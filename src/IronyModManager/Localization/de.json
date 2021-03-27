@@ -142,13 +142,15 @@
             "PromptMessage": "Dies überschreibt deine Mod-Kollektions-Mod-Reihenfolge und Mod-Auswahl. Vorgehen?"
         },
         "FileHash": {
-            "Export": "Kollektion hashes exportieren",
-            "Import": "Überprüfen Sie die kollektion hashes",
+            "ExportCollection": "Kollektion hashes exportieren",
+            "ExportGame": "Spiele spiel hashes",
+            "Import": "Hashes überprüfen",
             "DialogTitleExport": "Wählen Sie aus, wohin der Bericht exportiert werden soll",
             "DialogTitleImport": "Wählen Sie den zu importierenden JSON-Bericht aus",
             "ExportOverlay": "Bitte warten Sie beim Exportieren...",
             "ImportOverlay": "Bitte warten Sie, während Sie überprüfen...",
-            "Progress": "{Progress}",
+            "ProgressExport": "{Progress}",
+            "ProgressImport": "Schritt {Count}/{TotalCount}: {Progress}",
             "Close": "Schließen"
         },
         "JumpOnDragAndDrop": {

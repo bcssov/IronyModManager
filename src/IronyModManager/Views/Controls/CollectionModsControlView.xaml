@@ -98,7 +98,7 @@
                 <ContentControl Content="{Binding ModNameSortOrder}"></ContentControl>
               </Border>
             </Grid>
-            <ContentControl Content="{Binding ModReportView}"></ContentControl>
+            <ContentControl Content="{Binding HashReportView}"></ContentControl>
             <controls:DragDropListBox Margin="0,10,0,0" Items="{Binding SelectedMods}" ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                      x:Name="modList" Grid.Row="4" Grid.ColumnSpan="2"
                      MinHeight="{Binding $parent[Window].Height, 

@@ -4,7 +4,7 @@
 // Created          : 02-12-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 09-22-2020
+// Last Modified On : 03-27-2021
 // ***********************************************************************
 // <copyright file="IGameService.cs" company="Mario">
 //     Mario
@@ -13,6 +13,7 @@
 // ***********************************************************************
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using IronyModManager.Models.Common;
 
 namespace IronyModManager.Services.Common
@@ -25,6 +26,14 @@ namespace IronyModManager.Services.Common
     public interface IGameService : IBaseService
     {
         #region Methods
+
+        /// <summary>
+        /// Exports the hash report asynchronous.
+        /// </summary>
+        /// <param name="game">The game.</param>
+        /// <param name="path">The path.</param>
+        /// <returns>Task&lt;System.Boolean&gt;.</returns>
+        Task<bool> ExportHashReportAsync(IGame game, string path);
 
         /// <summary>
         /// Gets this instance.
@@ -60,6 +69,14 @@ namespace IronyModManager.Services.Common
         /// </summary>
         /// <returns>IGame.</returns>
         IGame GetSelected();
+
+        /// <summary>
+        /// Imports the hash report asynchronous.
+        /// </summary>
+        /// <param name="game">The game.</param>
+        /// <param name="hashReports">The hash reports.</param>
+        /// <returns>Task&lt;IEnumerable&lt;IHashReport&gt;&gt;.</returns>
+        Task<IEnumerable<IHashReport>> ImportHashReportAsync(IGame game, IReadOnlyCollection<IHashReport> hashReports);
 
         /// <summary>
         /// Determines whether [is continue game allowed] [the specified game].

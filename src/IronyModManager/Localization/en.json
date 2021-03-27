@@ -142,13 +142,15 @@
             "PromptMessage": "This will overwrite your mod collection mod order and mod selection. Proceed?"
         },
         "FileHash": {
-            "Export": "Export Collection Hashes",
-            "Import": "Verify Collection Hashes",
+            "ExportCollection": "Export Collection Hashes",
+            "ExportGame": "Export Game Hashes",
+            "Import": "Verify Hashes",
             "DialogTitleExport": "Select where to export report",
             "DialogTitleImport": "Select json report to import",
             "ExportOverlay": "Please wait while exporting...",
             "ImportOverlay": "Please wait while verifying...",
-            "Progress": "{Progress}",
+            "ProgressExport": "{Progress}",
+            "ProgressImport": "Step {Count}/{TotalCount}: {Progress}",
             "Close": "Close"
         },
         "JumpOnDragAndDrop": {

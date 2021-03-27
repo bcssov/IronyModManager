@@ -4,7 +4,7 @@
 // Created          : 03-01-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-16-2021
+// Last Modified On : 03-27-2021
 // ***********************************************************************
 // <copyright file="Enums.cs" company="Mario">
 //     Mario
@@ -66,6 +66,22 @@ namespace IronyModManager.Models.Common
         /// The mod override
         /// </summary>
         ModOverride
+    }
+
+    /// <summary>
+    /// Enum HashReportType
+    /// </summary>
+    public enum HashReportType
+    {
+        /// <summary>
+        /// The collection
+        /// </summary>
+        Collection,
+
+        /// <summary>
+        /// The game
+        /// </summary>
+        Game
     }
 
     /// <summary>

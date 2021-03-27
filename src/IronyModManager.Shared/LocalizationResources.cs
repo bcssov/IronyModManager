@@ -190,13 +190,15 @@ namespace IronyModManager.Shared
             public static class FileHash
             {
                 public const string Prefix = "Collection_Mods.FileHash.";
-                public const string Export = Prefix + "Export";
+                public const string ExportCollection = Prefix + "ExportCollection";
+                public const string ExportGame = Prefix + "ExportGame";
                 public const string Import = Prefix + "Import";
                 public const string DialogTitleExport = Prefix + "DialogTitleExport";
                 public const string DialogTitleImport = Prefix + "DialogTitleImport";
                 public const string ExportOverlay = Prefix + "ExportOverlay";
                 public const string ImportOverlay = Prefix + "ImportOverlay";
-                public const string Progress = Prefix + "Progress";
+                public const string ProgressExport = Prefix + "ProgressExport";
+                public const string ProgressImport = Prefix + "ProgressImport";
                 public const string Close = Prefix + "Close";
             }
             public static class JumpOnDragAndDrop

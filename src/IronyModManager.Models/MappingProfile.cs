@@ -4,7 +4,7 @@
 // Created          : 01-11-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-26-2021
+// Last Modified On : 03-27-2021
 // ***********************************************************************
 // <copyright file="MappingProfile.cs" company="Mario">
 //     Copyright (c) Mario. All rights reserved.
@@ -49,8 +49,8 @@ namespace IronyModManager.Models
             CreateMap<IPriorityDefinitionResult, PriorityDefinitionResult>().ReverseMap();
             CreateMap<IGameSettings, GameSettings>().ReverseMap();
             CreateMap<IUpdateSettings, UpdateSettings>().ReverseMap();
-            CreateMap<IModHashFileReport, ModHashFileReport>().ReverseMap();
-            CreateMap<IModHashReport, ModHashReport>().ReverseMap();
+            CreateMap<IHashFileReport, HashFileReport>().ReverseMap();
+            CreateMap<IHashReport, HashReport>().ReverseMap();
             CreateMap<IExternalEditor, ExternalEditor>().ReverseMap();
             CreateMap<IModInstallationResult, ModInstallationResult>().ReverseMap();
             CreateMap<IPermissionCheckResult, PermissionCheckResult>().ReverseMap();

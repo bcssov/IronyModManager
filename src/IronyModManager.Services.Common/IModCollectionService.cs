@@ -4,7 +4,7 @@
 // Created          : 03-04-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 09-30-2020
+// Last Modified On : 03-27-2021
 // ***********************************************************************
 // <copyright file="IModCollectionService.cs" company="Mario">
 //     Mario
@@ -95,9 +95,9 @@ namespace IronyModManager.Services.Common
         /// Imports the hash report asynchronous.
         /// </summary>
         /// <param name="mods">The mods.</param>
-        /// <param name="path">The path.</param>
-        /// <returns>Task&lt;IEnumerable&lt;IModHashReport&gt;&gt;.</returns>
-        Task<IEnumerable<IModHashReport>> ImportHashReportAsync(IEnumerable<IMod> mods, string path);
+        /// <param name="hashReports">The hash reports.</param>
+        /// <returns>Task&lt;IEnumerable&lt;IHashReport&gt;&gt;.</returns>
+        Task<IEnumerable<IHashReport>> ImportHashReportAsync(IEnumerable<IMod> mods, IReadOnlyCollection<IHashReport> hashReports);
 
         /// <summary>
         /// Imports the paradox asynchronous.

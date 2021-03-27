@@ -266,13 +266,28 @@ namespace IronyModManager.Views.Controls
                     }
                 };
                 var counterOffset = 5;
-                if (ViewModel.CanExportModHashReport)
+                var canExportGame = ViewModel.CanExportGame();
+                if (ViewModel.CanExportModHashReport || canExportGame)
                 {
-                    menuItems.Add(new MenuItem()
+                    var offset = 2;
+                    if (ViewModel.CanExportModHashReport)
                     {
-                        Header = ViewModel.ExportReport,
-                        Command = ViewModel.ExportReportCommand
-                    });
+                        menuItems.Add(new MenuItem()
+                        {
+                            Header = ViewModel.ExportCollectionReport,
+                            Command = ViewModel.ExportCollectionReportCommand
+                        });
+                        offset++;
+                    }
+                    if (canExportGame)
+                    {
+                        menuItems.Add(new MenuItem()
+                        {
+                            Header = ViewModel.ExportGameReport,
+                            Command = ViewModel.ExportGameReportCommand
+                        });
+                        offset++;
+                    }
                     menuItems.Add(new MenuItem()
                     {
                         Header = ViewModel.ImportReport,
@@ -282,7 +297,7 @@ namespace IronyModManager.Views.Controls
                     {
                         Header = "-"
                     });
-                    counterOffset += 3;
+                    counterOffset += offset;
                 }
                 if (!string.IsNullOrEmpty(ViewModel.GetContextMenuModUrl()))
                 {

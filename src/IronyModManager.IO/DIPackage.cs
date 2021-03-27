@@ -4,7 +4,7 @@
 // Created          : 02-23-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-17-2021
+// Last Modified On : 03-27-2021
 // ***********************************************************************
 // <copyright file="DIPackage.cs" company="Mario">
 //     Mario
@@ -58,7 +58,7 @@ namespace IronyModManager.IO
             container.Register<IPatchState, PatchState>();
             container.Register<IModMergeExporter, ModMergeExporter>();
             container.Register<IUnpacker, Unpacker>();
-            container.Register<IModReportExporter, ModReportExporter>();
+            container.Register<IReportExporter, ReportExporter>();
             container.Register<IModMergeCompressExporter, ModMergeCompressExporter>();
             container.Register<ITempFile, TempFile.TempFile>();
             container.RemoveTransientWarning<ITempFile>();

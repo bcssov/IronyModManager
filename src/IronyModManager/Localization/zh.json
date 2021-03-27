@@ -142,13 +142,15 @@
             "PromptMessage": "此操作将会覆盖你的模组加载顺序与选中的模组，是否继续？"
         },
         "FileHash": {
-            "Export": "导出合集文件指纹",
-            "Import": "验证合集文件指纹",
+            "ExportCollection": "导出合集文件指纹",
+            "ExportGame": "出口游戏哈希",
+            "Import": "验证哈希",
             "DialogTitleExport": "选择导出报告的位置",
             "DialogTitleImport": "选择要导入的 JSON 报告",
             "ExportOverlay": "正在导出……",
             "ImportOverlay": "正在验证……",
-            "Progress": "{Progress}",
+            "ProgressExport": "{Progress}",
+            "ProgressImport": "步骤 {Count}/{TotalCount}: {Progress}",
             "Close": "关闭"
         },
         "JumpOnDragAndDrop": {

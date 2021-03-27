@@ -4,7 +4,7 @@
 // Created          : 03-04-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-18-2021
+// Last Modified On : 03-27-2021
 // ***********************************************************************
 // <copyright file="ModCollectionService.cs" company="Mario">
 //     Mario
@@ -17,7 +17,6 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
-using IronyModManager.DI;
 using IronyModManager.IO.Common.Mods;
 using IronyModManager.IO.Common.Readers;
 using IronyModManager.Models.Common;
@@ -47,6 +46,11 @@ namespace IronyModManager.Services
         private static readonly object serviceLock = new { };
 
         /// <summary>
+        /// The mod report exporter
+        /// </summary>
+        private readonly IReportExportService exportService;
+
+        /// <summary>
         /// The message bus
         /// </summary>
         private readonly IMessageBus messageBus;
@@ -56,11 +60,6 @@ namespace IronyModManager.Services
         /// </summary>
         private readonly IModCollectionExporter modCollectionExporter;
 
-        /// <summary>
-        /// The mod report exporter
-        /// </summary>
-        private readonly IModReportExporter modReportExporter;
-
         #endregion Fields
 
         #region Constructors
@@ -69,7 +68,7 @@ namespace IronyModManager.Services
         /// Initializes a new instance of the <see cref="ModCollectionService" /> class.
         /// </summary>
         /// <param name="messageBus">The message bus.</param>
-        /// <param name="modReportExporter">The mod report exporter.</param>
+        /// <param name="exportService">The export service.</param>
         /// <param name="cache">The cache.</param>
         /// <param name="definitionInfoProviders">The definition information providers.</param>
         /// <param name="reader">The reader.</param>
@@ -79,12 +78,13 @@ namespace IronyModManager.Services
         /// <param name="modCollectionExporter">The mod collection exporter.</param>
         /// <param name="storageProvider">The storage provider.</param>
         /// <param name="mapper">The mapper.</param>
-        public ModCollectionService(IMessageBus messageBus, IModReportExporter modReportExporter, ICache cache, IEnumerable<IDefinitionInfoProvider> definitionInfoProviders, IReader reader, IModWriter modWriter,
+        public ModCollectionService(IMessageBus messageBus, IReportExportService exportService, ICache cache,
+            IEnumerable<IDefinitionInfoProvider> definitionInfoProviders, IReader reader, IModWriter modWriter,
             IModParser modParser, IGameService gameService, IModCollectionExporter modCollectionExporter,
             IStorageProvider storageProvider, IMapper mapper) : base(cache, definitionInfoProviders, reader, modWriter, modParser, gameService, storageProvider, mapper)
         {
             this.messageBus = messageBus;
-            this.modReportExporter = modReportExporter;
+            this.exportService = exportService;
             this.modCollectionExporter = modCollectionExporter;
         }
 
@@ -231,7 +231,7 @@ namespace IronyModManager.Services
                     modExport.Add(patchMod);
                 }
                 var reports = await ParseReportAsync(modExport);
-                return await modReportExporter.ExportAsync(reports, path);
+                return await exportService.ExportAsync(reports, path);
             }
             return false;
         }
@@ -324,10 +324,15 @@ namespace IronyModManager.Services
         /// Imports the hash report asynchronous.
         /// </summary>
         /// <param name="mods">The mods.</param>
-        /// <param name="path">The path.</param>
+        /// <param name="hashReports">The hash reports.</param>
         /// <returns>Task&lt;IEnumerable&lt;IModHashReport&gt;&gt;.</returns>
-        public virtual async Task<IEnumerable<IModHashReport>> ImportHashReportAsync(IEnumerable<IMod> mods, string path)
+        public virtual async Task<IEnumerable<IHashReport>> ImportHashReportAsync(IEnumerable<IMod> mods, IReadOnlyCollection<IHashReport> hashReports)
         {
+            var importedReports = exportService.GetCollectionReports(hashReports);
+            if (importedReports == null || !importedReports.Any())
+            {
+                return null;
+            }
             var modExport = mods.ToList();
             var collection = GetAllModCollectionsInternal().FirstOrDefault(p => p.IsSelected);
             var patchModName = GenerateCollectionPatchName(collection.Name);
@@ -353,59 +358,7 @@ namespace IronyModManager.Services
                 modExport.Add(patchMod);
             }
             var currentReports = await ParseReportAsync(modExport);
-            var importedReports = await modReportExporter.ImportAsync(path);
-            if (importedReports != null)
-            {
-                static void compareReports(List<IModHashReport> reports, IEnumerable<IModHashReport> firstReports, IEnumerable<IModHashReport> secondReports)
-                {
-                    foreach (var first in firstReports)
-                    {
-                        if (!secondReports.Any(p => p.Name.Equals(first.Name)))
-                        {
-                            if (!reports.Any(p => p.Name.Equals(first.Name)))
-                            {
-                                reports.Add(first);
-                            }
-                            continue;
-                        }
-                        foreach (var item in first.Reports)
-                        {
-                            var secondReport = secondReports.FirstOrDefault(p => p.Name.Equals(first.Name));
-                            if (!secondReport.Reports.Any(p => p.File.Equals(item.File) && p.Hash.Equals(item.Hash)))
-                            {
-                                var report = reports.FirstOrDefault(p => p.Name.Equals(first.Name));
-                                if (report == null)
-                                {
-                                    report = DIResolver.Get<IModHashReport>();
-                                    report.Name = first.Name;
-                                    reports.Add(report);
-                                }
-                                if (report.Reports == null)
-                                {
-                                    report.Reports = new List<IModHashFileReport>();
-                                }
-                                if (!report.Reports.Any(p => p.File.Equals(item.File)))
-                                {
-                                    var hashReport = DIResolver.Get<IModHashFileReport>();
-                                    hashReport.File = item.File;
-                                    hashReport.Hash = item.Hash;
-                                    var secondHash = secondReport.Reports.FirstOrDefault(p => p.File.Equals(item.File));
-                                    if (secondHash != null)
-                                    {
-                                        hashReport.SecondHash = secondHash.Hash;
-                                    }
-                                    report.Reports.Add(hashReport);
-                                }
-                            }
-                        }
-                    }
-                }
-                var reports = new List<IModHashReport>();
-                compareReports(reports, currentReports, importedReports);
-                compareReports(reports, importedReports, currentReports);
-                return reports;
-            }
-            return null;
+            return exportService.CompareReports(currentReports.ToList(), importedReports.ToList());
         }
 
         /// <summary>
@@ -552,24 +505,25 @@ namespace IronyModManager.Services
         /// </summary>
         /// <param name="mods">The mods.</param>
         /// <returns>IEnumerable&lt;IModHashReport&gt;.</returns>
-        protected virtual async Task<IEnumerable<IModHashReport>> ParseReportAsync(IEnumerable<IMod> mods)
+        protected virtual async Task<IEnumerable<IHashReport>> ParseReportAsync(IEnumerable<IMod> mods)
         {
             var game = GameService.GetSelected();
-            var reports = new List<IModHashReport>();
+            var reports = new List<IHashReport>();
             var total = mods.SelectMany(p => p.Files).Count(p => game.GameFolders.Any(a => p.StartsWith(a)));
             var progress = 0;
             double lastPercentage = 0;
             foreach (var mod in mods)
             {
-                var report = GetModelInstance<IModHashReport>();
+                var report = GetModelInstance<IHashReport>();
                 report.Name = mod.Name;
-                var hashReports = new List<IModHashFileReport>();
+                report.ReportType = HashReportType.Collection;
+                var hashReports = new List<IHashFileReport>();
                 foreach (var item in mod.Files.Where(p => game.GameFolders.Any(a => p.StartsWith(a))))
                 {
                     var info = Reader.GetFileInfo(mod.FullPath, item);
                     if (info != null)
                     {
-                        var fileReport = GetModelInstance<IModHashFileReport>();
+                        var fileReport = GetModelInstance<IHashFileReport>();
                         fileReport.File = item;
                         fileReport.Hash = info.ContentSHA;
                         hashReports.Add(fileReport);
@@ -578,7 +532,7 @@ namespace IronyModManager.Services
                     var percentage = GetProgressPercentage(total, progress);
                     if (percentage != lastPercentage)
                     {
-                        await messageBus.PublishAsync(new ModReportExportEvent(percentage));
+                        await messageBus.PublishAsync(new ModReportExportEvent(1, percentage));
                     }
                     lastPercentage = percentage;
                 }

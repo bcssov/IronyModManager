@@ -1,30 +1,27 @@
 ﻿// ***********************************************************************
-// Assembly         : IronyModManager.Models
+// Assembly         : IronyModManager.Models.Common
 // Author           : Mario
 // Created          : 09-30-2020
 //
 // Last Modified By : Mario
 // Last Modified On : 10-30-2020
 // ***********************************************************************
-// <copyright file="ModHashFileReport.cs" company="Mario">
+// <copyright file="IHashFileReport.cs" company="Mario">
 //     Mario
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
-using System.Collections.Generic;
 using System;
-using IronyModManager.Models.Common;
+using System.Collections.Generic;
 
-namespace IronyModManager.Models
+namespace IronyModManager.Models.Common
 {
     /// <summary>
-    /// Class ModHashFileReport.
-    /// Implements the <see cref="IronyModManager.Models.Common.BaseModel" />
-    /// Implements the <see cref="IronyModManager.Models.Common.IModHashFileReport" />
+    /// Interface IModHashFileReport
+    /// Implements the <see cref="IronyModManager.Models.Common.IModel" />
     /// </summary>
-    /// <seealso cref="IronyModManager.Models.Common.BaseModel" />
-    /// <seealso cref="IronyModManager.Models.Common.IModHashFileReport" />
-    public class ModHashFileReport : BaseModel, IModHashFileReport
+    /// <seealso cref="IronyModManager.Models.Common.IModel" />
+    public interface IHashFileReport : IModel
     {
         #region Properties
 
@@ -32,19 +29,19 @@ namespace IronyModManager.Models
         /// Gets or sets the file.
         /// </summary>
         /// <value>The file.</value>
-        public string File { get; set; }
+        string File { get; set; }
 
         /// <summary>
         /// Gets or sets the hash.
         /// </summary>
         /// <value>The hash.</value>
-        public string Hash { get; set; }
+        string Hash { get; set; }
 
         /// <summary>
         /// Gets or sets the second hash.
         /// </summary>
         /// <value>The second hash.</value>
-        public string SecondHash { get; set; }
+        string SecondHash { get; set; }
 
         #endregion Properties
     }

@@ -142,13 +142,15 @@
             "PromptMessage": "Ovo će prebrisati redoslijed i odabir modova. Nastaviti?"
         },
         "FileHash": {
-            "Export": "Izvoz hashova kolekcije",
-            "Import": "Provjerite hashove kolekcije",
+            "ExportCollection": "Izvoz hashova kolekcije",
+            "ExportGame": "Izvoz hasheva igre",
+            "Import": "Provjeri hashove",
             "DialogTitleExport": "Odaberite mjesto za izvoz izvješća",
             "DialogTitleImport": "Odaberite json izvješće za uvoz",
             "ExportOverlay": "Pričekajte dok se izvozi...",
             "ImportOverlay": "Pričekajte dok se verificira...",
-            "Progress": "{Progress}",
+            "ProgressExport": "{Progress}",
+            "ProgressImport": "Korak {Count}/{TotalCount}: {Progress}",
             "Close": "Zatvori"
         },
         "JumpOnDragAndDrop": {
