@@ -95,9 +95,9 @@ namespace IronyModManager.Services.Common
         /// Imports the hash report asynchronous.
         /// </summary>
         /// <param name="mods">The mods.</param>
-        /// <param name="path">The path.</param>
+        /// <param name="hashReports">The hash reports.</param>
         /// <returns>Task&lt;IEnumerable&lt;IHashReport&gt;&gt;.</returns>
-        Task<IEnumerable<IHashReport>> ImportHashReportAsync(IEnumerable<IMod> mods, string path);
+        Task<IEnumerable<IHashReport>> ImportHashReportAsync(IEnumerable<IMod> mods, IReadOnlyCollection<IHashReport> hashReports);
 
         /// <summary>
         /// Imports the paradox asynchronous.

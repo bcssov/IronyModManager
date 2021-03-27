@@ -32,19 +32,19 @@ namespace IronyModManager.Models
         /// Gets or sets the file.
         /// </summary>
         /// <value>The file.</value>
-        public string File { get; set; }
+        public virtual string File { get; set; }
 
         /// <summary>
         /// Gets or sets the hash.
         /// </summary>
         /// <value>The hash.</value>
-        public string Hash { get; set; }
+        public virtual string Hash { get; set; }
 
         /// <summary>
         /// Gets or sets the second hash.
         /// </summary>
         /// <value>The second hash.</value>
-        public string SecondHash { get; set; }
+        public virtual string SecondHash { get; set; }
 
         #endregion Properties
     }

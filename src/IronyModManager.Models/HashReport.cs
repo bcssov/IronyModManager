@@ -6,7 +6,7 @@
 // Last Modified By : Mario
 // Last Modified On : 03-27-2021
 // ***********************************************************************
-// <copyright file="ModHashReport.cs" company="Mario">
+// <copyright file="HashReport.cs" company="Mario">
 //     Mario
 // </copyright>
 // <summary></summary>
@@ -32,13 +32,19 @@ namespace IronyModManager.Models
         /// Gets or sets the name.
         /// </summary>
         /// <value>The name.</value>
-        public string Name { get; set; }
+        public virtual string Name { get; set; }
 
         /// <summary>
         /// Gets or sets the reports.
         /// </summary>
         /// <value>The reports.</value>
-        public IList<IHashFileReport> Reports { get; set; } = new List<IHashFileReport>();
+        public virtual IList<IHashFileReport> Reports { get; set; } = new List<IHashFileReport>();
+
+        /// <summary>
+        /// Gets or sets the type of the report.
+        /// </summary>
+        /// <value>The type of the report.</value>
+        public virtual HashReportType ReportType { get; set; }
 
         #endregion Properties
     }

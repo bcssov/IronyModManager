@@ -59,7 +59,7 @@ namespace IronyModManager.Services
         /// <summary>
         /// The mod report exporter
         /// </summary>
-        private readonly IModReportExporter modReportExporter;
+        private readonly IReportExportService modExportService;
 
         #endregion Fields
 
@@ -69,7 +69,7 @@ namespace IronyModManager.Services
         /// Initializes a new instance of the <see cref="ModCollectionService" /> class.
         /// </summary>
         /// <param name="messageBus">The message bus.</param>
-        /// <param name="modReportExporter">The mod report exporter.</param>
+        /// <param name="modExportService">The mod export service.</param>
         /// <param name="cache">The cache.</param>
         /// <param name="definitionInfoProviders">The definition information providers.</param>
         /// <param name="reader">The reader.</param>
@@ -79,12 +79,13 @@ namespace IronyModManager.Services
         /// <param name="modCollectionExporter">The mod collection exporter.</param>
         /// <param name="storageProvider">The storage provider.</param>
         /// <param name="mapper">The mapper.</param>
-        public ModCollectionService(IMessageBus messageBus, IModReportExporter modReportExporter, ICache cache, IEnumerable<IDefinitionInfoProvider> definitionInfoProviders, IReader reader, IModWriter modWriter,
+        public ModCollectionService(IMessageBus messageBus, IReportExportService modExportService, ICache cache,
+            IEnumerable<IDefinitionInfoProvider> definitionInfoProviders, IReader reader, IModWriter modWriter,
             IModParser modParser, IGameService gameService, IModCollectionExporter modCollectionExporter,
             IStorageProvider storageProvider, IMapper mapper) : base(cache, definitionInfoProviders, reader, modWriter, modParser, gameService, storageProvider, mapper)
         {
             this.messageBus = messageBus;
-            this.modReportExporter = modReportExporter;
+            this.modExportService = modExportService;
             this.modCollectionExporter = modCollectionExporter;
         }
 
@@ -231,7 +232,7 @@ namespace IronyModManager.Services
                     modExport.Add(patchMod);
                 }
                 var reports = await ParseReportAsync(modExport);
-                return await modReportExporter.ExportAsync(reports, path);
+                return await modExportService.ExportAsync(reports, path);
             }
             return false;
         }
@@ -324,9 +325,9 @@ namespace IronyModManager.Services
         /// Imports the hash report asynchronous.
         /// </summary>
         /// <param name="mods">The mods.</param>
-        /// <param name="path">The path.</param>
+        /// <param name="hashReports">The hash reports.</param>
         /// <returns>Task&lt;IEnumerable&lt;IModHashReport&gt;&gt;.</returns>
-        public virtual async Task<IEnumerable<IHashReport>> ImportHashReportAsync(IEnumerable<IMod> mods, string path)
+        public virtual async Task<IEnumerable<IHashReport>> ImportHashReportAsync(IEnumerable<IMod> mods, IReadOnlyCollection<IHashReport> hashReports)
         {
             var modExport = mods.ToList();
             var collection = GetAllModCollectionsInternal().FirstOrDefault(p => p.IsSelected);
@@ -353,7 +354,7 @@ namespace IronyModManager.Services
                 modExport.Add(patchMod);
             }
             var currentReports = await ParseReportAsync(modExport);
-            var importedReports = await modReportExporter.ImportAsync(path);
+            var importedReports = modExportService.GetCollectionReports(hashReports);
             if (importedReports != null)
             {
                 static void compareReports(List<IHashReport> reports, IEnumerable<IHashReport> firstReports, IEnumerable<IHashReport> secondReports)
@@ -563,6 +564,7 @@ namespace IronyModManager.Services
             {
                 var report = GetModelInstance<IHashReport>();
                 report.Name = mod.Name;
+                report.ReportType = HashReportType.Collection;
                 var hashReports = new List<IHashFileReport>();
                 foreach (var item in mod.Files.Where(p => game.GameFolders.Any(a => p.StartsWith(a))))
                 {

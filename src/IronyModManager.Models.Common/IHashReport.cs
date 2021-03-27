@@ -37,6 +37,12 @@ namespace IronyModManager.Models.Common
         /// <value>The reports.</value>
         IList<IHashFileReport> Reports { get; set; }
 
+        /// <summary>
+        /// Gets or sets the type of the report.
+        /// </summary>
+        /// <value>The type of the report.</value>
+        HashReportType ReportType { get; set; }
+
         #endregion Properties
     }
 }

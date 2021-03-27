@@ -136,6 +136,11 @@ namespace IronyModManager.ViewModels.Controls
         private readonly ConcurrentBag<IMod> reorderQueue;
 
         /// <summary>
+        /// The report export service
+        /// </summary>
+        private readonly IReportExportService reportExportService;
+
+        /// <summary>
         /// The active game
         /// </summary>
         private IGame activeGame;
@@ -192,6 +197,7 @@ namespace IronyModManager.ViewModels.Controls
         /// <summary>
         /// Initializes a new instance of the <see cref="CollectionModsControlViewModel" /> class.
         /// </summary>
+        /// <param name="reportExportService">The report export service.</param>
         /// <param name="hotkeyPressedHandler">The hotkey pressed handler.</param>
         /// <param name="patchMod">The patch mod.</param>
         /// <param name="idGenerator">The identifier generator.</param>
@@ -211,7 +217,7 @@ namespace IronyModManager.ViewModels.Controls
         /// <param name="localizationManager">The localization manager.</param>
         /// <param name="notificationAction">The notification action.</param>
         /// <param name="appAction">The application action.</param>
-        public CollectionModsControlViewModel(MainViewHotkeyPressedHandler hotkeyPressedHandler, PatchModControlViewModel patchMod,
+        public CollectionModsControlViewModel(IReportExportService reportExportService, MainViewHotkeyPressedHandler hotkeyPressedHandler, PatchModControlViewModel patchMod,
             IIDGenerator idGenerator, HashReportControlViewModel hashReportView, ModReportExportHandler modReportExportHandler,
             IFileDialogAction fileDialogAction, IModCollectionService modCollectionService,
             IAppStateService appStateService, IModPatchCollectionService modPatchCollectionService, IModService modService, IGameService gameService,
@@ -219,7 +225,8 @@ namespace IronyModManager.ViewModels.Controls
             SearchModsControlViewModel searchMods, SortOrderControlViewModel modNameSort, ILocalizationManager localizationManager,
             INotificationAction notificationAction, IAppAction appAction)
         {
-            this.PatchMod = patchMod;
+            this.reportExportService = reportExportService;
+            PatchMod = patchMod;
             this.idGenerator = idGenerator;
             this.modCollectionService = modCollectionService;
             this.appStateService = appStateService;
@@ -1544,7 +1551,8 @@ namespace IronyModManager.ViewModels.Controls
                     var id = idGenerator.GetNextId();
                     await TriggerOverlayAsync(id, true, localizationManager.GetResource(LocalizationResources.Collection_Mods.FileHash.ImportOverlay));
                     registerReportHandlers(id, true);
-                    var reports = await Task.Run(() => modCollectionService.ImportHashReportAsync(SelectedMods, path));
+                    var rawReports = await reportExportService.ImportAsync(path);
+                    var reports = await Task.Run(() => modCollectionService.ImportHashReportAsync(SelectedMods, rawReports.ToList()));
                     if (reports?.Count() > 0)
                     {
                         await TriggerOverlayAsync(id, false);
