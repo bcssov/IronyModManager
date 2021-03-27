@@ -356,54 +356,7 @@ namespace IronyModManager.Services
             var importedReports = exportService.GetCollectionReports(hashReports);
             if (importedReports != null)
             {
-                void compareReports(List<IHashReport> reports, IEnumerable<IHashReport> firstReports, IEnumerable<IHashReport> secondReports)
-                {
-                    foreach (var first in firstReports)
-                    {
-                        if (!secondReports.Any(p => p.Name.Equals(first.Name)))
-                        {
-                            if (!reports.Any(p => p.Name.Equals(first.Name)))
-                            {
-                                reports.Add(first);
-                            }
-                            continue;
-                        }
-                        foreach (var item in first.Reports)
-                        {
-                            var secondReport = secondReports.FirstOrDefault(p => p.Name.Equals(first.Name));
-                            if (!secondReport.Reports.Any(p => p.File.Equals(item.File) && p.Hash.Equals(item.Hash)))
-                            {
-                                var report = reports.FirstOrDefault(p => p.Name.Equals(first.Name));
-                                if (report == null)
-                                {
-                                    report = GetModelInstance<IHashReport>();
-                                    report.Name = first.Name;
-                                    reports.Add(report);
-                                }
-                                if (report.Reports == null)
-                                {
-                                    report.Reports = new List<IHashFileReport>();
-                                }
-                                if (!report.Reports.Any(p => p.File.Equals(item.File)))
-                                {
-                                    var hashReport = GetModelInstance<IHashFileReport>();
-                                    hashReport.File = item.File;
-                                    hashReport.Hash = item.Hash;
-                                    var secondHash = secondReport.Reports.FirstOrDefault(p => p.File.Equals(item.File));
-                                    if (secondHash != null)
-                                    {
-                                        hashReport.SecondHash = secondHash.Hash;
-                                    }
-                                    report.Reports.Add(hashReport);
-                                }
-                            }
-                        }
-                    }
-                }
-                var reports = new List<IHashReport>();
-                compareReports(reports, currentReports, importedReports);
-                compareReports(reports, importedReports, currentReports);
-                return reports;
+                return exportService.CompareReports(currentReports.ToList(), importedReports.ToList());
             }
             return null;
         }

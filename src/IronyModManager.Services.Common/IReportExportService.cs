@@ -29,6 +29,14 @@ namespace IronyModManager.Services.Common
         #region Methods
 
         /// <summary>
+        /// Compares the reports.
+        /// </summary>
+        /// <param name="firstReport">The first report.</param>
+        /// <param name="secondReport">The second report.</param>
+        /// <returns>IReadOnlyCollection&lt;IHashReport&gt;.</returns>
+        IReadOnlyCollection<IHashReport> CompareReports(IReadOnlyCollection<IHashReport> firstReport, IReadOnlyCollection<IHashReport> secondReport);
+
+        /// <summary>
         /// Exports the asynchronous.
         /// </summary>
         /// <param name="modHashes">The mod hashes.</param>

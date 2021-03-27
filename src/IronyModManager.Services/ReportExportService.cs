@@ -59,6 +59,66 @@ namespace IronyModManager.Services
         #region Methods
 
         /// <summary>
+        /// Compares the reports.
+        /// </summary>
+        /// <param name="firstReport">The first report.</param>
+        /// <param name="secondReport">The second report.</param>
+        /// <returns>IReadOnlyCollection&lt;IHashReport&gt;.</returns>
+        public virtual IReadOnlyCollection<IHashReport> CompareReports(IReadOnlyCollection<IHashReport> firstReport, IReadOnlyCollection<IHashReport> secondReport)
+        {
+            firstReport ??= new List<IHashReport>();
+            secondReport ??= new List<IHashReport>();
+            void compareReports(List<IHashReport> reports, IEnumerable<IHashReport> firstReports, IEnumerable<IHashReport> secondReports)
+            {
+                foreach (var first in firstReports)
+                {
+                    if (!secondReports.Any(p => p.Name.Equals(first.Name)))
+                    {
+                        if (!reports.Any(p => p.Name.Equals(first.Name)))
+                        {
+                            reports.Add(first);
+                        }
+                        continue;
+                    }
+                    foreach (var item in first.Reports)
+                    {
+                        var secondReport = secondReports.FirstOrDefault(p => p.Name.Equals(first.Name));
+                        if (!secondReport.Reports.Any(p => p.File.Equals(item.File) && p.Hash.Equals(item.Hash)))
+                        {
+                            var report = reports.FirstOrDefault(p => p.Name.Equals(first.Name));
+                            if (report == null)
+                            {
+                                report = GetModelInstance<IHashReport>();
+                                report.Name = first.Name;
+                                reports.Add(report);
+                            }
+                            if (report.Reports == null)
+                            {
+                                report.Reports = new List<IHashFileReport>();
+                            }
+                            if (!report.Reports.Any(p => p.File.Equals(item.File)))
+                            {
+                                var hashReport = GetModelInstance<IHashFileReport>();
+                                hashReport.File = item.File;
+                                hashReport.Hash = item.Hash;
+                                var secondHash = secondReport.Reports.FirstOrDefault(p => p.File.Equals(item.File));
+                                if (secondHash != null)
+                                {
+                                    hashReport.SecondHash = secondHash.Hash;
+                                }
+                                report.Reports.Add(hashReport);
+                            }
+                        }
+                    }
+                }
+            }
+            var reports = new List<IHashReport>();
+            compareReports(reports, firstReport, secondReport);
+            compareReports(reports, secondReport, firstReport);
+            return reports;
+        }
+
+        /// <summary>
         /// Exports the asynchronous.
         /// </summary>
         /// <param name="modHashes">The mod hashes.</param>

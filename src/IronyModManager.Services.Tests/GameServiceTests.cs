@@ -829,6 +829,10 @@ namespace IronyModManager.Services.Tests
                 }
                 return null;
             });
+            hashExport.Setup(p => p.CompareReports(It.IsAny<IReadOnlyCollection<IHashReport>>(), It.IsAny<IReadOnlyCollection<IHashReport>>())).Returns((IReadOnlyCollection<IHashReport> first, IReadOnlyCollection<IHashReport> second) =>
+            {
+                return null;
+            });
             var messageBus = new Mock<IMessageBus>();
             messageBus.Setup(p => p.PublishAsync(It.IsAny<IMessageBusEvent>()));
             messageBus.Setup(p => p.Publish(It.IsAny<IMessageBusEvent>()));
@@ -845,15 +849,17 @@ namespace IronyModManager.Services.Tests
         }
 
         /// <summary>
-        /// Defines the test method Should_import_hash_from_both_sources.
+        /// Defines the test method Should_import_hash.
         /// </summary>
         [Fact]
-        public async Task Should_import_hash_from_both_sources()
+        public async Task Should_import_hash()
         {
             var storageProvider = new Mock<IStorageProvider>();
             var mapper = new Mock<IMapper>();
             var hashExport = new Mock<IReportExportService>();
             var preferencesService = new Mock<IPreferencesService>();
+            var innerReports = new List<IHashFileReport>() { new HashFileReport() { File = "test\\1", Hash = "2" } };
+            var outerReports = new List<IHashReport>() { new HashReport() { Name = "test", Reports = innerReports, ReportType = HashReportType.Game } };
             hashExport.Setup(p => p.GetGameReports(It.IsAny<IReadOnlyCollection<IHashReport>>())).Returns((IReadOnlyCollection<IHashReport> hashReports) =>
             {
                 if (hashReports != null)
@@ -861,6 +867,10 @@ namespace IronyModManager.Services.Tests
                     return hashReports.Where(p => p.ReportType == HashReportType.Game).ToList();
                 }
                 return null;
+            });
+            hashExport.Setup(p => p.CompareReports(It.IsAny<IReadOnlyCollection<IHashReport>>(), It.IsAny<IReadOnlyCollection<IHashReport>>())).Returns((IReadOnlyCollection<IHashReport> first, IReadOnlyCollection<IHashReport> second) =>
+            {
+                return outerReports;
             });
             var messageBus = new Mock<IMessageBus>();
             messageBus.Setup(p => p.PublishAsync(It.IsAny<IMessageBusEvent>()));
@@ -876,97 +886,12 @@ namespace IronyModManager.Services.Tests
                "test\\test"
             });
             DISetup.SetupContainer();
-
-            var innerReports = new List<IHashFileReport>() { new HashFileReport() { File = "test\\1", Hash = "2" } };
-            var outerReports = new List<IHashReport>() { new HashReport() { Name = "test", Reports = innerReports, ReportType = HashReportType.Game } };
+            
             var service = new GameService(messageBus.Object, hashExport.Object, reader.Object, storageProvider.Object, preferencesService.Object, new Mock<IMapper>().Object);
             var result = await service.ImportHashReportAsync(new Game() { GameFolders = new List<string>() { "test" } }, outerReports);
             result.Should().NotBeNull();
             result.Count().Should().Be(1);
-            result.FirstOrDefault().Reports.Count.Should().Be(2);
-        }
-
-        /// <summary>
-        /// Defines the test method Should_import_hash_with_diff_only.
-        /// </summary>
-        [Fact]
-        public async Task Should_import_hash_with_diff_only()
-        {
-            var storageProvider = new Mock<IStorageProvider>();
-            var mapper = new Mock<IMapper>();
-            var hashExport = new Mock<IReportExportService>();
-            var preferencesService = new Mock<IPreferencesService>();
-            hashExport.Setup(p => p.GetGameReports(It.IsAny<IReadOnlyCollection<IHashReport>>())).Returns((IReadOnlyCollection<IHashReport> hashReports) =>
-            {
-                if (hashReports != null)
-                {
-                    return hashReports.Where(p => p.ReportType == HashReportType.Game).ToList();
-                }
-                return null;
-            });
-            var messageBus = new Mock<IMessageBus>();
-            messageBus.Setup(p => p.PublishAsync(It.IsAny<IMessageBusEvent>()));
-            messageBus.Setup(p => p.Publish(It.IsAny<IMessageBusEvent>()));
-            var reader = new Mock<IReader>();
-            reader.Setup(p => p.GetFileInfo(It.IsAny<string>(), It.IsAny<string>())).Returns(new IO.FileInfo()
-            {
-                FileName = "2",
-                ContentSHA = "3"
-            });
-            reader.Setup(p => p.GetFiles(It.IsAny<string>())).Returns(new List<string>()
-            {
-               "test\\test"
-            });
-            DISetup.SetupContainer();
-
-            var innerReport = new List<IHashFileReport>() { new HashFileReport() { File = "test\\test", Hash = "2" } };
-            var outerReport = new List<IHashReport>() { new HashReport() { Name = "test", Reports = innerReport } };
-            var service = new GameService(messageBus.Object, hashExport.Object, reader.Object, storageProvider.Object, preferencesService.Object, new Mock<IMapper>().Object);
-            var result = await service.ImportHashReportAsync(new Game() { GameFolders = new List<string>() { "test" } }, outerReport);
-            result.Should().NotBeNull();
-            result.Count().Should().Be(1);
             result.FirstOrDefault().Reports.Count.Should().Be(1);
-        }
-
-        /// <summary>
-        /// Defines the test method Should_not_import_hash_when_hashes_same.
-        /// </summary>
-        [Fact]
-        public async Task Should_not_import_hash_when_hashes_same()
-        {
-            var storageProvider = new Mock<IStorageProvider>();
-            var mapper = new Mock<IMapper>();
-            var hashExport = new Mock<IReportExportService>();
-            var preferencesService = new Mock<IPreferencesService>();
-            hashExport.Setup(p => p.GetGameReports(It.IsAny<IReadOnlyCollection<IHashReport>>())).Returns((IReadOnlyCollection<IHashReport> hashReports) =>
-            {
-                if (hashReports != null)
-                {
-                    return hashReports.Where(p => p.ReportType == HashReportType.Game).ToList();
-                }
-                return null;
-            });
-            var messageBus = new Mock<IMessageBus>();
-            messageBus.Setup(p => p.PublishAsync(It.IsAny<IMessageBusEvent>()));
-            messageBus.Setup(p => p.Publish(It.IsAny<IMessageBusEvent>()));
-            var reader = new Mock<IReader>();
-            reader.Setup(p => p.GetFileInfo(It.IsAny<string>(), It.IsAny<string>())).Returns(new IO.FileInfo()
-            {
-                FileName = "2",
-                ContentSHA = "2"
-            });
-            reader.Setup(p => p.GetFiles(It.IsAny<string>())).Returns(new List<string>()
-            {
-               "test\\test"
-            });
-            DISetup.SetupContainer();
-
-            var innerReport = new List<IHashFileReport>() { new HashFileReport() { File = "test\\test", Hash = "2" } };
-            var outerReport = new List<IHashReport>() { new HashReport() { Name = "test", Reports = innerReport, ReportType = HashReportType.Game } };
-            var service = new GameService(messageBus.Object, hashExport.Object, reader.Object, storageProvider.Object, preferencesService.Object, new Mock<IMapper>().Object);
-            var result = await service.ImportHashReportAsync(new Game() { GameFolders = new List<string>() { "test" } }, outerReport);
-            result.Should().NotBeNull();
-            result.Count().Should().Be(0);
         }
 
         /// <summary>

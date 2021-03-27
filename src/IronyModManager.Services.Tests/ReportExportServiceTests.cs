@@ -206,5 +206,76 @@ namespace IronyModManager.Services.Tests
             var result = service.GetGameReports(null);
             result.Should().BeNull();
         }
+
+        /// <summary>
+        /// Defines the test method Should_return_hash_from_both_sources.
+        /// </summary>
+        [Fact]
+        public void Should_return_hash_from_both_sources()
+        {
+            var storageProvider = new Mock<IStorageProvider>();
+            var mapper = new Mock<IMapper>();
+            var exporter = new Mock<IReportExporter>();
+            exporter.Setup(p => p.ExportAsync(It.IsAny<IEnumerable<IHashReport>>(), It.IsAny<string>())).ReturnsAsync(true);
+
+            var firstInnerReports = new List<IHashFileReport>() { new HashFileReport() { File = "test\\1", Hash = "3" } };
+            var firstOuterReports = new List<IHashReport>() { new HashReport() { Name = "testreport", Reports = firstInnerReports, ReportType = HashReportType.Game } };
+
+            var secondInnerReports = new List<IHashFileReport>() { new HashFileReport() { File = "test\\test", Hash = "2" } };
+            var secondOuterReports = new List<IHashReport>() { new HashReport() { Name = "testreport", Reports = secondInnerReports, ReportType = HashReportType.Game } };
+
+            var service = new ReportExportService(exporter.Object, storageProvider.Object, mapper.Object);
+            var result = service.CompareReports(firstOuterReports, secondOuterReports);
+            result.Should().NotBeNull();
+            result.Count().Should().Be(1);
+            result.FirstOrDefault().Reports.Count.Should().Be(2);
+        }
+
+        /// <summary>
+        /// Defines the test method Should_return_import_hash_with_diff_only.
+        /// </summary>
+        [Fact]
+        public void Should_return_hash_with_diff_only()
+        {
+            var storageProvider = new Mock<IStorageProvider>();
+            var mapper = new Mock<IMapper>();
+            var exporter = new Mock<IReportExporter>();
+            exporter.Setup(p => p.ExportAsync(It.IsAny<IEnumerable<IHashReport>>(), It.IsAny<string>())).ReturnsAsync(true);
+
+            var firstInnerReports = new List<IHashFileReport>() { new HashFileReport() { File = "test\\test", Hash = "3" } };
+            var firstOuterReports = new List<IHashReport>() { new HashReport() { Name = "testreport", Reports = firstInnerReports, ReportType = HashReportType.Game } };
+
+            var secondInnerReports = new List<IHashFileReport>() { new HashFileReport() { File = "test\\test", Hash = "2" } };
+            var secondOuterReports = new List<IHashReport>() { new HashReport() { Name = "testreport", Reports = secondInnerReports, ReportType = HashReportType.Game } };
+
+            var service = new ReportExportService(exporter.Object, storageProvider.Object, mapper.Object);
+            var result = service.CompareReports(firstOuterReports, secondOuterReports);
+            result.Should().NotBeNull();
+            result.Count().Should().Be(1);
+            result.FirstOrDefault().Reports.Count.Should().Be(1);
+        }
+
+        /// <summary>
+        /// Defines the test method Should_return_hash_when_hashes_same.
+        /// </summary>
+        [Fact]
+        public void Should_return_hash_when_hashes_same()
+        {
+            var storageProvider = new Mock<IStorageProvider>();
+            var mapper = new Mock<IMapper>();
+            var exporter = new Mock<IReportExporter>();
+            exporter.Setup(p => p.ExportAsync(It.IsAny<IEnumerable<IHashReport>>(), It.IsAny<string>())).ReturnsAsync(true);
+
+            var firstInnerReports = new List<IHashFileReport>() { new HashFileReport() { File = "test\\test", Hash = "2" } };
+            var firstOuterReports = new List<IHashReport>() { new HashReport() { Name = "testreport", Reports = firstInnerReports, ReportType = HashReportType.Game } };
+
+            var secondInnerReports = new List<IHashFileReport>() { new HashFileReport() { File = "test\\test", Hash = "2" } };
+            var secondOuterReports = new List<IHashReport>() { new HashReport() { Name = "testreport", Reports = secondInnerReports, ReportType = HashReportType.Game } };
+
+            var service = new ReportExportService(exporter.Object, storageProvider.Object, mapper.Object);
+            var result = service.CompareReports(firstOuterReports, secondOuterReports);
+            result.Should().NotBeNull();
+            result.Count().Should().Be(0);
+        }
     }
 }
