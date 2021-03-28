@@ -4,7 +4,7 @@
 // Created          : 01-10-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-19-2021
+// Last Modified On : 03-28-2021
 // ***********************************************************************
 // <copyright file="MainWindow.xaml.cs" company="Mario">
 //     Mario
@@ -145,8 +145,14 @@ namespace IronyModManager.Views
             if (service.IsDefined())
             {
                 var state = service.Get();
-                Height = state.Height.GetValueOrDefault();
-                Width = state.Width.GetValueOrDefault();
+                if (state.Height.GetValueOrDefault() > 0)
+                {
+                    Height = state.Height.GetValueOrDefault();
+                }
+                if (state.Width.GetValueOrDefault() > 0)
+                {
+                    Width = state.Width.GetValueOrDefault();
+                }
                 WindowState = state.IsMaximized.GetValueOrDefault() ? WindowState.Maximized : WindowState.Normal;
                 // Silly setup code isn't it?
                 var pos = Position.WithX(state.LocationX.GetValueOrDefault());
@@ -155,9 +161,12 @@ namespace IronyModManager.Views
                 var totalScreenX = Screens.All.Sum(p => p.WorkingArea.Width);
                 var locX = state.LocationX.GetValueOrDefault() + state.Width.GetValueOrDefault() > totalScreenX ? totalScreenX - state.Width.GetValueOrDefault() : state.LocationX.GetValueOrDefault();
                 var locY = state.LocationY.GetValueOrDefault() + state.Height.GetValueOrDefault() > activeScreen.WorkingArea.Height ? activeScreen.WorkingArea.Height - state.Height.GetValueOrDefault() : state.LocationY.GetValueOrDefault();
-                pos = Position.WithX(locX);
-                pos = pos.WithY(locY);
-                Position = pos;
+                if (locX > 0 && locY > 0)
+                {
+                    pos = Position.WithX(locX);
+                    pos = pos.WithY(locY);
+                    Position = pos;
+                }
             }
         }
 
