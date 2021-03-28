@@ -144,12 +144,16 @@ namespace IronyModManager.Views
             var service = DIResolver.Get<IWindowStateService>();
             if (service.IsDefined())
             {
+                bool isValid(int value)
+                {
+                    return value > 0 && !double.IsInfinity(value) && !double.IsNaN(value);
+                }
                 var state = service.Get();
-                if (state.Height.GetValueOrDefault() > 0)
+                if (isValid(state.Height.GetValueOrDefault()))
                 {
                     Height = state.Height.GetValueOrDefault();
                 }
-                if (state.Width.GetValueOrDefault() > 0)
+                if (isValid(state.Width.GetValueOrDefault()))
                 {
                     Width = state.Width.GetValueOrDefault();
                 }
@@ -161,7 +165,7 @@ namespace IronyModManager.Views
                 var totalScreenX = Screens.All.Sum(p => p.WorkingArea.Width);
                 var locX = state.LocationX.GetValueOrDefault() + state.Width.GetValueOrDefault() > totalScreenX ? totalScreenX - state.Width.GetValueOrDefault() : state.LocationX.GetValueOrDefault();
                 var locY = state.LocationY.GetValueOrDefault() + state.Height.GetValueOrDefault() > activeScreen.WorkingArea.Height ? activeScreen.WorkingArea.Height - state.Height.GetValueOrDefault() : state.LocationY.GetValueOrDefault();
-                if (locX > 0 && locY > 0)
+                if (isValid(locX) && isValid(locY))
                 {
                     pos = Position.WithX(locX);
                     pos = pos.WithY(locY);
