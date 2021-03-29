@@ -16,20 +16,20 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
     <WarningsAsErrors />
-    <NoWarn>1701;1702;NU1603;xUnit1004;NU1605</NoWarn>
+    <NoWarn>1701;1702;NU1603;xUnit1004</NoWarn>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Functional_Test|AnyCPU'">
     <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
     <WarningsAsErrors />
     <DefineConstants>TRACE;FUNCTIONAL_TEST</DefineConstants>
-	<NoWarn>1701;1702;NU1603;xUnit1004;NU1605</NoWarn>
+	<NoWarn>1701;1702;NU1603;xUnit1004</NoWarn>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
     <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
     <WarningsAsErrors />
-	<NoWarn>1701;1702;NU1603;xUnit1004;NU1605</NoWarn>
+	<NoWarn>1701;1702;NU1603;xUnit1004</NoWarn>
   </PropertyGroup>
 
   <ItemGroup>
