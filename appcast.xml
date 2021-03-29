@@ -4,160 +4,64 @@
 		<title>Irony Mod Manager</title>
 		<language>en</language>
 		<item>
-			<title>1.14.28-alpha</title>
-			<description>CHANGES FROM v1.13:
+			<title>1.14.35</title>
+			<description>RELEASE INFO:
+* Hide actions menu options which are not available
+* Minor fixes
+
+CHANGES FROM v1.13:
 * Updated dependencies
 * Updated material theme
 * Various theme fixes
 * Add conflict solver first run notification (for clarity)
 * Add game hash verification</description>
-			<pubDate>Sat, 27 Mar 2021 20:49:46 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.14.28-alpha/osx-x64.rar" sparkle:version="1.14.28.21206" sparkle:shortVersionString="1.14.28" length="67998827" sparkle:os="osx" type="application/vnd.rar" sparkle:signature="DJrulTQSC5GkRcSGmzumM8eqj0ftkAYub2S1HJrUkNmx9N9iZI3vKthWsnBKiIuVMZlLHk5ItK0Fu0sk7uSzBw=="/>
+			<pubDate>Mon, 29 Mar 2021 04:07:59 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.14.35/osx-x64.rar" sparkle:version="1.14.35.58421" sparkle:shortVersionString="1.14.35" length="67990759" sparkle:os="osx" type="application/vnd.rar" sparkle:signature="m7tvl5UbY+gAAECLXUIkKAJ2BMiH7UCqdXTN6QMV+Qdj8LJXIt9j8qG9WwEZubVITcT1UAJxuxWT2Fs68+lYDg=="/>
 		</item>
 		<item>
-			<title>1.14.28-alpha</title>
-			<description>CHANGES FROM v1.13:
+			<title>1.14.35</title>
+			<description>RELEASE INFO:
+* Hide actions menu options which are not available
+* Minor fixes
+
+CHANGES FROM v1.13:
 * Updated dependencies
 * Updated material theme
 * Various theme fixes
 * Add conflict solver first run notification (for clarity)
 * Add game hash verification</description>
-			<pubDate>Sat, 27 Mar 2021 20:49:54 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.14.28-alpha/win-x64-setup.rar" sparkle:version="1.14.28.21206" sparkle:shortVersionString="1.14.28" length="58831362" sparkle:os="windows" type="application/vnd.rar" sparkle:signature="Ue2BrYnraX4lX3BYCEsIC1UWcEwTfuoC5xQIwcXmss+FWSYMUMyVTyHN1jEN7sgAbCBKHJUj3WMqVMEXHjk7AA=="/>
+			<pubDate>Mon, 29 Mar 2021 04:08:06 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.14.35/win-x64-setup.rar" sparkle:version="1.14.35.58421" sparkle:shortVersionString="1.14.35" length="58840625" sparkle:os="windows" type="application/vnd.rar" sparkle:signature="DyF+FXgooewOZT6LKEB8MLFvTjtTD1lvO+47owzTHjC5KcgnyQyx4fpTdLvKiRyGiPpDeBrhORVySYCEskmgBw=="/>
 		</item>
 		<item>
-			<title>1.14.28-alpha</title>
-			<description>CHANGES FROM v1.13:
+			<title>1.14.35</title>
+			<description>RELEASE INFO:
+* Hide actions menu options which are not available
+* Minor fixes
+
+CHANGES FROM v1.13:
 * Updated dependencies
 * Updated material theme
 * Various theme fixes
 * Add conflict solver first run notification (for clarity)
 * Add game hash verification</description>
-			<pubDate>Sat, 27 Mar 2021 20:49:50 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.14.28-alpha/win-x64.rar" sparkle:version="1.14.28.21206" sparkle:shortVersionString="1.14.28" length="70814002" sparkle:os="windows" type="application/vnd.rar" sparkle:signature="NWng82Am61W64lgGp+aYKV3rGNy+YO7juAIrfUVghBhulCzRhrHFDPGCnfIIzeQPMaj8ZL1ziLLktZCdYtl/Dw=="/>
+			<pubDate>Mon, 29 Mar 2021 04:08:03 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.14.35/win-x64.rar" sparkle:version="1.14.35.58421" sparkle:shortVersionString="1.14.35" length="70805798" sparkle:os="windows" type="application/vnd.rar" sparkle:signature="bEY+A7hLRTDPTZWiZisB/w4rPJ6DPdA7NhY0lxaccy2frOtZ0taAWl6lwvrel8h3tgTRGdrKKALtj5+0rJvcBQ=="/>
 		</item>
 		<item>
-			<title>1.14.28-alpha</title>
-			<description>CHANGES FROM v1.13:
+			<title>1.14.35</title>
+			<description>RELEASE INFO:
+* Hide actions menu options which are not available
+* Minor fixes
+
+CHANGES FROM v1.13:
 * Updated dependencies
 * Updated material theme
 * Various theme fixes
 * Add conflict solver first run notification (for clarity)
 * Add game hash verification</description>
-			<pubDate>Sat, 27 Mar 2021 20:49:44 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.14.28-alpha/linux-x64.zip" sparkle:version="1.14.28.21206" sparkle:shortVersionString="1.14.28" length="84376791" sparkle:os="linux" type="application/zip" sparkle:signature="Y0rUXXPnmz4L/VkY5F9TKyH4U5cWEMTjrTxKtCNpVcDQBKAjGmu2vNzbnmSSwgSlPlY453uOEh7yWT8ONTTyDQ=="/>
-		</item>
-		<item>
-			<title>1.13.116</title>
-			<description>NOTE:
-Auto update was broken by an external component or GitHub breaking change which is outside of my control. If an update fails please update manually to at least v1.11.30 which fixes this problem.
-
-RELEASE INFO
-* Fix dialog window positioning
-* Fluent light is now the default theme
-* Fix mod management slowdown on larger window sizes
-* External editor filenames are not random anymore
-* Update chinese localization (by Clazex)
-* Various fixes
-
-CHANGES FROM v1.12:
-* Updated dependencies
-* Updated Avalonia (UI framework)
-* Removed some themes
-* Added new themes
-* Updated parser to conform Stellaris 2.9 specs
-* Fixed Win 7 crash when using CJK fonts
-* Irony will no longer cry about needing to rerun the conflict solver when performing compress merge
-* Add option to set position of notifications (bottom or top corners)
-* Various improvements and fixes
-* Check available disk space before performing a merge
-* Add custom mod directory (if set irony merges and patches will be stored there)</description>
-			<pubDate>Thu, 25 Mar 2021 18:36:52 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.13.116/osx-x64.rar" sparkle:version="1.13.116.39762" sparkle:shortVersionString="1.13.116" length="67002704" sparkle:os="osx" type="application/vnd.rar" sparkle:signature="LbO9sNg1iUB+wqZ9zpWQDTq9LE3W1nhJk2waNN06xv/zXHzl4ORS9jKem34sPoVcPLUoL3kfWw4HYunL1kglBA=="/>
-		</item>
-		<item>
-			<title>1.13.116</title>
-			<description>NOTE:
-Auto update was broken by an external component or GitHub breaking change which is outside of my control. If an update fails please update manually to at least v1.11.30 which fixes this problem.
-
-RELEASE INFO
-* Fix dialog window positioning
-* Fluent light is now the default theme
-* Fix mod management slowdown on larger window sizes
-* External editor filenames are not random anymore
-* Update chinese localization (by Clazex)
-* Various fixes
-
-CHANGES FROM v1.12:
-* Updated dependencies
-* Updated Avalonia (UI framework)
-* Removed some themes
-* Added new themes
-* Updated parser to conform Stellaris 2.9 specs
-* Fixed Win 7 crash when using CJK fonts
-* Irony will no longer cry about needing to rerun the conflict solver when performing compress merge
-* Add option to set position of notifications (bottom or top corners)
-* Various improvements and fixes
-* Check available disk space before performing a merge
-* Add custom mod directory (if set irony merges and patches will be stored there)</description>
-			<pubDate>Thu, 25 Mar 2021 18:37:00 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.13.116/win-x64-setup.rar" sparkle:version="1.13.116.39762" sparkle:shortVersionString="1.13.116" length="57942139" sparkle:os="windows" type="application/vnd.rar" sparkle:signature="2zrrs/c+WtyeAMF7XStVQu8HU/foTpjM+WkkSY1JUHhUtQ2USebZj695N9/YFiI4+k2nQVTt/5oFbsGUKYOnCw=="/>
-		</item>
-		<item>
-			<title>1.13.116</title>
-			<description>NOTE:
-Auto update was broken by an external component or GitHub breaking change which is outside of my control. If an update fails please update manually to at least v1.11.30 which fixes this problem.
-
-RELEASE INFO
-* Fix dialog window positioning
-* Fluent light is now the default theme
-* Fix mod management slowdown on larger window sizes
-* External editor filenames are not random anymore
-* Update chinese localization (by Clazex)
-* Various fixes
-
-CHANGES FROM v1.12:
-* Updated dependencies
-* Updated Avalonia (UI framework)
-* Removed some themes
-* Added new themes
-* Updated parser to conform Stellaris 2.9 specs
-* Fixed Win 7 crash when using CJK fonts
-* Irony will no longer cry about needing to rerun the conflict solver when performing compress merge
-* Add option to set position of notifications (bottom or top corners)
-* Various improvements and fixes
-* Check available disk space before performing a merge
-* Add custom mod directory (if set irony merges and patches will be stored there)</description>
-			<pubDate>Thu, 25 Mar 2021 18:36:56 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.13.116/win-x64.rar" sparkle:version="1.13.116.39762" sparkle:shortVersionString="1.13.116" length="69756919" sparkle:os="windows" type="application/vnd.rar" sparkle:signature="jE0Z8BNUajdeymiGlY98fAtR5B8Kj784HnpqCVsjx0XnGxHwWI73YcNSE2qMimMN+tgoHuNOiO73WXmtafmtBw=="/>
-		</item>
-		<item>
-			<title>1.13.116</title>
-			<description>NOTE:
-Auto update was broken by an external component or GitHub breaking change which is outside of my control. If an update fails please update manually to at least v1.11.30 which fixes this problem.
-
-RELEASE INFO
-* Fix dialog window positioning
-* Fluent light is now the default theme
-* Fix mod management slowdown on larger window sizes
-* External editor filenames are not random anymore
-* Update chinese localization (by Clazex)
-* Various fixes
-
-CHANGES FROM v1.12:
-* Updated dependencies
-* Updated Avalonia (UI framework)
-* Removed some themes
-* Added new themes
-* Updated parser to conform Stellaris 2.9 specs
-* Fixed Win 7 crash when using CJK fonts
-* Irony will no longer cry about needing to rerun the conflict solver when performing compress merge
-* Add option to set position of notifications (bottom or top corners)
-* Various improvements and fixes
-* Check available disk space before performing a merge
-* Add custom mod directory (if set irony merges and patches will be stored there)</description>
-			<pubDate>Thu, 25 Mar 2021 18:36:48 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.13.116/linux-x64.zip" sparkle:version="1.13.116.39762" sparkle:shortVersionString="1.13.116" length="83073245" sparkle:os="linux" type="application/zip" sparkle:signature="qlXFWkM1uW/nBdKIMsj9pKrdmievbDZ8/dmPy3RjdIknhXHeG2K28Ab4IG2k2iYvO1gat3E3OGZsv5Rsfo2vBw=="/>
+			<pubDate>Mon, 29 Mar 2021 04:07:56 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.14.35/linux-x64.zip" sparkle:version="1.14.35.58421" sparkle:shortVersionString="1.14.35" length="84372141" sparkle:os="linux" type="application/zip" sparkle:signature="Kf8zR8HTV6A+3UyVbxIHSRfKUR7keiQkAxG+9mLE6XhUr0VrPRJKkW5/9WRONMV09kCF1CudAhBpH/XC+HVZBw=="/>
 		</item>
 	</channel>
 </rss>
