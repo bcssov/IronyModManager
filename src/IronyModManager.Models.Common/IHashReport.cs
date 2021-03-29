@@ -4,9 +4,9 @@
 // Created          : 09-30-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 09-30-2020
+// Last Modified On : 03-27-2021
 // ***********************************************************************
-// <copyright file="IModHashReport.cs" company="Mario">
+// <copyright file="IHashReport.cs" company="Mario">
 //     Mario
 // </copyright>
 // <summary></summary>
@@ -17,11 +17,11 @@ using System.Collections.Generic;
 namespace IronyModManager.Models.Common
 {
     /// <summary>
-    /// Interface IModHashReport
+    /// Interface IHashReport
     /// Implements the <see cref="IronyModManager.Models.Common.IModel" />
     /// </summary>
     /// <seealso cref="IronyModManager.Models.Common.IModel" />
-    public interface IModHashReport : IModel
+    public interface IHashReport : IModel
     {
         #region Properties
 
@@ -35,7 +35,13 @@ namespace IronyModManager.Models.Common
         /// Gets or sets the reports.
         /// </summary>
         /// <value>The reports.</value>
-        IList<IModHashFileReport> Reports { get; set; }
+        IList<IHashFileReport> Reports { get; set; }
+
+        /// <summary>
+        /// Gets or sets the type of the report.
+        /// </summary>
+        /// <value>The type of the report.</value>
+        HashReportType ReportType { get; set; }
 
         #endregion Properties
     }

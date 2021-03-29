@@ -56,7 +56,7 @@
                 Command="{Binding RemoveCommand}" Margin="5,0,0,0" Width="30"></Button>
                 <!-- For the love of God I can't force this piece of shit to set its width properly -->
                 <ComboBox Items="{Binding ModCollections}" SelectedItem="{Binding SelectedModCollection}"
-                          MaxHeight="30" Margin="10"
+                          Height="30" Margin="10"
                           Width="{Binding $parent[Window].Width, 
                            Converter={StaticResource MathConverter} 
                            ConverterParameter=(x/2.1)-90}">
@@ -98,7 +98,7 @@
                 <ContentControl Content="{Binding ModNameSortOrder}"></ContentControl>
               </Border>
             </Grid>
-            <ContentControl Content="{Binding ModReportView}"></ContentControl>
+            <ContentControl Content="{Binding HashReportView}"></ContentControl>
             <controls:DragDropListBox Margin="0,10,0,0" Items="{Binding SelectedMods}" ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                      x:Name="modList" Grid.Row="4" Grid.ColumnSpan="2"
                      MinHeight="{Binding $parent[Window].Height, 

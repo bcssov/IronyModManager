@@ -4,7 +4,7 @@
 // Created          : 03-03-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-19-2021
+// Last Modified On : 03-29-2021
 // ***********************************************************************
 // <copyright file="CollectionModsControlViewModel.cs" company="Mario">
 //     Mario
@@ -136,6 +136,11 @@ namespace IronyModManager.ViewModels.Controls
         private readonly ConcurrentBag<IMod> reorderQueue;
 
         /// <summary>
+        /// The report export service
+        /// </summary>
+        private readonly IReportExportService reportExportService;
+
+        /// <summary>
         /// The active game
         /// </summary>
         private IGame activeGame;
@@ -192,10 +197,11 @@ namespace IronyModManager.ViewModels.Controls
         /// <summary>
         /// Initializes a new instance of the <see cref="CollectionModsControlViewModel" /> class.
         /// </summary>
+        /// <param name="reportExportService">The report export service.</param>
         /// <param name="hotkeyPressedHandler">The hotkey pressed handler.</param>
         /// <param name="patchMod">The patch mod.</param>
         /// <param name="idGenerator">The identifier generator.</param>
-        /// <param name="modReportView">The mod report view.</param>
+        /// <param name="hashReportView">The hash report view.</param>
         /// <param name="modReportExportHandler">The mod report export handler.</param>
         /// <param name="fileDialogAction">The file dialog action.</param>
         /// <param name="modCollectionService">The mod collection service.</param>
@@ -211,15 +217,16 @@ namespace IronyModManager.ViewModels.Controls
         /// <param name="localizationManager">The localization manager.</param>
         /// <param name="notificationAction">The notification action.</param>
         /// <param name="appAction">The application action.</param>
-        public CollectionModsControlViewModel(MainViewHotkeyPressedHandler hotkeyPressedHandler, PatchModControlViewModel patchMod,
-            IIDGenerator idGenerator, ModHashReportControlViewModel modReportView, ModReportExportHandler modReportExportHandler,
+        public CollectionModsControlViewModel(IReportExportService reportExportService, MainViewHotkeyPressedHandler hotkeyPressedHandler, PatchModControlViewModel patchMod,
+            IIDGenerator idGenerator, HashReportControlViewModel hashReportView, ModReportExportHandler modReportExportHandler,
             IFileDialogAction fileDialogAction, IModCollectionService modCollectionService,
             IAppStateService appStateService, IModPatchCollectionService modPatchCollectionService, IModService modService, IGameService gameService,
             AddNewCollectionControlViewModel addNewCollection, ExportModCollectionControlViewModel exportCollection, ModifyCollectionControlViewModel modifyCollection,
             SearchModsControlViewModel searchMods, SortOrderControlViewModel modNameSort, ILocalizationManager localizationManager,
             INotificationAction notificationAction, IAppAction appAction)
         {
-            this.PatchMod = patchMod;
+            this.reportExportService = reportExportService;
+            PatchMod = patchMod;
             this.idGenerator = idGenerator;
             this.modCollectionService = modCollectionService;
             this.appStateService = appStateService;
@@ -237,7 +244,7 @@ namespace IronyModManager.ViewModels.Controls
             this.fileDialogAction = fileDialogAction;
             this.modReportExportHandler = modReportExportHandler;
             this.hotkeyPressedHandler = hotkeyPressedHandler;
-            ModReportView = modReportView;
+            HashReportView = hashReportView;
             SearchMods.ShowArrows = true;
             reorderQueue = new ConcurrentBag<IMod>();
         }
@@ -429,6 +436,19 @@ namespace IronyModManager.ViewModels.Controls
         public virtual ExportModCollectionControlViewModel ExportCollection { get; protected set; }
 
         /// <summary>
+        /// Gets or sets the export collection report.
+        /// </summary>
+        /// <value>The export collection report.</value>
+        [StaticLocalization(LocalizationResources.Collection_Mods.FileHash.ExportCollection)]
+        public virtual string ExportCollectionReport { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets the export collection report command.
+        /// </summary>
+        /// <value>The export collection report command.</value>
+        public virtual ReactiveCommand<Unit, Unit> ExportCollectionReportCommand { get; protected set; }
+
+        /// <summary>
         /// Gets or sets the export collection to clipboard.
         /// </summary>
         /// <value>The export collection to clipboard.</value>
@@ -442,17 +462,23 @@ namespace IronyModManager.ViewModels.Controls
         public virtual ReactiveCommand<Unit, Unit> ExportCollectionToClipboardCommand { get; protected set; }
 
         /// <summary>
-        /// Gets or sets the export report.
+        /// Gets or sets the export game report.
         /// </summary>
-        /// <value>The export report.</value>
-        [StaticLocalization(LocalizationResources.Collection_Mods.FileHash.Export)]
-        public virtual string ExportReport { get; protected set; }
+        /// <value>The export game report.</value>
+        [StaticLocalization(LocalizationResources.Collection_Mods.FileHash.ExportGame)]
+        public virtual string ExportGameReport { get; protected set; }
 
         /// <summary>
-        /// Gets or sets the export report command.
+        /// Gets or sets the export game report command.
         /// </summary>
-        /// <value>The export report command.</value>
-        public virtual ReactiveCommand<Unit, Unit> ExportReportCommand { get; protected set; }
+        /// <value>The export game report command.</value>
+        public virtual ReactiveCommand<Unit, Unit> ExportGameReportCommand { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets the hash report view.
+        /// </summary>
+        /// <value>The hash report view.</value>
+        public virtual HashReportControlViewModel HashReportView { get; protected set; }
 
         /// <summary>
         /// Gets or sets the hovered mod.
@@ -523,12 +549,6 @@ namespace IronyModManager.ViewModels.Controls
         /// <value>The mod order.</value>
         [StaticLocalization(LocalizationResources.Collection_Mods.Order)]
         public virtual string ModOrder { get; protected set; }
-
-        /// <summary>
-        /// Gets or sets the mod report view.
-        /// </summary>
-        /// <value>The mod report view.</value>
-        public virtual ModHashReportControlViewModel ModReportView { get; protected set; }
 
         /// <summary>
         /// Gets or sets the mods.
@@ -667,6 +687,15 @@ namespace IronyModManager.ViewModels.Controls
         #endregion Properties
 
         #region Methods
+
+        /// <summary>
+        /// Determines whether this instance [can export game].
+        /// </summary>
+        /// <returns>bool.</returns>
+        public virtual bool CanExportGame()
+        {
+            return activeGame != null && !string.IsNullOrWhiteSpace(activeGame.ExecutableLocation) && System.IO.File.Exists(activeGame.ExecutableLocation);
+        }
 
         /// <summary>
         /// Gets the context menu mod steam URL.
@@ -1530,8 +1559,16 @@ namespace IronyModManager.ViewModels.Controls
             {
                 reportDisposable = modReportExportHandler.Subscribe(s =>
                 {
-                    TriggerOverlay(id, true, localizationManager.GetResource(useImportOverlay ? LocalizationResources.Collection_Mods.FileHash.ImportOverlay : LocalizationResources.Collection_Mods.FileHash.ExportOverlay),
-                        Smart.Format(localizationManager.GetResource(LocalizationResources.Collection_Mods.FileHash.Progress), new { Progress = s.Percentage.ToLocalizedPercentage() }));
+                    if (useImportOverlay)
+                    {
+                        TriggerOverlay(id, true, localizationManager.GetResource(LocalizationResources.Collection_Mods.FileHash.ImportOverlay),
+                        Smart.Format(localizationManager.GetResource(LocalizationResources.Collection_Mods.FileHash.ProgressImport), new { Progress = s.Percentage.ToLocalizedPercentage(), Count = s.Step, TotalCount = 2 }));
+                    }
+                    else
+                    {
+                        TriggerOverlay(id, true, localizationManager.GetResource(LocalizationResources.Collection_Mods.FileHash.ExportOverlay),
+                        Smart.Format(localizationManager.GetResource(LocalizationResources.Collection_Mods.FileHash.ProgressExport), new { Progress = s.Percentage.ToLocalizedPercentage() }));
+                    }
                 }).DisposeWith(disposables);
             }
 
@@ -1544,11 +1581,22 @@ namespace IronyModManager.ViewModels.Controls
                     var id = idGenerator.GetNextId();
                     await TriggerOverlayAsync(id, true, localizationManager.GetResource(LocalizationResources.Collection_Mods.FileHash.ImportOverlay));
                     registerReportHandlers(id, true);
-                    var reports = await Task.Run(() => modCollectionService.ImportHashReportAsync(SelectedMods, path));
-                    if (reports?.Count() > 0)
+                    var rawReports = await reportExportService.ImportAsync(path);
+                    var reports = new List<IHashReport>();
+                    var collectionReports = await Task.Run(() => modCollectionService.ImportHashReportAsync(SelectedMods, rawReports.ToList()));
+                    if (collectionReports != null && collectionReports.Any())
+                    {
+                        reports.AddRange(collectionReports);
+                    }
+                    var gameReports = await Task.Run(() => gameService.ImportHashReportAsync(activeGame, rawReports.ToList()));
+                    if (gameReports != null && gameReports.Any())
+                    {
+                        reports.AddRange(gameReports);
+                    }
+                    if (reports.Any())
                     {
                         await TriggerOverlayAsync(id, false);
-                        ModReportView.SetParameters(reports);
+                        HashReportView.SetParameters(reports);
                     }
                     else
                     {
@@ -1560,7 +1608,7 @@ namespace IronyModManager.ViewModels.Controls
                 }
             }).DisposeWith(disposables);
 
-            ExportReportCommand = ReactiveCommand.CreateFromTask(async () =>
+            ExportCollectionReportCommand = ReactiveCommand.CreateFromTask(async () =>
             {
                 var title = localizationManager.GetResource(LocalizationResources.Collection_Mods.FileHash.DialogTitleExport);
                 var path = await fileDialogAction.SaveDialogAsync(title, SelectedModCollection?.Name, Shared.Constants.JsonExtensionWithoutDot);
@@ -1570,6 +1618,25 @@ namespace IronyModManager.ViewModels.Controls
                     await TriggerOverlayAsync(id, true, localizationManager.GetResource(LocalizationResources.Collection_Mods.FileHash.ExportOverlay));
                     registerReportHandlers(id);
                     if (await Task.Run(() => modCollectionService.ExportHashReportAsync(SelectedMods, path)))
+                    {
+                        notificationAction.ShowNotification(localizationManager.GetResource(LocalizationResources.Notifications.ReportExported.Title),
+                            localizationManager.GetResource(LocalizationResources.Notifications.ReportExported.Message), NotificationType.Success);
+                    }
+                    await TriggerOverlayAsync(id, false);
+                    reportDisposable?.Dispose();
+                }
+            }).DisposeWith(disposables);
+
+            ExportGameReportCommand = ReactiveCommand.CreateFromTask(async () =>
+            {
+                var title = localizationManager.GetResource(LocalizationResources.Collection_Mods.FileHash.DialogTitleExport);
+                var path = await fileDialogAction.SaveDialogAsync(title, activeGame?.Name, Shared.Constants.JsonExtensionWithoutDot);
+                if (!string.IsNullOrWhiteSpace(path))
+                {
+                    var id = idGenerator.GetNextId();
+                    await TriggerOverlayAsync(id, true, localizationManager.GetResource(LocalizationResources.Collection_Mods.FileHash.ExportOverlay));
+                    registerReportHandlers(id);
+                    if (await Task.Run(() => gameService.ExportHashReportAsync(activeGame, path)))
                     {
                         notificationAction.ShowNotification(localizationManager.GetResource(LocalizationResources.Notifications.ReportExported.Title),
                             localizationManager.GetResource(LocalizationResources.Notifications.ReportExported.Message), NotificationType.Success);

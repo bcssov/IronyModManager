@@ -4,7 +4,7 @@
 // Created          : 01-11-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-16-2021
+// Last Modified On : 03-27-2021
 // ***********************************************************************
 // <copyright file="DIPackage.cs" company="IronyModManager.Services">
 //     Mario
@@ -53,6 +53,8 @@ namespace IronyModManager.Services
             container.Register<IPermissionCheckService, PermissionCheckService>();
             container.Register<IDLCService, DLCService>();
             container.Register<INotificationPositionSettingsService, NotificationPositionSettingsService>();
+            container.Register<IPromptNotificationsService, PromptNotificationsService>();
+            container.Register<IReportExportService, ReportExportService>();
         }
 
         #endregion Methods

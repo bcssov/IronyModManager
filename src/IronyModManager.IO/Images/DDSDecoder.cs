@@ -4,7 +4,7 @@
 // Created          : 02-17-2021
 //
 // Last Modified By : Mario
-// Last Modified On : 02-17-2021
+// Last Modified On : 03-26-2021
 // ***********************************************************************
 // <copyright file="DDSDecoder.cs" company="Mario">
 //     Mario
@@ -19,7 +19,7 @@ using BCnEncoder.Decoder;
 using BCnEncoder.Decoder.Options;
 using BCnEncoder.Shared;
 using BCnEncoder.Shared.ImageFiles;
-using Microsoft.Toolkit.HighPerformance.Memory;
+using Microsoft.Toolkit.HighPerformance;
 using Pfim;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
@@ -126,7 +126,7 @@ namespace IronyModManager.IO.Images
         /// <exception cref="ArgumentOutOfRangeException">format - null</exception>
         private CompressionFormat GetCompressionFormat(DdsFile file, DecoderInputOptions decoderInputOptions)
         {
-            // Copied from BNcEncoder due to protection level
+            // Copied from BCnEncoder due to protection level
             var format = file.header.ddsPixelFormat.IsDxt10Format ?
                 file.dx10Header.dxgiFormat :
                 file.header.ddsPixelFormat.DxgiFormat;
@@ -193,7 +193,9 @@ namespace IronyModManager.IO.Images
                     return CompressionFormat.AtcInterpolatedAlpha;
 
                 default:
+#pragma warning disable CA2208 // Instantiate argument exceptions correctly
                     throw new ArgumentOutOfRangeException(nameof(format), format, null);
+#pragma warning restore CA2208 // Instantiate argument exceptions correctly
             }
         }
 

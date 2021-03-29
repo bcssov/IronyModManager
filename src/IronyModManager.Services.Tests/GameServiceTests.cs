@@ -4,7 +4,7 @@
 // Created          : 02-12-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-17-2021
+// Last Modified On : 03-27-2021
 // ***********************************************************************
 // <copyright file="GameServiceTests.cs" company="Mario">
 //     Mario
@@ -17,12 +17,14 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text;
+using System.Threading.Tasks;
 using AutoMapper;
 using FluentAssertions;
 using IronyModManager.IO.Common.Readers;
 using IronyModManager.Models;
 using IronyModManager.Models.Common;
 using IronyModManager.Services.Common;
+using IronyModManager.Shared.MessageBus;
 using IronyModManager.Storage;
 using IronyModManager.Storage.Common;
 using IronyModManager.Tests.Common;
@@ -101,7 +103,7 @@ namespace IronyModManager.Services.Tests
             var preferencesService = new Mock<IPreferencesService>();
             SetupMockCase(preferencesService, storageProvider);
 
-            var service = new GameService(new Mock<IReader>().Object, storageProvider.Object, preferencesService.Object, new Mock<IMapper>().Object);
+            var service = new GameService(null, null, new Mock<IReader>().Object, storageProvider.Object, preferencesService.Object, new Mock<IMapper>().Object);
             var result = service.Get();
             result.Count().Should().Be(3);
             result.GroupBy(p => p.Type).Select(p => p.First()).Count().Should().Be(3);
@@ -117,7 +119,7 @@ namespace IronyModManager.Services.Tests
             var preferencesService = new Mock<IPreferencesService>();
             SetupMockCase(preferencesService, storageProvider);
 
-            var service = new GameService(new Mock<IReader>().Object, storageProvider.Object, preferencesService.Object, new Mock<IMapper>().Object);
+            var service = new GameService(null, null, new Mock<IReader>().Object, storageProvider.Object, preferencesService.Object, new Mock<IMapper>().Object);
             var result = service.Get();
             result.FirstOrDefault(p => p.IsSelected).Should().NotBeNull();
             result.FirstOrDefault(p => p.IsSelected).Type.Should().Be("game 1");
@@ -136,7 +138,7 @@ namespace IronyModManager.Services.Tests
             var preferencesService = new Mock<IPreferencesService>();
             SetupMockCase(preferencesService, storageProvider);
 
-            var service = new GameService(new Mock<IReader>().Object, storageProvider.Object, preferencesService.Object, new Mock<IMapper>().Object);
+            var service = new GameService(null, null, new Mock<IReader>().Object, storageProvider.Object, preferencesService.Object, new Mock<IMapper>().Object);
             var result = service.Get();
             result.FirstOrDefault(p => p.IsSelected).Should().NotBeNull();
             result.FirstOrDefault(p => p.IsSelected).Type.Should().Be("game 1");
@@ -157,7 +159,7 @@ namespace IronyModManager.Services.Tests
             var preferencesService = new Mock<IPreferencesService>();
             SetupMockCase(preferencesService, storageProvider);
 
-            var service = new GameService(new Mock<IReader>().Object, storageProvider.Object, preferencesService.Object, new Mock<IMapper>().Object);
+            var service = new GameService(null, null, new Mock<IReader>().Object, storageProvider.Object, preferencesService.Object, new Mock<IMapper>().Object);
             var result = service.GetSelected();
             result.Should().NotBeNull();
             result.Type.Should().Be("game 1");
@@ -176,7 +178,7 @@ namespace IronyModManager.Services.Tests
             var preferencesService = new Mock<IPreferencesService>();
             SetupMockCase(preferencesService, storageProvider);
 
-            var service = new GameService(new Mock<IReader>().Object, storageProvider.Object, preferencesService.Object, new Mock<IMapper>().Object);
+            var service = new GameService(null, null, new Mock<IReader>().Object, storageProvider.Object, preferencesService.Object, new Mock<IMapper>().Object);
             var result = service.Save(new Game()
             {
                 IsSelected = true,
@@ -201,7 +203,7 @@ namespace IronyModManager.Services.Tests
                 return true;
             });
 
-            var service = new GameService(new Mock<IReader>().Object, storageProvider.Object, preferencesService.Object, new Mock<IMapper>().Object);
+            var service = new GameService(null, null, new Mock<IReader>().Object, storageProvider.Object, preferencesService.Object, new Mock<IMapper>().Object);
             var result = service.Save(new Game()
             {
                 IsSelected = true,
@@ -223,7 +225,7 @@ namespace IronyModManager.Services.Tests
             var preferencesService = new Mock<IPreferencesService>();
             SetupMockCase(preferencesService, storageProvider);
 
-            var service = new GameService(new Mock<IReader>().Object, storageProvider.Object, preferencesService.Object, new Mock<IMapper>().Object);
+            var service = new GameService(null, null, new Mock<IReader>().Object, storageProvider.Object, preferencesService.Object, new Mock<IMapper>().Object);
             Exception exception = null;
             try
             {
@@ -250,7 +252,7 @@ namespace IronyModManager.Services.Tests
             var preferencesService = new Mock<IPreferencesService>();
             SetupMockCase(preferencesService, storageProvider);
 
-            var service = new GameService(new Mock<IReader>().Object, storageProvider.Object, preferencesService.Object, new Mock<IMapper>().Object);
+            var service = new GameService(null, null, new Mock<IReader>().Object, storageProvider.Object, preferencesService.Object, new Mock<IMapper>().Object);
             var games = new List<IGame>
             {
                 new Game()
@@ -282,7 +284,7 @@ namespace IronyModManager.Services.Tests
             var preferencesService = new Mock<IPreferencesService>();
             SetupMockCase(preferencesService, storageProvider);
 
-            var service = new GameService(new Mock<IReader>().Object, storageProvider.Object, preferencesService.Object, new Mock<IMapper>().Object);
+            var service = new GameService(null, null, new Mock<IReader>().Object, storageProvider.Object, preferencesService.Object, new Mock<IMapper>().Object);
             var games = new List<IGame>
             {
                 new Game()
@@ -343,7 +345,7 @@ namespace IronyModManager.Services.Tests
             var preferencesService = new Mock<IPreferencesService>();
             SetupMockCase(preferencesService, storageProvider);
 
-            var service = new GameService(new Mock<IReader>().Object, storageProvider.Object, preferencesService.Object, new Mock<IMapper>().Object);
+            var service = new GameService(null, null, new Mock<IReader>().Object, storageProvider.Object, preferencesService.Object, new Mock<IMapper>().Object);
             var themes = new List<IGame>
             {
                 new Game()
@@ -382,7 +384,7 @@ namespace IronyModManager.Services.Tests
             var storageProvider = new Mock<IStorageProvider>();
             var preferencesService = new Mock<IPreferencesService>();
             SetupMockCase(preferencesService, storageProvider);
-            var service = new GameService(new Mock<IReader>().Object, storageProvider.Object, preferencesService.Object, new Mock<IMapper>().Object);
+            var service = new GameService(null, null, new Mock<IReader>().Object, storageProvider.Object, preferencesService.Object, new Mock<IMapper>().Object);
             var args = service.GetLaunchSettings(game);
             args.ExecutableLocation.Should().Be("steam://run/1");
             args.LaunchArguments.Should().BeNullOrWhiteSpace();
@@ -406,7 +408,7 @@ namespace IronyModManager.Services.Tests
             var storageProvider = new Mock<IStorageProvider>();
             var preferencesService = new Mock<IPreferencesService>();
             SetupMockCase(preferencesService, storageProvider);
-            var service = new GameService(new Mock<IReader>().Object, storageProvider.Object, preferencesService.Object, new Mock<IMapper>().Object);
+            var service = new GameService(null, null, new Mock<IReader>().Object, storageProvider.Object, preferencesService.Object, new Mock<IMapper>().Object);
             var args = service.GetLaunchSettings(game);
             args.ExecutableLocation.Should().Be("steam://run/1//test");
             args.LaunchArguments.Should().BeNullOrWhiteSpace();
@@ -429,7 +431,7 @@ namespace IronyModManager.Services.Tests
             var storageProvider = new Mock<IStorageProvider>();
             var preferencesService = new Mock<IPreferencesService>();
             SetupMockCase(preferencesService, storageProvider);
-            var service = new GameService(new Mock<IReader>().Object, storageProvider.Object, preferencesService.Object, new Mock<IMapper>().Object);
+            var service = new GameService(null, null, new Mock<IReader>().Object, storageProvider.Object, preferencesService.Object, new Mock<IMapper>().Object);
             var args = service.GetLaunchSettings(game);
             args.ExecutableLocation.Should().Be("test.exe");
             args.LaunchArguments.Should().BeNullOrWhiteSpace();
@@ -453,7 +455,7 @@ namespace IronyModManager.Services.Tests
             var storageProvider = new Mock<IStorageProvider>();
             var preferencesService = new Mock<IPreferencesService>();
             SetupMockCase(preferencesService, storageProvider);
-            var service = new GameService(new Mock<IReader>().Object, storageProvider.Object, preferencesService.Object, new Mock<IMapper>().Object);
+            var service = new GameService(null, null, new Mock<IReader>().Object, storageProvider.Object, preferencesService.Object, new Mock<IMapper>().Object);
             var args = service.GetLaunchSettings(game);
             args.ExecutableLocation.Should().Be("test.exe");
             args.LaunchArguments.Should().Be("args");
@@ -477,7 +479,7 @@ namespace IronyModManager.Services.Tests
             var storageProvider = new Mock<IStorageProvider>();
             var preferencesService = new Mock<IPreferencesService>();
             SetupMockCase(preferencesService, storageProvider);
-            var service = new GameService(new Mock<IReader>().Object, storageProvider.Object, preferencesService.Object, new Mock<IMapper>().Object);
+            var service = new GameService(null, null, new Mock<IReader>().Object, storageProvider.Object, preferencesService.Object, new Mock<IMapper>().Object);
             var args = service.GetLaunchSettings(game, true);
             args.ExecutableLocation.Should().Be("test.exe");
             args.LaunchArguments.Should().Be("--continuelastsave -args");
@@ -502,7 +504,7 @@ namespace IronyModManager.Services.Tests
             var storageProvider = new Mock<IStorageProvider>();
             var preferencesService = new Mock<IPreferencesService>();
             SetupMockCase(preferencesService, storageProvider);
-            var service = new GameService(new Mock<IReader>().Object, storageProvider.Object, preferencesService.Object, new Mock<IMapper>().Object);
+            var service = new GameService(null, null, new Mock<IReader>().Object, storageProvider.Object, preferencesService.Object, new Mock<IMapper>().Object);
             var args = service.GetDefaultGameSettings(game);
             args.ExecutableLocation.Should().Be("steam://run/1");
         }
@@ -526,7 +528,7 @@ namespace IronyModManager.Services.Tests
             var storageProvider = new Mock<IStorageProvider>();
             var preferencesService = new Mock<IPreferencesService>();
             SetupMockCase(preferencesService, storageProvider);
-            var service = new GameService(new Mock<IReader>().Object, storageProvider.Object, preferencesService.Object, new Mock<IMapper>().Object);
+            var service = new GameService(null, null, new Mock<IReader>().Object, storageProvider.Object, preferencesService.Object, new Mock<IMapper>().Object);
             var args = service.GetDefaultGameSettings(game);
             args.UserDirectory.Should().Be("user-dir");
         }
@@ -545,14 +547,14 @@ namespace IronyModManager.Services.Tests
                 UserDirectory = "user-dir",
                 WorkshopDirectory = new List<string>() { "test" },
                 LaunchArguments = "args",
-                ExecutableLocation = "test.exe",                
+                ExecutableLocation = "test.exe",
             };
             var storageProvider = new Mock<IStorageProvider>();
             var preferencesService = new Mock<IPreferencesService>();
             SetupMockCase(preferencesService, storageProvider);
-            var service = new GameService(new Mock<IReader>().Object, storageProvider.Object, preferencesService.Object, new Mock<IMapper>().Object);
+            var service = new GameService(null, null, new Mock<IReader>().Object, storageProvider.Object, preferencesService.Object, new Mock<IMapper>().Object);
             var args = service.GetDefaultGameSettings(game);
-            args.CustomModDirectory.Should().BeNullOrEmpty();         
+            args.CustomModDirectory.Should().BeNullOrEmpty();
         }
 
         /// <summary>
@@ -572,7 +574,7 @@ namespace IronyModManager.Services.Tests
             var storageProvider = new Mock<IStorageProvider>();
             var preferencesService = new Mock<IPreferencesService>();
             SetupMockCase(preferencesService, storageProvider);
-            var service = new GameService(new Mock<IReader>().Object, storageProvider.Object, preferencesService.Object, new Mock<IMapper>().Object);
+            var service = new GameService(null, null, new Mock<IReader>().Object, storageProvider.Object, preferencesService.Object, new Mock<IMapper>().Object);
             var args = service.GetDefaultGameSettings(game);
             args.ExecutableLocation.Should().Be("exePath.exe");
         }
@@ -594,7 +596,7 @@ namespace IronyModManager.Services.Tests
             var storageProvider = new Mock<IStorageProvider>();
             var preferencesService = new Mock<IPreferencesService>();
             SetupMockCase(preferencesService, storageProvider);
-            var service = new GameService(new Mock<IReader>().Object, storageProvider.Object, preferencesService.Object, new Mock<IMapper>().Object);
+            var service = new GameService(null, null, new Mock<IReader>().Object, storageProvider.Object, preferencesService.Object, new Mock<IMapper>().Object);
             var args = service.GetDefaultGameSettings(game);
             args.UserDirectory.Should().Be("user2");
         }
@@ -616,7 +618,7 @@ namespace IronyModManager.Services.Tests
             var storageProvider = new Mock<IStorageProvider>();
             var preferencesService = new Mock<IPreferencesService>();
             SetupMockCase(preferencesService, storageProvider);
-            var service = new GameService(new Mock<IReader>().Object, storageProvider.Object, preferencesService.Object, new Mock<IMapper>().Object);
+            var service = new GameService(null, null, new Mock<IReader>().Object, storageProvider.Object, preferencesService.Object, new Mock<IMapper>().Object);
             var args = service.GetDefaultGameSettings(game);
             args.ExecutableLocation.Should().BeNullOrWhiteSpace();
         }
@@ -633,7 +635,7 @@ namespace IronyModManager.Services.Tests
             };
             var storageProvider = new Mock<IStorageProvider>();
             var preferencesService = new Mock<IPreferencesService>();
-            var service = new GameService(new Mock<IReader>().Object, storageProvider.Object, preferencesService.Object, new Mock<IMapper>().Object);
+            var service = new GameService(null, null, new Mock<IReader>().Object, storageProvider.Object, preferencesService.Object, new Mock<IMapper>().Object);
             var result = service.IsSteamLaunchPath(gameSettings);
             result.Should().BeTrue();
         }
@@ -650,7 +652,7 @@ namespace IronyModManager.Services.Tests
             };
             var storageProvider = new Mock<IStorageProvider>();
             var preferencesService = new Mock<IPreferencesService>();
-            var service = new GameService(new Mock<IReader>().Object, storageProvider.Object, preferencesService.Object, new Mock<IMapper>().Object);
+            var service = new GameService(null, null, new Mock<IReader>().Object, storageProvider.Object, preferencesService.Object, new Mock<IMapper>().Object);
             var result = service.IsSteamLaunchPath(gameSettings);
             result.Should().BeFalse();
         }
@@ -676,7 +678,7 @@ namespace IronyModManager.Services.Tests
                     Game = "game 2"
                 };
             });
-            var service = new GameService(new Mock<IReader>().Object, storageProvider.Object, preferencesService.Object, new Mock<IMapper>().Object);
+            var service = new GameService(null, null, new Mock<IReader>().Object, storageProvider.Object, preferencesService.Object, new Mock<IMapper>().Object);
             var result = service.IsSteamGame(gameSettings);
             result.Should().BeFalse();
         }
@@ -702,7 +704,7 @@ namespace IronyModManager.Services.Tests
                     Game = "game 2"
                 };
             });
-            var service = new GameService(new Mock<IReader>().Object, storageProvider.Object, preferencesService.Object, new Mock<IMapper>().Object);
+            var service = new GameService(null, null, new Mock<IReader>().Object, storageProvider.Object, preferencesService.Object, new Mock<IMapper>().Object);
             var result = service.IsSteamGame(gameSettings);
             result.Should().BeTrue();
         }
@@ -716,7 +718,7 @@ namespace IronyModManager.Services.Tests
             var storageProvider = new Mock<IStorageProvider>();
             var preferencesService = new Mock<IPreferencesService>();
             SetupMockCase(preferencesService, storageProvider);
-            var service = new GameService(new Mock<IReader>().Object, storageProvider.Object, preferencesService.Object, new Mock<IMapper>().Object);
+            var service = new GameService(null, null, new Mock<IReader>().Object, storageProvider.Object, preferencesService.Object, new Mock<IMapper>().Object);
             var result = service.IsContinueGameAllowed(new Game()
             {
                 Type = "game 2",
@@ -745,7 +747,7 @@ namespace IronyModManager.Services.Tests
             };
             var reader = new Mock<IReader>();
             reader.Setup(s => s.Read(It.IsAny<string>(), It.IsAny<IEnumerable<string>>())).Returns(fileInfos);
-            var service = new GameService(reader.Object, storageProvider.Object, preferencesService.Object, new Mock<IMapper>().Object);
+            var service = new GameService(null, null, reader.Object, storageProvider.Object, preferencesService.Object, new Mock<IMapper>().Object);
             var result = service.IsContinueGameAllowed(new Game()
             {
                 Type = "game 2",
@@ -766,7 +768,7 @@ namespace IronyModManager.Services.Tests
             SetupMockCase(preferencesService, storageProvider);
             var reader = new Mock<IReader>();
             reader.Setup(s => s.Read(It.IsAny<string>(), It.IsAny<IEnumerable<string>>())).Returns((IEnumerable<IFileInfo>)null);
-            var service = new GameService(reader.Object, storageProvider.Object, preferencesService.Object, new Mock<IMapper>().Object);
+            var service = new GameService(null, null, reader.Object, storageProvider.Object, preferencesService.Object, new Mock<IMapper>().Object);
             var result = service.GetGameSettingsFromJson(new Game()
             {
                 Type = "game 2",
@@ -796,7 +798,7 @@ namespace IronyModManager.Services.Tests
             };
             var reader = new Mock<IReader>();
             reader.Setup(s => s.Read(It.IsAny<string>(), It.IsAny<IEnumerable<string>>())).Returns(fileInfos);
-            var service = new GameService(reader.Object, storageProvider.Object, preferencesService.Object, new Mock<IMapper>().Object);
+            var service = new GameService(null, null, reader.Object, storageProvider.Object, preferencesService.Object, new Mock<IMapper>().Object);
             var result = service.GetGameSettingsFromJson(new Game()
             {
                 Type = "game 2",
@@ -807,6 +809,161 @@ namespace IronyModManager.Services.Tests
             result.ExecutableLocation.Should().Be("test\\stellaris.exe");
             result.LaunchArguments.Should().Be("-gdpr-compliant");
             result.CustomModDirectory.Should().BeNullOrEmpty();
+        }
+
+        /// <summary>
+        /// Defines the test method Should_not_import_hash.
+        /// </summary>
+        [Fact]
+        public async Task Should_not_import_hash()
+        {
+            var storageProvider = new Mock<IStorageProvider>();
+            var mapper = new Mock<IMapper>();
+            var hashExport = new Mock<IReportExportService>();
+            var preferencesService = new Mock<IPreferencesService>();
+            hashExport.Setup(p => p.GetGameReports(It.IsAny<IReadOnlyCollection<IHashReport>>())).Returns((IReadOnlyCollection<IHashReport> hashReports) =>
+            {
+                if (hashReports != null)
+                {
+                    return hashReports.Where(p => p.ReportType == HashReportType.Game).ToList();
+                }
+                return null;
+            });
+            hashExport.Setup(p => p.CompareReports(It.IsAny<IReadOnlyCollection<IHashReport>>(), It.IsAny<IReadOnlyCollection<IHashReport>>())).Returns((IReadOnlyCollection<IHashReport> first, IReadOnlyCollection<IHashReport> second) =>
+            {
+                return null;
+            });
+            var messageBus = new Mock<IMessageBus>();
+            messageBus.Setup(p => p.PublishAsync(It.IsAny<IMessageBusEvent>()));
+            messageBus.Setup(p => p.Publish(It.IsAny<IMessageBusEvent>()));
+            var reader = new Mock<IReader>();
+            reader.Setup(p => p.GetFiles(It.IsAny<string>())).Returns(new List<string>()
+            {
+               "test\\test"
+            });
+            DISetup.SetupContainer();
+
+            var service = new GameService(messageBus.Object, hashExport.Object, reader.Object, storageProvider.Object, preferencesService.Object, new Mock<IMapper>().Object);
+            var result = await service.ImportHashReportAsync(new Game() { GameFolders = new List<string>() { "test" } }, null);
+            result.Should().BeNull();
+        }
+
+        /// <summary>
+        /// Defines the test method Should_import_hash.
+        /// </summary>
+        [Fact]
+        public async Task Should_import_hash()
+        {
+            var storageProvider = new Mock<IStorageProvider>();
+            var mapper = new Mock<IMapper>();
+            var hashExport = new Mock<IReportExportService>();
+            var preferencesService = new Mock<IPreferencesService>();
+            var innerReports = new List<IHashFileReport>() { new HashFileReport() { File = "test\\1", Hash = "2" } };
+            var outerReports = new List<IHashReport>() { new HashReport() { Name = "test", Reports = innerReports, ReportType = HashReportType.Game } };
+            hashExport.Setup(p => p.GetGameReports(It.IsAny<IReadOnlyCollection<IHashReport>>())).Returns((IReadOnlyCollection<IHashReport> hashReports) =>
+            {
+                if (hashReports != null)
+                {
+                    return hashReports.Where(p => p.ReportType == HashReportType.Game).ToList();
+                }
+                return null;
+            });
+            hashExport.Setup(p => p.CompareReports(It.IsAny<IReadOnlyCollection<IHashReport>>(), It.IsAny<IReadOnlyCollection<IHashReport>>())).Returns((IReadOnlyCollection<IHashReport> first, IReadOnlyCollection<IHashReport> second) =>
+            {
+                return outerReports;
+            });
+            var messageBus = new Mock<IMessageBus>();
+            messageBus.Setup(p => p.PublishAsync(It.IsAny<IMessageBusEvent>()));
+            messageBus.Setup(p => p.Publish(It.IsAny<IMessageBusEvent>()));
+            var reader = new Mock<IReader>();
+            reader.Setup(p => p.GetFileInfo(It.IsAny<string>(), It.IsAny<string>())).Returns(new IO.FileInfo()
+            {
+                FileName = "2",
+                ContentSHA = "3"
+            });
+            reader.Setup(p => p.GetFiles(It.IsAny<string>())).Returns(new List<string>()
+            {
+               "test\\test"
+            });
+            DISetup.SetupContainer();
+            
+            var service = new GameService(messageBus.Object, hashExport.Object, reader.Object, storageProvider.Object, preferencesService.Object, new Mock<IMapper>().Object);
+            var result = await service.ImportHashReportAsync(new Game() { GameFolders = new List<string>() { "test" } }, outerReports);
+            result.Should().NotBeNull();
+            result.Count().Should().Be(1);
+            result.FirstOrDefault().Reports.Count.Should().Be(1);
+        }
+
+        /// <summary>
+        /// Defines the test method Should_not_export_hash_report.
+        /// </summary>
+        [Fact]
+        public async Task Should_not_export_hash_report()
+        {
+            var storageProvider = new Mock<IStorageProvider>();
+            var mapper = new Mock<IMapper>();
+            var hashExport = new Mock<IReportExportService>();
+            var preferencesService = new Mock<IPreferencesService>();
+            var messageBus = new Mock<IMessageBus>();
+            messageBus.Setup(p => p.PublishAsync(It.IsAny<IMessageBusEvent>()));
+            messageBus.Setup(p => p.Publish(It.IsAny<IMessageBusEvent>()));
+            var reader = new Mock<IReader>();
+            reader.Setup(p => p.GetFiles(It.IsAny<string>())).Returns(new List<string>()
+            {
+               "test\\test"
+            });
+            DISetup.SetupContainer();
+
+            var service = new GameService(messageBus.Object, hashExport.Object, reader.Object, storageProvider.Object, preferencesService.Object, new Mock<IMapper>().Object);
+
+            var result = await service.ExportHashReportAsync(new Game() { GameFolders = new List<string>() { "test" } }, string.Empty);
+            result.Should().BeFalse();
+        }
+
+        /// <summary>
+        /// Defines the test method Should_export_hash_report.
+        /// </summary>
+        [Fact]
+        public async Task Should_export_hash_report()
+        {
+            var storageProvider = new Mock<IStorageProvider>();
+            var mapper = new Mock<IMapper>();
+            var hashExport = new Mock<IReportExportService>();
+            hashExport.Setup(p => p.GetGameReports(It.IsAny<IReadOnlyCollection<IHashReport>>())).Returns((IReadOnlyCollection<IHashReport> hashReports) =>
+            {
+                if (hashReports != null)
+                {
+                    return hashReports.Where(p => p.ReportType == HashReportType.Game).ToList();
+                }
+                return null;
+            });
+            var preferencesService = new Mock<IPreferencesService>();
+            var messageBus = new Mock<IMessageBus>();
+            messageBus.Setup(p => p.PublishAsync(It.IsAny<IMessageBusEvent>()));
+            messageBus.Setup(p => p.Publish(It.IsAny<IMessageBusEvent>()));
+            var reader = new Mock<IReader>();
+            reader.Setup(p => p.GetFileInfo(It.IsAny<string>(), It.IsAny<string>())).Returns(new IO.FileInfo()
+            {
+                ContentSHA = "2"
+            });
+            reader.Setup(p => p.GetFiles(It.IsAny<string>())).Returns(new List<string>()
+            {
+               "test\\test"
+            });
+            hashExport.Setup(p => p.ExportAsync(It.IsAny<IEnumerable<IHashReport>>(), It.IsAny<string>())).ReturnsAsync((IEnumerable<IHashReport> report, string path) =>
+            {
+                if (report.Count() == 1 && report.FirstOrDefault().Reports.Count == 1 && report.FirstOrDefault().Reports.FirstOrDefault().File == "test\\test" && report.FirstOrDefault().Reports.FirstOrDefault().Hash == "2")
+                {
+                    return true;
+                }
+                return false;
+            });
+            DISetup.SetupContainer();
+
+            var service = new GameService(messageBus.Object, hashExport.Object, reader.Object, storageProvider.Object, preferencesService.Object, new Mock<IMapper>().Object);
+
+            var result = await service.ExportHashReportAsync(new Game() { GameFolders = new List<string>() { "test" } }, "test");
+            result.Should().BeTrue();
         }
     }
 }

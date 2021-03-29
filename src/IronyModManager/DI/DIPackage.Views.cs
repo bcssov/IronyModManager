@@ -4,7 +4,7 @@
 // Created          : 01-12-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-16-2021
+// Last Modified On : 03-27-2021
 // ***********************************************************************
 // <copyright file="DIPackage.Views.cs" company="Mario">
 //     Mario
@@ -60,7 +60,7 @@ namespace IronyModManager.DI
             container.Register<ConflictSolverDBSearchControlView>();
             container.Register<ConflictSolverCustomConflictsControlView>();
             container.Register<ActionsControlView>();
-            container.Register<ModHashReportControlView>();
+            container.Register<HashReportControlView>();
             container.Register<DLCManagerControlView>();
             container.Register<PatchModControlView>();
         }

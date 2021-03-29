@@ -21,10 +21,10 @@
                   Grid.Row="1" Grid.Column="0"
                   HorizontalAlignment="Stretch" VerticalAlignment="Stretch" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"></Button>
           <Button Content="{Binding Logs}" Command="{Binding LogsCommand}"
-                  Grid.Row="2" Grid.Column="0"
+                  Grid.Row="2" Grid.Column="0" IsVisible="{Binding LogsVisible}"
                   HorizontalAlignment="Stretch" VerticalAlignment="Stretch" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"></Button>
           <Button Content="{Binding ErrorLog}" Command="{Binding ErrorLogCommand}"
-                  Grid.Row="3" Grid.Column="0"
+                  Grid.Row="3" Grid.Column="0" IsVisible="{Binding ErrorLogVisible}"
                   HorizontalAlignment="Stretch" VerticalAlignment="Stretch" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"></Button>
           <Button Content="{Binding Close}" Command="{Binding CloseCommand}"
                   Grid.Row="4" Grid.Column="0"

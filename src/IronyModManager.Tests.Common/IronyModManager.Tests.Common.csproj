@@ -56,7 +56,7 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="NLog" Version="4.7.8" />
+    <PackageReference Include="NLog" Version="4.7.9" />
     <PackageReference Include="StrongNamer" Version="0.2.5" />
     <PackageReference Include="xunit" Version="2.4.1" />
     <PackageReference Include="xunit.runner.visualstudio" Version="2.4.3">

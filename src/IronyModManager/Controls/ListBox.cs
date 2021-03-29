@@ -4,7 +4,7 @@
 // Created          : 12-14-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-15-2021
+// Last Modified On : 03-28-2021
 // ***********************************************************************
 // <copyright file="ListBox.cs" company="Mario">
 //     Mario
@@ -20,6 +20,8 @@ using Avalonia.Controls.Presenters;
 using Avalonia.Input;
 using Avalonia.Styling;
 using Avalonia.VisualTree;
+using IronyModManager.DI;
+using IronyModManager.Shared;
 
 namespace IronyModManager.Controls
 {
@@ -113,7 +115,20 @@ namespace IronyModManager.Controls
         /// <inheritdoc />
         protected override void OnPointerPressed(PointerPressedEventArgs e)
         {
-            base.OnPointerPressed(e);
+            try
+            {
+                base.OnPointerPressed(e);
+            }
+            catch (ArgumentOutOfRangeException ex)
+            {
+                // Undetermined bug in Avalonia
+                var logger = DIResolver.Get<ILogger>();
+                logger.Error(ex);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
 
             if (e.GetCurrentPoint(null).Properties.PointerUpdateKind == PointerUpdateKind.RightButtonPressed)
             {

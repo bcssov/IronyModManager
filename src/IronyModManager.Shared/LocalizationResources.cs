@@ -190,13 +190,15 @@ namespace IronyModManager.Shared
             public static class FileHash
             {
                 public const string Prefix = "Collection_Mods.FileHash.";
-                public const string Export = Prefix + "Export";
+                public const string ExportCollection = Prefix + "ExportCollection";
+                public const string ExportGame = Prefix + "ExportGame";
                 public const string Import = Prefix + "Import";
                 public const string DialogTitleExport = Prefix + "DialogTitleExport";
                 public const string DialogTitleImport = Prefix + "DialogTitleImport";
                 public const string ExportOverlay = Prefix + "ExportOverlay";
                 public const string ImportOverlay = Prefix + "ImportOverlay";
-                public const string Progress = Prefix + "Progress";
+                public const string ProgressExport = Prefix + "ProgressExport";
+                public const string ProgressImport = Prefix + "ProgressImport";
                 public const string Close = Prefix + "Close";
             }
             public static class JumpOnDragAndDrop
@@ -297,12 +299,22 @@ namespace IronyModManager.Shared
             public const string Prefix = "Mod_Actions.";
             public const string Apply = Prefix + "Apply";
             public const string Overlay_Apply_Message = Prefix + "Overlay_Apply_Message";
-            public const string Conflict = Prefix + "Conflict";
-            public const string Overlay_Conflict_Solver_Loading_Definitions = Prefix + "Overlay_Conflict_Solver_Loading_Definitions";
-            public const string Overlay_Conflict_Solver_Analyzing_Conflicts = Prefix + "Overlay_Conflict_Solver_Analyzing_Conflicts";
-            public const string Overlay_Conflict_Solver_Analyzing_Resolved_Conflicts = Prefix + "Overlay_Conflict_Solver_Analyzing_Resolved_Conflicts";
-            public const string Overlay_Conflict_Solver_Replacing_Definitions = Prefix + "Overlay_Conflict_Solver_Replacing_Definitions";
-            public const string Overlay_Conflict_Solver_Progress = Prefix + "Overlay_Conflict_Solver_Progress";
+            public static class ConflictSolver
+            {
+                public const string Prefix = "Mod_Actions.ConflictSolver.";
+                public const string Conflict = Prefix + "Conflict";
+                public const string Overlay_Conflict_Solver_Loading_Definitions = Prefix + "Overlay_Conflict_Solver_Loading_Definitions";
+                public const string Overlay_Conflict_Solver_Analyzing_Conflicts = Prefix + "Overlay_Conflict_Solver_Analyzing_Conflicts";
+                public const string Overlay_Conflict_Solver_Analyzing_Resolved_Conflicts = Prefix + "Overlay_Conflict_Solver_Analyzing_Resolved_Conflicts";
+                public const string Overlay_Conflict_Solver_Replacing_Definitions = Prefix + "Overlay_Conflict_Solver_Replacing_Definitions";
+                public const string Overlay_Conflict_Solver_Progress = Prefix + "Overlay_Conflict_Solver_Progress";
+                public static class FirstUsePrompt
+                {
+                    public const string Prefix = "Mod_Actions.ConflictSolver.FirstUsePrompt.";
+                    public const string Title = Prefix + "Title";
+                    public const string Message = Prefix + "Message";
+                }
+            }
             public static class LaunchGame
             {
                 public const string Prefix = "Mod_Actions.LaunchGame.";

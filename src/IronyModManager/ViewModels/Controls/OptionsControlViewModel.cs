@@ -4,7 +4,7 @@
 // Created          : 05-30-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-25-2021
+// Last Modified On : 03-26-2021
 // ***********************************************************************
 // <copyright file="OptionsControlViewModel.cs" company="Mario">
 //     Mario
@@ -74,6 +74,11 @@ namespace IronyModManager.ViewModels.Controls
         /// The logger
         /// </summary>
         private readonly ILogger logger;
+
+        /// <summary>
+        /// The mod service
+        /// </summary>
+        private readonly IModService modService;
 
         /// <summary>
         /// The notification action
@@ -150,11 +155,6 @@ namespace IronyModManager.ViewModels.Controls
         /// </summary>
         private IDisposable refreshDescriptorsChanged;
 
-        /// <summary>
-        /// The mod service
-        /// </summary>
-        private readonly IModService modService;
-
         #endregion Fields
 
         #region Constructors
@@ -196,13 +196,6 @@ namespace IronyModManager.ViewModels.Controls
         #endregion Constructors
 
         #region Properties
-
-        /// <summary>
-        /// Gets or sets the custo mod path.
-        /// </summary>
-        /// <value>The custo mod path.</value>
-        [StaticLocalization(LocalizationResources.Options.Game.CustomModPath)]
-        public virtual string CustoModPath { get; protected set; }
 
         /// <summary>
         /// Gets or sets the application options title.
@@ -282,6 +275,13 @@ namespace IronyModManager.ViewModels.Controls
         /// </summary>
         /// <value>The close command.</value>
         public virtual ReactiveCommand<Unit, Unit> CloseCommand { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets the custo mod path.
+        /// </summary>
+        /// <value>The custo mod path.</value>
+        [StaticLocalization(LocalizationResources.Options.Game.CustomModPath)]
+        public virtual string CustoModPath { get; protected set; }
 
         /// <summary>
         /// Gets or sets the editor.
@@ -383,6 +383,19 @@ namespace IronyModManager.ViewModels.Controls
         public virtual string Navigate { get; protected set; }
 
         /// <summary>
+        /// Gets or sets the navigate custom directory command.
+        /// </summary>
+        /// <value>The navigate custom directory command.</value>
+        public virtual ReactiveCommand<Unit, Unit> NavigateCustomDirectoryCommand { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets the navigate custom user dir title.
+        /// </summary>
+        /// <value>The navigate custom user dir title.</value>
+        [StaticLocalization(LocalizationResources.Options.Dialog.CustomModPathTitle)]
+        public virtual string NavigateCustomUserDirTitle { get; protected set; }
+
+        /// <summary>
         /// Gets or sets the navigate directory command.
         /// </summary>
         /// <value>The navigate directory command.</value>
@@ -427,13 +440,6 @@ namespace IronyModManager.ViewModels.Controls
         /// <value>The navigate user dir title.</value>
         [StaticLocalization(LocalizationResources.Options.Dialog.UserDirTitle)]
         public virtual string NavigateUserDirTitle { get; protected set; }
-
-        /// <summary>
-        /// Gets or sets the navigate custom user dir title.
-        /// </summary>
-        /// <value>The navigate custom user dir title.</value>
-        [StaticLocalization(LocalizationResources.Options.Dialog.CustomModPathTitle)]
-        public virtual string NavigateCustomUserDirTitle { get; protected set; }
 
         /// <summary>
         /// Gets or sets the notification position.
@@ -488,22 +494,16 @@ namespace IronyModManager.ViewModels.Controls
         public virtual ReactiveCommand<Unit, Unit> ResetArgsCommand { get; protected set; }
 
         /// <summary>
-        /// Gets or sets the reset directory command.
-        /// </summary>
-        /// <value>The reset directory command.</value>
-        public virtual ReactiveCommand<Unit, Unit> ResetDirectoryCommand { get; protected set; }
-
-        /// <summary>
         /// Gets or sets the reset custom directory command.
         /// </summary>
         /// <value>The reset custom directory command.</value>
         public virtual ReactiveCommand<Unit, Unit> ResetCustomDirectoryCommand { get; protected set; }
 
         /// <summary>
-        /// Gets or sets the navigate custom directory command.
+        /// Gets or sets the reset directory command.
         /// </summary>
-        /// <value>The navigate custom directory command.</value>
-        public virtual ReactiveCommand<Unit, Unit> NavigateCustomDirectoryCommand { get; protected set; }
+        /// <value>The reset directory command.</value>
+        public virtual ReactiveCommand<Unit, Unit> ResetDirectoryCommand { get; protected set; }
 
         /// <summary>
         /// Gets or sets the reset editor arguments command.
@@ -604,6 +604,7 @@ namespace IronyModManager.ViewModels.Controls
                 UpdateInfoVisible = true;
                 var openState = IsOpen;
                 IsOpen = false;
+                await Task.Delay(100);
                 IsOpen = openState;
                 if (autoUpdateCheck)
                 {
@@ -839,7 +840,7 @@ namespace IronyModManager.ViewModels.Controls
                     var defaultSettings = gameService.GetDefaultGameSettings(Game);
                     Game.CustomModDirectory = defaultSettings.CustomModDirectory;
                     SaveGame();
-                }                
+                }
             }).DisposeWith(disposables);
 
             updater.Error.Subscribe(s =>
@@ -906,7 +907,7 @@ namespace IronyModManager.ViewModels.Controls
             game.UserDirectory = Game.UserDirectory;
             bool customDirectoryChanged = game.CustomModDirectory != Game.CustomModDirectory;
             game.CustomModDirectory = Game.CustomModDirectory;
-            if (gameService.Save(game) && (dirChanged)|| customDirectoryChanged)
+            if (gameService.Save(game) && (dirChanged) || customDirectoryChanged)
             {
                 MessageBus.PublishAsync(new GameUserDirectoryChangedEvent(game, customDirectoryChanged));
             }

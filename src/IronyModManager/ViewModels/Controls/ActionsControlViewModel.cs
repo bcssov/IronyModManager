@@ -4,7 +4,7 @@
 // Created          : 07-30-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-16-2021
+// Last Modified On : 03-28-2021
 // ***********************************************************************
 // <copyright file="ActionsControlViewModel.cs" company="Mario">
 //     Mario
@@ -16,6 +16,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Reactive;
 using System.Reactive.Disposables;
+using System.Reactive.Linq;
 using System.Threading.Tasks;
 using IronyModManager.Common.ViewModels;
 using IronyModManager.Implementation.Actions;
@@ -114,6 +115,12 @@ namespace IronyModManager.ViewModels.Controls
         public virtual ReactiveCommand<Unit, Unit> ErrorLogCommand { get; protected set; }
 
         /// <summary>
+        /// Gets or sets the error log visible.
+        /// </summary>
+        /// <value>The error log visible.</value>
+        public virtual bool ErrorLogVisible { get; protected set; }
+
+        /// <summary>
         /// Gets or sets a value indicating whether this instance is open.
         /// </summary>
         /// <value><c>true</c> if this instance is open; otherwise, <c>false</c>.</value>
@@ -131,6 +138,12 @@ namespace IronyModManager.ViewModels.Controls
         /// </summary>
         /// <value>The logs command.</value>
         public virtual ReactiveCommand<Unit, Unit> LogsCommand { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets the logs visible.
+        /// </summary>
+        /// <value>The logs visible.</value>
+        public virtual bool LogsVisible { get; protected set; }
 
         /// <summary>
         /// Gets or sets the shortcuts.
@@ -217,6 +230,19 @@ namespace IronyModManager.ViewModels.Controls
             {
                 IsOpen = false;
                 DLCManager.Open();
+            }).DisposeWith(disposables);
+
+            void evaluateVisibility()
+            {
+                LogsVisible = Directory.Exists(StaticResources.GetLogLocation());
+                var game = gameService.GetSelected();
+                ErrorLogVisible = game != null && File.Exists(game.LogLocation);
+            }
+
+            evaluateVisibility();
+            this.WhenAnyValue(p => p.IsOpen).Where(p => p).Subscribe(s =>
+            {
+                evaluateVisibility();
             }).DisposeWith(disposables);
 
             base.OnActivated(disposables);

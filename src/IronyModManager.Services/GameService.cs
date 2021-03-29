@@ -4,7 +4,7 @@
 // Created          : 02-12-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-17-2021
+// Last Modified On : 03-27-2021
 // ***********************************************************************
 // <copyright file="GameService.cs" company="Mario">
 //     Mario
@@ -15,12 +15,15 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 using AutoMapper;
 using IronyModManager.IO.Common.Readers;
 using IronyModManager.Models.Common;
 using IronyModManager.Services.Common;
+using IronyModManager.Services.Common.MessageBus;
 using IronyModManager.Services.Resolver;
 using IronyModManager.Shared;
+using IronyModManager.Shared.MessageBus;
 using IronyModManager.Storage.Common;
 using Newtonsoft.Json;
 
@@ -53,6 +56,11 @@ namespace IronyModManager.Services
         private const string SteamLaunchArgs = "steam://run/";
 
         /// <summary>
+        /// The message bus
+        /// </summary>
+        private readonly IMessageBus messageBus;
+
+        /// <summary>
         /// The path resolver
         /// </summary>
         private readonly PathResolver pathResolver;
@@ -67,6 +75,11 @@ namespace IronyModManager.Services
         /// </summary>
         private readonly IReader reader;
 
+        /// <summary>
+        /// The report export service
+        /// </summary>
+        private readonly IReportExportService reportExportService;
+
         #endregion Fields
 
         #region Constructors
@@ -74,12 +87,17 @@ namespace IronyModManager.Services
         /// <summary>
         /// Initializes a new instance of the <see cref="GameService" /> class.
         /// </summary>
+        /// <param name="messageBus">The message bus.</param>
+        /// <param name="reportExportService">The report export service.</param>
         /// <param name="reader">The reader.</param>
         /// <param name="storageProvider">The storage provider.</param>
         /// <param name="preferencesService">The preferences service.</param>
         /// <param name="mapper">The mapper.</param>
-        public GameService(IReader reader, IStorageProvider storageProvider, IPreferencesService preferencesService, IMapper mapper) : base(storageProvider, mapper)
+        public GameService(IMessageBus messageBus, IReportExportService reportExportService, IReader reader, IStorageProvider storageProvider,
+            IPreferencesService preferencesService, IMapper mapper) : base(storageProvider, mapper)
         {
+            this.messageBus = messageBus;
+            this.reportExportService = reportExportService;
             this.preferencesService = preferencesService;
             this.reader = reader;
             pathResolver = new PathResolver();
@@ -88,6 +106,28 @@ namespace IronyModManager.Services
         #endregion Constructors
 
         #region Methods
+
+        /// <summary>
+        /// export hash report as an asynchronous operation.
+        /// </summary>
+        /// <param name="game">The game.</param>
+        /// <param name="path">The path.</param>
+        /// <returns>Task&lt;System.Boolean&gt;.</returns>
+        public virtual async Task<bool> ExportHashReportAsync(IGame game, string path)
+        {
+            if (string.IsNullOrWhiteSpace(path))
+            {
+                return false;
+            }
+            var basePath = Path.GetDirectoryName(game.ExecutableLocation);
+            var files = reader.GetFiles(basePath);
+            if (files != null && files.Any())
+            {
+                var reports = await ParseReportAsync(game, basePath, files);
+                return await reportExportService.ExportAsync(reports, path);
+            }
+            return false;
+        }
 
         /// <summary>
         /// Gets this instance.
@@ -239,6 +279,25 @@ namespace IronyModManager.Services
         }
 
         /// <summary>
+        /// import hash report as an asynchronous operation.
+        /// </summary>
+        /// <param name="game">The game.</param>
+        /// <param name="hashReports">The hash reports.</param>
+        /// <returns>Task&lt;IEnumerable&lt;IHashReport&gt;&gt;.</returns>
+        public virtual async Task<IEnumerable<IHashReport>> ImportHashReportAsync(IGame game, IReadOnlyCollection<IHashReport> hashReports)
+        {
+            var importedReports = reportExportService.GetGameReports(hashReports);
+            if (importedReports == null || !importedReports.Any())
+            {
+                return null;
+            }
+            var basePath = Path.GetDirectoryName(game.ExecutableLocation);
+            var files = reader.GetFiles(basePath);
+            var currentReports = await ParseReportAsync(game, basePath, files);
+            return reportExportService.CompareReports(currentReports.ToList(), importedReports.ToList());
+        }
+
+        /// <summary>
         /// Determines whether [is continue game allowed] [the specified game].
         /// </summary>
         /// <param name="game">The game.</param>
@@ -376,6 +435,27 @@ namespace IronyModManager.Services
         }
 
         /// <summary>
+        /// Gets the progress percentage.
+        /// </summary>
+        /// <param name="total">The total.</param>
+        /// <param name="processed">The processed.</param>
+        /// <param name="maxPerc">The maximum perc.</param>
+        /// <returns>System.Double.</returns>
+        protected virtual double GetProgressPercentage(double total, double processed, double maxPerc = 100)
+        {
+            var perc = Math.Round(processed / total * 100, 2);
+            if (perc < 0)
+            {
+                perc = 0;
+            }
+            else if (perc > maxPerc)
+            {
+                perc = maxPerc;
+            }
+            return perc;
+        }
+
+        /// <summary>
         /// Initializes the model.
         /// </summary>
         /// <param name="gameType">Type of the game.</param>
@@ -445,6 +525,51 @@ namespace IronyModManager.Services
                 game.UserDirectory = gameType.UserDirectory;
             }
             return game;
+        }
+
+        /// <summary>
+        /// parse report as an asynchronous operation.
+        /// </summary>
+        /// <param name="game">The game.</param>
+        /// <param name="basePath">The base path.</param>
+        /// <param name="files">The files.</param>
+        /// <returns>IEnumerable&lt;IHashReport&gt;.</returns>
+        protected virtual async Task<IEnumerable<IHashReport>> ParseReportAsync(IGame game, string basePath, IEnumerable<string> files)
+        {
+            var reports = new List<IHashReport>();           
+
+            var total = files.Where(p => game.GameFolders.Any(x => p.StartsWith(x))).Count();
+            var progress = 0;
+            double lastPercentage = 0;
+
+            foreach (var item in game.GameFolders)
+            {
+                var report = GetModelInstance<IHashReport>();
+                report.Name = item;
+                report.ReportType = HashReportType.Game;
+                var hashReports = new List<IHashFileReport>();
+                foreach (var file in files.Where(p => p.StartsWith(item)))
+                {
+                    var info = reader.GetFileInfo(basePath, file);
+                    if (info != null)
+                    {
+                        var fileReport = GetModelInstance<IHashFileReport>();
+                        fileReport.File = file;
+                        fileReport.Hash = info.ContentSHA;
+                        hashReports.Add(fileReport);
+                    }
+                    progress++;
+                    var percentage = GetProgressPercentage(total, progress);
+                    if (percentage != lastPercentage)
+                    {
+                        await messageBus.PublishAsync(new ModReportExportEvent(1, percentage));
+                    }
+                    lastPercentage = percentage;
+                }
+                report.Reports = hashReports;
+                reports.Add(report);
+            }
+            return reports;
         }
 
         /// <summary>
