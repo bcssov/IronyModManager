@@ -4,10 +4,9 @@
 		<title>Irony Mod Manager</title>
 		<language>en</language>
 		<item>
-			<title>1.14.35</title>
+			<title>1.14.37</title>
 			<description>RELEASE INFO:
-* Hide actions menu options which are not available
-* Minor fixes
+* Hopefully fix mac builds (myget beta avalonia branch was seriously out of date)
 
 CHANGES FROM v1.13:
 * Updated dependencies
@@ -15,14 +14,13 @@ CHANGES FROM v1.13:
 * Various theme fixes
 * Add conflict solver first run notification (for clarity)
 * Add game hash verification</description>
-			<pubDate>Mon, 29 Mar 2021 04:07:59 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.14.35/osx-x64.rar" sparkle:version="1.14.35.58421" sparkle:shortVersionString="1.14.35" length="67990759" sparkle:os="osx" type="application/vnd.rar" sparkle:signature="m7tvl5UbY+gAAECLXUIkKAJ2BMiH7UCqdXTN6QMV+Qdj8LJXIt9j8qG9WwEZubVITcT1UAJxuxWT2Fs68+lYDg=="/>
+			<pubDate>Tue, 30 Mar 2021 03:40:53 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.14.37/osx-x64.rar" sparkle:version="1.14.37.23667" sparkle:shortVersionString="1.14.37" length="68074402" sparkle:os="osx" type="application/vnd.rar" sparkle:signature="07IlCqBurpzc5VrrDxiMm0DeJVugvUe5tg0BW56o0BW+CNu4TIJnwXzo4s51wqRpjpnJqLmsX9cgIIyo0wQ7DQ=="/>
 		</item>
 		<item>
-			<title>1.14.35</title>
+			<title>1.14.37</title>
 			<description>RELEASE INFO:
-* Hide actions menu options which are not available
-* Minor fixes
+* Hopefully fix mac builds (myget beta avalonia branch was seriously out of date)
 
 CHANGES FROM v1.13:
 * Updated dependencies
@@ -30,14 +28,13 @@ CHANGES FROM v1.13:
 * Various theme fixes
 * Add conflict solver first run notification (for clarity)
 * Add game hash verification</description>
-			<pubDate>Mon, 29 Mar 2021 04:08:06 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.14.35/win-x64-setup.rar" sparkle:version="1.14.35.58421" sparkle:shortVersionString="1.14.35" length="58840625" sparkle:os="windows" type="application/vnd.rar" sparkle:signature="DyF+FXgooewOZT6LKEB8MLFvTjtTD1lvO+47owzTHjC5KcgnyQyx4fpTdLvKiRyGiPpDeBrhORVySYCEskmgBw=="/>
+			<pubDate>Tue, 30 Mar 2021 03:41:00 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.14.37/win-x64-setup.rar" sparkle:version="1.14.37.23667" sparkle:shortVersionString="1.14.37" length="58844986" sparkle:os="windows" type="application/vnd.rar" sparkle:signature="RXxvcHoAH2bqFMb/iJoZGtqBsaVSVrCcgnJTDRgfe/wzgyV/gmfBnU7iB5iIoXqC+m0awrab/FeFwJ+G6g9DBQ=="/>
 		</item>
 		<item>
-			<title>1.14.35</title>
+			<title>1.14.37</title>
 			<description>RELEASE INFO:
-* Hide actions menu options which are not available
-* Minor fixes
+* Hopefully fix mac builds (myget beta avalonia branch was seriously out of date)
 
 CHANGES FROM v1.13:
 * Updated dependencies
@@ -45,14 +42,13 @@ CHANGES FROM v1.13:
 * Various theme fixes
 * Add conflict solver first run notification (for clarity)
 * Add game hash verification</description>
-			<pubDate>Mon, 29 Mar 2021 04:08:03 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.14.35/win-x64.rar" sparkle:version="1.14.35.58421" sparkle:shortVersionString="1.14.35" length="70805798" sparkle:os="windows" type="application/vnd.rar" sparkle:signature="bEY+A7hLRTDPTZWiZisB/w4rPJ6DPdA7NhY0lxaccy2frOtZ0taAWl6lwvrel8h3tgTRGdrKKALtj5+0rJvcBQ=="/>
+			<pubDate>Tue, 30 Mar 2021 03:40:56 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.14.37/win-x64.rar" sparkle:version="1.14.37.23667" sparkle:shortVersionString="1.14.37" length="70824964" sparkle:os="windows" type="application/vnd.rar" sparkle:signature="CkM8O8G+jLAf7aH5b9fwozuJ7lQ02yM+fgwd/HrSc3CfITAsLlg6BT28Q+MjSXzA8LQYExbsprFWXbDrhvTxDA=="/>
 		</item>
 		<item>
-			<title>1.14.35</title>
+			<title>1.14.37</title>
 			<description>RELEASE INFO:
-* Hide actions menu options which are not available
-* Minor fixes
+* Hopefully fix mac builds (myget beta avalonia branch was seriously out of date)
 
 CHANGES FROM v1.13:
 * Updated dependencies
@@ -60,8 +56,8 @@ CHANGES FROM v1.13:
 * Various theme fixes
 * Add conflict solver first run notification (for clarity)
 * Add game hash verification</description>
-			<pubDate>Mon, 29 Mar 2021 04:07:56 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.14.35/linux-x64.zip" sparkle:version="1.14.35.58421" sparkle:shortVersionString="1.14.35" length="84372141" sparkle:os="linux" type="application/zip" sparkle:signature="Kf8zR8HTV6A+3UyVbxIHSRfKUR7keiQkAxG+9mLE6XhUr0VrPRJKkW5/9WRONMV09kCF1CudAhBpH/XC+HVZBw=="/>
+			<pubDate>Tue, 30 Mar 2021 03:40:51 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.14.37/linux-x64.zip" sparkle:version="1.14.37.23667" sparkle:shortVersionString="1.14.37" length="84370065" sparkle:os="linux" type="application/zip" sparkle:signature="30MjaRfWKfFRzLMmbVxL5Hw1RRPWSMAcEBTUpbsNIprJerHF7Id+G6WTxYNbXp3GkZ/S4Tr3iuW3u9ZN15lxCw=="/>
 		</item>
 	</channel>
 </rss>
