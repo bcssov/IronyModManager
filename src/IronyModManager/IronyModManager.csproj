@@ -145,7 +145,7 @@
     </PackageReference>
     <PackageReference Include="NetSparkle.New" Version="2.0.0-preview20210131001" />
     <PackageReference Include="NLog" Version="4.7.9" />
-    <PackageReference Include="ReactiveUI" Version="13.2.2" />
+    <PackageReference Include="ReactiveUI" Version="13.2.10" />
     <PackageReference Include="SimpleInjector" Version="5.3.0" />
     <PackageReference Include="SimpleInjector.Packaging" Version="5.0.0" />
     <PackageReference Include="SmartFormat.NET" Version="2.6.2" />
