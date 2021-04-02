@@ -4,7 +4,7 @@
 // Created          : 03-13-2021
 //
 // Last Modified By : Mario
-// Last Modified On : 03-15-2021
+// Last Modified On : 04-02-2021
 // ***********************************************************************
 // <copyright file="FontManager.cs" company="Mario">
 //     Mario
@@ -41,6 +41,11 @@ namespace IronyModManager.Platform.Fonts
         /// </summary>
         private static IFontManagerImpl fontManager;
 
+        /// <summary>
+        /// All fonts
+        /// </summary>
+        private List<string> allFonts = null;
+
         #endregion Fields
 
         #region Constructors
@@ -66,7 +71,8 @@ namespace IronyModManager.Platform.Fonts
         /// The created glyph typeface. Can be <c>Null</c> if it was not possible to create a glyph typeface.</returns>
         public IGlyphTypefaceImpl CreateGlyphTypeface(Typeface typeface)
         {
-            if (typeface.FontFamily != null && GetFontFamilyManager().IsIronyFont(typeface.FontFamily.Name))
+            var fontFamilyManager = GetFontFamilyManager();
+            if (typeface.FontFamily != null && fontFamilyManager.IsIronyFont(typeface.FontFamily.Name))
             {
                 if (typeface.FontFamily.Key == null)
                 {
@@ -95,7 +101,8 @@ namespace IronyModManager.Platform.Fonts
         /// <returns>System.String.</returns>
         public string GetDefaultFontFamilyName()
         {
-            return fontManager.GetDefaultFontFamilyName();
+            var fontFamilyManager = GetFontFamilyManager();
+            return fontFamilyManager.GetDefaultFontFamily().Name;
         }
 
         /// <summary>
@@ -106,7 +113,14 @@ namespace IronyModManager.Platform.Fonts
         /// <returns>IEnumerable&lt;System.String&gt;.</returns>
         public IEnumerable<string> GetInstalledFontFamilyNames(bool checkForUpdates = false)
         {
-            return fontManager.GetInstalledFontFamilyNames(checkForUpdates);
+            if (allFonts == null || checkForUpdates)
+            {
+                var fontFamilyManager = GetFontFamilyManager();
+                allFonts = new List<string>();
+                allFonts.AddRange(fontManager.GetInstalledFontFamilyNames(checkForUpdates));
+                allFonts.AddRange(fontFamilyManager.GetAllFontNames());
+            }
+            return allFonts;
         }
 
         /// <summary>

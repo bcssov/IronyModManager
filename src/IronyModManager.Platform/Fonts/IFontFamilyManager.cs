@@ -4,7 +4,7 @@
 // Created          : 09-30-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-13-2021
+// Last Modified On : 04-02-2021
 // ***********************************************************************
 // <copyright file="IFontFamilyManager.cs" company="Mario">
 //     Mario
@@ -22,6 +22,12 @@ namespace IronyModManager.Platform.Fonts
     public interface IFontFamilyManager
     {
         #region Methods
+
+        /// <summary>
+        /// Gets all font names.
+        /// </summary>
+        /// <returns>IEnumerable&lt;System.String&gt;.</returns>
+        IEnumerable<string> GetAllFontNames();
 
         /// <summary>
         /// Gets the default font family.

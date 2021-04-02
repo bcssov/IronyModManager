@@ -4,7 +4,7 @@
 // Created          : 09-30-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-13-2021
+// Last Modified On : 04-02-2021
 // ***********************************************************************
 // <copyright file="FontFamilyManager.cs" company="Mario">
 //     Mario
@@ -54,6 +54,15 @@ namespace IronyModManager.Fonts
         #endregion Constructors
 
         #region Methods
+
+        /// <summary>
+        /// Gets all font names.
+        /// </summary>
+        /// <returns>IEnumerable&lt;System.String&gt;.</returns>
+        public IEnumerable<string> GetAllFontNames()
+        {
+            return fontFamilies.Select(p => p.Name).ToList();
+        }
 
         /// <summary>
         /// Gets the default font family.
