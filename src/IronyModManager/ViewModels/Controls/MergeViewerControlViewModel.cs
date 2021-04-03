@@ -4,7 +4,7 @@
 // Created          : 03-20-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-25-2021
+// Last Modified On : 04-04-2021
 // ***********************************************************************
 // <copyright file="MergeViewerControlViewModel.cs" company="Mario">
 //     Mario
@@ -836,7 +836,7 @@ namespace IronyModManager.ViewModels.Controls
         {
             var selected = leftSide ? LeftSideSelected : RightSideSelected;
             var source = leftSide ? LeftDiff : RightDiff;
-            if (selected != null && source != null && selected.Count > 0 && selected.Count < source.Count)
+            if (selected != null && source != null && selected.Count > 0 && selected.Count <= source.Count)
             {
                 foreach (var item in selected)
                 {

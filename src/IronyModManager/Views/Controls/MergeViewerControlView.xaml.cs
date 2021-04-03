@@ -4,7 +4,7 @@
 // Created          : 03-20-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-22-2021
+// Last Modified On : 04-04-2021
 // ***********************************************************************
 // <copyright file="MergeViewerControlView.xaml.cs" company="Mario">
 //     Mario
@@ -233,6 +233,10 @@ namespace IronyModManager.Views.Controls
                     if (focusSideScrollItem.HasValue)
                     {
                         FocusConflict(-1, leftSide, rightSide);
+                        if (focusSideScrollItem.GetValueOrDefault() >= listBox.ItemCount)
+                        {
+                            focusSideScrollItem = listBox.ItemCount - 1;
+                        }
                         listBox.ScrollIntoView(focusSideScrollItem.GetValueOrDefault());
                     }
                     focusSideScrollItem = null;
