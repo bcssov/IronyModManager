@@ -4,9 +4,11 @@
 		<title>Irony Mod Manager</title>
 		<language>en</language>
 		<item>
-			<title>1.14.37</title>
+			<title>1.14.41</title>
 			<description>RELEASE INFO:
-* Hopefully fix mac builds (myget beta avalonia branch was seriously out of date)
+* Fix issue with fonts on some Linux distro combos
+* Fix conflict solver virtualizer crashes
+* Various fixes
 
 CHANGES FROM v1.13:
 * Updated dependencies
@@ -14,13 +16,15 @@ CHANGES FROM v1.13:
 * Various theme fixes
 * Add conflict solver first run notification (for clarity)
 * Add game hash verification</description>
-			<pubDate>Tue, 30 Mar 2021 03:40:53 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.14.37/osx-x64.rar" sparkle:version="1.14.37.23667" sparkle:shortVersionString="1.14.37" length="68074402" sparkle:os="osx" type="application/vnd.rar" sparkle:signature="07IlCqBurpzc5VrrDxiMm0DeJVugvUe5tg0BW56o0BW+CNu4TIJnwXzo4s51wqRpjpnJqLmsX9cgIIyo0wQ7DQ=="/>
+			<pubDate>Sun, 04 Apr 2021 19:35:27 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.14.41/osx-x64.rar" sparkle:version="1.14.41.65428" sparkle:shortVersionString="1.14.41" length="68072608" sparkle:os="osx" type="application/vnd.rar" sparkle:signature="6jcJXJy2gEqa8OHkVYD95/WkgrLnXasvjYPZ8ntj2lEQG+BpUL9cilyvL39F2ONfn22z4oBPCIGTxcDPir3cAA=="/>
 		</item>
 		<item>
-			<title>1.14.37</title>
+			<title>1.14.41</title>
 			<description>RELEASE INFO:
-* Hopefully fix mac builds (myget beta avalonia branch was seriously out of date)
+* Fix issue with fonts on some Linux distro combos
+* Fix conflict solver virtualizer crashes
+* Various fixes
 
 CHANGES FROM v1.13:
 * Updated dependencies
@@ -28,13 +32,15 @@ CHANGES FROM v1.13:
 * Various theme fixes
 * Add conflict solver first run notification (for clarity)
 * Add game hash verification</description>
-			<pubDate>Tue, 30 Mar 2021 03:41:00 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.14.37/win-x64-setup.rar" sparkle:version="1.14.37.23667" sparkle:shortVersionString="1.14.37" length="58844986" sparkle:os="windows" type="application/vnd.rar" sparkle:signature="RXxvcHoAH2bqFMb/iJoZGtqBsaVSVrCcgnJTDRgfe/wzgyV/gmfBnU7iB5iIoXqC+m0awrab/FeFwJ+G6g9DBQ=="/>
+			<pubDate>Sun, 04 Apr 2021 19:35:35 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.14.41/win-x64-setup.rar" sparkle:version="1.14.41.65428" sparkle:shortVersionString="1.14.41" length="58841370" sparkle:os="windows" type="application/vnd.rar" sparkle:signature="uTKNtP/8rRmCEdckL3nC8gwuZa/G5Dnc68emwdWMYk3LsmgasYc6xBwh1Yudr9ktoElBSSgJ4I/KthRRdC56Cg=="/>
 		</item>
 		<item>
-			<title>1.14.37</title>
+			<title>1.14.41</title>
 			<description>RELEASE INFO:
-* Hopefully fix mac builds (myget beta avalonia branch was seriously out of date)
+* Fix issue with fonts on some Linux distro combos
+* Fix conflict solver virtualizer crashes
+* Various fixes
 
 CHANGES FROM v1.13:
 * Updated dependencies
@@ -42,13 +48,15 @@ CHANGES FROM v1.13:
 * Various theme fixes
 * Add conflict solver first run notification (for clarity)
 * Add game hash verification</description>
-			<pubDate>Tue, 30 Mar 2021 03:40:56 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.14.37/win-x64.rar" sparkle:version="1.14.37.23667" sparkle:shortVersionString="1.14.37" length="70824964" sparkle:os="windows" type="application/vnd.rar" sparkle:signature="CkM8O8G+jLAf7aH5b9fwozuJ7lQ02yM+fgwd/HrSc3CfITAsLlg6BT28Q+MjSXzA8LQYExbsprFWXbDrhvTxDA=="/>
+			<pubDate>Sun, 04 Apr 2021 19:35:31 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.14.41/win-x64.rar" sparkle:version="1.14.41.65428" sparkle:shortVersionString="1.14.41" length="70823580" sparkle:os="windows" type="application/vnd.rar" sparkle:signature="fn+kOzMsDoaHIvV1D0fvcZVfM3dfUb5Si0v5BPr9UaQPKwXGpUCGCOjREOR16NhXQxywp1pR35g51bl2VWGrAw=="/>
 		</item>
 		<item>
-			<title>1.14.37</title>
+			<title>1.14.41</title>
 			<description>RELEASE INFO:
-* Hopefully fix mac builds (myget beta avalonia branch was seriously out of date)
+* Fix issue with fonts on some Linux distro combos
+* Fix conflict solver virtualizer crashes
+* Various fixes
 
 CHANGES FROM v1.13:
 * Updated dependencies
@@ -56,8 +64,8 @@ CHANGES FROM v1.13:
 * Various theme fixes
 * Add conflict solver first run notification (for clarity)
 * Add game hash verification</description>
-			<pubDate>Tue, 30 Mar 2021 03:40:51 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.14.37/linux-x64.zip" sparkle:version="1.14.37.23667" sparkle:shortVersionString="1.14.37" length="84370065" sparkle:os="linux" type="application/zip" sparkle:signature="30MjaRfWKfFRzLMmbVxL5Hw1RRPWSMAcEBTUpbsNIprJerHF7Id+G6WTxYNbXp3GkZ/S4Tr3iuW3u9ZN15lxCw=="/>
+			<pubDate>Sun, 04 Apr 2021 19:35:25 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.14.41/linux-x64.zip" sparkle:version="1.14.41.65428" sparkle:shortVersionString="1.14.41" length="84371119" sparkle:os="linux" type="application/zip" sparkle:signature="JvrvwHDvtITo2Yjr1YxNnS1EPZIP0jNiTelMolvUbhguEafn1AuMB/gdbdDdmSwDzKRY+oQ/DxcfOVvFvKQwCg=="/>
 		</item>
 	</channel>
 </rss>
