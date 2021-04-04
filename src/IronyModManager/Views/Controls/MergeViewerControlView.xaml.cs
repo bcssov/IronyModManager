@@ -170,7 +170,7 @@ namespace IronyModManager.Views.Controls
                             return;
                         }
                         syncingScroll = true;
-                        Dispatcher.UIThread.InvokeAsync(async () =>
+                        Dispatcher.UIThread.SafeInvoke(async () =>
                         {
                             await SyncScrollAsync(thisListBox, otherListBox);
                             syncingScroll = false;
@@ -215,12 +215,17 @@ namespace IronyModManager.Views.Controls
                 FocusConflict(line, leftSide, rightSide);
             };
             int? focusSideScrollItem = null;
+            int previousCount = 0;
+            var autoScroll = leftSide.AutoScrollToSelectedItem;
             ViewModel.PreFocusSide += (left) =>
             {
-                var visibleItems = left ? leftSide.ItemContainerGenerator.Containers.ToList() : rightSide.ItemContainerGenerator.Containers.ToList();
+                leftSide.AutoScrollToSelectedItem = rightSide.AutoScrollToSelectedItem = false;
+                var listBox = left ? leftSide : rightSide;
+                var visibleItems = listBox.ItemContainerGenerator.Containers.ToList();
                 if (visibleItems.Any())
                 {
                     focusSideScrollItem = visibleItems.LastOrDefault().Index;
+                    previousCount = (left ? leftSide : rightSide).ItemCount;
                 }
             };
             ViewModel.PostFocusSide += (left) =>
@@ -228,12 +233,21 @@ namespace IronyModManager.Views.Controls
                 async Task delay()
                 {
                     await Task.Delay(50);
+                    leftSide.AutoScrollToSelectedItem = rightSide.AutoScrollToSelectedItem = autoScroll;
                     var listBox = left ? leftSide : rightSide;
                     listBox.Focus();
                     if (focusSideScrollItem.HasValue)
                     {
+                        if (listBox.ItemCount != previousCount)
+                        {
+                            focusSideScrollItem -= Math.Abs(previousCount - listBox.ItemCount);
+                        }
                         FocusConflict(-1, leftSide, rightSide);
-                        if (focusSideScrollItem.GetValueOrDefault() >= listBox.ItemCount)
+                        if (focusSideScrollItem.GetValueOrDefault() < 0)
+                        {
+                            focusSideScrollItem = 0;
+                        }
+                        else if (focusSideScrollItem.GetValueOrDefault() >= listBox.ItemCount)
                         {
                             focusSideScrollItem = listBox.ItemCount - 1;
                         }

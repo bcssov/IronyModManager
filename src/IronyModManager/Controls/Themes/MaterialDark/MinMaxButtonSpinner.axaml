@@ -10,8 +10,8 @@
     <Setter Property="Content">
       <Template>
         <Path Fill="{DynamicResource PrimaryHueLightBrush}"
-              Width="9"
-              Height="5"
+              Width="10"
+              Height="6"
               Stretch="Uniform"
               HorizontalAlignment="Center"
               VerticalAlignment="Center"
@@ -23,8 +23,8 @@
     <Setter Property="Content">
       <Template>
         <Path Fill="{DynamicResource PrimaryHueLightBrush}"
-              Width="9"
-              Height="5"
+              Width="10"
+              Height="6"
               Stretch="Uniform"
               HorizontalAlignment="Center"
               VerticalAlignment="Center"
@@ -50,8 +50,8 @@
                               VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"
                               Padding="{TemplateBinding Padding}" />
             <Grid Grid.Column="1" RowDefinitions="*,*" IsVisible="{TemplateBinding ShowButtonSpinner}">
-              <RepeatButton Grid.Row="0" Name="PART_IncreaseButton" />
-              <RepeatButton Grid.Row="1" Name="PART_DecreaseButton" />
+              <RepeatButton Grid.Row="0" Name="PART_IncreaseButton"/>
+              <RepeatButton Grid.Row="1" Name="PART_DecreaseButton"/>
             </Grid>
           </Grid>
         </Border>
@@ -70,8 +70,8 @@
                 VerticalAlignment="{TemplateBinding VerticalAlignment}">
           <Grid ColumnDefinitions="Auto,*">
             <Grid Grid.Column="0" RowDefinitions="*,*" IsVisible="{TemplateBinding ShowButtonSpinner}">
-              <RepeatButton Grid.Row="0" Name="PART_IncreaseButton" />
-              <RepeatButton Grid.Row="1" Name="PART_DecreaseButton" />
+              <RepeatButton Grid.Row="0" Name="PART_IncreaseButton"/>
+              <RepeatButton Grid.Row="1" Name="PART_DecreaseButton"/>
             </Grid>
             <ContentPresenter Name="PART_ContentPresenter" Grid.Column="1"
                               ContentTemplate="{TemplateBinding ContentTemplate}"
@@ -83,5 +83,12 @@
         </Border>
       </ControlTemplate>
     </Setter>
+  </Style>
+  <Style Selector="controls|MinMaxButtonSpinner /template/ RepeatButton:pointerover">
+    <Setter Property="BorderBrush" Value="{DynamicResource MaterialDesignTextAreaBorder}"/>
+  </Style>
+  <Style Selector="controls|MinMaxButtonSpinner /template/ RepeatButton">
+    <Setter Property="Background" Value="Transparent"/>
+    <Setter Property="BorderBrush" Value="Transparent"/>
   </Style>
 </Styles>

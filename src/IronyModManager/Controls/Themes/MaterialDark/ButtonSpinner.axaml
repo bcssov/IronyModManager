@@ -14,7 +14,7 @@
               Stretch="Uniform"
               HorizontalAlignment="Center"
               VerticalAlignment="Center"
-              Data="M0,0 L3,0 4.5,1.5 6,0 9,0 4.5,4.5 z" />
+              Data="M0,5 L4.5,.5 9,5 6,5 4.5,3.5 3,5 z" />
       </Template>
     </Setter>
   </Style>
@@ -27,7 +27,7 @@
               Stretch="Uniform"
               HorizontalAlignment="Center"
               VerticalAlignment="Center"
-              Data="M0,5 L4.5,.5 9,5 6,5 4.5,3.5 3,5 z" />
+              Data="M0,0 L3,0 4.5,1.5 6,0 9,0 4.5,4.5 z" />
       </Template>
     </Setter>
   </Style>
@@ -49,8 +49,8 @@
                               VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"
                               Padding="{TemplateBinding Padding}" />
             <Grid Grid.Column="1" RowDefinitions="*,*" IsVisible="{TemplateBinding ShowButtonSpinner}">
-              <RepeatButton Grid.Row="0" Name="PART_IncreaseButton" />
-              <RepeatButton Grid.Row="1" Name="PART_DecreaseButton" />
+              <RepeatButton Grid.Row="0" Name="PART_IncreaseButton"/>
+              <RepeatButton Grid.Row="1" Name="PART_DecreaseButton"/>
             </Grid>
           </Grid>
         </Border>
@@ -69,8 +69,8 @@
                 VerticalAlignment="{TemplateBinding VerticalAlignment}">
           <Grid ColumnDefinitions="Auto,*">
             <Grid Grid.Column="0" RowDefinitions="*,*" IsVisible="{TemplateBinding ShowButtonSpinner}">
-              <RepeatButton Grid.Row="0" Name="PART_IncreaseButton" />
-              <RepeatButton Grid.Row="1" Name="PART_DecreaseButton" />
+              <RepeatButton Grid.Row="0" Name="PART_IncreaseButton"/>
+              <RepeatButton Grid.Row="1" Name="PART_DecreaseButton"/>
             </Grid>
             <ContentPresenter Name="PART_ContentPresenter" Grid.Column="1"
                               ContentTemplate="{TemplateBinding ContentTemplate}"
@@ -82,5 +82,12 @@
         </Border>
       </ControlTemplate>
     </Setter>
+  </Style>
+  <Style Selector="ButtonSpinner /template/ RepeatButton:pointerover">
+    <Setter Property="BorderBrush" Value="{DynamicResource MaterialDesignTextAreaBorder}"/>
+  </Style>
+  <Style Selector="ButtonSpinner /template/ RepeatButton">
+    <Setter Property="Background" Value="Transparent"/>
+    <Setter Property="BorderBrush" Value="Transparent"/>
   </Style>
 </Styles>

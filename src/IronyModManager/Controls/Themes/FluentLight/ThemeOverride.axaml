@@ -103,6 +103,6 @@
     <Color x:Key="IronyBackgroundPopupColor">White</Color>
     <SolidColorBrush x:Key="IronyBackgroundPopupBrush" Color="{DynamicResource IronyBackgroundPopupColor}" />
     <x:Double x:Key="ControlContentThemeFontSize">12</x:Double>
-    <x:Double x:Key="ContentControlFontSize">12</x:Double>    
+    <x:Double x:Key="ContentControlFontSize">12</x:Double>
   </Styles.Resources>
 </Styles>

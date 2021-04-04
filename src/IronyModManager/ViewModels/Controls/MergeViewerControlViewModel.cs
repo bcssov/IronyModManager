@@ -663,6 +663,9 @@ namespace IronyModManager.ViewModels.Controls
         {
             if (selected?.Count() > 0)
             {
+                selected = CopyDiffPieceCollection(selected);
+                source = CopyDiffPieceCollection(source);
+                destination = CopyDiffPieceCollection(destination);
                 var ordered = OrderSelected(selected, source);
                 foreach (var item in ordered)
                 {
@@ -691,6 +694,9 @@ namespace IronyModManager.ViewModels.Controls
         {
             if (selected?.Count() > 0)
             {
+                selected = CopyDiffPieceCollection(selected);
+                source = CopyDiffPieceCollection(source);
+                destination = CopyDiffPieceCollection(destination);
                 var ordered = OrderSelected(selected, source);
                 var grouped = ordered.Select((x, id) =>
                 {
@@ -766,6 +772,9 @@ namespace IronyModManager.ViewModels.Controls
         {
             if (selected?.Count() > 0)
             {
+                selected = CopyDiffPieceCollection(selected);
+                source = CopyDiffPieceCollection(source);
+                destination = CopyDiffPieceCollection(destination);
                 var ordered = OrderSelected(selected, source);
                 var grouped = ordered.Select((x, id) =>
                 {
@@ -819,6 +828,16 @@ namespace IronyModManager.ViewModels.Controls
         }
 
         /// <summary>
+        /// Copies the difference piece collection.
+        /// </summary>
+        /// <param name="col">The col.</param>
+        /// <returns>System.Collections.Generic.List&lt;IronyModManager.ViewModels.Controls.MergeViewerControlViewModel.DiffPieceWithIndex&gt;.</returns>
+        protected virtual List<DiffPieceWithIndex> CopyDiffPieceCollection(IEnumerable<DiffPieceWithIndex> col)
+        {
+            return new List<DiffPieceWithIndex>(col);
+        }
+
+        /// <summary>
         /// copy text as an asynchronous operation.
         /// </summary>
         /// <param name="leftSide">if set to <c>true</c> [left side].</param>
@@ -835,7 +854,7 @@ namespace IronyModManager.ViewModels.Controls
         protected virtual void DeleteLines(bool leftSide)
         {
             var selected = leftSide ? LeftSideSelected : RightSideSelected;
-            var source = leftSide ? LeftDiff : RightDiff;
+            var source = CopyDiffPieceCollection(leftSide ? LeftDiff : RightDiff);
             if (selected != null && source != null && selected.Count > 0 && selected.Count <= source.Count)
             {
                 foreach (var item in selected)
@@ -981,6 +1000,8 @@ namespace IronyModManager.ViewModels.Controls
         {
             if (selected?.Count() > 0)
             {
+                selected = CopyDiffPieceCollection(selected);
+                source = CopyDiffPieceCollection(source);
                 var ordered = OrderSelected(selected, source);
                 foreach (var item in ordered)
                 {
@@ -1206,17 +1227,21 @@ namespace IronyModManager.ViewModels.Controls
             {
                 void performAction()
                 {
-                    if (LeftSideSelected.Count == 0)
-                    {
-                        LeftSideSelected.Add(LeftDiff.FirstOrDefault());
-                    }
                     switch (m.Hotkey)
                     {
                         case Enums.HotKeys.Ctrl_Up:
+                            if (LeftSideSelected.Count == 0)
+                            {
+                                LeftSideSelected.Add(LeftDiff.FirstOrDefault());
+                            }
                             FindConflict(true, false);
                             break;
 
                         case Enums.HotKeys.Ctrl_Down:
+                            if (LeftSideSelected.Count == 0)
+                            {
+                                LeftSideSelected.Add(LeftDiff.FirstOrDefault());
+                            }
                             FindConflict(true, true);
                             break;
 
@@ -1497,10 +1522,20 @@ namespace IronyModManager.ViewModels.Controls
             /// <returns><c>true</c> if the specified <see cref="System.Object" /> is equal to this instance; otherwise, <c>false</c>.</returns>
             public override bool Equals(object obj)
             {
-                var result = base.Equals(obj);
-                if (result && obj is DiffPieceWithIndex other)
+                return Equals(obj as DiffPiece);
+            }
+
+            /// <summary>
+            /// Equalses the specified other.
+            /// </summary>
+            /// <param name="other">The other.</param>
+            /// <returns>bool.</returns>
+            public new bool Equals(DiffPiece other)
+            {
+                var result = base.Equals(other);
+                if (result && other is DiffPieceWithIndex diffPieceWithIndex)
                 {
-                    return Index.Equals(other.Index);
+                    return Index.Equals(diffPieceWithIndex.Index);
                 }
                 return result;
             }
