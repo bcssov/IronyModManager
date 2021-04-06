@@ -4,7 +4,7 @@
 // Created          : 01-10-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-28-2021
+// Last Modified On : 04-07-2021
 // ***********************************************************************
 // <copyright file="MainWindow.xaml.cs" company="Mario">
 //     Mario
@@ -142,7 +142,7 @@ namespace IronyModManager.Views
         protected virtual void InitWindowSize()
         {
             var service = DIResolver.Get<IWindowStateService>();
-            if (service.IsDefined())
+            if (service.IsDefined() || service.IsMaximized())
             {
                 bool isValid(int value)
                 {
