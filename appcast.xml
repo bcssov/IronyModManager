@@ -4,11 +4,9 @@
 		<title>Irony Mod Manager</title>
 		<language>en</language>
 		<item>
-			<title>1.14.41</title>
+			<title>1.14.42</title>
 			<description>RELEASE INFO:
-* Fix issue with fonts on some Linux distro combos
-* Fix conflict solver virtualizer crashes
-* Various fixes
+* Fix Irony being unable to start if window size was not specified
 
 CHANGES FROM v1.13:
 * Updated dependencies
@@ -16,15 +14,13 @@ CHANGES FROM v1.13:
 * Various theme fixes
 * Add conflict solver first run notification (for clarity)
 * Add game hash verification</description>
-			<pubDate>Sun, 04 Apr 2021 19:35:27 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.14.41/osx-x64.rar" sparkle:version="1.14.41.65428" sparkle:shortVersionString="1.14.41" length="68072608" sparkle:os="osx" type="application/vnd.rar" sparkle:signature="6jcJXJy2gEqa8OHkVYD95/WkgrLnXasvjYPZ8ntj2lEQG+BpUL9cilyvL39F2ONfn22z4oBPCIGTxcDPir3cAA=="/>
+			<pubDate>Wed, 07 Apr 2021 01:20:18 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.14.42/osx-x64.rar" sparkle:version="1.14.42.39806" sparkle:shortVersionString="1.14.42" length="68084064" sparkle:os="osx" type="application/vnd.rar" sparkle:signature="cCxbFcNvyfgBSroS4/siAMt0iyINbKKKyQip4NCFi6+QWHLdKfGjY+mqMGxY0CMSpOfAkaVoR+cC7aHkFuOpBQ=="/>
 		</item>
 		<item>
-			<title>1.14.41</title>
+			<title>1.14.42</title>
 			<description>RELEASE INFO:
-* Fix issue with fonts on some Linux distro combos
-* Fix conflict solver virtualizer crashes
-* Various fixes
+* Fix Irony being unable to start if window size was not specified
 
 CHANGES FROM v1.13:
 * Updated dependencies
@@ -32,15 +28,13 @@ CHANGES FROM v1.13:
 * Various theme fixes
 * Add conflict solver first run notification (for clarity)
 * Add game hash verification</description>
-			<pubDate>Sun, 04 Apr 2021 19:35:35 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.14.41/win-x64-setup.rar" sparkle:version="1.14.41.65428" sparkle:shortVersionString="1.14.41" length="58841370" sparkle:os="windows" type="application/vnd.rar" sparkle:signature="uTKNtP/8rRmCEdckL3nC8gwuZa/G5Dnc68emwdWMYk3LsmgasYc6xBwh1Yudr9ktoElBSSgJ4I/KthRRdC56Cg=="/>
+			<pubDate>Wed, 07 Apr 2021 01:20:26 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.14.42/win-x64-setup.rar" sparkle:version="1.14.42.39806" sparkle:shortVersionString="1.14.42" length="58848647" sparkle:os="windows" type="application/vnd.rar" sparkle:signature="MSlPpb6YP4XkraNkQldEUQQitI50nPwuObfJY/Va+7KFHvTzINry78Lm6LcuSmQqbpXTelutTqB+UQjqAsv+Bw=="/>
 		</item>
 		<item>
-			<title>1.14.41</title>
+			<title>1.14.42</title>
 			<description>RELEASE INFO:
-* Fix issue with fonts on some Linux distro combos
-* Fix conflict solver virtualizer crashes
-* Various fixes
+* Fix Irony being unable to start if window size was not specified
 
 CHANGES FROM v1.13:
 * Updated dependencies
@@ -48,15 +42,13 @@ CHANGES FROM v1.13:
 * Various theme fixes
 * Add conflict solver first run notification (for clarity)
 * Add game hash verification</description>
-			<pubDate>Sun, 04 Apr 2021 19:35:31 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.14.41/win-x64.rar" sparkle:version="1.14.41.65428" sparkle:shortVersionString="1.14.41" length="70823580" sparkle:os="windows" type="application/vnd.rar" sparkle:signature="fn+kOzMsDoaHIvV1D0fvcZVfM3dfUb5Si0v5BPr9UaQPKwXGpUCGCOjREOR16NhXQxywp1pR35g51bl2VWGrAw=="/>
+			<pubDate>Wed, 07 Apr 2021 01:20:22 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.14.42/win-x64.rar" sparkle:version="1.14.42.39806" sparkle:shortVersionString="1.14.42" length="70834963" sparkle:os="windows" type="application/vnd.rar" sparkle:signature="Fw7nYSD+VWPw+YVkvJ0R2dDbVrM68go/wpsr10EAk2980wB/RkYbIU1fCt1tqx6cya0CnSqv5qWPdJ+VUKJOCw=="/>
 		</item>
 		<item>
-			<title>1.14.41</title>
+			<title>1.14.42</title>
 			<description>RELEASE INFO:
-* Fix issue with fonts on some Linux distro combos
-* Fix conflict solver virtualizer crashes
-* Various fixes
+* Fix Irony being unable to start if window size was not specified
 
 CHANGES FROM v1.13:
 * Updated dependencies
@@ -64,8 +56,8 @@ CHANGES FROM v1.13:
 * Various theme fixes
 * Add conflict solver first run notification (for clarity)
 * Add game hash verification</description>
-			<pubDate>Sun, 04 Apr 2021 19:35:25 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.14.41/linux-x64.zip" sparkle:version="1.14.41.65428" sparkle:shortVersionString="1.14.41" length="84371119" sparkle:os="linux" type="application/zip" sparkle:signature="JvrvwHDvtITo2Yjr1YxNnS1EPZIP0jNiTelMolvUbhguEafn1AuMB/gdbdDdmSwDzKRY+oQ/DxcfOVvFvKQwCg=="/>
+			<pubDate>Wed, 07 Apr 2021 01:20:15 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.14.42/linux-x64.zip" sparkle:version="1.14.42.39806" sparkle:shortVersionString="1.14.42" length="84371263" sparkle:os="linux" type="application/zip" sparkle:signature="2o7uvSMVV8mx00bNO4WyIgwHmbDxrwK1vOa9jmoQzjYVqK4z/hx3wBQ7PqkMWXxx2D23R2al09K2hdkXPyq1Cg=="/>
 		</item>
 	</channel>
 </rss>
