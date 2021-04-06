@@ -4,7 +4,7 @@
 // Created          : 01-10-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-14-2021
+// Last Modified On : 04-07-2021
 // ***********************************************************************
 // <copyright file="App.xaml.cs" company="Mario">
 //     Mario
@@ -123,11 +123,11 @@ namespace IronyModManager
         protected virtual void InitAppSizeDefaults(IClassicDesktopStyleApplicationLifetime desktop)
         {
             var stateService = DIResolver.Get<IWindowStateService>();
+            desktop.MainWindow.Height = desktop.MainWindow.MinHeight;
+            desktop.MainWindow.Width = desktop.MainWindow.MinWidth;
             if (!stateService.IsDefined() && !stateService.IsMaximized())
             {
                 desktop.MainWindow.SizeToContent = SizeToContent.Manual;
-                desktop.MainWindow.Height = desktop.MainWindow.MinHeight;
-                desktop.MainWindow.Width = desktop.MainWindow.MinWidth;
                 desktop.MainWindow.WindowStartupLocation = WindowStartupLocation.CenterScreen;
             }
         }
