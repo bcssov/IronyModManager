@@ -4,7 +4,7 @@
 // Created          : 03-13-2021
 //
 // Last Modified By : Mario
-// Last Modified On : 04-02-2021
+// Last Modified On : 04-09-2021
 // ***********************************************************************
 // <copyright file="FontManager.cs" company="Mario">
 //     Mario
@@ -45,6 +45,11 @@ namespace IronyModManager.Platform.Fonts
         /// All fonts
         /// </summary>
         private List<string> allFonts = null;
+
+        /// <summary>
+        /// The typefaces
+        /// </summary>
+        private List<Typeface> typefaces;
 
         #endregion Fields
 
@@ -135,6 +140,24 @@ namespace IronyModManager.Platform.Fonts
         /// <returns><c>True</c>, if the <see cref="T:Avalonia.Platform.IFontManagerImpl" /> could match the character to specified parameters, <c>False</c> otherwise.</returns>
         public bool TryMatchCharacter(int codepoint, FontStyle fontStyle, FontWeight fontWeight, FontFamily fontFamily, CultureInfo culture, out Typeface typeface)
         {
+            if (typefaces == null)
+            {
+                typefaces = new List<Typeface>();
+                foreach (var item in fontFamilyManager.GetAllFontNames())
+                {
+                    typefaces.Add(new Typeface(fontFamilyManager.ResolveFontFamily(item).GetFontFamily()));
+                }
+            }
+            foreach (var item in typefaces)
+            {
+                if (item.GlyphTypeface.GetGlyph((uint)codepoint) == 0)
+                {
+                    continue;
+                }
+                typeface = new Typeface(item.FontFamily.Name, fontStyle, fontWeight);
+                return true;
+            }
+
             return fontManager.TryMatchCharacter(codepoint, fontStyle, fontWeight, fontFamily, culture, out typeface);
         }
 
