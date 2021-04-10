@@ -4,7 +4,7 @@
 // Created          : 03-13-2021
 //
 // Last Modified By : Mario
-// Last Modified On : 04-09-2021
+// Last Modified On : 04-10-2021
 // ***********************************************************************
 // <copyright file="FontManager.cs" company="Mario">
 //     Mario
@@ -121,9 +121,10 @@ namespace IronyModManager.Platform.Fonts
             if (allFonts == null || checkForUpdates)
             {
                 var fontFamilyManager = GetFontFamilyManager();
-                allFonts = new List<string>();
-                allFonts.AddRange(fontManager.GetInstalledFontFamilyNames(checkForUpdates));
-                allFonts.AddRange(fontFamilyManager.GetAllFontNames());
+                var fonts = new List<string>();
+                fonts.AddRange(fontFamilyManager.GetAllFontNames());
+                fonts.AddRange(fontManager.GetInstalledFontFamilyNames(checkForUpdates));
+                allFonts = fonts.Distinct().ToList();
             }
             return allFonts;
         }
