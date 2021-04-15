@@ -10,6 +10,7 @@
   <StyleInclude Source="avares://IronyModManager/Controls/Themes/FluentLight/IronyToolTip.axaml"/>
   <StyleInclude Source="avares://IronyModManager/Controls/Themes/FluentLight/ListBoxItem.axaml"/>
   <StyleInclude Source="avares://IronyModManager/Controls/Themes/FluentLight/TextBox.axaml"/>
+  <StyleInclude Source="avares://IronyModManager/Controls/Themes/FluentLight/NumericEditTextbox.axaml"/>
 
   <!--Individual styles-->
   <Style Selector="NotificationCard">

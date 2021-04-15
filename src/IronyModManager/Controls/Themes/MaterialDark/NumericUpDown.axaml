@@ -25,7 +25,7 @@
                        AllowSpin="{TemplateBinding AllowSpin}"
                        ShowButtonSpinner="{TemplateBinding ShowButtonSpinner}"
                        ButtonSpinnerLocation="{TemplateBinding ButtonSpinnerLocation}">
-            <controls:TextBox Name="PART_TextBox"
+            <controls:NumericEditTextbox Name="PART_TextBox"
                      BorderThickness="0"
                      VerticalAlignment="Center"
                      Background="{TemplateBinding Background}"
@@ -40,15 +40,15 @@
                      AcceptsReturn="False"
                      TextAlignment="Center"
                      ShowContextMenu="False"
-                     AllowGlobalHotKeys="True"                              
+                     AllowGlobalHotKeys="True"
                      TextWrapping="NoWrap">
-            </controls:TextBox>
+            </controls:NumericEditTextbox>
           </controls:NumericButtonSpinner>
         </controls:MinMaxButtonSpinner>
       </ControlTemplate>
     </Setter>
   </Style>
-  <Style Selector="controls|MinMaxNumericUpDown /template/ TextBox#PART_TextBox">
+  <Style Selector="controls|MinMaxNumericUpDown /template/ controls|NumericEditTextbox#PART_TextBox">
     <Setter Property="Margin" Value="0,-5,0,0"/>
     <Setter Property="MinWidth" Value="20"/>
   </Style>

@@ -9,6 +9,7 @@
   <StyleInclude Source="avares://IronyModManager/Controls/Themes/IconsDark.xaml"/>
   <StyleInclude Source="avares://IronyModManager/Controls/Themes/Dark/IronyToolTip.axaml"/>
   <StyleInclude Source="avares://IronyModManager/Controls/Themes/Dark/TextBox.axaml"/>
+  <StyleInclude Source="avares://IronyModManager/Controls/Themes/Dark/NumericEditTextbox.axaml"/>
 
   <!--Individual styles-->
   <Style Selector="NotificationCard">
