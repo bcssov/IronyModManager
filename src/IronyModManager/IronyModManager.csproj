@@ -139,18 +139,18 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="Nerdbank.GitVersioning" Version="3.3.37">
+    <PackageReference Include="Nerdbank.GitVersioning" Version="3.4.194">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="NetSparkle.New" Version="2.0.0-preview20210131001" />
     <PackageReference Include="NLog" Version="4.7.9" />
-    <PackageReference Include="ReactiveUI" Version="13.2.10" />
+    <PackageReference Include="ReactiveUI" Version="13.2.18" />
     <PackageReference Include="SimpleInjector" Version="5.3.0" />
     <PackageReference Include="SimpleInjector.Packaging" Version="5.0.0" />
-    <PackageReference Include="SmartFormat.NET" Version="2.6.2" />
-    <PackageReference Include="Splat.NLog" Version="10.0.1" />
-    <PackageReference Include="Splat.SimpleInjector" Version="10.0.1" />
+    <PackageReference Include="SmartFormat.NET" Version="2.7.0" />
+    <PackageReference Include="Splat.NLog" Version="11.0.1" />
+    <PackageReference Include="Splat.SimpleInjector" Version="11.0.1" />
     <PackageReference Include="StrongNamer" Version="0.2.5" />
     <PackageReference Include="Syroot.Windows.IO.KnownFolders" Version="1.2.3" />
   </ItemGroup>

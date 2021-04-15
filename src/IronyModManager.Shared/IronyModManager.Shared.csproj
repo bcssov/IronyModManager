@@ -53,13 +53,13 @@
     <PackageReference Include="CodexMicroORM.Core" Version="0.9.8" />
     <PackageReference Include="Microsoft.DotNet.PlatformAbstractions" Version="$(MicrosoftDotNetPlatformAbstractionsVersion)" allowedVersions="$(MicrosoftDotNetPlatformAbstractionsVersion)" />
     <PackageReference Include="Microsoft.Extensions.DependencyModel" Version="$(MicrosoftExtensionsDependencyModelVersion)" allowedVersions="$(MicrosoftExtensionsDependencyModelVersion)" />
-    <PackageReference Include="Nerdbank.GitVersioning" Version="3.3.37">
+    <PackageReference Include="Nerdbank.GitVersioning" Version="3.4.194">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
     <PackageReference Include="Nito.AsyncEx" Version="5.1.0" />
-    <PackageReference Include="SlimMessageBus.Host.Memory" Version="1.11.1" />
+    <PackageReference Include="SlimMessageBus.Host.Memory" Version="1.11.2" />
     <PackageReference Include="StrongNamer" Version="0.2.5" />
     <PackageReference Include="System.Data.HashFunction.MetroHash" Version="2.0.0" />
     <PackageReference Include="System.Reactive" Version="5.0.0" />

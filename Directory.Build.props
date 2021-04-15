@@ -16,13 +16,13 @@
   <PropertyGroup>
     <MicrosoftExtensionsDependencyModelVersion>[5.0.0]</MicrosoftExtensionsDependencyModelVersion>
     <MicrosoftDotNetPlatformAbstractionsVersion>[5.0.0-preview.5.20278.1]</MicrosoftDotNetPlatformAbstractionsVersion>
-    <MicrosoftNETCorePlatformsVersion>[5.0.1]</MicrosoftNETCorePlatformsVersion>
+    <MicrosoftNETCorePlatformsVersion>[5.0.2]</MicrosoftNETCorePlatformsVersion>
     <MicrosoftWin32Registry>[5.0.0]</MicrosoftWin32Registry>
     <MicrosoftExtensionsConfigurationBinder>[5.0.0]</MicrosoftExtensionsConfigurationBinder>
     <MicrosoftExtensionsConfigurationJson>[5.0.0]</MicrosoftExtensionsConfigurationJson>
     <MaterialAvalonia>[2.0.0]</MaterialAvalonia>
     <MessageBoxAvalonia>[1.1.1]</MessageBoxAvalonia>
-    <Avalonia>[0.10.999-cibuild0013531-beta]</Avalonia>
+    <Avalonia>[0.10.999-cibuild0013732-beta]</Avalonia>
     <AvaloniaEdit>[0.10.0]</AvaloniaEdit>
   </PropertyGroup>
   <ItemGroup>
