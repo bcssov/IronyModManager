@@ -4,60 +4,40 @@
 		<title>Irony Mod Manager</title>
 		<language>en</language>
 		<item>
-			<title>1.14.42</title>
-			<description>RELEASE INFO:
-* Fix Irony being unable to start if window size was not specified
-
-CHANGES FROM v1.13:
+			<title>1.15.16</title>
+			<description>CHANGES FROM v1.14:
 * Updated dependencies
-* Updated material theme
-* Various theme fixes
-* Add conflict solver first run notification (for clarity)
-* Add game hash verification</description>
-			<pubDate>Wed, 07 Apr 2021 01:20:18 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.14.42/osx-x64.rar" sparkle:version="1.14.42.39806" sparkle:shortVersionString="1.14.42" length="68084064" sparkle:os="osx" type="application/vnd.rar" sparkle:signature="cCxbFcNvyfgBSroS4/siAMt0iyINbKKKyQip4NCFi6+QWHLdKfGjY+mqMGxY0CMSpOfAkaVoR+cC7aHkFuOpBQ=="/>
+* Fix segfault CTD on certain Linux (openSUSE) configurations
+* Update for Stellaris 3.0</description>
+			<pubDate>Fri, 16 Apr 2021 03:08:34 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.15.16/osx-x64.rar" sparkle:version="1.15.16.52133" sparkle:shortVersionString="1.15.16" length="68089563" sparkle:os="osx" type="application/vnd.rar" sparkle:signature="mBRLjh0kNzRmUxgvH3IHnx/X1sMkeqMfxlLEWA7nH7wrUDZcTx+KKxR/YNi/WIeC4eGmq571zryycYXuUQL9Dw=="/>
 		</item>
 		<item>
-			<title>1.14.42</title>
-			<description>RELEASE INFO:
-* Fix Irony being unable to start if window size was not specified
-
-CHANGES FROM v1.13:
+			<title>1.15.16</title>
+			<description>CHANGES FROM v1.14:
 * Updated dependencies
-* Updated material theme
-* Various theme fixes
-* Add conflict solver first run notification (for clarity)
-* Add game hash verification</description>
-			<pubDate>Wed, 07 Apr 2021 01:20:26 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.14.42/win-x64-setup.rar" sparkle:version="1.14.42.39806" sparkle:shortVersionString="1.14.42" length="58848647" sparkle:os="windows" type="application/vnd.rar" sparkle:signature="MSlPpb6YP4XkraNkQldEUQQitI50nPwuObfJY/Va+7KFHvTzINry78Lm6LcuSmQqbpXTelutTqB+UQjqAsv+Bw=="/>
+* Fix segfault CTD on certain Linux (openSUSE) configurations
+* Update for Stellaris 3.0</description>
+			<pubDate>Fri, 16 Apr 2021 03:08:41 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.15.16/win-x64-setup.rar" sparkle:version="1.15.16.52133" sparkle:shortVersionString="1.15.16" length="58869844" sparkle:os="windows" type="application/vnd.rar" sparkle:signature="W2tcdNVzSPVfQswtFes63GDE3a4wLh/5wGTuzAY27Yb2Cl+V3OQD6T358GGEazfZGHQFlEJ7DewO+ymkJ3ZSAw=="/>
 		</item>
 		<item>
-			<title>1.14.42</title>
-			<description>RELEASE INFO:
-* Fix Irony being unable to start if window size was not specified
-
-CHANGES FROM v1.13:
+			<title>1.15.16</title>
+			<description>CHANGES FROM v1.14:
 * Updated dependencies
-* Updated material theme
-* Various theme fixes
-* Add conflict solver first run notification (for clarity)
-* Add game hash verification</description>
-			<pubDate>Wed, 07 Apr 2021 01:20:22 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.14.42/win-x64.rar" sparkle:version="1.14.42.39806" sparkle:shortVersionString="1.14.42" length="70834963" sparkle:os="windows" type="application/vnd.rar" sparkle:signature="Fw7nYSD+VWPw+YVkvJ0R2dDbVrM68go/wpsr10EAk2980wB/RkYbIU1fCt1tqx6cya0CnSqv5qWPdJ+VUKJOCw=="/>
+* Fix segfault CTD on certain Linux (openSUSE) configurations
+* Update for Stellaris 3.0</description>
+			<pubDate>Fri, 16 Apr 2021 03:08:37 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.15.16/win-x64.rar" sparkle:version="1.15.16.52133" sparkle:shortVersionString="1.15.16" length="70835004" sparkle:os="windows" type="application/vnd.rar" sparkle:signature="5hSlf/zlJJi/OjJQ1rVvjEiRtZpr5aRhpVT8gFGmUqgDis5ZmCiKYulDxAMV5lfpc12nxTvDSyez8RdgbuawAA=="/>
 		</item>
 		<item>
-			<title>1.14.42</title>
-			<description>RELEASE INFO:
-* Fix Irony being unable to start if window size was not specified
-
-CHANGES FROM v1.13:
+			<title>1.15.16</title>
+			<description>CHANGES FROM v1.14:
 * Updated dependencies
-* Updated material theme
-* Various theme fixes
-* Add conflict solver first run notification (for clarity)
-* Add game hash verification</description>
-			<pubDate>Wed, 07 Apr 2021 01:20:15 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.14.42/linux-x64.zip" sparkle:version="1.14.42.39806" sparkle:shortVersionString="1.14.42" length="84371263" sparkle:os="linux" type="application/zip" sparkle:signature="2o7uvSMVV8mx00bNO4WyIgwHmbDxrwK1vOa9jmoQzjYVqK4z/hx3wBQ7PqkMWXxx2D23R2al09K2hdkXPyq1Cg=="/>
+* Fix segfault CTD on certain Linux (openSUSE) configurations
+* Update for Stellaris 3.0</description>
+			<pubDate>Fri, 16 Apr 2021 03:08:30 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.15.16/linux-x64.zip" sparkle:version="1.15.16.52133" sparkle:shortVersionString="1.15.16" length="84388521" sparkle:os="linux" type="application/zip" sparkle:signature="BC0+5s1Hj1gw1AUF66N26SkKtHPmaj6sheLC3tCzsvrnpG9to/t7FpBoMTbY3yPPpSlPBTxzjpJRqQglV1dzCQ=="/>
 		</item>
 	</channel>
 </rss>
