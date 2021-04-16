@@ -4,7 +4,7 @@
 // Created          : 01-13-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-10-2021
+// Last Modified On : 04-16-2021
 // ***********************************************************************
 // <copyright file="AvaloniaLogger.cs" company="Mario">
 //     Mario
@@ -15,8 +15,8 @@ using System;
 using System.Collections.Generic;
 using Avalonia.Logging;
 using IronyModManager.DI;
+using IronyModManager.Platform.Configuration;
 using IronyModManager.Shared;
-using Microsoft.Extensions.Configuration;
 
 namespace IronyModManager.Log
 {
@@ -51,8 +51,8 @@ namespace IronyModManager.Log
         {
             if (!loggingAllowed.HasValue)
             {
-                var configuration = DIResolver.Get<IConfigurationRoot>();
-                loggingAllowed = configuration.GetSection("Logging").GetSection("EnableAvaloniaLogger").Get<bool?>().GetValueOrDefault();
+                var configuration = DIResolver.Get<IPlatformConfiguration>();
+                loggingAllowed = configuration.GetOptions().Logging.EnableAvaloniaLogger;
             }
             if (loggingAllowed.GetValueOrDefault())
             {

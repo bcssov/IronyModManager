@@ -4,7 +4,7 @@
 // Created          : 01-10-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-16-2021
+// Last Modified On : 04-16-2021
 // ***********************************************************************
 // <copyright file="Program.cs" company="IronyModManager">
 //     Copyright (c) Mario. All rights reserved.
@@ -24,8 +24,8 @@ using IronyModManager.DI;
 using IronyModManager.Implementation.Actions;
 using IronyModManager.Localization;
 using IronyModManager.Platform;
+using IronyModManager.Platform.Configuration;
 using IronyModManager.Shared;
-using Microsoft.Extensions.Configuration;
 
 namespace IronyModManager
 {
@@ -119,30 +119,25 @@ namespace IronyModManager
         {
             void configureLinux()
             {
-                var configuration = DIResolver.Get<IConfigurationRoot>();
-                var linuxSection = configuration.GetSection("LinuxOptions");
-                var useGPU = linuxSection.GetSection("UseGPU").Get<bool?>();
-                var useEGL = linuxSection.GetSection("UseEGL").Get<bool?>();
-                var useDBusMenu = linuxSection.GetSection("UseDBusMenu").Get<bool?>();
-                var useDeferredRendering = linuxSection.GetSection("UseDeferredRendering").Get<bool?>();
-                if (useGPU.HasValue || useEGL.HasValue || useDBusMenu.HasValue || useDeferredRendering.HasValue)
+                var configuration = DIResolver.Get<IPlatformConfiguration>().GetOptions().LinuxOptions;
+                if (configuration.UseGPU.HasValue || configuration.UseEGL.HasValue || configuration.UseDBusMenu.HasValue || configuration.UseDeferredRendering.HasValue)
                 {
                     var opts = new X11PlatformOptions();
-                    if (useGPU.HasValue)
+                    if (configuration.UseGPU.HasValue)
                     {
-                        opts.UseGpu = useGPU.GetValueOrDefault();
+                        opts.UseGpu = configuration.UseGPU.GetValueOrDefault();
                     }
-                    if (useEGL.HasValue)
+                    if (configuration.UseEGL.HasValue)
                     {
-                        opts.UseEGL = useEGL.GetValueOrDefault();
+                        opts.UseEGL = configuration.UseEGL.GetValueOrDefault();
                     }
-                    if (useDBusMenu.HasValue)
+                    if (configuration.UseDBusMenu.HasValue)
                     {
-                        opts.UseDBusMenu = useDBusMenu.GetValueOrDefault();
+                        opts.UseDBusMenu = configuration.UseDBusMenu.GetValueOrDefault();
                     }
-                    if (useDeferredRendering.HasValue)
+                    if (configuration.UseDeferredRendering.HasValue)
                     {
-                        opts.UseDeferredRendering = useDeferredRendering.GetValueOrDefault();
+                        opts.UseDeferredRendering = configuration.UseDeferredRendering.GetValueOrDefault();
                     }
                     app.With(opts);
                 }
