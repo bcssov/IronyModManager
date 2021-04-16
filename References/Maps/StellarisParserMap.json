@@ -12,6 +12,14 @@
 		"PreferredParser": "DefaultParser"
 	},
 	{
+		"DirectoryPath": "common\\ai_espionage\\operations",
+		"PreferredParser": "DefaultParser"
+	},
+	{
+		"DirectoryPath": "common\\ai_espionage\\spynetworks",
+		"PreferredParser": "DefaultParser"
+	},
+	{
 		"DirectoryPath": "common\\ambient_objects",
 		"PreferredParser": "GenericKeyParser"
 	},
@@ -104,6 +112,14 @@
 		"PreferredParser": "DefaultParser"
 	},
 	{
+		"DirectoryPath": "common\\crisis_levels",
+		"PreferredParser": "DefaultParser"
+	},
+	{
+		"DirectoryPath": "common\\crisis_objectives",
+		"PreferredParser": "DefaultParser"
+	},
+	{
 		"DirectoryPath": "common\\decisions",
 		"PreferredParser": "DefaultParser"
 	},
@@ -148,6 +164,18 @@
 		"PreferredParser": "DefaultParser"
 	},
 	{
+		"DirectoryPath": "common\\espionage_assets",
+		"PreferredParser": "DefaultParser"
+	},
+	{
+		"DirectoryPath": "common\\espionage_operation_categories",
+		"PreferredParser": "DefaultParser"
+	},
+	{
+		"DirectoryPath": "common\\espionage_operation_types",
+		"PreferredParser": "DefaultParser"
+	},
+	{
 		"DirectoryPath": "common\\ethics",
 		"PreferredParser": "DefaultParser"
 	},
@@ -173,6 +201,14 @@
 	},
 	{
 		"DirectoryPath": "common\\federation_types",
+		"PreferredParser": "DefaultParser"
+	},
+	{
+		"DirectoryPath": "common\\first_contact",
+		"PreferredParser": "DefaultParser"
+	},
+	{
+		"DirectoryPath": "common\\galactic_community_actions",
 		"PreferredParser": "DefaultParser"
 	},
 	{
@@ -204,6 +240,18 @@
 		"PreferredParser": "DefaultParser"
 	},
 	{
+		"DirectoryPath": "common\\greeting_overlay_sounds",
+		"PreferredParser": "DefaultParser"
+	},
+	{
+		"DirectoryPath": "common\\intel_categories",
+		"PreferredParser": "DefaultParser"
+	},
+	{
+		"DirectoryPath": "common\\intel_levels",
+		"PreferredParser": "DefaultParser"
+	},
+	{
 		"DirectoryPath": "common\\leader_classes",
 		"PreferredParser": "DefaultParser"
 	},
@@ -218,6 +266,14 @@
 	{
 		"DirectoryPath": "common\\megastructures",
 		"PreferredParser": "DefaultParser"
+	},
+	{
+		"DirectoryPath": "common\\menace_perks",
+		"PreferredParser": "DefaultParser"
+	},
+	{
+		"DirectoryPath": "common\\message_types",
+		"PreferredParser": "GenericKeyParser"
 	},
 	{
 		"DirectoryPath": "common\\name_lists",
@@ -288,6 +344,10 @@
 		"PreferredParser": "DefaultParser"
 	},
 	{
+		"DirectoryPath": "common\\resolution_groups",
+		"PreferredParser": "DefaultParser"
+	},
+	{
 		"DirectoryPath": "common\\resolutions",
 		"PreferredParser": "DefaultParser"
 	},
@@ -337,7 +397,7 @@
 	},
 	{
 		"DirectoryPath": "common\\species_archetypes",
-		"PreferredParser": "DefaultParser"
+		"PreferredParser": "StellarisOverwrittenParser"
 	},
 	{
 		"DirectoryPath": "common\\species_classes",
@@ -373,7 +433,7 @@
 	},
 	{
 		"DirectoryPath": "common\\start_screen_messages",
-		"PreferredParser": "GenericKeyParser"
+		"PreferredParser": "StellarisWholeTextParser"
 	},
 	{
 		"DirectoryPath": "common\\static_modifiers",
@@ -828,6 +888,14 @@
 		"PreferredParser": "GenericGraphicsParser"
 	},
 	{
+		"DirectoryPath": "gfx\\models\\ships\\colossus\\nemesis_01",
+		"PreferredParser": "GenericKeyParser"
+	},
+	{
+		"DirectoryPath": "gfx\\models\\ships\\colossus\\nemesis_01",
+		"PreferredParser": "GenericGraphicsParser"
+	},
+	{
 		"DirectoryPath": "gfx\\models\\ships\\colossus\\plantoid_01",
 		"PreferredParser": "GenericKeyParser"
 	},
@@ -1060,6 +1128,14 @@
 		"PreferredParser": "GenericGraphicsParser"
 	},
 	{
+		"DirectoryPath": "gfx\\models\\ships\\juggernauts\\nemesis_01",
+		"PreferredParser": "GenericKeyParser"
+	},
+	{
+		"DirectoryPath": "gfx\\models\\ships\\juggernauts\\nemesis_01",
+		"PreferredParser": "GenericGraphicsParser"
+	},
+	{
 		"DirectoryPath": "gfx\\models\\ships\\juggernauts\\plantoid_01",
 		"PreferredParser": "GenericKeyParser"
 	},
@@ -1172,6 +1248,14 @@
 		"PreferredParser": "GenericGraphicsParser"
 	},
 	{
+		"DirectoryPath": "gfx\\models\\ships\\megastructures\\star_eater",
+		"PreferredParser": "GenericKeyParser"
+	},
+	{
+		"DirectoryPath": "gfx\\models\\ships\\megastructures\\star_eater",
+		"PreferredParser": "GenericGraphicsParser"
+	},
+	{
 		"DirectoryPath": "gfx\\models\\ships\\megastructures\\strategic_coordination_center",
 		"PreferredParser": "GenericKeyParser"
 	},
@@ -1202,6 +1286,14 @@
 	{
 		"DirectoryPath": "gfx\\models\\ships\\necroid_01",
 		"PreferredParser": "GenericGraphicsParser"
+	},
+	{
+		"DirectoryPath": "gfx\\models\\ships\\nemesis_01",
+		"PreferredParser": "GenericGraphicsParser"
+	},
+	{
+		"DirectoryPath": "gfx\\models\\ships\\nemesis_01",
+		"PreferredParser": "GenericKeyParser"
 	},
 	{
 		"DirectoryPath": "gfx\\models\\ships\\other",
@@ -1306,7 +1398,7 @@
 	{
 		"DirectoryPath": "gfx\\models\\ships\\titans\\mammalian_01",
 		"PreferredParser": "GenericGraphicsParser"
-	},	
+	},
 	{
 		"DirectoryPath": "gfx\\models\\ships\\titans\\molluscoid_01",
 		"PreferredParser": "GenericKeyParser"
@@ -1317,6 +1409,14 @@
 	},
 	{
 		"DirectoryPath": "gfx\\models\\ships\\titans\\necroid_01",
+		"PreferredParser": "GenericGraphicsParser"
+	},
+	{
+		"DirectoryPath": "gfx\\models\\ships\\titans\\nemesis_01",
+		"PreferredParser": "GenericKeyParser"
+	},
+	{
+		"DirectoryPath": "gfx\\models\\ships\\titans\\nemesis_01",
 		"PreferredParser": "GenericGraphicsParser"
 	},
 	{
@@ -1473,7 +1573,7 @@
 	},
 	{
 		"DirectoryPath": "map\\setup_scenarios",
-		"PreferredParser": "GenericKeyParser"
+		"PreferredParser": "StellarisWholeTextParser"
 	},
 	{
 		"DirectoryPath": "music",
@@ -1585,6 +1685,10 @@
 	},
 	{
 		"DirectoryPath": "sound\\necroids\\portraits",
+		"PreferredParser": "GenericWholeTextParser"
+	},
+	{
+		"DirectoryPath": "sound\\nemesis",
 		"PreferredParser": "GenericWholeTextParser"
 	},
 	{

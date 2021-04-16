@@ -4,7 +4,7 @@
 // Created          : 03-20-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-04-2021
+// Last Modified On : 04-15-2021
 // ***********************************************************************
 // <copyright file="MergeViewerControlView.xaml.cs" company="Mario">
 //     Mario
@@ -380,7 +380,9 @@ namespace IronyModManager.Views.Controls
                     }
                 }
             };
+#pragma warning disable CS0618 // Type or member is obsolete
             editor.ContextMenu = ctx;
+#pragma warning restore CS0618 // Type or member is obsolete
 
             editor.Options = new TextEditorOptions()
             {

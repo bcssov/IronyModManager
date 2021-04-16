@@ -38,7 +38,7 @@
                            AllowSpin="{TemplateBinding AllowSpin}"
                            ShowButtonSpinner="{TemplateBinding ShowButtonSpinner}"
                            ButtonSpinnerLocation="{TemplateBinding ButtonSpinnerLocation}">
-              <controls:TextBox Name="PART_TextBox"
+              <controls:NumericEditTextbox Name="PART_TextBox"
                        Background="Transparent"
                        BorderBrush="Transparent"
                        BorderThickness="0"
@@ -61,7 +61,7 @@
       </ControlTemplate>
     </Setter>
   </Style>
-  <Style Selector="controls|MinMaxNumericUpDown /template/ TextBox#PART_TextBox">
+  <Style Selector="controls|MinMaxNumericUpDown /template/ controls|NumericEditTextbox#PART_TextBox">
     <Setter Property="Margin" Value="2"/>
     <Setter Property="MinWidth" Value="20"/>
   </Style>

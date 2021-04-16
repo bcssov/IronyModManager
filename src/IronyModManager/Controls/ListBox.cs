@@ -4,7 +4,7 @@
 // Created          : 12-14-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-28-2021
+// Last Modified On : 04-15-2021
 // ***********************************************************************
 // <copyright file="ListBox.cs" company="Mario">
 //     Mario
@@ -80,7 +80,9 @@ namespace IronyModManager.Controls
         /// <param name="menuItems">The menu items.</param>
         public void SetContextMenuItems(IReadOnlyCollection<MenuItem> menuItems)
         {
+#pragma warning disable CS0618 // Type or member is obsolete
             ContextMenu = null;
+#pragma warning restore CS0618 // Type or member is obsolete
             if (contextMenu == null)
             {
                 contextMenu = new ContextMenu();

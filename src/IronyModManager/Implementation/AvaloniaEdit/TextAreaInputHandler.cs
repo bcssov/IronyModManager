@@ -4,16 +4,16 @@
 // Created          : 04-14-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-14-2020
+// Last Modified On : 04-15-2021
 // ***********************************************************************
 // <copyright file="TextAreaInputHandler.cs" company="Mario">
 //     Mario
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using System;
 using System.Threading.Tasks;
 using Avalonia.Input;
 using AvaloniaEdit;
@@ -56,7 +56,9 @@ namespace IronyModManager.Implementation.AvaloniaEdit
         public TextAreaInputHandler(TextEditor editor) : base(editor.TextArea)
         {
             this.editor = editor;
+#pragma warning disable CS0618 // Type or member is obsolete
             editor.ContextMenu.MenuClosed += ContextMenu_MenuClosed;
+#pragma warning restore CS0618 // Type or member is obsolete
         }
 
         #endregion Constructors
@@ -103,7 +105,7 @@ namespace IronyModManager.Implementation.AvaloniaEdit
         /// Handles the MenuClosed event of the ContextMenu control.
         /// </summary>
         /// <param name="sender">The source of the event.</param>
-        /// <param name="e">The <see cref="Avalonia.Interactivity.RoutedEventArgs"/> instance containing the event data.</param>
+        /// <param name="e">The <see cref="Avalonia.Interactivity.RoutedEventArgs" /> instance containing the event data.</param>
         private void ContextMenu_MenuClosed(object sender, Avalonia.Interactivity.RoutedEventArgs e)
         {
             ResetFlagAsync().ConfigureAwait(true);
@@ -140,7 +142,9 @@ namespace IronyModManager.Implementation.AvaloniaEdit
         {
             // Avalonia edit is killing RMB
             var rmb = IsRightMouseButton(e.GetCurrentPoint(null));
+#pragma warning disable CS0618 // Type or member is obsolete
             if (rmb && editor.ContextMenu != null)
+#pragma warning restore CS0618 // Type or member is obsolete
             {
                 // Aside from forking the whole project over and fixing the mess, we can hack our way around. It just ain't worth it.
                 if (mouseHandler == null)
@@ -149,7 +153,9 @@ namespace IronyModManager.Implementation.AvaloniaEdit
                 }
                 handleAllEvents = true;
                 NestedInputHandlers.Remove(mouseHandler);
+#pragma warning disable CS0618 // Type or member is obsolete
                 editor.ContextMenu.Open(editor);
+#pragma warning restore CS0618 // Type or member is obsolete
             }
         }
 

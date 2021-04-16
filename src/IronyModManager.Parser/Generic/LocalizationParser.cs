@@ -4,7 +4,7 @@
 // Created          : 02-18-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 01-01-2021
+// Last Modified On : 04-16-2021
 // ***********************************************************************
 // <copyright file="LocalizationParser.cs" company="Mario">
 //     Mario
@@ -40,7 +40,7 @@ namespace IronyModManager.Parser.Generic
         /// <summary>
         /// The key regex
         /// </summary>
-        protected static readonly Regex keyRegex = new Regex(@"^[\w_.-]*$", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+        protected static readonly Regex keyRegex = new(@"^[\w'_.-]*$", RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
         #endregion Fields
 

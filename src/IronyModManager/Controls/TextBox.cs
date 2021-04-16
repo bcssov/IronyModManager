@@ -4,7 +4,7 @@
 // Created          : 03-15-2021
 //
 // Last Modified By : Mario
-// Last Modified On : 03-15-2021
+// Last Modified On : 04-15-2021
 // ***********************************************************************
 // <copyright file="TextBox.cs" company="Mario">
 //     Mario
@@ -139,6 +139,7 @@ namespace IronyModManager.Controls
         protected override void OnApplyTemplate(TemplateAppliedEventArgs e)
         {
             base.OnApplyTemplate(e);
+#pragma warning disable CS0618 // Type or member is obsolete
             if (ContextMenu != null)
             {
                 if (registeredEvent)
@@ -148,6 +149,7 @@ namespace IronyModManager.Controls
                 ContextMenu.ContextMenuOpening += ContextMenuOpening;
                 registeredEvent = true;
             }
+#pragma warning restore CS0618 // Type or member is obsolete
         }
 
         /// <summary>
@@ -209,7 +211,7 @@ namespace IronyModManager.Controls
         /// <summary>
         /// Handles the <see cref="E:PointerMoved" /> event.
         /// </summary>
-        /// <param name="e">The <see cref="PointerEventArgs"/> instance containing the event data.</param>
+        /// <param name="e">The <see cref="PointerEventArgs" /> instance containing the event data.</param>
         protected override void OnPointerMoved(PointerEventArgs e)
         {
             focused = true;
@@ -224,6 +226,7 @@ namespace IronyModManager.Controls
         protected override void OnPropertyChanged<T>(AvaloniaPropertyChangedEventArgs<T> change)
         {
             base.OnPropertyChanged(change);
+#pragma warning disable CS0618 // Type or member is obsolete
             if (change.Property == ContextMenuProperty)
             {
                 if (ContextMenu != null)
@@ -236,6 +239,7 @@ namespace IronyModManager.Controls
                     registeredEvent = true;
                 }
             }
+#pragma warning restore CS0618 // Type or member is obsolete
         }
 
         /// <summary>
