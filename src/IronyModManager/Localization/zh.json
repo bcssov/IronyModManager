@@ -143,14 +143,14 @@
         },
         "FileHash": {
             "ExportCollection": "导出合集文件指纹",
-            "ExportGame": "出口游戏哈希",
+            "ExportGame": "导出游戏哈希",
             "Import": "验证哈希",
             "DialogTitleExport": "选择导出报告的位置",
             "DialogTitleImport": "选择要导入的 JSON 报告",
             "ExportOverlay": "正在导出……",
             "ImportOverlay": "正在验证……",
             "ProgressExport": "{Progress}",
-            "ProgressImport": "步骤 {Count}/{TotalCount}: {Progress}",
+            "ProgressImport": "步骤 {Count}/{TotalCount}：{Progress}",
             "Close": "关闭"
         },
         "JumpOnDragAndDrop": {
@@ -231,8 +231,8 @@
             "Overlay_Conflict_Solver_Replacing_Definitions": "正在应用模组补丁……",
             "Overlay_Conflict_Solver_Progress": "步骤 {Count}/{TotalCount}: {PercentDone}",
             "FirstUsePrompt": {
-                "Title": "注意力",
-                "Message": "冲突求解器不是为了胆小的核心。 它需要修补代码的知识和体验。 Mod Mod集合的用户应该忽略它，更大的Mod Collections的用户应考虑修剪其Mod集合或研究代码修补。 如果您继续进行支持，无法提供支持。"
+                "Title": "注意！",
+                "Message": "冲突处理器并不适合一般人。它需要修补代码的知识和经验。使用小型模组合集的用户应当直接忽略它；使用大型合集的用户应当考虑精简其合集或学习修补代码。如果继续，恕不提供支持。"
             }
         },
         "LaunchGame": {
@@ -327,7 +327,7 @@
             "Custom": "自定义",
             "Close": "关闭",
             "Reset": "重置",
-            "Overlay": "请稍等，消除冲突..."
+            "Overlay": "重置冲突标记中，请稍候……"
         },
         "DBSearch": {
             "Title": "数据库搜索",
