@@ -4,7 +4,7 @@
 // Created          : 06-18-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-12-2021
+// Last Modified On : 04-16-2021
 // ***********************************************************************
 // <copyright file="IronyToolTip.cs" company="Avalonia">
 //     Avalonia
@@ -24,7 +24,7 @@ using Avalonia.Styling;
 using Avalonia.Threading;
 using Avalonia.VisualTree;
 using IronyModManager.DI;
-using Microsoft.Extensions.Configuration;
+using IronyModManager.Platform.Configuration;
 
 namespace IronyModManager.Controls
 {
@@ -97,19 +97,9 @@ namespace IronyModManager.Controls
 #pragma warning restore CS8632 // The annotation for nullable reference types should only be used in code within a '#nullable' annotations context.
 
         /// <summary>
-        /// The tooltip section key
-        /// </summary>
-        private const string TooltipSectionKey = "Tooltips";
-
-        /// <summary>
-        /// The tooltip state key
-        /// </summary>
-        private const string TooltipStateKey = "Disable";
-
-        /// <summary>
         /// The popup
         /// </summary>
-        private IPopupHost _popup;
+        private IPopupHost popup;
 
         #endregion Fields
 
@@ -295,7 +285,7 @@ namespace IronyModManager.Controls
         /// <param name="control">The control.</param>
         internal void RecalculatePosition(Control control)
         {
-            _popup?.ConfigurePosition(control, GetPlacement(control), new Point(GetHorizontalOffset(control), GetVerticalOffset(control)));
+            popup?.ConfigurePosition(control, GetPlacement(control), new Point(GetHorizontalOffset(control), GetVerticalOffset(control)));
         }
 
         /// <summary>
@@ -337,7 +327,7 @@ namespace IronyModManager.Controls
         /// <summary>
         /// Recalculates the position on property changed.
         /// </summary>
-        /// <param name="args">The <see cref="AvaloniaPropertyChangedEventArgs"/> instance containing the event data.</param>
+        /// <param name="args">The <see cref="AvaloniaPropertyChangedEventArgs" /> instance containing the event data.</param>
         private static void RecalculatePositionOnPropertyChanged(AvaloniaPropertyChangedEventArgs args)
         {
             var control = (Control)args.Sender;
@@ -355,11 +345,11 @@ namespace IronyModManager.Controls
         /// </summary>
         private void Close()
         {
-            if (_popup != null)
+            if (popup != null)
             {
-                _popup.SetChild(null);
-                _popup.Dispose();
-                _popup = null;
+                popup.SetChild(null);
+                popup.Dispose();
+                popup = null;
             }
         }
 
@@ -375,14 +365,14 @@ namespace IronyModManager.Controls
             }
             Close();
 
-            _popup = OverlayPopupHost.CreatePopupHost(control, null);
-            _popup.SetChild(this);
-            ((ISetLogicalParent)_popup).SetParent(control);
+            popup = OverlayPopupHost.CreatePopupHost(control, null);
+            popup.SetChild(this);
+            ((ISetLogicalParent)popup).SetParent(control);
 
-            _popup.ConfigurePosition(control, GetPlacement(control),
+            popup.ConfigurePosition(control, GetPlacement(control),
                 new Point(GetHorizontalOffset(control), GetVerticalOffset(control)));
-            _popup.Show();
-            WindowManagerAddShadowHintChanged(_popup, false);
+            popup.Show();
+            WindowManagerAddShadowHintChanged(popup, false);
         }
 
         /// <summary>
@@ -426,7 +416,7 @@ namespace IronyModManager.Controls
             /// <summary>
             /// The timer
             /// </summary>
-            private DispatcherTimer _timer;
+            private DispatcherTimer timer;
 
             #endregion Fields
 
@@ -459,9 +449,8 @@ namespace IronyModManager.Controls
             {
                 if (!tooltipsEnabled.HasValue)
                 {
-                    var service = DIResolver.Get<IConfigurationRoot>();
-                    var section = service.GetSection(TooltipSectionKey);
-                    tooltipsEnabled = !section.GetSection(TooltipStateKey).Get<bool>();
+                    var config = DIResolver.Get<IPlatformConfiguration>();
+                    tooltipsEnabled = !config.GetOptions().Tooltips.Disable;
                 }
                 return tooltipsEnabled.GetValueOrDefault();
             }
@@ -521,7 +510,7 @@ namespace IronyModManager.Controls
             /// <summary>
             /// Tips the open changed.
             /// </summary>
-            /// <param name="e">The <see cref="AvaloniaPropertyChangedEventArgs"/> instance containing the event data.</param>
+            /// <param name="e">The <see cref="AvaloniaPropertyChangedEventArgs" /> instance containing the event data.</param>
             internal void TipOpenChanged(AvaloniaPropertyChangedEventArgs e)
             {
                 var control = (Control)e.Sender;
@@ -553,7 +542,7 @@ namespace IronyModManager.Controls
             /// Controls the detaching.
             /// </summary>
             /// <param name="sender">The sender.</param>
-            /// <param name="e">The <see cref="VisualTreeAttachmentEventArgs"/> instance containing the event data.</param>
+            /// <param name="e">The <see cref="VisualTreeAttachmentEventArgs" /> instance containing the event data.</param>
             private void ControlDetaching(object sender, VisualTreeAttachmentEventArgs e)
             {
                 var control = (Control)sender;
@@ -566,7 +555,7 @@ namespace IronyModManager.Controls
             /// Controls the effective viewport changed.
             /// </summary>
             /// <param name="sender">The sender.</param>
-            /// <param name="e">The <see cref="EffectiveViewportChangedEventArgs"/> instance containing the event data.</param>
+            /// <param name="e">The <see cref="EffectiveViewportChangedEventArgs" /> instance containing the event data.</param>
             private void ControlEffectiveViewportChanged(object sender, EffectiveViewportChangedEventArgs e)
             {
                 var control = (Control)sender;
@@ -674,9 +663,9 @@ namespace IronyModManager.Controls
             /// <param name="control">The control.</param>
             private void StartShowTimer(int showDelay, Control control)
             {
-                _timer = new DispatcherTimer { Interval = TimeSpan.FromMilliseconds(showDelay) };
-                _timer.Tick += (o, e) => Open(control);
-                _timer.Start();
+                timer = new DispatcherTimer { Interval = TimeSpan.FromMilliseconds(showDelay) };
+                timer.Tick += (o, e) => Open(control);
+                timer.Start();
             }
 
             /// <summary>
@@ -684,8 +673,8 @@ namespace IronyModManager.Controls
             /// </summary>
             private void StopTimer()
             {
-                _timer?.Stop();
-                _timer = null;
+                timer?.Stop();
+                timer = null;
             }
 
             #endregion Methods

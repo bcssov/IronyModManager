@@ -4,7 +4,7 @@
 // Created          : 03-13-2021
 //
 // Last Modified By : Mario
-// Last Modified On : 04-10-2021
+// Last Modified On : 04-16-2021
 // ***********************************************************************
 // <copyright file="FontManager.cs" company="Mario">
 //     Mario
@@ -19,6 +19,8 @@ using Avalonia.Media;
 using Avalonia.Platform;
 using Avalonia.Skia;
 using IronyModManager.DI;
+using IronyModManager.Platform.Configuration;
+using SkiaSharp;
 
 namespace IronyModManager.Platform.Fonts
 {
@@ -40,6 +42,11 @@ namespace IronyModManager.Platform.Fonts
         /// The font manager
         /// </summary>
         private static IFontManagerImpl fontManager;
+
+        /// <summary>
+        /// The platform configuration
+        /// </summary>
+        private static IPlatformConfiguration platformConfiguration;
 
         /// <summary>
         /// All fonts
@@ -97,6 +104,17 @@ namespace IronyModManager.Platform.Fonts
                 }
                 return new GlyphTypefaceImpl(skTypeface);
             }
+            else if (GetPlatformConfiguration().GetOptions().Fonts.UseInbuiltFontsOnly)
+            {
+                typeface = new Typeface(fontFamilyManager.GetDefaultFontFamily().GetFontFamily(), typeface.Style, typeface.Weight);
+                var fontCollection = SKTypefaceCollectionCache.GetOrAddTypefaceCollection(typeface.FontFamily);
+                var skTypeface = fontCollection.Get(typeface);
+                if (skTypeface == null)
+                {
+                    return fontManager.CreateGlyphTypeface(typeface);
+                }
+                return new GlyphTypefaceImpl(skTypeface);
+            }
             return fontManager.CreateGlyphTypeface(typeface);
         }
 
@@ -123,7 +141,10 @@ namespace IronyModManager.Platform.Fonts
                 var fontFamilyManager = GetFontFamilyManager();
                 var fonts = new List<string>();
                 fonts.AddRange(fontFamilyManager.GetAllFontNames());
-                fonts.AddRange(fontManager.GetInstalledFontFamilyNames(checkForUpdates));
+                if (!GetPlatformConfiguration().GetOptions().Fonts.UseInbuiltFontsOnly)
+                {
+                    fonts.AddRange(fontManager.GetInstalledFontFamilyNames(checkForUpdates));
+                }
                 allFonts = fonts.Distinct().ToList();
             }
             return allFonts;
@@ -159,6 +180,12 @@ namespace IronyModManager.Platform.Fonts
                 return true;
             }
 
+            if (GetPlatformConfiguration().GetOptions().Fonts.UseInbuiltFontsOnly)
+            {
+                var fallback = SKFontManager.Default.MatchCharacter(fontFamily?.Name, (SKFontStyleWeight)fontWeight, SKFontStyleWidth.Normal, (SKFontStyleSlant)fontStyle, new string[] { culture.ThreeLetterISOLanguageName, culture.TwoLetterISOLanguageName }, codepoint);
+                typeface = new Typeface(fallback?.FamilyName ?? fontFamilyManager.GetDefaultFontFamily().GetFontFamily(), fontStyle, fontWeight);
+                return true;
+            }
             return fontManager.TryMatchCharacter(codepoint, fontStyle, fontWeight, fontFamily, culture, out typeface);
         }
 
@@ -173,6 +200,19 @@ namespace IronyModManager.Platform.Fonts
                 fontFamilyManager = DIResolver.Get<IFontFamilyManager>();
             }
             return fontFamilyManager;
+        }
+
+        /// <summary>
+        /// Gets the platform configuration.
+        /// </summary>
+        /// <returns>IPlatformConfiguration.</returns>
+        private IPlatformConfiguration GetPlatformConfiguration()
+        {
+            if (platformConfiguration == null)
+            {
+                platformConfiguration = DIResolver.Get<IPlatformConfiguration>();
+            }
+            return platformConfiguration;
         }
 
         #endregion Methods
