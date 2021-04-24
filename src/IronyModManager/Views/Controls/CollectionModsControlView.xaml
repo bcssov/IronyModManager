@@ -79,8 +79,8 @@
             <Grid Margin="0,30,0,0" Grid.Column="0" Grid.Row="3" Grid.ColumnSpan="2" x:Name="header">
               <Grid.ColumnDefinitions>
                 <ColumnDefinition MaxWidth="50" Width="1.5*" />
-                <ColumnDefinition MaxWidth="100" Width="2*" />
-                <ColumnDefinition MinWidth="80" Width="2*" />
+                <ColumnDefinition MaxWidth="80" Width="2*" />
+                <ColumnDefinition MinWidth="100" Width="2*" />
                 <ColumnDefinition Width="5*" />
                 <ColumnDefinition Width="30" />
               </Grid.ColumnDefinitions>
@@ -110,8 +110,8 @@
                   <Grid Background="Transparent">
                     <Grid.ColumnDefinitions>
                       <ColumnDefinition MaxWidth="50" Width="1.5*" />
-                      <ColumnDefinition MaxWidth="100" Width="2*" />
-                      <ColumnDefinition MinWidth="80" Width="2*" />
+                      <ColumnDefinition MaxWidth="80" Width="2*" />
+                      <ColumnDefinition MinWidth="100" Width="2*" />
                       <ColumnDefinition Width="5*" />
                       <ColumnDefinition Width="30" />
                     </Grid.ColumnDefinitions>
