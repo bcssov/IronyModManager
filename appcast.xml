@@ -4,56 +4,56 @@
 		<title>Irony Mod Manager</title>
 		<language>en</language>
 		<item>
-			<title>1.15.18</title>
+			<title>1.15.20</title>
 			<description>RELEASE INFO:
-* Updated chinese translation (by Clazex)
-* Add option to use query inbuilt Irony fonts and not query system fonts at all
+* Tweak collection mods column widths
+* Fix mods sometimes not being enabled in collection mods area
 
 CHANGES FROM v1.14:
 * Updated dependencies
 * Fix segfault CTD on certain Linux (openSUSE) configurations
 * Update for Stellaris 3.0</description>
-			<pubDate>Fri, 16 Apr 2021 21:24:49 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.15.18/osx-x64.rar" sparkle:version="1.15.18.15629" sparkle:shortVersionString="1.15.18" length="68082645" sparkle:os="osx" type="application/vnd.rar" sparkle:signature="DDVlyXzofay+EmLBfe2f3RtpfeWhP8g65v8Th+FvFtnfIqzVxZI/g7XBYn4ppNvQ/7wh3ZlQGpLgCp46Q1/1BA=="/>
+			<pubDate>Sun, 25 Apr 2021 20:16:44 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.15.20/osx-x64.rar" sparkle:version="1.15.20.51255" sparkle:shortVersionString="1.15.20" length="68090955" sparkle:os="osx" type="application/vnd.rar" sparkle:signature="r/J/uKPO1lQqEPpiD9Hrk/wbc8KcGQ0+M8wO2afJG7yienpIaXUpUKK/Oy2hDIBjuddQlVZocyTIR9q1qZT2Dw=="/>
 		</item>
 		<item>
-			<title>1.15.18</title>
+			<title>1.15.20</title>
 			<description>RELEASE INFO:
-* Updated chinese translation (by Clazex)
-* Add option to use query inbuilt Irony fonts and not query system fonts at all
+* Tweak collection mods column widths
+* Fix mods sometimes not being enabled in collection mods area
 
 CHANGES FROM v1.14:
 * Updated dependencies
 * Fix segfault CTD on certain Linux (openSUSE) configurations
 * Update for Stellaris 3.0</description>
-			<pubDate>Fri, 16 Apr 2021 21:24:56 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.15.18/win-x64-setup.rar" sparkle:version="1.15.18.15629" sparkle:shortVersionString="1.15.18" length="58876016" sparkle:os="windows" type="application/vnd.rar" sparkle:signature="RrlCbVNFF7fg1uEljcYnIzVhx82/JIKR+gwwGzxmAfDIjyCxER3JDpEM23vd+L6hI/ugXulCtEfQrBOCebgoAg=="/>
+			<pubDate>Sun, 25 Apr 2021 20:16:51 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.15.20/win-x64-setup.rar" sparkle:version="1.15.20.51255" sparkle:shortVersionString="1.15.20" length="58880357" sparkle:os="windows" type="application/vnd.rar" sparkle:signature="Ly+ZAJ8faKuyTgBl4mU20zIHKXxl5zDLQJyA/BikQcNDbqC2GivRBfjNt7pKMOji5lygsxGpdIxD7xJRRgmoAQ=="/>
 		</item>
 		<item>
-			<title>1.15.18</title>
+			<title>1.15.20</title>
 			<description>RELEASE INFO:
-* Updated chinese translation (by Clazex)
-* Add option to use query inbuilt Irony fonts and not query system fonts at all
+* Tweak collection mods column widths
+* Fix mods sometimes not being enabled in collection mods area
 
 CHANGES FROM v1.14:
 * Updated dependencies
 * Fix segfault CTD on certain Linux (openSUSE) configurations
 * Update for Stellaris 3.0</description>
-			<pubDate>Fri, 16 Apr 2021 21:24:53 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.15.18/win-x64.rar" sparkle:version="1.15.18.15629" sparkle:shortVersionString="1.15.18" length="70828110" sparkle:os="windows" type="application/vnd.rar" sparkle:signature="ZXCQi5Uvz3bKRRZ3u0Jt+LHH1kBEjpq/uS8bBYHm8wnDOHY5Xna8EQp6wvUOCsXX1YqI6aCGFzLTTxBvmUiQDw=="/>
+			<pubDate>Sun, 25 Apr 2021 20:16:47 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.15.20/win-x64.rar" sparkle:version="1.15.20.51255" sparkle:shortVersionString="1.15.20" length="70836312" sparkle:os="windows" type="application/vnd.rar" sparkle:signature="k75vZxaKs5JPkGFRiG8AaAdj4CJD3hm7HC7pqXoBNmlA5ry5JtcY3f4qJyFygnCC43g5LC4xzne6a7JEoAc0CQ=="/>
 		</item>
 		<item>
-			<title>1.15.18</title>
+			<title>1.15.20</title>
 			<description>RELEASE INFO:
-* Updated chinese translation (by Clazex)
-* Add option to use query inbuilt Irony fonts and not query system fonts at all
+* Tweak collection mods column widths
+* Fix mods sometimes not being enabled in collection mods area
 
 CHANGES FROM v1.14:
 * Updated dependencies
 * Fix segfault CTD on certain Linux (openSUSE) configurations
 * Update for Stellaris 3.0</description>
-			<pubDate>Fri, 16 Apr 2021 21:24:47 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.15.18/linux-x64.zip" sparkle:version="1.15.18.15629" sparkle:shortVersionString="1.15.18" length="84390505" sparkle:os="linux" type="application/zip" sparkle:signature="f5ba7XW+SWT8jw76iXTo21GaYPvKcEUmF8gJW7HkNG/5SY68oDTFX7v2vzYsFbnLM0kLy2u6GcbEVgi1VquxDw=="/>
+			<pubDate>Sun, 25 Apr 2021 20:16:42 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.15.20/linux-x64.zip" sparkle:version="1.15.20.51255" sparkle:shortVersionString="1.15.20" length="84390528" sparkle:os="linux" type="application/zip" sparkle:signature="ctZhkYoNcKUdZhRykJOCsYlbymY/GPT8Pd9GIKyWTpcwOTd12UuO7l3QXglUeGKyqUiZaCOVw9V+3P0ROZwyDg=="/>
 		</item>
 	</channel>
 </rss>
