@@ -4,7 +4,7 @@
 // Created          : 03-03-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-29-2021
+// Last Modified On : 04-25-2021
 // ***********************************************************************
 // <copyright file="CollectionModsControlViewModel.cs" company="Mario">
 //     Mario
@@ -2033,6 +2033,10 @@ namespace IronyModManager.ViewModels.Controls
                             SaveSelectedCollection();
                         }
                         SetSelectedMods(SelectedMods, false);
+                        if (s.Sender != null)
+                        {
+                            InstantReorderSelectedItems(s.Sender, s.Sender.Order);
+                        }
                         RecognizeSortOrder(SelectedModCollection);
                     }
                     AllModsEnabled = SelectedMods?.Count > 0 && SelectedMods.All(p => p.IsSelected);
