@@ -41,7 +41,7 @@ namespace IronyModManager.Controls.Dialogs
         /// <summary>
         /// The mounted volumes
         /// </summary>
-        public static readonly ObservableCollection<MountedVolumeInfo> MountedVolumes = new ObservableCollection<MountedVolumeInfo>();
+        public static readonly ObservableCollection<MountedVolumeInfo> MountedVolumes = new();
 
         /// <summary>
         /// The s folders
