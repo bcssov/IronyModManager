@@ -4,7 +4,7 @@
 // Created          : 06-22-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-16-2021
+// Last Modified On : 04-27-2021
 // ***********************************************************************
 // <copyright file="DIPackage.Configuration.cs" company="Mario">
 //     Mario
@@ -13,7 +13,9 @@
 // ***********************************************************************
 using System;
 using System.Collections.Generic;
+using System.IO;
 using IronyModManager.Implementation;
+using IronyModManager.Implementation.Config;
 using IronyModManager.Localization.ResourceProviders;
 using IronyModManager.Platform.Configuration;
 using IronyModManager.Shared.Cache;
@@ -38,9 +40,9 @@ namespace IronyModManager.DI
 
         private void RegisterConfigurations(Container container)
         {
+            var configurationLoader = new ConfigurationLoader(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, Constants.AppSettings), Path.Combine(AppDomain.CurrentDomain.BaseDirectory, Constants.AppSettingsOverride));
             var configuration = new ConfigurationBuilder()
-                .SetBasePath(AppDomain.CurrentDomain.BaseDirectory)
-                .AddJsonFile(Constants.AppSettings, false)
+                .AddJsonStream(configurationLoader.GetStream())
                 .Build();
 
             container.RegisterInstance(configuration);
