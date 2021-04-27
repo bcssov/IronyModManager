@@ -4,7 +4,7 @@
 // Created          : 05-07-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 09-11-2020
+// Last Modified On : 04-27-2021
 // ***********************************************************************
 // <copyright file="ManagedDialogSources.cs" company="Avalonia">
 //     Avalonia
@@ -167,7 +167,7 @@ namespace IronyModManager.Controls.Dialogs
                        {
                            Directory.GetFiles(x.VolumePath);
                        }
-                       catch (UnauthorizedAccessException)
+                       catch (Exception)
                        {
                            return null;
                        }
