@@ -4,7 +4,7 @@
 // Created          : 04-16-2021
 //
 // Last Modified By : Mario
-// Last Modified On : 04-16-2021
+// Last Modified On : 04-27-2021
 // ***********************************************************************
 // <copyright file="PlatformConfiguration.cs" company="Mario">
 //     Mario
@@ -17,7 +17,7 @@ using System.Linq;
 using IronyModManager.Platform.Configuration;
 using Microsoft.Extensions.Configuration;
 
-namespace IronyModManager.Implementation
+namespace IronyModManager.Implementation.Config
 {
     /// <summary>
     /// Class PlatformConfiguration.

@@ -4,7 +4,7 @@
 // Created          : 06-10-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-11-2020
+// Last Modified On : 04-27-2021
 // ***********************************************************************
 // <copyright file="MessageBusDependencyResolver.cs" company="Mario">
 //     Mario
@@ -25,6 +25,19 @@ namespace IronyModManager.DI.MessageBus
     internal class MessageBusDependencyResolver : IDependencyResolver
     {
         #region Methods
+
+        /// <summary>
+        /// Creates the scope.
+        /// </summary>
+        /// <returns>IDependencyResolver.</returns>
+        public IDependencyResolver CreateScope() => this;
+
+        /// <summary>
+        /// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
+        /// </summary>
+        public void Dispose()
+        {
+        }
 
         /// <summary>
         /// Resolves the specified type.
