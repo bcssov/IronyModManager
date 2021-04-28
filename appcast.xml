@@ -4,56 +4,40 @@
 		<title>Irony Mod Manager</title>
 		<language>en</language>
 		<item>
-			<title>1.15.20</title>
-			<description>RELEASE INFO:
-* Tweak collection mods column widths
-* Fix mods sometimes not being enabled in collection mods area
-
-CHANGES FROM v1.14:
+			<title>1.16.14</title>
+			<description>CHANGES FROM v1.15:
 * Updated dependencies
-* Fix segfault CTD on certain Linux (openSUSE) configurations
-* Update for Stellaris 3.0</description>
-			<pubDate>Sun, 25 Apr 2021 20:16:44 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.15.20/osx-x64.rar" sparkle:version="1.15.20.51255" sparkle:shortVersionString="1.15.20" length="68090955" sparkle:os="osx" type="application/vnd.rar" sparkle:signature="r/J/uKPO1lQqEPpiD9Hrk/wbc8KcGQ0+M8wO2afJG7yienpIaXUpUKK/Oy2hDIBjuddQlVZocyTIR9q1qZT2Dw=="/>
+* Small fixes
+* Add option to override appSettings via appSettings.override.json</description>
+			<pubDate>Wed, 28 Apr 2021 04:44:14 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.16.14/osx-x64.rar" sparkle:version="1.16.14.27518" sparkle:shortVersionString="1.16.14" length="68099233" sparkle:os="osx" type="application/vnd.rar" sparkle:signature="2zMC68/tngFOAG8Kyi6GwnE4saQG+lVzbYawLL2m7Xt0tp7FOjV7p0tYMKGVSUo4gL/YwCrvp76ST5x7edHXAA=="/>
 		</item>
 		<item>
-			<title>1.15.20</title>
-			<description>RELEASE INFO:
-* Tweak collection mods column widths
-* Fix mods sometimes not being enabled in collection mods area
-
-CHANGES FROM v1.14:
+			<title>1.16.14</title>
+			<description>CHANGES FROM v1.15:
 * Updated dependencies
-* Fix segfault CTD on certain Linux (openSUSE) configurations
-* Update for Stellaris 3.0</description>
-			<pubDate>Sun, 25 Apr 2021 20:16:51 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.15.20/win-x64-setup.rar" sparkle:version="1.15.20.51255" sparkle:shortVersionString="1.15.20" length="58880357" sparkle:os="windows" type="application/vnd.rar" sparkle:signature="Ly+ZAJ8faKuyTgBl4mU20zIHKXxl5zDLQJyA/BikQcNDbqC2GivRBfjNt7pKMOji5lygsxGpdIxD7xJRRgmoAQ=="/>
+* Small fixes
+* Add option to override appSettings via appSettings.override.json</description>
+			<pubDate>Wed, 28 Apr 2021 04:44:22 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.16.14/win-x64-setup.rar" sparkle:version="1.16.14.27518" sparkle:shortVersionString="1.16.14" length="58888579" sparkle:os="windows" type="application/vnd.rar" sparkle:signature="hutSW4vzd8JqsUKzhzip6Ei5IfkQjM2wFxD7lwPl+C8MqeCTxCDaoYYkLNyH6waud/2LboNAFAUXP3MZQ+anAA=="/>
 		</item>
 		<item>
-			<title>1.15.20</title>
-			<description>RELEASE INFO:
-* Tweak collection mods column widths
-* Fix mods sometimes not being enabled in collection mods area
-
-CHANGES FROM v1.14:
+			<title>1.16.14</title>
+			<description>CHANGES FROM v1.15:
 * Updated dependencies
-* Fix segfault CTD on certain Linux (openSUSE) configurations
-* Update for Stellaris 3.0</description>
-			<pubDate>Sun, 25 Apr 2021 20:16:47 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.15.20/win-x64.rar" sparkle:version="1.15.20.51255" sparkle:shortVersionString="1.15.20" length="70836312" sparkle:os="windows" type="application/vnd.rar" sparkle:signature="k75vZxaKs5JPkGFRiG8AaAdj4CJD3hm7HC7pqXoBNmlA5ry5JtcY3f4qJyFygnCC43g5LC4xzne6a7JEoAc0CQ=="/>
+* Small fixes
+* Add option to override appSettings via appSettings.override.json</description>
+			<pubDate>Wed, 28 Apr 2021 04:44:18 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.16.14/win-x64.rar" sparkle:version="1.16.14.27518" sparkle:shortVersionString="1.16.14" length="70844657" sparkle:os="windows" type="application/vnd.rar" sparkle:signature="zovgA4Sw0wozo6W7H5hJlFZBXbdjBhUaTWmHTWetjZz6KiPhKoCz+1JfPuZoUr0o46JbkmUaTF2omDqXvVDVBw=="/>
 		</item>
 		<item>
-			<title>1.15.20</title>
-			<description>RELEASE INFO:
-* Tweak collection mods column widths
-* Fix mods sometimes not being enabled in collection mods area
-
-CHANGES FROM v1.14:
+			<title>1.16.14</title>
+			<description>CHANGES FROM v1.15:
 * Updated dependencies
-* Fix segfault CTD on certain Linux (openSUSE) configurations
-* Update for Stellaris 3.0</description>
-			<pubDate>Sun, 25 Apr 2021 20:16:42 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.15.20/linux-x64.zip" sparkle:version="1.15.20.51255" sparkle:shortVersionString="1.15.20" length="84390528" sparkle:os="linux" type="application/zip" sparkle:signature="ctZhkYoNcKUdZhRykJOCsYlbymY/GPT8Pd9GIKyWTpcwOTd12UuO7l3QXglUeGKyqUiZaCOVw9V+3P0ROZwyDg=="/>
+* Small fixes
+* Add option to override appSettings via appSettings.override.json</description>
+			<pubDate>Wed, 28 Apr 2021 04:44:11 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.16.14/linux-x64.zip" sparkle:version="1.16.14.27518" sparkle:shortVersionString="1.16.14" length="84399148" sparkle:os="linux" type="application/zip" sparkle:signature="bEJgLDe4Hn+//Nb6TBxMuHR8aGNcHkWm9fcBGJs59L4rOn/+NGm9qhhk4ok/e6yoOZQkaHftTplOJEaALYuxDQ=="/>
 		</item>
 	</channel>
 </rss>
