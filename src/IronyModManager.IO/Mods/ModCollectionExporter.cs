@@ -4,7 +4,7 @@
 // Created          : 03-09-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 12-16-2020
+// Last Modified On : 04-30-2021
 // ***********************************************************************
 // <copyright file="ModCollectionExporter.cs" company="Mario">
 //     Mario
@@ -18,6 +18,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using IronyModManager.IO.Common;
 using IronyModManager.IO.Common.Mods;
 using IronyModManager.IO.Mods.Importers;
 using IronyModManager.Shared;
@@ -160,7 +161,7 @@ namespace IronyModManager.IO.Mods
             {
                 if (Directory.Exists(parameters.ModDirectory))
                 {
-                    Directory.Delete(parameters.ModDirectory, true);
+                    DiskOperations.DeleteDirectory(parameters.ModDirectory, true);
                 }
             }
 

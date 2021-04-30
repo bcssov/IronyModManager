@@ -5,9 +5,9 @@
         xmlns:controls="clr-namespace:IronyModManager.Controls;assembly=IronyModManager"
         mc:Ignorable="d" d:DesignWidth="150" d:DesignHeight="100"
         x:Class="IronyModManager.Controls.Themes.StandardMessageBox"
-        SizeToContent="WidthAndHeight"
+        SizeToContent="Height"
         MinWidth="200"
-        MaxWidth="{Binding MaxWidth}"
+        MaxWidth="500"
         Icon="{Binding WindowIconPath}"
         WindowStartupLocation="{Binding LocationOfMyWindow}"
         MinHeight="100"
@@ -74,7 +74,7 @@
       <!--Bold text-->
       <controls:TextBox Grid.Row="0" Classes="header" Text="{Binding ContentHeader}" FontFamily="{Binding FontFamily}" IsVisible="{Binding HasHeader}" />
       <!--Content text-->
-      <controls:TextBox Grid.Row="2" Text="{Binding ContentMessage}" FontFamily="{Binding FontFamily}" MinWidth="500" MinHeight="40" MaxHeight="400" MaxWidth="500" TextWrapping="Wrap" />
+      <controls:TextBox Grid.Row="2" Text="{Binding ContentMessage}" FontFamily="{Binding FontFamily}" TextWrapping="Wrap" />
     </Grid>
     <!--Buttons-->
     <StackPanel Orientation="Horizontal" Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="3"

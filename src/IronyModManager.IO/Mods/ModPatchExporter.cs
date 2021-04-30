@@ -4,7 +4,7 @@
 // Created          : 03-31-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-25-2021
+// Last Modified On : 04-30-2021
 // ***********************************************************************
 // <copyright file="ModPatchExporter.cs" company="Mario">
 //     Mario
@@ -19,6 +19,7 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using IronyModManager.DI;
+using IronyModManager.IO.Common;
 using IronyModManager.IO.Common.MessageBus;
 using IronyModManager.IO.Common.Mods;
 using IronyModManager.IO.Common.Mods.Models;
@@ -170,9 +171,7 @@ namespace IronyModManager.IO.Mods
         /// export definition as an asynchronous operation.
         /// </summary>
         /// <param name="parameters">The parameters.</param>
-        /// <returns>System.Threading.Tasks.Task&lt;bool&gt;.</returns>
-        /// <exception cref="ArgumentNullException">nameof(parameters), Game.</exception>
-        /// <exception cref="ArgumentNullException">nameof(parameters), Game.</exception>
+        /// <returns>Task&lt;System.Boolean&gt;.</returns>
         public async Task<bool> ExportDefinitionAsync(ModPatchExporterParameters parameters)
         {
             async Task<bool> export()
@@ -296,7 +295,7 @@ namespace IronyModManager.IO.Mods
                     var oldPath = Path.Combine(parameters.RootPath, parameters.ModPath);
                     if (Directory.Exists(oldPath))
                     {
-                        Directory.Delete(oldPath, true);
+                        DiskOperations.DeleteDirectory(oldPath, true);
                     }
                 }
                 return result;
@@ -837,7 +836,7 @@ namespace IronyModManager.IO.Mods
                     var altFileName = Path.Combine(patchRootPath, fileName);
                     if (diskFile != fileName && File.Exists(altFileName))
                     {
-                        File.Delete(altFileName);
+                        DiskOperations.DeleteFile(altFileName);
                     }
                     var outPath = Path.Combine(patchRootPath, diskFile);
                     if (checkIfFileExists && File.Exists(outPath))
@@ -896,7 +895,7 @@ namespace IronyModManager.IO.Mods
             var backupPath = Path.Combine(path, StateBackup);
             if (File.Exists(backupPath))
             {
-                File.Delete(backupPath);
+                DiskOperations.DeleteFile(backupPath);
             }
             if (File.Exists(statePath))
             {

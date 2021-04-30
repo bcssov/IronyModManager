@@ -4,7 +4,7 @@
 // Created          : 06-19-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-16-2021
+// Last Modified On : 04-30-2021
 // ***********************************************************************
 // <copyright file="ModMergeExporter.cs" company="Mario">
 //     Mario
@@ -16,6 +16,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using IronyModManager.IO.Common;
 using IronyModManager.IO.Common.Mods;
 using IronyModManager.IO.Common.Readers;
 using IronyModManager.Shared;
@@ -122,7 +123,7 @@ namespace IronyModManager.IO.Mods
             }
             if (File.Exists(outPath))
             {
-                File.Delete(outPath);
+                DiskOperations.DeleteFile(outPath);
             }
             var fs = new FileStream(outPath, FileMode.Create, FileAccess.Write, FileShare.Read);
             if (stream.CanSeek)

@@ -4,7 +4,7 @@
 // Created          : 03-07-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-17-2021
+// Last Modified On : 04-30-2021
 // ***********************************************************************
 // <copyright file="NotificationAction.cs" company="Mario">
 //     Mario
@@ -92,8 +92,7 @@ namespace IronyModManager.Implementation.Actions
             var icon = notificationType switch
             {
                 NotificationType.Info => Icon.Info,
-                // Perhaps I should just fork this project over...
-                NotificationType.Success => Icon.Plus,
+                NotificationType.Success => Icon.Success,
                 NotificationType.Warning => Icon.Warning,
                 NotificationType.Error => Icon.Error,
                 _ => Icon.None,

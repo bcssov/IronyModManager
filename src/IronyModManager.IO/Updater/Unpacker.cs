@@ -4,18 +4,19 @@
 // Created          : 09-17-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 11-03-2020
+// Last Modified On : 04-30-2021
 // ***********************************************************************
 // <copyright file="Unpacker.cs" company="Mario">
 //     Mario
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
-using System.Collections.Generic;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using IronyModManager.IO.Common;
 using IronyModManager.IO.Common.MessageBus;
 using IronyModManager.IO.Common.Updater;
 using IronyModManager.Shared;
@@ -71,7 +72,7 @@ namespace IronyModManager.IO.Updater
             // Cleanup path were extracting to
             if (Directory.Exists(extractPath))
             {
-                Directory.Delete(extractPath, true);
+                DiskOperations.DeleteDirectory(extractPath, true);
             }
             using var fileStream = File.OpenRead(path);
             using var reader = ArchiveFactory.Open(fileStream);
