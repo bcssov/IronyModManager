@@ -4,7 +4,7 @@
 // Created          : 12-07-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-25-2021
+// Last Modified On : 04-30-2021
 // ***********************************************************************
 // <copyright file="TempFile.cs" company="Mario">
 //     Mario
@@ -15,6 +15,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using IronyModManager.IO.Common;
 using IronyModManager.Shared;
 
 namespace IronyModManager.IO.TempFile
@@ -140,7 +141,7 @@ namespace IronyModManager.IO.TempFile
         /// </summary>
         /// <param name="fileName">Name of the file.</param>
         /// <returns>System.String.</returns>
-        public string Create(string fileName = Constants.EmptyParam)
+        public string Create(string fileName = Shared.Constants.EmptyParam)
         {
             if (string.IsNullOrWhiteSpace(path))
             {
@@ -161,7 +162,7 @@ namespace IronyModManager.IO.TempFile
             {
                 if (System.IO.File.Exists(path))
                 {
-                    System.IO.File.Delete(path);
+                    DiskOperations.DeleteFile(path);
                     return true;
                 }
             }

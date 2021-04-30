@@ -4,7 +4,7 @@
 // Created          : 03-31-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-25-2021
+// Last Modified On : 04-30-2021
 // ***********************************************************************
 // <copyright file="ModWriter.cs" company="Mario">
 //     Mario
@@ -17,6 +17,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using IronyModManager.IO.Common;
 using IronyModManager.IO.Common.Mods;
 using IronyModManager.IO.Mods.Exporter;
 using IronyModManager.Shared;
@@ -116,11 +117,7 @@ namespace IronyModManager.IO.Mods
                 var fullPath = Path.Combine(parameters.RootDirectory ?? string.Empty, parameters.Mod.DescriptorFile ?? string.Empty);
                 if (File.Exists(fullPath))
                 {
-                    _ = new System.IO.FileInfo(fullPath)
-                    {
-                        IsReadOnly = false
-                    };
-                    File.Delete(fullPath);
+                    DiskOperations.DeleteFile(fullPath);
                     return Task.FromResult(true);
                 }
                 return Task.FromResult(false);
@@ -187,18 +184,18 @@ namespace IronyModManager.IO.Mods
                         var files = Directory.EnumerateFiles(fullPath, "*", SearchOption.TopDirectoryOnly);
                         foreach (var item in files)
                         {
-                            File.Delete(item);
+                            DiskOperations.DeleteFile(item);
                         }
                     }
                     else
                     {
-                        Directory.Delete(fullPath, true);
+                        DiskOperations.DeleteDirectory(fullPath, true);
                     }
                     return Task.FromResult(true);
                 }
                 else if (File.Exists(fullPath))
                 {
-                    File.Delete(fullPath);
+                    DiskOperations.DeleteFile(fullPath);
                     return Task.FromResult(true);
                 }
                 return Task.FromResult(false);

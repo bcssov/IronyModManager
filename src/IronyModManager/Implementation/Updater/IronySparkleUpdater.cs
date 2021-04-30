@@ -4,15 +4,15 @@
 // Created          : 09-17-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 01-30-2021
+// Last Modified On : 04-30-2021
 // ***********************************************************************
 // <copyright file="IronySparkleUpdater.cs" company="Mario">
 //     Mario
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
-using System.Collections.Generic;
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -109,7 +109,7 @@ namespace IronyModManager.Implementation.Updater
                     if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
                     {
                         var files = Directory.GetFiles(extractPath, "*.exe", SearchOption.TopDirectoryOnly);
-                        if (files.Count() > 0)
+                        if (files.Length > 0)
                         {
                             if (await appAction.RunAsync(files.FirstOrDefault()))
                             {

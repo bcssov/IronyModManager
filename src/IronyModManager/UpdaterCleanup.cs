@@ -4,19 +4,20 @@
 // Created          : 09-16-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-13-2021
+// Last Modified On : 04-30-2021
 // ***********************************************************************
 // <copyright file="UpdaterCleanup.cs" company="Mario">
 //     Mario
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
-using System.Collections.Generic;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
 using IronyModManager.DI;
 using IronyModManager.Implementation.Updater;
+using IronyModManager.IO.Common;
 using IronyModManager.Shared;
 using Newtonsoft.Json;
 
@@ -63,7 +64,7 @@ namespace IronyModManager
                         await Task.Delay(5000);
                         try
                         {
-                            Directory.Delete(path, true);
+                            DiskOperations.DeleteDirectory(path, true);
                         }
                         catch (Exception ex)
                         {

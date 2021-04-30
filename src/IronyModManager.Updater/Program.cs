@@ -4,7 +4,7 @@
 // Created          : 09-16-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 11-29-2020
+// Last Modified On : 04-30-2021
 // ***********************************************************************
 // <copyright file="Program.cs" company="Mario">
 //     Mario
@@ -60,7 +60,7 @@ namespace IronyModManager.Updater
                 var path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, folder);
                 if (Directory.Exists(path))
                 {
-                    Directory.Delete(path, true);
+                    DeleteDirectory(path, true);
                 }
             }
         }
@@ -89,6 +89,21 @@ namespace IronyModManager.Updater
                 return Task.FromResult(true);
             }
             return Task.FromResult(false);
+        }
+
+        /// <summary>
+        /// Deletes the directory.
+        /// </summary>
+        /// <param name="directory">The directory.</param>
+        /// <param name="recursive">if set to <c>true</c> [recursive].</param>
+        private static void DeleteDirectory(string directory, bool recursive)
+        {
+            var dirInfo = new DirectoryInfo(directory) { Attributes = FileAttributes.Normal };
+            foreach (var item in dirInfo.GetFileSystemInfos("*", recursive ? SearchOption.AllDirectories : SearchOption.TopDirectoryOnly))
+            {
+                item.Attributes = FileAttributes.Normal;
+            }
+            dirInfo.Delete(recursive);
         }
 
         /// <summary>
