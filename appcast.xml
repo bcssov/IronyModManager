@@ -4,40 +4,56 @@
 		<title>Irony Mod Manager</title>
 		<language>en</language>
 		<item>
-			<title>1.16.14</title>
-			<description>CHANGES FROM v1.15:
+			<title>1.16.17</title>
+			<description>RELEASE INFO:
+* Ensure that irony doesn't crash when deleting readonly mod files
+* Minor dependency bump
+
+CHANGES FROM v1.15:
 * Updated dependencies
 * Small fixes
 * Add option to override appSettings via appSettings.override.json</description>
-			<pubDate>Wed, 28 Apr 2021 04:44:14 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.16.14/osx-x64.rar" sparkle:version="1.16.14.27518" sparkle:shortVersionString="1.16.14" length="68099233" sparkle:os="osx" type="application/vnd.rar" sparkle:signature="2zMC68/tngFOAG8Kyi6GwnE4saQG+lVzbYawLL2m7Xt0tp7FOjV7p0tYMKGVSUo4gL/YwCrvp76ST5x7edHXAA=="/>
+			<pubDate>Mon, 03 May 2021 04:29:43 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.16.17/osx-x64.rar" sparkle:version="1.16.17.35542" sparkle:shortVersionString="1.16.17" length="69162749" sparkle:os="osx" type="application/vnd.rar" sparkle:signature="WIiRKozWnUoaki9ukLFHarABPvwYCmnYf5HBD4s4sIUN3sSKkWC+HrKFXZ0kGq+dVI5LmsxwvVe9EHyVHHI+Cw=="/>
 		</item>
 		<item>
-			<title>1.16.14</title>
-			<description>CHANGES FROM v1.15:
+			<title>1.16.17</title>
+			<description>RELEASE INFO:
+* Ensure that irony doesn't crash when deleting readonly mod files
+* Minor dependency bump
+
+CHANGES FROM v1.15:
 * Updated dependencies
 * Small fixes
 * Add option to override appSettings via appSettings.override.json</description>
-			<pubDate>Wed, 28 Apr 2021 04:44:22 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.16.14/win-x64-setup.rar" sparkle:version="1.16.14.27518" sparkle:shortVersionString="1.16.14" length="58888579" sparkle:os="windows" type="application/vnd.rar" sparkle:signature="hutSW4vzd8JqsUKzhzip6Ei5IfkQjM2wFxD7lwPl+C8MqeCTxCDaoYYkLNyH6waud/2LboNAFAUXP3MZQ+anAA=="/>
+			<pubDate>Mon, 03 May 2021 04:29:51 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.16.17/win-x64-setup.rar" sparkle:version="1.16.17.35542" sparkle:shortVersionString="1.16.17" length="59720857" sparkle:os="windows" type="application/vnd.rar" sparkle:signature="eCatjA93wdLdb2Ql8MEgrMhyG1FlgLAtDrO1tHOLAPZ2b87BNbYGWgDqdcNktOZL6q2UI55Uq3xaZ/xdbAugBw=="/>
 		</item>
 		<item>
-			<title>1.16.14</title>
-			<description>CHANGES FROM v1.15:
+			<title>1.16.17</title>
+			<description>RELEASE INFO:
+* Ensure that irony doesn't crash when deleting readonly mod files
+* Minor dependency bump
+
+CHANGES FROM v1.15:
 * Updated dependencies
 * Small fixes
 * Add option to override appSettings via appSettings.override.json</description>
-			<pubDate>Wed, 28 Apr 2021 04:44:18 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.16.14/win-x64.rar" sparkle:version="1.16.14.27518" sparkle:shortVersionString="1.16.14" length="70844657" sparkle:os="windows" type="application/vnd.rar" sparkle:signature="zovgA4Sw0wozo6W7H5hJlFZBXbdjBhUaTWmHTWetjZz6KiPhKoCz+1JfPuZoUr0o46JbkmUaTF2omDqXvVDVBw=="/>
+			<pubDate>Mon, 03 May 2021 04:29:47 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.16.17/win-x64.rar" sparkle:version="1.16.17.35542" sparkle:shortVersionString="1.16.17" length="72058603" sparkle:os="windows" type="application/vnd.rar" sparkle:signature="2HL5TKRGrXLj7SYadaf8s9GVtm2i6660p3JrUHaTETjeEft2BeJjtt7YhJAwYUrLSv+dEi0a25T5ka21Q8wEDg=="/>
 		</item>
 		<item>
-			<title>1.16.14</title>
-			<description>CHANGES FROM v1.15:
+			<title>1.16.17</title>
+			<description>RELEASE INFO:
+* Ensure that irony doesn't crash when deleting readonly mod files
+* Minor dependency bump
+
+CHANGES FROM v1.15:
 * Updated dependencies
 * Small fixes
 * Add option to override appSettings via appSettings.override.json</description>
-			<pubDate>Wed, 28 Apr 2021 04:44:11 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.16.14/linux-x64.zip" sparkle:version="1.16.14.27518" sparkle:shortVersionString="1.16.14" length="84399148" sparkle:os="linux" type="application/zip" sparkle:signature="bEJgLDe4Hn+//Nb6TBxMuHR8aGNcHkWm9fcBGJs59L4rOn/+NGm9qhhk4ok/e6yoOZQkaHftTplOJEaALYuxDQ=="/>
+			<pubDate>Mon, 03 May 2021 04:29:40 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.16.17/linux-x64.zip" sparkle:version="1.16.17.35542" sparkle:shortVersionString="1.16.17" length="85610572" sparkle:os="linux" type="application/zip" sparkle:signature="zd+f9D840oKkq7HBMizTKJ8tWHGG96EQYIKF1hvOptxVhj1t6PVexf75Dp+fGDY4rjJNjbwz5S1ge1j3SSfpDg=="/>
 		</item>
 	</channel>
 </rss>
