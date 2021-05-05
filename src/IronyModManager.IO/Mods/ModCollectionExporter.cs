@@ -91,6 +91,7 @@ namespace IronyModManager.IO.Mods
             using var zip = ArchiveFactory.Create(ArchiveType.Zip);
             using var stream = new MemoryStream(Encoding.UTF8.GetBytes(content));
             zip.AddEntry(Common.Constants.ExportedModContentId, stream, false);
+            var streams = new List<MemoryStream>();
             if (Directory.Exists(parameters.ModDirectory) && !parameters.ExportModOrderOnly)
             {
                 if (!RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
@@ -107,12 +108,24 @@ namespace IronyModManager.IO.Mods
                         var ms = new MemoryStream();
                         await fs.CopyToAsync(ms);
                         var file = item.Replace(parameters.ModDirectory, string.Empty).Trim('\\').Trim('/');
-                        zip.AddEntry(file, ms, true, modified: new System.IO.FileInfo(item).LastWriteTime);
+                        zip.AddEntry(file, ms, false, modified: new System.IO.FileInfo(item).LastWriteTime);                        
+                        fs.Close();
+                        await fs.DisposeAsync();
+                        streams.Add(ms);
                     }
                 }
             }
             zip.SaveTo(parameters.File, new SharpCompress.Writers.WriterOptions(CompressionType.Deflate));
             zip.Dispose();
+            if (streams.Any())
+            {
+                var task = streams.Select(async p =>
+                {                    
+                    p.Close();
+                    await p.DisposeAsync();
+                });
+                await Task.WhenAll(task);
+            }
             return true;
         }
 
