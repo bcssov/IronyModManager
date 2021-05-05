@@ -4,7 +4,7 @@
 // Created          : 03-09-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-30-2021
+// Last Modified On : 05-05-2021
 // ***********************************************************************
 // <copyright file="ModCollectionExporter.cs" company="Mario">
 //     Mario
@@ -16,6 +16,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 using IronyModManager.IO.Common;
@@ -84,7 +85,7 @@ namespace IronyModManager.IO.Mods
         /// </summary>
         /// <param name="parameters">The parameters.</param>
         /// <returns>Task&lt;System.Boolean&gt;.</returns>
-        public Task<bool> ExportAsync(ModCollectionExporterParams parameters)
+        public async Task<bool> ExportAsync(ModCollectionExporterParams parameters)
         {
             var content = JsonConvert.SerializeObject(parameters.Mod, Formatting.None);
             using var zip = ArchiveFactory.Create(ArchiveType.Zip);
@@ -92,11 +93,27 @@ namespace IronyModManager.IO.Mods
             zip.AddEntry(Common.Constants.ExportedModContentId, stream, false);
             if (Directory.Exists(parameters.ModDirectory) && !parameters.ExportModOrderOnly)
             {
-                zip.AddAllFromDirectory(parameters.ModDirectory);
+                if (!RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
+                {
+                    zip.AddAllFromDirectory(parameters.ModDirectory);
+                }
+                else
+                {
+                    // Yeah, osx sucks (ulimit bypass)
+                    var files = Directory.GetFiles(parameters.ModDirectory, "*.*", SearchOption.AllDirectories);
+                    foreach (var item in files)
+                    {
+                        var fs = new FileStream(item, FileMode.Open, FileAccess.Read, FileShare.Read);
+                        var ms = new MemoryStream();
+                        await fs.CopyToAsync(ms);
+                        var file = item.Replace(parameters.ModDirectory, string.Empty).Trim('\\').Trim('/');
+                        zip.AddEntry(file, ms, true, modified: new System.IO.FileInfo(item).LastWriteTime);
+                    }
+                }
             }
             zip.SaveTo(parameters.File, new SharpCompress.Writers.WriterOptions(CompressionType.Deflate));
             zip.Dispose();
-            return Task.FromResult(true);
+            return true;
         }
 
         /// <summary>
