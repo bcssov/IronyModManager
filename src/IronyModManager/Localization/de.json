@@ -4,20 +4,20 @@
         "FontFamily": "Noto Sans", // Do not translate this, this is the font used by this locale
         "SupportedNameBlock": "", // Leave empty for latin alphabets. Reference here: https://docs.microsoft.com/en-us/dotnet/standard/base-types/character-classes-in-regular-expressions#supported-named-blocks
         "Title": "Irony Mod Manager: v{AppVersion}",
-        "BackgroundOperationMessage": "Bitte warten Sie, bis eine Hintergrundoperation ausgeführt wird. App wird heruntergefahren, sobald es abgeschlossen ist...",
+        "BackgroundOperationMessage": "Bitte warten Sie, bis eine Hintergrundoperation ausgeführt wird. Anwendung wird heruntergefahren, sobald dies abgeschlossen ist...",
         "WaitBackgroundOperationMessage": "Bitte warten Sie, bis eine Hintergrundoperation ausgeführt wird.",
         "Actions": {
             "Name": "Aktionen",
             "Wiki": "Wiki",
-            "Logs": "Protokolle",
+            "Logs": "Log Dateien",
             "ErrorLog": "Error.log",
             "Close": "Schließen",
             "DLC": "DLC"
         }
     },
     "FatalError": {
-        "Message": "Ein nicht behandelter Fehler ist aufgetreten. App wird automatisch geschlossen.",
-        "Title": "Error",
+        "Message": "Ein nicht behandelter Fehler ist aufgetreten. Anwendung wird automatisch geschlossen.",
+        "Title": "Fehler",
         "Header": "Schwerwiegender Fehler"
     },
     "SavingError": {
@@ -37,14 +37,14 @@
         "Yes": "Ja",
         "No": "Nein",
         "Confirm": "Bestätigen",
-        "Cancel": "Stornieren"
+        "Cancel": "Abbrechen"
     },
     "FileDialog": {
         "FileName": "Dateiname",
-        "ShowHiddenFiles": "Zeige versteckte Dateien",
+        "ShowHiddenFiles": "Versteckte Dateien anzeigen",
         "Volume": "{Size} Volumen",
         "OK": "OK",
-        "Cancel": "Stornieren",
+        "Cancel": "Abbrechen",
         "Name": "Name",
         "DateModified": "Datum geändert",
         "Type": "Typ",
@@ -52,7 +52,7 @@
         "Folders": {
             "Downloads": "Downloads",
             "Desktop": "Desktop",
-            "Documents": "Unterlagen",
+            "Documents": "Dokumente",
             "Music": "Musik",
             "Videos": "Videos",
             "Pictures": "Bilder"
@@ -60,24 +60,24 @@
     },
     "TextBox": {
         "Copy": "Kopieren",
-        "Cut": "Schnitt",
+        "Cut": "Ausschneiden",
         "Paste": "Einfügen",
-        "SelectAll": "Wählen Sie Alle"
+        "SelectAll": "Alle Auswählen"
     },
     "Languages": {
         "Name": "Sprache"
     },
     "Themes": {
-        "Name": "Thema",
-        "Light": "Licht",
+        "Name": "Theme",
+        "Light": "Hell",
         "Dark": "Dunkel",
-        "FluentLight": "Fließend Licht",
-        "FluentDark": "Fließend Dunkel",
-        "MaterialDark": "Material Dunkel",
-        "MaterialLight": "Material Licht",
-        "Restart_Title": "Muss neu gestartet werden",
-        "Restart_Header": "App muss neu gestartet werden",
-        "Restart_Message": "Die App muss neu gestartet werden, damit das neue Design ordnungsgemäß angewendet wird. Möchten Sie die App neu starten?"
+        "FluentLight": "Hell - Fließend",
+        "FluentDark": "Dunkel - Fließend",
+        "MaterialDark": "Dunkel - Material",
+        "MaterialLight": "Hell - Material",
+        "Restart_Title": "Neustart Notwendig",
+        "Restart_Header": "Anwendung Muss Neu Gestartet Werden",
+        "Restart_Message": "Die Anwendung muss neu gestartet werden, damit das neue Design ordnungsgemäß angewendet wird. Möchten Sie die Anwendung neu starten?"
     },
     "NotificationPosition": {
         "BottomRight": "Unten rechts",
@@ -95,11 +95,11 @@
     },
     "Installed_Mods": {
         "Name": "Installierte Mods",
-        "Filter": "Mods filtern",
+        "Filter": "Mods Filtern",
         "Selected": "Ausgewählt",
         "Mod_Name": "Mod Name",
         "Supported_Version": "Unterstützte Version",
-        "LoadingMods": "Bitte warten Sie beim Laden der Mod-Daten...",
+        "LoadingMods": "Bitte warten Sie, während die Mods geladen werden...",
         "RefreshingModList": "Bitte warten Sie, während die Mod-Liste aktualisiert wird...",
         "InvalidMods": {
             "Title": "Ungültige Mods erkannt",
@@ -107,34 +107,34 @@
         }
     },
     "Collection_Mods": {
-        "Name": "Kollektion Mods",
+        "Name": "Mod Kollektion",
         "Remove": "-",
         "Create": "+",
-        "OK": "In Ordnung",
-        "Cancel": "Stornieren",
-        "Watermark": "Geben Sie den neuen kollektion ein",
+        "OK": "OK",
+        "Cancel": "Abbrechen",
+        "Watermark": "Geben Sie den Namen der neuen Kollektion ein",
         "Delete_Title": "Kollektion löschen?",
-        "Delete_Header": "Bestätigen Sie das Löschen der kollektion",
+        "Delete_Header": "Bestätigen Sie das Löschen der Kollektion",
         "Delete_Message": "Möchten Sie die {CollectionName}-Kollektion wirklich löschen?",
-        "Export": "Export",
+        "Export": "Exportieren",
         "Import": "Importieren",
-        "Export_Dialog_Title": "Kollektion exportieren",
-        "Import_Dialog_Title": "Kollektion importieren",
-        "Overlay_Exporting_Message": "Bitte warten Sie beim Exportieren einer Mod-Kollektion...",
-        "Overlay_Importing_Message": "Bitte warten Sie beim Importieren einer Mod-Kollektion...",
+        "Export_Dialog_Title": "Kollektion Exportieren",
+        "Import_Dialog_Title": "Kollektion Importieren",
+        "Overlay_Exporting_Message": "Bitte warten Sie, während die Mod-Kollektion exportiert wird...",
+        "Overlay_Importing_Message": "Bitte warten Sie, während die Mod-Kollektion importiert wird...",
         "Filter": "Mods durchsuchen",
         "Selected": "Ausgewählt",
         "Mod_Name": "Mod Name",
         "Order": "Reihenfolge",
         "Rename": "Umbenennen",
         "Duplicate": "Duplizieren",
-        "Overlay_Rename_Message": "Bitte warten Sie, während Sie den Umbenennungsvorgang ausführen...",
-        "Overlay_Duplicate_Message": "Bitte warten Sie, während Sie einen doppelten Vorgang ausführen...",
+        "Overlay_Rename_Message": "Bitte warten Sie, während der Umbenennung...",
+        "Overlay_Duplicate_Message": "Bitte warten Sie, während der Verdopplung...",
         "ExportToClipboard": "Kollektion in Zwischenablage kopieren",
         "DeleteMerge": {
             "DeleteTitle": "Zusammengeführten Mod löschen?",
             "DeleteHeader": "Bestätigen Sie das Löschen des Merge-Mods",
-            "DeleteMessage": "Das Vorhandensein eines zusammengeführten Mods wurde erkannt. Möchten Sie ihn auch löschen?"
+            "DeleteMessage": "Das Vorhandensein eines zusammengeführten Mods wurde erkannt. Möchten Sie diesen auch löschen?"
         },
         "ImportFromClipboard": {
             "Title": "Mod-Reihenfolge aus der Zwischenablage importieren",
@@ -142,13 +142,13 @@
             "PromptMessage": "Dies überschreibt deine Mod-Kollektions-Mod-Reihenfolge und Mod-Auswahl. Vorgehen?"
         },
         "FileHash": {
-            "ExportCollection": "Kollektion hashes exportieren",
-            "ExportGame": "Spiele spiel hashes",
-            "Import": "Hashes überprüfen",
+            "ExportCollection": "Kollektions Hashes Exportieren",
+            "ExportGame": "Spiel Hashes Exportieren",
+            "Import": "Hashes Verifizieren",
             "DialogTitleExport": "Wählen Sie aus, wohin der Bericht exportiert werden soll",
             "DialogTitleImport": "Wählen Sie den zu importierenden JSON-Bericht aus",
-            "ExportOverlay": "Bitte warten Sie beim Exportieren...",
-            "ImportOverlay": "Bitte warten Sie, während Sie überprüfen...",
+            "ExportOverlay": "Bitte warten Sie während des Exportiervorgangs...",
+            "ImportOverlay": "Bitte warten Sie während des Überprüfungsvorgangs...",
             "ProgressExport": "{Progress}",
             "ProgressImport": "Schritt {Count}/{TotalCount}: {Progress}",
             "Close": "Schließen"
@@ -168,39 +168,39 @@
         },
         "ImportOther": {
             "Title": "...",
-            "Paradoxos": "Import aus Paradoxos",
-            "Paradox": "Aus dem Spiel importieren",
-            "ParadoxLauncher": "Import aus Paradox Launcher",
+            "Paradoxos": "Aus Paradoxos Importieren",
+            "Paradox": "Aus Dem Spiel Importieren",
+            "ParadoxLauncher": "Aus Paradox Launcher Importieren",
             "Close": "Schließen"
         },
         "ExportOther": {
             "Title": "...",
-            "OrderOnly": "Nur Bestellung exportieren",
+            "OrderOnly": "Nur Reihenfolge Exportieren",
             "Close": "Schließen"
         },
         "MergeCollection": {
-            "Name": "Verschmelzen",
+            "Name": "Zusammenführen",
             "MergedCollectionPrefix": "(Zusammengeführt)", // It's used in path generation so should not be translated (depending on the type of language)
             "MergeCompressModPrefix": "(Zusammengeführt {Name})", // It's used in path generation so should not be translated (depending on the type of language)
             "Overlay_Progress": "Schritt {Count}/{TotalCount}: {PercentDone}",
             "DiskInfoOverlay": "Überprüfen des verfügbaren Speicherplatzes...",
             "Options": {
                 "Title": "Auswahlmodus",
-                "Basic": "Basic",
+                "Basic": "Einfach",
                 "Compress": "Komprimieren",
                 "Close": "Schließen"
             },
             "Basic": {
-                "Overlay_Gathering_Mod_Info": "Bitte warten Sie, während Sie Mod-Informationen sammeln...",
-                "Overlay_Writing_Files": "Bitte warten Sie, während Sie die Mod-Kollektion zusammenführen..."
+                "Overlay_Gathering_Mod_Info": "Bitte warten Sie, während Sie Mod-Informationen gesammelt werden...",
+                "Overlay_Writing_Files": "Bitte warten Sie, während die Mod-Kollektionen zusammengeführt werden..."
             },
             "Compress": {
-                "Overlay_Gathering_Mod_Info": "Bitte warten Sie, während Sie Mod-Informationen sammeln...",
-                "Overlay_Compressing_Files": "Bitte warten Sie, während Sie die Mod-Kollektion zusammenführen..."
+                "Overlay_Gathering_Mod_Info": "Bitte warten Sie, während Sie Mod-Informationen gesammelt werden...",
+                "Overlay_Compressing_Files": "Bitte warten Sie, während die Mod-Kollektionen zusammengeführt werden..."
             },
             "OverwritePrompt": {
                 "Title": "Bestehende Kollektion überschreiben?",
-                "Message": "Eine zusammengeführte Kollektion mit dem angegebenen Namen ist bereits vorhanden. Möchten Sie es überschreiben?"
+                "Message": "Eine zusammengeführte Kollektion mit dem angegebenen Namen ist bereits vorhanden. Möchten Sie diese überschreiben?"
             }
         },
         "PatchMod": {
@@ -210,7 +210,7 @@
             "NotAvailable": "Nicht verfügbar",
             "DeletePrompt": {
                 "Title": "Löschen bestätigen",
-                "Message": "Bist du sicher, dass du den Patch Mod löschen willst?"
+                "Message": "Sind Sie sicher, dass Sie den Patch Mod löschen wollen?"
             },
             "Actions": {
                 "Enable": "Aktivieren",
@@ -222,30 +222,30 @@
     },
     "Mod_Actions": {
         "Apply": "Anwenden",
-        "Overlay_Apply_Message": "Bitte warten Sie, während Sie die Mod-Kollektion anwenden...",
+        "Overlay_Apply_Message": "Bitte warten Sie, während die Mod-Kollektion angewendet wird...",
         "ConflictSolver": {
             "Conflict": "Konfliktlöser",
-            "Overlay_Conflict_Solver_Loading_Definitions": "Bitte warten Sie beim Laden der Mod-Definitionen...",
-            "Overlay_Conflict_Solver_Analyzing_Conflicts": "Bitte warten Sie, während Sie Definitionen auf Konflikte analysieren...",
-            "Overlay_Conflict_Solver_Analyzing_Resolved_Conflicts": "Bitte warten Sie, während Sie aufgelöste Definitionen analysieren...",
-            "Overlay_Conflict_Solver_Replacing_Definitions": "Bitte warten Sie, während Sie Definitionen ersetzen...",
+            "Overlay_Conflict_Solver_Loading_Definitions": "Bitte warten Sie, während die Mod-Definitionen geladen werden...",
+            "Overlay_Conflict_Solver_Analyzing_Conflicts": "Bitte warten Sie, während die Definitionen für Konflikte analysiert werden...",
+            "Overlay_Conflict_Solver_Analyzing_Resolved_Conflicts": "Bitte warten Sie, während die geklärten Definitionen analysiert werden...",
+            "Overlay_Conflict_Solver_Replacing_Definitions": "Bitte warten Sie, während die Definitionen ersetzt werden...",
             "Overlay_Conflict_Solver_Progress": "Schritt {Count}/{TotalCount}: {PercentDone}",
             "FirstUsePrompt": {
-                "Title": "Beachtung",
-                "Message": "Der Konfliktlöser ist nicht für das schwache Herz. Es erfordert Kenntnisse und Erfahrungen mit dem Patch-Code. Benutzer von kleinen Mod-Kollektionen sollten ignorieren, Benutzer mit größeren Mod-Sammlungen sollten entweder in Betracht ziehen, ihre Mod-Sammlungen zu trimmen oder Code-Patching zu erforschen. Unterstützung kann nicht bereitgestellt werden, wenn Sie fortfahren."
+                "Title": "Achtung",
+                "Message": "Der Konfliktlöser ist nichts für Anfänger. Er erfordert Kenntnisse und Erfahrungen mit Coding. Benutzer von kleinen Mod-Kollektionen sollten ihn ignorieren. Benutzer von größeren Mod-Kollektionen sollten hingegen in Betracht ziehen, ihre Mod-Kollektionen zu minimieren oder Coding zu erlernen. Support kann nicht bereitgestellt werden, wenn Sie fortfahren!"
             }
         },
         "LaunchGame": {
-            "Launch": "Spiel starten",
-            "Resume": "Setzen Sie Gameg fort",
-            "Overlay": "Spiel starten, bitte warten...",
+            "Launch": "Spiel Starten",
+            "Resume": "Spiel Fortsetzen",
+            "Overlay": "Spiel wird gestartet, bitte warten...",
             "LaunchError": {
                 "Title": "Spiel kann nicht gestartet werden",
                 "Message": "Das Spiel konnte nicht gestartet werden."
             },
             "NotSet": {
-                "Title": "Spiel nicht eingestellt",
-                "Message": "Das Spiel wurde nicht automatisch erkannt. Verwenden Sie das Optionsfenster, um den Programdatei Pfad manuell festzulegen."
+                "Title": "Spiel Nicht Eingestellt",
+                "Message": "Das Spiel wurde nicht automatisch erkannt. Verwenden Sie das Optionsfenster, um den Dateipfad manuell festzulegen."
             }
         }
     },
@@ -256,14 +256,14 @@
         "RightSide": "Rechte Seite",
         "BinaryFile": "Binärer Inhalt",
         "ImageInfo": "Breite: {Width} Höhe: {Height}",
-        "TakeLeft": "Biegen Sie links ab",
-        "TakeRight": "Hier rechts",
-        "OK": "In Ordnung",
-        "Cancel": "Stornieren",
-        "Resolve": "Lösen",
+        "TakeLeft": "Links Übernehmen",
+        "TakeRight": "Rechts Übernehmen",
+        "OK": "OK",
+        "Cancel": "Abbrechen",
+        "Resolve": "Beseitigen",
         "Ignore": "Ignorieren",
         "IgnoreRules": "Regeln ignorieren",
-        "OverlayResolve": "Bitte warten Sie, während Sie den Konflikt lösen...",
+        "OverlayResolve": "Bitte warten Sie, während der Konflikt beseitigt wird...",
         "NextConflict": "Nächster Konflikt",
         "PrevConflict": "Vorheriger Konflikt",
         "ConflictCount": "Konflikt Zahl: {Count}",
@@ -278,37 +278,37 @@
             "Error": "Fehler in Zeile: {Line} Spalte: {Column} Datei: {File}.{NewLine}Bitte melde diesen Fehler dem Autor des Mods: {ModName}.{NewLine}{NewLine}Fehlermeldung lautet:{NewLine}{NewLine}{Message}",
             "ErrorNoLine": "Fehler in der Datei: {File}.{NewLine}Bitte melde diesen Fehler dem Autor des Mods: {ModName}.{NewLine}{NewLine}Die Fehlermeldung lautet:{NewLine}{NewLine}{Message}",
             "ContextMenu": {
-                "OpenFile": "Datei öffnen",
-                "OpenDirectory": "Verzeichnis öffnen",
+                "OpenFile": "Datei Öffnen",
+                "OpenDirectory": "Verzeichnis Öffnen",
                 "CustomPatch": "In benutzerdefinierten Patch kopieren"
             }
         },
         "CompareSelectorContextMenu": {
-            "OpenFile": "Datei öffnen",
-            "OpenDirectory": "Verzeichnis öffnen"
+            "OpenFile": "Datei Öffnen",
+            "OpenDirectory": "Verzeichnis Öffnen"
         },
         "ContextMenu": {
-            "CopyAll": "Kopiere alles",
-            "CopyThis": "Kopier das",
-            "CopyThisAfterLine": "Kopieren Sie diese After Line",
-            "CopyThisBeforeLine": "Kopieren Sie diese vor Zeile",
-            "MoveUp": "Nach oben gehen",
-            "MoveDown": "Sich abwärts bewegen",
-            "Edit": "Bearbeiten Sie dies",
-            "CopyText": "Text kopieren",
+            "CopyAll": "Alles Kopieren",
+            "CopyThis": "Das Kopieren",
+            "CopyThisAfterLine": "Das nach dieser Zeile kopieren",
+            "CopyThisBeforeLine": "Das nach dieser Zeile kopieren",
+            "MoveUp": "Nach Oben",
+            "MoveDown": "Nach Uten",
+            "Edit": "Bearbeiten",
+            "CopyText": "Text Kopieren",
             "Delete": "Löschen",
-            "Undo": "Rückgängig machen",
+            "Undo": "Rückgängig Machen",
             "Redo": "Wiederholen",
             "Editor": "Externe Zusammenführung"
         },
         "EditorContextMenu": {
             "Copy": "Kopieren",
-            "Cut": "Schnitt",
+            "Cut": "Ausschneiden",
             "Delete": "Löschen",
             "Paste": "Einfügen",
-            "Undo": "Rückgängig machen",
+            "Undo": "Rückgängig Machen",
             "Redo": "Wiederholen",
-            "SelectAll": "Wählen Sie Alle"
+            "SelectAll": "Alle Auswählen"
         },
         "Modes": {
             "Title": "Auswahlmodus",
@@ -321,13 +321,13 @@
             "Close": "Schließen"
         },
         "ResetConflicts": {
-            "Title": "Konflikte zurücksetzen",
+            "Title": "Konflikte Zurücksetzen",
             "Resolved": "Aufgelöst",
             "Ignored": "Ignoriert",
             "Custom": "Benutzerdefiniert",
             "Close": "Schließen",
             "Reset": "Zurücksetzen",
-            "Overlay": "Bitte warten Sie, während Sie Konflikte rückgängig machen..."
+            "Overlay": "Bitte warten Sie, während die Konflikte rückgängig gemacht werden..."
         },
         "DBSearch": {
             "Title": "Datenbanksuche",
@@ -337,9 +337,9 @@
         },
         "CustomPatch": {
             "Title": "Benutzerdefinierter Patch",
-            "Load": "Lade",
+            "Load": "Laden",
             "Path": "Verzeichnis",
-            "Save": "Sparen",
+            "Save": "Speichern",
             "Close": "Schließen"
         },
         "Editor": {
@@ -349,8 +349,8 @@
     },
     "ConflictIgnore": {
         "Save": "Speichern",
-        "Cancel": "Stornieren",
-        "Watermark": "Verwenden Sie # für Kommentare. Neue Zeile ist eine neue Regel."
+        "Cancel": "Abbrechen",
+        "Watermark": "Verwenden Sie # für Kommentare. Jede neue Zeile ist eine neue Regel."
     },
     "Options": {
         "Name": "Optionen",
@@ -363,16 +363,16 @@
         },
         "Editor": {
             "Title": "Externe Editoroptionen",
-            "EditorExecutable": "Editor Programdatei",
+            "EditorExecutable": "Editor Programmdatei",
             "EditorArgs": "Editor Args",
             "EditorArgsPlaceholder": "Beispiel: leftFile:{Left} rightFile:{Right}"
         },
         "Game": {
             "Title": "Spieleinstellungen",
-            "GameExecutable": "Spiel Programdatei",
+            "GameExecutable": "Spiel Programmdatei",
             "UserDirectory": "Datenverzeichnis",
             "GameArgs": "Spiel Startoptionen",
-            "RefreshMods": "Aktualisieren Sie die Deskriptoren vor dem Spielen",
+            "RefreshMods": "Deskriptoren vor dem Spielen aktualisieren",
             "CloseAfterLaunch": "Nach dem Start des Spiels schließen",
             "AutoConfigure": "Alle konfigurieren...",
             "CustomModPath": "Benutzerdefiniertes Mod-Verzeichnis"
@@ -381,9 +381,9 @@
             "Title": "Aktualisierungsoptionen",
             "UpdateInfoTitle": "Versionsinformationen aktualisieren",
             "AutoUpdates": "Beim Start nach Updates suchen",
-            "CheckPrerelease": "Update auf Vorabversionen",
-            "CheckForUpdates": "Auf Updates prüfen",
-            "Install": "Installiere Updates",
+            "CheckPrerelease": "Update auf unveröffentlichte Vorabversionen",
+            "CheckForUpdates": "Nach Updates Suchen",
+            "Install": "Updates Installieren",
             "Version": "Version",
             "Overlay": {
                 "UpdateDownloading": "Updates herunterladen...",
@@ -396,7 +396,7 @@
             },
             "AutoUpdatePrompts": {
                 "Title": "Automatisch nach Aktualisierungen suchen",
-                "Message": "Irony möchte, dass Sie beim Start nach Updates suchen. Möchten Sie, dass Irony Sie automatisch über Updates informiert?"
+                "Message": "Irony möchte, beim Starten nach Updates suchen. Möchten Sie, dass Irony Sie automatisch über Updates informiert?"
             },
             "UpdateNotification": {
                 "Title": "Update erkannt",
@@ -404,16 +404,16 @@
             }
         },
         "Dialog": {
-            "ExeTitle": "Finde eine Programdatei Spieldatei",
+            "ExeTitle": "Finde eine Spiel-Programmdatei",
             "GameRootTitle": "Finde das Stammverzeichnis des Spiels",
             "UserDirTitle": "Spieldatenverzeichnis suchen",
-            "EditorTitle": "Suchen Sie die Programdatei Editor-Datei",
+            "EditorTitle": "Suchen Sie die Programmdatei Editor-Datei",
             "CustomModPathTitle": "Finde ein benutzerdefiniertes Mod-Verzeichnis"
         },
         "Prompts": {
             "CustomModDirectory": {
                 "Title": "Nicht leer",
-                "Message": "Benutzerdefiniertes MOD-Verzeichnis ist nicht leer, wenn Sie es jetzt ändern, jetzt verlieren Sie möglicherweise einige Mods. Bist du sicher, dass du es ändern willst?"
+                "Message": "Benutzerdefiniertes Mod-Verzeichnis ist nicht leer, wenn Sie es jetzt ändern, verlieren Sie möglicherweise einige Mods. Sind Sie sicher, dass Sie es ändern wollen?"
             }
         }
     },
@@ -496,7 +496,7 @@
         },
         "CustomPatchRerunConflictSolver": {
             "Title": "Konfliktlöser aktualisieren",
-            "Message": "Conflict Solver muss aktualisiert werden, um neue benutzerdefinierte Patches zu berücksichtigen. Bitte führen Sie den Konfliktlöser erneut aus."
+            "Message": "Konfliktlöser muss aktualisiert werden, um neue benutzerdefinierte Patches zu berücksichtigen. Bitte führen Sie den Konfliktlöser erneut aus."
         },
         "CollectionMergeNotEnoughSpace": {
             "Title": "Nicht genügend freier Speicherplatz",
@@ -504,23 +504,23 @@
         }
     },
     "Mod_App_Actions": {
-        "OpenInSteam": "In Steam öffnen",
-        "Open": "Öffnen Sie die Mod-URL",
-        "Copy": "Kopieren Sie die Mod-URL",
-        "OpenInAssociatedApp": "Öffnen Sie den Mod-Ordner/die Mod-Datei"
+        "OpenInSteam": "In Steam Öffnen",
+        "Open": "Mod-URL Öffnen",
+        "Copy": "Mod-URL Kopieren",
+        "OpenInAssociatedApp": "Mod-Ordner/Mod-Datei Öffnen"
     },
     "Descriptor_Actions": {
-        "CheckNew": "Überprüfen Sie die neuen Mods",
-        "Delete": "Löschen und neu laden",
-        "Delete_All": "Alle löschen und neu laden",
+        "CheckNew": "Neue Mods Suchen",
+        "Delete": "Löschen u. Neu Laden",
+        "Delete_All": "Alle Löschen u. Neu Laden",
         "Lock": "Sperren",
-        "Lock_All": "Sperre Alle",
+        "Lock_All": "Alle Sperren",
         "Unlock": "Freischalten",
-        "Unlock_All": "Alle freischalten"
+        "Unlock_All": "Alle Freischalten"
     },
     "Achievements": {
-        "AchievementCompatible": "Mod ist leistungskompatibel.",
-        "NotAchievementCompatible": "Mod ist nicht leistungskompatibel."
+        "AchievementCompatible": "Mod ist kompatibel mit Errungenschaften.",
+        "NotAchievementCompatible": "Mod ist nicht kompatibel mit Errungenschaften."
     },
     "Sorting": {
         "Sort_A_Z": "↑",
