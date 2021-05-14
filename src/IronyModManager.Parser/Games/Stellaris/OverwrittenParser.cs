@@ -41,7 +41,8 @@ namespace IronyModManager.Parser.Games.Stellaris
         {
             Common.Constants.Stellaris.PopJobs, Common.Constants.Stellaris.Traits,
             Common.Constants.Stellaris.Districts, Common.Constants.Stellaris.PlanetClasses,
-            Common.Constants.Stellaris.PrescriptedCountries, Common.Constants.Stellaris.SpeciesArchetypes
+            Common.Constants.Stellaris.PrescriptedCountries, Common.Constants.Stellaris.SpeciesArchetypes,
+            Common.Constants.Stellaris.Buildings
         };
 
         /// <summary>
