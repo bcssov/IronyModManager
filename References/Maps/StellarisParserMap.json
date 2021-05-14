@@ -57,7 +57,7 @@
 	},
 	{
 		"DirectoryPath": "common\\buildings",
-		"PreferredParser": "DefaultParser"
+		"PreferredParser": "StellarisOverwrittenParser"
 	},
 	{
 		"DirectoryPath": "common\\bypass",

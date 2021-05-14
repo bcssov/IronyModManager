@@ -4,7 +4,7 @@
 // Created          : 02-16-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-11-2021
+// Last Modified On : 05-14-2021
 // ***********************************************************************
 // <copyright file="Constants.cs" company="Mario">
 //     Mario
@@ -263,6 +263,11 @@ namespace IronyModManager.Parser.Common
             /// The sound
             /// </summary>
             public const string Sound = "sound";
+
+            /// <summary>
+            /// The buildings
+            /// </summary>
+            public static readonly string Buildings = MergePath(CommonPath, "buildings");
 
             /// <summary>
             /// The component tags
