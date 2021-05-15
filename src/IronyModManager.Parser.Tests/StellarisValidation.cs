@@ -310,7 +310,7 @@ namespace IronyModManager.Parser.Tests
             }
             File.WriteAllText("..\\..\\..\\..\\IronyModManager\\Maps\\StellarisParserMap.json.txt", sb.ToString());
 
-            File.WriteAllText("..\\..\\..\\..\\IronyModManager\\Maps\\StellarisParserMap.json", JsonDISerializer.Serialize(parserMap));
+            File.WriteAllText("..\\..\\..\\..\\IronyModManager\\Maps\\StellarisParserMap.json", JsonDISerializer.Serialize(parserMap.OrderBy(p => p.DirectoryPath, StringComparer.OrdinalIgnoreCase)));
         }
 
         /// <summary>

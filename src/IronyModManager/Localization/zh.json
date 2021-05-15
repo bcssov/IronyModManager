@@ -204,16 +204,16 @@
             }
         },
         "PatchMod": {
-            "Title": "补丁程序：{Status}",
+            "Title": "补丁模组：{Status}",
             "Enabled": "已启用",
-            "Disabled": "残障人士",
+            "Disabled": "已禁用",
             "NotAvailable": "无法使用",
             "DeletePrompt": {
                 "Title": "确认删除",
-                "Message": "您确定要删除补丁程序吗？"
+                "Message": "您确定要删除补丁吗？"
             },
             "Actions": {
-                "Enable": "使能够",
+                "Enable": "启用",
                 "Disable": "禁用",
                 "Delete": "删除",
                 "Close": "关闭"
