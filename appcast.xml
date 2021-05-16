@@ -4,56 +4,68 @@
 		<title>Irony Mod Manager</title>
 		<language>en</language>
 		<item>
-			<title>1.16.17</title>
+			<title>1.16.25</title>
 			<description>RELEASE INFO:
-* Ensure that irony doesn't crash when deleting readonly mod files
-* Minor dependency bump
+* ulimit bypass for collection export on OSX
+* Update dependencies
+* Update German translation (by Bhaeron)
+* Update Chinese translation (by SANagisa)
+* Treat buildings, technology, diplo actions and gov authorities in the same manner as pop_jobs, districts (for Stellaris)
 
 CHANGES FROM v1.15:
 * Updated dependencies
 * Small fixes
 * Add option to override appSettings via appSettings.override.json</description>
-			<pubDate>Mon, 03 May 2021 04:29:43 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.16.17/osx-x64.rar" sparkle:version="1.16.17.35542" sparkle:shortVersionString="1.16.17" length="69162749" sparkle:os="osx" type="application/vnd.rar" sparkle:signature="WIiRKozWnUoaki9ukLFHarABPvwYCmnYf5HBD4s4sIUN3sSKkWC+HrKFXZ0kGq+dVI5LmsxwvVe9EHyVHHI+Cw=="/>
+			<pubDate>Sun, 16 May 2021 04:15:16 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.16.25/osx-x64.rar" sparkle:version="1.16.25.54913" sparkle:shortVersionString="1.16.25" length="69184528" sparkle:os="osx" type="application/vnd.rar" sparkle:signature="9JbVMuSW+er8TdVsN2F4RM93cu6Kd+GpnHNCs8Q/+LIInqIPLgCluCddvAO+OqUWSMtf71pYbIcHGRyf0SFEAA=="/>
 		</item>
 		<item>
-			<title>1.16.17</title>
+			<title>1.16.25</title>
 			<description>RELEASE INFO:
-* Ensure that irony doesn't crash when deleting readonly mod files
-* Minor dependency bump
+* ulimit bypass for collection export on OSX
+* Update dependencies
+* Update German translation (by Bhaeron)
+* Update Chinese translation (by SANagisa)
+* Treat buildings, technology, diplo actions and gov authorities in the same manner as pop_jobs, districts (for Stellaris)
 
 CHANGES FROM v1.15:
 * Updated dependencies
 * Small fixes
 * Add option to override appSettings via appSettings.override.json</description>
-			<pubDate>Mon, 03 May 2021 04:29:51 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.16.17/win-x64-setup.rar" sparkle:version="1.16.17.35542" sparkle:shortVersionString="1.16.17" length="59720857" sparkle:os="windows" type="application/vnd.rar" sparkle:signature="eCatjA93wdLdb2Ql8MEgrMhyG1FlgLAtDrO1tHOLAPZ2b87BNbYGWgDqdcNktOZL6q2UI55Uq3xaZ/xdbAugBw=="/>
+			<pubDate>Sun, 16 May 2021 04:15:23 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.16.25/win-x64-setup.rar" sparkle:version="1.16.25.54913" sparkle:shortVersionString="1.16.25" length="59584484" sparkle:os="windows" type="application/vnd.rar" sparkle:signature="6v1t0m8/w7PVp9Fbs3irPedUiqt98SSi9nYZnXgVWlO9mV9KUjiPv+JNNdh2Dw0AxSOEwENYlTl2x6aimxqhAw=="/>
 		</item>
 		<item>
-			<title>1.16.17</title>
+			<title>1.16.25</title>
 			<description>RELEASE INFO:
-* Ensure that irony doesn't crash when deleting readonly mod files
-* Minor dependency bump
+* ulimit bypass for collection export on OSX
+* Update dependencies
+* Update German translation (by Bhaeron)
+* Update Chinese translation (by SANagisa)
+* Treat buildings, technology, diplo actions and gov authorities in the same manner as pop_jobs, districts (for Stellaris)
 
 CHANGES FROM v1.15:
 * Updated dependencies
 * Small fixes
 * Add option to override appSettings via appSettings.override.json</description>
-			<pubDate>Mon, 03 May 2021 04:29:47 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.16.17/win-x64.rar" sparkle:version="1.16.17.35542" sparkle:shortVersionString="1.16.17" length="72058603" sparkle:os="windows" type="application/vnd.rar" sparkle:signature="2HL5TKRGrXLj7SYadaf8s9GVtm2i6660p3JrUHaTETjeEft2BeJjtt7YhJAwYUrLSv+dEi0a25T5ka21Q8wEDg=="/>
+			<pubDate>Sun, 16 May 2021 04:15:19 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.16.25/win-x64.rar" sparkle:version="1.16.25.54913" sparkle:shortVersionString="1.16.25" length="71875680" sparkle:os="windows" type="application/vnd.rar" sparkle:signature="1Z0uehUhsacEcn4k0xTIrO69NfaamjFeT05oM9TMA6fEKsUVK3lhNKdNIbl8VN7qaNT++1VJzA0E9hRCKejrAw=="/>
 		</item>
 		<item>
-			<title>1.16.17</title>
+			<title>1.16.25</title>
 			<description>RELEASE INFO:
-* Ensure that irony doesn't crash when deleting readonly mod files
-* Minor dependency bump
+* ulimit bypass for collection export on OSX
+* Update dependencies
+* Update German translation (by Bhaeron)
+* Update Chinese translation (by SANagisa)
+* Treat buildings, technology, diplo actions and gov authorities in the same manner as pop_jobs, districts (for Stellaris)
 
 CHANGES FROM v1.15:
 * Updated dependencies
 * Small fixes
 * Add option to override appSettings via appSettings.override.json</description>
-			<pubDate>Mon, 03 May 2021 04:29:40 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.16.17/linux-x64.zip" sparkle:version="1.16.17.35542" sparkle:shortVersionString="1.16.17" length="85610572" sparkle:os="linux" type="application/zip" sparkle:signature="zd+f9D840oKkq7HBMizTKJ8tWHGG96EQYIKF1hvOptxVhj1t6PVexf75Dp+fGDY4rjJNjbwz5S1ge1j3SSfpDg=="/>
+			<pubDate>Sun, 16 May 2021 04:15:14 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.16.25/linux-x64.zip" sparkle:version="1.16.25.54913" sparkle:shortVersionString="1.16.25" length="85599613" sparkle:os="linux" type="application/zip" sparkle:signature="DZCinF4QTrdI32VA0KEglSYwb3qRz2sOlFRAHCHW1uTdghXTTVlaZgmfngDVU8JK5rGrzixirBPlM8zaqXyWDg=="/>
 		</item>
 	</channel>
 </rss>
