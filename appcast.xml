@@ -4,68 +4,72 @@
 		<title>Irony Mod Manager</title>
 		<language>en</language>
 		<item>
-			<title>1.16.25</title>
+			<title>1.16.26</title>
 			<description>RELEASE INFO:
 * ulimit bypass for collection export on OSX
 * Update dependencies
 * Update German translation (by Bhaeron)
 * Update Chinese translation (by SANagisa)
 * Treat buildings, technology, diplo actions and gov authorities in the same manner as pop_jobs, districts (for Stellaris)
+* Fix messagebox window height size
 
 CHANGES FROM v1.15:
 * Updated dependencies
 * Small fixes
 * Add option to override appSettings via appSettings.override.json</description>
-			<pubDate>Sun, 16 May 2021 04:15:16 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.16.25/osx-x64.rar" sparkle:version="1.16.25.54913" sparkle:shortVersionString="1.16.25" length="69184528" sparkle:os="osx" type="application/vnd.rar" sparkle:signature="9JbVMuSW+er8TdVsN2F4RM93cu6Kd+GpnHNCs8Q/+LIInqIPLgCluCddvAO+OqUWSMtf71pYbIcHGRyf0SFEAA=="/>
+			<pubDate>Sun, 16 May 2021 22:00:04 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.16.26/osx-x64.rar" sparkle:version="1.16.26.49942" sparkle:shortVersionString="1.16.26" length="69170832" sparkle:os="osx" type="application/vnd.rar" sparkle:signature="TorDooW6A+Ocm+x1Ugqp/swtUwAxzNeJJsf8LKSR8H5oLHL+QgQHnEWxASI/XuNYN68R4FZyOFmKk7GzYMMXCA=="/>
 		</item>
 		<item>
-			<title>1.16.25</title>
+			<title>1.16.26</title>
 			<description>RELEASE INFO:
 * ulimit bypass for collection export on OSX
 * Update dependencies
 * Update German translation (by Bhaeron)
 * Update Chinese translation (by SANagisa)
 * Treat buildings, technology, diplo actions and gov authorities in the same manner as pop_jobs, districts (for Stellaris)
+* Fix messagebox window height size
 
 CHANGES FROM v1.15:
 * Updated dependencies
 * Small fixes
 * Add option to override appSettings via appSettings.override.json</description>
-			<pubDate>Sun, 16 May 2021 04:15:23 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.16.25/win-x64-setup.rar" sparkle:version="1.16.25.54913" sparkle:shortVersionString="1.16.25" length="59584484" sparkle:os="windows" type="application/vnd.rar" sparkle:signature="6v1t0m8/w7PVp9Fbs3irPedUiqt98SSi9nYZnXgVWlO9mV9KUjiPv+JNNdh2Dw0AxSOEwENYlTl2x6aimxqhAw=="/>
+			<pubDate>Sun, 16 May 2021 22:00:12 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.16.26/win-x64-setup.rar" sparkle:version="1.16.26.49942" sparkle:shortVersionString="1.16.26" length="59573125" sparkle:os="windows" type="application/vnd.rar" sparkle:signature="kVcjIH4EJkt15We1qGn7lP5KgSqMBwtlMo2k4I8Q1N4PGyJWHSiHQqsSuzp+Y9WJiSx372kwERqdHuYxf9PGCA=="/>
 		</item>
 		<item>
-			<title>1.16.25</title>
+			<title>1.16.26</title>
 			<description>RELEASE INFO:
 * ulimit bypass for collection export on OSX
 * Update dependencies
 * Update German translation (by Bhaeron)
 * Update Chinese translation (by SANagisa)
 * Treat buildings, technology, diplo actions and gov authorities in the same manner as pop_jobs, districts (for Stellaris)
+* Fix messagebox window height size
 
 CHANGES FROM v1.15:
 * Updated dependencies
 * Small fixes
 * Add option to override appSettings via appSettings.override.json</description>
-			<pubDate>Sun, 16 May 2021 04:15:19 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.16.25/win-x64.rar" sparkle:version="1.16.25.54913" sparkle:shortVersionString="1.16.25" length="71875680" sparkle:os="windows" type="application/vnd.rar" sparkle:signature="1Z0uehUhsacEcn4k0xTIrO69NfaamjFeT05oM9TMA6fEKsUVK3lhNKdNIbl8VN7qaNT++1VJzA0E9hRCKejrAw=="/>
+			<pubDate>Sun, 16 May 2021 22:00:08 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.16.26/win-x64.rar" sparkle:version="1.16.26.49942" sparkle:shortVersionString="1.16.26" length="71861940" sparkle:os="windows" type="application/vnd.rar" sparkle:signature="mFGHLuVv7EGjPHCHzpbsQ4n07mEFXaiV8T/h3XFRMU2TOqW235AICv7ibWw8wVdB1XuiRfsY4k1VJbUy2jJMCw=="/>
 		</item>
 		<item>
-			<title>1.16.25</title>
+			<title>1.16.26</title>
 			<description>RELEASE INFO:
 * ulimit bypass for collection export on OSX
 * Update dependencies
 * Update German translation (by Bhaeron)
 * Update Chinese translation (by SANagisa)
 * Treat buildings, technology, diplo actions and gov authorities in the same manner as pop_jobs, districts (for Stellaris)
+* Fix messagebox window height size
 
 CHANGES FROM v1.15:
 * Updated dependencies
 * Small fixes
 * Add option to override appSettings via appSettings.override.json</description>
-			<pubDate>Sun, 16 May 2021 04:15:14 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.16.25/linux-x64.zip" sparkle:version="1.16.25.54913" sparkle:shortVersionString="1.16.25" length="85599613" sparkle:os="linux" type="application/zip" sparkle:signature="DZCinF4QTrdI32VA0KEglSYwb3qRz2sOlFRAHCHW1uTdghXTTVlaZgmfngDVU8JK5rGrzixirBPlM8zaqXyWDg=="/>
+			<pubDate>Sun, 16 May 2021 22:00:01 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.16.26/linux-x64.zip" sparkle:version="1.16.26.49942" sparkle:shortVersionString="1.16.26" length="85599307" sparkle:os="linux" type="application/zip" sparkle:signature="pHsROWD80vMJ2Dgh9n+SJEmorjFBtBjtiWNrbhWNYXtarvPfoTCZLGNUhANfPVWAYRzjAJEdhytjTAuh5GdjBw=="/>
 		</item>
 	</channel>
 </rss>
