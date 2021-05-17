@@ -12,6 +12,13 @@ Check out the detailed overview on the [wiki](https://github.com/bcssov/IronyMod
 ### Download
 * Latest stable version: [v1.16.26](https://github.com/bcssov/IronyModManager/releases/tag/v1.16.26)
 
+### Windows Defender flagging Irony?
+It's a false positive in an external component that Irony is using and it affects only versions <=1.16.17 which use this falsely flagged version. In this case you have 2 options:
+1. Whitelist Irony temporarily and run autoupdate and update to >=1.16.25
+2. Manually download 1.16.25 or later
+
+If you want to learn more about what has transpired see [here](https://github.com/bcssov/IronyModManager/issues/255).
+
 ### New users
 Check this [checklist](https://github.com/bcssov/IronyModManager/wiki/New-User-Checklist) if you are a first time user of Irony.
 
