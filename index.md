@@ -19,6 +19,14 @@ It's a false positive in an external component that Irony is using and it affect
 
 If you want to learn more about what has transpired see [here](https://github.com/bcssov/IronyModManager/issues/255).
 
+If Irony is still being flagged, open cmd (run as admin) and run the following commands. These will force update windows defender signature updates.
+
+```
+cd "%ProgramFiles%\Windows Defender"
+MpCmdRun.exe -removedefinitions -dynamicsignatures
+MpCmdRun.exe -SignatureUpdate
+```
+
 ### New users
 Check this [checklist](https://github.com/bcssov/IronyModManager/wiki/New-User-Checklist) if you are a first time user of Irony.
 
