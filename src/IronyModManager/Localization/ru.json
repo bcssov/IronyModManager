@@ -1,0 +1,534 @@
+﻿{
+    // Do NOT Translate anything in curly ({}) braces inside strings. These are used for formatting.
+    "App": {
+        "FontFamily": "Noto Sans", // Do not translate this, this is the font used by this locale
+        "SupportedNameBlock": "", // Leave empty for latin alphabets. Reference here: https://docs.microsoft.com/en-us/dotnet/standard/base-types/character-classes-in-regular-expressions#supported-named-blocks
+        "Title": "Irony Mod Manager: v{AppVersion}",
+        "BackgroundOperationMessage": "Подождите, пока выполняется фоновая операция. По завершению приложение будет закрыто...",
+        "WaitBackgroundOperationMessage": "Подождите, пока выполняется фоновая операция.",
+        "Actions": {
+            "Name": "Действия",
+            "Wiki": "Документация",
+            "Logs": "Логи",
+            "ErrorLog": "Error.log",
+            "Close": "Закрыть",
+            "DLC": "DLC"
+        }
+    },
+    "FatalError": {
+        "Message": "Возникла неизвестная ошибка, приложение будет закрыто.",
+        "Title": "Ошибка",
+        "Header": "Fatal Error"
+    },
+    "SavingError": {
+        "Title": "Ошибка сохранения",
+        "Message": "Что-то не даёт Irony записать файлы модов. Пожалуйста, сообщите об этом на Github автору программы и приложите лог ошибки."
+    },
+    "UnableToWriteError": {
+        "Title": "Приложение блокировано",
+        "Message": "Похоже, что приложение было блокировано антивирусом или разрешениями доступа и не может записать данные в папку Документы:{NewLine}{Paths}"
+    },
+    "InvalidModsDetected": {
+        "Title": "Ошибка в модах",
+        "Message": "Следующие моды невозможно загрузить из-за повреждения архивов или блокировки файлов:{NewLine}{Mods}"
+    },
+    "Prompt": {
+        "OK": "OK",
+        "Yes": "Да",
+        "No": "Нет",
+        "Confirm": "Принять",
+        "Cancel": "Отмена"
+    },
+    "FileDialog": {
+        "FileName": "Имя файла",
+        "ShowHiddenFiles": "Показать скрытые файлы",
+        "Volume": "{Size}",
+        "OK": "OK",
+        "Cancel": "Отмена",
+        "Name": "Имя",
+        "DateModified": "Изменен",
+        "Type": "Тип",
+        "Size": "Размер",
+        "Folders": {
+            "Downloads": "Загрузки",
+            "Desktop": "Рабочий стол",
+            "Documents": "Документы",
+            "Music": "Музыка",
+            "Videos": "Видео",
+            "Pictures": "Изображения"
+        }
+    },
+    "TextBox": {
+        "Copy": "Копировать",
+        "Cut": "Вырезать",
+        "Paste": "Вставить",
+        "SelectAll": "Выбрать все"
+    },
+    "Languages": {
+        "Name": "Язык"
+    },
+    "Themes": {
+        "Name": "Тема",
+        "Light": "Light",
+        "Dark": "Dark",
+        "FluentLight": "Fluent Light",
+        "FluentDark": "Fluent Dark",
+        "MaterialDark": "Material Dark",
+        "MaterialLight": "Material Light",
+        "Restart_Title": "Необходим перезапуск",
+        "Restart_Header": "Необходим перезапуск",
+        "Restart_Message": "Приложение необходимо перезапустить, чтобы применить другую тему. Перезапустить сейчас?"
+    },
+    "NotificationPosition": {
+        "BottomRight": "Снизу справа",
+        "BottomLeft": "Снизу слева",
+        "TopRight": "Сверху справа",
+        "TopLeft": "Сверху слева"
+    },
+    "Games": {
+        "Name": "Игра",
+        "Stellaris": "Stellaris",
+        "EuropaUniversalisIV": "Europa Universalis IV",
+        "HeartsofIronIV": "Hearts of Iron IV",
+        "ImperatorRome": "Imperator Rome",
+        "CrusaderKings3": "Crusader Kings III"
+    },
+    "Installed_Mods": {
+        "Name": "Установленные моды",
+        "Filter": "Фильтр",
+        "Selected": "Отметка",
+        "Mod_Name": "Название",
+        "Supported_Version": "Версия игры",
+        "LoadingMods": "Загрузка...",
+        "RefreshingModList": "Обновление списка модов...",
+        "InvalidMods": {
+            "Title": "Ошибка в модах",
+            "Message": "Не обнаружены следующие моды:{NewLine}{Mods}.{NewLine}{NewLine}Удалить их дескрипторы?"
+        }
+    },
+    "Collection_Mods": {
+        "Name": "Коллекции",
+        "Remove": "-",
+        "Create": "+",
+        "OK": "OK",
+        "Cancel": "Отмена",
+        "Watermark": "Введите имя коллекции",
+        "Delete_Title": "Удалить коллекцию?",
+        "Delete_Header": "Подтвердите удаление коллекции",
+        "Delete_Message": "Вы уверены, что хотите удалить коллекцию {CollectionName}?",
+        "Export": "Экспорт",
+        "Import": "Импорт",
+        "Export_Dialog_Title": "Экспортировать коллекцию",
+        "Import_Dialog_Title": "Импортировать коллекцию",
+        "Overlay_Exporting_Message": "Экспорт коллекции модов...",
+        "Overlay_Importing_Message": "Импорт коллекции модов...",
+        "Filter": "Поиск",
+        "Selected": "Включен",
+        "Mod_Name": "Название",
+        "Order": "Порядок",
+        "Rename": "Переименовать",
+        "Duplicate": "Дублировать",
+        "Overlay_Rename_Message": "Переименовывается...",
+        "Overlay_Duplicate_Message": "Дублируется...",
+        "ExportToClipboard": "Копировать коллекцию в буфер обмена",
+        "DeleteMerge": {
+            "DeleteTitle": "Удалить объединенный мод?",
+            "DeleteHeader": "Подтвердите удаление",
+            "DeleteMessage": "Объединенный мод еще существует, хотите удалить и его тоже?"
+        },
+        "ImportFromClipboard": {
+            "Title": "Загрузить порядок модов из буфера обмена",
+            "PromptTitle": "Перезаписать порядок модов?",
+            "PromptMessage": "Это перезапишет порядок модов в вашей коллекции и список выбранных модов. Продолжить?"
+        },
+        "FileHash": {
+            "ExportCollection": "Экспорт контрольных сумм коллекции",
+            "ExportGame": "Экспорт контрольных сумм игры",
+            "Import": "Сверить контрольные суммы",
+            "DialogTitleExport": "Куда экспортировать отчет",
+            "DialogTitleImport": "Выберите json-отчет для импорта",
+            "ExportOverlay": "Экспортируется...",
+            "ImportOverlay": "Проверяется...",
+            "ProgressExport": "{Progress}",
+            "ProgressImport": "Шаг {Count}/{TotalCount}: {Progress}",
+            "Close": "X"
+        },
+        "JumpOnDragAndDrop": {
+            "Title": "Автофокус: {State}",
+            "On": "Вкл",
+            "Off": "Выкл"
+        },
+        "ImportPrompt": {
+            "Title": "Коллекция уже существует",
+            "Message": "Такая коллекция уже существует и будет перезаписана, продолжить?"
+        },
+        "ImportNonExistingMods": {
+            "Title": "Несуществующие моды",
+            "Message": "Следующие моды не удалось импортировать, т. к. они не найдены:{NewLine}{Mods}"
+        },
+        "ImportOther": {
+            "Title": "...",
+            "Paradoxos": "Импорт из Paradoxos",
+            "Paradox": "Импорт из игры",
+            "ParadoxLauncher": "Импорт из Paradox Launcher",
+            "Close": "Закрыть"
+        },
+        "ExportOther": {
+            "Title": "...",
+            "OrderOnly": "Экспортировать только порядок",
+            "Close": "Закрыть"
+        },
+        "MergeCollection": {
+            "Name": "Объединить",
+            "MergedCollectionPrefix": "(Merge)", // It's used in path generation so should not be translated (depending on the type of language)
+            "MergeCompressModPrefix": "(Merge {Name})", // It's used in path generation so should not be translated (depending on the type of language)
+            "Overlay_Progress": "Шаг {Count}/{TotalCount}: {PercentDone}",
+            "DiskInfoOverlay": "Проверка доступного дискового пространства...",
+            "Options": {
+                "Title": "Режим",
+                "Basic": "Базовый",
+                "Compress": "Сжатие",
+                "Close": "Закрыть"
+            },
+            "Basic": {
+                "Overlay_Gathering_Mod_Info": "Сбор информации о модах...",
+                "Overlay_Writing_Files": "Объединение коллекции модов..."
+            },
+            "Compress": {
+                "Overlay_Gathering_Mod_Info": "Сбор информации о модах...",
+                "Overlay_Compressing_Files": "Объединение коллекции модов..."
+            },
+            "OverwritePrompt": {
+                "Title": "Перезаписать существующую коллекцию?",
+                "Message": "Объединение коллекции с указанным именем уже существует. Вы хотели бы её перезаписать?"
+            }
+        },
+        "PatchMod": {
+            "Title": "Патч-мод: {Status}",
+            "Enabled": "Активен",
+            "Disabled": "Отключен",
+            "NotAvailable": "Нет",
+            "DeletePrompt": {
+                "Title": "Удаление патча",
+                "Message": "Вы уверены, что хотите удалить патч-мод?"
+            },
+            "Actions": {
+                "Enable": "Активировать",
+                "Disable": "Отключить",
+                "Delete": "Удалить",
+                "Close": "Закрыть"
+            }
+        }
+    },
+    "Mod_Actions": {
+        "Apply": "Применить",
+        "Overlay_Apply_Message": "Сохранение коллекции...",
+        "ConflictSolver": {
+            "Conflict": "Разрешитель конфликтов",
+            "Overlay_Conflict_Solver_Loading_Definitions": "Загрузка определений модов...",
+            "Overlay_Conflict_Solver_Analyzing_Conflicts": "Анализ определений на предмет конфликтов...",
+            "Overlay_Conflict_Solver_Analyzing_Resolved_Conflicts": "Анализ разрешенных определений...",
+            "Overlay_Conflict_Solver_Replacing_Definitions": "Замена определений...",
+            "Overlay_Conflict_Solver_Progress": "Шаг {Count}/{TotalCount}: {PercentDone}",
+            "FirstUsePrompt": {
+                "Title": "Внимание",
+                "Message": "Разрешитель конфликтов - штука сложная. Он требует определенных знаний и опыта в исправлении кода. Пользователям небольших коллекций модов он вряд ли может понадобиться, а пользователям больших коллекций, в которых почти наверняка могут быть конфликты, стоит либо подумать над уменьшением своих сборок, либо над изучением темы исправления и совмещения модов, если такими знаниями они не обладают. Если в результате использования разрешителя конфликтов вы что-нибудь сломаете, то вам будет практически невозможно помочь."
+            }
+        },
+        "LaunchGame": {
+            "Launch": "Запустить игру",
+            "Resume": "Продолжить игру",
+            "Overlay": "Запуск игры...",
+            "LaunchError": {
+                "Title": "Ошибка",
+                "Message": "Не удалось запустить игру."
+            },
+            "NotSet": {
+                "Title": "Игра не задана",
+                "Message": "Irony не смог автоматически обнаружить игру для управления, укажите вручную путь к исполняемому файлу игры в опциях."
+            }
+        }
+    },
+    "Conflict_Solver": {
+        "Back": "Назад",
+        "ConflictedObjects": "Конфликтные объекты",
+        "LeftSide": "Левый",
+        "RightSide": "Правый",
+        "BinaryFile": "Двоичное содержимое",
+        "ImageInfo": "Ширина: {Width} Высота: {Height}",
+        "TakeLeft": "Взять левый",
+        "TakeRight": "Взять правый",
+        "OK": "OK",
+        "Cancel": "Отмена",
+        "Resolve": "Разрешить",
+        "Ignore": "Игнорировать",
+        "IgnoreRules": "Правила игнора",
+        "OverlayResolve": "Разрешение конфликта...",
+        "NextConflict": "След. конфликт",
+        "PrevConflict": "Пред. конфликт",
+        "ConflictCount": "Кол-во конфликтов: {Count}",
+        "PriorityReason": {
+            "FIOS": "(FIOS)",
+            "LIOS": "(LIOS)",
+            "Order": "(Load Order)",
+            "Override": "(Override)"
+        },
+        "InvalidConflicts": {
+            "Name": "Invalid",
+            "Error": "Ошибка на строке: {Line} символ: {Column} файл: {File}.{NewLine}Сообщите об ошибке автору мода: {ModName}.{NewLine}{NewLine}Ошибка:{NewLine}{NewLine}{Message}",
+            "ErrorNoLine": "Ошибка в файле: {File}.{NewLine}Сообщите об ошибке автору мода: {ModName}.{NewLine}{NewLine}Ошибка:{NewLine}{NewLine}{Message}",
+            "ContextMenu": {
+                "OpenFile": "Открыть файл",
+                "OpenDirectory": "Открыть папку",
+                "CustomPatch": "Копировать в свой патч"
+            }
+        },
+        "CompareSelectorContextMenu": {
+            "OpenFile": "Открыть файл",
+            "OpenDirectory": "Открыть папку"
+        },
+        "ContextMenu": {
+            "CopyAll": "Копировать все",
+            "CopyThis": "Копировать",
+            "CopyThisAfterLine": "Копировать после строки",
+            "CopyThisBeforeLine": "Копировать перед строкой",
+            "MoveUp": "Вверх",
+            "MoveDown": "Вниз",
+            "Edit": "Изменить",
+            "CopyText": "Копировать текст",
+            "Delete": "Удалить",
+            "Undo": "Отменить",
+            "Redo": "Вернуть",
+            "Editor": "Внешнее объединение"
+        },
+        "EditorContextMenu": {
+            "Copy": "Копировать",
+            "Cut": "Вырезать",
+            "Delete": "Удалить",
+            "Paste": "Вставить",
+            "Undo": "Отменить",
+            "Redo": "Вернуть",
+            "SelectAll": "Выбрать все"
+        },
+        "Modes": {
+            "Title": "Режим",
+            "Default": "Обычный",
+            "Advanced": "Расширенный",
+            "Close": "Закрыть"
+        },
+        "ModFilter": {
+            "Title": "Фильтр модов",
+            "Close": "Закрыть"
+        },
+        "ResetConflicts": {
+            "Title": "Отменить решение",
+            "Resolved": "Разрешен",
+            "Ignored": "Игнорирован",
+            "Custom": "Свое",
+            "Close": "Закрыть",
+            "Reset": "Сброс",
+            "Overlay": "Избавляемся от конфликтов..."
+        },
+        "DBSearch": {
+            "Title": "Поиск в базе данных",
+            "Watermark": "Введите запрос для поиска",
+            "Close": "закрыть",
+            "Clear": "X"
+        },
+        "CustomPatch": {
+            "Title": "Свой патч",
+            "Load": "Загрузить",
+            "Path": "Путь",
+            "Save": "Сохранить",
+            "Close": "Закрыть"
+        },
+        "Editor": {
+            "Title": "Внешнее объединение",
+            "Message": "Подтвердите, устраивает ли вас внешнее объединение."
+        }
+    },
+    "ConflictIgnore": {
+        "Save": "Сохранить",
+        "Cancel": "Отмена",
+        "Watermark": "Используйте # для комментариев. Новая строка - новое правило."
+    },
+    "Options": {
+        "Name": "Опции",
+        "Close": "Закрыть",
+        "NavigateTo": "...",
+        "Reset": "X",
+        "AppOptions": {
+            "Title": "Опции приложения",
+            "NotificationPosition": "Уведомления"
+        },
+        "Editor": {
+            "Title": "Опции внешнего редактора",
+            "EditorExecutable": "Путь к файлу .exe",
+            "EditorArgs": "Параметры запуска",
+            "EditorArgsPlaceholder": "Пример: leftFile:{Left} rightFile:{Right}"
+        },
+        "Game": {
+            "Title": "Опции игры",
+            "GameExecutable": "Путь к файлу .exe",
+            "UserDirectory": "Папка данных",
+            "GameArgs": "Параметры запуска",
+            "RefreshMods": "Обновлять дескрипторы перед игрой",
+            "CloseAfterLaunch": "Закрывать после запуска игры",
+            "AutoConfigure": "Настроить все...",
+            "CustomModPath": "Своя папка с модами"
+        },
+        "Updates": {
+            "Title": "Обновления",
+            "UpdateInfoTitle": "Инфо о релизе",
+            "AutoUpdates": "Проверять при запуске",
+            "CheckPrerelease": "Скачивать предрелизные версии",
+            "CheckForUpdates": "Проверить обновления",
+            "Install": "Установить",
+            "Version": "Версия",
+            "Overlay": {
+                "UpdateDownloading": "Загрузка обновления...",
+                "UpdateDownloadProgress": "{Progress}",
+                "UpdateInstalling": "Распаковка и подготовка к запуску..."
+            },
+            "Errors": {
+                "DownloadErrorTitle": "Ошибка обновления",
+                "DownloadErrorMessage": "Возникла ошибка при загрузке обновления, смотрите лог для подробностей."
+            },
+            "AutoUpdatePrompts": {
+                "Title": "Автопроверка обновлений",
+                "Message": "Irony спрашивает разрешения на проверку обновлений при запуске приложения. Вы хотели бы, чтобы Irony обновлялся автоматически??"
+            },
+            "UpdateNotification": {
+                "Title": "Есть обновления",
+                "Message": "Перейдите в меню опций, чтобы проверить обновления или нажмите на это сообщение."
+            }
+        },
+        "Dialog": {
+            "ExeTitle": "Укажите исполняемый файл игры",
+            "GameRootTitle": "Найти корневую папку игры",
+            "UserDirTitle": "Найти папку игровых данных",
+            "EditorTitle": "Укажите исполняемый файл редактора",
+            "CustomModPathTitle": "Укажите папку для модов"
+        },
+        "Prompts": {
+            "CustomModDirectory": {
+                "Title": "Папка не пуста",
+                "Message": "Текущая папка с вашими модами не пустая, если вы смените её на другую, то можете потерять оставшиеся в ней моды. Вы уверены, что хотите сменить папку?"
+            }
+        }
+    },
+    "Notifications": {
+        "CollectionCreated": {
+            "Title": "Коллекция создана",
+            "Message": "Коллекция {CollectionName} успешно создана."
+        },
+        "CollectionDeleted": {
+            "Title": "Коллекция удалена",
+            "Message": "Коллекция {CollectionName} успешно удалена."
+        },
+        "CollectionAndModDeleted": {
+            "Title": "Коллекция и объединение модов удалены",
+            "Message": "Коллекция {CollectionName} и объединение модов были удалены."
+        },
+        "CollectionExists": {
+            "Title": "Коллекция существует",
+            "Message": "Коллекция с названием {CollectionName} уже существует."
+        },
+        "CollectionExported": {
+            "Title": "Коллекция экспортирована",
+            "Message": "Коллекция {CollectionName} экспортирована."
+        },
+        "CollectionImported": {
+            "Title": "Коллекция импортирована",
+            "Message": "Коллекция {CollectionName} успешно импортирована."
+        },
+        "CollectionApplied": {
+            "Title": "Коллекция сохранена",
+            "Message": "Коллекция {CollectionName} успешно сохранена."
+        },
+        "CollectionNotApplied": {
+            "Title": "Коллекция не сохранена",
+            "Message": "Коллекция {CollectionName} не была сохранена."
+        },
+        "DescriptorsRefreshed": {
+            "Title": "Дескрипторы обновлены",
+            "Message": ""
+        },
+        "DescriptorsLocked": {
+            "Title": "Дескрипторы заблокированы",
+            "Message": ""
+        },
+        "DescriptorsUnlocked": {
+            "Title": "Дескрипторы разблокированы",
+            "Message": ""
+        },
+        "NewDescriptorsChecked": {
+            "Title": "Список обновлен",
+            "Message": "Список модов обновлен, если были установлены новые моды, они должны появиться здесь."
+        },
+        "CollectionRenamed": {
+            "Title": "Коллекция переименована",
+            "Message": "Коллекция успешно дублирована."
+        },
+        "CollectionDuplicated": {
+            "Title": "Коллекция дублирована",
+            "Message": "Коллекция успешно дублирована."
+        },
+        "CollectionMerged": {
+            "Title": "Коллекция объединена",
+            "Message": "Коллекция успешно объединена."
+        },
+        "ConflictSolverUpdate": {
+            "Title": "Новые данные в разрешителе конфликтов",
+            "Message": "Порядок загрузки или моды были обновлены. В случае отсутствия конфликтов просто вернитесь назад. Были применены автоматические исправления."
+        },
+        "NoUpdatesAvailable": {
+            "Title": "Обновлений нет",
+            "Message": "Вы используете последнюю версию."
+        },
+        "ReportExported": {
+            "Title": "Отчет выгружен",
+            "Message": ""
+        },
+        "ReportValid": {
+            "Title": "Хэш файлов совпадает",
+            "Message": "Похоже, что хэш в порядке."
+        },
+        "CustomPatchRerunConflictSolver": {
+            "Title": "Обновить разрешитель конфликтов",
+            "Message": "Разрешитель конфликтов должен быть обновлен, чтобы учесть новые добавленные патчи. Пожалуйста, перезайдите в разрешитель конфликтов."
+        },
+        "CollectionMergeNotEnoughSpace": {
+            "Title": "Недостаточно места",
+            "Message": "На диске недостаточно свободного места, чтобы произвести объединение."
+        }
+    },
+    "Mod_App_Actions": {
+        "OpenInSteam": "Открыть в Steam",
+        "Open": "Открыть ссылку на мод",
+        "Copy": "Копировать ссылку на мод",
+        "OpenInAssociatedApp": "Открыть папку/файл мода"
+    },
+    "Descriptor_Actions": {
+        "CheckNew": "Обновить список",
+        "Delete": "Удалить дескриптор и обновить список",
+        "Delete_All": "Удалить все дескрипторы и обновить список",
+        "Lock": "Блокировать",
+        "Lock_All": "Блокировать все",
+        "Unlock": "Разблокировать",
+        "Unlock_All": "Разблокировать все"
+    },
+    "Achievements": {
+        "AchievementCompatible": "Мод совместим с достижениями.",
+        "NotAchievementCompatible": "Мод несовместим с достижениями."
+    },
+    "Sorting": {
+        "Sort_A_Z": "↑",
+        "Sort_Z_A": "↓"
+    },
+    "Filter": {
+        "Clear": "X",
+        "UpArrow": "▲",
+        "DownArrow": "▼"
+    }
+}
