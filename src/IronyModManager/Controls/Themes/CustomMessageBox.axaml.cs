@@ -4,7 +4,7 @@
 // Created          : 03-11-2021
 //
 // Last Modified By : Mario
-// Last Modified On : 03-11-2021
+// Last Modified On : 05-21-2021
 // ***********************************************************************
 // <copyright file="CustomMessageBox.axaml.cs" company="Mario">
 //     Mario
@@ -16,6 +16,7 @@ using Avalonia.Markup.Xaml;
 using Avalonia.Markup.Xaml.Styling;
 using IronyModManager.DI;
 using IronyModManager.Services.Common;
+using IronyModManager.Shared;
 using MessageBox.Avalonia.Enums;
 using MessageBox.Avalonia.Views;
 
@@ -79,10 +80,22 @@ namespace IronyModManager.Controls.Themes
             var service = DIResolver.Get<IWindowStateService>();
             if (service.IsDefined() && !service.IsMaximized())
             {
-                var state = service.Get();
-                var pos = Position.WithX(calculateCenterPosition(state.LocationX.GetValueOrDefault(), state.Width.GetValueOrDefault(), Width));
-                pos = pos.WithY(calculateCenterPosition(state.LocationY.GetValueOrDefault(), state.Height.GetValueOrDefault(), Height));
-                Position = pos;
+                var oldPos = Position;
+                try
+                {
+                    var state = service.Get();
+                    var pos = Position.WithX(calculateCenterPosition(state.LocationX.GetValueOrDefault(), state.Width.GetValueOrDefault(), Width));
+                    pos = pos.WithY(calculateCenterPosition(state.LocationY.GetValueOrDefault(), state.Height.GetValueOrDefault(), Height));
+                    Position = pos;
+                }
+                catch (Exception ex)
+                {
+                    // Sometimes people change their monitor configuration or their system breaks down, so fix this
+                    var log = DIResolver.Get<ILogger>();
+                    log.Error(ex);
+                    WindowStartupLocation = Avalonia.Controls.WindowStartupLocation.CenterScreen;
+                    Position = oldPos;
+                }
             }
         }
 
