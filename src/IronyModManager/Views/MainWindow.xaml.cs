@@ -4,7 +4,7 @@
 // Created          : 01-10-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-07-2021
+// Last Modified On : 05-21-2021
 // ***********************************************************************
 // <copyright file="MainWindow.xaml.cs" company="Mario">
 //     Mario
@@ -144,32 +144,50 @@ namespace IronyModManager.Views
             var service = DIResolver.Get<IWindowStateService>();
             if (service.IsDefined() || service.IsMaximized())
             {
+                var oldPos = Position;
+                var oldHeight = Height;
+                var oldWidth = Width;
                 bool isValid(int value)
                 {
                     return value > 0 && !double.IsInfinity(value) && !double.IsNaN(value);
                 }
-                var state = service.Get();
-                if (isValid(state.Height.GetValueOrDefault()))
+                try
                 {
-                    Height = state.Height.GetValueOrDefault();
+                    var state = service.Get();
+                    if (isValid(state.Height.GetValueOrDefault()))
+                    {
+                        Height = state.Height.GetValueOrDefault();
+                    }
+                    if (isValid(state.Width.GetValueOrDefault()))
+                    {
+                        Width = state.Width.GetValueOrDefault();
+                    }
+                    WindowState = state.IsMaximized.GetValueOrDefault() ? WindowState.Maximized : WindowState.Normal;
+                    // Silly setup code isn't it?
+                    var pos = Position.WithX(state.LocationX.GetValueOrDefault());
+                    pos = pos.WithY(state.LocationY.GetValueOrDefault());
+                    var activeScreen = Screens.ScreenFromPoint(pos);
+                    var totalScreenX = Screens.All.Sum(p => p.WorkingArea.Width);
+                    var locX = state.LocationX.GetValueOrDefault() + state.Width.GetValueOrDefault() > totalScreenX ? totalScreenX - state.Width.GetValueOrDefault() : state.LocationX.GetValueOrDefault();
+                    var locY = state.LocationY.GetValueOrDefault() + state.Height.GetValueOrDefault() > activeScreen.WorkingArea.Height ? activeScreen.WorkingArea.Height - state.Height.GetValueOrDefault() : state.LocationY.GetValueOrDefault();
+                    if (isValid(locX) && isValid(locY))
+                    {
+                        pos = Position.WithX(locX);
+                        pos = pos.WithY(locY);
+                        Position = pos;
+                    }
                 }
-                if (isValid(state.Width.GetValueOrDefault()))
+                catch (Exception ex)
                 {
-                    Width = state.Width.GetValueOrDefault();
-                }
-                WindowState = state.IsMaximized.GetValueOrDefault() ? WindowState.Maximized : WindowState.Normal;
-                // Silly setup code isn't it?
-                var pos = Position.WithX(state.LocationX.GetValueOrDefault());
-                pos = pos.WithY(state.LocationY.GetValueOrDefault());
-                var activeScreen = Screens.ScreenFromPoint(pos);
-                var totalScreenX = Screens.All.Sum(p => p.WorkingArea.Width);
-                var locX = state.LocationX.GetValueOrDefault() + state.Width.GetValueOrDefault() > totalScreenX ? totalScreenX - state.Width.GetValueOrDefault() : state.LocationX.GetValueOrDefault();
-                var locY = state.LocationY.GetValueOrDefault() + state.Height.GetValueOrDefault() > activeScreen.WorkingArea.Height ? activeScreen.WorkingArea.Height - state.Height.GetValueOrDefault() : state.LocationY.GetValueOrDefault();
-                if (isValid(locX) && isValid(locY))
-                {
-                    pos = Position.WithX(locX);
-                    pos = pos.WithY(locY);
-                    Position = pos;
+                    // Sometimes people change their monitor configuration or their system breaks down, so fix this
+                    var log = DIResolver.Get<ILogger>();
+                    log.Error(ex);
+                    SizeToContent = SizeToContent.Manual;
+                    WindowStartupLocation = WindowStartupLocation.CenterScreen;
+                    WindowState = WindowState.Normal;
+                    Position = oldPos;
+                    Height = oldHeight;
+                    Width = oldWidth;
                 }
             }
         }
