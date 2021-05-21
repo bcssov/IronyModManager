@@ -103,22 +103,6 @@ namespace IronyModManager.Services.Tests
         }
 
         /// <summary>
-        /// Defines the test method Should_not_apply_any_language.
-        /// </summary>
-        [Fact]
-        public void Should_not_apply_any_language()
-        {
-            var resourceProvider = new Mock<IDefaultLocalizationResourceProvider>();
-            var preferencesService = new Mock<IPreferencesService>();
-            var locManager = new Mock<ILocalizationManager>();
-            SetupMockFailCase(locManager, resourceProvider, preferencesService);
-
-            var languageService = new LanguagesService(new Cache(), locManager.Object, resourceProvider.Object, preferencesService.Object, new Mock<IStorageProvider>().Object, new Mock<IMapper>().Object);
-            languageService.ApplySelected().Should().Be(false);
-            CurrentLocale.CultureName.Should().Be("en");
-        }
-
-        /// <summary>
         /// Shoulds the contain selected language.
         /// </summary>
         [Fact] 
@@ -137,23 +121,6 @@ namespace IronyModManager.Services.Tests
         }
 
         /// <summary>
-        /// Defines the test method Should_not_contain_selected_language.
-        /// </summary>
-        [Fact]
-        public void Should_not_contain_selected_language()
-        {
-            var resourceProvider = new Mock<IDefaultLocalizationResourceProvider>();
-            var preferencesService = new Mock<IPreferencesService>();
-            var locManager = new Mock<ILocalizationManager>();
-            SetupMockFailCase(locManager, resourceProvider, preferencesService);
-
-            var languageService = new LanguagesService(new Cache(), locManager.Object, resourceProvider.Object, preferencesService.Object, new Mock<IStorageProvider>().Object, new Mock<IMapper>().Object);
-            var result = languageService.Get();
-            result.Count().Should().Be(2);
-            result.Count(p => p.IsSelected).Should().Be(0);            
-        }
-
-        /// <summary>
         /// Defines the test method Should_return_selected_language.
         /// </summary>
         [Fact]
@@ -167,22 +134,6 @@ namespace IronyModManager.Services.Tests
             var languageService = new LanguagesService(new Cache(), locManager.Object, resourceProvider.Object, preferencesService.Object, new Mock<IStorageProvider>().Object, new Mock<IMapper>().Object);
             var result = languageService.GetSelected();            
             result.Abrv.Should().Be("en");
-        }
-
-        /// <summary>
-        /// Defines the test method Should_not_return_any_language.
-        /// </summary>
-        [Fact]
-        public void Should_not_return_any_language()
-        {
-            var resourceProvider = new Mock<IDefaultLocalizationResourceProvider>();
-            var preferencesService = new Mock<IPreferencesService>();
-            var locManager = new Mock<ILocalizationManager>();
-            SetupMockFailCase(locManager, resourceProvider, preferencesService);
-
-            var languageService = new LanguagesService(new Cache(), locManager.Object, resourceProvider.Object, preferencesService.Object, new Mock<IStorageProvider>().Object, new Mock<IMapper>().Object);
-            var result = languageService.GetSelected();
-            result.Should().BeNull();
         }
 
         /// <summary>

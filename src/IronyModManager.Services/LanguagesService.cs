@@ -4,7 +4,7 @@
 // Created          : 01-20-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-25-2021
+// Last Modified On : 05-21-2021
 // ***********************************************************************
 // <copyright file="LanguagesService.cs" company="Mario">
 //     Mario
@@ -107,17 +107,8 @@ namespace IronyModManager.Services
         public virtual bool ApplySelected()
         {
             var language = GetSelected();
-            bool result = false;
-            if (language != null)
-            {
-                CurrentLocale.SetCurrent(language.Abrv);
-                result = true;
-            }
-            else
-            {
-                CurrentLocale.SetCurrent(Shared.Constants.DefaultAppCulture);
-            }
-            return result;
+            CurrentLocale.SetCurrent(language.Abrv);
+            return true;
         }
 
         /// <summary>
@@ -135,6 +126,8 @@ namespace IronyModManager.Services
             {
                 languages.Add(InitModel(currentLocale, locale));
             }
+
+            EnsureSelected(languages);
 
             return languages.OrderBy(p => p.Abrv);
         }
@@ -218,7 +211,7 @@ namespace IronyModManager.Services
         /// <param name="languages">The languages.</param>
         /// <param name="selectedLanguage">The selected language.</param>
         /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
-        /// <exception cref="ArgumentNullException">$"{nameof(languages)} or {nameof(selectedLanguage)}.</exception>
+        /// <exception cref="ArgumentNullException"></exception>
         public virtual bool SetSelected(IEnumerable<ILanguage> languages, ILanguage selectedLanguage)
         {
             if (languages == null || !languages.Any() || selectedLanguage == null)
@@ -254,6 +247,18 @@ namespace IronyModManager.Services
         protected virtual string ConstructFontRegionCacheKey(ILanguage language)
         {
             return $"{FontRegion}-{language.Abrv}";
+        }
+
+        /// <summary>
+        /// Ensures the selected.
+        /// </summary>
+        /// <param name="languages">The languages.</param>
+        protected virtual void EnsureSelected(IEnumerable<ILanguage> languages)
+        {
+            if (!languages.Any(p => p.IsSelected))
+            {
+                languages.FirstOrDefault(p => p.Abrv.Equals(Shared.Constants.DefaultAppCulture)).IsSelected = true;
+            }
         }
 
         /// <summary>
