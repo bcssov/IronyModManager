@@ -4,7 +4,7 @@
 // Created          : 05-09-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-17-2021
+// Last Modified On : 05-24-2021
 // ***********************************************************************
 // <copyright file="ModifyCollectionControlViewModel.cs" company="Mario">
 //     Mario
@@ -537,6 +537,7 @@ namespace IronyModManager.ViewModels.Controls
                         }));
                     }).ConfigureAwait(false);
                     copy.Mods = mergeMods.Select(p => p.DescriptorFile).ToList();
+                    copy.PatchModEnabled = ActiveCollection.PatchModEnabled;
 
                     await TriggerOverlayAsync(id, false);
                     freeSpaceCheckHandler?.Dispose();
