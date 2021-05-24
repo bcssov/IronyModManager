@@ -4,7 +4,7 @@
 // Created          : 06-19-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 05-24-2021
+// Last Modified On : 05-25-2021
 // ***********************************************************************
 // <copyright file="ModMergeService.cs" company="Mario">
 //     Mario
@@ -49,7 +49,7 @@ namespace IronyModManager.Services
         /// <summary>
         /// The maximum zips to merge
         /// </summary>
-        private const int MaxZipsToMerge = 5;
+        private const int MaxZipsToMerge = 8;
 
         /// <summary>
         /// The zip lock
@@ -354,7 +354,7 @@ namespace IronyModManager.Services
 
             var exportedMods = new List<IMod>();
             using var semaphore = new SemaphoreSlim(MaxZipsToMerge);
-            var zipTasks = collectionMods.Where(p => p.Files != null).Select(async collectionMod =>
+            var zipTasks = collectionMods.AsParallel().Where(p => p.Files != null).Select(async collectionMod =>
             {
                 await semaphore.WaitAsync();
                 try
