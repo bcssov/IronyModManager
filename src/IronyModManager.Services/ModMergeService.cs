@@ -4,7 +4,7 @@
 // Created          : 06-19-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-25-2021
+// Last Modified On : 05-25-2021
 // ***********************************************************************
 // <copyright file="ModMergeService.cs" company="Mario">
 //     Mario
@@ -49,7 +49,7 @@ namespace IronyModManager.Services
         /// <summary>
         /// The maximum zips to merge
         /// </summary>
-        private const int MaxZipsToMerge = 4;
+        private const int MaxZipsToMerge = 8;
 
         /// <summary>
         /// The zip lock
@@ -211,8 +211,22 @@ namespace IronyModManager.Services
             var collection = GetAllModCollectionsInternal().FirstOrDefault(p => p.IsSelected);
             var patchName = GenerateCollectionPatchName(collection.Name);
             var patchMod = allMods.FirstOrDefault(p => p.Name.Equals(patchName));
-            if (patchMod != null)
+            if (patchMod == null)
             {
+                if (await ModWriter.ModDirectoryExistsAsync(new ModWriterParameters()
+                {
+                    RootDirectory = GetPatchModDirectory(game, patchName)
+                }))
+                {
+                    patchMod = GeneratePatchModDescriptor(allMods, game, patchName);
+                }
+            }
+            if (patchMod != null && collection.PatchModEnabled)
+            {
+                if (patchMod.Files == null || !patchMod.Files.Any())
+                {
+                    await PopulateModFilesInternalAsync(new List<IMod>() { patchMod });
+                }
                 collectionMods.Add(patchMod);
             }
 
@@ -313,7 +327,6 @@ namespace IronyModManager.Services
 
             var collection = GetAllModCollectionsInternal().FirstOrDefault(p => p.IsSelected);
             var patchName = GenerateCollectionPatchName(collection.Name);
-            var patchMod = allMods.FirstOrDefault(p => p.Name.Equals(patchName));
 
             await messageBus.PublishAsync(new ModCompressMergeProgressEvent(1, 0));
             await PopulateModFilesInternalAsync(collectionMods);
@@ -341,7 +354,7 @@ namespace IronyModManager.Services
 
             var exportedMods = new List<IMod>();
             using var semaphore = new SemaphoreSlim(MaxZipsToMerge);
-            var zipTasks = collectionMods.Where(p => p.Files != null).Select(async collectionMod =>
+            var zipTasks = collectionMods.AsParallel().Where(p => p.Files != null).Select(async collectionMod =>
             {
                 await semaphore.WaitAsync();
                 try
