@@ -10,7 +10,7 @@ Irony Mod Manager is a new advanced mod manager for Paradox Games, it started ou
 Check out the detailed overview on the [wiki](https://github.com/bcssov/IronyModManager/wiki).
 
 ### Download
-* Latest stable version: [v1.16.35](https://github.com/bcssov/IronyModManager/releases/tag/v1.16.30)
+* Latest stable version: [v1.16.35](https://github.com/bcssov/IronyModManager/releases/tag/v1.16.35)
 
 ### Windows Defender flagging Irony?
 It's a false positive in an external component that Irony is using and it affects only versions <=1.16.17 which use this falsely flagged version. In this case you have 2 options:
