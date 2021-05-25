@@ -4,56 +4,68 @@
 		<title>Irony Mod Manager</title>
 		<language>en</language>
 		<item>
-			<title>1.16.30</title>
+			<title>1.16.35</title>
 			<description>RELEASE INFO:
-* Fix #258
-* Add Russian translation (by Vitalyudin)
+* Fix #260
+* Upgrade dependencies
+* Fix CTD when deselecting all mods
+* Ensure that merge respects enabled\disabled flag
+* Speed compress merge up a notch ;)
 
 CHANGES FROM v1.15:
 * Updated dependencies
 * Small fixes
 * Add option to override appSettings via appSettings.override.json</description>
-			<pubDate>Fri, 21 May 2021 05:30:06 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.16.30/osx-x64.rar" sparkle:version="1.16.30.41286" sparkle:shortVersionString="1.16.30" length="69179609" sparkle:os="osx" type="application/vnd.rar" sparkle:signature="S2i9Wh5GAXKQiS2m/nT1EtYM2PmQJjOs+lIz1Sl0nUtdto6QZCfKwJviBKUUBwc1x7Q4cWW3sHncK6riMMDTCA=="/>
+			<pubDate>Tue, 25 May 2021 03:05:49 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.16.35/osx-x64.rar" sparkle:version="1.16.35.34271" sparkle:shortVersionString="1.16.35" length="69206199" sparkle:os="osx" type="application/vnd.rar" sparkle:signature="RWSNX2Xb3xE05DlwEuh+n/Z+6qGUqWF5gpuQfgtRPBenxGxz+EfznSvsB3Q1/haYAwdqz/wFK4omHrTq0VgyCw=="/>
 		</item>
 		<item>
-			<title>1.16.30</title>
+			<title>1.16.35</title>
 			<description>RELEASE INFO:
-* Fix #258
-* Add Russian translation (by Vitalyudin)
+* Fix #260
+* Upgrade dependencies
+* Fix CTD when deselecting all mods
+* Ensure that merge respects enabled\disabled flag
+* Speed compress merge up a notch ;)
 
 CHANGES FROM v1.15:
 * Updated dependencies
 * Small fixes
 * Add option to override appSettings via appSettings.override.json</description>
-			<pubDate>Fri, 21 May 2021 05:30:14 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.16.30/win-x64-setup.rar" sparkle:version="1.16.30.41286" sparkle:shortVersionString="1.16.30" length="59574400" sparkle:os="windows" type="application/vnd.rar" sparkle:signature="bIVtQfonC2iL1OZomh3MEn6pH5VY1yzXyGJ/bRJKlZUmu4goX0yf4yjWLUljANS8UTtBWKpmRAkoNATkyb9KCw=="/>
+			<pubDate>Tue, 25 May 2021 03:05:57 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.16.35/win-x64-setup.rar" sparkle:version="1.16.35.34271" sparkle:shortVersionString="1.16.35" length="59608379" sparkle:os="windows" type="application/vnd.rar" sparkle:signature="uXq8ONloNBDeuVlXQeEQ5u7Q13RbzvQ9e2kPv/pRyE5MpLwlWaYYLCHJobJbXyxA9HLjaMWCjrmePz90iI2aDA=="/>
 		</item>
 		<item>
-			<title>1.16.30</title>
+			<title>1.16.35</title>
 			<description>RELEASE INFO:
-* Fix #258
-* Add Russian translation (by Vitalyudin)
+* Fix #260
+* Upgrade dependencies
+* Fix CTD when deselecting all mods
+* Ensure that merge respects enabled\disabled flag
+* Speed compress merge up a notch ;)
 
 CHANGES FROM v1.15:
 * Updated dependencies
 * Small fixes
 * Add option to override appSettings via appSettings.override.json</description>
-			<pubDate>Fri, 21 May 2021 05:30:10 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.16.30/win-x64.rar" sparkle:version="1.16.30.41286" sparkle:shortVersionString="1.16.30" length="71870838" sparkle:os="windows" type="application/vnd.rar" sparkle:signature="ZgiXkONLIIOwhRMuu7nKPCLssuItV8rBuJzxuTqaAd3d3GSPgH2DJvxch555dRAkfWxGZtjYzY2C7J5mIeRDBQ=="/>
+			<pubDate>Tue, 25 May 2021 03:05:53 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.16.35/win-x64.rar" sparkle:version="1.16.35.34271" sparkle:shortVersionString="1.16.35" length="71896729" sparkle:os="windows" type="application/vnd.rar" sparkle:signature="HYaVFgh1FjNJCVU8WOl/95p4C86+WI9CB5MDbJlgG97BGoQSnCdjFajQklp3oNDKOnEhF0qP9hAw8jQ2UDqjBw=="/>
 		</item>
 		<item>
-			<title>1.16.30</title>
+			<title>1.16.35</title>
 			<description>RELEASE INFO:
-* Fix #258
-* Add Russian translation (by Vitalyudin)
+* Fix #260
+* Upgrade dependencies
+* Fix CTD when deselecting all mods
+* Ensure that merge respects enabled\disabled flag
+* Speed compress merge up a notch ;)
 
 CHANGES FROM v1.15:
 * Updated dependencies
 * Small fixes
 * Add option to override appSettings via appSettings.override.json</description>
-			<pubDate>Fri, 21 May 2021 05:30:03 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.16.30/linux-x64.zip" sparkle:version="1.16.30.41286" sparkle:shortVersionString="1.16.30" length="85606630" sparkle:os="linux" type="application/zip" sparkle:signature="RxLypFT/3nWsz/TLE2w0xSU/5wqGH7yo4sE+YFMYOKIxg5D0J17eyQ67ubZs3nGokoq2yu55NTglSvzcwmgVBw=="/>
+			<pubDate>Tue, 25 May 2021 03:05:47 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.16.35/linux-x64.zip" sparkle:version="1.16.35.34271" sparkle:shortVersionString="1.16.35" length="85654411" sparkle:os="linux" type="application/zip" sparkle:signature="20D9p4jQpFnSnAOLnBmwp5x7h2tpwTzVHHNLBX32D9u5jzAtAmGQgTCAm2Lq+uj7rCUmmnvCmcC6gCV7ynDxBA=="/>
 		</item>
 	</channel>
 </rss>
