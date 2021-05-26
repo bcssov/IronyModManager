@@ -4,7 +4,7 @@
 // Created          : 03-18-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-25-2021
+// Last Modified On : 05-26-2021
 // ***********************************************************************
 // <copyright file="MainConflictSolverViewModel.cs" company="Mario">
 //     Mario
@@ -669,6 +669,10 @@ namespace IronyModManager.ViewModels
                 DatabaseSearch.SetParameters(s);
                 CustomConflicts.SetParameters(s, SelectedModCollection.Name);
                 MergeViewer.InitParameters();
+                if (ModFilter.IsActivated)
+                {
+                    ModFilter.SetConflictResult(Conflicts, SelectedModsOrder.ToList(), SelectedModCollection.Name);
+                }
             }).DisposeWith(disposables);
 
             this.WhenAnyValue(v => v.SelectedParentConflict).Subscribe(s =>
