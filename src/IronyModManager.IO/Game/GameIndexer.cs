@@ -14,7 +14,9 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.IO.Compression;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 using IronyModManager.DI;
 using IronyModManager.IO.Common;
@@ -34,6 +36,11 @@ namespace IronyModManager.IO.Game
     public class GameIndexer : IGameIndexer
     {
         #region Fields
+
+        /// <summary>
+        /// The extension
+        /// </summary>
+        private const string Extension = ".irony";
 
         /// <summary>
         /// The version file
@@ -73,7 +80,7 @@ namespace IronyModManager.IO.Game
             var fullPath = Path.Combine(storagePath, game.Type, VersionFile);
             if (File.Exists(fullPath))
             {
-                var storedVersion = (await File.ReadAllTextAsync(fullPath)).ReplaceNewLine().Trim();
+                var storedVersion = (await File.ReadAllTextAsync(fullPath) ?? string.Empty).ReplaceNewLine().Trim();
                 return storedVersion.Equals(version ?? string.Empty);
             }
             return false;
@@ -92,11 +99,19 @@ namespace IronyModManager.IO.Game
             var fullPath = Path.Combine(storagePath, game.Type, path);
             if (File.Exists(fullPath))
             {
-                var text = await File.ReadAllTextAsync(fullPath);
-                if (!string.IsNullOrWhiteSpace(text))
+                var bytes = await File.ReadAllBytesAsync(fullPath);
+                if (bytes.Any())
                 {
-                    var result = JsonDISerializer.Deserialize<List<IDefinition>>(text);
-                    return result;
+                    using var source = new MemoryStream(bytes);
+                    using var destination = new MemoryStream();
+                    using var compress = new DeflateStream(source, CompressionMode.Decompress);
+                    await compress.CopyToAsync(destination);
+                    var text = Encoding.UTF8.GetString(destination.ToArray());
+                    if (!string.IsNullOrWhiteSpace(text))
+                    {
+                        var result = JsonDISerializer.Deserialize<List<IDefinition>>(text);
+                        return result;
+                    }
                 }
             }
             return null;
@@ -126,8 +141,14 @@ namespace IronyModManager.IO.Game
             {
                 File.Delete(fullPath);
             }
-            var serialized = JsonDISerializer.Serialize(definitions.ToList());
-            await File.WriteAllTextAsync(fullPath, serialized);
+            var json = JsonDISerializer.Serialize(definitions.ToList());
+            var bytes = Encoding.UTF8.GetBytes(json);
+            using var source = new MemoryStream(bytes);
+            using var destination = new MemoryStream();
+            using var compress = new DeflateStream(destination, CompressionMode.Compress, true);
+            await source.CopyToAsync(compress);
+            await compress.FlushAsync();
+            await File.WriteAllBytesAsync(fullPath, destination.ToArray());
             return true;
         }
 
@@ -156,7 +177,7 @@ namespace IronyModManager.IO.Game
         /// <returns>System.String.</returns>
         protected virtual string SanitizePath(string path)
         {
-            return path.Replace("\\", ".").Replace("/", ".").GenerateValidFileName();
+            return path.Replace("\\", ".").Replace("/", ".").GenerateValidFileName() + Extension;
         }
 
         #endregion Methods
