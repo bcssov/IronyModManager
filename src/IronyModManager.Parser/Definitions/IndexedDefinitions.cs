@@ -4,7 +4,7 @@
 // Created          : 02-16-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 12-08-2020
+// Last Modified On : 05-27-2021
 // ***********************************************************************
 // <copyright file="IndexedDefinitions.cs" company="Mario">
 //     Mario
@@ -46,6 +46,11 @@ namespace IronyModManager.Parser.Definitions
         /// The definitions
         /// </summary>
         private ConcurrentIndexedList<IDefinition> definitions;
+
+        /// <summary>
+        /// The directory keys
+        /// </summary>
+        private HashSet<string> directoryKeys;
 
         /// <summary>
         /// The disposed
@@ -97,6 +102,7 @@ namespace IronyModManager.Parser.Definitions
             typeAndIdKeys = new HashSet<string>();
             typeKeys = new HashSet<string>();
             allFileKeys = new HashSet<string>();
+            directoryKeys = new HashSet<string>();
             childHierarchicalDefinitions = new ConcurrentDictionary<string, ConcurrentIndexedList<IHierarchicalDefinitions>>();
             mainHierarchalDefinitions = new ConcurrentIndexedList<IHierarchicalDefinitions>(nameof(IHierarchicalDefinitions.Name));
         }
@@ -116,6 +122,7 @@ namespace IronyModManager.Parser.Definitions
             MapKeys(typeKeys, definition.Type);
             MapKeys(typeAndIdKeys, ConstructKey(definition.Type, definition.Id));
             MapKeys(allFileKeys, definition.FileCI);
+            MapKeys(directoryKeys, definition.ParentDirectory);
             if (!string.IsNullOrWhiteSpace(definition.DiskFile))
             {
                 MapKeys(allFileKeys, definition.DiskFile.ToLowerInvariant());
@@ -147,6 +154,8 @@ namespace IronyModManager.Parser.Definitions
             disposed = true;
             definitions.Clear();
             definitions = null;
+            directoryKeys.Clear();
+            directoryKeys = null;
             fileKeys.Clear();
             fileKeys = null;
             typeAndIdKeys.Clear();
@@ -179,6 +188,15 @@ namespace IronyModManager.Parser.Definitions
         public IEnumerable<IDefinition> GetAll()
         {
             return new HashSet<IDefinition>(definitions);
+        }
+
+        /// <summary>
+        /// Gets all directory keys.
+        /// </summary>
+        /// <returns>IEnumerable&lt;System.String&gt;.</returns>
+        public IEnumerable<string> GetAllDirectoryKeys()
+        {
+            return directoryKeys.ToHashSet();
         }
 
         /// <summary>

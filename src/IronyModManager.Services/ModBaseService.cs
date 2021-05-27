@@ -4,7 +4,7 @@
 // Created          : 04-07-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-25-2021
+// Last Modified On : 05-27-2021
 // ***********************************************************************
 // <copyright file="ModBaseService.cs" company="Mario">
 //     Mario
@@ -16,6 +16,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 using AutoMapper;
 using IronyModManager.DI;
@@ -28,6 +29,7 @@ using IronyModManager.Shared;
 using IronyModManager.Shared.Cache;
 using IronyModManager.Shared.Models;
 using IronyModManager.Storage.Common;
+using ValueType = IronyModManager.Shared.Models.ValueType;
 
 namespace IronyModManager.Services
 {
@@ -659,6 +661,99 @@ namespace IronyModManager.Services
                 return modName.StartsWith(PatchCollectionName);
             }
             return false;
+        }
+
+        /// <summary>
+        /// Determines whether [is valid definition type] [the specified definition].
+        /// </summary>
+        /// <param name="definition">The definition.</param>
+        /// <returns><c>true</c> if [is valid definition type] [the specified definition]; otherwise, <c>false</c>.</returns>
+        protected virtual bool IsValidDefinitionType(IDefinition definition)
+        {
+            return definition != null && definition.ValueType != ValueType.Variable &&
+                definition.ValueType != ValueType.Namespace &&
+                definition.ValueType != ValueType.Invalid &&
+                definition.ValueType != ValueType.EmptyFile;
+        }
+
+        /// <summary>
+        /// Merges the definitions.
+        /// </summary>
+        /// <param name="definitions">The definitions.</param>
+        protected virtual void MergeDefinitions(IEnumerable<IDefinition> definitions)
+        {
+            static void appendLine(StringBuilder sb, IEnumerable<string> lines)
+            {
+                if (lines?.Count() > 0)
+                {
+                    sb.AppendLine(string.Join(Environment.NewLine, lines));
+                }
+            }
+            static string mergeCode(string codeTag, string separator, IEnumerable<string> lines)
+            {
+                if (Shared.Constants.CodeSeparators.ClosingSeparators.Map.ContainsKey(separator))
+                {
+                    var closingTag = Shared.Constants.CodeSeparators.ClosingSeparators.Map[separator];
+                    var sb = new StringBuilder();
+                    sb.AppendLine($"{codeTag} = {separator}");
+                    foreach (var item in lines)
+                    {
+                        var splitLines = item.SplitOnNewLine();
+                        foreach (var split in splitLines)
+                        {
+                            sb.AppendLine($"{new string(' ', 4)}{split}");
+                        }
+                    }
+                    sb.Append(closingTag);
+                    return sb.ToString();
+                }
+                else
+                {
+                    var sb = new StringBuilder();
+                    sb.AppendLine($"{codeTag}{separator}");
+                    foreach (var item in lines)
+                    {
+                        var splitLines = item.SplitOnNewLine();
+                        foreach (var split in splitLines)
+                        {
+                            sb.AppendLine($"{new string(' ', 4)}{split}");
+                        }
+                    }
+                    return sb.ToString();
+                }
+            }
+
+            if (definitions?.Count() > 0)
+            {
+                var otherDefinitions = definitions.Where(p => IsValidDefinitionType(p));
+                var variableDefinitions = definitions.Where(p => !IsValidDefinitionType(p));
+                if (variableDefinitions.Any())
+                {
+                    foreach (var definition in otherDefinitions)
+                    {
+                        var originalCode = definition.OriginalCode.ReplaceTabs().ReplaceNewLine().Split(" ", StringSplitOptions.RemoveEmptyEntries);
+                        var namespaces = variableDefinitions.Where(p => p.ValueType == ValueType.Namespace);
+                        var variables = variableDefinitions.Where(p => originalCode.Contains(p.Id));
+                        var allVars = namespaces.Concat(variables);
+                        if (allVars.Any())
+                        {
+                            definition.Variables = allVars.ToList();
+                        }
+                        if (string.IsNullOrWhiteSpace(definition.CodeTag))
+                        {
+                            StringBuilder sb = new StringBuilder();
+                            appendLine(sb, namespaces.Select(p => p.Code));
+                            appendLine(sb, variables.Select(p => p.Code));
+                            appendLine(sb, new List<string> { definition.Code });
+                            definition.Code = sb.ToString();
+                        }
+                        else
+                        {
+                            definition.Code = mergeCode(definition.CodeTag, definition.CodeSeparator, namespaces.Select(p => p.OriginalCode).Concat(variables.Select(p => p.OriginalCode)).Concat(new List<string>() { definition.OriginalCode }));
+                        }
+                    }
+                }
+            }
         }
 
         /// <summary>

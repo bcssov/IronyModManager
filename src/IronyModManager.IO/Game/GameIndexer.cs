@@ -74,7 +74,7 @@ namespace IronyModManager.IO.Game
             if (File.Exists(fullPath))
             {
                 var storedVersion = (await File.ReadAllTextAsync(fullPath)).ReplaceNewLine().Trim();
-                return storedVersion.Equals(version);
+                return storedVersion.Equals(version ?? string.Empty);
             }
             return false;
         }
@@ -116,7 +116,7 @@ namespace IronyModManager.IO.Game
             {
                 throw new ArgumentException("Definitions type differ.");
             }
-            if (definitions == null || definitions.Count() == 0)
+            if (definitions == null || !definitions.Any())
             {
                 return false;
             }
@@ -129,6 +129,24 @@ namespace IronyModManager.IO.Game
             var serialized = JsonDISerializer.Serialize(definitions.ToList());
             await File.WriteAllTextAsync(fullPath, serialized);
             return true;
+        }
+
+        /// <summary>
+        /// write version as an asynchronous operation.
+        /// </summary>
+        /// <param name="storagePath">The storage path.</param>
+        /// <param name="game">The game.</param>
+        /// <param name="version">The version.</param>
+        /// <returns>Task&lt;System.Boolean&gt;.</returns>
+        public virtual async Task<bool> WriteVersionAsync(string storagePath, IGame game, string version)
+        {
+            var fullPath = Path.Combine(storagePath, game.Type, VersionFile);
+            if (File.Exists(fullPath))
+            {
+                DiskOperations.DeleteFile(fullPath);
+                await File.WriteAllTextAsync(fullPath, version);
+            }
+            return false;
         }
 
         /// <summary>

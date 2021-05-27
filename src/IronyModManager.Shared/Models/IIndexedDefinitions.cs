@@ -4,7 +4,7 @@
 // Created          : 02-16-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 12-07-2020
+// Last Modified On : 05-27-2021
 // ***********************************************************************
 // <copyright file="IIndexedDefinitions.cs" company="Mario">
 //     Mario
@@ -44,6 +44,12 @@ namespace IronyModManager.Shared.Models
         /// </summary>
         /// <returns>IEnumerable&lt;IDefinition&gt;.</returns>
         IEnumerable<IDefinition> GetAll();
+
+        /// <summary>
+        /// Gets all directory keys.
+        /// </summary>
+        /// <returns>IEnumerable&lt;System.String&gt;.</returns>
+        IEnumerable<string> GetAllDirectoryKeys();
 
         /// <summary>
         /// Gets all file keys.

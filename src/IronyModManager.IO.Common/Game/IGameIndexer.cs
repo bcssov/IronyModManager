@@ -62,6 +62,15 @@ namespace IronyModManager.IO.Common.Game
         /// <returns>Task&lt;System.Boolean&gt;.</returns>
         Task<bool> SaveDefinitionsAsync(string storagePath, IGame game, IEnumerable<IDefinition> definitions);
 
+        /// <summary>
+        /// Writes the version asynchronous.
+        /// </summary>
+        /// <param name="storagePath">The storage path.</param>
+        /// <param name="game">The game.</param>
+        /// <param name="version">The version.</param>
+        /// <returns>Task&lt;System.Boolean&gt;.</returns>
+        Task<bool> WriteVersionAsync(string storagePath, IGame game, string version);
+
         #endregion Methods
     }
 }

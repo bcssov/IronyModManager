@@ -4,7 +4,7 @@
 // Created          : 02-23-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-19-2021
+// Last Modified On : 05-27-2021
 // ***********************************************************************
 // <copyright file="Reader.cs" company="Mario">
 //     Mario
@@ -112,6 +112,12 @@ namespace IronyModManager.IO.Readers
             return null;
         }
 
+        /// <summary>
+        /// Gets the image stream asynchronous.
+        /// </summary>
+        /// <param name="rootPath">The root path.</param>
+        /// <param name="file">The file.</param>
+        /// <returns>Task&lt;MemoryStream&gt;.</returns>
         public virtual Task<MemoryStream> GetImageStreamAsync(string rootPath, string file)
         {
             if (Constants.ImageExtensions.Any(p => file.EndsWith(p, StringComparison.OrdinalIgnoreCase)))
@@ -122,12 +128,6 @@ namespace IronyModManager.IO.Readers
             return Task.FromResult((MemoryStream)null);
         }
 
-        /// <summary>
-        /// Gets the image stream asynchronous.
-        /// </summary>
-        /// <param name="rootPath">The root path.</param>
-        /// <param name="file">The file.</param>
-        /// <returns>Task&lt;MemoryStream&gt;.</returns>
         /// <summary>
         /// Gets the stream.
         /// </summary>
