@@ -51,7 +51,7 @@
     <PackageReference Include="Castle.Core" Version="4.4.1" />
     <PackageReference Include="Microsoft.DotNet.PlatformAbstractions" Version="$(MicrosoftDotNetPlatformAbstractionsVersion)" allowedVersions="$(MicrosoftDotNetPlatformAbstractionsVersion)" />
     <PackageReference Include="Microsoft.Extensions.DependencyModel" Version="$(MicrosoftExtensionsDependencyModelVersion)" allowedVersions="$(MicrosoftExtensionsDependencyModelVersion)" />
-    <PackageReference Include="Nerdbank.GitVersioning" Version="3.4.194">
+    <PackageReference Include="Nerdbank.GitVersioning" Version="3.4.203">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
