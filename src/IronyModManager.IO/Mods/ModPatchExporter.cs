@@ -4,7 +4,7 @@
 // Created          : 03-31-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-30-2021
+// Last Modified On : 05-27-2021
 // ***********************************************************************
 // <copyright file="ModPatchExporter.cs" company="Mario">
 //     Mario
@@ -77,6 +77,11 @@ namespace IronyModManager.IO.Mods
         /// The state name
         /// </summary>
         private const string StateName = "state" + Shared.Constants.JsonExtension;
+
+        /// <summary>
+        /// The state temporary
+        /// </summary>
+        private const string StateTemp = StateName + ".tmp";
 
         /// <summary>
         /// The write lock
@@ -893,14 +898,8 @@ namespace IronyModManager.IO.Mods
             await messageBus.PublishAsync(new WritingStateOperationEvent(writeCounter <= 0));
             var statePath = Path.Combine(path, StateName);
             var backupPath = Path.Combine(path, StateBackup);
-            if (File.Exists(backupPath))
-            {
-                DiskOperations.DeleteFile(backupPath);
-            }
-            if (File.Exists(statePath))
-            {
-                File.Copy(statePath, backupPath);
-            }
+            var stateTemp = Path.Combine(path, StateTemp);
+
             await Task.Factory.StartNew(async () =>
             {
                 var retry = new RetryStrategy();
@@ -955,12 +954,32 @@ namespace IronyModManager.IO.Mods
                     Directory.CreateDirectory(dirPath);
                 }
 
+                if (File.Exists(stateTemp))
+                {
+                    DiskOperations.DeleteFile(stateTemp);
+                }
                 var serialized = JsonDISerializer.Serialize(patchState);
                 await retry.RetryActionAsync(async () =>
                 {
-                    await File.WriteAllTextAsync(statePath, serialized);
+                    await File.WriteAllTextAsync(stateTemp, serialized);
                     return true;
                 });
+                if (File.Exists(backupPath))
+                {
+                    DiskOperations.DeleteFile(backupPath);
+                }
+                if (File.Exists(statePath))
+                {
+                    File.Copy(statePath, backupPath);
+                }
+                if (File.Exists(statePath))
+                {
+                    DiskOperations.DeleteFile(statePath);
+                }
+                if (File.Exists(stateTemp))
+                {
+                    File.Copy(stateTemp, statePath);
+                }
                 writeCounter--;
                 await messageBus.PublishAsync(new WritingStateOperationEvent(writeCounter <= 0));
                 mutex.Dispose();
