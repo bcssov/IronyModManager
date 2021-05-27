@@ -15,6 +15,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using IronyModManager.Models.Common;
 using IronyModManager.Shared.Models;
 
 namespace IronyModManager.IO.Common.Game
@@ -27,20 +28,39 @@ namespace IronyModManager.IO.Common.Game
         #region Methods
 
         /// <summary>
+        /// Clears the definition asynchronous.
+        /// </summary>
+        /// <param name="storagePath">The storage path.</param>
+        /// <param name="game">The game.</param>
+        /// <returns>Task&lt;System.Boolean&gt;.</returns>
+        Task<bool> ClearDefinitionAsync(string storagePath, IGame game);
+
+        /// <summary>
+        /// Definitions the exists asynchronous.
+        /// </summary>
+        /// <param name="storagePath">The storage path.</param>
+        /// <param name="game">The game.</param>
+        /// <param name="version">The version.</param>
+        /// <returns>Task&lt;System.Boolean&gt;.</returns>
+        Task<bool> DefinitionExistsAsync(string storagePath, IGame game, string version);
+
+        /// <summary>
         /// Gets the definitions asynchronous.
         /// </summary>
         /// <param name="storagePath">The storage path.</param>
+        /// <param name="game">The game.</param>
         /// <param name="path">The path.</param>
         /// <returns>Task&lt;IEnumerable&lt;IDefinition&gt;&gt;.</returns>
-        Task<IEnumerable<IDefinition>> GetDefinitionsAsync(string storagePath, string path);
+        Task<IEnumerable<IDefinition>> GetDefinitionsAsync(string storagePath, IGame game, string path);
 
         /// <summary>
         /// Saves the definitions asynchronous.
         /// </summary>
         /// <param name="storagePath">The storage path.</param>
+        /// <param name="game">The game.</param>
         /// <param name="definitions">The definitions.</param>
         /// <returns>Task&lt;System.Boolean&gt;.</returns>
-        Task<bool> SaveDefinitionsAsync(string storagePath, IEnumerable<IDefinition> definitions);
+        Task<bool> SaveDefinitionsAsync(string storagePath, IGame game, IEnumerable<IDefinition> definitions);
 
         #endregion Methods
     }
