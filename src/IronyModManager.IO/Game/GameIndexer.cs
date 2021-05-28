@@ -124,7 +124,7 @@ namespace IronyModManager.IO.Game
         /// <param name="game">The game.</param>
         /// <param name="definitions">The definitions.</param>
         /// <returns>Task&lt;System.Boolean&gt;.</returns>
-        /// <exception cref="ArgumentException">Definitions type differ.</exception>
+        /// <exception cref="ArgumentException">Definitions types differ.</exception>
         public virtual async Task<bool> SaveDefinitionsAsync(string storagePath, IGame game, IEnumerable<IDefinition> definitions)
         {
             if (definitions.GroupBy(p => p.ParentDirectory).Count() > 1)
@@ -168,7 +168,11 @@ namespace IronyModManager.IO.Game
             var fullPath = Path.Combine(storagePath, game.Type, VersionFile);
             if (File.Exists(fullPath))
             {
-                DiskOperations.DeleteFile(fullPath);                
+                DiskOperations.DeleteFile(fullPath);
+            }
+            if (!Directory.Exists(Path.GetDirectoryName(fullPath)))
+            {
+                Directory.CreateDirectory(Path.GetDirectoryName(fullPath));
             }
             await File.WriteAllTextAsync(fullPath, version);
             return false;

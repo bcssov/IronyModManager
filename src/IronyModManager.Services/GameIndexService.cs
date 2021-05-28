@@ -12,6 +12,7 @@
 // <summary></summary>
 // ***********************************************************************
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -126,14 +127,17 @@ namespace IronyModManager.Services
                         double processed = 0;
                         double total = folders.Count();
                         double previousProgress = 0;
-                        folders.AsParallel().ForAll(async folder =>
+                        var tasks = folders.AsParallel().Select(async folder =>
                         {
-                            IEnumerable<IDefinition> result = null;
-                            result = ParseGameFiles(game, Reader.Read(Path.Combine(gamePath, folder), searchSubFolders: false), folder);
-                            if ((result?.Any()).GetValueOrDefault())
+                            await Task.Run(async () =>
                             {
-                                await gameIndexer.SaveDefinitionsAsync(GetStoragePath(), game, result);
-                            }
+                                IEnumerable<IDefinition> result = null;
+                                result = ParseGameFiles(game, Reader.Read(Path.Combine(gamePath, folder), searchSubFolders: false), folder);
+                                if ((result?.Any()).GetValueOrDefault())
+                                {
+                                    await gameIndexer.SaveDefinitionsAsync(GetStoragePath(), game, result);
+                                }
+                            });
                             using var mutex = await asyncServiceLock.LockAsync();
                             processed++;
                             var perc = GetProgressPercentage(total, processed, 100);
@@ -144,6 +148,7 @@ namespace IronyModManager.Services
                             }
                             mutex.Dispose();
                         });
+                        await Task.WhenAll(tasks);
                         await gameIndexer.WriteVersionAsync(GetStoragePath(), game, version);
                         return true;
                     }
@@ -164,14 +169,14 @@ namespace IronyModManager.Services
         {
             if (game != null && !string.IsNullOrEmpty(version) && await gameIndexer.DefinitionExistsAsync(GetStoragePath(), game, version))
             {
-                var gameDefinitions = new List<IDefinition>();
+                var gameDefinitions = new ConcurrentBag<IDefinition>();
                 var directories = modDefinitions.GetAllDirectoryKeys();
                 double processed = 0;
                 double total = directories.Count();
                 double previousProgress = 0;
-                foreach (var item in directories)
+                var tasks = directories.Select(async directory =>
                 {
-                    var definitions = await gameIndexer.GetDefinitionsAsync(GetStoragePath(), game, item);
+                    var definitions = await Task.Run(async () => await gameIndexer.GetDefinitionsAsync(GetStoragePath(), game, directory));
                     if ((definitions?.Any()).GetValueOrDefault())
                     {
                         foreach (var def in definitions)
@@ -179,7 +184,10 @@ namespace IronyModManager.Services
                             def.ModName = game.Name;
                             def.IsFromGame = true;
                         }
-                        gameDefinitions.AddRange(definitions);
+                        foreach (var item in definitions)
+                        {
+                            gameDefinitions.Add(item);
+                        }
                         processed++;
                         var perc = GetProgressPercentage(total, processed, 100);
                         if (perc != previousProgress)
@@ -188,7 +196,8 @@ namespace IronyModManager.Services
                             previousProgress = perc;
                         }
                     }
-                }
+                });
+                await Task.WhenAll(tasks);
                 var indexed = DIResolver.Get<IIndexedDefinitions>();
                 indexed.InitMap(modDefinitions.GetAll().Concat(gameDefinitions));
                 return indexed;
@@ -231,6 +240,7 @@ namespace IronyModManager.Services
         /// </summary>
         /// <param name="game">The game.</param>
         /// <param name="fileInfos">The file infos.</param>
+        /// <param name="folder">The folder.</param>
         /// <returns>IEnumerable&lt;IDefinition&gt;.</returns>
         protected virtual IEnumerable<IDefinition> ParseGameFiles(IGame game, IEnumerable<IFileInfo> fileInfos, string folder)
         {

@@ -18,6 +18,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
 using IronyModManager.DI;
@@ -35,6 +36,7 @@ using IronyModManager.Shared.Cache;
 using IronyModManager.Shared.MessageBus;
 using IronyModManager.Shared.Models;
 using IronyModManager.Storage.Common;
+using Nito.AsyncEx;
 using ValueType = IronyModManager.Shared.Models.ValueType;
 
 namespace IronyModManager.Services
@@ -49,6 +51,8 @@ namespace IronyModManager.Services
     public class ModPatchCollectionService : ModBaseService, IModPatchCollectionService
     {
         #region Fields
+
+        private const int MaxModConflictsToCheck = 4;
 
         /// <summary>
         /// The cache region
@@ -1098,7 +1102,7 @@ namespace IronyModManager.Services
                 var result = new List<EvalState>();
                 if ((definitions?.Any()).GetValueOrDefault())
                 {
-                    result.AddRange(definitions.Select(m => new EvalState()
+                    result.AddRange(definitions.Where(p => !p.IsFromGame).Select(m => new EvalState()
                     {
                         ContentSha = m.ContentSHA,
                         FileName = m.OriginalFileName,
@@ -1133,32 +1137,57 @@ namespace IronyModManager.Services
                 conflicts.AddRange(mapEvalState(state.Conflicts));
                 conflicts.AddRange(mapEvalState(state.OrphanConflicts));
                 conflicts.AddRange(mapEvalState(state.OverwrittenConflicts));
-                foreach (var groupedMods in conflicts.GroupBy(p => p.ModName))
+                var cancellationToken = new CancellationTokenSource();
+                var semaphore = new AsyncSemaphore(MaxModConflictsToCheck);
+                var tasks = conflicts.GroupBy(p => p.ModName).Select(async groupedMods =>
                 {
-                    foreach (var item in groupedMods.GroupBy(p => p.FileName))
+                    await semaphore.WaitAsync(cancellationToken.Token);
+                    try
                     {
-                        var definition = item.FirstOrDefault();
-                        var mod = mods.FirstOrDefault(p => p.Name.Equals(definition.ModName));
-                        if (mod == null)
+                        return await Task.Run(() =>
                         {
-                            // Mod no longer in collection, needs refresh break further checks...
-                            Cache.Set(new CacheAddParameters<PatchCollectionState>() { Region = CacheRegion, Prefix = game.Type, Key = patchName, Value = new PatchCollectionState() { NeedsUpdate = true, CheckInProgress = false } });
-                            return true;
-                        }
-                        else
-                        {
-                            var info = Reader.GetFileInfo(mod.FullPath, definition.FileName);
-                            if (info == null)
+                            foreach (var item in groupedMods.GroupBy(p => p.FileName))
                             {
-                                info = Reader.GetFileInfo(mod.FullPath, definition.FallBackFileName);
+                                var definition = item.FirstOrDefault();
+                                var mod = mods.FirstOrDefault(p => p.Name.Equals(definition.ModName));
+                                if (mod == null)
+                                {
+                                    // Mod no longer in collection, needs refresh break further checks...
+                                    Cache.Set(new CacheAddParameters<PatchCollectionState>() { Region = CacheRegion, Prefix = game.Type, Key = patchName, Value = new PatchCollectionState() { NeedsUpdate = true, CheckInProgress = false } });
+                                    return true;
+                                }
+                                else
+                                {
+                                    var info = Reader.GetFileInfo(mod.FullPath, definition.FileName);
+                                    if (info == null)
+                                    {
+                                        info = Reader.GetFileInfo(mod.FullPath, definition.FallBackFileName);
+                                    }
+                                    if (info == null || !info.ContentSHA.Equals(definition.ContentSha))
+                                    {
+                                        // File no longer in collection or content does not match, break further checks
+                                        Cache.Set(new CacheAddParameters<PatchCollectionState>() { Region = CacheRegion, Prefix = game.Type, Key = patchName, Value = new PatchCollectionState() { NeedsUpdate = true, CheckInProgress = false } });
+                                        return true;
+                                    }
+                                }
                             }
-                            if (info == null || !info.ContentSHA.Equals(definition.ContentSha))
-                            {
-                                // File no longer in collection or content does not match, break further checks
-                                Cache.Set(new CacheAddParameters<PatchCollectionState>() { Region = CacheRegion, Prefix = game.Type, Key = patchName, Value = new PatchCollectionState() { NeedsUpdate = true, CheckInProgress = false } });
-                                return true;
-                            }
-                        }
+                            return false;
+                        }, cancellationToken.Token);
+                    }
+                    finally
+                    {
+                        semaphore.Release();
+                    }
+                }).ToList();
+                while (tasks.Any())
+                {
+                    var task = await Task.WhenAny(tasks);
+                    tasks.Remove(task);
+                    var result = await task;
+                    if (result)
+                    {
+                        cancellationToken.Cancel();
+                        return true;
                     }
                 }
                 Cache.Set(new CacheAddParameters<PatchCollectionState>() { Region = CacheRegion, Prefix = game.Type, Key = patchName, Value = new PatchCollectionState() { NeedsUpdate = false, CheckInProgress = false } });

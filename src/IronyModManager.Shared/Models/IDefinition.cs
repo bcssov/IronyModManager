@@ -148,7 +148,6 @@ namespace IronyModManager.Shared.Models
         /// Gets or sets a value indicating whether this instance is from game.
         /// </summary>
         /// <value><c>true</c> if this instance is from game; otherwise, <c>false</c>.</value>
-        [JsonIgnore]
         bool IsFromGame { get; set; }
 
         /// <summary>
