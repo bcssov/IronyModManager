@@ -233,6 +233,10 @@
             "FirstUsePrompt": {
                 "Title": "Achtung",
                 "Message": "Der Konfliktlöser ist nichts für Anfänger. Er erfordert Kenntnisse und Erfahrungen mit Coding. Benutzer von kleinen Mod-Kollektionen sollten ihn ignorieren. Benutzer von größeren Mod-Kollektionen sollten hingegen in Betracht ziehen, ihre Mod-Kollektionen zu minimieren oder Coding zu erlernen. Support kann nicht bereitgestellt werden, wenn Sie fortfahren!"
+            },
+            "GameExecutableNotSetPrompt": {
+                "Title": "Spielausführbare Datei nicht festgelegt",
+                "Message": "Die ausführbare Spieldatei wurde in den Optionen nicht festgelegt. Diese Mod-Sammlung hat zuvor Spieledateien in ihre Analyse einbezogen. Der Konfliktlöser kann keine Spieledateien analysieren und einige Auflösungen werden möglicherweise zurückgesetzt. Möchten Sie fortfahren?"
             }
         },
         "LaunchGame": {

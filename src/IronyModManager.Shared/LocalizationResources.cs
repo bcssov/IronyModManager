@@ -314,6 +314,12 @@ namespace IronyModManager.Shared
                     public const string Title = Prefix + "Title";
                     public const string Message = Prefix + "Message";
                 }
+                public static class GameExecutableNotSetPrompt
+                {
+                    public const string Prefix = "Mod_Actions.ConflictSolver.GameExecutableNotSetPrompt.";
+                    public const string Title = Prefix + "Title";
+                    public const string Message = Prefix + "Message";
+                }
             }
             public static class LaunchGame
             {

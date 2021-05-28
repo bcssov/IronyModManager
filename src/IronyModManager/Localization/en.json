@@ -233,6 +233,10 @@
             "FirstUsePrompt": {
                 "Title": "Attention",
                 "Message": "The conflict solver is not for the faint of heart. It requires knowledge of, and experience with patching code. Users of small mod collections should ignore it, users of larger mod collections should consider either trimming their mod collections or researching code patching. Support cannot be provided should you proceed."
+            },
+            "GameExecutableNotSetPrompt": {
+                "Title": "Game Executable Not Set",
+                "Message": "Game executable has not been set in the options. This mod collection previously included game files in its analysis. Conflict solver will not be able to analyze game files and some resolutions might be reset. Do you wish to proceed?"
             }
         },
         "LaunchGame": {

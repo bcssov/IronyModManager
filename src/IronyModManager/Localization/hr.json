@@ -233,6 +233,10 @@
             "FirstUsePrompt": {
                 "Title": "Pažnja",
                 "Message": "Rješavač sukoba nije za osobe slabog srca. Ono zahtijeva znanje i iskustvo s krpanjem koda. Korisnici manjih kolekcija ga slobodno trebaju ugnorirati, korisnici većih kolekcija trebaju ili smanjiti broj modifikacija ili istražiti krpanje koda. Ne može se pružiti podrška ako nastaviš."
+            },
+            "GameExecutableNotSetPrompt": {
+                "Title": "Izvršna datoteka igre nije postavljena",
+                "Message": "Izvršna datoteka igre nije postavljena u opcijama. Ova kolekcija modova prethodno je u svoju analizu uključivala datoteke igre. Rješivač sukoba neće moći analizirati datoteke igre i neke će se rezolucije možda resetirati. Želite li nastaviti?"
             }
         },
         "LaunchGame": {
