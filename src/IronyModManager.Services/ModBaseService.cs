@@ -225,6 +225,10 @@ namespace IronyModManager.Services
         /// <returns>IPriorityDefinitionResult.</returns>
         protected virtual IPriorityDefinitionResult EvalDefinitionPriorityInternal(IEnumerable<IDefinition> definitions)
         {
+            // We're expecting properly ordered definitions based on load order.
+            // In case of game being included this should be done by the calling method as well,
+            // though there should not be any problems since it's all based on a list of strings modOrder.IndexOf(modName).
+            // And the game is never a mod. If this changes this is going to be bad for me.
             var game = GameService.GetSelected();
             var result = GetModelInstance<IPriorityDefinitionResult>();
             if (game != null && definitions?.Count() > 1)
