@@ -4,7 +4,7 @@
 // Created          : 05-27-2021
 //
 // Last Modified By : Mario
-// Last Modified On : 05-27-2021
+// Last Modified On : 05-28-2021
 // ***********************************************************************
 // <copyright file="GameIndexService.cs" company="Mario">
 //     Mario
@@ -177,6 +177,7 @@ namespace IronyModManager.Services
                         foreach (var def in definitions)
                         {
                             def.ModName = game.Name;
+                            def.IsFromGame = true;
                         }
                         gameDefinitions.AddRange(definitions);
                         processed++;

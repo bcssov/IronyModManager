@@ -4,7 +4,7 @@
 // Created          : 04-07-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 05-27-2021
+// Last Modified On : 05-28-2021
 // ***********************************************************************
 // <copyright file="ModBaseService.cs" company="Mario">
 //     Mario
@@ -187,6 +187,7 @@ namespace IronyModManager.Services
             newDefinition.VirtualPath = definition.VirtualPath;
             newDefinition.CustomPriorityOrder = definition.CustomPriorityOrder;
             newDefinition.IsCustomPatch = definition.IsCustomPatch;
+            newDefinition.IsFromGame = definition.IsFromGame;
             return newDefinition;
         }
 
