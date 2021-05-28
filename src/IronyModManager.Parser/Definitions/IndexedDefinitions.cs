@@ -4,7 +4,7 @@
 // Created          : 02-16-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 05-27-2021
+// Last Modified On : 05-28-2021
 // ***********************************************************************
 // <copyright file="IndexedDefinitions.cs" company="Mario">
 //     Mario
@@ -336,7 +336,8 @@ namespace IronyModManager.Parser.Definitions
         public void InitSearch()
         {
             trie = new Trie<IDefinition>();
-            foreach (var item in definitions.Where(p => p.Tags?.Count > 0))
+            // We're not indexing definitions from the game
+            foreach (var item in definitions.Where(p => (p.Tags?.Any()).GetValueOrDefault() && !p.IsFromGame))
             {
                 trie.Add(item, item.Tags);
             }
