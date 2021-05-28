@@ -4,7 +4,7 @@
 // Created          : 05-26-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 05-27-2021
+// Last Modified On : 05-28-2021
 // ***********************************************************************
 // <copyright file="ModPatchCollectionService.cs" company="Mario">
 //     Mario
@@ -896,7 +896,8 @@ namespace IronyModManager.Services
                         OverwrittenConflicts = GetDefinitionOrDefault(conflicts.OverwrittenConflicts),
                         CustomConflicts = GetDefinitionOrDefault(conflicts.CustomConflicts),
                         RootPath = GetModDirectoryRootPath(game),
-                        PatchPath = EvaluatePatchNamePath(game, patchName)
+                        PatchPath = EvaluatePatchNamePath(game, patchName),
+                        HasGameDefinitions = conflicts.AllConflicts.HasGameDefinitions()
                     });
                     await messageBus.PublishAsync(new ModDefinitionPatchLoadEvent(100));
 
@@ -980,7 +981,8 @@ namespace IronyModManager.Services
                             OverwrittenConflicts = GetDefinitionOrDefault(conflictResult.OverwrittenConflicts),
                             CustomConflicts = GetDefinitionOrDefault(conflictResult.CustomConflicts),
                             RootPath = GetModDirectoryRootPath(game),
-                            PatchPath = EvaluatePatchNamePath(game, patchName)
+                            PatchPath = EvaluatePatchNamePath(game, patchName),
+                            HasGameDefinitions = conflictResult.AllConflicts.HasGameDefinitions()
                         });
                     }
 
@@ -1295,7 +1297,8 @@ namespace IronyModManager.Services
                 OverwrittenConflicts = GetDefinitionOrDefault(conflictResult.OverwrittenConflicts),
                 CustomConflicts = GetDefinitionOrDefault(conflictResult.CustomConflicts),
                 RootPath = GetModDirectoryRootPath(game),
-                PatchPath = EvaluatePatchNamePath(game, patchName)
+                PatchPath = EvaluatePatchNamePath(game, patchName),
+                HasGameDefinitions = conflictResult.AllConflicts.HasGameDefinitions()
             });
         }
 
@@ -1666,7 +1669,8 @@ namespace IronyModManager.Services
                         OverwrittenConflicts = GetDefinitionOrDefault(conflictResult.OverwrittenConflicts),
                         CustomConflicts = GetDefinitionOrDefault(conflictResult.CustomConflicts),
                         RootPath = GetModDirectoryRootPath(game),
-                        PatchPath = EvaluatePatchNamePath(game, patchName)
+                        PatchPath = EvaluatePatchNamePath(game, patchName),
+                        HasGameDefinitions = conflictResult.AllConflicts.HasGameDefinitions()
                     });
                     return exportPatches.Count > 0 ? exportResult && stateResult : stateResult;
                 }
@@ -2000,7 +2004,8 @@ namespace IronyModManager.Services
                         OverwrittenConflicts = GetDefinitionOrDefault(conflictResult.OverwrittenConflicts),
                         CustomConflicts = GetDefinitionOrDefault(conflictResult.CustomConflicts),
                         RootPath = GetModDirectoryRootPath(game),
-                        PatchPath = EvaluatePatchNamePath(game, patchName)
+                        PatchPath = EvaluatePatchNamePath(game, patchName),
+                        HasGameDefinitions = conflictResult.AllConflicts.HasGameDefinitions()
                     });
                     return true;
                 }

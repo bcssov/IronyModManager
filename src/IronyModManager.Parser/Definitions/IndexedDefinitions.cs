@@ -63,6 +63,11 @@ namespace IronyModManager.Parser.Definitions
         private HashSet<string> fileKeys;
 
         /// <summary>
+        /// The game definitions count
+        /// </summary>
+        private long gameDefinitionsCount;
+
+        /// <summary>
         /// The main hierarchal definitions
         /// </summary>
         private ConcurrentIndexedList<IHierarchicalDefinitions> mainHierarchalDefinitions;
@@ -137,6 +142,10 @@ namespace IronyModManager.Parser.Definitions
             if (useHierarchalMap && !forceIgnoreHierarchical)
             {
                 MapHierarchicalDefinition(definition);
+            }
+            if (definition.IsFromGame)
+            {
+                gameDefinitionsCount++;
             }
             definitions.Add(definition);
         }
@@ -314,6 +323,15 @@ namespace IronyModManager.Parser.Definitions
         }
 
         /// <summary>
+        /// Determines whether [has game definitions].
+        /// </summary>
+        /// <returns><c>true</c> if [has game definitions]; otherwise, <c>false</c>.</returns>
+        public bool HasGameDefinitions()
+        {
+            return gameDefinitionsCount > 0;
+        }
+
+        /// <summary>
         /// Initializes the map.
         /// </summary>
         /// <param name="definitions">The definitions.</param>
@@ -349,6 +367,14 @@ namespace IronyModManager.Parser.Definitions
         /// <param name="definition">The definition.</param>
         public void Remove(IDefinition definition)
         {
+            if (definition.IsFromGame)
+            {
+                gameDefinitionsCount--;
+            }
+            if (gameDefinitionsCount < 0)
+            {
+                gameDefinitionsCount = 0;
+            }
             definitions.Remove(definition);
             var hierarchicalDefinition = mainHierarchalDefinitions.GetFirstByNameNoLock(nameof(IHierarchicalDefinitions.Name), ResolveHierarchalParentDirectory(definition));
             if (hierarchicalDefinition != null)
