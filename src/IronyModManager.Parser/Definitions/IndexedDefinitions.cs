@@ -500,7 +500,7 @@ namespace IronyModManager.Parser.Definitions
             {
                 hierarchicalDefinition.Mods = new List<string>();
             }
-            if (!hierarchicalDefinition.Mods.Contains(definition.ModName))
+            if (!hierarchicalDefinition.Mods.Contains(definition.ModName) && !definition.IsFromGame)
             {
                 hierarchicalDefinition.Mods.Add(definition.ModName);
             }
