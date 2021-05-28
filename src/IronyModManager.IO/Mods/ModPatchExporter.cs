@@ -340,7 +340,7 @@ namespace IronyModManager.IO.Mods
             state.CustomConflicts = MapDefinitions(parameters.CustomConflicts, false);
             state.Mode = parameters.Mode;
             state.LoadOrder = parameters.LoadOrder;
-            state.GameFilesIncluded = parameters.HasGameDefinitions;
+            state.HasGameDefinitions = parameters.HasGameDefinitions;
             var history = state.ConflictHistory != null ? state.ConflictHistory.ToList() : new List<IDefinition>();
             var indexed = DIResolver.Get<IIndexedDefinitions>();
             indexed.InitMap(history);

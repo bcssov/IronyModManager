@@ -4,7 +4,7 @@
 // Created          : 05-27-2021
 //
 // Last Modified By : Mario
-// Last Modified On : 05-27-2021
+// Last Modified On : 05-28-2021
 // ***********************************************************************
 // <copyright file="GameIndexer.cs" company="Mario">
 //     Mario
@@ -62,7 +62,7 @@ namespace IronyModManager.IO.Game
             var fullPath = Path.Combine(storagePath, game.Type);
             if (Directory.Exists(fullPath))
             {
-                DiskOperations.DeleteDirectory(fullPath, false);
+                DiskOperations.DeleteDirectory(fullPath, true);
                 return Task.FromResult(true);
             }
             return Task.FromResult(false);
@@ -127,9 +127,9 @@ namespace IronyModManager.IO.Game
         /// <exception cref="ArgumentException">Definitions type differ.</exception>
         public virtual async Task<bool> SaveDefinitionsAsync(string storagePath, IGame game, IEnumerable<IDefinition> definitions)
         {
-            if (definitions.GroupBy(p => p.DiskFileCI).Count() != definitions.Count())
+            if (definitions.GroupBy(p => p.ParentDirectory).Count() > 1)
             {
-                throw new ArgumentException("Definitions type differ.");
+                throw new ArgumentException("Definitions types differ.");
             }
             if (definitions == null || !definitions.Any())
             {
@@ -139,7 +139,7 @@ namespace IronyModManager.IO.Game
             var fullPath = Path.Combine(storagePath, game.Type, path);
             if (File.Exists(fullPath))
             {
-                File.Delete(fullPath);
+                DiskOperations.DeleteFile(fullPath);
             }
             var json = JsonDISerializer.Serialize(definitions.ToList());
             var bytes = Encoding.UTF8.GetBytes(json);
@@ -148,6 +148,10 @@ namespace IronyModManager.IO.Game
             using var compress = new DeflateStream(destination, CompressionMode.Compress, true);
             await source.CopyToAsync(compress);
             await compress.FlushAsync();
+            if (!Directory.Exists(Path.GetDirectoryName(fullPath)))
+            {
+                Directory.CreateDirectory(Path.GetDirectoryName(fullPath));
+            }
             await File.WriteAllBytesAsync(fullPath, destination.ToArray());
             return true;
         }
@@ -164,9 +168,9 @@ namespace IronyModManager.IO.Game
             var fullPath = Path.Combine(storagePath, game.Type, VersionFile);
             if (File.Exists(fullPath))
             {
-                DiskOperations.DeleteFile(fullPath);
-                await File.WriteAllTextAsync(fullPath, version);
+                DiskOperations.DeleteFile(fullPath);                
             }
+            await File.WriteAllTextAsync(fullPath, version);
             return false;
         }
 

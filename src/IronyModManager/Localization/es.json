@@ -225,6 +225,8 @@
         "Overlay_Apply_Message": "Espere mientras aplica la colección de mods...",
         "ConflictSolver": {
             "Conflict": "Solucionador de conflictos",
+            "Overlay_Conflict_Solver_Indexing_Game": "Por favor, espere mientras se indexan las definiciones de juegos...",
+            "Overlay_Conflict_Solver_Loading_Game_Definitions": "Por favor, espere mientras cargando definiciones de juego...",
             "Overlay_Conflict_Solver_Loading_Definitions": "Espere mientras se cargan las definiciones de mod...",
             "Overlay_Conflict_Solver_Analyzing_Conflicts": "Espere mientras se analizan las definiciones en busca de conflictos...",
             "Overlay_Conflict_Solver_Analyzing_Resolved_Conflicts": "Espere mientras se analizan las definiciones resueltas...",

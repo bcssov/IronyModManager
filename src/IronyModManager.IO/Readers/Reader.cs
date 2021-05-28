@@ -4,7 +4,7 @@
 // Created          : 02-23-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 05-27-2021
+// Last Modified On : 05-28-2021
 // ***********************************************************************
 // <copyright file="Reader.cs" company="Mario">
 //     Mario
@@ -160,14 +160,15 @@ namespace IronyModManager.IO.Readers
         /// </summary>
         /// <param name="path">The path.</param>
         /// <param name="allowedPaths">The allowed paths.</param>
+        /// <param name="searchSubFolders">if set to <c>true</c> [search sub folders].</param>
         /// <returns>IEnumerable&lt;IFileInfo&gt;.</returns>
-        public virtual IEnumerable<IFileInfo> Read(string path, IEnumerable<string> allowedPaths = null)
+        public virtual IEnumerable<IFileInfo> Read(string path, IEnumerable<string> allowedPaths = null, bool searchSubFolders = true)
         {
             path ??= string.Empty;
-            var reader = readers.FirstOrDefault(r => r.CanRead(path));
+            var reader = readers.FirstOrDefault(r => r.CanRead(path, searchSubFolders));
             if (reader != null)
             {
-                return reader.Read(path, allowedPaths);
+                return reader.Read(path, allowedPaths, searchSubFolders);
             }
             return null;
         }

@@ -1061,6 +1061,30 @@ namespace IronyModManager.Services
         }
 
         /// <summary>
+        /// patch has game definitions as an asynchronous operation.
+        /// </summary>
+        /// <param name="collectionName">Name of the collection.</param>
+        /// <returns>Task&lt;System.Boolean&gt;.</returns>
+        public virtual async Task<bool> PatchHasGameDefinitionsAsync(string collectionName)
+        {
+            var game = GameService.GetSelected();
+            if (game != null && !string.IsNullOrWhiteSpace(collectionName))
+            {
+                var patchName = GenerateCollectionPatchName(collectionName);
+                var state = await modPatchExporter.GetPatchStateAsync(new ModPatchExporterParameters()
+                {
+                    RootPath = GetModDirectoryRootPath(game),
+                    PatchPath = EvaluatePatchNamePath(game, patchName)
+                }, false);
+                if (state != null)
+                {
+                    return state.HasGameDefinitions;
+                }
+            }
+            return false;
+        }
+
+        /// <summary>
         /// patch mod needs update as an asynchronous operation.
         /// </summary>
         /// <param name="collectionName">Name of the collection.</param>

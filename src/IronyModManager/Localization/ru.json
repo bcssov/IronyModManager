@@ -225,6 +225,8 @@
         "Overlay_Apply_Message": "Сохранение коллекции...",
         "ConflictSolver": {
             "Conflict": "Разрешитель конфликтов",
+            "Overlay_Conflict_Solver_Indexing_Game": "Пожалуйста, подождите, когда индексирование игрных определений...",
+            "Overlay_Conflict_Solver_Loading_Game_Definitions": "Пожалуйста, подождите во время загрузки определений игр...",
             "Overlay_Conflict_Solver_Loading_Definitions": "Загрузка определений модов...",
             "Overlay_Conflict_Solver_Analyzing_Conflicts": "Анализ определений на предмет конфликтов...",
             "Overlay_Conflict_Solver_Analyzing_Resolved_Conflicts": "Анализ разрешенных определений...",

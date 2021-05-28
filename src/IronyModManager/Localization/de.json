@@ -225,6 +225,8 @@
         "Overlay_Apply_Message": "Bitte warten Sie, während die Mod-Kollektion angewendet wird...",
         "ConflictSolver": {
             "Conflict": "Konfliktlöser",
+            "Overlay_Conflict_Solver_Indexing_Game": "Bitte warten Sie, während Sie die Spieldefinitionen indexieren...",
+            "Overlay_Conflict_Solver_Loading_Game_Definitions": "Bitte warten Sie beim Laden der Spieldefinitionen...",
             "Overlay_Conflict_Solver_Loading_Definitions": "Bitte warten Sie, während die Mod-Definitionen geladen werden...",
             "Overlay_Conflict_Solver_Analyzing_Conflicts": "Bitte warten Sie, während die Definitionen für Konflikte analysiert werden...",
             "Overlay_Conflict_Solver_Analyzing_Resolved_Conflicts": "Bitte warten Sie, während die geklärten Definitionen analysiert werden...",

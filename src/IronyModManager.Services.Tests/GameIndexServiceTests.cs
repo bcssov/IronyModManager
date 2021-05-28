@@ -166,8 +166,8 @@ namespace IronyModManager.Services.Tests
                     IsBinary = false
                 }
             };
-            reader.Setup(s => s.Read(It.Is<string>(p => p.Contains("test1")), It.IsAny<IEnumerable<string>>())).Returns(fileInfos1);
-            reader.Setup(s => s.Read(It.Is<string>(p => p.Contains("test2")), It.IsAny<IEnumerable<string>>())).Returns(fileInfos2);
+            reader.Setup(s => s.Read(It.Is<string>(p => p.Contains("test1")), It.IsAny<IEnumerable<string>>(), It.IsAny<bool>())).Returns(fileInfos1);
+            reader.Setup(s => s.Read(It.Is<string>(p => p.Contains("test2")), It.IsAny<IEnumerable<string>>(), It.IsAny<bool>())).Returns(fileInfos2);
             parserManager.Setup(s => s.Parse(It.IsAny<ParserManagerArgs>())).Returns((ParserManagerArgs args) =>
             {
                 return new List<IDefinition>() { new Definition()

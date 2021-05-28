@@ -819,6 +819,10 @@ namespace IronyModManager.Services
                     {
                         item.ModPath = GetPatchModDirectory(GameService.GetSelected(), item.ModName);
                     }
+                    else if (item.IsFromGame)
+                    {
+                        item.ModPath = Path.GetDirectoryName(GameService.GetSelected().ExecutableLocation);
+                    }
                     else
                     {
                         item.ModPath = collectionMods.FirstOrDefault(p => p.Name.Equals(item.ModName)).FullPath;

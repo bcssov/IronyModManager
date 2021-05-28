@@ -746,7 +746,7 @@ namespace IronyModManager.Services.Tests
                 }
             };
             var reader = new Mock<IReader>();
-            reader.Setup(s => s.Read(It.IsAny<string>(), It.IsAny<IEnumerable<string>>())).Returns(fileInfos);
+            reader.Setup(s => s.Read(It.IsAny<string>(), It.IsAny<IEnumerable<string>>(), It.IsAny<bool>())).Returns(fileInfos);
             var service = new GameService(null, null, reader.Object, storageProvider.Object, preferencesService.Object, new Mock<IMapper>().Object);
             var result = service.IsContinueGameAllowed(new Game()
             {
@@ -767,7 +767,7 @@ namespace IronyModManager.Services.Tests
             var preferencesService = new Mock<IPreferencesService>();
             SetupMockCase(preferencesService, storageProvider);
             var reader = new Mock<IReader>();
-            reader.Setup(s => s.Read(It.IsAny<string>(), It.IsAny<IEnumerable<string>>())).Returns((IEnumerable<IFileInfo>)null);
+            reader.Setup(s => s.Read(It.IsAny<string>(), It.IsAny<IEnumerable<string>>(), It.IsAny<bool>())).Returns((IEnumerable<IFileInfo>)null);
             var service = new GameService(null, null, reader.Object, storageProvider.Object, preferencesService.Object, new Mock<IMapper>().Object);
             var result = service.GetGameSettingsFromJson(new Game()
             {
@@ -797,7 +797,7 @@ namespace IronyModManager.Services.Tests
                 }
             };
             var reader = new Mock<IReader>();
-            reader.Setup(s => s.Read(It.IsAny<string>(), It.IsAny<IEnumerable<string>>())).Returns(fileInfos);
+            reader.Setup(s => s.Read(It.IsAny<string>(), It.IsAny<IEnumerable<string>>(), It.IsAny<bool>())).Returns(fileInfos);
             var service = new GameService(null, null, reader.Object, storageProvider.Object, preferencesService.Object, new Mock<IMapper>().Object);
             var result = service.GetGameSettingsFromJson(new Game()
             {
@@ -821,7 +821,7 @@ namespace IronyModManager.Services.Tests
             var preferencesService = new Mock<IPreferencesService>();
             SetupMockCase(preferencesService, storageProvider);
             var reader = new Mock<IReader>();
-            reader.Setup(s => s.Read(It.IsAny<string>(), It.IsAny<IEnumerable<string>>())).Returns((IEnumerable<IFileInfo>)null);
+            reader.Setup(s => s.Read(It.IsAny<string>(), It.IsAny<IEnumerable<string>>(), It.IsAny<bool>())).Returns((IEnumerable<IFileInfo>)null);
             var service = new GameService(null, null, reader.Object, storageProvider.Object, preferencesService.Object, new Mock<IMapper>().Object);
             var result = service.GetVersion(new Game()
             {
@@ -851,7 +851,7 @@ namespace IronyModManager.Services.Tests
                 }
             };
             var reader = new Mock<IReader>();
-            reader.Setup(s => s.Read(It.IsAny<string>(), It.IsAny<IEnumerable<string>>())).Returns(fileInfos);
+            reader.Setup(s => s.Read(It.IsAny<string>(), It.IsAny<IEnumerable<string>>(), It.IsAny<bool>())).Returns(fileInfos);
             var service = new GameService(null, null, reader.Object, storageProvider.Object, preferencesService.Object, new Mock<IMapper>().Object);
             var result = service.GetVersion(new Game()
             {

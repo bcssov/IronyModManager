@@ -4,7 +4,7 @@
 // Created          : 02-23-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-17-2021
+// Last Modified On : 05-28-2021
 // ***********************************************************************
 // <copyright file="ReaderTests.cs" company="Mario">
 //     Mario
@@ -244,8 +244,9 @@ namespace IronyModManager.IO.Tests
             /// Determines whether this instance can read the specified path.
             /// </summary>
             /// <param name="path">The path.</param>
+            /// <param name="searchSubfolders">if set to <c>true</c> [search subfolders].</param>
             /// <returns><c>true</c> if this instance can read the specified path; otherwise, <c>false</c>.</returns>
-            public bool CanRead(string path)
+            public bool CanRead(string path, bool searchSubfolders = true)
             {
                 return path.Equals("fake1");
             }
@@ -273,8 +274,7 @@ namespace IronyModManager.IO.Tests
             /// <summary>
             /// Gets the size of the file.
             /// </summary>
-            /// <param name="rootPath">The root path.</param>
-            /// <param name="file">The file.</param>
+            /// <param name="path">The path.</param>
             /// <returns>System.Int64.</returns>
             public long GetTotalSize(string path)
             {
@@ -300,8 +300,9 @@ namespace IronyModManager.IO.Tests
             /// </summary>
             /// <param name="path">The path.</param>
             /// <param name="allowedPaths">The allowed paths.</param>
+            /// <param name="searchSubFolders">if set to <c>true</c> [search sub folders].</param>
             /// <returns>IReadOnlyCollection&lt;IFileInfo&gt;.</returns>
-            public IReadOnlyCollection<IFileInfo> Read(string path, IEnumerable<string> allowedPaths)
+            public IReadOnlyCollection<IFileInfo> Read(string path, IEnumerable<string> allowedPaths, bool searchSubFolders = true)
             {
                 return new List<IFileInfo>() { new FileInfo()
                 {
@@ -333,8 +334,9 @@ namespace IronyModManager.IO.Tests
             /// Determines whether this instance can read the specified path.
             /// </summary>
             /// <param name="path">The path.</param>
+            /// <param name="searchSubfolders">if set to <c>true</c> [search subfolders].</param>
             /// <returns><c>true</c> if this instance can read the specified path; otherwise, <c>false</c>.</returns>
-            public bool CanRead(string path)
+            public bool CanRead(string path, bool searchSubfolders = true)
             {
                 return path.Equals("fake2");
             }
@@ -362,8 +364,7 @@ namespace IronyModManager.IO.Tests
             /// <summary>
             /// Gets the size of the file.
             /// </summary>
-            /// <param name="rootPath">The root path.</param>
-            /// <param name="file">The file.</param>
+            /// <param name="path">The path.</param>
             /// <returns>System.Int64.</returns>
             public long GetTotalSize(string path)
             {
@@ -389,8 +390,9 @@ namespace IronyModManager.IO.Tests
             /// </summary>
             /// <param name="path">The path.</param>
             /// <param name="allowedPaths">The allowed paths.</param>
+            /// <param name="searchSubFolders">if set to <c>true</c> [search sub folders].</param>
             /// <returns>IReadOnlyCollection&lt;IFileInfo&gt;.</returns>
-            public IReadOnlyCollection<IFileInfo> Read(string path, IEnumerable<string> allowedPaths)
+            public IReadOnlyCollection<IFileInfo> Read(string path, IEnumerable<string> allowedPaths, bool searchSubFolders = true)
             {
                 return new List<IFileInfo>() { new FileInfo()
                 {

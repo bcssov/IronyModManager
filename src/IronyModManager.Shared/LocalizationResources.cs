@@ -303,6 +303,8 @@ namespace IronyModManager.Shared
             {
                 public const string Prefix = "Mod_Actions.ConflictSolver.";
                 public const string Conflict = Prefix + "Conflict";
+                public const string Overlay_Conflict_Solver_Indexing_Game = Prefix + "Overlay_Conflict_Solver_Indexing_Game";
+                public const string Overlay_Conflict_Solver_Loading_Game_Definitions = Prefix + "Overlay_Conflict_Solver_Loading_Game_Definitions";
                 public const string Overlay_Conflict_Solver_Loading_Definitions = Prefix + "Overlay_Conflict_Solver_Loading_Definitions";
                 public const string Overlay_Conflict_Solver_Analyzing_Conflicts = Prefix + "Overlay_Conflict_Solver_Analyzing_Conflicts";
                 public const string Overlay_Conflict_Solver_Analyzing_Resolved_Conflicts = Prefix + "Overlay_Conflict_Solver_Analyzing_Resolved_Conflicts";

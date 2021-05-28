@@ -129,7 +129,7 @@ namespace IronyModManager.Services
                         folders.AsParallel().ForAll(async folder =>
                         {
                             IEnumerable<IDefinition> result = null;
-                            result = ParseGameFiles(game, Reader.Read(Path.Combine(gamePath, folder)));
+                            result = ParseGameFiles(game, Reader.Read(Path.Combine(gamePath, folder), searchSubFolders: false), folder);
                             if ((result?.Any()).GetValueOrDefault())
                             {
                                 await gameIndexer.SaveDefinitionsAsync(GetStoragePath(), game, result);
@@ -232,7 +232,7 @@ namespace IronyModManager.Services
         /// <param name="game">The game.</param>
         /// <param name="fileInfos">The file infos.</param>
         /// <returns>IEnumerable&lt;IDefinition&gt;.</returns>
-        protected virtual IEnumerable<IDefinition> ParseGameFiles(IGame game, IEnumerable<IFileInfo> fileInfos)
+        protected virtual IEnumerable<IDefinition> ParseGameFiles(IGame game, IEnumerable<IFileInfo> fileInfos, string folder)
         {
             if (fileInfos == null)
             {
@@ -244,11 +244,11 @@ namespace IronyModManager.Services
                 var fileDefs = parserManager.Parse(new ParserManagerArgs()
                 {
                     ContentSHA = fileInfo.ContentSHA,
-                    File = fileInfo.FileName,
+                    File = Path.Combine(folder, fileInfo.FileName),
                     GameType = game.Type,
                     Lines = fileInfo.Content,
                     ModName = game.Name
-                });
+                }).Where(p => p.ValueType != Shared.Models.ValueType.Invalid);
                 MergeDefinitions(fileDefs);
                 definitions.AddRange(fileDefs);
             }
