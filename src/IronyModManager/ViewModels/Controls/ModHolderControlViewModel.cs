@@ -4,7 +4,7 @@
 // Created          : 02-29-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 05-28-2021
+// Last Modified On : 05-29-2021
 // ***********************************************************************
 // <copyright file="ModHolderControlViewModel.cs" company="Mario">
 //     Mario
@@ -711,6 +711,10 @@ namespace IronyModManager.ViewModels.Controls
                         if (proceed)
                         {
                             await AnalyzeModsAsync(id, mode, version);
+                        }
+                        else
+                        {
+                            await TriggerOverlayAsync(id, false);
                         }
                     }
                 }
