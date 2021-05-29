@@ -1516,10 +1516,13 @@ namespace IronyModManager.Services
                         {
                             if (result)
                             {
-                                if (!conflicts.Contains(def) && IsValidDefinitionType(def))
+                                if (!def.IsFromGame && !conflicts.Contains(def) && IsValidDefinitionType(def))
                                 {
                                     def.ExistsInLastFile = existsInLastFile(def);
-                                    conflicts.Add(def);
+                                    if (!def.ExistsInLastFile)
+                                    {
+                                        conflicts.Add(def);
+                                    }
                                 }
                             }
                         }
@@ -1536,10 +1539,13 @@ namespace IronyModManager.Services
                                 else
                                 {
                                     fileConflictCache.TryAdd(def.FileCI, true);
-                                    if (!conflicts.Contains(def) && IsValidDefinitionType(def))
+                                    if (!def.IsFromGame && !conflicts.Contains(def) && IsValidDefinitionType(def))
                                     {
                                         def.ExistsInLastFile = existsInLastFile(def);
-                                        conflicts.Add(def);
+                                        if (!def.ExistsInLastFile)
+                                        {
+                                            conflicts.Add(def);
+                                        }
                                     }
                                 }
                             }
