@@ -60,7 +60,7 @@ namespace IronyModManager.Services
         /// <summary>
         /// The ignore game mods identifier
         /// </summary>
-        private const string IgnoreGameModsId = "ignoreGameMods";
+        private const string IgnoreGameModsId = "--ignoreGameMods";
 
         /// <summary>
         /// The maximum mod conflicts to check

@@ -3796,7 +3796,7 @@ namespace IronyModManager.Services.Tests
             var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter);
             var c = new ConflictResult()
             {
-                IgnoredPaths = "ignoreGameMods"
+                IgnoredPaths = "--ignoreGameMods"
             };
             var result = service.ShouldIgnoreGameMods(c);
             result.Should().BeTrue();
@@ -3861,7 +3861,7 @@ namespace IronyModManager.Services.Tests
             var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter);
             var c = new ConflictResult()
             {
-                IgnoredPaths = "ignoreGameMods"
+                IgnoredPaths = "--ignoreGameMods"
             };
             var result = service.ToggleIgnoreGameMods(c);
             result.Should().BeFalse();
@@ -3889,7 +3889,7 @@ namespace IronyModManager.Services.Tests
             };
             var result = service.ToggleIgnoreGameMods(c);
             result.Should().BeTrue();
-            c.IgnoredPaths.Should().Contain("ignoreGameMods");
+            c.IgnoredPaths.Should().Contain("--ignoreGameMods");
         }
 
         /// <summary>
