@@ -185,7 +185,7 @@ namespace IronyModManager.IO.Game
         /// <returns>System.String.</returns>
         protected virtual string SanitizePath(string path)
         {
-            return path.Replace("\\", ".").Replace("/", ".").GenerateValidFileName() + Extension;
+            return path.StandardizeDirectorySeparator().Split(Path.DirectorySeparatorChar)[0] + Path.DirectorySeparatorChar + path.StandardizeDirectorySeparator().Replace(Path.DirectorySeparatorChar, '.') + Extension;
         }
 
         #endregion Methods
