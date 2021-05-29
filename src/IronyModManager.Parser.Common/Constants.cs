@@ -4,7 +4,7 @@
 // Created          : 02-16-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 05-15-2021
+// Last Modified On : 05-29-2021
 // ***********************************************************************
 // <copyright file="Constants.cs" company="Mario">
 //     Mario
@@ -273,6 +273,11 @@ namespace IronyModManager.Parser.Common
             /// The component tags
             /// </summary>
             public static readonly string ComponentTags = MergePath(CommonPath, "component_tags");
+
+            /// <summary>
+            /// The country types
+            /// </summary>
+            public static readonly string CountryTypes = MergePath(CommonPath, "country_types");
 
             /// <summary>
             /// The diplomatic actions

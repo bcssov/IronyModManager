@@ -4,7 +4,7 @@
 // Created          : 05-25-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 05-15-2021
+// Last Modified On : 05-29-2021
 // ***********************************************************************
 // <copyright file="OverwrittenParser.cs" company="Mario">
 //     Mario
@@ -43,7 +43,8 @@ namespace IronyModManager.Parser.Games.Stellaris
             Common.Constants.Stellaris.Districts, Common.Constants.Stellaris.PlanetClasses,
             Common.Constants.Stellaris.PrescriptedCountries, Common.Constants.Stellaris.SpeciesArchetypes,
             Common.Constants.Stellaris.Buildings, Common.Constants.Stellaris.DiplomaticActions,
-            Common.Constants.Stellaris.Technology, Common.Constants.Stellaris.GovernmentAuthorities
+            Common.Constants.Stellaris.Technology, Common.Constants.Stellaris.GovernmentAuthorities,
+            Common.Constants.Stellaris.CountryTypes
         };
 
         /// <summary>
