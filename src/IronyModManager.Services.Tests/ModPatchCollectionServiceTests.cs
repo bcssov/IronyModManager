@@ -4,7 +4,7 @@
 // Created          : 05-26-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 05-28-2021
+// Last Modified On : 05-29-2021
 // ***********************************************************************
 // <copyright file="ModPatchCollectionServiceTests.cs" company="Mario">
 //     Mario
@@ -3758,6 +3758,138 @@ namespace IronyModManager.Services.Tests
             var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter);
             var result = await service.PatchHasGameDefinitionsAsync("fake");
             result.Should().BeTrue();
+        }
+
+        /// <summary>
+        /// Defines the test method Should_not_parse_ignore_game_mods_anything_when_no_conflict_result.
+        /// </summary>
+        [Fact]
+        public void Should_not_parse_ignore_game_mods_anything_when_no_conflict_result()
+        {
+            var storageProvider = new Mock<IStorageProvider>();
+            var modParser = new Mock<IModParser>();
+            var parserManager = new Mock<IParserManager>();
+            var reader = new Mock<IReader>();
+            var modWriter = new Mock<IModWriter>();
+            var gameService = new Mock<IGameService>();
+            var mapper = new Mock<IMapper>();
+            var modPatchExporter = new Mock<IModPatchExporter>();
+            var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter);
+            var result = service.ShouldIgnoreGameMods(null);
+            result.Should().BeNull();            
+        }
+
+        /// <summary>
+        /// Defines the test method Should_not_toggle_ignore_game_mods.
+        /// </summary>
+        [Fact]
+        public void Should_ignore_game_mods()
+        {
+            var storageProvider = new Mock<IStorageProvider>();
+            var modParser = new Mock<IModParser>();
+            var parserManager = new Mock<IParserManager>();
+            var reader = new Mock<IReader>();
+            var modWriter = new Mock<IModWriter>();
+            var gameService = new Mock<IGameService>();
+            var mapper = new Mock<IMapper>();
+            var modPatchExporter = new Mock<IModPatchExporter>();
+            var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter);
+            var c = new ConflictResult()
+            {
+                IgnoredPaths = "ignoreGameMods"
+            };
+            var result = service.ShouldIgnoreGameMods(c);
+            result.Should().BeTrue();
+        }
+
+        /// <summary>
+        /// Defines the test method Should_not_ignore_game_mods.
+        /// </summary>
+        [Fact]
+        public void Should_not_ignore_game_mods()
+        {
+            var storageProvider = new Mock<IStorageProvider>();
+            var modParser = new Mock<IModParser>();
+            var parserManager = new Mock<IParserManager>();
+            var reader = new Mock<IReader>();
+            var modWriter = new Mock<IModWriter>();
+            var gameService = new Mock<IGameService>();
+            var mapper = new Mock<IMapper>();
+            var modPatchExporter = new Mock<IModPatchExporter>();
+            var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter);
+            var c = new ConflictResult()
+            {
+                IgnoredPaths = ""
+            };
+            var result = service.ShouldIgnoreGameMods(c);
+            result.Should().BeFalse();
+        }
+
+        /// <summary>
+        /// Defines the test method Should_not_toggle_ignore_game_mods_anything_when_no_conflict_result.
+        /// </summary>
+        [Fact]
+        public void Should_not_toggle_ignore_game_mods_anything_when_no_conflict_result()
+        {
+            var storageProvider = new Mock<IStorageProvider>();
+            var modParser = new Mock<IModParser>();
+            var parserManager = new Mock<IParserManager>();
+            var reader = new Mock<IReader>();
+            var modWriter = new Mock<IModWriter>();
+            var gameService = new Mock<IGameService>();
+            var mapper = new Mock<IMapper>();
+            var modPatchExporter = new Mock<IModPatchExporter>();
+            var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter);
+            var result = service.ToggleIgnoreGameMods(null);
+            result.Should().BeNull();            
+        }
+
+        /// <summary>
+        /// Defines the test method Should_not_toggle_ignore_game_mods.
+        /// </summary>
+        [Fact]
+        public void Should_not_toggle_ignore_game_mods()
+        {
+            var storageProvider = new Mock<IStorageProvider>();
+            var modParser = new Mock<IModParser>();
+            var parserManager = new Mock<IParserManager>();
+            var reader = new Mock<IReader>();
+            var modWriter = new Mock<IModWriter>();
+            var gameService = new Mock<IGameService>();
+            var mapper = new Mock<IMapper>();
+            var modPatchExporter = new Mock<IModPatchExporter>();
+            var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter);
+            var c = new ConflictResult()
+            {
+                IgnoredPaths = "ignoreGameMods"
+            };
+            var result = service.ToggleIgnoreGameMods(c);
+            result.Should().BeFalse();
+            c.IgnoredPaths.Should().BeNullOrWhiteSpace();
+        }
+
+        /// <summary>
+        /// Defines the test method Should_toggle_ignore_game_mods.
+        /// </summary>
+        [Fact]
+        public void Should_toggle_ignore_game_mods()
+        {
+            var storageProvider = new Mock<IStorageProvider>();
+            var modParser = new Mock<IModParser>();
+            var parserManager = new Mock<IParserManager>();
+            var reader = new Mock<IReader>();
+            var modWriter = new Mock<IModWriter>();
+            var gameService = new Mock<IGameService>();
+            var mapper = new Mock<IMapper>();
+            var modPatchExporter = new Mock<IModPatchExporter>();
+            var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter);
+            var c = new ConflictResult()
+            {
+                IgnoredPaths = ""
+            };
+            var result = service.ToggleIgnoreGameMods(c);
+            result.Should().BeTrue();
+            c.IgnoredPaths.Should().Contain("ignoreGameMods");
         }
 
         /// <summary>

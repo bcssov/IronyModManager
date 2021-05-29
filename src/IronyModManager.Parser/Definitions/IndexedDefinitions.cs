@@ -4,7 +4,7 @@
 // Created          : 02-16-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 05-28-2021
+// Last Modified On : 05-29-2021
 // ***********************************************************************
 // <copyright file="IndexedDefinitions.cs" company="Mario">
 //     Mario
@@ -492,9 +492,14 @@ namespace IronyModManager.Parser.Definitions
             {
                 child.Mods = new List<string>();
             }
-            if (!child.Mods.Contains(definition.ModName))
+            if (!child.Mods.Contains(definition.ModName) && !definition.IsFromGame)
             {
                 child.Mods.Add(definition.ModName);
+            }
+            if (!definition.IsFromGame)
+            {
+                child.NonGameDefinitions++;
+                hierarchicalDefinition.NonGameDefinitions++;
             }
             if (hierarchicalDefinition.Mods == null)
             {

@@ -324,6 +324,7 @@
         },
         "ModFilter": {
             "Title": "Filtro de Mods",
+            "IgnoreGameConflicts": "Ignorar los conflictos del juego",
             "Close": "Cerrar"
         },
         "ResetConflicts": {

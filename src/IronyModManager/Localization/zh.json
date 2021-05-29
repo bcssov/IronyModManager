@@ -324,6 +324,7 @@
         },
         "ModFilter": {
             "Title": "模组过滤",
+            "IgnoreGameConflicts": "忽略游戏冲突",
             "Close": "关闭"
         },
         "ResetConflicts": {

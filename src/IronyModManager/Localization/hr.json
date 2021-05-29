@@ -324,6 +324,7 @@
         },
         "ModFilter": {
             "Title": "Mod Filter",
+            "IgnoreGameConflicts": "Zanemari sukobe igre",
             "Close": "Zatvori"
         },
         "ResetConflicts": {

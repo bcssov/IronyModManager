@@ -4,7 +4,7 @@
 // Created          : 03-25-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-02-2021
+// Last Modified On : 05-29-2021
 // ***********************************************************************
 // <copyright file="MergeViewerBinaryControlViewModel.cs" company="Mario">
 //     Mario
@@ -47,7 +47,7 @@ namespace IronyModManager.ViewModels.Controls
         /// <summary>
         /// The left image lock
         /// </summary>
-        private readonly AsyncLock leftImageLock = new AsyncLock();
+        private readonly AsyncLock leftImageLock = new();
 
         /// <summary>
         /// The localization manager
@@ -67,7 +67,7 @@ namespace IronyModManager.ViewModels.Controls
         /// <summary>
         /// The right image lock
         /// </summary>
-        private readonly AsyncLock rightImageLock = new AsyncLock();
+        private readonly AsyncLock rightImageLock = new();
 
         #endregion Fields
 
@@ -295,7 +295,7 @@ namespace IronyModManager.ViewModels.Controls
         {
             async Task parseImage()
             {
-                var mutex = await leftImageLock.LockAsync();
+                var mutex = await rightImageLock.LockAsync();
                 var right = RightImage;
                 if (definition != null)
                 {

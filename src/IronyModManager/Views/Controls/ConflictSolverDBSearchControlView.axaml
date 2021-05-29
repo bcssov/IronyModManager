@@ -26,7 +26,7 @@
                       HorizontalAlignment="Stretch" VerticalAlignment="Stretch" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"></Button>
             </Grid>
           </Panel>
-          <ListBox Items="{Binding Definitions}" Height="400" Width="300" Grid.Row="1"
+          <ListBox Items="{Binding Definitions}" Height="400" Width="500" Grid.Row="1"
                    ScrollViewer.HorizontalScrollBarVisibility="Disabled">
             <ListBox.ItemTemplate>
               <DataTemplate>

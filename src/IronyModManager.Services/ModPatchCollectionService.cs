@@ -4,7 +4,7 @@
 // Created          : 05-26-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 05-28-2021
+// Last Modified On : 05-29-2021
 // ***********************************************************************
 // <copyright file="ModPatchCollectionService.cs" company="Mario">
 //     Mario
@@ -52,12 +52,20 @@ namespace IronyModManager.Services
     {
         #region Fields
 
-        private const int MaxModConflictsToCheck = 4;
-
         /// <summary>
         /// The cache region
         /// </summary>
         private const string CacheRegion = "CollectionPatchState";
+
+        /// <summary>
+        /// The ignore game mods identifier
+        /// </summary>
+        private const string IgnoreGameModsId = "ignoreGameMods";
+
+        /// <summary>
+        /// The maximum mod conflicts to check
+        /// </summary>
+        private const int MaxModConflictsToCheck = 4;
 
         /// <summary>
         /// The mod name ignore identifier
@@ -167,7 +175,7 @@ namespace IronyModManager.Services
             if (conflictResult != null)
             {
                 var ignoredPaths = conflictResult.IgnoredPaths ?? string.Empty;
-                var lines = ignoredPaths.SplitOnNewLine().Where(p => !p.Trim().StartsWith("#"));
+                var lines = ignoredPaths.SplitOnNewLine();
                 var sb = new StringBuilder();
                 foreach (var line in lines)
                 {
@@ -1356,6 +1364,48 @@ namespace IronyModManager.Services
         }
 
         /// <summary>
+        /// Shoulds the ignore game mods.
+        /// </summary>
+        /// <param name="conflictResult">The conflict result.</param>
+        /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
+        public virtual bool? ShouldIgnoreGameMods(IConflictResult conflictResult)
+        {
+            if (conflictResult != null)
+            {
+                var ignoredPaths = conflictResult.IgnoredPaths ?? string.Empty;
+                var lines = ignoredPaths.SplitOnNewLine();
+                return lines.Any(p => p.Equals(IgnoreGameModsId));
+            }
+            return null;
+        }
+
+        /// <summary>
+        /// Toggles the ignore game mods.
+        /// </summary>
+        /// <param name="conflictResult">The conflict result.</param>
+        /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
+        public virtual bool? ToggleIgnoreGameMods(IConflictResult conflictResult)
+        {
+            if (conflictResult != null)
+            {
+                var ignoredPaths = conflictResult.IgnoredPaths ?? string.Empty;
+                var shouldIgnore = ShouldIgnoreGameMods(conflictResult);
+                var lines = ignoredPaths.SplitOnNewLine().ToList();
+                if (shouldIgnore.GetValueOrDefault())
+                {
+                    lines.Remove(IgnoreGameModsId);
+                }
+                else
+                {
+                    lines.Add(IgnoreGameModsId);
+                }
+                conflictResult.IgnoredPaths = string.Join(Environment.NewLine, lines).Trim(Environment.NewLine.ToCharArray());
+                return !shouldIgnore;
+            }
+            return null;
+        }
+
+        /// <summary>
         /// Evals the definitions.
         /// </summary>
         /// <param name="indexedDefinitions">The indexed definitions.</param>
@@ -1513,6 +1563,7 @@ namespace IronyModManager.Services
             ruleIgnoredDefinitions.InitMap(null, true);
             if (!string.IsNullOrEmpty(conflictResult.IgnoredPaths))
             {
+                var ignoreGameMods = false;
                 var allowedMods = GetCollectionMods().Select(p => p.Name).ToList();
                 var ignoreRules = new List<string>();
                 var includeRules = new List<string>();
@@ -1524,6 +1575,10 @@ namespace IronyModManager.Services
                     {
                         var ignoredModName = parsed.Replace(ModNameIgnoreId, string.Empty);
                         allowedMods.Remove(ignoredModName);
+                    }
+                    else if (parsed.Equals(IgnoreGameModsId))
+                    {
+                        ignoreGameMods = true;
                     }
                     else
                     {
@@ -1573,6 +1628,20 @@ namespace IronyModManager.Services
                         foreach (var item in topConflict.Children)
                         {
                             if (!alreadyIgnored.Contains(item.Key))
+                            {
+                                alreadyIgnored.Add(item.Key);
+                                ruleIgnoredDefinitions.AddToMap(conflictResult.Conflicts.GetByTypeAndId(item.Key).First());
+                            }
+                        }
+                    }
+                }
+                if (ignoreGameMods)
+                {
+                    foreach (var topConflict in conflictResult.Conflicts.GetHierarchicalDefinitions())
+                    {
+                        foreach (var item in topConflict.Children.Where(p => p.Mods.Count <= 1))
+                        {
+                            if (item.NonGameDefinitions <= 1 && !alreadyIgnored.Contains(item.Key))
                             {
                                 alreadyIgnored.Add(item.Key);
                                 ruleIgnoredDefinitions.AddToMap(conflictResult.Conflicts.GetByTypeAndId(item.Key).First());
