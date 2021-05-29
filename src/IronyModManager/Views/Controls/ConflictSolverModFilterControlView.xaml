@@ -26,8 +26,8 @@
               </DataTemplate>
             </ListBox.ItemTemplate>
           </ListBox>
-          <Panel Grid.Row="1" Margin="0,5">            
-              <CheckBox HorizontalAlignment="Left" IsChecked="{Binding IgnoreGameMods}" Content="{Binding IgnoreGameModsTitle}"></CheckBox>                          
+          <Panel Grid.Row="1" Margin="0,5">
+            <CheckBox HorizontalAlignment="Left" IsChecked="{Binding IgnoreGameMods}" Content="{Binding IgnoreGameModsTitle}"></CheckBox>
             <Button Content="{Binding Close}" Command="{Binding CloseCommand}" HorizontalAlignment="Right"></Button>
           </Panel>
         </Grid>
