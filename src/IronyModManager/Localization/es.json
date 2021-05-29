@@ -225,6 +225,8 @@
         "Overlay_Apply_Message": "Espere mientras aplica la colección de mods...",
         "ConflictSolver": {
             "Conflict": "Solucionador de conflictos",
+            "Overlay_Conflict_Solver_Indexing_Game": "Por favor, espere mientras se indexan las definiciones de juegos...",
+            "Overlay_Conflict_Solver_Loading_Game_Definitions": "Por favor, espere mientras cargando definiciones de juego...",
             "Overlay_Conflict_Solver_Loading_Definitions": "Espere mientras se cargan las definiciones de mod...",
             "Overlay_Conflict_Solver_Analyzing_Conflicts": "Espere mientras se analizan las definiciones en busca de conflictos...",
             "Overlay_Conflict_Solver_Analyzing_Resolved_Conflicts": "Espere mientras se analizan las definiciones resueltas...",
@@ -233,6 +235,10 @@
             "FirstUsePrompt": {
                 "Title": "Atención",
                 "Message": "El solucionador de conflictos no es para los débiles de corazón. Requiere conocimiento y experiencia con el código de parches. Los usuarios de pequeñas colecciones de MOD deben ignorarlo, los usuarios de colecciones MOD más grandes deben considerar recortar sus colecciones de mod y investigar parches de códigos. No se puede proporcionar apoyo en caso de que proceda."
+            },
+            "GameExecutableNotSetPrompt": {
+                "Title": "Ejecutable del juego no establecido",
+                "Message": "El ejecutable del juego no se ha configurado en las opciones. Esta colección de mods incluía previamente archivos de juegos en su análisis. El solucionador de conflictos no podrá analizar los archivos del juego y es posible que se restablezcan algunas resoluciones. ¿Desea continuar?"
             }
         },
         "LaunchGame": {
@@ -318,6 +324,7 @@
         },
         "ModFilter": {
             "Title": "Filtro de Mods",
+            "IgnoreGameConflicts": "Ignorar los conflictos del juego",
             "Close": "Cerrar"
         },
         "ResetConflicts": {

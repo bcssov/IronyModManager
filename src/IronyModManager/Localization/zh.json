@@ -225,6 +225,8 @@
         "Overlay_Apply_Message": "正在加载合集……",
         "ConflictSolver": {
             "Conflict": "冲突处理器",
+            "Overlay_Conflict_Solver_Indexing_Game": "请等待索引游戏定义……",
+            "Overlay_Conflict_Solver_Loading_Game_Definitions": "请在加载游戏定义时等待……",
             "Overlay_Conflict_Solver_Loading_Definitions": "正在加载模组数据……",
             "Overlay_Conflict_Solver_Analyzing_Conflicts": "正在分析模组冲突……",
             "Overlay_Conflict_Solver_Analyzing_Resolved_Conflicts": "正在分析已处理的冲突……",
@@ -233,6 +235,10 @@
             "FirstUsePrompt": {
                 "Title": "注意！",
                 "Message": "冲突处理器并不适合一般人。它需要修补代码的知识和经验。使用小型模组合集的用户应当直接忽略它；使用大型合集的用户应当考虑精简其合集或学习修补代码。如果继续，恕不提供支持。"
+            },
+            "GameExecutableNotSetPrompt": {
+                "Title": "游戏可执行文件未设置",
+                "Message": "尚未在选项中设置游戏可执行文件。此mod集合以前在其分析中包括了游戏文件。冲突解决程序将无法分析游戏文件，并且某些解决方案可能会重置。你要继续吗？"
             }
         },
         "LaunchGame": {
@@ -318,6 +324,7 @@
         },
         "ModFilter": {
             "Title": "模组过滤",
+            "IgnoreGameConflicts": "忽略游戏冲突",
             "Close": "关闭"
         },
         "ResetConflicts": {

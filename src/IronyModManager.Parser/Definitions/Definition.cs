@@ -4,7 +4,7 @@
 // Created          : 02-16-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 12-10-2020
+// Last Modified On : 05-28-2021
 // ***********************************************************************
 // <copyright file="Definition.cs" company="Mario">
 //     Mario
@@ -420,6 +420,12 @@ namespace IronyModManager.Parser.Definitions
         public bool IsCustomPatch { get; set; }
 
         /// <summary>
+        /// Gets or sets a value indicating whether this instance is from game.
+        /// </summary>
+        /// <value><c>true</c> if this instance is from game; otherwise, <c>false</c>.</value>
+        public bool IsFromGame { get; set; }
+
+        /// <summary>
         /// Gets or sets the name of the mod.
         /// </summary>
         /// <value>The name of the mod.</value>
@@ -686,6 +692,7 @@ namespace IronyModManager.Parser.Definitions
                 nameof(VirtualParentDirectoryCI) => VirtualParentDirectoryCI,
                 nameof(CustomPriorityOrder) => CustomPriorityOrder,
                 nameof(IsCustomPatch) => IsCustomPatch,
+                nameof(IsFromGame) => IsFromGame,
                 _ => Id
             };
         }

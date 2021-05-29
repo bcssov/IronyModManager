@@ -4,7 +4,7 @@
 // Created          : 05-26-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-25-2021
+// Last Modified On : 05-29-2021
 // ***********************************************************************
 // <copyright file="ModPatchCollectionService.cs" company="Mario">
 //     Mario
@@ -18,6 +18,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
 using IronyModManager.DI;
@@ -35,6 +36,7 @@ using IronyModManager.Shared.Cache;
 using IronyModManager.Shared.MessageBus;
 using IronyModManager.Shared.Models;
 using IronyModManager.Storage.Common;
+using Nito.AsyncEx;
 using ValueType = IronyModManager.Shared.Models.ValueType;
 
 namespace IronyModManager.Services
@@ -54,6 +56,16 @@ namespace IronyModManager.Services
         /// The cache region
         /// </summary>
         private const string CacheRegion = "CollectionPatchState";
+
+        /// <summary>
+        /// The ignore game mods identifier
+        /// </summary>
+        private const string IgnoreGameModsId = "--ignoreGameMods";
+
+        /// <summary>
+        /// The maximum mod conflicts to check
+        /// </summary>
+        private const int MaxModConflictsToCheck = 4;
 
         /// <summary>
         /// The mod name ignore identifier
@@ -163,7 +175,7 @@ namespace IronyModManager.Services
             if (conflictResult != null)
             {
                 var ignoredPaths = conflictResult.IgnoredPaths ?? string.Empty;
-                var lines = ignoredPaths.SplitOnNewLine().Where(p => !p.Trim().StartsWith("#"));
+                var lines = ignoredPaths.SplitOnNewLine();
                 var sb = new StringBuilder();
                 foreach (var line in lines)
                 {
@@ -896,7 +908,8 @@ namespace IronyModManager.Services
                         OverwrittenConflicts = GetDefinitionOrDefault(conflicts.OverwrittenConflicts),
                         CustomConflicts = GetDefinitionOrDefault(conflicts.CustomConflicts),
                         RootPath = GetModDirectoryRootPath(game),
-                        PatchPath = EvaluatePatchNamePath(game, patchName)
+                        PatchPath = EvaluatePatchNamePath(game, patchName),
+                        HasGameDefinitions = conflicts.AllConflicts.HasGameDefinitions()
                     });
                     await messageBus.PublishAsync(new ModDefinitionPatchLoadEvent(100));
 
@@ -980,7 +993,8 @@ namespace IronyModManager.Services
                             OverwrittenConflicts = GetDefinitionOrDefault(conflictResult.OverwrittenConflicts),
                             CustomConflicts = GetDefinitionOrDefault(conflictResult.CustomConflicts),
                             RootPath = GetModDirectoryRootPath(game),
-                            PatchPath = EvaluatePatchNamePath(game, patchName)
+                            PatchPath = EvaluatePatchNamePath(game, patchName),
+                            HasGameDefinitions = conflictResult.AllConflicts.HasGameDefinitions()
                         });
                     }
 
@@ -1059,6 +1073,30 @@ namespace IronyModManager.Services
         }
 
         /// <summary>
+        /// patch has game definitions as an asynchronous operation.
+        /// </summary>
+        /// <param name="collectionName">Name of the collection.</param>
+        /// <returns>Task&lt;System.Boolean&gt;.</returns>
+        public virtual async Task<bool> PatchHasGameDefinitionsAsync(string collectionName)
+        {
+            var game = GameService.GetSelected();
+            if (game != null && !string.IsNullOrWhiteSpace(collectionName))
+            {
+                var patchName = GenerateCollectionPatchName(collectionName);
+                var state = await modPatchExporter.GetPatchStateAsync(new ModPatchExporterParameters()
+                {
+                    RootPath = GetModDirectoryRootPath(game),
+                    PatchPath = EvaluatePatchNamePath(game, patchName)
+                }, false);
+                if (state != null)
+                {
+                    return state.HasGameDefinitions;
+                }
+            }
+            return false;
+        }
+
+        /// <summary>
         /// patch mod needs update as an asynchronous operation.
         /// </summary>
         /// <param name="collectionName">Name of the collection.</param>
@@ -1072,7 +1110,7 @@ namespace IronyModManager.Services
                 var result = new List<EvalState>();
                 if ((definitions?.Any()).GetValueOrDefault())
                 {
-                    result.AddRange(definitions.Select(m => new EvalState()
+                    result.AddRange(definitions.Where(p => !p.IsFromGame).Select(m => new EvalState()
                     {
                         ContentSha = m.ContentSHA,
                         FileName = m.OriginalFileName,
@@ -1107,32 +1145,57 @@ namespace IronyModManager.Services
                 conflicts.AddRange(mapEvalState(state.Conflicts));
                 conflicts.AddRange(mapEvalState(state.OrphanConflicts));
                 conflicts.AddRange(mapEvalState(state.OverwrittenConflicts));
-                foreach (var groupedMods in conflicts.GroupBy(p => p.ModName))
+                var cancellationToken = new CancellationTokenSource();
+                var semaphore = new AsyncSemaphore(MaxModConflictsToCheck);
+                var tasks = conflicts.GroupBy(p => p.ModName).Select(async groupedMods =>
                 {
-                    foreach (var item in groupedMods.GroupBy(p => p.FileName))
+                    await semaphore.WaitAsync(cancellationToken.Token);
+                    try
                     {
-                        var definition = item.FirstOrDefault();
-                        var mod = mods.FirstOrDefault(p => p.Name.Equals(definition.ModName));
-                        if (mod == null)
+                        return await Task.Run(() =>
                         {
-                            // Mod no longer in collection, needs refresh break further checks...
-                            Cache.Set(new CacheAddParameters<PatchCollectionState>() { Region = CacheRegion, Prefix = game.Type, Key = patchName, Value = new PatchCollectionState() { NeedsUpdate = true, CheckInProgress = false } });
-                            return true;
-                        }
-                        else
-                        {
-                            var info = Reader.GetFileInfo(mod.FullPath, definition.FileName);
-                            if (info == null)
+                            foreach (var item in groupedMods.GroupBy(p => p.FileName))
                             {
-                                info = Reader.GetFileInfo(mod.FullPath, definition.FallBackFileName);
+                                var definition = item.FirstOrDefault();
+                                var mod = mods.FirstOrDefault(p => p.Name.Equals(definition.ModName));
+                                if (mod == null)
+                                {
+                                    // Mod no longer in collection, needs refresh break further checks...
+                                    Cache.Set(new CacheAddParameters<PatchCollectionState>() { Region = CacheRegion, Prefix = game.Type, Key = patchName, Value = new PatchCollectionState() { NeedsUpdate = true, CheckInProgress = false } });
+                                    return true;
+                                }
+                                else
+                                {
+                                    var info = Reader.GetFileInfo(mod.FullPath, definition.FileName);
+                                    if (info == null)
+                                    {
+                                        info = Reader.GetFileInfo(mod.FullPath, definition.FallBackFileName);
+                                    }
+                                    if (info == null || !info.ContentSHA.Equals(definition.ContentSha))
+                                    {
+                                        // File no longer in collection or content does not match, break further checks
+                                        Cache.Set(new CacheAddParameters<PatchCollectionState>() { Region = CacheRegion, Prefix = game.Type, Key = patchName, Value = new PatchCollectionState() { NeedsUpdate = true, CheckInProgress = false } });
+                                        return true;
+                                    }
+                                }
                             }
-                            if (info == null || !info.ContentSHA.Equals(definition.ContentSha))
-                            {
-                                // File no longer in collection or content does not match, break further checks
-                                Cache.Set(new CacheAddParameters<PatchCollectionState>() { Region = CacheRegion, Prefix = game.Type, Key = patchName, Value = new PatchCollectionState() { NeedsUpdate = true, CheckInProgress = false } });
-                                return true;
-                            }
-                        }
+                            return false;
+                        }, cancellationToken.Token);
+                    }
+                    finally
+                    {
+                        semaphore.Release();
+                    }
+                }).ToList();
+                while (tasks.Any())
+                {
+                    var task = await Task.WhenAny(tasks);
+                    tasks.Remove(task);
+                    var result = await task;
+                    if (result)
+                    {
+                        cancellationToken.Cancel();
+                        return true;
                     }
                 }
                 Cache.Set(new CacheAddParameters<PatchCollectionState>() { Region = CacheRegion, Prefix = game.Type, Key = patchName, Value = new PatchCollectionState() { NeedsUpdate = false, CheckInProgress = false } });
@@ -1295,8 +1358,51 @@ namespace IronyModManager.Services
                 OverwrittenConflicts = GetDefinitionOrDefault(conflictResult.OverwrittenConflicts),
                 CustomConflicts = GetDefinitionOrDefault(conflictResult.CustomConflicts),
                 RootPath = GetModDirectoryRootPath(game),
-                PatchPath = EvaluatePatchNamePath(game, patchName)
+                PatchPath = EvaluatePatchNamePath(game, patchName),
+                HasGameDefinitions = conflictResult.AllConflicts.HasGameDefinitions()
             });
+        }
+
+        /// <summary>
+        /// Shoulds the ignore game mods.
+        /// </summary>
+        /// <param name="conflictResult">The conflict result.</param>
+        /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
+        public virtual bool? ShouldIgnoreGameMods(IConflictResult conflictResult)
+        {
+            if (conflictResult != null)
+            {
+                var ignoredPaths = conflictResult.IgnoredPaths ?? string.Empty;
+                var lines = ignoredPaths.SplitOnNewLine();
+                return lines.Any(p => p.Equals(IgnoreGameModsId));
+            }
+            return null;
+        }
+
+        /// <summary>
+        /// Toggles the ignore game mods.
+        /// </summary>
+        /// <param name="conflictResult">The conflict result.</param>
+        /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
+        public virtual bool? ToggleIgnoreGameMods(IConflictResult conflictResult)
+        {
+            if (conflictResult != null)
+            {
+                var ignoredPaths = conflictResult.IgnoredPaths ?? string.Empty;
+                var shouldIgnore = ShouldIgnoreGameMods(conflictResult);
+                var lines = ignoredPaths.SplitOnNewLine().ToList();
+                if (shouldIgnore.GetValueOrDefault())
+                {
+                    lines.Remove(IgnoreGameModsId);
+                }
+                else
+                {
+                    lines.Add(IgnoreGameModsId);
+                }
+                conflictResult.IgnoredPaths = string.Join(Environment.NewLine, lines).Trim(Environment.NewLine.ToCharArray());
+                return !shouldIgnore;
+            }
+            return null;
         }
 
         /// <summary>
@@ -1410,10 +1516,13 @@ namespace IronyModManager.Services
                         {
                             if (result)
                             {
-                                if (!conflicts.Contains(def) && IsValidDefinitionType(def))
+                                if (!def.IsFromGame && !conflicts.Contains(def) && IsValidDefinitionType(def))
                                 {
                                     def.ExistsInLastFile = existsInLastFile(def);
-                                    conflicts.Add(def);
+                                    if (!def.ExistsInLastFile)
+                                    {
+                                        conflicts.Add(def);
+                                    }
                                 }
                             }
                         }
@@ -1430,10 +1539,13 @@ namespace IronyModManager.Services
                                 else
                                 {
                                     fileConflictCache.TryAdd(def.FileCI, true);
-                                    if (!conflicts.Contains(def) && IsValidDefinitionType(def))
+                                    if (!def.IsFromGame && !conflicts.Contains(def) && IsValidDefinitionType(def))
                                     {
                                         def.ExistsInLastFile = existsInLastFile(def);
-                                        conflicts.Add(def);
+                                        if (!def.ExistsInLastFile)
+                                        {
+                                            conflicts.Add(def);
+                                        }
                                     }
                                 }
                             }
@@ -1457,6 +1569,7 @@ namespace IronyModManager.Services
             ruleIgnoredDefinitions.InitMap(null, true);
             if (!string.IsNullOrEmpty(conflictResult.IgnoredPaths))
             {
+                var ignoreGameMods = false;
                 var allowedMods = GetCollectionMods().Select(p => p.Name).ToList();
                 var ignoreRules = new List<string>();
                 var includeRules = new List<string>();
@@ -1468,6 +1581,10 @@ namespace IronyModManager.Services
                     {
                         var ignoredModName = parsed.Replace(ModNameIgnoreId, string.Empty);
                         allowedMods.Remove(ignoredModName);
+                    }
+                    else if (parsed.Equals(IgnoreGameModsId))
+                    {
+                        ignoreGameMods = true;
                     }
                     else
                     {
@@ -1517,6 +1634,20 @@ namespace IronyModManager.Services
                         foreach (var item in topConflict.Children)
                         {
                             if (!alreadyIgnored.Contains(item.Key))
+                            {
+                                alreadyIgnored.Add(item.Key);
+                                ruleIgnoredDefinitions.AddToMap(conflictResult.Conflicts.GetByTypeAndId(item.Key).First());
+                            }
+                        }
+                    }
+                }
+                if (ignoreGameMods)
+                {
+                    foreach (var topConflict in conflictResult.Conflicts.GetHierarchicalDefinitions())
+                    {
+                        foreach (var item in topConflict.Children.Where(p => p.Mods.Count <= 1))
+                        {
+                            if (item.NonGameDefinitions <= 1 && !alreadyIgnored.Contains(item.Key))
                             {
                                 alreadyIgnored.Add(item.Key);
                                 ruleIgnoredDefinitions.AddToMap(conflictResult.Conflicts.GetByTypeAndId(item.Key).First());
@@ -1666,7 +1797,8 @@ namespace IronyModManager.Services
                         OverwrittenConflicts = GetDefinitionOrDefault(conflictResult.OverwrittenConflicts),
                         CustomConflicts = GetDefinitionOrDefault(conflictResult.CustomConflicts),
                         RootPath = GetModDirectoryRootPath(game),
-                        PatchPath = EvaluatePatchNamePath(game, patchName)
+                        PatchPath = EvaluatePatchNamePath(game, patchName),
+                        HasGameDefinitions = conflictResult.AllConflicts.HasGameDefinitions()
                     });
                     return exportPatches.Count > 0 ? exportResult && stateResult : stateResult;
                 }
@@ -1744,19 +1876,6 @@ namespace IronyModManager.Services
         }
 
         /// <summary>
-        /// Determines whether [is valid definition type] [the specified definition].
-        /// </summary>
-        /// <param name="definition">The definition.</param>
-        /// <returns><c>true</c> if [is valid definition type] [the specified definition]; otherwise, <c>false</c>.</returns>
-        protected virtual bool IsValidDefinitionType(IDefinition definition)
-        {
-            return definition != null && definition.ValueType != ValueType.Variable &&
-                definition.ValueType != ValueType.Namespace &&
-                definition.ValueType != ValueType.Invalid &&
-                definition.ValueType != ValueType.EmptyFile;
-        }
-
-        /// <summary>
         /// Maps the patch state mode.
         /// </summary>
         /// <param name="mode">The mode.</param>
@@ -1784,86 +1903,6 @@ namespace IronyModManager.Services
                 PatchStateMode.Advanced => IO.Common.PatchStateMode.Advanced,
                 _ => IO.Common.PatchStateMode.None,
             };
-        }
-
-        /// <summary>
-        /// Merges the definitions.
-        /// </summary>
-        /// <param name="definitions">The definitions.</param>
-        protected virtual void MergeDefinitions(IEnumerable<IDefinition> definitions)
-        {
-            static void appendLine(StringBuilder sb, IEnumerable<string> lines)
-            {
-                if (lines?.Count() > 0)
-                {
-                    sb.AppendLine(string.Join(Environment.NewLine, lines));
-                }
-            }
-            static string mergeCode(string codeTag, string separator, IEnumerable<string> lines)
-            {
-                if (Shared.Constants.CodeSeparators.ClosingSeparators.Map.ContainsKey(separator))
-                {
-                    var closingTag = Shared.Constants.CodeSeparators.ClosingSeparators.Map[separator];
-                    var sb = new StringBuilder();
-                    sb.AppendLine($"{codeTag} = {separator}");
-                    foreach (var item in lines)
-                    {
-                        var splitLines = item.SplitOnNewLine();
-                        foreach (var split in splitLines)
-                        {
-                            sb.AppendLine($"{new string(' ', 4)}{split}");
-                        }
-                    }
-                    sb.Append(closingTag);
-                    return sb.ToString();
-                }
-                else
-                {
-                    var sb = new StringBuilder();
-                    sb.AppendLine($"{codeTag}{separator}");
-                    foreach (var item in lines)
-                    {
-                        var splitLines = item.SplitOnNewLine();
-                        foreach (var split in splitLines)
-                        {
-                            sb.AppendLine($"{new string(' ', 4)}{split}");
-                        }
-                    }
-                    return sb.ToString();
-                }
-            }
-
-            if (definitions?.Count() > 0)
-            {
-                var otherDefinitions = definitions.Where(p => IsValidDefinitionType(p));
-                var variableDefinitions = definitions.Where(p => !IsValidDefinitionType(p));
-                if (variableDefinitions.Any())
-                {
-                    foreach (var definition in otherDefinitions)
-                    {
-                        var originalCode = definition.OriginalCode.ReplaceTabs().ReplaceNewLine().Split(" ", StringSplitOptions.RemoveEmptyEntries);
-                        var namespaces = variableDefinitions.Where(p => p.ValueType == ValueType.Namespace);
-                        var variables = variableDefinitions.Where(p => originalCode.Contains(p.Id));
-                        var allVars = namespaces.Concat(variables);
-                        if (allVars.Any())
-                        {
-                            definition.Variables = allVars.ToList();
-                        }
-                        if (string.IsNullOrWhiteSpace(definition.CodeTag))
-                        {
-                            StringBuilder sb = new StringBuilder();
-                            appendLine(sb, namespaces.Select(p => p.Code));
-                            appendLine(sb, variables.Select(p => p.Code));
-                            appendLine(sb, new List<string> { definition.Code });
-                            definition.Code = sb.ToString();
-                        }
-                        else
-                        {
-                            definition.Code = mergeCode(definition.CodeTag, definition.CodeSeparator, namespaces.Select(p => p.OriginalCode).Concat(variables.Select(p => p.OriginalCode)).Concat(new List<string>() { definition.OriginalCode }));
-                        }
-                    }
-                }
-            }
         }
 
         /// <summary>
@@ -2093,7 +2132,8 @@ namespace IronyModManager.Services
                         OverwrittenConflicts = GetDefinitionOrDefault(conflictResult.OverwrittenConflicts),
                         CustomConflicts = GetDefinitionOrDefault(conflictResult.CustomConflicts),
                         RootPath = GetModDirectoryRootPath(game),
-                        PatchPath = EvaluatePatchNamePath(game, patchName)
+                        PatchPath = EvaluatePatchNamePath(game, patchName),
+                        HasGameDefinitions = conflictResult.AllConflicts.HasGameDefinitions()
                     });
                     return true;
                 }

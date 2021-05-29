@@ -4,7 +4,7 @@
 // Created          : 06-08-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 05-26-2021
+// Last Modified On : 05-29-2021
 // ***********************************************************************
 // <copyright file="ConflictSolverModFilterControlViewModel.cs" company="Mario">
 //     Mario
@@ -18,8 +18,11 @@ using System.Linq;
 using System.Reactive;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using Avalonia.Collections;
+using Avalonia.Threading;
+using IronyModManager.Common;
 using IronyModManager.Common.ViewModels;
 using IronyModManager.Localization.Attributes;
 using IronyModManager.Models.Common;
@@ -60,9 +63,24 @@ namespace IronyModManager.ViewModels.Controls
         private string previousIgnoredPath;
 
         /// <summary>
+        /// The previous ignore game mods
+        /// </summary>
+        private bool previousIgnoreGameMods;
+
+        /// <summary>
+        /// The setting values
+        /// </summary>
+        private bool settingValues = false;
+
+        /// <summary>
+        /// The should toggle game mods
+        /// </summary>
+        private bool shouldToggleGameMods;
+
+        /// <summary>
         /// The syncing selected mods
         /// </summary>
-        private bool syncingSelectedMods = false;
+        private CancellationTokenSource syncingToken;
 
         #endregion Fields
 
@@ -107,6 +125,19 @@ namespace IronyModManager.ViewModels.Controls
         public virtual bool HasSavedState { get; protected set; }
 
         /// <summary>
+        /// Gets or sets a value indicating whether [ignore game mods].
+        /// </summary>
+        /// <value><c>true</c> if [ignore game mods]; otherwise, <c>false</c>.</value>
+        public virtual bool IgnoreGameMods { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets the ignore game mods title.
+        /// </summary>
+        /// <value>The ignore game mods title.</value>
+        [StaticLocalization(LocalizationResources.Conflict_Solver.ModFilter.IgnoreGameConflicts)]
+        public virtual string IgnoreGameModsTitle { get; protected set; }
+
+        /// <summary>
         /// Gets or sets a value indicating whether this instance is open.
         /// </summary>
         /// <value><c>true</c> if this instance is open; otherwise, <c>false</c>.</value>
@@ -129,7 +160,7 @@ namespace IronyModManager.ViewModels.Controls
         /// Gets or sets the mods.
         /// </summary>
         /// <value>The mods.</value>
-        public virtual IAvaloniaList<string> Mods { get; set; }
+        public virtual IAvaloniaList<string> Mods { get; protected set; }
 
         /// <summary>
         /// Gets or sets the selected mods.
@@ -157,45 +188,65 @@ namespace IronyModManager.ViewModels.Controls
         /// <param name="collectionName">Name of the collection.</param>
         public virtual void SetConflictResult(IConflictResult conflictResult, IReadOnlyList<string> activeMods, string collectionName)
         {
+            async Task valuesSet()
+            {
+                await Task.Delay(50);
+                settingValues = false;
+            }
             this.collectionName = collectionName;
             ConflictResult = conflictResult;
             previousIgnoredPath = conflictResult?.IgnoredPaths ?? string.Empty;
             isOpen?.Dispose();
             isOpen = this.WhenAnyValue(p => p.IsOpen).Where(p => p).Subscribe(s =>
             {
+                settingValues = true;
                 Mods.Clear();
                 SelectedMods.Clear();
                 Mods.AddRange(activeMods);
                 SelectedMods.AddRange(activeMods.Except(modPatchCollectionService.GetIgnoredMods(ConflictResult)).ToList());
+                shouldToggleGameMods = false;
+                previousIgnoreGameMods = IgnoreGameMods = modPatchCollectionService.ShouldIgnoreGameMods(conflictResult).GetValueOrDefault();
+                valuesSet().ConfigureAwait(false);
             }).DisposeWith(Disposables);
         }
 
         /// <summary>
         /// Ignores the mods.
         /// </summary>
-        protected async Task IgnoreModsAsync()
+        /// <param name="token">The token.</param>
+        protected async Task IgnoreModsAsync(CancellationToken token)
         {
             if (ConflictResult == null)
             {
                 return;
             }
-            await Task.Delay(100);
-            var mods = Mods.Except(SelectedMods).ToList();
-            modPatchCollectionService.AddModsToIgnoreList(ConflictResult, mods);
-            if (previousIgnoredPath == null)
+            await Task.Delay(100, token);
+            if (!token.IsCancellationRequested)
             {
-                previousIgnoredPath = string.Empty;
+                await Dispatcher.UIThread.SafeInvokeAsync(async () =>
+                {
+                    var mods = Mods.Except(SelectedMods).ToList();
+                    modPatchCollectionService.AddModsToIgnoreList(ConflictResult, mods);
+                    if (shouldToggleGameMods)
+                    {
+                        modPatchCollectionService.ToggleIgnoreGameMods(ConflictResult);
+                        shouldToggleGameMods = false;
+                    }
+                    if (previousIgnoredPath == null)
+                    {
+                        previousIgnoredPath = string.Empty;
+                    }
+                    if (previousIgnoredPath.Equals(ConflictResult.IgnoredPaths ?? string.Empty))
+                    {
+                        return;
+                    }
+                    await modPatchCollectionService.SaveIgnoredPathsAsync(ConflictResult, collectionName);
+                    IgnoreGameMods = modPatchCollectionService.ShouldIgnoreGameMods(ConflictResult).GetValueOrDefault();
+                    previousIgnoredPath = ConflictResult.IgnoredPaths;
+                    HasSavedState = true;
+                    HasSavedState = false;
+                });
             }
-            if (previousIgnoredPath.Equals(ConflictResult.IgnoredPaths ?? string.Empty))
-            {
-                syncingSelectedMods = false;
-                return;
-            }
-            await modPatchCollectionService.SaveIgnoredPathsAsync(ConflictResult, collectionName);
-            previousIgnoredPath = ConflictResult.IgnoredPaths;
-            HasSavedState = true;
-            syncingSelectedMods = false;
-            HasSavedState = false;
         }
 
         /// <summary>
@@ -204,6 +255,20 @@ namespace IronyModManager.ViewModels.Controls
         /// <param name="disposables">The disposables.</param>
         protected override void OnActivated(CompositeDisposable disposables)
         {
+            async Task saveState()
+            {
+                if (syncingToken != null)
+                {
+                    syncingToken.Cancel();
+                }
+                syncingToken = new CancellationTokenSource();
+                if (shouldToggleGameMods)
+                {
+                    previousIgnoreGameMods = IgnoreGameMods;
+                }
+                await IgnoreModsAsync(syncingToken.Token).ConfigureAwait(false);
+            }
+
             Mods = new AvaloniaList<string>();
             SelectedMods = new AvaloniaList<string>();
 
@@ -219,13 +284,20 @@ namespace IronyModManager.ViewModels.Controls
 
             SelectedMods.CollectionChanged += (sender, args) =>
             {
-                if (syncingSelectedMods)
+                if (!settingValues)
                 {
-                    return;
+                    saveState().ConfigureAwait(false);
                 }
-                syncingSelectedMods = true;
-                IgnoreModsAsync().ConfigureAwait(false);
             };
+
+            this.WhenAnyValue(p => p.IgnoreGameMods).Subscribe(s =>
+            {
+                if (!settingValues && previousIgnoreGameMods != IgnoreGameMods)
+                {
+                    shouldToggleGameMods = true;
+                    saveState().ConfigureAwait(false);
+                }
+            }).DisposeWith(disposables);
 
             base.OnActivated(disposables);
         }

@@ -4,7 +4,7 @@
 // Created          : 02-12-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-27-2021
+// Last Modified On : 05-27-2021
 // ***********************************************************************
 // <copyright file="GameService.cs" company="Mario">
 //     Mario
@@ -195,32 +195,15 @@ namespace IronyModManager.Services
         /// <returns>IGameSettings.</returns>
         public virtual IGameSettings GetGameSettingsFromJson(IGame game, string path)
         {
-            string settingsFile;
-            if (string.IsNullOrWhiteSpace(game.LauncherSettingsPrefix))
+            var settingsObject = GetGameLauncherSettings(game, path);
+            if (settingsObject != null)
             {
-                settingsFile = game.LauncherSettingsFileName;
-            }
-            else
-            {
-                settingsFile = game.LauncherSettingsPrefix + game.LauncherSettingsFileName;
-            }
-            var info = reader.Read(Path.Combine(path, settingsFile));
-            if (info?.Count() > 0)
-            {
-                var text = string.Join(Environment.NewLine, info.FirstOrDefault().Content);
-                try
-                {
-                    var model = GetModelInstance<IGameSettings>();
-                    var settingsObject = JsonConvert.DeserializeObject<Models.LauncherSettings>(text);
-                    model.LaunchArguments = string.Join(" ", settingsObject.ExeArgs);
-                    model.UserDirectory = pathResolver.Parse(settingsObject.GameDataPath);
-                    model.ExecutableLocation = Path.Combine(path, settingsObject.ExePath).StandardizeDirectorySeparator();
-                    model.CustomModDirectory = string.Empty;
-                    return model;
-                }
-                catch
-                {
-                }
+                var model = GetModelInstance<IGameSettings>();
+                model.LaunchArguments = string.Join(" ", settingsObject.ExeArgs);
+                model.UserDirectory = pathResolver.Parse(settingsObject.GameDataPath);
+                model.ExecutableLocation = Path.Combine(path, settingsObject.ExePath).StandardizeDirectorySeparator();
+                model.CustomModDirectory = string.Empty;
+                return model;
             }
             return null;
         }
@@ -276,6 +259,22 @@ namespace IronyModManager.Services
         public virtual IGame GetSelected()
         {
             return Get().FirstOrDefault(s => s.IsSelected);
+        }
+
+        /// <summary>
+        /// Gets the version.
+        /// </summary>
+        /// <param name="game">The game.</param>
+        /// <returns>System.String.</returns>
+        public virtual string GetVersion(IGame game)
+        {
+            if (game != null)
+            {
+                var path = Path.GetDirectoryName(game.ExecutableLocation);
+                var settingsObject = GetGameLauncherSettings(game, path);
+                return settingsObject?.RawVersion;
+            }
+            return string.Empty;
         }
 
         /// <summary>
@@ -536,7 +535,7 @@ namespace IronyModManager.Services
         /// <returns>IEnumerable&lt;IHashReport&gt;.</returns>
         protected virtual async Task<IEnumerable<IHashReport>> ParseReportAsync(IGame game, string basePath, IEnumerable<string> files)
         {
-            var reports = new List<IHashReport>();           
+            var reports = new List<IHashReport>();
 
             var total = files.Where(p => game.GameFolders.Any(x => p.StartsWith(x))).Count();
             var progress = 0;
@@ -593,6 +592,40 @@ namespace IronyModManager.Services
             settings.UserDirectory = game.UserDirectory;
             settings.CustomModDirectory = game.CustomModDirectory;
             StorageProvider.SetGameSettings(gameSettings);
+        }
+
+        /// <summary>
+        /// Gets the game launcher settings.
+        /// </summary>
+        /// <param name="game">The game.</param>
+        /// <param name="path">The path.</param>
+        /// <returns>Models.LauncherSettings.</returns>
+        private Models.LauncherSettings GetGameLauncherSettings(IGame game, string path)
+        {
+            string settingsFile;
+            if (string.IsNullOrWhiteSpace(game.LauncherSettingsPrefix))
+            {
+                settingsFile = game.LauncherSettingsFileName;
+            }
+            else
+            {
+                settingsFile = game.LauncherSettingsPrefix + game.LauncherSettingsFileName;
+            }
+            var info = reader.Read(Path.Combine(path ?? string.Empty, settingsFile));
+            if (info?.Count() > 0)
+            {
+                var text = string.Join(Environment.NewLine, info.FirstOrDefault().Content);
+                try
+                {
+                    var model = GetModelInstance<IGameSettings>();
+                    var settingsObject = JsonConvert.DeserializeObject<Models.LauncherSettings>(text);
+                    return settingsObject;
+                }
+                catch
+                {
+                }
+            }
+            return null;
         }
 
         #endregion Methods

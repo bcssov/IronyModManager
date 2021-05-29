@@ -225,6 +225,8 @@
         "Overlay_Apply_Message": "Pričekajte dok se primjenjuje kolekcija...",
         "ConflictSolver": {
             "Conflict": "Rješavanje sukoba",
+            "Overlay_Conflict_Solver_Indexing_Game": "Pričekaj dok se indexiraju definicije igre...",
+            "Overlay_Conflict_Solver_Loading_Game_Definitions": "Pričekaj dok se učitavaju definicije igre...",
             "Overlay_Conflict_Solver_Loading_Definitions": "Pričekaj dok se učitavaju definicije modova...",
             "Overlay_Conflict_Solver_Replacing_Definitions": "Pričekaj dok se zamjenjuju definicije...",
             "Overlay_Conflict_Solver_Analyzing_Conflicts": "Pričekaj dok se analiziraju definicije za sukobe...",
@@ -233,6 +235,10 @@
             "FirstUsePrompt": {
                 "Title": "Pažnja",
                 "Message": "Rješavač sukoba nije za osobe slabog srca. Ono zahtijeva znanje i iskustvo s krpanjem koda. Korisnici manjih kolekcija ga slobodno trebaju ugnorirati, korisnici većih kolekcija trebaju ili smanjiti broj modifikacija ili istražiti krpanje koda. Ne može se pružiti podrška ako nastaviš."
+            },
+            "GameExecutableNotSetPrompt": {
+                "Title": "Izvršna datoteka igre nije postavljena",
+                "Message": "Izvršna datoteka igre nije postavljena u opcijama. Ova kolekcija modova prethodno je u svoju analizu uključivala datoteke igre. Rješivač sukoba neće moći analizirati datoteke igre i neke će se rezolucije možda resetirati. Želite li nastaviti?"
             }
         },
         "LaunchGame": {
@@ -318,6 +324,7 @@
         },
         "ModFilter": {
             "Title": "Mod Filter",
+            "IgnoreGameConflicts": "Zanemari sukobe igre",
             "Close": "Zatvori"
         },
         "ResetConflicts": {

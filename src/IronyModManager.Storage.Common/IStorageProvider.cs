@@ -4,7 +4,7 @@
 // Created          : 01-11-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-16-2021
+// Last Modified On : 05-27-2021
 // ***********************************************************************
 // <copyright file="IStorageProvider.cs" company="Mario">
 //     Mario
@@ -59,6 +59,12 @@ namespace IronyModManager.Storage.Common
         /// </summary>
         /// <returns>IPreferences.</returns>
         IPreferences GetPreferences();
+
+        /// <summary>
+        /// Gets the root storage path.
+        /// </summary>
+        /// <returns>System.String.</returns>
+        string GetRootStoragePath();
 
         /// <summary>
         /// Gets the themes.

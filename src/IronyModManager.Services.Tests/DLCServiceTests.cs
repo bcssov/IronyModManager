@@ -73,7 +73,7 @@ namespace IronyModManager.Services.Tests
                     IsBinary = false
                 }
             };
-            reader.Setup(s => s.Read(It.IsAny<string>(), It.IsAny<IEnumerable<string>>())).Returns(fileInfos);
+            reader.Setup(s => s.Read(It.IsAny<string>(), It.IsAny<IEnumerable<string>>(), It.IsAny<bool>())).Returns(fileInfos);
             var parser = new Mock<IDLCParser>();
             parser.Setup(s => s.Parse(It.IsAny<string>(), It.IsAny<IEnumerable<string>>())).Returns((string path, IEnumerable<string> values) =>
             {

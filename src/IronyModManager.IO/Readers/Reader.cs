@@ -4,7 +4,7 @@
 // Created          : 02-23-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-19-2021
+// Last Modified On : 05-28-2021
 // ***********************************************************************
 // <copyright file="Reader.cs" company="Mario">
 //     Mario
@@ -112,6 +112,12 @@ namespace IronyModManager.IO.Readers
             return null;
         }
 
+        /// <summary>
+        /// Gets the image stream asynchronous.
+        /// </summary>
+        /// <param name="rootPath">The root path.</param>
+        /// <param name="file">The file.</param>
+        /// <returns>Task&lt;MemoryStream&gt;.</returns>
         public virtual Task<MemoryStream> GetImageStreamAsync(string rootPath, string file)
         {
             if (Constants.ImageExtensions.Any(p => file.EndsWith(p, StringComparison.OrdinalIgnoreCase)))
@@ -122,12 +128,6 @@ namespace IronyModManager.IO.Readers
             return Task.FromResult((MemoryStream)null);
         }
 
-        /// <summary>
-        /// Gets the image stream asynchronous.
-        /// </summary>
-        /// <param name="rootPath">The root path.</param>
-        /// <param name="file">The file.</param>
-        /// <returns>Task&lt;MemoryStream&gt;.</returns>
         /// <summary>
         /// Gets the stream.
         /// </summary>
@@ -160,14 +160,15 @@ namespace IronyModManager.IO.Readers
         /// </summary>
         /// <param name="path">The path.</param>
         /// <param name="allowedPaths">The allowed paths.</param>
+        /// <param name="searchSubFolders">if set to <c>true</c> [search sub folders].</param>
         /// <returns>IEnumerable&lt;IFileInfo&gt;.</returns>
-        public virtual IEnumerable<IFileInfo> Read(string path, IEnumerable<string> allowedPaths = null)
+        public virtual IEnumerable<IFileInfo> Read(string path, IEnumerable<string> allowedPaths = null, bool searchSubFolders = true)
         {
             path ??= string.Empty;
-            var reader = readers.FirstOrDefault(r => r.CanRead(path));
+            var reader = readers.FirstOrDefault(r => r.CanRead(path, searchSubFolders));
             if (reader != null)
             {
-                return reader.Read(path, allowedPaths);
+                return reader.Read(path, allowedPaths, searchSubFolders);
             }
             return null;
         }
