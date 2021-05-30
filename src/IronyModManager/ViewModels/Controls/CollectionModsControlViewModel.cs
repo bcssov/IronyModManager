@@ -1300,6 +1300,7 @@ namespace IronyModManager.ViewModels.Controls
                                     successMessage = localizationManager.GetResource(LocalizationResources.Notifications.CollectionRenamed.Message);
                                     await TriggerOverlayAsync(id, false);
                                     notificationAction.ShowNotification(successTitle, successMessage, NotificationType.Success);
+                                    PatchMod.SetParameters(SelectedModCollection);
                                 }
                                 handleRenamePatchCollection().ConfigureAwait(true);
                             }
