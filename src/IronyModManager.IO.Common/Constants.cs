@@ -4,15 +4,15 @@
 // Created          : 02-23-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-13-2021
+// Last Modified On : 05-30-2021
 // ***********************************************************************
 // <copyright file="Constants.cs" company="Mario">
 //     Mario
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
-using System.Collections.Generic;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using IronyModManager.Shared;
 
@@ -30,6 +30,11 @@ namespace IronyModManager.IO.Common
         /// The exported mod content identifier
         /// </summary>
         public const string ExportedModContentId = "exported.json";
+
+        /// <summary>
+        /// The mod export path
+        /// </summary>
+        public const string ModExportPath = "irony_exported_mods";
 
         /// <summary>
         /// The DLC directory
