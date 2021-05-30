@@ -330,6 +330,11 @@ namespace IronyModManager.ViewModels.Controls
             DefaultOrderOnly,
 
             /// <summary>
+            /// The default with all mods
+            /// </summary>
+            DefaultWithAllMods,
+
+            /// <summary>
             /// The paradoxos
             /// </summary>
             Paradoxos,
@@ -940,7 +945,7 @@ namespace IronyModManager.ViewModels.Controls
                 });
                 TriggerOverlay(id, true, localizationManager.GetResource(LocalizationResources.Collection_Mods.Overlay_Exporting_Message), overlayProgress);
             }).DisposeWith(Disposables);
-            await Task.Run(async () => await modCollectionService.ExportAsync(path, collection, providerType == ImportProviderType.DefaultOrderOnly).ConfigureAwait(false)).ConfigureAwait(false);
+            await Task.Run(async () => await modCollectionService.ExportAsync(path, collection, providerType == ImportProviderType.DefaultOrderOnly, providerType == ImportProviderType.DefaultWithAllMods).ConfigureAwait(false)).ConfigureAwait(false);
             modExportProgress?.Dispose();
             var title = localizationManager.GetResource(LocalizationResources.Notifications.CollectionExported.Title);
             var message = Smart.Format(localizationManager.GetResource(LocalizationResources.Notifications.CollectionExported.Message), new { CollectionName = collection.Name });
@@ -1327,6 +1332,7 @@ namespace IronyModManager.ViewModels.Controls
             {
                 Observable.Merge(ExportCollection.ExportCommand.Select(p => Tuple.Create(ImportActionType.Export, p, ImportProviderType.Default)),
                     ExportCollection.ExportOrderOnlyCommand.Select(p => Tuple.Create(ImportActionType.Export, p, ImportProviderType.DefaultOrderOnly)),
+                    ExportCollection.ExportWholeCollectionCommand.Select(p => Tuple.Create(ImportActionType.Export, p, ImportProviderType.DefaultWithAllMods)),
                     ExportCollection.ImportCommand.Select(p => Tuple.Create(ImportActionType.Import, p, ImportProviderType.Default)),
                     ExportCollection.ImportOtherParadoxosCommand.Select(p => Tuple.Create(ImportActionType.Import, p, ImportProviderType.Paradoxos)),
                     ExportCollection.ImportOtherParadoxCommand.Select(p => Tuple.Create(ImportActionType.Import, p, ImportProviderType.Paradox)),

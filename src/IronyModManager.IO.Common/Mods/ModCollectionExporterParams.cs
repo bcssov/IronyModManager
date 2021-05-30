@@ -4,15 +4,15 @@
 // Created          : 04-02-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 09-13-2020
+// Last Modified On : 05-30-2021
 // ***********************************************************************
 // <copyright file="ModCollectionExporterParams.cs" company="Mario">
 //     Mario
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
-using System.Collections.Generic;
 using System;
+using System.Collections.Generic;
 using IronyModManager.Models.Common;
 using IronyModManager.Shared;
 
@@ -27,10 +27,22 @@ namespace IronyModManager.IO.Common.Mods
         #region Properties
 
         /// <summary>
+        /// Gets or sets the export mod directory.
+        /// </summary>
+        /// <value>The export mod directory.</value>
+        public string ExportModDirectory { get; set; }
+
+        /// <summary>
         /// Gets or sets a value indicating whether [export mod order only].
         /// </summary>
         /// <value><c>true</c> if [export mod order only]; otherwise, <c>false</c>.</value>
         public bool ExportModOrderOnly { get; set; }
+
+        /// <summary>
+        /// Gets or sets the export mods.
+        /// </summary>
+        /// <value>The export mods.</value>
+        public IEnumerable<IMod> ExportMods { get; set; }
 
         /// <summary>
         /// Gets or sets the file.

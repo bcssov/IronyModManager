@@ -177,6 +177,7 @@
         "ExportOther": {
             "Title": "...",
             "OrderOnly": "Nur Reihenfolge Exportieren",
+            "WholeCollection": "Export ganzer Sammlung",
             "Close": "Schließen"
         },
         "MergeCollection": {

@@ -135,6 +135,61 @@ namespace IronyModManager.IO.Mods
                     }
                 }
             }
+            if ((parameters.ExportMods?.Any()).GetValueOrDefault())
+            {
+                foreach (var mod in parameters.ExportMods)
+                {
+                    if (Directory.Exists(mod.FullPath))
+                    {
+                        var files = Directory.GetFiles(mod.FullPath, "*.*", SearchOption.AllDirectories);
+                        if (!RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
+                        {
+                            foreach (var item in files)
+                            {
+                                var fs = new FileStream(item, FileMode.Open, FileAccess.Read, FileShare.Read);
+                                var file = Path.Combine(Common.Constants.ModExportPath, item.Replace(Path.GetDirectoryName(mod.FullPath), string.Empty).Trim('\\').Trim('/'));
+                                zip.AddEntry(file, fs, false, modified: new System.IO.FileInfo(item).LastWriteTime);
+                                streams.Add(fs);
+                            }
+                        }
+                        else
+                        {
+                            foreach (var item in files)
+                            {
+                                var fs = new FileStream(item, FileMode.Open, FileAccess.Read, FileShare.Read);
+                                var ms = new MemoryStream();
+                                await fs.CopyToAsync(ms);
+                                var file = Path.Combine(Common.Constants.ModExportPath, item.Replace(Path.GetDirectoryName(mod.FullPath), string.Empty).Trim('\\').Trim('/'));
+                                zip.AddEntry(file, ms, false, modified: new System.IO.FileInfo(item).LastWriteTime);
+                                fs.Close();
+                                await fs.DisposeAsync();
+                                streams.Add(ms);
+                            }
+                        }
+                    }
+                    else if (File.Exists(mod.FullPath))
+                    {
+                        if (!RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
+                        {
+                            var fs = new FileStream(mod.FullPath, FileMode.Open, FileAccess.Read, FileShare.Read);
+                            var file = Path.Combine(Common.Constants.ModExportPath, Path.GetFileName(mod.FullPath));
+                            zip.AddEntry(file, fs, false, modified: new System.IO.FileInfo(mod.FullPath).LastWriteTime);
+                            streams.Add(fs);
+                        }
+                        else
+                        {
+                            var fs = new FileStream(mod.FullPath, FileMode.Open, FileAccess.Read, FileShare.Read);
+                            var ms = new MemoryStream();
+                            await fs.CopyToAsync(ms);
+                            var file = Path.Combine(Common.Constants.ModExportPath, Path.GetFileName(mod.FullPath));
+                            zip.AddEntry(file, ms, false, modified: new System.IO.FileInfo(mod.FullPath).LastWriteTime);
+                            fs.Close();
+                            await fs.DisposeAsync();
+                            streams.Add(ms);
+                        }
+                    }
+                }
+            }
 
             var entries = zip.Entries.Where(p => !p.IsDirectory);
             double total = entries.Count();
@@ -264,19 +319,6 @@ namespace IronyModManager.IO.Mods
                     if (!reader.Entry.IsDirectory)
                     {
                         count++;
-                        var relativePath = reader.Entry.Key.StandardizeDirectorySeparator().Trim(Path.DirectorySeparatorChar);
-                        if (reader.Entry.Key.Equals(Common.Constants.ExportedModContentId, StringComparison.OrdinalIgnoreCase))
-                        {
-                            if (importInstance)
-                            {
-                                result = true;
-                                break;
-                            }
-                        }
-                        else
-                        {
-                            reader.WriteEntryToDirectory(parameters.ModDirectory, ZipExtractionOpts.GetExtractionOptions());
-                        }
                     }
                 }
                 fileStream.Close();
@@ -315,7 +357,11 @@ namespace IronyModManager.IO.Mods
                         }
                         else
                         {
-                            reader.WriteEntryToDirectory(parameters.ModDirectory, ZipExtractionOpts.GetExtractionOptions());
+                            if (!importInstance)
+                            {
+                                var exportDirectory = relativePath.StartsWith(Common.Constants.ModExportPath + Path.DirectorySeparatorChar) ? parameters.ExportModDirectory : parameters.ModDirectory;
+                                reader.WriteEntryToDirectory(exportDirectory, ZipExtractionOpts.GetExtractionOptions());
+                            }
                         }
                         processed++;
                         var perc = GetProgressPercentage(total, processed, 100);
@@ -358,7 +404,11 @@ namespace IronyModManager.IO.Mods
                     }
                     else
                     {
-                        entry.WriteToDirectory(parameters.ModDirectory, ZipExtractionOpts.GetExtractionOptions());
+                        if (!importInstance)
+                        {
+                            var exportDirectory = relativePath.StartsWith(Common.Constants.ModExportPath + Path.DirectorySeparatorChar) ? parameters.ExportModDirectory : parameters.ModDirectory;
+                            entry.WriteToDirectory(exportDirectory, ZipExtractionOpts.GetExtractionOptions());
+                        }
                     }
                     processed++;
                     var perc = GetProgressPercentage(total, processed, 100);

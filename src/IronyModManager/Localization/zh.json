@@ -177,6 +177,7 @@
         "ExportOther": {
             "Title": "…",
             "OrderOnly": "仅导出模组加载顺序",
+            "WholeCollection": "出口全系列",
             "Close": "关闭"
         },
         "MergeCollection": {

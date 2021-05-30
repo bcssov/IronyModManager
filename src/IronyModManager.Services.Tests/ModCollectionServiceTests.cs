@@ -24,9 +24,12 @@ using IronyModManager.IO.Common.Mods;
 using IronyModManager.IO.Common.Readers;
 using IronyModManager.Models;
 using IronyModManager.Models.Common;
+using IronyModManager.Parser.Common.Mod;
+using IronyModManager.Parser.Mod;
 using IronyModManager.Services.Common;
 using IronyModManager.Shared.Cache;
 using IronyModManager.Shared.MessageBus;
+using IronyModManager.Shared.Models;
 using IronyModManager.Storage.Common;
 using IronyModManager.Tests.Common;
 using Moq;
@@ -529,6 +532,88 @@ namespace IronyModManager.Services.Tests
             {
                 Name = "fake"
             }, true);
+            isValid.Should().BeTrue();
+        }
+
+        /// <summary>
+        /// Defines the test method Should_export_whole_mod_collection.
+        /// </summary>
+        [Fact]
+        public async Task Should_export_whole_mod_collection()
+        {
+            var storageProvider = new Mock<IStorageProvider>();
+            var mapper = new Mock<IMapper>();
+            var gameService = new Mock<IGameService>();
+            var modExport = new Mock<IModCollectionExporter>();
+            var reader = new Mock<IReader>();
+            var modParser = new Mock<IModParser>();
+            var isValid = false;
+            gameService.Setup(s => s.GetSelected()).Returns(new Game()
+            {
+                Type = "no-items",
+                UserDirectory = "C:\\fake",
+                WorkshopDirectory = new List<string>() { "C:\\fake" },
+                CustomModDirectory = string.Empty
+            });
+            modExport.Setup(p => p.ExportAsync(It.IsAny<ModCollectionExporterParams>())).Callback((ModCollectionExporterParams p) =>
+            {
+                if (p.File.Equals("file") && p.Mod.Name.Equals("fake") && p.ExportMods.Any())
+                {
+                    isValid = true;
+                }
+            });
+            var modWriter = new Mock<IModWriter>();
+            modWriter.Setup(p => p.ModDirectoryExists(It.IsAny<ModWriterParameters>())).Returns((ModWriterParameters p) =>
+            {
+                return false;
+            });
+            var collections = new List<IModCollection>()
+            {
+                new ModCollection()
+                {
+                    IsSelected = true,
+                    Mods = new List<string>() { "mod/fakemod.mod"},
+                    Name = "fake",
+                    Game = "no-items",
+                }
+            };
+            storageProvider.Setup(s => s.GetModCollections()).Returns(() =>
+            {
+                return collections;
+            });
+            var fileInfos = new List<IFileInfo>()
+            {
+                new FileInfo()
+                {
+                    Content = new List<string>() { "a" },
+                    FileName = "fakemod.mod",
+                    IsBinary = false
+                }
+            };
+            reader.Setup(s => s.Read(It.IsAny<string>(), It.IsAny<IEnumerable<string>>(), It.IsAny<bool>())).Returns(fileInfos);
+            modParser.Setup(s => s.Parse(It.IsAny<IEnumerable<string>>())).Returns((IEnumerable<string> values) =>
+            {
+                return new ModObject()
+                {
+                    FileName = values.First(),
+                    Name = values.First()
+                };
+            });
+            mapper.Setup(s => s.Map<IMod>(It.IsAny<IModObject>())).Returns((IModObject o) =>
+            {
+                return new Mod()
+                {
+                    FileName = o.FileName,
+                    Name = o.Name
+                };
+            });
+
+            var service = new ModCollectionService(null, null, new Cache(), null, reader.Object, modWriter.Object, modParser.Object, gameService.Object, modExport.Object, storageProvider.Object, mapper.Object);
+            await service.ExportAsync("file", new ModCollection()
+            {
+                Name = "fake",
+                Mods = new List<string>() { "mod/fakemod.mod" }
+            }, false, true);
             isValid.Should().BeTrue();
         }
 

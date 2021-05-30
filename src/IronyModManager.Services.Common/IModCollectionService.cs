@@ -4,7 +4,7 @@
 // Created          : 03-04-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-27-2021
+// Last Modified On : 05-30-2021
 // ***********************************************************************
 // <copyright file="IModCollectionService.cs" company="Mario">
 //     Mario
@@ -53,8 +53,9 @@ namespace IronyModManager.Services.Common
         /// <param name="file">The file.</param>
         /// <param name="modCollection">The mod collection.</param>
         /// <param name="exportOrderOnly">if set to <c>true</c> [export order only].</param>
+        /// <param name="exportMods">if set to <c>true</c> [export mods].</param>
         /// <returns>Task&lt;System.Boolean&gt;.</returns>
-        Task<bool> ExportAsync(string file, IModCollection modCollection, bool exportOrderOnly = false);
+        Task<bool> ExportAsync(string file, IModCollection modCollection, bool exportOrderOnly = false, bool exportMods = false);
 
         /// <summary>
         /// Exports the hash report asynchronous.

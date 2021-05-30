@@ -177,6 +177,7 @@
         "ExportOther": {
             "Title": "...",
             "OrderOnly": "Izvezi redoslijed",
+            "WholeCollection": "Izvoz cijelu zbirku",
             "Close": "Zatvori"
         },
         "MergeCollection": {

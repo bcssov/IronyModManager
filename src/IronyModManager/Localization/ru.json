@@ -177,6 +177,7 @@
         "ExportOther": {
             "Title": "...",
             "OrderOnly": "Экспортировать только порядок",
+            "WholeCollection": "Экспортировать целую коллекцию",
             "Close": "Закрыть"
         },
         "MergeCollection": {
