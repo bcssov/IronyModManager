@@ -16,7 +16,9 @@
             <Grid RowDefinitions="1*,1*" Background="{DynamicResource IronyBackgroundPopupBrush}">
               <Button Content="{Binding ExportOrderOnly}" Command="{Binding ExportOrderOnlyCommand}"
                       Grid.Row="0" Grid.Column="0"
-                      HorizontalAlignment="Stretch" VerticalAlignment="Stretch" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"></Button>
+                      HorizontalAlignment="Stretch" VerticalAlignment="Stretch" 
+                      HorizontalContentAlignment="Center" VerticalContentAlignment="Center"
+                      IsVisible="{Binding ShowAdvancedFeatures}"></Button>
               <Button Content="{Binding ExportOtherClose}" Command="{Binding ExportOtherCloseCommand}"
                       Grid.Row="1" Grid.Column="0"
                       HorizontalAlignment="Stretch" VerticalAlignment="Stretch" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"></Button>
