@@ -1119,15 +1119,31 @@ namespace IronyModManager.ViewModels.Controls
                 };
                 if (result != null)
                 {
-                    var modPaths = result.Mods.ToList();
                     var game = gameService.Get().FirstOrDefault(p => p.Type.Equals(result.Game, StringComparison.OrdinalIgnoreCase));
                     await MessageBus.PublishAsync(new ActiveGameRequestEvent(game));
                     await MessageBus.PublishAsync(new ModListInstallRefreshRequestEvent(true));
+                    var hasMods = (modNames?.Any()).GetValueOrDefault();
+                    if (hasMods && !string.IsNullOrWhiteSpace(result.MergedFolderName))
+                    {
+                        var mods = Mods;
+                        var importedMods = new List<string>();
+                        var descriptors = result.Mods.ToList();
+                        for (int i = 0; i < descriptors.Count; i++)
+                        {
+                            var descriptor = descriptors[i];
+                            var name = modNames[i];
+                            var mod = mods.FirstOrDefault(p => p.Name.Equals(name) && System.IO.Path.GetDirectoryName(p.FullPath).EndsWith(System.IO.Path.DirectorySeparatorChar + result.MergedFolderName));
+                            importedMods.Add(mod == null ? descriptor : mod.DescriptorFile);
+                        }
+                        result.Mods = importedMods;
+                        modCollectionService.Save(result);
+                    }
+                    var modPaths = result.Mods.ToList();
                     restoreCollectionSelection = result.Name;
                     LoadModCollections();
                     var showImportNotification = true;
                     // Check if any mods do not exist
-                    if ((modNames?.Any()).GetValueOrDefault() && Mods.Any())
+                    if (hasMods && Mods.Any())
                     {
                         var mods = Mods;
                         var nonExistingModPaths = modPaths.Where(p => !mods.Any(m => m.DescriptorFile.Equals(p)));
