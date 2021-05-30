@@ -23,6 +23,7 @@ using IronyModManager.Models.Common;
 using IronyModManager.Parser.Common.Mod;
 using IronyModManager.Services.Common;
 using IronyModManager.Services.Common.MessageBus;
+using IronyModManager.Shared;
 using IronyModManager.Shared.Cache;
 using IronyModManager.Shared.MessageBus;
 using IronyModManager.Storage.Common;
@@ -187,11 +188,16 @@ namespace IronyModManager.Services
             {
                 return Task.FromResult(false);
             }
+            var collection = Mapper.Map<IModCollection>(modCollection);
+            if (string.IsNullOrWhiteSpace(collection.MergedFolderName) && exportMods)
+            {
+                collection.MergedFolderName = collection.Name.GenerateValidFileName();
+            }
             var path = GetPatchModDirectory(game, modCollection);
             var parameters = new ModCollectionExporterParams()
             {
                 File = file,
-                Mod = modCollection,
+                Mod = collection,
                 ModDirectory = path,
                 ExportModOrderOnly = exportOrderOnly
             };

@@ -489,6 +489,10 @@ namespace IronyModManager.Services.Tests
             {
                 return false;
             });
+            mapper.Setup(s => s.Map<IModCollection>(It.IsAny<IModCollection>())).Returns((IModCollection o) =>
+            {
+                return o;
+            });
 
             var service = new ModCollectionService(null, null, new Cache(), null, null, modWriter.Object, null, gameService.Object, modExport.Object, storageProvider.Object, mapper.Object);
             await service.ExportAsync("file", new ModCollection()
@@ -525,6 +529,10 @@ namespace IronyModManager.Services.Tests
             modWriter.Setup(p => p.ModDirectoryExists(It.IsAny<ModWriterParameters>())).Returns((ModWriterParameters p) =>
             {
                 return false;
+            });
+            mapper.Setup(s => s.Map<IModCollection>(It.IsAny<IModCollection>())).Returns((IModCollection o) =>
+            {
+                return o;
             });
 
             var service = new ModCollectionService(null, null, new Cache(), null, null, modWriter.Object, null, gameService.Object, modExport.Object, storageProvider.Object, mapper.Object);
@@ -606,6 +614,10 @@ namespace IronyModManager.Services.Tests
                     FileName = o.FileName,
                     Name = o.Name
                 };
+            });
+            mapper.Setup(s => s.Map<IModCollection>(It.IsAny<IModCollection>())).Returns((IModCollection o) =>
+            {
+                return o;
             });
 
             var service = new ModCollectionService(null, null, new Cache(), null, reader.Object, modWriter.Object, modParser.Object, gameService.Object, modExport.Object, storageProvider.Object, mapper.Object);
