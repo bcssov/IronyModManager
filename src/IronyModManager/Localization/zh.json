@@ -122,6 +122,7 @@
         "Import_Dialog_Title": "导入合集",
         "Overlay_Exporting_Message": "正在导出合集……",
         "Overlay_Importing_Message": "正在导入合集……",
+        "Overlay_Import_Export_Progress": "{PercentDone}",
         "Filter": "搜索模组",
         "Selected": "已选中",
         "Mod_Name": "模组名称",
@@ -176,6 +177,7 @@
         "ExportOther": {
             "Title": "…",
             "OrderOnly": "仅导出模组加载顺序",
+            "WholeCollection": "出口全系列",
             "Close": "关闭"
         },
         "MergeCollection": {

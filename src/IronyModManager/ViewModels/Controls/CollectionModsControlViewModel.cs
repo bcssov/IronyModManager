@@ -4,7 +4,7 @@
 // Created          : 03-03-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 05-24-2021
+// Last Modified On : 05-30-2021
 // ***********************************************************************
 // <copyright file="CollectionModsControlViewModel.cs" company="Mario">
 //     Mario
@@ -101,6 +101,11 @@ namespace IronyModManager.ViewModels.Controls
         private readonly IModCollectionService modCollectionService;
 
         /// <summary>
+        /// The mod export progress handler
+        /// </summary>
+        private readonly ModExportProgressHandler modExportProgressHandler;
+
+        /// <summary>
         /// The mod patch collection service
         /// </summary>
         private readonly IModPatchCollectionService modPatchCollectionService;
@@ -151,6 +156,11 @@ namespace IronyModManager.ViewModels.Controls
         private bool enableAllToggledState = false;
 
         /// <summary>
+        /// The mod export progress
+        /// </summary>
+        private IDisposable modExportProgress;
+
+        /// <summary>
         /// The mod order changed
         /// </summary>
         private IDisposable modOrderChanged;
@@ -197,6 +207,7 @@ namespace IronyModManager.ViewModels.Controls
         /// <summary>
         /// Initializes a new instance of the <see cref="CollectionModsControlViewModel" /> class.
         /// </summary>
+        /// <param name="modExportProgressHandler">The mod export progress handler.</param>
         /// <param name="reportExportService">The report export service.</param>
         /// <param name="hotkeyPressedHandler">The hotkey pressed handler.</param>
         /// <param name="patchMod">The patch mod.</param>
@@ -217,7 +228,8 @@ namespace IronyModManager.ViewModels.Controls
         /// <param name="localizationManager">The localization manager.</param>
         /// <param name="notificationAction">The notification action.</param>
         /// <param name="appAction">The application action.</param>
-        public CollectionModsControlViewModel(IReportExportService reportExportService, MainViewHotkeyPressedHandler hotkeyPressedHandler, PatchModControlViewModel patchMod,
+        public CollectionModsControlViewModel(ModExportProgressHandler modExportProgressHandler, IReportExportService reportExportService,
+            MainViewHotkeyPressedHandler hotkeyPressedHandler, PatchModControlViewModel patchMod,
             IIDGenerator idGenerator, HashReportControlViewModel hashReportView, ModReportExportHandler modReportExportHandler,
             IFileDialogAction fileDialogAction, IModCollectionService modCollectionService,
             IAppStateService appStateService, IModPatchCollectionService modPatchCollectionService, IModService modService, IGameService gameService,
@@ -244,6 +256,7 @@ namespace IronyModManager.ViewModels.Controls
             this.fileDialogAction = fileDialogAction;
             this.modReportExportHandler = modReportExportHandler;
             this.hotkeyPressedHandler = hotkeyPressedHandler;
+            this.modExportProgressHandler = modExportProgressHandler;
             HashReportView = hashReportView;
             SearchMods.ShowArrows = true;
             reorderQueue = new ConcurrentBag<IMod>();
@@ -315,6 +328,11 @@ namespace IronyModManager.ViewModels.Controls
             /// The default order only
             /// </summary>
             DefaultOrderOnly,
+
+            /// <summary>
+            /// The default with all mods
+            /// </summary>
+            DefaultWithAllMods,
 
             /// <summary>
             /// The paradoxos
@@ -911,10 +929,24 @@ namespace IronyModManager.ViewModels.Controls
         protected virtual async Task ExportCollectionAsync(string path, ImportProviderType providerType)
         {
             var id = idGenerator.GetNextId();
-            await TriggerOverlayAsync(id, true, localizationManager.GetResource(LocalizationResources.Collection_Mods.Overlay_Exporting_Message));
+            var overlayProgress = Smart.Format(localizationManager.GetResource(LocalizationResources.Collection_Mods.Overlay_Import_Export_Progress), new
+            {
+                PercentDone = 0.ToLocalizedPercentage()
+            });
+            await TriggerOverlayAsync(id, true, localizationManager.GetResource(LocalizationResources.Collection_Mods.Overlay_Exporting_Message), overlayProgress);
             var collection = modCollectionService.Get(SelectedModCollection.Name);
             AssignModCollectionNames(collection);
-            await Task.Run(async () => await modCollectionService.ExportAsync(path, collection, providerType == ImportProviderType.DefaultOrderOnly).ConfigureAwait(false)).ConfigureAwait(false);
+            modExportProgress?.Dispose();
+            modExportProgress = modExportProgressHandler.Subscribe(s =>
+            {
+                var overlayProgress = Smart.Format(localizationManager.GetResource(LocalizationResources.Collection_Mods.Overlay_Import_Export_Progress), new
+                {
+                    PercentDone = s.Progress.ToLocalizedPercentage()
+                });
+                TriggerOverlay(id, true, localizationManager.GetResource(LocalizationResources.Collection_Mods.Overlay_Exporting_Message), overlayProgress);
+            }).DisposeWith(Disposables);
+            await Task.Run(async () => await modCollectionService.ExportAsync(path, collection, providerType == ImportProviderType.DefaultOrderOnly, providerType == ImportProviderType.DefaultWithAllMods).ConfigureAwait(false)).ConfigureAwait(false);
+            modExportProgress?.Dispose();
             var title = localizationManager.GetResource(LocalizationResources.Notifications.CollectionExported.Title);
             var message = Smart.Format(localizationManager.GetResource(LocalizationResources.Notifications.CollectionExported.Message), new { CollectionName = collection.Name });
             notificationAction.ShowNotification(title, message, NotificationType.Success);
@@ -1005,9 +1037,19 @@ namespace IronyModManager.ViewModels.Controls
         protected virtual async Task ImportCollectionAsync(string path, ImportProviderType type)
         {
             List<string> modNames = null;
-            async Task<IModCollection> importDefault()
+            async Task<IModCollection> importDefault(long messageId)
             {
+                modExportProgress?.Dispose();
+                modExportProgress = modExportProgressHandler.Subscribe(s =>
+                {
+                    var overlayProgress = Smart.Format(localizationManager.GetResource(LocalizationResources.Collection_Mods.Overlay_Import_Export_Progress), new
+                    {
+                        PercentDone = s.Progress.ToLocalizedPercentage()
+                    });
+                    TriggerOverlay(messageId, true, localizationManager.GetResource(LocalizationResources.Collection_Mods.Overlay_Exporting_Message), overlayProgress);
+                }).DisposeWith(Disposables);
                 var collection = await Task.Run(async () => await modCollectionService.ImportAsync(path));
+                modExportProgress?.Dispose();
                 if (collection != null)
                 {
                     collection.IsSelected = true;
@@ -1039,7 +1081,11 @@ namespace IronyModManager.ViewModels.Controls
             }
 
             var id = idGenerator.GetNextId();
-            await TriggerOverlayAsync(id, true, localizationManager.GetResource(LocalizationResources.Collection_Mods.Overlay_Importing_Message));
+            var overlayProgress = Smart.Format(localizationManager.GetResource(LocalizationResources.Collection_Mods.Overlay_Import_Export_Progress), new
+            {
+                PercentDone = 0.ToLocalizedPercentage()
+            });
+            await TriggerOverlayAsync(id, true, localizationManager.GetResource(LocalizationResources.Collection_Mods.Overlay_Importing_Message), overlayProgress);
             var importData = type switch
             {
                 ImportProviderType.Paradoxos => await modCollectionService.ImportParadoxosAsync(path),
@@ -1068,20 +1114,36 @@ namespace IronyModManager.ViewModels.Controls
             {
                 var result = type switch
                 {
-                    ImportProviderType.Default => await importDefault(),
+                    ImportProviderType.Default => await importDefault(id),
                     _ => await importInstance(importData),
                 };
                 if (result != null)
                 {
-                    var modPaths = result.Mods.ToList();
                     var game = gameService.Get().FirstOrDefault(p => p.Type.Equals(result.Game, StringComparison.OrdinalIgnoreCase));
                     await MessageBus.PublishAsync(new ActiveGameRequestEvent(game));
                     await MessageBus.PublishAsync(new ModListInstallRefreshRequestEvent(true));
+                    var hasMods = (modNames?.Any()).GetValueOrDefault();
+                    if (hasMods && !string.IsNullOrWhiteSpace(result.MergedFolderName))
+                    {
+                        var mods = Mods;
+                        var importedMods = new List<string>();
+                        var descriptors = result.Mods.ToList();
+                        for (int i = 0; i < descriptors.Count; i++)
+                        {
+                            var descriptor = descriptors[i];
+                            var name = modNames[i];
+                            var mod = mods.FirstOrDefault(p => p.Name.Equals(name) && System.IO.Path.GetDirectoryName(p.FullPath).EndsWith(System.IO.Path.DirectorySeparatorChar + result.MergedFolderName));
+                            importedMods.Add(mod == null ? descriptor : mod.DescriptorFile);
+                        }
+                        result.Mods = importedMods;
+                        modCollectionService.Save(result);
+                    }
+                    var modPaths = result.Mods.ToList();
                     restoreCollectionSelection = result.Name;
                     LoadModCollections();
                     var showImportNotification = true;
                     // Check if any mods do not exist
-                    if ((modNames?.Any()).GetValueOrDefault() && Mods.Any())
+                    if (hasMods && Mods.Any())
                     {
                         var mods = Mods;
                         var nonExistingModPaths = modPaths.Where(p => !mods.Any(m => m.DescriptorFile.Equals(p)));
@@ -1254,6 +1316,7 @@ namespace IronyModManager.ViewModels.Controls
                                     successMessage = localizationManager.GetResource(LocalizationResources.Notifications.CollectionRenamed.Message);
                                     await TriggerOverlayAsync(id, false);
                                     notificationAction.ShowNotification(successTitle, successMessage, NotificationType.Success);
+                                    PatchMod.SetParameters(SelectedModCollection);
                                 }
                                 handleRenamePatchCollection().ConfigureAwait(true);
                             }
@@ -1286,6 +1349,7 @@ namespace IronyModManager.ViewModels.Controls
             {
                 Observable.Merge(ExportCollection.ExportCommand.Select(p => Tuple.Create(ImportActionType.Export, p, ImportProviderType.Default)),
                     ExportCollection.ExportOrderOnlyCommand.Select(p => Tuple.Create(ImportActionType.Export, p, ImportProviderType.DefaultOrderOnly)),
+                    ExportCollection.ExportWholeCollectionCommand.Select(p => Tuple.Create(ImportActionType.Export, p, ImportProviderType.DefaultWithAllMods)),
                     ExportCollection.ImportCommand.Select(p => Tuple.Create(ImportActionType.Import, p, ImportProviderType.Default)),
                     ExportCollection.ImportOtherParadoxosCommand.Select(p => Tuple.Create(ImportActionType.Import, p, ImportProviderType.Paradoxos)),
                     ExportCollection.ImportOtherParadoxCommand.Select(p => Tuple.Create(ImportActionType.Import, p, ImportProviderType.Paradox)),

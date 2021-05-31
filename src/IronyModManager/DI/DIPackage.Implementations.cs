@@ -4,7 +4,7 @@
 // Created          : 01-11-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 05-28-2021
+// Last Modified On : 05-30-2021
 // ***********************************************************************
 // <copyright file="DIPackage.Implementations.cs" company="Mario">
 //     Mario
@@ -85,6 +85,7 @@ namespace IronyModManager.DI
             container.Register<ModMergeFreeSpaceCheckHandler>(SimpleInjector.Lifestyle.Singleton);
             container.Register<GameDefinitionLoadProgressHandler>(SimpleInjector.Lifestyle.Singleton);
             container.Register<GameIndexProgressHandler>(SimpleInjector.Lifestyle.Singleton);
+            container.Register<ModExportProgressHandler>(SimpleInjector.Lifestyle.Singleton);
         }
 
         #endregion Methods

@@ -4,7 +4,7 @@
 // Created          : 02-18-2021
 //
 // Last Modified By : Mario
-// Last Modified On : 02-23-2021
+// Last Modified On : 05-31-2021
 // ***********************************************************************
 // <copyright file="Constants.cs" company="Mario">
 //     Mario
@@ -93,21 +93,6 @@ namespace IronyModManager.Implementation.Hotkey
         /// The control e
         /// </summary>
         public const string CTRL_E = "CTRL+E";
-
-        /// <summary>
-        /// The control z
-        /// </summary>
-        public const string CTRL_Z = "CTRL+Z";
-
-        /// <summary>
-        /// The control y
-        /// </summary>
-        public const string CTRL_Y = "CTRL+Y";
-
-        /// <summary>
-        /// The control x
-        /// </summary>
-        public const string CTRL_X = "CTRL+X";
 
         /// <summary>
         /// The control i
@@ -208,6 +193,26 @@ namespace IronyModManager.Implementation.Hotkey
         /// The control v
         /// </summary>
         public const string CTRL_V = "CTRL+V";
+
+        /// <summary>
+        /// The control x
+        /// </summary>
+        public const string CTRL_X = "CTRL+X";
+
+        /// <summary>
+        /// The control y
+        /// </summary>
+        public const string CTRL_Y = "CTRL+Y";
+
+        /// <summary>
+        /// The control z
+        /// </summary>
+        public const string CTRL_Z = "CTRL+Z";
+
+        /// <summary>
+        /// The return
+        /// </summary>
+        public const string RETURN = "Return";
 
         /// <summary>
         /// The shift down

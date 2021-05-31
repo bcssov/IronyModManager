@@ -122,6 +122,7 @@
         "Import_Dialog_Title": "Import Collection",
         "Overlay_Exporting_Message": "Please wait while exporting a mod collection...",
         "Overlay_Importing_Message": "Please wait while importing a mod collection...",
+        "Overlay_Import_Export_Progress": "{PercentDone}",
         "Filter": "Search Mods",
         "Selected": "Selected",
         "Mod_Name": "Mod Name",
@@ -176,6 +177,7 @@
         "ExportOther": {
             "Title": "...",
             "OrderOnly": "Export Order Only",
+            "WholeCollection": "Export Whole Collection",
             "Close": "Close"
         },
         "MergeCollection": {

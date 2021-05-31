@@ -1255,7 +1255,7 @@ namespace IronyModManager.Services
                 ModPath = EvaluatePatchNamePath(game, oldPatchName),
                 PatchPath = EvaluatePatchNamePath(game, newPatchName),
                 RenamePairs = new List<KeyValuePair<string, string>>() { new KeyValuePair<string, string>(oldPatchName, newPatchName) }
-            }); ;
+            });
         }
 
         /// <summary>

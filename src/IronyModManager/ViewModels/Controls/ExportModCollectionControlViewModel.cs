@@ -4,21 +4,22 @@
 // Created          : 03-09-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 09-13-2020
+// Last Modified On : 05-30-2021
 // ***********************************************************************
 // <copyright file="ExportModCollectionControlViewModel.cs" company="Mario">
 //     Mario
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
-using System.Collections.Generic;
 using System;
+using System.Collections.Generic;
 using System.Reactive;
 using System.Reactive.Disposables;
 using IronyModManager.Common.ViewModels;
 using IronyModManager.Implementation;
 using IronyModManager.Implementation.Actions;
 using IronyModManager.Localization.Attributes;
+using IronyModManager.Services.Common;
 using IronyModManager.Shared;
 using ReactiveUI;
 
@@ -39,6 +40,11 @@ namespace IronyModManager.ViewModels.Controls
         /// </summary>
         private readonly IFileDialogAction fileDialogAction;
 
+        /// <summary>
+        /// The game service
+        /// </summary>
+        private readonly IGameService gameService;
+
         #endregion Fields
 
         #region Constructors
@@ -46,10 +52,12 @@ namespace IronyModManager.ViewModels.Controls
         /// <summary>
         /// Initializes a new instance of the <see cref="ExportModCollectionControlViewModel" /> class.
         /// </summary>
+        /// <param name="gameService">The game service.</param>
         /// <param name="fileDialogAction">The file dialog action.</param>
-        public ExportModCollectionControlViewModel(IFileDialogAction fileDialogAction)
+        public ExportModCollectionControlViewModel(IGameService gameService, IFileDialogAction fileDialogAction)
         {
             this.fileDialogAction = fileDialogAction;
+            this.gameService = gameService;
         }
 
         #endregion Constructors
@@ -126,6 +134,19 @@ namespace IronyModManager.ViewModels.Controls
         /// </summary>
         /// <value>The export other command.</value>
         public virtual ReactiveCommand<Unit, Unit> ExportOtherCommand { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets the export whole collection.
+        /// </summary>
+        /// <value>The export whole collection.</value>
+        [StaticLocalization(LocalizationResources.Collection_Mods.ExportOther.WholeCollection)]
+        public virtual string ExportWholeCollection { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets the export whole collection command.
+        /// </summary>
+        /// <value>The export whole collection command.</value>
+        public virtual ReactiveCommand<Unit, CommandResult<string>> ExportWholeCollectionCommand { get; protected set; }
 
         /// <summary>
         /// Gets or sets the import.
@@ -224,6 +245,12 @@ namespace IronyModManager.ViewModels.Controls
         /// <value><c>true</c> if this instance is open; otherwise, <c>false</c>.</value>
         public virtual bool IsImportOpen { get; protected set; }
 
+        /// <summary>
+        /// Gets or sets a value indicating whether [show advanced features].
+        /// </summary>
+        /// <value><c>true</c> if [show advanced features]; otherwise, <c>false</c>.</value>
+        public virtual bool ShowAdvancedFeatures { get; protected set; }
+
         #endregion Properties
 
         #region Methods
@@ -238,11 +265,22 @@ namespace IronyModManager.ViewModels.Controls
         }
 
         /// <summary>
+        /// Evals the advanced features visibility.
+        /// </summary>
+        protected virtual void EvalAdvancedFeaturesVisibility()
+        {
+            var game = gameService.GetSelected();
+            ShowAdvancedFeatures = (game?.AdvancedFeaturesSupported).GetValueOrDefault();
+        }
+
+        /// <summary>
         /// Called when [activated].
         /// </summary>
         /// <param name="disposables">The disposables.</param>
         protected override void OnActivated(CompositeDisposable disposables)
         {
+            EvalAdvancedFeaturesVisibility();
+
             var allowModSelectionEnabled = this.WhenAnyValue(v => v.AllowModSelection);
 
             ExportCommand = ReactiveCommand.CreateFromTask(async () =>
@@ -300,7 +338,23 @@ namespace IronyModManager.ViewModels.Controls
                 return new CommandResult<string>(result, !string.IsNullOrWhiteSpace(result) ? CommandState.Success : CommandState.Failed);
             }, allowModSelectionEnabled).DisposeWith(disposables);
 
+            ExportWholeCollectionCommand = ReactiveCommand.CreateFromTask(async () =>
+            {
+                var result = await fileDialogAction.SaveDialogAsync(ExportDialogTitle, CollectionName, Shared.Constants.ZipExtensionWithoutDot);
+                return new CommandResult<string>(result, !string.IsNullOrWhiteSpace(result) ? CommandState.Success : CommandState.Failed);
+            }, allowModSelectionEnabled).DisposeWith(disposables);
+
             base.OnActivated(disposables);
+        }
+
+        /// <summary>
+        /// Called when [selected game changed].
+        /// </summary>
+        /// <param name="game">The game.</param>
+        protected override void OnSelectedGameChanged(Models.Common.IGame game)
+        {
+            base.OnSelectedGameChanged(game);
+            EvalAdvancedFeaturesVisibility();
         }
 
         #endregion Methods

@@ -4,7 +4,7 @@
 // Created          : 03-04-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-27-2021
+// Last Modified On : 05-30-2021
 // ***********************************************************************
 // <copyright file="ModCollectionService.cs" company="Mario">
 //     Mario
@@ -23,6 +23,7 @@ using IronyModManager.Models.Common;
 using IronyModManager.Parser.Common.Mod;
 using IronyModManager.Services.Common;
 using IronyModManager.Services.Common.MessageBus;
+using IronyModManager.Shared;
 using IronyModManager.Shared.Cache;
 using IronyModManager.Shared.MessageBus;
 using IronyModManager.Storage.Common;
@@ -178,22 +179,33 @@ namespace IronyModManager.Services
         /// <param name="file">The file.</param>
         /// <param name="modCollection">The mod collection.</param>
         /// <param name="exportOrderOnly">if set to <c>true</c> [export order only].</param>
+        /// <param name="exportMods">if set to <c>true</c> [export mods].</param>
         /// <returns>Task&lt;System.Boolean&gt;.</returns>
-        public virtual Task<bool> ExportAsync(string file, IModCollection modCollection, bool exportOrderOnly = false)
+        public virtual Task<bool> ExportAsync(string file, IModCollection modCollection, bool exportOrderOnly = false, bool exportMods = false)
         {
             var game = GameService.GetSelected();
             if (game == null || modCollection == null)
             {
                 return Task.FromResult(false);
             }
+            var collection = Mapper.Map<IModCollection>(modCollection);
+            if (string.IsNullOrWhiteSpace(collection.MergedFolderName) && exportMods)
+            {
+                collection.MergedFolderName = collection.Name.GenerateValidFileName();
+            }
             var path = GetPatchModDirectory(game, modCollection);
-            return modCollectionExporter.ExportAsync(new ModCollectionExporterParams()
+            var parameters = new ModCollectionExporterParams()
             {
                 File = file,
-                Mod = modCollection,
+                Mod = collection,
                 ModDirectory = path,
                 ExportModOrderOnly = exportOrderOnly
-            });
+            };
+            if (exportMods)
+            {
+                parameters.ExportMods = GetCollectionMods(collectionName: modCollection.Name);
+            }
+            return modCollectionExporter.ExportAsync(parameters);
         }
 
         /// <summary>
@@ -307,11 +319,13 @@ namespace IronyModManager.Services
             if (instance != null)
             {
                 var path = GetPatchModDirectory(game, instance);
+                var exportPath = GetPatchModDirectory(game, !string.IsNullOrWhiteSpace(instance.MergedFolderName) ? instance.MergedFolderName : instance.Name);
                 if (await modCollectionExporter.ImportModDirectoryAsync(new ModCollectionExporterParams()
                 {
                     File = file,
                     ModDirectory = path,
-                    Mod = instance
+                    Mod = instance,
+                    ExportModDirectory = exportPath
                 }))
                 {
                     return instance;
@@ -394,7 +408,7 @@ namespace IronyModManager.Services
         /// </summary>
         /// <param name="collection">The collection.</param>
         /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
-        /// <exception cref="ArgumentNullException">collection</exception>
+        /// <exception cref="ArgumentNullException">nameof(collection)</exception>
         public virtual bool Save(IModCollection collection)
         {
             if (collection == null || string.IsNullOrWhiteSpace(collection.Game))

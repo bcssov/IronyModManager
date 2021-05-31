@@ -164,6 +164,7 @@ namespace IronyModManager.Shared
             public const string Import_Dialog_Title = Prefix + "Import_Dialog_Title";
             public const string Overlay_Exporting_Message = Prefix + "Overlay_Exporting_Message";
             public const string Overlay_Importing_Message = Prefix + "Overlay_Importing_Message";
+            public const string Overlay_Import_Export_Progress = Prefix + "Overlay_Import_Export_Progress";
             public const string Filter = Prefix + "Filter";
             public const string Selected = Prefix + "Selected";
             public const string Mod_Name = Prefix + "Mod_Name";
@@ -234,6 +235,7 @@ namespace IronyModManager.Shared
                 public const string Prefix = "Collection_Mods.ExportOther.";
                 public const string Title = Prefix + "Title";
                 public const string OrderOnly = Prefix + "OrderOnly";
+                public const string WholeCollection = Prefix + "WholeCollection";
                 public const string Close = Prefix + "Close";
             }
             public static class MergeCollection

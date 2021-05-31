@@ -4,7 +4,7 @@
 // Created          : 01-10-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 05-21-2021
+// Last Modified On : 05-31-2021
 // ***********************************************************************
 // <copyright file="MainWindow.xaml.cs" company="Mario">
 //     Mario
@@ -147,7 +147,7 @@ namespace IronyModManager.Views
                 var oldPos = Position;
                 var oldHeight = Height;
                 var oldWidth = Width;
-                bool isValid(int value)
+                static bool isValid(int value)
                 {
                     return value > 0 && !double.IsInfinity(value) && !double.IsNaN(value);
                 }
