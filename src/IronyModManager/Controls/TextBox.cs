@@ -224,7 +224,6 @@ namespace IronyModManager.Controls
         protected override void OnPropertyChanged<T>(AvaloniaPropertyChangedEventArgs<T> change)
         {
             base.OnPropertyChanged(change);
-#pragma warning disable CS0618 // Type or member is obsolete
             if (change.Property == ContextMenuProperty)
             {
                 if (ContextMenu != null)
@@ -237,7 +236,6 @@ namespace IronyModManager.Controls
                     registeredEvent = true;
                 }
             }
-#pragma warning restore CS0618 // Type or member is obsolete
         }
 
         /// <summary>
