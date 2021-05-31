@@ -4,7 +4,7 @@
 // Created          : 03-25-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 05-29-2021
+// Last Modified On : 05-31-2021
 // ***********************************************************************
 // <copyright file="MergeViewerBinaryControlViewModel.cs" company="Mario">
 //     Mario
@@ -250,7 +250,7 @@ namespace IronyModManager.ViewModels.Controls
                     LeftImage = null;
                     left?.Dispose();
                     LeftHeight = LeftWidth = 0;
-                    using var ms = await modService.GetImageStreamAsync(definition?.ModName, definition?.File);
+                    using var ms = await modService.GetImageStreamAsync(definition?.ModName, definition?.File, definition.IsFromGame);
                     if (ms != null)
                     {
                         try
@@ -303,7 +303,7 @@ namespace IronyModManager.ViewModels.Controls
                     RightImage = null;
                     right?.Dispose();
                     RightHeight = RightWidth = 0;
-                    using var ms = await modService.GetImageStreamAsync(definition?.ModName, definition?.File);
+                    using var ms = await modService.GetImageStreamAsync(definition?.ModName, definition?.File, definition.IsFromGame);
                     if (ms != null)
                     {
                         try
