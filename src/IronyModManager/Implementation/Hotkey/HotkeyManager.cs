@@ -4,7 +4,7 @@
 // Created          : 02-17-2021
 //
 // Last Modified By : Mario
-// Last Modified On : 02-23-2021
+// Last Modified On : 05-31-2021
 // ***********************************************************************
 // <copyright file="HotkeyManager.cs" company="Mario">
 //     Mario
@@ -72,7 +72,8 @@ namespace IronyModManager.Implementation.Hotkey
             { Constants.CTRL_B, Enums.HotKeys.Ctrl_B },
             { Constants.CTRL_X, Enums.HotKeys.Ctrl_X },
             { Constants.CTRL_Z, Enums.HotKeys.Ctrl_Z },
-            { Constants.CTRL_Y, Enums.HotKeys.Ctrl_Y }
+            { Constants.CTRL_Y, Enums.HotKeys.Ctrl_Y },
+            { Constants.RETURN, Enums.HotKeys.Return}
         };
 
         /// <summary>

@@ -4,7 +4,7 @@
 // Created          : 03-05-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-16-2021
+// Last Modified On : 05-31-2021
 // ***********************************************************************
 // <copyright file="AddNewCollectionControlViewModel.cs" company="Mario">
 //     Mario
@@ -16,8 +16,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reactive;
 using System.Reactive.Disposables;
+using System.Reactive.Linq;
 using IronyModManager.Common.ViewModels;
 using IronyModManager.Implementation;
+using IronyModManager.Implementation.Hotkey;
 using IronyModManager.Localization.Attributes;
 using IronyModManager.Models.Common;
 using IronyModManager.Services.Common;
@@ -37,6 +39,11 @@ namespace IronyModManager.ViewModels.Controls
         #region Fields
 
         /// <summary>
+        /// The hotkey pressed handler
+        /// </summary>
+        private readonly MainViewHotkeyPressedHandler hotkeyPressedHandler;
+
+        /// <summary>
         /// The mod collection service
         /// </summary>
         private readonly IModCollectionService modCollectionService;
@@ -53,12 +60,14 @@ namespace IronyModManager.ViewModels.Controls
         /// <summary>
         /// Initializes a new instance of the <see cref="AddNewCollectionControlViewModel" /> class.
         /// </summary>
+        /// <param name="hotkeyPressedHandler">The hotkey pressed handler.</param>
         /// <param name="modCollectionService">The mod collection service.</param>
         /// <param name="modPatchCollectionService">The mod patch collection service.</param>
-        public AddNewCollectionControlViewModel(IModCollectionService modCollectionService, IModPatchCollectionService modPatchCollectionService)
+        public AddNewCollectionControlViewModel(MainViewHotkeyPressedHandler hotkeyPressedHandler, IModCollectionService modCollectionService, IModPatchCollectionService modPatchCollectionService)
         {
             this.modCollectionService = modCollectionService;
             this.modPatchCollectionService = modPatchCollectionService;
+            this.hotkeyPressedHandler = hotkeyPressedHandler;
         }
 
         #endregion Constructors
@@ -159,6 +168,19 @@ namespace IronyModManager.ViewModels.Controls
 
             CancelCommand = ReactiveCommand.Create(() =>
             {
+            }).DisposeWith(disposables);
+
+            hotkeyPressedHandler.Subscribe(hotkey =>
+            {
+                switch (hotkey.Hotkey)
+                {
+                    case Enums.HotKeys.Return:
+                        Observable.Start(() => { }).InvokeCommand(this, vm => vm.CreateCommand);
+                        break;
+
+                    default:
+                        break;
+                }
             }).DisposeWith(disposables);
 
             base.OnActivated(disposables);

@@ -4,7 +4,7 @@
 // Created          : 03-15-2021
 //
 // Last Modified By : Mario
-// Last Modified On : 04-15-2021
+// Last Modified On : 05-31-2021
 // ***********************************************************************
 // <copyright file="TextBox.cs" company="Mario">
 //     Mario
@@ -139,7 +139,6 @@ namespace IronyModManager.Controls
         protected override void OnApplyTemplate(TemplateAppliedEventArgs e)
         {
             base.OnApplyTemplate(e);
-#pragma warning disable CS0618 // Type or member is obsolete
             if (ContextMenu != null)
             {
                 if (registeredEvent)
@@ -149,7 +148,6 @@ namespace IronyModManager.Controls
                 ContextMenu.ContextMenuOpening += ContextMenuOpening;
                 registeredEvent = true;
             }
-#pragma warning restore CS0618 // Type or member is obsolete
         }
 
         /// <summary>
