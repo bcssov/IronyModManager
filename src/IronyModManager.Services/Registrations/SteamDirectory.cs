@@ -4,7 +4,7 @@
 // Created          : 02-24-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-16-2021
+// Last Modified On : 05-31-2021
 // ***********************************************************************
 // <copyright file="SteamDirectory.cs" company="Mario">
 //     Mario
@@ -151,9 +151,11 @@ namespace IronyModManager.Services.Registrations
         {
             var userDataFolders = new List<string>();
             var steamInstallDirectory = GetSteamRootPath();
-            if (Directory.Exists(steamInstallDirectory))
+            // I always thought that steam would create this folder during installation
+            var path = Path.Combine(steamInstallDirectory, SteamUserDataDirectory);
+            if (Directory.Exists(path))
             {
-                var folders = Directory.EnumerateDirectories(Path.Combine(steamInstallDirectory, SteamUserDataDirectory)).Where(p => Directory.Exists(Path.Combine(p, appId.ToString(), "remote"))).Select(p => Path.Combine(p, appId.ToString(), "remote"));
+                var folders = Directory.EnumerateDirectories(path).Where(p => Directory.Exists(Path.Combine(p, appId.ToString(), "remote"))).Select(p => Path.Combine(p, appId.ToString(), "remote"));
                 if (folders.Any())
                 {
                     userDataFolders.AddRange(folders);
