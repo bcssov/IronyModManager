@@ -4,6 +4,70 @@
 		<title>Irony Mod Manager</title>
 		<language>en</language>
 		<item>
+			<title>1.17.61-alpha</title>
+			<description>RELEASE NOTES:
+This is a significant upgrade to Irony. Please backup your collections made with previous versions of Irony.
+
+CHANGES FROM v1.16:
+* Updated dependencies
+* Patch exporter order of save operations changed a bit to be more robust
+* Fix custom patch and db search windows bugging out on some linux distros
+* Add feature to include game files in conflict solver analysis
+* Country types are treated in the same manner as pop_jobs (for Stellaris)
+* Add export mods feature along with load order
+* Various improvements and fixes</description>
+			<pubDate>Mon, 31 May 2021 08:16:47 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.17.61-alpha/osx-x64.rar" sparkle:version="1.17.61.15792" sparkle:shortVersionString="1.17.61" length="69341321" sparkle:os="osx" type="application/vnd.rar" sparkle:signature="w4WXlEf+mrCUunyAF4DFWvUJWVlkK9A9/ErIqkfNpthJsK3yeItkmAwp7uA+2Vqf/LiohNSW2wVzjCj04RXcBw=="/>
+		</item>
+		<item>
+			<title>1.17.61-alpha</title>
+			<description>RELEASE NOTES:
+This is a significant upgrade to Irony. Please backup your collections made with previous versions of Irony.
+
+CHANGES FROM v1.16:
+* Updated dependencies
+* Patch exporter order of save operations changed a bit to be more robust
+* Fix custom patch and db search windows bugging out on some linux distros
+* Add feature to include game files in conflict solver analysis
+* Country types are treated in the same manner as pop_jobs (for Stellaris)
+* Add export mods feature along with load order
+* Various improvements and fixes</description>
+			<pubDate>Mon, 31 May 2021 08:16:55 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.17.61-alpha/win-x64-setup.rar" sparkle:version="1.17.61.15792" sparkle:shortVersionString="1.17.61" length="59737878" sparkle:os="windows" type="application/vnd.rar" sparkle:signature="t/v1bL6f/jR8H4jNvU8JtLZgUMrf1wXiBCFWs1/jud2J2qzCKUIkj8rLHBj9TgX37GwChAOc6yGxuLMbTw/HCQ=="/>
+		</item>
+		<item>
+			<title>1.17.61-alpha</title>
+			<description>RELEASE NOTES:
+This is a significant upgrade to Irony. Please backup your collections made with previous versions of Irony.
+
+CHANGES FROM v1.16:
+* Updated dependencies
+* Patch exporter order of save operations changed a bit to be more robust
+* Fix custom patch and db search windows bugging out on some linux distros
+* Add feature to include game files in conflict solver analysis
+* Country types are treated in the same manner as pop_jobs (for Stellaris)
+* Add export mods feature along with load order
+* Various improvements and fixes</description>
+			<pubDate>Mon, 31 May 2021 08:16:51 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.17.61-alpha/win-x64.rar" sparkle:version="1.17.61.15792" sparkle:shortVersionString="1.17.61" length="72020193" sparkle:os="windows" type="application/vnd.rar" sparkle:signature="pTzMW74ksv1qBIg9asHvJeahkO5P4AUMvyvhqyDyNhfkOkQcc8k2Iacs8sch1nt/Ik9LBJc5lfAhj6zat5ovCw=="/>
+		</item>
+		<item>
+			<title>1.17.61-alpha</title>
+			<description>RELEASE NOTES:
+This is a significant upgrade to Irony. Please backup your collections made with previous versions of Irony.
+
+CHANGES FROM v1.16:
+* Updated dependencies
+* Patch exporter order of save operations changed a bit to be more robust
+* Fix custom patch and db search windows bugging out on some linux distros
+* Add feature to include game files in conflict solver analysis
+* Country types are treated in the same manner as pop_jobs (for Stellaris)
+* Add export mods feature along with load order
+* Various improvements and fixes</description>
+			<pubDate>Mon, 31 May 2021 08:16:44 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.17.61-alpha/linux-x64.zip" sparkle:version="1.17.61.15792" sparkle:shortVersionString="1.17.61" length="85795641" sparkle:os="linux" type="application/zip" sparkle:signature="O3T8uYWNOsfYYVMQUF8rAMmVOc1HEiBlf4v7K0BeGHaFOO1HcEwLq9chszGd3AI/nxboobozF859SKKDblZKCw=="/>
+		</item>
+		<item>
 			<title>1.16.36</title>
 			<description>RELEASE INFO:
 * Fix mod filter not firing events
