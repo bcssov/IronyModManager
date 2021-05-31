@@ -212,6 +212,7 @@ namespace IronyModManager.IO.Mods
             zip.SaveProgress += saveProgress;
             zip.Save(parameters.File);
             zip.SaveProgress -= saveProgress;
+            zip.Dispose();
             if (streams.Any())
             {
                 var task = streams.Select(async p =>
