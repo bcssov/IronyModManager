@@ -4,9 +4,12 @@
 		<title>Irony Mod Manager</title>
 		<language>en</language>
 		<item>
-			<title>1.17.61-alpha</title>
+			<title>1.17.63-alpha</title>
 			<description>RELEASE NOTES:
 This is a significant upgrade to Irony. Please backup your collections made with previous versions of Irony.
+
+* Fix rare ctd when userdata directory was not present in some steam installs
+* Speed up game indexing
 
 CHANGES FROM v1.16:
 * Updated dependencies
@@ -16,13 +19,16 @@ CHANGES FROM v1.16:
 * Country types are treated in the same manner as pop_jobs (for Stellaris)
 * Add export mods feature along with load order
 * Various improvements and fixes</description>
-			<pubDate>Mon, 31 May 2021 08:16:47 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.17.61-alpha/osx-x64.rar" sparkle:version="1.17.61.15792" sparkle:shortVersionString="1.17.61" length="69341321" sparkle:os="osx" type="application/vnd.rar" sparkle:signature="w4WXlEf+mrCUunyAF4DFWvUJWVlkK9A9/ErIqkfNpthJsK3yeItkmAwp7uA+2Vqf/LiohNSW2wVzjCj04RXcBw=="/>
+			<pubDate>Mon, 31 May 2021 13:23:42 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.17.63-alpha/osx-x64.rar" sparkle:version="1.17.63.49431" sparkle:shortVersionString="1.17.63" length="69342983" sparkle:os="osx" type="application/vnd.rar" sparkle:signature="zDCEVKKpSfOa88XIq3uvQl8NUW8JqoUjNjSiPmToBnGthWGnvhhQN8rKT9r7nCFbiJsbh77teVgtfKneYWqJCw=="/>
 		</item>
 		<item>
-			<title>1.17.61-alpha</title>
+			<title>1.17.63-alpha</title>
 			<description>RELEASE NOTES:
 This is a significant upgrade to Irony. Please backup your collections made with previous versions of Irony.
+
+* Fix rare ctd when userdata directory was not present in some steam installs
+* Speed up game indexing
 
 CHANGES FROM v1.16:
 * Updated dependencies
@@ -32,13 +38,16 @@ CHANGES FROM v1.16:
 * Country types are treated in the same manner as pop_jobs (for Stellaris)
 * Add export mods feature along with load order
 * Various improvements and fixes</description>
-			<pubDate>Mon, 31 May 2021 08:16:55 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.17.61-alpha/win-x64-setup.rar" sparkle:version="1.17.61.15792" sparkle:shortVersionString="1.17.61" length="59737878" sparkle:os="windows" type="application/vnd.rar" sparkle:signature="t/v1bL6f/jR8H4jNvU8JtLZgUMrf1wXiBCFWs1/jud2J2qzCKUIkj8rLHBj9TgX37GwChAOc6yGxuLMbTw/HCQ=="/>
+			<pubDate>Mon, 31 May 2021 13:23:49 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.17.63-alpha/win-x64-setup.rar" sparkle:version="1.17.63.49431" sparkle:shortVersionString="1.17.63" length="59717903" sparkle:os="windows" type="application/vnd.rar" sparkle:signature="vs31tlX4Ys2JNSvsSjHp0k31mRdfKpB0CVMl4CBBWRRLZttXDOY/LKPZB2iRZ8k+40sCM6ItR18mocB8qrbGAA=="/>
 		</item>
 		<item>
-			<title>1.17.61-alpha</title>
+			<title>1.17.63-alpha</title>
 			<description>RELEASE NOTES:
 This is a significant upgrade to Irony. Please backup your collections made with previous versions of Irony.
+
+* Fix rare ctd when userdata directory was not present in some steam installs
+* Speed up game indexing
 
 CHANGES FROM v1.16:
 * Updated dependencies
@@ -48,13 +57,16 @@ CHANGES FROM v1.16:
 * Country types are treated in the same manner as pop_jobs (for Stellaris)
 * Add export mods feature along with load order
 * Various improvements and fixes</description>
-			<pubDate>Mon, 31 May 2021 08:16:51 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.17.61-alpha/win-x64.rar" sparkle:version="1.17.61.15792" sparkle:shortVersionString="1.17.61" length="72020193" sparkle:os="windows" type="application/vnd.rar" sparkle:signature="pTzMW74ksv1qBIg9asHvJeahkO5P4AUMvyvhqyDyNhfkOkQcc8k2Iacs8sch1nt/Ik9LBJc5lfAhj6zat5ovCw=="/>
+			<pubDate>Mon, 31 May 2021 13:23:46 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.17.63-alpha/win-x64.rar" sparkle:version="1.17.63.49431" sparkle:shortVersionString="1.17.63" length="72022584" sparkle:os="windows" type="application/vnd.rar" sparkle:signature="JvfF2laSBkshkFWglv7DsYwHGoFY6AY1b7DLyh+FK4wN+Onijy7GGGHtNQZPkR/OJ/qCvw1gWeaLTINETxXcCQ=="/>
 		</item>
 		<item>
-			<title>1.17.61-alpha</title>
+			<title>1.17.63-alpha</title>
 			<description>RELEASE NOTES:
 This is a significant upgrade to Irony. Please backup your collections made with previous versions of Irony.
+
+* Fix rare ctd when userdata directory was not present in some steam installs
+* Speed up game indexing
 
 CHANGES FROM v1.16:
 * Updated dependencies
@@ -64,8 +76,8 @@ CHANGES FROM v1.16:
 * Country types are treated in the same manner as pop_jobs (for Stellaris)
 * Add export mods feature along with load order
 * Various improvements and fixes</description>
-			<pubDate>Mon, 31 May 2021 08:16:44 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.17.61-alpha/linux-x64.zip" sparkle:version="1.17.61.15792" sparkle:shortVersionString="1.17.61" length="85795641" sparkle:os="linux" type="application/zip" sparkle:signature="O3T8uYWNOsfYYVMQUF8rAMmVOc1HEiBlf4v7K0BeGHaFOO1HcEwLq9chszGd3AI/nxboobozF859SKKDblZKCw=="/>
+			<pubDate>Mon, 31 May 2021 13:23:40 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.17.63-alpha/linux-x64.zip" sparkle:version="1.17.63.49431" sparkle:shortVersionString="1.17.63" length="85796459" sparkle:os="linux" type="application/zip" sparkle:signature="fjU6V6Tu3iZY1KYkr80IdbtNOX8h8bjenHHsja9c4FJmIj+ixwGbPeCkar/bp6MyTUrfRF1I4a26vQVbj+9qDQ=="/>
 		</item>
 		<item>
 			<title>1.16.36</title>
