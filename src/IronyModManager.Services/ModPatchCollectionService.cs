@@ -4,7 +4,7 @@
 // Created          : 05-26-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 05-29-2021
+// Last Modified On : 05-31-2021
 // ***********************************************************************
 // <copyright file="ModPatchCollectionService.cs" company="Mario">
 //     Mario
@@ -58,11 +58,6 @@ namespace IronyModManager.Services
         private const string CacheRegion = "CollectionPatchState";
 
         /// <summary>
-        /// The ignore game mods identifier
-        /// </summary>
-        private const string IgnoreGameModsId = "--ignoreGameMods";
-
-        /// <summary>
         /// The maximum mod conflicts to check
         /// </summary>
         private const int MaxModConflictsToCheck = 4;
@@ -71,6 +66,11 @@ namespace IronyModManager.Services
         /// The mod name ignore identifier
         /// </summary>
         private const string ModNameIgnoreId = "modName:";
+
+        /// <summary>
+        /// The ignore game mods identifier
+        /// </summary>
+        private const string ShowGameModsId = "--showGameMods";
 
         /// <summary>
         /// The service lock
@@ -981,6 +981,8 @@ namespace IronyModManager.Services
 
                     if (exportedConflicts)
                     {
+                        EvalModIgnoreDefinitions(conflictResult);
+
                         await modPatchExporter.SaveStateAsync(new ModPatchExporterParameters()
                         {
                             LoadOrder = GetCollectionMods(collectionName: collectionName).Select(p => p.DescriptorFile),
@@ -1374,7 +1376,7 @@ namespace IronyModManager.Services
             {
                 var ignoredPaths = conflictResult.IgnoredPaths ?? string.Empty;
                 var lines = ignoredPaths.SplitOnNewLine();
-                return lines.Any(p => p.Equals(IgnoreGameModsId));
+                return !lines.Any(p => p.Equals(ShowGameModsId));
             }
             return null;
         }
@@ -1393,11 +1395,11 @@ namespace IronyModManager.Services
                 var lines = ignoredPaths.SplitOnNewLine().ToList();
                 if (shouldIgnore.GetValueOrDefault())
                 {
-                    lines.Remove(IgnoreGameModsId);
+                    lines.Add(ShowGameModsId);
                 }
                 else
                 {
-                    lines.Add(IgnoreGameModsId);
+                    lines.Remove(ShowGameModsId);
                 }
                 conflictResult.IgnoredPaths = string.Join(Environment.NewLine, lines).Trim(Environment.NewLine.ToCharArray());
                 return !shouldIgnore;
@@ -1567,9 +1569,10 @@ namespace IronyModManager.Services
         {
             var ruleIgnoredDefinitions = DIResolver.Get<IIndexedDefinitions>();
             ruleIgnoredDefinitions.InitMap(null, true);
+            var ignoreGameMods = true;
+            var alreadyIgnored = new HashSet<string>();
             if (!string.IsNullOrEmpty(conflictResult.IgnoredPaths))
             {
-                var ignoreGameMods = false;
                 var allowedMods = GetCollectionMods().Select(p => p.Name).ToList();
                 var ignoreRules = new List<string>();
                 var includeRules = new List<string>();
@@ -1582,9 +1585,9 @@ namespace IronyModManager.Services
                         var ignoredModName = parsed.Replace(ModNameIgnoreId, string.Empty);
                         allowedMods.Remove(ignoredModName);
                     }
-                    else if (parsed.Equals(IgnoreGameModsId))
+                    else if (parsed.Equals(ShowGameModsId))
                     {
-                        ignoreGameMods = true;
+                        ignoreGameMods = false;
                     }
                     else
                     {
@@ -1598,7 +1601,6 @@ namespace IronyModManager.Services
                         }
                     }
                 }
-                var alreadyIgnored = new HashSet<string>();
                 foreach (var topConflict in conflictResult.Conflicts.GetHierarchicalDefinitions())
                 {
                     if (topConflict.Mods.Any(x => allowedMods.Contains(x)))
@@ -1641,17 +1643,17 @@ namespace IronyModManager.Services
                         }
                     }
                 }
-                if (ignoreGameMods)
+            }
+            if (ignoreGameMods)
+            {
+                foreach (var topConflict in conflictResult.Conflicts.GetHierarchicalDefinitions())
                 {
-                    foreach (var topConflict in conflictResult.Conflicts.GetHierarchicalDefinitions())
+                    foreach (var item in topConflict.Children.Where(p => p.Mods.Count <= 1))
                     {
-                        foreach (var item in topConflict.Children.Where(p => p.Mods.Count <= 1))
+                        if (item.NonGameDefinitions <= 1 && !alreadyIgnored.Contains(item.Key))
                         {
-                            if (item.NonGameDefinitions <= 1 && !alreadyIgnored.Contains(item.Key))
-                            {
-                                alreadyIgnored.Add(item.Key);
-                                ruleIgnoredDefinitions.AddToMap(conflictResult.Conflicts.GetByTypeAndId(item.Key).First());
-                            }
+                            alreadyIgnored.Add(item.Key);
+                            ruleIgnoredDefinitions.AddToMap(conflictResult.Conflicts.GetByTypeAndId(item.Key).First());
                         }
                     }
                 }
