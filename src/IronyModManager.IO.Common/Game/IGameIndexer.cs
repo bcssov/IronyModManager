@@ -4,7 +4,7 @@
 // Created          : 05-27-2021
 //
 // Last Modified By : Mario
-// Last Modified On : 05-27-2021
+// Last Modified On : 05-31-2021
 // ***********************************************************************
 // <copyright file="IGameIndexer.cs" company="Mario">
 //     Mario
@@ -26,6 +26,15 @@ namespace IronyModManager.IO.Common.Game
     public interface IGameIndexer
     {
         #region Methods
+
+        /// <summary>
+        /// Cacheds the definitions same asynchronous.
+        /// </summary>
+        /// <param name="storagePath">The storage path.</param>
+        /// <param name="game">The game.</param>
+        /// <param name="version">The version.</param>
+        /// <returns>Task&lt;System.Boolean&gt;.</returns>
+        Task<bool> CachedDefinitionsSameAsync(string storagePath, IGame game, int version);
 
         /// <summary>
         /// Clears the definition asynchronous.
@@ -67,9 +76,10 @@ namespace IronyModManager.IO.Common.Game
         /// </summary>
         /// <param name="storagePath">The storage path.</param>
         /// <param name="game">The game.</param>
-        /// <param name="version">The version.</param>
+        /// <param name="gameVersion">The game version.</param>
+        /// <param name="cacheVersion">The cache version.</param>
         /// <returns>Task&lt;System.Boolean&gt;.</returns>
-        Task<bool> WriteVersionAsync(string storagePath, IGame game, string version);
+        Task<bool> WriteVersionAsync(string storagePath, IGame game, string gameVersion, int cacheVersion);
 
         #endregion Methods
     }

@@ -4,7 +4,7 @@
 // Created          : 05-27-2021
 //
 // Last Modified By : Mario
-// Last Modified On : 05-28-2021
+// Last Modified On : 05-31-2021
 // ***********************************************************************
 // <copyright file="GameIndexService.cs" company="Mario">
 //     Mario
@@ -48,14 +48,14 @@ namespace IronyModManager.Services
         #region Fields
 
         /// <summary>
-        /// The storage sub folder
-        /// </summary>
-        private const string StorageSubFolder = "IndexCache";
-
-        /// <summary>
         /// The service lock
         /// </summary>
         private static readonly AsyncLock asyncServiceLock = new();
+
+        /// <summary>
+        /// The current cache version
+        /// </summary>
+        private readonly int CurrentCacheVersion = 1;
 
         /// <summary>
         /// The game indexer
@@ -114,7 +114,7 @@ namespace IronyModManager.Services
             if (game != null && !string.IsNullOrEmpty(version))
             {
                 await messageBus.PublishAsync(new GameIndexProgressEvent(0));
-                if (!await gameIndexer.DefinitionExistsAsync(GetStoragePath(), game, version))
+                if (!await gameIndexer.DefinitionExistsAsync(GetStoragePath(), game, version) || !await gameIndexer.CachedDefinitionsSameAsync(GetStoragePath(), game, CurrentCacheVersion))
                 {
                     await gameIndexer.ClearDefinitionAsync(GetStoragePath(), game);
                     var gamePath = Path.GetDirectoryName(game.ExecutableLocation);
@@ -149,7 +149,7 @@ namespace IronyModManager.Services
                             mutex.Dispose();
                         });
                         await Task.WhenAll(tasks);
-                        await gameIndexer.WriteVersionAsync(GetStoragePath(), game, version);
+                        await gameIndexer.WriteVersionAsync(GetStoragePath(), game, version, CurrentCacheVersion);
                         return true;
                     }
                     return false;
@@ -232,7 +232,7 @@ namespace IronyModManager.Services
         /// <returns>System.String.</returns>
         protected virtual string GetStoragePath()
         {
-            return Path.Combine(StorageProvider.GetRootStoragePath(), StorageSubFolder);
+            return StorageProvider.GetRootStoragePath();
         }
 
         /// <summary>

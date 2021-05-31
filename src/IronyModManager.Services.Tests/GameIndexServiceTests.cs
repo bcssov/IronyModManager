@@ -111,7 +111,7 @@ namespace IronyModManager.Services.Tests
         /// Defines the test method Should_not_index_definitions_when_definition_exists.
         /// </summary>
         [Fact]
-        public async Task Should_not_index_definitions_when_definition_exists()
+        public async Task Should_not_index_definitions_when_definition_and_version_exists()
         {
             var storageProvider = new Mock<IStorageProvider>();
             var modParser = new Mock<IModParser>();
@@ -123,6 +123,7 @@ namespace IronyModManager.Services.Tests
             var gameIndexer = new Mock<IGameIndexer>();
             storageProvider.Setup(p => p.GetRootStoragePath()).Returns("c:\\test");
             gameIndexer.Setup(p => p.DefinitionExistsAsync(It.IsAny<string>(), It.IsAny<IGame>(), It.IsAny<string>())).Returns((string p1, IGame p2, string p3) => Task.FromResult(true));
+            gameIndexer.Setup(p => p.CachedDefinitionsSameAsync(It.IsAny<string>(), It.IsAny<IGame>(), It.IsAny<int>())).Returns((string p1, IGame p2, int p3) => Task.FromResult(true));
 
             var service = GetService(gameIndexer, storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService);
             var result = await service.IndexDefinitionsAsync(new Game(), "3.0.3");
@@ -133,7 +134,7 @@ namespace IronyModManager.Services.Tests
         /// Defines the test method Should_index_definitions.
         /// </summary>
         [Fact]
-        public async Task Should_index_definitions()
+        public async Task Should_index_definitions_when_definition_doesnt_exist()
         {
             var storageProvider = new Mock<IStorageProvider>();
             var modParser = new Mock<IModParser>();
@@ -145,8 +146,75 @@ namespace IronyModManager.Services.Tests
             var gameIndexer = new Mock<IGameIndexer>();
             storageProvider.Setup(p => p.GetRootStoragePath()).Returns("c:\\test");
             gameIndexer.Setup(p => p.DefinitionExistsAsync(It.IsAny<string>(), It.IsAny<IGame>(), It.IsAny<string>())).Returns((string p1, IGame p2, string p3) => Task.FromResult(false));
+            gameIndexer.Setup(p => p.CachedDefinitionsSameAsync(It.IsAny<string>(), It.IsAny<IGame>(), It.IsAny<int>())).Returns((string p1, IGame p2, int p3) => Task.FromResult(true));
             gameIndexer.Setup(p => p.ClearDefinitionAsync(It.IsAny<string>(), It.IsAny<IGame>())).Returns((string p1, IGame p2) => Task.FromResult(false));
-            gameIndexer.Setup(p => p.WriteVersionAsync(It.IsAny<string>(), It.IsAny<IGame>(), It.IsAny<string>())).Returns((string p1, IGame p2, string p3) => Task.FromResult(false));
+            gameIndexer.Setup(p => p.WriteVersionAsync(It.IsAny<string>(), It.IsAny<IGame>(), It.IsAny<string>(), It.IsAny<int>())).Returns((string p1, IGame p2, string p3, int p4) => Task.FromResult(false));
+            reader.Setup(p => p.GetFiles(It.IsAny<string>())).Returns(new List<string>() { "test1\\1.txt", "test2\\2.txt", "test3\\3.txt" });
+            var fileInfos1 = new List<IFileInfo>()
+            {
+                new FileInfo()
+                {
+                    Content = new List<string>() { "1" },
+                    FileName = "test1\\1.txt",
+                    IsBinary = false
+                }
+            };
+            var fileInfos2 = new List<IFileInfo>()
+            {
+                new FileInfo()
+                {
+                    Content = new List<string>() { "1" },
+                    FileName = "test2\\2.txt",
+                    IsBinary = false
+                }
+            };
+            reader.Setup(s => s.Read(It.Is<string>(p => p.Contains("test1")), It.IsAny<IEnumerable<string>>(), It.IsAny<bool>())).Returns(fileInfos1);
+            reader.Setup(s => s.Read(It.Is<string>(p => p.Contains("test2")), It.IsAny<IEnumerable<string>>(), It.IsAny<bool>())).Returns(fileInfos2);
+            parserManager.Setup(s => s.Parse(It.IsAny<ParserManagerArgs>())).Returns((ParserManagerArgs args) =>
+            {
+                return new List<IDefinition>() { new Definition()
+                {
+                    Code = args.File,
+                    File = args.File,
+                    ContentSHA = args.File,
+                    Id = args.File,
+                    Type = args.ModName
+                } };
+            });
+            var saved = new List<string>();
+            gameIndexer.Setup(p => p.SaveDefinitionsAsync(It.IsAny<string>(), It.IsAny<IGame>(), It.IsAny<IEnumerable<IDefinition>>())).Returns((string p1, IGame p2, IEnumerable<IDefinition> p3) =>
+            {
+                saved.Add(p3.FirstOrDefault().ParentDirectory);
+                return Task.FromResult(true);
+            });
+
+            var service = GetService(gameIndexer, storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService);
+            var result = await service.IndexDefinitionsAsync(new Game() { ExecutableLocation = "c:\\test\\test.exe", GameFolders = new List<string>() { "test1", "test2" } }, "3.0.3");
+            result.Should().BeTrue();
+            saved.Count.Should().Be(2);
+            saved.FirstOrDefault(p => p.Contains("test1")).Should().NotBeNull();
+            saved.FirstOrDefault(p => p.Contains("test2")).Should().NotBeNull();
+        }
+
+        /// <summary>
+        /// Defines the test method Should_index_definitions_when_version_doesnt_exist.
+        /// </summary>
+        [Fact]
+        public async Task Should_index_definitions_when_version_doesnt_exist()
+        {
+            var storageProvider = new Mock<IStorageProvider>();
+            var modParser = new Mock<IModParser>();
+            var parserManager = new Mock<IParserManager>();
+            var reader = new Mock<IReader>();
+            var modWriter = new Mock<IModWriter>();
+            var gameService = new Mock<IGameService>();
+            var mapper = new Mock<IMapper>();
+            var gameIndexer = new Mock<IGameIndexer>();
+            storageProvider.Setup(p => p.GetRootStoragePath()).Returns("c:\\test");
+            gameIndexer.Setup(p => p.DefinitionExistsAsync(It.IsAny<string>(), It.IsAny<IGame>(), It.IsAny<string>())).Returns((string p1, IGame p2, string p3) => Task.FromResult(true));
+            gameIndexer.Setup(p => p.CachedDefinitionsSameAsync(It.IsAny<string>(), It.IsAny<IGame>(), It.IsAny<int>())).Returns((string p1, IGame p2, int p3) => Task.FromResult(false));
+            gameIndexer.Setup(p => p.ClearDefinitionAsync(It.IsAny<string>(), It.IsAny<IGame>())).Returns((string p1, IGame p2) => Task.FromResult(false));
+            gameIndexer.Setup(p => p.WriteVersionAsync(It.IsAny<string>(), It.IsAny<IGame>(), It.IsAny<string>(), It.IsAny<int>())).Returns((string p1, IGame p2, string p3, int p4) => Task.FromResult(false));
             reader.Setup(p => p.GetFiles(It.IsAny<string>())).Returns(new List<string>() { "test1\\1.txt", "test2\\2.txt", "test3\\3.txt" });
             var fileInfos1 = new List<IFileInfo>()
             {

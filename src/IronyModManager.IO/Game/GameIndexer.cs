@@ -4,7 +4,7 @@
 // Created          : 05-27-2021
 //
 // Last Modified By : Mario
-// Last Modified On : 05-28-2021
+// Last Modified On : 05-31-2021
 // ***********************************************************************
 // <copyright file="GameIndexer.cs" company="Mario">
 //     Mario
@@ -38,6 +38,11 @@ namespace IronyModManager.IO.Game
         #region Fields
 
         /// <summary>
+        /// The cache version file
+        /// </summary>
+        private const string CacheVersionFile = "cache-version.txt";
+
+        /// <summary>
         /// The extension
         /// </summary>
         private const string Extension = ".irony";
@@ -45,11 +50,38 @@ namespace IronyModManager.IO.Game
         /// <summary>
         /// The version file
         /// </summary>
-        private const string VersionFile = "version.txt";
+        private const string GameVersionFile = "game-version.txt";
+
+        /// <summary>
+        /// The storage sub folder
+        /// </summary>
+        private const string StorageSubFolder = "IndexCache";
 
         #endregion Fields
 
         #region Methods
+
+        /// <summary>
+        /// cached definitions same as an asynchronous operation.
+        /// </summary>
+        /// <param name="storagePath">The storage path.</param>
+        /// <param name="game">The game.</param>
+        /// <param name="version">The version.</param>
+        /// <returns>Task&lt;System.Boolean&gt;.</returns>
+        public virtual async Task<bool> CachedDefinitionsSameAsync(string storagePath, IGame game, int version)
+        {
+            storagePath = ResolveStoragePath(storagePath);
+            var fullPath = Path.Combine(storagePath, game.Type, CacheVersionFile);
+            if (File.Exists(fullPath))
+            {
+                var text = (await File.ReadAllTextAsync(fullPath) ?? string.Empty).ReplaceNewLine().Trim();
+                if (int.TryParse(text, out var storedVersion))
+                {
+                    return storedVersion.Equals(version);
+                }
+            }
+            return false;
+        }
 
         /// <summary>
         /// Clears the definition asynchronous.
@@ -59,6 +91,7 @@ namespace IronyModManager.IO.Game
         /// <returns>Task&lt;System.Boolean&gt;.</returns>
         public virtual Task<bool> ClearDefinitionAsync(string storagePath, IGame game)
         {
+            storagePath = ResolveStoragePath(storagePath);
             var fullPath = Path.Combine(storagePath, game.Type);
             if (Directory.Exists(fullPath))
             {
@@ -77,7 +110,8 @@ namespace IronyModManager.IO.Game
         /// <returns>Task&lt;System.Boolean&gt;.</returns>
         public virtual async Task<bool> DefinitionExistsAsync(string storagePath, IGame game, string version)
         {
-            var fullPath = Path.Combine(storagePath, game.Type, VersionFile);
+            storagePath = ResolveStoragePath(storagePath);
+            var fullPath = Path.Combine(storagePath, game.Type, GameVersionFile);
             if (File.Exists(fullPath))
             {
                 var storedVersion = (await File.ReadAllTextAsync(fullPath) ?? string.Empty).ReplaceNewLine().Trim();
@@ -95,6 +129,7 @@ namespace IronyModManager.IO.Game
         /// <returns>Task&lt;IEnumerable&lt;IDefinition&gt;&gt;.</returns>
         public virtual async Task<IEnumerable<IDefinition>> GetDefinitionsAsync(string storagePath, IGame game, string path)
         {
+            storagePath = ResolveStoragePath(storagePath);
             path = SanitizePath(path);
             var fullPath = Path.Combine(storagePath, game.Type, path);
             if (File.Exists(fullPath))
@@ -127,6 +162,7 @@ namespace IronyModManager.IO.Game
         /// <exception cref="ArgumentException">Definitions types differ.</exception>
         public virtual async Task<bool> SaveDefinitionsAsync(string storagePath, IGame game, IEnumerable<IDefinition> definitions)
         {
+            storagePath = ResolveStoragePath(storagePath);
             if (definitions.GroupBy(p => p.ParentDirectory).Count() > 1)
             {
                 throw new ArgumentException("Definitions types differ.");
@@ -145,7 +181,7 @@ namespace IronyModManager.IO.Game
             var bytes = Encoding.UTF8.GetBytes(json);
             using var source = new MemoryStream(bytes);
             using var destination = new MemoryStream();
-            using var compress = new DeflateStream(destination, CompressionMode.Compress, true);
+            using var compress = new DeflateStream(destination, CompressionLevel.Fastest, true);
             await source.CopyToAsync(compress);
             await compress.FlushAsync();
             if (!Directory.Exists(Path.GetDirectoryName(fullPath)))
@@ -161,21 +197,39 @@ namespace IronyModManager.IO.Game
         /// </summary>
         /// <param name="storagePath">The storage path.</param>
         /// <param name="game">The game.</param>
-        /// <param name="version">The version.</param>
+        /// <param name="gameVersion">The game version.</param>
+        /// <param name="cacheVersion">The cache version.</param>
         /// <returns>Task&lt;System.Boolean&gt;.</returns>
-        public virtual async Task<bool> WriteVersionAsync(string storagePath, IGame game, string version)
+        public virtual async Task<bool> WriteVersionAsync(string storagePath, IGame game, string gameVersion, int cacheVersion)
         {
-            var fullPath = Path.Combine(storagePath, game.Type, VersionFile);
-            if (File.Exists(fullPath))
+            storagePath = ResolveStoragePath(storagePath);
+            var gameVersionFullPath = Path.Combine(storagePath, game.Type, GameVersionFile);
+            var cacheVersionFullPath = Path.Combine(storagePath, game.Type, CacheVersionFile);
+            if (!Directory.Exists(Path.GetDirectoryName(gameVersionFullPath)))
             {
-                DiskOperations.DeleteFile(fullPath);
+                Directory.CreateDirectory(Path.GetDirectoryName(gameVersionFullPath));
             }
-            if (!Directory.Exists(Path.GetDirectoryName(fullPath)))
+            if (File.Exists(gameVersionFullPath))
             {
-                Directory.CreateDirectory(Path.GetDirectoryName(fullPath));
+                DiskOperations.DeleteFile(gameVersionFullPath);
             }
-            await File.WriteAllTextAsync(fullPath, version);
+            if (File.Exists(cacheVersionFullPath))
+            {
+                DiskOperations.DeleteFile(cacheVersionFullPath);
+            }
+            await File.WriteAllTextAsync(gameVersionFullPath, gameVersion);
+            await File.WriteAllTextAsync(cacheVersionFullPath, cacheVersion.ToString());
             return false;
+        }
+
+        /// <summary>
+        /// Resolves the storage path.
+        /// </summary>
+        /// <param name="path">The path.</param>
+        /// <returns>System.String.</returns>
+        protected virtual string ResolveStoragePath(string path)
+        {
+            return Path.Combine(path, StorageSubFolder);
         }
 
         /// <summary>
@@ -185,7 +239,7 @@ namespace IronyModManager.IO.Game
         /// <returns>System.String.</returns>
         protected virtual string SanitizePath(string path)
         {
-            return path.StandardizeDirectorySeparator().Split(Path.DirectorySeparatorChar)[0] + Path.DirectorySeparatorChar + path.StandardizeDirectorySeparator().Replace(Path.DirectorySeparatorChar, '.') + Extension;
+            return Path.Combine(path.StandardizeDirectorySeparator().Split(Path.DirectorySeparatorChar)[0], path.StandardizeDirectorySeparator().Replace(Path.DirectorySeparatorChar, '.') + Extension);
         }
 
         #endregion Methods
