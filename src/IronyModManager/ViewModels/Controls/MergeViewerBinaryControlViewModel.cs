@@ -240,6 +240,7 @@ namespace IronyModManager.ViewModels.Controls
         /// <param name="definition">The definition.</param>
         public void SetLeft(IDefinition definition)
         {
+            var localDefinition = definition;
             async Task parseImage()
             {
                 var mutex = await leftImageLock.LockAsync();
@@ -250,7 +251,7 @@ namespace IronyModManager.ViewModels.Controls
                     LeftImage = null;
                     left?.Dispose();
                     LeftHeight = LeftWidth = 0;
-                    using var ms = await modService.GetImageStreamAsync(definition?.ModName, definition?.File, definition.IsFromGame);
+                    using var ms = await modService.GetImageStreamAsync(localDefinition.ModName, localDefinition.File, localDefinition.IsFromGame);
                     if (ms != null)
                     {
                         try
@@ -293,6 +294,7 @@ namespace IronyModManager.ViewModels.Controls
         /// <param name="definition">The definition.</param>
         public void SetRight(IDefinition definition)
         {
+            var localDefinition = definition;
             async Task parseImage()
             {
                 var mutex = await rightImageLock.LockAsync();
@@ -303,7 +305,7 @@ namespace IronyModManager.ViewModels.Controls
                     RightImage = null;
                     right?.Dispose();
                     RightHeight = RightWidth = 0;
-                    using var ms = await modService.GetImageStreamAsync(definition?.ModName, definition?.File, definition.IsFromGame);
+                    using var ms = await modService.GetImageStreamAsync(localDefinition.ModName, localDefinition.File, localDefinition.IsFromGame);
                     if (ms != null)
                     {
                         try
@@ -335,7 +337,7 @@ namespace IronyModManager.ViewModels.Controls
                 }
                 await Task.Delay(10);
                 mutex.Dispose();
-            }
+            }            
             Task.Run(() => parseImage().ConfigureAwait(false)).ConfigureAwait(false);
         }
 

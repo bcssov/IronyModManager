@@ -4,7 +4,7 @@
 // Created          : 03-31-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 05-29-2021
+// Last Modified On : 05-31-2021
 // ***********************************************************************
 // <copyright file="ModPatchExporter.cs" company="Mario">
 //     Mario
@@ -974,9 +974,6 @@ namespace IronyModManager.IO.Mods
                 if (File.Exists(statePath))
                 {
                     File.Copy(statePath, backupPath);
-                }
-                if (File.Exists(statePath))
-                {
                     DiskOperations.DeleteFile(statePath);
                 }
                 if (File.Exists(stateTemp))

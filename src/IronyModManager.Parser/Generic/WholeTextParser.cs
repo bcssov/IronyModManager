@@ -4,7 +4,7 @@
 // Created          : 03-28-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 12-07-2020
+// Last Modified On : 05-31-2021
 // ***********************************************************************
 // <copyright file="WholeTextParser.cs" company="Mario">
 //     Mario
@@ -15,6 +15,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text;
 using IronyModManager.Parser.Common.Args;
 using IronyModManager.Parser.Common.Parsers;
 using IronyModManager.Shared;
@@ -116,9 +117,15 @@ namespace IronyModManager.Parser.Generic
             }
 
             // This type is a bit different and only will conflict in filenames.
+            var code = codeParser.ParseScriptWithoutValidation(args.Lines);
             var def = GetDefinitionInstance();
             MapDefinitionFromArgs(ConstructArgs(args, def));
-            def.OriginalCode = def.Code = string.Join(Environment.NewLine, args.Lines.Where(p => !string.IsNullOrWhiteSpace(p)));
+            var sb = new StringBuilder();
+            foreach (var result in code.Values)
+            {
+                sb.AppendLine(FormatCode(result));
+            }
+            def.OriginalCode = def.Code = sb.ToString();
             def.Id = Path.GetFileName(args.File).ToLowerInvariant();
             if (fileNameTag)
             {
@@ -127,7 +134,10 @@ namespace IronyModManager.Parser.Generic
             else
             {
                 // Get tags only
-                var definitions = ParseRoot(args);
+                var definitions = new List<IDefinition>();
+                definitions.AddRange(ParseSimpleTypes(code.Values, args));
+                definitions.AddRange(ParseComplexTypes(code.Values, args));
+                definitions.AddRange(ParseTypesForVariables(code.Values, args));
                 foreach (var item in definitions)
                 {
                     foreach (var tag in item.Tags)

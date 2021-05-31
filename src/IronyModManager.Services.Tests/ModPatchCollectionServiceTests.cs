@@ -3716,7 +3716,7 @@ namespace IronyModManager.Services.Tests
             gameService.Setup(p => p.GetSelected()).Returns((IGame)null);
 
             var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter);
-            var result = await service.PatchHasGameDefinitionsAsync("fake");
+            var result = await service.PatchHasGameDefinitionsAsync(null);
             result.Should().BeFalse();
         }
 
