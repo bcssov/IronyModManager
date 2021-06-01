@@ -4,7 +4,7 @@
 // Created          : 05-27-2021
 //
 // Last Modified By : Mario
-// Last Modified On : 05-31-2021
+// Last Modified On : 06-01-2021
 // ***********************************************************************
 // <copyright file="IGameIndexer.cs" company="Mario">
 //     Mario
@@ -28,7 +28,7 @@ namespace IronyModManager.IO.Common.Game
         #region Methods
 
         /// <summary>
-        /// Cacheds the definitions same asynchronous.
+        /// Checks whether the cached definitions version signatures are the same.
         /// </summary>
         /// <param name="storagePath">The storage path.</param>
         /// <param name="game">The game.</param>
@@ -45,13 +45,22 @@ namespace IronyModManager.IO.Common.Game
         Task<bool> ClearDefinitionAsync(string storagePath, IGame game);
 
         /// <summary>
-        /// Definitions the exists asynchronous.
+        /// Checks whether the folder is cached.
+        /// </summary>
+        /// <param name="storagePath">The storage path.</param>
+        /// <param name="game">The game.</param>
+        /// <param name="path">The path.</param>
+        /// <returns>Task&lt;System.Boolean&gt;.</returns>
+        Task<bool> FolderCachedAsync(string storagePath, IGame game, string path);
+
+        /// <summary>
+        /// Check whether the cached game info is the same.
         /// </summary>
         /// <param name="storagePath">The storage path.</param>
         /// <param name="game">The game.</param>
         /// <param name="version">The version.</param>
         /// <returns>Task&lt;System.Boolean&gt;.</returns>
-        Task<bool> DefinitionExistsAsync(string storagePath, IGame game, string version);
+        Task<bool> GameVersionSameAsync(string storagePath, IGame game, string version);
 
         /// <summary>
         /// Gets the definitions asynchronous.

@@ -4,7 +4,7 @@
 // Created          : 05-27-2021
 //
 // Last Modified By : Mario
-// Last Modified On : 05-31-2021
+// Last Modified On : 06-01-2021
 // ***********************************************************************
 // <copyright file="GameIndexService.cs" company="Mario">
 //     Mario
@@ -108,52 +108,62 @@ namespace IronyModManager.Services
         /// </summary>
         /// <param name="game">The game.</param>
         /// <param name="version">The version.</param>
+        /// <param name="indexedDefinitions">The indexed definitions.</param>
         /// <returns>Task&lt;System.Boolean&gt;.</returns>
-        public virtual async Task<bool> IndexDefinitionsAsync(IGame game, string version)
+        public virtual async Task<bool> IndexDefinitionsAsync(IGame game, string version, IIndexedDefinitions indexedDefinitions)
         {
             if (game != null && !string.IsNullOrEmpty(version))
             {
                 await messageBus.PublishAsync(new GameIndexProgressEvent(0));
-                if (!await gameIndexer.DefinitionExistsAsync(GetStoragePath(), game, version) || !await gameIndexer.CachedDefinitionsSameAsync(GetStoragePath(), game, CurrentCacheVersion))
+                if (!await gameIndexer.GameVersionSameAsync(GetStoragePath(), game, version) || !await gameIndexer.CachedDefinitionsSameAsync(GetStoragePath(), game, CurrentCacheVersion))
                 {
                     await gameIndexer.ClearDefinitionAsync(GetStoragePath(), game);
-                    var gamePath = Path.GetDirectoryName(game.ExecutableLocation);
-                    var files = Reader.GetFiles(gamePath);
-                    if (files.Any())
-                    {
-                        files = files.Where(p => game.GameFolders.Any(x => p.StartsWith(x)));
-                        var folders = files.Select(p => Path.GetDirectoryName(p)).GroupBy(p => p).Select(p => p.FirstOrDefault());
-
-                        double processed = 0;
-                        double total = folders.Count();
-                        double previousProgress = 0;
-                        var tasks = folders.AsParallel().Select(async folder =>
-                        {
-                            await Task.Run(async () =>
-                            {
-                                IEnumerable<IDefinition> result = null;
-                                result = ParseGameFiles(game, Reader.Read(Path.Combine(gamePath, folder), searchSubFolders: false), folder);
-                                if ((result?.Any()).GetValueOrDefault())
-                                {
-                                    await gameIndexer.SaveDefinitionsAsync(GetStoragePath(), game, result);
-                                }
-                            });
-                            using var mutex = await asyncServiceLock.LockAsync();
-                            processed++;
-                            var perc = GetProgressPercentage(total, processed, 100);
-                            if (perc != previousProgress)
-                            {
-                                await messageBus.PublishAsync(new GameIndexProgressEvent(perc));
-                                previousProgress = perc;
-                            }
-                            mutex.Dispose();
-                        });
-                        await Task.WhenAll(tasks);
-                        await gameIndexer.WriteVersionAsync(GetStoragePath(), game, version, CurrentCacheVersion);
-                        return true;
-                    }
-                    return false;
                 }
+                var gamePath = Path.GetDirectoryName(game.ExecutableLocation);
+                var files = Reader.GetFiles(gamePath);
+                if (files.Any())
+                {
+                    files = files.Where(p => game.GameFolders.Any(x => p.StartsWith(x)));
+                    var indexedFolders = indexedDefinitions.GetAllDirectoryKeys().Select(p => p.ToLowerInvariant());
+                    var validFolders = files.Select(p => Path.GetDirectoryName(p)).GroupBy(p => p).Select(p => p.FirstOrDefault()).Where(p => indexedFolders.Any(a => a.ToLowerInvariant().Equals(p.ToLowerInvariant())));
+                    var folders = new List<string>();
+                    foreach (var item in validFolders)
+                    {
+                        if (!await gameIndexer.FolderCachedAsync(GetStoragePath(), game, item))
+                        {
+                            folders.Add(item);
+                        }
+                    }
+
+                    double processed = 0;
+                    double total = folders.Count;
+                    double previousProgress = 0;
+                    var tasks = folders.AsParallel().Select(async folder =>
+                    {
+                        await Task.Run(async () =>
+                        {
+                            IEnumerable<IDefinition> result = null;
+                            result = ParseGameFiles(game, Reader.Read(Path.Combine(gamePath, folder), searchSubFolders: false), folder);
+                            if ((result?.Any()).GetValueOrDefault())
+                            {
+                                await gameIndexer.SaveDefinitionsAsync(GetStoragePath(), game, result);
+                            }
+                        });
+                        using var mutex = await asyncServiceLock.LockAsync();
+                        processed++;
+                        var perc = GetProgressPercentage(total, processed, 100);
+                        if (perc != previousProgress)
+                        {
+                            await messageBus.PublishAsync(new GameIndexProgressEvent(perc));
+                            previousProgress = perc;
+                        }
+                        mutex.Dispose();
+                    });
+                    await Task.WhenAll(tasks);
+                    await gameIndexer.WriteVersionAsync(GetStoragePath(), game, version, CurrentCacheVersion);
+                    return true;
+                }
+                return false;
             }
             return false;
         }
@@ -167,7 +177,7 @@ namespace IronyModManager.Services
         /// <returns>Task&lt;IIndexedDefinitions&gt;.</returns>
         public virtual async Task<IIndexedDefinitions> LoadDefinitionsAsync(IIndexedDefinitions modDefinitions, IGame game, string version)
         {
-            if (game != null && !string.IsNullOrEmpty(version) && await gameIndexer.DefinitionExistsAsync(GetStoragePath(), game, version))
+            if (game != null && !string.IsNullOrEmpty(version) && await gameIndexer.GameVersionSameAsync(GetStoragePath(), game, version))
             {
                 var gameDefinitions = new ConcurrentBag<IDefinition>();
                 var directories = modDefinitions.GetAllDirectoryKeys();

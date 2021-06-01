@@ -4,7 +4,7 @@
 // Created          : 02-29-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 05-29-2021
+// Last Modified On : 06-01-2021
 // ***********************************************************************
 // <copyright file="ModHolderControlViewModel.cs" company="Mario">
 //     Mario
@@ -458,16 +458,16 @@ namespace IronyModManager.ViewModels.Controls
             modPatchCollectionService.ResetPatchStateCache();
 
             var game = gameService.GetSelected();
-            if (!string.IsNullOrWhiteSpace(version))
-            {
-                await Task.Run(async () => await gameIndexService.IndexDefinitionsAsync(game, version));
-            }
             var definitions = await Task.Run(async () =>
             {
                 return await modPatchCollectionService.GetModObjectsAsync(gameService.GetSelected(), CollectionMods.SelectedMods, CollectionMods.SelectedModCollection.Name).ConfigureAwait(false);
             }).ConfigureAwait(false);
             if (!string.IsNullOrWhiteSpace(version))
             {
+                if (!string.IsNullOrWhiteSpace(version))
+                {
+                    await Task.Run(async () => await gameIndexService.IndexDefinitionsAsync(game, version, definitions));
+                }
                 definitions = await Task.Run(async () =>
                 {
                     return await gameIndexService.LoadDefinitionsAsync(definitions, game, version);
@@ -910,19 +910,6 @@ namespace IronyModManager.ViewModels.Controls
         /// <param name="totalSteps">The total steps.</param>
         private void SubscribeToProgressReport(long id, CompositeDisposable disposables, int totalSteps)
         {
-            gameIndexHandler?.Dispose();
-            gameIndexHandler = gameIndexProgressHandler.Subscribe(s =>
-            {
-                var message = localizationManager.GetResource(LocalizationResources.Mod_Actions.ConflictSolver.Overlay_Conflict_Solver_Indexing_Game);
-                var overlayProgress = Smart.Format(localizationManager.GetResource(LocalizationResources.Mod_Actions.ConflictSolver.Overlay_Conflict_Solver_Progress), new
-                {
-                    PercentDone = s.Percentage.ToLocalizedPercentage(),
-                    Count = 1,
-                    TotalCount = totalSteps
-                });
-                TriggerOverlay(id, true, message, overlayProgress);
-            }).DisposeWith(disposables);
-
             definitionLoadHandler?.Dispose();
             definitionLoadHandler = modDefinitionLoadHandler.Subscribe(s =>
             {
@@ -930,7 +917,7 @@ namespace IronyModManager.ViewModels.Controls
                 var overlayProgress = Smart.Format(localizationManager.GetResource(LocalizationResources.Mod_Actions.ConflictSolver.Overlay_Conflict_Solver_Progress), new
                 {
                     PercentDone = s.Percentage.ToLocalizedPercentage(),
-                    Count = totalSteps == 6 ? 2 : 1,
+                    Count = 1,
                     TotalCount = totalSteps
                 });
                 TriggerOverlay(id, true, message, overlayProgress);
@@ -943,7 +930,20 @@ namespace IronyModManager.ViewModels.Controls
                 var overlayProgress = Smart.Format(localizationManager.GetResource(LocalizationResources.Mod_Actions.ConflictSolver.Overlay_Conflict_Solver_Progress), new
                 {
                     PercentDone = s.Percentage.ToLocalizedPercentage(),
-                    Count = totalSteps == 6 ? 3 : 2,
+                    Count = 2,
+                    TotalCount = totalSteps
+                });
+                TriggerOverlay(id, true, message, overlayProgress);
+            }).DisposeWith(disposables);
+
+            gameIndexHandler?.Dispose();
+            gameIndexHandler = gameIndexProgressHandler.Subscribe(s =>
+            {
+                var message = localizationManager.GetResource(LocalizationResources.Mod_Actions.ConflictSolver.Overlay_Conflict_Solver_Indexing_Game);
+                var overlayProgress = Smart.Format(localizationManager.GetResource(LocalizationResources.Mod_Actions.ConflictSolver.Overlay_Conflict_Solver_Progress), new
+                {
+                    PercentDone = s.Percentage.ToLocalizedPercentage(),
+                    Count = 3,
                     TotalCount = totalSteps
                 });
                 TriggerOverlay(id, true, message, overlayProgress);

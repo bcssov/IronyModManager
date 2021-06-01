@@ -4,7 +4,7 @@
 // Created          : 05-27-2021
 //
 // Last Modified By : Mario
-// Last Modified On : 05-31-2021
+// Last Modified On : 06-01-2021
 // ***********************************************************************
 // <copyright file="GameIndexer.cs" company="Mario">
 //     Mario
@@ -62,7 +62,7 @@ namespace IronyModManager.IO.Game
         #region Methods
 
         /// <summary>
-        /// cached definitions same as an asynchronous operation.
+        /// Checks whether the cached definitions version signatures are the same.
         /// </summary>
         /// <param name="storagePath">The storage path.</param>
         /// <param name="game">The game.</param>
@@ -102,13 +102,28 @@ namespace IronyModManager.IO.Game
         }
 
         /// <summary>
-        /// definition exists as an asynchronous operation.
+        /// Checks whether the folder is cached.
+        /// </summary>
+        /// <param name="storagePath">The storage path.</param>
+        /// <param name="game">The game.</param>
+        /// <param name="path">The path.</param>
+        /// <returns>Task&lt;System.Boolean&gt;.</returns>
+        public virtual Task<bool> FolderCachedAsync(string storagePath, IGame game, string path)
+        {
+            storagePath = ResolveStoragePath(storagePath);
+            path = SanitizePath(path);
+            var fullPath = Path.Combine(storagePath, game.Type, path);
+            return Task.FromResult(File.Exists(fullPath));
+        }
+
+        /// <summary>
+        /// Check whether the cached game info is the same.
         /// </summary>
         /// <param name="storagePath">The storage path.</param>
         /// <param name="game">The game.</param>
         /// <param name="version">The version.</param>
         /// <returns>Task&lt;System.Boolean&gt;.</returns>
-        public virtual async Task<bool> DefinitionExistsAsync(string storagePath, IGame game, string version)
+        public virtual async Task<bool> GameVersionSameAsync(string storagePath, IGame game, string version)
         {
             storagePath = ResolveStoragePath(storagePath);
             var fullPath = Path.Combine(storagePath, game.Type, GameVersionFile);
