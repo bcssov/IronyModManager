@@ -142,8 +142,7 @@ namespace IronyModManager.Services
                     {
                         await Task.Run(async () =>
                         {
-                            IEnumerable<IDefinition> result = null;
-                            result = ParseGameFiles(game, Reader.Read(Path.Combine(gamePath, folder), searchSubFolders: false), folder);
+                            var result = ParseGameFiles(game, Reader.Read(Path.Combine(gamePath, folder), searchSubFolders: false), folder);
                             if ((result?.Any()).GetValueOrDefault())
                             {
                                 await gameIndexer.SaveDefinitionsAsync(GetStoragePath(), game, result);

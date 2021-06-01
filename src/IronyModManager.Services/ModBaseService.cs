@@ -240,13 +240,15 @@ namespace IronyModManager.Services
                     IEnumerable<IDefinition> filtered = null;
                     if (definitions.Any(p => p.FileCI.Contains(Shared.Constants.LocalizationReplaceDirectory, StringComparison.OrdinalIgnoreCase)))
                     {
-                        if (definitions.GroupBy(p => p.CustomPriorityOrder).Count() == 1)
+                        var replaceDefinitions = definitions.Where(p => p.FileCI.Contains(Shared.Constants.LocalizationReplaceDirectory, StringComparison.OrdinalIgnoreCase));
+                        if (replaceDefinitions.GroupBy(p => p.CustomPriorityOrder).Count() == 1)
                         {
-                            filtered = definitions.Where(p => p.FileCI.Contains(Shared.Constants.LocalizationReplaceDirectory, StringComparison.OrdinalIgnoreCase));
+                            filtered = replaceDefinitions.ToList();
                         }
                         else
                         {
-                            filtered = definitions.OrderByDescending(p => p.CustomPriorityOrder).Where(p => p.FileCI.Contains(Shared.Constants.LocalizationReplaceDirectory, StringComparison.OrdinalIgnoreCase));
+                            var topPriority = replaceDefinitions.OrderByDescending(p => p.CustomPriorityOrder).FirstOrDefault().CustomPriorityOrder;
+                            filtered = replaceDefinitions.Where(p => p.CustomPriorityOrder == topPriority);
                         }
                     }
                     else
@@ -257,17 +259,28 @@ namespace IronyModManager.Services
                         }
                         else
                         {
-                            filtered = definitions.Where(p => p.CustomPriorityOrder == definitions.OrderByDescending(p => p.CustomPriorityOrder).FirstOrDefault().CustomPriorityOrder);
+                            var topPriority = definitions.OrderByDescending(p => p.CustomPriorityOrder).FirstOrDefault().CustomPriorityOrder;
+                            filtered = definitions.Where(p => p.CustomPriorityOrder == topPriority);
                         }
                     }
                     var uniqueDefinitions = filtered.GroupBy(p => p.ModName).Select(p => p.OrderBy(f => Path.GetFileNameWithoutExtension(f.File), StringComparer.Ordinal).Last());
                     if (uniqueDefinitions.Count() == 1)
                     {
-                        result.Definition = uniqueDefinitions.First();
+                        var definition = uniqueDefinitions.FirstOrDefault(p => !p.IsFromGame);
+                        if (definition == null)
+                        {
+                            definition = uniqueDefinitions.FirstOrDefault();
+                        }
+                        result.Definition = definition;
                     }
                     else if (uniqueDefinitions.Count() > 1)
                     {
-                        result.Definition = uniqueDefinitions.OrderBy(p => Path.GetFileNameWithoutExtension(p.File), StringComparer.Ordinal).Last();
+                        var modDefinitions = uniqueDefinitions.Where(p => !p.IsFromGame);
+                        if (!modDefinitions.Any())
+                        {
+                            definitions = uniqueDefinitions;
+                        }
+                        result.Definition = modDefinitions.OrderBy(p => Path.GetFileNameWithoutExtension(p.File), StringComparer.Ordinal).Last();
                     }
                 }
                 else
