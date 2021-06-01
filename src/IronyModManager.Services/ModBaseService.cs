@@ -324,7 +324,12 @@ namespace IronyModManager.Services
                             }
                             if (uniqueDefinitions.Count == 1 && overrideSkipped)
                             {
-                                result.Definition = definitionEvals.First().Definition;
+                                var definition = definitionEvals.FirstOrDefault(p => !p.Definition.IsFromGame);
+                                if (definition == null)
+                                {
+                                    definition = definitionEvals.FirstOrDefault();
+                                }
+                                result.Definition = definition.Definition;
                                 result.PriorityType = DefinitionPriorityType.ModOverride;
                             }
                             else if (uniqueDefinitions.Count > 1)
