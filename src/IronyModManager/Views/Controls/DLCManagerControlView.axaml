@@ -20,7 +20,7 @@
                     <ColumnDefinition Width="5*" />
                   </Grid.ColumnDefinitions>
                   <CheckBox IsChecked="{Binding IsEnabled}" Grid.Column="0"></CheckBox>
-                  <TextBlock Text="{Binding Name}" TextWrapping="Wrap" Grid.Column="1"></TextBlock>
+                  <TextBlock Text="{Binding Name}" TextWrapping="Wrap" Grid.Column="1" VerticalAlignment="Center"></TextBlock>
                 </Grid>
               </DataTemplate>
             </ListBox.ItemTemplate>
