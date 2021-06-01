@@ -4,7 +4,7 @@
 // Created          : 04-07-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 05-28-2021
+// Last Modified On : 06-01-2021
 // ***********************************************************************
 // <copyright file="ModBaseService.cs" company="Mario">
 //     Mario
@@ -304,21 +304,30 @@ namespace IronyModManager.Services
                                     FileName = fileName
                                 });
                             }
-                            IEnumerable<DefinitionEval> uniqueDefinitions;
+                            List<DefinitionEval> uniqueDefinitions;
                             if (isFios)
                             {
-                                uniqueDefinitions = definitionEvals.GroupBy(p => p.Definition.ModName).Select(p => p.OrderBy(f => Path.GetFileNameWithoutExtension(f.FileName), StringComparer.Ordinal).First());
+                                uniqueDefinitions = definitionEvals.GroupBy(p => p.Definition.ModName).Select(p => p.OrderBy(f => Path.GetFileNameWithoutExtension(f.FileName), StringComparer.Ordinal).First()).ToList();
                             }
                             else
                             {
-                                uniqueDefinitions = definitionEvals.GroupBy(p => p.Definition.ModName).Select(p => p.OrderBy(f => Path.GetFileNameWithoutExtension(f.FileName), StringComparer.Ordinal).Last());
+                                uniqueDefinitions = definitionEvals.GroupBy(p => p.Definition.ModName).Select(p => p.OrderBy(f => Path.GetFileNameWithoutExtension(f.FileName), StringComparer.Ordinal).Last()).ToList();
                             }
-                            if (uniqueDefinitions.Count() == 1 && overrideSkipped)
+                            // Filter out game definitions which might have the same filename
+                            var gameDefinitions = uniqueDefinitions.GroupBy(p => p.FileNameCI).Where(p => p.Any(a => a.Definition.IsFromGame)).SelectMany(p => p.Where(w => w.Definition.IsFromGame));
+                            if (gameDefinitions.Any())
+                            {
+                                foreach (var gameDef in gameDefinitions)
+                                {
+                                    uniqueDefinitions.Remove(gameDef);
+                                }
+                            }
+                            if (uniqueDefinitions.Count == 1 && overrideSkipped)
                             {
                                 result.Definition = definitionEvals.First().Definition;
                                 result.PriorityType = DefinitionPriorityType.ModOverride;
                             }
-                            else if (uniqueDefinitions.Count() > 1)
+                            else if (uniqueDefinitions.Count > 1)
                             {
                                 // Has same filenames?
                                 if (uniqueDefinitions.GroupBy(p => p.FileNameCI).Count() == 1)
