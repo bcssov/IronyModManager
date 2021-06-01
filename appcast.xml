@@ -4,12 +4,12 @@
 		<title>Irony Mod Manager</title>
 		<language>en</language>
 		<item>
-			<title>1.17.65-alpha</title>
+			<title>1.17.69-rc</title>
 			<description>RELEASE NOTES:
 This is a significant upgrade to Irony. Please backup your collections made with previous versions of Irony.
 
-* DLC Manager align text
-* When evaluation definition priority take into account game filename
+* Cache only game definitions as needed to further improve indexing speed
+* Fix override conflict solver definition priority evaluation
 
 CHANGES FROM v1.16:
 * Updated dependencies
@@ -19,16 +19,16 @@ CHANGES FROM v1.16:
 * Country types are treated in the same manner as pop_jobs (for Stellaris)
 * Add export mods feature along with load order
 * Various improvements and fixes</description>
-			<pubDate>Tue, 01 Jun 2021 08:43:25 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.17.65-alpha/osx-x64.rar" sparkle:version="1.17.65.53936" sparkle:shortVersionString="1.17.65" length="69342614" sparkle:os="osx" type="application/vnd.rar" sparkle:signature="E24efKrUT+t8JtTKsaF9wgQjfQfQ2Ru2H30ANCyA7PvzJuqxldT5oe7WSiOyIK+RTf9ygB1pbj2kMz0LMruoBQ=="/>
+			<pubDate>Tue, 01 Jun 2021 18:35:35 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.17.69-rc/osx-x64.rar" sparkle:version="1.17.69.5843" sparkle:shortVersionString="1.17.69" length="69341260" sparkle:os="osx" type="application/vnd.rar" sparkle:signature="FQ+9hRKFgbah6Up5s53uP0wbjuyphvT1DKyREVXz2XqReV0T156yp1EjdpR6VRfFn4Uw2DH7FP/h9i8drPlTCg=="/>
 		</item>
 		<item>
-			<title>1.17.65-alpha</title>
+			<title>1.17.69-rc</title>
 			<description>RELEASE NOTES:
 This is a significant upgrade to Irony. Please backup your collections made with previous versions of Irony.
 
-* DLC Manager align text
-* When evaluation definition priority take into account game filename
+* Cache only game definitions as needed to further improve indexing speed
+* Fix override conflict solver definition priority evaluation
 
 CHANGES FROM v1.16:
 * Updated dependencies
@@ -38,16 +38,16 @@ CHANGES FROM v1.16:
 * Country types are treated in the same manner as pop_jobs (for Stellaris)
 * Add export mods feature along with load order
 * Various improvements and fixes</description>
-			<pubDate>Tue, 01 Jun 2021 08:43:33 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.17.65-alpha/win-x64-setup.rar" sparkle:version="1.17.65.53936" sparkle:shortVersionString="1.17.65" length="59731749" sparkle:os="windows" type="application/vnd.rar" sparkle:signature="STbLKsl8xFzcFniifB/EMdLdXv1c/5eaZAedM7jW7vGlQchXG67UbuTTHU8sj9cUTKL38D3NxyRo78VBL5kFBA=="/>
+			<pubDate>Tue, 01 Jun 2021 18:35:42 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.17.69-rc/win-x64-setup.rar" sparkle:version="1.17.69.5843" sparkle:shortVersionString="1.17.69" length="59734165" sparkle:os="windows" type="application/vnd.rar" sparkle:signature="o1Rpr5WoZ6BzlIphr4s2lwi3FjQAa5Qvwuubq+WSxHx2G7Uh7MYuUWBKw1VKoVW1aVJ5oQwnpqyhHh93TKNrCQ=="/>
 		</item>
 		<item>
-			<title>1.17.65-alpha</title>
+			<title>1.17.69-rc</title>
 			<description>RELEASE NOTES:
 This is a significant upgrade to Irony. Please backup your collections made with previous versions of Irony.
 
-* DLC Manager align text
-* When evaluation definition priority take into account game filename
+* Cache only game definitions as needed to further improve indexing speed
+* Fix override conflict solver definition priority evaluation
 
 CHANGES FROM v1.16:
 * Updated dependencies
@@ -57,16 +57,16 @@ CHANGES FROM v1.16:
 * Country types are treated in the same manner as pop_jobs (for Stellaris)
 * Add export mods feature along with load order
 * Various improvements and fixes</description>
-			<pubDate>Tue, 01 Jun 2021 08:43:29 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.17.65-alpha/win-x64.rar" sparkle:version="1.17.65.53936" sparkle:shortVersionString="1.17.65" length="72021796" sparkle:os="windows" type="application/vnd.rar" sparkle:signature="Jnto4vqUpFwvSvDw7L83UzjQJ2jgJnrolATPuA+4CkivOR7HJOJbQsUcoATe2CsYyy0knwUqGLI/KE/NxIECDw=="/>
+			<pubDate>Tue, 01 Jun 2021 18:35:39 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.17.69-rc/win-x64.rar" sparkle:version="1.17.69.5843" sparkle:shortVersionString="1.17.69" length="72020450" sparkle:os="windows" type="application/vnd.rar" sparkle:signature="ebjkz/a+5HH/Dtco2uxj29G/ayRSfWq+p0bc7tHrIJ/bSS1YuzzcPMs+DY9A3uMNYuxJlUJrFyDoEowMbTafCA=="/>
 		</item>
 		<item>
-			<title>1.17.65-alpha</title>
+			<title>1.17.69-rc</title>
 			<description>RELEASE NOTES:
 This is a significant upgrade to Irony. Please backup your collections made with previous versions of Irony.
 
-* DLC Manager align text
-* When evaluation definition priority take into account game filename
+* Cache only game definitions as needed to further improve indexing speed
+* Fix override conflict solver definition priority evaluation
 
 CHANGES FROM v1.16:
 * Updated dependencies
@@ -76,8 +76,8 @@ CHANGES FROM v1.16:
 * Country types are treated in the same manner as pop_jobs (for Stellaris)
 * Add export mods feature along with load order
 * Various improvements and fixes</description>
-			<pubDate>Tue, 01 Jun 2021 08:43:21 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.17.65-alpha/linux-x64.zip" sparkle:version="1.17.65.53936" sparkle:shortVersionString="1.17.65" length="85796919" sparkle:os="linux" type="application/zip" sparkle:signature="wcLu/0EUQFFVbh+rlbx/qlVAIHtayrf92Fjdl/BcHS0PPgDtHU2BH8JWATre32tikrcV053+JjG4j6FGPLbBCA=="/>
+			<pubDate>Tue, 01 Jun 2021 18:35:33 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.17.69-rc/linux-x64.zip" sparkle:version="1.17.69.5843" sparkle:shortVersionString="1.17.69" length="85796968" sparkle:os="linux" type="application/zip" sparkle:signature="EkOF8gnHaLViCAw5aivLC99BZ4xlpFtUj9s7Z+09Rvz7jX3GYc3/2isrp6UYG2eYusjvss52u7al7h6A233sBQ=="/>
 		</item>
 		<item>
 			<title>1.16.36</title>
@@ -126,6 +126,6 @@ CHANGES FROM v1.15:
 * Add option to override appSettings via appSettings.override.json</description>
 			<pubDate>Wed, 26 May 2021 18:47:43 +02:00</pubDate>
 			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.16.36/linux-x64.zip" sparkle:version="1.16.36.24410" sparkle:shortVersionString="1.16.36" length="85659185" sparkle:os="linux" type="application/zip" sparkle:signature="dBf0tHf5g7w4JT/ND/NmT7IkTXl5K0oyQiaWIZN4OOb3NSlXajhzMKz1Gfgpu1TFcGwrjxiK4ijiePKw50W2Dg=="/>
-		</item>
+		</item>		
 	</channel>
 </rss>
