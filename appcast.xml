@@ -4,12 +4,12 @@
 		<title>Irony Mod Manager</title>
 		<language>en</language>
 		<item>
-			<title>1.17.63-alpha</title>
+			<title>1.17.65-alpha</title>
 			<description>RELEASE NOTES:
 This is a significant upgrade to Irony. Please backup your collections made with previous versions of Irony.
 
-* Fix rare ctd when userdata directory was not present in some steam installs
-* Speed up game indexing
+* DLC Manager align text
+* When evaluation definition priority take into account game filename
 
 CHANGES FROM v1.16:
 * Updated dependencies
@@ -19,16 +19,16 @@ CHANGES FROM v1.16:
 * Country types are treated in the same manner as pop_jobs (for Stellaris)
 * Add export mods feature along with load order
 * Various improvements and fixes</description>
-			<pubDate>Mon, 31 May 2021 13:23:42 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.17.63-alpha/osx-x64.rar" sparkle:version="1.17.63.49431" sparkle:shortVersionString="1.17.63" length="69342983" sparkle:os="osx" type="application/vnd.rar" sparkle:signature="zDCEVKKpSfOa88XIq3uvQl8NUW8JqoUjNjSiPmToBnGthWGnvhhQN8rKT9r7nCFbiJsbh77teVgtfKneYWqJCw=="/>
+			<pubDate>Tue, 01 Jun 2021 08:43:25 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.17.65-alpha/osx-x64.rar" sparkle:version="1.17.65.53936" sparkle:shortVersionString="1.17.65" length="69342614" sparkle:os="osx" type="application/vnd.rar" sparkle:signature="E24efKrUT+t8JtTKsaF9wgQjfQfQ2Ru2H30ANCyA7PvzJuqxldT5oe7WSiOyIK+RTf9ygB1pbj2kMz0LMruoBQ=="/>
 		</item>
 		<item>
-			<title>1.17.63-alpha</title>
+			<title>1.17.65-alpha</title>
 			<description>RELEASE NOTES:
 This is a significant upgrade to Irony. Please backup your collections made with previous versions of Irony.
 
-* Fix rare ctd when userdata directory was not present in some steam installs
-* Speed up game indexing
+* DLC Manager align text
+* When evaluation definition priority take into account game filename
 
 CHANGES FROM v1.16:
 * Updated dependencies
@@ -38,16 +38,16 @@ CHANGES FROM v1.16:
 * Country types are treated in the same manner as pop_jobs (for Stellaris)
 * Add export mods feature along with load order
 * Various improvements and fixes</description>
-			<pubDate>Mon, 31 May 2021 13:23:49 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.17.63-alpha/win-x64-setup.rar" sparkle:version="1.17.63.49431" sparkle:shortVersionString="1.17.63" length="59717903" sparkle:os="windows" type="application/vnd.rar" sparkle:signature="vs31tlX4Ys2JNSvsSjHp0k31mRdfKpB0CVMl4CBBWRRLZttXDOY/LKPZB2iRZ8k+40sCM6ItR18mocB8qrbGAA=="/>
+			<pubDate>Tue, 01 Jun 2021 08:43:33 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.17.65-alpha/win-x64-setup.rar" sparkle:version="1.17.65.53936" sparkle:shortVersionString="1.17.65" length="59731749" sparkle:os="windows" type="application/vnd.rar" sparkle:signature="STbLKsl8xFzcFniifB/EMdLdXv1c/5eaZAedM7jW7vGlQchXG67UbuTTHU8sj9cUTKL38D3NxyRo78VBL5kFBA=="/>
 		</item>
 		<item>
-			<title>1.17.63-alpha</title>
+			<title>1.17.65-alpha</title>
 			<description>RELEASE NOTES:
 This is a significant upgrade to Irony. Please backup your collections made with previous versions of Irony.
 
-* Fix rare ctd when userdata directory was not present in some steam installs
-* Speed up game indexing
+* DLC Manager align text
+* When evaluation definition priority take into account game filename
 
 CHANGES FROM v1.16:
 * Updated dependencies
@@ -57,16 +57,16 @@ CHANGES FROM v1.16:
 * Country types are treated in the same manner as pop_jobs (for Stellaris)
 * Add export mods feature along with load order
 * Various improvements and fixes</description>
-			<pubDate>Mon, 31 May 2021 13:23:46 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.17.63-alpha/win-x64.rar" sparkle:version="1.17.63.49431" sparkle:shortVersionString="1.17.63" length="72022584" sparkle:os="windows" type="application/vnd.rar" sparkle:signature="JvfF2laSBkshkFWglv7DsYwHGoFY6AY1b7DLyh+FK4wN+Onijy7GGGHtNQZPkR/OJ/qCvw1gWeaLTINETxXcCQ=="/>
+			<pubDate>Tue, 01 Jun 2021 08:43:29 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.17.65-alpha/win-x64.rar" sparkle:version="1.17.65.53936" sparkle:shortVersionString="1.17.65" length="72021796" sparkle:os="windows" type="application/vnd.rar" sparkle:signature="Jnto4vqUpFwvSvDw7L83UzjQJ2jgJnrolATPuA+4CkivOR7HJOJbQsUcoATe2CsYyy0knwUqGLI/KE/NxIECDw=="/>
 		</item>
 		<item>
-			<title>1.17.63-alpha</title>
+			<title>1.17.65-alpha</title>
 			<description>RELEASE NOTES:
 This is a significant upgrade to Irony. Please backup your collections made with previous versions of Irony.
 
-* Fix rare ctd when userdata directory was not present in some steam installs
-* Speed up game indexing
+* DLC Manager align text
+* When evaluation definition priority take into account game filename
 
 CHANGES FROM v1.16:
 * Updated dependencies
@@ -76,8 +76,8 @@ CHANGES FROM v1.16:
 * Country types are treated in the same manner as pop_jobs (for Stellaris)
 * Add export mods feature along with load order
 * Various improvements and fixes</description>
-			<pubDate>Mon, 31 May 2021 13:23:40 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.17.63-alpha/linux-x64.zip" sparkle:version="1.17.63.49431" sparkle:shortVersionString="1.17.63" length="85796459" sparkle:os="linux" type="application/zip" sparkle:signature="fjU6V6Tu3iZY1KYkr80IdbtNOX8h8bjenHHsja9c4FJmIj+ixwGbPeCkar/bp6MyTUrfRF1I4a26vQVbj+9qDQ=="/>
+			<pubDate>Tue, 01 Jun 2021 08:43:21 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.17.65-alpha/linux-x64.zip" sparkle:version="1.17.65.53936" sparkle:shortVersionString="1.17.65" length="85796919" sparkle:os="linux" type="application/zip" sparkle:signature="wcLu/0EUQFFVbh+rlbx/qlVAIHtayrf92Fjdl/BcHS0PPgDtHU2BH8JWATre32tikrcV053+JjG4j6FGPLbBCA=="/>
 		</item>
 		<item>
 			<title>1.16.36</title>
