@@ -464,10 +464,7 @@ namespace IronyModManager.ViewModels.Controls
             }).ConfigureAwait(false);
             if (!string.IsNullOrWhiteSpace(version))
             {
-                if (!string.IsNullOrWhiteSpace(version))
-                {
-                    await Task.Run(async () => await gameIndexService.IndexDefinitionsAsync(game, version, definitions));
-                }
+                await Task.Run(async () => await gameIndexService.IndexDefinitionsAsync(game, version, definitions));
                 definitions = await Task.Run(async () =>
                 {
                     return await gameIndexService.LoadDefinitionsAsync(definitions, game, version);
