@@ -4,7 +4,7 @@
 // Created          : 04-07-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-01-2021
+// Last Modified On : 06-03-2021
 // ***********************************************************************
 // <copyright file="ModBaseService.cs" company="Mario">
 //     Mario
@@ -327,15 +327,17 @@ namespace IronyModManager.Services
                                 uniqueDefinitions = definitionEvals.GroupBy(p => p.Definition.ModName).Select(p => p.OrderBy(f => Path.GetFileNameWithoutExtension(f.FileName), StringComparer.Ordinal).Last()).ToList();
                             }
                             // Filter out game definitions which might have the same filename
+                            var filteredGameDefinitions = false;
                             var gameDefinitions = uniqueDefinitions.GroupBy(p => p.FileNameCI).Where(p => p.Any(a => a.Definition.IsFromGame)).SelectMany(p => p.Where(w => w.Definition.IsFromGame));
                             if (gameDefinitions.Any())
                             {
+                                filteredGameDefinitions = true;
                                 foreach (var gameDef in gameDefinitions)
                                 {
                                     uniqueDefinitions.Remove(gameDef);
                                 }
                             }
-                            if (uniqueDefinitions.Count == 1 && overrideSkipped)
+                            if (uniqueDefinitions.Count == 1 && (overrideSkipped) || filteredGameDefinitions)
                             {
                                 var definition = definitionEvals.FirstOrDefault(p => !p.Definition.IsFromGame);
                                 if (definition == null)
@@ -343,7 +345,7 @@ namespace IronyModManager.Services
                                     definition = definitionEvals.FirstOrDefault();
                                 }
                                 result.Definition = definition.Definition;
-                                result.PriorityType = DefinitionPriorityType.ModOverride;
+                                result.PriorityType = filteredGameDefinitions ? DefinitionPriorityType.ModOrder : DefinitionPriorityType.ModOverride;
                             }
                             else if (uniqueDefinitions.Count > 1)
                             {
