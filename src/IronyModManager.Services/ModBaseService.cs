@@ -337,7 +337,7 @@ namespace IronyModManager.Services
                                     uniqueDefinitions.Remove(gameDef);
                                 }
                             }
-                            if (uniqueDefinitions.Count == 1 && (overrideSkipped) || filteredGameDefinitions)
+                            if (uniqueDefinitions.Count == 1 && (overrideSkipped || filteredGameDefinitions))
                             {
                                 var definition = definitionEvals.FirstOrDefault(p => !p.Definition.IsFromGame);
                                 if (definition == null)
@@ -345,7 +345,14 @@ namespace IronyModManager.Services
                                     definition = definitionEvals.FirstOrDefault();
                                 }
                                 result.Definition = definition.Definition;
-                                result.PriorityType = filteredGameDefinitions ? DefinitionPriorityType.ModOrder : DefinitionPriorityType.ModOverride;
+                                if (overrideSkipped)
+                                {
+                                    result.PriorityType = DefinitionPriorityType.ModOverride;
+                                }
+                                else if (filteredGameDefinitions)
+                                {
+                                    result.PriorityType = DefinitionPriorityType.ModOrder;
+                                }                                
                             }
                             else if (uniqueDefinitions.Count > 1)
                             {
@@ -384,7 +391,7 @@ namespace IronyModManager.Services
             }
             if (result.Definition == null)
             {
-                var definition = definitions.FirstOrDefault(p => !p.IsFromGame);
+                var definition = definitions?.FirstOrDefault(p => !p.IsFromGame);
                 if (definition == null && (definitions?.Any()).GetValueOrDefault())
                 {
                     definition = definitions.FirstOrDefault();

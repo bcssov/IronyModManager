@@ -4,7 +4,7 @@
 // Created          : 05-26-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 05-29-2021
+// Last Modified On : 06-03-2021
 // ***********************************************************************
 // <copyright file="ModPatchCollectionServiceTests.cs" company="Mario">
 //     Mario
@@ -1718,6 +1718,73 @@ namespace IronyModManager.Services.Tests
         }
 
         /// <summary>
+        /// Defines the test method EvalDefinitionPriority_should_return_first_game_object.
+        /// </summary>
+        [Fact]
+        public void EvalDefinitionPriority_should_return_first_game_object()
+        {
+            DISetup.SetupContainer();
+
+            var storageProvider = new Mock<IStorageProvider>();
+            var modParser = new Mock<IModParser>();
+            var parserManager = new Mock<IParserManager>();
+            var reader = new Mock<IReader>();
+            var modWriter = new Mock<IModWriter>();
+            var gameService = new Mock<IGameService>();
+            var mapper = new Mock<IMapper>();
+            var modPatchExporter = new Mock<IModPatchExporter>();
+            SetupMockCase(reader, parserManager, modParser);
+            gameService.Setup(p => p.GetSelected()).Returns(new Game()
+            {
+                Type = "EvalDefinitionPriority_should_return_first_game_object",
+                UserDirectory = "C:\\Users\\Fake"
+            });
+            var infoProvider = new Mock<IDefinitionInfoProvider>();
+            infoProvider.Setup(p => p.DefinitionUsesFIOSRules(It.IsAny<IDefinition>())).Returns(true);
+            infoProvider.Setup(p => p.CanProcess(It.IsAny<string>())).Returns(true);
+            var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter, new List<IDefinitionInfoProvider>() { infoProvider.Object });
+
+            var def = new Definition() { IsFromGame = true };
+            var result = service.EvalDefinitionPriority(new List<IDefinition>() { def });
+            result.Definition.Should().Be(def);
+            result.PriorityType.Should().Be(DefinitionPriorityType.None);
+        }
+
+        /// <summary>
+        /// Defines the test method EvalDefinitionPriority_should_return_first_only_valid_object.
+        /// </summary>
+        [Fact]
+        public void EvalDefinitionPriority_should_return_first_only_valid_object()
+        {
+            DISetup.SetupContainer();
+
+            var storageProvider = new Mock<IStorageProvider>();
+            var modParser = new Mock<IModParser>();
+            var parserManager = new Mock<IParserManager>();
+            var reader = new Mock<IReader>();
+            var modWriter = new Mock<IModWriter>();
+            var gameService = new Mock<IGameService>();
+            var mapper = new Mock<IMapper>();
+            var modPatchExporter = new Mock<IModPatchExporter>();
+            SetupMockCase(reader, parserManager, modParser);
+            gameService.Setup(p => p.GetSelected()).Returns(new Game()
+            {
+                Type = "EvalDefinitionPriority_should_return_first_only_valid_object",
+                UserDirectory = "C:\\Users\\Fake"
+            });
+            var infoProvider = new Mock<IDefinitionInfoProvider>();
+            infoProvider.Setup(p => p.DefinitionUsesFIOSRules(It.IsAny<IDefinition>())).Returns(true);
+            infoProvider.Setup(p => p.CanProcess(It.IsAny<string>())).Returns(true);
+            var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter, new List<IDefinitionInfoProvider>() { infoProvider.Object });
+
+            var def = new Definition() { };
+            var def2 = new Definition() { ExistsInLastFile = false };
+            var result = service.EvalDefinitionPriority(new List<IDefinition>() { def, def2 });
+            result.Definition.Should().Be(def);
+            result.PriorityType.Should().Be(DefinitionPriorityType.ModOrder);
+        }
+
+        /// <summary>
         /// Defines the test method EvalDefinitionPriority_should_return_last_object.
         /// </summary>
         [Fact]
@@ -1747,6 +1814,75 @@ namespace IronyModManager.Services.Tests
             var def = new Definition() { File = "test.txt", ModName = "1" };
             var def2 = new Definition() { File = "test.txt", ModName = "2" };
             var result = service.EvalDefinitionPriority(new List<IDefinition>() { def, def2 });
+            result.Definition.Should().Be(def2);
+            result.PriorityType.Should().Be(DefinitionPriorityType.ModOrder);
+        }
+
+        /// <summary>
+        /// Defines the test method EvalDefinitionPriority_should_return_last_object_as_cutom_patch.
+        /// </summary>
+        [Fact]
+        public void EvalDefinitionPriority_should_return_last_object_as_cutom_patch()
+        {
+            DISetup.SetupContainer();
+
+            var storageProvider = new Mock<IStorageProvider>();
+            var modParser = new Mock<IModParser>();
+            var parserManager = new Mock<IParserManager>();
+            var reader = new Mock<IReader>();
+            var modWriter = new Mock<IModWriter>();
+            var gameService = new Mock<IGameService>();
+            var mapper = new Mock<IMapper>();
+            var modPatchExporter = new Mock<IModPatchExporter>();
+            SetupMockCase(reader, parserManager, modParser);
+            gameService.Setup(p => p.GetSelected()).Returns(new Game()
+            {
+                Type = "EvalDefinitionPriority_should_return_last_object_as_cutom_patch",
+                UserDirectory = "C:\\Users\\Fake"
+            });
+            var infoProvider = new Mock<IDefinitionInfoProvider>();
+            infoProvider.Setup(p => p.DefinitionUsesFIOSRules(It.IsAny<IDefinition>())).Returns(true);
+            infoProvider.Setup(p => p.CanProcess(It.IsAny<string>())).Returns(true);
+            var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter, new List<IDefinitionInfoProvider>() { infoProvider.Object });
+
+            var def = new Definition() { File = "test.txt", ModName = "1", IsCustomPatch = true };
+            var def2 = new Definition() { File = "test.txt", ModName = "2" };
+            var result = service.EvalDefinitionPriority(new List<IDefinition>() { def, def2 });
+            result.Definition.Should().Be(def);
+            result.PriorityType.Should().Be(DefinitionPriorityType.ModOrder);
+        }
+
+        /// <summary>
+        /// Defines the test method EvalDefinitionPriority_should_return_last_non_game_object.
+        /// </summary>
+        [Fact]
+        public void EvalDefinitionPriority_should_return_last_non_game_object()
+        {
+            DISetup.SetupContainer();
+
+            var storageProvider = new Mock<IStorageProvider>();
+            var modParser = new Mock<IModParser>();
+            var parserManager = new Mock<IParserManager>();
+            var reader = new Mock<IReader>();
+            var modWriter = new Mock<IModWriter>();
+            var gameService = new Mock<IGameService>();
+            var mapper = new Mock<IMapper>();
+            var modPatchExporter = new Mock<IModPatchExporter>();
+            SetupMockCase(reader, parserManager, modParser);
+            gameService.Setup(p => p.GetSelected()).Returns(new Game()
+            {
+                Type = "EvalDefinitionPriority_should_return_last_non_game_object",
+                UserDirectory = "C:\\Users\\Fake"
+            });
+            var infoProvider = new Mock<IDefinitionInfoProvider>();
+            infoProvider.Setup(p => p.DefinitionUsesFIOSRules(It.IsAny<IDefinition>())).Returns(true);
+            infoProvider.Setup(p => p.CanProcess(It.IsAny<string>())).Returns(true);
+            var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter, new List<IDefinitionInfoProvider>() { infoProvider.Object });
+
+            var def = new Definition() { File = "test.txt", ModName = "1" };
+            var def2 = new Definition() { File = "test.txt", ModName = "2" };
+            var def3 = new Definition() { File = "test.txt", ModName = "Game", IsFromGame = true };
+            var result = service.EvalDefinitionPriority(new List<IDefinition>() { def3, def, def2 });
             result.Definition.Should().Be(def2);
             result.PriorityType.Should().Be(DefinitionPriorityType.ModOrder);
         }
@@ -1786,6 +1922,41 @@ namespace IronyModManager.Services.Tests
         }
 
         /// <summary>
+        /// Defines the test method EvalDefinitionPriority_should_return_first_object_due_to_FIOS_and_ignore_game_object.
+        /// </summary>
+        [Fact]
+        public void EvalDefinitionPriority_should_return_first_object_due_to_FIOS_and_ignore_game_object()
+        {
+            DISetup.SetupContainer();
+
+            var storageProvider = new Mock<IStorageProvider>();
+            var modParser = new Mock<IModParser>();
+            var parserManager = new Mock<IParserManager>();
+            var reader = new Mock<IReader>();
+            var modWriter = new Mock<IModWriter>();
+            var gameService = new Mock<IGameService>();
+            var mapper = new Mock<IMapper>();
+            var modPatchExporter = new Mock<IModPatchExporter>();
+            SetupMockCase(reader, parserManager, modParser);
+            gameService.Setup(p => p.GetSelected()).Returns(new Game()
+            {
+                Type = "EvalDefinitionPriority_should_return_first_object_due_to_FIOS_and_ignore_game_object",
+                UserDirectory = "C:\\Users\\Fake"
+            });
+            var infoProvider = new Mock<IDefinitionInfoProvider>();
+            infoProvider.Setup(p => p.DefinitionUsesFIOSRules(It.IsAny<IDefinition>())).Returns(true);
+            infoProvider.Setup(p => p.CanProcess(It.IsAny<string>())).Returns(true);
+            var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter, new List<IDefinitionInfoProvider>() { infoProvider.Object });
+
+            var def = new Definition() { File = "test1.txt", ModName = "1" };
+            var def2 = new Definition() { File = "test2.txt", ModName = "2" };
+            var def3 = new Definition() { File = "test1.txt", ModName = "Game", IsFromGame = true };
+            var result = service.EvalDefinitionPriority(new List<IDefinition>() { def3, def, def2 });
+            result.Definition.Should().Be(def);
+            result.PriorityType.Should().Be(DefinitionPriorityType.FIOS);
+        }
+
+        /// <summary>
         /// Defines the test method EvalDefinitionPriority_should_return_object_due_to_Override.
         /// </summary>
         [Fact]
@@ -1820,6 +1991,75 @@ namespace IronyModManager.Services.Tests
         }
 
         /// <summary>
+        /// Defines the test method EvalDefinitionPriority_should_return_object_due_to_game_object_filtering.
+        /// </summary>
+        [Fact]
+        public void EvalDefinitionPriority_should_return_object_due_to_game_object_filtering()
+        {
+            DISetup.SetupContainer();
+
+            var storageProvider = new Mock<IStorageProvider>();
+            var modParser = new Mock<IModParser>();
+            var parserManager = new Mock<IParserManager>();
+            var reader = new Mock<IReader>();
+            var modWriter = new Mock<IModWriter>();
+            var gameService = new Mock<IGameService>();
+            var mapper = new Mock<IMapper>();
+            var modPatchExporter = new Mock<IModPatchExporter>();
+            SetupMockCase(reader, parserManager, modParser);
+            gameService.Setup(p => p.GetSelected()).Returns(new Game()
+            {
+                Type = "EvalDefinitionPriority_should_return_object_due_to_game_object_filtering",
+                UserDirectory = "C:\\Users\\Fake"
+            });
+            var infoProvider = new Mock<IDefinitionInfoProvider>();
+            infoProvider.Setup(p => p.DefinitionUsesFIOSRules(It.IsAny<IDefinition>())).Returns(true);
+            infoProvider.Setup(p => p.CanProcess(It.IsAny<string>())).Returns(true);
+            var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter, new List<IDefinitionInfoProvider>() { infoProvider.Object });
+
+            var def = new Definition() { File = "test1.txt", ModName = "1", IsFromGame = true };
+            var def2 = new Definition() { File = "test1.txt", ModName = "2" };
+            var result = service.EvalDefinitionPriority(new List<IDefinition>() { def, def2 });
+            result.Definition.Should().Be(def2);
+            result.PriorityType.Should().Be(DefinitionPriorityType.ModOrder);
+        }
+
+        /// <summary>
+        /// Defines the test method EvalDefinitionPriority_should_return_object_due_to_Override_and_ignore_game_object.
+        /// </summary>
+        [Fact]
+        public void EvalDefinitionPriority_should_return_object_due_to_Override_and_ignore_game_object()
+        {
+            DISetup.SetupContainer();
+
+            var storageProvider = new Mock<IStorageProvider>();
+            var modParser = new Mock<IModParser>();
+            var parserManager = new Mock<IParserManager>();
+            var reader = new Mock<IReader>();
+            var modWriter = new Mock<IModWriter>();
+            var gameService = new Mock<IGameService>();
+            var mapper = new Mock<IMapper>();
+            var modPatchExporter = new Mock<IModPatchExporter>();
+            SetupMockCase(reader, parserManager, modParser);
+            gameService.Setup(p => p.GetSelected()).Returns(new Game()
+            {
+                Type = "EvalDefinitionPriority_should_return_object_due_to_Override_and_ignore_game_object",
+                UserDirectory = "C:\\Users\\Fake"
+            });
+            var infoProvider = new Mock<IDefinitionInfoProvider>();
+            infoProvider.Setup(p => p.DefinitionUsesFIOSRules(It.IsAny<IDefinition>())).Returns(true);
+            infoProvider.Setup(p => p.CanProcess(It.IsAny<string>())).Returns(true);
+            var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter, new List<IDefinitionInfoProvider>() { infoProvider.Object });
+
+            var def = new Definition() { File = "test1.txt", ModName = "1", Dependencies = new List<string>() { "2" } };
+            var def2 = new Definition() { File = "test1.txt", ModName = "2" };
+            var def3 = new Definition() { File = "test1.txt", ModName = "Game", IsFromGame = true };
+            var result = service.EvalDefinitionPriority(new List<IDefinition>() { def3, def, def2 });
+            result.Definition.Should().Be(def);
+            result.PriorityType.Should().Be(DefinitionPriorityType.ModOverride);
+        }
+
+        /// <summary>
         /// Defines the test method EvalDefinitionPriority_should_return_object_due_to_override_but_priority_should_be_fios.
         /// </summary>
         [Fact]
@@ -1838,7 +2078,7 @@ namespace IronyModManager.Services.Tests
             SetupMockCase(reader, parserManager, modParser);
             gameService.Setup(p => p.GetSelected()).Returns(new Game()
             {
-                Type = "EvalDefinitionPriority_should_return_object_due_to_override_but_priority_should_be_lios",
+                Type = "EvalDefinitionPriority_should_return_object_due_to_override_but_priority_should_be_fios",
                 UserDirectory = "C:\\Users\\Fake"
             });
             var infoProvider = new Mock<IDefinitionInfoProvider>();
@@ -1849,6 +2089,41 @@ namespace IronyModManager.Services.Tests
             var def = new Definition() { File = "test1.txt", ModName = "1", Dependencies = new List<string>() { "2" } };
             var def2 = new Definition() { File = "test2.txt", ModName = "2" };
             var result = service.EvalDefinitionPriority(new List<IDefinition>() { def, def2 });
+            result.Definition.Should().Be(def);
+            result.PriorityType.Should().Be(DefinitionPriorityType.FIOS);
+        }
+
+        /// <summary>
+        /// Defines the test method EvalDefinitionPriority_should_return_object_due_to_override_and_ignore_non_game_object_and_priority_should_be_fios.
+        /// </summary>
+        [Fact]
+        public void EvalDefinitionPriority_should_return_object_due_to_override_and_ignore_non_game_object_and_priority_should_be_fios()
+        {
+            DISetup.SetupContainer();
+
+            var storageProvider = new Mock<IStorageProvider>();
+            var modParser = new Mock<IModParser>();
+            var parserManager = new Mock<IParserManager>();
+            var reader = new Mock<IReader>();
+            var modWriter = new Mock<IModWriter>();
+            var gameService = new Mock<IGameService>();
+            var mapper = new Mock<IMapper>();
+            var modPatchExporter = new Mock<IModPatchExporter>();
+            SetupMockCase(reader, parserManager, modParser);
+            gameService.Setup(p => p.GetSelected()).Returns(new Game()
+            {
+                Type = "EvalDefinitionPriority_should_return_object_due_to_override_and_ignore_non_game_object_and_priority_should_be_fios",
+                UserDirectory = "C:\\Users\\Fake"
+            });
+            var infoProvider = new Mock<IDefinitionInfoProvider>();
+            infoProvider.Setup(p => p.DefinitionUsesFIOSRules(It.IsAny<IDefinition>())).Returns(true);
+            infoProvider.Setup(p => p.CanProcess(It.IsAny<string>())).Returns(true);
+            var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter, new List<IDefinitionInfoProvider>() { infoProvider.Object });
+
+            var def = new Definition() { File = "test1.txt", ModName = "1", Dependencies = new List<string>() { "2" } };
+            var def2 = new Definition() { File = "test2.txt", ModName = "2" };
+            var def3 = new Definition() { File = "test2.txt", ModName = "Game", IsFromGame = true };
+            var result = service.EvalDefinitionPriority(new List<IDefinition>() { def3, def, def2 });
             result.Definition.Should().Be(def);
             result.PriorityType.Should().Be(DefinitionPriorityType.FIOS);
         }
@@ -1885,6 +2160,456 @@ namespace IronyModManager.Services.Tests
             var result = service.EvalDefinitionPriority(new List<IDefinition>() { def, def2 });
             result.Definition.Should().Be(def2);
             result.PriorityType.Should().Be(DefinitionPriorityType.LIOS);
+        }
+
+        /// <summary>
+        /// Defines the test method EvalDefinitionPriority_should_return_first_object_due_to_LIOS_and_ignore_non_game_object.
+        /// </summary>
+        [Fact]
+        public void EvalDefinitionPriority_should_return_first_object_due_to_LIOS_and_ignore_non_game_object()
+        {
+            DISetup.SetupContainer();
+
+            var storageProvider = new Mock<IStorageProvider>();
+            var modParser = new Mock<IModParser>();
+            var parserManager = new Mock<IParserManager>();
+            var reader = new Mock<IReader>();
+            var modWriter = new Mock<IModWriter>();
+            var gameService = new Mock<IGameService>();
+            var mapper = new Mock<IMapper>();
+            var modPatchExporter = new Mock<IModPatchExporter>();
+            SetupMockCase(reader, parserManager, modParser);
+            gameService.Setup(p => p.GetSelected()).Returns(new Game()
+            {
+                Type = "EvalDefinitionPriority_should_return_first_object_due_to_LIOS_and_ignore_non_game_object",
+                UserDirectory = "C:\\Users\\Fake"
+            });
+            var infoProvider = new Mock<IDefinitionInfoProvider>();
+            infoProvider.Setup(p => p.DefinitionUsesFIOSRules(It.IsAny<IDefinition>())).Returns(false);
+            infoProvider.Setup(p => p.CanProcess(It.IsAny<string>())).Returns(true);
+            var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter, new List<IDefinitionInfoProvider>() { infoProvider.Object });
+
+            var def = new Definition() { File = "test1.txt", ModName = "1" };
+            var def2 = new Definition() { File = "test2.txt", ModName = "2" };
+            var def3 = new Definition() { File = "test2.txt", ModName = "Game", IsFromGame = true };
+            var result = service.EvalDefinitionPriority(new List<IDefinition>() { def3, def, def2 });
+            result.Definition.Should().Be(def2);
+            result.PriorityType.Should().Be(DefinitionPriorityType.LIOS);
+        }
+
+        /// <summary>
+        /// Defines the test method EvalDefinitionPriority_should_return_localization_override.
+        /// </summary>
+        [Fact]
+        public void EvalDefinitionPriority_should_return_localization_override()
+        {
+            DISetup.SetupContainer();
+
+            var storageProvider = new Mock<IStorageProvider>();
+            var modParser = new Mock<IModParser>();
+            var parserManager = new Mock<IParserManager>();
+            var reader = new Mock<IReader>();
+            var modWriter = new Mock<IModWriter>();
+            var gameService = new Mock<IGameService>();
+            var mapper = new Mock<IMapper>();
+            var modPatchExporter = new Mock<IModPatchExporter>();
+            SetupMockCase(reader, parserManager, modParser);
+            gameService.Setup(p => p.GetSelected()).Returns(new Game()
+            {
+                Type = "EvalDefinitionPriority_should_return_localization_override",
+                UserDirectory = "C:\\Users\\Fake"
+            });
+            var infoProvider = new Mock<IDefinitionInfoProvider>();
+            infoProvider.Setup(p => p.DefinitionUsesFIOSRules(It.IsAny<IDefinition>())).Returns(false);
+            infoProvider.Setup(p => p.CanProcess(It.IsAny<string>())).Returns(true);
+            var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter, new List<IDefinitionInfoProvider>() { infoProvider.Object });
+
+            var def = new Definition() { File = @"localisation\test.yml", ModName = "1" };
+            var def2 = new Definition() { File = @"localisation\replace\test.yml", ModName = "2" };
+            var result = service.EvalDefinitionPriority(new List<IDefinition>() { def, def2 });
+            result.Definition.Should().Be(def2);
+            result.PriorityType.Should().Be(DefinitionPriorityType.None);
+        }
+
+        /// <summary>
+        /// Defines the test method EvalDefinitionPriority_should_return_localization.
+        /// </summary>
+        [Fact]
+        public void EvalDefinitionPriority_should_return_localization()
+        {
+            DISetup.SetupContainer();
+
+            var storageProvider = new Mock<IStorageProvider>();
+            var modParser = new Mock<IModParser>();
+            var parserManager = new Mock<IParserManager>();
+            var reader = new Mock<IReader>();
+            var modWriter = new Mock<IModWriter>();
+            var gameService = new Mock<IGameService>();
+            var mapper = new Mock<IMapper>();
+            var modPatchExporter = new Mock<IModPatchExporter>();
+            SetupMockCase(reader, parserManager, modParser);
+            gameService.Setup(p => p.GetSelected()).Returns(new Game()
+            {
+                Type = "EvalDefinitionPriority_should_return_localization",
+                UserDirectory = "C:\\Users\\Fake"
+            });
+            var infoProvider = new Mock<IDefinitionInfoProvider>();
+            infoProvider.Setup(p => p.DefinitionUsesFIOSRules(It.IsAny<IDefinition>())).Returns(false);
+            infoProvider.Setup(p => p.CanProcess(It.IsAny<string>())).Returns(true);
+            var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter, new List<IDefinitionInfoProvider>() { infoProvider.Object });
+
+            var def = new Definition() { File = @"localisation\test.yml", ModName = "1" };
+            var def2 = new Definition() { File = @"localisation\test.yml", ModName = "2" };
+            var result = service.EvalDefinitionPriority(new List<IDefinition>() { def, def2 });
+            result.Definition.Should().Be(def2);
+            result.PriorityType.Should().Be(DefinitionPriorityType.None);
+        }
+
+        /// <summary>
+        /// Defines the test method EvalDefinitionPriority_should_return_localization_override_with_custom_priority.
+        /// </summary>
+        [Fact]
+        public void EvalDefinitionPriority_should_return_localization_override_with_custom_priority()
+        {
+            DISetup.SetupContainer();
+
+            var storageProvider = new Mock<IStorageProvider>();
+            var modParser = new Mock<IModParser>();
+            var parserManager = new Mock<IParserManager>();
+            var reader = new Mock<IReader>();
+            var modWriter = new Mock<IModWriter>();
+            var gameService = new Mock<IGameService>();
+            var mapper = new Mock<IMapper>();
+            var modPatchExporter = new Mock<IModPatchExporter>();
+            SetupMockCase(reader, parserManager, modParser);
+            gameService.Setup(p => p.GetSelected()).Returns(new Game()
+            {
+                Type = "EvalDefinitionPriority_should_return_localization_override_with_custom_priority",
+                UserDirectory = "C:\\Users\\Fake"
+            });
+            var infoProvider = new Mock<IDefinitionInfoProvider>();
+            infoProvider.Setup(p => p.DefinitionUsesFIOSRules(It.IsAny<IDefinition>())).Returns(false);
+            infoProvider.Setup(p => p.CanProcess(It.IsAny<string>())).Returns(true);
+            var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter, new List<IDefinitionInfoProvider>() { infoProvider.Object });
+
+            var def = new Definition() { File = @"localisation\test.yml", ModName = "1" };
+            var def2 = new Definition() { File = @"localisation\replace\test.yml", ModName = "2", CustomPriorityOrder = 5 };
+            var result = service.EvalDefinitionPriority(new List<IDefinition>() { def, def2 });
+            result.Definition.Should().Be(def2);
+            result.PriorityType.Should().Be(DefinitionPriorityType.None);
+        }
+
+        /// <summary>
+        /// Defines the test method EvalDefinitionPriority_should_return_localization_with_custom_priority.
+        /// </summary>
+        [Fact]
+        public void EvalDefinitionPriority_should_return_localization_with_custom_priority()
+        {
+            DISetup.SetupContainer();
+
+            var storageProvider = new Mock<IStorageProvider>();
+            var modParser = new Mock<IModParser>();
+            var parserManager = new Mock<IParserManager>();
+            var reader = new Mock<IReader>();
+            var modWriter = new Mock<IModWriter>();
+            var gameService = new Mock<IGameService>();
+            var mapper = new Mock<IMapper>();
+            var modPatchExporter = new Mock<IModPatchExporter>();
+            SetupMockCase(reader, parserManager, modParser);
+            gameService.Setup(p => p.GetSelected()).Returns(new Game()
+            {
+                Type = "EvalDefinitionPriority_should_return_localization_with_custom_priority",
+                UserDirectory = "C:\\Users\\Fake"
+            });
+            var infoProvider = new Mock<IDefinitionInfoProvider>();
+            infoProvider.Setup(p => p.DefinitionUsesFIOSRules(It.IsAny<IDefinition>())).Returns(false);
+            infoProvider.Setup(p => p.CanProcess(It.IsAny<string>())).Returns(true);
+            var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter, new List<IDefinitionInfoProvider>() { infoProvider.Object });
+
+            var def = new Definition() { File = @"localisation\test.yml", ModName = "1" };
+            var def2 = new Definition() { File = @"localisation\test.yml", ModName = "2", CustomPriorityOrder = 5 };
+            var result = service.EvalDefinitionPriority(new List<IDefinition>() { def, def2 });
+            result.Definition.Should().Be(def2);
+            result.PriorityType.Should().Be(DefinitionPriorityType.None);
+        }
+
+        /// <summary>
+        /// Defines the test method EvalDefinitionPriority_should_return_localization_override_and_filename_priority.
+        /// </summary>
+        [Fact]
+        public void EvalDefinitionPriority_should_return_localization_override_and_filename_priority()
+        {
+            DISetup.SetupContainer();
+
+            var storageProvider = new Mock<IStorageProvider>();
+            var modParser = new Mock<IModParser>();
+            var parserManager = new Mock<IParserManager>();
+            var reader = new Mock<IReader>();
+            var modWriter = new Mock<IModWriter>();
+            var gameService = new Mock<IGameService>();
+            var mapper = new Mock<IMapper>();
+            var modPatchExporter = new Mock<IModPatchExporter>();
+            SetupMockCase(reader, parserManager, modParser);
+            gameService.Setup(p => p.GetSelected()).Returns(new Game()
+            {
+                Type = "EvalDefinitionPriority_should_return_localization_override_and_filename_priority",
+                UserDirectory = "C:\\Users\\Fake"
+            });
+            var infoProvider = new Mock<IDefinitionInfoProvider>();
+            infoProvider.Setup(p => p.DefinitionUsesFIOSRules(It.IsAny<IDefinition>())).Returns(false);
+            infoProvider.Setup(p => p.CanProcess(It.IsAny<string>())).Returns(true);
+            var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter, new List<IDefinitionInfoProvider>() { infoProvider.Object });
+
+            var def = new Definition() { File = @"localisation\test.yml", ModName = "1" };
+            var def2 = new Definition() { File = @"localisation\replace\test.yml", ModName = "2" };
+            var def3 = new Definition() { File = @"localisation\replace\test2.yml", ModName = "3" };
+            var result = service.EvalDefinitionPriority(new List<IDefinition>() { def, def2, def3 });
+            result.Definition.Should().Be(def3);
+            result.PriorityType.Should().Be(DefinitionPriorityType.None);
+        }
+
+        /// <summary>
+        /// Defines the test method EvalDefinitionPriority_should_return_localization_and_filename_priority.
+        /// </summary>
+        [Fact]
+        public void EvalDefinitionPriority_should_return_localization_and_filename_priority()
+        {
+            DISetup.SetupContainer();
+
+            var storageProvider = new Mock<IStorageProvider>();
+            var modParser = new Mock<IModParser>();
+            var parserManager = new Mock<IParserManager>();
+            var reader = new Mock<IReader>();
+            var modWriter = new Mock<IModWriter>();
+            var gameService = new Mock<IGameService>();
+            var mapper = new Mock<IMapper>();
+            var modPatchExporter = new Mock<IModPatchExporter>();
+            SetupMockCase(reader, parserManager, modParser);
+            gameService.Setup(p => p.GetSelected()).Returns(new Game()
+            {
+                Type = "EvalDefinitionPriority_should_return_localization_and_filename_priority",
+                UserDirectory = "C:\\Users\\Fake"
+            });
+            var infoProvider = new Mock<IDefinitionInfoProvider>();
+            infoProvider.Setup(p => p.DefinitionUsesFIOSRules(It.IsAny<IDefinition>())).Returns(false);
+            infoProvider.Setup(p => p.CanProcess(It.IsAny<string>())).Returns(true);
+            var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter, new List<IDefinitionInfoProvider>() { infoProvider.Object });
+
+            var def = new Definition() { File = @"localisation\test.yml", ModName = "1" };
+            var def2 = new Definition() { File = @"localisation\test.yml", ModName = "2" };
+            var def3 = new Definition() { File = @"localisation\test2.yml", ModName = "3" };
+            var result = service.EvalDefinitionPriority(new List<IDefinition>() { def, def2, def3 });
+            result.Definition.Should().Be(def3);
+            result.PriorityType.Should().Be(DefinitionPriorityType.None);
+        }
+
+        /// <summary>
+        /// Defines the test method EvalDefinitionPriority_should_return_localization_override_with_multiple_custom_priority.
+        /// </summary>
+        [Fact]
+        public void EvalDefinitionPriority_should_return_localization_override_with_multiple_custom_priority()
+        {
+            DISetup.SetupContainer();
+
+            var storageProvider = new Mock<IStorageProvider>();
+            var modParser = new Mock<IModParser>();
+            var parserManager = new Mock<IParserManager>();
+            var reader = new Mock<IReader>();
+            var modWriter = new Mock<IModWriter>();
+            var gameService = new Mock<IGameService>();
+            var mapper = new Mock<IMapper>();
+            var modPatchExporter = new Mock<IModPatchExporter>();
+            SetupMockCase(reader, parserManager, modParser);
+            gameService.Setup(p => p.GetSelected()).Returns(new Game()
+            {
+                Type = "EvalDefinitionPriority_should_return_localization_override_with_multiple_custom_priority",
+                UserDirectory = "C:\\Users\\Fake"
+            });
+            var infoProvider = new Mock<IDefinitionInfoProvider>();
+            infoProvider.Setup(p => p.DefinitionUsesFIOSRules(It.IsAny<IDefinition>())).Returns(false);
+            infoProvider.Setup(p => p.CanProcess(It.IsAny<string>())).Returns(true);
+            var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter, new List<IDefinitionInfoProvider>() { infoProvider.Object });
+
+            var def = new Definition() { File = @"localisation\test.yml", ModName = "1" };
+            var def2 = new Definition() { File = @"localisation\replace\test.yml", ModName = "2", CustomPriorityOrder = 1000 };
+            var def3 = new Definition() { File = @"localisation\replace\test2.yml", ModName = "3", CustomPriorityOrder = 100 };
+            var result = service.EvalDefinitionPriority(new List<IDefinition>() { def, def2, def3 });
+            result.Definition.Should().Be(def2);
+            result.PriorityType.Should().Be(DefinitionPriorityType.None);
+        }
+
+        /// <summary>
+        /// Defines the test method EvalDefinitionPriority_should_return_localization_with_multiple_custom_priority.
+        /// </summary>
+        [Fact]
+        public void EvalDefinitionPriority_should_return_localization_with_multiple_custom_priority()
+        {
+            DISetup.SetupContainer();
+
+            var storageProvider = new Mock<IStorageProvider>();
+            var modParser = new Mock<IModParser>();
+            var parserManager = new Mock<IParserManager>();
+            var reader = new Mock<IReader>();
+            var modWriter = new Mock<IModWriter>();
+            var gameService = new Mock<IGameService>();
+            var mapper = new Mock<IMapper>();
+            var modPatchExporter = new Mock<IModPatchExporter>();
+            SetupMockCase(reader, parserManager, modParser);
+            gameService.Setup(p => p.GetSelected()).Returns(new Game()
+            {
+                Type = "EvalDefinitionPriority_should_return_localization_with_multiple_custom_priority",
+                UserDirectory = "C:\\Users\\Fake"
+            });
+            var infoProvider = new Mock<IDefinitionInfoProvider>();
+            infoProvider.Setup(p => p.DefinitionUsesFIOSRules(It.IsAny<IDefinition>())).Returns(false);
+            infoProvider.Setup(p => p.CanProcess(It.IsAny<string>())).Returns(true);
+            var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter, new List<IDefinitionInfoProvider>() { infoProvider.Object });
+
+            var def = new Definition() { File = @"localisation\test.yml", ModName = "1" };
+            var def2 = new Definition() { File = @"localisation\test.yml", ModName = "2", CustomPriorityOrder = 1000 };
+            var def3 = new Definition() { File = @"localisation\test2.yml", ModName = "3", CustomPriorityOrder = 100 };
+            var result = service.EvalDefinitionPriority(new List<IDefinition>() { def, def2, def3 });
+            result.Definition.Should().Be(def2);
+            result.PriorityType.Should().Be(DefinitionPriorityType.None);
+        }
+
+        /// <summary>
+        /// Defines the test method EvalDefinitionPriority_should_return_localization_override_with_custom_priority_and_filename_priority.
+        /// </summary>
+        [Fact]
+        public void EvalDefinitionPriority_should_return_localization_override_with_custom_priority_and_filename_priority()
+        {
+            DISetup.SetupContainer();
+
+            var storageProvider = new Mock<IStorageProvider>();
+            var modParser = new Mock<IModParser>();
+            var parserManager = new Mock<IParserManager>();
+            var reader = new Mock<IReader>();
+            var modWriter = new Mock<IModWriter>();
+            var gameService = new Mock<IGameService>();
+            var mapper = new Mock<IMapper>();
+            var modPatchExporter = new Mock<IModPatchExporter>();
+            SetupMockCase(reader, parserManager, modParser);
+            gameService.Setup(p => p.GetSelected()).Returns(new Game()
+            {
+                Type = "EvalDefinitionPriority_should_return_localization_override_with_custom_priority_and_filename_priority",
+                UserDirectory = "C:\\Users\\Fake"
+            });
+            var infoProvider = new Mock<IDefinitionInfoProvider>();
+            infoProvider.Setup(p => p.DefinitionUsesFIOSRules(It.IsAny<IDefinition>())).Returns(false);
+            infoProvider.Setup(p => p.CanProcess(It.IsAny<string>())).Returns(true);
+            var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter, new List<IDefinitionInfoProvider>() { infoProvider.Object });
+
+            var def = new Definition() { File = @"localisation\test.yml", ModName = "1" };
+            var def2 = new Definition() { File = @"localisation\replace\test.yml", ModName = "2", CustomPriorityOrder = 1000 };
+            var def3 = new Definition() { File = @"localisation\replace\test2.yml", ModName = "3", CustomPriorityOrder = 1000 };
+            var result = service.EvalDefinitionPriority(new List<IDefinition>() { def, def2, def3 });
+            result.Definition.Should().Be(def3);
+            result.PriorityType.Should().Be(DefinitionPriorityType.None);
+        }
+
+        /// <summary>
+        /// Defines the test method EvalDefinitionPriority_should_return_localization_with_custom_priority_and_filename_priority.
+        /// </summary>
+        [Fact]
+        public void EvalDefinitionPriority_should_return_localization_with_custom_priority_and_filename_priority()
+        {
+            DISetup.SetupContainer();
+
+            var storageProvider = new Mock<IStorageProvider>();
+            var modParser = new Mock<IModParser>();
+            var parserManager = new Mock<IParserManager>();
+            var reader = new Mock<IReader>();
+            var modWriter = new Mock<IModWriter>();
+            var gameService = new Mock<IGameService>();
+            var mapper = new Mock<IMapper>();
+            var modPatchExporter = new Mock<IModPatchExporter>();
+            SetupMockCase(reader, parserManager, modParser);
+            gameService.Setup(p => p.GetSelected()).Returns(new Game()
+            {
+                Type = "EvalDefinitionPriority_should_return_localization_with_custom_priority_and_filename_priority",
+                UserDirectory = "C:\\Users\\Fake"
+            });
+            var infoProvider = new Mock<IDefinitionInfoProvider>();
+            infoProvider.Setup(p => p.DefinitionUsesFIOSRules(It.IsAny<IDefinition>())).Returns(false);
+            infoProvider.Setup(p => p.CanProcess(It.IsAny<string>())).Returns(true);
+            var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter, new List<IDefinitionInfoProvider>() { infoProvider.Object });
+
+            var def = new Definition() { File = @"localisation\test.yml", ModName = "1" };
+            var def2 = new Definition() { File = @"localisation\replace\test.yml", ModName = "2", CustomPriorityOrder = 1000 };
+            var def3 = new Definition() { File = @"localisation\replace\test2.yml", ModName = "3", CustomPriorityOrder = 1000 };
+            var result = service.EvalDefinitionPriority(new List<IDefinition>() { def, def2, def3 });
+            result.Definition.Should().Be(def3);
+            result.PriorityType.Should().Be(DefinitionPriorityType.None);
+        }
+
+        /// <summary>
+        /// Defines the test method EvalDefinitionPriority_should_return_localization_override_and_ignore_non_game_definitions.
+        /// </summary>
+        [Fact]
+        public void EvalDefinitionPriority_should_return_localization_override_and_ignore_non_game_definitions()
+        {
+            DISetup.SetupContainer();
+
+            var storageProvider = new Mock<IStorageProvider>();
+            var modParser = new Mock<IModParser>();
+            var parserManager = new Mock<IParserManager>();
+            var reader = new Mock<IReader>();
+            var modWriter = new Mock<IModWriter>();
+            var gameService = new Mock<IGameService>();
+            var mapper = new Mock<IMapper>();
+            var modPatchExporter = new Mock<IModPatchExporter>();
+            SetupMockCase(reader, parserManager, modParser);
+            gameService.Setup(p => p.GetSelected()).Returns(new Game()
+            {
+                Type = "EvalDefinitionPriority_should_return_localization_override_and_ignore_non_game_definitions",
+                UserDirectory = "C:\\Users\\Fake"
+            });
+            var infoProvider = new Mock<IDefinitionInfoProvider>();
+            infoProvider.Setup(p => p.DefinitionUsesFIOSRules(It.IsAny<IDefinition>())).Returns(false);
+            infoProvider.Setup(p => p.CanProcess(It.IsAny<string>())).Returns(true);
+            var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter, new List<IDefinitionInfoProvider>() { infoProvider.Object });
+
+            var def = new Definition() { File = @"localisation\test.yml", ModName = "1" };
+            var def2 = new Definition() { File = @"localisation\replace\test2.yml", ModName = "2" };
+            var def3 = new Definition() { File = @"localisation\replace\test.yml", ModName = "Game", IsFromGame = true };
+            var result = service.EvalDefinitionPriority(new List<IDefinition>() { def3, def, def2 });
+            result.Definition.Should().Be(def2);
+            result.PriorityType.Should().Be(DefinitionPriorityType.None);
+        }
+
+        /// <summary>
+        /// Defines the test method EvalDefinitionPriority_should_return_localization_and_ignore_non_game_definitions.
+        /// </summary>
+        [Fact]
+        public void EvalDefinitionPriority_should_return_localization_and_ignore_non_game_definitions()
+        {
+            DISetup.SetupContainer();
+
+            var storageProvider = new Mock<IStorageProvider>();
+            var modParser = new Mock<IModParser>();
+            var parserManager = new Mock<IParserManager>();
+            var reader = new Mock<IReader>();
+            var modWriter = new Mock<IModWriter>();
+            var gameService = new Mock<IGameService>();
+            var mapper = new Mock<IMapper>();
+            var modPatchExporter = new Mock<IModPatchExporter>();
+            SetupMockCase(reader, parserManager, modParser);
+            gameService.Setup(p => p.GetSelected()).Returns(new Game()
+            {
+                Type = "EvalDefinitionPriority_should_return_localization_and_ignore_non_game_definitions",
+                UserDirectory = "C:\\Users\\Fake"
+            });
+            var infoProvider = new Mock<IDefinitionInfoProvider>();
+            infoProvider.Setup(p => p.DefinitionUsesFIOSRules(It.IsAny<IDefinition>())).Returns(false);
+            infoProvider.Setup(p => p.CanProcess(It.IsAny<string>())).Returns(true);
+            var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter, new List<IDefinitionInfoProvider>() { infoProvider.Object });
+
+            var def = new Definition() { File = @"localisation\test.yml", ModName = "1" };            
+            var def3 = new Definition() { File = @"localisation\test.yml", ModName = "Game", IsFromGame = true };
+            var result = service.EvalDefinitionPriority(new List<IDefinition>() { def3, def });
+            result.Definition.Should().Be(def);
+            result.PriorityType.Should().Be(DefinitionPriorityType.None);
         }
 
         /// <summary>
@@ -3776,7 +4501,7 @@ namespace IronyModManager.Services.Tests
             var modPatchExporter = new Mock<IModPatchExporter>();
             var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter);
             var result = service.ShouldIgnoreGameMods(null);
-            result.Should().BeNull();            
+            result.Should().BeNull();
         }
 
         /// <summary>
@@ -3841,7 +4566,7 @@ namespace IronyModManager.Services.Tests
             var modPatchExporter = new Mock<IModPatchExporter>();
             var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter);
             var result = service.ToggleIgnoreGameMods(null);
-            result.Should().BeNull();            
+            result.Should().BeNull();
         }
 
         /// <summary>
@@ -3889,7 +4614,7 @@ namespace IronyModManager.Services.Tests
             };
             var result = service.ToggleIgnoreGameMods(c);
             result.Should().BeTrue();
-            c.IgnoredPaths.Should().BeNullOrWhiteSpace();            
+            c.IgnoredPaths.Should().BeNullOrWhiteSpace();
         }
 
         /// <summary>
