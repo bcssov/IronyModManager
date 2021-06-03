@@ -4,7 +4,7 @@
 // Created          : 05-27-2021
 //
 // Last Modified By : Mario
-// Last Modified On : 06-01-2021
+// Last Modified On : 06-03-2021
 // ***********************************************************************
 // <copyright file="GameIndexService.cs" company="Mario">
 //     Mario
@@ -118,6 +118,7 @@ namespace IronyModManager.Services
                 if (!await gameIndexer.GameVersionSameAsync(GetStoragePath(), game, version) || !await gameIndexer.CachedDefinitionsSameAsync(GetStoragePath(), game, CurrentCacheVersion))
                 {
                     await gameIndexer.ClearDefinitionAsync(GetStoragePath(), game);
+                    await gameIndexer.WriteVersionAsync(GetStoragePath(), game, version, CurrentCacheVersion);
                 }
                 var gamePath = Path.GetDirectoryName(game.ExecutableLocation);
                 var files = Reader.GetFiles(gamePath);
@@ -134,32 +135,33 @@ namespace IronyModManager.Services
                             folders.Add(item);
                         }
                     }
-
-                    double processed = 0;
-                    double total = folders.Count;
-                    double previousProgress = 0;
-                    var tasks = folders.AsParallel().Select(async folder =>
+                    if (folders.Any())
                     {
-                        await Task.Run(async () =>
+                        double processed = 0;
+                        double total = folders.Count;
+                        double previousProgress = 0;
+                        var tasks = folders.AsParallel().Select(async folder =>
                         {
-                            var result = ParseGameFiles(game, Reader.Read(Path.Combine(gamePath, folder), searchSubFolders: false), folder);
-                            if ((result?.Any()).GetValueOrDefault())
+                            await Task.Run(async () =>
                             {
-                                await gameIndexer.SaveDefinitionsAsync(GetStoragePath(), game, result);
+                                var result = ParseGameFiles(game, Reader.Read(Path.Combine(gamePath, folder), searchSubFolders: false), folder);
+                                if ((result?.Any()).GetValueOrDefault())
+                                {
+                                    await gameIndexer.SaveDefinitionsAsync(GetStoragePath(), game, result);
+                                }
+                            });
+                            using var mutex = await asyncServiceLock.LockAsync();
+                            processed++;
+                            var perc = GetProgressPercentage(total, processed, 100);
+                            if (perc != previousProgress)
+                            {
+                                await messageBus.PublishAsync(new GameIndexProgressEvent(perc));
+                                previousProgress = perc;
                             }
+                            mutex.Dispose();
                         });
-                        using var mutex = await asyncServiceLock.LockAsync();
-                        processed++;
-                        var perc = GetProgressPercentage(total, processed, 100);
-                        if (perc != previousProgress)
-                        {
-                            await messageBus.PublishAsync(new GameIndexProgressEvent(perc));
-                            previousProgress = perc;
-                        }
-                        mutex.Dispose();
-                    });
-                    await Task.WhenAll(tasks);
-                    await gameIndexer.WriteVersionAsync(GetStoragePath(), game, version, CurrentCacheVersion);
+                        await Task.WhenAll(tasks);
+                    }
                     return true;
                 }
                 return false;
