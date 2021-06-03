@@ -384,7 +384,12 @@ namespace IronyModManager.Services
             }
             if (result.Definition == null)
             {
-                result.Definition = definitions?.FirstOrDefault();
+                var definition = definitions.FirstOrDefault(p => !p.IsFromGame);
+                if (definition == null && (definitions?.Any()).GetValueOrDefault())
+                {
+                    definition = definitions.FirstOrDefault();
+                }
+                result.Definition = definition;
             }
             return result;
         }
