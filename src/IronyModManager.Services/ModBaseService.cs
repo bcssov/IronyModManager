@@ -4,7 +4,7 @@
 // Created          : 04-07-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-03-2021
+// Last Modified On : 06-04-2021
 // ***********************************************************************
 // <copyright file="ModBaseService.cs" company="Mario">
 //     Mario
@@ -352,7 +352,7 @@ namespace IronyModManager.Services
                                 else if (filteredGameDefinitions)
                                 {
                                     result.PriorityType = DefinitionPriorityType.ModOrder;
-                                }                                
+                                }
                             }
                             else if (uniqueDefinitions.Count > 1)
                             {
@@ -444,16 +444,19 @@ namespace IronyModManager.Services
         protected virtual IMod GeneratePatchModDescriptor(IEnumerable<IMod> allMods, IGame game, string patchName)
         {
             var mod = DIResolver.Get<IMod>();
-            var dependencies = allMods.Where(p => p.Dependencies?.Count() > 0 && !IsPatchModInternal(p)).Select(p => p.Name).Distinct().ToList();
-            if (dependencies.Count > 0)
-            {
-                mod.Dependencies = dependencies;
-            }
             mod.DescriptorFile = $"{Shared.Constants.ModDirectory}/{patchName}{Shared.Constants.ModExtension}";
             mod.FileName = GetPatchModDirectory(game, patchName).Replace("\\", "/");
             mod.Name = patchName;
             mod.Source = ModSource.Local;
-            mod.Version = allMods.OrderByDescending(p => p.VersionData).FirstOrDefault() != null ? allMods.OrderByDescending(p => p.VersionData).FirstOrDefault().Version : string.Empty;
+            var version = GameService.GetVersion(game);
+            if (!string.IsNullOrWhiteSpace(version))
+            {
+                mod.Version = version;
+            }
+            else
+            {
+                mod.Version = allMods.OrderByDescending(p => p.VersionData).FirstOrDefault() != null ? allMods.OrderByDescending(p => p.VersionData).FirstOrDefault().Version : string.Empty;
+            }
             mod.Tags = new List<string>() { "Fixes" };
             mod.IsValid = true;
             mod.FullPath = mod.FileName.StandardizeDirectorySeparator();
