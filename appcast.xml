@@ -4,12 +4,9 @@
 		<title>Irony Mod Manager</title>
 		<language>en</language>
 		<item>
-			<title>1.17.73-rc</title>
+			<title>1.17.79</title>
 			<description>RELEASE NOTES:
 This is a significant upgrade to Irony. Please backup your collections made with previous versions of Irony.
-
-* Fix conflict solver localization priority detection
-* Fix regression caused by recent bugfixes with vanilla and mod priority calculation
 
 CHANGES FROM v1.16:
 * Updated dependencies
@@ -19,16 +16,13 @@ CHANGES FROM v1.16:
 * Country types are treated in the same manner as pop_jobs (for Stellaris)
 * Add export mods feature along with load order
 * Various improvements and fixes</description>
-			<pubDate>Thu, 03 Jun 2021 06:00:31 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.17.73-rc/osx-x64.rar" sparkle:version="1.17.73.44856" sparkle:shortVersionString="1.17.73" length="69342371" sparkle:os="osx" type="application/vnd.rar" sparkle:signature="TU6EhDOT5W4rk1rwqlK0AEwfTMm+hTcUu9ZPdO/VRshSEnC8vihCTS+A0H6ZYYumIAqyrZAPLUTxebEwsX6MBA=="/>
+			<pubDate>Fri, 04 Jun 2021 14:53:54 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.17.79/osx-x64.rar" sparkle:version="1.17.79.2699" sparkle:shortVersionString="1.17.79" length="69347197" sparkle:os="osx" type="application/vnd.rar" sparkle:signature="zuEzlQ2i188wbkRw57njTtUmvCFPPW0ENntjQ2Nd50JpLSwD4yre5bXXbvibS0xu1KgpYCW8upB89LE4JNAnDQ=="/>
 		</item>
 		<item>
-			<title>1.17.73-rc</title>
+			<title>1.17.79</title>
 			<description>RELEASE NOTES:
 This is a significant upgrade to Irony. Please backup your collections made with previous versions of Irony.
-
-* Fix conflict solver localization priority detection
-* Fix regression caused by recent bugfixes with vanilla and mod priority calculation
 
 CHANGES FROM v1.16:
 * Updated dependencies
@@ -38,16 +32,13 @@ CHANGES FROM v1.16:
 * Country types are treated in the same manner as pop_jobs (for Stellaris)
 * Add export mods feature along with load order
 * Various improvements and fixes</description>
-			<pubDate>Thu, 03 Jun 2021 06:00:38 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.17.73-rc/win-x64-setup.rar" sparkle:version="1.17.73.44856" sparkle:shortVersionString="1.17.73" length="59723291" sparkle:os="windows" type="application/vnd.rar" sparkle:signature="6RZrcl6lHwKTpMr3ZtTm/Nvji5AjaOE4o2poVW5klMT3sjm2YdNIqHM2TUBbdNGEY7P5lgPd2KZsfh/u3N8BDA=="/>
+			<pubDate>Fri, 04 Jun 2021 14:54:02 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.17.79/win-x64-setup.rar" sparkle:version="1.17.79.2699" sparkle:shortVersionString="1.17.79" length="59732153" sparkle:os="windows" type="application/vnd.rar" sparkle:signature="Ndb9epOrtCpXvk0WWukgtq5l3FxA3E0H8Pb6sjXpNHsvmUGoO+ut0wgXVcbAslQe3KbxQcVEymoQJOWtQZuFBg=="/>
 		</item>
 		<item>
-			<title>1.17.73-rc</title>
+			<title>1.17.79</title>
 			<description>RELEASE NOTES:
 This is a significant upgrade to Irony. Please backup your collections made with previous versions of Irony.
-
-* Fix conflict solver localization priority detection
-* Fix regression caused by recent bugfixes with vanilla and mod priority calculation
 
 CHANGES FROM v1.16:
 * Updated dependencies
@@ -57,16 +48,13 @@ CHANGES FROM v1.16:
 * Country types are treated in the same manner as pop_jobs (for Stellaris)
 * Add export mods feature along with load order
 * Various improvements and fixes</description>
-			<pubDate>Thu, 03 Jun 2021 06:00:35 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.17.73-rc/win-x64.rar" sparkle:version="1.17.73.44856" sparkle:shortVersionString="1.17.73" length="72021745" sparkle:os="windows" type="application/vnd.rar" sparkle:signature="Ka5irafGSTjlES30xBpKFP/T+wxgJxHes2BXhXxhPVpVA8QXkZZn38xn6+UfER7q+xlKkpbg7ZE0y4iue6noDA=="/>
+			<pubDate>Fri, 04 Jun 2021 14:53:58 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.17.79/win-x64.rar" sparkle:version="1.17.79.2699" sparkle:shortVersionString="1.17.79" length="72026912" sparkle:os="windows" type="application/vnd.rar" sparkle:signature="3twvnXevyA4wzkEHhVk5j6EEysvkmk1FiTb3Tpw14n/55kKhrfMpJ3o+rv/lsqITfj3lAiuvLmZWveRzZ7juBQ=="/>
 		</item>
 		<item>
-			<title>1.17.73-rc</title>
+			<title>1.17.79</title>
 			<description>RELEASE NOTES:
 This is a significant upgrade to Irony. Please backup your collections made with previous versions of Irony.
-
-* Fix conflict solver localization priority detection
-* Fix regression caused by recent bugfixes with vanilla and mod priority calculation
 
 CHANGES FROM v1.16:
 * Updated dependencies
@@ -76,56 +64,8 @@ CHANGES FROM v1.16:
 * Country types are treated in the same manner as pop_jobs (for Stellaris)
 * Add export mods feature along with load order
 * Various improvements and fixes</description>
-			<pubDate>Thu, 03 Jun 2021 06:00:29 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.17.73-rc/linux-x64.zip" sparkle:version="1.17.73.44856" sparkle:shortVersionString="1.17.73" length="85797351" sparkle:os="linux" type="application/zip" sparkle:signature="O5Td9P185I0rfj+BawWNQLLKB19YiiCuSDcn2v+Ve+VSV1MEPs8IbVLJX7cIMjz4B4LunS+1RtZpmDY/mNgLDA=="/>
-		</item>
-		<item>
-			<title>1.16.36</title>
-			<description>RELEASE INFO:
-* Fix mod filter not firing events
-
-CHANGES FROM v1.15:
-* Updated dependencies
-* Small fixes
-* Add option to override appSettings via appSettings.override.json</description>
-			<pubDate>Wed, 26 May 2021 18:47:47 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.16.36/osx-x64.rar" sparkle:version="1.16.36.24410" sparkle:shortVersionString="1.16.36" length="69212154" sparkle:os="osx" type="application/vnd.rar" sparkle:signature="9urSPTVDC6o9XLxwlQC+PObk/BASs3VCFNNPP6Qv3WfMbdVAuuslPPSV+1MkBj5KmJesivu2kEJicaeA/ni4BA=="/>
-		</item>
-		<item>
-			<title>1.16.36</title>
-			<description>RELEASE INFO:
-* Fix mod filter not firing events
-
-CHANGES FROM v1.15:
-* Updated dependencies
-* Small fixes
-* Add option to override appSettings via appSettings.override.json</description>
-			<pubDate>Wed, 26 May 2021 18:47:55 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.16.36/win-x64-setup.rar" sparkle:version="1.16.36.24410" sparkle:shortVersionString="1.16.36" length="59632118" sparkle:os="windows" type="application/vnd.rar" sparkle:signature="gop/QPrd3UVETGWBFWrdxr/+hDKS4feLTthacV55ECK+wE0nCHTdUikf51SJwIkISpR6T7DogtVBbw0GxNPNAg=="/>
-		</item>
-		<item>
-			<title>1.16.36</title>
-			<description>RELEASE INFO:
-* Fix mod filter not firing events
-
-CHANGES FROM v1.15:
-* Updated dependencies
-* Small fixes
-* Add option to override appSettings via appSettings.override.json</description>
-			<pubDate>Wed, 26 May 2021 18:47:51 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.16.36/win-x64.rar" sparkle:version="1.16.36.24410" sparkle:shortVersionString="1.16.36" length="71902824" sparkle:os="windows" type="application/vnd.rar" sparkle:signature="ZBOxH5vA8vhv0urWpmL5OCg4KWfNw057GIG4J5m4YcFYP/ugL8e7stJblNOmvhMncEAKoxlGcvgYOZMOaxC1Dg=="/>
-		</item>
-		<item>
-			<title>1.16.36</title>
-			<description>RELEASE INFO:
-* Fix mod filter not firing events
-
-CHANGES FROM v1.15:
-* Updated dependencies
-* Small fixes
-* Add option to override appSettings via appSettings.override.json</description>
-			<pubDate>Wed, 26 May 2021 18:47:43 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.16.36/linux-x64.zip" sparkle:version="1.16.36.24410" sparkle:shortVersionString="1.16.36" length="85659185" sparkle:os="linux" type="application/zip" sparkle:signature="dBf0tHf5g7w4JT/ND/NmT7IkTXl5K0oyQiaWIZN4OOb3NSlXajhzMKz1Gfgpu1TFcGwrjxiK4ijiePKw50W2Dg=="/>
+			<pubDate>Fri, 04 Jun 2021 14:53:51 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.17.79/linux-x64.zip" sparkle:version="1.17.79.2699" sparkle:shortVersionString="1.17.79" length="85803877" sparkle:os="linux" type="application/zip" sparkle:signature="oA5P5dk7QiG10xpKH54WHhaxfxDGTOY6p7aaMraj10G1l0GaiZfbCbDDfz5UeRVtbwcRy9DLZtZIEoxcKpjYDA=="/>
 		</item>
 	</channel>
 </rss>
