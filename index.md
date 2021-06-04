@@ -20,7 +20,7 @@ MpCmdRun.exe -SignatureUpdate
 ```
 
 ### Download
-* Latest stable version: [v1.17.79](https://github.com/bcssov/IronyModManager/releases/tag/v1.17.79)
+* Latest stable version: [v1.17.80](https://github.com/bcssov/IronyModManager/releases/tag/v1.17.80)
 
 ### New users
 Check this [checklist](https://github.com/bcssov/IronyModManager/wiki/New-User-Checklist) if you are a first time user of Irony.
