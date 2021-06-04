@@ -4,7 +4,7 @@
 // Created          : 02-29-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-01-2021
+// Last Modified On : 06-03-2021
 // ***********************************************************************
 // <copyright file="ModHolderControlViewModel.cs" company="Mario">
 //     Mario
@@ -460,27 +460,44 @@ namespace IronyModManager.ViewModels.Controls
             var game = gameService.GetSelected();
             var definitions = await Task.Run(async () =>
             {
-                return await modPatchCollectionService.GetModObjectsAsync(gameService.GetSelected(), CollectionMods.SelectedMods, CollectionMods.SelectedModCollection.Name).ConfigureAwait(false);
+                var result = await modPatchCollectionService.GetModObjectsAsync(gameService.GetSelected(), CollectionMods.SelectedMods, CollectionMods.SelectedModCollection.Name).ConfigureAwait(false);
+                // To stop people from whining
+                GC.Collect();
+                return result;
             }).ConfigureAwait(false);
             if (!string.IsNullOrWhiteSpace(version))
             {
-                await Task.Run(async () => await gameIndexService.IndexDefinitionsAsync(game, version, definitions));
+                await Task.Run(async () =>
+                {
+                    await gameIndexService.IndexDefinitionsAsync(game, version, definitions);
+                    // To stop people from whining
+                    GC.Collect();
+                });
                 definitions = await Task.Run(async () =>
                 {
-                    return await gameIndexService.LoadDefinitionsAsync(definitions, game, version);
+                    var result = await gameIndexService.LoadDefinitionsAsync(definitions, game, version);
+                    // To stop people from whining
+                    GC.Collect();
+                    return result;
                 }).ConfigureAwait(false);
             }
             var conflicts = await Task.Run(() =>
             {
                 if (definitions != null)
                 {
-                    return modPatchCollectionService.FindConflicts(definitions, CollectionMods.SelectedMods.Select(p => p.Name).ToList(), mode);
+                    // To stop people from whining
+                    var result =  modPatchCollectionService.FindConflicts(definitions, CollectionMods.SelectedMods.Select(p => p.Name).ToList(), mode);
+                    GC.Collect();
+                    return result;
                 }
                 return null;
             }).ConfigureAwait(false);
             var syncedConflicts = await Task.Run(async () =>
             {
-                return await modPatchCollectionService.InitializePatchStateAsync(conflicts, CollectionMods.SelectedModCollection.Name).ConfigureAwait(false);
+                var result = await modPatchCollectionService.InitializePatchStateAsync(conflicts, CollectionMods.SelectedModCollection.Name).ConfigureAwait(false);
+                // To stop people from whining
+                GC.Collect();
+                return result;
             }).ConfigureAwait(false);
             if (syncedConflicts != null)
             {
