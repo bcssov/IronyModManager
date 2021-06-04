@@ -4,7 +4,7 @@
 // Created          : 05-26-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 05-31-2021
+// Last Modified On : 06-04-2021
 // ***********************************************************************
 // <copyright file="ModPatchCollectionService.cs" company="Mario">
 //     Mario
@@ -725,6 +725,7 @@ namespace IronyModManager.Services
                 copy.Tags = definition.Tags;
                 copy.Type = definition.Type;
                 copy.ValueType = definition.ValueType;
+                copy.IsFromGame = definition.IsFromGame;
                 return copy;
             }
             async Task<(IIndexedDefinitions, int)> partialCopyIndexedDefinitions(IIndexedDefinitions indexedDefinitions, int total, int processed, int maxProgress)
