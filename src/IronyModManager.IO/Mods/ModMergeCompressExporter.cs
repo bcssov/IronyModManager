@@ -4,23 +4,20 @@
 // Created          : 11-26-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 11-27-2020
+// Last Modified On : 05-31-2021
 // ***********************************************************************
 // <copyright file="ModMergeCompressExporter.cs" company="Mario">
 //     Mario
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
-using System.Collections.Generic;
 using System;
 using System.Collections.Concurrent;
-using System.IO;
+using System.Collections.Generic;
 using System.Linq;
+using Ionic.Zip;
 using IronyModManager.IO.Common.Mods;
 using IronyModManager.Shared;
-using SharpCompress.Archives;
-using SharpCompress.Common;
-using SharpCompress.Writers.Zip;
 
 namespace IronyModManager.IO.Mods
 {
@@ -42,7 +39,7 @@ namespace IronyModManager.IO.Mods
         /// <summary>
         /// The queue
         /// </summary>
-        private readonly ConcurrentDictionary<long, IWritableArchive> queue;
+        private readonly ConcurrentDictionary<long, ZipFile> queue;
 
         /// <summary>
         /// The identifier
@@ -58,7 +55,7 @@ namespace IronyModManager.IO.Mods
         /// </summary>
         public ModMergeCompressExporter()
         {
-            queue = new ConcurrentDictionary<long, IWritableArchive>();
+            queue = new ConcurrentDictionary<long, ZipFile>();
         }
 
         #endregion Constructors
@@ -86,7 +83,7 @@ namespace IronyModManager.IO.Mods
                 throw new ArgumentNullException(nameof(parameters));
             }
             queue.TryGetValue(parameters.QueueId, out var value);
-            value.AddEntry(parameters.FileName, parameters.Stream, false);
+            value.AddEntry(parameters.FileName, parameters.Stream);
         }
 
         /// <summary>
@@ -97,20 +94,27 @@ namespace IronyModManager.IO.Mods
         /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
         public bool Finalize(long id, string exportPath)
         {
+            void saveProgress(object sender, SaveProgressEventArgs e)
+            {
+                switch (e.EventType)
+                {
+                    case ZipProgressEventType.Saving_AfterWriteEntry:
+                        if (ProcessedFile != null)
+                        {
+                            ProcessedFile?.Invoke(this, EventArgs.Empty);
+                        }
+                        break;
+
+                    default:
+                        break;
+                }
+            }
+
             if (queue.TryRemove(id, out var value))
             {
-                // Need to do this manually as SharpCompress doesn't raise events
-                using var stream = new System.IO.FileInfo(exportPath).Open(FileMode.Create, FileAccess.Write);
-                using var writer = new ZipWriter(stream, new ZipWriterOptions(CompressionType.Deflate));
-                foreach (var item in value.Entries.Where(p => !p.IsDirectory))
-                {
-                    using var entryStream = item.OpenEntryStream();
-                    writer.Write(item.Key, entryStream, item.LastModifiedTime);
-                    if (ProcessedFile != null)
-                    {
-                        ProcessedFile?.Invoke(this, EventArgs.Empty);
-                    }
-                }
+                value.SaveProgress += saveProgress;
+                value.Save(exportPath);
+                value.SaveProgress -= saveProgress;
                 value.Dispose();
                 return true;
             }
@@ -123,7 +127,7 @@ namespace IronyModManager.IO.Mods
         /// <returns>IArchive.</returns>
         public long Start()
         {
-            var zip = ArchiveFactory.Create(ArchiveType.Zip);
+            var zip = new ZipFile();
             lock (objectLock)
             {
                 id++;

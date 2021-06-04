@@ -4,7 +4,7 @@
 // Created          : 02-16-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 12-10-2020
+// Last Modified On : 05-28-2021
 // ***********************************************************************
 // <copyright file="IDefinition.cs" company="Mario">
 //     Mario
@@ -143,6 +143,12 @@ namespace IronyModManager.Shared.Models
         /// </summary>
         /// <value><c>true</c> if this instance is custom patch; otherwise, <c>false</c>.</value>
         bool IsCustomPatch { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether this instance is from game.
+        /// </summary>
+        /// <value><c>true</c> if this instance is from game; otherwise, <c>false</c>.</value>
+        bool IsFromGame { get; set; }
 
         /// <summary>
         /// Gets or sets the name of the mod.

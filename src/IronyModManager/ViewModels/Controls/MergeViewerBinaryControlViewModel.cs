@@ -4,7 +4,7 @@
 // Created          : 03-25-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-02-2021
+// Last Modified On : 05-31-2021
 // ***********************************************************************
 // <copyright file="MergeViewerBinaryControlViewModel.cs" company="Mario">
 //     Mario
@@ -47,7 +47,7 @@ namespace IronyModManager.ViewModels.Controls
         /// <summary>
         /// The left image lock
         /// </summary>
-        private readonly AsyncLock leftImageLock = new AsyncLock();
+        private readonly AsyncLock leftImageLock = new();
 
         /// <summary>
         /// The localization manager
@@ -67,7 +67,7 @@ namespace IronyModManager.ViewModels.Controls
         /// <summary>
         /// The right image lock
         /// </summary>
-        private readonly AsyncLock rightImageLock = new AsyncLock();
+        private readonly AsyncLock rightImageLock = new();
 
         #endregion Fields
 
@@ -240,6 +240,7 @@ namespace IronyModManager.ViewModels.Controls
         /// <param name="definition">The definition.</param>
         public void SetLeft(IDefinition definition)
         {
+            var localDefinition = definition;
             async Task parseImage()
             {
                 var mutex = await leftImageLock.LockAsync();
@@ -250,7 +251,7 @@ namespace IronyModManager.ViewModels.Controls
                     LeftImage = null;
                     left?.Dispose();
                     LeftHeight = LeftWidth = 0;
-                    using var ms = await modService.GetImageStreamAsync(definition?.ModName, definition?.File);
+                    using var ms = await modService.GetImageStreamAsync(localDefinition.ModName, localDefinition.File, localDefinition.IsFromGame);
                     if (ms != null)
                     {
                         try
@@ -293,9 +294,10 @@ namespace IronyModManager.ViewModels.Controls
         /// <param name="definition">The definition.</param>
         public void SetRight(IDefinition definition)
         {
+            var localDefinition = definition;
             async Task parseImage()
             {
-                var mutex = await leftImageLock.LockAsync();
+                var mutex = await rightImageLock.LockAsync();
                 var right = RightImage;
                 if (definition != null)
                 {
@@ -303,7 +305,7 @@ namespace IronyModManager.ViewModels.Controls
                     RightImage = null;
                     right?.Dispose();
                     RightHeight = RightWidth = 0;
-                    using var ms = await modService.GetImageStreamAsync(definition?.ModName, definition?.File);
+                    using var ms = await modService.GetImageStreamAsync(localDefinition.ModName, localDefinition.File, localDefinition.IsFromGame);
                     if (ms != null)
                     {
                         try
@@ -335,7 +337,7 @@ namespace IronyModManager.ViewModels.Controls
                 }
                 await Task.Delay(10);
                 mutex.Dispose();
-            }
+            }            
             Task.Run(() => parseImage().ConfigureAwait(false)).ConfigureAwait(false);
         }
 

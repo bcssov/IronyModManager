@@ -122,6 +122,7 @@
         "Import_Dialog_Title": "Kollektion Importieren",
         "Overlay_Exporting_Message": "Bitte warten Sie, während die Mod-Kollektion exportiert wird...",
         "Overlay_Importing_Message": "Bitte warten Sie, während die Mod-Kollektion importiert wird...",
+        "Overlay_Import_Export_Progress": "{PercentDone}",
         "Filter": "Mods durchsuchen",
         "Selected": "Ausgewählt",
         "Mod_Name": "Mod Name",
@@ -176,6 +177,7 @@
         "ExportOther": {
             "Title": "...",
             "OrderOnly": "Nur Reihenfolge Exportieren",
+            "WholeCollection": "Export ganzer Sammlung",
             "Close": "Schließen"
         },
         "MergeCollection": {
@@ -225,6 +227,8 @@
         "Overlay_Apply_Message": "Bitte warten Sie, während die Mod-Kollektion angewendet wird...",
         "ConflictSolver": {
             "Conflict": "Konfliktlöser",
+            "Overlay_Conflict_Solver_Indexing_Game": "Bitte warten Sie, während Sie die Spieldefinitionen indexieren...",
+            "Overlay_Conflict_Solver_Loading_Game_Definitions": "Bitte warten Sie beim Laden der Spieldefinitionen...",
             "Overlay_Conflict_Solver_Loading_Definitions": "Bitte warten Sie, während die Mod-Definitionen geladen werden...",
             "Overlay_Conflict_Solver_Analyzing_Conflicts": "Bitte warten Sie, während die Definitionen für Konflikte analysiert werden...",
             "Overlay_Conflict_Solver_Analyzing_Resolved_Conflicts": "Bitte warten Sie, während die geklärten Definitionen analysiert werden...",
@@ -233,6 +237,10 @@
             "FirstUsePrompt": {
                 "Title": "Achtung",
                 "Message": "Der Konfliktlöser ist nichts für Anfänger. Er erfordert Kenntnisse und Erfahrungen mit Coding. Benutzer von kleinen Mod-Kollektionen sollten ihn ignorieren. Benutzer von größeren Mod-Kollektionen sollten hingegen in Betracht ziehen, ihre Mod-Kollektionen zu minimieren oder Coding zu erlernen. Support kann nicht bereitgestellt werden, wenn Sie fortfahren!"
+            },
+            "GameExecutableNotSetPrompt": {
+                "Title": "Spielausführbare Datei nicht festgelegt",
+                "Message": "Die ausführbare Spieldatei wurde in den Optionen nicht festgelegt. Diese Mod-Sammlung hat zuvor Spieledateien in ihre Analyse einbezogen. Der Konfliktlöser kann keine Spieledateien analysieren und einige Auflösungen werden möglicherweise zurückgesetzt. Möchten Sie fortfahren?"
             }
         },
         "LaunchGame": {
@@ -318,6 +326,7 @@
         },
         "ModFilter": {
             "Title": "Mod Filter",
+            "IgnoreGameConflicts": "Spielkonflikte ignorieren",
             "Close": "Schließen"
         },
         "ResetConflicts": {

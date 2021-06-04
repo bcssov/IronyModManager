@@ -13,7 +13,7 @@
        Topmost="True" ObeyScreenEdges="True" StaysOpen="False" x:Name="popup"
        PlacementTarget="{Binding #openPopupButton}">
       <Border BorderThickness="1,1,1,1" BorderBrush="{DynamicResource IronyButtonBorderBrush}">
-        <Grid RowDefinitions="Auto,1*,1*" Background="{DynamicResource IronyBackgroundPopupBrush}">
+        <Grid RowDefinitions="Auto,500,1*" Background="{DynamicResource IronyBackgroundPopupBrush}">
           <Panel Grid.Row="0">
             <Grid ColumnDefinitions="4*,1*">
               <controls:TextBox Watermark="{Binding PathWatermark}" Text="{Binding Path}" Grid.Column="0"></controls:TextBox>

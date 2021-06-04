@@ -33,7 +33,7 @@
             <ListBox Items="{Binding SelectedParentHierarchicalDefinition.Children}"
                      SelectedItems="{Binding SelectedHierarchicalDefinitions}"
                      ScrollViewer.HorizontalScrollBarVisibility="Disabled"
-                     SelectionMode="Multiple" x:Name="conflictList" Height="350" Width="300" Grid.Row="2">
+                     SelectionMode="Multiple" x:Name="conflictList" Height="350" Width="500" Grid.Row="2">
               <ListBox.ItemTemplate>
                 <DataTemplate>
                   <TextBlock Text="{Binding Name}" TextWrapping="Wrap"></TextBlock>

@@ -4,7 +4,7 @@
 // Created          : 02-17-2021
 //
 // Last Modified By : Mario
-// Last Modified On : 02-23-2021
+// Last Modified On : 05-31-2021
 // ***********************************************************************
 // <copyright file="HotkeyManager.cs" company="Mario">
 //     Mario
@@ -32,13 +32,13 @@ namespace IronyModManager.Implementation.Hotkey
         /// <summary>
         /// The map
         /// </summary>
-        private static readonly Dictionary<string, Enums.HotKeys> map = new Dictionary<string, Enums.HotKeys>()
+        private static readonly Dictionary<string, Enums.HotKeys> map = new()
         {
             { Constants.CTRL_Down, Enums.HotKeys.Ctrl_Down },
             { Constants.CTRL_Up, Enums.HotKeys.Ctrl_Up },
             { Constants.CTRL_SHIFT_Up, Enums.HotKeys.Ctrl_Shift_Up },
             { Constants.CTRL_SHIFT_Down, Enums.HotKeys.Ctrl_Shift_Down },
-            { Constants.SHIFT_Down, Enums.HotKeys.Shift_Down},
+            { Constants.SHIFT_Down, Enums.HotKeys.Shift_Down },
             { Constants.SHIFT_Up, Enums.HotKeys.Shift_Up },
             { Constants.CTRL_1, Enums.HotKeys.Ctrl_1 },
             { Constants.CTRL_SHIFT_1, Enums.HotKeys.Ctrl_Shift_1 },
@@ -72,7 +72,8 @@ namespace IronyModManager.Implementation.Hotkey
             { Constants.CTRL_B, Enums.HotKeys.Ctrl_B },
             { Constants.CTRL_X, Enums.HotKeys.Ctrl_X },
             { Constants.CTRL_Z, Enums.HotKeys.Ctrl_Z },
-            { Constants.CTRL_Y, Enums.HotKeys.Ctrl_Y }
+            { Constants.CTRL_Y, Enums.HotKeys.Ctrl_Y },
+            { Constants.RETURN, Enums.HotKeys.Return }
         };
 
         /// <summary>

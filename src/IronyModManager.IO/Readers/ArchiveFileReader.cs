@@ -4,7 +4,7 @@
 // Created          : 02-23-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-19-2021
+// Last Modified On : 05-30-2021
 // ***********************************************************************
 // <copyright file="ArchiveFileReader.cs" company="Mario">
 //     Mario
@@ -69,8 +69,9 @@ namespace IronyModManager.IO.Readers
         /// Determines whether this instance can read the specified path.
         /// </summary>
         /// <param name="path">The path.</param>
+        /// <param name="searchSubFolders">if set to <c>true</c> [search sub folders].</param>
         /// <returns><c>true</c> if this instance can read the specified path; otherwise, <c>false</c>.</returns>
-        public virtual bool CanRead(string path)
+        public virtual bool CanRead(string path, bool searchSubFolders = true)
         {
             return File.Exists(path) && (path.EndsWith(Constants.ZipExtension, StringComparison.OrdinalIgnoreCase) || path.EndsWith(Constants.BinExtension, StringComparison.OrdinalIgnoreCase));
         }
@@ -218,7 +219,7 @@ namespace IronyModManager.IO.Readers
         /// <param name="path">The path.</param>
         /// <returns>System.Int64.</returns>
         public virtual long GetTotalSize(string path)
-        {           
+        {
             long getUsingReaderFactory()
             {
                 long total = 0;
@@ -260,8 +261,9 @@ namespace IronyModManager.IO.Readers
         /// </summary>
         /// <param name="path">The path.</param>
         /// <param name="allowedPaths">The allowed paths.</param>
+        /// <param name="searchSubFolders">if set to <c>true</c> [search sub folders].</param>
         /// <returns>IReadOnlyCollection&lt;IFileInfo&gt;.</returns>
-        public virtual IReadOnlyCollection<IFileInfo> Read(string path, IEnumerable<string> allowedPaths = null)
+        public virtual IReadOnlyCollection<IFileInfo> Read(string path, IEnumerable<string> allowedPaths = null, bool searchSubFolders = true)
         {
             var result = new List<IFileInfo>();
 
@@ -274,9 +276,16 @@ namespace IronyModManager.IO.Readers
                     if (!reader.Entry.IsDirectory)
                     {
                         var relativePath = reader.Entry.Key.StandardizeDirectorySeparator().Trim(Path.DirectorySeparatorChar);
-                        if (!relativePath.Contains(Path.DirectorySeparatorChar) ||
-                            relativePath.Split(Path.DirectorySeparatorChar, StringSplitOptions.RemoveEmptyEntries).Any(s => s.StartsWith(".") ||
-                            (allowedPaths?.Count() > 0 && !allowedPaths.Any(p => relativePath.StartsWith(p, StringComparison.OrdinalIgnoreCase)))))
+                        if (searchSubFolders)
+                        {
+                            if (!relativePath.Contains(Path.DirectorySeparatorChar) ||
+                                relativePath.Split(Path.DirectorySeparatorChar, StringSplitOptions.RemoveEmptyEntries).Any(s => s.StartsWith(".") ||
+                                (allowedPaths?.Count() > 0 && !allowedPaths.Any(p => relativePath.StartsWith(p, StringComparison.OrdinalIgnoreCase)))))
+                            {
+                                continue;
+                            }
+                        }
+                        else if (!searchSubFolders && !Path.GetDirectoryName(relativePath).Equals(path))
                         {
                             continue;
                         }
@@ -293,6 +302,7 @@ namespace IronyModManager.IO.Readers
                             using var streamReader = new StreamReader(memoryStream, true);
                             var text = streamReader.ReadToEnd();
                             streamReader.Close();
+                            streamReader.Dispose();
                             info.IsBinary = false;
                             info.Content = text.SplitOnNewLine(false);
                             info.ContentSHA = text.CalculateSHA();
@@ -314,9 +324,16 @@ namespace IronyModManager.IO.Readers
                 foreach (var entry in reader.Entries.Where(entry => !entry.IsDirectory))
                 {
                     var relativePath = entry.Key.StandardizeDirectorySeparator().Trim(Path.DirectorySeparatorChar);
-                    if (!relativePath.Contains(Path.DirectorySeparatorChar) ||
-                        relativePath.Split(Path.DirectorySeparatorChar, StringSplitOptions.RemoveEmptyEntries).Any(s => s.StartsWith(".") ||
-                        (allowedPaths?.Count() > 0 && !allowedPaths.Any(p => relativePath.StartsWith(p, StringComparison.OrdinalIgnoreCase)))))
+                    if (searchSubFolders)
+                    {
+                        if (!relativePath.Contains(Path.DirectorySeparatorChar) ||
+                            relativePath.Split(Path.DirectorySeparatorChar, StringSplitOptions.RemoveEmptyEntries).Any(s => s.StartsWith(".") ||
+                            (allowedPaths?.Count() > 0 && !allowedPaths.Any(p => relativePath.StartsWith(p, StringComparison.OrdinalIgnoreCase)))))
+                        {
+                            continue;
+                        }
+                    }
+                    else if (!searchSubFolders && !Path.GetDirectoryName(relativePath).Equals(path))
                     {
                         continue;
                     }
@@ -331,6 +348,7 @@ namespace IronyModManager.IO.Readers
                         using var streamReader = new StreamReader(memoryStream, true);
                         var text = streamReader.ReadToEnd();
                         streamReader.Close();
+                        streamReader.Dispose();
                         info.IsBinary = false;
                         info.Content = text.SplitOnNewLine(false);
                         info.ContentSHA = text.CalculateSHA();

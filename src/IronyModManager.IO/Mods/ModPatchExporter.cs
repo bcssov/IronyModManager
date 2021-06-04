@@ -4,7 +4,7 @@
 // Created          : 03-31-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-30-2021
+// Last Modified On : 05-31-2021
 // ***********************************************************************
 // <copyright file="ModPatchExporter.cs" company="Mario">
 //     Mario
@@ -77,6 +77,11 @@ namespace IronyModManager.IO.Mods
         /// The state name
         /// </summary>
         private const string StateName = "state" + Shared.Constants.JsonExtension;
+
+        /// <summary>
+        /// The state temporary
+        /// </summary>
+        private const string StateTemp = StateName + ".tmp";
 
         /// <summary>
         /// The write lock
@@ -335,6 +340,7 @@ namespace IronyModManager.IO.Mods
             state.CustomConflicts = MapDefinitions(parameters.CustomConflicts, false);
             state.Mode = parameters.Mode;
             state.LoadOrder = parameters.LoadOrder;
+            state.HasGameDefinitions = parameters.HasGameDefinitions;
             var history = state.ConflictHistory != null ? state.ConflictHistory.ToList() : new List<IDefinition>();
             var indexed = DIResolver.Get<IIndexedDefinitions>();
             indexed.InitMap(history);
@@ -504,6 +510,7 @@ namespace IronyModManager.IO.Mods
             newInstance.VirtualPath = original.VirtualPath;
             newInstance.CustomPriorityOrder = original.CustomPriorityOrder;
             newInstance.IsCustomPatch = original.IsCustomPatch;
+            newInstance.IsFromGame = original.IsFromGame;
             return newInstance;
         }
 
@@ -544,6 +551,7 @@ namespace IronyModManager.IO.Mods
             destination.CustomConflicts = MapDefinitions(source.CustomConflicts, includeCode);
             destination.Mode = source.Mode;
             destination.LoadOrder = source.LoadOrder;
+            destination.HasGameDefinitions = source.HasGameDefinitions;
         }
 
         /// <summary>
@@ -893,14 +901,8 @@ namespace IronyModManager.IO.Mods
             await messageBus.PublishAsync(new WritingStateOperationEvent(writeCounter <= 0));
             var statePath = Path.Combine(path, StateName);
             var backupPath = Path.Combine(path, StateBackup);
-            if (File.Exists(backupPath))
-            {
-                DiskOperations.DeleteFile(backupPath);
-            }
-            if (File.Exists(statePath))
-            {
-                File.Copy(statePath, backupPath);
-            }
+            var stateTemp = Path.Combine(path, StateTemp);
+
             await Task.Factory.StartNew(async () =>
             {
                 var retry = new RetryStrategy();
@@ -955,12 +957,29 @@ namespace IronyModManager.IO.Mods
                     Directory.CreateDirectory(dirPath);
                 }
 
+                if (File.Exists(stateTemp))
+                {
+                    DiskOperations.DeleteFile(stateTemp);
+                }
                 var serialized = JsonDISerializer.Serialize(patchState);
                 await retry.RetryActionAsync(async () =>
                 {
-                    await File.WriteAllTextAsync(statePath, serialized);
+                    await File.WriteAllTextAsync(stateTemp, serialized);
                     return true;
                 });
+                if (File.Exists(backupPath))
+                {
+                    DiskOperations.DeleteFile(backupPath);
+                }
+                if (File.Exists(statePath))
+                {
+                    File.Copy(statePath, backupPath);
+                    DiskOperations.DeleteFile(statePath);
+                }
+                if (File.Exists(stateTemp))
+                {
+                    File.Copy(stateTemp, statePath);
+                }
                 writeCounter--;
                 await messageBus.PublishAsync(new WritingStateOperationEvent(writeCounter <= 0));
                 mutex.Dispose();

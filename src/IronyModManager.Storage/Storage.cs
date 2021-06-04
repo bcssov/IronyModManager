@@ -4,7 +4,7 @@
 // Created          : 01-11-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-16-2021
+// Last Modified On : 05-27-2021
 // ***********************************************************************
 // <copyright file="Storage.cs" company="Mario">
 //     Mario
@@ -75,7 +75,7 @@ namespace IronyModManager.Storage
         /// Gets the state of the application.
         /// </summary>
         /// <returns>IAppState.</returns>
-        public IAppState GetAppState()
+        public virtual IAppState GetAppState()
         {
             lock (dbLock)
             {
@@ -114,7 +114,7 @@ namespace IronyModManager.Storage
         /// Gets the mod collections.
         /// </summary>
         /// <returns>IEnumerable&lt;IModCollection&gt;.</returns>
-        public IEnumerable<IModCollection> GetModCollections()
+        public virtual IEnumerable<IModCollection> GetModCollections()
         {
             lock (dbLock)
             {
@@ -127,7 +127,7 @@ namespace IronyModManager.Storage
         /// Gets the notification positions.
         /// </summary>
         /// <returns>IEnumerable&lt;INotificationPositionType&gt;.</returns>
-        public IEnumerable<INotificationPositionType> GetNotificationPositions()
+        public virtual IEnumerable<INotificationPositionType> GetNotificationPositions()
         {
             lock (dbLock)
             {
@@ -147,6 +147,15 @@ namespace IronyModManager.Storage
                 var result = Mapper.Map<IPreferences, IPreferences>(Database.Preferences);
                 return result;
             }
+        }
+
+        /// <summary>
+        /// Gets the root storage path.
+        /// </summary>
+        /// <returns>System.String.</returns>
+        public virtual string GetRootStoragePath()
+        {
+            return JsonStore.RootPaths.FirstOrDefault();
         }
 
         /// <summary>
@@ -216,7 +225,7 @@ namespace IronyModManager.Storage
         /// <param name="notificationPosition">The notification position.</param>
         /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
         /// <exception cref="InvalidOperationException">Notification position is null or already registered.</exception>
-        public bool RegisterNotificationPosition(INotificationPositionType notificationPosition)
+        public virtual bool RegisterNotificationPosition(INotificationPositionType notificationPosition)
         {
             lock (dbLock)
             {
@@ -265,7 +274,7 @@ namespace IronyModManager.Storage
         /// </summary>
         /// <param name="appState">State of the application.</param>
         /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
-        public bool SetAppState(IAppState appState)
+        public virtual bool SetAppState(IAppState appState)
         {
             lock (dbLock)
             {
@@ -279,7 +288,7 @@ namespace IronyModManager.Storage
         /// </summary>
         /// <param name="gameSettings">The game settings.</param>
         /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
-        public bool SetGameSettings(IEnumerable<IGameSettings> gameSettings)
+        public virtual bool SetGameSettings(IEnumerable<IGameSettings> gameSettings)
         {
             lock (dbLock)
             {
@@ -293,7 +302,7 @@ namespace IronyModManager.Storage
         /// </summary>
         /// <param name="modCollections">The mod collections.</param>
         /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
-        public bool SetModCollections(IEnumerable<IModCollection> modCollections)
+        public virtual bool SetModCollections(IEnumerable<IModCollection> modCollections)
         {
             lock (dbLock)
             {

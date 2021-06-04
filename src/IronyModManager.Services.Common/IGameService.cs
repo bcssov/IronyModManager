@@ -4,7 +4,7 @@
 // Created          : 02-12-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-27-2021
+// Last Modified On : 05-27-2021
 // ***********************************************************************
 // <copyright file="IGameService.cs" company="Mario">
 //     Mario
@@ -69,6 +69,13 @@ namespace IronyModManager.Services.Common
         /// </summary>
         /// <returns>IGame.</returns>
         IGame GetSelected();
+
+        /// <summary>
+        /// Gets the version.
+        /// </summary>
+        /// <param name="game">The game.</param>
+        /// <returns>System.String.</returns>
+        string GetVersion(IGame game);
 
         /// <summary>
         /// Imports the hash report asynchronous.

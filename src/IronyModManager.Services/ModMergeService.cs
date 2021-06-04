@@ -4,7 +4,7 @@
 // Created          : 06-19-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 05-25-2021
+// Last Modified On : 05-31-2021
 // ***********************************************************************
 // <copyright file="ModMergeService.cs" company="Mario">
 //     Mario
@@ -49,7 +49,7 @@ namespace IronyModManager.Services
         /// <summary>
         /// The maximum zips to merge
         /// </summary>
-        private const int MaxZipsToMerge = 8;
+        private const int MaxZipsToMerge = 4;
 
         /// <summary>
         /// The zip lock

@@ -4,7 +4,7 @@
 // Created          : 09-20-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-19-2021
+// Last Modified On : 05-28-2021
 // ***********************************************************************
 // <copyright file="JsonFileReader.cs" company="Mario">
 //     Mario
@@ -44,8 +44,9 @@ namespace IronyModManager.IO.Readers
         /// Determines whether this instance can read the specified path.
         /// </summary>
         /// <param name="path">The path.</param>
+        /// <param name="searchSubFolders">if set to <c>true</c> [search sub folders].</param>
         /// <returns><c>true</c> if this instance can read the specified path; otherwise, <c>false</c>.</returns>
-        public bool CanRead(string path)
+        public bool CanRead(string path, bool searchSubFolders = true)
         {
             return path.EndsWith(Constants.JsonExtension, StringComparison.OrdinalIgnoreCase);
         }
@@ -99,8 +100,9 @@ namespace IronyModManager.IO.Readers
         /// </summary>
         /// <param name="path">The path.</param>
         /// <param name="allowedPaths">The allowed paths.</param>
+        /// <param name="searchSubFolders">if set to <c>true</c> [search sub folders].</param>
         /// <returns>IReadOnlyCollection&lt;IFileInfo&gt;.</returns>
-        public IReadOnlyCollection<IFileInfo> Read(string path, IEnumerable<string> allowedPaths = null)
+        public IReadOnlyCollection<IFileInfo> Read(string path, IEnumerable<string> allowedPaths = null, bool searchSubFolders = true)
         {
             if (File.Exists(path))
             {

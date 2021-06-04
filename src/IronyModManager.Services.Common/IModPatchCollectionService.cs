@@ -4,7 +4,7 @@
 // Created          : 05-26-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-22-2021
+// Last Modified On : 05-29-2021
 // ***********************************************************************
 // <copyright file="IModPatchCollectionService.cs" company="Mario">
 //     Mario
@@ -162,6 +162,13 @@ namespace IronyModManager.Services.Common
         Task<string> LoadDefinitionContentsAsync(IDefinition definition, string collectionName);
 
         /// <summary>
+        /// Patches the has game definitions asynchronous.
+        /// </summary>
+        /// <param name="collectionName">Name of the collection.</param>
+        /// <returns>Task&lt;System.Boolean&gt;.</returns>
+        Task<bool> PatchHasGameDefinitionsAsync(string collectionName);
+
+        /// <summary>
         /// Patches the mod needs update asynchronous.
         /// </summary>
         /// <param name="collectionName">Name of the collection.</param>
@@ -224,6 +231,20 @@ namespace IronyModManager.Services.Common
         /// <param name="collectionName">Name of the collection.</param>
         /// <returns>Task&lt;System.Boolean&gt;.</returns>
         Task<bool> SaveIgnoredPathsAsync(IConflictResult conflictResult, string collectionName);
+
+        /// <summary>
+        /// Shoulds the ignore game mods.
+        /// </summary>
+        /// <param name="conflictResult">The conflict result.</param>
+        /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
+        bool? ShouldIgnoreGameMods(IConflictResult conflictResult);
+
+        /// <summary>
+        /// Toggles the ignore game mods.
+        /// </summary>
+        /// <param name="conflictResult">The conflict result.</param>
+        /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
+        bool? ToggleIgnoreGameMods(IConflictResult conflictResult);
 
         #endregion Methods
     }

@@ -4,7 +4,7 @@
 // Created          : 02-16-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 12-07-2020
+// Last Modified On : 05-28-2021
 // ***********************************************************************
 // <copyright file="IIndexedDefinitions.cs" company="Mario">
 //     Mario
@@ -44,6 +44,12 @@ namespace IronyModManager.Shared.Models
         /// </summary>
         /// <returns>IEnumerable&lt;IDefinition&gt;.</returns>
         IEnumerable<IDefinition> GetAll();
+
+        /// <summary>
+        /// Gets all directory keys.
+        /// </summary>
+        /// <returns>IEnumerable&lt;System.String&gt;.</returns>
+        IEnumerable<string> GetAllDirectoryKeys();
 
         /// <summary>
         /// Gets all file keys.
@@ -118,6 +124,12 @@ namespace IronyModManager.Shared.Models
         /// </summary>
         /// <returns>IEnumerable&lt;IHierarchicalDefinitions&gt;.</returns>
         IEnumerable<IHierarchicalDefinitions> GetHierarchicalDefinitions();
+
+        /// <summary>
+        /// Determines whether [has game definitions].
+        /// </summary>
+        /// <returns><c>true</c> if [has game definitions]; otherwise, <c>false</c>.</returns>
+        bool HasGameDefinitions();
 
         /// <summary>
         /// Initializes the map.

@@ -4,7 +4,7 @@
 // Created          : 02-12-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-27-2021
+// Last Modified On : 05-27-2021
 // ***********************************************************************
 // <copyright file="GameServiceTests.cs" company="Mario">
 //     Mario
@@ -746,7 +746,7 @@ namespace IronyModManager.Services.Tests
                 }
             };
             var reader = new Mock<IReader>();
-            reader.Setup(s => s.Read(It.IsAny<string>(), It.IsAny<IEnumerable<string>>())).Returns(fileInfos);
+            reader.Setup(s => s.Read(It.IsAny<string>(), It.IsAny<IEnumerable<string>>(), It.IsAny<bool>())).Returns(fileInfos);
             var service = new GameService(null, null, reader.Object, storageProvider.Object, preferencesService.Object, new Mock<IMapper>().Object);
             var result = service.IsContinueGameAllowed(new Game()
             {
@@ -767,7 +767,7 @@ namespace IronyModManager.Services.Tests
             var preferencesService = new Mock<IPreferencesService>();
             SetupMockCase(preferencesService, storageProvider);
             var reader = new Mock<IReader>();
-            reader.Setup(s => s.Read(It.IsAny<string>(), It.IsAny<IEnumerable<string>>())).Returns((IEnumerable<IFileInfo>)null);
+            reader.Setup(s => s.Read(It.IsAny<string>(), It.IsAny<IEnumerable<string>>(), It.IsAny<bool>())).Returns((IEnumerable<IFileInfo>)null);
             var service = new GameService(null, null, reader.Object, storageProvider.Object, preferencesService.Object, new Mock<IMapper>().Object);
             var result = service.GetGameSettingsFromJson(new Game()
             {
@@ -797,7 +797,7 @@ namespace IronyModManager.Services.Tests
                 }
             };
             var reader = new Mock<IReader>();
-            reader.Setup(s => s.Read(It.IsAny<string>(), It.IsAny<IEnumerable<string>>())).Returns(fileInfos);
+            reader.Setup(s => s.Read(It.IsAny<string>(), It.IsAny<IEnumerable<string>>(), It.IsAny<bool>())).Returns(fileInfos);
             var service = new GameService(null, null, reader.Object, storageProvider.Object, preferencesService.Object, new Mock<IMapper>().Object);
             var result = service.GetGameSettingsFromJson(new Game()
             {
@@ -809,6 +809,58 @@ namespace IronyModManager.Services.Tests
             result.ExecutableLocation.Should().Be("test\\stellaris.exe");
             result.LaunchArguments.Should().Be("-gdpr-compliant");
             result.CustomModDirectory.Should().BeNullOrEmpty();
+        }
+
+        /// <summary>
+        /// Defines the test method Should_not_return_version.
+        /// </summary>
+        [Fact]
+        public void Should_not_return_version()
+        {
+            var storageProvider = new Mock<IStorageProvider>();
+            var preferencesService = new Mock<IPreferencesService>();
+            SetupMockCase(preferencesService, storageProvider);
+            var reader = new Mock<IReader>();
+            reader.Setup(s => s.Read(It.IsAny<string>(), It.IsAny<IEnumerable<string>>(), It.IsAny<bool>())).Returns((IEnumerable<IFileInfo>)null);
+            var service = new GameService(null, null, reader.Object, storageProvider.Object, preferencesService.Object, new Mock<IMapper>().Object);
+            var result = service.GetVersion(new Game()
+            {
+                Type = "game 2",
+                UserDirectory = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)),
+                LauncherSettingsFileName = "launcher.json"
+            });
+            result.Should().BeNullOrEmpty();
+        }
+
+        /// <summary>
+        /// Defines the test method Should_return_version.
+        /// </summary>
+        [Fact]
+        public void Should_return_version()
+        {
+            var storageProvider = new Mock<IStorageProvider>();
+            var preferencesService = new Mock<IPreferencesService>();
+            SetupMockCase(preferencesService, storageProvider);
+            var fileInfos = new List<IFileInfo>()
+            {
+                new IO.FileInfo()
+                {
+                    Content = new List<string>() { "{    \"exeArgs\": [        \"-gdpr-compliant\"    ],    \"exePath\": \"stellaris.exe\",    \"gameDataPath\": \"test\",    \"rawVersion\": \"3.0.3\"}" },
+                    FileName = "continue_game.json",
+                    IsBinary = false
+                }
+            };
+            var reader = new Mock<IReader>();
+            reader.Setup(s => s.Read(It.IsAny<string>(), It.IsAny<IEnumerable<string>>(), It.IsAny<bool>())).Returns(fileInfos);
+            var service = new GameService(null, null, reader.Object, storageProvider.Object, preferencesService.Object, new Mock<IMapper>().Object);
+            var result = service.GetVersion(new Game()
+            {
+                Type = "game 2",
+                UserDirectory = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)),
+                LauncherSettingsFileName = "launcher.json",
+                ExecutableLocation = "c:\\fake"
+            });
+            result.Should().Be("3.0.3");
         }
 
         /// <summary>

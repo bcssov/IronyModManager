@@ -4,7 +4,7 @@
 // Created          : 04-02-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-18-2021
+// Last Modified On : 05-28-2021
 // ***********************************************************************
 // <copyright file="ModPatchExporterParameters.cs" company="Mario">
 //     Mario
@@ -49,6 +49,12 @@ namespace IronyModManager.IO.Common.Mods
         /// </summary>
         /// <value>The game.</value>
         public string Game { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether this instance has game definitions.
+        /// </summary>
+        /// <value><c>true</c> if this instance has game definitions; otherwise, <c>false</c>.</value>
+        public bool HasGameDefinitions { get; set; }
 
         /// <summary>
         /// Gets or sets the ignore conflict paths.

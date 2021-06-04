@@ -122,6 +122,7 @@
         "Import_Dialog_Title": "Import Collection",
         "Overlay_Exporting_Message": "Please wait while exporting a mod collection...",
         "Overlay_Importing_Message": "Please wait while importing a mod collection...",
+        "Overlay_Import_Export_Progress": "{PercentDone}",
         "Filter": "Search Mods",
         "Selected": "Selected",
         "Mod_Name": "Mod Name",
@@ -176,6 +177,7 @@
         "ExportOther": {
             "Title": "...",
             "OrderOnly": "Export Order Only",
+            "WholeCollection": "Export Whole Collection",
             "Close": "Close"
         },
         "MergeCollection": {
@@ -225,6 +227,8 @@
         "Overlay_Apply_Message": "Please wait while applying mod collection...",
         "ConflictSolver": {
             "Conflict": "Conflict Solver",
+            "Overlay_Conflict_Solver_Indexing_Game": "Please wait while indexing game definitions...",
+            "Overlay_Conflict_Solver_Loading_Game_Definitions": "Please wait while loading game definitions...",
             "Overlay_Conflict_Solver_Loading_Definitions": "Please wait while loading mod definitions...",
             "Overlay_Conflict_Solver_Analyzing_Conflicts": "Please wait while analyzing definitions for conflicts...",
             "Overlay_Conflict_Solver_Analyzing_Resolved_Conflicts": "Please wait while analyzing resolved definitions...",
@@ -233,6 +237,10 @@
             "FirstUsePrompt": {
                 "Title": "Attention",
                 "Message": "The conflict solver is not for the faint of heart. It requires knowledge of, and experience with patching code. Users of small mod collections should ignore it, users of larger mod collections should consider either trimming their mod collections or researching code patching. Support cannot be provided should you proceed."
+            },
+            "GameExecutableNotSetPrompt": {
+                "Title": "Game Executable Not Set",
+                "Message": "Game executable has not been set in the options. This mod collection previously included game files in its analysis. Conflict solver will not be able to analyze game files and some resolutions might be reset. Do you wish to proceed?"
             }
         },
         "LaunchGame": {
@@ -318,6 +326,7 @@
         },
         "ModFilter": {
             "Title": "Mod Filter",
+            "IgnoreGameConflicts": "Ignore Game Conflicts",
             "Close": "Close"
         },
         "ResetConflicts": {

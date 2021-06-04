@@ -13,12 +13,17 @@
                Topmost="True" ObeyScreenEdges="True" StaysOpen="False" x:Name="popupExport"
                PlacementTarget="{Binding #openExportPopupButton}">
           <Border BorderThickness="1,1,1,1" BorderBrush="{DynamicResource IronyButtonBorderBrush}">
-            <Grid RowDefinitions="1*,1*" Background="{DynamicResource IronyBackgroundPopupBrush}">
+            <Grid RowDefinitions="1*,1*,1*" Background="{DynamicResource IronyBackgroundPopupBrush}">
               <Button Content="{Binding ExportOrderOnly}" Command="{Binding ExportOrderOnlyCommand}"
                       Grid.Row="0" Grid.Column="0"
+                      HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
+                      HorizontalContentAlignment="Center" VerticalContentAlignment="Center"
+                      IsVisible="{Binding ShowAdvancedFeatures}"></Button>
+              <Button Content="{Binding ExportWholeCollection}" Command="{Binding ExportWholeCollectionCommand}"
+                      Grid.Row="1" Grid.Column="0"
                       HorizontalAlignment="Stretch" VerticalAlignment="Stretch" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"></Button>
               <Button Content="{Binding ExportOtherClose}" Command="{Binding ExportOtherCloseCommand}"
-                      Grid.Row="1" Grid.Column="0"
+                      Grid.Row="2" Grid.Column="0"
                       HorizontalAlignment="Stretch" VerticalAlignment="Stretch" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"></Button>
             </Grid>
           </Border>

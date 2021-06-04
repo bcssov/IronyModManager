@@ -4,7 +4,7 @@
 // Created          : 03-23-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 12-08-2020
+// Last Modified On : 05-29-2021
 // ***********************************************************************
 // <copyright file="HierarchicalDefinitions.cs" company="Mario">
 //     Mario
@@ -33,7 +33,7 @@ namespace IronyModManager.Parser.Definitions
         /// <summary>
         /// The file names
         /// </summary>
-        private readonly List<string> fileNames = new List<string>();
+        private readonly List<string> fileNames = new();
 
         #endregion Fields
 
@@ -85,6 +85,12 @@ namespace IronyModManager.Parser.Definitions
         /// <value>The name.</value>
         public string Name { get; set; }
 
+        /// <summary>
+        /// Gets or sets the non game definitions.
+        /// </summary>
+        /// <value>The non game definitions.</value>
+        public int NonGameDefinitions { get; set; }
+
         #endregion Properties
 
         #region Methods
@@ -104,7 +110,8 @@ namespace IronyModManager.Parser.Definitions
                 nameof(AdditionalData) => AdditionalData,
                 nameof(Mods) => Mods,
                 nameof(FileNames) => FileNames,
-                _ => Name,
+                nameof(NonGameDefinitions) => NonGameDefinitions,
+                _ => Name
             };
         }
 

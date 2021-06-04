@@ -4,7 +4,7 @@
 // Created          : 02-23-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-25-2021
+// Last Modified On : 05-30-2021
 // ***********************************************************************
 // <copyright file="DiskFileReader.cs" company="Mario">
 //     Mario
@@ -54,9 +54,14 @@ namespace IronyModManager.IO
         /// Determines whether this instance can read the specified path.
         /// </summary>
         /// <param name="path">The path.</param>
+        /// <param name="searchSubFolders">if set to <c>true</c> [search sub folders].</param>
         /// <returns><c>true</c> if this instance can read the specified path; otherwise, <c>false</c>.</returns>
-        public virtual bool CanRead(string path)
+        public virtual bool CanRead(string path, bool searchSubFolders = true)
         {
+            if (!searchSubFolders)
+            {
+                return Directory.Exists(path);
+            }
             return Directory.Exists(path) && !disallowedPaths.Any(p => path.EndsWith(p, StringComparison.OrdinalIgnoreCase));
         }
 
@@ -148,21 +153,25 @@ namespace IronyModManager.IO
         /// </summary>
         /// <param name="path">The path.</param>
         /// <param name="allowedPaths">The allowed paths.</param>
+        /// <param name="searchSubFolders">if set to <c>true</c> [search sub folders].</param>
         /// <returns>IReadOnlyCollection&lt;IFileInfo&gt;.</returns>
-        public virtual IReadOnlyCollection<IFileInfo> Read(string path, IEnumerable<string> allowedPaths)
+        public virtual IReadOnlyCollection<IFileInfo> Read(string path, IEnumerable<string> allowedPaths, bool searchSubFolders = true)
         {
-            var files = Directory.GetFiles(path, "*", SearchOption.AllDirectories);
+            var files = Directory.GetFiles(path, "*", searchSubFolders ? SearchOption.AllDirectories : SearchOption.TopDirectoryOnly);
             if (files?.Length > 0)
             {
                 var result = new List<IFileInfo>();
                 foreach (var file in files)
                 {
                     var relativePath = file.Replace(path, string.Empty).Trim(Path.DirectorySeparatorChar);
-                    if (!relativePath.Contains(Path.DirectorySeparatorChar) ||
-                        relativePath.Split(Path.DirectorySeparatorChar, StringSplitOptions.RemoveEmptyEntries).Any(s => s.StartsWith(".")) ||
-                        (allowedPaths?.Count() > 0 && !allowedPaths.Any(p => relativePath.StartsWith(p, StringComparison.OrdinalIgnoreCase))))
+                    if (searchSubFolders)
                     {
-                        continue;
+                        if (!relativePath.Contains(Path.DirectorySeparatorChar) ||
+                            relativePath.Split(Path.DirectorySeparatorChar, StringSplitOptions.RemoveEmptyEntries).Any(s => s.StartsWith(".")) ||
+                            (allowedPaths?.Count() > 0 && !allowedPaths.Any(p => relativePath.StartsWith(p, StringComparison.OrdinalIgnoreCase))))
+                        {
+                            continue;
+                        }
                     }
                     var info = DIResolver.Get<IFileInfo>();
                     var fileInfo = new System.IO.FileInfo(file);
@@ -175,6 +184,7 @@ namespace IronyModManager.IO
                         using var streamReader = new StreamReader(stream, true);
                         var text = streamReader.ReadToEnd();
                         streamReader.Close();
+                        streamReader.Dispose();
                         info.IsBinary = false;
                         info.Content = text.SplitOnNewLine(false);
                         info.ContentSHA = text.CalculateSHA();

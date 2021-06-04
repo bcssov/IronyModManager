@@ -4,7 +4,7 @@
 // Created          : 02-24-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-25-2021
+// Last Modified On : 05-31-2021
 // ***********************************************************************
 // <copyright file="ModService.cs" company="Mario">
 //     Mario
@@ -227,8 +227,9 @@ namespace IronyModManager.Services
         /// </summary>
         /// <param name="modName">Name of the mod.</param>
         /// <param name="path">The path.</param>
+        /// <param name="isFromGame">if set to <c>true</c> [is from game].</param>
         /// <returns>Task&lt;MemoryStream&gt;.</returns>
-        public virtual Task<MemoryStream> GetImageStreamAsync(string modName, string path)
+        public virtual Task<MemoryStream> GetImageStreamAsync(string modName, string path, bool isFromGame = false)
         {
             var game = GameService.GetSelected();
             if (game == null || string.IsNullOrWhiteSpace(modName))
@@ -236,7 +237,7 @@ namespace IronyModManager.Services
                 return Task.FromResult((MemoryStream)null);
             }
             var mods = GetInstalledModsInternal(game, false);
-            return GetImageStreamAsync(mods.FirstOrDefault(p => p.Name.Equals(modName)), path);
+            return GetImageStreamAsync(mods.FirstOrDefault(p => p.Name.Equals(modName)), path, isFromGame);
         }
 
         /// <summary>
@@ -244,12 +245,20 @@ namespace IronyModManager.Services
         /// </summary>
         /// <param name="mod">The mod.</param>
         /// <param name="path">The path.</param>
+        /// <param name="isFromGame">if set to <c>true</c> [is from game].</param>
         /// <returns>Task&lt;MemoryStream&gt;.</returns>
-        public virtual Task<MemoryStream> GetImageStreamAsync(IMod mod, string path)
+        public virtual Task<MemoryStream> GetImageStreamAsync(IMod mod, string path, bool isFromGame = false)
         {
-            if (mod != null && !string.IsNullOrWhiteSpace(path))
+            if (!isFromGame)
             {
-                return Reader.GetImageStreamAsync(mod.FullPath, path);
+                if (mod != null && !string.IsNullOrWhiteSpace(path))
+                {
+                    return Reader.GetImageStreamAsync(mod.FullPath, path);
+                }
+            }
+            else
+            {
+                return Reader.GetImageStreamAsync(Path.GetDirectoryName(GameService.GetSelected().ExecutableLocation), path);
             }
             return Task.FromResult((MemoryStream)null);
         }
@@ -604,6 +613,9 @@ namespace IronyModManager.Services
                 {
                     var modSourceOverride = directory.Split(Path.DirectorySeparatorChar, StringSplitOptions.RemoveEmptyEntries).
                             LastOrDefault().Contains(Constants.Paradox_mod_id, StringComparison.OrdinalIgnoreCase) ? ModSource.Paradox : modSource;
+
+                    parseModFiles(directory, modSourceOverride, true);
+
                     var zipFiles = Directory.EnumerateFiles(directory, $"*{Shared.Constants.ZipExtension}").Union(Directory.EnumerateFiles(directory, $"*{Shared.Constants.BinExtension}"));
                     if (zipFiles.Any())
                     {
@@ -612,9 +624,16 @@ namespace IronyModManager.Services
                             parseModFiles(zip, modSourceOverride, false);
                         }
                     }
-                    else
+
+                    var subdirectories = Directory.GetDirectories(directory);
+                    if (subdirectories.Any())
                     {
-                        parseModFiles(directory, modSourceOverride, true);
+                        foreach (var subdirectory in subdirectories)
+                        {
+                            var subDirectoryModSourceOverride = subdirectory.Split(Path.DirectorySeparatorChar, StringSplitOptions.RemoveEmptyEntries).
+                                LastOrDefault().Contains(Constants.Paradox_mod_id, StringComparison.OrdinalIgnoreCase) ? ModSource.Paradox : modSource;
+                            parseModFiles(subdirectory, subDirectoryModSourceOverride, true);
+                        }
                     }
                 }
             }

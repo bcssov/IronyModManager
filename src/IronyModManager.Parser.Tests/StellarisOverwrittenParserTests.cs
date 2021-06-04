@@ -4,7 +4,7 @@
 // Created          : 05-25-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 05-15-2021
+// Last Modified On : 05-29-2021
 // ***********************************************************************
 // <copyright file="StellarisOverwrittenParserTests.cs" company="Mario">
 //     Mario
@@ -196,6 +196,22 @@ namespace IronyModManager.Parser.Tests
             var parser = new OverwrittenParser(new CodeParser(new Logger()), null);
             parser.CanParse(args).Should().BeTrue();
         }
+
+        /// <summary>
+        /// Defines the test method CanParse_country_types_should_be_true.
+        /// </summary>
+        [Fact]
+        public void CanParse_country_types_should_be_true()
+        {
+            var args = new CanParseArgs()
+            {
+                File = "common\\country_types\\t.txt",
+                GameType = "Stellaris"
+            };
+            var parser = new OverwrittenParser(new CodeParser(new Logger()), null);
+            parser.CanParse(args).Should().BeTrue();
+        }
+
 
         /// <summary>
         /// Defines the test method Parse_should_yield_results.

@@ -164,6 +164,7 @@ namespace IronyModManager.Shared
             public const string Import_Dialog_Title = Prefix + "Import_Dialog_Title";
             public const string Overlay_Exporting_Message = Prefix + "Overlay_Exporting_Message";
             public const string Overlay_Importing_Message = Prefix + "Overlay_Importing_Message";
+            public const string Overlay_Import_Export_Progress = Prefix + "Overlay_Import_Export_Progress";
             public const string Filter = Prefix + "Filter";
             public const string Selected = Prefix + "Selected";
             public const string Mod_Name = Prefix + "Mod_Name";
@@ -234,6 +235,7 @@ namespace IronyModManager.Shared
                 public const string Prefix = "Collection_Mods.ExportOther.";
                 public const string Title = Prefix + "Title";
                 public const string OrderOnly = Prefix + "OrderOnly";
+                public const string WholeCollection = Prefix + "WholeCollection";
                 public const string Close = Prefix + "Close";
             }
             public static class MergeCollection
@@ -303,6 +305,8 @@ namespace IronyModManager.Shared
             {
                 public const string Prefix = "Mod_Actions.ConflictSolver.";
                 public const string Conflict = Prefix + "Conflict";
+                public const string Overlay_Conflict_Solver_Indexing_Game = Prefix + "Overlay_Conflict_Solver_Indexing_Game";
+                public const string Overlay_Conflict_Solver_Loading_Game_Definitions = Prefix + "Overlay_Conflict_Solver_Loading_Game_Definitions";
                 public const string Overlay_Conflict_Solver_Loading_Definitions = Prefix + "Overlay_Conflict_Solver_Loading_Definitions";
                 public const string Overlay_Conflict_Solver_Analyzing_Conflicts = Prefix + "Overlay_Conflict_Solver_Analyzing_Conflicts";
                 public const string Overlay_Conflict_Solver_Analyzing_Resolved_Conflicts = Prefix + "Overlay_Conflict_Solver_Analyzing_Resolved_Conflicts";
@@ -311,6 +315,12 @@ namespace IronyModManager.Shared
                 public static class FirstUsePrompt
                 {
                     public const string Prefix = "Mod_Actions.ConflictSolver.FirstUsePrompt.";
+                    public const string Title = Prefix + "Title";
+                    public const string Message = Prefix + "Message";
+                }
+                public static class GameExecutableNotSetPrompt
+                {
+                    public const string Prefix = "Mod_Actions.ConflictSolver.GameExecutableNotSetPrompt.";
                     public const string Title = Prefix + "Title";
                     public const string Message = Prefix + "Message";
                 }
@@ -422,6 +432,7 @@ namespace IronyModManager.Shared
             {
                 public const string Prefix = "Conflict_Solver.ModFilter.";
                 public const string Title = Prefix + "Title";
+                public const string IgnoreGameConflicts = Prefix + "IgnoreGameConflicts";
                 public const string Close = Prefix + "Close";
             }
             public static class ResetConflicts

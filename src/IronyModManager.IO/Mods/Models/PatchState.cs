@@ -4,7 +4,7 @@
 // Created          : 03-31-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-22-2021
+// Last Modified On : 05-28-2021
 // ***********************************************************************
 // <copyright file="PatchState.cs" company="Mario">
 //     Mario
@@ -47,6 +47,12 @@ namespace IronyModManager.IO.Mods.Models
         /// </summary>
         /// <value>The custom conflicts.</value>
         public IEnumerable<IDefinition> CustomConflicts { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether [game files included].
+        /// </summary>
+        /// <value><c>true</c> if [game files included]; otherwise, <c>false</c>.</value>
+        public bool HasGameDefinitions { get; set; }
 
         /// <summary>
         /// Gets or sets the ignore conflict paths.

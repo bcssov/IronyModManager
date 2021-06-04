@@ -4,7 +4,7 @@
 // Created          : 03-23-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 12-08-2020
+// Last Modified On : 05-29-2021
 // ***********************************************************************
 // <copyright file="IHierarchicalDefinitions.cs" company="Mario">
 //     Mario
@@ -61,6 +61,12 @@ namespace IronyModManager.Shared.Models
         /// </summary>
         /// <value>The name.</value>
         string Name { get; set; }
+
+        /// <summary>
+        /// Gets or sets the non game definitions.
+        /// </summary>
+        /// <value>The non game definitions.</value>
+        int NonGameDefinitions { get; set; }
 
         #endregion Properties
     }

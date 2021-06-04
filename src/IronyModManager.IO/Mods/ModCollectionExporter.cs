@@ -4,7 +4,7 @@
 // Created          : 03-09-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 05-05-2021
+// Last Modified On : 05-31-2021
 // ***********************************************************************
 // <copyright file="ModCollectionExporter.cs" company="Mario">
 //     Mario
@@ -19,13 +19,15 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
+using Ionic.Zip;
 using IronyModManager.IO.Common;
+using IronyModManager.IO.Common.MessageBus;
 using IronyModManager.IO.Common.Mods;
 using IronyModManager.IO.Mods.Importers;
 using IronyModManager.Shared;
+using IronyModManager.Shared.MessageBus;
 using Newtonsoft.Json;
 using SharpCompress.Archives;
-using SharpCompress.Common;
 using SharpCompress.Readers;
 
 namespace IronyModManager.IO.Mods
@@ -44,6 +46,11 @@ namespace IronyModManager.IO.Mods
         /// The logger
         /// </summary>
         private readonly ILogger logger;
+
+        /// <summary>
+        /// The message bus
+        /// </summary>
+        private readonly IMessageBus messageBus;
 
         /// <summary>
         /// The paradox importer
@@ -68,12 +75,14 @@ namespace IronyModManager.IO.Mods
         /// Initializes a new instance of the <see cref="ModCollectionExporter" /> class.
         /// </summary>
         /// <param name="logger">The logger.</param>
-        public ModCollectionExporter(ILogger logger)
+        /// <param name="messageBus">The message bus.</param>
+        public ModCollectionExporter(ILogger logger, IMessageBus messageBus)
         {
             paradoxosImporter = new ParadoxosImporter(logger);
             paradoxImporter = new ParadoxImporter(logger);
             paradoxLauncherImporter = new ParadoxLauncherImporter(logger);
             this.logger = logger;
+            this.messageBus = messageBus;
         }
 
         #endregion Constructors
@@ -87,40 +96,127 @@ namespace IronyModManager.IO.Mods
         /// <returns>Task&lt;System.Boolean&gt;.</returns>
         public async Task<bool> ExportAsync(ModCollectionExporterParams parameters)
         {
+            double processed = 0;
+            double previousProgress = 0;
+            void saveProgress(object sender, SaveProgressEventArgs e)
+            {
+                switch (e.EventType)
+                {
+                    case ZipProgressEventType.Saving_AfterWriteEntry:
+                        processed++;
+                        var perc = GetProgressPercentage(e.EntriesTotal, processed, 100);
+                        if (perc != previousProgress)
+                        {
+                            messageBus.Publish(new ModExportProgressEvent(perc));
+                            previousProgress = perc;
+                        }
+                        break;
+
+                    default:
+                        break;
+                }
+            }
+
             var content = JsonConvert.SerializeObject(parameters.Mod, Formatting.None);
-            using var zip = ArchiveFactory.Create(ArchiveType.Zip);
-            using var stream = new MemoryStream(Encoding.UTF8.GetBytes(content));
-            zip.AddEntry(Common.Constants.ExportedModContentId, stream, false);
-            var streams = new List<MemoryStream>();
+            using var dataStream = new MemoryStream(Encoding.UTF8.GetBytes(content));
+
+            var streams = new List<Stream>() { dataStream };
+            using var zip = new ZipFile();
+            zip.AddEntry(Common.Constants.ExportedModContentId, dataStream);
+
             if (Directory.Exists(parameters.ModDirectory) && !parameters.ExportModOrderOnly)
             {
+                var files = Directory.GetFiles(parameters.ModDirectory, "*.*", SearchOption.AllDirectories);
                 if (!RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
                 {
-                    zip.AddAllFromDirectory(parameters.ModDirectory);
+                    foreach (var item in files)
+                    {
+                        var fs = new FileStream(item, FileMode.Open, FileAccess.Read, FileShare.Read);
+                        var file = item.Replace(parameters.ModDirectory, string.Empty).Trim('\\').Trim('/');
+                        zip.AddEntry(file, fs);
+                        streams.Add(fs);
+                    }
                 }
                 else
                 {
                     // Yeah, osx sucks (ulimit bypass)
-                    var files = Directory.GetFiles(parameters.ModDirectory, "*.*", SearchOption.AllDirectories);
                     foreach (var item in files)
                     {
                         var fs = new FileStream(item, FileMode.Open, FileAccess.Read, FileShare.Read);
                         var ms = new MemoryStream();
                         await fs.CopyToAsync(ms);
                         var file = item.Replace(parameters.ModDirectory, string.Empty).Trim('\\').Trim('/');
-                        zip.AddEntry(file, ms, false, modified: new System.IO.FileInfo(item).LastWriteTime);                        
+                        zip.AddEntry(file, ms);
                         fs.Close();
                         await fs.DisposeAsync();
                         streams.Add(ms);
                     }
                 }
             }
-            zip.SaveTo(parameters.File, new SharpCompress.Writers.WriterOptions(CompressionType.Deflate));
+            if ((parameters.ExportMods?.Any()).GetValueOrDefault())
+            {
+                foreach (var mod in parameters.ExportMods)
+                {
+                    if (Directory.Exists(mod.FullPath))
+                    {
+                        var files = Directory.GetFiles(mod.FullPath, "*.*", SearchOption.AllDirectories);
+                        if (!RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
+                        {
+                            foreach (var item in files)
+                            {
+                                var fs = new FileStream(item, FileMode.Open, FileAccess.Read, FileShare.Read);
+                                var file = Path.Combine(Common.Constants.ModExportPath, mod.Name.GenerateValidFileName() + "_" + item.Replace(Path.GetDirectoryName(mod.FullPath), string.Empty).Trim('\\').Trim('/'));
+                                zip.AddEntry(file, fs);
+                                streams.Add(fs);
+                            }
+                        }
+                        else
+                        {
+                            foreach (var item in files)
+                            {
+                                var fs = new FileStream(item, FileMode.Open, FileAccess.Read, FileShare.Read);
+                                var ms = new MemoryStream();
+                                await fs.CopyToAsync(ms);
+                                var file = Path.Combine(Common.Constants.ModExportPath, mod.Name.GenerateValidFileName() + "_" + item.Replace(Path.GetDirectoryName(mod.FullPath), string.Empty).Trim('\\').Trim('/'));
+                                zip.AddEntry(file, ms);
+                                fs.Close();
+                                await fs.DisposeAsync();
+                                streams.Add(ms);
+                            }
+                        }
+                    }
+                    else if (File.Exists(mod.FullPath))
+                    {
+                        if (!RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
+                        {
+                            var fs = new FileStream(mod.FullPath, FileMode.Open, FileAccess.Read, FileShare.Read);
+                            var file = Path.Combine(Common.Constants.ModExportPath, mod.Name.GenerateValidFileName() + "_" + Path.GetFileName(mod.FullPath));
+                            zip.AddEntry(file, fs);
+                            streams.Add(fs);
+                        }
+                        else
+                        {
+                            var fs = new FileStream(mod.FullPath, FileMode.Open, FileAccess.Read, FileShare.Read);
+                            var ms = new MemoryStream();
+                            await fs.CopyToAsync(ms);
+                            var file = Path.Combine(Common.Constants.ModExportPath, mod.Name.GenerateValidFileName() + "_" + Path.GetFileName(mod.FullPath));
+                            zip.AddEntry(file, ms);
+                            fs.Close();
+                            await fs.DisposeAsync();
+                            streams.Add(ms);
+                        }
+                    }
+                }
+            }
+
+            zip.SaveProgress += saveProgress;
+            zip.Save(parameters.File);
+            zip.SaveProgress -= saveProgress;
             zip.Dispose();
             if (streams.Any())
             {
                 var task = streams.Select(async p =>
-                {                    
+                {
                     p.Close();
                     await p.DisposeAsync();
                 });
@@ -180,6 +276,27 @@ namespace IronyModManager.IO.Mods
         }
 
         /// <summary>
+        /// Gets the progress percentage.
+        /// </summary>
+        /// <param name="total">The total.</param>
+        /// <param name="processed">The processed.</param>
+        /// <param name="maxPerc">The maximum perc.</param>
+        /// <returns>System.Double.</returns>
+        protected virtual double GetProgressPercentage(double total, double processed, double maxPerc = 100)
+        {
+            var perc = Math.Round(processed / total * 100, 2);
+            if (perc < 0)
+            {
+                perc = 0;
+            }
+            else if (perc > maxPerc)
+            {
+                perc = maxPerc;
+            }
+            return perc;
+        }
+
+        /// <summary>
         /// Imports the internal.
         /// </summary>
         /// <param name="parameters">The parameters.</param>
@@ -197,10 +314,30 @@ namespace IronyModManager.IO.Mods
 
             var result = false;
 
-            void parseUsingReaderFactory()
+            int getTotalFileCount()
             {
+                var count = 0;
                 using var fileStream = File.OpenRead(parameters.File);
                 using var reader = ReaderFactory.Open(fileStream);
+                while (reader.MoveToNextEntry())
+                {
+                    if (!reader.Entry.IsDirectory)
+                    {
+                        count++;
+                    }
+                }
+                fileStream.Close();
+                fileStream.Dispose();
+                return count;
+            }
+
+            void parseUsingReaderFactory()
+            {
+                double total = getTotalFileCount();
+                using var fileStream = File.OpenRead(parameters.File);
+                using var reader = ReaderFactory.Open(fileStream);
+                double processed = 0;
+                double previousProgress = 0;
                 while (reader.MoveToNextEntry())
                 {
                     if (!reader.Entry.IsDirectory)
@@ -217,6 +354,7 @@ namespace IronyModManager.IO.Mods
                                 using var streamReader = new StreamReader(memoryStream, true);
                                 var text = streamReader.ReadToEnd();
                                 streamReader.Close();
+                                streamReader.Dispose();
                                 JsonConvert.PopulateObject(text, parameters.Mod);
                                 result = true;
                                 break;
@@ -224,7 +362,22 @@ namespace IronyModManager.IO.Mods
                         }
                         else
                         {
-                            reader.WriteEntryToDirectory(parameters.ModDirectory, ZipExtractionOpts.GetExtractionOptions());
+                            if (!importInstance)
+                            {
+                                var exportFileName = Path.Combine(relativePath.StartsWith(Common.Constants.ModExportPath + Path.DirectorySeparatorChar) ? parameters.ExportModDirectory : parameters.ModDirectory, relativePath.Replace(Common.Constants.ModExportPath + Path.DirectorySeparatorChar, string.Empty));
+                                if (!Directory.Exists(Path.GetDirectoryName(exportFileName)))
+                                {
+                                    Directory.CreateDirectory(Path.GetDirectoryName(exportFileName));
+                                }
+                                reader.WriteEntryToFile(exportFileName, ZipExtractionOpts.GetExtractionOptions());
+                            }
+                        }
+                        processed++;
+                        var perc = GetProgressPercentage(total, processed, 100);
+                        if (perc != previousProgress)
+                        {
+                            messageBus.Publish(new ModExportProgressEvent(perc));
+                            previousProgress = perc;
                         }
                     }
                 }
@@ -234,7 +387,11 @@ namespace IronyModManager.IO.Mods
             {
                 using var fileStream = File.OpenRead(parameters.File);
                 using var reader = ArchiveFactory.Open(fileStream);
-                foreach (var entry in reader.Entries.Where(entry => !entry.IsDirectory))
+                var entries = reader.Entries.Where(entry => !entry.IsDirectory);
+                double total = !importInstance ? entries.Count() : 1;
+                double processed = 0;
+                double previousProgress = 0;
+                foreach (var entry in entries)
                 {
                     var relativePath = entry.Key.StandardizeDirectorySeparator().Trim(Path.DirectorySeparatorChar);
                     if (entry.Key.Equals(Common.Constants.ExportedModContentId, StringComparison.OrdinalIgnoreCase))
@@ -248,6 +405,7 @@ namespace IronyModManager.IO.Mods
                             using var streamReader = new StreamReader(memoryStream, true);
                             var text = streamReader.ReadToEnd();
                             streamReader.Close();
+                            streamReader.Dispose();
                             JsonConvert.PopulateObject(text, parameters.Mod);
                             result = true;
                             break;
@@ -255,7 +413,22 @@ namespace IronyModManager.IO.Mods
                     }
                     else
                     {
-                        entry.WriteToDirectory(parameters.ModDirectory, ZipExtractionOpts.GetExtractionOptions());
+                        if (!importInstance)
+                        {
+                            var exportFileName = Path.Combine(relativePath.StartsWith(Common.Constants.ModExportPath + Path.DirectorySeparatorChar) ? parameters.ExportModDirectory : parameters.ModDirectory, relativePath.Replace(Common.Constants.ModExportPath + Path.DirectorySeparatorChar, string.Empty));
+                            if (!Directory.Exists(Path.GetDirectoryName(exportFileName)))
+                            {
+                                Directory.CreateDirectory(Path.GetDirectoryName(exportFileName));
+                            }
+                            entry.WriteToFile(exportFileName, ZipExtractionOpts.GetExtractionOptions());
+                        }
+                    }
+                    processed++;
+                    var perc = GetProgressPercentage(total, processed, 100);
+                    if (perc != previousProgress)
+                    {
+                        messageBus.Publish(new ModExportProgressEvent(perc));
+                        previousProgress = perc;
                     }
                 }
             }

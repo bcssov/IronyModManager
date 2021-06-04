@@ -23,6 +23,7 @@ using IronyModManager.Models;
 using IronyModManager.Models.Common;
 using IronyModManager.Shared.MessageBus;
 using IronyModManager.Storage.Common;
+using IronyModManager.Tests.Common;
 using Moq;
 using Xunit;
 
@@ -214,6 +215,8 @@ namespace IronyModManager.Services.Tests
         [Fact]
         public void Should_return_hash_from_both_sources()
         {
+            DISetup.SetupContainer();
+
             var storageProvider = new Mock<IStorageProvider>();
             var mapper = new Mock<IMapper>();
             var exporter = new Mock<IReportExporter>();
@@ -242,6 +245,8 @@ namespace IronyModManager.Services.Tests
         [Fact]
         public void Should_return_hash_with_diff_only()
         {
+            DISetup.SetupContainer();
+
             var storageProvider = new Mock<IStorageProvider>();
             var mapper = new Mock<IMapper>();
             var exporter = new Mock<IReportExporter>();

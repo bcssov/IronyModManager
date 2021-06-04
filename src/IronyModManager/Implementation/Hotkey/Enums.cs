@@ -4,7 +4,7 @@
 // Created          : 02-17-2021
 //
 // Last Modified By : Mario
-// Last Modified On : 02-23-2021
+// Last Modified On : 05-31-2021
 // ***********************************************************************
 // <copyright file="Enums.cs" company="Mario">
 //     Mario
@@ -227,7 +227,12 @@ namespace IronyModManager.Implementation.Hotkey
             /// <summary>
             /// The control x
             /// </summary>
-            Ctrl_X
+            Ctrl_X,
+
+            /// <summary>
+            /// The return
+            /// </summary>
+            Return
         }
 
         #endregion Enums

@@ -4,7 +4,7 @@
 // Created          : 02-24-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-19-2021
+// Last Modified On : 05-31-2021
 // ***********************************************************************
 // <copyright file="IModService.cs" company="Mario">
 //     Mario
@@ -77,16 +77,18 @@ namespace IronyModManager.Services.Common
         /// </summary>
         /// <param name="modName">Name of the mod.</param>
         /// <param name="path">The path.</param>
+        /// <param name="isFromGame">if set to <c>true</c> [is from game].</param>
         /// <returns>Task&lt;MemoryStream&gt;.</returns>
-        Task<MemoryStream> GetImageStreamAsync(string modName, string path);
+        Task<MemoryStream> GetImageStreamAsync(string modName, string path, bool isFromGame = false);
 
         /// <summary>
         /// Gets the image stream asynchronous.
         /// </summary>
         /// <param name="mod">The mod.</param>
         /// <param name="path">The path.</param>
+        /// <param name="isFromGame">if set to <c>true</c> [is from game].</param>
         /// <returns>Task&lt;MemoryStream&gt;.</returns>
-        Task<MemoryStream> GetImageStreamAsync(IMod mod, string path);
+        Task<MemoryStream> GetImageStreamAsync(IMod mod, string path, bool isFromGame = false);
 
         /// <summary>
         /// Gets the installed mods.

@@ -4,7 +4,7 @@
 // Created          : 01-20-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-16-2021
+// Last Modified On : 05-27-2021
 // ***********************************************************************
 // <copyright file="JsonStore.cs" company="Mario">
 //     Mario
@@ -54,7 +54,7 @@ namespace IronyModManager.Storage
         /// Gets the root path.
         /// </summary>
         /// <value>The root path.</value>
-        private static string[] RootPaths
+        protected internal static string[] RootPaths
         {
             get
             {
