@@ -4,7 +4,7 @@
 // Created          : 03-31-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-17-2021
+// Last Modified On : 06-06-2021
 // ***********************************************************************
 // <copyright file="IModWriter.cs" company="Mario">
 //     Mario
@@ -96,8 +96,9 @@ namespace IronyModManager.IO.Common.Mods
         /// </summary>
         /// <param name="parameters">The parameters.</param>
         /// <param name="stream">The stream.</param>
+        /// <param name="truncatePath">if set to <c>true</c> [truncate path].</param>
         /// <returns>Task&lt;System.Boolean&gt;.</returns>
-        Task<bool> WriteDescriptorToStreamAsync(ModWriterParameters parameters, Stream stream);
+        Task<bool> WriteDescriptorToStreamAsync(ModWriterParameters parameters, Stream stream, bool truncatePath = false);
 
         #endregion Methods
     }

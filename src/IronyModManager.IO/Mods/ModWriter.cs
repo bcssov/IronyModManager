@@ -4,7 +4,7 @@
 // Created          : 03-31-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-30-2021
+// Last Modified On : 06-06-2021
 // ***********************************************************************
 // <copyright file="ModWriter.cs" company="Mario">
 //     Mario
@@ -17,9 +17,11 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
 using IronyModManager.IO.Common;
 using IronyModManager.IO.Common.Mods;
 using IronyModManager.IO.Mods.Exporter;
+using IronyModManager.Models.Common;
 using IronyModManager.Shared;
 using Nito.AsyncEx;
 
@@ -46,6 +48,11 @@ namespace IronyModManager.IO.Mods
         private readonly JsonExporter jsonExporter;
 
         /// <summary>
+        /// The mapper
+        /// </summary>
+        private readonly IMapper mapper;
+
+        /// <summary>
         /// The sqlite exporter
         /// </summary>
         private readonly SQLiteExporter sqliteExporter;
@@ -58,10 +65,12 @@ namespace IronyModManager.IO.Mods
         /// Initializes a new instance of the <see cref="ModWriter" /> class.
         /// </summary>
         /// <param name="logger">The logger.</param>
-        public ModWriter(ILogger logger)
+        /// <param name="mapper">The mapper.</param>
+        public ModWriter(ILogger logger, IMapper mapper)
         {
             jsonExporter = new JsonExporter();
             sqliteExporter = new SQLiteExporter(logger);
+            this.mapper = mapper;
         }
 
         #endregion Constructors
@@ -236,7 +245,7 @@ namespace IronyModManager.IO.Mods
             {
                 // If needed I've got a much more complex serializer, it is written for Kerbal Space Program but the structure seems to be the same though this is much more simpler
                 var fullPath = Path.Combine(parameters.RootDirectory ?? string.Empty, parameters.Path ?? string.Empty);
-                await writeDescriptor(fullPath);
+                await writeDescriptor(fullPath, false);
                 // Attempt to fix issues where the game decides to delete local zipped mod descriptors (I'm assuming this happens to all pdx games)
                 if (parameters.LockDescriptor)
                 {
@@ -251,11 +260,11 @@ namespace IronyModManager.IO.Mods
                 if (writeDescriptorInModDirectory)
                 {
                     var modPath = Path.Combine(parameters.Mod.FileName ?? string.Empty, Shared.Constants.DescriptorFile);
-                    await writeDescriptor(modPath);
+                    await writeDescriptor(modPath, true);
                 }
                 return true;
             }
-            async Task<bool> writeDescriptor(string fullPath)
+            async Task<bool> writeDescriptor(string fullPath, bool truncatePath)
             {
                 bool? state = null;
                 if (File.Exists(fullPath))
@@ -265,7 +274,7 @@ namespace IronyModManager.IO.Mods
                     fileInfo.IsReadOnly = false;
                 }
                 using var fs = new FileStream(fullPath, FileMode.Create, FileAccess.Write, FileShare.Read);
-                var result = await WriteDescriptorToStreamAsync(parameters, fs);
+                var result = await WriteDescriptorToStreamAsync(parameters, fs, truncatePath);
                 if (state.HasValue)
                 {
                     var fileInfo = new System.IO.FileInfo(fullPath)
@@ -285,15 +294,33 @@ namespace IronyModManager.IO.Mods
         /// </summary>
         /// <param name="parameters">The parameters.</param>
         /// <param name="stream">The stream.</param>
+        /// <param name="truncatePath">if set to <c>true</c> [truncate path].</param>
         /// <returns>Task&lt;System.Boolean&gt;.</returns>
-        public async Task<bool> WriteDescriptorToStreamAsync(ModWriterParameters parameters, Stream stream)
+        public Task<bool> WriteDescriptorToStreamAsync(ModWriterParameters parameters, Stream stream, bool truncatePath = false)
         {
+            return WriteDescriptorToStreamInternalAsync(parameters.Mod, stream, truncatePath);
+        }
+
+        /// <summary>
+        /// write descriptor to stream internal as an asynchronous operation.
+        /// </summary>
+        /// <param name="mod">The mod.</param>
+        /// <param name="stream">The stream.</param>
+        /// <param name="truncatePath">if set to <c>true</c> [truncate path].</param>
+        /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
+        protected async Task<bool> WriteDescriptorToStreamInternalAsync(IMod mod, Stream stream, bool truncatePath = false)
+        {
+            if (truncatePath)
+            {
+                mod = mapper.Map<IMod>(mod);
+                mod.FileName = string.Empty;
+            }
             using var sw = new StreamWriter(stream, leaveOpen: true);
-            var props = parameters.Mod.GetType().GetProperties().Where(p => Attribute.IsDefined(p, typeof(DescriptorPropertyAttribute)));
+            var props = mod.GetType().GetProperties().Where(p => Attribute.IsDefined(p, typeof(DescriptorPropertyAttribute)));
             foreach (var prop in props)
             {
                 var attr = Attribute.GetCustomAttribute(prop, typeof(DescriptorPropertyAttribute), true) as DescriptorPropertyAttribute;
-                var val = prop.GetValue(parameters.Mod, null);
+                var val = prop.GetValue(mod, null);
                 if (val is IEnumerable<string> col)
                 {
                     if (col.Any())
