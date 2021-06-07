@@ -9,16 +9,6 @@ Irony Mod Manager is a new advanced mod manager for Paradox Games, it started ou
 
 Check out the detailed overview on the [wiki](https://github.com/bcssov/IronyModManager/wiki).
 
-### Windows Defender flagging Irony (again)?
-It seems like again a false positive detection in the latest Avalonia binaries is occurring. It should clear up eventually once the file(s) are submitted to MS for analysis. Until meantime whitelist the offending DLLs or wait until signatures are updated and Defender whitelists the binaries once more. If you have any questions post them in this [discussion](https://github.com/bcssov/IronyModManager/discussions/257) or at the [discord](https://github.com/bcssov/IronyModManager/discussions/230).
-
-The issue is supposedly resolved, you can try to force update defender definitions:
-```
-cd "%ProgramFiles%\Windows Defender"
-MpCmdRun.exe -removedefinitions -dynamicsignatures
-MpCmdRun.exe -SignatureUpdate
-```
-
 ### Download
 * Latest stable version: [v1.17.80](https://github.com/bcssov/IronyModManager/releases/tag/v1.17.80)
 
