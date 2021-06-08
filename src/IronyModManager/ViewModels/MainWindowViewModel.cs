@@ -4,7 +4,7 @@
 // Created          : 01-10-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-24-2021
+// Last Modified On : 06-08-2021
 // ***********************************************************************
 // <copyright file="MainWindowViewModel.cs" company="Mario">
 //     Mario
@@ -41,7 +41,7 @@ namespace IronyModManager.ViewModels
         /// <summary>
         /// The overlay stack
         /// </summary>
-        protected readonly List<OverlayQueue> overlayStack = new List<OverlayQueue>();
+        protected readonly List<OverlayQueue> overlayStack = new();
 
         /// <summary>
         /// The loop running
