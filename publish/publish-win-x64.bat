@@ -20,6 +20,8 @@ xcopy "src\IronyModManager\bin\Release\net5.0\win-x64\*.dll" "src\IronyModManage
 xcopy "src\IronyModManager\bin\Release\net5.0\win-x64\*.json" "src\IronyModManager\bin\Release\net5.0\publish\win-x64\" /Y /S /D
 xcopy "src\IronyModManager\bin\Release\net5.0\win-x64\*.pdb" "src\IronyModManager\bin\Release\net5.0\publish\win-x64\" /Y /S /D
 xcopy "src\IronyModManager.Updater\bin\Release\net5.0\publish\win-x64\*.*" "src\IronyModManager\bin\Release\net5.0\publish\win-x64\" /Y /S /D
+REM Temp fix due to avalonia bug
+xcopy "%userprofile%\.nuget\packages\avalonia.angle.windows.natives\2.1.0.2020091801\runtimes\win7-x64\native\av_libglesv2.dll" "src\IronyModManager\bin\Release\net5.0\publish\win-x64\" /Y /S /D
 del "src\IronyModManager\bin\Release\net5.0\publish\win-x64\IronyModManager.runtimeconfig.dev.json" /S /Q
 del "src\IronyModManager\bin\Release\net5.0\publish\win-x64\IronyModManager.Updater.runtimeconfig.dev.json" /S /Q
 xcopy "References\*.*" "src\IronyModManager\bin\Release\net5.0\publish\win-x64\"  /Y /S /D
