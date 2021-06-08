@@ -4,16 +4,16 @@
 // Created          : 01-29-2021
 //
 // Last Modified By : Mario
-// Last Modified On : 01-29-2021
+// Last Modified On : 06-08-2021
 // ***********************************************************************
 // <copyright file="ModInstallationResult.cs" company="Mario">
 //     Mario
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using System;
 using IronyModManager.Models.Common;
 
 namespace IronyModManager.Models
@@ -42,10 +42,22 @@ namespace IronyModManager.Models
         public virtual bool Invalid { get; set; }
 
         /// <summary>
+        /// Gets or sets a value indicating whether this instance is file.
+        /// </summary>
+        /// <value><c>true</c> if this instance is file; otherwise, <c>false</c>.</value>
+        public virtual bool IsFile { get; set; }
+
+        /// <summary>
         /// Gets or sets the mod.
         /// </summary>
         /// <value>The mod.</value>
         public virtual IMod Mod { get; set; }
+
+        /// <summary>
+        /// Gets or sets the parent directory.
+        /// </summary>
+        /// <value>The parent directory.</value>
+        public virtual string ParentDirectory { get; set; }
 
         /// <summary>
         /// Gets or sets the path.

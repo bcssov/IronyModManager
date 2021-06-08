@@ -4,7 +4,7 @@
 // Created          : 02-24-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 05-31-2021
+// Last Modified On : 06-08-2021
 // ***********************************************************************
 // <copyright file="ModService.cs" company="Mario">
 //     Mario
@@ -309,7 +309,23 @@ namespace IronyModManager.Services
             {
                 descriptors.AddRange(workshopDirectoryMods);
             }
-            var diffs = descriptors.Where(p => p.Mod != null && !mods.Any(m => m.DescriptorFile.Equals(p.Mod.DescriptorFile, StringComparison.OrdinalIgnoreCase))).ToList();
+            var filteredDescriptors = new List<IModInstallationResult>();
+            var grouped = descriptors.GroupBy(p => p.ParentDirectory);
+            foreach (var item in grouped)
+            {
+                if (item.Any())
+                {
+                    if (item.All(p => p.IsFile))
+                    {
+                        filteredDescriptors.AddRange(item);
+                    }
+                    else
+                    {
+                        filteredDescriptors.AddRange(item.Where(p => !p.IsFile));
+                    }
+                }
+            }
+            var diffs = filteredDescriptors.Where(p => !mods.Any(m => m.DescriptorFile.Equals(p.Mod.DescriptorFile, StringComparison.OrdinalIgnoreCase) && m.Version.Equals(p.Mod.Version) && m.Name.Equals(p.Mod.Name))).ToList();
             if (diffs.Count > 0)
             {
                 var result = new List<IModInstallationResult>();
@@ -354,15 +370,15 @@ namespace IronyModManager.Services
                     await Task.WhenAll(tasks);
                     Cache.Invalidate(new CacheInvalidateParameters() { Region = ModsCacheRegion, Prefix = game.Type, Keys = new List<string> { GetModsCacheKey(true), GetModsCacheKey(false) } });
                 }
-                if (descriptors.Any(p => p.Invalid))
+                if (filteredDescriptors.Any(p => p.Invalid))
                 {
-                    result.AddRange(descriptors.Where(p => p.Invalid));
+                    result.AddRange(filteredDescriptors.Where(p => p.Invalid));
                 }
                 return result;
             }
-            if (descriptors.Any(p => p.Invalid))
+            if (filteredDescriptors.Any(p => p.Invalid))
             {
-                return descriptors.Where(p => p.Invalid).ToList();
+                return filteredDescriptors.Where(p => p.Invalid).ToList();
             }
             return null;
         }
@@ -598,6 +614,15 @@ namespace IronyModManager.Services
                     result.Invalid = true;
                 }
                 result.Path = path;
+                result.IsFile = File.Exists(path);
+                if (result.IsFile)
+                {
+                    result.ParentDirectory = Path.GetDirectoryName(path);
+                }
+                else
+                {
+                    result.ParentDirectory = path;
+                }
                 mods.Add(result);
             }
             if (files.Any())
