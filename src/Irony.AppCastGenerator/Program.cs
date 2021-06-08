@@ -4,7 +4,7 @@
 // Created          : 09-14-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 12-07-2020
+// Last Modified On : 06-08-2021
 // ***********************************************************************
 // <copyright file="Program.cs" company="NetSparkle">
 //     NetSparkle
@@ -36,7 +36,7 @@ namespace Irony.AppCastGenerator
         /// <summary>
         /// The signature manager
         /// </summary>
-        private static readonly SignatureManager _signatureManager = new SignatureManager();
+        private static readonly SignatureManager _signatureManager = new();
 
         #endregion Fields
 
@@ -133,6 +133,7 @@ namespace Irony.AppCastGenerator
             {
                 var result = _signatureManager.VerifySignature(new FileInfo(opts.BinaryToVerify), opts.Signature);
 
+#pragma warning disable CA2241 // Provide correct arguments to formatting methods
                 if (result)
                 {
                     Console.WriteLine($"Signature valid", Color.Green);
@@ -141,7 +142,7 @@ namespace Irony.AppCastGenerator
                 {
                     Console.WriteLine($"Signature invalid", Color.Red);
                 }
-
+#pragma warning restore CA2241 // Provide correct arguments to formatting methods
                 return;
             }
 

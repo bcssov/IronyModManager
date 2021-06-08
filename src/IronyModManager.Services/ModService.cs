@@ -325,7 +325,7 @@ namespace IronyModManager.Services
                     }
                 }
             }
-            var diffs = filteredDescriptors.Where(p => !mods.Any(m => m.DescriptorFile.Equals(p.Mod.DescriptorFile, StringComparison.OrdinalIgnoreCase) && m.Version.Equals(p.Mod.Version) && m.Name.Equals(p.Mod.Name))).ToList();
+            var diffs = filteredDescriptors.Where(p => p.Mod != null && !mods.Any(m => m.DescriptorFile.Equals(p.Mod.DescriptorFile, StringComparison.OrdinalIgnoreCase) && m.Version.Equals(p.Mod.Version) && m.Name.Equals(p.Mod.Name))).ToList();
             if (diffs.Count > 0)
             {
                 var result = new List<IModInstallationResult>();
