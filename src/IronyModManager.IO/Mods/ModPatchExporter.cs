@@ -4,7 +4,7 @@
 // Created          : 03-31-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 05-31-2021
+// Last Modified On : 06-09-2021
 // ***********************************************************************
 // <copyright file="ModPatchExporter.cs" company="Mario">
 //     Mario
@@ -903,7 +903,7 @@ namespace IronyModManager.IO.Mods
             var backupPath = Path.Combine(path, StateBackup);
             var stateTemp = Path.Combine(path, StateTemp);
 
-            await Task.Factory.StartNew(async () =>
+            await Task.Run(async () =>
             {
                 var retry = new RetryStrategy();
                 var patchState = DIResolver.Get<IPatchState>();

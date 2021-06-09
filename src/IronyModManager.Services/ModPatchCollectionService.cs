@@ -4,7 +4,7 @@
 // Created          : 05-26-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-04-2021
+// Last Modified On : 06-09-2021
 // ***********************************************************************
 // <copyright file="ModPatchCollectionService.cs" company="Mario">
 //     Mario
@@ -312,7 +312,7 @@ namespace IronyModManager.Services
             var fileConflictCache = new Dictionary<string, bool>();
             var fileKeys = indexedDefinitions.GetAllFileKeys();
             var typeAndIdKeys = indexedDefinitions.GetAllTypeAndIdKeys();
-            var overwritten = indexedDefinitions.GetByValueType(ValueType.OverwrittenObject);
+            var overwritten = indexedDefinitions.GetByValueType(ValueType.OverwrittenObject).Concat(indexedDefinitions.GetByValueType(ValueType.OverWrittenObjectWithPreserveFileName));
             var empty = indexedDefinitions.GetByValueType(ValueType.EmptyFile);
 
             double total = fileKeys.Count() + typeAndIdKeys.Count() + overwritten.Count() + empty.Count();
@@ -1762,12 +1762,15 @@ namespace IronyModManager.Services
                             break;
                     }
 
-                    await ModWriter.ApplyModsAsync(new ModWriterParameters()
+                    await Task.Run(() =>
                     {
-                        AppendOnly = true,
-                        TopPriorityMods = new List<IMod>() { mod },
-                        RootDirectory = game.UserDirectory
-                    });
+                        ModWriter.ApplyModsAsync(new ModWriterParameters()
+                        {
+                            AppendOnly = true,
+                            TopPriorityMods = new List<IMod>() { mod },
+                            RootDirectory = game.UserDirectory
+                        }).ConfigureAwait(false);
+                    }).ConfigureAwait(false);
 
                     bool exportResult = false;
                     if (exportPatches.Count > 0)
@@ -1876,6 +1879,16 @@ namespace IronyModManager.Services
             }
             var cachedDiffs = cachedConflicts.Where(p => currentConflicts.Any(a => a.FileCI.Equals(p.FileCI) && a.DefinitionSHA.Equals(p.DefinitionSHA)));
             return cachedDiffs.Count() != cachedConflicts.Count();
+        }
+
+        /// <summary>
+        /// Determines whether [is overwritten type] [the specified value type].
+        /// </summary>
+        /// <param name="valueType">Type of the value.</param>
+        /// <returns><c>true</c> if [is overwritten type] [the specified value type]; otherwise, <c>false</c>.</returns>
+        protected virtual bool IsOverwrittenType(ValueType valueType)
+        {
+            return valueType == ValueType.OverwrittenObject || valueType == ValueType.OverWrittenObjectWithPreserveFileName;
         }
 
         /// <summary>
@@ -2069,7 +2082,7 @@ namespace IronyModManager.Services
                                     Path = item.DiskFile
                                 });
                             }
-                            if (item.ValueType == ValueType.OverwrittenObject)
+                            if (IsOverwrittenType(item.ValueType))
                             {
                                 if (collectionMods == null)
                                 {

@@ -1,12 +1,12 @@
 ﻿// ***********************************************************************
 // Assembly         : IronyModManager.Parser
 // Author           : Mario
-// Created          : 05-25-2020
+// Created          : 06-09-2021
 //
 // Last Modified By : Mario
 // Last Modified On : 06-09-2021
 // ***********************************************************************
-// <copyright file="OverwrittenParser.cs" company="Mario">
+// <copyright file="OverWrittenObjectWithPreserveFileNameParser.cs" company="Mario">
 //     Mario
 // </copyright>
 // <summary></summary>
@@ -16,7 +16,6 @@ using System.Collections.Generic;
 using System.Linq;
 using IronyModManager.Parser.Common.Args;
 using IronyModManager.Parser.Common.Parsers;
-using IronyModManager.Parser.Common.Parsers.Models;
 using IronyModManager.Shared;
 using IronyModManager.Shared.Models;
 using ValueType = IronyModManager.Shared.Models.ValueType;
@@ -24,44 +23,34 @@ using ValueType = IronyModManager.Shared.Models.ValueType;
 namespace IronyModManager.Parser.Games.Stellaris
 {
     /// <summary>
-    /// Class OverwrittenParser.
+    /// Class OverWrittenObjectWithPreserveFileName.
     /// Implements the <see cref="IronyModManager.Parser.Common.Parsers.BaseParser" />
     /// Implements the <see cref="IronyModManager.Parser.Common.Parsers.IGameParser" />
     /// </summary>
     /// <seealso cref="IronyModManager.Parser.Common.Parsers.BaseParser" />
     /// <seealso cref="IronyModManager.Parser.Common.Parsers.IGameParser" />
-    public class OverwrittenParser : BaseParser, IGameParser
+    public class OverWrittenObjectWithPreserveFileNameParser : BaseParser, IGameParser
     {
         #region Fields
 
         /// <summary>
-        /// The starts with checks
+        /// The directory names
         /// </summary>
         private static readonly string[] directoryNames = new string[]
         {
-            Common.Constants.Stellaris.PopJobs, Common.Constants.Stellaris.Traits,
-            Common.Constants.Stellaris.Districts, Common.Constants.Stellaris.PlanetClasses,
-            Common.Constants.Stellaris.PrescriptedCountries, Common.Constants.Stellaris.SpeciesArchetypes,
-            Common.Constants.Stellaris.Buildings, Common.Constants.Stellaris.DiplomaticActions,
-            Common.Constants.Stellaris.Technology, Common.Constants.Stellaris.GovernmentAuthorities,
-            Common.Constants.Stellaris.CountryTypes
+            Common.Constants.Stellaris.StrategicResources
         };
-
-        /// <summary>
-        /// The key type
-        /// </summary>
-        private bool keyType = false;
 
         #endregion Fields
 
         #region Constructors
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="FlagsParser" /> class.
+        /// Initializes a new instance of the <see cref="OverWrittenObjectWithPreserveFileNameParser" /> class.
         /// </summary>
         /// <param name="codeParser">The code parser.</param>
         /// <param name="logger">The logger.</param>
-        public OverwrittenParser(ICodeParser codeParser, ILogger logger) : base(codeParser, logger)
+        public OverWrittenObjectWithPreserveFileNameParser(ICodeParser codeParser, ILogger logger) : base(codeParser, logger)
         {
         }
 
@@ -73,7 +62,7 @@ namespace IronyModManager.Parser.Games.Stellaris
         /// Gets the name of the parser.
         /// </summary>
         /// <value>The name of the parser.</value>
-        public override string ParserName => "Stellaris" + nameof(OverwrittenParser);
+        public override string ParserName => "Stellaris" + nameof(OverWrittenObjectWithPreserveFileNameParser);
 
         /// <summary>
         /// Gets the priority.
@@ -102,11 +91,6 @@ namespace IronyModManager.Parser.Games.Stellaris
         /// <returns>IEnumerable&lt;IDefinition&gt;.</returns>
         public override IEnumerable<IDefinition> Parse(ParserArgs args)
         {
-            keyType = false;
-            if (args.File.StartsWith(Common.Constants.Stellaris.PlanetClasses))
-            {
-                keyType = true;
-            }
             var results = ParseRoot(args);
             if (results?.Count() > 0)
             {
@@ -114,7 +98,7 @@ namespace IronyModManager.Parser.Games.Stellaris
                 {
                     if (item.ValueType == ValueType.Object)
                     {
-                        item.ValueType = ValueType.OverwrittenObject;
+                        item.ValueType = ValueType.OverWrittenObjectWithPreserveFileName;
                     }
                 }
             }
@@ -130,23 +114,6 @@ namespace IronyModManager.Parser.Games.Stellaris
         {
             var directoryName = System.IO.Path.GetDirectoryName(args.File);
             return directoryNames.Any(s => directoryName.Equals(s, StringComparison.OrdinalIgnoreCase));
-        }
-
-        /// <summary>
-        /// Evals the element for identifier.
-        /// </summary>
-        /// <param name="value">The value.</param>
-        /// <returns>System.String.</returns>
-        protected override string EvalElementForId(IScriptElement value)
-        {
-            if (keyType)
-            {
-                if (Common.Constants.Scripts.GenericKeys.Any(s => s.Equals(value.Key, StringComparison.OrdinalIgnoreCase)))
-                {
-                    return value.Value;
-                }
-            }
-            return base.EvalElementForId(value);
         }
 
         #endregion Methods

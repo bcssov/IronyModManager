@@ -4,7 +4,7 @@
 // Created          : 03-18-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 05-26-2021
+// Last Modified On : 06-09-2021
 // ***********************************************************************
 // <copyright file="MainConflictSolverViewModel.cs" company="Mario">
 //     Mario
@@ -19,6 +19,7 @@ using System.Reactive;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
+using Avalonia.Collections;
 using Avalonia.Threading;
 using IronyModManager.Common;
 using IronyModManager.Common.Events;
@@ -216,7 +217,7 @@ namespace IronyModManager.ViewModels
         /// Gets or sets the hierarchal conflicts.
         /// </summary>
         /// <value>The hierarchal conflicts.</value>
-        public virtual IEnumerable<IHierarchicalDefinitions> HierarchalConflicts { get; protected set; }
+        public virtual AvaloniaList<IHierarchicalDefinitions> HierarchalConflicts { get; protected set; }
 
         /// <summary>
         /// Gets or sets the ignore.
@@ -505,7 +506,7 @@ namespace IronyModManager.ViewModels
             PreviousConflictIndex = null;
             if (conflictResult != null && conflictResult.Conflicts != null)
             {
-                var conflicts = conflictResult.Conflicts.GetHierarchicalDefinitions().ToList();
+                var conflicts = conflictResult.Conflicts.GetHierarchicalDefinitions().ToAvaloniaList();
 
                 var resolved = new List<IHierarchicalDefinitions>();
                 if (conflictResult.ResolvedConflicts != null)
@@ -545,8 +546,8 @@ namespace IronyModManager.ViewModels
                             }
                         }
                     }
-                    conflicts.RemoveAll(p => p.Children == null || p.Children.Count == 0);
                 }
+                conflicts.RemoveAll(conflicts.Where(p => p.Children == null || p.Children.Count == 0).ToList());
                 var invalid = conflictResult.AllConflicts.GetByValueType(ValueType.Invalid);
                 if (invalid?.Count() > 0)
                 {
@@ -576,7 +577,7 @@ namespace IronyModManager.ViewModels
                     invalidDef.Children = children;
                     conflicts.Add(invalidDef);
                 }
-                HierarchalConflicts = conflicts.ToObservableCollection();
+                HierarchalConflicts = conflicts;
                 NumberOfConflictsCaption = Smart.Format(localizationManager.GetResource(LocalizationResources.Conflict_Solver.ConflictCount), new { Count = conflicts.Where(p => p.Key != InvalidKey).SelectMany(p => p.Children).Count() });
                 if (HierarchalConflicts.Any() && SelectedParentConflict == null)
                 {
@@ -1106,9 +1107,9 @@ namespace IronyModManager.ViewModels
                 }
                 if (SelectedConflict == null)
                 {
-                    if (parentIdx > (HierarchalConflicts.Count() - 1))
+                    if (parentIdx > (HierarchalConflicts.Count - 1))
                     {
-                        parentIdx = HierarchalConflicts.Count() - 1;
+                        parentIdx = HierarchalConflicts.Count - 1;
                     }
                     else if (parentIdx < 0)
                     {

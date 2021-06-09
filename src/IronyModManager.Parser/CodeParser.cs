@@ -4,7 +4,7 @@
 // Created          : 02-22-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-16-2021
+// Last Modified On : 06-09-2021
 // ***********************************************************************
 // <copyright file="CodeParser.cs" company="Mario">
 //     Mario
@@ -42,7 +42,7 @@ namespace IronyModManager.Parser
         /// <summary>
         /// The cleaner conversion map
         /// </summary>
-        protected static readonly Dictionary<string, string> cleanerConversionMap = new Dictionary<string, string>()
+        protected static readonly Dictionary<string, string> cleanerConversionMap = new()
         {
             { $" {Common.Constants.Scripts.EqualsOperator}", Common.Constants.Scripts.EqualsOperator.ToString() },
             { $"{Common.Constants.Scripts.EqualsOperator} ", Common.Constants.Scripts.EqualsOperator.ToString() },
@@ -55,7 +55,7 @@ namespace IronyModManager.Parser
         /// <summary>
         /// The code terminator map
         /// </summary>
-        protected static readonly Dictionary<string, string> codeTerminatorMap = new Dictionary<string, string>()
+        protected static readonly Dictionary<string, string> codeTerminatorMap = new()
         {
             { $"{Common.Constants.Scripts.OpenObject}", $" {Common.Constants.Scripts.OpenObject} " },
             { $"{Common.Constants.Scripts.CloseObject}", $" {Common.Constants.Scripts.CloseObject} " }
@@ -144,7 +144,7 @@ namespace IronyModManager.Parser
                         {
                             sb.Append($"{new string(' ', indent * 4)}{element.Key} ");
                         }
-                        if (element.Values.Count() > 0)
+                        if (element.Values.Any())
                         {
                             foreach (var value in element.Values)
                             {
@@ -263,7 +263,7 @@ namespace IronyModManager.Parser
                 var sb = new StringBuilder();
                 var split = line.Split(Common.Constants.Scripts.ScriptCommentId);
                 var counter = 0;
-                var count = split.Count();
+                var count = split.Length;
                 var quoteCount = 0;
                 foreach (var item in split)
                 {
@@ -326,10 +326,10 @@ namespace IronyModManager.Parser
             if (!string.IsNullOrWhiteSpace(elKey.Operator))
             {
                 elOperator = elKey.Operator[0];
-                if (elKey.Operator.Count() > 1)
+                if (elKey.Operator.Length > 1)
                 {
                     // Move back index in case we're seing greater or equal to kind of operators
-                    index -= elKey.Operator.Count() - 1;
+                    index -= elKey.Operator.Length - 1;
                 }
             }
             else
@@ -437,7 +437,7 @@ namespace IronyModManager.Parser
         protected char? GetElementCharacter(IList<char> code, int index)
         {
             char? character = null;
-            if (index < code.Count())
+            if (index < code.Count)
             {
                 character = code[index];
             }
@@ -455,7 +455,7 @@ namespace IronyModManager.Parser
         {
             var counter = 0;
             var values = new List<IScriptElement>();
-            for (int i = index; i < code.Count(); i++)
+            for (int i = index; i < code.Count; i++)
             {
                 var prevIndex = index;
                 var character = GetElementCharacter(code, i);
@@ -523,7 +523,7 @@ namespace IronyModManager.Parser
             var openQuote = false;
             var operatorOpened = false;
             var squareBracketOpen = false;
-            for (int i = index; i < code.Count(); i++)
+            for (int i = index; i < code.Count; i++)
             {
                 var character = GetElementCharacter(code, i);
                 if (character == null)
@@ -637,7 +637,7 @@ namespace IronyModManager.Parser
         /// <param name="index">The index.</param>
         protected void IgnoreElementWhiteSpace(List<char> code, ref int index)
         {
-            for (int i = index; i < code.Count(); i++)
+            for (int i = index; i < code.Count; i++)
             {
                 var character = GetElementCharacter(code, i);
                 if (character == null || char.IsWhiteSpace(character.GetValueOrDefault()))
@@ -663,7 +663,7 @@ namespace IronyModManager.Parser
             var validCodeLines = lines.Where(p => !string.IsNullOrWhiteSpace(p) && !p.Trim().StartsWith(Common.Constants.Scripts.ScriptCommentId.ToString()))
                 .Select(p => FormatCodeTerminators(CleanComments(p)));
             var code = string.Join(Environment.NewLine, validCodeLines).ToList();
-            for (int i = 0; i < code.Count(); i++)
+            for (int i = 0; i < code.Count; i++)
             {
                 var element = GetElement(code, ref i);
                 if (element != null)

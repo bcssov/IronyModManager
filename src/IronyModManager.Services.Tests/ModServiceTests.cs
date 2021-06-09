@@ -657,7 +657,7 @@ namespace IronyModManager.Services.Tests
             {
                 DescriptorFile = "mod/fake.mod",
                 IsLocked = true
-            }}); ;
+            }});
             result.Count.Should().BeGreaterThan(0);
             lockSet.Should().BeTrue();
         }

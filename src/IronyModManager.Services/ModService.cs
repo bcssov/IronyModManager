@@ -4,7 +4,7 @@
 // Created          : 02-24-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-08-2021
+// Last Modified On : 06-09-2021
 // ***********************************************************************
 // <copyright file="ModService.cs" company="Mario">
 //     Mario
@@ -360,7 +360,7 @@ namespace IronyModManager.Services
                             RootDirectory = game.UserDirectory,
                             Path = localDiff.DescriptorFile,
                             LockDescriptor = shouldLock
-                        }, IsPatchModInternal(localDiff)); ;
+                        }, IsPatchModInternal(localDiff));
                     }));
                     installResult.Installed = true;
                     result.Add(installResult);
