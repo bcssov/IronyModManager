@@ -81,7 +81,7 @@
         "PreferredParser": "DefaultParser"
     }, {
         "DirectoryPath": "common\\country_types",
-        "PreferredParser": "DefaultParser"
+        "PreferredParser": "StellarisOverwrittenParser"
     }, {
         "DirectoryPath": "common\\crisis_levels",
         "PreferredParser": "DefaultParser"
@@ -330,7 +330,7 @@
         "PreferredParser": "DefaultParser"
     }, {
         "DirectoryPath": "common\\strategic_resources",
-        "PreferredParser": "DefaultParser"
+        "PreferredParser": "StellarisOverwrittenParser"
     }, {
         "DirectoryPath": "common\\subjects",
         "PreferredParser": "DefaultParser"

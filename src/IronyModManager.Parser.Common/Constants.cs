@@ -4,7 +4,7 @@
 // Created          : 02-16-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 05-29-2021
+// Last Modified On : 06-09-2021
 // ***********************************************************************
 // <copyright file="Constants.cs" company="Mario">
 //     Mario
@@ -363,6 +363,11 @@ namespace IronyModManager.Parser.Common
             /// The start screen messages
             /// </summary>
             public static readonly string StartScreenMessages = MergePath(CommonPath, "start_screen_messages");
+
+            /// <summary>
+            /// The strategic resources
+            /// </summary>
+            public static readonly string StrategicResources = MergePath(CommonPath, "strategic_resources");
 
             /// <summary>
             /// The technology
