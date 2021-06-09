@@ -1107,9 +1107,9 @@ namespace IronyModManager.ViewModels
                 }
                 if (SelectedConflict == null)
                 {
-                    if (parentIdx > (HierarchalConflicts.Count() - 1))
+                    if (parentIdx > (HierarchalConflicts.Count - 1))
                     {
-                        parentIdx = HierarchalConflicts.Count() - 1;
+                        parentIdx = HierarchalConflicts.Count - 1;
                     }
                     else if (parentIdx < 0)
                     {

@@ -260,7 +260,7 @@ namespace IronyModManager.IO.Mods.InfoProviders
             var length = 2;
             if (hash.Length < 2)
             {
-                length = hash.Length;
+                length = hash.Length - 1;
             }
             if (takeLeadingFileName)
             {
@@ -280,9 +280,9 @@ namespace IronyModManager.IO.Mods.InfoProviders
             var length = 6;
             if (fileName.Length < 6)
             {
-                length = fileName.Length;
+                length = fileName.Length - 1;
             }
-            return fileName.Substring(0, 6);
+            return fileName.Substring(0, length);
         }
 
         /// <summary>
