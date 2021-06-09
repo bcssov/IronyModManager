@@ -4,11 +4,16 @@
 		<title>Irony Mod Manager</title>
 		<language>en</language>
 		<item>
-			<title>1.17.80</title>
+			<title>1.17.88</title>
 			<description>RELEASE NOTES:
 This is a significant upgrade to Irony. Please backup your collections made with previous versions of Irony.
 
-* Quick fix which prevented Irony from notifying users that game exe is not set for conflict solver analysis
+* Bump dependencies
+* Irony won't write path info for patch mod descriptors anymore (in mod folder)
+* Irony will now refresh descriptors automatically if mod title or version have been changed
+* Fix mod detection bug when a zip and folder based structure were present in same directory
+* Treat strategic resources as pop_jobs (Stellaris)
+* Speed up conflict resolving/ignoring logic
 
 CHANGES FROM v1.16:
 * Updated dependencies
@@ -18,15 +23,20 @@ CHANGES FROM v1.16:
 * Country types are treated in the same manner as pop_jobs (for Stellaris)
 * Add export mods feature along with load order
 * Various improvements and fixes</description>
-			<pubDate>Fri, 04 Jun 2021 16:16:29 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.17.80/osx-x64.rar" sparkle:version="1.17.80.10539" sparkle:shortVersionString="1.17.80" length="69347682" sparkle:os="osx" type="application/vnd.rar" sparkle:signature="Iutg8RkJvgsqB4V6A2vhdETqVNPenqQ7jk6MUm4NLj9TDkibOB3YeisGB//lQRnU2UBLGjnBXNI67dDO5WftAQ=="/>
+			<pubDate>Wed, 09 Jun 2021 08:32:03 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.17.88/osx-x64.rar" sparkle:version="1.17.88.43529" sparkle:shortVersionString="1.17.88" length="69371100" sparkle:os="osx" type="application/vnd.rar" sparkle:signature="/0bDDDR7A3UTArKl9xAaQDwh81NonRtKI/7nK/p719q1j/vbBgMiRRhi2rLq70wIQwg+ZQ9TefyAtLMSHILaBg=="/>
 		</item>
 		<item>
-			<title>1.17.80</title>
+			<title>1.17.88</title>
 			<description>RELEASE NOTES:
 This is a significant upgrade to Irony. Please backup your collections made with previous versions of Irony.
 
-* Quick fix which prevented Irony from notifying users that game exe is not set for conflict solver analysis
+* Bump dependencies
+* Irony won't write path info for patch mod descriptors anymore (in mod folder)
+* Irony will now refresh descriptors automatically if mod title or version have been changed
+* Fix mod detection bug when a zip and folder based structure were present in same directory
+* Treat strategic resources as pop_jobs (Stellaris)
+* Speed up conflict resolving/ignoring logic
 
 CHANGES FROM v1.16:
 * Updated dependencies
@@ -36,15 +46,20 @@ CHANGES FROM v1.16:
 * Country types are treated in the same manner as pop_jobs (for Stellaris)
 * Add export mods feature along with load order
 * Various improvements and fixes</description>
-			<pubDate>Fri, 04 Jun 2021 16:16:37 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.17.80/win-x64-setup.rar" sparkle:version="1.17.80.10539" sparkle:shortVersionString="1.17.80" length="59763323" sparkle:os="windows" type="application/vnd.rar" sparkle:signature="lxI2Pc796vIZiufMOoORMo3ZYsEPAWFmEMcZfkuOHpwfqsAWuDZxaI98/3GhLgJSHWJ3yxQRXqAgAvnQS/m7CA=="/>
+			<pubDate>Wed, 09 Jun 2021 08:32:10 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.17.88/win-x64-setup.rar" sparkle:version="1.17.88.43529" sparkle:shortVersionString="1.17.88" length="60841831" sparkle:os="windows" type="application/vnd.rar" sparkle:signature="oVq2xOpqVvYJhQSjlKpRO2TyLnDKb55c993tDJLsdmg/ahGNhn6QAWNmoZqzB8NYIbtCDzeTdnAQb7v/n20yBQ=="/>
 		</item>
 		<item>
-			<title>1.17.80</title>
+			<title>1.17.88</title>
 			<description>RELEASE NOTES:
 This is a significant upgrade to Irony. Please backup your collections made with previous versions of Irony.
 
-* Quick fix which prevented Irony from notifying users that game exe is not set for conflict solver analysis
+* Bump dependencies
+* Irony won't write path info for patch mod descriptors anymore (in mod folder)
+* Irony will now refresh descriptors automatically if mod title or version have been changed
+* Fix mod detection bug when a zip and folder based structure were present in same directory
+* Treat strategic resources as pop_jobs (Stellaris)
+* Speed up conflict resolving/ignoring logic
 
 CHANGES FROM v1.16:
 * Updated dependencies
@@ -54,15 +69,20 @@ CHANGES FROM v1.16:
 * Country types are treated in the same manner as pop_jobs (for Stellaris)
 * Add export mods feature along with load order
 * Various improvements and fixes</description>
-			<pubDate>Fri, 04 Jun 2021 16:16:33 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.17.80/win-x64.rar" sparkle:version="1.17.80.10539" sparkle:shortVersionString="1.17.80" length="72027244" sparkle:os="windows" type="application/vnd.rar" sparkle:signature="2vYFGPIAZZ6VL7l67DB/H7XCfkdGJPiav+iO0HhuyLofDeF1veyS+a3H7Gyh9aoUMz7Qh3xPcvmq71tNlwpPDw=="/>
+			<pubDate>Wed, 09 Jun 2021 08:32:06 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.17.88/win-x64.rar" sparkle:version="1.17.88.43529" sparkle:shortVersionString="1.17.88" length="73237394" sparkle:os="windows" type="application/vnd.rar" sparkle:signature="t1XgjUC4OubHrz4VmJ27+KBDAl2IbC+xHz6oDSMeF8bj3L5SuE+JRFSGD78Ul/SM1/9pwzB0wE8CLjF5uJbuBA=="/>
 		</item>
 		<item>
-			<title>1.17.80</title>
+			<title>1.17.88</title>
 			<description>RELEASE NOTES:
 This is a significant upgrade to Irony. Please backup your collections made with previous versions of Irony.
 
-* Quick fix which prevented Irony from notifying users that game exe is not set for conflict solver analysis
+* Bump dependencies
+* Irony won't write path info for patch mod descriptors anymore (in mod folder)
+* Irony will now refresh descriptors automatically if mod title or version have been changed
+* Fix mod detection bug when a zip and folder based structure were present in same directory
+* Treat strategic resources as pop_jobs (Stellaris)
+* Speed up conflict resolving/ignoring logic
 
 CHANGES FROM v1.16:
 * Updated dependencies
@@ -72,8 +92,8 @@ CHANGES FROM v1.16:
 * Country types are treated in the same manner as pop_jobs (for Stellaris)
 * Add export mods feature along with load order
 * Various improvements and fixes</description>
-			<pubDate>Fri, 04 Jun 2021 16:16:26 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.17.80/linux-x64.zip" sparkle:version="1.17.80.10539" sparkle:shortVersionString="1.17.80" length="85803920" sparkle:os="linux" type="application/zip" sparkle:signature="p6pB5Cz/nETQmNOrU96eyF5lGY+R9ga8MjH4oZYGzeJMU/43ifmnfmGrl0KBlbnGDGUlkfFCIn6HZlcjB8EcCA=="/>
+			<pubDate>Wed, 09 Jun 2021 08:31:59 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.17.88/linux-x64.zip" sparkle:version="1.17.88.43529" sparkle:shortVersionString="1.17.88" length="85815028" sparkle:os="linux" type="application/zip" sparkle:signature="RYLtQgpzLx8chUzG0LBbo8aYEtVh+C7h6STnUcDN0Rvv3kqaFk0CgtI1Iv38oS0xoAanDdiJGyoIGmJCySWVAQ=="/>
 		</item>
 	</channel>
 </rss>
