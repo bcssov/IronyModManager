@@ -212,21 +212,6 @@ namespace IronyModManager.Parser.Tests
             parser.CanParse(args).Should().BeTrue();
         }
 
-        /// <summary>
-        /// Defines the test method CanParse_strategic_resources_should_be_true.
-        /// </summary>
-        [Fact]
-        public void CanParse_strategic_resources_should_be_true()
-        {
-            var args = new CanParseArgs()
-            {
-                File = "common\\strategic_resources\\t.txt",
-                GameType = "Stellaris"
-            };
-            var parser = new OverwrittenParser(new CodeParser(new Logger()), null);
-            parser.CanParse(args).Should().BeTrue();
-        }
-
 
         /// <summary>
         /// Defines the test method Parse_should_yield_results.
