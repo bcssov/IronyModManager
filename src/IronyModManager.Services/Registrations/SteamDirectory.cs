@@ -4,7 +4,7 @@
 // Created          : 02-24-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 05-31-2021
+// Last Modified On : 06-12-2021
 // ***********************************************************************
 // <copyright file="SteamDirectory.cs" company="Mario">
 //     Mario
@@ -41,6 +41,11 @@ namespace IronyModManager.Services.Registrations
         private const string InstallDirId = "installdir";
 
         /// <summary>
+        /// The library folder path identifier
+        /// </summary>
+        private const string LibraryFolderPathId = "\"path\"";
+
+        /// <summary>
         /// The steam apps directory
         /// </summary>
         private const string SteamAppsDirectory = "steamapps";
@@ -64,6 +69,11 @@ namespace IronyModManager.Services.Registrations
         /// The cached paths
         /// </summary>
         private static readonly Dictionary<string, List<string>> cachedPaths = new();
+
+        /// <summary>
+        /// The library folder VDF
+        /// </summary>
+        private static readonly string LibraryFolderVDF = PathHelper.MergePaths("config", "libraryfolders.vdf");
 
         /// <summary>
         /// The quotes regex
@@ -126,7 +136,8 @@ namespace IronyModManager.Services.Registrations
                     }
                 }
                 var vdfPath = Path.Combine(steamInstallDirectory, SteamConfigVDF);
-                var paths = GetVdf(vdfPath);
+                var libraryFolderVDF = Path.Combine(steamInstallDirectory, LibraryFolderVDF);
+                var paths = GetVdf(appId.ToString(), vdfPath, libraryFolderVDF);
                 foreach (var path in paths)
                 {
                     if (File.Exists(Path.Combine(path, SteamAppsDirectory, acfFile)))
@@ -180,7 +191,8 @@ namespace IronyModManager.Services.Registrations
                     result.Add(Path.Combine(steamInstallDirectory, SteamWorkshopDirectory, appId.ToString()));
                 }
                 var vdfPath = Path.Combine(steamInstallDirectory, SteamConfigVDF);
-                var paths = GetVdf(vdfPath);
+                var libraryFolderVDF = Path.Combine(steamInstallDirectory, LibraryFolderVDF);
+                var paths = GetVdf(appId.ToString(), vdfPath, libraryFolderVDF);
                 foreach (var path in paths)
                 {
                     if (Directory.Exists(Path.Combine(path, SteamWorkshopDirectory, appId.ToString())))
@@ -266,31 +278,34 @@ namespace IronyModManager.Services.Registrations
         /// <summary>
         /// Gets the VDF.
         /// </summary>
-        /// <param name="path">The path.</param>
+        /// <param name="cacheKey">The cache key.</param>
+        /// <param name="vdfPath">The path.</param>
+        /// <param name="libraryFolderPath">The library folder path.</param>
         /// <returns>List&lt;System.String&gt;.</returns>
-        private static List<string> GetVdf(string path)
+        private static List<string> GetVdf(string cacheKey, string vdfPath, string libraryFolderPath)
         {
-            if (cachedPaths.ContainsKey(path))
+            static string CleanPath(string path)
             {
-                return cachedPaths[path];
+                path = ReplaceMultipleCharacters(path, '\\');
+                path = ReplaceMultipleCharacters(path, '/');
+                return path;
+            }
+            static string ReplaceMultipleCharacters(string text, char delimiter)
+            {
+                return string.Join(delimiter, text.Split(delimiter, StringSplitOptions.RemoveEmptyEntries));
+            }
+
+            if (cachedPaths.ContainsKey(cacheKey))
+            {
+                return cachedPaths[cacheKey];
             }
             else
             {
-                if (File.Exists(path))
+                var paths = new List<string>();
+                if (File.Exists(vdfPath))
                 {
-                    static string CleanPath(string path)
-                    {
-                        path = ReplaceMultipleCharacters(path, '\\');
-                        path = ReplaceMultipleCharacters(path, '/');
-                        return path;
-                    }
-                    static string ReplaceMultipleCharacters(string text, char delimiter)
-                    {
-                        return string.Join(delimiter, text.Split(delimiter, StringSplitOptions.RemoveEmptyEntries));
-                    }
-                    var paths = new List<string>();
                     // I know there's a vdf parser out there but I see no need to add another dependency to look for a simple string
-                    var lines = File.ReadAllLines(path);
+                    var lines = File.ReadAllLines(vdfPath);
                     foreach (var line in lines)
                     {
                         if (line.Contains(SteamVDFBaseInstallFolderId, StringComparison.OrdinalIgnoreCase))
@@ -298,15 +313,35 @@ namespace IronyModManager.Services.Registrations
                             var directory = CleanPath(FindPath(line));
                             if (Directory.Exists(directory))
                             {
-                                paths.Add(directory);
+                                if (!paths.Contains(directory))
+                                {
+                                    paths.Add(directory);
+                                }
                             }
                         }
                     }
-                    cachedPaths.Add(path, paths);
-                    return paths;
                 }
+                if (File.Exists(libraryFolderPath))
+                {
+                    var lines = File.ReadAllLines(libraryFolderPath);
+                    foreach (var line in lines)
+                    {
+                        if (line.ReplaceTabs().Trim().Contains(LibraryFolderPathId, StringComparison.OrdinalIgnoreCase))
+                        {
+                            var directory = CleanPath(FindPath(line));
+                            if (Directory.Exists(directory))
+                            {
+                                if (!paths.Contains(directory))
+                                {
+                                    paths.Add(directory);
+                                }
+                            }
+                        }
+                    }
+                }
+                cachedPaths.Add(cacheKey, paths);
+                return paths;
             }
-            return new List<string>();
         }
 
         /// <summary>
