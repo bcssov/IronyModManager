@@ -311,9 +311,10 @@ namespace IronyModManager.Services
                 try
                 {
                     var data = JsonConvert.DeserializeObject<Models.ContinueGame>(string.Join(Environment.NewLine, parsed.FirstOrDefault().Content));
-                    var fileName = string.IsNullOrWhiteSpace(data.Filename) ? data.Title : data.Filename;
-                    var path = Path.GetFileNameWithoutExtension(fileName);
-                    var saveDir = Path.GetDirectoryName(fileName).Replace(saveGames, string.Empty).StandardizeDirectorySeparator();
+                    var path = string.IsNullOrWhiteSpace(data.Filename) ? data.Title : data.Filename;
+                    var fileWithoutExtension = Path.GetFileNameWithoutExtension(path);
+                    var fileWithExtension = Path.GetFileName(path);
+                    var saveDir = Path.GetDirectoryName(path).Replace(saveGames, string.Empty).StandardizeDirectorySeparator();
                     var files = new List<string>();
                     if (!string.IsNullOrWhiteSpace(saveDir))
                     {
@@ -345,7 +346,7 @@ namespace IronyModManager.Services
                             }
                         }
                     }
-                    return files.Any(p => Path.GetFileNameWithoutExtension(p).Equals(path, StringComparison.OrdinalIgnoreCase) || Path.GetFileNameWithoutExtension(fileName).Equals(path, StringComparison.OrdinalIgnoreCase));
+                    return files.Any(p => Path.GetFileNameWithoutExtension(p).Equals(fileWithoutExtension, StringComparison.OrdinalIgnoreCase) || Path.GetFileNameWithoutExtension(p).Equals(fileWithExtension, StringComparison.OrdinalIgnoreCase));
                 }
                 catch
                 {
