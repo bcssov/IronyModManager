@@ -94,7 +94,7 @@ license Type:Apache-2.0
 
 #########################
 Package:CodexMicroORM.Core
-Version:0.9.9
+Version:0.9.10
 project URL:https://github.com/codexguy/CodexMicroORM
 Description:A high performance, low code alternative to ORM's such as Entity Framework, offers intelligent database mapping to your existing CLR objects with minimal effort. Visit "Design Goals" on GitHub to see more rationale and guidance.
 licenseUrl:https://licenses.nuget.org/Apache-2.0
@@ -141,6 +141,22 @@ Description:A very extensive set of extension methods that allow you to more nat
       Supports the unit test frameworks MSTest, MSTest2, Gallio, NUnit, XUnit, MBUnit, MSpec, and NSpec.
 licenseUrl:https://licenses.nuget.org/Apache-2.0
 license Type:Apache-2.0
+
+#########################
+Package:Gameloop.Vdf
+Version:0.6.1
+project URL:https://github.com/shravan2x/Gameloop.Vdf
+Description:A high-performance framework for the Valve Data Format, also called KeyValues.
+licenseUrl:https://licenses.nuget.org/MIT
+license Type:MIT
+
+#########################
+Package:Gameloop.Vdf.JsonConverter
+Version:0.2.1
+project URL:https://github.com/shravan2x/Gameloop.Vdf.JsonConverter
+Description:VDF-JSON converters for Vdf.NET.
+licenseUrl:https://licenses.nuget.org/MIT
+license Type:MIT
 
 #########################
 Package:info.lundin.math.dll
@@ -240,7 +256,7 @@ license Type:BSD 3-Clause License
 
 #########################
 Package:Nerdbank.GitVersioning
-Version:3.4.203
+Version:3.3.37
 project URL:https://github.com/dotnet/Nerdbank.GitVersioning
 Description:Stamps your assemblies with semver 2.0 compliant git commit specific version information and provides NuGet versioning information as well.
 licenseUrl:https://licenses.nuget.org/MIT
@@ -336,7 +352,7 @@ license Type:Apache License 2.0
 
 #########################
 Package:SharpCompress
-Version:0.28.2
+Version:0.28.3
 project URL:https://github.com/adamhathcock/sharpcompress
 Description:SharpCompress is a compression library for NET Standard 2.0/2.1//NET 4.6 that can unrar, decompress 7zip, decompress xz, zip/unzip, tar/untar lzip/unlzip, bzip2/unbzip2 and gzip/ungzip with forward-only reading and file random access APIs. Write support for zip/tar/bzip2/gzip is implemented.
 licenseUrl:https://github.com/adamhathcock/sharpcompress/blob/master/LICENSE.txt
