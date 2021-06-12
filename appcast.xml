@@ -4,16 +4,12 @@
 		<title>Irony Mod Manager</title>
 		<language>en</language>
 		<item>
-			<title>1.17.88</title>
+			<title>1.17.92</title>
 			<description>RELEASE NOTES:
 This is a significant upgrade to Irony. Please backup your collections made with previous versions of Irony.
 
-* Bump dependencies
-* Irony won't write path info for patch mod descriptors anymore (in mod folder)
-* Irony will now refresh descriptors automatically if mod title or version have been changed
-* Fix mod detection bug when a zip and folder based structure were present in same directory
-* Treat strategic resources as pop_jobs (Stellaris)
-* Speed up conflict resolving/ignoring logic
+* Fix resume game sometimes not being enabled
+* Fix Irony not detecting Steam libraries due to steam changing where its other library paths are stored?
 
 CHANGES FROM v1.16:
 * Updated dependencies
@@ -23,20 +19,16 @@ CHANGES FROM v1.16:
 * Country types are treated in the same manner as pop_jobs (for Stellaris)
 * Add export mods feature along with load order
 * Various improvements and fixes</description>
-			<pubDate>Wed, 09 Jun 2021 08:32:03 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.17.88/osx-x64.rar" sparkle:version="1.17.88.43529" sparkle:shortVersionString="1.17.88" length="69371100" sparkle:os="osx" type="application/vnd.rar" sparkle:signature="/0bDDDR7A3UTArKl9xAaQDwh81NonRtKI/7nK/p719q1j/vbBgMiRRhi2rLq70wIQwg+ZQ9TefyAtLMSHILaBg=="/>
+			<pubDate>Sat, 12 Jun 2021 21:00:20 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.17.92/osx-x64.rar" sparkle:version="1.17.92.34117" sparkle:shortVersionString="1.17.92" length="69394814" sparkle:os="osx" type="application/vnd.rar" sparkle:signature="ToDRlM1onAz1/tXORKVMyP7nmw4SfDp52iqNIYWGlctaSU0Nng6HB2R/PntapO0qwJ67DHgWlGLCJBIDfr9eAQ=="/>
 		</item>
 		<item>
-			<title>1.17.88</title>
+			<title>1.17.92</title>
 			<description>RELEASE NOTES:
 This is a significant upgrade to Irony. Please backup your collections made with previous versions of Irony.
 
-* Bump dependencies
-* Irony won't write path info for patch mod descriptors anymore (in mod folder)
-* Irony will now refresh descriptors automatically if mod title or version have been changed
-* Fix mod detection bug when a zip and folder based structure were present in same directory
-* Treat strategic resources as pop_jobs (Stellaris)
-* Speed up conflict resolving/ignoring logic
+* Fix resume game sometimes not being enabled
+* Fix Irony not detecting Steam libraries due to steam changing where its other library paths are stored?
 
 CHANGES FROM v1.16:
 * Updated dependencies
@@ -46,20 +38,16 @@ CHANGES FROM v1.16:
 * Country types are treated in the same manner as pop_jobs (for Stellaris)
 * Add export mods feature along with load order
 * Various improvements and fixes</description>
-			<pubDate>Wed, 09 Jun 2021 08:32:10 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.17.88/win-x64-setup.rar" sparkle:version="1.17.88.43529" sparkle:shortVersionString="1.17.88" length="60841831" sparkle:os="windows" type="application/vnd.rar" sparkle:signature="oVq2xOpqVvYJhQSjlKpRO2TyLnDKb55c993tDJLsdmg/ahGNhn6QAWNmoZqzB8NYIbtCDzeTdnAQb7v/n20yBQ=="/>
+			<pubDate>Sat, 12 Jun 2021 21:00:29 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.17.92/win-x64-setup.rar" sparkle:version="1.17.92.34117" sparkle:shortVersionString="1.17.92" length="60856476" sparkle:os="windows" type="application/vnd.rar" sparkle:signature="xXkPwC1oyhAEWkaudw0qci2dkkN38D2nd3ndqjhCdR3098+EwBA9NFzlzERs7RakOKnkhyorMZd/ekntBKVmBw=="/>
 		</item>
 		<item>
-			<title>1.17.88</title>
+			<title>1.17.92</title>
 			<description>RELEASE NOTES:
 This is a significant upgrade to Irony. Please backup your collections made with previous versions of Irony.
 
-* Bump dependencies
-* Irony won't write path info for patch mod descriptors anymore (in mod folder)
-* Irony will now refresh descriptors automatically if mod title or version have been changed
-* Fix mod detection bug when a zip and folder based structure were present in same directory
-* Treat strategic resources as pop_jobs (Stellaris)
-* Speed up conflict resolving/ignoring logic
+* Fix resume game sometimes not being enabled
+* Fix Irony not detecting Steam libraries due to steam changing where its other library paths are stored?
 
 CHANGES FROM v1.16:
 * Updated dependencies
@@ -69,20 +57,16 @@ CHANGES FROM v1.16:
 * Country types are treated in the same manner as pop_jobs (for Stellaris)
 * Add export mods feature along with load order
 * Various improvements and fixes</description>
-			<pubDate>Wed, 09 Jun 2021 08:32:06 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.17.88/win-x64.rar" sparkle:version="1.17.88.43529" sparkle:shortVersionString="1.17.88" length="73237394" sparkle:os="windows" type="application/vnd.rar" sparkle:signature="t1XgjUC4OubHrz4VmJ27+KBDAl2IbC+xHz6oDSMeF8bj3L5SuE+JRFSGD78Ul/SM1/9pwzB0wE8CLjF5uJbuBA=="/>
+			<pubDate>Sat, 12 Jun 2021 21:00:24 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.17.92/win-x64.rar" sparkle:version="1.17.92.34117" sparkle:shortVersionString="1.17.92" length="73261080" sparkle:os="windows" type="application/vnd.rar" sparkle:signature="q871d1LiAH6nuANChQQS+U5SUVdwzBgV4dHsX+USfQeunY4ZwJWkcxgSo6w4z+6i8eu+mmz9fdXIHJ2uuWD3Aw=="/>
 		</item>
 		<item>
-			<title>1.17.88</title>
+			<title>1.17.92</title>
 			<description>RELEASE NOTES:
 This is a significant upgrade to Irony. Please backup your collections made with previous versions of Irony.
 
-* Bump dependencies
-* Irony won't write path info for patch mod descriptors anymore (in mod folder)
-* Irony will now refresh descriptors automatically if mod title or version have been changed
-* Fix mod detection bug when a zip and folder based structure were present in same directory
-* Treat strategic resources as pop_jobs (Stellaris)
-* Speed up conflict resolving/ignoring logic
+* Fix resume game sometimes not being enabled
+* Fix Irony not detecting Steam libraries due to steam changing where its other library paths are stored?
 
 CHANGES FROM v1.16:
 * Updated dependencies
@@ -92,8 +76,8 @@ CHANGES FROM v1.16:
 * Country types are treated in the same manner as pop_jobs (for Stellaris)
 * Add export mods feature along with load order
 * Various improvements and fixes</description>
-			<pubDate>Wed, 09 Jun 2021 08:31:59 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.17.88/linux-x64.zip" sparkle:version="1.17.88.43529" sparkle:shortVersionString="1.17.88" length="85815028" sparkle:os="linux" type="application/zip" sparkle:signature="RYLtQgpzLx8chUzG0LBbo8aYEtVh+C7h6STnUcDN0Rvv3kqaFk0CgtI1Iv38oS0xoAanDdiJGyoIGmJCySWVAQ=="/>
+			<pubDate>Sat, 12 Jun 2021 21:00:17 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.17.92/linux-x64.zip" sparkle:version="1.17.92.34117" sparkle:shortVersionString="1.17.92" length="85839301" sparkle:os="linux" type="application/zip" sparkle:signature="qqTaePAhZSSw0S0vMAJ/s0KY/E6nytfMNPlCs0g8FxZpvyJC5w2oonrmFzX/XJmykXOvOHeXERRAqS0aL29mDw=="/>
 		</item>
 	</channel>
 </rss>
