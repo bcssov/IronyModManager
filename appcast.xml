@@ -4,12 +4,13 @@
 		<title>Irony Mod Manager</title>
 		<language>en</language>
 		<item>
-			<title>1.17.92</title>
+			<title>1.17.93</title>
 			<description>RELEASE NOTES:
 This is a significant upgrade to Irony. Please backup your collections made with previous versions of Irony.
 
 * Fix resume game sometimes not being enabled
 * Fix Irony not detecting Steam libraries due to steam changing where its other library paths are stored?
+* Optimize detection of steam libraries with changes introduced in 1.17.92
 
 CHANGES FROM v1.16:
 * Updated dependencies
@@ -19,16 +20,17 @@ CHANGES FROM v1.16:
 * Country types are treated in the same manner as pop_jobs (for Stellaris)
 * Add export mods feature along with load order
 * Various improvements and fixes</description>
-			<pubDate>Sat, 12 Jun 2021 21:00:20 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.17.92/osx-x64.rar" sparkle:version="1.17.92.34117" sparkle:shortVersionString="1.17.92" length="69394814" sparkle:os="osx" type="application/vnd.rar" sparkle:signature="ToDRlM1onAz1/tXORKVMyP7nmw4SfDp52iqNIYWGlctaSU0Nng6HB2R/PntapO0qwJ67DHgWlGLCJBIDfr9eAQ=="/>
+			<pubDate>Sun, 13 Jun 2021 06:03:47 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.17.93/osx-x64.rar" sparkle:version="1.17.93.51915" sparkle:shortVersionString="1.17.93" length="69395887" sparkle:os="osx" type="application/vnd.rar" sparkle:signature="seTl+/rVvHeU/stOd8mWlc8YP2Ajf0M10nzLUltpJomX23dVFnr3ue3BwamLMz0OEQLr/RpOtiFrgFtgZ9t4AQ=="/>
 		</item>
 		<item>
-			<title>1.17.92</title>
+			<title>1.17.93</title>
 			<description>RELEASE NOTES:
 This is a significant upgrade to Irony. Please backup your collections made with previous versions of Irony.
 
 * Fix resume game sometimes not being enabled
 * Fix Irony not detecting Steam libraries due to steam changing where its other library paths are stored?
+* Optimize detection of steam libraries with changes introduced in 1.17.92
 
 CHANGES FROM v1.16:
 * Updated dependencies
@@ -38,16 +40,17 @@ CHANGES FROM v1.16:
 * Country types are treated in the same manner as pop_jobs (for Stellaris)
 * Add export mods feature along with load order
 * Various improvements and fixes</description>
-			<pubDate>Sat, 12 Jun 2021 21:00:29 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.17.92/win-x64-setup.rar" sparkle:version="1.17.92.34117" sparkle:shortVersionString="1.17.92" length="60856476" sparkle:os="windows" type="application/vnd.rar" sparkle:signature="xXkPwC1oyhAEWkaudw0qci2dkkN38D2nd3ndqjhCdR3098+EwBA9NFzlzERs7RakOKnkhyorMZd/ekntBKVmBw=="/>
+			<pubDate>Sun, 13 Jun 2021 06:03:57 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.17.93/win-x64-setup.rar" sparkle:version="1.17.93.51915" sparkle:shortVersionString="1.17.93" length="60854009" sparkle:os="windows" type="application/vnd.rar" sparkle:signature="N0r+5Qj8gxb9MJ/6coDiaBw+B032xJpHO48Ibh/6Vvn9xvR4eospoMnFrH7CrzZLtdEDPTq+hs8JDM+5XsAkBw=="/>
 		</item>
 		<item>
-			<title>1.17.92</title>
+			<title>1.17.93</title>
 			<description>RELEASE NOTES:
 This is a significant upgrade to Irony. Please backup your collections made with previous versions of Irony.
 
 * Fix resume game sometimes not being enabled
 * Fix Irony not detecting Steam libraries due to steam changing where its other library paths are stored?
+* Optimize detection of steam libraries with changes introduced in 1.17.92
 
 CHANGES FROM v1.16:
 * Updated dependencies
@@ -57,16 +60,17 @@ CHANGES FROM v1.16:
 * Country types are treated in the same manner as pop_jobs (for Stellaris)
 * Add export mods feature along with load order
 * Various improvements and fixes</description>
-			<pubDate>Sat, 12 Jun 2021 21:00:24 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.17.92/win-x64.rar" sparkle:version="1.17.92.34117" sparkle:shortVersionString="1.17.92" length="73261080" sparkle:os="windows" type="application/vnd.rar" sparkle:signature="q871d1LiAH6nuANChQQS+U5SUVdwzBgV4dHsX+USfQeunY4ZwJWkcxgSo6w4z+6i8eu+mmz9fdXIHJ2uuWD3Aw=="/>
+			<pubDate>Sun, 13 Jun 2021 06:03:52 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.17.93/win-x64.rar" sparkle:version="1.17.93.51915" sparkle:shortVersionString="1.17.93" length="73261978" sparkle:os="windows" type="application/vnd.rar" sparkle:signature="IYItZopv0J5y0qcn8fLURJbCVH8elb1gtkRnry9pVNVhHEZMKRiB9QLswi+K1AYBCdbDkdHzDeGjwA3VeSeqCw=="/>
 		</item>
 		<item>
-			<title>1.17.92</title>
+			<title>1.17.93</title>
 			<description>RELEASE NOTES:
 This is a significant upgrade to Irony. Please backup your collections made with previous versions of Irony.
 
 * Fix resume game sometimes not being enabled
 * Fix Irony not detecting Steam libraries due to steam changing where its other library paths are stored?
+* Optimize detection of steam libraries with changes introduced in 1.17.92
 
 CHANGES FROM v1.16:
 * Updated dependencies
@@ -76,8 +80,8 @@ CHANGES FROM v1.16:
 * Country types are treated in the same manner as pop_jobs (for Stellaris)
 * Add export mods feature along with load order
 * Various improvements and fixes</description>
-			<pubDate>Sat, 12 Jun 2021 21:00:17 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.17.92/linux-x64.zip" sparkle:version="1.17.92.34117" sparkle:shortVersionString="1.17.92" length="85839301" sparkle:os="linux" type="application/zip" sparkle:signature="qqTaePAhZSSw0S0vMAJ/s0KY/E6nytfMNPlCs0g8FxZpvyJC5w2oonrmFzX/XJmykXOvOHeXERRAqS0aL29mDw=="/>
+			<pubDate>Sun, 13 Jun 2021 06:03:44 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.17.93/linux-x64.zip" sparkle:version="1.17.93.51915" sparkle:shortVersionString="1.17.93" length="85840169" sparkle:os="linux" type="application/zip" sparkle:signature="W0AWrZwCV2YbselM53xsvhOBV/FMt1TkXisyDU/rvLXWEQp+JnRXswfssDHPvmcJ3a7ENb3ua38Hk+S5oaVtDw=="/>
 		</item>
 	</channel>
 </rss>
