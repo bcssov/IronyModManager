@@ -4,7 +4,7 @@
 // Created          : 02-24-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-12-2021
+// Last Modified On : 06-13-2021
 // ***********************************************************************
 // <copyright file="SteamDirectory.cs" company="Mario">
 //     Mario
@@ -16,7 +16,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
-using System.Text.RegularExpressions;
 using Gameloop.Vdf;
 using Gameloop.Vdf.JsonConverter;
 using Gameloop.Vdf.Linq;
@@ -38,11 +37,6 @@ namespace IronyModManager.Services.Registrations
         /// The acf format
         /// </summary>
         private const string ACFFormat = "appmanifest_{0}.acf";
-
-        /// <summary>
-        /// The install dir identifier
-        /// </summary>
-        private const string InstallDirId = "installdir";
 
         /// <summary>
         /// The steam apps directory
@@ -73,11 +67,6 @@ namespace IronyModManager.Services.Registrations
         /// The library folder VDF
         /// </summary>
         private static readonly string LibraryFolderVDF = PathHelper.MergePaths("config", "libraryfolders.vdf");
-
-        /// <summary>
-        /// The quotes regex
-        /// </summary>
-        private static readonly Regex quotesRegex = new("\".*?\"", RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
         /// <summary>
         /// The steam common directory
@@ -112,13 +101,14 @@ namespace IronyModManager.Services.Registrations
         {
             static string findInstallDirectory(string path)
             {
-                var lines = File.ReadAllLines(path);
-                foreach (var item in lines)
+                try
                 {
-                    if (item.Contains(InstallDirId))
-                    {
-                        return FindPath(item);
-                    }
+                    var vdf = VdfConvert.Deserialize(File.ReadAllText(path));
+                    var model = vdf.Value.ToJson().ToObject<SteamAppManifest>();
+                    return model.InstallDir.StandardizeDirectorySeparator();
+                }
+                catch
+                {
                 }
                 return string.Empty;
             }
@@ -204,21 +194,6 @@ namespace IronyModManager.Services.Registrations
         }
 
         /// <summary>
-        /// Finds the path.
-        /// </summary>
-        /// <param name="line">The line.</param>
-        /// <returns>System.String.</returns>
-        private static string FindPath(string line)
-        {
-            var result = quotesRegex.Matches(line.ReplaceTabs());
-            if (result.Count == 2)
-            {
-                return result[1].Value.Replace("\"", string.Empty);
-            }
-            return string.Empty;
-        }
-
-        /// <summary>
         /// Gets the steam linux root path.
         /// </summary>
         /// <returns>System.String.</returns>
@@ -282,15 +257,20 @@ namespace IronyModManager.Services.Registrations
         /// <returns>System.Collections.Generic.List&lt;string&gt;.</returns>
         private static List<string> GetVdf(string vdfPath, string libraryFolderPath)
         {
-            static string CleanPath(string path)
+            static string ParseLibraryFolderData(VObject item)
             {
-                path = ReplaceMultipleCharacters(path, '\\');
-                path = ReplaceMultipleCharacters(path, '/');
-                return path;
-            }
-            static string ReplaceMultipleCharacters(string text, char delimiter)
-            {
-                return string.Join(delimiter, text.Split(delimiter, StringSplitOptions.RemoveEmptyEntries));
+                try
+                {
+                    var deserialized = item.Value<VObject>().ToJson().ToObject<SteamLibraryFolderData>();
+                    if (deserialized.Mounted)
+                    {
+                        return deserialized.Path.StandardizeDirectorySeparator();
+                    }
+                }
+                catch
+                {
+                }
+                return string.Empty;
             }
 
             if (!(cachedPaths.ContainsKey(vdfPath) || cachedPaths.ContainsKey(libraryFolderPath)))
@@ -298,18 +278,19 @@ namespace IronyModManager.Services.Registrations
                 if (File.Exists(vdfPath))
                 {
                     var paths = new List<string>();
-                    // This is now legacy code, so I don't think I need to port this over to vdf parser usage
-                    var lines = File.ReadAllLines(vdfPath);
-                    foreach (var line in lines)
+                    var model = VdfConvert.Deserialize(File.ReadAllText(vdfPath));
+                    if (model != null && model.Value != null)
                     {
-                        if (line.Contains(SteamVDFBaseInstallFolderId, StringComparison.OrdinalIgnoreCase))
+                        var softwareKeyKey = model.Value.OfType<VProperty>().FirstOrDefault(p => p.Key == "Software");
+                        if (softwareKeyKey != null)
                         {
-                            var directory = CleanPath(FindPath(line));
-                            if (Directory.Exists(directory))
+                            var valveKey = softwareKeyKey.Value.OfType<VProperty>().FirstOrDefault(p => p.Key == "Valve");
+                            if (valveKey != null)
                             {
-                                if (!paths.Contains(directory))
+                                var steamKey = valveKey.Value.OfType<VProperty>().FirstOrDefault(p => p.Key == "Steam");
+                                if (steamKey != null)
                                 {
-                                    paths.Add(directory);
+                                    paths.AddRange(steamKey.Value.OfType<VProperty>().Where(p => p.Key.StartsWith(SteamVDFBaseInstallFolderId) && p.Value.Type == VTokenType.Value).Select(p => (p.Value as VValue).Value<string>()).Where(p => !string.IsNullOrWhiteSpace(p)));
                                 }
                             }
                         }
@@ -319,36 +300,10 @@ namespace IronyModManager.Services.Registrations
                 if (File.Exists(libraryFolderPath))
                 {
                     var paths = new List<string>();
-                    var lines = File.ReadAllLines(libraryFolderPath);
                     var model = VdfConvert.Deserialize(File.ReadAllText(libraryFolderPath));
                     if (model != null && model.Value != null && model.Value.Children().Any())
                     {
-                        foreach (var item in model.Value.Children().ToList())
-                        {
-                            if (item is VProperty property)
-                            {
-                                if (property.Value is VObject o)
-                                {
-                                    if (o.Properties().Any(p => p.Key.Contains("path")))
-                                    {
-                                        try
-                                        {
-                                            var deserialized = o.ToJson().ToObject<SteamLibraryFolderData>();
-                                            if (deserialized.Mounted > 0)
-                                            {
-                                                if (!paths.Contains(deserialized.Path))
-                                                {
-                                                    paths.Add(CleanPath(deserialized.Path));
-                                                }
-                                            }
-                                        }
-                                        catch
-                                        {
-                                        }
-                                    }
-                                }
-                            }
-                        }
+                        paths.AddRange(model.Value.Children().OfType<VProperty>().Where(p => p.Value.Type == VTokenType.Object && (p.Value is VObject) && (p.Value as VObject).Properties().Any(k => k.Key.Equals("path"))).Select(p => ParseLibraryFolderData(p.Value as VObject)).Where(p => !string.IsNullOrWhiteSpace(p)));
                     }
                     cachedPaths.Add(libraryFolderPath, paths);
                 }
@@ -364,7 +319,7 @@ namespace IronyModManager.Services.Registrations
                 {
                     result.AddRange(cachedPaths[libraryFolderPath]);
                 }
-                return result;
+                return result.Distinct().ToList();
             }
             return new List<string>();
         }

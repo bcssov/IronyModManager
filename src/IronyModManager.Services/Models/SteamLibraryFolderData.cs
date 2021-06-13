@@ -4,7 +4,7 @@
 // Created          : 06-12-2021
 //
 // Last Modified By : Mario
-// Last Modified On : 06-12-2021
+// Last Modified On : 06-13-2021
 // ***********************************************************************
 // <copyright file="SteamLibraryFolderData.cs" company="Mario">
 //     Mario
@@ -14,6 +14,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using IronyModManager.Shared.JsonConverters;
 using Newtonsoft.Json;
 
 namespace IronyModManager.Services.Models
@@ -43,8 +44,9 @@ namespace IronyModManager.Services.Models
         /// Gets or sets the mounted.
         /// </summary>
         /// <value>The mounted.</value>
+        [JsonConverter(typeof(BoolConverter))]
         [JsonProperty("mounted")]
-        public int Mounted { get; set; }
+        public bool Mounted { get; set; }
 
         /// <summary>
         /// Gets or sets the path.
