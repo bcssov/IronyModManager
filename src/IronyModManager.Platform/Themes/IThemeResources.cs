@@ -4,7 +4,7 @@
 // Created          : 03-14-2021
 //
 // Last Modified By : Mario
-// Last Modified On : 03-14-2021
+// Last Modified On : 06-14-2021
 // ***********************************************************************
 // <copyright file="IThemeResources.cs" company="Mario">
 //     Mario
@@ -23,6 +23,12 @@ namespace IronyModManager.Platform.Themes
     public interface IThemeResources
     {
         #region Properties
+
+        /// <summary>
+        /// Gets a value indicating whether this instance is light theme.
+        /// </summary>
+        /// <value><c>true</c> if this instance is light theme; otherwise, <c>false</c>.</value>
+        bool IsLightTheme { get; }
 
         /// <summary>
         /// Gets the styles.

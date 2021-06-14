@@ -4,7 +4,7 @@
 // Created          : 07-28-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-15-2021
+// Last Modified On : 06-14-2021
 // ***********************************************************************
 // <copyright file="ConflictSolverCustomConflictsControlView.axaml.cs" company="Mario">
 //     Mario
@@ -13,21 +13,18 @@
 // ***********************************************************************
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Reactive.Disposables;
-using System.Text;
-using System.Xml;
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
 using Avalonia.Markup.Xaml;
 using Avalonia.Threading;
 using AvaloniaEdit;
-using AvaloniaEdit.Highlighting;
-using AvaloniaEdit.Highlighting.Xshd;
 using IronyModManager.Common;
 using IronyModManager.Common.Events;
 using IronyModManager.Common.Views;
+using IronyModManager.DI;
+using IronyModManager.Implementation.AvaloniaEdit;
 using IronyModManager.Shared;
 using IronyModManager.ViewModels.Controls;
 using ReactiveUI;
@@ -45,14 +42,9 @@ namespace IronyModManager.Views.Controls
         #region Fields
 
         /// <summary>
-        /// The PDX script
+        /// The resource loader
         /// </summary>
-        private static IHighlightingDefinition pdxScriptHighlightingDefinition;
-
-        /// <summary>
-        /// The yaml highlighting definition
-        /// </summary>
-        private static IHighlightingDefinition yamlHighlightingDefinition;
+        private readonly IResourceLoader resourceLoader;
 
         #endregion Fields
 
@@ -63,26 +55,13 @@ namespace IronyModManager.Views.Controls
         /// </summary>
         public ConflictSolverCustomConflictsControlView()
         {
+            resourceLoader = DIResolver.Get<IResourceLoader>();
             InitializeComponent();
         }
 
         #endregion Constructors
 
         #region Methods
-
-        /// <summary>
-        /// Gets the highlighting definition.
-        /// </summary>
-        /// <param name="path">The path.</param>
-        /// <returns>IHighlightingDefinition.</returns>
-        protected virtual IHighlightingDefinition GetHighlightingDefinition(string path)
-        {
-            var bytes = ResourceReader.GetEmbeddedResource(path);
-            var xml = Encoding.UTF8.GetString(bytes, 0, bytes.Length);
-            using var sr = new StringReader(xml);
-            using var reader = XmlReader.Create(sr);
-            return HighlightingLoader.Load(HighlightingLoader.LoadXshd(reader), HighlightingManager.Instance);
-        }
 
         /// <summary>
         /// Called when [activated].
@@ -166,10 +145,7 @@ namespace IronyModManager.Views.Controls
                     }
                 }
             };
-#pragma warning disable CS0618 // Type or member is obsolete
             editor.ContextMenu = ctx;
-#pragma warning restore CS0618 // Type or member is obsolete
-
             editor.Options = new TextEditorOptions()
             {
                 ConvertTabsToSpaces = true,
@@ -187,19 +163,11 @@ namespace IronyModManager.Views.Controls
             {
                 if (ViewModel.EditingYaml)
                 {
-                    if (yamlHighlightingDefinition == null)
-                    {
-                        yamlHighlightingDefinition = GetHighlightingDefinition(Constants.Resources.YAML);
-                    }
-                    editor.SyntaxHighlighting = yamlHighlightingDefinition;
+                    editor.SyntaxHighlighting = resourceLoader.GetYAMLDefinition();
                 }
                 else
                 {
-                    if (pdxScriptHighlightingDefinition == null)
-                    {
-                        pdxScriptHighlightingDefinition = GetHighlightingDefinition(Constants.Resources.PDXScript);
-                    }
-                    editor.SyntaxHighlighting = pdxScriptHighlightingDefinition;
+                    editor.SyntaxHighlighting = resourceLoader.GetPDXScriptDefinition();
                 }
             }
 

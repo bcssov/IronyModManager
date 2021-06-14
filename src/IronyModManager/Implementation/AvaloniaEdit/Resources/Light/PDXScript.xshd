@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<SyntaxDefinition name="PDXScript" extensions=".txt" xmlns="http://icsharpcode.net/sharpdevelop/syntaxdefinition/2008">
+  <Color name="Comment" foreground="SlateGray" />
+  <Color name="String" foreground="PaleGreen" />
+  <Color name="Number" foreground="Orange" />
+  <Color name="Keywords" foreground="LightBlue" />
+  <Color name="Assignment" foreground="Red" />
+  <RuleSet ignoreCase="true">
+    <Span color="String" stopateol="false" escapecharacter="\">
+      <Begin>"</Begin>
+      <End>"</End>
+    </Span>
+    <Span color="Comment">
+      <Begin>\#</Begin>
+    </Span>
+    <Keywords color="Keywords">
+      <Word>yes</Word>
+      <Word>no</Word>
+      <Word>while</Word>
+      <Word>if</Word>
+      <Word>else_if</Word>
+      <Word>else</Word>
+      <Word>{</Word>
+      <Word>}</Word>
+    </Keywords>
+    <Keywords color="Assignment">
+      <Word>=</Word>
+    </Keywords>
+    <Rule color="Number">\b0[xX][0-9a-fA-F]+|(\b\d+(\.[0-9]+)?|\.[0-9]+)([eE][+-]?[0-9]+)?</Rule>
+  </RuleSet>
+</SyntaxDefinition>

@@ -4,7 +4,7 @@
 // Created          : 03-14-2021
 //
 // Last Modified By : Mario
-// Last Modified On : 03-26-2021
+// Last Modified On : 06-14-2021
 // ***********************************************************************
 // <copyright file="MaterialLightTheme.cs" company="Mario">
 //     Mario
@@ -29,6 +29,12 @@ namespace IronyModManager.Implementation.Themes
     public class MaterialLightTheme : BaseThemeResources
     {
         #region Properties
+
+        /// <summary>
+        /// Gets a value indicating whether this instance is light theme.
+        /// </summary>
+        /// <value><c>true</c> if this instance is light theme; otherwise, <c>false</c>.</value>
+        public override bool IsLightTheme => true;
 
         /// <summary>
         /// Gets the styles.

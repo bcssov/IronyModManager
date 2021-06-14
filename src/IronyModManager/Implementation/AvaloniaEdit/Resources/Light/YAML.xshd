@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<SyntaxDefinition name="PDXScript" extensions=".txt" xmlns="http://icsharpcode.net/sharpdevelop/syntaxdefinition/2008">
+  <Color name="Comment" foreground="SlateGray" />
+  <Color name="String" foreground="PaleGreen" />
+  <Color name="Assignment" foreground="Red" />
+  <RuleSet ignoreCase="true">
+    <Span color="String" stopateol="false" escapecharacter="\">
+      <Begin>"</Begin>
+      <End>"</End>
+    </Span>
+    <Span color="Comment">
+      <Begin>\#</Begin>
+    </Span>
+    <Keywords color="Assignment">
+      <Word>:</Word>
+    </Keywords>
+  </RuleSet>
+</SyntaxDefinition>
