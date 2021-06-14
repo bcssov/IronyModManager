@@ -4,7 +4,7 @@
 // Created          : 03-14-2021
 //
 // Last Modified By : Mario
-// Last Modified On : 03-14-2021
+// Last Modified On : 06-14-2021
 // ***********************************************************************
 // <copyright file="ThemeManager.cs" company="Mario">
 //     Mario
@@ -66,6 +66,17 @@ namespace IronyModManager.Implementation.Themes
             ValidateThemes();
             var resource = themeResources.FirstOrDefault(p => p.ThemeName.Equals(theme));
             resource.Register();
+        }
+
+        /// <summary>
+        /// Determines whether [is light theme] [the specified theme].
+        /// </summary>
+        /// <param name="theme">The theme.</param>
+        /// <returns><c>true</c> if [is light theme] [the specified theme]; otherwise, <c>false</c>.</returns>
+        public bool IsLightTheme(string theme)
+        {
+            var resource = themeResources.FirstOrDefault(p => p.ThemeName.Equals(theme));
+            return resource.IsLightTheme;
         }
 
         /// <summary>

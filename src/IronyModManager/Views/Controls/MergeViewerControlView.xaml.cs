@@ -4,7 +4,7 @@
 // Created          : 03-20-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-08-2021
+// Last Modified On : 06-14-2021
 // ***********************************************************************
 // <copyright file="MergeViewerControlView.xaml.cs" company="Mario">
 //     Mario
@@ -13,23 +13,19 @@
 // ***********************************************************************
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Reactive.Disposables;
-using System.Text;
 using System.Threading.Tasks;
-using System.Xml;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
 using Avalonia.Threading;
 using AvaloniaEdit;
-using AvaloniaEdit.Highlighting;
-using AvaloniaEdit.Highlighting.Xshd;
 using DiffPlex.DiffBuilder.Model;
 using IronyModManager.Common;
 using IronyModManager.Common.Views;
 using IronyModManager.DI;
+using IronyModManager.Implementation.AvaloniaEdit;
 using IronyModManager.Implementation.Hotkey;
 using IronyModManager.Shared;
 using IronyModManager.ViewModels.Controls;
@@ -49,16 +45,6 @@ namespace IronyModManager.Views.Controls
         #region Fields
 
         /// <summary>
-        /// The PDX script
-        /// </summary>
-        private static IHighlightingDefinition pdxScriptHighlightingDefinition;
-
-        /// <summary>
-        /// The yaml highlighting definition
-        /// </summary>
-        private static IHighlightingDefinition yamlHighlightingDefinition;
-
-        /// <summary>
         /// The hotkey pressed handler
         /// </summary>
         private readonly ConflictSolverViewHotkeyPressedHandler hotkeyPressedHandler;
@@ -67,6 +53,11 @@ namespace IronyModManager.Views.Controls
         /// The logger
         /// </summary>
         private readonly ILogger logger;
+
+        /// <summary>
+        /// The resource loader
+        /// </summary>
+        private readonly IResourceLoader resourceLoader;
 
         /// <summary>
         /// The syncing scroll
@@ -84,6 +75,7 @@ namespace IronyModManager.Views.Controls
         {
             logger = DIResolver.Get<ILogger>();
             hotkeyPressedHandler = DIResolver.Get<ConflictSolverViewHotkeyPressedHandler>();
+            resourceLoader = DIResolver.Get<IResourceLoader>();
             InitializeComponent();
         }
 
@@ -101,20 +93,6 @@ namespace IronyModManager.Views.Controls
         {
             leftListBox.SelectedIndex = line;
             rightListBox.SelectedIndex = line;
-        }
-
-        /// <summary>
-        /// Gets the highlighting definition.
-        /// </summary>
-        /// <param name="path">The path.</param>
-        /// <returns>IHighlightingDefinition.</returns>
-        protected virtual IHighlightingDefinition GetHighlightingDefinition(string path)
-        {
-            var bytes = ResourceReader.GetEmbeddedResource(path);
-            var xml = Encoding.UTF8.GetString(bytes, 0, bytes.Length);
-            using var sr = new StringReader(xml);
-            using var reader = XmlReader.Create(sr);
-            return HighlightingLoader.Load(HighlightingLoader.LoadXshd(reader), HighlightingManager.Instance);
         }
 
         /// <summary>
@@ -398,19 +376,11 @@ namespace IronyModManager.Views.Controls
             {
                 if (ViewModel.EditingYaml)
                 {
-                    if (yamlHighlightingDefinition == null)
-                    {
-                        yamlHighlightingDefinition = GetHighlightingDefinition(Constants.Resources.YAML);
-                    }
-                    editor.SyntaxHighlighting = yamlHighlightingDefinition;
+                    editor.SyntaxHighlighting = resourceLoader.GetYAMLDefinition();
                 }
                 else
                 {
-                    if (pdxScriptHighlightingDefinition == null)
-                    {
-                        pdxScriptHighlightingDefinition = GetHighlightingDefinition(Constants.Resources.PDXScript);
-                    }
-                    editor.SyntaxHighlighting = pdxScriptHighlightingDefinition;
+                    editor.SyntaxHighlighting = resourceLoader.GetPDXScriptDefinition();
                 }
             }
 

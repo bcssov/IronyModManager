@@ -4,7 +4,7 @@
 // Created          : 01-11-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 05-30-2021
+// Last Modified On : 06-14-2021
 // ***********************************************************************
 // <copyright file="DIPackage.Implementations.cs" company="Mario">
 //     Mario
@@ -20,6 +20,7 @@ using IronyModManager.Fonts;
 using IronyModManager.Implementation;
 using IronyModManager.Implementation.Actions;
 using IronyModManager.Implementation.AppState;
+using IronyModManager.Implementation.AvaloniaEdit;
 using IronyModManager.Implementation.Hotkey;
 using IronyModManager.Implementation.MessageBus;
 using IronyModManager.Implementation.Overlay;
@@ -86,6 +87,7 @@ namespace IronyModManager.DI
             container.Register<GameDefinitionLoadProgressHandler>(SimpleInjector.Lifestyle.Singleton);
             container.Register<GameIndexProgressHandler>(SimpleInjector.Lifestyle.Singleton);
             container.Register<ModExportProgressHandler>(SimpleInjector.Lifestyle.Singleton);
+            container.Register<IResourceLoader, ResourceLoader>();
         }
 
         #endregion Methods

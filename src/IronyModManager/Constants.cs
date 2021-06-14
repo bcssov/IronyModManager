@@ -4,7 +4,7 @@
 // Created          : 01-13-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-27-2021
+// Last Modified On : 06-14-2021
 // ***********************************************************************
 // <copyright file="Constants.cs" company="Mario">
 //     Mario
@@ -82,12 +82,22 @@ namespace IronyModManager
             /// <summary>
             /// The PDX script
             /// </summary>
-            public const string PDXScript = "Implementation\\AvaloniaEdit\\Resources\\PDXScript.xshd";
+            public const string PDXScriptDark = "Implementation\\AvaloniaEdit\\Resources\\Dark\\PDXScript.xshd";
+
+            /// <summary>
+            /// The PDX script light
+            /// </summary>
+            public const string PDXScriptLight = "Implementation\\AvaloniaEdit\\Resources\\Light\\PDXScript.xshd";
 
             /// <summary>
             /// The yaml
             /// </summary>
-            public const string YAML = "Implementation\\AvaloniaEdit\\Resources\\YAML.xshd";
+            public const string YAMLDark = "Implementation\\AvaloniaEdit\\Resources\\Dark\\YAML.xshd";
+
+            /// <summary>
+            /// The yaml light
+            /// </summary>
+            public const string YAMLLight = "Implementation\\AvaloniaEdit\\Resources\\Light\\YAML.xshd";
 
             #endregion Fields
         }
