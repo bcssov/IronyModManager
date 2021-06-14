@@ -93,7 +93,7 @@
     <SolidColorBrush x:Key="IronyAccentBrush" Color="{DynamicResource IronyAccentColor}" />
     <Color x:Key="IronyEditorBackgroundColor">#FFFFFF</Color>
     <SolidColorBrush x:Key="IronyEditorBackgroundBrush" Color="{DynamicResource IronyEditorBackgroundColor}" />
-    <Color x:Key="IronyMidBackgroundColor">#FF000000</Color>
+    <Color x:Key="IronyMidBackgroundColor">#FFF5F5F5</Color>
     <SolidColorBrush x:Key="IronyMidBackgroundBrush" Color="{DynamicResource IronyMidBackgroundColor}" />
     <Color x:Key="IronyButtonBorderColor">#FFAAAAAA</Color>
     <SolidColorBrush x:Key="IronyButtonBorderBrush" Color="{DynamicResource IronyButtonBorderColor}" />
