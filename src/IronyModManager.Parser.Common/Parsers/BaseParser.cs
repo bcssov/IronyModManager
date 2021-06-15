@@ -4,7 +4,7 @@
 // Created          : 02-17-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 12-07-2020
+// Last Modified On : 06-15-2021
 // ***********************************************************************
 // <copyright file="BaseParser.cs" company="Mario">
 //     Mario
@@ -37,7 +37,7 @@ namespace IronyModManager.Parser.Common.Parsers
         /// <summary>
         /// The simple error check lines threshold
         /// </summary>
-        protected const int SimpleErrorCheckLinesThreshold = 20000;
+        protected const int SimpleErrorCheckLinesThreshold = 25000;
 
         /// <summary>
         /// The code parser

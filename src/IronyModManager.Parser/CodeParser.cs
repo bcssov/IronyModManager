@@ -4,7 +4,7 @@
 // Created          : 02-22-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-09-2021
+// Last Modified On : 06-15-2021
 // ***********************************************************************
 // <copyright file="CodeParser.cs" company="Mario">
 //     Mario
@@ -249,6 +249,17 @@ namespace IronyModManager.Parser
                 }
             }
             return null;
+        }
+
+        /// <summary>
+        /// Cleans the code.
+        /// </summary>
+        /// <param name="lines">The lines.</param>
+        /// <returns>IEnumerable&lt;System.String&gt;.</returns>
+        protected virtual IEnumerable<string> CleanCode(IEnumerable<string> lines)
+        {
+            return lines.Where(p => !string.IsNullOrWhiteSpace(p) && !p.Trim().StartsWith(Common.Constants.Scripts.ScriptCommentId.ToString()))
+               .Select(p => FormatCodeTerminators(CleanComments(p)));
         }
 
         /// <summary>
@@ -660,8 +671,7 @@ namespace IronyModManager.Parser
         protected IEnumerable<IScriptElement> ParseElements(IEnumerable<string> lines)
         {
             var result = new List<IScriptElement>();
-            var validCodeLines = lines.Where(p => !string.IsNullOrWhiteSpace(p) && !p.Trim().StartsWith(Common.Constants.Scripts.ScriptCommentId.ToString()))
-                .Select(p => FormatCodeTerminators(CleanComments(p)));
+            var validCodeLines = CleanCode(lines);
             var code = string.Join(Environment.NewLine, validCodeLines).ToList();
             for (int i = 0; i < code.Count; i++)
             {
@@ -731,6 +741,7 @@ namespace IronyModManager.Parser
         /// <returns>IScriptError.</returns>
         protected IScriptError PerformBasicValidityCheck(IEnumerable<string> lines)
         {
+            lines = CleanCode(lines);
             var text = string.Join(Environment.NewLine, lines);
             var openBracket = text.Count(s => s == Common.Constants.Scripts.OpenObject);
             var closeBracket = text.Count(s => s == Common.Constants.Scripts.CloseObject);
