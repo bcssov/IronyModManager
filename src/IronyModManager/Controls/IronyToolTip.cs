@@ -4,7 +4,7 @@
 // Created          : 06-18-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-16-2021
+// Last Modified On : 06-15-2021
 // ***********************************************************************
 // <copyright file="IronyToolTip.cs" company="Avalonia">
 //     Avalonia
@@ -501,9 +501,15 @@ namespace IronyModManager.Controls
 
                 if (GetIsOpen(control) && e.NewValue != e.OldValue && !(e.NewValue is IronyToolTip))
                 {
-                    var tip = control.GetValue(ToolTipProperty);
-
-                    tip.Content = e.NewValue;
+                    if (e.NewValue is null)
+                    {
+                        Close(control);
+                    }
+                    else
+                    {
+                        var tip = control.GetValue(ToolTipProperty);
+                        tip.Content = e.NewValue;
+                    }
                 }
             }
 
