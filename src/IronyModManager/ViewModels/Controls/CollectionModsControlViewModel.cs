@@ -4,7 +4,7 @@
 // Created          : 03-03-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 05-30-2021
+// Last Modified On : 06-22-2021
 // ***********************************************************************
 // <copyright file="CollectionModsControlViewModel.cs" company="Mario">
 //     Mario
@@ -1046,7 +1046,7 @@ namespace IronyModManager.ViewModels.Controls
                     {
                         PercentDone = s.Progress.ToLocalizedPercentage()
                     });
-                    TriggerOverlay(messageId, true, localizationManager.GetResource(LocalizationResources.Collection_Mods.Overlay_Exporting_Message), overlayProgress);
+                    TriggerOverlay(messageId, true, localizationManager.GetResource(LocalizationResources.Collection_Mods.Overlay_Importing_Message), overlayProgress);
                 }).DisposeWith(Disposables);
                 var collection = await Task.Run(async () => await modCollectionService.ImportAsync(path));
                 modExportProgress?.Dispose();
