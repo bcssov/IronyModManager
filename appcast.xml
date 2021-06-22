@@ -4,13 +4,17 @@
 		<title>Irony Mod Manager</title>
 		<language>en</language>
 		<item>
-			<title>1.17.93</title>
+			<title>1.17.99</title>
 			<description>RELEASE NOTES:
 This is a significant upgrade to Irony. Please backup your collections made with previous versions of Irony.
 
-* Fix resume game sometimes not being enabled
-* Fix Irony not detecting Steam libraries due to steam changing where its other library paths are stored?
-* Optimize detection of steam libraries with changes introduced in 1.17.92
+* Treat traits as FIOS (for Stellaris)
+* Fix #267
+* Incrase line sensitivity for simple parser validation (for Stellaris)
+* Strip comments before validating files when falling back to simple parser (for Stellaris)
+* Fixed potential tooltip CTD
+* Bump dependencies
+* Minor fixes
 
 CHANGES FROM v1.16:
 * Updated dependencies
@@ -20,17 +24,21 @@ CHANGES FROM v1.16:
 * Country types are treated in the same manner as pop_jobs (for Stellaris)
 * Add export mods feature along with load order
 * Various improvements and fixes</description>
-			<pubDate>Sun, 13 Jun 2021 06:03:47 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.17.93/osx-x64.rar" sparkle:version="1.17.93.51915" sparkle:shortVersionString="1.17.93" length="69395887" sparkle:os="osx" type="application/vnd.rar" sparkle:signature="seTl+/rVvHeU/stOd8mWlc8YP2Ajf0M10nzLUltpJomX23dVFnr3ue3BwamLMz0OEQLr/RpOtiFrgFtgZ9t4AQ=="/>
+			<pubDate>Tue, 22 Jun 2021 07:46:12 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.17.99/osx-x64.rar" sparkle:version="1.17.99.39079" sparkle:shortVersionString="1.17.99" length="69399715" sparkle:os="osx" type="application/vnd.rar" sparkle:signature="e6QMMvJpUqXr6CBk2i7Wn9p68f9Rb8NOxqeegmXp/4tzTtxux9gtavUDcBSj19u2m79yPjUB6/4ABP1PDqdqAQ=="/>
 		</item>
 		<item>
-			<title>1.17.93</title>
+			<title>1.17.99</title>
 			<description>RELEASE NOTES:
 This is a significant upgrade to Irony. Please backup your collections made with previous versions of Irony.
 
-* Fix resume game sometimes not being enabled
-* Fix Irony not detecting Steam libraries due to steam changing where its other library paths are stored?
-* Optimize detection of steam libraries with changes introduced in 1.17.92
+* Treat traits as FIOS (for Stellaris)
+* Fix #267
+* Incrase line sensitivity for simple parser validation (for Stellaris)
+* Strip comments before validating files when falling back to simple parser (for Stellaris)
+* Fixed potential tooltip CTD
+* Bump dependencies
+* Minor fixes
 
 CHANGES FROM v1.16:
 * Updated dependencies
@@ -40,17 +48,21 @@ CHANGES FROM v1.16:
 * Country types are treated in the same manner as pop_jobs (for Stellaris)
 * Add export mods feature along with load order
 * Various improvements and fixes</description>
-			<pubDate>Sun, 13 Jun 2021 06:03:57 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.17.93/win-x64-setup.rar" sparkle:version="1.17.93.51915" sparkle:shortVersionString="1.17.93" length="60854009" sparkle:os="windows" type="application/vnd.rar" sparkle:signature="N0r+5Qj8gxb9MJ/6coDiaBw+B032xJpHO48Ibh/6Vvn9xvR4eospoMnFrH7CrzZLtdEDPTq+hs8JDM+5XsAkBw=="/>
+			<pubDate>Tue, 22 Jun 2021 07:46:20 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.17.99/win-x64-setup.rar" sparkle:version="1.17.99.39079" sparkle:shortVersionString="1.17.99" length="60857357" sparkle:os="windows" type="application/vnd.rar" sparkle:signature="8ir6D0x4EiG5tRDAC7DL63oC9KhwT01nYshVVqWY1zwYNf97c/B89VV3G89EUiOPE+2lSQZQhldZjB4j8tHXBg=="/>
 		</item>
 		<item>
-			<title>1.17.93</title>
+			<title>1.17.99</title>
 			<description>RELEASE NOTES:
 This is a significant upgrade to Irony. Please backup your collections made with previous versions of Irony.
 
-* Fix resume game sometimes not being enabled
-* Fix Irony not detecting Steam libraries due to steam changing where its other library paths are stored?
-* Optimize detection of steam libraries with changes introduced in 1.17.92
+* Treat traits as FIOS (for Stellaris)
+* Fix #267
+* Incrase line sensitivity for simple parser validation (for Stellaris)
+* Strip comments before validating files when falling back to simple parser (for Stellaris)
+* Fixed potential tooltip CTD
+* Bump dependencies
+* Minor fixes
 
 CHANGES FROM v1.16:
 * Updated dependencies
@@ -60,17 +72,21 @@ CHANGES FROM v1.16:
 * Country types are treated in the same manner as pop_jobs (for Stellaris)
 * Add export mods feature along with load order
 * Various improvements and fixes</description>
-			<pubDate>Sun, 13 Jun 2021 06:03:52 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.17.93/win-x64.rar" sparkle:version="1.17.93.51915" sparkle:shortVersionString="1.17.93" length="73261978" sparkle:os="windows" type="application/vnd.rar" sparkle:signature="IYItZopv0J5y0qcn8fLURJbCVH8elb1gtkRnry9pVNVhHEZMKRiB9QLswi+K1AYBCdbDkdHzDeGjwA3VeSeqCw=="/>
+			<pubDate>Tue, 22 Jun 2021 07:46:16 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.17.99/win-x64.rar" sparkle:version="1.17.99.39079" sparkle:shortVersionString="1.17.99" length="73265434" sparkle:os="windows" type="application/vnd.rar" sparkle:signature="WQzJWBtGVwXMGG+AIzKJQm0fta0nwvLBNozSfjId7DQ7k/aPx9WmOFD+zhF+y+yQy4KjOasrQKxBNBmg2lsCAA=="/>
 		</item>
 		<item>
-			<title>1.17.93</title>
+			<title>1.17.99</title>
 			<description>RELEASE NOTES:
 This is a significant upgrade to Irony. Please backup your collections made with previous versions of Irony.
 
-* Fix resume game sometimes not being enabled
-* Fix Irony not detecting Steam libraries due to steam changing where its other library paths are stored?
-* Optimize detection of steam libraries with changes introduced in 1.17.92
+* Treat traits as FIOS (for Stellaris)
+* Fix #267
+* Incrase line sensitivity for simple parser validation (for Stellaris)
+* Strip comments before validating files when falling back to simple parser (for Stellaris)
+* Fixed potential tooltip CTD
+* Bump dependencies
+* Minor fixes
 
 CHANGES FROM v1.16:
 * Updated dependencies
@@ -80,8 +96,8 @@ CHANGES FROM v1.16:
 * Country types are treated in the same manner as pop_jobs (for Stellaris)
 * Add export mods feature along with load order
 * Various improvements and fixes</description>
-			<pubDate>Sun, 13 Jun 2021 06:03:44 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.17.93/linux-x64.zip" sparkle:version="1.17.93.51915" sparkle:shortVersionString="1.17.93" length="85840169" sparkle:os="linux" type="application/zip" sparkle:signature="W0AWrZwCV2YbselM53xsvhOBV/FMt1TkXisyDU/rvLXWEQp+JnRXswfssDHPvmcJ3a7ENb3ua38Hk+S5oaVtDw=="/>
+			<pubDate>Tue, 22 Jun 2021 07:46:08 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.17.99/linux-x64.zip" sparkle:version="1.17.99.39079" sparkle:shortVersionString="1.17.99" length="85845289" sparkle:os="linux" type="application/zip" sparkle:signature="pD30HhfJnD++mSNdkjwET19GO5lZi8QhsTetgQ2D021Pti4pSwkaQJ2Oo/nWtjuHsXnh4uGGUG4mexb5lUW2Ag=="/>
 		</item>
 	</channel>
 </rss>
