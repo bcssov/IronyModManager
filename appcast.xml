@@ -4,7 +4,7 @@
 		<title>Irony Mod Manager</title>
 		<language>en</language>
 		<item>
-			<title>1.17.99</title>
+			<title>1.17.101</title>
 			<description>RELEASE NOTES:
 This is a significant upgrade to Irony. Please backup your collections made with previous versions of Irony.
 
@@ -15,6 +15,7 @@ This is a significant upgrade to Irony. Please backup your collections made with
 * Fixed potential tooltip CTD
 * Bump dependencies
 * Minor fixes
+* Fix edit mode CTD
 
 CHANGES FROM v1.16:
 * Updated dependencies
@@ -24,11 +25,11 @@ CHANGES FROM v1.16:
 * Country types are treated in the same manner as pop_jobs (for Stellaris)
 * Add export mods feature along with load order
 * Various improvements and fixes</description>
-			<pubDate>Tue, 22 Jun 2021 07:46:12 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.17.99/osx-x64.rar" sparkle:version="1.17.99.39079" sparkle:shortVersionString="1.17.99" length="69399715" sparkle:os="osx" type="application/vnd.rar" sparkle:signature="e6QMMvJpUqXr6CBk2i7Wn9p68f9Rb8NOxqeegmXp/4tzTtxux9gtavUDcBSj19u2m79yPjUB6/4ABP1PDqdqAQ=="/>
+			<pubDate>Wed, 23 Jun 2021 19:27:27 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.17.101/osx-x64.rar" sparkle:version="1.17.101.52090" sparkle:shortVersionString="1.17.101" length="69400215" sparkle:os="osx" type="application/vnd.rar" sparkle:signature="dQgzI6ls0LOQYEIpxz6qpw5opyLIAS/MHFWYuAxpXNkkj/7e8ix2OxAPoSM6Uwtxk2nw+Jly4dcSeu5brOPQBQ=="/>
 		</item>
 		<item>
-			<title>1.17.99</title>
+			<title>1.17.101</title>
 			<description>RELEASE NOTES:
 This is a significant upgrade to Irony. Please backup your collections made with previous versions of Irony.
 
@@ -39,6 +40,7 @@ This is a significant upgrade to Irony. Please backup your collections made with
 * Fixed potential tooltip CTD
 * Bump dependencies
 * Minor fixes
+* Fix edit mode CTD
 
 CHANGES FROM v1.16:
 * Updated dependencies
@@ -48,11 +50,11 @@ CHANGES FROM v1.16:
 * Country types are treated in the same manner as pop_jobs (for Stellaris)
 * Add export mods feature along with load order
 * Various improvements and fixes</description>
-			<pubDate>Tue, 22 Jun 2021 07:46:20 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.17.99/win-x64-setup.rar" sparkle:version="1.17.99.39079" sparkle:shortVersionString="1.17.99" length="60857357" sparkle:os="windows" type="application/vnd.rar" sparkle:signature="8ir6D0x4EiG5tRDAC7DL63oC9KhwT01nYshVVqWY1zwYNf97c/B89VV3G89EUiOPE+2lSQZQhldZjB4j8tHXBg=="/>
+			<pubDate>Wed, 23 Jun 2021 19:27:35 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.17.101/win-x64-setup.rar" sparkle:version="1.17.101.52090" sparkle:shortVersionString="1.17.101" length="60862983" sparkle:os="windows" type="application/vnd.rar" sparkle:signature="Yyc2BnibONQDw5CnImrVaqXWQrk+aYOwG/1WidIJoKe0c4u5upQnUaZusb0QwgCSgoBdrypicNkyMX9h5cmjDw=="/>
 		</item>
 		<item>
-			<title>1.17.99</title>
+			<title>1.17.101</title>
 			<description>RELEASE NOTES:
 This is a significant upgrade to Irony. Please backup your collections made with previous versions of Irony.
 
@@ -63,6 +65,7 @@ This is a significant upgrade to Irony. Please backup your collections made with
 * Fixed potential tooltip CTD
 * Bump dependencies
 * Minor fixes
+* Fix edit mode CTD
 
 CHANGES FROM v1.16:
 * Updated dependencies
@@ -72,11 +75,11 @@ CHANGES FROM v1.16:
 * Country types are treated in the same manner as pop_jobs (for Stellaris)
 * Add export mods feature along with load order
 * Various improvements and fixes</description>
-			<pubDate>Tue, 22 Jun 2021 07:46:16 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.17.99/win-x64.rar" sparkle:version="1.17.99.39079" sparkle:shortVersionString="1.17.99" length="73265434" sparkle:os="windows" type="application/vnd.rar" sparkle:signature="WQzJWBtGVwXMGG+AIzKJQm0fta0nwvLBNozSfjId7DQ7k/aPx9WmOFD+zhF+y+yQy4KjOasrQKxBNBmg2lsCAA=="/>
+			<pubDate>Wed, 23 Jun 2021 19:27:31 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.17.101/win-x64.rar" sparkle:version="1.17.101.52090" sparkle:shortVersionString="1.17.101" length="73265805" sparkle:os="windows" type="application/vnd.rar" sparkle:signature="M7CSeaK5yk9jNE2IYxfgruCMEtO0fBqBRXcjLvFnMPJb0rPE4ARu/dYGfYX2tUQ0KdupodDyjWhSqUWC/JqEAA=="/>
 		</item>
 		<item>
-			<title>1.17.99</title>
+			<title>1.17.101</title>
 			<description>RELEASE NOTES:
 This is a significant upgrade to Irony. Please backup your collections made with previous versions of Irony.
 
@@ -87,6 +90,7 @@ This is a significant upgrade to Irony. Please backup your collections made with
 * Fixed potential tooltip CTD
 * Bump dependencies
 * Minor fixes
+* Fix edit mode CTD
 
 CHANGES FROM v1.16:
 * Updated dependencies
@@ -96,8 +100,8 @@ CHANGES FROM v1.16:
 * Country types are treated in the same manner as pop_jobs (for Stellaris)
 * Add export mods feature along with load order
 * Various improvements and fixes</description>
-			<pubDate>Tue, 22 Jun 2021 07:46:08 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.17.99/linux-x64.zip" sparkle:version="1.17.99.39079" sparkle:shortVersionString="1.17.99" length="85845289" sparkle:os="linux" type="application/zip" sparkle:signature="pD30HhfJnD++mSNdkjwET19GO5lZi8QhsTetgQ2D021Pti4pSwkaQJ2Oo/nWtjuHsXnh4uGGUG4mexb5lUW2Ag=="/>
+			<pubDate>Wed, 23 Jun 2021 19:27:24 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.17.101/linux-x64.zip" sparkle:version="1.17.101.52090" sparkle:shortVersionString="1.17.101" length="85845738" sparkle:os="linux" type="application/zip" sparkle:signature="Kocv6Z4/2oObzJzA3fEV2mfkNdy8ZHV9C6Tlmj/1NwMErGhRi29RaHqQisxQuPcSQ4s0/Qb7aiLwQhC8UnBmAA=="/>
 		</item>
 	</channel>
 </rss>
