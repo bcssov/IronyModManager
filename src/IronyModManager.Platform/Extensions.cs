@@ -4,7 +4,7 @@
 // Created          : 10-29-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-25-2021
+// Last Modified On : 06-23-2021
 // ***********************************************************************
 // <copyright file="Extensions.cs" company="Mario">
 //     Mario
@@ -15,6 +15,7 @@ using System;
 using System.Collections.Generic;
 using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Input;
 using Avalonia.Input.Platform;
 using Avalonia.Platform;
 using IronyModManager.Platform.Assets;
@@ -53,11 +54,13 @@ namespace IronyModManager.Platform
                 // Asset loader
                 AssetLoader.RegisterResUriParsers();
                 AvaloniaLocator.CurrentMutable.Bind<IAssetLoader>().ToConstant(new AssetLoader());
+                // Input manager
+                var inputManager = AvaloniaLocator.Current.GetService<IInputManager>();
+                AvaloniaLocator.CurrentMutable.Bind<IInputManager>().ToConstant(new InputManager.InputManager(inputManager));
             });
             return builder;
         }
 
         #endregion Methods
-
     }
 }
