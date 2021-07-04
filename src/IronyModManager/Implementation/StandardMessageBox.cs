@@ -15,6 +15,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Avalonia.Controls;
+using IronyModManager.Common.Views;
 using MessageBox.Avalonia.BaseWindows.Base;
 using MessageBox.Avalonia.Enums;
 
@@ -72,7 +73,7 @@ namespace IronyModManager.Implementation
         public Task<ButtonResult> Show(Window window)
         {
             var tcs = new TaskCompletionSource<ButtonResult>();
-            if (window == null || window.WindowStartupLocation == WindowStartupLocation.CenterScreen)
+            if (window == null || (window is IBaseWindow baseWindow && baseWindow.IsCenterScreen))
             {
                 this.window.WindowStartupLocation = WindowStartupLocation.CenterScreen;
             }
@@ -89,7 +90,7 @@ namespace IronyModManager.Implementation
         public Task<ButtonResult> ShowDialog(Window ownerWindow)
         {
             var tcs = new TaskCompletionSource<ButtonResult>();
-            if (ownerWindow == null || ownerWindow.WindowStartupLocation == WindowStartupLocation.CenterScreen)
+            if (ownerWindow == null || (ownerWindow is IBaseWindow baseWindow && baseWindow.IsCenterScreen))
             {
                 window.WindowStartupLocation = WindowStartupLocation.CenterScreen;
             }
