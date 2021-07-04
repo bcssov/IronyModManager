@@ -4,7 +4,7 @@
 // Created          : 05-12-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-25-2021
+// Last Modified On : 07-04-2021
 // ***********************************************************************
 // <copyright file="StandardMessageBox.cs" company="Mario">
 //     Mario
@@ -72,7 +72,7 @@ namespace IronyModManager.Implementation
         public Task<ButtonResult> Show(Window window)
         {
             var tcs = new TaskCompletionSource<ButtonResult>();
-            if (window == null)
+            if (window == null || window.WindowStartupLocation == WindowStartupLocation.CenterScreen)
             {
                 this.window.WindowStartupLocation = WindowStartupLocation.CenterScreen;
             }
@@ -89,7 +89,7 @@ namespace IronyModManager.Implementation
         public Task<ButtonResult> ShowDialog(Window ownerWindow)
         {
             var tcs = new TaskCompletionSource<ButtonResult>();
-            if (ownerWindow == null)
+            if (ownerWindow == null || ownerWindow.WindowStartupLocation == WindowStartupLocation.CenterScreen)
             {
                 window.WindowStartupLocation = WindowStartupLocation.CenterScreen;
             }
