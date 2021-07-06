@@ -4,18 +4,12 @@
 		<title>Irony Mod Manager</title>
 		<language>en</language>
 		<item>
-			<title>1.17.101</title>
+			<title>1.17.104</title>
 			<description>RELEASE NOTES:
 This is a significant upgrade to Irony. Please backup your collections made with previous versions of Irony.
 
-* Treat traits as FIOS (for Stellaris)
-* Fix #267
-* Incrase line sensitivity for simple parser validation (for Stellaris)
-* Strip comments before validating files when falling back to simple parser (for Stellaris)
-* Fixed potential tooltip CTD
-* Bump dependencies
-* Minor fixes
-* Fix edit mode CTD
+* Fix dialog position on fresh installs
+* Fix mod filter sometimes not disabling mods in filter
 
 CHANGES FROM v1.16:
 * Updated dependencies
@@ -25,22 +19,16 @@ CHANGES FROM v1.16:
 * Country types are treated in the same manner as pop_jobs (for Stellaris)
 * Add export mods feature along with load order
 * Various improvements and fixes</description>
-			<pubDate>Wed, 23 Jun 2021 19:27:27 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.17.101/osx-x64.rar" sparkle:version="1.17.101.52090" sparkle:shortVersionString="1.17.101" length="69400215" sparkle:os="osx" type="application/vnd.rar" sparkle:signature="dQgzI6ls0LOQYEIpxz6qpw5opyLIAS/MHFWYuAxpXNkkj/7e8ix2OxAPoSM6Uwtxk2nw+Jly4dcSeu5brOPQBQ=="/>
+			<pubDate>Tue, 06 Jul 2021 04:46:14 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.17.104/osx-x64.rar" sparkle:version="1.17.104.2592" sparkle:shortVersionString="1.17.104" length="69399379" sparkle:os="osx" type="application/vnd.rar" sparkle:signature="P+339FT68ZT/L6+MEn9/ljRUnA9WHrEkb0BQMe4EzItgCy/pWYBfQ+wk6QKHci3cw/7dmDSgBflU3ggwjCJCBA=="/>
 		</item>
 		<item>
-			<title>1.17.101</title>
+			<title>1.17.104</title>
 			<description>RELEASE NOTES:
 This is a significant upgrade to Irony. Please backup your collections made with previous versions of Irony.
 
-* Treat traits as FIOS (for Stellaris)
-* Fix #267
-* Incrase line sensitivity for simple parser validation (for Stellaris)
-* Strip comments before validating files when falling back to simple parser (for Stellaris)
-* Fixed potential tooltip CTD
-* Bump dependencies
-* Minor fixes
-* Fix edit mode CTD
+* Fix dialog position on fresh installs
+* Fix mod filter sometimes not disabling mods in filter
 
 CHANGES FROM v1.16:
 * Updated dependencies
@@ -50,22 +38,16 @@ CHANGES FROM v1.16:
 * Country types are treated in the same manner as pop_jobs (for Stellaris)
 * Add export mods feature along with load order
 * Various improvements and fixes</description>
-			<pubDate>Wed, 23 Jun 2021 19:27:35 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.17.101/win-x64-setup.rar" sparkle:version="1.17.101.52090" sparkle:shortVersionString="1.17.101" length="60862983" sparkle:os="windows" type="application/vnd.rar" sparkle:signature="Yyc2BnibONQDw5CnImrVaqXWQrk+aYOwG/1WidIJoKe0c4u5upQnUaZusb0QwgCSgoBdrypicNkyMX9h5cmjDw=="/>
+			<pubDate>Tue, 06 Jul 2021 04:46:21 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.17.104/win-x64-setup.rar" sparkle:version="1.17.104.2592" sparkle:shortVersionString="1.17.104" length="60846239" sparkle:os="windows" type="application/vnd.rar" sparkle:signature="vUM3XfCK6iRgnh8y1Y+7dyfxdgYdDhy3wB2gSiCMfX6ttwu+/AnJ7ta+CDTJGCNc+1z54Y7fVKmtah1N/RLXCA=="/>
 		</item>
 		<item>
-			<title>1.17.101</title>
+			<title>1.17.104</title>
 			<description>RELEASE NOTES:
 This is a significant upgrade to Irony. Please backup your collections made with previous versions of Irony.
 
-* Treat traits as FIOS (for Stellaris)
-* Fix #267
-* Incrase line sensitivity for simple parser validation (for Stellaris)
-* Strip comments before validating files when falling back to simple parser (for Stellaris)
-* Fixed potential tooltip CTD
-* Bump dependencies
-* Minor fixes
-* Fix edit mode CTD
+* Fix dialog position on fresh installs
+* Fix mod filter sometimes not disabling mods in filter
 
 CHANGES FROM v1.16:
 * Updated dependencies
@@ -75,22 +57,16 @@ CHANGES FROM v1.16:
 * Country types are treated in the same manner as pop_jobs (for Stellaris)
 * Add export mods feature along with load order
 * Various improvements and fixes</description>
-			<pubDate>Wed, 23 Jun 2021 19:27:31 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.17.101/win-x64.rar" sparkle:version="1.17.101.52090" sparkle:shortVersionString="1.17.101" length="73265805" sparkle:os="windows" type="application/vnd.rar" sparkle:signature="M7CSeaK5yk9jNE2IYxfgruCMEtO0fBqBRXcjLvFnMPJb0rPE4ARu/dYGfYX2tUQ0KdupodDyjWhSqUWC/JqEAA=="/>
+			<pubDate>Tue, 06 Jul 2021 04:46:17 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.17.104/win-x64.rar" sparkle:version="1.17.104.2592" sparkle:shortVersionString="1.17.104" length="73265036" sparkle:os="windows" type="application/vnd.rar" sparkle:signature="Suvyu3BRzj04rcBVftjsGi5kzx54MtMjjc8c90uOACvJmG4T+kQ0jEmlFA3zdn2T3JIfxfQw6Bw7K6M6AznyCg=="/>
 		</item>
 		<item>
-			<title>1.17.101</title>
+			<title>1.17.104</title>
 			<description>RELEASE NOTES:
 This is a significant upgrade to Irony. Please backup your collections made with previous versions of Irony.
 
-* Treat traits as FIOS (for Stellaris)
-* Fix #267
-* Incrase line sensitivity for simple parser validation (for Stellaris)
-* Strip comments before validating files when falling back to simple parser (for Stellaris)
-* Fixed potential tooltip CTD
-* Bump dependencies
-* Minor fixes
-* Fix edit mode CTD
+* Fix dialog position on fresh installs
+* Fix mod filter sometimes not disabling mods in filter
 
 CHANGES FROM v1.16:
 * Updated dependencies
@@ -100,8 +76,8 @@ CHANGES FROM v1.16:
 * Country types are treated in the same manner as pop_jobs (for Stellaris)
 * Add export mods feature along with load order
 * Various improvements and fixes</description>
-			<pubDate>Wed, 23 Jun 2021 19:27:24 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.17.101/linux-x64.zip" sparkle:version="1.17.101.52090" sparkle:shortVersionString="1.17.101" length="85845738" sparkle:os="linux" type="application/zip" sparkle:signature="Kocv6Z4/2oObzJzA3fEV2mfkNdy8ZHV9C6Tlmj/1NwMErGhRi29RaHqQisxQuPcSQ4s0/Qb7aiLwQhC8UnBmAA=="/>
+			<pubDate>Tue, 06 Jul 2021 04:46:11 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.17.104/linux-x64.zip" sparkle:version="1.17.104.2592" sparkle:shortVersionString="1.17.104" length="85846817" sparkle:os="linux" type="application/zip" sparkle:signature="kcXUHSb+uKFCgPriZ3l2iaq/FyzDe26ag8iCFPGAeKjQoM8YFOswRY80osXFOs9TDX1SyBx3sMpM//9Fx6rfAQ=="/>
 		</item>
 	</channel>
 </rss>
