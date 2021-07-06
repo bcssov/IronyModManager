@@ -4,7 +4,7 @@
 // Created          : 05-26-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-09-2021
+// Last Modified On : 07-06-2021
 // ***********************************************************************
 // <copyright file="ModPatchCollectionService.cs" company="Mario">
 //     Mario
@@ -490,7 +490,7 @@ namespace IronyModManager.Services
                     var parsed = line.StandardizeDirectorySeparator().Trim().TrimStart(Path.DirectorySeparatorChar);
                     if (parsed.StartsWith(ModNameIgnoreId))
                     {
-                        var ignoredModName = parsed.Replace(ModNameIgnoreId, string.Empty);
+                        var ignoredModName = line.Replace(ModNameIgnoreId, string.Empty).Trim();
                         mods.Add(ignoredModName);
                     }
                 }
@@ -1583,7 +1583,7 @@ namespace IronyModManager.Services
                     var parsed = line.StandardizeDirectorySeparator().Trim().TrimStart(Path.DirectorySeparatorChar);
                     if (parsed.StartsWith(ModNameIgnoreId))
                     {
-                        var ignoredModName = parsed.Replace(ModNameIgnoreId, string.Empty);
+                        var ignoredModName = line.Replace(ModNameIgnoreId, string.Empty).Trim();
                         allowedMods.Remove(ignoredModName);
                     }
                     else if (parsed.Equals(ShowGameModsId))
