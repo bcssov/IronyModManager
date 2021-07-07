@@ -227,8 +227,8 @@
         "Overlay_Apply_Message": "Сохранение коллекции...",
         "ConflictSolver": {
             "Conflict": "Разрешитель конфликтов",
-            "Overlay_Conflict_Solver_Indexing_Game": "Пожалуйста, подождите, когда индексирование игрных определений...",
-            "Overlay_Conflict_Solver_Loading_Game_Definitions": "Пожалуйста, подождите во время загрузки определений игр...",
+            "Overlay_Conflict_Solver_Indexing_Game": "Индексирование игровых определений...",
+            "Overlay_Conflict_Solver_Loading_Game_Definitions": "Загрузка игровых определений...",
             "Overlay_Conflict_Solver_Loading_Definitions": "Загрузка определений модов...",
             "Overlay_Conflict_Solver_Analyzing_Conflicts": "Анализ определений на предмет конфликтов...",
             "Overlay_Conflict_Solver_Analyzing_Resolved_Conflicts": "Анализ разрешенных определений...",
@@ -270,7 +270,7 @@
         "Cancel": "Отмена",
         "Resolve": "Разрешить",
         "Ignore": "Игнорировать",
-        "IgnoreRules": "Правила игнора",
+        "IgnoreRules": "Правила игнорирования",
         "OverlayResolve": "Разрешение конфликта...",
         "NextConflict": "След. конфликт",
         "PrevConflict": "Пред. конфликт",
@@ -341,7 +341,7 @@
         "DBSearch": {
             "Title": "Поиск в базе данных",
             "Watermark": "Введите запрос для поиска",
-            "Close": "закрыть",
+            "Close": "Закрыть",
             "Clear": "X"
         },
         "CustomPatch": {
@@ -505,7 +505,7 @@
         },
         "CustomPatchRerunConflictSolver": {
             "Title": "Обновить разрешитель конфликтов",
-            "Message": "Разрешитель конфликтов должен быть обновлен, чтобы учесть новые добавленные патчи. Пожалуйста, перезайдите в разрешитель конфликтов."
+            "Message": "Данные разрешителя конфликтов должны быть обновлены, чтобы учесть добавленные патчи. Пожалуйста, перезайдите в разрешитель конфликтов."
         },
         "CollectionMergeNotEnoughSpace": {
             "Title": "Недостаточно места",
