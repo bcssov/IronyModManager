@@ -4,7 +4,7 @@
 // Created          : 06-08-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 05-29-2021
+// Last Modified On : 07-06-2021
 // ***********************************************************************
 // <copyright file="ConflictSolverModFilterControlViewModel.cs" company="Mario">
 //     Mario
@@ -160,13 +160,13 @@ namespace IronyModManager.ViewModels.Controls
         /// Gets or sets the mods.
         /// </summary>
         /// <value>The mods.</value>
-        public virtual IAvaloniaList<string> Mods { get; protected set; }
+        public virtual IAvaloniaList<Mod> Mods { get; protected set; }
 
         /// <summary>
         /// Gets or sets the selected mods.
         /// </summary>
         /// <value>The selected mods.</value>
-        public virtual IAvaloniaList<string> SelectedMods { get; protected set; }
+        public virtual IAvaloniaList<Mod> SelectedMods { get; protected set; }
 
         #endregion Properties
 
@@ -202,8 +202,10 @@ namespace IronyModManager.ViewModels.Controls
                 settingValues = true;
                 Mods.Clear();
                 SelectedMods.Clear();
-                Mods.AddRange(activeMods);
-                SelectedMods.AddRange(activeMods.Except(modPatchCollectionService.GetIgnoredMods(ConflictResult)).ToList());
+                Mods.AddRange(activeMods.Select(p => new Mod() { Name = p }));
+                var ignoredMods = modPatchCollectionService.GetIgnoredMods(ConflictResult).Select(p => new Mod() { Name = p }).ToList();
+                var selectedMods = Mods.ToList().Except(ignoredMods);
+                SelectedMods.AddRange(selectedMods);
                 shouldToggleGameMods = false;
                 previousIgnoreGameMods = IgnoreGameMods = modPatchCollectionService.ShouldIgnoreGameMods(conflictResult).GetValueOrDefault();
                 valuesSet().ConfigureAwait(false);
@@ -226,7 +228,7 @@ namespace IronyModManager.ViewModels.Controls
                 await Dispatcher.UIThread.SafeInvokeAsync(async () =>
                 {
                     var mods = Mods.Except(SelectedMods).ToList();
-                    modPatchCollectionService.AddModsToIgnoreList(ConflictResult, mods);
+                    modPatchCollectionService.AddModsToIgnoreList(ConflictResult, mods.Select(p => p.Name).ToList());
                     if (shouldToggleGameMods)
                     {
                         modPatchCollectionService.ToggleIgnoreGameMods(ConflictResult);
@@ -269,8 +271,8 @@ namespace IronyModManager.ViewModels.Controls
                 await IgnoreModsAsync(syncingToken.Token).ConfigureAwait(false);
             }
 
-            Mods = new AvaloniaList<string>();
-            SelectedMods = new AvaloniaList<string>();
+            Mods = new AvaloniaList<Mod>();
+            SelectedMods = new AvaloniaList<Mod>();
 
             CloseCommand = ReactiveCommand.Create(() =>
             {
@@ -303,5 +305,54 @@ namespace IronyModManager.ViewModels.Controls
         }
 
         #endregion Methods
+
+        #region Classes
+
+        /// <summary>
+        /// Class Mods.
+        /// </summary>
+        public class Mod
+        {
+            #region Properties
+
+            /// <summary>
+            /// Gets or sets the name.
+            /// </summary>
+            /// <value>The name.</value>
+            public string Name { get; set; }
+
+            #endregion Properties
+
+            #region Methods
+
+            /// <summary>
+            /// Determines whether the specified <see cref="System.Object" /> is equal to this instance.
+            /// </summary>
+            /// <param name="obj">The object to compare with the current object.</param>
+            /// <returns><c>true</c> if the specified <see cref="System.Object" /> is equal to this instance; otherwise, <c>false</c>.</returns>
+            public override bool Equals(object obj)
+            {
+                if (obj != null && obj is Mod mod)
+                {
+                    var name = mod.Name ?? string.Empty;
+                    var thisName = Name ?? string.Empty;
+                    return name.Equals(thisName, StringComparison.Ordinal);
+                }
+                return base.Equals(obj);
+            }
+
+            /// <summary>
+            /// Returns a hash code for this instance.
+            /// </summary>
+            /// <returns>A hash code for this instance, suitable for use in hashing algorithms and data structures like a hash table.</returns>
+            public override int GetHashCode()
+            {
+                return Name.GetHashCode();
+            }
+
+            #endregion Methods
+        }
+
+        #endregion Classes
     }
 }

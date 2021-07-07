@@ -21,8 +21,8 @@
                    Height="400" Width="500" Grid.Row="0">
             <ListBox.ItemTemplate>
               <DataTemplate>
-                <TextBlock Text="{Binding}" TextWrapping="Wrap"
-                           FontFamily="{Binding,Converter={StaticResource TextTypeFontFamilyConverter}}"></TextBlock>
+                <TextBlock Text="{Binding Name}" TextWrapping="Wrap"
+                           FontFamily="{Binding Name, Converter={StaticResource TextTypeFontFamilyConverter}}"></TextBlock>
               </DataTemplate>
             </ListBox.ItemTemplate>
           </ListBox>

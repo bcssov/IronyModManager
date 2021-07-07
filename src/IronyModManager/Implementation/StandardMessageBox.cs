@@ -4,7 +4,7 @@
 // Created          : 05-12-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-25-2021
+// Last Modified On : 07-04-2021
 // ***********************************************************************
 // <copyright file="StandardMessageBox.cs" company="Mario">
 //     Mario
@@ -15,6 +15,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Avalonia.Controls;
+using IronyModManager.Common.Views;
 using MessageBox.Avalonia.BaseWindows.Base;
 using MessageBox.Avalonia.Enums;
 
@@ -72,7 +73,7 @@ namespace IronyModManager.Implementation
         public Task<ButtonResult> Show(Window window)
         {
             var tcs = new TaskCompletionSource<ButtonResult>();
-            if (window == null)
+            if (window == null || (window is IBaseWindow baseWindow && baseWindow.IsCenterScreen))
             {
                 this.window.WindowStartupLocation = WindowStartupLocation.CenterScreen;
             }
@@ -89,7 +90,7 @@ namespace IronyModManager.Implementation
         public Task<ButtonResult> ShowDialog(Window ownerWindow)
         {
             var tcs = new TaskCompletionSource<ButtonResult>();
-            if (ownerWindow == null)
+            if (ownerWindow == null || (ownerWindow is IBaseWindow baseWindow && baseWindow.IsCenterScreen))
             {
                 window.WindowStartupLocation = WindowStartupLocation.CenterScreen;
             }

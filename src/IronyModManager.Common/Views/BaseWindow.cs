@@ -4,15 +4,15 @@
 // Created          : 01-15-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-14-2020
+// Last Modified On : 07-04-2021
 // ***********************************************************************
 // <copyright file="BaseWindow.cs" company="Mario">
 //     Mario
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
-using System.Collections.Generic;
 using System;
+using System.Collections.Generic;
 using System.Reactive.Disposables;
 using Avalonia;
 using Avalonia.Controls;
@@ -26,11 +26,13 @@ namespace IronyModManager.Common.Views
     /// <summary>
     /// Class BaseWindow.
     /// Implements the <see cref="Avalonia.ReactiveUI.ReactiveWindow{TViewModel}" />
+    /// Implements the <see cref="IronyModManager.Common.Views.IBaseWindow" />
     /// </summary>
     /// <typeparam name="TViewModel">The type of the t view model.</typeparam>
     /// <seealso cref="Avalonia.ReactiveUI.ReactiveWindow{TViewModel}" />
+    /// <seealso cref="IronyModManager.Common.Views.IBaseWindow" />
     [ExcludeFromCoverage("This should be tested via functional testing.")]
-    public abstract class BaseWindow<TViewModel> : ReactiveWindow<TViewModel> where TViewModel : BaseViewModel
+    public abstract class BaseWindow<TViewModel> : ReactiveWindow<TViewModel>, IBaseWindow where TViewModel : BaseViewModel
     {
         #region Fields
 
@@ -56,6 +58,8 @@ namespace IronyModManager.Common.Views
                     OnActivated(disposables);
                     IsActivated = true;
                 });
+                PropertyChanged += BaseWindow_PropertyChanged;
+                PositionChanged += BaseWindow_PositionChanged;
             }
         }
 
@@ -74,6 +78,12 @@ namespace IronyModManager.Common.Views
         }
 
         /// <summary>
+        /// Gets a value indicating whether this instance is center screen.
+        /// </summary>
+        /// <value><c>true</c> if this instance is center screen; otherwise, <c>false</c>.</value>
+        public bool IsCenterScreen { get; private set; }
+
+        /// <summary>
         /// Gets the disposables.
         /// </summary>
         /// <value>The disposables.</value>
@@ -89,6 +99,29 @@ namespace IronyModManager.Common.Views
         /// <param name="disposables">The disposables.</param>
         protected virtual void OnActivated(CompositeDisposable disposables)
         {
+        }
+
+        /// <summary>
+        /// Handles the PositionChanged event of the BaseWindow control.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="PixelPointEventArgs" /> instance containing the event data.</param>
+        private void BaseWindow_PositionChanged(object sender, PixelPointEventArgs e)
+        {
+            IsCenterScreen = false;
+        }
+
+        /// <summary>
+        /// Handles the PropertyChanged event of the BaseWindow control.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="AvaloniaPropertyChangedEventArgs"/> instance containing the event data.</param>
+        private void BaseWindow_PropertyChanged(object sender, AvaloniaPropertyChangedEventArgs e)
+        {
+            if (e.Property == WindowStartupLocationProperty)
+            {
+                IsCenterScreen = WindowStartupLocation == WindowStartupLocation.CenterScreen;
+            }
         }
 
         #endregion Methods
