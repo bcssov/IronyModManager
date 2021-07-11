@@ -4,12 +4,12 @@
 		<title>Irony Mod Manager</title>
 		<language>en</language>
 		<item>
-			<title>1.17.104</title>
+			<title>1.17.106</title>
 			<description>RELEASE NOTES:
 This is a significant upgrade to Irony. Please backup your collections made with previous versions of Irony.
 
-* Fix dialog position on fresh installs
-* Fix mod filter sometimes not disabling mods in filter
+* Update russian translation (by Vitalyudin)
+* Support older steam library formats
 
 CHANGES FROM v1.16:
 * Updated dependencies
@@ -19,16 +19,16 @@ CHANGES FROM v1.16:
 * Country types are treated in the same manner as pop_jobs (for Stellaris)
 * Add export mods feature along with load order
 * Various improvements and fixes</description>
-			<pubDate>Tue, 06 Jul 2021 04:46:14 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.17.104/osx-x64.rar" sparkle:version="1.17.104.2592" sparkle:shortVersionString="1.17.104" length="69399379" sparkle:os="osx" type="application/vnd.rar" sparkle:signature="P+339FT68ZT/L6+MEn9/ljRUnA9WHrEkb0BQMe4EzItgCy/pWYBfQ+wk6QKHci3cw/7dmDSgBflU3ggwjCJCBA=="/>
+			<pubDate>Sun, 11 Jul 2021 04:59:07 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.17.106/osx-x64.rar" sparkle:version="1.17.106.49035" sparkle:shortVersionString="1.17.106" length="69402065" sparkle:os="osx" type="application/vnd.rar" sparkle:signature="ewou6JA+OWUOsjzMqJ+CUBEaM3D+klu1Ya3+iebVwvIwPxYf2O4aVx7VCnP/Y50JTze3KTx8U9ycyS6ekuvkDg=="/>
 		</item>
 		<item>
-			<title>1.17.104</title>
+			<title>1.17.106</title>
 			<description>RELEASE NOTES:
 This is a significant upgrade to Irony. Please backup your collections made with previous versions of Irony.
 
-* Fix dialog position on fresh installs
-* Fix mod filter sometimes not disabling mods in filter
+* Update russian translation (by Vitalyudin)
+* Support older steam library formats
 
 CHANGES FROM v1.16:
 * Updated dependencies
@@ -38,16 +38,16 @@ CHANGES FROM v1.16:
 * Country types are treated in the same manner as pop_jobs (for Stellaris)
 * Add export mods feature along with load order
 * Various improvements and fixes</description>
-			<pubDate>Tue, 06 Jul 2021 04:46:21 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.17.104/win-x64-setup.rar" sparkle:version="1.17.104.2592" sparkle:shortVersionString="1.17.104" length="60846239" sparkle:os="windows" type="application/vnd.rar" sparkle:signature="vUM3XfCK6iRgnh8y1Y+7dyfxdgYdDhy3wB2gSiCMfX6ttwu+/AnJ7ta+CDTJGCNc+1z54Y7fVKmtah1N/RLXCA=="/>
+			<pubDate>Sun, 11 Jul 2021 04:59:15 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.17.106/win-x64-setup.rar" sparkle:version="1.17.106.49035" sparkle:shortVersionString="1.17.106" length="60860847" sparkle:os="windows" type="application/vnd.rar" sparkle:signature="SAe7znHwmLpw44l9LNw3HwMI18Kt728wsqyBLtSlWbMl2omlydlGuNPcWtBKjcYPAKLR9BXPNfDPSDVOejZEBg=="/>
 		</item>
 		<item>
-			<title>1.17.104</title>
+			<title>1.17.106</title>
 			<description>RELEASE NOTES:
 This is a significant upgrade to Irony. Please backup your collections made with previous versions of Irony.
 
-* Fix dialog position on fresh installs
-* Fix mod filter sometimes not disabling mods in filter
+* Update russian translation (by Vitalyudin)
+* Support older steam library formats
 
 CHANGES FROM v1.16:
 * Updated dependencies
@@ -57,16 +57,16 @@ CHANGES FROM v1.16:
 * Country types are treated in the same manner as pop_jobs (for Stellaris)
 * Add export mods feature along with load order
 * Various improvements and fixes</description>
-			<pubDate>Tue, 06 Jul 2021 04:46:17 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.17.104/win-x64.rar" sparkle:version="1.17.104.2592" sparkle:shortVersionString="1.17.104" length="73265036" sparkle:os="windows" type="application/vnd.rar" sparkle:signature="Suvyu3BRzj04rcBVftjsGi5kzx54MtMjjc8c90uOACvJmG4T+kQ0jEmlFA3zdn2T3JIfxfQw6Bw7K6M6AznyCg=="/>
+			<pubDate>Sun, 11 Jul 2021 04:59:11 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.17.106/win-x64.rar" sparkle:version="1.17.106.49035" sparkle:shortVersionString="1.17.106" length="73267795" sparkle:os="windows" type="application/vnd.rar" sparkle:signature="0mVNjkdMWgje54Xtyo5SkDRAMftF2FWXDGdp0eAQMe4mvepGKOmqfacMkmK8mHfIQkHF+zggGrqnKu9iU4oFCw=="/>
 		</item>
 		<item>
-			<title>1.17.104</title>
+			<title>1.17.106</title>
 			<description>RELEASE NOTES:
 This is a significant upgrade to Irony. Please backup your collections made with previous versions of Irony.
 
-* Fix dialog position on fresh installs
-* Fix mod filter sometimes not disabling mods in filter
+* Update russian translation (by Vitalyudin)
+* Support older steam library formats
 
 CHANGES FROM v1.16:
 * Updated dependencies
@@ -76,8 +76,8 @@ CHANGES FROM v1.16:
 * Country types are treated in the same manner as pop_jobs (for Stellaris)
 * Add export mods feature along with load order
 * Various improvements and fixes</description>
-			<pubDate>Tue, 06 Jul 2021 04:46:11 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.17.104/linux-x64.zip" sparkle:version="1.17.104.2592" sparkle:shortVersionString="1.17.104" length="85846817" sparkle:os="linux" type="application/zip" sparkle:signature="kcXUHSb+uKFCgPriZ3l2iaq/FyzDe26ag8iCFPGAeKjQoM8YFOswRY80osXFOs9TDX1SyBx3sMpM//9Fx6rfAQ=="/>
+			<pubDate>Sun, 11 Jul 2021 04:59:04 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.17.106/linux-x64.zip" sparkle:version="1.17.106.49035" sparkle:shortVersionString="1.17.106" length="85847260" sparkle:os="linux" type="application/zip" sparkle:signature="+TnTnxu3ewqajicXe02WHxUsBKyad26UVFpmY14xzvTYRZrPndKAFWDernk4g/rTAHVQp6/UTyeHx+pxOtReDg=="/>
 		</item>
 	</channel>
 </rss>
