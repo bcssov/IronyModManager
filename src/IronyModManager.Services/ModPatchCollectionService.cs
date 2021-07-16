@@ -4,7 +4,7 @@
 // Created          : 05-26-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 07-06-2021
+// Last Modified On : 07-16-2021
 // ***********************************************************************
 // <copyright file="ModPatchCollectionService.cs" company="Mario">
 //     Mario
@@ -422,6 +422,7 @@ namespace IronyModManager.Services
                 {
                     var newDefinition = CopyDefinition(definition);
                     var provider = DefinitionInfoProviders.FirstOrDefault(p => p.CanProcess(GameService.GetSelected().Type));
+                    var oldFileName = newDefinition.File;
                     newDefinition.File = Path.Combine(definition.ParentDirectory, definition.Id.GenerateValidFileName() + Path.GetExtension(definition.File));
                     var overwrittenFileNames = definition.OverwrittenFileNames;
                     foreach (var file in definitions.SelectMany(p => p.OverwrittenFileNames))
@@ -430,7 +431,15 @@ namespace IronyModManager.Services
                     }
                     newDefinition.OverwrittenFileNames = overwrittenFileNames.Distinct().ToList();
                     newDefinition.DiskFile = provider.GetDiskFileName(newDefinition);
+                    var preserveOverwrittenFileName = oldFileName == newDefinition.File;
                     newDefinition.File = provider.GetFileName(newDefinition);
+                    if (preserveOverwrittenFileName)
+                    {
+                        // What are the chances that generated filename will match
+                        var preservedOverwrittenFileName = newDefinition.OverwrittenFileNames;
+                        preservedOverwrittenFileName.Add(oldFileName);
+                        newDefinition.OverwrittenFileNames = preservedOverwrittenFileName;
+                    }
                     overwrittenDefs.Add(definition.TypeAndId, newDefinition);
                 }
                 processed++;
