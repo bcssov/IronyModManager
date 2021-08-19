@@ -248,7 +248,7 @@ namespace IronyModManager.ViewModels.Controls
                         if (!token.IsCancellationRequested)
                         {
                             int virtualDefCount = virtualDefinitions.Count();
-                            LeftSelectedDefinition = virtualDefinitions.FirstOrDefault(p => p != newDefinition && p != priorityDefinition.Definition && !(virtualDefCount >= 4 && p.OriginalModName == "Stellaris"));
+                            LeftSelectedDefinition = virtualDefinitions.FirstOrDefault(p => p != newDefinition && p != priorityDefinition.Definition && !(virtualDefCount >= 4 && p.IsFromGame));
                             RightSelectedDefinition = newDefinition;
                         }
                     }
