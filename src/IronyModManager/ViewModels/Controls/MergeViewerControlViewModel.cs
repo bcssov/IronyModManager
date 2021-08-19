@@ -663,6 +663,7 @@ namespace IronyModManager.ViewModels.Controls
         {
             if (selected?.Count() > 0)
             {
+                int indx = 0;
                 selected = CopyDiffPieceCollection(selected);
                 source = CopyDiffPieceCollection(source);
                 destination = CopyDiffPieceCollection(destination);
@@ -671,6 +672,7 @@ namespace IronyModManager.ViewModels.Controls
                 {
                     destination.RemoveAt(item.Key);
                     destination.Insert(item.Key, item.Value);
+                    indx = item.Key;
                 }
                 if (leftSide)
                 {
@@ -680,6 +682,7 @@ namespace IronyModManager.ViewModels.Controls
                 {
                     SetText(string.Join(Environment.NewLine, destination.Where(p => p.Text != null).Select(p => p.Text)), RightSide);
                 }
+                ConflictFound?.Invoke(indx);
             }
         }
 
@@ -694,6 +697,7 @@ namespace IronyModManager.ViewModels.Controls
         {
             if (selected?.Count() > 0)
             {
+                int indx = 0;
                 selected = CopyDiffPieceCollection(selected);
                 source = CopyDiffPieceCollection(source);
                 destination = CopyDiffPieceCollection(destination);
@@ -749,6 +753,7 @@ namespace IronyModManager.ViewModels.Controls
                         appliedOffset++;
                     }
                     destination.Insert(index, item.Item2);
+                    indx = index;
                 }
                 if (leftSide)
                 {
@@ -758,6 +763,7 @@ namespace IronyModManager.ViewModels.Controls
                 {
                     SetText(string.Join(Environment.NewLine, destination.Where(p => p.Text != null).Select(p => p.Text)), RightSide);
                 }
+                ConflictFound?.Invoke(indx);
             }
         }
 
@@ -772,6 +778,7 @@ namespace IronyModManager.ViewModels.Controls
         {
             if (selected?.Count() > 0)
             {
+                int indx = 0;
                 selected = CopyDiffPieceCollection(selected);
                 source = CopyDiffPieceCollection(source);
                 destination = CopyDiffPieceCollection(destination);
@@ -815,6 +822,7 @@ namespace IronyModManager.ViewModels.Controls
                         appliedOffset--;
                     }
                     destination.Insert(index, item.Item2);
+                    indx = index;
                 }
                 if (leftSide)
                 {
@@ -824,6 +832,7 @@ namespace IronyModManager.ViewModels.Controls
                 {
                     SetText(string.Join(Environment.NewLine, destination.Where(p => p.Text != null).Select(p => p.Text)), RightSide);
                 }
+                ConflictFound?.Invoke(indx);
             }
         }
 
@@ -853,6 +862,7 @@ namespace IronyModManager.ViewModels.Controls
         /// <param name="leftSide">if set to <c>true</c> [left side].</param>
         protected virtual void DeleteLines(bool leftSide)
         {
+            int indx = 0;
             var selected = leftSide ? LeftSideSelected : RightSideSelected;
             var source = CopyDiffPieceCollection(leftSide ? LeftDiff : RightDiff);
             if (selected != null && source != null && selected.Count > 0 && selected.Count <= source.Count)
@@ -860,6 +870,7 @@ namespace IronyModManager.ViewModels.Controls
                 foreach (var item in selected)
                 {
                     source.Remove(item);
+                    indx = item.Index;
                 }
                 if (leftSide)
                 {
@@ -869,6 +880,7 @@ namespace IronyModManager.ViewModels.Controls
                 {
                     SetText(LeftSide, string.Join(Environment.NewLine, source.Where(p => p.Text != null).Select(p => p.Text)));
                 }
+                ConflictFound?.Invoke(indx);
             }
         }
 
@@ -1000,6 +1012,7 @@ namespace IronyModManager.ViewModels.Controls
         {
             if (selected?.Count() > 0)
             {
+                int indx = 0;
                 selected = CopyDiffPieceCollection(selected);
                 source = CopyDiffPieceCollection(source);
                 var ordered = OrderSelected(selected, source);
@@ -1038,6 +1051,7 @@ namespace IronyModManager.ViewModels.Controls
                     }
                     source.RemoveAt(item.Key);
                     source.Insert(index, item.Value);
+                    indx = index;
                 }
                 if (leftSide)
                 {
@@ -1047,6 +1061,7 @@ namespace IronyModManager.ViewModels.Controls
                 {
                     SetText(LeftSide, string.Join(Environment.NewLine, source.Where(p => p.Text != null).Select(p => p.Text)));
                 }
+                ConflictFound?.Invoke(indx);
             }
         }
 
