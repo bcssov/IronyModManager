@@ -36,6 +36,8 @@ namespace IronyModManager.Implementation.Hotkey
         {
             { Constants.CTRL_Down, Enums.HotKeys.Ctrl_Down },
             { Constants.CTRL_Up, Enums.HotKeys.Ctrl_Up },
+            { Constants.CTRL_Right, Enums.HotKeys.Ctrl_Right },
+            { Constants.CTRL_Left, Enums.HotKeys.Ctrl_Left },
             { Constants.CTRL_SHIFT_Up, Enums.HotKeys.Ctrl_Shift_Up },
             { Constants.CTRL_SHIFT_Down, Enums.HotKeys.Ctrl_Shift_Down },
             { Constants.SHIFT_Down, Enums.HotKeys.Shift_Down },
