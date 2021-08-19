@@ -90,6 +90,11 @@ namespace IronyModManager.Implementation.Hotkey
         public const string CTRL_Down = "CTRL+Down";
 
         /// <summary>
+        /// The control left
+        /// </summary>
+        public const string CTRL_Left = "CTRL+Left";
+
+        /// <summary>
         /// The control e
         /// </summary>
         public const string CTRL_E = "CTRL+E";
@@ -188,6 +193,11 @@ namespace IronyModManager.Implementation.Hotkey
         /// The control up
         /// </summary>
         public const string CTRL_Up = "CTRL+Up";
+
+        /// <summary>
+        /// The control right
+        /// </summary>
+        public const string CTRL_Right = "CTRL+Right";
 
         /// <summary>
         /// The control v
