@@ -877,7 +877,7 @@ namespace IronyModManager.ViewModels.Controls
         /// </summary>
         /// <param name="leftSide">if set to <c>true</c> [left side].</param>
         /// <param name="moveDown">if set to <c>true</c> [move down].</param>
-        protected virtual void FindConflict(bool leftSide, bool moveDown)
+        protected virtual void FindConflict(bool leftSide, bool moveDown, bool skipImaginary)
         {
             var selectedItems = leftSide ? LeftSideSelected : RightSideSelected;
             if (selectedItems?.Count > 0)
@@ -904,7 +904,7 @@ namespace IronyModManager.ViewModels.Controls
                                 break;
                             }
                         }
-                        var line = source.Skip(idx).FirstOrDefault(p => p.SubPieces.Count > 0 || p.Type != ChangeType.Unchanged);
+                        var line = source.Skip(idx).FirstOrDefault(p => p.SubPieces.Count > 0 || !(p.Type == ChangeType.Unchanged || (skipImaginary && p.Type == ChangeType.Imaginary)));
                         if (line != null)
                         {
                             var index = line.Index - 1;
@@ -912,7 +912,7 @@ namespace IronyModManager.ViewModels.Controls
                             {
                                 index = 0;
                             }
-                            line = source.Skip(index).TakeWhile(p => p.SubPieces.Count > 0 || p.Type != ChangeType.Unchanged).LastOrDefault();
+                            line = source.Skip(index).TakeWhile(p => p.SubPieces.Count > 0 || !(p.Type == ChangeType.Unchanged || (skipImaginary && p.Type == ChangeType.Imaginary))).LastOrDefault();
                             if (line != null)
                             {
                                 matchIdx = source.IndexOf(line);
@@ -942,7 +942,7 @@ namespace IronyModManager.ViewModels.Controls
                                 break;
                             }
                         }
-                        var line = reverseSrc.Skip(reverseIdx).FirstOrDefault(p => p.SubPieces.Count > 0 || p.Type != ChangeType.Unchanged);
+                        var line = reverseSrc.Skip(reverseIdx).FirstOrDefault(p => p.SubPieces.Count > 0 || !(p.Type == ChangeType.Unchanged || (skipImaginary && p.Type == ChangeType.Imaginary)));
                         if (line != null)
                         {
                             var index = reverseSrc.Count - line.Index;
@@ -950,7 +950,7 @@ namespace IronyModManager.ViewModels.Controls
                             {
                                 index = 0;
                             }
-                            line = reverseSrc.Skip(index).TakeWhile(p => p.SubPieces.Count > 0 || p.Type != ChangeType.Unchanged).LastOrDefault();
+                            line = reverseSrc.Skip(index).TakeWhile(p => p.SubPieces.Count > 0 || !(p.Type == ChangeType.Unchanged || (skipImaginary && p.Type == ChangeType.Imaginary))).LastOrDefault();
                             if (line != null)
                             {
                                 matchIdx = source.IndexOf(line);
@@ -1185,12 +1185,12 @@ namespace IronyModManager.ViewModels.Controls
 
             NextConflictCommand = ReactiveCommand.Create((bool leftSide) =>
             {
-                FindConflict(leftSide, true);
+                FindConflict(leftSide, true, false);
             }).DisposeWith(disposables);
 
             PrevConflictCommand = ReactiveCommand.Create((bool leftSide) =>
             {
-                FindConflict(leftSide, false);
+                FindConflict(leftSide, false, false);
             }).DisposeWith(disposables);
 
             DeleteTextCommand = ReactiveCommand.Create((bool leftSide) =>
@@ -1234,7 +1234,7 @@ namespace IronyModManager.ViewModels.Controls
                             {
                                 LeftSideSelected.Add(LeftDiff.FirstOrDefault());
                             }
-                            FindConflict(true, false);
+                            FindConflict(true, false, false);
                             break;
 
                         case Enums.HotKeys.Ctrl_Down:
@@ -1242,7 +1242,23 @@ namespace IronyModManager.ViewModels.Controls
                             {
                                 LeftSideSelected.Add(LeftDiff.FirstOrDefault());
                             }
-                            FindConflict(true, true);
+                            FindConflict(true, true, false);
+                            break;
+
+                        case Enums.HotKeys.Ctrl_Left:
+                            if (LeftSideSelected.Count == 0)
+                            {
+                                LeftSideSelected.Add(LeftDiff.FirstOrDefault());
+                            }
+                            FindConflict(true, false, true);
+                            break;
+
+                        case Enums.HotKeys.Ctrl_Right:
+                            if (LeftSideSelected.Count == 0)
+                            {
+                                LeftSideSelected.Add(LeftDiff.FirstOrDefault());
+                            }
+                            FindConflict(true, true, true);
                             break;
 
                         case Enums.HotKeys.Ctrl_E:
