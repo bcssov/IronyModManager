@@ -249,6 +249,10 @@ namespace IronyModManager.ViewModels.Controls
                         {
                             int virtualDefCount = virtualDefinitions.Count();
                             LeftSelectedDefinition = virtualDefinitions.FirstOrDefault(p => p != newDefinition && p != priorityDefinition.Definition && !(virtualDefCount >= 4 && p.IsFromGame));
+                            if (LeftSelectedDefinition == null)
+                            {
+                                LeftSelectedDefinition = virtualDefinitions.FirstOrDefault(p => p != newDefinition && p != priorityDefinition.Definition);
+                            }
                             RightSelectedDefinition = newDefinition;
                         }
                     }
