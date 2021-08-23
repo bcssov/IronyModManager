@@ -11,7 +11,7 @@
       <TextBlock Text="{Binding ThemeText}" HorizontalAlignment="Left" VerticalAlignment="Center"
                  Margin="0,0,10,0"></TextBlock>
       <controls:ComboBox Items="{Binding Themes}" SelectedItem="{Binding SelectedTheme}"
-                MinHeight="25" MinWidth="80" HorizontalAlignment="Right" Margin="0,0,10,0" IsTextSearchEnabled="True">
+                MinHeight="25" MinWidth="80" HorizontalAlignment="Right" Margin="0,0,10,0" IsTextSearchEnabled="False">
         <controls:ComboBox.ItemTemplate>
           <DataTemplate>
             <ComboBoxItem IsSelected="{Binding IsSelected}" Content="{Binding Name}"></ComboBoxItem>
