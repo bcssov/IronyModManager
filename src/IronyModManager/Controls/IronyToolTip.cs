@@ -4,7 +4,7 @@
 // Created          : 06-18-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-15-2021
+// Last Modified On : 08-23-2021
 // ***********************************************************************
 // <copyright file="IronyToolTip.cs" company="Avalonia">
 //     Avalonia
@@ -16,6 +16,7 @@ using System.Collections.Generic;
 using System.Reactive.Linq;
 using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Controls.Diagnostics;
 using Avalonia.Controls.Metadata;
 using Avalonia.Controls.Primitives;
 using Avalonia.Input;
@@ -32,12 +33,16 @@ namespace IronyModManager.Controls
     /// Class IronyToolTip.
     /// Implements the <see cref="Avalonia.Controls.ContentControl" />
     /// Implements the <see cref="Avalonia.Styling.IStyleable" />
+    /// Implements the <see cref="Avalonia.Controls.Diagnostics.IPopupHostProvider" />
     /// </summary>
     /// <seealso cref="Avalonia.Controls.ContentControl" />
     /// <seealso cref="Avalonia.Styling.IStyleable" />
+    /// <seealso cref="Avalonia.Controls.Diagnostics.IPopupHostProvider" />
     [PseudoClasses(":open")]
-    public class IronyToolTip : ContentControl, IStyleable
+    public class IronyToolTip : ContentControl, IStyleable, IPopupHostProvider
     {
+#pragma warning disable CS8632 // The annotation for nullable reference types should only be used in code within a '#nullable' annotations context.
+
         #region Fields
 
         /// <summary>
@@ -73,12 +78,8 @@ namespace IronyModManager.Controls
         /// <summary>
         /// The tip property
         /// </summary>
-#pragma warning disable CS8632 // The annotation for nullable reference types should only be used in code within a '#nullable' annotations context.
-
         public static readonly AttachedProperty<object?> TipProperty =
-            AvaloniaProperty.RegisterAttached<ToolTip, Control, object?>("Tip");
-
-#pragma warning restore CS8632 // The annotation for nullable reference types should only be used in code within a '#nullable' annotations context.
+                    AvaloniaProperty.RegisterAttached<ToolTip, Control, object?>("Tip");
 
         /// <summary>
         /// The vertical offset property
@@ -89,19 +90,22 @@ namespace IronyModManager.Controls
         /// <summary>
         /// The tool tip property
         /// </summary>
-#pragma warning disable CS8632 // The annotation for nullable reference types should only be used in code within a '#nullable' annotations context.
-
         internal static readonly AttachedProperty<IronyToolTip?> ToolTipProperty =
-            AvaloniaProperty.RegisterAttached<IronyToolTip, Control, IronyToolTip?>("ToolTip");
-
-#pragma warning restore CS8632 // The annotation for nullable reference types should only be used in code within a '#nullable' annotations context.
+                    AvaloniaProperty.RegisterAttached<IronyToolTip, Control, IronyToolTip?>("ToolTip");
 
         /// <summary>
-        /// The popup
+        /// The popup host
         /// </summary>
-        private IPopupHost popup;
+        private IPopupHost? popupHost;
+
+        /// <summary>
+        /// The popup host changed handler
+        /// </summary>
+        private Action<IPopupHost?>? popupHostChangedHandler;
 
         #endregion Fields
+
+#pragma warning restore CS8632 // The annotation for nullable reference types should only be used in code within a '#nullable' annotations context.
 
         #region Constructors
 
@@ -121,7 +125,32 @@ namespace IronyModManager.Controls
 
         #endregion Constructors
 
+        /// <summary>
+        /// Raised when the popup host changes.
+        /// </summary>
+#pragma warning disable CS8632 // The annotation for nullable reference types should only be used in code within a '#nullable' annotations context.
+
+        #region Events
+
+        event Action<IPopupHost?>? IPopupHostProvider.PopupHostChanged
+#pragma warning restore CS8632 // The annotation for nullable reference types should only be used in code within a '#nullable' annotations context.
+        {
+            add => popupHostChangedHandler += value;
+            remove => popupHostChangedHandler -= value;
+        }
+
+        #endregion Events
+
+        /// <summary>
+        /// The popup host.
+        /// </summary>
+        /// <value>The popup host.</value>
+#pragma warning disable CS8632 // The annotation for nullable reference types should only be used in code within a '#nullable' annotations context.
+
         #region Properties
+
+        IPopupHost? IPopupHostProvider.PopupHost => popupHost;
+#pragma warning restore CS8632 // The annotation for nullable reference types should only be used in code within a '#nullable' annotations context.
 
         /// <summary>
         /// Gets the style key.
@@ -285,7 +314,7 @@ namespace IronyModManager.Controls
         /// <param name="control">The control.</param>
         internal void RecalculatePosition(Control control)
         {
-            popup?.ConfigurePosition(control, GetPlacement(control), new Point(GetHorizontalOffset(control), GetVerticalOffset(control)));
+            popupHost?.ConfigurePosition(control, GetPlacement(control), new Point(GetHorizontalOffset(control), GetVerticalOffset(control)));
         }
 
         /// <summary>
@@ -345,11 +374,12 @@ namespace IronyModManager.Controls
         /// </summary>
         private void Close()
         {
-            if (popup != null)
+            if (popupHost != null)
             {
-                popup.SetChild(null);
-                popup.Dispose();
-                popup = null;
+                popupHost.SetChild(null);
+                popupHost.Dispose();
+                popupHost = null;
+                popupHostChangedHandler?.Invoke(null);
             }
         }
 
@@ -365,14 +395,14 @@ namespace IronyModManager.Controls
             }
             Close();
 
-            popup = OverlayPopupHost.CreatePopupHost(control, null);
-            popup.SetChild(this);
-            ((ISetLogicalParent)popup).SetParent(control);
+            popupHost = OverlayPopupHost.CreatePopupHost(control, null);
+            popupHost.SetChild(this);
+            ((ISetLogicalParent)popupHost).SetParent(control);
 
-            popup.ConfigurePosition(control, GetPlacement(control),
+            popupHost.ConfigurePosition(control, GetPlacement(control),
                 new Point(GetHorizontalOffset(control), GetVerticalOffset(control)));
-            popup.Show();
-            WindowManagerAddShadowHintChanged(popup, false);
+            popupHost.Show();
+            WindowManagerAddShadowHintChanged(popupHost, false);
         }
 
         /// <summary>

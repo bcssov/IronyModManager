@@ -24,14 +24,14 @@
             <ContentControl Content="{Binding CustomConflicts}" Grid.Column="0" Grid.Row="1"></ContentControl>
             <ContentControl Content="{Binding ResetConflicts}" Grid.Column="1" Grid.Row="1"></ContentControl>
           </Grid>
-          <ComboBox Items="{Binding HierarchalConflicts}" SelectedItem="{Binding SelectedParentConflict}"
+          <controls:ComboBox Items="{Binding HierarchalConflicts}" SelectedItem="{Binding SelectedParentConflict}"
                    HorizontalAlignment="Stretch" MinHeight="30">
-            <ComboBox.ItemTemplate>
+            <controls:ComboBox.ItemTemplate>
               <DataTemplate>
                 <ComboBoxItem Content="{Binding Name}"></ComboBoxItem>
               </DataTemplate>
-            </ComboBox.ItemTemplate>
-          </ComboBox>
+            </controls:ComboBox.ItemTemplate>
+          </controls:ComboBox>
           <controls:ListBox Items="{Binding SelectedParentConflict.Children}" SelectedItem="SelectedConflict"
                    ScrollViewer.HorizontalScrollBarVisibility="Disabled" SelectionMode="Single" x:Name="conflictList"
                    Height="{Binding $parent[Window].Height, 

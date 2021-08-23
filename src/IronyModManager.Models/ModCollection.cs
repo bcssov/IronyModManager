@@ -4,7 +4,7 @@
 // Created          : 03-04-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-16-2021
+// Last Modified On : 08-23-2021
 // ***********************************************************************
 // <copyright file="ModCollection.cs" company="Mario">
 //     Mario
@@ -84,5 +84,24 @@ namespace IronyModManager.Models
         public bool PatchModEnabled { get; set; } = true;
 
         #endregion Properties
+
+        #region Methods
+
+        /// <summary>
+        /// Determines whether the specified term is match.
+        /// </summary>
+        /// <param name="term">The term.</param>
+        /// <returns><c>true</c> if the specified term is match; otherwise, <c>false</c>.</returns>
+        public bool IsMatch(string term)
+        {
+            if (string.IsNullOrWhiteSpace(Name))
+            {
+                return false;
+            }
+            term ??= string.Empty;
+            return Name.StartsWith(term, StringComparison.OrdinalIgnoreCase);
+        }
+
+        #endregion Methods
     }
 }

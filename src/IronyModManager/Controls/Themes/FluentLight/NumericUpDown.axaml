@@ -11,6 +11,7 @@
     <Setter Property="MinWidth" Value="20" />
     <Setter Property="FontSize" Value="{DynamicResource ControlContentThemeFontSize}" />
     <Setter Property="Padding" Value="{DynamicResource TextControlThemePadding}" />
+    <Setter Property="CornerRadius" Value="{DynamicResource ControlCornerRadius}" />
     <Setter Property="Template">
       <ControlTemplate>
         <Border Background="{TemplateBinding Background}"
@@ -21,6 +22,7 @@
           <controls:MinMaxButtonSpinner Name="PART_MinMax_Spinner"
                  Background="Transparent"
                  BorderBrush="Transparent"
+                 CornerRadius="{TemplateBinding CornerRadius}"
                  BorderThickness="0"
                  Padding="0"
                  HorizontalContentAlignment="Stretch"
@@ -31,6 +33,7 @@
             <controls:NumericButtonSpinner Name="PART_Spinner"
                            Background="Transparent"
                            BorderBrush="Transparent"
+                           CornerRadius="{TemplateBinding CornerRadius}"
                            BorderThickness="0"
                            Padding="0"
                            HorizontalContentAlignment="Stretch"

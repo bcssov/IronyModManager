@@ -69,7 +69,7 @@
       </StackPanel>
     </DockPanel>
 
-    <ComboBox DockPanel.Dock="Bottom"
+    <controls:ComboBox DockPanel.Dock="Bottom"
               IsVisible="{Binding ShowFilters}"
               Items="{Binding Filters}"
               SelectedItem="{Binding SelectedFilter}"

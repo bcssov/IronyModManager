@@ -4,7 +4,7 @@
 // Created          : 03-04-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-16-2021
+// Last Modified On : 08-23-2021
 // ***********************************************************************
 // <copyright file="IModCollection.cs" company="Mario">
 //     Mario
@@ -13,14 +13,17 @@
 // ***********************************************************************
 using System;
 using System.Collections.Generic;
+using IronyModManager.Shared.Models;
 
 namespace IronyModManager.Models.Common
 {
     /// <summary>
     /// Interface IModCollection Implements the <see cref="IronyModManager.Models.Common.IModel" />
+    /// Implements the <see cref="IronyModManager.Shared.Models.IQueryableModel" />
     /// </summary>
+    /// <seealso cref="IronyModManager.Shared.Models.IQueryableModel" />
     /// <seealso cref="IronyModManager.Models.Common.IModel" />
-    public interface IModCollection : IModel
+    public interface IModCollection : IModel, IQueryableModel
     {
         #region Properties
 
