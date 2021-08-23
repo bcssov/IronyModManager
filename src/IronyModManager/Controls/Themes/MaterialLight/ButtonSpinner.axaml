@@ -3,12 +3,13 @@
     <Setter Property="BorderThickness" Value="1" />
     <Setter Property="HorizontalContentAlignment" Value="Stretch" />
     <Setter Property="VerticalContentAlignment" Value="Center" />
+    <Setter Property="Foreground" Value="{DynamicResource PrimaryHueMidForegroundBrush}"/>
     <Setter Property="BorderBrush" Value="{DynamicResource MaterialDesignTextAreaBorder}" />
   </Style>
   <Style Selector="ButtonSpinner /template/ RepeatButton#PART_DecreaseButton">
     <Setter Property="Content">
       <Template>
-        <Path Fill="{DynamicResource PrimaryHueMidForegroundBrush}"
+        <Path Fill="{Binding $parent[ButtonSpinner].Foreground}"
               Width="9"
               Height="5"
               Stretch="Uniform"
@@ -21,7 +22,7 @@
   <Style Selector="ButtonSpinner /template/ RepeatButton#PART_IncreaseButton">
     <Setter Property="Content">
       <Template>
-        <Path Fill="{DynamicResource PrimaryHueMidForegroundBrush}"
+        <Path Fill="{Binding $parent[ButtonSpinner].Foreground}"
               Width="9"
               Height="5"
               Stretch="Uniform"
