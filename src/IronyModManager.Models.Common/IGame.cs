@@ -4,7 +4,7 @@
 // Created          : 02-12-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-17-2021
+// Last Modified On : 08-23-2021
 // ***********************************************************************
 // <copyright file="IGame.cs" company="Mario">
 //     Mario
@@ -14,6 +14,7 @@
 using System;
 using System.Collections.Generic;
 using IronyModManager.Localization;
+using IronyModManager.Shared.Models;
 
 namespace IronyModManager.Models.Common
 {
@@ -21,10 +22,12 @@ namespace IronyModManager.Models.Common
     /// Interface IGame
     /// Implements the <see cref="IronyModManager.Models.Common.IModel" />
     /// Implements the <see cref="IronyModManager.Localization.ILocalizableModel" />
+    /// Implements the <see cref="IronyModManager.Shared.Models.IQueryableModel" />
     /// </summary>
+    /// <seealso cref="IronyModManager.Shared.Models.IQueryableModel" />
     /// <seealso cref="IronyModManager.Models.Common.IModel" />
     /// <seealso cref="IronyModManager.Localization.ILocalizableModel" />
-    public interface IGame : IModel, ILocalizableModel
+    public interface IGame : IModel, ILocalizableModel, IQueryableModel
     {
         #region Properties
 

@@ -55,17 +55,17 @@
                 <Button Content="{Binding Remove}" MaxHeight="30"
                 Command="{Binding RemoveCommand}" Margin="5,0,0,0" Width="30"></Button>
                 <!-- For the love of God I can't force this piece of shit to set its width properly -->
-                <ComboBox Items="{Binding ModCollections}" SelectedItem="{Binding SelectedModCollection}"
+                <controls:ComboBox Items="{Binding ModCollections}" SelectedItem="{Binding SelectedModCollection}"
                           Height="30" Margin="10"
                           Width="{Binding $parent[Window].Width, 
                            Converter={StaticResource MathConverter} 
                            ConverterParameter=(x/2.1)-90}">
-                  <ComboBox.ItemTemplate>
+                  <controls:ComboBox.ItemTemplate>
                     <DataTemplate>
                       <ComboBoxItem Content="{Binding Name}" IsSelected="{Binding IsSelected}"></ComboBoxItem>
                     </DataTemplate>
-                  </ComboBox.ItemTemplate>
-                </ComboBox>
+                  </controls:ComboBox.ItemTemplate>
+                </controls:ComboBox>
                 <Button Content="{Binding Create}" MaxHeight="30"
                         Command="{Binding CreateCommand}" Margin="0,0,5,0" Width="30"></Button>
               </DockPanel>

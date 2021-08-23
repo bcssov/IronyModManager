@@ -4,7 +4,7 @@
 // Created          : 02-12-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-17-2021
+// Last Modified On : 08-23-2021
 // ***********************************************************************
 // <copyright file="Game.cs" company="Mario">
 //     Mario
@@ -152,5 +152,24 @@ namespace IronyModManager.Models
         public virtual IEnumerable<string> WorkshopDirectory { get; set; }
 
         #endregion Properties
+
+        #region Methods
+
+        /// <summary>
+        /// Determines whether the specified term is match.
+        /// </summary>
+        /// <param name="term">The term.</param>
+        /// <returns><c>true</c> if the specified term is match; otherwise, <c>false</c>.</returns>
+        public bool IsMatch(string term)
+        {
+            if (string.IsNullOrWhiteSpace(Name))
+            {
+                return false;
+            }
+            term ??= string.Empty;
+            return Name.StartsWith(term, StringComparison.OrdinalIgnoreCase);
+        }
+
+        #endregion Methods
     }
 }

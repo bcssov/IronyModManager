@@ -49,15 +49,15 @@
             </Border>
             <Grid ColumnDefinitions="1*,1*" RowDefinitions="1*" Margin="0,5">
               <TextBlock Text="{Binding NotificationPositionLabel}" Margin="0,5,0,0" Grid.Column="0" Grid.Row="0" VerticalAlignment="Center" HorizontalAlignment="Left" TextWrapping="Wrap"></TextBlock>
-              <ComboBox Items="{Binding NotificationPositions}" SelectedItem="{Binding NotificationPosition}"
+              <controls:ComboBox Items="{Binding NotificationPositions}" SelectedItem="{Binding NotificationPosition}"
                         MinHeight="25" MinWidth="80" Margin="0,5,0,0"
                         MaxWidth="180" Grid.Column="1" Grid.Row="0">
-                <ComboBox.ItemTemplate>
+                <controls:ComboBox.ItemTemplate>
                   <DataTemplate>
                     <ComboBoxItem IsSelected="{Binding IsSelected}" Content="{Binding Name}"></ComboBoxItem>
                   </DataTemplate>
-                </ComboBox.ItemTemplate>
-              </ComboBox>
+                </controls:ComboBox.ItemTemplate>
+              </controls:ComboBox>
             </Grid>
           </StackPanel>
           <StackPanel Orientation="Vertical" Grid.Row="1" Grid.Column="0">
