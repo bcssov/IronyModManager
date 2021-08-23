@@ -4,7 +4,7 @@
 // Created          : 03-16-2021
 //
 // Last Modified By : Mario
-// Last Modified On : 03-16-2021
+// Last Modified On : 08-23-2021
 // ***********************************************************************
 // <copyright file="INotificationPosition.cs" company="Mario">
 //     Mario
@@ -15,6 +15,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using IronyModManager.Localization;
+using IronyModManager.Shared.Models;
 
 namespace IronyModManager.Models.Common
 {
@@ -22,10 +23,12 @@ namespace IronyModManager.Models.Common
     /// Interface INotificationPosition
     /// Implements the <see cref="IronyModManager.Models.Common.IModel" />
     /// Implements the <see cref="IronyModManager.Localization.ILocalizableModel" />
+    /// Implements the <see cref="IronyModManager.Shared.Models.IQueryableModel" />
     /// </summary>
+    /// <seealso cref="IronyModManager.Shared.Models.IQueryableModel" />
     /// <seealso cref="IronyModManager.Localization.ILocalizableModel" />
     /// <seealso cref="IronyModManager.Models.Common.IModel" />
-    public interface INotificationPosition : IModel, ILocalizableModel
+    public interface INotificationPosition : IModel, ILocalizableModel, IQueryableModel
     {
         #region Properties
 

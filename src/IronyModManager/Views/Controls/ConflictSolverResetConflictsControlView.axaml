@@ -3,6 +3,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             xmlns:controls="clr-namespace:IronyModManager.Controls;assembly=IronyModManager"
              x:Class="IronyModManager.Views.Controls.ConflictSolverResetConflictsControlView">
   <Panel>
     <Button Content="{Binding ResetConflicts}" Command="{Binding ResetConflictsCommand}"
@@ -12,34 +13,34 @@
        Topmost="True" ObeyScreenEdges="True" StaysOpen="False" x:Name="popup"
        PlacementTarget="{Binding #openPopupButton}">
       <Border BorderThickness="1,1,1,1" BorderBrush="{DynamicResource IronyButtonBorderBrush}">
-        <Grid RowDefinitions="1*,1*,350,1*" Background="{DynamicResource IronyBackgroundPopupBrush}">          
-            <ComboBox SelectedItem="{Binding SelectedMode}" Items="{Binding Modes}"
-                      HorizontalAlignment="Stretch" MinHeight="30" Grid.Row="0">
-              <ComboBox.ItemTemplate>
-                <DataTemplate>
-                  <ComboBoxItem Content="{Binding Name}"></ComboBoxItem>
-                </DataTemplate>
-              </ComboBox.ItemTemplate>
-            </ComboBox>
-            <ComboBox Items="{Binding HierarchicalDefinitions}"
+        <Grid RowDefinitions="1*,1*,350,1*" Background="{DynamicResource IronyBackgroundPopupBrush}">
+          <controls:ComboBox SelectedItem="{Binding SelectedMode}" Items="{Binding Modes}"
+                    HorizontalAlignment="Stretch" MinHeight="30" Grid.Row="0">
+            <controls:ComboBox.ItemTemplate>
+              <DataTemplate>
+                <ComboBoxItem Content="{Binding Name}"></ComboBoxItem>
+              </DataTemplate>
+            </controls:ComboBox.ItemTemplate>
+          </controls:ComboBox>
+          <controls:ComboBox Items="{Binding HierarchicalDefinitions}"
                       SelectedItem="{Binding SelectedParentHierarchicalDefinition}"
                       HorizontalAlignment="Stretch" MinHeight="30" Grid.Row="1">
-              <ComboBox.ItemTemplate>
-                <DataTemplate>
-                  <ComboBoxItem Content="{Binding Name}"></ComboBoxItem>
-                </DataTemplate>
-              </ComboBox.ItemTemplate>
-            </ComboBox>
-            <ListBox Items="{Binding SelectedParentHierarchicalDefinition.Children}"
-                     SelectedItems="{Binding SelectedHierarchicalDefinitions}"
-                     ScrollViewer.HorizontalScrollBarVisibility="Disabled"
-                     SelectionMode="Multiple" x:Name="conflictList" Height="350" Width="500" Grid.Row="2">
-              <ListBox.ItemTemplate>
-                <DataTemplate>
-                  <TextBlock Text="{Binding Name}" TextWrapping="Wrap"></TextBlock>
-                </DataTemplate>
-              </ListBox.ItemTemplate>
-            </ListBox>          
+            <controls:ComboBox.ItemTemplate>
+              <DataTemplate>
+                <ComboBoxItem Content="{Binding Name}"></ComboBoxItem>
+              </DataTemplate>
+            </controls:ComboBox.ItemTemplate>
+          </controls:ComboBox>
+          <ListBox Items="{Binding SelectedParentHierarchicalDefinition.Children}"
+                   SelectedItems="{Binding SelectedHierarchicalDefinitions}"
+                   ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                   SelectionMode="Multiple" x:Name="conflictList" Height="350" Width="500" Grid.Row="2">
+            <ListBox.ItemTemplate>
+              <DataTemplate>
+                <TextBlock Text="{Binding Name}" TextWrapping="Wrap"></TextBlock>
+              </DataTemplate>
+            </ListBox.ItemTemplate>
+          </ListBox>
           <Panel Grid.Row="3" Margin="0,5">
             <Button Content="{Binding Reset}" Command="{Binding ResetCommand}" HorizontalAlignment="Left"></Button>
             <Button Content="{Binding Close}" Command="{Binding CloseCommand}" HorizontalAlignment="Right"></Button>

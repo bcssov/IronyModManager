@@ -4,7 +4,7 @@
 // Created          : 03-23-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 05-29-2021
+// Last Modified On : 08-23-2021
 // ***********************************************************************
 // <copyright file="IHierarchicalDefinitions.cs" company="Mario">
 //     Mario
@@ -20,9 +20,11 @@ namespace IronyModManager.Shared.Models
     /// <summary>
     /// Interface IHierarchicalDefinitions
     /// Implements the <see cref="CodexMicroORM.Core.Collections.ICEFIndexedListItem" />
+    /// Implements the <see cref="IronyModManager.Shared.Models.IQueryableModel" />
     /// </summary>
     /// <seealso cref="CodexMicroORM.Core.Collections.ICEFIndexedListItem" />
-    public interface IHierarchicalDefinitions : ICEFIndexedListItem
+    /// <seealso cref="IronyModManager.Shared.Models.IQueryableModel" />
+    public interface IHierarchicalDefinitions : ICEFIndexedListItem, IQueryableModel
     {
         #region Properties
 
