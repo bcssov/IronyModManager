@@ -4,7 +4,7 @@
 // Created          : 05-26-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 05-29-2021
+// Last Modified On : 08-23-2021
 // ***********************************************************************
 // <copyright file="IModPatchCollectionService.cs" company="Mario">
 //     Mario
@@ -235,6 +235,13 @@ namespace IronyModManager.Services.Common
         Task<bool> SaveIgnoredPathsAsync(IConflictResult conflictResult, string collectionName);
 
         /// <summary>
+        /// Shoulds the hide self conflicts.
+        /// </summary>
+        /// <param name="conflictResult">The conflict result.</param>
+        /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
+        bool? ShouldHideSelfConflicts(IConflictResult conflictResult);
+
+        /// <summary>
         /// Shoulds the ignore game mods.
         /// </summary>
         /// <param name="conflictResult">The conflict result.</param>
@@ -249,6 +256,13 @@ namespace IronyModManager.Services.Common
         bool? ToggleIgnoreGameMods(IConflictResult conflictResult);
         IEnumerable<IDefinition> Validate(ParserArgs args);
         public IBracketValidateResult GetBracketCount(string text);
+
+        /// <summary>
+        /// Toggles the self mod conflicts.
+        /// </summary>
+        /// <param name="conflictResult">The conflict result.</param>
+        /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
+        bool? ToggleSelfModConflicts(IConflictResult conflictResult);
 
         #endregion Methods
     }
