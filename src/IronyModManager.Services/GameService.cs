@@ -4,7 +4,7 @@
 // Created          : 02-12-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-12-2021
+// Last Modified On : 08-24-2021
 // ***********************************************************************
 // <copyright file="GameService.cs" company="Mario">
 //     Mario
@@ -420,13 +420,9 @@ namespace IronyModManager.Services
                 return false;
             }
 
-            var type = currentSelection != null ? currentSelection.Type : selectedGame.Type;
             foreach (var item in games)
             {
-                if (item.Type != type)
-                {
-                    item.IsSelected = false;
-                }
+                item.IsSelected = item.Type == selectedGame.Type;
             }
             selectedGame.IsSelected = true;
             var storedSelectedGame = Get().FirstOrDefault(p => p.Type.Equals(selectedGame.Type));

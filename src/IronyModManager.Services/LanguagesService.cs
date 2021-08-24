@@ -4,7 +4,7 @@
 // Created          : 01-20-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 05-21-2021
+// Last Modified On : 08-24-2021
 // ***********************************************************************
 // <copyright file="LanguagesService.cs" company="Mario">
 //     Mario
@@ -229,10 +229,7 @@ namespace IronyModManager.Services
 
             foreach (var item in languages)
             {
-                if (item.Abrv != selectedLanguage.Abrv)
-                {
-                    item.IsSelected = false;
-                }
+                item.IsSelected = item.Abrv == selectedLanguage.Abrv;
             }
 
             selectedLanguage.IsSelected = true;
