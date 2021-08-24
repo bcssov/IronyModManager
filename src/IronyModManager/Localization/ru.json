@@ -327,6 +327,7 @@
         "ModFilter": {
             "Title": "Фильтр модов",
             "IgnoreGameConflicts": "Игнорировать игровые конфликты",
+            "ShowSelfConflicts": "Показать собственные конфликты",
             "Close": "Закрыть"
         },
         "ResetConflicts": {

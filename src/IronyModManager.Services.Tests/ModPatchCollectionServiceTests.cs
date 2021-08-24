@@ -4,7 +4,7 @@
 // Created          : 05-26-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-03-2021
+// Last Modified On : 08-23-2021
 // ***********************************************************************
 // <copyright file="ModPatchCollectionServiceTests.cs" company="Mario">
 //     Mario
@@ -4615,6 +4615,138 @@ namespace IronyModManager.Services.Tests
             var result = service.ToggleIgnoreGameMods(c);
             result.Should().BeTrue();
             c.IgnoredPaths.Should().BeNullOrWhiteSpace();
+        }
+
+        /// <summary>
+        /// Defines the test method Should_not_parse_self_conflicts_when_no_conflict_result.
+        /// </summary>
+        [Fact]
+        public void Should_not_parse_self_conflicts_when_no_conflict_result()
+        {
+            var storageProvider = new Mock<IStorageProvider>();
+            var modParser = new Mock<IModParser>();
+            var parserManager = new Mock<IParserManager>();
+            var reader = new Mock<IReader>();
+            var modWriter = new Mock<IModWriter>();
+            var gameService = new Mock<IGameService>();
+            var mapper = new Mock<IMapper>();
+            var modPatchExporter = new Mock<IModPatchExporter>();
+            var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter);
+            var result = service.ShouldShowSelfConflicts(null);
+            result.Should().BeNull();
+        }
+
+        /// <summary>
+        /// Defines the test method Should_show_self_conflicts.
+        /// </summary>
+        [Fact]
+        public void Should_show_self_conflicts()
+        {
+            var storageProvider = new Mock<IStorageProvider>();
+            var modParser = new Mock<IModParser>();
+            var parserManager = new Mock<IParserManager>();
+            var reader = new Mock<IReader>();
+            var modWriter = new Mock<IModWriter>();
+            var gameService = new Mock<IGameService>();
+            var mapper = new Mock<IMapper>();
+            var modPatchExporter = new Mock<IModPatchExporter>();
+            var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter);
+            var c = new ConflictResult()
+            {
+                IgnoredPaths = "--showSelfConflicts"
+            };
+            var result = service.ShouldShowSelfConflicts(c);
+            result.Should().BeTrue();
+        }
+
+        /// <summary>
+        /// Defines the test method Should_not_show_self_conflicts.
+        /// </summary>
+        [Fact]
+        public void Should_not_show_self_conflicts()
+        {
+            var storageProvider = new Mock<IStorageProvider>();
+            var modParser = new Mock<IModParser>();
+            var parserManager = new Mock<IParserManager>();
+            var reader = new Mock<IReader>();
+            var modWriter = new Mock<IModWriter>();
+            var gameService = new Mock<IGameService>();
+            var mapper = new Mock<IMapper>();
+            var modPatchExporter = new Mock<IModPatchExporter>();
+            var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter);
+            var c = new ConflictResult()
+            {
+                IgnoredPaths = ""
+            };
+            var result = service.ShouldShowSelfConflicts(c);
+            result.Should().BeFalse();
+        }
+
+        /// <summary>
+        /// Defines the test method Should_not_toggle_self_conflicts_when_no_conflict_result.
+        /// </summary>
+        [Fact]
+        public void Should_not_toggle_self_conflicts_when_no_conflict_result()
+        {
+            var storageProvider = new Mock<IStorageProvider>();
+            var modParser = new Mock<IModParser>();
+            var parserManager = new Mock<IParserManager>();
+            var reader = new Mock<IReader>();
+            var modWriter = new Mock<IModWriter>();
+            var gameService = new Mock<IGameService>();
+            var mapper = new Mock<IMapper>();
+            var modPatchExporter = new Mock<IModPatchExporter>();
+            var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter);
+            var result = service.ToggleSelfModConflicts(null);
+            result.Should().BeNull();
+        }
+
+        /// <summary>
+        /// Defines the test method Should_not_toggle_self_conflicts.
+        /// </summary>
+        [Fact]
+        public void Should_not_toggle_self_conflicts()
+        {
+            var storageProvider = new Mock<IStorageProvider>();
+            var modParser = new Mock<IModParser>();
+            var parserManager = new Mock<IParserManager>();
+            var reader = new Mock<IReader>();
+            var modWriter = new Mock<IModWriter>();
+            var gameService = new Mock<IGameService>();
+            var mapper = new Mock<IMapper>();
+            var modPatchExporter = new Mock<IModPatchExporter>();
+            var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter);
+            var c = new ConflictResult()
+            {
+                IgnoredPaths = "--showSelfConflicts"
+            };
+            var result = service.ToggleSelfModConflicts(c);
+            result.Should().BeFalse();
+            c.IgnoredPaths.Should().BeNullOrWhiteSpace();
+        }
+
+        /// <summary>
+        /// Defines the test method Should_toggle_self_conflicts.
+        /// </summary>
+        [Fact]
+        public void Should_toggle_self_conflicts()
+        {
+            var storageProvider = new Mock<IStorageProvider>();
+            var modParser = new Mock<IModParser>();
+            var parserManager = new Mock<IParserManager>();
+            var reader = new Mock<IReader>();
+            var modWriter = new Mock<IModWriter>();
+            var gameService = new Mock<IGameService>();
+            var mapper = new Mock<IMapper>();
+            var modPatchExporter = new Mock<IModPatchExporter>();
+            var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter);
+            var c = new ConflictResult()
+            {
+                IgnoredPaths = ""
+            };
+            var result = service.ToggleSelfModConflicts(c);
+            result.Should().BeTrue();
+            c.IgnoredPaths.Should().Contain("--showSelfConflicts");
         }
 
         /// <summary>

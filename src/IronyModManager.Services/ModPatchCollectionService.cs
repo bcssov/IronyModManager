@@ -4,7 +4,7 @@
 // Created          : 05-26-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 07-16-2021
+// Last Modified On : 08-24-2021
 // ***********************************************************************
 // <copyright file="ModPatchCollectionService.cs" company="Mario">
 //     Mario
@@ -71,6 +71,11 @@ namespace IronyModManager.Services
         /// The ignore game mods identifier
         /// </summary>
         private const string ShowGameModsId = "--showGameMods";
+
+        /// <summary>
+        /// The show self conflicts identifier
+        /// </summary>
+        private const string ShowSelfConflictsId = "--showSelfConflicts";
 
         /// <summary>
         /// The service lock
@@ -1392,6 +1397,22 @@ namespace IronyModManager.Services
         }
 
         /// <summary>
+        /// Shoulds the show self conflicts.
+        /// </summary>
+        /// <param name="conflictResult">The conflict result.</param>
+        /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
+        public virtual bool? ShouldShowSelfConflicts(IConflictResult conflictResult)
+        {
+            if (conflictResult != null)
+            {
+                var ignoredPaths = conflictResult.IgnoredPaths ?? string.Empty;
+                var lines = ignoredPaths.SplitOnNewLine();
+                return lines.Any(p => p.Equals(ShowSelfConflictsId));
+            }
+            return null;
+        }
+
+        /// <summary>
         /// Toggles the ignore game mods.
         /// </summary>
         /// <param name="conflictResult">The conflict result.</param>
@@ -1413,6 +1434,32 @@ namespace IronyModManager.Services
                 }
                 conflictResult.IgnoredPaths = string.Join(Environment.NewLine, lines).Trim(Environment.NewLine.ToCharArray());
                 return !shouldIgnore;
+            }
+            return null;
+        }
+
+        /// <summary>
+        /// Toggles self mod conflicts.
+        /// </summary>
+        /// <param name="conflictResult">The conflict result.</param>
+        /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
+        public virtual bool? ToggleSelfModConflicts(IConflictResult conflictResult)
+        {
+            if (conflictResult != null)
+            {
+                var ignoredPaths = conflictResult.IgnoredPaths ?? string.Empty;
+                var shouldShow = ShouldShowSelfConflicts(conflictResult);
+                var lines = ignoredPaths.SplitOnNewLine().ToList();
+                if (!shouldShow.GetValueOrDefault())
+                {
+                    lines.Add(ShowSelfConflictsId);
+                }
+                else
+                {
+                    lines.Remove(ShowSelfConflictsId);
+                }
+                conflictResult.IgnoredPaths = string.Join(Environment.NewLine, lines).Trim(Environment.NewLine.ToCharArray());
+                return !shouldShow;
             }
             return null;
         }
@@ -1580,6 +1627,7 @@ namespace IronyModManager.Services
             var ruleIgnoredDefinitions = DIResolver.Get<IIndexedDefinitions>();
             ruleIgnoredDefinitions.InitMap(null, true);
             var ignoreGameMods = true;
+            var ignoreSelfConflicts = true;
             var alreadyIgnored = new HashSet<string>();
             if (!string.IsNullOrEmpty(conflictResult.IgnoredPaths))
             {
@@ -1598,6 +1646,10 @@ namespace IronyModManager.Services
                     else if (parsed.Equals(ShowGameModsId))
                     {
                         ignoreGameMods = false;
+                    }
+                    else if (parsed.Equals(ShowSelfConflictsId))
+                    {
+                        ignoreSelfConflicts = false;
                     }
                     else
                     {
@@ -1654,13 +1706,18 @@ namespace IronyModManager.Services
                     }
                 }
             }
-            if (ignoreGameMods)
+            if (ignoreGameMods || ignoreSelfConflicts)
             {
                 foreach (var topConflict in conflictResult.Conflicts.GetHierarchicalDefinitions())
                 {
                     foreach (var item in topConflict.Children.Where(p => p.Mods.Count <= 1))
                     {
-                        if (item.NonGameDefinitions <= 1 && !alreadyIgnored.Contains(item.Key))
+                        if (ignoreGameMods && item.NonGameDefinitions <= 1 && !alreadyIgnored.Contains(item.Key))
+                        {
+                            alreadyIgnored.Add(item.Key);
+                            ruleIgnoredDefinitions.AddToMap(conflictResult.Conflicts.GetByTypeAndId(item.Key).First());
+                        }
+                        if (ignoreSelfConflicts && !alreadyIgnored.Contains(item.Key))
                         {
                             alreadyIgnored.Add(item.Key);
                             ruleIgnoredDefinitions.AddToMap(conflictResult.Conflicts.GetByTypeAndId(item.Key).First());

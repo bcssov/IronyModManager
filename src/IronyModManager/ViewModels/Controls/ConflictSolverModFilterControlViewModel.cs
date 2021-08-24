@@ -4,7 +4,7 @@
 // Created          : 06-08-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 07-06-2021
+// Last Modified On : 08-24-2021
 // ***********************************************************************
 // <copyright file="ConflictSolverModFilterControlViewModel.cs" company="Mario">
 //     Mario
@@ -68,6 +68,11 @@ namespace IronyModManager.ViewModels.Controls
         private bool previousIgnoreGameMods;
 
         /// <summary>
+        /// The previous show self conflicts
+        /// </summary>
+        private bool previousShowSelfConflicts;
+
+        /// <summary>
         /// The setting values
         /// </summary>
         private bool settingValues = false;
@@ -76,6 +81,11 @@ namespace IronyModManager.ViewModels.Controls
         /// The should toggle game mods
         /// </summary>
         private bool shouldToggleGameMods;
+
+        /// <summary>
+        /// The should toggle self conflicts
+        /// </summary>
+        private bool shouldToggleSelfConflicts;
 
         /// <summary>
         /// The syncing selected mods
@@ -168,6 +178,19 @@ namespace IronyModManager.ViewModels.Controls
         /// <value>The selected mods.</value>
         public virtual IAvaloniaList<Mod> SelectedMods { get; protected set; }
 
+        /// <summary>
+        /// Gets or sets a value indicating whether [show self conflicts].
+        /// </summary>
+        /// <value><c>true</c> if [show self conflicts]; otherwise, <c>false</c>.</value>
+        public virtual bool ShowSelfConflicts { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets the show self conflicts title.
+        /// </summary>
+        /// <value>The show self conflicts title.</value>
+        [StaticLocalization(LocalizationResources.Conflict_Solver.ModFilter.ShowSelfConflicts)]
+        public virtual string ShowSelfConflictsTitle { get; protected set; }
+
         #endregion Properties
 
         #region Methods
@@ -208,6 +231,7 @@ namespace IronyModManager.ViewModels.Controls
                 SelectedMods.AddRange(selectedMods);
                 shouldToggleGameMods = false;
                 previousIgnoreGameMods = IgnoreGameMods = modPatchCollectionService.ShouldIgnoreGameMods(conflictResult).GetValueOrDefault();
+                previousShowSelfConflicts = ShowSelfConflicts = modPatchCollectionService.ShouldShowSelfConflicts(conflictResult).GetValueOrDefault();
                 valuesSet().ConfigureAwait(false);
             }).DisposeWith(Disposables);
         }
@@ -234,6 +258,11 @@ namespace IronyModManager.ViewModels.Controls
                         modPatchCollectionService.ToggleIgnoreGameMods(ConflictResult);
                         shouldToggleGameMods = false;
                     }
+                    if (shouldToggleSelfConflicts)
+                    {
+                        modPatchCollectionService.ToggleSelfModConflicts(ConflictResult);
+                        shouldToggleSelfConflicts = false;
+                    }
                     if (previousIgnoredPath == null)
                     {
                         previousIgnoredPath = string.Empty;
@@ -244,6 +273,7 @@ namespace IronyModManager.ViewModels.Controls
                     }
                     await modPatchCollectionService.SaveIgnoredPathsAsync(ConflictResult, collectionName);
                     IgnoreGameMods = modPatchCollectionService.ShouldIgnoreGameMods(ConflictResult).GetValueOrDefault();
+                    ShowSelfConflicts = modPatchCollectionService.ShouldShowSelfConflicts(ConflictResult).GetValueOrDefault();
                     previousIgnoredPath = ConflictResult.IgnoredPaths;
                     HasSavedState = true;
                     HasSavedState = false;
@@ -267,6 +297,10 @@ namespace IronyModManager.ViewModels.Controls
                 if (shouldToggleGameMods)
                 {
                     previousIgnoreGameMods = IgnoreGameMods;
+                }
+                if (shouldToggleSelfConflicts)
+                {
+                    previousShowSelfConflicts = ShowSelfConflicts;
                 }
                 await IgnoreModsAsync(syncingToken.Token).ConfigureAwait(false);
             }
@@ -297,6 +331,15 @@ namespace IronyModManager.ViewModels.Controls
                 if (!settingValues && previousIgnoreGameMods != IgnoreGameMods)
                 {
                     shouldToggleGameMods = true;
+                    saveState().ConfigureAwait(false);
+                }
+            }).DisposeWith(disposables);
+
+            this.WhenAnyValue(m => m.ShowSelfConflicts).Subscribe(s =>
+            {
+                if (!settingValues && previousShowSelfConflicts != ShowSelfConflicts)
+                {
+                    shouldToggleSelfConflicts = true;
                     saveState().ConfigureAwait(false);
                 }
             }).DisposeWith(disposables);

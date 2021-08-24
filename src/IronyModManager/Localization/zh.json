@@ -327,6 +327,7 @@
         "ModFilter": {
             "Title": "模组过滤",
             "IgnoreGameConflicts": "忽略原版游戏冲突",
+            "ShowSelfConflicts": "表现出自我冲突",
             "Close": "关闭"
         },
         "ResetConflicts": {
