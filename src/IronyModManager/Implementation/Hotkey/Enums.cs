@@ -45,6 +45,15 @@ namespace IronyModManager.Implementation.Hotkey
             Ctrl_Down,
 
             /// <summary>
+            /// The control right
+            /// </summary>
+            Ctrl_Right,
+
+            /// <summary>
+            /// The control left
+            /// </summary>
+            Ctrl_Left,
+            /// <summary>
             /// The control Shift up
             /// </summary>
             Ctrl_Shift_Up,
