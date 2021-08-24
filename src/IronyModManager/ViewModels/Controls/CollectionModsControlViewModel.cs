@@ -4,7 +4,7 @@
 // Created          : 03-03-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-22-2021
+// Last Modified On : 08-24-2021
 // ***********************************************************************
 // <copyright file="CollectionModsControlViewModel.cs" company="Mario">
 //     Mario
@@ -1782,7 +1782,11 @@ namespace IronyModManager.ViewModels.Controls
         {
             base.OnSelectedGameChanged(game);
             EvalAdvancedFeaturesVisibility();
-            LoadModCollections();
+            Task.Run(async () =>
+            {
+                await Task.Delay(50);
+                LoadModCollections();
+            }).ConfigureAwait(false);
         }
 
         /// <summary>

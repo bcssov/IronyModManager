@@ -4,7 +4,7 @@
 // Created          : 01-13-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-16-2021
+// Last Modified On : 08-24-2021
 // ***********************************************************************
 // <copyright file="ThemeService.cs" company="Mario">
 //     Mario
@@ -128,10 +128,7 @@ namespace IronyModManager.Services
 
             foreach (var item in themes)
             {
-                if (item.Type != currentlySelected.Type)
-                {
-                    item.IsSelected = false;
-                }
+                item.IsSelected = item.Type == selectedTheme.Type;
             }
 
             selectedTheme.IsSelected = true;
