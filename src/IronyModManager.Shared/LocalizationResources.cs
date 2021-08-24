@@ -444,6 +444,7 @@ namespace IronyModManager.Shared
                 public const string Prefix = "Conflict_Solver.ModFilter.";
                 public const string Title = Prefix + "Title";
                 public const string IgnoreGameConflicts = Prefix + "IgnoreGameConflicts";
+                public const string ShowSelfConflicts = Prefix + "ShowSelfConflicts";
                 public const string Close = Prefix + "Close";
             }
             public static class ResetConflicts

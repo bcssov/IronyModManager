@@ -4632,15 +4632,15 @@ namespace IronyModManager.Services.Tests
             var mapper = new Mock<IMapper>();
             var modPatchExporter = new Mock<IModPatchExporter>();
             var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter);
-            var result = service.ShouldHideSelfConflicts(null);
+            var result = service.ShouldShowSelfConflicts(null);
             result.Should().BeNull();
         }
 
         /// <summary>
-        /// Defines the test method Should_not_hide_self_conflicts.
+        /// Defines the test method Should_show_self_conflicts.
         /// </summary>
         [Fact]
-        public void Should_not_hide_self_conflicts()
+        public void Should_show_self_conflicts()
         {
             var storageProvider = new Mock<IStorageProvider>();
             var modParser = new Mock<IModParser>();
@@ -4653,17 +4653,17 @@ namespace IronyModManager.Services.Tests
             var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter);
             var c = new ConflictResult()
             {
-                IgnoredPaths = "--hideSelfConflicts"
+                IgnoredPaths = "--showSelfConflicts"
             };
-            var result = service.ShouldHideSelfConflicts(c);
+            var result = service.ShouldShowSelfConflicts(c);
             result.Should().BeTrue();
         }
 
         /// <summary>
-        /// Defines the test method Should_not_hide_self_conflicts.
+        /// Defines the test method Should_not_show_self_conflicts.
         /// </summary>
         [Fact]
-        public void Should_hide_self_conflicts()
+        public void Should_not_show_self_conflicts()
         {
             var storageProvider = new Mock<IStorageProvider>();
             var modParser = new Mock<IModParser>();
@@ -4678,7 +4678,7 @@ namespace IronyModManager.Services.Tests
             {
                 IgnoredPaths = ""
             };
-            var result = service.ShouldHideSelfConflicts(c);
+            var result = service.ShouldShowSelfConflicts(c);
             result.Should().BeFalse();
         }
 
@@ -4718,7 +4718,7 @@ namespace IronyModManager.Services.Tests
             var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter);
             var c = new ConflictResult()
             {
-                IgnoredPaths = "--hideSelfConflicts"
+                IgnoredPaths = "--showSelfConflicts"
             };
             var result = service.ToggleSelfModConflicts(c);
             result.Should().BeFalse();
@@ -4726,7 +4726,7 @@ namespace IronyModManager.Services.Tests
         }
 
         /// <summary>
-        /// Defines the test method Should_toggle_ignore_game_mods.
+        /// Defines the test method Should_toggle_self_conflicts.
         /// </summary>
         [Fact]
         public void Should_toggle_self_conflicts()
@@ -4746,7 +4746,7 @@ namespace IronyModManager.Services.Tests
             };
             var result = service.ToggleSelfModConflicts(c);
             result.Should().BeTrue();
-            c.IgnoredPaths.Should().Contain("--hideSelfConflicts");
+            c.IgnoredPaths.Should().Contain("--showSelfConflicts");
         }
 
         /// <summary>

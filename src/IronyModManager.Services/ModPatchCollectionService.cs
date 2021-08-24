@@ -4,7 +4,7 @@
 // Created          : 05-26-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 08-23-2021
+// Last Modified On : 08-24-2021
 // ***********************************************************************
 // <copyright file="ModPatchCollectionService.cs" company="Mario">
 //     Mario
@@ -59,11 +59,6 @@ namespace IronyModManager.Services
         private const string CacheRegion = "CollectionPatchState";
 
         /// <summary>
-        /// The hide self conflicts identifier
-        /// </summary>
-        private const string HideSelfConflictsId = "--hideSelfConflicts";
-
-        /// <summary>
         /// The maximum mod conflicts to check
         /// </summary>
         private const int MaxModConflictsToCheck = 4;
@@ -77,6 +72,11 @@ namespace IronyModManager.Services
         /// The ignore game mods identifier
         /// </summary>
         private const string ShowGameModsId = "--showGameMods";
+
+        /// <summary>
+        /// The show self conflicts identifier
+        /// </summary>
+        private const string ShowSelfConflictsId = "--showSelfConflicts";
 
         /// <summary>
         /// The service lock
@@ -1385,22 +1385,6 @@ namespace IronyModManager.Services
         }
 
         /// <summary>
-        /// Shoulds hide self conflicts.
-        /// </summary>
-        /// <param name="conflictResult">The conflict result.</param>
-        /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
-        public virtual bool? ShouldHideSelfConflicts(IConflictResult conflictResult)
-        {
-            if (conflictResult != null)
-            {
-                var ignoredPaths = conflictResult.IgnoredPaths ?? string.Empty;
-                var lines = ignoredPaths.SplitOnNewLine();
-                return lines.Any(p => p.Equals(HideSelfConflictsId));
-            }
-            return null;
-        }
-
-        /// <summary>
         /// Shoulds the ignore game mods.
         /// </summary>
         /// <param name="conflictResult">The conflict result.</param>
@@ -1412,6 +1396,22 @@ namespace IronyModManager.Services
                 var ignoredPaths = conflictResult.IgnoredPaths ?? string.Empty;
                 var lines = ignoredPaths.SplitOnNewLine();
                 return !lines.Any(p => p.Equals(ShowGameModsId));
+            }
+            return null;
+        }
+
+        /// <summary>
+        /// Shoulds the show self conflicts.
+        /// </summary>
+        /// <param name="conflictResult">The conflict result.</param>
+        /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
+        public virtual bool? ShouldShowSelfConflicts(IConflictResult conflictResult)
+        {
+            if (conflictResult != null)
+            {
+                var ignoredPaths = conflictResult.IgnoredPaths ?? string.Empty;
+                var lines = ignoredPaths.SplitOnNewLine();
+                return lines.Any(p => p.Equals(ShowSelfConflictsId));
             }
             return null;
         }
@@ -1452,18 +1452,18 @@ namespace IronyModManager.Services
             if (conflictResult != null)
             {
                 var ignoredPaths = conflictResult.IgnoredPaths ?? string.Empty;
-                var shouldHide = ShouldHideSelfConflicts(conflictResult);
+                var shouldShow = ShouldShowSelfConflicts(conflictResult);
                 var lines = ignoredPaths.SplitOnNewLine().ToList();
-                if (!shouldHide.GetValueOrDefault())
+                if (!shouldShow.GetValueOrDefault())
                 {
-                    lines.Add(HideSelfConflictsId);
+                    lines.Add(ShowSelfConflictsId);
                 }
                 else
                 {
-                    lines.Remove(HideSelfConflictsId);
+                    lines.Remove(ShowSelfConflictsId);
                 }
                 conflictResult.IgnoredPaths = string.Join(Environment.NewLine, lines).Trim(Environment.NewLine.ToCharArray());
-                return !shouldHide;
+                return !shouldShow;
             }
             return null;
         }
@@ -1631,6 +1631,7 @@ namespace IronyModManager.Services
             var ruleIgnoredDefinitions = DIResolver.Get<IIndexedDefinitions>();
             ruleIgnoredDefinitions.InitMap(null, true);
             var ignoreGameMods = true;
+            var ignoreSelfConflicts = true;
             var alreadyIgnored = new HashSet<string>();
             if (!string.IsNullOrEmpty(conflictResult.IgnoredPaths))
             {
@@ -1649,6 +1650,10 @@ namespace IronyModManager.Services
                     else if (parsed.Equals(ShowGameModsId))
                     {
                         ignoreGameMods = false;
+                    }
+                    else if (parsed.Equals(ShowSelfConflictsId))
+                    {
+                        ignoreSelfConflicts = false;
                     }
                     else
                     {
@@ -1705,13 +1710,18 @@ namespace IronyModManager.Services
                     }
                 }
             }
-            if (ignoreGameMods)
+            if (ignoreGameMods || ignoreSelfConflicts)
             {
                 foreach (var topConflict in conflictResult.Conflicts.GetHierarchicalDefinitions())
                 {
                     foreach (var item in topConflict.Children.Where(p => p.Mods.Count <= 1))
                     {
-                        if (item.NonGameDefinitions <= 1 && !alreadyIgnored.Contains(item.Key))
+                        if (ignoreGameMods && item.NonGameDefinitions <= 1 && !alreadyIgnored.Contains(item.Key))
+                        {
+                            alreadyIgnored.Add(item.Key);
+                            ruleIgnoredDefinitions.AddToMap(conflictResult.Conflicts.GetByTypeAndId(item.Key).First());
+                        }
+                        if (ignoreSelfConflicts && !alreadyIgnored.Contains(item.Key))
                         {
                             alreadyIgnored.Add(item.Key);
                             ruleIgnoredDefinitions.AddToMap(conflictResult.Conflicts.GetByTypeAndId(item.Key).First());
