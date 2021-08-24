@@ -526,6 +526,18 @@ namespace IronyModManager.ViewModels.Controls
         /// <value>The undo command.</value>
         public virtual ReactiveCommand<bool, Unit> UndoCommand { get; protected set; }
 
+        /// <summary>
+        /// Gets or sets the text regarding the bracket mismatch on the right side
+        /// </summary>
+        /// <value>The right side bracket count.</value>
+        public virtual String RightSideBracketMismatchText { get; set; }
+
+        /// <summary>
+        ///  Gets or sets the text regarding the bracket mismatch on the right side
+        /// </summary>
+        /// <value>The left side bracket count.</value>
+        public virtual String LeftSideBracketMismatchText { get; set; }
+
         #endregion Properties
 
         #region Methods
@@ -622,6 +634,8 @@ namespace IronyModManager.ViewModels.Controls
             RightSide = !string.IsNullOrEmpty(rightSide) ? rightSide.ReplaceTabs() : string.Empty;
             LeftDocument = new TextDocument(LeftSide);
             RightDocument = new TextDocument(RightSide);
+            SetBracketText();
+
             Compare();
             if (resetStack)
             {
@@ -638,6 +652,46 @@ namespace IronyModManager.ViewModels.Controls
                 {
                     evalStack(RightSide, prevRightSide);
                 }
+            }
+        }
+        /// <summary>
+        /// sets the bracket mismatch text to be displayed
+        /// </summary>
+        private void SetBracketText()
+        {
+            if (LeftSidePatchMod)
+            {
+                var openBracket = LeftSide.Count(s => s == Parser.Common.Constants.Scripts.OpenObject);
+                var closeBracket = LeftSide.Count(s => s == Parser.Common.Constants.Scripts.CloseObject);
+                if (openBracket != closeBracket)
+                {
+                    LeftSideBracketMismatchText = "Bracket Count Mismatch!  Open Bracket: " + openBracket + "  Close Bracket: " + closeBracket;
+                }
+                else
+                {
+                    LeftSideBracketMismatchText = "";
+                }
+            }
+            else
+            {
+                LeftSideBracketMismatchText = "";
+            }
+            if (RightSidePatchMod)
+            {
+                var openBracket = RightSide.Count(s => s == Parser.Common.Constants.Scripts.OpenObject);
+                var closeBracket = RightSide.Count(s => s == Parser.Common.Constants.Scripts.CloseObject);
+                if (openBracket != closeBracket)
+                {
+                    RightSideBracketMismatchText = "Bracket Count Mismatch!  Open Bracket: " + openBracket + "  Close Bracket: " + closeBracket;
+                }
+                else
+                {
+                    RightSideBracketMismatchText = "";
+                }
+            }
+            else
+            {
+                RightSideBracketMismatchText = "";
             }
         }
 
