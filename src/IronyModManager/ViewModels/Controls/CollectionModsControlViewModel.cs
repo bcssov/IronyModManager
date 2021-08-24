@@ -1224,11 +1224,11 @@ namespace IronyModManager.ViewModels.Controls
             var selected = ModCollections?.FirstOrDefault(p => p.IsSelected);
             if (selected != null)
             {
+                SelectedModCollection = selected;
                 if (recognizeSortOrder)
                 {
                     RecognizeSortOrder(selected);
                 }
-                SelectedModCollection = selected;
             }
         }
 
