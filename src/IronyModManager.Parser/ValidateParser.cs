@@ -8,9 +8,9 @@ using IronyModManager.Parser.Common.Parsers;
 using IronyModManager.Shared.Models;
 using IronyModManager.Shared;
 
-namespace IronyModManager.Parser.Validate
+namespace IronyModManager.Parser
 {
-    class ValidateParser : BaseParser
+    public class ValidateParser : BaseParser, IValidateParser
     {
         public ValidateParser(ICodeParser codeParser, ILogger logger) : base(codeParser, logger)
         {
