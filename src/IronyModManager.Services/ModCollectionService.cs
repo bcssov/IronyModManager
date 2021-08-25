@@ -4,7 +4,7 @@
 // Created          : 03-04-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 05-30-2021
+// Last Modified On : 08-25-2021
 // ***********************************************************************
 // <copyright file="ModCollectionService.cs" company="Mario">
 //     Mario
@@ -111,7 +111,12 @@ namespace IronyModManager.Services
             /// <summary>
             /// The paradoxos
             /// </summary>
-            Paradoxos
+            Paradoxos,
+
+            /// <summary>
+            /// The paradox launcher json
+            /// </summary>
+            ParadoxLauncherJson
         }
 
         #endregion Enums
@@ -394,6 +399,16 @@ namespace IronyModManager.Services
         }
 
         /// <summary>
+        /// Imports the paradox launcher json asynchronous.
+        /// </summary>
+        /// <param name="file">The file.</param>
+        /// <returns>Task&lt;IModCollection&gt;.</returns>
+        public virtual Task<IModCollection> ImportParadoxLauncherJsonAsync(string file)
+        {
+            return ImportModsAsync(ImportType.ParadoxLauncherJson, file);
+        }
+
+        /// <summary>
         /// import paradoxos as an asynchronous operation.
         /// </summary>
         /// <param name="file">The file.</param>
@@ -408,7 +423,7 @@ namespace IronyModManager.Services
         /// </summary>
         /// <param name="collection">The collection.</param>
         /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
-        /// <exception cref="ArgumentNullException">nameof(collection)</exception>
+        /// <exception cref="ArgumentNullException">collection</exception>
         public virtual bool Save(IModCollection collection)
         {
             if (collection == null || string.IsNullOrWhiteSpace(collection.Game))
@@ -494,6 +509,28 @@ namespace IronyModManager.Services
 
                     case ImportType.Paradoxos:
                         result = await modCollectionExporter.ImportParadoxosAsync(parameters);
+                        break;
+
+                    case ImportType.ParadoxLauncherJson:
+                        // So this format returns only display names and specifies for which game it is
+                        result = await modCollectionExporter.ImportParadoxLauncherAsync(parameters);
+                        if (result)
+                        {
+                            var gameByPdxId = GameService.Get().FirstOrDefault(p => p.ParadoxGameId.Equals(instance.Game));
+                            if (gameByPdxId != null)
+                            {
+                                instance.Game = gameByPdxId.Type;
+                                var mods = GetInstalledModsInternal(gameByPdxId, false);
+                                if (mods.Any())
+                                {
+                                    instance.Mods = mods.Where(p => instance.ModNames.Contains(p.Name)).Select(p => p.DescriptorFile);
+                                }
+                            }
+                            else
+                            {
+                                result = false;
+                            }
+                        }
                         break;
 
                     default:

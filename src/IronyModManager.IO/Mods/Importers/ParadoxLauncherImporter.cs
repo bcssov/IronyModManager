@@ -4,7 +4,7 @@
 // Created          : 08-12-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-20-2021
+// Last Modified On : 08-25-2021
 // ***********************************************************************
 // <copyright file="ParadoxLauncherImporter.cs" company="Mario">
 //     Mario
@@ -17,7 +17,9 @@ using System.Data;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using IronyModManager.DI;
 using IronyModManager.IO.Common.Mods;
+using IronyModManager.IO.Mods.Models.Paradox.Json;
 using IronyModManager.IO.Mods.Models.Paradox.v2;
 using IronyModManager.Shared;
 using Microsoft.Data.Sqlite;
@@ -62,11 +64,11 @@ namespace IronyModManager.IO.Mods.Importers
         #region Methods
 
         /// <summary>
-        /// import as an asynchronous operation.
+        /// database import as an asynchronous operation.
         /// </summary>
         /// <param name="parameters">The parameters.</param>
         /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
-        public async Task<bool> ImportAsync(ModCollectionExporterParams parameters)
+        public async Task<bool> DatabaseImportAsync(ModCollectionExporterParams parameters)
         {
             try
             {
@@ -93,6 +95,42 @@ namespace IronyModManager.IO.Mods.Importers
             catch (Exception ex)
             {
                 logger.Error(ex);
+            }
+            return false;
+        }
+
+        /// <summary>
+        /// json import as an asynchronous operation.
+        /// </summary>
+        /// <param name="parameters">The parameters.</param>
+        /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
+        public async Task<bool> JsonImportAsync(ModCollectionExporterParams parameters)
+        {
+            if (File.Exists(parameters.File))
+            {
+                var content = await File.ReadAllTextAsync(parameters.File);
+                if (string.IsNullOrWhiteSpace(content))
+                {
+                    ModInfo model = null;
+                    try
+                    {
+                        model = JsonDISerializer.Deserialize<ModInfo>(content);
+                    }
+                    catch (Exception ex)
+                    {
+                        logger.Error(ex);
+                        return false;
+                    }
+                    if (!string.IsNullOrWhiteSpace(model.Game) && !string.IsNullOrWhiteSpace(model.Name))
+                    {
+                        parameters.Mod.Name = model.Name;
+                        // Will need to lookup the game and mod ids in the mod service
+                        parameters.Mod.Game = model.Game;
+                        var mods = model.Mods.Where(p => p.Enabled).OrderBy(p => p.Position);
+                        parameters.Mod.ModNames = mods.Select(p => p.DisplayName).ToList();
+                        return true;
+                    }
+                }
             }
             return false;
         }
