@@ -61,6 +61,7 @@ namespace IronyModManager.Services
         /// The regular mods cache key
         /// </summary>
         protected const string RegularModsCacheKey = "RegularMods";
+        private IValidateParser validateParser;
 
         #endregion Fields
 
@@ -81,6 +82,17 @@ namespace IronyModManager.Services
             IModParser modParser, IGameService gameService,
             IStorageProvider storageProvider, IMapper mapper) : base(storageProvider, mapper)
         {
+            Cache = cache;
+            DefinitionInfoProviders = definitionInfoProviders;
+            GameService = gameService;
+            Reader = reader;
+            ModParser = modParser;
+            ModWriter = modWriter;
+        }
+
+        public ModBaseService(ICache cache, IEnumerable<IDefinitionInfoProvider> definitionInfoProviders, IReader reader, IModWriter modWriter, IModParser modParser, IGameService gameService, IStorageProvider storageProvider, IMapper mapper, IValidateParser validateParser) : this(cache, definitionInfoProviders, reader, modWriter, modParser, gameService, storageProvider, mapper)
+        {
+            this.validateParser = validateParser;
             Cache = cache;
             DefinitionInfoProviders = definitionInfoProviders;
             GameService = gameService;
