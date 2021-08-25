@@ -31,6 +31,7 @@ using IronyModManager.Implementation.Overlay;
 using IronyModManager.Localization;
 using IronyModManager.Localization.Attributes;
 using IronyModManager.Models.Common;
+using IronyModManager.Parser.Common.Args;
 using IronyModManager.Services.Common;
 using IronyModManager.Shared;
 using IronyModManager.Shared.Models;
@@ -637,7 +638,22 @@ namespace IronyModManager.ViewModels
 
             ResolveCommand = ReactiveCommand.Create(() =>
             {
-                ResolveConflictAsync(true).ConfigureAwait(true);
+                IDefinition patchDefinition = ModCompareSelector.VirtualDefinitions.FirstOrDefault(p => modPatchCollectionService.IsPatchMod(p.ModName));
+                var lines = patchDefinition.Code.SplitOnNewLine();
+                var args = new ParserArgs();
+                args.Lines = lines;
+                args.File = patchDefinition.File;
+                var validateresult = modPatchCollectionService.Validate(args);
+                if (validateresult != null)
+                {
+                    var title = localizationManager.GetResource(LocalizationResources.ResolutionSaveError.Title);
+                    var message = localizationManager.GetResource(LocalizationResources.ResolutionSaveError.Message);
+                    notificationAction.ShowNotification(title, message + " " + validateresult.FirstOrDefault().ErrorMessage, NotificationType.Error, 30);
+                }
+                else
+                {
+                    Dispatcher.UIThread.SafeInvoke(() => ResolveConflictAsync(true).ConfigureAwait(true));
+                }
             }, resolvingEnabled).DisposeWith(disposables);
 
             IgnoreCommand = ReactiveCommand.Create(() =>
@@ -988,10 +1004,26 @@ namespace IronyModManager.ViewModels
                     performModSelectionAction().ConfigureAwait(false);
                 }
                 else if (m.Hotkey == Enums.HotKeys.Ctrl_R)
-                {
+                {                 
                     if (ResolveEnabled && !ResolvingConflict)
                     {
-                        Dispatcher.UIThread.SafeInvoke(() => ResolveConflictAsync(true).ConfigureAwait(true));
+                        
+                        IDefinition patchDefinition = ModCompareSelector.VirtualDefinitions.FirstOrDefault(p => modPatchCollectionService.IsPatchMod(p.ModName));
+                        var lines = patchDefinition.Code.SplitOnNewLine();
+                        var args = new ParserArgs();
+                        args.Lines = lines;
+                        args.File = patchDefinition.File;
+                        var validateresult = modPatchCollectionService.Validate(args);
+                        if (validateresult != null)
+                        {
+                            var title = localizationManager.GetResource(LocalizationResources.ResolutionSaveError.Title);
+                            var message = localizationManager.GetResource(LocalizationResources.ResolutionSaveError.Message);
+                            notificationAction.ShowNotification(title, message + " " + validateresult.FirstOrDefault().ErrorMessage, NotificationType.Error, 30);
+                        }
+                        else
+                        {
+                            Dispatcher.UIThread.SafeInvoke(() => ResolveConflictAsync(true).ConfigureAwait(true));
+                        }
                     }
                 }
                 else if (m.Hotkey == Enums.HotKeys.Ctrl_I)
