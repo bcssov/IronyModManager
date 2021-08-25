@@ -101,5 +101,5 @@ namespace IronyModManager.Parser
     {
         public int OpenBracketCount { get; set; }
         public int CloseBracketCount { get; set; }
-        }
     }
+}
