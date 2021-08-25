@@ -70,6 +70,7 @@ namespace IronyModManager.Parser
             container.Register<IModObject, ModObject>();
             container.Register<IModParser, ModParser>();
             container.Register<ICodeParser, CodeParser>();
+            container.Register<IValidateParser, ValidateParser>();
             container.Register<IHierarchicalDefinitions, HierarchicalDefinitions>();
             container.Register<IParserMap, ParserMap>();
             container.Register<IScriptElement, ScriptElement>();
