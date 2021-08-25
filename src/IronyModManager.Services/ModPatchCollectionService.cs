@@ -29,6 +29,7 @@ using IronyModManager.Models.Common;
 using IronyModManager.Parser.Common;
 using IronyModManager.Parser.Common.Args;
 using IronyModManager.Parser.Common.Mod;
+using IronyModManager.Parser.Common.Parsers;
 using IronyModManager.Services.Common;
 using IronyModManager.Services.Common.MessageBus;
 using IronyModManager.Shared;
@@ -92,6 +93,8 @@ namespace IronyModManager.Services
         /// </summary>
         private readonly IParserManager parserManager;
 
+        private readonly IValidateParser validateParser;
+
         #endregion Fields
 
         #region Constructors
@@ -112,11 +115,12 @@ namespace IronyModManager.Services
         /// <param name="mapper">The mapper.</param>
         public ModPatchCollectionService(ICache cache, IMessageBus messageBus, IParserManager parserManager, IEnumerable<IDefinitionInfoProvider> definitionInfoProviders,
             IModPatchExporter modPatchExporter, IReader reader, IModWriter modWriter, IModParser modParser, IGameService gameService,
-            IStorageProvider storageProvider, IMapper mapper) : base(cache, definitionInfoProviders, reader, modWriter, modParser, gameService, storageProvider, mapper)
+            IStorageProvider storageProvider, IMapper mapper, IValidateParser validateParser) : base(cache, definitionInfoProviders, reader, modWriter, modParser, gameService, storageProvider, mapper, validateParser)
         {
             this.messageBus = messageBus;
             this.parserManager = parserManager;
             this.modPatchExporter = modPatchExporter;
+            this.validateParser = validateParser;
         }
 
         #endregion Constructors
@@ -2164,6 +2168,11 @@ namespace IronyModManager.Services
                 }
             }
             return false;
+        }
+
+        public IEnumerable<IDefinition> Validate(ParserArgs args)
+        {
+            return validateParser.Validate(args);
         }
 
         #endregion Methods
