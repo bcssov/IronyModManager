@@ -4,7 +4,7 @@
 // Created          : 03-09-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 05-31-2021
+// Last Modified On : 08-25-2021
 // ***********************************************************************
 // <copyright file="ModCollectionExporter.cs" company="Mario">
 //     Mario
@@ -262,7 +262,17 @@ namespace IronyModManager.IO.Mods
         /// <returns>Task&lt;System.Boolean&gt;.</returns>
         public Task<bool> ImportParadoxLauncherAsync(ModCollectionExporterParams parameters)
         {
-            return paradoxLauncherImporter.ImportAsync(parameters);
+            return paradoxLauncherImporter.DatabaseImportAsync(parameters);
+        }
+
+        /// <summary>
+        /// Imports the paradox launcher json asynchronous.
+        /// </summary>
+        /// <param name="parameters">The parameters.</param>
+        /// <returns>Task&lt;System.Boolean&gt;.</returns>
+        public Task<bool> ImportParadoxLauncherJsonAsync(ModCollectionExporterParams parameters)
+        {
+            return paradoxLauncherImporter.JsonImportAsync(parameters);
         }
 
         /// <summary>

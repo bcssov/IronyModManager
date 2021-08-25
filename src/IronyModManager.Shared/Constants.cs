@@ -4,7 +4,7 @@
 // Created          : 01-17-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-17-2021
+// Last Modified On : 08-25-2021
 // ***********************************************************************
 // <copyright file="Constants.cs" company="Mario">
 //     Mario
@@ -242,6 +242,11 @@ namespace IronyModManager.Shared
                 /// </summary>
                 public static readonly string LauncherSettingsPrefix = ".." + Path.DirectorySeparatorChar;
 
+                /// <summary>
+                /// The paradox game identifier
+                /// </summary>
+                public static string ParadoxGameId = "ck3";
+
                 #endregion Fields
             }
 
@@ -283,6 +288,11 @@ namespace IronyModManager.Shared
                 public static readonly string[] GameFolders = new string[] { "common", "customizable_localization", "decisions", "events", "gfx", "hints",
                     "history", "interface", "localisation", "map", "missions", "music", "sound", "tutorial", "tweakergui_assets" };
 
+                /// <summary>
+                /// The paradox game identifier
+                /// </summary>
+                public static string ParadoxGameId = "eu4";
+
                 #endregion Fields
             }
 
@@ -323,6 +333,11 @@ namespace IronyModManager.Shared
                 /// </summary>
                 public static readonly string[] GameFolders = new string[] { "common", "events", "gfx", "history", "interface", "localisation",
                     "map", "music", "portraits", "previewer_assets", "script", "sound", "tutorial", "tweakergui_assets" };
+
+                /// <summary>
+                /// The paradox game identifier
+                /// </summary>
+                public static string ParadoxGameId = "hoi4";
 
                 #endregion Fields
             }
@@ -375,6 +390,11 @@ namespace IronyModManager.Shared
                 /// </summary>
                 public static readonly string LauncherSettingsPrefix = ".." + Path.DirectorySeparatorChar;
 
+                /// <summary>
+                /// The paradox game identifier
+                /// </summary>
+                public static string ParadoxGameId = "imperator_rome";
+
                 #endregion Fields
             }
 
@@ -416,6 +436,11 @@ namespace IronyModManager.Shared
                 public static readonly string[] GameFolders = new string[] { "sound", "tweakergui_assets", "common", "crash_reporter", "dlc", "dlc_metadata",
                     "events", "flags", "fonts", "gfx", "interface", "launcher-assets", "licenses", "locales", "localisation", "localisation_synced", "map",
                     "music", "pdx_browser", "pdx_launcher", "pdx_online_assets", "prescripted_countries", "previewer_assets" };
+
+                /// <summary>
+                /// The paradox game identifier
+                /// </summary>
+                public static string ParadoxGameId = "stellaris";
 
                 #endregion Fields
             }
