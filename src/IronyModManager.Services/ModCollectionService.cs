@@ -4,7 +4,7 @@
 // Created          : 03-04-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 08-25-2021
+// Last Modified On : 08-26-2021
 // ***********************************************************************
 // <copyright file="ModCollectionService.cs" company="Mario">
 //     Mario
@@ -251,6 +251,30 @@ namespace IronyModManager.Services
                 return await exportService.ExportAsync(reports, path);
             }
             return false;
+        }
+
+        /// <summary>
+        /// Exports the paradox launcher json asynchronous.
+        /// </summary>
+        /// <param name="file">The file.</param>
+        /// <param name="modCollection">The mod collection.</param>
+        /// <returns>Task&lt;System.Boolean&gt;.</returns>
+        public virtual Task<bool> ExportParadoxLauncherJsonAsync(string file, IModCollection modCollection)
+        {
+            var game = GameService.GetSelected();
+            if (game == null || modCollection == null)
+            {
+                return Task.FromResult(false);
+            }
+            var collection = Mapper.Map<IModCollection>(modCollection);
+            var parameters = new ModCollectionExporterParams()
+            {
+                File = file,
+                Mod = collection,
+                ExportMods = GetCollectionMods(collectionName: modCollection.Name),
+                Game = game
+            };
+            return modCollectionExporter.ExportParadoxLauncherJsonAsync(parameters);
         }
 
         /// <summary>

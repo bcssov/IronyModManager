@@ -4,7 +4,7 @@
 // Created          : 03-09-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 08-25-2021
+// Last Modified On : 08-26-2021
 // ***********************************************************************
 // <copyright file="ModCollectionExporter.cs" company="Mario">
 //     Mario
@@ -23,6 +23,7 @@ using Ionic.Zip;
 using IronyModManager.IO.Common;
 using IronyModManager.IO.Common.MessageBus;
 using IronyModManager.IO.Common.Mods;
+using IronyModManager.IO.Mods.Exporter;
 using IronyModManager.IO.Mods.Importers;
 using IronyModManager.Shared;
 using IronyModManager.Shared.MessageBus;
@@ -58,6 +59,11 @@ namespace IronyModManager.IO.Mods
         private readonly ParadoxImporter paradoxImporter;
 
         /// <summary>
+        /// The paradox launcher exporter
+        /// </summary>
+        private readonly ParadoxLauncherExporter paradoxLauncherExporter;
+
+        /// <summary>
         /// The paradox launcher importer
         /// </summary>
         private readonly ParadoxLauncherImporter paradoxLauncherImporter;
@@ -81,6 +87,7 @@ namespace IronyModManager.IO.Mods
             paradoxosImporter = new ParadoxosImporter(logger);
             paradoxImporter = new ParadoxImporter(logger);
             paradoxLauncherImporter = new ParadoxLauncherImporter(logger);
+            paradoxLauncherExporter = new ParadoxLauncherExporter();
             this.logger = logger;
             this.messageBus = messageBus;
         }
@@ -223,6 +230,16 @@ namespace IronyModManager.IO.Mods
                 await Task.WhenAll(task);
             }
             return true;
+        }
+
+        /// <summary>
+        /// Exports the paradox launcher json asynchronous.
+        /// </summary>
+        /// <param name="parameters">The parameters.</param>
+        /// <returns>Task&lt;System.Boolean&gt;.</returns>
+        public Task<bool> ExportParadoxLauncherJsonAsync(ModCollectionExporterParams parameters)
+        {
+            return paradoxLauncherExporter.ExportAsync(parameters);
         }
 
         /// <summary>
