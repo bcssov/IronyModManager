@@ -4,7 +4,7 @@
 // Created          : 08-12-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 08-25-2021
+// Last Modified On : 08-26-2021
 // ***********************************************************************
 // <copyright file="ParadoxLauncherImporter.cs" company="Mario">
 //     Mario
@@ -109,7 +109,7 @@ namespace IronyModManager.IO.Mods.Importers
             if (File.Exists(parameters.File))
             {
                 var content = await File.ReadAllTextAsync(parameters.File);
-                if (string.IsNullOrWhiteSpace(content))
+                if (!string.IsNullOrWhiteSpace(content))
                 {
                     ModInfo model = null;
                     try
