@@ -1059,17 +1059,17 @@ namespace IronyModManager.Services.Tests
                 UserDirectory = "C:\\fake",
                 ParadoxGameId = "fake"
             } });
-            modExport.Setup(p => p.ImportParadoxLauncherAsync(It.IsAny<ModCollectionExporterParams>())).Returns((ModCollectionExporterParams p) =>
+            modExport.Setup(p => p.ImportParadoxLauncherJsonAsync(It.IsAny<ModCollectionExporterParams>())).Returns((ModCollectionExporterParams p) =>
             {
                 p.Mod.Name = "fake";
-                p.Mod.ModNames = new List<string>() { "fake1", "fake2" };
+                p.Mod.Mods = new List<string>() { "1", "2" };
                 p.Mod.Game = "fake";
                 return Task.FromResult(true);
             });
             var cache = new Cache();
             // Fake mods in cache (less mocking)
-            cache.Set(new CacheAddParameters<IEnumerable<IMod>>() { Region = "Mods", Prefix = "no-items", Key = "RegularMods", Value = new List<IMod>() { new Mod() { Name = "fake1", DescriptorFile = "f1" }, new Mod() { Name = "fake2", DescriptorFile = "f2" }, new Mod() { Name = "fake3", DescriptorFile = "f3" } } });
-            cache.Set(new CacheAddParameters<IEnumerable<IMod>>() { Region = "Mods", Prefix = "no-items", Key = "AllMods", Value = new List<IMod>() { new Mod() { Name = "fake1", DescriptorFile = "f1" }, new Mod() { Name = "fake2", DescriptorFile = "f2" }, new Mod() { Name = "fake3", DescriptorFile = "f3" } } });
+            cache.Set(new CacheAddParameters<IEnumerable<IMod>>() { Region = "Mods", Prefix = "no-items", Key = "RegularMods", Value = new List<IMod>() { new Mod() { Name = "fake1", DescriptorFile = "f1", RemoteId = 1 }, new Mod() { Name = "fake2", DescriptorFile = "f2", RemoteId = 2 }, new Mod() { Name = "fake3", DescriptorFile = "f3", RemoteId = 3 } } });
+            cache.Set(new CacheAddParameters<IEnumerable<IMod>>() { Region = "Mods", Prefix = "no-items", Key = "AllMods", Value = new List<IMod>() { new Mod() { Name = "fake1", DescriptorFile = "f1", RemoteId = 1 }, new Mod() { Name = "fake2", DescriptorFile = "f2", RemoteId = 2 }, new Mod() { Name = "fake3", DescriptorFile = "f3", RemoteId = 3 } } });
 
             var service = new ModCollectionService(null, null, cache, null, null, null, null, gameService.Object, modExport.Object, storageProvider.Object, mapper.Object);
             var result = await service.ImportParadoxLauncherJsonAsync("fake");

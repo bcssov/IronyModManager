@@ -127,7 +127,7 @@ namespace IronyModManager.IO.Mods.Importers
                         // Will need to lookup the game and mod ids in the mod service
                         parameters.Mod.Game = model.Game;
                         var mods = model.Mods.Where(p => p.Enabled).OrderBy(p => p.Position);
-                        parameters.Mod.ModNames = mods.Select(p => p.DisplayName).ToList();
+                        parameters.Mod.Mods = mods.Select(p => !string.IsNullOrWhiteSpace(p.PdxId) ? p.PdxId : p.SteamId).ToList();
                         return true;
                     }
                 }

@@ -179,12 +179,14 @@
             "Paradoxos": "Uvezi iz Paradoxos",
             "Paradox": "Uvezi iz igre",
             "ParadoxLauncher": "Uvezi iz Paradox Launcher",
+            "ParadoxLauncherJson": "Uvezi iz Paradox Launcher Json",
             "Close": "Zatvori"
         },
         "ExportOther": {
             "Title": "...",
             "OrderOnly": "Izvezi redoslijed",
             "WholeCollection": "Izvoz cijelu zbirku",
+            "ParadoxLauncherJson": "Izvezi u Paradox Launcher Json",
             "Close": "Zatvori"
         },
         "MergeCollection": {

@@ -179,12 +179,14 @@
             "Paradoxos": "Aus Paradoxos Importieren",
             "Paradox": "Aus Dem Spiel Importieren",
             "ParadoxLauncher": "Aus Paradox Launcher Importieren",
+            "ParadoxLauncherJson": "Aus Paradox Launcher Json Importieren",
             "Close": "Schließen"
         },
         "ExportOther": {
             "Title": "...",
             "OrderOnly": "Nur Reihenfolge Exportieren",
             "WholeCollection": "Export ganzer Sammlung",
+            "ParadoxLauncherJson": "Export nach Paradox Launcher Json",
             "Close": "Schließen"
         },
         "MergeCollection": {

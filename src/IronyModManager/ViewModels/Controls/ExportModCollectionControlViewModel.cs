@@ -4,7 +4,7 @@
 // Created          : 03-09-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 05-30-2021
+// Last Modified On : 08-26-2021
 // ***********************************************************************
 // <copyright file="ExportModCollectionControlViewModel.cs" company="Mario">
 //     Mario
@@ -136,6 +136,19 @@ namespace IronyModManager.ViewModels.Controls
         public virtual ReactiveCommand<Unit, Unit> ExportOtherCommand { get; protected set; }
 
         /// <summary>
+        /// Gets or sets the export paradox launcher json.
+        /// </summary>
+        /// <value>The export paradox launcher json.</value>
+        [StaticLocalization(LocalizationResources.Collection_Mods.ExportOther.ParadoxLauncherJson)]
+        public virtual string ExportParadoxLauncherJson { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets the export paradox launcher json command.
+        /// </summary>
+        /// <value>The export paradox launcher json command.</value>
+        public virtual ReactiveCommand<Unit, CommandResult<string>> ExportParadoxLauncherJsonCommand { get; protected set; }
+
+        /// <summary>
         /// Gets or sets the export whole collection.
         /// </summary>
         /// <value>The export whole collection.</value>
@@ -208,6 +221,13 @@ namespace IronyModManager.ViewModels.Controls
         public virtual ReactiveCommand<Unit, CommandResult<string>> ImportOtherParadoxCommand { get; protected set; }
 
         /// <summary>
+        /// Gets or sets the import other paradox json launcher.
+        /// </summary>
+        /// <value>The import other paradox json launcher.</value>
+        [StaticLocalization(LocalizationResources.Collection_Mods.ImportOther.ParadoxLauncherJson)]
+        public virtual string ImportOtherParadoxJsonLauncher { get; protected set; }
+
+        /// <summary>
         /// Gets or sets the import other paradox launcher.
         /// </summary>
         /// <value>The import other paradox launcher.</value>
@@ -219,6 +239,12 @@ namespace IronyModManager.ViewModels.Controls
         /// </summary>
         /// <value>The import other paradox launcher command.</value>
         public virtual ReactiveCommand<Unit, CommandResult<string>> ImportOtherParadoxLauncherCommand { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets the import other paradox launcher json command.
+        /// </summary>
+        /// <value>The import other paradox launcher json command.</value>
+        public virtual ReactiveCommand<Unit, CommandResult<string>> ImportOtherParadoxLauncherJsonCommand { get; protected set; }
 
         /// <summary>
         /// Gets or sets the import other paradoxos.
@@ -312,6 +338,12 @@ namespace IronyModManager.ViewModels.Controls
                 return new CommandResult<string>(string.Empty, CommandState.Success);
             }).DisposeWith(disposables);
 
+            ImportOtherParadoxLauncherJsonCommand = ReactiveCommand.CreateFromTask(async () =>
+            {
+                var result = await fileDialogAction.OpenDialogAsync(ImportDialogTitle, string.Empty, Shared.Constants.JsonExtensionWithoutDot);
+                return new CommandResult<string>(result, !string.IsNullOrWhiteSpace(result) ? CommandState.Success : CommandState.Failed);
+            }).DisposeWith(disposables);
+
             ImportOtherCommand = ReactiveCommand.Create(() =>
             {
                 IsImportOpen = true;
@@ -341,6 +373,12 @@ namespace IronyModManager.ViewModels.Controls
             ExportWholeCollectionCommand = ReactiveCommand.CreateFromTask(async () =>
             {
                 var result = await fileDialogAction.SaveDialogAsync(ExportDialogTitle, CollectionName, Shared.Constants.ZipExtensionWithoutDot);
+                return new CommandResult<string>(result, !string.IsNullOrWhiteSpace(result) ? CommandState.Success : CommandState.Failed);
+            }, allowModSelectionEnabled).DisposeWith(disposables);
+
+            ExportParadoxLauncherJsonCommand = ReactiveCommand.CreateFromTask(async () =>
+            {
+                var result = await fileDialogAction.SaveDialogAsync(ExportDialogTitle, CollectionName, Shared.Constants.JsonExtensionWithoutDot);
                 return new CommandResult<string>(result, !string.IsNullOrWhiteSpace(result) ? CommandState.Success : CommandState.Failed);
             }, allowModSelectionEnabled).DisposeWith(disposables);
 

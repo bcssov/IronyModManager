@@ -30,6 +30,16 @@ namespace IronyModManager.IO.Mods.Exporter
     /// <seealso cref="IronyModManager.IO.Mods.Exporter.BaseExporter" />
     internal class ParadoxLauncherExporter : BaseExporter
     {
+        #region Fields
+
+        // If paradox can have a magic number, so can we
+        /// <summary>
+        /// The position
+        /// </summary>
+        private const int Pos = 4096;
+
+        #endregion Fields
+
         #region Methods
 
         /// <summary>
@@ -49,7 +59,7 @@ namespace IronyModManager.IO.Mods.Exporter
                 {
                     DisplayName = p.Name,
                     Enabled = true,
-                    Position = (validMods.IndexOf(p) + 1).ToString("x10"),
+                    Position = (validMods.IndexOf(p) + 1 + Pos).ToString("x10"),
                     SteamId = p.Source == ModSource.Steam ? p.RemoteId.ToString() : null,
                     PdxId = p.Source == ModSource.Paradox ? p.RemoteId.ToString() : null
                 }).ToList()
