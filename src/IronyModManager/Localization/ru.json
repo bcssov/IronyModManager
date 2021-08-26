@@ -172,12 +172,14 @@
             "Paradoxos": "Импорт из Paradoxos",
             "Paradox": "Импорт из игры",
             "ParadoxLauncher": "Импорт из Paradox Launcher",
+            "ParadoxLauncherJson": "Импорт из Paradox Launcher Json",
             "Close": "Закрыть"
         },
         "ExportOther": {
             "Title": "...",
             "OrderOnly": "Экспортировать только порядок",
             "WholeCollection": "Экспортировать целую коллекцию",
+            "ParadoxLauncherJson": "Экспорт в Paradox Launcher Json",
             "Close": "Закрыть"
         },
         "MergeCollection": {

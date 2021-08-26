@@ -4,7 +4,7 @@
 // Created          : 03-03-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 08-24-2021
+// Last Modified On : 08-26-2021
 // ***********************************************************************
 // <copyright file="CollectionModsControlViewModel.cs" company="Mario">
 //     Mario
@@ -347,7 +347,12 @@ namespace IronyModManager.ViewModels.Controls
             /// <summary>
             /// The paradox launcher
             /// </summary>
-            ParadoxLauncher
+            ParadoxLauncher,
+
+            /// <summary>
+            /// The paradox launcher json
+            /// </summary>
+            ParadoxLauncherJson
         }
 
         #endregion Enums
@@ -936,17 +941,24 @@ namespace IronyModManager.ViewModels.Controls
             await TriggerOverlayAsync(id, true, localizationManager.GetResource(LocalizationResources.Collection_Mods.Overlay_Exporting_Message), overlayProgress);
             var collection = modCollectionService.Get(SelectedModCollection.Name);
             AssignModCollectionNames(collection);
-            modExportProgress?.Dispose();
-            modExportProgress = modExportProgressHandler.Subscribe(s =>
+            if (providerType == ImportProviderType.ParadoxLauncherJson)
             {
-                var overlayProgress = Smart.Format(localizationManager.GetResource(LocalizationResources.Collection_Mods.Overlay_Import_Export_Progress), new
+                await Task.Run(async () => await modCollectionService.ExportParadoxLauncherJsonAsync(path, collection).ConfigureAwait(false)).ConfigureAwait(false);
+            }
+            else
+            {
+                modExportProgress?.Dispose();
+                modExportProgress = modExportProgressHandler.Subscribe(s =>
                 {
-                    PercentDone = s.Progress.ToLocalizedPercentage()
-                });
-                TriggerOverlay(id, true, localizationManager.GetResource(LocalizationResources.Collection_Mods.Overlay_Exporting_Message), overlayProgress);
-            }).DisposeWith(Disposables);
-            await Task.Run(async () => await modCollectionService.ExportAsync(path, collection, providerType == ImportProviderType.DefaultOrderOnly, providerType == ImportProviderType.DefaultWithAllMods).ConfigureAwait(false)).ConfigureAwait(false);
-            modExportProgress?.Dispose();
+                    var overlayProgress = Smart.Format(localizationManager.GetResource(LocalizationResources.Collection_Mods.Overlay_Import_Export_Progress), new
+                    {
+                        PercentDone = s.Progress.ToLocalizedPercentage()
+                    });
+                    TriggerOverlay(id, true, localizationManager.GetResource(LocalizationResources.Collection_Mods.Overlay_Exporting_Message), overlayProgress);
+                }).DisposeWith(Disposables);
+                await Task.Run(async () => await modCollectionService.ExportAsync(path, collection, providerType == ImportProviderType.DefaultOrderOnly, providerType == ImportProviderType.DefaultWithAllMods).ConfigureAwait(false)).ConfigureAwait(false);
+                modExportProgress?.Dispose();
+            }
             var title = localizationManager.GetResource(LocalizationResources.Notifications.CollectionExported.Title);
             var message = Smart.Format(localizationManager.GetResource(LocalizationResources.Notifications.CollectionExported.Message), new { CollectionName = collection.Name });
             notificationAction.ShowNotification(title, message, NotificationType.Success);
@@ -1091,6 +1103,7 @@ namespace IronyModManager.ViewModels.Controls
                 ImportProviderType.Paradoxos => await modCollectionService.ImportParadoxosAsync(path),
                 ImportProviderType.Paradox => await modCollectionService.ImportParadoxAsync(),
                 ImportProviderType.ParadoxLauncher => await modCollectionService.ImportParadoxLauncherAsync(),
+                ImportProviderType.ParadoxLauncherJson => await modCollectionService.ImportParadoxLauncherJsonAsync(path),
                 _ => await modCollectionService.GetImportedCollectionDetailsAsync(path),
             };
             if (importData == null)
@@ -1353,7 +1366,9 @@ namespace IronyModManager.ViewModels.Controls
                     ExportCollection.ImportCommand.Select(p => Tuple.Create(ImportActionType.Import, p, ImportProviderType.Default)),
                     ExportCollection.ImportOtherParadoxosCommand.Select(p => Tuple.Create(ImportActionType.Import, p, ImportProviderType.Paradoxos)),
                     ExportCollection.ImportOtherParadoxCommand.Select(p => Tuple.Create(ImportActionType.Import, p, ImportProviderType.Paradox)),
-                    ExportCollection.ImportOtherParadoxLauncherCommand.Select(p => Tuple.Create(ImportActionType.Import, p, ImportProviderType.ParadoxLauncher)))
+                    ExportCollection.ImportOtherParadoxLauncherCommand.Select(p => Tuple.Create(ImportActionType.Import, p, ImportProviderType.ParadoxLauncher)),
+                    ExportCollection.ImportOtherParadoxLauncherJsonCommand.Select(p => Tuple.Create(ImportActionType.Import, p, ImportProviderType.ParadoxLauncherJson)),
+                    ExportCollection.ExportParadoxLauncherJsonCommand.Select(p => Tuple.Create(ImportActionType.Export, p, ImportProviderType.ParadoxLauncherJson)))
                 .Subscribe(s =>
                 {
                     if (s.Item2.State == CommandState.Success)

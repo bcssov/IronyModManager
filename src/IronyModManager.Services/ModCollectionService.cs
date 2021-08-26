@@ -537,7 +537,7 @@ namespace IronyModManager.Services
 
                     case ImportType.ParadoxLauncherJson:
                         // So this format returns only display names and specifies for which game it is
-                        result = await modCollectionExporter.ImportParadoxLauncherAsync(parameters);
+                        result = await modCollectionExporter.ImportParadoxLauncherJsonAsync(parameters);
                         if (result)
                         {
                             var gameByPdxId = GameService.Get().FirstOrDefault(p => p.ParadoxGameId.Equals(instance.Game));
@@ -547,7 +547,9 @@ namespace IronyModManager.Services
                                 var mods = GetInstalledModsInternal(gameByPdxId, false);
                                 if (mods.Any())
                                 {
-                                    instance.Mods = mods.Where(p => instance.ModNames.Contains(p.Name)).Select(p => p.DescriptorFile);
+                                    var collectionMods = mods.Where(p => instance.Mods.Contains(p.RemoteId.ToString()));
+                                    instance.Mods = collectionMods.Select(p => p.DescriptorFile).ToList();
+                                    instance.ModNames = collectionMods.Select(p => p.Name).ToList();
                                 }
                             }
                             else
