@@ -4,7 +4,7 @@
 // Created          : 02-12-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-16-2021
+// Last Modified On : 08-25-2021
 // ***********************************************************************
 // <copyright file="GameType.cs" company="Mario">
 //     Mario
@@ -91,6 +91,12 @@ namespace IronyModManager.Storage
         /// </summary>
         /// <value>The name.</value>
         public virtual string Name { get; set; }
+
+        /// <summary>
+        /// Gets or sets the paradox game identifier.
+        /// </summary>
+        /// <value>The paradox game identifier.</value>
+        public virtual string ParadoxGameId { get; set; }
 
         /// <summary>
         /// Gets or sets the remote steam user directory.

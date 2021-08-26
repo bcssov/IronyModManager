@@ -172,12 +172,14 @@
             "Paradoxos": "从 Paradoxos 导入",
             "Paradox": "从游戏导入",
             "ParadoxLauncher": "从 Paradox 启动器导入",
+            "ParadoxLauncherJson": "从 Paradox Launcher Json 导入",
             "Close": "关闭"
         },
         "ExportOther": {
             "Title": "…",
             "OrderOnly": "仅导出模组加载顺序",
             "WholeCollection": "导出完整合集",
+            "ParadoxLauncherJson": "导出到 Paradox Launcher Json",
             "Close": "关闭"
         },
         "MergeCollection": {

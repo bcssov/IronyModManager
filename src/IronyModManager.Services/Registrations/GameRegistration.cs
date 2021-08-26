@@ -4,7 +4,7 @@
 // Created          : 02-12-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-16-2021
+// Last Modified On : 08-25-2021
 // ***********************************************************************
 // <copyright file="GameRegistration.cs" company="Mario">
 //     Mario
@@ -79,6 +79,7 @@ namespace IronyModManager.Services.Registrations
             game.LauncherSettingsPrefix = Shared.Constants.GamesTypes.CrusaderKings3.LauncherSettingsPrefix;
             game.RemoteSteamUserDirectory = SteamDirectory.GetUserDataFolders(game.SteamAppId).Select(p => p.StandardizeDirectorySeparator()).ToList();
             game.AdvancedFeaturesSupported = false;
+            game.ParadoxGameId = Shared.Constants.GamesTypes.CrusaderKings3.ParadoxGameId;
             MapGameSettings(game, GetExecutableSettings(game.BaseSteamGameDirectory, game.LauncherSettingsFileName));
             return game;
         }
@@ -103,6 +104,7 @@ namespace IronyModManager.Services.Registrations
             game.LauncherSettingsFileName = Shared.Constants.GamesTypes.LauncherSettingsFileName;
             game.RemoteSteamUserDirectory = SteamDirectory.GetUserDataFolders(game.SteamAppId).Select(p => p.StandardizeDirectorySeparator()).ToList();
             game.AdvancedFeaturesSupported = false;
+            game.ParadoxGameId = Shared.Constants.GamesTypes.EuropaUniversalis4.ParadoxGameId;
             MapGameSettings(game, GetExecutableSettings(game.BaseSteamGameDirectory, game.LauncherSettingsFileName));
             return game;
         }
@@ -162,6 +164,7 @@ namespace IronyModManager.Services.Registrations
             game.LauncherSettingsFileName = Shared.Constants.GamesTypes.LauncherSettingsFileName;
             game.RemoteSteamUserDirectory = SteamDirectory.GetUserDataFolders(game.SteamAppId).Select(p => p.StandardizeDirectorySeparator()).ToList();
             game.AdvancedFeaturesSupported = false;
+            game.ParadoxGameId = Shared.Constants.GamesTypes.HeartsOfIron4.ParadoxGameId;
             MapGameSettings(game, GetExecutableSettings(game.BaseSteamGameDirectory, game.LauncherSettingsFileName));
             return game;
         }
@@ -187,6 +190,7 @@ namespace IronyModManager.Services.Registrations
             game.LauncherSettingsPrefix = Shared.Constants.GamesTypes.ImperatorRome.LauncherSettingsPrefix;
             game.RemoteSteamUserDirectory = SteamDirectory.GetUserDataFolders(game.SteamAppId).Select(p => p.StandardizeDirectorySeparator()).ToList();
             game.AdvancedFeaturesSupported = false;
+            game.ParadoxGameId = Shared.Constants.GamesTypes.ImperatorRome.ParadoxGameId;
             MapGameSettings(game, GetExecutableSettings(game.BaseSteamGameDirectory, game.LauncherSettingsFileName));
             return game;
         }
@@ -211,6 +215,7 @@ namespace IronyModManager.Services.Registrations
             game.LauncherSettingsFileName = Shared.Constants.GamesTypes.LauncherSettingsFileName;
             game.RemoteSteamUserDirectory = SteamDirectory.GetUserDataFolders(game.SteamAppId).Select(p => p.StandardizeDirectorySeparator()).ToList();
             game.AdvancedFeaturesSupported = true;
+            game.ParadoxGameId = Shared.Constants.GamesTypes.Stellaris.ParadoxGameId;
             MapGameSettings(game, GetExecutableSettings(game.BaseSteamGameDirectory, game.LauncherSettingsFileName));
             return game;
         }

@@ -4,7 +4,7 @@
 // Created          : 03-04-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 05-30-2021
+// Last Modified On : 08-26-2021
 // ***********************************************************************
 // <copyright file="ModCollectionService.cs" company="Mario">
 //     Mario
@@ -111,7 +111,12 @@ namespace IronyModManager.Services
             /// <summary>
             /// The paradoxos
             /// </summary>
-            Paradoxos
+            Paradoxos,
+
+            /// <summary>
+            /// The paradox launcher json
+            /// </summary>
+            ParadoxLauncherJson
         }
 
         #endregion Enums
@@ -246,6 +251,30 @@ namespace IronyModManager.Services
                 return await exportService.ExportAsync(reports, path);
             }
             return false;
+        }
+
+        /// <summary>
+        /// Exports the paradox launcher json asynchronous.
+        /// </summary>
+        /// <param name="file">The file.</param>
+        /// <param name="modCollection">The mod collection.</param>
+        /// <returns>Task&lt;System.Boolean&gt;.</returns>
+        public virtual Task<bool> ExportParadoxLauncherJsonAsync(string file, IModCollection modCollection)
+        {
+            var game = GameService.GetSelected();
+            if (game == null || modCollection == null)
+            {
+                return Task.FromResult(false);
+            }
+            var collection = Mapper.Map<IModCollection>(modCollection);
+            var parameters = new ModCollectionExporterParams()
+            {
+                File = file,
+                Mod = collection,
+                ExportMods = GetCollectionMods(collectionName: modCollection.Name),
+                Game = game
+            };
+            return modCollectionExporter.ExportParadoxLauncherJsonAsync(parameters);
         }
 
         /// <summary>
@@ -394,6 +423,16 @@ namespace IronyModManager.Services
         }
 
         /// <summary>
+        /// Imports the paradox launcher json asynchronous.
+        /// </summary>
+        /// <param name="file">The file.</param>
+        /// <returns>Task&lt;IModCollection&gt;.</returns>
+        public virtual Task<IModCollection> ImportParadoxLauncherJsonAsync(string file)
+        {
+            return ImportModsAsync(ImportType.ParadoxLauncherJson, file);
+        }
+
+        /// <summary>
         /// import paradoxos as an asynchronous operation.
         /// </summary>
         /// <param name="file">The file.</param>
@@ -408,7 +447,7 @@ namespace IronyModManager.Services
         /// </summary>
         /// <param name="collection">The collection.</param>
         /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
-        /// <exception cref="ArgumentNullException">nameof(collection)</exception>
+        /// <exception cref="ArgumentNullException">collection</exception>
         public virtual bool Save(IModCollection collection)
         {
             if (collection == null || string.IsNullOrWhiteSpace(collection.Game))
@@ -494,6 +533,30 @@ namespace IronyModManager.Services
 
                     case ImportType.Paradoxos:
                         result = await modCollectionExporter.ImportParadoxosAsync(parameters);
+                        break;
+
+                    case ImportType.ParadoxLauncherJson:
+                        // So this format returns only display names and specifies for which game it is
+                        result = await modCollectionExporter.ImportParadoxLauncherJsonAsync(parameters);
+                        if (result)
+                        {
+                            var gameByPdxId = GameService.Get().FirstOrDefault(p => p.ParadoxGameId.Equals(instance.Game));
+                            if (gameByPdxId != null)
+                            {
+                                instance.Game = gameByPdxId.Type;
+                                var mods = GetInstalledModsInternal(gameByPdxId, false);
+                                if (mods.Any())
+                                {
+                                    var collectionMods = mods.Where(p => instance.Mods.Contains(p.RemoteId.ToString()));
+                                    instance.Mods = collectionMods.Select(p => p.DescriptorFile).ToList();
+                                    instance.ModNames = collectionMods.Select(p => p.Name).ToList();
+                                }
+                            }
+                            else
+                            {
+                                result = false;
+                            }
+                        }
                         break;
 
                     default:
