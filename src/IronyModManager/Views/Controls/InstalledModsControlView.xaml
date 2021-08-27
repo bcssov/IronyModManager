@@ -49,7 +49,7 @@
           </Border>
         </Grid>
         <controls:ListBox Items="{Binding FilteredMods}" SelectedItem="{Binding SelectedMod}"
-                          ScrollViewer.HorizontalScrollBarVisibility="Disabled" x:Name="modList">
+                          ScrollViewer.HorizontalScrollBarVisibility="Disabled" x:Name="modList" IsTextSearchEnabled="True">
           <controls:ListBox.ItemTemplate>
             <DataTemplate>
               <Grid Background="Transparent">
