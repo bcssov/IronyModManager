@@ -16,12 +16,11 @@ using System.Collections.Generic;
 using System.Linq;
 using Avalonia;
 using Avalonia.Controls;
-using Avalonia.Controls.Generators;
 using Avalonia.Controls.Presenters;
 using Avalonia.Input;
 using Avalonia.Styling;
-using Avalonia.Threading;
 using Avalonia.VisualTree;
+using IronyModManager.Controls.Helper;
 using IronyModManager.DI;
 using IronyModManager.Shared;
 using IronyModManager.Shared.Models;
@@ -45,19 +44,11 @@ namespace IronyModManager.Controls
         private ContextMenu contextMenu;
 
         /// <summary>
-        /// The text search term
+        /// The search select
         /// </summary>
-        private string textSearchTerm = string.Empty;
-
-        /// <summary>
-        /// The text search timer
-        /// </summary>
-#pragma warning disable CS8632 // The annotation for nullable reference types should only be used in code within a '#nullable' annotations context.
-        private DispatcherTimer? textSearchTimer;
+        private SearchSelect searchSelect;
 
         #endregion Fields
-
-#pragma warning restore CS8632 // The annotation for nullable reference types should only be used in code within a '#nullable' annotations context.
 
         #region Delegates
 
@@ -159,42 +150,14 @@ namespace IronyModManager.Controls
         /// <param name="e">The <see cref="TextInputEventArgs" /> instance containing the event data.</param>
         protected override void OnTextInput(TextInputEventArgs e)
         {
-            if (!e.Handled)
+            if (searchSelect == null)
             {
-                if (!IsTextSearchEnabled)
-                    return;
-
-                StopTextSearchTimer();
-
-                textSearchTerm += e.Text;
-
-                bool match(ItemContainerInfo info)
-                {
-                    // Bad Avalonia implementation
-                    if (info.ContainerControl is IContentControl control)
-                    {
-                        if (control.Content is IQueryableModel model)
-                        {
-                            return model.IsMatch(textSearchTerm);
-                        }
-                        else
-                        {
-                            return control.Content?.ToString()?.StartsWith(textSearchTerm, StringComparison.OrdinalIgnoreCase) == true;
-                        }
-                    }
-                    return false;
-                }
-
-                var info = ItemContainerGenerator.Containers.FirstOrDefault(match);
-
-                if (info != null)
-                {
-                    SelectedIndex = info.Index;
-                }
-
-                StartTextSearchTimer();
-
-                e.Handled = true;
+                searchSelect = new SearchSelect();
+            }
+            var index = searchSelect.FindMatch(e, IsTextSearchEnabled, ItemContainerGenerator, Items as IEnumerable<IQueryableModel>);
+            if (index.HasValue)
+            {
+                SelectedIndex = index.GetValueOrDefault();
             }
             base.OnTextInput(e);
         }
@@ -206,43 +169,6 @@ namespace IronyModManager.Controls
         private void RaiseContextMenuOpening(ListBoxItem listBoxItem)
         {
             ContextMenuOpening?.Invoke(listBoxItem);
-        }
-
-        /// <summary>
-        /// Starts the text search timer.
-        /// </summary>
-        private void StartTextSearchTimer()
-        {
-            textSearchTimer = new DispatcherTimer { Interval = TimeSpan.FromSeconds(1) };
-            textSearchTimer.Tick += TextSearchTimer_Tick;
-            textSearchTimer.Start();
-        }
-
-        /// <summary>
-        /// Stops the text search timer.
-        /// </summary>
-        private void StopTextSearchTimer()
-        {
-            if (textSearchTimer == null)
-            {
-                return;
-            }
-
-            textSearchTimer.Tick -= TextSearchTimer_Tick;
-            textSearchTimer.Stop();
-
-            textSearchTimer = null;
-        }
-
-        /// <summary>
-        /// Handles the Tick event of the TextSearchTimer control.
-        /// </summary>
-        /// <param name="sender">The source of the event.</param>
-        /// <param name="e">The <see cref="EventArgs" /> instance containing the event data.</param>
-        private void TextSearchTimer_Tick(object sender, EventArgs e)
-        {
-            textSearchTerm = string.Empty;
-            StopTextSearchTimer();
         }
 
         #endregion Methods
