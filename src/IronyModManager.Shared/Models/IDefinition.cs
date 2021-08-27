@@ -4,7 +4,7 @@
 // Created          : 02-16-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 05-28-2021
+// Last Modified On : 08-27-2021
 // ***********************************************************************
 // <copyright file="IDefinition.cs" company="Mario">
 //     Mario
@@ -21,9 +21,11 @@ namespace IronyModManager.Shared.Models
     /// <summary>
     /// Interface IDefinition
     /// Implements the <see cref="CodexMicroORM.Core.Collections.ICEFIndexedListItem" />
+    /// Implements the <see cref="IronyModManager.Shared.Models.IQueryableModel" />
     /// </summary>
+    /// <seealso cref="IronyModManager.Shared.Models.IQueryableModel" />
     /// <seealso cref="CodexMicroORM.Core.Collections.ICEFIndexedListItem" />
-    public interface IDefinition : ICEFIndexedListItem
+    public interface IDefinition : ICEFIndexedListItem, IQueryableModel
     {
         #region Properties
 

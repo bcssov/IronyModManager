@@ -36,7 +36,7 @@
                    ScrollViewer.HorizontalScrollBarVisibility="Disabled" SelectionMode="Single" x:Name="conflictList"
                    Height="{Binding $parent[Window].Height, 
                      Converter={StaticResource MathConverter} 
-                     ConverterParameter=x-160}">
+                     ConverterParameter=x-160}" IsTextSearchEnabled="True">
             <controls:ListBox.ItemTemplate>
               <DataTemplate>
                 <Grid ColumnDefinitions="*" Background="Transparent">

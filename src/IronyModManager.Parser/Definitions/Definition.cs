@@ -4,7 +4,7 @@
 // Created          : 02-16-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 05-28-2021
+// Last Modified On : 08-27-2021
 // ***********************************************************************
 // <copyright file="Definition.cs" company="Mario">
 //     Mario
@@ -695,6 +695,34 @@ namespace IronyModManager.Parser.Definitions
                 nameof(IsFromGame) => IsFromGame,
                 _ => Id
             };
+        }
+
+        /// <summary>
+        /// Determines whether the specified term is match.
+        /// </summary>
+        /// <param name="term">The term.</param>
+        /// <returns><c>true</c> if the specified term is match; otherwise, <c>false</c>.</returns>
+        public bool IsMatch(string term)
+        {
+            string searchTerm = string.Empty;
+            if (!string.IsNullOrWhiteSpace(ModName) && !string.IsNullOrWhiteSpace(Id))
+            {
+                searchTerm = $"{ModName} - {Id}";
+            }
+            else if (!string.IsNullOrWhiteSpace(ModName))
+            {
+                searchTerm = ModName;
+            }
+            else if (!string.IsNullOrWhiteSpace(Id))
+            {
+                searchTerm = Id;
+            }
+            if (string.IsNullOrWhiteSpace(searchTerm))
+            {
+                return false;
+            }
+            term ??= string.Empty;
+            return searchTerm.StartsWith(term, StringComparison.OrdinalIgnoreCase);
         }
 
         #endregion Methods

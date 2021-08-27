@@ -104,7 +104,8 @@
                      MinHeight="{Binding $parent[Window].Height, 
                      Converter={StaticResource MathConverter} 
                      ConverterParameter=x-300}"
-                     SelectedItem="{Binding SelectedMod}">
+                     SelectedItem="{Binding SelectedMod}"
+                     IsTextSearchEnabled="True">
               <controls:DragDropListBox.ItemTemplate>
                 <DataTemplate>
                   <Grid Background="Transparent">
