@@ -4,7 +4,7 @@
 // Created          : 02-29-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 12-07-2020
+// Last Modified On : 08-27-2021
 // ***********************************************************************
 // <copyright file="Mod.cs" company="Mario">
 //     Mario
@@ -225,5 +225,24 @@ namespace IronyModManager.Models
         }
 
         #endregion Properties
+
+        #region Methods
+
+        /// <summary>
+        /// Determines whether the specified term is match.
+        /// </summary>
+        /// <param name="term">The term.</param>
+        /// <returns><c>true</c> if the specified term is match; otherwise, <c>false</c>.</returns>
+        public virtual bool IsMatch(string term)
+        {
+            if (string.IsNullOrWhiteSpace(Name))
+            {
+                return false;
+            }
+            term ??= string.Empty;
+            return Name.StartsWith(term, StringComparison.OrdinalIgnoreCase);
+        }
+
+        #endregion Methods
     }
 }
