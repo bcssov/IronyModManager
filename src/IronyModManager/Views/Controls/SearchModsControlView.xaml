@@ -14,14 +14,14 @@
     <Grid ColumnDefinitions="7*,*,*,*" IsVisible="{Binding ShowArrows}">
       <controls:TextBox Text="{Binding Text}" Watermark="{Binding WatermarkText}" HorizontalAlignment="Stretch"
                Grid.Column="0" FontFamily="{Binding Text,Converter={StaticResource TextTypeFontFamilyConverter}}"></controls:TextBox>
-      <Button Content="{Binding DownArrowText}" Command="{Binding DownArrowCommand}" Grid.Column="1"></Button>
-      <Button Content="{Binding UpArrowText}" Command="{Binding UpArrowCommand}" Grid.Column="2"></Button>
-      <Button Content="{Binding ClearText}" Command="{Binding ClearTextCommand}" Grid.Column="3"></Button>
+      <Button Content="{Binding DownArrowText}" Command="{Binding DownArrowCommand}" Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"></Button>
+      <Button Content="{Binding UpArrowText}" Command="{Binding UpArrowCommand}" Grid.Column="2" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"></Button>
+      <Button Content="{Binding ClearText}" Command="{Binding ClearTextCommand}" Grid.Column="3" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"></Button>
     </Grid>
     <Grid ColumnDefinitions="8*,*" IsVisible="{Binding !ShowArrows}">
       <controls:TextBox Text="{Binding Text}" Watermark="{Binding WatermarkText}" HorizontalAlignment="Stretch"
                Grid.Column="0" FontFamily="{Binding Text,Converter={StaticResource TextTypeFontFamilyConverter}}"></controls:TextBox>
-      <Button Content="{Binding ClearText}" Command="{Binding ClearTextCommand}" Grid.Column="1"></Button>
+      <Button Content="{Binding ClearText}" Command="{Binding ClearTextCommand}" Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"></Button>
     </Grid>
   </Panel>
 </UserControl>
