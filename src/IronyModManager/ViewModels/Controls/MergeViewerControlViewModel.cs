@@ -35,6 +35,7 @@ using IronyModManager.Services.Common;
 using IronyModManager.Shared;
 using IronyModManager.Shared.Models;
 using ReactiveUI;
+using SmartFormat;
 
 namespace IronyModManager.ViewModels.Controls
 {
@@ -661,13 +662,11 @@ namespace IronyModManager.ViewModels.Controls
         {
             if (LeftSidePatchMod)
             {
-                var openBracket = LeftSide.Count(s => s == Parser.Common.Constants.Scripts.OpenObject);
-                var closeBracket = LeftSide.Count(s => s == Parser.Common.Constants.Scripts.CloseObject);
-                if (openBracket != closeBracket)
+                var bracketCount = modPatchCollectionService.GetBracketCount(LeftSide);
+                if (bracketCount.OpenBracketCount != bracketCount.CloseBracketCount)
                 {
-                    var OpenBracketSideText = localizationManager.GetResource(LocalizationResources.BracketMismatchError.OpenBracket);
-                    var CloseBracketSideText = localizationManager.GetResource(LocalizationResources.BracketMismatchError.CloseBracket);
-                    LeftSideBracketMismatchText = OpenBracketSideText + openBracket + CloseBracketSideText + closeBracket;
+                    var message = localizationManager.GetResource(LocalizationResources.BracketMismatchError.Message).FormatSmart(new { bracketCount.OpenBracketCount, bracketCount.CloseBracketCount });
+                    LeftSideBracketMismatchText = message;
                 }
                 else
                 {
@@ -680,13 +679,11 @@ namespace IronyModManager.ViewModels.Controls
             }
             if (RightSidePatchMod)
             {
-                var openBracket = RightSide.Count(s => s == Parser.Common.Constants.Scripts.OpenObject);
-                var closeBracket = RightSide.Count(s => s == Parser.Common.Constants.Scripts.CloseObject);
-                if (openBracket != closeBracket)
+                var bracketCount = modPatchCollectionService.GetBracketCount(RightSide);
+                if (bracketCount.OpenBracketCount != bracketCount.CloseBracketCount)
                 {
-                    var OpenBracketSideText = localizationManager.GetResource(LocalizationResources.BracketMismatchError.OpenBracket);
-                    var CloseBracketSideText = localizationManager.GetResource(LocalizationResources.BracketMismatchError.CloseBracket);
-                    RightSideBracketMismatchText = OpenBracketSideText + openBracket + CloseBracketSideText + closeBracket;
+                    var message = localizationManager.GetResource(LocalizationResources.BracketMismatchError.Message).FormatSmart(new { bracketCount.OpenBracketCount, bracketCount.CloseBracketCount });
+                    RightSideBracketMismatchText = message;
                 }
                 else
                 {

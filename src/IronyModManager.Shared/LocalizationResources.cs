@@ -61,8 +61,7 @@ namespace IronyModManager.Shared
         public static class BracketMismatchError
         {
             public const string Prefix = "BracketMismatchError.";
-            public const string OpenBracket = Prefix + "OpenBracket";
-            public const string CloseBracket = Prefix + "CloseBracket";
+            public const string Message = Prefix + "Message";
         }
         public static class Prompt
         {

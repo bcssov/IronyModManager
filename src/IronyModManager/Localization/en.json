@@ -1,551 +1,550 @@
 ﻿{
-  // Do NOT Translate anything in curly ({}) braces inside strings. These are used for formatting.
-  "App": {
-    "FontFamily": "Noto Sans", // Do not translate this, this is the font used by this locale
-    "SupportedNameBlock": "", // Leave empty for latin alphabets. Reference here: https://docs.microsoft.com/en-us/dotnet/standard/base-types/character-classes-in-regular-expressions#supported-named-blocks
-    "Title": "Irony Mod Manager: v{AppVersion}",
-    "BackgroundOperationMessage": "Please wait a background operation is being performed. App will shut down once it is completed...",
-    "WaitBackgroundOperationMessage": "Please wait a background operation is being performed.",
-    "Actions": {
-      "Name": "Actions",
-      "Wiki": "Wiki",
-      "Logs": "Logs",
-      "ErrorLog": "Error.log",
-      "Close": "Close",
-      "DLC": "DLC"
+    // Do NOT Translate anything in curly ({}) braces inside strings. These are used for formatting.
+    "App": {
+        "FontFamily": "Noto Sans", // Do not translate this, this is the font used by this locale
+        "SupportedNameBlock": "", // Leave empty for latin alphabets. Reference here: https://docs.microsoft.com/en-us/dotnet/standard/base-types/character-classes-in-regular-expressions#supported-named-blocks
+        "Title": "Irony Mod Manager: v{AppVersion}",
+        "BackgroundOperationMessage": "Please wait a background operation is being performed. App will shut down once it is completed...",
+        "WaitBackgroundOperationMessage": "Please wait a background operation is being performed.",
+        "Actions": {
+            "Name": "Actions",
+            "Wiki": "Wiki",
+            "Logs": "Logs",
+            "ErrorLog": "Error.log",
+            "Close": "Close",
+            "DLC": "DLC"
+        }
+    },
+    "FatalError": {
+        "Message": "Unhandled error occurred. App will close automatically.",
+        "Title": "Error",
+        "Header": "Fatal Error"
+    },
+    "SavingError": {
+        "Title": "Save Error",
+        "Message": "Something seems to be locking Irony's ability to write to mod files. Please report this on GitHub issue tracker and post the error log."
+    },
+    "UnableToWriteError": {
+        "Title": "Application Blocked",
+        "Message": "The application appears to be blocked by Antivirus or permissions and is unable to write to the user documents directory:{NewLine}{Paths}"
+    },
+    "InvalidModsDetected": {
+        "Title": "Invalid Mods Detected",
+        "Message": "The following mod locations could not be parsed due to either invalid archives or locked files:{NewLine}{Mods}"
+    },
+    "ResolutionSaveError": {
+        "Title": "Virtual Definition Validation Failed",
+        "Message": "The virtual definition could not be used to resolve the conflict.  The virtual definition failed validation."
+    },
+    "BracketMismatchError": {
+        "Message": "Bracket Count Mismatch!  Open Bracket: {OpenBracketCount}  Close Bracket: {CloseBracketCount}"
+    },
+    "Prompt": {
+        "OK": "OK",
+        "Yes": "Yes",
+        "No": "No",
+        "Confirm": "Confirm",
+        "Cancel": "Cancel"
+    },
+    "FileDialog": {
+        "FileName": "File name",
+        "ShowHiddenFiles": "Show hidden files",
+        "Volume": "{Size} Volume",
+        "OK": "OK",
+        "Cancel": "Cancel",
+        "Name": "Name",
+        "DateModified": "Date Modified",
+        "Type": "Type",
+        "Size": "Size",
+        "Folders": {
+            "Downloads": "Downloads",
+            "Desktop": "Desktop",
+            "Documents": "Documents",
+            "Music": "Music",
+            "Videos": "Videos",
+            "Pictures": "Pictures"
+        }
+    },
+    "TextBox": {
+        "Copy": "Copy",
+        "Cut": "Cut",
+        "Paste": "Paste",
+        "SelectAll": "Select All"
+    },
+    "Languages": {
+        "Name": "Language"
+    },
+    "Themes": {
+        "Name": "Theme",
+        "Light": "Light",
+        "Dark": "Dark",
+        "FluentLight": "Fluent Light",
+        "FluentDark": "Fluent Dark",
+        "MaterialDark": "Material Dark",
+        "MaterialLight": "Material Light",
+        "Restart_Title": "Needs restart",
+        "Restart_Header": "App needs restart",
+        "Restart_Message": "App needs to be restarted in order for the new theme to properly apply. Do you want to restart the app?"
+    },
+    "NotificationPosition": {
+        "BottomRight": "Bottom Right",
+        "BottomLeft": "Bottom Left",
+        "TopRight": "Top Right",
+        "TopLeft": "Top Left"
+    },
+    "Games": {
+        "Name": "Game",
+        "Stellaris": "Stellaris",
+        "EuropaUniversalisIV": "Europa Universalis IV",
+        "HeartsofIronIV": "Hearts of Iron IV",
+        "ImperatorRome": "Imperator Rome",
+        "CrusaderKings3": "Crusader Kings III"
+    },
+    "Installed_Mods": {
+        "Name": "Installed Mods",
+        "Filter": "Filter Mods",
+        "Selected": "Selected",
+        "Mod_Name": "Mod Name",
+        "Supported_Version": "Supported Version",
+        "LoadingMods": "Please wait while loading mod data...",
+        "RefreshingModList": "Please wait while the mod list is being refreshed...",
+        "InvalidMods": {
+            "Title": "Invalid Mods Detected",
+            "Message": "The following mods are missing:{NewLine}{Mods}.{NewLine}{NewLine}Do you want to delete the descriptors?"
+        }
+    },
+    "Collection_Mods": {
+        "Name": "Collection Mods",
+        "Remove": "-",
+        "Create": "+",
+        "OK": "OK",
+        "Cancel": "Cancel",
+        "Watermark": "Enter new collection name",
+        "Delete_Title": "Delete Collection?",
+        "Delete_Header": "Confirm collection deletion",
+        "Delete_Message": "Are you sure you want to delete the {CollectionName} collection?",
+        "Export": "Export",
+        "Import": "Import",
+        "Export_Dialog_Title": "Export Collection",
+        "Import_Dialog_Title": "Import Collection",
+        "Overlay_Exporting_Message": "Please wait while exporting a mod collection...",
+        "Overlay_Importing_Message": "Please wait while importing a mod collection...",
+        "Overlay_Import_Export_Progress": "{PercentDone}",
+        "Filter": "Search Mods",
+        "Selected": "Selected",
+        "Mod_Name": "Mod Name",
+        "Order": "Order",
+        "Rename": "Rename",
+        "Duplicate": "Duplicate",
+        "Overlay_Rename_Message": "Please wait while performing rename operation...",
+        "Overlay_Duplicate_Message": "Please wait while performing duplicate operation...",
+        "ExportToClipboard": "Copy Collection To Clipboard",
+        "DeleteMerge": {
+            "DeleteTitle": "Delete Merged Mod?",
+            "DeleteHeader": "Confirm merge mod deletion",
+            "DeleteMessage": "Existence of merged mod has been detected, do you want to delete it as well?"
+        },
+        "ImportFromClipboard": {
+            "Title": "Import Mod Order From Clipboard",
+            "PromptTitle": "Overwrite Mod Order?",
+            "PromptMessage": "This will overwrite your mod collection mod order and mod selection. Proceed?"
+        },
+        "FileHash": {
+            "ExportCollection": "Export Collection Hashes",
+            "ExportGame": "Export Game Hashes",
+            "Import": "Verify Hashes",
+            "DialogTitleExport": "Select where to export report",
+            "DialogTitleImport": "Select json report to import",
+            "ExportOverlay": "Please wait while exporting...",
+            "ImportOverlay": "Please wait while verifying...",
+            "ProgressExport": "{Progress}",
+            "ProgressImport": "Step {Count}/{TotalCount}: {Progress}",
+            "Close": "Close"
+        },
+        "JumpOnDragAndDrop": {
+            "Title": "Auto Focus: {State}",
+            "On": "On",
+            "Off": "Off"
+        },
+        "ImportPrompt": {
+            "Title": "Collection Exists",
+            "Message": "Collection already exists and will be overwritten, do you want to proceed?"
+        },
+        "ImportNonExistingMods": {
+            "Title": "Non existant mods",
+            "Message": "The following mods could not be imported as they appear to be missing:{NewLine}{Mods}"
+        },
+        "ImportOther": {
+            "Title": "...",
+            "Paradoxos": "Import From Paradoxos",
+            "Paradox": "Import From Game",
+            "ParadoxLauncher": "Import From Paradox Launcher",
+            "Close": "Close"
+        },
+        "ExportOther": {
+            "Title": "...",
+            "OrderOnly": "Export Order Only",
+            "WholeCollection": "Export Whole Collection",
+            "Close": "Close"
+        },
+        "MergeCollection": {
+            "Name": "Merge",
+            "MergedCollectionPrefix": "(Merged)", // It's used in path generation so should not be translated (depending on the type of language)
+            "MergeCompressModPrefix": "(Merged {Name})", // It's used in path generation so should not be translated (depending on the type of language)
+            "Overlay_Progress": "Step {Count}/{TotalCount}: {PercentDone}",
+            "DiskInfoOverlay": "Checking available disk space...",
+            "Options": {
+                "Title": "Select mode",
+                "Basic": "Basic",
+                "Compress": "Compress",
+                "Close": "Close"
+            },
+            "Basic": {
+                "Overlay_Gathering_Mod_Info": "Please wait while gathering mod info...",
+                "Overlay_Writing_Files": "Please wait while merging the mod collection..."
+            },
+            "Compress": {
+                "Overlay_Gathering_Mod_Info": "Please wait while gathering mod info...",
+                "Overlay_Compressing_Files": "Please wait while merging the mod collection..."
+            },
+            "OverwritePrompt": {
+                "Title": "Overwrite existing collection?",
+                "Message": "A merged collection with the specified name already exists. Would you like to overwrite it?"
+            }
+        },
+        "PatchMod": {
+            "Title": "Patch Mod: {Status}",
+            "Enabled": "Enabled",
+            "Disabled": "Disabled",
+            "NotAvailable": "Not Available",
+            "DeletePrompt": {
+                "Title": "Confirm Delete",
+                "Message": "Are you sure you want to delete the patch mod?"
+            },
+            "Actions": {
+                "Enable": "Enable",
+                "Disable": "Disable",
+                "Delete": "Delete",
+                "Close": "Close"
+            }
+        }
+    },
+    "Mod_Actions": {
+        "Apply": "Apply",
+        "Overlay_Apply_Message": "Please wait while applying mod collection...",
+        "ConflictSolver": {
+            "Conflict": "Conflict Solver",
+            "Overlay_Conflict_Solver_Indexing_Game": "Please wait while indexing game definitions...",
+            "Overlay_Conflict_Solver_Loading_Game_Definitions": "Please wait while loading game definitions...",
+            "Overlay_Conflict_Solver_Loading_Definitions": "Please wait while loading mod definitions...",
+            "Overlay_Conflict_Solver_Analyzing_Conflicts": "Please wait while analyzing definitions for conflicts...",
+            "Overlay_Conflict_Solver_Analyzing_Resolved_Conflicts": "Please wait while analyzing resolved definitions...",
+            "Overlay_Conflict_Solver_Replacing_Definitions": "Please wait while replacing definitions...",
+            "Overlay_Conflict_Solver_Progress": "Step {Count}/{TotalCount}: {PercentDone}",
+            "FirstUsePrompt": {
+                "Title": "Attention",
+                "Message": "The conflict solver is not for the faint of heart. It requires knowledge of, and experience with patching code. Users of small mod collections should ignore it, users of larger mod collections should consider either trimming their mod collections or researching code patching. Support cannot be provided should you proceed."
+            },
+            "GameExecutableNotSetPrompt": {
+                "Title": "Game Executable Not Set",
+                "Message": "Game executable has not been set in the options. This mod collection previously included game files in its analysis. Conflict solver will not be able to analyze game files and some resolutions might be reset. Do you wish to proceed?"
+            }
+        },
+        "LaunchGame": {
+            "Launch": "Launch Game",
+            "Resume": "Resume Game",
+            "Overlay": "Launching game, please wait...",
+            "LaunchError": {
+                "Title": "Cannot Launch Game",
+                "Message": "Failed to launch the game."
+            },
+            "NotSet": {
+                "Title": "Game Not Set",
+                "Message": "Game was not automatically detected, please use the options window to manually set the executable path."
+            }
+        }
+    },
+    "Conflict_Solver": {
+        "Back": "Back",
+        "ConflictedObjects": "Conflicted Objects",
+        "LeftSide": "Left Side",
+        "RightSide": "Right Side",
+        "BinaryFile": "Binary Content",
+        "ImageInfo": "Width: {Width} Height: {Height}",
+        "TakeLeft": "Take Left",
+        "TakeRight": "Take Right",
+        "OK": "OK",
+        "Cancel": "Cancel",
+        "Resolve": "Resolve",
+        "Ignore": "Ignore",
+        "IgnoreRules": "Ignore Rules",
+        "OverlayResolve": "Please wait while resolving conflict...",
+        "NextConflict": "Next Conflict",
+        "PrevConflict": "Prev Conflict",
+        "ConflictCount": "Conflict Count: {Count}",
+        "PriorityReason": {
+            "FIOS": "(FIOS)",
+            "LIOS": "(LIOS)",
+            "Order": "(Load Order)",
+            "Override": "(Override)"
+        },
+        "InvalidConflicts": {
+            "Name": "Invalid",
+            "Error": "Error at line: {Line} column: {Column} file: {File}.{NewLine}Please report this error to the author of the mod: {ModName}.{NewLine}{NewLine}Error message says:{NewLine}{NewLine}{Message}",
+            "ErrorNoLine": "Error at file: {File}.{NewLine}Please report this error to the author of the mod: {ModName}.{NewLine}{NewLine}Error message says:{NewLine}{NewLine}{Message}",
+            "ContextMenu": {
+                "OpenFile": "Open File",
+                "OpenDirectory": "Open Directory",
+                "CustomPatch": "Copy To Custom Patch"
+            }
+        },
+        "CompareSelectorContextMenu": {
+            "OpenFile": "Open File",
+            "OpenDirectory": "Open Directory"
+        },
+        "ContextMenu": {
+            "CopyAll": "Copy All",
+            "CopyThis": "Copy This",
+            "CopyThisAfterLine": "Copy This After Line",
+            "CopyThisBeforeLine": "Copy This Before Line",
+            "MoveUp": "Move Up",
+            "MoveDown": "Move Down",
+            "Edit": "Edit",
+            "CopyText": "Copy Text",
+            "Delete": "Delete",
+            "Undo": "Undo",
+            "Redo": "Redo",
+            "Editor": "External Merge"
+        },
+        "EditorContextMenu": {
+            "Copy": "Copy",
+            "Cut": "Cut",
+            "Delete": "Delete",
+            "Paste": "Paste",
+            "Undo": "Undo",
+            "Redo": "Redo",
+            "SelectAll": "Select All"
+        },
+        "Modes": {
+            "Title": "Select Mode",
+            "Default": "Default",
+            "Advanced": "Advanced",
+            "Close": "Close"
+        },
+        "ModFilter": {
+            "Title": "Mod Filter",
+            "IgnoreGameConflicts": "Ignore Game Conflicts",
+            "Close": "Close"
+        },
+        "ResetConflicts": {
+            "Title": "Reset Conflicts",
+            "Resolved": "Resolved",
+            "Ignored": "Ignored",
+            "Custom": "Custom",
+            "Close": "Close",
+            "Reset": "Reset",
+            "Overlay": "Please wait while undoing conflicts..."
+        },
+        "DBSearch": {
+            "Title": "Database Search",
+            "Watermark": "Enter search term",
+            "Close": "Close",
+            "Clear": "X"
+        },
+        "CustomPatch": {
+            "Title": "Custom Patch",
+            "Load": "Load",
+            "Path": "Path",
+            "Save": "Save",
+            "Close": "Close"
+        },
+        "Editor": {
+            "Title": "External Merge",
+            "Message": "Press confirm once you are satisfied with external merge."
+        }
+    },
+    "ConflictIgnore": {
+        "Save": "Save",
+        "Cancel": "Cancel",
+        "Watermark": "Use # for comments. New line is a new rule."
+    },
+    "Options": {
+        "Name": "Options",
+        "Close": "Close",
+        "NavigateTo": "...",
+        "Reset": "X",
+        "AppOptions": {
+            "Title": "Application Options",
+            "NotificationPosition": "Notification Position"
+        },
+        "Editor": {
+            "Title": "External Editor Options",
+            "EditorExecutable": "Editor Executable",
+            "EditorArgs": "Editor Args",
+            "EditorArgsPlaceholder": "Example: leftFile:{Left} rightFile:{Right}"
+        },
+        "Game": {
+            "Title": "Game Options",
+            "GameExecutable": "Game Executable",
+            "UserDirectory": "Data Directory",
+            "GameArgs": "Game Launch Options",
+            "RefreshMods": "Refresh Descriptors Before Playing",
+            "CloseAfterLaunch": "Close After Launching Game",
+            "AutoConfigure": "Configure All...",
+            "CustomModPath": "Custom Mod Directory"
+        },
+        "Updates": {
+            "Title": "Update Options",
+            "UpdateInfoTitle": "Update Release Information",
+            "AutoUpdates": "Check For Updates at Startup",
+            "CheckPrerelease": "Update To Prerelease Versions",
+            "CheckForUpdates": "Check For Updates",
+            "Install": "Install Updates",
+            "Version": "Version",
+            "Overlay": {
+                "UpdateDownloading": "Downloading Updates...",
+                "UpdateDownloadProgress": "{Progress}",
+                "UpdateInstalling": "Unpacking updates and preparing to run installer..."
+            },
+            "Errors": {
+                "DownloadErrorTitle": "Update Error",
+                "DownloadErrorMessage": "Error occurred while downloading updates, please see error log for more details."
+            },
+            "AutoUpdatePrompts": {
+                "Title": "Automatically Check For Updates",
+                "Message": "Irony would like your permission to check for updates at startup. Would you like Irony to notify you of updates automatically?"
+            },
+            "UpdateNotification": {
+                "Title": "Update Detected",
+                "Message": "Check the options screen for update details or click on this message."
+            }
+        },
+        "Dialog": {
+            "ExeTitle": "Find game executable",
+            "GameRootTitle": "Find game root directory",
+            "UserDirTitle": "Find game data directory",
+            "EditorTitle": "Find editor executable",
+            "CustomModPathTitle": "Find custom mod directory"
+        },
+        "Prompts": {
+            "CustomModDirectory": {
+                "Title": "Not Empty",
+                "Message": "Custom mod directory is not empty if you change it now you may lose some mods. Are you sure you want to change it?"
+            }
+        }
+    },
+    "Notifications": {
+        "CollectionCreated": {
+            "Title": "Collection Created",
+            "Message": "{CollectionName} has been created."
+        },
+        "CollectionDeleted": {
+            "Title": "Collection Deleted",
+            "Message": "{CollectionName} has been deleted."
+        },
+        "CollectionAndModDeleted": {
+            "Title": "Collection and Merged Mods Deleted",
+            "Message": "{CollectionName} and merged mods have been deleted."
+        },
+        "CollectionExists": {
+            "Title": "Collection Exists",
+            "Message": "{CollectionName} already exists."
+        },
+        "CollectionExported": {
+            "Title": "Collection Exported",
+            "Message": "{CollectionName} has been exported."
+        },
+        "CollectionImported": {
+            "Title": "Collection Imported",
+            "Message": "{CollectionName} has been imported."
+        },
+        "CollectionApplied": {
+            "Title": "Collection Applied",
+            "Message": "{CollectionName} has been applied."
+        },
+        "CollectionNotApplied": {
+            "Title": "Collection Not Applied",
+            "Message": "{CollectionName} has not been applied."
+        },
+        "DescriptorsRefreshed": {
+            "Title": "Descriptors Refreshed",
+            "Message": "Descriptors have been refreshed."
+        },
+        "DescriptorsLocked": {
+            "Title": "Descriptors Locked",
+            "Message": "Descriptors have been locked."
+        },
+        "DescriptorsUnlocked": {
+            "Title": "Descriptors Unlocked",
+            "Message": "Descriptors have been unlocked."
+        },
+        "NewDescriptorsChecked": {
+            "Title": "New Mods Checked",
+            "Message": "Check for new mods is complete."
+        },
+        "CollectionRenamed": {
+            "Title": "Collection Renamed",
+            "Message": "Collection has been renamed."
+        },
+        "CollectionDuplicated": {
+            "Title": "Collection Duplicated",
+            "Message": "Collection has been duplicated."
+        },
+        "CollectionMerged": {
+            "Title": "Collection Merged",
+            "Message": "Collection has been merged."
+        },
+        "ConflictSolverUpdate": {
+            "Title": "Conflict Solver Updates",
+            "Message": "Load order or some mods have been updated. In case of no conflicts just navigate back. Some automatic fixes are applied."
+        },
+        "NoUpdatesAvailable": {
+            "Title": "No Updates",
+            "Message": "There seem to be no updates available."
+        },
+        "ReportExported": {
+            "Title": "Report Exported",
+            "Message": "Report has been exported."
+        },
+        "ReportValid": {
+            "Title": "File Hash Match",
+            "Message": "All file hashes seem to match."
+        },
+        "CustomPatchRerunConflictSolver": {
+            "Title": "Conflict Solver Refresh",
+            "Message": "Conflict Solver needs to be refreshed to take into account new custom patches added. Please rerun conflict solver."
+        },
+        "CollectionMergeNotEnoughSpace": {
+            "Title": "Not enough free space",
+            "Message": "There is not enough free space to perform merge operation."
+        }
+    },
+    "Mod_App_Actions": {
+        "OpenInSteam": "Open In Steam",
+        "Open": "Open Mod Url",
+        "Copy": "Copy Mod Url",
+        "OpenInAssociatedApp": "Open Mod Folder/File"
+    },
+    "Descriptor_Actions": {
+        "CheckNew": "Check New Mods",
+        "Delete": "Delete And Reload",
+        "Delete_All": "Delete All And Reload",
+        "Lock": "Lock",
+        "Lock_All": "Lock All",
+        "Unlock": "Unlock",
+        "Unlock_All": "Unlock All"
+    },
+    "Achievements": {
+        "AchievementCompatible": "Mod is achievement compatible.",
+        "NotAchievementCompatible": "Mod is not achievement compatible."
+    },
+    "Sorting": {
+        "Sort_A_Z": "↑",
+        "Sort_Z_A": "↓"
+    },
+    "Filter": {
+        "Clear": "X",
+        "UpArrow": "▲",
+        "DownArrow": "▼"
     }
-  },
-  "FatalError": {
-    "Message": "Unhandled error occurred. App will close automatically.",
-    "Title": "Error",
-    "Header": "Fatal Error"
-  },
-  "SavingError": {
-    "Title": "Save Error",
-    "Message": "Something seems to be locking Irony's ability to write to mod files. Please report this on GitHub issue tracker and post the error log."
-  },
-  "UnableToWriteError": {
-    "Title": "Application Blocked",
-    "Message": "The application appears to be blocked by Antivirus or permissions and is unable to write to the user documents directory:{NewLine}{Paths}"
-  },
-  "InvalidModsDetected": {
-    "Title": "Invalid Mods Detected",
-    "Message": "The following mod locations could not be parsed due to either invalid archives or locked files:{NewLine}{Mods}"
-  },
-  "ResolutionSaveError": {
-    "Title": "Virtual Definition Validation Failed",
-    "Message": "The virtual definition could not be used to resolve the conflict.  The virtual definition failed validation."
-  },
-  "BracketMismatchError": {
-    "OpenBracket": "Bracket Count Mismatch!  Open Bracket: ",
-    "CloseBracket": "  Close Bracket: "
-  },
-  "Prompt": {
-    "OK": "OK",
-    "Yes": "Yes",
-    "No": "No",
-    "Confirm": "Confirm",
-    "Cancel": "Cancel"
-  },
-  "FileDialog": {
-    "FileName": "File name",
-    "ShowHiddenFiles": "Show hidden files",
-    "Volume": "{Size} Volume",
-    "OK": "OK",
-    "Cancel": "Cancel",
-    "Name": "Name",
-    "DateModified": "Date Modified",
-    "Type": "Type",
-    "Size": "Size",
-    "Folders": {
-      "Downloads": "Downloads",
-      "Desktop": "Desktop",
-      "Documents": "Documents",
-      "Music": "Music",
-      "Videos": "Videos",
-      "Pictures": "Pictures"
-    }
-  },
-  "TextBox": {
-    "Copy": "Copy",
-    "Cut": "Cut",
-    "Paste": "Paste",
-    "SelectAll": "Select All"
-  },
-  "Languages": {
-    "Name": "Language"
-  },
-  "Themes": {
-    "Name": "Theme",
-    "Light": "Light",
-    "Dark": "Dark",
-    "FluentLight": "Fluent Light",
-    "FluentDark": "Fluent Dark",
-    "MaterialDark": "Material Dark",
-    "MaterialLight": "Material Light",
-    "Restart_Title": "Needs restart",
-    "Restart_Header": "App needs restart",
-    "Restart_Message": "App needs to be restarted in order for the new theme to properly apply. Do you want to restart the app?"
-  },
-  "NotificationPosition": {
-    "BottomRight": "Bottom Right",
-    "BottomLeft": "Bottom Left",
-    "TopRight": "Top Right",
-    "TopLeft": "Top Left"
-  },
-  "Games": {
-    "Name": "Game",
-    "Stellaris": "Stellaris",
-    "EuropaUniversalisIV": "Europa Universalis IV",
-    "HeartsofIronIV": "Hearts of Iron IV",
-    "ImperatorRome": "Imperator Rome",
-    "CrusaderKings3": "Crusader Kings III"
-  },
-  "Installed_Mods": {
-    "Name": "Installed Mods",
-    "Filter": "Filter Mods",
-    "Selected": "Selected",
-    "Mod_Name": "Mod Name",
-    "Supported_Version": "Supported Version",
-    "LoadingMods": "Please wait while loading mod data...",
-    "RefreshingModList": "Please wait while the mod list is being refreshed...",
-    "InvalidMods": {
-      "Title": "Invalid Mods Detected",
-      "Message": "The following mods are missing:{NewLine}{Mods}.{NewLine}{NewLine}Do you want to delete the descriptors?"
-    }
-  },
-  "Collection_Mods": {
-    "Name": "Collection Mods",
-    "Remove": "-",
-    "Create": "+",
-    "OK": "OK",
-    "Cancel": "Cancel",
-    "Watermark": "Enter new collection name",
-    "Delete_Title": "Delete Collection?",
-    "Delete_Header": "Confirm collection deletion",
-    "Delete_Message": "Are you sure you want to delete the {CollectionName} collection?",
-    "Export": "Export",
-    "Import": "Import",
-    "Export_Dialog_Title": "Export Collection",
-    "Import_Dialog_Title": "Import Collection",
-    "Overlay_Exporting_Message": "Please wait while exporting a mod collection...",
-    "Overlay_Importing_Message": "Please wait while importing a mod collection...",
-    "Overlay_Import_Export_Progress": "{PercentDone}",
-    "Filter": "Search Mods",
-    "Selected": "Selected",
-    "Mod_Name": "Mod Name",
-    "Order": "Order",
-    "Rename": "Rename",
-    "Duplicate": "Duplicate",
-    "Overlay_Rename_Message": "Please wait while performing rename operation...",
-    "Overlay_Duplicate_Message": "Please wait while performing duplicate operation...",
-    "ExportToClipboard": "Copy Collection To Clipboard",
-    "DeleteMerge": {
-      "DeleteTitle": "Delete Merged Mod?",
-      "DeleteHeader": "Confirm merge mod deletion",
-      "DeleteMessage": "Existence of merged mod has been detected, do you want to delete it as well?"
-    },
-    "ImportFromClipboard": {
-      "Title": "Import Mod Order From Clipboard",
-      "PromptTitle": "Overwrite Mod Order?",
-      "PromptMessage": "This will overwrite your mod collection mod order and mod selection. Proceed?"
-    },
-    "FileHash": {
-      "ExportCollection": "Export Collection Hashes",
-      "ExportGame": "Export Game Hashes",
-      "Import": "Verify Hashes",
-      "DialogTitleExport": "Select where to export report",
-      "DialogTitleImport": "Select json report to import",
-      "ExportOverlay": "Please wait while exporting...",
-      "ImportOverlay": "Please wait while verifying...",
-      "ProgressExport": "{Progress}",
-      "ProgressImport": "Step {Count}/{TotalCount}: {Progress}",
-      "Close": "Close"
-    },
-    "JumpOnDragAndDrop": {
-      "Title": "Auto Focus: {State}",
-      "On": "On",
-      "Off": "Off"
-    },
-    "ImportPrompt": {
-      "Title": "Collection Exists",
-      "Message": "Collection already exists and will be overwritten, do you want to proceed?"
-    },
-    "ImportNonExistingMods": {
-      "Title": "Non existant mods",
-      "Message": "The following mods could not be imported as they appear to be missing:{NewLine}{Mods}"
-    },
-    "ImportOther": {
-      "Title": "...",
-      "Paradoxos": "Import From Paradoxos",
-      "Paradox": "Import From Game",
-      "ParadoxLauncher": "Import From Paradox Launcher",
-      "Close": "Close"
-    },
-    "ExportOther": {
-      "Title": "...",
-      "OrderOnly": "Export Order Only",
-      "WholeCollection": "Export Whole Collection",
-      "Close": "Close"
-    },
-    "MergeCollection": {
-      "Name": "Merge",
-      "MergedCollectionPrefix": "(Merged)", // It's used in path generation so should not be translated (depending on the type of language)
-      "MergeCompressModPrefix": "(Merged {Name})", // It's used in path generation so should not be translated (depending on the type of language)
-      "Overlay_Progress": "Step {Count}/{TotalCount}: {PercentDone}",
-      "DiskInfoOverlay": "Checking available disk space...",
-      "Options": {
-        "Title": "Select mode",
-        "Basic": "Basic",
-        "Compress": "Compress",
-        "Close": "Close"
-      },
-      "Basic": {
-        "Overlay_Gathering_Mod_Info": "Please wait while gathering mod info...",
-        "Overlay_Writing_Files": "Please wait while merging the mod collection..."
-      },
-      "Compress": {
-        "Overlay_Gathering_Mod_Info": "Please wait while gathering mod info...",
-        "Overlay_Compressing_Files": "Please wait while merging the mod collection..."
-      },
-      "OverwritePrompt": {
-        "Title": "Overwrite existing collection?",
-        "Message": "A merged collection with the specified name already exists. Would you like to overwrite it?"
-      }
-    },
-    "PatchMod": {
-      "Title": "Patch Mod: {Status}",
-      "Enabled": "Enabled",
-      "Disabled": "Disabled",
-      "NotAvailable": "Not Available",
-      "DeletePrompt": {
-        "Title": "Confirm Delete",
-        "Message": "Are you sure you want to delete the patch mod?"
-      },
-      "Actions": {
-        "Enable": "Enable",
-        "Disable": "Disable",
-        "Delete": "Delete",
-        "Close": "Close"
-      }
-    }
-  },
-  "Mod_Actions": {
-    "Apply": "Apply",
-    "Overlay_Apply_Message": "Please wait while applying mod collection...",
-    "ConflictSolver": {
-      "Conflict": "Conflict Solver",
-      "Overlay_Conflict_Solver_Indexing_Game": "Please wait while indexing game definitions...",
-      "Overlay_Conflict_Solver_Loading_Game_Definitions": "Please wait while loading game definitions...",
-      "Overlay_Conflict_Solver_Loading_Definitions": "Please wait while loading mod definitions...",
-      "Overlay_Conflict_Solver_Analyzing_Conflicts": "Please wait while analyzing definitions for conflicts...",
-      "Overlay_Conflict_Solver_Analyzing_Resolved_Conflicts": "Please wait while analyzing resolved definitions...",
-      "Overlay_Conflict_Solver_Replacing_Definitions": "Please wait while replacing definitions...",
-      "Overlay_Conflict_Solver_Progress": "Step {Count}/{TotalCount}: {PercentDone}",
-      "FirstUsePrompt": {
-        "Title": "Attention",
-        "Message": "The conflict solver is not for the faint of heart. It requires knowledge of, and experience with patching code. Users of small mod collections should ignore it, users of larger mod collections should consider either trimming their mod collections or researching code patching. Support cannot be provided should you proceed."
-      },
-      "GameExecutableNotSetPrompt": {
-        "Title": "Game Executable Not Set",
-        "Message": "Game executable has not been set in the options. This mod collection previously included game files in its analysis. Conflict solver will not be able to analyze game files and some resolutions might be reset. Do you wish to proceed?"
-      }
-    },
-    "LaunchGame": {
-      "Launch": "Launch Game",
-      "Resume": "Resume Game",
-      "Overlay": "Launching game, please wait...",
-      "LaunchError": {
-        "Title": "Cannot Launch Game",
-        "Message": "Failed to launch the game."
-      },
-      "NotSet": {
-        "Title": "Game Not Set",
-        "Message": "Game was not automatically detected, please use the options window to manually set the executable path."
-      }
-    }
-  },
-  "Conflict_Solver": {
-    "Back": "Back",
-    "ConflictedObjects": "Conflicted Objects",
-    "LeftSide": "Left Side",
-    "RightSide": "Right Side",
-    "BinaryFile": "Binary Content",
-    "ImageInfo": "Width: {Width} Height: {Height}",
-    "TakeLeft": "Take Left",
-    "TakeRight": "Take Right",
-    "OK": "OK",
-    "Cancel": "Cancel",
-    "Resolve": "Resolve",
-    "Ignore": "Ignore",
-    "IgnoreRules": "Ignore Rules",
-    "OverlayResolve": "Please wait while resolving conflict...",
-    "NextConflict": "Next Conflict",
-    "PrevConflict": "Prev Conflict",
-    "ConflictCount": "Conflict Count: {Count}",
-    "PriorityReason": {
-      "FIOS": "(FIOS)",
-      "LIOS": "(LIOS)",
-      "Order": "(Load Order)",
-      "Override": "(Override)"
-    },
-    "InvalidConflicts": {
-      "Name": "Invalid",
-      "Error": "Error at line: {Line} column: {Column} file: {File}.{NewLine}Please report this error to the author of the mod: {ModName}.{NewLine}{NewLine}Error message says:{NewLine}{NewLine}{Message}",
-      "ErrorNoLine": "Error at file: {File}.{NewLine}Please report this error to the author of the mod: {ModName}.{NewLine}{NewLine}Error message says:{NewLine}{NewLine}{Message}",
-      "ContextMenu": {
-        "OpenFile": "Open File",
-        "OpenDirectory": "Open Directory",
-        "CustomPatch": "Copy To Custom Patch"
-      }
-    },
-    "CompareSelectorContextMenu": {
-      "OpenFile": "Open File",
-      "OpenDirectory": "Open Directory"
-    },
-    "ContextMenu": {
-      "CopyAll": "Copy All",
-      "CopyThis": "Copy This",
-      "CopyThisAfterLine": "Copy This After Line",
-      "CopyThisBeforeLine": "Copy This Before Line",
-      "MoveUp": "Move Up",
-      "MoveDown": "Move Down",
-      "Edit": "Edit",
-      "CopyText": "Copy Text",
-      "Delete": "Delete",
-      "Undo": "Undo",
-      "Redo": "Redo",
-      "Editor": "External Merge"
-    },
-    "EditorContextMenu": {
-      "Copy": "Copy",
-      "Cut": "Cut",
-      "Delete": "Delete",
-      "Paste": "Paste",
-      "Undo": "Undo",
-      "Redo": "Redo",
-      "SelectAll": "Select All"
-    },
-    "Modes": {
-      "Title": "Select Mode",
-      "Default": "Default",
-      "Advanced": "Advanced",
-      "Close": "Close"
-    },
-    "ModFilter": {
-      "Title": "Mod Filter",
-      "IgnoreGameConflicts": "Ignore Game Conflicts",
-      "Close": "Close"
-    },
-    "ResetConflicts": {
-      "Title": "Reset Conflicts",
-      "Resolved": "Resolved",
-      "Ignored": "Ignored",
-      "Custom": "Custom",
-      "Close": "Close",
-      "Reset": "Reset",
-      "Overlay": "Please wait while undoing conflicts..."
-    },
-    "DBSearch": {
-      "Title": "Database Search",
-      "Watermark": "Enter search term",
-      "Close": "Close",
-      "Clear": "X"
-    },
-    "CustomPatch": {
-      "Title": "Custom Patch",
-      "Load": "Load",
-      "Path": "Path",
-      "Save": "Save",
-      "Close": "Close"
-    },
-    "Editor": {
-      "Title": "External Merge",
-      "Message": "Press confirm once you are satisfied with external merge."
-    }
-  },
-  "ConflictIgnore": {
-    "Save": "Save",
-    "Cancel": "Cancel",
-    "Watermark": "Use # for comments. New line is a new rule."
-  },
-  "Options": {
-    "Name": "Options",
-    "Close": "Close",
-    "NavigateTo": "...",
-    "Reset": "X",
-    "AppOptions": {
-      "Title": "Application Options",
-      "NotificationPosition": "Notification Position"
-    },
-    "Editor": {
-      "Title": "External Editor Options",
-      "EditorExecutable": "Editor Executable",
-      "EditorArgs": "Editor Args",
-      "EditorArgsPlaceholder": "Example: leftFile:{Left} rightFile:{Right}"
-    },
-    "Game": {
-      "Title": "Game Options",
-      "GameExecutable": "Game Executable",
-      "UserDirectory": "Data Directory",
-      "GameArgs": "Game Launch Options",
-      "RefreshMods": "Refresh Descriptors Before Playing",
-      "CloseAfterLaunch": "Close After Launching Game",
-      "AutoConfigure": "Configure All...",
-      "CustomModPath": "Custom Mod Directory"
-    },
-    "Updates": {
-      "Title": "Update Options",
-      "UpdateInfoTitle": "Update Release Information",
-      "AutoUpdates": "Check For Updates at Startup",
-      "CheckPrerelease": "Update To Prerelease Versions",
-      "CheckForUpdates": "Check For Updates",
-      "Install": "Install Updates",
-      "Version": "Version",
-      "Overlay": {
-        "UpdateDownloading": "Downloading Updates...",
-        "UpdateDownloadProgress": "{Progress}",
-        "UpdateInstalling": "Unpacking updates and preparing to run installer..."
-      },
-      "Errors": {
-        "DownloadErrorTitle": "Update Error",
-        "DownloadErrorMessage": "Error occurred while downloading updates, please see error log for more details."
-      },
-      "AutoUpdatePrompts": {
-        "Title": "Automatically Check For Updates",
-        "Message": "Irony would like your permission to check for updates at startup. Would you like Irony to notify you of updates automatically?"
-      },
-      "UpdateNotification": {
-        "Title": "Update Detected",
-        "Message": "Check the options screen for update details or click on this message."
-      }
-    },
-    "Dialog": {
-      "ExeTitle": "Find game executable",
-      "GameRootTitle": "Find game root directory",
-      "UserDirTitle": "Find game data directory",
-      "EditorTitle": "Find editor executable",
-      "CustomModPathTitle": "Find custom mod directory"
-    },
-    "Prompts": {
-      "CustomModDirectory": {
-        "Title": "Not Empty",
-        "Message": "Custom mod directory is not empty if you change it now you may lose some mods. Are you sure you want to change it?"
-      }
-    }
-  },
-  "Notifications": {
-    "CollectionCreated": {
-      "Title": "Collection Created",
-      "Message": "{CollectionName} has been created."
-    },
-    "CollectionDeleted": {
-      "Title": "Collection Deleted",
-      "Message": "{CollectionName} has been deleted."
-    },
-    "CollectionAndModDeleted": {
-      "Title": "Collection and Merged Mods Deleted",
-      "Message": "{CollectionName} and merged mods have been deleted."
-    },
-    "CollectionExists": {
-      "Title": "Collection Exists",
-      "Message": "{CollectionName} already exists."
-    },
-    "CollectionExported": {
-      "Title": "Collection Exported",
-      "Message": "{CollectionName} has been exported."
-    },
-    "CollectionImported": {
-      "Title": "Collection Imported",
-      "Message": "{CollectionName} has been imported."
-    },
-    "CollectionApplied": {
-      "Title": "Collection Applied",
-      "Message": "{CollectionName} has been applied."
-    },
-    "CollectionNotApplied": {
-      "Title": "Collection Not Applied",
-      "Message": "{CollectionName} has not been applied."
-    },
-    "DescriptorsRefreshed": {
-      "Title": "Descriptors Refreshed",
-      "Message": "Descriptors have been refreshed."
-    },
-    "DescriptorsLocked": {
-      "Title": "Descriptors Locked",
-      "Message": "Descriptors have been locked."
-    },
-    "DescriptorsUnlocked": {
-      "Title": "Descriptors Unlocked",
-      "Message": "Descriptors have been unlocked."
-    },
-    "NewDescriptorsChecked": {
-      "Title": "New Mods Checked",
-      "Message": "Check for new mods is complete."
-    },
-    "CollectionRenamed": {
-      "Title": "Collection Renamed",
-      "Message": "Collection has been renamed."
-    },
-    "CollectionDuplicated": {
-      "Title": "Collection Duplicated",
-      "Message": "Collection has been duplicated."
-    },
-    "CollectionMerged": {
-      "Title": "Collection Merged",
-      "Message": "Collection has been merged."
-    },
-    "ConflictSolverUpdate": {
-      "Title": "Conflict Solver Updates",
-      "Message": "Load order or some mods have been updated. In case of no conflicts just navigate back. Some automatic fixes are applied."
-    },
-    "NoUpdatesAvailable": {
-      "Title": "No Updates",
-      "Message": "There seem to be no updates available."
-    },
-    "ReportExported": {
-      "Title": "Report Exported",
-      "Message": "Report has been exported."
-    },
-    "ReportValid": {
-      "Title": "File Hash Match",
-      "Message": "All file hashes seem to match."
-    },
-    "CustomPatchRerunConflictSolver": {
-      "Title": "Conflict Solver Refresh",
-      "Message": "Conflict Solver needs to be refreshed to take into account new custom patches added. Please rerun conflict solver."
-    },
-    "CollectionMergeNotEnoughSpace": {
-      "Title": "Not enough free space",
-      "Message": "There is not enough free space to perform merge operation."
-    }
-  },
-  "Mod_App_Actions": {
-    "OpenInSteam": "Open In Steam",
-    "Open": "Open Mod Url",
-    "Copy": "Copy Mod Url",
-    "OpenInAssociatedApp": "Open Mod Folder/File"
-  },
-  "Descriptor_Actions": {
-    "CheckNew": "Check New Mods",
-    "Delete": "Delete And Reload",
-    "Delete_All": "Delete All And Reload",
-    "Lock": "Lock",
-    "Lock_All": "Lock All",
-    "Unlock": "Unlock",
-    "Unlock_All": "Unlock All"
-  },
-  "Achievements": {
-    "AchievementCompatible": "Mod is achievement compatible.",
-    "NotAchievementCompatible": "Mod is not achievement compatible."
-  },
-  "Sorting": {
-    "Sort_A_Z": "↑",
-    "Sort_Z_A": "↓"
-  },
-  "Filter": {
-    "Clear": "X",
-    "UpArrow": "▲",
-    "DownArrow": "▼"
-  }
 }

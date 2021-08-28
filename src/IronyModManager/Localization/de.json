@@ -32,6 +32,13 @@
         "Title": "Ungültige Mods erkannt",
         "Message": "Die folgenden Mod-Speicherorte konnten aufgrund ungültiger Archive oder gesperrter Dateien nicht analysiert werden:{NewLine}{Mods}"
     },
+    "ResolutionSaveError": {
+        "Title": "Validierung der virtuellen Definition fehlgeschlagen",
+        "Message": "Die virtuelle Definition konnte nicht zum Auflösen des Konflikts verwendet werden. Die Validierung der virtuellen Definition ist fehlgeschlagen."
+    },
+    "BracketMismatchError": {
+        "Message": "Klammeranzahl stimmt nicht überein! Offene Klammer: {OpenBracketCount}  Klammer schließen:  {CloseBracketCount}"
+    },
     "Prompt": {
         "OK": "OK",
         "Yes": "Ja",

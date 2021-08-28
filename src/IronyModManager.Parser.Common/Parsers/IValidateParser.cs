@@ -11,5 +11,13 @@ namespace IronyModManager.Parser.Common.Parsers
     public interface IValidateParser
     {
         public IEnumerable<IDefinition> Validate(ParserArgs args);
+
+        public IBracketValidateResult GetBracketCount(string text);
+    }
+
+    public interface IBracketValidateResult
+    {
+        public int OpenBracketCount { get; set; }
+        public int CloseBracketCount { get; set; }
     }
 }

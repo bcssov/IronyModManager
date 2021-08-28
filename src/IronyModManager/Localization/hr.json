@@ -32,6 +32,13 @@
         "Title": "Otkriveni su nevaljani modovi",
         "Message": "Sljedeće lokacije modova nisu mogle biti raščlanjene zbog nevaljanih arhiva ili zaključanih datoteka:{NewLine}{Mods}"
     },
+    "ResolutionSaveError": {
+        "Title": "A virtuális definíció ellenőrzése sikertelen",
+        "Message": "A virtuális definíció nem használható a konfliktus megoldására. A virtuális definíció sikertelen érvényesítése."
+    },
+    "BracketMismatchError": {
+        "Message": "A konzolszám nem egyezik! Nyitott konzol:{OpenBracketCount}  Zárójel:  {CloseBracketCount}"
+    },
     "Prompt": {
         "OK": "U redu",
         "Yes": "Da",
