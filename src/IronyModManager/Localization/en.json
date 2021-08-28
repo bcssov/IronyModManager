@@ -36,6 +36,10 @@
     "Title": "Virtual Definition Validation Failed",
     "Message": "The virtual definition could not be used to resolve the conflict.  The virtual definition failed validation."
   },
+  "BracketMismatchError": {
+    "OpenBracket": "Bracket Count Mismatch!  Open Bracket: ",
+    "CloseBracket": "  Close Bracket: "
+  },
   "Prompt": {
     "OK": "OK",
     "Yes": "Yes",

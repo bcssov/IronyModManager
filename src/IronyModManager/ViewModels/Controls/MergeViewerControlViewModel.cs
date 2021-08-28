@@ -665,16 +665,18 @@ namespace IronyModManager.ViewModels.Controls
                 var closeBracket = LeftSide.Count(s => s == Parser.Common.Constants.Scripts.CloseObject);
                 if (openBracket != closeBracket)
                 {
-                    LeftSideBracketMismatchText = "Bracket Count Mismatch!  Open Bracket: " + openBracket + "  Close Bracket: " + closeBracket;
+                    var OpenBracketSideText = localizationManager.GetResource(LocalizationResources.BracketMismatchError.OpenBracket);
+                    var CloseBracketSideText = localizationManager.GetResource(LocalizationResources.BracketMismatchError.CloseBracket);
+                    LeftSideBracketMismatchText = OpenBracketSideText + openBracket + CloseBracketSideText + closeBracket;
                 }
                 else
                 {
-                    LeftSideBracketMismatchText = "";
+                    LeftSideBracketMismatchText = string.Empty;
                 }
             }
             else
             {
-                LeftSideBracketMismatchText = "";
+                LeftSideBracketMismatchText = string.Empty;
             }
             if (RightSidePatchMod)
             {
@@ -682,16 +684,18 @@ namespace IronyModManager.ViewModels.Controls
                 var closeBracket = RightSide.Count(s => s == Parser.Common.Constants.Scripts.CloseObject);
                 if (openBracket != closeBracket)
                 {
-                    RightSideBracketMismatchText = "Bracket Count Mismatch!  Open Bracket: " + openBracket + "  Close Bracket: " + closeBracket;
+                    var OpenBracketSideText = localizationManager.GetResource(LocalizationResources.BracketMismatchError.OpenBracket);
+                    var CloseBracketSideText = localizationManager.GetResource(LocalizationResources.BracketMismatchError.CloseBracket);
+                    RightSideBracketMismatchText = OpenBracketSideText + openBracket + CloseBracketSideText + closeBracket;
                 }
                 else
                 {
-                    RightSideBracketMismatchText = "";
+                    RightSideBracketMismatchText = string.Empty;
                 }
             }
             else
             {
-                RightSideBracketMismatchText = "";
+                RightSideBracketMismatchText = string.Empty;
             }
         }
 
