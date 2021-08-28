@@ -16,6 +16,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using IronyModManager.Models.Common;
 using IronyModManager.Parser.Common.Args;
+using IronyModManager.Parser.Common.Parsers;
 using IronyModManager.Shared.Models;
 
 namespace IronyModManager.Services.Common
@@ -247,6 +248,7 @@ namespace IronyModManager.Services.Common
         /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
         bool? ToggleIgnoreGameMods(IConflictResult conflictResult);
         IEnumerable<IDefinition> Validate(ParserArgs args);
+        public IBracketValidateResult GetBracketCount(string text);
 
         #endregion Methods
     }

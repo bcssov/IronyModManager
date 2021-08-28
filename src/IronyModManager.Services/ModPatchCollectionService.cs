@@ -115,7 +115,7 @@ namespace IronyModManager.Services
         /// <param name="mapper">The mapper.</param>
         public ModPatchCollectionService(ICache cache, IMessageBus messageBus, IParserManager parserManager, IEnumerable<IDefinitionInfoProvider> definitionInfoProviders,
             IModPatchExporter modPatchExporter, IReader reader, IModWriter modWriter, IModParser modParser, IGameService gameService,
-            IStorageProvider storageProvider, IMapper mapper, IValidateParser validateParser) : base(cache, definitionInfoProviders, reader, modWriter, modParser, gameService, storageProvider, mapper, validateParser)
+            IStorageProvider storageProvider, IMapper mapper, IValidateParser validateParser) : base(cache, definitionInfoProviders, reader, modWriter, modParser, gameService, storageProvider, mapper)
         {
             this.messageBus = messageBus;
             this.parserManager = parserManager;
@@ -2173,6 +2173,11 @@ namespace IronyModManager.Services
         public IEnumerable<IDefinition> Validate(ParserArgs args)
         {
             return validateParser.Validate(args);
+        }
+
+        public IBracketValidateResult GetBracketCount(string text)
+        {
+            return validateParser.GetBracketCount(text);
         }
 
         #endregion Methods
