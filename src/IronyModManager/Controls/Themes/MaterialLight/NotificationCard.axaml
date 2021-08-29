@@ -10,8 +10,8 @@
       <ControlTemplate>
         <LayoutTransformControl Name="PART_LayoutTransformControl" UseRenderTransform="True">
           <Border Background="{TemplateBinding Background}"
-                  BorderBrush="{TemplateBinding BorderBrush}"
-                  BorderThickness="{TemplateBinding BorderThickness}"
+                  BorderBrush="{DynamicResource IronyButtonBorderBrush}"
+                  BorderThickness="1"
                   Margin="8,8,0,0">
             <DockPanel>
               <Panel x:Name="PART_HeaderBar" Height="4" DockPanel.Dock="Top" />
