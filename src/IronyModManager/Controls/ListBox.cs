@@ -4,7 +4,7 @@
 // Created          : 12-14-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 08-27-2021
+// Last Modified On : 08-29-2021
 // ***********************************************************************
 // <copyright file="ListBox.cs" company="Mario">
 //     Mario
@@ -41,7 +41,7 @@ namespace IronyModManager.Controls
         /// <summary>
         /// The context menu
         /// </summary>
-        private ContextMenu contextMenu;
+        private MenuFlyout contextMenu;
 
         /// <summary>
         /// The search select
@@ -90,12 +90,16 @@ namespace IronyModManager.Controls
             ContextMenu = null;
             if (contextMenu == null)
             {
-                contextMenu = new ContextMenu();
+                // Of course Avalonia update is going to fuck up something! It's no longer respecting and setting pointer value of the popup (which is private btw) in the context menu implementation
+                contextMenu = new MenuFlyout()
+                {
+                    Placement = FlyoutPlacementMode.Bottom
+                };
             }
             if (menuItems?.Count > 0)
             {
                 contextMenu.Items = menuItems;
-                contextMenu.Open(this);
+                contextMenu.ShowAt(this, true);
             }
         }
 
