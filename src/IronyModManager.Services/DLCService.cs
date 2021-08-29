@@ -4,7 +4,7 @@
 // Created          : 02-14-2021
 //
 // Last Modified By : Mario
-// Last Modified On : 03-25-2021
+// Last Modified On : 08-29-2021
 // ***********************************************************************
 // <copyright file="DLCService.cs" company="Mario">
 //     Mario
@@ -66,6 +66,11 @@ namespace IronyModManager.Services
         /// The reader
         /// </summary>
         private readonly IReader reader;
+
+        /// <summary>
+        /// The DLC directories
+        /// </summary>
+        private string[] DLCDirectories = new string[] { DLCFolder, "builtin_dlc" };
 
         #endregion Fields
 
@@ -129,30 +134,33 @@ namespace IronyModManager.Services
                 var result = new List<IDLC>();
                 if (!string.IsNullOrWhiteSpace(game.ExecutableLocation))
                 {
-                    string directory = string.Empty;
                     var cleanedExePath = System.IO.Path.GetDirectoryName(game.ExecutableLocation);
                     while (!string.IsNullOrWhiteSpace(cleanedExePath))
                     {
-                        directory = System.IO.Path.Combine(cleanedExePath, DLCFolder);
+                        var directory = System.IO.Path.Combine(cleanedExePath, DLCFolder);
                         if (System.IO.Directory.Exists(directory))
                         {
                             break;
                         }
                         cleanedExePath = System.IO.Path.GetDirectoryName(cleanedExePath);
                     }
-                    if (System.IO.Directory.Exists(directory))
+                    foreach (var dlcFolder in DLCDirectories)
                     {
-                        var infos = reader.Read(directory);
-                        if (infos != null && infos.Any())
+                        var directory = System.IO.Path.Combine(cleanedExePath, dlcFolder);
+                        if (System.IO.Directory.Exists(directory))
                         {
-                            foreach (var item in infos)
+                            var infos = reader.Read(directory);
+                            if (infos != null && infos.Any())
                             {
-                                var dlcObject = dlcParser.Parse(System.IO.Path.Combine(DLCFolder, item.FileName), item.Content);
-                                result.Add(Mapper.Map<IDLC>(dlcObject));
+                                foreach (var item in infos)
+                                {
+                                    var dlcObject = dlcParser.Parse(System.IO.Path.Combine(dlcFolder, item.FileName), item.Content);
+                                    result.Add(Mapper.Map<IDLC>(dlcObject));
+                                }
                             }
                         }
-                        cache.Set(new CacheAddParameters<List<IDLC>>() { Region = CacheRegion, Key = game.Type, Value = result });
                     }
+                    cache.Set(new CacheAddParameters<List<IDLC>>() { Region = CacheRegion, Key = game.Type, Value = result });
                 }
                 return Task.FromResult((IReadOnlyCollection<IDLC>)result);
             }
