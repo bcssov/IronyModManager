@@ -4,7 +4,7 @@
 // Created          : 05-28-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-20-2021
+// Last Modified On : 08-29-2021
 // ***********************************************************************
 // <copyright file="ParadoxosImporter.cs" company="Mario">
 //     Mario
@@ -18,6 +18,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Xml.Serialization;
 using IronyModManager.DI;
+using IronyModManager.IO.Common.Models;
 using IronyModManager.IO.Common.Mods;
 using IronyModManager.IO.Mods.Models.Paradoxos;
 using IronyModManager.Shared;
@@ -64,13 +65,14 @@ namespace IronyModManager.IO.Mods.Importers
         /// </summary>
         /// <param name="parameters">The parameters.</param>
         /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
-        public async Task<bool> ImportAsync(ModCollectionExporterParams parameters)
+        public async Task<ICollectionImportResult> ImportAsync(ModCollectionExporterParams parameters)
         {
             if (File.Exists(parameters.File))
             {
+                var result = DIResolver.Get<ICollectionImportResult>();
                 void map(ParadoxosExportedList model)
                 {
-                    parameters.Mod.Name = model.ExportedList.Name;
+                    result.Name = model.ExportedList.Name;
                     IOrderedEnumerable<ParadoxosMod> ordered;
                     // It got confusing a bit...
                     if (model.ExportedList.CustomOrder)
@@ -81,7 +83,7 @@ namespace IronyModManager.IO.Mods.Importers
                     {
                         ordered = model.ExportedList.Mod.OrderByDescending(p => p.ModName, StringComparer.OrdinalIgnoreCase);
                     }
-                    parameters.Mod.Mods = ordered.Select(p =>
+                    result.Descriptors = ordered.Select(p =>
                     {
                         if (!p.FileName.StartsWith("mod/", StringComparison.OrdinalIgnoreCase))
                         {
@@ -89,7 +91,7 @@ namespace IronyModManager.IO.Mods.Importers
                         }
                         return p.FileName;
                     }).ToList();
-                    parameters.Mod.ModNames = ordered.Select(p => p.ModName).ToList();
+                    result.ModNames = ordered.Select(p => p.ModName).ToList();
                 }
                 bool parseXML(string content)
                 {
@@ -125,20 +127,29 @@ namespace IronyModManager.IO.Mods.Importers
                 {
                     if (parameters.File.EndsWith(Shared.Constants.XMLExtension, StringComparison.OrdinalIgnoreCase))
                     {
-                        return parseXML(content);
+                        if (parseXML(content))
+                        {
+                            return result;
+                        }
                     }
                     else if (parameters.File.EndsWith(Shared.Constants.JsonExtension, StringComparison.OrdinalIgnoreCase))
                     {
-                        return parseJson(content);
+                        if (parseJson(content))
+                        {
+                            return result;
+                        }
                     }
                     else
                     {
                         // Try to guess and parse as both
-                        return parseXML(content) || parseJson(content);
+                        if (parseXML(content) || parseJson(content))
+                        {
+                            return result;
+                        }
                     }
                 }
             }
-            return false;
+            return null;
         }
 
         /// <summary>

@@ -4,7 +4,7 @@
 // Created          : 03-03-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 08-26-2021
+// Last Modified On : 08-29-2021
 // ***********************************************************************
 // <copyright file="CollectionModsControlViewModel.cs" company="Mario">
 //     Mario
@@ -1081,7 +1081,7 @@ namespace IronyModManager.ViewModels.Controls
                 if (importData != null)
                 {
                     importData.IsSelected = true;
-                    modNames = importData.ModNames.ToList();
+                    modNames = importData.ModNames != null ? importData.ModNames.ToList() : new List<string>();
                     // Mod names are only used in export\import operations
                     importData.ModNames = null;
                     if (modCollectionService.Save(importData))

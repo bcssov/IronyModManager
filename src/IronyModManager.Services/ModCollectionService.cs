@@ -4,7 +4,7 @@
 // Created          : 03-04-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 08-26-2021
+// Last Modified On : 08-29-2021
 // ***********************************************************************
 // <copyright file="ModCollectionService.cs" company="Mario">
 //     Mario
@@ -17,6 +17,7 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
+using IronyModManager.IO.Common.Models;
 using IronyModManager.IO.Common.Mods;
 using IronyModManager.IO.Common.Readers;
 using IronyModManager.Models.Common;
@@ -325,8 +326,9 @@ namespace IronyModManager.Services
                 File = file,
                 Mod = instance
             });
-            if (result)
+            if (result != null)
             {
+                MapImportResult(instance, result);
                 return instance;
             }
             return null;
@@ -349,13 +351,14 @@ namespace IronyModManager.Services
             {
                 var path = GetPatchModDirectory(game, instance);
                 var exportPath = GetPatchModDirectory(game, !string.IsNullOrWhiteSpace(instance.MergedFolderName) ? instance.MergedFolderName : instance.Name);
-                if (await modCollectionExporter.ImportModDirectoryAsync(new ModCollectionExporterParams()
+                var result = await modCollectionExporter.ImportModDirectoryAsync(new ModCollectionExporterParams()
                 {
                     File = file,
                     ModDirectory = path,
                     Mod = instance,
                     ExportModDirectory = exportPath
-                }))
+                });
+                if (result)
                 {
                     return instance;
                 }
@@ -520,7 +523,7 @@ namespace IronyModManager.Services
                     File = file,
                     Mod = instance
                 };
-                bool result = false;
+                ICollectionImportResult result = null;
                 switch (importType)
                 {
                     case ImportType.Paradox:
@@ -536,34 +539,16 @@ namespace IronyModManager.Services
                         break;
 
                     case ImportType.ParadoxLauncherJson:
-                        // So this format returns only display names and specifies for which game it is
                         result = await modCollectionExporter.ImportParadoxLauncherJsonAsync(parameters);
-                        if (result)
-                        {
-                            var gameByPdxId = GameService.Get().FirstOrDefault(p => p.ParadoxGameId.Equals(instance.Game));
-                            if (gameByPdxId != null)
-                            {
-                                instance.Game = gameByPdxId.Type;
-                                var mods = GetInstalledModsInternal(gameByPdxId, false);
-                                if (mods.Any())
-                                {
-                                    var collectionMods = mods.Where(p => instance.Mods.Contains(p.RemoteId.ToString()));
-                                    instance.Mods = collectionMods.Select(p => p.DescriptorFile).ToList();
-                                    instance.ModNames = collectionMods.Select(p => p.Name).ToList();
-                                }
-                            }
-                            else
-                            {
-                                result = false;
-                            }
-                        }
                         break;
 
                     default:
                         break;
                 }
-                if (result)
+                if (result != null)
                 {
+                    // Order of operations is very important here
+                    MapImportResult(instance, result);
                     return instance;
                 }
                 return null;
@@ -575,6 +560,43 @@ namespace IronyModManager.Services
                 return null;
             }
             return await performImport(game);
+        }
+
+        /// <summary>
+        /// Maps the import result.
+        /// </summary>
+        /// <param name="modCollection">The mod collection.</param>
+        /// <param name="importResult">The import result.</param>
+        protected virtual void MapImportResult(IModCollection modCollection, ICollectionImportResult importResult)
+        {
+            if (!string.IsNullOrWhiteSpace(importResult.Game))
+            {
+                var collectionGame = GameService.Get().FirstOrDefault(p => p.Type.Equals(importResult.Game));
+                if (collectionGame == null)
+                {
+                    collectionGame = GameService.Get().FirstOrDefault(p => p.ParadoxGameId.Equals(importResult.Game));
+                }
+                if (collectionGame != null)
+                {
+                    modCollection.Game = collectionGame.Type;
+                }
+            }
+            modCollection.IsSelected = importResult.IsSelected;
+            modCollection.MergedFolderName = importResult.MergedFolderName;
+            modCollection.ModNames = importResult.ModNames;
+            modCollection.Mods = importResult.Descriptors;
+            modCollection.Name = importResult.Name;
+            modCollection.PatchModEnabled = importResult.PatchModEnabled;
+            if (importResult.ModIds != null && importResult.ModIds.Any())
+            {
+                var mods = GetInstalledModsInternal(modCollection.Game, false);
+                if (mods.Any())
+                {
+                    var collectionMods = mods.Where(p => importResult.ModIds.Contains(p.RemoteId.ToString()));
+                    modCollection.Mods = collectionMods.Select(p => p.DescriptorFile).ToList();
+                    modCollection.ModNames = collectionMods.Select(p => p.Name).ToList();
+                }
+            }
         }
 
         /// <summary>

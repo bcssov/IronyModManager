@@ -4,7 +4,7 @@
 // Created          : 03-09-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 08-26-2021
+// Last Modified On : 08-29-2021
 // ***********************************************************************
 // <copyright file="ModCollectionExporter.cs" company="Mario">
 //     Mario
@@ -19,12 +19,16 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
+using AutoMapper;
 using Ionic.Zip;
+using IronyModManager.DI;
 using IronyModManager.IO.Common;
 using IronyModManager.IO.Common.MessageBus;
+using IronyModManager.IO.Common.Models;
 using IronyModManager.IO.Common.Mods;
 using IronyModManager.IO.Mods.Exporter;
 using IronyModManager.IO.Mods.Importers;
+using IronyModManager.Models.Common;
 using IronyModManager.Shared;
 using IronyModManager.Shared.MessageBus;
 using Newtonsoft.Json;
@@ -47,6 +51,11 @@ namespace IronyModManager.IO.Mods
         /// The logger
         /// </summary>
         private readonly ILogger logger;
+
+        /// <summary>
+        /// The mapper
+        /// </summary>
+        private readonly IMapper mapper;
 
         /// <summary>
         /// The message bus
@@ -82,7 +91,8 @@ namespace IronyModManager.IO.Mods
         /// </summary>
         /// <param name="logger">The logger.</param>
         /// <param name="messageBus">The message bus.</param>
-        public ModCollectionExporter(ILogger logger, IMessageBus messageBus)
+        /// <param name="mapper">The mapper.</param>
+        public ModCollectionExporter(ILogger logger, IMessageBus messageBus, IMapper mapper)
         {
             paradoxosImporter = new ParadoxosImporter(logger);
             paradoxImporter = new ParadoxImporter(logger);
@@ -90,6 +100,7 @@ namespace IronyModManager.IO.Mods
             paradoxLauncherExporter = new ParadoxLauncherExporter();
             this.logger = logger;
             this.messageBus = messageBus;
+            this.mapper = mapper;
         }
 
         #endregion Constructors
@@ -172,7 +183,7 @@ namespace IronyModManager.IO.Mods
                             foreach (var item in files)
                             {
                                 var fs = new FileStream(item, FileMode.Open, FileAccess.Read, FileShare.Read);
-                                var file = Path.Combine(Common.Constants.ModExportPath, mod.Name.GenerateValidFileName() + "_" + item.Replace(Path.GetDirectoryName(mod.FullPath), string.Empty).Trim('\\').Trim('/'));
+                                var file = Path.Combine(Common.Constants.ModExportPath, parameters.Mod.Name.GenerateShortFileNameHashId(4).GenerateValidFileName() + "_" + mod.Name.GenerateValidFileName() + "_" + item.Replace(Path.GetDirectoryName(mod.FullPath), string.Empty).Trim('\\').Trim('/'));
                                 zip.AddEntry(file, fs);
                                 streams.Add(fs);
                             }
@@ -184,7 +195,7 @@ namespace IronyModManager.IO.Mods
                                 var fs = new FileStream(item, FileMode.Open, FileAccess.Read, FileShare.Read);
                                 var ms = new MemoryStream();
                                 await fs.CopyToAsync(ms);
-                                var file = Path.Combine(Common.Constants.ModExportPath, mod.Name.GenerateValidFileName() + "_" + item.Replace(Path.GetDirectoryName(mod.FullPath), string.Empty).Trim('\\').Trim('/'));
+                                var file = Path.Combine(Common.Constants.ModExportPath, parameters.Mod.Name.GenerateShortFileNameHashId(4).GenerateValidFileName() + "_" + mod.Name.GenerateValidFileName() + "_" + item.Replace(Path.GetDirectoryName(mod.FullPath), string.Empty).Trim('\\').Trim('/'));
                                 zip.AddEntry(file, ms);
                                 fs.Close();
                                 await fs.DisposeAsync();
@@ -197,7 +208,7 @@ namespace IronyModManager.IO.Mods
                         if (!RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
                         {
                             var fs = new FileStream(mod.FullPath, FileMode.Open, FileAccess.Read, FileShare.Read);
-                            var file = Path.Combine(Common.Constants.ModExportPath, mod.Name.GenerateValidFileName() + "_" + Path.GetFileName(mod.FullPath));
+                            var file = Path.Combine(Common.Constants.ModExportPath, parameters.Mod.Name.GenerateShortFileNameHashId(4).GenerateValidFileName() + "_"  + mod.Name.GenerateValidFileName() + "_" + Path.GetFileName(mod.FullPath));
                             zip.AddEntry(file, fs);
                             streams.Add(fs);
                         }
@@ -206,7 +217,7 @@ namespace IronyModManager.IO.Mods
                             var fs = new FileStream(mod.FullPath, FileMode.Open, FileAccess.Read, FileShare.Read);
                             var ms = new MemoryStream();
                             await fs.CopyToAsync(ms);
-                            var file = Path.Combine(Common.Constants.ModExportPath, mod.Name.GenerateValidFileName() + "_" + Path.GetFileName(mod.FullPath));
+                            var file = Path.Combine(Common.Constants.ModExportPath, parameters.Mod.Name.GenerateShortFileNameHashId(4).GenerateValidFileName() + "_" + mod.Name.GenerateValidFileName() + "_" + Path.GetFileName(mod.FullPath));
                             zip.AddEntry(file, ms);
                             fs.Close();
                             await fs.DisposeAsync();
@@ -247,9 +258,10 @@ namespace IronyModManager.IO.Mods
         /// </summary>
         /// <param name="parameters">The parameters.</param>
         /// <returns>Task&lt;System.Boolean&gt;.</returns>
-        public Task<bool> ImportAsync(ModCollectionExporterParams parameters)
+        public Task<ICollectionImportResult> ImportAsync(ModCollectionExporterParams parameters)
         {
-            return Task.FromResult(ImportInternal(parameters, true));
+            ImportInternal(parameters, true, out var result);
+            return Task.FromResult(result);
         }
 
         /// <summary>
@@ -259,7 +271,8 @@ namespace IronyModManager.IO.Mods
         /// <returns>Task&lt;System.Boolean&gt;.</returns>
         public Task<bool> ImportModDirectoryAsync(ModCollectionExporterParams parameters)
         {
-            return Task.FromResult(ImportInternal(parameters, false));
+            var result = ImportInternal(parameters, false, out _);
+            return Task.FromResult(result);
         }
 
         /// <summary>
@@ -267,7 +280,7 @@ namespace IronyModManager.IO.Mods
         /// </summary>
         /// <param name="parameters">The parameters.</param>
         /// <returns>Task&lt;System.Boolean&gt;.</returns>
-        public Task<bool> ImportParadoxAsync(ModCollectionExporterParams parameters)
+        public Task<ICollectionImportResult> ImportParadoxAsync(ModCollectionExporterParams parameters)
         {
             return paradoxImporter.ImportAsync(parameters);
         }
@@ -277,7 +290,7 @@ namespace IronyModManager.IO.Mods
         /// </summary>
         /// <param name="parameters">The parameters.</param>
         /// <returns>Task&lt;System.Boolean&gt;.</returns>
-        public Task<bool> ImportParadoxLauncherAsync(ModCollectionExporterParams parameters)
+        public Task<ICollectionImportResult> ImportParadoxLauncherAsync(ModCollectionExporterParams parameters)
         {
             return paradoxLauncherImporter.DatabaseImportAsync(parameters);
         }
@@ -287,7 +300,7 @@ namespace IronyModManager.IO.Mods
         /// </summary>
         /// <param name="parameters">The parameters.</param>
         /// <returns>Task&lt;System.Boolean&gt;.</returns>
-        public Task<bool> ImportParadoxLauncherJsonAsync(ModCollectionExporterParams parameters)
+        public Task<ICollectionImportResult> ImportParadoxLauncherJsonAsync(ModCollectionExporterParams parameters)
         {
             return paradoxLauncherImporter.JsonImportAsync(parameters);
         }
@@ -297,7 +310,7 @@ namespace IronyModManager.IO.Mods
         /// </summary>
         /// <param name="parameters">The parameters.</param>
         /// <returns>Task&lt;System.Boolean&gt;.</returns>
-        public Task<bool> ImportParadoxosAsync(ModCollectionExporterParams parameters)
+        public Task<ICollectionImportResult> ImportParadoxosAsync(ModCollectionExporterParams parameters)
         {
             return paradoxosImporter.ImportAsync(parameters);
         }
@@ -328,9 +341,15 @@ namespace IronyModManager.IO.Mods
         /// </summary>
         /// <param name="parameters">The parameters.</param>
         /// <param name="importInstance">if set to <c>true</c> [import instance].</param>
+        /// <param name="collectionImportResult">The collection import result.</param>
         /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
-        private bool ImportInternal(ModCollectionExporterParams parameters, bool importInstance)
+        private bool ImportInternal(ModCollectionExporterParams parameters, bool importInstance, out ICollectionImportResult collectionImportResult)
         {
+            ICollectionImportResult importResult = null;
+            if (importInstance)
+            {
+                importResult = DIResolver.Get<ICollectionImportResult>();
+            }
             if (!importInstance)
             {
                 if (Directory.Exists(parameters.ModDirectory))
@@ -382,7 +401,10 @@ namespace IronyModManager.IO.Mods
                                 var text = streamReader.ReadToEnd();
                                 streamReader.Close();
                                 streamReader.Dispose();
-                                JsonConvert.PopulateObject(text, parameters.Mod);
+                                var model = JsonDISerializer.Deserialize<IModCollection>(text);
+                                mapper.Map(model, importResult);
+                                importResult.ModNames = model.ModNames;
+                                importResult.Descriptors = model.Mods;
                                 result = true;
                                 break;
                             }
@@ -433,7 +455,10 @@ namespace IronyModManager.IO.Mods
                             var text = streamReader.ReadToEnd();
                             streamReader.Close();
                             streamReader.Dispose();
-                            JsonConvert.PopulateObject(text, parameters.Mod);
+                            var model = JsonDISerializer.Deserialize<IModCollection>(text);
+                            mapper.Map(model, importResult);
+                            importResult.ModNames = model.ModNames;
+                            importResult.Descriptors = model.Mods;
                             result = true;
                             break;
                         }
@@ -469,6 +494,7 @@ namespace IronyModManager.IO.Mods
                 result = false;
                 parseUsingReaderFactory();
             }
+            collectionImportResult = importResult;
             return !importInstance || result;
         }
 

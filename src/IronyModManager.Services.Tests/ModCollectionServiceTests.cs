@@ -4,7 +4,7 @@
 // Created          : 03-04-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 08-26-2021
+// Last Modified On : 08-29-2021
 // ***********************************************************************
 // <copyright file="ModCollectionServiceTests.cs" company="Mario">
 //     Mario
@@ -20,8 +20,10 @@ using AutoMapper;
 using FluentAssertions;
 using IronyModManager.IO;
 using IronyModManager.IO.Common;
+using IronyModManager.IO.Common.Models;
 using IronyModManager.IO.Common.Mods;
 using IronyModManager.IO.Common.Readers;
+using IronyModManager.IO.Models;
 using IronyModManager.Models;
 using IronyModManager.Models.Common;
 using IronyModManager.Parser.Common.Mod;
@@ -733,8 +735,11 @@ namespace IronyModManager.Services.Tests
             });
             modExport.Setup(p => p.ImportAsync(It.IsAny<ModCollectionExporterParams>())).Returns((ModCollectionExporterParams p) =>
             {
-                p.Mod.Name = "fake";
-                return Task.FromResult(true);
+                ICollectionImportResult result = new CollectionImportResult
+                {
+                    Name = "fake"
+                };
+                return Task.FromResult(result);
             });
             modExport.Setup(p => p.ImportModDirectoryAsync(It.IsAny<ModCollectionExporterParams>())).Returns((ModCollectionExporterParams p) =>
             {
@@ -769,8 +774,11 @@ namespace IronyModManager.Services.Tests
             });
             modExport.Setup(p => p.ImportAsync(It.IsAny<ModCollectionExporterParams>())).Returns((ModCollectionExporterParams p) =>
             {
-                p.Mod.Name = "fake";
-                return Task.FromResult(true);
+                ICollectionImportResult result = new CollectionImportResult
+                {
+                    Name = "fake"
+                };
+                return Task.FromResult(result);
             });
             modExport.Setup(p => p.ImportModDirectoryAsync(It.IsAny<ModCollectionExporterParams>())).Returns((ModCollectionExporterParams p) =>
             {
@@ -805,8 +813,7 @@ namespace IronyModManager.Services.Tests
             });
             modExport.Setup(p => p.ImportAsync(It.IsAny<ModCollectionExporterParams>())).Returns((ModCollectionExporterParams p) =>
             {
-                p.Mod.Name = "fake";
-                return Task.FromResult(false);
+                return Task.FromResult((ICollectionImportResult)null);
             });
 
             var service = new ModCollectionService(null, null, new Cache(), null, null, null, null, gameService.Object, modExport.Object, storageProvider.Object, mapper.Object);
@@ -832,8 +839,11 @@ namespace IronyModManager.Services.Tests
             });
             modExport.Setup(p => p.ImportAsync(It.IsAny<ModCollectionExporterParams>())).Returns((ModCollectionExporterParams p) =>
             {
-                p.Mod.Name = "fake";
-                return Task.FromResult(true);
+                ICollectionImportResult result = new CollectionImportResult
+                {
+                    Name = "fake"
+                };
+                return Task.FromResult(result);
             });
 
             var service = new ModCollectionService(null, null, new Cache(), null, null, null, null, gameService.Object, modExport.Object, storageProvider.Object, mapper.Object);
@@ -893,8 +903,11 @@ namespace IronyModManager.Services.Tests
             });
             modExport.Setup(p => p.ImportParadoxosAsync(It.IsAny<ModCollectionExporterParams>())).Returns((ModCollectionExporterParams p) =>
             {
-                p.Mod.Name = "fake";
-                return Task.FromResult(true);
+                ICollectionImportResult result = new CollectionImportResult
+                {
+                    Name = "fake"
+                };
+                return Task.FromResult(result);
             });
 
             var service = new ModCollectionService(null, null, new Cache(), null, null, null, null, gameService.Object, modExport.Object, storageProvider.Object, mapper.Object);
@@ -920,8 +933,7 @@ namespace IronyModManager.Services.Tests
             });
             modExport.Setup(p => p.ImportParadoxosAsync(It.IsAny<ModCollectionExporterParams>())).Returns((ModCollectionExporterParams p) =>
             {
-                p.Mod.Name = "fake";
-                return Task.FromResult(false);
+                return Task.FromResult((ICollectionImportResult)null);
             });
 
             var service = new ModCollectionService(null, null, new Cache(), null, null, null, null, gameService.Object, modExport.Object, storageProvider.Object, mapper.Object);
@@ -947,8 +959,11 @@ namespace IronyModManager.Services.Tests
             });
             modExport.Setup(p => p.ImportParadoxAsync(It.IsAny<ModCollectionExporterParams>())).Returns((ModCollectionExporterParams p) =>
             {
-                p.Mod.Name = "fake";
-                return Task.FromResult(true);
+                ICollectionImportResult result = new CollectionImportResult
+                {
+                    Name = "fake"
+                };
+                return Task.FromResult(result);
             });
 
             var service = new ModCollectionService(null, null, new Cache(), null, null, null, null, gameService.Object, modExport.Object, storageProvider.Object, mapper.Object);
@@ -975,7 +990,7 @@ namespace IronyModManager.Services.Tests
             modExport.Setup(p => p.ImportParadoxosAsync(It.IsAny<ModCollectionExporterParams>())).Returns((ModCollectionExporterParams p) =>
             {
                 p.Mod.Name = "fake";
-                return Task.FromResult(false);
+                return Task.FromResult((ICollectionImportResult)null);
             });
 
             var service = new ModCollectionService(null, null, new Cache(), null, null, null, null, gameService.Object, modExport.Object, storageProvider.Object, mapper.Object);
@@ -1001,8 +1016,11 @@ namespace IronyModManager.Services.Tests
             });
             modExport.Setup(p => p.ImportParadoxLauncherAsync(It.IsAny<ModCollectionExporterParams>())).Returns((ModCollectionExporterParams p) =>
             {
-                p.Mod.Name = "fake";
-                return Task.FromResult(true);
+                ICollectionImportResult result = new CollectionImportResult
+                {
+                    Name = "fake"
+                };
+                return Task.FromResult(result);
             });
 
             var service = new ModCollectionService(null, null, new Cache(), null, null, null, null, gameService.Object, modExport.Object, storageProvider.Object, mapper.Object);
@@ -1028,8 +1046,7 @@ namespace IronyModManager.Services.Tests
             });
             modExport.Setup(p => p.ImportParadoxLauncherAsync(It.IsAny<ModCollectionExporterParams>())).Returns((ModCollectionExporterParams p) =>
             {
-                p.Mod.Name = "fake";
-                return Task.FromResult(false);
+                return Task.FromResult((ICollectionImportResult)null);
             });
 
             var service = new ModCollectionService(null, null, new Cache(), null, null, null, null, gameService.Object, modExport.Object, storageProvider.Object, mapper.Object);
@@ -1061,10 +1078,13 @@ namespace IronyModManager.Services.Tests
             } });
             modExport.Setup(p => p.ImportParadoxLauncherJsonAsync(It.IsAny<ModCollectionExporterParams>())).Returns((ModCollectionExporterParams p) =>
             {
-                p.Mod.Name = "fake";
-                p.Mod.Mods = new List<string>() { "1", "2" };
-                p.Mod.Game = "fake";
-                return Task.FromResult(true);
+                ICollectionImportResult result = new CollectionImportResult
+                {
+                    Name = "fake",
+                    ModIds = new List<string>() { "1", "2" },
+                    Game = "fake"
+                };
+                return Task.FromResult(result);                
             });
             var cache = new Cache();
             // Fake mods in cache (less mocking)
@@ -1098,8 +1118,7 @@ namespace IronyModManager.Services.Tests
             });
             modExport.Setup(p => p.ImportParadoxLauncherJsonAsync(It.IsAny<ModCollectionExporterParams>())).Returns((ModCollectionExporterParams p) =>
             {
-                p.Mod.Name = "fake";
-                return Task.FromResult(false);
+                return Task.FromResult((ICollectionImportResult)null);
             });
 
             var service = new ModCollectionService(null, null, new Cache(), null, null, null, null, gameService.Object, modExport.Object, storageProvider.Object, mapper.Object);

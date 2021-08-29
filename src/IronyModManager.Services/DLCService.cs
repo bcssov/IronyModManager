@@ -53,6 +53,11 @@ namespace IronyModManager.Services
         private readonly ICache cache;
 
         /// <summary>
+        /// The DLC directories
+        /// </summary>
+        private readonly string[] DLCDirectories = new string[] { DLCFolder, "builtin_dlc" };
+
+        /// <summary>
         /// The DLC exporter
         /// </summary>
         private readonly IDLCExporter dlcExporter;
@@ -66,11 +71,6 @@ namespace IronyModManager.Services
         /// The reader
         /// </summary>
         private readonly IReader reader;
-
-        /// <summary>
-        /// The DLC directories
-        /// </summary>
-        private string[] DLCDirectories = new string[] { DLCFolder, "builtin_dlc" };
 
         #endregion Fields
 
