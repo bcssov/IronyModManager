@@ -174,6 +174,29 @@
     <Setter Property="Opacity" Value="0.56" />
   </Style>
 
+  <Style
+      Selector="MenuItem > MenuItem:not(:disabled):not(:selected) /template/ Border#PART_MenuItemHighlighter,
+    MenuFlyoutPresenter > MenuItem:not(:disabled):not(:selected) /template/ Border#PART_MenuItemHighlighter">
+    <Setter Property="Opacity" Value="0" />
+  </Style>
+
+  <Style
+      Selector="MenuItem > MenuItem:disabled:not(:selected) /template/ Border#PART_MenuItemHighlighter,
+    MenuFlyoutPresenter > MenuItem:disabled:not(:selected) /template/ Border#PART_MenuItemHighlighter">
+    <Setter Property="Opacity" Value="0" />
+  </Style>
+
+  <Style
+      Selector="MenuItem > MenuItem:not(.Menu):not(:disabled):selected /template/ Border#PART_MenuItemHighlighter,
+    MenuFlyoutPresenter > MenuItem:not(.Menu):not(:disabled):selected /template/ Border#PART_MenuItemHighlighter">
+    <Setter Property="Opacity" Value="0.13" />
+  </Style>
+
+  <Style Selector="MenuItem > MenuItem:not(.Menu):disabled,
+    MenuFlyoutPresenter > MenuItem:not(.Menu):disabled">
+    <Setter Property="Opacity" Value="0.56" />
+  </Style>
+
   <Style Selector="Menu > MenuItem">
     <Setter Property="Focusable" Value="False" />
   </Style>
