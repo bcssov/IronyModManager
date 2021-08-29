@@ -4,7 +4,7 @@
 // Created          : 02-23-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 05-30-2021
+// Last Modified On : 08-29-2021
 // ***********************************************************************
 // <copyright file="DiskFileReader.cs" company="Mario">
 //     Mario
@@ -34,7 +34,7 @@ namespace IronyModManager.IO
         /// <summary>
         /// The disallowed paths
         /// </summary>
-        private static readonly string[] disallowedPaths = new string[] { Common.Constants.ModDirectory, Common.Constants.DLCDirectory };
+        private static readonly string[] disallowedPaths = new string[] { Common.Constants.ModDirectory, Common.Constants.DLCDirectory, Common.Constants.BuiltInDLCDirectory };
 
         #endregion Fields
 
