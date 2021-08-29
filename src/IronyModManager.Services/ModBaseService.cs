@@ -4,7 +4,7 @@
 // Created          : 04-07-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-04-2021
+// Last Modified On : 08-29-2021
 // ***********************************************************************
 // <copyright file="ModBaseService.cs" company="Mario">
 //     Mario
@@ -521,6 +521,17 @@ namespace IronyModManager.Services
                 }
             }
             return collectionMods;
+        }
+
+        /// <summary>
+        /// Gets the installed mods internal.
+        /// </summary>
+        /// <param name="game">The game.</param>
+        /// <param name="ignorePatchMods">if set to <c>true</c> [ignore patch mods].</param>
+        /// <returns>IEnumerable&lt;IMod&gt;.</returns>
+        protected virtual IEnumerable<IMod> GetInstalledModsInternal(string game, bool ignorePatchMods)
+        {
+            return GetInstalledModsInternal(GameService.Get().FirstOrDefault(p => p.Type.Equals(game)), ignorePatchMods);
         }
 
         /// <summary>
