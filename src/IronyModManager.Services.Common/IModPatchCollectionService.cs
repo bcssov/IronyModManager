@@ -264,6 +264,13 @@ namespace IronyModManager.Services.Common
         /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
         bool? ToggleSelfModConflicts(IConflictResult conflictResult);
 
+        /// <summary>
+        /// Toggles the self mod conflicts.
+        /// </summary>
+        /// <param name="conflictResult">The conflict result.</param>
+        /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
+        bool? ToggleSelfModConflicts(IConflictResult conflictResult);
+
         #endregion Methods
     }
 }
