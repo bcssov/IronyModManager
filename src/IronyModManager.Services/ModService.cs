@@ -4,7 +4,7 @@
 // Created          : 02-24-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-09-2021
+// Last Modified On : 08-30-2021
 // ***********************************************************************
 // <copyright file="ModService.cs" company="Mario">
 //     Mario
@@ -325,7 +325,7 @@ namespace IronyModManager.Services
                     }
                 }
             }
-            var diffs = filteredDescriptors.Where(p => p.Mod != null && !mods.Any(m => m.DescriptorFile.Equals(p.Mod.DescriptorFile, StringComparison.OrdinalIgnoreCase) && m.Version.Equals(p.Mod.Version) && m.Name.Equals(p.Mod.Name))).ToList();
+            var diffs = filteredDescriptors.Where(p => p.Mod != null && !mods.Any(m => AreModsSame(m, p.Mod))).ToList();
             if (diffs.Count > 0)
             {
                 var result = new List<IModInstallationResult>();
@@ -508,6 +508,23 @@ namespace IronyModManager.Services
         public virtual Task<bool> PurgeModPatchAsync(string collectionName)
         {
             return PurgeModDirectoryAsync(GenerateCollectionPatchName(collectionName));
+        }
+
+        /// <summary>
+        /// Ares the mods same.
+        /// </summary>
+        /// <param name="mod">The mod.</param>
+        /// <param name="otherMod">The other mod.</param>
+        /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
+        protected virtual bool AreModsSame(IMod mod, IMod otherMod)
+        {
+            if (mod == null || otherMod == null)
+            {
+                return false;
+            }
+            return mod.DescriptorFile.Equals(otherMod.DescriptorFile, StringComparison.OrdinalIgnoreCase) && mod.Version.Equals(otherMod.Version) &&
+                mod.Name.Equals(otherMod.Name) && mod.Dependencies.ListsSame(otherMod.Dependencies) && mod.RemoteId.GetValueOrDefault().Equals(otherMod.RemoteId.GetValueOrDefault()) &&
+                mod.ReplacePath.ListsSame(otherMod.ReplacePath) && mod.UserDir.ListsSame(otherMod.UserDir);
         }
 
         /// <summary>

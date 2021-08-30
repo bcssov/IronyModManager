@@ -4,7 +4,7 @@
 // Created          : 02-16-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-15-2021
+// Last Modified On : 08-30-2021
 // ***********************************************************************
 // <copyright file="Extensions.cs" company="Mario">
 //     Mario
@@ -104,6 +104,22 @@ namespace IronyModManager.Shared
             var fileName = Path.GetInvalidFileNameChars().Aggregate(value, (current, character) => current.Replace(character.ToString(), string.Empty));
             fileName = emptyStringCharacters.Aggregate(fileName, (a, b) => a.Replace(b, "_"));
             return fileName;
+        }
+
+        /// <summary>
+        /// Listses the same.
+        /// </summary>
+        /// <typeparam name="TSource">The type of the t source.</typeparam>
+        /// <param name="first">The first.</param>
+        /// <param name="second">The second.</param>
+        /// <returns>bool.</returns>
+        public static bool ListsSame<TSource>(this IEnumerable<TSource> first, IEnumerable<TSource> second)
+        {
+            if (first == null || second == null)
+            {
+                return false;
+            }
+            return first.SequenceEqual(second);
         }
 
         /// <summary>
