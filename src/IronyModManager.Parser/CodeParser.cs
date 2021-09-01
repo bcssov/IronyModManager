@@ -259,7 +259,7 @@ namespace IronyModManager.Parser
         protected virtual IEnumerable<string> CleanCode(IEnumerable<string> lines)
         {
             return lines.Where(p => !string.IsNullOrWhiteSpace(p) && !p.Trim().StartsWith(Common.Constants.Scripts.ScriptCommentId.ToString()))
-               .Select(p => FormatCodeTerminators(CleanComments(p)));
+               .Select(p => FormatCodeTerminators(RemoveInlineComments(p)));
         }
 
         /// <summary>
@@ -267,7 +267,7 @@ namespace IronyModManager.Parser
         /// </summary>
         /// <param name="line">The line.</param>
         /// <returns>System.String.</returns>
-        protected string CleanComments(string line)
+        protected string RemoveInlineComments(string line)
         {
             if (line.IndexOf(Common.Constants.Scripts.ScriptCommentId) > 0)
             {
