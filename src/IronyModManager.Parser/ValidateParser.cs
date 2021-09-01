@@ -90,7 +90,10 @@ namespace IronyModManager.Parser
                     }
                     cleanlines.Add(sb.ToString().Trim(Common.Constants.Scripts.ScriptCommentId));
                 }
-                cleanlines.Add(line);
+                if (line.IndexOf(Common.Constants.Scripts.ScriptCommentId) != 0)
+                {
+                    cleanlines.Add(line);
+                }
             }
             var cleantext = String.Join("\r\n", cleanlines);
             return cleantext;
