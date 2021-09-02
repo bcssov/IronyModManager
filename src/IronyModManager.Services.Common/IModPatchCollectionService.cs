@@ -15,6 +15,8 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using IronyModManager.Models.Common;
+using IronyModManager.Parser.Common.Args;
+using IronyModManager.Parser.Common.Parsers;
 using IronyModManager.Shared.Models;
 
 namespace IronyModManager.Services.Common
@@ -252,6 +254,8 @@ namespace IronyModManager.Services.Common
         /// <param name="conflictResult">The conflict result.</param>
         /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
         bool? ToggleIgnoreGameMods(IConflictResult conflictResult);
+        IEnumerable<IDefinition> Validate(ParserArgs args);
+        public IBracketValidateResult GetBracketCount(string text);
 
         /// <summary>
         /// Toggles the self mod conflicts.

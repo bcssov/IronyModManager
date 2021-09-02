@@ -52,6 +52,17 @@ namespace IronyModManager.Shared
             public const string Title = Prefix + "Title";
             public const string Message = Prefix + "Message";
         }
+        public static class ResolutionSaveError
+        {
+            public const string Prefix = "ResolutionSaveError.";
+            public const string Title = Prefix + "Title";
+            public const string Message = Prefix + "Message";
+        }
+        public static class BracketMismatchError
+        {
+            public const string Prefix = "BracketMismatchError.";
+            public const string Message = Prefix + "Message";
+        }
         public static class Prompt
         {
             public const string Prefix = "Prompt.";

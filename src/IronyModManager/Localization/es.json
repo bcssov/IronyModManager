@@ -32,6 +32,13 @@
         "Title": "Mods no válidos detectados",
         "Message": "No se pudieron analizar las siguientes ubicaciones del mod debido a archivos no válidos o archivos bloqueados:{NewLine}{Mods}"
     },
+    "ResolutionSaveError": {
+        "Title": "Error de validación de definición virtual ",
+        "Message": "La definición virtual no se pudo utilizar para resolver el conflicto. La definición virtual falló la validación."
+    },
+    "BracketMismatchError": {
+        "Message": "¡Discrepancia en el recuento de soportes! Soporte abierto:{OpenBracketCount}  Cerrar soporte: {CloseBracketCount}"
+    },
     "Prompt": {
         "OK": "OK",
         "Yes": "Si",
