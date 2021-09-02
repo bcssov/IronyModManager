@@ -32,13 +32,6 @@
         "Title": "检测到无效模组",
         "Message": "由于无效的存档或锁定的文件，无法解析以下模组位置：{NewLine}{Mods}"
     },
-    "ResolutionSaveError": {
-        "Title": "虚拟定义验证失败",
-        "Message": "无法使用虚拟定义来解决冲突。 虚拟定义验证失败。"
-    },
-    "BracketMismatchError": {
-        "Message": "括号计数不匹配！ 开括号： {OpenBracketCount}  关闭括号：{CloseBracketCount}"
-    },
     "Prompt": {
         "OK": "好",
         "Yes": "是",
@@ -364,6 +357,13 @@
         "Editor": {
             "Title": "外部合并",
             "Message": "外部合并完成后，请点击确认。"
+        },
+        "ResolutionSaveError": {
+            "Title": "虚拟定义验证失败",
+            "Message": "无法使用虚拟定义来解决冲突。虚拟定义验证失败。{NewLine}{NewLine}{ErrorMessage}"
+        },
+        "BracketMismatchError": {
+            "Message": "括号计数不匹配！打开括号：{OpenBracketCount} 关闭括号：{CloseBracketCount}"
         }
     },
     "ConflictIgnore": {

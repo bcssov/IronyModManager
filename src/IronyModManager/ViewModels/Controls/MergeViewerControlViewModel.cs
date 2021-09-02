@@ -4,7 +4,7 @@
 // Created          : 03-20-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 08-27-2021
+// Last Modified On : 09-02-2021
 // ***********************************************************************
 // <copyright file="MergeViewerControlViewModel.cs" company="Mario">
 //     Mario
@@ -167,6 +167,12 @@ namespace IronyModManager.ViewModels.Controls
         #endregion Events
 
         #region Properties
+
+        /// <summary>
+        /// Gets or sets the bracket mismatch text.
+        /// </summary>
+        /// <value>The bracket mismatch text.</value>
+        public virtual string BracketMismatchText { get; set; }
 
         /// <summary>
         /// Gets or sets the cancel.
@@ -527,18 +533,6 @@ namespace IronyModManager.ViewModels.Controls
         /// <value>The undo command.</value>
         public virtual ReactiveCommand<bool, Unit> UndoCommand { get; protected set; }
 
-        /// <summary>
-        /// Gets or sets the text regarding the bracket mismatch on the right side
-        /// </summary>
-        /// <value>The right side bracket count.</value>
-        public virtual String RightSideBracketMismatchText { get; set; }
-
-        /// <summary>
-        ///  Gets or sets the text regarding the bracket mismatch on the right side
-        /// </summary>
-        /// <value>The left side bracket count.</value>
-        public virtual String LeftSideBracketMismatchText { get; set; }
-
         #endregion Properties
 
         #region Methods
@@ -653,46 +647,6 @@ namespace IronyModManager.ViewModels.Controls
                 {
                     evalStack(RightSide, prevRightSide);
                 }
-            }
-        }
-        /// <summary>
-        /// sets the bracket mismatch text to be displayed
-        /// </summary>
-        private void SetBracketText()
-        {
-            if (LeftSidePatchMod)
-            {
-                var bracketCount = modPatchCollectionService.GetBracketCount(LeftSide);
-                if (bracketCount.OpenBracketCount != bracketCount.CloseBracketCount)
-                {
-                    var message = localizationManager.GetResource(LocalizationResources.BracketMismatchError.Message).FormatSmart(new { bracketCount.OpenBracketCount, bracketCount.CloseBracketCount });
-                    LeftSideBracketMismatchText = message;
-                }
-                else
-                {
-                    LeftSideBracketMismatchText = string.Empty;
-                }
-            }
-            else
-            {
-                LeftSideBracketMismatchText = string.Empty;
-            }
-            if (RightSidePatchMod)
-            {
-                var bracketCount = modPatchCollectionService.GetBracketCount(RightSide);
-                if (bracketCount.OpenBracketCount != bracketCount.CloseBracketCount)
-                {
-                    var message = localizationManager.GetResource(LocalizationResources.BracketMismatchError.Message).FormatSmart(new { bracketCount.OpenBracketCount, bracketCount.CloseBracketCount });
-                    RightSideBracketMismatchText = message;
-                }
-                else
-                {
-                    RightSideBracketMismatchText = string.Empty;
-                }
-            }
-            else
-            {
-                RightSideBracketMismatchText = string.Empty;
             }
         }
 
@@ -1576,6 +1530,30 @@ namespace IronyModManager.ViewModels.Controls
                     }
                 }
                 files?.Dispose();
+            }
+        }
+
+        /// <summary>
+        /// sets the bracket mismatch text to be displayed
+        /// </summary>
+        private void SetBracketText()
+        {
+            if (LeftSidePatchMod || RightSidePatchMod)
+            {
+                var bracketCount = modPatchCollectionService.GetBracketCount(LeftSidePatchMod ? LeftSide : RightSide);
+                if (bracketCount.OpenBracketCount != bracketCount.CloseBracketCount)
+                {
+                    var message = localizationManager.GetResource(LocalizationResources.Conflict_Solver.BracketMismatchError.Message).FormatSmart(new { bracketCount.OpenBracketCount, bracketCount.CloseBracketCount });
+                    BracketMismatchText = message;
+                }
+                else
+                {
+                    BracketMismatchText = string.Empty;
+                }
+            }
+            else
+            {
+                BracketMismatchText = string.Empty;
             }
         }
 

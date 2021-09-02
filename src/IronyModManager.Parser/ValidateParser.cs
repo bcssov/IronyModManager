@@ -1,108 +1,111 @@
-﻿using System;
+﻿// ***********************************************************************
+// Assembly         : IronyModManager.Parser
+// Author           : Mario
+// Created          : 09-02-2021
+//
+// Last Modified By : Mario
+// Last Modified On : 09-02-2021
+// ***********************************************************************
+// <copyright file="ValidateParser.cs" company="Mario">
+//     Mario
+// </copyright>
+// <summary></summary>
+// ***********************************************************************
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using IronyModManager.DI;
 using IronyModManager.Parser.Common.Args;
 using IronyModManager.Parser.Common.Parsers;
-using IronyModManager.Shared.Models;
+using IronyModManager.Parser.Common.Parsers.Models;
 using IronyModManager.Shared;
+using IronyModManager.Shared.Models;
 
 namespace IronyModManager.Parser
 {
+    /// <summary>
+    /// Class ValidateParser.
+    /// Implements the <see cref="IronyModManager.Parser.Common.Parsers.BaseParser" />
+    /// Implements the <see cref="IronyModManager.Parser.Common.Parsers.IValidateParser" />
+    /// </summary>
+    /// <seealso cref="IronyModManager.Parser.Common.Parsers.BaseParser" />
+    /// <seealso cref="IronyModManager.Parser.Common.Parsers.IValidateParser" />
     public class ValidateParser : BaseParser, IValidateParser
     {
+        #region Constructors
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ValidateParser" /> class.
+        /// </summary>
+        /// <param name="codeParser">The code parser.</param>
+        /// <param name="logger">The logger.</param>
         public ValidateParser(ICodeParser codeParser, ILogger logger) : base(codeParser, logger)
         {
         }
 
-        public override string ParserName => nameof(ValidateParser);
+        #endregion Constructors
 
+        #region Properties
+
+        /// <summary>
+        /// Gets the name of the parser.
+        /// </summary>
+        /// <value>The name of the parser.</value>
+        /// <exception cref="NotSupportedException"></exception>
+        public override string ParserName => throw new NotSupportedException();
+
+        #endregion Properties
+
+        #region Methods
+
+        /// <summary>
+        /// Determines whether this instance can parse the specified arguments.
+        /// </summary>
+        /// <param name="args">The arguments.</param>
+        /// <returns><c>true</c> if this instance can parse the specified arguments; otherwise, <c>false</c>.</returns>
+        /// <exception cref="NotSupportedException"></exception>
         public override bool CanParse(CanParseArgs args)
         {
-            //apparently it was supposed to be false, means it can be used as a parser
-            return false;
+            throw new NotSupportedException();
         }
 
-        public override IEnumerable<IDefinition> Parse(ParserArgs args)
-        {
-            return ParseRoot(args);
-        }
-
-        public IEnumerable<IDefinition> Validate(ParserArgs args)
-        {
-            return EvalForErrorsOnly(args);
-        }
-
+        /// <summary>
+        /// Gets the bracket count.
+        /// </summary>
+        /// <param name="text">The text.</param>
+        /// <returns>IBracketValidateResult.</returns>
         public IBracketValidateResult GetBracketCount(string text)
         {
-            BracketValidateResult bracketCount = new BracketValidateResult();
-            var cleantext = CleanComments(text);
-            
+            var bracketCount = DIResolver.Get<IBracketValidateResult>();
+            var cleanText = string.Join(Environment.NewLine, codeParser.CleanCode(text.SplitOnNewLine()));
 
-            bracketCount.CloseBracketCount = cleantext.Count(s => s == Common.Constants.Scripts.CloseObject);
-            bracketCount.OpenBracketCount = cleantext.Count(s => s == Common.Constants.Scripts.OpenObject);
+            bracketCount.CloseBracketCount = cleanText.Count(s => s == Common.Constants.Scripts.CloseObject);
+            bracketCount.OpenBracketCount = cleanText.Count(s => s == Common.Constants.Scripts.OpenObject);
 
             return bracketCount;
         }
 
         /// <summary>
-        /// Cleans the comments.
+        /// Parses the specified arguments.
         /// </summary>
-        /// <param name="line">The line.</param>
-        /// <returns>System.String.</returns>
-        /// yoink?
-        protected string CleanComments(string text)
+        /// <param name="args">The arguments.</param>
+        /// <returns>IEnumerable&lt;IDefinition&gt;.</returns>
+        /// <exception cref="NotSupportedException"></exception>
+        public override IEnumerable<IDefinition> Parse(ParserArgs args)
         {
-            var lines = text.SplitOnNewLine();
-            List<string> cleanlines = new List<string>();
-            foreach (var line in lines)
-            {
-                if (line.IndexOf(Common.Constants.Scripts.ScriptCommentId) > 0)
-                {
-                    var sb = new StringBuilder();
-                    var split = line.Split(Common.Constants.Scripts.ScriptCommentId);
-                    var counter = 0;
-                    var count = split.Length;
-                    var quoteCount = 0;
-                    foreach (var item in split)
-                    {
-                        counter++;
-                        var previousQuoteCount = quoteCount;
-                        quoteCount += item.Count(p => p == Common.Constants.Scripts.Quote);
-                        if (counter == 1)
-                        {
-                            sb.Append(item);
-                        }
-                        else
-                        {
-                            var quoteIndex = item.IndexOf(Common.Constants.Scripts.Quote);
-                            if (quoteIndex > -1 && quoteCount == 2 && previousQuoteCount > 0)
-                            {
-                                sb.Append($"#{item.Substring(0, quoteIndex + 1)}");
-                                break;
-                            }
-                            else if (counter < count && previousQuoteCount > 0)
-                            {
-                                sb.Append($"#{item}");
-                            }
-                        }
-                    }
-                    cleanlines.Add(sb.ToString().Trim(Common.Constants.Scripts.ScriptCommentId));
-                }
-                if (line.IndexOf(Common.Constants.Scripts.ScriptCommentId) != 0)
-                {
-                    cleanlines.Add(line);
-                }
-            }
-            var cleantext = String.Join("\r\n", cleanlines);
-            return cleantext;
+            throw new NotSupportedException();
         }
-    }
 
-    public class BracketValidateResult : IBracketValidateResult
-    {
-        public int OpenBracketCount { get; set; }
-        public int CloseBracketCount { get; set; }
+        /// <summary>
+        /// Validates the specified arguments.
+        /// </summary>
+        /// <param name="args">The arguments.</param>
+        /// <returns>IEnumerable&lt;IDefinition&gt;.</returns>
+        public IEnumerable<IDefinition> Validate(ParserArgs args)
+        {
+            return EvalForErrorsOnly(args);
+        }
+
+        #endregion Methods
     }
 }

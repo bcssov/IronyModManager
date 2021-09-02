@@ -118,16 +118,6 @@ namespace IronyModManager.Parser.Tests
             sb.AppendLine(@"#}");
             sb.AppendLine(@"");
             sb.AppendLine(@"### END TEMPLATE:effects ###");
-
-
-            var args = new ParserArgs()
-            {
-                ContentSHA = "sha",
-                ModDependencies = new List<string> { "1" },
-                File = "common\\fake\\fake.txt",
-                Lines = sb.ToString().Split(Environment.NewLine.ToCharArray(), StringSplitOptions.RemoveEmptyEntries),
-                ModName = "fake"
-            };
             var parser = new ValidateParser(new CodeParser(new Logger()), null);
             var result = parser.GetBracketCount(sb.ToString());
             result.OpenBracketCount.Should().Be(13);

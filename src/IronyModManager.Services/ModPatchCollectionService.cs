@@ -4,7 +4,7 @@
 // Created          : 05-26-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 08-27-2021
+// Last Modified On : 09-02-2021
 // ***********************************************************************
 // <copyright file="ModPatchCollectionService.cs" company="Mario">
 //     Mario
@@ -30,6 +30,7 @@ using IronyModManager.Parser.Common;
 using IronyModManager.Parser.Common.Args;
 using IronyModManager.Parser.Common.Mod;
 using IronyModManager.Parser.Common.Parsers;
+using IronyModManager.Parser.Common.Parsers.Models;
 using IronyModManager.Services.Common;
 using IronyModManager.Services.Common.MessageBus;
 using IronyModManager.Shared;
@@ -98,6 +99,9 @@ namespace IronyModManager.Services
         /// </summary>
         private readonly IParserManager parserManager;
 
+        /// <summary>
+        /// The validate parser
+        /// </summary>
         private readonly IValidateParser validateParser;
 
         #endregion Fields
@@ -118,6 +122,7 @@ namespace IronyModManager.Services
         /// <param name="gameService">The game service.</param>
         /// <param name="storageProvider">The storage provider.</param>
         /// <param name="mapper">The mapper.</param>
+        /// <param name="validateParser">The validate parser.</param>
         public ModPatchCollectionService(ICache cache, IMessageBus messageBus, IParserManager parserManager, IEnumerable<IDefinitionInfoProvider> definitionInfoProviders,
             IModPatchExporter modPatchExporter, IReader reader, IModWriter modWriter, IModParser modParser, IGameService gameService,
             IStorageProvider storageProvider, IMapper mapper, IValidateParser validateParser) : base(cache, definitionInfoProviders, reader, modWriter, modParser, gameService, storageProvider, mapper)
@@ -489,6 +494,16 @@ namespace IronyModManager.Services
             messageBus.Publish(new ModDefinitionAnalyzeEvent(100));
 
             return result;
+        }
+
+        /// <summary>
+        /// Gets the bracket count.
+        /// </summary>
+        /// <param name="text">The text.</param>
+        /// <returns>IBracketValidateResult.</returns>
+        public virtual IBracketValidateResult GetBracketCount(string text)
+        {
+            return validateParser.GetBracketCount(text);
         }
 
         /// <summary>
@@ -1469,6 +1484,22 @@ namespace IronyModManager.Services
         }
 
         /// <summary>
+        /// Validates the specified definition.
+        /// </summary>
+        /// <param name="definition">The definition.</param>
+        /// <returns>IEnumerable&lt;IDefinition&gt;.</returns>
+        public virtual IEnumerable<IDefinition> Validate(IDefinition definition)
+        {
+            var lines = definition.Code.SplitOnNewLine();
+            var args = new ParserArgs
+            {
+                Lines = lines,
+                File = definition.File
+            };
+            return validateParser.Validate(args);
+        }
+
+        /// <summary>
         /// Evals the definitions.
         /// </summary>
         /// <param name="indexedDefinitions">The indexed definitions.</param>
@@ -2225,16 +2256,6 @@ namespace IronyModManager.Services
                 }
             }
             return false;
-        }
-
-        public IEnumerable<IDefinition> Validate(ParserArgs args)
-        {
-            return validateParser.Validate(args);
-        }
-
-        public IBracketValidateResult GetBracketCount(string text)
-        {
-            return validateParser.GetBracketCount(text);
         }
 
         #endregion Methods

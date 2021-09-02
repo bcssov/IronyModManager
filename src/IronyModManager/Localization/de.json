@@ -32,13 +32,6 @@
         "Title": "Ungültige Mods erkannt",
         "Message": "Die folgenden Mod-Speicherorte konnten aufgrund ungültiger Archive oder gesperrter Dateien nicht analysiert werden:{NewLine}{Mods}"
     },
-    "ResolutionSaveError": {
-        "Title": "Validierung der virtuellen Definition fehlgeschlagen",
-        "Message": "Die virtuelle Definition konnte nicht zum Auflösen des Konflikts verwendet werden. Die Validierung der virtuellen Definition ist fehlgeschlagen."
-    },
-    "BracketMismatchError": {
-        "Message": "Klammeranzahl stimmt nicht überein! Offene Klammer: {OpenBracketCount}  Klammer schließen:  {CloseBracketCount}"
-    },
     "Prompt": {
         "OK": "OK",
         "Yes": "Ja",
@@ -364,6 +357,13 @@
         "Editor": {
             "Title": "Externe Zusammenführung",
             "Message": "Drücken Sie auf Bestätigen, sobald Sie mit der externen Zusammenführung zufrieden sind."
+        },
+        "ResolutionSaveError": {
+            "Title": "Validierung der virtuellen Definition fehlgeschlagen",
+            "Message": "Die virtuelle Definition konnte nicht zum Auflösen des Konflikts verwendet werden. Die Validierung der virtuellen Definition ist fehlgeschlagen.{NewLine}{NewLine}{ErrorMessage}"
+        },
+        "BracketMismatchError": {
+            "Message": "Klammeranzahl stimmt nicht überein! Klammer öffnen: {OpenBracketCount} Klammer schließen: {CloseBracketCount}"
         }
     },
     "ConflictIgnore": {

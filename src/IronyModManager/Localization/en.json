@@ -32,13 +32,6 @@
         "Title": "Invalid Mods Detected",
         "Message": "The following mod locations could not be parsed due to either invalid archives or locked files:{NewLine}{Mods}"
     },
-    "ResolutionSaveError": {
-        "Title": "Virtual Definition Validation Failed",
-        "Message": "The virtual definition could not be used to resolve the conflict.  The virtual definition failed validation."
-    },
-    "BracketMismatchError": {
-        "Message": "Bracket Count Mismatch!  Open Bracket: {OpenBracketCount}  Close Bracket: {CloseBracketCount}"
-    },
     "Prompt": {
         "OK": "OK",
         "Yes": "Yes",
@@ -364,6 +357,13 @@
         "Editor": {
             "Title": "External Merge",
             "Message": "Press confirm once you are satisfied with external merge."
+        },
+        "ResolutionSaveError": {
+            "Title": "Virtual Definition Validation Failed",
+            "Message": "The virtual definition could not be used to resolve the conflict. The virtual definition failed validation.{NewLine}{NewLine}{ErrorMessage}"
+        },
+        "BracketMismatchError": {
+            "Message": "Bracket Count Mismatch! Open Bracket: {OpenBracketCount} Close Bracket: {CloseBracketCount}"
         }
     },
     "ConflictIgnore": {

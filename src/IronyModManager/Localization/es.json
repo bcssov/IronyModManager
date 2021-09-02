@@ -32,13 +32,6 @@
         "Title": "Mods no válidos detectados",
         "Message": "No se pudieron analizar las siguientes ubicaciones del mod debido a archivos no válidos o archivos bloqueados:{NewLine}{Mods}"
     },
-    "ResolutionSaveError": {
-        "Title": "Error de validación de definición virtual ",
-        "Message": "La definición virtual no se pudo utilizar para resolver el conflicto. La definición virtual falló la validación."
-    },
-    "BracketMismatchError": {
-        "Message": "¡Discrepancia en el recuento de soportes! Soporte abierto:{OpenBracketCount}  Cerrar soporte: {CloseBracketCount}"
-    },
     "Prompt": {
         "OK": "OK",
         "Yes": "Si",
@@ -364,6 +357,13 @@
         "Editor": {
             "Title": "Fusión Externa",
             "Message": "Presione confirmar una vez que esté satisfecho con la Fusión Externa."
+        },
+        "ResolutionSaveError": {
+            "Title": "Error de validación de definición virtual",
+            "Message": "La definición virtual no se pudo utilizar para resolver el conflicto. La definición virtual falló la validación.{NewLine}{NewLine}{ErrorMessage}"
+        },
+        "BracketMismatchError": {
+            "Message": "¡Discrepancia en el recuento de soportes! Abrir corchete: {OpenBracketCount} Cerrar corchete: {CloseBracketCount}"
         }
     },
     "ConflictIgnore": {

@@ -1,23 +1,46 @@
-﻿using System;
+﻿// ***********************************************************************
+// Assembly         : IronyModManager.Parser.Common
+// Author           : Mario
+// Created          : 09-02-2021
+//
+// Last Modified By : Mario
+// Last Modified On : 09-02-2021
+// ***********************************************************************
+// <copyright file="IValidateParser.cs" company="Mario">
+//     Mario
+// </copyright>
+// <summary></summary>
+// ***********************************************************************
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using IronyModManager.Parser.Common.Args;
+using IronyModManager.Parser.Common.Parsers.Models;
 using IronyModManager.Shared.Models;
 
 namespace IronyModManager.Parser.Common.Parsers
 {
+    /// <summary>
+    /// Interface IValidateParser
+    /// </summary>
     public interface IValidateParser
     {
+        #region Methods
+
+        /// <summary>
+        /// Gets the bracket count.
+        /// </summary>
+        /// <param name="text">The text.</param>
+        /// <returns>IBracketValidateResult.</returns>
+        public IBracketValidateResult GetBracketCount(string text);
+
+        /// <summary>
+        /// Validates the specified arguments.
+        /// </summary>
+        /// <param name="args">The arguments.</param>
+        /// <returns>IEnumerable&lt;IDefinition&gt;.</returns>
         public IEnumerable<IDefinition> Validate(ParserArgs args);
 
-        public IBracketValidateResult GetBracketCount(string text);
-    }
-
-    public interface IBracketValidateResult
-    {
-        public int OpenBracketCount { get; set; }
-        public int CloseBracketCount { get; set; }
+        #endregion Methods
     }
 }

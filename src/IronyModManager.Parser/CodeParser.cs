@@ -4,7 +4,7 @@
 // Created          : 02-22-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-15-2021
+// Last Modified On : 09-02-2021
 // ***********************************************************************
 // <copyright file="CodeParser.cs" company="Mario">
 //     Mario
@@ -82,6 +82,17 @@ namespace IronyModManager.Parser
         #endregion Constructors
 
         #region Methods
+
+        /// <summary>
+        /// Cleans the code.
+        /// </summary>
+        /// <param name="lines">The lines.</param>
+        /// <returns>IEnumerable&lt;System.String&gt;.</returns>
+        public virtual IEnumerable<string> CleanCode(IEnumerable<string> lines)
+        {
+            return lines.Where(p => !string.IsNullOrWhiteSpace(p) && !p.Trim().StartsWith(Common.Constants.Scripts.ScriptCommentId.ToString()))
+               .Select(p => FormatCodeTerminators(RemoveInlineComments(p)));
+        }
 
         /// <summary>
         /// Cleans the whitespace.
@@ -249,59 +260,6 @@ namespace IronyModManager.Parser
                 }
             }
             return null;
-        }
-
-        /// <summary>
-        /// Cleans the code.
-        /// </summary>
-        /// <param name="lines">The lines.</param>
-        /// <returns>IEnumerable&lt;System.String&gt;.</returns>
-        protected virtual IEnumerable<string> CleanCode(IEnumerable<string> lines)
-        {
-            return lines.Where(p => !string.IsNullOrWhiteSpace(p) && !p.Trim().StartsWith(Common.Constants.Scripts.ScriptCommentId.ToString()))
-               .Select(p => FormatCodeTerminators(RemoveInlineComments(p)));
-        }
-
-        /// <summary>
-        /// Cleans the comments.
-        /// </summary>
-        /// <param name="line">The line.</param>
-        /// <returns>System.String.</returns>
-        protected string RemoveInlineComments(string line)
-        {
-            if (line.IndexOf(Common.Constants.Scripts.ScriptCommentId) > 0)
-            {
-                var sb = new StringBuilder();
-                var split = line.Split(Common.Constants.Scripts.ScriptCommentId);
-                var counter = 0;
-                var count = split.Length;
-                var quoteCount = 0;
-                foreach (var item in split)
-                {
-                    counter++;
-                    var previousQuoteCount = quoteCount;
-                    quoteCount += item.Count(p => p == Common.Constants.Scripts.Quote);
-                    if (counter == 1)
-                    {
-                        sb.Append(item);
-                    }
-                    else
-                    {
-                        var quoteIndex = item.IndexOf(Common.Constants.Scripts.Quote);
-                        if (quoteIndex > -1 && quoteCount == 2 && previousQuoteCount > 0)
-                        {
-                            sb.Append($"#{item.Substring(0, quoteIndex + 1)}");
-                            break;
-                        }
-                        else if (counter < count && previousQuoteCount > 0)
-                        {
-                            sb.Append($"#{item}");
-                        }
-                    }
-                }
-                return sb.ToString().Trim(Common.Constants.Scripts.ScriptCommentId);
-            }
-            return line;
         }
 
         /// <summary>
@@ -752,6 +710,48 @@ namespace IronyModManager.Parser
                 return error;
             }
             return null;
+        }
+
+        /// <summary>
+        /// Cleans the comments.
+        /// </summary>
+        /// <param name="line">The line.</param>
+        /// <returns>System.String.</returns>
+        protected string RemoveInlineComments(string line)
+        {
+            if (line.IndexOf(Common.Constants.Scripts.ScriptCommentId) > 0)
+            {
+                var sb = new StringBuilder();
+                var split = line.Split(Common.Constants.Scripts.ScriptCommentId);
+                var counter = 0;
+                var count = split.Length;
+                var quoteCount = 0;
+                foreach (var item in split)
+                {
+                    counter++;
+                    var previousQuoteCount = quoteCount;
+                    quoteCount += item.Count(p => p == Common.Constants.Scripts.Quote);
+                    if (counter == 1)
+                    {
+                        sb.Append(item);
+                    }
+                    else
+                    {
+                        var quoteIndex = item.IndexOf(Common.Constants.Scripts.Quote);
+                        if (quoteIndex > -1 && quoteCount == 2 && previousQuoteCount > 0)
+                        {
+                            sb.Append($"#{item.Substring(0, quoteIndex + 1)}");
+                            break;
+                        }
+                        else if (counter < count && previousQuoteCount > 0)
+                        {
+                            sb.Append($"#{item}");
+                        }
+                    }
+                }
+                return sb.ToString().Trim(Common.Constants.Scripts.ScriptCommentId);
+            }
+            return line;
         }
 
         #endregion Methods
