@@ -4,6 +4,66 @@
 		<title>Irony Mod Manager</title>
 		<language>en</language>
 		<item>
+			<title>1.18.63-alpha</title>
+			<description>CHANGES FROM v1.17:
+* Update dependencies
+* Update Chinese translation (by Clazex)
+* Reselect lines after performing merge operations in Conflict Solver (by scrangos)
+* New hotkeys: Ctrl+Left Ctrl+Right that find the previous conflict and next conflict (by scrangos)
+* If there are 4+ definitions including the virtual definition, skip the stellaris definition if its there when the conflict is being selected as the default selected definition for the left side (by scrangos)
+* Add show self conflicts mod filter option (self conflicts are ignored by default now)
+* Add option to export to Paradox Launcher Json format (min launcher version 2021.7.rc5)
+* Conflict Solver bracket count (by scrangos)
+* Various fixes</description>
+			<pubDate>Thu, 02 Sep 2021 06:37:43 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.18.63-alpha/osx-x64.rar" sparkle:version="1.18.63.20154" sparkle:shortVersionString="1.18.63" length="69704145" sparkle:os="osx" type="application/vnd.rar" sparkle:signature="5YNHLqd0FF5dTJEioLLCdYJiLEyYGmWuL1SLi1FY6GJqvTsvcGvISnbsvlOUESRHYF+RBUdXWLveUd93IMKUDA=="/>
+		</item>
+		<item>
+			<title>1.18.63-alpha</title>
+			<description>CHANGES FROM v1.17:
+* Update dependencies
+* Update Chinese translation (by Clazex)
+* Reselect lines after performing merge operations in Conflict Solver (by scrangos)
+* New hotkeys: Ctrl+Left Ctrl+Right that find the previous conflict and next conflict (by scrangos)
+* If there are 4+ definitions including the virtual definition, skip the stellaris definition if its there when the conflict is being selected as the default selected definition for the left side (by scrangos)
+* Add show self conflicts mod filter option (self conflicts are ignored by default now)
+* Add option to export to Paradox Launcher Json format (min launcher version 2021.7.rc5)
+* Conflict Solver bracket count (by scrangos)
+* Various fixes</description>
+			<pubDate>Thu, 02 Sep 2021 06:37:51 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.18.63-alpha/win-x64-setup.rar" sparkle:version="1.18.63.20154" sparkle:shortVersionString="1.18.63" length="61119396" sparkle:os="windows" type="application/vnd.rar" sparkle:signature="zySSSoI7q6E/EtPAUsDZtGJv9Tt10LumwsnSUFHmM4F9K4v9KVKDDk+9dI/Ia1X9hO5bW2CDwjD3+U+GPhYbCw=="/>
+		</item>
+		<item>
+			<title>1.18.63-alpha</title>
+			<description>CHANGES FROM v1.17:
+* Update dependencies
+* Update Chinese translation (by Clazex)
+* Reselect lines after performing merge operations in Conflict Solver (by scrangos)
+* New hotkeys: Ctrl+Left Ctrl+Right that find the previous conflict and next conflict (by scrangos)
+* If there are 4+ definitions including the virtual definition, skip the stellaris definition if its there when the conflict is being selected as the default selected definition for the left side (by scrangos)
+* Add show self conflicts mod filter option (self conflicts are ignored by default now)
+* Add option to export to Paradox Launcher Json format (min launcher version 2021.7.rc5)
+* Conflict Solver bracket count (by scrangos)
+* Various fixes</description>
+			<pubDate>Thu, 02 Sep 2021 06:37:47 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.18.63-alpha/win-x64.rar" sparkle:version="1.18.63.20154" sparkle:shortVersionString="1.18.63" length="73577186" sparkle:os="windows" type="application/vnd.rar" sparkle:signature="Ix1YGmT+pE3kvCKcuwRABeQDCW+PxKzApEGC8AB8CBlSv9HiCKe9xJ6j6sew24iqtHm6IIz9OPJjHL9A6tKoBQ=="/>
+		</item>
+		<item>
+			<title>1.18.63-alpha</title>
+			<description>CHANGES FROM v1.17:
+* Update dependencies
+* Update Chinese translation (by Clazex)
+* Reselect lines after performing merge operations in Conflict Solver (by scrangos)
+* New hotkeys: Ctrl+Left Ctrl+Right that find the previous conflict and next conflict (by scrangos)
+* If there are 4+ definitions including the virtual definition, skip the stellaris definition if its there when the conflict is being selected as the default selected definition for the left side (by scrangos)
+* Add show self conflicts mod filter option (self conflicts are ignored by default now)
+* Add option to export to Paradox Launcher Json format (min launcher version 2021.7.rc5)
+* Conflict Solver bracket count (by scrangos)
+* Various fixes</description>
+			<pubDate>Thu, 02 Sep 2021 06:37:39 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.18.63-alpha/linux-x64.zip" sparkle:version="1.18.63.20154" sparkle:shortVersionString="1.18.63" length="86168557" sparkle:os="linux" type="application/zip" sparkle:signature="XwQn0K+GkX0BRJUoKk8A2YZ2McOFEwv6dXgEIvaW2kl1NWvShiU6F6+UlEzGUj8iHTNJ3mTLCqsicK6H9VTbDw=="/>
+		</item>
+		<item>
 			<title>1.17.107</title>
 			<description>RELEASE NOTES:
 This is a significant upgrade to Irony. Please backup your collections made with previous versions of Irony.
