@@ -406,5 +406,48 @@ namespace IronyModManager.Parser.Tests
                 result[i].ModName.Should().Be("fake");
             }
         }
+
+        /// <summary>
+        /// Defines the test method Parse_inline_should_yield_results.
+        /// </summary>
+        [Fact]
+        public void Parse_inline_should_yield_results()
+        {
+            DISetup.SetupContainer();
+
+            var sb = new StringBuilder();
+            sb.AppendLine("NTest.Path.SubPath = 10");
+
+            var args = new ParserArgs()
+            {
+                ContentSHA = "sha",
+                ModDependencies = new List<string> { "1" },
+                File = "common\\defines\\t.txt",
+                Lines = sb.ToString().Split(Environment.NewLine.ToCharArray(), StringSplitOptions.RemoveEmptyEntries),
+                ModName = "fake"
+            };
+            var parser = new Generic.DefinesParser(new CodeParser(new Logger()), null);
+            var result = parser.Parse(args).ToList();
+            result.Should().NotBeNullOrEmpty();
+            result.Count.Should().Be(1);
+            for (int i = 0; i < 1; i++)
+            {
+                result[i].ContentSHA.Should().Be("sha");
+                result[i].Dependencies.First().Should().Be("1");
+                result[i].File.Should().Be("common\\defines\\t.txt");
+                switch (i)
+                {
+                    case 0:
+                        result[i].Id.Should().Be("SubPath");
+                        result[i].ValueType.Should().Be(ValueType.SpecialVariable);
+                        result[i].Type.Should().Be("common\\defines\\NTest.Path-txt");
+                        result[i].Code.Should().Be("NTest.Path.SubPath = 10");
+                        break;
+                    default:
+                        break;
+                }
+                result[i].ModName.Should().Be("fake");
+            }
+        }
     }
 }
