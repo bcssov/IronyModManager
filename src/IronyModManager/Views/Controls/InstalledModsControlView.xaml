@@ -13,6 +13,9 @@
     <converter:BoolAndConverter x:Key="BoolAndConverter" />
     <converter:AchievementStatusCompatibleConverter x:Key="AchievementStatusCompatibleConverter" />
     <converter:AchievementStatusNotCompatibleConverter x:Key="AchievementStatusNotCompatibleConverter" />
+    <converter:LocalModConverter x:Key="LocalModConverter" />
+    <converter:ParadoxModConverter x:Key="ParadoxModConverter" />
+    <converter:SteamModConverter x:Key="SteamModConverter" />
     <converter:TextTypeFontFamilyConverter x:Key="TextTypeFontFamilyConverter" />
   </UserControl.Resources>
   <Panel Height="{Binding $parent[Window].Height, 
@@ -61,17 +64,35 @@
                   <ColumnDefinition Width="8" />
                   <ColumnDefinition Width="3*" />
                 </Grid.ColumnDefinitions>
-                <CheckBox IsChecked="{Binding IsSelected}"
-                          Grid.Column="0" Grid.ColumnSpan="2">
-                  <CheckBox.IsEnabled>
-                    <MultiBinding Converter="{StaticResource BoolAndConverter}" Mode="OneWay">
-                      <Binding Path="DataContext.AllowModSelection" ElementName="installedMods" />
-                      <Binding Path="DataContext.IsValid" RelativeSource="{RelativeSource Self}" />
-                    </MultiBinding>
-                  </CheckBox.IsEnabled>
-                </CheckBox>
+                <Grid Grid.Column="0" Grid.ColumnSpan="2" ColumnDefinitions="*,16">
+                  <CheckBox IsChecked="{Binding IsSelected}" Grid.Column="0">
+                    <CheckBox.IsEnabled>
+                      <MultiBinding Converter="{StaticResource BoolAndConverter}" Mode="OneWay">
+                        <Binding Path="DataContext.AllowModSelection" ElementName="installedMods" />
+                        <Binding Path="DataContext.IsValid" RelativeSource="{RelativeSource Self}" />
+                      </MultiBinding>
+                    </CheckBox.IsEnabled>
+                  </CheckBox>
+                  <Panel Grid.Column="1" Margin="-30,0,0,0">
+                    <controls:IronyToolTip Background="Transparent" BorderThickness="0,0,0,0"  IsVisible="{Binding Source, Converter={StaticResource LocalModConverter}}">
+                      <DrawingPresenter Width="14" Height="14" Drawing="{DynamicResource Icons.LocalMod}"
+                                        controls:IronyToolTip.Tip="{Binding Path=DataContext.LocalModTooltip, ElementName=installedMods}"
+                                        controls:IronyToolTip.ShowDelay="0" controls:IronyToolTip.ReactToParent="true" />
+                    </controls:IronyToolTip>
+                    <controls:IronyToolTip Background="Transparent" BorderThickness="0,0,0,0"  IsVisible="{Binding Source, Converter={StaticResource ParadoxModConverter}}">
+                      <DrawingPresenter Width="14" Height="14" Drawing="{DynamicResource Icons.ParadoxMod}"
+                                        controls:IronyToolTip.Tip="{Binding Path=DataContext.ParadoxModTooltip, ElementName=installedMods}"
+                                        controls:IronyToolTip.ShowDelay="0" controls:IronyToolTip.ReactToParent="true" />
+                    </controls:IronyToolTip>
+                    <controls:IronyToolTip Background="Transparent" BorderThickness="0,0,0,0"  IsVisible="{Binding Source, Converter={StaticResource SteamModConverter}}">
+                      <DrawingPresenter Width="14" Height="14" Drawing="{DynamicResource Icons.SteamMod}"
+                                        controls:IronyToolTip.Tip="{Binding Path=DataContext.SteamModTooltip, ElementName=installedMods}"
+                                        controls:IronyToolTip.ShowDelay="0" controls:IronyToolTip.ReactToParent="true" />
+                    </controls:IronyToolTip>
+                  </Panel>
+                </Grid>
                 <Grid Grid.Column="3" ColumnDefinitions="*,16">
-                  <TextBlock Text="{Binding Name}" TextWrapping="Wrap" Grid.Column="0" FontFamily="{Binding Name,Converter={StaticResource TextTypeFontFamilyConverter}}"></TextBlock>
+                  <TextBlock Text="{Binding Name}" TextWrapping="Wrap" Grid.Column="0" FontFamily="{Binding Name,Converter={StaticResource TextTypeFontFamilyConverter}}" VerticalAlignment="Center"></TextBlock>
                   <Panel Grid.Column="1">
                     <!-- Because Avalonia sucks in this regard, that's why -->
                     <controls:IronyToolTip Background="Transparent" BorderThickness="0,0,0,0"  IsVisible="{Binding AchievementStatus, Converter={StaticResource AchievementStatusCompatibleConverter}}">

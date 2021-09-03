@@ -541,6 +541,11 @@
         "AchievementCompatible": "Mod es compatible con logros.",
         "NotAchievementCompatible": "Mod NO es compatible con logros."
     },
+    "ModSource": {
+        "Paradox": "La fuente de mod es de paradoja interactiva",
+        "Steam": "La fuente mod es de Steam",
+        "Local": "La fuente de mod es local"
+    },
     "Sorting": {
         "Sort_A_Z": "↑",
         "Sort_Z_A": "↓"

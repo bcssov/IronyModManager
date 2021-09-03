@@ -541,6 +541,11 @@
         "AchievementCompatible": "Mod ist kompatibel mit Errungenschaften.",
         "NotAchievementCompatible": "Mod ist nicht kompatibel mit Errungenschaften."
     },
+    "ModSource": {
+        "Paradox": "Mod-Quelle ist von Paradox Interaktiv",
+        "Steam": "Mod-Quelle ist von Steam",
+        "Local": "Mod-Quelle ist lokal"
+    },
     "Sorting": {
         "Sort_A_Z": "↑",
         "Sort_Z_A": "↓"

@@ -541,6 +541,11 @@
         "AchievementCompatible": "模组兼容成就",
         "NotAchievementCompatible": "模组不兼容成就"
     },
+    "ModSource": {
+        "Paradox": "Mod 源来自 Paradox Interactive",
+        "Steam": "Mod 来源来自 Steam",
+        "Local": "Mod源是本地的"
+    },
     "Sorting": {
         "Sort_A_Z": "↑",
         "Sort_Z_A": "↓"
