@@ -130,8 +130,6 @@ namespace IronyModManager.Parser.Generic
                         definition.ValueType = ValueType.SpecialVariable;
                         definition.Code = FormatCode(dataItem);
                         definition.OriginalCode = FormatCode(dataItem, skipVariables: true);
-                        definition.CodeSeparator = Constants.CodeSeparators.ClosingSeparators.CurlyBracket;
-                        definition.CodeTag = dataItem.Key;
                         var tags = ParseScriptTags(new List<IScriptElement>() { dataItem }, id);
                         if (tags.Any())
                         {
