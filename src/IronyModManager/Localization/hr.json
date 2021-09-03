@@ -541,6 +541,11 @@
         "AchievementCompatible": "Mod je kompatibilan s achievementima.",
         "NotAchievementCompatible": "Mod nije kompatibilan s achievementima."
     },
+    "ModSource": {
+        "Paradox": "Paradox Interactive Mod",
+        "Steam": "Steam Mod",
+        "Local": "Localni Mod"
+    },
     "Sorting": {
         "Sort_A_Z": "↑",
         "Sort_Z_A": "↓"

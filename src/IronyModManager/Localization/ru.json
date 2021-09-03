@@ -541,6 +541,11 @@
         "AchievementCompatible": "Мод совместим с достижениями.",
         "NotAchievementCompatible": "Мод несовместим с достижениями."
     },
+    "ModSource": {
+        "Paradox": "Источник мода от Paradox Interactive",
+        "Steam": "Источник мода из пара",
+        "Local": "Источник мода локальный"
+    },
     "Sorting": {
         "Sort_A_Z": "↑",
         "Sort_Z_A": "↓"

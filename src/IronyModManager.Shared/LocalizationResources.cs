@@ -735,6 +735,13 @@ namespace IronyModManager.Shared
             public const string AchievementCompatible = Prefix + "AchievementCompatible";
             public const string NotAchievementCompatible = Prefix + "NotAchievementCompatible";
         }
+        public static class ModSource
+        {
+            public const string Prefix = "ModSource.";
+            public const string Paradox = Prefix + "Paradox";
+            public const string Steam = Prefix + "Steam";
+            public const string Local = Prefix + "Local";
+        }
         public static class Sorting
         {
             public const string Prefix = "Sorting.";

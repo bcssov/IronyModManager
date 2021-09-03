@@ -12,6 +12,9 @@
     <converter:MathConverter x:Key="MathConverter" />
     <converter:AchievementStatusCompatibleConverter x:Key="AchievementStatusCompatibleConverter" />
     <converter:AchievementStatusNotCompatibleConverter x:Key="AchievementStatusNotCompatibleConverter" />
+    <converter:LocalModConverter x:Key="LocalModConverter" />
+    <converter:ParadoxModConverter x:Key="ParadoxModConverter" />
+    <converter:SteamModConverter x:Key="SteamModConverter" />
     <converter:TextTypeFontFamilyConverter x:Key="TextTypeFontFamilyConverter" />
   </UserControl.Resources>
   <Panel Height="{Binding $parent[Window].Height, 
@@ -116,7 +119,26 @@
                       <ColumnDefinition Width="5*" />
                       <ColumnDefinition Width="30" />
                     </Grid.ColumnDefinitions>
-                    <CheckBox IsChecked="{Binding IsSelected}" Grid.Column="0" Grid.ColumnSpan="2"></CheckBox>
+                    <Grid Grid.Column="0" Grid.ColumnSpan="2" ColumnDefinitions="*,16">
+                      <CheckBox IsChecked="{Binding IsSelected}" Grid.Column="0"></CheckBox>
+                      <Panel Grid.Column="1" Margin="-30,0,0,0">                  
+                        <controls:IronyToolTip Background="Transparent" BorderThickness="0,0,0,0"  IsVisible="{Binding Source, Converter={StaticResource LocalModConverter}}">
+                          <DrawingPresenter Width="14" Height="14" Drawing="{DynamicResource Icons.LocalMod}"
+                                            controls:IronyToolTip.Tip="{Binding Path=DataContext.LocalModTooltip, ElementName=collectionMods}"
+                                            controls:IronyToolTip.ShowDelay="0" controls:IronyToolTip.ReactToParent="true" />
+                        </controls:IronyToolTip>
+                        <controls:IronyToolTip Background="Transparent" BorderThickness="0,0,0,0"  IsVisible="{Binding Source, Converter={StaticResource ParadoxModConverter}}">
+                          <DrawingPresenter Width="14" Height="14" Drawing="{DynamicResource Icons.ParadoxMod}"
+                                            controls:IronyToolTip.Tip="{Binding Path=DataContext.ParadoxModTooltip, ElementName=collectionMods}"
+                                            controls:IronyToolTip.ShowDelay="0" controls:IronyToolTip.ReactToParent="true" />
+                        </controls:IronyToolTip>
+                        <controls:IronyToolTip Background="Transparent" BorderThickness="0,0,0,0"  IsVisible="{Binding Source, Converter={StaticResource SteamModConverter}}">
+                          <DrawingPresenter Width="14" Height="14" Drawing="{DynamicResource Icons.SteamMod}"
+                                            controls:IronyToolTip.Tip="{Binding Path=DataContext.SteamModTooltip, ElementName=collectionMods}"
+                                            controls:IronyToolTip.ShowDelay="0" controls:IronyToolTip.ReactToParent="true" />
+                        </controls:IronyToolTip>
+                      </Panel>
+                    </Grid>
                     <controls:MinMaxNumericUpDown x:Name="order" Value="{Binding Order}" ClipValueToMinMax="True" MinMaxAllowSpin="True"
                                             Grid.Column="2" MaxHeight="30" HorizontalAlignment="Stretch" Margin="0,0,10,0"></controls:MinMaxNumericUpDown>
                     <Grid Grid.Column="3" ColumnDefinitions="*,16">

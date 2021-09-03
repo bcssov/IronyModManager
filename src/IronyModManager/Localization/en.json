@@ -541,6 +541,11 @@
         "AchievementCompatible": "Mod is achievement compatible.",
         "NotAchievementCompatible": "Mod is not achievement compatible."
     },
+    "ModSource": {
+        "Paradox": "Mod source is from Paradox Interactive",
+        "Steam": "Mod source is from Steam",
+        "Local": "Mod source is Local"
+    },
     "Sorting": {
         "Sort_A_Z": "↑",
         "Sort_Z_A": "↓"

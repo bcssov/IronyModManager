@@ -4,7 +4,7 @@
 // Created          : 03-03-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 08-29-2021
+// Last Modified On : 09-03-2021
 // ***********************************************************************
 // <copyright file="CollectionModsControlViewModel.cs" company="Mario">
 //     Mario
@@ -536,6 +536,13 @@ namespace IronyModManager.ViewModels.Controls
         public virtual ReactiveCommand<Unit, Unit> ImportReportCommand { get; protected set; }
 
         /// <summary>
+        /// Gets or sets the local mod tooltip.
+        /// </summary>
+        /// <value>The local mod tooltip.</value>
+        [StaticLocalization(LocalizationResources.ModSource.Local)]
+        public virtual string LocalModTooltip { get; protected set; }
+
+        /// <summary>
         /// Gets or sets the maximum order.
         /// </summary>
         /// <value>The maximum order.</value>
@@ -639,6 +646,13 @@ namespace IronyModManager.ViewModels.Controls
         public virtual ReactiveCommand<Unit, Unit> OpenUrlCommand { get; protected set; }
 
         /// <summary>
+        /// Gets or sets the paradox mod tooltip.
+        /// </summary>
+        /// <value>The paradox mod tooltip.</value>
+        [StaticLocalization(LocalizationResources.ModSource.Paradox)]
+        public virtual string ParadoxModTooltip { get; protected set; }
+
+        /// <summary>
         /// Gets or sets the patch mod.
         /// </summary>
         /// <value>The patch mod.</value>
@@ -699,6 +713,13 @@ namespace IronyModManager.ViewModels.Controls
         /// </summary>
         /// <value><c>true</c> if [show advanced features]; otherwise, <c>false</c>.</value>
         public virtual bool ShowAdvancedFeatures { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets the steam mod tooltip.
+        /// </summary>
+        /// <value>The steam mod tooltip.</value>
+        [StaticLocalization(LocalizationResources.ModSource.Steam)]
+        public virtual string SteamModTooltip { get; protected set; }
 
         /// <summary>
         /// Gets or sets the title.
