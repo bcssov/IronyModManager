@@ -119,9 +119,9 @@
                       <ColumnDefinition Width="5*" />
                       <ColumnDefinition Width="30" />
                     </Grid.ColumnDefinitions>
-                    <Grid Grid.Column="0" Grid.ColumnSpan="2" ColumnDefinitions="*,16">
+                    <Grid Grid.Column="0" Grid.ColumnSpan="2" ColumnDefinitions="*,38">
                       <CheckBox IsChecked="{Binding IsSelected}" Grid.Column="0"></CheckBox>
-                      <Panel Grid.Column="1" Margin="-30,0,0,0">                  
+                      <Panel Grid.Column="1" HorizontalAlignment="Left">                  
                         <controls:IronyToolTip Background="Transparent" BorderThickness="0,0,0,0"  IsVisible="{Binding Source, Converter={StaticResource LocalModConverter}}">
                           <DrawingPresenter Width="14" Height="14" Drawing="{DynamicResource Icons.LocalMod}"
                                             controls:IronyToolTip.Tip="{Binding Path=DataContext.LocalModTooltip, ElementName=collectionMods}"
