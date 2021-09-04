@@ -4,7 +4,7 @@
 // Created          : 02-21-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 12-07-2020
+// Last Modified On : 09-03-2021
 // ***********************************************************************
 // <copyright file="DefinesParser.cs" company="Mario">
 //     Mario
@@ -118,6 +118,31 @@ namespace IronyModManager.Parser.Generic
                             }
                             result.Add(definition);
                         }
+                    }
+                    else if (!string.IsNullOrWhiteSpace(dataItem.Key) && !string.IsNullOrWhiteSpace(dataItem.Operator) && dataItem.Key.Contains("."))
+                    {
+                        //Dot notation is used
+                        var definition = GetDefinitionInstance();
+                        var id = dataItem.Key.Substring(dataItem.Key.LastIndexOf(".") + 1, dataItem.Key.Length - dataItem.Key.LastIndexOf(".") - 1);
+                        var type = dataItem.Key.Substring(0, dataItem.Key.LastIndexOf("."));
+                        MapDefinitionFromArgs(ConstructArgs(args, definition, typeOverride: $"{type}-{Common.Constants.TxtType}"));
+                        definition.Id = TrimId(id);
+                        definition.ValueType = ValueType.SpecialVariable;
+                        definition.Code = FormatCode(dataItem);
+                        definition.OriginalCode = FormatCode(dataItem, skipVariables: true);
+                        var tags = ParseScriptTags(new List<IScriptElement>() { dataItem }, id);
+                        if (tags.Any())
+                        {
+                            foreach (var tag in tags)
+                            {
+                                var lower = tag.ToLowerInvariant();
+                                if (!definition.Tags.Contains(lower))
+                                {
+                                    definition.Tags.Add(lower);
+                                }
+                            }
+                        }
+                        result.Add(definition);
                     }
                     else
                     {

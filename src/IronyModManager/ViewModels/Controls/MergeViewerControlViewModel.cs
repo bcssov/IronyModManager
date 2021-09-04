@@ -4,7 +4,7 @@
 // Created          : 03-20-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-04-2021
+// Last Modified On : 09-02-2021
 // ***********************************************************************
 // <copyright file="MergeViewerControlViewModel.cs" company="Mario">
 //     Mario
@@ -35,6 +35,7 @@ using IronyModManager.Services.Common;
 using IronyModManager.Shared;
 using IronyModManager.Shared.Models;
 using ReactiveUI;
+using SmartFormat;
 
 namespace IronyModManager.ViewModels.Controls
 {
@@ -166,6 +167,12 @@ namespace IronyModManager.ViewModels.Controls
         #endregion Events
 
         #region Properties
+
+        /// <summary>
+        /// Gets or sets the bracket mismatch text.
+        /// </summary>
+        /// <value>The bracket mismatch text.</value>
+        public virtual string BracketMismatchText { get; set; }
 
         /// <summary>
         /// Gets or sets the cancel.
@@ -622,6 +629,8 @@ namespace IronyModManager.ViewModels.Controls
             RightSide = !string.IsNullOrEmpty(rightSide) ? rightSide.ReplaceTabs() : string.Empty;
             LeftDocument = new TextDocument(LeftSide);
             RightDocument = new TextDocument(RightSide);
+            SetBracketText();
+
             Compare();
             if (resetStack)
             {
@@ -889,6 +898,7 @@ namespace IronyModManager.ViewModels.Controls
         /// </summary>
         /// <param name="leftSide">if set to <c>true</c> [left side].</param>
         /// <param name="moveDown">if set to <c>true</c> [move down].</param>
+        /// <param name="skipImaginary">if set to <c>true</c> [skip imaginary].</param>
         protected virtual void FindConflict(bool leftSide, bool moveDown, bool skipImaginary)
         {
             var selectedItems = leftSide ? LeftSideSelected : RightSideSelected;
@@ -1523,6 +1533,30 @@ namespace IronyModManager.ViewModels.Controls
             }
         }
 
+        /// <summary>
+        /// sets the bracket mismatch text to be displayed
+        /// </summary>
+        private void SetBracketText()
+        {
+            if (LeftSidePatchMod || RightSidePatchMod)
+            {
+                var bracketCount = modPatchCollectionService.GetBracketCount(LeftSidePatchMod ? LeftSide : RightSide);
+                if (bracketCount.OpenBracketCount != bracketCount.CloseBracketCount)
+                {
+                    var message = localizationManager.GetResource(LocalizationResources.Conflict_Solver.BracketMismatchError.Message).FormatSmart(new { bracketCount.OpenBracketCount, bracketCount.CloseBracketCount });
+                    BracketMismatchText = message;
+                }
+                else
+                {
+                    BracketMismatchText = string.Empty;
+                }
+            }
+            else
+            {
+                BracketMismatchText = string.Empty;
+            }
+        }
+
         #endregion Methods
 
         #region Classes
@@ -1530,9 +1564,11 @@ namespace IronyModManager.ViewModels.Controls
         /// <summary>
         /// Class DiffPieceWithIndex.
         /// Implements the <see cref="DiffPlex.DiffBuilder.Model.DiffPiece" />
+        /// Implements the <see cref="IronyModManager.Shared.Models.IQueryableModel" />
         /// </summary>
+        /// <seealso cref="IronyModManager.Shared.Models.IQueryableModel" />
         /// <seealso cref="DiffPlex.DiffBuilder.Model.DiffPiece" />
-        public class DiffPieceWithIndex : DiffPiece
+        public class DiffPieceWithIndex : DiffPiece, IQueryableModel
         {
             #region Properties
 
@@ -1576,6 +1612,21 @@ namespace IronyModManager.ViewModels.Controls
             /// </summary>
             /// <returns>A hash code for this instance, suitable for use in hashing algorithms and data structures like a hash table.</returns>
             public override int GetHashCode() => base.GetHashCode();
+
+            /// <summary>
+            /// Determines whether the specified term is match.
+            /// </summary>
+            /// <param name="term">The term.</param>
+            /// <returns><c>true</c> if the specified term is match; otherwise, <c>false</c>.</returns>
+            public bool IsMatch(string term)
+            {
+                if (string.IsNullOrWhiteSpace(Text))
+                {
+                    return false;
+                }
+                term ??= string.Empty;
+                return Text.Trim().StartsWith(term, StringComparison.OrdinalIgnoreCase);
+            }
 
             #endregion Methods
         }

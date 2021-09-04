@@ -20,9 +20,9 @@
     <MicrosoftWin32Registry>[5.0.0]</MicrosoftWin32Registry>
     <MicrosoftExtensionsConfigurationBinder>[5.0.0]</MicrosoftExtensionsConfigurationBinder>
     <MicrosoftExtensionsConfigurationJson>[5.0.0]</MicrosoftExtensionsConfigurationJson>
-    <MaterialAvalonia>[2.2.0]</MaterialAvalonia>
+    <MaterialAvalonia>[2.3.0]</MaterialAvalonia>
     <MessageBoxAvalonia>[1.5.1]</MessageBoxAvalonia>
-    <Avalonia>[0.10.6]</Avalonia>
+    <Avalonia>[0.10.7]</Avalonia>
     <AvaloniaEdit>[0.10.4]</AvaloniaEdit>
   </PropertyGroup>
   <ItemGroup>

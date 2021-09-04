@@ -290,7 +290,8 @@ namespace IronyModManager.Storage.Tests
                 LauncherSettingsPrefix = "prefix",
                 AdvancedFeaturesSupported = true,
                 RemoteSteamUserDirectory = new List<string>() { "remotesave" },
-                Abrv = "abrv"
+                Abrv = "abrv",
+                ParadoxGameId = "pdxId"
             };
             storage.RegisterGame(game);
             dbMock.Games.Count.Should().Be(2);
@@ -309,6 +310,7 @@ namespace IronyModManager.Storage.Tests
             dbMock.Games.FirstOrDefault(p => p.Name == key).RemoteSteamUserDirectory.FirstOrDefault().Should().Be("remotesave");
             dbMock.Games.FirstOrDefault(p => p.Name == key).AdvancedFeaturesSupported.Should().BeTrue();
             dbMock.Games.FirstOrDefault(p => p.Name == key).Abrv.Should().Be("abrv");
+            dbMock.Games.FirstOrDefault(p => p.Name == key).ParadoxGameId.Should().Be("pdxId");
         }
 
         /// <summary>
@@ -514,7 +516,8 @@ namespace IronyModManager.Storage.Tests
                 LauncherSettingsPrefix = "prefix",
                 AdvancedFeaturesSupported = true,
                 RemoteSteamUserDirectory = new List<string>() { "remotesave" },
-                Abrv = "abrv"
+                Abrv = "abrv",
+                ParadoxGameId = "pdxId"
             };
             storage.RegisterGame(game);
             var result = storage.GetGames();
@@ -534,6 +537,7 @@ namespace IronyModManager.Storage.Tests
             result.FirstOrDefault(p => p.Name == key).RemoteSteamUserDirectory.FirstOrDefault().Should().Be("remotesave");
             result.FirstOrDefault(p => p.Name == key).AdvancedFeaturesSupported.Should().BeTrue();
             result.FirstOrDefault(p => p.Name == key).Abrv.Should().Be("abrv");
+            result.FirstOrDefault(p => p.Name == key).ParadoxGameId.Should().Be("pdxId");
         }
 
         /// <summary>

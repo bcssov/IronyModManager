@@ -12,6 +12,9 @@
     <converter:MathConverter x:Key="MathConverter" />
     <converter:AchievementStatusCompatibleConverter x:Key="AchievementStatusCompatibleConverter" />
     <converter:AchievementStatusNotCompatibleConverter x:Key="AchievementStatusNotCompatibleConverter" />
+    <converter:LocalModConverter x:Key="LocalModConverter" />
+    <converter:ParadoxModConverter x:Key="ParadoxModConverter" />
+    <converter:SteamModConverter x:Key="SteamModConverter" />
     <converter:TextTypeFontFamilyConverter x:Key="TextTypeFontFamilyConverter" />
   </UserControl.Resources>
   <Panel Height="{Binding $parent[Window].Height, 
@@ -55,17 +58,17 @@
                 <Button Content="{Binding Remove}" MaxHeight="30"
                 Command="{Binding RemoveCommand}" Margin="5,0,0,0" Width="30"></Button>
                 <!-- For the love of God I can't force this piece of shit to set its width properly -->
-                <ComboBox Items="{Binding ModCollections}" SelectedItem="{Binding SelectedModCollection}"
+                <controls:ComboBox Items="{Binding ModCollections}" SelectedItem="{Binding SelectedModCollection}"
                           Height="30" Margin="10"
                           Width="{Binding $parent[Window].Width, 
                            Converter={StaticResource MathConverter} 
                            ConverterParameter=(x/2.1)-90}">
-                  <ComboBox.ItemTemplate>
+                  <controls:ComboBox.ItemTemplate>
                     <DataTemplate>
                       <ComboBoxItem Content="{Binding Name}" IsSelected="{Binding IsSelected}"></ComboBoxItem>
                     </DataTemplate>
-                  </ComboBox.ItemTemplate>
-                </ComboBox>
+                  </controls:ComboBox.ItemTemplate>
+                </controls:ComboBox>
                 <Button Content="{Binding Create}" MaxHeight="30"
                         Command="{Binding CreateCommand}" Margin="0,0,5,0" Width="30"></Button>
               </DockPanel>
@@ -104,7 +107,8 @@
                      MinHeight="{Binding $parent[Window].Height, 
                      Converter={StaticResource MathConverter} 
                      ConverterParameter=x-300}"
-                     SelectedItem="{Binding SelectedMod}">
+                     SelectedItem="{Binding SelectedMod}"
+                     IsTextSearchEnabled="True">
               <controls:DragDropListBox.ItemTemplate>
                 <DataTemplate>
                   <Grid Background="Transparent">
@@ -115,7 +119,26 @@
                       <ColumnDefinition Width="5*" />
                       <ColumnDefinition Width="30" />
                     </Grid.ColumnDefinitions>
-                    <CheckBox IsChecked="{Binding IsSelected}" Grid.Column="0" Grid.ColumnSpan="2"></CheckBox>
+                    <Grid Grid.Column="0" Grid.ColumnSpan="2" ColumnDefinitions="*,38">
+                      <CheckBox IsChecked="{Binding IsSelected}" Grid.Column="0"></CheckBox>
+                      <Panel Grid.Column="1" HorizontalAlignment="Left">                  
+                        <controls:IronyToolTip Background="Transparent" BorderThickness="0,0,0,0"  IsVisible="{Binding Source, Converter={StaticResource LocalModConverter}}">
+                          <DrawingPresenter Width="14" Height="14" Drawing="{DynamicResource Icons.LocalMod}"
+                                            controls:IronyToolTip.Tip="{Binding Path=DataContext.LocalModTooltip, ElementName=collectionMods}"
+                                            controls:IronyToolTip.ShowDelay="0" controls:IronyToolTip.ReactToParent="true" />
+                        </controls:IronyToolTip>
+                        <controls:IronyToolTip Background="Transparent" BorderThickness="0,0,0,0"  IsVisible="{Binding Source, Converter={StaticResource ParadoxModConverter}}">
+                          <DrawingPresenter Width="14" Height="14" Drawing="{DynamicResource Icons.ParadoxMod}"
+                                            controls:IronyToolTip.Tip="{Binding Path=DataContext.ParadoxModTooltip, ElementName=collectionMods}"
+                                            controls:IronyToolTip.ShowDelay="0" controls:IronyToolTip.ReactToParent="true" />
+                        </controls:IronyToolTip>
+                        <controls:IronyToolTip Background="Transparent" BorderThickness="0,0,0,0"  IsVisible="{Binding Source, Converter={StaticResource SteamModConverter}}">
+                          <DrawingPresenter Width="14" Height="14" Drawing="{DynamicResource Icons.SteamMod}"
+                                            controls:IronyToolTip.Tip="{Binding Path=DataContext.SteamModTooltip, ElementName=collectionMods}"
+                                            controls:IronyToolTip.ShowDelay="0" controls:IronyToolTip.ReactToParent="true" />
+                        </controls:IronyToolTip>
+                      </Panel>
+                    </Grid>
                     <controls:MinMaxNumericUpDown x:Name="order" Value="{Binding Order}" ClipValueToMinMax="True" MinMaxAllowSpin="True"
                                             Grid.Column="2" MaxHeight="30" HorizontalAlignment="Stretch" Margin="0,0,10,0"></controls:MinMaxNumericUpDown>
                     <Grid Grid.Column="3" ColumnDefinitions="*,16">

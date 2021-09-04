@@ -4,7 +4,7 @@
 // Created          : 05-26-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 05-29-2021
+// Last Modified On : 09-02-2021
 // ***********************************************************************
 // <copyright file="IModPatchCollectionService.cs" company="Mario">
 //     Mario
@@ -15,6 +15,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using IronyModManager.Models.Common;
+using IronyModManager.Parser.Common.Parsers.Models;
 using IronyModManager.Shared.Models;
 
 namespace IronyModManager.Services.Common
@@ -91,6 +92,13 @@ namespace IronyModManager.Services.Common
         /// <param name="patchStateMode">The patch state mode.</param>
         /// <returns>IConflictResult.</returns>
         IConflictResult FindConflicts(IIndexedDefinitions indexedDefinitions, IList<string> modOrder, PatchStateMode patchStateMode);
+
+        /// <summary>
+        /// Gets the bracket count.
+        /// </summary>
+        /// <param name="text">The text.</param>
+        /// <returns>IBracketValidateResult.</returns>
+        public IBracketValidateResult GetBracketCount(string text);
 
         /// <summary>
         /// Gets the ignored mods.
@@ -240,11 +248,32 @@ namespace IronyModManager.Services.Common
         bool? ShouldIgnoreGameMods(IConflictResult conflictResult);
 
         /// <summary>
+        /// Shoulds the hide self conflicts.
+        /// </summary>
+        /// <param name="conflictResult">The conflict result.</param>
+        /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
+        bool? ShouldShowSelfConflicts(IConflictResult conflictResult);
+
+        /// <summary>
         /// Toggles the ignore game mods.
         /// </summary>
         /// <param name="conflictResult">The conflict result.</param>
         /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
         bool? ToggleIgnoreGameMods(IConflictResult conflictResult);
+
+        /// <summary>
+        /// Toggles the self mod conflicts.
+        /// </summary>
+        /// <param name="conflictResult">The conflict result.</param>
+        /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
+        bool? ToggleSelfModConflicts(IConflictResult conflictResult);
+
+        /// <summary>
+        /// Validates the specified definition.
+        /// </summary>
+        /// <param name="definition">The definition.</param>
+        /// <returns>IEnumerable&lt;IDefinition&gt;.</returns>
+        IEnumerable<IDefinition> Validate(IDefinition definition);
 
         #endregion Methods
     }

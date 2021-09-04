@@ -4,7 +4,7 @@
 // Created          : 08-12-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-20-2021
+// Last Modified On : 08-29-2021
 // ***********************************************************************
 // <copyright file="ParadoxLauncherImporter.cs" company="Mario">
 //     Mario
@@ -17,7 +17,10 @@ using System.Data;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using IronyModManager.DI;
+using IronyModManager.IO.Common.Models;
 using IronyModManager.IO.Common.Mods;
+using IronyModManager.IO.Mods.Models.Paradox.Json;
 using IronyModManager.IO.Mods.Models.Paradox.v2;
 using IronyModManager.Shared;
 using Microsoft.Data.Sqlite;
@@ -62,11 +65,11 @@ namespace IronyModManager.IO.Mods.Importers
         #region Methods
 
         /// <summary>
-        /// import as an asynchronous operation.
+        /// database import as an asynchronous operation.
         /// </summary>
         /// <param name="parameters">The parameters.</param>
         /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
-        public async Task<bool> ImportAsync(ModCollectionExporterParams parameters)
+        public async Task<ICollectionImportResult> DatabaseImportAsync(ModCollectionExporterParams parameters)
         {
             try
             {
@@ -82,10 +85,11 @@ namespace IronyModManager.IO.Mods.Importers
                         var validMods = mods.Where(p => ordered.Any(m => m.ModId.Equals(p.Id))).OrderBy(p => ordered.FindIndex(o => o.ModId == p.Id));
                         if (validMods.Any())
                         {
-                            parameters.Mod.Name = activeCollection.Name;
-                            parameters.Mod.Mods = validMods.Select(p => p.GameRegistryId).ToList();
-                            parameters.Mod.ModNames = validMods.Select(p => p.DisplayName).ToList();
-                            return true;
+                            var result = DIResolver.Get<ICollectionImportResult>();
+                            result.Name = activeCollection.Name;
+                            result.Descriptors = validMods.Select(p => p.GameRegistryId).ToList();
+                            result.ModNames = validMods.Select(p => p.DisplayName).ToList();
+                            return result;
                         }
                     }
                 }
@@ -94,7 +98,44 @@ namespace IronyModManager.IO.Mods.Importers
             {
                 logger.Error(ex);
             }
-            return false;
+            return null;
+        }
+
+        /// <summary>
+        /// json import as an asynchronous operation.
+        /// </summary>
+        /// <param name="parameters">The parameters.</param>
+        /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
+        public async Task<ICollectionImportResult> JsonImportAsync(ModCollectionExporterParams parameters)
+        {
+            if (File.Exists(parameters.File))
+            {
+                var content = await File.ReadAllTextAsync(parameters.File);
+                if (!string.IsNullOrWhiteSpace(content))
+                {
+                    ModInfo model = null;
+                    try
+                    {
+                        model = JsonDISerializer.Deserialize<ModInfo>(content);
+                    }
+                    catch (Exception ex)
+                    {
+                        logger.Error(ex);
+                        return null;
+                    }
+                    if (!string.IsNullOrWhiteSpace(model.Game) && !string.IsNullOrWhiteSpace(model.Name))
+                    {
+                        var result = DIResolver.Get<ICollectionImportResult>();
+                        result.Name = model.Name;
+                        // Will need to lookup the game and mod ids in the mod service
+                        result.Game = model.Game;
+                        var mods = model.Mods.Where(p => p.Enabled).OrderBy(p => p.Position);
+                        result.ModIds = mods.Select(p => !string.IsNullOrWhiteSpace(p.PdxId) ? p.PdxId : p.SteamId).ToList();
+                        return result;
+                    }
+                }
+            }
+            return null;
         }
 
         /// <summary>

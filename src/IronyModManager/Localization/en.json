@@ -172,12 +172,14 @@
             "Paradoxos": "Import From Paradoxos",
             "Paradox": "Import From Game",
             "ParadoxLauncher": "Import From Paradox Launcher",
+            "ParadoxLauncherJson": "Import From Paradox Launcher Json",
             "Close": "Close"
         },
         "ExportOther": {
             "Title": "...",
             "OrderOnly": "Export Order Only",
             "WholeCollection": "Export Whole Collection",
+            "ParadoxLauncherJson": "Export To Paradox Launcher Json",
             "Close": "Close"
         },
         "MergeCollection": {
@@ -327,6 +329,7 @@
         "ModFilter": {
             "Title": "Mod Filter",
             "IgnoreGameConflicts": "Ignore Game Conflicts",
+            "ShowSelfConflicts": "Show Self Conflicts",
             "Close": "Close"
         },
         "ResetConflicts": {
@@ -354,6 +357,13 @@
         "Editor": {
             "Title": "External Merge",
             "Message": "Press confirm once you are satisfied with external merge."
+        },
+        "ResolutionSaveError": {
+            "Title": "Virtual Definition Validation Failed",
+            "Message": "The virtual definition could not be used to resolve the conflict. The virtual definition failed validation.{NewLine}{NewLine}{ErrorMessage}"
+        },
+        "BracketMismatchError": {
+            "Message": "Bracket Count Mismatch! Open Bracket: {OpenBracketCount} Close Bracket: {CloseBracketCount}"
         }
     },
     "ConflictIgnore": {
@@ -530,6 +540,11 @@
     "Achievements": {
         "AchievementCompatible": "Mod is achievement compatible.",
         "NotAchievementCompatible": "Mod is not achievement compatible."
+    },
+    "ModSource": {
+        "Paradox": "Mod source is from Paradox Interactive",
+        "Steam": "Mod source is from Steam",
+        "Local": "Mod source is Local"
     },
     "Sorting": {
         "Sort_A_Z": "↑",

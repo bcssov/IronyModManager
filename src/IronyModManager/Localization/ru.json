@@ -172,12 +172,14 @@
             "Paradoxos": "Импорт из Paradoxos",
             "Paradox": "Импорт из игры",
             "ParadoxLauncher": "Импорт из Paradox Launcher",
+            "ParadoxLauncherJson": "Импорт из Paradox Launcher Json",
             "Close": "Закрыть"
         },
         "ExportOther": {
             "Title": "...",
             "OrderOnly": "Экспортировать только порядок",
             "WholeCollection": "Экспортировать целую коллекцию",
+            "ParadoxLauncherJson": "Экспорт в Paradox Launcher Json",
             "Close": "Закрыть"
         },
         "MergeCollection": {
@@ -327,6 +329,7 @@
         "ModFilter": {
             "Title": "Фильтр модов",
             "IgnoreGameConflicts": "Игнорировать игровые конфликты",
+            "ShowSelfConflicts": "Показать собственные конфликты",
             "Close": "Закрыть"
         },
         "ResetConflicts": {
@@ -354,6 +357,13 @@
         "Editor": {
             "Title": "Внешнее объединение",
             "Message": "Подтвердите, устраивает ли вас внешнее объединение."
+        },
+        "ResolutionSaveError": {
+            "Title": "Ошибка валидации виртуального определения",
+            "Message": "Виртуальное определение не может быть использовано для разрешения конфликта. Виртуальное определение не прошло проверку.{NewLine}{NewLine}{ErrorMessage}"
+        },
+        "BracketMismatchError": {
+            "Message": "Несоответствие количества скобок! Открытая скобка: {OpenBracketCount} Закрытая скобка: {CloseBracketCount}"
         }
     },
     "ConflictIgnore": {
@@ -530,6 +540,11 @@
     "Achievements": {
         "AchievementCompatible": "Мод совместим с достижениями.",
         "NotAchievementCompatible": "Мод несовместим с достижениями."
+    },
+    "ModSource": {
+        "Paradox": "Источник мода от Paradox Interactive",
+        "Steam": "Источник мода из пара",
+        "Local": "Источник мода локальный"
     },
     "Sorting": {
         "Sort_A_Z": "↑",

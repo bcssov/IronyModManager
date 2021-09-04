@@ -172,12 +172,14 @@
             "Paradoxos": "Uvezi iz Paradoxos",
             "Paradox": "Uvezi iz igre",
             "ParadoxLauncher": "Uvezi iz Paradox Launcher",
+            "ParadoxLauncherJson": "Uvezi iz Paradox Launcher Json",
             "Close": "Zatvori"
         },
         "ExportOther": {
             "Title": "...",
             "OrderOnly": "Izvezi redoslijed",
             "WholeCollection": "Izvoz cijelu zbirku",
+            "ParadoxLauncherJson": "Izvezi u Paradox Launcher Json",
             "Close": "Zatvori"
         },
         "MergeCollection": {
@@ -327,6 +329,7 @@
         "ModFilter": {
             "Title": "Mod Filter",
             "IgnoreGameConflicts": "Zanemari sukobe igre",
+            "ShowSelfConflicts": "Pokaži sukobe sa samim sobom",
             "Close": "Zatvori"
         },
         "ResetConflicts": {
@@ -354,6 +357,13 @@
         "Editor": {
             "Title": "Vanjsko spajanje",
             "Message": "Pritisnite potvrdi nakon što ste zadovoljni vanjskim spajanjem."
+        },
+        "ResolutionSaveError": {
+            "Title": "Provjera valjanosti virtualne definicije nije uspjela",
+            "Message": "Virtualna definicija nije se mogla koristiti za rješavanje sukoba. Virtualna definicija nije uspjela provjeriti validaciju.{NewLine}{NewLine}{ErrorMessage}"
+        },
+        "BracketMismatchError": {
+            "Message": "Nepodudaranje broja zagrada! Otvorena zagrada: {OpenBracketCount} Zatvori zagrada: {CloseBracketCount}"
         }
     },
     "ConflictIgnore": {
@@ -530,6 +540,11 @@
     "Achievements": {
         "AchievementCompatible": "Mod je kompatibilan s achievementima.",
         "NotAchievementCompatible": "Mod nije kompatibilan s achievementima."
+    },
+    "ModSource": {
+        "Paradox": "Paradox Interactive Mod",
+        "Steam": "Steam Mod",
+        "Local": "Localni Mod"
     },
     "Sorting": {
         "Sort_A_Z": "↑",

@@ -172,12 +172,14 @@
             "Paradoxos": "Aus Paradoxos Importieren",
             "Paradox": "Aus Dem Spiel Importieren",
             "ParadoxLauncher": "Aus Paradox Launcher Importieren",
+            "ParadoxLauncherJson": "Aus Paradox Launcher Json Importieren",
             "Close": "Schließen"
         },
         "ExportOther": {
             "Title": "...",
             "OrderOnly": "Nur Reihenfolge Exportieren",
             "WholeCollection": "Export ganzer Sammlung",
+            "ParadoxLauncherJson": "Export nach Paradox Launcher Json",
             "Close": "Schließen"
         },
         "MergeCollection": {
@@ -327,6 +329,7 @@
         "ModFilter": {
             "Title": "Mod Filter",
             "IgnoreGameConflicts": "Spielkonflikte ignorieren",
+            "ShowSelfConflicts": "Selbstkonflikte anzeigen",
             "Close": "Schließen"
         },
         "ResetConflicts": {
@@ -354,6 +357,13 @@
         "Editor": {
             "Title": "Externe Zusammenführung",
             "Message": "Drücken Sie auf Bestätigen, sobald Sie mit der externen Zusammenführung zufrieden sind."
+        },
+        "ResolutionSaveError": {
+            "Title": "Validierung der virtuellen Definition fehlgeschlagen",
+            "Message": "Die virtuelle Definition konnte nicht zum Auflösen des Konflikts verwendet werden. Die Validierung der virtuellen Definition ist fehlgeschlagen.{NewLine}{NewLine}{ErrorMessage}"
+        },
+        "BracketMismatchError": {
+            "Message": "Klammeranzahl stimmt nicht überein! Klammer öffnen: {OpenBracketCount} Klammer schließen: {CloseBracketCount}"
         }
     },
     "ConflictIgnore": {
@@ -530,6 +540,11 @@
     "Achievements": {
         "AchievementCompatible": "Mod ist kompatibel mit Errungenschaften.",
         "NotAchievementCompatible": "Mod ist nicht kompatibel mit Errungenschaften."
+    },
+    "ModSource": {
+        "Paradox": "Mod-Quelle ist von Paradox Interaktiv",
+        "Steam": "Mod-Quelle ist von Steam",
+        "Local": "Mod-Quelle ist lokal"
     },
     "Sorting": {
         "Sort_A_Z": "↑",

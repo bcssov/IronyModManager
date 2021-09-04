@@ -4,7 +4,7 @@
 // Created          : 01-13-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-16-2021
+// Last Modified On : 08-23-2021
 // ***********************************************************************
 // <copyright file="ITheme.cs" company="Mario">
 //     Mario
@@ -13,6 +13,7 @@
 // ***********************************************************************
 using System.Collections.Generic;
 using IronyModManager.Localization;
+using IronyModManager.Shared.Models;
 
 namespace IronyModManager.Models.Common
 {
@@ -20,10 +21,12 @@ namespace IronyModManager.Models.Common
     /// Interface ITheme
     /// Implements the <see cref="IronyModManager.Models.Common.IModel" />
     /// Implements the <see cref="IronyModManager.Localization.ILocalizableModel" />
+    /// Implements the <see cref="IronyModManager.Shared.Models.IQueryableModel" />
     /// </summary>
+    /// <seealso cref="IronyModManager.Shared.Models.IQueryableModel" />
     /// <seealso cref="IronyModManager.Localization.ILocalizableModel" />
     /// <seealso cref="IronyModManager.Models.Common.IModel" />
-    public interface ITheme : IModel, ILocalizableModel
+    public interface ITheme : IModel, ILocalizableModel, IQueryableModel
     {
         #region Properties
 

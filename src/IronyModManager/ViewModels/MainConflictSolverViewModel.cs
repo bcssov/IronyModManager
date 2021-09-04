@@ -4,7 +4,7 @@
 // Created          : 03-18-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-09-2021
+// Last Modified On : 09-02-2021
 // ***********************************************************************
 // <copyright file="MainConflictSolverViewModel.cs" company="Mario">
 //     Mario
@@ -480,6 +480,26 @@ namespace IronyModManager.ViewModels
         }
 
         /// <summary>
+        /// Evaluates the definition validity.
+        /// </summary>
+        /// <returns>System.Threading.Tasks.Task.</returns>
+        protected virtual async Task EvaluateDefinitionValidity()
+        {
+            var patchDefinition = ModCompareSelector.VirtualDefinitions.FirstOrDefault(p => modPatchCollectionService.IsPatchMod(p.ModName));
+            var validateResult = modPatchCollectionService.Validate(patchDefinition);
+            if (validateResult != null)
+            {
+                var title = localizationManager.GetResource(LocalizationResources.Conflict_Solver.ResolutionSaveError.Title);
+                var message = localizationManager.GetResource(LocalizationResources.Conflict_Solver.ResolutionSaveError.Message);
+                await Dispatcher.UIThread.SafeInvokeAsync(async () => await notificationAction.ShowPromptAsync(title, title, message.FormatSmart(new { Environment.NewLine, validateResult.FirstOrDefault().ErrorMessage }), NotificationType.Error, PromptType.OK));
+            }
+            else
+            {
+                await Dispatcher.UIThread.SafeInvokeAsync(async () => await ResolveConflictAsync(true).ConfigureAwait(true));
+            }
+        }
+
+        /// <summary>
         /// Evals the viewer visibility.
         /// </summary>
         protected virtual void EvalViewerVisibility()
@@ -635,9 +655,9 @@ namespace IronyModManager.ViewModels
                 ReactiveUI.MessageBus.Current.SendMessage(args);
             }).DisposeWith(disposables);
 
-            ResolveCommand = ReactiveCommand.Create(() =>
+            ResolveCommand = ReactiveCommand.CreateFromTask(() =>
             {
-                ResolveConflictAsync(true).ConfigureAwait(true);
+                return EvaluateDefinitionValidity();
             }, resolvingEnabled).DisposeWith(disposables);
 
             IgnoreCommand = ReactiveCommand.Create(() =>
@@ -991,7 +1011,7 @@ namespace IronyModManager.ViewModels
                 {
                     if (ResolveEnabled && !ResolvingConflict)
                     {
-                        Dispatcher.UIThread.SafeInvoke(() => ResolveConflictAsync(true).ConfigureAwait(true));
+                        EvaluateDefinitionValidity().ConfigureAwait(false);
                     }
                 }
                 else if (m.Hotkey == Enums.HotKeys.Ctrl_I)

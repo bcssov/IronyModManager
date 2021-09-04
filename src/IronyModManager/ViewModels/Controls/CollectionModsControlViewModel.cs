@@ -4,7 +4,7 @@
 // Created          : 03-03-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-22-2021
+// Last Modified On : 09-03-2021
 // ***********************************************************************
 // <copyright file="CollectionModsControlViewModel.cs" company="Mario">
 //     Mario
@@ -347,7 +347,12 @@ namespace IronyModManager.ViewModels.Controls
             /// <summary>
             /// The paradox launcher
             /// </summary>
-            ParadoxLauncher
+            ParadoxLauncher,
+
+            /// <summary>
+            /// The paradox launcher json
+            /// </summary>
+            ParadoxLauncherJson
         }
 
         #endregion Enums
@@ -531,6 +536,13 @@ namespace IronyModManager.ViewModels.Controls
         public virtual ReactiveCommand<Unit, Unit> ImportReportCommand { get; protected set; }
 
         /// <summary>
+        /// Gets or sets the local mod tooltip.
+        /// </summary>
+        /// <value>The local mod tooltip.</value>
+        [StaticLocalization(LocalizationResources.ModSource.Local)]
+        public virtual string LocalModTooltip { get; protected set; }
+
+        /// <summary>
         /// Gets or sets the maximum order.
         /// </summary>
         /// <value>The maximum order.</value>
@@ -634,6 +646,13 @@ namespace IronyModManager.ViewModels.Controls
         public virtual ReactiveCommand<Unit, Unit> OpenUrlCommand { get; protected set; }
 
         /// <summary>
+        /// Gets or sets the paradox mod tooltip.
+        /// </summary>
+        /// <value>The paradox mod tooltip.</value>
+        [StaticLocalization(LocalizationResources.ModSource.Paradox)]
+        public virtual string ParadoxModTooltip { get; protected set; }
+
+        /// <summary>
         /// Gets or sets the patch mod.
         /// </summary>
         /// <value>The patch mod.</value>
@@ -694,6 +713,13 @@ namespace IronyModManager.ViewModels.Controls
         /// </summary>
         /// <value><c>true</c> if [show advanced features]; otherwise, <c>false</c>.</value>
         public virtual bool ShowAdvancedFeatures { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets the steam mod tooltip.
+        /// </summary>
+        /// <value>The steam mod tooltip.</value>
+        [StaticLocalization(LocalizationResources.ModSource.Steam)]
+        public virtual string SteamModTooltip { get; protected set; }
 
         /// <summary>
         /// Gets or sets the title.
@@ -936,17 +962,24 @@ namespace IronyModManager.ViewModels.Controls
             await TriggerOverlayAsync(id, true, localizationManager.GetResource(LocalizationResources.Collection_Mods.Overlay_Exporting_Message), overlayProgress);
             var collection = modCollectionService.Get(SelectedModCollection.Name);
             AssignModCollectionNames(collection);
-            modExportProgress?.Dispose();
-            modExportProgress = modExportProgressHandler.Subscribe(s =>
+            if (providerType == ImportProviderType.ParadoxLauncherJson)
             {
-                var overlayProgress = Smart.Format(localizationManager.GetResource(LocalizationResources.Collection_Mods.Overlay_Import_Export_Progress), new
+                await Task.Run(async () => await modCollectionService.ExportParadoxLauncherJsonAsync(path, collection).ConfigureAwait(false)).ConfigureAwait(false);
+            }
+            else
+            {
+                modExportProgress?.Dispose();
+                modExportProgress = modExportProgressHandler.Subscribe(s =>
                 {
-                    PercentDone = s.Progress.ToLocalizedPercentage()
-                });
-                TriggerOverlay(id, true, localizationManager.GetResource(LocalizationResources.Collection_Mods.Overlay_Exporting_Message), overlayProgress);
-            }).DisposeWith(Disposables);
-            await Task.Run(async () => await modCollectionService.ExportAsync(path, collection, providerType == ImportProviderType.DefaultOrderOnly, providerType == ImportProviderType.DefaultWithAllMods).ConfigureAwait(false)).ConfigureAwait(false);
-            modExportProgress?.Dispose();
+                    var overlayProgress = Smart.Format(localizationManager.GetResource(LocalizationResources.Collection_Mods.Overlay_Import_Export_Progress), new
+                    {
+                        PercentDone = s.Progress.ToLocalizedPercentage()
+                    });
+                    TriggerOverlay(id, true, localizationManager.GetResource(LocalizationResources.Collection_Mods.Overlay_Exporting_Message), overlayProgress);
+                }).DisposeWith(Disposables);
+                await Task.Run(async () => await modCollectionService.ExportAsync(path, collection, providerType == ImportProviderType.DefaultOrderOnly, providerType == ImportProviderType.DefaultWithAllMods).ConfigureAwait(false)).ConfigureAwait(false);
+                modExportProgress?.Dispose();
+            }
             var title = localizationManager.GetResource(LocalizationResources.Notifications.CollectionExported.Title);
             var message = Smart.Format(localizationManager.GetResource(LocalizationResources.Notifications.CollectionExported.Message), new { CollectionName = collection.Name });
             notificationAction.ShowNotification(title, message, NotificationType.Success);
@@ -1069,7 +1102,7 @@ namespace IronyModManager.ViewModels.Controls
                 if (importData != null)
                 {
                     importData.IsSelected = true;
-                    modNames = importData.ModNames.ToList();
+                    modNames = importData.ModNames != null ? importData.ModNames.ToList() : new List<string>();
                     // Mod names are only used in export\import operations
                     importData.ModNames = null;
                     if (modCollectionService.Save(importData))
@@ -1091,6 +1124,7 @@ namespace IronyModManager.ViewModels.Controls
                 ImportProviderType.Paradoxos => await modCollectionService.ImportParadoxosAsync(path),
                 ImportProviderType.Paradox => await modCollectionService.ImportParadoxAsync(),
                 ImportProviderType.ParadoxLauncher => await modCollectionService.ImportParadoxLauncherAsync(),
+                ImportProviderType.ParadoxLauncherJson => await modCollectionService.ImportParadoxLauncherJsonAsync(path),
                 _ => await modCollectionService.GetImportedCollectionDetailsAsync(path),
             };
             if (importData == null)
@@ -1224,11 +1258,11 @@ namespace IronyModManager.ViewModels.Controls
             var selected = ModCollections?.FirstOrDefault(p => p.IsSelected);
             if (selected != null)
             {
+                SelectedModCollection = selected;
                 if (recognizeSortOrder)
                 {
                     RecognizeSortOrder(selected);
                 }
-                SelectedModCollection = selected;
             }
         }
 
@@ -1353,7 +1387,9 @@ namespace IronyModManager.ViewModels.Controls
                     ExportCollection.ImportCommand.Select(p => Tuple.Create(ImportActionType.Import, p, ImportProviderType.Default)),
                     ExportCollection.ImportOtherParadoxosCommand.Select(p => Tuple.Create(ImportActionType.Import, p, ImportProviderType.Paradoxos)),
                     ExportCollection.ImportOtherParadoxCommand.Select(p => Tuple.Create(ImportActionType.Import, p, ImportProviderType.Paradox)),
-                    ExportCollection.ImportOtherParadoxLauncherCommand.Select(p => Tuple.Create(ImportActionType.Import, p, ImportProviderType.ParadoxLauncher)))
+                    ExportCollection.ImportOtherParadoxLauncherCommand.Select(p => Tuple.Create(ImportActionType.Import, p, ImportProviderType.ParadoxLauncher)),
+                    ExportCollection.ImportOtherParadoxLauncherJsonCommand.Select(p => Tuple.Create(ImportActionType.Import, p, ImportProviderType.ParadoxLauncherJson)),
+                    ExportCollection.ExportParadoxLauncherJsonCommand.Select(p => Tuple.Create(ImportActionType.Export, p, ImportProviderType.ParadoxLauncherJson)))
                 .Subscribe(s =>
                 {
                     if (s.Item2.State == CommandState.Success)
@@ -1782,7 +1818,11 @@ namespace IronyModManager.ViewModels.Controls
         {
             base.OnSelectedGameChanged(game);
             EvalAdvancedFeaturesVisibility();
-            LoadModCollections();
+            Task.Run(async () =>
+            {
+                await Task.Delay(50);
+                LoadModCollections();
+            }).ConfigureAwait(false);
         }
 
         /// <summary>

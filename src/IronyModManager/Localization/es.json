@@ -172,12 +172,14 @@
             "Paradoxos": "Importar desde Paradoxos",
             "Paradox": "Importar desde Juego",
             "ParadoxLauncher": "Importar desde Paradox Launcher",
+            "ParadoxLauncherJson": "Importar desde Paradox Launcher Json",
             "Close": "Cerrar"
         },
         "ExportOther": {
             "Title": "...",
             "OrderOnly": "Exportar Orden Solamente",
             "WholeCollection": "Exportar toda la colección",
+            "ParadoxLauncherJson": "Exportar a Paradox Launcher Json",
             "Close": "Cerrar"
         },
         "MergeCollection": {
@@ -327,6 +329,7 @@
         "ModFilter": {
             "Title": "Filtro de Mods",
             "IgnoreGameConflicts": "Ignorar los conflictos del juego",
+            "ShowSelfConflicts": "Mostrar autoconflictos",
             "Close": "Cerrar"
         },
         "ResetConflicts": {
@@ -354,6 +357,13 @@
         "Editor": {
             "Title": "Fusión Externa",
             "Message": "Presione confirmar una vez que esté satisfecho con la Fusión Externa."
+        },
+        "ResolutionSaveError": {
+            "Title": "Error de validación de definición virtual",
+            "Message": "La definición virtual no se pudo utilizar para resolver el conflicto. La definición virtual falló la validación.{NewLine}{NewLine}{ErrorMessage}"
+        },
+        "BracketMismatchError": {
+            "Message": "¡Discrepancia en el recuento de soportes! Abrir corchete: {OpenBracketCount} Cerrar corchete: {CloseBracketCount}"
         }
     },
     "ConflictIgnore": {
@@ -530,6 +540,11 @@
     "Achievements": {
         "AchievementCompatible": "Mod es compatible con logros.",
         "NotAchievementCompatible": "Mod NO es compatible con logros."
+    },
+    "ModSource": {
+        "Paradox": "La fuente de mod es de paradoja interactiva",
+        "Steam": "La fuente mod es de Steam",
+        "Local": "La fuente de mod es local"
     },
     "Sorting": {
         "Sort_A_Z": "↑",

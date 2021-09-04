@@ -24,19 +24,19 @@
             <ContentControl Content="{Binding CustomConflicts}" Grid.Column="0" Grid.Row="1"></ContentControl>
             <ContentControl Content="{Binding ResetConflicts}" Grid.Column="1" Grid.Row="1"></ContentControl>
           </Grid>
-          <ComboBox Items="{Binding HierarchalConflicts}" SelectedItem="{Binding SelectedParentConflict}"
+          <controls:ComboBox Items="{Binding HierarchalConflicts}" SelectedItem="{Binding SelectedParentConflict}"
                    HorizontalAlignment="Stretch" MinHeight="30">
-            <ComboBox.ItemTemplate>
+            <controls:ComboBox.ItemTemplate>
               <DataTemplate>
                 <ComboBoxItem Content="{Binding Name}"></ComboBoxItem>
               </DataTemplate>
-            </ComboBox.ItemTemplate>
-          </ComboBox>
+            </controls:ComboBox.ItemTemplate>
+          </controls:ComboBox>
           <controls:ListBox Items="{Binding SelectedParentConflict.Children}" SelectedItem="SelectedConflict"
                    ScrollViewer.HorizontalScrollBarVisibility="Disabled" SelectionMode="Single" x:Name="conflictList"
                    Height="{Binding $parent[Window].Height, 
                      Converter={StaticResource MathConverter} 
-                     ConverterParameter=x-160}">
+                     ConverterParameter=x-160}" IsTextSearchEnabled="True">
             <controls:ListBox.ItemTemplate>
               <DataTemplate>
                 <Grid ColumnDefinitions="*" Background="Transparent">
@@ -54,7 +54,7 @@
                      HorizontalAlignment="Center" Margin="10"></TextBlock>
           <TextBlock Text="{Binding RightSide}" Grid.Column="1" Grid.Row="0"
                      HorizontalAlignment="Center" Margin="10"></TextBlock>
-          <ContentControl Margin="10" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Content="{Binding ModCompareSelector}"></ContentControl>
+          <ContentControl Margin="10,10,10,0" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Content="{Binding ModCompareSelector}"></ContentControl>
         </Grid>
       </Panel>
       <Panel Grid.Row="0" Grid.Column="1" Grid.RowSpan="2" IsVisible="{Binding !IsConflictSolverAvailable}">
@@ -62,7 +62,7 @@
                  IsReadOnly="True" ScrollViewer.HorizontalScrollBarVisibility="Auto"></controls:TextBox>
       </Panel>
       <ContentControl IsVisible="{Binding IsBinaryViewerVisible}" Margin="10" Grid.Row="1" Grid.Column="1" Content="{Binding BinaryMergeViewer}"></ContentControl>
-      <ContentControl IsVisible="{Binding IsMergeViewerVisible}" Margin="10" Grid.Row="1" Grid.Column="1" Content="{Binding MergeViewer}"></ContentControl>
+      <ContentControl IsVisible="{Binding IsMergeViewerVisible}" Margin="10,0,10,10" Grid.Row="1" Grid.Column="1" Content="{Binding MergeViewer}"></ContentControl>
       <Button Grid.Row="2" Grid.Column="1" Content="{Binding Resolve}" Command="{Binding ResolveCommand}"
               VerticalAlignment="Bottom" HorizontalAlignment="Left"
               Margin="10,0,0,10" IsEnabled="{Binding ResolveEnabled}" IsVisible="{Binding IsConflictSolverAvailable}"></Button>

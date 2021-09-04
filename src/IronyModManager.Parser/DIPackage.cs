@@ -4,7 +4,7 @@
 // Created          : 02-16-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-09-2021
+// Last Modified On : 09-02-2021
 // ***********************************************************************
 // <copyright file="DIPackage.cs" company="Mario">
 //     Mario
@@ -70,6 +70,7 @@ namespace IronyModManager.Parser
             container.Register<IModObject, ModObject>();
             container.Register<IModParser, ModParser>();
             container.Register<ICodeParser, CodeParser>();
+            container.Register<IValidateParser, ValidateParser>();
             container.Register<IHierarchicalDefinitions, HierarchicalDefinitions>();
             container.Register<IParserMap, ParserMap>();
             container.Register<IScriptElement, ScriptElement>();
@@ -77,6 +78,7 @@ namespace IronyModManager.Parser
             container.Register<IParseResponse, ParseResponse>();
             container.Register<IDLCParser, DLCParser>();
             container.Register<IDLCObject, DLCObject>();
+            container.Register<IBracketValidateResult, BracketValidateResult>();
         }
 
         #endregion Methods

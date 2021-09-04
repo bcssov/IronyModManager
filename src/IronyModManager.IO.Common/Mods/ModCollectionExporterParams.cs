@@ -4,7 +4,7 @@
 // Created          : 04-02-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 05-30-2021
+// Last Modified On : 08-26-2021
 // ***********************************************************************
 // <copyright file="ModCollectionExporterParams.cs" company="Mario">
 //     Mario
@@ -49,6 +49,12 @@ namespace IronyModManager.IO.Common.Mods
         /// </summary>
         /// <value>The file.</value>
         public string File { get; set; }
+
+        /// <summary>
+        /// Gets or sets the game.
+        /// </summary>
+        /// <value>The game.</value>
+        public IGame Game { get; set; }
 
         /// <summary>
         /// Gets or sets the mod.

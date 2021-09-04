@@ -228,6 +228,7 @@ namespace IronyModManager.Shared
                 public const string Paradoxos = Prefix + "Paradoxos";
                 public const string Paradox = Prefix + "Paradox";
                 public const string ParadoxLauncher = Prefix + "ParadoxLauncher";
+                public const string ParadoxLauncherJson = Prefix + "ParadoxLauncherJson";
                 public const string Close = Prefix + "Close";
             }
             public static class ExportOther
@@ -236,6 +237,7 @@ namespace IronyModManager.Shared
                 public const string Title = Prefix + "Title";
                 public const string OrderOnly = Prefix + "OrderOnly";
                 public const string WholeCollection = Prefix + "WholeCollection";
+                public const string ParadoxLauncherJson = Prefix + "ParadoxLauncherJson";
                 public const string Close = Prefix + "Close";
             }
             public static class MergeCollection
@@ -433,6 +435,7 @@ namespace IronyModManager.Shared
                 public const string Prefix = "Conflict_Solver.ModFilter.";
                 public const string Title = Prefix + "Title";
                 public const string IgnoreGameConflicts = Prefix + "IgnoreGameConflicts";
+                public const string ShowSelfConflicts = Prefix + "ShowSelfConflicts";
                 public const string Close = Prefix + "Close";
             }
             public static class ResetConflicts
@@ -467,6 +470,17 @@ namespace IronyModManager.Shared
             {
                 public const string Prefix = "Conflict_Solver.Editor.";
                 public const string Title = Prefix + "Title";
+                public const string Message = Prefix + "Message";
+            }
+            public static class ResolutionSaveError
+            {
+                public const string Prefix = "Conflict_Solver.ResolutionSaveError.";
+                public const string Title = Prefix + "Title";
+                public const string Message = Prefix + "Message";
+            }
+            public static class BracketMismatchError
+            {
+                public const string Prefix = "Conflict_Solver.BracketMismatchError.";
                 public const string Message = Prefix + "Message";
             }
         }
@@ -720,6 +734,13 @@ namespace IronyModManager.Shared
             public const string Prefix = "Achievements.";
             public const string AchievementCompatible = Prefix + "AchievementCompatible";
             public const string NotAchievementCompatible = Prefix + "NotAchievementCompatible";
+        }
+        public static class ModSource
+        {
+            public const string Prefix = "ModSource.";
+            public const string Paradox = Prefix + "Paradox";
+            public const string Steam = Prefix + "Steam";
+            public const string Local = Prefix + "Local";
         }
         public static class Sorting
         {

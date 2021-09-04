@@ -4,7 +4,7 @@
 // Created          : 12-14-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-15-2021
+// Last Modified On : 08-29-2021
 // ***********************************************************************
 // <copyright file="ListBox.cs" company="Mario">
 //     Mario
@@ -20,8 +20,10 @@ using Avalonia.Controls.Presenters;
 using Avalonia.Input;
 using Avalonia.Styling;
 using Avalonia.VisualTree;
+using IronyModManager.Controls.Helper;
 using IronyModManager.DI;
 using IronyModManager.Shared;
+using IronyModManager.Shared.Models;
 
 namespace IronyModManager.Controls
 {
@@ -39,7 +41,12 @@ namespace IronyModManager.Controls
         /// <summary>
         /// The context menu
         /// </summary>
-        private ContextMenu contextMenu;
+        private MenuFlyout contextMenu;
+
+        /// <summary>
+        /// The search select
+        /// </summary>
+        private SearchSelect searchSelect;
 
         #endregion Fields
 
@@ -80,17 +87,19 @@ namespace IronyModManager.Controls
         /// <param name="menuItems">The menu items.</param>
         public void SetContextMenuItems(IReadOnlyCollection<MenuItem> menuItems)
         {
-#pragma warning disable CS0618 // Type or member is obsolete
             ContextMenu = null;
-#pragma warning restore CS0618 // Type or member is obsolete
             if (contextMenu == null)
             {
-                contextMenu = new ContextMenu();
+                // Of course Avalonia update is going to fuck up something! It's no longer respecting and setting pointer value of the popup (which is private btw) in the context menu implementation
+                contextMenu = new MenuFlyout()
+                {
+                    Placement = FlyoutPlacementMode.Bottom
+                };
             }
             if (menuItems?.Count > 0)
             {
                 contextMenu.Items = menuItems;
-                contextMenu.Open(this);
+                contextMenu.ShowAt(this, true);
             }
         }
 
@@ -137,6 +146,24 @@ namespace IronyModManager.Controls
                 var hoveredItem = GetHoveredItem(e.GetPosition(this));
                 RaiseContextMenuOpening(hoveredItem);
             }
+        }
+
+        /// <summary>
+        /// Handles the <see cref="E:TextInput" /> event.
+        /// </summary>
+        /// <param name="e">The <see cref="TextInputEventArgs" /> instance containing the event data.</param>
+        protected override void OnTextInput(TextInputEventArgs e)
+        {
+            if (searchSelect == null)
+            {
+                searchSelect = new SearchSelect();
+            }
+            var index = searchSelect.FindMatch(e, IsTextSearchEnabled, ItemContainerGenerator, Items as IEnumerable<IQueryableModel>);
+            if (index.HasValue)
+            {
+                SelectedIndex = index.GetValueOrDefault();
+            }
+            base.OnTextInput(e);
         }
 
         /// <summary>

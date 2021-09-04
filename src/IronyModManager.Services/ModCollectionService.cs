@@ -4,7 +4,7 @@
 // Created          : 03-04-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 05-30-2021
+// Last Modified On : 08-29-2021
 // ***********************************************************************
 // <copyright file="ModCollectionService.cs" company="Mario">
 //     Mario
@@ -17,6 +17,7 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
+using IronyModManager.IO.Common.Models;
 using IronyModManager.IO.Common.Mods;
 using IronyModManager.IO.Common.Readers;
 using IronyModManager.Models.Common;
@@ -111,7 +112,12 @@ namespace IronyModManager.Services
             /// <summary>
             /// The paradoxos
             /// </summary>
-            Paradoxos
+            Paradoxos,
+
+            /// <summary>
+            /// The paradox launcher json
+            /// </summary>
+            ParadoxLauncherJson
         }
 
         #endregion Enums
@@ -249,6 +255,30 @@ namespace IronyModManager.Services
         }
 
         /// <summary>
+        /// Exports the paradox launcher json asynchronous.
+        /// </summary>
+        /// <param name="file">The file.</param>
+        /// <param name="modCollection">The mod collection.</param>
+        /// <returns>Task&lt;System.Boolean&gt;.</returns>
+        public virtual Task<bool> ExportParadoxLauncherJsonAsync(string file, IModCollection modCollection)
+        {
+            var game = GameService.GetSelected();
+            if (game == null || modCollection == null)
+            {
+                return Task.FromResult(false);
+            }
+            var collection = Mapper.Map<IModCollection>(modCollection);
+            var parameters = new ModCollectionExporterParams()
+            {
+                File = file,
+                Mod = collection,
+                ExportMods = GetCollectionMods(collectionName: modCollection.Name),
+                Game = game
+            };
+            return modCollectionExporter.ExportParadoxLauncherJsonAsync(parameters);
+        }
+
+        /// <summary>
         /// Gets the specified name.
         /// </summary>
         /// <param name="name">The name.</param>
@@ -296,8 +326,9 @@ namespace IronyModManager.Services
                 File = file,
                 Mod = instance
             });
-            if (result)
+            if (result != null)
             {
+                MapImportResult(instance, result);
                 return instance;
             }
             return null;
@@ -320,13 +351,14 @@ namespace IronyModManager.Services
             {
                 var path = GetPatchModDirectory(game, instance);
                 var exportPath = GetPatchModDirectory(game, !string.IsNullOrWhiteSpace(instance.MergedFolderName) ? instance.MergedFolderName : instance.Name);
-                if (await modCollectionExporter.ImportModDirectoryAsync(new ModCollectionExporterParams()
+                var result = await modCollectionExporter.ImportModDirectoryAsync(new ModCollectionExporterParams()
                 {
                     File = file,
                     ModDirectory = path,
                     Mod = instance,
                     ExportModDirectory = exportPath
-                }))
+                });
+                if (result)
                 {
                     return instance;
                 }
@@ -394,6 +426,16 @@ namespace IronyModManager.Services
         }
 
         /// <summary>
+        /// Imports the paradox launcher json asynchronous.
+        /// </summary>
+        /// <param name="file">The file.</param>
+        /// <returns>Task&lt;IModCollection&gt;.</returns>
+        public virtual Task<IModCollection> ImportParadoxLauncherJsonAsync(string file)
+        {
+            return ImportModsAsync(ImportType.ParadoxLauncherJson, file);
+        }
+
+        /// <summary>
         /// import paradoxos as an asynchronous operation.
         /// </summary>
         /// <param name="file">The file.</param>
@@ -408,7 +450,7 @@ namespace IronyModManager.Services
         /// </summary>
         /// <param name="collection">The collection.</param>
         /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
-        /// <exception cref="ArgumentNullException">nameof(collection)</exception>
+        /// <exception cref="ArgumentNullException">collection</exception>
         public virtual bool Save(IModCollection collection)
         {
             if (collection == null || string.IsNullOrWhiteSpace(collection.Game))
@@ -481,7 +523,7 @@ namespace IronyModManager.Services
                     File = file,
                     Mod = instance
                 };
-                bool result = false;
+                ICollectionImportResult result = null;
                 switch (importType)
                 {
                     case ImportType.Paradox:
@@ -496,11 +538,17 @@ namespace IronyModManager.Services
                         result = await modCollectionExporter.ImportParadoxosAsync(parameters);
                         break;
 
+                    case ImportType.ParadoxLauncherJson:
+                        result = await modCollectionExporter.ImportParadoxLauncherJsonAsync(parameters);
+                        break;
+
                     default:
                         break;
                 }
-                if (result)
+                if (result != null)
                 {
+                    // Order of operations is very important here
+                    MapImportResult(instance, result);
                     return instance;
                 }
                 return null;
@@ -512,6 +560,43 @@ namespace IronyModManager.Services
                 return null;
             }
             return await performImport(game);
+        }
+
+        /// <summary>
+        /// Maps the import result.
+        /// </summary>
+        /// <param name="modCollection">The mod collection.</param>
+        /// <param name="importResult">The import result.</param>
+        protected virtual void MapImportResult(IModCollection modCollection, ICollectionImportResult importResult)
+        {
+            if (!string.IsNullOrWhiteSpace(importResult.Game))
+            {
+                var collectionGame = GameService.Get().FirstOrDefault(p => p.Type.Equals(importResult.Game));
+                if (collectionGame == null)
+                {
+                    collectionGame = GameService.Get().FirstOrDefault(p => p.ParadoxGameId.Equals(importResult.Game));
+                }
+                if (collectionGame != null)
+                {
+                    modCollection.Game = collectionGame.Type;
+                }
+            }
+            modCollection.IsSelected = importResult.IsSelected;
+            modCollection.MergedFolderName = importResult.MergedFolderName;
+            modCollection.ModNames = importResult.ModNames;
+            modCollection.Mods = importResult.Descriptors;
+            modCollection.Name = importResult.Name;
+            modCollection.PatchModEnabled = importResult.PatchModEnabled;
+            if (importResult.ModIds != null && importResult.ModIds.Any())
+            {
+                var mods = GetInstalledModsInternal(modCollection.Game, false);
+                if (mods.Any())
+                {
+                    var collectionMods = mods.Where(p => importResult.ModIds.Contains(p.RemoteId.ToString()));
+                    modCollection.Mods = collectionMods.Select(p => p.DescriptorFile).ToList();
+                    modCollection.ModNames = collectionMods.Select(p => p.Name).ToList();
+                }
+            }
         }
 
         /// <summary>

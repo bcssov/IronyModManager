@@ -4,7 +4,7 @@
 // Created          : 02-29-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 12-07-2020
+// Last Modified On : 08-27-2021
 // ***********************************************************************
 // <copyright file="IMod.cs" company="Mario">
 //     Mario
@@ -23,10 +23,12 @@ namespace IronyModManager.Models.Common
     /// Interface IMod
     /// Implements the <see cref="IronyModManager.Shared.Models.IModObject" />
     /// Implements the <see cref="IronyModManager.Localization.ILocalizableModel" />
+    /// Implements the <see cref="IronyModManager.Shared.Models.IQueryableModel" />
     /// </summary>
+    /// <seealso cref="IronyModManager.Shared.Models.IQueryableModel" />
     /// <seealso cref="IronyModManager.Shared.Models.IModObject" />
     /// <seealso cref="IronyModManager.Localization.ILocalizableModel" />
-    public interface IMod : IModObject, ILocalizableModel
+    public interface IMod : IModObject, ILocalizableModel, IQueryableModel
     {
         #region Properties
 

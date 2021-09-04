@@ -36,10 +36,11 @@
       </Grid>
     </Panel>
     <Panel IsVisible="{Binding !EditingText}">
-      <Grid ColumnDefinitions="5*,5*" Margin="0,0,10,0" IsSharedSizeScope="True">
-        <controls:ListBox Grid.Column="0" Items="{Binding LeftDiff}"
+      <Grid RowDefinitions="15,1*" ColumnDefinitions="5*,5*" Margin="0,0,10,0" IsSharedSizeScope="True">
+        <TextBlock Text="{Binding BracketMismatchText}" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Foreground="{DynamicResource IronyAccentBrush}" HorizontalAlignment="Center" VerticalAlignment="Center"></TextBlock>
+        <controls:ListBox Grid.Column="0" Grid.Row="1" Items="{Binding LeftDiff}"
                  ScrollViewer.HorizontalScrollBarVisibility="Auto" x:Name="leftSide"
-                 SelectedItems="{Binding LeftSideSelected}" SelectionMode="Multiple">
+                 SelectedItems="{Binding LeftSideSelected}" SelectionMode="Multiple" IsTextSearchEnabled="True">
           <controls:ListBox.ItemTemplate>
             <DataTemplate>
               <Grid ColumnDefinitions="30,8*" MinHeight="20" Background="Transparent">
@@ -63,9 +64,9 @@
             </DataTemplate>
           </controls:ListBox.ItemTemplate>
         </controls:ListBox>
-        <controls:ListBox Grid.Column="1" Items="{Binding RightDiff}"
+        <controls:ListBox Grid.Column="1" Grid.Row="1" Items="{Binding RightDiff}"
                  ScrollViewer.HorizontalScrollBarVisibility="Auto" x:Name="rightSide"
-                 SelectedItems="{Binding RightSideSelected}" SelectionMode="Multiple">
+                 SelectedItems="{Binding RightSideSelected}" SelectionMode="Multiple" IsTextSearchEnabled="True">
           <controls:ListBox.ItemTemplate>
             <DataTemplate>
               <Grid ColumnDefinitions="30,8*" MinHeight="20" Background="Transparent">

@@ -30,11 +30,11 @@
 
   <ItemGroup>
     <PackageReference Include="CommandLineParser" Version="2.8.0" />
-    <PackageReference Include="MimeTypes" Version="2.2.0">
+    <PackageReference Include="MimeTypes" Version="2.2.1">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="NetSparkleUpdater.SparkleUpdater" Version="2.0.5" />
+    <PackageReference Include="NetSparkleUpdater.SparkleUpdater" Version="2.0.6" />
     <PackageReference Include="Portable.BouncyCastle" Version="1.8.10" />
     <PackageReference Include="StrongNamer" Version="0.2.5" />
   </ItemGroup>

@@ -4,7 +4,7 @@
 // Created          : 03-04-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 05-30-2021
+// Last Modified On : 08-26-2021
 // ***********************************************************************
 // <copyright file="IModCollectionService.cs" company="Mario">
 //     Mario
@@ -66,6 +66,14 @@ namespace IronyModManager.Services.Common
         Task<bool> ExportHashReportAsync(IEnumerable<IMod> mods, string path);
 
         /// <summary>
+        /// Exports the paradox launcher json asynchronous.
+        /// </summary>
+        /// <param name="file">The file.</param>
+        /// <param name="modCollection">The mod collection.</param>
+        /// <returns>Task&lt;System.Boolean&gt;.</returns>
+        Task<bool> ExportParadoxLauncherJsonAsync(string file, IModCollection modCollection);
+
+        /// <summary>
         /// Gets the specified name.
         /// </summary>
         /// <param name="name">The name.</param>
@@ -111,6 +119,13 @@ namespace IronyModManager.Services.Common
         /// </summary>
         /// <returns>Task&lt;IModCollection&gt;.</returns>
         Task<IModCollection> ImportParadoxLauncherAsync();
+
+        /// <summary>
+        /// Imports the paradox launcher json asynchronous.
+        /// </summary>
+        /// <param name="file">The file.</param>
+        /// <returns>Task&lt;IModCollection&gt;.</returns>
+        Task<IModCollection> ImportParadoxLauncherJsonAsync(string file);
 
         /// <summary>
         /// Imports the paradoxos asynchronous.

@@ -172,12 +172,14 @@
             "Paradoxos": "从 Paradoxos 导入",
             "Paradox": "从游戏导入",
             "ParadoxLauncher": "从 Paradox 启动器导入",
+            "ParadoxLauncherJson": "从 Paradox Launcher Json 导入",
             "Close": "关闭"
         },
         "ExportOther": {
             "Title": "…",
             "OrderOnly": "仅导出模组加载顺序",
             "WholeCollection": "导出完整合集",
+            "ParadoxLauncherJson": "导出到 Paradox Launcher Json",
             "Close": "关闭"
         },
         "MergeCollection": {
@@ -327,6 +329,7 @@
         "ModFilter": {
             "Title": "模组过滤",
             "IgnoreGameConflicts": "忽略原版游戏冲突",
+            "ShowSelfConflicts": "表现出自我冲突",
             "Close": "关闭"
         },
         "ResetConflicts": {
@@ -354,6 +357,13 @@
         "Editor": {
             "Title": "外部合并",
             "Message": "外部合并完成后，请点击确认。"
+        },
+        "ResolutionSaveError": {
+            "Title": "虚拟定义验证失败",
+            "Message": "无法使用虚拟定义来解决冲突。虚拟定义验证失败。{NewLine}{NewLine}{ErrorMessage}"
+        },
+        "BracketMismatchError": {
+            "Message": "括号计数不匹配！打开括号：{OpenBracketCount} 关闭括号：{CloseBracketCount}"
         }
     },
     "ConflictIgnore": {
@@ -530,6 +540,11 @@
     "Achievements": {
         "AchievementCompatible": "模组兼容成就",
         "NotAchievementCompatible": "模组不兼容成就"
+    },
+    "ModSource": {
+        "Paradox": "Mod 源来自 Paradox Interactive",
+        "Steam": "Mod 来源来自 Steam",
+        "Local": "Mod源是本地的"
     },
     "Sorting": {
         "Sort_A_Z": "↑",
