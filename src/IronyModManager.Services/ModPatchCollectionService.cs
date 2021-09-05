@@ -4,7 +4,7 @@
 // Created          : 05-26-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 09-02-2021
+// Last Modified On : 09-05-2021
 // ***********************************************************************
 // <copyright file="ModPatchCollectionService.cs" company="Mario">
 //     Mario
@@ -1488,15 +1488,28 @@ namespace IronyModManager.Services
         /// </summary>
         /// <param name="definition">The definition.</param>
         /// <returns>IEnumerable&lt;IDefinition&gt;.</returns>
-        public virtual IEnumerable<IDefinition> Validate(IDefinition definition)
+        public virtual IValidateResult Validate(IDefinition definition)
         {
-            var lines = definition.Code.SplitOnNewLine();
-            var args = new ParserArgs
+            var result = GetModelInstance<IValidateResult>();
+            result.IsValid = true;
+            if (definition != null)
             {
-                Lines = lines,
-                File = definition.File
-            };
-            return validateParser.Validate(args);
+                var lines = definition.Code.SplitOnNewLine();
+                var args = new ParserArgs
+                {
+                    Lines = lines,
+                    File = definition.File
+                };
+                IEnumerable<IDefinition> validation = definition.ValueType != ValueType.Binary ? validateParser.Validate(args) : null;
+                if (validation != null && validation.Any())
+                {
+                    result.ErrorMessage = validation.FirstOrDefault().ErrorMessage;
+                    result.ErrorLine = validation.FirstOrDefault().ErrorLine;
+                    result.ErrorColumn = validation.FirstOrDefault().ErrorColumn;
+                    result.IsValid = false;
+                }
+            }
+            return result;
         }
 
         /// <summary>

@@ -476,7 +476,8 @@ namespace IronyModManager.Shared
             {
                 public const string Prefix = "Conflict_Solver.ResolutionSaveError.";
                 public const string Title = Prefix + "Title";
-                public const string Message = Prefix + "Message";
+                public const string MessageLine = Prefix + "MessageLine";
+                public const string MessageNoLine = Prefix + "MessageNoLine";
             }
             public static class BracketMismatchError
             {

@@ -360,7 +360,8 @@
         },
         "ResolutionSaveError": {
             "Title": "Validierung der virtuellen Definition fehlgeschlagen",
-            "Message": "Die virtuelle Definition konnte nicht zum Auflösen des Konflikts verwendet werden. Die Validierung der virtuellen Definition ist fehlgeschlagen.{NewLine}{NewLine}{ErrorMessage}"
+            "MessageLine": "Die virtuelle Definition konnte nicht zum Auflösen des Konflikts verwendet werden. Die Validierung der virtuellen Definition ist fehlgeschlagen.{NewLine}{NewLine}{ErrorMessage}{NewLine}Fehler in Zeile: {Line} Spalte: {Column}",
+            "MessageNoLine": "Die virtuelle Definition konnte nicht zum Auflösen des Konflikts verwendet werden. Die Validierung der virtuellen Definition ist fehlgeschlagen.{NewLine}{NewLine}{ErrorMessage}"
         },
         "BracketMismatchError": {
             "Message": "Klammeranzahl stimmt nicht überein! Klammer öffnen: {OpenBracketCount} Klammer schließen: {CloseBracketCount}"

@@ -4,7 +4,7 @@
 // Created          : 03-18-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 09-02-2021
+// Last Modified On : 09-05-2021
 // ***********************************************************************
 // <copyright file="MainConflictSolverViewModel.cs" company="Mario">
 //     Mario
@@ -486,12 +486,12 @@ namespace IronyModManager.ViewModels
         protected virtual async Task EvaluateDefinitionValidity()
         {
             var patchDefinition = ModCompareSelector.VirtualDefinitions.FirstOrDefault(p => modPatchCollectionService.IsPatchMod(p.ModName));
-            var validateResult = modPatchCollectionService.Validate(patchDefinition);
-            if (validateResult != null)
+            var validationResult = modPatchCollectionService.Validate(patchDefinition);
+            if (!validationResult.IsValid)
             {
                 var title = localizationManager.GetResource(LocalizationResources.Conflict_Solver.ResolutionSaveError.Title);
-                var message = localizationManager.GetResource(LocalizationResources.Conflict_Solver.ResolutionSaveError.Message);
-                await Dispatcher.UIThread.SafeInvokeAsync(async () => await notificationAction.ShowPromptAsync(title, title, message.FormatSmart(new { Environment.NewLine, validateResult.FirstOrDefault().ErrorMessage }), NotificationType.Error, PromptType.OK));
+                var message = localizationManager.GetResource(validationResult.ErrorLine.HasValue ? LocalizationResources.Conflict_Solver.ResolutionSaveError.MessageLine : LocalizationResources.Conflict_Solver.ResolutionSaveError.MessageNoLine);
+                await Dispatcher.UIThread.SafeInvokeAsync(async () => await notificationAction.ShowPromptAsync(title, title, message.FormatSmart(new { Environment.NewLine, validationResult.ErrorMessage, Line = validationResult.ErrorLine, Column = validationResult.ErrorColumn }), NotificationType.Error, PromptType.OK));
             }
             else
             {

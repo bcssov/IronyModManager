@@ -4,7 +4,7 @@
 // Created          : 02-29-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 09-03-2021
+// Last Modified On : 09-05-2021
 // ***********************************************************************
 // <copyright file="InstalledModsControlViewModel.cs" company="Mario">
 //     Mario
@@ -29,6 +29,7 @@ using IronyModManager.Localization.Attributes;
 using IronyModManager.Models.Common;
 using IronyModManager.Services.Common;
 using IronyModManager.Shared;
+using Nito.AsyncEx;
 using ReactiveUI;
 using SmartFormat;
 
@@ -58,6 +59,11 @@ namespace IronyModManager.ViewModels.Controls
         /// The mod version key
         /// </summary>
         private const string ModVersionKey = "modVersion";
+
+        /// <summary>
+        /// The bind lock
+        /// </summary>
+        private static readonly AsyncLock bindLock = new();
 
         /// <summary>
         /// The URL action
@@ -604,7 +610,13 @@ namespace IronyModManager.ViewModels.Controls
             ActiveGame = game;
             if (game != null)
             {
-                var mods = await Task.Run(() => modService.GetInstalledMods(game));
+                var mods = await Task.Run(async () =>
+                {
+                    var mutex = await bindLock.LockAsync();
+                    var result = modService.GetInstalledMods(game);
+                    mutex.Dispose();
+                    return result;
+                });
                 await Task.Run(async () =>
                 {
                     await PopulateModFilesAsyncAsync(mods).ConfigureAwait(false);

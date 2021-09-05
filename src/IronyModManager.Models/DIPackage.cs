@@ -4,7 +4,7 @@
 // Created          : 01-15-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-27-2021
+// Last Modified On : 09-05-2021
 // ***********************************************************************
 // <copyright file="DIPackage.cs" company="Mario">
 //     Mario
@@ -60,6 +60,7 @@ namespace IronyModManager.Models
             container.RegisterLocalization<IDLC, DLC>();
             container.RegisterLocalization<INotificationPosition, NotificationPosition>();
             container.RegisterModel<IPromptNotifications, PromptNotifications>();
+            container.RegisterModel<IValidateResult, ValidateResult>();
         }
 
         #endregion Methods

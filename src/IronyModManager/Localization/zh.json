@@ -360,7 +360,8 @@
         },
         "ResolutionSaveError": {
             "Title": "虚拟定义验证失败",
-            "Message": "无法使用虚拟定义来解决冲突。虚拟定义验证失败。{NewLine}{NewLine}{ErrorMessage}"
+            "MessageLine": "无法使用虚拟定义来解决冲突。虚拟定义验证失败。{NewLine}{NewLine}{ErrorMessage}{NewLine}行错误：{Line} 列：{Column}",
+            "MessageNoLine": "无法使用虚拟定义来解决冲突。虚拟定义验证失败。{NewLine}{NewLine}{ErrorMessage}"
         },
         "BracketMismatchError": {
             "Message": "括号计数不匹配！打开括号：{OpenBracketCount} 关闭括号：{CloseBracketCount}"

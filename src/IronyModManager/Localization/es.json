@@ -360,7 +360,8 @@
         },
         "ResolutionSaveError": {
             "Title": "Error de validación de definición virtual",
-            "Message": "La definición virtual no se pudo utilizar para resolver el conflicto. La definición virtual falló la validación.{NewLine}{NewLine}{ErrorMessage}"
+            "MessageLine": "La definición virtual no se pudo utilizar para resolver el conflicto. La definición virtual falló la validación.{NewLine}{NewLine}{ErrorMessage}{NewLine}Error en la línea: {Line} Columna: {Column}",
+            "MessageNoLine": "La definición virtual no se pudo utilizar para resolver el conflicto. La definición virtual falló la validación.{NewLine}{NewLine}{ErrorMessage}"
         },
         "BracketMismatchError": {
             "Message": "¡Discrepancia en el recuento de soportes! Abrir corchete: {OpenBracketCount} Cerrar corchete: {CloseBracketCount}"
