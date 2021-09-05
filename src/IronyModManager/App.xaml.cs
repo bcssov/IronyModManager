@@ -4,7 +4,7 @@
 // Created          : 01-10-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-07-2021
+// Last Modified On : 09-05-2021
 // ***********************************************************************
 // <copyright file="App.xaml.cs" company="Mario">
 //     Mario
@@ -174,6 +174,8 @@ namespace IronyModManager
         /// </summary>
         protected virtual async Task VerifyWritePermissionsAsync()
         {
+            // Hopefully enough time for the UI to show up and such
+            await Task.Delay(5000);
             var permissionService = DIResolver.Get<IPermissionCheckService>();
             var permissions = permissionService.VerifyPermissions();
             if (permissions.Count > 0 && permissions.Any(p => !p.Valid))

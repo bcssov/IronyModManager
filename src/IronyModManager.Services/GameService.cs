@@ -4,7 +4,7 @@
 // Created          : 02-12-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 08-25-2021
+// Last Modified On : 09-05-2021
 // ***********************************************************************
 // <copyright file="GameService.cs" company="Mario">
 //     Mario
@@ -275,6 +275,25 @@ namespace IronyModManager.Services
                 return settingsObject?.RawVersion;
             }
             return string.Empty;
+        }
+
+        /// <summary>
+        /// Gets the version.
+        /// </summary>
+        /// <param name="game">The game.</param>
+        /// <returns>System.String.</returns>
+        public virtual IEnumerable<string> GetVersions(IGame game)
+        {
+            if (game != null)
+            {
+                var path = Path.GetDirectoryName(game.ExecutableLocation);
+                var settingsObject = GetGameLauncherSettings(game, path);
+                if (settingsObject != null)
+                {
+                    return new List<string>() { settingsObject.RawVersion, settingsObject.Version };
+                }
+            }
+            return new List<string>();
         }
 
         /// <summary>

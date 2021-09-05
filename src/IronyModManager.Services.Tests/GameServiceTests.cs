@@ -864,6 +864,62 @@ namespace IronyModManager.Services.Tests
         }
 
         /// <summary>
+        /// Defines the test method Should_not_return_versions.
+        /// </summary>
+        [Fact]
+        public void Should_not_return_versions()
+        {
+            var storageProvider = new Mock<IStorageProvider>();
+            var preferencesService = new Mock<IPreferencesService>();
+            SetupMockCase(preferencesService, storageProvider);
+            var reader = new Mock<IReader>();
+            reader.Setup(s => s.Read(It.IsAny<string>(), It.IsAny<IEnumerable<string>>(), It.IsAny<bool>())).Returns((IEnumerable<IFileInfo>)null);
+            var service = new GameService(null, null, reader.Object, storageProvider.Object, preferencesService.Object, new Mock<IMapper>().Object);
+            var result = service.GetVersions(new Game()
+            {
+                Type = "game 2",
+                UserDirectory = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)),
+                LauncherSettingsFileName = "launcher.json"
+            });
+            result.Should().NotBeNull();
+            result.Count().Should().Be(0);
+        }
+
+        /// <summary>
+        /// Defines the test method Should_return_versions.
+        /// </summary>
+        [Fact]
+        public void Should_return_versions()
+        {
+            var storageProvider = new Mock<IStorageProvider>();
+            var preferencesService = new Mock<IPreferencesService>();
+            SetupMockCase(preferencesService, storageProvider);
+            var fileInfos = new List<IFileInfo>()
+            {
+                new IO.FileInfo()
+                {
+                    Content = new List<string>() { "{    \"exeArgs\": [        \"-gdpr-compliant\"    ],    \"exePath\": \"stellaris.exe\",    \"gameDataPath\": \"test\",    \"rawVersion\": \"3.0.3\"}" },
+                    FileName = "continue_game.json",
+                    IsBinary = false
+                }
+            };
+            var reader = new Mock<IReader>();
+            reader.Setup(s => s.Read(It.IsAny<string>(), It.IsAny<IEnumerable<string>>(), It.IsAny<bool>())).Returns(fileInfos);
+            var service = new GameService(null, null, reader.Object, storageProvider.Object, preferencesService.Object, new Mock<IMapper>().Object);
+            var result = service.GetVersions(new Game()
+            {
+                Type = "game 2",
+                UserDirectory = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)),
+                LauncherSettingsFileName = "launcher.json",
+                ExecutableLocation = "c:\\fake"
+            });
+            result.Should().NotBeNull();
+            result.Count().Should().Be(2);
+            result.FirstOrDefault().Should().Be("3.0.3");
+            result.LastOrDefault().Should().BeNullOrWhiteSpace();
+        }
+
+        /// <summary>
         /// Defines the test method Should_not_import_hash.
         /// </summary>
         [Fact]
