@@ -914,9 +914,8 @@ namespace IronyModManager.Services.Tests
                 ExecutableLocation = "c:\\fake"
             });
             result.Should().NotBeNull();
-            result.Count().Should().Be(2);
-            result.FirstOrDefault().Should().Be("3.0.3");
-            result.LastOrDefault().Should().BeNullOrWhiteSpace();
+            result.Count().Should().Be(1);
+            result.FirstOrDefault().Should().Be("3.0.3");            
         }
 
         /// <summary>
