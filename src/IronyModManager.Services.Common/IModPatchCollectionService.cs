@@ -4,7 +4,7 @@
 // Created          : 05-26-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 09-02-2021
+// Last Modified On : 09-05-2021
 // ***********************************************************************
 // <copyright file="IModPatchCollectionService.cs" company="Mario">
 //     Mario
@@ -272,8 +272,8 @@ namespace IronyModManager.Services.Common
         /// Validates the specified definition.
         /// </summary>
         /// <param name="definition">The definition.</param>
-        /// <returns>IEnumerable&lt;IDefinition&gt;.</returns>
-        IEnumerable<IDefinition> Validate(IDefinition definition);
+        /// <returns>IValidateResult.</returns>
+        IValidateResult Validate(IDefinition definition);
 
         #endregion Methods
     }

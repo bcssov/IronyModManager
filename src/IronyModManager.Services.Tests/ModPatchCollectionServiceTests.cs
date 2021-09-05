@@ -30,8 +30,10 @@ using IronyModManager.Parser;
 using IronyModManager.Parser.Common;
 using IronyModManager.Parser.Common.Args;
 using IronyModManager.Parser.Common.Mod;
+using IronyModManager.Parser.Common.Parsers;
 using IronyModManager.Parser.Definitions;
 using IronyModManager.Parser.Mod;
+using IronyModManager.Parser.Models;
 using IronyModManager.Services.Common;
 using IronyModManager.Shared;
 using IronyModManager.Shared.Cache;
@@ -66,12 +68,12 @@ namespace IronyModManager.Services.Tests
         /// <returns>ModService.</returns>
         private static ModPatchCollectionService GetService(Mock<IStorageProvider> storageProvider, Mock<IModParser> modParser,
             Mock<IParserManager> parserManager, Mock<IReader> reader, Mock<IMapper> mapper, Mock<IModWriter> modWriter,
-            Mock<IGameService> gameService, Mock<IModPatchExporter> modPatchExporter, IEnumerable<IDefinitionInfoProvider> definitionInfoProviders = null)
+            Mock<IGameService> gameService, Mock<IModPatchExporter> modPatchExporter, IEnumerable<IDefinitionInfoProvider> definitionInfoProviders = null, Mock<IValidateParser> validateParser = null)
         {
             var messageBus = new Mock<IMessageBus>();
             messageBus.Setup(p => p.PublishAsync(It.IsAny<IMessageBusEvent>()));
             messageBus.Setup(p => p.Publish(It.IsAny<IMessageBusEvent>()));
-            return new ModPatchCollectionService(new Cache(), messageBus.Object, parserManager.Object, definitionInfoProviders, modPatchExporter.Object, reader.Object, modWriter.Object, modParser.Object, gameService.Object, storageProvider.Object, mapper.Object, null);
+            return new ModPatchCollectionService(new Cache(), messageBus.Object, parserManager.Object, definitionInfoProviders, modPatchExporter.Object, reader.Object, modWriter.Object, modParser.Object, gameService.Object, storageProvider.Object, mapper.Object, validateParser?.Object);
         }
 
         /// <summary>
@@ -2605,7 +2607,7 @@ namespace IronyModManager.Services.Tests
             infoProvider.Setup(p => p.CanProcess(It.IsAny<string>())).Returns(true);
             var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter, new List<IDefinitionInfoProvider>() { infoProvider.Object });
 
-            var def = new Definition() { File = @"localisation\test.yml", ModName = "1" };            
+            var def = new Definition() { File = @"localisation\test.yml", ModName = "1" };
             var def3 = new Definition() { File = @"localisation\test.yml", ModName = "Game", IsFromGame = true };
             var result = service.EvalDefinitionPriority(new List<IDefinition>() { def3, def });
             result.Definition.Should().Be(def);
@@ -4747,6 +4749,97 @@ namespace IronyModManager.Services.Tests
             var result = service.ToggleSelfModConflicts(c);
             result.Should().BeTrue();
             c.IgnoredPaths.Should().Contain("--showSelfConflicts");
+        }
+
+        /// <summary>
+        /// Defines the test method Should_return_bracket_count_result.
+        /// </summary>
+        [Fact]
+        public void Should_return_bracket_count_result()
+        {
+            var storageProvider = new Mock<IStorageProvider>();
+            var modParser = new Mock<IModParser>();
+            var parserManager = new Mock<IParserManager>();
+            var reader = new Mock<IReader>();
+            var modWriter = new Mock<IModWriter>();
+            var gameService = new Mock<IGameService>();
+            var mapper = new Mock<IMapper>();
+            var modPatchExporter = new Mock<IModPatchExporter>();
+            var validateParser = new Mock<IValidateParser>();
+            validateParser.Setup(p => p.GetBracketCount(It.IsAny<string>())).Returns(new BracketValidateResult() { CloseBracketCount = 1, OpenBracketCount = 1 });
+            var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter, null, validateParser);
+            var result = service.GetBracketCount("test");
+            result.Should().NotBeNull();
+            result.OpenBracketCount.Should().Be(1);
+            result.CloseBracketCount.Should().Be(1);
+        }
+
+        /// <summary>
+        /// Defines the test method Should_validate_definition_and_treat_as_invalid.
+        /// </summary>
+        [Fact]
+        public void Should_validate_definition_and_treat_as_invalid()
+        {
+            var storageProvider = new Mock<IStorageProvider>();
+            var modParser = new Mock<IModParser>();
+            var parserManager = new Mock<IParserManager>();
+            var reader = new Mock<IReader>();
+            var modWriter = new Mock<IModWriter>();
+            var gameService = new Mock<IGameService>();
+            var mapper = new Mock<IMapper>();
+            var modPatchExporter = new Mock<IModPatchExporter>();
+            var validateParser = new Mock<IValidateParser>();
+            validateParser.Setup(p => p.Validate(It.IsAny<ParserArgs>())).Returns(new List<IDefinition>() { new Definition() { ErrorMessage = "test" } });
+            var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter, null, validateParser);
+            var result = service.Validate(new Definition() { ValueType = ValueType.Object });
+            result.Should().NotBeNull();
+            result.IsValid.Should().BeFalse();
+            result.ErrorMessage.Should().Be("test");
+        }
+
+
+        /// <summary>
+        /// Defines the test method Should_validate_definition_and_treat_as_valid.
+        /// </summary>
+        [Fact]
+        public void Should_validate_definition_and_treat_as_valid()
+        {
+            var storageProvider = new Mock<IStorageProvider>();
+            var modParser = new Mock<IModParser>();
+            var parserManager = new Mock<IParserManager>();
+            var reader = new Mock<IReader>();
+            var modWriter = new Mock<IModWriter>();
+            var gameService = new Mock<IGameService>();
+            var mapper = new Mock<IMapper>();
+            var modPatchExporter = new Mock<IModPatchExporter>();
+            var validateParser = new Mock<IValidateParser>();
+            validateParser.Setup(p => p.Validate(It.IsAny<ParserArgs>())).Returns((IEnumerable<IDefinition>)null);
+            var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter, null, validateParser);
+            var result = service.Validate(new Definition() { ValueType = ValueType.Object });
+            result.Should().NotBeNull();
+            result.IsValid.Should().BeTrue();            
+        }
+
+        /// <summary>
+        /// Defines the test method Should_not_validate_binary_definition_and_treat_as_valid.
+        /// </summary>
+        [Fact]
+        public void Should_not_validate_binary_definition_and_treat_as_valid()
+        {
+            var storageProvider = new Mock<IStorageProvider>();
+            var modParser = new Mock<IModParser>();
+            var parserManager = new Mock<IParserManager>();
+            var reader = new Mock<IReader>();
+            var modWriter = new Mock<IModWriter>();
+            var gameService = new Mock<IGameService>();
+            var mapper = new Mock<IMapper>();
+            var modPatchExporter = new Mock<IModPatchExporter>();
+            var validateParser = new Mock<IValidateParser>();
+            validateParser.Setup(p => p.Validate(It.IsAny<ParserArgs>())).Returns(new List<IDefinition>() { new Definition() { ErrorMessage = "test" } });
+            var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter, null, validateParser);
+            var result = service.Validate(new Definition() { ValueType = ValueType.Binary });
+            result.Should().NotBeNull();
+            result.IsValid.Should().BeTrue();
         }
 
         /// <summary>

@@ -360,7 +360,8 @@
         },
         "ResolutionSaveError": {
             "Title": "Provjera valjanosti virtualne definicije nije uspjela",
-            "Message": "Virtualna definicija nije se mogla koristiti za rješavanje sukoba. Virtualna definicija nije uspjela provjeriti validaciju.{NewLine}{NewLine}{ErrorMessage}"
+            "MessageLine": "Virtualna definicija nije se mogla koristiti za rješavanje sukoba. Virtualna definicija nije uspjela provjeriti validaciju.{NewLine}{NewLine}{ErrorMessage}{NewLine}Pogreška u retku: {Line} stupac: {Column}",
+            "MessageNoLine": "Virtualna definicija nije se mogla koristiti za rješavanje sukoba. Virtualna definicija nije uspjela provjeriti validaciju.{NewLine}{NewLine}{ErrorMessage}"
         },
         "BracketMismatchError": {
             "Message": "Nepodudaranje broja zagrada! Otvorena zagrada: {OpenBracketCount} Zatvori zagrada: {CloseBracketCount}"
