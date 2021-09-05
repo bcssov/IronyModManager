@@ -272,7 +272,18 @@ namespace IronyModManager.Services
             {
                 var path = Path.GetDirectoryName(game.ExecutableLocation);
                 var settingsObject = GetGameLauncherSettings(game, path);
-                return settingsObject?.RawVersion;
+                // Some games use version field (inconsistency again)
+                if (settingsObject != null)
+                {
+                    if (!string.IsNullOrWhiteSpace(settingsObject.RawVersion) && Version.TryParse(settingsObject.RawVersion, out _))
+                    {
+                        return settingsObject.RawVersion;
+                    }
+                    if (!string.IsNullOrWhiteSpace(settingsObject.Version) && Version.TryParse(settingsObject.Version, out _))
+                    {
+                        return settingsObject.Version;
+                    }
+                }
             }
             return string.Empty;
         }
@@ -290,7 +301,16 @@ namespace IronyModManager.Services
                 var settingsObject = GetGameLauncherSettings(game, path);
                 if (settingsObject != null)
                 {
-                    return new List<string>() { settingsObject.RawVersion, settingsObject.Version };
+                    var result = new List<string>();
+                    if (!string.IsNullOrWhiteSpace(settingsObject.RawVersion))
+                    {
+                        result.Add(settingsObject.RawVersion);
+                    }
+                    if (!string.IsNullOrWhiteSpace(settingsObject.Version))
+                    {
+                        result.Add(settingsObject.Version);
+                    }
+                    return result;
                 }
             }
             return new List<string>();
