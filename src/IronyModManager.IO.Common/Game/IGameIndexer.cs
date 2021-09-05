@@ -4,7 +4,7 @@
 // Created          : 05-27-2021
 //
 // Last Modified By : Mario
-// Last Modified On : 06-01-2021
+// Last Modified On : 09-05-2021
 // ***********************************************************************
 // <copyright file="IGameIndexer.cs" company="Mario">
 //     Mario
@@ -58,9 +58,9 @@ namespace IronyModManager.IO.Common.Game
         /// </summary>
         /// <param name="storagePath">The storage path.</param>
         /// <param name="game">The game.</param>
-        /// <param name="version">The version.</param>
+        /// <param name="versions">The versions.</param>
         /// <returns>Task&lt;System.Boolean&gt;.</returns>
-        Task<bool> GameVersionSameAsync(string storagePath, IGame game, string version);
+        Task<bool> GameVersionsSameAsync(string storagePath, IGame game, IEnumerable<string> versions);
 
         /// <summary>
         /// Gets the definitions asynchronous.
@@ -85,10 +85,10 @@ namespace IronyModManager.IO.Common.Game
         /// </summary>
         /// <param name="storagePath">The storage path.</param>
         /// <param name="game">The game.</param>
-        /// <param name="gameVersion">The game version.</param>
+        /// <param name="gameVersions">The game versions.</param>
         /// <param name="cacheVersion">The cache version.</param>
         /// <returns>Task&lt;System.Boolean&gt;.</returns>
-        Task<bool> WriteVersionAsync(string storagePath, IGame game, string gameVersion, int cacheVersion);
+        Task<bool> WriteVersionAsync(string storagePath, IGame game, IEnumerable<string> gameVersions, int cacheVersion);
 
         #endregion Methods
     }

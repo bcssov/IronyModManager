@@ -4,7 +4,7 @@
 // Created          : 02-29-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-03-2021
+// Last Modified On : 09-05-2021
 // ***********************************************************************
 // <copyright file="ModHolderControlViewModel.cs" company="Mario">
 //     Mario
@@ -438,11 +438,11 @@ namespace IronyModManager.ViewModels.Controls
         /// </summary>
         /// <param name="id">The identifier.</param>
         /// <param name="mode">The mode.</param>
-        /// <param name="version">The version.</param>
+        /// <param name="versions">The versions.</param>
         /// <returns>Task.</returns>
-        protected virtual async Task AnalyzeModsAsync(long id, PatchStateMode mode, string version)
+        protected virtual async Task AnalyzeModsAsync(long id, PatchStateMode mode, IEnumerable<string> versions)
         {
-            var totalSteps = !string.IsNullOrWhiteSpace(version) ? 6 : 4;
+            var totalSteps = versions != null && versions.Any()  ? 6 : 4;
 
             SubscribeToProgressReport(id, Disposables, totalSteps);
 
@@ -465,17 +465,17 @@ namespace IronyModManager.ViewModels.Controls
                 GC.Collect();
                 return result;
             }).ConfigureAwait(false);
-            if (!string.IsNullOrWhiteSpace(version))
+            if (versions != null && versions.Any())
             {
                 await Task.Run(async () =>
                 {
-                    await gameIndexService.IndexDefinitionsAsync(game, version, definitions);
+                    await gameIndexService.IndexDefinitionsAsync(game, versions, definitions);
                     // To stop people from whining
                     GC.Collect();
                 });
                 definitions = await Task.Run(async () =>
                 {
-                    var result = await gameIndexService.LoadDefinitionsAsync(definitions, game, version);
+                    var result = await gameIndexService.LoadDefinitionsAsync(definitions, game, versions);
                     // To stop people from whining
                     GC.Collect();
                     return result;
@@ -704,7 +704,7 @@ namespace IronyModManager.ViewModels.Controls
                     await shutDownState.WaitUntilFreeAsync();
                     modPatchCollectionService.ResetPatchStateCache();
                     var mode = await modPatchCollectionService.GetPatchStateModeAsync(CollectionMods.SelectedModCollection.Name);
-                    var version = gameService.GetVersion(game);
+                    var versions = gameService.GetVersions(game);
                     if (mode == PatchStateMode.None)
                     {
                         await TriggerOverlayAsync(id, false);
@@ -714,7 +714,7 @@ namespace IronyModManager.ViewModels.Controls
                     else
                     {
                         var hasGameDefinitions = await modPatchCollectionService.PatchHasGameDefinitionsAsync(CollectionMods.SelectedModCollection.Name);
-                        var shouldAnalyzePatchState = !string.IsNullOrEmpty(version);
+                        var shouldAnalyzePatchState = versions != null && versions.Any();
                         var proceed = true;
                         if (hasGameDefinitions && !shouldAnalyzePatchState)
                         {
@@ -724,7 +724,7 @@ namespace IronyModManager.ViewModels.Controls
                         }
                         if (proceed)
                         {
-                            await AnalyzeModsAsync(id, mode, version);
+                            await AnalyzeModsAsync(id, mode, versions);
                         }
                         else
                         {
@@ -835,15 +835,15 @@ namespace IronyModManager.ViewModels.Controls
             AdvancedModeCommand = ReactiveCommand.CreateFromTask(async () =>
             {
                 var game = gameService.GetSelected();
-                var version = gameService.GetVersion(game);
-                await AnalyzeModsAsync(idGenerator.GetNextId(), PatchStateMode.Advanced, version);
+                var versions = gameService.GetVersions(game);
+                await AnalyzeModsAsync(idGenerator.GetNextId(), PatchStateMode.Advanced, versions);
             }).DisposeWith(disposables);
 
             DefaultModeCommand = ReactiveCommand.CreateFromTask(async () =>
             {
                 var game = gameService.GetSelected();
-                var version = gameService.GetVersion(game);
-                await AnalyzeModsAsync(idGenerator.GetNextId(), PatchStateMode.Default, version);
+                var versions = gameService.GetVersions(game);
+                await AnalyzeModsAsync(idGenerator.GetNextId(), PatchStateMode.Default, versions);
             }).DisposeWith(disposables);
 
             CloseModeCommand = ReactiveCommand.Create(() =>

@@ -4,7 +4,7 @@
 // Created          : 05-27-2021
 //
 // Last Modified By : Mario
-// Last Modified On : 06-01-2021
+// Last Modified On : 09-05-2021
 // ***********************************************************************
 // <copyright file="GameIndexer.cs" company="Mario">
 //     Mario
@@ -121,16 +121,19 @@ namespace IronyModManager.IO.Game
         /// </summary>
         /// <param name="storagePath">The storage path.</param>
         /// <param name="game">The game.</param>
-        /// <param name="version">The version.</param>
+        /// <param name="versions">The versions.</param>
         /// <returns>Task&lt;System.Boolean&gt;.</returns>
-        public virtual async Task<bool> GameVersionSameAsync(string storagePath, IGame game, string version)
+        public virtual async Task<bool> GameVersionsSameAsync(string storagePath, IGame game, IEnumerable<string> versions)
         {
             storagePath = ResolveStoragePath(storagePath);
             var fullPath = Path.Combine(storagePath, game.Type, GameVersionFile);
             if (File.Exists(fullPath))
             {
-                var storedVersion = (await File.ReadAllTextAsync(fullPath) ?? string.Empty).ReplaceNewLine().Trim();
-                return storedVersion.Equals(version ?? string.Empty);
+                var storedVersions = (await File.ReadAllTextAsync(fullPath) ?? string.Empty).SplitOnNewLine().ToList();
+                if (storedVersions.Count == versions.Count())
+                {
+                    return storedVersions.SequenceEqual(versions);
+                }
             }
             return false;
         }
@@ -214,8 +217,8 @@ namespace IronyModManager.IO.Game
         /// <param name="game">The game.</param>
         /// <param name="gameVersion">The game version.</param>
         /// <param name="cacheVersion">The cache version.</param>
-        /// <returns>Task&lt;System.Boolean&gt;.</returns>
-        public virtual async Task<bool> WriteVersionAsync(string storagePath, IGame game, string gameVersion, int cacheVersion)
+        /// <returns>System.Threading.Tasks.Task&lt;bool&gt;.</returns>
+        public virtual async Task<bool> WriteVersionAsync(string storagePath, IGame game, IEnumerable<string> gameVersion, int cacheVersion)
         {
             storagePath = ResolveStoragePath(storagePath);
             var gameVersionFullPath = Path.Combine(storagePath, game.Type, GameVersionFile);
@@ -232,7 +235,7 @@ namespace IronyModManager.IO.Game
             {
                 DiskOperations.DeleteFile(cacheVersionFullPath);
             }
-            await File.WriteAllTextAsync(gameVersionFullPath, gameVersion);
+            await File.WriteAllTextAsync(gameVersionFullPath, string.Join(Environment.NewLine, gameVersion));
             await File.WriteAllTextAsync(cacheVersionFullPath, cacheVersion.ToString());
             return false;
         }

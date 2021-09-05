@@ -4,7 +4,7 @@
 // Created          : 05-27-2021
 //
 // Last Modified By : Mario
-// Last Modified On : 06-01-2021
+// Last Modified On : 09-05-2021
 // ***********************************************************************
 // <copyright file="IGameIndexService.cs" company="Mario">
 //     Mario
@@ -36,7 +36,7 @@ namespace IronyModManager.Services.Common
         /// <param name="version">The version.</param>
         /// <param name="indexedDefinitions">The indexed definitions.</param>
         /// <returns>Task&lt;System.Boolean&gt;.</returns>
-        Task<bool> IndexDefinitionsAsync(IGame game, string version, IIndexedDefinitions indexedDefinitions);
+        Task<bool> IndexDefinitionsAsync(IGame game, IEnumerable<string> version, IIndexedDefinitions indexedDefinitions);
 
         /// <summary>
         /// Loads the definitions asynchronous.
@@ -45,7 +45,7 @@ namespace IronyModManager.Services.Common
         /// <param name="game">The game.</param>
         /// <param name="version">The version.</param>
         /// <returns>Task&lt;IIndexedDefinitions&gt;.</returns>
-        Task<IIndexedDefinitions> LoadDefinitionsAsync(IIndexedDefinitions modDefinitions, IGame game, string version);
+        Task<IIndexedDefinitions> LoadDefinitionsAsync(IIndexedDefinitions modDefinitions, IGame game, IEnumerable<string> version);
 
         #endregion Methods
     }

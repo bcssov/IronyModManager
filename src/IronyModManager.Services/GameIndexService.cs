@@ -4,7 +4,7 @@
 // Created          : 05-27-2021
 //
 // Last Modified By : Mario
-// Last Modified On : 06-09-2021
+// Last Modified On : 09-05-2021
 // ***********************************************************************
 // <copyright file="GameIndexService.cs" company="Mario">
 //     Mario
@@ -107,18 +107,18 @@ namespace IronyModManager.Services
         /// index definitions as an asynchronous operation.
         /// </summary>
         /// <param name="game">The game.</param>
-        /// <param name="version">The version.</param>
+        /// <param name="versions">The versions.</param>
         /// <param name="indexedDefinitions">The indexed definitions.</param>
-        /// <returns>Task&lt;System.Boolean&gt;.</returns>
-        public virtual async Task<bool> IndexDefinitionsAsync(IGame game, string version, IIndexedDefinitions indexedDefinitions)
+        /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
+        public virtual async Task<bool> IndexDefinitionsAsync(IGame game, IEnumerable<string> versions, IIndexedDefinitions indexedDefinitions)
         {
-            if (game != null && !string.IsNullOrEmpty(version))
+            if (game != null && versions != null && versions.Any())
             {
                 await messageBus.PublishAsync(new GameIndexProgressEvent(0));
-                if (!await gameIndexer.GameVersionSameAsync(GetStoragePath(), game, version) || !await gameIndexer.CachedDefinitionsSameAsync(GetStoragePath(), game, CurrentCacheVersion))
+                if (!await gameIndexer.GameVersionsSameAsync(GetStoragePath(), game, versions) || !await gameIndexer.CachedDefinitionsSameAsync(GetStoragePath(), game, CurrentCacheVersion))
                 {
                     await gameIndexer.ClearDefinitionAsync(GetStoragePath(), game);
-                    await gameIndexer.WriteVersionAsync(GetStoragePath(), game, version, CurrentCacheVersion);
+                    await gameIndexer.WriteVersionAsync(GetStoragePath(), game, versions, CurrentCacheVersion);
                 }
                 var gamePath = Path.GetDirectoryName(game.ExecutableLocation);
                 var files = Reader.GetFiles(gamePath);
@@ -174,11 +174,11 @@ namespace IronyModManager.Services
         /// </summary>
         /// <param name="modDefinitions">The mod definitions.</param>
         /// <param name="game">The game.</param>
-        /// <param name="version">The version.</param>
-        /// <returns>Task&lt;IIndexedDefinitions&gt;.</returns>
-        public virtual async Task<IIndexedDefinitions> LoadDefinitionsAsync(IIndexedDefinitions modDefinitions, IGame game, string version)
+        /// <param name="versions">The versions.</param>
+        /// <returns>IIndexedDefinitions.</returns>
+        public virtual async Task<IIndexedDefinitions> LoadDefinitionsAsync(IIndexedDefinitions modDefinitions, IGame game, IEnumerable<string> versions)
         {
-            if (game != null && !string.IsNullOrEmpty(version) && await gameIndexer.GameVersionSameAsync(GetStoragePath(), game, version))
+            if (game != null && versions != null && versions.Any() && await gameIndexer.GameVersionsSameAsync(GetStoragePath(), game, versions))
             {
                 var gameDefinitions = new ConcurrentBag<IDefinition>();
                 var directories = modDefinitions.GetAllDirectoryKeys();
