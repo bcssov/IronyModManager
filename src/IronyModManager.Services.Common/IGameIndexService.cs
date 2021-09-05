@@ -33,19 +33,19 @@ namespace IronyModManager.Services.Common
         /// Indexes the definitions asynchronous.
         /// </summary>
         /// <param name="game">The game.</param>
-        /// <param name="version">The version.</param>
+        /// <param name="versions">The versions.</param>
         /// <param name="indexedDefinitions">The indexed definitions.</param>
         /// <returns>Task&lt;System.Boolean&gt;.</returns>
-        Task<bool> IndexDefinitionsAsync(IGame game, IEnumerable<string> version, IIndexedDefinitions indexedDefinitions);
+        Task<bool> IndexDefinitionsAsync(IGame game, IEnumerable<string> versions, IIndexedDefinitions indexedDefinitions);
 
         /// <summary>
         /// Loads the definitions asynchronous.
         /// </summary>
         /// <param name="modDefinitions">The mod definitions.</param>
         /// <param name="game">The game.</param>
-        /// <param name="version">The version.</param>
+        /// <param name="versions">The versions.</param>
         /// <returns>Task&lt;IIndexedDefinitions&gt;.</returns>
-        Task<IIndexedDefinitions> LoadDefinitionsAsync(IIndexedDefinitions modDefinitions, IGame game, IEnumerable<string> version);
+        Task<IIndexedDefinitions> LoadDefinitionsAsync(IIndexedDefinitions modDefinitions, IGame game, IEnumerable<string> versions);
 
         #endregion Methods
     }
