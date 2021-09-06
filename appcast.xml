@@ -4,8 +4,14 @@
 		<title>Irony Mod Manager</title>
 		<language>en</language>
 		<item>
-			<title>1.18.71</title>
-			<description>CHANGES FROM v1.17:
+			<title>1.18.75</title>
+			<description>RELEASE NOTES:
+* Game indexer takes into account multiple unique game info segments to ensure that it can refresh properly indexed game database
+* Delay the permission check once the app starts
+* Fix broken conflict resolution for binary files
+* Fix CTD when switching games (under certain conditions)
+
+CHANGES FROM v1.17:
 * Update dependencies
 * Update Chinese translation (by Clazex)
 * Reselect lines after performing merge operations in Conflict Solver (by scrangos)
@@ -16,12 +22,18 @@
 * Conflict Solver bracket count (by scrangos)
 * Add mod source indicator
 * Various fixes</description>
-			<pubDate>Sat, 04 Sep 2021 05:20:44 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.18.71/osx-x64.rar" sparkle:version="1.18.71.35664" sparkle:shortVersionString="1.18.71" length="69702274" sparkle:os="osx" type="application/vnd.rar" sparkle:signature="g0OlAg64eaCyHtEBZoo3Bkut6sXYb2/X30zb01tgCducqDzV3nOj3cVXr3XDttEBZ85sL8qmkxTr9txTrliiDg=="/>
+			<pubDate>Mon, 06 Sep 2021 02:13:43 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.18.75/osx-x64.rar" sparkle:version="1.18.75.65077" sparkle:shortVersionString="1.18.75" length="69701842" sparkle:os="osx" type="application/vnd.rar" sparkle:signature="0VtC9M9P7/bICJRseYRp38t4gvDYJK5BO1a3jBqmCG0fAN4RTRx/BdF4W3g4/cqfD01fXMhC60VR6Q33GUN6Aw=="/>
 		</item>
 		<item>
-			<title>1.18.71</title>
-			<description>CHANGES FROM v1.17:
+			<title>1.18.75</title>
+			<description>RELEASE NOTES:
+* Game indexer takes into account multiple unique game info segments to ensure that it can refresh properly indexed game database
+* Delay the permission check once the app starts
+* Fix broken conflict resolution for binary files
+* Fix CTD when switching games (under certain conditions)
+
+CHANGES FROM v1.17:
 * Update dependencies
 * Update Chinese translation (by Clazex)
 * Reselect lines after performing merge operations in Conflict Solver (by scrangos)
@@ -32,12 +44,18 @@
 * Conflict Solver bracket count (by scrangos)
 * Add mod source indicator
 * Various fixes</description>
-			<pubDate>Sat, 04 Sep 2021 05:20:52 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.18.71/win-x64-setup.rar" sparkle:version="1.18.71.35664" sparkle:shortVersionString="1.18.71" length="61110923" sparkle:os="windows" type="application/vnd.rar" sparkle:signature="uIIC1n9pNCyEWRXR54r4yF2CETYD8/gbHAIdEhlzyWugGabZQLbUW5qWf+jAvXX2TPMtHWJoxZd6uNqkUmeJAQ=="/>
+			<pubDate>Mon, 06 Sep 2021 02:13:51 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.18.75/win-x64-setup.rar" sparkle:version="1.18.75.65077" sparkle:shortVersionString="1.18.75" length="61105811" sparkle:os="windows" type="application/vnd.rar" sparkle:signature="gi7403kNpmprDnKO6lTYIDf3hnKvk7BI2D7rI5p5sZYFOjXWBR6IsH6Lyvyr61joMH6ZAVKCrJ9dbnt/fCDBAQ=="/>
 		</item>
 		<item>
-			<title>1.18.71</title>
-			<description>CHANGES FROM v1.17:
+			<title>1.18.75</title>
+			<description>RELEASE NOTES:
+* Game indexer takes into account multiple unique game info segments to ensure that it can refresh properly indexed game database
+* Delay the permission check once the app starts
+* Fix broken conflict resolution for binary files
+* Fix CTD when switching games (under certain conditions)
+
+CHANGES FROM v1.17:
 * Update dependencies
 * Update Chinese translation (by Clazex)
 * Reselect lines after performing merge operations in Conflict Solver (by scrangos)
@@ -48,12 +66,18 @@
 * Conflict Solver bracket count (by scrangos)
 * Add mod source indicator
 * Various fixes</description>
-			<pubDate>Sat, 04 Sep 2021 05:20:48 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.18.71/win-x64.rar" sparkle:version="1.18.71.35664" sparkle:shortVersionString="1.18.71" length="73575283" sparkle:os="windows" type="application/vnd.rar" sparkle:signature="VF839KgozG1viGinZvMx0aC1q3smABojCK/lnuCeCr9NYdWh3DQFrthRb+7bCI8aIaN+kVJDPa7fPd14eoqaAg=="/>
+			<pubDate>Mon, 06 Sep 2021 02:13:47 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.18.75/win-x64.rar" sparkle:version="1.18.75.65077" sparkle:shortVersionString="1.18.75" length="73574492" sparkle:os="windows" type="application/vnd.rar" sparkle:signature="UxCmTKYwYhuHG3B4nBKq0o9Re4f+HcH/7yAaTAaKi3K5M6kJ9kIj2q7cQv4IQ+6fYdq2sxxdvrqY2zW5eTIqAg=="/>
 		</item>
 		<item>
-			<title>1.18.71</title>
-			<description>CHANGES FROM v1.17:
+			<title>1.18.75</title>
+			<description>RELEASE NOTES:
+* Game indexer takes into account multiple unique game info segments to ensure that it can refresh properly indexed game database
+* Delay the permission check once the app starts
+* Fix broken conflict resolution for binary files
+* Fix CTD when switching games (under certain conditions)
+
+CHANGES FROM v1.17:
 * Update dependencies
 * Update Chinese translation (by Clazex)
 * Reselect lines after performing merge operations in Conflict Solver (by scrangos)
@@ -64,8 +88,8 @@
 * Conflict Solver bracket count (by scrangos)
 * Add mod source indicator
 * Various fixes</description>
-			<pubDate>Sat, 04 Sep 2021 05:20:40 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.18.71/linux-x64.zip" sparkle:version="1.18.71.35664" sparkle:shortVersionString="1.18.71" length="86169981" sparkle:os="linux" type="application/zip" sparkle:signature="XTdecWmUvm+Xj8xZCgZooZJepmA7ai8XRF4ZxluJz4v5xPzhv9SK1gK+fq2RuDRrSGxsSZ1Y5c+rGfiH8F/qDQ=="/>
+			<pubDate>Mon, 06 Sep 2021 02:13:39 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.18.75/linux-x64.zip" sparkle:version="1.18.75.65077" sparkle:shortVersionString="1.18.75" length="86171766" sparkle:os="linux" type="application/zip" sparkle:signature="NwxiM+h0Hvc5kIyksOy3DR4LvrTl9b9ZsWNEKkJSBpucPBL3oIczGctQzqPqmWcMALJsGOk6Xr3nE3JgdzdVBQ=="/>
 		</item>
 	</channel>
 </rss>
