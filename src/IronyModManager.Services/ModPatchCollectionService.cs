@@ -4,7 +4,7 @@
 // Created          : 05-26-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 09-05-2021
+// Last Modified On : 09-06-2021
 // ***********************************************************************
 // <copyright file="ModPatchCollectionService.cs" company="Mario">
 //     Mario
@@ -1013,10 +1013,10 @@ namespace IronyModManager.Services
                         }
                     }
 
+                    EvalModIgnoreDefinitions(conflictResult);
+
                     if (exportedConflicts)
                     {
-                        EvalModIgnoreDefinitions(conflictResult);
-
                         await modPatchExporter.SaveStateAsync(new ModPatchExporterParameters()
                         {
                             LoadOrder = GetCollectionMods(collectionName: collectionName).Select(p => p.DescriptorFile),

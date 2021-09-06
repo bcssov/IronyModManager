@@ -4858,7 +4858,7 @@ namespace IronyModManager.Services.Tests
             var registration = new Services.Registrations.GameRegistration();
             registration.OnPostStartup();
             var game = DISetup.Container.GetInstance<IGameService>().Get().First(s => s.Type == "Stellaris");
-            var mods = DISetup.Container.GetInstance<IModService>().GetInstalledMods(game);
+            var mods = await DISetup.Container.GetInstance<IModService>().GetInstalledModsAsync(game);
             var defs = await DISetup.Container.GetInstance<IModPatchCollectionService>().GetModObjectsAsync(game, mods, string.Empty);
         }
     }

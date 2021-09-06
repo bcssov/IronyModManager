@@ -4,7 +4,7 @@
 // Created          : 02-29-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 09-05-2021
+// Last Modified On : 09-06-2021
 // ***********************************************************************
 // <copyright file="InstalledModsControlViewModel.cs" company="Mario">
 //     Mario
@@ -29,7 +29,6 @@ using IronyModManager.Localization.Attributes;
 using IronyModManager.Models.Common;
 using IronyModManager.Services.Common;
 using IronyModManager.Shared;
-using Nito.AsyncEx;
 using ReactiveUI;
 using SmartFormat;
 
@@ -59,11 +58,6 @@ namespace IronyModManager.ViewModels.Controls
         /// The mod version key
         /// </summary>
         private const string ModVersionKey = "modVersion";
-
-        /// <summary>
-        /// The bind lock
-        /// </summary>
-        private static readonly AsyncLock bindLock = new();
 
         /// <summary>
         /// The URL action
@@ -278,6 +272,12 @@ namespace IronyModManager.ViewModels.Controls
         /// <value>The filter mods watermark.</value>
         [StaticLocalization(LocalizationResources.Installed_Mods.Filter)]
         public virtual string FilterModsWatermark { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether [game changed refresh].
+        /// </summary>
+        /// <value><c>true</c> if [game changed refresh]; otherwise, <c>false</c>.</value>
+        public virtual bool GameChangedRefresh { get; protected set; }
 
         /// <summary>
         /// Gets or sets the local mod tooltip.
@@ -597,6 +597,8 @@ namespace IronyModManager.ViewModels.Controls
         /// <returns>Task.</returns>
         protected virtual async Task BindAsync(IGame game = null, bool skipOverlay = false)
         {
+            var raiseGameChanged = game != null;
+            GameChangedRefresh = false;
             var id = idGenerator.GetNextId();
             if (!skipOverlay)
             {
@@ -610,13 +612,11 @@ namespace IronyModManager.ViewModels.Controls
             ActiveGame = game;
             if (game != null)
             {
-                var mods = await Task.Run(async () =>
+                if (raiseGameChanged)
                 {
-                    var mutex = await bindLock.LockAsync();
-                    var result = modService.GetInstalledMods(game);
-                    mutex.Dispose();
-                    return result;
-                });
+                    GameChangedRefresh = true;
+                }
+                var mods = await Task.Run(async () => await modService.GetInstalledModsAsync(game));
                 await Task.Run(async () =>
                 {
                     await PopulateModFilesAsyncAsync(mods).ConfigureAwait(false);
@@ -656,6 +656,10 @@ namespace IronyModManager.ViewModels.Controls
             }
             else
             {
+                if (raiseGameChanged)
+                {
+                    GameChangedRefresh = true;
+                }
                 Mods = FilteredMods = new System.Collections.ObjectModel.ObservableCollection<IMod>();
                 AllMods = Mods.ToHashSet();
             }
