@@ -4,7 +4,7 @@
 // Created          : 02-24-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 08-30-2021
+// Last Modified On : 09-06-2021
 // ***********************************************************************
 // <copyright file="ModService.cs" company="Mario">
 //     Mario
@@ -26,6 +26,7 @@ using IronyModManager.Services.Common;
 using IronyModManager.Shared;
 using IronyModManager.Shared.Cache;
 using IronyModManager.Storage.Common;
+using Nito.AsyncEx;
 
 namespace IronyModManager.Services
 {
@@ -39,6 +40,11 @@ namespace IronyModManager.Services
     public class ModService : ModBaseService, IModService
     {
         #region Fields
+
+        /// <summary>
+        /// The mod read lock
+        /// </summary>
+        private static readonly AsyncLock modReadLock = new();
 
         /// <summary>
         /// The logger
@@ -264,17 +270,20 @@ namespace IronyModManager.Services
         }
 
         /// <summary>
-        /// Gets the installed mods.
+        /// Gets the installed mods asynchronous.
         /// </summary>
         /// <param name="game">The game.</param>
-        /// <returns>IEnumerable&lt;IMod&gt;.</returns>
-        public virtual IEnumerable<IMod> GetInstalledMods(IGame game)
+        /// <returns>Task&lt;IEnumerable&lt;IMod&gt;&gt;.</returns>
+        public virtual async Task<IEnumerable<IMod>> GetInstalledModsAsync(IGame game)
         {
+            using var mutex = await modReadLock.LockAsync();
             if (game != null)
             {
                 Cache.Invalidate(new CacheInvalidateParameters() { Region = ModsCacheRegion, Prefix = game.Type, Keys = new List<string> { GetModsCacheKey(true), GetModsCacheKey(false) } });
             }
-            return GetInstalledModsInternal(game, true);
+            var result = GetInstalledModsInternal(game, true);
+            mutex.Dispose();
+            return result;
         }
 
         /// <summary>
@@ -284,9 +293,11 @@ namespace IronyModManager.Services
         /// <returns>Task&lt;System.Boolean&gt;.</returns>
         public virtual async Task<IReadOnlyCollection<IModInstallationResult>> InstallModsAsync(IEnumerable<IMod> statusToRetain)
         {
+            using var mutex = await modReadLock.LockAsync();
             var game = GameService.GetSelected();
             if (game == null)
             {
+                mutex.Dispose();
                 return null;
             }
             var mods = GetInstalledModsInternal(game, false);
@@ -374,12 +385,15 @@ namespace IronyModManager.Services
                 {
                     result.AddRange(filteredDescriptors.Where(p => p.Invalid));
                 }
+                mutex.Dispose();
                 return result;
             }
             if (filteredDescriptors.Any(p => p.Invalid))
             {
+                mutex.Dispose();
                 return filteredDescriptors.Where(p => p.Invalid).ToList();
             }
+            mutex.Dispose();
             return null;
         }
 

@@ -4,7 +4,7 @@
 // Created          : 02-29-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 09-05-2021
+// Last Modified On : 09-06-2021
 // ***********************************************************************
 // <copyright file="ModHolderControlViewModel.cs" company="Mario">
 //     Mario
@@ -442,7 +442,7 @@ namespace IronyModManager.ViewModels.Controls
         /// <returns>Task.</returns>
         protected virtual async Task AnalyzeModsAsync(long id, PatchStateMode mode, IEnumerable<string> versions)
         {
-            var totalSteps = versions != null && versions.Any()  ? 6 : 4;
+            var totalSteps = versions != null && versions.Any() ? 6 : 4;
 
             SubscribeToProgressReport(id, Disposables, totalSteps);
 
@@ -486,7 +486,7 @@ namespace IronyModManager.ViewModels.Controls
                 if (definitions != null)
                 {
                     // To stop people from whining
-                    var result =  modPatchCollectionService.FindConflicts(definitions, CollectionMods.SelectedMods.Select(p => p.Name).ToList(), mode);
+                    var result = modPatchCollectionService.FindConflicts(definitions, CollectionMods.SelectedMods.Select(p => p.Name).ToList(), mode);
                     GC.Collect();
                     return result;
                 }
@@ -673,6 +673,11 @@ namespace IronyModManager.ViewModels.Controls
             this.WhenAnyValue(v => v.CollectionMods.NeedsModListRefresh).Where(x => x).Subscribe(async s =>
             {
                 await InstalledMods.RefreshModsAsync();
+            }).DisposeWith(disposables);
+
+            this.WhenAnyValue(v => v.InstalledMods.GameChangedRefresh).Where(x => x).Subscribe(s =>
+            {
+                CollectionMods.ReloadModCollection();
             }).DisposeWith(disposables);
 
             this.WhenAnyValue(p => p.InstalledMods.PerformingEnableAll).Subscribe(s =>

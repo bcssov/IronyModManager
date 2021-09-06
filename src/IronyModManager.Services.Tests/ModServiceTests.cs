@@ -102,7 +102,7 @@ namespace IronyModManager.Services.Tests
         /// Defines the test method Should_return_installed_mods.
         /// </summary>
         [Fact]
-        public void Should_return_installed_mods()
+        public async Task Should_return_installed_mods()
         {
             var storageProvider = new Mock<IStorageProvider>();
             var modParser = new Mock<IModParser>();
@@ -125,7 +125,7 @@ namespace IronyModManager.Services.Tests
             });
 
             var service = GetService(storageProvider, modParser, reader, mapper, modWriter, gameService);
-            var result = service.GetInstalledMods(new Game() { UserDirectory = "fake1", WorkshopDirectory = new List<string>() { "fake2" }, Type = "Should_return_installed_mods", CustomModDirectory = string.Empty });
+            var result = await service.GetInstalledModsAsync(new Game() { UserDirectory = "fake1", WorkshopDirectory = new List<string>() { "fake2" }, Type = "Should_return_installed_mods", CustomModDirectory = string.Empty });
             result.Count().Should().Be(2);
             result.First().FileName.Should().Be("1");
             result.Last().FileName.Should().Be("2");
@@ -135,7 +135,7 @@ namespace IronyModManager.Services.Tests
         /// Defines the test method Should_throw_exception_when_no_game_specified_when_fetching_installed_mods.
         /// </summary>
         [Fact]
-        public void Should_throw_exception_when_no_game_specified_when_fetching_installed_mods()
+        public async Task Should_throw_exception_when_no_game_specified_when_fetching_installed_mods()
         {
             var storageProvider = new Mock<IStorageProvider>();
             var modParser = new Mock<IModParser>();
@@ -147,7 +147,7 @@ namespace IronyModManager.Services.Tests
             var service = GetService(storageProvider, modParser, reader, mapper, modWriter, gameService);
             try
             {
-                service.GetInstalledMods(null);
+                await service.GetInstalledModsAsync(null);
             }
             catch (Exception ex)
             {

@@ -4,7 +4,7 @@
 // Created          : 02-24-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 05-31-2021
+// Last Modified On : 09-06-2021
 // ***********************************************************************
 // <copyright file="IModService.cs" company="Mario">
 //     Mario
@@ -95,7 +95,7 @@ namespace IronyModManager.Services.Common
         /// </summary>
         /// <param name="game">The game.</param>
         /// <returns>IEnumerable&lt;IMod&gt;.</returns>
-        IEnumerable<IMod> GetInstalledMods(IGame game);
+        Task<IEnumerable<IMod>> GetInstalledModsAsync(IGame game);
 
         /// <summary>
         /// Installs the mods asynchronous.

@@ -4,7 +4,7 @@
 // Created          : 02-24-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 07-11-2021
+// Last Modified On : 09-06-2021
 // ***********************************************************************
 // <copyright file="SteamDirectory.cs" company="Mario">
 //     Mario
@@ -19,6 +19,7 @@ using System.Runtime.InteropServices;
 using Gameloop.Vdf;
 using Gameloop.Vdf.JsonConverter;
 using Gameloop.Vdf.Linq;
+using IronyModManager.DI;
 using IronyModManager.Services.Models;
 using IronyModManager.Shared;
 using Microsoft.Win32;
@@ -108,9 +109,12 @@ namespace IronyModManager.Services.Registrations
             {
                 try
                 {
-                    var vdf = VdfConvert.Deserialize(File.ReadAllText(path));
-                    var model = vdf.Value.ToJson().ToObject<SteamAppManifest>();
-                    return model.InstallDir.StandardizeDirectorySeparator();
+                    var vdf = LoadVDF(path);
+                    if (vdf != null)
+                    {
+                        var model = vdf.Value.ToJson().ToObject<SteamAppManifest>();
+                        return model.InstallDir.StandardizeDirectorySeparator();
+                    }
                 }
                 catch
                 {
@@ -286,7 +290,7 @@ namespace IronyModManager.Services.Registrations
                 if (File.Exists(vdfPath))
                 {
                     var paths = new List<string>();
-                    var model = VdfConvert.Deserialize(File.ReadAllText(vdfPath));
+                    var model = LoadVDF(vdfPath);
                     if (model != null && model.Value != null)
                     {
                         var softwareKeyKey = model.Value.OfType<VProperty>().FirstOrDefault(p => p.Key == "Software");
@@ -311,7 +315,7 @@ namespace IronyModManager.Services.Registrations
                     // In newer steam versions and libraries this file is present in config folder
                     loadAppsLibraryFolder = false;
                     var paths = new List<string>();
-                    var model = VdfConvert.Deserialize(File.ReadAllText(libraryFolderPath));
+                    var model = LoadVDF(libraryFolderPath);
                     if (model != null && model.Value != null && model.Value.Children().Any())
                     {
                         paths.AddRange(model.Value.Children().OfType<VProperty>().Where(p => p.Value.Type == VTokenType.Object && (p.Value is VObject) && (p.Value as VObject).Properties().Any(k => k.Key.Equals("path"))).Select(p => ParseLibraryFolderData(p.Value as VObject)).Where(p => !string.IsNullOrWhiteSpace(p)));
@@ -321,7 +325,7 @@ namespace IronyModManager.Services.Registrations
                 if (File.Exists(steamAppsLibraryFolderPath) && loadAppsLibraryFolder)
                 {
                     var paths = new List<string>();
-                    var model = VdfConvert.Deserialize(File.ReadAllText(steamAppsLibraryFolderPath));
+                    var model = LoadVDF(steamAppsLibraryFolderPath);
                     if (model != null && model.Value != null && model.Value.Children().Any())
                     {
                         paths.AddRange(model.Value.Children().OfType<VProperty>().Where(p => p.Value.Type == VTokenType.Value && p is VProperty && int.TryParse(p.Key, out var _)).Select(p => (p.Value as VValue).Value<string>()).Where(p => !string.IsNullOrWhiteSpace(p)));
@@ -347,6 +351,29 @@ namespace IronyModManager.Services.Registrations
                 return result.Distinct().ToList();
             }
             return new List<string>();
+        }
+
+        /// <summary>
+        /// Loads the VDF.
+        /// </summary>
+        /// <param name="path">The path.</param>
+        /// <returns>VProperty.</returns>
+        private static VProperty LoadVDF(string path)
+        {
+            var content = File.ReadAllText(path);
+            if (!string.IsNullOrWhiteSpace(content))
+            {
+                try
+                {
+                    return VdfConvert.Deserialize(content);
+                }
+                catch (Exception ex)
+                {
+                    var logger = DIResolver.Get<ILogger>();
+                    logger.Error(ex);
+                }
+            }
+            return null;
         }
 
         /// <summary>

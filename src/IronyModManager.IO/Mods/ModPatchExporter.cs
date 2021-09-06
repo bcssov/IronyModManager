@@ -4,7 +4,7 @@
 // Created          : 03-31-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-09-2021
+// Last Modified On : 09-06-2021
 // ***********************************************************************
 // <copyright file="ModPatchExporter.cs" company="Mario">
 //     Mario
@@ -897,7 +897,7 @@ namespace IronyModManager.IO.Mods
         private async Task WriteStateInBackground(IPatchState model, IEnumerable<IDefinition> modifiedHistory, HashSet<string> externalCode, string path)
         {
             writeCounter++;
-            var mutex = await writeLock.LockAsync();
+            using var mutex = await writeLock.LockAsync();
             await messageBus.PublishAsync(new WritingStateOperationEvent(writeCounter <= 0));
             var statePath = Path.Combine(path, StateName);
             var backupPath = Path.Combine(path, StateBackup);

@@ -4,7 +4,7 @@
 // Created          : 03-25-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 05-31-2021
+// Last Modified On : 09-06-2021
 // ***********************************************************************
 // <copyright file="MergeViewerBinaryControlViewModel.cs" company="Mario">
 //     Mario
@@ -201,7 +201,7 @@ namespace IronyModManager.ViewModels.Controls
         {
             async Task resetLeft(bool fullReset)
             {
-                var mutex = await leftImageLock.LockAsync();
+                using var mutex = await leftImageLock.LockAsync();
                 TakeLeftClass = string.Empty;
                 if (fullReset)
                 {
@@ -216,7 +216,7 @@ namespace IronyModManager.ViewModels.Controls
             }
             async Task resetRight(bool fullReset)
             {
-                var mutex = await leftImageLock.LockAsync();
+                using var mutex = await rightImageLock.LockAsync();
                 TakeRightClass = string.Empty;
                 if (fullReset)
                 {
@@ -243,7 +243,7 @@ namespace IronyModManager.ViewModels.Controls
             var localDefinition = definition;
             async Task parseImage()
             {
-                var mutex = await leftImageLock.LockAsync();
+                using var mutex = await leftImageLock.LockAsync();
                 var left = LeftImage;
                 if (definition != null)
                 {
@@ -297,7 +297,7 @@ namespace IronyModManager.ViewModels.Controls
             var localDefinition = definition;
             async Task parseImage()
             {
-                var mutex = await rightImageLock.LockAsync();
+                using var mutex = await rightImageLock.LockAsync();
                 var right = RightImage;
                 if (definition != null)
                 {
@@ -337,7 +337,7 @@ namespace IronyModManager.ViewModels.Controls
                 }
                 await Task.Delay(10);
                 mutex.Dispose();
-            }            
+            }
             Task.Run(() => parseImage().ConfigureAwait(false)).ConfigureAwait(false);
         }
 
