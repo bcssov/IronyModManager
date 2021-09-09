@@ -4,7 +4,7 @@
 // Created          : 01-10-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-16-2021
+// Last Modified On : 09-09-2021
 // ***********************************************************************
 // <copyright file="Program.cs" company="IronyModManager">
 //     Copyright (c) Mario. All rights reserved.
@@ -15,6 +15,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using Avalonia;
 using Avalonia.Controls;
@@ -35,6 +36,15 @@ namespace IronyModManager
     [ExcludeFromCoverage("Program entry point.")]
     internal class Program
     {
+        #region Fields
+
+        /// <summary>
+        /// The external notification shown
+        /// </summary>
+        private static bool ExternalNotificationShown = false;
+
+        #endregion Fields
+
         #region Methods
 
         // Avalonia configuration, don't remove; also used by visual designer.
@@ -178,12 +188,16 @@ namespace IronyModManager
                 logger.Error(e);
 
                 var runFatalErrorProcess = StaticResources.CommandLineOptions == null || !StaticResources.CommandLineOptions.ShowFatalErrorNotification;
-                if (runFatalErrorProcess)
+                if (runFatalErrorProcess && !ExternalNotificationShown)
                 {
                     var path = Process.GetCurrentProcess().MainModule.FileName;
                     var appAction = DIResolver.Get<IAppAction>();
                     await appAction.RunAsync(path, "--fatal-error");
+                    ExternalNotificationShown = true;
                 }
+                // Force exit as it seems that sometimes the app doesn't quit on such an error
+                Thread.Sleep(10000);
+                Environment.Exit(0);
             }
         }
 
