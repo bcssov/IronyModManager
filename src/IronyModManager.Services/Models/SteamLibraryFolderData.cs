@@ -4,7 +4,7 @@
 // Created          : 06-12-2021
 //
 // Last Modified By : Mario
-// Last Modified On : 06-13-2021
+// Last Modified On : 09-10-2021
 // ***********************************************************************
 // <copyright file="SteamLibraryFolderData.cs" company="Mario">
 //     Mario
@@ -24,6 +24,19 @@ namespace IronyModManager.Services.Models
     /// </summary>
     internal class SteamLibraryFolderData
     {
+        #region Constructors
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="SteamLibraryFolderData"/> class.
+        /// </summary>
+        public SteamLibraryFolderData()
+        {
+            // Steam sucks
+            Mounted = true;
+        }
+
+        #endregion Constructors
+
         #region Properties
 
         /// <summary>
