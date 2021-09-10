@@ -4,15 +4,11 @@
 		<title>Irony Mod Manager</title>
 		<language>en</language>
 		<item>
-			<title>1.18.76</title>
+			<title>1.18.78</title>
 			<description>RELEASE NOTES:
-* Game indexer takes into account multiple unique game info segments to ensure that it can refresh properly indexed game database
-* Delay the permission check once the app starts
-* Fix broken conflict resolution for binary files
-* Fix CTD when switching games (under certain conditions)
-* Fix conflict solver showing game conflicts in certain instances
-* Make switching game selection more robust
-* Small fixes
+* Force exit the app in case of a fatal error
+* Keep up with steam format changes (yes this broke Irony's detection of steam library workshop mods)
+* Update CWTools dependency
 
 CHANGES FROM v1.17:
 * Update dependencies
@@ -25,19 +21,15 @@ CHANGES FROM v1.17:
 * Conflict Solver bracket count (by scrangos)
 * Add mod source indicator
 * Various fixes</description>
-			<pubDate>Mon, 06 Sep 2021 05:54:47 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.18.76/osx-x64.rar" sparkle:version="1.18.76.59190" sparkle:shortVersionString="1.18.76" length="69707964" sparkle:os="osx" type="application/vnd.rar" sparkle:signature="8H0YCANIhddeDFOkos+O30tROvcyJ3pLLmf0kWGNI8b3EDv1Aj5JEe7IBSHe2JEcfgR90s4QuFNykz9V/AgLDA=="/>
+			<pubDate>Fri, 10 Sep 2021 15:01:33 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.18.78/osx-x64.rar" sparkle:version="1.18.78.37437" sparkle:shortVersionString="1.18.78" length="69717214" sparkle:os="osx" type="application/vnd.rar" sparkle:signature="oWsr7nmYE59OBC/v5UYwu+0amOksaE9SR4rxGkV4WFmKinK0ZGVTLrBu3miZiUVbeMXEjXqdRxRu24nDb0TUAA=="/>
 		</item>
 		<item>
-			<title>1.18.76</title>
+			<title>1.18.78</title>
 			<description>RELEASE NOTES:
-* Game indexer takes into account multiple unique game info segments to ensure that it can refresh properly indexed game database
-* Delay the permission check once the app starts
-* Fix broken conflict resolution for binary files
-* Fix CTD when switching games (under certain conditions)
-* Fix conflict solver showing game conflicts in certain instances
-* Make switching game selection more robust
-* Small fixes
+* Force exit the app in case of a fatal error
+* Keep up with steam format changes (yes this broke Irony's detection of steam library workshop mods)
+* Update CWTools dependency
 
 CHANGES FROM v1.17:
 * Update dependencies
@@ -50,19 +42,15 @@ CHANGES FROM v1.17:
 * Conflict Solver bracket count (by scrangos)
 * Add mod source indicator
 * Various fixes</description>
-			<pubDate>Mon, 06 Sep 2021 05:54:55 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.18.76/win-x64-setup.rar" sparkle:version="1.18.76.59190" sparkle:shortVersionString="1.18.76" length="61102545" sparkle:os="windows" type="application/vnd.rar" sparkle:signature="wBN+OKNY9hUbr5xeMYkbdxZOPy4r5VHVSFeTF98x+tYE4iBUyuWs7+Mnm8+SzHc+pkHC+FXVgLB4OXc+HrSFCw=="/>
+			<pubDate>Fri, 10 Sep 2021 15:01:41 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.18.78/win-x64-setup.rar" sparkle:version="1.18.78.37437" sparkle:shortVersionString="1.18.78" length="61108323" sparkle:os="windows" type="application/vnd.rar" sparkle:signature="uG/pU7rQG3JsP6IUHwsNzjAgUef19cFfMsqVqL92PrF4meQhEn7imqJYhEicYnoIX1iMcGT4olV9C7NBiC4YBQ=="/>
 		</item>
 		<item>
-			<title>1.18.76</title>
+			<title>1.18.78</title>
 			<description>RELEASE NOTES:
-* Game indexer takes into account multiple unique game info segments to ensure that it can refresh properly indexed game database
-* Delay the permission check once the app starts
-* Fix broken conflict resolution for binary files
-* Fix CTD when switching games (under certain conditions)
-* Fix conflict solver showing game conflicts in certain instances
-* Make switching game selection more robust
-* Small fixes
+* Force exit the app in case of a fatal error
+* Keep up with steam format changes (yes this broke Irony's detection of steam library workshop mods)
+* Update CWTools dependency
 
 CHANGES FROM v1.17:
 * Update dependencies
@@ -75,19 +63,15 @@ CHANGES FROM v1.17:
 * Conflict Solver bracket count (by scrangos)
 * Add mod source indicator
 * Various fixes</description>
-			<pubDate>Mon, 06 Sep 2021 05:54:51 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.18.76/win-x64.rar" sparkle:version="1.18.76.59190" sparkle:shortVersionString="1.18.76" length="73580879" sparkle:os="windows" type="application/vnd.rar" sparkle:signature="9Am1IE5MrMoJn3ybZTVV/pPsCusnzejobDMmnJfgQuwTbuPBiIcNrSJ4SZGee8Q2AWLMpKgkRpkUqydHg5C5AA=="/>
+			<pubDate>Fri, 10 Sep 2021 15:01:37 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.18.78/win-x64.rar" sparkle:version="1.18.78.37437" sparkle:shortVersionString="1.18.78" length="73589905" sparkle:os="windows" type="application/vnd.rar" sparkle:signature="2cpZQilgjpUMwJf97500UDTw8l6THflVPYUZVq24cFBqBt3BKiMelHkAZNFBWhFw5xPIiddxpQpjE+2Betd3BA=="/>
 		</item>
 		<item>
-			<title>1.18.76</title>
+			<title>1.18.78</title>
 			<description>RELEASE NOTES:
-* Game indexer takes into account multiple unique game info segments to ensure that it can refresh properly indexed game database
-* Delay the permission check once the app starts
-* Fix broken conflict resolution for binary files
-* Fix CTD when switching games (under certain conditions)
-* Fix conflict solver showing game conflicts in certain instances
-* Make switching game selection more robust
-* Small fixes
+* Force exit the app in case of a fatal error
+* Keep up with steam format changes (yes this broke Irony's detection of steam library workshop mods)
+* Update CWTools dependency
 
 CHANGES FROM v1.17:
 * Update dependencies
@@ -100,8 +84,8 @@ CHANGES FROM v1.17:
 * Conflict Solver bracket count (by scrangos)
 * Add mod source indicator
 * Various fixes</description>
-			<pubDate>Mon, 06 Sep 2021 05:54:43 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.18.76/linux-x64.zip" sparkle:version="1.18.76.59190" sparkle:shortVersionString="1.18.76" length="86172781" sparkle:os="linux" type="application/zip" sparkle:signature="aR/eM3eX0Z9a1xUh+uivvfhpZY+KXYlJ3dPqdyMD3K9fYl9CxF2tH/uGmFQdc6bfZ3Qe22NMkL2ul9WGDAkIAg=="/>
+			<pubDate>Fri, 10 Sep 2021 15:01:30 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.18.78/linux-x64.zip" sparkle:version="1.18.78.37437" sparkle:shortVersionString="1.18.78" length="86180446" sparkle:os="linux" type="application/zip" sparkle:signature="rp7tTA1ME0iXZnfXn5FcgyPM1r7AIvn1oF99q+Zpkchl6w3WSTK0cLKDKi1oMDEN9d79lJATjV+CburQQAxWBw=="/>
 		</item>
 	</channel>
 </rss>
