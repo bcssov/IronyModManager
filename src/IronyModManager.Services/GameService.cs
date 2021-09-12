@@ -4,7 +4,7 @@
 // Created          : 02-12-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 09-05-2021
+// Last Modified On : 09-12-2021
 // ***********************************************************************
 // <copyright file="GameService.cs" company="Mario">
 //     Mario
@@ -17,6 +17,7 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
+using IronyModManager.IO.Common;
 using IronyModManager.IO.Common.Readers;
 using IronyModManager.Models.Common;
 using IronyModManager.Services.Common;
@@ -198,10 +199,11 @@ namespace IronyModManager.Services
             var settingsObject = GetGameLauncherSettings(game, path);
             if (settingsObject != null)
             {
+                path = settingsObject.BasePath;
                 var model = GetModelInstance<IGameSettings>();
                 model.LaunchArguments = string.Join(" ", settingsObject.ExeArgs);
                 model.UserDirectory = pathResolver.Parse(settingsObject.GameDataPath);
-                model.ExecutableLocation = Path.Combine(path, settingsObject.ExePath).StandardizeDirectorySeparator();
+                model.ExecutableLocation = PathOperations.ResolveRelativePath(path, settingsObject.ExePath).StandardizeDirectorySeparator();
                 model.CustomModDirectory = string.Empty;
                 return model;
             }
@@ -648,14 +650,32 @@ namespace IronyModManager.Services
             {
                 settingsFile = game.LauncherSettingsPrefix + game.LauncherSettingsFileName;
             }
-            var info = reader.Read(Path.Combine(path ?? string.Empty, settingsFile));
-            if (info?.Count() > 0)
+            var infoPath = PathOperations.ResolveRelativePath(path, settingsFile);
+            var info = reader.Read(infoPath);
+            if (info == null)
+            {
+                // Try to traverse down
+                var gamePath = Path.GetDirectoryName(path);
+                while (!string.IsNullOrWhiteSpace(gamePath))
+                {
+                    infoPath = PathOperations.ResolveRelativePath(gamePath, settingsFile);
+                    info = reader.Read(infoPath);
+                    if (info != null)
+                    {
+                        break;
+                    }
+                    gamePath = Path.GetDirectoryName(gamePath);
+                }
+                path = gamePath;
+            }
+            if (info != null && info.Any())
             {
                 var text = string.Join(Environment.NewLine, info.FirstOrDefault().Content);
                 try
                 {
                     var model = GetModelInstance<IGameSettings>();
                     var settingsObject = JsonConvert.DeserializeObject<Models.LauncherSettings>(text);
+                    settingsObject.BasePath = path;
                     return settingsObject;
                 }
                 catch

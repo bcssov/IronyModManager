@@ -4,7 +4,7 @@
 // Created          : 08-12-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 09-20-2020
+// Last Modified On : 09-12-2021
 // ***********************************************************************
 // <copyright file="LauncherSettings.cs" company="Mario">
 //     Mario
@@ -23,6 +23,12 @@ namespace IronyModManager.Services.Models
     internal class LauncherSettings
     {
         #region Properties
+
+        /// <summary>
+        /// Gets or sets the base path.
+        /// </summary>
+        /// <value>The base path.</value>
+        public string BasePath { get; set; }
 
         /// <summary>
         /// Gets or sets the browser DLC URL.

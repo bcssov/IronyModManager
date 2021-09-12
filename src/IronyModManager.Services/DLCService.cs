@@ -4,7 +4,7 @@
 // Created          : 02-14-2021
 //
 // Last Modified By : Mario
-// Last Modified On : 08-29-2021
+// Last Modified On : 09-12-2021
 // ***********************************************************************
 // <copyright file="DLCService.cs" company="Mario">
 //     Mario
@@ -144,18 +144,21 @@ namespace IronyModManager.Services
                         }
                         cleanedExePath = System.IO.Path.GetDirectoryName(cleanedExePath);
                     }
-                    foreach (var dlcFolder in DLCDirectories)
+                    if (!string.IsNullOrWhiteSpace(cleanedExePath))
                     {
-                        var directory = System.IO.Path.Combine(cleanedExePath, dlcFolder);
-                        if (System.IO.Directory.Exists(directory))
+                        foreach (var dlcFolder in DLCDirectories)
                         {
-                            var infos = reader.Read(directory);
-                            if (infos != null && infos.Any())
+                            var directory = System.IO.Path.Combine(cleanedExePath, dlcFolder);
+                            if (System.IO.Directory.Exists(directory))
                             {
-                                foreach (var item in infos)
+                                var infos = reader.Read(directory);
+                                if (infos != null && infos.Any())
                                 {
-                                    var dlcObject = dlcParser.Parse(System.IO.Path.Combine(dlcFolder, item.FileName), item.Content);
-                                    result.Add(Mapper.Map<IDLC>(dlcObject));
+                                    foreach (var item in infos)
+                                    {
+                                        var dlcObject = dlcParser.Parse(System.IO.Path.Combine(dlcFolder, item.FileName), item.Content);
+                                        result.Add(Mapper.Map<IDLC>(dlcObject));
+                                    }
                                 }
                             }
                         }

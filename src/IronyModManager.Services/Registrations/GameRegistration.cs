@@ -4,7 +4,7 @@
 // Created          : 02-12-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 08-25-2021
+// Last Modified On : 09-12-2021
 // ***********************************************************************
 // <copyright file="GameRegistration.cs" company="Mario">
 //     Mario
@@ -16,6 +16,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using IronyModManager.DI;
+using IronyModManager.IO.Common;
 using IronyModManager.Services.Models;
 using IronyModManager.Services.Resolver;
 using IronyModManager.Shared;
@@ -125,13 +126,13 @@ namespace IronyModManager.Services.Registrations
                     try
                     {
                         var settings = JsonConvert.DeserializeObject<LauncherSettings>(text);
-                        var exePath = Path.Combine(path, settings.ExePath).StandardizeDirectorySeparator();
+                        var exePath = PathOperations.ResolveRelativePath(path, settings.ExePath).StandardizeDirectorySeparator();
                         if (File.Exists(exePath))
                         {
                             return new GameSettings()
                             {
                                 ExecutableArgs = string.Join(" ", settings.ExeArgs),
-                                ExecutablePath = Path.Combine(path, settings.ExePath).StandardizeDirectorySeparator(),
+                                ExecutablePath = exePath,
                                 UserDir = pathResolver.Parse(settings.GameDataPath)
                             };
                         }
