@@ -4,7 +4,7 @@
 // Created          : 02-14-2021
 //
 // Last Modified By : Mario
-// Last Modified On : 08-29-2021
+// Last Modified On : 09-12-2021
 // ***********************************************************************
 // <copyright file="DLCService.cs" company="Mario">
 //     Mario
@@ -13,6 +13,7 @@
 // ***********************************************************************
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -134,28 +135,31 @@ namespace IronyModManager.Services
                 var result = new List<IDLC>();
                 if (!string.IsNullOrWhiteSpace(game.ExecutableLocation))
                 {
-                    var cleanedExePath = System.IO.Path.GetDirectoryName(game.ExecutableLocation);
+                    var cleanedExePath = Path.GetDirectoryName(game.ExecutableLocation);
                     while (!string.IsNullOrWhiteSpace(cleanedExePath))
                     {
-                        var directory = System.IO.Path.Combine(cleanedExePath, DLCFolder);
-                        if (System.IO.Directory.Exists(directory))
+                        var directory = Path.Combine(cleanedExePath, ResolveDLCDirectory(game.DLCContainer, DLCFolder));
+                        if (Directory.Exists(directory))
                         {
                             break;
                         }
-                        cleanedExePath = System.IO.Path.GetDirectoryName(cleanedExePath);
+                        cleanedExePath = Path.GetDirectoryName(cleanedExePath);
                     }
-                    foreach (var dlcFolder in DLCDirectories)
+                    if (!string.IsNullOrWhiteSpace(cleanedExePath))
                     {
-                        var directory = System.IO.Path.Combine(cleanedExePath, dlcFolder);
-                        if (System.IO.Directory.Exists(directory))
+                        foreach (var dlcFolder in DLCDirectories)
                         {
-                            var infos = reader.Read(directory);
-                            if (infos != null && infos.Any())
+                            var directory = Path.Combine(cleanedExePath, ResolveDLCDirectory(game.DLCContainer, dlcFolder));
+                            if (Directory.Exists(directory))
                             {
-                                foreach (var item in infos)
+                                var infos = reader.Read(directory);
+                                if (infos != null && infos.Any())
                                 {
-                                    var dlcObject = dlcParser.Parse(System.IO.Path.Combine(dlcFolder, item.FileName), item.Content);
-                                    result.Add(Mapper.Map<IDLC>(dlcObject));
+                                    foreach (var item in infos)
+                                    {
+                                        var dlcObject = dlcParser.Parse(Path.Combine(dlcFolder, item.FileName), item.Content);
+                                        result.Add(Mapper.Map<IDLC>(dlcObject));
+                                    }
                                 }
                             }
                         }
@@ -199,6 +203,21 @@ namespace IronyModManager.Services
                 return true;
             }
             return false;
+        }
+
+        /// <summary>
+        /// Resolves the DLC directory.
+        /// </summary>
+        /// <param name="basePath">The base path.</param>
+        /// <param name="dlc">The DLC.</param>
+        /// <returns>System.String.</returns>
+        protected virtual string ResolveDLCDirectory(string basePath, string dlc)
+        {
+            if (string.IsNullOrWhiteSpace(basePath))
+            {
+                return dlc;
+            }
+            return Path.Combine(basePath, dlc);
         }
 
         #endregion Methods

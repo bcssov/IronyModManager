@@ -4,7 +4,7 @@
 // Created          : 02-12-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 08-25-2021
+// Last Modified On : 09-12-2021
 // ***********************************************************************
 // <copyright file="Game.cs" company="Mario">
 //     Mario
@@ -65,6 +65,12 @@ namespace IronyModManager.Models
         /// </summary>
         /// <value>The custom mod directory.</value>
         public virtual string CustomModDirectory { get; set; }
+
+        /// <summary>
+        /// Gets or sets the DLC container.
+        /// </summary>
+        /// <value>The DLC container.</value>
+        public virtual string DLCContainer { get; set; }
 
         /// <summary>
         /// Gets or sets the executable location.

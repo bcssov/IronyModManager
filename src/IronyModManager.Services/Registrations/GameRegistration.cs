@@ -4,7 +4,7 @@
 // Created          : 02-12-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 08-25-2021
+// Last Modified On : 09-12-2021
 // ***********************************************************************
 // <copyright file="GameRegistration.cs" company="Mario">
 //     Mario
@@ -16,6 +16,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using IronyModManager.DI;
+using IronyModManager.IO.Common;
 using IronyModManager.Services.Models;
 using IronyModManager.Services.Resolver;
 using IronyModManager.Shared;
@@ -66,6 +67,7 @@ namespace IronyModManager.Services.Registrations
         private IGameType GetCK3(string baseUserDir)
         {
             var game = DIResolver.Get<IGameType>();
+            game.DLCContainer = Shared.Constants.GamesTypes.CrusaderKings3.DLCContainer;
             game.ChecksumFolders = Shared.Constants.GamesTypes.CrusaderKings3.ChecksumFolders;
             game.GameFolders = Shared.Constants.GamesTypes.CrusaderKings3.GameFolders;
             game.LogLocation = Path.Combine(Path.Combine(baseUserDir, Shared.Constants.GamesTypes.CrusaderKings3.DocsPath), Shared.Constants.GamesTypes.LogLocation).StandardizeDirectorySeparator();
@@ -92,6 +94,7 @@ namespace IronyModManager.Services.Registrations
         private IGameType GetEUIV(string baseUserDir)
         {
             var game = DIResolver.Get<IGameType>();
+            game.DLCContainer = Shared.Constants.GamesTypes.DLCContainer;
             game.ChecksumFolders = Shared.Constants.GamesTypes.EuropaUniversalis4.ChecksumFolders;
             game.GameFolders = Shared.Constants.GamesTypes.EuropaUniversalis4.GameFolders;
             game.LogLocation = Path.Combine(Path.Combine(baseUserDir, Shared.Constants.GamesTypes.EuropaUniversalis4.DocsPath), Shared.Constants.GamesTypes.LogLocation).StandardizeDirectorySeparator();
@@ -125,13 +128,13 @@ namespace IronyModManager.Services.Registrations
                     try
                     {
                         var settings = JsonConvert.DeserializeObject<LauncherSettings>(text);
-                        var exePath = Path.Combine(path, settings.ExePath).StandardizeDirectorySeparator();
+                        var exePath = PathOperations.ResolveRelativePath(path, settings.ExePath).StandardizeDirectorySeparator();
                         if (File.Exists(exePath))
                         {
                             return new GameSettings()
                             {
                                 ExecutableArgs = string.Join(" ", settings.ExeArgs),
-                                ExecutablePath = Path.Combine(path, settings.ExePath).StandardizeDirectorySeparator(),
+                                ExecutablePath = exePath,
                                 UserDir = pathResolver.Parse(settings.GameDataPath)
                             };
                         }
@@ -152,6 +155,7 @@ namespace IronyModManager.Services.Registrations
         private IGameType GetHOI4(string baseUserDir)
         {
             var game = DIResolver.Get<IGameType>();
+            game.DLCContainer = Shared.Constants.GamesTypes.DLCContainer;
             game.ChecksumFolders = Shared.Constants.GamesTypes.HeartsOfIron4.ChecksumFolders;
             game.GameFolders = Shared.Constants.GamesTypes.HeartsOfIron4.GameFolders;
             game.LogLocation = Path.Combine(Path.Combine(baseUserDir, Shared.Constants.GamesTypes.HeartsOfIron4.DocsPath), Shared.Constants.GamesTypes.LogLocation).StandardizeDirectorySeparator();
@@ -177,6 +181,7 @@ namespace IronyModManager.Services.Registrations
         private IGameType GetImperator(string baseUserDir)
         {
             var game = DIResolver.Get<IGameType>();
+            game.DLCContainer = Shared.Constants.GamesTypes.ImperatorRome.DLCContainer;
             game.ChecksumFolders = Shared.Constants.GamesTypes.ImperatorRome.ChecksumFolders;
             game.GameFolders = Shared.Constants.GamesTypes.ImperatorRome.GameFolders;
             game.LogLocation = Path.Combine(Path.Combine(baseUserDir, Shared.Constants.GamesTypes.ImperatorRome.DocsPath), Shared.Constants.GamesTypes.LogLocation).StandardizeDirectorySeparator();
@@ -203,6 +208,7 @@ namespace IronyModManager.Services.Registrations
         private IGameType GetStellaris(string baseUserDir)
         {
             var game = DIResolver.Get<IGameType>();
+            game.DLCContainer = Shared.Constants.GamesTypes.DLCContainer;
             game.ChecksumFolders = Shared.Constants.GamesTypes.Stellaris.ChecksumFolders;
             game.GameFolders = Shared.Constants.GamesTypes.Stellaris.GameFolders;
             game.LogLocation = Path.Combine(Path.Combine(baseUserDir, Shared.Constants.GamesTypes.Stellaris.DocsPath), Shared.Constants.GamesTypes.LogLocation).StandardizeDirectorySeparator();
