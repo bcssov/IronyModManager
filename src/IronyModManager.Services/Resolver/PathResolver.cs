@@ -4,7 +4,7 @@
 // Created          : 09-22-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 09-23-2020
+// Last Modified On : 09-12-2021
 // ***********************************************************************
 // <copyright file="PathResolver.cs" company="Mario">
 //     Mario
@@ -29,9 +29,10 @@ namespace IronyModManager.Services.Resolver
         /// <summary>
         /// The map
         /// </summary>
-        private static readonly Dictionary<string, Environment.SpecialFolder> map = new Dictionary<string, Environment.SpecialFolder>() {
+        private static readonly Dictionary<string, Environment.SpecialFolder> map = new()
+        {
             { "%USER_DOCUMENTS%", Environment.SpecialFolder.MyDocuments },
-            { "$LINUX_DATA_HOME", Environment.SpecialFolder.LocalApplicationData}
+            { "$LINUX_DATA_HOME", Environment.SpecialFolder.LocalApplicationData }
         };
 
         #endregion Fields

@@ -510,6 +510,7 @@ namespace IronyModManager.Services
             game.WorkshopDirectory = gameType.WorkshopDirectory;
             game.LogLocation = gameType.LogLocation;
             game.ChecksumFolders = gameType.ChecksumFolders;
+            game.DLCContainer = gameType.DLCContainer;
             game.GameFolders = gameType.GameFolders ?? new List<string>();
             game.BaseSteamGameDirectory = gameType.BaseSteamGameDirectory;
             game.AdvancedFeaturesSupported = gameType.AdvancedFeaturesSupported;

@@ -4,7 +4,7 @@
 // Created          : 01-17-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 08-25-2021
+// Last Modified On : 09-12-2021
 // ***********************************************************************
 // <copyright file="Constants.cs" company="Mario">
 //     Mario
@@ -181,6 +181,11 @@ namespace IronyModManager.Shared
             #region Fields
 
             /// <summary>
+            /// The DLC container
+            /// </summary>
+            public static readonly string DLCContainer = string.Empty;
+
+            /// <summary>
             /// The launcher settings file name
             /// </summary>
             public static readonly string LauncherSettingsFileName = "launcher-settings.json";
@@ -227,6 +232,11 @@ namespace IronyModManager.Shared
                 public static readonly string[] ChecksumFolders = new string[] { "common", "events", "history", "map_data", "gui", "localization" };
 
                 /// <summary>
+                /// The DLC container
+                /// </summary>
+                public static readonly string DLCContainer = "game";
+
+                /// <summary>
                 /// The game folders
                 /// </summary>
                 public static readonly string[] GameFolders = new string[] { "common", "content_source", "dlc", "events", "fonts", "gfx", "gui", "history", "localization",
@@ -245,7 +255,7 @@ namespace IronyModManager.Shared
                 /// <summary>
                 /// The paradox game identifier
                 /// </summary>
-                public static string ParadoxGameId = "ck3";
+                public static readonly string ParadoxGameId = "ck3";
 
                 #endregion Fields
             }
@@ -291,7 +301,7 @@ namespace IronyModManager.Shared
                 /// <summary>
                 /// The paradox game identifier
                 /// </summary>
-                public static string ParadoxGameId = "eu4";
+                public static readonly string ParadoxGameId = "eu4";
 
                 #endregion Fields
             }
@@ -337,7 +347,7 @@ namespace IronyModManager.Shared
                 /// <summary>
                 /// The paradox game identifier
                 /// </summary>
-                public static string ParadoxGameId = "hoi4";
+                public static readonly string ParadoxGameId = "hoi4";
 
                 #endregion Fields
             }
@@ -375,6 +385,11 @@ namespace IronyModManager.Shared
                 public static readonly string[] ChecksumFolders = new string[] { "common", "events", "decisions", "gui", "localization", "map_data", "setup" };
 
                 /// <summary>
+                /// The DLC container
+                /// </summary>
+                public static readonly string DLCContainer = "game";
+
+                /// <summary>
                 /// The game folders
                 /// </summary>
                 public static readonly string[] GameFolders = new string[] { "common", "content_source", "decisions", "events", "fonts", "gfx",
@@ -393,7 +408,7 @@ namespace IronyModManager.Shared
                 /// <summary>
                 /// The paradox game identifier
                 /// </summary>
-                public static string ParadoxGameId = "imperator_rome";
+                public static readonly string ParadoxGameId = "imperator_rome";
 
                 #endregion Fields
             }
@@ -440,7 +455,7 @@ namespace IronyModManager.Shared
                 /// <summary>
                 /// The paradox game identifier
                 /// </summary>
-                public static string ParadoxGameId = "stellaris";
+                public static readonly string ParadoxGameId = "stellaris";
 
                 #endregion Fields
             }

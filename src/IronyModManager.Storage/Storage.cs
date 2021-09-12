@@ -4,7 +4,7 @@
 // Created          : 01-11-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 08-25-2021
+// Last Modified On : 09-12-2021
 // ***********************************************************************
 // <copyright file="Storage.cs" company="Mario">
 //     Mario
@@ -215,6 +215,7 @@ namespace IronyModManager.Storage
                 game.ParadoxGameId = gameType.ParadoxGameId;
                 game.RemoteSteamUserDirectory = gameType.RemoteSteamUserDirectory ?? new List<string>();
                 game.Abrv = gameType.Abrv ?? string.Empty;
+                game.DLCContainer = gameType.DLCContainer ?? string.Empty;
                 Database.Games.Add(game);
                 return true;
             }

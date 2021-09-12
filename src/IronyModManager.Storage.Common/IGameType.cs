@@ -4,7 +4,7 @@
 // Created          : 02-12-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 08-25-2021
+// Last Modified On : 09-12-2021
 // ***********************************************************************
 // <copyright file="IGameType.cs" company="Mario">
 //     Mario
@@ -46,6 +46,12 @@ namespace IronyModManager.Storage.Common
         /// </summary>
         /// <value>The checksum folders.</value>
         IEnumerable<string> ChecksumFolders { get; set; }
+
+        /// <summary>
+        /// Gets or sets the DLC container.
+        /// </summary>
+        /// <value>The DLC container.</value>
+        string DLCContainer { get; set; }
 
         /// <summary>
         /// Gets or sets the executable arguments.
