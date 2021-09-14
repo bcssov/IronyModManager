@@ -216,8 +216,9 @@ namespace IronyModManager.Parser.Tests
                 {
                     continue;
                 }
-                string usedParser = types.First().UsedParser;
-                var groupedParsers = types.GroupBy(p => p.UsedParser);
+                var filteredTypes = types.Where(p => p.ValueType != ValueType.EmptyFile);
+                string usedParser = filteredTypes.First().UsedParser;
+                var groupedParsers = filteredTypes.GroupBy(p => p.UsedParser);
                 if (groupedParsers.Count() > 1)
                 {
                     // Decide based on count which parser is the right one

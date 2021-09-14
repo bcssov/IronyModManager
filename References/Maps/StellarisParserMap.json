@@ -1145,6 +1145,9 @@
         "DirectoryPath": "interface\\resource_groups",
         "PreferredParser": "DefaultParser"
     }, {
+        "DirectoryPath": "localisation",
+        "PreferredParser": "GenericLocalizationParser"
+    }, {
         "DirectoryPath": "localisation\\braz_por",
         "PreferredParser": "GenericLocalizationParser"
     }, {
