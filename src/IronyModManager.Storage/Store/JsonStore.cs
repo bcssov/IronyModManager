@@ -4,7 +4,7 @@
 // Created          : 01-20-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 05-27-2021
+// Last Modified On : 09-15-2021
 // ***********************************************************************
 // <copyright file="JsonStore.cs" company="Mario">
 //     Mario
@@ -72,6 +72,25 @@ namespace IronyModManager.Storage
         #region Methods
 
         /// <summary>
+        /// Clears all.
+        /// </summary>
+        /// <exception cref="NotSupportedException"></exception>
+        public void ClearAll()
+        {
+            throw new NotSupportedException();
+        }
+
+        /// <summary>
+        /// Clears the data.
+        /// </summary>
+        /// <param name="id">The identifier.</param>
+        /// <exception cref="NotSupportedException"></exception>
+        public void ClearData(string id)
+        {
+            throw new NotSupportedException();
+        }
+
+        /// <summary>
         /// Gets the data.
         /// </summary>
         /// <param name="id">The identifier.</param>
@@ -94,6 +113,16 @@ namespace IronyModManager.Storage
                 storeItems = new List<StoreItem>();
 
             return storeItems.ToDictionary(item => item.Name, item => item.Value);
+        }
+
+        /// <summary>
+        /// Lists the ids.
+        /// </summary>
+        /// <returns>IEnumerable&lt;System.String&gt;.</returns>
+        /// <exception cref="NotSupportedException"></exception>
+        public IEnumerable<string> ListIds()
+        {
+            throw new NotSupportedException();
         }
 
         /// <summary>

@@ -59,7 +59,7 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="ReactiveUI" Version="16.2.1" />
+    <PackageReference Include="ReactiveUI" Version="16.2.6" />
     <PackageReference Include="StrongNamer" Version="0.2.5" />
   </ItemGroup>
 

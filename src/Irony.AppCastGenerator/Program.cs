@@ -4,7 +4,7 @@
 // Created          : 09-14-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-08-2021
+// Last Modified On : 09-15-2021
 // ***********************************************************************
 // <copyright file="Program.cs" company="NetSparkle">
 //     NetSparkle
@@ -18,7 +18,6 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Text;
-using System.Web;
 using System.Xml;
 using CommandLine;
 using NetSparkleUpdater;
@@ -186,7 +185,7 @@ namespace Irony.AppCastGenerator
                 foreach (var binary in binaries)
                 {
                     var fileInfo = new FileInfo(binary);
-                    var remoteUpdateFile = $"{opts.BaseUrl}/{(opts.PrefixVersion ? $"v{titleVersionInfo}/" : "")}{HttpUtility.UrlEncode(fileInfo.Name)}";
+                    var remoteUpdateFile = $"{opts.BaseUrl}/{(opts.PrefixVersion ? $"v{titleVersionInfo}/" : "")}{Uri.EscapeDataString(fileInfo.Name)}";
 
                     string os = string.Empty;
                     if (binary.Contains("win", StringComparison.OrdinalIgnoreCase))
