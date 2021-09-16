@@ -16,6 +16,7 @@
   <StyleInclude Source="avares://IronyModManager/Controls/Themes/MaterialDark/NotificationCard.axaml"/>
   <StyleInclude Source="avares://IronyModManager/Controls/Themes/MaterialDark/NumericEditTextbox.axaml"/>
   <StyleInclude Source="avares://IronyModManager/Controls/Themes/MaterialDark/MenuFlyoutPresenter.axaml"/>
+  <StyleInclude Source="avares://IronyModManager/Controls/Themes/MaterialDark/ScrollBar.axaml"/>
 
   <!--Individual styles-->
   <Style Selector="NotificationCard">

@@ -66,7 +66,7 @@ namespace IronyModManager.Controls
         private IMessageBus messageBus;
 
         /// <summary>
-        /// The registerd event
+        /// The registered event
         /// </summary>
         private bool registeredEvent = false;
 

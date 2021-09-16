@@ -4,7 +4,7 @@
 // Created          : 03-18-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 09-05-2021
+// Last Modified On : 09-16-2021
 // ***********************************************************************
 // <copyright file="MainConflictSolverViewModel.cs" company="Mario">
 //     Mario
@@ -713,7 +713,7 @@ namespace IronyModManager.ViewModels
                     ModCompareSelector.IsBinaryConflict = IsBinaryConflict = conflicts?.FirstOrDefault()?.ValueType == ValueType.Binary;
                     ModCompareSelector.Definitions = conflicts;
                     MergeViewer.SetSidePatchMod(ModCompareSelector.LeftSelectedDefinition, ModCompareSelector.RightSelectedDefinition);
-                    MergeViewer.SetText(string.Empty, string.Empty, true);
+                    MergeViewer.SetText(string.Empty, string.Empty, true, lockScroll: true);
                     MergeViewer.ExitEditMode();
                     EvalViewerVisibility();
                     IgnoreEnabled = true;
@@ -724,7 +724,7 @@ namespace IronyModManager.ViewModels
                     {
                         ModCompareSelector.Reset();
                         BinaryMergeViewer.Reset();
-                        MergeViewer.SetText(string.Empty, string.Empty, true);
+                        MergeViewer.SetText(string.Empty, string.Empty, true, lockScroll: true);
                     }
                     PreviousConflictIndex = null;
                     IgnoreEnabled = false;
@@ -739,7 +739,7 @@ namespace IronyModManager.ViewModels
                     {
                         MergeViewer.EditingYaml = s.Type.StartsWith(Shared.Constants.LocalizationDirectory);
                         MergeViewer.SetSidePatchMod(ModCompareSelector.LeftSelectedDefinition, ModCompareSelector.RightSelectedDefinition);
-                        MergeViewer.SetText(s.Code, MergeViewer.RightSide);
+                        MergeViewer.SetText(s.Code, MergeViewer.RightSide, lockScroll: true);
                         MergeViewer.ExitEditMode();
                         if (!IsBinaryConflict)
                         {
@@ -771,7 +771,7 @@ namespace IronyModManager.ViewModels
                     {
                         MergeViewer.EditingYaml = s.Type.StartsWith(Shared.Constants.LocalizationDirectory);
                         MergeViewer.SetSidePatchMod(ModCompareSelector.LeftSelectedDefinition, ModCompareSelector.RightSelectedDefinition);
-                        MergeViewer.SetText(MergeViewer.LeftSide, s.Code);
+                        MergeViewer.SetText(MergeViewer.LeftSide, s.Code, lockScroll: true);
                         MergeViewer.ExitEditMode();
                         if (!IsBinaryConflict)
                         {
