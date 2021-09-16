@@ -4,7 +4,7 @@
 // Created          : 03-20-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 09-02-2021
+// Last Modified On : 09-16-2021
 // ***********************************************************************
 // <copyright file="MergeViewerControlViewModel.cs" company="Mario">
 //     Mario
@@ -28,6 +28,7 @@ using DiffPlex.DiffBuilder.Model;
 using IronyModManager.Common;
 using IronyModManager.Common.ViewModels;
 using IronyModManager.Implementation.Actions;
+using IronyModManager.Implementation.AppState;
 using IronyModManager.Implementation.Hotkey;
 using IronyModManager.Localization;
 using IronyModManager.Localization.Attributes;
@@ -85,6 +86,11 @@ namespace IronyModManager.ViewModels.Controls
         private readonly Stack<string> redoStack = new();
 
         /// <summary>
+        /// The scroll state
+        /// </summary>
+        private readonly IScrollState scrollState;
+
+        /// <summary>
         /// The undo stack
         /// </summary>
         private readonly Stack<string> undoStack = new();
@@ -111,13 +117,15 @@ namespace IronyModManager.ViewModels.Controls
         /// <summary>
         /// Initializes a new instance of the <see cref="MergeViewerControlViewModel" /> class.
         /// </summary>
+        /// <param name="scrollState">State of the scroll.</param>
         /// <param name="modPatchCollectionService">The mod patch collection service.</param>
         /// <param name="hotkeyPressedHandler">The hotkey pressed handler.</param>
         /// <param name="appAction">The application action.</param>
         /// <param name="externalEditorService">The external editor service.</param>
         /// <param name="notificationAction">The notification action.</param>
         /// <param name="localizationManager">The localization manager.</param>
-        public MergeViewerControlViewModel(IModPatchCollectionService modPatchCollectionService, ConflictSolverViewHotkeyPressedHandler hotkeyPressedHandler,
+        public MergeViewerControlViewModel(IScrollState scrollState,
+            IModPatchCollectionService modPatchCollectionService, ConflictSolverViewHotkeyPressedHandler hotkeyPressedHandler,
             IAppAction appAction, IExternalEditorService externalEditorService,
             INotificationAction notificationAction, ILocalizationManager localizationManager)
         {
@@ -127,6 +135,7 @@ namespace IronyModManager.ViewModels.Controls
             this.localizationManager = localizationManager;
             this.hotkeyPressedHandler = hotkeyPressedHandler;
             this.modPatchCollectionService = modPatchCollectionService;
+            this.scrollState = scrollState;
         }
 
         #endregion Constructors
@@ -599,7 +608,8 @@ namespace IronyModManager.ViewModels.Controls
         /// <param name="rightSide">The right side.</param>
         /// <param name="resetStack">if set to <c>true</c> [reset stack].</param>
         /// <param name="skipStackPush">if set to <c>true</c> [skip stack push].</param>
-        public virtual void SetText(string leftSide, string rightSide, bool resetStack = false, bool skipStackPush = false)
+        /// <param name="lockScroll">if set to <c>true</c> [lock scroll].</param>
+        public virtual void SetText(string leftSide, string rightSide, bool resetStack = false, bool skipStackPush = false, bool lockScroll = false)
         {
             void evalStack(string text, string prevText)
             {
@@ -623,6 +633,7 @@ namespace IronyModManager.ViewModels.Controls
                     redoStack.Clear();
                 }
             }
+            scrollState.SetState(!lockScroll);
             var prevLeftSide = LeftSide;
             var prevRightSide = RightSide;
             LeftSide = !string.IsNullOrEmpty(leftSide) ? leftSide.ReplaceTabs() : string.Empty;
@@ -648,6 +659,7 @@ namespace IronyModManager.ViewModels.Controls
                     evalStack(RightSide, prevRightSide);
                 }
             }
+            scrollState.SetState(true);
         }
 
         /// <summary>
