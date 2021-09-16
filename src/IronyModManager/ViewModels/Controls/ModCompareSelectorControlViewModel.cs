@@ -4,7 +4,7 @@
 // Created          : 03-24-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-23-2021
+// Last Modified On : 09-16-2021
 // ***********************************************************************
 // <copyright file="ModCompareSelectorControlViewModel.cs" company="Mario">
 //     Mario
@@ -116,16 +116,16 @@ namespace IronyModManager.ViewModels.Controls
         public virtual IEnumerable<IDefinition> Definitions { get; set; }
 
         /// <summary>
+        /// Gets or sets the definition selection.
+        /// </summary>
+        /// <value>The definition selection.</value>
+        public virtual CompareSelection DefinitionSelection { get; protected set; }
+
+        /// <summary>
         /// Gets or sets a value indicating whether this instance is binary conflict.
         /// </summary>
         /// <value><c>true</c> if this instance is binary conflict; otherwise, <c>false</c>.</value>
         public virtual bool IsBinaryConflict { get; set; }
-
-        /// <summary>
-        /// Gets or sets the left selected definition.
-        /// </summary>
-        /// <value>The left selected definition.</value>
-        public virtual IDefinition LeftSelectedDefinition { get; set; }
 
         /// <summary>
         /// Gets or sets the open directory.
@@ -154,12 +154,6 @@ namespace IronyModManager.ViewModels.Controls
         public virtual ReactiveCommand<Unit, Unit> OpenFileCommand { get; protected set; }
 
         /// <summary>
-        /// Gets or sets the right selected definition.
-        /// </summary>
-        /// <value>The right selected definition.</value>
-        public virtual IDefinition RightSelectedDefinition { get; set; }
-
-        /// <summary>
         /// Gets or sets the selected mods order.
         /// </summary>
         /// <value>The selected mods order.</value>
@@ -180,8 +174,7 @@ namespace IronyModManager.ViewModels.Controls
         /// </summary>
         public void Reset()
         {
-            LeftSelectedDefinition = null;
-            RightSelectedDefinition = null;
+            DefinitionSelection = null;
             VirtualDefinitions = null;
             previousDefinitions = null;
         }
@@ -241,19 +234,19 @@ namespace IronyModManager.ViewModels.Controls
                         await Task.Delay(100, token);
                         if (!token.IsCancellationRequested)
                         {
-                            LeftSelectedDefinition = null;
-                            RightSelectedDefinition = null;
+                            DefinitionSelection = null;
                         }
                         await Task.Delay(50, token);
                         if (!token.IsCancellationRequested)
                         {
                             int virtualDefCount = virtualDefinitions.Count();
-                            LeftSelectedDefinition = virtualDefinitions.FirstOrDefault(p => p != newDefinition && p != priorityDefinition.Definition && !(virtualDefCount >= 4 && p.IsFromGame));
-                            if (LeftSelectedDefinition == null)
+                            var left = virtualDefinitions.FirstOrDefault(p => p != newDefinition && p != priorityDefinition.Definition && !(virtualDefCount >= 4 && p.IsFromGame));
+                            if (left == null)
                             {
-                                LeftSelectedDefinition = virtualDefinitions.FirstOrDefault(p => p != newDefinition && p != priorityDefinition.Definition);
+                                left = virtualDefinitions.FirstOrDefault(p => p != newDefinition && p != priorityDefinition.Definition);
                             }
-                            RightSelectedDefinition = newDefinition;
+                            var right = newDefinition;
+                            DefinitionSelection = new CompareSelection(left, right);
                         }
                     }
                 }
@@ -267,14 +260,14 @@ namespace IronyModManager.ViewModels.Controls
                         await Task.Delay(100, token);
                         if (!token.IsCancellationRequested)
                         {
-                            LeftSelectedDefinition = null;
-                            RightSelectedDefinition = null;
+                            DefinitionSelection = null;
                         }
                         await Task.Delay(50, token);
                         if (!token.IsCancellationRequested)
                         {
-                            LeftSelectedDefinition = virtualDefinitions.ElementAt(0);
-                            RightSelectedDefinition = virtualDefinitions.ElementAt(1);
+                            var left = virtualDefinitions.ElementAt(0);
+                            var right = virtualDefinitions.ElementAt(1);
+                            DefinitionSelection = new CompareSelection(left, right);
                         }
                     }
                 }
@@ -442,18 +435,62 @@ namespace IronyModManager.ViewModels.Controls
             {
                 Dispatcher.UIThread.SafeInvoke(() =>
                 {
+                    var left = DefinitionSelection.LeftSelectedDefinition;
+                    var right = DefinitionSelection.RightSelectedDefinition;
                     if (selectLeft)
                     {
-                        LeftSelectedDefinition = VirtualDefinitions.ToList()[index.GetValueOrDefault()];
+                        left = VirtualDefinitions.ToList()[index.GetValueOrDefault()];
                     }
                     else
                     {
-                        RightSelectedDefinition = VirtualDefinitions.ToList()[index.GetValueOrDefault()];
+                        right = VirtualDefinitions.ToList()[index.GetValueOrDefault()];
                     }
+                    DefinitionSelection = new CompareSelection(left, right);
                 });
             }
         }
 
         #endregion Methods
+
+        #region Classes
+
+        /// <summary>
+        /// Class CompareSelection.
+        /// </summary>
+        public class CompareSelection
+        {
+            #region Constructors
+
+            /// <summary>
+            /// Initializes a new instance of the <see cref="CompareSelection"/> class.
+            /// </summary>
+            /// <param name="left">The left.</param>
+            /// <param name="right">The right.</param>
+            public CompareSelection(IDefinition left, IDefinition right)
+            {
+                LeftSelectedDefinition = left;
+                RightSelectedDefinition = right;
+            }
+
+            #endregion Constructors
+
+            #region Properties
+
+            /// <summary>
+            /// Gets or sets the left selected definition.
+            /// </summary>
+            /// <value>The left selected definition.</value>
+            public virtual IDefinition LeftSelectedDefinition { get; set; }
+
+            /// <summary>
+            /// Gets or sets the right selected definition.
+            /// </summary>
+            /// <value>The right selected definition.</value>
+            public virtual IDefinition RightSelectedDefinition { get; set; }
+
+            #endregion Properties
+        }
+
+        #endregion Classes
     }
 }
