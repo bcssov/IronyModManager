@@ -4,14 +4,11 @@
 		<title>Irony Mod Manager</title>
 		<language>en</language>
 		<item>
-			<title>1.18.82</title>
+			<title>1.18.86</title>
 			<description>RELEASE NOTES:
-* Update Chinese translation (by Clazex)
+* Update parser map to Stellaris 3.1
 * Update dependencies
-* Fix CK3\Imperator auto configuration
-* Fix CK3 DLC detection related CTD
-* Auto configuration is now a lot smarter (you can point anywhere inside the game folder and Irony will find its way around)
-* Fix DLC detection for Imperator and CK3
+* Fix scroll viewer conflict solver related CTD
 
 CHANGES FROM v1.17:
 * Update dependencies
@@ -24,18 +21,15 @@ CHANGES FROM v1.17:
 * Conflict Solver bracket count (by scrangos)
 * Add mod source indicator
 * Various fixes</description>
-			<pubDate>Sun, 12 Sep 2021 08:05:40 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.18.82/osx-x64.rar" sparkle:version="1.18.82.55648" sparkle:shortVersionString="1.18.82" length="69715342" sparkle:os="osx" type="application/vnd.rar" sparkle:signature="XfX0OV0iWSDP9EO5ufzg1zvvZ+Ew5iW5LeyV4Fvsms9LHTAw0BicwAh9sSBq4H3j/mszUxmvpx5hEGaWOlN0BQ=="/>
+			<pubDate>Thu, 16 Sep 2021 19:34:49 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.18.86/osx-x64.rar" sparkle:version="1.18.86.12572" sparkle:shortVersionString="1.18.86" length="69701255" sparkle:os="osx" type="application/vnd.rar" sparkle:signature="JLAvoYZpnx9vNIt36TSMly/xq1+rnudN4dfnjg62yV48TK5BUzGJVVXV6muWCZnDVdwfJgBd6vUC+H/n7J5VBQ=="/>
 		</item>
 		<item>
-			<title>1.18.82</title>
+			<title>1.18.86</title>
 			<description>RELEASE NOTES:
-* Update Chinese translation (by Clazex)
+* Update parser map to Stellaris 3.1
 * Update dependencies
-* Fix CK3\Imperator auto configuration
-* Fix CK3 DLC detection related CTD
-* Auto configuration is now a lot smarter (you can point anywhere inside the game folder and Irony will find its way around)
-* Fix DLC detection for Imperator and CK3
+* Fix scroll viewer conflict solver related CTD
 
 CHANGES FROM v1.17:
 * Update dependencies
@@ -48,18 +42,15 @@ CHANGES FROM v1.17:
 * Conflict Solver bracket count (by scrangos)
 * Add mod source indicator
 * Various fixes</description>
-			<pubDate>Sun, 12 Sep 2021 08:05:48 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.18.82/win-x64-setup.rar" sparkle:version="1.18.82.55648" sparkle:shortVersionString="1.18.82" length="61123017" sparkle:os="windows" type="application/vnd.rar" sparkle:signature="hOJmAAnV/Hfi7vre04wPg0WGRFbJwUzbUNXNWISsk6aXl66aiPQv/q3DyTmkmg04ed7wzH7tgIdSuBi6vDQ6BA=="/>
+			<pubDate>Thu, 16 Sep 2021 19:34:57 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.18.86/win-x64-setup.rar" sparkle:version="1.18.86.12572" sparkle:shortVersionString="1.18.86" length="61131573" sparkle:os="windows" type="application/vnd.rar" sparkle:signature="Jm5DDd8bmHGmb4NnshgHBqim/GPEQDZzhj8Wo5nDYEkY5GQKfO14WW2cnx/f7997L8GyHvfxt86lq/o23dwUCQ=="/>
 		</item>
 		<item>
-			<title>1.18.82</title>
+			<title>1.18.86</title>
 			<description>RELEASE NOTES:
-* Update Chinese translation (by Clazex)
+* Update parser map to Stellaris 3.1
 * Update dependencies
-* Fix CK3\Imperator auto configuration
-* Fix CK3 DLC detection related CTD
-* Auto configuration is now a lot smarter (you can point anywhere inside the game folder and Irony will find its way around)
-* Fix DLC detection for Imperator and CK3
+* Fix scroll viewer conflict solver related CTD
 
 CHANGES FROM v1.17:
 * Update dependencies
@@ -72,18 +63,15 @@ CHANGES FROM v1.17:
 * Conflict Solver bracket count (by scrangos)
 * Add mod source indicator
 * Various fixes</description>
-			<pubDate>Sun, 12 Sep 2021 08:05:44 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.18.82/win-x64.rar" sparkle:version="1.18.82.55648" sparkle:shortVersionString="1.18.82" length="73588181" sparkle:os="windows" type="application/vnd.rar" sparkle:signature="LYSHfAkbnjcNgdtd/uNh3hzy+LxL4F9VGYuQxChppz49A4BGiCXzH+48xjX+zyz4WDmBWUQssiXqHWFqml+pAg=="/>
+			<pubDate>Thu, 16 Sep 2021 19:34:53 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.18.86/win-x64.rar" sparkle:version="1.18.86.12572" sparkle:shortVersionString="1.18.86" length="73512922" sparkle:os="windows" type="application/vnd.rar" sparkle:signature="BCqQti2JkltWPe5nG/webJc4wL+g3x91okg6OvSfXCSeCdb7iz2PlZ7BVhpyrVBkGAMyEWkgKJr2Qa26x77qCQ=="/>
 		</item>
 		<item>
-			<title>1.18.82</title>
+			<title>1.18.86</title>
 			<description>RELEASE NOTES:
-* Update Chinese translation (by Clazex)
+* Update parser map to Stellaris 3.1
 * Update dependencies
-* Fix CK3\Imperator auto configuration
-* Fix CK3 DLC detection related CTD
-* Auto configuration is now a lot smarter (you can point anywhere inside the game folder and Irony will find its way around)
-* Fix DLC detection for Imperator and CK3
+* Fix scroll viewer conflict solver related CTD
 
 CHANGES FROM v1.17:
 * Update dependencies
@@ -96,8 +84,8 @@ CHANGES FROM v1.17:
 * Conflict Solver bracket count (by scrangos)
 * Add mod source indicator
 * Various fixes</description>
-			<pubDate>Sun, 12 Sep 2021 08:05:36 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.18.82/linux-x64.zip" sparkle:version="1.18.82.55648" sparkle:shortVersionString="1.18.82" length="86181516" sparkle:os="linux" type="application/zip" sparkle:signature="n9iPYjEx4ryztq9ljRrMy101U0+a4kLLYtOKsbJM9W7dY36hbYjB6zxSPMIKWGjdqCGj/rvrVFvAYOkwLzskCw=="/>
+			<pubDate>Thu, 16 Sep 2021 19:34:46 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.18.86/linux-x64.zip" sparkle:version="1.18.86.12572" sparkle:shortVersionString="1.18.86" length="86208926" sparkle:os="linux" type="application/zip" sparkle:signature="uKslB/ZErcznlUP+7C+SLzQRILLTNI+uYn0QQiOnDjDk4aJf25TbSZkqmvQC1L4Yu/0Phs2jmOeUCYupTqX3Dg=="/>
 		</item>
 	</channel>
 </rss>
