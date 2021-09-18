@@ -4,7 +4,7 @@
 // Created          : 03-24-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 09-16-2021
+// Last Modified On : 09-18-2021
 // ***********************************************************************
 // <copyright file="ModCompareSelectorControlViewModel.cs" company="Mario">
 //     Mario
@@ -18,6 +18,7 @@ using System.IO;
 using System.Linq;
 using System.Reactive;
 using System.Reactive.Disposables;
+using System.Reactive.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Avalonia.Threading;
@@ -165,6 +166,18 @@ namespace IronyModManager.ViewModels.Controls
         /// <value>The virtual definitions.</value>
         public virtual IEnumerable<IDefinition> VirtualDefinitions { get; protected set; }
 
+        /// <summary>
+        /// Gets or sets the left selected definition.
+        /// </summary>
+        /// <value>The left selected definition.</value>
+        public virtual IDefinition LeftSelectedDefinition { get; set; }
+
+        /// <summary>
+        /// Gets or sets the right selected definition.
+        /// </summary>
+        /// <value>The right selected definition.</value>
+        public virtual IDefinition RightSelectedDefinition { get; set; }
+
         #endregion Properties
 
         #region Methods
@@ -174,6 +187,8 @@ namespace IronyModManager.ViewModels.Controls
         /// </summary>
         public void Reset()
         {
+            LeftSelectedDefinition = null;
+            RightSelectedDefinition = null;
             DefinitionSelection = null;
             VirtualDefinitions = null;
             previousDefinitions = null;
@@ -235,6 +250,8 @@ namespace IronyModManager.ViewModels.Controls
                         if (!token.IsCancellationRequested)
                         {
                             DefinitionSelection = null;
+                            LeftSelectedDefinition = null;
+                            RightSelectedDefinition = null;
                         }
                         await Task.Delay(50, token);
                         if (!token.IsCancellationRequested)
@@ -247,6 +264,8 @@ namespace IronyModManager.ViewModels.Controls
                             }
                             var right = newDefinition;
                             DefinitionSelection = new CompareSelection(left, right);
+                            LeftSelectedDefinition = left;
+                            RightSelectedDefinition = right;
                         }
                     }
                 }
@@ -261,6 +280,8 @@ namespace IronyModManager.ViewModels.Controls
                         if (!token.IsCancellationRequested)
                         {
                             DefinitionSelection = null;
+                            LeftSelectedDefinition = null;
+                            RightSelectedDefinition = null;
                         }
                         await Task.Delay(50, token);
                         if (!token.IsCancellationRequested)
@@ -268,6 +289,8 @@ namespace IronyModManager.ViewModels.Controls
                             var left = virtualDefinitions.ElementAt(0);
                             var right = virtualDefinitions.ElementAt(1);
                             DefinitionSelection = new CompareSelection(left, right);
+                            LeftSelectedDefinition = left;
+                            RightSelectedDefinition = right;
                         }
                     }
                 }
@@ -319,6 +342,11 @@ namespace IronyModManager.ViewModels.Controls
             hotkeyPressedHandler.Subscribe(m =>
             {
                 SelectDefinitionByHotkey(m.Hotkey);
+            }).DisposeWith(disposables);
+
+            this.WhenAnyValue(p => p.LeftSelectedDefinition, p => p.RightSelectedDefinition, (left, right) => new CompareSelection(left, right)).Where(p => p != DefinitionSelection && p.LeftSelectedDefinition != null && p.RightSelectedDefinition != null).Subscribe(s =>
+            {
+                DefinitionSelection = s;
             }).DisposeWith(disposables);
 
             base.OnActivated(disposables);
@@ -446,6 +474,8 @@ namespace IronyModManager.ViewModels.Controls
                         right = VirtualDefinitions.ToList()[index.GetValueOrDefault()];
                     }
                     DefinitionSelection = new CompareSelection(left, right);
+                    LeftSelectedDefinition = left;
+                    RightSelectedDefinition = right;
                 });
             }
         }
@@ -462,7 +492,7 @@ namespace IronyModManager.ViewModels.Controls
             #region Constructors
 
             /// <summary>
-            /// Initializes a new instance of the <see cref="CompareSelection"/> class.
+            /// Initializes a new instance of the <see cref="CompareSelection" /> class.
             /// </summary>
             /// <param name="left">The left.</param>
             /// <param name="right">The right.</param>
@@ -489,6 +519,47 @@ namespace IronyModManager.ViewModels.Controls
             public virtual IDefinition RightSelectedDefinition { get; set; }
 
             #endregion Properties
+
+            #region Methods
+
+            /// <summary>
+            /// Determines whether the specified <see cref="System.Object" /> is equal to this instance.
+            /// </summary>
+            /// <param name="obj">The object to compare with the current object.</param>
+            /// <returns><c>true</c> if the specified <see cref="System.Object" /> is equal to this instance; otherwise, <c>false</c>.</returns>
+            public override bool Equals(object obj)
+            {
+                if (obj is CompareSelection cs)
+                {
+                    return Equals(cs);
+                }
+                return base.Equals(obj);
+            }
+
+            /// <summary>
+            /// Equalses the specified object.
+            /// </summary>
+            /// <param name="obj">The object.</param>
+            /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
+            public bool Equals(CompareSelection obj)
+            {
+                if (obj == null)
+                {
+                    return false;
+                }
+                return obj.LeftSelectedDefinition == LeftSelectedDefinition && obj.RightSelectedDefinition == RightSelectedDefinition;
+            }
+
+            /// <summary>
+            /// Returns a hash code for this instance.
+            /// </summary>
+            /// <returns>A hash code for this instance, suitable for use in hashing algorithms and data structures like a hash table.</returns>
+            public override int GetHashCode()
+            {
+                return HashCode.Combine(LeftSelectedDefinition, RightSelectedDefinition);
+            }
+
+            #endregion Methods
         }
 
         #endregion Classes
