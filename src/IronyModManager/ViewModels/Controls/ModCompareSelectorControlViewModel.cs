@@ -129,6 +129,12 @@ namespace IronyModManager.ViewModels.Controls
         public virtual bool IsBinaryConflict { get; set; }
 
         /// <summary>
+        /// Gets or sets the left selected definition.
+        /// </summary>
+        /// <value>The left selected definition.</value>
+        public virtual IDefinition LeftSelectedDefinition { get; private set; }
+
+        /// <summary>
         /// Gets or sets the open directory.
         /// </summary>
         /// <value>The open directory.</value>
@@ -155,6 +161,12 @@ namespace IronyModManager.ViewModels.Controls
         public virtual ReactiveCommand<Unit, Unit> OpenFileCommand { get; protected set; }
 
         /// <summary>
+        /// Gets or sets the right selected definition.
+        /// </summary>
+        /// <value>The right selected definition.</value>
+        public virtual IDefinition RightSelectedDefinition { get; private set; }
+
+        /// <summary>
         /// Gets or sets the selected mods order.
         /// </summary>
         /// <value>The selected mods order.</value>
@@ -165,18 +177,6 @@ namespace IronyModManager.ViewModels.Controls
         /// </summary>
         /// <value>The virtual definitions.</value>
         public virtual IEnumerable<IDefinition> VirtualDefinitions { get; protected set; }
-
-        /// <summary>
-        /// Gets or sets the left selected definition.
-        /// </summary>
-        /// <value>The left selected definition.</value>
-        public virtual IDefinition LeftSelectedDefinition { get; set; }
-
-        /// <summary>
-        /// Gets or sets the right selected definition.
-        /// </summary>
-        /// <value>The right selected definition.</value>
-        public virtual IDefinition RightSelectedDefinition { get; set; }
 
         #endregion Properties
 
