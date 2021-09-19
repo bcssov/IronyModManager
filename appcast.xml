@@ -4,14 +4,12 @@
 		<title>Irony Mod Manager</title>
 		<language>en</language>
 		<item>
-			<title>1.18.87</title>
+			<title>1.18.89</title>
 			<description>NOTE:
-This is a fix for broken conflict solver definition selection caused in v1.18.86
+Versions v1.18.86 and v1.18.87 have an updated third party component version which broke update extraction. If Irony update fails for you please update manually.
 
 RELEASE NOTES:
-* Update parser map to Stellaris 3.1
-* Update dependencies
-* Fix scroll viewer conflict solver related CTD
+* Fix broken update
 
 CHANGES FROM v1.17:
 * Update dependencies
@@ -24,18 +22,16 @@ CHANGES FROM v1.17:
 * Conflict Solver bracket count (by scrangos)
 * Add mod source indicator
 * Various fixes</description>
-			<pubDate>Sat, 18 Sep 2021 05:36:29 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.18.87/osx-x64.rar" sparkle:version="1.18.87.68" sparkle:shortVersionString="1.18.87" length="69709679" sparkle:os="osx" type="application/vnd.rar" sparkle:signature="S72eCjysQDM8xk/A3oXiu7X2KEesSgkuduEXlzFVEpGfU47kg9NAoxHxMHnT+CsHUd1ANP13y+7Yeb68XKToCg=="/>
+			<pubDate>Sun, 19 Sep 2021 05:44:12 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.18.89/osx-x64.rar" sparkle:version="1.18.89.33969" sparkle:shortVersionString="1.18.89" length="69729006" sparkle:os="osx" type="application/vnd.rar" sparkle:signature="PXbvaHJb9T0Gyooeru/0Jav0ylzY/Pk3/Pjc9X1lleHSbiZvYx2Q5ZdfBo0fZF2z3wP0Y1cI/KuVBLXBOC/KBQ=="/>
 		</item>
 		<item>
-			<title>1.18.87</title>
+			<title>1.18.89</title>
 			<description>NOTE:
-This is a fix for broken conflict solver definition selection caused in v1.18.86
+Versions v1.18.86 and v1.18.87 have an updated third party component version which broke update extraction. If Irony update fails for you please update manually.
 
 RELEASE NOTES:
-* Update parser map to Stellaris 3.1
-* Update dependencies
-* Fix scroll viewer conflict solver related CTD
+* Fix broken update
 
 CHANGES FROM v1.17:
 * Update dependencies
@@ -48,18 +44,16 @@ CHANGES FROM v1.17:
 * Conflict Solver bracket count (by scrangos)
 * Add mod source indicator
 * Various fixes</description>
-			<pubDate>Sat, 18 Sep 2021 05:36:37 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.18.87/win-x64-setup.rar" sparkle:version="1.18.87.68" sparkle:shortVersionString="1.18.87" length="61130922" sparkle:os="windows" type="application/vnd.rar" sparkle:signature="Zw4Ggk3kx84PZCBCN2D11b5qDvcFzdWSbq6nVTwX+/i8lWioPKkVQpdR9VasQCU17cDuD1Nrq7odyRcV8zWHBw=="/>
+			<pubDate>Sun, 19 Sep 2021 05:44:20 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.18.89/win-x64-setup.rar" sparkle:version="1.18.89.33969" sparkle:shortVersionString="1.18.89" length="61138539" sparkle:os="windows" type="application/vnd.rar" sparkle:signature="NDnrSc1xU83wk7bB0+WmAn522w5Wx/GiBdG0slZgxFIgUeBXbYEsao5cXIrt27O8vleg3Y8KqSiugr1QI0emDQ=="/>
 		</item>
 		<item>
-			<title>1.18.87</title>
+			<title>1.18.89</title>
 			<description>NOTE:
-This is a fix for broken conflict solver definition selection caused in v1.18.86
+Versions v1.18.86 and v1.18.87 have an updated third party component version which broke update extraction. If Irony update fails for you please update manually.
 
 RELEASE NOTES:
-* Update parser map to Stellaris 3.1
-* Update dependencies
-* Fix scroll viewer conflict solver related CTD
+* Fix broken update
 
 CHANGES FROM v1.17:
 * Update dependencies
@@ -72,18 +66,16 @@ CHANGES FROM v1.17:
 * Conflict Solver bracket count (by scrangos)
 * Add mod source indicator
 * Various fixes</description>
-			<pubDate>Sat, 18 Sep 2021 05:36:33 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.18.87/win-x64.rar" sparkle:version="1.18.87.68" sparkle:shortVersionString="1.18.87" length="73521656" sparkle:os="windows" type="application/vnd.rar" sparkle:signature="AQOJCLZib9TmcsQzJYRTt6o4OwHV2Zz8lO5Up6kIXT8z+hZ2DOjPGXXKN/re3fnGgjMV0Uwec229ZRRWrqsWDQ=="/>
+			<pubDate>Sun, 19 Sep 2021 05:44:16 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.18.89/win-x64.rar" sparkle:version="1.18.89.33969" sparkle:shortVersionString="1.18.89" length="73540488" sparkle:os="windows" type="application/vnd.rar" sparkle:signature="MR+IoR/fM/zxq2SmXay3lAwrqyXSX+PLsuw+tWR1GTVMr24bkISjJCBzQ+HyaaSVy0imQ5iM/gj+f4Rt4LbkCA=="/>
 		</item>
 		<item>
-			<title>1.18.87</title>
+			<title>1.18.89</title>
 			<description>NOTE:
-This is a fix for broken conflict solver definition selection caused in v1.18.86
+Versions v1.18.86 and v1.18.87 have an updated third party component version which broke update extraction. If Irony update fails for you please update manually.
 
 RELEASE NOTES:
-* Update parser map to Stellaris 3.1
-* Update dependencies
-* Fix scroll viewer conflict solver related CTD
+* Fix broken update
 
 CHANGES FROM v1.17:
 * Update dependencies
@@ -96,8 +88,8 @@ CHANGES FROM v1.17:
 * Conflict Solver bracket count (by scrangos)
 * Add mod source indicator
 * Various fixes</description>
-			<pubDate>Sat, 18 Sep 2021 05:36:24 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.18.87/linux-x64.zip" sparkle:version="1.18.87.68" sparkle:shortVersionString="1.18.87" length="86209606" sparkle:os="linux" type="application/zip" sparkle:signature="DDfzKDWnZSGFCtwISPuOXAH1RzsgJbFM66YKf0zHKD2GEutEtT3F5SiK5E3swPLhpaIrrXAOFwCpft+dHsj2Bw=="/>
+			<pubDate>Sun, 19 Sep 2021 05:44:08 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.18.89/linux-x64.zip" sparkle:version="1.18.89.33969" sparkle:shortVersionString="1.18.89" length="86232238" sparkle:os="linux" type="application/zip" sparkle:signature="qtMEXOL9EO+Q7UfVy8nMr2jjNQVoQw7q6zNGX7U8/PlMna56CqkGgNxmebeLIFFSfXdepTTDnpL8agFnfdPoBQ=="/>
 		</item>
 	</channel>
 </rss>
