@@ -4,7 +4,7 @@
 // Created          : 09-17-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-30-2021
+// Last Modified On : 09-19-2021
 // ***********************************************************************
 // <copyright file="Unpacker.cs" company="Mario">
 //     Mario
@@ -74,6 +74,8 @@ namespace IronyModManager.IO.Updater
             {
                 DiskOperations.DeleteDirectory(extractPath, true);
             }
+            // Throwing exception because of this? While previously it would automatically be created
+            Directory.CreateDirectory(extractPath);
             using var fileStream = File.OpenRead(path);
             using var reader = ArchiveFactory.Open(fileStream);
             var all = reader.Entries.Where(entry => !entry.IsDirectory);
