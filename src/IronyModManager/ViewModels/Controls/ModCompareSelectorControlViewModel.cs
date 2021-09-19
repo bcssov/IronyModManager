@@ -4,7 +4,7 @@
 // Created          : 03-24-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 09-18-2021
+// Last Modified On : 09-19-2021
 // ***********************************************************************
 // <copyright file="ModCompareSelectorControlViewModel.cs" company="Mario">
 //     Mario
@@ -132,7 +132,7 @@ namespace IronyModManager.ViewModels.Controls
         /// Gets or sets the left selected definition.
         /// </summary>
         /// <value>The left selected definition.</value>
-        public virtual IDefinition LeftSelectedDefinition { get; private set; }
+        public virtual IDefinition LeftSelectedDefinition { get; protected set; }
 
         /// <summary>
         /// Gets or sets the open directory.
@@ -164,7 +164,7 @@ namespace IronyModManager.ViewModels.Controls
         /// Gets or sets the right selected definition.
         /// </summary>
         /// <value>The right selected definition.</value>
-        public virtual IDefinition RightSelectedDefinition { get; private set; }
+        public virtual IDefinition RightSelectedDefinition { get; protected set; }
 
         /// <summary>
         /// Gets or sets the selected mods order.
