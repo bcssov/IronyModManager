@@ -13,7 +13,7 @@ Check out the detailed overview on the [wiki](https://github.com/bcssov/IronyMod
 Versions v1.18.86 and v1.18.87 have an updated third party component version which broke update extraction. If Irony update fails for you please update manually.
 
 ### Download
-* Latest stable version: [v1.18.89](https://github.com/bcssov/IronyModManager/releases/tag/v1.18.89)
+* Latest stable version: [v1.18.90](https://github.com/bcssov/IronyModManager/releases/tag/v1.18.90)
 
 ### New users
 Check this [checklist](https://github.com/bcssov/IronyModManager/wiki/New-User-Checklist) if you are a first time user of Irony.
