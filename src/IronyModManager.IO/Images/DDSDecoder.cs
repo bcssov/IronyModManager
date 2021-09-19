@@ -4,7 +4,7 @@
 // Created          : 02-17-2021
 //
 // Last Modified By : Mario
-// Last Modified On : 03-26-2021
+// Last Modified On : 09-19-2021
 // ***********************************************************************
 // <copyright file="DDSDecoder.cs" company="Mario">
 //     Mario
@@ -127,9 +127,7 @@ namespace IronyModManager.IO.Images
         private CompressionFormat GetCompressionFormat(DdsFile file, DecoderInputOptions decoderInputOptions)
         {
             // Copied from BCnEncoder due to protection level
-            var format = file.header.ddsPixelFormat.IsDxt10Format ?
-                file.dx10Header.dxgiFormat :
-                file.header.ddsPixelFormat.DxgiFormat;
+            var format = file.header.ddsPixelFormat.IsDxt10Format ? file.dx10Header.dxgiFormat : file.header.ddsPixelFormat.DxgiFormat;
 
             switch (format)
             {
@@ -151,11 +149,14 @@ namespace IronyModManager.IO.Images
                 case DxgiFormat.DxgiFormatBc1UnormSrgb:
                 case DxgiFormat.DxgiFormatBc1Typeless:
                     if (file.header.ddsPixelFormat.dwFlags.HasFlag(PixelFormatFlags.DdpfAlphaPixels))
+                    {
                         return CompressionFormat.Bc1WithAlpha;
+                    }
 
                     if (decoderInputOptions.DdsBc1ExpectAlpha)
+                    {
                         return CompressionFormat.Bc1WithAlpha;
-
+                    }
                     return CompressionFormat.Bc1;
 
                 case DxgiFormat.DxgiFormatBc2Unorm:
@@ -178,6 +179,13 @@ namespace IronyModManager.IO.Images
                 case DxgiFormat.DxgiFormatBc5Typeless:
                     return CompressionFormat.Bc5;
 
+                case DxgiFormat.DxgiFormatBc6HTypeless:
+                case DxgiFormat.DxgiFormatBc6HUf16:
+                    return CompressionFormat.Bc6U;
+
+                case DxgiFormat.DxgiFormatBc6HSf16:
+                    return CompressionFormat.Bc6S;
+
                 case DxgiFormat.DxgiFormatBc7Unorm:
                 case DxgiFormat.DxgiFormatBc7UnormSrgb:
                 case DxgiFormat.DxgiFormatBc7Typeless:
@@ -193,12 +201,10 @@ namespace IronyModManager.IO.Images
                     return CompressionFormat.AtcInterpolatedAlpha;
 
                 default:
-#pragma warning disable CA2208 // Instantiate argument exceptions correctly
-                    throw new ArgumentOutOfRangeException(nameof(format), format, null);
-#pragma warning restore CA2208 // Instantiate argument exceptions correctly
+                    return CompressionFormat.Unknown;
             }
         }
-
-        #endregion Methods
     }
+
+    #endregion Methods
 }
