@@ -4,7 +4,7 @@
 // Created          : 11-26-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 05-31-2021
+// Last Modified On : 10-07-2021
 // ***********************************************************************
 // <copyright file="ModMergeCompressExporter.cs" company="Mario">
 //     Mario
@@ -83,7 +83,9 @@ namespace IronyModManager.IO.Mods
                 throw new ArgumentNullException(nameof(parameters));
             }
             queue.TryGetValue(parameters.QueueId, out var value);
-            value.AddEntry(parameters.FileName, parameters.Stream);
+            var entry = value.AddEntry(parameters.FileName, parameters.Stream);
+            entry.AlternateEncoding = System.Text.Encoding.UTF8;
+            entry.AlternateEncodingUsage = ZipOption.AsNecessary;
         }
 
         /// <summary>
@@ -112,6 +114,8 @@ namespace IronyModManager.IO.Mods
 
             if (queue.TryRemove(id, out var value))
             {
+                value.AlternateEncoding = System.Text.Encoding.UTF8;
+                value.AlternateEncodingUsage = ZipOption.AsNecessary;
                 value.SaveProgress += saveProgress;
                 value.Save(exportPath);
                 value.SaveProgress -= saveProgress;
