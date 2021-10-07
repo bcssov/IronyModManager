@@ -4,12 +4,9 @@
 		<title>Irony Mod Manager</title>
 		<language>en</language>
 		<item>
-			<title>1.18.90</title>
-			<description>NOTE:
-Versions v1.18.86 and v1.18.87 have an updated third party component version which broke update extraction. If Irony update fails for you please update manually.
-
-RELEASE NOTES:
-* Re-fix #298
+			<title>1.18.92</title>
+			<description>RELEASE NOTES:
+* Fix handling non-latin characters in zip files
 
 CHANGES FROM v1.17:
 * Update dependencies
@@ -22,16 +19,13 @@ CHANGES FROM v1.17:
 * Conflict Solver bracket count (by scrangos)
 * Add mod source indicator
 * Various fixes</description>
-			<pubDate>Sun, 19 Sep 2021 18:38:39 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.18.90/osx-x64.rar" sparkle:version="1.18.90.26615" sparkle:shortVersionString="1.18.90" length="69729065" sparkle:os="osx" type="application/vnd.rar" sparkle:signature="RP6DSJoJkxX9YW4y5Fe0csDXF/QBYVamPUB3TqF7qzOwQRj7Crg6FryvCb1vfWrJC+1JjxRwQFuGOePPC86nAQ=="/>
+			<pubDate>Thu, 07 Oct 2021 05:40:10 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.18.92/osx-x64.rar" sparkle:version="1.18.92.37821" sparkle:shortVersionString="1.18.92" length="69729480" sparkle:os="osx" type="application/vnd.rar" sparkle:signature="qiSHUWC26ptp47wTnyMUNu+cBvwzZYSvYZVB9lh6SiuU6QQ3Ul0fbU7nashUMj2PSjKmQGWIlCBK1Cr2IuleAA=="/>
 		</item>
 		<item>
-			<title>1.18.90</title>
-			<description>NOTE:
-Versions v1.18.86 and v1.18.87 have an updated third party component version which broke update extraction. If Irony update fails for you please update manually.
-
-RELEASE NOTES:
-* Re-fix #298
+			<title>1.18.92</title>
+			<description>RELEASE NOTES:
+* Fix handling non-latin characters in zip files
 
 CHANGES FROM v1.17:
 * Update dependencies
@@ -44,16 +38,13 @@ CHANGES FROM v1.17:
 * Conflict Solver bracket count (by scrangos)
 * Add mod source indicator
 * Various fixes</description>
-			<pubDate>Sun, 19 Sep 2021 18:38:47 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.18.90/win-x64-setup.rar" sparkle:version="1.18.90.26615" sparkle:shortVersionString="1.18.90" length="61145277" sparkle:os="windows" type="application/vnd.rar" sparkle:signature="RKQNVFHcSJTsEsEwWVH9mZ9cUxHFP7NNSoa/u7zGx9mgX0lgNvTp9mDeENtLE5+V2h8pHzd9wYKTEuFKyjq5Dw=="/>
+			<pubDate>Thu, 07 Oct 2021 05:40:18 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.18.92/win-x64-setup.rar" sparkle:version="1.18.92.37821" sparkle:shortVersionString="1.18.92" length="61149327" sparkle:os="windows" type="application/vnd.rar" sparkle:signature="+VBvUN+QAlZN53KcNg0/EdQ+HU0h4cjCLzC/q4Dkf/dQ86MhmSHITsJ6F+S7KcRVGwPnJy23PucFF8/91BFjAQ=="/>
 		</item>
 		<item>
-			<title>1.18.90</title>
-			<description>NOTE:
-Versions v1.18.86 and v1.18.87 have an updated third party component version which broke update extraction. If Irony update fails for you please update manually.
-
-RELEASE NOTES:
-* Re-fix #298
+			<title>1.18.92</title>
+			<description>RELEASE NOTES:
+* Fix handling non-latin characters in zip files
 
 CHANGES FROM v1.17:
 * Update dependencies
@@ -66,16 +57,13 @@ CHANGES FROM v1.17:
 * Conflict Solver bracket count (by scrangos)
 * Add mod source indicator
 * Various fixes</description>
-			<pubDate>Sun, 19 Sep 2021 18:38:43 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.18.90/win-x64.rar" sparkle:version="1.18.90.26615" sparkle:shortVersionString="1.18.90" length="73540572" sparkle:os="windows" type="application/vnd.rar" sparkle:signature="Rqda9q9EElwnBcde+cZm/cVeKhBzH3MUG/FI1lNQkFrazVjkUUoqbVMs19N30hMH2mMpPCFI1Aqu19qoor7TBQ=="/>
+			<pubDate>Thu, 07 Oct 2021 05:40:14 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.18.92/win-x64.rar" sparkle:version="1.18.92.37821" sparkle:shortVersionString="1.18.92" length="73540939" sparkle:os="windows" type="application/vnd.rar" sparkle:signature="NXGvqOR1pApzUQbRdz9LU42+WRfEDMAIQJt6ar9jPhvzsZIPcjDmQhKD2VRELlz0qG9vPIAHVoQEky1RDIzUBQ=="/>
 		</item>
 		<item>
-			<title>1.18.90</title>
-			<description>NOTE:
-Versions v1.18.86 and v1.18.87 have an updated third party component version which broke update extraction. If Irony update fails for you please update manually.
-
-RELEASE NOTES:
-* Re-fix #298
+			<title>1.18.92</title>
+			<description>RELEASE NOTES:
+* Fix handling non-latin characters in zip files
 
 CHANGES FROM v1.17:
 * Update dependencies
@@ -88,8 +76,8 @@ CHANGES FROM v1.17:
 * Conflict Solver bracket count (by scrangos)
 * Add mod source indicator
 * Various fixes</description>
-			<pubDate>Sun, 19 Sep 2021 18:38:36 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.18.90/linux-x64.zip" sparkle:version="1.18.90.26615" sparkle:shortVersionString="1.18.90" length="86232255" sparkle:os="linux" type="application/zip" sparkle:signature="mFmMhKVk10CJKObv4co5B0Q7+2Dk4Et2tY5+oYktj0L8jxhEjEjhlrF0uSGNZKY6enP1fjSF3Jw3uxenlMb4CQ=="/>
+			<pubDate>Thu, 07 Oct 2021 05:40:07 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.18.92/linux-x64.zip" sparkle:version="1.18.92.37821" sparkle:shortVersionString="1.18.92" length="86232289" sparkle:os="linux" type="application/zip" sparkle:signature="LNlVjZk/pfHLf98agC0DPDboRrYtNVNOMGGmmTVwWf13zKBHzvzK4tGop1lv1jhT7vfPAklnUMGfna/s2txYCQ=="/>
 		</item>
 	</channel>
 </rss>
