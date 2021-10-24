@@ -4,7 +4,7 @@
 // Created          : 05-27-2021
 //
 // Last Modified By : Mario
-// Last Modified On : 09-05-2021
+// Last Modified On : 10-24-2021
 // ***********************************************************************
 // <copyright file="GameIndexService.cs" company="Mario">
 //     Mario
@@ -28,6 +28,7 @@ using IronyModManager.Parser.Common.Args;
 using IronyModManager.Parser.Common.Mod;
 using IronyModManager.Services.Common;
 using IronyModManager.Services.Common.MessageBus;
+using IronyModManager.Services.Resolver;
 using IronyModManager.Shared.Cache;
 using IronyModManager.Shared.MessageBus;
 using IronyModManager.Shared.Models;
@@ -72,6 +73,11 @@ namespace IronyModManager.Services
         /// </summary>
         private readonly IParserManager parserManager;
 
+        /// <summary>
+        /// The path resolver
+        /// </summary>
+        private readonly GameRootPathResolver pathResolver;
+
         #endregion Fields
 
         #region Constructors
@@ -97,6 +103,7 @@ namespace IronyModManager.Services
             this.gameIndexer = gameIndexer;
             this.messageBus = messageBus;
             this.parserManager = parserManager;
+            pathResolver = new GameRootPathResolver();
         }
 
         #endregion Constructors
@@ -120,7 +127,7 @@ namespace IronyModManager.Services
                     await gameIndexer.ClearDefinitionAsync(GetStoragePath(), game);
                     await gameIndexer.WriteVersionAsync(GetStoragePath(), game, versions, CurrentCacheVersion);
                 }
-                var gamePath = Path.GetDirectoryName(game.ExecutableLocation);
+                var gamePath = pathResolver.GetPath(game);
                 var files = Reader.GetFiles(gamePath);
                 if (files.Any())
                 {

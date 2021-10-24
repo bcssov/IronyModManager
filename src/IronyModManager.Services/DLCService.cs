@@ -4,7 +4,7 @@
 // Created          : 02-14-2021
 //
 // Last Modified By : Mario
-// Last Modified On : 09-12-2021
+// Last Modified On : 10-24-2021
 // ***********************************************************************
 // <copyright file="DLCService.cs" company="Mario">
 //     Mario
@@ -22,6 +22,7 @@ using IronyModManager.IO.Common.Readers;
 using IronyModManager.Models.Common;
 using IronyModManager.Parser.Common.DLC;
 using IronyModManager.Services.Common;
+using IronyModManager.Services.Resolver;
 using IronyModManager.Shared.Cache;
 using IronyModManager.Storage.Common;
 
@@ -44,11 +45,6 @@ namespace IronyModManager.Services
         private const string CacheRegion = "DLC";
 
         /// <summary>
-        /// The DLC folder
-        /// </summary>
-        private const string DLCFolder = "dlc";
-
-        /// <summary>
         /// The cache
         /// </summary>
         private readonly ICache cache;
@@ -56,7 +52,7 @@ namespace IronyModManager.Services
         /// <summary>
         /// The DLC directories
         /// </summary>
-        private readonly string[] DLCDirectories = new string[] { DLCFolder, "builtin_dlc" };
+        private readonly string[] DLCDirectories = new string[] { GameRootPathResolver.DLCFolder, "builtin_dlc" };
 
         /// <summary>
         /// The DLC exporter
@@ -67,6 +63,11 @@ namespace IronyModManager.Services
         /// The DLC parser
         /// </summary>
         private readonly IDLCParser dlcParser;
+
+        /// <summary>
+        /// The path resolver
+        /// </summary>
+        private readonly GameRootPathResolver pathResolver;
 
         /// <summary>
         /// The reader
@@ -92,6 +93,7 @@ namespace IronyModManager.Services
             this.reader = reader;
             this.dlcParser = dlcParser;
             this.cache = cache;
+            pathResolver = new GameRootPathResolver();
         }
 
         #endregion Constructors
@@ -135,21 +137,12 @@ namespace IronyModManager.Services
                 var result = new List<IDLC>();
                 if (!string.IsNullOrWhiteSpace(game.ExecutableLocation))
                 {
-                    var cleanedExePath = Path.GetDirectoryName(game.ExecutableLocation);
-                    while (!string.IsNullOrWhiteSpace(cleanedExePath))
-                    {
-                        var directory = Path.Combine(cleanedExePath, ResolveDLCDirectory(game.DLCContainer, DLCFolder));
-                        if (Directory.Exists(directory))
-                        {
-                            break;
-                        }
-                        cleanedExePath = Path.GetDirectoryName(cleanedExePath);
-                    }
+                    var cleanedExePath = pathResolver.GetPath(game);
                     if (!string.IsNullOrWhiteSpace(cleanedExePath))
                     {
                         foreach (var dlcFolder in DLCDirectories)
                         {
-                            var directory = Path.Combine(cleanedExePath, ResolveDLCDirectory(game.DLCContainer, dlcFolder));
+                            var directory = Path.Combine(cleanedExePath, pathResolver.ResolveDLCDirectory(game.DLCContainer, dlcFolder));
                             if (Directory.Exists(directory))
                             {
                                 var infos = reader.Read(directory);
@@ -203,21 +196,6 @@ namespace IronyModManager.Services
                 return true;
             }
             return false;
-        }
-
-        /// <summary>
-        /// Resolves the DLC directory.
-        /// </summary>
-        /// <param name="basePath">The base path.</param>
-        /// <param name="dlc">The DLC.</param>
-        /// <returns>System.String.</returns>
-        protected virtual string ResolveDLCDirectory(string basePath, string dlc)
-        {
-            if (string.IsNullOrWhiteSpace(basePath))
-            {
-                return dlc;
-            }
-            return Path.Combine(basePath, dlc);
         }
 
         #endregion Methods
