@@ -555,5 +555,15 @@
         "Clear": "X",
         "UpArrow": "▲",
         "DownArrow": "▼"
+    },
+    "FilterCommands": {
+        "Achievements": "достижения",
+        "Source": "источник",
+        "Version": "версия",
+        "Selected": "выбранный",
+        "Yes": "да",
+        "No": "Нет",
+        "True": "истинный",
+        "False": "ложный"
     }
 }

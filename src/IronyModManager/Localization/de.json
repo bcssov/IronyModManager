@@ -555,5 +555,15 @@
         "Clear": "X",
         "UpArrow": "▲",
         "DownArrow": "▼"
+    },
+    "FilterCommands": {
+        "Achievements": "erfolge",
+        "Source": "quelle",
+        "Version": "version",
+        "Selected": "ausgewählt",
+        "Yes": "ja",
+        "No": "nein",
+        "True": "wahr",
+        "False": "falsch"
     }
 }

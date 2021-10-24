@@ -555,5 +555,15 @@
         "Clear": "X",
         "UpArrow": "▲",
         "DownArrow": "▼"
+    },
+    "FilterCommands": {
+        "Achievements": "postignuća",
+        "Source": "izvor",
+        "Version": "verzija",
+        "Selected": "odabran",
+        "Yes": "da",
+        "No": "ne",
+        "True": "točno",
+        "False": "netočno"
     }
 }

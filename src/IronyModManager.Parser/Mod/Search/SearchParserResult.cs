@@ -31,14 +31,14 @@ namespace IronyModManager.Parser.Mod.Search
         /// Gets or sets a value indicating whether [achievement compatible].
         /// </summary>
         /// <value><c>null</c> if [achievement compatible] contains no value, <c>true</c> if [achievement compatible]; otherwise, <c>false</c>.</value>
-        [DescriptorProperty("achievements")]
+        [DescriptorProperty(Fields.Achievements)]
         public bool? AchievementCompatible { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether this instance is selected.
         /// </summary>
         /// <value><c>null</c> if [is selected] contains no value, <c>true</c> if [is selected]; otherwise, <c>false</c>.</value>
-        [DescriptorProperty("selected")]
+        [DescriptorProperty(Fields.Selected)]
         public bool? IsSelected { get; set; }
 
         /// <summary>
@@ -52,14 +52,14 @@ namespace IronyModManager.Parser.Mod.Search
         /// Gets or sets the source.
         /// </summary>
         /// <value>The source.</value>
-        [DescriptorProperty("source")]
+        [DescriptorProperty(Fields.Source)]
         public string Source { get; set; }
 
         /// <summary>
         /// Gets or sets the version.
         /// </summary>
         /// <value>The version.</value>
-        [DescriptorProperty("version")]
+        [DescriptorProperty(Fields.Version)]
         public Version? Version { get; set; }
 
         #endregion Properties
