@@ -206,8 +206,7 @@
     <Setter Property="ClipToBounds" Value="False" />
     <Setter Property="Template">
       <ControlTemplate>
-        <Grid Name="rootGrid"
-              Margin="3,12"
+        <Grid Name="rootGrid"              
               Width="6">
           <Border Name="backBorder"
                   CornerRadius="6"
@@ -276,6 +275,14 @@
       <Transitions>
         <DoubleTransition Duration="0:0:0.5" Property="Opacity" Easing="CubicEaseOut" />
       </Transitions>
+    </Setter>
+  </Style>
+
+
+  <!-- Allow overriding from TextBox -->
+  <Style Selector="ScrollBar.Modern /template/ Grid#rootGrid">
+    <Setter Property="Margin"
+            Value="3 12">
     </Setter>
   </Style>
 
