@@ -4,7 +4,7 @@
 // Created          : 01-10-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 09-05-2021
+// Last Modified On : 10-24-2021
 // ***********************************************************************
 // <copyright file="App.xaml.cs" company="Mario">
 //     Mario
@@ -199,6 +199,7 @@ namespace IronyModManager
             SetFontFamily(mainWindow);
             var vm = (MainWindowViewModel)resolver.ResolveViewModel<MainWindow>();
             mainWindow.DataContext = vm;
+            mainWindow.ExtendClientAreaChromeHints = Avalonia.Platform.ExtendClientAreaChromeHints.PreferSystemChrome;
             desktop.MainWindow = mainWindow;
         }
 
@@ -222,6 +223,7 @@ namespace IronyModManager
             var message = locManager.GetResource(LocalizationResources.FatalError.Message);
             var header = locManager.GetResource(LocalizationResources.FatalError.Header);
             var messageBox = MessageBoxes.GetFatalErrorWindow(title, header, message);
+            messageBox.ExtendClientAreaChromeHints = Avalonia.Platform.ExtendClientAreaChromeHints.PreferSystemChrome;
 
             SetFontFamily(messageBox);
             desktop.MainWindow = messageBox;
