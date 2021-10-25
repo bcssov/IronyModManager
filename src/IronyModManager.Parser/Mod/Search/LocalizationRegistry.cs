@@ -55,7 +55,7 @@ namespace IronyModManager.Parser.Mod.Search
         #region Constructors
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="LocalizationRegistry"/> class.
+        /// Initializes a new instance of the <see cref="LocalizationRegistry" /> class.
         /// </summary>
         /// <param name="cache">The cache.</param>
         public LocalizationRegistry(ICache cache)
@@ -101,7 +101,7 @@ namespace IronyModManager.Parser.Mod.Search
         /// </summary>
         /// <param name="key">The key.</param>
         /// <returns>List&lt;System.String&gt;.</returns>
-        public IEnumerable<string> GetTranslations(string key)
+        public IDictionary<string, string> GetTranslations(string key)
         {
             var cached = cache.Get<Dictionary<string, string>>(new CacheGetParameters()
             {
@@ -110,9 +110,9 @@ namespace IronyModManager.Parser.Mod.Search
             });
             if (cached != null)
             {
-                return cached.Select(p => p.Value).ToList();
+                return cached.ToDictionary(k => k.Key, v => v.Value);
             }
-            return new List<string>();
+            return new Dictionary<string, string>();
         }
 
         /// <summary>

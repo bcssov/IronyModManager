@@ -4,7 +4,7 @@
 // Created          : 10-24-2021
 //
 // Last Modified By : Mario
-// Last Modified On : 10-24-2021
+// Last Modified On : 10-25-2021
 // ***********************************************************************
 // <copyright file="SearchParserResult.cs" company="Mario">
 //     Mario
@@ -55,6 +55,8 @@ namespace IronyModManager.Parser.Mod.Search
         [DescriptorProperty(Fields.Source)]
         public string Source { get; set; }
 
+#nullable enable
+
         /// <summary>
         /// Gets or sets the version.
         /// </summary>
@@ -63,5 +65,7 @@ namespace IronyModManager.Parser.Mod.Search
         public Version? Version { get; set; }
 
         #endregion Properties
+
+#nullable disable
     }
 }

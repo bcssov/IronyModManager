@@ -4,7 +4,7 @@
 // Created          : 02-23-2021
 //
 // Last Modified By : Mario
-// Last Modified On : 02-24-2021
+// Last Modified On : 10-25-2021
 // ***********************************************************************
 // <copyright file="Subject.cs" company="reactive">
 //     reactive
@@ -31,19 +31,23 @@ namespace IronyModManager.Shared.MessageBus
     /// <seealso cref="System.Reactive.Subjects.SubjectBase{TMessage}" />
     public sealed class Subject<TMessage> : SubjectBase<TMessage> where TMessage : IMessageBusEvent
     {
-#pragma warning disable CS8632 // The annotation for nullable reference types should only be used in code within a '#nullable' annotations context.
-
-        #region Fields
+#nullable enable
 
         /// <summary>
         /// The disposed
         /// </summary>
+#pragma warning disable CA1825 // Avoid zero-length array allocations
+
+        #region Fields
+
         private static readonly SubjectDisposable[] Disposed = new SubjectDisposable[0];
 
         /// <summary>
         /// The terminated
         /// </summary>
         private static readonly SubjectDisposable[] Terminated = new SubjectDisposable[0];
+
+#pragma warning restore CA1825 // Avoid zero-length array allocations
 
         /// <summary>
         /// The exception
@@ -57,7 +61,7 @@ namespace IronyModManager.Shared.MessageBus
 
         #endregion Fields
 
-#pragma warning restore CS8632 // The annotation for nullable reference types should only be used in code within a '#nullable' annotations context.
+#nullable disable
 
         #region Constructors
 
@@ -309,7 +313,7 @@ namespace IronyModManager.Shared.MessageBus
 
         #endregion Methods
 
-#pragma warning disable CS8632 // The annotation for nullable reference types should only be used in code within a '#nullable' annotations context.
+#nullable enable
 
         #region Classes
 
@@ -382,6 +386,6 @@ namespace IronyModManager.Shared.MessageBus
 
         #endregion Classes
 
-#pragma warning restore CS8632 // The annotation for nullable reference types should only be used in code within a '#nullable' annotations context.
+#nullable disable
     }
 }

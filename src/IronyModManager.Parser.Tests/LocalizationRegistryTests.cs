@@ -37,7 +37,7 @@ namespace IronyModManager.Parser.Tests
         public void Should_have_all_translation_keys()
         {
             var registry = new LocalizationRegistry(new Cache());
-            registry.GetTranslationKeys().Count().Should().Be(8);
+            registry.GetTranslationKeys().Length.Should().Be(8);
         }
 
         /// <summary>
@@ -51,7 +51,7 @@ namespace IronyModManager.Parser.Tests
             registry.RegisterTranslation("fr", registry.GetTranslationKeys().FirstOrDefault(), "test2");
             registry.GetTranslation("en", registry.GetTranslationKeys().FirstOrDefault()).Should().Be("test1");
             registry.GetTranslation("fr", registry.GetTranslationKeys().FirstOrDefault()).Should().Be("test2");
-            registry.GetTranslations(registry.GetTranslationKeys().FirstOrDefault()).Count().Should().Be(2);
+            registry.GetTranslations(registry.GetTranslationKeys().FirstOrDefault()).Count.Should().Be(2);
         }
     }
 }

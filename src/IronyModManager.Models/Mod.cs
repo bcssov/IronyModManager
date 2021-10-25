@@ -4,7 +4,7 @@
 // Created          : 02-29-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 08-27-2021
+// Last Modified On : 10-25-2021
 // ***********************************************************************
 // <copyright file="Mod.cs" company="Mario">
 //     Mario
@@ -13,7 +13,6 @@
 // ***********************************************************************
 using System;
 using System.Collections.Generic;
-using System.Text;
 using IronyModManager.Models.Common;
 using IronyModManager.Shared;
 
@@ -188,28 +187,10 @@ namespace IronyModManager.Models
             {
                 if (!string.IsNullOrWhiteSpace(Version))
                 {
-                    var sb = new StringBuilder();
-                    var count = 0;
-                    foreach (var item in Version.Split("."))
+                    var convertedVersion = Version.ToVersion();
+                    if (convertedVersion != null)
                     {
-                        var parsed = item.Replace("*", string.Empty);
-                        if (string.IsNullOrWhiteSpace(parsed))
-                        {
-                            parsed = "*";
-                        }
-                        if (int.TryParse(parsed, out var part))
-                        {
-                            sb.Append($"{part}.");
-                        }
-                        else if (parsed.Equals("*"))
-                        {
-                            sb.Append($"{(count > 1 ? int.MaxValue : 0)}.");
-                        }
-                        count++;
-                    }
-                    if (System.Version.TryParse(sb.ToString().Trim().Trim('.'), out var parsedVersion))
-                    {
-                        versionData = parsedVersion;
+                        versionData = convertedVersion;
                     }
                     else
                     {

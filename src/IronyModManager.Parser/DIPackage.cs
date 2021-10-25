@@ -18,6 +18,7 @@ using IronyModManager.Parser.Common;
 using IronyModManager.Parser.Common.DLC;
 using IronyModManager.Parser.Common.Mod;
 using IronyModManager.Parser.Common.Mod.Search;
+using IronyModManager.Parser.Common.Mod.Search.Converter;
 using IronyModManager.Parser.Common.Parsers;
 using IronyModManager.Parser.Common.Parsers.Models;
 using IronyModManager.Parser.Default;
@@ -27,6 +28,7 @@ using IronyModManager.Parser.Games.Stellaris;
 using IronyModManager.Parser.Generic;
 using IronyModManager.Parser.Mod;
 using IronyModManager.Parser.Mod.Search;
+using IronyModManager.Parser.Mod.Search.Converter;
 using IronyModManager.Parser.Models;
 using IronyModManager.Shared;
 using IronyModManager.Shared.Models;
@@ -84,6 +86,10 @@ namespace IronyModManager.Parser
             container.Register<IBracketValidateResult, BracketValidateResult>();
             container.Register<ISearchParserResult, SearchParserResult>();
             container.Register<ILocalizationRegistry, LocalizationRegistry>(Lifestyle.Singleton);
+            container.Collection.Register(typeof(ITypeConverter), new List<Type>
+            {
+                typeof(BoolConverter)
+            });
         }
 
         #endregion Methods

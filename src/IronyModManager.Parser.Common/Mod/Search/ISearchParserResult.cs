@@ -4,7 +4,7 @@
 // Created          : 10-24-2021
 //
 // Last Modified By : Mario
-// Last Modified On : 10-24-2021
+// Last Modified On : 10-25-2021
 // ***********************************************************************
 // <copyright file="ISearchParserResult.cs" company="Mario">
 //     Mario
@@ -22,7 +22,7 @@ namespace IronyModManager.Parser.Common.Mod.Search
     /// </summary>
     public interface ISearchParserResult
     {
-#pragma warning disable CS8632 // The annotation for nullable reference types should only be used in code within a '#nullable' annotations context.
+#nullable enable
 
         #region Properties
 
@@ -58,6 +58,6 @@ namespace IronyModManager.Parser.Common.Mod.Search
 
         #endregion Properties
 
-#pragma warning restore CS8632 // The annotation for nullable reference types should only be used in code within a '#nullable' annotations context.
+#nullable disable
     }
 }

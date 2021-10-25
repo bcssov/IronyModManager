@@ -43,7 +43,7 @@ namespace IronyModManager.Parser.Common.Mod.Search
         /// </summary>
         /// <param name="key">The key.</param>
         /// <returns>IEnumerable&lt;System.String&gt;.</returns>
-        IEnumerable<string> GetTranslations(string key);
+        IDictionary<string, string> GetTranslations(string key);
 
         /// <summary>
         /// Registers the translation.
