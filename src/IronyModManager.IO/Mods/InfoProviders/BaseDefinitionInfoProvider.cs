@@ -4,7 +4,7 @@
 // Created          : 04-04-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-09-2021
+// Last Modified On : 10-25-2021
 // ***********************************************************************
 // <copyright file="BaseDefinitionInfoProvider.cs" company="Mario">
 //     Mario
@@ -308,6 +308,10 @@ namespace IronyModManager.IO.Mods.InfoProviders
             {
                 if (definition.ValueType != ValueType.OverWrittenObjectWithPreserveFileName)
                 {
+                    if (definition.ValueType == ValueType.OverwrittenObjectSingleFile)
+                    {
+                        return Path.Combine(definition.ParentDirectory, $"{FIOSName}{fileName.GenerateValidFileName()}");
+                    }
                     return Path.Combine(definition.ParentDirectory, $"{FIOSName}{GenerateNameHash(definition.OriginalModName)}{(string.IsNullOrWhiteSpace(definition.OriginalFileName) ? GenerateNameHash(fileName, true) : GenerateNameHash(definition.OriginalFileName, true))}{definition.Order:D4}{fileName.GenerateValidFileName()}");
                 }
                 else
@@ -331,6 +335,10 @@ namespace IronyModManager.IO.Mods.InfoProviders
             {
                 if (definition.ValueType != ValueType.OverWrittenObjectWithPreserveFileName)
                 {
+                    if (definition.ValueType == ValueType.OverwrittenObjectSingleFile)
+                    {
+                        return Path.Combine(definition.ParentDirectory, $"{LIOSName}{fileName.GenerateValidFileName()}");
+                    }
                     return Path.Combine(definition.ParentDirectory, $"{LIOSName}{GenerateNameHash(definition.OriginalModName)}{(string.IsNullOrWhiteSpace(definition.OriginalFileName) ? GenerateNameHash(fileName, true) : GenerateNameHash(definition.OriginalFileName, true))}{definition.Order:D4}{fileName.GenerateValidFileName()}");
                 }
                 else

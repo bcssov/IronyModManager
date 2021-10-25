@@ -132,7 +132,7 @@
         "PreferredParser": "DefaultParser"
     }, {
         "DirectoryPath": "common\\ethics",
-        "PreferredParser": "StellarisWholeTextParser"
+        "PreferredParser": "StellarisOverwrittenObjectSingleFileParser"
     }, {
         "DirectoryPath": "common\\event_chains",
         "PreferredParser": "DefaultParser"

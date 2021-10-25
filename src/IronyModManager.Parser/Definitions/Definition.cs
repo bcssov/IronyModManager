@@ -4,7 +4,7 @@
 // Created          : 02-16-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 08-27-2021
+// Last Modified On : 10-25-2021
 // ***********************************************************************
 // <copyright file="Definition.cs" company="Mario">
 //     Mario
@@ -442,7 +442,6 @@ namespace IronyModManager.Parser.Definitions
         /// Gets or sets the order.
         /// </summary>
         /// <value>The order.</value>
-        [JsonIgnore]
         public int Order { get; set; }
 
         /// <summary>

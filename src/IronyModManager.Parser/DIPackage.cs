@@ -4,7 +4,7 @@
 // Created          : 02-16-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 09-02-2021
+// Last Modified On : 10-25-2021
 // ***********************************************************************
 // <copyright file="DIPackage.cs" company="Mario">
 //     Mario
@@ -64,7 +64,8 @@ namespace IronyModManager.Parser
             container.Collection.Register(typeof(IGameParser), new List<Type>
             {
                 typeof(FlagsParser), typeof(SolarSystemInitializersParser), typeof(Games.Stellaris.WholeTextParser),
-                typeof(OverwrittenParser), typeof(ScriptedVariablesParser), typeof(OverWrittenObjectWithPreserveFileNameParser)
+                typeof(OverwrittenParser), typeof(ScriptedVariablesParser), typeof(OverWrittenObjectWithPreserveFileNameParser),
+                typeof(OverwrittenObjectSingleFileParser)
             });
             container.Register<IParserManager, ParserManager>();
             container.Register<IModObject, ModObject>();
