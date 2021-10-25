@@ -4,7 +4,7 @@
 // Created          : 02-18-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-07-2021
+// Last Modified On : 10-25-2021
 // ***********************************************************************
 // <copyright file="WholeTextParser.cs" company="Mario">
 //     Mario
@@ -45,9 +45,9 @@ namespace IronyModManager.Parser.Games.Stellaris
         private static readonly string[] startsWithChecks = new string[]
         {
             Common.Constants.Stellaris.DiploPhrases, Common.Constants.Stellaris.MapGalaxy, Common.Constants.Stellaris.NameLists,
-            Common.Constants.Stellaris.SpeciesNames, Common.Constants.Stellaris.Terraform, Common.Constants.Stellaris.Portraits,
+            Common.Constants.Stellaris.SpeciesNames, Common.Constants.Stellaris.Portraits,
             Common.Constants.Stellaris.ComponentTags, Common.Constants.Stellaris.RandomNamesBase, Common.Constants.Stellaris.RandomNames,
-            Common.Constants.Stellaris.StartScreenMessages, Common.Constants.Stellaris.MapSetupScenarios
+            Common.Constants.Stellaris.StartScreenMessages, Common.Constants.Stellaris.MapSetupScenarios, Common.Constants.Stellaris.Ethics
         };
 
         #endregion Fields
