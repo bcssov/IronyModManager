@@ -83,6 +83,7 @@ namespace IronyModManager.Parser
             container.Register<IDLCObject, DLCObject>();
             container.Register<IBracketValidateResult, BracketValidateResult>();
             container.Register<ISearchParserResult, SearchParserResult>();
+            container.Register<ILocalizationRegistry, LocalizationRegistry>(Lifestyle.Singleton);
         }
 
         #endregion Methods

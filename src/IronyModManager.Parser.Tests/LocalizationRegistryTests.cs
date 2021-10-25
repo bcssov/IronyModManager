@@ -4,7 +4,7 @@
 // Created          : 10-24-2021
 //
 // Last Modified By : Mario
-// Last Modified On : 10-24-2021
+// Last Modified On : 10-25-2021
 // ***********************************************************************
 // <copyright file="LocalizationRegistryTests.cs" company="Mario">
 //     Mario
@@ -19,6 +19,8 @@ using System.Threading.Tasks;
 using FluentAssertions;
 using IronyModManager.Parser.Common.Mod.Search;
 using IronyModManager.Parser.Games.Stellaris;
+using IronyModManager.Parser.Mod.Search;
+using IronyModManager.Shared.Cache;
 using Xunit;
 
 namespace IronyModManager.Parser.Tests
@@ -34,7 +36,8 @@ namespace IronyModManager.Parser.Tests
         [Fact]
         public void Should_have_all_translation_keys()
         {
-            LocalizationRegistry.GetTranslationKeys().Count().Should().Be(8);
+            var registry = new LocalizationRegistry(new Cache());
+            registry.GetTranslationKeys().Count().Should().Be(8);
         }
 
         /// <summary>
@@ -43,11 +46,12 @@ namespace IronyModManager.Parser.Tests
         [Fact]
         public void Should_contain_registered_keys()
         {
-            LocalizationRegistry.RegisterTranslation("en", LocalizationRegistry.GetTranslationKeys().FirstOrDefault(), "test1");
-            LocalizationRegistry.RegisterTranslation("fr", LocalizationRegistry.GetTranslationKeys().FirstOrDefault(), "test2");
-            LocalizationRegistry.GetTranslation("en", LocalizationRegistry.GetTranslationKeys().FirstOrDefault()).Should().Be("test1");
-            LocalizationRegistry.GetTranslation("fr", LocalizationRegistry.GetTranslationKeys().FirstOrDefault()).Should().Be("test2");
-            LocalizationRegistry.GetTranslations(LocalizationRegistry.GetTranslationKeys().FirstOrDefault()).Count.Should().Be(2);
+            var registry = new LocalizationRegistry(new Cache());
+            registry.RegisterTranslation("en", registry.GetTranslationKeys().FirstOrDefault(), "test1");
+            registry.RegisterTranslation("fr", registry.GetTranslationKeys().FirstOrDefault(), "test2");
+            registry.GetTranslation("en", registry.GetTranslationKeys().FirstOrDefault()).Should().Be("test1");
+            registry.GetTranslation("fr", registry.GetTranslationKeys().FirstOrDefault()).Should().Be("test2");
+            registry.GetTranslations(registry.GetTranslationKeys().FirstOrDefault()).Count().Should().Be(2);
         }
     }
 }

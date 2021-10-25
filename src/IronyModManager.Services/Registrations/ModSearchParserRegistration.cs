@@ -4,7 +4,7 @@
 // Created          : 10-24-2021
 //
 // Last Modified By : Mario
-// Last Modified On : 10-24-2021
+// Last Modified On : 10-25-2021
 // ***********************************************************************
 // <copyright file="ModSearchParserRegistration.cs" company="Mario">
 //     Mario
@@ -38,12 +38,13 @@ namespace IronyModManager.Services.Registrations
         {
             var languages = DIResolver.Get<ILanguagesService>().Get();
             var manager = DIResolver.Get<ILocalizationManager>();
-            var translationKeys = LocalizationRegistry.GetTranslationKeys();
+            var registry = DIResolver.Get<ILocalizationRegistry>();
+            var translationKeys = registry.GetTranslationKeys();
             foreach (var key in translationKeys)
             {
                 foreach (var language in languages)
                 {
-                    LocalizationRegistry.RegisterTranslation(language.Abrv, key, manager.GetResource(language.Abrv, key));
+                    registry.RegisterTranslation(language.Abrv, key, manager.GetResource(language.Abrv, key));
                 }
             }
         }
