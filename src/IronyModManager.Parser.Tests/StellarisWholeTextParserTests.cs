@@ -148,7 +148,7 @@ namespace IronyModManager.Parser.Tests
                 GameType = "Stellaris"
             };
             var parser = new WholeTextParser(new CodeParser(new Logger()), null);
-            parser.CanParse(args).Should().BeTrue();            
+            parser.CanParse(args).Should().BeTrue();
         }
 
         /// <summary>
@@ -191,21 +191,6 @@ namespace IronyModManager.Parser.Tests
             var args = new CanParseArgs()
             {
                 File = "map\\setup_scenarios\\test.txt",
-                GameType = "Stellaris"
-            };
-            var parser = new WholeTextParser(new CodeParser(new Logger()), null);
-            parser.CanParse(args).Should().BeTrue();
-        }
-
-        /// <summary>
-        /// Defines the test method CanParse_ethics_should_be_true.
-        /// </summary>
-        [Fact]
-        public void CanParse_ethics_should_be_true()
-        {
-            var args = new CanParseArgs()
-            {
-                File = "common\\ethics\\test.txt",
                 GameType = "Stellaris"
             };
             var parser = new WholeTextParser(new CodeParser(new Logger()), null);
