@@ -4,7 +4,7 @@
 // Created          : 05-26-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 09-06-2021
+// Last Modified On : 10-25-2021
 // ***********************************************************************
 // <copyright file="ModPatchCollectionService.cs" company="Mario">
 //     Mario
@@ -78,6 +78,11 @@ namespace IronyModManager.Services
         /// The show self conflicts identifier
         /// </summary>
         private const string ShowSelfConflictsId = "--showSelfConflicts";
+
+        /// <summary>
+        /// The single file merged
+        /// </summary>
+        private const string SingleFileMerged = "irony_merged";
 
         /// <summary>
         /// The service lock
@@ -326,7 +331,7 @@ namespace IronyModManager.Services
             var fileConflictCache = new Dictionary<string, bool>();
             var fileKeys = indexedDefinitions.GetAllFileKeys();
             var typeAndIdKeys = indexedDefinitions.GetAllTypeAndIdKeys();
-            var overwritten = indexedDefinitions.GetByValueType(ValueType.OverwrittenObject).Concat(indexedDefinitions.GetByValueType(ValueType.OverWrittenObjectWithPreserveFileName));
+            var overwritten = indexedDefinitions.GetByValueType(ValueType.OverwrittenObject).Concat(indexedDefinitions.GetByValueType(ValueType.OverWrittenObjectWithPreserveFileName)).Concat(indexedDefinitions.GetByValueType(ValueType.OverwrittenObjectSingleFile));
             var empty = indexedDefinitions.GetByValueType(ValueType.EmptyFile);
 
             double total = fileKeys.Count() + typeAndIdKeys.Count() + overwritten.Count() + empty.Count();
@@ -700,12 +705,27 @@ namespace IronyModManager.Services
         {
             var game = GameService.GetSelected();
             double previousProgress = 0;
+            async Task cleanSingleMergeFiles(string directory, string patchName)
+            {
+                var patchModDir = GetPatchModDirectory(game, patchName);
+                await ModWriter.PurgeModDirectoryAsync(new ModWriterParameters()
+                {
+                    RootDirectory = patchModDir,
+                    Path = directory
+                });
+            }
             async Task<int> syncPatchFiles(IConflictResult conflicts, IEnumerable<string> patchFiles, string patchName, int total, int processed, int maxProgress)
             {
                 var patchModDir = GetPatchModDirectory(game, patchName);
                 foreach (var file in patchFiles.Distinct())
                 {
                     var cleaned = false;
+                    // Skip single file overwrites as they are cleaned at the beginning of the process
+                    var folderConflicts = conflicts.AllConflicts.GetByParentDirectory(Path.GetDirectoryName(file));
+                    if (folderConflicts.Any() && folderConflicts.FirstOrDefault().ValueType == ValueType.OverwrittenObjectSingleFile)
+                    {
+                        continue;
+                    }
                     if (!conflicts.CustomConflicts.ExistsByFile(file) &&
                         !conflicts.OrphanConflicts.ExistsByFile(file) &&
                         !conflicts.OverwrittenConflicts.ExistsByFile(file) &&
@@ -759,6 +779,8 @@ namespace IronyModManager.Services
                 copy.Type = definition.Type;
                 copy.ValueType = definition.ValueType;
                 copy.IsFromGame = definition.IsFromGame;
+                copy.Order = definition.Order;
+                copy.OriginalFileName = definition.OriginalFileName;
                 return copy;
             }
             async Task<(IIndexedDefinitions, int)> partialCopyIndexedDefinitions(IIndexedDefinitions indexedDefinitions, int total, int processed, int maxProgress)
@@ -793,6 +815,10 @@ namespace IronyModManager.Services
                     RootPath = GetModDirectoryRootPath(game),
                     PatchPath = EvaluatePatchNamePath(game, patchName)
                 });
+                foreach (var item in conflictResult.OverwrittenConflicts.GetAll().GroupBy(p => p.ParentDirectory))
+                {
+                    await cleanSingleMergeFiles(item.First().ParentDirectory, patchName);
+                }
                 var total = patchFiles.Count() + conflictResult.AllConflicts.GetAll().Count();
                 if (state != null)
                 {
@@ -884,16 +910,38 @@ namespace IronyModManager.Services
 
                     if (conflictResult.OverwrittenConflicts.GetAll().Any())
                     {
+                        var alreadyMergedTypes = new HashSet<string>();
                         var overwrittenConflicts = PopulateModPath(conflictResult.OverwrittenConflicts.GetAll().Where(p => !resolvedIndex.GetByTypeAndId(p.TypeAndId).Any()), GetCollectionMods());
                         foreach (var item in overwrittenConflicts)
                         {
-                            await modPatchExporter.ExportDefinitionAsync(new ModPatchExporterParameters()
+                            var canExport = true;
+                            var definition = item;
+                            if (item.ValueType == ValueType.OverwrittenObjectSingleFile)
                             {
-                                Game = game.Type,
-                                OverwrittenConflicts = new List<IDefinition>() { item },
-                                RootPath = GetModDirectoryRootPath(game),
-                                PatchPath = EvaluatePatchNamePath(game, patchName)
-                            });
+                                if (!alreadyMergedTypes.Contains(definition.Type))
+                                {
+                                    var merged = ProcessOverwrittenSingleFileDefinitions(conflictResult, item.Type);
+                                    if (merged != null)
+                                    {
+                                        definition = PopulateModPath(merged, GetCollectionMods()).FirstOrDefault();
+                                        alreadyMergedTypes.Add(definition.Type);
+                                    }
+                                }
+                                else
+                                {
+                                    canExport = false;
+                                }
+                            }
+                            if (canExport)
+                            {
+                                await modPatchExporter.ExportDefinitionAsync(new ModPatchExporterParameters()
+                                {
+                                    Game = game.Type,
+                                    OverwrittenConflicts = new List<IDefinition>() { definition },
+                                    RootPath = GetModDirectoryRootPath(game),
+                                    PatchPath = EvaluatePatchNamePath(game, patchName)
+                                });
+                            }
                         }
                         processed++;
                         perc = GetProgressPercentage(total, processed);
@@ -990,18 +1038,40 @@ namespace IronyModManager.Services
 
                     if (conflictResult.OverwrittenConflicts.GetAll().Any())
                     {
+                        var alreadyMergedTypes = new HashSet<string>();
                         var overwrittenConflicts = PopulateModPath(conflictResult.OverwrittenConflicts.GetAll().Where(p => !conflictResult.ResolvedConflicts.GetByTypeAndId(p.TypeAndId).Any()), GetCollectionMods());
                         foreach (var item in overwrittenConflicts)
                         {
-                            if (await modPatchExporter.ExportDefinitionAsync(new ModPatchExporterParameters()
+                            var canExport = true;
+                            var definition = item;
+                            if (item.ValueType == ValueType.OverwrittenObjectSingleFile)
                             {
-                                Game = game.Type,
-                                OverwrittenConflicts = new List<IDefinition>() { item },
-                                RootPath = GetModDirectoryRootPath(game),
-                                PatchPath = EvaluatePatchNamePath(game, patchName)
-                            }))
+                                if (!alreadyMergedTypes.Contains(definition.Type))
+                                {
+                                    var merged = ProcessOverwrittenSingleFileDefinitions(conflictResult, item.Type);
+                                    if (merged != null)
+                                    {
+                                        definition = PopulateModPath(merged, GetCollectionMods()).FirstOrDefault();
+                                        alreadyMergedTypes.Add(definition.Type);
+                                    }
+                                }
+                                else
+                                {
+                                    canExport = false;
+                                }
+                            }
+                            if (canExport)
                             {
-                                exportedConflicts = true;
+                                if (await modPatchExporter.ExportDefinitionAsync(new ModPatchExporterParameters()
+                                {
+                                    Game = game.Type,
+                                    OverwrittenConflicts = new List<IDefinition>() { definition },
+                                    RootPath = GetModDirectoryRootPath(game),
+                                    PatchPath = EvaluatePatchNamePath(game, patchName)
+                                }))
+                                {
+                                    exportedConflicts = true;
+                                }
                             }
                             processed++;
                             perc = GetProgressPercentage(total, processed);
@@ -1886,9 +1956,18 @@ namespace IronyModManager.Services
                         }).ConfigureAwait(false);
                     }).ConfigureAwait(false);
 
-                    bool exportResult = false;
-                    if (exportPatches.Count > 0)
+                    var exportResult = false;
+                    if (exportPatches.Any())
                     {
+                        if (definition.ValueType == ValueType.OverwrittenObjectSingleFile)
+                        {
+                            var merged = ProcessOverwrittenSingleFileDefinitions(conflictResult, definition.Type);
+                            if (merged != null)
+                            {
+                                args.OverwrittenConflicts = PopulateModPath(merged, GetCollectionMods());
+                                args.Definitions = null;
+                            }
+                        }
                         exportResult = await modPatchExporter.ExportDefinitionAsync(args);
                         if (exportResult)
                         {
@@ -1920,7 +1999,7 @@ namespace IronyModManager.Services
                         PatchPath = EvaluatePatchNamePath(game, patchName),
                         HasGameDefinitions = conflictResult.AllConflicts.HasGameDefinitions()
                     });
-                    return exportPatches.Count > 0 ? exportResult && stateResult : stateResult;
+                    return exportPatches.Any() ? exportResult && stateResult : stateResult;
                 }
             }
             return false;
@@ -2002,7 +2081,7 @@ namespace IronyModManager.Services
         /// <returns><c>true</c> if [is overwritten type] [the specified value type]; otherwise, <c>false</c>.</returns>
         protected virtual bool IsOverwrittenType(ValueType valueType)
         {
-            return valueType == ValueType.OverwrittenObject || valueType == ValueType.OverWrittenObjectWithPreserveFileName;
+            return valueType == ValueType.OverwrittenObject || valueType == ValueType.OverWrittenObjectWithPreserveFileName || valueType == ValueType.OverwrittenObjectSingleFile;
         }
 
         /// <summary>
@@ -2036,6 +2115,114 @@ namespace IronyModManager.Services
         }
 
         /// <summary>
+        /// Merges the single file definitions.
+        /// </summary>
+        /// <param name="definitions">The definitions.</param>
+        /// <returns>IDefinition.</returns>
+        protected virtual IDefinition MergeSingleFileDefinitions(IEnumerable<IDefinition> definitions)
+        {
+            static void appendLine(StringBuilder sb, IEnumerable<string> lines, int indent = 0)
+            {
+                foreach (var item in lines)
+                {
+                    if (indent == 0)
+                    {
+                        sb.AppendLine(item);
+                    }
+                    else
+                    {
+                        sb.AppendLine($"{new string(' ', indent)}{item}");
+                    }
+                }
+            }
+            static void mergeCode(StringBuilder sb, string codeTag, string separator, IEnumerable<string> variables, IEnumerable<string> lines)
+            {
+                if (Shared.Constants.CodeSeparators.ClosingSeparators.Map.ContainsKey(separator))
+                {
+                    var closingTag = Shared.Constants.CodeSeparators.ClosingSeparators.Map[separator];
+                    sb.AppendLine($"{codeTag} = {separator}");
+                    if (!lines.Any())
+                    {
+                        foreach (var item in variables)
+                        {
+                            var splitLines = item.SplitOnNewLine();
+                            appendLine(sb, splitLines, 4);
+                        }
+                    }
+                    else
+                    {
+                        bool varsInserted = false;
+                        foreach (var item in lines)
+                        {
+                            var splitLines = item.SplitOnNewLine();
+                            foreach (var split in splitLines)
+                            {
+                                sb.AppendLine($"{new string(' ', 4)}{split}");
+                                if (!varsInserted && split.Contains(Shared.Constants.CodeSeparators.ClosingSeparators.CurlyBracket))
+                                {
+                                    varsInserted = true;
+                                    foreach (var var in variables)
+                                    {
+                                        var splitVars = var.SplitOnNewLine();
+                                        appendLine(sb, splitVars, 8);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    sb.AppendLine(closingTag);
+                }
+                else
+                {
+                    sb.AppendLine($"{codeTag}{separator}");
+                    foreach (var item in variables)
+                    {
+                        var splitLines = item.SplitOnNewLine();
+                        appendLine(sb, splitLines, 4);
+                    }
+                    foreach (var item in lines)
+                    {
+                        var splitLines = item.SplitOnNewLine();
+                        appendLine(sb, splitLines, 4);
+                    }
+                }
+            }
+
+            var sb = new StringBuilder();
+            var copy = CopyDefinition(definitions.FirstOrDefault());
+            if (copy.ValueType == ValueType.Namespace || copy.ValueType == ValueType.Variable)
+            {
+                copy.ValueType = ValueType.OverwrittenObjectSingleFile;
+                copy.IsFromGame = false;
+            }
+            var groups = definitions.GroupBy(p => p.CodeTag, StringComparer.OrdinalIgnoreCase);
+            foreach (var group in groups.OrderBy(p => p.FirstOrDefault().CodeTag, StringComparer.OrdinalIgnoreCase))
+            {
+                bool hasCodeTag = !string.IsNullOrWhiteSpace(group.FirstOrDefault().CodeTag);
+                if (!hasCodeTag)
+                {
+                    var namespaces = group.Where(p => p.ValueType == ValueType.Namespace);
+                    var variables = group.Where(p => p.ValueType == ValueType.Variable);
+                    var other = group.Where(p => p.ValueType != ValueType.Variable && p.ValueType != ValueType.Namespace);
+                    var code = namespaces.Select(p => p.OriginalCode).Concat(variables.Select(p => p.OriginalCode)).Concat(other.Select(p => p.OriginalCode));
+                    appendLine(sb, code);
+                }
+                else
+                {
+                    var namespaces = group.Where(p => p.ValueType == ValueType.Namespace);
+                    var variables = definitions.Where(p => p.ValueType == ValueType.Variable && !string.IsNullOrWhiteSpace(p.CodeTag));
+                    var other = group.Where(p => p.ValueType != ValueType.Variable && p.ValueType != ValueType.Namespace);
+                    var vars = namespaces.Select(p => p.OriginalCode).Concat(variables.Select(p => p.OriginalCode));
+                    var code = other.Select(p => p.OriginalCode);
+                    mergeCode(sb, group.FirstOrDefault().CodeTag, group.FirstOrDefault().CodeSeparator, vars, code);
+                }
+            }
+
+            copy.Code = sb.ToString();
+            return copy;
+        }
+
+        /// <summary>
         /// Parses the mod files.
         /// </summary>
         /// <param name="game">The game.</param>
@@ -2064,6 +2251,160 @@ namespace IronyModManager.Services
                 definitions.AddRange(fileDefs);
             }
             return definitions;
+        }
+
+        /// <summary>
+        /// Processes the overwritten single file definitions.
+        /// </summary>
+        /// <param name="conflictResult">The conflict result.</param>
+        /// <param name="type">The type.</param>
+        /// <returns>IDefinition.</returns>
+        protected virtual IDefinition ProcessOverwrittenSingleFileDefinitions(IConflictResult conflictResult, string type)
+        {
+            static string cleanString(string text)
+            {
+                text ??= string.Empty;
+                text = text.Replace(" ", string.Empty).Replace("\t", string.Empty).Trim();
+                return text;
+            }
+            static string getNextVariableName(List<IDefinition> exportDefinitons, IDefinition definition)
+            {
+                var count = exportDefinitons.Where(p => p.Id.Equals(definition.Id, StringComparison.OrdinalIgnoreCase)).Count() + 1;
+                var name = $"{definition.Id}_{count}";
+                while (exportDefinitons.Any(p => p.Id.Equals(name, StringComparison.OrdinalIgnoreCase)))
+                {
+                    count++;
+                    name = $"{definition.Id}_{count}";
+                }
+                return name;
+            }
+            void parseNameSpaces(List<IDefinition> exportDefinitions, IDefinition def)
+            {
+                var namespaces = def.Variables?.Where(p => p.ValueType == ValueType.Namespace);
+                if (namespaces?.Count() > 0)
+                {
+                    foreach (var name in namespaces)
+                    {
+                        if (!exportDefinitions.Any(p => p.ValueType == ValueType.Namespace && cleanString(p.Code).Equals(cleanString(name.Code))))
+                        {
+                            var copy = CopyDefinition(name);
+                            copy.CodeTag = def.CodeTag;
+                            copy.CodeSeparator = def.CodeSeparator;
+                            exportDefinitions.Add(copy);
+                        }
+                    }
+                }
+            }
+            void parseVariables(List<IDefinition> exportDefinitions, IDefinition def)
+            {
+                var variables = def.Variables?.Where(p => p.ValueType == ValueType.Variable);
+                if (variables?.Count() > 0)
+                {
+                    foreach (var variable in variables)
+                    {
+                        var copy = CopyDefinition(variable);
+                        var oldId = copy.Id;
+                        copy.Id = getNextVariableName(exportDefinitions, variable);
+                        copy.Code = string.Join(" ", copy.Code.Split(" ", StringSplitOptions.None).Select(p => p.Contains(oldId) ? string.Join(Environment.NewLine, p.SplitOnNewLine(false).Select(s => s.Trim() == oldId ? s.Replace(oldId, copy.Id) : s)) : p));
+                        copy.OriginalCode = string.Join(" ", copy.OriginalCode.Split(" ", StringSplitOptions.None).Select(p => p.Contains(oldId) ? string.Join(Environment.NewLine, p.SplitOnNewLine(false).Select(s => s.Trim() == oldId ? s.Replace(oldId, copy.Id) : s)) : p));
+                        copy.CodeTag = def.CodeTag;
+                        copy.CodeSeparator = def.CodeSeparator;
+                        exportDefinitions.Add(copy);
+                        def.Code = string.Join(" ", def.Code.Split(" ", StringSplitOptions.None).Select(p => p.Contains(oldId) ? string.Join(Environment.NewLine, p.SplitOnNewLine(false).Select(s => s.Trim() == oldId ? s.Replace(oldId, copy.Id) : s)) : p));
+                        def.OriginalCode = string.Join(" ", def.OriginalCode.Split(" ", StringSplitOptions.None).Select(p => p.Contains(oldId) ? string.Join(Environment.NewLine, p.SplitOnNewLine(false).Select(s => s.Trim() == oldId ? s.Replace(oldId, copy.Id) : s)) : p));
+                    }
+                }
+            }
+
+            var definitions = conflictResult.OverwrittenConflicts.GetByValueType(ValueType.OverwrittenObjectSingleFile).Where(p => p.Type.Equals(type));
+            if (definitions.Any())
+            {
+                var game = GameService.GetSelected();
+                var export = new List<IDefinition>();
+                var infoProvider = DefinitionInfoProviders.FirstOrDefault(p => p.CanProcess(game.Type));
+                var overwrittenFileNames = new HashSet<string>();
+                foreach (var item in definitions)
+                {
+                    IDefinition definition = item;
+                    var resolved = conflictResult.ResolvedConflicts.GetByTypeAndId(item.TypeAndId);
+                    // Only need to check for resolution, since overwritten objects already have sorted out priority
+                    if (resolved.Any())
+                    {
+                        definition = resolved.FirstOrDefault();
+                    }
+                    var copy = CopyDefinition(definition);
+                    var parsed = parserManager.Parse(new ParserManagerArgs()
+                    {
+                        ContentSHA = copy.ContentSHA,
+                        File = copy.File,
+                        GameType = game.Type,
+                        Lines = copy.Code.SplitOnNewLine(false),
+                        ModDependencies = copy.Dependencies,
+                        ModName = copy.ModName
+                    });
+                    var others = parsed.Where(p => p.ValueType != ValueType.Variable && p.ValueType != ValueType.Namespace);
+                    foreach (var other in others)
+                    {
+                        var variables = parsed.Where(p => p.ValueType == ValueType.Variable || p.ValueType == ValueType.Namespace);
+                        other.Variables = variables;
+                        parseNameSpaces(export, other);
+                        parseVariables(export, other);
+                        var exportCopy = CopyDefinition(other);
+                        var allType = conflictResult.AllConflicts.GetByTypeAndId(item.TypeAndId).ToList();
+                        allType.ForEach(p => overwrittenFileNames.Add(p.OriginalFileName));
+                        if (allType.Any(p => p.IsFromGame))
+                        {
+                            exportCopy.Order = allType.FirstOrDefault(p => p.IsFromGame).Order;
+                        }
+                        else
+                        {
+                            var all = conflictResult.AllConflicts.GetByParentDirectory(item.ParentDirectory);
+                            // Invert logic
+                            if (!infoProvider.DefinitionUsesFIOSRules(item))
+                            {
+                                var ordered = all.GroupBy(p => p.File).OrderBy(p => p.Key, StringComparer.Ordinal).SelectMany(p => p.OrderBy(x => x.Order)).ToList();
+                                var match = ordered.FirstOrDefault(p => p.TypeAndId.Equals(item.TypeAndId) && p.File.Equals(item.OriginalFileName));
+                                exportCopy.Order = ordered.IndexOf(match) + 1;
+                            }
+                            else
+                            {
+                                var ordered = all.GroupBy(p => p.File).OrderByDescending(p => p.Key, StringComparer.Ordinal).SelectMany(p => p.OrderBy(x => x.Order)).ToList();
+                                var match = ordered.FirstOrDefault(p => p.TypeAndId.Equals(item.TypeAndId) && p.File.Equals(item.OriginalFileName));
+                                exportCopy.Order = ordered.IndexOf(match) + 1;
+                            }
+                        }
+                        export.Add(exportCopy);
+                    }
+                }
+                if (export.All(p => p.ValueType == ValueType.Namespace || p.ValueType == ValueType.Variable))
+                {
+                    export.Clear();
+                }
+                if (export.Any())
+                {
+                    var namespaces = export.Where(p => p.ValueType == ValueType.Namespace).OrderBy(p => p.Id);
+                    var variables = export.Where(p => p.ValueType == ValueType.Variable).OrderBy(p => p.Id);
+                    var other = export.Where(p => p.ValueType != ValueType.Variable && p.ValueType != ValueType.Namespace).OrderBy(p => p.Order);
+                    var merged = MergeSingleFileDefinitions(namespaces.Concat(variables.Concat(other)));
+                    if (merged != null)
+                    {
+                        var oldFileName = merged.File;
+                        merged.Id = SingleFileMerged;
+                        merged.OverwrittenFileNames = overwrittenFileNames.Distinct().ToList();
+                        merged.File = infoProvider.GetFileName(merged);
+                        merged.DiskFile = infoProvider.GetDiskFileName(merged);
+                        var preserveOverwrittenFileName = oldFileName == merged.File;
+                        if (preserveOverwrittenFileName)
+                        {
+                            var preservedOverwrittenFileName = merged.OverwrittenFileNames;
+                            preservedOverwrittenFileName.Add(oldFileName);
+                            merged.OverwrittenFileNames = preservedOverwrittenFileName.Distinct().ToList();
+                        }
+                        return merged;
+                    }
+                }
+            }
+            return null;
         }
 
         /// <summary>
@@ -2205,13 +2546,30 @@ namespace IronyModManager.Services
                                 var overwritten = conflictResult.OverwrittenConflicts.GetByTypeAndId(typeAndId);
                                 if (overwritten.Any())
                                 {
-                                    await modPatchExporter.ExportDefinitionAsync(new ModPatchExporterParameters()
+                                    if (item.ValueType == ValueType.OverwrittenObjectSingleFile)
                                     {
-                                        Game = game.Type,
-                                        OverwrittenConflicts = PopulateModPath(overwritten.Where(p => !conflictResult.ResolvedConflicts.GetByTypeAndId(p.TypeAndId).Any()), collectionMods),
-                                        RootPath = GetModDirectoryRootPath(game),
-                                        PatchPath = EvaluatePatchNamePath(game, patchName)
-                                    });
+                                        var merged = ProcessOverwrittenSingleFileDefinitions(conflictResult, item.Type);
+                                        if (merged != null)
+                                        {
+                                            await modPatchExporter.ExportDefinitionAsync(new ModPatchExporterParameters()
+                                            {
+                                                Game = game.Type,
+                                                OverwrittenConflicts = PopulateModPath(merged, collectionMods),
+                                                RootPath = GetModDirectoryRootPath(game),
+                                                PatchPath = EvaluatePatchNamePath(game, patchName)
+                                            });
+                                        }
+                                    }
+                                    else
+                                    {
+                                        await modPatchExporter.ExportDefinitionAsync(new ModPatchExporterParameters()
+                                        {
+                                            Game = game.Type,
+                                            OverwrittenConflicts = PopulateModPath(overwritten.Where(p => !conflictResult.ResolvedConflicts.GetByTypeAndId(p.TypeAndId).Any()), collectionMods),
+                                            RootPath = GetModDirectoryRootPath(game),
+                                            PatchPath = EvaluatePatchNamePath(game, patchName)
+                                        });
+                                    }
                                 }
                             }
                         }

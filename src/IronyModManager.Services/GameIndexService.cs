@@ -4,7 +4,7 @@
 // Created          : 05-27-2021
 //
 // Last Modified By : Mario
-// Last Modified On : 10-24-2021
+// Last Modified On : 10-25-2021
 // ***********************************************************************
 // <copyright file="GameIndexService.cs" company="Mario">
 //     Mario
@@ -56,7 +56,7 @@ namespace IronyModManager.Services
         /// <summary>
         /// The current cache version
         /// </summary>
-        private readonly int CurrentCacheVersion = 2;
+        private readonly int CurrentCacheVersion = 3;
 
         /// <summary>
         /// The game indexer

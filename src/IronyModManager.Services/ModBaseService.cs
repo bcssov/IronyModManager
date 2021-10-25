@@ -4,7 +4,7 @@
 // Created          : 04-07-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 08-29-2021
+// Last Modified On : 10-25-2021
 // ***********************************************************************
 // <copyright file="ModBaseService.cs" company="Mario">
 //     Mario
@@ -24,7 +24,6 @@ using IronyModManager.IO.Common.Mods;
 using IronyModManager.IO.Common.Readers;
 using IronyModManager.Models.Common;
 using IronyModManager.Parser.Common.Mod;
-using IronyModManager.Parser.Common.Parsers;
 using IronyModManager.Services.Common;
 using IronyModManager.Shared;
 using IronyModManager.Shared.Cache;
@@ -857,6 +856,17 @@ namespace IronyModManager.Services
                 return true;
             }
             return false;
+        }
+
+        /// <summary>
+        /// Populates the mod path.
+        /// </summary>
+        /// <param name="definition">The definition.</param>
+        /// <param name="collectionMods">The collection mods.</param>
+        /// <returns>IEnumerable&lt;IDefinition&gt;.</returns>
+        protected virtual IEnumerable<IDefinition> PopulateModPath(IDefinition definition, IEnumerable<IMod> collectionMods)
+        {
+            return PopulateModPath(new List<IDefinition>() { definition }, collectionMods);
         }
 
         /// <summary>

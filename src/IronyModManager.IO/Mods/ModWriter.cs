@@ -4,7 +4,7 @@
 // Created          : 03-31-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-06-2021
+// Last Modified On : 10-25-2021
 // ***********************************************************************
 // <copyright file="ModWriter.cs" company="Mario">
 //     Mario
@@ -205,6 +205,12 @@ namespace IronyModManager.IO.Mods
                 else if (File.Exists(fullPath))
                 {
                     DiskOperations.DeleteFile(fullPath);
+                    var directory = Path.GetDirectoryName(fullPath);
+                    var files = Directory.EnumerateFiles(directory, "*", SearchOption.AllDirectories);
+                    if (!files.Any())
+                    {
+                        DiskOperations.DeleteDirectory(directory, true);
+                    }
                     return Task.FromResult(true);
                 }
                 return Task.FromResult(false);
