@@ -4,7 +4,7 @@
 // Created          : 02-16-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 08-30-2021
+// Last Modified On : 10-26-2021
 // ***********************************************************************
 // <copyright file="Extensions.cs" company="Mario">
 //     Mario
@@ -39,9 +39,19 @@ namespace IronyModManager.Shared
         private static readonly IMetroHash128 hash = MetroHash128Factory.Instance.Create();
 
         /// <summary>
+        /// The invalid file name characters
+        /// </summary>
+        private static readonly char[] invalidFileNameCharactersExtension = new char[] { ':' };
+
+        /// <summary>
         /// The tab space
         /// </summary>
         private static readonly string tabSpace = new(' ', 4);
+
+        /// <summary>
+        /// The invalid file name characters
+        /// </summary>
+        private static IEnumerable<char> invalidFileNameCharacters = null;
 
         #endregion Fields
 
@@ -101,7 +111,7 @@ namespace IronyModManager.Shared
             {
                 return value;
             }
-            var fileName = Path.GetInvalidFileNameChars().Aggregate(value, (current, character) => current.Replace(character.ToString(), string.Empty));
+            var fileName = GetInvalidFileNameChars().Aggregate(value, (current, character) => current.Replace(character.ToString(), string.Empty));
             fileName = emptyStringCharacters.Aggregate(fileName, (a, b) => a.Replace(b, "_"));
             return fileName;
         }
@@ -169,6 +179,19 @@ namespace IronyModManager.Shared
                 return string.Empty;
             }
             return value.Replace('\\', Path.DirectorySeparatorChar).Replace('/', Path.DirectorySeparatorChar);
+        }
+
+        /// <summary>
+        /// Gets the invalid file name chars.
+        /// </summary>
+        /// <returns>System.Collections.Generic.IEnumerable&lt;char&gt;.</returns>
+        private static IEnumerable<char> GetInvalidFileNameChars()
+        {
+            if (invalidFileNameCharacters == null)
+            {
+                invalidFileNameCharacters = Path.GetInvalidFileNameChars().Concat(invalidFileNameCharactersExtension).Distinct().ToList();
+            }
+            return invalidFileNameCharacters;
         }
 
         #endregion Methods
