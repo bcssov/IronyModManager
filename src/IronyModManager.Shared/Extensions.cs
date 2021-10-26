@@ -81,6 +81,19 @@ namespace IronyModManager.Shared
         }
 
         /// <summary>
+        /// Conditionals the filter.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="col">The col.</param>
+        /// <param name="condition">The condition.</param>
+        /// <param name="filter">The filter.</param>
+        /// <returns>System.Collections.Generic.IEnumerable&lt;T&gt;.</returns>
+        public static IEnumerable<T> ConditionalFilter<T>(this IEnumerable<T> col, bool condition, Func<IEnumerable<T>, IEnumerable<T>> filter)
+        {
+            return condition ? filter(col) : col;
+        }
+
+        /// <summary>
         /// Generates the short file name hash identifier.
         /// </summary>
         /// <param name="value">The value.</param>
@@ -230,8 +243,6 @@ namespace IronyModManager.Shared
         }
 
         #endregion Methods
-
-
 
 #nullable disable
     }
