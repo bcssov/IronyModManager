@@ -4,6 +4,66 @@
 		<title>Irony Mod Manager</title>
 		<language>en</language>
 		<item>
+			<title>1.19.46-alpha</title>
+			<description>NOTE:
+This version has significant changes to Conflict Solver, please backup your existing mod collections before running conflict solver.
+
+CHANGES FROM v1.18:
+* Update dependencies
+* Various fixes
+* Add mod search filtering syntax
+* Stellaris parser type recognition updates
+* Add single merge folder type handling for Stellaris
+* Fix #304</description>
+			<pubDate>Tue, 26 Oct 2021 20:12:27 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.19.46-alpha/osx-x64.rar" sparkle:version="1.19.46.36199" sparkle:shortVersionString="1.19.46" length="70133083" sparkle:os="osx" type="application/vnd.rar" sparkle:signature="oSik50o8lY+W6JHpxtRgolCw8cXPbRMATe5nmtlj4DsmRa/YoVGXkqcLp5+w23XyS0fZ7W0vr/QvTch7q+o1AA=="/>
+		</item>
+		<item>
+			<title>1.19.46-alpha</title>
+			<description>NOTE:
+This version has significant changes to Conflict Solver, please backup your existing mod collections before running conflict solver.
+
+CHANGES FROM v1.18:
+* Update dependencies
+* Various fixes
+* Add mod search filtering syntax
+* Stellaris parser type recognition updates
+* Add single merge folder type handling for Stellaris
+* Fix #304</description>
+			<pubDate>Tue, 26 Oct 2021 20:12:35 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.19.46-alpha/win-x64-setup.rar" sparkle:version="1.19.46.36199" sparkle:shortVersionString="1.19.46" length="61499433" sparkle:os="windows" type="application/vnd.rar" sparkle:signature="Z/oUy6xdNDoecwHG0/Eb7TcNX/TcP6GjUCRnLYgVSA+SLBOCHRfJBqlTAt/d5ZNmPonlfiM4lm6RApKi801QAg=="/>
+		</item>
+		<item>
+			<title>1.19.46-alpha</title>
+			<description>NOTE:
+This version has significant changes to Conflict Solver, please backup your existing mod collections before running conflict solver.
+
+CHANGES FROM v1.18:
+* Update dependencies
+* Various fixes
+* Add mod search filtering syntax
+* Stellaris parser type recognition updates
+* Add single merge folder type handling for Stellaris
+* Fix #304</description>
+			<pubDate>Tue, 26 Oct 2021 20:12:31 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.19.46-alpha/win-x64.rar" sparkle:version="1.19.46.36199" sparkle:shortVersionString="1.19.46" length="73951180" sparkle:os="windows" type="application/vnd.rar" sparkle:signature="xeFugms/lbjmPWf/15OYLvBPmMMk8Mnu3A4Chft+WhBuFmbSoPqYPkdMyPl0TM6jq9tmv5NFGp4diMGjy5rlDQ=="/>
+		</item>
+		<item>
+			<title>1.19.46-alpha</title>
+			<description>NOTE:
+This version has significant changes to Conflict Solver, please backup your existing mod collections before running conflict solver.
+
+CHANGES FROM v1.18:
+* Update dependencies
+* Various fixes
+* Add mod search filtering syntax
+* Stellaris parser type recognition updates
+* Add single merge folder type handling for Stellaris
+* Fix #304</description>
+			<pubDate>Tue, 26 Oct 2021 20:12:23 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.19.46-alpha/linux-x64.zip" sparkle:version="1.19.46.36199" sparkle:shortVersionString="1.19.46" length="86754847" sparkle:os="linux" type="application/zip" sparkle:signature="hT8SeZViZ+RE8CZCgPvsVAE/gRT1RrepL7UMgs4BOom96QeywFjqg0bsuAs66tWfjCh9DWaI92pMSXim+d1WBw=="/>
+		</item>
+		<item>
 			<title>1.18.92</title>
 			<description>RELEASE NOTES:
 * Fix handling non-latin characters in zip files
