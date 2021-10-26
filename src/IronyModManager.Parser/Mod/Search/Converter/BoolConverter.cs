@@ -44,13 +44,14 @@ namespace IronyModManager.Parser.Mod.Search.Converter
         /// Gets the translation field keys.
         /// </summary>
         /// <value>The translation field keys.</value>
-        public override IEnumerable<string> TranslationFieldKeys => new List<string>() { LocalizationResources.FilterCommands.Achievements, LocalizationResources.FilterCommands.Selected };
+        public override IDictionary<string, string> TranslationFieldKeys => new Dictionary<string, string>() { { LocalizationResources.FilterCommands.Achievements, Fields.Achievements }, { LocalizationResources.FilterCommands.Selected, Fields.Selected } };
 
         /// <summary>
         /// Gets the value keys.
         /// </summary>
         /// <value>The value keys.</value>
-        private IEnumerable<string> ValueKeys => new List<string>() { LocalizationResources.FilterCommands.Yes, LocalizationResources.FilterCommands.False, LocalizationResources.FilterCommands.No, LocalizationResources.FilterCommands.True };
+        private IDictionary<string, string> ValueKeys => new Dictionary<string, string>() { { LocalizationResources.FilterCommands.Yes, string.Empty }, { LocalizationResources.FilterCommands.False, string.Empty },
+            { LocalizationResources.FilterCommands.No, string.Empty } , {LocalizationResources.FilterCommands.True, string.Empty } };
 
         #endregion Properties
 
@@ -64,7 +65,7 @@ namespace IronyModManager.Parser.Mod.Search.Converter
         /// <returns>T.</returns>
         public override BoolFilterResult Convert(string locale, string value)
         {
-            var translation = GetTranslationValue(locale, value, ValueKeys, out var localeUsed);
+            var translation = GetTranslationValue(locale, value, ValueKeys, out var localeUsed, out var _);
             if (!string.IsNullOrWhiteSpace(translation) && !string.IsNullOrWhiteSpace(localeUsed))
             {
                 if (GetInclude(localeUsed).Any(x => translation.StartsWith(x)))

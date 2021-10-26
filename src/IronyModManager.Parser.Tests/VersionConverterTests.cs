@@ -18,6 +18,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using FluentAssertions;
+using IronyModManager.Parser.Common.Mod.Search;
 using IronyModManager.Parser.Mod.Search;
 using IronyModManager.Parser.Mod.Search.Converter;
 using IronyModManager.Shared;
@@ -42,8 +43,9 @@ namespace IronyModManager.Parser.Tests
             registry.RegisterTranslation("fr", LocalizationResources.FilterCommands.Version, "fr-ach");
 
             var converter = new VersionConverter(registry);
-            converter.CanConvert("en", "en-ach").Should().BeTrue();
-            converter.CanConvert("en", "fr-ach").Should().BeTrue();
+            converter.CanConvert("en", "en-ach").Result.Should().BeTrue();
+            converter.CanConvert("en", "en-ach").MappedStaticField.Should().Be(Fields.Version);
+            converter.CanConvert("en", "fr-ach").Result.Should().BeTrue();
         }
 
         /// <summary>
@@ -57,7 +59,7 @@ namespace IronyModManager.Parser.Tests
             registry.RegisterTranslation("fr", LocalizationResources.FilterCommands.Version, "fr-ach");
 
             var converter = new VersionConverter(registry);
-            converter.CanConvert("en", "en-fake").Should().BeFalse();
+            converter.CanConvert("en", "en-fake").Result.Should().BeFalse();
         }
 
         /// <summary>

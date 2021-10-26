@@ -32,6 +32,21 @@ namespace IronyModManager.Parser.Mod.Search
         #region Fields
 
         /// <summary>
+        /// The name property
+        /// </summary>
+        private const string NameProperty = "name";
+
+        /// <summary>
+        /// The statement separator
+        /// </summary>
+        private const string StatementSeparator = "&&";
+
+        /// <summary>
+        /// The value separator
+        /// </summary>
+        private const string ValueSeparator = ":";
+
+        /// <summary>
         /// The search parser properties
         /// </summary>
         private static IEnumerable<PropertyInfo> searchParserProperties;
@@ -73,28 +88,44 @@ namespace IronyModManager.Parser.Mod.Search
         /// <returns>ISearchParserResult.</returns>
         public ISearchParserResult Parse(string locale, string text)
         {
+            if (string.IsNullOrWhiteSpace(text) || !text.Contains(StatementSeparator))
+            {
+                var result = DIResolver.Get<ISearchParserResult>();
+                result.Name = (text ?? string.Empty).ToLowerInvariant();
+                return result;
+            }
             try
             {
-                var tokens = (text ?? string.Empty).ToLowerInvariant().Split("&&").ToDictionary(k => k.Split(":").Length > 1 ? k.Split(":")[0].Trim() : "name", v => v.Split(":").Length > 1 ? v.Split(":")[1].Trim() : v.Trim());
+                var tokens = text.ToLowerInvariant().Split(StatementSeparator).ToDictionary(k => k.Split(ValueSeparator).Length > 1 ? k.Split(ValueSeparator)[0].Trim() : NameProperty, v => v.Split(ValueSeparator).Length > 1 ? v.Split(ValueSeparator)[1].Trim() : v.Trim());
                 if (tokens.Any())
                 {
                     var result = DIResolver.Get<ISearchParserResult>();
                     foreach (var item in tokens)
                     {
                         object value;
-                        var converter = converters.FirstOrDefault(x => x.CanConvert(locale, item.Key));
+                        string field = item.Key;
+                        var converter = converters.FirstOrDefault(x =>
+                        {
+                            var result = x.CanConvert(locale, item.Key);
+                            if (result != null && result.Result)
+                            {
+                                field = result.MappedStaticField;
+                                return true;
+                            }
+                            return false;
+                        });
                         if (converter != null)
                         {
                             value = converter.Convert(locale, item.Value);
+                            var property = GetProperties().FirstOrDefault(p => p.CanRead && ((Common.Mod.Search.DescriptorPropertyAttribute)Attribute.GetCustomAttribute(p, typeof(Common.Mod.Search.DescriptorPropertyAttribute), true)).PropertyName == field);
+                            if (property != null && property.CanWrite)
+                            {
+                                property.SetValue(result, value);
+                            }
                         }
                         else
                         {
-                            value = item.Value;
-                        }
-                        var property = GetProperties().FirstOrDefault(p => p.CanRead && ((Common.Mod.Search.DescriptorPropertyAttribute)Attribute.GetCustomAttribute(p, typeof(Common.Mod.Search.DescriptorPropertyAttribute), true)).PropertyName == item.Key);
-                        if (property != null && property.CanWrite)
-                        {
-                            property.SetValue(result, value);
+                            result.Name = item.Value;
                         }
                     }
                     return result;

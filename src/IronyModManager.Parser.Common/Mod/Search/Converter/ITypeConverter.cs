@@ -30,8 +30,8 @@ namespace IronyModManager.Parser.Common.Mod.Search.Converter
         /// </summary>
         /// <param name="locale">The locale.</param>
         /// <param name="key">The key.</param>
-        /// <returns><c>true</c> if this instance can convert the specified locale; otherwise, <c>false</c>.</returns>
-        bool CanConvert(string locale, string key);
+        /// <returns>CanParseResult.</returns>
+        CanParseResult CanConvert(string locale, string key);
 
         /// <summary>
         /// Converts the specified locale.

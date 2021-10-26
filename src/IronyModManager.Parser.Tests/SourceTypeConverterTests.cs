@@ -49,8 +49,9 @@ namespace IronyModManager.Parser.Tests
             registry.RegisterTranslation("fr", LocalizationResources.FilterCommands.Local, "fr-local");
 
             var converter = new SourceTypeConverter(registry);
-            converter.CanConvert("en", "en-ach").Should().BeTrue();
-            converter.CanConvert("en", "fr-ach").Should().BeTrue();
+            converter.CanConvert("en", "en-ach").Result.Should().BeTrue();
+            converter.CanConvert("en", "en-ach").MappedStaticField.Should().Be(Fields.Source);
+            converter.CanConvert("en", "fr-ach").Result.Should().BeTrue();
         }
 
         /// <summary>
@@ -70,7 +71,7 @@ namespace IronyModManager.Parser.Tests
             registry.RegisterTranslation("fr", LocalizationResources.FilterCommands.Local, "fr-local");
 
             var converter = new SourceTypeConverter(registry);
-            converter.CanConvert("en", "en-fake").Should().BeFalse();
+            converter.CanConvert("en", "en-fake").Result.Should().BeFalse();
         }
 
         /// <summary>
@@ -90,8 +91,8 @@ namespace IronyModManager.Parser.Tests
             registry.RegisterTranslation("fr", LocalizationResources.FilterCommands.Local, "fr-local");
 
             var converter = new SourceTypeConverter(registry);
-            converter.Convert("en", "steam").Should().Be(SourceType.Steam);
-            converter.Convert("en", "fr-steam").Should().Be(SourceType.Steam);
+            converter.Convert("en", "steam").Result.Should().Be(SourceType.Steam);
+            converter.Convert("en", "fr-steam").Result.Should().Be(SourceType.Steam);
         }
 
         /// <summary>

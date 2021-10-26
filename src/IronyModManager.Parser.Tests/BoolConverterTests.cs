@@ -17,6 +17,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using FluentAssertions;
+using IronyModManager.Parser.Common.Mod.Search;
 using IronyModManager.Parser.Mod.Search;
 using IronyModManager.Parser.Mod.Search.Converter;
 using IronyModManager.Shared;
@@ -39,6 +40,8 @@ namespace IronyModManager.Parser.Tests
             var registry = new LocalizationRegistry(new Cache());
             registry.RegisterTranslation("en", LocalizationResources.FilterCommands.Achievements, "en-ach");
             registry.RegisterTranslation("fr", LocalizationResources.FilterCommands.Achievements, "fr-ach");
+            registry.RegisterTranslation("en", LocalizationResources.FilterCommands.Selected, "en-sel");
+            registry.RegisterTranslation("fr", LocalizationResources.FilterCommands.Selected, "fr-sel");
             registry.RegisterTranslation("en", LocalizationResources.FilterCommands.Yes, "yes");
             registry.RegisterTranslation("fr", LocalizationResources.FilterCommands.Yes, "fr-yes");
             registry.RegisterTranslation("en", LocalizationResources.FilterCommands.True, "true");
@@ -49,8 +52,9 @@ namespace IronyModManager.Parser.Tests
             registry.RegisterTranslation("fr", LocalizationResources.FilterCommands.False, "fr-false");
 
             var converter = new BoolConverter(registry);
-            converter.CanConvert("en", "en-ach").Should().BeTrue();
-            converter.CanConvert("en", "fr-ach").Should().BeTrue();
+            converter.CanConvert("en", "en-ach").Result.Should().BeTrue();
+            converter.CanConvert("en", "en-ach").MappedStaticField.Should().Be(Fields.Achievements);
+            converter.CanConvert("en", "fr-ach").Result.Should().BeTrue();
         }
 
         /// <summary>
@@ -72,7 +76,7 @@ namespace IronyModManager.Parser.Tests
             registry.RegisterTranslation("fr", LocalizationResources.FilterCommands.False, "fr-false");
 
             var converter = new BoolConverter(registry);
-            converter.CanConvert("en", "en-fake").Should().BeFalse();
+            converter.CanConvert("en", "en-fake").Result.Should().BeFalse();
         }
 
         /// <summary>

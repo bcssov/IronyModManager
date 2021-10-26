@@ -39,7 +39,7 @@ namespace IronyModManager.Parser.Mod.Search.Converter
         #region Constructors
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="BaseConverter" /> class.
+        /// Initializes a new instance of the <see cref="BaseConverter{T}" /> class.
         /// </summary>
         /// <param name="localizationRegistry">The localization registry.</param>
         public BaseConverter(ILocalizationRegistry localizationRegistry)
@@ -55,7 +55,7 @@ namespace IronyModManager.Parser.Mod.Search.Converter
         /// Gets the translation field keys.
         /// </summary>
         /// <value>The translation field keys.</value>
-        public abstract IEnumerable<string> TranslationFieldKeys { get; }
+        public abstract IDictionary<string, string> TranslationFieldKeys { get; }
 
         #endregion Properties
 
@@ -67,10 +67,10 @@ namespace IronyModManager.Parser.Mod.Search.Converter
         /// <param name="locale">The locale.</param>
         /// <param name="key">The key.</param>
         /// <returns><c>true</c> if this instance can convert the specified locale; otherwise, <c>false</c>.</returns>
-        public virtual bool CanConvert(string locale, string key)
+        public virtual CanParseResult CanConvert(string locale, string key)
         {
-            var translation = GetTranslationValue(locale, key, TranslationFieldKeys, out var _);
-            return !string.IsNullOrWhiteSpace(translation);
+            var translation = GetTranslationValue(locale, key, TranslationFieldKeys, out var _, out var mappedStaticField);
+            return new CanParseResult(!string.IsNullOrWhiteSpace(translation), mappedStaticField);
         }
 
 #nullable enable
@@ -90,32 +90,36 @@ namespace IronyModManager.Parser.Mod.Search.Converter
         /// <param name="value">The value.</param>
         /// <param name="translationKeys">The translation keys.</param>
         /// <param name="localeUsed">The locale used.</param>
+        /// <param name="mappedStaticField">The mapped static field.</param>
         /// <returns>System.String.</returns>
-        protected virtual string GetTranslationValue(string locale, string value, IEnumerable<string> translationKeys, out string localeUsed)
+        protected virtual string GetTranslationValue(string locale, string value, IDictionary<string, string> translationKeys, out string localeUsed, out string mappedStaticField)
         {
             foreach (var item in translationKeys)
             {
-                var field = localizationRegistry.GetTranslation(locale, item) ?? string.Empty;
-                if (field.StartsWith(value))
+                var field = localizationRegistry.GetTranslation(locale, item.Key) ?? string.Empty;
+                if (value.StartsWith(field))
                 {
                     localeUsed = locale;
+                    mappedStaticField = item.Value;
                     return field;
                 }
             }
             foreach (var item in translationKeys)
             {
-                var fields = localizationRegistry.GetTranslations(item);
+                var fields = localizationRegistry.GetTranslations(item.Key);
                 if (fields != null)
                 {
-                    var field = fields.FirstOrDefault(f => (f.Value ?? string.Empty).StartsWith(value));
+                    var field = fields.FirstOrDefault(f => value.StartsWith(f.Value ?? string.Empty));
                     if (!string.IsNullOrWhiteSpace(field.Value))
                     {
                         localeUsed = field.Key;
+                        mappedStaticField = item.Value;
                         return field.Value;
                     }
                 }
             }
             localeUsed = string.Empty;
+            mappedStaticField = string.Empty;
             return string.Empty;
         }
 

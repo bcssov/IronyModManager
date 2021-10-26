@@ -44,7 +44,6 @@ namespace IronyModManager.Parser.Common.Mod.Search
         /// Gets or sets the name.
         /// </summary>
         /// <value>The name.</value>
-        [DescriptorProperty("name")]
         string Name { get; set; }
 
         /// <summary>

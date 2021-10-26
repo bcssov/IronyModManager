@@ -44,13 +44,13 @@ namespace IronyModManager.Parser.Mod.Search.Converter
         /// Gets the translation field keys.
         /// </summary>
         /// <value>The translation field keys.</value>
-        public override IEnumerable<string> TranslationFieldKeys => new List<string>() { LocalizationResources.FilterCommands.Source };
+        public override IDictionary<string, string> TranslationFieldKeys => new Dictionary<string, string>() { { LocalizationResources.FilterCommands.Source, Fields.Source } };
 
         /// <summary>
         /// Gets the value keys.
         /// </summary>
         /// <value>The value keys.</value>
-        private IEnumerable<string> ValueKeys => new List<string>() { LocalizationResources.FilterCommands.Paradox, LocalizationResources.FilterCommands.Local, LocalizationResources.FilterCommands.Steam };
+        private IDictionary<string, string> ValueKeys => new Dictionary<string, string>() { { LocalizationResources.FilterCommands.Paradox, string.Empty }, { LocalizationResources.FilterCommands.Local, string.Empty }, { LocalizationResources.FilterCommands.Steam, string.Empty } };
 
         #endregion Properties
 
@@ -64,7 +64,7 @@ namespace IronyModManager.Parser.Mod.Search.Converter
         /// <returns>T.</returns>
         public override SourceTypeResult Convert(string locale, string value)
         {
-            var translation = GetTranslationValue(locale, value, ValueKeys, out var localeUsed);
+            var translation = GetTranslationValue(locale, value, ValueKeys, out var localeUsed, out var _);
             if (!string.IsNullOrWhiteSpace(translation) && !string.IsNullOrWhiteSpace(localeUsed))
             {
                 if (GetSteam(localeUsed).StartsWith(translation))

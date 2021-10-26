@@ -46,7 +46,7 @@ namespace IronyModManager.Parser.Mod.Search.Converter
         /// Gets the translation field keys.
         /// </summary>
         /// <value>The translation field keys.</value>
-        public override IEnumerable<string> TranslationFieldKeys => new List<string>() { LocalizationResources.FilterCommands.Version };
+        public override IDictionary<string, string> TranslationFieldKeys => new Dictionary<string, string>() { { LocalizationResources.FilterCommands.Version, Fields.Version } };
 
         #endregion Properties
 

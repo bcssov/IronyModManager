@@ -25,6 +25,20 @@ namespace IronyModManager.Parser.Mod.Search
     /// <seealso cref="IronyModManager.Parser.Common.Mod.Search.ISearchParserResult" />
     public class SearchParserResult : ISearchParserResult
     {
+        #region Constructors
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="SearchParserResult"/> class.
+        /// </summary>
+        public SearchParserResult()
+        {
+            AchievementCompatible = new BoolFilterResult(null);
+            IsSelected = new BoolFilterResult(null);
+            Source = new SourceTypeResult(SourceType.None);
+        }
+
+        #endregion Constructors
+
         #region Properties
 
         /// <summary>
@@ -45,7 +59,6 @@ namespace IronyModManager.Parser.Mod.Search
         /// Gets or sets the name.
         /// </summary>
         /// <value>The name.</value>
-        [DescriptorProperty("name")]
         public string Name { get; set; }
 
         /// <summary>
