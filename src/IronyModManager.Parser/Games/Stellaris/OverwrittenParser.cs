@@ -4,7 +4,7 @@
 // Created          : 05-25-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 10-25-2021
+// Last Modified On : 10-26-2021
 // ***********************************************************************
 // <copyright file="OverwrittenParser.cs" company="Mario">
 //     Mario
@@ -111,7 +111,7 @@ namespace IronyModManager.Parser.Games.Stellaris
         public override IEnumerable<IDefinition> Parse(ParserArgs args)
         {
             keyType = false;
-            if (args.File.StartsWith(Common.Constants.Stellaris.PlanetClasses))
+            if (args.File.StartsWith(Common.Constants.Stellaris.PlanetClasses) || args.File.StartsWith(Common.Constants.Stellaris.SectionTemplates))
             {
                 keyType = true;
             }
