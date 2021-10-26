@@ -1403,11 +1403,11 @@ namespace IronyModManager.Services.Tests
                 new Mod() { Name = "test 4", Version = "1.5", AchievementStatus = AchievementStatus.Compatible }
             };
 
-            var result = service.FindMod(mods, "test", 1, false);
+            var result = service.FindMod(mods, "test", false, 1);
             result.Should().NotBeNull();
             result.Name.Should().Be("test 3");
 
-            result = service.FindMod(mods, "test", 2, false);
+            result = service.FindMod(mods, "test", false, 2);
             result.Should().NotBeNull();
             result.Name.Should().Be("test 4");
         }
@@ -1447,11 +1447,11 @@ namespace IronyModManager.Services.Tests
                 new Mod() { Name = "test 4", Version = "1.5", AchievementStatus = AchievementStatus.Compatible }
             };
 
-            var result = service.FindMod(mods, "test", 0, true);
+            var result = service.FindMod(mods, "test", true, 0);
             result.Should().NotBeNull();
             result.Name.Should().Be("test 4");
 
-            result = service.FindMod(mods, "test", 2, true);
+            result = service.FindMod(mods, "test", true, 2);
             result.Should().NotBeNull();
             result.Name.Should().Be("test 5");
         }

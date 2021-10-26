@@ -88,7 +88,7 @@ namespace IronyModManager.Parser.Mod.Search
         /// <returns>ISearchParserResult.</returns>
         public ISearchParserResult Parse(string locale, string text)
         {
-            if (string.IsNullOrWhiteSpace(text) || !text.Contains(StatementSeparator))
+            if (string.IsNullOrWhiteSpace(text))
             {
                 var result = DIResolver.Get<ISearchParserResult>();
                 result.Name = (text ?? string.Empty).ToLowerInvariant();
@@ -96,7 +96,23 @@ namespace IronyModManager.Parser.Mod.Search
             }
             try
             {
-                var tokens = text.ToLowerInvariant().Split(StatementSeparator).ToDictionary(k => k.Split(ValueSeparator).Length > 1 ? k.Split(ValueSeparator)[0].Trim() : NameProperty, v => v.Split(ValueSeparator).Length > 1 ? v.Split(ValueSeparator)[1].Trim() : v.Trim());
+                var nameAdded = false;
+                var tokens = text.ToLowerInvariant().Split(StatementSeparator).ToDictionary(k =>
+                {
+                    if (k.Split(ValueSeparator).Length > 1)
+                    {
+                        return k.Split(ValueSeparator)[0].Trim();
+                    }
+                    else
+                    {
+                        if (nameAdded)
+                        {
+                            return k.Trim();
+                        }
+                        nameAdded = true;
+                        return NameProperty;
+                    }
+                }, v => v.Split(ValueSeparator).Length > 1 ? v.Split(ValueSeparator)[1].Trim() : v.Trim());
                 if (tokens.Any())
                 {
                     var result = DIResolver.Get<ISearchParserResult>();
@@ -127,6 +143,10 @@ namespace IronyModManager.Parser.Mod.Search
                         {
                             result.Name = item.Value;
                         }
+                    }
+                    if (string.IsNullOrWhiteSpace(result.Name))
+                    {
+                        result.Name = string.Empty;
                     }
                     return result;
                 }

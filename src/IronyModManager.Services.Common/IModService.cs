@@ -85,10 +85,10 @@ namespace IronyModManager.Services.Common
         /// </summary>
         /// <param name="collection">The collection.</param>
         /// <param name="text">The text.</param>
-        /// <param name="skipIndex">Index of the skip.</param>
         /// <param name="reverse">if set to <c>true</c> [reverse].</param>
+        /// <param name="skipIndex">Index of the skip.</param>
         /// <returns>IMod.</returns>
-        IMod FindMod(IEnumerable<IMod> collection, string text, int skipIndex, bool reverse);
+        IMod FindMod(IEnumerable<IMod> collection, string text, bool reverse, int? skipIndex = null);
 
         /// <summary>
         /// Gets the image stream asynchronous.

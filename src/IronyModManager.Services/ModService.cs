@@ -245,6 +245,10 @@ namespace IronyModManager.Services
         /// <returns>IEnumerable&lt;IMod&gt;.</returns>
         public virtual IEnumerable<IMod> FilterMods(IEnumerable<IMod> collection, string text)
         {
+            if (collection == null)
+            {
+                return collection;
+            }
             var parameters = searchParser.Parse(CurrentLocale.CultureName, text);
             var result = collection.Where(p => p.Name.Contains(parameters.Name, StringComparison.InvariantCultureIgnoreCase) ||
                     (p.RemoteId.HasValue && p.RemoteId.GetValueOrDefault().ToString().Contains(parameters.Name)))
@@ -260,13 +264,17 @@ namespace IronyModManager.Services
         /// </summary>
         /// <param name="collection">The collection.</param>
         /// <param name="text">The text.</param>
-        /// <param name="skipIndex">Index of the skip.</param>
         /// <param name="reverse">if set to <c>true</c> [reverse].</param>
+        /// <param name="skipIndex">Index of the skip.</param>
         /// <returns>IMod.</returns>
-        public virtual IMod FindMod(IEnumerable<IMod> collection, string text, int skipIndex, bool reverse)
+        public virtual IMod FindMod(IEnumerable<IMod> collection, string text, bool reverse, int? skipIndex = null)
         {
+            if (collection == null)
+            {
+                return null;
+            }
             var parameters = searchParser.Parse(CurrentLocale.CultureName, text);
-            var result = !reverse ? collection.Skip(skipIndex + 1) : collection.Reverse().Skip(skipIndex);
+            var result = !reverse ? collection.Skip(skipIndex.GetValueOrDefault()) : collection.Reverse().Skip(skipIndex.GetValueOrDefault());
             result = result.Where(p => p.Name.Contains(parameters.Name, StringComparison.InvariantCultureIgnoreCase) ||
                     (p.RemoteId.HasValue && p.RemoteId.GetValueOrDefault().ToString().Contains(parameters.Name)))
                     .ConditionalFilter(parameters.AchievementCompatible.Result.HasValue, x => x.Where(p => p.AchievementStatus == (parameters.AchievementCompatible.Result.GetValueOrDefault() ? AchievementStatus.Compatible : AchievementStatus.NotCompatible)))
