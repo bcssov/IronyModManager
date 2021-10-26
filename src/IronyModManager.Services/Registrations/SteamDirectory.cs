@@ -4,7 +4,7 @@
 // Created          : 02-24-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 09-06-2021
+// Last Modified On : 10-26-2021
 // ***********************************************************************
 // <copyright file="SteamDirectory.cs" company="Mario">
 //     Mario
@@ -102,8 +102,9 @@ namespace IronyModManager.Services.Registrations
         /// Gets the game directory.
         /// </summary>
         /// <param name="appId">The application identifier.</param>
+        /// <param name="rootPathOnly">if set to <c>true</c> returns root path only.</param>
         /// <returns>System.String.</returns>
-        public static string GetGameDirectory(int appId)
+        public static string GetGameDirectory(int appId, bool rootPathOnly = false)
         {
             static string findInstallDirectory(string path)
             {
@@ -130,6 +131,10 @@ namespace IronyModManager.Services.Registrations
                     var path = findInstallDirectory(Path.Combine(steamInstallDirectory, SteamAppsDirectory, acfFile));
                     if (!string.IsNullOrWhiteSpace(path) && Directory.Exists(Path.Combine(steamInstallDirectory, SteamCommonDirectory, path)))
                     {
+                        if (rootPathOnly)
+                        {
+                            return Path.Combine(steamInstallDirectory, SteamAppsDirectory);
+                        }
                         return Path.Combine(steamInstallDirectory, SteamCommonDirectory, path);
                     }
                 }
@@ -144,6 +149,10 @@ namespace IronyModManager.Services.Registrations
                         var installDir = findInstallDirectory(Path.Combine(path, SteamAppsDirectory, acfFile));
                         if (!string.IsNullOrWhiteSpace(installDir) && Directory.Exists(Path.Combine(path, SteamCommonDirectory, installDir)))
                         {
+                            if (rootPathOnly)
+                            {
+                                return Path.Combine(path, SteamAppsDirectory);
+                            }
                             return Path.Combine(path, SteamCommonDirectory, installDir);
                         }
                     }
@@ -178,16 +187,17 @@ namespace IronyModManager.Services.Registrations
         /// Gets the workshop directory.
         /// </summary>
         /// <param name="appId">The application identifier.</param>
-        /// <returns>System.String.</returns>
+        /// <returns>System.Collections.Generic.IReadOnlyCollection&lt;string&gt;.</returns>
         public static IReadOnlyCollection<string> GetWorkshopDirectory(int appId)
         {
-            var steamInstallDirectory = GetSteamRootPath();
-            var result = new List<string>();
+            var gameDirectory = GetGameDirectory(appId, true).ToLowerInvariant().StandardizeDirectorySeparator();
+            var steamInstallDirectory = GetSteamRootPath().StandardizeDirectorySeparator();
+            var result = new List<WorkshopDirectoryContainer>();
             if (Directory.Exists(steamInstallDirectory))
             {
                 if (Directory.Exists(Path.Combine(steamInstallDirectory, SteamWorkshopDirectory, appId.ToString())))
                 {
-                    result.Add(Path.Combine(steamInstallDirectory, SteamWorkshopDirectory, appId.ToString()));
+                    result.Add(new WorkshopDirectoryContainer(Path.Combine(steamInstallDirectory, SteamWorkshopDirectory, appId.ToString()).StandardizeDirectorySeparator()));
                 }
                 var vdfPath = Path.Combine(steamInstallDirectory, SteamConfigVDF);
                 var libraryFolderVDF = Path.Combine(steamInstallDirectory, LibraryFolderVDF);
@@ -197,11 +207,11 @@ namespace IronyModManager.Services.Registrations
                 {
                     if (Directory.Exists(Path.Combine(path, SteamWorkshopDirectory, appId.ToString())))
                     {
-                        result.Add(Path.Combine(path, SteamWorkshopDirectory, appId.ToString()));
+                        result.Add(new(Path.Combine(path, SteamWorkshopDirectory, appId.ToString()).StandardizeDirectorySeparator()));
                     }
                 }
             }
-            return result;
+            return result.GroupBy(p => p.PathCI).Select(p => p.FirstOrDefault()).OrderBy(p => p.PathCI.StartsWith(gameDirectory) ? 0 : 1).Select(p => p.Path).ToList();
         }
 
         /// <summary>
@@ -396,5 +406,53 @@ namespace IronyModManager.Services.Registrations
         }
 
         #endregion Methods
+
+        #region Classes
+
+        /// <summary>
+        /// Class WorkshopDirectoryContainer.
+        /// </summary>
+        private class WorkshopDirectoryContainer
+        {
+            #region Constructors
+
+            /// <summary>
+            /// Initializes a new instance of the <see cref="WorkshopDirectoryContainer" /> class.
+            /// </summary>
+            /// <param name="path">The path.</param>
+            public WorkshopDirectoryContainer(string path)
+            {
+                Path = path;
+            }
+
+            #endregion Constructors
+
+            #region Properties
+
+            /// <summary>
+            /// Gets the path.
+            /// </summary>
+            /// <value>The path.</value>
+            public string Path
+            {
+                get;
+            }
+
+            /// <summary>
+            /// Gets the path ci.
+            /// </summary>
+            /// <value>The path ci.</value>
+            public string PathCI
+            {
+                get
+                {
+                    return Path.ToLowerInvariant();
+                }
+            }
+
+            #endregion Properties
+        }
+
+        #endregion Classes
     }
 }

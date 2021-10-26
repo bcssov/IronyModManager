@@ -404,8 +404,12 @@ namespace IronyModManager.Services
                 var tasks = new List<Task>();
                 foreach (var diff in diffs.GroupBy(p => p.Mod.DescriptorFile))
                 {
-                    var installResult = diff.FirstOrDefault();
-                    var localDiff = diff.FirstOrDefault().Mod;
+                    IModInstallationResult installResult = diff.FirstOrDefault();
+                    if (game.WorkshopDirectory.Any() && diff.Any(p => p.Path.StartsWith(game.WorkshopDirectory.FirstOrDefault())))
+                    {
+                        installResult = diff.FirstOrDefault(p => p.Path.StartsWith(game.WorkshopDirectory.FirstOrDefault()));                        
+                    }
+                    var localDiff = installResult.Mod;
                     if (IsPatchModInternal(localDiff))
                     {
                         continue;
