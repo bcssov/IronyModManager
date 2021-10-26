@@ -4,7 +4,7 @@
 // Created          : 10-24-2021
 //
 // Last Modified By : Mario
-// Last Modified On : 10-25-2021
+// Last Modified On : 10-26-2021
 // ***********************************************************************
 // <copyright file="SearchParserResult.cs" company="Mario">
 //     Mario
@@ -53,7 +53,7 @@ namespace IronyModManager.Parser.Mod.Search
         /// </summary>
         /// <value>The source.</value>
         [DescriptorProperty(Fields.Source)]
-        public string Source { get; set; }
+        public SourceType Source { get; set; }
 
 #nullable enable
 

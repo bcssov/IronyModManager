@@ -4,7 +4,7 @@
 // Created          : 10-24-2021
 //
 // Last Modified By : Mario
-// Last Modified On : 10-25-2021
+// Last Modified On : 10-26-2021
 // ***********************************************************************
 // <copyright file="ISearchParserResult.cs" company="Mario">
 //     Mario
@@ -48,7 +48,7 @@ namespace IronyModManager.Parser.Common.Mod.Search
         /// Gets or sets the source.
         /// </summary>
         /// <value>The source.</value>
-        string Source { get; set; }
+        SourceType Source { get; set; }
 
         /// <summary>
         /// Gets or sets the version.

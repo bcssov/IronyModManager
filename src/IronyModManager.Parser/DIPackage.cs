@@ -4,7 +4,7 @@
 // Created          : 02-16-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 10-25-2021
+// Last Modified On : 10-26-2021
 // ***********************************************************************
 // <copyright file="DIPackage.cs" company="Mario">
 //     Mario
@@ -88,7 +88,7 @@ namespace IronyModManager.Parser
             container.Register<ILocalizationRegistry, LocalizationRegistry>(Lifestyle.Singleton);
             container.Collection.Register(typeof(ITypeConverter), new List<Type>
             {
-                typeof(BoolConverter)
+                typeof(BoolConverter), typeof(VersionConverter), typeof(SourceTypeConverter)
             });
         }
 
