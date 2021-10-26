@@ -11,6 +11,7 @@ Check out the detailed overview on the [wiki](https://github.com/bcssov/IronyMod
 
 ### Download
 * Latest stable version: [v1.18.92](https://github.com/bcssov/IronyModManager/releases/tag/v1.18.92)
+* Latest prerelease version: [v1.19.46-alpha](https://github.com/bcssov/IronyModManager/releases/tag/v1.19.46-alpha)
 
 ### New users
 Check this [checklist](https://github.com/bcssov/IronyModManager/wiki/New-User-Checklist) if you are a first time user of Irony.
