@@ -4,7 +4,7 @@
 // Created          : 10-25-2021
 //
 // Last Modified By : Mario
-// Last Modified On : 10-25-2021
+// Last Modified On : 10-26-2021
 // ***********************************************************************
 // <copyright file="ITypeConverter.cs" company="Mario">
 //     Mario
@@ -20,7 +20,8 @@ namespace IronyModManager.Parser.Common.Mod.Search.Converter
     /// <summary>
     /// Interface ITypeConverter
     /// </summary>
-    public interface ITypeConverter
+    /// <typeparam name="T"></typeparam>
+    public interface ITypeConverter<T>
     {
         #region Methods
 
@@ -35,12 +36,12 @@ namespace IronyModManager.Parser.Common.Mod.Search.Converter
 #nullable enable
 
         /// <summary>
-        /// Converts the specified value.
+        /// Converts the specified locale.
         /// </summary>
         /// <param name="locale">The locale.</param>
         /// <param name="value">The value.</param>
-        /// <returns>System.Nullable&lt;System.Object&gt;.</returns>
-        object? Convert(string locale, string value);
+        /// <returns>T.</returns>
+        T Convert(string locale, string value);
 
         #endregion Methods
 

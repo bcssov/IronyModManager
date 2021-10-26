@@ -21,15 +21,15 @@ namespace IronyModManager.Parser.Mod.Search.Converter
 {
     /// <summary>
     /// Class SourceTypeConverter.
-    /// Implements the <see cref="IronyModManager.Parser.Mod.Search.Converter.BaseConverter" />
+    /// Implements the <see cref="IronyModManager.Parser.Mod.Search.Converter.BaseConverter{IronyModManager.Parser.Common.Mod.Search.SourceType}" />
     /// </summary>
-    /// <seealso cref="IronyModManager.Parser.Mod.Search.Converter.BaseConverter" />
-    public class SourceTypeConverter : BaseConverter
+    /// <seealso cref="IronyModManager.Parser.Mod.Search.Converter.BaseConverter{IronyModManager.Parser.Common.Mod.Search.SourceType}" />
+    public class SourceTypeConverter : BaseConverter<SourceType>
     {
         #region Constructors
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="SourceTypeConverter"/> class.
+        /// Initializes a new instance of the <see cref="SourceTypeConverter" /> class.
         /// </summary>
         /// <param name="localizationRegistry">The localization registry.</param>
         public SourceTypeConverter(ILocalizationRegistry localizationRegistry) : base(localizationRegistry)
@@ -54,17 +54,15 @@ namespace IronyModManager.Parser.Mod.Search.Converter
 
         #endregion Properties
 
-#nullable enable
-
         #region Methods
 
         /// <summary>
-        /// Converts the specified value.
+        /// Converts the specified locale.
         /// </summary>
         /// <param name="locale">The locale.</param>
         /// <param name="value">The value.</param>
-        /// <returns>System.Nullable&lt;System.Object&gt;.</returns>
-        public override object? Convert(string locale, string value)
+        /// <returns>T.</returns>
+        public override SourceType Convert(string locale, string value)
         {
             var translation = GetTranslationValue(locale, value, ValueKeys, out var localeUsed);
             if (!string.IsNullOrWhiteSpace(translation) && !string.IsNullOrWhiteSpace(localeUsed))
@@ -84,8 +82,6 @@ namespace IronyModManager.Parser.Mod.Search.Converter
             }
             return SourceType.None;
         }
-
-#nullable disable
 
         /// <summary>
         /// Gets the local.

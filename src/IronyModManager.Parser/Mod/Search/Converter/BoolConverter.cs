@@ -4,7 +4,7 @@
 // Created          : 10-25-2021
 //
 // Last Modified By : Mario
-// Last Modified On : 10-25-2021
+// Last Modified On : 10-26-2021
 // ***********************************************************************
 // <copyright file="BoolConverter.cs" company="Mario">
 //     Mario
@@ -21,10 +21,10 @@ namespace IronyModManager.Parser.Mod.Search.Converter
 {
     /// <summary>
     /// Class BoolConverter.
-    /// Implements the <see cref="IronyModManager.Parser.Mod.Search.Converter.BaseConverter" />
+    /// Implements the <see cref="IronyModManager.Parser.Mod.Search.Converter.BaseConverter{System.Boolean?}" />
     /// </summary>
-    /// <seealso cref="IronyModManager.Parser.Mod.Search.Converter.BaseConverter" />
-    public class BoolConverter : BaseConverter
+    /// <seealso cref="IronyModManager.Parser.Mod.Search.Converter.BaseConverter{System.Boolean?}" />
+    public class BoolConverter : BaseConverter<bool?>
     {
         #region Constructors
 
@@ -59,12 +59,12 @@ namespace IronyModManager.Parser.Mod.Search.Converter
         #region Methods
 
         /// <summary>
-        /// Converts the specified value.
+        /// Converts the specified locale.
         /// </summary>
         /// <param name="locale">The locale.</param>
         /// <param name="value">The value.</param>
-        /// <returns>System.Nullable&lt;System.Object&gt;.</returns>
-        public override object? Convert(string locale, string value)
+        /// <returns>T.</returns>
+        public override bool? Convert(string locale, string value)
         {
             var translation = GetTranslationValue(locale, value, ValueKeys, out var localeUsed);
             if (!string.IsNullOrWhiteSpace(translation) && !string.IsNullOrWhiteSpace(localeUsed))

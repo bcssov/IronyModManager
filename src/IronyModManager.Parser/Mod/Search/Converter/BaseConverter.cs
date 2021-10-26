@@ -4,7 +4,7 @@
 // Created          : 10-25-2021
 //
 // Last Modified By : Mario
-// Last Modified On : 10-25-2021
+// Last Modified On : 10-26-2021
 // ***********************************************************************
 // <copyright file="BaseConverter.cs" company="Mario">
 //     Mario
@@ -21,10 +21,11 @@ namespace IronyModManager.Parser.Mod.Search.Converter
 {
     /// <summary>
     /// Class BaseConverter.
-    /// Implements the <see cref="IronyModManager.Parser.Common.Mod.Search.Converter.ITypeConverter" />
+    /// Implements the <see cref="IronyModManager.Parser.Common.Mod.Search.Converter.ITypeConverter{T}" />
     /// </summary>
-    /// <seealso cref="IronyModManager.Parser.Common.Mod.Search.Converter.ITypeConverter" />
-    public abstract class BaseConverter : ITypeConverter
+    /// <typeparam name="T"></typeparam>
+    /// <seealso cref="IronyModManager.Parser.Common.Mod.Search.Converter.ITypeConverter{T}" />
+    public abstract class BaseConverter<T> : ITypeConverter<T>
     {
         #region Fields
 
@@ -75,12 +76,12 @@ namespace IronyModManager.Parser.Mod.Search.Converter
 #nullable enable
 
         /// <summary>
-        /// Converts the specified value.
+        /// Converts the specified locale.
         /// </summary>
         /// <param name="locale">The locale.</param>
         /// <param name="value">The value.</param>
-        /// <returns>System.Nullable&lt;System.Object&gt;.</returns>
-        public abstract object? Convert(string locale, string value);
+        /// <returns>T.</returns>
+        public abstract T Convert(string locale, string value);
 
         /// <summary>
         /// Gets the translation value.

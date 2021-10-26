@@ -90,8 +90,8 @@ namespace IronyModManager.Parser.Tests
             registry.RegisterTranslation("fr", LocalizationResources.FilterCommands.Local, "fr-local");
 
             var converter = new SourceTypeConverter(registry);
-            ((SourceType)converter.Convert("en", "steam")).Should().Be(SourceType.Steam);
-            ((SourceType)converter.Convert("en", "fr-steam")).Should().Be(SourceType.Steam);
+            converter.Convert("en", "steam").Should().Be(SourceType.Steam);
+            converter.Convert("en", "fr-steam").Should().Be(SourceType.Steam);
         }
 
         /// <summary>
@@ -111,8 +111,8 @@ namespace IronyModManager.Parser.Tests
             registry.RegisterTranslation("fr", LocalizationResources.FilterCommands.Local, "fr-local");
 
             var converter = new SourceTypeConverter(registry);
-            ((SourceType)converter.Convert("en", "pdx")).Should().Be(SourceType.Paradox);
-            ((SourceType)converter.Convert("en", "fr-pdx")).Should().Be(SourceType.Paradox);
+            converter.Convert("en", "pdx").Should().Be(SourceType.Paradox);
+            converter.Convert("en", "fr-pdx").Should().Be(SourceType.Paradox);
         }
 
         /// <summary>
@@ -132,8 +132,8 @@ namespace IronyModManager.Parser.Tests
             registry.RegisterTranslation("fr", LocalizationResources.FilterCommands.Local, "fr-local");
 
             var converter = new SourceTypeConverter(registry);
-            ((SourceType)converter.Convert("en", "local")).Should().Be(SourceType.Local);
-            ((SourceType)converter.Convert("en", "fr-local")).Should().Be(SourceType.Local);
+            converter.Convert("en", "local").Should().Be(SourceType.Local);
+            converter.Convert("en", "fr-local").Should().Be(SourceType.Local);
         }
 
         /// <summary>
@@ -153,8 +153,8 @@ namespace IronyModManager.Parser.Tests
             registry.RegisterTranslation("fr", LocalizationResources.FilterCommands.Local, "fr-local");
 
             var converter = new SourceTypeConverter(registry);
-            ((SourceType)converter.Convert("en", "dummy")).Should().Be(SourceType.None);
-            ((SourceType)converter.Convert("en", "fr-dummy")).Should().Be(SourceType.None);
+            converter.Convert("en", "dummy").Should().Be(SourceType.None);
+            converter.Convert("en", "fr-dummy").Should().Be(SourceType.None);
         }
     }
 }

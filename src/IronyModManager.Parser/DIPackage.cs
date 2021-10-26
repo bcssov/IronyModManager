@@ -86,7 +86,7 @@ namespace IronyModManager.Parser
             container.Register<IBracketValidateResult, BracketValidateResult>();
             container.Register<ISearchParserResult, SearchParserResult>();
             container.Register<ILocalizationRegistry, LocalizationRegistry>(Lifestyle.Singleton);
-            container.Collection.Register(typeof(ITypeConverter), new List<Type>
+            container.Collection.Register(typeof(ITypeConverter<>), new List<Type>
             {
                 typeof(BoolConverter), typeof(VersionConverter), typeof(SourceTypeConverter)
             });

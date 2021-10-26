@@ -19,12 +19,14 @@ using IronyModManager.Shared;
 
 namespace IronyModManager.Parser.Mod.Search.Converter
 {
+#nullable enable
+
     /// <summary>
     /// Class VersionConverter.
-    /// Implements the <see cref="IronyModManager.Parser.Mod.Search.Converter.BaseConverter" />
+    /// Implements the <see cref="IronyModManager.Parser.Mod.Search.Converter.BaseConverter{System.Version}" />
     /// </summary>
-    /// <seealso cref="IronyModManager.Parser.Mod.Search.Converter.BaseConverter" />
-    public class VersionConverter : BaseConverter
+    /// <seealso cref="IronyModManager.Parser.Mod.Search.Converter.BaseConverter{System.Version}" />
+    public class VersionConverter : BaseConverter<Version?>
     {
         #region Constructors
 
@@ -44,23 +46,19 @@ namespace IronyModManager.Parser.Mod.Search.Converter
         /// Gets the translation field keys.
         /// </summary>
         /// <value>The translation field keys.</value>
-        /// <exception cref="NotImplementedException"></exception>
         public override IEnumerable<string> TranslationFieldKeys => new List<string>() { LocalizationResources.FilterCommands.Version };
 
         #endregion Properties
 
-#nullable enable
-
         #region Methods
 
         /// <summary>
-        /// Converts the specified value.
+        /// Converts the specified locale.
         /// </summary>
         /// <param name="locale">The locale.</param>
         /// <param name="value">The value.</param>
-        /// <returns>System.Nullable&lt;System.Object&gt;.</returns>
-        /// <exception cref="NotImplementedException"></exception>
-        public override object? Convert(string locale, string value)
+        /// <returns>T.</returns>
+        public override Version? Convert(string locale, string value)
         {
             value ??= string.Empty;
             return value.ToVersion();

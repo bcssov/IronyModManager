@@ -94,8 +94,8 @@ namespace IronyModManager.Parser.Tests
             registry.RegisterTranslation("fr", LocalizationResources.FilterCommands.False, "fr-false");
 
             var converter = new BoolConverter(registry);
-            (converter.Convert("en", "yes") as bool?).Should().BeTrue();
-            (converter.Convert("en", "fr-yes") as bool?).Should().BeTrue();
+            converter.Convert("en", "yes").Should().BeTrue();
+            converter.Convert("en", "fr-yes").Should().BeTrue();
         }
 
         /// <summary>
@@ -117,8 +117,8 @@ namespace IronyModManager.Parser.Tests
             registry.RegisterTranslation("fr", LocalizationResources.FilterCommands.False, "fr-false");
 
             var converter = new BoolConverter(registry);
-            (converter.Convert("en", "no") as bool?).Should().BeFalse();
-            (converter.Convert("en", "fr-no") as bool?).Should().BeFalse();
+            converter.Convert("en", "no").Should().BeFalse();
+            converter.Convert("en", "fr-no").Should().BeFalse();
         }
 
         /// <summary>
@@ -140,8 +140,8 @@ namespace IronyModManager.Parser.Tests
             registry.RegisterTranslation("fr", LocalizationResources.FilterCommands.False, "fr-false");
 
             var converter = new BoolConverter(registry);
-            (converter.Convert("en", "empty") as bool?).Should().BeNull();
-            (converter.Convert("en", "fr-empty") as bool?).Should().BeNull();
+            converter.Convert("en", "empty").Should().BeNull();
+            converter.Convert("en", "fr-empty").Should().BeNull();
         }
     }
 }

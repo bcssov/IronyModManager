@@ -69,7 +69,7 @@ namespace IronyModManager.Parser.Tests
             var registry = new LocalizationRegistry(new Cache());
 
             var converter = new VersionConverter(registry);
-            var version = converter.Convert("en", "1.0") as Version;
+            var version = converter.Convert("en", "1.0");
             version.Equals(new Version(1, 0)).Should().BeTrue();
         }
 
@@ -82,7 +82,7 @@ namespace IronyModManager.Parser.Tests
             var registry = new LocalizationRegistry(new Cache());
 
             var converter = new VersionConverter(registry);
-            var version = converter.Convert("en", "test") as Version;
+            var version = converter.Convert("en", "test");
             version.Should().BeNull();
         }
     }
