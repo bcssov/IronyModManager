@@ -543,7 +543,7 @@
         "NotAchievementCompatible": "Mod NO es compatible con logros."
     },
     "ModSource": {
-        "Paradox": "La fuente de mod es de paradoja interactiva",
+        "Paradox": "La fuente de mod es de Paradox Interactive",
         "Steam": "La fuente mod es de Steam",
         "Local": "La fuente de mod es local"
     },
@@ -555,5 +555,18 @@
         "Clear": "X",
         "UpArrow": "▲",
         "DownArrow": "▼"
+    },
+    "FilterCommands": {
+        "Achievements": "logros",
+        "Source": "fuente",
+        "Version": "versión",
+        "Selected": "seleccionado",
+        "Yes": "sí",
+        "No": "no",
+        "True": "verdadero",
+        "False": "falso",
+        "Steam": "steam",
+        "Paradox": "paradox",
+        "Local": "local"
     }
 }

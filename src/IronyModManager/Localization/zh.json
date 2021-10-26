@@ -555,5 +555,18 @@
         "Clear": "×",
         "UpArrow": "▲",
         "DownArrow": "▼"
+    },
+    "FilterCommands": {
+        "Achievements": "成就",
+        "Source": "来源",
+        "Version": "版本",
+        "Selected": "选中",
+        "Yes": "是",
+        "No": "否",
+        "True": "真",
+        "False": "假",
+        "Steam": "steam",
+        "Paradox": "paradox",
+        "Local": "当地"
     }
 }

@@ -170,7 +170,7 @@ namespace IronyModManager.Services.Tests
             var service = GetService(gameIndexer, storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService);
             var indexed = new IndexedDefinitions();
             indexed.InitMap(new List<IDefinition>() { new Definition() { File = "test1\\1.txt" }, new Definition() { File = "test2\\3.txt" } });
-            var result = await service.IndexDefinitionsAsync(new Game() { ExecutableLocation = "c:\\test\\test.exe", GameFolders = new List<string>() { "test1", "test2" } }, new List<string>() { "3.0.3" }, indexed);
+            var result = await service.IndexDefinitionsAsync(new Game() { ExecutableLocation = System.IO.Path.Combine(System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location)), GameFolders = new List<string>() { "test1", "test2" } }, new List<string>() { "3.0.3" }, indexed);
             result.Should().BeTrue();
             saved.Count.Should().Be(2);
             saved.FirstOrDefault(p => p.Contains("test1")).Should().NotBeNull();
@@ -239,7 +239,7 @@ namespace IronyModManager.Services.Tests
             var service = GetService(gameIndexer, storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService);
             var indexed = new IndexedDefinitions();
             indexed.InitMap(new List<IDefinition>() { new Definition() { File = "test1\\1.txt" }, new Definition() { File = "test2\\3.txt" } });
-            var result = await service.IndexDefinitionsAsync(new Game() { ExecutableLocation = "c:\\test\\test.exe", GameFolders = new List<string>() { "test1", "test2" } }, new List<string>() { "3.0.3" }, indexed);
+            var result = await service.IndexDefinitionsAsync(new Game() { ExecutableLocation = System.IO.Path.Combine(System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location)), GameFolders = new List<string>() { "test1", "test2" } }, new List<string>() { "3.0.3" }, indexed);
             result.Should().BeTrue();
             saved.Count.Should().Be(2);
             saved.FirstOrDefault(p => p.Contains("test1")).Should().NotBeNull();
@@ -315,7 +315,7 @@ namespace IronyModManager.Services.Tests
             var service = GetService(gameIndexer, storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService);
             var indexed = new IndexedDefinitions();
             indexed.InitMap(new List<IDefinition>() { new Definition() { File = "test1\\1.txt" }, new Definition() { File = "test2\\3.txt" } });
-            var result = await service.IndexDefinitionsAsync(new Game() { ExecutableLocation = "c:\\test\\test.exe", GameFolders = new List<string>() { "test1", "test2" } }, new List<string>() { "3.0.3" }, indexed);
+            var result = await service.IndexDefinitionsAsync(new Game() { ExecutableLocation = System.IO.Path.Combine(System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location)), GameFolders = new List<string>() { "test1", "test2" } }, new List<string>() { "3.0.3" }, indexed);
             result.Should().BeTrue();
             saved.Count.Should().Be(1);
             saved.FirstOrDefault(p => p.Contains("test1")).Should().NotBeNull();

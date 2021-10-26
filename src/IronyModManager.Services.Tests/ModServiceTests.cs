@@ -23,14 +23,17 @@ using IronyModManager.IO.Common;
 using IronyModManager.IO.Common.Mods;
 using IronyModManager.IO.Common.Readers;
 using IronyModManager.IO.Mods.Models;
+using IronyModManager.Localization;
 using IronyModManager.Models;
 using IronyModManager.Models.Common;
 using IronyModManager.Parser;
 using IronyModManager.Parser.Common;
 using IronyModManager.Parser.Common.Args;
 using IronyModManager.Parser.Common.Mod;
+using IronyModManager.Parser.Common.Mod.Search;
 using IronyModManager.Parser.Definitions;
 using IronyModManager.Parser.Mod;
+using IronyModManager.Parser.Mod.Search;
 using IronyModManager.Services.Common;
 using IronyModManager.Shared;
 using IronyModManager.Shared.Cache;
@@ -60,9 +63,9 @@ namespace IronyModManager.Services.Tests
         /// <returns>ModService.</returns>
         private static ModService GetService(Mock<IStorageProvider> storageProvider, Mock<IModParser> modParser,
              Mock<IReader> reader, Mock<IMapper> mapper, Mock<IModWriter> modWriter,
-            Mock<IGameService> gameService)
+            Mock<IGameService> gameService, Mock<IParser> parser = null)
         {
-            return new ModService(null, new Cache(), null, reader.Object, modParser.Object, modWriter.Object, gameService.Object, storageProvider.Object, mapper.Object);
+            return new ModService(parser?.Object, null, new Cache(), null, reader.Object, modParser.Object, modWriter.Object, gameService.Object, storageProvider.Object, mapper.Object);
         }
 
         /// <summary>
@@ -1325,6 +1328,132 @@ namespace IronyModManager.Services.Tests
 
             var result = await service.CustomModDirectoryEmptyAsync("Custom_mod_directory_empty_should_return_true");
             result.Should().BeFalse();
+        }
+
+        /// <summary>
+        /// Defines the test method Should_filter_mods.
+        /// </summary>
+        [Fact]
+        public void Should_filter_mods()
+        {
+            DISetup.SetupContainer();
+            CurrentLocale.SetCurrent("en");
+
+            var storageProvider = new Mock<IStorageProvider>();
+            var modParser = new Mock<IModParser>();
+            var reader = new Mock<IReader>();
+            var modWriter = new Mock<IModWriter>();
+            var gameService = new Mock<IGameService>();
+            var mapper = new Mock<IMapper>();
+            var parser = new Mock<IParser>();
+
+            var service = GetService(storageProvider, modParser, reader, mapper, modWriter, gameService, parser: parser);
+
+            parser.Setup(p => p.Parse(It.IsAny<string>(), It.IsAny<string>())).Returns(new SearchParserResult()
+            {
+                Name = "test",
+                AchievementCompatible = new BoolFilterResult(true),
+                Version = new Version(1, 1)
+            });
+
+            var mods = new List<IMod>()
+            {
+                new Mod() { Name = "test", Version = "1.0", AchievementStatus = AchievementStatus.Compatible },
+                new Mod() { Name = "test 2", Version = "1.5", AchievementStatus = AchievementStatus.NotCompatible },
+                new Mod() { Name = "test 3", Version = "1.5", AchievementStatus = AchievementStatus.Compatible }
+            };
+
+            var result = service.FilterMods(mods, "test");
+            result.Should().NotBeNull();
+            result.Count().Should().Be(1);
+            result.FirstOrDefault().Name.Should().Be("test 3");
+        }
+
+        /// <summary>
+        /// Defines the test method Should_find_mods.
+        /// </summary>
+        [Fact]
+        public void Should_find_mods()
+        {
+            DISetup.SetupContainer();
+            CurrentLocale.SetCurrent("en");
+
+            var storageProvider = new Mock<IStorageProvider>();
+            var modParser = new Mock<IModParser>();
+            var reader = new Mock<IReader>();
+            var modWriter = new Mock<IModWriter>();
+            var gameService = new Mock<IGameService>();
+            var mapper = new Mock<IMapper>();
+            var parser = new Mock<IParser>();
+
+            var service = GetService(storageProvider, modParser, reader, mapper, modWriter, gameService, parser: parser);
+
+            parser.Setup(p => p.Parse(It.IsAny<string>(), It.IsAny<string>())).Returns(new SearchParserResult()
+            {
+                Name = "test",
+                AchievementCompatible = new BoolFilterResult(true),
+                Version = new Version(1, 1)
+            });
+
+            var mods = new List<IMod>()
+            {
+                new Mod() { Name = "test", Version = "1.0", AchievementStatus = AchievementStatus.Compatible },
+                new Mod() { Name = "test 2", Version = "1.5", AchievementStatus = AchievementStatus.NotCompatible },
+                new Mod() { Name = "test 3", Version = "1.5", AchievementStatus = AchievementStatus.Compatible },
+                new Mod() { Name = "test 4", Version = "1.5", AchievementStatus = AchievementStatus.Compatible }
+            };
+
+            var result = service.FindMod(mods, "test", false, 1);
+            result.Should().NotBeNull();
+            result.Name.Should().Be("test 3");
+
+            result = service.FindMod(mods, "test", false, 2);
+            result.Should().NotBeNull();
+            result.Name.Should().Be("test 4");
+        }
+
+        /// <summary>
+        /// Defines the test method Should_find_mods_in_reverse.
+        /// </summary>
+        [Fact]
+        public void Should_find_mods_in_reverse()
+        {
+            DISetup.SetupContainer();
+            CurrentLocale.SetCurrent("en");
+
+            var storageProvider = new Mock<IStorageProvider>();
+            var modParser = new Mock<IModParser>();
+            var reader = new Mock<IReader>();
+            var modWriter = new Mock<IModWriter>();
+            var gameService = new Mock<IGameService>();
+            var mapper = new Mock<IMapper>();
+            var parser = new Mock<IParser>();
+
+            var service = GetService(storageProvider, modParser, reader, mapper, modWriter, gameService, parser: parser);
+
+            parser.Setup(p => p.Parse(It.IsAny<string>(), It.IsAny<string>())).Returns(new SearchParserResult()
+            {
+                Name = "test",
+                AchievementCompatible = new BoolFilterResult(true),
+                Version = new Version(1, 1)
+            });
+
+            var mods = new List<IMod>()
+            {
+                new Mod() { Name = "test 5", Version = "1.5", AchievementStatus = AchievementStatus.Compatible },
+                new Mod() { Name = "test", Version = "1.0", AchievementStatus = AchievementStatus.Compatible },
+                new Mod() { Name = "test 2", Version = "1.5", AchievementStatus = AchievementStatus.NotCompatible },
+                new Mod() { Name = "test 3", Version = "1.5", AchievementStatus = AchievementStatus.Compatible },
+                new Mod() { Name = "test 4", Version = "1.5", AchievementStatus = AchievementStatus.Compatible }
+            };
+
+            var result = service.FindMod(mods, "test", true, 0);
+            result.Should().NotBeNull();
+            result.Name.Should().Be("test 4");
+
+            result = service.FindMod(mods, "test", true, 2);
+            result.Should().NotBeNull();
+            result.Name.Should().Be("test 5");
         }
     }
 }

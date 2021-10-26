@@ -4,7 +4,7 @@
 // Created          : 02-24-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 09-06-2021
+// Last Modified On : 10-26-2021
 // ***********************************************************************
 // <copyright file="IModService.cs" company="Mario">
 //     Mario
@@ -71,6 +71,24 @@ namespace IronyModManager.Services.Common
         /// <param name="modCollection">The mod collection.</param>
         /// <returns>Task&lt;System.Boolean&gt;.</returns>
         Task<bool> ExportModsAsync(IReadOnlyCollection<IMod> enabledMods, IReadOnlyCollection<IMod> regularMods, IModCollection modCollection);
+
+        /// <summary>
+        /// Filters the mods.
+        /// </summary>
+        /// <param name="collection">The collection.</param>
+        /// <param name="text">The text.</param>
+        /// <returns>IEnumerable&lt;IMod&gt;.</returns>
+        IEnumerable<IMod> FilterMods(IEnumerable<IMod> collection, string text);
+
+        /// <summary>
+        /// Finds the mod.
+        /// </summary>
+        /// <param name="collection">The collection.</param>
+        /// <param name="text">The text.</param>
+        /// <param name="reverse">if set to <c>true</c> [reverse].</param>
+        /// <param name="skipIndex">Index of the skip.</param>
+        /// <returns>IMod.</returns>
+        IMod FindMod(IEnumerable<IMod> collection, string text, bool reverse, int? skipIndex = null);
 
         /// <summary>
         /// Gets the image stream asynchronous.

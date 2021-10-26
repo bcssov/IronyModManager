@@ -4,7 +4,7 @@
 // Created          : 02-24-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 09-06-2021
+// Last Modified On : 10-26-2021
 // ***********************************************************************
 // <copyright file="ModService.cs" company="Mario">
 //     Mario
@@ -20,8 +20,10 @@ using System.Threading.Tasks;
 using AutoMapper;
 using IronyModManager.IO.Common.Mods;
 using IronyModManager.IO.Common.Readers;
+using IronyModManager.Localization;
 using IronyModManager.Models.Common;
 using IronyModManager.Parser.Common.Mod;
+using IronyModManager.Parser.Common.Mod.Search;
 using IronyModManager.Services.Common;
 using IronyModManager.Shared;
 using IronyModManager.Shared.Cache;
@@ -51,6 +53,11 @@ namespace IronyModManager.Services
         /// </summary>
         private readonly ILogger logger;
 
+        /// <summary>
+        /// The search parser
+        /// </summary>
+        private readonly IParser searchParser;
+
         #endregion Fields
 
         #region Constructors
@@ -58,6 +65,7 @@ namespace IronyModManager.Services
         /// <summary>
         /// Initializes a new instance of the <see cref="ModService" /> class.
         /// </summary>
+        /// <param name="searchParser">The search parser.</param>
         /// <param name="logger">The logger.</param>
         /// <param name="cache">The cache.</param>
         /// <param name="definitionInfoProviders">The definition information providers.</param>
@@ -67,12 +75,13 @@ namespace IronyModManager.Services
         /// <param name="gameService">The game service.</param>
         /// <param name="storageProvider">The storage provider.</param>
         /// <param name="mapper">The mapper.</param>
-        public ModService(ILogger logger, ICache cache, IEnumerable<IDefinitionInfoProvider> definitionInfoProviders,
+        public ModService(IParser searchParser, ILogger logger, ICache cache, IEnumerable<IDefinitionInfoProvider> definitionInfoProviders,
             IReader reader, IModParser modParser,
             IModWriter modWriter, IGameService gameService,
             IStorageProvider storageProvider, IMapper mapper) : base(cache, definitionInfoProviders, reader, modWriter, modParser, gameService, storageProvider, mapper)
         {
             this.logger = logger;
+            this.searchParser = searchParser;
         }
 
         #endregion Constructors
@@ -226,6 +235,53 @@ namespace IronyModManager.Services
                 }
             }
             return await ModWriter.ApplyModsAsync(applyModParams);
+        }
+
+        /// <summary>
+        /// Filters the mods.
+        /// </summary>
+        /// <param name="collection">The collection.</param>
+        /// <param name="text">The text.</param>
+        /// <returns>IEnumerable&lt;IMod&gt;.</returns>
+        public virtual IEnumerable<IMod> FilterMods(IEnumerable<IMod> collection, string text)
+        {
+            if (collection == null)
+            {
+                return collection;
+            }
+            var parameters = searchParser.Parse(CurrentLocale.CultureName, text);
+            var result = collection.Where(p => p.Name.Contains(parameters.Name, StringComparison.InvariantCultureIgnoreCase) ||
+                    (p.RemoteId.HasValue && p.RemoteId.GetValueOrDefault().ToString().Contains(parameters.Name)))
+                    .ConditionalFilter(parameters.AchievementCompatible.Result.HasValue, x => x.Where(p => p.AchievementStatus == (parameters.AchievementCompatible.Result.GetValueOrDefault() ? AchievementStatus.Compatible : AchievementStatus.NotCompatible)))
+                    .ConditionalFilter(parameters.IsSelected.Result.HasValue, x => x.Where(p => p.IsSelected == parameters.IsSelected.Result.GetValueOrDefault()))
+                    .ConditionalFilter(parameters.Source.Result != SourceType.None, x => x.Where(p => p.Source == SourceTypeToModSource(parameters.Source.Result)))
+                    .ConditionalFilter(parameters.Version != null, x => x.Where(p => p.VersionData > parameters.Version));
+            return result.ToList();
+        }
+
+        /// <summary>
+        /// Finds the mod.
+        /// </summary>
+        /// <param name="collection">The collection.</param>
+        /// <param name="text">The text.</param>
+        /// <param name="reverse">if set to <c>true</c> [reverse].</param>
+        /// <param name="skipIndex">Index of the skip.</param>
+        /// <returns>IMod.</returns>
+        public virtual IMod FindMod(IEnumerable<IMod> collection, string text, bool reverse, int? skipIndex = null)
+        {
+            if (collection == null)
+            {
+                return null;
+            }
+            var parameters = searchParser.Parse(CurrentLocale.CultureName, text);
+            var result = !reverse ? collection.Skip(skipIndex.GetValueOrDefault()) : collection.Reverse().Skip(skipIndex.GetValueOrDefault());
+            result = result.Where(p => p.Name.Contains(parameters.Name, StringComparison.InvariantCultureIgnoreCase) ||
+                    (p.RemoteId.HasValue && p.RemoteId.GetValueOrDefault().ToString().Contains(parameters.Name)))
+                    .ConditionalFilter(parameters.AchievementCompatible.Result.HasValue, x => x.Where(p => p.AchievementStatus == (parameters.AchievementCompatible.Result.GetValueOrDefault() ? AchievementStatus.Compatible : AchievementStatus.NotCompatible)))
+                    .ConditionalFilter(parameters.IsSelected.Result.HasValue, x => x.Where(p => p.IsSelected == parameters.IsSelected.Result.GetValueOrDefault()))
+                    .ConditionalFilter(parameters.Source.Result != SourceType.None, x => x.Where(p => p.Source == SourceTypeToModSource(parameters.Source.Result)))
+                    .ConditionalFilter(parameters.Version != null, x => x.Where(p => p.VersionData > parameters.Version));
+            return result.FirstOrDefault();
         }
 
         /// <summary>
@@ -709,6 +765,21 @@ namespace IronyModManager.Services
             long.TryParse(name.Replace(Constants.Steam_mod_id, string.Empty), out var id);
 #pragma warning restore CA1806 // Do not ignore method results
             return id;
+        }
+
+        /// <summary>
+        /// Sources the type to mod source.
+        /// </summary>
+        /// <param name="type">The type.</param>
+        /// <returns>ModSource.</returns>
+        protected virtual ModSource SourceTypeToModSource(SourceType type)
+        {
+            return type switch
+            {
+                SourceType.Paradox => ModSource.Paradox,
+                SourceType.Steam => ModSource.Steam,
+                _ => ModSource.Local,
+            };
         }
 
         #endregion Methods

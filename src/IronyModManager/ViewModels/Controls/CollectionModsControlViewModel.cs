@@ -4,7 +4,7 @@
 // Created          : 03-03-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 09-06-2021
+// Last Modified On : 10-26-2021
 // ***********************************************************************
 // <copyright file="CollectionModsControlViewModel.cs" company="Mario">
 //     Mario
@@ -1474,7 +1474,7 @@ namespace IronyModManager.ViewModels.Controls
                     skipModSelectionSave = true;
                     if (!string.IsNullOrWhiteSpace(s) && SelectedMods != null)
                     {
-                        SelectedMod = SelectedMods.FirstOrDefault(p => p.Name.Contains(s, StringComparison.InvariantCultureIgnoreCase) || (p.RemoteId.HasValue && p.RemoteId.GetValueOrDefault().ToString().Contains(s)));
+                        SelectedMod = modService.FindMod(SelectedMods, s, false, null);
                     }
                     var modCount = SelectedModCollection?.Mods.Count();
                     var selectedModsCount = SelectedMods?.Count;
@@ -1505,8 +1505,7 @@ namespace IronyModManager.ViewModels.Controls
                     var searchString = SearchMods.Text ?? string.Empty;
                     if (!s.Result)
                     {
-                        var mod = SelectedMods.Skip(index + 1).FirstOrDefault(s => s.Name.Contains(searchString, StringComparison.InvariantCultureIgnoreCase) ||
-                                        (s.RemoteId.HasValue && s.RemoteId.GetValueOrDefault().ToString().Contains(searchString)));
+                        var mod = modService.FindMod(SelectedMods, searchString, false, index + 1);
                         if (mod != null && mod != SelectedMod)
                         {
                             SelectedMod = mod;
@@ -1515,8 +1514,7 @@ namespace IronyModManager.ViewModels.Controls
                     else
                     {
                         var reverseIndex = SelectedMods.Count - index;
-                        var mod = SelectedMods.Reverse().Skip(reverseIndex).FirstOrDefault(s => s.Name.Contains(searchString, StringComparison.InvariantCultureIgnoreCase) ||
-                                        (s.RemoteId.HasValue && s.RemoteId.GetValueOrDefault().ToString().Contains(searchString)));
+                        var mod = modService.FindMod(SelectedMods, searchString, true, reverseIndex);
                         if (mod != null && mod != SelectedMod)
                         {
                             SelectedMod = mod;

@@ -81,6 +81,19 @@ namespace IronyModManager.Shared
         }
 
         /// <summary>
+        /// Conditionals the filter.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="col">The col.</param>
+        /// <param name="condition">The condition.</param>
+        /// <param name="filter">The filter.</param>
+        /// <returns>System.Collections.Generic.IEnumerable&lt;T&gt;.</returns>
+        public static IEnumerable<T> ConditionalFilter<T>(this IEnumerable<T> col, bool condition, Func<IEnumerable<T>, IEnumerable<T>> filter)
+        {
+            return condition ? filter(col) : col;
+        }
+
+        /// <summary>
         /// Generates the short file name hash identifier.
         /// </summary>
         /// <param name="value">The value.</param>
@@ -181,6 +194,41 @@ namespace IronyModManager.Shared
             return value.Replace('\\', Path.DirectorySeparatorChar).Replace('/', Path.DirectorySeparatorChar);
         }
 
+#nullable enable
+
+        /// <summary>
+        /// Converts to version.
+        /// </summary>
+        /// <param name="value">The value.</param>
+        /// <returns>System.Version?.</returns>
+        public static Version? ToVersion(this string value)
+        {
+            var sb = new StringBuilder();
+            var count = 0;
+            foreach (var item in value.Split("."))
+            {
+                var parsed = item.Replace("*", string.Empty);
+                if (string.IsNullOrWhiteSpace(parsed))
+                {
+                    parsed = "*";
+                }
+                if (int.TryParse(parsed, out var part))
+                {
+                    sb.Append($"{part}.");
+                }
+                else if (parsed.Equals("*"))
+                {
+                    sb.Append($"{(count > 1 ? int.MaxValue : 0)}.");
+                }
+                count++;
+            }
+            if (Version.TryParse(sb.ToString().Trim().Trim('.'), out var parsedVersion))
+            {
+                return parsedVersion;
+            }
+            return null;
+        }
+
         /// <summary>
         /// Gets the invalid file name chars.
         /// </summary>
@@ -195,5 +243,7 @@ namespace IronyModManager.Shared
         }
 
         #endregion Methods
+
+#nullable disable
     }
 }

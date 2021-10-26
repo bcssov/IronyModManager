@@ -545,7 +545,7 @@
     "ModSource": {
         "Paradox": "Paradox Interactive Mod",
         "Steam": "Steam Mod",
-        "Local": "Localni Mod"
+        "Local": "Lokalni Mod"
     },
     "Sorting": {
         "Sort_A_Z": "↑",
@@ -555,5 +555,18 @@
         "Clear": "X",
         "UpArrow": "▲",
         "DownArrow": "▼"
+    },
+    "FilterCommands": {
+        "Achievements": "postignuća",
+        "Source": "izvor",
+        "Version": "verzija",
+        "Selected": "odabran",
+        "Yes": "da",
+        "No": "ne",
+        "True": "točno",
+        "False": "netočno",
+        "Steam": "steam",
+        "Paradox": "paradox",
+        "Local": "lokal"
     }
 }

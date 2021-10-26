@@ -555,5 +555,18 @@
         "Clear": "X",
         "UpArrow": "▲",
         "DownArrow": "▼"
+    },
+    "FilterCommands": {
+        "Achievements": "achievements",
+        "Source": "source",
+        "Version": "version",
+        "Selected": "selected",
+        "Yes": "yes",
+        "No": "no",
+        "True": "true",
+        "False": "false",
+        "Steam": "steam",
+        "Paradox": "paradox",
+        "Local": "local"
     }
 }
