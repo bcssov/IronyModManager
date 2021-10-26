@@ -21,10 +21,10 @@ namespace IronyModManager.Parser.Mod.Search.Converter
 {
     /// <summary>
     /// Class SourceTypeConverter.
-    /// Implements the <see cref="IronyModManager.Parser.Mod.Search.Converter.BaseConverter{IronyModManager.Parser.Common.Mod.Search.SourceType}" />
+    /// Implements the <see cref="IronyModManager.Parser.Mod.Search.Converter.BaseConverter{IronyModManager.Parser.Common.Mod.Search.SourceTypeResult}" />
     /// </summary>
-    /// <seealso cref="IronyModManager.Parser.Mod.Search.Converter.BaseConverter{IronyModManager.Parser.Common.Mod.Search.SourceType}" />
-    public class SourceTypeConverter : BaseConverter<SourceType>
+    /// <seealso cref="IronyModManager.Parser.Mod.Search.Converter.BaseConverter{IronyModManager.Parser.Common.Mod.Search.SourceTypeResult}" />
+    public class SourceTypeConverter : BaseConverter<SourceTypeResult>
     {
         #region Constructors
 
@@ -62,25 +62,25 @@ namespace IronyModManager.Parser.Mod.Search.Converter
         /// <param name="locale">The locale.</param>
         /// <param name="value">The value.</param>
         /// <returns>T.</returns>
-        public override SourceType Convert(string locale, string value)
+        public override SourceTypeResult Convert(string locale, string value)
         {
             var translation = GetTranslationValue(locale, value, ValueKeys, out var localeUsed);
             if (!string.IsNullOrWhiteSpace(translation) && !string.IsNullOrWhiteSpace(localeUsed))
             {
                 if (GetSteam(localeUsed).StartsWith(translation))
                 {
-                    return SourceType.Steam;
+                    return new SourceTypeResult(SourceType.Steam);
                 }
                 else if (GetParadox(localeUsed).StartsWith(translation))
                 {
-                    return SourceType.Paradox;
+                    return new SourceTypeResult(SourceType.Paradox);
                 }
                 else if (GetLocal(localeUsed).StartsWith(translation))
                 {
-                    return SourceType.Local;
+                    return new SourceTypeResult(SourceType.Local);
                 }
             }
-            return SourceType.None;
+            return new SourceTypeResult(SourceType.None);
         }
 
         /// <summary>

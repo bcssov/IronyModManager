@@ -90,6 +90,7 @@ namespace IronyModManager.Parser
             {
                 typeof(BoolConverter), typeof(VersionConverter), typeof(SourceTypeConverter)
             });
+            container.Register<IParser, Mod.Search.Parser>();
         }
 
         #endregion Methods

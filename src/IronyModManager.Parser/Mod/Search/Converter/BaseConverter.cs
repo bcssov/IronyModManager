@@ -25,7 +25,7 @@ namespace IronyModManager.Parser.Mod.Search.Converter
     /// </summary>
     /// <typeparam name="T"></typeparam>
     /// <seealso cref="IronyModManager.Parser.Common.Mod.Search.Converter.ITypeConverter{T}" />
-    public abstract class BaseConverter<T> : ITypeConverter<T>
+    public abstract class BaseConverter<T> : ITypeConverter<T> where T : class
     {
         #region Fields
 

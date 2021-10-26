@@ -21,10 +21,10 @@ namespace IronyModManager.Parser.Mod.Search.Converter
 {
     /// <summary>
     /// Class BoolConverter.
-    /// Implements the <see cref="IronyModManager.Parser.Mod.Search.Converter.BaseConverter{System.Boolean?}" />
+    /// Implements the <see cref="IronyModManager.Parser.Mod.Search.Converter.BaseConverter{IronyModManager.Parser.Common.Mod.Search.BoolFilterResult}" />
     /// </summary>
-    /// <seealso cref="IronyModManager.Parser.Mod.Search.Converter.BaseConverter{System.Boolean?}" />
-    public class BoolConverter : BaseConverter<bool?>
+    /// <seealso cref="IronyModManager.Parser.Mod.Search.Converter.BaseConverter{IronyModManager.Parser.Common.Mod.Search.BoolFilterResult}" />
+    public class BoolConverter : BaseConverter<BoolFilterResult>
     {
         #region Constructors
 
@@ -54,8 +54,6 @@ namespace IronyModManager.Parser.Mod.Search.Converter
 
         #endregion Properties
 
-#nullable enable
-
         #region Methods
 
         /// <summary>
@@ -64,21 +62,21 @@ namespace IronyModManager.Parser.Mod.Search.Converter
         /// <param name="locale">The locale.</param>
         /// <param name="value">The value.</param>
         /// <returns>T.</returns>
-        public override bool? Convert(string locale, string value)
+        public override BoolFilterResult Convert(string locale, string value)
         {
             var translation = GetTranslationValue(locale, value, ValueKeys, out var localeUsed);
             if (!string.IsNullOrWhiteSpace(translation) && !string.IsNullOrWhiteSpace(localeUsed))
             {
                 if (GetInclude(localeUsed).Any(x => translation.StartsWith(x)))
                 {
-                    return true;
+                    return new BoolFilterResult(true);
                 }
                 else if (GetExclude(localeUsed).Any(x => translation.StartsWith(x)))
                 {
-                    return false;
+                    return new BoolFilterResult(false);
                 }
             }
-            return null;
+            return new BoolFilterResult(null);
         }
 
         /// <summary>
@@ -107,6 +105,4 @@ namespace IronyModManager.Parser.Mod.Search.Converter
 
         #endregion Methods
     }
-
-#nullable disable
 }

@@ -21,7 +21,7 @@ namespace IronyModManager.Parser.Common.Mod.Search.Converter
     /// Interface ITypeConverter
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    public interface ITypeConverter<T>
+    public interface ITypeConverter<out T> where T : class
     {
         #region Methods
 
@@ -33,8 +33,6 @@ namespace IronyModManager.Parser.Common.Mod.Search.Converter
         /// <returns><c>true</c> if this instance can convert the specified locale; otherwise, <c>false</c>.</returns>
         bool CanConvert(string locale, string key);
 
-#nullable enable
-
         /// <summary>
         /// Converts the specified locale.
         /// </summary>
@@ -44,7 +42,5 @@ namespace IronyModManager.Parser.Common.Mod.Search.Converter
         T Convert(string locale, string value);
 
         #endregion Methods
-
-#nullable disable
     }
 }

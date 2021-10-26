@@ -111,8 +111,8 @@ namespace IronyModManager.Parser.Tests
             registry.RegisterTranslation("fr", LocalizationResources.FilterCommands.Local, "fr-local");
 
             var converter = new SourceTypeConverter(registry);
-            converter.Convert("en", "pdx").Should().Be(SourceType.Paradox);
-            converter.Convert("en", "fr-pdx").Should().Be(SourceType.Paradox);
+            converter.Convert("en", "pdx").Result.Should().Be(SourceType.Paradox);
+            converter.Convert("en", "fr-pdx").Result.Should().Be(SourceType.Paradox);
         }
 
         /// <summary>
@@ -132,8 +132,8 @@ namespace IronyModManager.Parser.Tests
             registry.RegisterTranslation("fr", LocalizationResources.FilterCommands.Local, "fr-local");
 
             var converter = new SourceTypeConverter(registry);
-            converter.Convert("en", "local").Should().Be(SourceType.Local);
-            converter.Convert("en", "fr-local").Should().Be(SourceType.Local);
+            converter.Convert("en", "local").Result.Should().Be(SourceType.Local);
+            converter.Convert("en", "fr-local").Result.Should().Be(SourceType.Local);
         }
 
         /// <summary>
@@ -153,8 +153,8 @@ namespace IronyModManager.Parser.Tests
             registry.RegisterTranslation("fr", LocalizationResources.FilterCommands.Local, "fr-local");
 
             var converter = new SourceTypeConverter(registry);
-            converter.Convert("en", "dummy").Should().Be(SourceType.None);
-            converter.Convert("en", "fr-dummy").Should().Be(SourceType.None);
+            converter.Convert("en", "dummy").Result.Should().Be(SourceType.None);
+            converter.Convert("en", "fr-dummy").Result.Should().Be(SourceType.None);
         }
     }
 }

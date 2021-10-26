@@ -27,33 +27,38 @@ namespace IronyModManager.Parser.Common.Mod.Search
         #region Properties
 
         /// <summary>
-        /// Gets or sets a value indicating whether [achievement compatible].
+        /// Gets or sets the achievement compatible.
         /// </summary>
-        /// <value><c>null</c> if [achievement compatible] contains no value, <c>true</c> if [achievement compatible]; otherwise, <c>false</c>.</value>
-        bool? AchievementCompatible { get; set; }
+        /// <value>The achievement compatible.</value>
+        [DescriptorProperty(Fields.Achievements)]
+        BoolFilterResult AchievementCompatible { get; set; }
 
         /// <summary>
-        /// Gets or sets a value indicating whether this instance is selected.
+        /// Gets or sets the is selected.
         /// </summary>
-        /// <value><c>null</c> if [is selected] contains no value, <c>true</c> if [is selected]; otherwise, <c>false</c>.</value>
-        bool? IsSelected { get; set; }
+        /// <value>The is selected.</value>
+        [DescriptorProperty(Fields.Selected)]
+        BoolFilterResult IsSelected { get; set; }
 
         /// <summary>
         /// Gets or sets the name.
         /// </summary>
         /// <value>The name.</value>
+        [DescriptorProperty("name")]
         string Name { get; set; }
 
         /// <summary>
         /// Gets or sets the source.
         /// </summary>
         /// <value>The source.</value>
-        SourceType Source { get; set; }
+        [DescriptorProperty(Fields.Source)]
+        SourceTypeResult Source { get; set; }
 
         /// <summary>
         /// Gets or sets the version.
         /// </summary>
         /// <value>The version.</value>
+        [DescriptorProperty(Fields.Version)]
         Version? Version { get; set; }
 
         #endregion Properties

@@ -32,14 +32,14 @@ namespace IronyModManager.Parser.Mod.Search
         /// </summary>
         /// <value><c>null</c> if [achievement compatible] contains no value, <c>true</c> if [achievement compatible]; otherwise, <c>false</c>.</value>
         [DescriptorProperty(Fields.Achievements)]
-        public bool? AchievementCompatible { get; set; }
+        public BoolFilterResult AchievementCompatible { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether this instance is selected.
         /// </summary>
         /// <value><c>null</c> if [is selected] contains no value, <c>true</c> if [is selected]; otherwise, <c>false</c>.</value>
         [DescriptorProperty(Fields.Selected)]
-        public bool? IsSelected { get; set; }
+        public BoolFilterResult IsSelected { get; set; }
 
         /// <summary>
         /// Gets or sets the name.
@@ -53,7 +53,7 @@ namespace IronyModManager.Parser.Mod.Search
         /// </summary>
         /// <value>The source.</value>
         [DescriptorProperty(Fields.Source)]
-        public SourceType Source { get; set; }
+        public SourceTypeResult Source { get; set; }
 
 #nullable enable
 
