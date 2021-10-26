@@ -545,7 +545,7 @@
     "ModSource": {
         "Paradox": "Paradox Interactive Mod",
         "Steam": "Steam Mod",
-        "Local": "Localni Mod"
+        "Local": "Lokalni Mod"
     },
     "Sorting": {
         "Sort_A_Z": "↑",
@@ -564,6 +564,9 @@
         "Yes": "da",
         "No": "ne",
         "True": "točno",
-        "False": "netočno"
+        "False": "netočno",
+        "Steam": "steam",
+        "Paradox": "paradox",
+        "Local": "lokal"
     }
 }

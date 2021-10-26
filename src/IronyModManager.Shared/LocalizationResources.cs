@@ -767,6 +767,9 @@ namespace IronyModManager.Shared
             public const string No = Prefix + "No";
             public const string True = Prefix + "True";
             public const string False = Prefix + "False";
+            public const string Steam = Prefix + "Steam";
+            public const string Paradox = Prefix + "Paradox";
+            public const string Local = Prefix + "Local";
         }
     }
 }

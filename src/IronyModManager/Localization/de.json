@@ -564,6 +564,9 @@
         "Yes": "ja",
         "No": "nein",
         "True": "wahr",
-        "False": "falsch"
+        "False": "falsch",
+        "Steam": "steam",
+        "Paradox": "paradox",
+        "Local": "local"
     }
 }

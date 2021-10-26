@@ -544,7 +544,7 @@
     },
     "ModSource": {
         "Paradox": "Источник мода от Paradox Interactive",
-        "Steam": "Источник мода из пара",
+        "Steam": "Источник мода из Steam",
         "Local": "Источник мода локальный"
     },
     "Sorting": {
@@ -564,6 +564,9 @@
         "Yes": "да",
         "No": "Нет",
         "True": "истинный",
-        "False": "ложный"
+        "False": "ложный",
+        "Steam": "steam",
+        "Paradox": "paradox",
+        "Local": "локальный"
     }
 }

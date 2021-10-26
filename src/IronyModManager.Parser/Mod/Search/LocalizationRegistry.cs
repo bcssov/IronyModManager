@@ -4,7 +4,7 @@
 // Created          : 10-25-2021
 //
 // Last Modified By : Mario
-// Last Modified On : 10-25-2021
+// Last Modified On : 10-26-2021
 // ***********************************************************************
 // <copyright file="LocalizationRegistry.cs" company="Mario">
 //     Mario
@@ -43,7 +43,8 @@ namespace IronyModManager.Parser.Mod.Search
         /// The translation keys
         /// </summary>
         private static readonly string[] translationKeys = new string[] { LocalizationResources.FilterCommands.Achievements, LocalizationResources.FilterCommands.False, LocalizationResources.FilterCommands.No,
-        LocalizationResources.FilterCommands.Selected, LocalizationResources.FilterCommands.Source, LocalizationResources.FilterCommands.True, LocalizationResources.FilterCommands.Version, LocalizationResources.FilterCommands.Yes};
+        LocalizationResources.FilterCommands.Selected, LocalizationResources.FilterCommands.Source, LocalizationResources.FilterCommands.True, LocalizationResources.FilterCommands.Version, LocalizationResources.FilterCommands.Yes,
+        LocalizationResources.FilterCommands.Steam, LocalizationResources.FilterCommands.Paradox, LocalizationResources.FilterCommands.Local };
 
         /// <summary>
         /// The cache

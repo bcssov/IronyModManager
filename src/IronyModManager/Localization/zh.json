@@ -564,6 +564,9 @@
         "Yes": "是",
         "No": "否",
         "True": "真",
-        "False": "假"
+        "False": "假",
+        "Steam": "steam",
+        "Paradox": "paradox",
+        "Local": "当地"
     }
 }
