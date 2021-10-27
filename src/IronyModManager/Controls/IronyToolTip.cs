@@ -4,7 +4,7 @@
 // Created          : 06-18-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 10-25-2021
+// Last Modified On : 10-27-2021
 // ***********************************************************************
 // <copyright file="IronyToolTip.cs" company="Avalonia">
 //     Avalonia
@@ -538,7 +538,10 @@ namespace IronyModManager.Controls
                     else
                     {
                         var tip = control.GetValue(ToolTipProperty);
-                        tip.Content = e.NewValue;
+                        if (tip != null)
+                        {
+                            tip.Content = e.NewValue;
+                        }                        
                     }
                 }
             }

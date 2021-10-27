@@ -4,7 +4,7 @@
 // Created          : 03-18-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 09-16-2021
+// Last Modified On : 10-27-2021
 // ***********************************************************************
 // <copyright file="MainConflictSolverViewModel.cs" company="Mario">
 //     Mario
@@ -169,6 +169,12 @@ namespace IronyModManager.ViewModels
         /// </summary>
         /// <value>The back command.</value>
         public virtual ReactiveCommand<Unit, Unit> BackCommand { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether [back triggered].
+        /// </summary>
+        /// <value><c>true</c> if [back triggered]; otherwise, <c>false</c>.</value>
+        public virtual bool BackTriggered { get; protected set; }
 
         /// <summary>
         /// Gets or sets the binary merge viewer.
@@ -460,6 +466,7 @@ namespace IronyModManager.ViewModels
         {
             ModCompareSelector.Reset();
             IgnoreEnabled = false;
+            BackTriggered = false;
         }
 
         /// <summary>
@@ -641,9 +648,14 @@ namespace IronyModManager.ViewModels
         protected override void OnActivated(CompositeDisposable disposables)
         {
             var resolvingEnabled = this.WhenAnyValue(v => v.ResolvingConflict, v => !v);
+            var backTriggered = this.WhenAnyValue(v => v.BackTriggered, v => !v);
 
-            BackCommand = ReactiveCommand.Create(() =>
+            BackCommand = ReactiveCommand.CreateFromTask(async () =>
             {
+                var id = idGenerator.GetNextId();
+                await TriggerOverlayAsync(id, true);
+                await Task.Delay(100);
+                BackTriggered = true;
                 Conflicts?.Dispose();
                 Conflicts = null;
                 SelectedModsOrder = null;
@@ -653,7 +665,9 @@ namespace IronyModManager.ViewModels
                     State = NavigationState.Main
                 };
                 ReactiveUI.MessageBus.Current.SendMessage(args);
-            }).DisposeWith(disposables);
+                BackTriggered = false;
+                await TriggerOverlayAsync(id, false);
+            }, backTriggered).DisposeWith(disposables);
 
             ResolveCommand = ReactiveCommand.CreateFromTask(() =>
             {

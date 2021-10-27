@@ -49,7 +49,7 @@
         </StackPanel>
       </Panel>
       <Panel Grid.Row="0" Grid.Column="1" IsVisible="{Binding IsConflictSolverAvailable}">
-        <Grid ColumnDefinitions="5*,5*" RowDefinitions="3*,15*">
+        <Grid ColumnDefinitions="5*,5*" RowDefinitions="4*,15*">
           <TextBlock Text="{Binding LeftSide}" Grid.Column="0" Grid.Row="0"
                      HorizontalAlignment="Center" Margin="10"></TextBlock>
           <TextBlock Text="{Binding RightSide}" Grid.Column="1" Grid.Row="0"
