@@ -1407,7 +1407,7 @@ namespace IronyModManager.Services.Tests
             result.Should().NotBeNull();
             result.Name.Should().Be("test 3");
 
-            result = service.FindMod(mods, "test", false, 2);
+            result = service.FindMod(mods, "test", false, 3);
             result.Should().NotBeNull();
             result.Name.Should().Be("test 4");
         }
