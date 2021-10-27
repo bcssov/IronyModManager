@@ -165,7 +165,7 @@ namespace IronyModManager.Parser.Mod.Search
                 logger.Error(ex);
             }
             var emptyResult = DIResolver.Get<ISearchParserResult>();
-            emptyResult.Name = (text ?? string.Empty).ToLowerInvariant().Trim();
+            emptyResult.Name = text.ToLowerInvariant().Trim();
             return emptyResult;
         }
 
