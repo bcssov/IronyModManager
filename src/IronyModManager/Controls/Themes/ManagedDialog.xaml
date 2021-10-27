@@ -40,7 +40,7 @@
   </UserControl.Resources>
   <DockPanel>
     <DockPanel DockPanel.Dock="Top" Margin="0 0 0 5">
-      <dialog:ChildFitter DockPanel.Dock="Right" Width="{Binding ElementName=Location, Path=Bounds.Height}">
+      <dialog:ChildFitter DockPanel.Dock="Right" Width="{Binding ElementName=Location, Path=Bounds.Height}" MinWidth="30" Margin="0,0,10,0">
         <Button Command="{Binding GoUp}">
           <Image Stretch="Fill">
             <Image.Source>
