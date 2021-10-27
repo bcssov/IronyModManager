@@ -4,7 +4,7 @@
 // Created          : 03-13-2021
 //
 // Last Modified By : Mario
-// Last Modified On : 03-13-2021
+// Last Modified On : 10-27-2021
 // ***********************************************************************
 // <copyright file="SKTypefaceCollection.cs" company="Avalonia">
 //     Avalonia
@@ -69,14 +69,16 @@ namespace IronyModManager.Platform.Fonts
                 return typeface;
             }
 
+            var initialWeight = (int)key.Weight;
+
             var weight = (int)key.Weight;
 
-            weight -= weight % 100; // make sure we start at a full weight
+            weight -= weight % 50; // make sure we start at a full weight
 
             for (var i = (int)key.Style; i < 2; i++)
             {
                 // only try 2 font weights in each direction
-                for (var j = 0; j < 200; j += 100)
+                for (var j = 0; j < initialWeight; j += 50)
                 {
                     if (weight - j >= 100)
                     {

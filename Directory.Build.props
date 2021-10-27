@@ -22,7 +22,7 @@
     <MicrosoftExtensionsConfigurationJson>[5.0.0]</MicrosoftExtensionsConfigurationJson>
     <MaterialAvalonia>[2.4.1]</MaterialAvalonia>
     <MessageBoxAvalonia>[1.5.5]</MessageBoxAvalonia>
-    <Avalonia>[0.10.8]</Avalonia>
+    <Avalonia>[0.10.9]</Avalonia>
     <AvaloniaEdit>[0.10.4]</AvaloniaEdit>
   </PropertyGroup>
   <ItemGroup>
