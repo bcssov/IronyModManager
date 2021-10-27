@@ -4,7 +4,7 @@
 // Created          : 10-26-2021
 //
 // Last Modified By : Mario
-// Last Modified On : 10-26-2021
+// Last Modified On : 10-27-2021
 // ***********************************************************************
 // <copyright file="Parser.cs" company="Mario">
 //     Mario
@@ -44,7 +44,7 @@ namespace IronyModManager.Parser.Mod.Search
         /// <summary>
         /// The value separator
         /// </summary>
-        private const string ValueSeparator = ":";
+        private const char ValueSeparator = ':';
 
         /// <summary>
         /// The search parser properties
@@ -91,28 +91,33 @@ namespace IronyModManager.Parser.Mod.Search
             if (string.IsNullOrWhiteSpace(text))
             {
                 var result = DIResolver.Get<ISearchParserResult>();
-                result.Name = (text ?? string.Empty).ToLowerInvariant();
+                result.Name = (text ?? string.Empty).ToLowerInvariant().Trim();
                 return result;
             }
             try
             {
-                var nameAdded = false;
-                var tokens = text.ToLowerInvariant().Split(StatementSeparator).ToDictionary(k =>
+                var tokens = new Dictionary<string, string>();
+                foreach (var item in text.ToLowerInvariant().Split(StatementSeparator))
                 {
-                    if (k.Split(ValueSeparator).Length > 1)
+                    string key = string.Empty;
+                    string value = string.Empty;
+                    if (item.Count(p => p == ValueSeparator) == 1)
                     {
-                        return k.Split(ValueSeparator)[0].Trim();
+                        var split = item.Split(ValueSeparator);
+                        key = split[0].Trim();
+                        value = split[1].Trim();
                     }
                     else
                     {
-                        if (nameAdded)
-                        {
-                            return k.Trim();
-                        }
-                        nameAdded = true;
-                        return NameProperty;
+                        key = NameProperty;
+                        value = item.Trim();
                     }
-                }, v => v.Split(ValueSeparator).Length > 1 ? v.Split(ValueSeparator)[1].Trim() : v.Trim());
+                    if (!tokens.ContainsKey(key))
+                    {
+                        tokens.Add(key, value);
+                    }
+                }
+                var nothingSet = true;
                 if (tokens.Any())
                 {
                     var result = DIResolver.Get<ISearchParserResult>();
@@ -137,6 +142,7 @@ namespace IronyModManager.Parser.Mod.Search
                             if (property != null && property.CanWrite)
                             {
                                 property.SetValue(result, value);
+                                nothingSet = false;
                             }
                         }
                         else
@@ -148,7 +154,10 @@ namespace IronyModManager.Parser.Mod.Search
                     {
                         result.Name = string.Empty;
                     }
-                    return result;
+                    if (!nothingSet)
+                    {
+                        return result;
+                    }
                 }
             }
             catch (Exception ex)
@@ -156,7 +165,7 @@ namespace IronyModManager.Parser.Mod.Search
                 logger.Error(ex);
             }
             var emptyResult = DIResolver.Get<ISearchParserResult>();
-            emptyResult.Name = (text ?? string.Empty).ToLowerInvariant();
+            emptyResult.Name = (text ?? string.Empty).ToLowerInvariant().Trim();
             return emptyResult;
         }
 
