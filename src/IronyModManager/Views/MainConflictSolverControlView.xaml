@@ -16,9 +16,9 @@
     </Panel>
     <Grid ColumnDefinitions="3*,7*" IsVisible="{Binding !EditingIgnoreConflictsRules}">
       <Grid.RowDefinitions>
-        <RowDefinition MaxHeight="150" Height="4*" />
-        <RowDefinition Height="9*" />        
-        <RowDefinition Height="50" />        
+        <RowDefinition Height="170" />
+        <RowDefinition Height="*" />
+        <RowDefinition Height="50" />
       </Grid.RowDefinitions>
       <Panel Grid.Column="0" Grid.Row="0" Grid.RowSpan="3">
         <StackPanel Orientation="Vertical" Grid.Column="0" Grid.Row="0" Margin="5,0,0,0">
