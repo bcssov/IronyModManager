@@ -13,7 +13,7 @@
   </UserControl.Resources>
   <Panel>
     <Panel IsVisible="{Binding EditingText}">
-      <Grid ColumnDefinitions="*" RowDefinitions="*,40">
+      <Grid ColumnDefinitions="*" RowDefinitions="*,40" Margin="0,15,0,0" IsSharedSizeScope="True">
         <Border BorderThickness="1,1,1,1" BorderBrush="{DynamicResource ThemeBorderMidBrush}"
                 Grid.Column="0" Grid.Row="0" Margin="0,0,10,0">
           <Panel>
