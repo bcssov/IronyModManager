@@ -4,7 +4,7 @@
 // Created          : 03-13-2021
 //
 // Last Modified By : Mario
-// Last Modified On : 04-16-2021
+// Last Modified On : 10-27-2021
 // ***********************************************************************
 // <copyright file="FontManager.cs" company="Mario">
 //     Mario
@@ -102,7 +102,9 @@ namespace IronyModManager.Platform.Fonts
                 {
                     return fontManager.CreateGlyphTypeface(typeface);
                 }
-                return new GlyphTypefaceImpl(skTypeface);
+                var isFakeBold = (int)typeface.Weight >= 600 && !skTypeface.IsBold;
+                var isFakeItalic = typeface.Style == FontStyle.Italic && !skTypeface.IsItalic;
+                return new GlyphTypefaceImpl(skTypeface, isFakeBold, isFakeItalic);
             }
             else if (GetPlatformConfiguration().GetOptions().Fonts.UseInbuiltFontsOnly)
             {
@@ -113,7 +115,9 @@ namespace IronyModManager.Platform.Fonts
                 {
                     return fontManager.CreateGlyphTypeface(typeface);
                 }
-                return new GlyphTypefaceImpl(skTypeface);
+                var isFakeBold = (int)typeface.Weight >= 600 && !skTypeface.IsBold;
+                var isFakeItalic = typeface.Style == FontStyle.Italic && !skTypeface.IsItalic;
+                return new GlyphTypefaceImpl(skTypeface, isFakeBold, isFakeItalic);
             }
             return fontManager.CreateGlyphTypeface(typeface);
         }
