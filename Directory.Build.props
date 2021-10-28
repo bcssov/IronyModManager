@@ -22,8 +22,8 @@
     <MicrosoftExtensionsConfigurationJson>[5.0.0]</MicrosoftExtensionsConfigurationJson>
     <MaterialAvalonia>[2.4.1]</MaterialAvalonia>
     <MessageBoxAvalonia>[1.5.5]</MessageBoxAvalonia>
-    <Avalonia>[0.10.9]</Avalonia>
-    <AvaloniaEdit>[0.10.4]</AvaloniaEdit>
+    <Avalonia>[0.10.10]</Avalonia>
+    <AvaloniaEdit>[0.10.9]</AvaloniaEdit>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Nerdbank.GitVersioning">
