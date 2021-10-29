@@ -4,7 +4,7 @@
 // Created          : 01-10-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 10-24-2021
+// Last Modified On : 10-29-2021
 // ***********************************************************************
 // <copyright file="App.xaml.cs" company="Mario">
 //     Mario
@@ -218,9 +218,11 @@ namespace IronyModManager
                     await appAction.ExitAppAsync();
                 });
             }
+            var logger = DIResolver.Get<ILogger>();
+            var lastException = logger.GetLastFatalExceptionMessage();
             var locManager = DIResolver.Get<ILocalizationManager>();
             var title = locManager.GetResource(LocalizationResources.FatalError.Title);
-            var message = locManager.GetResource(LocalizationResources.FatalError.Message);
+            var message = string.IsNullOrWhiteSpace(lastException) ? locManager.GetResource(LocalizationResources.FatalError.Message) : locManager.GetResource(LocalizationResources.FatalError.MessageWithLastError).FormatSmart(new { Environment.NewLine, Message = string.Join(Environment.NewLine, lastException.SplitOnNewLine()) });
             var header = locManager.GetResource(LocalizationResources.FatalError.Header);
             var messageBox = MessageBoxes.GetFatalErrorWindow(title, header, message);
             messageBox.ExtendClientAreaChromeHints = Avalonia.Platform.ExtendClientAreaChromeHints.PreferSystemChrome;
@@ -233,7 +235,10 @@ namespace IronyModManager
             {
                 desktop.MainWindow.WindowStartupLocation = WindowStartupLocation.CenterScreen;
             }
-            close().ConfigureAwait(false);
+            if (string.IsNullOrWhiteSpace(lastException))
+            {
+                close().ConfigureAwait(false);
+            }
         }
 
         /// <summary>

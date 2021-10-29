@@ -17,6 +17,7 @@
     },
     "FatalError": {
         "Message": "Ein nicht behandelter Fehler ist aufgetreten. Anwendung wird automatisch geschlossen.",
+        "MessageWithLastError": "Ein nicht behandelter Fehler ist aufgetreten. Bitte verwenden Sie diese Informationen, um einen Fehlerbericht einzulegen:{NewLine}{NewLine}{Message}",
         "Title": "Fehler",
         "Header": "Schwerwiegender Fehler"
     },

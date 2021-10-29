@@ -4,7 +4,7 @@
 // Created          : 05-07-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 08-11-2020
+// Last Modified On : 10-29-2021
 // ***********************************************************************
 // <copyright file="Logger.cs" company="Mario">
 //     Mario
@@ -27,14 +27,18 @@ namespace IronyModManager.Tests.Common
     [ExcludeFromCoverage("Exclude logger.")]
     public class Logger : Shared.ILogger
     {
-        #region Fields
-
         /// <summary>
         /// The log
         /// </summary>
+#pragma warning disable CA2211 // Non-constant fields should not be visible
+
+        #region Fields
+
         protected static NLog.Logger log = LogManager.GetCurrentClassLogger();
 
         #endregion Fields
+
+#pragma warning restore CA2211 // Non-constant fields should not be visible
 
         #region Methods
 
@@ -43,7 +47,7 @@ namespace IronyModManager.Tests.Common
         /// </summary>
         /// <param name="ex">The ex.</param>
         /// <param name="message">The message.</param>
-        public void Error(Exception ex, string message = Shared.Constants.EmptyParam)
+        public void Error(Exception ex, string message = Constants.EmptyParam)
         {
             if (ex != null)
             {
@@ -56,6 +60,35 @@ namespace IronyModManager.Tests.Common
                     log.Error(ex);
                 }
             }
+        }
+
+        /// <summary>
+        /// Fatals the specified ex.
+        /// </summary>
+        /// <param name="ex">The ex.</param>
+        /// <param name="message">The message.</param>
+        public void Fatal(Exception ex, string message = Constants.EmptyParam)
+        {
+            if (ex != null)
+            {
+                if (!string.IsNullOrWhiteSpace(message))
+                {
+                    log.Fatal(ex, message);
+                }
+                else
+                {
+                    log.Fatal(ex);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Gets the last fatal exception message.
+        /// </summary>
+        /// <returns>System.String.</returns>
+        public string GetLastFatalExceptionMessage()
+        {
+            return string.Empty;
         }
 
         /// <summary>

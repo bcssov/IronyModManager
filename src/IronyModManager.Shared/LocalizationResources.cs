@@ -31,6 +31,7 @@ namespace IronyModManager.Shared
         {
             public const string Prefix = "FatalError.";
             public const string Message = Prefix + "Message";
+            public const string MessageWithLastError = Prefix + "MessageWithLastError";
             public const string Title = Prefix + "Title";
             public const string Header = Prefix + "Header";
         }

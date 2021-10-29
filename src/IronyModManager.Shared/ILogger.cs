@@ -4,7 +4,7 @@
 // Created          : 01-13-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 08-11-2020
+// Last Modified On : 10-29-2021
 // ***********************************************************************
 // <copyright file="ILogger.cs" company="Mario">
 //     Mario
@@ -31,6 +31,19 @@ namespace IronyModManager.Shared
         /// <param name="ex">The ex.</param>
         /// <param name="message">The message.</param>
         void Error(Exception ex, string message = Constants.EmptyParam);
+
+        /// <summary>
+        /// Fatals the specified ex.
+        /// </summary>
+        /// <param name="ex">The ex.</param>
+        /// <param name="message">The message.</param>
+        void Fatal(Exception ex, string message = Constants.EmptyParam);
+
+        /// <summary>
+        /// Gets the last fatal exception message.
+        /// </summary>
+        /// <returns>System.String.</returns>
+        string GetLastFatalExceptionMessage();
 
         /// <summary>
         /// Informations the specified message.
