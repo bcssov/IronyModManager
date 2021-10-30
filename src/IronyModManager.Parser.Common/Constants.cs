@@ -4,7 +4,7 @@
 // Created          : 02-16-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 10-25-2021
+// Last Modified On : 10-30-2021
 // ***********************************************************************
 // <copyright file="Constants.cs" company="Mario">
 //     Mario
@@ -23,6 +23,11 @@ namespace IronyModManager.Parser.Common
     public static class Constants
     {
         #region Fields
+
+        /// <summary>
+        /// The empty overwrite comment
+        /// </summary>
+        public const string EmptyOverwriteComment = "# This mod contains empty code. Possibly to overwrite other mods.";
 
         /// <summary>
         /// The binary type
