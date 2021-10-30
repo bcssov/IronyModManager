@@ -4,7 +4,7 @@
 // Created          : 05-26-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 10-25-2021
+// Last Modified On : 10-30-2021
 // ***********************************************************************
 // <copyright file="ModPatchCollectionService.cs" company="Mario">
 //     Mario
@@ -334,7 +334,7 @@ namespace IronyModManager.Services
             var overwritten = indexedDefinitions.GetByValueType(ValueType.OverwrittenObject).Concat(indexedDefinitions.GetByValueType(ValueType.OverWrittenObjectWithPreserveFileName)).Concat(indexedDefinitions.GetByValueType(ValueType.OverwrittenObjectSingleFile));
             var empty = indexedDefinitions.GetByValueType(ValueType.EmptyFile);
 
-            double total = fileKeys.Count() + typeAndIdKeys.Count() + overwritten.Count() + empty.Count();
+            double total = fileKeys.Count() + (typeAndIdKeys.Count() * 2) + overwritten.Count() + empty.Count();
             double processed = 0;
             double previousProgress = 0;
             messageBus.Publish(new ModDefinitionAnalyzeEvent(0));
@@ -410,6 +410,43 @@ namespace IronyModManager.Services
 
             var indexedConflicts = DIResolver.Get<IIndexedDefinitions>();
             indexedConflicts.InitMap(conflicts);
+
+            foreach (var typeId in typeAndIdKeys)
+            {
+                var items = indexedConflicts.GetByTypeAndId(typeId);
+                if (items.Any() && items.Count() > 1 && items.All(p => !p.ExistsInLastFile))
+                {
+                    var fileDefs = indexedDefinitions.GetByFile(items.FirstOrDefault().FileCI);
+                    var lastMod = fileDefs.GroupBy(p => p.ModName).Select(p => p.First()).OrderByDescending(p => modOrder.IndexOf(p.ModName)).FirstOrDefault();
+                    var copy = CopyDefinition(items.FirstOrDefault());
+                    copy.Dependencies = lastMod.Dependencies;
+                    copy.ModName = lastMod.ModName;
+                    copy.Code = copy.OriginalCode = Parser.Common.Constants.EmptyOverwriteComment;
+                    copy.ContentSHA = lastMod.ContentSHA;
+                    copy.UsedParser = lastMod.UsedParser;
+                    copy.CodeSeparator = lastMod.CodeSeparator;
+                    copy.CodeTag = lastMod.CodeTag;
+                    copy.OriginalModName = lastMod.OriginalModName;
+                    copy.OriginalFileName = lastMod.OriginalFileName;
+                    copy.Variables = lastMod.Variables;
+                    var fileNames = copy.AdditionalFileNames;
+                    foreach (var fileName in lastMod.AdditionalFileNames)
+                    {
+                        fileNames.Add(fileName);
+                    }
+                    copy.AdditionalFileNames = fileNames;
+                    copy.ExistsInLastFile = true;
+                    indexedConflicts.AddToMap(copy);
+                    conflicts.Add(copy);
+                }
+                processed++;
+                var perc = GetProgressPercentage(total, processed, 99.9);
+                if (perc != previousProgress)
+                {
+                    messageBus.Publish(new ModDefinitionAnalyzeEvent(perc));
+                    previousProgress = perc;
+                }
+            }
 
             var overwrittenDefs = new Dictionary<string, IDefinition>();
             foreach (var item in overwritten.GroupBy(p => p.TypeAndId))
