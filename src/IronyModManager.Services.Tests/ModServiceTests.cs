@@ -63,9 +63,9 @@ namespace IronyModManager.Services.Tests
         /// <returns>ModService.</returns>
         private static ModService GetService(Mock<IStorageProvider> storageProvider, Mock<IModParser> modParser,
              Mock<IReader> reader, Mock<IMapper> mapper, Mock<IModWriter> modWriter,
-            Mock<IGameService> gameService, Mock<IParser> parser = null)
+            Mock<IGameService> gameService, Mock<IParser> parser = null, Mock<ILanguagesService> languageService = null)
         {
-            return new ModService(parser?.Object, null, new Cache(), null, reader.Object, modParser.Object, modWriter.Object, gameService.Object, storageProvider.Object, mapper.Object);
+            return new ModService(languageService?.Object, parser?.Object, null, new Cache(), null, reader.Object, modParser.Object, modWriter.Object, gameService.Object, storageProvider.Object, mapper.Object);
         }
 
         /// <summary>
@@ -1346,8 +1346,9 @@ namespace IronyModManager.Services.Tests
             var gameService = new Mock<IGameService>();
             var mapper = new Mock<IMapper>();
             var parser = new Mock<IParser>();
+            var lngService = new Mock<ILanguagesService>();
 
-            var service = GetService(storageProvider, modParser, reader, mapper, modWriter, gameService, parser: parser);
+            var service = GetService(storageProvider, modParser, reader, mapper, modWriter, gameService, parser: parser, lngService);
 
             parser.Setup(p => p.Parse(It.IsAny<string>(), It.IsAny<string>())).Returns(new SearchParserResult()
             {
@@ -1355,6 +1356,7 @@ namespace IronyModManager.Services.Tests
                 AchievementCompatible = new BoolFilterResult(true),
                 Version = new Version(1, 1)
             });
+            lngService.Setup(p => p.GetSelected()).Returns(new Language() { Abrv = "en" });
 
             var mods = new List<IMod>()
             {
@@ -1385,8 +1387,9 @@ namespace IronyModManager.Services.Tests
             var gameService = new Mock<IGameService>();
             var mapper = new Mock<IMapper>();
             var parser = new Mock<IParser>();
+            var lngService = new Mock<ILanguagesService>();
 
-            var service = GetService(storageProvider, modParser, reader, mapper, modWriter, gameService, parser: parser);
+            var service = GetService(storageProvider, modParser, reader, mapper, modWriter, gameService, parser: parser, lngService);
 
             parser.Setup(p => p.Parse(It.IsAny<string>(), It.IsAny<string>())).Returns(new SearchParserResult()
             {
@@ -1394,6 +1397,7 @@ namespace IronyModManager.Services.Tests
                 AchievementCompatible = new BoolFilterResult(true),
                 Version = new Version(1, 1)
             });
+            lngService.Setup(p => p.GetSelected()).Returns(new Language() { Abrv = "en" });
 
             var mods = new List<IMod>()
             {
@@ -1428,8 +1432,9 @@ namespace IronyModManager.Services.Tests
             var gameService = new Mock<IGameService>();
             var mapper = new Mock<IMapper>();
             var parser = new Mock<IParser>();
+            var lngService = new Mock<ILanguagesService>();
 
-            var service = GetService(storageProvider, modParser, reader, mapper, modWriter, gameService, parser: parser);
+            var service = GetService(storageProvider, modParser, reader, mapper, modWriter, gameService, parser: parser, lngService);
 
             parser.Setup(p => p.Parse(It.IsAny<string>(), It.IsAny<string>())).Returns(new SearchParserResult()
             {
@@ -1437,6 +1442,7 @@ namespace IronyModManager.Services.Tests
                 AchievementCompatible = new BoolFilterResult(true),
                 Version = new Version(1, 1)
             });
+            lngService.Setup(p => p.GetSelected()).Returns(new Language() { Abrv = "en" });
 
             var mods = new List<IMod>()
             {
