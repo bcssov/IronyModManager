@@ -4,15 +4,14 @@
 		<title>Irony Mod Manager</title>
 		<language>en</language>
 		<item>
-			<title>1.19.60-rc</title>
+			<title>1.19.65-rc</title>
 			<description>NOTE:
 This version has significant changes to Conflict Solver, please backup your existing mod collections before running conflict solver.
 
 RELEASE NOTES:
-* Updated dependencies
-* Fix launching external apps on Linux
+* Add last exception information to fatal crash dialog
+* Fix empty overwrites handling where a definition did not exist in a last overwrite
 * Various fixes
-* Tweak mod search filtering to cover some edge cases
 
 CHANGES FROM v1.18:
 * Update dependencies
@@ -21,19 +20,18 @@ CHANGES FROM v1.18:
 * Stellaris parser type recognition updates
 * Add single merge folder type handling for Stellaris
 * Fix #304</description>
-			<pubDate>Thu, 28 Oct 2021 18:17:16 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.19.60-rc/osx-x64.rar" sparkle:version="1.19.60.10848" sparkle:shortVersionString="1.19.60" length="70323351" sparkle:os="osx" type="application/vnd.rar" sparkle:signature="+zDjxnVFgNvvY7tLCDLEoAdK0niHCouzCQNAlkakflm01bTzKMwOZ0LtU3VHAx426izQFKAvbqjJD1vdnnY2Aw=="/>
+			<pubDate>Sun, 31 Oct 2021 05:31:24 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.19.65-rc/osx-x64.rar" sparkle:version="1.19.65.21341" sparkle:shortVersionString="1.19.65" length="70335944" sparkle:os="osx" type="application/vnd.rar" sparkle:signature="uhkkGhDL97g/4TRAZqweI7AU8ylNcdWXLP54HFScb4ieSzeHKNvy3tf1fhzThw0g1SFF7DMJ6Oe9e+mtLaRSDw=="/>
 		</item>
 		<item>
-			<title>1.19.60-rc</title>
+			<title>1.19.65-rc</title>
 			<description>NOTE:
 This version has significant changes to Conflict Solver, please backup your existing mod collections before running conflict solver.
 
 RELEASE NOTES:
-* Updated dependencies
-* Fix launching external apps on Linux
+* Add last exception information to fatal crash dialog
+* Fix empty overwrites handling where a definition did not exist in a last overwrite
 * Various fixes
-* Tweak mod search filtering to cover some edge cases
 
 CHANGES FROM v1.18:
 * Update dependencies
@@ -42,19 +40,18 @@ CHANGES FROM v1.18:
 * Stellaris parser type recognition updates
 * Add single merge folder type handling for Stellaris
 * Fix #304</description>
-			<pubDate>Thu, 28 Oct 2021 18:17:23 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.19.60-rc/win-x64-setup.rar" sparkle:version="1.19.60.10848" sparkle:shortVersionString="1.19.60" length="61681146" sparkle:os="windows" type="application/vnd.rar" sparkle:signature="4enNiKkbY8P0OgDj2VmCmz8Ylz8TnpYZkn3FuN2bgViRHbSrMpTjmXFG1PMR7rwplmO37fbfd3G1L7E7mvmkBQ=="/>
+			<pubDate>Sun, 31 Oct 2021 05:31:32 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.19.65-rc/win-x64-setup.rar" sparkle:version="1.19.65.21341" sparkle:shortVersionString="1.19.65" length="61677866" sparkle:os="windows" type="application/vnd.rar" sparkle:signature="89UNNi0LmAzhoGFgkutHCn4EW+MJlKg1b0Vmwl/OLsL1+tkH7LdtdTj+/omOBla7RIi8jxR+mAGyF6pwYPiuAg=="/>
 		</item>
 		<item>
-			<title>1.19.60-rc</title>
+			<title>1.19.65-rc</title>
 			<description>NOTE:
 This version has significant changes to Conflict Solver, please backup your existing mod collections before running conflict solver.
 
 RELEASE NOTES:
-* Updated dependencies
-* Fix launching external apps on Linux
+* Add last exception information to fatal crash dialog
+* Fix empty overwrites handling where a definition did not exist in a last overwrite
 * Various fixes
-* Tweak mod search filtering to cover some edge cases
 
 CHANGES FROM v1.18:
 * Update dependencies
@@ -63,19 +60,18 @@ CHANGES FROM v1.18:
 * Stellaris parser type recognition updates
 * Add single merge folder type handling for Stellaris
 * Fix #304</description>
-			<pubDate>Thu, 28 Oct 2021 18:17:20 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.19.60-rc/win-x64.rar" sparkle:version="1.19.60.10848" sparkle:shortVersionString="1.19.60" length="74142459" sparkle:os="windows" type="application/vnd.rar" sparkle:signature="el+BbwndPhfuEo2rClDdlrKE4dxT8+wt7aZeafWxPOh3mhqotM5Q2eIcedUli6BQ8qD3Ka/eOj4+ca6b6gR0Cw=="/>
+			<pubDate>Sun, 31 Oct 2021 05:31:28 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.19.65-rc/win-x64.rar" sparkle:version="1.19.65.21341" sparkle:shortVersionString="1.19.65" length="74155091" sparkle:os="windows" type="application/vnd.rar" sparkle:signature="LTcSot4xgVcJ6T4qv72qpZXMSFiW/B13LnKwDx2ohr7DNU61b1Z9Y5d3Uy1euxF2mCXA4NJ5Hq6ow5kVb+ijAg=="/>
 		</item>
 		<item>
-			<title>1.19.60-rc</title>
+			<title>1.19.65-rc</title>
 			<description>NOTE:
 This version has significant changes to Conflict Solver, please backup your existing mod collections before running conflict solver.
 
 RELEASE NOTES:
-* Updated dependencies
-* Fix launching external apps on Linux
+* Add last exception information to fatal crash dialog
+* Fix empty overwrites handling where a definition did not exist in a last overwrite
 * Various fixes
-* Tweak mod search filtering to cover some edge cases
 
 CHANGES FROM v1.18:
 * Update dependencies
@@ -84,8 +80,8 @@ CHANGES FROM v1.18:
 * Stellaris parser type recognition updates
 * Add single merge folder type handling for Stellaris
 * Fix #304</description>
-			<pubDate>Thu, 28 Oct 2021 18:17:13 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.19.60-rc/linux-x64.zip" sparkle:version="1.19.60.10848" sparkle:shortVersionString="1.19.60" length="86971308" sparkle:os="linux" type="application/zip" sparkle:signature="Xcdxp2Kt1QXkP4yjmO1Dcpo9czAcY3hsDccvfRmvPCJEIOg8ZYEMvlL3PSQ25I9B6ljEW7lhCfk3ShZcBcv+Cg=="/>
+			<pubDate>Sun, 31 Oct 2021 05:31:21 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.19.65-rc/linux-x64.zip" sparkle:version="1.19.65.21341" sparkle:shortVersionString="1.19.65" length="86975780" sparkle:os="linux" type="application/zip" sparkle:signature="oxzBkpN89yIQRE3O/5Vzcw81s+kh8deyobamDkg5Fn6xm41qLQENc+M+kfGjAnMWg04T73LWIWVCPjHx36sSBQ=="/>
 		</item>
 		<item>
 			<title>1.18.92</title>
