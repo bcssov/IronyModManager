@@ -4,7 +4,7 @@
 // Created          : 09-02-2021
 //
 // Last Modified By : Mario
-// Last Modified On : 09-02-2021
+// Last Modified On : 10-31-2021
 // ***********************************************************************
 // <copyright file="ValidateParser.cs" company="Mario">
 //     Mario
@@ -77,12 +77,22 @@ namespace IronyModManager.Parser
         public IBracketValidateResult GetBracketCount(string text)
         {
             var bracketCount = DIResolver.Get<IBracketValidateResult>();
-            var cleanText = string.Join(Environment.NewLine, codeParser.CleanCode(text.SplitOnNewLine()));
+            var cleanText = CleanCode(text);
 
             bracketCount.CloseBracketCount = cleanText.Count(s => s == Common.Constants.Scripts.CloseObject);
             bracketCount.OpenBracketCount = cleanText.Count(s => s == Common.Constants.Scripts.OpenObject);
 
             return bracketCount;
+        }
+
+        /// <summary>
+        /// Determines whether the specified text has code.
+        /// </summary>
+        /// <param name="text">The text.</param>
+        /// <returns><c>true</c> if the specified text has code; otherwise, <c>false</c>.</returns>
+        public bool HasCode(string text)
+        {
+            return !string.IsNullOrWhiteSpace(CleanCode(text));
         }
 
         /// <summary>
@@ -104,6 +114,16 @@ namespace IronyModManager.Parser
         public IEnumerable<IDefinition> Validate(ParserArgs args)
         {
             return EvalForErrorsOnly(args);
+        }
+
+        /// <summary>
+        /// Cleans the code.
+        /// </summary>
+        /// <param name="text">The text.</param>
+        /// <returns>System.String.</returns>
+        private string CleanCode(string text)
+        {
+            return string.Join(Environment.NewLine, codeParser.CleanCode(text.SplitOnNewLine()));
         }
 
         #endregion Methods

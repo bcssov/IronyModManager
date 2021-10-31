@@ -4,7 +4,7 @@
 // Created          : 05-26-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 10-30-2021
+// Last Modified On : 10-31-2021
 // ***********************************************************************
 // <copyright file="ModPatchCollectionService.cs" company="Mario">
 //     Mario
@@ -421,7 +421,7 @@ namespace IronyModManager.Services
                     var copy = CopyDefinition(items.FirstOrDefault());
                     copy.Dependencies = lastMod.Dependencies;
                     copy.ModName = lastMod.ModName;
-                    copy.Code = copy.OriginalCode = Parser.Common.Constants.EmptyOverwriteComment;
+                    copy.Code = copy.OriginalCode = Comments.GetEmptyCommentType(copy.File);
                     copy.ContentSHA = lastMod.ContentSHA;
                     copy.UsedParser = lastMod.UsedParser;
                     copy.CodeSeparator = lastMod.CodeSeparator;
@@ -2158,69 +2158,81 @@ namespace IronyModManager.Services
         /// <returns>IDefinition.</returns>
         protected virtual IDefinition MergeSingleFileDefinitions(IEnumerable<IDefinition> definitions)
         {
-            static void appendLine(StringBuilder sb, IEnumerable<string> lines, int indent = 0)
+            bool hasCode(IEnumerable<string> lines)
             {
-                foreach (var item in lines)
+                var result = validateParser.HasCode(string.Join(Environment.NewLine, lines));
+                return result;
+            }
+
+            void appendLine(StringBuilder sb, IEnumerable<string> lines, int indent = 0)
+            {
+                if (hasCode(lines))
                 {
-                    if (indent == 0)
+                    foreach (var item in lines)
                     {
-                        sb.AppendLine(item);
-                    }
-                    else
-                    {
-                        sb.AppendLine($"{new string(' ', indent)}{item}");
+                        if (indent == 0)
+                        {
+                            sb.AppendLine(item);
+                        }
+                        else
+                        {
+                            sb.AppendLine($"{new string(' ', indent)}{item}");
+                        }
                     }
                 }
             }
-            static void mergeCode(StringBuilder sb, string codeTag, string separator, IEnumerable<string> variables, IEnumerable<string> lines)
+            void mergeCode(StringBuilder sb, string codeTag, string separator, IEnumerable<string> variables, IEnumerable<string> lines)
             {
-                if (Shared.Constants.CodeSeparators.ClosingSeparators.Map.ContainsKey(separator))
+                if (hasCode(lines))
                 {
-                    var closingTag = Shared.Constants.CodeSeparators.ClosingSeparators.Map[separator];
-                    sb.AppendLine($"{codeTag} = {separator}");
-                    if (!lines.Any())
+                    if (Shared.Constants.CodeSeparators.ClosingSeparators.Map.ContainsKey(separator))
                     {
+                        var closingTag = Shared.Constants.CodeSeparators.ClosingSeparators.Map[separator];
+                        sb.AppendLine($"{codeTag} = {separator}");
+                        if (!lines.Any())
+                        {
+                            foreach (var item in variables)
+                            {
+                                var splitLines = item.SplitOnNewLine();
+                                appendLine(sb, splitLines, 4);
+                            }
+                        }
+                        else
+                        {
+                            bool varsInserted = false;
+                            foreach (var item in lines)
+                            {
+                                var splitLines = item.SplitOnNewLine();
+                                foreach (var split in splitLines)
+                                {
+                                    sb.AppendLine($"{new string(' ', 4)}{split}");
+                                    if (!varsInserted && split.Contains(Shared.Constants.CodeSeparators.ClosingSeparators.CurlyBracket))
+                                    {
+                                        varsInserted = true;
+                                        foreach (var var in variables)
+                                        {
+                                            var splitVars = var.SplitOnNewLine();
+                                            appendLine(sb, splitVars, 8);
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        sb.AppendLine(closingTag);
+                    }
+                    else
+                    {
+                        sb.AppendLine($"{codeTag}{separator}");
                         foreach (var item in variables)
                         {
                             var splitLines = item.SplitOnNewLine();
                             appendLine(sb, splitLines, 4);
                         }
-                    }
-                    else
-                    {
-                        bool varsInserted = false;
                         foreach (var item in lines)
                         {
                             var splitLines = item.SplitOnNewLine();
-                            foreach (var split in splitLines)
-                            {
-                                sb.AppendLine($"{new string(' ', 4)}{split}");
-                                if (!varsInserted && split.Contains(Shared.Constants.CodeSeparators.ClosingSeparators.CurlyBracket))
-                                {
-                                    varsInserted = true;
-                                    foreach (var var in variables)
-                                    {
-                                        var splitVars = var.SplitOnNewLine();
-                                        appendLine(sb, splitVars, 8);
-                                    }
-                                }
-                            }
+                            appendLine(sb, splitLines, 4);
                         }
-                    }
-                    sb.AppendLine(closingTag);
-                }
-                else
-                {
-                    sb.AppendLine($"{codeTag}{separator}");
-                    foreach (var item in variables)
-                    {
-                        var splitLines = item.SplitOnNewLine();
-                        appendLine(sb, splitLines, 4);
-                    }
-                    foreach (var item in lines)
-                    {
-                        var splitLines = item.SplitOnNewLine();
-                        appendLine(sb, splitLines, 4);
                     }
                 }
             }

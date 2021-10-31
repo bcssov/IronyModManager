@@ -354,7 +354,7 @@ namespace IronyModManager.Services.Tests
             };
             var indexed = new IndexedDefinitions();
             indexed.InitMap(definitions);
-            var result = service.FindConflicts(indexed, new List<string>(), IronyModManager.Models.Common.PatchStateMode.Default);
+            var result = service.FindConflicts(indexed, new List<string>() { "test2", "test1" }, IronyModManager.Models.Common.PatchStateMode.Default);
             result.Conflicts.GetAll().Count().Should().Be(2);
             result.Conflicts.GetAllFileKeys().Count().Should().Be(1);
             result.OrphanConflicts.GetAll().Count().Should().Be(1);
@@ -4817,7 +4817,7 @@ namespace IronyModManager.Services.Tests
             var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter, null, validateParser);
             var result = service.Validate(new Definition() { ValueType = ValueType.Object });
             result.Should().NotBeNull();
-            result.IsValid.Should().BeTrue();            
+            result.IsValid.Should().BeTrue();
         }
 
         /// <summary>

@@ -4,7 +4,7 @@
 // Created          : 09-02-2021
 //
 // Last Modified By : Mario
-// Last Modified On : 09-02-2021
+// Last Modified On : 10-31-2021
 // ***********************************************************************
 // <copyright file="IValidateParser.cs" company="Mario">
 //     Mario
@@ -33,6 +33,13 @@ namespace IronyModManager.Parser.Common.Parsers
         /// <param name="text">The text.</param>
         /// <returns>IBracketValidateResult.</returns>
         public IBracketValidateResult GetBracketCount(string text);
+
+        /// <summary>
+        /// Determines whether the specified text has code.
+        /// </summary>
+        /// <param name="text">The text.</param>
+        /// <returns><c>true</c> if the specified text has code; otherwise, <c>false</c>.</returns>
+        public bool HasCode(string text);
 
         /// <summary>
         /// Validates the specified arguments.

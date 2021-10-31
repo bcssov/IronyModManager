@@ -4,7 +4,7 @@
 // Created          : 02-16-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 10-30-2021
+// Last Modified On : 10-31-2021
 // ***********************************************************************
 // <copyright file="Constants.cs" company="Mario">
 //     Mario
@@ -25,11 +25,6 @@ namespace IronyModManager.Parser.Common
         #region Fields
 
         /// <summary>
-        /// The empty overwrite comment
-        /// </summary>
-        public const string EmptyOverwriteComment = "# This mod contains empty code. Possibly to overwrite other mods.";
-
-        /// <summary>
         /// The binary type
         /// </summary>
         public const string BinaryType = "binary";
@@ -38,6 +33,16 @@ namespace IronyModManager.Parser.Common
         /// The common path
         /// </summary>
         public const string CommonPath = "common";
+
+        /// <summary>
+        /// The empty overwrite comment
+        /// </summary>
+        public const string EmptyOverwriteComment = "# This mod contains empty code. Possibly to overwrite other mods.";
+
+        /// <summary>
+        /// The empty shader comment
+        /// </summary>
+        public const string EmptyShaderComment = "// This mod contains empty code. Possibly to overwrite other mods.";
 
         /// <summary>
         /// The FXH extension
