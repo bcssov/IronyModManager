@@ -258,36 +258,6 @@ namespace IronyModManager.Parser.Tests
         }
 
         /// <summary>
-        /// Defines the test method CanParse_starbase_modules_should_be_true.
-        /// </summary>
-        [Fact]
-        public void CanParse_starbase_modules_should_be_true()
-        {
-            var args = new CanParseArgs()
-            {
-                File = "common\\starbase_modules\\test.txt",
-                GameType = "Stellaris"
-            };
-            var parser = new OverwrittenParser(new CodeParser(new Logger()), null);
-            parser.CanParse(args).Should().BeTrue();
-        }
-
-        /// <summary>
-        /// Defines the test method CanParse_ship_sizes_should_be_true.
-        /// </summary>
-        [Fact]
-        public void CanParse_ship_sizes_should_be_true()
-        {
-            var args = new CanParseArgs()
-            {
-                File = "common\\ship_sizes\\test.txt",
-                GameType = "Stellaris"
-            };
-            var parser = new OverwrittenParser(new CodeParser(new Logger()), null);
-            parser.CanParse(args).Should().BeTrue();
-        }
-
-        /// <summary>
         /// Defines the test method CanParse_opinion_modifiers_should_be_true.
         /// </summary>
         [Fact]
