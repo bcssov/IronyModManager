@@ -4,7 +4,7 @@
 		<title>Irony Mod Manager</title>
 		<language>en</language>
 		<item>
-			<title>1.19.65-rc</title>
+			<title>1.19.66-rc</title>
 			<description>NOTE:
 This version has significant changes to Conflict Solver, please backup your existing mod collections before running conflict solver.
 
@@ -12,6 +12,7 @@ RELEASE NOTES:
 * Add last exception information to fatal crash dialog
 * Fix empty overwrites handling where a definition did not exist in a last overwrite
 * Various fixes
+* Treat ship_sizes and starbase_modules as ethics
 
 CHANGES FROM v1.18:
 * Update dependencies
@@ -20,11 +21,11 @@ CHANGES FROM v1.18:
 * Stellaris parser type recognition updates
 * Add single merge folder type handling for Stellaris
 * Fix #304</description>
-			<pubDate>Sun, 31 Oct 2021 05:31:24 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.19.65-rc/osx-x64.rar" sparkle:version="1.19.65.21341" sparkle:shortVersionString="1.19.65" length="70335944" sparkle:os="osx" type="application/vnd.rar" sparkle:signature="uhkkGhDL97g/4TRAZqweI7AU8ylNcdWXLP54HFScb4ieSzeHKNvy3tf1fhzThw0g1SFF7DMJ6Oe9e+mtLaRSDw=="/>
+			<pubDate>Sun, 31 Oct 2021 15:59:02 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.19.66-rc/osx-x64.rar" sparkle:version="1.19.66.20030" sparkle:shortVersionString="1.19.66" length="70336250" sparkle:os="osx" type="application/vnd.rar" sparkle:signature="Qh7xw/AhI5frkN7es6NRMp4m2Sy4hwB9qdjK7cnstuAcqH29Jfm3ISPAj/qlAez0nIxeNpAWoZE+PACibA/DBg=="/>
 		</item>
 		<item>
-			<title>1.19.65-rc</title>
+			<title>1.19.66-rc</title>
 			<description>NOTE:
 This version has significant changes to Conflict Solver, please backup your existing mod collections before running conflict solver.
 
@@ -32,6 +33,7 @@ RELEASE NOTES:
 * Add last exception information to fatal crash dialog
 * Fix empty overwrites handling where a definition did not exist in a last overwrite
 * Various fixes
+* Treat ship_sizes and starbase_modules as ethics
 
 CHANGES FROM v1.18:
 * Update dependencies
@@ -40,11 +42,11 @@ CHANGES FROM v1.18:
 * Stellaris parser type recognition updates
 * Add single merge folder type handling for Stellaris
 * Fix #304</description>
-			<pubDate>Sun, 31 Oct 2021 05:31:32 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.19.65-rc/win-x64-setup.rar" sparkle:version="1.19.65.21341" sparkle:shortVersionString="1.19.65" length="61677866" sparkle:os="windows" type="application/vnd.rar" sparkle:signature="89UNNi0LmAzhoGFgkutHCn4EW+MJlKg1b0Vmwl/OLsL1+tkH7LdtdTj+/omOBla7RIi8jxR+mAGyF6pwYPiuAg=="/>
+			<pubDate>Sun, 31 Oct 2021 15:59:10 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.19.66-rc/win-x64-setup.rar" sparkle:version="1.19.66.20030" sparkle:shortVersionString="1.19.66" length="61666852" sparkle:os="windows" type="application/vnd.rar" sparkle:signature="dJ/lFJGAyoHtDnuNWkopfeItpJYf5g5f5ki00rDSGTIF4OlSC4daYXdcAG/dpqWLgtvjiiFshyFLFGpsNOrxDw=="/>
 		</item>
 		<item>
-			<title>1.19.65-rc</title>
+			<title>1.19.66-rc</title>
 			<description>NOTE:
 This version has significant changes to Conflict Solver, please backup your existing mod collections before running conflict solver.
 
@@ -52,6 +54,7 @@ RELEASE NOTES:
 * Add last exception information to fatal crash dialog
 * Fix empty overwrites handling where a definition did not exist in a last overwrite
 * Various fixes
+* Treat ship_sizes and starbase_modules as ethics
 
 CHANGES FROM v1.18:
 * Update dependencies
@@ -60,11 +63,11 @@ CHANGES FROM v1.18:
 * Stellaris parser type recognition updates
 * Add single merge folder type handling for Stellaris
 * Fix #304</description>
-			<pubDate>Sun, 31 Oct 2021 05:31:28 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.19.65-rc/win-x64.rar" sparkle:version="1.19.65.21341" sparkle:shortVersionString="1.19.65" length="74155091" sparkle:os="windows" type="application/vnd.rar" sparkle:signature="LTcSot4xgVcJ6T4qv72qpZXMSFiW/B13LnKwDx2ohr7DNU61b1Z9Y5d3Uy1euxF2mCXA4NJ5Hq6ow5kVb+ijAg=="/>
+			<pubDate>Sun, 31 Oct 2021 15:59:06 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.19.66-rc/win-x64.rar" sparkle:version="1.19.66.20030" sparkle:shortVersionString="1.19.66" length="74155558" sparkle:os="windows" type="application/vnd.rar" sparkle:signature="eYYTMhqNJTSWgYw8reh0oUNUQxMuuH5dtQvs2rjf+yBRx3RrJXiNQftVhZvdBrkH6X4y0iOVPPoqz+Kn1LVhCg=="/>
 		</item>
 		<item>
-			<title>1.19.65-rc</title>
+			<title>1.19.66-rc</title>
 			<description>NOTE:
 This version has significant changes to Conflict Solver, please backup your existing mod collections before running conflict solver.
 
@@ -72,6 +75,7 @@ RELEASE NOTES:
 * Add last exception information to fatal crash dialog
 * Fix empty overwrites handling where a definition did not exist in a last overwrite
 * Various fixes
+* Treat ship_sizes and starbase_modules as ethics
 
 CHANGES FROM v1.18:
 * Update dependencies
@@ -80,8 +84,8 @@ CHANGES FROM v1.18:
 * Stellaris parser type recognition updates
 * Add single merge folder type handling for Stellaris
 * Fix #304</description>
-			<pubDate>Sun, 31 Oct 2021 05:31:21 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.19.65-rc/linux-x64.zip" sparkle:version="1.19.65.21341" sparkle:shortVersionString="1.19.65" length="86975780" sparkle:os="linux" type="application/zip" sparkle:signature="oxzBkpN89yIQRE3O/5Vzcw81s+kh8deyobamDkg5Fn6xm41qLQENc+M+kfGjAnMWg04T73LWIWVCPjHx36sSBQ=="/>
+			<pubDate>Sun, 31 Oct 2021 15:58:58 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.19.66-rc/linux-x64.zip" sparkle:version="1.19.66.20030" sparkle:shortVersionString="1.19.66" length="86975846" sparkle:os="linux" type="application/zip" sparkle:signature="mPdIAXGX5U1MRp0DI5trMGF6joWA7DDY5SStV76GNL07m873G/WIfqeNArM+WGW/YZLHVopXUKGLumV95/NxCg=="/>
 		</item>
 		<item>
 			<title>1.18.92</title>
