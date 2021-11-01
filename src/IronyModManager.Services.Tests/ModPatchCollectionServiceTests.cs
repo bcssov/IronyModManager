@@ -298,7 +298,6 @@ namespace IronyModManager.Services.Tests
             var result = service.FindConflicts(indexed, new List<string>(), IronyModManager.Models.Common.PatchStateMode.Default);
             result.Conflicts.GetAll().Count().Should().Be(2);
             result.Conflicts.GetAllFileKeys().Count().Should().Be(1);
-            result.OrphanConflicts.GetAll().Count().Should().Be(0);
             result.Conflicts.GetAll().All(p => p.ModName == "test1" || p.ModName == "test2").Should().BeTrue();
         }
 
@@ -355,10 +354,71 @@ namespace IronyModManager.Services.Tests
             var indexed = new IndexedDefinitions();
             indexed.InitMap(definitions);
             var result = service.FindConflicts(indexed, new List<string>() { "test2", "test1" }, IronyModManager.Models.Common.PatchStateMode.Default);
+            result.Conflicts.GetAll().Count().Should().Be(4);
+            result.Conflicts.GetAllFileKeys().Count().Should().Be(1);
+            result.Conflicts.GetAll().All(p => p.ModName == "test1" || p.ModName == "test2").Should().BeTrue();
+            result.Conflicts.GetAll().Count(p => p.Code == Parser.Common.Constants.EmptyOverwriteComment).Should().Be(1);
+        }
+
+
+
+        /// <summary>
+        /// Defines the test method Should_ignore_orphan_filename_conflicts.
+        /// </summary>
+        [Fact]
+        public void Should_ignore_orphan_localisation_filename_conflicts()
+        {
+            DISetup.SetupContainer();
+
+            var storageProvider = new Mock<IStorageProvider>();
+            var modParser = new Mock<IModParser>();
+            var parserManager = new Mock<IParserManager>();
+            var reader = new Mock<IReader>();
+            var modWriter = new Mock<IModWriter>();
+            var gameService = new Mock<IGameService>();
+            var mapper = new Mock<IMapper>();
+            var modPatchExporter = new Mock<IModPatchExporter>();
+
+            SetupMockCase(reader, parserManager, modParser);
+
+            var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter);
+            var definitions = new List<IDefinition>()
+            {
+                new Definition()
+                {
+                    File = "localisation\\1.yml",
+                    Code = "a",
+                    Id = "a",
+                    Type= "events",
+                    ModName = "test1",
+                    ValueType = ValueType.Object
+                },
+                new Definition()
+                {
+                    File = "localisation\\1.yml",
+                    Code = "b",
+                    Type = "events",
+                    Id = "a",
+                    ModName = "test2",
+                    ValueType = ValueType.Object
+                },
+                new Definition()
+                {
+                    File = "localisation\\1.yml",
+                    Code = "b",
+                    Type = "events",
+                    Id = "c",
+                    ModName = "test2",
+                    ValueType = ValueType.Object
+                }
+            };
+            var indexed = new IndexedDefinitions();
+            indexed.InitMap(definitions);
+            var result = service.FindConflicts(indexed, new List<string>() { "test2", "test1" }, IronyModManager.Models.Common.PatchStateMode.Default);
             result.Conflicts.GetAll().Count().Should().Be(2);
             result.Conflicts.GetAllFileKeys().Count().Should().Be(1);
-            result.OrphanConflicts.GetAll().Count().Should().Be(1);
             result.Conflicts.GetAll().All(p => p.ModName == "test1" || p.ModName == "test2").Should().BeTrue();
+            result.Conflicts.GetAll().Count(p => p.Code == Parser.Common.Constants.EmptyOverwriteComment).Should().Be(0);
         }
 
         /// <summary>
@@ -407,7 +467,6 @@ namespace IronyModManager.Services.Tests
             var result = service.FindConflicts(indexed, new List<string>(), IronyModManager.Models.Common.PatchStateMode.Default);
             result.Conflicts.GetAll().Count().Should().Be(2);
             result.Conflicts.GetAllFileKeys().Count().Should().Be(2);
-            result.OrphanConflicts.GetAll().Count().Should().Be(0);
             result.Conflicts.GetAll().All(p => p.ModName == "test1" || p.ModName == "test2").Should().BeTrue();
         }
 
@@ -467,7 +526,6 @@ namespace IronyModManager.Services.Tests
             var result = service.FindConflicts(indexed, new List<string>(), IronyModManager.Models.Common.PatchStateMode.Default);
             result.Conflicts.GetAll().Count().Should().Be(0);
             result.Conflicts.GetAllFileKeys().Count().Should().Be(0);
-            result.OrphanConflicts.GetAll().Count().Should().Be(0);
         }
 
         /// <summary>
@@ -526,7 +584,6 @@ namespace IronyModManager.Services.Tests
             var result = service.FindConflicts(indexed, new List<string>(), IronyModManager.Models.Common.PatchStateMode.Default);
             result.Conflicts.GetAll().Count().Should().Be(0);
             result.Conflicts.GetAllFileKeys().Count().Should().Be(0);
-            result.OrphanConflicts.GetAll().Count().Should().Be(0);
         }
 
         /// <summary>
@@ -585,7 +642,6 @@ namespace IronyModManager.Services.Tests
             var result = service.FindConflicts(indexed, new List<string>(), IronyModManager.Models.Common.PatchStateMode.Default);
             result.Conflicts.GetAll().Count().Should().Be(2);
             result.Conflicts.GetAllFileKeys().Count().Should().Be(1);
-            result.OrphanConflicts.GetAll().Count().Should().Be(0);
             result.Conflicts.GetAll().All(p => p.ModName == "test1" || p.ModName == "test3").Should().BeTrue();
         }
 
@@ -654,7 +710,6 @@ namespace IronyModManager.Services.Tests
             var result = service.FindConflicts(indexed, new List<string>(), IronyModManager.Models.Common.PatchStateMode.Default);
             result.Conflicts.GetAll().Count().Should().Be(2);
             result.Conflicts.GetAllFileKeys().Count().Should().Be(1);
-            result.OrphanConflicts.GetAll().Count().Should().Be(0);
             result.Conflicts.GetAll().All(p => p.ModName == "test3" || p.ModName == "test4").Should().BeTrue();
         }
 
@@ -722,7 +777,6 @@ namespace IronyModManager.Services.Tests
             var result = service.FindConflicts(indexed, new List<string>(), IronyModManager.Models.Common.PatchStateMode.Default);
             result.Conflicts.GetAll().Count().Should().Be(0);
             result.Conflicts.GetAllFileKeys().Count().Should().Be(0);
-            result.OrphanConflicts.GetAll().Count().Should().Be(0);
         }
 
         /// <summary>
@@ -847,7 +901,6 @@ namespace IronyModManager.Services.Tests
             {
                 AllConflicts = indexed,
                 Conflicts = indexed,
-                OrphanConflicts = indexed,
                 ResolvedConflicts = indexed
             };
             var result = await service.ApplyModPatchAsync(c, new Definition() { ModName = "test", ValueType = ValueType.Object }, "colname");
@@ -942,8 +995,8 @@ namespace IronyModManager.Services.Tests
             var all = new IndexedDefinitions();
             all.InitMap(definitions);
 
-            var orphan = new IndexedDefinitions();
-            orphan.InitMap(new List<IDefinition>());
+            var overwritten = new IndexedDefinitions();
+            overwritten.InitMap(new List<IDefinition>());
 
             var resolved = new IndexedDefinitions();
             resolved.InitMap(new List<IDefinition>());
@@ -952,9 +1005,8 @@ namespace IronyModManager.Services.Tests
             {
                 AllConflicts = all,
                 Conflicts = all,
-                OrphanConflicts = orphan,
                 ResolvedConflicts = resolved,
-                OverwrittenConflicts = orphan
+                OverwrittenConflicts = overwritten
             };
             var result = await service.ApplyModPatchAsync(c, new Definition() { ModName = "1" }, "colname");
             result.Should().BeTrue();
@@ -1096,7 +1148,6 @@ namespace IronyModManager.Services.Tests
                 {
                     Conflicts = new List<IDefinition>(),
                     ResolvedConflicts = new List<IDefinition>(),
-                    OrphanConflicts = new List<IDefinition>(),
                     ConflictHistory = new List<IDefinition>() { new Definition() { File = "1", Id = "test", Type = "events", Code = "ab" } }
                 };
                 return res;
@@ -1132,7 +1183,6 @@ namespace IronyModManager.Services.Tests
             {
                 AllConflicts = indexed,
                 Conflicts = indexed,
-                OrphanConflicts = indexed,
                 ResolvedConflicts = indexed
             };
             var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter);
@@ -1164,7 +1214,6 @@ namespace IronyModManager.Services.Tests
             {
                 AllConflicts = indexed,
                 Conflicts = indexed,
-                OrphanConflicts = indexed,
                 ResolvedConflicts = indexed
             };
             var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter);
@@ -1202,7 +1251,6 @@ namespace IronyModManager.Services.Tests
                 {
                     AllConflicts = o.Conflicts,
                     Conflicts = o.Conflicts,
-                    OrphanConflicts = o.OrphanConflicts,
                     ResolvedConflicts = o.ResolvedConflicts,
                     OverwrittenConflicts = o.OverwrittenConflicts
                 };
@@ -1234,7 +1282,6 @@ namespace IronyModManager.Services.Tests
                 {
                     Conflicts = definitions,
                     ResolvedConflicts = definitions,
-                    OrphanConflicts = new List<IDefinition>(),
                     OverwrittenConflicts = new List<IDefinition>()
                 };
                 return res;
@@ -1247,8 +1294,8 @@ namespace IronyModManager.Services.Tests
             var conflicts = new IndexedDefinitions();
             conflicts.InitMap(definitions);
 
-            var orphan = new IndexedDefinitions();
-            orphan.InitMap(new List<IDefinition>());
+            var overwritten = new IndexedDefinitions();
+            overwritten.InitMap(new List<IDefinition>());
 
             var resolved = new IndexedDefinitions();
             resolved.InitMap(new List<IDefinition>());
@@ -1257,8 +1304,7 @@ namespace IronyModManager.Services.Tests
             {
                 AllConflicts = all,
                 Conflicts = conflicts,
-                OrphanConflicts = orphan,
-                OverwrittenConflicts = orphan
+                OverwrittenConflicts = overwritten
             };
             var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter);
             var result = await service.InitializePatchStateAsync(c, "fake");
@@ -1293,7 +1339,6 @@ namespace IronyModManager.Services.Tests
                 {
                     AllConflicts = o.Conflicts,
                     Conflicts = o.Conflicts,
-                    OrphanConflicts = o.OrphanConflicts,
                     ResolvedConflicts = o.ResolvedConflicts,
                     OverwrittenConflicts = o.OverwrittenConflicts
                 };
@@ -1346,7 +1391,6 @@ namespace IronyModManager.Services.Tests
                 {
                     Conflicts = definitions2,
                     ResolvedConflicts = definitions2,
-                    OrphanConflicts = new List<IDefinition>(),
                     OverwrittenConflicts = new List<IDefinition>()
                 };
                 return res;
@@ -1359,8 +1403,8 @@ namespace IronyModManager.Services.Tests
             var conflicts = new IndexedDefinitions();
             conflicts.InitMap(definitions);
 
-            var orphan = new IndexedDefinitions();
-            orphan.InitMap(new List<IDefinition>());
+            var overwritten = new IndexedDefinitions();
+            overwritten.InitMap(new List<IDefinition>());
 
             var resolved = new IndexedDefinitions();
             resolved.InitMap(new List<IDefinition>());
@@ -1369,8 +1413,7 @@ namespace IronyModManager.Services.Tests
             {
                 AllConflicts = all,
                 Conflicts = conflicts,
-                OrphanConflicts = orphan,
-                OverwrittenConflicts = orphan
+                OverwrittenConflicts = overwritten
             };
             var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter);
             var result = await service.InitializePatchStateAsync(c, "fake");
@@ -1555,7 +1598,6 @@ namespace IronyModManager.Services.Tests
             {
                 AllConflicts = indexed,
                 Conflicts = indexed,
-                OrphanConflicts = indexed,
                 ResolvedConflicts = indexed,
                 IgnoredConflicts = indexed
             };
@@ -1637,9 +1679,6 @@ namespace IronyModManager.Services.Tests
             var all = new IndexedDefinitions();
             all.InitMap(definitions);
 
-            var orphan = new IndexedDefinitions();
-            orphan.InitMap(new List<IDefinition>());
-
             var resolved = new IndexedDefinitions();
             resolved.InitMap(new List<IDefinition>());
 
@@ -1651,7 +1690,6 @@ namespace IronyModManager.Services.Tests
             {
                 AllConflicts = all,
                 Conflicts = all,
-                OrphanConflicts = orphan,
                 ResolvedConflicts = resolved,
                 IgnoredConflicts = ignored
             };
@@ -3020,7 +3058,6 @@ namespace IronyModManager.Services.Tests
                 {
                     Conflicts = new List<IDefinition>(),
                     ResolvedConflicts = new List<IDefinition>(),
-                    OrphanConflicts = new List<IDefinition>(),
                     OverwrittenConflicts = new List<IDefinition>(),
                     Mode = IO.Common.PatchStateMode.Default
                 };
@@ -3558,7 +3595,6 @@ namespace IronyModManager.Services.Tests
             {
                 AllConflicts = indexed,
                 Conflicts = indexed,
-                OrphanConflicts = indexed,
                 ResolvedConflicts = indexed,
                 CustomConflicts = indexed,
             };
@@ -3654,9 +3690,6 @@ namespace IronyModManager.Services.Tests
             var all = new IndexedDefinitions();
             all.InitMap(definitions);
 
-            var orphan = new IndexedDefinitions();
-            orphan.InitMap(new List<IDefinition>());
-
             var resolved = new IndexedDefinitions();
             resolved.InitMap(new List<IDefinition>());
 
@@ -3667,7 +3700,6 @@ namespace IronyModManager.Services.Tests
             {
                 AllConflicts = all,
                 Conflicts = all,
-                OrphanConflicts = orphan,
                 ResolvedConflicts = resolved,
                 CustomConflicts = custom,
                 OverwrittenConflicts = custom
@@ -3897,7 +3929,6 @@ namespace IronyModManager.Services.Tests
                 {
                     Conflicts = new List<IDefinition>() { new Definition() { File = "1", Id = "test", Type = "events", Code = "ab", ModName = "1" } },
                     OverwrittenConflicts = new List<IDefinition>(),
-                    OrphanConflicts = new List<IDefinition>(),
                     LoadOrder = new List<string>() { "mod/fake2.txt", "mod/fake1.txt" }
                 };
                 return res;
@@ -3961,7 +3992,6 @@ namespace IronyModManager.Services.Tests
                 {
                     Conflicts = new List<IDefinition>() { new Definition() { File = "1", Id = "test", Type = "events", Code = "ab", ModName = "1" } },
                     OverwrittenConflicts = new List<IDefinition>(),
-                    OrphanConflicts = new List<IDefinition>(),
                     LoadOrder = new List<string>() { "mod/fake2.txt", "mod/fake1.txt" }
                 };
                 return res;
@@ -4025,7 +4055,6 @@ namespace IronyModManager.Services.Tests
                 {
                     Conflicts = new List<IDefinition>() { new Definition() { File = "1", Id = "test", Type = "events", Code = "ab", ModName = "1" } },
                     OverwrittenConflicts = new List<IDefinition>(),
-                    OrphanConflicts = new List<IDefinition>(),
                     LoadOrder = new List<string>() { "mod/fake2.txt", "mod/fake1.txt" }
                 };
                 return res;
@@ -4093,75 +4122,6 @@ namespace IronyModManager.Services.Tests
                 {
                     Conflicts = new List<IDefinition>(),
                     OverwrittenConflicts = new List<IDefinition>() { new Definition() { File = "1", Id = "test", Type = "events", Code = "ab", ModName = "1", OriginalFileName = "1" } },
-                    OrphanConflicts = new List<IDefinition>(),
-                    LoadOrder = new List<string>() { "mod/fake2.txt", "mod/fake1.txt" }
-                };
-                return res;
-            });
-            reader.Setup(p => p.GetFileInfo(It.IsAny<string>(), It.IsAny<string>())).Returns(new FileInfo()
-            {
-                ContentSHA = "2"
-            });
-            modWriter.Setup(p => p.ModDirectoryExists(It.IsAny<ModWriterParameters>())).Returns((ModWriterParameters p) =>
-            {
-                return false;
-            });
-            var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter);
-            var result = await service.PatchModNeedsUpdateAsync("colname", new List<string>() { "mod/fake2.txt", "mod/fake1.txt" });
-            result.Should().BeTrue();
-        }
-
-        /// <summary>
-        /// Defines the test method Patch_mod_should_need_update_when_orphan_sha_not_same.
-        /// </summary>
-        [Fact]
-        public async Task Patch_mod_should_need_update_when_orphan_sha_not_same()
-        {
-            var storageProvider = new Mock<IStorageProvider>();
-            var modParser = new Mock<IModParser>();
-            var parserManager = new Mock<IParserManager>();
-            var reader = new Mock<IReader>();
-            var modWriter = new Mock<IModWriter>();
-            var gameService = new Mock<IGameService>();
-            var mapper = new Mock<IMapper>();
-            var modPatchExporter = new Mock<IModPatchExporter>();
-            SetupMockCase(reader, parserManager, modParser);
-            gameService.Setup(p => p.GetSelected()).Returns(new Game()
-            {
-                Type = "Patch_mod_should_need_update_when_overwritten_sha_not_same",
-                UserDirectory = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "mod"),
-                WorkshopDirectory = new List<string>() { "C:\\fake" },
-                CustomModDirectory = string.Empty
-            });
-            mapper.Setup(s => s.Map<IMod>(It.IsAny<IModObject>())).Returns((IModObject o) =>
-            {
-                return new Mod()
-                {
-                    FileName = o.FileName,
-                    Name = o.Name
-                };
-            });
-            var collections = new List<IModCollection>()
-            {
-                new ModCollection()
-                {
-                    IsSelected = true,
-                    Mods = new List<string>() { "mod/fake1.txt", "mod/fake2.txt"},
-                    Name = "test",
-                    Game = "Patch_mod_should_need_update_when_overwritten_sha_not_same"
-                }
-            };
-            storageProvider.Setup(s => s.GetModCollections()).Returns(() =>
-            {
-                return collections;
-            });
-            modPatchExporter.Setup(p => p.GetPatchStateAsync(It.IsAny<ModPatchExporterParameters>(), It.IsAny<bool>())).ReturnsAsync((ModPatchExporterParameters p, bool load) =>
-            {
-                var res = new PatchState()
-                {
-                    Conflicts = new List<IDefinition>(),
-                    OverwrittenConflicts = new List<IDefinition>(),
-                    OrphanConflicts = new List<IDefinition>() { new Definition() { File = "1", Id = "test", Type = "events", Code = "ab", ModName = "1" } },
                     LoadOrder = new List<string>() { "mod/fake2.txt", "mod/fake1.txt" }
                 };
                 return res;
@@ -4229,7 +4189,6 @@ namespace IronyModManager.Services.Tests
                 {
                     Conflicts = new List<IDefinition>() { new Definition() { File = "1", Id = "test", Type = "events", Code = "ab", ModName = "1" } },
                     OverwrittenConflicts = new List<IDefinition>(),
-                    OrphanConflicts = new List<IDefinition>(),
                     LoadOrder = new List<string>() { "mod/fake1.txt", "mod/fake2.txt" }
                 };
                 return res;
@@ -4297,7 +4256,6 @@ namespace IronyModManager.Services.Tests
                 {
                     Conflicts = new List<IDefinition>() { new Definition() { File = "1", Id = "test", Type = "events", Code = "ab", ModName = "1", ContentSHA = "1" } },
                     OverwrittenConflicts = new List<IDefinition>(),
-                    OrphanConflicts = new List<IDefinition>(),
                     LoadOrder = new List<string>() { "mod/fake2.txt", "mod/fake1.txt" }
                 };
                 return res;
@@ -4469,7 +4427,6 @@ namespace IronyModManager.Services.Tests
                 {
                     Conflicts = new List<IDefinition>(),
                     ResolvedConflicts = new List<IDefinition>(),
-                    OrphanConflicts = new List<IDefinition>(),
                     OverwrittenConflicts = new List<IDefinition>(),
                     Mode = IO.Common.PatchStateMode.Default,
                     HasGameDefinitions = true

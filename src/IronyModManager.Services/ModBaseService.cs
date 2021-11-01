@@ -4,7 +4,7 @@
 // Created          : 04-07-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 10-25-2021
+// Last Modified On : 11-01-2021
 // ***********************************************************************
 // <copyright file="ModBaseService.cs" company="Mario">
 //     Mario
@@ -222,8 +222,9 @@ namespace IronyModManager.Services
         /// Evals the definition priority internal.
         /// </summary>
         /// <param name="definitions">The definitions.</param>
+        /// <param name="forceFios">if set to <c>true</c> [force fios].</param>
         /// <returns>IPriorityDefinitionResult.</returns>
-        protected virtual IPriorityDefinitionResult EvalDefinitionPriorityInternal(IEnumerable<IDefinition> definitions)
+        protected virtual IPriorityDefinitionResult EvalDefinitionPriorityInternal(IEnumerable<IDefinition> definitions, bool forceFios = false)
         {
             // We're expecting properly ordered definitions based on load order.
             // In case of game being included this should be done by the calling method as well,
@@ -300,7 +301,7 @@ namespace IronyModManager.Services
                         if (provider != null)
                         {
                             bool overrideSkipped = false;
-                            isFios = provider.DefinitionUsesFIOSRules(validDefinitions.First());
+                            isFios = forceFios || provider.DefinitionUsesFIOSRules(validDefinitions.First());
                             foreach (var item in validDefinitions)
                             {
                                 var fileName = isFios ? item.AdditionalFileNames.OrderBy(p => Path.GetFileNameWithoutExtension(p), StringComparer.Ordinal).First() : item.AdditionalFileNames.OrderBy(p => Path.GetFileNameWithoutExtension(p), StringComparer.Ordinal).Last();

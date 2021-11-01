@@ -4,7 +4,7 @@
 // Created          : 10-25-2021
 //
 // Last Modified By : Mario
-// Last Modified On : 10-31-2021
+// Last Modified On : 11-01-2021
 // ***********************************************************************
 // <copyright file="OverwrittenObjectSingleFileParser.cs" company="Mario">
 //     Mario
@@ -40,7 +40,7 @@ namespace IronyModManager.Parser.Games.Stellaris
         private static readonly string[] directoryNames = new string[]
         {
             Common.Constants.Stellaris.Ethics,  Common.Constants.Stellaris.StarbaseModules,
-            Common.Constants.Stellaris.ShipSizes
+            Common.Constants.Stellaris.ShipSizes, Common.Constants.Stellaris.StrategicResources
         };
 
         #endregion Fields

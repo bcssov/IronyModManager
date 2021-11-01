@@ -4,7 +4,7 @@
 // Created          : 03-31-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 09-06-2021
+// Last Modified On : 11-01-2021
 // ***********************************************************************
 // <copyright file="ModPatchExporter.cs" company="Mario">
 //     Mario
@@ -186,7 +186,6 @@ namespace IronyModManager.IO.Mods
                     throw new ArgumentNullException(nameof(parameters), "Game.");
                 }
                 var definitionsInvalid = (parameters.Definitions == null || !parameters.Definitions.Any()) &&
-                    (parameters.OrphanConflicts == null || !parameters.OrphanConflicts.Any()) &&
                     (parameters.OverwrittenConflicts == null || !parameters.OverwrittenConflicts.Any()) &&
                     (parameters.CustomConflicts == null || !parameters.CustomConflicts.Any());
                 if (definitionsInvalid)
@@ -203,14 +202,6 @@ namespace IronyModManager.IO.Mods
                         results.Add(await CopyBinariesAsync(parameters.Definitions.Where(p => p.ValueType == ValueType.Binary),
                             GetPatchRootPath(parameters.RootPath, parameters.PatchPath), false));
                         results.Add(await WriteMergedContentAsync(parameters.Definitions.Where(p => p.ValueType != ValueType.Binary),
-                            GetPatchRootPath(parameters.RootPath, parameters.PatchPath), parameters.Game, false, FileNameGeneration.GenerateFileName));
-                    }
-
-                    if (parameters.OrphanConflicts?.Count() > 0)
-                    {
-                        results.Add(await CopyBinariesAsync(parameters.OrphanConflicts.Where(p => p.ValueType == ValueType.Binary),
-                            GetPatchRootPath(parameters.RootPath, parameters.PatchPath), false));
-                        results.Add(await WriteMergedContentAsync(parameters.OrphanConflicts.Where(p => p.ValueType != ValueType.Binary),
                             GetPatchRootPath(parameters.RootPath, parameters.PatchPath), parameters.Game, false, FileNameGeneration.GenerateFileName));
                     }
 
@@ -329,58 +320,66 @@ namespace IronyModManager.IO.Mods
             {
                 state = DIResolver.Get<IPatchState>();
             }
-            var modifiedHistory = new List<IDefinition>();
+            var modifiedHistory = new ConcurrentDictionary<string, IDefinition>();
             var path = Path.Combine(GetPatchRootPath(parameters.RootPath, parameters.PatchPath));
             state.IgnoreConflictPaths = parameters.IgnoreConflictPaths;
             state.ResolvedConflicts = MapDefinitions(parameters.ResolvedConflicts, false);
             state.Conflicts = MapDefinitions(parameters.Conflicts, false);
-            state.OrphanConflicts = MapDefinitions(parameters.OrphanConflicts, false);
             state.IgnoredConflicts = MapDefinitions(parameters.IgnoredConflicts, false);
             state.OverwrittenConflicts = MapDefinitions(parameters.OverwrittenConflicts, false);
             state.CustomConflicts = MapDefinitions(parameters.CustomConflicts, false);
             state.Mode = parameters.Mode;
             state.LoadOrder = parameters.LoadOrder;
             state.HasGameDefinitions = parameters.HasGameDefinitions;
-            var history = state.ConflictHistory != null ? state.ConflictHistory.ToList() : new List<IDefinition>();
-            var indexed = DIResolver.Get<IIndexedDefinitions>();
-            indexed.InitMap(history);
+            var history = new ConcurrentDictionary<string, IEnumerable<IDefinition>>();
+            foreach (var item in state.IndexedConflictHistory)
+            {
+                history.TryAdd(item.Key, item.Value);
+            }
             if (parameters.ResolvedConflicts != null)
             {
-                foreach (var item in parameters.ResolvedConflicts.Where(s => !string.IsNullOrWhiteSpace(s.Code)))
+                var tasks = parameters.ResolvedConflicts.Where(s => !string.IsNullOrWhiteSpace(s.Code)).Select(item =>
                 {
-                    var existingHits = indexed.GetByTypeAndId(item.TypeAndId).ToList();
-                    var existing = existingHits.FirstOrDefault(p => item.Code.Equals(p.Code));
-                    if (existing == null)
+                    return Task.Run(() =>
                     {
-                        history.RemoveAll(p => existingHits.Any(x => p.Equals(x)));
-                        history.Add(item);
-                        modifiedHistory.Add(item);
-                    }
-                    else
-                    {
-                        existingHits.Remove(existing);
-                        history.RemoveAll(p => existingHits.Any(x => p.Equals(x)));
-                    }
-                }
+                        if (!history.TryGetValue(item.TypeAndId, out var existingHits))
+                        {
+                            existingHits = new List<IDefinition>();
+                        }
+                        var existing = existingHits.FirstOrDefault(p => item.Code.Equals(p.Code));
+                        if (existing == null)
+                        {
+                            var definitions = new List<IDefinition>() { item };
+                            history.AddOrUpdate(item.TypeAndId, definitions, (k, v) => definitions);
+                            modifiedHistory.AddOrUpdate(item.TypeAndId, item, (k, v) => item);
+                        }
+                        else if (existingHits.Count() > 1)
+                        {
+                            var definitions = new List<IDefinition>() { existing };
+                            history.AddOrUpdate(existing.TypeAndId, definitions, (k, v) => definitions);
+                            modifiedHistory.AddOrUpdate(existing.TypeAndId, existing, (k, v) => existing);
+                        }
+                    });
+                });
+                await Task.WhenAll(tasks);
             }
             if (parameters.Definitions != null)
             {
-                foreach (var item in parameters.Definitions.Where(s => !string.IsNullOrWhiteSpace(s.Code) && !modifiedHistory.Any(p => p.TypeAndId.Equals(s.TypeAndId))))
+                foreach (var item in parameters.Definitions.Where(s => !string.IsNullOrWhiteSpace(s.Code) && !modifiedHistory.Any(p => p.Key.Equals(s.TypeAndId))))
                 {
-                    var existingHits = indexed.GetByTypeAndId(item.TypeAndId).ToList();
-                    history.RemoveAll(p => existingHits.Any(x => p.Equals(x)));
-                    history.Add(item);
-                    modifiedHistory.Add(item);
+                    var definitions = new List<IDefinition>() { item };
+                    history.AddOrUpdate(item.TypeAndId, definitions, (k, v) => definitions);
+                    modifiedHistory.AddOrUpdate(item.TypeAndId, item, (k, v) => item);
                 }
             }
-            state.ConflictHistory = MapDefinitions(history, true);
+            state.ConflictHistory = MapDefinitions(history.SelectMany(p => p.Value), true);
             var externallyLoadedCode = cache.Get<HashSet<string>>(new CacheGetParameters() { Key = CacheExternalCodeKey, Region = CacheStateRegion });
             if (externallyLoadedCode == null)
             {
                 externallyLoadedCode = new HashSet<string>();
                 cache.Set(new CacheAddParameters<HashSet<string>>() { Key = CacheExternalCodeKey, Value = externallyLoadedCode, Region = CacheStateRegion });
             }
-            return StoreState(state, modifiedHistory, externallyLoadedCode, path);
+            return StoreState(state, modifiedHistory.Select(p => p.Value), externallyLoadedCode, path);
         }
 
         /// <summary>
@@ -545,7 +544,6 @@ namespace IronyModManager.IO.Mods
             destination.Conflicts = MapDefinitions(source.Conflicts, includeCode);
             destination.IgnoreConflictPaths = source.IgnoreConflictPaths;
             destination.IgnoredConflicts = MapDefinitions(source.IgnoredConflicts, includeCode);
-            destination.OrphanConflicts = MapDefinitions(source.OrphanConflicts, includeCode);
             destination.ResolvedConflicts = MapDefinitions(source.ResolvedConflicts, includeCode);
             destination.OverwrittenConflicts = MapDefinitions(source.OverwrittenConflicts, includeCode);
             destination.CustomConflicts = MapDefinitions(source.CustomConflicts, includeCode);
@@ -689,14 +687,6 @@ namespace IronyModManager.IO.Mods
                     else
                     {
                         StandardizeDefinitionPaths(cached.IgnoredConflicts);
-                    }
-                    if (cached.OrphanConflicts == null)
-                    {
-                        cached.OrphanConflicts = new List<IDefinition>();
-                    }
-                    else
-                    {
-                        StandardizeDefinitionPaths(cached.OrphanConflicts);
                     }
                     if (cached.ResolvedConflicts == null)
                     {
@@ -928,10 +918,13 @@ namespace IronyModManager.IO.Mods
                     if (externalCode != null && !externalCode.Contains(item.TypeAndId))
                     {
                         loadedCode.Add(item.TypeAndId);
-                        var existing = patchState.ConflictHistory.FirstOrDefault(p => p.TypeAndId.Equals(item.TypeAndId));
-                        if (existing != null)
+                        if (patchState.IndexedConflictHistory.ContainsKey(item.TypeAndId))
                         {
-                            existing.Code = null;
+                            var existingHistory = patchState.IndexedConflictHistory[item.TypeAndId];
+                            foreach (var existing in existingHistory)
+                            {
+                                existing.Code = null;
+                            }
                         }
                     }
                     await retry.RetryActionAsync(async () =>

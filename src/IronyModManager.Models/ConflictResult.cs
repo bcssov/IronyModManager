@@ -4,7 +4,7 @@
 // Created          : 03-18-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-20-2021
+// Last Modified On : 11-01-2021
 // ***********************************************************************
 // <copyright file="ConflictResult.cs" company="Mario">
 //     Mario
@@ -75,12 +75,6 @@ namespace IronyModManager.Models
         public PatchStateMode Mode { get; set; }
 
         /// <summary>
-        /// Gets or sets the orphan conflicts.
-        /// </summary>
-        /// <value>The orphan conflicts.</value>
-        public IIndexedDefinitions OrphanConflicts { get; set; }
-
-        /// <summary>
         /// Gets or sets the overwritten conflicts.
         /// </summary>
         /// <value>The overwritten conflicts.</value>
@@ -116,7 +110,6 @@ namespace IronyModManager.Models
             AllConflicts?.Dispose();
             Conflicts?.Dispose();
             IgnoredConflicts?.Dispose();
-            OrphanConflicts?.Dispose();
             ResolvedConflicts?.Dispose();
             RuleIgnoredConflicts?.Dispose();
             OverwrittenConflicts?.Dispose();
@@ -125,7 +118,6 @@ namespace IronyModManager.Models
             Conflicts = null;
             IgnoredConflicts = null;
             ResolvedConflicts = null;
-            OrphanConflicts = null;
             RuleIgnoredConflicts = null;
             OverwrittenConflicts = null;
             CustomConflicts = null;

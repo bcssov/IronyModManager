@@ -4,7 +4,7 @@
 // Created          : 04-06-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 05-28-2021
+// Last Modified On : 11-01-2021
 // ***********************************************************************
 // <copyright file="IPatchState.cs" company="Mario">
 //     Mario
@@ -61,6 +61,12 @@ namespace IronyModManager.IO.Common.Mods.Models
         IEnumerable<IDefinition> IgnoredConflicts { get; set; }
 
         /// <summary>
+        /// Gets the indexed conflict history.
+        /// </summary>
+        /// <value>The indexed conflict history.</value>
+        IDictionary<string, IEnumerable<IDefinition>> IndexedConflictHistory { get; }
+
+        /// <summary>
         /// Gets or sets the load order.
         /// </summary>
         /// <value>The load order.</value>
@@ -71,12 +77,6 @@ namespace IronyModManager.IO.Common.Mods.Models
         /// </summary>
         /// <value>The mode.</value>
         PatchStateMode Mode { get; set; }
-
-        /// <summary>
-        /// Gets or sets the orphan conflicts.
-        /// </summary>
-        /// <value>The orphan conflicts.</value>
-        IEnumerable<IDefinition> OrphanConflicts { get; set; }
 
         /// <summary>
         /// Gets or sets the overwritten conflicts.
