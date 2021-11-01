@@ -177,6 +177,8 @@ namespace IronyModManager.IO.Mods
         /// </summary>
         /// <param name="parameters">The parameters.</param>
         /// <returns>Task&lt;System.Boolean&gt;.</returns>
+        /// <exception cref="ArgumentNullException">nameof(parameters), Game.</exception>
+        /// <exception cref="ArgumentNullException">nameof(parameters), Definitions.</exception>
         public async Task<bool> ExportDefinitionAsync(ModPatchExporterParameters parameters)
         {
             async Task<bool> export()
@@ -266,14 +268,19 @@ namespace IronyModManager.IO.Mods
         /// <param name="parameters">The parameters.</param>
         /// <param name="path">The path.</param>
         /// <returns>Task&lt;System.String&gt;.</returns>
-        public Task<string> LoadDefinitionContentsAsync(ModPatchExporterParameters parameters, string path)
+        public async Task<string> LoadDefinitionContentsAsync(ModPatchExporterParameters parameters, string path)
         {
-            var patchPath = Path.Combine(parameters.RootPath, parameters.PatchPath, path);
-            if (File.Exists(patchPath))
+            var patchPath = Path.Combine(parameters.RootPath, parameters.PatchPath);
+            var state = await GetPatchStateAsync(parameters);
+            if (state != null && state.ConflictHistory != null)
             {
-                return File.ReadAllTextAsync(patchPath);
+                var history = state.ConflictHistory.FirstOrDefault(p => p.FileCI.Equals(path, StringComparison.OrdinalIgnoreCase));
+                if (history != null)
+                {
+                    return history.Code;
+                }
             }
-            return Task.FromResult(string.Empty);
+            return string.Empty;
         }
 
         /// <summary>
