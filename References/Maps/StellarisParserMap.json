@@ -330,7 +330,7 @@
         "PreferredParser": "DefaultParser"
     }, {
         "DirectoryPath": "common\\strategic_resources",
-        "PreferredParser": "StellarisOverWrittenObjectWithPreserveFileNameParser"
+        "PreferredParser": "StellarisOverwrittenObjectSingleFileParser"
     }, {
         "DirectoryPath": "common\\subjects",
         "PreferredParser": "DefaultParser"

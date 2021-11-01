@@ -414,7 +414,7 @@ namespace IronyModManager.Services
             foreach (var typeId in typeAndIdKeys)
             {
                 var items = indexedConflicts.GetByTypeAndId(typeId);
-                if (items.Any() && items.Any() && items.All(p => !p.ExistsInLastFile) && !items.Any(p => p.File.StartsWith(Shared.Constants.LocalizationDirectory, StringComparison.OrdinalIgnoreCase)))
+                if (items.Any() && items.All(p => !p.ExistsInLastFile) && !items.Any(p => p.File.StartsWith(Shared.Constants.LocalizationDirectory, StringComparison.OrdinalIgnoreCase)))
                 {
                     var fileDefs = indexedDefinitions.GetByFile(items.FirstOrDefault().FileCI);
                     var lastMod = fileDefs.GroupBy(p => p.ModName).Select(p => p.First()).OrderByDescending(p => modOrder.IndexOf(p.ModName)).FirstOrDefault();
@@ -684,7 +684,7 @@ namespace IronyModManager.Services
                             var fileDefs = new List<IDefinition>();
                             foreach (var fileCode in fileCodes)
                             {
-                                if (state != null && state.IndexedConflictHistory.Any() && state.IndexedConflictHistory.ContainsKey(fileCode.TypeAndId))
+                                if (state.IndexedConflictHistory != null && state.IndexedConflictHistory.Any() && state.IndexedConflictHistory.ContainsKey(fileCode.TypeAndId))
                                 {
                                     var history = state.IndexedConflictHistory[fileCode.TypeAndId].FirstOrDefault();
                                     if (history != null && !string.IsNullOrWhiteSpace(history.Code))
@@ -962,7 +962,7 @@ namespace IronyModManager.Services
                                 definition.DiskFile = item.DiskFile;
                                 definition.File = item.File;
                                 definition.OverwrittenFileNames = item.OverwrittenFileNames;
-                                if (state != null && state.IndexedConflictHistory.Any() && state.IndexedConflictHistory.ContainsKey(definition.TypeAndId))
+                                if (state.IndexedConflictHistory != null && state.IndexedConflictHistory.Any() && state.IndexedConflictHistory.ContainsKey(definition.TypeAndId))
                                 {
                                     var history = state.IndexedConflictHistory[definition.TypeAndId].FirstOrDefault();
                                     if (history != null)
@@ -1073,14 +1073,6 @@ namespace IronyModManager.Services
                                 definition.DiskFile = item.DiskFile;
                                 definition.File = item.File;
                                 definition.OverwrittenFileNames = item.OverwrittenFileNames;
-                                if (state != null && state.IndexedConflictHistory.Any() && state.IndexedConflictHistory.ContainsKey(definition.TypeAndId))
-                                {
-                                    var history = state.IndexedConflictHistory[definition.TypeAndId].FirstOrDefault();
-                                    if (history != null)
-                                    {
-                                        definition.Code = history.Code;
-                                    }
-                                }
                             }
                             var canExport = true;
                             if (definition.ValueType == ValueType.OverwrittenObjectSingleFile)
