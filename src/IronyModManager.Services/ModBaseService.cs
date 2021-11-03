@@ -25,6 +25,7 @@ using IronyModManager.IO.Common.Readers;
 using IronyModManager.Models.Common;
 using IronyModManager.Parser.Common.Mod;
 using IronyModManager.Services.Common;
+using IronyModManager.Services.Resolver;
 using IronyModManager.Shared;
 using IronyModManager.Shared.Cache;
 using IronyModManager.Shared.Models;
@@ -61,6 +62,11 @@ namespace IronyModManager.Services
         /// </summary>
         protected const string RegularModsCacheKey = "RegularMods";
 
+        /// <summary>
+        /// The path resolver
+        /// </summary>
+        protected readonly IGameRootPathResolver pathResolver;
+
         #endregion Fields
 
         #region Constructors
@@ -86,6 +92,7 @@ namespace IronyModManager.Services
             Reader = reader;
             ModParser = modParser;
             ModWriter = modWriter;
+            pathResolver = new GameRootPathResolver();
         }
 
         #endregion Constructors
@@ -745,7 +752,7 @@ namespace IronyModManager.Services
         {
             static void appendLine(StringBuilder sb, IEnumerable<string> lines)
             {
-                if (lines?.Count() > 0)
+                if (lines != null && lines.Any())
                 {
                     sb.AppendLine(string.Join(Environment.NewLine, lines));
                 }
@@ -784,7 +791,7 @@ namespace IronyModManager.Services
                 }
             }
 
-            if (definitions?.Count() > 0)
+            if (definitions != null && definitions.Any())
             {
                 var otherDefinitions = definitions.Where(p => IsValidDefinitionType(p));
                 var variableDefinitions = definitions.Where(p => !IsValidDefinitionType(p));
@@ -888,7 +895,7 @@ namespace IronyModManager.Services
                     }
                     else if (item.IsFromGame)
                     {
-                        item.ModPath = Path.GetDirectoryName(GameService.GetSelected().ExecutableLocation);
+                        item.ModPath = pathResolver.GetPath(GameService.GetSelected());
                     }
                     else
                     {

@@ -2320,7 +2320,7 @@ namespace IronyModManager.Services
             void parseNameSpaces(List<IDefinition> exportDefinitions, IDefinition def)
             {
                 var namespaces = def.Variables?.Where(p => p.ValueType == ValueType.Namespace);
-                if (namespaces?.Count() > 0)
+                if (namespaces != null && namespaces.Any())
                 {
                     foreach (var name in namespaces)
                     {
@@ -2337,7 +2337,7 @@ namespace IronyModManager.Services
             void parseVariables(List<IDefinition> exportDefinitions, IDefinition def)
             {
                 var variables = def.Variables?.Where(p => p.ValueType == ValueType.Variable);
-                if (variables?.Count() > 0)
+                if (variables != null && variables.Any())
                 {
                     foreach (var variable in variables)
                     {
