@@ -4,7 +4,7 @@
 // Created          : 05-26-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 11-01-2021
+// Last Modified On : 11-03-2021
 // ***********************************************************************
 // <copyright file="ModPatchCollectionService.cs" company="Mario">
 //     Mario
@@ -976,7 +976,7 @@ namespace IronyModManager.Services
                             {
                                 if (!alreadyMergedTypes.Contains(definition.Type))
                                 {
-                                    var merged = ProcessOverwrittenSingleFileDefinitions(conflictResult, GetCollectionMods().Select(p => p.Name).ToList(), definition.Type);
+                                    var merged = ProcessOverwrittenSingleFileDefinitions(conflictResult, patchName, definition.Type);
                                     if (merged != null)
                                     {
                                         definition = PopulateModPath(merged, GetCollectionMods()).FirstOrDefault();
@@ -1079,7 +1079,7 @@ namespace IronyModManager.Services
                             {
                                 if (!alreadyMergedTypes.Contains(definition.Type))
                                 {
-                                    var merged = ProcessOverwrittenSingleFileDefinitions(conflictResult, GetCollectionMods().Select(p => p.Name).ToList(), definition.Type);
+                                    var merged = ProcessOverwrittenSingleFileDefinitions(conflictResult, patchName, definition.Type);
                                     if (merged != null)
                                     {
                                         definition = PopulateModPath(merged, GetCollectionMods()).FirstOrDefault();
@@ -1989,7 +1989,7 @@ namespace IronyModManager.Services
                     {
                         if (definition.ValueType == ValueType.OverwrittenObjectSingleFile)
                         {
-                            var merged = ProcessOverwrittenSingleFileDefinitions(conflictResult, GetCollectionMods().Select(p => p.Name).ToList(), definition.Type);
+                            var merged = ProcessOverwrittenSingleFileDefinitions(conflictResult, patchName, definition.Type);
                             if (merged != null)
                             {
                                 args.OverwrittenConflicts = PopulateModPath(merged, GetCollectionMods());
@@ -2295,10 +2295,10 @@ namespace IronyModManager.Services
         /// Processes the overwritten single file definitions.
         /// </summary>
         /// <param name="conflictResult">The conflict result.</param>
-        /// <param name="modOrder">The mod order.</param>
+        /// <param name="patchName">Name of the patch.</param>
         /// <param name="type">The type.</param>
         /// <returns>IDefinition.</returns>
-        protected virtual IDefinition ProcessOverwrittenSingleFileDefinitions(IConflictResult conflictResult, IList<string> modOrder, string type)
+        protected virtual IDefinition ProcessOverwrittenSingleFileDefinitions(IConflictResult conflictResult, string patchName, string type)
         {
             static string cleanString(string text)
             {
@@ -2358,6 +2358,7 @@ namespace IronyModManager.Services
             var definitions = conflictResult.OverwrittenConflicts.GetByValueType(ValueType.OverwrittenObjectSingleFile).Where(p => p.Type.Equals(type));
             if (definitions.Any())
             {
+                var modOrder = GetCollectionMods().Select(p => p.Name).ToList();
                 var game = GameService.GetSelected();
                 var export = new List<IDefinition>();
                 var all = conflictResult.AllConflicts.GetByParentDirectory(definitions.FirstOrDefault().ParentDirectoryCI).Where(p => IsValidDefinitionType(p));
@@ -2433,6 +2434,7 @@ namespace IronyModManager.Services
                         merged.File = infoProvider.GetFileName(merged);
                         merged.DiskFile = infoProvider.GetDiskFileName(merged);
                         merged.ValueType = ValueType.OverwrittenObjectSingleFile;
+                        merged.ModName = patchName;
                         var preserveOverwrittenFileName = oldFileName == merged.File;
                         if (preserveOverwrittenFileName)
                         {
@@ -2588,7 +2590,7 @@ namespace IronyModManager.Services
                                 {
                                     if (item.ValueType == ValueType.OverwrittenObjectSingleFile)
                                     {
-                                        var merged = ProcessOverwrittenSingleFileDefinitions(conflictResult, GetCollectionMods().Select(p => p.Name).ToList(), item.Type);
+                                        var merged = ProcessOverwrittenSingleFileDefinitions(conflictResult, patchName, item.Type);
                                         if (merged != null)
                                         {
                                             await modPatchExporter.ExportDefinitionAsync(new ModPatchExporterParameters()

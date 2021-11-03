@@ -4,7 +4,7 @@
 // Created          : 04-07-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 11-01-2021
+// Last Modified On : 11-03-2021
 // ***********************************************************************
 // <copyright file="ModBaseService.cs" company="Mario">
 //     Mario
@@ -878,7 +878,7 @@ namespace IronyModManager.Services
         /// <returns>IEnumerable&lt;IDefinition&gt;.</returns>
         protected virtual IEnumerable<IDefinition> PopulateModPath(IEnumerable<IDefinition> definitions, IEnumerable<IMod> collectionMods)
         {
-            if (definitions?.Count() > 0)
+            if (definitions != null && definitions.Any())
             {
                 foreach (var item in definitions)
                 {

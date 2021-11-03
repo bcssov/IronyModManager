@@ -4,7 +4,7 @@
 // Created          : 03-31-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 11-01-2021
+// Last Modified On : 11-03-2021
 // ***********************************************************************
 // <copyright file="ModPatchExporter.cs" company="Mario">
 //     Mario
@@ -397,7 +397,7 @@ namespace IronyModManager.IO.Mods
         {
             static IList<string> standardizeArray(IList<string> paths)
             {
-                if (paths?.Count > 0)
+                if (paths != null && paths.Any())
                 {
                     var newPaths = new List<string>();
                     foreach (var item in paths)
@@ -409,7 +409,7 @@ namespace IronyModManager.IO.Mods
                 return paths;
             }
 
-            if (definitions?.Count() > 0)
+            if (definitions != null && definitions.Any())
             {
                 foreach (var item in definitions)
                 {
