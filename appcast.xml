@@ -4,12 +4,12 @@
 		<title>Irony Mod Manager</title>
 		<language>en</language>
 		<item>
-			<title>1.19.73-rc</title>
+			<title>1.19.76</title>
 			<description>NOTE:
-This version has significant changes to Conflict Solver, please backup your existing mod collections before running conflict solver. Save game compatibility is not guranteed.
+This version has significant changes to Conflict Solver, please backup your existing mod collections before running conflict solver. Save game compatibility is not guaranteed.
 
 RELEASE NOTES:
-* Fix conflict solver CTD
+* Fix handling of game paths for vanilla definitions
 
 CHANGES FROM v1.18:
 * Update dependencies
@@ -19,16 +19,16 @@ CHANGES FROM v1.18:
 * Add single merge folder type handling for Stellaris
 * Fix #304
 * Many conflict solver handling improvements</description>
-			<pubDate>Wed, 03 Nov 2021 05:31:51 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.19.73-rc/osx-x64.rar" sparkle:version="1.19.73.33129" sparkle:shortVersionString="1.19.73" length="70339357" sparkle:os="osx" type="application/vnd.rar" sparkle:signature="EcZPwrp/IG/PvULDTHKAILvtsOwQDKDauy80RlqqBUzEduL2nf1jLRGXQKN9/FgGiFM9gYElmj2Qtsz42ag8DQ=="/>
+			<pubDate>Wed, 03 Nov 2021 19:22:01 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.19.76/osx-x64.rar" sparkle:version="1.19.76.17913" sparkle:shortVersionString="1.19.76" length="70340780" sparkle:os="osx" type="application/vnd.rar" sparkle:signature="6BE2RcskQ1bphQd/mmfTN/wKmcQ9/f6MiaAReqWn+9nDkD5Vy4XcB1HHRVyWblzy1yMmfFb+kmwwxgku0iRQBw=="/>
 		</item>
 		<item>
-			<title>1.19.73-rc</title>
+			<title>1.19.76</title>
 			<description>NOTE:
-This version has significant changes to Conflict Solver, please backup your existing mod collections before running conflict solver. Save game compatibility is not guranteed.
+This version has significant changes to Conflict Solver, please backup your existing mod collections before running conflict solver. Save game compatibility is not guaranteed.
 
 RELEASE NOTES:
-* Fix conflict solver CTD
+* Fix handling of game paths for vanilla definitions
 
 CHANGES FROM v1.18:
 * Update dependencies
@@ -38,16 +38,16 @@ CHANGES FROM v1.18:
 * Add single merge folder type handling for Stellaris
 * Fix #304
 * Many conflict solver handling improvements</description>
-			<pubDate>Wed, 03 Nov 2021 05:31:59 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.19.73-rc/win-x64-setup.rar" sparkle:version="1.19.73.33129" sparkle:shortVersionString="1.19.73" length="61672580" sparkle:os="windows" type="application/vnd.rar" sparkle:signature="va9DGkLIsfDtyLdsRD/HZbHHqeTihLr2AsQEz73YdCOQ2V9mhQhZWoIxszZ8UgwO4akZyzHC13BDQuz/MHtSDw=="/>
+			<pubDate>Wed, 03 Nov 2021 19:22:09 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.19.76/win-x64-setup.rar" sparkle:version="1.19.76.17913" sparkle:shortVersionString="1.19.76" length="61678915" sparkle:os="windows" type="application/vnd.rar" sparkle:signature="70TUOqGV9pdAfGvvJF7u4ypm3IpNdQJ4uMgxLpNHYc+cuWZxk6wA3a6nVjk+OJTDyLYd8mCBnzcfr/x2+jp0Cw=="/>
 		</item>
 		<item>
-			<title>1.19.73-rc</title>
+			<title>1.19.76</title>
 			<description>NOTE:
-This version has significant changes to Conflict Solver, please backup your existing mod collections before running conflict solver. Save game compatibility is not guranteed.
+This version has significant changes to Conflict Solver, please backup your existing mod collections before running conflict solver. Save game compatibility is not guaranteed.
 
 RELEASE NOTES:
-* Fix conflict solver CTD
+* Fix handling of game paths for vanilla definitions
 
 CHANGES FROM v1.18:
 * Update dependencies
@@ -57,16 +57,16 @@ CHANGES FROM v1.18:
 * Add single merge folder type handling for Stellaris
 * Fix #304
 * Many conflict solver handling improvements</description>
-			<pubDate>Wed, 03 Nov 2021 05:31:55 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.19.73-rc/win-x64.rar" sparkle:version="1.19.73.33129" sparkle:shortVersionString="1.19.73" length="74158622" sparkle:os="windows" type="application/vnd.rar" sparkle:signature="kA9/1I8nq+6BrR2Gd60Zp8mTOzKpukraBd+FRrBN/yHk5jS8JXzYE7xeeCEQEgdFJ2Phnm3s2ZooDvylLnY+DA=="/>
+			<pubDate>Wed, 03 Nov 2021 19:22:05 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.19.76/win-x64.rar" sparkle:version="1.19.76.17913" sparkle:shortVersionString="1.19.76" length="74160072" sparkle:os="windows" type="application/vnd.rar" sparkle:signature="cJhNpz+RczbCVxfRlskpXflR2OH438Mo0TQpa+g1SdPSJUIgoYihowYO+e4B8X1IfkXZLQlO9678r5lRicjzBg=="/>
 		</item>
 		<item>
-			<title>1.19.73-rc</title>
+			<title>1.19.76</title>
 			<description>NOTE:
-This version has significant changes to Conflict Solver, please backup your existing mod collections before running conflict solver. Save game compatibility is not guranteed.
+This version has significant changes to Conflict Solver, please backup your existing mod collections before running conflict solver. Save game compatibility is not guaranteed.
 
 RELEASE NOTES:
-* Fix conflict solver CTD
+* Fix handling of game paths for vanilla definitions
 
 CHANGES FROM v1.18:
 * Update dependencies
@@ -76,84 +76,8 @@ CHANGES FROM v1.18:
 * Add single merge folder type handling for Stellaris
 * Fix #304
 * Many conflict solver handling improvements</description>
-			<pubDate>Wed, 03 Nov 2021 05:31:47 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.19.73-rc/linux-x64.zip" sparkle:version="1.19.73.33129" sparkle:shortVersionString="1.19.73" length="86976949" sparkle:os="linux" type="application/zip" sparkle:signature="qRVL3mHp8IU8cxAFiAnxiQmEL2kACoI/PF9EP/lRplnJlxaHFzx5aF4qCgBl86LdllDZAhZDIt8TlQkzaVyEBg=="/>
-		</item>
-		<item>
-			<title>1.18.92</title>
-			<description>RELEASE NOTES:
-* Fix handling non-latin characters in zip files
-
-CHANGES FROM v1.17:
-* Update dependencies
-* Update Chinese translation (by Clazex)
-* Reselect lines after performing merge operations in Conflict Solver (by scrangos)
-* New hotkeys: Ctrl+Left Ctrl+Right that find the previous conflict and next conflict (by scrangos)
-* If there are 4+ definitions including the virtual definition, skip the stellaris definition if its there when the conflict is being selected as the default selected definition for the left side (by scrangos)
-* Add show self conflicts mod filter option (self conflicts are ignored by default now)
-* Add option to export to Paradox Launcher Json format (min launcher version 2021.7.rc5)
-* Conflict Solver bracket count (by scrangos)
-* Add mod source indicator
-* Various fixes</description>
-			<pubDate>Thu, 07 Oct 2021 05:40:10 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.18.92/osx-x64.rar" sparkle:version="1.18.92.37821" sparkle:shortVersionString="1.18.92" length="69729480" sparkle:os="osx" type="application/vnd.rar" sparkle:signature="qiSHUWC26ptp47wTnyMUNu+cBvwzZYSvYZVB9lh6SiuU6QQ3Ul0fbU7nashUMj2PSjKmQGWIlCBK1Cr2IuleAA=="/>
-		</item>
-		<item>
-			<title>1.18.92</title>
-			<description>RELEASE NOTES:
-* Fix handling non-latin characters in zip files
-
-CHANGES FROM v1.17:
-* Update dependencies
-* Update Chinese translation (by Clazex)
-* Reselect lines after performing merge operations in Conflict Solver (by scrangos)
-* New hotkeys: Ctrl+Left Ctrl+Right that find the previous conflict and next conflict (by scrangos)
-* If there are 4+ definitions including the virtual definition, skip the stellaris definition if its there when the conflict is being selected as the default selected definition for the left side (by scrangos)
-* Add show self conflicts mod filter option (self conflicts are ignored by default now)
-* Add option to export to Paradox Launcher Json format (min launcher version 2021.7.rc5)
-* Conflict Solver bracket count (by scrangos)
-* Add mod source indicator
-* Various fixes</description>
-			<pubDate>Thu, 07 Oct 2021 05:40:18 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.18.92/win-x64-setup.rar" sparkle:version="1.18.92.37821" sparkle:shortVersionString="1.18.92" length="61149327" sparkle:os="windows" type="application/vnd.rar" sparkle:signature="+VBvUN+QAlZN53KcNg0/EdQ+HU0h4cjCLzC/q4Dkf/dQ86MhmSHITsJ6F+S7KcRVGwPnJy23PucFF8/91BFjAQ=="/>
-		</item>
-		<item>
-			<title>1.18.92</title>
-			<description>RELEASE NOTES:
-* Fix handling non-latin characters in zip files
-
-CHANGES FROM v1.17:
-* Update dependencies
-* Update Chinese translation (by Clazex)
-* Reselect lines after performing merge operations in Conflict Solver (by scrangos)
-* New hotkeys: Ctrl+Left Ctrl+Right that find the previous conflict and next conflict (by scrangos)
-* If there are 4+ definitions including the virtual definition, skip the stellaris definition if its there when the conflict is being selected as the default selected definition for the left side (by scrangos)
-* Add show self conflicts mod filter option (self conflicts are ignored by default now)
-* Add option to export to Paradox Launcher Json format (min launcher version 2021.7.rc5)
-* Conflict Solver bracket count (by scrangos)
-* Add mod source indicator
-* Various fixes</description>
-			<pubDate>Thu, 07 Oct 2021 05:40:14 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.18.92/win-x64.rar" sparkle:version="1.18.92.37821" sparkle:shortVersionString="1.18.92" length="73540939" sparkle:os="windows" type="application/vnd.rar" sparkle:signature="NXGvqOR1pApzUQbRdz9LU42+WRfEDMAIQJt6ar9jPhvzsZIPcjDmQhKD2VRELlz0qG9vPIAHVoQEky1RDIzUBQ=="/>
-		</item>
-		<item>
-			<title>1.18.92</title>
-			<description>RELEASE NOTES:
-* Fix handling non-latin characters in zip files
-
-CHANGES FROM v1.17:
-* Update dependencies
-* Update Chinese translation (by Clazex)
-* Reselect lines after performing merge operations in Conflict Solver (by scrangos)
-* New hotkeys: Ctrl+Left Ctrl+Right that find the previous conflict and next conflict (by scrangos)
-* If there are 4+ definitions including the virtual definition, skip the stellaris definition if its there when the conflict is being selected as the default selected definition for the left side (by scrangos)
-* Add show self conflicts mod filter option (self conflicts are ignored by default now)
-* Add option to export to Paradox Launcher Json format (min launcher version 2021.7.rc5)
-* Conflict Solver bracket count (by scrangos)
-* Add mod source indicator
-* Various fixes</description>
-			<pubDate>Thu, 07 Oct 2021 05:40:07 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.18.92/linux-x64.zip" sparkle:version="1.18.92.37821" sparkle:shortVersionString="1.18.92" length="86232289" sparkle:os="linux" type="application/zip" sparkle:signature="LNlVjZk/pfHLf98agC0DPDboRrYtNVNOMGGmmTVwWf13zKBHzvzK4tGop1lv1jhT7vfPAklnUMGfna/s2txYCQ=="/>
+			<pubDate>Wed, 03 Nov 2021 19:21:56 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.19.76/linux-x64.zip" sparkle:version="1.19.76.17913" sparkle:shortVersionString="1.19.76" length="86976943" sparkle:os="linux" type="application/zip" sparkle:signature="AhLKqwv2bW4nmdRfV1U0Q5/tvSwKalwDaDlZR0ev8EfUYZZ3cTS2HLhx2o71QdiTBNiKgwg+O01XqqWOuR9OCQ=="/>
 		</item>
 	</channel>
 </rss>
