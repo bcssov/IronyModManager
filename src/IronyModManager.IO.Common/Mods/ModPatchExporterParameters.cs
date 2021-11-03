@@ -4,7 +4,7 @@
 // Created          : 04-02-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 05-28-2021
+// Last Modified On : 11-01-2021
 // ***********************************************************************
 // <copyright file="ModPatchExporterParameters.cs" company="Mario">
 //     Mario
@@ -85,12 +85,6 @@ namespace IronyModManager.IO.Common.Mods
         /// </summary>
         /// <value>The mod path.</value>
         public string ModPath { get; set; }
-
-        /// <summary>
-        /// Gets or sets the orphan conflicts.
-        /// </summary>
-        /// <value>The orphan conflicts.</value>
-        public IEnumerable<IDefinition> OrphanConflicts { get; set; }
 
         /// <summary>
         /// Gets or sets the overwritten conflicts.

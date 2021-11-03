@@ -135,21 +135,6 @@ namespace IronyModManager.Parser.Tests
             parser.CanParse(args).Should().BeTrue();
         }
 
-        /// <summary>
-        /// Defines the test method CanParse_terraform_should_be_true.
-        /// </summary>
-        [Fact]
-        public void CanParse_terraform_should_be_true()
-        {
-            var args = new CanParseArgs()
-            {
-                File = "common\\terraform\\test.txt",
-                GameType = "Stellaris"
-            };
-            var parser = new WholeTextParser(new CodeParser(new Logger()), null);
-            parser.CanParse(args).Should().BeTrue();
-        }
-
 
         /// <summary>
         /// Defines the test method CanParse_name_list_should_be_true.
@@ -163,7 +148,7 @@ namespace IronyModManager.Parser.Tests
                 GameType = "Stellaris"
             };
             var parser = new WholeTextParser(new CodeParser(new Logger()), null);
-            parser.CanParse(args).Should().BeTrue();            
+            parser.CanParse(args).Should().BeTrue();
         }
 
         /// <summary>

@@ -1,12 +1,12 @@
 ﻿// ***********************************************************************
 // Assembly         : IronyModManager.Parser.Tests
 // Author           : Mario
-// Created          : 06-09-2021
+// Created          : 10-25-2021
 //
 // Last Modified By : Mario
-// Last Modified On : 06-09-2021
+// Last Modified On : 11-01-2021
 // ***********************************************************************
-// <copyright file="StellarisOverWrittenObjectWithPreserveFileNameParserTests.cs" company="Mario">
+// <copyright file="StellarisOverwrittenObjectSingleFileParserTests.cs" company="Mario">
 //     Mario
 // </copyright>
 // <summary></summary>
@@ -29,9 +29,54 @@ namespace IronyModManager.Parser.Tests
     /// <summary>
     /// Class StellarisWholeTextParserTests.
     /// </summary>
-    public class StellarisOverWrittenObjectWithPreserveFileNameParserTests
+    public class StellarisOverwrittenObjectSingleFileParserTests
     {
         #region Methods
+
+        /// <summary>
+        /// Defines the test method CanParse_opinion_modifiers_should_be_true.
+        /// </summary>
+        [Fact]
+        public void CanParse_ethics_should_be_true()
+        {
+            var args = new CanParseArgs()
+            {
+                File = "common\\ethics\\test.txt",
+                GameType = "Stellaris"
+            };
+            var parser = new OverwrittenObjectSingleFileParser(new CodeParser(new Logger()), null);
+            parser.CanParse(args).Should().BeTrue();
+        }
+
+        /// <summary>
+        /// Defines the test method CanParse_starbase_modules_should_be_true.
+        /// </summary>
+        [Fact]
+        public void CanParse_starbase_modules_should_be_true()
+        {
+            var args = new CanParseArgs()
+            {
+                File = "common\\starbase_modules\\test.txt",
+                GameType = "Stellaris"
+            };
+            var parser = new OverwrittenObjectSingleFileParser(new CodeParser(new Logger()), null);
+            parser.CanParse(args).Should().BeTrue();
+        }
+
+        /// <summary>
+        /// Defines the test method CanParse_ship_sizes_should_be_true.
+        /// </summary>
+        [Fact]
+        public void CanParse_ship_sizes_should_be_true()
+        {
+            var args = new CanParseArgs()
+            {
+                File = "common\\ship_sizes\\test.txt",
+                GameType = "Stellaris"
+            };
+            var parser = new OverwrittenObjectSingleFileParser(new CodeParser(new Logger()), null);
+            parser.CanParse(args).Should().BeTrue();
+        }
 
         /// <summary>
         /// Defines the test method CanParse_strategic_resources_should_be_true.
@@ -44,10 +89,9 @@ namespace IronyModManager.Parser.Tests
                 File = "common\\strategic_resources\\t.txt",
                 GameType = "Stellaris"
             };
-            var parser = new OverWrittenObjectWithPreserveFileNameParser(new CodeParser(new Logger()), null);
+            var parser = new OverwrittenObjectSingleFileParser(new CodeParser(new Logger()), null);
             parser.CanParse(args).Should().BeTrue();
         }
-
 
         /// <summary>
         /// Defines the test method Parse_should_yield_results.
@@ -120,7 +164,7 @@ namespace IronyModManager.Parser.Tests
                 Lines = sb.ToString().Split(Environment.NewLine.ToCharArray(), StringSplitOptions.RemoveEmptyEntries),
                 ModName = "fake"
             };
-            var parser = new OverWrittenObjectWithPreserveFileNameParser(new CodeParser(new Logger()), null);
+            var parser = new OverwrittenObjectSingleFileParser(new CodeParser(new Logger()), null);
             var result = parser.Parse(args).ToList();
             result.Should().NotBeNullOrEmpty();
             result.Count.Should().Be(4);
@@ -140,17 +184,17 @@ namespace IronyModManager.Parser.Tests
                     case 1:
                         result[i].Id.Should().Be("asl_mode_options_1");
                         result[i].Code.Should().Be(sb2.ToString().Trim().ReplaceTabs());
-                        result[i].ValueType.Should().Be(ValueType.OverWrittenObjectWithPreserveFileName);
+                        result[i].ValueType.Should().Be(ValueType.OverwrittenObjectSingleFile);
                         break;
 
                     case 2:
                         result[i].Id.Should().Be("asl_mode_options_3");
-                        result[i].ValueType.Should().Be(ValueType.OverWrittenObjectWithPreserveFileName);
+                        result[i].ValueType.Should().Be(ValueType.OverwrittenObjectSingleFile);
                         break;
 
                     case 3:
                         result[i].Id.Should().Be("asl_mode_options_5");
-                        result[i].ValueType.Should().Be(ValueType.OverWrittenObjectWithPreserveFileName);
+                        result[i].ValueType.Should().Be(ValueType.OverwrittenObjectSingleFile);
                         break;
 
                     default:
@@ -160,7 +204,6 @@ namespace IronyModManager.Parser.Tests
                 result[i].Type.Should().Be("common\\fake\\txt");
             }
         }
-
         #endregion Methods
     }
 }

@@ -4,7 +4,7 @@
 // Created          : 08-27-2021
 //
 // Last Modified By : Mario
-// Last Modified On : 08-27-2021
+// Last Modified On : 10-25-2021
 // ***********************************************************************
 // <copyright file="SearchSelect.cs" company="Mario">
 //     Mario
@@ -37,12 +37,12 @@ namespace IronyModManager.Controls.Helper
         /// <summary>
         /// The text search timer
         /// </summary>
-#pragma warning disable CS8632 // The annotation for nullable reference types should only be used in code within a '#nullable' annotations context.
+#nullable enable
         private DispatcherTimer? textSearchTimer;
 
         #endregion Fields
 
-#pragma warning restore CS8632 // The annotation for nullable reference types should only be used in code within a '#nullable' annotations context.
+#nullable disable
 
         #region Methods
 

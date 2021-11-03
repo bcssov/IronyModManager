@@ -40,10 +40,13 @@
   </UserControl.Resources>
   <DockPanel>
     <DockPanel DockPanel.Dock="Top" Margin="0 0 0 5">
-      <dialog:ChildFitter DockPanel.Dock="Right" Width="{Binding ElementName=Location, Path=Bounds.Height}">
+      <dialog:ChildFitter DockPanel.Dock="Right" Width="{Binding ElementName=Location, Path=Bounds.Height}" MinWidth="30" Margin="0,0,10,0">
         <Button Command="{Binding GoUp}">
-
-          <DrawingPresenter Drawing="{StaticResource LevelUp}" Stretch="Fill" />
+          <Image Stretch="Fill">
+            <Image.Source>
+              <DrawingImage Drawing="{StaticResource LevelUp}"></DrawingImage>
+            </Image.Source>
+          </Image>
         </Button>
       </dialog:ChildFitter>
       <controls:TextBox x:Name="Location" Text="{Binding Location}" Margin="0 0 5 0">
@@ -85,7 +88,11 @@
       <ListBox.ItemTemplate>
         <DataTemplate>
           <StackPanel Spacing="4" Orientation="Horizontal" Background="Transparent">
-            <DrawingPresenter Width="16" Height="16" Drawing="{Binding IconKey, Converter={StaticResource Icons}}" />
+            <Image Width="16" Height="16">
+              <Image.Source>
+                <DrawingImage Drawing="{Binding IconKey, Converter={StaticResource Icons}}"></DrawingImage>
+              </Image.Source>
+            </Image>
             <TextBlock Text="{Binding DisplayName}" />
           </StackPanel>
         </DataTemplate>
@@ -134,7 +141,11 @@
                 <ColumnDefinition SharedSizeGroup="Splitter" />
                 <ColumnDefinition SharedSizeGroup="Size" />
               </Grid.ColumnDefinitions>
-              <DrawingPresenter Width="16" Height="16" Drawing="{Binding IconKey, Converter={StaticResource Icons}}" />
+              <Image Width="16" Height="16">
+                <Image.Source>
+                  <DrawingImage Drawing="{Binding IconKey, Converter={StaticResource Icons}}"></DrawingImage>
+                </Image.Source>
+              </Image>
               <TextBlock Grid.Column="2" Text="{Binding DisplayName}" />
               <TextBlock Grid.Column="4" Text="{Binding Modified}" />
               <TextBlock Grid.Column="6" Text="{Binding Type}" />

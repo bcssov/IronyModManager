@@ -31,6 +31,7 @@ namespace IronyModManager.Shared
         {
             public const string Prefix = "FatalError.";
             public const string Message = Prefix + "Message";
+            public const string MessageWithLastError = Prefix + "MessageWithLastError";
             public const string Title = Prefix + "Title";
             public const string Header = Prefix + "Header";
         }
@@ -755,6 +756,21 @@ namespace IronyModManager.Shared
             public const string Clear = Prefix + "Clear";
             public const string UpArrow = Prefix + "UpArrow";
             public const string DownArrow = Prefix + "DownArrow";
+        }
+        public static class FilterCommands
+        {
+            public const string Prefix = "FilterCommands.";
+            public const string Achievements = Prefix + "Achievements";
+            public const string Source = Prefix + "Source";
+            public const string Version = Prefix + "Version";
+            public const string Selected = Prefix + "Selected";
+            public const string Yes = Prefix + "Yes";
+            public const string No = Prefix + "No";
+            public const string True = Prefix + "True";
+            public const string False = Prefix + "False";
+            public const string Steam = Prefix + "Steam";
+            public const string Paradox = Prefix + "Paradox";
+            public const string Local = Prefix + "Local";
         }
     }
 }

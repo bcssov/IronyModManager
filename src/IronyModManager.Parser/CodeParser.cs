@@ -4,7 +4,7 @@
 // Created          : 02-22-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 09-02-2021
+// Last Modified On : 10-31-2021
 // ***********************************************************************
 // <copyright file="CodeParser.cs" company="Mario">
 //     Mario
@@ -297,7 +297,7 @@ namespace IronyModManager.Parser
                 elOperator = elKey.Operator[0];
                 if (elKey.Operator.Length > 1)
                 {
-                    // Move back index in case we're seing greater or equal to kind of operators
+                    // Move back index in case we're seeing greater or equal to kind of operators
                     index -= elKey.Operator.Length - 1;
                 }
             }

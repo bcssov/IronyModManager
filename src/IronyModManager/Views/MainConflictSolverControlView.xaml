@@ -14,7 +14,12 @@
     <Panel IsVisible="{Binding EditingIgnoreConflictsRules}">
       <ContentControl Content="{Binding IgnoreConflictsRules}"></ContentControl>
     </Panel>
-    <Grid RowDefinitions="4*,9*,1.1*" ColumnDefinitions="3*,7*" IsVisible="{Binding !EditingIgnoreConflictsRules}">
+    <Grid ColumnDefinitions="3*,7*" IsVisible="{Binding !EditingIgnoreConflictsRules}">
+      <Grid.RowDefinitions>
+        <RowDefinition Height="170" />
+        <RowDefinition Height="*" />
+        <RowDefinition Height="50" />
+      </Grid.RowDefinitions>
       <Panel Grid.Column="0" Grid.Row="0" Grid.RowSpan="3">
         <StackPanel Orientation="Vertical" Grid.Column="0" Grid.Row="0" Margin="5,0,0,0">
           <TextBlock Text="{Binding ConflictedObjects}" HorizontalAlignment="Center" Margin="10"></TextBlock>
@@ -49,7 +54,7 @@
         </StackPanel>
       </Panel>
       <Panel Grid.Row="0" Grid.Column="1" IsVisible="{Binding IsConflictSolverAvailable}">
-        <Grid ColumnDefinitions="5*,5*" RowDefinitions="3*,15*">
+        <Grid ColumnDefinitions="5*,5*" RowDefinitions="4*,15*">
           <TextBlock Text="{Binding LeftSide}" Grid.Column="0" Grid.Row="0"
                      HorizontalAlignment="Center" Margin="10"></TextBlock>
           <TextBlock Text="{Binding RightSide}" Grid.Column="1" Grid.Row="0"

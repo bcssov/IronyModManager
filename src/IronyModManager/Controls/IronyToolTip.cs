@@ -4,7 +4,7 @@
 // Created          : 06-18-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 08-23-2021
+// Last Modified On : 10-27-2021
 // ***********************************************************************
 // <copyright file="IronyToolTip.cs" company="Avalonia">
 //     Avalonia
@@ -41,7 +41,7 @@ namespace IronyModManager.Controls
     [PseudoClasses(":open")]
     public class IronyToolTip : ContentControl, IStyleable, IPopupHostProvider
     {
-#pragma warning disable CS8632 // The annotation for nullable reference types should only be used in code within a '#nullable' annotations context.
+#nullable enable
 
         #region Fields
 
@@ -105,7 +105,7 @@ namespace IronyModManager.Controls
 
         #endregion Fields
 
-#pragma warning restore CS8632 // The annotation for nullable reference types should only be used in code within a '#nullable' annotations context.
+#nullable disable
 
         #region Constructors
 
@@ -128,12 +128,12 @@ namespace IronyModManager.Controls
         /// <summary>
         /// Raised when the popup host changes.
         /// </summary>
-#pragma warning disable CS8632 // The annotation for nullable reference types should only be used in code within a '#nullable' annotations context.
+#nullable enable
 
         #region Events
 
         event Action<IPopupHost?>? IPopupHostProvider.PopupHostChanged
-#pragma warning restore CS8632 // The annotation for nullable reference types should only be used in code within a '#nullable' annotations context.
+#nullable disable
         {
             add => popupHostChangedHandler += value;
             remove => popupHostChangedHandler -= value;
@@ -145,12 +145,12 @@ namespace IronyModManager.Controls
         /// The popup host.
         /// </summary>
         /// <value>The popup host.</value>
-#pragma warning disable CS8632 // The annotation for nullable reference types should only be used in code within a '#nullable' annotations context.
+#nullable enable
 
         #region Properties
 
         IPopupHost? IPopupHostProvider.PopupHost => popupHost;
-#pragma warning restore CS8632 // The annotation for nullable reference types should only be used in code within a '#nullable' annotations context.
+#nullable disable
 
         /// <summary>
         /// Gets the style key.
@@ -217,10 +217,10 @@ namespace IronyModManager.Controls
         /// </summary>
         /// <param name="element">The element.</param>
         /// <returns>System.Object.</returns>
-#pragma warning disable CS8632 // The annotation for nullable reference types should only be used in code within a '#nullable' annotations context.
+#nullable enable
 
         public static object? GetTip(Control element)
-#pragma warning restore CS8632 // The annotation for nullable reference types should only be used in code within a '#nullable' annotations context.
+#nullable disable
         {
             return element.GetValue(TipProperty);
         }
@@ -290,10 +290,10 @@ namespace IronyModManager.Controls
         /// </summary>
         /// <param name="element">The element.</param>
         /// <param name="value">The value.</param>
-#pragma warning disable CS8632 // The annotation for nullable reference types should only be used in code within a '#nullable' annotations context.
+#nullable enable
 
         public static void SetTip(Control element, object? value)
-#pragma warning restore CS8632 // The annotation for nullable reference types should only be used in code within a '#nullable' annotations context.
+#nullable disable
         {
             element.SetValue(TipProperty, value);
         }
@@ -325,9 +325,9 @@ namespace IronyModManager.Controls
         {
             var control = (Control)e.Sender;
             var newValue = (bool)e.NewValue!;
-#pragma warning disable CS8632 // The annotation for nullable reference types should only be used in code within a '#nullable' annotations context.
+#nullable enable
             IronyToolTip? toolTip;
-#pragma warning restore CS8632 // The annotation for nullable reference types should only be used in code within a '#nullable' annotations context.
+#nullable disable
 
             if (newValue)
             {
@@ -538,7 +538,10 @@ namespace IronyModManager.Controls
                     else
                     {
                         var tip = control.GetValue(ToolTipProperty);
-                        tip.Content = e.NewValue;
+                        if (tip != null)
+                        {
+                            tip.Content = e.NewValue;
+                        }                        
                     }
                 }
             }

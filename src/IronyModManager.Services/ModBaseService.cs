@@ -4,7 +4,7 @@
 // Created          : 04-07-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 08-29-2021
+// Last Modified On : 11-03-2021
 // ***********************************************************************
 // <copyright file="ModBaseService.cs" company="Mario">
 //     Mario
@@ -24,8 +24,8 @@ using IronyModManager.IO.Common.Mods;
 using IronyModManager.IO.Common.Readers;
 using IronyModManager.Models.Common;
 using IronyModManager.Parser.Common.Mod;
-using IronyModManager.Parser.Common.Parsers;
 using IronyModManager.Services.Common;
+using IronyModManager.Services.Resolver;
 using IronyModManager.Shared;
 using IronyModManager.Shared.Cache;
 using IronyModManager.Shared.Models;
@@ -62,6 +62,11 @@ namespace IronyModManager.Services
         /// </summary>
         protected const string RegularModsCacheKey = "RegularMods";
 
+        /// <summary>
+        /// The path resolver
+        /// </summary>
+        protected readonly IGameRootPathResolver pathResolver;
+
         #endregion Fields
 
         #region Constructors
@@ -87,6 +92,7 @@ namespace IronyModManager.Services
             Reader = reader;
             ModParser = modParser;
             ModWriter = modWriter;
+            pathResolver = new GameRootPathResolver();
         }
 
         #endregion Constructors
@@ -223,8 +229,9 @@ namespace IronyModManager.Services
         /// Evals the definition priority internal.
         /// </summary>
         /// <param name="definitions">The definitions.</param>
+        /// <param name="forceFios">if set to <c>true</c> [force fios].</param>
         /// <returns>IPriorityDefinitionResult.</returns>
-        protected virtual IPriorityDefinitionResult EvalDefinitionPriorityInternal(IEnumerable<IDefinition> definitions)
+        protected virtual IPriorityDefinitionResult EvalDefinitionPriorityInternal(IEnumerable<IDefinition> definitions, bool forceFios = false)
         {
             // We're expecting properly ordered definitions based on load order.
             // In case of game being included this should be done by the calling method as well,
@@ -301,7 +308,7 @@ namespace IronyModManager.Services
                         if (provider != null)
                         {
                             bool overrideSkipped = false;
-                            isFios = provider.DefinitionUsesFIOSRules(validDefinitions.First());
+                            isFios = forceFios || provider.DefinitionUsesFIOSRules(validDefinitions.First());
                             foreach (var item in validDefinitions)
                             {
                                 var fileName = isFios ? item.AdditionalFileNames.OrderBy(p => Path.GetFileNameWithoutExtension(p), StringComparer.Ordinal).First() : item.AdditionalFileNames.OrderBy(p => Path.GetFileNameWithoutExtension(p), StringComparer.Ordinal).Last();
@@ -745,7 +752,7 @@ namespace IronyModManager.Services
         {
             static void appendLine(StringBuilder sb, IEnumerable<string> lines)
             {
-                if (lines?.Count() > 0)
+                if (lines != null && lines.Any())
                 {
                     sb.AppendLine(string.Join(Environment.NewLine, lines));
                 }
@@ -784,7 +791,7 @@ namespace IronyModManager.Services
                 }
             }
 
-            if (definitions?.Count() > 0)
+            if (definitions != null && definitions.Any())
             {
                 var otherDefinitions = definitions.Where(p => IsValidDefinitionType(p));
                 var variableDefinitions = definitions.Where(p => !IsValidDefinitionType(p));
@@ -862,12 +869,23 @@ namespace IronyModManager.Services
         /// <summary>
         /// Populates the mod path.
         /// </summary>
+        /// <param name="definition">The definition.</param>
+        /// <param name="collectionMods">The collection mods.</param>
+        /// <returns>IEnumerable&lt;IDefinition&gt;.</returns>
+        protected virtual IEnumerable<IDefinition> PopulateModPath(IDefinition definition, IEnumerable<IMod> collectionMods)
+        {
+            return PopulateModPath(new List<IDefinition>() { definition }, collectionMods);
+        }
+
+        /// <summary>
+        /// Populates the mod path.
+        /// </summary>
         /// <param name="definitions">The definitions.</param>
         /// <param name="collectionMods">The collection mods.</param>
         /// <returns>IEnumerable&lt;IDefinition&gt;.</returns>
         protected virtual IEnumerable<IDefinition> PopulateModPath(IEnumerable<IDefinition> definitions, IEnumerable<IMod> collectionMods)
         {
-            if (definitions?.Count() > 0)
+            if (definitions != null && definitions.Any())
             {
                 foreach (var item in definitions)
                 {
@@ -877,7 +895,7 @@ namespace IronyModManager.Services
                     }
                     else if (item.IsFromGame)
                     {
-                        item.ModPath = Path.GetDirectoryName(GameService.GetSelected().ExecutableLocation);
+                        item.ModPath = pathResolver.GetPath(GameService.GetSelected());
                     }
                     else
                     {

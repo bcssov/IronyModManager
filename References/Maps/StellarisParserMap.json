@@ -132,7 +132,7 @@
         "PreferredParser": "DefaultParser"
     }, {
         "DirectoryPath": "common\\ethics",
-        "PreferredParser": "DefaultParser"
+        "PreferredParser": "StellarisOverwrittenObjectSingleFileParser"
     }, {
         "DirectoryPath": "common\\event_chains",
         "PreferredParser": "DefaultParser"
@@ -219,7 +219,7 @@
         "PreferredParser": "GenericWholeTextParser"
     }, {
         "DirectoryPath": "common\\opinion_modifiers",
-        "PreferredParser": "DefaultParser"
+        "PreferredParser": "StellarisOverwrittenParser"
     }, {
         "DirectoryPath": "common\\personalities",
         "PreferredParser": "DefaultParser"
@@ -252,7 +252,7 @@
         "PreferredParser": "StellarisWholeTextParser"
     }, {
         "DirectoryPath": "common\\relics",
-        "PreferredParser": "DefaultParser"
+        "PreferredParser": "StellarisOverwrittenParser"
     }, {
         "DirectoryPath": "common\\resolutions",
         "PreferredParser": "DefaultParser"
@@ -276,7 +276,7 @@
         "PreferredParser": "StellarisScriptedVariablesParser"
     }, {
         "DirectoryPath": "common\\section_templates",
-        "PreferredParser": "GenericKeyParser"
+        "PreferredParser": "StellarisOverwrittenParser"
     }, {
         "DirectoryPath": "common\\sector_focuses",
         "PreferredParser": "DefaultParser"
@@ -288,7 +288,7 @@
         "PreferredParser": "GenericKeyParser"
     }, {
         "DirectoryPath": "common\\ship_sizes",
-        "PreferredParser": "DefaultParser"
+        "PreferredParser": "StellarisOverwrittenObjectSingleFileParser"
     }, {
         "DirectoryPath": "common\\solar_system_initializers",
         "PreferredParser": "StellarisSolarSystemInitializersParser"
@@ -315,7 +315,7 @@
         "PreferredParser": "DefaultParser"
     }, {
         "DirectoryPath": "common\\starbase_modules",
-        "PreferredParser": "DefaultParser"
+        "PreferredParser": "StellarisOverwrittenObjectSingleFileParser"
     }, {
         "DirectoryPath": "common\\starbase_types",
         "PreferredParser": "DefaultParser"
@@ -330,7 +330,7 @@
         "PreferredParser": "DefaultParser"
     }, {
         "DirectoryPath": "common\\strategic_resources",
-        "PreferredParser": "StellarisOverWrittenObjectWithPreserveFileNameParser"
+        "PreferredParser": "StellarisOverwrittenObjectSingleFileParser"
     }, {
         "DirectoryPath": "common\\subjects",
         "PreferredParser": "DefaultParser"
@@ -348,7 +348,7 @@
         "PreferredParser": "DefaultParser"
     }, {
         "DirectoryPath": "common\\terraform",
-        "PreferredParser": "StellarisWholeTextParser"
+        "PreferredParser": "StellarisOverwrittenParser"
     }, {
         "DirectoryPath": "common\\trade_conversions",
         "PreferredParser": "DefaultParser"

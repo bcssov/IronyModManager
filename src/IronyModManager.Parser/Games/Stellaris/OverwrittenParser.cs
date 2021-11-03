@@ -4,7 +4,7 @@
 // Created          : 05-25-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-09-2021
+// Last Modified On : 10-31-2021
 // ***********************************************************************
 // <copyright file="OverwrittenParser.cs" company="Mario">
 //     Mario
@@ -44,13 +44,20 @@ namespace IronyModManager.Parser.Games.Stellaris
             Common.Constants.Stellaris.PrescriptedCountries, Common.Constants.Stellaris.SpeciesArchetypes,
             Common.Constants.Stellaris.Buildings, Common.Constants.Stellaris.DiplomaticActions,
             Common.Constants.Stellaris.Technology, Common.Constants.Stellaris.GovernmentAuthorities,
-            Common.Constants.Stellaris.CountryTypes
+            Common.Constants.Stellaris.CountryTypes, Common.Constants.Stellaris.Terraform,
+            Common.Constants.Stellaris.Relics, Common.Constants.Stellaris.OpinionModifiers,
+            Common.Constants.Stellaris.SectionTemplates
         };
 
         /// <summary>
         /// The key type
         /// </summary>
         private bool keyType = false;
+
+        /// <summary>
+        /// The terraform type
+        /// </summary>
+        private bool terraformType = false;
 
         #endregion Fields
 
@@ -103,9 +110,13 @@ namespace IronyModManager.Parser.Games.Stellaris
         public override IEnumerable<IDefinition> Parse(ParserArgs args)
         {
             keyType = false;
-            if (args.File.StartsWith(Common.Constants.Stellaris.PlanetClasses))
+            if (args.File.StartsWith(Common.Constants.Stellaris.PlanetClasses) || args.File.StartsWith(Common.Constants.Stellaris.SectionTemplates))
             {
                 keyType = true;
+            }
+            else if (args.File.StartsWith(Common.Constants.Stellaris.Terraform))
+            {
+                terraformType = true;
             }
             var results = ParseRoot(args);
             if (results?.Count() > 0)
@@ -130,6 +141,49 @@ namespace IronyModManager.Parser.Games.Stellaris
         {
             var directoryName = System.IO.Path.GetDirectoryName(args.File);
             return directoryNames.Any(s => directoryName.Equals(s, StringComparison.OrdinalIgnoreCase));
+        }
+
+        /// <summary>
+        /// Evals the definition identifier.
+        /// </summary>
+        /// <param name="values">The values.</param>
+        /// <param name="defaultId">The default identifier.</param>
+        /// <returns>System.String.</returns>
+        protected override string EvalDefinitionId(IEnumerable<IScriptElement> values, string defaultId)
+        {
+            if (terraformType)
+            {
+                if (values?.Count() > 0)
+                {
+                    string from = string.Empty;
+                    string to = string.Empty;
+                    foreach (var item in values)
+                    {
+                        if (item.Key.Equals("from", StringComparison.OrdinalIgnoreCase))
+                        {
+                            from = item.Value;
+                        }
+                        else if (item.Key.Equals("to", StringComparison.OrdinalIgnoreCase))
+                        {
+                            to = item.Value;
+                        }
+                    }
+                    if (!string.IsNullOrWhiteSpace(from) && !string.IsNullOrWhiteSpace(to))
+                    {
+                        return $"{from}-{to}";
+                    }
+                    else if (!string.IsNullOrWhiteSpace(from))
+                    {
+                        return from;
+                    }
+                    else if (!string.IsNullOrWhiteSpace(to))
+                    {
+                        return to;
+                    }
+                }
+                return defaultId;
+            }
+            return base.EvalDefinitionId(values, defaultId);
         }
 
         /// <summary>

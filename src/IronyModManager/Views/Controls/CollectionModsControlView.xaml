@@ -121,21 +121,33 @@
                     </Grid.ColumnDefinitions>
                     <Grid Grid.Column="0" Grid.ColumnSpan="2" ColumnDefinitions="*,38">
                       <CheckBox IsChecked="{Binding IsSelected}" Grid.Column="0"></CheckBox>
-                      <Panel Grid.Column="1" HorizontalAlignment="Left">                  
+                      <Panel Grid.Column="1" HorizontalAlignment="Left">
                         <controls:IronyToolTip Background="Transparent" BorderThickness="0,0,0,0"  IsVisible="{Binding Source, Converter={StaticResource LocalModConverter}}">
-                          <DrawingPresenter Width="14" Height="14" Drawing="{DynamicResource Icons.LocalMod}"
-                                            controls:IronyToolTip.Tip="{Binding Path=DataContext.LocalModTooltip, ElementName=collectionMods}"
-                                            controls:IronyToolTip.ShowDelay="0" controls:IronyToolTip.ReactToParent="true" />
+                          <Image Width="14" Height="14"
+                                 controls:IronyToolTip.Tip="{Binding Path=DataContext.LocalModTooltip, ElementName=collectionMods}"
+                                 controls:IronyToolTip.ShowDelay="0" controls:IronyToolTip.ReactToParent="true">
+                            <Image.Source>
+                              <DrawingImage Drawing="{DynamicResource Icons.LocalMod}"></DrawingImage>
+                            </Image.Source>
+                          </Image>
                         </controls:IronyToolTip>
                         <controls:IronyToolTip Background="Transparent" BorderThickness="0,0,0,0"  IsVisible="{Binding Source, Converter={StaticResource ParadoxModConverter}}">
-                          <DrawingPresenter Width="14" Height="14" Drawing="{DynamicResource Icons.ParadoxMod}"
-                                            controls:IronyToolTip.Tip="{Binding Path=DataContext.ParadoxModTooltip, ElementName=collectionMods}"
-                                            controls:IronyToolTip.ShowDelay="0" controls:IronyToolTip.ReactToParent="true" />
+                          <Image Width="14" Height="14"
+                                 controls:IronyToolTip.Tip="{Binding Path=DataContext.ParadoxModTooltip, ElementName=collectionMods}"
+                                 controls:IronyToolTip.ShowDelay="0" controls:IronyToolTip.ReactToParent="true">
+                            <Image.Source>
+                              <DrawingImage Drawing="{DynamicResource Icons.ParadoxMod}"></DrawingImage>
+                            </Image.Source>
+                          </Image>
                         </controls:IronyToolTip>
                         <controls:IronyToolTip Background="Transparent" BorderThickness="0,0,0,0"  IsVisible="{Binding Source, Converter={StaticResource SteamModConverter}}">
-                          <DrawingPresenter Width="14" Height="14" Drawing="{DynamicResource Icons.SteamMod}"
-                                            controls:IronyToolTip.Tip="{Binding Path=DataContext.SteamModTooltip, ElementName=collectionMods}"
-                                            controls:IronyToolTip.ShowDelay="0" controls:IronyToolTip.ReactToParent="true" />
+                          <Image Width="14" Height="14"
+                                 controls:IronyToolTip.Tip="{Binding Path=DataContext.SteamModTooltip, ElementName=collectionMods}"
+                                 controls:IronyToolTip.ShowDelay="0" controls:IronyToolTip.ReactToParent="true">
+                            <Image.Source>
+                              <DrawingImage Drawing="{DynamicResource Icons.SteamMod}"></DrawingImage>
+                            </Image.Source>
+                          </Image>
                         </controls:IronyToolTip>
                       </Panel>
                     </Grid>
@@ -147,14 +159,22 @@
                       <Panel Grid.Column="1">
                         <!-- Because Avalonia sucks in this regard, that's why -->
                         <controls:IronyToolTip Background="Transparent" BorderThickness="0,0,0,0" IsVisible="{Binding AchievementStatus, Converter={StaticResource AchievementStatusCompatibleConverter}}">
-                          <DrawingPresenter VerticalAlignment="Center" Width="14" Height="14" Drawing="{DynamicResource Icons.Achievements}"
-                                            controls:IronyToolTip.Tip="{Binding Path=DataContext.AchievementCompatible, ElementName=collectionMods}"
-                                            controls:IronyToolTip.ShowDelay="0" controls:IronyToolTip.ReactToParent="true" />
+                          <Image Width="14" Height="14"
+                                 controls:IronyToolTip.Tip="{Binding Path=DataContext.AchievementCompatible, ElementName=collectionMods}"
+                                 controls:IronyToolTip.ShowDelay="0" controls:IronyToolTip.ReactToParent="true">
+                            <Image.Source>
+                              <DrawingImage Drawing="{DynamicResource Icons.Achievements}"></DrawingImage>
+                            </Image.Source>
+                          </Image>
                         </controls:IronyToolTip>
                         <controls:IronyToolTip Background="Transparent" BorderThickness="0,0,0,0" IsVisible="{Binding AchievementStatus, Converter={StaticResource AchievementStatusNotCompatibleConverter}}">
-                          <DrawingPresenter VerticalAlignment="Center" Width="14" Height="14" Drawing="{DynamicResource Icons.NoAchievements}"
-                                            controls:IronyToolTip.Tip="{Binding Path=DataContext.NotAchievementCompatible, ElementName=collectionMods}"
-                                            controls:IronyToolTip.ShowDelay="0" controls:IronyToolTip.ReactToParent="true" />
+                          <Image Width="14" Height="14"
+                                 controls:IronyToolTip.Tip="{Binding Path=DataContext.NotAchievementCompatible, ElementName=collectionMods}"
+                                 controls:IronyToolTip.ShowDelay="0" controls:IronyToolTip.ReactToParent="true">
+                            <Image.Source>
+                              <DrawingImage Drawing="{DynamicResource Icons.NoAchievements}"></DrawingImage>
+                            </Image.Source>
+                          </Image>
                         </controls:IronyToolTip>
                       </Panel>
                     </Grid>

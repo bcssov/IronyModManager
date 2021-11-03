@@ -4,7 +4,7 @@
 // Created          : 03-28-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 05-31-2021
+// Last Modified On : 10-31-2021
 // ***********************************************************************
 // <copyright file="WholeTextParser.cs" company="Mario">
 //     Mario
@@ -120,12 +120,19 @@ namespace IronyModManager.Parser.Generic
             var code = codeParser.ParseScriptWithoutValidation(args.Lines);
             var def = GetDefinitionInstance();
             MapDefinitionFromArgs(ConstructArgs(args, def));
-            var sb = new StringBuilder();
-            foreach (var result in code.Values)
+            if (!fileNameTag)
             {
-                sb.AppendLine(FormatCode(result));
+                var sb = new StringBuilder();
+                foreach (var result in code.Values)
+                {
+                    sb.AppendLine(FormatCode(result));
+                }
+                def.OriginalCode = def.Code = sb.ToString();
             }
-            def.OriginalCode = def.Code = sb.ToString();
+            else
+            {
+                def.OriginalCode = def.Code = string.Join(Environment.NewLine, args.Lines);
+            }
             def.Id = Path.GetFileName(args.File).ToLowerInvariant();
             if (fileNameTag)
             {

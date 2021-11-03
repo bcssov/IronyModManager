@@ -4,7 +4,7 @@
 // Created          : 05-27-2021
 //
 // Last Modified By : Mario
-// Last Modified On : 09-05-2021
+// Last Modified On : 11-03-2021
 // ***********************************************************************
 // <copyright file="GameIndexService.cs" company="Mario">
 //     Mario
@@ -55,7 +55,7 @@ namespace IronyModManager.Services
         /// <summary>
         /// The current cache version
         /// </summary>
-        private readonly int CurrentCacheVersion = 2;
+        private readonly int CurrentCacheVersion = 4;
 
         /// <summary>
         /// The game indexer
@@ -120,7 +120,7 @@ namespace IronyModManager.Services
                     await gameIndexer.ClearDefinitionAsync(GetStoragePath(), game);
                     await gameIndexer.WriteVersionAsync(GetStoragePath(), game, versions, CurrentCacheVersion);
                 }
-                var gamePath = Path.GetDirectoryName(game.ExecutableLocation);
+                var gamePath = pathResolver.GetPath(game);
                 var files = Reader.GetFiles(gamePath);
                 if (files.Any())
                 {

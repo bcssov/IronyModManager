@@ -4,7 +4,7 @@
 // Created          : 01-13-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 01-29-2021
+// Last Modified On : 10-29-2021
 // ***********************************************************************
 // <copyright file="Logger.cs" company="Mario">
 //     Mario
@@ -13,6 +13,7 @@
 // ***********************************************************************
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using IronyModManager.Shared;
 using NLog;
 
@@ -56,6 +57,40 @@ namespace IronyModManager.Log
                     log.Error(ex);
                 }
             }
+        }
+
+        /// <summary>
+        /// Fatals the specified ex.
+        /// </summary>
+        /// <param name="ex">The ex.</param>
+        /// <param name="message">The message.</param>
+        public void Fatal(Exception ex, string message = Shared.Constants.EmptyParam)
+        {
+            if (ex != null)
+            {
+                if (!string.IsNullOrWhiteSpace(message))
+                {
+                    log.Fatal(ex, message);
+                }
+                else
+                {
+                    log.Fatal(ex);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Gets the last fatal exception message.
+        /// </summary>
+        /// <returns>System.String.</returns>
+        public string GetLastFatalExceptionMessage()
+        {
+            var fileTarget = log.Factory.Configuration.AllTargets.FirstOrDefault(p => p is IronyFileTarget);
+            if (fileTarget != null)
+            {
+                return ((IronyFileTarget)fileTarget).GetLastFatalException();
+            }
+            return string.Empty;
         }
 
         /// <summary>

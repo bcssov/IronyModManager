@@ -4,7 +4,7 @@
 // Created          : 02-29-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 09-06-2021
+// Last Modified On : 10-26-2021
 // ***********************************************************************
 // <copyright file="InstalledModsControlViewModel.cs" company="Mario">
 //     Mario
@@ -632,8 +632,7 @@ namespace IronyModManager.ViewModels.Controls
                     await RemoveInvalidModsPromptAsync(invalidMods).ConfigureAwait(false);
                 }
                 var searchString = FilterMods.Text ?? string.Empty;
-                FilteredMods = Mods.Where(p => p.Name.Contains(searchString, StringComparison.InvariantCultureIgnoreCase) ||
-                    (p.RemoteId.HasValue && p.RemoteId.GetValueOrDefault().ToString().Contains(searchString))).ToObservableCollection();
+                FilteredMods = modService.FilterMods(Mods, searchString).ToObservableCollection();
                 AllModsEnabled = FilteredMods.Where(p => p.IsValid).Any() && FilteredMods.Where(p => p.IsValid).All(p => p.IsSelected);
 
                 if (Disposables != null)
@@ -853,8 +852,7 @@ namespace IronyModManager.ViewModels.Controls
             this.WhenAnyValue(s => s.FilterMods.Text).Subscribe(s =>
             {
                 var searchString = FilterMods.Text ?? string.Empty;
-                FilteredMods = Mods?.Where(p => p.Name.Contains(searchString, StringComparison.InvariantCultureIgnoreCase) ||
-                    (p.RemoteId.HasValue && p.RemoteId.GetValueOrDefault().ToString().Contains(searchString))).ToObservableCollection();
+                FilteredMods = modService.FilterMods(Mods, searchString);
                 AllModsEnabled = FilteredMods != null && FilteredMods.Where(p => p.IsValid).Any() && FilteredMods.Where(p => p.IsValid).All(p => p.IsSelected);
                 ApplyDefaultSort();
                 SaveState();

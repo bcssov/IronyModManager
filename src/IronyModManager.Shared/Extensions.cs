@@ -4,7 +4,7 @@
 // Created          : 02-16-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 08-30-2021
+// Last Modified On : 10-26-2021
 // ***********************************************************************
 // <copyright file="Extensions.cs" company="Mario">
 //     Mario
@@ -39,9 +39,19 @@ namespace IronyModManager.Shared
         private static readonly IMetroHash128 hash = MetroHash128Factory.Instance.Create();
 
         /// <summary>
+        /// The invalid file name characters
+        /// </summary>
+        private static readonly char[] invalidFileNameCharactersExtension = new char[] { ':' };
+
+        /// <summary>
         /// The tab space
         /// </summary>
         private static readonly string tabSpace = new(' ', 4);
+
+        /// <summary>
+        /// The invalid file name characters
+        /// </summary>
+        private static IEnumerable<char> invalidFileNameCharacters = null;
 
         #endregion Fields
 
@@ -68,6 +78,19 @@ namespace IronyModManager.Shared
             using var bufferedStream = new BufferedStream(stream, 1024 * 32);
             var checksum = hash.ComputeHash(bufferedStream);
             return checksum.AsHexString();
+        }
+
+        /// <summary>
+        /// Conditionals the filter.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="col">The col.</param>
+        /// <param name="condition">The condition.</param>
+        /// <param name="filter">The filter.</param>
+        /// <returns>System.Collections.Generic.IEnumerable&lt;T&gt;.</returns>
+        public static IEnumerable<T> ConditionalFilter<T>(this IEnumerable<T> col, bool condition, Func<IEnumerable<T>, IEnumerable<T>> filter)
+        {
+            return condition ? filter(col) : col;
         }
 
         /// <summary>
@@ -101,7 +124,7 @@ namespace IronyModManager.Shared
             {
                 return value;
             }
-            var fileName = Path.GetInvalidFileNameChars().Aggregate(value, (current, character) => current.Replace(character.ToString(), string.Empty));
+            var fileName = GetInvalidFileNameChars().Aggregate(value, (current, character) => current.Replace(character.ToString(), string.Empty));
             fileName = emptyStringCharacters.Aggregate(fileName, (a, b) => a.Replace(b, "_"));
             return fileName;
         }
@@ -171,6 +194,56 @@ namespace IronyModManager.Shared
             return value.Replace('\\', Path.DirectorySeparatorChar).Replace('/', Path.DirectorySeparatorChar);
         }
 
+#nullable enable
+
+        /// <summary>
+        /// Converts to version.
+        /// </summary>
+        /// <param name="value">The value.</param>
+        /// <returns>System.Version?.</returns>
+        public static Version? ToVersion(this string value)
+        {
+            var sb = new StringBuilder();
+            var count = 0;
+            foreach (var item in value.Split("."))
+            {
+                var parsed = item.Replace("*", string.Empty);
+                if (string.IsNullOrWhiteSpace(parsed))
+                {
+                    parsed = "*";
+                }
+                if (int.TryParse(parsed, out var part))
+                {
+                    sb.Append($"{part}.");
+                }
+                else if (parsed.Equals("*"))
+                {
+                    sb.Append($"{(count > 1 ? int.MaxValue : 0)}.");
+                }
+                count++;
+            }
+            if (Version.TryParse(sb.ToString().Trim().Trim('.'), out var parsedVersion))
+            {
+                return parsedVersion;
+            }
+            return null;
+        }
+
+        /// <summary>
+        /// Gets the invalid file name chars.
+        /// </summary>
+        /// <returns>System.Collections.Generic.IEnumerable&lt;char&gt;.</returns>
+        private static IEnumerable<char> GetInvalidFileNameChars()
+        {
+            if (invalidFileNameCharacters == null)
+            {
+                invalidFileNameCharacters = Path.GetInvalidFileNameChars().Concat(invalidFileNameCharactersExtension).Distinct().ToList();
+            }
+            return invalidFileNameCharacters;
+        }
+
         #endregion Methods
+
+#nullable disable
     }
 }

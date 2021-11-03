@@ -4,7 +4,7 @@
 // Created          : 02-16-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 09-02-2021
+// Last Modified On : 10-26-2021
 // ***********************************************************************
 // <copyright file="DIPackage.cs" company="Mario">
 //     Mario
@@ -17,6 +17,8 @@ using IronyModManager.DI.Extensions;
 using IronyModManager.Parser.Common;
 using IronyModManager.Parser.Common.DLC;
 using IronyModManager.Parser.Common.Mod;
+using IronyModManager.Parser.Common.Mod.Search;
+using IronyModManager.Parser.Common.Mod.Search.Converter;
 using IronyModManager.Parser.Common.Parsers;
 using IronyModManager.Parser.Common.Parsers.Models;
 using IronyModManager.Parser.Default;
@@ -25,6 +27,8 @@ using IronyModManager.Parser.DLC;
 using IronyModManager.Parser.Games.Stellaris;
 using IronyModManager.Parser.Generic;
 using IronyModManager.Parser.Mod;
+using IronyModManager.Parser.Mod.Search;
+using IronyModManager.Parser.Mod.Search.Converter;
 using IronyModManager.Parser.Models;
 using IronyModManager.Shared;
 using IronyModManager.Shared.Models;
@@ -64,7 +68,7 @@ namespace IronyModManager.Parser
             container.Collection.Register(typeof(IGameParser), new List<Type>
             {
                 typeof(FlagsParser), typeof(SolarSystemInitializersParser), typeof(Games.Stellaris.WholeTextParser),
-                typeof(OverwrittenParser), typeof(ScriptedVariablesParser), typeof(OverWrittenObjectWithPreserveFileNameParser)
+                typeof(OverwrittenParser), typeof(ScriptedVariablesParser), typeof(OverwrittenObjectSingleFileParser)
             });
             container.Register<IParserManager, ParserManager>();
             container.Register<IModObject, ModObject>();
@@ -79,6 +83,13 @@ namespace IronyModManager.Parser
             container.Register<IDLCParser, DLCParser>();
             container.Register<IDLCObject, DLCObject>();
             container.Register<IBracketValidateResult, BracketValidateResult>();
+            container.Register<ISearchParserResult, SearchParserResult>();
+            container.Register<ILocalizationRegistry, LocalizationRegistry>(Lifestyle.Singleton);
+            container.Collection.Register(typeof(ITypeConverter<>), new List<Type>
+            {
+                typeof(BoolConverter), typeof(VersionConverter), typeof(SourceTypeConverter)
+            });
+            container.Register<IParser, Mod.Search.Parser>();
         }
 
         #endregion Methods

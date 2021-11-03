@@ -17,6 +17,7 @@
     },
     "FatalError": {
         "Message": "Došlo je do greške. Aplikacija će se automatski zatvoriti.",
+        "MessageWithLastError": "Unhandled error ocurred. Koristite ovu informaciju da biste podnijeli izvješće o greški:{NewLine}{NewLine}{Message}",
         "Title": "Greška",
         "Header": "Fatalna pogreška"
     },
@@ -545,7 +546,7 @@
     "ModSource": {
         "Paradox": "Paradox Interactive Mod",
         "Steam": "Steam Mod",
-        "Local": "Localni Mod"
+        "Local": "Lokalni Mod"
     },
     "Sorting": {
         "Sort_A_Z": "↑",
@@ -555,5 +556,18 @@
         "Clear": "X",
         "UpArrow": "▲",
         "DownArrow": "▼"
+    },
+    "FilterCommands": {
+        "Achievements": "postignuća",
+        "Source": "izvor",
+        "Version": "verzija",
+        "Selected": "odabran",
+        "Yes": "da",
+        "No": "ne",
+        "True": "točno",
+        "False": "netočno",
+        "Steam": "steam",
+        "Paradox": "paradox",
+        "Local": "lokal"
     }
 }

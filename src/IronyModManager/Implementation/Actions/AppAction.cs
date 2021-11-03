@@ -4,7 +4,7 @@
 // Created          : 03-01-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 11-16-2020
+// Last Modified On : 10-27-2021
 // ***********************************************************************
 // <copyright file="AppAction.cs" company="Mario">
 //     Mario
@@ -12,11 +12,12 @@
 // <summary></summary>
 // ***********************************************************************
 
-using System.Collections.Generic;
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Runtime.InteropServices;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
@@ -33,6 +34,28 @@ namespace IronyModManager.Implementation.Actions
     [ExcludeFromCoverage("UI Actions are tested via functional testing.")]
     public class AppAction : IAppAction
     {
+        #region Fields
+
+        /// <summary>
+        /// The logger
+        /// </summary>
+        private readonly ILogger logger;
+
+        #endregion Fields
+
+        #region Constructors
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="AppAction" /> class.
+        /// </summary>
+        /// <param name="logger">The logger.</param>
+        public AppAction(ILogger logger)
+        {
+            this.logger = logger;
+        }
+
+        #endregion Constructors
+
         #region Methods
 
         /// <summary>
@@ -95,8 +118,9 @@ namespace IronyModManager.Implementation.Actions
                 }
                 return Task.FromResult(true);
             }
-            catch
+            catch (Exception ex)
             {
+                logger.Error(ex);
                 return Task.FromResult(false);
             }
         }
@@ -130,8 +154,9 @@ namespace IronyModManager.Implementation.Actions
                 }
                 return Task.FromResult(true);
             }
-            catch
+            catch (Exception ex)
             {
+                logger.Error(ex);
                 return Task.FromResult(false);
             }
         }
@@ -142,7 +167,7 @@ namespace IronyModManager.Implementation.Actions
         /// <param name="cmd">The command.</param>
         private void ShellExec(string cmd)
         {
-            var escapedArgs = cmd.Replace("\"", "\\\"");
+            var escapedArgs = Regex.Replace(cmd, "(?=[`~!#&*()|;'<>])", "\\").Replace("\"", "\\\\\\\"");
 
             using var process = Process.Start(
                 new ProcessStartInfo

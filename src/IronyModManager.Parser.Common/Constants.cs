@@ -4,7 +4,7 @@
 // Created          : 02-16-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-09-2021
+// Last Modified On : 10-31-2021
 // ***********************************************************************
 // <copyright file="Constants.cs" company="Mario">
 //     Mario
@@ -33,6 +33,16 @@ namespace IronyModManager.Parser.Common
         /// The common path
         /// </summary>
         public const string CommonPath = "common";
+
+        /// <summary>
+        /// The empty overwrite comment
+        /// </summary>
+        public const string EmptyOverwriteComment = "# This mod contains empty code. Possibly to overwrite other mods.";
+
+        /// <summary>
+        /// The empty shader comment
+        /// </summary>
+        public const string EmptyShaderComment = "// This mod contains empty code. Possibly to overwrite other mods.";
 
         /// <summary>
         /// The FXH extension
@@ -295,6 +305,11 @@ namespace IronyModManager.Parser.Common
             public static readonly string Districts = MergePath(CommonPath, "districts");
 
             /// <summary>
+            /// The ethics
+            /// </summary>
+            public static readonly string Ethics = MergePath(CommonPath, "ethics");
+
+            /// <summary>
             /// The government authorities
             /// </summary>
             public static readonly string GovernmentAuthorities = MergePath(CommonPath, "governments", "authorities");
@@ -313,6 +328,11 @@ namespace IronyModManager.Parser.Common
             /// The name lists
             /// </summary>
             public static readonly string NameLists = MergePath(CommonPath, "name_lists");
+
+            /// <summary>
+            /// The opinion modifiers
+            /// </summary>
+            public static readonly string OpinionModifiers = MergePath(CommonPath, "opinion_modifiers");
 
             /// <summary>
             /// The planet classes
@@ -340,9 +360,24 @@ namespace IronyModManager.Parser.Common
             public static readonly string RandomNamesBase = MergePath(CommonPath, "random_names", "base");
 
             /// <summary>
+            /// The relics
+            /// </summary>
+            public static readonly string Relics = MergePath(CommonPath, "relics");
+
+            /// <summary>
             /// The scripted variables
             /// </summary>
             public static readonly string ScriptedVariables = MergePath(CommonPath, "scripted_variables");
+
+            /// <summary>
+            /// The section templates
+            /// </summary>
+            public static readonly string SectionTemplates = MergePath(CommonPath, "section_templates");
+
+            /// <summary>
+            /// The ship sizes
+            /// </summary>
+            public static readonly string ShipSizes = MergePath(CommonPath, "ship_sizes");
 
             /// <summary>
             /// The solar system initializers
@@ -358,6 +393,11 @@ namespace IronyModManager.Parser.Common
             /// The species names
             /// </summary>
             public static readonly string SpeciesNames = MergePath(CommonPath, "species_names");
+
+            /// <summary>
+            /// The starbase modules
+            /// </summary>
+            public static readonly string StarbaseModules = MergePath(CommonPath, "starbase_modules");
 
             /// <summary>
             /// The start screen messages

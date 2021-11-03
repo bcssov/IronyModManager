@@ -4,7 +4,7 @@
 // Created          : 04-04-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-09-2021
+// Last Modified On : 11-01-2021
 // ***********************************************************************
 // <copyright file="BaseDefinitionInfoProvider.cs" company="Mario">
 //     Mario
@@ -245,47 +245,6 @@ namespace IronyModManager.IO.Mods.InfoProviders
         }
 
         /// <summary>
-        /// Generates the name hash.
-        /// </summary>
-        /// <param name="hash">The hash.</param>
-        /// <param name="takeLeadingFileName">if set to <c>true</c> [take leading file name].</param>
-        /// <returns>System.String.</returns>
-        protected virtual string GenerateNameHash(string hash, bool takeLeadingFileName = false)
-        {
-            hash = Path.GetFileNameWithoutExtension(hash);
-            if (string.IsNullOrWhiteSpace(hash))
-            {
-                return hash;
-            }
-            var length = 2;
-            if (hash.Length < 2)
-            {
-                length = hash.Length - 1;
-            }
-            if (takeLeadingFileName)
-            {
-                return $"{hash.Substring(0, length)}{hash.GenerateShortFileNameHashId()}";
-            }
-            return hash.GenerateShortFileNameHashId();
-        }
-
-        /// <summary>
-        /// Generates the unique file name signature.
-        /// </summary>
-        /// <param name="fileName">Name of the file.</param>
-        /// <returns>System.String.</returns>
-        protected virtual string GenerateUniqueFileNameSignature(string fileName)
-        {
-            fileName = Path.GetFileNameWithoutExtension(fileName);
-            var length = 6;
-            if (fileName.Length < 6)
-            {
-                length = fileName.Length - 1;
-            }
-            return fileName.Substring(0, length);
-        }
-
-        /// <summary>
         /// Generates the name of the whole text file.
         /// </summary>
         /// <param name="definition">The definition.</param>
@@ -306,14 +265,11 @@ namespace IronyModManager.IO.Mods.InfoProviders
         {
             if (requestDiskFileName)
             {
-                if (definition.ValueType != ValueType.OverWrittenObjectWithPreserveFileName)
+                if (definition.ValueType == ValueType.OverwrittenObjectSingleFile)
                 {
-                    return Path.Combine(definition.ParentDirectory, $"{FIOSName}{GenerateNameHash(definition.OriginalModName)}{(string.IsNullOrWhiteSpace(definition.OriginalFileName) ? GenerateNameHash(fileName, true) : GenerateNameHash(definition.OriginalFileName, true))}{definition.Order:D4}{fileName.GenerateValidFileName()}");
+                    return Path.Combine(definition.ParentDirectory, $"{FIOSName}{fileName.GenerateValidFileName()}");
                 }
-                else
-                {
-                    return Path.Combine(definition.ParentDirectory, $"{FIOSName}{(string.IsNullOrWhiteSpace(definition.OriginalFileName) ? GenerateUniqueFileNameSignature(fileName) : GenerateUniqueFileNameSignature(definition.OriginalFileName))}{definition.Order:D4}{fileName.GenerateValidFileName()}");
-                }
+                return Path.Combine(definition.ParentDirectory, $"{FIOSName}{definition.Order:D8}{fileName.GenerateValidFileName()}");
             }
             return Path.Combine(definition.ParentDirectory, $"{FIOSName}{fileName.GenerateValidFileName()}");
         }
@@ -329,14 +285,11 @@ namespace IronyModManager.IO.Mods.InfoProviders
         {
             if (requestDiskFileName)
             {
-                if (definition.ValueType != ValueType.OverWrittenObjectWithPreserveFileName)
+                if (definition.ValueType == ValueType.OverwrittenObjectSingleFile)
                 {
-                    return Path.Combine(definition.ParentDirectory, $"{LIOSName}{GenerateNameHash(definition.OriginalModName)}{(string.IsNullOrWhiteSpace(definition.OriginalFileName) ? GenerateNameHash(fileName, true) : GenerateNameHash(definition.OriginalFileName, true))}{definition.Order:D4}{fileName.GenerateValidFileName()}");
+                    return Path.Combine(definition.ParentDirectory, $"{LIOSName}{fileName.GenerateValidFileName()}");
                 }
-                else
-                {
-                    return Path.Combine(definition.ParentDirectory, $"{LIOSName}{(string.IsNullOrWhiteSpace(definition.OriginalFileName) ? GenerateUniqueFileNameSignature(fileName) : GenerateUniqueFileNameSignature(definition.OriginalFileName))}{definition.Order:D4}{fileName.GenerateValidFileName()}");
-                }
+                return Path.Combine(definition.ParentDirectory, $"{LIOSName}{definition.Order:D8}{fileName.GenerateValidFileName()}");
             }
             return Path.Combine(definition.ParentDirectory, $"{LIOSName}{fileName.GenerateValidFileName()}");
         }

@@ -4,7 +4,7 @@
 // Created          : 11-26-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 10-07-2021
+// Last Modified On : 11-02-2021
 // ***********************************************************************
 // <copyright file="ModMergeCompressExporter.cs" company="Mario">
 //     Mario
@@ -131,13 +131,13 @@ namespace IronyModManager.IO.Mods
         /// <returns>IArchive.</returns>
         public long Start()
         {
-            var zip = new ZipFile();
             lock (objectLock)
             {
+                var zip = new ZipFile();
                 id++;
                 queue.TryAdd(id, zip);
+                return id;
             }
-            return id;
         }
 
         #endregion Methods

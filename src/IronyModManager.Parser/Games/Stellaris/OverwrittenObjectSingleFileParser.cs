@@ -1,16 +1,17 @@
 ﻿// ***********************************************************************
 // Assembly         : IronyModManager.Parser
 // Author           : Mario
-// Created          : 06-09-2021
+// Created          : 10-25-2021
 //
 // Last Modified By : Mario
-// Last Modified On : 06-09-2021
+// Last Modified On : 11-01-2021
 // ***********************************************************************
-// <copyright file="OverWrittenObjectWithPreserveFileNameParser.cs" company="Mario">
+// <copyright file="OverwrittenObjectSingleFileParser.cs" company="Mario">
 //     Mario
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,22 +24,23 @@ using ValueType = IronyModManager.Shared.Models.ValueType;
 namespace IronyModManager.Parser.Games.Stellaris
 {
     /// <summary>
-    /// Class OverWrittenObjectWithPreserveFileName.
+    /// Class OverwrittenParser.
     /// Implements the <see cref="IronyModManager.Parser.Common.Parsers.BaseParser" />
     /// Implements the <see cref="IronyModManager.Parser.Common.Parsers.IGameParser" />
     /// </summary>
     /// <seealso cref="IronyModManager.Parser.Common.Parsers.BaseParser" />
     /// <seealso cref="IronyModManager.Parser.Common.Parsers.IGameParser" />
-    public class OverWrittenObjectWithPreserveFileNameParser : BaseParser, IGameParser
+    public class OverwrittenObjectSingleFileParser : BaseParser, IGameParser
     {
         #region Fields
 
         /// <summary>
-        /// The directory names
+        /// The starts with checks
         /// </summary>
         private static readonly string[] directoryNames = new string[]
         {
-            Common.Constants.Stellaris.StrategicResources
+            Common.Constants.Stellaris.Ethics,  Common.Constants.Stellaris.StarbaseModules,
+            Common.Constants.Stellaris.ShipSizes, Common.Constants.Stellaris.StrategicResources
         };
 
         #endregion Fields
@@ -46,11 +48,11 @@ namespace IronyModManager.Parser.Games.Stellaris
         #region Constructors
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="OverWrittenObjectWithPreserveFileNameParser" /> class.
+        /// Initializes a new instance of the <see cref="FlagsParser" /> class.
         /// </summary>
         /// <param name="codeParser">The code parser.</param>
         /// <param name="logger">The logger.</param>
-        public OverWrittenObjectWithPreserveFileNameParser(ICodeParser codeParser, ILogger logger) : base(codeParser, logger)
+        public OverwrittenObjectSingleFileParser(ICodeParser codeParser, ILogger logger) : base(codeParser, logger)
         {
         }
 
@@ -62,7 +64,7 @@ namespace IronyModManager.Parser.Games.Stellaris
         /// Gets the name of the parser.
         /// </summary>
         /// <value>The name of the parser.</value>
-        public override string ParserName => "Stellaris" + nameof(OverWrittenObjectWithPreserveFileNameParser);
+        public override string ParserName => "Stellaris" + nameof(OverwrittenObjectSingleFileParser);
 
         /// <summary>
         /// Gets the priority.
@@ -98,7 +100,7 @@ namespace IronyModManager.Parser.Games.Stellaris
                 {
                     if (item.ValueType == ValueType.Object)
                     {
-                        item.ValueType = ValueType.OverWrittenObjectWithPreserveFileName;
+                        item.ValueType = ValueType.OverwrittenObjectSingleFile;
                     }
                 }
             }

@@ -17,6 +17,7 @@
     },
     "FatalError": {
         "Message": "发生了无法处理的异常，程序即将关闭",
+        "MessageWithLastError": "发生了无法处理的异常，请使用此信息来提交错误报告：{NewLine}{NewLine}{Message}",
         "Title": "错误",
         "Header": "严重错误"
     },
@@ -555,5 +556,18 @@
         "Clear": "×",
         "UpArrow": "▲",
         "DownArrow": "▼"
+    },
+    "FilterCommands": {
+        "Achievements": "成就",
+        "Source": "来源",
+        "Version": "版本",
+        "Selected": "选中",
+        "Yes": "是",
+        "No": "否",
+        "True": "真",
+        "False": "假",
+        "Steam": "steam",
+        "Paradox": "paradox",
+        "Local": "当地"
     }
 }

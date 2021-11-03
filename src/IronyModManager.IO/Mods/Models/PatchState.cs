@@ -4,7 +4,7 @@
 // Created          : 03-31-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 05-28-2021
+// Last Modified On : 11-01-2021
 // ***********************************************************************
 // <copyright file="PatchState.cs" company="Mario">
 //     Mario
@@ -13,6 +13,7 @@
 // ***********************************************************************
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using IronyModManager.IO.Common;
 using IronyModManager.IO.Common.Mods.Models;
 using IronyModManager.Shared;
@@ -28,13 +29,39 @@ namespace IronyModManager.IO.Mods.Models
     [ExcludeFromCoverage("Skipping testing IO logic.")]
     public class PatchState : IPatchState
     {
+        #region Fields
+
+        /// <summary>
+        /// The conflict history
+        /// </summary>
+        private IEnumerable<IDefinition> conflictHistory;
+
+        /// <summary>
+        /// The indexed conflict history
+        /// </summary>
+        private IDictionary<string, IEnumerable<IDefinition>> indexedConflictHistory;
+
+        #endregion Fields
+
         #region Properties
 
         /// <summary>
         /// Gets or sets the conflict history.
         /// </summary>
         /// <value>The conflict history.</value>
-        public IEnumerable<IDefinition> ConflictHistory { get; set; }
+        public IEnumerable<IDefinition> ConflictHistory
+        {
+            get
+            {
+                return conflictHistory;
+            }
+            set
+            {
+                conflictHistory = value;
+                indexedConflictHistory = null;
+                InitConflictHistoryIndex();
+            }
+        }
 
         /// <summary>
         /// Gets or sets the conflicts.
@@ -67,6 +94,22 @@ namespace IronyModManager.IO.Mods.Models
         public IEnumerable<IDefinition> IgnoredConflicts { get; set; }
 
         /// <summary>
+        /// Gets the indexed conflict history.
+        /// </summary>
+        /// <value>The indexed conflict history.</value>
+        public IDictionary<string, IEnumerable<IDefinition>> IndexedConflictHistory
+        {
+            get
+            {
+                if (indexedConflictHistory == null)
+                {
+                    InitConflictHistoryIndex();
+                }
+                return indexedConflictHistory;
+            }
+        }
+
+        /// <summary>
         /// Gets or sets the load order.
         /// </summary>
         /// <value>The load order.</value>
@@ -77,12 +120,6 @@ namespace IronyModManager.IO.Mods.Models
         /// </summary>
         /// <value>The mode.</value>
         public PatchStateMode Mode { get; set; }
-
-        /// <summary>
-        /// Gets or sets the orphan conflicts.
-        /// </summary>
-        /// <value>The orphan conflicts.</value>
-        public IEnumerable<IDefinition> OrphanConflicts { get; set; }
 
         /// <summary>
         /// Gets or sets the overwritten conflicts.
@@ -97,5 +134,36 @@ namespace IronyModManager.IO.Mods.Models
         public IEnumerable<IDefinition> ResolvedConflicts { get; set; }
 
         #endregion Properties
+
+        #region Methods
+
+        /// <summary>
+        /// Initializes the index of the conflict history.
+        /// </summary>
+        private void InitConflictHistoryIndex()
+        {
+            if (indexedConflictHistory == null)
+            {
+                indexedConflictHistory = new Dictionary<string, IEnumerable<IDefinition>>();
+            }
+            if (conflictHistory != null && conflictHistory.Any())
+            {
+                conflictHistory.ToList().ForEach(p =>
+                {
+                    if (indexedConflictHistory.ContainsKey(p.TypeAndId))
+                    {
+                        var col = indexedConflictHistory[p.TypeAndId].ToList();
+                        col.Add(p);
+                        indexedConflictHistory[p.Type] = col;
+                    }
+                    else
+                    {
+                        indexedConflictHistory.Add(p.TypeAndId, new List<IDefinition>() { p });
+                    }
+                });
+            }
+        }
+
+        #endregion Methods
     }
 }
