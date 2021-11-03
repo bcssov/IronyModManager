@@ -4,15 +4,12 @@
 		<title>Irony Mod Manager</title>
 		<language>en</language>
 		<item>
-			<title>1.19.69-rc</title>
+			<title>1.19.73-rc</title>
 			<description>NOTE:
-This version has significant changes to Conflict Solver, please backup your existing mod collections before running conflict solver. Save game compatibility is not guaranteed.
+This version has significant changes to Conflict Solver, please backup your existing mod collections before running conflict solver. Save game compatibility is not guranteed.
 
 RELEASE NOTES:
-* Force refresh of stellaris conflict solver cache analysis
-* Further improvement in handling overwritten types for Stellaris
-* Various Fixes
-* Remove orphan conflict handling due to new improvements
+* Fix conflict solver CTD
 
 CHANGES FROM v1.18:
 * Update dependencies
@@ -20,20 +17,18 @@ CHANGES FROM v1.18:
 * Add mod search filtering syntax
 * Stellaris parser type recognition updates
 * Add single merge folder type handling for Stellaris
-* Fix #304</description>
-			<pubDate>Mon, 01 Nov 2021 21:00:55 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.19.69-rc/osx-x64.rar" sparkle:version="1.19.69.62600" sparkle:shortVersionString="1.19.69" length="70336138" sparkle:os="osx" type="application/vnd.rar" sparkle:signature="pXuaG2/gZjWMdwi7dud8ee231RckDXm+4kSBqqnmN/w7K5k9NKcmsRAIwmvs90ski86dKsw2U+vks1PDQdc6Cg=="/>
+* Fix #304
+* Many conflict solver handling improvements</description>
+			<pubDate>Wed, 03 Nov 2021 05:31:51 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.19.73-rc/osx-x64.rar" sparkle:version="1.19.73.33129" sparkle:shortVersionString="1.19.73" length="70339357" sparkle:os="osx" type="application/vnd.rar" sparkle:signature="EcZPwrp/IG/PvULDTHKAILvtsOwQDKDauy80RlqqBUzEduL2nf1jLRGXQKN9/FgGiFM9gYElmj2Qtsz42ag8DQ=="/>
 		</item>
 		<item>
-			<title>1.19.69-rc</title>
+			<title>1.19.73-rc</title>
 			<description>NOTE:
-This version has significant changes to Conflict Solver, please backup your existing mod collections before running conflict solver. Save game compatibility is not guaranteed.
+This version has significant changes to Conflict Solver, please backup your existing mod collections before running conflict solver. Save game compatibility is not guranteed.
 
 RELEASE NOTES:
-* Force refresh of stellaris conflict solver cache analysis
-* Further improvement in handling overwritten types for Stellaris
-* Various Fixes
-* Remove orphan conflict handling due to new improvements
+* Fix conflict solver CTD
 
 CHANGES FROM v1.18:
 * Update dependencies
@@ -41,20 +36,18 @@ CHANGES FROM v1.18:
 * Add mod search filtering syntax
 * Stellaris parser type recognition updates
 * Add single merge folder type handling for Stellaris
-* Fix #304</description>
-			<pubDate>Mon, 01 Nov 2021 21:01:04 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.19.69-rc/win-x64-setup.rar" sparkle:version="1.19.69.62600" sparkle:shortVersionString="1.19.69" length="61681061" sparkle:os="windows" type="application/vnd.rar" sparkle:signature="4odlgQGwLChvoY3NBJrqonD0pxZkfNnMygXka8KvfmHCmFs5gKh4Bu1ehjPy2LIEZIR/RIRTIPqqAXWJflaIDA=="/>
+* Fix #304
+* Many conflict solver handling improvements</description>
+			<pubDate>Wed, 03 Nov 2021 05:31:59 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.19.73-rc/win-x64-setup.rar" sparkle:version="1.19.73.33129" sparkle:shortVersionString="1.19.73" length="61672580" sparkle:os="windows" type="application/vnd.rar" sparkle:signature="va9DGkLIsfDtyLdsRD/HZbHHqeTihLr2AsQEz73YdCOQ2V9mhQhZWoIxszZ8UgwO4akZyzHC13BDQuz/MHtSDw=="/>
 		</item>
 		<item>
-			<title>1.19.69-rc</title>
+			<title>1.19.73-rc</title>
 			<description>NOTE:
-This version has significant changes to Conflict Solver, please backup your existing mod collections before running conflict solver. Save game compatibility is not guaranteed.
+This version has significant changes to Conflict Solver, please backup your existing mod collections before running conflict solver. Save game compatibility is not guranteed.
 
 RELEASE NOTES:
-* Force refresh of stellaris conflict solver cache analysis
-* Further improvement in handling overwritten types for Stellaris
-* Various Fixes
-* Remove orphan conflict handling due to new improvements
+* Fix conflict solver CTD
 
 CHANGES FROM v1.18:
 * Update dependencies
@@ -62,20 +55,18 @@ CHANGES FROM v1.18:
 * Add mod search filtering syntax
 * Stellaris parser type recognition updates
 * Add single merge folder type handling for Stellaris
-* Fix #304</description>
-			<pubDate>Mon, 01 Nov 2021 21:00:59 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.19.69-rc/win-x64.rar" sparkle:version="1.19.69.62600" sparkle:shortVersionString="1.19.69" length="74155214" sparkle:os="windows" type="application/vnd.rar" sparkle:signature="lQRkbpCPCyuycDqQ1+couA14dzYFfwxdkvKL2EzRJWDAtuQ/yuSss3gZL3y2Tj3odDMZWBKPRIktDpp6XsJHCg=="/>
+* Fix #304
+* Many conflict solver handling improvements</description>
+			<pubDate>Wed, 03 Nov 2021 05:31:55 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.19.73-rc/win-x64.rar" sparkle:version="1.19.73.33129" sparkle:shortVersionString="1.19.73" length="74158622" sparkle:os="windows" type="application/vnd.rar" sparkle:signature="kA9/1I8nq+6BrR2Gd60Zp8mTOzKpukraBd+FRrBN/yHk5jS8JXzYE7xeeCEQEgdFJ2Phnm3s2ZooDvylLnY+DA=="/>
 		</item>
 		<item>
-			<title>1.19.69-rc</title>
+			<title>1.19.73-rc</title>
 			<description>NOTE:
-This version has significant changes to Conflict Solver, please backup your existing mod collections before running conflict solver. Save game compatibility is not guaranteed.
+This version has significant changes to Conflict Solver, please backup your existing mod collections before running conflict solver. Save game compatibility is not guranteed.
 
 RELEASE NOTES:
-* Force refresh of stellaris conflict solver cache analysis
-* Further improvement in handling overwritten types for Stellaris
-* Various Fixes
-* Remove orphan conflict handling due to new improvements
+* Fix conflict solver CTD
 
 CHANGES FROM v1.18:
 * Update dependencies
@@ -83,9 +74,10 @@ CHANGES FROM v1.18:
 * Add mod search filtering syntax
 * Stellaris parser type recognition updates
 * Add single merge folder type handling for Stellaris
-* Fix #304</description>
-			<pubDate>Mon, 01 Nov 2021 21:00:52 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.19.69-rc/linux-x64.zip" sparkle:version="1.19.69.62600" sparkle:shortVersionString="1.19.69" length="86977377" sparkle:os="linux" type="application/zip" sparkle:signature="L/lLrQevdws0v6fzSSJHCEqGsM3n18LHfscH2j5LIGb5i7N+RofwCtfAY3kQVSlatyP3IifwwrR7h/5cYRiXAA=="/>
+* Fix #304
+* Many conflict solver handling improvements</description>
+			<pubDate>Wed, 03 Nov 2021 05:31:47 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.19.73-rc/linux-x64.zip" sparkle:version="1.19.73.33129" sparkle:shortVersionString="1.19.73" length="86976949" sparkle:os="linux" type="application/zip" sparkle:signature="qRVL3mHp8IU8cxAFiAnxiQmEL2kACoI/PF9EP/lRplnJlxaHFzx5aF4qCgBl86LdllDZAhZDIt8TlQkzaVyEBg=="/>
 		</item>
 		<item>
 			<title>1.18.92</title>
