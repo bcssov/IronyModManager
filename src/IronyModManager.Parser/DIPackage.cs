@@ -68,8 +68,7 @@ namespace IronyModManager.Parser
             container.Collection.Register(typeof(IGameParser), new List<Type>
             {
                 typeof(FlagsParser), typeof(SolarSystemInitializersParser), typeof(Games.Stellaris.WholeTextParser),
-                typeof(OverwrittenParser), typeof(ScriptedVariablesParser), typeof(OverWrittenObjectWithPreserveFileNameParser),
-                typeof(OverwrittenObjectSingleFileParser)
+                typeof(OverwrittenParser), typeof(ScriptedVariablesParser), typeof(OverwrittenObjectSingleFileParser)
             });
             container.Register<IParserManager, ParserManager>();
             container.Register<IModObject, ModObject>();

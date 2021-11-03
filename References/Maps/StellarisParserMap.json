@@ -288,7 +288,7 @@
         "PreferredParser": "GenericKeyParser"
     }, {
         "DirectoryPath": "common\\ship_sizes",
-        "PreferredParser": "StellarisOverwrittenParser"
+        "PreferredParser": "StellarisOverwrittenObjectSingleFileParser"
     }, {
         "DirectoryPath": "common\\solar_system_initializers",
         "PreferredParser": "StellarisSolarSystemInitializersParser"
@@ -315,7 +315,7 @@
         "PreferredParser": "DefaultParser"
     }, {
         "DirectoryPath": "common\\starbase_modules",
-        "PreferredParser": "StellarisOverwrittenParser"
+        "PreferredParser": "StellarisOverwrittenObjectSingleFileParser"
     }, {
         "DirectoryPath": "common\\starbase_types",
         "PreferredParser": "DefaultParser"
@@ -330,7 +330,7 @@
         "PreferredParser": "DefaultParser"
     }, {
         "DirectoryPath": "common\\strategic_resources",
-        "PreferredParser": "StellarisOverWrittenObjectWithPreserveFileNameParser"
+        "PreferredParser": "StellarisOverwrittenObjectSingleFileParser"
     }, {
         "DirectoryPath": "common\\subjects",
         "PreferredParser": "DefaultParser"

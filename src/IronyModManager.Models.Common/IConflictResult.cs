@@ -4,15 +4,15 @@
 // Created          : 03-18-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 12-07-2020
+// Last Modified On : 11-01-2021
 // ***********************************************************************
 // <copyright file="IConflictResult.cs" company="Mario">
 //     Mario
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
-using System.Collections.Generic;
 using System;
+using System.Collections.Generic;
 using IronyModManager.Shared.Models;
 
 namespace IronyModManager.Models.Common
@@ -63,12 +63,6 @@ namespace IronyModManager.Models.Common
         /// </summary>
         /// <value>The mode.</value>
         PatchStateMode Mode { get; set; }
-
-        /// <summary>
-        /// Gets or sets the orphan conflicts.
-        /// </summary>
-        /// <value>The orphan conflicts.</value>
-        IIndexedDefinitions OrphanConflicts { get; set; }
 
         /// <summary>
         /// Gets or sets the overwritten conflicts.

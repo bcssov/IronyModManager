@@ -4,7 +4,7 @@
 // Created          : 02-18-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 10-25-2021
+// Last Modified On : 11-01-2021
 // ***********************************************************************
 // <copyright file="Enums.cs" company="Mario">
 //     Mario
@@ -65,11 +65,6 @@ namespace IronyModManager.Shared.Models
         /// The empty file
         /// </summary>
         EmptyFile,
-
-        /// <summary>
-        /// The over written object with preserve file name
-        /// </summary>
-        OverWrittenObjectWithPreserveFileName,
 
         /// <summary>
         /// The overwritten object single file

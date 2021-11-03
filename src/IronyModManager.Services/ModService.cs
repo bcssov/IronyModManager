@@ -4,7 +4,7 @@
 // Created          : 02-24-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 10-26-2021
+// Last Modified On : 10-31-2021
 // ***********************************************************************
 // <copyright file="ModService.cs" company="Mario">
 //     Mario
@@ -20,7 +20,6 @@ using System.Threading.Tasks;
 using AutoMapper;
 using IronyModManager.IO.Common.Mods;
 using IronyModManager.IO.Common.Readers;
-using IronyModManager.Localization;
 using IronyModManager.Models.Common;
 using IronyModManager.Parser.Common.Mod;
 using IronyModManager.Parser.Common.Mod.Search;
@@ -49,6 +48,11 @@ namespace IronyModManager.Services
         private static readonly AsyncLock modReadLock = new();
 
         /// <summary>
+        /// The language service
+        /// </summary>
+        private readonly ILanguagesService languageService;
+
+        /// <summary>
         /// The logger
         /// </summary>
         private readonly ILogger logger;
@@ -65,6 +69,7 @@ namespace IronyModManager.Services
         /// <summary>
         /// Initializes a new instance of the <see cref="ModService" /> class.
         /// </summary>
+        /// <param name="languageService">The language service.</param>
         /// <param name="searchParser">The search parser.</param>
         /// <param name="logger">The logger.</param>
         /// <param name="cache">The cache.</param>
@@ -75,13 +80,14 @@ namespace IronyModManager.Services
         /// <param name="gameService">The game service.</param>
         /// <param name="storageProvider">The storage provider.</param>
         /// <param name="mapper">The mapper.</param>
-        public ModService(IParser searchParser, ILogger logger, ICache cache, IEnumerable<IDefinitionInfoProvider> definitionInfoProviders,
+        public ModService(ILanguagesService languageService, IParser searchParser, ILogger logger, ICache cache, IEnumerable<IDefinitionInfoProvider> definitionInfoProviders,
             IReader reader, IModParser modParser,
             IModWriter modWriter, IGameService gameService,
             IStorageProvider storageProvider, IMapper mapper) : base(cache, definitionInfoProviders, reader, modWriter, modParser, gameService, storageProvider, mapper)
         {
             this.logger = logger;
             this.searchParser = searchParser;
+            this.languageService = languageService;
         }
 
         #endregion Constructors
@@ -249,7 +255,7 @@ namespace IronyModManager.Services
             {
                 return collection;
             }
-            var parameters = searchParser.Parse(CurrentLocale.CultureName, text);
+            var parameters = searchParser.Parse(languageService.GetSelected().Abrv, text);
             var result = collection.Where(p => p.Name.Contains(parameters.Name, StringComparison.InvariantCultureIgnoreCase) ||
                     (p.RemoteId.HasValue && p.RemoteId.GetValueOrDefault().ToString().Contains(parameters.Name)))
                     .ConditionalFilter(parameters.AchievementCompatible.Result.HasValue, x => x.Where(p => p.AchievementStatus == (parameters.AchievementCompatible.Result.GetValueOrDefault() ? AchievementStatus.Compatible : AchievementStatus.NotCompatible)))
@@ -273,7 +279,7 @@ namespace IronyModManager.Services
             {
                 return null;
             }
-            var parameters = searchParser.Parse(CurrentLocale.CultureName, text);
+            var parameters = searchParser.Parse(languageService.GetSelected().Abrv, text);
             var result = !reverse ? collection.Skip(skipIndex.GetValueOrDefault()) : collection.Reverse().Skip(skipIndex.GetValueOrDefault());
             result = result.Where(p => p.Name.Contains(parameters.Name, StringComparison.InvariantCultureIgnoreCase) ||
                     (p.RemoteId.HasValue && p.RemoteId.GetValueOrDefault().ToString().Contains(parameters.Name)))
@@ -407,7 +413,7 @@ namespace IronyModManager.Services
                     IModInstallationResult installResult = diff.FirstOrDefault();
                     if (game.WorkshopDirectory.Any() && diff.Any(p => p.Path.StartsWith(game.WorkshopDirectory.FirstOrDefault())))
                     {
-                        installResult = diff.FirstOrDefault(p => p.Path.StartsWith(game.WorkshopDirectory.FirstOrDefault()));                        
+                        installResult = diff.FirstOrDefault(p => p.Path.StartsWith(game.WorkshopDirectory.FirstOrDefault()));
                     }
                     var localDiff = installResult.Mod;
                     if (IsPatchModInternal(localDiff))

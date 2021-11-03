@@ -4,7 +4,7 @@
 // Created          : 10-25-2021
 //
 // Last Modified By : Mario
-// Last Modified On : 10-25-2021
+// Last Modified On : 11-01-2021
 // ***********************************************************************
 // <copyright file="StellarisOverwrittenObjectSingleFileParserTests.cs" company="Mario">
 //     Mario
@@ -42,6 +42,51 @@ namespace IronyModManager.Parser.Tests
             var args = new CanParseArgs()
             {
                 File = "common\\ethics\\test.txt",
+                GameType = "Stellaris"
+            };
+            var parser = new OverwrittenObjectSingleFileParser(new CodeParser(new Logger()), null);
+            parser.CanParse(args).Should().BeTrue();
+        }
+
+        /// <summary>
+        /// Defines the test method CanParse_starbase_modules_should_be_true.
+        /// </summary>
+        [Fact]
+        public void CanParse_starbase_modules_should_be_true()
+        {
+            var args = new CanParseArgs()
+            {
+                File = "common\\starbase_modules\\test.txt",
+                GameType = "Stellaris"
+            };
+            var parser = new OverwrittenObjectSingleFileParser(new CodeParser(new Logger()), null);
+            parser.CanParse(args).Should().BeTrue();
+        }
+
+        /// <summary>
+        /// Defines the test method CanParse_ship_sizes_should_be_true.
+        /// </summary>
+        [Fact]
+        public void CanParse_ship_sizes_should_be_true()
+        {
+            var args = new CanParseArgs()
+            {
+                File = "common\\ship_sizes\\test.txt",
+                GameType = "Stellaris"
+            };
+            var parser = new OverwrittenObjectSingleFileParser(new CodeParser(new Logger()), null);
+            parser.CanParse(args).Should().BeTrue();
+        }
+
+        /// <summary>
+        /// Defines the test method CanParse_strategic_resources_should_be_true.
+        /// </summary>
+        [Fact]
+        public void CanParse_strategic_resources_should_be_true()
+        {
+            var args = new CanParseArgs()
+            {
+                File = "common\\strategic_resources\\t.txt",
                 GameType = "Stellaris"
             };
             var parser = new OverwrittenObjectSingleFileParser(new CodeParser(new Logger()), null);

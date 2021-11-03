@@ -4,7 +4,7 @@
 // Created          : 05-27-2021
 //
 // Last Modified By : Mario
-// Last Modified On : 10-25-2021
+// Last Modified On : 11-03-2021
 // ***********************************************************************
 // <copyright file="GameIndexService.cs" company="Mario">
 //     Mario
@@ -28,7 +28,6 @@ using IronyModManager.Parser.Common.Args;
 using IronyModManager.Parser.Common.Mod;
 using IronyModManager.Services.Common;
 using IronyModManager.Services.Common.MessageBus;
-using IronyModManager.Services.Resolver;
 using IronyModManager.Shared.Cache;
 using IronyModManager.Shared.MessageBus;
 using IronyModManager.Shared.Models;
@@ -56,7 +55,7 @@ namespace IronyModManager.Services
         /// <summary>
         /// The current cache version
         /// </summary>
-        private readonly int CurrentCacheVersion = 3;
+        private readonly int CurrentCacheVersion = 4;
 
         /// <summary>
         /// The game indexer
@@ -72,11 +71,6 @@ namespace IronyModManager.Services
         /// The parser manager
         /// </summary>
         private readonly IParserManager parserManager;
-
-        /// <summary>
-        /// The path resolver
-        /// </summary>
-        private readonly GameRootPathResolver pathResolver;
 
         #endregion Fields
 
@@ -103,7 +97,6 @@ namespace IronyModManager.Services
             this.gameIndexer = gameIndexer;
             this.messageBus = messageBus;
             this.parserManager = parserManager;
-            pathResolver = new GameRootPathResolver();
         }
 
         #endregion Constructors

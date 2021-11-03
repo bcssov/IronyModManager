@@ -4,7 +4,7 @@
 // Created          : 05-25-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 10-26-2021
+// Last Modified On : 10-31-2021
 // ***********************************************************************
 // <copyright file="OverwrittenParser.cs" company="Mario">
 //     Mario
@@ -46,8 +46,7 @@ namespace IronyModManager.Parser.Games.Stellaris
             Common.Constants.Stellaris.Technology, Common.Constants.Stellaris.GovernmentAuthorities,
             Common.Constants.Stellaris.CountryTypes, Common.Constants.Stellaris.Terraform,
             Common.Constants.Stellaris.Relics, Common.Constants.Stellaris.OpinionModifiers,
-            Common.Constants.Stellaris.SectionTemplates, Common.Constants.Stellaris.StarbaseModules,
-            Common.Constants.Stellaris.ShipSizes
+            Common.Constants.Stellaris.SectionTemplates
         };
 
         /// <summary>

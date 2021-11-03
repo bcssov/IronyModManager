@@ -4,7 +4,7 @@
 // Created          : 01-10-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 09-09-2021
+// Last Modified On : 10-29-2021
 // ***********************************************************************
 // <copyright file="Program.cs" company="IronyModManager">
 //     Copyright (c) Mario. All rights reserved.
@@ -15,6 +15,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Threading;
 using System.Threading.Tasks;
 using Avalonia;
@@ -84,6 +85,7 @@ namespace IronyModManager
             InitDefaultCulture();
             InitAppEvents();
             InitDI();
+            InitLogging();
 
             try
             {
@@ -152,7 +154,10 @@ namespace IronyModManager
                     app.With(opts);
                 }
             }
-            configureLinux();
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
+            {
+                configureLinux();
+            }
         }
 
         /// <summary>
@@ -177,6 +182,14 @@ namespace IronyModManager
         }
 
         /// <summary>
+        /// Initializes the logging.
+        /// </summary>
+        private static void InitLogging()
+        {
+            NLog.Config.ConfigurationItemFactory.Default.Targets.RegisterDefinition("IronyFile", typeof(Log.IronyFileTarget));
+        }
+
+        /// <summary>
         /// Logs the error.
         /// </summary>
         /// <param name="e">The e.</param>
@@ -185,7 +198,7 @@ namespace IronyModManager
             if (e != null)
             {
                 var logger = DIResolver.Get<ILogger>();
-                logger.Error(e);
+                logger.Fatal(e);
 
                 var runFatalErrorProcess = StaticResources.CommandLineOptions == null || !StaticResources.CommandLineOptions.ShowFatalErrorNotification;
                 if (runFatalErrorProcess && !ExternalNotificationShown)

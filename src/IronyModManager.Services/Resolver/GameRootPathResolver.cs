@@ -4,7 +4,7 @@
 // Created          : 10-24-2021
 //
 // Last Modified By : Mario
-// Last Modified On : 10-24-2021
+// Last Modified On : 11-03-2021
 // ***********************************************************************
 // <copyright file="GameRootPathResolver.cs" company="Mario">
 //     Mario
@@ -22,8 +22,10 @@ namespace IronyModManager.Services.Resolver
 {
     /// <summary>
     /// Class DLCPathResolver.
+    /// Implements the <see cref="IronyModManager.Services.Resolver.IGameRootPathResolver" />
     /// </summary>
-    internal class GameRootPathResolver
+    /// <seealso cref="IronyModManager.Services.Resolver.IGameRootPathResolver" />
+    internal class GameRootPathResolver : IGameRootPathResolver
     {
         #region Fields
 
