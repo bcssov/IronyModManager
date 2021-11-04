@@ -4,7 +4,7 @@
 // Created          : 03-14-2021
 //
 // Last Modified By : Mario
-// Last Modified On : 06-14-2021
+// Last Modified On : 11-04-2021
 // ***********************************************************************
 // <copyright file="IThemeManager.cs" company="Mario">
 //     Mario
@@ -29,6 +29,13 @@ namespace IronyModManager.Platform.Themes
         /// </summary>
         /// <param name="theme">The theme.</param>
         void ApplyTheme(string theme);
+
+        /// <summary>
+        /// Gets the HTML base CSS.
+        /// </summary>
+        /// <param name="additionalStyles">The additional styles.</param>
+        /// <returns>System.String.</returns>
+        string GetHtmlBaseCSS(string additionalStyles);
 
         /// <summary>
         /// Determines whether [is light theme] [the specified theme].
