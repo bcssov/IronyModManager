@@ -405,7 +405,7 @@
             "CheckPrerelease": "Update To Prerelease Versions",
             "CheckForUpdates": "Check For Updates",
             "Install": "Install Updates",
-            "Version": "Version",
+            "Version": "Version: {Version}",
             "Overlay": {
                 "UpdateDownloading": "Downloading Updates...",
                 "UpdateDownloadProgress": "{Progress}",

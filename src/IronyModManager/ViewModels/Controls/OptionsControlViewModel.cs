@@ -4,7 +4,7 @@
 // Created          : 05-30-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-26-2021
+// Last Modified On : 11-04-2021
 // ***********************************************************************
 // <copyright file="OptionsControlViewModel.cs" company="Mario">
 //     Mario
@@ -277,11 +277,11 @@ namespace IronyModManager.ViewModels.Controls
         public virtual ReactiveCommand<Unit, Unit> CloseCommand { get; protected set; }
 
         /// <summary>
-        /// Gets or sets the custo mod path.
+        /// Gets or sets the custom mod path.
         /// </summary>
-        /// <value>The custo mod path.</value>
+        /// <value>The custom mod path.</value>
         [StaticLocalization(LocalizationResources.Options.Game.CustomModPath)]
-        public virtual string CustoModPath { get; protected set; }
+        public virtual string CustomModPath { get; protected set; }
 
         /// <summary>
         /// Gets or sets the editor.
