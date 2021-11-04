@@ -4,7 +4,7 @@
 // Created          : 05-30-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-10-2021
+// Last Modified On : 11-04-2021
 // ***********************************************************************
 // <copyright file="OptionsControlView.xaml.cs" company="Mario">
 //     Mario
@@ -13,13 +13,18 @@
 // ***********************************************************************
 using System.Linq;
 using System.Reactive.Disposables;
+using System.Reactive.Linq;
+using System.Text;
 using Avalonia.Controls;
+using Avalonia.Controls.Html;
 using Avalonia.Controls.Primitives;
 using Avalonia.Markup.Xaml;
 using Avalonia.Threading;
 using IronyModManager.Common;
 using IronyModManager.Common.Events;
 using IronyModManager.Common.Views;
+using IronyModManager.DI;
+using IronyModManager.Platform.Themes;
 using IronyModManager.Shared;
 using IronyModManager.ViewModels.Controls;
 using ReactiveUI;
@@ -41,7 +46,7 @@ namespace IronyModManager.Views.Controls
         /// </summary>
         public OptionsControlView()
         {
-            this.InitializeComponent();
+            InitializeComponent();
         }
 
         #endregion Constructors
@@ -55,6 +60,10 @@ namespace IronyModManager.Views.Controls
         protected override void OnActivated(CompositeDisposable disposables)
         {
             var popup = this.FindControl<Popup>("popup");
+            var changelog = this.FindControl<HtmlLabel>("changelog");
+            var themeManager = DIResolver.Get<IThemeManager>();
+            changelog.BaseStylesheet = themeManager.GetHtmlBaseCSS("width:660px;");
+            var md = new MarkdownSharp.Markdown();
             popup.Closed += (sender, args) =>
             {
                 ViewModel.ForceClose();
@@ -71,6 +80,19 @@ namespace IronyModManager.Views.Controls
                 {
                     ViewModel.ForceClose();
                 });
+            }).DisposeWith(disposables);
+            this.WhenAnyValue(p => p.ViewModel.IsActivated).Where(p => p).SubscribeObservable(s =>
+            {
+                this.WhenAnyValue(p => p.ViewModel.UpdateInfoVisible).Where(p => p).SubscribeObservable(s =>
+                {
+                    var html = new StringBuilder("<!DOCTYPE html><html><head><meta http-equiv='Content-Type' content='text/html;charset=UTF-8'/></head><body>");
+                    var log = new StringBuilder();
+                    log.AppendLine($"#{ViewModel.VersionTitle}: {ViewModel.VersionContent}");
+                    log.AppendLine(ViewModel.Changelog);
+                    html.AppendLine(md.Transform(log.ToString()));
+                    html.AppendLine("</body></html>");
+                    changelog.Text = html.ToString();
+                }).DisposeWith(disposables);
             }).DisposeWith(disposables);
 
             base.OnActivated(disposables);

@@ -4,7 +4,7 @@
 // Created          : 03-14-2021
 //
 // Last Modified By : Mario
-// Last Modified On : 06-14-2021
+// Last Modified On : 11-04-2021
 // ***********************************************************************
 // <copyright file="MaterialDarkTheme.cs" company="Mario">
 //     Mario
@@ -29,6 +29,18 @@ namespace IronyModManager.Implementation.Themes
     public class MaterialDarkTheme : BaseThemeResources
     {
         #region Properties
+
+        /// <summary>
+        /// Gets the color of the background HTML.
+        /// </summary>
+        /// <value>The color of the background HTML.</value>
+        public override string BackgroundHtmlColor => "#FF303030";
+
+        /// <summary>
+        /// Gets the color of the foreground HTML.
+        /// </summary>
+        /// <value>The color of the foreground HTML.</value>
+        public override string ForegroundHtmlColor => "#D2D2D2";
 
         /// <summary>
         /// Gets a value indicating whether this instance is light theme.

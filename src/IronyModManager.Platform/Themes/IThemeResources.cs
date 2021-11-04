@@ -4,7 +4,7 @@
 // Created          : 03-14-2021
 //
 // Last Modified By : Mario
-// Last Modified On : 06-14-2021
+// Last Modified On : 11-04-2021
 // ***********************************************************************
 // <copyright file="IThemeResources.cs" company="Mario">
 //     Mario
@@ -23,6 +23,18 @@ namespace IronyModManager.Platform.Themes
     public interface IThemeResources
     {
         #region Properties
+
+        /// <summary>
+        /// Gets the color of the background HTML.
+        /// </summary>
+        /// <value>The color of the background HTML.</value>
+        public string BackgroundHtmlColor { get; }
+
+        /// <summary>
+        /// Gets the color of the foreground HTML.
+        /// </summary>
+        /// <value>The color of the foreground HTML.</value>
+        public string ForegroundHtmlColor { get; }
 
         /// <summary>
         /// Gets a value indicating whether this instance is light theme.
@@ -45,6 +57,13 @@ namespace IronyModManager.Platform.Themes
         #endregion Properties
 
         #region Methods
+
+        /// <summary>
+        /// Gets the HTML base CSS.
+        /// </summary>
+        /// <param name="additionalStyles">The additional styles.</param>
+        /// <returns>System.String.</returns>
+        string GetHtmlBaseCSS(string additionalStyles);
 
         /// <summary>
         /// Registers this instance.

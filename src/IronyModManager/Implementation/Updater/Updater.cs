@@ -4,7 +4,7 @@
 // Created          : 09-16-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-23-2021
+// Last Modified On : 11-04-2021
 // ***********************************************************************
 // <copyright file="Updater.cs" company="Mario">
 //     Mario
@@ -236,7 +236,7 @@ namespace IronyModManager.Implementation.Updater
         {
             if (updateInfo != null && updateInfo.Updates.Count > 0)
             {
-                return string.Join(Environment.NewLine, updateInfo.Updates.FirstOrDefault().Description.SplitOnNewLine().Select(p => p.Trim()));
+                return string.Join(Environment.NewLine, updateInfo.Updates.FirstOrDefault().Description.SplitOnNewLine(false).Select(p => p.Trim()));
             }
             return string.Empty;
         }
@@ -247,7 +247,7 @@ namespace IronyModManager.Implementation.Updater
         /// <returns>System.String.</returns>
         public string GetVersion()
         {
-            if (updateInfo != null && updateInfo.Updates.Count > 0)
+            if (updateInfo != null && updateInfo.Updates.Any())
             {
                 return updateInfo.Updates.FirstOrDefault().Title;
             }

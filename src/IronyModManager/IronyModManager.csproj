@@ -383,4 +383,10 @@
       <Generator>MSBuild:Compile</Generator>
     </EmbeddedResource>
   </ItemGroup>
+  <ItemGroup>
+    <Reference Include="Avalonia.HtmlRenderer">
+      <HintPath>References\Avalonia.HtmlRenderer.dll</HintPath>
+      <Private>true</Private>
+    </Reference>
+  </ItemGroup>
 </Project>

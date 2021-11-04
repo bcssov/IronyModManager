@@ -4,7 +4,7 @@
 // Created          : 03-14-2021
 //
 // Last Modified By : Mario
-// Last Modified On : 06-14-2021
+// Last Modified On : 11-04-2021
 // ***********************************************************************
 // <copyright file="BaseThemeResources.cs" company="Mario">
 //     Mario
@@ -16,6 +16,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Avalonia;
 using Avalonia.Markup.Xaml.Styling;
+using SmartFormat;
 
 namespace IronyModManager.Platform.Themes
 {
@@ -26,7 +27,28 @@ namespace IronyModManager.Platform.Themes
     /// <seealso cref="IronyModManager.Platform.Themes.IThemeResources" />
     public abstract class BaseThemeResources : IThemeResources
     {
+        #region Fields
+
+        /// <summary>
+        /// The CSS
+        /// </summary>
+        private const string CSS = "body {{ color: {color}; background-color: {backgroundColor}; word-wrap: break-word; {additionalStyles} }}";
+
+        #endregion Fields
+
         #region Properties
+
+        /// <summary>
+        /// Gets the color of the background HTML.
+        /// </summary>
+        /// <value>The color of the background HTML.</value>
+        public abstract string BackgroundHtmlColor { get; }
+
+        /// <summary>
+        /// Gets the color of the foreground HTML.
+        /// </summary>
+        /// <value>The color of the foreground HTML.</value>
+        public abstract string ForegroundHtmlColor { get; }
 
         /// <summary>
         /// Gets a value indicating whether this instance is light theme.
@@ -49,6 +71,17 @@ namespace IronyModManager.Platform.Themes
         #endregion Properties
 
         #region Methods
+
+        /// <summary>
+        /// Gets the HTML base CSS.
+        /// </summary>
+        /// <param name="additionalStyles">The additional styles.</param>
+        /// <returns>System.String.</returns>
+        /// <value>The HTML base CSS.</value>
+        public virtual string GetHtmlBaseCSS(string additionalStyles)
+        {
+            return Smart.Format(CSS, new { color = ForegroundHtmlColor, backgroundColor = BackgroundHtmlColor, additionalStyles });
+        }
 
         /// <summary>
         /// Registers this instance.

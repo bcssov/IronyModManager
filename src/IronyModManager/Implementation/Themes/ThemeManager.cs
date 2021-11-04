@@ -4,7 +4,7 @@
 // Created          : 03-14-2021
 //
 // Last Modified By : Mario
-// Last Modified On : 06-14-2021
+// Last Modified On : 11-04-2021
 // ***********************************************************************
 // <copyright file="ThemeManager.cs" company="Mario">
 //     Mario
@@ -66,6 +66,19 @@ namespace IronyModManager.Implementation.Themes
             ValidateThemes();
             var resource = themeResources.FirstOrDefault(p => p.ThemeName.Equals(theme));
             resource.Register();
+        }
+
+        /// <summary>
+        /// Gets the HTML base CSS.
+        /// </summary>
+        /// <param name="additionalStyles">The additional styles.</param>
+        /// <returns>System.String.</returns>
+        public string GetHtmlBaseCSS(string additionalStyles)
+        {
+            ValidateThemes();
+            var theme = themeService.GetSelected();
+            var resource = themeResources.FirstOrDefault(p => p.ThemeName.Equals(theme.Type));
+            return resource.GetHtmlBaseCSS(additionalStyles);
         }
 
         /// <summary>
