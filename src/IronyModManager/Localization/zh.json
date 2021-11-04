@@ -405,7 +405,7 @@
             "CheckPrerelease": "检查预发布版更新",
             "CheckForUpdates": "检查更新",
             "Install": "安装更新",
-            "Version": "版本",
+            "Version": "版本：{Version}",
             "Overlay": {
                 "UpdateDownloading": "正在下载更新……",
                 "UpdateDownloadProgress": "{Progress}",

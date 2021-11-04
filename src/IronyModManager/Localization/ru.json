@@ -405,7 +405,7 @@
             "CheckPrerelease": "Скачивать предрелизные версии",
             "CheckForUpdates": "Проверить обновления",
             "Install": "Установить",
-            "Version": "Версия",
+            "Version": "Версия: {Version}",
             "Overlay": {
                 "UpdateDownloading": "Загрузка обновления...",
                 "UpdateDownloadProgress": "{Progress}",

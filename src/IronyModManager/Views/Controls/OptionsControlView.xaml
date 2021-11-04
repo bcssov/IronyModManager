@@ -34,7 +34,7 @@
               <controls:TextBox IsReadOnly="True" Text="{Binding Game.UserDirectory}" MaxWidth="180" Grid.Column="1" Grid.Row="3"></controls:TextBox>
               <Button Content="{Binding Navigate}" Command="{Binding NavigateDirectoryCommand}" Grid.Column="2" Grid.Row="3"></Button>
               <Button Content="{Binding Reset}" Command="{Binding ResetDirectoryCommand}" Grid.Column="3" Grid.Row="3"></Button>
-              <TextBlock Text="{Binding CustoModPath}" Grid.Column="0" Grid.Row="4" VerticalAlignment="Center" HorizontalAlignment="Left" TextWrapping="Wrap"></TextBlock>
+              <TextBlock Text="{Binding CustomModPath}" Grid.Column="0" Grid.Row="4" VerticalAlignment="Center" HorizontalAlignment="Left" TextWrapping="Wrap"></TextBlock>
               <controls:TextBox IsReadOnly="True" Text="{Binding Game.CustomModDirectory}" MaxWidth="180" Grid.Column="1" Grid.Row="4"></controls:TextBox>
               <Button Content="{Binding Navigate}" Command="{Binding NavigateCustomDirectoryCommand}" Grid.Column="2" Grid.Row="4"></Button>
               <Button Content="{Binding Reset}" Command="{Binding ResetCustomDirectoryCommand}" Grid.Column="3" Grid.Row="4"></Button>

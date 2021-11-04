@@ -4,7 +4,7 @@
 // Created          : 09-30-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-02-2021
+// Last Modified On : 11-04-2021
 // ***********************************************************************
 // <copyright file="FontFamilyManager.cs" company="Mario">
 //     Mario
@@ -80,7 +80,7 @@ namespace IronyModManager.Fonts
         /// <returns><c>true</c> if [is irony font] [the specified font name]; otherwise, <c>false</c>.</returns>
         public bool IsIronyFont(string fontName)
         {
-            return fontFamilies.Any(p => p.Name.Equals(fontName ?? string.Empty, StringComparison.Ordinal));
+            return fontFamilies.Any(p => p.Name.Equals(fontName ?? string.Empty, StringComparison.OrdinalIgnoreCase));
         }
 
         /// <summary>
@@ -90,7 +90,7 @@ namespace IronyModManager.Fonts
         /// <returns>IFontFamily.</returns>
         public IFontFamily ResolveFontFamily(string fontName)
         {
-            var font = fontFamilies.FirstOrDefault(p => p.Name.Equals(fontName ?? string.Empty, StringComparison.Ordinal));
+            var font = fontFamilies.FirstOrDefault(p => p.Name.Equals(fontName ?? string.Empty, StringComparison.OrdinalIgnoreCase));
             if (font == null)
             {
                 SystemFontFamily systemFont = systemFonts.FirstOrDefault(p => p.Name.Equals(fontName));

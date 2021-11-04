@@ -405,7 +405,7 @@
             "CheckPrerelease": "Uključi alpha\\beta\\rc azužiranja",
             "CheckForUpdates": "Provjeri ima li ažuriranja",
             "Install": "Instaliraj ažuriranja",
-            "Version": "Verzija",
+            "Version": "Verzija: {Version}",
             "Overlay": {
                 "UpdateDownloading": "Preuzimanje ažuriranja...",
                 "UpdateDownloadProgress": "{Progress}",

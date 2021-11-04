@@ -24,10 +24,14 @@ using IronyModManager.Common;
 using IronyModManager.Common.Events;
 using IronyModManager.Common.Views;
 using IronyModManager.DI;
+using IronyModManager.Models.Common;
+using IronyModManager.Platform.Fonts;
 using IronyModManager.Platform.Themes;
+using IronyModManager.Services.Common;
 using IronyModManager.Shared;
 using IronyModManager.ViewModels.Controls;
 using ReactiveUI;
+using SmartFormat;
 
 namespace IronyModManager.Views.Controls
 {
@@ -61,9 +65,44 @@ namespace IronyModManager.Views.Controls
         {
             var popup = this.FindControl<Popup>("popup");
             var changelog = this.FindControl<HtmlLabel>("changelog");
-            var themeManager = DIResolver.Get<IThemeManager>();
-            changelog.BaseStylesheet = themeManager.GetHtmlBaseCSS("width:660px;");
             var md = new MarkdownSharp.Markdown();
+
+            string getVersionHtml()
+            {
+                var html = new StringBuilder("<!DOCTYPE html><html><head><meta http-equiv='Content-Type' content='text/html;charset=UTF-8'/></head><body>");
+                var log = new StringBuilder();
+                log.AppendLine($"#{Smart.Format(ViewModel.VersionTitle, new { Version = ViewModel.VersionContent })}");
+                log.AppendLine(ViewModel.Changelog);
+                html.AppendLine(md.Transform(log.ToString()));
+                html.AppendLine("</body></html>");
+                return html.ToString();
+            }
+
+            void setFont(string locale = Shared.Constants.EmptyParam)
+            {
+                var langService = DIResolver.Get<ILanguagesService>();
+                ILanguage language;
+                if (string.IsNullOrWhiteSpace(locale))
+                {
+                    language = langService.GetSelected();
+                }
+                else
+                {
+                    language = langService.Get().FirstOrDefault(p => p.Abrv.Equals(locale));
+                }
+                var themeManager = DIResolver.Get<IThemeManager>();
+                var fontResolver = DIResolver.Get<IFontFamilyManager>();
+                var font = fontResolver.ResolveFontFamily(language.Font);
+                changelog.BaseStylesheet = themeManager.GetHtmlBaseCSS($"width:660px; font-family:\"{font.Name}\";");
+                changelog.Text = getVersionHtml();
+            }
+            var listener = MessageBus.Current.Listen<LocaleChangedEventArgs>();
+            listener.SubscribeObservable(x =>
+            {
+                setFont(x.Locale);
+            });
+            setFont();
+
             popup.Closed += (sender, args) =>
             {
                 ViewModel.ForceClose();
@@ -81,17 +120,12 @@ namespace IronyModManager.Views.Controls
                     ViewModel.ForceClose();
                 });
             }).DisposeWith(disposables);
+
             this.WhenAnyValue(p => p.ViewModel.IsActivated).Where(p => p).SubscribeObservable(s =>
             {
                 this.WhenAnyValue(p => p.ViewModel.UpdateInfoVisible).Where(p => p).SubscribeObservable(s =>
                 {
-                    var html = new StringBuilder("<!DOCTYPE html><html><head><meta http-equiv='Content-Type' content='text/html;charset=UTF-8'/></head><body>");
-                    var log = new StringBuilder();
-                    log.AppendLine($"#{ViewModel.VersionTitle}: {ViewModel.VersionContent}");
-                    log.AppendLine(ViewModel.Changelog);
-                    html.AppendLine(md.Transform(log.ToString()));
-                    html.AppendLine("</body></html>");
-                    changelog.Text = html.ToString();
+                    changelog.Text = getVersionHtml();
                 }).DisposeWith(disposables);
             }).DisposeWith(disposables);
 
