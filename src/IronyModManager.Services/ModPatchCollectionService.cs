@@ -4,7 +4,7 @@
 // Created          : 05-26-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 11-03-2021
+// Last Modified On : 11-05-2021
 // ***********************************************************************
 // <copyright file="ModPatchCollectionService.cs" company="Mario">
 //     Mario
@@ -345,7 +345,7 @@ namespace IronyModManager.Services
                 var emptyConflicts = indexedDefinitions.GetByFile(item.File);
                 if (emptyConflicts.Any())
                 {
-                    foreach (var emptyConflict in emptyConflicts.Where(p => p.ValueType != ValueType.Invalid && !p.ModName.Equals(item.ModName) && !p.File.StartsWith(Shared.Constants.LocalizationDirectory, StringComparison.OrdinalIgnoreCase)))
+                    foreach (var emptyConflict in emptyConflicts.Where(p => p.ValueType != ValueType.Invalid && !p.ModName.Equals(item.ModName)))
                     {
                         var copy = indexedDefinitions.GetByTypeAndId(emptyConflict.TypeAndId).FirstOrDefault(p => p.ModName.Equals(item.ModName));
                         if (copy == null)
@@ -414,7 +414,7 @@ namespace IronyModManager.Services
             foreach (var typeId in typeAndIdKeys)
             {
                 var items = indexedConflicts.GetByTypeAndId(typeId);
-                if (items.Any() && items.All(p => !p.ExistsInLastFile) && !items.Any(p => p.File.StartsWith(Shared.Constants.LocalizationDirectory, StringComparison.OrdinalIgnoreCase)))
+                if (items.Any() && items.All(p => !p.ExistsInLastFile))
                 {
                     var fileDefs = indexedDefinitions.GetByFile(items.FirstOrDefault().FileCI);
                     var lastMod = fileDefs.GroupBy(p => p.ModName).Select(p => p.First()).OrderByDescending(p => modOrder.IndexOf(p.ModName)).FirstOrDefault();
