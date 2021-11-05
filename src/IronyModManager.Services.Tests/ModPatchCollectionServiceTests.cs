@@ -366,7 +366,7 @@ namespace IronyModManager.Services.Tests
         /// Defines the test method Should_ignore_orphan_filename_conflicts.
         /// </summary>
         [Fact]
-        public void Should_ignore_orphan_localisation_filename_conflicts()
+        public void Should_not_ignore_orphan_localisation_filename_conflicts()
         {
             DISetup.SetupContainer();
 
@@ -415,10 +415,10 @@ namespace IronyModManager.Services.Tests
             var indexed = new IndexedDefinitions();
             indexed.InitMap(definitions);
             var result = service.FindConflicts(indexed, new List<string>() { "test2", "test1" }, IronyModManager.Models.Common.PatchStateMode.Default);
-            result.Conflicts.GetAll().Count().Should().Be(2);
+            result.Conflicts.GetAll().Count().Should().Be(4);
             result.Conflicts.GetAllFileKeys().Count().Should().Be(1);
             result.Conflicts.GetAll().All(p => p.ModName == "test1" || p.ModName == "test2").Should().BeTrue();
-            result.Conflicts.GetAll().Count(p => p.Code == Parser.Common.Constants.EmptyOverwriteComment).Should().Be(0);
+            result.Conflicts.GetAll().Count(p => p.Code == Parser.Common.Constants.EmptyOverwriteComment).Should().Be(1);
         }
 
         /// <summary>
