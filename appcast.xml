@@ -4,14 +4,16 @@
 		<title>Irony Mod Manager</title>
 		<language>en</language>
 		<item>
-			<title>1.19.76</title>
-			<description>NOTE:
+			<title>1.19.81</title>
+			<description>## Note
 This version has significant changes to Conflict Solver, please backup your existing mod collections before running conflict solver. Save game compatibility is not guaranteed.
 
-RELEASE NOTES:
-* Fix handling of game paths for vanilla definitions
+## Release Notes
+* Add html changelog preview
+* Add empty localization overwrite detection
+* Allow ignore rules to be visible at all times
 
-CHANGES FROM v1.18:
+## Changes From v1.18
 * Update dependencies
 * Various fixes
 * Add mod search filtering syntax
@@ -19,18 +21,20 @@ CHANGES FROM v1.18:
 * Add single merge folder type handling for Stellaris
 * Fix #304
 * Many conflict solver handling improvements</description>
-			<pubDate>Wed, 03 Nov 2021 19:22:01 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.19.76/osx-x64.rar" sparkle:version="1.19.76.17913" sparkle:shortVersionString="1.19.76" length="70340780" sparkle:os="osx" type="application/vnd.rar" sparkle:signature="6BE2RcskQ1bphQd/mmfTN/wKmcQ9/f6MiaAReqWn+9nDkD5Vy4XcB1HHRVyWblzy1yMmfFb+kmwwxgku0iRQBw=="/>
+			<pubDate>Sun, 07 Nov 2021 06:40:58 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.19.81/osx-x64.rar" sparkle:version="1.19.81.25883" sparkle:shortVersionString="1.19.81" length="70436012" sparkle:os="osx" type="application/vnd.rar" sparkle:signature="VUNHtQ8waQOeglqj49E14zsNCOWgf+mWuiVgNLbYKG8fIMz1Oh6y3FUuospswPMNWoPCXVMGC/d3i91BpbqrDQ=="/>
 		</item>
 		<item>
-			<title>1.19.76</title>
-			<description>NOTE:
+			<title>1.19.81</title>
+			<description>## Note
 This version has significant changes to Conflict Solver, please backup your existing mod collections before running conflict solver. Save game compatibility is not guaranteed.
 
-RELEASE NOTES:
-* Fix handling of game paths for vanilla definitions
+## Release Notes
+* Add html changelog preview
+* Add empty localization overwrite detection
+* Allow ignore rules to be visible at all times
 
-CHANGES FROM v1.18:
+## Changes From v1.18
 * Update dependencies
 * Various fixes
 * Add mod search filtering syntax
@@ -38,18 +42,20 @@ CHANGES FROM v1.18:
 * Add single merge folder type handling for Stellaris
 * Fix #304
 * Many conflict solver handling improvements</description>
-			<pubDate>Wed, 03 Nov 2021 19:22:09 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.19.76/win-x64-setup.rar" sparkle:version="1.19.76.17913" sparkle:shortVersionString="1.19.76" length="61678915" sparkle:os="windows" type="application/vnd.rar" sparkle:signature="70TUOqGV9pdAfGvvJF7u4ypm3IpNdQJ4uMgxLpNHYc+cuWZxk6wA3a6nVjk+OJTDyLYd8mCBnzcfr/x2+jp0Cw=="/>
+			<pubDate>Sun, 07 Nov 2021 06:41:06 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.19.81/win-x64-setup.rar" sparkle:version="1.19.81.25883" sparkle:shortVersionString="1.19.81" length="61760868" sparkle:os="windows" type="application/vnd.rar" sparkle:signature="1zbFVUMQ5pUTHBagpa69PICcS4NFeDCe9QKQVGa5ETiI6yeEVtOMHlRhtG7KnglDICYl//3R6ZJNOkzRw+44Dw=="/>
 		</item>
 		<item>
-			<title>1.19.76</title>
-			<description>NOTE:
+			<title>1.19.81</title>
+			<description>## Note
 This version has significant changes to Conflict Solver, please backup your existing mod collections before running conflict solver. Save game compatibility is not guaranteed.
 
-RELEASE NOTES:
-* Fix handling of game paths for vanilla definitions
+## Release Notes
+* Add html changelog preview
+* Add empty localization overwrite detection
+* Allow ignore rules to be visible at all times
 
-CHANGES FROM v1.18:
+## Changes From v1.18
 * Update dependencies
 * Various fixes
 * Add mod search filtering syntax
@@ -57,18 +63,20 @@ CHANGES FROM v1.18:
 * Add single merge folder type handling for Stellaris
 * Fix #304
 * Many conflict solver handling improvements</description>
-			<pubDate>Wed, 03 Nov 2021 19:22:05 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.19.76/win-x64.rar" sparkle:version="1.19.76.17913" sparkle:shortVersionString="1.19.76" length="74160072" sparkle:os="windows" type="application/vnd.rar" sparkle:signature="cJhNpz+RczbCVxfRlskpXflR2OH438Mo0TQpa+g1SdPSJUIgoYihowYO+e4B8X1IfkXZLQlO9678r5lRicjzBg=="/>
+			<pubDate>Sun, 07 Nov 2021 06:41:01 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.19.81/win-x64.rar" sparkle:version="1.19.81.25883" sparkle:shortVersionString="1.19.81" length="74255351" sparkle:os="windows" type="application/vnd.rar" sparkle:signature="GLkF/bDgTkIOiVq8lODmppEth18JO6zda3DeAQtp0phVyfWrDG1gyHbQlTe1srLbR+m8UqMRYc06rnFlAu+9Bg=="/>
 		</item>
 		<item>
-			<title>1.19.76</title>
-			<description>NOTE:
+			<title>1.19.81</title>
+			<description>## Note
 This version has significant changes to Conflict Solver, please backup your existing mod collections before running conflict solver. Save game compatibility is not guaranteed.
 
-RELEASE NOTES:
-* Fix handling of game paths for vanilla definitions
+## Release Notes
+* Add html changelog preview
+* Add empty localization overwrite detection
+* Allow ignore rules to be visible at all times
 
-CHANGES FROM v1.18:
+## Changes From v1.18
 * Update dependencies
 * Various fixes
 * Add mod search filtering syntax
@@ -76,8 +84,8 @@ CHANGES FROM v1.18:
 * Add single merge folder type handling for Stellaris
 * Fix #304
 * Many conflict solver handling improvements</description>
-			<pubDate>Wed, 03 Nov 2021 19:21:56 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.19.76/linux-x64.zip" sparkle:version="1.19.76.17913" sparkle:shortVersionString="1.19.76" length="86976943" sparkle:os="linux" type="application/zip" sparkle:signature="AhLKqwv2bW4nmdRfV1U0Q5/tvSwKalwDaDlZR0ev8EfUYZZ3cTS2HLhx2o71QdiTBNiKgwg+O01XqqWOuR9OCQ=="/>
+			<pubDate>Sun, 07 Nov 2021 06:40:52 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.19.81/linux-x64.zip" sparkle:version="1.19.81.25883" sparkle:shortVersionString="1.19.81" length="87080836" sparkle:os="linux" type="application/zip" sparkle:signature="eEV8XA5teFjoqW3957Jr2cmk8wTHaAW0xXnTmhMtXzD3itYC82KJMZiARjWYmIMxlqTSft6q8Mp3Oitlmbv9BQ=="/>
 		</item>
 	</channel>
 </rss>
