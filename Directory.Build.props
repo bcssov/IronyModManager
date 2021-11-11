@@ -9,6 +9,7 @@
     <RepositoryUrl>https://github.com/bcssov/IronyModManager</RepositoryUrl>
     <RepositoryType>GIT</RepositoryType>
     <ProduceReferenceAssembly>false</ProduceReferenceAssembly>
+    <ErrorOnDuplicatePublishOutputFiles>false</ErrorOnDuplicatePublishOutputFiles>
   </PropertyGroup>
   <PropertyGroup Label="BasePath">
     <SolutionDir Condition="'$(SolutionDir)'==''">$(MSBuildThisFileDirectory)</SolutionDir>
