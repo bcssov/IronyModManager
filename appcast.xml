@@ -4,14 +4,12 @@
 		<title>Irony Mod Manager</title>
 		<language>en</language>
 		<item>
-			<title>1.19.81</title>
+			<title>1.19.83</title>
 			<description>## Note
 This version has significant changes to Conflict Solver, please backup your existing mod collections before running conflict solver. Save game compatibility is not guaranteed.
 
 ## Release Notes
-* Add html changelog preview
-* Add empty localization overwrite detection
-* Allow ignore rules to be visible at all times
+* Exclude shader\fxh validation from conflict solver
 
 ## Changes From v1.18
 * Update dependencies
@@ -21,18 +19,16 @@ This version has significant changes to Conflict Solver, please backup your exis
 * Add single merge folder type handling for Stellaris
 * Fix #304
 * Many conflict solver handling improvements</description>
-			<pubDate>Sun, 07 Nov 2021 06:40:58 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.19.81/osx-x64.rar" sparkle:version="1.19.81.25883" sparkle:shortVersionString="1.19.81" length="70436012" sparkle:os="osx" type="application/vnd.rar" sparkle:signature="VUNHtQ8waQOeglqj49E14zsNCOWgf+mWuiVgNLbYKG8fIMz1Oh6y3FUuospswPMNWoPCXVMGC/d3i91BpbqrDQ=="/>
+			<pubDate>Fri, 12 Nov 2021 00:48:05 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.19.83/osx-x64.rar" sparkle:version="1.19.83.32644" sparkle:shortVersionString="1.19.83" length="70427669" sparkle:os="osx" type="application/vnd.rar" sparkle:signature="Ee2KrrROaBJKTl7+PN3SphTBIJWeN25m/vwje2MwRywhjUMBlYBKbnSJX7WvBWz7kmCs6a4y11X18dUT3j8uDQ=="/>
 		</item>
 		<item>
-			<title>1.19.81</title>
+			<title>1.19.83</title>
 			<description>## Note
 This version has significant changes to Conflict Solver, please backup your existing mod collections before running conflict solver. Save game compatibility is not guaranteed.
 
 ## Release Notes
-* Add html changelog preview
-* Add empty localization overwrite detection
-* Allow ignore rules to be visible at all times
+* Exclude shader\fxh validation from conflict solver
 
 ## Changes From v1.18
 * Update dependencies
@@ -42,18 +38,16 @@ This version has significant changes to Conflict Solver, please backup your exis
 * Add single merge folder type handling for Stellaris
 * Fix #304
 * Many conflict solver handling improvements</description>
-			<pubDate>Sun, 07 Nov 2021 06:41:06 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.19.81/win-x64-setup.rar" sparkle:version="1.19.81.25883" sparkle:shortVersionString="1.19.81" length="61760868" sparkle:os="windows" type="application/vnd.rar" sparkle:signature="1zbFVUMQ5pUTHBagpa69PICcS4NFeDCe9QKQVGa5ETiI6yeEVtOMHlRhtG7KnglDICYl//3R6ZJNOkzRw+44Dw=="/>
+			<pubDate>Fri, 12 Nov 2021 00:48:13 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.19.83/win-x64-setup.rar" sparkle:version="1.19.83.32644" sparkle:shortVersionString="1.19.83" length="61746985" sparkle:os="windows" type="application/vnd.rar" sparkle:signature="QLtO+WGoicp2qyBomMWmwXRHsaUtEZpCXuhkgKtJ9RzXYgBoEGpviGnAdDy6LBSMqEjVbYpxQVyF1/Hv644oAA=="/>
 		</item>
 		<item>
-			<title>1.19.81</title>
+			<title>1.19.83</title>
 			<description>## Note
 This version has significant changes to Conflict Solver, please backup your existing mod collections before running conflict solver. Save game compatibility is not guaranteed.
 
 ## Release Notes
-* Add html changelog preview
-* Add empty localization overwrite detection
-* Allow ignore rules to be visible at all times
+* Exclude shader\fxh validation from conflict solver
 
 ## Changes From v1.18
 * Update dependencies
@@ -63,18 +57,16 @@ This version has significant changes to Conflict Solver, please backup your exis
 * Add single merge folder type handling for Stellaris
 * Fix #304
 * Many conflict solver handling improvements</description>
-			<pubDate>Sun, 07 Nov 2021 06:41:01 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.19.81/win-x64.rar" sparkle:version="1.19.81.25883" sparkle:shortVersionString="1.19.81" length="74255351" sparkle:os="windows" type="application/vnd.rar" sparkle:signature="GLkF/bDgTkIOiVq8lODmppEth18JO6zda3DeAQtp0phVyfWrDG1gyHbQlTe1srLbR+m8UqMRYc06rnFlAu+9Bg=="/>
+			<pubDate>Fri, 12 Nov 2021 00:48:09 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.19.83/win-x64.rar" sparkle:version="1.19.83.32644" sparkle:shortVersionString="1.19.83" length="74245193" sparkle:os="windows" type="application/vnd.rar" sparkle:signature="VByaYNmV4vLU+ME0WfPEq0GOWNEucww1LfKRy0egmUxymkSXnNmIDkNXF+OkmK7NnT8v+k/lk3oHbhJCJtRoBg=="/>
 		</item>
 		<item>
-			<title>1.19.81</title>
+			<title>1.19.83</title>
 			<description>## Note
 This version has significant changes to Conflict Solver, please backup your existing mod collections before running conflict solver. Save game compatibility is not guaranteed.
 
 ## Release Notes
-* Add html changelog preview
-* Add empty localization overwrite detection
-* Allow ignore rules to be visible at all times
+* Exclude shader\fxh validation from conflict solver
 
 ## Changes From v1.18
 * Update dependencies
@@ -84,8 +76,8 @@ This version has significant changes to Conflict Solver, please backup your exis
 * Add single merge folder type handling for Stellaris
 * Fix #304
 * Many conflict solver handling improvements</description>
-			<pubDate>Sun, 07 Nov 2021 06:40:52 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.19.81/linux-x64.zip" sparkle:version="1.19.81.25883" sparkle:shortVersionString="1.19.81" length="87080836" sparkle:os="linux" type="application/zip" sparkle:signature="eEV8XA5teFjoqW3957Jr2cmk8wTHaAW0xXnTmhMtXzD3itYC82KJMZiARjWYmIMxlqTSft6q8Mp3Oitlmbv9BQ=="/>
+			<pubDate>Fri, 12 Nov 2021 00:48:00 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.19.83/linux-x64.zip" sparkle:version="1.19.83.32644" sparkle:shortVersionString="1.19.83" length="87083594" sparkle:os="linux" type="application/zip" sparkle:signature="aXP5wmzksAX6AKv3qU4F9+A1m2H9BwnVcLLwDtOVx/kjdsOZ7Kkzg5okifyyMAUh6iflcD+hsV9iedpY2D0zDw=="/>
 		</item>
 	</channel>
 </rss>
