@@ -4,7 +4,7 @@
 // Created          : 09-02-2021
 //
 // Last Modified By : Mario
-// Last Modified On : 10-31-2021
+// Last Modified On : 11-12-2021
 // ***********************************************************************
 // <copyright file="ValidateParser.cs" company="Mario">
 //     Mario
@@ -32,6 +32,18 @@ namespace IronyModManager.Parser
     /// <seealso cref="IronyModManager.Parser.Common.Parsers.IValidateParser" />
     public class ValidateParser : BaseParser, IValidateParser
     {
+        #region Fields
+
+        /// <summary>
+        /// The skip validation for types
+        /// </summary>
+        private static readonly string[] skipValidationForTypes = new string[]
+        {
+            Common.Constants.ShaderExtension, Common.Constants.FxhExtension
+        };
+
+        #endregion Fields
+
         #region Constructors
 
         /// <summary>
@@ -51,7 +63,7 @@ namespace IronyModManager.Parser
         /// Gets the name of the parser.
         /// </summary>
         /// <value>The name of the parser.</value>
-        /// <exception cref="NotSupportedException"></exception>
+        /// <exception cref="System.NotSupportedException"></exception>
         public override string ParserName => throw new NotSupportedException();
 
         #endregion Properties
@@ -63,7 +75,7 @@ namespace IronyModManager.Parser
         /// </summary>
         /// <param name="args">The arguments.</param>
         /// <returns><c>true</c> if this instance can parse the specified arguments; otherwise, <c>false</c>.</returns>
-        /// <exception cref="NotSupportedException"></exception>
+        /// <exception cref="System.NotSupportedException"></exception>
         public override bool CanParse(CanParseArgs args)
         {
             throw new NotSupportedException();
@@ -100,7 +112,7 @@ namespace IronyModManager.Parser
         /// </summary>
         /// <param name="args">The arguments.</param>
         /// <returns>IEnumerable&lt;IDefinition&gt;.</returns>
-        /// <exception cref="NotSupportedException"></exception>
+        /// <exception cref="System.NotSupportedException"></exception>
         public override IEnumerable<IDefinition> Parse(ParserArgs args)
         {
             throw new NotSupportedException();
@@ -113,7 +125,11 @@ namespace IronyModManager.Parser
         /// <returns>IEnumerable&lt;IDefinition&gt;.</returns>
         public IEnumerable<IDefinition> Validate(ParserArgs args)
         {
-            return EvalForErrorsOnly(args);
+            if (!skipValidationForTypes.Any(p => args.File.EndsWith(p, StringComparison.OrdinalIgnoreCase)))
+            {
+                return EvalForErrorsOnly(args);
+            }
+            return null;
         }
 
         /// <summary>
