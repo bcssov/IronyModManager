@@ -4,7 +4,7 @@
 // Created          : 03-28-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 10-31-2021
+// Last Modified On : 11-12-2021
 // ***********************************************************************
 // <copyright file="WholeTextParser.cs" company="Mario">
 //     Mario
@@ -103,7 +103,7 @@ namespace IronyModManager.Parser.Generic
         {
             bool fileNameTag = false;
             // Doesn't seem to like fxh and or shader file extensions
-            if (!skipValidationForTypes.Any(p => args.File.EndsWith(p)))
+            if (!skipValidationForTypes.Any(p => args.File.EndsWith(p, StringComparison.OrdinalIgnoreCase)))
             {
                 var errors = EvalForErrorsOnly(args);
                 if (errors != null)
