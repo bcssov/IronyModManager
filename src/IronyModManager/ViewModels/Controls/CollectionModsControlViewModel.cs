@@ -4,7 +4,7 @@
 // Created          : 03-03-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 10-26-2021
+// Last Modified On : 11-16-2021
 // ***********************************************************************
 // <copyright file="CollectionModsControlViewModel.cs" company="Mario">
 //     Mario
@@ -350,9 +350,19 @@ namespace IronyModManager.ViewModels.Controls
             ParadoxLauncher,
 
             /// <summary>
+            /// The paradox launcher beta
+            /// </summary>
+            ParadoxLauncherBeta,
+
+            /// <summary>
             /// The paradox launcher json
             /// </summary>
-            ParadoxLauncherJson
+            ParadoxLauncherJson,
+
+            /// <summary>
+            /// The paradox launcher json202110
+            /// </summary>
+            ParadoxLauncherJson202110
         }
 
         #endregion Enums
@@ -974,6 +984,10 @@ namespace IronyModManager.ViewModels.Controls
             {
                 await Task.Run(async () => await modCollectionService.ExportParadoxLauncherJsonAsync(path, collection).ConfigureAwait(false)).ConfigureAwait(false);
             }
+            else if (providerType == ImportProviderType.ParadoxLauncherJson202110)
+            {
+                await Task.Run(async () => await modCollectionService.ExportParadoxLauncher202110JsonAsync(path, collection).ConfigureAwait(false)).ConfigureAwait(false);
+            }
             else
             {
                 modExportProgress?.Dispose();
@@ -1132,6 +1146,7 @@ namespace IronyModManager.ViewModels.Controls
                 ImportProviderType.Paradoxos => await modCollectionService.ImportParadoxosAsync(path),
                 ImportProviderType.Paradox => await modCollectionService.ImportParadoxAsync(),
                 ImportProviderType.ParadoxLauncher => await modCollectionService.ImportParadoxLauncherAsync(),
+                ImportProviderType.ParadoxLauncherBeta => await modCollectionService.ImportParadoxLauncherBetaAsync(),
                 ImportProviderType.ParadoxLauncherJson => await modCollectionService.ImportParadoxLauncherJsonAsync(path),
                 _ => await modCollectionService.GetImportedCollectionDetailsAsync(path),
             };
@@ -1396,8 +1411,10 @@ namespace IronyModManager.ViewModels.Controls
                     ExportCollection.ImportOtherParadoxosCommand.Select(p => Tuple.Create(ImportActionType.Import, p, ImportProviderType.Paradoxos)),
                     ExportCollection.ImportOtherParadoxCommand.Select(p => Tuple.Create(ImportActionType.Import, p, ImportProviderType.Paradox)),
                     ExportCollection.ImportOtherParadoxLauncherCommand.Select(p => Tuple.Create(ImportActionType.Import, p, ImportProviderType.ParadoxLauncher)),
+                    ExportCollection.ImportOtherParadoxLauncherBetaCommand.Select(p => Tuple.Create(ImportActionType.Import, p, ImportProviderType.ParadoxLauncherBeta)),
                     ExportCollection.ImportOtherParadoxLauncherJsonCommand.Select(p => Tuple.Create(ImportActionType.Import, p, ImportProviderType.ParadoxLauncherJson)),
-                    ExportCollection.ExportParadoxLauncherJsonCommand.Select(p => Tuple.Create(ImportActionType.Export, p, ImportProviderType.ParadoxLauncherJson)))
+                    ExportCollection.ExportParadoxLauncherJsonCommand.Select(p => Tuple.Create(ImportActionType.Export, p, ImportProviderType.ParadoxLauncherJson)),
+                    ExportCollection.ExportParadoxLauncherJson202110Command.Select(p => Tuple.Create(ImportActionType.Export, p, ImportProviderType.ParadoxLauncherJson202110)))
                 .Subscribe(s =>
                 {
                     if (s.Item2.State == CommandState.Success)

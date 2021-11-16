@@ -4,7 +4,7 @@
 // Created          : 03-09-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 08-29-2021
+// Last Modified On : 11-16-2021
 // ***********************************************************************
 // <copyright file="IModCollectionExporter.cs" company="Mario">
 //     Mario
@@ -31,6 +31,13 @@ namespace IronyModManager.IO.Common.Mods
         /// <param name="parameters">The parameters.</param>
         /// <returns>Task&lt;System.Boolean&gt;.</returns>
         Task<bool> ExportAsync(ModCollectionExporterParams parameters);
+
+        /// <summary>
+        /// Exports the paradox launcher json202010 asynchronous.
+        /// </summary>
+        /// <param name="parameters">The parameters.</param>
+        /// <returns>Task&lt;System.Boolean&gt;.</returns>
+        Task<bool> ExportParadoxLauncherJson202110Async(ModCollectionExporterParams parameters);
 
         /// <summary>
         /// Exports the paradox launcher json asynchronous.
@@ -66,6 +73,13 @@ namespace IronyModManager.IO.Common.Mods
         /// <param name="parameters">The parameters.</param>
         /// <returns>Task&lt;System.Boolean&gt;.</returns>
         Task<ICollectionImportResult> ImportParadoxLauncherAsync(ModCollectionExporterParams parameters);
+
+        /// <summary>
+        /// Imports the paradox launcher beta asynchronous.
+        /// </summary>
+        /// <param name="parameters">The parameters.</param>
+        /// <returns>Task&lt;ICollectionImportResult&gt;.</returns>
+        Task<ICollectionImportResult> ImportParadoxLauncherBetaAsync(ModCollectionExporterParams parameters);
 
         /// <summary>
         /// Imports the paradox launcher json asynchronous.

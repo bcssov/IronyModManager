@@ -1,12 +1,12 @@
 ﻿// ***********************************************************************
 // Assembly         : IronyModManager.IO
 // Author           : Mario
-// Created          : 08-25-2021
+// Created          : 11-16-2021
 //
 // Last Modified By : Mario
-// Last Modified On : 08-25-2021
+// Last Modified On : 11-16-2021
 // ***********************************************************************
-// <copyright file="ModInfo.cs" company="Mario">
+// <copyright file="KnoxMigrations.cs" company="Mario">
 //     Mario
 // </copyright>
 // <summary></summary>
@@ -14,36 +14,30 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Newtonsoft.Json;
+using RepoDb.Attributes;
 
-namespace IronyModManager.IO.Mods.Models.Paradox.Json
+namespace IronyModManager.IO.Mods.Models.Paradox.v2
 {
     /// <summary>
-    /// Class ModInfo.
+    /// Class KnoxMigrations.
     /// </summary>
-    internal class ModInfo
+    [Map("knex_migrations")]
+    internal class KnoxMigrations
     {
         #region Properties
 
         /// <summary>
-        /// Gets or sets the game.
+        /// Gets or sets the identifier.
         /// </summary>
-        /// <value>The game.</value>
-        [JsonProperty("game")]
-        public string Game { get; set; }
-
-        /// <summary>
-        /// Gets or sets the mods.
-        /// </summary>
-        /// <value>The mods.</value>
-        [JsonProperty("mods")]
-        public List<Mods> Mods { get; set; }
+        /// <value>The identifier.</value>
+        [Map("id")]
+        public int Id { get; set; }
 
         /// <summary>
         /// Gets or sets the name.
         /// </summary>
         /// <value>The name.</value>
-        [JsonProperty("name")]
+        [Map("name")]
         public string Name { get; set; }
 
         #endregion Properties

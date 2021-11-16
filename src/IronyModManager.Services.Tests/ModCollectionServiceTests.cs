@@ -4,7 +4,7 @@
 // Created          : 03-04-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 08-29-2021
+// Last Modified On : 11-16-2021
 // ***********************************************************************
 // <copyright file="ModCollectionServiceTests.cs" company="Mario">
 //     Mario
@@ -718,6 +718,92 @@ namespace IronyModManager.Services.Tests
         }
 
         /// <summary>
+        /// Defines the test method Should_export_mod_collection_as_paradox_202110_json.
+        /// </summary>
+        [Fact]
+        public async Task Should_export_mod_collection_as_paradox_202110_json()
+        {
+            var storageProvider = new Mock<IStorageProvider>();
+            var mapper = new Mock<IMapper>();
+            var gameService = new Mock<IGameService>();
+            var modExport = new Mock<IModCollectionExporter>();
+            var reader = new Mock<IReader>();
+            var modParser = new Mock<IModParser>();
+            var isValid = false;
+            gameService.Setup(s => s.GetSelected()).Returns(new Game()
+            {
+                Type = "no-items",
+                UserDirectory = "C:\\fake",
+                WorkshopDirectory = new List<string>() { "C:\\fake" },
+                CustomModDirectory = string.Empty
+            });
+            modExport.Setup(p => p.ExportParadoxLauncherJson202110Async(It.IsAny<ModCollectionExporterParams>())).Callback((ModCollectionExporterParams p) =>
+            {
+                if (p.File.Equals("file") && p.Mod.Name.Equals("fake") && p.ExportMods.Any() && p.Game != null)
+                {
+                    isValid = true;
+                }
+            });
+            var modWriter = new Mock<IModWriter>();
+            modWriter.Setup(p => p.ModDirectoryExists(It.IsAny<ModWriterParameters>())).Returns((ModWriterParameters p) =>
+            {
+                return false;
+            });
+            var collections = new List<IModCollection>()
+            {
+                new ModCollection()
+                {
+                    IsSelected = true,
+                    Mods = new List<string>() { "mod/fakemod.mod"},
+                    Name = "fake",
+                    Game = "no-items",
+                }
+            };
+            storageProvider.Setup(s => s.GetModCollections()).Returns(() =>
+            {
+                return collections;
+            });
+            var fileInfos = new List<IFileInfo>()
+            {
+                new FileInfo()
+                {
+                    Content = new List<string>() { "a" },
+                    FileName = "fakemod.mod",
+                    IsBinary = false
+                }
+            };
+            reader.Setup(s => s.Read(It.IsAny<string>(), It.IsAny<IEnumerable<string>>(), It.IsAny<bool>())).Returns(fileInfos);
+            modParser.Setup(s => s.Parse(It.IsAny<IEnumerable<string>>())).Returns((IEnumerable<string> values) =>
+            {
+                return new ModObject()
+                {
+                    FileName = values.First(),
+                    Name = values.First()
+                };
+            });
+            mapper.Setup(s => s.Map<IMod>(It.IsAny<IModObject>())).Returns((IModObject o) =>
+            {
+                return new Mod()
+                {
+                    FileName = o.FileName,
+                    Name = o.Name
+                };
+            });
+            mapper.Setup(s => s.Map<IModCollection>(It.IsAny<IModCollection>())).Returns((IModCollection o) =>
+            {
+                return o;
+            });
+
+            var service = new ModCollectionService(null, null, new Cache(), null, reader.Object, modWriter.Object, modParser.Object, gameService.Object, modExport.Object, storageProvider.Object, mapper.Object);
+            await service.ExportParadoxLauncher202110JsonAsync("file", new ModCollection()
+            {
+                Name = "fake",
+                Mods = new List<string>() { "mod/fakemod.mod" }
+            });
+            isValid.Should().BeTrue();
+        }
+
+        /// <summary>
         /// Defines the test method Should_import_mod.
         /// </summary>
         [Fact]
@@ -1051,6 +1137,62 @@ namespace IronyModManager.Services.Tests
 
             var service = new ModCollectionService(null, null, new Cache(), null, null, null, null, gameService.Object, modExport.Object, storageProvider.Object, mapper.Object);
             var result = await service.ImportParadoxLauncherAsync();
+            result.Should().BeNull();
+        }
+
+        /// <summary>
+        /// Defines the test method Should_import_paradox_launcher_beta_mod.
+        /// </summary>
+        [Fact]
+        public async Task Should_import_paradox_launcher_beta_mod()
+        {
+            var storageProvider = new Mock<IStorageProvider>();
+            var mapper = new Mock<IMapper>();
+            var gameService = new Mock<IGameService>();
+            var modExport = new Mock<IModCollectionExporter>();
+            DISetup.SetupContainer();
+            gameService.Setup(s => s.GetSelected()).Returns(new Game()
+            {
+                Type = "no-items",
+                UserDirectory = "C:\\fake"
+            });
+            modExport.Setup(p => p.ImportParadoxLauncherBetaAsync(It.IsAny<ModCollectionExporterParams>())).Returns((ModCollectionExporterParams p) =>
+            {
+                ICollectionImportResult result = new CollectionImportResult
+                {
+                    Name = "fake"
+                };
+                return Task.FromResult(result);
+            });
+
+            var service = new ModCollectionService(null, null, new Cache(), null, null, null, null, gameService.Object, modExport.Object, storageProvider.Object, mapper.Object);
+            var result = await service.ImportParadoxLauncherBetaAsync();
+            result.Name.Should().Be("fake");
+        }
+
+        /// <summary>
+        /// Defines the test method Should_not_import_paradox_launcher_beta_mod.
+        /// </summary>
+        [Fact]
+        public async Task Should_not_import_paradox_launcher_beta_mod()
+        {
+            var storageProvider = new Mock<IStorageProvider>();
+            var mapper = new Mock<IMapper>();
+            var gameService = new Mock<IGameService>();
+            var modExport = new Mock<IModCollectionExporter>();
+            DISetup.SetupContainer();
+            gameService.Setup(s => s.GetSelected()).Returns(new Game()
+            {
+                Type = "no-items",
+                UserDirectory = "C:\\fake"
+            });
+            modExport.Setup(p => p.ImportParadoxLauncherBetaAsync(It.IsAny<ModCollectionExporterParams>())).Returns((ModCollectionExporterParams p) =>
+            {
+                return Task.FromResult((ICollectionImportResult)null);
+            });
+
+            var service = new ModCollectionService(null, null, new Cache(), null, null, null, null, gameService.Object, modExport.Object, storageProvider.Object, mapper.Object);
+            var result = await service.ImportParadoxLauncherBetaAsync();
             result.Should().BeNull();
         }
 

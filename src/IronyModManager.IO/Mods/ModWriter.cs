@@ -4,7 +4,7 @@
 // Created          : 03-31-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 10-25-2021
+// Last Modified On : 11-16-2021
 // ***********************************************************************
 // <copyright file="ModWriter.cs" company="Mario">
 //     Mario
@@ -57,6 +57,11 @@ namespace IronyModManager.IO.Mods
         /// </summary>
         private readonly SQLiteExporter sqliteExporter;
 
+        /// <summary>
+        /// The sqlite exporter beta
+        /// </summary>
+        private readonly SQLiteExporter sqliteExporterBeta;
+
         #endregion Fields
 
         #region Constructors
@@ -69,7 +74,8 @@ namespace IronyModManager.IO.Mods
         public ModWriter(ILogger logger, IMapper mapper)
         {
             jsonExporter = new JsonExporter();
-            sqliteExporter = new SQLiteExporter(logger);
+            sqliteExporter = new SQLiteExporter(logger, false);
+            sqliteExporterBeta = new SQLiteExporter(logger, true);
             this.mapper = mapper;
         }
 
@@ -90,6 +96,7 @@ namespace IronyModManager.IO.Mods
                 tasks = new Task<bool>[]
                 {
                     Task.Run(async() => await sqliteExporter.ExportAsync(parameters)),
+                    Task.Run(async() => await sqliteExporterBeta.ExportAsync(parameters)),
                     Task.Run(async() => await jsonExporter.ExportModsAsync(parameters))
                 };
                 await Task.WhenAll(tasks);
