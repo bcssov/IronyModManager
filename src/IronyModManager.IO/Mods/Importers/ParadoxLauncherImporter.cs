@@ -100,8 +100,8 @@ namespace IronyModManager.IO.Mods.Importers
                     }
                     if (!string.IsNullOrWhiteSpace(model.Game) && !string.IsNullOrWhiteSpace(model.Name))
                     {
-                        // Validate whether this really is v2
-                        if (model.Mods.Any(p => p.Position.StartsWith("00")))
+                        // Validate whether this really is v2 (execting length larger than 4 as a dumb best guess)
+                        if (model.Mods.Any(p => p.Position.Length >= 4))
                         {
                             var result = DIResolver.Get<ICollectionImportResult>();
                             result.Name = model.Name;
