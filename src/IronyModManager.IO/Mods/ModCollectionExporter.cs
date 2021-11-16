@@ -4,7 +4,7 @@
 // Created          : 03-09-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 08-29-2021
+// Last Modified On : 11-16-2021
 // ***********************************************************************
 // <copyright file="ModCollectionExporter.cs" company="Mario">
 //     Mario
@@ -78,6 +78,11 @@ namespace IronyModManager.IO.Mods
         private readonly ParadoxLauncherImporter paradoxLauncherImporter;
 
         /// <summary>
+        /// The paradox launcher importer beta
+        /// </summary>
+        private readonly ParadoxLauncherImporterBeta paradoxLauncherImporterBeta;
+
+        /// <summary>
         /// The paradoxos importer
         /// </summary>
         private readonly ParadoxosImporter paradoxosImporter;
@@ -98,6 +103,7 @@ namespace IronyModManager.IO.Mods
             paradoxImporter = new ParadoxImporter(logger);
             paradoxLauncherImporter = new ParadoxLauncherImporter(logger);
             paradoxLauncherExporter = new ParadoxLauncherExporter();
+            paradoxLauncherImporterBeta = new ParadoxLauncherImporterBeta(logger);
             this.logger = logger;
             this.messageBus = messageBus;
             this.mapper = mapper;
@@ -208,7 +214,7 @@ namespace IronyModManager.IO.Mods
                         if (!RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
                         {
                             var fs = new FileStream(mod.FullPath, FileMode.Open, FileAccess.Read, FileShare.Read);
-                            var file = Path.Combine(Common.Constants.ModExportPath, parameters.Mod.Name.GenerateShortFileNameHashId(4).GenerateValidFileName() + "_"  + mod.Name.GenerateValidFileName() + "_" + Path.GetFileName(mod.FullPath));
+                            var file = Path.Combine(Common.Constants.ModExportPath, parameters.Mod.Name.GenerateShortFileNameHashId(4).GenerateValidFileName() + "_" + mod.Name.GenerateValidFileName() + "_" + Path.GetFileName(mod.FullPath));
                             zip.AddEntry(file, fs);
                             streams.Add(fs);
                         }
@@ -293,6 +299,16 @@ namespace IronyModManager.IO.Mods
         public Task<ICollectionImportResult> ImportParadoxLauncherAsync(ModCollectionExporterParams parameters)
         {
             return paradoxLauncherImporter.DatabaseImportAsync(parameters);
+        }
+
+        /// <summary>
+        /// Imports the paradox launcher beta asynchronous.
+        /// </summary>
+        /// <param name="parameters">The parameters.</param>
+        /// <returns>Task&lt;ICollectionImportResult&gt;.</returns>
+        public Task<ICollectionImportResult> ImportParadoxLauncherBetaAsync(ModCollectionExporterParams parameters)
+        {
+            return paradoxLauncherImporterBeta.DatabaseImportAsync(parameters);
         }
 
         /// <summary>

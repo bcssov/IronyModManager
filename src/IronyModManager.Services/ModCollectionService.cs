@@ -4,7 +4,7 @@
 // Created          : 03-04-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 08-29-2021
+// Last Modified On : 11-16-2021
 // ***********************************************************************
 // <copyright file="ModCollectionService.cs" company="Mario">
 //     Mario
@@ -117,7 +117,12 @@ namespace IronyModManager.Services
             /// <summary>
             /// The paradox launcher json
             /// </summary>
-            ParadoxLauncherJson
+            ParadoxLauncherJson,
+
+            /// <summary>
+            /// The paradox launcher beta
+            /// </summary>
+            ParadoxLauncherBeta
         }
 
         #endregion Enums
@@ -426,6 +431,15 @@ namespace IronyModManager.Services
         }
 
         /// <summary>
+        /// Imports the paradox launcher beta asynchronous.
+        /// </summary>
+        /// <returns>Task&lt;IModCollection&gt;.</returns>
+        public virtual Task<IModCollection> ImportParadoxLauncherBetaAsync()
+        {
+            return ImportModsAsync(ImportType.ParadoxLauncherBeta);
+        }
+
+        /// <summary>
         /// Imports the paradox launcher json asynchronous.
         /// </summary>
         /// <param name="file">The file.</param>
@@ -450,7 +464,7 @@ namespace IronyModManager.Services
         /// </summary>
         /// <param name="collection">The collection.</param>
         /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
-        /// <exception cref="ArgumentNullException">collection</exception>
+        /// <exception cref="System.ArgumentNullException">collection</exception>
         public virtual bool Save(IModCollection collection)
         {
             if (collection == null || string.IsNullOrWhiteSpace(collection.Game))
@@ -536,6 +550,10 @@ namespace IronyModManager.Services
 
                     case ImportType.Paradoxos:
                         result = await modCollectionExporter.ImportParadoxosAsync(parameters);
+                        break;
+
+                    case ImportType.ParadoxLauncherBeta:
+                        result = await modCollectionExporter.ImportParadoxLauncherBetaAsync(parameters);
                         break;
 
                     case ImportType.ParadoxLauncherJson:

@@ -173,6 +173,7 @@
             "Paradoxos": "Uvezi iz Paradoxos",
             "Paradox": "Uvezi iz igre",
             "ParadoxLauncher": "Uvezi iz Paradox Launcher",
+            "ParadoxLauncherBeta": "Uvezi iz Paradox Launcher Bete",
             "ParadoxLauncherJson": "Uvezi iz Paradox Launcher Json",
             "Close": "Zatvori"
         },
@@ -180,7 +181,8 @@
             "Title": "...",
             "OrderOnly": "Izvezi redoslijed",
             "WholeCollection": "Izvoz cijelu zbirku",
-            "ParadoxLauncherJson": "Izvezi u Paradox Launcher Json",
+            "ParadoxLauncherJson": "Izvezi u Paradox Launcher Json (<2020.10)",
+            "ParadoxLauncherJson202010": "Izvezi u Paradox Launcher Json (>=2020.10)",
             "Close": "Zatvori"
         },
         "MergeCollection": {

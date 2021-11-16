@@ -4,7 +4,7 @@
 // Created          : 08-12-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 08-29-2021
+// Last Modified On : 11-16-2021
 // ***********************************************************************
 // <copyright file="ParadoxLauncherImporter.cs" company="Mario">
 //     Mario
@@ -139,6 +139,16 @@ namespace IronyModManager.IO.Mods.Importers
         }
 
         /// <summary>
+        /// Gets the database path.
+        /// </summary>
+        /// <param name="parameters">The parameters.</param>
+        /// <returns>System.String.</returns>
+        protected virtual string GetDbPath(ModCollectionExporterParams parameters)
+        {
+            return Path.Combine(Path.GetDirectoryName(parameters.ModDirectory), Constants.Sql_db_path);
+        }
+
+        /// <summary>
         /// Gets the connection.
         /// </summary>
         /// <param name="parameters">The parameters.</param>
@@ -146,16 +156,6 @@ namespace IronyModManager.IO.Mods.Importers
         private IDbConnection GetConnection(ModCollectionExporterParams parameters)
         {
             return new SqliteConnection($"Data Source=\"{GetDbPath(parameters)}\"").EnsureOpen();
-        }
-
-        /// <summary>
-        /// Gets the database path.
-        /// </summary>
-        /// <param name="parameters">The parameters.</param>
-        /// <returns>System.String.</returns>
-        private string GetDbPath(ModCollectionExporterParams parameters)
-        {
-            return Path.Combine(Path.GetDirectoryName(parameters.ModDirectory), Constants.Sql_db_path);
         }
 
         #endregion Methods

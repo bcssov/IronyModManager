@@ -4,7 +4,7 @@
 // Created          : 03-04-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 08-29-2021
+// Last Modified On : 11-16-2021
 // ***********************************************************************
 // <copyright file="ModCollectionServiceTests.cs" company="Mario">
 //     Mario
@@ -1051,6 +1051,62 @@ namespace IronyModManager.Services.Tests
 
             var service = new ModCollectionService(null, null, new Cache(), null, null, null, null, gameService.Object, modExport.Object, storageProvider.Object, mapper.Object);
             var result = await service.ImportParadoxLauncherAsync();
+            result.Should().BeNull();
+        }
+
+        /// <summary>
+        /// Defines the test method Should_import_paradox_launcher_beta_mod.
+        /// </summary>
+        [Fact]
+        public async Task Should_import_paradox_launcher_beta_mod()
+        {
+            var storageProvider = new Mock<IStorageProvider>();
+            var mapper = new Mock<IMapper>();
+            var gameService = new Mock<IGameService>();
+            var modExport = new Mock<IModCollectionExporter>();
+            DISetup.SetupContainer();
+            gameService.Setup(s => s.GetSelected()).Returns(new Game()
+            {
+                Type = "no-items",
+                UserDirectory = "C:\\fake"
+            });
+            modExport.Setup(p => p.ImportParadoxLauncherBetaAsync(It.IsAny<ModCollectionExporterParams>())).Returns((ModCollectionExporterParams p) =>
+            {
+                ICollectionImportResult result = new CollectionImportResult
+                {
+                    Name = "fake"
+                };
+                return Task.FromResult(result);
+            });
+
+            var service = new ModCollectionService(null, null, new Cache(), null, null, null, null, gameService.Object, modExport.Object, storageProvider.Object, mapper.Object);
+            var result = await service.ImportParadoxLauncherBetaAsync();
+            result.Name.Should().Be("fake");
+        }
+
+        /// <summary>
+        /// Defines the test method Should_not_import_paradox_launcher_beta_mod.
+        /// </summary>
+        [Fact]
+        public async Task Should_not_import_paradox_launcher_beta_mod()
+        {
+            var storageProvider = new Mock<IStorageProvider>();
+            var mapper = new Mock<IMapper>();
+            var gameService = new Mock<IGameService>();
+            var modExport = new Mock<IModCollectionExporter>();
+            DISetup.SetupContainer();
+            gameService.Setup(s => s.GetSelected()).Returns(new Game()
+            {
+                Type = "no-items",
+                UserDirectory = "C:\\fake"
+            });
+            modExport.Setup(p => p.ImportParadoxLauncherBetaAsync(It.IsAny<ModCollectionExporterParams>())).Returns((ModCollectionExporterParams p) =>
+            {
+                return Task.FromResult((ICollectionImportResult)null);
+            });
+
+            var service = new ModCollectionService(null, null, new Cache(), null, null, null, null, gameService.Object, modExport.Object, storageProvider.Object, mapper.Object);
+            var result = await service.ImportParadoxLauncherBetaAsync();
             result.Should().BeNull();
         }
 

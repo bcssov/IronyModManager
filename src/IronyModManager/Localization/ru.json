@@ -173,6 +173,7 @@
             "Paradoxos": "Импорт из Paradoxos",
             "Paradox": "Импорт из игры",
             "ParadoxLauncher": "Импорт из Paradox Launcher",
+            "ParadoxLauncherBeta": "Импорт из Paradox Launcher Beta",
             "ParadoxLauncherJson": "Импорт из Paradox Launcher Json",
             "Close": "Закрыть"
         },
@@ -180,7 +181,8 @@
             "Title": "...",
             "OrderOnly": "Экспортировать только порядок",
             "WholeCollection": "Экспортировать целую коллекцию",
-            "ParadoxLauncherJson": "Экспорт в Paradox Launcher Json",
+            "ParadoxLauncherJson": "Экспорт в Paradox Launcher Json (<2020.10)",
+            "ParadoxLauncherJson202010": "Экспорт в Paradox Launcher Json (>=2020.10)",
             "Close": "Закрыть"
         },
         "MergeCollection": {

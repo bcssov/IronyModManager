@@ -4,7 +4,7 @@
 // Created          : 03-09-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 08-26-2021
+// Last Modified On : 11-16-2021
 // ***********************************************************************
 // <copyright file="ExportModCollectionControlViewModel.cs" company="Mario">
 //     Mario
@@ -215,6 +215,13 @@ namespace IronyModManager.ViewModels.Controls
         public virtual string ImportOtherParadox { get; protected set; }
 
         /// <summary>
+        /// Gets or sets the import other paradox beta launcher.
+        /// </summary>
+        /// <value>The import other paradox beta launcher.</value>
+        [StaticLocalization(LocalizationResources.Collection_Mods.ImportOther.ParadoxLauncherBeta)]
+        public virtual string ImportOtherParadoxBetaLauncher { get; protected set; }
+
+        /// <summary>
         /// Gets or sets the import other paradox command.
         /// </summary>
         /// <value>The import other paradox command.</value>
@@ -233,6 +240,12 @@ namespace IronyModManager.ViewModels.Controls
         /// <value>The import other paradox launcher.</value>
         [StaticLocalization(LocalizationResources.Collection_Mods.ImportOther.ParadoxLauncher)]
         public virtual string ImportOtherParadoxLauncher { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets the import other paradox launcher beta command.
+        /// </summary>
+        /// <value>The import other paradox launcher beta command.</value>
+        public virtual ReactiveCommand<Unit, CommandResult<string>> ImportOtherParadoxLauncherBetaCommand { get; protected set; }
 
         /// <summary>
         /// Gets or sets the import other paradox launcher command.
@@ -334,6 +347,11 @@ namespace IronyModManager.ViewModels.Controls
             }).DisposeWith(disposables);
 
             ImportOtherParadoxLauncherCommand = ReactiveCommand.Create(() =>
+            {
+                return new CommandResult<string>(string.Empty, CommandState.Success);
+            }).DisposeWith(disposables);
+
+            ImportOtherParadoxLauncherBetaCommand = ReactiveCommand.Create(() =>
             {
                 return new CommandResult<string>(string.Empty, CommandState.Success);
             }).DisposeWith(disposables);

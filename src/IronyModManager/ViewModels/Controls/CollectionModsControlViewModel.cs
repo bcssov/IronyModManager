@@ -4,7 +4,7 @@
 // Created          : 03-03-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 10-26-2021
+// Last Modified On : 11-16-2021
 // ***********************************************************************
 // <copyright file="CollectionModsControlViewModel.cs" company="Mario">
 //     Mario
@@ -348,6 +348,11 @@ namespace IronyModManager.ViewModels.Controls
             /// The paradox launcher
             /// </summary>
             ParadoxLauncher,
+
+            /// <summary>
+            /// The paradox launcher beta
+            /// </summary>
+            ParadoxLauncherBeta,
 
             /// <summary>
             /// The paradox launcher json
@@ -1132,6 +1137,7 @@ namespace IronyModManager.ViewModels.Controls
                 ImportProviderType.Paradoxos => await modCollectionService.ImportParadoxosAsync(path),
                 ImportProviderType.Paradox => await modCollectionService.ImportParadoxAsync(),
                 ImportProviderType.ParadoxLauncher => await modCollectionService.ImportParadoxLauncherAsync(),
+                ImportProviderType.ParadoxLauncherBeta => await modCollectionService.ImportParadoxLauncherBetaAsync(),
                 ImportProviderType.ParadoxLauncherJson => await modCollectionService.ImportParadoxLauncherJsonAsync(path),
                 _ => await modCollectionService.GetImportedCollectionDetailsAsync(path),
             };
@@ -1396,6 +1402,7 @@ namespace IronyModManager.ViewModels.Controls
                     ExportCollection.ImportOtherParadoxosCommand.Select(p => Tuple.Create(ImportActionType.Import, p, ImportProviderType.Paradoxos)),
                     ExportCollection.ImportOtherParadoxCommand.Select(p => Tuple.Create(ImportActionType.Import, p, ImportProviderType.Paradox)),
                     ExportCollection.ImportOtherParadoxLauncherCommand.Select(p => Tuple.Create(ImportActionType.Import, p, ImportProviderType.ParadoxLauncher)),
+                    ExportCollection.ImportOtherParadoxLauncherBetaCommand.Select(p => Tuple.Create(ImportActionType.Import, p, ImportProviderType.ParadoxLauncherBeta)),
                     ExportCollection.ImportOtherParadoxLauncherJsonCommand.Select(p => Tuple.Create(ImportActionType.Import, p, ImportProviderType.ParadoxLauncherJson)),
                     ExportCollection.ExportParadoxLauncherJsonCommand.Select(p => Tuple.Create(ImportActionType.Export, p, ImportProviderType.ParadoxLauncherJson)))
                 .Subscribe(s =>

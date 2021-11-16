@@ -229,6 +229,7 @@ namespace IronyModManager.Shared
                 public const string Paradoxos = Prefix + "Paradoxos";
                 public const string Paradox = Prefix + "Paradox";
                 public const string ParadoxLauncher = Prefix + "ParadoxLauncher";
+                public const string ParadoxLauncherBeta = Prefix + "ParadoxLauncherBeta";
                 public const string ParadoxLauncherJson = Prefix + "ParadoxLauncherJson";
                 public const string Close = Prefix + "Close";
             }
@@ -239,6 +240,7 @@ namespace IronyModManager.Shared
                 public const string OrderOnly = Prefix + "OrderOnly";
                 public const string WholeCollection = Prefix + "WholeCollection";
                 public const string ParadoxLauncherJson = Prefix + "ParadoxLauncherJson";
+                public const string ParadoxLauncherJson202010 = Prefix + "ParadoxLauncherJson202010";
                 public const string Close = Prefix + "Close";
             }
             public static class MergeCollection

@@ -4,7 +4,7 @@
 // Created          : 03-04-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 08-26-2021
+// Last Modified On : 11-16-2021
 // ***********************************************************************
 // <copyright file="IModCollectionService.cs" company="Mario">
 //     Mario
@@ -119,6 +119,12 @@ namespace IronyModManager.Services.Common
         /// </summary>
         /// <returns>Task&lt;IModCollection&gt;.</returns>
         Task<IModCollection> ImportParadoxLauncherAsync();
+
+        /// <summary>
+        /// Imports the paradox launcher beta asynchronous.
+        /// </summary>
+        /// <returns>Task&lt;IModCollection&gt;.</returns>
+        Task<IModCollection> ImportParadoxLauncherBetaAsync();
 
         /// <summary>
         /// Imports the paradox launcher json asynchronous.
