@@ -15,12 +15,11 @@
     <SolutionDir Condition="'$(SolutionDir)'==''">$(MSBuildThisFileDirectory)</SolutionDir>
   </PropertyGroup>
   <PropertyGroup>
-    <MicrosoftExtensionsDependencyModelVersion>[5.0.0]</MicrosoftExtensionsDependencyModelVersion>
-    <MicrosoftDotNetPlatformAbstractionsVersion>[5.0.0-preview.5.20278.1]</MicrosoftDotNetPlatformAbstractionsVersion>
-    <MicrosoftNETCorePlatformsVersion>[5.0.4]</MicrosoftNETCorePlatformsVersion>
-    <MicrosoftWin32Registry>[5.0.0]</MicrosoftWin32Registry>
-    <MicrosoftExtensionsConfigurationBinder>[5.0.0]</MicrosoftExtensionsConfigurationBinder>
-    <MicrosoftExtensionsConfigurationJson>[5.0.0]</MicrosoftExtensionsConfigurationJson>
+    <MicrosoftExtensionsDependencyModelVersion>[6.0.0]</MicrosoftExtensionsDependencyModelVersion>    
+    <MicrosoftNETCorePlatformsVersion>[6.0.0]</MicrosoftNETCorePlatformsVersion>
+    <MicrosoftWin32Registry>[6.0.0-preview.5.21301.5]</MicrosoftWin32Registry>
+    <MicrosoftExtensionsConfigurationBinder>[6.0.0]</MicrosoftExtensionsConfigurationBinder>
+    <MicrosoftExtensionsConfigurationJson>[6.0.0]</MicrosoftExtensionsConfigurationJson>
     <MaterialAvalonia>[2.4.1]</MaterialAvalonia>
     <MessageBoxAvalonia>[1.5.5]</MessageBoxAvalonia>
     <Avalonia>[0.10.10]</Avalonia>

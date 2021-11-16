@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net5.0</TargetFramework>
+    <TargetFramework>net6.0</TargetFramework>
     <Description>Irony Mod Manager Shared Component</Description>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
     <PackageIcon>logo.png</PackageIcon>
@@ -50,8 +50,7 @@
   <ItemGroup>
     <PackageReference Include="AutoMapper" Version="10.1.1" />
     <PackageReference Include="Castle.Core" Version="4.4.1" />
-    <PackageReference Include="CodexMicroORM.Core" Version="0.9.12" />
-    <PackageReference Include="Microsoft.DotNet.PlatformAbstractions" Version="$(MicrosoftDotNetPlatformAbstractionsVersion)" allowedVersions="$(MicrosoftDotNetPlatformAbstractionsVersion)" />
+    <PackageReference Include="CodexMicroORM.Core" Version="0.9.13" />
     <PackageReference Include="Microsoft.Extensions.DependencyModel" Version="$(MicrosoftExtensionsDependencyModelVersion)" allowedVersions="$(MicrosoftExtensionsDependencyModelVersion)" />
     <PackageReference Include="Nerdbank.GitVersioning" Version="3.3.37">
       <PrivateAssets>all</PrivateAssets>
@@ -59,7 +58,7 @@
     </PackageReference>
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
     <PackageReference Include="Nito.AsyncEx" Version="5.1.2" />
-    <PackageReference Include="SlimMessageBus.Host.Memory" Version="1.14.1" />
+    <PackageReference Include="SlimMessageBus.Host.Memory" Version="1.15.0" />
     <PackageReference Include="StrongNamer" Version="0.2.5" />
     <PackageReference Include="System.Data.HashFunction.MetroHash" Version="2.0.0" />
     <PackageReference Include="System.Reactive" Version="5.0.0" />
