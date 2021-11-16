@@ -4,6 +4,42 @@
 		<title>Irony Mod Manager</title>
 		<language>en</language>
 		<item>
+			<title>1.20.18-rc</title>
+			<description>## Changes From v1.19
+* Update dependencies
+* Upgrade to net6.0
+* Make Irony compliant with new Paradox Launcher 2021.10 formats</description>
+			<pubDate>Tue, 16 Nov 2021 15:39:38 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.20.18-rc/osx-x64.rar" sparkle:version="1.20.18.3993" sparkle:shortVersionString="1.20.18" length="70775874" sparkle:os="osx" type="application/vnd.rar" sparkle:signature="eAdnhSFRugXLpjZ1wG1PFo2Z8p74eqxrvpr7NKPly3RhIUjHvu6Ne4CP4viiTwF5ih8DuWqcABT0uUzqkrGvBA=="/>
+		</item>
+		<item>
+			<title>1.20.18-rc</title>
+			<description>## Changes From v1.19
+* Update dependencies
+* Upgrade to net6.0
+* Make Irony compliant with new Paradox Launcher 2021.10 formats</description>
+			<pubDate>Tue, 16 Nov 2021 15:39:46 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.20.18-rc/win-x64-setup.rar" sparkle:version="1.20.18.3993" sparkle:shortVersionString="1.20.18" length="63551682" sparkle:os="windows" type="application/vnd.rar" sparkle:signature="pIAvRuXJkVclcfKq6A4B/RK6oBb0TUi92Wg2fbOHt04jp+99PtRvIviSZs7gRmhbA3i5gLTJtORlEkoVTClKBA=="/>
+		</item>
+		<item>
+			<title>1.20.18-rc</title>
+			<description>## Changes From v1.19
+* Update dependencies
+* Upgrade to net6.0
+* Make Irony compliant with new Paradox Launcher 2021.10 formats</description>
+			<pubDate>Tue, 16 Nov 2021 15:39:42 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.20.18-rc/win-x64.rar" sparkle:version="1.20.18.3993" sparkle:shortVersionString="1.20.18" length="76137807" sparkle:os="windows" type="application/vnd.rar" sparkle:signature="p7axbB7nzoAvb4YSwhQ01KfBUDpqyazwGmYPXwLoTTQ+XWXJKBsf4IqKfurs4udSA2CLoy3O7/bKQ0GtsvyRCg=="/>
+		</item>
+		<item>
+			<title>1.20.18-rc</title>
+			<description>## Changes From v1.19
+* Update dependencies
+* Upgrade to net6.0
+* Make Irony compliant with new Paradox Launcher 2021.10 formats</description>
+			<pubDate>Tue, 16 Nov 2021 15:39:34 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.20.18-rc/linux-x64.zip" sparkle:version="1.20.18.3993" sparkle:shortVersionString="1.20.18" length="87312219" sparkle:os="linux" type="application/zip" sparkle:signature="M8e7jFCmSMPsjVrPtaRVgq3NTvpKXhevHHz42SpfX8QFxz723GAGe9LKT6SqP7ckshKtLUUCcD+u6TW1x34LDw=="/>
+		</item>
+		<item>
 			<title>1.19.83</title>
 			<description>## Note
 This version has significant changes to Conflict Solver, please backup your existing mod collections before running conflict solver. Save game compatibility is not guaranteed.
