@@ -33,6 +33,13 @@ namespace IronyModManager.IO.Common.Mods
         Task<bool> ExportAsync(ModCollectionExporterParams parameters);
 
         /// <summary>
+        /// Exports the paradox launcher json202010 asynchronous.
+        /// </summary>
+        /// <param name="parameters">The parameters.</param>
+        /// <returns>Task&lt;System.Boolean&gt;.</returns>
+        Task<bool> ExportParadoxLauncherJson202110Async(ModCollectionExporterParams parameters);
+
+        /// <summary>
         /// Exports the paradox launcher json asynchronous.
         /// </summary>
         /// <param name="parameters">The parameters.</param>

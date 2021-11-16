@@ -181,8 +181,8 @@
             "Title": "...",
             "OrderOnly": "Export Order Only",
             "WholeCollection": "Export Whole Collection",
-            "ParadoxLauncherJson": "Export To Paradox Launcher Json (<2020.10)",
-            "ParadoxLauncherJson202010": "Export To Paradox Launcher Json (>=2020.10)",
+            "ParadoxLauncherJson": "Export To Paradox Launcher Json (<2021.10)",
+            "ParadoxLauncherJson202110": "Export To Paradox Launcher Json (>=2021.10)",
             "Close": "Close"
         },
         "MergeCollection": {

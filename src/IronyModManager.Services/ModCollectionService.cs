@@ -260,6 +260,30 @@ namespace IronyModManager.Services
         }
 
         /// <summary>
+        /// Exports the paradox launcher202110 json asynchronous.
+        /// </summary>
+        /// <param name="file">The file.</param>
+        /// <param name="modCollection">The mod collection.</param>
+        /// <returns>Task&lt;System.Boolean&gt;.</returns>
+        public virtual Task<bool> ExportParadoxLauncher202110JsonAsync(string file, IModCollection modCollection)
+        {
+            var game = GameService.GetSelected();
+            if (game == null || modCollection == null)
+            {
+                return Task.FromResult(false);
+            }
+            var collection = Mapper.Map<IModCollection>(modCollection);
+            var parameters = new ModCollectionExporterParams()
+            {
+                File = file,
+                Mod = collection,
+                ExportMods = GetCollectionMods(collectionName: modCollection.Name),
+                Game = game
+            };
+            return modCollectionExporter.ExportParadoxLauncherJson202110Async(parameters);
+        }
+
+        /// <summary>
         /// Exports the paradox launcher json asynchronous.
         /// </summary>
         /// <param name="file">The file.</param>

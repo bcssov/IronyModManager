@@ -66,6 +66,14 @@ namespace IronyModManager.Services.Common
         Task<bool> ExportHashReportAsync(IEnumerable<IMod> mods, string path);
 
         /// <summary>
+        /// Exports the paradox launcher202110 json asynchronous.
+        /// </summary>
+        /// <param name="file">The file.</param>
+        /// <param name="modCollection">The mod collection.</param>
+        /// <returns>Task&lt;System.Boolean&gt;.</returns>
+        Task<bool> ExportParadoxLauncher202110JsonAsync(string file, IModCollection modCollection);
+
+        /// <summary>
         /// Exports the paradox launcher json asynchronous.
         /// </summary>
         /// <param name="file">The file.</param>

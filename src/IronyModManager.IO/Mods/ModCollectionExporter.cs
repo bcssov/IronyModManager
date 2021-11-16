@@ -73,6 +73,11 @@ namespace IronyModManager.IO.Mods
         private readonly ParadoxLauncherExporter paradoxLauncherExporter;
 
         /// <summary>
+        /// The paradox launcher exporter202010
+        /// </summary>
+        private readonly ParadoxLauncherExporter202110 paradoxLauncherExporter202110;
+
+        /// <summary>
         /// The paradox launcher importer
         /// </summary>
         private readonly ParadoxLauncherImporter paradoxLauncherImporter;
@@ -104,6 +109,7 @@ namespace IronyModManager.IO.Mods
             paradoxLauncherImporter = new ParadoxLauncherImporter(logger);
             paradoxLauncherExporter = new ParadoxLauncherExporter();
             paradoxLauncherImporterBeta = new ParadoxLauncherImporterBeta(logger);
+            paradoxLauncherExporter202110 = new ParadoxLauncherExporter202110();
             this.logger = logger;
             this.messageBus = messageBus;
             this.mapper = mapper;
@@ -247,6 +253,16 @@ namespace IronyModManager.IO.Mods
                 await Task.WhenAll(task);
             }
             return true;
+        }
+
+        /// <summary>
+        /// Exports the paradox launcher json202010 asynchronous.
+        /// </summary>
+        /// <param name="parameters">The parameters.</param>
+        /// <returns>Task&lt;System.Boolean&gt;.</returns>
+        public Task<bool> ExportParadoxLauncherJson202110Async(ModCollectionExporterParams parameters)
+        {
+            return paradoxLauncherExporter202110.ExportAsync(parameters);
         }
 
         /// <summary>

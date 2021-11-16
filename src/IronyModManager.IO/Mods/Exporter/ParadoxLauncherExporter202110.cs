@@ -1,12 +1,12 @@
 ﻿// ***********************************************************************
 // Assembly         : IronyModManager.IO
 // Author           : Mario
-// Created          : 08-26-2021
+// Created          : 11-16-2021
 //
 // Last Modified By : Mario
 // Last Modified On : 11-16-2021
 // ***********************************************************************
-// <copyright file="ParadoxLauncherExporter.cs" company="Mario">
+// <copyright file="ParadoxLauncherExporter202110.cs" company="Mario">
 //     Mario
 // </copyright>
 // <summary></summary>
@@ -18,35 +18,25 @@ using System.Linq;
 using System.Threading.Tasks;
 using IronyModManager.DI;
 using IronyModManager.IO.Common.Mods;
-using IronyModManager.IO.Mods.Models.Paradox.Json.v2;
+using IronyModManager.IO.Mods.Models.Paradox.Json.v3;
 using IronyModManager.Models.Common;
 
 namespace IronyModManager.IO.Mods.Exporter
 {
     /// <summary>
-    /// Class ParadoxLauncherExporter.
+    /// Class ParadoxLauncherExporter202110.
     /// Implements the <see cref="IronyModManager.IO.Mods.Exporter.BaseExporter" />
     /// </summary>
     /// <seealso cref="IronyModManager.IO.Mods.Exporter.BaseExporter" />
-    internal class ParadoxLauncherExporter : BaseExporter
+    internal class ParadoxLauncherExporter202110 : BaseExporter
     {
-        #region Fields
-
-        // If paradox can have a magic number, so can we
-        /// <summary>
-        /// The position
-        /// </summary>
-        private const int Pos = 4096;
-
-        #endregion Fields
-
         #region Methods
 
         /// <summary>
-        /// export as an asynchronous operation.
+        /// Export as an asynchronous operation.
         /// </summary>
         /// <param name="params">The parameters.</param>
-        /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
+        /// <returns>A Task&lt;System.Boolean&gt; representing the asynchronous operation.</returns>
         public async Task<bool> ExportAsync(ModCollectionExporterParams @params)
         {
             // Paradox launcher only exports pdx or steam mods, local mods are not exported
@@ -55,11 +45,11 @@ namespace IronyModManager.IO.Mods.Exporter
             {
                 Game = @params.Game.ParadoxGameId,
                 Name = @params.Mod.Name,
-                Mods = validMods.Select(p => new Models.Paradox.Json.v2.Mods()
+                Mods = validMods.Select(p => new Models.Paradox.Json.v3.Mods()
                 {
                     DisplayName = p.Name,
                     Enabled = true,
-                    Position = (validMods.IndexOf(p) + 1 + Pos).ToString("x10"),
+                    Position = validMods.IndexOf(p),
                     SteamId = p.Source == ModSource.Steam ? p.RemoteId.ToString() : null,
                     PdxId = p.Source == ModSource.Paradox ? p.RemoteId.ToString() : null
                 }).ToList()

@@ -15,6 +15,8 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
+using IronyModManager.IO.Common.Models;
 using IronyModManager.IO.Common.Mods;
 using IronyModManager.Shared;
 
@@ -26,12 +28,12 @@ namespace IronyModManager.IO.Mods.Importers
     /// </summary>
     /// <seealso cref="IronyModManager.IO.Mods.Importers.ParadoxLauncherImporter" />
     [ExcludeFromCoverage("Skipping testing IO logic.")]
-    public class ParadoxLauncherImporterBeta : ParadoxLauncherImporter
+    internal class ParadoxLauncherImporterBeta : ParadoxLauncherImporter
     {
         #region Constructors
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="ParadoxLauncherImporterBeta"/> class.
+        /// Initializes a new instance of the <see cref="ParadoxLauncherImporterBeta" /> class.
         /// </summary>
         /// <param name="logger">The logger.</param>
         public ParadoxLauncherImporterBeta(ILogger logger) : base(logger)
@@ -41,6 +43,17 @@ namespace IronyModManager.IO.Mods.Importers
         #endregion Constructors
 
         #region Methods
+
+        /// <summary>
+        /// json import as an asynchronous operation.
+        /// </summary>
+        /// <param name="parameters">The parameters.</param>
+        /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
+        /// <exception cref="System.NotSupportedException"></exception>
+        public override Task<ICollectionImportResult> JsonImportAsync(ModCollectionExporterParams parameters)
+        {
+            throw new NotSupportedException();
+        }
 
         /// <summary>
         /// Gets the database path.

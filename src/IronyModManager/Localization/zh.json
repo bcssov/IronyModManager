@@ -181,8 +181,8 @@
             "Title": "…",
             "OrderOnly": "仅导出模组加载顺序",
             "WholeCollection": "导出完整合集",
-            "ParadoxLauncherJson": "导出到官方启动器 JSON 配置文件 (<2020.10)",
-            "ParadoxLauncherJson202010": "导出到官方启动器 JSON 配置文件 (>=2020.10)",
+            "ParadoxLauncherJson": "导出到官方启动器 JSON 配置文件 (<2021.10)",
+            "ParadoxLauncherJson202110": "导出到官方启动器 JSON 配置文件 (>=2021.10)",
             "Close": "关闭"
         },
         "MergeCollection": {
