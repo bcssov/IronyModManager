@@ -69,6 +69,8 @@ namespace IronyModManager.IO.Mods.Importers
         /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
         public async Task<ICollectionImportResult> DatabaseImportAsync(ModCollectionExporterParams parameters)
         {
+            // Caching sucks in this ORM
+            TypeMapCache.Flush();
             if (await IsV3Async(parameters))
             {
                 return await DatabaseImportv3Async(parameters);
