@@ -4,7 +4,7 @@
 // Created          : 08-11-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 08-11-2020
+// Last Modified On : 11-16-2021
 // ***********************************************************************
 // <copyright file="Constants.cs" company="Mario">
 //     Mario
@@ -44,9 +44,19 @@ namespace IronyModManager.IO.Mods
         public const string Ready_to_play = "ready_to_play";
 
         /// <summary>
+        /// The SQL database beta path
+        /// </summary>
+        public const string Sql_db_beta_path = "launcher-v2_openbeta.sqlite";
+
+        /// <summary>
         /// The SQL database path
         /// </summary>
         public const string Sql_db_path = "launcher-v2.sqlite";
+
+        /// <summary>
+        /// The SQL v3 identifier
+        /// </summary>
+        public const string SqlV3Id = "modifyPositionToInteger";
 
         /// <summary>
         /// The empty SQL database path

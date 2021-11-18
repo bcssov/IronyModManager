@@ -4,7 +4,7 @@
 // Created          : 08-26-2021
 //
 // Last Modified By : Mario
-// Last Modified On : 08-26-2021
+// Last Modified On : 11-16-2021
 // ***********************************************************************
 // <copyright file="ParadoxLauncherExporter.cs" company="Mario">
 //     Mario
@@ -18,7 +18,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using IronyModManager.DI;
 using IronyModManager.IO.Common.Mods;
-using IronyModManager.IO.Mods.Models.Paradox.Json;
+using IronyModManager.IO.Mods.Models.Paradox.Json.v2;
 using IronyModManager.Models.Common;
 
 namespace IronyModManager.IO.Mods.Exporter
@@ -55,7 +55,7 @@ namespace IronyModManager.IO.Mods.Exporter
             {
                 Game = @params.Game.ParadoxGameId,
                 Name = @params.Mod.Name,
-                Mods = validMods.Select(p => new Models.Paradox.Json.Mods()
+                Mods = validMods.Select(p => new Models.Paradox.Json.v2.Mods()
                 {
                     DisplayName = p.Name,
                     Enabled = true,

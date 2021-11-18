@@ -173,6 +173,7 @@
             "Paradoxos": "Importar desde Paradoxos",
             "Paradox": "Importar desde Juego",
             "ParadoxLauncher": "Importar desde Paradox Launcher",
+            "ParadoxLauncherBeta": "Importación de Paradox Launcher Beta",
             "ParadoxLauncherJson": "Importar desde Paradox Launcher Json",
             "Close": "Cerrar"
         },
@@ -180,7 +181,8 @@
             "Title": "...",
             "OrderOnly": "Exportar Orden Solamente",
             "WholeCollection": "Exportar toda la colección",
-            "ParadoxLauncherJson": "Exportar a Paradox Launcher Json",
+            "ParadoxLauncherJson": "Exportar a Paradox Launcher Json (<2021.10)",
+            "ParadoxLauncherJson202110": "Exportar a Paradox Launcher Json (>=2021.10)",
             "Close": "Cerrar"
         },
         "MergeCollection": {

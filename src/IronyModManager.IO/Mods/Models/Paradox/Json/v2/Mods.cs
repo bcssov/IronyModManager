@@ -4,7 +4,7 @@
 // Created          : 08-25-2021
 //
 // Last Modified By : Mario
-// Last Modified On : 08-26-2021
+// Last Modified On : 11-16-2021
 // ***********************************************************************
 // <copyright file="Mods.cs" company="Mario">
 //     Mario
@@ -16,7 +16,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Newtonsoft.Json;
 
-namespace IronyModManager.IO.Mods.Models.Paradox.Json
+namespace IronyModManager.IO.Mods.Models.Paradox.Json.v2
 {
     /// <summary>
     /// Class Mods.
@@ -35,7 +35,7 @@ namespace IronyModManager.IO.Mods.Models.Paradox.Json
         public string DisplayName { get; set; }
 
         /// <summary>
-        /// Gets or sets a value indicating whether this <see cref="Mods"/> is enabled.
+        /// Gets or sets a value indicating whether this <see cref="Mods" /> is enabled.
         /// </summary>
         /// <value><c>true</c> if enabled; otherwise, <c>false</c>.</value>
         [JsonProperty("enabled")]

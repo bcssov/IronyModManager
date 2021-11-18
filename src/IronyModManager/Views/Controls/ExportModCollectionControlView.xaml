@@ -4,63 +4,69 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d" d:DesignWidth="300" d:DesignHeight="40"
              x:Class="IronyModManager.Views.Controls.ExportModCollectionControlView">
-  <Panel>
-    <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" Margin="10,0,0,0">
-      <Button Content="{Binding Export}" Command="{Binding ExportCommand}" MaxHeight="30"></Button>
-      <Panel>
-        <Button Content="{Binding ExportOther}" Command="{Binding ExportOtherCommand}" x:Name="openExportPopupButton"></Button>
-        <Popup PlacementMode="AnchorAndGravity" IsOpen="{Binding IsExportOpen}"
+    <Panel>
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" Margin="10,0,0,0">
+            <Button Content="{Binding Export}" Command="{Binding ExportCommand}" MaxHeight="30"></Button>
+            <Panel>
+                <Button Content="{Binding ExportOther}" Command="{Binding ExportOtherCommand}" x:Name="openExportPopupButton"></Button>
+                <Popup PlacementMode="AnchorAndGravity" IsOpen="{Binding IsExportOpen}"
                Topmost="True" ObeyScreenEdges="True" StaysOpen="False" x:Name="popupExport"
                PlacementTarget="{Binding #openExportPopupButton}">
-          <Border BorderThickness="1,1,1,1" BorderBrush="{DynamicResource IronyButtonBorderBrush}">
-            <Grid RowDefinitions="1*,1*,1*,1*" Background="{DynamicResource IronyBackgroundPopupBrush}">
-              <Button Content="{Binding ExportOrderOnly}" Command="{Binding ExportOrderOnlyCommand}"
-                      Grid.Row="0" Grid.Column="0"
-                      HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
-                      HorizontalContentAlignment="Center" VerticalContentAlignment="Center"
-                      IsVisible="{Binding ShowAdvancedFeatures}"></Button>
-              <Button Content="{Binding ExportWholeCollection}" Command="{Binding ExportWholeCollectionCommand}"
-                      Grid.Row="1" Grid.Column="0"
-                      HorizontalAlignment="Stretch" VerticalAlignment="Stretch" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"></Button>
-              <Button Content="{Binding ExportParadoxLauncherJson}" Command="{Binding ExportParadoxLauncherJsonCommand}"
-                      Grid.Row="2" Grid.Column="0"
-                      HorizontalAlignment="Stretch" VerticalAlignment="Stretch" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"></Button>
-              <Button Content="{Binding ExportOtherClose}" Command="{Binding ExportOtherCloseCommand}"
-                      Grid.Row="3" Grid.Column="0"
-                      HorizontalAlignment="Stretch" VerticalAlignment="Stretch" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"></Button>
-            </Grid>
-          </Border>
-        </Popup>
-      </Panel>
-    </StackPanel>
-    <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,0,10,0">
-      <Button Content="{Binding Import}" Command="{Binding ImportCommand}" MaxHeight="30"></Button>
-      <Panel>
-        <Button Content="{Binding ImportOther}" Command="{Binding ImportOtherCommand}" x:Name="openImportPopupButton"></Button>
-        <Popup PlacementMode="AnchorAndGravity" IsOpen="{Binding IsImportOpen}"
+                    <Border BorderThickness="1,1,1,1" BorderBrush="{DynamicResource IronyButtonBorderBrush}">
+                        <Grid RowDefinitions="1*,1*,1*,1*,1*" Background="{DynamicResource IronyBackgroundPopupBrush}">
+                            <Button Content="{Binding ExportOrderOnly}" Command="{Binding ExportOrderOnlyCommand}"
+                              Grid.Row="0" Grid.Column="0"
+                              HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
+                              HorizontalContentAlignment="Center" VerticalContentAlignment="Center"
+                              IsVisible="{Binding ShowAdvancedFeatures}"></Button>
+                            <Button Content="{Binding ExportWholeCollection}" Command="{Binding ExportWholeCollectionCommand}"
+                              Grid.Row="1" Grid.Column="0"
+                              HorizontalAlignment="Stretch" VerticalAlignment="Stretch" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"></Button>
+                            <Button Content="{Binding ExportParadoxLauncherJson}" Command="{Binding ExportParadoxLauncherJsonCommand}"
+                              Grid.Row="2" Grid.Column="0"
+                              HorizontalAlignment="Stretch" VerticalAlignment="Stretch" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"></Button>
+                            <Button Content="{Binding ExportParadoxLauncherJson202110}" Command="{Binding ExportParadoxLauncherJson202110Command}"
+                              Grid.Row="3" Grid.Column="0"
+                              HorizontalAlignment="Stretch" VerticalAlignment="Stretch" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"></Button>
+                            <Button Content="{Binding ExportOtherClose}" Command="{Binding ExportOtherCloseCommand}"
+                              Grid.Row="4" Grid.Column="0"
+                              HorizontalAlignment="Stretch" VerticalAlignment="Stretch" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"></Button>
+                        </Grid>
+                    </Border>
+                </Popup>
+            </Panel>
+        </StackPanel>
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,0,10,0">
+            <Button Content="{Binding Import}" Command="{Binding ImportCommand}" MaxHeight="30"></Button>
+            <Panel>
+                <Button Content="{Binding ImportOther}" Command="{Binding ImportOtherCommand}" x:Name="openImportPopupButton"></Button>
+                <Popup PlacementMode="AnchorAndGravity" IsOpen="{Binding IsImportOpen}"
                Topmost="True" ObeyScreenEdges="True" StaysOpen="False" x:Name="popupImport"
                PlacementTarget="{Binding #openImportPopupButton}">
-          <Border BorderThickness="1,1,1,1" BorderBrush="{DynamicResource IronyButtonBorderBrush}">
-            <Grid RowDefinitions="1*,1*,1*,1*,1*" Background="{DynamicResource IronyBackgroundPopupBrush}">
-              <Button Content="{Binding ImportOtherParadoxos}" Command="{Binding ImportOtherParadoxosCommand}"
-                      Grid.Row="0" Grid.Column="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
-                      HorizontalContentAlignment="Center" VerticalContentAlignment="Center"></Button>
-              <Button Content="{Binding ImportOtherParadox}" Command="{Binding ImportOtherParadoxCommand}"
-                      Grid.Row="1" Grid.Column="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
-                      HorizontalContentAlignment="Center" VerticalContentAlignment="Center"></Button>
-              <Button Content="{Binding ImportOtherParadoxLauncher}" Command="{Binding ImportOtherParadoxLauncherCommand}"
-                      Grid.Row="2" Grid.Column="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
-                      HorizontalContentAlignment="Center" VerticalContentAlignment="Center"></Button>
-              <Button Content="{Binding ImportOtherParadoxJsonLauncher}" Command="{Binding ImportOtherParadoxLauncherJsonCommand}"
-                      Grid.Row="3" Grid.Column="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
-                      HorizontalContentAlignment="Center" VerticalContentAlignment="Center"></Button>
-              <Button Content="{Binding ImportOtherClose}" Command="{Binding ImportOtherCloseCommand}"
-                      Grid.Row="4" Grid.Column="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
-                      HorizontalContentAlignment="Center" VerticalContentAlignment="Center"></Button>
-            </Grid>
-          </Border>
-        </Popup>
-      </Panel>
-    </StackPanel>
-  </Panel>
+                    <Border BorderThickness="1,1,1,1" BorderBrush="{DynamicResource IronyButtonBorderBrush}">
+                        <Grid RowDefinitions="1*,1*,1*,1*,1*,1*" Background="{DynamicResource IronyBackgroundPopupBrush}">
+                            <Button Content="{Binding ImportOtherParadoxos}" Command="{Binding ImportOtherParadoxosCommand}"
+                              Grid.Row="0" Grid.Column="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
+                              HorizontalContentAlignment="Center" VerticalContentAlignment="Center"></Button>
+                            <Button Content="{Binding ImportOtherParadox}" Command="{Binding ImportOtherParadoxCommand}"
+                              Grid.Row="1" Grid.Column="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
+                              HorizontalContentAlignment="Center" VerticalContentAlignment="Center"></Button>
+                            <Button Content="{Binding ImportOtherParadoxLauncher}" Command="{Binding ImportOtherParadoxLauncherCommand}"
+                              Grid.Row="2" Grid.Column="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
+                              HorizontalContentAlignment="Center" VerticalContentAlignment="Center"></Button>
+                            <Button Content="{Binding ImportOtherParadoxBetaLauncher}" Command="{Binding ImportOtherParadoxLauncherBetaCommand}"
+                              Grid.Row="3" Grid.Column="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
+                              HorizontalContentAlignment="Center" VerticalContentAlignment="Center"></Button>
+                            <Button Content="{Binding ImportOtherParadoxJsonLauncher}" Command="{Binding ImportOtherParadoxLauncherJsonCommand}"
+                              Grid.Row="4" Grid.Column="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
+                              HorizontalContentAlignment="Center" VerticalContentAlignment="Center"></Button>
+                            <Button Content="{Binding ImportOtherClose}" Command="{Binding ImportOtherCloseCommand}"
+                              Grid.Row="5" Grid.Column="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
+                              HorizontalContentAlignment="Center" VerticalContentAlignment="Center"></Button>
+                        </Grid>
+                    </Border>
+                </Popup>
+            </Panel>
+        </StackPanel>
+    </Panel>
 </UserControl>

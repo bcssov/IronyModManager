@@ -173,6 +173,7 @@
             "Paradoxos": "从 Paradoxos 导入",
             "Paradox": "从游戏导入",
             "ParadoxLauncher": "从官方启动器导入",
+            "ParadoxLauncherBeta": "从Paradox发射器Beta导入",
             "ParadoxLauncherJson": "从官方启动器 JSON 配置文件导入",
             "Close": "关闭"
         },
@@ -180,7 +181,8 @@
             "Title": "…",
             "OrderOnly": "仅导出模组加载顺序",
             "WholeCollection": "导出完整合集",
-            "ParadoxLauncherJson": "导出到官方启动器 JSON 配置文件",
+            "ParadoxLauncherJson": "导出到官方启动器 JSON 配置文件 (<2021.10)",
+            "ParadoxLauncherJson202110": "导出到官方启动器 JSON 配置文件 (>=2021.10)",
             "Close": "关闭"
         },
         "MergeCollection": {
