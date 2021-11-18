@@ -4,116 +4,40 @@
 		<title>Irony Mod Manager</title>
 		<language>en</language>
 		<item>
-			<title>1.20.18-rc</title>
+			<title>1.20.21</title>
 			<description>## Changes From v1.19
 * Update dependencies
 * Upgrade to net6.0
 * Make Irony compliant with new Paradox Launcher 2021.10 formats</description>
-			<pubDate>Tue, 16 Nov 2021 15:39:38 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.20.18-rc/osx-x64.rar" sparkle:version="1.20.18.3993" sparkle:shortVersionString="1.20.18" length="70775874" sparkle:os="osx" type="application/vnd.rar" sparkle:signature="eAdnhSFRugXLpjZ1wG1PFo2Z8p74eqxrvpr7NKPly3RhIUjHvu6Ne4CP4viiTwF5ih8DuWqcABT0uUzqkrGvBA=="/>
+			<pubDate>Thu, 18 Nov 2021 19:47:10 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.20.21/osx-x64.rar" sparkle:version="1.20.21.34675" sparkle:shortVersionString="1.20.21" length="70774693" sparkle:os="osx" type="application/vnd.rar" sparkle:signature="DmciPJaefpDxywB4E/yzcEhrqLkpzBNNWMXZLsdgoT83WhJVZkgryH3alb2EMugqFe+LZikKmFeOXB+yKhFzDQ=="/>
 		</item>
 		<item>
-			<title>1.20.18-rc</title>
+			<title>1.20.21</title>
 			<description>## Changes From v1.19
 * Update dependencies
 * Upgrade to net6.0
 * Make Irony compliant with new Paradox Launcher 2021.10 formats</description>
-			<pubDate>Tue, 16 Nov 2021 15:39:46 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.20.18-rc/win-x64-setup.rar" sparkle:version="1.20.18.3993" sparkle:shortVersionString="1.20.18" length="63551682" sparkle:os="windows" type="application/vnd.rar" sparkle:signature="pIAvRuXJkVclcfKq6A4B/RK6oBb0TUi92Wg2fbOHt04jp+99PtRvIviSZs7gRmhbA3i5gLTJtORlEkoVTClKBA=="/>
+			<pubDate>Thu, 18 Nov 2021 19:47:18 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.20.21/win-x64-setup.rar" sparkle:version="1.20.21.34675" sparkle:shortVersionString="1.20.21" length="63549430" sparkle:os="windows" type="application/vnd.rar" sparkle:signature="7jlJOA/XntW9VmxLW054hkZjPX2uzEjq/fuqmveR3c5nv/VZ/63XfZx0dAJco43oeTs4dW5YW6LvnsI3XyIoDg=="/>
 		</item>
 		<item>
-			<title>1.20.18-rc</title>
+			<title>1.20.21</title>
 			<description>## Changes From v1.19
 * Update dependencies
 * Upgrade to net6.0
 * Make Irony compliant with new Paradox Launcher 2021.10 formats</description>
-			<pubDate>Tue, 16 Nov 2021 15:39:42 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.20.18-rc/win-x64.rar" sparkle:version="1.20.18.3993" sparkle:shortVersionString="1.20.18" length="76137807" sparkle:os="windows" type="application/vnd.rar" sparkle:signature="p7axbB7nzoAvb4YSwhQ01KfBUDpqyazwGmYPXwLoTTQ+XWXJKBsf4IqKfurs4udSA2CLoy3O7/bKQ0GtsvyRCg=="/>
+			<pubDate>Thu, 18 Nov 2021 19:47:14 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.20.21/win-x64.rar" sparkle:version="1.20.21.34675" sparkle:shortVersionString="1.20.21" length="76136658" sparkle:os="windows" type="application/vnd.rar" sparkle:signature="rmA38bVhDNNHTQuXX6AGEsrdVjwg4+wkOL4EIEu5RQocV2WdPIuRjHuB6hklKsfJDeoX2aIjDnoU6Dh/S1aOAg=="/>
 		</item>
 		<item>
-			<title>1.20.18-rc</title>
+			<title>1.20.21</title>
 			<description>## Changes From v1.19
 * Update dependencies
 * Upgrade to net6.0
 * Make Irony compliant with new Paradox Launcher 2021.10 formats</description>
-			<pubDate>Tue, 16 Nov 2021 15:39:34 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.20.18-rc/linux-x64.zip" sparkle:version="1.20.18.3993" sparkle:shortVersionString="1.20.18" length="87312219" sparkle:os="linux" type="application/zip" sparkle:signature="M8e7jFCmSMPsjVrPtaRVgq3NTvpKXhevHHz42SpfX8QFxz723GAGe9LKT6SqP7ckshKtLUUCcD+u6TW1x34LDw=="/>
-		</item>
-		<item>
-			<title>1.19.83</title>
-			<description>## Note
-This version has significant changes to Conflict Solver, please backup your existing mod collections before running conflict solver. Save game compatibility is not guaranteed.
-
-## Release Notes
-* Exclude shader\fxh validation from conflict solver
-
-## Changes From v1.18
-* Update dependencies
-* Various fixes
-* Add mod search filtering syntax
-* Stellaris parser type recognition updates
-* Add single merge folder type handling for Stellaris
-* Fix #304
-* Many conflict solver handling improvements</description>
-			<pubDate>Fri, 12 Nov 2021 00:48:05 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.19.83/osx-x64.rar" sparkle:version="1.19.83.32644" sparkle:shortVersionString="1.19.83" length="70427669" sparkle:os="osx" type="application/vnd.rar" sparkle:signature="Ee2KrrROaBJKTl7+PN3SphTBIJWeN25m/vwje2MwRywhjUMBlYBKbnSJX7WvBWz7kmCs6a4y11X18dUT3j8uDQ=="/>
-		</item>
-		<item>
-			<title>1.19.83</title>
-			<description>## Note
-This version has significant changes to Conflict Solver, please backup your existing mod collections before running conflict solver. Save game compatibility is not guaranteed.
-
-## Release Notes
-* Exclude shader\fxh validation from conflict solver
-
-## Changes From v1.18
-* Update dependencies
-* Various fixes
-* Add mod search filtering syntax
-* Stellaris parser type recognition updates
-* Add single merge folder type handling for Stellaris
-* Fix #304
-* Many conflict solver handling improvements</description>
-			<pubDate>Fri, 12 Nov 2021 00:48:13 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.19.83/win-x64-setup.rar" sparkle:version="1.19.83.32644" sparkle:shortVersionString="1.19.83" length="61746985" sparkle:os="windows" type="application/vnd.rar" sparkle:signature="QLtO+WGoicp2qyBomMWmwXRHsaUtEZpCXuhkgKtJ9RzXYgBoEGpviGnAdDy6LBSMqEjVbYpxQVyF1/Hv644oAA=="/>
-		</item>
-		<item>
-			<title>1.19.83</title>
-			<description>## Note
-This version has significant changes to Conflict Solver, please backup your existing mod collections before running conflict solver. Save game compatibility is not guaranteed.
-
-## Release Notes
-* Exclude shader\fxh validation from conflict solver
-
-## Changes From v1.18
-* Update dependencies
-* Various fixes
-* Add mod search filtering syntax
-* Stellaris parser type recognition updates
-* Add single merge folder type handling for Stellaris
-* Fix #304
-* Many conflict solver handling improvements</description>
-			<pubDate>Fri, 12 Nov 2021 00:48:09 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.19.83/win-x64.rar" sparkle:version="1.19.83.32644" sparkle:shortVersionString="1.19.83" length="74245193" sparkle:os="windows" type="application/vnd.rar" sparkle:signature="VByaYNmV4vLU+ME0WfPEq0GOWNEucww1LfKRy0egmUxymkSXnNmIDkNXF+OkmK7NnT8v+k/lk3oHbhJCJtRoBg=="/>
-		</item>
-		<item>
-			<title>1.19.83</title>
-			<description>## Note
-This version has significant changes to Conflict Solver, please backup your existing mod collections before running conflict solver. Save game compatibility is not guaranteed.
-
-## Release Notes
-* Exclude shader\fxh validation from conflict solver
-
-## Changes From v1.18
-* Update dependencies
-* Various fixes
-* Add mod search filtering syntax
-* Stellaris parser type recognition updates
-* Add single merge folder type handling for Stellaris
-* Fix #304
-* Many conflict solver handling improvements</description>
-			<pubDate>Fri, 12 Nov 2021 00:48:00 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.19.83/linux-x64.zip" sparkle:version="1.19.83.32644" sparkle:shortVersionString="1.19.83" length="87083594" sparkle:os="linux" type="application/zip" sparkle:signature="aXP5wmzksAX6AKv3qU4F9+A1m2H9BwnVcLLwDtOVx/kjdsOZ7Kkzg5okifyyMAUh6iflcD+hsV9iedpY2D0zDw=="/>
+			<pubDate>Thu, 18 Nov 2021 19:47:07 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.20.21/linux-x64.zip" sparkle:version="1.20.21.34675" sparkle:shortVersionString="1.20.21" length="87311973" sparkle:os="linux" type="application/zip" sparkle:signature="6gdfHhQ2ITw4xqBueRFaTWi5X9o0KhuBFpd9xjZafK9xW6S9eM3umHkdgNy9WPpxAMjXI06KRljr6J4nLPp1DQ=="/>
 		</item>
 	</channel>
 </rss>
