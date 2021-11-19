@@ -4,7 +4,7 @@
 // Created          : 08-12-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 11-16-2021
+// Last Modified On : 11-19-2021
 // ***********************************************************************
 // <copyright file="ParadoxLauncherImporter.cs" company="Mario">
 //     Mario
@@ -70,7 +70,10 @@ namespace IronyModManager.IO.Mods.Importers
         public async Task<ICollectionImportResult> DatabaseImportAsync(ModCollectionExporterParams parameters)
         {
             // Caching sucks in this ORM
-            TypeMapCache.Flush();
+            DbFieldCache.Flush();
+            FieldCache.Flush();
+            IdentityCache.Flush();
+            PrimaryCache.Flush();
             if (await IsV3Async(parameters))
             {
                 return await DatabaseImportv3Async(parameters);
