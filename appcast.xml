@@ -4,40 +4,56 @@
 		<title>Irony Mod Manager</title>
 		<language>en</language>
 		<item>
-			<title>1.20.21</title>
-			<description>## Changes From v1.19
+			<title>1.20.23</title>
+			<description>## Release Notes
+* Fix sqlite db caching issue (initial workaround was partial)
+* Cache mod export during conflict solving
+
+## Changes From v1.19
 * Update dependencies
 * Upgrade to net6.0
 * Make Irony compliant with new Paradox Launcher 2021.10 formats</description>
-			<pubDate>Thu, 18 Nov 2021 19:47:10 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.20.21/osx-x64.rar" sparkle:version="1.20.21.34675" sparkle:shortVersionString="1.20.21" length="70774693" sparkle:os="osx" type="application/vnd.rar" sparkle:signature="DmciPJaefpDxywB4E/yzcEhrqLkpzBNNWMXZLsdgoT83WhJVZkgryH3alb2EMugqFe+LZikKmFeOXB+yKhFzDQ=="/>
+			<pubDate>Fri, 19 Nov 2021 08:28:15 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.20.23/osx-x64.rar" sparkle:version="1.20.23.58937" sparkle:shortVersionString="1.20.23" length="70776442" sparkle:os="osx" type="application/vnd.rar" sparkle:signature="PURW93EG8gwztj3WavgeXpTuSp3baNAc24Qh4/ffH4d6sDM+O1NgoCK9gHVspCbvzXtWC5Nin6kHN8QYjrkXAw=="/>
 		</item>
 		<item>
-			<title>1.20.21</title>
-			<description>## Changes From v1.19
+			<title>1.20.23</title>
+			<description>## Release Notes
+* Fix sqlite db caching issue (initial workaround was partial)
+* Cache mod export during conflict solving
+
+## Changes From v1.19
 * Update dependencies
 * Upgrade to net6.0
 * Make Irony compliant with new Paradox Launcher 2021.10 formats</description>
-			<pubDate>Thu, 18 Nov 2021 19:47:18 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.20.21/win-x64-setup.rar" sparkle:version="1.20.21.34675" sparkle:shortVersionString="1.20.21" length="63549430" sparkle:os="windows" type="application/vnd.rar" sparkle:signature="7jlJOA/XntW9VmxLW054hkZjPX2uzEjq/fuqmveR3c5nv/VZ/63XfZx0dAJco43oeTs4dW5YW6LvnsI3XyIoDg=="/>
+			<pubDate>Fri, 19 Nov 2021 08:28:23 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.20.23/win-x64-setup.rar" sparkle:version="1.20.23.58937" sparkle:shortVersionString="1.20.23" length="63554189" sparkle:os="windows" type="application/vnd.rar" sparkle:signature="Z8E7DmFCZ8P9YQTohNofXqRhAAGGqq/19xv76AvIgKpaoCZukbdtoOdxXvN5X3XQgv/kDehdfOkP0YgyDaKoAw=="/>
 		</item>
 		<item>
-			<title>1.20.21</title>
-			<description>## Changes From v1.19
+			<title>1.20.23</title>
+			<description>## Release Notes
+* Fix sqlite db caching issue (initial workaround was partial)
+* Cache mod export during conflict solving
+
+## Changes From v1.19
 * Update dependencies
 * Upgrade to net6.0
 * Make Irony compliant with new Paradox Launcher 2021.10 formats</description>
-			<pubDate>Thu, 18 Nov 2021 19:47:14 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.20.21/win-x64.rar" sparkle:version="1.20.21.34675" sparkle:shortVersionString="1.20.21" length="76136658" sparkle:os="windows" type="application/vnd.rar" sparkle:signature="rmA38bVhDNNHTQuXX6AGEsrdVjwg4+wkOL4EIEu5RQocV2WdPIuRjHuB6hklKsfJDeoX2aIjDnoU6Dh/S1aOAg=="/>
+			<pubDate>Fri, 19 Nov 2021 08:28:19 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.20.23/win-x64.rar" sparkle:version="1.20.23.58937" sparkle:shortVersionString="1.20.23" length="76138609" sparkle:os="windows" type="application/vnd.rar" sparkle:signature="edAUoQB5abBFwJTTnlI0c5NQ7mbdVjfc02paaKrZkKUk+tfkADmWd9dN0jpvkbHTd9LT4sTOMEt+zJqIMAWODQ=="/>
 		</item>
 		<item>
-			<title>1.20.21</title>
-			<description>## Changes From v1.19
+			<title>1.20.23</title>
+			<description>## Release Notes
+* Fix sqlite db caching issue (initial workaround was partial)
+* Cache mod export during conflict solving
+
+## Changes From v1.19
 * Update dependencies
 * Upgrade to net6.0
 * Make Irony compliant with new Paradox Launcher 2021.10 formats</description>
-			<pubDate>Thu, 18 Nov 2021 19:47:07 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.20.21/linux-x64.zip" sparkle:version="1.20.21.34675" sparkle:shortVersionString="1.20.21" length="87311973" sparkle:os="linux" type="application/zip" sparkle:signature="6gdfHhQ2ITw4xqBueRFaTWi5X9o0KhuBFpd9xjZafK9xW6S9eM3umHkdgNy9WPpxAMjXI06KRljr6J4nLPp1DQ=="/>
+			<pubDate>Fri, 19 Nov 2021 08:28:12 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.20.23/linux-x64.zip" sparkle:version="1.20.23.58937" sparkle:shortVersionString="1.20.23" length="87312708" sparkle:os="linux" type="application/zip" sparkle:signature="vn61UNWh8lOWGRvrlyaLqUrl2vgnHEbJaXk+ANm4xKn7VmSX32hysjiXxrviuPa+DPAQCDKxo6ibF6d6VHzfDg=="/>
 		</item>
 	</channel>
 </rss>
