@@ -4,7 +4,7 @@
 // Created          : 05-26-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 11-05-2021
+// Last Modified On : 11-19-2021
 // ***********************************************************************
 // <copyright file="ModPatchCollectionService.cs" company="Mario">
 //     Mario
@@ -53,6 +53,16 @@ namespace IronyModManager.Services
     public class ModPatchCollectionService : ModBaseService, IModPatchCollectionService
     {
         #region Fields
+
+        /// <summary>
+        /// The mod exported key
+        /// </summary>
+        protected const string ModExportedKey = "ExportState";
+
+        /// <summary>
+        /// The mods exported region
+        /// </summary>
+        protected const string ModsExportedRegion = "ModExportedState";
 
         /// <summary>
         /// The cache region
@@ -1423,6 +1433,7 @@ namespace IronyModManager.Services
         /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
         public virtual bool ResetPatchStateCache()
         {
+            Cache.Invalidate(new CacheInvalidateParameters() { Region = ModsExportedRegion, Keys = new List<string>() { ModExportedKey } });
             modPatchExporter.ResetCache();
             return true;
         }
@@ -1974,15 +1985,20 @@ namespace IronyModManager.Services
                             break;
                     }
 
-                    await Task.Run(() =>
+                    var state = Cache.Get<ModsExportedState>(new CacheGetParameters() { Region = ModsExportedRegion, Key = ModExportedKey });
+                    if (state == null || state.Exported.GetValueOrDefault() == false)
                     {
-                        ModWriter.ApplyModsAsync(new ModWriterParameters()
+                        await Task.Run(() =>
                         {
-                            AppendOnly = true,
-                            TopPriorityMods = new List<IMod>() { mod },
-                            RootDirectory = game.UserDirectory
+                            ModWriter.ApplyModsAsync(new ModWriterParameters()
+                            {
+                                AppendOnly = true,
+                                TopPriorityMods = new List<IMod>() { mod },
+                                RootDirectory = game.UserDirectory
+                            }).ConfigureAwait(false);
                         }).ConfigureAwait(false);
-                    }).ConfigureAwait(false);
+                        Cache.Set(new CacheAddParameters<ModsExportedState>() { Region = ModsExportedRegion, Key = ModExportedKey, Value = new ModsExportedState() { Exported = true } });
+                    }
 
                     var exportResult = false;
                     if (exportPatches.Any())
@@ -2482,6 +2498,7 @@ namespace IronyModManager.Services
         /// <param name="item">The item.</param>
         /// <param name="files">The files.</param>
         /// <param name="matchedConflicts">The matched conflicts.</param>
+        /// <returns>A Task representing the asynchronous operation.</returns>
         protected virtual async Task SyncPatchStateAsync(IGame game, string patchName, List<IDefinition> resolvedConflicts, IGrouping<string, IDefinition> item, IList<string> files, IEnumerable<IDefinition> matchedConflicts)
         {
             var synced = await SyncPatchStatesAsync(matchedConflicts, item, patchName, game, files.ToArray());
@@ -2644,12 +2661,21 @@ namespace IronyModManager.Services
                     {
                         mod = allMods.FirstOrDefault(p => p.Name.Equals(patchName));
                     }
-                    await ModWriter.ApplyModsAsync(new ModWriterParameters()
+
+                    var state = Cache.Get<ModsExportedState>(new CacheGetParameters() { Region = ModsExportedRegion, Key = ModExportedKey });
+                    if (state == null || state.Exported.GetValueOrDefault() == false)
                     {
-                        AppendOnly = true,
-                        TopPriorityMods = new List<IMod>() { mod },
-                        RootDirectory = game.UserDirectory
-                    });
+                        await Task.Run(() =>
+                        {
+                            ModWriter.ApplyModsAsync(new ModWriterParameters()
+                            {
+                                AppendOnly = true,
+                                TopPriorityMods = new List<IMod>() { mod },
+                                RootDirectory = game.UserDirectory
+                            }).ConfigureAwait(false);
+                        }).ConfigureAwait(false);
+                        Cache.Set(new CacheAddParameters<ModsExportedState>() { Region = ModsExportedRegion, Key = ModExportedKey, Value = new ModsExportedState() { Exported = true } });
+                    }
                     await modPatchExporter.SaveStateAsync(new ModPatchExporterParameters()
                     {
                         LoadOrder = GetCollectionMods(collectionName: collectionName).Select(p => p.DescriptorFile),
@@ -2732,6 +2758,22 @@ namespace IronyModManager.Services
             /// </summary>
             /// <value>The name of the mod.</value>
             public string ModName { get; set; }
+
+            #endregion Properties
+        }
+
+        /// <summary>
+        /// Class ModsExportedState.
+        /// </summary>
+        private class ModsExportedState
+        {
+            #region Properties
+
+            /// <summary>
+            /// Gets or sets a value indicating whether this <see cref="ModsExportedState"/> is exported.
+            /// </summary>
+            /// <value><c>null</c> if [exported] contains no value, <c>true</c> if [exported]; otherwise, <c>false</c>.</value>
+            public bool? Exported { get; set; }
 
             #endregion Properties
         }
