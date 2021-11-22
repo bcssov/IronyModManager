@@ -77,6 +77,9 @@
         "DirectoryPath": "common\\component_templates",
         "PreferredParser": "StellarisWholeTextParser"
     }, {
+        "DirectoryPath": "common\\country_container",
+        "PreferredParser": "DefaultParser"
+    }, {
         "DirectoryPath": "common\\country_customization",
         "PreferredParser": "DefaultParser"
     }, {
@@ -335,6 +338,9 @@
         "DirectoryPath": "common\\subjects",
         "PreferredParser": "DefaultParser"
     }, {
+        "DirectoryPath": "common\\system_tooltips",
+        "PreferredParser": "DefaultParser"
+    }, {
         "DirectoryPath": "common\\system_types",
         "PreferredParser": "DefaultParser"
     }, {
@@ -482,6 +488,12 @@
         "DirectoryPath": "gfx\\models\\portraits\\ancient_relics",
         "PreferredParser": "GenericGraphicsParser"
     }, {
+        "DirectoryPath": "gfx\\models\\portraits\\aquatic",
+        "PreferredParser": "GenericKeyParser"
+    }, {
+        "DirectoryPath": "gfx\\models\\portraits\\aquatic",
+        "PreferredParser": "GenericGraphicsParser"
+    }, {
         "DirectoryPath": "gfx\\models\\portraits\\arthropoid",
         "PreferredParser": "GenericKeyParser"
     }, {
@@ -593,6 +605,12 @@
         "DirectoryPath": "gfx\\models\\ships\\ai_01",
         "PreferredParser": "GenericGraphicsParser"
     }, {
+        "DirectoryPath": "gfx\\models\\ships\\aquatic_01",
+        "PreferredParser": "GenericKeyParser"
+    }, {
+        "DirectoryPath": "gfx\\models\\ships\\aquatic_01",
+        "PreferredParser": "GenericGraphicsParser"
+    }, {
         "DirectoryPath": "gfx\\models\\ships\\arthropoid_01",
         "PreferredParser": "GenericKeyParser"
     }, {
@@ -609,6 +627,12 @@
         "PreferredParser": "GenericKeyParser"
     }, {
         "DirectoryPath": "gfx\\models\\ships\\caravaneer_01",
+        "PreferredParser": "GenericGraphicsParser"
+    }, {
+        "DirectoryPath": "gfx\\models\\ships\\colossus\\aquatic_01",
+        "PreferredParser": "GenericKeyParser"
+    }, {
+        "DirectoryPath": "gfx\\models\\ships\\colossus\\aquatic_01",
         "PreferredParser": "GenericGraphicsParser"
     }, {
         "DirectoryPath": "gfx\\models\\ships\\colossus\\arthropoid_01",
@@ -795,6 +819,12 @@
         "PreferredParser": "GenericKeyParser"
     }, {
         "DirectoryPath": "gfx\\models\\ships\\humanoid_01",
+        "PreferredParser": "GenericGraphicsParser"
+    }, {
+        "DirectoryPath": "gfx\\models\\ships\\juggernauts\\aquatics_01",
+        "PreferredParser": "GenericKeyParser"
+    }, {
+        "DirectoryPath": "gfx\\models\\ships\\juggernauts\\aquatics_01",
         "PreferredParser": "GenericGraphicsParser"
     }, {
         "DirectoryPath": "gfx\\models\\ships\\juggernauts\\arthropoid_01",
@@ -1011,6 +1041,12 @@
         "PreferredParser": "GenericKeyParser"
     }, {
         "DirectoryPath": "gfx\\models\\ships\\swarm_01",
+        "PreferredParser": "GenericGraphicsParser"
+    }, {
+        "DirectoryPath": "gfx\\models\\ships\\titans\\aquatic_01",
+        "PreferredParser": "GenericKeyParser"
+    }, {
+        "DirectoryPath": "gfx\\models\\ships\\titans\\aquatic_01",
         "PreferredParser": "GenericGraphicsParser"
     }, {
         "DirectoryPath": "gfx\\models\\ships\\titans\\arthropoid_01",
@@ -1233,6 +1269,21 @@
         "PreferredParser": "GenericWholeTextParser"
     }, {
         "DirectoryPath": "sound\\apocalypse",
+        "PreferredParser": "GenericWholeTextParser"
+    }, {
+        "DirectoryPath": "sound\\aquatics\\dragon",
+        "PreferredParser": "GenericWholeTextParser"
+    }, {
+        "DirectoryPath": "sound\\aquatics\\events",
+        "PreferredParser": "GenericWholeTextParser"
+    }, {
+        "DirectoryPath": "sound\\aquatics\\portraits",
+        "PreferredParser": "GenericWholeTextParser"
+    }, {
+        "DirectoryPath": "sound\\aquatics\\ships",
+        "PreferredParser": "GenericWholeTextParser"
+    }, {
+        "DirectoryPath": "sound\\aquatics\\weapons",
         "PreferredParser": "GenericWholeTextParser"
     }, {
         "DirectoryPath": "sound\\distant_stars",
