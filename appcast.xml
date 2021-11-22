@@ -4,56 +4,52 @@
 		<title>Irony Mod Manager</title>
 		<language>en</language>
 		<item>
-			<title>1.20.23</title>
+			<title>1.20.24</title>
 			<description>## Release Notes
-* Fix sqlite db caching issue (initial workaround was partial)
-* Cache mod export during conflict solving
+* Update parser map to Stellaris 3.2 version
 
 ## Changes From v1.19
 * Update dependencies
 * Upgrade to net6.0
 * Make Irony compliant with new Paradox Launcher 2021.10 formats</description>
-			<pubDate>Fri, 19 Nov 2021 08:28:15 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.20.23/osx-x64.rar" sparkle:version="1.20.23.58937" sparkle:shortVersionString="1.20.23" length="70776442" sparkle:os="osx" type="application/vnd.rar" sparkle:signature="PURW93EG8gwztj3WavgeXpTuSp3baNAc24Qh4/ffH4d6sDM+O1NgoCK9gHVspCbvzXtWC5Nin6kHN8QYjrkXAw=="/>
+			<pubDate>Mon, 22 Nov 2021 23:35:38 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.20.24/osx-x64.rar" sparkle:version="1.20.24.14243" sparkle:shortVersionString="1.20.24" length="70776321" sparkle:os="osx" type="application/vnd.rar" sparkle:signature="CuijjFVLAnlIyHR2D14xUzPym5MkcV7RM7xpmALjLI9jND7A96vTyLvzRdMtR08Ff0KlUV5c8bVDM8oaxbCCAg=="/>
 		</item>
 		<item>
-			<title>1.20.23</title>
+			<title>1.20.24</title>
 			<description>## Release Notes
-* Fix sqlite db caching issue (initial workaround was partial)
-* Cache mod export during conflict solving
+* Update parser map to Stellaris 3.2 version
 
 ## Changes From v1.19
 * Update dependencies
 * Upgrade to net6.0
 * Make Irony compliant with new Paradox Launcher 2021.10 formats</description>
-			<pubDate>Fri, 19 Nov 2021 08:28:23 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.20.23/win-x64-setup.rar" sparkle:version="1.20.23.58937" sparkle:shortVersionString="1.20.23" length="63554189" sparkle:os="windows" type="application/vnd.rar" sparkle:signature="Z8E7DmFCZ8P9YQTohNofXqRhAAGGqq/19xv76AvIgKpaoCZukbdtoOdxXvN5X3XQgv/kDehdfOkP0YgyDaKoAw=="/>
+			<pubDate>Mon, 22 Nov 2021 23:35:47 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.20.24/win-x64-setup.rar" sparkle:version="1.20.24.14243" sparkle:shortVersionString="1.20.24" length="63557594" sparkle:os="windows" type="application/vnd.rar" sparkle:signature="L9SwuJmfs/vu0s/+L3SCn1O/FDbup7NcsE0tP3VLwBoplFGEZG24uMREJieqp38ZSwmjV1fUNqDJjUVQU6wCAA=="/>
 		</item>
 		<item>
-			<title>1.20.23</title>
+			<title>1.20.24</title>
 			<description>## Release Notes
-* Fix sqlite db caching issue (initial workaround was partial)
-* Cache mod export during conflict solving
+* Update parser map to Stellaris 3.2 version
 
 ## Changes From v1.19
 * Update dependencies
 * Upgrade to net6.0
 * Make Irony compliant with new Paradox Launcher 2021.10 formats</description>
-			<pubDate>Fri, 19 Nov 2021 08:28:19 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.20.23/win-x64.rar" sparkle:version="1.20.23.58937" sparkle:shortVersionString="1.20.23" length="76138609" sparkle:os="windows" type="application/vnd.rar" sparkle:signature="edAUoQB5abBFwJTTnlI0c5NQ7mbdVjfc02paaKrZkKUk+tfkADmWd9dN0jpvkbHTd9LT4sTOMEt+zJqIMAWODQ=="/>
+			<pubDate>Mon, 22 Nov 2021 23:35:42 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.20.24/win-x64.rar" sparkle:version="1.20.24.14243" sparkle:shortVersionString="1.20.24" length="76138452" sparkle:os="windows" type="application/vnd.rar" sparkle:signature="kQsoP5DcWwbg/5m3F54uShntPv6ci6GyK1nrn89OZCjJYbW3+M+9lba0RP/mDEZqC+QG3/KXFNTjGEbpRWivCQ=="/>
 		</item>
 		<item>
-			<title>1.20.23</title>
+			<title>1.20.24</title>
 			<description>## Release Notes
-* Fix sqlite db caching issue (initial workaround was partial)
-* Cache mod export during conflict solving
+* Update parser map to Stellaris 3.2 version
 
 ## Changes From v1.19
 * Update dependencies
 * Upgrade to net6.0
 * Make Irony compliant with new Paradox Launcher 2021.10 formats</description>
-			<pubDate>Fri, 19 Nov 2021 08:28:12 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.20.23/linux-x64.zip" sparkle:version="1.20.23.58937" sparkle:shortVersionString="1.20.23" length="87312708" sparkle:os="linux" type="application/zip" sparkle:signature="vn61UNWh8lOWGRvrlyaLqUrl2vgnHEbJaXk+ANm4xKn7VmSX32hysjiXxrviuPa+DPAQCDKxo6ibF6d6VHzfDg=="/>
+			<pubDate>Mon, 22 Nov 2021 23:35:34 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.20.24/linux-x64.zip" sparkle:version="1.20.24.14243" sparkle:shortVersionString="1.20.24" length="87312607" sparkle:os="linux" type="application/zip" sparkle:signature="owWZB9NsHibVezlNv0KZyw087m0MNjzrXILKp4/r3/V2K5RE5BHnPxhzu/AJtcZZj1fAo4kFsfV5jQ5v1Ze9BA=="/>
 		</item>
 	</channel>
 </rss>
