@@ -4,7 +4,7 @@
 // Created          : 10-25-2021
 //
 // Last Modified By : Mario
-// Last Modified On : 11-01-2021
+// Last Modified On : 11-27-2021
 // ***********************************************************************
 // <copyright file="OverwrittenObjectSingleFileParser.cs" company="Mario">
 //     Mario
@@ -14,6 +14,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using IronyModManager.Parser.Common.Args;
 using IronyModManager.Parser.Common.Parsers;
@@ -33,6 +34,11 @@ namespace IronyModManager.Parser.Games.Stellaris
     public class OverwrittenObjectSingleFileParser : BaseParser, IGameParser
     {
         #region Fields
+
+        /// <summary>
+        /// The merge type ids
+        /// </summary>
+        private static readonly Dictionary<string, string[]> allowDuplicateIds = new() { { Common.Constants.Stellaris.Ethics.ToLowerInvariant(), new string[] { "ethic_categories" } } };
 
         /// <summary>
         /// The starts with checks
@@ -94,13 +100,21 @@ namespace IronyModManager.Parser.Games.Stellaris
         public override IEnumerable<IDefinition> Parse(ParserArgs args)
         {
             var results = ParseRoot(args);
-            if (results?.Count() > 0)
+            if (results != null && results.Any())
             {
                 foreach (var item in results)
                 {
                     if (item.ValueType == ValueType.Object)
                     {
                         item.ValueType = ValueType.OverwrittenObjectSingleFile;
+                        if (allowDuplicateIds.ContainsKey(Path.GetDirectoryName(args.File)))
+                        {
+                            var items = allowDuplicateIds[Path.GetDirectoryName(args.File)];
+                            if (items.Any(p => p.Equals(item.Id, StringComparison.OrdinalIgnoreCase)))
+                            {
+                                item.AllowDuplicate = true;
+                            }
+                        }
                     }
                 }
             }

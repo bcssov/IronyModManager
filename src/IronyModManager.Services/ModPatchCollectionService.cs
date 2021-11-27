@@ -4,7 +4,7 @@
 // Created          : 05-26-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 11-19-2021
+// Last Modified On : 11-27-2021
 // ***********************************************************************
 // <copyright file="ModPatchCollectionService.cs" company="Mario">
 //     Mario
@@ -1651,7 +1651,7 @@ namespace IronyModManager.Services
             var processed = new HashSet<IDefinition>();
             foreach (var def in validDefinitions)
             {
-                if (processed.Contains(def) || conflicts.Contains(def))
+                if (processed.Contains(def) || conflicts.Contains(def) || def.AllowDuplicate)
                 {
                     continue;
                 }
@@ -2380,23 +2380,37 @@ namespace IronyModManager.Services
                 var all = conflictResult.AllConflicts.GetByParentDirectory(definitions.FirstOrDefault().ParentDirectoryCI).Where(p => IsValidDefinitionType(p));
                 var ordered = all.GroupBy(p => p.TypeAndId).Select(p =>
                 {
-                    var priority = EvalDefinitionPriorityInternal(p.OrderBy(p => modOrder.IndexOf(p.ModName)), true);
-                    return new DefinitionOrderSort()
+                    if (p.Any(v => v.AllowDuplicate))
                     {
-                        TypeAndId = priority.Definition.TypeAndId,
-                        Order = priority.Definition.Order,
-                        File = Path.GetFileNameWithoutExtension(priority.Definition.File)
-                    };
-                }).GroupBy(p => p.File).OrderBy(p => p.Key, StringComparer.Ordinal).SelectMany(p => p.OrderBy(x => x.Order)).ToList();
+                        return p.GroupBy(p => p.File).Select(v => new DefinitionOrderSort()
+                        {
+                            TypeAndId = v.FirstOrDefault().TypeAndId,
+                            Order = v.FirstOrDefault().Order,
+                            File = Path.GetFileNameWithoutExtension(v.FirstOrDefault().File)
+                        });
+                    }
+                    else
+                    {
+                        var priority = EvalDefinitionPriorityInternal(p.OrderBy(p => modOrder.IndexOf(p.ModName)), true);
+                        return new List<DefinitionOrderSort>() { new DefinitionOrderSort()
+                        {
+                            TypeAndId = priority.Definition.TypeAndId,
+                            Order = priority.Definition.Order,
+                            File = Path.GetFileNameWithoutExtension(priority.Definition.File)
+                        }};
+                    }
+                }).SelectMany(p => p).GroupBy(p => p.File).OrderBy(p => p.Key, StringComparer.Ordinal).SelectMany(p => p.OrderBy(x => x.Order)).ToList();
                 var fullyOrdered = ordered.Select(p => new DefinitionOrderSort()
                 {
                     TypeAndId = p.TypeAndId,
-                    Order = ordered.IndexOf(p)
+                    Order = ordered.IndexOf(p),
+                    File = p.File
                 }).ToList();
                 var sortExport = new List<IDefinition>();
                 var infoProvider = DefinitionInfoProviders.FirstOrDefault(p => p.CanProcess(game.Type));
                 var overwrittenFileNames = new HashSet<string>();
-                foreach (var item in definitions)
+
+                void handleDefinition(IDefinition item)
                 {
                     IDefinition definition = item;
                     var resolved = conflictResult.ResolvedConflicts.GetByTypeAndId(item.TypeAndId);
@@ -2425,9 +2439,39 @@ namespace IronyModManager.Services
                         var exportCopy = CopyDefinition(other);
                         var allType = conflictResult.AllConflicts.GetByTypeAndId(definition.TypeAndId).ToList();
                         allType.ForEach(p => overwrittenFileNames.Add(p.OriginalFileName));
-                        exportCopy.Order = fullyOrdered.FirstOrDefault(p => p.TypeAndId == definition.TypeAndId).Order;
+                        if (other.AllowDuplicate)
+                        {
+                            var match = fullyOrdered.FirstOrDefault(p => p.TypeAndId == definition.TypeAndId && p.File == Path.GetFileNameWithoutExtension(other.File));
+                            if (match == null)
+                            {
+                                match = fullyOrdered.FirstOrDefault(p => p.TypeAndId == definition.TypeAndId);
+                            }
+                            exportCopy.Order = match.Order;
+                        }
+                        else
+                        {
+                            exportCopy.Order = fullyOrdered.FirstOrDefault(p => p.TypeAndId == definition.TypeAndId).Order;
+                        }
                         export.Add(exportCopy);
                         sortExport.Add(exportCopy);
+                    }
+                }
+
+                var handledDuplicates = new HashSet<string>();
+                foreach (var item in definitions)
+                {
+                    if (!item.AllowDuplicate)
+                    {
+                        handleDefinition(item);
+                    }
+                    else if (!handledDuplicates.Contains(item.TypeAndId))
+                    {
+                        handledDuplicates.Add(item.TypeAndId);
+                        var duplicates = conflictResult.AllConflicts.GetByTypeAndId(item.TypeAndId).GroupBy(p => p.File);
+                        foreach (var duplicate in duplicates)
+                        {
+                            handleDefinition(EvalDefinitionPriority(duplicate.OrderBy(p => modOrder.IndexOf(p.ModName))).Definition);
+                        }
                     }
                 }
                 var fullySortedExport = sortExport.OrderBy(p => p.Order).ToList();
@@ -2446,18 +2490,11 @@ namespace IronyModManager.Services
                     {
                         var oldFileName = merged.File;
                         merged.Id = SingleFileMerged;
-                        merged.OverwrittenFileNames = overwrittenFileNames.Distinct().ToList();
                         merged.File = infoProvider.GetFileName(merged);
                         merged.DiskFile = infoProvider.GetDiskFileName(merged);
                         merged.ValueType = ValueType.OverwrittenObjectSingleFile;
                         merged.ModName = patchName;
-                        var preserveOverwrittenFileName = oldFileName == merged.File;
-                        if (preserveOverwrittenFileName)
-                        {
-                            var preservedOverwrittenFileName = merged.OverwrittenFileNames;
-                            preservedOverwrittenFileName.Add(oldFileName);
-                            merged.OverwrittenFileNames = preservedOverwrittenFileName.Distinct().ToList();
-                        }
+                        merged.OverwrittenFileNames = overwrittenFileNames.Distinct().ToList();
                         return merged;
                     }
                 }
@@ -2770,7 +2807,7 @@ namespace IronyModManager.Services
             #region Properties
 
             /// <summary>
-            /// Gets or sets a value indicating whether this <see cref="ModsExportedState"/> is exported.
+            /// Gets or sets a value indicating whether this <see cref="ModsExportedState" /> is exported.
             /// </summary>
             /// <value><c>null</c> if [exported] contains no value, <c>true</c> if [exported]; otherwise, <c>false</c>.</value>
             public bool? Exported { get; set; }

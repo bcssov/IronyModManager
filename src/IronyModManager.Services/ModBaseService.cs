@@ -4,7 +4,7 @@
 // Created          : 04-07-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 11-03-2021
+// Last Modified On : 11-27-2021
 // ***********************************************************************
 // <copyright file="ModBaseService.cs" company="Mario">
 //     Mario
@@ -195,6 +195,7 @@ namespace IronyModManager.Services
             newDefinition.CustomPriorityOrder = definition.CustomPriorityOrder;
             newDefinition.IsCustomPatch = definition.IsCustomPatch;
             newDefinition.IsFromGame = definition.IsFromGame;
+            newDefinition.AllowDuplicate = definition.AllowDuplicate;
             return newDefinition;
         }
 
@@ -548,7 +549,7 @@ namespace IronyModManager.Services
         /// <param name="game">The game.</param>
         /// <param name="ignorePatchMods">if set to <c>true</c> [ignore patch mods].</param>
         /// <returns>IEnumerable&lt;IMod&gt;.</returns>
-        /// <exception cref="ArgumentNullException">game</exception>
+        /// <exception cref="System.ArgumentNullException">game</exception>
         protected virtual IEnumerable<IMod> GetInstalledModsInternal(IGame game, bool ignorePatchMods)
         {
             if (game == null)
