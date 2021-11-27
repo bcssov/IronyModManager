@@ -4,7 +4,7 @@
 // Created          : 02-16-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 10-25-2021
+// Last Modified On : 11-27-2021
 // ***********************************************************************
 // <copyright file="Definition.cs" company="Mario">
 //     Mario
@@ -32,6 +32,21 @@ namespace IronyModManager.Parser.Definitions
     public class Definition : IDefinition
     {
         #region Fields
+
+        /// <summary>
+        /// The additional files lock
+        /// </summary>
+        private readonly object additionalFilesLock = new();
+
+        /// <summary>
+        /// The generated files lock
+        /// </summary>
+        private readonly object generatedFilesLock = new();
+
+        /// <summary>
+        /// The overwritten files lock
+        /// </summary>
+        private readonly object overwrittenFilesLock = new();
 
         /// <summary>
         /// The additional file names
@@ -142,7 +157,10 @@ namespace IronyModManager.Parser.Definitions
             {
                 if (!additionalFileNames.Contains(File))
                 {
-                    additionalFileNames.Add(File);
+                    lock (additionalFilesLock)
+                    {
+                        additionalFileNames.Add(File);
+                    }
                 }
                 return additionalFileNames.Distinct().ToList();
             }
@@ -157,9 +175,18 @@ namespace IronyModManager.Parser.Definitions
                 {
                     val = value;
                 }
-                additionalFileNames = val;
+                lock (additionalFilesLock)
+                {
+                    additionalFileNames = val;
+                }
             }
         }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether [allow duplicate].
+        /// </summary>
+        /// <value><c>true</c> if [allow duplicate]; otherwise, <c>false</c>.</value>
+        public bool AllowDuplicate { get; set; }
 
         /// <summary>
         /// Gets or sets the code.
@@ -347,15 +374,24 @@ namespace IronyModManager.Parser.Definitions
                 parentDirectoryCI = string.Empty;
                 if (generatedFileNames.Contains(old))
                 {
-                    generatedFileNames.Remove(old);
+                    lock (generatedFilesLock)
+                    {
+                        generatedFileNames.Remove(old);
+                    }
                 }
                 if (overwrittenFileNames.Contains(old))
                 {
-                    overwrittenFileNames.Remove(old);
+                    lock (overwrittenFilesLock)
+                    {
+                        overwrittenFileNames.Remove(old);
+                    }
                 }
                 if (additionalFileNames.Contains(old))
                 {
-                    additionalFileNames.Remove(old);
+                    lock (additionalFilesLock)
+                    {
+                        additionalFileNames.Remove(old);
+                    }
                 }
             }
         }
@@ -377,7 +413,10 @@ namespace IronyModManager.Parser.Definitions
             {
                 if (!generatedFileNames.Contains(File))
                 {
-                    generatedFileNames.Add(File);
+                    lock (generatedFilesLock)
+                    {
+                        generatedFileNames.Add(File);
+                    }
                 }
                 return generatedFileNames.Distinct().ToList();
             }
@@ -392,7 +431,10 @@ namespace IronyModManager.Parser.Definitions
                 {
                     val = value;
                 }
-                generatedFileNames = val;
+                lock (generatedFilesLock)
+                {
+                    generatedFileNames = val;
+                }
             }
         }
 
@@ -493,7 +535,10 @@ namespace IronyModManager.Parser.Definitions
             {
                 if (!overwrittenFileNames.Contains(File))
                 {
-                    overwrittenFileNames.Add(File);
+                    lock (overwrittenFilesLock)
+                    {
+                        overwrittenFileNames.Add(File);
+                    }
                 }
                 return overwrittenFileNames.Distinct().ToList();
             }
@@ -508,7 +553,10 @@ namespace IronyModManager.Parser.Definitions
                 {
                     val = value;
                 }
-                overwrittenFileNames = val;
+                lock (overwrittenFilesLock)
+                {
+                    overwrittenFileNames = val;
+                }
             }
         }
 
@@ -692,6 +740,7 @@ namespace IronyModManager.Parser.Definitions
                 nameof(CustomPriorityOrder) => CustomPriorityOrder,
                 nameof(IsCustomPatch) => IsCustomPatch,
                 nameof(IsFromGame) => IsFromGame,
+                nameof(AllowDuplicate) => AllowDuplicate,
                 _ => Id
             };
         }

@@ -4,7 +4,7 @@
 // Created          : 02-16-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 10-25-2021
+// Last Modified On : 11-27-2021
 // ***********************************************************************
 // <copyright file="IDefinition.cs" company="Mario">
 //     Mario
@@ -34,6 +34,12 @@ namespace IronyModManager.Shared.Models
         /// </summary>
         /// <value>The additional file names.</value>
         IList<string> AdditionalFileNames { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether [allow duplicate].
+        /// </summary>
+        /// <value><c>true</c> if [allow duplicate]; otherwise, <c>false</c>.</value>
+        bool AllowDuplicate { get; set; }
 
         /// <summary>
         /// Gets or sets the code.
