@@ -4,52 +4,52 @@
 		<title>Irony Mod Manager</title>
 		<language>en</language>
 		<item>
-			<title>1.20.25</title>
+			<title>1.20.27</title>
 			<description>## Release Notes
-* Fix ethic categories handling (Stellaris)
+* Fix resolving vanilla binary conflicts (Stellaris)
 
 ## Changes From v1.19
 * Update dependencies
 * Upgrade to net6.0
 * Make Irony compliant with new Paradox Launcher 2021.10 formats</description>
-			<pubDate>Sat, 27 Nov 2021 15:09:55 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.20.25/osx-x64.rar" sparkle:version="1.20.25.8522" sparkle:shortVersionString="1.20.25" length="70777054" sparkle:os="osx" type="application/vnd.rar" sparkle:signature="lmPzMF2fXHO5tQFgK2U6Xpguem87iK+WrJ0CvtuIzo5SXiFTN2P1xyBJRlObSzWnWEdTCp3RUUut0g3dJBWCAg=="/>
+			<pubDate>Mon, 06 Dec 2021 06:57:59 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.20.27/osx-x64.rar" sparkle:version="1.20.27.53051" sparkle:shortVersionString="1.20.27" length="70783811" sparkle:os="osx" type="application/vnd.rar" sparkle:signature="Q71A4VgemgDd72xaUSiOc75FHh8BQAkN23FgCvVlASUQB6iQKjrQet8qql4UcZ9oFDTW2y+L1MqknlEyplkFBQ=="/>
 		</item>
 		<item>
-			<title>1.20.25</title>
+			<title>1.20.27</title>
 			<description>## Release Notes
-* Fix ethic categories handling (Stellaris)
+* Fix resolving vanilla binary conflicts (Stellaris)
 
 ## Changes From v1.19
 * Update dependencies
 * Upgrade to net6.0
 * Make Irony compliant with new Paradox Launcher 2021.10 formats</description>
-			<pubDate>Sat, 27 Nov 2021 15:10:03 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.20.25/win-x64-setup.rar" sparkle:version="1.20.25.8522" sparkle:shortVersionString="1.20.25" length="63546612" sparkle:os="windows" type="application/vnd.rar" sparkle:signature="e0a2Q6cC3rCxcpdxkaYhU0RXXElYgxOpQ1r5IumdAMHALpYEaTsOztdYyzKUnweLjeC5I+uvYDVc0fox0aeRBQ=="/>
+			<pubDate>Mon, 06 Dec 2021 06:58:07 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.20.27/win-x64-setup.rar" sparkle:version="1.20.27.53051" sparkle:shortVersionString="1.20.27" length="63563460" sparkle:os="windows" type="application/vnd.rar" sparkle:signature="QJJ/N2NxKLMUYxMq+jIPNc1bJ/ow43qcbGz8Dp5aguaSq2ZZ7hvCD5m3efGQ4Hrlbi4VWYzKqLJVraJSjZUHBA=="/>
 		</item>
 		<item>
-			<title>1.20.25</title>
+			<title>1.20.27</title>
 			<description>## Release Notes
-* Fix ethic categories handling (Stellaris)
+* Fix resolving vanilla binary conflicts (Stellaris)
 
 ## Changes From v1.19
 * Update dependencies
 * Upgrade to net6.0
 * Make Irony compliant with new Paradox Launcher 2021.10 formats</description>
-			<pubDate>Sat, 27 Nov 2021 15:09:59 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.20.25/win-x64.rar" sparkle:version="1.20.25.8522" sparkle:shortVersionString="1.20.25" length="76139083" sparkle:os="windows" type="application/vnd.rar" sparkle:signature="tqkagxNsLRIl3jmRJNvgbIX4KPAZzclZc2LJeZAGCq3HERlXuWcKLCRdLnsHcuiCvZ4DwsL1lIoputYrwIwJAg=="/>
+			<pubDate>Mon, 06 Dec 2021 06:58:03 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.20.27/win-x64.rar" sparkle:version="1.20.27.53051" sparkle:shortVersionString="1.20.27" length="76145816" sparkle:os="windows" type="application/vnd.rar" sparkle:signature="n3opw3Bqhu74ODuVGLJvDHjKIFrpTQGzgXq4xgWb53WzoKZpw10LsMmhhBdljqiWqKPN1RofxsT0xtqFyVUvCQ=="/>
 		</item>
 		<item>
-			<title>1.20.25</title>
+			<title>1.20.27</title>
 			<description>## Release Notes
-* Fix ethic categories handling (Stellaris)
+* Fix resolving vanilla binary conflicts (Stellaris)
 
 ## Changes From v1.19
 * Update dependencies
 * Upgrade to net6.0
 * Make Irony compliant with new Paradox Launcher 2021.10 formats</description>
-			<pubDate>Sat, 27 Nov 2021 15:09:52 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.20.25/linux-x64.zip" sparkle:version="1.20.25.8522" sparkle:shortVersionString="1.20.25" length="87314246" sparkle:os="linux" type="application/zip" sparkle:signature="7QFL63LTVBJfq9HhYPzpsDliA0eXzbcygkfcz/k+1YWpRbjdYVBQ1SqVjETUzRRXoS1R6XlqKh1DB4QqXERiDw=="/>
+			<pubDate>Mon, 06 Dec 2021 06:57:54 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.20.27/linux-x64.zip" sparkle:version="1.20.27.53051" sparkle:shortVersionString="1.20.27" length="87314338" sparkle:os="linux" type="application/zip" sparkle:signature="j1OeLEgMpRaioS+gJJD/YPPpV8pyBmXaRuCHGj3wpxdxidKEmOP+Y+iTuraXf7VFL+E+RLMXApyH5xOruX6NAg=="/>
 		</item>
 	</channel>
 </rss>
