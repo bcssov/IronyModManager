@@ -4,7 +4,7 @@
 // Created          : 03-24-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 09-19-2021
+// Last Modified On : 12-06-2021
 // ***********************************************************************
 // <copyright file="ModCompareSelectorControlViewModel.cs" company="Mario">
 //     Mario
@@ -215,6 +215,7 @@ namespace IronyModManager.ViewModels.Controls
         /// </summary>
         /// <param name="definitions">The definitions.</param>
         /// <param name="token">The token.</param>
+        /// <returns>A Task representing the asynchronous operation.</returns>
         protected async Task AddVirtualDefinitionAsync(IEnumerable<IDefinition> definitions, CancellationToken token)
         {
             addingVirtualDefinition = true;
@@ -273,6 +274,19 @@ namespace IronyModManager.ViewModels.Controls
                 {
                     VirtualDefinitions = definitions.OrderBy(p => SelectedModsOrder.IndexOf(p.ModName)).ToHashSet();
                     var virtualDefinitions = VirtualDefinitions;
+                    var priorityDefinition = modPatchCollectionService.EvalDefinitionPriority(virtualDefinitions);
+                    if (priorityDefinition == null || priorityDefinition.Definition == null)
+                    {
+                        if (priorityDefinition == null)
+                        {
+                            priorityDefinition = DIResolver.Get<IPriorityDefinitionResult>();
+                            priorityDefinition.PriorityType = DefinitionPriorityType.None;
+                        }
+                        if (priorityDefinition.Definition == null)
+                        {
+                            priorityDefinition.Definition = virtualDefinitions.First();
+                        }
+                    }
                     if (virtualDefinitions.Any())
                     {
                         // No reason to anymore not select a default definition on either side, wait a bit first to allow the UI to settle down
@@ -286,8 +300,8 @@ namespace IronyModManager.ViewModels.Controls
                         await Task.Delay(50, token);
                         if (!token.IsCancellationRequested)
                         {
-                            var left = virtualDefinitions.ElementAt(0);
-                            var right = virtualDefinitions.ElementAt(1);
+                            var left = virtualDefinitions.FirstOrDefault(p => p != priorityDefinition.Definition);
+                            var right = priorityDefinition.Definition;
                             DefinitionSelection = new CompareSelection(left, right);
                             LeftSelectedDefinition = left;
                             RightSelectedDefinition = right;
