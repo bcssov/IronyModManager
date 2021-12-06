@@ -4,7 +4,7 @@
 // Created          : 05-26-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 11-27-2021
+// Last Modified On : 12-06-2021
 // ***********************************************************************
 // <copyright file="ModPatchCollectionService.cs" company="Mario">
 //     Mario
@@ -1957,7 +1957,7 @@ namespace IronyModManager.Services
                     mod = allMods.FirstOrDefault(p => p.Name.Equals(patchName));
                 }
                 var definitionMod = allMods.FirstOrDefault(p => p.Name.Equals(definition.ModName));
-                if (definitionMod != null || IsPatchMod(definitionMod))
+                if (definitionMod != null || definition.IsFromGame)
                 {
                     var args = new ModPatchExporterParameters()
                     {
