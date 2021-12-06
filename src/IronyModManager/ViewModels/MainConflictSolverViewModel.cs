@@ -4,7 +4,7 @@
 // Created          : 03-18-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 10-27-2021
+// Last Modified On : 12-06-2021
 // ***********************************************************************
 // <copyright file="MainConflictSolverViewModel.cs" company="Mario">
 //     Mario
@@ -1019,6 +1019,7 @@ namespace IronyModManager.ViewModels
         /// resolve conflict as an asynchronous operation.
         /// </summary>
         /// <param name="resolve">if set to <c>true</c> [resolve].</param>
+        /// <returns>A Task representing the asynchronous operation.</returns>
         protected virtual async Task ResolveConflictAsync(bool resolve)
         {
             if (ResolvingConflict)
@@ -1026,7 +1027,7 @@ namespace IronyModManager.ViewModels
                 return;
             }
             ResolvingConflict = true;
-            if (ModCompareSelector.VirtualDefinitions?.Count() > 0)
+            if (ModCompareSelector.VirtualDefinitions != null && ModCompareSelector.VirtualDefinitions.Any())
             {
                 IHierarchicalDefinitions conflictParent = null;
                 int? conflictParentIdx = null;
