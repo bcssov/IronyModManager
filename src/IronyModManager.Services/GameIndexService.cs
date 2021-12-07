@@ -4,7 +4,7 @@
 // Created          : 05-27-2021
 //
 // Last Modified By : Mario
-// Last Modified On : 11-27-2021
+// Last Modified On : 12-07-2021
 // ***********************************************************************
 // <copyright file="GameIndexService.cs" company="Mario">
 //     Mario
@@ -122,7 +122,8 @@ namespace IronyModManager.Services
                 }
                 var gamePath = pathResolver.GetPath(game);
                 var files = Reader.GetFiles(gamePath);
-                if (files.Any())
+                // No clue how someone got reader to return 0 based on configuration alone but just in case to ignore this mess
+                if (files != null && files.Any())
                 {
                     files = files.Where(p => game.GameFolders.Any(x => p.StartsWith(x)));
                     var indexedFolders = indexedDefinitions.GetAllDirectoryKeys().Select(p => p.ToLowerInvariant());
