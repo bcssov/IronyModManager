@@ -4,7 +4,7 @@
 // Created          : 02-29-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 10-26-2021
+// Last Modified On : 12-07-2021
 // ***********************************************************************
 // <copyright file="InstalledModsControlViewModel.cs" company="Mario">
 //     Mario
@@ -19,6 +19,7 @@ using System.Reactive;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
+using Avalonia.Threading;
 using DynamicData;
 using IronyModManager.Common;
 using IronyModManager.Common.ViewModels;
@@ -525,6 +526,7 @@ namespace IronyModManager.ViewModels.Controls
         /// refresh mods as an asynchronous operation.
         /// </summary>
         /// <param name="skipOverlay">if set to <c>true</c> [skip overlay].</param>
+        /// <returns>A Task representing the asynchronous operation.</returns>
         public virtual async Task RefreshModsAsync(bool skipOverlay = false)
         {
             RefreshingMods = true;
@@ -629,7 +631,10 @@ namespace IronyModManager.ViewModels.Controls
                 var invalidMods = AllMods.Where(p => !p.IsValid);
                 if (invalidMods.Any())
                 {
-                    await RemoveInvalidModsPromptAsync(invalidMods).ConfigureAwait(false);
+                    await Dispatcher.UIThread.SafeInvokeAsync(async () =>
+                    {
+                        await RemoveInvalidModsPromptAsync(invalidMods).ConfigureAwait(false);
+                    });
                 }
                 var searchString = FilterMods.Text ?? string.Empty;
                 FilteredMods = modService.FilterMods(Mods, searchString).ToObservableCollection();
@@ -671,6 +676,7 @@ namespace IronyModManager.ViewModels.Controls
         /// <summary>
         /// check mod enabled state as an asynchronous operation.
         /// </summary>
+        /// <returns>A Task representing the asynchronous operation.</returns>
         protected virtual async Task CheckModEnabledStateAsync()
         {
             checkingState = true;
@@ -682,6 +688,7 @@ namespace IronyModManager.ViewModels.Controls
         /// <summary>
         /// check new mods as an asynchronous operation.
         /// </summary>
+        /// <returns>A Task representing the asynchronous operation.</returns>
         protected virtual async Task CheckNewModsAsync()
         {
             var id = idGenerator.GetNextId();
@@ -702,6 +709,7 @@ namespace IronyModManager.ViewModels.Controls
         /// delete descriptor as an asynchronous operation.
         /// </summary>
         /// <param name="mods">The mods.</param>
+        /// <returns>A Task representing the asynchronous operation.</returns>
         protected virtual async Task DeleteDescriptorAsync(IEnumerable<IMod> mods)
         {
             if (mods?.Count() > 0)
@@ -780,6 +788,7 @@ namespace IronyModManager.ViewModels.Controls
         /// </summary>
         /// <param name="mods">The mods.</param>
         /// <param name="isLocked">if set to <c>true</c> [is locked].</param>
+        /// <returns>A Task representing the asynchronous operation.</returns>
         protected virtual async Task LockDescriptorAsync(IEnumerable<IMod> mods, bool isLocked)
         {
             if (mods?.Count() > 0)
@@ -944,6 +953,7 @@ namespace IronyModManager.ViewModels.Controls
         /// eval achievement compatibility as an asynchronous operation.
         /// </summary>
         /// <param name="mods">The mods.</param>
+        /// <returns>A Task representing the asynchronous operation.</returns>
         protected virtual async Task PopulateModFilesAsyncAsync(IEnumerable<IMod> mods)
         {
             await modService.PopulateModFilesAsync(mods);
@@ -953,6 +963,7 @@ namespace IronyModManager.ViewModels.Controls
         /// remove invalid mods prompt as an asynchronous operation.
         /// </summary>
         /// <param name="mods">The mods.</param>
+        /// <returns>A Task representing the asynchronous operation.</returns>
         protected virtual async Task RemoveInvalidModsPromptAsync(IEnumerable<IMod> mods)
         {
             if (showingPrompt)
