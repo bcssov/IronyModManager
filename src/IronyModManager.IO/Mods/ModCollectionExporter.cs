@@ -4,7 +4,7 @@
 // Created          : 03-09-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 11-16-2021
+// Last Modified On : 12-10-2021
 // ***********************************************************************
 // <copyright file="ModCollectionExporter.cs" company="Mario">
 //     Mario
@@ -282,8 +282,12 @@ namespace IronyModManager.IO.Mods
         /// <returns>Task&lt;System.Boolean&gt;.</returns>
         public Task<ICollectionImportResult> ImportAsync(ModCollectionExporterParams parameters)
         {
-            ImportInternal(parameters, true, out var result);
-            return Task.FromResult(result);
+            var importResult = ImportInternal(parameters, true, out var result);
+            if (importResult)
+            {
+                return Task.FromResult(result);
+            }
+            return Task.FromResult((ICollectionImportResult)null);
         }
 
         /// <summary>
