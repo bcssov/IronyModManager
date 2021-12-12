@@ -4,7 +4,7 @@
 // Created          : 02-13-2021
 //
 // Last Modified By : Nick Butcher
-// Last Modified On : 12-12-2021
+// Last Modified On : 12-13-2021
 // ***********************************************************************
 // <copyright file="BaseGenericObjectParser.cs" company="Mario">
 //     Mario
@@ -64,7 +64,15 @@ namespace IronyModManager.Parser
         /// <returns>T.</returns>
         protected static T Convert<T>(string value)
         {
-            value = value.Trim().Trim('"').Replace("\\\"", "\"");
+            value = value.Replace("\\\"", "\"").Trim();
+            if (value[0] == '"')
+            {
+                value = value[1..^0];
+            }
+            if (value[value.Length - 1] == '"')
+            {
+                value = value[0..^1];
+            }
             var converter = GetConverter<T>();
             return converter.IsValid(value) ? (T)converter.ConvertFromString(value) : default;
         }

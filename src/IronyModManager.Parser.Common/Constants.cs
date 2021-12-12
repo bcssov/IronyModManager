@@ -4,7 +4,7 @@
 // Created          : 02-16-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 10-31-2021
+// Last Modified On : 12-12-2021
 // ***********************************************************************
 // <copyright file="Constants.cs" company="Mario">
 //     Mario
@@ -158,6 +158,11 @@ namespace IronyModManager.Parser.Common
             /// The variable separator identifier
             /// </summary>
             public const char EqualsOperator = '=';
+
+            /// <summary>
+            /// The escape character
+            /// </summary>
+            public const char EscapeCharacter = '\\';
 
             /// <summary>
             /// The fallback to simple parser comment

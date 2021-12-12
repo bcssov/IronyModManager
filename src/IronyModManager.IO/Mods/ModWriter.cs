@@ -4,7 +4,7 @@
 // Created          : 03-31-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 11-16-2021
+// Last Modified On : 12-13-2021
 // ***********************************************************************
 // <copyright file="ModWriter.cs" company="Mario">
 //     Mario
@@ -342,7 +342,7 @@ namespace IronyModManager.IO.Mods
                         {
                             foreach (var item in col)
                             {
-                                await sw.WriteLineAsync($"{attr.PropertyName}=\"{item}\"");
+                                await sw.WriteLineAsync($"{attr.PropertyName}=\"{item.Replace("\"", "\\\"")}\"");
                             }
                         }
                         else
@@ -350,7 +350,7 @@ namespace IronyModManager.IO.Mods
                             await sw.WriteLineAsync($"{attr.PropertyName}={{");
                             foreach (var item in col)
                             {
-                                await sw.WriteLineAsync($"\t\"{item}\"");
+                                await sw.WriteLineAsync($"\t\"{item.Replace("\"", "\\\"")}\"");
                             }
                             await sw.WriteLineAsync("}");
                         }
@@ -362,11 +362,11 @@ namespace IronyModManager.IO.Mods
                     {
                         if (attr.AlternateNameEndsWithCondition?.Count() > 0 && attr.AlternateNameEndsWithCondition.Any(p => val.ToString().EndsWith(p, StringComparison.OrdinalIgnoreCase)))
                         {
-                            await sw.WriteLineAsync($"{attr.AlternatePropertyName}=\"{val}\"");
+                            await sw.WriteLineAsync($"{attr.AlternatePropertyName}=\"{val.ToString().Replace("\"", "\\\"")}\"");
                         }
                         else
                         {
-                            await sw.WriteLineAsync($"{attr.PropertyName}=\"{val}\"");
+                            await sw.WriteLineAsync($"{attr.PropertyName}=\"{val.ToString().Replace("\"", "\\\"")}\"");
                         }
                     }
                 }
