@@ -64,7 +64,7 @@ namespace IronyModManager.Parser
         /// <returns>T.</returns>
         protected static T Convert<T>(string value)
         {
-            value = value.Trim().Trim('"');
+            value = value.Trim().Trim('"').Replace("\\\"", "\"");
             var converter = GetConverter<T>();
             return converter.IsValid(value) ? (T)converter.ConvertFromString(value) : default;
         }
