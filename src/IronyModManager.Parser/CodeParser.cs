@@ -4,7 +4,7 @@
 // Created          : 02-22-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 10-31-2021
+// Last Modified On : 12-12-2021
 // ***********************************************************************
 // <copyright file="CodeParser.cs" company="Mario">
 //     Mario
@@ -419,7 +419,7 @@ namespace IronyModManager.Parser
         /// <param name="code">The code.</param>
         /// <param name="index">The index.</param>
         /// <returns>IEnumerable&lt;IScriptElement&gt;.</returns>
-        /// <exception cref="ArgumentException">Unknown script syntax error near code:{sb}</exception>
+        /// <exception cref="System.ArgumentException">Unknown script syntax error near code:{sb}</exception>
         protected IEnumerable<IScriptElement> GetElements(List<char> code, ref int index)
         {
             var counter = 0;
@@ -492,6 +492,7 @@ namespace IronyModManager.Parser
             var openQuote = false;
             var operatorOpened = false;
             var squareBracketOpen = false;
+            int? escapeIndex = null;
             for (int i = index; i < code.Count; i++)
             {
                 var character = GetElementCharacter(code, i);
@@ -500,26 +501,37 @@ namespace IronyModManager.Parser
                     index = i;
                     break;
                 }
-                if (character == Common.Constants.Scripts.Quote)
+                if (character == Common.Constants.Scripts.EscapeCharacter)
                 {
-                    if (operatorOpened)
+                    escapeIndex = i;
+                }
+                else if (character == Common.Constants.Scripts.Quote)
+                {
+                    if (!escapeIndex.HasValue)
                     {
-                        if (breakOnOperatorTerminator)
+                        if (operatorOpened)
                         {
+                            if (breakOnOperatorTerminator)
+                            {
+                                break;
+                            }
+                            else
+                            {
+                                operatorOpened = false;
+                            }
+                        }
+                        if (openQuote)
+                        {
+                            sbValue.Append(character.GetValueOrDefault());
+                            index = i + 1;
                             break;
                         }
-                        else
-                        {
-                            operatorOpened = false;
-                        }
+                        openQuote = true;
                     }
-                    if (openQuote)
+                    else
                     {
-                        sbValue.Append(character.GetValueOrDefault());
-                        index = i + 1;
-                        break;
+                        escapeIndex = null;
                     }
-                    openQuote = true;
                 }
                 else if (character == Common.Constants.Scripts.SquareOpenBracket)
                 {
@@ -590,6 +602,10 @@ namespace IronyModManager.Parser
                     sbOperator.Append(character.GetValueOrDefault());
                 }
                 index = i;
+                if (escapeIndex.HasValue && index - escapeIndex.GetValueOrDefault() >= 1)
+                {
+                    escapeIndex = null;
+                }
             }
             return new ElementValue()
             {
