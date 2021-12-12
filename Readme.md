@@ -3,7 +3,7 @@ Check the [Wiki](https://github.com/bcssov/IronyModManager/wiki)
 
 # Building Irony Mod Manager
 All instructions are for Windows.
-1. Install Visual Studio 2019
+1. Install Visual Studio 2022 (required for .NET6)
 1. Clone the repo to your local machine
 1. Open the LocalizationResourceGenerator solution file located in \Tools\LocalizationResourceGenerator\src
     * Build the solution and copy the binaries to the Tools\LocalizationResourceGenerator folder
