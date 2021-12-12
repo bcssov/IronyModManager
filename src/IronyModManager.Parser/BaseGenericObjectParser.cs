@@ -3,8 +3,8 @@
 // Author           : Mario
 // Created          : 02-13-2021
 //
-// Last Modified By : Mario
-// Last Modified On : 02-26-2021
+// Last Modified By : Nick Butcher
+// Last Modified On : 12-12-2021
 // ***********************************************************************
 // <copyright file="BaseGenericObjectParser.cs" company="Mario">
 //     Mario
@@ -64,7 +64,7 @@ namespace IronyModManager.Parser
         /// <returns>T.</returns>
         protected static T Convert<T>(string value)
         {
-            value = value.Trim().Trim('"');
+            value = value.Trim().Trim('"').Replace("\\\"", "\"");
             var converter = GetConverter<T>();
             return converter.IsValid(value) ? (T)converter.ConvertFromString(value) : default;
         }
