@@ -4,52 +4,52 @@
 		<title>Irony Mod Manager</title>
 		<language>en</language>
 		<item>
-			<title>1.20.33</title>
+			<title>1.20.34</title>
 			<description>## Release Notes
-* Display mod names with escaped quotations bugfix
+* Fix index out of range CTD while parsing some seemingly invalid mod descriptors
 
 ## Changes From v1.19
 * Update dependencies
 * Upgrade to net6.0
 * Make Irony compliant with new Paradox Launcher 2021.10 formats</description>
-			<pubDate>Mon, 13 Dec 2021 00:41:57 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.20.33/osx-x64.rar" sparkle:version="1.20.33.19372" sparkle:shortVersionString="1.20.33" length="70773840" sparkle:os="osx" type="application/vnd.rar" sparkle:signature="LpBwWnU5aiY4nCHsKgE+H/c7fe2z1dgfoMsD00BOa4QJD/LrLMYogDqitbuloe3tbmTORfKBVpRloNODiC68AA=="/>
+			<pubDate>Tue, 14 Dec 2021 20:49:16 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.20.34/osx-x64.rar" sparkle:version="1.20.34.55998" sparkle:shortVersionString="1.20.34" length="70774357" sparkle:os="osx" type="application/vnd.rar" sparkle:signature="hvaY+pE7B/5qLho0j6SjNWu2WEXDr4ATcHBTMxeCXuYgfvSU7hRHaegAndesrefiFui8nIJO/eHhbEnK6ESvBA=="/>
 		</item>
 		<item>
-			<title>1.20.33</title>
+			<title>1.20.34</title>
 			<description>## Release Notes
-* Display mod names with escaped quotations bugfix
+* Fix index out of range CTD while parsing some seemingly invalid mod descriptors
 
 ## Changes From v1.19
 * Update dependencies
 * Upgrade to net6.0
 * Make Irony compliant with new Paradox Launcher 2021.10 formats</description>
-			<pubDate>Mon, 13 Dec 2021 00:42:05 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.20.33/win-x64-setup.rar" sparkle:version="1.20.33.19372" sparkle:shortVersionString="1.20.33" length="63560109" sparkle:os="windows" type="application/vnd.rar" sparkle:signature="nXFvBSy1g2/2XK9WYRjqshRvMMOTRlgAAj2YggLhLJABdqLh/yyWvfUb/b70/fGMy6Mn96Hv7mupF3B01qNcCg=="/>
+			<pubDate>Tue, 14 Dec 2021 20:49:23 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.20.34/win-x64-setup.rar" sparkle:version="1.20.34.55998" sparkle:shortVersionString="1.20.34" length="63552427" sparkle:os="windows" type="application/vnd.rar" sparkle:signature="cZ5qAfxHvW7k0L0jLvgd4QcTe1Ve+wS3J5MkMRAYDojv128Rc8Ap+5jxClXF2oABKdM+M7OE8mSJB1yMYFdsAg=="/>
 		</item>
 		<item>
-			<title>1.20.33</title>
+			<title>1.20.34</title>
 			<description>## Release Notes
-* Display mod names with escaped quotations bugfix
+* Fix index out of range CTD while parsing some seemingly invalid mod descriptors
 
 ## Changes From v1.19
 * Update dependencies
 * Upgrade to net6.0
 * Make Irony compliant with new Paradox Launcher 2021.10 formats</description>
-			<pubDate>Mon, 13 Dec 2021 00:42:01 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.20.33/win-x64.rar" sparkle:version="1.20.33.19372" sparkle:shortVersionString="1.20.33" length="76135700" sparkle:os="windows" type="application/vnd.rar" sparkle:signature="a3RGzohoscsmP9Xv9/nwpAAEWssnzp+YYeCEaR4D0pQcgyjdwRa8T54UcyuRfz8YYT9XUZC0GlCDK9tXmV5BDA=="/>
+			<pubDate>Tue, 14 Dec 2021 20:49:19 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.20.34/win-x64.rar" sparkle:version="1.20.34.55998" sparkle:shortVersionString="1.20.34" length="76136222" sparkle:os="windows" type="application/vnd.rar" sparkle:signature="g3Gfz1JEUK5F7PYL6L2p/l41XmxWjaEumdlwqLCuMjxa6KwqDdSGyDFLnVlTbFCzUzpSORcNz90/luGy3MZPCA=="/>
 		</item>
 		<item>
-			<title>1.20.33</title>
+			<title>1.20.34</title>
 			<description>## Release Notes
-* Display mod names with escaped quotations bugfix
+* Fix index out of range CTD while parsing some seemingly invalid mod descriptors
 
 ## Changes From v1.19
 * Update dependencies
 * Upgrade to net6.0
 * Make Irony compliant with new Paradox Launcher 2021.10 formats</description>
-			<pubDate>Mon, 13 Dec 2021 00:41:53 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.20.33/linux-x64.zip" sparkle:version="1.20.33.19372" sparkle:shortVersionString="1.20.33" length="87314536" sparkle:os="linux" type="application/zip" sparkle:signature="x+mYtDf1b7VGoVF3JryL6FdrnxoarCPMM8EVPIcz2LIzYn61RUUGHDydfJ5D7rTUxID12HtlpNHvSYrU8M54Aw=="/>
+			<pubDate>Tue, 14 Dec 2021 20:49:12 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.20.34/linux-x64.zip" sparkle:version="1.20.34.55998" sparkle:shortVersionString="1.20.34" length="87314453" sparkle:os="linux" type="application/zip" sparkle:signature="U+P70+i3aP6GW4R1mlOBNcnmfsN29owlKD4LtYe0LBOj2H/2SqjFDoHbHzj7V6Y8jljr+8oq2p5zANOztzPWDA=="/>
 		</item>
 	</channel>
 </rss>
