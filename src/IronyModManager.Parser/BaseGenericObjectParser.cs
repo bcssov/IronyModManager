@@ -3,8 +3,8 @@
 // Author           : Mario
 // Created          : 02-13-2021
 //
-// Last Modified By : Nick Butcher
-// Last Modified On : 12-13-2021
+// Last Modified By : Mario
+// Last Modified On : 12-14-2021
 // ***********************************************************************
 // <copyright file="BaseGenericObjectParser.cs" company="Mario">
 //     Mario
@@ -65,13 +65,17 @@ namespace IronyModManager.Parser
         protected static T Convert<T>(string value)
         {
             value = value.Replace("\\\"", "\"").Trim();
-            if (value[0] == '"')
+            if (value.Length > 0 && value[0] == '"')
             {
                 value = value[1..^0];
             }
-            if (value[value.Length - 1] == '"')
+            if (value.Length > 0 && value[value.Length - 1] == '"')
             {
                 value = value[0..^1];
+            }
+            if (string.IsNullOrWhiteSpace(value))
+            {
+                return default;
             }
             var converter = GetConverter<T>();
             return converter.IsValid(value) ? (T)converter.ConvertFromString(value) : default;
@@ -119,7 +123,11 @@ namespace IronyModManager.Parser
                     {
                         if (!string.IsNullOrWhiteSpace(value.Value))
                         {
-                            result.Add(Convert<T>(value.Value));
+                            var converted = Convert<T>(value.Value);
+                            if (converted != null)
+                            {
+                                result.Add(converted);
+                            }
                         }
                     }
                 }
@@ -176,7 +184,11 @@ namespace IronyModManager.Parser
                     {
                         if (!string.IsNullOrWhiteSpace(item.Key))
                         {
-                            result.Add(Convert<T>(item.Key));
+                            var converted = Convert<T>(item.Key);
+                            if (converted != null)
+                            {
+                                result.Add(converted);
+                            }
                         }
                     }
                 }
