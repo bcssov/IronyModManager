@@ -4,7 +4,7 @@
 // Created          : 11-26-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 11-02-2021
+// Last Modified On : 12-15-2021
 // ***********************************************************************
 // <copyright file="ModMergeCompressExporter.cs" company="Mario">
 //     Mario
@@ -75,7 +75,7 @@ namespace IronyModManager.IO.Mods
         /// Adds the file.
         /// </summary>
         /// <param name="parameters">The parameters.</param>
-        /// <exception cref="ArgumentNullException">parameters</exception>
+        /// <exception cref="System.ArgumentNullException">parameters</exception>
         public void AddFile(ModMergeCompressExporterParameters parameters)
         {
             if (parameters == null)
@@ -133,7 +133,10 @@ namespace IronyModManager.IO.Mods
         {
             lock (objectLock)
             {
-                var zip = new ZipFile();
+                var zip = new ZipFile
+                {
+                    UseZip64WhenSaving = Zip64Option.AsNecessary
+                };
                 id++;
                 queue.TryAdd(id, zip);
                 return id;

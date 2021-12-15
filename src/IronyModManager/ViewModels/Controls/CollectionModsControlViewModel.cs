@@ -4,7 +4,7 @@
 // Created          : 03-03-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 11-16-2021
+// Last Modified On : 12-15-2021
 // ***********************************************************************
 // <copyright file="CollectionModsControlViewModel.cs" company="Mario">
 //     Mario
@@ -1946,8 +1946,10 @@ namespace IronyModManager.ViewModels.Controls
             var message = Smart.Format(localizationManager.GetResource(LocalizationResources.Collection_Mods.Delete_Message), noti);
             if (await notificationAction.ShowPromptAsync(title, header, message, NotificationType.Info))
             {
+                var id = idGenerator.GetNextId();
+                await TriggerOverlayAsync(id, true, localizationManager.GetResource(LocalizationResources.Collection_Mods.Deleting_Message));
                 var collection = modCollectionService.Get(collectionName);
-                bool deleteMergedMod = false;
+                var deleteMergedMod = false;
                 if (!string.IsNullOrWhiteSpace(collection?.MergedFolderName) && await modService.ModDirectoryExistsAsync(collection.MergedFolderName))
                 {
                     deleteMergedMod = await notificationAction.ShowPromptAsync(localizationManager.GetResource(LocalizationResources.Collection_Mods.DeleteMerge.DeleteTitle),
@@ -1962,7 +1964,7 @@ namespace IronyModManager.ViewModels.Controls
                         await modPatchCollectionService.CleanPatchCollectionAsync(collectionName).ConfigureAwait(false);
                         if (deleteMergedMod)
                         {
-                            await modService.PurgeModDirectoryAsync(collection.MergedFolderName);
+                            await modService.PurgeModDirectoryAsync(collection.MergedFolderName).ConfigureAwait(false);
                         }
                     }).ConfigureAwait(false);
                     LoadModCollections();
@@ -1981,6 +1983,7 @@ namespace IronyModManager.ViewModels.Controls
                         notificationAction.ShowNotification(notificationTitle, notificationMessage, NotificationType.Success);
                     }
                 }
+                await TriggerOverlayAsync(id, false);
             }
         }
 

@@ -117,6 +117,7 @@
         "Delete_Title": "Delete Collection?",
         "Delete_Header": "Confirm collection deletion",
         "Delete_Message": "Are you sure you want to delete the {CollectionName} collection?",
+        "Deleting_Message": "Please wait while deleting mod collection...",
         "Export": "Export",
         "Import": "Import",
         "Export_Dialog_Title": "Export Collection",

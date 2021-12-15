@@ -4,7 +4,7 @@
 // Created          : 02-13-2021
 //
 // Last Modified By : Mario
-// Last Modified On : 12-14-2021
+// Last Modified On : 12-15-2021
 // ***********************************************************************
 // <copyright file="BaseGenericObjectParser.cs" company="Mario">
 //     Mario
@@ -124,7 +124,7 @@ namespace IronyModManager.Parser
                         if (!string.IsNullOrWhiteSpace(value.Value))
                         {
                             var converted = Convert<T>(value.Value);
-                            if (converted != null)
+                            if (!object.Equals(converted, default(T)))
                             {
                                 result.Add(converted);
                             }
@@ -185,7 +185,7 @@ namespace IronyModManager.Parser
                         if (!string.IsNullOrWhiteSpace(item.Key))
                         {
                             var converted = Convert<T>(item.Key);
-                            if (converted != null)
+                            if (!object.Equals(converted, default(T)))
                             {
                                 result.Add(converted);
                             }
