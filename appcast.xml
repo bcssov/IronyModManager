@@ -4,52 +4,64 @@
 		<title>Irony Mod Manager</title>
 		<language>en</language>
 		<item>
-			<title>1.20.34</title>
+			<title>1.20.37</title>
 			<description>## Release Notes
 * Fix index out of range CTD while parsing some seemingly invalid mod descriptors
+* Handle large collection exports by supporting zip64
+* Show overlay when deleting large mod collections
+* Minor fixes
 
 ## Changes From v1.19
 * Update dependencies
 * Upgrade to net6.0
 * Make Irony compliant with new Paradox Launcher 2021.10 formats</description>
-			<pubDate>Tue, 14 Dec 2021 20:49:16 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.20.34/osx-x64.rar" sparkle:version="1.20.34.55998" sparkle:shortVersionString="1.20.34" length="70774357" sparkle:os="osx" type="application/vnd.rar" sparkle:signature="hvaY+pE7B/5qLho0j6SjNWu2WEXDr4ATcHBTMxeCXuYgfvSU7hRHaegAndesrefiFui8nIJO/eHhbEnK6ESvBA=="/>
+			<pubDate>Wed, 15 Dec 2021 08:10:02 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.20.37/osx-x64.rar" sparkle:version="1.20.37.36971" sparkle:shortVersionString="1.20.37" length="70779379" sparkle:os="osx" type="application/vnd.rar" sparkle:signature="T/hnJkL0SruDjVfvetBNfpSsUO8rwojQDAcU/ZqXjqMaDFi/vS/YnyY0fmwWoMfp54Bn+MmJX9TMcaJZBoqjDA=="/>
 		</item>
 		<item>
-			<title>1.20.34</title>
+			<title>1.20.37</title>
 			<description>## Release Notes
 * Fix index out of range CTD while parsing some seemingly invalid mod descriptors
+* Handle large collection exports by supporting zip64
+* Show overlay when deleting large mod collections
+* Minor fixes
 
 ## Changes From v1.19
 * Update dependencies
 * Upgrade to net6.0
 * Make Irony compliant with new Paradox Launcher 2021.10 formats</description>
-			<pubDate>Tue, 14 Dec 2021 20:49:23 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.20.34/win-x64-setup.rar" sparkle:version="1.20.34.55998" sparkle:shortVersionString="1.20.34" length="63552427" sparkle:os="windows" type="application/vnd.rar" sparkle:signature="cZ5qAfxHvW7k0L0jLvgd4QcTe1Ve+wS3J5MkMRAYDojv128Rc8Ap+5jxClXF2oABKdM+M7OE8mSJB1yMYFdsAg=="/>
+			<pubDate>Wed, 15 Dec 2021 08:10:11 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.20.37/win-x64-setup.rar" sparkle:version="1.20.37.36971" sparkle:shortVersionString="1.20.37" length="63552904" sparkle:os="windows" type="application/vnd.rar" sparkle:signature="MMUVs+vyP/h3cU3OPV3PRflFtFRFl7EGpMOPf3O25iBIAwIxlsxUb+cE4HJgZNFY9jibZvYRzy85fhfJoJleBA=="/>
 		</item>
 		<item>
-			<title>1.20.34</title>
+			<title>1.20.37</title>
 			<description>## Release Notes
 * Fix index out of range CTD while parsing some seemingly invalid mod descriptors
+* Handle large collection exports by supporting zip64
+* Show overlay when deleting large mod collections
+* Minor fixes
 
 ## Changes From v1.19
 * Update dependencies
 * Upgrade to net6.0
 * Make Irony compliant with new Paradox Launcher 2021.10 formats</description>
-			<pubDate>Tue, 14 Dec 2021 20:49:19 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.20.34/win-x64.rar" sparkle:version="1.20.34.55998" sparkle:shortVersionString="1.20.34" length="76136222" sparkle:os="windows" type="application/vnd.rar" sparkle:signature="g3Gfz1JEUK5F7PYL6L2p/l41XmxWjaEumdlwqLCuMjxa6KwqDdSGyDFLnVlTbFCzUzpSORcNz90/luGy3MZPCA=="/>
+			<pubDate>Wed, 15 Dec 2021 08:10:06 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.20.37/win-x64.rar" sparkle:version="1.20.37.36971" sparkle:shortVersionString="1.20.37" length="76141218" sparkle:os="windows" type="application/vnd.rar" sparkle:signature="XvcFN2rvWE2gE8X4rRc2KVI0LdLa+ILjN1gPa/n5/ijv1iwTg+1lVtRhyqd9F1v4Lu1HR5a/MGneQ7rREUxODQ=="/>
 		</item>
 		<item>
-			<title>1.20.34</title>
+			<title>1.20.37</title>
 			<description>## Release Notes
 * Fix index out of range CTD while parsing some seemingly invalid mod descriptors
+* Handle large collection exports by supporting zip64
+* Show overlay when deleting large mod collections
+* Minor fixes
 
 ## Changes From v1.19
 * Update dependencies
 * Upgrade to net6.0
 * Make Irony compliant with new Paradox Launcher 2021.10 formats</description>
-			<pubDate>Tue, 14 Dec 2021 20:49:12 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.20.34/linux-x64.zip" sparkle:version="1.20.34.55998" sparkle:shortVersionString="1.20.34" length="87314453" sparkle:os="linux" type="application/zip" sparkle:signature="U+P70+i3aP6GW4R1mlOBNcnmfsN29owlKD4LtYe0LBOj2H/2SqjFDoHbHzj7V6Y8jljr+8oq2p5zANOztzPWDA=="/>
+			<pubDate>Wed, 15 Dec 2021 08:09:58 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.20.37/linux-x64.zip" sparkle:version="1.20.37.36971" sparkle:shortVersionString="1.20.37" length="87314636" sparkle:os="linux" type="application/zip" sparkle:signature="qb7URH02jUMAyacPioH/gDt1YTBO+QlqMlU+FcrLjiquDN78JFeIuAP8aRhiuDzNcrtmpxIjmL4nOAR2q4eOAQ=="/>
 		</item>
 	</channel>
 </rss>
