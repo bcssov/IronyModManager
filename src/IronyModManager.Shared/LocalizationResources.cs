@@ -159,6 +159,7 @@ namespace IronyModManager.Shared
             public const string Delete_Title = Prefix + "Delete_Title";
             public const string Delete_Header = Prefix + "Delete_Header";
             public const string Delete_Message = Prefix + "Delete_Message";
+            public const string Deleting_Message = Prefix + "Deleting_Message";
             public const string Export = Prefix + "Export";
             public const string Import = Prefix + "Import";
             public const string Export_Dialog_Title = Prefix + "Export_Dialog_Title";

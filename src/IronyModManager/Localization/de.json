@@ -117,6 +117,7 @@
         "Delete_Title": "Kollektion löschen?",
         "Delete_Header": "Bestätigen Sie das Löschen der Kollektion",
         "Delete_Message": "Möchten Sie die {CollectionName}-Kollektion wirklich löschen?",
+        "Deleting_Message": "Bitte warten Sie, während Sie die Mod-Kollektion löschen...",
         "Export": "Exportieren",
         "Import": "Importieren",
         "Export_Dialog_Title": "Kollektion Exportieren",

@@ -133,8 +133,10 @@ namespace IronyModManager.IO.Mods
         {
             lock (objectLock)
             {
-                var zip = new ZipFile();
-                zip.UseZip64WhenSaving = Zip64Option.AsNecessary;
+                var zip = new ZipFile
+                {
+                    UseZip64WhenSaving = Zip64Option.AsNecessary
+                };
                 id++;
                 queue.TryAdd(id, zip);
                 return id;

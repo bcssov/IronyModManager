@@ -117,6 +117,7 @@
         "Delete_Title": "删除此合集？",
         "Delete_Header": "确认删除操作",
         "Delete_Message": "是否确认删除合集 {CollectionName}？",
+        "Deleting_Message": "请在删除Mod Collection时等待......",
         "Export": "导出",
         "Import": "导入",
         "Export_Dialog_Title": "导出合集",
