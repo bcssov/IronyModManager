@@ -196,7 +196,7 @@ namespace IronyModManager.IO.Mods
                             foreach (var item in files)
                             {
                                 var fs = new FileStream(item, FileMode.Open, FileAccess.Read, FileShare.Read);
-                                var file = Path.Combine(Common.Constants.ModExportPath, parameters.Mod.Name.GenerateShortFileNameHashId(4).GenerateValidFileName() + "_" + mod.Name.GenerateValidFileName() + "_" + item.Replace(Path.GetDirectoryName(mod.FullPath), string.Empty).Trim('\\').Trim('/'));
+                                var file = Path.Combine(Common.Constants.ModExportPath, parameters.Mod.Name.GenerateShortFileNameHashId(4).GenerateValidFileName() + "_" + mod.Name.GenerateValidFileName().GenerateShortFileNameHashId(8), item.Replace(mod.FullPath, string.Empty).Trim('\\').Trim('/'));
                                 zip.AddEntry(file, fs);
                                 streams.Add(fs);
                             }
@@ -208,7 +208,7 @@ namespace IronyModManager.IO.Mods
                                 var fs = new FileStream(item, FileMode.Open, FileAccess.Read, FileShare.Read);
                                 var ms = new MemoryStream();
                                 await fs.CopyToAsync(ms);
-                                var file = Path.Combine(Common.Constants.ModExportPath, parameters.Mod.Name.GenerateShortFileNameHashId(4).GenerateValidFileName() + "_" + mod.Name.GenerateValidFileName() + "_" + item.Replace(Path.GetDirectoryName(mod.FullPath), string.Empty).Trim('\\').Trim('/'));
+                                var file = Path.Combine(Common.Constants.ModExportPath, parameters.Mod.Name.GenerateShortFileNameHashId(4).GenerateValidFileName() + "_" + mod.Name.GenerateValidFileName().GenerateShortFileNameHashId(8), item.Replace(mod.FullPath, string.Empty).Trim('\\').Trim('/'));
                                 zip.AddEntry(file, ms);
                                 fs.Close();
                                 await fs.DisposeAsync();
@@ -221,7 +221,7 @@ namespace IronyModManager.IO.Mods
                         if (!RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
                         {
                             var fs = new FileStream(mod.FullPath, FileMode.Open, FileAccess.Read, FileShare.Read);
-                            var file = Path.Combine(Common.Constants.ModExportPath, parameters.Mod.Name.GenerateShortFileNameHashId(4).GenerateValidFileName() + "_" + mod.Name.GenerateValidFileName() + "_" + Path.GetFileName(mod.FullPath));
+                            var file = Path.Combine(Common.Constants.ModExportPath, parameters.Mod.Name.GenerateShortFileNameHashId(4).GenerateValidFileName() + "_" + Path.GetFileNameWithoutExtension(mod.FullPath).GenerateShortFileNameHashId(8) + Path.GetExtension(mod.FullPath));
                             zip.AddEntry(file, fs);
                             streams.Add(fs);
                         }
@@ -230,7 +230,7 @@ namespace IronyModManager.IO.Mods
                             var fs = new FileStream(mod.FullPath, FileMode.Open, FileAccess.Read, FileShare.Read);
                             var ms = new MemoryStream();
                             await fs.CopyToAsync(ms);
-                            var file = Path.Combine(Common.Constants.ModExportPath, parameters.Mod.Name.GenerateShortFileNameHashId(4).GenerateValidFileName() + "_" + mod.Name.GenerateValidFileName() + "_" + Path.GetFileName(mod.FullPath));
+                            var file = Path.Combine(Common.Constants.ModExportPath, parameters.Mod.Name.GenerateShortFileNameHashId(4).GenerateValidFileName() + "_" + Path.GetFileNameWithoutExtension(mod.FullPath).GenerateShortFileNameHashId(8) + Path.GetExtension(mod.FullPath));
                             zip.AddEntry(file, ms);
                             fs.Close();
                             await fs.DisposeAsync();
