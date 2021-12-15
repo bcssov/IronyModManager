@@ -4,7 +4,7 @@
 // Created          : 03-09-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 12-10-2021
+// Last Modified On : 12-15-2021
 // ***********************************************************************
 // <copyright file="ModCollectionExporter.cs" company="Mario">
 //     Mario
@@ -152,6 +152,7 @@ namespace IronyModManager.IO.Mods
 
             var streams = new List<Stream>() { dataStream };
             using var zip = new ZipFile();
+            zip.UseZip64WhenSaving = Zip64Option.AsNecessary;
             zip.AddEntry(Common.Constants.ExportedModContentId, dataStream);
 
             if (Directory.Exists(parameters.ModDirectory) && !parameters.ExportModOrderOnly)
