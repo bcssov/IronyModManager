@@ -4,7 +4,7 @@
 // Created          : 04-16-2021
 //
 // Last Modified By : Mario
-// Last Modified On : 04-16-2021
+// Last Modified On : 12-16-2021
 // ***********************************************************************
 // <copyright file="PlatformConfigurationOptions.cs" company="Mario">
 //     Mario
@@ -114,6 +114,12 @@ namespace IronyModManager.Platform.Configuration
         /// <value>The tooltips.</value>
         public Tooltips Tooltips { get; } = new Tooltips();
 
+        /// <summary>
+        /// Gets the updates.
+        /// </summary>
+        /// <value>The updates.</value>
+        public Updates Updates { get; } = new Updates();
+
         #endregion Properties
     }
 
@@ -126,6 +132,22 @@ namespace IronyModManager.Platform.Configuration
 
         /// <summary>
         /// Gets or sets a value indicating whether this <see cref="Tooltips" /> is disable.
+        /// </summary>
+        /// <value><c>true</c> if disable; otherwise, <c>false</c>.</value>
+        public bool Disable { get; set; }
+
+        #endregion Properties
+    }
+
+    /// <summary>
+    /// Class Updates.
+    /// </summary>
+    public class Updates
+    {
+        #region Properties
+
+        /// <summary>
+        /// Gets or sets a value indicating whether this <see cref="Updates" /> is disable.
         /// </summary>
         /// <value><c>true</c> if disable; otherwise, <c>false</c>.</value>
         public bool Disable { get; set; }
