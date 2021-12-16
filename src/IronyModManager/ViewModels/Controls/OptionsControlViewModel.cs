@@ -4,7 +4,7 @@
 // Created          : 05-30-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 11-04-2021
+// Last Modified On : 12-16-2021
 // ***********************************************************************
 // <copyright file="OptionsControlViewModel.cs" company="Mario">
 //     Mario
@@ -28,6 +28,7 @@ using IronyModManager.Implementation.Updater;
 using IronyModManager.Localization;
 using IronyModManager.Localization.Attributes;
 using IronyModManager.Models.Common;
+using IronyModManager.Platform.Configuration;
 using IronyModManager.Services.Common;
 using IronyModManager.Shared;
 using ReactiveUI;
@@ -84,6 +85,11 @@ namespace IronyModManager.ViewModels.Controls
         /// The notification action
         /// </summary>
         private readonly INotificationAction notificationAction;
+
+        /// <summary>
+        /// The platform configuration
+        /// </summary>
+        private readonly IPlatformConfiguration platformConfiguration;
 
         /// <summary>
         /// The position settings service
@@ -162,6 +168,7 @@ namespace IronyModManager.ViewModels.Controls
         /// <summary>
         /// Initializes a new instance of the <see cref="OptionsControlViewModel" /> class.
         /// </summary>
+        /// <param name="platformConfiguration">The platform configuration.</param>
         /// <param name="modService">The mod service.</param>
         /// <param name="positionSettingsService">The position settings service.</param>
         /// <param name="externalEditorService">The external editor service.</param>
@@ -173,7 +180,7 @@ namespace IronyModManager.ViewModels.Controls
         /// <param name="updaterService">The updater service.</param>
         /// <param name="gameService">The game service.</param>
         /// <param name="fileDialogAction">The file dialog action.</param>
-        public OptionsControlViewModel(IModService modService, INotificationPositionSettingsService positionSettingsService,
+        public OptionsControlViewModel(IPlatformConfiguration platformConfiguration, IModService modService, INotificationPositionSettingsService positionSettingsService,
             IExternalEditorService externalEditorService, IIDGenerator idGenerator, ILogger logger,
             INotificationAction notificationAction, ILocalizationManager localizationManager, IUpdater updater,
             IUpdaterService updaterService, IGameService gameService, IFileDialogAction fileDialogAction)
@@ -189,6 +196,8 @@ namespace IronyModManager.ViewModels.Controls
             this.idGenerator = idGenerator;
             this.externalEditorService = externalEditorService;
             this.modService = modService;
+            this.platformConfiguration = platformConfiguration;
+            UpdatesAllowed = !platformConfiguration.GetOptions().Updates.Disable;
             LeftMargin = new Thickness(20, 0, 0, 0);
             LeftChildMargin = new Thickness(20, 10, 0, 0);
         }
@@ -550,6 +559,12 @@ namespace IronyModManager.ViewModels.Controls
         public virtual string UpdateReleaseInfo { get; protected set; }
 
         /// <summary>
+        /// Gets or sets a value indicating whether [updates allowed].
+        /// </summary>
+        /// <value><c>true</c> if [updates allowed]; otherwise, <c>false</c>.</value>
+        public virtual bool UpdatesAllowed { get; protected set; }
+
+        /// <summary>
         /// Gets or sets the update settings.
         /// </summary>
         /// <value>The update settings.</value>
@@ -635,29 +650,32 @@ namespace IronyModManager.ViewModels.Controls
             SetEditor(externalEditorService.Get());
             SetNotificationPosition(positionSettingsService.Get());
             var updateSettings = updaterService.Get();
-            if (updateSettings.AutoUpdates == null)
+            if (UpdatesAllowed)
             {
-                async Task showPrompt()
+                if (updateSettings.AutoUpdates == null)
                 {
-                    var title = localizationManager.GetResource(LocalizationResources.Options.Updates.AutoUpdatePrompts.Title);
-                    var message = localizationManager.GetResource(LocalizationResources.Options.Updates.AutoUpdatePrompts.Message);
-                    if (await notificationAction.ShowPromptAsync(title, title, message, NotificationType.Info))
+                    async Task showPrompt()
                     {
-                        updateSettings.AutoUpdates = true;
-                        SaveUpdateSettings();
-                        await CheckForUpdatesAsync(true);
+                        var title = localizationManager.GetResource(LocalizationResources.Options.Updates.AutoUpdatePrompts.Title);
+                        var message = localizationManager.GetResource(LocalizationResources.Options.Updates.AutoUpdatePrompts.Message);
+                        if (await notificationAction.ShowPromptAsync(title, title, message, NotificationType.Info))
+                        {
+                            updateSettings.AutoUpdates = true;
+                            SaveUpdateSettings();
+                            await CheckForUpdatesAsync(true);
+                        }
+                        else
+                        {
+                            updateSettings.AutoUpdates = false;
+                            SaveUpdateSettings();
+                        }
                     }
-                    else
-                    {
-                        updateSettings.AutoUpdates = false;
-                        SaveUpdateSettings();
-                    }
+                    showPrompt().ConfigureAwait(false);
                 }
-                showPrompt().ConfigureAwait(false);
-            }
-            else if (updateSettings.AutoUpdates.GetValueOrDefault())
-            {
-                CheckForUpdatesAsync(true).ConfigureAwait(false);
+                else if (updateSettings.AutoUpdates.GetValueOrDefault())
+                {
+                    CheckForUpdatesAsync(true).ConfigureAwait(false);
+                }
             }
             SetUpdateSettings(updateSettings);
 

@@ -4,7 +4,7 @@
 // Created          : 04-16-2021
 //
 // Last Modified By : Mario
-// Last Modified On : 04-27-2021
+// Last Modified On : 12-16-2021
 // ***********************************************************************
 // <copyright file="PlatformConfiguration.cs" company="Mario">
 //     Mario
@@ -72,6 +72,7 @@ namespace IronyModManager.Implementation.Config
                 platformConfiguration.LinuxOptions.UseDeferredRendering = linuxSection.GetSection("UseDeferredRendering").Get<bool?>();
                 platformConfiguration.Tooltips.Disable = configuration.GetSection("Tooltips").GetSection("Disable").Get<bool>();
                 platformConfiguration.Fonts.UseInbuiltFontsOnly = configuration.GetSection("Fonts").GetSection("UseInbuiltFontsOnly").Get<bool>();
+                platformConfiguration.Updates.Disable = configuration.GetSection("Updates").GetSection("Disable").Get<bool>();
             }
             return platformConfiguration;
         }
