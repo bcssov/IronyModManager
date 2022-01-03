@@ -4,7 +4,7 @@
 // Created          : 03-03-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 12-15-2021
+// Last Modified On : 01-03-2022
 // ***********************************************************************
 // <copyright file="CollectionModsControlViewModel.cs" company="Mario">
 //     Mario
@@ -1637,7 +1637,7 @@ namespace IronyModManager.ViewModels.Controls
                 var text = await appAction.GetAsync();
                 if (!string.IsNullOrWhiteSpace(text))
                 {
-                    var modNames = text.SplitOnNewLine();
+                    var modNames = text.SplitOnNewLine().Select(p => p.Trim());
                     if (modNames.Any(p => Mods.Any(m => m.Name.Equals(p, StringComparison.OrdinalIgnoreCase))))
                     {
                         var title = localizationManager.GetResource(LocalizationResources.Collection_Mods.ImportFromClipboard.PromptTitle);
