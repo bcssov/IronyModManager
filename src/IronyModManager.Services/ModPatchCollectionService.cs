@@ -4,7 +4,7 @@
 // Created          : 05-26-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 12-06-2021
+// Last Modified On : 01-03-2022
 // ***********************************************************************
 // <copyright file="ModPatchCollectionService.cs" company="Mario">
 //     Mario
@@ -2488,8 +2488,9 @@ namespace IronyModManager.Services
                     var merged = MergeSingleFileDefinitions(namespaces.Concat(variables.Concat(other)));
                     if (merged != null)
                     {
-                        var oldFileName = merged.File;
                         merged.Id = SingleFileMerged;
+                        merged.File = overwrittenFileNames.FirstOrDefault();
+                        merged.GeneratedFileNames = overwrittenFileNames.Distinct().ToList();
                         merged.File = infoProvider.GetFileName(merged);
                         merged.DiskFile = infoProvider.GetDiskFileName(merged);
                         merged.ValueType = ValueType.OverwrittenObjectSingleFile;
