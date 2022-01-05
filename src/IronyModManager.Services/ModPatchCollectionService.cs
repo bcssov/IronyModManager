@@ -4,7 +4,7 @@
 // Created          : 05-26-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 01-03-2022
+// Last Modified On : 01-05-2022
 // ***********************************************************************
 // <copyright file="ModPatchCollectionService.cs" company="Mario">
 //     Mario
@@ -986,7 +986,7 @@ namespace IronyModManager.Services
                             {
                                 if (!alreadyMergedTypes.Contains(definition.Type))
                                 {
-                                    var merged = ProcessOverwrittenSingleFileDefinitions(conflictResult, patchName, definition.Type);
+                                    var merged = ProcessOverwrittenSingleFileDefinitions(conflictResult, patchName, definition.Type, state);
                                     if (merged != null)
                                     {
                                         definition = PopulateModPath(merged, GetCollectionMods()).FirstOrDefault();
@@ -2313,8 +2313,9 @@ namespace IronyModManager.Services
         /// <param name="conflictResult">The conflict result.</param>
         /// <param name="patchName">Name of the patch.</param>
         /// <param name="type">The type.</param>
+        /// <param name="state">The state.</param>
         /// <returns>IDefinition.</returns>
-        protected virtual IDefinition ProcessOverwrittenSingleFileDefinitions(IConflictResult conflictResult, string patchName, string type)
+        protected virtual IDefinition ProcessOverwrittenSingleFileDefinitions(IConflictResult conflictResult, string patchName, string type, IPatchState state = null)
         {
             static string cleanString(string text)
             {
@@ -2412,14 +2413,31 @@ namespace IronyModManager.Services
 
                 void handleDefinition(IDefinition item)
                 {
+                    IDefinition copy;
                     IDefinition definition = item;
                     var resolved = conflictResult.ResolvedConflicts.GetByTypeAndId(item.TypeAndId);
                     // Only need to check for resolution, since overwritten objects already have sorted out priority
                     if (resolved.Any())
                     {
-                        definition = resolved.FirstOrDefault();
+                        copy = CopyDefinition(resolved.FirstOrDefault());
+                        copy.Order = item.Order;
+                        copy.DiskFile = item.DiskFile;
+                        copy.File = item.File;
+                        copy.OverwrittenFileNames = item.OverwrittenFileNames;
+                        // If state is provided assume we need to load from conflict history
+                        if (state != null && state.IndexedConflictHistory != null && state.IndexedConflictHistory.Any() && state.IndexedConflictHistory.ContainsKey(definition.TypeAndId))
+                        {
+                            var history = state.IndexedConflictHistory[definition.TypeAndId].FirstOrDefault();
+                            if (history != null)
+                            {
+                                copy.Code = history.Code;
+                            }
+                        }
                     }
-                    var copy = CopyDefinition(definition);
+                    else
+                    {
+                        copy = CopyDefinition(definition);
+                    }
                     var parsed = parserManager.Parse(new ParserManagerArgs()
                     {
                         ContentSHA = copy.ContentSHA,
