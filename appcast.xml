@@ -4,8 +4,11 @@
 		<title>Irony Mod Manager</title>
 		<language>en</language>
 		<item>
-			<title>1.20.41</title>
-			<description>## Release Notes
+			<title>1.20.43</title>
+			<description>## Current Release Notes
+* Fix conflict resolver resetting on single file merge conflict types
+
+## 1.20.41 Release Notes
 * Shorten folder structure of exported mod collections
 * Expose config option to disable update logic
 * Improve a bit import from clipboard
@@ -15,12 +18,15 @@
 * Update dependencies
 * Upgrade to net6.0
 * Make Irony compliant with new Paradox Launcher 2021.10 formats</description>
-			<pubDate>Mon, 03 Jan 2022 20:35:02 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.20.41/osx-x64.rar" sparkle:version="1.20.41.35637" sparkle:shortVersionString="1.20.41" length="70825143" sparkle:os="osx" type="application/vnd.rar" sparkle:signature="6w4kjbcT41H4XQfre2wnoNedwM7wW1u/PyOSR0WjcNymOl477p9iMkGY3GVTVtP9AsxkiJ8mvqF321//LbLFBg=="/>
+			<pubDate>Wed, 05 Jan 2022 08:03:50 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.20.43/osx-x64.rar" sparkle:version="1.20.43.65324" sparkle:shortVersionString="1.20.43" length="70825802" sparkle:os="osx" type="application/vnd.rar" sparkle:signature="oAqb7cdJw+95oLco3cZ4hUWb6uwzfHBctug+q1CdNjQQQyRURuincFaEhEZYXeBDET1QwtZFp13rJ9JCDBfzDQ=="/>
 		</item>
 		<item>
-			<title>1.20.41</title>
-			<description>## Release Notes
+			<title>1.20.43</title>
+			<description>## Current Release Notes
+* Fix conflict resolver resetting on single file merge conflict types
+
+## 1.20.41 Release Notes
 * Shorten folder structure of exported mod collections
 * Expose config option to disable update logic
 * Improve a bit import from clipboard
@@ -30,12 +36,15 @@
 * Update dependencies
 * Upgrade to net6.0
 * Make Irony compliant with new Paradox Launcher 2021.10 formats</description>
-			<pubDate>Mon, 03 Jan 2022 20:35:11 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.20.41/win-x64-setup.rar" sparkle:version="1.20.41.35637" sparkle:shortVersionString="1.20.41" length="63588729" sparkle:os="windows" type="application/vnd.rar" sparkle:signature="hNfKlE0Qs1qLEXYdAW1aWuoHI+TZtgfLs+y1oeB5RBnqvl/0YMkqzJdF0aVK02sNzqERjHmejroQGam4RlFJCA=="/>
+			<pubDate>Wed, 05 Jan 2022 08:03:58 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.20.43/win-x64-setup.rar" sparkle:version="1.20.43.65324" sparkle:shortVersionString="1.20.43" length="63578739" sparkle:os="windows" type="application/vnd.rar" sparkle:signature="o8VGXOmJY4SmTVx+s9sn5Gnert5g1o3dz1rMUI/ZmKxfF8+IGGfKIutxaYHSmy/X6ZoIc/gTOfpqwvf11mAEBw=="/>
 		</item>
 		<item>
-			<title>1.20.41</title>
-			<description>## Release Notes
+			<title>1.20.43</title>
+			<description>## Current Release Notes
+* Fix conflict resolver resetting on single file merge conflict types
+
+## 1.20.41 Release Notes
 * Shorten folder structure of exported mod collections
 * Expose config option to disable update logic
 * Improve a bit import from clipboard
@@ -45,12 +54,15 @@
 * Update dependencies
 * Upgrade to net6.0
 * Make Irony compliant with new Paradox Launcher 2021.10 formats</description>
-			<pubDate>Mon, 03 Jan 2022 20:35:06 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.20.41/win-x64.rar" sparkle:version="1.20.41.35637" sparkle:shortVersionString="1.20.41" length="76211592" sparkle:os="windows" type="application/vnd.rar" sparkle:signature="ogsekGeZv6GwaVaF/CM3nSv851hSfpo3IUv9TZvgj89QKzipUuHWUq6bl6FYcp3+sIK+dm2SuThzlQa7zS6/AQ=="/>
+			<pubDate>Wed, 05 Jan 2022 08:03:54 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.20.43/win-x64.rar" sparkle:version="1.20.43.65324" sparkle:shortVersionString="1.20.43" length="76211977" sparkle:os="windows" type="application/vnd.rar" sparkle:signature="dwzp4Y7lBuNziSEtt1FZT1pl75+FBkYkwQQ7aw6TVSc6vFb5HkkA/XcGCB+izJcxA7GhPVCX7PU4g/GHhK3xBQ=="/>
 		</item>
 		<item>
-			<title>1.20.41</title>
-			<description>## Release Notes
+			<title>1.20.43</title>
+			<description>## Current Release Notes
+* Fix conflict resolver resetting on single file merge conflict types
+
+## 1.20.41 Release Notes
 * Shorten folder structure of exported mod collections
 * Expose config option to disable update logic
 * Improve a bit import from clipboard
@@ -60,8 +72,8 @@
 * Update dependencies
 * Upgrade to net6.0
 * Make Irony compliant with new Paradox Launcher 2021.10 formats</description>
-			<pubDate>Mon, 03 Jan 2022 20:34:58 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.20.41/linux-x64.zip" sparkle:version="1.20.41.35637" sparkle:shortVersionString="1.20.41" length="87367404" sparkle:os="linux" type="application/zip" sparkle:signature="MAvd6XzoIp1h7+YAmRcflI9bs+YJZUUocMxiYZSLDZfzF1x3UzGIJol+LOa5obt//0uAqE39GzBKPVPBn/ojBA=="/>
+			<pubDate>Wed, 05 Jan 2022 08:03:46 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.20.43/linux-x64.zip" sparkle:version="1.20.43.65324" sparkle:shortVersionString="1.20.43" length="87367515" sparkle:os="linux" type="application/zip" sparkle:signature="25woGTTzV+rRV+E5P9/JegHeJbGBaqv9Lr/ND/6Cc6YOQica1N4pwf76xsrOpFW9Eef3/thl9EFnahSkWXzaBQ=="/>
 		</item>
 	</channel>
 </rss>
