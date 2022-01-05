@@ -469,12 +469,14 @@ namespace IronyModManager.Services
                     var all = indexedDefinitions.GetByParentDirectory(item.FirstOrDefault().ParentDirectoryCI).Where(p => IsValidDefinitionType(p));
                     var ordered = all.GroupBy(p => p.TypeAndId).Select(p =>
                     {
-                        var priority = EvalDefinitionPriorityInternal(p.OrderBy(p => modOrder.IndexOf(p.ModName)), true);
+                        var partialCopy = new List<IDefinition>();
+                        p.ToList().ForEach(x => partialCopy.Add(PartialDefinitionCopy(x, false)));
+                        var priority = EvalDefinitionPriorityInternal(partialCopy.OrderBy(x => modOrder.IndexOf(x.ModName)), true);
                         return new DefinitionOrderSort()
                         {
                             TypeAndId = priority.Definition.TypeAndId,
                             Order = priority.Definition.Order,
-                            File = Path.GetFileNameWithoutExtension(priority.Definition.File)
+                            File = Path.GetFileNameWithoutExtension(priority.FileName)
                         };
                     }).GroupBy(p => p.File).OrderBy(p => p.Key, StringComparer.Ordinal).SelectMany(p => p.OrderBy(x => x.Order)).ToList();
                     var fullyOrdered = ordered.Select(p => new DefinitionOrderSort()
@@ -853,32 +855,12 @@ namespace IronyModManager.Services
                 }
                 return processed;
             }
-            IDefinition partialDefinitionCopy(IDefinition definition)
-            {
-                if (definition.ValueType == ValueType.Invalid)
-                {
-                    // Perform a full copy for invalid items
-                    return CopyDefinition(definition);
-                }
-                var copy = DIResolver.Get<IDefinition>();
-                copy.DiskFile = definition.DiskFile;
-                copy.File = definition.File;
-                copy.Id = definition.Id;
-                copy.ModName = definition.ModName;
-                copy.Tags = definition.Tags;
-                copy.Type = definition.Type;
-                copy.ValueType = definition.ValueType;
-                copy.IsFromGame = definition.IsFromGame;
-                copy.Order = definition.Order;
-                copy.OriginalFileName = definition.OriginalFileName;
-                return copy;
-            }
             async Task<(IIndexedDefinitions, int)> partialCopyIndexedDefinitions(IIndexedDefinitions indexedDefinitions, int total, int processed, int maxProgress)
             {
                 var copy = DIResolver.Get<IIndexedDefinitions>();
                 foreach (var item in indexedDefinitions.GetAll())
                 {
-                    copy.AddToMap(partialDefinitionCopy(item));
+                    copy.AddToMap(PartialDefinitionCopy(item));
                     processed++;
                     var perc = GetProgressPercentage(total, processed, maxProgress);
                     if (previousProgress != perc)
@@ -986,7 +968,7 @@ namespace IronyModManager.Services
                             {
                                 if (!alreadyMergedTypes.Contains(definition.Type))
                                 {
-                                    var merged = ProcessOverwrittenSingleFileDefinitions(conflictResult, patchName, definition.Type, state);
+                                    var merged = ProcessOverwrittenSingleFileDefinitions(conflictResult, patchName, definition.Type, Tuple.Create(state, resolvedIndex));
                                     if (merged != null)
                                     {
                                         definition = PopulateModPath(merged, GetCollectionMods()).FirstOrDefault();
@@ -1019,7 +1001,6 @@ namespace IronyModManager.Services
                     }
 
                     var conflicts = GetModelInstance<IConflictResult>();
-
                     var partialCopyResult = await partialCopyIndexedDefinitions(conflictResult.AllConflicts, total, processed, 100);
                     conflictResult.AllConflicts.Dispose();
                     conflicts.AllConflicts = partialCopyResult.Item1;
@@ -2308,14 +2289,44 @@ namespace IronyModManager.Services
         }
 
         /// <summary>
+        /// Partials the definition copy.
+        /// </summary>
+        /// <param name="definition">The definition.</param>
+        /// <param name="copyAditionalFilenames">if set to <c>true</c> [copy aditional filenames].</param>
+        /// <returns>IDefinition.</returns>
+        protected virtual IDefinition PartialDefinitionCopy(IDefinition definition, bool copyAditionalFilenames = true)
+        {
+            if (definition.ValueType == ValueType.Invalid || definition.AllowDuplicate)
+            {
+                return CopyDefinition(definition);
+            }
+            var copy = DIResolver.Get<IDefinition>();
+            if (copyAditionalFilenames)
+            {
+                copy.AdditionalFileNames = definition.AdditionalFileNames;
+            }
+            copy.DiskFile = definition.DiskFile;
+            copy.File = definition.File;
+            copy.Id = definition.Id;
+            copy.ModName = definition.ModName;
+            copy.Tags = definition.Tags;
+            copy.Type = definition.Type;
+            copy.ValueType = definition.ValueType;
+            copy.IsFromGame = definition.IsFromGame;
+            copy.Order = definition.Order;
+            copy.OriginalFileName = definition.OriginalFileName;
+            return copy;
+        }
+
+        /// <summary>
         /// Processes the overwritten single file definitions.
         /// </summary>
         /// <param name="conflictResult">The conflict result.</param>
         /// <param name="patchName">Name of the patch.</param>
         /// <param name="type">The type.</param>
-        /// <param name="state">The state.</param>
+        /// <param name="stateProvinder">The state provinder.</param>
         /// <returns>IDefinition.</returns>
-        protected virtual IDefinition ProcessOverwrittenSingleFileDefinitions(IConflictResult conflictResult, string patchName, string type, IPatchState state = null)
+        protected virtual IDefinition ProcessOverwrittenSingleFileDefinitions(IConflictResult conflictResult, string patchName, string type, Tuple<IPatchState, IIndexedDefinitions> stateProvinder = null)
         {
             static string cleanString(string text)
             {
@@ -2383,21 +2394,27 @@ namespace IronyModManager.Services
                 {
                     if (p.Any(v => v.AllowDuplicate))
                     {
-                        return p.GroupBy(p => p.File).Select(v => new DefinitionOrderSort()
+                        return p.GroupBy(p => p.File).Select(v =>
                         {
-                            TypeAndId = v.FirstOrDefault().TypeAndId,
-                            Order = v.FirstOrDefault().Order,
-                            File = Path.GetFileNameWithoutExtension(v.FirstOrDefault().File)
+                            var defininition = v.FirstOrDefault();
+                            return new DefinitionOrderSort()
+                            {
+                                TypeAndId = defininition.TypeAndId,
+                                Order = defininition.Order,
+                                File = Path.GetFileNameWithoutExtension(defininition.File)
+                            };
                         });
                     }
                     else
                     {
-                        var priority = EvalDefinitionPriorityInternal(p.OrderBy(p => modOrder.IndexOf(p.ModName)), true);
+                        var partialCopy = new List<IDefinition>();
+                        p.ToList().ForEach(x => partialCopy.Add(PartialDefinitionCopy(x, false)));
+                        var priority = EvalDefinitionPriorityInternal(partialCopy.OrderBy(x => modOrder.IndexOf(x.ModName)), true);
                         return new List<DefinitionOrderSort>() { new DefinitionOrderSort()
                         {
                             TypeAndId = priority.Definition.TypeAndId,
                             Order = priority.Definition.Order,
-                            File = Path.GetFileNameWithoutExtension(priority.Definition.File)
+                            File = Path.GetFileNameWithoutExtension(priority.FileName)
                         }};
                     }
                 }).SelectMany(p => p).GroupBy(p => p.File).OrderBy(p => p.Key, StringComparer.Ordinal).SelectMany(p => p.OrderBy(x => x.Order)).ToList();
@@ -2413,31 +2430,38 @@ namespace IronyModManager.Services
 
                 void handleDefinition(IDefinition item)
                 {
-                    IDefinition copy;
                     IDefinition definition = item;
-                    var resolved = conflictResult.ResolvedConflicts.GetByTypeAndId(item.TypeAndId);
-                    // Only need to check for resolution, since overwritten objects already have sorted out priority
-                    if (resolved.Any())
+                    IEnumerable<IDefinition> resolved;
+                    if (stateProvinder != null)
                     {
-                        copy = CopyDefinition(resolved.FirstOrDefault());
-                        copy.Order = item.Order;
-                        copy.DiskFile = item.DiskFile;
-                        copy.File = item.File;
-                        copy.OverwrittenFileNames = item.OverwrittenFileNames;
-                        // If state is provided assume we need to load from conflict history
-                        if (state != null && state.IndexedConflictHistory != null && state.IndexedConflictHistory.Any() && state.IndexedConflictHistory.ContainsKey(definition.TypeAndId))
-                        {
-                            var history = state.IndexedConflictHistory[definition.TypeAndId].FirstOrDefault();
-                            if (history != null)
-                            {
-                                copy.Code = history.Code;
-                            }
-                        }
+                        resolved = stateProvinder.Item2.GetByTypeAndId(item.TypeAndId);
                     }
                     else
                     {
-                        copy = CopyDefinition(definition);
+                        resolved = conflictResult.ResolvedConflicts.GetByTypeAndId(item.TypeAndId);
                     }
+                    // Only need to check for resolution, since overwritten objects already have sorted out priority
+                    if (resolved.Any())
+                    {
+                        definition = resolved.FirstOrDefault();
+                        if (stateProvinder != null)
+                        {
+                            definition.Order = item.Order;
+                            definition.DiskFile = item.DiskFile;
+                            definition.File = item.File;
+                            definition.OverwrittenFileNames = item.OverwrittenFileNames;
+                            // If state is provided assume we need to load from conflict history
+                            if (stateProvinder.Item1 != null && stateProvinder.Item1.IndexedConflictHistory != null && stateProvinder.Item1.IndexedConflictHistory.Any() && stateProvinder.Item1.IndexedConflictHistory.ContainsKey(definition.TypeAndId))
+                            {
+                                var history = stateProvinder.Item1.IndexedConflictHistory[definition.TypeAndId].FirstOrDefault();
+                                if (history != null)
+                                {
+                                    definition.Code = history.Code;
+                                }
+                            }
+                        }
+                    }
+                    var copy = CopyDefinition(definition);
                     var parsed = parserManager.Parse(new ParserManagerArgs()
                     {
                         ContentSHA = copy.ContentSHA,

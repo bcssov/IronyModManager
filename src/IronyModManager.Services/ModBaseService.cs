@@ -4,7 +4,7 @@
 // Created          : 04-07-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 11-27-2021
+// Last Modified On : 01-05-2022
 // ***********************************************************************
 // <copyright file="ModBaseService.cs" company="Mario">
 //     Mario
@@ -281,6 +281,7 @@ namespace IronyModManager.Services
                             definition = uniqueDefinitions.FirstOrDefault();
                         }
                         result.Definition = definition;
+                        result.FileName = definition.File;
                     }
                     else if (uniqueDefinitions.Count() > 1)
                     {
@@ -289,7 +290,9 @@ namespace IronyModManager.Services
                         {
                             definitions = uniqueDefinitions;
                         }
-                        result.Definition = modDefinitions.OrderBy(p => Path.GetFileNameWithoutExtension(p.File), StringComparer.Ordinal).Last();
+                        var definition = modDefinitions.OrderBy(p => Path.GetFileNameWithoutExtension(p.File), StringComparer.Ordinal).Last();
+                        result.Definition = definition;
+                        result.FileName = definition.File;
                     }
                 }
                 else
@@ -300,6 +303,7 @@ namespace IronyModManager.Services
                         result.Definition = validDefinitions.FirstOrDefault();
                         // If it's the only valid one assume load order is responsible
                         result.PriorityType = DefinitionPriorityType.ModOrder;
+                        result.FileName = validDefinitions.FirstOrDefault().File;
                     }
                     else if (validDefinitions.Count > 1)
                     {
@@ -354,6 +358,7 @@ namespace IronyModManager.Services
                                     definition = definitionEvals.FirstOrDefault();
                                 }
                                 result.Definition = definition.Definition;
+                                result.FileName = definition.FileName;
                                 if (overrideSkipped)
                                 {
                                     result.PriorityType = DefinitionPriorityType.ModOverride;
@@ -370,12 +375,16 @@ namespace IronyModManager.Services
                                 {
                                     if (uniqueDefinitions.Any(p => p.Definition.IsCustomPatch))
                                     {
-                                        result.Definition = uniqueDefinitions.FirstOrDefault(p => p.Definition.IsCustomPatch).Definition;
+                                        var definition = uniqueDefinitions.FirstOrDefault(p => p.Definition.IsCustomPatch);
+                                        result.Definition = definition.Definition;
+                                        result.FileName = definition.FileName;
                                         result.PriorityType = DefinitionPriorityType.ModOrder;
                                     }
                                     else
                                     {
-                                        result.Definition = uniqueDefinitions.Last().Definition;
+                                        var definition = uniqueDefinitions.Last();
+                                        result.Definition = definition.Definition;
+                                        result.FileName = definition.FileName;
                                         result.PriorityType = DefinitionPriorityType.ModOrder;
                                     }
                                 }
@@ -384,12 +393,16 @@ namespace IronyModManager.Services
                                     // Using FIOS or LIOS?
                                     if (isFios)
                                     {
-                                        result.Definition = uniqueDefinitions.OrderBy(p => Path.GetFileNameWithoutExtension(p.FileName), StringComparer.Ordinal).First().Definition;
+                                        var definition = uniqueDefinitions.OrderBy(p => Path.GetFileNameWithoutExtension(p.FileName), StringComparer.Ordinal).First();
+                                        result.Definition = definition.Definition;
+                                        result.FileName = definition.FileName;
                                         result.PriorityType = DefinitionPriorityType.FIOS;
                                     }
                                     else
                                     {
-                                        result.Definition = uniqueDefinitions.OrderBy(p => Path.GetFileNameWithoutExtension(p.FileName), StringComparer.Ordinal).Last().Definition;
+                                        var definition = uniqueDefinitions.OrderBy(p => Path.GetFileNameWithoutExtension(p.FileName), StringComparer.Ordinal).Last();
+                                        result.Definition = definition.Definition;
+                                        result.FileName = definition.FileName;
                                         result.PriorityType = DefinitionPriorityType.LIOS;
                                     }
                                 }
@@ -406,6 +419,7 @@ namespace IronyModManager.Services
                     definition = definitions.FirstOrDefault();
                 }
                 result.Definition = definition;
+                result.FileName = definition.File;
             }
             return result;
         }

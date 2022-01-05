@@ -4,15 +4,15 @@
 // Created          : 04-27-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 12-07-2020
+// Last Modified On : 01-05-2022
 // ***********************************************************************
 // <copyright file="IPriorityDefinitionResult.cs" company="Mario">
 //     Mario
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
-using System.Collections.Generic;
 using System;
+using System.Collections.Generic;
 using IronyModManager.Shared.Models;
 
 namespace IronyModManager.Models.Common
@@ -31,6 +31,12 @@ namespace IronyModManager.Models.Common
         /// </summary>
         /// <value>The definition.</value>
         IDefinition Definition { get; set; }
+
+        /// <summary>
+        /// Gets or sets the name of the file.
+        /// </summary>
+        /// <value>The name of the file.</value>
+        string FileName { get; set; }
 
         /// <summary>
         /// Gets or sets the type of the priority.
