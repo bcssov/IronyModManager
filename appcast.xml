@@ -4,8 +4,12 @@
 		<title>Irony Mod Manager</title>
 		<language>en</language>
 		<item>
-			<title>1.20.43</title>
+			<title>1.20.44</title>
 			<description>## Current Release Notes
+* Fix additional scenarios which caused conflict solver to reset single file merge conflict types
+* Additional Fixes
+
+## 1.20.43 Release Notes
 * Fix conflict resolver resetting on single file merge conflict types
 
 ## 1.20.41 Release Notes
@@ -18,12 +22,16 @@
 * Update dependencies
 * Upgrade to net6.0
 * Make Irony compliant with new Paradox Launcher 2021.10 formats</description>
-			<pubDate>Wed, 05 Jan 2022 08:03:50 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.20.43/osx-x64.rar" sparkle:version="1.20.43.65324" sparkle:shortVersionString="1.20.43" length="70825802" sparkle:os="osx" type="application/vnd.rar" sparkle:signature="oAqb7cdJw+95oLco3cZ4hUWb6uwzfHBctug+q1CdNjQQQyRURuincFaEhEZYXeBDET1QwtZFp13rJ9JCDBfzDQ=="/>
+			<pubDate>Wed, 05 Jan 2022 22:51:34 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.20.44/osx-x64.rar" sparkle:version="1.20.44.13856" sparkle:shortVersionString="1.20.44" length="70826636" sparkle:os="osx" type="application/vnd.rar" sparkle:signature="7HzxTVI/Ao4FM+6BKgupPOT/151lThSy7yWCTxfjfqSuEgNRku+VG/E2uYT7jjhQG+PnNE3NTJ0xHUIDJd4ZCQ=="/>
 		</item>
 		<item>
-			<title>1.20.43</title>
+			<title>1.20.44</title>
 			<description>## Current Release Notes
+* Fix additional scenarios which caused conflict solver to reset single file merge conflict types
+* Additional Fixes
+
+## 1.20.43 Release Notes
 * Fix conflict resolver resetting on single file merge conflict types
 
 ## 1.20.41 Release Notes
@@ -36,12 +44,16 @@
 * Update dependencies
 * Upgrade to net6.0
 * Make Irony compliant with new Paradox Launcher 2021.10 formats</description>
-			<pubDate>Wed, 05 Jan 2022 08:03:58 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.20.43/win-x64-setup.rar" sparkle:version="1.20.43.65324" sparkle:shortVersionString="1.20.43" length="63578739" sparkle:os="windows" type="application/vnd.rar" sparkle:signature="o8VGXOmJY4SmTVx+s9sn5Gnert5g1o3dz1rMUI/ZmKxfF8+IGGfKIutxaYHSmy/X6ZoIc/gTOfpqwvf11mAEBw=="/>
+			<pubDate>Wed, 05 Jan 2022 22:51:43 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.20.44/win-x64-setup.rar" sparkle:version="1.20.44.13856" sparkle:shortVersionString="1.20.44" length="63593756" sparkle:os="windows" type="application/vnd.rar" sparkle:signature="G/57awY41ddDsVRA3tbxIs+0kasIMzZUxXw5nYVO1S9+0AHacC2o3nL7SD0xEqJJpA6KHfv8m1CsmYHVJ0JyAw=="/>
 		</item>
 		<item>
-			<title>1.20.43</title>
+			<title>1.20.44</title>
 			<description>## Current Release Notes
+* Fix additional scenarios which caused conflict solver to reset single file merge conflict types
+* Additional Fixes
+
+## 1.20.43 Release Notes
 * Fix conflict resolver resetting on single file merge conflict types
 
 ## 1.20.41 Release Notes
@@ -54,12 +66,16 @@
 * Update dependencies
 * Upgrade to net6.0
 * Make Irony compliant with new Paradox Launcher 2021.10 formats</description>
-			<pubDate>Wed, 05 Jan 2022 08:03:54 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.20.43/win-x64.rar" sparkle:version="1.20.43.65324" sparkle:shortVersionString="1.20.43" length="76211977" sparkle:os="windows" type="application/vnd.rar" sparkle:signature="dwzp4Y7lBuNziSEtt1FZT1pl75+FBkYkwQQ7aw6TVSc6vFb5HkkA/XcGCB+izJcxA7GhPVCX7PU4g/GHhK3xBQ=="/>
+			<pubDate>Wed, 05 Jan 2022 22:51:38 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.20.44/win-x64.rar" sparkle:version="1.20.44.13856" sparkle:shortVersionString="1.20.44" length="76213057" sparkle:os="windows" type="application/vnd.rar" sparkle:signature="7lmpTcL5SE+VS9OhluP0xnshPS/3slLW7rwFK983A6Hus/XcOe2inLJevrA8bPCiEi96uJlaSSw61+Ez1QMWBg=="/>
 		</item>
 		<item>
-			<title>1.20.43</title>
+			<title>1.20.44</title>
 			<description>## Current Release Notes
+* Fix additional scenarios which caused conflict solver to reset single file merge conflict types
+* Additional Fixes
+
+## 1.20.43 Release Notes
 * Fix conflict resolver resetting on single file merge conflict types
 
 ## 1.20.41 Release Notes
@@ -72,8 +88,8 @@
 * Update dependencies
 * Upgrade to net6.0
 * Make Irony compliant with new Paradox Launcher 2021.10 formats</description>
-			<pubDate>Wed, 05 Jan 2022 08:03:46 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.20.43/linux-x64.zip" sparkle:version="1.20.43.65324" sparkle:shortVersionString="1.20.43" length="87367515" sparkle:os="linux" type="application/zip" sparkle:signature="25woGTTzV+rRV+E5P9/JegHeJbGBaqv9Lr/ND/6Cc6YOQica1N4pwf76xsrOpFW9Eef3/thl9EFnahSkWXzaBQ=="/>
+			<pubDate>Wed, 05 Jan 2022 22:51:30 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.20.44/linux-x64.zip" sparkle:version="1.20.44.13856" sparkle:shortVersionString="1.20.44" length="87368100" sparkle:os="linux" type="application/zip" sparkle:signature="Vgu3k6v8iwuM0orW/D0MLyY+dtGls3upSn5YOfJmhGT/VgHVSSPQ/JrzcCHP0DWXwvEAwrdg4GKBXgL/+rvbCQ=="/>
 		</item>
 	</channel>
 </rss>
