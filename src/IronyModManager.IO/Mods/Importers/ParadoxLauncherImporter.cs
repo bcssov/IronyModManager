@@ -4,7 +4,7 @@
 // Created          : 08-12-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 11-19-2021
+// Last Modified On : 01-16-2022
 // ***********************************************************************
 // <copyright file="ParadoxLauncherImporter.cs" company="Mario">
 //     Mario
@@ -74,7 +74,7 @@ namespace IronyModManager.IO.Mods.Importers
             FieldCache.Flush();
             IdentityCache.Flush();
             PrimaryCache.Flush();
-            if (await IsV3Async(parameters))
+            if (await IsV4Async(parameters))
             {
                 return await DatabaseImportv3Async(parameters);
             }
@@ -224,13 +224,13 @@ namespace IronyModManager.IO.Mods.Importers
             try
             {
                 using var con = GetConnection(parameters);
-                var activeCollection = (await con.QueryAsync<Models.Paradox.v3.Playsets>(p => p.IsActive == true, trace: trace)).FirstOrDefault();
+                var activeCollection = (await con.QueryAsync<Models.Paradox.v4.Playsets>(p => p.IsActive == true, trace: trace)).FirstOrDefault();
                 if (activeCollection != null)
                 {
-                    var collectionMods = await con.QueryAsync<Models.Paradox.v3.PlaysetsMods>(p => p.PlaysetId == activeCollection.Id.ToString(), trace: trace);
+                    var collectionMods = await con.QueryAsync<Models.Paradox.v4.PlaysetsMods>(p => p.PlaysetId == activeCollection.Id.ToString(), trace: trace);
                     if (collectionMods?.Count() > 0)
                     {
-                        var mods = await con.QueryAllAsync<Models.Paradox.v3.Mods>(trace: trace);
+                        var mods = await con.QueryAllAsync<Models.Paradox.v4.Mods>(trace: trace);
                         var ordered = collectionMods.Where(p => p.Enabled).OrderBy(p => p.Position).ToList();
                         var validMods = mods.Where(p => ordered.Any(m => m.ModId.Equals(p.Id))).OrderBy(p => ordered.FindIndex(o => o.ModId == p.Id));
                         if (validMods.Any())
@@ -272,17 +272,17 @@ namespace IronyModManager.IO.Mods.Importers
         }
 
         /// <summary>
-        /// Is v3 as an asynchronous operation.
+        /// Is v4 as an asynchronous operation.
         /// </summary>
         /// <param name="parameters">The parameters.</param>
         /// <returns>A Task&lt;System.Boolean&gt; representing the asynchronous operation.</returns>
-        private async Task<bool> IsV3Async(ModCollectionExporterParams parameters)
+        private async Task<bool> IsV4Async(ModCollectionExporterParams parameters)
         {
             try
             {
                 using var con = GetConnection(parameters);
                 var changes = await con.QueryAllAsync<Models.Paradox.v2.KnoxMigrations>();
-                return changes != null && changes.Any(c => c.Name.Equals(Constants.SqlV3Id, StringComparison.OrdinalIgnoreCase));
+                return changes != null && changes.Any(c => c.Name.Equals(Constants.SqlV4Id.Name, StringComparison.OrdinalIgnoreCase) && c.Id.Equals(Constants.SqlV4Id.Id));
             }
             catch
             {

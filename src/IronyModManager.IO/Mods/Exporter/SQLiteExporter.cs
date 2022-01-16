@@ -4,7 +4,7 @@
 // Created          : 08-11-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 11-19-2021
+// Last Modified On : 01-16-2022
 // ***********************************************************************
 // <copyright file="SQLiteExporter.cs" company="Mario">
 //     Mario
@@ -96,16 +96,29 @@ namespace IronyModManager.IO.Mods.Exporter
             IdentityCache.Flush();
             PrimaryCache.Flush();
             EnsureDbExists(parameters);
-            var isV3 = await IsV3Async(parameters);
-            if (isV3)
+            var version = await GetVersionAsync(parameters);
+            switch (version)
             {
-                var collection = await RecreateCollectionV3Async(parameters);
-                await SyncModsV3Async(collection, parameters);
-            }
-            else
-            {
-                var collection = await RecreateCollectionV2Async(parameters);
-                await SyncModsV2Async(collection, parameters);
+                case Version.v3:
+                    {
+                        var collection = await RecreateCollectionV3Async(parameters);
+                        await SyncModsV2Async(collection, parameters);
+                    }
+                    break;
+
+                case Version.v4:
+                    {
+                        var collection = await RecreateCollectionV4Async(parameters);
+                        await SyncModsV4Async(collection, parameters);
+                    }
+                    break;
+
+                default:
+                    {
+                        var collection = await RecreateCollectionV2Async(parameters);
+                        await SyncModsV2Async(collection, parameters);
+                    }
+                    break;
             }
             mutex.Dispose();
             return true;
@@ -154,22 +167,32 @@ namespace IronyModManager.IO.Mods.Exporter
         }
 
         /// <summary>
-        /// Is v3 as an asynchronous operation.
+        /// Is v4 as an asynchronous operation.
         /// </summary>
         /// <param name="parameters">The parameters.</param>
         /// <returns>A Task&lt;System.Boolean&gt; representing the asynchronous operation.</returns>
-        private async Task<bool> IsV3Async(ModWriterParameters parameters)
+        private async Task<Version> GetVersionAsync(ModWriterParameters parameters)
         {
             try
             {
                 using var con = GetConnection(parameters);
                 var changes = await con.QueryAllAsync<Models.Paradox.v2.KnoxMigrations>();
-                return changes != null && changes.Any(c => c.Name.Equals(Constants.SqlV3Id, StringComparison.OrdinalIgnoreCase));
+                if (changes != null)
+                {
+                    if (changes.Any(c => c.Name.Equals(Constants.SqlV4Id.Name, StringComparison.OrdinalIgnoreCase) && c.Id.Equals(Constants.SqlV4Id.Id)))
+                    {
+                        return Version.v4;
+                    }
+                    if (changes.Any(c => c.Name.Equals(Constants.SqlV3Id.Name, StringComparison.OrdinalIgnoreCase) && c.Id.Equals(Constants.SqlV3Id.Id)))
+                    {
+                        return Version.v3;
+                    }
+                }
             }
             catch
             {
-                return false;
             }
+            return Version.Default;
         }
 
         /// <summary>
@@ -268,7 +291,7 @@ namespace IronyModManager.IO.Mods.Exporter
                     IsActive = true,
                     LoadOrder = CollectionSortType,
                     Name = GetCollectionName(),
-                    CreatedOn = DateTime.UtcNow
+                    CreatedOn = DateTime.Now
                 };
             }
 
@@ -336,6 +359,88 @@ namespace IronyModManager.IO.Mods.Exporter
         }
 
         /// <summary>
+        /// Recreate collection v4 as an asynchronous operation.
+        /// </summary>
+        /// <param name="parameters">The parameters.</param>
+        /// <returns>A Task&lt;Models.Paradox.v4.Playsets&gt; representing the asynchronous operation.</returns>
+        private async Task<Models.Paradox.v4.Playsets> RecreateCollectionV4Async(ModWriterParameters parameters)
+        {
+            Models.Paradox.v4.Playsets getDefaultIronyCollection()
+            {
+                return new Models.Paradox.v4.Playsets()
+                {
+                    Id = Guid.NewGuid().ToString(),
+                    IsActive = true,
+                    LoadOrder = CollectionSortType,
+                    Name = GetCollectionName(),
+                    CreatedOn = DateTime.UtcNow
+                };
+            }
+
+            var colName = GetCollectionName();
+
+            // They did do a cascade delete right?
+            using var con = GetConnection(parameters);
+            using var transaction = con.BeginTransaction();
+
+            var activeCollections = (await con.QueryAsync<Models.Paradox.v4.Playsets>(p => p.IsActive == true, trace: trace)).ToList().Where(p => !p.Name.Equals(colName)).ToList();
+            try
+            {
+                Models.Paradox.v4.Playsets ironyCollection;
+                if (!parameters.AppendOnly)
+                {
+                    await con.DeleteAsync<Models.Paradox.v4.Playsets>(p => p.Name == colName, transaction: transaction, trace: trace);
+
+                    if (activeCollections.Count > 0)
+                    {
+                        foreach (var item in activeCollections)
+                        {
+                            item.IsActive = false;
+                        }
+                        await con.UpdateAllAsync(activeCollections, transaction: transaction, trace: trace);
+                    }
+
+                    ironyCollection = getDefaultIronyCollection();
+                    await con.InsertAsync(ironyCollection, transaction: transaction, trace: trace);
+                }
+                else
+                {
+                    ironyCollection = (await con.QueryAsync<Models.Paradox.v4.Playsets>(p => p.Name == colName, trace: trace)).FirstOrDefault();
+
+                    if (activeCollections.Count > 0)
+                    {
+                        foreach (var item in activeCollections)
+                        {
+                            item.IsActive = false;
+                        }
+                        await con.UpdateAllAsync(activeCollections, transaction: transaction, trace: trace);
+                    }
+
+                    if (ironyCollection == null)
+                    {
+                        ironyCollection = getDefaultIronyCollection();
+                        await con.InsertAsync(ironyCollection, transaction: transaction, trace: trace);
+                    }
+                    else
+                    {
+                        ironyCollection.IsActive = true;
+                        await con.UpdateAsync(ironyCollection, transaction: transaction, trace: trace);
+                    }
+                }
+
+                transaction.Commit();
+
+                return ironyCollection;
+            }
+            catch (Exception ex)
+            {
+                logger.Error(ex);
+                transaction.Rollback();
+                throw;
+            }
+        }
+
+        /// <summary>
         /// Maps the PDX mod.
         /// </summary>
         /// <param name="pdxMod">The PDX mod.</param>
@@ -355,16 +460,16 @@ namespace IronyModManager.IO.Mods.Exporter
         }
 
         /// <summary>
-        /// Maps the PDX mod v3.
+        /// Maps the PDX mod v4.
         /// </summary>
         /// <param name="pdxMod">The PDX mod.</param>
         /// <param name="mod">The mod.</param>
-        /// <returns>Models.Paradox.v3.Mods.</returns>
-        private Models.Paradox.v3.Mods MapPdxModV3(Models.Paradox.v3.Mods pdxMod, IMod mod)
+        /// <returns>Models.Paradox.v4.Mods.</returns>
+        private Models.Paradox.v4.Mods MapPdxModV4(Models.Paradox.v4.Mods pdxMod, IMod mod)
         {
             if (pdxMod == null)
             {
-                pdxMod = new Models.Paradox.v3.Mods()
+                pdxMod = new Models.Paradox.v4.Mods()
                 {
                     Id = Guid.NewGuid().ToString()
                 };
@@ -457,7 +562,7 @@ namespace IronyModManager.IO.Mods.Exporter
         }
 
         /// <summary>
-        /// Prepare mods transaction v3 as an asynchronous operation.
+        /// Prepare mods transaction v4 as an asynchronous operation.
         /// </summary>
         /// <param name="con">The con.</param>
         /// <param name="transaction">The transaction.</param>
@@ -465,14 +570,14 @@ namespace IronyModManager.IO.Mods.Exporter
         /// <param name="mods">The mods.</param>
         /// <param name="removeInvalid">if set to <c>true</c> [remove invalid].</param>
         /// <returns>A Task&lt;IEnumerable`1&gt; representing the asynchronous operation.</returns>
-        private async Task<IEnumerable<Models.Paradox.v3.Mods>> PrepareModsTransactionV3Async(IDbConnection con, IDbTransaction transaction, List<IMod> exportMods, IEnumerable<Models.Paradox.v3.Mods> mods, bool removeInvalid)
+        private async Task<IEnumerable<Models.Paradox.v4.Mods>> PrepareModsTransactionV4Async(IDbConnection con, IDbTransaction transaction, List<IMod> exportMods, IEnumerable<Models.Paradox.v4.Mods> mods, bool removeInvalid)
         {
-            var result = new HashSet<Models.Paradox.v3.Mods>();
+            var result = new HashSet<Models.Paradox.v4.Mods>();
             if (mods?.Count() > 0)
             {
-                var toRemove = new HashSet<Models.Paradox.v3.Mods>();
-                var toInsert = new HashSet<Models.Paradox.v3.Mods>();
-                var toUpdate = new HashSet<Models.Paradox.v3.Mods>();
+                var toRemove = new HashSet<Models.Paradox.v4.Mods>();
+                var toInsert = new HashSet<Models.Paradox.v4.Mods>();
+                var toUpdate = new HashSet<Models.Paradox.v4.Mods>();
                 if (removeInvalid)
                 {
                     foreach (var item in mods)
@@ -488,7 +593,7 @@ namespace IronyModManager.IO.Mods.Exporter
                     var pdxMod = mods.FirstOrDefault(p => p.GameRegistryId.Equals(item.DescriptorFile, StringComparison.OrdinalIgnoreCase));
                     if (pdxMod == null)
                     {
-                        var newPdxMod = MapPdxModV3(null, item);
+                        var newPdxMod = MapPdxModV4(null, item);
                         toInsert.Add(newPdxMod);
                         result.Add(newPdxMod);
                     }
@@ -497,13 +602,13 @@ namespace IronyModManager.IO.Mods.Exporter
                         // Pending delete, insert a new entry instead
                         if (toRemove.Contains(pdxMod))
                         {
-                            var newPdxMod = MapPdxModV3(null, item);
+                            var newPdxMod = MapPdxModV4(null, item);
                             toInsert.Add(newPdxMod);
                             result.Add(newPdxMod);
                         }
                         else
                         {
-                            var updatedPdxMod = MapPdxModV3(pdxMod, item);
+                            var updatedPdxMod = MapPdxModV4(pdxMod, item);
                             toUpdate.Add(updatedPdxMod);
                             result.Add(updatedPdxMod);
                         }
@@ -524,10 +629,10 @@ namespace IronyModManager.IO.Mods.Exporter
             }
             else
             {
-                var toInsert = new HashSet<Models.Paradox.v3.Mods>();
+                var toInsert = new HashSet<Models.Paradox.v4.Mods>();
                 foreach (var mod in exportMods)
                 {
-                    var pdxMod = MapPdxModV3(null, mod);
+                    var pdxMod = MapPdxModV4(null, mod);
                     toInsert.Add(pdxMod);
                     result.Add(pdxMod);
                 }
@@ -639,7 +744,7 @@ namespace IronyModManager.IO.Mods.Exporter
         }
 
         /// <summary>
-        /// Prepare playset mods transaction v3 as an asynchronous operation.
+        /// Prepare playset mods transaction v4 as an asynchronous operation.
         /// </summary>
         /// <param name="con">The con.</param>
         /// <param name="transaction">The transaction.</param>
@@ -647,11 +752,11 @@ namespace IronyModManager.IO.Mods.Exporter
         /// <param name="mods">The mods.</param>
         /// <param name="recreateCollection">if set to <c>true</c> [recreate collection].</param>
         /// <returns>A Task representing the asynchronous operation.</returns>
-        private async Task PreparePlaysetModsTransactionV3Async(IDbConnection con, IDbTransaction transaction, Models.Paradox.v3.Playsets collection, IEnumerable<Models.Paradox.v3.Mods> mods, bool recreateCollection)
+        private async Task PreparePlaysetModsTransactionV4Async(IDbConnection con, IDbTransaction transaction, Models.Paradox.v4.Playsets collection, IEnumerable<Models.Paradox.v4.Mods> mods, bool recreateCollection)
         {
-            Models.Paradox.v3.PlaysetsMods mapMod(Models.Paradox.v3.Mods mod, int position)
+            Models.Paradox.v4.PlaysetsMods mapMod(Models.Paradox.v4.Mods mod, int position)
             {
-                return new Models.Paradox.v3.PlaysetsMods()
+                return new Models.Paradox.v4.PlaysetsMods()
                 {
                     Enabled = true,
                     ModId = mod.Id,
@@ -662,16 +767,16 @@ namespace IronyModManager.IO.Mods.Exporter
 
             if (mods?.Count() > 0)
             {
-                var collectionMods = await con.QueryAsync<Models.Paradox.v3.PlaysetsMods>(p => p.PlaysetId == collection.Id, trace: trace);
+                var collectionMods = await con.QueryAsync<Models.Paradox.v4.PlaysetsMods>(p => p.PlaysetId == collection.Id, trace: trace);
                 int pos = 0;
                 if (recreateCollection || collectionMods == null || !collectionMods.Any())
                 {
                     if (recreateCollection)
                     {
-                        await con.DeleteAsync<Models.Paradox.v3.PlaysetsMods>(p => p.PlaysetId == collection.Id, transaction: transaction, trace: trace);
+                        await con.DeleteAsync<Models.Paradox.v4.PlaysetsMods>(p => p.PlaysetId == collection.Id, transaction: transaction, trace: trace);
                     }
 
-                    var toInsert = new List<Models.Paradox.v3.PlaysetsMods>();
+                    var toInsert = new List<Models.Paradox.v4.PlaysetsMods>();
                     foreach (var item in mods)
                     {
                         toInsert.Add(mapMod(item, pos));
@@ -684,9 +789,9 @@ namespace IronyModManager.IO.Mods.Exporter
                 }
                 else
                 {
-                    var toInsert = new HashSet<Models.Paradox.v3.PlaysetsMods>();
-                    var toUpdate = new HashSet<Models.Paradox.v3.PlaysetsMods>();
-                    var bottom = new HashSet<Models.Paradox.v3.PlaysetsMods>();
+                    var toInsert = new HashSet<Models.Paradox.v4.PlaysetsMods>();
+                    var toUpdate = new HashSet<Models.Paradox.v4.PlaysetsMods>();
+                    var bottom = new HashSet<Models.Paradox.v4.PlaysetsMods>();
                     foreach (var item in mods)
                     {
                         var existing = collectionMods.FirstOrDefault(p => p.ModId == item.Id);
@@ -772,12 +877,12 @@ namespace IronyModManager.IO.Mods.Exporter
         }
 
         /// <summary>
-        /// Synchronize mods v3 as an asynchronous operation.
+        /// Synchronize mods v4 as an asynchronous operation.
         /// </summary>
         /// <param name="collection">The collection.</param>
         /// <param name="parameters">The parameters.</param>
         /// <returns>A Task representing the asynchronous operation.</returns>
-        private async Task SyncModsV3Async(Models.Paradox.v3.Playsets collection, ModWriterParameters parameters)
+        private async Task SyncModsV4Async(Models.Paradox.v4.Playsets collection, ModWriterParameters parameters)
         {
             var exportMods = new List<IMod>();
             var enabledMods = new List<IMod>();
@@ -797,12 +902,12 @@ namespace IronyModManager.IO.Mods.Exporter
             }
 
             using var con = GetConnection(parameters);
-            var mods = await con.QueryAllAsync<Models.Paradox.v3.Mods>(trace: trace);
+            var mods = await con.QueryAllAsync<Models.Paradox.v4.Mods>(trace: trace);
             using var transaction = con.BeginTransaction();
             try
             {
-                var allMods = await PrepareModsTransactionV3Async(con, transaction, exportMods, mods, !parameters.AppendOnly);
-                await PreparePlaysetModsTransactionV3Async(con, transaction, collection, allMods.Where(p => enabledMods.Any(s => s.DescriptorFile.Equals(p.GameRegistryId))), !parameters.AppendOnly);
+                var allMods = await PrepareModsTransactionV4Async(con, transaction, exportMods, mods, !parameters.AppendOnly);
+                await PreparePlaysetModsTransactionV4Async(con, transaction, collection, allMods.Where(p => enabledMods.Any(s => s.DescriptorFile.Equals(p.GameRegistryId))), !parameters.AppendOnly);
                 transaction.Commit();
             }
             catch (Exception ex)
@@ -811,6 +916,27 @@ namespace IronyModManager.IO.Mods.Exporter
                 transaction.Rollback();
                 throw;
             }
+        }
+
+        /// <summary>
+        /// Enum Version
+        /// </summary>
+        private enum Version
+        {
+            /// <summary>
+            /// The default
+            /// </summary>
+            Default,
+
+            /// <summary>
+            /// The v3
+            /// </summary>
+            v3,
+
+            /// <summary>
+            /// The v4
+            /// </summary>
+            v4
         }
     }
 

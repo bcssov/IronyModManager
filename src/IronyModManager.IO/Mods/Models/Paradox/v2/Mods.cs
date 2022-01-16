@@ -4,7 +4,7 @@
 // Created          : 08-11-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 09-26-2020
+// Last Modified On : 01-16-2022
 // ***********************************************************************
 // <copyright file="Mods.cs" company="Mario">
 //     Mario
@@ -13,7 +13,7 @@
 // ***********************************************************************
 using System;
 using System.Collections.Generic;
-using IronyModManager.IO.Mods.Models.Paradox.v2.PropertyHandlers;
+using IronyModManager.IO.Mods.Models.Paradox.PropertyHandlers;
 using RepoDb.Attributes;
 
 namespace IronyModManager.IO.Mods.Models.Paradox.v2
