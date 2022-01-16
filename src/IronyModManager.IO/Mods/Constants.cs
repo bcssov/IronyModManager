@@ -4,7 +4,7 @@
 // Created          : 08-11-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 11-16-2021
+// Last Modified On : 01-16-2022
 // ***********************************************************************
 // <copyright file="Constants.cs" company="Mario">
 //     Mario
@@ -54,15 +54,54 @@ namespace IronyModManager.IO.Mods
         public const string Sql_db_path = "launcher-v2.sqlite";
 
         /// <summary>
-        /// The SQL v3 identifier
-        /// </summary>
-        public const string SqlV3Id = "modifyPositionToInteger";
-
-        /// <summary>
         /// The empty SQL database path
         /// </summary>
         public static readonly string Empty_sql_db_path = "Databases" + System.IO.Path.DirectorySeparatorChar + "empty_paradox_launcher.sqlite";
 
         #endregion Fields
+
+        #region Classes
+
+        /// <summary>
+        /// Class SqlV5Id.
+        /// </summary>
+        public class SqlV3Id
+        {
+            #region Fields
+
+            /// <summary>
+            /// The identifier
+            /// </summary>
+            public const int Id = 6;
+
+            /// <summary>
+            /// The SQL v5 identifier
+            /// </summary>
+            public const string Name = "addCreatedAndSubscribedDate";
+
+            #endregion Fields
+        }
+
+        /// <summary>
+        /// Class SqlV4Id.
+        /// </summary>
+        public class SqlV4Id
+        {
+            #region Fields
+
+            /// <summary>
+            /// The identifier
+            /// </summary>
+            public const int Id = 13;
+
+            /// <summary>
+            /// The SQL v5 identifier
+            /// </summary>
+            public const string Name = "modifyPositionToInteger";
+
+            #endregion Fields
+        }
+
+        #endregion Classes
     }
 }

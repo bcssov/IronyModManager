@@ -4,7 +4,7 @@
 // Created          : 08-11-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 08-13-2020
+// Last Modified On : 01-16-2022
 // ***********************************************************************
 // <copyright file="JsonStringToListHandler.cs" company="Mario">
 //     Mario
@@ -17,7 +17,7 @@ using Newtonsoft.Json.Linq;
 using RepoDb;
 using RepoDb.Interfaces;
 
-namespace IronyModManager.IO.Mods.Models.Paradox.v2.PropertyHandlers
+namespace IronyModManager.IO.Mods.Models.Paradox.PropertyHandlers
 {
     /// <summary>
     /// Class StringToListHandler.

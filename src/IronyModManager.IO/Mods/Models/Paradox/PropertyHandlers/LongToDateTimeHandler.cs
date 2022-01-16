@@ -4,7 +4,7 @@
 // Created          : 11-16-2021
 //
 // Last Modified By : Mario
-// Last Modified On : 11-16-2021
+// Last Modified On : 01-16-2022
 // ***********************************************************************
 // <copyright file="LongToDateTimeHandler.cs" company="Mario">
 //     Mario
@@ -18,7 +18,7 @@ using System.Linq;
 using RepoDb;
 using RepoDb.Interfaces;
 
-namespace IronyModManager.IO.Mods.Models.Paradox.v3.PropertyHandlers
+namespace IronyModManager.IO.Mods.Models.Paradox.PropertyHandlers
 {
     /// <summary>
     /// Class ObjectToDateTimeHandler.
