@@ -278,6 +278,9 @@
         "DirectoryPath": "common\\scripted_variables",
         "PreferredParser": "StellarisScriptedVariablesParser"
     }, {
+        "DirectoryPath": "common\\script_values",
+        "PreferredParser": "DefaultParser"
+    }, {
         "DirectoryPath": "common\\section_templates",
         "PreferredParser": "StellarisOverwrittenParser"
     }, {
@@ -292,6 +295,9 @@
     }, {
         "DirectoryPath": "common\\ship_sizes",
         "PreferredParser": "StellarisOverwrittenObjectSingleFileParser"
+    }, {
+        "DirectoryPath": "common\\situations",
+        "PreferredParser": "DefaultParser"
     }, {
         "DirectoryPath": "common\\solar_system_initializers",
         "PreferredParser": "StellarisSolarSystemInitializersParser"
@@ -1087,6 +1093,9 @@
     }, {
         "DirectoryPath": "gfx\\models\\ships\\titans\\molluscoid_01",
         "PreferredParser": "GenericKeyParser"
+    }, {
+        "DirectoryPath": "gfx\\models\\ships\\titans\\molluscoid_01",
+        "PreferredParser": "GenericGraphicsParser"
     }, {
         "DirectoryPath": "gfx\\models\\ships\\titans\\necroid_01",
         "PreferredParser": "GenericKeyParser"
