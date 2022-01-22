@@ -419,7 +419,7 @@ namespace IronyModManager.Services
                     definition = definitions.FirstOrDefault();
                 }
                 result.Definition = definition;
-                result.FileName = definition.File;
+                result.FileName = definition?.File;
             }
             return result;
         }
