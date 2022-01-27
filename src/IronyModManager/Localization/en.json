@@ -328,6 +328,7 @@
             "Title": "Select Mode",
             "Default": "Default",
             "Advanced": "Advanced",
+            "Analyze": "Analyze Only",
             "Close": "Close"
         },
         "ModFilter": {

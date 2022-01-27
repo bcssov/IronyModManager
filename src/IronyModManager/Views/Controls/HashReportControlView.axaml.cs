@@ -4,7 +4,7 @@
 // Created          : 10-01-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-27-2021
+// Last Modified On : 01-27-2022
 // ***********************************************************************
 // <copyright file="HashReportControlView.axaml.cs" company="Mario">
 //     Mario
@@ -33,6 +33,15 @@ namespace IronyModManager.Views.Controls
     [ExcludeFromCoverage("This should be tested via functional testing.")]
     public class HashReportControlView : BaseControl<HashReportControlViewModel>
     {
+        #region Fields
+
+        /// <summary>
+        /// The popup
+        /// </summary>
+        private Popup popup;
+
+        #endregion Fields
+
         #region Constructors
 
         /// <summary>
@@ -41,6 +50,7 @@ namespace IronyModManager.Views.Controls
         public HashReportControlView()
         {
             InitializeComponent();
+            LayoutUpdated += HashReportControlView_LayoutUpdated;
         }
 
         #endregion Constructors
@@ -55,18 +65,25 @@ namespace IronyModManager.Views.Controls
         {
             base.OnActivated(disposables);
 
-            var popup = this.FindControl<Popup>("popup");
+            popup = this.FindControl<Popup>("popup");
+            UpdateOffsets();
             popup.Closed += (sender, args) =>
             {
                 ViewModel.ForceClose();
             };
-            popup.Opened += (sender, args) =>
+        }
+
+        /// <summary>
+        /// Handles the LayoutUpdated event of the HashReportControlView control.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
+        private void HashReportControlView_LayoutUpdated(object sender, System.EventArgs e)
+        {
+            if (popup != null)
             {
-                var window = Helpers.GetMainWindow();
-                var verticalOffset = window.Bounds.Height / 2;
-                popup.Host.ConfigurePosition(window, popup.PlacementMode, new Avalonia.Point(popup.HorizontalOffset, verticalOffset),
-                    Avalonia.Controls.Primitives.PopupPositioning.PopupAnchor.Top, Avalonia.Controls.Primitives.PopupPositioning.PopupGravity.None);
-            };
+                UpdateOffsets();
+            }
         }
 
         /// <summary>
@@ -75,6 +92,16 @@ namespace IronyModManager.Views.Controls
         private void InitializeComponent()
         {
             AvaloniaXamlLoader.Load(this);
+        }
+
+        /// <summary>
+        /// Updates the offsets.
+        /// </summary>
+        private void UpdateOffsets()
+        {
+            var window = Helpers.GetMainWindow();
+            var verticalOffset = Helpers.CalculatePopupCenterPosition(400, window.Bounds.Height, 125);
+            popup.VerticalOffset = verticalOffset;
         }
 
         #endregion Methods

@@ -4,7 +4,7 @@
 // Created          : 01-10-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-08-2021
+// Last Modified On : 01-27-2022
 // ***********************************************************************
 // <copyright file="MainWindowViewModel.cs" company="Mario">
 //     Mario
@@ -187,6 +187,7 @@ namespace IronyModManager.ViewModels
         /// animate transition as an asynchronous operation.
         /// </summary>
         /// <param name="mainVisible">if set to <c>true</c> [main visible].</param>
+        /// <returns>A Task representing the asynchronous operation.</returns>
         protected virtual async Task AnimateTransitionAsync(bool mainVisible)
         {
             // For the love of me I cannot find a good animation type from Avalonia. All I can say is WTF Avalonia.
@@ -249,10 +250,12 @@ namespace IronyModManager.ViewModels
                     state = s.State;
                     switch (s.State)
                     {
+                        case NavigationState.ReadOnlyConflictSolver:
                         case NavigationState.ConflictSolver:
                             ConflictSolver.SelectedModCollection = s.SelectedCollection;
                             ConflictSolver.SelectedModsOrder = s.SelectedMods;
                             ConflictSolver.Conflicts = s.Results;
+                            ConflictSolver.ReadOnly = s.State == NavigationState.ReadOnlyConflictSolver;
                             ConflictSolver.Reset();
                             AnimateTransitionAsync(false).ConfigureAwait(true);
                             break;
@@ -283,6 +286,7 @@ namespace IronyModManager.ViewModels
         /// <summary>
         /// overlay loop as an asynchronous operation.
         /// </summary>
+        /// <returns>A Task representing the asynchronous operation.</returns>
         protected async Task OverlayLoopAsync()
         {
             void setOverlayProperties(OverlayProgressEvent e)

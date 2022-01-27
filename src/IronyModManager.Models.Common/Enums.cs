@@ -170,6 +170,11 @@ namespace IronyModManager.Models.Common
         /// <summary>
         /// The advanced
         /// </summary>
-        Advanced
+        Advanced,
+
+        /// <summary>
+        /// The read only
+        /// </summary>
+        ReadOnly
     }
 }

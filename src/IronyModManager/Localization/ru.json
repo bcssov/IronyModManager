@@ -328,6 +328,7 @@
             "Title": "Режим",
             "Default": "Обычный",
             "Advanced": "Расширенный",
+            "Analyze": "Только анализ",
             "Close": "Закрыть"
         },
         "ModFilter": {

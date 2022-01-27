@@ -4,33 +4,33 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="IronyModManager.Views.Controls.ActionsControlView">
-  <Panel>
-    <ContentControl Content="{Binding DLCManager}" Grid.Row="0" Grid.Column="0"></ContentControl>
-    <Button Content="{Binding Shortcuts}" Command="{Binding ShortcutsCommand}"
-            BorderThickness="0,0,0,0" Background="Transparent"
-            Foreground="{DynamicResource IronyAccentBrush}" x:Name="openPopupButton"></Button>
-    <Popup PlacementMode="AnchorAndGravity" IsOpen="{Binding IsOpen}"
-           Topmost="True" ObeyScreenEdges="True" StaysOpen="False" x:Name="popup"
-           PlacementTarget="{Binding #openPopupButton}">
-      <Border BorderThickness="1,1,1,1" BorderBrush="{DynamicResource IronyButtonBorderBrush}">
-        <Grid RowDefinitions="1*,1*,1*,1*,1*" Background="{DynamicResource IronyBackgroundPopupBrush}">
-          <Button Content="{Binding DLC}" Command="{Binding DLCCommand}"
-                  Grid.Row="0" Grid.Column="0"
-                  HorizontalAlignment="Stretch" VerticalAlignment="Stretch" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"></Button>
-          <Button Content="{Binding Wiki}" Command="{Binding WikiCommand}"
-                  Grid.Row="1" Grid.Column="0"
-                  HorizontalAlignment="Stretch" VerticalAlignment="Stretch" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"></Button>
-          <Button Content="{Binding Logs}" Command="{Binding LogsCommand}"
-                  Grid.Row="2" Grid.Column="0" IsVisible="{Binding LogsVisible}"
-                  HorizontalAlignment="Stretch" VerticalAlignment="Stretch" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"></Button>
-          <Button Content="{Binding ErrorLog}" Command="{Binding ErrorLogCommand}"
-                  Grid.Row="3" Grid.Column="0" IsVisible="{Binding ErrorLogVisible}"
-                  HorizontalAlignment="Stretch" VerticalAlignment="Stretch" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"></Button>
-          <Button Content="{Binding Close}" Command="{Binding CloseCommand}"
-                  Grid.Row="4" Grid.Column="0"
-                  HorizontalAlignment="Stretch" VerticalAlignment="Stretch" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"></Button>
-        </Grid>
-      </Border>
-    </Popup>
-  </Panel>
+    <Panel>
+        <ContentControl Content="{Binding DLCManager}" Grid.Row="0" Grid.Column="0"></ContentControl>
+        <Button Content="{Binding Shortcuts}" Command="{Binding ShortcutsCommand}"
+                BorderThickness="0,0,0,0" Background="Transparent"
+                Foreground="{DynamicResource IronyAccentBrush}" x:Name="openPopupButton"></Button>
+        <Popup PlacementMode="AnchorAndGravity" PlacementGravity="Bottom" VerticalOffset="15" IsOpen="{Binding IsOpen}"
+               Topmost="True" ObeyScreenEdges="True" StaysOpen="False" x:Name="popup"
+               PlacementTarget="{Binding #openPopupButton}">
+            <Border BorderThickness="1,1,1,1" BorderBrush="{DynamicResource IronyButtonBorderBrush}">
+                <Grid RowDefinitions="1*,1*,1*,1*,1*" Background="{DynamicResource IronyBackgroundPopupBrush}">
+                    <Button Content="{Binding DLC}" Command="{Binding DLCCommand}"
+                            Grid.Row="0" Grid.Column="0"
+                            HorizontalAlignment="Stretch" VerticalAlignment="Stretch" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"></Button>
+                    <Button Content="{Binding Wiki}" Command="{Binding WikiCommand}"
+                            Grid.Row="1" Grid.Column="0"
+                            HorizontalAlignment="Stretch" VerticalAlignment="Stretch" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"></Button>
+                    <Button Content="{Binding Logs}" Command="{Binding LogsCommand}"
+                            Grid.Row="2" Grid.Column="0" IsVisible="{Binding LogsVisible}"
+                            HorizontalAlignment="Stretch" VerticalAlignment="Stretch" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"></Button>
+                    <Button Content="{Binding ErrorLog}" Command="{Binding ErrorLogCommand}"
+                            Grid.Row="3" Grid.Column="0" IsVisible="{Binding ErrorLogVisible}"
+                            HorizontalAlignment="Stretch" VerticalAlignment="Stretch" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"></Button>
+                    <Button Content="{Binding Close}" Command="{Binding CloseCommand}"
+                            Grid.Row="4" Grid.Column="0"
+                            HorizontalAlignment="Stretch" VerticalAlignment="Stretch" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"></Button>
+                </Grid>
+            </Border>
+        </Popup>
+    </Panel>
 </UserControl>

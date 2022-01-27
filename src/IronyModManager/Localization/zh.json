@@ -328,6 +328,7 @@
             "Title": "选择模式",
             "Default": "默认",
             "Advanced": "高级",
+            "Analyze": "仅分析",
             "Close": "关闭"
         },
         "ModFilter": {

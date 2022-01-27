@@ -4,7 +4,7 @@
 // Created          : 03-18-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 12-06-2021
+// Last Modified On : 01-27-2022
 // ***********************************************************************
 // <copyright file="MainConflictSolverViewModel.cs" company="Mario">
 //     Mario
@@ -443,6 +443,12 @@ namespace IronyModManager.ViewModels
         /// </summary>
         /// <value>The selected parent conflict.</value>
         public virtual IHierarchicalDefinitions SelectedParentConflict { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether [read only].
+        /// </summary>
+        /// <value><c>true</c> if [read only]; otherwise, <c>false</c>.</value>
+        public virtual bool ReadOnly { get; set; }
 
         #endregion Properties
 
