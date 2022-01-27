@@ -4,7 +4,7 @@
 // Created          : 06-10-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-27-2021
+// Last Modified On : 01-27-2022
 // ***********************************************************************
 // <copyright file="MessageBusDependencyResolver.cs" company="Mario">
 //     Mario
@@ -30,7 +30,7 @@ namespace IronyModManager.DI.MessageBus
         /// Creates the scope.
         /// </summary>
         /// <returns>IDependencyResolver.</returns>
-        public IDependencyResolver CreateScope() => this;
+        public IChildDependencyResolver CreateScope() => new ChildDependencyResolver(this);
 
         /// <summary>
         /// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
@@ -51,5 +51,61 @@ namespace IronyModManager.DI.MessageBus
         }
 
         #endregion Methods
+
+        #region Classes
+
+        /// <summary>
+        /// Class ChildDependencyResolver.
+        /// Implements the <see cref="SlimMessageBus.Host.DependencyResolver.IChildDependencyResolver" />
+        /// </summary>
+        /// <seealso cref="SlimMessageBus.Host.DependencyResolver.IChildDependencyResolver" />
+        private class ChildDependencyResolver : IChildDependencyResolver
+        {
+            #region Constructors
+
+            /// <summary>
+            /// Initializes a new instance of the <see cref="ChildDependencyResolver" /> class.
+            /// </summary>
+            /// <param name="parent">The parent.</param>
+            public ChildDependencyResolver(IDependencyResolver parent) => Parent = parent;
+
+            #endregion Constructors
+
+            #region Properties
+
+            /// <summary>
+            /// Gets the parent.
+            /// </summary>
+            /// <value>The parent.</value>
+            public IDependencyResolver Parent { get; }
+
+            #endregion Properties
+
+            #region Methods
+
+            /// <summary>
+            /// Creates the scope.
+            /// </summary>
+            /// <returns>IChildDependencyResolver.</returns>
+            public IChildDependencyResolver CreateScope() => new ChildDependencyResolver(this);
+
+            /// <summary>
+            /// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
+            /// </summary>
+            public void Dispose()
+            {
+            }
+
+            /// <summary>
+            /// Resolves the specified type.
+            /// </summary>
+            /// <param name="type">The type.</param>
+            /// <returns>System.Object.</returns>
+            public object Resolve(Type type) => Parent.Resolve(type);
+
+            #endregion Methods
+        }
+
+        #endregion Classes
     }
 }

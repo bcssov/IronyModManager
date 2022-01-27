@@ -130,13 +130,14 @@
     <PackageReference Include="DiffPlex" Version="1.7.0" />
     <PackageReference Include="info.lundin.math.dll" Version="1.2.7" />
     <PackageReference Include="Material.Avalonia" Version="$(MaterialAvalonia)" allowedVersions="$(MaterialAvalonia)" />
+    <PackageReference Include="Material.Icons.Avalonia" Version="1.0.2" />
     <PackageReference Include="MessageBox.Avalonia" Version="$(MessageBoxAvalonia)" allowedVersions="$(MessageBoxAvalonia)" />
     <PackageReference Include="Microsoft.Bcl.AsyncInterfaces" Version="6.0.0" />
     <PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="$(MicrosoftExtensionsConfigurationBinder)" allowedVersions="$(MicrosoftExtensionsConfigurationBinder)" />
     <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="$(MicrosoftExtensionsConfigurationJson)" allowedVersions="$(MicrosoftExtensionsConfigurationJson)" />
     <PackageReference Include="Microsoft.Extensions.DependencyModel" Version="$(MicrosoftExtensionsDependencyModelVersion)" allowedVersions="$(MicrosoftExtensionsDependencyModelVersion)" />
     <PackageReference Include="Microsoft.NETCore.Platforms" Version="$(MicrosoftNETCorePlatformsVersion)" allowedVersions="$(MicrosoftNETCorePlatformsVersion)" />
-    <PackageReference Include="Microsoft.VisualStudio.SlowCheetah" Version="3.2.26">
+    <PackageReference Include="Microsoft.VisualStudio.SlowCheetah" Version="4.0.8">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
@@ -144,14 +145,14 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="NetSparkleUpdater.SparkleUpdater" Version="2.0.8" />
-    <PackageReference Include="NLog" Version="4.7.12" />
-    <PackageReference Include="ReactiveUI" Version="16.3.10" />
+    <PackageReference Include="NetSparkleUpdater.SparkleUpdater" Version="2.0.9" />
+    <PackageReference Include="NLog" Version="4.7.13" />
+    <PackageReference Include="ReactiveUI" Version="17.1.17" />
     <PackageReference Include="SimpleInjector" Version="5.3.2" />
     <PackageReference Include="SimpleInjector.Packaging" Version="5.0.0" />
-    <PackageReference Include="SmartFormat.NET" Version="2.7.1" />
-    <PackageReference Include="Splat.NLog" Version="13.1.42" />
-    <PackageReference Include="Splat.SimpleInjector" Version="13.1.42" />
+    <PackageReference Include="SmartFormat.NET" Version="2.7.2" />
+    <PackageReference Include="Splat.NLog" Version="14.1.17" />
+    <PackageReference Include="Splat.SimpleInjector" Version="14.1.17" />
     <PackageReference Include="StrongNamer" Version="0.2.5" />
     <PackageReference Include="Syroot.Windows.IO.KnownFolders" Version="1.2.3" />
   </ItemGroup>
