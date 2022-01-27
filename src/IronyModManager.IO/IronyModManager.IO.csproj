@@ -50,7 +50,7 @@
 
   <ItemGroup>
     <PackageReference Include="BCnEncoder.Net" Version="2.1.0" />
-    <PackageReference Include="DotNetZip" Version="1.15.0" />
+    <PackageReference Include="DotNetZip" Version="1.16.0" />
     <PackageReference Include="Microsoft.Extensions.DependencyModel" Version="$(MicrosoftExtensionsDependencyModelVersion)" allowedVersions="$(MicrosoftExtensionsDependencyModelVersion)" />
     <PackageReference Include="Microsoft.NETCore.Platforms" Version="$(MicrosoftNETCorePlatformsVersion)" allowedVersions="$(MicrosoftNETCorePlatformsVersion)" />
     <PackageReference Include="Nerdbank.GitVersioning" Version="3.3.37">
@@ -58,8 +58,8 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
-    <PackageReference Include="Pfim" Version="0.10.1" />
-    <PackageReference Include="SharpCompress" Version="0.30.0" />
+    <PackageReference Include="Pfim" Version="0.10.3" />
+    <PackageReference Include="SharpCompress" Version="0.30.1" />
     <PackageReference Include="SimpleInjector.Packaging" Version="5.0.0" />
     <PackageReference Include="SixLabors.ImageSharp" Version="1.0.4" />
     <PackageReference Include="SixLabors.ImageSharp.Drawing" Version="1.0.0-beta11" />

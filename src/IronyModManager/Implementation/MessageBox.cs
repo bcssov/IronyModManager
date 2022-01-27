@@ -4,7 +4,7 @@
 // Created          : 01-22-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-25-2021
+// Last Modified On : 01-27-2022
 // ***********************************************************************
 // <copyright file="MessageBox.cs" company="Mario">
 //     Mario
@@ -56,7 +56,7 @@ namespace IronyModManager.Implementation
                 FontFamily = font.GetFontFamily(),
                 WindowIcon = StaticResources.GetAppIcon()
             };
-            var window = new Controls.Themes.CustomMessageBox(parameters.Style);
+            var window = new Controls.Themes.CustomMessageBox();
             window.DataContext = new MsBoxCustomViewModel(new MsCustomParams(parameters), window);
             return window;
         }
@@ -92,7 +92,7 @@ namespace IronyModManager.Implementation
                 FontFamily = font.GetFontFamily(),
                 WindowIcon = StaticResources.GetAppIcon()
             };
-            var window = new Controls.Themes.StandardMessageBox(parameters.Style, buttonEnum);
+            var window = new Controls.Themes.StandardMessageBox(buttonEnum);
             window.DataContext = new MsBoxStandardViewModel(parameters, window);
             return new StandardMessageBox(window);
         }
