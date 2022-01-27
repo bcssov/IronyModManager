@@ -4,7 +4,7 @@
 // Created          : 02-29-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 09-06-2021
+// Last Modified On : 01-27-2022
 // ***********************************************************************
 // <copyright file="ModHolderControlViewModel.cs" company="Mario">
 //     Mario
@@ -527,6 +527,7 @@ namespace IronyModManager.ViewModels.Controls
         /// </summary>
         /// <param name="id">The identifier.</param>
         /// <param name="showOverlay">if set to <c>true</c> [show overlay].</param>
+        /// <returns>A Task representing the asynchronous operation.</returns>
         protected virtual async Task ApplyCollectionAsync(long id, bool showOverlay = true)
         {
             if (ApplyingCollection)
@@ -597,6 +598,7 @@ namespace IronyModManager.ViewModels.Controls
         /// <summary>
         /// eval resume availability loop as an asynchronous operation.
         /// </summary>
+        /// <returns>A Task representing the asynchronous operation.</returns>
         protected virtual async Task EvalResumeAvailabilityLoopAsync()
         {
             while (true)
@@ -610,6 +612,7 @@ namespace IronyModManager.ViewModels.Controls
         /// install mods as an asynchronous operation.
         /// </summary>
         /// <param name="skipOverlay">if set to <c>true</c> [skip overlay].</param>
+        /// <returns>A Task representing the asynchronous operation.</returns>
         protected virtual async Task InstallModsAsync(bool skipOverlay = false)
         {
             var result = await modService.InstallModsAsync(InstalledMods.Mods);
@@ -637,7 +640,7 @@ namespace IronyModManager.ViewModels.Controls
         {
             Task.Run(() => EvalResumeAvailabilityLoopAsync().ConfigureAwait(false));
 
-            ShowAdvancedFeatures = (gameService.GetSelected()?.AdvancedFeaturesSupported).GetValueOrDefault();
+            ShowAdvancedFeatures = (gameService.GetSelected()?.AdvancedFeatures) == GameAdvancedFeatures.Full;
             AnalyzeClass = string.Empty;
 
             var allowModSelectionEnabled = this.WhenAnyValue(v => v.AllowModSelection);
@@ -899,7 +902,7 @@ namespace IronyModManager.ViewModels.Controls
         {
             forceEnableResumeButton = false;
             EvalResumeAvailability(game);
-            ShowAdvancedFeatures = (game?.AdvancedFeaturesSupported).GetValueOrDefault();
+            ShowAdvancedFeatures = (game?.AdvancedFeatures) == GameAdvancedFeatures.Full;
             base.OnSelectedGameChanged(game);
         }
 

@@ -4,7 +4,7 @@
 // Created          : 03-09-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 11-16-2021
+// Last Modified On : 01-27-2022
 // ***********************************************************************
 // <copyright file="ExportModCollectionControlViewModel.cs" company="Mario">
 //     Mario
@@ -322,7 +322,7 @@ namespace IronyModManager.ViewModels.Controls
         protected virtual void EvalAdvancedFeaturesVisibility()
         {
             var game = gameService.GetSelected();
-            ShowAdvancedFeatures = (game?.AdvancedFeaturesSupported).GetValueOrDefault();
+            ShowAdvancedFeatures = (game?.AdvancedFeatures) == Models.Common.GameAdvancedFeatures.Full;
         }
 
         /// <summary>

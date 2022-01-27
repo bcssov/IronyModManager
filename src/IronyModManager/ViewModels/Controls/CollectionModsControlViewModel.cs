@@ -4,7 +4,7 @@
 // Created          : 03-03-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 01-03-2022
+// Last Modified On : 01-27-2022
 // ***********************************************************************
 // <copyright file="CollectionModsControlViewModel.cs" company="Mario">
 //     Mario
@@ -960,7 +960,7 @@ namespace IronyModManager.ViewModels.Controls
         protected virtual void EvalAdvancedFeaturesVisibility()
         {
             var game = gameService.GetSelected();
-            ShowAdvancedFeatures = (game?.AdvancedFeaturesSupported).GetValueOrDefault();
+            ShowAdvancedFeatures = (game?.AdvancedFeatures) == GameAdvancedFeatures.Full;
             SearchModsColSpan = ShowAdvancedFeatures ? 1 : 2;
         }
 

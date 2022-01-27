@@ -4,7 +4,7 @@
 // Created          : 02-12-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 09-12-2021
+// Last Modified On : 01-27-2022
 // ***********************************************************************
 // <copyright file="Game.cs" company="Mario">
 //     Mario
@@ -37,10 +37,10 @@ namespace IronyModManager.Models
         public virtual string Abrv { get; set; }
 
         /// <summary>
-        /// Gets or sets a value indicating whether [advanced features supported].
+        /// Gets or sets the advanced features.
         /// </summary>
-        /// <value><c>true</c> if [advanced features supported]; otherwise, <c>false</c>.</value>
-        public virtual bool AdvancedFeaturesSupported { get; set; }
+        /// <value>The advanced features.</value>
+        public virtual GameAdvancedFeatures AdvancedFeatures { get; set; }
 
         /// <summary>
         /// Gets or sets the base steam game directory.

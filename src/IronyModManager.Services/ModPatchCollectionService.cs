@@ -4,7 +4,7 @@
 // Created          : 05-26-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 01-05-2022
+// Last Modified On : 01-27-2022
 // ***********************************************************************
 // <copyright file="ModPatchCollectionService.cs" company="Mario">
 //     Mario
@@ -1876,7 +1876,7 @@ namespace IronyModManager.Services
         {
             foreach (var item in values)
             {
-                if (pattern.Contains("*") || pattern.Contains("?"))
+                if (pattern.Contains('*') || pattern.Contains('?'))
                 {
                     var regex = $"^{Regex.Escape(pattern).Replace("\\*", ".*").Replace("\\?", ".")}$";
                     if (Regex.IsMatch(item, regex, RegexOptions.IgnoreCase))

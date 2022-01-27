@@ -288,7 +288,7 @@ namespace IronyModManager.Storage.Tests
                 ExecutableArgs = "args",
                 LauncherSettingsFileName = "settings",
                 LauncherSettingsPrefix = "prefix",
-                AdvancedFeaturesSupported = true,
+                AdvancedFeatures = GameAdvancedFeatures.ReadOnly,
                 RemoteSteamUserDirectory = new List<string>() { "remotesave" },
                 Abrv = "abrv",
                 ParadoxGameId = "pdxId",
@@ -309,7 +309,7 @@ namespace IronyModManager.Storage.Tests
             dbMock.Games.FirstOrDefault(p => p.Name == key).LauncherSettingsFileName.Should().Be("settings");
             dbMock.Games.FirstOrDefault(p => p.Name == key).LauncherSettingsPrefix.Should().Be("prefix");
             dbMock.Games.FirstOrDefault(p => p.Name == key).RemoteSteamUserDirectory.FirstOrDefault().Should().Be("remotesave");
-            dbMock.Games.FirstOrDefault(p => p.Name == key).AdvancedFeaturesSupported.Should().BeTrue();
+            dbMock.Games.FirstOrDefault(p => p.Name == key).AdvancedFeatures.Should().Be(GameAdvancedFeatures.ReadOnly);
             dbMock.Games.FirstOrDefault(p => p.Name == key).Abrv.Should().Be("abrv");
             dbMock.Games.FirstOrDefault(p => p.Name == key).ParadoxGameId.Should().Be("pdxId");
             dbMock.Games.FirstOrDefault(p => p.Name == key).DLCContainer.Should().Be("container");
@@ -516,7 +516,7 @@ namespace IronyModManager.Storage.Tests
                 ExecutableArgs = "args",
                 LauncherSettingsFileName = "settings",
                 LauncherSettingsPrefix = "prefix",
-                AdvancedFeaturesSupported = true,
+                AdvancedFeatures = GameAdvancedFeatures.ReadOnly,
                 RemoteSteamUserDirectory = new List<string>() { "remotesave" },
                 Abrv = "abrv",
                 ParadoxGameId = "pdxId",
@@ -538,7 +538,7 @@ namespace IronyModManager.Storage.Tests
             result.FirstOrDefault(p => p.Name == key).LauncherSettingsFileName.Should().Be("settings");
             result.FirstOrDefault(p => p.Name == key).LauncherSettingsPrefix.Should().Be("prefix");
             result.FirstOrDefault(p => p.Name == key).RemoteSteamUserDirectory.FirstOrDefault().Should().Be("remotesave");
-            result.FirstOrDefault(p => p.Name == key).AdvancedFeaturesSupported.Should().BeTrue();
+            result.FirstOrDefault(p => p.Name == key).AdvancedFeatures.Should().Be(GameAdvancedFeatures.ReadOnly);
             result.FirstOrDefault(p => p.Name == key).Abrv.Should().Be("abrv");
             result.FirstOrDefault(p => p.Name == key).ParadoxGameId.Should().Be("pdxId");
             result.FirstOrDefault(p => p.Name == key).DLCContainer.Should().Be("container");
