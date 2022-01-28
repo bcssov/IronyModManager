@@ -7,79 +7,83 @@
              xmlns:converter="clr-namespace:IronyModManager.Converters;assembly=IronyModManager"
              xmlns:controls="clr-namespace:IronyModManager.Controls;assembly=IronyModManager"
              x:Class="IronyModManager.Views.MainConflictSolverControlView">
-  <UserControl.Resources>
-    <converter:MathConverter x:Key="MathConverter" />
-  </UserControl.Resources>
-  <Panel HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
-    <Panel IsVisible="{Binding EditingIgnoreConflictsRules}">
-      <ContentControl Content="{Binding IgnoreConflictsRules}"></ContentControl>
-    </Panel>
-    <Grid ColumnDefinitions="3*,7*" IsVisible="{Binding !EditingIgnoreConflictsRules}">
-      <Grid.RowDefinitions>
-        <RowDefinition Height="170" />
-        <RowDefinition Height="*" />
-        <RowDefinition Height="50" />
-      </Grid.RowDefinitions>
-      <Panel Grid.Column="0" Grid.Row="0" Grid.RowSpan="3">
-        <StackPanel Orientation="Vertical" Grid.Column="0" Grid.Row="0" Margin="5,0,0,0">
-          <TextBlock Text="{Binding ConflictedObjects}" HorizontalAlignment="Center" Margin="10"></TextBlock>
-          <Grid ColumnDefinitions="*,*" RowDefinitions="*,*">
-            <ContentControl Content="{Binding ModFilter}" Grid.Column="0" Grid.Row="0"></ContentControl>
-            <ContentControl Content="{Binding DatabaseSearch}" Grid.Column="1" Grid.Row="0"></ContentControl>
-            <ContentControl Content="{Binding CustomConflicts}" Grid.Column="0" Grid.Row="1"></ContentControl>
-            <ContentControl Content="{Binding ResetConflicts}" Grid.Column="1" Grid.Row="1"></ContentControl>
-          </Grid>
-          <controls:ComboBox Items="{Binding HierarchalConflicts}" SelectedItem="{Binding SelectedParentConflict}"
-                   HorizontalAlignment="Stretch" MinHeight="30">
-            <controls:ComboBox.ItemTemplate>
-              <DataTemplate>
-                <ComboBoxItem Content="{Binding Name}"></ComboBoxItem>
-              </DataTemplate>
-            </controls:ComboBox.ItemTemplate>
-          </controls:ComboBox>
-          <controls:ListBox Items="{Binding SelectedParentConflict.Children}" SelectedItem="SelectedConflict"
-                   ScrollViewer.HorizontalScrollBarVisibility="Disabled" SelectionMode="Single" x:Name="conflictList"
-                   Height="{Binding $parent[Window].Height, 
+    <UserControl.Resources>
+        <converter:MathConverter x:Key="MathConverter" />
+    </UserControl.Resources>
+    <Panel HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+        <Panel IsVisible="{Binding EditingIgnoreConflictsRules}">
+            <ContentControl Content="{Binding IgnoreConflictsRules}"></ContentControl>
+        </Panel>
+        <Grid ColumnDefinitions="3*,7*" IsVisible="{Binding !EditingIgnoreConflictsRules}">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="170" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="50" />
+            </Grid.RowDefinitions>
+            <Panel Grid.Column="0" Grid.Row="0" Grid.RowSpan="3">
+                <StackPanel Orientation="Vertical" Grid.Column="0" Grid.Row="0" Margin="5,0,0,0">
+                    <TextBlock Text="{Binding ConflictedObjects}" HorizontalAlignment="Center" Margin="10"></TextBlock>
+                    <Grid ColumnDefinitions="*,*" RowDefinitions="*,*">
+                        <ContentControl Content="{Binding ModFilter}" Grid.Column="0" Grid.Row="0"></ContentControl>
+                        <ContentControl Content="{Binding DatabaseSearch}" Grid.Column="1" Grid.Row="0"></ContentControl>
+                        <ContentControl Content="{Binding CustomConflicts}" Grid.Column="0" Grid.Row="1" IsVisible="{Binding !ReadOnly}"></ContentControl>
+                        <ContentControl Content="{Binding ResetConflicts}" Grid.Column="1" Grid.Row="1" IsVisible="{Binding !ReadOnly}"></ContentControl>
+                    </Grid>
+                    <controls:ComboBox Items="{Binding HierarchalConflicts}" SelectedItem="{Binding SelectedParentConflict}"
+                             HorizontalAlignment="Stretch" MinHeight="30">
+                        <controls:ComboBox.ItemTemplate>
+                            <DataTemplate>
+                                <ComboBoxItem Content="{Binding Name}"></ComboBoxItem>
+                            </DataTemplate>
+                        </controls:ComboBox.ItemTemplate>
+                    </controls:ComboBox>
+                    <controls:ListBox Items="{Binding SelectedParentConflict.Children}" SelectedItem="SelectedConflict"
+                             ScrollViewer.HorizontalScrollBarVisibility="Disabled" SelectionMode="Single" x:Name="conflictList"
+                             Height="{Binding $parent[Window].Height, 
                      Converter={StaticResource MathConverter} 
                      ConverterParameter=x-160}" IsTextSearchEnabled="True">
-            <controls:ListBox.ItemTemplate>
-              <DataTemplate>
-                <Grid ColumnDefinitions="*" Background="Transparent">
-                  <TextBlock Text="{Binding Name}" TextWrapping="Wrap"></TextBlock>
+                        <controls:ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <Grid ColumnDefinitions="*" Background="Transparent">
+                                    <TextBlock Text="{Binding Name}" TextWrapping="Wrap"></TextBlock>
+                                </Grid>
+                            </DataTemplate>
+                        </controls:ListBox.ItemTemplate>
+                    </controls:ListBox>
+                    <TextBlock Text="{Binding NumberOfConflictsCaption}" HorizontalAlignment="Center" Margin="0,10,0,0"></TextBlock>
+                </StackPanel>
+            </Panel>
+            <Panel Grid.Row="0" Grid.Column="1" IsVisible="{Binding IsConflictSolverAvailable}">
+                <Grid ColumnDefinitions="5*,5*" RowDefinitions="4*,15*">
+                    <TextBlock Text="{Binding LeftSide}" Grid.Column="0" Grid.Row="0"
+                               HorizontalAlignment="Center" Margin="10"></TextBlock>
+                    <TextBlock Text="{Binding RightSide}" Grid.Column="1" Grid.Row="0"
+                               HorizontalAlignment="Center" Margin="10"></TextBlock>
+                    <ContentControl Margin="10,10,10,0" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Content="{Binding ModCompareSelector}"></ContentControl>
                 </Grid>
-              </DataTemplate>
-            </controls:ListBox.ItemTemplate>
-          </controls:ListBox>
-          <TextBlock Text="{Binding NumberOfConflictsCaption}" HorizontalAlignment="Center" Margin="0,10,0,0"></TextBlock>
-        </StackPanel>
-      </Panel>
-      <Panel Grid.Row="0" Grid.Column="1" IsVisible="{Binding IsConflictSolverAvailable}">
-        <Grid ColumnDefinitions="5*,5*" RowDefinitions="4*,15*">
-          <TextBlock Text="{Binding LeftSide}" Grid.Column="0" Grid.Row="0"
-                     HorizontalAlignment="Center" Margin="10"></TextBlock>
-          <TextBlock Text="{Binding RightSide}" Grid.Column="1" Grid.Row="0"
-                     HorizontalAlignment="Center" Margin="10"></TextBlock>
-          <ContentControl Margin="10,10,10,0" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Content="{Binding ModCompareSelector}"></ContentControl>
+            </Panel>
+            <Panel Grid.Row="0" Grid.Column="1" Grid.RowSpan="2" IsVisible="{Binding !IsConflictSolverAvailable}">
+                <controls:TextBox TextWrapping="Wrap" Text="{Binding SelectedConflict.Key}" Margin="10,0,20,10"
+                         IsReadOnly="True" ScrollViewer.HorizontalScrollBarVisibility="Auto"></controls:TextBox>
+            </Panel>
+            <ContentControl IsVisible="{Binding IsBinaryViewerVisible}" Margin="10" Grid.Row="1" Grid.Column="1" Content="{Binding BinaryMergeViewer}"></ContentControl>
+            <ContentControl IsVisible="{Binding IsMergeViewerVisible}" Margin="10,0,10,10" Grid.Row="1" Grid.Column="1" Content="{Binding MergeViewer}"></ContentControl>
+            <Panel Grid.Row="2" Grid.Column="1" IsVisible="{Binding !ReadOnly}">
+                <Button Content="{Binding Resolve}" Command="{Binding ResolveCommand}"
+                        VerticalAlignment="Bottom" HorizontalAlignment="Left"
+                        Margin="10,0,0,10" IsEnabled="{Binding ResolveEnabled}" IsVisible="{Binding IsConflictSolverAvailable}"></Button>
+            </Panel>
+            <StackPanel Grid.Row="2" Grid.Column="1" HorizontalAlignment="Center"
+                        Margin="0,0,0,10" VerticalAlignment="Bottom" Orientation="Horizontal">
+                <Panel IsVisible="{Binding !ReadOnly}" Margin="0,0,20,0">
+                    <Button Content="{Binding Ignore}" Command="{Binding IgnoreCommand}"
+                          IsEnabled="{Binding IgnoreEnabled}" IsVisible="{Binding IsConflictSolverAvailable}"></Button>
+                </Panel>
+                <Button Content="{Binding IgnoreRules}" Command="{Binding IgnoreRulesCommand}" Margin="20,0,0,0"></Button>
+            </StackPanel>
+            <Button Grid.Row="2" Grid.Column="1" Content="{Binding Back}" Command="{Binding BackCommand}"
+                    VerticalAlignment="Bottom" HorizontalAlignment="Right"
+                    Margin="0,0,20,10"></Button>
         </Grid>
-      </Panel>
-      <Panel Grid.Row="0" Grid.Column="1" Grid.RowSpan="2" IsVisible="{Binding !IsConflictSolverAvailable}">
-        <controls:TextBox TextWrapping="Wrap" Text="{Binding SelectedConflict.Key}" Margin="10,0,20,10"
-                 IsReadOnly="True" ScrollViewer.HorizontalScrollBarVisibility="Auto"></controls:TextBox>
-      </Panel>
-      <ContentControl IsVisible="{Binding IsBinaryViewerVisible}" Margin="10" Grid.Row="1" Grid.Column="1" Content="{Binding BinaryMergeViewer}"></ContentControl>
-      <ContentControl IsVisible="{Binding IsMergeViewerVisible}" Margin="10,0,10,10" Grid.Row="1" Grid.Column="1" Content="{Binding MergeViewer}"></ContentControl>
-      <Button Grid.Row="2" Grid.Column="1" Content="{Binding Resolve}" Command="{Binding ResolveCommand}"
-              VerticalAlignment="Bottom" HorizontalAlignment="Left"
-              Margin="10,0,0,10" IsEnabled="{Binding ResolveEnabled}" IsVisible="{Binding IsConflictSolverAvailable}"></Button>
-      <StackPanel Grid.Row="2" Grid.Column="1" HorizontalAlignment="Center"
-                  Margin="0,0,0,10" VerticalAlignment="Bottom" Orientation="Horizontal">
-        <Button Content="{Binding Ignore}" Command="{Binding IgnoreCommand}"
-              IsEnabled="{Binding IgnoreEnabled}" IsVisible="{Binding IsConflictSolverAvailable}" Margin="0,0,20,0"></Button>
-        <Button Content="{Binding IgnoreRules}" Command="{Binding IgnoreRulesCommand}" Margin="20,0,0,0"></Button>
-      </StackPanel>
-      <Button Grid.Row="2" Grid.Column="1" Content="{Binding Back}" Command="{Binding BackCommand}"
-              VerticalAlignment="Bottom" HorizontalAlignment="Right"
-              Margin="0,0,20,10"></Button>
-    </Grid>
-  </Panel>
+    </Panel>
 </UserControl>

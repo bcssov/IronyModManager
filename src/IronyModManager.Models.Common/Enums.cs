@@ -4,7 +4,7 @@
 // Created          : 03-01-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-27-2021
+// Last Modified On : 01-27-2022
 // ***********************************************************************
 // <copyright file="Enums.cs" company="Mario">
 //     Mario
@@ -66,6 +66,27 @@ namespace IronyModManager.Models.Common
         /// The mod override
         /// </summary>
         ModOverride
+    }
+
+    /// <summary>
+    /// Enum GameAdvancedFeatures
+    /// </summary>
+    public enum GameAdvancedFeatures
+    {
+        /// <summary>
+        /// The none
+        /// </summary>
+        None,
+
+        /// <summary>
+        /// The read only
+        /// </summary>
+        ReadOnly,
+
+        /// <summary>
+        /// The full
+        /// </summary>
+        Full
     }
 
     /// <summary>
@@ -149,6 +170,11 @@ namespace IronyModManager.Models.Common
         /// <summary>
         /// The advanced
         /// </summary>
-        Advanced
+        Advanced,
+
+        /// <summary>
+        /// The read only
+        /// </summary>
+        ReadOnly
     }
 }

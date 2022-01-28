@@ -4,7 +4,7 @@
 // Created          : 02-29-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 09-06-2021
+// Last Modified On : 01-28-2022
 // ***********************************************************************
 // <copyright file="ModHolderControlViewModel.cs" company="Mario">
 //     Mario
@@ -281,6 +281,12 @@ namespace IronyModManager.ViewModels.Controls
         public virtual ReactiveCommand<Unit, Unit> AdvancedModeCommand { get; protected set; }
 
         /// <summary>
+        /// Gets or sets a value indicating whether [advanced mode visible].
+        /// </summary>
+        /// <value><c>true</c> if [advanced mode visible]; otherwise, <c>false</c>.</value>
+        public virtual bool AdvancedModeVisible { get; protected set; }
+
+        /// <summary>
         /// Gets or sets a value indicating whether [allow mod selection].
         /// </summary>
         /// <value><c>true</c> if [allow mod selection]; otherwise, <c>false</c>.</value>
@@ -304,6 +310,19 @@ namespace IronyModManager.ViewModels.Controls
         /// </summary>
         /// <value>The analyze command.</value>
         public virtual ReactiveCommand<Unit, Unit> AnalyzeCommand { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets the analyze mode.
+        /// </summary>
+        /// <value>The analyze mode.</value>
+        [StaticLocalization(LocalizationResources.Conflict_Solver.Modes.Analyze)]
+        public virtual string AnalyzeMode { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets the analyze mode command.
+        /// </summary>
+        /// <value>The analyze mode command.</value>
+        public virtual ReactiveCommand<Unit, Unit> AnalyzeModeCommand { get; protected set; }
 
         /// <summary>
         /// Gets or sets the apply.
@@ -355,6 +374,12 @@ namespace IronyModManager.ViewModels.Controls
         /// </summary>
         /// <value>The default mode command.</value>
         public virtual ReactiveCommand<Unit, Unit> DefaultModeCommand { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether [default mode visible].
+        /// </summary>
+        /// <value><c>true</c> if [default mode visible]; otherwise, <c>false</c>.</value>
+        public virtual bool DefaultModeVisible { get; protected set; }
 
         /// <summary>
         /// Gets or sets the installed mods.
@@ -443,6 +468,10 @@ namespace IronyModManager.ViewModels.Controls
         protected virtual async Task AnalyzeModsAsync(long id, PatchStateMode mode, IEnumerable<string> versions)
         {
             var totalSteps = versions != null && versions.Any() ? 6 : 4;
+            if (mode == PatchStateMode.ReadOnly)
+            {
+                totalSteps--;
+            }
 
             SubscribeToProgressReport(id, Disposables, totalSteps);
 
@@ -492,22 +521,30 @@ namespace IronyModManager.ViewModels.Controls
                 }
                 return null;
             }).ConfigureAwait(false);
-            var syncedConflicts = await Task.Run(async () =>
+            if (mode != PatchStateMode.ReadOnly)
             {
-                var result = await modPatchCollectionService.InitializePatchStateAsync(conflicts, CollectionMods.SelectedModCollection.Name).ConfigureAwait(false);
-                // To stop people from whining
-                GC.Collect();
-                return result;
-            }).ConfigureAwait(false);
-            if (syncedConflicts != null)
+                var syncedConflicts = await Task.Run(async () =>
+                {
+                    var result = await modPatchCollectionService.InitializePatchStateAsync(conflicts, CollectionMods.SelectedModCollection.Name).ConfigureAwait(false);
+                    // To stop people from whining
+                    GC.Collect();
+                    return result;
+                }).ConfigureAwait(false);
+                if (syncedConflicts != null)
+                {
+                    conflicts = syncedConflicts;
+                }
+            }
+            else
             {
-                conflicts = syncedConflicts;
+                await modPatchCollectionService.SaveIgnoredPathsAsync(conflicts, CollectionMods.SelectedModCollection.Name);
+                conflicts.AllConflicts.InitSearch();
             }
             var args = new NavigationEventArgs()
             {
                 SelectedCollection = CollectionMods.SelectedModCollection,
                 Results = conflicts,
-                State = NavigationState.ConflictSolver,
+                State = mode == PatchStateMode.ReadOnly ? NavigationState.ReadOnlyConflictSolver : NavigationState.ConflictSolver,
                 SelectedMods = CollectionMods.SelectedMods.Select(p => p.Name).ToList()
             };
             ReactiveUI.MessageBus.Current.SendMessage(args);
@@ -527,6 +564,7 @@ namespace IronyModManager.ViewModels.Controls
         /// </summary>
         /// <param name="id">The identifier.</param>
         /// <param name="showOverlay">if set to <c>true</c> [show overlay].</param>
+        /// <returns>A Task representing the asynchronous operation.</returns>
         protected virtual async Task ApplyCollectionAsync(long id, bool showOverlay = true)
         {
             if (ApplyingCollection)
@@ -597,6 +635,7 @@ namespace IronyModManager.ViewModels.Controls
         /// <summary>
         /// eval resume availability loop as an asynchronous operation.
         /// </summary>
+        /// <returns>A Task representing the asynchronous operation.</returns>
         protected virtual async Task EvalResumeAvailabilityLoopAsync()
         {
             while (true)
@@ -610,6 +649,7 @@ namespace IronyModManager.ViewModels.Controls
         /// install mods as an asynchronous operation.
         /// </summary>
         /// <param name="skipOverlay">if set to <c>true</c> [skip overlay].</param>
+        /// <returns>A Task representing the asynchronous operation.</returns>
         protected virtual async Task InstallModsAsync(bool skipOverlay = false)
         {
             var result = await modService.InstallModsAsync(InstalledMods.Mods);
@@ -635,9 +675,34 @@ namespace IronyModManager.ViewModels.Controls
         /// <param name="disposables">The disposables.</param>
         protected override void OnActivated(CompositeDisposable disposables)
         {
+            async Task runAnalysis(PatchStateMode mode)
+            {
+                var id = idGenerator.GetNextId();
+                await TriggerOverlayAsync(id, true, localizationManager.GetResource(LocalizationResources.App.WaitBackgroundOperationMessage));
+                var game = gameService.GetSelected();
+                var versions = gameService.GetVersions(game);
+                var hasGameDefinitions = await modPatchCollectionService.PatchHasGameDefinitionsAsync(CollectionMods.SelectedModCollection.Name);
+                var shouldAnalyzePatchState = versions != null && versions.Any();
+                var proceed = true;
+                if (hasGameDefinitions && !shouldAnalyzePatchState)
+                {
+                    var title = localizationManager.GetResource(LocalizationResources.Mod_Actions.ConflictSolver.GameExecutableNotSetPrompt.Title);
+                    var message = localizationManager.GetResource(LocalizationResources.Mod_Actions.ConflictSolver.GameExecutableNotSetPrompt.Message);
+                    proceed = await notificationAction.ShowPromptAsync(title, title, message, NotificationType.Info, PromptType.YesNo);
+                }
+                if (proceed)
+                {
+                    await AnalyzeModsAsync(id, mode, versions);
+                }
+                else
+                {
+                    await TriggerOverlayAsync(id, false);
+                }
+            }
+
             Task.Run(() => EvalResumeAvailabilityLoopAsync().ConfigureAwait(false));
 
-            ShowAdvancedFeatures = (gameService.GetSelected()?.AdvancedFeaturesSupported).GetValueOrDefault();
+            ShowAdvancedFeatures = (gameService.GetSelected()?.AdvancedFeatures) == GameAdvancedFeatures.Full;
             AnalyzeClass = string.Empty;
 
             var allowModSelectionEnabled = this.WhenAnyValue(v => v.AllowModSelection);
@@ -710,32 +775,26 @@ namespace IronyModManager.ViewModels.Controls
                     modPatchCollectionService.ResetPatchStateCache();
                     var mode = await modPatchCollectionService.GetPatchStateModeAsync(CollectionMods.SelectedModCollection.Name);
                     var versions = gameService.GetVersions(game);
-                    if (mode == PatchStateMode.None)
+                    switch (mode)
                     {
-                        await TriggerOverlayAsync(id, false);
-                        await Task.Delay(50);
-                        IsModeOpen = true;
+                        case PatchStateMode.Default:
+                            AdvancedModeVisible = false;
+                            DefaultModeVisible = true;
+                            break;
+
+                        case PatchStateMode.Advanced:
+                            AdvancedModeVisible = true;
+                            DefaultModeVisible = false;
+                            break;
+
+                        default:
+                            AdvancedModeVisible = true;
+                            DefaultModeVisible = true;
+                            break;
                     }
-                    else
-                    {
-                        var hasGameDefinitions = await modPatchCollectionService.PatchHasGameDefinitionsAsync(CollectionMods.SelectedModCollection.Name);
-                        var shouldAnalyzePatchState = versions != null && versions.Any();
-                        var proceed = true;
-                        if (hasGameDefinitions && !shouldAnalyzePatchState)
-                        {
-                            var title = localizationManager.GetResource(LocalizationResources.Mod_Actions.ConflictSolver.GameExecutableNotSetPrompt.Title);
-                            var message = localizationManager.GetResource(LocalizationResources.Mod_Actions.ConflictSolver.GameExecutableNotSetPrompt.Message);
-                            proceed = await notificationAction.ShowPromptAsync(title, title, message, NotificationType.Info, PromptType.YesNo);
-                        }
-                        if (proceed)
-                        {
-                            await AnalyzeModsAsync(id, mode, versions);
-                        }
-                        else
-                        {
-                            await TriggerOverlayAsync(id, false);
-                        }
-                    }
+                    await TriggerOverlayAsync(id, false);
+                    await Task.Delay(50);
+                    IsModeOpen = true;
                 }
             }, allowModSelectionEnabled).DisposeWith(disposables);
 
@@ -751,7 +810,7 @@ namespace IronyModManager.ViewModels.Controls
                         var attempts = 0;
                         while (!processes.Any(p => p.ProcessName.Equals(SteamProcess, StringComparison.OrdinalIgnoreCase)))
                         {
-                            if (attempts > 3)
+                            if (attempts > 5)
                             {
                                 break;
                             }
@@ -837,18 +896,19 @@ namespace IronyModManager.ViewModels.Controls
                 await launchGame(true);
             }, allowModSelectionEnabled).DisposeWith(disposables);
 
-            AdvancedModeCommand = ReactiveCommand.CreateFromTask(async () =>
+            AdvancedModeCommand = ReactiveCommand.CreateFromTask(() =>
             {
-                var game = gameService.GetSelected();
-                var versions = gameService.GetVersions(game);
-                await AnalyzeModsAsync(idGenerator.GetNextId(), PatchStateMode.Advanced, versions);
+                return runAnalysis(PatchStateMode.Advanced);
             }).DisposeWith(disposables);
 
-            DefaultModeCommand = ReactiveCommand.CreateFromTask(async () =>
+            DefaultModeCommand = ReactiveCommand.CreateFromTask(() =>
             {
-                var game = gameService.GetSelected();
-                var versions = gameService.GetVersions(game);
-                await AnalyzeModsAsync(idGenerator.GetNextId(), PatchStateMode.Default, versions);
+                return runAnalysis(PatchStateMode.Default);
+            }).DisposeWith(disposables);
+
+            AnalyzeModeCommand = ReactiveCommand.CreateFromTask(() =>
+            {
+                return runAnalysis(PatchStateMode.ReadOnly);
             }).DisposeWith(disposables);
 
             CloseModeCommand = ReactiveCommand.Create(() =>
@@ -899,7 +959,7 @@ namespace IronyModManager.ViewModels.Controls
         {
             forceEnableResumeButton = false;
             EvalResumeAvailability(game);
-            ShowAdvancedFeatures = (game?.AdvancedFeaturesSupported).GetValueOrDefault();
+            ShowAdvancedFeatures = (game?.AdvancedFeatures) == GameAdvancedFeatures.Full;
             base.OnSelectedGameChanged(game);
         }
 
@@ -929,6 +989,10 @@ namespace IronyModManager.ViewModels.Controls
         /// <param name="totalSteps">The total steps.</param>
         private void SubscribeToProgressReport(long id, CompositeDisposable disposables, int totalSteps)
         {
+            int calcTotalSteps(int desired)
+            {
+                return totalSteps == 5 ? desired - 1 : desired;
+            }
             definitionLoadHandler?.Dispose();
             definitionLoadHandler = modDefinitionLoadHandler.Subscribe(s =>
             {
@@ -988,7 +1052,7 @@ namespace IronyModManager.ViewModels.Controls
                 var overlayProgress = Smart.Format(localizationManager.GetResource(LocalizationResources.Mod_Actions.ConflictSolver.Overlay_Conflict_Solver_Progress), new
                 {
                     PercentDone = s.Percentage.ToLocalizedPercentage(),
-                    Count = totalSteps == 6 ? 5 : 3,
+                    Count = totalSteps >= 5 ? calcTotalSteps(5) : calcTotalSteps(3),
                     TotalCount = totalSteps
                 });
                 TriggerOverlay(id, true, message, overlayProgress);
@@ -1001,7 +1065,7 @@ namespace IronyModManager.ViewModels.Controls
                 var overlayProgress = Smart.Format(localizationManager.GetResource(LocalizationResources.Mod_Actions.ConflictSolver.Overlay_Conflict_Solver_Progress), new
                 {
                     PercentDone = s.Percentage.ToLocalizedPercentage(),
-                    Count = totalSteps == 6 ? 6 : 4,
+                    Count = totalSteps >= 5 ? calcTotalSteps(6) : calcTotalSteps(4),
                     TotalCount = totalSteps
                 });
                 TriggerOverlay(id, true, message, overlayProgress);

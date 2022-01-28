@@ -328,6 +328,7 @@
             "Title": "Odaberi način rada",
             "Default": "Zadano",
             "Advanced": "Napredno",
+            "Analyze": "Samo analiziraj",
             "Close": "Zatvori"
         },
         "ModFilter": {

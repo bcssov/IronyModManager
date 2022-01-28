@@ -4,7 +4,7 @@
 // Created          : 01-11-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 09-12-2021
+// Last Modified On : 01-27-2022
 // ***********************************************************************
 // <copyright file="Storage.cs" company="Mario">
 //     Mario
@@ -189,7 +189,7 @@ namespace IronyModManager.Storage
         /// </summary>
         /// <param name="gameType">Type of the game.</param>
         /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
-        /// <exception cref="InvalidOperationException"></exception>
+        /// <exception cref="System.InvalidOperationException"></exception>
         public virtual bool RegisterGame(IGameType gameType)
         {
             lock (dbLock)
@@ -211,7 +211,7 @@ namespace IronyModManager.Storage
                 game.ExecutableArgs = gameType.ExecutableArgs ?? string.Empty;
                 game.LauncherSettingsFileName = gameType.LauncherSettingsFileName ?? string.Empty;
                 game.LauncherSettingsPrefix = gameType.LauncherSettingsPrefix ?? string.Empty;
-                game.AdvancedFeaturesSupported = gameType.AdvancedFeaturesSupported;
+                game.AdvancedFeatures = gameType.AdvancedFeatures;
                 game.ParadoxGameId = gameType.ParadoxGameId;
                 game.RemoteSteamUserDirectory = gameType.RemoteSteamUserDirectory ?? new List<string>();
                 game.Abrv = gameType.Abrv ?? string.Empty;
@@ -226,7 +226,7 @@ namespace IronyModManager.Storage
         /// </summary>
         /// <param name="notificationPosition">The notification position.</param>
         /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
-        /// <exception cref="InvalidOperationException">Notification position is null or already registered.</exception>
+        /// <exception cref="System.InvalidOperationException">Notification position is null or already registered.</exception>
         public virtual bool RegisterNotificationPosition(INotificationPositionType notificationPosition)
         {
             lock (dbLock)
@@ -249,8 +249,8 @@ namespace IronyModManager.Storage
         /// <param name="name">The name.</param>
         /// <param name="isDefault">if set to <c>true</c> [is default].</param>
         /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
-        /// <exception cref="InvalidOperationException">There is already a default theme registered.</exception>
-        /// <exception cref="InvalidOperationException"></exception>
+        /// <exception cref="System.InvalidOperationException">There is already a default theme registered.</exception>
+        /// <exception cref="System.InvalidOperationException"></exception>
         public virtual bool RegisterTheme(string name, bool isDefault = false)
         {
             lock (dbLock)

@@ -4,7 +4,7 @@
 // Created          : 05-26-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 08-23-2021
+// Last Modified On : 01-28-2022
 // ***********************************************************************
 // <copyright file="ModPatchCollectionServiceTests.cs" company="Mario">
 //     Mario
@@ -65,6 +65,7 @@ namespace IronyModManager.Services.Tests
         /// <param name="gameService">The game service.</param>
         /// <param name="modPatchExporter">The mod patch exporter.</param>
         /// <param name="definitionInfoProviders">The definition information providers.</param>
+        /// <param name="validateParser">The validate parser.</param>
         /// <returns>ModService.</returns>
         private static ModPatchCollectionService GetService(Mock<IStorageProvider> storageProvider, Mock<IModParser> modParser,
             Mock<IParserManager> parserManager, Mock<IReader> reader, Mock<IMapper> mapper, Mock<IModWriter> modWriter,
@@ -1421,6 +1422,104 @@ namespace IronyModManager.Services.Tests
             result.ResolvedConflicts.GetAll().Count().Should().Be(0);
         }
 
+
+        /// <summary>
+        /// Defines the test method Should_not_initialize_patch_state_when_readonly_mode.
+        /// </summary>
+        [Fact]
+        public async Task Should_not_initialize_patch_state_when_readonly_mode()
+        {
+            DISetup.SetupContainer();
+
+            var storageProvider = new Mock<IStorageProvider>();
+            var modParser = new Mock<IModParser>();
+            var parserManager = new Mock<IParserManager>();
+            var reader = new Mock<IReader>();
+            var modWriter = new Mock<IModWriter>();
+            var gameService = new Mock<IGameService>();
+            var mapper = new Mock<IMapper>();
+            var modPatchExporter = new Mock<IModPatchExporter>();
+            gameService.Setup(p => p.GetSelected()).Returns(new Game()
+            {
+                Type = "Should_not_initialize_patch_state_when_readonly_mode",
+                UserDirectory = "C:\\Users\\Fake"
+            });
+            mapper.Setup(s => s.Map<IConflictResult>(It.IsAny<IConflictResult>())).Returns((IConflictResult o) =>
+            {
+                return new ConflictResult()
+                {
+                    AllConflicts = o.Conflicts,
+                    Conflicts = o.Conflicts,
+                    ResolvedConflicts = o.ResolvedConflicts,
+                    OverwrittenConflicts = o.OverwrittenConflicts,
+                    Mode = IronyModManager.Models.Common.PatchStateMode.ReadOnly
+                };
+            });
+            var definitions = new List<IDefinition>()
+            {
+                new Definition()
+                {
+                    File = "events\\1.txt",
+                    Code = "a",
+                    Id = "a",
+                    Type= "events",
+                    ModName = "test1",
+                    ValueType = ValueType.Object
+                },
+                new Definition()
+                {
+                    File = "events\\2.txt",
+                    Code = "b",
+                    Type = "events",
+                    Id = "a",
+                    ModName = "test2",
+                    ValueType = ValueType.Object
+                },
+            };
+            modPatchExporter.Setup(p => p.GetPatchStateAsync(It.IsAny<ModPatchExporterParameters>(), It.IsAny<bool>())).ReturnsAsync((ModPatchExporterParameters p, bool load) =>
+            {
+                var res = new PatchState()
+                {
+                    Conflicts = definitions,
+                    ResolvedConflicts = definitions,
+                    OverwrittenConflicts = new List<IDefinition>()
+                };
+                return res;
+            });
+            modWriter.Setup(p => p.PurgeModDirectoryAsync(It.IsAny<ModWriterParameters>(), It.IsAny<bool>())).Returns(Task.FromResult(true));
+
+            var all = new IndexedDefinitions();
+            all.InitMap(definitions);
+
+            var conflicts = new IndexedDefinitions();
+            conflicts.InitMap(definitions);
+
+            var overwritten = new IndexedDefinitions();
+            overwritten.InitMap(new List<IDefinition>());
+
+            var resolved = new IndexedDefinitions();
+            resolved.InitMap(new List<IDefinition>());
+
+            var c = new ConflictResult()
+            {
+                AllConflicts = all,
+                Conflicts = conflicts,
+                OverwrittenConflicts = overwritten,
+                Mode = IronyModManager.Models.Common.PatchStateMode.ReadOnly
+            };
+            var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter);
+            var exceptionThrown = false;
+            try
+            {
+                var result = await service.InitializePatchStateAsync(c, "fake");
+            }
+            catch (Exception ex)
+            {
+                ex.GetType().Should().Be(typeof(ArgumentException));
+                exceptionThrown = true;
+            }
+            exceptionThrown.Should().BeTrue();
+        }
 
         /// <summary>
         /// Defines the test method Should_not_be_a_patch_mod.
@@ -2794,6 +2893,64 @@ namespace IronyModManager.Services.Tests
         }
 
         /// <summary>
+        /// Defines the test method SaveIgnoredPathsAsync_should_be_false_when_readonly_mode.
+        /// </summary>
+        [Fact]
+        public async Task SaveIgnoredPathsAsync_should_be_true_when_readonly_mode()
+        {
+            DISetup.SetupContainer();
+
+            var storageProvider = new Mock<IStorageProvider>();
+            var modParser = new Mock<IModParser>();
+            var parserManager = new Mock<IParserManager>();
+            var reader = new Mock<IReader>();
+            var modWriter = new Mock<IModWriter>();
+            var gameService = new Mock<IGameService>();
+            var mapper = new Mock<IMapper>();
+            var modPatchExporter = new Mock<IModPatchExporter>();
+            SetupMockCase(reader, parserManager, modParser);
+            gameService.Setup(p => p.GetSelected()).Returns(new Game()
+            {
+                Type = "SaveIgnoredPathsAsync_should_be_false_when_readonly_mode",
+                UserDirectory = "C:\\Users\\Fake",
+                WorkshopDirectory = new List<string>() { "C:\\Fake" },
+                CustomModDirectory = string.Empty
+            });
+            modPatchExporter.Setup(p => p.SaveStateAsync(It.IsAny<ModPatchExporterParameters>())).Returns(Task.FromResult(true));
+            mapper.Setup(s => s.Map<IMod>(It.IsAny<IModObject>())).Returns((IModObject o) =>
+            {
+                return new Mod()
+                {
+                    FileName = o.FileName,
+                    Name = o.Name
+                };
+            });
+            var collections = new List<IModCollection>()
+            {
+                new ModCollection()
+                {
+                    IsSelected = true,
+                    Mods = new List<string>() { "mod/fake1.txt", "mod/fake2.txt"},
+                    Name = "test",
+                    Game = "SaveIgnoredPathsAsync_should_be_false"
+                }
+            };
+            storageProvider.Setup(s => s.GetModCollections()).Returns(() =>
+            {
+                return collections;
+            });
+            modWriter.Setup(p => p.ModDirectoryExists(It.IsAny<ModWriterParameters>())).Returns((ModWriterParameters p) =>
+            {
+                return false;
+            });
+            var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter, null);
+
+            var indexed = new IndexedDefinitions();
+            var result = await service.SaveIgnoredPathsAsync(new ConflictResult() { AllConflicts = indexed, Conflicts = indexed, Mode = IronyModManager.Models.Common.PatchStateMode.ReadOnly }, "test");
+            result.Should().BeTrue();
+        }
+
+        /// <summary>
         /// Defines the test method CopyPatchMod_should_be_false_when_no_game.
         /// </summary>
         [Fact]
@@ -3709,6 +3866,122 @@ namespace IronyModManager.Services.Tests
         }
 
         /// <summary>
+        /// Defines the test method Should_throw_exception_when_applying_custom_patches_due_to_readonly_mode.
+        /// </summary>
+        [Fact]
+        public async Task Should_throw_exception_when_applying_custom_patches_due_to_readonly_mode()
+        {
+            DISetup.SetupContainer();
+
+            var storageProvider = new Mock<IStorageProvider>();
+            var modParser = new Mock<IModParser>();
+            var parserManager = new Mock<IParserManager>();
+            var reader = new Mock<IReader>();
+            var modWriter = new Mock<IModWriter>();
+            var gameService = new Mock<IGameService>();
+            var mapper = new Mock<IMapper>();
+            var modPatchExporter = new Mock<IModPatchExporter>();
+            SetupMockCase(reader, parserManager, modParser);
+            gameService.Setup(p => p.GetSelected()).Returns(new Game()
+            {
+                Type = "Should_throw_exception_when_applying_custom_patches_due_to_readonly_mode",
+                UserDirectory = "C:\\Users\\Fake",
+                WorkshopDirectory = new List<string>() { "C:\\fake" },
+                CustomModDirectory = string.Empty
+            });
+            mapper.Setup(s => s.Map<IMod>(It.IsAny<IModObject>())).Returns((IModObject o) =>
+            {
+                return new Mod()
+                {
+                    FileName = o.FileName,
+                    Name = o.Name
+                };
+            });
+            var collections = new List<IModCollection>()
+            {
+                new ModCollection()
+                {
+                    IsSelected = true,
+                    Mods = new List<string>() { "mod/fake1.txt", "mod/fake2.txt"},
+                    Name = "test",
+                    Game = "Should_return_true_when_applying_custom_patches"
+                }
+            };
+            storageProvider.Setup(s => s.GetModCollections()).Returns(() =>
+            {
+                return collections;
+            });
+            modWriter.Setup(p => p.CreateModDirectoryAsync(It.IsAny<ModWriterParameters>())).Returns(Task.FromResult(true));
+            modWriter.Setup(p => p.WriteDescriptorAsync(It.IsAny<ModWriterParameters>(), It.IsAny<bool>())).Returns(Task.FromResult(true));
+            modPatchExporter.Setup(p => p.SaveStateAsync(It.IsAny<ModPatchExporterParameters>())).Returns(Task.FromResult(true));
+            modWriter.Setup(p => p.PurgeModDirectoryAsync(It.IsAny<ModWriterParameters>(), It.IsAny<bool>())).Returns(Task.FromResult(true));
+            modPatchExporter.Setup(p => p.ExportDefinitionAsync(It.IsAny<ModPatchExporterParameters>())).ReturnsAsync((ModPatchExporterParameters p) =>
+            {
+                if (p.CustomConflicts.Any())
+                {
+                    return true;
+                }
+                return false;
+            });
+            modWriter.Setup(p => p.ModDirectoryExists(It.IsAny<ModWriterParameters>())).Returns((ModWriterParameters p) =>
+            {
+                return false;
+            });
+
+            var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter);
+            var definitions = new List<IDefinition>()
+            {
+                new Definition()
+                {
+                    File = "events\\1.txt",
+                    Code = "a",
+                    Id = "a",
+                    Type= "events",
+                    ModName = "test1",
+                    ValueType = ValueType.Object
+                },
+                new Definition()
+                {
+                    File = "events\\2.txt",
+                    Code = "b",
+                    Type = "events",
+                    Id = "a",
+                    ModName = "test2",
+                    ValueType = ValueType.Object
+                },
+            };
+            var all = new IndexedDefinitions();
+            all.InitMap(definitions);
+
+            var resolved = new IndexedDefinitions();
+            resolved.InitMap(new List<IDefinition>());
+
+            var custom = new IndexedDefinitions();
+            custom.InitMap(new List<IDefinition>());
+
+            var c = new ConflictResult()
+            {
+                AllConflicts = all,
+                Conflicts = all,
+                ResolvedConflicts = resolved,
+                CustomConflicts = custom,
+                OverwrittenConflicts = custom,
+                Mode = IronyModManager.Models.Common.PatchStateMode.ReadOnly
+            };
+            var exceptionThrown = false;
+            try
+            {
+                var result = await service.AddCustomModPatchAsync(c, new Definition() { ModName = "1" }, "colname");
+            }
+            catch (Exception ex)
+            {
+                ex.GetType().Should().Be(typeof(ArgumentException));
+                exceptionThrown = true;
+            }
+            exceptionThrown.Should().BeTrue();
+        }
+
+        /// <summary>
         /// Defines the test method Should_reset_custom_conflict.
         /// </summary>
         [Fact]
@@ -3748,6 +4021,58 @@ namespace IronyModManager.Services.Tests
             };
             var result = await service.ResetCustomConflictAsync(c, "test-1", "fake");
             result.Should().BeTrue();
+        }
+
+        /// <summary>
+        /// Defines the test method Should_not_reset_custom_conflict_due_to_readonly_mode.
+        /// </summary>
+        [Fact]
+        public async Task Should_not_reset_custom_conflict_due_to_readonly_mode()
+        {
+            var storageProvider = new Mock<IStorageProvider>();
+            var modParser = new Mock<IModParser>();
+            var parserManager = new Mock<IParserManager>();
+            var reader = new Mock<IReader>();
+            var modWriter = new Mock<IModWriter>();
+            var gameService = new Mock<IGameService>();
+            var mapper = new Mock<IMapper>();
+            var modPatchExporter = new Mock<IModPatchExporter>();
+            gameService.Setup(p => p.GetSelected()).Returns(new Game()
+            {
+                Type = "Should_reset_custom_conflict",
+                UserDirectory = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "mod"),
+                WorkshopDirectory = new List<string>() { "C:\\fake" }
+            });
+            var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter);
+
+            var custom = new IndexedDefinitions();
+            custom.InitMap(new List<IDefinition>()
+            {
+                new Definition()
+                {
+                    Type = "test",
+                    Id = "1",
+                    ModName = "test"
+                }
+            });
+
+            var c = new ConflictResult()
+            {
+                AllConflicts = new IndexedDefinitions(),
+                CustomConflicts = custom,
+                Mode = IronyModManager.Models.Common.PatchStateMode.ReadOnly
+            };
+            var exceptionThrown = false;
+            try
+            {
+                var result = await service.ResetCustomConflictAsync(c, "test-1", "fake");
+            }
+            catch (Exception ex)
+            {
+                ex.GetType().Should().Be(typeof(ArgumentException));
+                exceptionThrown = true;
+            }
+            exceptionThrown.Should().BeTrue();
         }
 
         /// <summary>

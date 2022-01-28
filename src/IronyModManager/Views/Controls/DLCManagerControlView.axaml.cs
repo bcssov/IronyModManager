@@ -4,13 +4,14 @@
 // Created          : 02-15-2021
 //
 // Last Modified By : Mario
-// Last Modified On : 03-10-2021
+// Last Modified On : 01-27-2022
 // ***********************************************************************
 // <copyright file="DLCManagerControlView.axaml.cs" company="Mario">
 //     Mario
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
+using System;
 using System.Reactive.Disposables;
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
@@ -29,6 +30,15 @@ namespace IronyModManager.Views.Controls
     [ExcludeFromCoverage("This should be tested via functional testing.")]
     public class DLCManagerControlView : BaseControl<DLCManagerControlViewModel>
     {
+        #region Fields
+
+        /// <summary>
+        /// The popup
+        /// </summary>
+        private Popup popup;
+
+        #endregion Fields
+
         #region Constructors
 
         /// <summary>
@@ -37,6 +47,7 @@ namespace IronyModManager.Views.Controls
         public DLCManagerControlView()
         {
             InitializeComponent();
+            LayoutUpdated += DLCManagerControlView_LayoutUpdated;
         }
 
         #endregion Constructors
@@ -49,20 +60,26 @@ namespace IronyModManager.Views.Controls
         /// <param name="disposables">The disposables.</param>
         protected override void OnActivated(CompositeDisposable disposables)
         {
-            var popup = this.FindControl<Popup>("popup");
+            popup = this.FindControl<Popup>("popup");
+            UpdateOffsets();
             popup.Closed += (sender, args) =>
             {
                 ViewModel.ForceClose();
             };
-            popup.Opened += (sender, args) =>
-            {
-                var window = Helpers.GetMainWindow();
-                var verticalOffset = window.Bounds.Height / 2;
-                popup.Host.ConfigurePosition(window, popup.PlacementMode, new Avalonia.Point(popup.HorizontalOffset, verticalOffset),
-                   Avalonia.Controls.Primitives.PopupPositioning.PopupAnchor.Top, Avalonia.Controls.Primitives.PopupPositioning.PopupGravity.None);
-            };
-
             base.OnActivated(disposables);
+        }
+
+        /// <summary>
+        /// Handles the LayoutUpdated event of the DLCManagerControlView control.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="System.EventArgs" /> instance containing the event data.</param>
+        private void DLCManagerControlView_LayoutUpdated(object sender, System.EventArgs e)
+        {
+            if (popup != null)
+            {
+                UpdateOffsets();
+            }
         }
 
         /// <summary>
@@ -71,6 +88,18 @@ namespace IronyModManager.Views.Controls
         private void InitializeComponent()
         {
             AvaloniaXamlLoader.Load(this);
+        }
+
+        /// <summary>
+        /// Updates the offsets.
+        /// </summary>
+        private void UpdateOffsets()
+        {
+            var window = Helpers.GetMainWindow();
+            var verticalOffset = Helpers.CalculatePopupCenterPosition(400, window.Bounds.Height, 200);
+            var horizontalOffset = Helpers.CalculatePopupCenterPosition(600, window.Bounds.Width, 100);
+            popup.VerticalOffset = verticalOffset;
+            popup.HorizontalOffset = horizontalOffset;
         }
 
         #endregion Methods

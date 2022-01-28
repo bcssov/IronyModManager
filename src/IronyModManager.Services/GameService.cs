@@ -4,7 +4,7 @@
 // Created          : 02-12-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 09-12-2021
+// Last Modified On : 01-27-2022
 // ***********************************************************************
 // <copyright file="GameService.cs" company="Mario">
 //     Mario
@@ -425,7 +425,7 @@ namespace IronyModManager.Services
         /// </summary>
         /// <param name="game">The game.</param>
         /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
-        /// <exception cref="InvalidOperationException">Game not selected</exception>
+        /// <exception cref="System.InvalidOperationException">Game not selected</exception>
         public virtual bool Save(IGame game)
         {
             if (!game.IsSelected)
@@ -445,7 +445,7 @@ namespace IronyModManager.Services
         /// <param name="games">The games.</param>
         /// <param name="selectedGame">The selected game.</param>
         /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
-        /// <exception cref="ArgumentNullException"></exception>
+        /// <exception cref="System.ArgumentNullException"></exception>
         public virtual bool SetSelected(IEnumerable<IGame> games, IGame selectedGame)
         {
             if (games == null || !games.Any() || selectedGame == null)
@@ -513,7 +513,7 @@ namespace IronyModManager.Services
             game.DLCContainer = gameType.DLCContainer;
             game.GameFolders = gameType.GameFolders ?? new List<string>();
             game.BaseSteamGameDirectory = gameType.BaseSteamGameDirectory;
-            game.AdvancedFeaturesSupported = gameType.AdvancedFeaturesSupported;
+            game.AdvancedFeatures = gameType.AdvancedFeatures;
             game.ParadoxGameId = gameType.ParadoxGameId;
             game.LauncherSettingsFileName = gameType.LauncherSettingsFileName;
             game.LauncherSettingsPrefix = gameType.LauncherSettingsPrefix;
