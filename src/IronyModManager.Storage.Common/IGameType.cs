@@ -4,7 +4,7 @@
 // Created          : 02-12-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 01-27-2022
+// Last Modified On : 01-28-2022
 // ***********************************************************************
 // <copyright file="IGameType.cs" company="Mario">
 //     Mario
@@ -71,6 +71,12 @@ namespace IronyModManager.Storage.Common
         /// </summary>
         /// <value>The game folders.</value>
         IEnumerable<string> GameFolders { get; set; }
+
+        /// <summary>
+        /// Gets or sets the game index cache version.
+        /// </summary>
+        /// <value>The game index cache version.</value>
+        int GameIndexCacheVersion { get; set; }
 
         /// <summary>
         /// Gets or sets the name of the launcher settings file.

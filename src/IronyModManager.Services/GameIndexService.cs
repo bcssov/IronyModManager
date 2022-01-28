@@ -4,7 +4,7 @@
 // Created          : 05-27-2021
 //
 // Last Modified By : Mario
-// Last Modified On : 12-07-2021
+// Last Modified On : 01-28-2022
 // ***********************************************************************
 // <copyright file="GameIndexService.cs" company="Mario">
 //     Mario
@@ -51,11 +51,6 @@ namespace IronyModManager.Services
         /// The service lock
         /// </summary>
         private static readonly AsyncLock asyncServiceLock = new();
-
-        /// <summary>
-        /// The current cache version
-        /// </summary>
-        private readonly int CurrentCacheVersion = 5;
 
         /// <summary>
         /// The game indexer
@@ -115,10 +110,10 @@ namespace IronyModManager.Services
             if (game != null && versions != null && versions.Any())
             {
                 await messageBus.PublishAsync(new GameIndexProgressEvent(0));
-                if (!await gameIndexer.GameVersionsSameAsync(GetStoragePath(), game, versions) || !await gameIndexer.CachedDefinitionsSameAsync(GetStoragePath(), game, CurrentCacheVersion))
+                if (!await gameIndexer.GameVersionsSameAsync(GetStoragePath(), game, versions) || !await gameIndexer.CachedDefinitionsSameAsync(GetStoragePath(), game, game.GameIndexCacheVersion))
                 {
                     await gameIndexer.ClearDefinitionAsync(GetStoragePath(), game);
-                    await gameIndexer.WriteVersionAsync(GetStoragePath(), game, versions, CurrentCacheVersion);
+                    await gameIndexer.WriteVersionAsync(GetStoragePath(), game, versions, game.GameIndexCacheVersion);
                 }
                 var gamePath = pathResolver.GetPath(game);
                 var files = Reader.GetFiles(gamePath);

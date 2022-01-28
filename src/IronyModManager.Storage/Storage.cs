@@ -4,7 +4,7 @@
 // Created          : 01-11-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 01-27-2022
+// Last Modified On : 01-28-2022
 // ***********************************************************************
 // <copyright file="Storage.cs" company="Mario">
 //     Mario
@@ -212,6 +212,7 @@ namespace IronyModManager.Storage
                 game.LauncherSettingsFileName = gameType.LauncherSettingsFileName ?? string.Empty;
                 game.LauncherSettingsPrefix = gameType.LauncherSettingsPrefix ?? string.Empty;
                 game.AdvancedFeatures = gameType.AdvancedFeatures;
+                game.GameIndexCacheVersion = gameType.GameIndexCacheVersion;
                 game.ParadoxGameId = gameType.ParadoxGameId;
                 game.RemoteSteamUserDirectory = gameType.RemoteSteamUserDirectory ?? new List<string>();
                 game.Abrv = gameType.Abrv ?? string.Empty;
