@@ -154,6 +154,7 @@
             "ImportOverlay": "正在验证……",
             "ProgressExport": "{Progress}",
             "ProgressImport": "步骤 {Count}/{TotalCount}：{Progress}",
+            "Export": "导出",
             "Close": "关闭"
         },
         "JumpOnDragAndDrop": {

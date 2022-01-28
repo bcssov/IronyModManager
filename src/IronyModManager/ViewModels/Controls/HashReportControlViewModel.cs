@@ -4,7 +4,7 @@
 // Created          : 10-01-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-27-2021
+// Last Modified On : 01-28-2022
 // ***********************************************************************
 // <copyright file="HashReportControlViewModel.cs" company="Mario">
 //     Mario
@@ -16,7 +16,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reactive;
 using System.Reactive.Disposables;
+using System.Text;
 using IronyModManager.Common.ViewModels;
+using IronyModManager.Implementation.Actions;
 using IronyModManager.Localization.Attributes;
 using IronyModManager.Models.Common;
 using IronyModManager.Shared;
@@ -32,6 +34,28 @@ namespace IronyModManager.ViewModels.Controls
     [ExcludeFromCoverage("This should be tested via functional testing.")]
     public class HashReportControlViewModel : BaseViewModel
     {
+        #region Fields
+
+        /// <summary>
+        /// The application action
+        /// </summary>
+        private readonly IAppAction appAction;
+
+        #endregion Fields
+
+        #region Constructors
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="HashReportControlViewModel" /> class.
+        /// </summary>
+        /// <param name="appAction">The application action.</param>
+        public HashReportControlViewModel(IAppAction appAction)
+        {
+            this.appAction = appAction;
+        }
+
+        #endregion Constructors
+
         #region Properties
 
         /// <summary>
@@ -46,6 +70,19 @@ namespace IronyModManager.ViewModels.Controls
         /// </summary>
         /// <value>The close command.</value>
         public virtual ReactiveCommand<Unit, Unit> CloseCommand { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets the export.
+        /// </summary>
+        /// <value>The export.</value>
+        [StaticLocalization(LocalizationResources.Collection_Mods.FileHash.Export)]
+        public virtual string Export { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets the export command.
+        /// </summary>
+        /// <value>The export command.</value>
+        public virtual ReactiveCommand<Unit, Unit> ExportCommand { get; protected set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether this instance is open.
@@ -110,6 +147,21 @@ namespace IronyModManager.ViewModels.Controls
             CloseCommand = ReactiveCommand.Create(() =>
             {
                 IsOpen = false;
+            }).DisposeWith(disposables);
+
+            ExportCommand = ReactiveCommand.CreateFromTask(async () =>
+            {
+                var sb = new StringBuilder();
+                foreach (var report in Reports)
+                {
+                    sb.AppendLine(report.Name);
+                    foreach (var childReports in report.Reports)
+                    {
+                        sb.AppendLine($"{new(' ', 4)}{childReports.Display}");
+                    }
+                    sb.AppendLine();
+                }
+                await appAction.CopyAsync(sb.ToString());
             }).DisposeWith(disposables);
         }
 

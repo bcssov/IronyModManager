@@ -154,6 +154,7 @@
             "ImportOverlay": "Pričekajte dok se verificira...",
             "ProgressExport": "{Progress}",
             "ProgressImport": "Korak {Count}/{TotalCount}: {Progress}",
+            "Export": "Izvoz",
             "Close": "Zatvori"
         },
         "JumpOnDragAndDrop": {

@@ -4,7 +4,7 @@
 // Created          : 03-03-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-27-2021
+// Last Modified On : 01-28-2022
 // ***********************************************************************
 // <copyright file="CollectionModsControlView.xaml.cs" company="Mario">
 //     Mario
@@ -77,6 +77,7 @@ namespace IronyModManager.Views.Controls
         /// </summary>
         /// <param name="mod">The mod.</param>
         /// <param name="scrollToSelected">if set to <c>true</c> [scroll to selected].</param>
+        /// <returns>A Task representing the asynchronous operation.</returns>
         protected virtual async Task FocusListBoxItemAsync(IMod mod, bool scrollToSelected)
         {
             await Task.Delay(100);
@@ -354,7 +355,7 @@ namespace IronyModManager.Views.Controls
         /// <returns>List&lt;MenuItem&gt;.</returns>
         private List<MenuItem> GetStaticMenuItems()
         {
-            return new List<MenuItem>
+            var menuItems = new List<MenuItem>
             {
                 new MenuItem()
                 {
@@ -371,6 +372,36 @@ namespace IronyModManager.Views.Controls
                     Command = ViewModel.ImportCollectionFromClipboardCommand
                 }
             };
+            var canExportGame = ViewModel.CanExportGame();
+            if (ViewModel.CanExportModHashReport || canExportGame)
+            {
+                menuItems.Add(new MenuItem()
+                {
+                    Header = "-"
+                });
+                if (ViewModel.CanExportModHashReport)
+                {
+                    menuItems.Add(new MenuItem()
+                    {
+                        Header = ViewModel.ExportCollectionReport,
+                        Command = ViewModel.ExportCollectionReportCommand
+                    });
+                }
+                if (canExportGame)
+                {
+                    menuItems.Add(new MenuItem()
+                    {
+                        Header = ViewModel.ExportGameReport,
+                        Command = ViewModel.ExportGameReportCommand
+                    });
+                }
+                menuItems.Add(new MenuItem()
+                {
+                    Header = ViewModel.ImportReport,
+                    Command = ViewModel.ImportReportCommand
+                });
+            }
+            return menuItems;
         }
 
         /// <summary>

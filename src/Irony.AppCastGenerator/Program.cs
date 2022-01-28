@@ -4,7 +4,7 @@
 // Created          : 09-14-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 09-15-2021
+// Last Modified On : 01-28-2022
 // ***********************************************************************
 // <copyright file="Program.cs" company="NetSparkle">
 //     NetSparkle
@@ -206,7 +206,7 @@ namespace Irony.AppCastGenerator
                         Title = titleVersionInfo,
                         DownloadLink = remoteUpdateFile,
                         Version = versionInfo,
-                        ShortVersion = versionInfo.Substring(0, versionInfo.LastIndexOf('.')),
+                        ShortVersion = versionInfo[..versionInfo.LastIndexOf('.')],
                         PublicationDate = fileInfo.CreationTime,
                         UpdateSize = fileInfo.Length,
                         Description = "",

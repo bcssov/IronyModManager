@@ -154,6 +154,7 @@
             "ImportOverlay": "Espere mientras verifica...",
             "ProgressExport": "{Progress}",
             "ProgressImport": "Step {Count}/{TotalCount}: {Progress}",
+            "Export": "Exportar",
             "Close": "Cerrar"
         },
         "JumpOnDragAndDrop": {
