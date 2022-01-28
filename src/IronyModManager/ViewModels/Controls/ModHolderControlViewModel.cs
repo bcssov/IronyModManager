@@ -4,7 +4,7 @@
 // Created          : 02-29-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 01-27-2022
+// Last Modified On : 01-28-2022
 // ***********************************************************************
 // <copyright file="ModHolderControlViewModel.cs" company="Mario">
 //     Mario
@@ -281,6 +281,12 @@ namespace IronyModManager.ViewModels.Controls
         public virtual ReactiveCommand<Unit, Unit> AdvancedModeCommand { get; protected set; }
 
         /// <summary>
+        /// Gets or sets a value indicating whether [advanced mode visible].
+        /// </summary>
+        /// <value><c>true</c> if [advanced mode visible]; otherwise, <c>false</c>.</value>
+        public virtual bool AdvancedModeVisible { get; protected set; }
+
+        /// <summary>
         /// Gets or sets a value indicating whether [allow mod selection].
         /// </summary>
         /// <value><c>true</c> if [allow mod selection]; otherwise, <c>false</c>.</value>
@@ -304,6 +310,19 @@ namespace IronyModManager.ViewModels.Controls
         /// </summary>
         /// <value>The analyze command.</value>
         public virtual ReactiveCommand<Unit, Unit> AnalyzeCommand { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets the analyze mode.
+        /// </summary>
+        /// <value>The analyze mode.</value>
+        [StaticLocalization(LocalizationResources.Conflict_Solver.Modes.Analyze)]
+        public virtual string AnalyzeMode { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets the analyze mode command.
+        /// </summary>
+        /// <value>The analyze mode command.</value>
+        public virtual ReactiveCommand<Unit, Unit> AnalyzeModeCommand { get; protected set; }
 
         /// <summary>
         /// Gets or sets the apply.
@@ -344,19 +363,6 @@ namespace IronyModManager.ViewModels.Controls
         public virtual CollectionModsControlViewModel CollectionMods { get; protected set; }
 
         /// <summary>
-        /// Gets or sets the analyze mode.
-        /// </summary>
-        /// <value>The analyze mode.</value>
-        [StaticLocalization(LocalizationResources.Conflict_Solver.Modes.Analyze)]
-        public virtual string AnalyzeMode { get; protected set; }
-
-        /// <summary>
-        /// Gets or sets the analyze mode command.
-        /// </summary>
-        /// <value>The analyze mode command.</value>
-        public virtual ReactiveCommand<Unit, Unit> AnalyzeModeCommand { get; protected set; }
-
-        /// <summary>
         /// Gets or sets the default mode.
         /// </summary>
         /// <value>The default mode.</value>
@@ -368,6 +374,12 @@ namespace IronyModManager.ViewModels.Controls
         /// </summary>
         /// <value>The default mode command.</value>
         public virtual ReactiveCommand<Unit, Unit> DefaultModeCommand { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether [default mode visible].
+        /// </summary>
+        /// <value><c>true</c> if [default mode visible]; otherwise, <c>false</c>.</value>
+        public virtual bool DefaultModeVisible { get; protected set; }
 
         /// <summary>
         /// Gets or sets the installed mods.
@@ -523,6 +535,11 @@ namespace IronyModManager.ViewModels.Controls
                     conflicts = syncedConflicts;
                 }
             }
+            else
+            {
+                await modPatchCollectionService.SaveIgnoredPathsAsync(conflicts, CollectionMods.SelectedModCollection.Name);
+                conflicts.AllConflicts.InitSearch();
+            }
             var args = new NavigationEventArgs()
             {
                 SelectedCollection = CollectionMods.SelectedModCollection,
@@ -653,18 +670,6 @@ namespace IronyModManager.ViewModels.Controls
         }
 
         /// <summary>
-        /// Gets or sets a value indicating whether [advanced mode visible].
-        /// </summary>
-        /// <value><c>true</c> if [advanced mode visible]; otherwise, <c>false</c>.</value>
-        public virtual bool AdvancedModeVisible { get; protected set; }
-
-        /// <summary>
-        /// Gets or sets a value indicating whether [default mode visible].
-        /// </summary>
-        /// <value><c>true</c> if [default mode visible]; otherwise, <c>false</c>.</value>
-        public virtual bool DefaultModeVisible { get; protected set; }
-
-        /// <summary>
         /// Called when [activated].
         /// </summary>
         /// <param name="disposables">The disposables.</param>
@@ -776,10 +781,12 @@ namespace IronyModManager.ViewModels.Controls
                             AdvancedModeVisible = false;
                             DefaultModeVisible = true;
                             break;
+
                         case PatchStateMode.Advanced:
                             AdvancedModeVisible = true;
                             DefaultModeVisible = false;
                             break;
+
                         default:
                             AdvancedModeVisible = true;
                             DefaultModeVisible = true;
@@ -891,12 +898,12 @@ namespace IronyModManager.ViewModels.Controls
 
             AdvancedModeCommand = ReactiveCommand.CreateFromTask(() =>
             {
-                return runAnalysis(PatchStateMode.Advanced);                
+                return runAnalysis(PatchStateMode.Advanced);
             }).DisposeWith(disposables);
 
             DefaultModeCommand = ReactiveCommand.CreateFromTask(() =>
             {
-                return runAnalysis(PatchStateMode.Default);                
+                return runAnalysis(PatchStateMode.Default);
             }).DisposeWith(disposables);
 
             AnalyzeModeCommand = ReactiveCommand.CreateFromTask(() =>
