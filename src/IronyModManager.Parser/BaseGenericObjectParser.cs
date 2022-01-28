@@ -4,7 +4,7 @@
 // Created          : 02-13-2021
 //
 // Last Modified By : Mario
-// Last Modified On : 12-15-2021
+// Last Modified On : 01-28-2022
 // ***********************************************************************
 // <copyright file="BaseGenericObjectParser.cs" company="Mario">
 //     Mario
@@ -32,7 +32,7 @@ namespace IronyModManager.Parser
         /// <summary>
         /// The converters
         /// </summary>
-        private static readonly ConcurrentDictionary<Type, TypeConverter> converters = new ConcurrentDictionary<Type, TypeConverter>();
+        private static readonly ConcurrentDictionary<Type, TypeConverter> converters = new();
 
         /// <summary>
         /// The text parser
@@ -69,7 +69,7 @@ namespace IronyModManager.Parser
             {
                 value = value[1..^0];
             }
-            if (value.Length > 0 && value[value.Length - 1] == '"')
+            if (value.Length > 0 && value[^1] == '"')
             {
                 value = value[0..^1];
             }

@@ -4,7 +4,7 @@
 // Created          : 02-16-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-25-2020
+// Last Modified On : 01-28-2022
 // ***********************************************************************
 // <copyright file="ParserArgs.cs" company="Mario">
 //     Mario
@@ -34,6 +34,12 @@ namespace IronyModManager.Parser.Common.Args
         /// </summary>
         /// <value>The file.</value>
         public string File { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether [force simple validation].
+        /// </summary>
+        /// <value><c>true</c> if [force simple validation]; otherwise, <c>false</c>.</value>
+        public bool ForceSimpleValidation { get; set; }
 
         /// <summary>
         /// Gets or sets the lines.

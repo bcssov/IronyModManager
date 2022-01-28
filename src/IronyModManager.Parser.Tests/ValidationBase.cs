@@ -77,7 +77,9 @@ namespace IronyModManager.Parser.Tests
         /// </summary>
         public void Extensions()
         {
+#pragma warning disable CA1847 // Use char literal for a single character lookup
             var exts = Directory.GetFiles(rootPath, "*", SearchOption.AllDirectories).Where(s => s.Replace(rootPath, string.Empty).Contains("\\")).GroupBy(s => Path.GetExtension(s)).Select(s => s.First());
+#pragma warning restore CA1847 // Use char literal for a single character lookup
             var allowedExtensions = new List<string>();
             foreach (var item in exts)
             {
@@ -126,7 +128,7 @@ namespace IronyModManager.Parser.Tests
                     if (prev == 0 || !char.IsWhiteSpace(cleaned[prev - 1]))
                     {
                         var parsed = cleaned.Split(key, StringSplitOptions.RemoveEmptyEntries);
-                        if (parsed.Count() > 0)
+                        if (parsed.Length > 0)
                         {
                             if (parsed.First().StartsWith("\""))
                             {
@@ -150,7 +152,7 @@ namespace IronyModManager.Parser.Tests
             foreach (var item in files)
             {
                 var relativePath = item.Replace(rootPath, string.Empty);
-                if (!relativePath.Contains("\\") || relativePath.Contains("readme", StringComparison.OrdinalIgnoreCase) || relativePath.Contains("example", StringComparison.OrdinalIgnoreCase))
+                if (!relativePath.Contains('\\') || relativePath.Contains("readme", StringComparison.OrdinalIgnoreCase) || relativePath.Contains("example", StringComparison.OrdinalIgnoreCase) || relativePath.Contains("changelog", StringComparison.OrdinalIgnoreCase))
                 {
                     continue;
                 }
@@ -297,11 +299,11 @@ namespace IronyModManager.Parser.Tests
                 }
 
                 var grouped = types.GroupBy(p => p.ValueType);
-                if (grouped.Count() == 0)
+                if (!grouped.Any())
                 {
                     undefined.Add(item);
                 }
-                if (grouped.Count(s => s.Key == ValueType.Object) > 0)
+                if (grouped.Any(s => s.Key == ValueType.Object))
                 {
                     var objTypes = grouped.Where(s => s.Key == ValueType.Object).SelectMany(p => p);
                     var idGroup = objTypes.GroupBy(s => s.Id);

@@ -237,7 +237,8 @@ namespace IronyModManager.Parser
                 ModDependencies = args.ModDependencies,
                 File = args.File,
                 Lines = args.Lines ?? new List<string>(),
-                ModName = args.ModName
+                ModName = args.ModName,
+                ForceSimpleValidation = args.ForceSimpleValidation
             };
             var preferredParserNames = GetPreferredParsers(args.GameType, Path.GetDirectoryName(args.File));
             IDefaultParser preferredParser = null;

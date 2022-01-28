@@ -4,7 +4,7 @@
 // Created          : 02-21-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 09-03-2021
+// Last Modified On : 01-28-2022
 // ***********************************************************************
 // <copyright file="DefinesParser.cs" company="Mario">
 //     Mario
@@ -81,7 +81,7 @@ namespace IronyModManager.Parser.Generic
         /// <returns>IEnumerable&lt;IDefinition&gt;.</returns>
         public override IEnumerable<IDefinition> Parse(ParserArgs args)
         {
-            var data = TryParse(args, false);
+            var data = TryParse(args);
             if (data.Error != null)
             {
                 return new List<IDefinition>() { TranslateScriptError(data.Error, args) };
@@ -119,12 +119,12 @@ namespace IronyModManager.Parser.Generic
                             result.Add(definition);
                         }
                     }
-                    else if (!string.IsNullOrWhiteSpace(dataItem.Key) && !string.IsNullOrWhiteSpace(dataItem.Operator) && dataItem.Key.Contains("."))
+                    else if (!string.IsNullOrWhiteSpace(dataItem.Key) && !string.IsNullOrWhiteSpace(dataItem.Operator) && dataItem.Key.Contains('.'))
                     {
                         //Dot notation is used
                         var definition = GetDefinitionInstance();
                         var id = dataItem.Key.Substring(dataItem.Key.LastIndexOf(".") + 1, dataItem.Key.Length - dataItem.Key.LastIndexOf(".") - 1);
-                        var type = dataItem.Key.Substring(0, dataItem.Key.LastIndexOf("."));
+                        var type = dataItem.Key[..dataItem.Key.LastIndexOf(".")];
                         MapDefinitionFromArgs(ConstructArgs(args, definition, typeOverride: $"{type}-{Common.Constants.TxtType}"));
                         definition.Id = TrimId(id);
                         definition.ValueType = ValueType.SpecialVariable;
