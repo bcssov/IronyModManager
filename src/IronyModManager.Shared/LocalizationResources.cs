@@ -202,6 +202,7 @@ namespace IronyModManager.Shared
                 public const string ImportOverlay = Prefix + "ImportOverlay";
                 public const string ProgressExport = Prefix + "ProgressExport";
                 public const string ProgressImport = Prefix + "ProgressImport";
+                public const string Export = Prefix + "Export";
                 public const string Close = Prefix + "Close";
             }
             public static class JumpOnDragAndDrop

@@ -34,9 +34,14 @@
                             </DataTemplate>
                         </ListBox.ItemTemplate>
                     </ListBox>
-                    <Button Content="{Binding Close}" Command="{Binding CloseCommand}"
-                            Grid.Row="1" Grid.Column="0" MaxHeight="30" Grid.ColumnSpan="2"
+                    <Grid Grid.Row="1" Grid.Column="0" MaxHeight="30" Grid.ColumnSpan="2" ColumnDefinitions="400,400">
+                        <Button Content="{Binding Export}" Command="{Binding ExportCommand}"
+                            Grid.Column="0" MaxHeight="30" Grid.ColumnSpan="1"
                             HorizontalAlignment="Stretch" VerticalAlignment="Stretch" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"></Button>
+                        <Button Content="{Binding Close}" Command="{Binding CloseCommand}"
+                            Grid.Column="1" MaxHeight="30" Grid.ColumnSpan="1"
+                            HorizontalAlignment="Stretch" VerticalAlignment="Stretch" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"></Button>
+                    </Grid>
                 </Grid>
             </Border>
         </Popup>

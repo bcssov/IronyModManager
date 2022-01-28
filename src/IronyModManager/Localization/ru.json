@@ -154,6 +154,7 @@
             "ImportOverlay": "Проверяется...",
             "ProgressExport": "{Progress}",
             "ProgressImport": "Шаг {Count}/{TotalCount}: {Progress}",
+            "Export": "Экспорт",
             "Close": "X"
         },
         "JumpOnDragAndDrop": {
