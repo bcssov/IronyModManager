@@ -4,7 +4,7 @@
 // Created          : 02-19-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 10-31-2021
+// Last Modified On : 01-28-2022
 // ***********************************************************************
 // <copyright file="ParserManager.cs" company="Mario">
 //     Mario
@@ -93,14 +93,15 @@ namespace IronyModManager.Parser
         /// <returns>IIndexedDefinitions.</returns>
         public IEnumerable<IDefinition> Parse(ParserManagerArgs args)
         {
-            static bool isValidLine(string line)
+            static bool isValidLine(string line, string commentId)
             {
                 string text = line ?? string.Empty;
-                return !string.IsNullOrWhiteSpace(text) && !text.Trim().StartsWith(Constants.Scripts.ScriptCommentId);
+                return !string.IsNullOrWhiteSpace(text) && !text.Trim().StartsWith(commentId);
             }
             // Check if empty text file
+            var commentId = args.File.EndsWith(Constants.LuaExtension, StringComparison.OrdinalIgnoreCase) ? Constants.Scripts.LuaScriptCommentId : Constants.Scripts.ScriptCommentId.ToString();
             if (Shared.Constants.TextExtensions.Any(p => args.File.EndsWith(p, StringComparison.OrdinalIgnoreCase)) &&
-                (args.Lines == null || !args.Lines.Any() || !args.Lines.Any(p => isValidLine(p))))
+                (args.Lines == null || !args.Lines.Any() || !args.Lines.Any(p => isValidLine(p, commentId))))
             {
                 var definition = DIResolver.Get<IDefinition>();
                 definition.OriginalCode = definition.Code = Comments.GetEmptyCommentType(args.File);
@@ -162,7 +163,7 @@ namespace IronyModManager.Parser
         /// Validates the parser names.
         /// </summary>
         /// <param name="parsers">The parsers.</param>
-        /// <exception cref="ArgumentOutOfRangeException">Duplicate parsers detected: {message}</exception>
+        /// <exception cref="System.ArgumentOutOfRangeException">Duplicate parsers detected: {message}</exception>
         private static void ValidateParserNames(IEnumerable<IDefaultParser> parsers)
         {
             var invalid = parsers.GroupBy(p => p.ParserName).Where(s => s.Count() > 1);

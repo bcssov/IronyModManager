@@ -119,7 +119,7 @@ namespace IronyModManager.Parser.Tests
             sb.AppendLine(@"");
             sb.AppendLine(@"### END TEMPLATE:effects ###");
             var parser = new ValidateParser(new CodeParser(new Logger()), null);
-            var result = parser.GetBracketCount(sb.ToString());
+            var result = parser.GetBracketCount("test.txt", sb.ToString());
             result.OpenBracketCount.Should().Be(13);
             result.CloseBracketCount.Should().Be(13);
 

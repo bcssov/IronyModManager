@@ -5048,9 +5048,9 @@ namespace IronyModManager.Services.Tests
             var mapper = new Mock<IMapper>();
             var modPatchExporter = new Mock<IModPatchExporter>();
             var validateParser = new Mock<IValidateParser>();
-            validateParser.Setup(p => p.GetBracketCount(It.IsAny<string>())).Returns(new BracketValidateResult() { CloseBracketCount = 1, OpenBracketCount = 1 });
+            validateParser.Setup(p => p.GetBracketCount(It.IsAny<string>(), It.IsAny<string>())).Returns(new BracketValidateResult() { CloseBracketCount = 1, OpenBracketCount = 1 });
             var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter, null, validateParser);
-            var result = service.GetBracketCount("test");
+            var result = service.GetBracketCount("test.txt", "test");
             result.Should().NotBeNull();
             result.OpenBracketCount.Should().Be(1);
             result.CloseBracketCount.Should().Be(1);

@@ -4,7 +4,7 @@
 // Created          : 09-02-2021
 //
 // Last Modified By : Mario
-// Last Modified On : 11-12-2021
+// Last Modified On : 01-28-2022
 // ***********************************************************************
 // <copyright file="ValidateParser.cs" company="Mario">
 //     Mario
@@ -84,12 +84,13 @@ namespace IronyModManager.Parser
         /// <summary>
         /// Gets the bracket count.
         /// </summary>
+        /// <param name="file">The file.</param>
         /// <param name="text">The text.</param>
         /// <returns>IBracketValidateResult.</returns>
-        public IBracketValidateResult GetBracketCount(string text)
+        public IBracketValidateResult GetBracketCount(string file, string text)
         {
             var bracketCount = DIResolver.Get<IBracketValidateResult>();
-            var cleanText = CleanCode(text);
+            var cleanText = CleanCode(file, text);
 
             bracketCount.CloseBracketCount = cleanText.Count(s => s == Common.Constants.Scripts.CloseObject);
             bracketCount.OpenBracketCount = cleanText.Count(s => s == Common.Constants.Scripts.OpenObject);
@@ -100,11 +101,12 @@ namespace IronyModManager.Parser
         /// <summary>
         /// Determines whether the specified text has code.
         /// </summary>
+        /// <param name="file">The file.</param>
         /// <param name="text">The text.</param>
         /// <returns><c>true</c> if the specified text has code; otherwise, <c>false</c>.</returns>
-        public bool HasCode(string text)
+        public bool HasCode(string file, string text)
         {
-            return !string.IsNullOrWhiteSpace(CleanCode(text));
+            return !string.IsNullOrWhiteSpace(CleanCode(file, text));
         }
 
         /// <summary>
@@ -135,11 +137,12 @@ namespace IronyModManager.Parser
         /// <summary>
         /// Cleans the code.
         /// </summary>
+        /// <param name="file">The file.</param>
         /// <param name="text">The text.</param>
         /// <returns>System.String.</returns>
-        private string CleanCode(string text)
+        private string CleanCode(string file, string text)
         {
-            return string.Join(Environment.NewLine, codeParser.CleanCode(text.SplitOnNewLine()));
+            return string.Join(Environment.NewLine, codeParser.CleanCode(file, text.SplitOnNewLine()));
         }
 
         #endregion Methods

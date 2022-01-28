@@ -35,6 +35,11 @@ namespace IronyModManager.Parser.Common
         public const string CommonPath = "common";
 
         /// <summary>
+        /// The empty lua overwrite comment
+        /// </summary>
+        public const string EmptyLuaOverwriteComment = "-- This mod contains empty code. Possibly to overwrite other mods.";
+
+        /// <summary>
         /// The empty overwrite comment
         /// </summary>
         public const string EmptyOverwriteComment = "# This mod contains empty code. Possibly to overwrite other mods.";
@@ -63,6 +68,11 @@ namespace IronyModManager.Parser.Common
         /// The localization extension
         /// </summary>
         public const string LocalizationExtension = ".yml";
+
+        /// <summary>
+        /// The lua extension
+        /// </summary>
+        public const string LuaExtension = ".lua";
 
         /// <summary>
         /// The shader extensions
@@ -188,6 +198,11 @@ namespace IronyModManager.Parser.Common
             /// The lower than operator
             /// </summary>
             public const char LowerThanOperator = '<';
+
+            /// <summary>
+            /// The lua script comment identifier
+            /// </summary>
+            public const string LuaScriptCommentId = "--";
 
             /// <summary>
             /// The not equal operator

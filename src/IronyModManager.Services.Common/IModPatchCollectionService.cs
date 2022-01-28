@@ -4,7 +4,7 @@
 // Created          : 05-26-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 09-05-2021
+// Last Modified On : 01-28-2022
 // ***********************************************************************
 // <copyright file="IModPatchCollectionService.cs" company="Mario">
 //     Mario
@@ -96,9 +96,10 @@ namespace IronyModManager.Services.Common
         /// <summary>
         /// Gets the bracket count.
         /// </summary>
+        /// <param name="file">The file.</param>
         /// <param name="text">The text.</param>
         /// <returns>IBracketValidateResult.</returns>
-        public IBracketValidateResult GetBracketCount(string text);
+        public IBracketValidateResult GetBracketCount(string file, string text);
 
         /// <summary>
         /// Gets the ignored mods.

@@ -4,7 +4,7 @@
 // Created          : 02-22-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 09-02-2021
+// Last Modified On : 01-28-2022
 // ***********************************************************************
 // <copyright file="ICodeParser.cs" company="Mario">
 //     Mario
@@ -27,9 +27,10 @@ namespace IronyModManager.Parser.Common.Parsers
         /// <summary>
         /// Cleans the code.
         /// </summary>
+        /// <param name="file">The file.</param>
         /// <param name="lines">The lines.</param>
         /// <returns>IEnumerable&lt;System.String&gt;.</returns>
-        IEnumerable<string> CleanCode(IEnumerable<string> lines);
+        IEnumerable<string> CleanCode(string file, IEnumerable<string> lines);
 
         /// <summary>
         /// Cleans the whitespace.
