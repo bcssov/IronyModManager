@@ -4,7 +4,7 @@
 // Created          : 10-29-2021
 //
 // Last Modified By : Mario
-// Last Modified On : 10-29-2021
+// Last Modified On : 01-28-2022
 // ***********************************************************************
 // <copyright file="IronyFileTarget.cs" company="Mario">
 //     Mario
@@ -98,7 +98,8 @@ namespace IronyModManager.Log
             {
                 try
                 {
-                    File.WriteAllText(GetLastExceptionFileName(logEvent), logEvent.FormattedMessage);
+                    var write = GetBytesToWrite(logEvent);
+                    File.WriteAllBytes(GetLastExceptionFileName(logEvent), write);
                 }
                 catch
                 {
