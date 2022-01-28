@@ -161,7 +161,7 @@ namespace IronyModManager.Parser.Tests
                 {
                     continue;
                 }
-                //if (relativePath.Contains(@"common\defines\00_defines.lua"))
+                //if (relativePath.Contains(@"defines"))
                 //{
                 //    System.Diagnostics.Debugger.Break();
                 //}
@@ -191,7 +191,7 @@ namespace IronyModManager.Parser.Tests
                     GameType = gameType,
                     ModDependencies = new List<string>(),
                     ModName = "None",
-                    ForceSimpleValidation = true
+                    ValidationType = ValidationType.SkipAll
                 };
                 try
                 {

@@ -224,10 +224,11 @@ namespace IronyModManager.Parser
         /// Parses the script without validation.
         /// </summary>
         /// <param name="lines">The lines.</param>
+        /// <param name="file">The file.</param>
         /// <returns>IParseResponse.</returns>
-        public IParseResponse ParseScriptWithoutValidation(IEnumerable<string> lines)
+        public IParseResponse ParseScriptWithoutValidation(IEnumerable<string> lines, string file)
         {
-            return ParseScriptData(lines, skipValidityCheck: true);
+            return ParseScriptData(lines, file, skipValidityCheck: true);
         }
 
         /// <summary>
@@ -762,7 +763,7 @@ namespace IronyModManager.Parser
                         var quoteIndex = item.IndexOf(Common.Constants.Scripts.Quote);
                         if (quoteIndex > -1 && quoteCount == 2 && previousQuoteCount > 0)
                         {
-                            sb.Append($"#{item.Substring(0, quoteIndex + 1)}");
+                            sb.Append($"#{item[..(quoteIndex + 1)]}");
                             break;
                         }
                         else if (counter < count && previousQuoteCount > 0)

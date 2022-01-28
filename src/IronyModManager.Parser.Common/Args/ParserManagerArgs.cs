@@ -36,12 +36,6 @@ namespace IronyModManager.Parser.Common.Args
         public string File { get; set; }
 
         /// <summary>
-        /// Gets or sets a value indicating whether [force simple validation].
-        /// </summary>
-        /// <value><c>true</c> if [force simple validation]; otherwise, <c>false</c>.</value>
-        public bool ForceSimpleValidation { get; set; }
-
-        /// <summary>
         /// Gets or sets the type of the game.
         /// </summary>
         /// <value>The type of the game.</value>
@@ -64,6 +58,12 @@ namespace IronyModManager.Parser.Common.Args
         /// </summary>
         /// <value>The name of the mod.</value>
         public string ModName { get; set; }
+
+        /// <summary>
+        /// Gets or sets the type of the validation.
+        /// </summary>
+        /// <value>The type of the validation.</value>
+        public ValidationType ValidationType { get; set; }
 
         #endregion Properties
     }

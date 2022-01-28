@@ -4,7 +4,7 @@
 // Created          : 03-28-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 11-12-2021
+// Last Modified On : 01-28-2022
 // ***********************************************************************
 // <copyright file="WholeTextParser.cs" company="Mario">
 //     Mario
@@ -117,7 +117,7 @@ namespace IronyModManager.Parser.Generic
             }
 
             // This type is a bit different and only will conflict in filenames.
-            var code = codeParser.ParseScriptWithoutValidation(args.Lines);
+            var code = codeParser.ParseScriptWithoutValidation(args.Lines, args.File);
             var def = GetDefinitionInstance();
             MapDefinitionFromArgs(ConstructArgs(args, def));
             if (!fileNameTag)

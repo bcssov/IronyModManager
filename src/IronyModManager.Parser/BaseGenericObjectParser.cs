@@ -211,7 +211,7 @@ namespace IronyModManager.Parser
         /// <returns>IParseResponse.</returns>
         protected virtual IParseResponse ParseCode(IEnumerable<string> lines)
         {
-            var data = codeParser.ParseScriptWithoutValidation(lines);
+            var data = codeParser.ParseScriptWithoutValidation(lines, string.Empty);
             if (data.Error == null && data.Values?.Count() > 0)
             {
                 return data;

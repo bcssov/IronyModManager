@@ -264,7 +264,8 @@ namespace IronyModManager.Services
                     File = Path.Combine(folder, fileInfo.FileName),
                     GameType = game.Type,
                     Lines = fileInfo.Content,
-                    ModName = game.Name
+                    ModName = game.Name,
+                    ValidationType = ValidationType.SkipAll
                 }).Where(p => p.ValueType != Shared.Models.ValueType.Invalid);
                 MergeDefinitions(fileDefs);
                 definitions.AddRange(fileDefs);

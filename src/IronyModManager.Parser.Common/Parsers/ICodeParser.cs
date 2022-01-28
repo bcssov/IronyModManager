@@ -60,8 +60,9 @@ namespace IronyModManager.Parser.Common.Parsers
         /// Parses the script without validation.
         /// </summary>
         /// <param name="lines">The lines.</param>
+        /// <param name="file">The file.</param>
         /// <returns>IParseResponse.</returns>
-        IParseResponse ParseScriptWithoutValidation(IEnumerable<string> lines);
+        IParseResponse ParseScriptWithoutValidation(IEnumerable<string> lines, string file);
 
         /// <summary>
         /// Performs the validity check.
