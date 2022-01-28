@@ -4,7 +4,7 @@
 // Created          : 02-16-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 12-12-2021
+// Last Modified On : 01-28-2022
 // ***********************************************************************
 // <copyright file="Constants.cs" company="Mario">
 //     Mario
@@ -190,11 +190,6 @@ namespace IronyModManager.Parser.Common
             public const char LowerThanOperator = '<';
 
             /// <summary>
-            /// The namespace
-            /// </summary>
-            public const string Namespace = "namespace";
-
-            /// <summary>
             /// The not equal operator
             /// </summary>
             public const char NotEqualOperator = '!';
@@ -248,6 +243,11 @@ namespace IronyModManager.Parser.Common
             /// The inline operators
             /// </summary>
             public static readonly string[] InlineOperators = new string[] { "hsv", "rgb" };
+
+            /// <summary>
+            /// The namespace
+            /// </summary>
+            public static readonly string[] Namespaces = new string[] { "namespace", "add_namespace" };
 
             /// <summary>
             /// The operators

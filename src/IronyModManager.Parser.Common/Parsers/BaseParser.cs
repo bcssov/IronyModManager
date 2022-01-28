@@ -4,7 +4,7 @@
 // Created          : 02-17-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-15-2021
+// Last Modified On : 01-28-2022
 // ***********************************************************************
 // <copyright file="BaseParser.cs" company="Mario">
 //     Mario
@@ -446,7 +446,7 @@ namespace IronyModManager.Parser.Common.Parsers
                     var op = item.Operator ?? string.Empty;
                     if (op.Equals(Constants.Scripts.EqualsOperator.ToString()))
                     {
-                        if (item.Key.StartsWith(Constants.Scripts.Namespace, StringComparison.OrdinalIgnoreCase))
+                        if (Constants.Scripts.Namespaces.Any(n => item.Key.StartsWith(n, StringComparison.OrdinalIgnoreCase)))
                         {
                             typeAssigned = true;
                             definition.Id = $"{Path.GetFileNameWithoutExtension(args.File)}-{TrimId(item.Key)}";
