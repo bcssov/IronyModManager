@@ -1265,6 +1265,9 @@
         "DirectoryPath": "previewer_assets\\assetviewer_interface",
         "PreferredParser": "GenericGraphicsParser"
     }, {
+        "DirectoryPath": "previewer_assets\\assetviewer_interface",
+        "PreferredParser": "DefaultParser"
+    }, {
         "DirectoryPath": "sound",
         "PreferredParser": "GenericWholeTextParser"
     }, {

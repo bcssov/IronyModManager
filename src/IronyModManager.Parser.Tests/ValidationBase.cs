@@ -190,7 +190,8 @@ namespace IronyModManager.Parser.Tests
                     ContentSHA = content.CalculateSHA(),
                     GameType = gameType,
                     ModDependencies = new List<string>(),
-                    ModName = "None"
+                    ModName = "None",
+                    ForceSimpleValidation = true
                 };
                 try
                 {
