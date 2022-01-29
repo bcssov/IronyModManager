@@ -184,6 +184,16 @@ namespace IronyModManager.Parser.Common
             /// </summary>
             public static readonly string GraphicalCultureType = MergePath(CommonPath, "graphicalculturetype.txt");
 
+            /// <summary>
+            /// The ideas
+            /// </summary>
+            public static readonly string Ideas = MergePath(CommonPath, "ideas");
+
+            /// <summary>
+            /// The intelligence agencies
+            /// </summary>
+            public static readonly string IntelligenceAgencies = MergePath(CommonPath, "intelligence_agencies");
+
             #endregion Fields
         }
 
