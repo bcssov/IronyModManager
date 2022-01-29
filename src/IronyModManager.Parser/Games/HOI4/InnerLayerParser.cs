@@ -6,7 +6,7 @@
 // Last Modified By : Mario
 // Last Modified On : 01-29-2022
 // ***********************************************************************
-// <copyright file="KeyValuePairParser.cs" company="Mario">
+// <copyright file="InnerLayerParser.cs" company="Mario">
 //     Mario
 // </copyright>
 // <summary></summary>
@@ -22,22 +22,22 @@ using IronyModManager.Shared.Models;
 namespace IronyModManager.Parser.Games.HOI4
 {
     /// <summary>
-    /// Class KeyValuePairParser.
+    /// Class InnerLayerParser.
     /// Implements the <see cref="IronyModManager.Parser.Common.Parsers.BaseParser" />
     /// Implements the <see cref="IronyModManager.Parser.Common.Parsers.IGameParser" />
     /// </summary>
     /// <seealso cref="IronyModManager.Parser.Common.Parsers.BaseParser" />
     /// <seealso cref="IronyModManager.Parser.Common.Parsers.IGameParser" />
-    public class KeyValuePairParser : BaseParser, IGameParser
+    public class InnerLayerParser : BaseParser, IGameParser
     {
         #region Constructors
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="KeyValuePairParser" /> class.
+        /// Initializes a new instance of the <see cref="InnerLayerParser" /> class.
         /// </summary>
         /// <param name="codeParser">The code parser.</param>
         /// <param name="logger">The logger.</param>
-        public KeyValuePairParser(ICodeParser codeParser, ILogger logger) : base(codeParser, logger)
+        public InnerLayerParser(ICodeParser codeParser, ILogger logger) : base(codeParser, logger)
         {
         }
 
@@ -49,7 +49,7 @@ namespace IronyModManager.Parser.Games.HOI4
         /// Gets the name of the parser.
         /// </summary>
         /// <value>The name of the parser.</value>
-        public override string ParserName => "HOI4" + nameof(KeyValuePairParser);
+        public override string ParserName => "HOI4" + nameof(InnerLayerParser);
 
         /// <summary>
         /// Gets the priority.
@@ -78,38 +78,7 @@ namespace IronyModManager.Parser.Games.HOI4
         /// <returns>IEnumerable&lt;IDefinition&gt;.</returns>
         public override IEnumerable<IDefinition> Parse(ParserArgs args)
         {
-            var result = new List<IDefinition>();
-            var parseResult = TryParse(args);
-            if (parseResult.Error != null)
-            {
-                result.Add(TranslateScriptError(parseResult.Error, args));
-            }
-            else
-            {
-                foreach (var item in parseResult.Values)
-                {
-                    var definition = GetDefinitionInstance();
-                    string id = EvalDefinitionId(item.Values, item.Key);
-                    MapDefinitionFromArgs(ConstructArgs(args, definition));
-                    definition.Id = TrimId(id);
-                    definition.ValueType = Shared.Models.ValueType.Object;
-                    definition.OriginalCode = definition.Code = FormatCode(item);
-                    var tags = ParseScriptTags(item.Values, item.Key);
-                    if (tags.Any())
-                    {
-                        foreach (var tag in tags)
-                        {
-                            var lower = tag.ToLowerInvariant();
-                            if (!definition.Tags.Contains(lower))
-                            {
-                                definition.Tags.Add(lower);
-                            }
-                        }
-                    }
-                    result.Add(definition);
-                }
-            }
-            return result;
+            return ParseSecondLevel(args);
         }
 
         /// <summary>
@@ -119,7 +88,7 @@ namespace IronyModManager.Parser.Games.HOI4
         /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
         protected virtual bool EvalStartsWith(CanParseArgs args)
         {
-            return args.File.StartsWith(Common.Constants.HOI4.CountryTags, StringComparison.OrdinalIgnoreCase);
+            return args.File.StartsWith(Common.Constants.HOI4.Abilities, StringComparison.OrdinalIgnoreCase);
         }
 
         #endregion Methods

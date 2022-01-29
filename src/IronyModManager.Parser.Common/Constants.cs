@@ -145,6 +145,11 @@ namespace IronyModManager.Parser.Common
             public const string Map = "map";
 
             /// <summary>
+            /// The abilities
+            /// </summary>
+            public static readonly string Abilities = MergePath(CommonPath, "abilities");
+
+            /// <summary>
             /// The country tags
             /// </summary>
             public static readonly string CountryTags = MergePath(CommonPath, "country_tags");
