@@ -160,6 +160,11 @@ namespace IronyModManager.Parser.Common
             public static readonly string Bookmark = MergePath(CommonPath, "bookmarks");
 
             /// <summary>
+            /// The characters
+            /// </summary>
+            public static readonly string Characters = MergePath(CommonPath, "characters");
+
+            /// <summary>
             /// The country tags
             /// </summary>
             public static readonly string CountryTags = MergePath(CommonPath, "country_tags");

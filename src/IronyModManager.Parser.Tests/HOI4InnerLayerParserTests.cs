@@ -42,7 +42,35 @@ namespace IronyModManager.Parser.Tests
             };
             var parser = new Games.HOI4.InnerLayerParser(new CodeParser(new Logger()), null);
             parser.CanParse(args).Should().BeFalse();
-            args.File = "common\\abilities\\test.txt";
+        }
+
+        /// <summary>
+        /// Defines the test method CanParse_abilities_should_be_true.
+        /// </summary>
+        [Fact]
+        public void CanParse_abilities_should_be_true()
+        {
+            var args = new CanParseArgs()
+            {
+                File = "common\\abilities\\test.txt",
+                GameType = "HeartsofIronIV"
+            };
+            var parser = new Games.HOI4.InnerLayerParser(new CodeParser(new Logger()), null);
+            parser.CanParse(args).Should().BeTrue();
+        }
+
+        /// <summary>
+        /// Defines the test method CanParse_charactrs_should_be_true.
+        /// </summary>
+        [Fact]
+        public void CanParse_charactrs_should_be_true()
+        {
+            var args = new CanParseArgs()
+            {
+                File = "common\\characters\\test.txt",
+                GameType = "HeartsofIronIV"
+            };
+            var parser = new Games.HOI4.InnerLayerParser(new CodeParser(new Logger()), null);
             parser.CanParse(args).Should().BeTrue();
         }
 

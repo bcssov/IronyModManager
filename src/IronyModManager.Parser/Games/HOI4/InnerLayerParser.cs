@@ -30,6 +30,14 @@ namespace IronyModManager.Parser.Games.HOI4
     /// <seealso cref="IronyModManager.Parser.Common.Parsers.IGameParser" />
     public class InnerLayerParser : BaseParser, IGameParser
     {
+        /// <summary>
+        /// The starts with checks
+        /// </summary>
+        private static readonly string[] startsWithChecks = new string[]
+        {
+           Common.Constants.HOI4.Abilities, Common.Constants.HOI4.Characters
+        };
+
         #region Constructors
 
         /// <summary>
@@ -88,7 +96,7 @@ namespace IronyModManager.Parser.Games.HOI4
         /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
         protected virtual bool EvalStartsWith(CanParseArgs args)
         {
-            return args.File.StartsWith(Common.Constants.HOI4.Abilities, StringComparison.OrdinalIgnoreCase);
+            return startsWithChecks.Any(s => args.File.StartsWith(s, StringComparison.OrdinalIgnoreCase));
         }
 
         #endregion Methods
