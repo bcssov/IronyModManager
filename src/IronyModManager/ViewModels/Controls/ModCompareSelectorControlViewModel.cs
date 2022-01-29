@@ -262,7 +262,7 @@ namespace IronyModManager.ViewModels.Controls
                         if (!token.IsCancellationRequested)
                         {
                             int virtualDefCount = virtualDefinitions.Count();
-                            var left = virtualDefinitions.FirstOrDefault(p => p != newDefinition && p != priorityDefinition.Definition && !(virtualDefCount >= 4 && p.IsFromGame));
+                            var left = newDefinition != null ? virtualDefinitions.FirstOrDefault(p => p != newDefinition && p != priorityDefinition.Definition && !(virtualDefCount >= 4 && p.IsFromGame)) : virtualDefinitions.FirstOrDefault(p => p != priorityDefinition.Definition);
                             if (left == null)
                             {
                                 left = virtualDefinitions.FirstOrDefault(p => p != newDefinition && p != priorityDefinition.Definition);

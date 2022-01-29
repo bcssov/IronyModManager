@@ -830,13 +830,24 @@ namespace IronyModManager.Parser
                 }
                 set
                 {
-                    if (decimal.TryParse(value, NumberStyles.Number, CultureInfo.InvariantCulture, out var result))
+                    var val = value ?? string.Empty;
+                    var containsComma = false;
+                    if (val.EndsWith(","))
+                    {
+                        val = val.Trim(",");
+                        containsComma = true;
+                    }
+                    if (decimal.TryParse(val, NumberStyles.Number, CultureInfo.InvariantCulture, out var result))
                     {
                         this.value = result.ToString("G0", CultureInfo.InvariantCulture);
                     }
                     else
                     {
-                        this.value = value;
+                        this.value = val;
+                    }
+                    if (containsComma)
+                    {
+                        this.value += ",";
                     }
                 }
             }
