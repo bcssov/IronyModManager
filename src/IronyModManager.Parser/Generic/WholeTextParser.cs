@@ -41,7 +41,7 @@ namespace IronyModManager.Parser.Generic
         /// </summary>
         private static readonly string[] skipValidationForTypes = new string[]
         {
-            Common.Constants.ShaderExtension, Common.Constants.FxhExtension
+            Common.Constants.ShaderExtension, Common.Constants.FxhExtension, Common.Constants.CsvExtension
         };
 
         /// <summary>

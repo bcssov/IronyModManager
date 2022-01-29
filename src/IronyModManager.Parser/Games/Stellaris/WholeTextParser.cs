@@ -4,7 +4,7 @@
 // Created          : 02-18-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 10-25-2021
+// Last Modified On : 01-29-2022
 // ***********************************************************************
 // <copyright file="WholeTextParser.cs" company="Mario">
 //     Mario
@@ -30,14 +30,6 @@ namespace IronyModManager.Parser.Games.Stellaris
     public class WholeTextParser : Generic.WholeTextParser, IGameParser
     {
         #region Fields
-
-        /// <summary>
-        /// The equals checks
-        /// </summary>
-        private static readonly string[] equalsChecks = new string[]
-        {
-            Common.Constants.Stellaris.WeaponComponents
-        };
 
         /// <summary>
         /// The starts with checks
@@ -88,16 +80,6 @@ namespace IronyModManager.Parser.Games.Stellaris
         }
 
         /// <summary>
-        /// Determines whether this instance [can parse equals] the specified arguments.
-        /// </summary>
-        /// <param name="args">The arguments.</param>
-        /// <returns><c>true</c> if this instance [can parse equals] the specified arguments; otherwise, <c>false</c>.</returns>
-        protected virtual bool CanParseEquals(CanParseArgs args)
-        {
-            return equalsChecks.Any(s => args.File.Equals(s, StringComparison.OrdinalIgnoreCase));
-        }
-
-        /// <summary>
         /// Determines whether this instance [can parse starts with] the specified arguments.
         /// </summary>
         /// <param name="args">The arguments.</param>
@@ -114,7 +96,7 @@ namespace IronyModManager.Parser.Games.Stellaris
         /// <returns><c>true</c> if [is valid type] [the specified arguments]; otherwise, <c>false</c>.</returns>
         protected override bool IsValidType(CanParseArgs args)
         {
-            return CanParseStartsWith(args) || CanParseEquals(args);
+            return CanParseStartsWith(args);
         }
 
         #endregion Methods

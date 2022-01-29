@@ -35,6 +35,11 @@ namespace IronyModManager.Parser.Common
         public const string CommonPath = "common";
 
         /// <summary>
+        /// The CSV extension
+        /// </summary>
+        public const string CsvExtension = ".csv";
+
+        /// <summary>
         /// The empty lua overwrite comment
         /// </summary>
         public const string EmptyLuaOverwriteComment = "-- This mod contains empty code. Possibly to overwrite other mods.";
@@ -463,11 +468,6 @@ namespace IronyModManager.Parser.Common
             /// The traits
             /// </summary>
             public static readonly string Traits = MergePath(CommonPath, "traits");
-
-            /// <summary>
-            /// The weapon components
-            /// </summary>
-            public static readonly string WeaponComponents = MergePath(CommonPath, "component_templates", "weapon_components.csv");
 
             #endregion Fields
         }

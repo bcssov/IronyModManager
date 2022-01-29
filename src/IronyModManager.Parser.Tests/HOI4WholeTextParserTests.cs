@@ -4,9 +4,9 @@
 // Created          : 02-18-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-07-2021
+// Last Modified On : 01-29-2022
 // ***********************************************************************
-// <copyright file="StellarisWholeTextParserTests.cs" company="Mario">
+// <copyright file="HOI4WholeTextParserTests.cs" company="Mario">
 //     Mario
 // </copyright>
 // <summary></summary>
