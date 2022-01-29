@@ -90,12 +90,21 @@ namespace IronyModManager.Parser.Generic
                 lines = text[..(text.LastIndexOf("}") + 1)].SplitOnNewLine(false);
                 lines = codeParser.CleanCode(args.File, lines);
                 var newLines = new List<string>();
+                var curlyCount = 0;
+                var curlyCloseCount = 0;
                 foreach (var item in lines)
                 {
                     var line = item;
-                    if (line.Contains(','))
+                    curlyCount += line.Count(s => s == Common.Constants.Scripts.OpenObject);
+                    curlyCloseCount += line.Count(s => s == Common.Constants.Scripts.CloseObject);
+                    if (curlyCount - curlyCloseCount <= 2 && line.Contains(','))
                     {
-                        line = line[..line.LastIndexOf(",")];
+                        var bracketLocation = line.IndexOf(Common.Constants.Scripts.OpenObject.ToString());
+                        int idLoc = line.LastIndexOf(",");
+                        if (idLoc > bracketLocation || bracketLocation == -1)
+                        {
+                            line = line[..line.LastIndexOf(",")];
+                        }
                     }
                     newLines.Add(line);
                 }
@@ -115,7 +124,32 @@ namespace IronyModManager.Parser.Generic
             {
                 foreach (var dataItem in data.Values)
                 {
-                    if (dataItem.Values != null)
+                    if (!string.IsNullOrWhiteSpace(dataItem.Key) && !string.IsNullOrWhiteSpace(dataItem.Operator) && dataItem.Key.Contains('.'))
+                    {
+                        //Dot notation is used
+                        var definition = GetDefinitionInstance();
+                        var id = dataItem.Key.Substring(dataItem.Key.LastIndexOf(".") + 1, dataItem.Key.Length - dataItem.Key.LastIndexOf(".") - 1);
+                        var type = dataItem.Key[..dataItem.Key.LastIndexOf(".")];
+                        MapDefinitionFromArgs(ConstructArgs(localArgs, definition, typeOverride: $"{type}-{Common.Constants.TxtType}"));
+                        definition.Id = TrimId(id);
+                        definition.ValueType = ValueType.SpecialVariable;
+                        definition.Code = FormatCode(dataItem);
+                        definition.OriginalCode = FormatCode(dataItem, skipVariables: true);
+                        var tags = ParseScriptTags(new List<IScriptElement>() { dataItem }, id);
+                        if (tags.Any())
+                        {
+                            foreach (var tag in tags)
+                            {
+                                var lower = tag.ToLowerInvariant();
+                                if (!definition.Tags.Contains(lower))
+                                {
+                                    definition.Tags.Add(lower);
+                                }
+                            }
+                        }
+                        result.Add(definition);
+                    }
+                    else if (dataItem.Values != null)
                     {
                         if (isLua)
                         {
@@ -130,7 +164,7 @@ namespace IronyModManager.Parser.Generic
                                     MapDefinitionFromArgs(ConstructArgs(localArgs, definition, typeOverride: $"{type}-{Common.Constants.TxtType}"));
                                     definition.Id = TrimId(id);
                                     definition.ValueType = ValueType.SpecialVariable;
-                                    definition.OriginalCode = definition.Code = $"{type}.{id} = {item.Value}";
+                                    definition.OriginalCode = definition.Code = $"{type}.{FormatCode(item, skipVariables: true)}";
                                     var tags = ParseScriptTags(item.Values, item.Key);
                                     if (tags.Any())
                                     {
@@ -175,31 +209,6 @@ namespace IronyModManager.Parser.Generic
                                 result.Add(definition);
                             }
                         }
-                    }
-                    else if (!string.IsNullOrWhiteSpace(dataItem.Key) && !string.IsNullOrWhiteSpace(dataItem.Operator) && dataItem.Key.Contains('.'))
-                    {
-                        //Dot notation is used
-                        var definition = GetDefinitionInstance();
-                        var id = dataItem.Key.Substring(dataItem.Key.LastIndexOf(".") + 1, dataItem.Key.Length - dataItem.Key.LastIndexOf(".") - 1);
-                        var type = dataItem.Key[..dataItem.Key.LastIndexOf(".")];
-                        MapDefinitionFromArgs(ConstructArgs(localArgs, definition, typeOverride: $"{type}-{Common.Constants.TxtType}"));
-                        definition.Id = TrimId(id);
-                        definition.ValueType = ValueType.SpecialVariable;
-                        definition.Code = FormatCode(dataItem);
-                        definition.OriginalCode = FormatCode(dataItem, skipVariables: true);
-                        var tags = ParseScriptTags(new List<IScriptElement>() { dataItem }, id);
-                        if (tags.Any())
-                        {
-                            foreach (var tag in tags)
-                            {
-                                var lower = tag.ToLowerInvariant();
-                                if (!definition.Tags.Contains(lower))
-                                {
-                                    definition.Tags.Add(lower);
-                                }
-                            }
-                        }
-                        result.Add(definition);
                     }
                     else
                     {
