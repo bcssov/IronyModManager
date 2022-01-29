@@ -4,7 +4,7 @@
 // Created          : 03-28-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 01-28-2022
+// Last Modified On : 01-29-2022
 // ***********************************************************************
 // <copyright file="WholeTextParser.cs" company="Mario">
 //     Mario
@@ -18,6 +18,7 @@ using System.Linq;
 using System.Text;
 using IronyModManager.Parser.Common.Args;
 using IronyModManager.Parser.Common.Parsers;
+using IronyModManager.Parser.Common.Parsers.Models;
 using IronyModManager.Shared;
 using IronyModManager.Shared.Models;
 using ValueType = IronyModManager.Shared.Models.ValueType;
@@ -101,9 +102,9 @@ namespace IronyModManager.Parser.Generic
         /// <returns>IEnumerable&lt;IDefinition&gt;.</returns>
         public override IEnumerable<IDefinition> Parse(ParserArgs args)
         {
-            bool fileNameTag = false;
+            var fileNameTag = IsFileNameTag(args);
             // Doesn't seem to like fxh and or shader file extensions
-            if (!skipValidationForTypes.Any(p => args.File.EndsWith(p, StringComparison.OrdinalIgnoreCase)))
+            if (!fileNameTag)
             {
                 var errors = EvalForErrorsOnly(args);
                 if (errors != null)
@@ -111,36 +112,20 @@ namespace IronyModManager.Parser.Generic
                     return errors;
                 }
             }
-            else
-            {
-                fileNameTag = true;
-            }
 
-            // This type is a bit different and only will conflict in filenames.
-            var code = codeParser.ParseScriptWithoutValidation(args.Lines, args.File);
             var def = GetDefinitionInstance();
             MapDefinitionFromArgs(ConstructArgs(args, def));
-            if (!fileNameTag)
-            {
-                var sb = new StringBuilder();
-                foreach (var result in code.Values)
-                {
-                    sb.AppendLine(FormatCode(result));
-                }
-                def.OriginalCode = def.Code = sb.ToString();
-            }
-            else
-            {
-                def.OriginalCode = def.Code = string.Join(Environment.NewLine, args.Lines);
-            }
             def.Id = Path.GetFileName(args.File).ToLowerInvariant();
             if (fileNameTag)
             {
+                def.OriginalCode = def.Code = GetFileTagCode(args.File, args.Lines);
                 def.Tags.Add(def.Id.ToLowerInvariant());
             }
             else
             {
-                // Get tags only
+                var code = codeParser.ParseScriptWithoutValidation(args.Lines, args.File);
+                def.OriginalCode = def.Code = GetNonFileTagCode(code);
+
                 var definitions = new List<IDefinition>();
                 definitions.AddRange(ParseSimpleTypes(code.Values, args));
                 definitions.AddRange(ParseComplexTypes(code.Values, args));
@@ -199,6 +184,42 @@ namespace IronyModManager.Parser.Generic
         protected virtual bool CanParseStartsWith(CanParseArgs args)
         {
             return startsWithChecks.Any(s => args.File.StartsWith(s, StringComparison.OrdinalIgnoreCase));
+        }
+
+        /// <summary>
+        /// Gets the file tag code.
+        /// </summary>
+        /// <param name="file">The file.</param>
+        /// <param name="lines">The lines.</param>
+        /// <returns>System.String.</returns>
+        protected virtual string GetFileTagCode(string file, IEnumerable<string> lines)
+        {
+            return string.Join(Environment.NewLine, lines);
+        }
+
+        /// <summary>
+        /// Gets the non file tag code.
+        /// </summary>
+        /// <param name="code">The code.</param>
+        /// <returns>System.String.</returns>
+        protected virtual string GetNonFileTagCode(IParseResponse code)
+        {
+            var sb = new StringBuilder();
+            foreach (var result in code.Values)
+            {
+                sb.AppendLine(FormatCode(result));
+            }
+            return sb.ToString();
+        }
+
+        /// <summary>
+        /// Determines whether [is file name tag] [the specified arguments].
+        /// </summary>
+        /// <param name="args">The arguments.</param>
+        /// <returns><c>true</c> if [is file name tag] [the specified arguments]; otherwise, <c>false</c>.</returns>
+        protected virtual bool IsFileNameTag(ParserArgs args)
+        {
+            return skipValidationForTypes.Any(p => args.File.EndsWith(p, StringComparison.OrdinalIgnoreCase));
         }
 
         /// <summary>

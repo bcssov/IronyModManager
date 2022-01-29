@@ -70,7 +70,7 @@ namespace IronyModManager.Parser
             {
                 typeof(FlagsParser), typeof(SolarSystemInitializersParser), typeof(Games.Stellaris.WholeTextParser),
                 typeof(OverwrittenParser), typeof(ScriptedVariablesParser), typeof(OverwrittenObjectSingleFileParser),
-                typeof(KeyValuePairParser)
+                typeof(KeyValuePairParser), typeof(Games.HOI4.WholeTextParser)
             });
             container.Register<IParserManager, ParserManager>();
             container.Register<IModObject, ModObject>();

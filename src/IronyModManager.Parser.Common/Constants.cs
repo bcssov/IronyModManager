@@ -123,6 +123,26 @@ namespace IronyModManager.Parser.Common
         #region Classes
 
         /// <summary>
+        /// Class HOI4.
+        /// </summary>
+        public static class HOI4
+        {
+            #region Fields
+
+            /// <summary>
+            /// The country tags
+            /// </summary>
+            public static readonly string CountryTags = MergePath(CommonPath, "country_tags");
+
+            /// <summary>
+            /// The graphical culture type
+            /// </summary>
+            public static readonly string GraphicalCultureType = MergePath(CommonPath, "graphicalculturetype.txt");
+
+            #endregion Fields
+        }
+
+        /// <summary>
         /// Class Localization.
         /// </summary>
         public static class Localization
@@ -270,17 +290,6 @@ namespace IronyModManager.Parser.Common
             public static readonly char[] Operators = new char[] { EqualsOperator, GreaterThanOperator, LowerThanOperator, NotEqualOperator };
 
             #endregion Fields
-        }
-
-        /// <summary>
-        /// Class HOI4.
-        /// </summary>
-        public static class HOI4
-        {
-            /// <summary>
-            /// The country tags
-            /// </summary>
-            public static readonly string CountryTags = MergePath(CommonPath, "country_tags");
         }
 
         /// <summary>

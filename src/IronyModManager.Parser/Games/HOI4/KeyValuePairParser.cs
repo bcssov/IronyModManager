@@ -33,7 +33,7 @@ namespace IronyModManager.Parser.Games.HOI4
         #region Constructors
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="KeyValuePairParser"/> class.
+        /// Initializes a new instance of the <see cref="KeyValuePairParser" /> class.
         /// </summary>
         /// <param name="codeParser">The code parser.</param>
         /// <param name="logger">The logger.</param>
@@ -68,7 +68,7 @@ namespace IronyModManager.Parser.Games.HOI4
         /// <returns><c>true</c> if this instance can parse the specified arguments; otherwise, <c>false</c>.</returns>
         public override bool CanParse(CanParseArgs args)
         {
-            return args.IsHOI4() && args.File.StartsWith(Common.Constants.HOI4.CountryTags, StringComparison.OrdinalIgnoreCase);
+            return args.IsHOI4() && (EvalStartsWith(args));
         }
 
         /// <summary>
@@ -76,7 +76,6 @@ namespace IronyModManager.Parser.Games.HOI4
         /// </summary>
         /// <param name="args">The arguments.</param>
         /// <returns>IEnumerable&lt;IDefinition&gt;.</returns>
-        /// <exception cref="System.NotImplementedException"></exception>
         public override IEnumerable<IDefinition> Parse(ParserArgs args)
         {
             var result = new List<IDefinition>();
@@ -111,6 +110,16 @@ namespace IronyModManager.Parser.Games.HOI4
                 }
             }
             return result;
+        }
+
+        /// <summary>
+        /// Evals the starts with.
+        /// </summary>
+        /// <param name="args">The arguments.</param>
+        /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
+        protected virtual bool EvalStartsWith(CanParseArgs args)
+        {
+            return args.File.StartsWith(Common.Constants.HOI4.CountryTags, StringComparison.OrdinalIgnoreCase);
         }
 
         #endregion Methods
