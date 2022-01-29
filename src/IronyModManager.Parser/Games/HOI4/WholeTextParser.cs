@@ -148,7 +148,9 @@ namespace IronyModManager.Parser.Games.HOI4
         /// <returns><c>true</c> if [is valid type] [the specified arguments]; otherwise, <c>false</c>.</returns>
         protected override bool IsValidType(CanParseArgs args)
         {
-            return CanParseEquals(args) || CanParseMapCsvFile(args.File) || CanParseStartsWith(args);
+            return CanParseEquals(args) || CanParseMapCsvFile(args.File) ||
+                CanParseStartsWith(args) ||
+                (args.File.StartsWith(Common.Constants.HOI4.GFX + System.IO.Path.DirectorySeparatorChar) && args.File.EndsWith(Common.Constants.TxtExtension, StringComparison.OrdinalIgnoreCase));
         }
 
         #endregion Methods

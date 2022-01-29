@@ -166,6 +166,36 @@ namespace IronyModManager.Parser.Tests
         }
 
         /// <summary>
+        /// Defines the test method CanParse_gfx_txt_should_be_true.
+        /// </summary>
+        [Fact]
+        public void CanParse_gfx_txt_should_be_true()
+        {
+            var args = new CanParseArgs()
+            {
+                File = "gfx\\folder\\fake.txt",
+                GameType = "HeartsofIronIV"
+            };
+            var parser = new WholeTextParser(new CodeParser(new Logger()), null);
+            parser.CanParse(args).Should().BeTrue();
+        }
+
+        /// <summary>
+        /// Defines the test method CanParse_gfx_txt_should_be_false.
+        /// </summary>
+        [Fact]
+        public void CanParse_gfx_txt_should_be_false()
+        {
+            var args = new CanParseArgs()
+            {
+                File = "gfx\\folder\\fake.dds",
+                GameType = "HeartsofIronIV"
+            };
+            var parser = new WholeTextParser(new CodeParser(new Logger()), null);
+            parser.CanParse(args).Should().BeFalse();
+        }
+
+        /// <summary>
         /// Defines the test method Parse_should_yield_results.
         /// </summary>
         [Fact]

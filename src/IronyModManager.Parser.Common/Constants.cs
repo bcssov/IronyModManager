@@ -140,6 +140,11 @@ namespace IronyModManager.Parser.Common
             #region Fields
 
             /// <summary>
+            /// The GFX
+            /// </summary>
+            public const string GFX = "gfx";
+
+            /// <summary>
             /// The map
             /// </summary>
             public const string Map = "map";
