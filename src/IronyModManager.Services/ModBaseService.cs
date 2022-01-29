@@ -4,7 +4,7 @@
 // Created          : 04-07-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 01-08-2022
+// Last Modified On : 01-29-2022
 // ***********************************************************************
 // <copyright file="ModBaseService.cs" company="Mario">
 //     Mario
@@ -298,6 +298,10 @@ namespace IronyModManager.Services
                 else
                 {
                     var validDefinitions = definitions.Where(p => p.ExistsInLastFile).ToList();
+                    if (validDefinitions.Any(d => !string.IsNullOrWhiteSpace(d.VirtualPath)))
+                    {
+                        validDefinitions = definitions.Where(d => !string.IsNullOrWhiteSpace(d.VirtualPath)).ToList();
+                    }
                     if (validDefinitions.Count == 1)
                     {
                         result.Definition = validDefinitions.FirstOrDefault();

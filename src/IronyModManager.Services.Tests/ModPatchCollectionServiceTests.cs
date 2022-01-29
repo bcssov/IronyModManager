@@ -2752,6 +2752,41 @@ namespace IronyModManager.Services.Tests
         }
 
         /// <summary>
+        /// Defines the test method EvalDefinitionPriority_gfx_replace_directory_should_win.
+        /// </summary>
+        [Fact]
+        public void EvalDefinitionPriority_gfx_replace_directory_should_win()
+        {
+            DISetup.SetupContainer();
+
+            var storageProvider = new Mock<IStorageProvider>();
+            var modParser = new Mock<IModParser>();
+            var parserManager = new Mock<IParserManager>();
+            var reader = new Mock<IReader>();
+            var modWriter = new Mock<IModWriter>();
+            var gameService = new Mock<IGameService>();
+            var mapper = new Mock<IMapper>();
+            var modPatchExporter = new Mock<IModPatchExporter>();
+            SetupMockCase(reader, parserManager, modParser);
+            gameService.Setup(p => p.GetSelected()).Returns(new Game()
+            {
+                Type = "EvalDefinitionPriority_gfx_replace_directory_should_win",
+                UserDirectory = "C:\\Users\\Fake"
+            });
+            var infoProvider = new Mock<IDefinitionInfoProvider>();
+            infoProvider.Setup(p => p.DefinitionUsesFIOSRules(It.IsAny<IDefinition>())).Returns(false);
+            infoProvider.Setup(p => p.CanProcess(It.IsAny<string>())).Returns(true);
+            var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter, new List<IDefinitionInfoProvider>() { infoProvider.Object });
+
+            var def = new Definition() { File = @"gfx\test.gfx", ModName = "1" };
+            var def2 = new Definition() { File = @"gfx\replace\test.gfx", ModName = "2", VirtualPath = "gfx\\test.gfx" };
+            var def3 = new Definition() { File = @"gfx\test.gfx", ModName = "Game", IsFromGame = true };
+            var result = service.EvalDefinitionPriority(new List<IDefinition>() { def3, def, def2 });
+            result.Definition.Should().Be(def2);
+            result.PriorityType.Should().Be(DefinitionPriorityType.ModOrder);
+        }
+
+        /// <summary>
         /// Defines the test method SaveIgnoredPathsAsync_should_be_false_when_game_is_null.
         /// </summary>
         [Fact]

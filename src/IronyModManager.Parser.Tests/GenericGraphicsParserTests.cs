@@ -93,7 +93,7 @@ namespace IronyModManager.Parser.Tests
             var result = parser.Parse(args).ToList();
             result.Should().NotBeNullOrEmpty();
             result.Count.Should().Be(2);
-            for (int i = 0; i < 1; i++)
+            for (int i = 0; i < 2; i++)
             {
                 result[i].ContentSHA.Should().Be("sha");
                 result[i].Dependencies.First().Should().Be("1");
@@ -268,7 +268,7 @@ namespace IronyModManager.Parser.Tests
             var result = parser.Parse(args).ToList();
             result.Should().NotBeNullOrEmpty();
             result.Count.Should().Be(2);
-            for (int i = 0; i < 1; i++)
+            for (int i = 0; i < 2; i++)
             {
                 result[i].ContentSHA.Should().Be("sha");
                 result[i].Dependencies.First().Should().Be("1");
@@ -552,7 +552,7 @@ namespace IronyModManager.Parser.Tests
             var result = parser.Parse(args).ToList();
             result.Should().NotBeNullOrEmpty();
             result.Count.Should().Be(4);
-            for (int i = 0; i < 2; i++)
+            for (int i = 0; i < 4; i++)
             {
                 result[i].ContentSHA.Should().Be("sha");
                 result[i].Dependencies.First().Should().Be("1");
@@ -569,16 +569,18 @@ namespace IronyModManager.Parser.Tests
                         result[i].Id.Should().Be("@test2");
                         result[i].CodeTag.Should().Be("spriteTypes");
                         result[i].ValueType.Should().Be(ValueType.Variable);
-                        break;
+                        break;                    
                     case 2:
+                        result[i].Id.Should().Be("GFX_dmm_mod_1");
+                        result[i].ValueType.Should().Be(ValueType.Object);
+                        break;
+
+                    case 3:
                         result[i].Id.Should().Be("@test3");
                         result[i].CodeTag.Should().Be("spriteTypes");
                         result[i].ValueType.Should().Be(ValueType.Variable);
                         break;
-                    case 3:
-                        result[i].Id.Should().Be("GFX_dmm_mod_1");
-                        result[i].ValueType.Should().Be(ValueType.Object);
-                        break;
+
                     default:
                         break;
                 }
@@ -620,7 +622,7 @@ namespace IronyModManager.Parser.Tests
             var result = parser.Parse(args).ToList();
             result.Should().NotBeNullOrEmpty();
             result.Count.Should().Be(4);
-            for (int i = 0; i < 3; i++)
+            for (int i = 0; i < 4; i++)
             {
                 result[i].ContentSHA.Should().Be("sha");
                 result[i].Dependencies.First().Should().Be("1");
@@ -651,6 +653,53 @@ namespace IronyModManager.Parser.Tests
                 }
                 result[i].ModName.Should().Be("fake");
                 result[i].Type.Should().Be("gui\\gui");
+            }
+        }
+
+        /// <summary>
+        /// Defines the test method Parse_gfx_replace_should_yield_results.
+        /// </summary>
+        [Fact]
+        public void Parse_gfx_replace_should_yield_results()
+        {
+            DISetup.SetupContainer();
+
+            var sb = new StringBuilder();
+            sb.AppendLine(@"spriteTypes = {");
+            sb.AppendLine(@"	spriteType = {");
+            sb.AppendLine(@"		name = ""GFX_dmm_mod_1""");
+            sb.AppendLine(@"	}");
+            sb.AppendLine(@"}");
+
+            var args = new ParserArgs()
+            {
+                ContentSHA = "sha",
+                ModDependencies = new List<string> { "1" },
+                File = "interface\\replace\\gfx.gfx",
+                Lines = sb.ToString().Split(Environment.NewLine.ToCharArray(), StringSplitOptions.RemoveEmptyEntries),
+                ModName = "fake"
+            };
+            var parser = new GraphicsParser(new CodeParser(new Logger()), null);
+            var result = parser.Parse(args).ToList();
+            result.Should().NotBeNullOrEmpty();
+            result.Count.Should().Be(1);
+            for (int i = 0; i < 1; i++)
+            {
+                result[i].ContentSHA.Should().Be("sha");
+                result[i].Dependencies.First().Should().Be("1");
+                result[i].File.Should().Be("interface\\replace\\gfx.gfx");
+                switch (i)
+                {
+                    case 0:
+                        result[i].Id.Should().Be("GFX_dmm_mod_1");
+                        result[i].ValueType.Should().Be(ValueType.Object);
+                        break;
+                    default:
+                        break;
+                }
+                result[i].ModName.Should().Be("fake");
+                result[i].Type.Should().Be("interface\\gfx");
+                result[i].VirtualPath.Should().Be("interface\\gfx.gfx");
             }
         }
     }
