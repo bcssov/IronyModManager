@@ -78,7 +78,7 @@ namespace IronyModManager.Parser.Tests
             sb3.AppendLine(@"        -0.6");
             sb3.AppendLine(@"        0.3");
             sb3.AppendLine(@"    }");
-            sb3.Append('}');            
+            sb3.Append('}');
 
             var sb4 = new StringBuilder();
             sb4.AppendLine(@"NGraphics = {");
@@ -448,6 +448,39 @@ namespace IronyModManager.Parser.Tests
                 }
                 result[i].ModName.Should().Be("fake");
             }
+        }
+
+        /// <summary>
+        /// Defines the test method Parse_lua_with_code_should_yield_results.
+        /// </summary>
+        [Fact]
+        public void Parse_lua_with_code_should_yield_results()
+        {
+            DISetup.SetupContainer();
+
+            var sb = new StringBuilder();
+            sb.AppendLine(@"NDefines_Graphics = {");
+            sb.AppendLine(@"");
+            sb.AppendLine(@"NWiki = {");
+            sb.AppendLine(@"	BASE_URL = ""https://hoi4.paradoxwikis.com/"",");
+            sb.AppendLine(@"	FORUM_URL = ""https://forum.paradoxplaza.com/forum/index.php?forums/hearts-of-iron-iv.844/""");
+            sb.AppendLine(@"}");
+            sb.AppendLine(@"}");
+            sb.AppendLine(@"");
+            sb.AppendLine(@"for k,v in pairs( NDefines_Graphics ) do NDefines[k] = v end");
+
+            var args = new ParserArgs()
+            {
+                ContentSHA = "sha",
+                ModDependencies = new List<string> { "1" },
+                File = "common\\defines\\t.lua",
+                Lines = sb.ToString().Split(Environment.NewLine.ToCharArray(), StringSplitOptions.RemoveEmptyEntries),
+                ModName = "fake"
+            };
+            var parser = new Generic.DefinesParser(new CodeParser(new Logger()), null);
+            var result = parser.Parse(args).ToList();
+            result.Should().NotBeNullOrEmpty();
+            result.Count.Should().Be(2);
         }
     }
 }

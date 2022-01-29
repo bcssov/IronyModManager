@@ -4,7 +4,7 @@
 // Created          : 02-21-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 01-28-2022
+// Last Modified On : 01-29-2022
 // ***********************************************************************
 // <copyright file="DefinesParser.cs" company="Mario">
 //     Mario
@@ -81,10 +81,34 @@ namespace IronyModManager.Parser.Generic
         /// <returns>IEnumerable&lt;IDefinition&gt;.</returns>
         public override IEnumerable<IDefinition> Parse(ParserArgs args)
         {
-            var data = TryParse(args);
+            var isLua = false;
+            IEnumerable<string> lines = args.Lines;
+            if (args.File.EndsWith(Common.Constants.LuaExtension, StringComparison.OrdinalIgnoreCase) && lines != null && lines.Any())
+            {
+                isLua = true;
+                var text = string.Join(Environment.NewLine, lines);
+                lines = text.Substring(0, text.LastIndexOf("}") + 1).SplitOnNewLine(false);
+                lines = codeParser.CleanCode(args.File, lines);
+                var newLines = new List<string>();
+                foreach (var item in lines)
+                {
+                    var line = item;
+                    if (line.Contains(','))
+                    {
+                        line = line.Substring(0, line.LastIndexOf(","));
+                    }
+                    newLines.Add(line);
+                }
+                lines = newLines;
+            }
+            var localArgs = new ParserArgs(args)
+            {
+                Lines = lines
+            };
+            var data = TryParse(localArgs);
             if (data.Error != null)
             {
-                return new List<IDefinition>() { TranslateScriptError(data.Error, args) };
+                return new List<IDefinition>() { TranslateScriptError(data.Error, localArgs) };
             }
             var result = new List<IDefinition>();
             if (data.Values?.Count() > 0)
@@ -93,30 +117,63 @@ namespace IronyModManager.Parser.Generic
                 {
                     if (dataItem.Values != null)
                     {
-                        foreach (var item in dataItem.Values)
+                        if (isLua)
                         {
-                            var definition = GetDefinitionInstance();
-                            string id = EvalDefinitionId(item.Values, item.Key);
-                            MapDefinitionFromArgs(ConstructArgs(args, definition, typeOverride: $"{dataItem.Key}-{Common.Constants.TxtType}"));
-                            definition.Id = TrimId(id);
-                            definition.ValueType = ValueType.SpecialVariable;
-                            definition.Code = FormatCode(item, dataItem.Key);
-                            definition.OriginalCode = FormatCode(item, skipVariables: true);
-                            definition.CodeSeparator = Constants.CodeSeparators.ClosingSeparators.CurlyBracket;
-                            definition.CodeTag = dataItem.Key;
-                            var tags = ParseScriptTags(item.Values, item.Key);
-                            if (tags.Any())
+                            // Turn into dot notation, easier to maintain
+                            foreach (var middleValue in dataItem.Values)
                             {
-                                foreach (var tag in tags)
+                                foreach (var item in middleValue.Values)
                                 {
-                                    var lower = tag.ToLowerInvariant();
-                                    if (!definition.Tags.Contains(lower))
+                                    var definition = GetDefinitionInstance();
+                                    var id = EvalDefinitionId(item.Values, item.Key);
+                                    var type = $"{dataItem.Key}.{middleValue.Key}";
+                                    MapDefinitionFromArgs(ConstructArgs(localArgs, definition, typeOverride: $"{type}-{Common.Constants.TxtType}"));
+                                    definition.Id = TrimId(id);
+                                    definition.ValueType = ValueType.SpecialVariable;
+                                    definition.OriginalCode = definition.Code = $"{type}.{id} = {item.Value}";
+                                    var tags = ParseScriptTags(item.Values, item.Key);
+                                    if (tags.Any())
                                     {
-                                        definition.Tags.Add(lower);
+                                        foreach (var tag in tags)
+                                        {
+                                            var lower = tag.ToLowerInvariant();
+                                            if (!definition.Tags.Contains(lower))
+                                            {
+                                                definition.Tags.Add(lower);
+                                            }
+                                        }
                                     }
+                                    result.Add(definition);
                                 }
                             }
-                            result.Add(definition);
+                        }
+                        else
+                        {
+                            foreach (var item in dataItem.Values)
+                            {
+                                var definition = GetDefinitionInstance();
+                                string id = EvalDefinitionId(item.Values, item.Key);
+                                MapDefinitionFromArgs(ConstructArgs(localArgs, definition, typeOverride: $"{dataItem.Key}-{Common.Constants.TxtType}"));
+                                definition.Id = TrimId(id);
+                                definition.ValueType = ValueType.SpecialVariable;
+                                definition.Code = FormatCode(item, dataItem.Key);
+                                definition.OriginalCode = FormatCode(item, skipVariables: true);
+                                definition.CodeSeparator = Constants.CodeSeparators.ClosingSeparators.CurlyBracket;
+                                definition.CodeTag = dataItem.Key;
+                                var tags = ParseScriptTags(item.Values, item.Key);
+                                if (tags.Any())
+                                {
+                                    foreach (var tag in tags)
+                                    {
+                                        var lower = tag.ToLowerInvariant();
+                                        if (!definition.Tags.Contains(lower))
+                                        {
+                                            definition.Tags.Add(lower);
+                                        }
+                                    }
+                                }
+                                result.Add(definition);
+                            }
                         }
                     }
                     else if (!string.IsNullOrWhiteSpace(dataItem.Key) && !string.IsNullOrWhiteSpace(dataItem.Operator) && dataItem.Key.Contains('.'))
@@ -125,7 +182,7 @@ namespace IronyModManager.Parser.Generic
                         var definition = GetDefinitionInstance();
                         var id = dataItem.Key.Substring(dataItem.Key.LastIndexOf(".") + 1, dataItem.Key.Length - dataItem.Key.LastIndexOf(".") - 1);
                         var type = dataItem.Key[..dataItem.Key.LastIndexOf(".")];
-                        MapDefinitionFromArgs(ConstructArgs(args, definition, typeOverride: $"{type}-{Common.Constants.TxtType}"));
+                        MapDefinitionFromArgs(ConstructArgs(localArgs, definition, typeOverride: $"{type}-{Common.Constants.TxtType}"));
                         definition.Id = TrimId(id);
                         definition.ValueType = ValueType.SpecialVariable;
                         definition.Code = FormatCode(dataItem);
@@ -150,8 +207,8 @@ namespace IronyModManager.Parser.Generic
                         if (string.IsNullOrWhiteSpace(dataItem.Operator))
                         {
                             var definesError = DIResolver.Get<IScriptError>();
-                            definesError.Message = $"There appears to be a syntax error detected in: {args.File}";
-                            return new List<IDefinition>() { TranslateScriptError(definesError, args) };
+                            definesError.Message = $"There appears to be a syntax error detected in: {localArgs.File}";
+                            return new List<IDefinition>() { TranslateScriptError(definesError, localArgs) };
                         }
                     }
                 }
