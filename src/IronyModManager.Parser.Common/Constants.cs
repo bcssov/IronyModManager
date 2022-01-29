@@ -145,6 +145,11 @@ namespace IronyModManager.Parser.Common
             public const string GFX = "gfx";
 
             /// <summary>
+            /// The history
+            /// </summary>
+            public const string History = "history";
+
+            /// <summary>
             /// The map
             /// </summary>
             public const string Map = "map";
