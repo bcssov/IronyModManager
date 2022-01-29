@@ -87,6 +87,16 @@ namespace IronyModManager.Parser.Games.HOI4
         }
 
         /// <summary>
+        /// Determines whether this instance [can parse map CSV file] the specified file.
+        /// </summary>
+        /// <param name="file">The file.</param>
+        /// <returns><c>true</c> if this instance [can parse map CSV file] the specified file; otherwise, <c>false</c>.</returns>
+        protected virtual bool CanParseMapCsvFile(string file)
+        {
+            return file.StartsWith(Common.Constants.HOI4.Map) && file.EndsWith(Common.Constants.TxtExtension);
+        }
+
+        /// <summary>
         /// Gets the file tag code.
         /// </summary>
         /// <param name="file">The file.</param>
@@ -105,7 +115,7 @@ namespace IronyModManager.Parser.Games.HOI4
         /// <returns><c>true</c> if [is file name tag] [the specified arguments]; otherwise, <c>false</c>.</returns>
         protected override bool IsFileNameTag(ParserArgs args)
         {
-            return args.File.Equals(Common.Constants.HOI4.GraphicalCultureType, StringComparison.OrdinalIgnoreCase);
+            return args.File.Equals(Common.Constants.HOI4.GraphicalCultureType, StringComparison.OrdinalIgnoreCase) || CanParseMapCsvFile(args.File);
         }
 
         /// <summary>
@@ -115,7 +125,7 @@ namespace IronyModManager.Parser.Games.HOI4
         /// <returns><c>true</c> if [is valid type] [the specified arguments]; otherwise, <c>false</c>.</returns>
         protected override bool IsValidType(CanParseArgs args)
         {
-            return CanParseEquals(args);
+            return CanParseEquals(args) || CanParseMapCsvFile(args.File);
         }
 
         #endregion Methods

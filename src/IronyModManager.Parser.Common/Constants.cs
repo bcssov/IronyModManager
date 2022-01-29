@@ -85,6 +85,11 @@ namespace IronyModManager.Parser.Common
         public const string ShaderExtension = ".shader";
 
         /// <summary>
+        /// The text extension
+        /// </summary>
+        public const string TxtExtension = "." + TxtType;
+
+        /// <summary>
         /// The text type
         /// </summary>
         public const string TxtType = "txt";
@@ -133,6 +138,11 @@ namespace IronyModManager.Parser.Common
         public static class HOI4
         {
             #region Fields
+
+            /// <summary>
+            /// The map
+            /// </summary>
+            public const string Map = "map";
 
             /// <summary>
             /// The country tags
