@@ -39,6 +39,14 @@ namespace IronyModManager.Parser.Games.HOI4
             Common.Constants.HOI4.GraphicalCultureType
         };
 
+        /// <summary>
+        /// The starts with checks
+        /// </summary>
+        private static readonly string[] startsWithChecks = new string[]
+        {
+            Common.Constants.HOI4.Countries
+        };
+
         #endregion Fields
 
         #region Constructors
@@ -97,6 +105,16 @@ namespace IronyModManager.Parser.Games.HOI4
         }
 
         /// <summary>
+        /// Determines whether this instance [can parse starts with] the specified arguments.
+        /// </summary>
+        /// <param name="args">The arguments.</param>
+        /// <returns><c>true</c> if this instance [can parse starts with] the specified arguments; otherwise, <c>false</c>.</returns>
+        protected override bool CanParseStartsWith(CanParseArgs args)
+        {
+            return startsWithChecks.Any(s => args.File.StartsWith(s, StringComparison.OrdinalIgnoreCase));
+        }
+
+        /// <summary>
         /// Gets the file tag code.
         /// </summary>
         /// <param name="file">The file.</param>
@@ -115,7 +133,9 @@ namespace IronyModManager.Parser.Games.HOI4
         /// <returns><c>true</c> if [is file name tag] [the specified arguments]; otherwise, <c>false</c>.</returns>
         protected override bool IsFileNameTag(ParserArgs args)
         {
-            return args.File.Equals(Common.Constants.HOI4.GraphicalCultureType, StringComparison.OrdinalIgnoreCase) || CanParseMapCsvFile(args.File);
+            return args.File.Equals(Common.Constants.HOI4.GraphicalCultureType, StringComparison.OrdinalIgnoreCase) ||
+                CanParseMapCsvFile(args.File) ||
+                args.File.StartsWith(Common.Constants.HOI4.Countries);
         }
 
         /// <summary>
@@ -125,7 +145,7 @@ namespace IronyModManager.Parser.Games.HOI4
         /// <returns><c>true</c> if [is valid type] [the specified arguments]; otherwise, <c>false</c>.</returns>
         protected override bool IsValidType(CanParseArgs args)
         {
-            return CanParseEquals(args) || CanParseMapCsvFile(args.File);
+            return CanParseEquals(args) || CanParseMapCsvFile(args.File) || CanParseStartsWith(args);
         }
 
         #endregion Methods
