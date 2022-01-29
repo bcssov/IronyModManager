@@ -199,6 +199,36 @@ namespace IronyModManager.Parser.Common
             /// </summary>
             public static readonly string IntelligenceAgencies = MergePath(CommonPath, "intelligence_agencies");
 
+            /// <summary>
+            /// The opinion modifiers
+            /// </summary>
+            public static readonly string OpinionModifiers = MergePath(CommonPath, "opinion_modifiers");
+
+            /// <summary>
+            /// The scripted GUI
+            /// </summary>
+            public static readonly string ScriptedGui = MergePath(CommonPath, "scripted_guis");
+
+            /// <summary>
+            /// The state categories
+            /// </summary>
+            public static readonly string StateCategories = MergePath(CommonPath, "state_category");
+
+            /// <summary>
+            /// The technologies
+            /// </summary>
+            public static readonly string Technologies = MergePath(CommonPath, "technologies");
+
+            /// <summary>
+            /// The unit leader
+            /// </summary>
+            public static readonly string UnitLeader = MergePath(CommonPath, "unit_leader");
+
+            /// <summary>
+            /// The units
+            /// </summary>
+            public static readonly string Units = MergePath(CommonPath, "units");
+
             #endregion Fields
         }
 
