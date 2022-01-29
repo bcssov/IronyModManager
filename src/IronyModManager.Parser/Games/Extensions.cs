@@ -4,7 +4,7 @@
 // Created          : 03-28-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 08-13-2020
+// Last Modified On : 01-29-2022
 // ***********************************************************************
 // <copyright file="Extensions.cs" company="Mario">
 //     Mario
@@ -23,6 +23,16 @@ namespace IronyModManager.Parser.Games
     public static class Extensions
     {
         #region Methods
+
+        /// <summary>
+        /// Determines whether [is ho i4] [the specified arguments].
+        /// </summary>
+        /// <param name="args">The arguments.</param>
+        /// <returns><c>true</c> if [is ho i4] [the specified arguments]; otherwise, <c>false</c>.</returns>
+        public static bool IsHOI4(this CanParseArgs args)
+        {
+            return args.GameType.Equals(Shared.Constants.GamesTypes.HeartsOfIron4.Id, StringComparison.OrdinalIgnoreCase);
+        }
 
         /// <summary>
         /// Determines whether the specified arguments is stellaris.

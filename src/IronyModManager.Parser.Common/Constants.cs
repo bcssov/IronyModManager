@@ -4,7 +4,7 @@
 // Created          : 02-16-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 01-28-2022
+// Last Modified On : 01-29-2022
 // ***********************************************************************
 // <copyright file="Constants.cs" company="Mario">
 //     Mario
@@ -270,6 +270,17 @@ namespace IronyModManager.Parser.Common
             public static readonly char[] Operators = new char[] { EqualsOperator, GreaterThanOperator, LowerThanOperator, NotEqualOperator };
 
             #endregion Fields
+        }
+
+        /// <summary>
+        /// Class HOI4.
+        /// </summary>
+        public static class HOI4
+        {
+            /// <summary>
+            /// The country tags
+            /// </summary>
+            public static readonly string CountryTags = MergePath(CommonPath, "country_tags");
         }
 
         /// <summary>
