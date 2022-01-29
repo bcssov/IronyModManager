@@ -86,29 +86,34 @@ namespace IronyModManager.Parser.Generic
             if (codeParser.IsLua(args.File) && lines != null && lines.Any())
             {
                 isLua = true;
-                var text = string.Join(Environment.NewLine, lines);
-                lines = text[..(text.LastIndexOf("}") + 1)].SplitOnNewLine(false);
-                lines = codeParser.CleanCode(args.File, lines);
-                var newLines = new List<string>();
-                var curlyCount = 0;
-                var curlyCloseCount = 0;
-                foreach (var item in lines)
+                // Check whether this is dot notation type
+                var firstMatch = lines.FirstOrDefault(l => l.Contains(Common.Constants.Scripts.EqualsOperator));
+                if (firstMatch != null && !firstMatch.Split(Common.Constants.Scripts.EqualsOperator, StringSplitOptions.RemoveEmptyEntries)[0].Contains("."))
                 {
-                    var line = item;
-                    curlyCount += line.Count(s => s == Common.Constants.Scripts.OpenObject);
-                    curlyCloseCount += line.Count(s => s == Common.Constants.Scripts.CloseObject);
-                    if (curlyCount - curlyCloseCount <= 2 && line.Contains(','))
+                    var text = string.Join(Environment.NewLine, lines);
+                    lines = text[..(text.LastIndexOf("}") + 1)].SplitOnNewLine(false);
+                    lines = codeParser.CleanCode(args.File, lines);
+                    var newLines = new List<string>();
+                    var curlyCount = 0;
+                    var curlyCloseCount = 0;
+                    foreach (var item in lines)
                     {
-                        var bracketLocation = line.IndexOf(Common.Constants.Scripts.OpenObject.ToString());
-                        int idLoc = line.LastIndexOf(",");
-                        if (idLoc > bracketLocation || bracketLocation == -1)
+                        var line = item;
+                        curlyCount += line.Count(s => s == Common.Constants.Scripts.OpenObject);
+                        curlyCloseCount += line.Count(s => s == Common.Constants.Scripts.CloseObject);
+                        if (curlyCount - curlyCloseCount <= 2 && line.Contains(','))
                         {
-                            line = line[..line.LastIndexOf(",")];
+                            var bracketLocation = line.IndexOf(Common.Constants.Scripts.OpenObject.ToString());
+                            int idLoc = line.LastIndexOf(",");
+                            if (idLoc > bracketLocation || bracketLocation == -1)
+                            {
+                                line = line[..line.LastIndexOf(",")];
+                            }
                         }
+                        newLines.Add(line);
                     }
-                    newLines.Add(line);
+                    lines = newLines;
                 }
-                lines = newLines;
             }
             var localArgs = new ParserArgs(args)
             {
