@@ -205,6 +205,11 @@ namespace IronyModManager.Parser.Common
             public static readonly string Countries = MergePath(CommonPath, "countries");
 
             /// <summary>
+            /// The country leader
+            /// </summary>
+            public static readonly string CountryLeader = MergePath(CommonPath, "country_leader");
+
+            /// <summary>
             /// The country tags
             /// </summary>
             public static readonly string CountryTags = MergePath(CommonPath, "country_tags");

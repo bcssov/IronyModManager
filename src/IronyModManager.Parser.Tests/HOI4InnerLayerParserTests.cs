@@ -165,6 +165,21 @@ namespace IronyModManager.Parser.Tests
         }
 
         /// <summary>
+        /// Defines the test method CanParse_country_leader_should_be_true.
+        /// </summary>
+        [Fact]
+        public void CanParse_country_leader_should_be_true()
+        {
+            var args = new CanParseArgs()
+            {
+                File = "common\\country_leader\\test.txt",
+                GameType = "HeartsofIronIV"
+            };
+            var parser = new Games.HOI4.InnerLayerParser(new CodeParser(new Logger()), null);
+            parser.CanParse(args).Should().BeTrue();
+        }
+
+        /// <summary>
         /// Defines the test method Parse_should_yield_results.
         /// </summary>
         [Fact]

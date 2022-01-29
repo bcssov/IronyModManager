@@ -4,7 +4,7 @@
 // Created          : 02-29-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 01-28-2022
+// Last Modified On : 01-29-2022
 // ***********************************************************************
 // <copyright file="ModHolderControlViewModel.cs" company="Mario">
 //     Mario
@@ -702,7 +702,7 @@ namespace IronyModManager.ViewModels.Controls
 
             Task.Run(() => EvalResumeAvailabilityLoopAsync().ConfigureAwait(false));
 
-            ShowAdvancedFeatures = (gameService.GetSelected()?.AdvancedFeatures) == GameAdvancedFeatures.Full;
+            ShowAdvancedFeatures = (gameService.GetSelected()?.AdvancedFeatures) != GameAdvancedFeatures.None;
             AnalyzeClass = string.Empty;
 
             var allowModSelectionEnabled = this.WhenAnyValue(v => v.AllowModSelection);
@@ -773,24 +773,32 @@ namespace IronyModManager.ViewModels.Controls
                     await TriggerOverlayAsync(id, true, localizationManager.GetResource(LocalizationResources.App.WaitBackgroundOperationMessage));
                     await shutDownState.WaitUntilFreeAsync();
                     modPatchCollectionService.ResetPatchStateCache();
-                    var mode = await modPatchCollectionService.GetPatchStateModeAsync(CollectionMods.SelectedModCollection.Name);
-                    var versions = gameService.GetVersions(game);
-                    switch (mode)
+                    if (game.AdvancedFeatures == GameAdvancedFeatures.Full)
                     {
-                        case PatchStateMode.Default:
-                            AdvancedModeVisible = false;
-                            DefaultModeVisible = true;
-                            break;
+                        var mode = await modPatchCollectionService.GetPatchStateModeAsync(CollectionMods.SelectedModCollection.Name);
+                        var versions = gameService.GetVersions(game);
+                        switch (mode)
+                        {
+                            case PatchStateMode.Default:
+                                AdvancedModeVisible = false;
+                                DefaultModeVisible = true;
+                                break;
 
-                        case PatchStateMode.Advanced:
-                            AdvancedModeVisible = true;
-                            DefaultModeVisible = false;
-                            break;
+                            case PatchStateMode.Advanced:
+                                AdvancedModeVisible = true;
+                                DefaultModeVisible = false;
+                                break;
 
-                        default:
-                            AdvancedModeVisible = true;
-                            DefaultModeVisible = true;
-                            break;
+                            default:
+                                AdvancedModeVisible = true;
+                                DefaultModeVisible = true;
+                                break;
+                        }
+                    }
+                    else
+                    {
+                        AdvancedModeVisible = false;
+                        DefaultModeVisible = false;
                     }
                     await TriggerOverlayAsync(id, false);
                     await Task.Delay(50);
@@ -959,7 +967,7 @@ namespace IronyModManager.ViewModels.Controls
         {
             forceEnableResumeButton = false;
             EvalResumeAvailability(game);
-            ShowAdvancedFeatures = (game?.AdvancedFeatures) == GameAdvancedFeatures.Full;
+            ShowAdvancedFeatures = (game?.AdvancedFeatures) != GameAdvancedFeatures.None;
             base.OnSelectedGameChanged(game);
         }
 

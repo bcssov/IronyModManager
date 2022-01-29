@@ -48,7 +48,7 @@
         "PreferredParser": "HOI4WholeTextParser"
     }, {
         "DirectoryPath": "common\\country_leader",
-        "PreferredParser": "DefaultParser"
+        "PreferredParser": "HOI4InnerLayerParser"
     }, {
         "DirectoryPath": "common\\country_tags",
         "PreferredParser": "HOI4KeyValuePairParser"

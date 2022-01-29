@@ -4,7 +4,7 @@
 // Created          : 04-25-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 12-07-2020
+// Last Modified On : 01-29-2022
 // ***********************************************************************
 // <copyright file="DefinitionPriorityClassConverter.cs" company="Mario">
 //     Mario
@@ -39,6 +39,9 @@ namespace IronyModManager.Converters
         /// <param name="parameter">The parameter.</param>
         /// <param name="culture">The culture.</param>
         /// <returns>System.Object.</returns>
+        /// <remarks>This method should not throw exceptions. If the value is not convertible, return
+        /// <see cref="F:Avalonia.AvaloniaProperty.UnsetValue" />. Any exception thrown will be treated as
+        /// an application exception.</remarks>
         public object Convert(IList<object> values, Type targetType, object parameter, CultureInfo culture)
         {
             if (values != null && values.Count == 2)
@@ -59,7 +62,7 @@ namespace IronyModManager.Converters
                         }
                     }
                     var priority = service.EvalDefinitionPriority(clean);
-                    if (priority?.Definition == definition)
+                    if (priority != null && priority.Definition == definition && priority.PriorityType != Models.Common.DefinitionPriorityType.NoProvider)
                     {
                         return "CopiedDefinition";
                     }

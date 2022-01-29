@@ -4,7 +4,7 @@
 // Created          : 03-24-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 12-06-2021
+// Last Modified On : 01-29-2022
 // ***********************************************************************
 // <copyright file="ModCompareSelectorControlViewModel.cs" company="Mario">
 //     Mario
@@ -237,10 +237,14 @@ namespace IronyModManager.ViewModels.Controls
                             priorityDefinition.Definition = col.First();
                         }
                     }
-                    var newDefinition = await modPatchCollectionService.CreatePatchDefinitionAsync(priorityDefinition.Definition, CollectionName);
-                    if (newDefinition != null)
+                    IDefinition newDefinition = null;
+                    if (priorityDefinition.PriorityType != DefinitionPriorityType.NoProvider)
                     {
-                        col.Add(newDefinition);
+                        newDefinition = await modPatchCollectionService.CreatePatchDefinitionAsync(priorityDefinition.Definition, CollectionName);
+                        if (newDefinition != null)
+                        {
+                            col.Add(newDefinition);
+                        }
                     }
                     VirtualDefinitions = col.ToObservableCollection();
                     var virtualDefinitions = VirtualDefinitions;
@@ -263,7 +267,7 @@ namespace IronyModManager.ViewModels.Controls
                             {
                                 left = virtualDefinitions.FirstOrDefault(p => p != newDefinition && p != priorityDefinition.Definition);
                             }
-                            var right = newDefinition;
+                            var right = newDefinition ?? priorityDefinition.Definition;
                             DefinitionSelection = new CompareSelection(left, right);
                             LeftSelectedDefinition = left;
                             RightSelectedDefinition = right;

@@ -1887,7 +1887,7 @@ namespace IronyModManager.Services.Tests
             var def2 = new Definition();
             var result = service.EvalDefinitionPriority(new List<IDefinition>() { def, def2 });
             result.Definition.Should().Be(def);
-            result.PriorityType.Should().Be(DefinitionPriorityType.None);
+            result.PriorityType.Should().Be(DefinitionPriorityType.NoProvider);
         }
 
         /// <summary>

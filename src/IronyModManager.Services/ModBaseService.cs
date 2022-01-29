@@ -240,10 +240,12 @@ namespace IronyModManager.Services
             // And the game is never a mod. If this changes this is going to be bad for me.
             var game = GameService.GetSelected();
             var result = GetModelInstance<IPriorityDefinitionResult>();
+            var noProvider = false;
             if (game != null && definitions?.Count() > 1)
             {
                 var provider = DefinitionInfoProviders.FirstOrDefault(p => p.CanProcess(game.Type));
-                if (provider != null)
+                noProvider = provider == null;
+                if (!noProvider)
                 {
                     // Handle localizations differently
                     var file = definitions.FirstOrDefault().File ?? string.Empty;
@@ -427,6 +429,10 @@ namespace IronyModManager.Services
                 }
                 result.Definition = definition;
                 result.FileName = definition?.File;
+                if (noProvider)
+                {
+                    result.PriorityType = DefinitionPriorityType.NoProvider;
+                }
             }
             return result;
         }
