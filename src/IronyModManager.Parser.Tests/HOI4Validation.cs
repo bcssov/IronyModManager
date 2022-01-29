@@ -35,7 +35,7 @@ namespace IronyModManager.Parser.Tests
         /// Initializes a new instance of the <see cref="StellarisValidation" /> class.
         /// </summary>
         /// <param name="writer">The writer.</param>
-        public HOI4Validation(ITestOutputHelper writer) : base(writer, @"D:\Games\Steam\steamapps\common\Hearts of Iron IV", "HOI4")
+        public HOI4Validation(ITestOutputHelper writer) : base(writer, @"D:\Games\Steam\steamapps\common\Hearts of Iron IV\\", "HeartsofIronIV")
         {
         }
 

@@ -262,6 +262,10 @@ namespace IronyModManager.Parser.Tests
                             usedParser = ordered.First().First().UsedParser;
                         }
                     }
+                    else if (groupedParsers.All(p => p.First().UsedParser.Contains("WholeTextParser")))
+                    {
+                        usedParser = "GenericWholeTextParser";
+                    }
                     else
                     {
                         throw new ArgumentException("Fatal error. Check parsers.");
