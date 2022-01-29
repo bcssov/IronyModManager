@@ -30,10 +30,10 @@ namespace IronyModManager.Parser.Tests
     public class HOI4InnerLayerParserTests
     {
         /// <summary>
-        /// Defines the test method CanParse_should_be_false_then_true.
+        /// Defines the test method CanParse_should_be_false.
         /// </summary>
         [Fact]
-        public void CanParse_should_be_false_then_true()
+        public void CanParse_should_be_false()
         {
             var args = new CanParseArgs()
             {
@@ -72,6 +72,36 @@ namespace IronyModManager.Parser.Tests
             };
             var parser = new Games.HOI4.InnerLayerParser(new CodeParser(new Logger()), null);
             parser.CanParse(args).Should().BeTrue();
+        }
+
+        /// <summary>
+        /// Defines the test method CanParse_decisions_should_be_true.
+        /// </summary>
+        [Fact]
+        public void CanParse_decisions_should_be_true()
+        {
+            var args = new CanParseArgs()
+            {
+                File = "common\\decisions\\test.txt",
+                GameType = "HeartsofIronIV"
+            };
+            var parser = new Games.HOI4.InnerLayerParser(new CodeParser(new Logger()), null);
+            parser.CanParse(args).Should().BeTrue();
+        }
+
+        /// <summary>
+        /// Defines the test method CanParse_decision_categories_should_be_true.
+        /// </summary>
+        [Fact]
+        public void CanParse_decision_categories_should_be_true()
+        {
+            var args = new CanParseArgs()
+            {
+                File = "common\\decisions\\categories\\test.txt",
+                GameType = "HeartsofIronIV"
+            };
+            var parser = new Games.HOI4.InnerLayerParser(new CodeParser(new Logger()), null);
+            parser.CanParse(args).Should().BeFalse();
         }
 
         /// <summary>

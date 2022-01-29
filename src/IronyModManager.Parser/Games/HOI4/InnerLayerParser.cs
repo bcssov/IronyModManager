@@ -13,6 +13,7 @@
 // ***********************************************************************
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using IronyModManager.Parser.Common.Args;
 using IronyModManager.Parser.Common.Parsers;
@@ -33,12 +34,19 @@ namespace IronyModManager.Parser.Games.HOI4
         #region Fields
 
         /// <summary>
+        /// The exact match
+        /// </summary>
+        private static readonly string[] exactMatch = new string[]
+        {
+            Common.Constants.HOI4.Decisions
+        };
+
+        /// <summary>
         /// The starts with checks
         /// </summary>
         private static readonly string[] startsWithChecks = new string[]
         {
-           Common.Constants.HOI4.Abilities, Common.Constants.HOI4.Characters,
-           Common.Constants.HOI4.Decisions
+           Common.Constants.HOI4.Abilities, Common.Constants.HOI4.Characters
         };
 
         #endregion Fields
@@ -81,7 +89,7 @@ namespace IronyModManager.Parser.Games.HOI4
         /// <returns><c>true</c> if this instance can parse the specified arguments; otherwise, <c>false</c>.</returns>
         public override bool CanParse(CanParseArgs args)
         {
-            return args.IsHOI4() && EvalStartsWith(args);
+            return args.IsHOI4() && (EvalStartsWith(args) || EvalEquals(args));
         }
 
         /// <summary>
@@ -92,7 +100,7 @@ namespace IronyModManager.Parser.Games.HOI4
         public override IEnumerable<IDefinition> Parse(ParserArgs args)
         {
             var result = ParseSecondLevel(args);
-            if (args.File.StartsWith(Common.Constants.HOI4.Decisions))
+            if (Path.GetDirectoryName(args.File).Equals(Common.Constants.HOI4.Decisions))
             {
                 foreach (var item in result)
                 {
@@ -100,6 +108,16 @@ namespace IronyModManager.Parser.Games.HOI4
                 }
             }
             return result;
+        }
+
+        /// <summary>
+        /// Evals the equals.
+        /// </summary>
+        /// <param name="args">The arguments.</param>
+        /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
+        protected virtual bool EvalEquals(CanParseArgs args)
+        {
+            return exactMatch.Any(s => Path.GetDirectoryName(args.File).Equals(s, StringComparison.OrdinalIgnoreCase));
         }
 
         /// <summary>
