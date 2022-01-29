@@ -161,7 +161,7 @@ namespace IronyModManager.Parser.Tests
                 {
                     continue;
                 }
-                //if (relativePath.Contains(@"defines"))
+                //if (relativePath.Contains(@"common\ideas\SOV.txt"))
                 //{
                 //    System.Diagnostics.Debugger.Break();
                 //}

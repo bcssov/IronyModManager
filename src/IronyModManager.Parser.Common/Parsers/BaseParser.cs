@@ -4,7 +4,7 @@
 // Created          : 02-17-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 01-28-2022
+// Last Modified On : 01-29-2022
 // ***********************************************************************
 // <copyright file="BaseParser.cs" company="Mario">
 //     Mario
@@ -171,9 +171,13 @@ namespace IronyModManager.Parser.Common.Parsers
         /// <returns>IEnumerable&lt;IDefinition&gt;.</returns>
         protected virtual IEnumerable<IDefinition> EvalForErrorsOnly(ParserArgs args)
         {
+            if (args.ValidationType == ValidationType.SkipAll)
+            {
+                return null;
+            }
             try
             {
-                var error = codeParser.PerformValidityCheck(args.Lines, args.File, ShouldSwitchToBasicChecking(args.Lines));
+                var error = codeParser.PerformValidityCheck(args.Lines, args.File, ShouldSwitchToBasicChecking(args.Lines) || args.ValidationType == ValidationType.SimpleOnly);
                 if (error != null)
                 {
                     return new List<IDefinition>() { TranslateScriptError(error, args) };
@@ -555,7 +559,7 @@ namespace IronyModManager.Parser.Common.Parsers
             }
             try
             {
-                var simpleChecks = args.ValidationType == ValidationType.SimplyOnly;
+                var simpleChecks = args.ValidationType == ValidationType.SimpleOnly;
                 if (!simpleChecks)
                 {
                     simpleChecks = ShouldSwitchToBasicChecking(args.Lines);

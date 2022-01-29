@@ -4,7 +4,7 @@
 // Created          : 01-28-2022
 //
 // Last Modified By : Mario
-// Last Modified On : 01-28-2022
+// Last Modified On : 01-29-2022
 // ***********************************************************************
 // <copyright file="Enums.cs" company="Mario">
 //     Mario
@@ -28,9 +28,9 @@ namespace IronyModManager.Parser.Common
         Full,
 
         /// <summary>
-        /// The simply only
+        /// The simple only
         /// </summary>
-        SimplyOnly,
+        SimpleOnly,
 
         /// <summary>
         /// The skip all

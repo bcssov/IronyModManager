@@ -75,7 +75,7 @@
         "PreferredParser": "GenericKeyParser"
     }, {
         "DirectoryPath": "common\\component_templates",
-        "PreferredParser": "StellarisWholeTextParser"
+        "PreferredParser": "GenericWholeTextParser"
     }, {
         "DirectoryPath": "common\\country_container",
         "PreferredParser": "DefaultParser"
