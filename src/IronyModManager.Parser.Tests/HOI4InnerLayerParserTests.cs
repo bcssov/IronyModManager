@@ -126,5 +126,61 @@ namespace IronyModManager.Parser.Tests
                 result[i].Type.Should().Be("common\\abilities\\txt");
             }
         }
+
+        /// <summary>
+        /// Defines the test method Parse_decisions_should_yield_results.
+        /// </summary>
+        [Fact]
+        public void Parse_decisions_should_yield_results()
+        {
+            DISetup.SetupContainer();
+
+            var sb = new StringBuilder();
+            sb.AppendLine(@"political_actions = {");
+            sb.AppendLine(@"	");
+            sb.AppendLine(@"	sample = {");
+            sb.AppendLine(@"		allowed = {");
+            sb.AppendLine(@"			original_tag = TAG");
+            sb.AppendLine(@"		}");
+            sb.AppendLine(@"		available = {");
+            sb.AppendLine(@"			");
+            sb.AppendLine(@"		}");
+            sb.AppendLine(@"	}");
+            sb.AppendLine(@"}");
+
+
+            var args = new ParserArgs()
+            {
+                ContentSHA = "sha",
+                ModDependencies = new List<string> { "1" },
+                File = "common\\decisions\\fake.txt",
+                Lines = sb.ToString().Split(Environment.NewLine.ToCharArray(), StringSplitOptions.RemoveEmptyEntries),
+                ModName = "fake"
+            };
+            var parser = new Games.HOI4.InnerLayerParser(new CodeParser(new Logger()), null);
+            var result = parser.Parse(args).ToList();
+            result.Should().NotBeNullOrEmpty();
+            result.Count.Should().Be(1);
+            for (int i = 0; i < 1; i++)
+            {
+                result[i].ContentSHA.Should().Be("sha");
+                result[i].Dependencies.First().Should().Be("1");
+                result[i].File.Should().Be("common\\decisions\\fake.txt");
+                switch (i)
+                {
+                    case 0:
+                        result[i].Id.Should().Be("sample");
+                        result[i].CodeTag.Should().Be("political_actions");
+                        result[i].CodeSeparator.Should().Be("{");
+                        result[i].ValueType.Should().Be(ValueType.Object);
+                        break;
+
+                    default:
+                        break;
+                }
+                result[i].ModName.Should().Be("fake");
+                result[i].Type.Should().Be("common\\decisions\\political_actions-txt");
+            }
+        }
     }
 }

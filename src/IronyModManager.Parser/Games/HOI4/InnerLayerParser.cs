@@ -30,13 +30,18 @@ namespace IronyModManager.Parser.Games.HOI4
     /// <seealso cref="IronyModManager.Parser.Common.Parsers.IGameParser" />
     public class InnerLayerParser : BaseParser, IGameParser
     {
+        #region Fields
+
         /// <summary>
         /// The starts with checks
         /// </summary>
         private static readonly string[] startsWithChecks = new string[]
         {
-           Common.Constants.HOI4.Abilities, Common.Constants.HOI4.Characters
+           Common.Constants.HOI4.Abilities, Common.Constants.HOI4.Characters,
+           Common.Constants.HOI4.Decisions
         };
+
+        #endregion Fields
 
         #region Constructors
 
@@ -86,7 +91,15 @@ namespace IronyModManager.Parser.Games.HOI4
         /// <returns>IEnumerable&lt;IDefinition&gt;.</returns>
         public override IEnumerable<IDefinition> Parse(ParserArgs args)
         {
-            return ParseSecondLevel(args);
+            var result = ParseSecondLevel(args);
+            if (args.File.StartsWith(Common.Constants.HOI4.Decisions))
+            {
+                foreach (var item in result)
+                {
+                    item.Type = FormatType(args.File, typeOverride: $"{item.CodeTag}-{Common.Constants.TxtType}");
+                }
+            }
+            return result;
         }
 
         /// <summary>

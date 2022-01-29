@@ -175,6 +175,11 @@ namespace IronyModManager.Parser.Common
             public static readonly string CountryTags = MergePath(CommonPath, "country_tags");
 
             /// <summary>
+            /// The decisions
+            /// </summary>
+            public static readonly string Decisions = MergePath(CommonPath, "decisions");
+
+            /// <summary>
             /// The graphical culture type
             /// </summary>
             public static readonly string GraphicalCultureType = MergePath(CommonPath, "graphicalculturetype.txt");
