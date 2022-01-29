@@ -272,5 +272,67 @@ namespace IronyModManager.Parser.Tests
                 result[i].Type.Should().Be("common\\decisions\\political_actions-txt");
             }
         }
+
+        /// <summary>
+        /// Defines the test method Parse_levels_should_yield_results.
+        /// </summary>
+        [Fact]
+        public void Parse_levels_should_yield_results()
+        {
+            DISetup.SetupContainer();
+
+            var sb = new StringBuilder();
+            sb.AppendLine(@"leader_attack_skills = {");
+            sb.AppendLine(@"");
+            sb.AppendLine(@"	### NAVY ###");
+            sb.AppendLine(@"	1 = {");
+            sb.AppendLine(@"		cost = 100");
+            sb.AppendLine(@"		type = navy");
+            sb.AppendLine(@"		modifier = {");
+            sb.AppendLine(@"			naval_damage_factor = 0.05");
+            sb.AppendLine(@"		}");
+            sb.AppendLine(@"	}");
+            sb.AppendLine(@"");
+            sb.AppendLine(@"	2 = {");
+            sb.AppendLine(@"		cost = 200");
+            sb.AppendLine(@"		type = navy");
+            sb.AppendLine(@"		modifier = {");
+            sb.AppendLine(@"			naval_damage_factor = 0.10");
+            sb.AppendLine(@"		}");
+            sb.AppendLine(@"	}");
+            sb.AppendLine(@"}");
+
+
+            var args = new ParserArgs()
+            {
+                ContentSHA = "sha",
+                ModDependencies = new List<string> { "1" },
+                File = "common\\unit_leader\\fake.txt",
+                Lines = sb.ToString().Split(Environment.NewLine.ToCharArray(), StringSplitOptions.RemoveEmptyEntries),
+                ModName = "fake"
+            };
+            var parser = new Games.HOI4.InnerLayerParser(new CodeParser(new Logger()), null);
+            var result = parser.Parse(args).ToList();
+            result.Should().NotBeNullOrEmpty();
+            result.Count.Should().Be(1);
+            for (int i = 0; i < 1; i++)
+            {
+                result[i].ContentSHA.Should().Be("sha");
+                result[i].Dependencies.First().Should().Be("1");
+                result[i].File.Should().Be("common\\unit_leader\\fake.txt");
+                switch (i)
+                {
+                    case 0:
+                        result[i].Id.Should().Be("leader_attack_skills");
+                        result[i].ValueType.Should().Be(ValueType.Object);
+                        break;
+
+                    default:
+                        break;
+                }
+                result[i].ModName.Should().Be("fake");
+                result[i].Type.Should().Be("common\\unit_leader\\txt");
+            }
+        }
     }
 }

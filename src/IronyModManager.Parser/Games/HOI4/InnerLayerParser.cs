@@ -102,11 +102,18 @@ namespace IronyModManager.Parser.Games.HOI4
         public override IEnumerable<IDefinition> Parse(ParserArgs args)
         {
             var result = ParseSecondLevel(args);
-            if (Path.GetDirectoryName(args.File).Equals(Common.Constants.HOI4.Decisions))
+            if (Path.GetDirectoryName(args.File).Equals(Common.Constants.HOI4.Decisions, StringComparison.OrdinalIgnoreCase))
             {
                 foreach (var item in result)
                 {
                     item.Type = FormatType(args.File, typeOverride: $"{item.CodeTag}-{Common.Constants.TxtType}");
+                }
+            }
+            else if (args.File.StartsWith(Common.Constants.HOI4.UnitLeader, StringComparison.OrdinalIgnoreCase))
+            {
+                if (result.Any() && result.All(p => int.TryParse(p.Id, out var _)))
+                {
+                    result = ParseRoot(args);
                 }
             }
             return result;
