@@ -481,6 +481,30 @@ namespace IronyModManager.Parser.Tests
             var result = parser.Parse(args).ToList();
             result.Should().NotBeNullOrEmpty();
             result.Count.Should().Be(2);
+            for (int i = 0; i < 2; i++)
+            {
+                result[i].ContentSHA.Should().Be("sha");
+                result[i].Dependencies.First().Should().Be("1");
+                result[i].File.Should().Be("common\\defines\\t.lua");
+                switch (i)
+                {
+                    case 0:
+                        result[i].Id.Should().Be("BASE_URL");
+                        result[i].ValueType.Should().Be(ValueType.SpecialVariable);
+                        result[i].Type.Should().Be("common\\defines\\NDefines_Graphics.NWiki-txt");
+                        result[i].Code.Should().Be("NDefines_Graphics.NWiki.BASE_URL = \"https://hoi4.paradoxwikis.com/\"");
+                        break;
+                    case 1:
+                        result[i].Id.Should().Be("FORUM_URL");
+                        result[i].ValueType.Should().Be(ValueType.SpecialVariable);
+                        result[i].Type.Should().Be("common\\defines\\NDefines_Graphics.NWiki-txt");
+                        result[i].Code.Should().Be("NDefines_Graphics.NWiki.FORUM_URL = \"https://forum.paradoxplaza.com/forum/index.php?forums/hearts-of-iron-iv.844/\"");
+                        break;
+                    default:
+                        break;
+                }
+                result[i].ModName.Should().Be("fake");
+            }
         }
     }
 }
