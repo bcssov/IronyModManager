@@ -211,6 +211,112 @@ namespace IronyModManager.Parser.Tests
         }
 
         /// <summary>
+        /// Defines the test method CanParse_music_should_be_true.
+        /// </summary>
+        [Fact]
+        public void CanParse_music_should_be_true()
+        {
+            var args = new CanParseArgs()
+            {
+                File = "music\\folder\\fake.txt",
+                GameType = "HeartsofIronIV"
+            };
+            var parser = new WholeTextParser(new CodeParser(new Logger()), null);
+            parser.CanParse(args).Should().BeTrue();
+        }
+
+        /// <summary>
+        /// Defines the test method CanParse_music_should_be_false.
+        /// </summary>
+        [Fact]
+        public void CanParse_music_should_be_false()
+        {
+            var args = new CanParseArgs()
+            {
+                File = "music\\folder\\fake.mp3",
+                GameType = "HeartsofIronIV"
+            };
+            var parser = new WholeTextParser(new CodeParser(new Logger()), null);
+            parser.CanParse(args).Should().BeFalse();
+        }
+
+        /// <summary>
+        /// Defines the test method CanParse_script_should_be_true.
+        /// </summary>
+        [Fact]
+        public void CanParse_script_should_be_true()
+        {
+            var args = new CanParseArgs()
+            {
+                File = "script\\folder\\fake.lua",
+                GameType = "HeartsofIronIV"
+            };
+            var parser = new WholeTextParser(new CodeParser(new Logger()), null);
+            parser.CanParse(args).Should().BeTrue();
+        }
+
+        /// <summary>
+        /// Determines whether this instance [can parse script text should be true].
+        /// </summary>
+        [Fact]
+        public void CanParse_script_txt_should_be_true()
+        {
+            var args = new CanParseArgs()
+            {
+                File = "script\\folder\\fake.txt",
+                GameType = "HeartsofIronIV"
+            };
+            var parser = new WholeTextParser(new CodeParser(new Logger()), null);
+            parser.CanParse(args).Should().BeTrue();
+        }
+
+
+        /// <summary>
+        /// Defines the test method CanParse_script_should_be_false.
+        /// </summary>
+        [Fact]
+        public void CanParse_script_should_be_false()
+        {
+            var args = new CanParseArgs()
+            {
+                File = "script\\folder\\fake.mp3",
+                GameType = "HeartsofIronIV"
+            };
+            var parser = new WholeTextParser(new CodeParser(new Logger()), null);
+            parser.CanParse(args).Should().BeFalse();
+        }
+
+        /// <summary>
+        /// Defines the test method CanParse_tests_should_be_true.
+        /// </summary>
+        [Fact]
+        public void CanParse_tests_should_be_true()
+        {
+            var args = new CanParseArgs()
+            {
+                File = "tests\\folder\\fake.txt",
+                GameType = "HeartsofIronIV"
+            };
+            var parser = new WholeTextParser(new CodeParser(new Logger()), null);
+            parser.CanParse(args).Should().BeTrue();
+        }
+
+        /// <summary>
+        /// Defines the test method CanParse_tutorial_should_be_true.
+        /// </summary>
+        [Fact]
+        public void CanParse_tutorial_should_be_true()
+        {
+            var args = new CanParseArgs()
+            {
+                File = "tutorial\\folder\\fake.txt",
+                GameType = "HeartsofIronIV"
+            };
+            var parser = new WholeTextParser(new CodeParser(new Logger()), null);
+            parser.CanParse(args).Should().BeTrue();
+        }
+
+        /// <summary>
         /// Defines the test method Parse_should_yield_results.
         /// </summary>
         [Fact]

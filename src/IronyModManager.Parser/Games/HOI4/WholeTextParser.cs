@@ -130,6 +130,17 @@ namespace IronyModManager.Parser.Games.HOI4
         }
 
         /// <summary>
+        /// Determines whether [is any text file] [the specified file].
+        /// </summary>
+        /// <param name="file">The file.</param>
+        /// <param name="directory">The directory.</param>
+        /// <returns><c>true</c> if [is any text file] [the specified file]; otherwise, <c>false</c>.</returns>
+        protected virtual bool IsAnyTxtFile(string file, string directory)
+        {
+            return IsTxtFile(file, directory) || file.StartsWith(directory + System.IO.Path.DirectorySeparatorChar) && file.EndsWith(Common.Constants.LuaExtension, StringComparison.OrdinalIgnoreCase);
+        }
+
+        /// <summary>
         /// Determines whether [is file name tag] [the specified arguments].
         /// </summary>
         /// <param name="args">The arguments.</param>
@@ -138,7 +149,19 @@ namespace IronyModManager.Parser.Games.HOI4
         {
             return args.File.Equals(Common.Constants.HOI4.GraphicalCultureType, StringComparison.OrdinalIgnoreCase) ||
                 CanParseMapCsvFile(args.File) ||
-                args.File.StartsWith(Common.Constants.HOI4.Countries);
+                args.File.StartsWith(Common.Constants.HOI4.Countries) ||
+                args.File.EndsWith(Common.Constants.LuaExtension, StringComparison.OrdinalIgnoreCase);
+        }
+
+        /// <summary>
+        /// Determines whether [is text file] [the specified file].
+        /// </summary>
+        /// <param name="file">The file.</param>
+        /// <param name="directory">The directory.</param>
+        /// <returns><c>true</c> if [is text file] [the specified file]; otherwise, <c>false</c>.</returns>
+        protected virtual bool IsTxtFile(string file, string directory)
+        {
+            return file.StartsWith(directory + System.IO.Path.DirectorySeparatorChar) && file.EndsWith(Common.Constants.TxtExtension, StringComparison.OrdinalIgnoreCase);
         }
 
         /// <summary>
@@ -150,7 +173,8 @@ namespace IronyModManager.Parser.Games.HOI4
         {
             return CanParseEquals(args) || CanParseMapCsvFile(args.File) ||
                 CanParseStartsWith(args) ||
-                (args.File.StartsWith(Common.Constants.HOI4.GFX + System.IO.Path.DirectorySeparatorChar) && args.File.EndsWith(Common.Constants.TxtExtension, StringComparison.OrdinalIgnoreCase));
+                IsTxtFile(args.File, Common.Constants.HOI4.GFX) || IsTxtFile(args.File, Common.Constants.HOI4.Music) ||
+                IsAnyTxtFile(args.File, Common.Constants.HOI4.Script) || IsAnyTxtFile(args.File, Common.Constants.HOI4.Tests) || IsAnyTxtFile(args.File, Common.Constants.HOI4.Tutorial);
         }
 
         #endregion Methods
