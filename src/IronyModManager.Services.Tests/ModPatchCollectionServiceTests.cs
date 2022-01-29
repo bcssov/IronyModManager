@@ -1857,6 +1857,40 @@ namespace IronyModManager.Services.Tests
         }
 
         /// <summary>
+        /// Defines the test method EvalDefinitionPriority_should_return_first_object_when_no_info_provider.
+        /// </summary>
+        [Fact]
+        public void EvalDefinitionPriority_should_return_first_object_when_no_info_provider()
+        {
+            DISetup.SetupContainer();
+
+            var storageProvider = new Mock<IStorageProvider>();
+            var modParser = new Mock<IModParser>();
+            var parserManager = new Mock<IParserManager>();
+            var reader = new Mock<IReader>();
+            var modWriter = new Mock<IModWriter>();
+            var gameService = new Mock<IGameService>();
+            var mapper = new Mock<IMapper>();
+            var modPatchExporter = new Mock<IModPatchExporter>();
+            SetupMockCase(reader, parserManager, modParser);
+            gameService.Setup(p => p.GetSelected()).Returns(new Game()
+            {
+                Type = "EvalDefinitionPriority_should_return_first_object_when_no_info_provider",
+                UserDirectory = "C:\\Users\\Fake"
+            });
+            var infoProvider = new Mock<IDefinitionInfoProvider>();
+            infoProvider.Setup(p => p.DefinitionUsesFIOSRules(It.IsAny<IDefinition>())).Returns(false);
+            infoProvider.Setup(p => p.CanProcess(It.IsAny<string>())).Returns(false);
+            var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter, new List<IDefinitionInfoProvider>() { infoProvider.Object });
+
+            var def = new Definition();
+            var def2 = new Definition();
+            var result = service.EvalDefinitionPriority(new List<IDefinition>() { def, def2 });
+            result.Definition.Should().Be(def);
+            result.PriorityType.Should().Be(DefinitionPriorityType.None);
+        }
+
+        /// <summary>
         /// Defines the test method EvalDefinitionPriority_should_return_first_game_object.
         /// </summary>
         [Fact]
