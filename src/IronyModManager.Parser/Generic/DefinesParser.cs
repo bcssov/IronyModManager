@@ -83,11 +83,11 @@ namespace IronyModManager.Parser.Generic
         {
             var isLua = false;
             IEnumerable<string> lines = args.Lines;
-            if (args.File.EndsWith(Common.Constants.LuaExtension, StringComparison.OrdinalIgnoreCase) && lines != null && lines.Any())
+            if (codeParser.IsLua(args.File) && lines != null && lines.Any())
             {
                 isLua = true;
                 var text = string.Join(Environment.NewLine, lines);
-                lines = text.Substring(0, text.LastIndexOf("}") + 1).SplitOnNewLine(false);
+                lines = text[..(text.LastIndexOf("}") + 1)].SplitOnNewLine(false);
                 lines = codeParser.CleanCode(args.File, lines);
                 var newLines = new List<string>();
                 foreach (var item in lines)
@@ -95,7 +95,7 @@ namespace IronyModManager.Parser.Generic
                     var line = item;
                     if (line.Contains(','))
                     {
-                        line = line.Substring(0, line.LastIndexOf(","));
+                        line = line[..line.LastIndexOf(",")];
                     }
                     newLines.Add(line);
                 }

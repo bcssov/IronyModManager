@@ -4,7 +4,7 @@
 // Created          : 02-22-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 01-28-2022
+// Last Modified On : 01-29-2022
 // ***********************************************************************
 // <copyright file="ICodeParser.cs" company="Mario">
 //     Mario
@@ -46,6 +46,13 @@ namespace IronyModManager.Parser.Common.Parsers
         /// <param name="indentLevel">The indent level.</param>
         /// <returns>System.String.</returns>
         string FormatCode(IScriptElement element, int indentLevel = 0);
+
+        /// <summary>
+        /// Determines whether the specified file is lua.
+        /// </summary>
+        /// <param name="file">The file.</param>
+        /// <returns><c>true</c> if the specified file is lua; otherwise, <c>false</c>.</returns>
+        bool IsLua(string file);
 
         /// <summary>
         /// Parses the script.

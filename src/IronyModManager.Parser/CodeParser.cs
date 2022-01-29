@@ -4,7 +4,7 @@
 // Created          : 02-22-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 01-28-2022
+// Last Modified On : 01-29-2022
 // ***********************************************************************
 // <copyright file="CodeParser.cs" company="Mario">
 //     Mario
@@ -91,7 +91,7 @@ namespace IronyModManager.Parser
         /// <returns>IEnumerable&lt;System.String&gt;.</returns>
         public virtual IEnumerable<string> CleanCode(string file, IEnumerable<string> lines)
         {
-            var commentId = file.EndsWith(Common.Constants.LuaExtension, StringComparison.OrdinalIgnoreCase) ? Common.Constants.Scripts.LuaScriptCommentId : Common.Constants.Scripts.ScriptCommentId.ToString();
+            var commentId = IsLua(file) ? Common.Constants.Scripts.LuaScriptCommentId : Common.Constants.Scripts.ScriptCommentId.ToString();
             return lines.Where(p => !string.IsNullOrWhiteSpace(p) && !p.Trim().StartsWith(commentId))
                .Select(p => FormatCodeTerminators(RemoveInlineComments(commentId, p)));
         }
@@ -209,6 +209,16 @@ namespace IronyModManager.Parser
         }
 
         /// <summary>
+        /// Determines whether the specified file is lua.
+        /// </summary>
+        /// <param name="file">The file.</param>
+        /// <returns><c>true</c> if the specified file is lua; otherwise, <c>false</c>.</returns>
+        public bool IsLua(string file)
+        {
+            return file.EndsWith(Common.Constants.LuaExtension, StringComparison.OrdinalIgnoreCase);
+        }
+
+        /// <summary>
         /// Parses the script.
         /// </summary>
         /// <param name="lines">The lines.</param>
@@ -240,7 +250,6 @@ namespace IronyModManager.Parser
         /// <returns>IScriptError.</returns>
         public IScriptError PerformValidityCheck(IEnumerable<string> lines, string file, bool performSimpleCheck = false)
         {
-            performSimpleCheck = performSimpleCheck ? performSimpleCheck : file.EndsWith(Common.Constants.LuaExtension, StringComparison.OrdinalIgnoreCase);
             if (performSimpleCheck)
             {
                 var error = PerformBasicValidityCheck(file, lines);
