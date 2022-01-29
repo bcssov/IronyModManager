@@ -21,7 +21,6 @@ using IronyModManager.Parser.Common.Mod.Search;
 using IronyModManager.Parser.Common.Mod.Search.Converter;
 using IronyModManager.Parser.Common.Parsers;
 using IronyModManager.Parser.Common.Parsers.Models;
-using IronyModManager.Parser.Default;
 using IronyModManager.Parser.Definitions;
 using IronyModManager.Parser.DLC;
 using IronyModManager.Parser.Games.HOI4;
@@ -59,7 +58,7 @@ namespace IronyModManager.Parser
             container.RemoveTransientWarning<IIndexedDefinitions>();
             container.Collection.Register(typeof(IDefaultParser), new List<Type>()
             {
-                typeof(DefaultParser)
+                typeof(Default.DefaultParser)
             });
             container.Collection.Register(typeof(IGenericParser), new List<Type>()
             {
@@ -70,7 +69,7 @@ namespace IronyModManager.Parser
             {
                 typeof(FlagsParser), typeof(SolarSystemInitializersParser), typeof(Games.Stellaris.WholeTextParser),
                 typeof(OverwrittenParser), typeof(ScriptedVariablesParser), typeof(OverwrittenObjectSingleFileParser),
-                typeof(KeyValuePairParser), typeof(Games.HOI4.WholeTextParser), typeof(InnerLayerParser)
+                typeof(KeyValuePairParser), typeof(Games.HOI4.WholeTextParser), typeof(InnerLayerParser), typeof(Games.HOI4.DefaultParser)
             });
             container.Register<IParserManager, ParserManager>();
             container.Register<IModObject, ModObject>();
