@@ -63,7 +63,7 @@ namespace IronyModManager.Parser
             container.Collection.Register(typeof(IGenericParser), new List<Type>()
             {
                  typeof(BinaryParser), typeof(DefinesParser), typeof(GraphicsParser),
-                 typeof(KeyParser), typeof(LocalizationParser), typeof(Generic.WholeTextParser)
+                 typeof(Generic.KeyParser), typeof(LocalizationParser), typeof(Generic.WholeTextParser)
             });
             container.Collection.Register(typeof(IGameParser), new List<Type>
             {

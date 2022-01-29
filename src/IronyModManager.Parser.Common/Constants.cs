@@ -155,6 +155,11 @@ namespace IronyModManager.Parser.Common
             public static readonly string AIStrategyPlanes = MergePath(CommonPath, "ai_strategy_plans");
 
             /// <summary>
+            /// The bookmark
+            /// </summary>
+            public static readonly string Bookmark = MergePath(CommonPath, "bookmarks");
+
+            /// <summary>
             /// The country tags
             /// </summary>
             public static readonly string CountryTags = MergePath(CommonPath, "country_tags");

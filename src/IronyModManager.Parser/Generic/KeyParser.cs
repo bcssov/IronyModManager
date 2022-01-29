@@ -57,7 +57,7 @@ namespace IronyModManager.Parser.Generic
         /// Gets the priority.
         /// </summary>
         /// <value>The priority.</value>
-        public int Priority => 10;
+        public virtual int Priority => 10;
 
         #endregion Properties
 

@@ -6,7 +6,7 @@
 // Last Modified By : Mario
 // Last Modified On : 01-29-2022
 // ***********************************************************************
-// <copyright file="HOI4DefaultParser.cs" company="Mario">
+// <copyright file="HOI4DefaultParserTests.cs" company="Mario">
 //     Mario
 // </copyright>
 // <summary></summary>
@@ -24,7 +24,7 @@ namespace IronyModManager.Parser.Tests
     /// <summary>
     /// Class HOI4KeyValuePairParserTests.
     /// </summary>
-    public class HOI4DefaultParser
+    public class HOI4DefaultParserTests
     {
         #region Methods
 

@@ -6,7 +6,7 @@
 // Last Modified By : Mario
 // Last Modified On : 01-29-2022
 // ***********************************************************************
-// <copyright file="DefaultParser.cs" company="Mario">
+// <copyright file="KeyParser.cs" company="Mario">
 //     Mario
 // </copyright>
 // <summary></summary>
@@ -16,27 +16,29 @@ using System.Collections.Generic;
 using System.Linq;
 using IronyModManager.Parser.Common.Args;
 using IronyModManager.Parser.Common.Parsers;
+using IronyModManager.Parser.Common.Parsers.Models;
 using IronyModManager.Shared;
+using IronyModManager.Shared.Models;
 
 namespace IronyModManager.Parser.Games.HOI4
 {
     /// <summary>
-    /// Class DefaultParser.
-    /// Implements the <see cref="IronyModManager.Parser.Default.DefaultParser" />
+    /// Class KeyParser.
+    /// Implements the <see cref="IronyModManager.Parser.Generic.KeyParser" />
     /// Implements the <see cref="IronyModManager.Parser.Common.Parsers.IGameParser" />
     /// </summary>
-    /// <seealso cref="IronyModManager.Parser.Default.DefaultParser" />
+    /// <seealso cref="IronyModManager.Parser.Generic.KeyParser" />
     /// <seealso cref="IronyModManager.Parser.Common.Parsers.IGameParser" />
-    public class DefaultParser : Default.DefaultParser, IGameParser
+    public class KeyParser : Generic.KeyParser, IGameParser
     {
         #region Constructors
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="DefaultParser" /> class.
+        /// Initializes a new instance of the <see cref="KeyParser" /> class.
         /// </summary>
-        /// <param name="codeParser">The text parser.</param>
+        /// <param name="codeParser">The code parser.</param>
         /// <param name="logger">The logger.</param>
-        public DefaultParser(ICodeParser codeParser, ILogger logger) : base(codeParser, logger)
+        public KeyParser(ICodeParser codeParser, ILogger logger) : base(codeParser, logger)
         {
         }
 
@@ -48,13 +50,13 @@ namespace IronyModManager.Parser.Games.HOI4
         /// Gets the name of the parser.
         /// </summary>
         /// <value>The name of the parser.</value>
-        public override string ParserName => "HOI4" + nameof(DefaultParser);
+        public override string ParserName => "HOI4" + nameof(KeyParser);
 
         /// <summary>
         /// Gets the priority.
         /// </summary>
         /// <value>The priority.</value>
-        public int Priority => 10;
+        public override int Priority => 10;
 
         #endregion Properties
 
@@ -71,13 +73,37 @@ namespace IronyModManager.Parser.Games.HOI4
         }
 
         /// <summary>
+        /// Parses the specified arguments.
+        /// </summary>
+        /// <param name="args">The arguments.</param>
+        /// <returns>IEnumerable&lt;IDefinition&gt;.</returns>
+        public override IEnumerable<IDefinition> Parse(ParserArgs args)
+        {
+            return ParseSecondLevel(args);
+        }
+
+        /// <summary>
+        /// Evals the element for identifier.
+        /// </summary>
+        /// <param name="value">The value.</param>
+        /// <returns>System.String.</returns>
+        protected override string EvalElementForId(IScriptElement value)
+        {
+            if (value.Key.Equals("name", StringComparison.OrdinalIgnoreCase))
+            {
+                return value.Value;
+            }
+            return base.EvalElementForId(value);
+        }
+
+        /// <summary>
         /// Evals the starts with.
         /// </summary>
         /// <param name="args">The arguments.</param>
         /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
         protected virtual bool EvalStartsWith(CanParseArgs args)
         {
-            return args.File.StartsWith(Common.Constants.HOI4.AIStrategyPlanes, StringComparison.OrdinalIgnoreCase);
+            return args.File.StartsWith(Common.Constants.HOI4.Bookmark, StringComparison.OrdinalIgnoreCase);
         }
 
         #endregion Methods
