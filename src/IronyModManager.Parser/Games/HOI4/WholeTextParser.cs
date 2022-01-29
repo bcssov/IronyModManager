@@ -45,7 +45,8 @@ namespace IronyModManager.Parser.Games.HOI4
         private static readonly string[] startsWithChecks = new string[]
         {
             Common.Constants.HOI4.Countries, Common.Constants.HOI4.Ideas,
-            Common.Constants.HOI4.AIStrategyPlanes, Common.Constants.HOI4.AIStrategy
+            Common.Constants.HOI4.AIStrategyPlanes, Common.Constants.HOI4.AIStrategy,
+            Common.Constants.HOI4.IntelligenceAgencies
         };
 
         #endregion Fields

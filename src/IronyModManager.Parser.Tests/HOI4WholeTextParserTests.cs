@@ -120,6 +120,21 @@ namespace IronyModManager.Parser.Tests
             parser.CanParse(args).Should().BeTrue();
         }
 
+        /// <summary>
+        /// Defines the test method CanParse_intelligence_agencies_should_be_true.
+        /// </summary>
+        [Fact]
+        public void CanParse_intelligence_agencies_should_be_true()
+        {
+            var args = new CanParseArgs()
+            {
+                File = "common\\intelligence_agencies\\fake.txt",
+                GameType = "HeartsofIronIV"
+            };
+            var parser = new WholeTextParser(new CodeParser(new Logger()), null);
+            parser.CanParse(args).Should().BeTrue();
+        }
+
 
         /// <summary>
         /// Defines the test method Parse_should_yield_results.
