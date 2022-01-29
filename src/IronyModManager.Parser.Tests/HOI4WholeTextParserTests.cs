@@ -91,6 +91,37 @@ namespace IronyModManager.Parser.Tests
         }
 
         /// <summary>
+        /// Defines the test method CanParse_aistrategyplans_should_be_true.
+        /// </summary>
+        [Fact]
+        public void CanParse_aistrategyplans_should_be_true()
+        {
+            var args = new CanParseArgs()
+            {
+                File = "common\\ai_strategy_plans\\fake.txt",
+                GameType = "HeartsofIronIV"
+            };
+            var parser = new WholeTextParser(new CodeParser(new Logger()), null);
+            parser.CanParse(args).Should().BeTrue();
+        }
+
+        /// <summary>
+        /// Defines the test method CanParse_aistrategy_should_be_true.
+        /// </summary>
+        [Fact]
+        public void CanParse_aistrategy_should_be_true()
+        {
+            var args = new CanParseArgs()
+            {
+                File = "common\\ai_strategy\\fake.txt",
+                GameType = "HeartsofIronIV"
+            };
+            var parser = new WholeTextParser(new CodeParser(new Logger()), null);
+            parser.CanParse(args).Should().BeTrue();
+        }
+
+
+        /// <summary>
         /// Defines the test method Parse_should_yield_results.
         /// </summary>
         [Fact]

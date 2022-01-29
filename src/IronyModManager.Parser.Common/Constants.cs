@@ -150,6 +150,11 @@ namespace IronyModManager.Parser.Common
             public static readonly string Abilities = MergePath(CommonPath, "abilities");
 
             /// <summary>
+            /// The ai strategy
+            /// </summary>
+            public static readonly string AIStrategy = MergePath(CommonPath, "ai_strategy");
+
+            /// <summary>
             /// The ai strategy planes
             /// </summary>
             public static readonly string AIStrategyPlanes = MergePath(CommonPath, "ai_strategy_plans");
