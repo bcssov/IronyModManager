@@ -4,7 +4,7 @@
 // Created          : 02-16-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 01-29-2022
+// Last Modified On : 01-30-2022
 // ***********************************************************************
 // <copyright file="Constants.cs" company="Mario">
 //     Mario
@@ -180,6 +180,16 @@ namespace IronyModManager.Parser.Common
             public static readonly string Abilities = MergePath(CommonPath, "abilities");
 
             /// <summary>
+            /// The aces
+            /// </summary>
+            public static readonly string Aces = MergePath(CommonPath, "aces");
+
+            /// <summary>
+            /// The ai areas
+            /// </summary>
+            public static readonly string AIAreas = MergePath(CommonPath, "ai_areas");
+
+            /// <summary>
             /// The ai strategy
             /// </summary>
             public static readonly string AIStrategy = MergePath(CommonPath, "ai_strategy");
@@ -193,6 +203,11 @@ namespace IronyModManager.Parser.Common
             /// The bookmark
             /// </summary>
             public static readonly string Bookmark = MergePath(CommonPath, "bookmarks");
+
+            /// <summary>
+            /// The buildings
+            /// </summary>
+            public static readonly string Buildings = MergePath(CommonPath, "buildings");
 
             /// <summary>
             /// The characters
@@ -220,6 +235,16 @@ namespace IronyModManager.Parser.Common
             public static readonly string Decisions = MergePath(CommonPath, "decisions");
 
             /// <summary>
+            /// The difficulty settings
+            /// </summary>
+            public static readonly string DifficultySettings = MergePath(CommonPath, "difficulty_settings");
+
+            /// <summary>
+            /// The generation
+            /// </summary>
+            public static readonly string Generation = MergePath(CommonPath, "generation");
+
+            /// <summary>
             /// The graphical culture type
             /// </summary>
             public static readonly string GraphicalCultureType = MergePath(CommonPath, "graphicalculturetype.txt");
@@ -230,6 +255,16 @@ namespace IronyModManager.Parser.Common
             public static readonly string Ideas = MergePath(CommonPath, "ideas");
 
             /// <summary>
+            /// The idea tags
+            /// </summary>
+            public static readonly string IdeaTags = MergePath(CommonPath, "idea_tags");
+
+            /// <summary>
+            /// The ideologies
+            /// </summary>
+            public static readonly string Ideologies = MergePath(CommonPath, "ideologies");
+
+            /// <summary>
             /// The intelligence agencies
             /// </summary>
             public static readonly string IntelligenceAgencies = MergePath(CommonPath, "intelligence_agencies");
@@ -238,6 +273,11 @@ namespace IronyModManager.Parser.Common
             /// The opinion modifiers
             /// </summary>
             public static readonly string OpinionModifiers = MergePath(CommonPath, "opinion_modifiers");
+
+            /// <summary>
+            /// The resources
+            /// </summary>
+            public static readonly string Resources = MergePath(CommonPath, "resources");
 
             /// <summary>
             /// The scripted GUI
@@ -255,6 +295,11 @@ namespace IronyModManager.Parser.Common
             public static readonly string Technologies = MergePath(CommonPath, "technologies");
 
             /// <summary>
+            /// The terrain
+            /// </summary>
+            public static readonly string Terrain = MergePath(CommonPath, "terrain");
+
+            /// <summary>
             /// The unit leader
             /// </summary>
             public static readonly string UnitLeader = MergePath(CommonPath, "unit_leader");
@@ -263,6 +308,11 @@ namespace IronyModManager.Parser.Common
             /// The units
             /// </summary>
             public static readonly string Units = MergePath(CommonPath, "units");
+
+            /// <summary>
+            /// The wargoals
+            /// </summary>
+            public static readonly string Wargoals = MergePath(CommonPath, "wargoals");
 
             #endregion Fields
         }
@@ -450,9 +500,19 @@ namespace IronyModManager.Parser.Common
             public static readonly string ComponentTags = MergePath(CommonPath, "component_tags");
 
             /// <summary>
+            /// The country container
+            /// </summary>
+            public static readonly string CountryContainer = MergePath(CommonPath, "country_container");
+
+            /// <summary>
             /// The country types
             /// </summary>
             public static readonly string CountryTypes = MergePath(CommonPath, "country_types");
+
+            /// <summary>
+            /// The diplomacy economy
+            /// </summary>
+            public static readonly string DiplomacyEconomy = MergePath(CommonPath, "diplomacy_economy");
 
             /// <summary>
             /// The diplomatic actions

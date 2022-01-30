@@ -183,6 +183,36 @@ namespace IronyModManager.Parser.Tests
         }
 
         /// <summary>
+        /// Defines the test method CanParse_country_container_should_be_true.
+        /// </summary>
+        [Fact]
+        public void CanParse_country_container_should_be_true()
+        {
+            var args = new CanParseArgs()
+            {
+                File = "common\\country_container\\test.txt",
+                GameType = "Stellaris"
+            };
+            var parser = new WholeTextParser(new CodeParser(new Logger()), null);
+            parser.CanParse(args).Should().BeTrue();
+        }
+
+        /// <summary>
+        /// Defines the test method CanParse_diplomacy_economy_should_be_true.
+        /// </summary>
+        [Fact]
+        public void CanParse_diplomacy_economy_should_be_true()
+        {
+            var args = new CanParseArgs()
+            {
+                File = "common\\diplomacy_economy\\test.txt",
+                GameType = "Stellaris"
+            };
+            var parser = new WholeTextParser(new CodeParser(new Logger()), null);
+            parser.CanParse(args).Should().BeTrue();
+        }
+
+        /// <summary>
         /// Defines the test method Parse_should_yield_results.
         /// </summary>
         [Fact]

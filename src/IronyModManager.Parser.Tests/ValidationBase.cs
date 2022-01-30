@@ -161,7 +161,7 @@ namespace IronyModManager.Parser.Tests
                 {
                     continue;
                 }
-                //if (relativePath.Contains(@"common\ideas\SOV.txt"))
+                //if (relativePath.Contains(@"common\defines"))
                 //{
                 //    System.Diagnostics.Debugger.Break();
                 //}
@@ -218,7 +218,22 @@ namespace IronyModManager.Parser.Tests
             indexed.InitMap(result);
             var typesKeys = indexed.GetAllTypeKeys();
             var objects = new List<string>();
+            var singleObjects = new List<string>();
             var parserMap = new List<IParserMap>();
+
+            var dirs = indexed.GetAllDirectoryKeys();
+
+            foreach (var dir in dirs)
+            {
+                var all = indexed.GetByParentDirectory(dir);
+                if (all.Count() <= 2 && !all.All(p => p.ValueType == ValueType.WholeTextFile))
+                {
+                    if (!singleObjects.Contains(all.First().File))
+                    {
+                        singleObjects.Add($"{all.First().File}");
+                    }
+                }
+            }
 
             foreach (var item in typesKeys)
             {
@@ -329,6 +344,7 @@ namespace IronyModManager.Parser.Tests
             var sb = new StringBuilder();
             sb.AppendLine($"{Environment.NewLine}-------------------{Environment.NewLine}Undefined{Environment.NewLine}-------------------{Environment.NewLine}{string.Join(Environment.NewLine, undefined.OrderBy(s => s))}");
             sb.AppendLine($"{Environment.NewLine}-------------------{Environment.NewLine}Invalid{Environment.NewLine}-------------------{Environment.NewLine}{string.Join(Environment.NewLine, invalid.OrderBy(s => s))}");
+            sb.AppendLine($"{Environment.NewLine}-------------------{Environment.NewLine}Single Objects{Environment.NewLine}-------------------{Environment.NewLine}{string.Join(Environment.NewLine, singleObjects.OrderBy(s => s))}");
             sb.AppendLine($"{Environment.NewLine}-------------------{Environment.NewLine}Objects{Environment.NewLine}-------------------{Environment.NewLine}{string.Join(Environment.NewLine, objects.OrderBy(s => s))}");
 
             if (!Directory.Exists("..\\..\\..\\..\\IronyModManager\\Maps"))

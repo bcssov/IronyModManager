@@ -6,10 +6,10 @@
         "PreferredParser": "HOI4InnerLayerParser"
     }, {
         "DirectoryPath": "common\\aces",
-        "PreferredParser": "DefaultParser"
+        "PreferredParser": "HOI4InnerLayerParser"
     }, {
         "DirectoryPath": "common\\ai_areas",
-        "PreferredParser": "DefaultParser"
+        "PreferredParser": "HOI4InnerLayerParser"
     }, {
         "DirectoryPath": "common\\ai_equipment",
         "PreferredParser": "DefaultParser"
@@ -36,7 +36,7 @@
         "PreferredParser": "HOI4KeyParser"
     }, {
         "DirectoryPath": "common\\buildings",
-        "PreferredParser": "DefaultParser"
+        "PreferredParser": "HOI4InnerLayerParser"
     }, {
         "DirectoryPath": "common\\characters",
         "PreferredParser": "HOI4InnerLayerParser"
@@ -66,7 +66,7 @@
         "PreferredParser": "GenericDefinesParser"
     }, {
         "DirectoryPath": "common\\difficulty_settings",
-        "PreferredParser": "DefaultParser"
+        "PreferredParser": "HOI4KeyParser"
     }, {
         "DirectoryPath": "common\\dynamic_modifiers",
         "PreferredParser": "DefaultParser"
@@ -75,16 +75,16 @@
         "PreferredParser": "DefaultParser"
     }, {
         "DirectoryPath": "common\\generation",
-        "PreferredParser": "DefaultParser"
+        "PreferredParser": "HOI4WholeTextParser"
     }, {
         "DirectoryPath": "common\\ideas",
         "PreferredParser": "HOI4WholeTextParser"
     }, {
         "DirectoryPath": "common\\idea_tags",
-        "PreferredParser": "DefaultParser"
+        "PreferredParser": "HOI4WholeTextParser"
     }, {
         "DirectoryPath": "common\\ideologies",
-        "PreferredParser": "DefaultParser"
+        "PreferredParser": "HOI4InnerLayerParser"
     }, {
         "DirectoryPath": "common\\intelligence_agencies",
         "PreferredParser": "HOI4WholeTextParser"
@@ -129,7 +129,7 @@
         "PreferredParser": "DefaultParser"
     }, {
         "DirectoryPath": "common\\resources",
-        "PreferredParser": "DefaultParser"
+        "PreferredParser": "HOI4InnerLayerParser"
     }, {
         "DirectoryPath": "common\\scorers\\country",
         "PreferredParser": "DefaultParser"
@@ -159,7 +159,7 @@
         "PreferredParser": "DefaultParser"
     }, {
         "DirectoryPath": "common\\terrain",
-        "PreferredParser": "DefaultParser"
+        "PreferredParser": "HOI4WholeTextParser"
     }, {
         "DirectoryPath": "common\\timed_activities",
         "PreferredParser": "DefaultParser"
@@ -207,7 +207,7 @@
         "PreferredParser": "DefaultParser"
     }, {
         "DirectoryPath": "common\\wargoals",
-        "PreferredParser": "DefaultParser"
+        "PreferredParser": "HOI4InnerLayerParser"
     }, {
         "DirectoryPath": "dlc\\dlc001_german_historical_portraits\\interface",
         "PreferredParser": "GenericGraphicsParser"

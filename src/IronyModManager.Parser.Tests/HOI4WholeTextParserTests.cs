@@ -317,6 +317,51 @@ namespace IronyModManager.Parser.Tests
         }
 
         /// <summary>
+        /// Defines the test method CanParse_generation_should_be_true.
+        /// </summary>
+        [Fact]
+        public void CanParse_generation_should_be_true()
+        {
+            var args = new CanParseArgs()
+            {
+                File = "common\\generation\\fake.txt",
+                GameType = "HeartsofIronIV"
+            };
+            var parser = new WholeTextParser(new CodeParser(new Logger()), null);
+            parser.CanParse(args).Should().BeTrue();
+        }
+
+        /// <summary>
+        /// Defines the test method CanParse_idea_tags_should_be_true.
+        /// </summary>
+        [Fact]
+        public void CanParse_idea_tags_should_be_true()
+        {
+            var args = new CanParseArgs()
+            {
+                File = "common\\idea_tags\\fake.txt",
+                GameType = "HeartsofIronIV"
+            };
+            var parser = new WholeTextParser(new CodeParser(new Logger()), null);
+            parser.CanParse(args).Should().BeTrue();
+        }
+
+        /// <summary>
+        /// Defines the test method CanParse_terrain_tags_should_be_true.
+        /// </summary>
+        [Fact]
+        public void CanParse_terrain_tags_should_be_true()
+        {
+            var args = new CanParseArgs()
+            {
+                File = "common\\terrain\\fake.txt",
+                GameType = "HeartsofIronIV"
+            };
+            var parser = new WholeTextParser(new CodeParser(new Logger()), null);
+            parser.CanParse(args).Should().BeTrue();
+        }
+
+        /// <summary>
         /// Defines the test method Parse_should_yield_results.
         /// </summary>
         [Fact]

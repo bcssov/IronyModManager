@@ -78,7 +78,7 @@
         "PreferredParser": "GenericWholeTextParser"
     }, {
         "DirectoryPath": "common\\country_container",
-        "PreferredParser": "DefaultParser"
+        "PreferredParser": "StellarisWholeTextParser"
     }, {
         "DirectoryPath": "common\\country_customization",
         "PreferredParser": "DefaultParser"
@@ -105,7 +105,7 @@
         "PreferredParser": "DefaultParser"
     }, {
         "DirectoryPath": "common\\diplomacy_economy",
-        "PreferredParser": "DefaultParser"
+        "PreferredParser": "StellarisWholeTextParser"
     }, {
         "DirectoryPath": "common\\diplomatic_actions",
         "PreferredParser": "StellarisOverwrittenParser"

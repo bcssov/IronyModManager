@@ -47,7 +47,8 @@ namespace IronyModManager.Parser.Games.HOI4
             Common.Constants.HOI4.Countries, Common.Constants.HOI4.Ideas,
             Common.Constants.HOI4.AIStrategyPlanes, Common.Constants.HOI4.AIStrategy,
             Common.Constants.HOI4.IntelligenceAgencies, Common.Constants.HOI4.ScriptedGui,
-            Common.Constants.HOI4.Units, Common.Constants.HOI4.History
+            Common.Constants.HOI4.Units, Common.Constants.HOI4.History, Common.Constants.HOI4.Generation,
+            Common.Constants.HOI4.IdeaTags, Common.Constants.HOI4.Terrain
         };
 
         #endregion Fields

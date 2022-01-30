@@ -39,7 +39,8 @@ namespace IronyModManager.Parser.Games.Stellaris
             Common.Constants.Stellaris.DiploPhrases, Common.Constants.Stellaris.MapGalaxy, Common.Constants.Stellaris.NameLists,
             Common.Constants.Stellaris.SpeciesNames, Common.Constants.Stellaris.Portraits,
             Common.Constants.Stellaris.ComponentTags, Common.Constants.Stellaris.RandomNamesBase, Common.Constants.Stellaris.RandomNames,
-            Common.Constants.Stellaris.StartScreenMessages, Common.Constants.Stellaris.MapSetupScenarios
+            Common.Constants.Stellaris.StartScreenMessages, Common.Constants.Stellaris.MapSetupScenarios, Common.Constants.Stellaris.CountryContainer,
+            Common.Constants.Stellaris.DiplomacyEconomy
         };
 
         #endregion Fields

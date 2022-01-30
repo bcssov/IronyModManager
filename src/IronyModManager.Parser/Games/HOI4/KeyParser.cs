@@ -4,7 +4,7 @@
 // Created          : 01-29-2022
 //
 // Last Modified By : Mario
-// Last Modified On : 01-29-2022
+// Last Modified On : 01-30-2022
 // ***********************************************************************
 // <copyright file="KeyParser.cs" company="Mario">
 //     Mario
@@ -31,6 +31,15 @@ namespace IronyModManager.Parser.Games.HOI4
     /// <seealso cref="IronyModManager.Parser.Common.Parsers.IGameParser" />
     public class KeyParser : Generic.KeyParser, IGameParser
     {
+        #region Fields
+
+        /// <summary>
+        /// The parsing bookmark
+        /// </summary>
+        private bool parsingBookmark = false;
+
+        #endregion Fields
+
         #region Constructors
 
         /// <summary>
@@ -79,6 +88,7 @@ namespace IronyModManager.Parser.Games.HOI4
         /// <returns>IEnumerable&lt;IDefinition&gt;.</returns>
         public override IEnumerable<IDefinition> Parse(ParserArgs args)
         {
+            parsingBookmark = args.File.StartsWith(Common.Constants.HOI4.Bookmark, StringComparison.OrdinalIgnoreCase);
             return ParseSecondLevel(args);
         }
 
@@ -89,7 +99,11 @@ namespace IronyModManager.Parser.Games.HOI4
         /// <returns>System.String.</returns>
         protected override string EvalElementForId(IScriptElement value)
         {
-            if (value.Key.Equals("name", StringComparison.OrdinalIgnoreCase))
+            if (parsingBookmark && value.Key.Equals("name", StringComparison.OrdinalIgnoreCase))
+            {
+                return value.Value;
+            }
+            else if (value.Key.Equals("key", StringComparison.OrdinalIgnoreCase))
             {
                 return value.Value;
             }
@@ -103,7 +117,8 @@ namespace IronyModManager.Parser.Games.HOI4
         /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
         protected virtual bool EvalStartsWith(CanParseArgs args)
         {
-            return args.File.StartsWith(Common.Constants.HOI4.Bookmark, StringComparison.OrdinalIgnoreCase);
+            return args.File.StartsWith(Common.Constants.HOI4.Bookmark, StringComparison.OrdinalIgnoreCase)
+                || args.File.StartsWith(Common.Constants.HOI4.DifficultySettings, StringComparison.OrdinalIgnoreCase);
         }
 
         #endregion Methods

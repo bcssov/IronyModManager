@@ -4,7 +4,7 @@
 // Created          : 01-29-2022
 //
 // Last Modified By : Mario
-// Last Modified On : 01-29-2022
+// Last Modified On : 01-31-2022
 // ***********************************************************************
 // <copyright file="InnerLayerParser.cs" company="Mario">
 //     Mario
@@ -49,7 +49,9 @@ namespace IronyModManager.Parser.Games.HOI4
            Common.Constants.HOI4.Abilities, Common.Constants.HOI4.Characters,
            Common.Constants.HOI4.OpinionModifiers, Common.Constants.HOI4.StateCategories,
            Common.Constants.HOI4.Technologies, Common.Constants.HOI4.UnitLeader,
-           Common.Constants.HOI4.CountryLeader
+           Common.Constants.HOI4.CountryLeader, Common.Constants.HOI4.Aces,
+           Common.Constants.HOI4.AIAreas, Common.Constants.HOI4.Buildings, Common.Constants.HOI4.Ideologies,
+           Common.Constants.HOI4.Resources, Common.Constants.HOI4.Wargoals
         };
 
         #endregion Fields
