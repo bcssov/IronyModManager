@@ -82,6 +82,7 @@ namespace IronyModManager.Parser.Generic
         public override IEnumerable<IDefinition> Parse(ParserArgs args)
         {
             var isLua = false;
+            var forceSimpleValidation = false;
             IEnumerable<string> lines = args.Lines;
             if (codeParser.IsLua(args.File) && lines != null && lines.Any())
             {
@@ -90,6 +91,7 @@ namespace IronyModManager.Parser.Generic
                 var firstMatch = lines.FirstOrDefault(l => l.Contains(Common.Constants.Scripts.EqualsOperator));
                 if (firstMatch != null && !firstMatch.Split(Common.Constants.Scripts.EqualsOperator, StringSplitOptions.RemoveEmptyEntries)[0].Contains("."))
                 {
+                    forceSimpleValidation = true;
                     var text = string.Join(Environment.NewLine, lines);
                     lines = text[..(text.LastIndexOf("}") + 1)].SplitOnNewLine(false);
                     lines = codeParser.CleanCode(args.File, lines);
@@ -119,6 +121,10 @@ namespace IronyModManager.Parser.Generic
             {
                 Lines = lines
             };
+            if (forceSimpleValidation && localArgs.ValidationType == Common.ValidationType.Full)
+            {
+                localArgs.ValidationType = Common.ValidationType.SimpleOnly;
+            }
             var data = TryParse(localArgs);
             if (data.Error != null)
             {
