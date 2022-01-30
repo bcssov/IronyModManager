@@ -4,7 +4,7 @@
 // Created          : 02-16-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-25-2020
+// Last Modified On : 01-29-2022
 // ***********************************************************************
 // <copyright file="ParserArgs.cs" company="Mario">
 //     Mario
@@ -21,6 +21,31 @@ namespace IronyModManager.Parser.Common.Args
     /// </summary>
     public class ParserArgs
     {
+        #region Constructors
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ParserArgs"/> class.
+        /// </summary>
+        public ParserArgs()
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ParserArgs"/> class.
+        /// </summary>
+        /// <param name="args">The arguments.</param>
+        public ParserArgs(ParserArgs args)
+        {
+            ContentSHA = args.ContentSHA;
+            File = args.File;
+            Lines = args.Lines;
+            ModDependencies = args.ModDependencies;
+            ModName = args.ModName;
+            ValidationType = args.ValidationType;
+        }
+
+        #endregion Constructors
+
         #region Properties
 
         /// <summary>
@@ -52,6 +77,12 @@ namespace IronyModManager.Parser.Common.Args
         /// </summary>
         /// <value>The name of the mod.</value>
         public string ModName { get; set; }
+
+        /// <summary>
+        /// Gets or sets the type of the validation.
+        /// </summary>
+        /// <value>The type of the validation.</value>
+        public ValidationType ValidationType { get; set; }
 
         #endregion Properties
     }

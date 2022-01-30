@@ -78,7 +78,7 @@ namespace IronyModManager.Parser.Tests
             sb3.AppendLine(@"        -0.6");
             sb3.AppendLine(@"        0.3");
             sb3.AppendLine(@"    }");
-            sb3.Append('}');            
+            sb3.Append('}');
 
             var sb4 = new StringBuilder();
             sb4.AppendLine(@"NGraphics = {");
@@ -442,6 +442,296 @@ namespace IronyModManager.Parser.Tests
                         result[i].ValueType.Should().Be(ValueType.SpecialVariable);
                         result[i].Type.Should().Be("common\\defines\\NTest.Path-txt");
                         result[i].Code.Should().Be("NTest.Path.SubPath = 10");
+                        break;
+                    default:
+                        break;
+                }
+                result[i].ModName.Should().Be("fake");
+            }
+        }
+
+        /// <summary>
+        /// Defines the test method Parse_lua_with_code_should_yield_results.
+        /// </summary>
+        [Fact]
+        public void Parse_lua_with_code_should_yield_results()
+        {
+            DISetup.SetupContainer();
+
+            var sb = new StringBuilder();
+            sb.AppendLine(@"NDefines_Graphics = {");
+            sb.AppendLine(@"");
+            sb.AppendLine(@"NWiki = {");
+            sb.AppendLine(@"	BASE_URL = ""https://hoi4.paradoxwikis.com/"",");
+            sb.AppendLine(@"	FORUM_URL = ""https://forum.paradoxplaza.com/forum/index.php?forums/hearts-of-iron-iv.844/""");
+            sb.AppendLine(@"}");
+            sb.AppendLine(@"}");
+            sb.AppendLine(@"");
+            sb.AppendLine(@"for k,v in pairs( NDefines_Graphics ) do NDefines[k] = v end");
+
+            var args = new ParserArgs()
+            {
+                ContentSHA = "sha",
+                ModDependencies = new List<string> { "1" },
+                File = "common\\defines\\t.lua",
+                Lines = sb.ToString().Split(Environment.NewLine.ToCharArray(), StringSplitOptions.RemoveEmptyEntries),
+                ModName = "fake"
+            };
+            var parser = new Generic.DefinesParser(new CodeParser(new Logger()), null);
+            var result = parser.Parse(args).ToList();
+            result.Should().NotBeNullOrEmpty();
+            result.Count.Should().Be(2);
+            for (int i = 0; i < 2; i++)
+            {
+                result[i].ContentSHA.Should().Be("sha");
+                result[i].Dependencies.First().Should().Be("1");
+                result[i].File.Should().Be("common\\defines\\t.lua");
+                switch (i)
+                {
+                    case 0:
+                        result[i].Id.Should().Be("BASE_URL");
+                        result[i].ValueType.Should().Be(ValueType.SpecialVariable);
+                        result[i].Type.Should().Be("common\\defines\\NDefines_Graphics.NWiki-txt");
+                        result[i].Code.Should().Be("NDefines_Graphics.NWiki.BASE_URL = \"https://hoi4.paradoxwikis.com/\"");
+                        break;
+                    case 1:
+                        result[i].Id.Should().Be("FORUM_URL");
+                        result[i].ValueType.Should().Be(ValueType.SpecialVariable);
+                        result[i].Type.Should().Be("common\\defines\\NDefines_Graphics.NWiki-txt");
+                        result[i].Code.Should().Be("NDefines_Graphics.NWiki.FORUM_URL = \"https://forum.paradoxplaza.com/forum/index.php?forums/hearts-of-iron-iv.844/\"");
+                        break;
+                    default:
+                        break;
+                }
+                result[i].ModName.Should().Be("fake");
+            }
+        }
+
+        /// <summary>
+        /// Defines the test method Parse_lua_complex_object_should_yield_results.
+        /// </summary>
+        [Fact]
+        public void Parse_lua_complex_object_should_yield_results()
+        {
+            DISetup.SetupContainer();
+
+            var sb = new StringBuilder();
+            sb.AppendLine(@"NDefines_Graphics = {");
+            sb.AppendLine(@"	NInterface = {");
+            sb.AppendLine(@"		NO_COMBATS_COLOR = { 0.0, 0.0, 0.8 },				-- Color for icons if all combats are successful");
+            sb.AppendLine(@"		MAP_MODE_IDEOLOGY_COLOR_TRANSPARENCY = 1");
+            sb.AppendLine(@"	}");
+            sb.AppendLine(@"}");
+
+
+            var args = new ParserArgs()
+            {
+                ContentSHA = "sha",
+                ModDependencies = new List<string> { "1" },
+                File = "common\\defines\\t.lua",
+                Lines = sb.ToString().Split(Environment.NewLine.ToCharArray(), StringSplitOptions.RemoveEmptyEntries),
+                ModName = "fake"
+            };
+            var parser = new Generic.DefinesParser(new CodeParser(new Logger()), null);
+            var result = parser.Parse(args).ToList();
+            result.Should().NotBeNullOrEmpty();
+            result.Count.Should().Be(2);
+            for (int i = 0; i < 2; i++)
+            {
+                result[i].ContentSHA.Should().Be("sha");
+                result[i].Dependencies.First().Should().Be("1");
+                result[i].File.Should().Be("common\\defines\\t.lua");
+                switch (i)
+                {
+                    case 0:
+                        result[i].Id.Should().Be("NO_COMBATS_COLOR");
+                        result[i].ValueType.Should().Be(ValueType.SpecialVariable);
+                        result[i].Type.Should().Be("common\\defines\\NDefines_Graphics.NInterface-txt");
+                        result[i].Code.Should().Be("NDefines_Graphics.NInterface.NO_COMBATS_COLOR = {\r\n    0,\r\n    0,\r\n    0.8\r\n}");
+                        break;
+                    case 1:
+                        result[i].Id.Should().Be("MAP_MODE_IDEOLOGY_COLOR_TRANSPARENCY");
+                        result[i].ValueType.Should().Be(ValueType.SpecialVariable);
+                        result[i].Type.Should().Be("common\\defines\\NDefines_Graphics.NInterface-txt");
+                        result[i].Code.Should().Be("NDefines_Graphics.NInterface.MAP_MODE_IDEOLOGY_COLOR_TRANSPARENCY = 1");
+                        break;
+                    default:
+                        break;
+                }
+                result[i].ModName.Should().Be("fake");
+            }
+        }
+
+        /// <summary>
+        /// Defines the test method Parse_lua_complex_object_should_yield_results.
+        /// </summary>
+        [Fact]
+        public void Parse_lua_multiple_complex_object_should_yield_results()
+        {
+            DISetup.SetupContainer();
+
+            var sb = new StringBuilder();
+            sb.AppendLine(@"NDefines_Graphics = {");
+            sb.AppendLine(@"	NInterface = {");
+            sb.AppendLine(@"		NO_COMBATS_COLOR = { 0.0, 0.0, 0.8 },				-- Color for icons if all combats are successful");
+            sb.AppendLine(@"		MAP_MODE_IDEOLOGY_COLOR_TRANSPARENCY = 1");
+            sb.AppendLine(@"	},");
+            sb.AppendLine(@"	NInterface2 = {");
+            sb.AppendLine(@"		NO_COMBATS_COLOR = { 0.0, 0.0, 0.8 },				-- Color for icons if all combats are successful");
+            sb.AppendLine(@"		MAP_MODE_IDEOLOGY_COLOR_TRANSPARENCY = 1");
+            sb.AppendLine(@"	}");
+            sb.AppendLine(@"}");
+
+
+            var args = new ParserArgs()
+            {
+                ContentSHA = "sha",
+                ModDependencies = new List<string> { "1" },
+                File = "common\\defines\\t.lua",
+                Lines = sb.ToString().Split(Environment.NewLine.ToCharArray(), StringSplitOptions.RemoveEmptyEntries),
+                ModName = "fake"
+            };
+            var parser = new Generic.DefinesParser(new CodeParser(new Logger()), null);
+            var result = parser.Parse(args).ToList();
+            result.Should().NotBeNullOrEmpty();
+            result.Count.Should().Be(4);
+            for (int i = 0; i < 4; i++)
+            {
+                result[i].ContentSHA.Should().Be("sha");
+                result[i].Dependencies.First().Should().Be("1");
+                result[i].File.Should().Be("common\\defines\\t.lua");
+                switch (i)
+                {
+                    case 0:
+                        result[i].Id.Should().Be("NO_COMBATS_COLOR");
+                        result[i].ValueType.Should().Be(ValueType.SpecialVariable);
+                        result[i].Type.Should().Be("common\\defines\\NDefines_Graphics.NInterface-txt");
+                        result[i].Code.Should().Be("NDefines_Graphics.NInterface.NO_COMBATS_COLOR = {\r\n    0,\r\n    0,\r\n    0.8\r\n}");
+                        break;
+                    case 1:
+                        result[i].Id.Should().Be("MAP_MODE_IDEOLOGY_COLOR_TRANSPARENCY");
+                        result[i].ValueType.Should().Be(ValueType.SpecialVariable);
+                        result[i].Type.Should().Be("common\\defines\\NDefines_Graphics.NInterface-txt");
+                        result[i].Code.Should().Be("NDefines_Graphics.NInterface.MAP_MODE_IDEOLOGY_COLOR_TRANSPARENCY = 1");
+                        break;
+                    case 2:
+                        result[i].Id.Should().Be("NO_COMBATS_COLOR");
+                        result[i].ValueType.Should().Be(ValueType.SpecialVariable);
+                        result[i].Type.Should().Be("common\\defines\\NDefines_Graphics.NInterface2-txt");
+                        result[i].Code.Should().Be("NDefines_Graphics.NInterface2.NO_COMBATS_COLOR = {\r\n    0,\r\n    0,\r\n    0.8\r\n}");
+                        break;
+                    case 3:
+                        result[i].Id.Should().Be("MAP_MODE_IDEOLOGY_COLOR_TRANSPARENCY");
+                        result[i].ValueType.Should().Be(ValueType.SpecialVariable);
+                        result[i].Type.Should().Be("common\\defines\\NDefines_Graphics.NInterface2-txt");
+                        result[i].Code.Should().Be("NDefines_Graphics.NInterface2.MAP_MODE_IDEOLOGY_COLOR_TRANSPARENCY = 1");
+                        break;
+                    default:
+                        break;
+                }
+                result[i].ModName.Should().Be("fake");
+            }
+        }
+
+        /// <summary>
+        /// Defines the test method Parse_lua_complex_array_object_should_yield_results.
+        /// </summary>
+        [Fact]
+        public void Parse_lua_complex_array_object_should_yield_results()
+        {
+            DISetup.SetupContainer();
+
+            var sb = new StringBuilder();
+            sb.AppendLine(@"NDefines_Graphics = {");
+            sb.AppendLine(@"	NInterface = {");
+            sb.AppendLine(@"	SUPPLY_MAP_MODE_STATUS_COLOR = {");
+            sb.AppendLine(@"		0.0,   0.9, 0.0, 0.0, 1.0,			-- #E60000 red");
+            sb.AppendLine(@"		0.7,   0.98, 0.4, 0.1, 1.0,			-- #FA661A orange");
+            sb.AppendLine(@"		1.0,   0.8, 0.64, 0.2, 1.0,			-- #CCA333 mustard");
+            sb.AppendLine(@"	}");
+            sb.AppendLine(@"	}");
+            sb.AppendLine(@"}");
+
+
+            var args = new ParserArgs()
+            {
+                ContentSHA = "sha",
+                ModDependencies = new List<string> { "1" },
+                File = "common\\defines\\t.lua",
+                Lines = sb.ToString().Split(Environment.NewLine.ToCharArray(), StringSplitOptions.RemoveEmptyEntries),
+                ModName = "fake"
+            };
+            var parser = new Generic.DefinesParser(new CodeParser(new Logger()), null);
+            var result = parser.Parse(args).ToList();
+            result.Should().NotBeNullOrEmpty();
+            result.Count.Should().Be(1);
+            for (int i = 0; i < 1; i++)
+            {
+                result[i].ContentSHA.Should().Be("sha");
+                result[i].Dependencies.First().Should().Be("1");
+                result[i].File.Should().Be("common\\defines\\t.lua");
+                switch (i)
+                {
+                    case 0:
+                        result[i].Id.Should().Be("SUPPLY_MAP_MODE_STATUS_COLOR");
+                        result[i].ValueType.Should().Be(ValueType.SpecialVariable);
+                        result[i].Type.Should().Be("common\\defines\\NDefines_Graphics.NInterface-txt");
+                        result[i].Code.Should().Be("NDefines_Graphics.NInterface.SUPPLY_MAP_MODE_STATUS_COLOR = {\r\n    0,\r\n    0.9,\r\n    0,\r\n    0,\r\n    1,\r\n    0.7,\r\n    0.98,\r\n    0.4,\r\n    0.1,\r\n    1,\r\n    1,\r\n    0.8,\r\n    0.64,\r\n    0.2,\r\n    1\r\n}");
+                        break;
+                    default:
+                        break;
+                }
+                result[i].ModName.Should().Be("fake");
+            }
+        }
+
+        /// <summary>
+        /// Defines the test method Parse_lua_inline_should_yield_results.
+        /// </summary>
+        [Fact]
+        public void Parse_lua_inline_should_yield_results()
+        {
+            DISetup.SetupContainer();
+
+            var sb = new StringBuilder();
+            sb.AppendLine(@"NDefines.NOperatives.MAX_RECRUITED_OPERATIVES = 16");
+            sb.AppendLine(@"NDefines_Graphics.NMapMode.SUPPLY_MAP_MODE_REACH_COLOR = {");
+            sb.AppendLine(@"    0.0,   0.6, 0.0, 0.4, 1.0, 			-- #990066 dark purple");
+            sb.AppendLine(@"    0.02,  0.2, 0.17, 0.52, 1.0, 		-- #332B85 dark purple blue");
+            sb.AppendLine(@"}");
+
+
+            var args = new ParserArgs()
+            {
+                ContentSHA = "sha",
+                ModDependencies = new List<string> { "1" },
+                File = "common\\defines\\t.lua",
+                Lines = sb.ToString().Split(Environment.NewLine.ToCharArray(), StringSplitOptions.RemoveEmptyEntries),
+                ModName = "fake"
+            };
+            var parser = new Generic.DefinesParser(new CodeParser(new Logger()), null);
+            var result = parser.Parse(args).ToList();
+            result.Should().NotBeNullOrEmpty();
+            result.Count.Should().Be(2);
+            for (int i = 0; i < 2; i++)
+            {
+                result[i].ContentSHA.Should().Be("sha");
+                result[i].Dependencies.First().Should().Be("1");
+                result[i].File.Should().Be("common\\defines\\t.lua");
+                switch (i)
+                {
+                    case 0:
+                        result[i].Id.Should().Be("MAX_RECRUITED_OPERATIVES");
+                        result[i].ValueType.Should().Be(ValueType.SpecialVariable);
+                        result[i].Type.Should().Be("common\\defines\\NDefines.NOperatives-txt");
+                        result[i].Code.Should().Be("NDefines.NOperatives.MAX_RECRUITED_OPERATIVES = 16");
+                        break;
+
+                    case 1:
+                        result[i].Id.Should().Be("SUPPLY_MAP_MODE_REACH_COLOR");
+                        result[i].ValueType.Should().Be(ValueType.SpecialVariable);
+                        result[i].Type.Should().Be("common\\defines\\NDefines_Graphics.NMapMode-txt");
+                        result[i].Code.Should().Be("NDefines_Graphics.NMapMode.SUPPLY_MAP_MODE_REACH_COLOR = {\r\n    0,\r\n    0.6,\r\n    0,\r\n    0.4,\r\n    1,\r\n    0.02,\r\n    0.2,\r\n    0.17,\r\n    0.52,\r\n    1\r\n}");
                         break;
                     default:
                         break;

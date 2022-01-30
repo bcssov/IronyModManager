@@ -237,11 +237,11 @@ namespace IronyModManager.Storage.Tests
         {
             DISetup.SetupContainer();
             var dbMock = GetDbMock();
-            var newThemeKey = "test2";            
+            var newThemeKey = "test2";
             var storage = new Storage(dbMock, new Mock<IMapper>().Object);
             storage.RegisterTheme(newThemeKey);
             dbMock.Themes.Count.Should().Be(2);
-            dbMock.Themes.FirstOrDefault(p => p.Name == newThemeKey).Should().NotBeNull();            
+            dbMock.Themes.FirstOrDefault(p => p.Name == newThemeKey).Should().NotBeNull();
         }
 
         /// <summary>
@@ -292,7 +292,8 @@ namespace IronyModManager.Storage.Tests
                 RemoteSteamUserDirectory = new List<string>() { "remotesave" },
                 Abrv = "abrv",
                 ParadoxGameId = "pdxId",
-                DLCContainer = "container"
+                DLCContainer = "container",
+                GameIndexCacheVersion = 2
             };
             storage.RegisterGame(game);
             dbMock.Games.Count.Should().Be(2);
@@ -313,6 +314,7 @@ namespace IronyModManager.Storage.Tests
             dbMock.Games.FirstOrDefault(p => p.Name == key).Abrv.Should().Be("abrv");
             dbMock.Games.FirstOrDefault(p => p.Name == key).ParadoxGameId.Should().Be("pdxId");
             dbMock.Games.FirstOrDefault(p => p.Name == key).DLCContainer.Should().Be("container");
+            dbMock.Games.FirstOrDefault(p => p.Name == key).GameIndexCacheVersion.Should().Be(2);
         }
 
         /// <summary>
@@ -450,7 +452,7 @@ namespace IronyModManager.Storage.Tests
         {
             DISetup.SetupContainer();
             var dbMock = GetDbMock();
-            var newThemeKey = "test2";            
+            var newThemeKey = "test2";
             var mapper = new Mock<IMapper>();
             mapper.Setup(p => p.Map<List<IThemeType>>(It.IsAny<IEnumerable<IThemeType>>())).Returns(() =>
             {
@@ -460,7 +462,7 @@ namespace IronyModManager.Storage.Tests
             storage.RegisterTheme(newThemeKey);
             var themes = storage.GetThemes();
             themes.Count().Should().Be(2);
-            themes.FirstOrDefault(p => p.Name == newThemeKey).Should().NotBeNull();            
+            themes.FirstOrDefault(p => p.Name == newThemeKey).Should().NotBeNull();
         }
 
         /// <summary>
@@ -520,7 +522,8 @@ namespace IronyModManager.Storage.Tests
                 RemoteSteamUserDirectory = new List<string>() { "remotesave" },
                 Abrv = "abrv",
                 ParadoxGameId = "pdxId",
-                DLCContainer = "container"
+                DLCContainer = "container",
+                GameIndexCacheVersion = 2
             };
             storage.RegisterGame(game);
             var result = storage.GetGames();
@@ -542,6 +545,7 @@ namespace IronyModManager.Storage.Tests
             result.FirstOrDefault(p => p.Name == key).Abrv.Should().Be("abrv");
             result.FirstOrDefault(p => p.Name == key).ParadoxGameId.Should().Be("pdxId");
             result.FirstOrDefault(p => p.Name == key).DLCContainer.Should().Be("container");
+            result.FirstOrDefault(p => p.Name == key).GameIndexCacheVersion.Should().Be(2);
         }
 
         /// <summary>

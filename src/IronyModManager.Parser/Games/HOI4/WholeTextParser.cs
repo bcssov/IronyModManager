@@ -4,7 +4,7 @@
 // Created          : 02-18-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 01-30-2022
+// Last Modified On : 01-29-2022
 // ***********************************************************************
 // <copyright file="WholeTextParser.cs" company="Mario">
 //     Mario
@@ -18,7 +18,7 @@ using IronyModManager.Parser.Common.Args;
 using IronyModManager.Parser.Common.Parsers;
 using IronyModManager.Shared;
 
-namespace IronyModManager.Parser.Games.Stellaris
+namespace IronyModManager.Parser.Games.HOI4
 {
     /// <summary>
     /// Class WholeTextParser.
@@ -32,15 +32,23 @@ namespace IronyModManager.Parser.Games.Stellaris
         #region Fields
 
         /// <summary>
+        /// The equals checks
+        /// </summary>
+        private static readonly string[] equalsChecks = new string[]
+        {
+            Common.Constants.HOI4.GraphicalCultureType
+        };
+
+        /// <summary>
         /// The starts with checks
         /// </summary>
         private static readonly string[] startsWithChecks = new string[]
         {
-            Common.Constants.Stellaris.DiploPhrases, Common.Constants.Stellaris.MapGalaxy, Common.Constants.Stellaris.NameLists,
-            Common.Constants.Stellaris.SpeciesNames, Common.Constants.Stellaris.Portraits,
-            Common.Constants.Stellaris.ComponentTags, Common.Constants.Stellaris.RandomNamesBase, Common.Constants.Stellaris.RandomNames,
-            Common.Constants.Stellaris.StartScreenMessages, Common.Constants.Stellaris.MapSetupScenarios, Common.Constants.Stellaris.CountryContainer,
-            Common.Constants.Stellaris.DiplomacyEconomy
+            Common.Constants.HOI4.Countries, Common.Constants.HOI4.Ideas,
+            Common.Constants.HOI4.AIStrategyPlanes, Common.Constants.HOI4.AIStrategy,
+            Common.Constants.HOI4.IntelligenceAgencies, Common.Constants.HOI4.ScriptedGui,
+            Common.Constants.HOI4.Units, Common.Constants.HOI4.History, Common.Constants.HOI4.Generation,
+            Common.Constants.HOI4.IdeaTags, Common.Constants.HOI4.Terrain
         };
 
         #endregion Fields
@@ -64,7 +72,7 @@ namespace IronyModManager.Parser.Games.Stellaris
         /// Gets the name of the parser.
         /// </summary>
         /// <value>The name of the parser.</value>
-        public override string ParserName => "Stellaris" + nameof(WholeTextParser);
+        public override string ParserName => "HOI4" + nameof(WholeTextParser);
 
         #endregion Properties
 
@@ -77,7 +85,27 @@ namespace IronyModManager.Parser.Games.Stellaris
         /// <returns><c>true</c> if this instance can parse the specified arguments; otherwise, <c>false</c>.</returns>
         public override bool CanParse(CanParseArgs args)
         {
-            return args.IsStellaris() && IsValidType(args);
+            return args.IsHOI4() && IsValidType(args);
+        }
+
+        /// <summary>
+        /// Determines whether this instance [can parse equals] the specified arguments.
+        /// </summary>
+        /// <param name="args">The arguments.</param>
+        /// <returns><c>true</c> if this instance [can parse equals] the specified arguments; otherwise, <c>false</c>.</returns>
+        protected virtual bool CanParseEquals(CanParseArgs args)
+        {
+            return equalsChecks.Any(s => args.File.Equals(s, StringComparison.OrdinalIgnoreCase));
+        }
+
+        /// <summary>
+        /// Determines whether this instance [can parse map CSV file] the specified file.
+        /// </summary>
+        /// <param name="file">The file.</param>
+        /// <returns><c>true</c> if this instance [can parse map CSV file] the specified file; otherwise, <c>false</c>.</returns>
+        protected virtual bool CanParseMapCsvFile(string file)
+        {
+            return file.StartsWith(Common.Constants.HOI4.Map) && file.EndsWith(Common.Constants.TxtExtension);
         }
 
         /// <summary>
@@ -103,13 +131,38 @@ namespace IronyModManager.Parser.Games.Stellaris
         }
 
         /// <summary>
+        /// Determines whether [is any text file] [the specified file].
+        /// </summary>
+        /// <param name="file">The file.</param>
+        /// <param name="directory">The directory.</param>
+        /// <returns><c>true</c> if [is any text file] [the specified file]; otherwise, <c>false</c>.</returns>
+        protected virtual bool IsAnyTxtFile(string file, string directory)
+        {
+            return IsTxtFile(file, directory) || file.StartsWith(directory + System.IO.Path.DirectorySeparatorChar) && file.EndsWith(Common.Constants.LuaExtension, StringComparison.OrdinalIgnoreCase);
+        }
+
+        /// <summary>
         /// Determines whether [is file name tag] [the specified arguments].
         /// </summary>
         /// <param name="args">The arguments.</param>
         /// <returns><c>true</c> if [is file name tag] [the specified arguments]; otherwise, <c>false</c>.</returns>
         protected override bool IsFileNameTag(ParserArgs args)
         {
-            return args.File.StartsWith(Common.Constants.Stellaris.ComponentTags, StringComparison.OrdinalIgnoreCase);
+            return args.File.Equals(Common.Constants.HOI4.GraphicalCultureType, StringComparison.OrdinalIgnoreCase) ||
+                CanParseMapCsvFile(args.File) ||
+                args.File.StartsWith(Common.Constants.HOI4.Countries) ||
+                args.File.EndsWith(Common.Constants.LuaExtension, StringComparison.OrdinalIgnoreCase);
+        }
+
+        /// <summary>
+        /// Determines whether [is text file] [the specified file].
+        /// </summary>
+        /// <param name="file">The file.</param>
+        /// <param name="directory">The directory.</param>
+        /// <returns><c>true</c> if [is text file] [the specified file]; otherwise, <c>false</c>.</returns>
+        protected virtual bool IsTxtFile(string file, string directory)
+        {
+            return file.StartsWith(directory + System.IO.Path.DirectorySeparatorChar) && file.EndsWith(Common.Constants.TxtExtension, StringComparison.OrdinalIgnoreCase);
         }
 
         /// <summary>
@@ -119,7 +172,10 @@ namespace IronyModManager.Parser.Games.Stellaris
         /// <returns><c>true</c> if [is valid type] [the specified arguments]; otherwise, <c>false</c>.</returns>
         protected override bool IsValidType(CanParseArgs args)
         {
-            return CanParseStartsWith(args);
+            return CanParseEquals(args) || CanParseMapCsvFile(args.File) ||
+                CanParseStartsWith(args) ||
+                IsTxtFile(args.File, Common.Constants.HOI4.GFX) || IsTxtFile(args.File, Common.Constants.HOI4.Music) ||
+                IsAnyTxtFile(args.File, Common.Constants.HOI4.Script) || IsAnyTxtFile(args.File, Common.Constants.HOI4.Tests) || IsAnyTxtFile(args.File, Common.Constants.HOI4.Tutorial);
         }
 
         #endregion Methods

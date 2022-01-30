@@ -4,7 +4,7 @@
 // Created          : 02-22-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 09-02-2021
+// Last Modified On : 01-29-2022
 // ***********************************************************************
 // <copyright file="ICodeParser.cs" company="Mario">
 //     Mario
@@ -27,9 +27,10 @@ namespace IronyModManager.Parser.Common.Parsers
         /// <summary>
         /// Cleans the code.
         /// </summary>
+        /// <param name="file">The file.</param>
         /// <param name="lines">The lines.</param>
         /// <returns>IEnumerable&lt;System.String&gt;.</returns>
-        IEnumerable<string> CleanCode(IEnumerable<string> lines);
+        IEnumerable<string> CleanCode(string file, IEnumerable<string> lines);
 
         /// <summary>
         /// Cleans the whitespace.
@@ -47,6 +48,13 @@ namespace IronyModManager.Parser.Common.Parsers
         string FormatCode(IScriptElement element, int indentLevel = 0);
 
         /// <summary>
+        /// Determines whether the specified file is lua.
+        /// </summary>
+        /// <param name="file">The file.</param>
+        /// <returns><c>true</c> if the specified file is lua; otherwise, <c>false</c>.</returns>
+        bool IsLua(string file);
+
+        /// <summary>
         /// Parses the script.
         /// </summary>
         /// <param name="lines">The lines.</param>
@@ -59,8 +67,9 @@ namespace IronyModManager.Parser.Common.Parsers
         /// Parses the script without validation.
         /// </summary>
         /// <param name="lines">The lines.</param>
+        /// <param name="file">The file.</param>
         /// <returns>IParseResponse.</returns>
-        IParseResponse ParseScriptWithoutValidation(IEnumerable<string> lines);
+        IParseResponse ParseScriptWithoutValidation(IEnumerable<string> lines, string file);
 
         /// <summary>
         /// Performs the validity check.

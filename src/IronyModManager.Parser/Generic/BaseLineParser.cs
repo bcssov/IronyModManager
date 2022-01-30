@@ -4,15 +4,15 @@
 // Created          : 08-31-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 12-07-2020
+// Last Modified On : 01-29-2022
 // ***********************************************************************
 // <copyright file="BaseLineParser.cs" company="Mario">
 //     Mario
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
-using System.Collections.Generic;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -33,7 +33,7 @@ namespace IronyModManager.Parser.Generic
         /// <summary>
         /// The quotes regex
         /// </summary>
-        protected static readonly Regex quotesRegex = new Regex("\".*?\"", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+        protected static readonly Regex quotesRegex = new("\".*?\"", RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
         #endregion Fields
 

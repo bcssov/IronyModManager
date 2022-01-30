@@ -4,7 +4,7 @@
 // Created          : 03-01-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 01-27-2022
+// Last Modified On : 01-29-2022
 // ***********************************************************************
 // <copyright file="Enums.cs" company="Mario">
 //     Mario
@@ -65,7 +65,12 @@ namespace IronyModManager.Models.Common
         /// <summary>
         /// The mod override
         /// </summary>
-        ModOverride
+        ModOverride,
+
+        /// <summary>
+        /// The no provider
+        /// </summary>
+        NoProvider
     }
 
     /// <summary>

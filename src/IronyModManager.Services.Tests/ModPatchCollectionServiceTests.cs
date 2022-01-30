@@ -1857,6 +1857,40 @@ namespace IronyModManager.Services.Tests
         }
 
         /// <summary>
+        /// Defines the test method EvalDefinitionPriority_should_return_first_object_when_no_info_provider.
+        /// </summary>
+        [Fact]
+        public void EvalDefinitionPriority_should_return_first_object_when_no_info_provider()
+        {
+            DISetup.SetupContainer();
+
+            var storageProvider = new Mock<IStorageProvider>();
+            var modParser = new Mock<IModParser>();
+            var parserManager = new Mock<IParserManager>();
+            var reader = new Mock<IReader>();
+            var modWriter = new Mock<IModWriter>();
+            var gameService = new Mock<IGameService>();
+            var mapper = new Mock<IMapper>();
+            var modPatchExporter = new Mock<IModPatchExporter>();
+            SetupMockCase(reader, parserManager, modParser);
+            gameService.Setup(p => p.GetSelected()).Returns(new Game()
+            {
+                Type = "EvalDefinitionPriority_should_return_first_object_when_no_info_provider",
+                UserDirectory = "C:\\Users\\Fake"
+            });
+            var infoProvider = new Mock<IDefinitionInfoProvider>();
+            infoProvider.Setup(p => p.DefinitionUsesFIOSRules(It.IsAny<IDefinition>())).Returns(false);
+            infoProvider.Setup(p => p.CanProcess(It.IsAny<string>())).Returns(false);
+            var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter, new List<IDefinitionInfoProvider>() { infoProvider.Object });
+
+            var def = new Definition();
+            var def2 = new Definition();
+            var result = service.EvalDefinitionPriority(new List<IDefinition>() { def, def2 });
+            result.Definition.Should().Be(def);
+            result.PriorityType.Should().Be(DefinitionPriorityType.NoProvider);
+        }
+
+        /// <summary>
         /// Defines the test method EvalDefinitionPriority_should_return_first_game_object.
         /// </summary>
         [Fact]
@@ -2749,6 +2783,41 @@ namespace IronyModManager.Services.Tests
             var result = service.EvalDefinitionPriority(new List<IDefinition>() { def3, def });
             result.Definition.Should().Be(def);
             result.PriorityType.Should().Be(DefinitionPriorityType.None);
+        }
+
+        /// <summary>
+        /// Defines the test method EvalDefinitionPriority_gfx_replace_directory_should_win.
+        /// </summary>
+        [Fact]
+        public void EvalDefinitionPriority_gfx_replace_directory_should_win()
+        {
+            DISetup.SetupContainer();
+
+            var storageProvider = new Mock<IStorageProvider>();
+            var modParser = new Mock<IModParser>();
+            var parserManager = new Mock<IParserManager>();
+            var reader = new Mock<IReader>();
+            var modWriter = new Mock<IModWriter>();
+            var gameService = new Mock<IGameService>();
+            var mapper = new Mock<IMapper>();
+            var modPatchExporter = new Mock<IModPatchExporter>();
+            SetupMockCase(reader, parserManager, modParser);
+            gameService.Setup(p => p.GetSelected()).Returns(new Game()
+            {
+                Type = "EvalDefinitionPriority_gfx_replace_directory_should_win",
+                UserDirectory = "C:\\Users\\Fake"
+            });
+            var infoProvider = new Mock<IDefinitionInfoProvider>();
+            infoProvider.Setup(p => p.DefinitionUsesFIOSRules(It.IsAny<IDefinition>())).Returns(false);
+            infoProvider.Setup(p => p.CanProcess(It.IsAny<string>())).Returns(true);
+            var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter, new List<IDefinitionInfoProvider>() { infoProvider.Object });
+
+            var def = new Definition() { File = @"gfx\test.gfx", ModName = "1" };
+            var def2 = new Definition() { File = @"gfx\replace\test.gfx", ModName = "2", VirtualPath = "gfx\\test.gfx" };
+            var def3 = new Definition() { File = @"gfx\test.gfx", ModName = "Game", IsFromGame = true };
+            var result = service.EvalDefinitionPriority(new List<IDefinition>() { def3, def, def2 });
+            result.Definition.Should().Be(def2);
+            result.PriorityType.Should().Be(DefinitionPriorityType.ModOrder);
         }
 
         /// <summary>
@@ -5048,9 +5117,9 @@ namespace IronyModManager.Services.Tests
             var mapper = new Mock<IMapper>();
             var modPatchExporter = new Mock<IModPatchExporter>();
             var validateParser = new Mock<IValidateParser>();
-            validateParser.Setup(p => p.GetBracketCount(It.IsAny<string>())).Returns(new BracketValidateResult() { CloseBracketCount = 1, OpenBracketCount = 1 });
+            validateParser.Setup(p => p.GetBracketCount(It.IsAny<string>(), It.IsAny<string>())).Returns(new BracketValidateResult() { CloseBracketCount = 1, OpenBracketCount = 1 });
             var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter, null, validateParser);
-            var result = service.GetBracketCount("test");
+            var result = service.GetBracketCount("test.txt", "test");
             result.Should().NotBeNull();
             result.OpenBracketCount.Should().Be(1);
             result.CloseBracketCount.Should().Be(1);

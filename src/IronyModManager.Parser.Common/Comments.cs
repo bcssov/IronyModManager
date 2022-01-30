@@ -4,7 +4,7 @@
 // Created          : 10-31-2021
 //
 // Last Modified By : Mario
-// Last Modified On : 10-31-2021
+// Last Modified On : 01-28-2022
 // ***********************************************************************
 // <copyright file="Comments.cs" company="Mario">
 //     Mario
@@ -34,6 +34,10 @@ namespace IronyModManager.Parser.Common
             if (filename.EndsWith(Constants.ShaderExtension, StringComparison.OrdinalIgnoreCase) || filename.EndsWith(Constants.FxhExtension, StringComparison.OrdinalIgnoreCase))
             {
                 return Constants.EmptyShaderComment;
+            }
+            else if (filename.EndsWith(Constants.LuaExtension, StringComparison.OrdinalIgnoreCase))
+            {
+                return Constants.EmptyLuaOverwriteComment;
             }
             return Constants.EmptyOverwriteComment;
         }

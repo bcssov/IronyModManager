@@ -595,11 +595,12 @@ namespace IronyModManager.Services
         /// <summary>
         /// Gets the bracket count.
         /// </summary>
+        /// <param name="file">The file.</param>
         /// <param name="text">The text.</param>
         /// <returns>IBracketValidateResult.</returns>
-        public virtual IBracketValidateResult GetBracketCount(string text)
+        public virtual IBracketValidateResult GetBracketCount(string file, string text)
         {
-            return validateParser.GetBracketCount(text);
+            return validateParser.GetBracketCount(file, text);
         }
 
         /// <summary>
@@ -2163,9 +2164,9 @@ namespace IronyModManager.Services
         /// <returns>IDefinition.</returns>
         protected virtual IDefinition MergeSingleFileDefinitions(IEnumerable<IDefinition> definitions)
         {
-            bool hasCode(string text)
+            bool hasCode(string file, string text)
             {
-                var result = validateParser.HasCode(text);
+                var result = validateParser.HasCode(file, text);
                 return result;
             }
 
@@ -2246,17 +2247,17 @@ namespace IronyModManager.Services
                 bool hasCodeTag = !string.IsNullOrWhiteSpace(group.FirstOrDefault().CodeTag);
                 if (!hasCodeTag)
                 {
-                    var namespaces = group.Where(p => hasCode(p.Code) && p.ValueType == ValueType.Namespace);
-                    var variables = group.Where(p => hasCode(p.Code) && p.ValueType == ValueType.Variable);
-                    var other = group.Where(p => p.ValueType != ValueType.Variable && p.ValueType != ValueType.Namespace && hasCode(p.Code));
+                    var namespaces = group.Where(p => hasCode(p.File, p.Code) && p.ValueType == ValueType.Namespace);
+                    var variables = group.Where(p => hasCode(p.File, p.Code) && p.ValueType == ValueType.Variable);
+                    var other = group.Where(p => p.ValueType != ValueType.Variable && p.ValueType != ValueType.Namespace && hasCode(p.File, p.Code));
                     var code = namespaces.Select(p => p.OriginalCode).Concat(variables.Select(p => p.OriginalCode)).Concat(other.Select(p => p.OriginalCode));
                     appendLine(sb, code);
                 }
                 else
                 {
-                    var namespaces = group.Where(p => hasCode(p.Code) && p.ValueType == ValueType.Namespace);
-                    var variables = definitions.Where(p => p.ValueType == ValueType.Variable && !string.IsNullOrWhiteSpace(p.CodeTag) && hasCode(p.Code));
-                    var other = group.Where(p => p.ValueType != ValueType.Variable && p.ValueType != ValueType.Namespace && hasCode(p.Code));
+                    var namespaces = group.Where(p => hasCode(p.File, p.Code) && p.ValueType == ValueType.Namespace);
+                    var variables = definitions.Where(p => p.ValueType == ValueType.Variable && !string.IsNullOrWhiteSpace(p.CodeTag) && hasCode(p.File, p.Code));
+                    var other = group.Where(p => p.ValueType != ValueType.Variable && p.ValueType != ValueType.Namespace && hasCode(p.File, p.Code));
                     var vars = namespaces.Select(p => p.OriginalCode).Concat(variables.Select(p => p.OriginalCode));
                     var code = other.Select(p => p.OriginalCode);
                     mergeCode(sb, group.FirstOrDefault().CodeTag, group.FirstOrDefault().CodeSeparator, vars, code);

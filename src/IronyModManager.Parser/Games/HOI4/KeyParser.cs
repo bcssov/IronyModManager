@@ -1,19 +1,18 @@
 ﻿// ***********************************************************************
 // Assembly         : IronyModManager.Parser
 // Author           : Mario
-// Created          : 02-18-2020
+// Created          : 01-29-2022
 //
 // Last Modified By : Mario
-// Last Modified On : 01-29-2022
+// Last Modified On : 01-30-2022
 // ***********************************************************************
-// <copyright file="GraphicsParser.cs" company="Mario">
+// <copyright file="KeyParser.cs" company="Mario">
 //     Mario
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using IronyModManager.Parser.Common.Args;
 using IronyModManager.Parser.Common.Parsers;
@@ -21,27 +20,34 @@ using IronyModManager.Parser.Common.Parsers.Models;
 using IronyModManager.Shared;
 using IronyModManager.Shared.Models;
 
-namespace IronyModManager.Parser.Generic
+namespace IronyModManager.Parser.Games.HOI4
 {
     /// <summary>
-    /// Class GraphicsParser.
-    /// Implements the <see cref="IronyModManager.Parser.Generic.BaseGraphicsParser" />
-    /// Implements the <see cref="IronyModManager.Parser.Common.Parsers.IGenericParser" />
-    /// Implements the <see cref="IronyModManager.Parser.Common.Parsers.BaseParser" />
+    /// Class KeyParser.
+    /// Implements the <see cref="IronyModManager.Parser.Generic.KeyParser" />
+    /// Implements the <see cref="IronyModManager.Parser.Common.Parsers.IGameParser" />
     /// </summary>
-    /// <seealso cref="IronyModManager.Parser.Common.Parsers.BaseParser" />
-    /// <seealso cref="IronyModManager.Parser.Generic.BaseGraphicsParser" />
-    /// <seealso cref="IronyModManager.Parser.Common.Parsers.IGenericParser" />
-    public class GraphicsParser : BaseParser, IGenericParser
+    /// <seealso cref="IronyModManager.Parser.Generic.KeyParser" />
+    /// <seealso cref="IronyModManager.Parser.Common.Parsers.IGameParser" />
+    public class KeyParser : Generic.KeyParser, IGameParser
     {
+        #region Fields
+
+        /// <summary>
+        /// The parsing bookmark
+        /// </summary>
+        private bool parsingBookmark = false;
+
+        #endregion Fields
+
         #region Constructors
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="GraphicsParser" /> class.
+        /// Initializes a new instance of the <see cref="KeyParser" /> class.
         /// </summary>
         /// <param name="codeParser">The code parser.</param>
         /// <param name="logger">The logger.</param>
-        public GraphicsParser(ICodeParser codeParser, ILogger logger) : base(codeParser, logger)
+        public KeyParser(ICodeParser codeParser, ILogger logger) : base(codeParser, logger)
         {
         }
 
@@ -53,13 +59,13 @@ namespace IronyModManager.Parser.Generic
         /// Gets the name of the parser.
         /// </summary>
         /// <value>The name of the parser.</value>
-        public override string ParserName => "Generic" + nameof(GraphicsParser);
+        public override string ParserName => "HOI4" + nameof(KeyParser);
 
         /// <summary>
         /// Gets the priority.
         /// </summary>
         /// <value>The priority.</value>
-        public int Priority => 2;
+        public override int Priority => 10;
 
         #endregion Properties
 
@@ -72,7 +78,7 @@ namespace IronyModManager.Parser.Generic
         /// <returns><c>true</c> if this instance can parse the specified arguments; otherwise, <c>false</c>.</returns>
         public override bool CanParse(CanParseArgs args)
         {
-            return args.File.EndsWith(Common.Constants.GuiExtension, StringComparison.OrdinalIgnoreCase) || args.File.EndsWith(Common.Constants.GfxExtension, StringComparison.OrdinalIgnoreCase);
+            return args.IsHOI4() && EvalStartsWith(args);
         }
 
         /// <summary>
@@ -82,17 +88,8 @@ namespace IronyModManager.Parser.Generic
         /// <returns>IEnumerable&lt;IDefinition&gt;.</returns>
         public override IEnumerable<IDefinition> Parse(ParserArgs args)
         {
-            var result = ParseSecondLevel(args);
-            var replaceFolder = Path.DirectorySeparatorChar + "replace";
-            if (Path.GetDirectoryName(args.File).EndsWith(replaceFolder))
-            {
-                foreach (var item in result)
-                {
-                    item.VirtualPath = Path.Combine(Path.GetDirectoryName(args.File).Replace(replaceFolder, string.Empty), Path.GetFileName(args.File));
-                    item.Type = FormatType(item.VirtualPath);
-                }
-            }
-            return result;
+            parsingBookmark = args.File.StartsWith(Common.Constants.HOI4.Bookmark, StringComparison.OrdinalIgnoreCase);
+            return ParseSecondLevel(args);
         }
 
         /// <summary>
@@ -102,11 +99,26 @@ namespace IronyModManager.Parser.Generic
         /// <returns>System.String.</returns>
         protected override string EvalElementForId(IScriptElement value)
         {
-            if (Common.Constants.Scripts.GraphicsTypeName.Equals(value.Key, StringComparison.OrdinalIgnoreCase))
+            if (parsingBookmark && value.Key.Equals("name", StringComparison.OrdinalIgnoreCase))
+            {
+                return value.Value;
+            }
+            else if (value.Key.Equals("key", StringComparison.OrdinalIgnoreCase))
             {
                 return value.Value;
             }
             return base.EvalElementForId(value);
+        }
+
+        /// <summary>
+        /// Evals the starts with.
+        /// </summary>
+        /// <param name="args">The arguments.</param>
+        /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
+        protected virtual bool EvalStartsWith(CanParseArgs args)
+        {
+            return args.File.StartsWith(Common.Constants.HOI4.Bookmark, StringComparison.OrdinalIgnoreCase)
+                || args.File.StartsWith(Common.Constants.HOI4.DifficultySettings, StringComparison.OrdinalIgnoreCase);
         }
 
         #endregion Methods

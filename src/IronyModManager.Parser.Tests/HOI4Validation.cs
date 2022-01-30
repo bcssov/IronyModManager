@@ -1,12 +1,12 @@
 ﻿// ***********************************************************************
 // Assembly         : IronyModManager.Parser.Tests
 // Author           : Mario
-// Created          : 02-17-2020
+// Created          : 01-28-2022
 //
 // Last Modified By : Mario
 // Last Modified On : 01-28-2022
 // ***********************************************************************
-// <copyright file="StellarisValidation.cs" company="Mario">
+// <copyright file="HOI4Validation.cs" company="Mario">
 //     Mario
 // </copyright>
 // <summary></summary>
@@ -14,15 +14,20 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
 using Xunit;
 using Xunit.Abstractions;
 
 namespace IronyModManager.Parser.Tests
 {
     /// <summary>
-    /// Class DetectDuplicates.
+    /// Class HOI4Validation.
+    /// Implements the <see cref="IronyModManager.Parser.Tests.ValidationBase" />
     /// </summary>
-    public class StellarisValidation : ValidationBase
+    /// <seealso cref="IronyModManager.Parser.Tests.ValidationBase" />
+    public class HOI4Validation : ValidationBase
     {
         #region Constructors
 
@@ -30,7 +35,7 @@ namespace IronyModManager.Parser.Tests
         /// Initializes a new instance of the <see cref="StellarisValidation" /> class.
         /// </summary>
         /// <param name="writer">The writer.</param>
-        public StellarisValidation(ITestOutputHelper writer) : base(writer, @"D:\Games\Steam\steamapps\common\Stellaris\", "Stellaris")
+        public HOI4Validation(ITestOutputHelper writer) : base(writer, @"D:\Games\Steam\steamapps\common\Hearts of Iron IV\\", "HeartsofIronIV")
         {
         }
 
@@ -50,7 +55,7 @@ namespace IronyModManager.Parser.Tests
         /// Defines the test method Detect.
         /// </summary>
         /// <exception cref="ArgumentException">Fatal error. Check parsers.</exception>
-        public void StellarisDetectDuplicatesAndGenerateParserMap()
+        public void HOI4DetectDuplicatesAndGenerateParserMap()
         {
             DetectDuplicatesAndGenerateParserMap();
         }
@@ -65,7 +70,7 @@ namespace IronyModManager.Parser.Tests
         /// <summary>
         /// Defines the test method StellarisExtensions.
         /// </summary>
-        public void StellarisExtensions()
+        public void HOI4Extensions()
         {
             Extensions();
         }

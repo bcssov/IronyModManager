@@ -4,7 +4,7 @@
 // Created          : 03-18-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 01-27-2022
+// Last Modified On : 01-28-2022
 // ***********************************************************************
 // <copyright file="MainConflictSolverViewModel.cs" company="Mario">
 //     Mario
@@ -377,6 +377,12 @@ namespace IronyModManager.ViewModels
         public virtual int? PreviousConflictIndex { get; set; }
 
         /// <summary>
+        /// Gets or sets a value indicating whether [read only].
+        /// </summary>
+        /// <value><c>true</c> if [read only]; otherwise, <c>false</c>.</value>
+        public virtual bool ReadOnly { get; set; }
+
+        /// <summary>
         /// Gets or sets the reset conflicts.
         /// </summary>
         /// <value>The reset conflicts.</value>
@@ -443,12 +449,6 @@ namespace IronyModManager.ViewModels
         /// </summary>
         /// <value>The selected parent conflict.</value>
         public virtual IHierarchicalDefinitions SelectedParentConflict { get; set; }
-
-        /// <summary>
-        /// Gets or sets a value indicating whether [read only].
-        /// </summary>
-        /// <value><c>true</c> if [read only]; otherwise, <c>false</c>.</value>
-        public virtual bool ReadOnly { get; set; }
 
         #endregion Properties
 
@@ -760,6 +760,7 @@ namespace IronyModManager.ViewModels
                     if (s != null && IsConflictSolverAvailable)
                     {
                         MergeViewer.EditingYaml = s.LeftSelectedDefinition.Type.StartsWith(Shared.Constants.LocalizationDirectory);
+                        MergeViewer.EditingLua = s.LeftSelectedDefinition.File.EndsWith(Parser.Common.Constants.LuaExtension, StringComparison.OrdinalIgnoreCase);
                         MergeViewer.SetSidePatchMod(s.LeftSelectedDefinition, s.RightSelectedDefinition);
                         MergeViewer.SetText(s.LeftSelectedDefinition.Code, s.RightSelectedDefinition.Code, lockScroll: true);
                         MergeViewer.ExitEditMode();

@@ -4,7 +4,7 @@
 // Created          : 02-16-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 01-27-2022
+// Last Modified On : 01-28-2022
 // ***********************************************************************
 // <copyright file="Extensions.cs" company="Mario">
 //     Mario
@@ -128,6 +128,58 @@ namespace IronyModManager.Shared
                 return string.Empty;
             }
             return value.Replace('\\', Path.DirectorySeparatorChar).Replace('/', Path.DirectorySeparatorChar);
+        }
+
+        /// <summary>
+        /// Trims the specified value.
+        /// </summary>
+        /// <param name="input">The input.</param>
+        /// <param name="value">The value.</param>
+        /// <param name="type">The type.</param>
+        /// <returns>System.String.</returns>
+        public static string Trim(this string input, string value, StringComparison type = StringComparison.CurrentCultureIgnoreCase)
+        {
+            return TrimStart(TrimEnd(input, value, type), value, type);
+        }
+
+        /// <summary>
+        /// Trims the end.
+        /// </summary>
+        /// <param name="input">The input.</param>
+        /// <param name="value">The value.</param>
+        /// <param name="type">The type.</param>
+        /// <returns>System.String.</returns>
+        public static string TrimEnd(this string input, string value, StringComparison type = StringComparison.CurrentCultureIgnoreCase)
+        {
+            if (!string.IsNullOrEmpty(value))
+            {
+                while (!string.IsNullOrEmpty(input) && input.EndsWith(value, type))
+                {
+                    input = input.Substring(0, (input.Length - value.Length));
+                }
+            }
+
+            return input;
+        }
+
+        /// <summary>
+        /// Trims the start.
+        /// </summary>
+        /// <param name="input">The input.</param>
+        /// <param name="value">The value.</param>
+        /// <param name="type">The type.</param>
+        /// <returns>System.String.</returns>
+        public static string TrimStart(this string input, string value, StringComparison type = StringComparison.CurrentCultureIgnoreCase)
+        {
+            if (!string.IsNullOrEmpty(value))
+            {
+                while (!string.IsNullOrEmpty(input) && input.StartsWith(value, type))
+                {
+                    input = input.Substring(value.Length - 1);
+                }
+            }
+
+            return input;
         }
 
         #endregion Methods
