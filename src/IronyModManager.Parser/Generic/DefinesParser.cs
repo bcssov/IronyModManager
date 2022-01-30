@@ -4,7 +4,7 @@
 // Created          : 02-21-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 01-29-2022
+// Last Modified On : 01-30-2022
 // ***********************************************************************
 // <copyright file="DefinesParser.cs" company="Mario">
 //     Mario
@@ -14,6 +14,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using IronyModManager.DI;
 using IronyModManager.Parser.Common.Args;
 using IronyModManager.Parser.Common.Parsers;
@@ -33,6 +34,25 @@ namespace IronyModManager.Parser.Generic
     /// <seealso cref="IronyModManager.Parser.Common.Parsers.IGenericParser" />
     public class DefinesParser : BaseParser, IGenericParser
     {
+        #region Fields
+
+        /// <summary>
+        /// The clean comma after brace
+        /// </summary>
+        private static readonly Regex cleanCommaAfterBrace = new("(}\\s*)([,;])", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+
+        /// <summary>
+        /// The clean comma before brace
+        /// </summary>
+        private static readonly Regex cleanCommaBeforeBrace = new("[,;](\\s*})", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+
+        /// <summary>
+        /// The clean dot notation
+        /// </summary>
+        private static readonly Regex cleanDotNotation = new("([,;](\\s*))+(?![^{]*})", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+
+        #endregion Fields
+
         #region Constructors
 
         /// <summary>
@@ -82,19 +102,26 @@ namespace IronyModManager.Parser.Generic
         public override IEnumerable<IDefinition> Parse(ParserArgs args)
         {
             var isLua = false;
-            var forceSimpleValidation = false;
             IEnumerable<string> lines = args.Lines;
             if (codeParser.IsLua(args.File) && lines != null && lines.Any())
             {
                 isLua = true;
-                // Check whether this is dot notation type
+                var isComplex = false;
+                var text = string.Join(Environment.NewLine, lines);
                 var firstMatch = lines.FirstOrDefault(l => l.Contains(Common.Constants.Scripts.EqualsOperator));
-                if (firstMatch != null && !firstMatch.Split(Common.Constants.Scripts.EqualsOperator, StringSplitOptions.RemoveEmptyEntries)[0].Contains("."))
+                if (firstMatch != null && !firstMatch.Split(Common.Constants.Scripts.EqualsOperator, StringSplitOptions.RemoveEmptyEntries)[0].Contains('.'))
                 {
-                    forceSimpleValidation = true;
-                    var text = string.Join(Environment.NewLine, lines);
                     lines = text[..(text.LastIndexOf("}") + 1)].SplitOnNewLine(false);
-                    lines = codeParser.CleanCode(args.File, lines);
+                    isComplex = true;
+                }
+                lines = codeParser.CleanCode(args.File, lines);
+                text = string.Join(Environment.NewLine, lines);
+                text = cleanCommaBeforeBrace.Replace(text, "$1");
+                text = cleanDotNotation.Replace(text, "$2");
+                text = cleanCommaAfterBrace.Replace(text, "$1");
+                lines = text.SplitOnNewLine(false);
+                if (isComplex)
+                {
                     var newLines = new List<string>();
                     var curlyCount = 0;
                     var curlyCloseCount = 0;
@@ -103,13 +130,15 @@ namespace IronyModManager.Parser.Generic
                         var line = item;
                         curlyCount += line.Count(s => s == Common.Constants.Scripts.OpenObject);
                         curlyCloseCount += line.Count(s => s == Common.Constants.Scripts.CloseObject);
-                        if (curlyCount - curlyCloseCount <= 2 && line.Contains(','))
+                        if (curlyCount - curlyCloseCount == 2 && (line.EndsWith(',') || line.EndsWith(';')))
                         {
-                            var bracketLocation = line.IndexOf(Common.Constants.Scripts.OpenObject.ToString());
-                            int idLoc = line.LastIndexOf(",");
-                            if (idLoc > bracketLocation || bracketLocation == -1)
+                            if (line.EndsWith(','))
                             {
                                 line = line[..line.LastIndexOf(",")];
+                            }
+                            else
+                            {
+                                line = line[..line.LastIndexOf(";")];
                             }
                         }
                         newLines.Add(line);
@@ -121,8 +150,9 @@ namespace IronyModManager.Parser.Generic
             {
                 Lines = lines
             };
-            if (forceSimpleValidation && localArgs.ValidationType == Common.ValidationType.Full)
+            if (isLua && localArgs.ValidationType == Common.ValidationType.Full)
             {
+                // Switching to simple since we butchered the formatting
                 localArgs.ValidationType = Common.ValidationType.SimpleOnly;
             }
             var data = TryParse(localArgs);

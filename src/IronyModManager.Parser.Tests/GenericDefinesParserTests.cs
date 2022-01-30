@@ -676,7 +676,7 @@ namespace IronyModManager.Parser.Tests
                         result[i].Id.Should().Be("SUPPLY_MAP_MODE_STATUS_COLOR");
                         result[i].ValueType.Should().Be(ValueType.SpecialVariable);
                         result[i].Type.Should().Be("common\\defines\\NDefines_Graphics.NInterface-txt");
-                        result[i].Code.Should().Be("NDefines_Graphics.NInterface.SUPPLY_MAP_MODE_STATUS_COLOR = {\r\n    0,\r\n    0.9,\r\n    0,\r\n    0,\r\n    1,\r\n    0.7,\r\n    0.98,\r\n    0.4,\r\n    0.1,\r\n    1,\r\n    1,\r\n    0.8,\r\n    0.64,\r\n    0.2,\r\n    1,\r\n}");
+                        result[i].Code.Should().Be("NDefines_Graphics.NInterface.SUPPLY_MAP_MODE_STATUS_COLOR = {\r\n    0,\r\n    0.9,\r\n    0,\r\n    0,\r\n    1,\r\n    0.7,\r\n    0.98,\r\n    0.4,\r\n    0.1,\r\n    1,\r\n    1,\r\n    0.8,\r\n    0.64,\r\n    0.2,\r\n    1\r\n}");
                         break;
                     default:
                         break;
@@ -731,7 +731,7 @@ namespace IronyModManager.Parser.Tests
                         result[i].Id.Should().Be("SUPPLY_MAP_MODE_REACH_COLOR");
                         result[i].ValueType.Should().Be(ValueType.SpecialVariable);
                         result[i].Type.Should().Be("common\\defines\\NDefines_Graphics.NMapMode-txt");
-                        result[i].Code.Should().Be("NDefines_Graphics.NMapMode.SUPPLY_MAP_MODE_REACH_COLOR = {\r\n    0,\r\n    0.6,\r\n    0,\r\n    0.4,\r\n    1,\r\n    0.02,\r\n    0.2,\r\n    0.17,\r\n    0.52,\r\n    1,\r\n}");
+                        result[i].Code.Should().Be("NDefines_Graphics.NMapMode.SUPPLY_MAP_MODE_REACH_COLOR = {\r\n    0,\r\n    0.6,\r\n    0,\r\n    0.4,\r\n    1,\r\n    0.02,\r\n    0.2,\r\n    0.17,\r\n    0.52,\r\n    1\r\n}");
                         break;
                     default:
                         break;
