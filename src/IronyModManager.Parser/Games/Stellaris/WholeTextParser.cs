@@ -4,7 +4,7 @@
 // Created          : 02-18-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 01-29-2022
+// Last Modified On : 01-30-2022
 // ***********************************************************************
 // <copyright file="WholeTextParser.cs" company="Mario">
 //     Mario
@@ -87,6 +87,28 @@ namespace IronyModManager.Parser.Games.Stellaris
         protected override bool CanParseStartsWith(CanParseArgs args)
         {
             return startsWithChecks.Any(s => args.File.StartsWith(s, StringComparison.OrdinalIgnoreCase));
+        }
+
+        /// <summary>
+        /// Gets the file tag code.
+        /// </summary>
+        /// <param name="file">The file.</param>
+        /// <param name="lines">The lines.</param>
+        /// <returns>System.String.</returns>
+        protected override string GetFileTagCode(string file, IEnumerable<string> lines)
+        {
+            var cleaned = codeParser.CleanCode(file, lines);
+            return base.GetFileTagCode(file, cleaned);
+        }
+
+        /// <summary>
+        /// Determines whether [is file name tag] [the specified arguments].
+        /// </summary>
+        /// <param name="args">The arguments.</param>
+        /// <returns><c>true</c> if [is file name tag] [the specified arguments]; otherwise, <c>false</c>.</returns>
+        protected override bool IsFileNameTag(ParserArgs args)
+        {
+            return args.File.StartsWith(Common.Constants.Stellaris.ComponentTags, StringComparison.OrdinalIgnoreCase);
         }
 
         /// <summary>

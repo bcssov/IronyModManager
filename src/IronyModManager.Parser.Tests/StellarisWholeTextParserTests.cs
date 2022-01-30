@@ -229,5 +229,58 @@ namespace IronyModManager.Parser.Tests
                 result[i].Type.Should().Be("common\\txt");
             }
         }
+
+        /// <summary>
+        /// Defines the test method Parse_component_tags_should_yield_results.
+        /// </summary>
+        [Fact]
+        public void Parse_component_tags_should_yield_results()
+        {
+            DISetup.SetupContainer();
+
+            var sb = new StringBuilder();
+            sb.AppendLine(@"weapon_type_energy");
+            sb.AppendLine(@"weapon_type_kinetic");
+            sb.AppendLine(@"weapon_type_explosive");
+            sb.AppendLine(@"weapon_type_strike_craft");
+            sb.AppendLine(@"weapon_type_point_defense");
+            sb.AppendLine(@"weapon_role_anti_armor");
+            sb.AppendLine(@"weapon_role_anti_shield");
+            sb.AppendLine(@"weapon_role_artillery");
+            sb.AppendLine(@"weapon_role_anti_hull");
+            sb.AppendLine(@"weapon_role_point_defense");
+
+            var args = new ParserArgs()
+            {
+                ContentSHA = "sha",
+                ModDependencies = new List<string> { "1" },
+                File = "common\\component_tags\\t.txt",
+                Lines = sb.ToString().Split(Environment.NewLine.ToCharArray(), StringSplitOptions.RemoveEmptyEntries),
+                ModName = "fake"
+            };
+            var parser = new WholeTextParser(new CodeParser(new Logger()), null);
+            var result = parser.Parse(args).ToList();
+            result.Should().NotBeNullOrEmpty();
+            result.Count.Should().Be(1);
+            for (int i = 0; i < 1; i++)
+            {
+                result[i].ContentSHA.Should().Be("sha");
+                result[i].Dependencies.First().Should().Be("1");
+                result[i].File.Should().Be("common\\component_tags\\t.txt");
+                switch (i)
+                {
+                    case 0:
+                        result[i].Code.Trim().Should().Be(sb.ToString().Trim());
+                        result[i].Id.Should().Be("t.txt");
+                        result[i].ValueType.Should().Be(ValueType.WholeTextFile);
+                        break;
+
+                    default:
+                        break;
+                }
+                result[i].ModName.Should().Be("fake");
+                result[i].Type.Should().Be("common\\component_tags\\txt");
+            }
+        }
     }
 }
