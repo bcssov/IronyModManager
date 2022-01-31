@@ -389,13 +389,16 @@ namespace IronyModManager.Parser.Definitions
             {
                 gameDefinitionsCount = 0;
             }
-            if (definition.WillBeReset)
+            if (useHierarchalMap)
             {
-                resetDefinitionsCount--;
-            }
-            if (resetDefinitionsCount < 0)
-            {
-                resetDefinitionsCount = 0;
+                if (definition.WillBeReset)
+                {
+                    resetDefinitionsCount--;
+                }
+                if (resetDefinitionsCount < 0)
+                {
+                    resetDefinitionsCount = 0;
+                }
             }
             definitions.Remove(definition);
             var hierarchicalDefinition = mainHierarchalDefinitions.GetFirstByNameNoLock(nameof(IHierarchicalDefinitions.Name), ResolveHierarchalParentDirectory(definition));
