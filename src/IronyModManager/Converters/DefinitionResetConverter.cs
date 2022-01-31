@@ -44,7 +44,7 @@ namespace IronyModManager.Converters
         {
             if (value is IHierarchicalDefinitions definition)
             {
-                if (definition != null && definition.WillBeReset)
+                if (definition.WillBeReset)
                 {
                     return "ResetMod";
                 }

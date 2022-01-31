@@ -4,7 +4,7 @@
 // Created          : 02-18-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 01-29-2022
+// Last Modified On : 01-31-2022
 // ***********************************************************************
 // <copyright file="WholeTextParser.cs" company="Mario">
 //     Mario
@@ -138,7 +138,7 @@ namespace IronyModManager.Parser.Games.HOI4
         /// <returns><c>true</c> if [is any text file] [the specified file]; otherwise, <c>false</c>.</returns>
         protected virtual bool IsAnyTxtFile(string file, string directory)
         {
-            return IsTxtFile(file, directory) || file.StartsWith(directory + System.IO.Path.DirectorySeparatorChar) && file.EndsWith(Common.Constants.LuaExtension, StringComparison.OrdinalIgnoreCase);
+            return IsTxtFile(file, directory) || (file.StartsWith(directory + System.IO.Path.DirectorySeparatorChar) && file.EndsWith(Common.Constants.LuaExtension, StringComparison.OrdinalIgnoreCase));
         }
 
         /// <summary>
