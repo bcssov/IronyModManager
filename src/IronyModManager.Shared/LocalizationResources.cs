@@ -490,6 +490,14 @@ namespace IronyModManager.Shared
                 public const string Prefix = "Conflict_Solver.BracketMismatchError.";
                 public const string Message = Prefix + "Message";
             }
+            public static class ResetWarning
+            {
+                public const string Prefix = "Conflict_Solver.ResetWarning.";
+                public const string Title = Prefix + "Title";
+                public const string AnalyzeMode = Prefix + "AnalyzeMode";
+                public const string RegularMode = Prefix + "RegularMode";
+                public const string ListOfConflictsFormat = Prefix + "ListOfConflictsFormat";
+            }
         }
         public static class ConflictIgnore
         {

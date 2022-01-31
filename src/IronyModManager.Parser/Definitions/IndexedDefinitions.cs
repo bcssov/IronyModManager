@@ -411,6 +411,7 @@ namespace IronyModManager.Parser.Definitions
                     {
                         children.Remove(child);
                     }
+                    hierarchicalDefinition.WillBeReset = children.Any(p => p.WillBeReset);
                     if (!children.Select(p => p).Any())
                     {
                         childHierarchicalDefinitions.TryRemove(hierarchicalDefinition.Name, out _);
@@ -487,6 +488,10 @@ namespace IronyModManager.Parser.Definitions
                 childHierarchicalDefinitions.TryAdd(parentDirectoryCI, new ConcurrentIndexedList<IHierarchicalDefinitions>(nameof(IHierarchicalDefinitions.Name)));
                 shouldAdd = true;
             }
+            if (definition.WillBeReset)
+            {
+                hierarchicalDefinition.WillBeReset = definition.WillBeReset;
+            }
             bool exists = false;
             IHierarchicalDefinitions child = null;
             if (childHierarchicalDefinitions.TryGetValue(hierarchicalDefinition.Name, out var children))
@@ -513,9 +518,9 @@ namespace IronyModManager.Parser.Definitions
                     child.FileNames.Add(definition.FileCI);
                 }
             }
-            child.WillBeReset = definition.WillBeReset;
-            if (child.WillBeReset)
+            if (definition.WillBeReset)
             {
+                child.WillBeReset = definition.WillBeReset;
                 resetDefinitionsCount++;
             }
             if (child.Mods == null)

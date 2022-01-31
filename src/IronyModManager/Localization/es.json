@@ -371,6 +371,12 @@
         },
         "BracketMismatchError": {
             "Message": "¡Discrepancia en el recuento de soportes! Abrir corchete: {OpenBracketCount} Cerrar corchete: {CloseBracketCount}"
+        },
+        "ResetWarning": {
+            "Title": "Los conflictos se reinician",
+            "AnalyzeMode": "Algunos conflictos se restablecerán si se ejecuta un solucionador de conflicto debido a cambios de mod:{NewLine}{NewLine}{ListOfConflict}",
+            "RegularMode": "Algunos mods se restablecieron debido a cambios de mod:{NewLine}{NewLine}{ListOfConflict}",
+            "ListOfConflictsFormat": "{ParentDirectory}: {Name}"
         }
     },
     "ConflictIgnore": {

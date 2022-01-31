@@ -371,6 +371,12 @@
         },
         "BracketMismatchError": {
             "Message": "括号计数不匹配！左括号数：{OpenBracketCount}，右括号数：{CloseBracketCount}"
+        },
+        "ResetWarning": {
+            "Title": "冲突重置",
+            "AnalyzeMode": "如果由于MOD更改运行冲突求解器，则将重置某些冲突：{NewLine}{NewLine}{ListOfConflict}",
+            "RegularMode": "由于MOD更改，某些MOD被重置：{NewLine}{NewLine}{ListOfConflict}",
+            "ListOfConflictsFormat": "{ParentDirectory}：{Name}"
         }
     },
     "ConflictIgnore": {

@@ -4,7 +4,7 @@
 // Created          : 03-18-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 01-28-2022
+// Last Modified On : 01-31-2022
 // ***********************************************************************
 // <copyright file="MainConflictSolverViewModel.cs" company="Mario">
 //     Mario
@@ -18,6 +18,7 @@ using System.Linq;
 using System.Reactive;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
+using System.Text;
 using System.Threading.Tasks;
 using Avalonia.Collections;
 using Avalonia.Threading;
@@ -380,7 +381,7 @@ namespace IronyModManager.ViewModels
         /// Gets or sets a value indicating whether [read only].
         /// </summary>
         /// <value><c>true</c> if [read only]; otherwise, <c>false</c>.</value>
-        public virtual bool ReadOnly { get; set; }
+        public virtual bool ReadOnly { get; protected set; }
 
         /// <summary>
         /// Gets or sets the reset conflicts.
@@ -455,6 +456,34 @@ namespace IronyModManager.ViewModels
         #region Methods
 
         /// <summary>
+        /// Initializes the specified read only.
+        /// </summary>
+        /// <param name="readOnly">if set to <c>true</c> [read only].</param>
+        public void Initialize(bool readOnly)
+        {
+            ReadOnly = readOnly;
+            ModCompareSelector.Reset();
+            IgnoreEnabled = false;
+            BackTriggered = false;
+            if (Conflicts.Conflicts.HasResetDefinitions())
+            {
+                var sb = new StringBuilder();
+                var allHierarchalDefinitions = Conflicts.Conflicts.GetHierarchicalDefinitions();
+                var modListFormat = localizationManager.GetResource(LocalizationResources.Conflict_Solver.ResetWarning.ListOfConflictsFormat);
+                foreach (var conflict in allHierarchalDefinitions.Where(p => p.WillBeReset))
+                {
+                    foreach (var child in conflict.Children.Where(p => p.WillBeReset))
+                    {
+                        sb.AppendLine(Smart.Format(modListFormat, new { ParentDirectory = conflict.Name, child.Name }));
+                    }
+                }
+                var msg = Smart.Format(localizationManager.GetResource(readOnly ? LocalizationResources.Conflict_Solver.ResetWarning.AnalyzeMode : LocalizationResources.Conflict_Solver.ResetWarning.RegularMode), new { Environment.NewLine, ListOfConflict = sb.ToString() });
+                var title = localizationManager.GetResource(LocalizationResources.Conflict_Solver.ResetWarning.Title);
+                Dispatcher.UIThread.SafeInvoke(() => notificationAction.ShowPromptAsync(title, title, msg, NotificationType.Warning, PromptType.OK));
+            }
+        }
+
+        /// <summary>
         /// Called when [locale changed].
         /// </summary>
         /// <param name="newLocale">The new locale.</param>
@@ -463,16 +492,6 @@ namespace IronyModManager.ViewModels
         {
             FilterHierarchalConflictsAsync(Conflicts).ConfigureAwait(false);
             base.OnLocaleChanged(newLocale, oldLocale);
-        }
-
-        /// <summary>
-        /// Resets this instance.
-        /// </summary>
-        public void Reset()
-        {
-            ModCompareSelector.Reset();
-            IgnoreEnabled = false;
-            BackTriggered = false;
         }
 
         /// <summary>

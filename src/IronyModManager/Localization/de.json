@@ -371,6 +371,12 @@
         },
         "BracketMismatchError": {
             "Message": "Klammeranzahl stimmt nicht überein! Klammer öffnen: {OpenBracketCount} Klammer schließen: {CloseBracketCount}"
+        },
+        "ResetWarning": {
+            "Title": "Konflikte zurücksetzen",
+            "AnalyzeMode": "Einige Konflikte werden zurückgesetzt, wenn der Konfliktlöser aufgrund von Mod-Änderungen ausgeführt wird:{NewLine}{NewLine}{ListOfConflict}",
+            "RegularMode": "Einige Mods wurden aufgrund von Mod-Änderungen zurückgesetzt:{NewLine}{NewLine}{ListOfConflict}",
+            "ListOfConflictsFormat": "{ParentDirectory}: {Name}"
         }
     },
     "ConflictIgnore": {

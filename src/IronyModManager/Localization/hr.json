@@ -371,6 +371,12 @@
         },
         "BracketMismatchError": {
             "Message": "Nepodudaranje broja zagrada! Otvorena zagrada: {OpenBracketCount} Zatvori zagrada: {CloseBracketCount}"
+        },
+        "ResetWarning": {
+            "Title": "Sukobi Resetirani",
+            "AnalyzeMode": "Neki sukobi će se resetirati ako se rješavač sukoba pokrene:{NewLine}{NewLine}{ListOfConflict}",
+            "RegularMode": "Neki sukobi su se resetirali zbog promjena u modovima:{NewLine}{NewLine}{ListOfConflict}",
+            "ListOfConflictsFormat": "{ParentDirectory}: {Name}"
         }
     },
     "ConflictIgnore": {
