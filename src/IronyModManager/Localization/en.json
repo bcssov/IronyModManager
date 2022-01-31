@@ -336,6 +336,7 @@
             "Title": "Mod Filter",
             "IgnoreGameConflicts": "Ignore Game Conflicts",
             "ShowSelfConflicts": "Show Self Conflicts",
+            "ShowResetConflicts": "Show Only Reset Conflicts",
             "Close": "Close"
         },
         "ResetConflicts": {

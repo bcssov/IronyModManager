@@ -336,6 +336,7 @@
             "Title": "Mod Filter",
             "IgnoreGameConflicts": "Zanemari sukobe igre",
             "ShowSelfConflicts": "Pokaži sukobe sa samim sobom",
+            "ShowResetConflicts": "Pokaži samo resetirane sukobe",
             "Close": "Zatvori"
         },
         "ResetConflicts": {

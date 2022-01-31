@@ -5005,6 +5005,138 @@ namespace IronyModManager.Services.Tests
         }
 
         /// <summary>
+        /// Defines the test method Should_not_parse_reset_conflicts_when_no_conflict_result.
+        /// </summary>
+        [Fact]
+        public void Should_not_parse_reset_conflicts_when_no_conflict_result()
+        {
+            var storageProvider = new Mock<IStorageProvider>();
+            var modParser = new Mock<IModParser>();
+            var parserManager = new Mock<IParserManager>();
+            var reader = new Mock<IReader>();
+            var modWriter = new Mock<IModWriter>();
+            var gameService = new Mock<IGameService>();
+            var mapper = new Mock<IMapper>();
+            var modPatchExporter = new Mock<IModPatchExporter>();
+            var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter);
+            var result = service.ShouldShowResetConflicts(null);
+            result.Should().BeNull();
+        }
+
+        /// <summary>
+        /// Defines the test method Should_show_reset_conflicts.
+        /// </summary>
+        [Fact]
+        public void Should_show_reset_conflicts()
+        {
+            var storageProvider = new Mock<IStorageProvider>();
+            var modParser = new Mock<IModParser>();
+            var parserManager = new Mock<IParserManager>();
+            var reader = new Mock<IReader>();
+            var modWriter = new Mock<IModWriter>();
+            var gameService = new Mock<IGameService>();
+            var mapper = new Mock<IMapper>();
+            var modPatchExporter = new Mock<IModPatchExporter>();
+            var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter);
+            var c = new ConflictResult()
+            {
+                IgnoredPaths = "--showResetConflicts"
+            };
+            var result = service.ShouldShowResetConflicts(c);
+            result.Should().BeTrue();
+        }
+
+        /// <summary>
+        /// Defines the test method Should_not_show_reset_conflicts.
+        /// </summary>
+        [Fact]
+        public void Should_not_show_reset_conflicts()
+        {
+            var storageProvider = new Mock<IStorageProvider>();
+            var modParser = new Mock<IModParser>();
+            var parserManager = new Mock<IParserManager>();
+            var reader = new Mock<IReader>();
+            var modWriter = new Mock<IModWriter>();
+            var gameService = new Mock<IGameService>();
+            var mapper = new Mock<IMapper>();
+            var modPatchExporter = new Mock<IModPatchExporter>();
+            var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter);
+            var c = new ConflictResult()
+            {
+                IgnoredPaths = ""
+            };
+            var result = service.ShouldShowResetConflicts(c);
+            result.Should().BeFalse();
+        }
+
+        /// <summary>
+        /// Defines the test method Should_not_toggle_reset_conflicts_when_no_conflict_result.
+        /// </summary>
+        [Fact]
+        public void Should_not_toggle_reset_conflicts_when_no_conflict_result()
+        {
+            var storageProvider = new Mock<IStorageProvider>();
+            var modParser = new Mock<IModParser>();
+            var parserManager = new Mock<IParserManager>();
+            var reader = new Mock<IReader>();
+            var modWriter = new Mock<IModWriter>();
+            var gameService = new Mock<IGameService>();
+            var mapper = new Mock<IMapper>();
+            var modPatchExporter = new Mock<IModPatchExporter>();
+            var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter);
+            var result = service.ToggleShowResetConflicts(null);
+            result.Should().BeNull();
+        }
+
+        /// <summary>
+        /// Defines the test method Should_not_toggle_reset_conflicts.
+        /// </summary>
+        [Fact]
+        public void Should_not_toggle_reset_conflicts()
+        {
+            var storageProvider = new Mock<IStorageProvider>();
+            var modParser = new Mock<IModParser>();
+            var parserManager = new Mock<IParserManager>();
+            var reader = new Mock<IReader>();
+            var modWriter = new Mock<IModWriter>();
+            var gameService = new Mock<IGameService>();
+            var mapper = new Mock<IMapper>();
+            var modPatchExporter = new Mock<IModPatchExporter>();
+            var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter);
+            var c = new ConflictResult()
+            {
+                IgnoredPaths = "--showResetConflicts"
+            };
+            var result = service.ToggleShowResetConflicts(c);
+            result.Should().BeFalse();
+            c.IgnoredPaths.Should().BeNullOrWhiteSpace();
+        }
+
+        /// <summary>
+        /// Defines the test method Should_toggle_reset_conflicts.
+        /// </summary>
+        [Fact]
+        public void Should_toggle_reset_conflicts()
+        {
+            var storageProvider = new Mock<IStorageProvider>();
+            var modParser = new Mock<IModParser>();
+            var parserManager = new Mock<IParserManager>();
+            var reader = new Mock<IReader>();
+            var modWriter = new Mock<IModWriter>();
+            var gameService = new Mock<IGameService>();
+            var mapper = new Mock<IMapper>();
+            var modPatchExporter = new Mock<IModPatchExporter>();
+            var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter);
+            var c = new ConflictResult()
+            {
+                IgnoredPaths = ""
+            };
+            var result = service.ToggleShowResetConflicts(c);
+            result.Should().BeTrue();
+            c.IgnoredPaths.Should().Contain("--showResetConflicts");
+        }
+
+        /// <summary>
         /// Defines the test method Should_return_bracket_count_result.
         /// </summary>
         [Fact]

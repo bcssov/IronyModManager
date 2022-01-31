@@ -336,6 +336,7 @@
             "Title": "模组过滤",
             "IgnoreGameConflicts": "忽略原版游戏冲突",
             "ShowSelfConflicts": "显示自我冲突",
+            "ShowResetConflicts": "仅显示重置冲突",
             "Close": "关闭"
         },
         "ResetConflicts": {

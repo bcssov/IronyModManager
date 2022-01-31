@@ -442,6 +442,7 @@ namespace IronyModManager.Shared
                 public const string Title = Prefix + "Title";
                 public const string IgnoreGameConflicts = Prefix + "IgnoreGameConflicts";
                 public const string ShowSelfConflicts = Prefix + "ShowSelfConflicts";
+                public const string ShowResetConflicts = Prefix + "ShowResetConflicts";
                 public const string Close = Prefix + "Close";
             }
             public static class ResetConflicts

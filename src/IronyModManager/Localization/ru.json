@@ -336,6 +336,7 @@
             "Title": "Фильтр модов",
             "IgnoreGameConflicts": "Игнорировать игровые конфликты",
             "ShowSelfConflicts": "Показать собственные конфликты",
+            "ShowResetConflicts": "Показать только сброс конфликтов",
             "Close": "Закрыть"
         },
         "ResetConflicts": {

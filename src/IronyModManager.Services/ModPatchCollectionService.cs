@@ -85,6 +85,11 @@ namespace IronyModManager.Services
         private const string ShowGameModsId = "--showGameMods";
 
         /// <summary>
+        /// The show reset conflicts
+        /// </summary>
+        private const string ShowResetConflicts = "--showResetConflicts";
+
+        /// <summary>
         /// The show self conflicts identifier
         /// </summary>
         private const string ShowSelfConflictsId = "--showSelfConflicts";
@@ -1523,6 +1528,22 @@ namespace IronyModManager.Services
         }
 
         /// <summary>
+        /// Shoulds the show reset conflicts.
+        /// </summary>
+        /// <param name="conflictResult">The conflict result.</param>
+        /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
+        public virtual bool? ShouldShowResetConflicts(IConflictResult conflictResult)
+        {
+            if (conflictResult != null)
+            {
+                var ignoredPaths = conflictResult.IgnoredPaths ?? string.Empty;
+                var lines = ignoredPaths.SplitOnNewLine();
+                return lines.Any(p => p.Equals(ShowResetConflicts));
+            }
+            return null;
+        }
+
+        /// <summary>
         /// Shoulds the show self conflicts.
         /// </summary>
         /// <param name="conflictResult">The conflict result.</param>
@@ -1586,6 +1607,32 @@ namespace IronyModManager.Services
                 }
                 conflictResult.IgnoredPaths = string.Join(Environment.NewLine, lines).Trim(Environment.NewLine.ToCharArray());
                 return !shouldShow;
+            }
+            return null;
+        }
+
+        /// <summary>
+        /// Toggles the show reset conflicts.
+        /// </summary>
+        /// <param name="conflictResult">The conflict result.</param>
+        /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
+        public virtual bool? ToggleShowResetConflicts(IConflictResult conflictResult)
+        {
+            if (conflictResult != null)
+            {
+                var ignoredPaths = conflictResult.IgnoredPaths ?? string.Empty;
+                var shouldReset = ShouldShowResetConflicts(conflictResult);
+                var lines = ignoredPaths.SplitOnNewLine().ToList();
+                if (!shouldReset.GetValueOrDefault())
+                {
+                    lines.Add(ShowResetConflicts);
+                }
+                else
+                {
+                    lines.Remove(ShowResetConflicts);
+                }
+                conflictResult.IgnoredPaths = string.Join(Environment.NewLine, lines).Trim(Environment.NewLine.ToCharArray());
+                return !shouldReset;
             }
             return null;
         }
@@ -1781,6 +1828,7 @@ namespace IronyModManager.Services
         {
             var ruleIgnoredDefinitions = DIResolver.Get<IIndexedDefinitions>();
             ruleIgnoredDefinitions.InitMap(null, true);
+            var showResetConflicts = false;
             var ignoreGameMods = true;
             var ignoreSelfConflicts = true;
             var alreadyIgnored = new HashSet<string>();
@@ -1806,6 +1854,14 @@ namespace IronyModManager.Services
                     {
                         ignoreSelfConflicts = false;
                     }
+                    else if (parsed.Equals(ShowResetConflicts))
+                    {
+                        // Only filter if there's actually something to filter
+                        if (conflictResult.Conflicts.HasResetDefinitions())
+                        {
+                            showResetConflicts = true;
+                        }
+                    }
                     else
                     {
                         if (!parsed.StartsWith("!"))
@@ -1818,13 +1874,30 @@ namespace IronyModManager.Services
                         }
                     }
                 }
-                foreach (var topConflict in conflictResult.Conflicts.GetHierarchicalDefinitions())
+                if (!showResetConflicts)
                 {
-                    if (topConflict.Mods.Any(x => allowedMods.Contains(x)))
+                    foreach (var topConflict in conflictResult.Conflicts.GetHierarchicalDefinitions())
                     {
-                        foreach (var item in topConflict.Children)
+                        if (topConflict.Mods.Any(x => allowedMods.Contains(x)))
                         {
-                            if (!item.Mods.Any(x => allowedMods.Contains(x)))
+                            foreach (var item in topConflict.Children)
+                            {
+                                if (!item.Mods.Any(x => allowedMods.Contains(x)))
+                                {
+                                    if (!alreadyIgnored.Contains(item.Key))
+                                    {
+                                        alreadyIgnored.Add(item.Key);
+                                        ruleIgnoredDefinitions.AddToMap(conflictResult.Conflicts.GetByTypeAndId(item.Key).First());
+                                    }
+                                }
+                            }
+                            var name = topConflict.Name;
+                            if (!name.EndsWith(Path.DirectorySeparatorChar))
+                            {
+                                name = $"{name}{Path.DirectorySeparatorChar}";
+                            }
+                            var invalid = topConflict.Children.Where(p => ignoreRules.Any(r => EvalWildcard(r, p.FileNames.ToArray()))).Where(p => !includeRules.Any(r => EvalWildcard(r, p.FileNames.ToArray())));
+                            foreach (var item in invalid)
                             {
                                 if (!alreadyIgnored.Contains(item.Key))
                                 {
@@ -1833,49 +1906,52 @@ namespace IronyModManager.Services
                                 }
                             }
                         }
-                        var name = topConflict.Name;
-                        if (!name.EndsWith(Path.DirectorySeparatorChar))
+                        else
                         {
-                            name = $"{name}{Path.DirectorySeparatorChar}";
-                        }
-                        var invalid = topConflict.Children.Where(p => ignoreRules.Any(r => EvalWildcard(r, p.FileNames.ToArray()))).Where(p => !includeRules.Any(r => EvalWildcard(r, p.FileNames.ToArray())));
-                        foreach (var item in invalid)
-                        {
-                            if (!alreadyIgnored.Contains(item.Key))
+                            foreach (var item in topConflict.Children)
                             {
-                                alreadyIgnored.Add(item.Key);
-                                ruleIgnoredDefinitions.AddToMap(conflictResult.Conflicts.GetByTypeAndId(item.Key).First());
-                            }
-                        }
-                    }
-                    else
-                    {
-                        foreach (var item in topConflict.Children)
-                        {
-                            if (!alreadyIgnored.Contains(item.Key))
-                            {
-                                alreadyIgnored.Add(item.Key);
-                                ruleIgnoredDefinitions.AddToMap(conflictResult.Conflicts.GetByTypeAndId(item.Key).First());
+                                if (!alreadyIgnored.Contains(item.Key))
+                                {
+                                    alreadyIgnored.Add(item.Key);
+                                    ruleIgnoredDefinitions.AddToMap(conflictResult.Conflicts.GetByTypeAndId(item.Key).First());
+                                }
                             }
                         }
                     }
                 }
             }
-            if (ignoreGameMods || ignoreSelfConflicts)
+            if (showResetConflicts)
             {
                 foreach (var topConflict in conflictResult.Conflicts.GetHierarchicalDefinitions())
                 {
                     foreach (var item in topConflict.Children.Where(p => p.Mods.Count <= 1))
                     {
-                        if (ignoreGameMods && item.NonGameDefinitions <= 1 && !alreadyIgnored.Contains(item.Key))
+                        if (!item.WillBeReset && !alreadyIgnored.Contains(item.Key))
                         {
                             alreadyIgnored.Add(item.Key);
                             ruleIgnoredDefinitions.AddToMap(conflictResult.Conflicts.GetByTypeAndId(item.Key).First());
                         }
-                        if (ignoreSelfConflicts && item.NonGameDefinitions > 1 && !alreadyIgnored.Contains(item.Key))
+                    }
+                }
+            }
+            else
+            {
+                if (ignoreGameMods || ignoreSelfConflicts)
+                {
+                    foreach (var topConflict in conflictResult.Conflicts.GetHierarchicalDefinitions())
+                    {
+                        foreach (var item in topConflict.Children.Where(p => p.Mods.Count <= 1))
                         {
-                            alreadyIgnored.Add(item.Key);
-                            ruleIgnoredDefinitions.AddToMap(conflictResult.Conflicts.GetByTypeAndId(item.Key).First());
+                            if (ignoreGameMods && item.NonGameDefinitions <= 1 && !alreadyIgnored.Contains(item.Key))
+                            {
+                                alreadyIgnored.Add(item.Key);
+                                ruleIgnoredDefinitions.AddToMap(conflictResult.Conflicts.GetByTypeAndId(item.Key).First());
+                            }
+                            if (ignoreSelfConflicts && item.NonGameDefinitions > 1 && !alreadyIgnored.Contains(item.Key))
+                            {
+                                alreadyIgnored.Add(item.Key);
+                                ruleIgnoredDefinitions.AddToMap(conflictResult.Conflicts.GetByTypeAndId(item.Key).First());
+                            }
                         }
                     }
                 }
