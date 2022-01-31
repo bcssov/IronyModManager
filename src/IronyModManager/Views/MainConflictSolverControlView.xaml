@@ -9,6 +9,7 @@
              x:Class="IronyModManager.Views.MainConflictSolverControlView">
     <UserControl.Resources>
         <converter:MathConverter x:Key="MathConverter" />
+        <converter:DefinitionResetConverter x:Key="DefinitionResetConverter" />
     </UserControl.Resources>
     <Panel HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
         <Panel IsVisible="{Binding EditingIgnoreConflictsRules}">
@@ -45,7 +46,9 @@
                         <controls:ListBox.ItemTemplate>
                             <DataTemplate>
                                 <Grid ColumnDefinitions="*" Background="Transparent">
-                                    <TextBlock Text="{Binding Name}" TextWrapping="Wrap"></TextBlock>
+                                    <controls:BoundClassBorder BoundClasses="{Binding, Converter={StaticResource DefinitionResetConverter}}">
+                                        <TextBlock Text="{Binding Name}" TextWrapping="Wrap"></TextBlock>
+                                    </controls:BoundClassBorder>
                                 </Grid>
                             </DataTemplate>
                         </controls:ListBox.ItemTemplate>
