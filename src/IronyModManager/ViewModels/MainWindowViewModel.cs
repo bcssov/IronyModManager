@@ -4,7 +4,7 @@
 // Created          : 01-10-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 01-27-2022
+// Last Modified On : 01-31-2022
 // ***********************************************************************
 // <copyright file="MainWindowViewModel.cs" company="Mario">
 //     Mario
@@ -255,8 +255,7 @@ namespace IronyModManager.ViewModels
                             ConflictSolver.SelectedModCollection = s.SelectedCollection;
                             ConflictSolver.SelectedModsOrder = s.SelectedMods;
                             ConflictSolver.Conflicts = s.Results;
-                            ConflictSolver.ReadOnly = s.State == NavigationState.ReadOnlyConflictSolver;
-                            ConflictSolver.Reset();
+                            ConflictSolver.Initialize(s.State == NavigationState.ReadOnlyConflictSolver);
                             AnimateTransitionAsync(false).ConfigureAwait(true);
                             break;
 

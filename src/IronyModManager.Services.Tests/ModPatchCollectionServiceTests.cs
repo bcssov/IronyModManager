@@ -1424,104 +1424,6 @@ namespace IronyModManager.Services.Tests
 
 
         /// <summary>
-        /// Defines the test method Should_not_initialize_patch_state_when_readonly_mode.
-        /// </summary>
-        [Fact]
-        public async Task Should_not_initialize_patch_state_when_readonly_mode()
-        {
-            DISetup.SetupContainer();
-
-            var storageProvider = new Mock<IStorageProvider>();
-            var modParser = new Mock<IModParser>();
-            var parserManager = new Mock<IParserManager>();
-            var reader = new Mock<IReader>();
-            var modWriter = new Mock<IModWriter>();
-            var gameService = new Mock<IGameService>();
-            var mapper = new Mock<IMapper>();
-            var modPatchExporter = new Mock<IModPatchExporter>();
-            gameService.Setup(p => p.GetSelected()).Returns(new Game()
-            {
-                Type = "Should_not_initialize_patch_state_when_readonly_mode",
-                UserDirectory = "C:\\Users\\Fake"
-            });
-            mapper.Setup(s => s.Map<IConflictResult>(It.IsAny<IConflictResult>())).Returns((IConflictResult o) =>
-            {
-                return new ConflictResult()
-                {
-                    AllConflicts = o.Conflicts,
-                    Conflicts = o.Conflicts,
-                    ResolvedConflicts = o.ResolvedConflicts,
-                    OverwrittenConflicts = o.OverwrittenConflicts,
-                    Mode = IronyModManager.Models.Common.PatchStateMode.ReadOnly
-                };
-            });
-            var definitions = new List<IDefinition>()
-            {
-                new Definition()
-                {
-                    File = "events\\1.txt",
-                    Code = "a",
-                    Id = "a",
-                    Type= "events",
-                    ModName = "test1",
-                    ValueType = ValueType.Object
-                },
-                new Definition()
-                {
-                    File = "events\\2.txt",
-                    Code = "b",
-                    Type = "events",
-                    Id = "a",
-                    ModName = "test2",
-                    ValueType = ValueType.Object
-                },
-            };
-            modPatchExporter.Setup(p => p.GetPatchStateAsync(It.IsAny<ModPatchExporterParameters>(), It.IsAny<bool>())).ReturnsAsync((ModPatchExporterParameters p, bool load) =>
-            {
-                var res = new PatchState()
-                {
-                    Conflicts = definitions,
-                    ResolvedConflicts = definitions,
-                    OverwrittenConflicts = new List<IDefinition>()
-                };
-                return res;
-            });
-            modWriter.Setup(p => p.PurgeModDirectoryAsync(It.IsAny<ModWriterParameters>(), It.IsAny<bool>())).Returns(Task.FromResult(true));
-
-            var all = new IndexedDefinitions();
-            all.InitMap(definitions);
-
-            var conflicts = new IndexedDefinitions();
-            conflicts.InitMap(definitions);
-
-            var overwritten = new IndexedDefinitions();
-            overwritten.InitMap(new List<IDefinition>());
-
-            var resolved = new IndexedDefinitions();
-            resolved.InitMap(new List<IDefinition>());
-
-            var c = new ConflictResult()
-            {
-                AllConflicts = all,
-                Conflicts = conflicts,
-                OverwrittenConflicts = overwritten,
-                Mode = IronyModManager.Models.Common.PatchStateMode.ReadOnly
-            };
-            var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter);
-            var exceptionThrown = false;
-            try
-            {
-                var result = await service.InitializePatchStateAsync(c, "fake");
-            }
-            catch (Exception ex)
-            {
-                ex.GetType().Should().Be(typeof(ArgumentException));
-                exceptionThrown = true;
-            }
-            exceptionThrown.Should().BeTrue();
-        }
-
-        /// <summary>
         /// Defines the test method Should_not_be_a_patch_mod.
         /// </summary>
         [Fact]
@@ -5100,6 +5002,138 @@ namespace IronyModManager.Services.Tests
             var result = service.ToggleSelfModConflicts(c);
             result.Should().BeTrue();
             c.IgnoredPaths.Should().Contain("--showSelfConflicts");
+        }
+
+        /// <summary>
+        /// Defines the test method Should_not_parse_reset_conflicts_when_no_conflict_result.
+        /// </summary>
+        [Fact]
+        public void Should_not_parse_reset_conflicts_when_no_conflict_result()
+        {
+            var storageProvider = new Mock<IStorageProvider>();
+            var modParser = new Mock<IModParser>();
+            var parserManager = new Mock<IParserManager>();
+            var reader = new Mock<IReader>();
+            var modWriter = new Mock<IModWriter>();
+            var gameService = new Mock<IGameService>();
+            var mapper = new Mock<IMapper>();
+            var modPatchExporter = new Mock<IModPatchExporter>();
+            var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter);
+            var result = service.ShouldShowResetConflicts(null);
+            result.Should().BeNull();
+        }
+
+        /// <summary>
+        /// Defines the test method Should_show_reset_conflicts.
+        /// </summary>
+        [Fact]
+        public void Should_show_reset_conflicts()
+        {
+            var storageProvider = new Mock<IStorageProvider>();
+            var modParser = new Mock<IModParser>();
+            var parserManager = new Mock<IParserManager>();
+            var reader = new Mock<IReader>();
+            var modWriter = new Mock<IModWriter>();
+            var gameService = new Mock<IGameService>();
+            var mapper = new Mock<IMapper>();
+            var modPatchExporter = new Mock<IModPatchExporter>();
+            var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter);
+            var c = new ConflictResult()
+            {
+                IgnoredPaths = "--showResetConflicts"
+            };
+            var result = service.ShouldShowResetConflicts(c);
+            result.Should().BeTrue();
+        }
+
+        /// <summary>
+        /// Defines the test method Should_not_show_reset_conflicts.
+        /// </summary>
+        [Fact]
+        public void Should_not_show_reset_conflicts()
+        {
+            var storageProvider = new Mock<IStorageProvider>();
+            var modParser = new Mock<IModParser>();
+            var parserManager = new Mock<IParserManager>();
+            var reader = new Mock<IReader>();
+            var modWriter = new Mock<IModWriter>();
+            var gameService = new Mock<IGameService>();
+            var mapper = new Mock<IMapper>();
+            var modPatchExporter = new Mock<IModPatchExporter>();
+            var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter);
+            var c = new ConflictResult()
+            {
+                IgnoredPaths = ""
+            };
+            var result = service.ShouldShowResetConflicts(c);
+            result.Should().BeFalse();
+        }
+
+        /// <summary>
+        /// Defines the test method Should_not_toggle_reset_conflicts_when_no_conflict_result.
+        /// </summary>
+        [Fact]
+        public void Should_not_toggle_reset_conflicts_when_no_conflict_result()
+        {
+            var storageProvider = new Mock<IStorageProvider>();
+            var modParser = new Mock<IModParser>();
+            var parserManager = new Mock<IParserManager>();
+            var reader = new Mock<IReader>();
+            var modWriter = new Mock<IModWriter>();
+            var gameService = new Mock<IGameService>();
+            var mapper = new Mock<IMapper>();
+            var modPatchExporter = new Mock<IModPatchExporter>();
+            var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter);
+            var result = service.ToggleShowResetConflicts(null);
+            result.Should().BeNull();
+        }
+
+        /// <summary>
+        /// Defines the test method Should_not_toggle_reset_conflicts.
+        /// </summary>
+        [Fact]
+        public void Should_not_toggle_reset_conflicts()
+        {
+            var storageProvider = new Mock<IStorageProvider>();
+            var modParser = new Mock<IModParser>();
+            var parserManager = new Mock<IParserManager>();
+            var reader = new Mock<IReader>();
+            var modWriter = new Mock<IModWriter>();
+            var gameService = new Mock<IGameService>();
+            var mapper = new Mock<IMapper>();
+            var modPatchExporter = new Mock<IModPatchExporter>();
+            var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter);
+            var c = new ConflictResult()
+            {
+                IgnoredPaths = "--showResetConflicts"
+            };
+            var result = service.ToggleShowResetConflicts(c);
+            result.Should().BeFalse();
+            c.IgnoredPaths.Should().BeNullOrWhiteSpace();
+        }
+
+        /// <summary>
+        /// Defines the test method Should_toggle_reset_conflicts.
+        /// </summary>
+        [Fact]
+        public void Should_toggle_reset_conflicts()
+        {
+            var storageProvider = new Mock<IStorageProvider>();
+            var modParser = new Mock<IModParser>();
+            var parserManager = new Mock<IParserManager>();
+            var reader = new Mock<IReader>();
+            var modWriter = new Mock<IModWriter>();
+            var gameService = new Mock<IGameService>();
+            var mapper = new Mock<IMapper>();
+            var modPatchExporter = new Mock<IModPatchExporter>();
+            var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter);
+            var c = new ConflictResult()
+            {
+                IgnoredPaths = ""
+            };
+            var result = service.ToggleShowResetConflicts(c);
+            result.Should().BeTrue();
+            c.IgnoredPaths.Should().Contain("--showResetConflicts");
         }
 
         /// <summary>

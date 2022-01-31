@@ -4,7 +4,7 @@
 // Created          : 05-26-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 01-28-2022
+// Last Modified On : 01-31-2022
 // ***********************************************************************
 // <copyright file="IModPatchCollectionService.cs" company="Mario">
 //     Mario
@@ -249,6 +249,13 @@ namespace IronyModManager.Services.Common
         bool? ShouldIgnoreGameMods(IConflictResult conflictResult);
 
         /// <summary>
+        /// Shoulds the show reset conflicts.
+        /// </summary>
+        /// <param name="conflictResult">The conflict result.</param>
+        /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
+        bool? ShouldShowResetConflicts(IConflictResult conflictResult);
+
+        /// <summary>
         /// Shoulds the hide self conflicts.
         /// </summary>
         /// <param name="conflictResult">The conflict result.</param>
@@ -268,6 +275,13 @@ namespace IronyModManager.Services.Common
         /// <param name="conflictResult">The conflict result.</param>
         /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
         bool? ToggleSelfModConflicts(IConflictResult conflictResult);
+
+        /// <summary>
+        /// Toggles the show reset conflicts.
+        /// </summary>
+        /// <param name="conflictResult">The conflict result.</param>
+        /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
+        bool? ToggleShowResetConflicts(IConflictResult conflictResult);
 
         /// <summary>
         /// Validates the specified definition.

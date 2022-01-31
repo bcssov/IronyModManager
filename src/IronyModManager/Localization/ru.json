@@ -336,6 +336,7 @@
             "Title": "Фильтр модов",
             "IgnoreGameConflicts": "Игнорировать игровые конфликты",
             "ShowSelfConflicts": "Показать собственные конфликты",
+            "ShowResetConflicts": "Показать только сброс конфликтов",
             "Close": "Закрыть"
         },
         "ResetConflicts": {
@@ -371,6 +372,12 @@
         },
         "BracketMismatchError": {
             "Message": "Несоответствие количества скобок! Открытая скобка: {OpenBracketCount} Закрытая скобка: {CloseBracketCount}"
+        },
+        "ResetWarning": {
+            "Title": "Конфликты сброс",
+            "AnalyzeMode": "Некоторые конфликты будут сброшены, если решатель конфликтов работает из-за изменений мода:{NewLine}{NewLine}{ListOfConflict}",
+            "RegularMode": "Некоторые моды были сброшены из-за изменений мода:{NewLine}{NewLine}{ListOfConflict}",
+            "ListOfConflictsFormat": "{ParentDirectory}: {Name}"
         }
     },
     "ConflictIgnore": {

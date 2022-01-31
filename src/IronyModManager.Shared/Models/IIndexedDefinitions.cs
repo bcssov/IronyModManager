@@ -4,7 +4,7 @@
 // Created          : 02-16-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 05-28-2021
+// Last Modified On : 01-31-2022
 // ***********************************************************************
 // <copyright file="IIndexedDefinitions.cs" company="Mario">
 //     Mario
@@ -130,6 +130,12 @@ namespace IronyModManager.Shared.Models
         /// </summary>
         /// <returns><c>true</c> if [has game definitions]; otherwise, <c>false</c>.</returns>
         bool HasGameDefinitions();
+
+        /// <summary>
+        /// Determines whether [has reset definitions].
+        /// </summary>
+        /// <returns><c>true</c> if [has reset definitions]; otherwise, <c>false</c>.</returns>
+        bool HasResetDefinitions();
 
         /// <summary>
         /// Initializes the map.

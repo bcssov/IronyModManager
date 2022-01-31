@@ -336,6 +336,7 @@
             "Title": "Mod Filter",
             "IgnoreGameConflicts": "Ignore Game Conflicts",
             "ShowSelfConflicts": "Show Self Conflicts",
+            "ShowResetConflicts": "Show Only Reset Conflicts",
             "Close": "Close"
         },
         "ResetConflicts": {
@@ -371,6 +372,12 @@
         },
         "BracketMismatchError": {
             "Message": "Bracket Count Mismatch! Open Bracket: {OpenBracketCount} Close Bracket: {CloseBracketCount}"
+        },
+        "ResetWarning": {
+            "Title": "Conflicts Reset",
+            "AnalyzeMode": "Some conflicts will be reset if Conflict Solver is run due to mod changes:{NewLine}{NewLine}{ListOfConflict}",
+            "RegularMode": "Some mods were reset due to mod changes:{NewLine}{NewLine}{ListOfConflict}",
+            "ListOfConflictsFormat": "{ParentDirectory}: {Name}"
         }
     },
     "ConflictIgnore": {
