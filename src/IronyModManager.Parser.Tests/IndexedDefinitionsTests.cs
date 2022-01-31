@@ -4,7 +4,7 @@
 // Created          : 02-17-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 05-28-2021
+// Last Modified On : 01-31-2022
 // ***********************************************************************
 // <copyright file="IndexedDefinitionsTests.cs" company="Mario">
 //     Mario
@@ -332,6 +332,90 @@ namespace IronyModManager.Parser.Tests
             var service = new IndexedDefinitions();
             service.InitMap(defs);
             var results = service.HasGameDefinitions();
+            results.Should().BeTrue();
+        }
+
+        /// <summary>
+        /// Defines the test method HasResetDefinitions_should_be_false.
+        /// </summary>
+        [Fact]
+        public void HasResetDefinitions_should_be_false()
+        {
+            DISetup.SetupContainer();
+            var defs = new List<IDefinition>();
+            for (int i = 0; i < 10; i++)
+            {
+                defs.Add(new Definition()
+                {
+                    Code = i.ToString(),
+                    ContentSHA = i.ToString(),
+                    Dependencies = new List<string> { i.ToString() },
+                    File = "test\\" + i.ToString(),
+                    Id = i.ToString(),
+                    ModName = i.ToString(),
+                    Type = i.ToString(),                    
+                });
+            }
+            var service = new IndexedDefinitions();
+            service.InitMap(defs);
+            var results = service.HasResetDefinitions();
+            results.Should().BeFalse();
+        }
+
+
+        /// <summary>
+        /// Defines the test method HasResetDefinitions_should_be_false_due_to_no_hierarchical_definition.
+        /// </summary>
+        [Fact]
+        public void HasResetDefinitions_should_be_false_due_to_no_hierarchical_definition()
+        {
+            DISetup.SetupContainer();
+            var defs = new List<IDefinition>();
+            for (int i = 0; i < 10; i++)
+            {
+                defs.Add(new Definition()
+                {
+                    Code = i.ToString(),
+                    ContentSHA = i.ToString(),
+                    Dependencies = new List<string> { i.ToString() },
+                    File = "test\\" + i.ToString(),
+                    Id = i.ToString(),
+                    ModName = i.ToString(),
+                    Type = i.ToString(),
+                    WillBeReset = true
+                });
+            }
+            var service = new IndexedDefinitions();
+            service.InitMap(defs);
+            var results = service.HasResetDefinitions();
+            results.Should().BeFalse();
+        }
+
+        /// <summary>
+        /// Defines the test method HasResetDefinitions_should_be_true.
+        /// </summary>
+        [Fact]
+        public void HasResetDefinitions_should_be_true()
+        {
+            DISetup.SetupContainer();
+            var defs = new List<IDefinition>();
+            for (int i = 0; i < 10; i++)
+            {
+                defs.Add(new Definition()
+                {
+                    Code = i.ToString(),
+                    ContentSHA = i.ToString(),
+                    Dependencies = new List<string> { i.ToString() },
+                    File = "test\\" + i.ToString(),
+                    Id = i.ToString(),
+                    ModName = i.ToString(),
+                    Type = i.ToString(),
+                    WillBeReset = true
+                });
+            }
+            var service = new IndexedDefinitions();
+            service.InitMap(defs, true);
+            var results = service.HasResetDefinitions();
             results.Should().BeTrue();
         }
 

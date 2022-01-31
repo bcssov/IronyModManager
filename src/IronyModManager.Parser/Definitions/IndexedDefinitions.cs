@@ -73,6 +73,11 @@ namespace IronyModManager.Parser.Definitions
         private ConcurrentIndexedList<IHierarchicalDefinitions> mainHierarchalDefinitions;
 
         /// <summary>
+        /// The reset definitions count
+        /// </summary>
+        private int resetDefinitionsCount;
+
+        /// <summary>
         /// The trie
         /// </summary>
         private Trie<IDefinition> trie;
@@ -332,6 +337,15 @@ namespace IronyModManager.Parser.Definitions
         }
 
         /// <summary>
+        /// Determines whether [has reset definitions].
+        /// </summary>
+        /// <returns><c>true</c> if [has reset definitions]; otherwise, <c>false</c>.</returns>
+        public bool HasResetDefinitions()
+        {
+            return resetDefinitionsCount > 0;
+        }
+
+        /// <summary>
         /// Initializes the map.
         /// </summary>
         /// <param name="definitions">The definitions.</param>
@@ -374,6 +388,14 @@ namespace IronyModManager.Parser.Definitions
             if (gameDefinitionsCount < 0)
             {
                 gameDefinitionsCount = 0;
+            }
+            if (definition.WillBeReset)
+            {
+                resetDefinitionsCount--;
+            }
+            if (resetDefinitionsCount < 0)
+            {
+                resetDefinitionsCount = 0;
             }
             definitions.Remove(definition);
             var hierarchicalDefinition = mainHierarchalDefinitions.GetFirstByNameNoLock(nameof(IHierarchicalDefinitions.Name), ResolveHierarchalParentDirectory(definition));
@@ -489,6 +511,10 @@ namespace IronyModManager.Parser.Definitions
                 }
             }
             child.WillBeReset = definition.WillBeReset;
+            if (child.WillBeReset)
+            {
+                resetDefinitionsCount++;
+            }
             if (child.Mods == null)
             {
                 child.Mods = new List<string>();
