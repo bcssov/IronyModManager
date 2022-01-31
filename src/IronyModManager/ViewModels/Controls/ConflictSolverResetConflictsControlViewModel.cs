@@ -4,7 +4,7 @@
 // Created          : 06-11-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 08-23-2021
+// Last Modified On : 01-31-2022
 // ***********************************************************************
 // <copyright file="ConflictSolverResetConflictsControlViewModel.cs" company="Mario">
 //     Mario
@@ -153,6 +153,12 @@ namespace IronyModManager.ViewModels.Controls
         public virtual IEnumerable<Mode> Modes { get; protected set; }
 
         /// <summary>
+        /// Gets or sets a value indicating whether [read only].
+        /// </summary>
+        /// <value><c>true</c> if [read only]; otherwise, <c>false</c>.</value>
+        public virtual bool ReadOnly { get; protected set; }
+
+        /// <summary>
         /// Gets or sets the reset.
         /// </summary>
         /// <value>The reset.</value>
@@ -232,6 +238,15 @@ namespace IronyModManager.ViewModels.Controls
         public virtual void Refresh()
         {
             Bind(GetHierarchicalDefinitions(SelectedMode));
+        }
+
+        /// <summary>
+        /// Sets the parameters.
+        /// </summary>
+        /// <param name="readOnly">if set to <c>true</c> [read only].</param>
+        public void SetParameters(bool readOnly)
+        {
+            ReadOnly = readOnly;
         }
 
         /// <summary>
@@ -373,7 +388,7 @@ namespace IronyModManager.ViewModels.Controls
 
             ResetCommand = ReactiveCommand.CreateFromTask(async () =>
             {
-                if (SelectedHierarchicalDefinitions != null && SelectedHierarchicalDefinitions.Any(p => !string.IsNullOrWhiteSpace(p.Key)))
+                if (!ReadOnly && SelectedHierarchicalDefinitions != null && SelectedHierarchicalDefinitions.Any(p => !string.IsNullOrWhiteSpace(p.Key)))
                 {
                     var definitions = SelectedHierarchicalDefinitions.Where(p => !string.IsNullOrWhiteSpace(p.Key));
                     if (SelectedMode?.Value == IgnoredValue)

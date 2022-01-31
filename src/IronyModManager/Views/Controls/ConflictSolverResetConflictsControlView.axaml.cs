@@ -4,7 +4,7 @@
 // Created          : 06-11-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 01-27-2022
+// Last Modified On : 01-31-2022
 // ***********************************************************************
 // <copyright file="ConflictSolverResetConflictsControlView.axaml.cs" company="Mario">
 //     Mario
@@ -95,6 +95,10 @@ namespace IronyModManager.Views.Controls
                         }
                         index = null;
                     }
+                }).DisposeWith(disposables);
+                this.WhenAnyValue(v => v.ViewModel.ReadOnly).SubscribeObservable(s =>
+                {
+                    Dispatcher.UIThread.SafeInvoke(() => conflictList.IsEnabled = !s);
                 }).DisposeWith(disposables);
             }).DisposeWith(disposables);
             base.OnActivated(disposables);

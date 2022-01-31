@@ -390,6 +390,12 @@ namespace IronyModManager.ViewModels
         public virtual ConflictSolverResetConflictsControlViewModel ResetConflicts { get; protected set; }
 
         /// <summary>
+        /// Gets or sets the reset conflicts column.
+        /// </summary>
+        /// <value>The reset conflicts column.</value>
+        public virtual int ResetConflictsColumn { get; protected set; }
+
+        /// <summary>
         /// Gets or sets the resolve.
         /// </summary>
         /// <value>The resolve.</value>
@@ -462,6 +468,8 @@ namespace IronyModManager.ViewModels
         public void Initialize(bool readOnly)
         {
             ReadOnly = readOnly;
+            ResetConflictsColumn = readOnly ? 0 : 1;
+            ResetConflicts.SetParameters(readOnly);
             ModCompareSelector.Reset();
             IgnoreEnabled = false;
             BackTriggered = false;

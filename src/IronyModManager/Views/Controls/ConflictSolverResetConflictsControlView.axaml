@@ -42,7 +42,7 @@
                         </ListBox.ItemTemplate>
                     </ListBox>
                     <Panel Grid.Row="3" Margin="0,5">
-                        <Button Content="{Binding Reset}" Command="{Binding ResetCommand}" HorizontalAlignment="Left"></Button>
+                        <Button Content="{Binding Reset}" Command="{Binding ResetCommand}" HorizontalAlignment="Left" IsVisible="{Binding !ReadOnly}"></Button>
                         <Button Content="{Binding Close}" Command="{Binding CloseCommand}" HorizontalAlignment="Right"></Button>
                     </Panel>
                 </Grid>
