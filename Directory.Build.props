@@ -20,10 +20,12 @@
         <MicrosoftWin32Registry>[6.0.0-preview.5.21301.5]</MicrosoftWin32Registry>
         <MicrosoftExtensionsConfigurationBinder>[6.0.0]</MicrosoftExtensionsConfigurationBinder>
         <MicrosoftExtensionsConfigurationJson>[6.0.0]</MicrosoftExtensionsConfigurationJson>
-        <MaterialAvalonia>[2.5.0.66-nightly]</MaterialAvalonia>
+        <MaterialAvalonia>[2.5.0.71-nightly]</MaterialAvalonia>
         <MessageBoxAvalonia>[1.7.1]</MessageBoxAvalonia>
         <Avalonia>[0.10.12]</Avalonia>
-        <AvaloniaEdit>[0.10.9]</AvaloniaEdit>
+        <AvaloniaEdit>[0.10.12.1]</AvaloniaEdit>
+        <!-- Sigh... force certain version, as the most recent update broke the whole setting read logic and well there are bugs in certain other areas which would allow me to bypass the issue. So therefore this is here to prevent someone from happily triggering an update -->
+        <Jot>[2.1.11]</Jot>
     </PropertyGroup>
     <ItemGroup>
         <PackageReference Include="Nerdbank.GitVersioning">
