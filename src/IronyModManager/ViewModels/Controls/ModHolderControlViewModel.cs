@@ -4,7 +4,7 @@
 // Created          : 02-29-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 01-29-2022
+// Last Modified On : 01-31-2022
 // ***********************************************************************
 // <copyright file="ModHolderControlViewModel.cs" company="Mario">
 //     Mario
@@ -468,10 +468,6 @@ namespace IronyModManager.ViewModels.Controls
         protected virtual async Task AnalyzeModsAsync(long id, PatchStateMode mode, IEnumerable<string> versions)
         {
             var totalSteps = versions != null && versions.Any() ? 6 : 4;
-            if (mode == PatchStateMode.ReadOnly)
-            {
-                totalSteps--;
-            }
 
             SubscribeToProgressReport(id, Disposables, totalSteps);
 
@@ -521,24 +517,16 @@ namespace IronyModManager.ViewModels.Controls
                 }
                 return null;
             }).ConfigureAwait(false);
-            if (mode != PatchStateMode.ReadOnly)
+            var syncedConflicts = await Task.Run(async () =>
             {
-                var syncedConflicts = await Task.Run(async () =>
-                {
-                    var result = await modPatchCollectionService.InitializePatchStateAsync(conflicts, CollectionMods.SelectedModCollection.Name).ConfigureAwait(false);
-                    // To stop people from whining
-                    GC.Collect();
-                    return result;
-                }).ConfigureAwait(false);
-                if (syncedConflicts != null)
-                {
-                    conflicts = syncedConflicts;
-                }
-            }
-            else
+                var result = await modPatchCollectionService.InitializePatchStateAsync(conflicts, CollectionMods.SelectedModCollection.Name).ConfigureAwait(false);
+                // To stop people from whining
+                GC.Collect();
+                return result;
+            }).ConfigureAwait(false);
+            if (syncedConflicts != null)
             {
-                await modPatchCollectionService.SaveIgnoredPathsAsync(conflicts, CollectionMods.SelectedModCollection.Name);
-                conflicts.AllConflicts.InitSearch();
+                conflicts = syncedConflicts;
             }
             var args = new NavigationEventArgs()
             {
@@ -997,10 +985,6 @@ namespace IronyModManager.ViewModels.Controls
         /// <param name="totalSteps">The total steps.</param>
         private void SubscribeToProgressReport(long id, CompositeDisposable disposables, int totalSteps)
         {
-            int calcTotalSteps(int desired)
-            {
-                return totalSteps == 5 ? desired - 1 : desired;
-            }
             definitionLoadHandler?.Dispose();
             definitionLoadHandler = modDefinitionLoadHandler.Subscribe(s =>
             {
@@ -1060,7 +1044,7 @@ namespace IronyModManager.ViewModels.Controls
                 var overlayProgress = Smart.Format(localizationManager.GetResource(LocalizationResources.Mod_Actions.ConflictSolver.Overlay_Conflict_Solver_Progress), new
                 {
                     PercentDone = s.Percentage.ToLocalizedPercentage(),
-                    Count = totalSteps >= 5 ? calcTotalSteps(5) : calcTotalSteps(3),
+                    Count = totalSteps == 6 ? 5 : 3,
                     TotalCount = totalSteps
                 });
                 TriggerOverlay(id, true, message, overlayProgress);
@@ -1073,7 +1057,7 @@ namespace IronyModManager.ViewModels.Controls
                 var overlayProgress = Smart.Format(localizationManager.GetResource(LocalizationResources.Mod_Actions.ConflictSolver.Overlay_Conflict_Solver_Progress), new
                 {
                     PercentDone = s.Percentage.ToLocalizedPercentage(),
-                    Count = totalSteps >= 5 ? calcTotalSteps(6) : calcTotalSteps(4),
+                    Count = totalSteps == 6 ? 6 : 4,
                     TotalCount = totalSteps
                 });
                 TriggerOverlay(id, true, message, overlayProgress);

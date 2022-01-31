@@ -4,7 +4,7 @@
 // Created          : 04-07-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 01-29-2022
+// Last Modified On : 01-31-2022
 // ***********************************************************************
 // <copyright file="ModBaseService.cs" company="Mario">
 //     Mario
@@ -196,6 +196,7 @@ namespace IronyModManager.Services
             newDefinition.IsCustomPatch = definition.IsCustomPatch;
             newDefinition.IsFromGame = definition.IsFromGame;
             newDefinition.AllowDuplicate = definition.AllowDuplicate;
+            newDefinition.WillBeReset = definition.WillBeReset;
             return newDefinition;
         }
 
