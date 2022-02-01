@@ -4,7 +4,7 @@
 // Created          : 06-08-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 01-31-2022
+// Last Modified On : 02-01-2022
 // ***********************************************************************
 // <copyright file="ConflictSolverModFilterControlViewModel.cs" company="Mario">
 //     Mario
@@ -183,6 +183,12 @@ namespace IronyModManager.ViewModels.Controls
         public virtual IAvaloniaList<Mod> Mods { get; protected set; }
 
         /// <summary>
+        /// Gets or sets a value indicating whether [reset view].
+        /// </summary>
+        /// <value><c>true</c> if [reset view]; otherwise, <c>false</c>.</value>
+        public virtual bool ResetView { get; protected set; }
+
+        /// <summary>
         /// Gets or sets the selected mods.
         /// </summary>
         /// <value>The selected mods.</value>
@@ -256,6 +262,8 @@ namespace IronyModManager.ViewModels.Controls
                 previousIgnoreGameMods = IgnoreGameMods = modPatchCollectionService.ShouldIgnoreGameMods(conflictResult).GetValueOrDefault();
                 previousShowSelfConflicts = ShowSelfConflicts = modPatchCollectionService.ShouldShowSelfConflicts(conflictResult).GetValueOrDefault();
                 previousShowResetConflicts = ShowResetConflicts = modPatchCollectionService.ShouldShowResetConflicts(conflictResult).GetValueOrDefault();
+                ResetView = false;
+                ResetView = true;
                 valuesSet().ConfigureAwait(false);
             }).DisposeWith(Disposables);
         }
