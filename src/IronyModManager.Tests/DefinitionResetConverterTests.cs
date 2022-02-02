@@ -4,7 +4,7 @@
 // Created          : 01-31-2022
 //
 // Last Modified By : Mario
-// Last Modified On : 01-31-2022
+// Last Modified On : 02-02-2022
 // ***********************************************************************
 // <copyright file="DefinitionResetConverterTests.cs" company="Mario">
 //     Mario
@@ -31,11 +31,22 @@ namespace IronyModManager.Tests
         /// Defines the test method Class_should_be_unchanged.
         /// </summary>
         [Fact]
-        public void Class_should_be_reset_mod()
+        public void Class_should_be_reset_resolved_conflict()
         {
             var converter = new DefinitionResetConverter();
-            var result = converter.Convert(new HierarchicalDefinitions() { WillBeReset = true }, null, null, null);
-            result.Should().Be("ResetMod");
+            var result = converter.Convert(new HierarchicalDefinitions() { ResetType = Shared.Models.ResetType.Resolved }, null, null, null);
+            result.Should().Be("ResolvedResetMod");
+        }
+
+        /// <summary>
+        /// Defines the test method Class_should_be_reset_ignored_conflict.
+        /// </summary>
+        [Fact]
+        public void Class_should_be_reset_ignored_conflict()
+        {
+            var converter = new DefinitionResetConverter();
+            var result = converter.Convert(new HierarchicalDefinitions() { ResetType = Shared.Models.ResetType.Ignored }, null, null, null);
+            result.Should().Be("IgnoredResetMod");
         }
 
         /// <summary>
@@ -46,6 +57,9 @@ namespace IronyModManager.Tests
         {
             var converter = new DefinitionResetConverter();
             var result = converter.Convert(new HierarchicalDefinitions(), null, null, null);
+            result.Should().Be(string.Empty);
+
+            result = converter.Convert(new HierarchicalDefinitions() {ResetType = Shared.Models.ResetType.Any } , null, null, null);
             result.Should().Be(string.Empty);
 
             result = converter.Convert(null, null, null, null);

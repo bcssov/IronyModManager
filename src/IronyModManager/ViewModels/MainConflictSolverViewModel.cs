@@ -4,7 +4,7 @@
 // Created          : 03-18-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 01-31-2022
+// Last Modified On : 02-02-2022
 // ***********************************************************************
 // <copyright file="MainConflictSolverViewModel.cs" company="Mario">
 //     Mario
@@ -475,17 +475,66 @@ namespace IronyModManager.ViewModels
             BackTriggered = false;
             if (Conflicts.Conflicts.HasResetDefinitions())
             {
-                var sb = new StringBuilder();
+                var sbResolved = new StringBuilder();
+                var sbIgnored = new StringBuilder();
                 var allHierarchalDefinitions = Conflicts.Conflicts.GetHierarchicalDefinitions();
                 var modListFormat = localizationManager.GetResource(LocalizationResources.Conflict_Solver.ResetWarning.ListOfConflictsFormat);
-                foreach (var conflict in allHierarchalDefinitions.Where(p => p.WillBeReset))
+                foreach (var conflict in allHierarchalDefinitions.Where(p => p.ResetType != ResetType.None))
                 {
-                    foreach (var child in conflict.Children.Where(p => p.WillBeReset))
+                    foreach (var child in conflict.Children.Where(p => p.ResetType != ResetType.None))
                     {
-                        sb.AppendLine(Smart.Format(modListFormat, new { ParentDirectory = conflict.Name, child.Name }));
+                        switch (child.ResetType)
+                        {
+                            case ResetType.Resolved:
+                                sbResolved.AppendLine(Smart.Format(modListFormat, new { ParentDirectory = conflict.Name, child.Name }));
+                                break;
+
+                            case ResetType.Ignored:
+                                sbIgnored.AppendLine(Smart.Format(modListFormat, new { ParentDirectory = conflict.Name, child.Name }));
+                                break;
+
+                            default:
+                                break;
+                        }
                     }
                 }
-                var msg = Smart.Format(localizationManager.GetResource(readOnly ? LocalizationResources.Conflict_Solver.ResetWarning.AnalyzeMode : LocalizationResources.Conflict_Solver.ResetWarning.RegularMode), new { Environment.NewLine, ListOfConflict = sb.ToString() });
+                var msgFormat = string.Empty;
+                if (readOnly)
+                {
+                    if (sbIgnored.Length > 0 && sbResolved.Length > 0)
+                    {
+                        msgFormat = localizationManager.GetResource(LocalizationResources.Conflict_Solver.ResetWarning.AnalyzeModeAll);
+                    }
+                    else if (sbResolved.Length > 0)
+                    {
+                        msgFormat = localizationManager.GetResource(LocalizationResources.Conflict_Solver.ResetWarning.AnalyzeModeResolvedOnly);
+                    }
+                    else
+                    {
+                        msgFormat = localizationManager.GetResource(LocalizationResources.Conflict_Solver.ResetWarning.AnalyzeModeIgnoredOnly);
+                    }
+                }
+                else
+                {
+                    if (sbIgnored.Length > 0 && sbResolved.Length > 0)
+                    {
+                        msgFormat = localizationManager.GetResource(LocalizationResources.Conflict_Solver.ResetWarning.RegularModeAll);
+                    }
+                    else if (sbResolved.Length > 0)
+                    {
+                        msgFormat = localizationManager.GetResource(LocalizationResources.Conflict_Solver.ResetWarning.RegularModeResolvedOnly);
+                    }
+                    else
+                    {
+                        msgFormat = localizationManager.GetResource(LocalizationResources.Conflict_Solver.ResetWarning.RegularModeIgnoredOnly);
+                    }
+                }
+                var msg = Smart.Format(msgFormat, new
+                {
+                    Environment.NewLine,
+                    ListOfConflictsResolved = sbResolved.ToString(),
+                    ListOfConflictsIgnored = sbIgnored.ToString()
+                });
                 var title = localizationManager.GetResource(LocalizationResources.Conflict_Solver.ResetWarning.Title);
                 Dispatcher.UIThread.SafeInvoke(() => notificationAction.ShowPromptAsync(title, title, msg, NotificationType.Warning, PromptType.OK));
             }

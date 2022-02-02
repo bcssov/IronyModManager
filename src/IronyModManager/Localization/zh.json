@@ -375,8 +375,12 @@
         },
         "ResetWarning": {
             "Title": "冲突重置",
-            "AnalyzeMode": "如果由于MOD更改运行冲突求解器，则将重置某些冲突：{NewLine}{NewLine}{ListOfConflict}",
-            "RegularMode": "由于MOD更改，某些MOD被重置：{NewLine}{NewLine}{ListOfConflict}",
+            "AnalyzeModeAll": "如果由于MOD更改运行冲突求解器，将重置某些冲突。 这些都是解决的冲突，它将被重置：{NewLine}{NewLine}{ListOfConflictsResolved}{NewLine}这些都被忽略了将重置的冲突：{NewLine}{NewLine}{ListOfConflictsIgnored}",
+            "AnalyzeModeResolvedOnly": "如果由于MOD更改运行冲突求解器，将重置某些冲突。 这些都是解决的冲突，它将被重置：{NewLine}{NewLine}{ListOfConflictsResolved}",
+            "AnalyzeModeIgnoredOnly": "如果由于MOD更改运行冲突求解器，将重置某些冲突。 这些都是解决的冲突，这些都被忽略了将重置的冲突：{NewLine}{NewLine}{ListOfConflictsIgnored}",
+            "RegularModeAll": "由于MOD更改，某些冲突被重置。 这些被重置已解决的冲突：{NewLine}{NewLine}{ListOfConflictsResolved}{NewLine}这些被重置被忽略了冲突：{NewLine}{NewLine}{ListOfConflictsIgnored}",
+            "RegularModeResolvedOnly": "由于MOD更改，某些冲突被重置。 这些被重置已解决的冲突：{NewLine}{NewLine}{ListOfConflictsResolved}",
+            "RegularModeIgnoredOnly": "由于MOD更改，某些冲突被重置。 这些被重置已解决的冲突：这些被重置被忽略了冲突：{NewLine}{NewLine}{ListOfConflictsIgnored}",
             "ListOfConflictsFormat": "{ParentDirectory}：{Name}"
         }
     },

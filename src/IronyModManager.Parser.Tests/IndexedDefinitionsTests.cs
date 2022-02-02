@@ -268,7 +268,7 @@ namespace IronyModManager.Parser.Tests
                     Code = i.ToString(),
                     ContentSHA = i.ToString(),
                     Dependencies = new List<string> { i.ToString() },
-                    File = "test\\" +  i.ToString(),
+                    File = "test\\" + i.ToString(),
                     Id = i.ToString(),
                     ModName = i.ToString(),
                     Type = i.ToString()
@@ -298,7 +298,7 @@ namespace IronyModManager.Parser.Tests
                     File = "test\\" + i.ToString(),
                     Id = i.ToString(),
                     ModName = i.ToString(),
-                    Type = i.ToString(),                    
+                    Type = i.ToString(),
                 });
             }
             var service = new IndexedDefinitions();
@@ -353,7 +353,7 @@ namespace IronyModManager.Parser.Tests
                     File = "test\\" + i.ToString(),
                     Id = i.ToString(),
                     ModName = i.ToString(),
-                    Type = i.ToString(),                    
+                    Type = i.ToString(),
                 });
             }
             var service = new IndexedDefinitions();
@@ -382,7 +382,7 @@ namespace IronyModManager.Parser.Tests
                     Id = i.ToString(),
                     ModName = i.ToString(),
                     Type = i.ToString(),
-                    WillBeReset = true
+                    ResetType = ResetType.Resolved
                 });
             }
             var service = new IndexedDefinitions();
@@ -410,12 +410,96 @@ namespace IronyModManager.Parser.Tests
                     Id = i.ToString(),
                     ModName = i.ToString(),
                     Type = i.ToString(),
-                    WillBeReset = true
+                    ResetType = ResetType.Resolved
                 });
             }
             var service = new IndexedDefinitions();
             service.InitMap(defs, true);
             var results = service.HasResetDefinitions();
+            results.Should().BeTrue();
+        }
+
+        /// <summary>
+        /// Defines the test method ChaneHierarchicalResetState_should_be_false_due_to_no_map_initalized.
+        /// </summary>
+        [Fact]
+        public void ChaneHierarchicalResetState_should_be_false_due_to_no_map_initalized()
+        {
+            DISetup.SetupContainer();
+            var defs = new List<IDefinition>();
+            for (int i = 0; i < 10; i++)
+            {
+                defs.Add(new Definition()
+                {
+                    Code = i.ToString(),
+                    ContentSHA = i.ToString(),
+                    Dependencies = new List<string> { i.ToString() },
+                    File = "test\\" + i.ToString(),
+                    Id = i.ToString(),
+                    ModName = i.ToString(),
+                    Type = i.ToString(),
+                    ResetType = ResetType.Resolved
+                });
+            }
+            var service = new IndexedDefinitions();
+            service.InitMap(defs, false);
+            var results = service.ChaneHierarchicalResetState(new Definition() { ResetType = ResetType.Resolved, Id = "1", Type = "1", File = "test\\1" });
+            results.Should().BeFalse();
+        }
+
+        /// <summary>
+        /// Defines the test method ChaneHierarchicalResetState_should_be_false_due_to_no_definition.
+        /// </summary>
+        [Fact]
+        public void ChaneHierarchicalResetState_should_be_false_due_to_no_definition()
+        {
+            DISetup.SetupContainer();
+            var defs = new List<IDefinition>();
+            for (int i = 0; i < 10; i++)
+            {
+                defs.Add(new Definition()
+                {
+                    Code = i.ToString(),
+                    ContentSHA = i.ToString(),
+                    Dependencies = new List<string> { i.ToString() },
+                    File = "test\\" + i.ToString(),
+                    Id = i.ToString(),
+                    ModName = i.ToString(),
+                    Type = i.ToString(),
+                    ResetType = ResetType.Resolved
+                });
+            }
+            var service = new IndexedDefinitions();
+            service.InitMap(defs, true);
+            var results = service.ChaneHierarchicalResetState(null);
+            results.Should().BeFalse();
+        }
+
+        /// <summary>
+        /// Defines the test method ChaneHierarchicalResetState_should_be_true.
+        /// </summary>
+        [Fact]
+        public void ChaneHierarchicalResetState_should_be_true()
+        {
+            DISetup.SetupContainer();
+            var defs = new List<IDefinition>();
+            for (int i = 0; i < 10; i++)
+            {
+                defs.Add(new Definition()
+                {
+                    Code = i.ToString(),
+                    ContentSHA = i.ToString(),
+                    Dependencies = new List<string> { i.ToString() },
+                    File = "test\\" + i.ToString(),
+                    Id = i.ToString(),
+                    ModName = i.ToString(),
+                    Type = i.ToString(),
+                    ResetType = ResetType.Resolved
+                });
+            }
+            var service = new IndexedDefinitions();
+            service.InitMap(defs, true);
+            var results = service.ChaneHierarchicalResetState(new Definition() { ResetType = ResetType.None, Id = "1", Type = "1", File = "test\\1" });
             results.Should().BeTrue();
         }
 

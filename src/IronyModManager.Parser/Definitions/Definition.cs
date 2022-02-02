@@ -4,7 +4,7 @@
 // Created          : 02-16-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 01-31-2022
+// Last Modified On : 02-02-2022
 // ***********************************************************************
 // <copyright file="Definition.cs" company="Mario">
 //     Mario
@@ -593,6 +593,13 @@ namespace IronyModManager.Parser.Definitions
         }
 
         /// <summary>
+        /// Gets or sets the type of the reset.
+        /// </summary>
+        /// <value>The type of the reset.</value>
+        [JsonIgnore]
+        public ResetType ResetType { get; set; }
+
+        /// <summary>
         /// Gets or sets the tags.
         /// </summary>
         /// <value>The tags.</value>
@@ -690,13 +697,6 @@ namespace IronyModManager.Parser.Definitions
             }
         }
 
-        /// <summary>
-        /// Gets or sets a value indicating whether [will be reset].
-        /// </summary>
-        /// <value><c>true</c> if [will be reset]; otherwise, <c>false</c>.</value>
-        [JsonIgnore]
-        public bool WillBeReset { get; set; }
-
         #endregion Properties
 
         #region Methods
@@ -748,7 +748,7 @@ namespace IronyModManager.Parser.Definitions
                 nameof(IsCustomPatch) => IsCustomPatch,
                 nameof(IsFromGame) => IsFromGame,
                 nameof(AllowDuplicate) => AllowDuplicate,
-                nameof(WillBeReset) => WillBeReset,
+                nameof(ResetType) => ResetType,
                 _ => Id
             };
         }

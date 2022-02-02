@@ -375,8 +375,12 @@
         },
         "ResetWarning": {
             "Title": "Los conflictos se reinician",
-            "AnalyzeMode": "Algunos conflictos se restablecerán si se ejecuta un solucionador de conflicto debido a cambios de mod:{NewLine}{NewLine}{ListOfConflict}",
-            "RegularMode": "Algunos mods se restablecieron debido a cambios de mod:{NewLine}{NewLine}{ListOfConflict}",
+            "AnalyzeModeAll": "Algunos conflictos se restablecerán si se ejecuta un solucionador de conflicto debido a cambios de mod. Estos se resuelven conflictos que se restablecerán:{NewLine}{NewLine}{ListOfConflictsResolved}{NewLine}Se ignoran los conflictos que se restablecerán:{NewLine}{NewLine}{ListOfConflictsIgnored}",
+            "AnalyzeModeResolvedOnly": "Algunos conflictos se restablecerán si se ejecuta un solucionador de conflicto debido a cambios de mod. Estos se resuelven conflictos que se restablecerán:{NewLine}{NewLine}{ListOfConflictsResolved}",
+            "AnalyzeModeIgnoredOnly": "Algunos conflictos se restablecerán si se ejecuta un solucionador de conflicto debido a cambios de mod. Se ignoran los conflictos que se restablecerán:{NewLine}{NewLine}{ListOfConflictsIgnored}",
+            "RegularModeAll": "Algunos conflictos se restablecieron debido a cambios de mod. Estos se restablecieron en conflictos resueltos:{NewLine}{NewLine}{ListOfConflictsResolved}{NewLine}Se restablecieron los conflictos ignorados:{NewLine}{NewLine}{ListOfConflictsIgnored}",
+            "RegularModeResolvedOnly": "Algunos conflictos se restablecieron debido a cambios de mod. Estos se restablecieron en conflictos resueltos:{NewLine}{NewLine}{ListOfConflictsResolved}",
+            "RegularModeIgnoredOnly": "Algunos conflictos se restablecieron debido a cambios de mod. Se restablecieron los conflictos ignorados:{NewLine}{NewLine}{ListOfConflictsIgnored}",
             "ListOfConflictsFormat": "{ParentDirectory}: {Name}"
         }
     },

@@ -375,8 +375,12 @@
         },
         "ResetWarning": {
             "Title": "Конфликты сброс",
-            "AnalyzeMode": "Некоторые конфликты будут сброшены, если решатель конфликтов работает из-за изменений мода:{NewLine}{NewLine}{ListOfConflict}",
-            "RegularMode": "Некоторые моды были сброшены из-за изменений мода:{NewLine}{NewLine}{ListOfConflict}",
+            "AnalyzeModeAll": "Некоторые конфликты будут сброшены, если решатель конфликтов выполняется из-за изменений мода. Эти разрешенные конфликты, которые будут сброшены:{NewLine}{NewLine}{ListOfConflictsResolved}{NewLine}Они игнорируются конфликтами, которые будут сброшены:{NewLine}{NewLine}{ListOfConflictsIgnored}",
+            "AnalyzeModeResolvedOnly": "Некоторые конфликты будут сброшены, если решатель конфликтов выполняется из-за изменений мода. Эти разрешенные конфликты, которые будут сброшены:{NewLine}{NewLine}{ListOfConflictsResolved}",
+            "AnalyzeModeIgnoredOnly": "Некоторые конфликты будут сброшены, если решатель конфликтов выполняется из-за изменений мода. Они игнорируются конфликтами, которые будут сброшены:{NewLine}{NewLine}{ListOfConflictsIgnored}",
+            "RegularModeAll": "Некоторые конфликты были сброшены из-за изменений мода. Они были сброшены разрешенные конфликты:{NewLine}{NewLine}{ListOfConflictsResolved}{NewLine}Они были сброшены игнорированные конфликты:{NewLine}{NewLine}{ListOfConflictsIgnored}",
+            "RegularModeResolvedOnly": "Некоторые конфликты были сброшены из-за изменений мода. Они были сброшены разрешенные конфликты:{NewLine}{NewLine}{ListOfConflictsResolved}",
+            "RegularModeIgnoredOnly": "Некоторые конфликты были сброшены из-за изменений мода. Они были сброшены игнорированные конфликты:{NewLine}{NewLine}{ListOfConflictsIgnored}",
             "ListOfConflictsFormat": "{ParentDirectory}: {Name}"
         }
     },

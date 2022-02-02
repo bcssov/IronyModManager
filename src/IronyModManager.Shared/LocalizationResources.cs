@@ -495,8 +495,12 @@ namespace IronyModManager.Shared
             {
                 public const string Prefix = "Conflict_Solver.ResetWarning.";
                 public const string Title = Prefix + "Title";
-                public const string AnalyzeMode = Prefix + "AnalyzeMode";
-                public const string RegularMode = Prefix + "RegularMode";
+                public const string AnalyzeModeAll = Prefix + "AnalyzeModeAll";
+                public const string AnalyzeModeResolvedOnly = Prefix + "AnalyzeModeResolvedOnly";
+                public const string AnalyzeModeIgnoredOnly = Prefix + "AnalyzeModeIgnoredOnly";
+                public const string RegularModeAll = Prefix + "RegularModeAll";
+                public const string RegularModeResolvedOnly = Prefix + "RegularModeResolvedOnly";
+                public const string RegularModeIgnoredOnly = Prefix + "RegularModeIgnoredOnly";
                 public const string ListOfConflictsFormat = Prefix + "ListOfConflictsFormat";
             }
         }

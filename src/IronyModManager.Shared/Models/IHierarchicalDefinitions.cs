@@ -4,7 +4,7 @@
 // Created          : 03-23-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 01-31-2022
+// Last Modified On : 02-02-2022
 // ***********************************************************************
 // <copyright file="IHierarchicalDefinitions.cs" company="Mario">
 //     Mario
@@ -71,10 +71,10 @@ namespace IronyModManager.Shared.Models
         int NonGameDefinitions { get; set; }
 
         /// <summary>
-        /// Gets or sets a value indicating whether [will be reset].
+        /// Gets or sets the type of the reset.
         /// </summary>
-        /// <value><c>true</c> if [will be reset]; otherwise, <c>false</c>.</value>
-        bool WillBeReset { get; set; }
+        /// <value>The type of the reset.</value>
+        ResetType ResetType { get; set; }
 
         #endregion Properties
     }

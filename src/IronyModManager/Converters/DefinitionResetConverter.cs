@@ -4,7 +4,7 @@
 // Created          : 01-31-2022
 //
 // Last Modified By : Mario
-// Last Modified On : 01-31-2022
+// Last Modified On : 02-02-2022
 // ***********************************************************************
 // <copyright file="DefinitionResetConverter.cs" company="Mario">
 //     Mario
@@ -44,9 +44,16 @@ namespace IronyModManager.Converters
         {
             if (value is IHierarchicalDefinitions definition)
             {
-                if (definition.WillBeReset)
+                switch (definition.ResetType)
                 {
-                    return "ResetMod";
+                    case ResetType.Resolved:
+                        return "ResolvedResetMod";
+
+                    case ResetType.Ignored:
+                        return "IgnoredResetMod";
+
+                    default:
+                        return string.Empty;
                 }
             }
             return string.Empty;

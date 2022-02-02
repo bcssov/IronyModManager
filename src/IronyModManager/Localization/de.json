@@ -375,8 +375,12 @@
         },
         "ResetWarning": {
             "Title": "Konflikte zurücksetzen",
-            "AnalyzeMode": "Einige Konflikte werden zurückgesetzt, wenn der Konfliktlöser aufgrund von Mod-Änderungen ausgeführt wird:{NewLine}{NewLine}{ListOfConflict}",
-            "RegularMode": "Einige Mods wurden aufgrund von Mod-Änderungen zurückgesetzt:{NewLine}{NewLine}{ListOfConflict}",
+            "AnalyzeModeAll": "Einige Konflikte werden zurückgesetzt, wenn der Konfliktlöser aufgrund von Mod-Änderungen ausgeführt wird. Diese sind aufgelöste Konflikte, die zurückgesetzt werden:{NewLine}{NewLine}{ListOfConflictsResolved}{NewLine}Diese sind ignorierte Konflikte, die zurückgesetzt werden:{NewLine}{NewLine}{ListOfConflictsIgnored}",
+            "AnalyzeModeResolvedOnly": "Einige Konflikte werden zurückgesetzt, wenn der Konfliktlöser aufgrund von Mod-Änderungen ausgeführt wird. Diese sind aufgelöste Konflikte, die zurückgesetzt werden:{NewLine}{NewLine}{ListOfConflictsResolved}",
+            "AnalyzeModeIgnoredOnly": "Einige Konflikte werden zurückgesetzt, wenn der Konfliktlöser aufgrund von Mod-Änderungen ausgeführt wird. Diese sind ignorierte Konflikte, die zurückgesetzt werden:{NewLine}{NewLine}{ListOfConflictsIgnored}",
+            "RegularModeAll": "Einige Konflikte wurden aufgrund von Mod-Änderungen zurückgesetzt. Diese wurden zurückgesetzt. Aufgelöste Konflikte:{NewLine}{NewLine}{ListOfConflictsResolved}{NewLine}Diese wurden ignorierte Konflikte zurückgesetzt:{NewLine}{NewLine}{ListOfConflictsIgnored}",
+            "RegularModeResolvedOnly": "Einige Konflikte wurden aufgrund von Mod-Änderungen zurückgesetzt. Diese wurden zurückgesetzt. Aufgelöste Konflikte:{NewLine}{NewLine}{ListOfConflictsResolved}",
+            "RegularModeIgnoredOnly": "Einige Konflikte wurden aufgrund von Mod-Änderungen zurückgesetzt. Diese wurden ignorierte Konflikte zurückgesetzt:{NewLine}{NewLine}{ListOfConflictsIgnored}",
             "ListOfConflictsFormat": "{ParentDirectory}: {Name}"
         }
     },

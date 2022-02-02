@@ -4,7 +4,7 @@
 // Created          : 05-26-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 01-31-2022
+// Last Modified On : 02-02-2022
 // ***********************************************************************
 // <copyright file="ModPatchCollectionService.cs" company="Mario">
 //     Mario
@@ -1924,9 +1924,9 @@ namespace IronyModManager.Services
             {
                 foreach (var topConflict in conflictResult.Conflicts.GetHierarchicalDefinitions())
                 {
-                    foreach (var item in topConflict.Children.Where(p => p.Mods.Count <= 1))
+                    foreach (var item in topConflict.Children)
                     {
-                        if (!item.WillBeReset && !alreadyIgnored.Contains(item.Key))
+                        if (item.ResetType == ResetType.None && !alreadyIgnored.Contains(item.Key))
                         {
                             alreadyIgnored.Add(item.Key);
                             ruleIgnoredDefinitions.AddToMap(conflictResult.Conflicts.GetByTypeAndId(item.Key).First());
@@ -2074,6 +2074,10 @@ namespace IronyModManager.Services
                         Cache.Set(new CacheAddParameters<ModsExportedState>() { Region = ModsExportedRegion, Key = ModExportedKey, Value = new ModsExportedState() { Exported = true } });
                     }
 
+                    // Reset type flag since it was resolved now
+                    definition.ResetType = ResetType.None;
+                    conflictResult.ResolvedConflicts.ChaneHierarchicalResetState(definition);
+
                     var exportResult = false;
                     if (exportPatches.Any())
                     {
@@ -2152,7 +2156,7 @@ namespace IronyModManager.Services
                     }
                     else
                     {
-                        matchedConflicts.ToList().ForEach(p => p.WillBeReset = true);
+                        matchedConflicts.ToList().ForEach(p => p.ResetType = ResetType.Ignored);
                     }
                 }
             }
@@ -2420,7 +2424,7 @@ namespace IronyModManager.Services
             copy.IsFromGame = definition.IsFromGame;
             copy.Order = definition.Order;
             copy.OriginalFileName = definition.OriginalFileName;
-            copy.WillBeReset = definition.WillBeReset;
+            copy.ResetType = definition.ResetType;
             return copy;
         }
 
@@ -2691,7 +2695,13 @@ namespace IronyModManager.Services
             var synced = await SyncPatchStatesAsync(matchedConflicts, item, patchName, game, readOnlyMode, files.ToArray());
             if (synced)
             {
-                matchedConflicts.ToList().ForEach(p => p.WillBeReset = true);
+                matchedConflicts.ToList().ForEach(p =>
+                {
+                    if (p.ResetType == ResetType.None)
+                    {
+                        p.ResetType = ResetType.Resolved;
+                    }
+                });
                 item.ToList().ForEach((diff) =>
                 {
                     var existingConflict = resolvedConflicts.FirstOrDefault(p => p.TypeAndId.Equals(diff.TypeAndId));

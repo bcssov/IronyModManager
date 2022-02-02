@@ -4,7 +4,7 @@
 // Created          : 03-31-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 01-31-2022
+// Last Modified On : 02-02-2022
 // ***********************************************************************
 // <copyright file="ModPatchExporter.cs" company="Mario">
 //     Mario
@@ -518,7 +518,7 @@ namespace IronyModManager.IO.Mods
             newInstance.IsCustomPatch = original.IsCustomPatch;
             newInstance.IsFromGame = original.IsFromGame;
             newInstance.AllowDuplicate = original.AllowDuplicate;
-            newInstance.WillBeReset = original.WillBeReset;
+            newInstance.ResetType = original.ResetType;
             return newInstance;
         }
 

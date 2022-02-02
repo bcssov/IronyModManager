@@ -4,7 +4,7 @@
 // Created          : 02-18-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 11-01-2021
+// Last Modified On : 02-02-2022
 // ***********************************************************************
 // <copyright file="Enums.cs" company="Mario">
 //     Mario
@@ -16,6 +16,32 @@ using System.Collections.Generic;
 
 namespace IronyModManager.Shared.Models
 {
+    /// <summary>
+    /// Enum ResetType
+    /// </summary>
+    public enum ResetType
+    {
+        /// <summary>
+        /// The none
+        /// </summary>
+        None,
+
+        /// <summary>
+        /// The resolved
+        /// </summary>
+        Resolved,
+
+        /// <summary>
+        /// The ignored
+        /// </summary>
+        Ignored,
+
+        /// <summary>
+        /// Any
+        /// </summary>
+        Any
+    }
+
     /// <summary>
     /// Enum ValueType
     /// </summary>

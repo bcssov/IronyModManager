@@ -4,7 +4,7 @@
 // Created          : 02-16-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 01-31-2022
+// Last Modified On : 02-02-2022
 // ***********************************************************************
 // <copyright file="IDefinition.cs" company="Mario">
 //     Mario
@@ -215,6 +215,13 @@ namespace IronyModManager.Shared.Models
         string ParentDirectoryCI { get; }
 
         /// <summary>
+        /// Gets or sets the type of the reset.
+        /// </summary>
+        /// <value>The type of the reset.</value>
+        [JsonIgnore]
+        ResetType ResetType { get; set; }
+
+        /// <summary>
         /// Gets or sets the tags.
         /// </summary>
         /// <value>The tags.</value>
@@ -271,13 +278,6 @@ namespace IronyModManager.Shared.Models
         /// </summary>
         /// <value>The virtual localization directory.</value>
         string VirtualPath { get; set; }
-
-        /// <summary>
-        /// Gets or sets a value indicating whether [will be reset].
-        /// </summary>
-        /// <value><c>true</c> if [will be reset]; otherwise, <c>false</c>.</value>
-        [JsonIgnore]
-        bool WillBeReset { get; set; }
 
         #endregion Properties
     }

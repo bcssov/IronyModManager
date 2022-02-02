@@ -84,9 +84,13 @@
         <Setter Property="BorderThickness" Value="2,2,2,2"/>
         <Setter Property="BorderBrush" Value="Red"/>
     </Style>
-    <Style Selector="Border.ResetMod">
+    <Style Selector="Border.ResolvedResetMod">
         <Setter Property="BorderThickness" Value="2,2,2,2"/>
         <Setter Property="BorderBrush" Value="Red" />
+    </Style>
+    <Style Selector="Border.IgnoredResetMod">
+        <Setter Property="BorderThickness" Value="2,2,2,2"/>
+        <Setter Property="BorderBrush" Value="#ffc58b" />
     </Style>
     <Style Selector="ListBoxItem.ModCompare:selected /template/ ContentPresenter">
         <Setter Property="Background" Value="{DynamicResource ThemeAccentBrush3}"/>

@@ -4,7 +4,7 @@
 // Created          : 02-16-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 01-31-2022
+// Last Modified On : 02-02-2022
 // ***********************************************************************
 // <copyright file="IndexedDefinitions.cs" company="Mario">
 //     Mario
@@ -153,6 +153,42 @@ namespace IronyModManager.Parser.Definitions
                 gameDefinitionsCount++;
             }
             definitions.Add(definition);
+        }
+
+        /// <summary>
+        /// Chanes the state of the hierarchical reset.
+        /// </summary>
+        /// <param name="definition">The definition.</param>
+        /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
+        public bool ChaneHierarchicalResetState(IDefinition definition)
+        {
+            if (useHierarchalMap && definition != null)
+            {
+                var parentDirectoryCI = ResolveHierarchalParentDirectory(definition);
+                var hierarchicalDefinition = mainHierarchalDefinitions.GetFirstByNameNoLock(nameof(IHierarchicalDefinitions.Name), parentDirectoryCI);
+                if (hierarchicalDefinition != null)
+                {
+                    if (childHierarchicalDefinitions.TryGetValue(hierarchicalDefinition.Name, out var children))
+                    {
+                        var child = children.GetFirstByNameNoLock(nameof(IHierarchicalDefinitions.Name), definition.Id);
+                        if (child != null)
+                        {
+                            child.ResetType = definition.ResetType;
+                            if (definition.ResetType != ResetType.None)
+                            {
+                                resetDefinitionsCount--;
+                            }
+                            if (resetDefinitionsCount < 0)
+                            {
+                                resetDefinitionsCount = 0;
+                            }
+                            hierarchicalDefinition.ResetType = children.Any(p => p.ResetType != ResetType.None) ? ResetType.Any : ResetType.None;
+                            return true;
+                        }
+                    }
+                }
+            }
+            return false;
         }
 
         /// <summary>
@@ -391,7 +427,7 @@ namespace IronyModManager.Parser.Definitions
             }
             if (useHierarchalMap)
             {
-                if (definition.WillBeReset)
+                if (definition.ResetType != ResetType.None)
                 {
                     resetDefinitionsCount--;
                 }
@@ -411,7 +447,7 @@ namespace IronyModManager.Parser.Definitions
                     {
                         children.Remove(child);
                     }
-                    hierarchicalDefinition.WillBeReset = children.Any(p => p.WillBeReset);
+                    hierarchicalDefinition.ResetType = children.Any(p => p.ResetType != ResetType.None) ? ResetType.Any : ResetType.None;
                     if (!children.Select(p => p).Any())
                     {
                         childHierarchicalDefinitions.TryRemove(hierarchicalDefinition.Name, out _);
@@ -488,9 +524,9 @@ namespace IronyModManager.Parser.Definitions
                 childHierarchicalDefinitions.TryAdd(parentDirectoryCI, new ConcurrentIndexedList<IHierarchicalDefinitions>(nameof(IHierarchicalDefinitions.Name)));
                 shouldAdd = true;
             }
-            if (definition.WillBeReset)
+            if (definition.ResetType != ResetType.None)
             {
-                hierarchicalDefinition.WillBeReset = definition.WillBeReset;
+                hierarchicalDefinition.ResetType = ResetType.Any;
             }
             bool exists = false;
             IHierarchicalDefinitions child = null;
@@ -518,9 +554,9 @@ namespace IronyModManager.Parser.Definitions
                     child.FileNames.Add(definition.FileCI);
                 }
             }
-            if (definition.WillBeReset)
+            if (definition.ResetType != ResetType.None)
             {
-                child.WillBeReset = definition.WillBeReset;
+                child.ResetType = definition.ResetType;
                 resetDefinitionsCount++;
             }
             if (child.Mods == null)

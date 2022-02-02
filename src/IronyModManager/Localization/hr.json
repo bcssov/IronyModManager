@@ -375,8 +375,12 @@
         },
         "ResetWarning": {
             "Title": "Sukobi Resetirani",
-            "AnalyzeMode": "Neki sukobi će se resetirati ako se rješavač sukoba pokrene:{NewLine}{NewLine}{ListOfConflict}",
-            "RegularMode": "Neki sukobi su se resetirali zbog promjena u modovima:{NewLine}{NewLine}{ListOfConflict}",
+            "AnalyzeModeAll": "Neki sukobi će se resetirati ako se rješavač sukoba pokrene zbog promjena u modu. Ovo su riješeni sukobi koji će se resetirati:{NewLine}{NewLine}{ListOfConflictsResolved}{NewLine}Ovo su zanemareni sukobi koji će se resetirati:{NewLine}{NewLine}{ListOfConflictsIgnored}",
+            "AnalyzeModeResolvedOnly": "Neki sukobi će se resetirati ako se rješavač sukoba pokrene zbog promjena u modu. Ovo su riješeni sukobi koji će se resetirati:{NewLine}{NewLine}{ListOfConflictsResolved}",
+            "AnalyzeModeIgnoredOnly": "Neki sukobi će se resetirati ako se rješavač sukoba pokrene zbog promjena u modu. Ovo su zanemareni sukobi koji će se resetirati:{NewLine}{NewLine}{ListOfConflictsIgnored}",
+            "RegularModeAll": "Neki sukobi su resetirali zbog promjena u modu. Ovo su resetirani riješeni sukobi:{NewLine}{NewLine}{ListOfConflictsResolved}{NewLine}Ovo su resetirani zanemareni sukobi:{NewLine}{NewLine}{ListOfConflictsIgnored}",
+            "RegularModeResolvedOnly": "Neki sukobi su resetirali zbog promjena u modu. Ovo su resetirani riješeni sukobi:{NewLine}{NewLine}{ListOfConflictsResolved}",
+            "RegularModeIgnoredOnly": "Neki sukobi su resetirali zbog promjena u modu. Ovo su resetirani zanemareni sukobi:{NewLine}{NewLine}{ListOfConflictsIgnored}",
             "ListOfConflictsFormat": "{ParentDirectory}: {Name}"
         }
     },

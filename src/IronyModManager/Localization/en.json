@@ -375,8 +375,12 @@
         },
         "ResetWarning": {
             "Title": "Conflicts Reset",
-            "AnalyzeMode": "Some conflicts will be reset if Conflict Solver is run due to mod changes:{NewLine}{NewLine}{ListOfConflict}",
-            "RegularMode": "Some mods were reset due to mod changes:{NewLine}{NewLine}{ListOfConflict}",
+            "AnalyzeModeAll": "Some conflicts will be reset if Conflict Solver is run due to mod changes. These are resolved conflicts which will be reset:{NewLine}{NewLine}{ListOfConflictsResolved}{NewLine}These are ignored conflicts which will be reset:{NewLine}{NewLine}{ListOfConflictsIgnored}",
+            "AnalyzeModeResolvedOnly": "Some conflicts will be reset if Conflict Solver is run due to mod changes. These are resolved conflicts which will be reset:{NewLine}{NewLine}{ListOfConflictsResolved}",
+            "AnalyzeModeIgnoredOnly": "Some conflicts will be reset if Conflict Solver is run due to mod changes. These are ignored conflicts which will be reset:{NewLine}{NewLine}{ListOfConflictsIgnored}",
+            "RegularModeAll": "Some conflicts were reset due to mod changes. These were reset resolved conflicts:{NewLine}{NewLine}{ListOfConflictsResolved}{NewLine}These were reset ignored conflicts:{NewLine}{NewLine}{ListOfConflictsIgnored}",
+            "RegularModeResolvedOnly": "Some conflicts were reset due to mod changes. These were reset resolved conflicts:{NewLine}{NewLine}{ListOfConflictsResolved}",
+            "RegularModeIgnoredOnly": "Some conflicts were reset due to mod changes. These were reset ignored conflicts:{NewLine}{NewLine}{ListOfConflictsIgnored}",
             "ListOfConflictsFormat": "{ParentDirectory}: {Name}"
         }
     },

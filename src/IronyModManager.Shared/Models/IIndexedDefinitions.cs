@@ -4,7 +4,7 @@
 // Created          : 02-16-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 01-31-2022
+// Last Modified On : 02-02-2022
 // ***********************************************************************
 // <copyright file="IIndexedDefinitions.cs" company="Mario">
 //     Mario
@@ -31,6 +31,13 @@ namespace IronyModManager.Shared.Models
         /// <param name="definition">The definition.</param>
         /// <param name="forceIgnoreHierarchical">if set to <c>true</c> [force ignore hierarchical].</param>
         void AddToMap(IDefinition definition, bool forceIgnoreHierarchical = false);
+
+        /// <summary>
+        /// Chanes the state of the hierarchical reset.
+        /// </summary>
+        /// <param name="definition">The definition.</param>
+        /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
+        bool ChaneHierarchicalResetState(IDefinition definition);
 
         /// <summary>
         /// Existses the by file.
