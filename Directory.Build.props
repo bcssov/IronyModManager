@@ -24,8 +24,7 @@
         <MessageBoxAvalonia>[1.7.1]</MessageBoxAvalonia>
         <Avalonia>[0.10.12]</Avalonia>
         <AvaloniaEdit>[0.10.12.1]</AvaloniaEdit>
-        <!-- Sigh... force certain version, as the most recent update broke the whole setting read logic and well there are bugs in certain other areas which would allow me to bypass the issue. So therefore this is here to prevent someone from happily triggering an update -->
-        <Jot>[2.1.11]</Jot>
+        <Jot>[2.1.13]</Jot>
     </PropertyGroup>
     <ItemGroup>
         <PackageReference Include="Nerdbank.GitVersioning">
