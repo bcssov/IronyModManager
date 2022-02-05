@@ -11,7 +11,7 @@ Check out the detailed overview on the [wiki](https://github.com/bcssov/IronyMod
 
 ### Download
 * Latest stable version: [v1.20.46](https://github.com/bcssov/IronyModManager/releases/tag/v1.20.46)
-* Latest prerelease version: [v1.21.91-alpha](https://github.com/bcssov/IronyModManager/releases/tag/v1.21.91-alpha)
+* Latest release candidate version: [v1.21.94-rc](https://github.com/bcssov/IronyModManager/releases/tag/v1.21.94-rc)
 
 ### Survey
 Survey about potential Steam Workshup upload feature. It takes seconds go [here](https://github.com/bcssov/IronyModManager/discussions/317) for more details.
