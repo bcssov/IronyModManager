@@ -4,13 +4,12 @@
 		<title>Irony Mod Manager</title>
 		<language>en</language>
 		<item>
-			<title>1.21.91-alpha</title>
+			<title>1.21.94-rc</title>
 			<description>## Note
 As of this version Irony supports analyze mode for HOI4. If you see any bugs in how Irony detects any definitions there please report on the issue tracker.
 
 ## Current Release Notes
-* Minor fixes
-* Conflict solver reset notifications differentiate between resolved and ignored conflicts
+* Fix UTF8 handling of mod patch exports
 
 ## Release Notes 1.21
 * Update dependencies
@@ -19,17 +18,16 @@ As of this version Irony supports analyze mode for HOI4. If you see any bugs in 
 * Add option to export hash analysis report to clipboard
 * HOI4 conflict solver analyze support added (hopefully with no parser mapping errors)
 * Conflict solver reset conflicts notifications, indicators and filter</description>
-			<pubDate>Thu, 03 Feb 2022 07:23:28 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.21.91-alpha/osx-x64.rar" sparkle:version="1.21.91.59003" sparkle:shortVersionString="1.21.91" length="73728779" sparkle:os="osx" type="application/vnd.rar" sparkle:signature="g+hkJiPXVi/+F3uru4t/97P5fmNn570iFzJl0+xEn5TjJeFMxpI/9kFBHn1YzwYGMFnXZIlzg7zNNQHKGNH+CQ=="/>
+			<pubDate>Sat, 05 Feb 2022 19:39:43 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.21.94-rc/osx-x64.rar" sparkle:version="1.21.94.30286" sparkle:shortVersionString="1.21.94" length="73728097" sparkle:os="osx" type="application/vnd.rar" sparkle:signature="FRcP+/sGm1RZFXhLoQAGmZjLlzjwyIvLQi2v2KvIT3wRlvM3L8OEy0kH1Jkg0io+/Q38ZWXRToeo5tXo9hWkDg=="/>
 		</item>
 		<item>
-			<title>1.21.91-alpha</title>
+			<title>1.21.94-rc</title>
 			<description>## Note
 As of this version Irony supports analyze mode for HOI4. If you see any bugs in how Irony detects any definitions there please report on the issue tracker.
 
 ## Current Release Notes
-* Minor fixes
-* Conflict solver reset notifications differentiate between resolved and ignored conflicts
+* Fix UTF8 handling of mod patch exports
 
 ## Release Notes 1.21
 * Update dependencies
@@ -38,17 +36,16 @@ As of this version Irony supports analyze mode for HOI4. If you see any bugs in 
 * Add option to export hash analysis report to clipboard
 * HOI4 conflict solver analyze support added (hopefully with no parser mapping errors)
 * Conflict solver reset conflicts notifications, indicators and filter</description>
-			<pubDate>Thu, 03 Feb 2022 07:23:37 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.21.91-alpha/win-x64-setup.rar" sparkle:version="1.21.91.59003" sparkle:shortVersionString="1.21.91" length="63802884" sparkle:os="windows" type="application/vnd.rar" sparkle:signature="g9+wW9jddFFeHFwwC1tEIeR1Nzeou1Htcbn/XQLiJBK8GR86RLhyr7C1YgVZgEoivdPG3miij5EwkEXipOTpAg=="/>
+			<pubDate>Sat, 05 Feb 2022 19:39:52 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.21.94-rc/win-x64-setup.rar" sparkle:version="1.21.94.30286" sparkle:shortVersionString="1.21.94" length="63800619" sparkle:os="windows" type="application/vnd.rar" sparkle:signature="m1AKTQsWtsmFbhL3fqlHMht5oWKqSvdkxCmIv9fNBEguS9YQdxcYvTgZ0MxHjvzkL4XYWfUmPSeLhLx2/u+EAQ=="/>
 		</item>
 		<item>
-			<title>1.21.91-alpha</title>
+			<title>1.21.94-rc</title>
 			<description>## Note
 As of this version Irony supports analyze mode for HOI4. If you see any bugs in how Irony detects any definitions there please report on the issue tracker.
 
 ## Current Release Notes
-* Minor fixes
-* Conflict solver reset notifications differentiate between resolved and ignored conflicts
+* Fix UTF8 handling of mod patch exports
 
 ## Release Notes 1.21
 * Update dependencies
@@ -57,17 +54,16 @@ As of this version Irony supports analyze mode for HOI4. If you see any bugs in 
 * Add option to export hash analysis report to clipboard
 * HOI4 conflict solver analyze support added (hopefully with no parser mapping errors)
 * Conflict solver reset conflicts notifications, indicators and filter</description>
-			<pubDate>Thu, 03 Feb 2022 07:23:33 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.21.91-alpha/win-x64.rar" sparkle:version="1.21.91.59003" sparkle:shortVersionString="1.21.91" length="76440372" sparkle:os="windows" type="application/vnd.rar" sparkle:signature="arPoPCBNPJGq9lC+1XdWo1/p8sWPh4jz1AYapT0Mk3/mYr+sB+aijyUvJTPjZvnX3kBdzWU9bsk7K3BUxmaqDA=="/>
+			<pubDate>Sat, 05 Feb 2022 19:39:47 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.21.94-rc/win-x64.rar" sparkle:version="1.21.94.30286" sparkle:shortVersionString="1.21.94" length="76440046" sparkle:os="windows" type="application/vnd.rar" sparkle:signature="5jpjstMTKaog3l012M8uXFsrltkGTKZ/BazYhWtzhbadFNqb5IfpycRM6XfK/dFzzKphyDwrxF8YZuCjKgX+Cg=="/>
 		</item>
 		<item>
-			<title>1.21.91-alpha</title>
+			<title>1.21.94-rc</title>
 			<description>## Note
 As of this version Irony supports analyze mode for HOI4. If you see any bugs in how Irony detects any definitions there please report on the issue tracker.
 
 ## Current Release Notes
-* Minor fixes
-* Conflict solver reset notifications differentiate between resolved and ignored conflicts
+* Fix UTF8 handling of mod patch exports
 
 ## Release Notes 1.21
 * Update dependencies
@@ -76,8 +72,8 @@ As of this version Irony supports analyze mode for HOI4. If you see any bugs in 
 * Add option to export hash analysis report to clipboard
 * HOI4 conflict solver analyze support added (hopefully with no parser mapping errors)
 * Conflict solver reset conflicts notifications, indicators and filter</description>
-			<pubDate>Thu, 03 Feb 2022 07:23:25 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.21.91-alpha/linux-x64.zip" sparkle:version="1.21.91.59003" sparkle:shortVersionString="1.21.91" length="87884574" sparkle:os="linux" type="application/zip" sparkle:signature="wfoR+ePdoRtCu+SlpQDPRzUBXRuhW4qL4O5bCzumMi3p95aWVgqoZ75W6Ki3Q3QW3bu/LNNEwp6QGrJWZN7WCA=="/>
+			<pubDate>Sat, 05 Feb 2022 19:39:39 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.21.94-rc/linux-x64.zip" sparkle:version="1.21.94.30286" sparkle:shortVersionString="1.21.94" length="87885326" sparkle:os="linux" type="application/zip" sparkle:signature="59jdHuXZ5zQMPfT/nxBdYtorwDYrsBUASg8UjEwA4uvNbxUrvzPaOU9dmT3Qv4QF0TB3dbIDgoJ1I3PoFVKVCw=="/>
 		</item>
 		<item>
 			<title>1.20.46</title>
