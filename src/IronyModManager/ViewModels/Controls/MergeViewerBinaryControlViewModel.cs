@@ -4,7 +4,7 @@
 // Created          : 03-25-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 09-06-2021
+// Last Modified On : 02-07-2022
 // ***********************************************************************
 // <copyright file="MergeViewerBinaryControlViewModel.cs" company="Mario">
 //     Mario
@@ -12,6 +12,7 @@
 // <summary></summary>
 // ***********************************************************************
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Reactive;
 using System.Reactive.Disposables;
@@ -45,9 +46,10 @@ namespace IronyModManager.ViewModels.Controls
         private const string BlockSelected = "BlockSelected";
 
         /// <summary>
-        /// The left image lock
+        /// The image cache
         /// </summary>
-        private readonly AsyncLock leftImageLock = new();
+        private readonly ThreadSafeLimitedDictionary<string, IBitmap> imageCache;
+
 
         /// <summary>
         /// The localization manager
@@ -64,10 +66,6 @@ namespace IronyModManager.ViewModels.Controls
         /// </summary>
         private readonly IModService modService;
 
-        /// <summary>
-        /// The right image lock
-        /// </summary>
-        private readonly AsyncLock rightImageLock = new();
 
         #endregion Fields
 
@@ -84,6 +82,10 @@ namespace IronyModManager.ViewModels.Controls
             this.modService = modService;
             this.localizationManager = localizationManager;
             this.logger = logger;
+            imageCache = new ThreadSafeLimitedDictionary<string, IBitmap>
+            {
+                MaxItems = 100
+            };
         }
 
         #endregion Constructors
@@ -197,41 +199,51 @@ namespace IronyModManager.ViewModels.Controls
         /// Resets this instance.
         /// </summary>
         /// <param name="fullReset">if set to <c>true</c> [full reset].</param>
-        public void Reset(bool fullReset = true)
+        public void Reset(bool fullReset)
         {
-            async Task resetLeft(bool fullReset)
+            async Task resetImages(bool fullReset)
             {
-                using var mutex = await leftImageLock.LockAsync();
                 TakeLeftClass = string.Empty;
-                if (fullReset)
-                {
-                    var left = LeftImage;
-                    LeftImage = null;
-                    left?.Dispose();
-                    LeftImageInfo = string.Empty;
-                    LeftHeight = LeftWidth = 0;
-                }
-                await Task.Delay(10);
-                mutex.Dispose();
-            }
-            async Task resetRight(bool fullReset)
-            {
-                using var mutex = await rightImageLock.LockAsync();
                 TakeRightClass = string.Empty;
+                RightImage = null;
+                RightImageInfo = string.Empty;
+                RightHeight = RightWidth = 0;
+                LeftImage = null;
+                LeftImageInfo = string.Empty;
+                LeftHeight = LeftWidth = 0;
                 if (fullReset)
                 {
-                    var right = RightImage;
-                    RightImage = null;
-                    right?.Dispose();
-                    RightImageInfo = string.Empty;
-                    RightHeight = RightWidth = 0;
+                    foreach (var item in imageCache)
+                    {
+                        item.Value.Dispose();
+                    }
+                    imageCache.Clear();
                 }
                 await Task.Delay(10);
-                mutex.Dispose();
             }
+            resetImages(fullReset).ConfigureAwait(false);
+        }
 
-            resetLeft(fullReset).ConfigureAwait(false);
-            resetRight(fullReset).ConfigureAwait(false);
+        /// <summary>
+        /// Get bitmap as an asynchronous operation.
+        /// </summary>
+        /// <param name="definition">The definition.</param>
+        /// <returns>A Task&lt;IBitmap&gt; representing the asynchronous operation.</returns>
+        protected virtual async Task<IBitmap> GetBitmapAsync(IDefinition definition)
+        {
+            IBitmap bitmap = null;
+            var key = ConstructImageCacheKey(definition);
+            if (imageCache.Contains(key))
+            {
+                bitmap = imageCache[key];
+            }
+            else
+            {
+                using var ms = await modService.GetImageStreamAsync(definition.ModName, definition.File, definition.IsFromGame);
+                bitmap = new Bitmap(ms);
+                imageCache.Add(key, bitmap);
+            }
+            return bitmap;
         }
 
         /// <summary>
@@ -240,52 +252,41 @@ namespace IronyModManager.ViewModels.Controls
         /// <param name="definition">The definition.</param>
         public void SetLeft(IDefinition definition)
         {
-            var localDefinition = definition;
-            async Task parseImage()
+            async Task parseImage(IDefinition definition)
             {
-                using var mutex = await leftImageLock.LockAsync();
-                var left = LeftImage;
+                LeftImageInfo = string.Empty;
+                LeftImage = null;
+                LeftHeight = LeftWidth = 0;
                 if (definition != null)
                 {
-                    LeftImageInfo = string.Empty;
-                    LeftImage = null;
-                    left?.Dispose();
-                    LeftHeight = LeftWidth = 0;
-                    using var ms = await modService.GetImageStreamAsync(localDefinition.ModName, localDefinition.File, localDefinition.IsFromGame);
-                    if (ms != null)
+                    try
                     {
-                        try
-                        {
-                            LeftImage = new Bitmap(ms);
-                            var imageHeight = (LeftImage?.PixelSize.Width).GetValueOrDefault();
-                            var imageWidth = (LeftImage?.PixelSize.Height).GetValueOrDefault();
-                            var info = localizationManager.GetResource(LocalizationResources.Conflict_Solver.ImageInfo);
-                            LeftImageInfo = Smart.Format(info, new { Width = imageWidth, Height = imageHeight });
-                            LeftHeight = imageHeight;
-                            LeftWidth = imageWidth;
-                        }
-                        catch (Exception ex)
-                        {
-                            logger.Error(ex);
-                            LeftImageInfo = string.Empty;
-                            LeftImage = null;
-                            left?.Dispose();
-                            LeftHeight = LeftWidth = 0;
-                        }
+                        LeftImage = await GetBitmapAsync(definition);
+                        var imageHeight = (LeftImage?.PixelSize.Height).GetValueOrDefault();
+                        var imageWidth = (LeftImage?.PixelSize.Width).GetValueOrDefault();
+                        var info = localizationManager.GetResource(LocalizationResources.Conflict_Solver.ImageInfo);
+                        LeftImageInfo = Smart.Format(info, new { Width = imageWidth, Height = imageHeight });
+                        LeftHeight = imageHeight;
+                        LeftWidth = imageWidth;
+                    }
+                    catch (Exception ex)
+                    {
+                        logger.Error(ex);
+                        LeftImageInfo = string.Empty;
+                        LeftImage = null;
+                        LeftHeight = LeftWidth = 0;
                     }
                 }
                 else
                 {
                     LeftImageInfo = string.Empty;
                     LeftImage = null;
-                    left?.Dispose();
                     LeftHeight = LeftWidth = 0;
                 }
                 await Task.Delay(10);
-                mutex.Dispose();
             }
 
-            Task.Run(() => parseImage().ConfigureAwait(false)).ConfigureAwait(false);
+            Task.Run(() => parseImage(definition).ConfigureAwait(false)).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -294,51 +295,41 @@ namespace IronyModManager.ViewModels.Controls
         /// <param name="definition">The definition.</param>
         public void SetRight(IDefinition definition)
         {
-            var localDefinition = definition;
-            async Task parseImage()
+            async Task parseImage(IDefinition definition)
             {
-                using var mutex = await rightImageLock.LockAsync();
-                var right = RightImage;
+                RightImageInfo = string.Empty;
+                RightImage = null;
+                RightHeight = RightWidth = 0;
                 if (definition != null)
                 {
-                    RightImageInfo = string.Empty;
-                    RightImage = null;
-                    right?.Dispose();
-                    RightHeight = RightWidth = 0;
-                    using var ms = await modService.GetImageStreamAsync(localDefinition.ModName, localDefinition.File, localDefinition.IsFromGame);
-                    if (ms != null)
+                    try
                     {
-                        try
-                        {
-                            RightImage = new Bitmap(ms);
-                            var imageHeight = (RightImage?.PixelSize.Width).GetValueOrDefault();
-                            var imageWidth = (RightImage?.PixelSize.Height).GetValueOrDefault();
-                            var info = localizationManager.GetResource(LocalizationResources.Conflict_Solver.ImageInfo);
-                            RightImageInfo = Smart.Format(info, new { Width = imageWidth, Height = imageHeight });
-                            RightHeight = imageHeight;
-                            RightWidth = imageWidth;
-                        }
-                        catch (Exception ex)
-                        {
-                            logger.Error(ex);
-                            RightImageInfo = string.Empty;
-                            RightImage = null;
-                            right?.Dispose();
-                            RightHeight = RightWidth = 0;
-                        }
+                        RightImage = await GetBitmapAsync(definition);
+                        var imageHeight = (RightImage?.PixelSize.Height).GetValueOrDefault();
+                        var imageWidth = (RightImage?.PixelSize.Width).GetValueOrDefault();
+                        var info = localizationManager.GetResource(LocalizationResources.Conflict_Solver.ImageInfo);
+                        RightImageInfo = Smart.Format(info, new { Width = imageWidth, Height = imageHeight });
+                        RightHeight = imageHeight;
+                        RightWidth = imageWidth;
+                    }
+                    catch (Exception ex)
+                    {
+                        logger.Error(ex);
+                        RightImageInfo = string.Empty;
+                        RightImage = null;
+                        RightHeight = RightWidth = 0;
                     }
                 }
                 else
                 {
                     RightImageInfo = string.Empty;
                     RightImage = null;
-                    right?.Dispose();
                     RightHeight = RightWidth = 0;
                 }
                 await Task.Delay(10);
-                mutex.Dispose();
             }
-            Task.Run(() => parseImage().ConfigureAwait(false)).ConfigureAwait(false);
+
+            Task.Run(() => parseImage(definition).ConfigureAwait(false)).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -360,6 +351,16 @@ namespace IronyModManager.ViewModels.Controls
             }).DisposeWith(disposables);
 
             base.OnActivated(disposables);
+        }
+
+        /// <summary>
+        /// Constructs the image cache key.
+        /// </summary>
+        /// <param name="definition">The definition.</param>
+        /// <returns>System.String.</returns>
+        protected virtual string ConstructImageCacheKey(IDefinition definition)
+        {
+            return $"{definition.ModName}-{definition.File}-{definition.IsFromGame}";
         }
 
         #endregion Methods

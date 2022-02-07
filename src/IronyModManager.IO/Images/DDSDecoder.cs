@@ -4,7 +4,7 @@
 // Created          : 02-17-2021
 //
 // Last Modified By : Mario
-// Last Modified On : 09-19-2021
+// Last Modified On : 02-07-2022
 // ***********************************************************************
 // <copyright file="DDSDecoder.cs" company="Mario">
 //     Mario
@@ -13,6 +13,7 @@
 // ***********************************************************************
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using BCnEncoder.Decoder;
@@ -24,6 +25,7 @@ using Pfim;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
 using SixLabors.ImageSharp.Processing;
+using SixLabors.ImageSharp.Textures.TextureFormats;
 using DxgiFormat = BCnEncoder.Shared.ImageFiles.DxgiFormat;
 
 namespace IronyModManager.IO.Images
@@ -36,14 +38,77 @@ namespace IronyModManager.IO.Images
         #region Methods
 
         /// <summary>
+        /// Decodes the stream to image asynchronous.
+        /// </summary>
+        /// <param name="stream">The stream.</param>
+        /// <returns>Task&lt;Image&gt;.</returns>
+        public Task<Image> DecodeStreamToImageAsync(Stream stream)
+        {
+            var ddsDecoder = new SixLabors.ImageSharp.Textures.Formats.Dds.DdsDecoder();
+            var configuration = SixLabors.ImageSharp.Textures.Configuration.Default.Clone();
+            var texture = ddsDecoder.DecodeTexture(configuration, stream);
+            if (texture is CubemapTexture cubemapTexture)
+            {
+                var right = cubemapTexture.PositiveX.MipMaps.FirstOrDefault().GetImage();
+                var left = cubemapTexture.NegativeX.MipMaps.FirstOrDefault().GetImage();
+                var top = cubemapTexture.PositiveY.MipMaps.FirstOrDefault().GetImage();
+                var bottom = cubemapTexture.NegativeY.MipMaps.FirstOrDefault().GetImage();
+                var front = cubemapTexture.PositiveZ.MipMaps.FirstOrDefault().GetImage();
+                var back = cubemapTexture.NegativeZ.MipMaps.FirstOrDefault().GetImage();
+                var image = GetCubeMap(right, left, top, bottom, front, back);
+                if (image != null)
+                {
+                    return Task.FromResult(image);
+                }
+            }
+            else if (texture is FlatTexture flatTexture)
+            {
+                var image = flatTexture.MipMaps.FirstOrDefault().GetImage();
+                if (image != null)
+                {
+                    return Task.FromResult(image);
+                }
+            }
+
+            return Task.FromResult((Image)null);
+        }
+
+        /// <summary>
+        /// Gets the cube map.
+        /// </summary>
+        /// <param name="right">The right.</param>
+        /// <param name="left">The left.</param>
+        /// <param name="top">The top.</param>
+        /// <param name="bottom">The bottom.</param>
+        /// <param name="front">The front.</param>
+        /// <param name="back">The back.</param>
+        /// <returns>Image.</returns>
+        private Image GetCubeMap(Image right, Image left, Image top, Image bottom, Image front, Image back)
+        {
+            var width = left.Width + front.Width + right.Width + back.Width;
+            var height = top.Height + front.Height + bottom.Height;
+            var image = new Image<Rgba32>(width, height);
+            image.Mutate(i =>
+            {
+                i.DrawImage(top, new Point(left.Width, 0), 1f);
+                i.DrawImage(left, new Point(0, top.Height), 1f);
+                i.DrawImage(front, new Point(left.Width, top.Height), 1f);
+                i.DrawImage(right, new Point(left.Width + front.Width, top.Height), 1f);
+                i.DrawImage(back, new Point(left.Width + front.Width + right.Width, top.Height), 1f);
+                i.DrawImage(bottom, new Point(left.Width, top.Height + front.Height), 1f);
+            });
+            return image;
+        }
+
+        /// <summary>
         /// decode to image as an asynchronous operation.
         /// </summary>
         /// <param name="file">The file.</param>
         /// <returns>Image&lt;Rgba32&gt;[].</returns>
-        public async Task<Image<Rgba32>> DecodeToImageAsync(DdsFile file)
+        public async Task<Image> DecodeToImageAsync(DdsFile file)
         {
-            Image<Rgba32> image = null;
             var decoder = new BcDecoder();
+            Image<Rgba32> image;
             if (file.Faces.Count == 6)
             {
                 // Cubemap
@@ -53,18 +118,7 @@ namespace IronyModManager.IO.Images
                 var bottom = ColorMemoryToImage(await decoder.DecodeRaw2DAsync(file.Faces[3].MipMaps[0].Data, Convert.ToInt32(file.Faces[3].Width), Convert.ToInt32(file.Faces[3].Height), GetCompressionFormat(file, decoder.InputOptions)));
                 var front = ColorMemoryToImage(await decoder.DecodeRaw2DAsync(file.Faces[4].MipMaps[0].Data, Convert.ToInt32(file.Faces[4].Width), Convert.ToInt32(file.Faces[4].Height), GetCompressionFormat(file, decoder.InputOptions)));
                 var back = ColorMemoryToImage(await decoder.DecodeRaw2DAsync(file.Faces[5].MipMaps[0].Data, Convert.ToInt32(file.Faces[5].Width), Convert.ToInt32(file.Faces[5].Height), GetCompressionFormat(file, decoder.InputOptions)));
-                var width = left.Width + front.Width + right.Width + back.Width;
-                var height = top.Height + front.Height + bottom.Height;
-                image = new Image<Rgba32>(width, height);
-                image.Mutate(i =>
-                {
-                    i.DrawImage(top, new Point(left.Width, 0), 1f);
-                    i.DrawImage(left, new Point(0, top.Height), 1f);
-                    i.DrawImage(front, new Point(left.Width, top.Height), 1f);
-                    i.DrawImage(right, new Point(left.Width + front.Width, top.Height), 1f);
-                    i.DrawImage(back, new Point(left.Width + front.Width + right.Width, top.Height), 1f);
-                    i.DrawImage(bottom, new Point(left.Width, top.Height + front.Height), 1f);
-                });
+                return GetCubeMap(right, left, top, bottom, front, back);
             }
             else
             {

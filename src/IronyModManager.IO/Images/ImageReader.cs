@@ -4,7 +4,7 @@
 // Created          : 02-17-2021
 //
 // Last Modified By : Mario
-// Last Modified On : 02-23-2021
+// Last Modified On : 02-07-2022
 // ***********************************************************************
 // <copyright file="ImageReader.cs" company="Mario">
 //     Mario
@@ -129,7 +129,7 @@ namespace IronyModManager.IO.Images
         /// </summary>
         /// <param name="stream">The stream.</param>
         /// <returns>MemoryStream.</returns>
-        /// <exception cref="AggregateException"></exception>
+        /// <exception cref="System.AggregateException"></exception>
         private async Task<MemoryStream> GetDDS(Stream stream)
         {
             if (stream.CanSeek)
@@ -138,10 +138,10 @@ namespace IronyModManager.IO.Images
             }
             var exceptions = new List<Exception>();
             MemoryStream ms = null;
+            // Default provider (SixLabors.Textures)
             try
             {
-                var file = DdsFile.Load(stream);
-                var image = await ddsDecoder.DecodeToImageAsync(file);
+                var image = await ddsDecoder.DecodeStreamToImageAsync(stream);
                 ms = new MemoryStream();
                 await image.SaveAsPngAsync(ms);
             }
@@ -155,7 +155,28 @@ namespace IronyModManager.IO.Images
                 ms = null;
                 exceptions.Add(ex);
             }
-            // fallback
+            // fallback #1 (BCnEncoder.NET)
+            if (ms == null)
+            {
+                try
+                {
+                    var file = DdsFile.Load(stream);
+                    var image = await ddsDecoder.DecodeToImageAsync(file);
+                    ms = new MemoryStream();
+                    await image.SaveAsPngAsync(ms);
+                }
+                catch (Exception ex)
+                {
+                    if (ms != null)
+                    {
+                        ms.Close();
+                        await ms.DisposeAsync();
+                    }
+                    ms = null;
+                    exceptions.Add(ex);
+                }
+            }
+            // fallback #2 (pfim)
             if (ms == null)
             {
                 if (stream.CanSeek)
@@ -194,7 +215,7 @@ namespace IronyModManager.IO.Images
                 }
             }
             // Fallback can result in memory stream being empty so throw aggregate exception only if both attempts failed
-            if (ms == null && exceptions.Count == 2)
+            if (ms == null && exceptions.Count == 3)
             {
                 throw new AggregateException(exceptions);
             }
