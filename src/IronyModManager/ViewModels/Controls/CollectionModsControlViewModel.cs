@@ -4,7 +4,7 @@
 // Created          : 03-03-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 01-27-2022
+// Last Modified On : 02-08-2022
 // ***********************************************************************
 // <copyright file="CollectionModsControlViewModel.cs" company="Mario">
 //     Mario
@@ -1180,9 +1180,9 @@ namespace IronyModManager.ViewModels.Controls
                     await MessageBus.PublishAsync(new ActiveGameRequestEvent(game));
                     await MessageBus.PublishAsync(new ModListInstallRefreshRequestEvent(true));
                     var hasMods = (modNames?.Any()).GetValueOrDefault();
+                    var mods = game != null ? await modService.GetAvailableModsAsync(game) ?? new List<IMod>() : new List<IMod>();
                     if (hasMods && !string.IsNullOrWhiteSpace(result.MergedFolderName))
                     {
-                        var mods = Mods;
                         var importedMods = new List<string>();
                         var descriptors = result.Mods.ToList();
                         for (int i = 0; i < descriptors.Count; i++)
@@ -1200,9 +1200,8 @@ namespace IronyModManager.ViewModels.Controls
                     LoadModCollections();
                     var showImportNotification = true;
                     // Check if any mods do not exist
-                    if (hasMods && Mods.Any())
+                    if (hasMods && mods.Any())
                     {
-                        var mods = Mods;
                         var nonExistingModPaths = modPaths.Where(p => !mods.Any(m => m.DescriptorFile.Equals(p)));
                         if (nonExistingModPaths.Any())
                         {
