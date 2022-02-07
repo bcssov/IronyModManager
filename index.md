@@ -13,9 +13,6 @@ Check out the detailed overview on the [wiki](https://github.com/bcssov/IronyMod
 * Latest stable version: [v1.20.46](https://github.com/bcssov/IronyModManager/releases/tag/v1.20.46)
 * Latest release candidate version: [v1.21.94-rc](https://github.com/bcssov/IronyModManager/releases/tag/v1.21.94-rc)
 
-### Survey
-Survey about potential Steam Workshup upload feature. It takes seconds go [here](https://github.com/bcssov/IronyModManager/discussions/317) for more details.
-
 ### New users
 Check this [checklist](https://github.com/bcssov/IronyModManager/wiki/New-User-Checklist) if you are a first time user of Irony.
 
