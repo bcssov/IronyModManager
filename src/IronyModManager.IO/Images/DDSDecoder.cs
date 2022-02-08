@@ -4,7 +4,7 @@
 // Created          : 02-17-2021
 //
 // Last Modified By : Mario
-// Last Modified On : 02-07-2022
+// Last Modified On : 02-08-2022
 // ***********************************************************************
 // <copyright file="DDSDecoder.cs" company="Mario">
 //     Mario
@@ -31,7 +31,7 @@ using DxgiFormat = BCnEncoder.Shared.ImageFiles.DxgiFormat;
 namespace IronyModManager.IO.Images
 {
     /// <summary>
-    /// Class DDSFacesDecoder.
+    /// Class DDSDecoder.
     /// </summary>
     internal class DDSDecoder
     {
@@ -45,8 +45,7 @@ namespace IronyModManager.IO.Images
         public Task<Image> DecodeStreamToImageAsync(Stream stream)
         {
             var ddsDecoder = new SixLabors.ImageSharp.Textures.Formats.Dds.DdsDecoder();
-            var configuration = SixLabors.ImageSharp.Textures.Configuration.Default.Clone();
-            var texture = ddsDecoder.DecodeTexture(configuration, stream);
+            var texture = ddsDecoder.DecodeTexture(SixLabors.ImageSharp.Textures.Configuration.Default, stream);
             if (texture is CubemapTexture cubemapTexture)
             {
                 var right = cubemapTexture.PositiveX.MipMaps.FirstOrDefault().GetImage();

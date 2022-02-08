@@ -4,7 +4,7 @@
 // Created          : 02-17-2021
 //
 // Last Modified By : Mario
-// Last Modified On : 02-07-2022
+// Last Modified On : 02-08-2022
 // ***********************************************************************
 // <copyright file="ImageReader.cs" company="Mario">
 //     Mario
@@ -158,6 +158,10 @@ namespace IronyModManager.IO.Images
             // fallback #1 (BCnEncoder.NET)
             if (ms == null)
             {
+                if (stream.CanSeek)
+                {
+                    stream.Seek(0, SeekOrigin.Begin);
+                }
                 try
                 {
                     var file = DdsFile.Load(stream);
@@ -214,7 +218,7 @@ namespace IronyModManager.IO.Images
                     exceptions.Add(ex);
                 }
             }
-            // Fallback can result in memory stream being empty so throw aggregate exception only if both attempts failed
+            // Fallback can result in memory stream being empty so throw aggregate exception only if all attempts failed
             if (ms == null && exceptions.Count == 3)
             {
                 throw new AggregateException(exceptions);
