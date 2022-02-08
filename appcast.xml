@@ -4,12 +4,16 @@
 		<title>Irony Mod Manager</title>
 		<language>en</language>
 		<item>
-			<title>1.21.94-rc</title>
+			<title>1.21.99-rc</title>
 			<description>## Note
 As of this version Irony supports analyze mode for HOI4. If you see any bugs in how Irony detects any definitions there please report on the issue tracker.
 
 ## Current Release Notes
-* Fix UTF8 handling of mod patch exports
+* Minor fixes
+* Enhance dds image handling
+* Fix showing game images via context menu
+* Optimize binary image preview
+* In case of CTDs ensure that backup options db is generated
 
 ## Release Notes 1.21
 * Update dependencies
@@ -17,17 +21,23 @@ As of this version Irony supports analyze mode for HOI4. If you see any bugs in 
 * Add conflict solver analyze mode only
 * Add option to export hash analysis report to clipboard
 * HOI4 conflict solver analyze support added (hopefully with no parser mapping errors)
-* Conflict solver reset conflicts notifications, indicators and filter</description>
-			<pubDate>Sat, 05 Feb 2022 19:39:43 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.21.94-rc/osx-x64.rar" sparkle:version="1.21.94.30286" sparkle:shortVersionString="1.21.94" length="73728097" sparkle:os="osx" type="application/vnd.rar" sparkle:signature="FRcP+/sGm1RZFXhLoQAGmZjLlzjwyIvLQi2v2KvIT3wRlvM3L8OEy0kH1Jkg0io+/Q38ZWXRToeo5tXo9hWkDg=="/>
+* Conflict solver reset conflicts notifications, indicators and filter
+* Enhance dds image handling
+* Optimize binary image preview</description>
+			<pubDate>Tue, 08 Feb 2022 07:04:46 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.21.99-rc/osx-x64.rar" sparkle:version="1.21.99.32246" sparkle:shortVersionString="1.21.99" length="73837910" sparkle:os="osx" type="application/vnd.rar" sparkle:signature="d+LvMwaVRHJqIv8g0S75PIh9r5FzmWAZnubIX4xhPkfEcX4WEgW4MUBB6slbRceX6srYUghEqnvkK0H6wKZCBQ=="/>
 		</item>
 		<item>
-			<title>1.21.94-rc</title>
+			<title>1.21.99-rc</title>
 			<description>## Note
 As of this version Irony supports analyze mode for HOI4. If you see any bugs in how Irony detects any definitions there please report on the issue tracker.
 
 ## Current Release Notes
-* Fix UTF8 handling of mod patch exports
+* Minor fixes
+* Enhance dds image handling
+* Fix showing game images via context menu
+* Optimize binary image preview
+* In case of CTDs ensure that backup options db is generated
 
 ## Release Notes 1.21
 * Update dependencies
@@ -35,17 +45,23 @@ As of this version Irony supports analyze mode for HOI4. If you see any bugs in 
 * Add conflict solver analyze mode only
 * Add option to export hash analysis report to clipboard
 * HOI4 conflict solver analyze support added (hopefully with no parser mapping errors)
-* Conflict solver reset conflicts notifications, indicators and filter</description>
-			<pubDate>Sat, 05 Feb 2022 19:39:52 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.21.94-rc/win-x64-setup.rar" sparkle:version="1.21.94.30286" sparkle:shortVersionString="1.21.94" length="63800619" sparkle:os="windows" type="application/vnd.rar" sparkle:signature="m1AKTQsWtsmFbhL3fqlHMht5oWKqSvdkxCmIv9fNBEguS9YQdxcYvTgZ0MxHjvzkL4XYWfUmPSeLhLx2/u+EAQ=="/>
+* Conflict solver reset conflicts notifications, indicators and filter
+* Enhance dds image handling
+* Optimize binary image preview</description>
+			<pubDate>Tue, 08 Feb 2022 07:04:54 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.21.99-rc/win-x64-setup.rar" sparkle:version="1.21.99.32246" sparkle:shortVersionString="1.21.99" length="63887312" sparkle:os="windows" type="application/vnd.rar" sparkle:signature="Nl/J+n2dU3EPX/FSZcExVmWwlmOx39pr16DYBYs4AjpT1zIZGyim7gF0ML0/D/xRYO+nZSoZmPwm6Fzr71+uDg=="/>
 		</item>
 		<item>
-			<title>1.21.94-rc</title>
+			<title>1.21.99-rc</title>
 			<description>## Note
 As of this version Irony supports analyze mode for HOI4. If you see any bugs in how Irony detects any definitions there please report on the issue tracker.
 
 ## Current Release Notes
-* Fix UTF8 handling of mod patch exports
+* Minor fixes
+* Enhance dds image handling
+* Fix showing game images via context menu
+* Optimize binary image preview
+* In case of CTDs ensure that backup options db is generated
 
 ## Release Notes 1.21
 * Update dependencies
@@ -53,17 +69,23 @@ As of this version Irony supports analyze mode for HOI4. If you see any bugs in 
 * Add conflict solver analyze mode only
 * Add option to export hash analysis report to clipboard
 * HOI4 conflict solver analyze support added (hopefully with no parser mapping errors)
-* Conflict solver reset conflicts notifications, indicators and filter</description>
-			<pubDate>Sat, 05 Feb 2022 19:39:47 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.21.94-rc/win-x64.rar" sparkle:version="1.21.94.30286" sparkle:shortVersionString="1.21.94" length="76440046" sparkle:os="windows" type="application/vnd.rar" sparkle:signature="5jpjstMTKaog3l012M8uXFsrltkGTKZ/BazYhWtzhbadFNqb5IfpycRM6XfK/dFzzKphyDwrxF8YZuCjKgX+Cg=="/>
+* Conflict solver reset conflicts notifications, indicators and filter
+* Enhance dds image handling
+* Optimize binary image preview</description>
+			<pubDate>Tue, 08 Feb 2022 07:04:50 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.21.99-rc/win-x64.rar" sparkle:version="1.21.99.32246" sparkle:shortVersionString="1.21.99" length="76549901" sparkle:os="windows" type="application/vnd.rar" sparkle:signature="H8B9/4pEtp4WI11co9Di7f0Sn4l4yReWqfnhTfpN4AdrhQP7T79+Gs2bc5YLZPFaA1/LFNkHYI9gfpyrOUFdBw=="/>
 		</item>
 		<item>
-			<title>1.21.94-rc</title>
+			<title>1.21.99-rc</title>
 			<description>## Note
 As of this version Irony supports analyze mode for HOI4. If you see any bugs in how Irony detects any definitions there please report on the issue tracker.
 
 ## Current Release Notes
-* Fix UTF8 handling of mod patch exports
+* Minor fixes
+* Enhance dds image handling
+* Fix showing game images via context menu
+* Optimize binary image preview
+* In case of CTDs ensure that backup options db is generated
 
 ## Release Notes 1.21
 * Update dependencies
@@ -71,9 +93,11 @@ As of this version Irony supports analyze mode for HOI4. If you see any bugs in 
 * Add conflict solver analyze mode only
 * Add option to export hash analysis report to clipboard
 * HOI4 conflict solver analyze support added (hopefully with no parser mapping errors)
-* Conflict solver reset conflicts notifications, indicators and filter</description>
-			<pubDate>Sat, 05 Feb 2022 19:39:39 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.21.94-rc/linux-x64.zip" sparkle:version="1.21.94.30286" sparkle:shortVersionString="1.21.94" length="87885326" sparkle:os="linux" type="application/zip" sparkle:signature="59jdHuXZ5zQMPfT/nxBdYtorwDYrsBUASg8UjEwA4uvNbxUrvzPaOU9dmT3Qv4QF0TB3dbIDgoJ1I3PoFVKVCw=="/>
+* Conflict solver reset conflicts notifications, indicators and filter
+* Enhance dds image handling
+* Optimize binary image preview</description>
+			<pubDate>Tue, 08 Feb 2022 07:04:42 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.21.99-rc/linux-x64.zip" sparkle:version="1.21.99.32246" sparkle:shortVersionString="1.21.99" length="88022704" sparkle:os="linux" type="application/zip" sparkle:signature="lRyLEKhrHhZHhpvvGXraXctMCWZinZWngJmx2+Gcw5bl3LBGU0412vkkUJOc+1UWRsmRujn27VhWvwU1EVnWBA=="/>
 		</item>
 		<item>
 			<title>1.20.46</title>
