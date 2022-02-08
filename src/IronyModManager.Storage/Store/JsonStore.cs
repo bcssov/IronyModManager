@@ -169,11 +169,7 @@ namespace IronyModManager.Storage
             }
 
             File.WriteAllText(tempFilePath, serialized);
-            File.Copy(tempFilePath, filePath, true);
-            if (File.Exists(tempFilePath))
-            {
-                File.Delete(tempFilePath);
-            }
+            File.Move(tempFilePath, filePath, true);
         }
 
         /// <summary>
