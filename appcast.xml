@@ -4,16 +4,12 @@
 		<title>Irony Mod Manager</title>
 		<language>en</language>
 		<item>
-			<title>1.21.99-rc</title>
+			<title>1.21.104-rc</title>
 			<description>## Note
 As of this version Irony supports analyze mode for HOI4. If you see any bugs in how Irony detects any definitions there please report on the issue tracker.
 
 ## Current Release Notes
 * Minor fixes
-* Enhance dds image handling
-* Fix showing game images via context menu
-* Optimize binary image preview
-* In case of CTDs ensure that backup options db is generated
 
 ## Release Notes 1.21
 * Update dependencies
@@ -24,20 +20,16 @@ As of this version Irony supports analyze mode for HOI4. If you see any bugs in 
 * Conflict solver reset conflicts notifications, indicators and filter
 * Enhance dds image handling
 * Optimize binary image preview</description>
-			<pubDate>Tue, 08 Feb 2022 07:04:46 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.21.99-rc/osx-x64.rar" sparkle:version="1.21.99.32246" sparkle:shortVersionString="1.21.99" length="73837910" sparkle:os="osx" type="application/vnd.rar" sparkle:signature="d+LvMwaVRHJqIv8g0S75PIh9r5FzmWAZnubIX4xhPkfEcX4WEgW4MUBB6slbRceX6srYUghEqnvkK0H6wKZCBQ=="/>
+			<pubDate>Tue, 08 Feb 2022 20:36:01 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.21.104-rc/osx-x64.rar" sparkle:version="1.21.104.9573" sparkle:shortVersionString="1.21.104" length="73866636" sparkle:os="osx" type="application/vnd.rar" sparkle:signature="9Aa9iEDldREbEzqy2iJvPiPcan7mhXzAfxSTChODHdrW8znAsRC1uX6Gq5soKMNQVgnaBr8RLu7wdUEmjYSkBg=="/>
 		</item>
 		<item>
-			<title>1.21.99-rc</title>
+			<title>1.21.104-rc</title>
 			<description>## Note
 As of this version Irony supports analyze mode for HOI4. If you see any bugs in how Irony detects any definitions there please report on the issue tracker.
 
 ## Current Release Notes
 * Minor fixes
-* Enhance dds image handling
-* Fix showing game images via context menu
-* Optimize binary image preview
-* In case of CTDs ensure that backup options db is generated
 
 ## Release Notes 1.21
 * Update dependencies
@@ -48,20 +40,16 @@ As of this version Irony supports analyze mode for HOI4. If you see any bugs in 
 * Conflict solver reset conflicts notifications, indicators and filter
 * Enhance dds image handling
 * Optimize binary image preview</description>
-			<pubDate>Tue, 08 Feb 2022 07:04:54 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.21.99-rc/win-x64-setup.rar" sparkle:version="1.21.99.32246" sparkle:shortVersionString="1.21.99" length="63887312" sparkle:os="windows" type="application/vnd.rar" sparkle:signature="Nl/J+n2dU3EPX/FSZcExVmWwlmOx39pr16DYBYs4AjpT1zIZGyim7gF0ML0/D/xRYO+nZSoZmPwm6Fzr71+uDg=="/>
+			<pubDate>Tue, 08 Feb 2022 20:36:10 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.21.104-rc/win-x64-setup.rar" sparkle:version="1.21.104.9573" sparkle:shortVersionString="1.21.104" length="63921289" sparkle:os="windows" type="application/vnd.rar" sparkle:signature="XhGs8J8Or1Cs+7uKEoU5UmhHljcYTz4MbAYtuTa+APssjW2qCYpjHYmWZ5AiJ+rzDLKEBacuNMZ4Ha6A1mrPAg=="/>
 		</item>
 		<item>
-			<title>1.21.99-rc</title>
+			<title>1.21.104-rc</title>
 			<description>## Note
 As of this version Irony supports analyze mode for HOI4. If you see any bugs in how Irony detects any definitions there please report on the issue tracker.
 
 ## Current Release Notes
 * Minor fixes
-* Enhance dds image handling
-* Fix showing game images via context menu
-* Optimize binary image preview
-* In case of CTDs ensure that backup options db is generated
 
 ## Release Notes 1.21
 * Update dependencies
@@ -72,20 +60,16 @@ As of this version Irony supports analyze mode for HOI4. If you see any bugs in 
 * Conflict solver reset conflicts notifications, indicators and filter
 * Enhance dds image handling
 * Optimize binary image preview</description>
-			<pubDate>Tue, 08 Feb 2022 07:04:50 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.21.99-rc/win-x64.rar" sparkle:version="1.21.99.32246" sparkle:shortVersionString="1.21.99" length="76549901" sparkle:os="windows" type="application/vnd.rar" sparkle:signature="H8B9/4pEtp4WI11co9Di7f0Sn4l4yReWqfnhTfpN4AdrhQP7T79+Gs2bc5YLZPFaA1/LFNkHYI9gfpyrOUFdBw=="/>
+			<pubDate>Tue, 08 Feb 2022 20:36:05 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.21.104-rc/win-x64.rar" sparkle:version="1.21.104.9573" sparkle:shortVersionString="1.21.104" length="76578676" sparkle:os="windows" type="application/vnd.rar" sparkle:signature="nqM0Qzx8IMnoUo/UAh7G1hrize8mkWUKLQJVnvlc25um6qQRcOaC+uKpNX/7rMfkLgz2AX9WuHdiB1m3b0V0BA=="/>
 		</item>
 		<item>
-			<title>1.21.99-rc</title>
+			<title>1.21.104-rc</title>
 			<description>## Note
 As of this version Irony supports analyze mode for HOI4. If you see any bugs in how Irony detects any definitions there please report on the issue tracker.
 
 ## Current Release Notes
 * Minor fixes
-* Enhance dds image handling
-* Fix showing game images via context menu
-* Optimize binary image preview
-* In case of CTDs ensure that backup options db is generated
 
 ## Release Notes 1.21
 * Update dependencies
@@ -96,8 +80,8 @@ As of this version Irony supports analyze mode for HOI4. If you see any bugs in 
 * Conflict solver reset conflicts notifications, indicators and filter
 * Enhance dds image handling
 * Optimize binary image preview</description>
-			<pubDate>Tue, 08 Feb 2022 07:04:42 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.21.99-rc/linux-x64.zip" sparkle:version="1.21.99.32246" sparkle:shortVersionString="1.21.99" length="88022704" sparkle:os="linux" type="application/zip" sparkle:signature="lRyLEKhrHhZHhpvvGXraXctMCWZinZWngJmx2+Gcw5bl3LBGU0412vkkUJOc+1UWRsmRujn27VhWvwU1EVnWBA=="/>
+			<pubDate>Tue, 08 Feb 2022 20:35:56 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.21.104-rc/linux-x64.zip" sparkle:version="1.21.104.9573" sparkle:shortVersionString="1.21.104" length="88057827" sparkle:os="linux" type="application/zip" sparkle:signature="hQisj9lwzd1pl41PLH3fKf2za6NHFl74+mNcgjG311GwERZR4P8nPhFbCF4MHtqOLsMU2dd3ZiUb4+/m2CCTCg=="/>
 		</item>
 		<item>
 			<title>1.20.46</title>
