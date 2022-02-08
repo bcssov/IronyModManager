@@ -291,9 +291,8 @@ namespace IronyModManager.Storage
                 if (IsDifferent(data, Database.AppState))
                 {
                     Database.AppState = data;
-                    return true;
                 }
-                return false;
+                return true;
             }
         }
 
@@ -310,9 +309,8 @@ namespace IronyModManager.Storage
                 if (IsDifferent(data, Database.GameSettings))
                 {
                     Database.GameSettings = data;
-                    return true;
                 }
-                return false;
+                return true;
             }
         }
 
@@ -329,9 +327,8 @@ namespace IronyModManager.Storage
                 if (IsDifferent(data, Database.ModCollection))
                 {
                     Database.ModCollection = data;
-                    return true;
                 }
-                return false;
+                return true;
             }
         }
 
@@ -348,9 +345,8 @@ namespace IronyModManager.Storage
                 if (IsDifferent(data, Database.Preferences))
                 {
                     Database.Preferences = data;
-                    return true;
                 }
-                return false;
+                return true;
             }
         }
 
@@ -367,9 +363,8 @@ namespace IronyModManager.Storage
                 if (IsDifferent(data, Database.WindowState))
                 {
                     Database.WindowState = data;
-                    return true;
                 }
-                return false;
+                return true;
             }
         }
 
