@@ -4,7 +4,7 @@
 // Created          : 02-16-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-02-2022
+// Last Modified On : 02-08-2022
 // ***********************************************************************
 // <copyright file="IndexedDefinitions.cs" company="Mario">
 //     Mario
@@ -31,6 +31,11 @@ namespace IronyModManager.Parser.Definitions
     public class IndexedDefinitions : IIndexedDefinitions
     {
         #region Fields
+
+        /// <summary>
+        /// The reset definitions count
+        /// </summary>
+        private readonly HashSet<string> resetDefinitions;
 
         /// <summary>
         /// All file keys
@@ -73,11 +78,6 @@ namespace IronyModManager.Parser.Definitions
         private ConcurrentIndexedList<IHierarchicalDefinitions> mainHierarchalDefinitions;
 
         /// <summary>
-        /// The reset definitions count
-        /// </summary>
-        private int resetDefinitionsCount;
-
-        /// <summary>
         /// The trie
         /// </summary>
         private Trie<IDefinition> trie;
@@ -113,6 +113,7 @@ namespace IronyModManager.Parser.Definitions
             typeKeys = new HashSet<string>();
             allFileKeys = new HashSet<string>();
             directoryKeys = new HashSet<string>();
+            resetDefinitions = new HashSet<string>();
             childHierarchicalDefinitions = new ConcurrentDictionary<string, ConcurrentIndexedList<IHierarchicalDefinitions>>();
             mainHierarchalDefinitions = new ConcurrentIndexedList<IHierarchicalDefinitions>(nameof(IHierarchicalDefinitions.Name));
         }
@@ -156,11 +157,11 @@ namespace IronyModManager.Parser.Definitions
         }
 
         /// <summary>
-        /// Chanes the state of the hierarchical reset.
+        /// Changes the state of the hierarchical reset.
         /// </summary>
         /// <param name="definition">The definition.</param>
         /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
-        public bool ChaneHierarchicalResetState(IDefinition definition)
+        public bool ChangeHierarchicalResetState(IDefinition definition)
         {
             if (useHierarchalMap && definition != null)
             {
@@ -174,14 +175,7 @@ namespace IronyModManager.Parser.Definitions
                         if (child != null)
                         {
                             child.ResetType = definition.ResetType;
-                            if (definition.ResetType != ResetType.None)
-                            {
-                                resetDefinitionsCount--;
-                            }
-                            if (resetDefinitionsCount < 0)
-                            {
-                                resetDefinitionsCount = 0;
-                            }
+                            AddOrRemoveFromResetDefinitions(definition, false);
                             hierarchicalDefinition.ResetType = children.Any(p => p.ResetType != ResetType.None) ? ResetType.Any : ResetType.None;
                             return true;
                         }
@@ -378,7 +372,7 @@ namespace IronyModManager.Parser.Definitions
         /// <returns><c>true</c> if [has reset definitions]; otherwise, <c>false</c>.</returns>
         public bool HasResetDefinitions()
         {
-            return resetDefinitionsCount > 0;
+            return resetDefinitions.Any();
         }
 
         /// <summary>
@@ -427,14 +421,7 @@ namespace IronyModManager.Parser.Definitions
             }
             if (useHierarchalMap)
             {
-                if (definition.ResetType != ResetType.None)
-                {
-                    resetDefinitionsCount--;
-                }
-                if (resetDefinitionsCount < 0)
-                {
-                    resetDefinitionsCount = 0;
-                }
+                AddOrRemoveFromResetDefinitions(definition, false);
             }
             definitions.Remove(definition);
             var hierarchicalDefinition = mainHierarchalDefinitions.GetFirstByNameNoLock(nameof(IHierarchicalDefinitions.Name), ResolveHierarchalParentDirectory(definition));
@@ -509,6 +496,26 @@ namespace IronyModManager.Parser.Definitions
         }
 
         /// <summary>
+        /// Adds the or remove from reset definitions.
+        /// </summary>
+        /// <param name="definition">The definition.</param>
+        /// <param name="add">if set to <c>true</c> [add].</param>
+        private void AddOrRemoveFromResetDefinitions(IDefinition definition, bool add)
+        {
+            if (definition.ResetType != ResetType.None)
+            {
+                if (add)
+                {
+                    resetDefinitions.Add(definition.TypeAndId);
+                }
+                else
+                {
+                    resetDefinitions.Remove(definition.TypeAndId);
+                }
+            }
+        }
+
+        /// <summary>
         /// Maps the pretty print hierarchy.
         /// </summary>
         /// <param name="definition">The definition.</param>
@@ -557,7 +564,7 @@ namespace IronyModManager.Parser.Definitions
             if (definition.ResetType != ResetType.None)
             {
                 child.ResetType = definition.ResetType;
-                resetDefinitionsCount++;
+                AddOrRemoveFromResetDefinitions(definition, true);
             }
             if (child.Mods == null)
             {

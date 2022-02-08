@@ -33,11 +33,11 @@ namespace IronyModManager.Shared.Models
         void AddToMap(IDefinition definition, bool forceIgnoreHierarchical = false);
 
         /// <summary>
-        /// Chanes the state of the hierarchical reset.
+        /// Changes the state of the hierarchical reset.
         /// </summary>
         /// <param name="definition">The definition.</param>
         /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
-        bool ChaneHierarchicalResetState(IDefinition definition);
+        bool ChangeHierarchicalResetState(IDefinition definition);
 
         /// <summary>
         /// Existses the by file.

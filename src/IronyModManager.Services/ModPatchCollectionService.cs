@@ -4,7 +4,7 @@
 // Created          : 05-26-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-07-2022
+// Last Modified On : 02-08-2022
 // ***********************************************************************
 // <copyright file="ModPatchCollectionService.cs" company="Mario">
 //     Mario
@@ -805,7 +805,7 @@ namespace IronyModManager.Services
         {
             var game = GameService.GetSelected();
             double previousProgress = 0;
-            var allowCleanup = conflictResult != null ? conflictResult.Mode != PatchStateMode.ReadOnly : false;
+            var allowCleanup = conflictResult != null && conflictResult.Mode != PatchStateMode.ReadOnly;
             async Task cleanSingleMergeFiles(string directory, string patchName)
             {
                 if (!allowCleanup)
@@ -2084,7 +2084,7 @@ namespace IronyModManager.Services
 
                     // Reset type flag since it was resolved now
                     definition.ResetType = ResetType.None;
-                    conflictResult.ResolvedConflicts.ChaneHierarchicalResetState(definition);
+                    conflictResult.ResolvedConflicts.ChangeHierarchicalResetState(definition);
 
                     var exportResult = false;
                     if (exportPatches.Any())
