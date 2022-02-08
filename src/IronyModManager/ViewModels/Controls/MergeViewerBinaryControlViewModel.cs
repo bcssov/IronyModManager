@@ -4,7 +4,7 @@
 // Created          : 03-25-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-07-2022
+// Last Modified On : 02-08-2022
 // ***********************************************************************
 // <copyright file="MergeViewerBinaryControlViewModel.cs" company="Mario">
 //     Mario
@@ -12,7 +12,6 @@
 // <summary></summary>
 // ***********************************************************************
 using System;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Reactive;
 using System.Reactive.Disposables;
@@ -24,7 +23,6 @@ using IronyModManager.Localization.Attributes;
 using IronyModManager.Services.Common;
 using IronyModManager.Shared;
 using IronyModManager.Shared.Models;
-using Nito.AsyncEx;
 using ReactiveUI;
 using SmartFormat;
 
@@ -50,7 +48,6 @@ namespace IronyModManager.ViewModels.Controls
         /// </summary>
         private readonly ThreadSafeLimitedDictionary<string, IBitmap> imageCache;
 
-
         /// <summary>
         /// The localization manager
         /// </summary>
@@ -65,7 +62,6 @@ namespace IronyModManager.ViewModels.Controls
         /// The mod service
         /// </summary>
         private readonly IModService modService;
-
 
         #endregion Fields
 
@@ -225,28 +221,6 @@ namespace IronyModManager.ViewModels.Controls
         }
 
         /// <summary>
-        /// Get bitmap as an asynchronous operation.
-        /// </summary>
-        /// <param name="definition">The definition.</param>
-        /// <returns>A Task&lt;IBitmap&gt; representing the asynchronous operation.</returns>
-        protected virtual async Task<IBitmap> GetBitmapAsync(IDefinition definition)
-        {
-            IBitmap bitmap = null;
-            var key = ConstructImageCacheKey(definition);
-            if (imageCache.Contains(key))
-            {
-                bitmap = imageCache[key];
-            }
-            else
-            {
-                using var ms = await modService.GetImageStreamAsync(definition.ModName, definition.File, definition.IsFromGame);
-                bitmap = new Bitmap(ms);
-                imageCache.Add(key, bitmap);
-            }
-            return bitmap;
-        }
-
-        /// <summary>
         /// Sets the left.
         /// </summary>
         /// <param name="definition">The definition.</param>
@@ -261,13 +235,23 @@ namespace IronyModManager.ViewModels.Controls
                 {
                     try
                     {
-                        LeftImage = await GetBitmapAsync(definition);
-                        var imageHeight = (LeftImage?.PixelSize.Height).GetValueOrDefault();
-                        var imageWidth = (LeftImage?.PixelSize.Width).GetValueOrDefault();
-                        var info = localizationManager.GetResource(LocalizationResources.Conflict_Solver.ImageInfo);
-                        LeftImageInfo = Smart.Format(info, new { Width = imageWidth, Height = imageHeight });
-                        LeftHeight = imageHeight;
-                        LeftWidth = imageWidth;
+                        var image = await GetBitmapAsync(definition);
+                        if (image != null)
+                        {
+                            LeftImage = image;
+                            var imageHeight = (LeftImage?.PixelSize.Height).GetValueOrDefault();
+                            var imageWidth = (LeftImage?.PixelSize.Width).GetValueOrDefault();
+                            var info = localizationManager.GetResource(LocalizationResources.Conflict_Solver.ImageInfo);
+                            LeftImageInfo = Smart.Format(info, new { Width = imageWidth, Height = imageHeight });
+                            LeftHeight = imageHeight;
+                            LeftWidth = imageWidth;
+                        }
+                        else
+                        {
+                            LeftImageInfo = string.Empty;
+                            LeftImage = null;
+                            LeftHeight = LeftWidth = 0;
+                        }
                     }
                     catch (Exception ex)
                     {
@@ -304,13 +288,23 @@ namespace IronyModManager.ViewModels.Controls
                 {
                     try
                     {
-                        RightImage = await GetBitmapAsync(definition);
-                        var imageHeight = (RightImage?.PixelSize.Height).GetValueOrDefault();
-                        var imageWidth = (RightImage?.PixelSize.Width).GetValueOrDefault();
-                        var info = localizationManager.GetResource(LocalizationResources.Conflict_Solver.ImageInfo);
-                        RightImageInfo = Smart.Format(info, new { Width = imageWidth, Height = imageHeight });
-                        RightHeight = imageHeight;
-                        RightWidth = imageWidth;
+                        var image = await GetBitmapAsync(definition);
+                        if (image != null)
+                        {
+                            RightImage = image;
+                            var imageHeight = (RightImage?.PixelSize.Height).GetValueOrDefault();
+                            var imageWidth = (RightImage?.PixelSize.Width).GetValueOrDefault();
+                            var info = localizationManager.GetResource(LocalizationResources.Conflict_Solver.ImageInfo);
+                            RightImageInfo = Smart.Format(info, new { Width = imageWidth, Height = imageHeight });
+                            RightHeight = imageHeight;
+                            RightWidth = imageWidth;
+                        }
+                        else
+                        {
+                            RightImageInfo = string.Empty;
+                            RightImage = null;
+                            RightHeight = RightWidth = 0;
+                        }
                     }
                     catch (Exception ex)
                     {
@@ -333,6 +327,41 @@ namespace IronyModManager.ViewModels.Controls
         }
 
         /// <summary>
+        /// Constructs the image cache key.
+        /// </summary>
+        /// <param name="definition">The definition.</param>
+        /// <returns>System.String.</returns>
+        protected virtual string ConstructImageCacheKey(IDefinition definition)
+        {
+            return $"{definition.ModName}-{definition.File}-{definition.IsFromGame}";
+        }
+
+        /// <summary>
+        /// Get bitmap as an asynchronous operation.
+        /// </summary>
+        /// <param name="definition">The definition.</param>
+        /// <returns>A Task&lt;IBitmap&gt; representing the asynchronous operation.</returns>
+        protected virtual async Task<IBitmap> GetBitmapAsync(IDefinition definition)
+        {
+            IBitmap bitmap = null;
+            var key = ConstructImageCacheKey(definition);
+            if (imageCache.Contains(key))
+            {
+                bitmap = imageCache[key];
+            }
+            else
+            {
+                using var ms = await modService.GetImageStreamAsync(definition.ModName, definition.File, definition.IsFromGame);
+                if (ms != null)
+                {
+                    bitmap = new Bitmap(ms);
+                    imageCache.Add(key, bitmap);
+                }
+            }
+            return bitmap;
+        }
+
+        /// <summary>
         /// Called when [activated].
         /// </summary>
         /// <param name="disposables">The disposables.</param>
@@ -351,16 +380,6 @@ namespace IronyModManager.ViewModels.Controls
             }).DisposeWith(disposables);
 
             base.OnActivated(disposables);
-        }
-
-        /// <summary>
-        /// Constructs the image cache key.
-        /// </summary>
-        /// <param name="definition">The definition.</param>
-        /// <returns>System.String.</returns>
-        protected virtual string ConstructImageCacheKey(IDefinition definition)
-        {
-            return $"{definition.ModName}-{definition.File}-{definition.IsFromGame}";
         }
 
         #endregion Methods

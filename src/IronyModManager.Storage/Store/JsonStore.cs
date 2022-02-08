@@ -4,7 +4,7 @@
 // Created          : 01-20-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 09-15-2021
+// Last Modified On : 02-08-2022
 // ***********************************************************************
 // <copyright file="JsonStore.cs" company="Mario">
 //     Mario
@@ -74,7 +74,7 @@ namespace IronyModManager.Storage
         /// <summary>
         /// Clears all.
         /// </summary>
-        /// <exception cref="NotSupportedException"></exception>
+        /// <exception cref="System.NotSupportedException"></exception>
         public void ClearAll()
         {
             throw new NotSupportedException();
@@ -84,7 +84,7 @@ namespace IronyModManager.Storage
         /// Clears the data.
         /// </summary>
         /// <param name="id">The identifier.</param>
-        /// <exception cref="NotSupportedException"></exception>
+        /// <exception cref="System.NotSupportedException"></exception>
         public void ClearData(string id)
         {
             throw new NotSupportedException();
@@ -119,7 +119,7 @@ namespace IronyModManager.Storage
         /// Lists the ids.
         /// </summary>
         /// <returns>IEnumerable&lt;System.String&gt;.</returns>
-        /// <exception cref="NotSupportedException"></exception>
+        /// <exception cref="System.NotSupportedException"></exception>
         public IEnumerable<string> ListIds()
         {
             throw new NotSupportedException();
@@ -132,9 +132,10 @@ namespace IronyModManager.Storage
         /// <param name="values">The values.</param>
         public void SetData(string id, IDictionary<string, object> values)
         {
-            string filePath = GetFilePath(id);
+            var filePath = GetFilePath(id);
+            var tempFilePath = filePath + ".tmp";
             var list = values.Select(kvp => new StoreItem() { Name = kvp.Key, Value = kvp.Value, Type = FormatTypeName(kvp.Value) });
-            string serialized = JsonConvert.SerializeObject(list, new JsonSerializerSettings() { Formatting = Formatting.None, TypeNameHandling = TypeNameHandling.None });
+            var serialized = JsonConvert.SerializeObject(list, new JsonSerializerSettings() { Formatting = Formatting.None, TypeNameHandling = TypeNameHandling.None });
 
             string directory = Path.GetDirectoryName(filePath);
             if (!Directory.Exists(directory))
@@ -142,7 +143,12 @@ namespace IronyModManager.Storage
                 Directory.CreateDirectory(directory);
             }
 
-            File.WriteAllText(filePath, serialized);
+            File.WriteAllText(tempFilePath, serialized);
+            File.Copy(tempFilePath, filePath, true);
+            if (File.Exists(tempFilePath))
+            {
+                File.Delete(tempFilePath);
+            }
         }
 
         /// <summary>
