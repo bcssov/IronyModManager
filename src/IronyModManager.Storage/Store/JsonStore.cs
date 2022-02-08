@@ -97,20 +97,44 @@ namespace IronyModManager.Storage
         /// <returns>IDictionary&lt;System.String, System.Object&gt;.</returns>
         public IDictionary<string, object> GetData(string id)
         {
-            string filePath = GetFilePath(id, true);
-            List<StoreItem> storeItems = null;
-            if (File.Exists(filePath))
+            static List<StoreItem> readItems(string path)
             {
-                try
+                List<StoreItem> items = null;
+                if (File.Exists(path))
                 {
-                    var fileContents = File.ReadAllText(filePath);
-                    storeItems = JsonConvert.DeserializeObject<List<StoreItem>>(fileContents, new StoreConverter());
+                    try
+                    {
+                        var fileContents = File.ReadAllText(path);
+                        items = JsonConvert.DeserializeObject<List<StoreItem>>(fileContents, new StoreConverter());
+                    }
+                    catch { }
                 }
-                catch { }
-            }
 
-            if (storeItems == null)
-                storeItems = new List<StoreItem>();
+                if (items == null)
+                {
+                    items = new List<StoreItem>();
+                }
+                return items;
+            }
+            List<StoreItem> storeItems;
+
+            var filePath = GetFilePath(id, true);
+            var tempFilePath = GetTempPath(filePath);
+            var diskItems = readItems(filePath);
+            var tempDiskItems = readItems(tempFilePath);
+
+            var diskDateItem = diskItems.FirstOrDefault(p => p.Type == Store.Constants.StoreDateId);
+            var tempDiskDateItem = tempDiskItems.FirstOrDefault(p => p.Type == Store.Constants.StoreDateId);
+            var diskDate = diskDateItem != null ? (DateTime)diskDateItem.Value : DateTime.MinValue;
+            var tempDiskDate = tempDiskDateItem != null ? (DateTime)tempDiskDateItem.Value : DateTime.MinValue;
+            if (tempDiskDate > diskDate)
+            {
+                storeItems = tempDiskItems.Where(p => p != tempDiskDateItem).ToList();
+            }
+            else
+            {
+                storeItems = diskItems.Where(p => p != diskDateItem).ToList();
+            }
 
             return storeItems.ToDictionary(item => item.Name, item => item.Value);
         }
@@ -133,8 +157,9 @@ namespace IronyModManager.Storage
         public void SetData(string id, IDictionary<string, object> values)
         {
             var filePath = GetFilePath(id);
-            var tempFilePath = filePath + ".tmp";
-            var list = values.Select(kvp => new StoreItem() { Name = kvp.Key, Value = kvp.Value, Type = FormatTypeName(kvp.Value) });
+            var tempFilePath = GetTempPath(filePath);
+            var list = values.Select(kvp => new StoreItem() { Name = kvp.Key, Value = kvp.Value, Type = FormatTypeName(kvp.Value) }).ToList();
+            list.Add(new StoreItem() { Name = Store.Constants.StoreDateId, Type = Store.Constants.StoreDateId, Value = DateTime.UtcNow });
             var serialized = JsonConvert.SerializeObject(list, new JsonSerializerSettings() { Formatting = Formatting.None, TypeNameHandling = TypeNameHandling.None });
 
             string directory = Path.GetDirectoryName(filePath);
@@ -180,6 +205,16 @@ namespace IronyModManager.Storage
                 return $"{nameof(IEnumerable)}{Store.Constants.EnumerableOpenTag}{string.Join(Store.Constants.Dot, names)}{Store.Constants.EnumerableCloseTag}";
             }
             return type.FullName;
+        }
+
+        /// <summary>
+        /// Gets the temporary path.
+        /// </summary>
+        /// <param name="filePath">The file path.</param>
+        /// <returns>System.String.</returns>
+        private static string GetTempPath(string filePath)
+        {
+            return $"{filePath}.tmp";
         }
 
         /// <summary>
@@ -249,7 +284,7 @@ namespace IronyModManager.Storage
                         var dbs = new List<StorageItem>();
                         foreach (var item in Directory.EnumerateFiles(root, $"*{Shared.Constants.JsonExtension}"))
                         {
-                            if (item.Contains("_", StringComparison.OrdinalIgnoreCase))
+                            if (item.Contains('_', StringComparison.OrdinalIgnoreCase))
                             {
                                 var versionData = item.Split("_", StringSplitOptions.RemoveEmptyEntries)[1].Replace(Shared.Constants.JsonExtension, string.Empty).Trim();
                                 if (Version.TryParse(versionData, out var parsedVersion))

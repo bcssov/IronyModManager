@@ -126,6 +126,12 @@ namespace IronyModManager.ViewModels.Controls
         public virtual double LeftWidth { get; protected set; }
 
         /// <summary>
+        /// Gets or sets a value indicating whether [read only].
+        /// </summary>
+        /// <value><c>true</c> if [read only]; otherwise, <c>false</c>.</value>
+        public virtual bool ReadOnly { get; protected set; }
+
+        /// <summary>
         /// Gets or sets the height of the right.
         /// </summary>
         /// <value>The height of the right.</value>
@@ -271,6 +277,15 @@ namespace IronyModManager.ViewModels.Controls
             }
 
             Task.Run(() => parseImage(definition).ConfigureAwait(false)).ConfigureAwait(false);
+        }
+
+        /// <summary>
+        /// Sets the parameters.
+        /// </summary>
+        /// <param name="readOnly">if set to <c>true</c> [read only].</param>
+        public virtual void SetParameters(bool readOnly)
+        {
+            ReadOnly = readOnly;
         }
 
         /// <summary>
