@@ -4,7 +4,7 @@
 // Created          : 03-31-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-02-2022
+// Last Modified On : 02-09-2022
 // ***********************************************************************
 // <copyright file="ModPatchExporter.cs" company="Mario">
 //     Mario
@@ -17,6 +17,7 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using IronyModManager.DI;
 using IronyModManager.IO.Common;
@@ -107,6 +108,11 @@ namespace IronyModManager.IO.Mods
         /// The reader
         /// </summary>
         private readonly IReader reader;
+
+        /// <summary>
+        /// The saving token
+        /// </summary>
+        private CancellationTokenSource savingToken;
 
         /// <summary>
         /// The write counter
@@ -786,7 +792,12 @@ namespace IronyModManager.IO.Mods
             cachedItem.PatchState = model;
             cache.Set(new CacheAddParameters<CachedState>() { Key = CacheStateKey, Value = cachedItem, Region = CacheStateRegion });
 
-            WriteStateInBackground(model, modifiedHistory, externalCode, path).ConfigureAwait(false);
+            if (savingToken != null)
+            {
+                savingToken.Cancel();
+            }
+            savingToken = new CancellationTokenSource();
+            WriteStateInBackground(model, modifiedHistory, externalCode, path, savingToken.Token).ConfigureAwait(false);
             return true;
         }
 
@@ -892,11 +903,17 @@ namespace IronyModManager.IO.Mods
         /// <param name="modifiedHistory">The modified history.</param>
         /// <param name="externalCode">The external code.</param>
         /// <param name="path">The path.</param>
+        /// <param name="cancellationToken">The cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>System.Threading.Tasks.Task.</returns>
-        private async Task WriteStateInBackground(IPatchState model, IEnumerable<IDefinition> modifiedHistory, HashSet<string> externalCode, string path)
+        private async Task WriteStateInBackground(IPatchState model, IEnumerable<IDefinition> modifiedHistory, HashSet<string> externalCode, string path, CancellationToken cancellationToken)
         {
             writeCounter++;
-            using var mutex = await writeLock.LockAsync();
+            using var ctr = cancellationToken.Register(() =>
+            {
+                writeCounter--;
+                messageBus.PublishAsync(new WritingStateOperationEvent(writeCounter <= 0)).ConfigureAwait(false);
+            });
+            using var mutex = await writeLock.LockAsync(cancellationToken);
             await messageBus.PublishAsync(new WritingStateOperationEvent(writeCounter <= 0));
             var statePath = Path.Combine(path, StateName);
             var backupPath = Path.Combine(path, StateBackup);
@@ -904,6 +921,10 @@ namespace IronyModManager.IO.Mods
 
             await Task.Run(async () =>
             {
+                if (cancellationToken.IsCancellationRequested)
+                {
+                    return;
+                }
                 var retry = new RetryStrategy();
                 var patchState = DIResolver.Get<IPatchState>();
                 MapPatchState(model, patchState, true);
@@ -985,7 +1006,7 @@ namespace IronyModManager.IO.Mods
                 writeCounter--;
                 await messageBus.PublishAsync(new WritingStateOperationEvent(writeCounter <= 0));
                 mutex.Dispose();
-            }).ConfigureAwait(false);
+            }, CancellationToken.None).ConfigureAwait(false);
         }
 
         #endregion Methods

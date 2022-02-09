@@ -4,7 +4,7 @@
 // Created          : 03-18-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-08-2022
+// Last Modified On : 02-09-2022
 // ***********************************************************************
 // <copyright file="MainConflictSolverViewModel.cs" company="Mario">
 //     Mario
@@ -98,9 +98,19 @@ namespace IronyModManager.ViewModels
         private readonly INotificationAction notificationAction;
 
         /// <summary>
+        /// The cached invalids
+        /// </summary>
+        private IHierarchicalDefinitions cachedInvalids;
+
+        /// <summary>
         /// The filtering conflicts
         /// </summary>
         private bool filteringConflicts = false;
+
+        /// <summary>
+        /// The invalids checked
+        /// </summary>
+        private bool invalidsChecked;
 
         /// <summary>
         /// The take left binary
@@ -600,11 +610,11 @@ namespace IronyModManager.ViewModels
         }
 
         /// <summary>
-        /// Filters the hierarchal conflicts asynchronous.
+        /// Filter hierarchal conflicts as an asynchronous operation.
         /// </summary>
         /// <param name="conflictResult">The conflict result.</param>
         /// <param name="selectedDefinitionOverride">The selected definition override.</param>
-        /// <returns>Task.</returns>
+        /// <returns>A Task representing the asynchronous operation.</returns>
         protected virtual async Task FilterHierarchalConflictsAsync(IConflictResult conflictResult, IHierarchicalDefinitions selectedDefinitionOverride = null)
         {
             while (filteringConflicts)
@@ -658,64 +668,77 @@ namespace IronyModManager.ViewModels
                     }
                 }
                 conflicts.RemoveAll(conflicts.Where(p => p.Children == null || p.Children.Count == 0).ToList());
-                var invalid = conflictResult.AllConflicts.GetByValueType(ValueType.Invalid);
-                if (invalid?.Count() > 0)
+                if (!invalidsChecked)
                 {
-                    var invalidDef = DIResolver.Get<IHierarchicalDefinitions>();
-                    invalidDef.Name = Invalid;
-                    invalidDef.Key = InvalidKey;
-                    var children = new List<IHierarchicalDefinitions>();
-                    foreach (var item in invalid)
+                    invalidsChecked = true;
+                    var invalid = conflictResult.AllConflicts.GetByValueType(ValueType.Invalid);
+                    if (invalid?.Count() > 0)
                     {
-                        var invalidChild = DIResolver.Get<IHierarchicalDefinitions>();
-                        invalidChild.Name = item.File;
-                        var message = item.ErrorColumn.HasValue || item.ErrorLine.HasValue ?
-                            localizationManager.GetResource(LocalizationResources.Conflict_Solver.InvalidConflicts.Error) :
-                            localizationManager.GetResource(LocalizationResources.Conflict_Solver.InvalidConflicts.ErrorNoLine);
-                        invalidChild.Key = Smart.Format(message, new
+                        var invalidDef = DIResolver.Get<IHierarchicalDefinitions>();
+                        invalidDef.Name = Invalid;
+                        invalidDef.Key = InvalidKey;
+                        var children = new List<IHierarchicalDefinitions>();
+                        foreach (var item in invalid)
                         {
-                            item.ModName,
-                            Line = item.ErrorLine,
-                            Column = item.ErrorColumn,
-                            Environment.NewLine,
-                            Message = item.ErrorMessage,
-                            item.File
-                        });
-                        invalidChild.AdditionalData = item;
-                        children.Add(invalidChild);
+                            var invalidChild = DIResolver.Get<IHierarchicalDefinitions>();
+                            invalidChild.Name = item.File;
+                            var message = item.ErrorColumn.HasValue || item.ErrorLine.HasValue ?
+                                localizationManager.GetResource(LocalizationResources.Conflict_Solver.InvalidConflicts.Error) :
+                                localizationManager.GetResource(LocalizationResources.Conflict_Solver.InvalidConflicts.ErrorNoLine);
+                            invalidChild.Key = Smart.Format(message, new
+                            {
+                                item.ModName,
+                                Line = item.ErrorLine,
+                                Column = item.ErrorColumn,
+                                Environment.NewLine,
+                                Message = item.ErrorMessage,
+                                item.File
+                            });
+                            invalidChild.AdditionalData = item;
+                            children.Add(invalidChild);
+                        }
+                        invalidDef.Children = children;
+                        cachedInvalids = invalidDef;
+                        conflicts.Add(invalidDef);
                     }
-                    invalidDef.Children = children;
-                    conflicts.Add(invalidDef);
+                }
+                if (cachedInvalids != null)
+                {
+                    conflicts.Add(cachedInvalids);
                 }
                 HierarchalConflicts = conflicts;
                 NumberOfConflictsCaption = Smart.Format(localizationManager.GetResource(LocalizationResources.Conflict_Solver.ConflictCount), new { Count = conflicts.Where(p => p.Key != InvalidKey).SelectMany(p => p.Children).Count() });
+                var selectedParentConflict = SelectedParentConflict;
+                int? previousConflictIndex = null;
                 if (HierarchalConflicts.Any() && SelectedParentConflict == null)
                 {
-                    SelectedParentConflict = HierarchalConflicts.FirstOrDefault();
+                    selectedParentConflict = HierarchalConflicts.FirstOrDefault();
                 }
-                if (SelectedParentConflict != null)
+                if (selectedParentConflict != null)
                 {
-                    var conflictName = SelectedParentConflict.Name;
-                    SelectedParentConflict = null;
+                    var conflictName = selectedParentConflict.Name;
+                    selectedParentConflict = null;
                     var newSelected = HierarchalConflicts.FirstOrDefault(p => p.Name.Equals(conflictName));
                     if (newSelected != null)
                     {
-                        PreviousConflictIndex = index;
+                        previousConflictIndex = index;
                         if (selectedDefinitionOverride != null)
                         {
                             var overrideMatch = newSelected.Children.FirstOrDefault(p => p.Key.Equals(selectedDefinitionOverride.Key));
                             if (overrideMatch != null)
                             {
-                                PreviousConflictIndex = newSelected.Children.ToList().IndexOf(overrideMatch);
+                                previousConflictIndex = newSelected.Children.ToList().IndexOf(overrideMatch);
                             }
                         }
-                        if (PreviousConflictIndex.GetValueOrDefault() > (newSelected.Children.Count - 1))
+                        if (previousConflictIndex.GetValueOrDefault() > (newSelected.Children.Count - 1))
                         {
-                            PreviousConflictIndex = newSelected.Children.Count - 1;
+                            previousConflictIndex = newSelected.Children.Count - 1;
                         }
-                        SelectedParentConflict = newSelected;
+                        selectedParentConflict = newSelected;
                     }
                 }
+                PreviousConflictIndex = previousConflictIndex;
+                SelectedParentConflict = selectedParentConflict;
             }
             else
             {
@@ -744,6 +767,8 @@ namespace IronyModManager.ViewModels
                 Conflicts = null;
                 SelectedModsOrder = null;
                 SelectedModCollection = null;
+                cachedInvalids = null;
+                invalidsChecked = false;
                 var args = new NavigationEventArgs()
                 {
                     State = NavigationState.Main
@@ -1159,9 +1184,9 @@ namespace IronyModManager.ViewModels
                     SyncCode(patchDefinition);
                     try
                     {
-                        if (resolve ?
+                        if (await Task.Run(async () => resolve ?
                             await modPatchCollectionService.ApplyModPatchAsync(Conflicts, patchDefinition, SelectedModCollection.Name) :
-                            await modPatchCollectionService.IgnoreModPatchAsync(Conflicts, patchDefinition, SelectedModCollection.Name))
+                            await modPatchCollectionService.IgnoreModPatchAsync(Conflicts, patchDefinition, SelectedModCollection.Name)))
                         {
                             await FilterHierarchalConflictsAsync(Conflicts);
                             IHierarchicalDefinitions selectedConflict = null;

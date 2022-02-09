@@ -4,7 +4,7 @@
 // Created          : 02-16-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-08-2022
+// Last Modified On : 02-09-2022
 // ***********************************************************************
 // <copyright file="IndexedDefinitions.cs" company="Mario">
 //     Mario
@@ -31,11 +31,6 @@ namespace IronyModManager.Parser.Definitions
     public class IndexedDefinitions : IIndexedDefinitions
     {
         #region Fields
-
-        /// <summary>
-        /// The reset definitions count
-        /// </summary>
-        private readonly HashSet<string> resetDefinitions;
 
         /// <summary>
         /// All file keys
@@ -76,6 +71,11 @@ namespace IronyModManager.Parser.Definitions
         /// The main hierarchal definitions
         /// </summary>
         private ConcurrentIndexedList<IHierarchicalDefinitions> mainHierarchalDefinitions;
+
+        /// <summary>
+        /// The reset definitions count
+        /// </summary>
+        private HashSet<string> resetDefinitions;
 
         /// <summary>
         /// The trie
@@ -163,7 +163,7 @@ namespace IronyModManager.Parser.Definitions
         /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
         public bool ChangeHierarchicalResetState(IDefinition definition)
         {
-            if (useHierarchalMap && definition != null)
+            if (definition != null)
             {
                 var parentDirectoryCI = ResolveHierarchalParentDirectory(definition);
                 var hierarchicalDefinition = mainHierarchalDefinitions.GetFirstByNameNoLock(nameof(IHierarchicalDefinitions.Name), parentDirectoryCI);
@@ -213,6 +213,8 @@ namespace IronyModManager.Parser.Definitions
             mainHierarchalDefinitions.Clear();
             mainHierarchalDefinitions = null;
             trie = null;
+            resetDefinitions.Clear();
+            resetDefinitions = null;
         }
 
         /// <summary>
@@ -419,10 +421,7 @@ namespace IronyModManager.Parser.Definitions
             {
                 gameDefinitionsCount = 0;
             }
-            if (useHierarchalMap)
-            {
-                AddOrRemoveFromResetDefinitions(definition, false);
-            }
+            AddOrRemoveFromResetDefinitions(definition, false);
             definitions.Remove(definition);
             var hierarchicalDefinition = mainHierarchalDefinitions.GetFirstByNameNoLock(nameof(IHierarchicalDefinitions.Name), ResolveHierarchalParentDirectory(definition));
             if (hierarchicalDefinition != null)
@@ -434,11 +433,16 @@ namespace IronyModManager.Parser.Definitions
                     {
                         children.Remove(child);
                     }
-                    hierarchicalDefinition.ResetType = children.Any(p => p.ResetType != ResetType.None) ? ResetType.Any : ResetType.None;
+                    bool removed = false;
                     if (!children.Select(p => p).Any())
                     {
+                        removed = true;
                         childHierarchicalDefinitions.TryRemove(hierarchicalDefinition.Name, out _);
                         mainHierarchalDefinitions.Remove(hierarchicalDefinition);
+                    }
+                    if (!removed)
+                    {
+                        hierarchicalDefinition.ResetType = children.Any() && children.Any(p => p.ResetType != ResetType.None) ? ResetType.Any : ResetType.None;
                     }
                 }
             }
@@ -531,10 +535,6 @@ namespace IronyModManager.Parser.Definitions
                 childHierarchicalDefinitions.TryAdd(parentDirectoryCI, new ConcurrentIndexedList<IHierarchicalDefinitions>(nameof(IHierarchicalDefinitions.Name)));
                 shouldAdd = true;
             }
-            if (definition.ResetType != ResetType.None)
-            {
-                hierarchicalDefinition.ResetType = ResetType.Any;
-            }
             bool exists = false;
             IHierarchicalDefinitions child = null;
             if (childHierarchicalDefinitions.TryGetValue(hierarchicalDefinition.Name, out var children))
@@ -564,6 +564,7 @@ namespace IronyModManager.Parser.Definitions
             if (definition.ResetType != ResetType.None)
             {
                 child.ResetType = definition.ResetType;
+                hierarchicalDefinition.ResetType = ResetType.Any;
                 AddOrRemoveFromResetDefinitions(definition, true);
             }
             if (child.Mods == null)
