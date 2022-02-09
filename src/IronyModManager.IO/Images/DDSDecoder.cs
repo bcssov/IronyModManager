@@ -4,7 +4,7 @@
 // Created          : 02-17-2021
 //
 // Last Modified By : Mario
-// Last Modified On : 02-08-2022
+// Last Modified On : 02-09-2022
 // ***********************************************************************
 // <copyright file="DDSDecoder.cs" company="Mario">
 //     Mario
@@ -55,18 +55,12 @@ namespace IronyModManager.IO.Images
                 var front = cubemapTexture.PositiveZ.MipMaps.FirstOrDefault().GetImage();
                 var back = cubemapTexture.NegativeZ.MipMaps.FirstOrDefault().GetImage();
                 var image = GetCubeMap(right, left, top, bottom, front, back);
-                if (image != null)
-                {
-                    return Task.FromResult(image);
-                }
+                return Task.FromResult(image);
             }
             else if (texture is FlatTexture flatTexture)
             {
                 var image = flatTexture.MipMaps.FirstOrDefault().GetImage();
-                if (image != null)
-                {
-                    return Task.FromResult(image);
-                }
+                return Task.FromResult(image);
             }
 
             return Task.FromResult((Image)null);
