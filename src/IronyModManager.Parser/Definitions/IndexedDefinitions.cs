@@ -349,14 +349,15 @@ namespace IronyModManager.Parser.Definitions
         /// <returns>IEnumerable&lt;IHierarchicalDefinitions&gt;.</returns>
         public IEnumerable<IHierarchicalDefinitions> GetHierarchicalDefinitions()
         {
-            foreach (var item in mainHierarchalDefinitions)
+            var hierarchicalDefinitions = CopyHierarchicalDefinition(mainHierarchalDefinitions);
+            foreach (var item in hierarchicalDefinitions)
             {
                 if (childHierarchicalDefinitions.TryGetValue(item.Name, out var value))
                 {
-                    item.Children = value.Select(p => p).OrderBy(p => p.Name).ToHashSet();
+                    item.Children = CopyHierarchicalDefinition(value.Select(p => p).OrderBy(p => p.Name).ToHashSet()).ToHashSet();
                 }
             }
-            return mainHierarchalDefinitions.Select(p => p).OrderBy(p => p.Name).ToHashSet();
+            return hierarchicalDefinitions.Select(p => p).OrderBy(p => p.Name).ToHashSet();
         }
 
         /// <summary>
@@ -517,6 +518,29 @@ namespace IronyModManager.Parser.Definitions
                     resetDefinitions.Remove(definition.TypeAndId);
                 }
             }
+        }
+
+        /// <summary>
+        /// Copies the hierarchical definition.
+        /// </summary>
+        /// <param name="source">The source.</param>
+        /// <returns>IEnumerable&lt;IHierarchicalDefinitions&gt;.</returns>
+        private IEnumerable<IHierarchicalDefinitions> CopyHierarchicalDefinition(IEnumerable<IHierarchicalDefinitions> source)
+        {
+            var result = new HashSet<IHierarchicalDefinitions>();
+            foreach (var item in source)
+            {
+                var copy = DIResolver.Get<IHierarchicalDefinitions>();
+                copy.Name = item.Name;
+                copy.Mods = item.Mods;
+                copy.AdditionalData = item.AdditionalData;
+                item.FileNames.ToList().ForEach(f => copy.FileNames.Add(f));
+                copy.ResetType = item.ResetType;
+                copy.Key = item.Key;
+                copy.NonGameDefinitions = item.NonGameDefinitions;
+                result.Add(copy);
+            }
+            return result;
         }
 
         /// <summary>
