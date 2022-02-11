@@ -4,7 +4,7 @@
 // Created          : 01-11-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-08-2022
+// Last Modified On : 02-11-2022
 // ***********************************************************************
 // <copyright file="Storage.cs" company="Mario">
 //     Mario
@@ -391,7 +391,6 @@ namespace IronyModManager.Storage
             if (compareLogic == null)
             {
                 compareLogic = new CompareLogic();
-                compareLogic.Config.IgnoreCollectionOrder = true;
                 compareLogic.Config.IgnoreConcreteTypes = true;
                 compareLogic.Config.IgnoreObjectTypes = true;
             }

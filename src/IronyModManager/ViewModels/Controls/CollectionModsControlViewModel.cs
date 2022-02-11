@@ -4,7 +4,7 @@
 // Created          : 03-03-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-08-2022
+// Last Modified On : 02-11-2022
 // ***********************************************************************
 // <copyright file="CollectionModsControlViewModel.cs" company="Mario">
 //     Mario
@@ -1312,6 +1312,7 @@ namespace IronyModManager.ViewModels.Controls
                 if (gameService.GetSelected() != null)
                 {
                     EnteringNewCollection = true;
+                    MessageBus.Publish(new AllowEnterHotKeysEvent(true));
                     AddNewCollection.NewCollectionName = string.Empty;
                     AddNewCollection.RenamingCollection = null;
                 }
@@ -1358,6 +1359,7 @@ namespace IronyModManager.ViewModels.Controls
                             LoadModCollections();
                             SaveState();
                             skipModCollectionSave = EnteringNewCollection = false;
+                            MessageBus.Publish(new AllowEnterHotKeysEvent(false));
                             string successTitle;
                             string successMessage;
                             if (AddNewCollection.RenamingCollection != null)
@@ -1392,6 +1394,7 @@ namespace IronyModManager.ViewModels.Controls
                             break;
 
                         case CommandState.NotExecuted:
+                            MessageBus.Publish(new AllowEnterHotKeysEvent(false));
                             EnteringNewCollection = false;
                             break;
 
@@ -1441,6 +1444,7 @@ namespace IronyModManager.ViewModels.Controls
                     if (s.Result == ModifyAction.Rename)
                     {
                         EnteringNewCollection = true;
+                        MessageBus.Publish(new AllowEnterHotKeysEvent(true));
                         AddNewCollection.RenamingCollection = SelectedModCollection;
                         AddNewCollection.NewCollectionName = SelectedModCollection.Name;
                     }
@@ -1475,6 +1479,7 @@ namespace IronyModManager.ViewModels.Controls
                             LoadModCollections();
                             SaveState();
                             skipModCollectionSave = EnteringNewCollection = false;
+                            MessageBus.Publish(new AllowEnterHotKeysEvent(false));
                             var existsTitle = localizationManager.GetResource(LocalizationResources.Notifications.CollectionDuplicated.Title);
                             var existsMessage = localizationManager.GetResource(LocalizationResources.Notifications.CollectionDuplicated.Message);
                             notificationAction.ShowNotification(existsTitle, existsMessage, NotificationType.Success);

@@ -4,7 +4,7 @@
 // Created          : 02-17-2021
 //
 // Last Modified By : Mario
-// Last Modified On : 02-18-2021
+// Last Modified On : 02-11-2022
 // ***********************************************************************
 // <copyright file="IHotkeyManager.cs" company="Mario">
 //     Mario
@@ -25,6 +25,12 @@ namespace IronyModManager.Implementation.Hotkey
     public interface IHotkeyManager
     {
         #region Methods
+
+        /// <summary>
+        /// Gets the enter keys.
+        /// </summary>
+        /// <returns>IReadOnlyCollection&lt;System.String&gt;.</returns>
+        IReadOnlyCollection<string> GetEnterKeys();
 
         /// <summary>
         /// Gets the keys.

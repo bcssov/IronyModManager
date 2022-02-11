@@ -4,7 +4,7 @@
 // Created          : 01-11-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 09-16-2021
+// Last Modified On : 02-11-2022
 // ***********************************************************************
 // <copyright file="DIPackage.Implementations.cs" company="Mario">
 //     Mario
@@ -89,6 +89,7 @@ namespace IronyModManager.DI
             container.Register<ModExportProgressHandler>(SimpleInjector.Lifestyle.Singleton);
             container.Register<IResourceLoader, ResourceLoader>();
             container.Register<IScrollState, ScrollState>(SimpleInjector.Lifestyle.Singleton);
+            container.Register<AllowEnterHotKeysHandler>(SimpleInjector.Lifestyle.Singleton);
         }
 
         #endregion Methods

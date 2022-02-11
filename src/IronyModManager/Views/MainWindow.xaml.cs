@@ -4,7 +4,7 @@
 // Created          : 01-10-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 05-31-2021
+// Last Modified On : 02-11-2022
 // ***********************************************************************
 // <copyright file="MainWindow.xaml.cs" company="Mario">
 //     Mario
@@ -13,6 +13,7 @@
 // ***********************************************************************
 
 using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Reactive.Disposables;
@@ -48,6 +49,16 @@ namespace IronyModManager.Views
         #region Fields
 
         /// <summary>
+        /// The enter key gestures
+        /// </summary>
+        private Dictionary<string, KeyGesture> enterKeyGestures;
+
+        /// <summary>
+        /// The hotkey gestures
+        /// </summary>
+        private Dictionary<string, KeyGesture> hotkeyGestures;
+
+        /// <summary>
         /// The prevent shutdown
         /// </summary>
         private bool preventShutdown = false;
@@ -80,6 +91,42 @@ namespace IronyModManager.Views
         #endregion Constructors
 
         #region Methods
+
+        /// <summary>
+        /// Gets the enter key gestures.
+        /// </summary>
+        /// <returns>Dictionary&lt;System.String, KeyGesture&gt;.</returns>
+        protected virtual Dictionary<string, KeyGesture> GetEnterKeyGestures()
+        {
+            if (enterKeyGestures == null)
+            {
+                enterKeyGestures = new Dictionary<string, KeyGesture>();
+                var manager = DIResolver.Get<IHotkeyManager>();
+                foreach (var item in manager.GetEnterKeys())
+                {
+                    enterKeyGestures.Add(item, KeyGesture.Parse(item));
+                }
+            }
+            return enterKeyGestures;
+        }
+
+        /// <summary>
+        /// Gets the hot key gestures.
+        /// </summary>
+        /// <returns>Dictionary&lt;System.String, KeyGesture&gt;.</returns>
+        protected virtual Dictionary<string, KeyGesture> GetHotKeyGestures()
+        {
+            if (hotkeyGestures == null)
+            {
+                hotkeyGestures = new Dictionary<string, KeyGesture>();
+                var manager = DIResolver.Get<IHotkeyManager>();
+                foreach (var item in manager.GetKeys())
+                {
+                    hotkeyGestures.Add(item, KeyGesture.Parse(item));
+                }
+            }
+            return hotkeyGestures;
+        }
 
         /// <summary>
         /// Handles the closing.
@@ -118,20 +165,37 @@ namespace IronyModManager.Views
         }
 
         /// <summary>
-        /// Initializes the hotkeys.
+        /// Initializes the enter hot keys.
         /// </summary>
-        protected virtual void InitializeHotkeys()
+        protected virtual void InitializeEnterHotKeys()
         {
-            var manager = DIResolver.Get<IHotkeyManager>();
-            KillHotkeys();
-            foreach (var item in manager.GetKeys())
+            KillHotkeys(GetEnterKeyGestures());
+            foreach (var item in GetEnterKeyGestures())
             {
                 var vm = ViewModel;
                 KeyBindings.Add(new KeyBinding()
                 {
                     Command = vm.RegisterHotkeyCommand,
-                    CommandParameter = item,
-                    Gesture = KeyGesture.Parse(item)
+                    CommandParameter = item.Key,
+                    Gesture = item.Value
+                });
+            }
+        }
+
+        /// <summary>
+        /// Initializes the hotkeys.
+        /// </summary>
+        protected virtual void InitializeHotKeys()
+        {
+            KillHotkeys(GetHotKeyGestures());
+            foreach (var item in GetHotKeyGestures())
+            {
+                var vm = ViewModel;
+                KeyBindings.Add(new KeyBinding()
+                {
+                    Command = vm.RegisterHotkeyCommand,
+                    CommandParameter = item.Key,
+                    Gesture = item.Value
                 });
             }
         }
@@ -195,9 +259,15 @@ namespace IronyModManager.Views
         /// <summary>
         /// Kills the hotkeys.
         /// </summary>
-        protected virtual void KillHotkeys()
+        /// <param name="hotkeys">The hotkeys.</param>
+        protected virtual void KillHotkeys(Dictionary<string, KeyGesture> hotkeys)
         {
-            KeyBindings.Clear();
+            var enterHotKeys = GetEnterKeyGestures();
+            var enterBindings = KeyBindings.Where(p => hotkeys.ContainsValue(p.Gesture)).ToList();
+            foreach (var item in enterBindings)
+            {
+                KeyBindings.Remove(item);
+            }
         }
 
         /// <summary>
@@ -226,7 +296,7 @@ namespace IronyModManager.Views
 
             this.WhenAnyValue(v => v.ViewModel.RegisterHotkeyCommand).Subscribe(s =>
             {
-                InitializeHotkeys();
+                InitializeHotKeys();
             }).DisposeWith(disposables);
 
             var hotkeySuspendHandler = DIResolver.Get<SuspendHotkeysHandler>();
@@ -236,11 +306,27 @@ namespace IronyModManager.Views
                 {
                     if (s.SuspendHotkeys)
                     {
-                        KillHotkeys();
+                        KillHotkeys(GetHotKeyGestures());
                     }
                     else
                     {
-                        InitializeHotkeys();
+                        InitializeHotKeys();
+                    }
+                });
+            }).DisposeWith(disposables);
+
+            var allowEnterHotkeyHandler = DIResolver.Get<AllowEnterHotKeysHandler>();
+            allowEnterHotkeyHandler.Subscribe(s =>
+            {
+                Dispatcher.UIThread.SafeInvoke(() =>
+                {
+                    if (!s.AllowEnter)
+                    {
+                        KillHotkeys(GetEnterKeyGestures());
+                    }
+                    else
+                    {
+                        InitializeEnterHotKeys();
                     }
                 });
             }).DisposeWith(disposables);
