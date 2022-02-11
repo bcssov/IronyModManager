@@ -4,14 +4,14 @@
 		<title>Irony Mod Manager</title>
 		<language>en</language>
 		<item>
-			<title>1.21.108-rc</title>
+			<title>1.21.110-rc</title>
 			<description>## Note
-As of this version Irony supports analyze mode for HOI4. If you see any bugs in how Irony detects any definitions there please report on the issue tracker.
+* As of this version Irony supports analyze mode for HOI4. If you see any bugs in how Irony detects any definitions there please report on the issue tracker.
+* Stellaris collections with patch mods are not backwards compatible with older versions. I seriously mean it; importing a collection made in v1.21 will not be recognized in say v1.20.
 
 ## Current Release Notes
-* Speed up resetting multiple resolutions
-* Some fixes
-* Optimize resolution UI when using large collections with lots of conflicts
+* Compress patch state jsons
+* Fix failing to launch game if game requires elevation
 
 ## Release Notes 1.21
 * Update dependencies
@@ -22,18 +22,18 @@ As of this version Irony supports analyze mode for HOI4. If you see any bugs in 
 * Conflict solver reset conflicts notifications, indicators and filter
 * Enhance dds image handling
 * Optimize binary image preview</description>
-			<pubDate>Wed, 09 Feb 2022 22:41:21 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.21.108-rc/osx-x64.rar" sparkle:version="1.21.108.37446" sparkle:shortVersionString="1.21.108" length="73935758" sparkle:os="osx" type="application/vnd.rar" sparkle:signature="vqieq5eGMKZ5NAyv8E9qci8wIwrPlWDpi66nYVzulreJp/BtWMGzKbANf2w6ViOrefLAw2O794Ajp0FCLHv4Aw=="/>
+			<pubDate>Fri, 11 Feb 2022 07:30:40 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.21.110-rc/osx-x64.rar" sparkle:version="1.21.110.11950" sparkle:shortVersionString="1.21.110" length="73935769" sparkle:os="osx" type="application/vnd.rar" sparkle:signature="0LLxv4BbEYGqKPclThjbp0vdwqYEVz3xSJhEjZUOhQn6ZTl6roTyAXCyYs6k6bW61rre+XjRSHNTy/0mEBe7Bw=="/>
 		</item>
 		<item>
-			<title>1.21.108-rc</title>
+			<title>1.21.110-rc</title>
 			<description>## Note
-As of this version Irony supports analyze mode for HOI4. If you see any bugs in how Irony detects any definitions there please report on the issue tracker.
+* As of this version Irony supports analyze mode for HOI4. If you see any bugs in how Irony detects any definitions there please report on the issue tracker.
+* Stellaris collections with patch mods are not backwards compatible with older versions. I seriously mean it; importing a collection made in v1.21 will not be recognized in say v1.20.
 
 ## Current Release Notes
-* Speed up resetting multiple resolutions
-* Some fixes
-* Optimize resolution UI when using large collections with lots of conflicts
+* Compress patch state jsons
+* Fix failing to launch game if game requires elevation
 
 ## Release Notes 1.21
 * Update dependencies
@@ -44,18 +44,18 @@ As of this version Irony supports analyze mode for HOI4. If you see any bugs in 
 * Conflict solver reset conflicts notifications, indicators and filter
 * Enhance dds image handling
 * Optimize binary image preview</description>
-			<pubDate>Wed, 09 Feb 2022 22:41:29 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.21.108-rc/win-x64-setup.rar" sparkle:version="1.21.108.37446" sparkle:shortVersionString="1.21.108" length="63930523" sparkle:os="windows" type="application/vnd.rar" sparkle:signature="CN/qjJm/lxvJVn0OautsrKCM6h5fPsqJsnZGsiJNTajRQAE9qsT+QLZHGrgAFGUrbN/aytQJXLAfGUEVAjZJBQ=="/>
+			<pubDate>Fri, 11 Feb 2022 07:30:49 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.21.110-rc/win-x64-setup.rar" sparkle:version="1.21.110.11950" sparkle:shortVersionString="1.21.110" length="63921680" sparkle:os="windows" type="application/vnd.rar" sparkle:signature="glxa8NLj0KlxuxJbKdmk1lpLkvja2tJAGUS88KgHqk8q6mWv9qxTOMwCpgxdXBIYrCbTHQk8XJtyYvbCgeRwBQ=="/>
 		</item>
 		<item>
-			<title>1.21.108-rc</title>
+			<title>1.21.110-rc</title>
 			<description>## Note
-As of this version Irony supports analyze mode for HOI4. If you see any bugs in how Irony detects any definitions there please report on the issue tracker.
+* As of this version Irony supports analyze mode for HOI4. If you see any bugs in how Irony detects any definitions there please report on the issue tracker.
+* Stellaris collections with patch mods are not backwards compatible with older versions. I seriously mean it; importing a collection made in v1.21 will not be recognized in say v1.20.
 
 ## Current Release Notes
-* Speed up resetting multiple resolutions
-* Some fixes
-* Optimize resolution UI when using large collections with lots of conflicts
+* Compress patch state jsons
+* Fix failing to launch game if game requires elevation
 
 ## Release Notes 1.21
 * Update dependencies
@@ -66,18 +66,18 @@ As of this version Irony supports analyze mode for HOI4. If you see any bugs in 
 * Conflict solver reset conflicts notifications, indicators and filter
 * Enhance dds image handling
 * Optimize binary image preview</description>
-			<pubDate>Wed, 09 Feb 2022 22:41:25 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.21.108-rc/win-x64.rar" sparkle:version="1.21.108.37446" sparkle:shortVersionString="1.21.108" length="76606151" sparkle:os="windows" type="application/vnd.rar" sparkle:signature="Vfz34OJkUVC1Dfh6AHC26YT4qIKEMuwCZhvpmfLHIE398sD/RZx9b1uvi+9sN35/nME6b8Zg5rNl2qL8O03bCQ=="/>
+			<pubDate>Fri, 11 Feb 2022 07:30:44 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.21.110-rc/win-x64.rar" sparkle:version="1.21.110.11950" sparkle:shortVersionString="1.21.110" length="76606259" sparkle:os="windows" type="application/vnd.rar" sparkle:signature="se37ZiSNs4gOinJBY5qnW1rjM/6R67/TQkXi0l46V6UYEw6dlh0pnn6e2P7zpry+DbbkQs3a5f1xR/cvQmZpAA=="/>
 		</item>
 		<item>
-			<title>1.21.108-rc</title>
+			<title>1.21.110-rc</title>
 			<description>## Note
-As of this version Irony supports analyze mode for HOI4. If you see any bugs in how Irony detects any definitions there please report on the issue tracker.
+* As of this version Irony supports analyze mode for HOI4. If you see any bugs in how Irony detects any definitions there please report on the issue tracker.
+* Stellaris collections with patch mods are not backwards compatible with older versions. I seriously mean it; importing a collection made in v1.21 will not be recognized in say v1.20.
 
 ## Current Release Notes
-* Speed up resetting multiple resolutions
-* Some fixes
-* Optimize resolution UI when using large collections with lots of conflicts
+* Compress patch state jsons
+* Fix failing to launch game if game requires elevation
 
 ## Release Notes 1.21
 * Update dependencies
@@ -88,8 +88,8 @@ As of this version Irony supports analyze mode for HOI4. If you see any bugs in 
 * Conflict solver reset conflicts notifications, indicators and filter
 * Enhance dds image handling
 * Optimize binary image preview</description>
-			<pubDate>Wed, 09 Feb 2022 22:41:19 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.21.108-rc/linux-x64.zip" sparkle:version="1.21.108.37446" sparkle:shortVersionString="1.21.108" length="88032118" sparkle:os="linux" type="application/zip" sparkle:signature="OfZ3c3Z1F0frwdAYiQzDAn05ZNl77ETGIDjiaBoBWw96N+0obbgfQ/1uboyw6f6kSevTZMH3bBiJSKqPoL4HAw=="/>
+			<pubDate>Fri, 11 Feb 2022 07:30:36 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.21.110-rc/linux-x64.zip" sparkle:version="1.21.110.11950" sparkle:shortVersionString="1.21.110" length="88033318" sparkle:os="linux" type="application/zip" sparkle:signature="jQKU3J0Q7lvGQergb9Swyh0fydCQUiCjQ+41DlrURiiJ0kNkADHdQJ97WXlTMYJTYid5RSfgGTTL/SKQtO0xBA=="/>
 		</item>
 		<item>
 			<title>1.20.46</title>
