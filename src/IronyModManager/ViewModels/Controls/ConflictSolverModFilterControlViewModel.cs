@@ -4,7 +4,7 @@
 // Created          : 06-08-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 08-24-2021
+// Last Modified On : 02-01-2022
 // ***********************************************************************
 // <copyright file="ConflictSolverModFilterControlViewModel.cs" company="Mario">
 //     Mario
@@ -68,6 +68,11 @@ namespace IronyModManager.ViewModels.Controls
         private bool previousIgnoreGameMods;
 
         /// <summary>
+        /// The previous show reset conflicts
+        /// </summary>
+        private bool previousShowResetConflicts;
+
+        /// <summary>
         /// The previous show self conflicts
         /// </summary>
         private bool previousShowSelfConflicts;
@@ -86,6 +91,11 @@ namespace IronyModManager.ViewModels.Controls
         /// The should toggle self conflicts
         /// </summary>
         private bool shouldToggleSelfConflicts;
+
+        /// <summary>
+        /// The should toggle show reset conflicts
+        /// </summary>
+        private bool shouldToggleShowResetConflicts;
 
         /// <summary>
         /// The syncing selected mods
@@ -173,10 +183,29 @@ namespace IronyModManager.ViewModels.Controls
         public virtual IAvaloniaList<Mod> Mods { get; protected set; }
 
         /// <summary>
+        /// Gets or sets a value indicating whether [reset view].
+        /// </summary>
+        /// <value><c>true</c> if [reset view]; otherwise, <c>false</c>.</value>
+        public virtual bool ResetView { get; protected set; }
+
+        /// <summary>
         /// Gets or sets the selected mods.
         /// </summary>
         /// <value>The selected mods.</value>
         public virtual IAvaloniaList<Mod> SelectedMods { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether [show reset conflicts].
+        /// </summary>
+        /// <value><c>true</c> if [show reset conflicts]; otherwise, <c>false</c>.</value>
+        public virtual bool ShowResetConflicts { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets the show reset conflicts title.
+        /// </summary>
+        /// <value>The show reset conflicts title.</value>
+        [StaticLocalization(LocalizationResources.Conflict_Solver.ModFilter.ShowResetConflicts)]
+        public virtual string ShowResetConflictsTitle { get; protected set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether [show self conflicts].
@@ -232,6 +261,9 @@ namespace IronyModManager.ViewModels.Controls
                 shouldToggleGameMods = false;
                 previousIgnoreGameMods = IgnoreGameMods = modPatchCollectionService.ShouldIgnoreGameMods(conflictResult).GetValueOrDefault();
                 previousShowSelfConflicts = ShowSelfConflicts = modPatchCollectionService.ShouldShowSelfConflicts(conflictResult).GetValueOrDefault();
+                previousShowResetConflicts = ShowResetConflicts = modPatchCollectionService.ShouldShowResetConflicts(conflictResult).GetValueOrDefault();
+                ResetView = false;
+                ResetView = true;
                 valuesSet().ConfigureAwait(false);
             }).DisposeWith(Disposables);
         }
@@ -240,6 +272,7 @@ namespace IronyModManager.ViewModels.Controls
         /// Ignores the mods.
         /// </summary>
         /// <param name="token">The token.</param>
+        /// <returns>A Task representing the asynchronous operation.</returns>
         protected async Task IgnoreModsAsync(CancellationToken token)
         {
             if (ConflictResult == null)
@@ -263,6 +296,11 @@ namespace IronyModManager.ViewModels.Controls
                         modPatchCollectionService.ToggleSelfModConflicts(ConflictResult);
                         shouldToggleSelfConflicts = false;
                     }
+                    if (shouldToggleShowResetConflicts)
+                    {
+                        modPatchCollectionService.ToggleShowResetConflicts(ConflictResult);
+                        shouldToggleShowResetConflicts = false;
+                    }
                     if (previousIgnoredPath == null)
                     {
                         previousIgnoredPath = string.Empty;
@@ -274,6 +312,7 @@ namespace IronyModManager.ViewModels.Controls
                     await modPatchCollectionService.SaveIgnoredPathsAsync(ConflictResult, collectionName);
                     IgnoreGameMods = modPatchCollectionService.ShouldIgnoreGameMods(ConflictResult).GetValueOrDefault();
                     ShowSelfConflicts = modPatchCollectionService.ShouldShowSelfConflicts(ConflictResult).GetValueOrDefault();
+                    ShowResetConflicts = modPatchCollectionService.ShouldShowResetConflicts(ConflictResult).GetValueOrDefault();
                     previousIgnoredPath = ConflictResult.IgnoredPaths;
                     HasSavedState = true;
                     HasSavedState = false;
@@ -301,6 +340,10 @@ namespace IronyModManager.ViewModels.Controls
                 if (shouldToggleSelfConflicts)
                 {
                     previousShowSelfConflicts = ShowSelfConflicts;
+                }
+                if (shouldToggleShowResetConflicts)
+                {
+                    previousShowResetConflicts = ShowResetConflicts;
                 }
                 await IgnoreModsAsync(syncingToken.Token).ConfigureAwait(false);
             }
@@ -340,6 +383,15 @@ namespace IronyModManager.ViewModels.Controls
                 if (!settingValues && previousShowSelfConflicts != ShowSelfConflicts)
                 {
                     shouldToggleSelfConflicts = true;
+                    saveState().ConfigureAwait(false);
+                }
+            }).DisposeWith(disposables);
+
+            this.WhenAnyValue(m => m.ShowResetConflicts).Subscribe(s =>
+            {
+                if (!settingValues && previousShowResetConflicts != ShowResetConflicts)
+                {
+                    shouldToggleShowResetConflicts = true;
                     saveState().ConfigureAwait(false);
                 }
             }).DisposeWith(disposables);

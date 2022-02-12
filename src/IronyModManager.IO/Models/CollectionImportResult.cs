@@ -4,7 +4,7 @@
 // Created          : 08-29-2021
 //
 // Last Modified By : Mario
-// Last Modified On : 08-29-2021
+// Last Modified On : 02-08-2022
 // ***********************************************************************
 // <copyright file="CollectionImportResult.cs" company="Mario">
 //     Mario
@@ -38,12 +38,6 @@ namespace IronyModManager.IO.Models
         /// </summary>
         /// <value>The game identifier.</value>
         public virtual string Game { get; set; }
-
-        /// <summary>
-        /// Gets or sets the game identifier.
-        /// </summary>
-        /// <value>The game identifier.</value>
-        public virtual string GameId { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether this instance is selected.

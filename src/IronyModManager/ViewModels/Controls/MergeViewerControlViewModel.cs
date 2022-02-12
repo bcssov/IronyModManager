@@ -4,7 +4,7 @@
 // Created          : 03-20-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 09-16-2021
+// Last Modified On : 01-28-2022
 // ***********************************************************************
 // <copyright file="MergeViewerControlViewModel.cs" company="Mario">
 //     Mario
@@ -291,6 +291,12 @@ namespace IronyModManager.ViewModels.Controls
         /// </summary>
         /// <value><c>true</c> if [editing left]; otherwise, <c>false</c>.</value>
         public virtual bool EditingLeft { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether [editing lua].
+        /// </summary>
+        /// <value><c>true</c> if [editing lua]; otherwise, <c>false</c>.</value>
+        public virtual bool EditingLua { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether [editing right].
@@ -1552,7 +1558,7 @@ namespace IronyModManager.ViewModels.Controls
         {
             if (LeftSidePatchMod || RightSidePatchMod)
             {
-                var bracketCount = modPatchCollectionService.GetBracketCount(LeftSidePatchMod ? LeftSide : RightSide);
+                var bracketCount = modPatchCollectionService.GetBracketCount(EditingLua ? "fake.lua" : "fake.txt", LeftSidePatchMod ? LeftSide : RightSide);
                 if (bracketCount.OpenBracketCount != bracketCount.CloseBracketCount)
                 {
                     var message = localizationManager.GetResource(LocalizationResources.Conflict_Solver.BracketMismatchError.Message).FormatSmart(new { bracketCount.OpenBracketCount, bracketCount.CloseBracketCount });

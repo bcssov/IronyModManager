@@ -4,7 +4,7 @@
 // Created          : 03-18-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-18-2020
+// Last Modified On : 01-27-2022
 // ***********************************************************************
 // <copyright file="Enums.cs" company="Mario">
 //     Mario
@@ -29,6 +29,11 @@ namespace IronyModManager.Common.Events
         /// <summary>
         /// The conflict solver
         /// </summary>
-        ConflictSolver
+        ConflictSolver,
+
+        /// <summary>
+        /// The read only conflict solver
+        /// </summary>
+        ReadOnlyConflictSolver
     }
 }

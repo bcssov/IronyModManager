@@ -4,7 +4,7 @@
 // Created          : 03-04-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 11-16-2021
+// Last Modified On : 02-08-2022
 // ***********************************************************************
 // <copyright file="ModCollectionService.cs" company="Mario">
 //     Mario
@@ -378,6 +378,11 @@ namespace IronyModManager.Services
             var instance = await GetImportedCollectionDetailsAsync(file);
             if (instance != null)
             {
+                // Incase selected game != imported collection game
+                if (!game.Type.Equals(instance.Game))
+                {
+                    game = GameService.Get().FirstOrDefault(p => p.Type.Equals(instance.Game));
+                }
                 var path = GetPatchModDirectory(game, instance);
                 var exportPath = GetPatchModDirectory(game, !string.IsNullOrWhiteSpace(instance.MergedFolderName) ? instance.MergedFolderName : instance.Name);
                 var result = await modCollectionExporter.ImportModDirectoryAsync(new ModCollectionExporterParams()

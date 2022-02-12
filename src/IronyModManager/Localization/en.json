@@ -154,6 +154,7 @@
             "ImportOverlay": "Please wait while verifying...",
             "ProgressExport": "{Progress}",
             "ProgressImport": "Step {Count}/{TotalCount}: {Progress}",
+            "Export": "Export",
             "Close": "Close"
         },
         "JumpOnDragAndDrop": {
@@ -328,12 +329,14 @@
             "Title": "Select Mode",
             "Default": "Default",
             "Advanced": "Advanced",
+            "Analyze": "Analyze Only",
             "Close": "Close"
         },
         "ModFilter": {
             "Title": "Mod Filter",
             "IgnoreGameConflicts": "Ignore Game Conflicts",
             "ShowSelfConflicts": "Show Self Conflicts",
+            "ShowResetConflicts": "Show Only Reset Conflicts",
             "Close": "Close"
         },
         "ResetConflicts": {
@@ -369,6 +372,16 @@
         },
         "BracketMismatchError": {
             "Message": "Bracket Count Mismatch! Open Bracket: {OpenBracketCount} Close Bracket: {CloseBracketCount}"
+        },
+        "ResetWarning": {
+            "Title": "Conflicts Reset",
+            "AnalyzeModeAll": "Some conflicts will be reset if Conflict Solver is run due to mod changes. These are resolved conflicts which will be reset:{NewLine}{NewLine}{ListOfConflictsResolved}{NewLine}These are ignored conflicts which will be reset:{NewLine}{NewLine}{ListOfConflictsIgnored}",
+            "AnalyzeModeResolvedOnly": "Some conflicts will be reset if Conflict Solver is run due to mod changes. These are resolved conflicts which will be reset:{NewLine}{NewLine}{ListOfConflictsResolved}",
+            "AnalyzeModeIgnoredOnly": "Some conflicts will be reset if Conflict Solver is run due to mod changes. These are ignored conflicts which will be reset:{NewLine}{NewLine}{ListOfConflictsIgnored}",
+            "RegularModeAll": "Some conflicts were reset due to mod changes. These were reset resolved conflicts:{NewLine}{NewLine}{ListOfConflictsResolved}{NewLine}These were reset ignored conflicts:{NewLine}{NewLine}{ListOfConflictsIgnored}",
+            "RegularModeResolvedOnly": "Some conflicts were reset due to mod changes. These were reset resolved conflicts:{NewLine}{NewLine}{ListOfConflictsResolved}",
+            "RegularModeIgnoredOnly": "Some conflicts were reset due to mod changes. These were reset ignored conflicts:{NewLine}{NewLine}{ListOfConflictsIgnored}",
+            "ListOfConflictsFormat": "{ParentDirectory}: {Name}"
         }
     },
     "ConflictIgnore": {

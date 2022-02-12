@@ -202,6 +202,7 @@ namespace IronyModManager.Shared
                 public const string ImportOverlay = Prefix + "ImportOverlay";
                 public const string ProgressExport = Prefix + "ProgressExport";
                 public const string ProgressImport = Prefix + "ProgressImport";
+                public const string Export = Prefix + "Export";
                 public const string Close = Prefix + "Close";
             }
             public static class JumpOnDragAndDrop
@@ -432,6 +433,7 @@ namespace IronyModManager.Shared
                 public const string Title = Prefix + "Title";
                 public const string Default = Prefix + "Default";
                 public const string Advanced = Prefix + "Advanced";
+                public const string Analyze = Prefix + "Analyze";
                 public const string Close = Prefix + "Close";
             }
             public static class ModFilter
@@ -440,6 +442,7 @@ namespace IronyModManager.Shared
                 public const string Title = Prefix + "Title";
                 public const string IgnoreGameConflicts = Prefix + "IgnoreGameConflicts";
                 public const string ShowSelfConflicts = Prefix + "ShowSelfConflicts";
+                public const string ShowResetConflicts = Prefix + "ShowResetConflicts";
                 public const string Close = Prefix + "Close";
             }
             public static class ResetConflicts
@@ -487,6 +490,18 @@ namespace IronyModManager.Shared
             {
                 public const string Prefix = "Conflict_Solver.BracketMismatchError.";
                 public const string Message = Prefix + "Message";
+            }
+            public static class ResetWarning
+            {
+                public const string Prefix = "Conflict_Solver.ResetWarning.";
+                public const string Title = Prefix + "Title";
+                public const string AnalyzeModeAll = Prefix + "AnalyzeModeAll";
+                public const string AnalyzeModeResolvedOnly = Prefix + "AnalyzeModeResolvedOnly";
+                public const string AnalyzeModeIgnoredOnly = Prefix + "AnalyzeModeIgnoredOnly";
+                public const string RegularModeAll = Prefix + "RegularModeAll";
+                public const string RegularModeResolvedOnly = Prefix + "RegularModeResolvedOnly";
+                public const string RegularModeIgnoredOnly = Prefix + "RegularModeIgnoredOnly";
+                public const string ListOfConflictsFormat = Prefix + "ListOfConflictsFormat";
             }
         }
         public static class ConflictIgnore

@@ -4,7 +4,7 @@
 // Created          : 02-19-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-25-2020
+// Last Modified On : 01-28-2022
 // ***********************************************************************
 // <copyright file="ParserManagerArgs.cs" company="Mario">
 //     Mario
@@ -58,6 +58,12 @@ namespace IronyModManager.Parser.Common.Args
         /// </summary>
         /// <value>The name of the mod.</value>
         public string ModName { get; set; }
+
+        /// <summary>
+        /// Gets or sets the type of the validation.
+        /// </summary>
+        /// <value>The type of the validation.</value>
+        public ValidationType ValidationType { get; set; }
 
         #endregion Properties
     }

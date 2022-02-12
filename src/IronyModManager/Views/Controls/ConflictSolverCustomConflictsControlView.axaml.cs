@@ -4,7 +4,7 @@
 // Created          : 07-28-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-14-2021
+// Last Modified On : 01-27-2022
 // ***********************************************************************
 // <copyright file="ConflictSolverCustomConflictsControlView.axaml.cs" company="Mario">
 //     Mario
@@ -76,11 +76,6 @@ namespace IronyModManager.Views.Controls
             popup.Closed += (sender, args) =>
             {
                 ViewModel.ForceClosePopup();
-            };
-            popup.Opened += (sender, args) =>
-            {
-                popup.Host.ConfigurePosition(popup.PlacementTarget, popup.PlacementMode, new Avalonia.Point(popup.HorizontalOffset, 15),
-                    Avalonia.Controls.Primitives.PopupPositioning.PopupAnchor.None, Avalonia.Controls.Primitives.PopupPositioning.PopupGravity.Bottom);
             };
             MessageBus.Current.Listen<ForceClosePopulsEventArgs>()
             .SubscribeObservable(x =>

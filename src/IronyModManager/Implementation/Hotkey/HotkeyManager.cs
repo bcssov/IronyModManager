@@ -4,7 +4,7 @@
 // Created          : 02-17-2021
 //
 // Last Modified By : Mario
-// Last Modified On : 05-31-2021
+// Last Modified On : 02-11-2022
 // ***********************************************************************
 // <copyright file="HotkeyManager.cs" company="Mario">
 //     Mario
@@ -28,6 +28,14 @@ namespace IronyModManager.Implementation.Hotkey
     public class HotkeyManager : IHotkeyManager
     {
         #region Fields
+
+        /// <summary>
+        /// The enter key map
+        /// </summary>
+        private static readonly Dictionary<string, Enums.HotKeys> enterKeyMap = new()
+        {
+            { Constants.RETURN, Enums.HotKeys.Return }
+        };
 
         /// <summary>
         /// The map
@@ -74,9 +82,18 @@ namespace IronyModManager.Implementation.Hotkey
             { Constants.CTRL_B, Enums.HotKeys.Ctrl_B },
             { Constants.CTRL_X, Enums.HotKeys.Ctrl_X },
             { Constants.CTRL_Z, Enums.HotKeys.Ctrl_Z },
-            { Constants.CTRL_Y, Enums.HotKeys.Ctrl_Y },
-            { Constants.RETURN, Enums.HotKeys.Return }
+            { Constants.CTRL_Y, Enums.HotKeys.Ctrl_Y }
         };
+
+        /// <summary>
+        /// The merged map
+        /// </summary>
+        private static readonly Dictionary<string, Enums.HotKeys> mergedMap = new();
+
+        /// <summary>
+        /// The map initialized
+        /// </summary>
+        private static bool mapInitialized = false;
 
         /// <summary>
         /// The message bus
@@ -94,11 +111,21 @@ namespace IronyModManager.Implementation.Hotkey
         public HotkeyManager(IMessageBus messageBus)
         {
             this.messageBus = messageBus;
+            MergeMaps();
         }
 
         #endregion Constructors
 
         #region Methods
+
+        /// <summary>
+        /// Gets the enter keys.
+        /// </summary>
+        /// <returns>IReadOnlyCollection&lt;System.String&gt;.</returns>
+        public IReadOnlyCollection<string> GetEnterKeys()
+        {
+            return enterKeyMap.Select(p => p.Key).ToList();
+        }
 
         /// <summary>
         /// Gets the keys.
@@ -140,11 +167,31 @@ namespace IronyModManager.Implementation.Hotkey
         /// <returns>Enums.HotKeys.</returns>
         private Enums.HotKeys MapHotkey(string hotKey)
         {
-            if (map.ContainsKey(hotKey))
+            if (mergedMap.ContainsKey(hotKey))
             {
-                return map[hotKey];
+                return mergedMap[hotKey];
             }
             return Enums.HotKeys.None;
+        }
+
+        /// <summary>
+        /// Merges the maps.
+        /// </summary>
+        private void MergeMaps()
+        {
+            if (mapInitialized)
+            {
+                return;
+            }
+            mapInitialized = true;
+            foreach (var item in map)
+            {
+                mergedMap.Add(item.Key, item.Value);
+            }
+            foreach (var item in enterKeyMap)
+            {
+                mergedMap.Add(item.Key, item.Value);
+            }
         }
 
         #endregion Methods

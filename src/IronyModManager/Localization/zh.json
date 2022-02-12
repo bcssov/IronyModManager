@@ -154,6 +154,7 @@
             "ImportOverlay": "正在验证……",
             "ProgressExport": "{Progress}",
             "ProgressImport": "步骤 {Count}/{TotalCount}：{Progress}",
+            "Export": "导出",
             "Close": "关闭"
         },
         "JumpOnDragAndDrop": {
@@ -328,12 +329,14 @@
             "Title": "选择模式",
             "Default": "默认",
             "Advanced": "高级",
+            "Analyze": "仅分析",
             "Close": "关闭"
         },
         "ModFilter": {
             "Title": "模组过滤",
             "IgnoreGameConflicts": "忽略原版游戏冲突",
             "ShowSelfConflicts": "显示自我冲突",
+            "ShowResetConflicts": "仅显示重置冲突",
             "Close": "关闭"
         },
         "ResetConflicts": {
@@ -369,6 +372,16 @@
         },
         "BracketMismatchError": {
             "Message": "括号计数不匹配！左括号数：{OpenBracketCount}，右括号数：{CloseBracketCount}"
+        },
+        "ResetWarning": {
+            "Title": "冲突重置",
+            "AnalyzeModeAll": "如果由于MOD更改运行冲突求解器，将重置某些冲突。 这些都是解决的冲突，它将被重置：{NewLine}{NewLine}{ListOfConflictsResolved}{NewLine}这些都被忽略了将重置的冲突：{NewLine}{NewLine}{ListOfConflictsIgnored}",
+            "AnalyzeModeResolvedOnly": "如果由于MOD更改运行冲突求解器，将重置某些冲突。 这些都是解决的冲突，它将被重置：{NewLine}{NewLine}{ListOfConflictsResolved}",
+            "AnalyzeModeIgnoredOnly": "如果由于MOD更改运行冲突求解器，将重置某些冲突。 这些都是解决的冲突，这些都被忽略了将重置的冲突：{NewLine}{NewLine}{ListOfConflictsIgnored}",
+            "RegularModeAll": "由于MOD更改，某些冲突被重置。 这些被重置已解决的冲突：{NewLine}{NewLine}{ListOfConflictsResolved}{NewLine}这些被重置被忽略了冲突：{NewLine}{NewLine}{ListOfConflictsIgnored}",
+            "RegularModeResolvedOnly": "由于MOD更改，某些冲突被重置。 这些被重置已解决的冲突：{NewLine}{NewLine}{ListOfConflictsResolved}",
+            "RegularModeIgnoredOnly": "由于MOD更改，某些冲突被重置。 这些被重置已解决的冲突：这些被重置被忽略了冲突：{NewLine}{NewLine}{ListOfConflictsIgnored}",
+            "ListOfConflictsFormat": "{ParentDirectory}：{Name}"
         }
     },
     "ConflictIgnore": {

@@ -4,7 +4,7 @@
 // Created          : 02-16-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 12-12-2021
+// Last Modified On : 01-30-2022
 // ***********************************************************************
 // <copyright file="Constants.cs" company="Mario">
 //     Mario
@@ -33,6 +33,16 @@ namespace IronyModManager.Parser.Common
         /// The common path
         /// </summary>
         public const string CommonPath = "common";
+
+        /// <summary>
+        /// The CSV extension
+        /// </summary>
+        public const string CsvExtension = ".csv";
+
+        /// <summary>
+        /// The empty lua overwrite comment
+        /// </summary>
+        public const string EmptyLuaOverwriteComment = "-- This mod contains empty code. Possibly to overwrite other mods.";
 
         /// <summary>
         /// The empty overwrite comment
@@ -65,9 +75,19 @@ namespace IronyModManager.Parser.Common
         public const string LocalizationExtension = ".yml";
 
         /// <summary>
+        /// The lua extension
+        /// </summary>
+        public const string LuaExtension = ".lua";
+
+        /// <summary>
         /// The shader extensions
         /// </summary>
         public const string ShaderExtension = ".shader";
+
+        /// <summary>
+        /// The text extension
+        /// </summary>
+        public const string TxtExtension = "." + TxtType;
 
         /// <summary>
         /// The text type
@@ -111,6 +131,191 @@ namespace IronyModManager.Parser.Common
         #endregion Methods
 
         #region Classes
+
+        /// <summary>
+        /// Class HOI4.
+        /// </summary>
+        public static class HOI4
+        {
+            #region Fields
+
+            /// <summary>
+            /// The GFX
+            /// </summary>
+            public const string GFX = "gfx";
+
+            /// <summary>
+            /// The history
+            /// </summary>
+            public const string History = "history";
+
+            /// <summary>
+            /// The map
+            /// </summary>
+            public const string Map = "map";
+
+            /// <summary>
+            /// The music
+            /// </summary>
+            public const string Music = "music";
+
+            /// <summary>
+            /// The script
+            /// </summary>
+            public const string Script = "script";
+
+            /// <summary>
+            /// The tests
+            /// </summary>
+            public const string Tests = "tests";
+
+            /// <summary>
+            /// The tutorial
+            /// </summary>
+            public const string Tutorial = "tutorial";
+
+            /// <summary>
+            /// The abilities
+            /// </summary>
+            public static readonly string Abilities = MergePath(CommonPath, "abilities");
+
+            /// <summary>
+            /// The aces
+            /// </summary>
+            public static readonly string Aces = MergePath(CommonPath, "aces");
+
+            /// <summary>
+            /// The ai areas
+            /// </summary>
+            public static readonly string AIAreas = MergePath(CommonPath, "ai_areas");
+
+            /// <summary>
+            /// The ai strategy
+            /// </summary>
+            public static readonly string AIStrategy = MergePath(CommonPath, "ai_strategy");
+
+            /// <summary>
+            /// The ai strategy planes
+            /// </summary>
+            public static readonly string AIStrategyPlanes = MergePath(CommonPath, "ai_strategy_plans");
+
+            /// <summary>
+            /// The bookmark
+            /// </summary>
+            public static readonly string Bookmark = MergePath(CommonPath, "bookmarks");
+
+            /// <summary>
+            /// The buildings
+            /// </summary>
+            public static readonly string Buildings = MergePath(CommonPath, "buildings");
+
+            /// <summary>
+            /// The characters
+            /// </summary>
+            public static readonly string Characters = MergePath(CommonPath, "characters");
+
+            /// <summary>
+            /// The countries
+            /// </summary>
+            public static readonly string Countries = MergePath(CommonPath, "countries");
+
+            /// <summary>
+            /// The country leader
+            /// </summary>
+            public static readonly string CountryLeader = MergePath(CommonPath, "country_leader");
+
+            /// <summary>
+            /// The country tags
+            /// </summary>
+            public static readonly string CountryTags = MergePath(CommonPath, "country_tags");
+
+            /// <summary>
+            /// The decisions
+            /// </summary>
+            public static readonly string Decisions = MergePath(CommonPath, "decisions");
+
+            /// <summary>
+            /// The difficulty settings
+            /// </summary>
+            public static readonly string DifficultySettings = MergePath(CommonPath, "difficulty_settings");
+
+            /// <summary>
+            /// The generation
+            /// </summary>
+            public static readonly string Generation = MergePath(CommonPath, "generation");
+
+            /// <summary>
+            /// The graphical culture type
+            /// </summary>
+            public static readonly string GraphicalCultureType = MergePath(CommonPath, "graphicalculturetype.txt");
+
+            /// <summary>
+            /// The ideas
+            /// </summary>
+            public static readonly string Ideas = MergePath(CommonPath, "ideas");
+
+            /// <summary>
+            /// The idea tags
+            /// </summary>
+            public static readonly string IdeaTags = MergePath(CommonPath, "idea_tags");
+
+            /// <summary>
+            /// The ideologies
+            /// </summary>
+            public static readonly string Ideologies = MergePath(CommonPath, "ideologies");
+
+            /// <summary>
+            /// The intelligence agencies
+            /// </summary>
+            public static readonly string IntelligenceAgencies = MergePath(CommonPath, "intelligence_agencies");
+
+            /// <summary>
+            /// The opinion modifiers
+            /// </summary>
+            public static readonly string OpinionModifiers = MergePath(CommonPath, "opinion_modifiers");
+
+            /// <summary>
+            /// The resources
+            /// </summary>
+            public static readonly string Resources = MergePath(CommonPath, "resources");
+
+            /// <summary>
+            /// The scripted GUI
+            /// </summary>
+            public static readonly string ScriptedGui = MergePath(CommonPath, "scripted_guis");
+
+            /// <summary>
+            /// The state categories
+            /// </summary>
+            public static readonly string StateCategories = MergePath(CommonPath, "state_category");
+
+            /// <summary>
+            /// The technologies
+            /// </summary>
+            public static readonly string Technologies = MergePath(CommonPath, "technologies");
+
+            /// <summary>
+            /// The terrain
+            /// </summary>
+            public static readonly string Terrain = MergePath(CommonPath, "terrain");
+
+            /// <summary>
+            /// The unit leader
+            /// </summary>
+            public static readonly string UnitLeader = MergePath(CommonPath, "unit_leader");
+
+            /// <summary>
+            /// The units
+            /// </summary>
+            public static readonly string Units = MergePath(CommonPath, "units");
+
+            /// <summary>
+            /// The wargoals
+            /// </summary>
+            public static readonly string Wargoals = MergePath(CommonPath, "wargoals");
+
+            #endregion Fields
+        }
 
         /// <summary>
         /// Class Localization.
@@ -190,9 +395,9 @@ namespace IronyModManager.Parser.Common
             public const char LowerThanOperator = '<';
 
             /// <summary>
-            /// The namespace
+            /// The lua script comment identifier
             /// </summary>
-            public const string Namespace = "namespace";
+            public const string LuaScriptCommentId = "--";
 
             /// <summary>
             /// The not equal operator
@@ -250,6 +455,11 @@ namespace IronyModManager.Parser.Common
             public static readonly string[] InlineOperators = new string[] { "hsv", "rgb" };
 
             /// <summary>
+            /// The namespace
+            /// </summary>
+            public static readonly string[] Namespaces = new string[] { "namespace", "add_namespace" };
+
+            /// <summary>
             /// The operators
             /// </summary>
             public static readonly char[] Operators = new char[] { EqualsOperator, GreaterThanOperator, LowerThanOperator, NotEqualOperator };
@@ -290,9 +500,19 @@ namespace IronyModManager.Parser.Common
             public static readonly string ComponentTags = MergePath(CommonPath, "component_tags");
 
             /// <summary>
+            /// The country container
+            /// </summary>
+            public static readonly string CountryContainer = MergePath(CommonPath, "country_container");
+
+            /// <summary>
             /// The country types
             /// </summary>
             public static readonly string CountryTypes = MergePath(CommonPath, "country_types");
+
+            /// <summary>
+            /// The diplomacy economy
+            /// </summary>
+            public static readonly string DiplomacyEconomy = MergePath(CommonPath, "diplomacy_economy");
 
             /// <summary>
             /// The diplomatic actions
@@ -428,11 +648,6 @@ namespace IronyModManager.Parser.Common
             /// The traits
             /// </summary>
             public static readonly string Traits = MergePath(CommonPath, "traits");
-
-            /// <summary>
-            /// The weapon components
-            /// </summary>
-            public static readonly string WeaponComponents = MergePath(CommonPath, "component_templates", "weapon_components.csv");
 
             #endregion Fields
         }

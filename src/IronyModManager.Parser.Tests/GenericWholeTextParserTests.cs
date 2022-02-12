@@ -4,7 +4,7 @@
 // Created          : 03-28-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-28-2020
+// Last Modified On : 01-29-2022
 // ***********************************************************************
 // <copyright file="GenericWholeTextParserTests.cs" company="Mario">
 //     Mario
@@ -118,6 +118,21 @@ namespace IronyModManager.Parser.Tests
             };
             var parser = new WholeTextParser(new CodeParser(new Logger()), null);
             parser.CanParse(args).Should().BeFalse();
+        }
+
+        /// <summary>
+        /// Defines the test method CanParse_csv_fils_should_be_true.
+        /// </summary>
+        [Fact]
+        public void CanParse_csv_fils_should_be_true()
+        {
+            var args = new CanParseArgs()
+            {
+                File = "common\\csv.csv",
+                GameType = "HeartsofIronIV"
+            };
+            var parser = new WholeTextParser(new CodeParser(new Logger()), null);
+            parser.CanParse(args).Should().BeTrue();
         }
 
         /// <summary>

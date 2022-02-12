@@ -4,7 +4,7 @@
 // Created          : 03-18-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 12-06-2021
+// Last Modified On : 02-09-2022
 // ***********************************************************************
 // <copyright file="MainConflictSolverViewModel.cs" company="Mario">
 //     Mario
@@ -18,6 +18,7 @@ using System.Linq;
 using System.Reactive;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
+using System.Text;
 using System.Threading.Tasks;
 using Avalonia.Collections;
 using Avalonia.Threading;
@@ -97,9 +98,19 @@ namespace IronyModManager.ViewModels
         private readonly INotificationAction notificationAction;
 
         /// <summary>
+        /// The cached invalids
+        /// </summary>
+        private IHierarchicalDefinitions cachedInvalids;
+
+        /// <summary>
         /// The filtering conflicts
         /// </summary>
         private bool filteringConflicts = false;
+
+        /// <summary>
+        /// The invalids checked
+        /// </summary>
+        private bool invalidsChecked;
 
         /// <summary>
         /// The take left binary
@@ -377,10 +388,22 @@ namespace IronyModManager.ViewModels
         public virtual int? PreviousConflictIndex { get; set; }
 
         /// <summary>
+        /// Gets or sets a value indicating whether [read only].
+        /// </summary>
+        /// <value><c>true</c> if [read only]; otherwise, <c>false</c>.</value>
+        public virtual bool ReadOnly { get; protected set; }
+
+        /// <summary>
         /// Gets or sets the reset conflicts.
         /// </summary>
         /// <value>The reset conflicts.</value>
         public virtual ConflictSolverResetConflictsControlViewModel ResetConflicts { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets the reset conflicts column.
+        /// </summary>
+        /// <value>The reset conflicts column.</value>
+        public virtual int ResetConflictsColumn { get; protected set; }
 
         /// <summary>
         /// Gets or sets the resolve.
@@ -449,6 +472,86 @@ namespace IronyModManager.ViewModels
         #region Methods
 
         /// <summary>
+        /// Initializes the specified read only.
+        /// </summary>
+        /// <param name="readOnly">if set to <c>true</c> [read only].</param>
+        public void Initialize(bool readOnly)
+        {
+            ReadOnly = readOnly;
+            ResetConflictsColumn = readOnly ? 0 : 1;
+            ResetConflicts.SetParameters(readOnly);
+            BinaryMergeViewer.SetParameters(readOnly);
+            ModCompareSelector.Reset();
+            IgnoreEnabled = false;
+            BackTriggered = false;
+            if (Conflicts.Conflicts.HasResetDefinitions())
+            {
+                var sbResolved = new StringBuilder();
+                var sbIgnored = new StringBuilder();
+                var allHierarchalDefinitions = Conflicts.Conflicts.GetHierarchicalDefinitions();
+                var modListFormat = localizationManager.GetResource(LocalizationResources.Conflict_Solver.ResetWarning.ListOfConflictsFormat);
+                foreach (var conflict in allHierarchalDefinitions.Where(p => p.ResetType != ResetType.None))
+                {
+                    foreach (var child in conflict.Children.Where(p => p.ResetType != ResetType.None))
+                    {
+                        switch (child.ResetType)
+                        {
+                            case ResetType.Resolved:
+                                sbResolved.AppendLine(Smart.Format(modListFormat, new { ParentDirectory = conflict.Name, child.Name }));
+                                break;
+
+                            case ResetType.Ignored:
+                                sbIgnored.AppendLine(Smart.Format(modListFormat, new { ParentDirectory = conflict.Name, child.Name }));
+                                break;
+
+                            default:
+                                break;
+                        }
+                    }
+                }
+                var msgFormat = string.Empty;
+                if (readOnly)
+                {
+                    if (sbIgnored.Length > 0 && sbResolved.Length > 0)
+                    {
+                        msgFormat = localizationManager.GetResource(LocalizationResources.Conflict_Solver.ResetWarning.AnalyzeModeAll);
+                    }
+                    else if (sbResolved.Length > 0)
+                    {
+                        msgFormat = localizationManager.GetResource(LocalizationResources.Conflict_Solver.ResetWarning.AnalyzeModeResolvedOnly);
+                    }
+                    else
+                    {
+                        msgFormat = localizationManager.GetResource(LocalizationResources.Conflict_Solver.ResetWarning.AnalyzeModeIgnoredOnly);
+                    }
+                }
+                else
+                {
+                    if (sbIgnored.Length > 0 && sbResolved.Length > 0)
+                    {
+                        msgFormat = localizationManager.GetResource(LocalizationResources.Conflict_Solver.ResetWarning.RegularModeAll);
+                    }
+                    else if (sbResolved.Length > 0)
+                    {
+                        msgFormat = localizationManager.GetResource(LocalizationResources.Conflict_Solver.ResetWarning.RegularModeResolvedOnly);
+                    }
+                    else
+                    {
+                        msgFormat = localizationManager.GetResource(LocalizationResources.Conflict_Solver.ResetWarning.RegularModeIgnoredOnly);
+                    }
+                }
+                var msg = Smart.Format(msgFormat, new
+                {
+                    Environment.NewLine,
+                    ListOfConflictsResolved = sbResolved.ToString(),
+                    ListOfConflictsIgnored = sbIgnored.ToString()
+                });
+                var title = localizationManager.GetResource(LocalizationResources.Conflict_Solver.ResetWarning.Title);
+                Dispatcher.UIThread.SafeInvoke(() => notificationAction.ShowPromptAsync(title, title, msg, NotificationType.Warning, PromptType.OK));
+            }
+        }
+
+        /// <summary>
         /// Called when [locale changed].
         /// </summary>
         /// <param name="newLocale">The new locale.</param>
@@ -457,16 +560,6 @@ namespace IronyModManager.ViewModels
         {
             FilterHierarchalConflictsAsync(Conflicts).ConfigureAwait(false);
             base.OnLocaleChanged(newLocale, oldLocale);
-        }
-
-        /// <summary>
-        /// Resets this instance.
-        /// </summary>
-        public void Reset()
-        {
-            ModCompareSelector.Reset();
-            IgnoreEnabled = false;
-            BackTriggered = false;
         }
 
         /// <summary>
@@ -517,11 +610,11 @@ namespace IronyModManager.ViewModels
         }
 
         /// <summary>
-        /// Filters the hierarchal conflicts asynchronous.
+        /// Filter hierarchal conflicts as an asynchronous operation.
         /// </summary>
         /// <param name="conflictResult">The conflict result.</param>
         /// <param name="selectedDefinitionOverride">The selected definition override.</param>
-        /// <returns>Task.</returns>
+        /// <returns>A Task representing the asynchronous operation.</returns>
         protected virtual async Task FilterHierarchalConflictsAsync(IConflictResult conflictResult, IHierarchicalDefinitions selectedDefinitionOverride = null)
         {
             while (filteringConflicts)
@@ -575,64 +668,77 @@ namespace IronyModManager.ViewModels
                     }
                 }
                 conflicts.RemoveAll(conflicts.Where(p => p.Children == null || p.Children.Count == 0).ToList());
-                var invalid = conflictResult.AllConflicts.GetByValueType(ValueType.Invalid);
-                if (invalid?.Count() > 0)
+                if (!invalidsChecked)
                 {
-                    var invalidDef = DIResolver.Get<IHierarchicalDefinitions>();
-                    invalidDef.Name = Invalid;
-                    invalidDef.Key = InvalidKey;
-                    var children = new List<IHierarchicalDefinitions>();
-                    foreach (var item in invalid)
+                    invalidsChecked = true;
+                    var invalid = conflictResult.AllConflicts.GetByValueType(ValueType.Invalid);
+                    if (invalid?.Count() > 0)
                     {
-                        var invalidChild = DIResolver.Get<IHierarchicalDefinitions>();
-                        invalidChild.Name = item.File;
-                        var message = item.ErrorColumn.HasValue || item.ErrorLine.HasValue ?
-                            localizationManager.GetResource(LocalizationResources.Conflict_Solver.InvalidConflicts.Error) :
-                            localizationManager.GetResource(LocalizationResources.Conflict_Solver.InvalidConflicts.ErrorNoLine);
-                        invalidChild.Key = Smart.Format(message, new
+                        var invalidDef = DIResolver.Get<IHierarchicalDefinitions>();
+                        invalidDef.Name = Invalid;
+                        invalidDef.Key = InvalidKey;
+                        var children = new List<IHierarchicalDefinitions>();
+                        foreach (var item in invalid)
                         {
-                            item.ModName,
-                            Line = item.ErrorLine,
-                            Column = item.ErrorColumn,
-                            Environment.NewLine,
-                            Message = item.ErrorMessage,
-                            item.File
-                        });
-                        invalidChild.AdditionalData = item;
-                        children.Add(invalidChild);
+                            var invalidChild = DIResolver.Get<IHierarchicalDefinitions>();
+                            invalidChild.Name = item.File;
+                            var message = item.ErrorColumn.HasValue || item.ErrorLine.HasValue ?
+                                localizationManager.GetResource(LocalizationResources.Conflict_Solver.InvalidConflicts.Error) :
+                                localizationManager.GetResource(LocalizationResources.Conflict_Solver.InvalidConflicts.ErrorNoLine);
+                            invalidChild.Key = Smart.Format(message, new
+                            {
+                                item.ModName,
+                                Line = item.ErrorLine,
+                                Column = item.ErrorColumn,
+                                Environment.NewLine,
+                                Message = item.ErrorMessage,
+                                item.File
+                            });
+                            invalidChild.AdditionalData = item;
+                            children.Add(invalidChild);
+                        }
+                        invalidDef.Children = children;
+                        cachedInvalids = invalidDef;
+                        conflicts.Add(invalidDef);
                     }
-                    invalidDef.Children = children;
-                    conflicts.Add(invalidDef);
+                }
+                if (cachedInvalids != null)
+                {
+                    conflicts.Add(cachedInvalids);
                 }
                 HierarchalConflicts = conflicts;
                 NumberOfConflictsCaption = Smart.Format(localizationManager.GetResource(LocalizationResources.Conflict_Solver.ConflictCount), new { Count = conflicts.Where(p => p.Key != InvalidKey).SelectMany(p => p.Children).Count() });
+                var selectedParentConflict = SelectedParentConflict;
+                int? previousConflictIndex = null;
                 if (HierarchalConflicts.Any() && SelectedParentConflict == null)
                 {
-                    SelectedParentConflict = HierarchalConflicts.FirstOrDefault();
+                    selectedParentConflict = HierarchalConflicts.FirstOrDefault();
                 }
-                if (SelectedParentConflict != null)
+                if (selectedParentConflict != null)
                 {
-                    var conflictName = SelectedParentConflict.Name;
-                    SelectedParentConflict = null;
+                    var conflictName = selectedParentConflict.Name;
+                    selectedParentConflict = null;
                     var newSelected = HierarchalConflicts.FirstOrDefault(p => p.Name.Equals(conflictName));
                     if (newSelected != null)
                     {
-                        PreviousConflictIndex = index;
+                        previousConflictIndex = index;
                         if (selectedDefinitionOverride != null)
                         {
                             var overrideMatch = newSelected.Children.FirstOrDefault(p => p.Key.Equals(selectedDefinitionOverride.Key));
                             if (overrideMatch != null)
                             {
-                                PreviousConflictIndex = newSelected.Children.ToList().IndexOf(overrideMatch);
+                                previousConflictIndex = newSelected.Children.ToList().IndexOf(overrideMatch);
                             }
                         }
-                        if (PreviousConflictIndex.GetValueOrDefault() > (newSelected.Children.Count - 1))
+                        if (previousConflictIndex.GetValueOrDefault() > (newSelected.Children.Count - 1))
                         {
-                            PreviousConflictIndex = newSelected.Children.Count - 1;
+                            previousConflictIndex = newSelected.Children.Count - 1;
                         }
-                        SelectedParentConflict = newSelected;
+                        selectedParentConflict = newSelected;
                     }
                 }
+                PreviousConflictIndex = previousConflictIndex;
+                SelectedParentConflict = selectedParentConflict;
             }
             else
             {
@@ -655,11 +761,14 @@ namespace IronyModManager.ViewModels
                 var id = idGenerator.GetNextId();
                 await TriggerOverlayAsync(id, true);
                 await Task.Delay(100);
+                BinaryMergeViewer.Reset(true);
                 BackTriggered = true;
                 Conflicts?.Dispose();
                 Conflicts = null;
                 SelectedModsOrder = null;
                 SelectedModCollection = null;
+                cachedInvalids = null;
+                invalidsChecked = false;
                 var args = new NavigationEventArgs()
                 {
                     State = NavigationState.Main
@@ -739,7 +848,7 @@ namespace IronyModManager.ViewModels
                     if (HierarchalConflicts == null || !HierarchalConflicts.Any())
                     {
                         ModCompareSelector.Reset();
-                        BinaryMergeViewer.Reset();
+                        BinaryMergeViewer.Reset(false);
                         MergeViewer.SetText(string.Empty, string.Empty, true, lockScroll: true);
                     }
                     PreviousConflictIndex = null;
@@ -754,6 +863,7 @@ namespace IronyModManager.ViewModels
                     if (s != null && IsConflictSolverAvailable)
                     {
                         MergeViewer.EditingYaml = s.LeftSelectedDefinition.Type.StartsWith(Shared.Constants.LocalizationDirectory);
+                        MergeViewer.EditingLua = s.LeftSelectedDefinition.File.EndsWith(Parser.Common.Constants.LuaExtension, StringComparison.OrdinalIgnoreCase);
                         MergeViewer.SetSidePatchMod(s.LeftSelectedDefinition, s.RightSelectedDefinition);
                         MergeViewer.SetText(s.LeftSelectedDefinition.Code, s.RightSelectedDefinition.Code, lockScroll: true);
                         MergeViewer.ExitEditMode();
@@ -777,7 +887,7 @@ namespace IronyModManager.ViewModels
                     }
                     else
                     {
-                        BinaryMergeViewer.Reset();
+                        BinaryMergeViewer.Reset(false);
                         ResolveEnabled = false;
                     }
                 }).DisposeWith(disposables);
@@ -1074,9 +1184,9 @@ namespace IronyModManager.ViewModels
                     SyncCode(patchDefinition);
                     try
                     {
-                        if (resolve ?
+                        if (await Task.Run(async () => resolve ?
                             await modPatchCollectionService.ApplyModPatchAsync(Conflicts, patchDefinition, SelectedModCollection.Name) :
-                            await modPatchCollectionService.IgnoreModPatchAsync(Conflicts, patchDefinition, SelectedModCollection.Name))
+                            await modPatchCollectionService.IgnoreModPatchAsync(Conflicts, patchDefinition, SelectedModCollection.Name)))
                         {
                             await FilterHierarchalConflictsAsync(Conflicts);
                             IHierarchicalDefinitions selectedConflict = null;

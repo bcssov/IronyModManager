@@ -4,7 +4,7 @@
 // Created          : 02-18-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 10-25-2021
+// Last Modified On : 01-30-2022
 // ***********************************************************************
 // <copyright file="WholeTextParser.cs" company="Mario">
 //     Mario
@@ -32,14 +32,6 @@ namespace IronyModManager.Parser.Games.Stellaris
         #region Fields
 
         /// <summary>
-        /// The equals checks
-        /// </summary>
-        private static readonly string[] equalsChecks = new string[]
-        {
-            Common.Constants.Stellaris.WeaponComponents
-        };
-
-        /// <summary>
         /// The starts with checks
         /// </summary>
         private static readonly string[] startsWithChecks = new string[]
@@ -47,7 +39,8 @@ namespace IronyModManager.Parser.Games.Stellaris
             Common.Constants.Stellaris.DiploPhrases, Common.Constants.Stellaris.MapGalaxy, Common.Constants.Stellaris.NameLists,
             Common.Constants.Stellaris.SpeciesNames, Common.Constants.Stellaris.Portraits,
             Common.Constants.Stellaris.ComponentTags, Common.Constants.Stellaris.RandomNamesBase, Common.Constants.Stellaris.RandomNames,
-            Common.Constants.Stellaris.StartScreenMessages, Common.Constants.Stellaris.MapSetupScenarios
+            Common.Constants.Stellaris.StartScreenMessages, Common.Constants.Stellaris.MapSetupScenarios, Common.Constants.Stellaris.CountryContainer,
+            Common.Constants.Stellaris.DiplomacyEconomy
         };
 
         #endregion Fields
@@ -88,16 +81,6 @@ namespace IronyModManager.Parser.Games.Stellaris
         }
 
         /// <summary>
-        /// Determines whether this instance [can parse equals] the specified arguments.
-        /// </summary>
-        /// <param name="args">The arguments.</param>
-        /// <returns><c>true</c> if this instance [can parse equals] the specified arguments; otherwise, <c>false</c>.</returns>
-        protected virtual bool CanParseEquals(CanParseArgs args)
-        {
-            return equalsChecks.Any(s => args.File.Equals(s, StringComparison.OrdinalIgnoreCase));
-        }
-
-        /// <summary>
         /// Determines whether this instance [can parse starts with] the specified arguments.
         /// </summary>
         /// <param name="args">The arguments.</param>
@@ -108,13 +91,35 @@ namespace IronyModManager.Parser.Games.Stellaris
         }
 
         /// <summary>
+        /// Gets the file tag code.
+        /// </summary>
+        /// <param name="file">The file.</param>
+        /// <param name="lines">The lines.</param>
+        /// <returns>System.String.</returns>
+        protected override string GetFileTagCode(string file, IEnumerable<string> lines)
+        {
+            var cleaned = codeParser.CleanCode(file, lines);
+            return base.GetFileTagCode(file, cleaned);
+        }
+
+        /// <summary>
+        /// Determines whether [is file name tag] [the specified arguments].
+        /// </summary>
+        /// <param name="args">The arguments.</param>
+        /// <returns><c>true</c> if [is file name tag] [the specified arguments]; otherwise, <c>false</c>.</returns>
+        protected override bool IsFileNameTag(ParserArgs args)
+        {
+            return args.File.StartsWith(Common.Constants.Stellaris.ComponentTags, StringComparison.OrdinalIgnoreCase);
+        }
+
+        /// <summary>
         /// Determines whether [is valid type] [the specified arguments].
         /// </summary>
         /// <param name="args">The arguments.</param>
         /// <returns><c>true</c> if [is valid type] [the specified arguments]; otherwise, <c>false</c>.</returns>
         protected override bool IsValidType(CanParseArgs args)
         {
-            return CanParseStartsWith(args) || CanParseEquals(args);
+            return CanParseStartsWith(args);
         }
 
         #endregion Methods

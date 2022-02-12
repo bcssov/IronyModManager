@@ -4,7 +4,7 @@
 // Created          : 02-16-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 12-07-2020
+// Last Modified On : 01-29-2022
 // ***********************************************************************
 // <copyright file="KeyParser.cs" company="Mario">
 //     Mario
@@ -57,7 +57,7 @@ namespace IronyModManager.Parser.Generic
         /// Gets the priority.
         /// </summary>
         /// <value>The priority.</value>
-        public int Priority => 10;
+        public virtual int Priority => 10;
 
         #endregion Properties
 
@@ -92,7 +92,7 @@ namespace IronyModManager.Parser.Generic
                                     break;
                                 }
                             }
-                            if (cleaned.Substring(0, idLoc).Count(s => s == Constants.Scripts.OpenObject) == 1)
+                            if (cleaned[..idLoc].Count(s => s == Constants.Scripts.OpenObject) == 1)
                             {
                                 return true;
                             }

@@ -4,7 +4,7 @@
 // Created          : 03-23-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 08-23-2021
+// Last Modified On : 02-02-2022
 // ***********************************************************************
 // <copyright file="HierarchicalDefinitions.cs" company="Mario">
 //     Mario
@@ -91,6 +91,12 @@ namespace IronyModManager.Parser.Definitions
         /// <value>The non game definitions.</value>
         public int NonGameDefinitions { get; set; }
 
+        /// <summary>
+        /// Gets or sets the type of the reset.
+        /// </summary>
+        /// <value>The type of the reset.</value>
+        public ResetType ResetType { get; set; }
+
         #endregion Properties
 
         #region Methods
@@ -111,6 +117,7 @@ namespace IronyModManager.Parser.Definitions
                 nameof(Mods) => Mods,
                 nameof(FileNames) => FileNames,
                 nameof(NonGameDefinitions) => NonGameDefinitions,
+                nameof(ResetType) => ResetType,
                 _ => Name
             };
         }

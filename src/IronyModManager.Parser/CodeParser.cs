@@ -4,7 +4,7 @@
 // Created          : 02-22-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 12-12-2021
+// Last Modified On : 01-29-2022
 // ***********************************************************************
 // <copyright file="CodeParser.cs" company="Mario">
 //     Mario
@@ -86,12 +86,14 @@ namespace IronyModManager.Parser
         /// <summary>
         /// Cleans the code.
         /// </summary>
+        /// <param name="file">The file.</param>
         /// <param name="lines">The lines.</param>
         /// <returns>IEnumerable&lt;System.String&gt;.</returns>
-        public virtual IEnumerable<string> CleanCode(IEnumerable<string> lines)
+        public virtual IEnumerable<string> CleanCode(string file, IEnumerable<string> lines)
         {
-            return lines.Where(p => !string.IsNullOrWhiteSpace(p) && !p.Trim().StartsWith(Common.Constants.Scripts.ScriptCommentId.ToString()))
-               .Select(p => FormatCodeTerminators(RemoveInlineComments(p)));
+            var commentId = IsLua(file) ? Common.Constants.Scripts.LuaScriptCommentId : Common.Constants.Scripts.ScriptCommentId.ToString();
+            return lines.Where(p => !string.IsNullOrWhiteSpace(p) && !p.Trim().StartsWith(commentId))
+               .Select(p => FormatCodeTerminators(RemoveInlineComments(commentId, p)));
         }
 
         /// <summary>
@@ -207,6 +209,16 @@ namespace IronyModManager.Parser
         }
 
         /// <summary>
+        /// Determines whether the specified file is lua.
+        /// </summary>
+        /// <param name="file">The file.</param>
+        /// <returns><c>true</c> if the specified file is lua; otherwise, <c>false</c>.</returns>
+        public bool IsLua(string file)
+        {
+            return file.EndsWith(Common.Constants.LuaExtension, StringComparison.OrdinalIgnoreCase);
+        }
+
+        /// <summary>
         /// Parses the script.
         /// </summary>
         /// <param name="lines">The lines.</param>
@@ -222,10 +234,11 @@ namespace IronyModManager.Parser
         /// Parses the script without validation.
         /// </summary>
         /// <param name="lines">The lines.</param>
+        /// <param name="file">The file.</param>
         /// <returns>IParseResponse.</returns>
-        public IParseResponse ParseScriptWithoutValidation(IEnumerable<string> lines)
+        public IParseResponse ParseScriptWithoutValidation(IEnumerable<string> lines, string file)
         {
-            return ParseScriptData(lines, skipValidityCheck: true);
+            return ParseScriptData(lines, file, skipValidityCheck: true);
         }
 
         /// <summary>
@@ -239,7 +252,7 @@ namespace IronyModManager.Parser
         {
             if (performSimpleCheck)
             {
-                var error = PerformBasicValidityCheck(lines);
+                var error = PerformBasicValidityCheck(file, lines);
                 if (error != null)
                 {
                     return error;
@@ -640,12 +653,13 @@ namespace IronyModManager.Parser
         /// <summary>
         /// Parses the elements.
         /// </summary>
+        /// <param name="file">The file.</param>
         /// <param name="lines">The lines.</param>
         /// <returns>IEnumerable&lt;IScriptElement&gt;.</returns>
-        protected IEnumerable<IScriptElement> ParseElements(IEnumerable<string> lines)
+        protected IEnumerable<IScriptElement> ParseElements(string file, IEnumerable<string> lines)
         {
             var result = new List<IScriptElement>();
-            var validCodeLines = CleanCode(lines);
+            var validCodeLines = CleanCode(file, lines);
             var code = string.Join(Environment.NewLine, validCodeLines).ToList();
             for (int i = 0; i < code.Count; i++)
             {
@@ -673,7 +687,7 @@ namespace IronyModManager.Parser
             {
                 try
                 {
-                    result.Values = ParseElements(lines);
+                    result.Values = ParseElements(file, lines);
                 }
                 catch (Exception ex)
                 {
@@ -694,7 +708,7 @@ namespace IronyModManager.Parser
                 {
                     try
                     {
-                        result.Values = ParseElements(lines);
+                        result.Values = ParseElements(file, lines);
                     }
                     catch (Exception ex)
                     {
@@ -711,11 +725,12 @@ namespace IronyModManager.Parser
         /// <summary>
         /// Performs the basic validity check.
         /// </summary>
+        /// <param name="file">The file.</param>
         /// <param name="lines">The lines.</param>
         /// <returns>IScriptError.</returns>
-        protected IScriptError PerformBasicValidityCheck(IEnumerable<string> lines)
+        protected IScriptError PerformBasicValidityCheck(string file, IEnumerable<string> lines)
         {
-            lines = CleanCode(lines);
+            lines = CleanCode(file, lines);
             var text = string.Join(Environment.NewLine, lines);
             var openBracket = text.Count(s => s == Common.Constants.Scripts.OpenObject);
             var closeBracket = text.Count(s => s == Common.Constants.Scripts.CloseObject);
@@ -731,14 +746,15 @@ namespace IronyModManager.Parser
         /// <summary>
         /// Cleans the comments.
         /// </summary>
+        /// <param name="commentId">The comment identifier.</param>
         /// <param name="line">The line.</param>
         /// <returns>System.String.</returns>
-        protected string RemoveInlineComments(string line)
+        protected string RemoveInlineComments(string commentId, string line)
         {
-            if (line.IndexOf(Common.Constants.Scripts.ScriptCommentId) > 0)
+            if (line.IndexOf(commentId) > 0)
             {
                 var sb = new StringBuilder();
-                var split = line.Split(Common.Constants.Scripts.ScriptCommentId);
+                var split = line.Split(commentId);
                 var counter = 0;
                 var count = split.Length;
                 var quoteCount = 0;
@@ -756,7 +772,7 @@ namespace IronyModManager.Parser
                         var quoteIndex = item.IndexOf(Common.Constants.Scripts.Quote);
                         if (quoteIndex > -1 && quoteCount == 2 && previousQuoteCount > 0)
                         {
-                            sb.Append($"#{item.Substring(0, quoteIndex + 1)}");
+                            sb.Append($"#{item[..(quoteIndex + 1)]}");
                             break;
                         }
                         else if (counter < count && previousQuoteCount > 0)
@@ -765,7 +781,7 @@ namespace IronyModManager.Parser
                         }
                     }
                 }
-                return sb.ToString().Trim(Common.Constants.Scripts.ScriptCommentId);
+                return sb.ToString().Trim(commentId);
             }
             return line;
         }
@@ -814,13 +830,24 @@ namespace IronyModManager.Parser
                 }
                 set
                 {
-                    if (decimal.TryParse(value, NumberStyles.Number, CultureInfo.InvariantCulture, out var result))
+                    var val = value ?? string.Empty;
+                    var containsComma = false;
+                    if (val.EndsWith(","))
+                    {
+                        val = val.Trim(",");
+                        containsComma = true;
+                    }
+                    if (decimal.TryParse(val, NumberStyles.Number, CultureInfo.InvariantCulture, out var result))
                     {
                         this.value = result.ToString("G0", CultureInfo.InvariantCulture);
                     }
                     else
                     {
-                        this.value = value;
+                        this.value = val;
+                    }
+                    if (containsComma)
+                    {
+                        this.value += ",";
                     }
                 }
             }

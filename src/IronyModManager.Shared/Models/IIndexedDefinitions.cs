@@ -4,7 +4,7 @@
 // Created          : 02-16-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 05-28-2021
+// Last Modified On : 02-02-2022
 // ***********************************************************************
 // <copyright file="IIndexedDefinitions.cs" company="Mario">
 //     Mario
@@ -31,6 +31,13 @@ namespace IronyModManager.Shared.Models
         /// <param name="definition">The definition.</param>
         /// <param name="forceIgnoreHierarchical">if set to <c>true</c> [force ignore hierarchical].</param>
         void AddToMap(IDefinition definition, bool forceIgnoreHierarchical = false);
+
+        /// <summary>
+        /// Changes the state of the hierarchical reset.
+        /// </summary>
+        /// <param name="definition">The definition.</param>
+        /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
+        bool ChangeHierarchicalResetState(IDefinition definition);
 
         /// <summary>
         /// Existses the by file.
@@ -130,6 +137,12 @@ namespace IronyModManager.Shared.Models
         /// </summary>
         /// <returns><c>true</c> if [has game definitions]; otherwise, <c>false</c>.</returns>
         bool HasGameDefinitions();
+
+        /// <summary>
+        /// Determines whether [has reset definitions].
+        /// </summary>
+        /// <returns><c>true</c> if [has reset definitions]; otherwise, <c>false</c>.</returns>
+        bool HasResetDefinitions();
 
         /// <summary>
         /// Initializes the map.

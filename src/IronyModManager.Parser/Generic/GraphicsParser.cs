@@ -4,7 +4,7 @@
 // Created          : 02-18-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 12-07-2020
+// Last Modified On : 01-29-2022
 // ***********************************************************************
 // <copyright file="GraphicsParser.cs" company="Mario">
 //     Mario
@@ -13,6 +13,7 @@
 // ***********************************************************************
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using IronyModManager.Parser.Common.Args;
 using IronyModManager.Parser.Common.Parsers;
@@ -81,7 +82,17 @@ namespace IronyModManager.Parser.Generic
         /// <returns>IEnumerable&lt;IDefinition&gt;.</returns>
         public override IEnumerable<IDefinition> Parse(ParserArgs args)
         {
-            return ParseSecondLevel(args);
+            var result = ParseSecondLevel(args);
+            var replaceFolder = Path.DirectorySeparatorChar + "replace";
+            if (Path.GetDirectoryName(args.File).EndsWith(replaceFolder))
+            {
+                foreach (var item in result)
+                {
+                    item.VirtualPath = Path.Combine(Path.GetDirectoryName(args.File).Replace(replaceFolder, string.Empty), Path.GetFileName(args.File));
+                    item.Type = FormatType(item.VirtualPath);
+                }
+            }
+            return result;
         }
 
         /// <summary>

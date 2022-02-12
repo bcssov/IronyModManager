@@ -4,7 +4,7 @@
 // Created          : 03-09-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 12-15-2021
+// Last Modified On : 02-05-2022
 // ***********************************************************************
 // <copyright file="ModCollectionExporter.cs" company="Mario">
 //     Mario
@@ -164,7 +164,9 @@ namespace IronyModManager.IO.Mods
                     {
                         var fs = new FileStream(item, FileMode.Open, FileAccess.Read, FileShare.Read);
                         var file = item.Replace(parameters.ModDirectory, string.Empty).Trim('\\').Trim('/');
-                        zip.AddEntry(file, fs);
+                        var entry = zip.AddEntry(file, fs);
+                        entry.AlternateEncoding = Encoding.UTF8;
+                        entry.AlternateEncodingUsage = ZipOption.AsNecessary;
                         streams.Add(fs);
                     }
                 }
@@ -177,7 +179,9 @@ namespace IronyModManager.IO.Mods
                         var ms = new MemoryStream();
                         await fs.CopyToAsync(ms);
                         var file = item.Replace(parameters.ModDirectory, string.Empty).Trim('\\').Trim('/');
-                        zip.AddEntry(file, ms);
+                        var entry = zip.AddEntry(file, ms);
+                        entry.AlternateEncoding = Encoding.UTF8;
+                        entry.AlternateEncodingUsage = ZipOption.AsNecessary;
                         fs.Close();
                         await fs.DisposeAsync();
                         streams.Add(ms);

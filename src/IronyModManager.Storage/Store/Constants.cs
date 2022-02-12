@@ -4,7 +4,7 @@
 // Created          : 03-04-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-04-2020
+// Last Modified On : 02-08-2022
 // ***********************************************************************
 // <copyright file="Constants.cs" company="Mario">
 //     Mario
@@ -37,6 +37,11 @@ namespace IronyModManager.Storage.Store
         /// The enumerable open tag
         /// </summary>
         public const string EnumerableOpenTag = "<";
+
+        /// <summary>
+        /// The store date identifier
+        /// </summary>
+        public const string StoreDateId = "InternalStorageDateId";
 
         #endregion Fields
     }

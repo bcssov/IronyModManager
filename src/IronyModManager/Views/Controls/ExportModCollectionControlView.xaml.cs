@@ -4,7 +4,7 @@
 // Created          : 03-09-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-10-2021
+// Last Modified On : 01-27-2022
 // ***********************************************************************
 // <copyright file="ExportModCollectionControlView.xaml.cs" company="Mario">
 //     Mario
@@ -58,20 +58,10 @@ namespace IronyModManager.Views.Controls
             {
                 ViewModel.ForceClose();
             };
-            popupImport.Opened += (sender, args) =>
-            {
-                popupImport.Host.ConfigurePosition(popupImport.PlacementTarget, popupImport.PlacementMode, new Avalonia.Point(popupImport.HorizontalOffset, 15),
-                    Avalonia.Controls.Primitives.PopupPositioning.PopupAnchor.None, Avalonia.Controls.Primitives.PopupPositioning.PopupGravity.Bottom);
-            };
             var popupExport = this.FindControl<Popup>("popupExport");
             popupExport.Closed += (sender, args) =>
             {
                 ViewModel.ForceClose();
-            };
-            popupExport.Opened += (sender, args) =>
-            {
-                popupExport.Host.ConfigurePosition(popupExport.PlacementTarget, popupExport.PlacementMode, new Avalonia.Point(popupExport.HorizontalOffset, 15),
-                    Avalonia.Controls.Primitives.PopupPositioning.PopupAnchor.None, Avalonia.Controls.Primitives.PopupPositioning.PopupGravity.Bottom);
             };
             MessageBus.Current.Listen<ForceClosePopulsEventArgs>()
             .SubscribeObservable(x =>

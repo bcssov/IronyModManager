@@ -4,7 +4,7 @@
 // Created          : 03-31-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 11-27-2021
+// Last Modified On : 02-10-2022
 // ***********************************************************************
 // <copyright file="ModPatchExporter.cs" company="Mario">
 //     Mario
@@ -16,7 +16,10 @@ using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
+using System.IO.Compression;
 using System.Linq;
+using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using IronyModManager.DI;
 using IronyModManager.IO.Common;
@@ -59,6 +62,11 @@ namespace IronyModManager.IO.Mods
         private const string CacheStateRegion = "ModPatchExporter";
 
         /// <summary>
+        /// The json state name
+        /// </summary>
+        private const string JsonStateName = "state" + Shared.Constants.JsonExtension;
+
+        /// <summary>
         /// The state backup
         /// </summary>
         private const string StateBackup = StateName + ".bak";
@@ -76,12 +84,17 @@ namespace IronyModManager.IO.Mods
         /// <summary>
         /// The state name
         /// </summary>
-        private const string StateName = "state" + Shared.Constants.JsonExtension;
+        private const string StateName = "state.irony";
 
         /// <summary>
         /// The state temporary
         /// </summary>
         private const string StateTemp = StateName + ".tmp";
+
+        /// <summary>
+        /// The old format paths
+        /// </summary>
+        private static readonly List<string> OldFormatPaths = new() { JsonStateName, JsonStateName + ".bak", JsonStateName + ".tmp" };
 
         /// <summary>
         /// The write lock
@@ -107,6 +120,11 @@ namespace IronyModManager.IO.Mods
         /// The reader
         /// </summary>
         private readonly IReader reader;
+
+        /// <summary>
+        /// The saving token
+        /// </summary>
+        private CancellationTokenSource savingToken;
 
         /// <summary>
         /// The write counter
@@ -446,19 +464,20 @@ namespace IronyModManager.IO.Mods
                     }
                     info.CopyTo(destinationPath, true);
                 }
-                var backups = new List<string>() { Path.Combine(newPath, StateName), Path.Combine(newPath, StateBackup) };
-                foreach (var item in backups)
+                var text = await ReadPatchContentAsync(newPath);
+                foreach (var renamePair in parameters.RenamePairs)
                 {
-                    if (File.Exists(item))
-                    {
-                        var text = await File.ReadAllTextAsync(item);
-                        foreach (var renamePair in parameters.RenamePairs)
-                        {
-                            text = text.Replace($"\"{renamePair.Key}\"", $"\"{renamePair.Value}\"");
-                        }
-                        await File.WriteAllTextAsync(item, text);
-                    }
+                    text = text.Replace($"\"{renamePair.Key}\"", $"\"{renamePair.Value}\"");
                 }
+                await SavePatchContentAsync(Path.Combine(newPath, StateName), text);
+                OldFormatPaths.ForEach(path =>
+                {
+                    var fullPath = Path.Combine(newPath, path);
+                    if (File.Exists(fullPath))
+                    {
+                        DiskOperations.DeleteFile(fullPath);
+                    }
+                });
                 return true;
             }
             return false;
@@ -518,6 +537,7 @@ namespace IronyModManager.IO.Mods
             newInstance.IsCustomPatch = original.IsCustomPatch;
             newInstance.IsFromGame = original.IsFromGame;
             newInstance.AllowDuplicate = original.AllowDuplicate;
+            newInstance.ResetType = original.ResetType;
             return newInstance;
         }
 
@@ -558,6 +578,53 @@ namespace IronyModManager.IO.Mods
             destination.Mode = source.Mode;
             destination.LoadOrder = source.LoadOrder;
             destination.HasGameDefinitions = source.HasGameDefinitions;
+        }
+
+        /// <summary>
+        /// Read patch content as an asynchronous operation.
+        /// </summary>
+        /// <param name="homePath">The home path.</param>
+        /// <returns>A Task&lt;string&gt; representing the asynchronous operation.</returns>
+        private static async Task<string> ReadPatchContentAsync(string homePath)
+        {
+            var jsonPath = Path.Combine(homePath, JsonStateName);
+            var path = Path.Combine(homePath, StateName);
+            if (File.Exists(jsonPath))
+            {
+                return await File.ReadAllTextAsync(jsonPath);
+            }
+            else if (File.Exists(path))
+            {
+                var bytes = await File.ReadAllBytesAsync(path);
+                if (bytes.Any())
+                {
+                    using var source = new MemoryStream(bytes);
+                    using var destination = new MemoryStream();
+                    using var compress = new GZipStream(source, CompressionMode.Decompress);
+                    await compress.CopyToAsync(destination);
+                    var text = Encoding.UTF8.GetString(destination.ToArray());
+                    return text;
+                }
+            }
+            return string.Empty;
+        }
+
+        /// <summary>
+        /// Save patch content as an asynchronous operation.
+        /// </summary>
+        /// <param name="fullPath">The full path.</param>
+        /// <param name="content">The content.</param>
+        /// <returns>A Task&lt;bool&gt; representing the asynchronous operation.</returns>
+        private static async Task<bool> SavePatchContentAsync(string fullPath, string content)
+        {
+            var bytes = Encoding.UTF8.GetBytes(content);
+            using var source = new MemoryStream(bytes);
+            using var destination = new MemoryStream();
+            using var compress = new GZipStream(destination, CompressionLevel.Fastest, true);
+            await source.CopyToAsync(compress);
+            await compress.FlushAsync();
+            await File.WriteAllBytesAsync(fullPath, destination.ToArray());
+            return true;
         }
 
         /// <summary>
@@ -659,12 +726,14 @@ namespace IronyModManager.IO.Mods
         /// <returns>System.Threading.Tasks.Task&lt;IronyModManager.IO.Common.Mods.Models.IPatchState&gt;.</returns>
         private async Task<IPatchState> GetPatchStateInternalAsync(ModPatchExporterParameters parameters, bool loadExternalCode)
         {
-            var statePath = Path.Combine(GetPatchRootPath(parameters.RootPath, parameters.PatchPath), StateName);
+            var rootPath = GetPatchRootPath(parameters.RootPath, parameters.PatchPath);
+            var statePath = Path.Combine(rootPath, StateName);
+            var jsonStatePath = Path.Combine(rootPath, JsonStateName);
             var cached = GetPatchState(statePath);
-            if (File.Exists(statePath) && cached == null)
+            if ((File.Exists(statePath) || File.Exists(jsonStatePath)) && cached == null)
             {
                 using var mutex = await writeLock.LockAsync();
-                var text = await File.ReadAllTextAsync(statePath);
+                var text = await ReadPatchContentAsync(rootPath);
                 if (!string.IsNullOrWhiteSpace(text))
                 {
                     cached = JsonDISerializer.Deserialize<IPatchState>(text);
@@ -785,7 +854,12 @@ namespace IronyModManager.IO.Mods
             cachedItem.PatchState = model;
             cache.Set(new CacheAddParameters<CachedState>() { Key = CacheStateKey, Value = cachedItem, Region = CacheStateRegion });
 
-            WriteStateInBackground(model, modifiedHistory, externalCode, path).ConfigureAwait(false);
+            if (savingToken != null)
+            {
+                savingToken.Cancel();
+            }
+            savingToken = new CancellationTokenSource();
+            WriteStateInBackground(model, modifiedHistory, externalCode, path, savingToken.Token).ConfigureAwait(false);
             return true;
         }
 
@@ -891,11 +965,17 @@ namespace IronyModManager.IO.Mods
         /// <param name="modifiedHistory">The modified history.</param>
         /// <param name="externalCode">The external code.</param>
         /// <param name="path">The path.</param>
+        /// <param name="cancellationToken">The cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>System.Threading.Tasks.Task.</returns>
-        private async Task WriteStateInBackground(IPatchState model, IEnumerable<IDefinition> modifiedHistory, HashSet<string> externalCode, string path)
+        private async Task WriteStateInBackground(IPatchState model, IEnumerable<IDefinition> modifiedHistory, HashSet<string> externalCode, string path, CancellationToken cancellationToken)
         {
             writeCounter++;
-            using var mutex = await writeLock.LockAsync();
+            using var ctr = cancellationToken.Register(() =>
+            {
+                writeCounter--;
+                messageBus.PublishAsync(new WritingStateOperationEvent(writeCounter <= 0)).ConfigureAwait(false);
+            });
+            using var mutex = await writeLock.LockAsync(cancellationToken);
             await messageBus.PublishAsync(new WritingStateOperationEvent(writeCounter <= 0));
             var statePath = Path.Combine(path, StateName);
             var backupPath = Path.Combine(path, StateBackup);
@@ -903,6 +983,10 @@ namespace IronyModManager.IO.Mods
 
             await Task.Run(async () =>
             {
+                if (cancellationToken.IsCancellationRequested)
+                {
+                    return;
+                }
                 var retry = new RetryStrategy();
                 var patchState = DIResolver.Get<IPatchState>();
                 MapPatchState(model, patchState, true);
@@ -965,8 +1049,7 @@ namespace IronyModManager.IO.Mods
                 var serialized = JsonDISerializer.Serialize(patchState);
                 await retry.RetryActionAsync(async () =>
                 {
-                    await File.WriteAllTextAsync(stateTemp, serialized);
-                    return true;
+                    return await SavePatchContentAsync(stateTemp, serialized);
                 });
                 if (File.Exists(backupPath))
                 {
@@ -981,10 +1064,18 @@ namespace IronyModManager.IO.Mods
                 {
                     File.Copy(stateTemp, statePath);
                 }
+                OldFormatPaths.ForEach(oldPath =>
+                {
+                    var fullPath = Path.Combine(path, oldPath);
+                    if (File.Exists(fullPath))
+                    {
+                        DiskOperations.DeleteFile(fullPath);
+                    }
+                });
                 writeCounter--;
                 await messageBus.PublishAsync(new WritingStateOperationEvent(writeCounter <= 0));
                 mutex.Dispose();
-            }).ConfigureAwait(false);
+            }, CancellationToken.None).ConfigureAwait(false);
         }
 
         #endregion Methods

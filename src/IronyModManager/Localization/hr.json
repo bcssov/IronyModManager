@@ -154,6 +154,7 @@
             "ImportOverlay": "Pričekajte dok se verificira...",
             "ProgressExport": "{Progress}",
             "ProgressImport": "Korak {Count}/{TotalCount}: {Progress}",
+            "Export": "Izvoz",
             "Close": "Zatvori"
         },
         "JumpOnDragAndDrop": {
@@ -328,12 +329,14 @@
             "Title": "Odaberi način rada",
             "Default": "Zadano",
             "Advanced": "Napredno",
+            "Analyze": "Samo analiziraj",
             "Close": "Zatvori"
         },
         "ModFilter": {
             "Title": "Mod Filter",
             "IgnoreGameConflicts": "Zanemari sukobe igre",
             "ShowSelfConflicts": "Pokaži sukobe sa samim sobom",
+            "ShowResetConflicts": "Pokaži samo resetirane sukobe",
             "Close": "Zatvori"
         },
         "ResetConflicts": {
@@ -369,6 +372,16 @@
         },
         "BracketMismatchError": {
             "Message": "Nepodudaranje broja zagrada! Otvorena zagrada: {OpenBracketCount} Zatvori zagrada: {CloseBracketCount}"
+        },
+        "ResetWarning": {
+            "Title": "Sukobi Resetirani",
+            "AnalyzeModeAll": "Neki sukobi će se resetirati ako se rješavač sukoba pokrene zbog promjena u modu. Ovo su riješeni sukobi koji će se resetirati:{NewLine}{NewLine}{ListOfConflictsResolved}{NewLine}Ovo su zanemareni sukobi koji će se resetirati:{NewLine}{NewLine}{ListOfConflictsIgnored}",
+            "AnalyzeModeResolvedOnly": "Neki sukobi će se resetirati ako se rješavač sukoba pokrene zbog promjena u modu. Ovo su riješeni sukobi koji će se resetirati:{NewLine}{NewLine}{ListOfConflictsResolved}",
+            "AnalyzeModeIgnoredOnly": "Neki sukobi će se resetirati ako se rješavač sukoba pokrene zbog promjena u modu. Ovo su zanemareni sukobi koji će se resetirati:{NewLine}{NewLine}{ListOfConflictsIgnored}",
+            "RegularModeAll": "Neki sukobi su resetirali zbog promjena u modu. Ovo su resetirani riješeni sukobi:{NewLine}{NewLine}{ListOfConflictsResolved}{NewLine}Ovo su resetirani zanemareni sukobi:{NewLine}{NewLine}{ListOfConflictsIgnored}",
+            "RegularModeResolvedOnly": "Neki sukobi su resetirali zbog promjena u modu. Ovo su resetirani riješeni sukobi:{NewLine}{NewLine}{ListOfConflictsResolved}",
+            "RegularModeIgnoredOnly": "Neki sukobi su resetirali zbog promjena u modu. Ovo su resetirani zanemareni sukobi:{NewLine}{NewLine}{ListOfConflictsIgnored}",
+            "ListOfConflictsFormat": "{ParentDirectory}: {Name}"
         }
     },
     "ConflictIgnore": {

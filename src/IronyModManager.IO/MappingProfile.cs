@@ -4,7 +4,7 @@
 // Created          : 08-29-2021
 //
 // Last Modified By : Mario
-// Last Modified On : 08-29-2021
+// Last Modified On : 01-27-2022
 // ***********************************************************************
 // <copyright file="MappingProfile.cs" company="Mario">
 //     Mario
@@ -32,7 +32,7 @@ namespace IronyModManager.IO
         #region Constructors
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="MappingProfile"/> class.
+        /// Initializes a new instance of the <see cref="MappingProfile" /> class.
         /// </summary>
         public MappingProfile()
         {
@@ -45,7 +45,7 @@ namespace IronyModManager.IO
                 .ForMember(m => m.PatchModEnabled, o => o.MapFrom(s => s.PatchModEnabled))
                 .ForMember(m => m.PatchModEnabled, o => o.MapFrom(s => s.PatchModEnabled))
                 .ReverseMap()
-                .ForAllOtherMembers(m => m.Ignore());
+                .IgnoreAllUnmappedMembers();
         }
 
         #endregion Constructors

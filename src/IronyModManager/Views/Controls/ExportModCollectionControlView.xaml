@@ -9,7 +9,7 @@
             <Button Content="{Binding Export}" Command="{Binding ExportCommand}" MaxHeight="30"></Button>
             <Panel>
                 <Button Content="{Binding ExportOther}" Command="{Binding ExportOtherCommand}" x:Name="openExportPopupButton"></Button>
-                <Popup PlacementMode="AnchorAndGravity" IsOpen="{Binding IsExportOpen}"
+                <Popup PlacementMode="AnchorAndGravity" PlacementGravity="Bottom" VerticalOffset="15" IsOpen="{Binding IsExportOpen}"
                Topmost="True" ObeyScreenEdges="True" StaysOpen="False" x:Name="popupExport"
                PlacementTarget="{Binding #openExportPopupButton}">
                     <Border BorderThickness="1,1,1,1" BorderBrush="{DynamicResource IronyButtonBorderBrush}">
@@ -40,7 +40,7 @@
             <Button Content="{Binding Import}" Command="{Binding ImportCommand}" MaxHeight="30"></Button>
             <Panel>
                 <Button Content="{Binding ImportOther}" Command="{Binding ImportOtherCommand}" x:Name="openImportPopupButton"></Button>
-                <Popup PlacementMode="AnchorAndGravity" IsOpen="{Binding IsImportOpen}"
+                <Popup PlacementMode="AnchorAndGravity" PlacementGravity="Bottom" VerticalOffset="15" IsOpen="{Binding IsImportOpen}"
                Topmost="True" ObeyScreenEdges="True" StaysOpen="False" x:Name="popupImport"
                PlacementTarget="{Binding #openImportPopupButton}">
                     <Border BorderThickness="1,1,1,1" BorderBrush="{DynamicResource IronyButtonBorderBrush}">

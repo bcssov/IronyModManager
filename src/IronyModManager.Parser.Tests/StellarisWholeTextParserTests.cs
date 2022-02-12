@@ -4,7 +4,7 @@
 // Created          : 02-18-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-07-2021
+// Last Modified On : 01-29-2022
 // ***********************************************************************
 // <copyright file="StellarisWholeTextParserTests.cs" company="Mario">
 //     Mario
@@ -39,21 +39,6 @@ namespace IronyModManager.Parser.Tests
             var args = new CanParseArgs()
             {
                 File = "map\\galaxy\\test.txt",
-                GameType = "Stellaris"
-            };
-            var parser = new WholeTextParser(new CodeParser(new Logger()), null);
-            parser.CanParse(args).Should().BeTrue();
-        }
-
-        /// <summary>
-        /// Defines the test method CanParse_weapon_components_should_be_true.
-        /// </summary>
-        [Fact]
-        public void CanParse_weapon_components_should_be_true()
-        {
-            var args = new CanParseArgs()
-            {
-                File = "common\\component_templates\\weapon_components.csv",
                 GameType = "Stellaris"
             };
             var parser = new WholeTextParser(new CodeParser(new Logger()), null);
@@ -198,6 +183,36 @@ namespace IronyModManager.Parser.Tests
         }
 
         /// <summary>
+        /// Defines the test method CanParse_country_container_should_be_true.
+        /// </summary>
+        [Fact]
+        public void CanParse_country_container_should_be_true()
+        {
+            var args = new CanParseArgs()
+            {
+                File = "common\\country_container\\test.txt",
+                GameType = "Stellaris"
+            };
+            var parser = new WholeTextParser(new CodeParser(new Logger()), null);
+            parser.CanParse(args).Should().BeTrue();
+        }
+
+        /// <summary>
+        /// Defines the test method CanParse_diplomacy_economy_should_be_true.
+        /// </summary>
+        [Fact]
+        public void CanParse_diplomacy_economy_should_be_true()
+        {
+            var args = new CanParseArgs()
+            {
+                File = "common\\diplomacy_economy\\test.txt",
+                GameType = "Stellaris"
+            };
+            var parser = new WholeTextParser(new CodeParser(new Logger()), null);
+            parser.CanParse(args).Should().BeTrue();
+        }
+
+        /// <summary>
         /// Defines the test method Parse_should_yield_results.
         /// </summary>
         [Fact]
@@ -242,6 +257,59 @@ namespace IronyModManager.Parser.Tests
                 }
                 result[i].ModName.Should().Be("fake");
                 result[i].Type.Should().Be("common\\txt");
+            }
+        }
+
+        /// <summary>
+        /// Defines the test method Parse_component_tags_should_yield_results.
+        /// </summary>
+        [Fact]
+        public void Parse_component_tags_should_yield_results()
+        {
+            DISetup.SetupContainer();
+
+            var sb = new StringBuilder();
+            sb.AppendLine(@"weapon_type_energy");
+            sb.AppendLine(@"weapon_type_kinetic");
+            sb.AppendLine(@"weapon_type_explosive");
+            sb.AppendLine(@"weapon_type_strike_craft");
+            sb.AppendLine(@"weapon_type_point_defense");
+            sb.AppendLine(@"weapon_role_anti_armor");
+            sb.AppendLine(@"weapon_role_anti_shield");
+            sb.AppendLine(@"weapon_role_artillery");
+            sb.AppendLine(@"weapon_role_anti_hull");
+            sb.AppendLine(@"weapon_role_point_defense");
+
+            var args = new ParserArgs()
+            {
+                ContentSHA = "sha",
+                ModDependencies = new List<string> { "1" },
+                File = "common\\component_tags\\t.txt",
+                Lines = sb.ToString().Split(Environment.NewLine.ToCharArray(), StringSplitOptions.RemoveEmptyEntries),
+                ModName = "fake"
+            };
+            var parser = new WholeTextParser(new CodeParser(new Logger()), null);
+            var result = parser.Parse(args).ToList();
+            result.Should().NotBeNullOrEmpty();
+            result.Count.Should().Be(1);
+            for (int i = 0; i < 1; i++)
+            {
+                result[i].ContentSHA.Should().Be("sha");
+                result[i].Dependencies.First().Should().Be("1");
+                result[i].File.Should().Be("common\\component_tags\\t.txt");
+                switch (i)
+                {
+                    case 0:
+                        result[i].Code.Trim().Should().Be(sb.ToString().Trim());
+                        result[i].Id.Should().Be("t.txt");
+                        result[i].ValueType.Should().Be(ValueType.WholeTextFile);
+                        break;
+
+                    default:
+                        break;
+                }
+                result[i].ModName.Should().Be("fake");
+                result[i].Type.Should().Be("common\\component_tags\\txt");
             }
         }
     }

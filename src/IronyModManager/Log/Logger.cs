@@ -4,7 +4,7 @@
 // Created          : 01-13-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 10-29-2021
+// Last Modified On : 01-28-2022
 // ***********************************************************************
 // <copyright file="Logger.cs" company="Mario">
 //     Mario
@@ -13,7 +13,10 @@
 // ***********************************************************************
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
+using System.Runtime.InteropServices;
+using System.Text;
 using IronyModManager.Shared;
 using NLog;
 
@@ -48,14 +51,7 @@ namespace IronyModManager.Log
         {
             if (ex != null)
             {
-                if (!string.IsNullOrWhiteSpace(message))
-                {
-                    log.Error(ex, message);
-                }
-                else
-                {
-                    log.Error(ex);
-                }
+                log.Error(ex, FormatMessage(message));
             }
         }
 
@@ -68,14 +64,7 @@ namespace IronyModManager.Log
         {
             if (ex != null)
             {
-                if (!string.IsNullOrWhiteSpace(message))
-                {
-                    log.Fatal(ex, message);
-                }
-                else
-                {
-                    log.Fatal(ex);
-                }
+                log.Fatal(ex, FormatMessage(message));
             }
         }
 
@@ -101,7 +90,7 @@ namespace IronyModManager.Log
         {
             if (!string.IsNullOrEmpty(message))
             {
-                log.Info(message);
+                log.Info(FormatMessage(message));
             }
         }
 
@@ -113,7 +102,7 @@ namespace IronyModManager.Log
         {
             if (!string.IsNullOrEmpty(message))
             {
-                log.Trace(message);
+                log.Trace(FormatMessage(message));
             }
         }
 
@@ -169,6 +158,24 @@ namespace IronyModManager.Log
         protected static bool IsWarnEnabled()
         {
             return log.IsWarnEnabled;
+        }
+
+        /// <summary>
+        /// Formats the message.
+        /// </summary>
+        /// <param name="message">The message.</param>
+        /// <returns>string.</returns>
+        private string FormatMessage(string message)
+        {
+            var sb = new StringBuilder();
+            if (!string.IsNullOrWhiteSpace(message))
+            {
+                sb.AppendLine(message);
+            }
+            sb.AppendLine($"Version: {FileVersionInfo.GetVersionInfo(GetType().Assembly.Location).ProductVersion}");
+            sb.AppendLine($"OS Description: {RuntimeInformation.OSDescription}");
+            sb.AppendLine($"Runtime Identifier: {RuntimeInformation.RuntimeIdentifier}");
+            return sb.ToString();
         }
 
         #endregion Methods

@@ -4,7 +4,7 @@
 // Created          : 02-17-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-15-2021
+// Last Modified On : 01-29-2022
 // ***********************************************************************
 // <copyright file="BaseParser.cs" company="Mario">
 //     Mario
@@ -171,9 +171,13 @@ namespace IronyModManager.Parser.Common.Parsers
         /// <returns>IEnumerable&lt;IDefinition&gt;.</returns>
         protected virtual IEnumerable<IDefinition> EvalForErrorsOnly(ParserArgs args)
         {
+            if (args.ValidationType == ValidationType.SkipAll)
+            {
+                return null;
+            }
             try
             {
-                var error = codeParser.PerformValidityCheck(args.Lines, args.File, ShouldSwitchToBasicChecking(args.Lines));
+                var error = codeParser.PerformValidityCheck(args.Lines, args.File, ShouldSwitchToBasicChecking(args.Lines) || args.ValidationType == ValidationType.SimpleOnly);
                 if (error != null)
                 {
                     return new List<IDefinition>() { TranslateScriptError(error, args) };
@@ -340,13 +344,11 @@ namespace IronyModManager.Parser.Common.Parsers
         /// Parses the root.
         /// </summary>
         /// <param name="args">The arguments.</param>
-        /// <param name="useSimpleValidation">if set to <c>true</c> [use simple validation].</param>
-        /// <param name="skipValidation">if set to <c>true</c> [skip validation].</param>
         /// <returns>IEnumerable&lt;IDefinition&gt;.</returns>
-        protected virtual IEnumerable<IDefinition> ParseRoot(ParserArgs args, bool useSimpleValidation = false, bool skipValidation = false)
+        protected virtual IEnumerable<IDefinition> ParseRoot(ParserArgs args)
         {
             var result = new List<IDefinition>();
-            var values = skipValidation ? codeParser.ParseScriptWithoutValidation(args.Lines) : TryParse(args, useSimpleValidation);
+            var values = TryParse(args);
             if (values.Error != null)
             {
                 result.Add(TranslateScriptError(values.Error, args));
@@ -390,13 +392,11 @@ namespace IronyModManager.Parser.Common.Parsers
         /// Parses the second level.
         /// </summary>
         /// <param name="args">The arguments.</param>
-        /// <param name="useSimpleValidation">if set to <c>true</c> [use simple validation].</param>
-        /// <param name="skipValidation">if set to <c>true</c> [skip validation].</param>
         /// <returns>IEnumerable&lt;IDefinition&gt;.</returns>
-        protected virtual IEnumerable<IDefinition> ParseSecondLevel(ParserArgs args, bool useSimpleValidation = false, bool skipValidation = false)
+        protected virtual IEnumerable<IDefinition> ParseSecondLevel(ParserArgs args)
         {
             var result = new List<IDefinition>();
-            var values = skipValidation ? codeParser.ParseScriptWithoutValidation(args.Lines) : TryParse(args, useSimpleValidation);
+            var values = TryParse(args);
             if (values.Error != null)
             {
                 result.Add(TranslateScriptError(values.Error, args));
@@ -446,7 +446,7 @@ namespace IronyModManager.Parser.Common.Parsers
                     var op = item.Operator ?? string.Empty;
                     if (op.Equals(Constants.Scripts.EqualsOperator.ToString()))
                     {
-                        if (item.Key.StartsWith(Constants.Scripts.Namespace, StringComparison.OrdinalIgnoreCase))
+                        if (Constants.Scripts.Namespaces.Any(n => item.Key.StartsWith(n, StringComparison.OrdinalIgnoreCase)))
                         {
                             typeAssigned = true;
                             definition.Id = $"{Path.GetFileNameWithoutExtension(args.File)}-{TrimId(item.Key)}";
@@ -550,12 +550,16 @@ namespace IronyModManager.Parser.Common.Parsers
         /// Tries the parse.
         /// </summary>
         /// <param name="args">The arguments.</param>
-        /// <param name="simpleChecks">if set to <c>true</c> [simple checks].</param>
         /// <returns>IParseResponse.</returns>
-        protected virtual IParseResponse TryParse(ParserArgs args, bool simpleChecks)
+        protected virtual IParseResponse TryParse(ParserArgs args)
         {
+            if (args.ValidationType == ValidationType.SkipAll)
+            {
+                return codeParser.ParseScriptWithoutValidation(args.Lines, args.File);
+            }
             try
             {
+                var simpleChecks = args.ValidationType == ValidationType.SimpleOnly;
                 if (!simpleChecks)
                 {
                     simpleChecks = ShouldSwitchToBasicChecking(args.Lines);

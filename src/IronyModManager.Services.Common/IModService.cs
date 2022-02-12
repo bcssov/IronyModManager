@@ -4,7 +4,7 @@
 // Created          : 02-24-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 10-26-2021
+// Last Modified On : 02-08-2022
 // ***********************************************************************
 // <copyright file="IModService.cs" company="Mario">
 //     Mario
@@ -89,6 +89,13 @@ namespace IronyModManager.Services.Common
         /// <param name="skipIndex">Index of the skip.</param>
         /// <returns>IMod.</returns>
         IMod FindMod(IEnumerable<IMod> collection, string text, bool reverse, int? skipIndex = null);
+
+        /// <summary>
+        /// Gets the available mods.
+        /// </summary>
+        /// <param name="game">The game.</param>
+        /// <returns>Task&lt;IEnumerable&lt;IMod&gt;&gt;.</returns>
+        Task<IEnumerable<IMod>> GetAvailableModsAsync(IGame game);
 
         /// <summary>
         /// Gets the image stream asynchronous.

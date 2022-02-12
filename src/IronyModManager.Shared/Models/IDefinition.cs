@@ -4,7 +4,7 @@
 // Created          : 02-16-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 11-27-2021
+// Last Modified On : 02-02-2022
 // ***********************************************************************
 // <copyright file="IDefinition.cs" company="Mario">
 //     Mario
@@ -213,6 +213,13 @@ namespace IronyModManager.Shared.Models
         /// </summary>
         /// <value>The parent directory ci.</value>
         string ParentDirectoryCI { get; }
+
+        /// <summary>
+        /// Gets or sets the type of the reset.
+        /// </summary>
+        /// <value>The type of the reset.</value>
+        [JsonIgnore]
+        ResetType ResetType { get; set; }
 
         /// <summary>
         /// Gets or sets the tags.

@@ -4,7 +4,7 @@
 // Created          : 06-11-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 08-23-2021
+// Last Modified On : 02-09-2022
 // ***********************************************************************
 // <copyright file="ConflictSolverResetConflictsControlViewModel.cs" company="Mario">
 //     Mario
@@ -17,6 +17,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reactive;
 using System.Reactive.Disposables;
+using System.Threading.Tasks;
 using Avalonia.Collections;
 using IronyModManager.Common;
 using IronyModManager.Common.ViewModels;
@@ -153,6 +154,12 @@ namespace IronyModManager.ViewModels.Controls
         public virtual IEnumerable<Mode> Modes { get; protected set; }
 
         /// <summary>
+        /// Gets or sets a value indicating whether [read only].
+        /// </summary>
+        /// <value><c>true</c> if [read only]; otherwise, <c>false</c>.</value>
+        public virtual bool ReadOnly { get; protected set; }
+
+        /// <summary>
         /// Gets or sets the reset.
         /// </summary>
         /// <value>The reset.</value>
@@ -232,6 +239,15 @@ namespace IronyModManager.ViewModels.Controls
         public virtual void Refresh()
         {
             Bind(GetHierarchicalDefinitions(SelectedMode));
+        }
+
+        /// <summary>
+        /// Sets the parameters.
+        /// </summary>
+        /// <param name="readOnly">if set to <c>true</c> [read only].</param>
+        public void SetParameters(bool readOnly)
+        {
+            ReadOnly = readOnly;
         }
 
         /// <summary>
@@ -373,7 +389,7 @@ namespace IronyModManager.ViewModels.Controls
 
             ResetCommand = ReactiveCommand.CreateFromTask(async () =>
             {
-                if (SelectedHierarchicalDefinitions != null && SelectedHierarchicalDefinitions.Any(p => !string.IsNullOrWhiteSpace(p.Key)))
+                if (!ReadOnly && SelectedHierarchicalDefinitions != null && SelectedHierarchicalDefinitions.Any(p => !string.IsNullOrWhiteSpace(p.Key)))
                 {
                     var definitions = SelectedHierarchicalDefinitions.Where(p => !string.IsNullOrWhiteSpace(p.Key));
                     if (SelectedMode?.Value == IgnoredValue)
@@ -383,7 +399,7 @@ namespace IronyModManager.ViewModels.Controls
                         var results = new List<bool>();
                         foreach (var item in definitions)
                         {
-                            results.Add(await modPatchCollectionService.ResetIgnoredConflictAsync(Conflicts, item.Key, CollectionName));
+                            results.Add(await Task.Run(async () => await modPatchCollectionService.ResetIgnoredConflictAsync(Conflicts, item.Key, CollectionName)));
                         }
                         await TriggerOverlayAsync(id, false);
                         if (results.Any())
@@ -399,7 +415,7 @@ namespace IronyModManager.ViewModels.Controls
                         var results = new List<bool>();
                         foreach (var item in definitions)
                         {
-                            results.Add(await modPatchCollectionService.ResetResolvedConflictAsync(Conflicts, item.Key, CollectionName));
+                            results.Add(await Task.Run(async () => await modPatchCollectionService.ResetResolvedConflictAsync(Conflicts, item.Key, CollectionName)));
                         }
                         await TriggerOverlayAsync(id, false);
                         if (results.Any())
@@ -415,7 +431,7 @@ namespace IronyModManager.ViewModels.Controls
                         var results = new List<bool>();
                         foreach (var item in definitions)
                         {
-                            results.Add(await modPatchCollectionService.ResetCustomConflictAsync(Conflicts, item.Key, CollectionName));
+                            results.Add(await Task.Run(async () => await modPatchCollectionService.ResetCustomConflictAsync(Conflicts, item.Key, CollectionName)));
                         }
                         await TriggerOverlayAsync(id, false);
                         if (results.Any())

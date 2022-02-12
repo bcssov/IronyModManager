@@ -74,6 +74,32 @@ namespace IronyModManager.Tests
         }
 
         /// <summary>
+        /// Defines the test method Class_should_be_empty_when_no_provider.
+        /// </summary>
+        [Fact]
+        public void Class_should_be_empty_when_no_provider()
+        {
+            DISetup.SetupContainer();
+            var converter = new DefinitionPriorityClassConverter();
+            var service = new Mock<IModPatchCollectionService>();
+            service.Setup(p => p.IsPatchMod(It.IsAny<string>())).Returns((string p) =>
+            {
+                if (p == "IronyModManager_fake3")
+                {
+                    return true;
+                }
+                return false;
+            });
+            DISetup.Container.RegisterInstance(service.Object);
+            var def = new Definition() { ModName = "IronyModManager_fake1", File = "test1.txt" };
+            var def2 = new Definition() { ModName = "IronyModManager_fake2", File = "test1.txt" };
+            var def3 = new Definition() { ModName = "IronyModManager_fake3", File = "test.txt" };
+            service.Setup(p => p.EvalDefinitionPriority(It.IsAny<IEnumerable<IDefinition>>())).Returns(new PriorityDefinitionResult() { Definition = def, PriorityType = Models.Common.DefinitionPriorityType.NoProvider });
+            var result = converter.Convert(new List<object>() { new List<IDefinition>() { def, def2, def3 }, def }, null, null, null);
+            result.ToString().Should().BeNullOrEmpty();
+        }
+
+        /// <summary>
         /// Defines the test method Class_should_be_empty.
         /// </summary>
         [Fact]

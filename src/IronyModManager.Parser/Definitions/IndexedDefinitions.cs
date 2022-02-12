@@ -4,7 +4,7 @@
 // Created          : 02-16-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 05-29-2021
+// Last Modified On : 02-09-2022
 // ***********************************************************************
 // <copyright file="IndexedDefinitions.cs" company="Mario">
 //     Mario
@@ -73,6 +73,11 @@ namespace IronyModManager.Parser.Definitions
         private ConcurrentIndexedList<IHierarchicalDefinitions> mainHierarchalDefinitions;
 
         /// <summary>
+        /// The reset definitions count
+        /// </summary>
+        private HashSet<string> resetDefinitions;
+
+        /// <summary>
         /// The trie
         /// </summary>
         private Trie<IDefinition> trie;
@@ -108,6 +113,7 @@ namespace IronyModManager.Parser.Definitions
             typeKeys = new HashSet<string>();
             allFileKeys = new HashSet<string>();
             directoryKeys = new HashSet<string>();
+            resetDefinitions = new HashSet<string>();
             childHierarchicalDefinitions = new ConcurrentDictionary<string, ConcurrentIndexedList<IHierarchicalDefinitions>>();
             mainHierarchalDefinitions = new ConcurrentIndexedList<IHierarchicalDefinitions>(nameof(IHierarchicalDefinitions.Name));
         }
@@ -151,6 +157,35 @@ namespace IronyModManager.Parser.Definitions
         }
 
         /// <summary>
+        /// Changes the state of the hierarchical reset.
+        /// </summary>
+        /// <param name="definition">The definition.</param>
+        /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
+        public bool ChangeHierarchicalResetState(IDefinition definition)
+        {
+            if (definition != null)
+            {
+                var parentDirectoryCI = ResolveHierarchalParentDirectory(definition);
+                var hierarchicalDefinition = mainHierarchalDefinitions.GetFirstByNameNoLock(nameof(IHierarchicalDefinitions.Name), parentDirectoryCI);
+                if (hierarchicalDefinition != null)
+                {
+                    if (childHierarchicalDefinitions.TryGetValue(hierarchicalDefinition.Name, out var children))
+                    {
+                        var child = children.GetFirstByNameNoLock(nameof(IHierarchicalDefinitions.Name), definition.Id);
+                        if (child != null)
+                        {
+                            child.ResetType = definition.ResetType;
+                            AddOrRemoveFromResetDefinitions(definition, false);
+                            hierarchicalDefinition.ResetType = children.Any(p => p.ResetType != ResetType.None) ? ResetType.Any : ResetType.None;
+                            return true;
+                        }
+                    }
+                }
+            }
+            return false;
+        }
+
+        /// <summary>
         /// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
         /// </summary>
         public void Dispose()
@@ -178,6 +213,8 @@ namespace IronyModManager.Parser.Definitions
             mainHierarchalDefinitions.Clear();
             mainHierarchalDefinitions = null;
             trie = null;
+            resetDefinitions.Clear();
+            resetDefinitions = null;
         }
 
         /// <summary>
@@ -312,14 +349,15 @@ namespace IronyModManager.Parser.Definitions
         /// <returns>IEnumerable&lt;IHierarchicalDefinitions&gt;.</returns>
         public IEnumerable<IHierarchicalDefinitions> GetHierarchicalDefinitions()
         {
-            foreach (var item in mainHierarchalDefinitions)
+            var hierarchicalDefinitions = CopyHierarchicalDefinition(mainHierarchalDefinitions);
+            foreach (var item in hierarchicalDefinitions)
             {
                 if (childHierarchicalDefinitions.TryGetValue(item.Name, out var value))
                 {
-                    item.Children = value.Select(p => p).OrderBy(p => p.Name).ToHashSet();
+                    item.Children = CopyHierarchicalDefinition(value.Select(p => p).OrderBy(p => p.Name).ToHashSet()).ToHashSet();
                 }
             }
-            return mainHierarchalDefinitions.Select(p => p).OrderBy(p => p.Name).ToHashSet();
+            return hierarchicalDefinitions.Select(p => p).OrderBy(p => p.Name).ToHashSet();
         }
 
         /// <summary>
@@ -329,6 +367,15 @@ namespace IronyModManager.Parser.Definitions
         public bool HasGameDefinitions()
         {
             return gameDefinitionsCount > 0;
+        }
+
+        /// <summary>
+        /// Determines whether [has reset definitions].
+        /// </summary>
+        /// <returns><c>true</c> if [has reset definitions]; otherwise, <c>false</c>.</returns>
+        public bool HasResetDefinitions()
+        {
+            return resetDefinitions.Any();
         }
 
         /// <summary>
@@ -375,6 +422,7 @@ namespace IronyModManager.Parser.Definitions
             {
                 gameDefinitionsCount = 0;
             }
+            AddOrRemoveFromResetDefinitions(definition, false);
             definitions.Remove(definition);
             var hierarchicalDefinition = mainHierarchalDefinitions.GetFirstByNameNoLock(nameof(IHierarchicalDefinitions.Name), ResolveHierarchalParentDirectory(definition));
             if (hierarchicalDefinition != null)
@@ -386,10 +434,16 @@ namespace IronyModManager.Parser.Definitions
                     {
                         children.Remove(child);
                     }
+                    bool removed = false;
                     if (!children.Select(p => p).Any())
                     {
+                        removed = true;
                         childHierarchicalDefinitions.TryRemove(hierarchicalDefinition.Name, out _);
                         mainHierarchalDefinitions.Remove(hierarchicalDefinition);
+                    }
+                    if (!removed)
+                    {
+                        hierarchicalDefinition.ResetType = children.Any() && children.Any(p => p.ResetType != ResetType.None) ? ResetType.Any : ResetType.None;
                     }
                 }
             }
@@ -447,6 +501,49 @@ namespace IronyModManager.Parser.Definitions
         }
 
         /// <summary>
+        /// Adds the or remove from reset definitions.
+        /// </summary>
+        /// <param name="definition">The definition.</param>
+        /// <param name="add">if set to <c>true</c> [add].</param>
+        private void AddOrRemoveFromResetDefinitions(IDefinition definition, bool add)
+        {
+            if (definition.ResetType != ResetType.None)
+            {
+                if (add)
+                {
+                    resetDefinitions.Add(definition.TypeAndId);
+                }
+                else
+                {
+                    resetDefinitions.Remove(definition.TypeAndId);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Copies the hierarchical definition.
+        /// </summary>
+        /// <param name="source">The source.</param>
+        /// <returns>IEnumerable&lt;IHierarchicalDefinitions&gt;.</returns>
+        private IEnumerable<IHierarchicalDefinitions> CopyHierarchicalDefinition(IEnumerable<IHierarchicalDefinitions> source)
+        {
+            var result = new HashSet<IHierarchicalDefinitions>();
+            foreach (var item in source)
+            {
+                var copy = DIResolver.Get<IHierarchicalDefinitions>();
+                copy.Name = item.Name;
+                copy.Mods = item.Mods;
+                copy.AdditionalData = item.AdditionalData;
+                item.FileNames.ToList().ForEach(f => copy.FileNames.Add(f));
+                copy.ResetType = item.ResetType;
+                copy.Key = item.Key;
+                copy.NonGameDefinitions = item.NonGameDefinitions;
+                result.Add(copy);
+            }
+            return result;
+        }
+
+        /// <summary>
         /// Maps the pretty print hierarchy.
         /// </summary>
         /// <param name="definition">The definition.</param>
@@ -487,6 +584,12 @@ namespace IronyModManager.Parser.Definitions
                 {
                     child.FileNames.Add(definition.FileCI);
                 }
+            }
+            if (definition.ResetType != ResetType.None)
+            {
+                child.ResetType = definition.ResetType;
+                hierarchicalDefinition.ResetType = ResetType.Any;
+                AddOrRemoveFromResetDefinitions(definition, true);
             }
             if (child.Mods == null)
             {

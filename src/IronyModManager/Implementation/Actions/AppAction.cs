@@ -4,7 +4,7 @@
 // Created          : 03-01-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 10-27-2021
+// Last Modified On : 02-11-2022
 // ***********************************************************************
 // <copyright file="AppAction.cs" company="Mario">
 //     Mario
@@ -140,7 +140,8 @@ namespace IronyModManager.Implementation.Actions
                     Process.Start(new ProcessStartInfo()
                     {
                         FileName = path,
-                        WorkingDirectory = Path.GetDirectoryName(path)
+                        WorkingDirectory = Path.GetDirectoryName(path),
+                        UseShellExecute = RuntimeInformation.IsOSPlatform(OSPlatform.Windows)
                     });
                 }
                 else
@@ -149,7 +150,8 @@ namespace IronyModManager.Implementation.Actions
                     {
                         FileName = path,
                         Arguments = args,
-                        WorkingDirectory = Path.GetDirectoryName(path)
+                        WorkingDirectory = Path.GetDirectoryName(path),
+                        UseShellExecute = RuntimeInformation.IsOSPlatform(OSPlatform.Windows)
                     });
                 }
                 return Task.FromResult(true);

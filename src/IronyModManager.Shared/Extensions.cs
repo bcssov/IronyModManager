@@ -4,7 +4,7 @@
 // Created          : 02-16-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 10-26-2021
+// Last Modified On : 01-28-2022
 // ***********************************************************************
 // <copyright file="Extensions.cs" company="Mario">
 //     Mario
@@ -13,10 +13,8 @@
 // ***********************************************************************
 using System;
 using System.Collections.Generic;
-using System.Data.HashFunction.MetroHash;
 using System.IO;
 using System.Linq;
-using System.Text;
 
 namespace IronyModManager.Shared
 {
@@ -24,7 +22,7 @@ namespace IronyModManager.Shared
     /// Class Extensions.
     /// </summary>
     [ExcludeFromCoverage("Hash calculation is excluded.")]
-    public static class Extensions
+    public static partial class Extensions
     {
         #region Fields
 
@@ -32,16 +30,6 @@ namespace IronyModManager.Shared
         /// The empty string characters
         /// </summary>
         private static readonly string[] emptyStringCharacters = new string[] { " " };
-
-        /// <summary>
-        /// The hash
-        /// </summary>
-        private static readonly IMetroHash128 hash = MetroHash128Factory.Instance.Create();
-
-        /// <summary>
-        /// The invalid file name characters
-        /// </summary>
-        private static readonly char[] invalidFileNameCharactersExtension = new char[] { ':' };
 
         /// <summary>
         /// The tab space
@@ -58,42 +46,6 @@ namespace IronyModManager.Shared
         #region Methods
 
         /// <summary>
-        /// Calculates the sha.
-        /// </summary>
-        /// <param name="value">The value.</param>
-        /// <returns>System.String.</returns>
-        public static string CalculateSHA(this string value)
-        {
-            var checksum = hash.ComputeHash(Encoding.UTF8.GetBytes(value));
-            return checksum.AsHexString();
-        }
-
-        /// <summary>
-        /// Calculates the sha.
-        /// </summary>
-        /// <param name="stream">The stream.</param>
-        /// <returns>System.String.</returns>
-        public static string CalculateSHA(this Stream stream)
-        {
-            using var bufferedStream = new BufferedStream(stream, 1024 * 32);
-            var checksum = hash.ComputeHash(bufferedStream);
-            return checksum.AsHexString();
-        }
-
-        /// <summary>
-        /// Conditionals the filter.
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="col">The col.</param>
-        /// <param name="condition">The condition.</param>
-        /// <param name="filter">The filter.</param>
-        /// <returns>System.Collections.Generic.IEnumerable&lt;T&gt;.</returns>
-        public static IEnumerable<T> ConditionalFilter<T>(this IEnumerable<T> col, bool condition, Func<IEnumerable<T>, IEnumerable<T>> filter)
-        {
-            return condition ? filter(col) : col;
-        }
-
-        /// <summary>
         /// Generates the short file name hash identifier.
         /// </summary>
         /// <param name="value">The value.</param>
@@ -108,7 +60,7 @@ namespace IronyModManager.Shared
             var hash = value.CalculateSHA().GenerateValidFileName();
             if (hash.Length > maxLength)
             {
-                return hash.Substring(0, maxLength);
+                return hash[..maxLength];
             }
             return hash;
         }
@@ -127,22 +79,6 @@ namespace IronyModManager.Shared
             var fileName = GetInvalidFileNameChars().Aggregate(value, (current, character) => current.Replace(character.ToString(), string.Empty));
             fileName = emptyStringCharacters.Aggregate(fileName, (a, b) => a.Replace(b, "_"));
             return fileName;
-        }
-
-        /// <summary>
-        /// Listses the same.
-        /// </summary>
-        /// <typeparam name="TSource">The type of the t source.</typeparam>
-        /// <param name="first">The first.</param>
-        /// <param name="second">The second.</param>
-        /// <returns>bool.</returns>
-        public static bool ListsSame<TSource>(this IEnumerable<TSource> first, IEnumerable<TSource> second)
-        {
-            if (first == null || second == null)
-            {
-                return false;
-            }
-            return first.SequenceEqual(second);
         }
 
         /// <summary>
@@ -194,56 +130,58 @@ namespace IronyModManager.Shared
             return value.Replace('\\', Path.DirectorySeparatorChar).Replace('/', Path.DirectorySeparatorChar);
         }
 
-#nullable enable
-
         /// <summary>
-        /// Converts to version.
+        /// Trims the specified value.
         /// </summary>
+        /// <param name="input">The input.</param>
         /// <param name="value">The value.</param>
-        /// <returns>System.Version?.</returns>
-        public static Version? ToVersion(this string value)
+        /// <param name="type">The type.</param>
+        /// <returns>System.String.</returns>
+        public static string Trim(this string input, string value, StringComparison type = StringComparison.CurrentCultureIgnoreCase)
         {
-            var sb = new StringBuilder();
-            var count = 0;
-            foreach (var item in value.Split("."))
-            {
-                var parsed = item.Replace("*", string.Empty);
-                if (string.IsNullOrWhiteSpace(parsed))
-                {
-                    parsed = "*";
-                }
-                if (int.TryParse(parsed, out var part))
-                {
-                    sb.Append($"{part}.");
-                }
-                else if (parsed.Equals("*"))
-                {
-                    sb.Append($"{(count > 1 ? int.MaxValue : 0)}.");
-                }
-                count++;
-            }
-            if (Version.TryParse(sb.ToString().Trim().Trim('.'), out var parsedVersion))
-            {
-                return parsedVersion;
-            }
-            return null;
+            return TrimStart(TrimEnd(input, value, type), value, type);
         }
 
         /// <summary>
-        /// Gets the invalid file name chars.
+        /// Trims the end.
         /// </summary>
-        /// <returns>System.Collections.Generic.IEnumerable&lt;char&gt;.</returns>
-        private static IEnumerable<char> GetInvalidFileNameChars()
+        /// <param name="input">The input.</param>
+        /// <param name="value">The value.</param>
+        /// <param name="type">The type.</param>
+        /// <returns>System.String.</returns>
+        public static string TrimEnd(this string input, string value, StringComparison type = StringComparison.CurrentCultureIgnoreCase)
         {
-            if (invalidFileNameCharacters == null)
+            if (!string.IsNullOrEmpty(value))
             {
-                invalidFileNameCharacters = Path.GetInvalidFileNameChars().Concat(invalidFileNameCharactersExtension).Distinct().ToList();
+                while (!string.IsNullOrEmpty(input) && input.EndsWith(value, type))
+                {
+                    input = input.Substring(0, (input.Length - value.Length));
+                }
             }
-            return invalidFileNameCharacters;
+
+            return input;
+        }
+
+        /// <summary>
+        /// Trims the start.
+        /// </summary>
+        /// <param name="input">The input.</param>
+        /// <param name="value">The value.</param>
+        /// <param name="type">The type.</param>
+        /// <returns>System.String.</returns>
+        public static string TrimStart(this string input, string value, StringComparison type = StringComparison.CurrentCultureIgnoreCase)
+        {
+            if (!string.IsNullOrEmpty(value))
+            {
+                while (!string.IsNullOrEmpty(input) && input.StartsWith(value, type))
+                {
+                    input = input.Substring(value.Length - 1);
+                }
+            }
+
+            return input;
         }
 
         #endregion Methods
-
-#nullable disable
     }
 }

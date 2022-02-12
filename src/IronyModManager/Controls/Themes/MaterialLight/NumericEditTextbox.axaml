@@ -456,13 +456,13 @@
   <!-- Additional decorations for TextFields -->
   <!-- ReSharper disable InconsistentNaming -->
 
-  <Style Selector="controls|NumericEditTextbox.clearButton, TextBox.revealPasswordButton">
+  <!--<Style Selector="controls|NumericEditTextbox.clearButton, TextBox.revealPasswordButton">
     <Setter Property="InnerRightContent">
       <Template>
         <Border Name="PART_AssistButtonsContainer"/>
       </Template>
     </Setter>
-  </Style>
+  </Style>-->
 
   <Style Selector="controls|NumericEditTextbox.clearButton[AcceptsReturn=False][IsReadOnly=False]:not(controls|NumericEditTextbox:empty) Border#PART_AssistButtonsContainer">
     <Setter Property="Child">

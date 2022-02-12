@@ -154,6 +154,7 @@
             "ImportOverlay": "Espere mientras verifica...",
             "ProgressExport": "{Progress}",
             "ProgressImport": "Step {Count}/{TotalCount}: {Progress}",
+            "Export": "Exportar",
             "Close": "Cerrar"
         },
         "JumpOnDragAndDrop": {
@@ -328,12 +329,14 @@
             "Title": "Seleccionar Modo",
             "Default": "Defecto",
             "Advanced": "Avanzado",
+            "Analyze": "Analizar solo",
             "Close": "Cerrar"
         },
         "ModFilter": {
             "Title": "Filtro de Mods",
             "IgnoreGameConflicts": "Ignorar los conflictos del juego",
             "ShowSelfConflicts": "Mostrar autoconflictos",
+            "ShowResetConflicts": "Mostrar solo restablecer conflictos",
             "Close": "Cerrar"
         },
         "ResetConflicts": {
@@ -369,6 +372,16 @@
         },
         "BracketMismatchError": {
             "Message": "¡Discrepancia en el recuento de soportes! Abrir corchete: {OpenBracketCount} Cerrar corchete: {CloseBracketCount}"
+        },
+        "ResetWarning": {
+            "Title": "Los conflictos se reinician",
+            "AnalyzeModeAll": "Algunos conflictos se restablecerán si se ejecuta un solucionador de conflicto debido a cambios de mod. Estos se resuelven conflictos que se restablecerán:{NewLine}{NewLine}{ListOfConflictsResolved}{NewLine}Se ignoran los conflictos que se restablecerán:{NewLine}{NewLine}{ListOfConflictsIgnored}",
+            "AnalyzeModeResolvedOnly": "Algunos conflictos se restablecerán si se ejecuta un solucionador de conflicto debido a cambios de mod. Estos se resuelven conflictos que se restablecerán:{NewLine}{NewLine}{ListOfConflictsResolved}",
+            "AnalyzeModeIgnoredOnly": "Algunos conflictos se restablecerán si se ejecuta un solucionador de conflicto debido a cambios de mod. Se ignoran los conflictos que se restablecerán:{NewLine}{NewLine}{ListOfConflictsIgnored}",
+            "RegularModeAll": "Algunos conflictos se restablecieron debido a cambios de mod. Estos se restablecieron en conflictos resueltos:{NewLine}{NewLine}{ListOfConflictsResolved}{NewLine}Se restablecieron los conflictos ignorados:{NewLine}{NewLine}{ListOfConflictsIgnored}",
+            "RegularModeResolvedOnly": "Algunos conflictos se restablecieron debido a cambios de mod. Estos se restablecieron en conflictos resueltos:{NewLine}{NewLine}{ListOfConflictsResolved}",
+            "RegularModeIgnoredOnly": "Algunos conflictos se restablecieron debido a cambios de mod. Se restablecieron los conflictos ignorados:{NewLine}{NewLine}{ListOfConflictsIgnored}",
+            "ListOfConflictsFormat": "{ParentDirectory}: {Name}"
         }
     },
     "ConflictIgnore": {

@@ -154,6 +154,7 @@
             "ImportOverlay": "Bitte warten Sie während des Überprüfungsvorgangs...",
             "ProgressExport": "{Progress}",
             "ProgressImport": "Schritt {Count}/{TotalCount}: {Progress}",
+            "Export": "Exportieren",
             "Close": "Schließen"
         },
         "JumpOnDragAndDrop": {
@@ -328,12 +329,14 @@
             "Title": "Auswahlmodus",
             "Default": "Standard",
             "Advanced": "Erweitert",
+            "Analyze": "Nur analysieren",
             "Close": "Schließen"
         },
         "ModFilter": {
             "Title": "Mod Filter",
             "IgnoreGameConflicts": "Spielkonflikte ignorieren",
             "ShowSelfConflicts": "Selbstkonflikte anzeigen",
+            "ShowResetConflicts": "Show nur Zurücksetzen von Konflikten",
             "Close": "Schließen"
         },
         "ResetConflicts": {
@@ -369,6 +372,16 @@
         },
         "BracketMismatchError": {
             "Message": "Klammeranzahl stimmt nicht überein! Klammer öffnen: {OpenBracketCount} Klammer schließen: {CloseBracketCount}"
+        },
+        "ResetWarning": {
+            "Title": "Konflikte zurücksetzen",
+            "AnalyzeModeAll": "Einige Konflikte werden zurückgesetzt, wenn der Konfliktlöser aufgrund von Mod-Änderungen ausgeführt wird. Diese sind aufgelöste Konflikte, die zurückgesetzt werden:{NewLine}{NewLine}{ListOfConflictsResolved}{NewLine}Diese sind ignorierte Konflikte, die zurückgesetzt werden:{NewLine}{NewLine}{ListOfConflictsIgnored}",
+            "AnalyzeModeResolvedOnly": "Einige Konflikte werden zurückgesetzt, wenn der Konfliktlöser aufgrund von Mod-Änderungen ausgeführt wird. Diese sind aufgelöste Konflikte, die zurückgesetzt werden:{NewLine}{NewLine}{ListOfConflictsResolved}",
+            "AnalyzeModeIgnoredOnly": "Einige Konflikte werden zurückgesetzt, wenn der Konfliktlöser aufgrund von Mod-Änderungen ausgeführt wird. Diese sind ignorierte Konflikte, die zurückgesetzt werden:{NewLine}{NewLine}{ListOfConflictsIgnored}",
+            "RegularModeAll": "Einige Konflikte wurden aufgrund von Mod-Änderungen zurückgesetzt. Diese wurden zurückgesetzt. Aufgelöste Konflikte:{NewLine}{NewLine}{ListOfConflictsResolved}{NewLine}Diese wurden ignorierte Konflikte zurückgesetzt:{NewLine}{NewLine}{ListOfConflictsIgnored}",
+            "RegularModeResolvedOnly": "Einige Konflikte wurden aufgrund von Mod-Änderungen zurückgesetzt. Diese wurden zurückgesetzt. Aufgelöste Konflikte:{NewLine}{NewLine}{ListOfConflictsResolved}",
+            "RegularModeIgnoredOnly": "Einige Konflikte wurden aufgrund von Mod-Änderungen zurückgesetzt. Diese wurden ignorierte Konflikte zurückgesetzt:{NewLine}{NewLine}{ListOfConflictsIgnored}",
+            "ListOfConflictsFormat": "{ParentDirectory}: {Name}"
         }
     },
     "ConflictIgnore": {

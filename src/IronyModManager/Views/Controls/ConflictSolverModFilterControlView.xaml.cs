@@ -4,7 +4,7 @@
 // Created          : 06-08-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-10-2021
+// Last Modified On : 02-01-2022
 // ***********************************************************************
 // <copyright file="ConflictSolverModFilterControlView.xaml.cs" company="Mario">
 //     Mario
@@ -12,6 +12,7 @@
 // <summary></summary>
 // ***********************************************************************
 using System.Reactive.Disposables;
+using System.Reactive.Linq;
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
 using Avalonia.Markup.Xaml;
@@ -58,17 +59,21 @@ namespace IronyModManager.Views.Controls
             {
                 ViewModel.ForceClosePopup();
             };
-            popup.Opened += (sender, args) =>
-            {
-                popup.Host.ConfigurePosition(popup.PlacementTarget, popup.PlacementMode, new Avalonia.Point(popup.HorizontalOffset, 15),
-                    Avalonia.Controls.Primitives.PopupPositioning.PopupAnchor.None, Avalonia.Controls.Primitives.PopupPositioning.PopupGravity.Bottom);
-            };
             MessageBus.Current.Listen<ForceClosePopulsEventArgs>()
             .SubscribeObservable(x =>
             {
                 Dispatcher.UIThread.InvokeAsync(() =>
                 {
                     ViewModel.ForceClosePopup();
+                });
+            }).DisposeWith(disposables);
+
+            var modList = this.FindControl<ListBox>("modList");
+            this.WhenAnyValue(v => v.ViewModel.ResetView).Where(p => p).SubscribeObservable(s =>
+            {
+                Dispatcher.UIThread.SafeInvoke(() =>
+                {
+                    modList.ScrollIntoView(0);
                 });
             }).DisposeWith(disposables);
 

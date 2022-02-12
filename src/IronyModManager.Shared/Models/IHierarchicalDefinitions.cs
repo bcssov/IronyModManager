@@ -4,7 +4,7 @@
 // Created          : 03-23-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 08-23-2021
+// Last Modified On : 02-02-2022
 // ***********************************************************************
 // <copyright file="IHierarchicalDefinitions.cs" company="Mario">
 //     Mario
@@ -69,6 +69,12 @@ namespace IronyModManager.Shared.Models
         /// </summary>
         /// <value>The non game definitions.</value>
         int NonGameDefinitions { get; set; }
+
+        /// <summary>
+        /// Gets or sets the type of the reset.
+        /// </summary>
+        /// <value>The type of the reset.</value>
+        ResetType ResetType { get; set; }
 
         #endregion Properties
     }

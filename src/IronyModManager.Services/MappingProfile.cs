@@ -4,7 +4,7 @@
 // Created          : 01-11-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-26-2021
+// Last Modified On : 01-27-2022
 // ***********************************************************************
 // <copyright file="MappingProfile.cs" company="Mario">
 //     Copyright (c) Mario. All rights reserved.
@@ -36,29 +36,29 @@ namespace IronyModManager.Models
         public MappingProfile()
         {
             CreateMap<ITheme, IPreferences>()
-                .ForMember(p => p.Theme, o => o.MapFrom(m => m.Type)).ReverseMap().ForAllOtherMembers(p => p.Ignore());
+                .ForMember(p => p.Theme, o => o.MapFrom(m => m.Type)).ReverseMap().IgnoreAllUnmappedMembers();
             CreateMap<ILanguage, IPreferences>()
-                .ForMember(p => p.Locale, o => o.MapFrom(m => m.Abrv)).ReverseMap().ForAllOtherMembers(p => p.Ignore());
+                .ForMember(p => p.Locale, o => o.MapFrom(m => m.Abrv)).ReverseMap().IgnoreAllUnmappedMembers();
             CreateMap<IGame, IPreferences>()
-                .ForMember(m => m.Game, o => o.MapFrom(s => s.Type)).ReverseMap().ForAllOtherMembers(m => m.Ignore());
+                .ForMember(m => m.Game, o => o.MapFrom(s => s.Type)).ReverseMap().IgnoreAllUnmappedMembers();
             CreateMap<IUpdateSettings, IPreferences>()
                 .ForMember(m => m.AutoUpdates, o => o.MapFrom(s => s.AutoUpdates))
                 .ForMember(m => m.CheckForPrerelease, o => o.MapFrom(s => s.CheckForPrerelease))
                 .ReverseMap()
-                .ForAllOtherMembers(m => m.Ignore());
+                .IgnoreAllUnmappedMembers();
             CreateMap<IExternalEditor, IPreferences>()
                 .ForMember(m => m.ExternalEditorLocation, o => o.MapFrom(s => s.ExternalEditorLocation))
                 .ForMember(m => m.ExternalEditorParameters, o => o.MapFrom(s => s.ExternalEditorParameters))
                 .ReverseMap()
-                .ForAllOtherMembers(m => m.Ignore());
+                .IgnoreAllUnmappedMembers();
             CreateMap<IDefinition, IDefinition>().ReverseMap();
             CreateMap<IMod, IMod>().ReverseMap();
             CreateMap<INotificationPosition, IPreferences>()
-                .ForMember(p => p.NotificationPosition, o => o.MapFrom(m => m.Type)).ReverseMap().ForAllOtherMembers(p => p.Ignore());
+                .ForMember(p => p.NotificationPosition, o => o.MapFrom(m => m.Type)).ReverseMap().IgnoreAllUnmappedMembers();
             CreateMap<IPromptNotifications, IPreferences>()
                 .ForMember(m => m.ConflictSolverPromptShown, o => o.MapFrom(s => s.ConflictSolverPromptShown))
                 .ReverseMap()
-                .ForAllOtherMembers(m => m.Ignore());
+                .IgnoreAllUnmappedMembers();
         }
 
         #endregion Constructors

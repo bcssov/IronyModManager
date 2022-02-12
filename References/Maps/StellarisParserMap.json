@@ -75,10 +75,10 @@
         "PreferredParser": "GenericKeyParser"
     }, {
         "DirectoryPath": "common\\component_templates",
-        "PreferredParser": "StellarisWholeTextParser"
+        "PreferredParser": "GenericWholeTextParser"
     }, {
         "DirectoryPath": "common\\country_container",
-        "PreferredParser": "DefaultParser"
+        "PreferredParser": "StellarisWholeTextParser"
     }, {
         "DirectoryPath": "common\\country_customization",
         "PreferredParser": "DefaultParser"
@@ -105,7 +105,7 @@
         "PreferredParser": "DefaultParser"
     }, {
         "DirectoryPath": "common\\diplomacy_economy",
-        "PreferredParser": "DefaultParser"
+        "PreferredParser": "StellarisWholeTextParser"
     }, {
         "DirectoryPath": "common\\diplomatic_actions",
         "PreferredParser": "StellarisOverwrittenParser"
@@ -1264,6 +1264,9 @@
     }, {
         "DirectoryPath": "previewer_assets\\assetviewer_interface",
         "PreferredParser": "GenericGraphicsParser"
+    }, {
+        "DirectoryPath": "previewer_assets\\assetviewer_interface",
+        "PreferredParser": "DefaultParser"
     }, {
         "DirectoryPath": "sound",
         "PreferredParser": "GenericWholeTextParser"

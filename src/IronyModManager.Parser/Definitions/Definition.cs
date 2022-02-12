@@ -4,7 +4,7 @@
 // Created          : 02-16-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 11-27-2021
+// Last Modified On : 02-02-2022
 // ***********************************************************************
 // <copyright file="Definition.cs" company="Mario">
 //     Mario
@@ -593,6 +593,13 @@ namespace IronyModManager.Parser.Definitions
         }
 
         /// <summary>
+        /// Gets or sets the type of the reset.
+        /// </summary>
+        /// <value>The type of the reset.</value>
+        [JsonIgnore]
+        public ResetType ResetType { get; set; }
+
+        /// <summary>
         /// Gets or sets the tags.
         /// </summary>
         /// <value>The tags.</value>
@@ -741,6 +748,7 @@ namespace IronyModManager.Parser.Definitions
                 nameof(IsCustomPatch) => IsCustomPatch,
                 nameof(IsFromGame) => IsFromGame,
                 nameof(AllowDuplicate) => AllowDuplicate,
+                nameof(ResetType) => ResetType,
                 _ => Id
             };
         }
