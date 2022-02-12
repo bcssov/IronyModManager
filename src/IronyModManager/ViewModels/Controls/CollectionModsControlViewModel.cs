@@ -4,7 +4,7 @@
 // Created          : 03-03-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 01-27-2022
+// Last Modified On : 02-11-2022
 // ***********************************************************************
 // <copyright file="CollectionModsControlViewModel.cs" company="Mario">
 //     Mario
@@ -1180,9 +1180,9 @@ namespace IronyModManager.ViewModels.Controls
                     await MessageBus.PublishAsync(new ActiveGameRequestEvent(game));
                     await MessageBus.PublishAsync(new ModListInstallRefreshRequestEvent(true));
                     var hasMods = (modNames?.Any()).GetValueOrDefault();
+                    var mods = game != null ? await modService.GetAvailableModsAsync(game) ?? new List<IMod>() : new List<IMod>();
                     if (hasMods && !string.IsNullOrWhiteSpace(result.MergedFolderName))
                     {
-                        var mods = Mods;
                         var importedMods = new List<string>();
                         var descriptors = result.Mods.ToList();
                         for (int i = 0; i < descriptors.Count; i++)
@@ -1200,9 +1200,8 @@ namespace IronyModManager.ViewModels.Controls
                     LoadModCollections();
                     var showImportNotification = true;
                     // Check if any mods do not exist
-                    if (hasMods && Mods.Any())
+                    if (hasMods && mods.Any())
                     {
-                        var mods = Mods;
                         var nonExistingModPaths = modPaths.Where(p => !mods.Any(m => m.DescriptorFile.Equals(p)));
                         if (nonExistingModPaths.Any())
                         {
@@ -1313,6 +1312,7 @@ namespace IronyModManager.ViewModels.Controls
                 if (gameService.GetSelected() != null)
                 {
                     EnteringNewCollection = true;
+                    MessageBus.Publish(new AllowEnterHotKeysEvent(true));
                     AddNewCollection.NewCollectionName = string.Empty;
                     AddNewCollection.RenamingCollection = null;
                 }
@@ -1359,6 +1359,7 @@ namespace IronyModManager.ViewModels.Controls
                             LoadModCollections();
                             SaveState();
                             skipModCollectionSave = EnteringNewCollection = false;
+                            MessageBus.Publish(new AllowEnterHotKeysEvent(false));
                             string successTitle;
                             string successMessage;
                             if (AddNewCollection.RenamingCollection != null)
@@ -1393,6 +1394,7 @@ namespace IronyModManager.ViewModels.Controls
                             break;
 
                         case CommandState.NotExecuted:
+                            MessageBus.Publish(new AllowEnterHotKeysEvent(false));
                             EnteringNewCollection = false;
                             break;
 
@@ -1442,6 +1444,7 @@ namespace IronyModManager.ViewModels.Controls
                     if (s.Result == ModifyAction.Rename)
                     {
                         EnteringNewCollection = true;
+                        MessageBus.Publish(new AllowEnterHotKeysEvent(true));
                         AddNewCollection.RenamingCollection = SelectedModCollection;
                         AddNewCollection.NewCollectionName = SelectedModCollection.Name;
                     }
@@ -1476,6 +1479,7 @@ namespace IronyModManager.ViewModels.Controls
                             LoadModCollections();
                             SaveState();
                             skipModCollectionSave = EnteringNewCollection = false;
+                            MessageBus.Publish(new AllowEnterHotKeysEvent(false));
                             var existsTitle = localizationManager.GetResource(LocalizationResources.Notifications.CollectionDuplicated.Title);
                             var existsMessage = localizationManager.GetResource(LocalizationResources.Notifications.CollectionDuplicated.Message);
                             notificationAction.ShowNotification(existsTitle, existsMessage, NotificationType.Success);

@@ -59,7 +59,7 @@
                 Command="{Binding RemoveCommand}" Margin="5,0,0,0" Width="30"></Button>
                 <!-- For the love of God I can't force this piece of shit to set its width properly -->
                 <controls:ComboBox Items="{Binding ModCollections}" SelectedItem="{Binding SelectedModCollection}"
-                          Height="30" Margin="10"
+                          Height="32" Margin="10"
                           Width="{Binding $parent[Window].Width, 
                            Converter={StaticResource MathConverter} 
                            ConverterParameter=(x/2.1)-90}">

@@ -158,6 +158,63 @@ namespace IronyModManager.Services.Tests
             }
         }
 
+        /// <summary>
+        /// Defines the test method Should_return_available_mods.
+        /// </summary>
+        [Fact]
+        public async Task Should_return_available_mods()
+        {
+            var storageProvider = new Mock<IStorageProvider>();
+            var modParser = new Mock<IModParser>();
+            var reader = new Mock<IReader>();
+            var mapper = new Mock<IMapper>();
+            var modWriter = new Mock<IModWriter>();
+            var gameService = new Mock<IGameService>();
+            mapper.Setup(s => s.Map<IMod>(It.IsAny<IModObject>())).Returns((IModObject o) =>
+            {
+                return new Mod()
+                {
+                    FileName = o.FileName
+                };
+            });
+
+            SetupMockCase(reader, modParser);
+            modWriter.Setup(p => p.ModDirectoryExists(It.IsAny<ModWriterParameters>())).Returns((ModWriterParameters p) =>
+            {
+                return false;
+            });
+
+            var service = GetService(storageProvider, modParser, reader, mapper, modWriter, gameService);
+            var result = await service.GetInstalledModsAsync(new Game() { UserDirectory = "fake1", WorkshopDirectory = new List<string>() { "fake2" }, Type = "Should_return_available_mods", CustomModDirectory = string.Empty });
+            result.Count().Should().Be(2);
+            result.First().FileName.Should().Be("1");
+            result.Last().FileName.Should().Be("2");
+        }
+
+        /// <summary>
+        /// Defines the test method Should_throw_exception_when_no_game_specified_when_fetching_available_mods.
+        /// </summary>
+        [Fact]
+        public async Task Should_throw_exception_when_no_game_specified_when_fetching_available_mods()
+        {
+            var storageProvider = new Mock<IStorageProvider>();
+            var modParser = new Mock<IModParser>();
+            var reader = new Mock<IReader>();
+            var modWriter = new Mock<IModWriter>();
+            var gameService = new Mock<IGameService>();
+            var mapper = new Mock<IMapper>();
+
+            var service = GetService(storageProvider, modParser, reader, mapper, modWriter, gameService);
+            try
+            {
+                await service.GetInstalledModsAsync(null);
+            }
+            catch (Exception ex)
+            {
+                ex.GetType().Should().Be(typeof(ArgumentNullException));
+            }
+        }
+
 
         /// <summary>
         /// Defines the test method Should_return_steam_url.

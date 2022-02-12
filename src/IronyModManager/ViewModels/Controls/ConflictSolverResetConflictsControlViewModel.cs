@@ -4,7 +4,7 @@
 // Created          : 06-11-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 01-31-2022
+// Last Modified On : 02-09-2022
 // ***********************************************************************
 // <copyright file="ConflictSolverResetConflictsControlViewModel.cs" company="Mario">
 //     Mario
@@ -17,6 +17,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reactive;
 using System.Reactive.Disposables;
+using System.Threading.Tasks;
 using Avalonia.Collections;
 using IronyModManager.Common;
 using IronyModManager.Common.ViewModels;
@@ -398,7 +399,7 @@ namespace IronyModManager.ViewModels.Controls
                         var results = new List<bool>();
                         foreach (var item in definitions)
                         {
-                            results.Add(await modPatchCollectionService.ResetIgnoredConflictAsync(Conflicts, item.Key, CollectionName));
+                            results.Add(await Task.Run(async () => await modPatchCollectionService.ResetIgnoredConflictAsync(Conflicts, item.Key, CollectionName)));
                         }
                         await TriggerOverlayAsync(id, false);
                         if (results.Any())
@@ -414,7 +415,7 @@ namespace IronyModManager.ViewModels.Controls
                         var results = new List<bool>();
                         foreach (var item in definitions)
                         {
-                            results.Add(await modPatchCollectionService.ResetResolvedConflictAsync(Conflicts, item.Key, CollectionName));
+                            results.Add(await Task.Run(async () => await modPatchCollectionService.ResetResolvedConflictAsync(Conflicts, item.Key, CollectionName)));
                         }
                         await TriggerOverlayAsync(id, false);
                         if (results.Any())
@@ -430,7 +431,7 @@ namespace IronyModManager.ViewModels.Controls
                         var results = new List<bool>();
                         foreach (var item in definitions)
                         {
-                            results.Add(await modPatchCollectionService.ResetCustomConflictAsync(Conflicts, item.Key, CollectionName));
+                            results.Add(await Task.Run(async () => await modPatchCollectionService.ResetCustomConflictAsync(Conflicts, item.Key, CollectionName)));
                         }
                         await TriggerOverlayAsync(id, false);
                         if (results.Any())

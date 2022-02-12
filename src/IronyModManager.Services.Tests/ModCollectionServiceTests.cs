@@ -819,11 +819,20 @@ namespace IronyModManager.Services.Tests
                 Type = "no-items",
                 UserDirectory = "C:\\fake"
             });
+            gameService.Setup(s => s.Get()).Returns(new List<IGame>()
+            {
+                new Game()
+                {
+                    Type = "no-items",
+                    UserDirectory = "C:\\fake"
+                }
+            });
             modExport.Setup(p => p.ImportAsync(It.IsAny<ModCollectionExporterParams>())).Returns((ModCollectionExporterParams p) =>
             {
                 ICollectionImportResult result = new CollectionImportResult
                 {
-                    Name = "fake"
+                    Name = "fake",
+                    Game = "no-items"
                 };
                 return Task.FromResult(result);
             });
@@ -858,11 +867,20 @@ namespace IronyModManager.Services.Tests
                 Type = "no-items",
                 UserDirectory = "C:\\fake"
             });
+            gameService.Setup(s => s.Get()).Returns(new List<IGame>()
+            {
+                new Game()
+                {
+                    Type = "no-items",
+                    UserDirectory = "C:\\fake"
+                }
+            });
             modExport.Setup(p => p.ImportAsync(It.IsAny<ModCollectionExporterParams>())).Returns((ModCollectionExporterParams p) =>
             {
                 ICollectionImportResult result = new CollectionImportResult
                 {
-                    Name = "fake"
+                    Name = "fake",
+                    Game = "no-items"
                 };
                 return Task.FromResult(result);
             });
@@ -1226,7 +1244,7 @@ namespace IronyModManager.Services.Tests
                     ModIds = new List<string>() { "1", "2" },
                     Game = "fake"
                 };
-                return Task.FromResult(result);                
+                return Task.FromResult(result);
             });
             var cache = new Cache();
             // Fake mods in cache (less mocking)

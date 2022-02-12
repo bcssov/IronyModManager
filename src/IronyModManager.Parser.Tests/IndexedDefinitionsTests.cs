@@ -443,7 +443,7 @@ namespace IronyModManager.Parser.Tests
             }
             var service = new IndexedDefinitions();
             service.InitMap(defs, false);
-            var results = service.ChaneHierarchicalResetState(new Definition() { ResetType = ResetType.Resolved, Id = "1", Type = "1", File = "test\\1" });
+            var results = service.ChangeHierarchicalResetState(new Definition() { ResetType = ResetType.Resolved, Id = "1", Type = "1", File = "test\\1" });
             results.Should().BeFalse();
         }
 
@@ -471,7 +471,7 @@ namespace IronyModManager.Parser.Tests
             }
             var service = new IndexedDefinitions();
             service.InitMap(defs, true);
-            var results = service.ChaneHierarchicalResetState(null);
+            var results = service.ChangeHierarchicalResetState(null);
             results.Should().BeFalse();
         }
 
@@ -499,7 +499,7 @@ namespace IronyModManager.Parser.Tests
             }
             var service = new IndexedDefinitions();
             service.InitMap(defs, true);
-            var results = service.ChaneHierarchicalResetState(new Definition() { ResetType = ResetType.None, Id = "1", Type = "1", File = "test\\1" });
+            var results = service.ChangeHierarchicalResetState(new Definition() { ResetType = ResetType.None, Id = "1", Type = "1", File = "test\\1" });
             results.Should().BeTrue();
         }
 

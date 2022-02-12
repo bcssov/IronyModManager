@@ -4,7 +4,7 @@
 // Created          : 02-24-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 10-31-2021
+// Last Modified On : 02-08-2022
 // ***********************************************************************
 // <copyright file="ModService.cs" company="Mario">
 //     Mario
@@ -288,6 +288,19 @@ namespace IronyModManager.Services
                     .ConditionalFilter(parameters.Source.Result != SourceType.None, x => x.Where(p => p.Source == SourceTypeToModSource(parameters.Source.Result)))
                     .ConditionalFilter(parameters.Version != null, x => x.Where(p => p.VersionData > parameters.Version));
             return result.FirstOrDefault();
+        }
+
+        /// <summary>
+        /// Get available mods as an asynchronous operation.
+        /// </summary>
+        /// <param name="game">The game.</param>
+        /// <returns>A Task&lt;IEnumerable`1&gt; representing the asynchronous operation.</returns>
+        public virtual async Task<IEnumerable<IMod>> GetAvailableModsAsync(IGame game)
+        {
+            using var mutex = await modReadLock.LockAsync();
+            var result = GetInstalledModsInternal(game, true);
+            mutex.Dispose();
+            return result;
         }
 
         /// <summary>

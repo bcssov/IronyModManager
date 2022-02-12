@@ -4,7 +4,7 @@
 // Created          : 01-20-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-04-2020
+// Last Modified On : 02-08-2022
 // ***********************************************************************
 // <copyright file="StoreConverter.cs" company="Mario">
 //     Mario
@@ -17,7 +17,6 @@ using System.Collections.Generic;
 using System.Linq;
 using IronyModManager.DI;
 using IronyModManager.DI.Assemblies;
-using IronyModManager.Models.Common;
 using IronyModManager.Shared;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -69,8 +68,13 @@ namespace IronyModManager.Storage.Store
         {
             reader.Read();
             var typeName = reader.ReadAsString();
-            object instance;
-            if (typeName.StartsWith(nameof(IEnumerable)))
+            object instance = null;
+            Type deserializeType = null;
+            if (typeName.Equals(Constants.StoreDateId))
+            {
+                deserializeType = typeof(DateTime);
+            }
+            else if (typeName.StartsWith(nameof(IEnumerable)))
             {
                 var splitType = typeName.Split(Constants.EnumerableOpenTag, StringSplitOptions.RemoveEmptyEntries)[1].Replace(Constants.EnumerableCloseTag, string.Empty).Trim();
                 var type = AssemblyManager.FindType(splitType);
@@ -79,7 +83,7 @@ namespace IronyModManager.Storage.Store
             }
             else
             {
-                var type = AssemblyManager.FindType(typeName);                
+                var type = AssemblyManager.FindType(typeName);
                 instance = DIResolver.Get(type);
             }
 
@@ -88,7 +92,14 @@ namespace IronyModManager.Storage.Store
 
             reader.Read();
             reader.Read();
-            serializer.Populate(reader, instance);
+            if (deserializeType == null)
+            {
+                serializer.Populate(reader, instance);
+            }
+            else
+            {
+                instance = serializer.Deserialize(reader, deserializeType);
+            }
 
             reader.Read();
 

@@ -4,7 +4,7 @@
 // Created          : 03-13-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-15-2021
+// Last Modified On : 02-11-2022
 // ***********************************************************************
 // <copyright file="MinMaxNumericUpDown.cs" company="Mario">
 //     Mario
@@ -256,7 +256,7 @@ namespace IronyModManager.Controls
                     break;
 
                 default:
-                    e.Handled = true;
+                    e.Handled = false;
                     break;
             }
         }
@@ -332,6 +332,7 @@ namespace IronyModManager.Controls
         /// do decrement as an asynchronous operation.
         /// </summary>
         /// <param name="cancellationToken">The cancellation token.</param>
+        /// <returns>A Task representing the asynchronous operation.</returns>
         private async Task DoDecrementAsync(CancellationToken cancellationToken)
         {
             if (spinner == null || (spinner.ValidSpinDirection & ValidSpinDirections.Decrease) == ValidSpinDirections.Decrease)
@@ -352,6 +353,7 @@ namespace IronyModManager.Controls
         /// do increment as an asynchronous operation.
         /// </summary>
         /// <param name="cancellationToken">The cancellation token.</param>
+        /// <returns>A Task representing the asynchronous operation.</returns>
         private async Task DoIncrementAsync(CancellationToken cancellationToken)
         {
             if (spinner == null || (spinner.ValidSpinDirection & ValidSpinDirections.Increase) == ValidSpinDirections.Increase)

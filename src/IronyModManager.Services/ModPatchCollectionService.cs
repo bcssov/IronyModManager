@@ -4,7 +4,7 @@
 // Created          : 05-26-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-02-2022
+// Last Modified On : 02-08-2022
 // ***********************************************************************
 // <copyright file="ModPatchCollectionService.cs" company="Mario">
 //     Mario
@@ -805,7 +805,7 @@ namespace IronyModManager.Services
         {
             var game = GameService.GetSelected();
             double previousProgress = 0;
-            var allowCleanup = conflictResult != null ? conflictResult.Mode != PatchStateMode.ReadOnly : false;
+            var allowCleanup = conflictResult != null && conflictResult.Mode != PatchStateMode.ReadOnly;
             async Task cleanSingleMergeFiles(string directory, string patchName)
             {
                 if (!allowCleanup)
@@ -1456,21 +1456,29 @@ namespace IronyModManager.Services
         /// <returns>System.String.</returns>
         public virtual string ResolveFullDefinitionPath(IDefinition definition)
         {
-            if (definition == null || GameService.GetSelected() == null)
+            var game = GameService.GetSelected();
+            if (definition == null || game == null)
             {
                 return string.Empty;
             }
-            var mods = GetCollectionMods();
-            if (mods?.Count() > 0)
+            if (definition.IsFromGame)
             {
-                var mod = mods.FirstOrDefault(p => p.Name.Equals(definition.ModName));
-                if (mod != null && !string.IsNullOrWhiteSpace(mod.FullPath))
+                return Path.Combine(pathResolver.GetPath(game), definition.File);
+            }
+            else
+            {
+                var mods = GetCollectionMods();
+                if (mods != null && mods.Any())
                 {
-                    if (mod.FullPath.EndsWith(Shared.Constants.ZipExtension, StringComparison.OrdinalIgnoreCase) || mod.FullPath.EndsWith(Shared.Constants.BinExtension, StringComparison.OrdinalIgnoreCase))
+                    var mod = mods.FirstOrDefault(p => p.Name.Equals(definition.ModName));
+                    if (mod != null && !string.IsNullOrWhiteSpace(mod.FullPath))
                     {
-                        return mod.FullPath;
+                        if (mod.FullPath.EndsWith(Shared.Constants.ZipExtension, StringComparison.OrdinalIgnoreCase) || mod.FullPath.EndsWith(Shared.Constants.BinExtension, StringComparison.OrdinalIgnoreCase))
+                        {
+                            return mod.FullPath;
+                        }
+                        return Path.Combine(mod.FullPath, definition.File);
                     }
-                    return Path.Combine(mod.FullPath, definition.File);
                 }
             }
             return string.Empty;
@@ -2076,7 +2084,7 @@ namespace IronyModManager.Services
 
                     // Reset type flag since it was resolved now
                     definition.ResetType = ResetType.None;
-                    conflictResult.ResolvedConflicts.ChaneHierarchicalResetState(definition);
+                    conflictResult.ResolvedConflicts.ChangeHierarchicalResetState(definition);
 
                     var exportResult = false;
                     if (exportPatches.Any())

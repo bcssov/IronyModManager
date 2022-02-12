@@ -4,7 +4,7 @@
 // Created          : 03-25-2021
 //
 // Last Modified By : Mario
-// Last Modified On : 03-25-2021
+// Last Modified On : 02-07-2022
 // ***********************************************************************
 // <copyright file="LimitedDictionary.cs" company="Mario">
 //     Mario
@@ -19,11 +19,9 @@ namespace IronyModManager.Shared
 {
     /// <summary>
     /// Class LimitedDictionary.
-    /// Implements the <see cref="System.Collections.Generic.Dictionary{TKey, TValue}" />
     /// </summary>
     /// <typeparam name="TKey">The type of the t key.</typeparam>
     /// <typeparam name="TValue">The type of the t value.</typeparam>
-    /// <seealso cref="System.Collections.Generic.Dictionary{TKey, TValue}" />
     public class LimitedDictionary<TKey, TValue>
     {
         #region Fields
@@ -70,7 +68,7 @@ namespace IronyModManager.Shared
         /// </summary>
         /// <param name="key">The key.</param>
         /// <returns>TValue.</returns>
-        public TValue this[TKey key]
+        public virtual TValue this[TKey key]
         {
             get { return dict[key]; }
         }
@@ -84,7 +82,7 @@ namespace IronyModManager.Shared
         /// </summary>
         /// <param name="key">The key.</param>
         /// <param name="value">The value.</param>
-        public void Add(TKey key, TValue value)
+        public virtual void Add(TKey key, TValue value)
         {
             if (!dict.ContainsKey(key))
             {
@@ -99,20 +97,37 @@ namespace IronyModManager.Shared
         }
 
         /// <summary>
+        /// Clears this instance.
+        /// </summary>
+        public virtual void Clear()
+        {
+            dict.Clear();
+        }
+
+        /// <summary>
         /// Determines whether this instance contains the object.
         /// </summary>
         /// <param name="key">The key.</param>
         /// <returns><c>true</c> if [contains] [the specified key]; otherwise, <c>false</c>.</returns>
-        public bool Contains(TKey key)
+        public virtual bool Contains(TKey key)
         {
             return dict.ContainsKey(key);
+        }
+
+        /// <summary>
+        /// Gets the enumerator.
+        /// </summary>
+        /// <returns>Dictionary`2.Enumerator.</returns>
+        public virtual Dictionary<TKey, TValue>.Enumerator GetEnumerator()
+        {
+            return dict.GetEnumerator();
         }
 
         /// <summary>
         /// Removes the specified key.
         /// </summary>
         /// <param name="key">The key.</param>
-        public void Remove(TKey key)
+        public virtual void Remove(TKey key)
         {
             if (dict.ContainsKey(key))
             {

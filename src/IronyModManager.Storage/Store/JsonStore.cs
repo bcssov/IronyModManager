@@ -4,7 +4,7 @@
 // Created          : 01-20-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 09-15-2021
+// Last Modified On : 02-08-2022
 // ***********************************************************************
 // <copyright file="JsonStore.cs" company="Mario">
 //     Mario
@@ -74,7 +74,7 @@ namespace IronyModManager.Storage
         /// <summary>
         /// Clears all.
         /// </summary>
-        /// <exception cref="NotSupportedException"></exception>
+        /// <exception cref="System.NotSupportedException"></exception>
         public void ClearAll()
         {
             throw new NotSupportedException();
@@ -84,7 +84,7 @@ namespace IronyModManager.Storage
         /// Clears the data.
         /// </summary>
         /// <param name="id">The identifier.</param>
-        /// <exception cref="NotSupportedException"></exception>
+        /// <exception cref="System.NotSupportedException"></exception>
         public void ClearData(string id)
         {
             throw new NotSupportedException();
@@ -97,20 +97,44 @@ namespace IronyModManager.Storage
         /// <returns>IDictionary&lt;System.String, System.Object&gt;.</returns>
         public IDictionary<string, object> GetData(string id)
         {
-            string filePath = GetFilePath(id, true);
-            List<StoreItem> storeItems = null;
-            if (File.Exists(filePath))
+            static List<StoreItem> readItems(string path)
             {
-                try
+                List<StoreItem> items = null;
+                if (File.Exists(path))
                 {
-                    var fileContents = File.ReadAllText(filePath);
-                    storeItems = JsonConvert.DeserializeObject<List<StoreItem>>(fileContents, new StoreConverter());
+                    try
+                    {
+                        var fileContents = File.ReadAllText(path);
+                        items = JsonConvert.DeserializeObject<List<StoreItem>>(fileContents, new StoreConverter());
+                    }
+                    catch { }
                 }
-                catch { }
-            }
 
-            if (storeItems == null)
-                storeItems = new List<StoreItem>();
+                if (items == null)
+                {
+                    items = new List<StoreItem>();
+                }
+                return items;
+            }
+            List<StoreItem> storeItems;
+
+            var filePath = GetFilePath(id, true);
+            var tempFilePath = GetTempPath(filePath);
+            var diskItems = readItems(filePath);
+            var tempDiskItems = readItems(tempFilePath);
+
+            var diskDateItem = diskItems.FirstOrDefault(p => p.Type == Store.Constants.StoreDateId);
+            var tempDiskDateItem = tempDiskItems.FirstOrDefault(p => p.Type == Store.Constants.StoreDateId);
+            var diskDate = diskDateItem != null ? (DateTime)diskDateItem.Value : DateTime.MinValue;
+            var tempDiskDate = tempDiskDateItem != null ? (DateTime)tempDiskDateItem.Value : DateTime.MinValue;
+            if (tempDiskDate > diskDate)
+            {
+                storeItems = tempDiskItems.Where(p => p != tempDiskDateItem).ToList();
+            }
+            else
+            {
+                storeItems = diskItems.Where(p => p != diskDateItem).ToList();
+            }
 
             return storeItems.ToDictionary(item => item.Name, item => item.Value);
         }
@@ -119,7 +143,7 @@ namespace IronyModManager.Storage
         /// Lists the ids.
         /// </summary>
         /// <returns>IEnumerable&lt;System.String&gt;.</returns>
-        /// <exception cref="NotSupportedException"></exception>
+        /// <exception cref="System.NotSupportedException"></exception>
         public IEnumerable<string> ListIds()
         {
             throw new NotSupportedException();
@@ -132,9 +156,11 @@ namespace IronyModManager.Storage
         /// <param name="values">The values.</param>
         public void SetData(string id, IDictionary<string, object> values)
         {
-            string filePath = GetFilePath(id);
-            var list = values.Select(kvp => new StoreItem() { Name = kvp.Key, Value = kvp.Value, Type = FormatTypeName(kvp.Value) });
-            string serialized = JsonConvert.SerializeObject(list, new JsonSerializerSettings() { Formatting = Formatting.None, TypeNameHandling = TypeNameHandling.None });
+            var filePath = GetFilePath(id);
+            var tempFilePath = GetTempPath(filePath);
+            var list = values.Select(kvp => new StoreItem() { Name = kvp.Key, Value = kvp.Value, Type = FormatTypeName(kvp.Value) }).ToList();
+            list.Add(new StoreItem() { Name = Store.Constants.StoreDateId, Type = Store.Constants.StoreDateId, Value = DateTime.UtcNow });
+            var serialized = JsonConvert.SerializeObject(list, new JsonSerializerSettings() { Formatting = Formatting.None, TypeNameHandling = TypeNameHandling.None });
 
             string directory = Path.GetDirectoryName(filePath);
             if (!Directory.Exists(directory))
@@ -142,7 +168,8 @@ namespace IronyModManager.Storage
                 Directory.CreateDirectory(directory);
             }
 
-            File.WriteAllText(filePath, serialized);
+            File.WriteAllText(tempFilePath, serialized);
+            File.Move(tempFilePath, filePath, true);
         }
 
         /// <summary>
@@ -174,6 +201,16 @@ namespace IronyModManager.Storage
                 return $"{nameof(IEnumerable)}{Store.Constants.EnumerableOpenTag}{string.Join(Store.Constants.Dot, names)}{Store.Constants.EnumerableCloseTag}";
             }
             return type.FullName;
+        }
+
+        /// <summary>
+        /// Gets the temporary path.
+        /// </summary>
+        /// <param name="filePath">The file path.</param>
+        /// <returns>System.String.</returns>
+        private static string GetTempPath(string filePath)
+        {
+            return $"{filePath}.tmp";
         }
 
         /// <summary>
@@ -243,7 +280,7 @@ namespace IronyModManager.Storage
                         var dbs = new List<StorageItem>();
                         foreach (var item in Directory.EnumerateFiles(root, $"*{Shared.Constants.JsonExtension}"))
                         {
-                            if (item.Contains("_", StringComparison.OrdinalIgnoreCase))
+                            if (item.Contains('_', StringComparison.OrdinalIgnoreCase))
                             {
                                 var versionData = item.Split("_", StringSplitOptions.RemoveEmptyEntries)[1].Replace(Shared.Constants.JsonExtension, string.Empty).Trim();
                                 if (Version.TryParse(versionData, out var parsedVersion))
