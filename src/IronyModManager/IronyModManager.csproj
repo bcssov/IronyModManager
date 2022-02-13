@@ -279,6 +279,9 @@
     <None Update="Localization\es.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="Localization\fr.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="Localization\hr.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

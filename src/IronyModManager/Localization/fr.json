@@ -154,6 +154,7 @@
             "ImportOverlay": "Veuillez patienter pendant la vérification...",
             "ProgressExport": "{Progress}",
             "ProgressImport": "Étape {Count}/{TotalCount}: {Progress}",
+            "Export": "Exporter",
             "Close": "Fermer"
         },
         "JumpOnDragAndDrop": {
@@ -316,10 +317,10 @@
             "Editor": "Fusion externe"
         },
         "EditorContextMenu": {
-			"Copy": "Copier",
-			"Cut": "Couper",
+            "Copy": "Copier",
+            "Cut": "Couper",
             "Delete": "Supprimer",
- 			"Paste": "Coller",
+            "Paste": "Coller",
             "Undo": "annuler",
             "Redo": "Refaire",
             "SelectAll": "Tout sélectionner"
@@ -328,12 +329,14 @@
             "Title": "Sélectionnez le mode",
             "Default": "Simple",
             "Advanced": "Avancée",
+            "Analyze": "Analyser uniquement",
             "Close": "Fermer"
         },
         "ModFilter": {
             "Title": "Filtre de mod",
             "IgnoreGameConflicts": "Ignorer les conflits du jeu",
             "ShowSelfConflicts": "Afficher les conflits personnels",
+            "ShowResetConflicts": "Afficher uniquement les conflits de réinitialisation",
             "Close": "Fermer"
         },
         "ResetConflicts": {
@@ -369,6 +372,16 @@
         },
         "BracketMismatchError": {
             "Message": "Incohérence dans le nombre de parenthèses ! Parenthèse ouverte: {OpenBracketCount} Parenthèse fermée: {CloseBracketCount}"
+        },
+        "ResetWarning": {
+            "Title": "Réinitialisation des conflits",
+            "AnalyzeModeAll": "Certains conflits seront réinitialisés si le solveur de conflit est exécuté en raison de modifications modernes. Celles-ci sont des conflits résolus qui seront réinitialisés:{NewLine}{NewLine}{NewLine}{ListOfConflictsResolved}{NewLine}Ce sont des conflits ignorés qui seront réinitialisés:{NewLine}{NewLine}{ListOfConflictsIgnored}",
+            "AnalyzeModeResolvedOnly": "Certains conflits seront réinitialisés si le solveur de conflit est exécuté en raison de modifications modernes. Ce sont des conflits résolus qui seront réinitialisés:{NewLine}{NewLine}{ListOfConflictsResolved}",
+            "AnalyzeModeIgnoredOnly": "Certains conflits seront réinitialisés si le solveur de conflit est exécuté en raison de modifications modernes. Ce sont des conflits ignorés qui seront réinitialisés:{NewLine}{NewLine}{ListOfConflictsIgnored}",
+            "RegularModeAll": "Certains conflits ont été réinitialisés en raison de modifications modernes. Celles-ci ont été réinitialisées en conflits résolus:{NewLine}{NewLine}{ListOfConflictsResolved}{NewLine}Celles-ci ont été réinitialisées à des conflits ignorés:{NewLine}{NewLine}{ListOfConflictsIgnored}",
+            "RegularModeResolvedOnly": "Certains conflits ont été réinitialisés en raison de modifications modernes. Celles-ci ont été réinitialisées en conflits résolus:{NewLine}{NewLine}{ListOfConflictsResolved}",
+            "RegularModeIgnoredOnly": "Certains conflits ont été réinitialisés en raison de modifications modernes. Celles-ci ont été réinitialisées à des conflits ignorés:{NewLine}{NewLine}{ListOfConflictsIgnored}",
+            "ListOfConflictsFormat": "{ParentDirectory}: {Name}"
         }
     },
     "ConflictIgnore": {
