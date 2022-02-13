@@ -4,7 +4,7 @@
 // Created          : 02-17-2021
 //
 // Last Modified By : Mario
-// Last Modified On : 02-11-2022
+// Last Modified On : 02-13-2022
 // ***********************************************************************
 // <copyright file="HotkeyManager.cs" company="Mario">
 //     Mario
@@ -149,6 +149,7 @@ namespace IronyModManager.Implementation.Hotkey
             {
                 switch (navigationState)
                 {
+                    case NavigationState.ReadOnlyConflictSolver:
                     case NavigationState.ConflictSolver:
                         await messageBus.PublishAsync(new ConflictSolverViewHotkeyPressedEvent(pressedKey));
                         break;
