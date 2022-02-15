@@ -4,7 +4,7 @@
 // Created          : 03-01-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-11-2022
+// Last Modified On : 02-15-2022
 // ***********************************************************************
 // <copyright file="AppAction.cs" company="Mario">
 //     Mario
@@ -111,7 +111,7 @@ namespace IronyModManager.Implementation.Actions
                     using var process = Process.Start(new ProcessStartInfo
                     {
                         FileName = RuntimeInformation.IsOSPlatform(OSPlatform.Windows) ? command : "open",
-                        Arguments = RuntimeInformation.IsOSPlatform(OSPlatform.OSX) ? $"-e {command}" : "",
+                        Arguments = RuntimeInformation.IsOSPlatform(OSPlatform.OSX) ? $"{command}" : "",
                         CreateNoWindow = true,
                         UseShellExecute = RuntimeInformation.IsOSPlatform(OSPlatform.Windows)
                     });
