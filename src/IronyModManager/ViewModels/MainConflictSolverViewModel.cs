@@ -4,7 +4,7 @@
 // Created          : 03-18-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-09-2022
+// Last Modified On : 02-18-2022
 // ***********************************************************************
 // <copyright file="MainConflictSolverViewModel.cs" company="Mario">
 //     Mario
@@ -904,18 +904,20 @@ namespace IronyModManager.ViewModels
 
             this.WhenAnyValue(p => p.MergeViewer.LeftSide).Where(p => !string.IsNullOrWhiteSpace(p)).Subscribe(s =>
             {
-                if (MergeViewer.LeftSidePatchMod)
+                var virtualDefinitions = ModCompareSelector.VirtualDefinitions;
+                if (MergeViewer.LeftSidePatchMod && virtualDefinitions != null)
                 {
-                    var patchDefinition = ModCompareSelector.VirtualDefinitions.FirstOrDefault(p => modPatchCollectionService.IsPatchMod(p.ModName));
+                    var patchDefinition = virtualDefinitions.FirstOrDefault(p => modPatchCollectionService.IsPatchMod(p.ModName));
                     SyncCode(patchDefinition);
                 }
             }).DisposeWith(disposables);
 
             this.WhenAnyValue(p => p.MergeViewer.RightSide).Where(p => !string.IsNullOrWhiteSpace(p)).Subscribe(s =>
             {
-                if (MergeViewer.RightSidePatchMod)
+                var virtualDefinitions = ModCompareSelector.VirtualDefinitions;
+                if (MergeViewer.RightSidePatchMod && virtualDefinitions != null)
                 {
-                    var patchDefinition = ModCompareSelector.VirtualDefinitions.FirstOrDefault(p => modPatchCollectionService.IsPatchMod(p.ModName));
+                    var patchDefinition = virtualDefinitions.FirstOrDefault(p => modPatchCollectionService.IsPatchMod(p.ModName));
                     SyncCode(patchDefinition);
                 }
             }).DisposeWith(disposables);
