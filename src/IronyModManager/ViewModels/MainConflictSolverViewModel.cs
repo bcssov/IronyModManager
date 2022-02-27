@@ -4,7 +4,7 @@
 // Created          : 03-18-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-18-2022
+// Last Modified On : 02-27-2022
 // ***********************************************************************
 // <copyright file="MainConflictSolverViewModel.cs" company="Mario">
 //     Mario
@@ -706,11 +706,11 @@ namespace IronyModManager.ViewModels
                 {
                     conflicts.Add(cachedInvalids);
                 }
+                var selectedParentConflict = SelectedParentConflict;
                 HierarchalConflicts = conflicts;
                 NumberOfConflictsCaption = Smart.Format(localizationManager.GetResource(LocalizationResources.Conflict_Solver.ConflictCount), new { Count = conflicts.Where(p => p.Key != InvalidKey).SelectMany(p => p.Children).Count() });
-                var selectedParentConflict = SelectedParentConflict;
                 int? previousConflictIndex = null;
-                if (HierarchalConflicts.Any() && SelectedParentConflict == null)
+                if (HierarchalConflicts.Any() && selectedParentConflict == null)
                 {
                     selectedParentConflict = HierarchalConflicts.FirstOrDefault();
                 }
