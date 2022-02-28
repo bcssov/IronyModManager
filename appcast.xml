@@ -4,14 +4,15 @@
 		<title>Irony Mod Manager</title>
 		<language>en</language>
 		<item>
-			<title>1.21.119</title>
+			<title>1.21.122</title>
 			<description>## Note
 * As of this version Irony supports analyze mode for HOI4. If you see any bugs in how Irony detects any definitions there please report on the issue tracker.
 * Stellaris collections with patch mods are not backwards compatible with older versions. I seriously mean it; importing a collection made in v1.21 will not be recognized in say v1.20.
 
 ## Current Release Notes
-* Fix hotkeys not working in analyze mode
-* Add French translation (thanks to Asketyll)
+* Hopefully fix some osx instances not opening files\folders via context menu
+* Fix random CTD in conflict solver
+* Fix resetting conflict solver selection upon resolve to wrong category
 
 ## Release Notes 1.21
 * Update dependencies
@@ -22,18 +23,19 @@
 * Conflict solver reset conflicts notifications, indicators and filter
 * Enhance dds image handling
 * Optimize binary image preview</description>
-			<pubDate>Mon, 14 Feb 2022 00:45:30 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.21.119/osx-x64.rar" sparkle:version="1.21.119.11336" sparkle:shortVersionString="1.21.119" length="73943502" sparkle:os="osx" type="application/vnd.rar" sparkle:signature="5Q1zW4ni2YW9K2xvwQrqfosn++UNu9EYMhW5+colCaQNVtf7GriW597j8ZhZ8gstAJV/+P7FH4Z72LhbGwrnDw=="/>
+			<pubDate>Mon, 28 Feb 2022 21:13:33 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.21.122/osx-x64.rar" sparkle:version="1.21.122.64293" sparkle:shortVersionString="1.21.122" length="73946134" sparkle:os="osx" type="application/vnd.rar" sparkle:signature="hpVER3sFnfPut5Ixq7Sv0xXR+xtQ5qDql2PQmSoIFtzViCPrF4uP3cGo23Z5b8RDIAR3hx+S+CVlHYvyH2rHAg=="/>
 		</item>
 		<item>
-			<title>1.21.119</title>
+			<title>1.21.122</title>
 			<description>## Note
 * As of this version Irony supports analyze mode for HOI4. If you see any bugs in how Irony detects any definitions there please report on the issue tracker.
 * Stellaris collections with patch mods are not backwards compatible with older versions. I seriously mean it; importing a collection made in v1.21 will not be recognized in say v1.20.
 
 ## Current Release Notes
-* Fix hotkeys not working in analyze mode
-* Add French translation (thanks to Asketyll)
+* Hopefully fix some osx instances not opening files\folders via context menu
+* Fix random CTD in conflict solver
+* Fix resetting conflict solver selection upon resolve to wrong category
 
 ## Release Notes 1.21
 * Update dependencies
@@ -44,18 +46,19 @@
 * Conflict solver reset conflicts notifications, indicators and filter
 * Enhance dds image handling
 * Optimize binary image preview</description>
-			<pubDate>Mon, 14 Feb 2022 00:45:38 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.21.119/win-x64-setup.rar" sparkle:version="1.21.119.11336" sparkle:shortVersionString="1.21.119" length="63933185" sparkle:os="windows" type="application/vnd.rar" sparkle:signature="vLzQMMCwL+guT5HWfuAzg3Belt8n+XzlmPk/H6BmCuMb3AtwCzoASa5euPl6l7ZzGq8F0ooeP/lLm01BuB8nAw=="/>
+			<pubDate>Mon, 28 Feb 2022 21:13:41 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.21.122/win-x64-setup.rar" sparkle:version="1.21.122.64293" sparkle:shortVersionString="1.21.122" length="63939520" sparkle:os="windows" type="application/vnd.rar" sparkle:signature="3fB/+OquZWsWIGvjHHGKtOVl4KSyqw8F8elQgUDbKsjdMgi4/+8v+oMUbd9uAC8ECMybY4G9WwiqAtniQWS1AA=="/>
 		</item>
 		<item>
-			<title>1.21.119</title>
+			<title>1.21.122</title>
 			<description>## Note
 * As of this version Irony supports analyze mode for HOI4. If you see any bugs in how Irony detects any definitions there please report on the issue tracker.
 * Stellaris collections with patch mods are not backwards compatible with older versions. I seriously mean it; importing a collection made in v1.21 will not be recognized in say v1.20.
 
 ## Current Release Notes
-* Fix hotkeys not working in analyze mode
-* Add French translation (thanks to Asketyll)
+* Hopefully fix some osx instances not opening files\folders via context menu
+* Fix random CTD in conflict solver
+* Fix resetting conflict solver selection upon resolve to wrong category
 
 ## Release Notes 1.21
 * Update dependencies
@@ -66,18 +69,19 @@
 * Conflict solver reset conflicts notifications, indicators and filter
 * Enhance dds image handling
 * Optimize binary image preview</description>
-			<pubDate>Mon, 14 Feb 2022 00:45:34 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.21.119/win-x64.rar" sparkle:version="1.21.119.11336" sparkle:shortVersionString="1.21.119" length="76613836" sparkle:os="windows" type="application/vnd.rar" sparkle:signature="3wPZvHOrxwmcqVI1mEUEUHTlC7cROUXOU64JUV+2fq2x9BYO6n8O6mjLbT5xSz1leWO8BC+rBWYrTY+tM7GkBA=="/>
+			<pubDate>Mon, 28 Feb 2022 21:13:37 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.21.122/win-x64.rar" sparkle:version="1.21.122.64293" sparkle:shortVersionString="1.21.122" length="76616588" sparkle:os="windows" type="application/vnd.rar" sparkle:signature="Xqds6X4KzZ66i6J5vLwHJBYExhVczes1+bArPge6ERsciJCduYcrRhOAAzGDR7N4qEfjE6oDDpdez8jvQlOpBA=="/>
 		</item>
 		<item>
-			<title>1.21.119</title>
+			<title>1.21.122</title>
 			<description>## Note
 * As of this version Irony supports analyze mode for HOI4. If you see any bugs in how Irony detects any definitions there please report on the issue tracker.
 * Stellaris collections with patch mods are not backwards compatible with older versions. I seriously mean it; importing a collection made in v1.21 will not be recognized in say v1.20.
 
 ## Current Release Notes
-* Fix hotkeys not working in analyze mode
-* Add French translation (thanks to Asketyll)
+* Hopefully fix some osx instances not opening files\folders via context menu
+* Fix random CTD in conflict solver
+* Fix resetting conflict solver selection upon resolve to wrong category
 
 ## Release Notes 1.21
 * Update dependencies
@@ -88,8 +92,8 @@
 * Conflict solver reset conflicts notifications, indicators and filter
 * Enhance dds image handling
 * Optimize binary image preview</description>
-			<pubDate>Mon, 14 Feb 2022 00:45:26 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.21.119/linux-x64.zip" sparkle:version="1.21.119.11336" sparkle:shortVersionString="1.21.119" length="88041401" sparkle:os="linux" type="application/zip" sparkle:signature="uP5DcnoKXPjYnIyyV23GvbEfwAIrL8eim890302Dwlubg++qwRu2aTlr5fr8y3WYgYpBMSZfNIYgdfNKvI7VCQ=="/>
+			<pubDate>Mon, 28 Feb 2022 21:13:30 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.21.122/linux-x64.zip" sparkle:version="1.21.122.64293" sparkle:shortVersionString="1.21.122" length="88041361" sparkle:os="linux" type="application/zip" sparkle:signature="8DxnwfLn1U7O0fi6r0YFyLdiL3mmPo9iQKgoyvEPLfT5yCWnA3jqKRbq6a2PzmOliJ6alcDt64dVC520pGNACw=="/>
 		</item>
 	</channel>
 </rss>
