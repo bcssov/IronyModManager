@@ -3203,6 +3203,37 @@ namespace IronyModManager.Services.Tests
         }
 
         /// <summary>
+        /// Defines the test method Should_get_patch_state_from_mode_text.
+        /// </summary>
+        [Fact]
+        public async Task Should_get_patch_state_from_mode_text()
+        {
+            DISetup.SetupContainer();
+
+            var storageProvider = new Mock<IStorageProvider>();
+            var modParser = new Mock<IModParser>();
+            var parserManager = new Mock<IParserManager>();
+            var reader = new Mock<IReader>();
+            var modWriter = new Mock<IModWriter>();
+            var gameService = new Mock<IGameService>();
+            var mapper = new Mock<IMapper>();
+            var modPatchExporter = new Mock<IModPatchExporter>();
+            modPatchExporter.Setup(p => p.GetPatchStateModeAsync(It.IsAny<ModPatchExporterParameters>())).ReturnsAsync((ModPatchExporterParameters p) =>
+            {
+                return IO.Common.PatchStateMode.Default;
+            });
+            gameService.Setup(p => p.GetSelected()).Returns(new Game()
+            {
+                Type = "Should_get_patch_state",
+                UserDirectory = "C:\\Users\\Fake"
+            });
+
+            var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter);
+            var result = await service.GetPatchStateModeAsync("fake");
+            result.Should().Be(IronyModManager.Models.Common.PatchStateMode.Default);
+        }
+
+        /// <summary>
         /// Defines the test method Should_not_resolve_full_definition_path_when_no_game_or_definition_null.
         /// </summary>
         [Fact]
