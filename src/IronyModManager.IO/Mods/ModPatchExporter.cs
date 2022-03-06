@@ -4,7 +4,7 @@
 // Created          : 03-31-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-10-2022
+// Last Modified On : 03-06-2022
 // ***********************************************************************
 // <copyright file="ModPatchExporter.cs" company="Mario">
 //     Mario
@@ -65,6 +65,11 @@ namespace IronyModManager.IO.Mods
         /// The json state name
         /// </summary>
         private const string JsonStateName = "state" + Shared.Constants.JsonExtension;
+
+        /// <summary>
+        /// The mode file name
+        /// </summary>
+        private const string ModeFileName = "mode.txt";
 
         /// <summary>
         /// The state backup
@@ -278,6 +283,26 @@ namespace IronyModManager.IO.Mods
         public async Task<IPatchState> GetPatchStateAsync(ModPatchExporterParameters parameters, bool loadExternalCode = true)
         {
             return await GetPatchStateInternalAsync(parameters, loadExternalCode);
+        }
+
+        /// <summary>
+        /// Get patch state mode as an asynchronous operation.
+        /// </summary>
+        /// <param name="parameters">The parameters.</param>
+        /// <returns>A Task&lt;IronyModManager.IO.Common.PatchStateMode?&gt; representing the asynchronous operation.</returns>
+        public async Task<PatchStateMode?> GetPatchStateModeAsync(ModPatchExporterParameters parameters)
+        {
+            var rootPath = GetPatchRootPath(parameters.RootPath, parameters.PatchPath);
+            var modeFileName = Path.Combine(rootPath, ModeFileName);
+            if (File.Exists(modeFileName))
+            {
+                var content = await File.ReadAllTextAsync(modeFileName);
+                if (int.TryParse(content.Trim(), out var value) && Enum.IsDefined(typeof(PatchStateMode), value))
+                {
+                    return (PatchStateMode)value;
+                }
+            }
+            return null;
         }
 
         /// <summary>
@@ -1064,6 +1089,8 @@ namespace IronyModManager.IO.Mods
                 {
                     File.Copy(stateTemp, statePath);
                 }
+                var modeFileName = Path.Combine(path, ModeFileName);
+                await File.WriteAllTextAsync(modeFileName, ((int)model.Mode).ToString());
                 OldFormatPaths.ForEach(oldPath =>
                 {
                     var fullPath = Path.Combine(path, oldPath);

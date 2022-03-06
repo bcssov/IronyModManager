@@ -4,7 +4,7 @@
 // Created          : 05-26-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-08-2022
+// Last Modified On : 03-06-2022
 // ***********************************************************************
 // <copyright file="ModPatchCollectionService.cs" company="Mario">
 //     Mario
@@ -770,14 +770,23 @@ namespace IronyModManager.Services
             if (game != null && !string.IsNullOrWhiteSpace(collectionName))
             {
                 var patchName = GenerateCollectionPatchName(collectionName);
-                var state = await modPatchExporter.GetPatchStateAsync(new ModPatchExporterParameters()
+                var @params = new ModPatchExporterParameters()
                 {
                     RootPath = GetModDirectoryRootPath(game),
                     PatchPath = EvaluatePatchNamePath(game, patchName)
-                }, false);
-                if (state != null)
+                };
+                var mode = await modPatchExporter.GetPatchStateModeAsync(@params);
+                if (mode.HasValue)
                 {
-                    return MapPatchStateMode(state.Mode);
+                    return MapPatchStateMode(mode.GetValueOrDefault());
+                }
+                else
+                {
+                    var state = await modPatchExporter.GetPatchStateAsync(@params, false);
+                    if (state != null)
+                    {
+                        return MapPatchStateMode(state.Mode);
+                    }
                 }
             }
             return PatchStateMode.None;
