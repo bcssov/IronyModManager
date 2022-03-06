@@ -4,7 +4,7 @@
 // Created          : 02-22-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 01-29-2022
+// Last Modified On : 03-06-2022
 // ***********************************************************************
 // <copyright file="CodeParser.cs" company="Mario">
 //     Mario
@@ -16,6 +16,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using CWTools.CSharp;
 using IronyModManager.DI;
 using IronyModManager.Parser.Common.Parsers;
@@ -60,6 +61,8 @@ namespace IronyModManager.Parser
             { $"{Common.Constants.Scripts.OpenObject}", $" {Common.Constants.Scripts.OpenObject} " },
             { $"{Common.Constants.Scripts.CloseObject}", $" {Common.Constants.Scripts.CloseObject} " }
         };
+
+        protected static readonly Regex quotesRegex = new("\".*?\"", RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
         /// <summary>
         /// The logger
@@ -286,7 +289,17 @@ namespace IronyModManager.Parser
             {
                 return string.Empty;
             }
-            var cleaned = string.Join(' ', line.Trim().Replace("\t", " ").Split(' ', StringSplitOptions.RemoveEmptyEntries));
+            var regexHits = quotesRegex.Matches(line);
+            var cleaned = string.Join(" ", line.Trim().Replace("\t", " ").Split(" ".ToCharArray(), StringSplitOptions.RemoveEmptyEntries));
+            if (regexHits.Count > 0)
+            {
+                var cleanedRegexHits = quotesRegex.Matches(cleaned);
+                for (int i = 0; i < regexHits.Count; i++)
+                {
+                    var insert = line.Substring(regexHits[i].Index, regexHits[i].Length);
+                    cleaned = cleaned.Remove(cleanedRegexHits[i].Index, cleanedRegexHits[i].Length).Insert(cleanedRegexHits[i].Index, insert);
+                }
+            }
             foreach (var item in codeTerminatorMap)
             {
                 cleaned = cleaned.Replace(item.Key, item.Value).Trim();
