@@ -117,7 +117,7 @@
         "Delete_Title": "删除此合集？",
         "Delete_Header": "确认删除操作",
         "Delete_Message": "是否确认删除合集 {CollectionName}？",
-        "Deleting_Message": "请在删除Mod Collection时等待......",
+        "Deleting_Message": "正在删除合集……",
         "Export": "导出",
         "Import": "导入",
         "Export_Dialog_Title": "导出合集",
@@ -336,7 +336,7 @@
             "Title": "模组过滤",
             "IgnoreGameConflicts": "忽略原版游戏冲突",
             "ShowSelfConflicts": "显示自我冲突",
-            "ShowResetConflicts": "仅显示重置冲突",
+            "ShowResetConflicts": "仅显示被重置的冲突",
             "Close": "关闭"
         },
         "ResetConflicts": {
@@ -375,12 +375,12 @@
         },
         "ResetWarning": {
             "Title": "冲突重置",
-            "AnalyzeModeAll": "如果由于MOD更改运行冲突求解器，将重置某些冲突。 这些都是解决的冲突，它将被重置：{NewLine}{NewLine}{ListOfConflictsResolved}{NewLine}这些都被忽略了将重置的冲突：{NewLine}{NewLine}{ListOfConflictsIgnored}",
-            "AnalyzeModeResolvedOnly": "如果由于MOD更改运行冲突求解器，将重置某些冲突。 这些都是解决的冲突，它将被重置：{NewLine}{NewLine}{ListOfConflictsResolved}",
-            "AnalyzeModeIgnoredOnly": "如果由于MOD更改运行冲突求解器，将重置某些冲突。 这些都是解决的冲突，这些都被忽略了将重置的冲突：{NewLine}{NewLine}{ListOfConflictsIgnored}",
-            "RegularModeAll": "由于MOD更改，某些冲突被重置。 这些被重置已解决的冲突：{NewLine}{NewLine}{ListOfConflictsResolved}{NewLine}这些被重置被忽略了冲突：{NewLine}{NewLine}{ListOfConflictsIgnored}",
-            "RegularModeResolvedOnly": "由于MOD更改，某些冲突被重置。 这些被重置已解决的冲突：{NewLine}{NewLine}{ListOfConflictsResolved}",
-            "RegularModeIgnoredOnly": "由于MOD更改，某些冲突被重置。 这些被重置已解决的冲突：这些被重置被忽略了冲突：{NewLine}{NewLine}{ListOfConflictsIgnored}",
+            "AnalyzeModeAll": "一些冲突将由于因模组变更而重新运行冲突处理器而被重置。以下已处理的冲突将被重置：{NewLine}{NewLine}{ListOfConflictsResolved}{NewLine}以下已忽略的冲突将被重置：{NewLine}{NewLine}{ListOfConflictsIgnored}",
+            "AnalyzeModeResolvedOnly": "一些冲突将由于因模组变更而重新运行冲突处理器而被重置。以下已处理的冲突将被重置：{NewLine}{NewLine}{ListOfConflictsResolved}",
+            "AnalyzeModeIgnoredOnly": "一些冲突将由于因模组变更而重新运行冲突处理器而被重置。这些都是解决的冲突，以下已忽略的冲突将被重置：{NewLine}{NewLine}{ListOfConflictsIgnored}",
+            "RegularModeAll": "一些冲突由于模组变更而被重置。以下为被重置的已处理的冲突：{NewLine}{NewLine}{ListOfConflictsResolved}{NewLine}以下为被重置的已忽略的冲突：{NewLine}{NewLine}{ListOfConflictsIgnored}",
+            "RegularModeResolvedOnly": "一些冲突由于模组变更而被重置。以下为被重置的已处理的冲突：{NewLine}{NewLine}{ListOfConflictsResolved}",
+            "RegularModeIgnoredOnly": "一些冲突由于模组变更而被重置。以下为被重置的已忽略的冲突：{NewLine}{NewLine}{ListOfConflictsIgnored}",
             "ListOfConflictsFormat": "{ParentDirectory}：{Name}"
         }
     },
