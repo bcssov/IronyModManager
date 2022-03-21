@@ -4,7 +4,7 @@
 // Created          : 05-26-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-06-2022
+// Last Modified On : 03-21-2022
 // ***********************************************************************
 // <copyright file="ModPatchCollectionService.cs" company="Mario">
 //     Mario
@@ -379,6 +379,7 @@ namespace IronyModManager.Services
                             copy.OriginalModName = item.OriginalModName;
                             copy.OriginalFileName = item.OriginalFileName;
                             copy.Variables = item.Variables;
+                            copy.IsFromGame = item.IsFromGame;
                             indexedDefinitions.AddToMap(copy);
                         }
                         var fileNames = copy.AdditionalFileNames;
@@ -452,6 +453,7 @@ namespace IronyModManager.Services
                     }
                     copy.AdditionalFileNames = fileNames;
                     copy.ExistsInLastFile = true;
+                    copy.IsFromGame = lastMod.IsFromGame;
                     indexedConflicts.AddToMap(copy);
                     indexedDefinitions.AddToMap(copy);
                     conflicts.Add(copy);
@@ -1794,7 +1796,7 @@ namespace IronyModManager.Services
                         {
                             if (result)
                             {
-                                if (!def.IsFromGame && !conflicts.Contains(def) && IsValidDefinitionType(def))
+                                if (!conflicts.Contains(def) && IsValidDefinitionType(def))
                                 {
                                     def.ExistsInLastFile = existsInLastFile(def);
                                     if (!def.ExistsInLastFile)
@@ -1817,7 +1819,7 @@ namespace IronyModManager.Services
                                 else
                                 {
                                     fileConflictCache.TryAdd(def.FileCI, true);
-                                    if (!def.IsFromGame && !conflicts.Contains(def) && IsValidDefinitionType(def))
+                                    if (!conflicts.Contains(def) && IsValidDefinitionType(def))
                                     {
                                         def.ExistsInLastFile = existsInLastFile(def);
                                         if (!def.ExistsInLastFile)
