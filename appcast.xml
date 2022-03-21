@@ -4,13 +4,14 @@
 		<title>Irony Mod Manager</title>
 		<language>en</language>
 		<item>
-			<title>1.21.127</title>
+			<title>1.21.129</title>
 			<description>## Note
 * As of this version Irony supports analyze mode for HOI4. If you see any bugs in how Irony detects any definitions there please report on the issue tracker.
 * Stellaris collections with patch mods are not backwards compatible with older versions. I seriously mean it; importing a collection made in v1.21 will not be recognized in say v1.20.
 
 ## Current Release Notes
-* Bump avalonia to fix some bugs
+* Update Chinese translation (by Clazex)
+* Don't filter out empty game overrides
 
 ## Release Notes 1.21
 * Update dependencies
@@ -21,17 +22,18 @@
 * Conflict solver reset conflicts notifications, indicators and filter
 * Enhance dds image handling
 * Optimize binary image preview</description>
-			<pubDate>Wed, 16 Mar 2022 00:05:46 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.21.127/osx-x64.rar" sparkle:version="1.21.127.28633" sparkle:shortVersionString="1.21.127" length="73930972" sparkle:os="osx" type="application/vnd.rar" sparkle:signature="siyjUbxH2y86mbH5qanspfFx8vJJ7sBMDciiojUeO0a1eOCmHD/qKprikxiXbBTkxyb5d7hB+Z8xHfBsa5kbCA=="/>
+			<pubDate>Mon, 21 Mar 2022 09:04:42 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.21.129/osx-x64.rar" sparkle:version="1.21.129.31656" sparkle:shortVersionString="1.21.129" length="73931223" sparkle:os="osx" type="application/vnd.rar" sparkle:signature="1At5weQw9x/dFo4byoVrFC058AhwQ4jkHn4DGNoSIm6qpJz74Yj0GL0R6E/Fz8vxYZ+mxRvZana6kYyaCRO2Ag=="/>
 		</item>
 		<item>
-			<title>1.21.127</title>
+			<title>1.21.129</title>
 			<description>## Note
 * As of this version Irony supports analyze mode for HOI4. If you see any bugs in how Irony detects any definitions there please report on the issue tracker.
 * Stellaris collections with patch mods are not backwards compatible with older versions. I seriously mean it; importing a collection made in v1.21 will not be recognized in say v1.20.
 
 ## Current Release Notes
-* Bump avalonia to fix some bugs
+* Update Chinese translation (by Clazex)
+* Don't filter out empty game overrides
 
 ## Release Notes 1.21
 * Update dependencies
@@ -42,17 +44,18 @@
 * Conflict solver reset conflicts notifications, indicators and filter
 * Enhance dds image handling
 * Optimize binary image preview</description>
-			<pubDate>Wed, 16 Mar 2022 00:05:54 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.21.127/win-x64-setup.rar" sparkle:version="1.21.127.28633" sparkle:shortVersionString="1.21.127" length="64011790" sparkle:os="windows" type="application/vnd.rar" sparkle:signature="IhdTbqcLv/3KeBm/OZrnutdVPwrym+Bf7ITjOxgEH/rdLpyyPFKcDvWKyHoXtdIpjMtnsBmeEg7ABNxPnALVAA=="/>
+			<pubDate>Mon, 21 Mar 2022 09:04:50 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.21.129/win-x64-setup.rar" sparkle:version="1.21.129.31656" sparkle:shortVersionString="1.21.129" length="64014686" sparkle:os="windows" type="application/vnd.rar" sparkle:signature="U33KN6HfjfyWuu5zGzLLJ7nhFOz8TCNEzUSNwyUu0bt9+WxKclqtGrCZBL4qFS83/NYUwss7ftWjnqo8lJF3Bw=="/>
 		</item>
 		<item>
-			<title>1.21.127</title>
+			<title>1.21.129</title>
 			<description>## Note
 * As of this version Irony supports analyze mode for HOI4. If you see any bugs in how Irony detects any definitions there please report on the issue tracker.
 * Stellaris collections with patch mods are not backwards compatible with older versions. I seriously mean it; importing a collection made in v1.21 will not be recognized in say v1.20.
 
 ## Current Release Notes
-* Bump avalonia to fix some bugs
+* Update Chinese translation (by Clazex)
+* Don't filter out empty game overrides
 
 ## Release Notes 1.21
 * Update dependencies
@@ -63,17 +66,18 @@
 * Conflict solver reset conflicts notifications, indicators and filter
 * Enhance dds image handling
 * Optimize binary image preview</description>
-			<pubDate>Wed, 16 Mar 2022 00:05:50 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.21.127/win-x64.rar" sparkle:version="1.21.127.28633" sparkle:shortVersionString="1.21.127" length="76766401" sparkle:os="windows" type="application/vnd.rar" sparkle:signature="SNcNQT7+KVf+Yu2stEn7mCDOlip6AOWbQ+6RM5tfeMrwKl882/qegsrTVfLvPeg/1fD3/T2T4IZUxDqFKXw1Bw=="/>
+			<pubDate>Mon, 21 Mar 2022 09:04:46 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.21.129/win-x64.rar" sparkle:version="1.21.129.31656" sparkle:shortVersionString="1.21.129" length="76766230" sparkle:os="windows" type="application/vnd.rar" sparkle:signature="my7Isxxu65rkWJlJ/zGBaZWHQvGwDIUrGkgQr2BdpT69slABivjx7L0/7eJJkFzfcjdltlh7YcMI96/Xc3ybDw=="/>
 		</item>
 		<item>
-			<title>1.21.127</title>
+			<title>1.21.129</title>
 			<description>## Note
 * As of this version Irony supports analyze mode for HOI4. If you see any bugs in how Irony detects any definitions there please report on the issue tracker.
 * Stellaris collections with patch mods are not backwards compatible with older versions. I seriously mean it; importing a collection made in v1.21 will not be recognized in say v1.20.
 
 ## Current Release Notes
-* Bump avalonia to fix some bugs
+* Update Chinese translation (by Clazex)
+* Don't filter out empty game overrides
 
 ## Release Notes 1.21
 * Update dependencies
@@ -84,8 +88,8 @@
 * Conflict solver reset conflicts notifications, indicators and filter
 * Enhance dds image handling
 * Optimize binary image preview</description>
-			<pubDate>Wed, 16 Mar 2022 00:05:43 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.21.127/linux-x64.zip" sparkle:version="1.21.127.28633" sparkle:shortVersionString="1.21.127" length="88206009" sparkle:os="linux" type="application/zip" sparkle:signature="F+FGAMJuP/gWmZku6jxS7KxpeGiJRae7yhauW+0XNg/4548h9MMDw04PrPvSMMvGWag1ZKqNoM46gYcby3pQAg=="/>
+			<pubDate>Mon, 21 Mar 2022 09:04:38 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.21.129/linux-x64.zip" sparkle:version="1.21.129.31656" sparkle:shortVersionString="1.21.129" length="88205968" sparkle:os="linux" type="application/zip" sparkle:signature="RsM2gM7sU5Llda2yt/SqgIDoIa8fvKLrQl9327mlA8Bnq4zWP34gXc6lloKV+Hvi/Z6JEIbWeMewsfJ44CtFBA=="/>
 		</item>
 	</channel>
 </rss>
