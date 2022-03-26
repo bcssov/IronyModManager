@@ -4,7 +4,7 @@
 // Created          : 03-17-2021
 //
 // Last Modified By : Mario
-// Last Modified On : 03-17-2021
+// Last Modified On : 03-26-2022
 // ***********************************************************************
 // <copyright file="DriveInfoProvider.cs" company="Mario">
 //     Mario
@@ -28,6 +28,28 @@ namespace IronyModManager.IO
     [ExcludeFromCoverage("Skipping testing IO logic.")]
     public class DriveInfoProvider : IDriveInfoProvider
     {
+        #region Fields
+
+        /// <summary>
+        /// The logger
+        /// </summary>
+        private ILogger logger;
+
+        #endregion Fields
+
+        #region Constructors
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="DriveInfoProvider"/> class.
+        /// </summary>
+        /// <param name="logger">The logger.</param>
+        public DriveInfoProvider(ILogger logger)
+        {
+            this.logger = logger;
+        }
+
+        #endregion Constructors
+
         #region Methods
 
         /// <summary>
@@ -37,11 +59,18 @@ namespace IronyModManager.IO
         /// <returns>System.Nullable&lt;System.Int64&gt;.</returns>
         public long? GetFreeSpace(string path)
         {
-            var root = Path.GetPathRoot(path);
-            var drive = DriveInfo.GetDrives().FirstOrDefault(p => p.Name.Equals(root, StringComparison.OrdinalIgnoreCase));
-            if (drive != null)
+            try
             {
-                return drive.AvailableFreeSpace;
+                // I remember this having problems in earlier versions of .NET or is my memory failing me...
+                var info = new DriveInfo(path);
+                if (info != null)
+                {
+                    return info.AvailableFreeSpace;
+                }
+            }
+            catch (Exception ex)
+            {
+                logger.Error(ex);
             }
             return null;
         }
