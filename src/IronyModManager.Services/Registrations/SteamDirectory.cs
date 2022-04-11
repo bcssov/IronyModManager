@@ -4,7 +4,7 @@
 // Created          : 02-24-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 10-26-2021
+// Last Modified On : 04-11-2022
 // ***********************************************************************
 // <copyright file="SteamDirectory.cs" company="Mario">
 //     Mario
@@ -93,6 +93,11 @@ namespace IronyModManager.Services.Registrations
         /// The steam workshop directory
         /// </summary>
         private static readonly string SteamWorkshopDirectory = PathHelper.MergePaths(SteamAppsDirectory, "workshop", "content");
+
+        /// <summary>
+        /// The VDF serializer settings
+        /// </summary>
+        private static readonly VdfSerializerSettings VdfSerializerSettings = new() { MaximumTokenSize = 16384, UsesEscapeSequences = true, UsesConditionals = true };
 
         #endregion Fields
 
@@ -375,7 +380,7 @@ namespace IronyModManager.Services.Registrations
             {
                 try
                 {
-                    return VdfConvert.Deserialize(content);
+                    return VdfConvert.Deserialize(content, VdfSerializerSettings);
                 }
                 catch (Exception ex)
                 {
