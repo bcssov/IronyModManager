@@ -4,13 +4,13 @@
 		<title>Irony Mod Manager</title>
 		<language>en</language>
 		<item>
-			<title>1.21.130</title>
+			<title>1.21.131</title>
 			<description>## Note
 * As of this version Irony supports analyze mode for HOI4. If you see any bugs in how Irony detects any definitions there please report on the issue tracker.
 * Stellaris collections with patch mods are not backwards compatible with older versions. I seriously mean it; importing a collection made in v1.21 will not be recognized in say v1.20.
 
 ## Current Release Notes
-* Fix issue of not being able to identify available free space under Linux
+* Increase steam max token size (seems like default 4096 is not enough per own valve code: https://github.com/ValveSoftware/source-sdk-2013/blob/master/sp/src/tier1/KeyValues.cpp#L42)
 
 ## Release Notes 1.21
 * Update dependencies
@@ -21,17 +21,17 @@
 * Conflict solver reset conflicts notifications, indicators and filter
 * Enhance dds image handling
 * Optimize binary image preview</description>
-			<pubDate>Sat, 26 Mar 2022 20:19:39 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.21.130/osx-x64.rar" sparkle:version="1.21.130.26525" sparkle:shortVersionString="1.21.130" length="73931513" sparkle:os="osx" type="application/vnd.rar" sparkle:signature="QDjWrJI4YfUjNlQUCtGuXdAXrEACRfx5LwwE0YNJPKqW6UOd6+DzJAlsro0lb09ZSf+4OrS8wT8n6gRGAfU7AA=="/>
+			<pubDate>Mon, 11 Apr 2022 09:10:23 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.21.131/osx-x64.rar" sparkle:version="1.21.131.2806" sparkle:shortVersionString="1.21.131" length="73930985" sparkle:os="osx" type="application/vnd.rar" sparkle:signature="bVpx1dSSxNjSD5eExaVolmKFRZOOzWlwfW7/w5gH3/Vqfb9p+bYnxXcid9gUH3vTSAkgyOhzgPF/RHvZWEJdCA=="/>
 		</item>
 		<item>
-			<title>1.21.130</title>
+			<title>1.21.131</title>
 			<description>## Note
 * As of this version Irony supports analyze mode for HOI4. If you see any bugs in how Irony detects any definitions there please report on the issue tracker.
 * Stellaris collections with patch mods are not backwards compatible with older versions. I seriously mean it; importing a collection made in v1.21 will not be recognized in say v1.20.
 
 ## Current Release Notes
-* Fix issue of not being able to identify available free space under Linux
+* Increase steam max token size (seems like default 4096 is not enough per own valve code: https://github.com/ValveSoftware/source-sdk-2013/blob/master/sp/src/tier1/KeyValues.cpp#L42)
 
 ## Release Notes 1.21
 * Update dependencies
@@ -42,17 +42,17 @@
 * Conflict solver reset conflicts notifications, indicators and filter
 * Enhance dds image handling
 * Optimize binary image preview</description>
-			<pubDate>Sat, 26 Mar 2022 20:19:47 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.21.130/win-x64-setup.rar" sparkle:version="1.21.130.26525" sparkle:shortVersionString="1.21.130" length="64002519" sparkle:os="windows" type="application/vnd.rar" sparkle:signature="EU3smOyeqdUP6Ugm/+4NN4YRIwzbNpDyxCEug+vvlcZI9l2H8Uh+ReuutrigkhUcL39Ac3tgnwawhJSteDXpBg=="/>
+			<pubDate>Mon, 11 Apr 2022 09:10:32 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.21.131/win-x64-setup.rar" sparkle:version="1.21.131.2806" sparkle:shortVersionString="1.21.131" length="64003643" sparkle:os="windows" type="application/vnd.rar" sparkle:signature="5J7DCu5hiMvJKFwCXHZvH/M77meBfao+SEUCfln0SgQU5UxjJD3txcilzXjQVz43KA8K0F5OO9BtAkeh7Yb4DA=="/>
 		</item>
 		<item>
-			<title>1.21.130</title>
+			<title>1.21.131</title>
 			<description>## Note
 * As of this version Irony supports analyze mode for HOI4. If you see any bugs in how Irony detects any definitions there please report on the issue tracker.
 * Stellaris collections with patch mods are not backwards compatible with older versions. I seriously mean it; importing a collection made in v1.21 will not be recognized in say v1.20.
 
 ## Current Release Notes
-* Fix issue of not being able to identify available free space under Linux
+* Increase steam max token size (seems like default 4096 is not enough per own valve code: https://github.com/ValveSoftware/source-sdk-2013/blob/master/sp/src/tier1/KeyValues.cpp#L42)
 
 ## Release Notes 1.21
 * Update dependencies
@@ -63,17 +63,17 @@
 * Conflict solver reset conflicts notifications, indicators and filter
 * Enhance dds image handling
 * Optimize binary image preview</description>
-			<pubDate>Sat, 26 Mar 2022 20:19:43 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.21.130/win-x64.rar" sparkle:version="1.21.130.26525" sparkle:shortVersionString="1.21.130" length="76766590" sparkle:os="windows" type="application/vnd.rar" sparkle:signature="K7ll4Kt8wXghbydzrWqP8JcwrbYr0br2krMEYsIUuQj36wJSB+C4d+hhfuOTHgx4CH1Jj+bWWOZan0AfsTXCCg=="/>
+			<pubDate>Mon, 11 Apr 2022 09:10:28 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.21.131/win-x64.rar" sparkle:version="1.21.131.2806" sparkle:shortVersionString="1.21.131" length="76766512" sparkle:os="windows" type="application/vnd.rar" sparkle:signature="pTUSHj94cv2tl7DUkXjXvcuD/yE3qSqnuo33GG9HaTPhAzCX82cO8youoVXiBBBBdZ6zSLfhjUUqF4wLEWIhDQ=="/>
 		</item>
 		<item>
-			<title>1.21.130</title>
+			<title>1.21.131</title>
 			<description>## Note
 * As of this version Irony supports analyze mode for HOI4. If you see any bugs in how Irony detects any definitions there please report on the issue tracker.
 * Stellaris collections with patch mods are not backwards compatible with older versions. I seriously mean it; importing a collection made in v1.21 will not be recognized in say v1.20.
 
 ## Current Release Notes
-* Fix issue of not being able to identify available free space under Linux
+* Increase steam max token size (seems like default 4096 is not enough per own valve code: https://github.com/ValveSoftware/source-sdk-2013/blob/master/sp/src/tier1/KeyValues.cpp#L42)
 
 ## Release Notes 1.21
 * Update dependencies
@@ -84,8 +84,8 @@
 * Conflict solver reset conflicts notifications, indicators and filter
 * Enhance dds image handling
 * Optimize binary image preview</description>
-			<pubDate>Sat, 26 Mar 2022 20:19:37 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.21.130/linux-x64.zip" sparkle:version="1.21.130.26525" sparkle:shortVersionString="1.21.130" length="88205624" sparkle:os="linux" type="application/zip" sparkle:signature="iafudu1DAS2e8B46WcMRdRVXgRDzyK+3d5JZzq39HzjlSlf+de5xShNoI032LjSHRDBdk2HfORwrW7+YciwJCw=="/>
+			<pubDate>Mon, 11 Apr 2022 09:10:20 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.21.131/linux-x64.zip" sparkle:version="1.21.131.2806" sparkle:shortVersionString="1.21.131" length="88205726" sparkle:os="linux" type="application/zip" sparkle:signature="DFOXthXJH2k2XfDbaeJjjRp8BFOjLhFzUl6XSmV/1GZyO09fQPUJ+a0rc2BzNKuRKIQN2PaMwSSoW6/clLD5Cw=="/>
 		</item>
 	</channel>
 </rss>
