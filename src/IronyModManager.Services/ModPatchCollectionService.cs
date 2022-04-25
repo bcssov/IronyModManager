@@ -4,7 +4,7 @@
 // Created          : 05-26-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-21-2022
+// Last Modified On : 04-25-2022
 // ***********************************************************************
 // <copyright file="ModPatchCollectionService.cs" company="Mario">
 //     Mario
@@ -840,7 +840,7 @@ namespace IronyModManager.Services
                         var cleaned = false;
                         // Skip single file overwrites as they are cleaned at the beginning of the process
                         var folderConflicts = conflicts.AllConflicts.GetByParentDirectory(Path.GetDirectoryName(file));
-                        if (folderConflicts.Any() && folderConflicts.FirstOrDefault().ValueType == ValueType.OverwrittenObjectSingleFile)
+                        if (folderConflicts.Any() && folderConflicts.Any(p => p.ValueType == ValueType.OverwrittenObjectSingleFile))
                         {
                             continue;
                         }
