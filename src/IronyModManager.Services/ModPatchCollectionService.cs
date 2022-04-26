@@ -4,7 +4,7 @@
 // Created          : 05-26-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-25-2022
+// Last Modified On : 04-26-2022
 // ***********************************************************************
 // <copyright file="ModPatchCollectionService.cs" company="Mario">
 //     Mario
@@ -380,6 +380,7 @@ namespace IronyModManager.Services
                             copy.OriginalFileName = item.OriginalFileName;
                             copy.Variables = item.Variables;
                             copy.IsFromGame = item.IsFromGame;
+                            copy.FileNameSuffix = item.FileNameSuffix;
                             indexedDefinitions.AddToMap(copy);
                         }
                         var fileNames = copy.AdditionalFileNames;
@@ -2444,6 +2445,7 @@ namespace IronyModManager.Services
             copy.Order = definition.Order;
             copy.OriginalFileName = definition.OriginalFileName;
             copy.ResetType = definition.ResetType;
+            copy.FileNameSuffix = definition.FileNameSuffix;
             return copy;
         }
 

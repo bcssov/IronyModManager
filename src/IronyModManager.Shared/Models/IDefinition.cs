@@ -4,7 +4,7 @@
 // Created          : 02-16-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-02-2022
+// Last Modified On : 04-26-2022
 // ***********************************************************************
 // <copyright file="IDefinition.cs" company="Mario">
 //     Mario
@@ -132,6 +132,12 @@ namespace IronyModManager.Shared.Models
         /// </summary>
         /// <value>The file ci.</value>
         string FileCI { get; }
+
+        /// <summary>
+        /// Gets or sets the file name suffix.
+        /// </summary>
+        /// <value>The file name suffix.</value>
+        string FileNameSuffix { get; set; }
 
         /// <summary>
         /// Gets or sets the generated file names.

@@ -4,7 +4,7 @@
 // Created          : 04-04-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 11-01-2021
+// Last Modified On : 04-26-2022
 // ***********************************************************************
 // <copyright file="BaseDefinitionInfoProvider.cs" company="Mario">
 //     Mario
@@ -164,7 +164,7 @@ namespace IronyModManager.IO.Mods.InfoProviders
         /// Ensures the type of all same.
         /// </summary>
         /// <param name="definition">The definition.</param>
-        /// <exception cref="ArgumentException">Invalid type.</exception>
+        /// <exception cref="System.ArgumentException">Invalid type.</exception>
         protected virtual void EnsureValidType(IDefinition definition)
         {
             if (definition.ValueType == ValueType.Variable || definition.ValueType == ValueType.Namespace)
@@ -232,14 +232,19 @@ namespace IronyModManager.IO.Mods.InfoProviders
         /// <returns>System.String.</returns>
         protected virtual string GenerateLocalizationFileName(IDefinition definition, string fileName)
         {
+            var file = fileName;
+            if (!string.IsNullOrWhiteSpace(definition.FileNameSuffix))
+            {
+                file = $"{Path.GetFileNameWithoutExtension(fileName)}_{definition.FileNameSuffix}{Path.GetExtension(fileName)}";
+            }
             if (definition.ParentDirectory.Contains(Shared.Constants.LocalizationReplaceDirectory, StringComparison.OrdinalIgnoreCase))
             {
-                var proposedFileName = Path.Combine(definition.ParentDirectory, $"{LIOSName}{fileName.GenerateValidFileName()}");
+                var proposedFileName = Path.Combine(definition.ParentDirectory, $"{LIOSName}{file.GenerateValidFileName()}");
                 return EnsureRuleEnforced(definition, proposedFileName, false);
             }
             else
             {
-                var proposedFileName = Path.Combine(definition.ParentDirectory, Shared.Constants.LocalizationReplaceDirectory, $"{LIOSName}{fileName.GenerateValidFileName()}");
+                var proposedFileName = Path.Combine(definition.ParentDirectory, Shared.Constants.LocalizationReplaceDirectory, $"{LIOSName}{file.GenerateValidFileName()}");
                 return EnsureRuleEnforced(definition, proposedFileName, false);
             }
         }

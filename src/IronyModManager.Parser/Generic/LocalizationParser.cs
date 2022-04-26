@@ -4,7 +4,7 @@
 // Created          : 02-18-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-16-2021
+// Last Modified On : 04-26-2022
 // ***********************************************************************
 // <copyright file="LocalizationParser.cs" company="Mario">
 //     Mario
@@ -178,6 +178,7 @@ namespace IronyModManager.Parser.Generic
                                 def.Id = GetKey(code, Common.Constants.Localization.YmlSeparator.ToString());
                                 prevId = def.Id;
                                 def.ValueType = ValueType.SpecialVariable;
+                                def.FileNameSuffix = selectedLanguage;
                                 def.Tags.Add(def.Id.ToLowerInvariant());
                                 result.Add(def);
                             }
