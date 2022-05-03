@@ -12,6 +12,11 @@ Check out the detailed overview on the [wiki](https://github.com/bcssov/IronyMod
 ### Download
 * Latest stable version: [v1.21.133](https://github.com/bcssov/IronyModManager/releases/tag/v1.21.133)
 
+### Discord
+https://discord.gg/MR4gaSDVuf
+
+Or until recently what used to be primary discord over at Stellaris Modding Den: https://discord.gg/ezzCnwP7fj where under hosted tools you can find #irony-mod-manager channel.
+
 ### New users
 Check this [checklist](https://github.com/bcssov/IronyModManager/wiki/New-User-Checklist) if you are a first time user of Irony.
 
