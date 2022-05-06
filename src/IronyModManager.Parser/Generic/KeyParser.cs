@@ -4,7 +4,7 @@
 // Created          : 02-16-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 01-29-2022
+// Last Modified On : 05-06-2022
 // ***********************************************************************
 // <copyright file="KeyParser.cs" company="Mario">
 //     Mario
@@ -86,7 +86,7 @@ namespace IronyModManager.Parser.Generic
                             int idLoc = -1;
                             foreach (var item in Constants.Scripts.GenericKeyIds)
                             {
-                                idLoc = cleaned.IndexOf(item);
+                                idLoc = cleaned.IndexOf(item, StringComparison.OrdinalIgnoreCase);
                                 if (idLoc > -1)
                                 {
                                     break;
@@ -114,7 +114,7 @@ namespace IronyModManager.Parser.Generic
                         int idLoc = -1;
                         foreach (var item in Constants.Scripts.GenericKeyIds)
                         {
-                            idLoc = cleaned.IndexOf(item);
+                            idLoc = cleaned.IndexOf(item, StringComparison.OrdinalIgnoreCase);
                             if (idLoc > -1)
                             {
                                 break;
