@@ -169,7 +169,8 @@ namespace IronyModManager.Implementation.Actions
         /// <param name="cmd">The command.</param>
         private void ShellExec(string cmd)
         {
-            var escapedArgs = Regex.Replace(cmd, "(?=[`~!#&*()|;'<>])", "\\").Replace("\"", "\\\\\\\"");
+            // Bad idea copying this from Avalonia
+            var escapedArgs = cmd.Replace("\"", "\\\"");
 
             using var process = Process.Start(
                 new ProcessStartInfo
