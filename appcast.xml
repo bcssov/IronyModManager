@@ -10,7 +10,7 @@
 * Stellaris collections with patch mods are not backwards compatible with older versions. I seriously mean it; importing a collection made in v1.21 will not be recognized in say v1.20.
 
 ## Current Release Notes
-* Fix certain cases where xdp-open didn't work on linux
+* Fix certain cases where xdg-open didn't work on linux
 * Fix #362
 
 ## Release Notes 1.21
@@ -32,7 +32,7 @@
 * Stellaris collections with patch mods are not backwards compatible with older versions. I seriously mean it; importing a collection made in v1.21 will not be recognized in say v1.20.
 
 ## Current Release Notes
-* Fix certain cases where xdp-open didn't work on linux
+* Fix certain cases where xdg-open didn't work on linux
 * Fix #362
 
 ## Release Notes 1.21
@@ -54,7 +54,7 @@
 * Stellaris collections with patch mods are not backwards compatible with older versions. I seriously mean it; importing a collection made in v1.21 will not be recognized in say v1.20.
 
 ## Current Release Notes
-* Fix certain cases where xdp-open didn't work on linux
+* Fix certain cases where xdg-open didn't work on linux
 * Fix #362
 
 ## Release Notes 1.21
@@ -76,7 +76,7 @@
 * Stellaris collections with patch mods are not backwards compatible with older versions. I seriously mean it; importing a collection made in v1.21 will not be recognized in say v1.20.
 
 ## Current Release Notes
-* Fix certain cases where xdp-open didn't work on linux
+* Fix certain cases where xdg-open didn't work on linux
 * Fix #362
 
 ## Release Notes 1.21
