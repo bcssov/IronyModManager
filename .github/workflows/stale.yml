@@ -8,24 +8,20 @@ on:
 jobs:
   stale:
     runs-on: ubuntu-latest
+    permissions:
+        issues: write
+        pull-requests: write
     steps:
-      - uses: actions/stale@v5
-        with:
-          repo-token: "${{ secrets.STALE_TOKEN }}"
-          
+      - uses: actions/stale@main
+        with:          
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
           close-pr-message: >
                 This issue has been automatically marked as stale because it has not had
                 recent activity. It will be closed if no further activity occurs. Thank you
-                for your contributions.
-                
-          days-before-issue-stale: 4
-          
-          days-before-issue-close: 4
-                    
-          stale-issue-label: 'wontfix'
-          
-          stale-pr-label: 'wontfix'
-          
-          exempt-issue-labels: 'pinned,security,bug,documentation,feature,help wanted'
-          
+                for your contributions.   
+          days-before-issue-stale: 4       
+          days-before-issue-close: 4                    
+          stale-issue-label: 'wontfix'          
+          stale-pr-label: 'wontfix'          
+          exempt-issue-labels: 'pinned,security,bug,documentation,feature,help wanted'          
           exempt-pr-labels: 'pinned,security,bug,documentation,feature,help wanted'
