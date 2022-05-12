@@ -3,7 +3,7 @@ name: Notifications
 on: 
   release:
     types:
-      - created
+      - published
 
 jobs:
   run_main:
