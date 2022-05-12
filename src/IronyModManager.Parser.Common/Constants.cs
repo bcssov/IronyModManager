@@ -4,7 +4,7 @@
 // Created          : 02-16-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 01-30-2022
+// Last Modified On : 05-12-2022
 // ***********************************************************************
 // <copyright file="Constants.cs" company="Mario">
 //     Mario
@@ -332,12 +332,12 @@ namespace IronyModManager.Parser.Common
             /// <summary>
             /// The locale folders
             /// </summary>
-            public static readonly string[] LocaleFolders = new string[] { "default", "english", "braz_por", "french", "german", "polish", "russian", "simp_chinese", "spanish", "chinese", "traditional_chinese" };
+            public static readonly string[] LocaleFolders = new string[] { "default", "english", "braz_por", "french", "german", "polish", "russian", "simp_chinese", "spanish", "chinese", "traditional_chinese", "japanese", "korean" };
 
             /// <summary>
             /// The locales
             /// </summary>
-            public static readonly string[] Locales = new string[] { "l_default", "l_english", "l_braz_por", "l_french", "l_german", "l_polish", "l_russian", "l_simp_chinese", "l_spanish", "l_chinese", "l_traditional_chinese" };
+            public static readonly string[] Locales = new string[] { "l_default", "l_english", "l_braz_por", "l_french", "l_german", "l_polish", "l_russian", "l_simp_chinese", "l_spanish", "l_chinese", "l_traditional_chinese", "l_japanese", "l_korean" };
 
             #endregion Fields
         }

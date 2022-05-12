@@ -249,7 +249,7 @@ namespace IronyModManager.Parser.Tests
                         }
                     }
                 }
-                if (types.Count == 0)
+                if (types.Count == 0 || types.All(p => p.ValueType == ValueType.EmptyFile))
                 {
                     continue;
                 }
