@@ -44,7 +44,7 @@
           <controls:ListBox.ItemTemplate>
             <DataTemplate>
               <Grid ColumnDefinitions="30,8*" MinHeight="20" Background="Transparent">
-                <TextBlock Text="{Binding Position}" Grid.Column="0" Width="30" HorizontalAlignment="Left"></TextBlock>
+                <TextBlock Text="{Binding Position}" Grid.Column="0" Width="36" HorizontalAlignment="Left"></TextBlock>
                 <controls:HorizontalItemsRepeater Grid.Column="1" Items="{Binding SubPieces}" IsVisible="{Binding SubPieces, 
                                                 Converter={StaticResource CollectionNullOrEmptyConverter} ConverterParameter=true}"
                                                   HorizontalCacheLength="100" VerticalCacheLength="100">
@@ -70,7 +70,7 @@
           <controls:ListBox.ItemTemplate>
             <DataTemplate>
               <Grid ColumnDefinitions="30,8*" MinHeight="20" Background="Transparent">
-                <TextBlock Text="{Binding Position}" Grid.Column="0" Width="30" HorizontalAlignment="Left"></TextBlock>
+                <TextBlock Text="{Binding Position}" Grid.Column="0" Width="36" HorizontalAlignment="Left"></TextBlock>
                 <controls:HorizontalItemsRepeater Grid.Column="1" Items="{Binding SubPieces}" IsVisible="{Binding SubPieces, 
                                                 Converter={StaticResource CollectionNullOrEmptyConverter} ConverterParameter=true}"
                                                   HorizontalCacheLength="100" VerticalCacheLength="100">
