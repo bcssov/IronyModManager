@@ -4,14 +4,14 @@
 		<title>Irony Mod Manager</title>
 		<language>en</language>
 		<item>
-			<title>1.21.135</title>
+			<title>1.21.144</title>
 			<description>## Note
 * As of this version Irony supports analyze mode for HOI4. If you see any bugs in how Irony detects any definitions there please report on the issue tracker.
 * Stellaris collections with patch mods are not backwards compatible with older versions. I seriously mean it; importing a collection made in v1.21 will not be recognized in say v1.20.
 
 ## Current Release Notes
-* Fix certain cases where xdg-open didn't work on linux
-* Fix #362
+* Stellaris 3.4 support
+* Update parser maps
 
 ## Release Notes 1.21
 * Update dependencies
@@ -22,18 +22,18 @@
 * Conflict solver reset conflicts notifications, indicators and filter
 * Enhance dds image handling
 * Optimize binary image preview</description>
-			<pubDate>Fri, 06 May 2022 20:58:19 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.21.135/osx-x64.rar" sparkle:version="1.21.135.4011" sparkle:shortVersionString="1.21.135" length="74035688" sparkle:os="osx" type="application/vnd.rar" sparkle:signature="Ky911BLP6epgN7d7Q2LPqEptUZt+7YNl21DGJPm5bpIdkgubPsR7jeaZ0VARpJfzLkvxuPzyyt2UZ3cmmrUODg=="/>
+			<pubDate>Thu, 12 May 2022 18:55:25 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.21.144/osx-x64.rar" sparkle:version="1.21.144.15125" sparkle:shortVersionString="1.21.144" length="74039152" sparkle:os="osx" type="application/vnd.rar" sparkle:signature="oqCetJTsSEklB2iQgntcoD4Y23S9RvSZLIrvuC9pV2LIQUmnL5ZXs5Yn8wTUNVwwHrXsHjtrmcItqwuvqwFoBw=="/>
 		</item>
 		<item>
-			<title>1.21.135</title>
+			<title>1.21.144</title>
 			<description>## Note
 * As of this version Irony supports analyze mode for HOI4. If you see any bugs in how Irony detects any definitions there please report on the issue tracker.
 * Stellaris collections with patch mods are not backwards compatible with older versions. I seriously mean it; importing a collection made in v1.21 will not be recognized in say v1.20.
 
 ## Current Release Notes
-* Fix certain cases where xdg-open didn't work on linux
-* Fix #362
+* Stellaris 3.4 support
+* Update parser maps
 
 ## Release Notes 1.21
 * Update dependencies
@@ -44,18 +44,18 @@
 * Conflict solver reset conflicts notifications, indicators and filter
 * Enhance dds image handling
 * Optimize binary image preview</description>
-			<pubDate>Fri, 06 May 2022 20:58:27 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.21.135/win-x64-setup.rar" sparkle:version="1.21.135.4011" sparkle:shortVersionString="1.21.135" length="64050477" sparkle:os="windows" type="application/vnd.rar" sparkle:signature="/8u9orDasJcAClVjw/HG/e7axwBh3jEApuK56Qtr5TEzP6vdBR947WUJYoeAvqD398vsVu9xzYEkq98KMqZhDg=="/>
+			<pubDate>Thu, 12 May 2022 18:55:33 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.21.144/win-x64-setup.rar" sparkle:version="1.21.144.15125" sparkle:shortVersionString="1.21.144" length="64037560" sparkle:os="windows" type="application/vnd.rar" sparkle:signature="LQlEd3DnvwaXOTtbloyzJfknAnKYMSuVzdi9FneeaysHL8S9y/g41Ki9a+yFjMEdoGSHkIXmTr6++XoSQ5ZjAQ=="/>
 		</item>
 		<item>
-			<title>1.21.135</title>
+			<title>1.21.144</title>
 			<description>## Note
 * As of this version Irony supports analyze mode for HOI4. If you see any bugs in how Irony detects any definitions there please report on the issue tracker.
 * Stellaris collections with patch mods are not backwards compatible with older versions. I seriously mean it; importing a collection made in v1.21 will not be recognized in say v1.20.
 
 ## Current Release Notes
-* Fix certain cases where xdg-open didn't work on linux
-* Fix #362
+* Stellaris 3.4 support
+* Update parser maps
 
 ## Release Notes 1.21
 * Update dependencies
@@ -66,18 +66,18 @@
 * Conflict solver reset conflicts notifications, indicators and filter
 * Enhance dds image handling
 * Optimize binary image preview</description>
-			<pubDate>Fri, 06 May 2022 20:58:23 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.21.135/win-x64.rar" sparkle:version="1.21.135.4011" sparkle:shortVersionString="1.21.135" length="76785626" sparkle:os="windows" type="application/vnd.rar" sparkle:signature="Y4hWiyJL02+K1QhRiksfTKJ3bFREL9flj9Hf5pd9DcyO6VQIKWhwqNtb4RVNNyDStSWZFQWixTAZLfEh68H/CQ=="/>
+			<pubDate>Thu, 12 May 2022 18:55:29 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.21.144/win-x64.rar" sparkle:version="1.21.144.15125" sparkle:shortVersionString="1.21.144" length="76792031" sparkle:os="windows" type="application/vnd.rar" sparkle:signature="MRlF2sHkLV/cXRC4nXDk+j7S/7IXwLuxBaGeNcEpAAUaSOUqjQTes0CvIDDwSANw5c6wnX4hakmUi+65mItEBQ=="/>
 		</item>
 		<item>
-			<title>1.21.135</title>
+			<title>1.21.144</title>
 			<description>## Note
 * As of this version Irony supports analyze mode for HOI4. If you see any bugs in how Irony detects any definitions there please report on the issue tracker.
 * Stellaris collections with patch mods are not backwards compatible with older versions. I seriously mean it; importing a collection made in v1.21 will not be recognized in say v1.20.
 
 ## Current Release Notes
-* Fix certain cases where xdg-open didn't work on linux
-* Fix #362
+* Stellaris 3.4 support
+* Update parser maps
 
 ## Release Notes 1.21
 * Update dependencies
@@ -88,8 +88,8 @@
 * Conflict solver reset conflicts notifications, indicators and filter
 * Enhance dds image handling
 * Optimize binary image preview</description>
-			<pubDate>Fri, 06 May 2022 20:58:16 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.21.135/linux-x64.zip" sparkle:version="1.21.135.4011" sparkle:shortVersionString="1.21.135" length="88235794" sparkle:os="linux" type="application/zip" sparkle:signature="RMxjJGoG8e9fNdHWoDriYIXo9xR5xubkVWel1RSo+R36Ur10zySIkKtnLo2g8ES4NagcCiwr/iYj5hhx1y6zCA=="/>
+			<pubDate>Thu, 12 May 2022 18:55:22 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.21.144/linux-x64.zip" sparkle:version="1.21.144.15125" sparkle:shortVersionString="1.21.144" length="88235521" sparkle:os="linux" type="application/zip" sparkle:signature="B9kA/llg3BfwfxE83zaJEprwIvq0OPUHE4xif2u1HSAC2J7dCaiKtCzL8m3eIvM93Jd0+AxTTLg4neoeEhZLDQ=="/>
 		</item>
 	</channel>
 </rss>
