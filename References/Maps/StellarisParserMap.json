@@ -5,6 +5,18 @@
         "DirectoryPath": "common\\agendas",
         "PreferredParser": "DefaultParser"
     }, {
+        "DirectoryPath": "common\\agreement_presets",
+        "PreferredParser": "DefaultParser"
+    }, {
+        "DirectoryPath": "common\\agreement_resources",
+        "PreferredParser": "DefaultParser"
+    }, {
+        "DirectoryPath": "common\\agreement_terms",
+        "PreferredParser": "DefaultParser"
+    }, {
+        "DirectoryPath": "common\\agreement_term_values",
+        "PreferredParser": "DefaultParser"
+    }, {
         "DirectoryPath": "common\\ai_budget",
         "PreferredParser": "DefaultParser"
     }, {
@@ -81,6 +93,12 @@
         "PreferredParser": "StellarisWholeTextParser"
     }, {
         "DirectoryPath": "common\\country_customization",
+        "PreferredParser": "DefaultParser"
+    }, {
+        "DirectoryPath": "common\\country_limits\\ownership_limits",
+        "PreferredParser": "DefaultParser"
+    }, {
+        "DirectoryPath": "common\\country_limits\\ship_of_size_limits",
         "PreferredParser": "DefaultParser"
     }, {
         "DirectoryPath": "common\\country_types",
@@ -272,6 +290,9 @@
         "DirectoryPath": "common\\scripted_loc",
         "PreferredParser": "GenericKeyParser"
     }, {
+        "DirectoryPath": "common\\scripted_modifiers",
+        "PreferredParser": "DefaultParser"
+    }, {
         "DirectoryPath": "common\\scripted_triggers",
         "PreferredParser": "DefaultParser"
     }, {
@@ -301,6 +322,12 @@
     }, {
         "DirectoryPath": "common\\solar_system_initializers",
         "PreferredParser": "StellarisSolarSystemInitializersParser"
+    }, {
+        "DirectoryPath": "common\\specialist_subject_perks",
+        "PreferredParser": "DefaultParser"
+    }, {
+        "DirectoryPath": "common\\specialist_subject_types",
+        "PreferredParser": "DefaultParser"
     }, {
         "DirectoryPath": "common\\special_projects",
         "PreferredParser": "GenericKeyParser"
@@ -341,9 +368,6 @@
         "DirectoryPath": "common\\strategic_resources",
         "PreferredParser": "StellarisOverwrittenObjectSingleFileParser"
     }, {
-        "DirectoryPath": "common\\subjects",
-        "PreferredParser": "DefaultParser"
-    }, {
         "DirectoryPath": "common\\system_tooltips",
         "PreferredParser": "DefaultParser"
     }, {
@@ -361,6 +385,9 @@
     }, {
         "DirectoryPath": "common\\terraform",
         "PreferredParser": "StellarisOverwrittenParser"
+    }, {
+        "DirectoryPath": "common\\tradable_actions",
+        "PreferredParser": "DefaultParser"
     }, {
         "DirectoryPath": "common\\trade_conversions",
         "PreferredParser": "DefaultParser"
@@ -389,6 +416,9 @@
         "DirectoryPath": "flags",
         "PreferredParser": "StellarisFlagsParser"
     }, {
+        "DirectoryPath": "flags\\aquatic",
+        "PreferredParser": "StellarisFlagsParser"
+    }, {
         "DirectoryPath": "flags\\domination",
         "PreferredParser": "StellarisFlagsParser"
     }, {
@@ -398,13 +428,25 @@
         "DirectoryPath": "flags\\human",
         "PreferredParser": "StellarisFlagsParser"
     }, {
+        "DirectoryPath": "flags\\imperial",
+        "PreferredParser": "StellarisFlagsParser"
+    }, {
         "DirectoryPath": "flags\\legion",
+        "PreferredParser": "StellarisFlagsParser"
+    }, {
+        "DirectoryPath": "flags\\lithoid",
+        "PreferredParser": "StellarisFlagsParser"
+    }, {
+        "DirectoryPath": "flags\\necroid",
         "PreferredParser": "StellarisFlagsParser"
     }, {
         "DirectoryPath": "flags\\paradox",
         "PreferredParser": "StellarisFlagsParser"
     }, {
         "DirectoryPath": "flags\\pirate",
+        "PreferredParser": "StellarisFlagsParser"
+    }, {
+        "DirectoryPath": "flags\\plantoid",
         "PreferredParser": "StellarisFlagsParser"
     }, {
         "DirectoryPath": "flags\\special",
@@ -542,6 +584,12 @@
         "DirectoryPath": "gfx\\models\\portraits\\humanoid",
         "PreferredParser": "GenericKeyParser"
     }, {
+        "DirectoryPath": "gfx\\models\\portraits\\human\\new_human",
+        "PreferredParser": "GenericKeyParser"
+    }, {
+        "DirectoryPath": "gfx\\models\\portraits\\human\\new_human",
+        "PreferredParser": "GenericGraphicsParser"
+    }, {
         "DirectoryPath": "gfx\\models\\portraits\\lithoid",
         "PreferredParser": "GenericKeyParser"
     }, {
@@ -584,10 +632,22 @@
         "DirectoryPath": "gfx\\models\\portraits\\reptilian",
         "PreferredParser": "GenericGraphicsParser"
     }, {
+        "DirectoryPath": "gfx\\models\\portraits\\salvager",
+        "PreferredParser": "GenericKeyParser"
+    }, {
+        "DirectoryPath": "gfx\\models\\portraits\\salvager",
+        "PreferredParser": "GenericGraphicsParser"
+    }, {
         "DirectoryPath": "gfx\\models\\portraits\\shroud",
         "PreferredParser": "GenericKeyParser"
     }, {
         "DirectoryPath": "gfx\\models\\portraits\\shroud",
+        "PreferredParser": "GenericGraphicsParser"
+    }, {
+        "DirectoryPath": "gfx\\models\\portraits\\shroudwalker",
+        "PreferredParser": "GenericKeyParser"
+    }, {
+        "DirectoryPath": "gfx\\models\\portraits\\shroudwalker",
         "PreferredParser": "GenericGraphicsParser"
     }, {
         "DirectoryPath": "gfx\\models\\portraits\\swarm",
@@ -935,6 +995,12 @@
         "DirectoryPath": "gfx\\models\\ships\\megastructures\\gateway",
         "PreferredParser": "GenericGraphicsParser"
     }, {
+        "DirectoryPath": "gfx\\models\\ships\\megastructures\\hyper_relay",
+        "PreferredParser": "GenericKeyParser"
+    }, {
+        "DirectoryPath": "gfx\\models\\ships\\megastructures\\hyper_relay",
+        "PreferredParser": "GenericGraphicsParser"
+    }, {
         "DirectoryPath": "gfx\\models\\ships\\megastructures\\interstellar_assembly",
         "PreferredParser": "GenericKeyParser"
     }, {
@@ -963,6 +1029,18 @@
         "PreferredParser": "GenericKeyParser"
     }, {
         "DirectoryPath": "gfx\\models\\ships\\megastructures\\mega_shipyard",
+        "PreferredParser": "GenericGraphicsParser"
+    }, {
+        "DirectoryPath": "gfx\\models\\ships\\megastructures\\orbital_ring",
+        "PreferredParser": "GenericKeyParser"
+    }, {
+        "DirectoryPath": "gfx\\models\\ships\\megastructures\\orbital_ring",
+        "PreferredParser": "GenericGraphicsParser"
+    }, {
+        "DirectoryPath": "gfx\\models\\ships\\megastructures\\quantum_catapult",
+        "PreferredParser": "GenericKeyParser"
+    }, {
+        "DirectoryPath": "gfx\\models\\ships\\megastructures\\quantum_catapult",
         "PreferredParser": "GenericGraphicsParser"
     }, {
         "DirectoryPath": "gfx\\models\\ships\\megastructures\\spy_orb",
@@ -1205,6 +1283,12 @@
         "DirectoryPath": "localisation\\german",
         "PreferredParser": "GenericLocalizationParser"
     }, {
+        "DirectoryPath": "localisation\\japanese",
+        "PreferredParser": "GenericLocalizationParser"
+    }, {
+        "DirectoryPath": "localisation\\korean",
+        "PreferredParser": "GenericLocalizationParser"
+    }, {
         "DirectoryPath": "localisation\\polish",
         "PreferredParser": "GenericLocalizationParser"
     }, {
@@ -1329,6 +1413,18 @@
         "PreferredParser": "GenericWholeTextParser"
     }, {
         "DirectoryPath": "sound\\nemesis",
+        "PreferredParser": "GenericWholeTextParser"
+    }, {
+        "DirectoryPath": "sound\\overlord\\event_images",
+        "PreferredParser": "GenericWholeTextParser"
+    }, {
+        "DirectoryPath": "sound\\overlord\\Megastructures",
+        "PreferredParser": "GenericWholeTextParser"
+    }, {
+        "DirectoryPath": "sound\\overlord\\Portraits",
+        "PreferredParser": "GenericWholeTextParser"
+    }, {
+        "DirectoryPath": "sound\\overlord\\Starbases",
         "PreferredParser": "GenericWholeTextParser"
     }, {
         "DirectoryPath": "sound\\portrait",

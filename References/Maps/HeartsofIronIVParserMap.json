@@ -209,6 +209,9 @@
         "DirectoryPath": "common\\wargoals",
         "PreferredParser": "HOI4InnerLayerParser"
     }, {
+        "DirectoryPath": "country_metadata",
+        "PreferredParser": "DefaultParser"
+    }, {
         "DirectoryPath": "dlc\\dlc001_german_historical_portraits\\interface",
         "PreferredParser": "GenericGraphicsParser"
     }, {
@@ -232,6 +235,9 @@
     }, {
         "DirectoryPath": "dlc\\dlc021_anniversary_pack\\sound",
         "PreferredParser": "GenericKeyParser"
+    }, {
+        "DirectoryPath": "dlc_metadata\\dlc_info",
+        "PreferredParser": "DefaultParser"
     }, {
         "DirectoryPath": "events",
         "PreferredParser": "GenericKeyParser"
@@ -349,6 +355,9 @@
     }, {
         "DirectoryPath": "interface",
         "PreferredParser": "DefaultParser"
+    }, {
+        "DirectoryPath": "interface\\career_profile",
+        "PreferredParser": "GenericGraphicsParser"
     }, {
         "DirectoryPath": "interface\\equipmentdesigner",
         "PreferredParser": "GenericGraphicsParser"
