@@ -13,7 +13,7 @@ Check out the detailed overview on the [wiki](https://github.com/bcssov/IronyMod
 * Latest stable version: [v1.21.144](https://github.com/bcssov/IronyModManager/releases/tag/v1.21.144)
 
 ### Discord
-[https://discord.gg/MR4gaSDVuf](https://discord.gg/MR4gaSDVuf)
+[https://discord.gg/t9JmY8KFrV](https://discord.gg/t9JmY8KFrV)
 
 Or until recently what used to be primary discord over at Stellaris Modding Den: [https://discord.gg/ezzCnwP7fj](https://discord.gg/ezzCnwP7fj) where under hosted tools you can find #irony-mod-manager channel.
 
