@@ -4,7 +4,7 @@
 // Created          : 03-17-2021
 //
 // Last Modified By : Mario
-// Last Modified On : 03-26-2022
+// Last Modified On : 06-03-2022
 // ***********************************************************************
 // <copyright file="DriveInfoProvider.cs" company="Mario">
 //     Mario
@@ -15,6 +15,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Runtime.InteropServices;
 using IronyModManager.IO.Common;
 using IronyModManager.Shared;
 
@@ -40,7 +41,7 @@ namespace IronyModManager.IO
         #region Constructors
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="DriveInfoProvider"/> class.
+        /// Initializes a new instance of the <see cref="DriveInfoProvider" /> class.
         /// </summary>
         /// <param name="logger">The logger.</param>
         public DriveInfoProvider(ILogger logger)
@@ -61,11 +62,33 @@ namespace IronyModManager.IO
         {
             try
             {
+                var shouldCleanup = false;
+                // Inconsistent behavior of the .net through various other platforms
+                if (!RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+                {
+                    if (!Directory.Exists(path))
+                    {
+                        shouldCleanup = true;
+                        Directory.CreateDirectory(path);
+                    }
+                }
                 // I remember this having problems in earlier versions of .NET or is my memory failing me...
                 var info = new DriveInfo(path);
                 if (info != null)
                 {
-                    return info.AvailableFreeSpace;
+                    var freeSpace = info.AvailableFreeSpace;
+                    if (shouldCleanup && Directory.Exists(path))
+                    {
+                        Directory.Delete(path);
+                    }
+                    return freeSpace;
+                }
+                else
+                {
+                    if (shouldCleanup && Directory.Exists(path))
+                    {
+                        Directory.Delete(path);
+                    }
                 }
             }
             catch (Exception ex)
