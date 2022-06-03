@@ -4,7 +4,7 @@
 // Created          : 02-17-2021
 //
 // Last Modified By : Mario
-// Last Modified On : 02-09-2022
+// Last Modified On : 06-03-2022
 // ***********************************************************************
 // <copyright file="DDSDecoder.cs" company="Mario">
 //     Mario
@@ -59,8 +59,13 @@ namespace IronyModManager.IO.Images
             }
             else if (texture is FlatTexture flatTexture)
             {
-                var image = flatTexture.MipMaps.FirstOrDefault().GetImage();
-                return Task.FromResult(image);
+                // Dxt5 implementation has problems in this library (also the struct is internal)
+                var mipMap = flatTexture.MipMaps.FirstOrDefault();
+                if (!mipMap.GetType().FullName.Contains("SixLabors.ImageSharp.Textures.TextureFormats.Decoding.Dxt5"))
+                {
+                    var image = mipMap.GetImage();
+                    return Task.FromResult(image);
+                }
             }
 
             return Task.FromResult((Image)null);
