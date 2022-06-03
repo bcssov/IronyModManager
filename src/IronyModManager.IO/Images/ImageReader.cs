@@ -4,7 +4,7 @@
 // Created          : 02-17-2021
 //
 // Last Modified By : Mario
-// Last Modified On : 06-03-2022
+// Last Modified On : 06-04-2022
 // ***********************************************************************
 // <copyright file="ImageReader.cs" company="Mario">
 //     Mario
@@ -161,22 +161,29 @@ namespace IronyModManager.IO.Images
                 exceptions.Add(ex);
             }
             // Fallback #1 (SixLabors.Textures)
-            try
+            if (ms == null)
             {
-                var image = await ddsDecoder.DecodeStreamToImageAsync(stream);
-                ms = new MemoryStream();
-                await image.SaveAsPngAsync(ms);
-                image.Dispose();
-            }
-            catch (Exception ex)
-            {
-                if (ms != null)
+                if (stream.CanSeek)
                 {
-                    ms.Close();
-                    await ms.DisposeAsync();
+                    stream.Seek(0, SeekOrigin.Begin);
                 }
-                ms = null;
-                exceptions.Add(ex);
+                try
+                {
+                    var image = await ddsDecoder.DecodeStreamToImageAsync(stream);
+                    ms = new MemoryStream();
+                    await image.SaveAsPngAsync(ms);
+                    image.Dispose();
+                }
+                catch (Exception ex)
+                {
+                    if (ms != null)
+                    {
+                        ms.Close();
+                        await ms.DisposeAsync();
+                    }
+                    ms = null;
+                    exceptions.Add(ex);
+                }
             }
             // fallback #2 (BCnEncoder.NET)
             if (ms == null)
