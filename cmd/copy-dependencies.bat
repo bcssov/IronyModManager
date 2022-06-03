@@ -23,6 +23,8 @@ if "%config%" == "Release" (
 			if not "%%i" == "%solutiondir%src\IronyModManager" xcopy "%%i\%outdir%*.exe" "%solutiondir%src\IronyModManager\%outdir%" /Y /S /D
 			if not "%%i" == "%solutiondir%src\IronyModManager" xcopy "%%i\%outdir%*.json" "%solutiondir%src\IronyModManager\%outdir%" /Y /S /D
 			if not "%%i" == "%solutiondir%src\IronyModManager" xcopy "%%i\%outdir%*.pdb" "%solutiondir%src\IronyModManager\%outdir%" /Y /S /D	
+			if not "%%i" == "%solutiondir%src\IronyModManager" xcopy "%%i\%outdir%*.dylib" "%solutiondir%src\IronyModManager\%outdir%" /Y /S /D	
+			if not "%%i" == "%solutiondir%src\IronyModManager" xcopy "%%i\%outdir%*.so" "%solutiondir%src\IronyModManager\%outdir%" /Y /S /D	
 		)
 		endlocal
 	)
@@ -36,11 +38,15 @@ if "%config%" == "Release" (
 				if not "%%i" == "%solutiondir%src\IronyModManager" xcopy "%%i\%copydir%*.exe" "%solutiondir%src\IronyModManager\%outdir%" /Y /S /D
 				if not "%%i" == "%solutiondir%src\IronyModManager" xcopy "%%i\%copydir%*.json" "%solutiondir%src\IronyModManager\%outdir%" /Y /S /D
 				if not "%%i" == "%solutiondir%src\IronyModManager" xcopy "%%i\%copydir%*.pdb" "%solutiondir%src\IronyModManager\%outdir%" /Y /S /D
+				if not "%%i" == "%solutiondir%src\IronyModManager" xcopy "%%i\%copydir%*.dylib" "%solutiondir%src\IronyModManager\%outdir%" /Y /S /D
+				if not "%%i" == "%solutiondir%src\IronyModManager" xcopy "%%i\%copydir%*.so" "%solutiondir%src\IronyModManager\%outdir%" /Y /S /D				
 			) else (
 				if not "%%i" == "%solutiondir%src\IronyModManager" xcopy "%%i\%outdir%*.dll" "%solutiondir%src\IronyModManager\%outdir%" /Y /S /D
 				if not "%%i" == "%solutiondir%src\IronyModManager" xcopy "%%i\%outdir%*.exe" "%solutiondir%src\IronyModManager\%outdir%" /Y /S /D
 				if not "%%i" == "%solutiondir%src\IronyModManager" xcopy "%%i\%outdir%*.json" "%solutiondir%src\IronyModManager\%outdir%" /Y /S /D
 				if not "%%i" == "%solutiondir%src\IronyModManager" xcopy "%%i\%outdir%*.pdb" "%solutiondir%src\IronyModManager\%outdir%" /Y /S /D			
+				if not "%%i" == "%solutiondir%src\IronyModManager" xcopy "%%i\%outdir%*.dylib" "%solutiondir%src\IronyModManager\%outdir%" /Y /S /D			
+				if not "%%i" == "%solutiondir%src\IronyModManager" xcopy "%%i\%outdir%*.so" "%solutiondir%src\IronyModManager\%outdir%" /Y /S /D			
 			)
 		)
 		endlocal
