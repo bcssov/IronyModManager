@@ -4,12 +4,15 @@
 		<title>Irony Mod Manager</title>
 		<language>en</language>
 		<item>
-			<title>1.21.150</title>
+			<title>1.21.151</title>
 			<description>## Note
 * As of this version Irony supports analyze mode for HOI4. If you see any bugs in how Irony detects any definitions there please report on the issue tracker.
 * Stellaris collections with patch mods are not backwards compatible with older versions. I seriously mean it; importing a collection made in v1.21 will not be recognized in say v1.20.
 
 ## Current Release Notes
+* Adjust image providers
+
+## 1.21.150 Release Notes
 * Make more space in conflict viewers to see 5 digit lines better
 * Prevent duplicate invalid items from showing
 * Add fallback image provider
@@ -24,16 +27,19 @@
 * Conflict solver reset conflicts notifications, indicators and filter
 * Enhance dds image handling
 * Optimize binary image preview</description>
-			<pubDate>Fri, 03 Jun 2022 20:55:23 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.21.150/linux-x64.zip" sparkle:version="1.21.150.14604" sparkle:shortVersionString="1.21.150" length="88822355" sparkle:os="linux" type="application/zip" sparkle:signature="o7iG+HHCqRnr4vE3s2TXXQJFBBU5AYGmBXMSX/0Qd4tQmbV3N5bQszojJfxq7ZXZAE6HpNWQIJ/TgEoKnK4RCQ=="/>
+			<pubDate>Sat, 04 Jun 2022 02:05:13 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.21.151/linux-x64.zip" sparkle:version="1.21.151.30950" sparkle:shortVersionString="1.21.151" length="88822233" sparkle:os="linux" type="application/zip" sparkle:signature="DCbMijO8pKDchhiMGkNEYZOU2H/oVeHOyUNKc6n1U/zbG63n8RCH7Pcs+wyCRZOh5vhCGohTCfVANIdC2z9WBw=="/>
 		</item>
 		<item>
-			<title>1.21.150</title>
+			<title>1.21.151</title>
 			<description>## Note
 * As of this version Irony supports analyze mode for HOI4. If you see any bugs in how Irony detects any definitions there please report on the issue tracker.
 * Stellaris collections with patch mods are not backwards compatible with older versions. I seriously mean it; importing a collection made in v1.21 will not be recognized in say v1.20.
 
 ## Current Release Notes
+* Adjust image providers
+
+## 1.21.150 Release Notes
 * Make more space in conflict viewers to see 5 digit lines better
 * Prevent duplicate invalid items from showing
 * Add fallback image provider
@@ -48,16 +54,19 @@
 * Conflict solver reset conflicts notifications, indicators and filter
 * Enhance dds image handling
 * Optimize binary image preview</description>
-			<pubDate>Fri, 03 Jun 2022 20:55:29 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.21.150/osx-x64.zip" sparkle:version="1.21.150.14604" sparkle:shortVersionString="1.21.150" length="91542455" sparkle:os="osx" type="application/zip" sparkle:signature="A15Rey+NPnt+TFzfFbNhlm/k39y5X/gmYEFyPhuWzT9oZ2zkJOgia6m4BwKvAFZ3avIFJR5+rFvg8/8KJm7bAg=="/>
+			<pubDate>Sat, 04 Jun 2022 02:05:22 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.21.151/osx-x64.zip" sparkle:version="1.21.151.30950" sparkle:shortVersionString="1.21.151" length="91542384" sparkle:os="osx" type="application/zip" sparkle:signature="KpRPrTBpTz9jC4kobdnc9Q4ZN8FbdxKI8I4Ja3eO6O3a89W8yx8AuP6wTFR1/Op0P3DwHrNeo40ckfekYhg8CA=="/>
 		</item>
 		<item>
-			<title>1.21.150</title>
+			<title>1.21.151</title>
 			<description>## Note
 * As of this version Irony supports analyze mode for HOI4. If you see any bugs in how Irony detects any definitions there please report on the issue tracker.
 * Stellaris collections with patch mods are not backwards compatible with older versions. I seriously mean it; importing a collection made in v1.21 will not be recognized in say v1.20.
 
 ## Current Release Notes
+* Adjust image providers
+
+## 1.21.150 Release Notes
 * Make more space in conflict viewers to see 5 digit lines better
 * Prevent duplicate invalid items from showing
 * Add fallback image provider
@@ -72,16 +81,19 @@
 * Conflict solver reset conflicts notifications, indicators and filter
 * Enhance dds image handling
 * Optimize binary image preview</description>
-			<pubDate>Fri, 03 Jun 2022 20:55:35 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.21.150/win-x64-setup.zip" sparkle:version="1.21.150.14604" sparkle:shortVersionString="1.21.150" length="72650605" sparkle:os="windows" type="application/zip" sparkle:signature="jNzGImKebdkLpdCfcOzwOTQP9MMQzlRInd4rVEdvGbGfHnbptAJzlGvKsw8RrO/bPvEjGftnn9eU6GoInH2vDw=="/>
+			<pubDate>Sat, 04 Jun 2022 02:05:31 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.21.151/win-x64-setup.zip" sparkle:version="1.21.151.30950" sparkle:shortVersionString="1.21.151" length="72640156" sparkle:os="windows" type="application/zip" sparkle:signature="V85uK0oZXCOrRItpM4kP6KJAGrC47SsezQef4b/McMC+JYW+veMF/4BYcRwQk2/nbA9bvsEkUBc7leE4v70QAA=="/>
 		</item>
 		<item>
-			<title>1.21.150</title>
+			<title>1.21.151</title>
 			<description>## Note
 * As of this version Irony supports analyze mode for HOI4. If you see any bugs in how Irony detects any definitions there please report on the issue tracker.
 * Stellaris collections with patch mods are not backwards compatible with older versions. I seriously mean it; importing a collection made in v1.21 will not be recognized in say v1.20.
 
 ## Current Release Notes
+* Adjust image providers
+
+## 1.21.150 Release Notes
 * Make more space in conflict viewers to see 5 digit lines better
 * Prevent duplicate invalid items from showing
 * Add fallback image provider
@@ -96,8 +108,8 @@
 * Conflict solver reset conflicts notifications, indicators and filter
 * Enhance dds image handling
 * Optimize binary image preview</description>
-			<pubDate>Fri, 03 Jun 2022 20:55:35 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.21.150/win-x64.zip" sparkle:version="1.21.150.14604" sparkle:shortVersionString="1.21.150" length="106425996" sparkle:os="windows" type="application/zip" sparkle:signature="mL8gBeLdpSiVc2UkEhzB3/gWAeGTCs8r1ilpFdpDjNfcuVJAYQU2G1w1Bou7MyvVxtpb64nE19QdRpAayEQtCw=="/>
+			<pubDate>Sat, 04 Jun 2022 02:05:31 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.21.151/win-x64.zip" sparkle:version="1.21.151.30950" sparkle:shortVersionString="1.21.151" length="106425908" sparkle:os="windows" type="application/zip" sparkle:signature="K33Q+LZg5QSPNWvsh75Mu3VJaIPny7gidftQF2wpApMP7ccXCbiR+76oOxPd+eCgFZaMkY8RDZUB9yeacXBTAQ=="/>
 		</item>
 	</channel>
 </rss>
