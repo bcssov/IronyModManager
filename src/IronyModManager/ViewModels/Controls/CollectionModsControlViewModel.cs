@@ -4,7 +4,7 @@
 // Created          : 03-03-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-11-2022
+// Last Modified On : 06-20-2022
 // ***********************************************************************
 // <copyright file="CollectionModsControlViewModel.cs" company="Mario">
 //     Mario
@@ -1195,7 +1195,7 @@ namespace IronyModManager.ViewModels.Controls
                         result.Mods = importedMods;
                         modCollectionService.Save(result);
                     }
-                    var modPaths = result.Mods.ToList();
+                    var modPaths = result.Mods != null ? result.Mods.ToList() : new List<string>();
                     restoreCollectionSelection = result.Name;
                     LoadModCollections();
                     var showImportNotification = true;
