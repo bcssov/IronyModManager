@@ -4,7 +4,7 @@
 // Created          : 03-04-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-08-2022
+// Last Modified On : 06-20-2022
 // ***********************************************************************
 // <copyright file="ModCollectionService.cs" company="Mario">
 //     Mario
@@ -639,7 +639,8 @@ namespace IronyModManager.Services
                 var mods = GetInstalledModsInternal(modCollection.Game, false);
                 if (mods.Any())
                 {
-                    var collectionMods = mods.Where(p => importResult.ModIds.Contains(p.RemoteId.ToString()));
+                    var sort = importResult.ModIds.ToList();
+                    var collectionMods = mods.Where(p => importResult.ModIds.Contains(p.RemoteId.ToString())).OrderBy(p => sort.IndexOf(p.RemoteId.ToString()));
                     modCollection.Mods = collectionMods.Select(p => p.DescriptorFile).ToList();
                     modCollection.ModNames = collectionMods.Select(p => p.Name).ToList();
                 }
