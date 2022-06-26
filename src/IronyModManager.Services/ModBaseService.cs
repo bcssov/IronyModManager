@@ -4,7 +4,7 @@
 // Created          : 04-07-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-26-2022
+// Last Modified On : 06-26-2022
 // ***********************************************************************
 // <copyright file="ModBaseService.cs" company="Mario">
 //     Mario
@@ -459,6 +459,21 @@ namespace IronyModManager.Services
                 patchNamePath = patchName;
             }
             return patchNamePath;
+        }
+
+        /// <summary>
+        /// Formats the name of the prefix mod.
+        /// </summary>
+        /// <param name="prefix">The prefix.</param>
+        /// <param name="name">The name.</param>
+        /// <returns>System.String.</returns>
+        protected virtual string FormatPrefixModName(string prefix, string name)
+        {
+            if (!string.IsNullOrWhiteSpace(prefix))
+            {
+                return $"{prefix}{name}";
+            }
+            return name;
         }
 
         /// <summary>

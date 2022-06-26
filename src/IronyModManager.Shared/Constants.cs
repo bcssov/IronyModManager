@@ -4,7 +4,7 @@
 // Created          : 01-17-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 01-28-2022
+// Last Modified On : 06-26-2022
 // ***********************************************************************
 // <copyright file="Constants.cs" company="Mario">
 //     Mario
@@ -78,6 +78,11 @@ namespace IronyModManager.Shared
         /// The mod extension
         /// </summary>
         public const string ModExtension = "." + ModDirectory;
+
+        /// <summary>
+        /// The mod name prefix override
+        /// </summary>
+        public const string ModNamePrefixOverride = "mod_name_prefix.txt";
 
         /// <summary>
         /// The plugins path and name

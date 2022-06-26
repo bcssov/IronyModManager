@@ -58,11 +58,6 @@ namespace IronyModManager.Services
         private readonly ILogger logger;
 
         /// <summary>
-        /// The mod prefix file name
-        /// </summary>
-        private readonly string ModPrefixFileName = "mod_name_prefix.txt";
-
-        /// <summary>
         /// The search parser
         /// </summary>
         private readonly IParser searchParser;
@@ -659,7 +654,7 @@ namespace IronyModManager.Services
 
             string readModPrefix(string path)
             {
-                var fileInfo = Reader.GetFileInfo(path, ModPrefixFileName);
+                var fileInfo = Reader.GetFileInfo(path, Shared.Constants.ModNamePrefixOverride);
                 if (fileInfo == null)
                 {
                     return string.Empty;
@@ -682,10 +677,7 @@ namespace IronyModManager.Services
                         }
                     }
                     var mod = Mapper.Map<IMod>(ModParser.Parse(fileInfo.Content));
-                    if (!string.IsNullOrWhiteSpace(modNamePrefix))
-                    {
-                        mod.Name = $"{modNamePrefix} {mod.Name}";
-                    }
+                    mod.Name = FormatPrefixModName(modNamePrefix, mod.Name);
                     mod.FileName = path.Replace("\\", "/");
                     mod.FullPath = path.StandardizeDirectorySeparator();
                     mod.IsLocked = fileInfo.IsReadOnly;
@@ -755,7 +747,6 @@ namespace IronyModManager.Services
                 mods.Add(result);
             }
 
-            var mainNamePrefix = readModPrefix(path);
             if (files.Any())
             {
                 foreach (var file in files)
@@ -770,21 +761,7 @@ namespace IronyModManager.Services
                     var modSourceOverride = directory.Split(Path.DirectorySeparatorChar, StringSplitOptions.RemoveEmptyEntries).
                             LastOrDefault().Contains(Constants.Paradox_mod_id, StringComparison.OrdinalIgnoreCase) ? ModSource.Paradox : modSource;
 
-                    var childNamePrefix = readModPrefix(directory);
-                    var modNamePrefix = string.Empty;
-                    if (!string.IsNullOrWhiteSpace(mainNamePrefix) && !string.IsNullOrWhiteSpace(childNamePrefix))
-                    {
-                        modNamePrefix = $"{mainNamePrefix} {childNamePrefix}";
-                    }
-                    else if (!string.IsNullOrWhiteSpace(childNamePrefix))
-                    {
-                        modNamePrefix = childNamePrefix;
-                    }
-                    else if (!string.IsNullOrWhiteSpace(mainNamePrefix))
-                    {
-                        modNamePrefix = mainNamePrefix;
-                    }
-
+                    var modNamePrefix = readModPrefix(directory);
                     parseModFiles(directory, modSourceOverride, true, modNamePrefix);
 
                     var zipFiles = Directory.EnumerateFiles(directory, $"*{Shared.Constants.ZipExtension}").Union(Directory.EnumerateFiles(directory, $"*{Shared.Constants.BinExtension}"));

@@ -4,7 +4,7 @@
 // Created          : 03-04-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-20-2022
+// Last Modified On : 06-26-2022
 // ***********************************************************************
 // <copyright file="ModCollectionService.cs" company="Mario">
 //     Mario
@@ -205,16 +205,21 @@ namespace IronyModManager.Services
                 collection.MergedFolderName = collection.Name.GenerateValidFileName();
             }
             var path = GetPatchModDirectory(game, modCollection);
+            var modNameOverride = $"({collection.Name}) ";
             var parameters = new ModCollectionExporterParams()
             {
                 File = file,
                 Mod = collection,
                 ModDirectory = path,
-                ExportModOrderOnly = exportOrderOnly
+                ExportModOrderOnly = exportOrderOnly,
+                ModNameOverride = modNameOverride
             };
             if (exportMods)
             {
                 parameters.ExportMods = GetCollectionMods(collectionName: modCollection.Name);
+                var prefixModNames = new List<string>();
+                collection.ModNames.ToList().ForEach(p => prefixModNames.Add(FormatPrefixModName(modNameOverride, p)));
+                collection.ModNames = prefixModNames;
             }
             return modCollectionExporter.ExportAsync(parameters);
         }
