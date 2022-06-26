@@ -4,7 +4,7 @@
 // Created          : 04-02-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 08-26-2021
+// Last Modified On : 06-26-2022
 // ***********************************************************************
 // <copyright file="ModCollectionExporterParams.cs" company="Mario">
 //     Mario
@@ -67,6 +67,12 @@ namespace IronyModManager.IO.Common.Mods
         /// </summary>
         /// <value>The mod directory.</value>
         public string ModDirectory { get; set; }
+
+        /// <summary>
+        /// Gets or sets the mod name override.
+        /// </summary>
+        /// <value>The mod name override.</value>
+        public string ModNameOverride { get; set; }
 
         #endregion Properties
     }

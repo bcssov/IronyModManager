@@ -4,7 +4,7 @@
 // Created          : 03-09-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-13-2022
+// Last Modified On : 06-26-2022
 // ***********************************************************************
 // <copyright file="ModCollectionExporter.cs" company="Mario">
 //     Mario
@@ -189,7 +189,11 @@ namespace IronyModManager.IO.Mods
                 }
             }
             if ((parameters.ExportMods?.Any()).GetValueOrDefault())
-            {
+            {                
+                var prefixDataStream = new MemoryStream(Encoding.UTF8.GetBytes(parameters.ModNameOverride));
+                streams.Add(prefixDataStream);
+                zip.AddEntry(Path.Combine(Common.Constants.ModExportPath, Shared.Constants.ModNamePrefixOverride), prefixDataStream);
+
                 foreach (var mod in parameters.ExportMods)
                 {
                     if (Directory.Exists(mod.FullPath))

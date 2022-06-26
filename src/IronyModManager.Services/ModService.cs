@@ -4,7 +4,7 @@
 // Created          : 02-24-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-08-2022
+// Last Modified On : 06-26-2022
 // ***********************************************************************
 // <copyright file="ModService.cs" company="Mario">
 //     Mario
@@ -652,7 +652,17 @@ namespace IronyModManager.Services
                 }
             }
 
-            void parseModFiles(string path, ModSource source, bool isDirectory)
+            string readModPrefix(string path)
+            {
+                var fileInfo = Reader.GetFileInfo(path, Shared.Constants.ModNamePrefixOverride);
+                if (fileInfo == null)
+                {
+                    return string.Empty;
+                }
+                return fileInfo.Content.FirstOrDefault();
+            }
+
+            void parseModFiles(string path, ModSource source, bool isDirectory, string modNamePrefix)
             {
                 var result = GetModelInstance<IModInstallationResult>();
                 try
@@ -667,6 +677,7 @@ namespace IronyModManager.Services
                         }
                     }
                     var mod = Mapper.Map<IMod>(ModParser.Parse(fileInfo.Content));
+                    mod.Name = FormatPrefixModName(modNamePrefix, mod.Name);
                     mod.FileName = path.Replace("\\", "/");
                     mod.FullPath = path.StandardizeDirectorySeparator();
                     mod.IsLocked = fileInfo.IsReadOnly;
@@ -735,11 +746,12 @@ namespace IronyModManager.Services
                 }
                 mods.Add(result);
             }
+
             if (files.Any())
             {
                 foreach (var file in files)
                 {
-                    parseModFiles(file, modSource, false);
+                    parseModFiles(file, modSource, false, string.Empty);
                 }
             }
             if (directories.Any())
@@ -749,14 +761,15 @@ namespace IronyModManager.Services
                     var modSourceOverride = directory.Split(Path.DirectorySeparatorChar, StringSplitOptions.RemoveEmptyEntries).
                             LastOrDefault().Contains(Constants.Paradox_mod_id, StringComparison.OrdinalIgnoreCase) ? ModSource.Paradox : modSource;
 
-                    parseModFiles(directory, modSourceOverride, true);
+                    var modNamePrefix = readModPrefix(directory);
+                    parseModFiles(directory, modSourceOverride, true, modNamePrefix);
 
                     var zipFiles = Directory.EnumerateFiles(directory, $"*{Shared.Constants.ZipExtension}").Union(Directory.EnumerateFiles(directory, $"*{Shared.Constants.BinExtension}"));
                     if (zipFiles.Any())
                     {
                         foreach (var zip in zipFiles)
                         {
-                            parseModFiles(zip, modSourceOverride, false);
+                            parseModFiles(zip, modSourceOverride, false, modNamePrefix);
                         }
                     }
 
@@ -767,7 +780,7 @@ namespace IronyModManager.Services
                         {
                             var subDirectoryModSourceOverride = subdirectory.Split(Path.DirectorySeparatorChar, StringSplitOptions.RemoveEmptyEntries).
                                 LastOrDefault().Contains(Constants.Paradox_mod_id, StringComparison.OrdinalIgnoreCase) ? ModSource.Paradox : modSource;
-                            parseModFiles(subdirectory, subDirectoryModSourceOverride, true);
+                            parseModFiles(subdirectory, subDirectoryModSourceOverride, true, modNamePrefix);
                         }
                     }
                 }
