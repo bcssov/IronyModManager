@@ -4,7 +4,7 @@
 // Created          : 03-18-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-03-2022
+// Last Modified On : 06-27-2022
 // ***********************************************************************
 // <copyright file="MainConflictSolverViewModel.cs" company="Mario">
 //     Mario
@@ -952,7 +952,7 @@ namespace IronyModManager.ViewModels
             {
                 if (ContextMenuDefinition.AdditionalData is IDefinition definition)
                 {
-                    CustomConflicts.SetContent(definition.File, definition.Code);
+                    CustomConflicts.SetContent(definition.File, definition.OriginalCode);
                 }
             }).DisposeWith(disposables);
 
