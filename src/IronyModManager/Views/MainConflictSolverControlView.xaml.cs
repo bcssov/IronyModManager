@@ -4,7 +4,7 @@
 // Created          : 03-18-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-15-2021
+// Last Modified On : 06-27-2022
 // ***********************************************************************
 // <copyright file="MainConflictSolverControlView.xaml.cs" company="Mario">
 //     Mario
@@ -130,23 +130,27 @@ namespace IronyModManager.Views
                     ViewModel.SetParameters(item.Content as IHierarchicalDefinitions);
                     if (!string.IsNullOrWhiteSpace(ViewModel.InvalidConflictPath))
                     {
-                        menuItems = new List<MenuItem>()
+                        menuItems = new List<MenuItem>();
+                        if (!ViewModel.ReadOnly)
                         {
-                            new MenuItem()
+                            menuItems = new List<MenuItem>()
                             {
-                                Header = ViewModel.InvalidCustomPatch,
-                                Command = ViewModel.InvalidCustomPatchCommand
-                            },
-                            new MenuItem()
-                            {
-                                Header = "-"
-                            },
-                            new MenuItem()
-                            {
-                                Header = ViewModel.InvalidOpenFile,
-                                Command = ViewModel.InvalidOpenFileCommand
-                            }
-                        };
+                                new MenuItem()
+                                {
+                                    Header = ViewModel.InvalidCustomPatch,
+                                    Command = ViewModel.InvalidCustomPatchCommand
+                                },
+                                new MenuItem()
+                                {
+                                    Header = "-"
+                                }
+                            };
+                        }
+                        menuItems.Add(new MenuItem()
+                        {
+                            Header = ViewModel.InvalidOpenFile,
+                            Command = ViewModel.InvalidOpenFileCommand
+                        });
                         if (!ViewModel.InvalidConflictPath.EndsWith(Shared.Constants.ZipExtension, StringComparison.OrdinalIgnoreCase) &&
                             !ViewModel.InvalidConflictPath.EndsWith(Shared.Constants.BinExtension, StringComparison.OrdinalIgnoreCase))
                         {
