@@ -4,12 +4,16 @@
 		<title>Irony Mod Manager</title>
 		<language>en</language>
 		<item>
-			<title>1.21.156</title>
+			<title>1.21.158</title>
 			<description>## Note
 * As of this version Irony supports analyze mode for HOI4. If you see any bugs in how Irony detects any definitions there please report on the issue tracker.
 * Stellaris collections with patch mods are not backwards compatible with older versions. I seriously mean it; importing a collection made in v1.21 will not be recognized in say v1.20.
 
 ## Current Release Notes
+* Fix #372
+* Minor fixes
+
+## v1.21.156 Release Notes
 * Add mod name prefix override support (per folder)
 * Resolve #378
 
@@ -22,16 +26,20 @@
 * Conflict solver reset conflicts notifications, indicators and filter
 * Enhance dds image handling
 * Optimize binary image preview</description>
-			<pubDate>Sun, 26 Jun 2022 23:42:42 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.21.156/linux-x64.zip" sparkle:version="1.21.156.26789" sparkle:shortVersionString="1.21.156" length="88822770" sparkle:os="linux" type="application/zip" sparkle:signature="/JVcumzlQbSghK907KJJ/5h/pCF0OTueGqo79TT+mAqYZkdlJk1QPzPweo8SniSJrc9eISUvktSpRBqdNXRGDQ=="/>
+			<pubDate>Mon, 27 Jun 2022 18:45:00 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.21.158/linux-x64.zip" sparkle:version="1.21.158.29017" sparkle:shortVersionString="1.21.158" length="88823086" sparkle:os="linux" type="application/zip" sparkle:signature="Tj/upY0VdCCxl0Q9suNG2uMjDvL/rc8HVAGMtMIfPKH8sc+DJsgNL+dW5W65be70qR57jQeZ8Ien5zcxQLCGAw=="/>
 		</item>
 		<item>
-			<title>1.21.156</title>
+			<title>1.21.158</title>
 			<description>## Note
 * As of this version Irony supports analyze mode for HOI4. If you see any bugs in how Irony detects any definitions there please report on the issue tracker.
 * Stellaris collections with patch mods are not backwards compatible with older versions. I seriously mean it; importing a collection made in v1.21 will not be recognized in say v1.20.
 
 ## Current Release Notes
+* Fix #372
+* Minor fixes
+
+## v1.21.156 Release Notes
 * Add mod name prefix override support (per folder)
 * Resolve #378
 
@@ -44,16 +52,20 @@
 * Conflict solver reset conflicts notifications, indicators and filter
 * Enhance dds image handling
 * Optimize binary image preview</description>
-			<pubDate>Sun, 26 Jun 2022 23:42:51 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.21.156/osx-x64.zip" sparkle:version="1.21.156.26789" sparkle:shortVersionString="1.21.156" length="91543375" sparkle:os="osx" type="application/zip" sparkle:signature="9m07iQCFtI5xTz8wTjTu8JD2Hmasxm3WvohQAJ9pLH4IS5xgS5sG9Wo8P5Hvc2Hsmi6az/NEAHsS4GWrBo6xCg=="/>
+			<pubDate>Mon, 27 Jun 2022 18:45:09 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.21.158/osx-x64.zip" sparkle:version="1.21.158.29017" sparkle:shortVersionString="1.21.158" length="91543682" sparkle:os="osx" type="application/zip" sparkle:signature="hEAVLHW93AfJZyhMdTx4NNco2bw8pTQO6ZHmCkWqZyyRQqbHHRA1CuduHzpQfUdjDIyuzvXH0Nr4SNJnfppeCg=="/>
 		</item>
 		<item>
-			<title>1.21.156</title>
+			<title>1.21.158</title>
 			<description>## Note
 * As of this version Irony supports analyze mode for HOI4. If you see any bugs in how Irony detects any definitions there please report on the issue tracker.
 * Stellaris collections with patch mods are not backwards compatible with older versions. I seriously mean it; importing a collection made in v1.21 will not be recognized in say v1.20.
 
 ## Current Release Notes
+* Fix #372
+* Minor fixes
+
+## v1.21.156 Release Notes
 * Add mod name prefix override support (per folder)
 * Resolve #378
 
@@ -66,16 +78,20 @@
 * Conflict solver reset conflicts notifications, indicators and filter
 * Enhance dds image handling
 * Optimize binary image preview</description>
-			<pubDate>Sun, 26 Jun 2022 23:42:59 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.21.156/win-x64-setup.zip" sparkle:version="1.21.156.26789" sparkle:shortVersionString="1.21.156" length="72631889" sparkle:os="windows" type="application/zip" sparkle:signature="nqS/c1pM2fS+rVkB21x/ZtGvDbbh6sZ5NSRBl2CHMHQCzXPt+wyLzpGP1ZSsT6ANEFHXsxWpDTrKdZCreJgFAA=="/>
+			<pubDate>Mon, 27 Jun 2022 18:45:18 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.21.158/win-x64-setup.zip" sparkle:version="1.21.158.29017" sparkle:shortVersionString="1.21.158" length="72630051" sparkle:os="windows" type="application/zip" sparkle:signature="J2ukArRtCPB2E254D5s8SCdMXe3F9vSVH0IkTmcIwVT9IgIofnsBKuW3pghyR93KgcaJW2lylhe43ETZur+KCQ=="/>
 		</item>
 		<item>
-			<title>1.21.156</title>
+			<title>1.21.158</title>
 			<description>## Note
 * As of this version Irony supports analyze mode for HOI4. If you see any bugs in how Irony detects any definitions there please report on the issue tracker.
 * Stellaris collections with patch mods are not backwards compatible with older versions. I seriously mean it; importing a collection made in v1.21 will not be recognized in say v1.20.
 
 ## Current Release Notes
+* Fix #372
+* Minor fixes
+
+## v1.21.156 Release Notes
 * Add mod name prefix override support (per folder)
 * Resolve #378
 
@@ -88,8 +104,8 @@
 * Conflict solver reset conflicts notifications, indicators and filter
 * Enhance dds image handling
 * Optimize binary image preview</description>
-			<pubDate>Sun, 26 Jun 2022 23:43:00 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.21.156/win-x64.zip" sparkle:version="1.21.156.26789" sparkle:shortVersionString="1.21.156" length="106426382" sparkle:os="windows" type="application/zip" sparkle:signature="9Gy0Abocq6Z5FQAaXgr9fTCFqFZ+lJPhVOvv09rXJJyeCqrIcIct+J66q10rnIK3XixqtojklcmqKfRlofRJBw=="/>
+			<pubDate>Mon, 27 Jun 2022 18:45:18 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.21.158/win-x64.zip" sparkle:version="1.21.158.29017" sparkle:shortVersionString="1.21.158" length="106426707" sparkle:os="windows" type="application/zip" sparkle:signature="NqZv6g/GV/SCSgkjkSaqpXME0gZBD4T6TLZzWCrW/BvVzQG48yvwsDGjZh2f0AT4a7J24auv5bCGsDrpcHuHDQ=="/>
 		</item>
 	</channel>
 </rss>
