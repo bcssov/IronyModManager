@@ -4,7 +4,7 @@
 // Created          : 05-26-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-26-2022
+// Last Modified On : 06-27-2022
 // ***********************************************************************
 // <copyright file="ModPatchCollectionService.cs" company="Mario">
 //     Mario
@@ -2607,8 +2607,6 @@ namespace IronyModManager.Services
                     {
                         var variables = parsed.Where(p => p.ValueType == ValueType.Variable || p.ValueType == ValueType.Namespace);
                         other.Variables = variables;
-                        parseNameSpaces(export, other);
-                        parseVariables(export, other);
                         var exportCopy = CopyDefinition(other);
                         var allType = conflictResult.AllConflicts.GetByTypeAndId(definition.TypeAndId).ToList();
                         allType.ForEach(p => overwrittenFileNames.Add(p.OriginalFileName));
@@ -2649,6 +2647,11 @@ namespace IronyModManager.Services
                 }
                 var fullySortedExport = sortExport.OrderBy(p => p.Order).ToList();
                 sortExport.ForEach(p => p.Order = fullySortedExport.IndexOf(p) + 1);
+                foreach (var item in sortExport.OrderBy(p => p.Order).Where(p => p.ValueType != ValueType.Variable && p.ValueType != ValueType.Namespace))
+                {
+                    parseNameSpaces(export, item);
+                    parseVariables(export, item);
+                }
                 if (export.All(p => p.ValueType == ValueType.Namespace || p.ValueType == ValueType.Variable))
                 {
                     export.Clear();
