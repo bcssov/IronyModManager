@@ -27,8 +27,8 @@
         <Jot>[2.1.13]</Jot>
          <!-- Recently 2.0 version was released and not all packages were updated  -->
         <SixLaborsImageSharp>[1.0.4]</SixLaborsImageSharp>
-        <SixLaborsImageSharpDrawing>[1.0.0-beta13]</SixLaborsImageSharpDrawing>
-        <SixLaborsImageSharpTextures>[0.0.0-alpha.0.123]</SixLaborsImageSharpTextures>
+        <SixLaborsImageSharpDrawing>[1.0.0-beta13.22]</SixLaborsImageSharpDrawing>
+        <SixLaborsImageSharpTextures>[0.0.0-alpha.0.132]</SixLaborsImageSharpTextures>
     </PropertyGroup>
     <ItemGroup>
         <PackageReference Include="Nerdbank.GitVersioning">
