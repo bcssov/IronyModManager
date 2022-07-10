@@ -4,7 +4,7 @@
 // Created          : 01-10-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 07-10-2022
+// Last Modified On : 07-11-2022
 // ***********************************************************************
 // <copyright file="App.xaml.cs" company="Mario">
 //     Mario
@@ -121,9 +121,17 @@ namespace IronyModManager
         /// <param name="desktop">The desktop.</param>
         protected virtual void InitAppSizeDefaults(IClassicDesktopStyleApplicationLifetime desktop)
         {
+            static double validateSize(double minValue, double value)
+            {
+                if (double.IsNaN(value) || double.IsInfinity(value) || minValue > value)
+                {
+                    return minValue;
+                }
+                return value;
+            }
             var stateService = DIResolver.Get<IWindowStateService>();
-            desktop.MainWindow.Height = desktop.MainWindow.MinHeight;
-            desktop.MainWindow.Width = desktop.MainWindow.MinWidth;
+            desktop.MainWindow.Height = validateSize(desktop.MainWindow.MinHeight, desktop.MainWindow.Height);
+            desktop.MainWindow.Width = validateSize(desktop.MainWindow.MinWidth, desktop.MainWindow.Width);
             if (!stateService.IsDefined() && !stateService.IsMaximized())
             {
                 desktop.MainWindow.SizeToContent = SizeToContent.Manual;
