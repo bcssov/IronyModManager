@@ -101,7 +101,7 @@ namespace IronyModManager.Implementation.Updater
         /// <param name="item">The item.</param>
         public new async Task InitAndBeginDownload(AppCastItem item)
         {
-            UpdateDownloading = true;            
+            UpdateDownloading = true;
             await base.InitAndBeginDownload(item);
             UpdateDownloader.DownloadFileCompleted -= OnDownloadFinished;
             UpdateDownloader.DownloadFileCompleted += OnDownloadFinished;
@@ -125,7 +125,7 @@ namespace IronyModManager.Implementation.Updater
         /// <param name="disposing"><c>true</c> to release both managed and unmanaged resources; <c>false</c> to release only unmanaged resources.</param>
         protected override void Dispose(bool disposing)
         {
-            if (!disposed && disposed)
+            if (!disposed && disposing)
             {
                 UpdateDownloader.DownloadFileCompleted -= OnDownloadFinished;
             }
