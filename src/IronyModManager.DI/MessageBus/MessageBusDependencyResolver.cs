@@ -58,9 +58,9 @@ namespace IronyModManager.DI.MessageBus
             {
                 if (typeof(IEnumerable).IsAssignableFrom(type))
                 {
-                    var list = typeof(List<>);
-                    var listType = list.MakeGenericType(type);
-                    var instance = Activator.CreateInstance(listType);
+                    var listType = typeof(List<>);
+                    var genericListType = listType.MakeGenericType(type);
+                    var instance = Activator.CreateInstance(genericListType);
                     return instance;
                 }
                 else if (!type.IsInterface)
