@@ -4,7 +4,7 @@
 // Created          : 03-13-2021
 //
 // Last Modified By : Mario
-// Last Modified On : 03-13-2021
+// Last Modified On : 07-10-2022
 // ***********************************************************************
 // <copyright file="SKTypefaceCollectionCache.cs" company="Avalonia">
 //     Avalonia
@@ -67,8 +67,7 @@ namespace IronyModManager.Platform.Fonts
         /// </summary>
         /// <param name="fontFamily">The font family.</param>
         /// <returns>SKTypefaceCollection.</returns>
-        /// <exception cref="InvalidOperationException">Asset could not be loaded.</exception>
-        /// <exception cref="InvalidOperationException">Asset could not be loaded.</exception>
+        /// <exception cref="System.InvalidOperationException">Asset could not be loaded.</exception>
 
         private static SKTypefaceCollection CreateCustomFontCollection(FontFamily fontFamily)
         {
@@ -90,7 +89,9 @@ namespace IronyModManager.Platform.Fonts
                     return null;
                 }
 
-                if (typeface.FamilyName != fontFamily.Name)
+                var typefaceFamilyName = typeface.FamilyName ?? string.Empty;
+                var familyName = fontFamily.Name ?? string.Empty;
+                if (!typefaceFamilyName.Contains(familyName))
                 {
                     continue;
                 }

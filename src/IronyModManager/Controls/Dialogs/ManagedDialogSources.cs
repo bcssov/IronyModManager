@@ -4,7 +4,7 @@
 // Created          : 05-07-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-27-2021
+// Last Modified On : 07-10-2022
 // ***********************************************************************
 // <copyright file="ManagedDialogSources.cs" company="Avalonia">
 //     Avalonia
@@ -25,7 +25,6 @@ using Avalonia.Dialogs;
 using IronyModManager.DI;
 using IronyModManager.Localization;
 using IronyModManager.Shared;
-using SmartFormat;
 using Syroot.Windows.IO;
 
 namespace IronyModManager.Controls.Dialogs
@@ -160,7 +159,7 @@ namespace IronyModManager.Controls.Dialogs
 
                        if (displayName == null & x.VolumeSizeBytes > 0)
                        {
-                           displayName = Smart.Format(localizationManager.GetResource(LocalizationResources.FileDialog.Volume), new { Size = ByteSizeHelper.ToString(x.VolumeSizeBytes) });
+                           displayName = IronyFormatter.Format(localizationManager.GetResource(LocalizationResources.FileDialog.Volume), new { Size = ByteSizeHelper.ToString(x.VolumeSizeBytes) });
                        };
 
                        try

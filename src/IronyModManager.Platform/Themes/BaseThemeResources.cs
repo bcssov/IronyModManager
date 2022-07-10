@@ -4,7 +4,7 @@
 // Created          : 03-14-2021
 //
 // Last Modified By : Mario
-// Last Modified On : 11-04-2021
+// Last Modified On : 07-10-2022
 // ***********************************************************************
 // <copyright file="BaseThemeResources.cs" company="Mario">
 //     Mario
@@ -16,7 +16,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Avalonia;
 using Avalonia.Markup.Xaml.Styling;
-using SmartFormat;
+using IronyModManager.Shared;
 
 namespace IronyModManager.Platform.Themes
 {
@@ -80,7 +80,7 @@ namespace IronyModManager.Platform.Themes
         /// <value>The HTML base CSS.</value>
         public virtual string GetHtmlBaseCSS(string additionalStyles)
         {
-            return Smart.Format(CSS, new { color = ForegroundHtmlColor, backgroundColor = BackgroundHtmlColor, additionalStyles });
+            return IronyFormatter.Format(CSS, new { color = ForegroundHtmlColor, backgroundColor = BackgroundHtmlColor, additionalStyles });
         }
 
         /// <summary>

@@ -4,7 +4,7 @@
 // Created          : 03-03-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-20-2022
+// Last Modified On : 07-10-2022
 // ***********************************************************************
 // <copyright file="CollectionModsControlViewModel.cs" company="Mario">
 //     Mario
@@ -40,7 +40,6 @@ using IronyModManager.Services.Common;
 using IronyModManager.Shared;
 using Nito.AsyncEx;
 using ReactiveUI;
-using SmartFormat;
 using static IronyModManager.ViewModels.Controls.ModifyCollectionControlViewModel;
 
 namespace IronyModManager.ViewModels.Controls
@@ -973,7 +972,7 @@ namespace IronyModManager.ViewModels.Controls
         protected virtual async Task ExportCollectionAsync(string path, ImportProviderType providerType)
         {
             var id = idGenerator.GetNextId();
-            var overlayProgress = Smart.Format(localizationManager.GetResource(LocalizationResources.Collection_Mods.Overlay_Import_Export_Progress), new
+            var overlayProgress = IronyFormatter.Format(localizationManager.GetResource(LocalizationResources.Collection_Mods.Overlay_Import_Export_Progress), new
             {
                 PercentDone = 0.ToLocalizedPercentage()
             });
@@ -993,7 +992,7 @@ namespace IronyModManager.ViewModels.Controls
                 modExportProgress?.Dispose();
                 modExportProgress = modExportProgressHandler.Subscribe(s =>
                 {
-                    var overlayProgress = Smart.Format(localizationManager.GetResource(LocalizationResources.Collection_Mods.Overlay_Import_Export_Progress), new
+                    var overlayProgress = IronyFormatter.Format(localizationManager.GetResource(LocalizationResources.Collection_Mods.Overlay_Import_Export_Progress), new
                     {
                         PercentDone = s.Progress.ToLocalizedPercentage()
                     });
@@ -1003,7 +1002,7 @@ namespace IronyModManager.ViewModels.Controls
                 modExportProgress?.Dispose();
             }
             var title = localizationManager.GetResource(LocalizationResources.Notifications.CollectionExported.Title);
-            var message = Smart.Format(localizationManager.GetResource(LocalizationResources.Notifications.CollectionExported.Message), new { CollectionName = collection.Name });
+            var message = IronyFormatter.Format(localizationManager.GetResource(LocalizationResources.Notifications.CollectionExported.Message), new { CollectionName = collection.Name });
             notificationAction.ShowNotification(title, message, NotificationType.Success);
             await TriggerOverlayAsync(id, false);
         }
@@ -1097,7 +1096,7 @@ namespace IronyModManager.ViewModels.Controls
                 modExportProgress?.Dispose();
                 modExportProgress = modExportProgressHandler.Subscribe(s =>
                 {
-                    var overlayProgress = Smart.Format(localizationManager.GetResource(LocalizationResources.Collection_Mods.Overlay_Import_Export_Progress), new
+                    var overlayProgress = IronyFormatter.Format(localizationManager.GetResource(LocalizationResources.Collection_Mods.Overlay_Import_Export_Progress), new
                     {
                         PercentDone = s.Progress.ToLocalizedPercentage()
                     });
@@ -1136,7 +1135,7 @@ namespace IronyModManager.ViewModels.Controls
             }
 
             var id = idGenerator.GetNextId();
-            var overlayProgress = Smart.Format(localizationManager.GetResource(LocalizationResources.Collection_Mods.Overlay_Import_Export_Progress), new
+            var overlayProgress = IronyFormatter.Format(localizationManager.GetResource(LocalizationResources.Collection_Mods.Overlay_Import_Export_Progress), new
             {
                 PercentDone = 0.ToLocalizedPercentage()
             });
@@ -1220,11 +1219,11 @@ namespace IronyModManager.ViewModels.Controls
                                 }
                             }
                             var notExistingModTitle = localizationManager.GetResource(LocalizationResources.Collection_Mods.ImportNonExistingMods.Title);
-                            var nonExistingModMessage = Smart.Format(localizationManager.GetResource(LocalizationResources.Collection_Mods.ImportNonExistingMods.Message), new { Environment.NewLine, Mods = string.Join(Environment.NewLine, nonExistingModNames) });
+                            var nonExistingModMessage = IronyFormatter.Format(localizationManager.GetResource(LocalizationResources.Collection_Mods.ImportNonExistingMods.Message), new { Environment.NewLine, Mods = string.Join(Environment.NewLine, nonExistingModNames) });
                             endOverlay = false;
                             showImportNotification = false;
                             var title = localizationManager.GetResource(LocalizationResources.Notifications.CollectionImported.Title);
-                            var message = Smart.Format(localizationManager.GetResource(LocalizationResources.Notifications.CollectionImported.Message), new { CollectionName = result.Name });
+                            var message = IronyFormatter.Format(localizationManager.GetResource(LocalizationResources.Notifications.CollectionImported.Message), new { CollectionName = result.Name });
                             notificationAction.ShowNotification(title, message, NotificationType.Warning);
                             await TriggerOverlayAsync(id, false);
                             await notificationAction.ShowPromptAsync(notExistingModTitle, notExistingModTitle, nonExistingModMessage, NotificationType.Warning, PromptType.OK);
@@ -1233,7 +1232,7 @@ namespace IronyModManager.ViewModels.Controls
                     if (showImportNotification)
                     {
                         var title = localizationManager.GetResource(LocalizationResources.Notifications.CollectionImported.Title);
-                        var message = Smart.Format(localizationManager.GetResource(LocalizationResources.Notifications.CollectionImported.Message), new { CollectionName = result.Name });
+                        var message = IronyFormatter.Format(localizationManager.GetResource(LocalizationResources.Notifications.CollectionImported.Message), new { CollectionName = result.Name });
                         notificationAction.ShowNotification(title, message, NotificationType.Success);
                     }
                 }
@@ -1382,14 +1381,14 @@ namespace IronyModManager.ViewModels.Controls
                             {
                                 TriggerOverlay(id, false);
                                 successTitle = localizationManager.GetResource(LocalizationResources.Notifications.CollectionCreated.Title);
-                                successMessage = Smart.Format(localizationManager.GetResource(LocalizationResources.Notifications.CollectionCreated.Message), notification);
+                                successMessage = IronyFormatter.Format(localizationManager.GetResource(LocalizationResources.Notifications.CollectionCreated.Message), notification);
                                 notificationAction.ShowNotification(successTitle, successMessage, NotificationType.Success);
                             }
                             break;
 
                         case CommandState.Exists:
                             var existsTitle = localizationManager.GetResource(LocalizationResources.Notifications.CollectionExists.Title);
-                            var existsMessage = Smart.Format(localizationManager.GetResource(LocalizationResources.Notifications.CollectionExists.Message), notification);
+                            var existsMessage = IronyFormatter.Format(localizationManager.GetResource(LocalizationResources.Notifications.CollectionExists.Message), notification);
                             notificationAction.ShowNotification(existsTitle, existsMessage, NotificationType.Warning);
                             break;
 
@@ -1672,7 +1671,7 @@ namespace IronyModManager.ViewModels.Controls
                             if (nonExistingMods.Any())
                             {
                                 var notExistingModTitle = localizationManager.GetResource(LocalizationResources.Collection_Mods.ImportNonExistingMods.Title);
-                                var nonExistingModMessage = Smart.Format(localizationManager.GetResource(LocalizationResources.Collection_Mods.ImportNonExistingMods.Message), new { Environment.NewLine, Mods = string.Join(Environment.NewLine, nonExistingMods) });
+                                var nonExistingModMessage = IronyFormatter.Format(localizationManager.GetResource(LocalizationResources.Collection_Mods.ImportNonExistingMods.Message), new { Environment.NewLine, Mods = string.Join(Environment.NewLine, nonExistingMods) });
                                 await notificationAction.ShowPromptAsync(notExistingModTitle, notExistingModTitle, nonExistingModMessage, NotificationType.Warning, PromptType.OK);
                             }
                         }
@@ -1689,12 +1688,12 @@ namespace IronyModManager.ViewModels.Controls
                     if (useImportOverlay)
                     {
                         TriggerOverlay(id, true, localizationManager.GetResource(LocalizationResources.Collection_Mods.FileHash.ImportOverlay),
-                        Smart.Format(localizationManager.GetResource(LocalizationResources.Collection_Mods.FileHash.ProgressImport), new { Progress = s.Percentage.ToLocalizedPercentage(), Count = s.Step, TotalCount = 2 }));
+                        IronyFormatter.Format(localizationManager.GetResource(LocalizationResources.Collection_Mods.FileHash.ProgressImport), new { Progress = s.Percentage.ToLocalizedPercentage(), Count = s.Step, TotalCount = 2 }));
                     }
                     else
                     {
                         TriggerOverlay(id, true, localizationManager.GetResource(LocalizationResources.Collection_Mods.FileHash.ExportOverlay),
-                        Smart.Format(localizationManager.GetResource(LocalizationResources.Collection_Mods.FileHash.ProgressExport), new { Progress = s.Percentage.ToLocalizedPercentage() }));
+                        IronyFormatter.Format(localizationManager.GetResource(LocalizationResources.Collection_Mods.FileHash.ProgressExport), new { Progress = s.Percentage.ToLocalizedPercentage() }));
                     }
                 }).DisposeWith(disposables);
             }
@@ -1947,7 +1946,7 @@ namespace IronyModManager.ViewModels.Controls
             var noti = new { CollectionName = collectionName };
             var title = localizationManager.GetResource(LocalizationResources.Collection_Mods.Delete_Title);
             var header = localizationManager.GetResource(LocalizationResources.Collection_Mods.Delete_Header);
-            var message = Smart.Format(localizationManager.GetResource(LocalizationResources.Collection_Mods.Delete_Message), noti);
+            var message = IronyFormatter.Format(localizationManager.GetResource(LocalizationResources.Collection_Mods.Delete_Message), noti);
             if (await notificationAction.ShowPromptAsync(title, header, message, NotificationType.Info))
             {
                 var id = idGenerator.GetNextId();
@@ -1976,14 +1975,14 @@ namespace IronyModManager.ViewModels.Controls
                     {
                         NeedsModListRefresh = true;
                         var notificationTitle = localizationManager.GetResource(LocalizationResources.Notifications.CollectionAndModDeleted.Title);
-                        var notificationMessage = Smart.Format(localizationManager.GetResource(LocalizationResources.Notifications.CollectionAndModDeleted.Message), noti);
+                        var notificationMessage = IronyFormatter.Format(localizationManager.GetResource(LocalizationResources.Notifications.CollectionAndModDeleted.Message), noti);
                         notificationAction.ShowNotification(notificationTitle, notificationMessage, NotificationType.Success);
                         NeedsModListRefresh = false;
                     }
                     else
                     {
                         var notificationTitle = localizationManager.GetResource(LocalizationResources.Notifications.CollectionDeleted.Title);
-                        var notificationMessage = Smart.Format(localizationManager.GetResource(LocalizationResources.Notifications.CollectionDeleted.Message), noti);
+                        var notificationMessage = IronyFormatter.Format(localizationManager.GetResource(LocalizationResources.Notifications.CollectionDeleted.Message), noti);
                         notificationAction.ShowNotification(notificationTitle, notificationMessage, NotificationType.Success);
                     }
                 }
@@ -2058,7 +2057,7 @@ namespace IronyModManager.ViewModels.Controls
         {
             var focusLabel = localizationManager.GetResource(LocalizationResources.Collection_Mods.JumpOnDragAndDrop.Title);
             var focusState = localizationManager.GetResource(CollectionJumpOnPositionChange ? LocalizationResources.Collection_Mods.JumpOnDragAndDrop.On : LocalizationResources.Collection_Mods.JumpOnDragAndDrop.Off);
-            var label = Smart.Format(focusLabel, new { State = focusState });
+            var label = IronyFormatter.Format(focusLabel, new { State = focusState });
             CollectionJumpOnPositionChangeLabel = label;
         }
 

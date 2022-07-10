@@ -4,7 +4,7 @@
 // Created          : 06-10-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 01-27-2022
+// Last Modified On : 07-10-2022
 // ***********************************************************************
 // <copyright file="MessageBusDependencyResolver.cs" company="Mario">
 //     Mario
@@ -12,6 +12,7 @@
 // <summary></summary>
 // ***********************************************************************
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using SlimMessageBus.Host.DependencyResolver;
 
@@ -46,8 +47,29 @@ namespace IronyModManager.DI.MessageBus
         /// <returns>System.Object.</returns>
         public object Resolve(Type type)
         {
-            var obj = DIResolver.Get(type);
-            return obj;
+            // I don't think you thought this through buddy.
+            var existingRegistration = DIResolver.GetImplementationType(type);
+            if (existingRegistration is not null)
+            {
+                var obj = DIResolver.Get(type);
+                return obj;
+            }
+            else
+            {
+                if (typeof(IEnumerable).IsAssignableFrom(type))
+                {
+                    var listType = typeof(List<>);
+                    var genericListType = listType.MakeGenericType(type);
+                    var instance = Activator.CreateInstance(genericListType);
+                    return instance;
+                }
+                else if (!type.IsInterface)
+                {
+                    var instance = Activator.CreateInstance(type);
+                    return instance;
+                }
+                return null;
+            }
         }
 
         #endregion Methods

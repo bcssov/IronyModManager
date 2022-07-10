@@ -4,7 +4,7 @@
 // Created          : 10-29-2021
 //
 // Last Modified By : Mario
-// Last Modified On : 10-29-2021
+// Last Modified On : 07-10-2022
 // ***********************************************************************
 // <copyright file="FilePathLayout.cs" company="NLog">
 //     NLog
@@ -125,13 +125,13 @@ namespace IronyModManager.Log
             this.filePathKind = filePathKind;
             this.cleanupInvalidChars = cleanupInvalidChars;
 
-            if (this.layout == null)
+            if (this.layout is null)
             {
                 this.filePathKind = FilePathKind.Unknown;
                 return;
             }
 
-            //do we have to the the layout?
+            //do we have to the layout?
             if (cleanupInvalidChars || this.filePathKind == FilePathKind.Unknown)
             {
                 cleanedFixedResult = CreateCleanedFixedResult(cleanupInvalidChars, layout);
@@ -140,7 +140,7 @@ namespace IronyModManager.Log
 
             if (this.filePathKind == FilePathKind.Relative)
             {
-                baseDir = LogFactory.CurrentAppDomain.BaseDirectory;
+                baseDir = AppDomain.CurrentDomain.BaseDirectory;
             }
         }
 
@@ -195,7 +195,7 @@ namespace IronyModManager.Log
                 {
                     //delay char[] creation until first invalid char
                     //is found to avoid memory allocation.
-                    if (fileNameChars == null)
+                    if (fileNameChars is null)
                     {
                         fileNameChars = filePath[(lastDirSeparator + 1)..].ToCharArray();
                     }
@@ -207,7 +207,9 @@ namespace IronyModManager.Log
             if (fileNameChars != null)
             {
                 //keep the / in the dirname, because dirname could be c:/ and combine of c: and file name won't work well.
+#pragma warning disable IDE0057 // Use range operator
                 var dirName = lastDirSeparator > 0 ? filePath.Substring(0, lastDirSeparator + 1) : string.Empty;
+#pragma warning restore IDE0057 // Use range operator
                 string fileName = new string(fileNameChars);
                 return Path.Combine(dirName, fileName);
             }
@@ -354,7 +356,7 @@ namespace IronyModManager.Log
         private string GetCleanFileName(string rawFileName)
         {
             var cleanFileName = rawFileName;
-            if (cleanupInvalidChars && cleanedFixedResult == null)
+            if (cleanupInvalidChars && cleanedFixedResult is null)
             {
                 cleanFileName = CleanupInvalidFilePath(rawFileName);
             }

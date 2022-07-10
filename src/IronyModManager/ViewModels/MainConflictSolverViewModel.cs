@@ -4,7 +4,7 @@
 // Created          : 03-18-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-27-2022
+// Last Modified On : 07-10-2022
 // ***********************************************************************
 // <copyright file="MainConflictSolverViewModel.cs" company="Mario">
 //     Mario
@@ -37,7 +37,6 @@ using IronyModManager.Shared;
 using IronyModManager.Shared.Models;
 using IronyModManager.ViewModels.Controls;
 using ReactiveUI;
-using SmartFormat;
 using ValueType = IronyModManager.Shared.Models.ValueType;
 
 namespace IronyModManager.ViewModels
@@ -497,11 +496,11 @@ namespace IronyModManager.ViewModels
                         switch (child.ResetType)
                         {
                             case ResetType.Resolved:
-                                sbResolved.AppendLine(Smart.Format(modListFormat, new { ParentDirectory = conflict.Name, child.Name }));
+                                sbResolved.AppendLine(IronyFormatter.Format(modListFormat, new { ParentDirectory = conflict.Name, child.Name }));
                                 break;
 
                             case ResetType.Ignored:
-                                sbIgnored.AppendLine(Smart.Format(modListFormat, new { ParentDirectory = conflict.Name, child.Name }));
+                                sbIgnored.AppendLine(IronyFormatter.Format(modListFormat, new { ParentDirectory = conflict.Name, child.Name }));
                                 break;
 
                             default:
@@ -540,7 +539,7 @@ namespace IronyModManager.ViewModels
                         msgFormat = localizationManager.GetResource(LocalizationResources.Conflict_Solver.ResetWarning.RegularModeIgnoredOnly);
                     }
                 }
-                var msg = Smart.Format(msgFormat, new
+                var msg = IronyFormatter.Format(msgFormat, new
                 {
                     Environment.NewLine,
                     ListOfConflictsResolved = sbResolved.ToString(),
@@ -591,7 +590,7 @@ namespace IronyModManager.ViewModels
             {
                 var title = localizationManager.GetResource(LocalizationResources.Conflict_Solver.ResolutionSaveError.Title);
                 var message = localizationManager.GetResource(validationResult.ErrorLine.HasValue ? LocalizationResources.Conflict_Solver.ResolutionSaveError.MessageLine : LocalizationResources.Conflict_Solver.ResolutionSaveError.MessageNoLine);
-                await Dispatcher.UIThread.SafeInvokeAsync(async () => await notificationAction.ShowPromptAsync(title, title, message.FormatSmart(new { Environment.NewLine, validationResult.ErrorMessage, Line = validationResult.ErrorLine, Column = validationResult.ErrorColumn }), NotificationType.Error, PromptType.OK));
+                await Dispatcher.UIThread.SafeInvokeAsync(async () => await notificationAction.ShowPromptAsync(title, title, message.FormatIronySmart(new { Environment.NewLine, validationResult.ErrorMessage, Line = validationResult.ErrorLine, Column = validationResult.ErrorColumn }), NotificationType.Error, PromptType.OK));
             }
             else
             {
@@ -685,7 +684,7 @@ namespace IronyModManager.ViewModels
                             var message = item.ErrorColumn.HasValue || item.ErrorLine.HasValue ?
                                 localizationManager.GetResource(LocalizationResources.Conflict_Solver.InvalidConflicts.Error) :
                                 localizationManager.GetResource(LocalizationResources.Conflict_Solver.InvalidConflicts.ErrorNoLine);
-                            invalidChild.Key = Smart.Format(message, new
+                            invalidChild.Key = IronyFormatter.Format(message, new
                             {
                                 item.ModName,
                                 Line = item.ErrorLine,
@@ -708,7 +707,7 @@ namespace IronyModManager.ViewModels
                 }
                 var selectedParentConflict = SelectedParentConflict;
                 HierarchalConflicts = conflicts;
-                NumberOfConflictsCaption = Smart.Format(localizationManager.GetResource(LocalizationResources.Conflict_Solver.ConflictCount), new { Count = conflicts.Where(p => p.Key != InvalidKey).SelectMany(p => p.Children).Count() });
+                NumberOfConflictsCaption = IronyFormatter.Format(localizationManager.GetResource(LocalizationResources.Conflict_Solver.ConflictCount), new { Count = conflicts.Where(p => p.Key != InvalidKey).SelectMany(p => p.Children).Count() });
                 int? previousConflictIndex = null;
                 if (HierarchalConflicts.Any() && selectedParentConflict == null)
                 {

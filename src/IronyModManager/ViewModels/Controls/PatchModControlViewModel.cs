@@ -4,7 +4,7 @@
 // Created          : 02-16-2021
 //
 // Last Modified By : Mario
-// Last Modified On : 02-18-2021
+// Last Modified On : 07-10-2022
 // ***********************************************************************
 // <copyright file="PatchModControlViewModel.cs" company="Mario">
 //     Mario
@@ -25,7 +25,6 @@ using IronyModManager.Models.Common;
 using IronyModManager.Services.Common;
 using IronyModManager.Shared;
 using ReactiveUI;
-using SmartFormat;
 
 namespace IronyModManager.ViewModels.Controls
 {
@@ -305,6 +304,7 @@ namespace IronyModManager.ViewModels.Controls
         /// set collection data as an asynchronous operation.
         /// </summary>
         /// <param name="modCollection">The mod collection.</param>
+        /// <returns>A Task representing the asynchronous operation.</returns>
         protected async Task SetCollectionDataAsync(IModCollection modCollection)
         {
             this.modCollection = modCollection;
@@ -325,16 +325,16 @@ namespace IronyModManager.ViewModels.Controls
                 if (IsOpenVisible)
                 {
                     var status = IsPatchModEnabled ? localizationManager.GetResource(LocalizationResources.Collection_Mods.PatchMod.Enabled) : localizationManager.GetResource(LocalizationResources.Collection_Mods.PatchMod.Disabled);
-                    Open = Smart.Format(localizationManager.GetResource(LocalizationResources.Collection_Mods.PatchMod.Title), new { Status = status });
+                    Open = IronyFormatter.Format(localizationManager.GetResource(LocalizationResources.Collection_Mods.PatchMod.Title), new { Status = status });
                 }
                 else
                 {
-                    Open = Smart.Format(localizationManager.GetResource(LocalizationResources.Collection_Mods.PatchMod.Title), new { Status = localizationManager.GetResource(LocalizationResources.Collection_Mods.PatchMod.NotAvailable) });
+                    Open = IronyFormatter.Format(localizationManager.GetResource(LocalizationResources.Collection_Mods.PatchMod.Title), new { Status = localizationManager.GetResource(LocalizationResources.Collection_Mods.PatchMod.NotAvailable) });
                 }
             }
             else
             {
-                Open = Smart.Format(localizationManager.GetResource(LocalizationResources.Collection_Mods.PatchMod.Title), new { Status = localizationManager.GetResource(LocalizationResources.Collection_Mods.PatchMod.NotAvailable) });
+                Open = IronyFormatter.Format(localizationManager.GetResource(LocalizationResources.Collection_Mods.PatchMod.Title), new { Status = localizationManager.GetResource(LocalizationResources.Collection_Mods.PatchMod.NotAvailable) });
             }
         }
 

@@ -4,7 +4,7 @@
 // Created          : 03-25-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-09-2022
+// Last Modified On : 07-10-2022
 // ***********************************************************************
 // <copyright file="MergeViewerBinaryControlViewModel.cs" company="Mario">
 //     Mario
@@ -24,7 +24,6 @@ using IronyModManager.Services.Common;
 using IronyModManager.Shared;
 using IronyModManager.Shared.Models;
 using ReactiveUI;
-using SmartFormat;
 
 namespace IronyModManager.ViewModels.Controls
 {
@@ -248,7 +247,7 @@ namespace IronyModManager.ViewModels.Controls
                             var imageHeight = image.PixelSize.Height;
                             var imageWidth = image.PixelSize.Width;
                             var info = localizationManager.GetResource(LocalizationResources.Conflict_Solver.ImageInfo);
-                            LeftImageInfo = Smart.Format(info, new { Width = imageWidth, Height = imageHeight });
+                            LeftImageInfo = IronyFormatter.Format(info, new { Width = imageWidth, Height = imageHeight });
                             LeftHeight = imageHeight;
                             LeftWidth = imageWidth;
                         }
@@ -310,7 +309,7 @@ namespace IronyModManager.ViewModels.Controls
                             var imageHeight = image.PixelSize.Height;
                             var imageWidth = image.PixelSize.Width;
                             var info = localizationManager.GetResource(LocalizationResources.Conflict_Solver.ImageInfo);
-                            RightImageInfo = Smart.Format(info, new { Width = imageWidth, Height = imageHeight });
+                            RightImageInfo = IronyFormatter.Format(info, new { Width = imageWidth, Height = imageHeight });
                             RightHeight = imageHeight;
                             RightWidth = imageWidth;
                         }

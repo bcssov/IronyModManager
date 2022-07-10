@@ -3,6 +3,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:viewModels="clr-namespace:MessageBox.Avalonia.ViewModels"
+        xmlns:avalonia="clr-namespace:Markdown.Avalonia;assembly=Markdown.Avalonia"
         xmlns:controls="clr-namespace:IronyModManager.Controls;assembly=IronyModManager"
         mc:Ignorable="d" d:DesignWidth="150" d:DesignHeight="100"
         x:Class="IronyModManager.Controls.Themes.StandardMessageBox"
@@ -13,92 +14,104 @@
         Icon="{Binding WindowIconPath}"
         WindowStartupLocation="{Binding LocationOfMyWindow}"
         MinHeight="100"
+        SystemDecorations="{Binding SystemDecorations}"
         CanResize="{Binding CanResize}"
         FontFamily="{Binding FontFamily}"
         Title="{Binding ContentTitle}"
         Padding="15">
-  <Design.DataContext>
-    <viewModels:MsBoxStandardViewModel />
-  </Design.DataContext>
-  <Window.KeyBindings>
-    <KeyBinding Gesture="Ctrl+C" Command="{Binding Copy}" />
-    <KeyBinding Gesture="Enter" Command="{Binding EnterClickCommand}" />
-    <KeyBinding Gesture="Escape" Command="{Binding EscClickCommand}" />
-  </Window.KeyBindings>
+    <Design.DataContext>
+        <viewModels:MsBoxStandardViewModel />
+    </Design.DataContext>
+    <Window.KeyBindings>
+        <KeyBinding Gesture="Ctrl+C" Command="{Binding Copy}" />
+        <KeyBinding Gesture="Enter" Command="{Binding EnterClickCommand}" />
+        <KeyBinding Gesture="Escape" Command="{Binding EscClickCommand}" />
+    </Window.KeyBindings>
 
 
-  <Window.Styles>
-    <Style Selector="Image">
-      <Setter Property="Margin" Value="0,0,15,0" />
-      <Setter Property="MaxHeight" Value="50" />
-      <Setter Property="MaxWidth" Value="50" />
-      <Setter Property="VerticalAlignment" Value="Top" />
-    </Style>
-    <Style Selector="TextBox">
-      <Setter Property="BorderThickness" Value="0" />
-      <Setter Property="TextWrapping" Value="Wrap" />
-      <Setter Property="AcceptsReturn" Value="True" />
-      <Setter Property="IsReadOnly" Value="True" />
-      <Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Auto" />
-      <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Disabled" />
-    </Style>
-    <Style Selector="TextBox:focus /template/ Border#border">
-      <Setter Property="BorderThickness" Value="0" />
-    </Style>
-    <Style Selector="TextBox:focus /template/ Border#PART_BorderElement">
-      <Setter Property="BorderThickness" Value="0" />
-    </Style>
-    <Style Selector="TextBox.header">
-      <Setter Property="FontWeight" Value="Bold" />
-      <Setter Property="Margin" Value="0,0,0,10" />
-    </Style>
-    <Style Selector="Button">
-      <Setter Property="Margin" Value="15 0 0 0" />
-      <Setter Property="MinHeight" Value="24" />
-      <Setter Property="MinWidth" Value="75" />
-    </Style>
+    <Window.Styles>
+        <Style Selector="Image">
+            <Setter Property="Margin" Value="0,0,15,0" />
+            <Setter Property="MaxHeight" Value="50" />
+            <Setter Property="MaxWidth" Value="50" />
+            <Setter Property="VerticalAlignment" Value="Top" />
+        </Style>
+        <Style Selector="TextBox">
+            <Setter Property="BorderThickness" Value="0" />
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="TextWrapping" Value="Wrap" />
+            <Setter Property="AcceptsReturn" Value="True" />
+            <Setter Property="IsReadOnly" Value="True" />
+            <Setter Property="CaretBrush" Value="Transparent" />
+            <Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Auto" />
+            <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Disabled" />
+        </Style>
+        <Style Selector="TextBox:pointerover /template/ Border#border">
+            <Setter Property="Background" Value="Transparent" />
+        </Style>
+        <Style Selector="TextBox:pointerover /template/ Border#PART_BorderElement">
+            <Setter Property="Background" Value="Transparent" />
+        </Style>
+        <Style Selector="TextBox:focus /template/ Border#border">
+            <Setter Property="BorderThickness" Value="0" />
+            <Setter Property="Background" Value="Transparent" />
+        </Style>
+        <Style Selector="TextBox:focus /template/ Border#PART_BorderElement">
+            <Setter Property="BorderThickness" Value="0" />
+            <Setter Property="Background" Value="Transparent" />
+        </Style>
+        <Style Selector="TextBox.header">
+            <Setter Property="FontWeight" Value="Bold" />
+            <Setter Property="Margin" Value="0,0,0,10" />
+        </Style>
+        <Style Selector="Button">
+            <Setter Property="Margin" Value="15 0 0 0" />
+            <Setter Property="MinHeight" Value="24" />
+            <Setter Property="MinWidth" Value="75" />
+        </Style>
 
-  </Window.Styles>
-  <Grid Classes="MsBoxStandardContainer">
-    <Grid.ColumnDefinitions>
-      <ColumnDefinition Width="Auto" />
-      <ColumnDefinition Width="*" />
-    </Grid.ColumnDefinitions>
-    <Grid.RowDefinitions>
-      <RowDefinition Height="*" MaxHeight="150" />
-      <RowDefinition Height="15" />
-      <RowDefinition Height="Auto" />
-    </Grid.RowDefinitions>
-    <!--Icon-->
-    <Image Grid.Row="0" Grid.Column="0"
-           IsVisible="{Binding Icon}"
-           Source="{Binding ImagePath}" />
-    <Grid Grid.Row="0" Grid.Column="1">
-      <Grid.RowDefinitions>
-        <RowDefinition Height="Auto" />
-        <RowDefinition Height="*" />
-      </Grid.RowDefinitions>
-      <!--Bold text-->
-      <controls:TextBox Grid.Row="0" Classes="header" FontFamily="{Binding FontFamily}" Text="{Binding ContentHeader}"
-               IsVisible="{Binding HasHeader}" />
-      <!--Content text-->
-      <controls:TextBox Grid.Row="2" FontFamily="{Binding FontFamily}" Text="{Binding ContentMessage}" MinWidth="500" MinHeight="40" MaxHeight="400" MaxWidth="500" TextWrapping="Wrap" />
+    </Window.Styles>
+    <Grid Classes="MsBoxStandardContainer">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" MaxHeight="150" />
+            <RowDefinition Height="15" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        <!--Icon-->
+        <Image Grid.Row="0" Grid.Column="0"
+               IsVisible="{Binding HasIcon}"
+               Source="{Binding ImagePath}" />
+        <Grid Grid.Row="0" Grid.Column="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+            <!--Bold text-->
+            <controls:TextBox Grid.Row="0" Classes="header" FontFamily="{Binding FontFamily}" Text="{Binding ContentHeader}"
+                     IsVisible="{Binding HasHeader}" />
+            <!--Content text-->
+            <controls:TextBox Grid.Row="2" FontFamily="{Binding FontFamily}" Text="{Binding ContentMessage}" MinWidth="600" MinHeight="40" MaxHeight="400" MaxWidth="600" TextWrapping="Wrap" IsVisible="{Binding !Markdown}" />
+            <avalonia:MarkdownScrollViewer Grid.Row="2" Markdown="{Binding ContentMessage}" IsVisible="{Binding Markdown}"/>
+        </Grid>
+        <!--Buttons-->
+        <StackPanel Orientation="Horizontal" Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2"
+                    HorizontalAlignment="Right">
+            <!-- Seriously, binding strings in implementation of MessageBox Avalonia? -->
+            <Button Content="OK" Tag="Colored" Command="{Binding ButtonClickCommand}"
+                    CommandParameter="OK"
+                    IsVisible="{Binding IsOkShowed}" x:Name="ok" />
+            <Button Content="Yes" Command="{Binding ButtonClickCommand}" CommandParameter="Yes"
+                    IsVisible="{Binding IsYesShowed}" x:Name="yes" />
+            <Button Content="No" Command="{Binding ButtonClickCommand}" CommandParameter="No"
+                    IsVisible="{Binding IsNoShowed}" x:Name="no" />
+            <Button Content="Abort" Command="{Binding ButtonClickCommand}" CommandParameter="Abort"
+                    IsVisible="{Binding IsAbortShowed}" />
+            <Button Content="Cancel" Command="{Binding ButtonClickCommand}" CommandParameter="Cancel"
+                    IsVisible="{Binding IsCancelShowed}" x:Name="cancel"/>
+        </StackPanel>
     </Grid>
-    <!--Buttons-->
-    <StackPanel Orientation="Horizontal" Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2"
-                HorizontalAlignment="Right">
-      <!-- Seriously, binding strings in implementation of MessageBox Avalonia? -->
-      <Button Content="OK" Tag="Colored" Command="{Binding ButtonClickCommand}"
-              CommandParameter="OK"
-              IsVisible="{Binding IsOkShowed}" x:Name="ok" />
-      <Button Content="Yes" Command="{Binding ButtonClickCommand}" CommandParameter="Yes"
-              IsVisible="{Binding IsYesShowed}" x:Name="yes" />
-      <Button Content="No" Command="{Binding ButtonClickCommand}" CommandParameter="No"
-              IsVisible="{Binding IsNoShowed}" x:Name="no" />
-      <Button Content="Abort" Command="{Binding ButtonClickCommand}" CommandParameter="Abort"
-              IsVisible="{Binding IsAbortShowed}" />
-      <Button Content="Cancel" Command="{Binding ButtonClickCommand}" CommandParameter="Cancel"
-              IsVisible="{Binding IsCancelShowed}" x:Name="cancel"/>
-    </StackPanel>
-  </Grid>
 </Window>
