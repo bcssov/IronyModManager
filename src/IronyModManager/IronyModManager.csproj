@@ -145,7 +145,7 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="NetSparkleUpdater.SparkleUpdater" Version="2.0.9" />
+    <PackageReference Include="NetSparkleUpdater.SparkleUpdater" Version="2.1.1" />
     <PackageReference Include="NLog" Version="4.7.13" />
     <PackageReference Include="ReactiveUI" Version="17.1.17" />
     <PackageReference Include="SimpleInjector" Version="5.3.3" />
