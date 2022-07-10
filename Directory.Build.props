@@ -16,7 +16,7 @@
     </PropertyGroup>
     <PropertyGroup>
         <MicrosoftExtensionsDependencyModelVersion>[6.0.0]</MicrosoftExtensionsDependencyModelVersion>
-        <MicrosoftNETCorePlatformsVersion>[6.0.1]</MicrosoftNETCorePlatformsVersion>
+        <MicrosoftNETCorePlatformsVersion>[6.0.4]</MicrosoftNETCorePlatformsVersion>
         <MicrosoftWin32Registry>[6.0.0-preview.5.21301.5]</MicrosoftWin32Registry>
         <MicrosoftExtensionsConfigurationBinder>[6.0.0]</MicrosoftExtensionsConfigurationBinder>
         <MicrosoftExtensionsConfigurationJson>[6.0.0]</MicrosoftExtensionsConfigurationJson>
