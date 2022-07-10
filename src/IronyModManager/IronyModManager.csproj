@@ -146,13 +146,13 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="NetSparkleUpdater.SparkleUpdater" Version="2.1.1" />
-    <PackageReference Include="NLog" Version="4.7.13" />
+    <PackageReference Include="NLog" Version="5.0.1" />
     <PackageReference Include="ReactiveUI" Version="17.1.17" />
     <PackageReference Include="SimpleInjector" Version="5.3.3" />
     <PackageReference Include="SimpleInjector.Packaging" Version="5.0.0" />
     <PackageReference Include="SmartFormat.NET" Version="2.7.2" />
-    <PackageReference Include="Splat.NLog" Version="14.1.17" />
-    <PackageReference Include="Splat.SimpleInjector" Version="14.1.17" />
+    <PackageReference Include="Splat.NLog" Version="14.3.4" />
+    <PackageReference Include="Splat.SimpleInjector" Version="14.3.4" />
     <PackageReference Include="StrongNamer" Version="0.2.5" />
     <PackageReference Include="Syroot.Windows.IO.KnownFolders" Version="1.2.3" />
   </ItemGroup>
