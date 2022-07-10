@@ -207,7 +207,9 @@ namespace IronyModManager.Log
             if (fileNameChars != null)
             {
                 //keep the / in the dirname, because dirname could be c:/ and combine of c: and file name won't work well.
+#pragma warning disable IDE0057 // Use range operator
                 var dirName = lastDirSeparator > 0 ? filePath.Substring(0, lastDirSeparator + 1) : string.Empty;
+#pragma warning restore IDE0057 // Use range operator
                 string fileName = new string(fileNameChars);
                 return Path.Combine(dirName, fileName);
             }

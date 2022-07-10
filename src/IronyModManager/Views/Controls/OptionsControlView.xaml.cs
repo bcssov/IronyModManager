@@ -4,7 +4,7 @@
 // Created          : 05-30-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 01-27-2022
+// Last Modified On : 07-10-2022
 // ***********************************************************************
 // <copyright file="OptionsControlView.xaml.cs" company="Mario">
 //     Mario
@@ -31,7 +31,6 @@ using IronyModManager.Services.Common;
 using IronyModManager.Shared;
 using IronyModManager.ViewModels.Controls;
 using ReactiveUI;
-using SmartFormat;
 
 namespace IronyModManager.Views.Controls
 {
@@ -71,7 +70,7 @@ namespace IronyModManager.Views.Controls
             {
                 var html = new StringBuilder("<!DOCTYPE html><html><head><meta http-equiv='Content-Type' content='text/html;charset=UTF-8'/></head><body>");
                 var log = new StringBuilder();
-                log.AppendLine($"#{Smart.Format(ViewModel.VersionTitle, new { Version = ViewModel.VersionContent })}");
+                log.AppendLine($"#{IronyFormatter.Format(ViewModel.VersionTitle, new { Version = ViewModel.VersionContent })}");
                 log.AppendLine(ViewModel.Changelog);
                 html.AppendLine(md.Transform(log.ToString()));
                 html.AppendLine("</body></html>");

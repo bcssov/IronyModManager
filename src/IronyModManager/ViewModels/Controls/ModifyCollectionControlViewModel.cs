@@ -4,7 +4,7 @@
 // Created          : 05-09-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 05-25-2021
+// Last Modified On : 07-10-2022
 // ***********************************************************************
 // <copyright file="ModifyCollectionControlViewModel.cs" company="Mario">
 //     Mario
@@ -31,7 +31,6 @@ using IronyModManager.Models.Common;
 using IronyModManager.Services.Common;
 using IronyModManager.Shared;
 using ReactiveUI;
-using SmartFormat;
 
 namespace IronyModManager.ViewModels.Controls
 {
@@ -440,7 +439,7 @@ namespace IronyModManager.ViewModels.Controls
 
                     SubscribeToProgressReports(id, disposables, MergeType.Basic);
 
-                    var overlayProgress = Smart.Format(localizationManager.GetResource(LocalizationResources.Collection_Mods.MergeCollection.Overlay_Progress), new
+                    var overlayProgress = IronyFormatter.Format(localizationManager.GetResource(LocalizationResources.Collection_Mods.MergeCollection.Overlay_Progress), new
                     {
                         PercentDone = 0.ToLocalizedPercentage(),
                         Count = 1,
@@ -506,7 +505,7 @@ namespace IronyModManager.ViewModels.Controls
 
                     SubscribeToProgressReports(id, disposables, MergeType.Compress);
 
-                    var overlayProgress = Smart.Format(localizationManager.GetResource(LocalizationResources.Collection_Mods.MergeCollection.Overlay_Progress), new
+                    var overlayProgress = IronyFormatter.Format(localizationManager.GetResource(LocalizationResources.Collection_Mods.MergeCollection.Overlay_Progress), new
                     {
                         PercentDone = 0.ToLocalizedPercentage(),
                         Count = 1,
@@ -531,7 +530,7 @@ namespace IronyModManager.ViewModels.Controls
 
                     var mergeMods = await Task.Run(async () =>
                     {
-                        return await modMergeService.MergeCompressCollectionAsync(copy.Name, Smart.Format(localizationManager.GetResource(LocalizationResources.Collection_Mods.MergeCollection.MergeCompressModPrefix), new
+                        return await modMergeService.MergeCompressCollectionAsync(copy.Name, IronyFormatter.Format(localizationManager.GetResource(LocalizationResources.Collection_Mods.MergeCollection.MergeCompressModPrefix), new
                         {
                             Name = copy.Name.Replace($"{localizationManager.GetResource(LocalizationResources.Collection_Mods.MergeCollection.MergedCollectionPrefix)} ", string.Empty)
                         }));
@@ -578,7 +577,7 @@ namespace IronyModManager.ViewModels.Controls
             freeSpaceCheckHandler = modMergeFreeSpaceCheckHandler.Subscribe(s =>
             {
                 var message = localizationManager.GetResource(LocalizationResources.Collection_Mods.MergeCollection.DiskInfoOverlay);
-                var overlayProgress = Smart.Format(localizationManager.GetResource(LocalizationResources.Collection_Mods.MergeCollection.Overlay_Progress), new
+                var overlayProgress = IronyFormatter.Format(localizationManager.GetResource(LocalizationResources.Collection_Mods.MergeCollection.Overlay_Progress), new
                 {
                     PercentDone = s.Percentage.ToLocalizedPercentage(),
                     Count = 1,
@@ -600,7 +599,7 @@ namespace IronyModManager.ViewModels.Controls
                     {
                         message = localizationManager.GetResource(LocalizationResources.Collection_Mods.MergeCollection.Basic.Overlay_Writing_Files);
                     }
-                    var overlayProgress = Smart.Format(localizationManager.GetResource(LocalizationResources.Collection_Mods.MergeCollection.Overlay_Progress), new
+                    var overlayProgress = IronyFormatter.Format(localizationManager.GetResource(LocalizationResources.Collection_Mods.MergeCollection.Overlay_Progress), new
                     {
                         PercentDone = s.Percentage.ToLocalizedPercentage(),
                         Count = s.Step + 1,
@@ -622,7 +621,7 @@ namespace IronyModManager.ViewModels.Controls
                     {
                         message = localizationManager.GetResource(LocalizationResources.Collection_Mods.MergeCollection.Compress.Overlay_Compressing_Files);
                     }
-                    var overlayProgress = Smart.Format(localizationManager.GetResource(LocalizationResources.Collection_Mods.MergeCollection.Overlay_Progress), new
+                    var overlayProgress = IronyFormatter.Format(localizationManager.GetResource(LocalizationResources.Collection_Mods.MergeCollection.Overlay_Progress), new
                     {
                         PercentDone = s.Percentage.ToLocalizedPercentage(),
                         Count = s.Step + 1,

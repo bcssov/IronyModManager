@@ -36,7 +36,6 @@ using IronyModManager.Services.Common;
 using IronyModManager.Shared;
 using IronyModManager.Shared.Models;
 using ReactiveUI;
-using SmartFormat;
 
 namespace IronyModManager.ViewModels.Controls
 {
@@ -1561,7 +1560,7 @@ namespace IronyModManager.ViewModels.Controls
                 var bracketCount = modPatchCollectionService.GetBracketCount(EditingLua ? "fake.lua" : "fake.txt", LeftSidePatchMod ? LeftSide : RightSide);
                 if (bracketCount.OpenBracketCount != bracketCount.CloseBracketCount)
                 {
-                    var message = localizationManager.GetResource(LocalizationResources.Conflict_Solver.BracketMismatchError.Message).FormatSmart(new { bracketCount.OpenBracketCount, bracketCount.CloseBracketCount });
+                    var message = localizationManager.GetResource(LocalizationResources.Conflict_Solver.BracketMismatchError.Message).FormatIronySmart(new { bracketCount.OpenBracketCount, bracketCount.CloseBracketCount });
                     BracketMismatchText = message;
                 }
                 else

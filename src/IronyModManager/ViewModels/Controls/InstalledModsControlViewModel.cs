@@ -4,7 +4,7 @@
 // Created          : 02-29-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 12-07-2021
+// Last Modified On : 07-10-2022
 // ***********************************************************************
 // <copyright file="InstalledModsControlViewModel.cs" company="Mario">
 //     Mario
@@ -31,7 +31,6 @@ using IronyModManager.Models.Common;
 using IronyModManager.Services.Common;
 using IronyModManager.Shared;
 using ReactiveUI;
-using SmartFormat;
 
 namespace IronyModManager.ViewModels.Controls
 {
@@ -977,7 +976,7 @@ namespace IronyModManager.ViewModels.Controls
                 messages.Add($"{item.Name} ({item.DescriptorFile})");
             }
             var title = localizationManager.GetResource(LocalizationResources.Installed_Mods.InvalidMods.Title);
-            var message = Smart.Format(localizationManager.GetResource(LocalizationResources.Installed_Mods.InvalidMods.Message), new
+            var message = IronyFormatter.Format(localizationManager.GetResource(LocalizationResources.Installed_Mods.InvalidMods.Message), new
             {
                 Mods = string.Join(Environment.NewLine, messages),
                 Environment.NewLine
@@ -1025,7 +1024,7 @@ namespace IronyModManager.ViewModels.Controls
         protected virtual async Task ShowInvalidModsNotificationAsync(IReadOnlyCollection<IModInstallationResult> mods)
         {
             var title = localizationManager.GetResource(LocalizationResources.InvalidModsDetected.Title);
-            var message = localizationManager.GetResource(LocalizationResources.InvalidModsDetected.Message).FormatSmart(new { Environment.NewLine, Mods = string.Join(Environment.NewLine, mods.Select(p => p.Path)) });
+            var message = localizationManager.GetResource(LocalizationResources.InvalidModsDetected.Message).FormatIronySmart(new { Environment.NewLine, Mods = string.Join(Environment.NewLine, mods.Select(p => p.Path)) });
 
             if (!showingInvalidNotification)
             {

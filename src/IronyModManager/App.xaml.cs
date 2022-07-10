@@ -4,7 +4,7 @@
 // Created          : 01-10-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 10-29-2021
+// Last Modified On : 07-10-2022
 // ***********************************************************************
 // <copyright file="App.xaml.cs" company="Mario">
 //     Mario
@@ -35,7 +35,6 @@ using IronyModManager.Shared;
 using IronyModManager.ViewModels;
 using IronyModManager.Views;
 using ReactiveUI;
-using SmartFormat;
 
 namespace IronyModManager
 {
@@ -161,7 +160,7 @@ namespace IronyModManager
         /// <param name="desktop">The desktop.</param>
         protected virtual void SetAppTitle(IClassicDesktopStyleApplicationLifetime desktop)
         {
-            var appTitle = Smart.Format(DIResolver.Get<ILocalizationManager>().GetResource(LocalizationResources.App.Title),
+            var appTitle = IronyFormatter.Format(DIResolver.Get<ILocalizationManager>().GetResource(LocalizationResources.App.Title),
                 new
                 {
                     AppVersion = FileVersionInfo.GetVersionInfo(GetType().Assembly.Location).ProductVersion.Split("+")[0]
@@ -172,6 +171,7 @@ namespace IronyModManager
         /// <summary>
         /// verify write permissions as an asynchronous operation.
         /// </summary>
+        /// <returns>A Task representing the asynchronous operation.</returns>
         protected virtual async Task VerifyWritePermissionsAsync()
         {
             // Hopefully enough time for the UI to show up and such
@@ -183,7 +183,7 @@ namespace IronyModManager
                 var notificationAction = DIResolver.Get<INotificationAction>();
                 var locManager = DIResolver.Get<ILocalizationManager>();
                 var title = locManager.GetResource(LocalizationResources.UnableToWriteError.Title);
-                var message = Smart.Format(locManager.GetResource(LocalizationResources.UnableToWriteError.Message), new { Environment.NewLine, Paths = string.Join(Environment.NewLine, permissions.Where(p => !p.Valid).Select(p => p.Path).ToList()) });
+                var message = IronyFormatter.Format(locManager.GetResource(LocalizationResources.UnableToWriteError.Message), new { Environment.NewLine, Paths = string.Join(Environment.NewLine, permissions.Where(p => !p.Valid).Select(p => p.Path).ToList()) });
                 await notificationAction.ShowPromptAsync(title, title, message, NotificationType.Error, PromptType.OK);
             }
         }
@@ -222,7 +222,7 @@ namespace IronyModManager
             var lastException = logger.GetLastFatalExceptionMessage();
             var locManager = DIResolver.Get<ILocalizationManager>();
             var title = locManager.GetResource(LocalizationResources.FatalError.Title);
-            var message = string.IsNullOrWhiteSpace(lastException) ? locManager.GetResource(LocalizationResources.FatalError.Message) : locManager.GetResource(LocalizationResources.FatalError.MessageWithLastError).FormatSmart(new { Environment.NewLine, Message = string.Join(Environment.NewLine, lastException.SplitOnNewLine()) });
+            var message = string.IsNullOrWhiteSpace(lastException) ? locManager.GetResource(LocalizationResources.FatalError.Message) : locManager.GetResource(LocalizationResources.FatalError.MessageWithLastError).FormatIronySmart(new { Environment.NewLine, Message = string.Join(Environment.NewLine, lastException.SplitOnNewLine()) });
             var header = locManager.GetResource(LocalizationResources.FatalError.Header);
             var messageBox = MessageBoxes.GetFatalErrorWindow(title, header, message);
             messageBox.ExtendClientAreaChromeHints = Avalonia.Platform.ExtendClientAreaChromeHints.PreferSystemChrome;

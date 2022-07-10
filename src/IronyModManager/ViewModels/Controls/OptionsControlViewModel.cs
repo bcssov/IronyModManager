@@ -32,7 +32,6 @@ using IronyModManager.Platform.Configuration;
 using IronyModManager.Services.Common;
 using IronyModManager.Shared;
 using ReactiveUI;
-using SmartFormat;
 
 namespace IronyModManager.ViewModels.Controls
 {
@@ -875,13 +874,13 @@ namespace IronyModManager.ViewModels.Controls
                 if (downloadingUpdates)
                 {
                     var message = localizationManager.GetResource(LocalizationResources.Options.Updates.Overlay.UpdateDownloading);
-                    var progress = Smart.Format(localizationManager.GetResource(LocalizationResources.Options.Updates.Overlay.UpdateDownloadProgress), new { Progress = s.ToLocalizedPercentage() });
+                    var progress = IronyFormatter.Format(localizationManager.GetResource(LocalizationResources.Options.Updates.Overlay.UpdateDownloadProgress), new { Progress = s.ToLocalizedPercentage() });
                     TriggerOverlay(messageId, true, message, progress);
                 }
                 else if (installingUpdates)
                 {
                     var message = localizationManager.GetResource(LocalizationResources.Options.Updates.Overlay.UpdateInstalling);
-                    var progress = Smart.Format(localizationManager.GetResource(LocalizationResources.Options.Updates.Overlay.UpdateDownloadProgress), new { Progress = s.ToLocalizedPercentage() });
+                    var progress = IronyFormatter.Format(localizationManager.GetResource(LocalizationResources.Options.Updates.Overlay.UpdateDownloadProgress), new { Progress = s.ToLocalizedPercentage() });
                     TriggerOverlay(messageId, true, message, progress);
                 }
             }).DisposeWith(disposables);
