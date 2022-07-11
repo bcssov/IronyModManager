@@ -23,6 +23,7 @@ namespace IronyModManager.Shared
     /// <summary>
     /// Class ProcessRunner.
     /// </summary>
+    [ExcludeFromCoverage("Process runner is excluded.")]
     public static class ProcessRunner
     {
         #region Methods

@@ -4,7 +4,7 @@
 // Created          : 02-16-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 01-28-2022
+// Last Modified On : 07-11-2022
 // ***********************************************************************
 // <copyright file="Extensions.cs" company="Mario">
 //     Mario
@@ -21,7 +21,7 @@ namespace IronyModManager.Shared
     /// <summary>
     /// Class Extensions.
     /// </summary>
-    [ExcludeFromCoverage("Hash calculation is excluded.")]
+    [ExcludeFromCoverage("Extensions are excluded.")]
     public static partial class Extensions
     {
         #region Fields
