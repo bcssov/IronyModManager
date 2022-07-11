@@ -403,7 +403,9 @@
             "EditorExecutable": "Путь к файлу .exe",
             "EditorArgs": "Параметры запуска",
             "EditorArgsPlaceholder": "Пример: leftFile:{Left} rightFile:{Right}",
-            "Test": "Тестовая конфигурация"
+            "Test": "Тестовая конфигурация",
+            "TestLeft": "faucibus purus in massa tempor, nec feugiat nisl pretium fusce",
+            "TestRight": "faucibus purus in massa tempor nec feugiat nisl pretium fusce"
         },
         "Game": {
             "Title": "Опции игры",

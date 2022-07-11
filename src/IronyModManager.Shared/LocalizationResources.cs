@@ -532,6 +532,8 @@ namespace IronyModManager.Shared
                 public const string EditorArgs = Prefix + "EditorArgs";
                 public const string EditorArgsPlaceholder = Prefix + "EditorArgsPlaceholder";
                 public const string Test = Prefix + "Test";
+                public const string TestLeft = Prefix + "TestLeft";
+                public const string TestRight = Prefix + "TestRight";
             }
             public static class Game
             {

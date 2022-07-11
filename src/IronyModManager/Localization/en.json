@@ -403,7 +403,9 @@
             "EditorExecutable": "Editor Executable",
             "EditorArgs": "Editor Args",
             "EditorArgsPlaceholder": "Example: leftFile:{Left} rightFile:{Right}",
-            "Test": "Test Configuration"
+            "Test": "Test Configuration",
+            "TestLeft": "faucibus purus in massa tempor, nec feugiat nisl pretium fusce",
+            "TestRight": "faucibus purus in massa tempor nec feugiat nisl pretium fusce"
         },
         "Game": {
             "Title": "Game Options",

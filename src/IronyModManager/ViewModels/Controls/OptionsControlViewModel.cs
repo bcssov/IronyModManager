@@ -56,7 +56,7 @@ namespace IronyModManager.ViewModels.Controls
         /// </summary>
         private readonly IFileDialogAction fileDialogAction;
 
-        /// <summary>
+        /// <summary>v
         /// The game service
         /// </summary>
         private readonly IGameService gameService;
@@ -909,8 +909,8 @@ namespace IronyModManager.ViewModels.Controls
                     file.Text = text;
                     return file;
                 }
-                var left = createTempFile("faucibus purus in massa tempor, nec feugiat nisl pretium fusce");
-                var right = createTempFile("faucibus purus in massa tempor nec feugiat nisl pretium fusce");
+                var left = createTempFile(localizationManager.GetResource(LocalizationResources.Options.Editor.TestLeft));
+                var right = createTempFile(localizationManager.GetResource(LocalizationResources.Options.Editor.TestRight));
                 var arguments = externalEditorService.GetLaunchArguments(left.File, right.File);
                 var opts = externalEditorService.Get();
                 if (await appAction.RunAsync(opts.ExternalEditorLocation, arguments))

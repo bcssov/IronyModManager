@@ -403,7 +403,9 @@
             "EditorExecutable": "Izvršna datoteka",
             "EditorArgs": "Argumenti",
             "EditorArgsPlaceholder": "Primjer: leftFile:{Left} rightFile:{Right}",
-            "Test": "Ispitivanje konfiguracije"
+            "Test": "Ispitivanje konfiguracije",
+            "TestLeft": "faucibus purus in massa tempor, nec feugiat nisl pretium fusce",
+            "TestRight": "faucibus purus in massa tempor nec feugiat nisl pretium fusce"
         },
         "Game": {
             "Title": "Mogućnosti igre",

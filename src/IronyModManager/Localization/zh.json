@@ -403,7 +403,9 @@
             "EditorExecutable": "可执行文件",
             "EditorArgs": "启动参数",
             "EditorArgsPlaceholder": "示例：leftFile:{Left} rightFile:{Right}",
-            "Test": "测试配置"
+            "Test": "测试配置",
+            "TestLeft": "faucibus purus in massa tempor, nec feugiat nisl pretium fusce",
+            "TestRight": "faucibus purus in massa tempor nec feugiat nisl pretium fusce"
         },
         "Game": {
             "Title": "游戏选项",
