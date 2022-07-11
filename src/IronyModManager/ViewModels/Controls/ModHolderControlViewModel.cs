@@ -200,7 +200,7 @@ namespace IronyModManager.ViewModels.Controls
         /// <summary>
         /// Initializes a new instance of the <see cref="ModHolderControlViewModel" /> class.
         /// </summary>
-        /// <param name="steamHandlerService">The steam handler service.</param>
+        /// <param name="externalProcessHandlerService">The external process handler service.</param>
         /// <param name="gameDefinitionLoadProgressHandler">The game definition load progress handler.</param>
         /// <param name="gameIndexProgressHandler">The game index progress handler.</param>
         /// <param name="gameIndexService">The game index service.</param>
@@ -549,12 +549,23 @@ namespace IronyModManager.ViewModels.Controls
         /// </summary>
         /// <param name="id">The identifier.</param>
         /// <param name="showOverlay">if set to <c>true</c> [show overlay].</param>
+        /// <param name="validateParadoxLauncher">if set to <c>true</c> [validate paradox launcher].</param>
         /// <returns>A Task representing the asynchronous operation.</returns>
-        protected virtual async Task ApplyCollectionAsync(long id, bool showOverlay = true)
+        protected virtual async Task ApplyCollectionAsync(long id, bool showOverlay = true, bool validateParadoxLauncher = false)
         {
             if (ApplyingCollection)
             {
                 return;
+            }
+            if (validateParadoxLauncher)
+            {
+                if (await externalProcessHandlerService.IsParadoxLauncherRunningAsync())
+                {
+                    var title = localizationManager.GetResource(LocalizationResources.Notifications.ParadoxLauncherRunning.Title);
+                    var message = localizationManager.GetResource(LocalizationResources.Notifications.ParadoxLauncherRunning.Message);
+                    notificationAction.ShowNotification(title, message, NotificationType.Warning, 30);
+                    return;
+                }
             }
             ApplyingCollection = true;
             if (CollectionMods.SelectedModCollection != null)
@@ -737,7 +748,7 @@ namespace IronyModManager.ViewModels.Controls
 
             ApplyCommand = ReactiveCommand.Create(() =>
             {
-                ApplyCollectionAsync(idGenerator.GetNextId()).ConfigureAwait(true);
+                ApplyCollectionAsync(idGenerator.GetNextId(), validateParadoxLauncher: true).ConfigureAwait(true);
             }, applyEnabled).DisposeWith(disposables);
 
             AnalyzeCommand = ReactiveCommand.CreateFromTask(async () =>
@@ -806,6 +817,13 @@ namespace IronyModManager.ViewModels.Controls
                 var game = gameService.GetSelected();
                 if (game != null)
                 {
+                    if (await externalProcessHandlerService.IsParadoxLauncherRunningAsync())
+                    {
+                        var title = localizationManager.GetResource(LocalizationResources.Notifications.ParadoxLauncherRunning.Title);
+                        var message = localizationManager.GetResource(LocalizationResources.Notifications.ParadoxLauncherRunning.Message);
+                        notificationAction.ShowNotification(title, message, NotificationType.Warning, 30);
+                        return;
+                    }
                     var args = gameService.GetLaunchSettings(game, continueGame);
                     if (!string.IsNullOrWhiteSpace(args.ExecutableLocation))
                     {
