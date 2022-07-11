@@ -52,6 +52,7 @@
     <PackageReference Include="SixLabors.ImageSharp" Version="$(SixLaborsImageSharp)" allowedVersions="$(SixLaborsImageSharp)" />
     <PackageReference Include="SixLabors.ImageSharp.Drawing" Version="$(SixLaborsImageSharpDrawing)" allowedVersions="$(SixLaborsImageSharpDrawing)" />
     <PackageReference Include="SixLabors.ImageSharp.Textures" Version="$(SixLaborsImageSharpTextures)" allowedVersions="$(SixLaborsImageSharpTextures)" />
+    <PackageReference Include="Steamworks.NET" Version="20.1.0" />
     <PackageReference Include="StrongNamer" Version="0.2.5" />
   </ItemGroup>
 

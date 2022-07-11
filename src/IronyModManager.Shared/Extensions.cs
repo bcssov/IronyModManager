@@ -155,7 +155,7 @@ namespace IronyModManager.Shared
             {
                 while (!string.IsNullOrEmpty(input) && input.EndsWith(value, type))
                 {
-                    input = input.Substring(0, (input.Length - value.Length));
+                    input = input[..^value.Length];
                 }
             }
 
@@ -175,7 +175,7 @@ namespace IronyModManager.Shared
             {
                 while (!string.IsNullOrEmpty(input) && input.StartsWith(value, type))
                 {
-                    input = input.Substring(value.Length - 1);
+                    input = input[(value.Length - 1)..];
                 }
             }
 
