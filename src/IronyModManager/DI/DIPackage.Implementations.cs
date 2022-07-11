@@ -4,7 +4,7 @@
 // Created          : 01-11-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-11-2022
+// Last Modified On : 07-11-2022
 // ***********************************************************************
 // <copyright file="DIPackage.Implementations.cs" company="Mario">
 //     Mario
@@ -22,7 +22,6 @@ using IronyModManager.Implementation.Actions;
 using IronyModManager.Implementation.AppState;
 using IronyModManager.Implementation.AvaloniaEdit;
 using IronyModManager.Implementation.Hotkey;
-using IronyModManager.Implementation.MessageBus;
 using IronyModManager.Implementation.Overlay;
 using IronyModManager.Implementation.Themes;
 using IronyModManager.Implementation.Updater;
@@ -55,41 +54,20 @@ namespace IronyModManager.DI
             container.Register<IAppAction, AppAction>();
             container.Register<INotificationAction, NotificationAction>();
             container.Register<IFileDialogAction, FileDialogAction>();
-            container.Register<WritingStateOperationHandler>(SimpleInjector.Lifestyle.Singleton);
-            container.Register<ModDefinitionAnalyzeHandler>(SimpleInjector.Lifestyle.Singleton);
-            container.Register<ModDefinitionLoadHandler>(SimpleInjector.Lifestyle.Singleton);
-            container.Register<ModDefinitionPatchLoadHandler>(SimpleInjector.Lifestyle.Singleton);
             container.Register<IShutDownState, ShutdownState>(SimpleInjector.Lifestyle.Singleton);
-            container.Register<OverlayProgressHandler>(SimpleInjector.Lifestyle.Singleton);
-            container.Register<ModFileMergeProgressHandler>(SimpleInjector.Lifestyle.Singleton);
-            container.Register<ActiveGameRequestHandler>(SimpleInjector.Lifestyle.Singleton);
             container.Register<IUpdater, Updater>(SimpleInjector.Lifestyle.Singleton);
             container.RemoveMixedLifetimeWarning<IAppAction>();
-            container.Register<UpdateUnpackProgressHandler>(SimpleInjector.Lifestyle.Singleton);
-            container.Register<GameUserDirectoryChangedHandler>(SimpleInjector.Lifestyle.Singleton);
-            container.Register<ModReportExportHandler>(SimpleInjector.Lifestyle.Singleton);
             container.Collection.Register(typeof(IFontFamily), new List<Type>()
             {
                 typeof(NotoSansFontFamily), typeof(NotoSansSCFontFamily)
             }, SimpleInjector.Lifestyle.Singleton);
             container.Register<IFontFamilyManager, FontFamilyManager>(SimpleInjector.Lifestyle.Singleton);
             container.Register<IIDGenerator, IDGenerator>(SimpleInjector.Lifestyle.Singleton);
-            container.Register<ModCompressMergeProgressHandler>(SimpleInjector.Lifestyle.Singleton);
-            container.Register<ModDefinitionInvalidReplaceHandler>(SimpleInjector.Lifestyle.Singleton);
-            container.Register<MainViewHotkeyPressedHandler>(SimpleInjector.Lifestyle.Singleton);
-            container.Register<ConflictSolverViewHotkeyPressedHandler>(SimpleInjector.Lifestyle.Singleton);
             container.Register<IHotkeyManager, HotkeyManager>();
-            container.Register<SuspendHotkeysHandler>(SimpleInjector.Lifestyle.Singleton);
-            container.Register<ModListInstallRefreshRequestHandler>(SimpleInjector.Lifestyle.Singleton);
             container.Register<IThemeManager, ThemeManager>();
             container.Collection.Register(typeof(IThemeResources), typeof(DIPackage).Assembly);
-            container.Register<ModMergeFreeSpaceCheckHandler>(SimpleInjector.Lifestyle.Singleton);
-            container.Register<GameDefinitionLoadProgressHandler>(SimpleInjector.Lifestyle.Singleton);
-            container.Register<GameIndexProgressHandler>(SimpleInjector.Lifestyle.Singleton);
-            container.Register<ModExportProgressHandler>(SimpleInjector.Lifestyle.Singleton);
             container.Register<IResourceLoader, ResourceLoader>();
             container.Register<IScrollState, ScrollState>(SimpleInjector.Lifestyle.Singleton);
-            container.Register<AllowEnterHotKeysHandler>(SimpleInjector.Lifestyle.Singleton);
         }
 
         #endregion Methods

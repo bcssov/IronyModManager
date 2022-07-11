@@ -4,7 +4,7 @@
 // Created          : 06-10-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 01-29-2021
+// Last Modified On : 07-11-2022
 // ***********************************************************************
 // <copyright file="MessageBusRegistration.cs" company="Mario">
 //     Mario
@@ -19,6 +19,7 @@ using System.Reflection;
 using IronyModManager.Shared.MessageBus;
 using Microsoft.Extensions.Logging.Abstractions;
 using SlimMessageBus.Host.Config;
+using SlimMessageBus.Host.Interceptor;
 using SlimMessageBus.Host.Memory;
 
 namespace IronyModManager.DI.MessageBus
@@ -36,6 +37,30 @@ namespace IronyModManager.DI.MessageBus
         /// <param name="assemblies">The assemblies.</param>
         public static void Register(IEnumerable<Assembly> assemblies)
         {
+            static object initCollectionObject(Type type)
+            {
+                var listType = typeof(List<>);
+                var genericListType = listType.MakeGenericType(type);
+                var instance = Activator.CreateInstance(genericListType);
+                return instance;
+            }
+            static Type resolveProducerInterceptor(Type type)
+            {
+                return typeof(IProducerInterceptor<>).MakeGenericType(type);
+            }
+            static Type resolvePublishInterceptor(Type type)
+            {
+                return typeof(IPublishInterceptor<>).MakeGenericType(type);
+            }
+            static Type resolveConsumerInterceptor(Type type)
+            {
+                return typeof(IConsumerInterceptor<>).MakeGenericType(type);
+            }
+            static Type resolveEnumerable(Type type)
+            {
+                return typeof(IEnumerable<>).MakeGenericType(type);
+            }
+
             var registeredTypes = new HashSet<Type>();
             var builder = MessageBusBuilder.Create()
                 .WithLoggerFacory(NullLoggerFactory.Instance) // Breaking change for some reason
@@ -60,8 +85,15 @@ namespace IronyModManager.DI.MessageBus
                                 {
                                     registeredTypes.Add(find.EventType);
                                     builder.Produce(find.EventType, x => x.DefaultTopic(x.Settings.MessageType.Name));
+                                    var producerType = resolveProducerInterceptor(find.EventType);
+                                    var publishType = resolvePublishInterceptor(find.EventType);
+                                    var consumerType = resolveConsumerInterceptor(find.EventType);
+                                    DIContainer.Container.Register(resolveEnumerable(producerType), () => initCollectionObject(producerType));
+                                    DIContainer.Container.Register(resolveEnumerable(publishType), () => initCollectionObject(publishType));
+                                    DIContainer.Container.Register(resolveEnumerable(consumerType), () => initCollectionObject(consumerType));
                                 }
                                 builder.Consume(find.EventType, x => x.Topic(x.MessageType.Name).WithConsumer(find.HandlerType));
+                                DIContainer.Container.Register(find.HandlerType, find.HandlerType, SimpleInjector.Lifestyle.Singleton);
                             });
                     });
                 });
