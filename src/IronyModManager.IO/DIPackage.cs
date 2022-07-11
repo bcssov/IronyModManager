@@ -73,6 +73,7 @@ namespace IronyModManager.IO
             container.Register<IGameIndexer, GameIndexer>();
             container.Register<ICollectionImportResult, CollectionImportResult>();
             container.Register<ISteam, SteamHandler>();
+            container.Register<IParadoxLauncher, ParadoxLauncherHandler>();
         }
 
         #endregion Methods

@@ -29,6 +29,12 @@ namespace IronyModManager.Services.Common
         #region Methods
 
         /// <summary>
+        /// Determines whether [is paradox launcher running asynchronous].
+        /// </summary>
+        /// <returns>Task&lt;System.Boolean&gt;.</returns>
+        Task<bool> IsParadoxLauncherRunningAsync();
+
+        /// <summary>
         /// Launches the steam asynchronous.
         /// </summary>
         /// <param name="useLegacyMethod">if set to <c>true</c> [use legacy method].</param>
