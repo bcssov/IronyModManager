@@ -156,7 +156,7 @@ namespace IronyModManager.IO.Platforms
         /// Shutdowns the asynchronous.
         /// </summary>
         /// <returns>Task&lt;System.Boolean&gt;.</returns>
-        public Task<bool> ShutdownAsync()
+        public Task<bool> ShutdownAPIAsync()
         {
             SteamAPI.Shutdown();
             return Task.FromResult(true);
@@ -172,13 +172,13 @@ namespace IronyModManager.IO.Platforms
 
             if (!Packsize.Test())
             {
-                await ShutdownAsync();
+                await ShutdownAPIAsync();
                 return false;
             }
 
             if (!DllCheck.Test())
             {
-                await ShutdownAsync();
+                await ShutdownAPIAsync();
                 return false;
             }
 

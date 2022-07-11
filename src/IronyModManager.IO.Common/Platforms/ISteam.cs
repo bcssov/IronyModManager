@@ -39,10 +39,10 @@ namespace IronyModManager.IO.Common.Platforms
         Task<bool> InitAsync(long appId);
 
         /// <summary>
-        /// Shutdowns the asynchronous.
+        /// Shutdowns the API asynchronous.
         /// </summary>
         /// <returns>Task&lt;System.Boolean&gt;.</returns>
-        Task<bool> ShutdownAsync();
+        Task<bool> ShutdownAPIAsync();
 
         #endregion Methods
     }
