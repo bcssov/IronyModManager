@@ -6,7 +6,7 @@
 // Last Modified By : Mario
 // Last Modified On : 07-11-2022
 // ***********************************************************************
-// <copyright file="SteamHandlerServiceTests.cs" company="Mario">
+// <copyright file="ExternalProcessHandlerServiceTests.cs" company="Mario">
 //     Mario
 // </copyright>
 // <summary></summary>
@@ -28,16 +28,16 @@ namespace IronyModManager.Services.Tests
     /// <summary>
     /// Class SteamHandlerServiceTests.
     /// </summary>
-    public class SteamHandlerServiceTests
+    public class ExternalProcessHandlerServiceTests
     {
         /// <summary>
         /// Gets the service.
         /// </summary>
         /// <param name="steam">The steam.</param>
         /// <returns>SteamHandlerService.</returns>
-        private static SteamHandlerService GetService(Mock<ISteam> steam)
+        private static ExternalProcessHandlerService GetService(Mock<ISteam> steam)
         {
-            return new SteamHandlerService(steam.Object, new Mock<IStorageProvider>().Object, new Mock<IMapper>().Object);
+            return new ExternalProcessHandlerService(steam.Object, new Mock<IStorageProvider>().Object, new Mock<IMapper>().Object);
         }
 
         /// <summary>

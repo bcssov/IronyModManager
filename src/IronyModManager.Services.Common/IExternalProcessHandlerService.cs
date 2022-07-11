@@ -6,7 +6,7 @@
 // Last Modified By : Mario
 // Last Modified On : 07-11-2022
 // ***********************************************************************
-// <copyright file="ISteamHandlerService.cs" company="Mario">
+// <copyright file="IExternalProcessHandlerService.cs" company="Mario">
 //     Mario
 // </copyright>
 // <summary></summary>
@@ -20,11 +20,11 @@ using IronyModManager.Models.Common;
 namespace IronyModManager.Services.Common
 {
     /// <summary>
-    /// Interface ISteamRunner
+    /// Interface IExternalProcessHandlerService
     /// Implements the <see cref="IronyModManager.Services.Common.IBaseService" />
     /// </summary>
     /// <seealso cref="IronyModManager.Services.Common.IBaseService" />
-    public interface ISteamHandlerService : IBaseService
+    public interface IExternalProcessHandlerService : IBaseService
     {
         #region Methods
 

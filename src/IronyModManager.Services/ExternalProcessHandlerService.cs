@@ -6,7 +6,7 @@
 // Last Modified By : Mario
 // Last Modified On : 07-11-2022
 // ***********************************************************************
-// <copyright file="SteamHandlerService.cs" company="Mario">
+// <copyright file="ExternalProcessHandlerService.cs" company="Mario">
 //     Mario
 // </copyright>
 // <summary></summary>
@@ -24,13 +24,13 @@ using IronyModManager.Storage.Common;
 namespace IronyModManager.Services
 {
     /// <summary>
-    /// Class SteamHandlerService.
+    /// Class ExternalProcessHandlerService.
     /// Implements the <see cref="IronyModManager.Services.BaseService" />
-    /// Implements the <see cref="ISteamHandlerService" />
+    /// Implements the <see cref="IExternalProcessHandlerService" />
     /// </summary>
     /// <seealso cref="IronyModManager.Services.BaseService" />
-    /// <seealso cref="ISteamHandlerService" />
-    public class SteamHandlerService : BaseService, ISteamHandlerService
+    /// <seealso cref="IExternalProcessHandlerService" />
+    public class ExternalProcessHandlerService : BaseService, IExternalProcessHandlerService
     {
         #region Fields
 
@@ -49,7 +49,7 @@ namespace IronyModManager.Services
         /// <param name="steam">The steam.</param>
         /// <param name="storageProvider">The storage provider.</param>
         /// <param name="mapper">The mapper.</param>
-        public SteamHandlerService(ISteam steam, IStorageProvider storageProvider, IMapper mapper) : base(storageProvider, mapper)
+        public ExternalProcessHandlerService(ISteam steam, IStorageProvider storageProvider, IMapper mapper) : base(storageProvider, mapper)
         {
             this.steam = steam;
         }

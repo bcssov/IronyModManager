@@ -56,7 +56,7 @@ namespace IronyModManager.Services
             container.Register<IPromptNotificationsService, PromptNotificationsService>();
             container.Register<IReportExportService, ReportExportService>();
             container.Register<IGameIndexService, GameIndexService>();
-            container.Register<ISteamHandlerService, SteamHandlerService>();
+            container.Register<IExternalProcessHandlerService, ExternalProcessHandlerService>();
         }
 
         #endregion Methods

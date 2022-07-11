@@ -14,7 +14,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Reactive;
 using System.Reactive.Disposables;
@@ -58,6 +57,11 @@ namespace IronyModManager.ViewModels.Controls
         /// The application action
         /// </summary>
         private readonly IAppAction appAction;
+
+        /// <summary>
+        /// The external process handler service
+        /// </summary>
+        private readonly IExternalProcessHandlerService externalProcessHandlerService;
 
         /// <summary>
         /// The game definition load progress handler
@@ -150,11 +154,6 @@ namespace IronyModManager.ViewModels.Controls
         private readonly IShutDownState shutDownState;
 
         /// <summary>
-        /// The steam handler service
-        /// </summary>
-        private readonly ISteamHandlerService steamHandlerService;
-
-        /// <summary>
         /// The definition analyze load handler
         /// </summary>
         private IDisposable definitionAnalyzeLoadHandler = null;
@@ -223,7 +222,7 @@ namespace IronyModManager.ViewModels.Controls
         /// <param name="modDefinitionPatchLoadHandler">The mod definition patch load handler.</param>
         /// <param name="gameDirectoryChangedHandler">The game directory changed handler.</param>
         /// <param name="logger">The logger.</param>
-        public ModHolderControlViewModel(ISteamHandlerService steamHandlerService, GameDefinitionLoadProgressHandler gameDefinitionLoadProgressHandler, GameIndexProgressHandler gameIndexProgressHandler,
+        public ModHolderControlViewModel(IExternalProcessHandlerService externalProcessHandlerService, GameDefinitionLoadProgressHandler gameDefinitionLoadProgressHandler, GameIndexProgressHandler gameIndexProgressHandler,
             IGameIndexService gameIndexService, IPromptNotificationsService promptNotificationsService,
             ModListInstallRefreshRequestHandler modListInstallRefreshRequestHandler, ModDefinitionInvalidReplaceHandler modDefinitionInvalidReplaceHandler,
             IIDGenerator idGenerator, IShutDownState shutDownState, IModService modService, IModPatchCollectionService modPatchCollectionService, IGameService gameService,
@@ -252,7 +251,7 @@ namespace IronyModManager.ViewModels.Controls
             this.gameIndexService = gameIndexService;
             this.gameIndexProgressHandler = gameIndexProgressHandler;
             this.gameDefinitionLoadProgressHandler = gameDefinitionLoadProgressHandler;
-            this.steamHandlerService = steamHandlerService;
+            this.externalProcessHandlerService = externalProcessHandlerService;
             InstalledMods = installedModsControlViewModel;
             CollectionMods = collectionModsControlViewModel;
             if (StaticResources.CommandLineOptions != null && StaticResources.CommandLineOptions.EnableResumeGameButton)
@@ -797,7 +796,7 @@ namespace IronyModManager.ViewModels.Controls
                 if (gameService.IsSteamGame(args))
                 {
                     var config = DIResolver.Get<IPlatformConfiguration>().GetOptions();
-                    return await steamHandlerService.LaunchSteamAsync(config.Steam.UseLegacyLaunchMethod, gameService.GetSelected());                    
+                    return await externalProcessHandlerService.LaunchSteamAsync(config.Steam.UseLegacyLaunchMethod, gameService.GetSelected());
                 }
                 return true;
             }
