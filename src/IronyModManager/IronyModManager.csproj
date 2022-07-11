@@ -25,12 +25,7 @@
     <Configurations>Debug;Release</Configurations>
 	<PlatformTarget>x64</PlatformTarget>
 	<Platforms>x64</Platforms>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <NoWarn>1701;1702;NU1603</NoWarn>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <NoWarn>1701;1702;NU1603</NoWarn>
+    <NoWarn>1701;1702;NU1603</NoWarn>	
   </PropertyGroup>
   <ItemGroup>
     <Compile Update="**\*.xaml.cs">
