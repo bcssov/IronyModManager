@@ -12,21 +12,23 @@
     <PackageIconUrl />
     <PackageTags>Irony Mod Manager IO Component</PackageTags>
     <PackageReleaseNotes>Irony Mod Manager IO Component</PackageReleaseNotes>
+	<PlatformTarget>x64</PlatformTarget>
+	<Platforms>x64</Platforms>
   </PropertyGroup>
 
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
     <WarningsAsErrors />
     <NoWarn>1701;1702;NU1603</NoWarn>
   </PropertyGroup>
 
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Functional_Test|AnyCPU'">
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Functional_Test|x64'">
     <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
     <WarningsAsErrors />
     <NoWarn>1701;1702;NU1603</NoWarn>
   </PropertyGroup>
 
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
     <WarningsAsErrors />
     <NoWarn>1701;1702;NU1603</NoWarn>
@@ -51,7 +53,7 @@
   <ItemGroup>
     <PackageReference Include="BCnEncoder.Net" Version="2.1.0" />
     <PackageReference Include="DotNetZip" Version="1.16.0" />
-    <PackageReference Include="Magick.NET-Q8-AnyCPU" Version="11.2.1" />
+    <PackageReference Include="Magick.NET-Q8-x64" Version="11.2.1" />
     <PackageReference Include="Microsoft.Extensions.DependencyModel" Version="$(MicrosoftExtensionsDependencyModelVersion)" allowedVersions="$(MicrosoftExtensionsDependencyModelVersion)" />
     <PackageReference Include="Microsoft.NETCore.Platforms" Version="$(MicrosoftNETCorePlatformsVersion)" allowedVersions="$(MicrosoftNETCorePlatformsVersion)" />
     <PackageReference Include="Nerdbank.GitVersioning" Version="3.3.37">

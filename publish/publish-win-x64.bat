@@ -16,13 +16,14 @@ dotnet publish src\IronyModManager.Platform\IronyModManager.Platform.csproj  /p:
 dotnet publish src\IronyModManager.Common\IronyModManager.Common.csproj  /p:PublishProfile=src\IronyModManager.Common\Properties\PublishProfiles\win-x64.pubxml --configuration Release
 dotnet publish src\IronyModManager.Updater\IronyModManager.Updater.csproj  /p:PublishProfile=src\IronyModManager.Updater\Properties\PublishProfiles\win-x64.pubxml --configuration Release
 dotnet publish src\IronyModManager\IronyModManager.csproj  /p:PublishProfile=src\IronyModManager\Properties\PublishProfiles\win-x64.pubxml --configuration Release
-xcopy "src\IronyModManager\bin\Release\net6.0\win-x64\*.dll" "src\IronyModManager\bin\Release\net6.0\publish\win-x64\" /Y /S /D
-xcopy "src\IronyModManager\bin\Release\net6.0\win-x64\*.json" "src\IronyModManager\bin\Release\net6.0\publish\win-x64\" /Y /S /D
-xcopy "src\IronyModManager\bin\Release\net6.0\win-x64\*.pdb" "src\IronyModManager\bin\Release\net6.0\publish\win-x64\" /Y /S /D
-xcopy "src\IronyModManager.Updater\bin\Release\net6.0\publish\win-x64\*.*" "src\IronyModManager\bin\Release\net6.0\publish\win-x64\" /Y /S /D
+xcopy "src\IronyModManager\bin\x64\Release\net6.0\win-x64\*.dll" "src\IronyModManager\bin\x64\Release\net6.0\publish\win-x64\" /Y /S /D
+xcopy "src\IronyModManager\bin\x64\Release\net6.0\win-x64\*.json" "src\IronyModManager\bin\x64\Release\net6.0\publish\win-x64\" /Y /S /D
+xcopy "src\IronyModManager\bin\x64\Release\net6.0\win-x64\*.pdb" "src\IronyModManager\bin\x64\Release\net6.0\publish\win-x64\" /Y /S /D
+xcopy "src\IronyModManager.Updater\bin\x64\Release\net6.0\publish\win-x64\*.*" "src\IronyModManager\bin\x64\Release\net6.0\publish\win-x64\" /Y /S /D
 REM Temp fix due to avalonia bug
-xcopy "%userprofile%\.nuget\packages\avalonia.angle.windows.natives\2.1.0.2020091801\runtimes\win7-x64\native\av_libglesv2.dll" "src\IronyModManager\bin\Release\net6.0\publish\win-x64\" /Y /S /D
-del "src\IronyModManager\bin\Release\net6.0\publish\win-x64\IronyModManager.runtimeconfig.dev.json" /S /Q
-del "src\IronyModManager\bin\Release\net6.0\publish\win-x64\IronyModManager.Updater.runtimeconfig.dev.json" /S /Q
-xcopy "References\*.*" "src\IronyModManager\bin\Release\net6.0\publish\win-x64\"  /Y /S /D
-cd publish
+xcopy "%userprofile%\.nuget\packages\avalonia.angle.windows.natives\2.1.0.2020091801\runtimes\win7-x64\native\av_libglesv2.dll" "src\IronyModManager\bin\x64\Release\net6.0\publish\win-x64\" /Y /S /D
+del "src\IronyModManager\bin\x64\Release\net6.0\publish\win-x64\IronyModManager.runtimeconfig.dev.json" /S /Q
+del "src\IronyModManager\bin\x64\Release\net6.0\publish\win-x64\IronyModManager.Updater.runtimeconfig.dev.json" /S /Q
+del "src\IronyModManager\bin\x64\Release\net6.0\publish\win-x64\steam_api64.dll" /S /Q
+xcopy "%solutiondir%References\CopyAll\*.*" "%solutiondir%src\IronyModManager\%outdir%" /Y /S /D
+xcopy "%solutiondir%References\Conditional\Steamworks\Windows-x64\*.*" "%solutiondir%src\IronyModManager\%outdir%" /Y /S /D
