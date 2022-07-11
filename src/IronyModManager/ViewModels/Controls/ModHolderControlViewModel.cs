@@ -563,7 +563,7 @@ namespace IronyModManager.ViewModels.Controls
                 {
                     var title = localizationManager.GetResource(LocalizationResources.Notifications.ParadoxLauncherRunning.Title);
                     var message = localizationManager.GetResource(LocalizationResources.Notifications.ParadoxLauncherRunning.Message);
-                    notificationAction.ShowNotification(title, message, NotificationType.Warning, 30);
+                    notificationAction.ShowNotification(title, message, NotificationType.Error, 30);
                     return;
                 }
             }
@@ -821,7 +821,7 @@ namespace IronyModManager.ViewModels.Controls
                     {
                         var title = localizationManager.GetResource(LocalizationResources.Notifications.ParadoxLauncherRunning.Title);
                         var message = localizationManager.GetResource(LocalizationResources.Notifications.ParadoxLauncherRunning.Message);
-                        notificationAction.ShowNotification(title, message, NotificationType.Warning, 30);
+                        notificationAction.ShowNotification(title, message, NotificationType.Error, 30);
                         return;
                     }
                     var args = gameService.GetLaunchSettings(game, continueGame);

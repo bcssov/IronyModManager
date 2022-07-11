@@ -4,7 +4,7 @@
 // Created          : 03-18-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 07-10-2022
+// Last Modified On : 07-11-2022
 // ***********************************************************************
 // <copyright file="MainConflictSolverViewModel.cs" company="Mario">
 //     Mario
@@ -67,6 +67,11 @@ namespace IronyModManager.ViewModels
         private readonly IAppAction appAction;
 
         /// <summary>
+        /// The external process handler service
+        /// </summary>
+        private readonly IExternalProcessHandlerService externalProcessHandlerService;
+
+        /// <summary>
         /// The hotkey pressed handler
         /// </summary>
         private readonly ConflictSolverViewHotkeyPressedHandler hotkeyPressedHandler;
@@ -123,6 +128,7 @@ namespace IronyModManager.ViewModels
         /// <summary>
         /// Initializes a new instance of the <see cref="MainConflictSolverControlViewModel" /> class.
         /// </summary>
+        /// <param name="externalProcessHandlerService">The external process handler service.</param>
         /// <param name="hotkeyPressedHandler">The hotkey pressed handler.</param>
         /// <param name="idGenerator">The identifier generator.</param>
         /// <param name="modPatchCollectionService">The mod patch collection service.</param>
@@ -138,7 +144,8 @@ namespace IronyModManager.ViewModels
         /// <param name="logger">The logger.</param>
         /// <param name="notificationAction">The notification action.</param>
         /// <param name="appAction">The application action.</param>
-        public MainConflictSolverControlViewModel(ConflictSolverViewHotkeyPressedHandler hotkeyPressedHandler, IIDGenerator idGenerator,
+        public MainConflictSolverControlViewModel(IExternalProcessHandlerService externalProcessHandlerService,
+            ConflictSolverViewHotkeyPressedHandler hotkeyPressedHandler, IIDGenerator idGenerator,
             IModPatchCollectionService modPatchCollectionService, ILocalizationManager localizationManager,
             MergeViewerControlViewModel mergeViewer, MergeViewerBinaryControlViewModel binaryMergeViewer,
             ModCompareSelectorControlViewModel modCompareSelector, ModConflictIgnoreControlViewModel ignoreConflictsRules,
@@ -153,6 +160,7 @@ namespace IronyModManager.ViewModels
             this.notificationAction = notificationAction;
             this.appAction = appAction;
             this.hotkeyPressedHandler = hotkeyPressedHandler;
+            this.externalProcessHandlerService = externalProcessHandlerService;
             MergeViewer = mergeViewer;
             ModCompareSelector = modCompareSelector;
             BinaryMergeViewer = binaryMergeViewer;
@@ -1135,6 +1143,13 @@ namespace IronyModManager.ViewModels
         {
             if (ResolvingConflict)
             {
+                return;
+            }
+            if (await externalProcessHandlerService.IsParadoxLauncherRunningAsync())
+            {
+                var title = localizationManager.GetResource(LocalizationResources.Notifications.ParadoxLauncherRunning.Title);
+                var message = localizationManager.GetResource(LocalizationResources.Notifications.ParadoxLauncherRunning.Message);
+                notificationAction.ShowNotification(title, message, NotificationType.Error, 30);
                 return;
             }
             ResolvingConflict = true;
