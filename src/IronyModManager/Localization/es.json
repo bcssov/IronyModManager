@@ -402,7 +402,8 @@
             "Title": "Opciones del Editor externo",
             "EditorExecutable": "Editor Ejecutable",
             "EditorArgs": "Editor Args",
-            "EditorArgsPlaceholder": "Ejemplo: leftFile:{Left} rightFile:{Right}"
+            "EditorArgsPlaceholder": "Ejemplo: leftFile:{Left} rightFile:{Right}",
+            "Test": "Configuración de prueba"
         },
         "Game": {
             "Title": "Opciones de Juego",

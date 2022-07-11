@@ -531,6 +531,7 @@ namespace IronyModManager.Shared
                 public const string EditorExecutable = Prefix + "EditorExecutable";
                 public const string EditorArgs = Prefix + "EditorArgs";
                 public const string EditorArgsPlaceholder = Prefix + "EditorArgsPlaceholder";
+                public const string Test = Prefix + "Test";
             }
             public static class Game
             {

@@ -4,7 +4,7 @@
 // Created          : 05-30-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 12-16-2021
+// Last Modified On : 07-11-2022
 // ***********************************************************************
 // <copyright file="OptionsControlViewModel.cs" company="Mario">
 //     Mario
@@ -22,6 +22,7 @@ using Avalonia;
 using IronyModManager.Common;
 using IronyModManager.Common.Events;
 using IronyModManager.Common.ViewModels;
+using IronyModManager.DI;
 using IronyModManager.Implementation.Actions;
 using IronyModManager.Implementation.Overlay;
 using IronyModManager.Implementation.Updater;
@@ -86,11 +87,6 @@ namespace IronyModManager.ViewModels.Controls
         private readonly INotificationAction notificationAction;
 
         /// <summary>
-        /// The platform configuration
-        /// </summary>
-        private readonly IPlatformConfiguration platformConfiguration;
-
-        /// <summary>
         /// The position settings service
         /// </summary>
         private readonly INotificationPositionSettingsService positionSettingsService;
@@ -104,6 +100,11 @@ namespace IronyModManager.ViewModels.Controls
         /// The updater service
         /// </summary>
         private readonly IUpdaterService updaterService;
+
+        /// <summary>
+        /// The application action
+        /// </summary>
+        private IAppAction appAction;
 
         /// <summary>
         /// The automatic update changed
@@ -167,6 +168,7 @@ namespace IronyModManager.ViewModels.Controls
         /// <summary>
         /// Initializes a new instance of the <see cref="OptionsControlViewModel" /> class.
         /// </summary>
+        /// <param name="appAction">The application action.</param>
         /// <param name="platformConfiguration">The platform configuration.</param>
         /// <param name="modService">The mod service.</param>
         /// <param name="positionSettingsService">The position settings service.</param>
@@ -179,7 +181,7 @@ namespace IronyModManager.ViewModels.Controls
         /// <param name="updaterService">The updater service.</param>
         /// <param name="gameService">The game service.</param>
         /// <param name="fileDialogAction">The file dialog action.</param>
-        public OptionsControlViewModel(IPlatformConfiguration platformConfiguration, IModService modService, INotificationPositionSettingsService positionSettingsService,
+        public OptionsControlViewModel(IAppAction appAction, IPlatformConfiguration platformConfiguration, IModService modService, INotificationPositionSettingsService positionSettingsService,
             IExternalEditorService externalEditorService, IIDGenerator idGenerator, ILogger logger,
             INotificationAction notificationAction, ILocalizationManager localizationManager, IUpdater updater,
             IUpdaterService updaterService, IGameService gameService, IFileDialogAction fileDialogAction)
@@ -195,7 +197,7 @@ namespace IronyModManager.ViewModels.Controls
             this.idGenerator = idGenerator;
             this.externalEditorService = externalEditorService;
             this.modService = modService;
-            this.platformConfiguration = platformConfiguration;
+            this.appAction = appAction;
             UpdatesAllowed = !platformConfiguration.GetOptions().Updates.Disable;
             LeftMargin = new Thickness(20, 0, 0, 0);
             LeftChildMargin = new Thickness(20, 10, 0, 0);
@@ -536,6 +538,19 @@ namespace IronyModManager.ViewModels.Controls
         /// </summary>
         /// <value><c>true</c> if [show game options]; otherwise, <c>false</c>.</value>
         public virtual bool ShowGameOptions { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets the test external editor configuration.
+        /// </summary>
+        /// <value>The test external editor configuration.</value>
+        [StaticLocalization(LocalizationResources.Options.Editor.Test)]
+        public virtual string TestExternalEditorConfiguration { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets the test external editor configuration command.
+        /// </summary>
+        /// <value>The test external editor configuration command.</value>
+        public virtual ReactiveCommand<Unit, Unit> TestExternalEditorConfigurationCommand { get; protected set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether [update information visible].
@@ -883,6 +898,27 @@ namespace IronyModManager.ViewModels.Controls
                     var progress = IronyFormatter.Format(localizationManager.GetResource(LocalizationResources.Options.Updates.Overlay.UpdateDownloadProgress), new { Progress = s.ToLocalizedPercentage() });
                     TriggerOverlay(messageId, true, message, progress);
                 }
+            }).DisposeWith(disposables);
+
+            TestExternalEditorConfigurationCommand = ReactiveCommand.CreateFromTask(async () =>
+            {
+                ITempFile createTempFile(string text)
+                {
+                    var file = DIResolver.Get<ITempFile>();
+                    file.Create();
+                    file.Text = text;
+                    return file;
+                }
+                var left = createTempFile("faucibus purus in massa tempor, nec feugiat nisl pretium fusce");
+                var right = createTempFile("faucibus purus in massa tempor nec feugiat nisl pretium fusce");
+                var arguments = externalEditorService.GetLaunchArguments(left.File, right.File);
+                var opts = externalEditorService.Get();
+                if (await appAction.RunAsync(opts.ExternalEditorLocation, arguments))
+                {
+                    await notificationAction.ShowPromptAsync(TestExternalEditorConfiguration, TestExternalEditorConfiguration, TestExternalEditorConfiguration, NotificationType.Info, PromptType.OK);
+                }
+                left.Dispose();
+                right.Dispose();
             }).DisposeWith(disposables);
 
             base.OnActivated(disposables);

@@ -402,7 +402,8 @@
             "Title": "Опции внешнего редактора",
             "EditorExecutable": "Путь к файлу .exe",
             "EditorArgs": "Параметры запуска",
-            "EditorArgsPlaceholder": "Пример: leftFile:{Left} rightFile:{Right}"
+            "EditorArgsPlaceholder": "Пример: leftFile:{Left} rightFile:{Right}",
+            "Test": "Тестовая конфигурация"
         },
         "Game": {
             "Title": "Опции игры",
