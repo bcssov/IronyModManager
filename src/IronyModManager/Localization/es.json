@@ -538,6 +538,10 @@
         "CollectionMergeNotEnoughSpace": {
             "Title": "No hay suficiente espacio libre",
             "Message": "No hay suficiente espacio libre para realizar una operación de combinación."
+        },
+        "ParadoxLauncherRunning": {
+            "Title": "Paradox Launcher activo",
+            "Message": "Paradox Launcher se está ejecutando, cierre antes de intentar esta acción."
         }
     },
     "Mod_App_Actions": {

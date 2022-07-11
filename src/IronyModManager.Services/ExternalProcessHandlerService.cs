@@ -35,6 +35,11 @@ namespace IronyModManager.Services
         #region Fields
 
         /// <summary>
+        /// The paradox launcher
+        /// </summary>
+        private readonly IParadoxLauncher paradoxLauncher;
+
+        /// <summary>
         /// The steam
         /// </summary>
         private readonly ISteam steam;
@@ -46,17 +51,28 @@ namespace IronyModManager.Services
         /// <summary>
         /// Initializes a new instance of the <see cref="SteamHandlerService" /> class.
         /// </summary>
+        /// <param name="paradoxLauncher">The paradox launcher.</param>
         /// <param name="steam">The steam.</param>
         /// <param name="storageProvider">The storage provider.</param>
         /// <param name="mapper">The mapper.</param>
-        public ExternalProcessHandlerService(ISteam steam, IStorageProvider storageProvider, IMapper mapper) : base(storageProvider, mapper)
+        public ExternalProcessHandlerService(IParadoxLauncher paradoxLauncher, ISteam steam, IStorageProvider storageProvider, IMapper mapper) : base(storageProvider, mapper)
         {
             this.steam = steam;
+            this.paradoxLauncher = paradoxLauncher;
         }
 
         #endregion Constructors
 
         #region Methods
+
+        /// <summary>
+        /// Determines whether [is paradox launcher running asynchronous].
+        /// </summary>
+        /// <returns>Task&lt;System.Boolean&gt;.</returns>
+        public Task<bool> IsParadoxLauncherRunningAsync()
+        {
+            return paradoxLauncher.IsRunningAsync();
+        }
 
         /// <summary>
         /// Launches the steam asynchronous.
