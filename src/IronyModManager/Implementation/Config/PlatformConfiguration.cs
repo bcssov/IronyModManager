@@ -4,7 +4,7 @@
 // Created          : 04-16-2021
 //
 // Last Modified By : Mario
-// Last Modified On : 12-16-2021
+// Last Modified On : 07-11-2022
 // ***********************************************************************
 // <copyright file="PlatformConfiguration.cs" company="Mario">
 //     Mario
@@ -73,6 +73,7 @@ namespace IronyModManager.Implementation.Config
                 platformConfiguration.Tooltips.Disable = configuration.GetSection("Tooltips").GetSection("Disable").Get<bool>();
                 platformConfiguration.Fonts.UseInbuiltFontsOnly = configuration.GetSection("Fonts").GetSection("UseInbuiltFontsOnly").Get<bool>();
                 platformConfiguration.Updates.Disable = configuration.GetSection("Updates").GetSection("Disable").Get<bool>();
+                platformConfiguration.Steam.UseLegacyLaunchMethod = configuration.GetSection("Steam").GetSection("UseLegacyLaunchMethod").Get<bool>();
             }
             return platformConfiguration;
         }

@@ -16,11 +16,14 @@ dotnet publish src\IronyModManager.Platform\IronyModManager.Platform.csproj  /p:
 dotnet publish src\IronyModManager.Common\IronyModManager.Common.csproj  /p:PublishProfile=src\IronyModManager.Common\Properties\PublishProfiles\linux-x64.pubxml --configuration Release
 dotnet publish src\IronyModManager.Updater\IronyModManager.Updater.csproj  /p:PublishProfile=src\IronyModManager.Updater\Properties\PublishProfiles\linux-x64.pubxml --configuration Release
 dotnet publish src\IronyModManager\IronyModManager.csproj  /p:PublishProfile=src\IronyModManager\Properties\PublishProfiles\linux-x64.pubxml --configuration Release
-xcopy "src\IronyModManager\bin\Release\net6.0\linux-x64\*.dll" "src\IronyModManager\bin\Release\net6.0\publish\linux-x64\" /Y /S /D
-xcopy "src\IronyModManager\bin\Release\net6.0\linux-x64\*.json" "src\IronyModManager\bin\Release\net6.0\publish\linux-x64\" /Y /S /D
-xcopy "src\IronyModManager\bin\Release\net6.0\linux-x64\*.pdb" "src\IronyModManager\bin\Release\net6.0\publish\linux-x64\" /Y /S /D
-xcopy "src\IronyModManager.Updater\bin\Release\net6.0\publish\linux-x64\*.*" "src\IronyModManager\bin\Release\net6.0\publish\linux-x64\" /Y /S /D
-del "src\IronyModManager\bin\Release\net6.0\publish\linux-x64\IronyModManager.runtimeconfig.dev.json" /S /Q
-del "src\IronyModManager\bin\Release\net6.0\publish\linux-x64\IronyModManager.Updater.runtimeconfig.dev.json" /S /Q
-xcopy "References\*.*" "src\IronyModManager\bin\Release\net6.0\publish\linux-x64\" /Y /S /D
+xcopy "src\IronyModManager\bin\Release\net6.0\linux-x64\*.dll" "src\IronyModManager\bin\x64\Release\net6.0\publish\linux-x64\" /Y /S /D
+xcopy "src\IronyModManager\bin\Release\net6.0\linux-x64\*.json" "src\IronyModManager\bin\x64\Release\net6.0\publish\linux-x64\" /Y /S /D
+xcopy "src\IronyModManager\bin\Release\net6.0\linux-x64\*.pdb" "src\IronyModManager\bin\x64\Release\net6.0\publish\linux-x64\" /Y /S /D
+xcopy "src\IronyModManager.Updater\bin\x64\Release\net6.0\publish\linux-x64\*.*" "src\IronyModManager\bin\x64\Release\net6.0\publish\linux-x64\" /Y /S /D
+del "src\IronyModManager\bin\x64\Release\net6.0\publish\linux-x64\IronyModManager.runtimeconfig.dev.json" /S /Q
+del "src\IronyModManager\bin\x64\Release\net6.0\publish\linux-x64\IronyModManager.Updater.runtimeconfig.dev.json" /S /Q
+del "src\IronyModManager\bin\x64\Release\net6.0\publish\linux-x64\steam_api64.dll" /S /Q
+xcopy "References\CopyAll\*.*" "src\IronyModManager\bin\x64\Release\net6.0\publish\linux-x64\" /Y /S /D
+REM Why on earth cannot nuget include these? Also the documentation sucks in this regard
+xcopy "References\Conditional\Steamworks\OSX-Linux-x64\libsteam_api.so" "src\IronyModManager\bin\x64\Release\net6.0\publish\linux-x64\" /Y /S /D
 cd publish

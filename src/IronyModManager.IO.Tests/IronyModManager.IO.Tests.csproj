@@ -11,25 +11,15 @@
     <PackageIconUrl />
     <PackageTags>IronyModManager.IO.Tests</PackageTags>
     <PackageReleaseNotes>IronyModManager.IO.Tests</PackageReleaseNotes>
-  </PropertyGroup>
-
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+	<PlatformTarget>x64</PlatformTarget>
+	<Platforms>x64</Platforms>
     <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
     <WarningsAsErrors />
-    <NoWarn>1701;1702;NU1603;xUnit1004</NoWarn>
+	<NoWarn>1701;1702;NU1603;xUnit1004</NoWarn>	
   </PropertyGroup>
-
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Functional_Test|AnyCPU'">
-    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
-    <WarningsAsErrors />
-    <DefineConstants>TRACE;FUNCTIONAL_TEST</DefineConstants>
-	<NoWarn>1701;1702;NU1603</NoWarn>
-  </PropertyGroup>
-
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
-    <WarningsAsErrors />
-	<NoWarn>1701;1702;NU1603</NoWarn>
+  
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Functional_Test|x64'">  
+    <DefineConstants>TRACE;FUNCTIONAL_TEST</DefineConstants>	
   </PropertyGroup>
 
   <ItemGroup>

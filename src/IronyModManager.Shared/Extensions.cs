@@ -4,7 +4,7 @@
 // Created          : 02-16-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 01-28-2022
+// Last Modified On : 07-11-2022
 // ***********************************************************************
 // <copyright file="Extensions.cs" company="Mario">
 //     Mario
@@ -21,7 +21,7 @@ namespace IronyModManager.Shared
     /// <summary>
     /// Class Extensions.
     /// </summary>
-    [ExcludeFromCoverage("Hash calculation is excluded.")]
+    [ExcludeFromCoverage("Extensions are excluded.")]
     public static partial class Extensions
     {
         #region Fields
@@ -155,7 +155,7 @@ namespace IronyModManager.Shared
             {
                 while (!string.IsNullOrEmpty(input) && input.EndsWith(value, type))
                 {
-                    input = input.Substring(0, (input.Length - value.Length));
+                    input = input[..^value.Length];
                 }
             }
 
@@ -175,7 +175,7 @@ namespace IronyModManager.Shared
             {
                 while (!string.IsNullOrEmpty(input) && input.StartsWith(value, type))
                 {
-                    input = input.Substring(value.Length - 1);
+                    input = input[(value.Length - 1)..];
                 }
             }
 

@@ -4,7 +4,7 @@
 // Created          : 04-16-2021
 //
 // Last Modified By : Mario
-// Last Modified On : 12-16-2021
+// Last Modified On : 07-11-2022
 // ***********************************************************************
 // <copyright file="PlatformConfigurationOptions.cs" company="Mario">
 //     Mario
@@ -109,6 +109,12 @@ namespace IronyModManager.Platform.Configuration
         public Logging Logging { get; } = new Logging();
 
         /// <summary>
+        /// Gets the steam.
+        /// </summary>
+        /// <value>The steam.</value>
+        public Steam Steam { get; } = new Steam();
+
+        /// <summary>
         /// Gets the tooltips.
         /// </summary>
         /// <value>The tooltips.</value>
@@ -119,6 +125,22 @@ namespace IronyModManager.Platform.Configuration
         /// </summary>
         /// <value>The updates.</value>
         public Updates Updates { get; } = new Updates();
+
+        #endregion Properties
+    }
+
+    /// <summary>
+    /// Class Steam.
+    /// </summary>
+    public class Steam
+    {
+        #region Properties
+
+        /// <summary>
+        /// Gets or sets a value indicating whether [use legacy launch method].
+        /// </summary>
+        /// <value><c>true</c> if [use legacy launch method]; otherwise, <c>false</c>.</value>
+        public bool UseLegacyLaunchMethod { get; set; }
 
         #endregion Properties
     }
