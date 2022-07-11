@@ -4,7 +4,7 @@
 // Created          : 02-29-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 07-10-2022
+// Last Modified On : 07-11-2022
 // ***********************************************************************
 // <copyright file="ModHolderControlViewModel.cs" company="Mario">
 //     Mario
@@ -23,6 +23,7 @@ using System.Threading.Tasks;
 using IronyModManager.Common;
 using IronyModManager.Common.Events;
 using IronyModManager.Common.ViewModels;
+using IronyModManager.DI;
 using IronyModManager.Implementation.Actions;
 using IronyModManager.Implementation.AppState;
 using IronyModManager.Implementation.MessageBus;
@@ -30,6 +31,7 @@ using IronyModManager.Implementation.Overlay;
 using IronyModManager.Localization;
 using IronyModManager.Localization.Attributes;
 using IronyModManager.Models.Common;
+using IronyModManager.Platform.Configuration;
 using IronyModManager.Services.Common;
 using IronyModManager.Shared;
 using IronyModManager.Shared.MessageBus.Events;
@@ -51,16 +53,6 @@ namespace IronyModManager.ViewModels.Controls
         /// The block selected
         /// </summary>
         private const string InvalidConflictSolverClass = "InvalidConflictSolver";
-
-        /// <summary>
-        /// The steam launch
-        /// </summary>
-        private const string SteamLaunch = SteamProcess + "://open/main";
-
-        /// <summary>
-        /// The steam process
-        /// </summary>
-        private const string SteamProcess = "steam";
 
         /// <summary>
         /// The application action
@@ -158,6 +150,11 @@ namespace IronyModManager.ViewModels.Controls
         private readonly IShutDownState shutDownState;
 
         /// <summary>
+        /// The steam handler service
+        /// </summary>
+        private readonly ISteamHandlerService steamHandlerService;
+
+        /// <summary>
         /// The definition analyze load handler
         /// </summary>
         private IDisposable definitionAnalyzeLoadHandler = null;
@@ -204,6 +201,7 @@ namespace IronyModManager.ViewModels.Controls
         /// <summary>
         /// Initializes a new instance of the <see cref="ModHolderControlViewModel" /> class.
         /// </summary>
+        /// <param name="steamHandlerService">The steam handler service.</param>
         /// <param name="gameDefinitionLoadProgressHandler">The game definition load progress handler.</param>
         /// <param name="gameIndexProgressHandler">The game index progress handler.</param>
         /// <param name="gameIndexService">The game index service.</param>
@@ -225,7 +223,7 @@ namespace IronyModManager.ViewModels.Controls
         /// <param name="modDefinitionPatchLoadHandler">The mod definition patch load handler.</param>
         /// <param name="gameDirectoryChangedHandler">The game directory changed handler.</param>
         /// <param name="logger">The logger.</param>
-        public ModHolderControlViewModel(GameDefinitionLoadProgressHandler gameDefinitionLoadProgressHandler, GameIndexProgressHandler gameIndexProgressHandler,
+        public ModHolderControlViewModel(ISteamHandlerService steamHandlerService, GameDefinitionLoadProgressHandler gameDefinitionLoadProgressHandler, GameIndexProgressHandler gameIndexProgressHandler,
             IGameIndexService gameIndexService, IPromptNotificationsService promptNotificationsService,
             ModListInstallRefreshRequestHandler modListInstallRefreshRequestHandler, ModDefinitionInvalidReplaceHandler modDefinitionInvalidReplaceHandler,
             IIDGenerator idGenerator, IShutDownState shutDownState, IModService modService, IModPatchCollectionService modPatchCollectionService, IGameService gameService,
@@ -234,7 +232,7 @@ namespace IronyModManager.ViewModels.Controls
             ModDefinitionAnalyzeHandler modDefinitionAnalyzeHandler, ModDefinitionLoadHandler modDefinitionLoadHandler, ModDefinitionPatchLoadHandler modDefinitionPatchLoadHandler,
             GameUserDirectoryChangedHandler gameDirectoryChangedHandler, ILogger logger)
         {
-            // It was supposed to be a small project and I ended up with this mess I seriously need to introduce facades sometime
+            // Oh boy ctor injection really needs some cleanup huge code smell
             this.promptNotificationsService = promptNotificationsService;
             this.modDefinitionInvalidReplaceHandler = modDefinitionInvalidReplaceHandler;
             this.idGenerator = idGenerator;
@@ -254,6 +252,7 @@ namespace IronyModManager.ViewModels.Controls
             this.gameIndexService = gameIndexService;
             this.gameIndexProgressHandler = gameIndexProgressHandler;
             this.gameDefinitionLoadProgressHandler = gameDefinitionLoadProgressHandler;
+            this.steamHandlerService = steamHandlerService;
             InstalledMods = installedModsControlViewModel;
             CollectionMods = collectionModsControlViewModel;
             if (StaticResources.CommandLineOptions != null && StaticResources.CommandLineOptions.EnableResumeGameButton)
@@ -797,23 +796,8 @@ namespace IronyModManager.ViewModels.Controls
             {
                 if (gameService.IsSteamGame(args))
                 {
-                    // Check if process is running
-                    var processes = Process.GetProcesses();
-                    if (!processes.Any(p => p.ProcessName.Equals(SteamProcess, StringComparison.OrdinalIgnoreCase)))
-                    {
-                        await appAction.OpenAsync(SteamLaunch);
-                        var attempts = 0;
-                        while (!processes.Any(p => p.ProcessName.Equals(SteamProcess, StringComparison.OrdinalIgnoreCase)))
-                        {
-                            if (attempts > 5)
-                            {
-                                break;
-                            }
-                            await Task.Delay(3000);
-                            processes = Process.GetProcesses();
-                            attempts++;
-                        }
-                    }
+                    var config = DIResolver.Get<IPlatformConfiguration>().GetOptions();
+                    return await steamHandlerService.LaunchSteamAsync(config.Steam.UseLegacyLaunchMethod, gameService.GetSelected());                    
                 }
                 return true;
             }
