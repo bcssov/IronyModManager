@@ -538,6 +538,10 @@
         "CollectionMergeNotEnoughSpace": {
             "Title": "Nema dovoljno slobodnog prostora",
             "Message": "Nema dovoljno slobodnog prostora za spajanje kolekcije."
+        },
+        "ParadoxLauncherRunning": {
+            "Title": "Paradox Launcher Aktivan",
+            "Message": "Paradox Launcher je pokrenut molimo zatvorite ga prije nego pokušate ovu akciju."
         }
     },
     "Mod_App_Actions": {

@@ -538,6 +538,10 @@
         "CollectionMergeNotEnoughSpace": {
             "Title": "存储空间不足",
             "Message": "没有足够的可用存储空间以执行合并操作。"
+        },
+        "ParadoxLauncherRunning": {
+            "Title": "悖论发射器活跃",
+            "Message": "悖论发射器正在运行，请在尝试此操作之前将其关闭。"
         }
     },
     "Mod_App_Actions": {

@@ -538,6 +538,10 @@
         "CollectionMergeNotEnoughSpace": {
             "Title": "Nicht genügend freier Speicherplatz",
             "Message": "Es ist nicht genügend freier Speicherplatz, um den Zusammenführungsvorgang durchzuführen."
+        },
+        "ParadoxLauncherRunning": {
+            "Title": "Paradox Launcher Active",
+            "Message": "Paradox Launcher läuft, bitte schließen Sie ihn, bevor Sie diese Aktion versuchen."
         }
     },
     "Mod_App_Actions": {
