@@ -1,3 +1,0 @@
-﻿Just to ensure that this directory gets created.
-
-Plugins go into their own separate subdirectory of this folder.
