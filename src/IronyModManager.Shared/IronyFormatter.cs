@@ -4,7 +4,7 @@
 // Created          : 07-10-2022
 //
 // Last Modified By : Mario
-// Last Modified On : 07-10-2022
+// Last Modified On : 07-12-2022
 // ***********************************************************************
 // <copyright file="IronyFormatter.cs" company="Mario">
 //     Mario
@@ -32,16 +32,25 @@ namespace IronyModManager.Shared
 
         #endregion Fields
 
+#nullable enable
+        /// <summary>
+        /// Formats the specified format provider.
+        /// </summary>
+        /// <param name="formatProvider">The format provider.</param>
+        /// <param name="format">The format.</param>
+        /// <param name="args">The arguments.</param>
+        /// <returns>System.String.</returns>
+
+        #region Methods
+
+        public static string Format(IFormatProvider formatProvider, string format, params object?[] args) => smartFormatter.Format(formatProvider, format, args);
+
         /// <summary>
         /// Formats the specified format.
         /// </summary>
         /// <param name="format">The format.</param>
         /// <param name="args">The arguments.</param>
         /// <returns>System.String.</returns>
-#nullable enable
-
-        #region Methods
-
         public static string Format(string format, params object?[] args) => smartFormatter.Format(format, args);
 
 #nullable disable

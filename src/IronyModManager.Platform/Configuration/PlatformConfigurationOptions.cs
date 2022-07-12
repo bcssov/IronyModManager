@@ -4,7 +4,7 @@
 // Created          : 04-16-2021
 //
 // Last Modified By : Mario
-// Last Modified On : 07-11-2022
+// Last Modified On : 07-12-2022
 // ***********************************************************************
 // <copyright file="PlatformConfigurationOptions.cs" company="Mario">
 //     Mario
@@ -29,6 +29,22 @@ namespace IronyModManager.Platform.Configuration
         /// </summary>
         /// <value><c>true</c> if [use inbuilt fonts only]; otherwise, <c>false</c>.</value>
         public bool UseInbuiltFontsOnly { get; set; }
+
+        #endregion Properties
+    }
+
+    /// <summary>
+    /// Class Formatting.
+    /// </summary>
+    public class Formatting
+    {
+        #region Properties
+
+        /// <summary>
+        /// Gets or sets a value indicating whether [use system culture].
+        /// </summary>
+        /// <value><c>true</c> if [use system culture]; otherwise, <c>false</c>.</value>
+        public bool UseSystemCulture { get; set; }
 
         #endregion Properties
     }
@@ -95,6 +111,12 @@ namespace IronyModManager.Platform.Configuration
         /// </summary>
         /// <value>The fonts.</value>
         public Fonts Fonts { get; } = new Fonts();
+
+        /// <summary>
+        /// Gets the formatting.
+        /// </summary>
+        /// <value>The formatting.</value>
+        public Formatting Formatting { get; } = new Formatting();
 
         /// <summary>
         /// Gets the linux options.

@@ -4,15 +4,15 @@
 // Created          : 01-18-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-04-2020
+// Last Modified On : 07-12-2022
 // ***********************************************************************
 // <copyright file="CurrentLocale.cs" company="Mario">
 //     Mario
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
-using System.Collections.Generic;
 using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Threading;
 using IronyModManager.Shared;
@@ -25,6 +25,18 @@ namespace IronyModManager.Localization
     [ExcludeFromCoverage("Locale shouldn't be unit tested.")]
     public static class CurrentLocale
     {
+        #region Constructors
+
+        /// <summary>
+        /// Initializes static members of the <see cref="CurrentLocale"/> class.
+        /// </summary>
+        static CurrentLocale()
+        {
+            InitialCulture = Thread.CurrentThread.CurrentCulture;
+        }
+
+        #endregion Constructors
+
         #region Properties
 
         /// <summary>
@@ -38,6 +50,12 @@ namespace IronyModManager.Localization
         /// </summary>
         /// <value>The current culture.</value>
         public static CultureInfo CurrentCulture { get; private set; }
+
+        /// <summary>
+        /// Gets the initial culture.
+        /// </summary>
+        /// <value>The initial culture.</value>
+        public static CultureInfo InitialCulture { get; private set; }
 
         #endregion Properties
 

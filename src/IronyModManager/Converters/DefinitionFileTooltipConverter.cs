@@ -74,7 +74,7 @@ namespace IronyModManager.Converters
                     if (definition.LastModified.HasValue)
                     {
                         var resource = localizationManager.GetResource(LocalizationResources.Conflict_Solver.Tooltips.DefinitionInfo);
-                        return IronyFormatter.Format(resource, new { definition.File, DateTime = definition.LastModified });
+                        return IronyFormatter.Format(Common.Helpers.GetFormatProvider(), resource, new { definition.File, DateTime = definition.LastModified });
                     }
                     return definition.File;
                 }
