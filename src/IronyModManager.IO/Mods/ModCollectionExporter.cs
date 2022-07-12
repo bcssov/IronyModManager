@@ -189,7 +189,7 @@ namespace IronyModManager.IO.Mods
                 }
             }
             if ((parameters.ExportMods?.Any()).GetValueOrDefault())
-            {                
+            {
                 var prefixDataStream = new MemoryStream(Encoding.UTF8.GetBytes(parameters.ModNameOverride));
                 streams.Add(prefixDataStream);
                 zip.AddEntry(Path.Combine(Common.Constants.ModExportPath, Shared.Constants.ModNamePrefixOverride), prefixDataStream);
@@ -458,6 +458,7 @@ namespace IronyModManager.IO.Mods
                                 mapper.Map(model, importResult);
                                 importResult.ModNames = model.ModNames;
                                 importResult.Descriptors = model.Mods;
+                                importResult.ModIds = model.ModIds;
                                 result = true;
                                 break;
                             }
@@ -512,6 +513,7 @@ namespace IronyModManager.IO.Mods
                             mapper.Map(model, importResult);
                             importResult.ModNames = model.ModNames;
                             importResult.Descriptors = model.Mods;
+                            importResult.ModIds = model.ModIds;
                             result = true;
                             break;
                         }

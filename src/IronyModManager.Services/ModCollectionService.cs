@@ -4,7 +4,7 @@
 // Created          : 03-04-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-26-2022
+// Last Modified On : 07-12-2022
 // ***********************************************************************
 // <copyright file="ModCollectionService.cs" company="Mario">
 //     Mario
@@ -362,7 +362,7 @@ namespace IronyModManager.Services
             });
             if (result != null)
             {
-                MapImportResult(instance, result);
+                MapImportResult(instance, result, false);
                 return instance;
             }
             return null;
@@ -600,7 +600,7 @@ namespace IronyModManager.Services
                 if (result != null)
                 {
                     // Order of operations is very important here
-                    MapImportResult(instance, result);
+                    MapImportResult(instance, result, true);
                     return instance;
                 }
                 return null;
@@ -619,7 +619,8 @@ namespace IronyModManager.Services
         /// </summary>
         /// <param name="modCollection">The mod collection.</param>
         /// <param name="importResult">The import result.</param>
-        protected virtual void MapImportResult(IModCollection modCollection, ICollectionImportResult importResult)
+        /// <param name="importByModIds">if set to <c>true</c> [import by mod ids].</param>
+        protected virtual void MapImportResult(IModCollection modCollection, ICollectionImportResult importResult, bool importByModIds)
         {
             if (!string.IsNullOrWhiteSpace(importResult.Game))
             {
@@ -639,13 +640,15 @@ namespace IronyModManager.Services
             modCollection.Mods = importResult.Descriptors;
             modCollection.Name = importResult.Name;
             modCollection.PatchModEnabled = importResult.PatchModEnabled;
-            if (importResult.ModIds != null && importResult.ModIds.Any())
+            modCollection.ModIds = importResult.ModIds;
+            if (importByModIds && importResult.ModIds != null && importResult.ModIds.Any())
             {
                 var mods = GetInstalledModsInternal(modCollection.Game, false);
                 if (mods.Any())
                 {
                     var sort = importResult.ModIds.ToList();
-                    var collectionMods = mods.Where(p => importResult.ModIds.Contains(p.RemoteId.ToString())).OrderBy(p => sort.IndexOf(p.RemoteId.ToString()));
+                    var collectionMods = mods.Where(p => importResult.ModIds.Any(x => (x.ParadoxId.HasValue && x.ParadoxId.GetValueOrDefault() == p.RemoteId.GetValueOrDefault()) || (x.SteamId.HasValue && x.SteamId.GetValueOrDefault() == p.RemoteId.GetValueOrDefault()))).
+                        OrderBy(p => sort.IndexOf(sort.FirstOrDefault(x => (x.ParadoxId.HasValue && x.ParadoxId.GetValueOrDefault() == p.RemoteId.GetValueOrDefault()) || (x.SteamId.HasValue && x.SteamId.GetValueOrDefault() == p.RemoteId.GetValueOrDefault()))));
                     modCollection.Mods = collectionMods.Select(p => p.DescriptorFile).ToList();
                     modCollection.ModNames = collectionMods.Select(p => p.Name).ToList();
                 }

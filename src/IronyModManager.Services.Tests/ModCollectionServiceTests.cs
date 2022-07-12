@@ -4,7 +4,7 @@
 // Created          : 03-04-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 11-16-2021
+// Last Modified On : 07-12-2022
 // ***********************************************************************
 // <copyright file="ModCollectionServiceTests.cs" company="Mario">
 //     Mario
@@ -1241,7 +1241,7 @@ namespace IronyModManager.Services.Tests
                 ICollectionImportResult result = new CollectionImportResult
                 {
                     Name = "fake",
-                    ModIds = new List<string>() { "1", "2" },
+                    ModIds = new List<IModCollectionSourceInfo>() { new ModCollectionSourceInfo() { SteamId = 1 }, new ModCollectionSourceInfo() { SteamId = 2 } },
                     Game = "fake"
                 };
                 return Task.FromResult(result);

@@ -27,6 +27,7 @@ using DynamicData;
 using IronyModManager.Common;
 using IronyModManager.Common.Events;
 using IronyModManager.Common.ViewModels;
+using IronyModManager.DI;
 using IronyModManager.Implementation;
 using IronyModManager.Implementation.Actions;
 using IronyModManager.Implementation.Hotkey;
@@ -941,16 +942,34 @@ namespace IronyModManager.ViewModels.Controls
         }
 
         /// <summary>
-        /// Assigns the mod collection names.
+        /// Assigns the mod collection export information.
         /// </summary>
         /// <param name="collection">The collection.</param>
-        protected virtual void AssignModCollectionNames(IModCollection collection)
+        protected virtual void AssignModCollectionExportInfo(IModCollection collection)
         {
             if (collection == null)
             {
                 collection = SelectedModCollection;
             }
             collection.ModNames = SelectedMods?.Where(p => p.IsSelected).Select(p => p.Name).ToList();
+            collection.ModIds = SelectedMods?.Where(p => p.IsSelected).Select(p =>
+            {
+                var result = DIResolver.Get<IModCollectionSourceInfo>();
+                switch (p.Source)
+                {
+                    case ModSource.Steam:
+                        result.SteamId = p.RemoteId;
+                        break;
+
+                    case ModSource.Paradox:
+                        result.ParadoxId = p.RemoteId;
+                        break;
+
+                    default:
+                        break;
+                }
+                return result;
+            }).ToList();
         }
 
         /// <summary>
@@ -978,7 +997,7 @@ namespace IronyModManager.ViewModels.Controls
             });
             await TriggerOverlayAsync(id, true, localizationManager.GetResource(LocalizationResources.Collection_Mods.Overlay_Exporting_Message), overlayProgress);
             var collection = modCollectionService.Get(SelectedModCollection.Name);
-            AssignModCollectionNames(collection);
+            AssignModCollectionExportInfo(collection);
             if (providerType == ImportProviderType.ParadoxLauncherJson)
             {
                 await Task.Run(async () => await modCollectionService.ExportParadoxLauncherJsonAsync(path, collection).ConfigureAwait(false)).ConfigureAwait(false);
@@ -1109,7 +1128,8 @@ namespace IronyModManager.ViewModels.Controls
                     collection.IsSelected = true;
                     modNames = collection.ModNames.ToList();
                     // Mod names are only used in export\import operations
-                    collection.ModNames = null;
+                    collection.ModNames = new List<string>();
+                    collection.ModIds = new List<IModCollectionSourceInfo>();
                     if (modCollectionService.Save(collection))
                     {
                         return collection;
@@ -1125,7 +1145,8 @@ namespace IronyModManager.ViewModels.Controls
                     importData.IsSelected = true;
                     modNames = importData.ModNames != null ? importData.ModNames.ToList() : new List<string>();
                     // Mod names are only used in export\import operations
-                    importData.ModNames = null;
+                    importData.ModNames = new List<string>();
+                    importData.ModIds = new List<IModCollectionSourceInfo>();
                     if (modCollectionService.Save(importData))
                     {
                         return Task.FromResult(importData);
