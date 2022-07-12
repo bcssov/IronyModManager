@@ -4,7 +4,7 @@
 // Created          : 02-23-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 05-30-2021
+// Last Modified On : 07-12-2022
 // ***********************************************************************
 // <copyright file="ArchiveFileReader.cs" company="Mario">
 //     Mario
@@ -137,7 +137,7 @@ namespace IronyModManager.IO.Readers
         /// <param name="rootPath">The root path.</param>
         /// <param name="file">The file.</param>
         /// <returns>Stream.</returns>
-        public virtual (Stream, bool) GetStream(string rootPath, string file)
+        public virtual (Stream, bool, DateTime?) GetStream(string rootPath, string file)
         {
             static MemoryStream readStream(Stream entryStream)
             {
@@ -202,14 +202,15 @@ namespace IronyModManager.IO.Readers
                 return null;
             }
 
+            // Return zip file last write time. Zip info can be unreliable if the client which created it actually didn't write the info in the first place (as far as I know)
             try
             {
-                return (getUsingArchiveFactory(), false);
+                return (getUsingArchiveFactory(), false, new System.IO.FileInfo(rootPath).LastWriteTime);
             }
             catch (Exception ex)
             {
                 logger.Error(ex);
-                return (getUsingReaderFactory(), false);
+                return (getUsingReaderFactory(), false, new System.IO.FileInfo(rootPath).LastWriteTime);
             }
         }
 
@@ -270,6 +271,7 @@ namespace IronyModManager.IO.Readers
             void parseUsingReaderFactory()
             {
                 using var fileStream = File.OpenRead(path);
+                var modified = new System.IO.FileInfo(path).LastWriteTime;
                 using var reader = ReaderFactory.Open(fileStream);
                 while (reader.MoveToNextEntry())
                 {
@@ -291,6 +293,7 @@ namespace IronyModManager.IO.Readers
                         }
                         var info = DIResolver.Get<IFileInfo>();
                         info.IsReadOnly = false;
+                        info.LastModified = modified;
                         info.Size = reader.Entry.Size;
                         using var entryStream = reader.OpenEntryStream();
                         using var memoryStream = new MemoryStream();
@@ -320,6 +323,7 @@ namespace IronyModManager.IO.Readers
             void parseUsingArchiveFactory()
             {
                 using var fileStream = File.OpenRead(path);
+                var modified = new System.IO.FileInfo(path).LastWriteTime;
                 using var reader = ArchiveFactory.Open(fileStream);
                 foreach (var entry in reader.Entries.Where(entry => !entry.IsDirectory))
                 {
@@ -338,6 +342,9 @@ namespace IronyModManager.IO.Readers
                         continue;
                     }
                     var info = DIResolver.Get<IFileInfo>();
+                    info.IsReadOnly = false;
+                    info.LastModified = modified;
+                    info.Size = entry.Size;
                     using var entryStream = entry.OpenEntryStream();
                     using var memoryStream = new MemoryStream();
                     entryStream.CopyTo(memoryStream);
