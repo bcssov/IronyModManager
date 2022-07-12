@@ -197,9 +197,11 @@ namespace IronyModManager.Parser
                     if (values.Length == 2)
                     {
                         var ids = values[1].Split(',');
+                        var cleanedIds = new List<string>();
+                        ids.ToList().ForEach(p => cleanedIds.Add(p.Trim()));
                         foreach (var item in definitions)
                         {
-                            if (ids.Any(i => i.Equals(item.Id, StringComparison.OrdinalIgnoreCase)))
+                            if (cleanedIds.Any(i => i.Equals(item.Id, StringComparison.OrdinalIgnoreCase)))
                             {
                                 item.IsPlaceholder = true;
                             }
