@@ -91,6 +91,76 @@ namespace IronyModManager.Parser.Tests
         }
 
         /// <summary>
+        /// Defines the test method Should_mark_all_definitions_as_placholders.
+        /// </summary>
+        [Fact]
+        public void Should_mark_all_definitions_as_placholders()
+        {
+            var defaultParser = new List<IDefaultParser>() { new DefaultParser() };
+            var genericParser = new List<IGenericParser>() { new GenericParser() };
+            var gameParser = new List<IGameParser>() { new PlaceholderFileParser() };
+
+            var manager = new ParserManager(gameParser, genericParser, defaultParser);
+            var result = manager.Parse(new ParserManagerArgs()
+            {
+                File = "fake-game",
+                GameType = "game",
+                Lines = new List<string>()
+                {
+                    Parser.Common.Constants.Scripts.PlaceholderFileComment
+                }
+            });
+            result.ToList().TrueForAll(p => p.IsPlaceholder);
+        }
+
+        /// <summary>
+        /// Defines the test method Should_mark_single_definition_as_placholders.
+        /// </summary>
+        [Fact]
+        public void Should_mark_single_definition_as_placholders()
+        {
+            var defaultParser = new List<IDefaultParser>() { new DefaultParser() };
+            var genericParser = new List<IGenericParser>() { new GenericParser() };
+            var gameParser = new List<IGameParser>() { new PlaceholderFileParser() };
+
+            var manager = new ParserManager(gameParser, genericParser, defaultParser);
+            var result = manager.Parse(new ParserManagerArgs()
+            {
+                File = "fake-game",
+                GameType = "game",
+                Lines = new List<string>()
+                {
+                    Parser.Common.Constants.Scripts.PlaceholderObjectsComment + "id2"
+                }
+            });
+            result.FirstOrDefault(p => p.Id.Equals("id2")).IsPlaceholder.Should().BeTrue();
+            result.Where(p => p.Id != "id2").ToList().TrueForAll(p => !p.IsPlaceholder);
+        }
+
+        /// <summary>
+        /// Defines the test method Should_not_mark_any_definition_as_placholders.
+        /// </summary>
+        [Fact]
+        public void Should_not_mark_any_definition_as_placholders()
+        {
+            var defaultParser = new List<IDefaultParser>() { new DefaultParser() };
+            var genericParser = new List<IGenericParser>() { new GenericParser() };
+            var gameParser = new List<IGameParser>() { new PlaceholderFileParser() };
+
+            var manager = new ParserManager(gameParser, genericParser, defaultParser);
+            var result = manager.Parse(new ParserManagerArgs()
+            {
+                File = "fake-game",
+                GameType = "game",
+                Lines = new List<string>()
+                {
+                    Parser.Common.Constants.Scripts.PlaceholderObjectsComment
+                }
+            });
+            result.ToList().TrueForAll(p => !p.IsPlaceholder);
+        }
+
+        /// <summary>
         /// Class DefaultParser.
         /// Implements the <see cref="IronyModManager.Parser.Default.IDefaultParser" />
         /// Implements the <see cref="IronyModManager.Parser.Common.Parsers.IDefaultParser" />
@@ -212,6 +282,82 @@ namespace IronyModManager.Parser.Tests
             {
                 return new List<IDefinition>() {
                     new Definition() { File = "game_parser" }
+                };
+            }
+        }
+
+        class PlaceholderFileParser : IGameParser
+        {
+            /// <summary>
+            /// Gets the name of the parser.
+            /// </summary>
+            /// <value>The name of the parser.</value>
+            public string ParserName => nameof(GameParser);
+
+            /// <summary>
+            /// Gets the priority.
+            /// </summary>
+            /// <value>The priority.</value>
+            public int Priority => 10;
+
+            /// <summary>
+            /// Determines whether this instance can parse the specified arguments.
+            /// </summary>
+            /// <param name="args">The arguments.</param>
+            /// <returns><c>true</c> if this instance can parse the specified arguments; otherwise, <c>false</c>.</returns>
+            public bool CanParse(CanParseArgs args)
+            {
+                return args.File == "fake-game";
+            }
+
+            /// <summary>
+            /// Parses the specified arguments.
+            /// </summary>
+            /// <param name="args">The arguments.</param>
+            /// <returns>IEnumerable&lt;IDefinition&gt;.</returns>
+            public IEnumerable<IDefinition> Parse(ParserArgs args)
+            {
+                return new List<IDefinition>() {
+                    new Definition() { File = "game_parser", Id = "id1" },
+                    new Definition() { File = "game_parser2", Id = "id2" }
+                };
+            }
+        }
+
+        class PlaceholderObjectParser : IGameParser
+        {
+            /// <summary>
+            /// Gets the name of the parser.
+            /// </summary>
+            /// <value>The name of the parser.</value>
+            public string ParserName => nameof(GameParser);
+
+            /// <summary>
+            /// Gets the priority.
+            /// </summary>
+            /// <value>The priority.</value>
+            public int Priority => 10;
+
+            /// <summary>
+            /// Determines whether this instance can parse the specified arguments.
+            /// </summary>
+            /// <param name="args">The arguments.</param>
+            /// <returns><c>true</c> if this instance can parse the specified arguments; otherwise, <c>false</c>.</returns>
+            public bool CanParse(CanParseArgs args)
+            {
+                return args.File == "fake-game";
+            }
+
+            /// <summary>
+            /// Parses the specified arguments.
+            /// </summary>
+            /// <param name="args">The arguments.</param>
+            /// <returns>IEnumerable&lt;IDefinition&gt;.</returns>
+            public IEnumerable<IDefinition> Parse(ParserArgs args)
+            {
+                return new List<IDefinition>() {
+                    new Definition() { File = "game_parser", Id = "id1" },
+                    new Definition() { File = "game_parser2", Id = "id2" }
                 };
             }
         }
