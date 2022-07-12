@@ -4,7 +4,7 @@
 // Created          : 10-26-2021
 //
 // Last Modified By : Mario
-// Last Modified On : 10-27-2021
+// Last Modified On : 07-13-2022
 // ***********************************************************************
 // <copyright file="Parser.cs" company="Mario">
 //     Mario
@@ -12,6 +12,7 @@
 // <summary></summary>
 // ***********************************************************************
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -35,6 +36,11 @@ namespace IronyModManager.Parser.Mod.Search
         /// The name property
         /// </summary>
         private const string NameProperty = "name";
+
+        /// <summary>
+        /// The or statement separator
+        /// </summary>
+        private const string OrStatementSeparator = "||";
 
         /// <summary>
         /// The statement separator
@@ -88,10 +94,28 @@ namespace IronyModManager.Parser.Mod.Search
         /// <returns>ISearchParserResult.</returns>
         public ISearchParserResult Parse(string locale, string text)
         {
+            IList<string> parseOrStatements(string text)
+            {
+                var list = new List<string>();
+                if (!string.IsNullOrWhiteSpace(text))
+                {
+                    if (text.Contains(OrStatementSeparator))
+                    {
+                        var split = text.Split(OrStatementSeparator, StringSplitOptions.RemoveEmptyEntries).ToList();
+                        split.ForEach(x => list.Add(x.Trim()));
+                    }
+                    else
+                    {
+                        list.Add(text);
+                    }
+                }
+                return list;
+            }
+
             if (string.IsNullOrWhiteSpace(text))
             {
                 var result = DIResolver.Get<ISearchParserResult>();
-                result.Name = (text ?? string.Empty).ToLowerInvariant().Trim();
+                result.Name = parseOrStatements((text ?? string.Empty).ToLowerInvariant().Trim());
                 return result;
             }
             try
@@ -123,7 +147,6 @@ namespace IronyModManager.Parser.Mod.Search
                     var result = DIResolver.Get<ISearchParserResult>();
                     foreach (var item in tokens)
                     {
-                        object value;
                         string field = item.Key;
                         var converter = converters.FirstOrDefault(x =>
                         {
@@ -137,22 +160,32 @@ namespace IronyModManager.Parser.Mod.Search
                         });
                         if (converter != null)
                         {
-                            value = converter.Convert(locale, item.Value);
                             var property = GetProperties().FirstOrDefault(p => p.CanRead && ((Common.Mod.Search.DescriptorPropertyAttribute)Attribute.GetCustomAttribute(p, typeof(Common.Mod.Search.DescriptorPropertyAttribute), true)).PropertyName == field);
                             if (property != null && property.CanWrite)
                             {
-                                property.SetValue(result, value);
+                                var attribute = property.GetCustomAttribute(typeof(Common.Mod.Search.DescriptorPropertyAttribute), true) as Common.Mod.Search.DescriptorPropertyAttribute;
+                                if (attribute.IsList)
+                                {
+                                    var values = parseOrStatements(item.Value);
+                                    var col = property.GetValue(result, null) as IList;
+                                    foreach (var val in values)
+                                    {
+                                        var value = converter.Convert(locale, val);
+                                        col.Add(value);
+                                    }
+                                }
+                                else
+                                {
+                                    var value = converter.Convert(locale, item.Value);
+                                    property.SetValue(result, value);
+                                }
                                 nothingSet = false;
                             }
                         }
                         else
                         {
-                            result.Name = item.Value;
+                            result.Name = parseOrStatements(item.Value);
                         }
-                    }
-                    if (string.IsNullOrWhiteSpace(result.Name))
-                    {
-                        result.Name = string.Empty;
                     }
                     if (!nothingSet)
                     {
@@ -165,7 +198,7 @@ namespace IronyModManager.Parser.Mod.Search
                 logger.Error(ex);
             }
             var emptyResult = DIResolver.Get<ISearchParserResult>();
-            emptyResult.Name = text.ToLowerInvariant().Trim();
+            emptyResult.Name = parseOrStatements(text.ToLowerInvariant().Trim());
             return emptyResult;
         }
 

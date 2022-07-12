@@ -4,7 +4,7 @@
 // Created          : 10-24-2021
 //
 // Last Modified By : Mario
-// Last Modified On : 10-26-2021
+// Last Modified On : 07-13-2022
 // ***********************************************************************
 // <copyright file="SearchParserResult.cs" company="Mario">
 //     Mario
@@ -25,16 +25,20 @@ namespace IronyModManager.Parser.Mod.Search
     /// <seealso cref="IronyModManager.Parser.Common.Mod.Search.ISearchParserResult" />
     public class SearchParserResult : ISearchParserResult
     {
+#nullable enable
+
         #region Constructors
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="SearchParserResult"/> class.
+        /// Initializes a new instance of the <see cref="SearchParserResult" /> class.
         /// </summary>
         public SearchParserResult()
         {
             AchievementCompatible = new BoolFilterResult(null);
             IsSelected = new BoolFilterResult(null);
-            Source = new SourceTypeResult(SourceType.None);
+            Source = new List<SourceTypeResult>();
+            Version = new List<Version?>();
+            Name = new List<string>();
         }
 
         #endregion Constructors
@@ -59,23 +63,21 @@ namespace IronyModManager.Parser.Mod.Search
         /// Gets or sets the name.
         /// </summary>
         /// <value>The name.</value>
-        public string Name { get; set; }
+        public IList<string> Name { get; set; }
 
         /// <summary>
         /// Gets or sets the source.
         /// </summary>
         /// <value>The source.</value>
-        [DescriptorProperty(Fields.Source)]
-        public SourceTypeResult Source { get; set; }
-
-#nullable enable
+        [DescriptorProperty(Fields.Source, true)]
+        public IList<SourceTypeResult> Source { get; set; }
 
         /// <summary>
         /// Gets or sets the version.
         /// </summary>
         /// <value>The version.</value>
-        [DescriptorProperty(Fields.Version)]
-        public Version? Version { get; set; }
+        [DescriptorProperty(Fields.Version, true)]
+        public IList<Version?> Version { get; set; }
 
         #endregion Properties
 
