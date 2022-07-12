@@ -503,6 +503,11 @@ namespace IronyModManager.Shared
                 public const string RegularModeIgnoredOnly = Prefix + "RegularModeIgnoredOnly";
                 public const string ListOfConflictsFormat = Prefix + "ListOfConflictsFormat";
             }
+            public static class Tooltips
+            {
+                public const string Prefix = "Conflict_Solver.Tooltips.";
+                public const string DefinitionInfo = Prefix + "DefinitionInfo";
+            }
         }
         public static class ConflictIgnore
         {
