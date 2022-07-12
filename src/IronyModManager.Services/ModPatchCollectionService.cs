@@ -455,6 +455,7 @@ namespace IronyModManager.Services
                     copy.AdditionalFileNames = fileNames;
                     copy.ExistsInLastFile = true;
                     copy.IsFromGame = lastMod.IsFromGame;
+                    copy.LastModified = null;
                     indexedConflicts.AddToMap(copy);
                     indexedDefinitions.AddToMap(copy);
                     conflicts.Add(copy);

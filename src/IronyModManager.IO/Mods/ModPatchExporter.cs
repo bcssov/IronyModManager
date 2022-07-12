@@ -565,6 +565,7 @@ namespace IronyModManager.IO.Mods
             newInstance.ResetType = original.ResetType;
             newInstance.FileNameSuffix = original.FileNameSuffix;
             newInstance.IsPlaceholder = original.IsPlaceholder;
+            newInstance.LastModified = original.LastModified;
             return newInstance;
         }
 
