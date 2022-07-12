@@ -4,7 +4,7 @@
 // Created          : 08-12-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 01-16-2022
+// Last Modified On : 07-12-2022
 // ***********************************************************************
 // <copyright file="ParadoxLauncherImporter.cs" company="Mario">
 //     Mario
@@ -20,6 +20,7 @@ using System.Threading.Tasks;
 using IronyModManager.DI;
 using IronyModManager.IO.Common.Models;
 using IronyModManager.IO.Common.Mods;
+using IronyModManager.Models.Common;
 using IronyModManager.Shared;
 using Microsoft.Data.Sqlite;
 using RepoDb;
@@ -113,7 +114,19 @@ namespace IronyModManager.IO.Mods.Importers
                             // Will need to lookup the game and mod ids in the mod service
                             result.Game = model.Game;
                             var mods = model.Mods.Where(p => p.Enabled).OrderBy(p => p.Position);
-                            result.ModIds = mods.Select(p => !string.IsNullOrWhiteSpace(p.PdxId) ? p.PdxId : p.SteamId).ToList();
+                            result.ModIds = mods.Select(p =>
+                            {
+                                var result = DIResolver.Get<IModCollectionSourceInfo>();
+                                if (long.TryParse(p.PdxId, out var pdxid))
+                                {
+                                    result.ParadoxId = pdxid;
+                                }
+                                if (long.TryParse(p.SteamId, out var steamId))
+                                {
+                                    result.SteamId = steamId;
+                                }
+                                return result;
+                            }).ToList();
                             return (null, result);
                         }
                     }
@@ -141,7 +154,19 @@ namespace IronyModManager.IO.Mods.Importers
                         // Will need to lookup the game and mod ids in the mod service
                         result.Game = model.Game;
                         var mods = model.Mods.Where(p => p.Enabled).OrderBy(p => p.Position);
-                        result.ModIds = mods.Select(p => !string.IsNullOrWhiteSpace(p.PdxId) ? p.PdxId : p.SteamId).ToList();
+                        result.ModIds = mods.Select(p =>
+                        {
+                            var result = DIResolver.Get<IModCollectionSourceInfo>();
+                            if (long.TryParse(p.PdxId, out var pdxid))
+                            {
+                                result.ParadoxId = pdxid;
+                            }
+                            if (long.TryParse(p.SteamId, out var steamId))
+                            {
+                                result.SteamId = steamId;
+                            }
+                            return result;
+                        }).ToList();
                         return (null, result);
                     }
                 }
