@@ -4,7 +4,7 @@
 // Created          : 02-19-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 01-28-2022
+// Last Modified On : 07-12-2022
 // ***********************************************************************
 // <copyright file="ParserManager.cs" company="Mario">
 //     Mario
@@ -175,6 +175,43 @@ namespace IronyModManager.Parser
         }
 
         /// <summary>
+        /// Evaluates for placeholders.
+        /// </summary>
+        /// <param name="definitions">The definitions.</param>
+        /// <param name="lines">The lines.</param>
+        private void EvaluateForPlaceholders(IEnumerable<IDefinition> definitions, IEnumerable<string> lines)
+        {
+            if (lines != null)
+            {
+                if (lines.Any(p => !string.IsNullOrEmpty(p) && p.Contains(Constants.Scripts.PlaceholderFileComment, StringComparison.OrdinalIgnoreCase)))
+                {
+                    foreach (var item in definitions)
+                    {
+                        item.IsPlaceholder = true;
+                    }
+                }
+                else if (lines.Any(p => !string.IsNullOrEmpty(p) && p.Contains(Constants.Scripts.PlaceholderObjectsComment, StringComparison.OrdinalIgnoreCase)))
+                {
+                    var placeholderLine = lines.FirstOrDefault(p => p.Contains(Constants.Scripts.PlaceholderObjectsComment));
+                    var values = placeholderLine.Split(':');
+                    if (values.Length == 2)
+                    {
+                        var ids = values[1].Split(',');
+                        var cleanedIds = new List<string>();
+                        ids.ToList().ForEach(p => cleanedIds.Add(p.Trim()));
+                        foreach (var item in definitions)
+                        {
+                            if (cleanedIds.Any(i => i.Equals(item.Id, StringComparison.OrdinalIgnoreCase)))
+                            {
+                                item.IsPlaceholder = true;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        /// <summary>
         /// Gets the preferred parser.
         /// </summary>
         /// <param name="game">The game.</param>
@@ -266,6 +303,7 @@ namespace IronyModManager.Parser
             {
                 result = preferredParser.Parse(parseArgs);
                 SetAdditionalData(result, preferredParser.ParserName);
+                EvaluateForPlaceholders(result, args.Lines);
             }
             else
             {
@@ -274,6 +312,7 @@ namespace IronyModManager.Parser
                 {
                     result = gameParser.Parse(parseArgs);
                     SetAdditionalData(result, gameParser.ParserName);
+                    EvaluateForPlaceholders(result, args.Lines);
                 }
                 else
                 {
@@ -282,12 +321,14 @@ namespace IronyModManager.Parser
                     {
                         result = genericParser.Parse(parseArgs);
                         SetAdditionalData(result, genericParser.ParserName);
+                        EvaluateForPlaceholders(result, args.Lines);
                     }
                     else
                     {
                         var parser = defaultParsers.FirstOrDefault(p => p.CanParse(canParseArgs));
                         result = parser.Parse(parseArgs);
                         SetAdditionalData(result, parser.ParserName);
+                        EvaluateForPlaceholders(result, args.Lines);
                     }
                 }
             }

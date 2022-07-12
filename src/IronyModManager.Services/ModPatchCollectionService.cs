@@ -4,7 +4,7 @@
 // Created          : 05-26-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-27-2022
+// Last Modified On : 07-12-2022
 // ***********************************************************************
 // <copyright file="ModPatchCollectionService.cs" company="Mario">
 //     Mario
@@ -574,10 +574,44 @@ namespace IronyModManager.Services
 
             messageBus.Publish(new ModDefinitionAnalyzeEvent(99.9));
             var groupedConflicts = conflicts.GroupBy(p => p.TypeAndId);
+            var filteredConclicts = new List<IDefinition>();
+            foreach (var conflict in groupedConflicts.Where(p => p.Count() > 1))
+            {
+                if (conflict.Any(p => p.IsPlaceholder))
+                {
+                    // Ignore all placeholders
+                    if (!conflict.All(p => p.IsPlaceholder))
+                    {
+                        var priority = EvalDefinitionPriority(conflict.OrderBy(m => modOrder.IndexOf(m.ModName)));
+                        // If priority definition is placeholder then we need to show this as the mod author messed up or Irony messed up
+                        if (priority.Definition.IsPlaceholder)
+                        {
+                            var nonPlaceholders = conflict.Where(p => !p.IsPlaceholder).ToList();
+                            nonPlaceholders.Add(priority.Definition);
+                            if (nonPlaceholders.Count() > 1)
+                            {
+                                filteredConclicts.AddRange(nonPlaceholders);
+                            }
+                        }
+                        else
+                        {
+                            var nonPlaceholders = conflict.Where(p => !p.IsPlaceholder);
+                            if (nonPlaceholders.Count() > 1)
+                            {
+                                filteredConclicts.AddRange(nonPlaceholders);
+                            }
+                        }
+                    }
+                }
+                else
+                {
+                    filteredConclicts.AddRange(conflict);
+                }
+            }
             var result = GetModelInstance<IConflictResult>();
             result.Mode = patchStateMode;
             var conflictsIndexed = DIResolver.Get<IIndexedDefinitions>();
-            conflictsIndexed.InitMap(groupedConflicts.Where(p => p.Count() > 1).SelectMany(p => p), true);
+            conflictsIndexed.InitMap(filteredConclicts, true);
             result.AllConflicts = indexedDefinitions;
             result.Conflicts = conflictsIndexed;
             var resolvedConflicts = DIResolver.Get<IIndexedDefinitions>();
@@ -1777,6 +1811,11 @@ namespace IronyModManager.Services
                                             }
                                         }
                                         item.AdditionalFileNames = fileNames;
+                                        if (item.IsPlaceholder)
+                                        {
+                                            // Uncheck placeholder mark as there's a duplicate which is not marked as placeholder
+                                            item.IsPlaceholder = false;
+                                        }
                                     }
                                     item.ExistsInLastFile = existsInLastFile(item);
                                     conflicts.Add(item);
@@ -2446,6 +2485,7 @@ namespace IronyModManager.Services
             copy.OriginalFileName = definition.OriginalFileName;
             copy.ResetType = definition.ResetType;
             copy.FileNameSuffix = definition.FileNameSuffix;
+            copy.IsPlaceholder = definition.IsPlaceholder;
             return copy;
         }
 

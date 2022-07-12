@@ -4,7 +4,7 @@
 // Created          : 02-16-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 05-12-2022
+// Last Modified On : 07-12-2022
 // ***********************************************************************
 // <copyright file="Constants.cs" company="Mario">
 //     Mario
@@ -408,6 +408,16 @@ namespace IronyModManager.Parser.Common
             /// The opening bracket
             /// </summary>
             public const char OpenObject = '{';
+
+            /// <summary>
+            /// The placeholder file comment
+            /// </summary>
+            public const string PlaceholderFileComment = "# Irony this is a placeholder file please ignore it";
+
+            /// <summary>
+            /// The placeholder objects comment
+            /// </summary>
+            public const string PlaceholderObjectsComment = "# Irony these are placeholder objects please ignore them:";
 
             /// <summary>
             /// The quote
