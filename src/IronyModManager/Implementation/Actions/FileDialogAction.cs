@@ -4,7 +4,7 @@
 // Created          : 03-09-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 09-30-2020
+// Last Modified On : 07-12-2022
 // ***********************************************************************
 // <copyright file="FileDialogAction.cs" company="Mario">
 //     Mario
@@ -137,7 +137,20 @@ namespace IronyModManager.Implementation.Actions
         /// <returns>System.String.</returns>
         private string GetInitialDirectory()
         {
-            return AppDomain.CurrentDomain.BaseDirectory;
+            var path = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+            if (string.IsNullOrWhiteSpace(path))
+            {
+                path = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
+            }
+            if (string.IsNullOrWhiteSpace(path))
+            {
+                path = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
+            }
+            if (string.IsNullOrWhiteSpace(path))
+            {
+                path = AppDomain.CurrentDomain.BaseDirectory;
+            }
+            return path;
         }
 
         #endregion Methods
