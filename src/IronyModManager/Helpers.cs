@@ -4,7 +4,7 @@
 // Created          : 05-12-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 01-27-2022
+// Last Modified On : 07-12-2022
 // ***********************************************************************
 // <copyright file="Helpers.cs" company="Mario">
 //     Mario
@@ -36,7 +36,7 @@ namespace IronyModManager
         public static int CalculatePopupCenterPosition(double size, double otherSize, double offset)
         {
             var center = size / 2d;
-            var value = 0;
+            int value;
             if (!double.IsNaN(otherSize) && otherSize > 0)
             {
                 value = Convert.ToInt32(otherSize / 2d - center);

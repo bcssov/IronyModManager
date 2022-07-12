@@ -4,7 +4,7 @@
 // Created          : 02-24-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-26-2022
+// Last Modified On : 07-12-2022
 // ***********************************************************************
 // <copyright file="ModService.cs" company="Mario">
 //     Mario
@@ -18,6 +18,7 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
+using IronyModManager.DI;
 using IronyModManager.IO.Common.Mods;
 using IronyModManager.IO.Common.Readers;
 using IronyModManager.Models.Common;
@@ -255,13 +256,13 @@ namespace IronyModManager.Services
             {
                 return collection;
             }
-            var parameters = searchParser.Parse(languageService.GetSelected().Abrv, text);
-            var result = collection.Where(p => p.Name.Contains(parameters.Name, StringComparison.InvariantCultureIgnoreCase) ||
-                    (p.RemoteId.HasValue && p.RemoteId.GetValueOrDefault().ToString().Contains(parameters.Name)))
+            var parameters = CleanSearchResult(searchParser.Parse(languageService.GetSelected().Abrv, text));
+            var result = collection.ConditionalFilter(parameters.Name.Any(), x => x.Where(p => parameters.Name.Any(x => p.Name.Contains(x, StringComparison.OrdinalIgnoreCase)) ||
+                    (p.RemoteId.HasValue && parameters.Name.Any(x => p.RemoteId.GetValueOrDefault().ToString().Contains(x, StringComparison.OrdinalIgnoreCase)))))
                     .ConditionalFilter(parameters.AchievementCompatible.Result.HasValue, x => x.Where(p => p.AchievementStatus == (parameters.AchievementCompatible.Result.GetValueOrDefault() ? AchievementStatus.Compatible : AchievementStatus.NotCompatible)))
                     .ConditionalFilter(parameters.IsSelected.Result.HasValue, x => x.Where(p => p.IsSelected == parameters.IsSelected.Result.GetValueOrDefault()))
-                    .ConditionalFilter(parameters.Source.Result != SourceType.None, x => x.Where(p => p.Source == SourceTypeToModSource(parameters.Source.Result)))
-                    .ConditionalFilter(parameters.Version != null, x => x.Where(p => p.VersionData > parameters.Version));
+                    .ConditionalFilter(parameters.Source.Any(), x => x.Where(p => parameters.Source.Any(s => p.Source == SourceTypeToModSource(s.Result))))
+                    .ConditionalFilter(parameters.Version.Any(), x => x.Where(p => parameters.Version.Any(s => p.VersionData > s)));
             return result.ToList();
         }
 
@@ -279,14 +280,14 @@ namespace IronyModManager.Services
             {
                 return null;
             }
-            var parameters = searchParser.Parse(languageService.GetSelected().Abrv, text);
+            var parameters = CleanSearchResult(searchParser.Parse(languageService.GetSelected().Abrv, text));
             var result = !reverse ? collection.Skip(skipIndex.GetValueOrDefault()) : collection.Reverse().Skip(skipIndex.GetValueOrDefault());
-            result = result.Where(p => p.Name.Contains(parameters.Name, StringComparison.InvariantCultureIgnoreCase) ||
-                    (p.RemoteId.HasValue && p.RemoteId.GetValueOrDefault().ToString().Contains(parameters.Name)))
+            result = result.ConditionalFilter(parameters.Name.Any(), x => x.Where(p => parameters.Name.Any(x => p.Name.Contains(x, StringComparison.OrdinalIgnoreCase)) ||
+                    (p.RemoteId.HasValue && parameters.Name.Any(x => p.RemoteId.GetValueOrDefault().ToString().Contains(x, StringComparison.OrdinalIgnoreCase)))))
                     .ConditionalFilter(parameters.AchievementCompatible.Result.HasValue, x => x.Where(p => p.AchievementStatus == (parameters.AchievementCompatible.Result.GetValueOrDefault() ? AchievementStatus.Compatible : AchievementStatus.NotCompatible)))
                     .ConditionalFilter(parameters.IsSelected.Result.HasValue, x => x.Where(p => p.IsSelected == parameters.IsSelected.Result.GetValueOrDefault()))
-                    .ConditionalFilter(parameters.Source.Result != SourceType.None, x => x.Where(p => p.Source == SourceTypeToModSource(parameters.Source.Result)))
-                    .ConditionalFilter(parameters.Version != null, x => x.Where(p => p.VersionData > parameters.Version));
+                    .ConditionalFilter(parameters.Source.Any(), x => x.Where(p => parameters.Source.Any(s => p.Source == SourceTypeToModSource(s.Result))))
+                    .ConditionalFilter(parameters.Version.Any(), x => x.Where(p => parameters.Version.Any(s => p.VersionData > s)));
             return result.FirstOrDefault();
         }
 
@@ -618,6 +619,22 @@ namespace IronyModManager.Services
             return mod.DescriptorFile.Equals(otherMod.DescriptorFile, StringComparison.OrdinalIgnoreCase) && mod.Version.Equals(otherMod.Version) &&
                 mod.Name.Equals(otherMod.Name) && mod.Dependencies.ListsSame(otherMod.Dependencies) && mod.RemoteId.GetValueOrDefault().Equals(otherMod.RemoteId.GetValueOrDefault()) &&
                 mod.ReplacePath.ListsSame(otherMod.ReplacePath) && mod.UserDir.ListsSame(otherMod.UserDir);
+        }
+
+        /// <summary>
+        /// Cleans the search result.
+        /// </summary>
+        /// <param name="parserResult">The parser result.</param>
+        /// <returns>ISearchParserResult.</returns>
+        protected virtual ISearchParserResult CleanSearchResult(ISearchParserResult parserResult)
+        {
+            var result = DIResolver.Get<ISearchParserResult>();
+            result.AchievementCompatible = parserResult.AchievementCompatible;
+            result.Source = parserResult.Source.Where(p => p.Result != SourceType.None).ToList();
+            result.Version = parserResult.Version.Where(p => p != null).ToList();
+            result.IsSelected = parserResult.IsSelected;
+            result.Name = parserResult.Name.Where(p => !string.IsNullOrWhiteSpace(p)).ToList();
+            return result;
         }
 
         /// <summary>
