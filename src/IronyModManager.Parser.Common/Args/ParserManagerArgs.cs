@@ -4,7 +4,7 @@
 // Created          : 02-19-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 01-28-2022
+// Last Modified On : 07-12-2022
 // ***********************************************************************
 // <copyright file="ParserManagerArgs.cs" company="Mario">
 //     Mario
@@ -34,6 +34,12 @@ namespace IronyModManager.Parser.Common.Args
         /// </summary>
         /// <value>The file.</value>
         public string File { get; set; }
+
+        /// <summary>
+        /// Gets or sets the file last modified.
+        /// </summary>
+        /// <value>The file last modified.</value>
+        public DateTime? FileLastModified { get; set; }
 
         /// <summary>
         /// Gets or sets the type of the game.

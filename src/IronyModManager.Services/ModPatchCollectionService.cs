@@ -2449,7 +2449,8 @@ namespace IronyModManager.Services
                     GameType = game.Type,
                     Lines = fileInfo.Content,
                     ModDependencies = modObject.Dependencies,
-                    ModName = modObject.Name
+                    ModName = modObject.Name,
+                    FileLastModified = fileInfo.LastModified
                 });
                 MergeDefinitions(fileDefs);
                 definitions.AddRange(fileDefs);
