@@ -455,6 +455,7 @@ namespace IronyModManager.Services
                     copy.AdditionalFileNames = fileNames;
                     copy.ExistsInLastFile = true;
                     copy.IsFromGame = lastMod.IsFromGame;
+                    copy.LastModified = null;
                     indexedConflicts.AddToMap(copy);
                     indexedDefinitions.AddToMap(copy);
                     conflicts.Add(copy);
@@ -2448,7 +2449,8 @@ namespace IronyModManager.Services
                     GameType = game.Type,
                     Lines = fileInfo.Content,
                     ModDependencies = modObject.Dependencies,
-                    ModName = modObject.Name
+                    ModName = modObject.Name,
+                    FileLastModified = fileInfo.LastModified
                 });
                 MergeDefinitions(fileDefs);
                 definitions.AddRange(fileDefs);

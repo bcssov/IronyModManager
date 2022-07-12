@@ -382,6 +382,9 @@
             "RegularModeResolvedOnly": "一些冲突由于模组变更而被重置。以下为被重置的已处理的冲突：{NewLine}{NewLine}{ListOfConflictsResolved}",
             "RegularModeIgnoredOnly": "一些冲突由于模组变更而被重置。以下为被重置的已忽略的冲突：{NewLine}{NewLine}{ListOfConflictsIgnored}",
             "ListOfConflictsFormat": "{ParentDirectory}：{Name}"
+        },
+        "Tooltips": {
+            "DefinitionInfo": "文件：{File}修改：{DateTime}"
         }
     },
     "ConflictIgnore": {

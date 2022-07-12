@@ -287,12 +287,12 @@ namespace IronyModManager.IO.Tests
             /// <param name="rootPath">The root path.</param>
             /// <param name="file">The file.</param>
             /// <returns>Stream.</returns>
-            public (Stream, bool) GetStream(string rootPath, string file)
+            public (Stream, bool, DateTime?) GetStream(string rootPath, string file)
             {
                 var ms = new MemoryStream();
                 var sw = new StreamWriter(ms);
                 sw.Write("fake1");
-                return (ms, false);
+                return (ms, false, null);
             }
 
             /// <summary>
@@ -377,12 +377,12 @@ namespace IronyModManager.IO.Tests
             /// <param name="rootPath">The root path.</param>
             /// <param name="file">The file.</param>
             /// <returns>Stream.</returns>
-            public (Stream, bool) GetStream(string rootPath, string file)
+            public (Stream, bool, DateTime?) GetStream(string rootPath, string file)
             {
                 var ms = new MemoryStream();
                 var sw = new StreamWriter(ms);
                 sw.Write("fake1");
-                return (ms, false);
+                return (ms, false, null);
             }
 
             /// <summary>

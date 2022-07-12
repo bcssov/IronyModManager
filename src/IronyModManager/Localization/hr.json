@@ -382,6 +382,9 @@
             "RegularModeResolvedOnly": "Neki sukobi su resetirali zbog promjena u modu. Ovo su resetirani riješeni sukobi:{NewLine}{NewLine}{ListOfConflictsResolved}",
             "RegularModeIgnoredOnly": "Neki sukobi su resetirali zbog promjena u modu. Ovo su resetirani zanemareni sukobi:{NewLine}{NewLine}{ListOfConflictsIgnored}",
             "ListOfConflictsFormat": "{ParentDirectory}: {Name}"
+        },
+        "Tooltips": {
+            "DefinitionInfo": "Datoteka:{File} modificirano:{DateTime}"
         }
     },
     "ConflictIgnore": {

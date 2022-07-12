@@ -480,6 +480,13 @@ namespace IronyModManager.Parser.Definitions
         public bool IsPlaceholder { get; set; }
 
         /// <summary>
+        /// Gets or sets the last modified.
+        /// </summary>
+        /// <value>The last modified.</value>
+        [JsonIgnore]
+        public DateTime? LastModified { get; set; }
+
+        /// <summary>
         /// Gets or sets the name of the mod.
         /// </summary>
         /// <value>The name of the mod.</value>
@@ -763,6 +770,7 @@ namespace IronyModManager.Parser.Definitions
                 nameof(ResetType) => ResetType,
                 nameof(FileNameSuffix) => FileNameSuffix,
                 nameof(IsPlaceholder) => IsPlaceholder,
+                nameof(LastModified) => LastModified,
                 _ => Id
             };
         }

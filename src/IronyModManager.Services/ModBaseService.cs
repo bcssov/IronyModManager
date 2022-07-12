@@ -199,6 +199,7 @@ namespace IronyModManager.Services
             newDefinition.ResetType = definition.ResetType;
             newDefinition.FileNameSuffix = definition.FileNameSuffix;
             newDefinition.IsPlaceholder = definition.IsPlaceholder;
+            newDefinition.LastModified = definition.LastModified;
             return newDefinition;
         }
 

@@ -171,6 +171,13 @@ namespace IronyModManager.Shared.Models
         bool IsPlaceholder { get; set; }
 
         /// <summary>
+        /// Gets or sets the last modified.
+        /// </summary>
+        /// <value>The last modified.</value>
+        [JsonIgnore]
+        DateTime? LastModified { get; set; }
+
+        /// <summary>
         /// Gets or sets the name of the mod.
         /// </summary>
         /// <value>The name of the mod.</value>

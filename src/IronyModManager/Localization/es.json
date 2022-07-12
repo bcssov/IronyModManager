@@ -382,6 +382,9 @@
             "RegularModeResolvedOnly": "Algunos conflictos se restablecieron debido a cambios de mod. Estos se restablecieron en conflictos resueltos:{NewLine}{NewLine}{ListOfConflictsResolved}",
             "RegularModeIgnoredOnly": "Algunos conflictos se restablecieron debido a cambios de mod. Se restablecieron los conflictos ignorados:{NewLine}{NewLine}{ListOfConflictsIgnored}",
             "ListOfConflictsFormat": "{ParentDirectory}: {Name}"
+        },
+        "Tooltips": {
+            "DefinitionInfo": "Archivo:{File} modificado:{DateTime}"
         }
     },
     "ConflictIgnore": {

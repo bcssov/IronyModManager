@@ -4,7 +4,7 @@
 // Created          : 02-23-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 08-29-2021
+// Last Modified On : 07-12-2022
 // ***********************************************************************
 // <copyright file="DiskFileReader.cs" company="Mario">
 //     Mario
@@ -97,7 +97,7 @@ namespace IronyModManager.IO
         /// <param name="rootPath">The root path.</param>
         /// <param name="file">The file.</param>
         /// <returns>Stream.</returns>
-        public virtual (Stream, bool) GetStream(string rootPath, string file)
+        public virtual (Stream, bool, DateTime?) GetStream(string rootPath, string file)
         {
             static FileStream readStream(string path)
             {
@@ -110,7 +110,10 @@ namespace IronyModManager.IO
                 var files = Directory.EnumerateFiles(rootPath, file, SearchOption.TopDirectoryOnly);
                 if (files.Any())
                 {
-                    return (readStream(files.First()), new System.IO.FileInfo(files.First()).IsReadOnly);
+                    var fInfo = new System.IO.FileInfo(files.First());
+                    var isreadOnly = fInfo.IsReadOnly;
+                    var modified = fInfo.LastWriteTime;
+                    return (readStream(files.First()), isreadOnly, modified);
                 }
             }
             else
@@ -118,10 +121,13 @@ namespace IronyModManager.IO
                 var fullPath = Path.Combine(rootPath, file);
                 if (File.Exists(fullPath))
                 {
-                    return (readStream(fullPath), new System.IO.FileInfo(fullPath).IsReadOnly);
+                    var fInfo = new System.IO.FileInfo(fullPath);
+                    var isreadOnly = fInfo.IsReadOnly;
+                    var modified = fInfo.LastWriteTime;
+                    return (readStream(fullPath), isreadOnly, modified);
                 }
             }
-            return (null, false);
+            return (null, false, null);
         }
 
         /// <summary>
@@ -177,6 +183,7 @@ namespace IronyModManager.IO
                     var fileInfo = new System.IO.FileInfo(file);
                     info.IsReadOnly = fileInfo.IsReadOnly;
                     info.Size = fileInfo.Length;
+                    info.LastModified = fileInfo.LastWriteTime;
                     using var stream = File.OpenRead(file);
                     info.FileName = relativePath;
                     if (Constants.TextExtensions.Any(s => file.EndsWith(s, StringComparison.OrdinalIgnoreCase)))

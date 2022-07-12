@@ -116,6 +116,7 @@ namespace IronyModManager.Parser
                 definition.OriginalFileName = args.File;
                 definition.UsedParser = string.Empty;
                 definition.ValueType = ValueType.EmptyFile;
+                definition.LastModified = args.FileLastModified;
                 return new List<IDefinition>() { definition };
             }
             return InvokeParsers(args);
@@ -142,7 +143,8 @@ namespace IronyModManager.Parser
         /// </summary>
         /// <param name="definitions">The definitions.</param>
         /// <param name="parserName">Name of the parser.</param>
-        private static void SetAdditionalData(IEnumerable<IDefinition> definitions, string parserName)
+        /// <param name="lastModified">The last modified.</param>
+        private static void SetAdditionalData(IEnumerable<IDefinition> definitions, string parserName, DateTime? lastModified)
         {
             if (definitions?.Count() > 0)
             {
@@ -155,6 +157,7 @@ namespace IronyModManager.Parser
                         item.Order = order;
                     }
                     item.UsedParser = parserName;
+                    item.LastModified = lastModified;
                 }
             }
         }
@@ -302,7 +305,7 @@ namespace IronyModManager.Parser
             if (preferredParser != null)
             {
                 result = preferredParser.Parse(parseArgs);
-                SetAdditionalData(result, preferredParser.ParserName);
+                SetAdditionalData(result, preferredParser.ParserName, args.FileLastModified);
                 EvaluateForPlaceholders(result, args.Lines);
             }
             else
@@ -311,7 +314,7 @@ namespace IronyModManager.Parser
                 if (gameParser != null)
                 {
                     result = gameParser.Parse(parseArgs);
-                    SetAdditionalData(result, gameParser.ParserName);
+                    SetAdditionalData(result, gameParser.ParserName, args.FileLastModified);
                     EvaluateForPlaceholders(result, args.Lines);
                 }
                 else
@@ -320,14 +323,14 @@ namespace IronyModManager.Parser
                     if (genericParser != null)
                     {
                         result = genericParser.Parse(parseArgs);
-                        SetAdditionalData(result, genericParser.ParserName);
+                        SetAdditionalData(result, genericParser.ParserName, args.FileLastModified);
                         EvaluateForPlaceholders(result, args.Lines);
                     }
                     else
                     {
                         var parser = defaultParsers.FirstOrDefault(p => p.CanParse(canParseArgs));
                         result = parser.Parse(parseArgs);
-                        SetAdditionalData(result, parser.ParserName);
+                        SetAdditionalData(result, parser.ParserName, args.FileLastModified);
                         EvaluateForPlaceholders(result, args.Lines);
                     }
                 }

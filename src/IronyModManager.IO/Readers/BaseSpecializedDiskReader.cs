@@ -4,7 +4,7 @@
 // Created          : 02-13-2021
 //
 // Last Modified By : Mario
-// Last Modified On : 05-28-2021
+// Last Modified On : 07-12-2022
 // ***********************************************************************
 // <copyright file="BaseSpecializedDiskReader.cs" company="Mario">
 //     Mario
@@ -88,7 +88,7 @@ namespace IronyModManager.IO.Readers
         /// </summary>
         /// <param name="path">The path.</param>
         /// <returns>IList&lt;System.String&gt;.</returns>
-        /// <exception cref="NotSupportedException"></exception>
+        /// <exception cref="System.NotSupportedException"></exception>
         public virtual IEnumerable<string> GetFiles(string path)
         {
             throw new NotSupportedException();
@@ -100,8 +100,8 @@ namespace IronyModManager.IO.Readers
         /// <param name="rootPath">The root path.</param>
         /// <param name="file">The file.</param>
         /// <returns>Stream.</returns>
-        /// <exception cref="NotSupportedException"></exception>
-        public virtual (Stream, bool) GetStream(string rootPath, string file)
+        /// <exception cref="System.NotSupportedException"></exception>
+        public virtual (Stream, bool, DateTime?) GetStream(string rootPath, string file)
         {
             throw new NotSupportedException();
         }
@@ -111,7 +111,7 @@ namespace IronyModManager.IO.Readers
         /// </summary>
         /// <param name="path">The path.</param>
         /// <returns>System.Int64.</returns>
-        /// <exception cref="NotSupportedException"></exception>
+        /// <exception cref="System.NotSupportedException"></exception>
         public virtual long GetTotalSize(string path)
         {
             throw new NotSupportedException();
@@ -142,6 +142,7 @@ namespace IronyModManager.IO.Readers
                     info.IsBinary = false;
                     info.Content = content.SplitOnNewLine(false);
                     info.ContentSHA = content.CalculateSHA();
+                    info.LastModified = fileInfo.LastWriteTime;
                     result.Add(info);
                 }
                 return result;
