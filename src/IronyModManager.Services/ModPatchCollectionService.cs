@@ -4,7 +4,7 @@
 // Created          : 05-26-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 07-12-2022
+// Last Modified On : 07-13-2022
 // ***********************************************************************
 // <copyright file="ModPatchCollectionService.cs" company="Mario">
 //     Mario
@@ -1812,7 +1812,7 @@ namespace IronyModManager.Services
                                             }
                                         }
                                         item.AdditionalFileNames = fileNames;
-                                        if (item.IsPlaceholder)
+                                        if (item.IsPlaceholder && shaMatches.Any(p => !p.IsPlaceholder))
                                         {
                                             // Uncheck placeholder mark as there's a duplicate which is not marked as placeholder
                                             item.IsPlaceholder = false;
