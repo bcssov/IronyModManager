@@ -127,7 +127,7 @@
     <PackageReference Include="DiffPlex" Version="1.7.1" />
     <PackageReference Include="info.lundin.math.dll" Version="1.2.7" />
     <PackageReference Include="Material.Avalonia" Version="$(MaterialAvalonia)" allowedVersions="$(MaterialAvalonia)" />
-    <PackageReference Include="Material.Icons.Avalonia" Version="1.0.2" />
+    <PackageReference Include="Material.Icons.Avalonia" Version="1.1.10" />
     <PackageReference Include="MessageBox.Avalonia" Version="$(MessageBoxAvalonia)" allowedVersions="$(MessageBoxAvalonia)" />
     <PackageReference Include="Microsoft.Bcl.AsyncInterfaces" Version="6.0.0" />
     <PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="$(MicrosoftExtensionsConfigurationBinder)" allowedVersions="$(MicrosoftExtensionsConfigurationBinder)" />
@@ -142,7 +142,7 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="NetSparkleUpdater.SparkleUpdater" Version="2.1.1" />
+    <PackageReference Include="NetSparkleUpdater.SparkleUpdater" Version="2.1.2" />
     <PackageReference Include="NLog" Version="5.0.1" />
     <PackageReference Include="ReactiveUI" Version="18.2.9" />
     <PackageReference Include="SimpleInjector" Version="5.3.3" />
