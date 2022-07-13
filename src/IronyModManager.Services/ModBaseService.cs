@@ -4,7 +4,7 @@
 // Created          : 04-07-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 07-12-2022
+// Last Modified On : 07-13-2022
 // ***********************************************************************
 // <copyright file="ModBaseService.cs" company="Mario">
 //     Mario
@@ -798,6 +798,15 @@ namespace IronyModManager.Services
         /// <param name="definitions">The definitions.</param>
         protected virtual void MergeDefinitions(IEnumerable<IDefinition> definitions)
         {
+            static bool evalNamespace(string code, string id)
+            {
+                var split = code.Split(Parser.Common.Constants.Scripts.EqualsOperator, StringSplitOptions.RemoveEmptyEntries);
+                if (split.Length == 2)
+                {
+                    return id.Trim().StartsWith(split[1].Trim(), StringComparison.OrdinalIgnoreCase);
+                }
+                return true;
+            }
             static void appendLine(StringBuilder sb, IEnumerable<string> lines)
             {
                 if (lines != null && lines.Any())
@@ -848,7 +857,7 @@ namespace IronyModManager.Services
                     foreach (var definition in otherDefinitions)
                     {
                         var originalCode = definition.OriginalCode.ReplaceTabs().ReplaceNewLine().Split(" ", StringSplitOptions.RemoveEmptyEntries);
-                        var namespaces = variableDefinitions.Where(p => p.ValueType == ValueType.Namespace);
+                        var namespaces = variableDefinitions.Where(p => p.ValueType == ValueType.Namespace && evalNamespace(p.Code, definition.Id));
                         var variables = variableDefinitions.Where(p => originalCode.Contains(p.Id));
                         var allVars = namespaces.Concat(variables);
                         if (allVars.Any())
