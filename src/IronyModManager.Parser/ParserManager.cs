@@ -4,7 +4,7 @@
 // Created          : 02-19-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 07-12-2022
+// Last Modified On : 07-13-2022
 // ***********************************************************************
 // <copyright file="ParserManager.cs" company="Mario">
 //     Mario
@@ -195,7 +195,7 @@ namespace IronyModManager.Parser
                 }
                 else if (lines.Any(p => !string.IsNullOrEmpty(p) && p.Contains(Constants.Scripts.PlaceholderObjectsComment, StringComparison.OrdinalIgnoreCase)))
                 {
-                    var placeholderLine = lines.FirstOrDefault(p => p.Contains(Constants.Scripts.PlaceholderObjectsComment));
+                    var placeholderLine = lines.FirstOrDefault(p => p.Contains(Constants.Scripts.PlaceholderObjectsComment, StringComparison.OrdinalIgnoreCase));
                     var values = placeholderLine.Split(':');
                     if (values.Length == 2)
                     {

@@ -4,7 +4,7 @@
 // Created          : 03-17-2021
 //
 // Last Modified By : Mario
-// Last Modified On : 06-03-2022
+// Last Modified On : 07-13-2022
 // ***********************************************************************
 // <copyright file="DriveInfoProvider.cs" company="Mario">
 //     Mario
@@ -74,22 +74,12 @@ namespace IronyModManager.IO
                 }
                 // I remember this having problems in earlier versions of .NET or is my memory failing me...
                 var info = new DriveInfo(path);
-                if (info != null)
+                var freeSpace = info.AvailableFreeSpace;
+                if (shouldCleanup && Directory.Exists(path))
                 {
-                    var freeSpace = info.AvailableFreeSpace;
-                    if (shouldCleanup && Directory.Exists(path))
-                    {
-                        Directory.Delete(path);
-                    }
-                    return freeSpace;
+                    Directory.Delete(path);
                 }
-                else
-                {
-                    if (shouldCleanup && Directory.Exists(path))
-                    {
-                        Directory.Delete(path);
-                    }
-                }
+                return freeSpace;
             }
             catch (Exception ex)
             {

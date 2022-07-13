@@ -110,7 +110,8 @@ namespace IronyModManager.Parser.Tests
                     Parser.Common.Constants.Scripts.PlaceholderFileComment
                 }
             });
-            result.ToList().TrueForAll(p => p.IsPlaceholder);
+            var testResult = result.ToList().TrueForAll(p => p.IsPlaceholder);
+            testResult.Should().BeTrue();
         }
 
         /// <summary>
@@ -134,7 +135,8 @@ namespace IronyModManager.Parser.Tests
                 }
             });
             result.FirstOrDefault(p => p.Id.Equals("id2")).IsPlaceholder.Should().BeTrue();
-            result.Where(p => p.Id != "id2").ToList().TrueForAll(p => !p.IsPlaceholder);
+            var testResult = result.Where(p => p.Id != "id2").ToList().TrueForAll(p => !p.IsPlaceholder);
+            testResult.Should().BeTrue();
         }
 
         /// <summary>
@@ -157,7 +159,8 @@ namespace IronyModManager.Parser.Tests
                     Parser.Common.Constants.Scripts.PlaceholderObjectsComment
                 }
             });
-            result.ToList().TrueForAll(p => !p.IsPlaceholder);
+            var testResult = result.ToList().TrueForAll(p => !p.IsPlaceholder);
+            testResult.Should().BeTrue();
         }
 
         /// <summary>
