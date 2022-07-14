@@ -1100,7 +1100,7 @@ namespace IronyModManager.ViewModels.Controls
                         }
                     }
                 }
-                if (missingMods.Any())
+                if (missingMods.Any() && activeGame != null && existingCollection.Game.Equals(activeGame.Type))
                 {
                     var title = localizationManager.GetResource(LocalizationResources.Collection_Mods.Prompts.ModsMissingTitle);
                     var message = IronyFormatter.Format(localizationManager.GetResource(LocalizationResources.Collection_Mods.Prompts.ModsMissingMessage), new { Environment.NewLine, Mods = string.Join(Environment.NewLine, missingMods) });
