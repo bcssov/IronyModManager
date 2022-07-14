@@ -227,6 +227,10 @@
                 "Delete": "Obriši",
                 "Close": "Zatvori"
             }
+        },
+        "Prompts": {
+            "ModsMissingTitle": "Modovi uklonjeni",
+            "ModsMissingMessage": "Neki modovi nedostaju i automatski su uklonjeni iz kolekcije:{NewLine}{NewLine}{Mods}"
         }
     },
     "Mod_Actions": {

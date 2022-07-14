@@ -227,6 +227,10 @@
                 "Delete": "删除",
                 "Close": "关闭"
             }
+        },
+        "Prompts": {
+            "ModsMissingTitle": "撤消了Mods",
+            "ModsMissingMessage": "一些mods缺失，已从收藏中自动删除。:{NewLine}{NewLine}{Mods}"
         }
     },
     "Mod_Actions": {

@@ -227,7 +227,12 @@
                 "Delete": "Delete",
                 "Close": "Close"
             }
+        },
+        "Prompts": {
+            "ModsMissingTitle": "Mods removed",
+            "ModsMissingMessage": "Some mods are missing and have been removed from the collection automatically:{NewLine}{NewLine}{Mods}"
         }
+
     },
     "Mod_Actions": {
         "Apply": "Apply",

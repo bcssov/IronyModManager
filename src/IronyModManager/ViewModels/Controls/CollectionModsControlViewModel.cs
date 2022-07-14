@@ -4,7 +4,7 @@
 // Created          : 03-03-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 07-10-2022
+// Last Modified On : 07-14-2022
 // ***********************************************************************
 // <copyright file="CollectionModsControlViewModel.cs" company="Mario">
 //     Mario
@@ -942,15 +942,11 @@ namespace IronyModManager.ViewModels.Controls
         }
 
         /// <summary>
-        /// Assigns the mod collection export information.
+        /// Assigns the optional collection metadata.
         /// </summary>
         /// <param name="collection">The collection.</param>
-        protected virtual void AssignModCollectionExportInfo(IModCollection collection)
+        protected virtual void AssignOptionalCollectionMetadata(IModCollection collection)
         {
-            if (collection == null)
-            {
-                collection = SelectedModCollection;
-            }
             collection.ModNames = SelectedMods?.Where(p => p.IsSelected).Select(p => p.Name).ToList();
             collection.ModIds = SelectedMods?.Where(p => p.IsSelected).Select(p =>
             {
@@ -997,7 +993,6 @@ namespace IronyModManager.ViewModels.Controls
             });
             await TriggerOverlayAsync(id, true, localizationManager.GetResource(LocalizationResources.Collection_Mods.Overlay_Exporting_Message), overlayProgress);
             var collection = modCollectionService.Get(SelectedModCollection.Name);
-            AssignModCollectionExportInfo(collection);
             if (providerType == ImportProviderType.ParadoxLauncherJson)
             {
                 await Task.Run(async () => await modCollectionService.ExportParadoxLauncherJsonAsync(path, collection).ConfigureAwait(false)).ConfigureAwait(false);
@@ -1081,14 +1076,35 @@ namespace IronyModManager.ViewModels.Controls
             var selectedMods = new ObservableCollection<IMod>();
             if (existingCollection?.Mods?.Count() > 0 && Mods != null)
             {
+                var missingMods = new List<string>();
+                var hasModNames = existingCollection.ModNames != null && existingCollection.ModNames.Count() == existingCollection.Mods.Count();
+                var index = -1;
                 foreach (var item in existingCollection.Mods)
                 {
+                    index++;
                     var mod = Mods.FirstOrDefault(p => p.DescriptorFile.Equals(item, StringComparison.InvariantCultureIgnoreCase));
                     if (mod != null)
                     {
                         mod.IsSelected = true;
                         selectedMods.Add(mod);
                     }
+                    else
+                    {
+                        if (hasModNames)
+                        {
+                            missingMods.Add($"{existingCollection.ModNames.ElementAt(index)} ({item})");
+                        }
+                        else
+                        {
+                            missingMods.Add(item);
+                        }
+                    }
+                }
+                if (missingMods.Any())
+                {
+                    var title = localizationManager.GetResource(LocalizationResources.Collection_Mods.Prompts.ModsMissingTitle);
+                    var message = IronyFormatter.Format(localizationManager.GetResource(LocalizationResources.Collection_Mods.Prompts.ModsMissingMessage), new { Environment.NewLine, Mods = string.Join(Environment.NewLine, missingMods) });
+                    Dispatcher.UIThread.SafeInvoke(() => notificationAction.ShowPromptAsync(title, title, message, NotificationType.Warning, PromptType.OK));
                 }
             }
             SetSelectedMods(selectedMods);
@@ -1127,9 +1143,6 @@ namespace IronyModManager.ViewModels.Controls
                 {
                     collection.IsSelected = true;
                     modNames = collection.ModNames.ToList();
-                    // Mod names are only used in export\import operations
-                    collection.ModNames = new List<string>();
-                    collection.ModIds = new List<IModCollectionSourceInfo>();
                     if (modCollectionService.Save(collection))
                     {
                         return collection;
@@ -1144,9 +1157,6 @@ namespace IronyModManager.ViewModels.Controls
                 {
                     importData.IsSelected = true;
                     modNames = importData.ModNames != null ? importData.ModNames.ToList() : new List<string>();
-                    // Mod names are only used in export\import operations
-                    importData.ModNames = new List<string>();
-                    importData.ModIds = new List<IModCollectionSourceInfo>();
                     if (modCollectionService.Save(importData))
                     {
                         return Task.FromResult(importData);
@@ -2031,9 +2041,12 @@ namespace IronyModManager.ViewModels.Controls
                 collection.IsSelected = true;
                 collection.MergedFolderName = SelectedModCollection.MergedFolderName;
                 collection.PatchModEnabled = SelectedModCollection.PatchModEnabled;
+                AssignOptionalCollectionMetadata(collection);
                 if (modCollectionService.Save(collection))
                 {
                     SelectedModCollection.Mods = collection.Mods.ToList();
+                    SelectedModCollection.ModIds = collection.ModIds;
+                    SelectedModCollection.ModNames = collection.ModNames;
                 }
             }
         }

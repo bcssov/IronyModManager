@@ -302,6 +302,12 @@ namespace IronyModManager.Shared
                     public const string Close = Prefix + "Close";
                 }
             }
+            public static class Prompts
+            {
+                public const string Prefix = "Collection_Mods.Prompts.";
+                public const string ModsMissingTitle = Prefix + "ModsMissingTitle";
+                public const string ModsMissingMessage = Prefix + "ModsMissingMessage";
+            }
         }
         public static class Mod_Actions
         {
