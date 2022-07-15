@@ -4,8 +4,13 @@
 		<title>Irony Mod Manager</title>
 		<language>en</language>
 		<item>
-			<title>1.22.99-alpha</title>
-			<description>## Release Notes 1.22
+			<title>1.22.110-rc</title>
+			<description>## Current Release Notes
+* Minor fixes
+* Show missing mods notification if mod is deinstalled and is in a collection
+* Auto detect gog paths on windows
+
+## Release Notes 1.22
 * Update dependencies
 * Improve detection whether steam is running or not (for steam games)
 * Add paradox launcher running warning
@@ -15,13 +20,20 @@
 * Add mod id info to mod collection export metadata
 * Add definition last modified date info in conflict solver (in tooltips)
 * Add mod search\filtering OR operator support for certain fields
-* Exclude non event related namespaces from definition code extraction</description>
-			<pubDate>Wed, 13 Jul 2022 02:33:27 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.22.99-alpha/linux-x64.zip" sparkle:version="1.22.99.4291" sparkle:shortVersionString="1.22.99" length="87793655" sparkle:os="linux" type="application/zip" sparkle:signature="RwQZDifs7X8UjzZjMS8Vw0iD3ld18wAwa6rOnOc1D7FUO0Nf9n821V+VNmvj6uYJZAWIjyAygvEMGskVk5BzCA=="/>
+* Exclude non event related namespaces from definition code extraction
+* Show missing mods notification if mod is deinstalled and is in a collection
+* Auto detect gog games on windows</description>
+			<pubDate>Fri, 15 Jul 2022 15:52:52 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.22.110-rc/linux-x64.zip" sparkle:version="1.22.110.48741" sparkle:shortVersionString="1.22.110" length="88040598" sparkle:os="linux" type="application/zip" sparkle:signature="XFzKGDVNAwazaD+RzsOqC5ZKaGJpFpEP3rvGDZTl58ry7TLro7ShZrfmPS9RlGrNbYER+Rqi1CaIsYlU+/eeDA=="/>
 		</item>
 		<item>
-			<title>1.22.99-alpha</title>
-			<description>## Release Notes 1.22
+			<title>1.22.110-rc</title>
+			<description>## Current Release Notes
+* Minor fixes
+* Show missing mods notification if mod is deinstalled and is in a collection
+* Auto detect gog paths on windows
+
+## Release Notes 1.22
 * Update dependencies
 * Improve detection whether steam is running or not (for steam games)
 * Add paradox launcher running warning
@@ -31,13 +43,20 @@
 * Add mod id info to mod collection export metadata
 * Add definition last modified date info in conflict solver (in tooltips)
 * Add mod search\filtering OR operator support for certain fields
-* Exclude non event related namespaces from definition code extraction</description>
-			<pubDate>Wed, 13 Jul 2022 02:33:34 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.22.99-alpha/osx-x64.zip" sparkle:version="1.22.99.4291" sparkle:shortVersionString="1.22.99" length="90663807" sparkle:os="osx" type="application/zip" sparkle:signature="J3NXZFJOcWaOh30BKb0Sz8z6Mx2Ikb90aJZQoJlb0+Gy4tT0fzy071NzV78R1hCGA8pzWk3zktpAVPi1KWltBQ=="/>
+* Exclude non event related namespaces from definition code extraction
+* Show missing mods notification if mod is deinstalled and is in a collection
+* Auto detect gog games on windows</description>
+			<pubDate>Fri, 15 Jul 2022 15:52:58 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.22.110-rc/osx-x64.zip" sparkle:version="1.22.110.48741" sparkle:shortVersionString="1.22.110" length="90912630" sparkle:os="osx" type="application/zip" sparkle:signature="HIqQmhdegyIkzGV3r8OQ8ZKnj8JAqJZisgYN4M9xo1Zmj4ge2MXpo2PSkwSXU+WhBXPiUaUw2hq3YPvjDu7qCw=="/>
 		</item>
 		<item>
-			<title>1.22.99-alpha</title>
-			<description>## Release Notes 1.22
+			<title>1.22.110-rc</title>
+			<description>## Current Release Notes
+* Minor fixes
+* Show missing mods notification if mod is deinstalled and is in a collection
+* Auto detect gog paths on windows
+
+## Release Notes 1.22
 * Update dependencies
 * Improve detection whether steam is running or not (for steam games)
 * Add paradox launcher running warning
@@ -47,13 +66,20 @@
 * Add mod id info to mod collection export metadata
 * Add definition last modified date info in conflict solver (in tooltips)
 * Add mod search\filtering OR operator support for certain fields
-* Exclude non event related namespaces from definition code extraction</description>
-			<pubDate>Wed, 13 Jul 2022 02:33:40 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.22.99-alpha/win-x64-setup.zip" sparkle:version="1.22.99.4291" sparkle:shortVersionString="1.22.99" length="71906187" sparkle:os="windows" type="application/zip" sparkle:signature="8pSj0oMbjGbShuP1e3qKFmKqHT9dsBOidYKtMO79UDiAEfjh66cjfiZVyeKTsjwVjjbL45ktybr0G6+kaGBiAA=="/>
+* Exclude non event related namespaces from definition code extraction
+* Show missing mods notification if mod is deinstalled and is in a collection
+* Auto detect gog games on windows</description>
+			<pubDate>Fri, 15 Jul 2022 15:53:04 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.22.110-rc/win-x64-setup.zip" sparkle:version="1.22.110.48741" sparkle:shortVersionString="1.22.110" length="72066608" sparkle:os="windows" type="application/zip" sparkle:signature="QFcjDQNfjC7h+KO1N3dfyRhmXLr4IjpQ8GGLPAqVA/MB9hzSIkrpTbgThSZsD1nVi7iuV1MJgYDHFtrNLC30DA=="/>
 		</item>
 		<item>
-			<title>1.22.99-alpha</title>
-			<description>## Release Notes 1.22
+			<title>1.22.110-rc</title>
+			<description>## Current Release Notes
+* Minor fixes
+* Show missing mods notification if mod is deinstalled and is in a collection
+* Auto detect gog paths on windows
+
+## Release Notes 1.22
 * Update dependencies
 * Improve detection whether steam is running or not (for steam games)
 * Add paradox launcher running warning
@@ -63,9 +89,11 @@
 * Add mod id info to mod collection export metadata
 * Add definition last modified date info in conflict solver (in tooltips)
 * Add mod search\filtering OR operator support for certain fields
-* Exclude non event related namespaces from definition code extraction</description>
-			<pubDate>Wed, 13 Jul 2022 02:33:40 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.22.99-alpha/win-x64.zip" sparkle:version="1.22.99.4291" sparkle:shortVersionString="1.22.99" length="105256262" sparkle:os="windows" type="application/zip" sparkle:signature="GqZyRvggxI9YGgjQ+hW4BN30IjMn9Km/QEwl9t2RS9ijFnLndhC6JZRHZuhC5WNzDcBSNWmDoIp0fACFyZIfBw=="/>
+* Exclude non event related namespaces from definition code extraction
+* Show missing mods notification if mod is deinstalled and is in a collection
+* Auto detect gog games on windows</description>
+			<pubDate>Fri, 15 Jul 2022 15:53:05 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.22.110-rc/win-x64.zip" sparkle:version="1.22.110.48741" sparkle:shortVersionString="1.22.110" length="105503193" sparkle:os="windows" type="application/zip" sparkle:signature="xS6AYB2KZ824dbtPLvh0XNdvBYP8W3W0BcFtr55tfnOyL74yXlHiMqWJldgXqG3cCmkZKqbAkDd4+MTQhh81AA=="/>
 		</item>
 		<item>
 			<title>1.21.158</title>
