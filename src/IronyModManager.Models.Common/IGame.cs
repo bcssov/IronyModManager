@@ -4,7 +4,7 @@
 // Created          : 02-12-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 01-28-2022
+// Last Modified On : 07-15-2022
 // ***********************************************************************
 // <copyright file="IGame.cs" company="Mario">
 //     Mario
@@ -90,6 +90,12 @@ namespace IronyModManager.Models.Common
         /// </summary>
         /// <value>The game index cache version.</value>
         int GameIndexCacheVersion { get; set; }
+
+        /// <summary>
+        /// Gets or sets the gog application identifier.
+        /// </summary>
+        /// <value>The gog application identifier.</value>
+        int? GogAppId { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether this instance is selected.
