@@ -293,7 +293,8 @@ namespace IronyModManager.Storage.Tests
                 Abrv = "abrv",
                 ParadoxGameId = "pdxId",
                 DLCContainer = "container",
-                GameIndexCacheVersion = 2
+                GameIndexCacheVersion = 2,
+                GogAppId = 3
             };
             storage.RegisterGame(game);
             dbMock.Games.Count.Should().Be(2);
@@ -315,6 +316,7 @@ namespace IronyModManager.Storage.Tests
             dbMock.Games.FirstOrDefault(p => p.Name == key).ParadoxGameId.Should().Be("pdxId");
             dbMock.Games.FirstOrDefault(p => p.Name == key).DLCContainer.Should().Be("container");
             dbMock.Games.FirstOrDefault(p => p.Name == key).GameIndexCacheVersion.Should().Be(2);
+            dbMock.Games.FirstOrDefault(p => p.Name == key).GogAppId.Should().Be(3);
         }
 
         /// <summary>
@@ -523,7 +525,8 @@ namespace IronyModManager.Storage.Tests
                 Abrv = "abrv",
                 ParadoxGameId = "pdxId",
                 DLCContainer = "container",
-                GameIndexCacheVersion = 2
+                GameIndexCacheVersion = 2,
+                GogAppId = 3
             };
             storage.RegisterGame(game);
             var result = storage.GetGames();
@@ -546,6 +549,7 @@ namespace IronyModManager.Storage.Tests
             result.FirstOrDefault(p => p.Name == key).ParadoxGameId.Should().Be("pdxId");
             result.FirstOrDefault(p => p.Name == key).DLCContainer.Should().Be("container");
             result.FirstOrDefault(p => p.Name == key).GameIndexCacheVersion.Should().Be(2);
+            result.FirstOrDefault(p => p.Name == key).GogAppId.Should().Be(3);
         }
 
         /// <summary>
