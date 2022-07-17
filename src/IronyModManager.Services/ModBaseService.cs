@@ -4,7 +4,7 @@
 // Created          : 04-07-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 07-13-2022
+// Last Modified On : 07-17-2022
 // ***********************************************************************
 // <copyright file="ModBaseService.cs" company="Mario">
 //     Mario
@@ -352,7 +352,7 @@ namespace IronyModManager.Services
                             }
                             // Filter out game definitions which might have the same filename
                             var filteredGameDefinitions = false;
-                            var gameDefinitions = uniqueDefinitions.GroupBy(p => p.FileNameCI).Where(p => p.Any(a => a.Definition.IsFromGame)).SelectMany(p => p.Where(w => w.Definition.IsFromGame));
+                            var gameDefinitions = uniqueDefinitions.GroupBy(p => p.FileNameCI).Where(p => p.Any(a => a.Definition.IsFromGame) && p.Count() > 1).SelectMany(p => p.Where(w => w.Definition.IsFromGame));
                             if (gameDefinitions.Any())
                             {
                                 filteredGameDefinitions = true;
