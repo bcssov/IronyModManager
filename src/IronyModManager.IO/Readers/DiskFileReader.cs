@@ -4,7 +4,7 @@
 // Created          : 02-23-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 07-12-2022
+// Last Modified On : 07-18-2022
 // ***********************************************************************
 // <copyright file="DiskFileReader.cs" company="Mario">
 //     Mario
@@ -19,7 +19,7 @@ using IronyModManager.DI;
 using IronyModManager.IO.Common.Readers;
 using IronyModManager.Shared;
 
-namespace IronyModManager.IO
+namespace IronyModManager.IO.Readers
 {
     /// <summary>
     /// Class DiskFileReader.
@@ -97,7 +97,7 @@ namespace IronyModManager.IO
         /// <param name="rootPath">The root path.</param>
         /// <param name="file">The file.</param>
         /// <returns>Stream.</returns>
-        public virtual (Stream, bool, DateTime?) GetStream(string rootPath, string file)
+        public virtual (Stream, bool, DateTime?, EncodingInfo) GetStream(string rootPath, string file)
         {
             static FileStream readStream(string path)
             {
@@ -113,7 +113,7 @@ namespace IronyModManager.IO
                     var fInfo = new System.IO.FileInfo(files.First());
                     var isreadOnly = fInfo.IsReadOnly;
                     var modified = fInfo.LastWriteTime;
-                    return (readStream(files.First()), isreadOnly, modified);
+                    return (readStream(files.First()), isreadOnly, modified, fInfo.GetEncodingInfo());
                 }
             }
             else
@@ -124,10 +124,10 @@ namespace IronyModManager.IO
                     var fInfo = new System.IO.FileInfo(fullPath);
                     var isreadOnly = fInfo.IsReadOnly;
                     var modified = fInfo.LastWriteTime;
-                    return (readStream(fullPath), isreadOnly, modified);
+                    return (readStream(fullPath), isreadOnly, modified, fInfo.GetEncodingInfo());
                 }
             }
-            return (null, false, null);
+            return (null, false, null, null);
         }
 
         /// <summary>
@@ -186,6 +186,7 @@ namespace IronyModManager.IO
                     info.LastModified = fileInfo.LastWriteTime;
                     using var stream = File.OpenRead(file);
                     info.FileName = relativePath;
+                    info.Encoding = fileInfo.GetEncodingInfo();
                     if (Constants.TextExtensions.Any(s => file.EndsWith(s, StringComparison.OrdinalIgnoreCase)))
                     {
                         using var streamReader = new StreamReader(stream, true);

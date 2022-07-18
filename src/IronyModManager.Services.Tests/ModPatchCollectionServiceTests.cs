@@ -166,10 +166,13 @@ namespace IronyModManager.Services.Tests
             var gameService = new Mock<IGameService>();
             var mapper = new Mock<IMapper>();
             var modPatchExporter = new Mock<IModPatchExporter>();
+            var infoProvider = new Mock<IDefinitionInfoProvider>();
+            infoProvider.Setup(p => p.IsValidEncoding(It.IsAny<string>(), It.IsAny<EncodingInfo>())).Returns(true);
+            infoProvider.Setup(p => p.CanProcess(It.IsAny<string>())).Returns(true);
 
             SetupMockCase(reader, parserManager, modParser);
 
-            var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter);
+            var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter, new List<IDefinitionInfoProvider>() { infoProvider.Object });
             var result = await service.GetModObjectsAsync(new Game() { UserDirectory = "c:\\fake" }, new List<IMod>()
             {
                 new Mod()
@@ -200,10 +203,13 @@ namespace IronyModManager.Services.Tests
             var gameService = new Mock<IGameService>();
             var mapper = new Mock<IMapper>();
             var modPatchExporter = new Mock<IModPatchExporter>();
+            var infoProvider = new Mock<IDefinitionInfoProvider>();
+            infoProvider.Setup(p => p.IsValidEncoding(It.IsAny<string>(), It.IsAny<EncodingInfo>())).Returns(true);
+            infoProvider.Setup(p => p.CanProcess(It.IsAny<string>())).Returns(true);
 
             SetupMockCase(reader, parserManager, modParser);
 
-            var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter);
+            var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter, new List<IDefinitionInfoProvider>() { infoProvider.Object });
             var result = await service.GetModObjectsAsync(new Game() { UserDirectory = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), WorkshopDirectory = new List<string>() { "fake1" } }, new List<IMod>()
             {
                 new Mod()
@@ -234,10 +240,13 @@ namespace IronyModManager.Services.Tests
             var gameService = new Mock<IGameService>();
             var mapper = new Mock<IMapper>();
             var modPatchExporter = new Mock<IModPatchExporter>();
+            var infoProvider = new Mock<IDefinitionInfoProvider>();
+            infoProvider.Setup(p => p.IsValidEncoding(It.IsAny<string>(), It.IsAny<EncodingInfo>())).Returns(true);
+            infoProvider.Setup(p => p.CanProcess(It.IsAny<string>())).Returns(true);
 
             SetupMockCase(reader, parserManager, modParser);
 
-            var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter);
+            var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter, new List<IDefinitionInfoProvider>() { infoProvider.Object });
             var result = await service.GetModObjectsAsync(new Game() { WorkshopDirectory = new List<string>() { Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) }, UserDirectory = "fake1" }, new List<IMod>()
             {
                 new Mod()

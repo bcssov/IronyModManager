@@ -87,7 +87,7 @@
             <controls:TextBox Grid.Row="0" Classes="header" FontFamily="{Binding FontFamily}" Text="{Binding ContentHeader}"
                      IsVisible="{Binding HasHeader}" />
             <!--Content text-->
-            <controls:TextBox Grid.Row="2" Classes="contentMessage" FontFamily="{Binding FontFamily}" Text="{Binding ContentMessage}" MinWidth="600" MinHeight="40" MaxHeight="400" MaxWidth="600" TextWrapping="Wrap" IsVisible="{Binding !Markdown}" />
+            <controls:TextBox Grid.Row="2" FontFamily="{Binding FontFamily}" Text="{Binding ContentMessage}" MinWidth="600" MinHeight="40" MaxHeight="400" MaxWidth="600" TextWrapping="Wrap" IsVisible="{Binding !Markdown}" />
             <avalonia:MarkdownScrollViewer Grid.Row="2" Markdown="{Binding ContentMessage}" IsVisible="{Binding Markdown}"/>
         </Grid>
         <!--Buttons-->

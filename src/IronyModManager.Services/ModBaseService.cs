@@ -4,7 +4,7 @@
 // Created          : 04-07-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 07-17-2022
+// Last Modified On : 07-18-2022
 // ***********************************************************************
 // <copyright file="ModBaseService.cs" company="Mario">
 //     Mario
@@ -247,7 +247,7 @@ namespace IronyModManager.Services
             var noProvider = false;
             if (game != null && definitions?.Count() > 1)
             {
-                var provider = DefinitionInfoProviders.FirstOrDefault(p => p.CanProcess(game.Type));
+                var provider = DefinitionInfoProviders.FirstOrDefault(p => p.CanProcess(game.Type) && p.IsFullyImplemented);
                 noProvider = provider == null;
                 if (!noProvider)
                 {

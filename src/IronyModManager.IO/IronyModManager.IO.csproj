@@ -54,6 +54,7 @@
     <PackageReference Include="SixLabors.ImageSharp.Textures" Version="$(SixLaborsImageSharpTextures)" allowedVersions="$(SixLaborsImageSharpTextures)" />
     <PackageReference Include="Steamworks.NET" Version="20.1.0" />
     <PackageReference Include="StrongNamer" Version="0.2.5" />
+    <PackageReference Include="UTF.Unknown" Version="2.5.1" />
   </ItemGroup>
 
   <ItemGroup>

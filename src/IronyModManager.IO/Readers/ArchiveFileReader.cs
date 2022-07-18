@@ -4,7 +4,7 @@
 // Created          : 02-23-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 07-12-2022
+// Last Modified On : 07-18-2022
 // ***********************************************************************
 // <copyright file="ArchiveFileReader.cs" company="Mario">
 //     Mario
@@ -137,16 +137,16 @@ namespace IronyModManager.IO.Readers
         /// <param name="rootPath">The root path.</param>
         /// <param name="file">The file.</param>
         /// <returns>Stream.</returns>
-        public virtual (Stream, bool, DateTime?) GetStream(string rootPath, string file)
+        public virtual (Stream, bool, DateTime?, EncodingInfo) GetStream(string rootPath, string file)
         {
-            static MemoryStream readStream(Stream entryStream)
+            (MemoryStream, EncodingInfo) readStream(Stream entryStream)
             {
                 var memoryStream = new MemoryStream();
                 entryStream.CopyTo(memoryStream);
                 memoryStream.Seek(0, SeekOrigin.Begin);
-                return memoryStream;
+                return (memoryStream, memoryStream.GetEncodingInfo(file));
             }
-            Stream getUsingReaderFactory()
+            (MemoryStream, EncodingInfo) getUsingReaderFactory()
             {
                 using var fileStream = File.OpenRead(rootPath);
                 using var reader = ReaderFactory.Open(fileStream);
@@ -173,9 +173,9 @@ namespace IronyModManager.IO.Readers
                         }
                     }
                 }
-                return null;
+                return (null, null);
             }
-            Stream getUsingArchiveFactory()
+            (MemoryStream, EncodingInfo) getUsingArchiveFactory()
             {
                 using var fileStream = File.OpenRead(rootPath);
                 using var reader = ArchiveFactory.Open(fileStream);
@@ -199,18 +199,20 @@ namespace IronyModManager.IO.Readers
                         return readStream(stream);
                     }
                 }
-                return null;
+                return (null, null);
             }
 
             // Return zip file last write time. Zip info can be unreliable if the client which created it actually didn't write the info in the first place (as far as I know)
             try
             {
-                return (getUsingArchiveFactory(), false, new System.IO.FileInfo(rootPath).LastWriteTime);
+                var result = getUsingArchiveFactory();
+                return (result.Item1, false, new System.IO.FileInfo(rootPath).LastWriteTime, result.Item2);
             }
             catch (Exception ex)
             {
                 logger.Error(ex);
-                return (getUsingReaderFactory(), false, new System.IO.FileInfo(rootPath).LastWriteTime);
+                var result = getUsingReaderFactory();
+                return (result.Item1, false, new System.IO.FileInfo(rootPath).LastWriteTime, result.Item2);
             }
         }
 
@@ -299,6 +301,7 @@ namespace IronyModManager.IO.Readers
                         using var memoryStream = new MemoryStream();
                         entryStream.CopyTo(memoryStream);
                         memoryStream.Seek(0, SeekOrigin.Begin);
+                        info.Encoding = memoryStream.GetEncodingInfo(relativePath);
                         info.FileName = relativePath;
                         if (Constants.TextExtensions.Any(s => reader.Entry.Key.EndsWith(s, StringComparison.OrdinalIgnoreCase)))
                         {
@@ -349,6 +352,7 @@ namespace IronyModManager.IO.Readers
                     using var memoryStream = new MemoryStream();
                     entryStream.CopyTo(memoryStream);
                     memoryStream.Seek(0, SeekOrigin.Begin);
+                    info.Encoding = memoryStream.GetEncodingInfo(relativePath);
                     info.FileName = relativePath;
                     if (Constants.TextExtensions.Any(s => entry.Key.EndsWith(s, StringComparison.OrdinalIgnoreCase)))
                     {
