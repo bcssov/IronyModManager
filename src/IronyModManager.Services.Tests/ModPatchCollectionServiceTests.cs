@@ -169,6 +169,7 @@ namespace IronyModManager.Services.Tests
             var infoProvider = new Mock<IDefinitionInfoProvider>();
             infoProvider.Setup(p => p.IsValidEncoding(It.IsAny<string>(), It.IsAny<EncodingInfo>())).Returns(true);
             infoProvider.Setup(p => p.CanProcess(It.IsAny<string>())).Returns(true);
+            infoProvider.Setup(p => p.IsFullyImplemented).Returns(true);
 
             SetupMockCase(reader, parserManager, modParser);
 
@@ -206,6 +207,7 @@ namespace IronyModManager.Services.Tests
             var infoProvider = new Mock<IDefinitionInfoProvider>();
             infoProvider.Setup(p => p.IsValidEncoding(It.IsAny<string>(), It.IsAny<EncodingInfo>())).Returns(true);
             infoProvider.Setup(p => p.CanProcess(It.IsAny<string>())).Returns(true);
+            infoProvider.Setup(p => p.IsFullyImplemented).Returns(true);
 
             SetupMockCase(reader, parserManager, modParser);
 
@@ -243,6 +245,7 @@ namespace IronyModManager.Services.Tests
             var infoProvider = new Mock<IDefinitionInfoProvider>();
             infoProvider.Setup(p => p.IsValidEncoding(It.IsAny<string>(), It.IsAny<EncodingInfo>())).Returns(true);
             infoProvider.Setup(p => p.CanProcess(It.IsAny<string>())).Returns(true);
+            infoProvider.Setup(p => p.IsFullyImplemented).Returns(true);
 
             SetupMockCase(reader, parserManager, modParser);
 
@@ -1728,6 +1731,7 @@ namespace IronyModManager.Services.Tests
             var infoProvider = new Mock<IDefinitionInfoProvider>();
             infoProvider.Setup(p => p.DefinitionUsesFIOSRules(It.IsAny<IDefinition>())).Returns(true);
             infoProvider.Setup(p => p.CanProcess(It.IsAny<string>())).Returns(true);
+            infoProvider.Setup(p => p.IsFullyImplemented).Returns(true);
             var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter, new List<IDefinitionInfoProvider>() { infoProvider.Object });
 
             var result = service.EvalDefinitionPriority(null);
@@ -1759,6 +1763,7 @@ namespace IronyModManager.Services.Tests
             var infoProvider = new Mock<IDefinitionInfoProvider>();
             infoProvider.Setup(p => p.DefinitionUsesFIOSRules(It.IsAny<IDefinition>())).Returns(true);
             infoProvider.Setup(p => p.CanProcess(It.IsAny<string>())).Returns(true);
+            infoProvider.Setup(p => p.IsFullyImplemented).Returns(true);
             var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter, new List<IDefinitionInfoProvider>() { infoProvider.Object });
 
             var def = new Definition();
@@ -1792,6 +1797,7 @@ namespace IronyModManager.Services.Tests
             var infoProvider = new Mock<IDefinitionInfoProvider>();
             infoProvider.Setup(p => p.DefinitionUsesFIOSRules(It.IsAny<IDefinition>())).Returns(false);
             infoProvider.Setup(p => p.CanProcess(It.IsAny<string>())).Returns(false);
+            infoProvider.Setup(p => p.IsFullyImplemented).Returns(true);
             var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter, new List<IDefinitionInfoProvider>() { infoProvider.Object });
 
             var def = new Definition();
@@ -1826,6 +1832,7 @@ namespace IronyModManager.Services.Tests
             var infoProvider = new Mock<IDefinitionInfoProvider>();
             infoProvider.Setup(p => p.DefinitionUsesFIOSRules(It.IsAny<IDefinition>())).Returns(true);
             infoProvider.Setup(p => p.CanProcess(It.IsAny<string>())).Returns(true);
+            infoProvider.Setup(p => p.IsFullyImplemented).Returns(true);
             var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter, new List<IDefinitionInfoProvider>() { infoProvider.Object });
 
             var def = new Definition() { IsFromGame = true };
@@ -1859,6 +1866,7 @@ namespace IronyModManager.Services.Tests
             var infoProvider = new Mock<IDefinitionInfoProvider>();
             infoProvider.Setup(p => p.DefinitionUsesFIOSRules(It.IsAny<IDefinition>())).Returns(true);
             infoProvider.Setup(p => p.CanProcess(It.IsAny<string>())).Returns(true);
+            infoProvider.Setup(p => p.IsFullyImplemented).Returns(true);
             var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter, new List<IDefinitionInfoProvider>() { infoProvider.Object });
 
             var def = new Definition() { };
@@ -1893,6 +1901,7 @@ namespace IronyModManager.Services.Tests
             var infoProvider = new Mock<IDefinitionInfoProvider>();
             infoProvider.Setup(p => p.DefinitionUsesFIOSRules(It.IsAny<IDefinition>())).Returns(true);
             infoProvider.Setup(p => p.CanProcess(It.IsAny<string>())).Returns(true);
+            infoProvider.Setup(p => p.IsFullyImplemented).Returns(true);
             var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter, new List<IDefinitionInfoProvider>() { infoProvider.Object });
 
             var def = new Definition() { File = "test.txt", ModName = "1" };
@@ -1927,6 +1936,7 @@ namespace IronyModManager.Services.Tests
             var infoProvider = new Mock<IDefinitionInfoProvider>();
             infoProvider.Setup(p => p.DefinitionUsesFIOSRules(It.IsAny<IDefinition>())).Returns(true);
             infoProvider.Setup(p => p.CanProcess(It.IsAny<string>())).Returns(true);
+            infoProvider.Setup(p => p.IsFullyImplemented).Returns(true);
             var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter, new List<IDefinitionInfoProvider>() { infoProvider.Object });
 
             var def = new Definition() { File = "test.txt", ModName = "1", IsCustomPatch = true };
@@ -1961,6 +1971,7 @@ namespace IronyModManager.Services.Tests
             var infoProvider = new Mock<IDefinitionInfoProvider>();
             infoProvider.Setup(p => p.DefinitionUsesFIOSRules(It.IsAny<IDefinition>())).Returns(true);
             infoProvider.Setup(p => p.CanProcess(It.IsAny<string>())).Returns(true);
+            infoProvider.Setup(p => p.IsFullyImplemented).Returns(true);
             var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter, new List<IDefinitionInfoProvider>() { infoProvider.Object });
 
             var def = new Definition() { File = "test.txt", ModName = "1" };
@@ -1996,6 +2007,7 @@ namespace IronyModManager.Services.Tests
             var infoProvider = new Mock<IDefinitionInfoProvider>();
             infoProvider.Setup(p => p.DefinitionUsesFIOSRules(It.IsAny<IDefinition>())).Returns(true);
             infoProvider.Setup(p => p.CanProcess(It.IsAny<string>())).Returns(true);
+            infoProvider.Setup(p => p.IsFullyImplemented).Returns(true);
             var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter, new List<IDefinitionInfoProvider>() { infoProvider.Object });
 
             var def = new Definition() { File = "test1.txt", ModName = "1" };
@@ -2030,6 +2042,7 @@ namespace IronyModManager.Services.Tests
             var infoProvider = new Mock<IDefinitionInfoProvider>();
             infoProvider.Setup(p => p.DefinitionUsesFIOSRules(It.IsAny<IDefinition>())).Returns(true);
             infoProvider.Setup(p => p.CanProcess(It.IsAny<string>())).Returns(true);
+            infoProvider.Setup(p => p.IsFullyImplemented).Returns(true);
             var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter, new List<IDefinitionInfoProvider>() { infoProvider.Object });
 
             var def = new Definition() { File = "test1.txt", ModName = "1" };
@@ -2065,6 +2078,7 @@ namespace IronyModManager.Services.Tests
             var infoProvider = new Mock<IDefinitionInfoProvider>();
             infoProvider.Setup(p => p.DefinitionUsesFIOSRules(It.IsAny<IDefinition>())).Returns(true);
             infoProvider.Setup(p => p.CanProcess(It.IsAny<string>())).Returns(true);
+            infoProvider.Setup(p => p.IsFullyImplemented).Returns(true);
             var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter, new List<IDefinitionInfoProvider>() { infoProvider.Object });
 
             var def = new Definition() { File = "test1.txt", ModName = "1", Dependencies = new List<string>() { "2" } };
@@ -2099,6 +2113,7 @@ namespace IronyModManager.Services.Tests
             var infoProvider = new Mock<IDefinitionInfoProvider>();
             infoProvider.Setup(p => p.DefinitionUsesFIOSRules(It.IsAny<IDefinition>())).Returns(true);
             infoProvider.Setup(p => p.CanProcess(It.IsAny<string>())).Returns(true);
+            infoProvider.Setup(p => p.IsFullyImplemented).Returns(true);
             var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter, new List<IDefinitionInfoProvider>() { infoProvider.Object });
 
             var def = new Definition() { File = "test1.txt", ModName = "1", IsFromGame = true };
@@ -2133,6 +2148,7 @@ namespace IronyModManager.Services.Tests
             var infoProvider = new Mock<IDefinitionInfoProvider>();
             infoProvider.Setup(p => p.DefinitionUsesFIOSRules(It.IsAny<IDefinition>())).Returns(true);
             infoProvider.Setup(p => p.CanProcess(It.IsAny<string>())).Returns(true);
+            infoProvider.Setup(p => p.IsFullyImplemented).Returns(true);
             var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter, new List<IDefinitionInfoProvider>() { infoProvider.Object });
 
             var def = new Definition() { File = "test1.txt", ModName = "1", Dependencies = new List<string>() { "2" } };
@@ -2168,6 +2184,7 @@ namespace IronyModManager.Services.Tests
             var infoProvider = new Mock<IDefinitionInfoProvider>();
             infoProvider.Setup(p => p.DefinitionUsesFIOSRules(It.IsAny<IDefinition>())).Returns(true);
             infoProvider.Setup(p => p.CanProcess(It.IsAny<string>())).Returns(true);
+            infoProvider.Setup(p => p.IsFullyImplemented).Returns(true);
             var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter, new List<IDefinitionInfoProvider>() { infoProvider.Object });
 
             var def = new Definition() { File = "test1.txt", ModName = "1", Dependencies = new List<string>() { "2" } };
@@ -2202,6 +2219,7 @@ namespace IronyModManager.Services.Tests
             var infoProvider = new Mock<IDefinitionInfoProvider>();
             infoProvider.Setup(p => p.DefinitionUsesFIOSRules(It.IsAny<IDefinition>())).Returns(true);
             infoProvider.Setup(p => p.CanProcess(It.IsAny<string>())).Returns(true);
+            infoProvider.Setup(p => p.IsFullyImplemented).Returns(true);
             var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter, new List<IDefinitionInfoProvider>() { infoProvider.Object });
 
             var def = new Definition() { File = "test1.txt", ModName = "1", Dependencies = new List<string>() { "2" } };
@@ -2237,6 +2255,7 @@ namespace IronyModManager.Services.Tests
             var infoProvider = new Mock<IDefinitionInfoProvider>();
             infoProvider.Setup(p => p.DefinitionUsesFIOSRules(It.IsAny<IDefinition>())).Returns(false);
             infoProvider.Setup(p => p.CanProcess(It.IsAny<string>())).Returns(true);
+            infoProvider.Setup(p => p.IsFullyImplemented).Returns(true);
             var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter, new List<IDefinitionInfoProvider>() { infoProvider.Object });
 
             var def = new Definition() { File = "test1.txt", ModName = "1" };
@@ -2271,6 +2290,7 @@ namespace IronyModManager.Services.Tests
             var infoProvider = new Mock<IDefinitionInfoProvider>();
             infoProvider.Setup(p => p.DefinitionUsesFIOSRules(It.IsAny<IDefinition>())).Returns(false);
             infoProvider.Setup(p => p.CanProcess(It.IsAny<string>())).Returns(true);
+            infoProvider.Setup(p => p.IsFullyImplemented).Returns(true);
             var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter, new List<IDefinitionInfoProvider>() { infoProvider.Object });
 
             var def = new Definition() { File = "test1.txt", ModName = "1" };
@@ -2306,6 +2326,7 @@ namespace IronyModManager.Services.Tests
             var infoProvider = new Mock<IDefinitionInfoProvider>();
             infoProvider.Setup(p => p.DefinitionUsesFIOSRules(It.IsAny<IDefinition>())).Returns(false);
             infoProvider.Setup(p => p.CanProcess(It.IsAny<string>())).Returns(true);
+            infoProvider.Setup(p => p.IsFullyImplemented).Returns(true);
             var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter, new List<IDefinitionInfoProvider>() { infoProvider.Object });
 
             var def = new Definition() { File = @"localisation\test.yml", ModName = "1" };
@@ -2340,6 +2361,7 @@ namespace IronyModManager.Services.Tests
             var infoProvider = new Mock<IDefinitionInfoProvider>();
             infoProvider.Setup(p => p.DefinitionUsesFIOSRules(It.IsAny<IDefinition>())).Returns(false);
             infoProvider.Setup(p => p.CanProcess(It.IsAny<string>())).Returns(true);
+            infoProvider.Setup(p => p.IsFullyImplemented).Returns(true);
             var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter, new List<IDefinitionInfoProvider>() { infoProvider.Object });
 
             var def = new Definition() { File = @"localisation\test.yml", ModName = "1" };
@@ -2374,6 +2396,7 @@ namespace IronyModManager.Services.Tests
             var infoProvider = new Mock<IDefinitionInfoProvider>();
             infoProvider.Setup(p => p.DefinitionUsesFIOSRules(It.IsAny<IDefinition>())).Returns(false);
             infoProvider.Setup(p => p.CanProcess(It.IsAny<string>())).Returns(true);
+            infoProvider.Setup(p => p.IsFullyImplemented).Returns(true);
             var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter, new List<IDefinitionInfoProvider>() { infoProvider.Object });
 
             var def = new Definition() { File = @"localisation\test.yml", ModName = "1" };
@@ -2408,6 +2431,7 @@ namespace IronyModManager.Services.Tests
             var infoProvider = new Mock<IDefinitionInfoProvider>();
             infoProvider.Setup(p => p.DefinitionUsesFIOSRules(It.IsAny<IDefinition>())).Returns(false);
             infoProvider.Setup(p => p.CanProcess(It.IsAny<string>())).Returns(true);
+            infoProvider.Setup(p => p.IsFullyImplemented).Returns(true);
             var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter, new List<IDefinitionInfoProvider>() { infoProvider.Object });
 
             var def = new Definition() { File = @"localisation\test.yml", ModName = "1" };
@@ -2442,6 +2466,7 @@ namespace IronyModManager.Services.Tests
             var infoProvider = new Mock<IDefinitionInfoProvider>();
             infoProvider.Setup(p => p.DefinitionUsesFIOSRules(It.IsAny<IDefinition>())).Returns(false);
             infoProvider.Setup(p => p.CanProcess(It.IsAny<string>())).Returns(true);
+            infoProvider.Setup(p => p.IsFullyImplemented).Returns(true);
             var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter, new List<IDefinitionInfoProvider>() { infoProvider.Object });
 
             var def = new Definition() { File = @"localisation\test.yml", ModName = "1" };
@@ -2477,6 +2502,7 @@ namespace IronyModManager.Services.Tests
             var infoProvider = new Mock<IDefinitionInfoProvider>();
             infoProvider.Setup(p => p.DefinitionUsesFIOSRules(It.IsAny<IDefinition>())).Returns(false);
             infoProvider.Setup(p => p.CanProcess(It.IsAny<string>())).Returns(true);
+            infoProvider.Setup(p => p.IsFullyImplemented).Returns(true);
             var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter, new List<IDefinitionInfoProvider>() { infoProvider.Object });
 
             var def = new Definition() { File = @"localisation\test.yml", ModName = "1" };
@@ -2512,6 +2538,7 @@ namespace IronyModManager.Services.Tests
             var infoProvider = new Mock<IDefinitionInfoProvider>();
             infoProvider.Setup(p => p.DefinitionUsesFIOSRules(It.IsAny<IDefinition>())).Returns(false);
             infoProvider.Setup(p => p.CanProcess(It.IsAny<string>())).Returns(true);
+            infoProvider.Setup(p => p.IsFullyImplemented).Returns(true);
             var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter, new List<IDefinitionInfoProvider>() { infoProvider.Object });
 
             var def = new Definition() { File = @"localisation\test.yml", ModName = "1" };
@@ -2547,6 +2574,7 @@ namespace IronyModManager.Services.Tests
             var infoProvider = new Mock<IDefinitionInfoProvider>();
             infoProvider.Setup(p => p.DefinitionUsesFIOSRules(It.IsAny<IDefinition>())).Returns(false);
             infoProvider.Setup(p => p.CanProcess(It.IsAny<string>())).Returns(true);
+            infoProvider.Setup(p => p.IsFullyImplemented).Returns(true);
             var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter, new List<IDefinitionInfoProvider>() { infoProvider.Object });
 
             var def = new Definition() { File = @"localisation\test.yml", ModName = "1" };
@@ -2582,6 +2610,7 @@ namespace IronyModManager.Services.Tests
             var infoProvider = new Mock<IDefinitionInfoProvider>();
             infoProvider.Setup(p => p.DefinitionUsesFIOSRules(It.IsAny<IDefinition>())).Returns(false);
             infoProvider.Setup(p => p.CanProcess(It.IsAny<string>())).Returns(true);
+            infoProvider.Setup(p => p.IsFullyImplemented).Returns(true);
             var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter, new List<IDefinitionInfoProvider>() { infoProvider.Object });
 
             var def = new Definition() { File = @"localisation\test.yml", ModName = "1" };
@@ -2617,6 +2646,7 @@ namespace IronyModManager.Services.Tests
             var infoProvider = new Mock<IDefinitionInfoProvider>();
             infoProvider.Setup(p => p.DefinitionUsesFIOSRules(It.IsAny<IDefinition>())).Returns(false);
             infoProvider.Setup(p => p.CanProcess(It.IsAny<string>())).Returns(true);
+            infoProvider.Setup(p => p.IsFullyImplemented).Returns(true);
             var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter, new List<IDefinitionInfoProvider>() { infoProvider.Object });
 
             var def = new Definition() { File = @"localisation\test.yml", ModName = "1" };
@@ -2652,6 +2682,7 @@ namespace IronyModManager.Services.Tests
             var infoProvider = new Mock<IDefinitionInfoProvider>();
             infoProvider.Setup(p => p.DefinitionUsesFIOSRules(It.IsAny<IDefinition>())).Returns(false);
             infoProvider.Setup(p => p.CanProcess(It.IsAny<string>())).Returns(true);
+            infoProvider.Setup(p => p.IsFullyImplemented).Returns(true);
             var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter, new List<IDefinitionInfoProvider>() { infoProvider.Object });
 
             var def = new Definition() { File = @"localisation\test.yml", ModName = "1" };
@@ -2687,6 +2718,7 @@ namespace IronyModManager.Services.Tests
             var infoProvider = new Mock<IDefinitionInfoProvider>();
             infoProvider.Setup(p => p.DefinitionUsesFIOSRules(It.IsAny<IDefinition>())).Returns(false);
             infoProvider.Setup(p => p.CanProcess(It.IsAny<string>())).Returns(true);
+            infoProvider.Setup(p => p.IsFullyImplemented).Returns(true);
             var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter, new List<IDefinitionInfoProvider>() { infoProvider.Object });
 
             var def = new Definition() { File = @"localisation\test.yml", ModName = "1" };
@@ -2721,6 +2753,7 @@ namespace IronyModManager.Services.Tests
             var infoProvider = new Mock<IDefinitionInfoProvider>();
             infoProvider.Setup(p => p.DefinitionUsesFIOSRules(It.IsAny<IDefinition>())).Returns(false);
             infoProvider.Setup(p => p.CanProcess(It.IsAny<string>())).Returns(true);
+            infoProvider.Setup(p => p.IsFullyImplemented).Returns(true);
             var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter, new List<IDefinitionInfoProvider>() { infoProvider.Object });
 
             var def = new Definition() { File = @"gfx\test.gfx", ModName = "1" };

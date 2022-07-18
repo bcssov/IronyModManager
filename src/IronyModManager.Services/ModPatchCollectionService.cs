@@ -2455,23 +2455,6 @@ namespace IronyModManager.Services
             var definitions = new List<IDefinition>();
             foreach (var fileInfo in fileInfos)
             {
-                if (definitionInfoProvider != null && !definitionInfoProvider.IsValidEncoding(fileInfo.FileName, fileInfo.Encoding))
-                {
-                    var definition = DIResolver.Get<IDefinition>();
-                    definition.ErrorMessage = "File has invalid encoding, please use UTF-8-BOM Encoding.";
-                    definition.Id = Path.GetFileName(fileInfo.FileName).ToLowerInvariant();
-                    definition.ValueType = ValueType.Invalid;
-                    definition.OriginalCode = definition.Code = string.Join(Environment.NewLine, fileInfo.Content);
-                    definition.ContentSHA = fileInfo.ContentSHA;
-                    definition.Dependencies = modObject.Dependencies;
-                    definition.ModName = modObject.Name;
-                    definition.OriginalModName = modObject.Name;
-                    definition.OriginalFileName = fileInfo.FileName;
-                    definition.File = fileInfo.FileName;
-                    definition.Type = FormatType(fileInfo.FileName);
-                    definitions.Add(definition);
-                    continue;
-                }
                 var fileDefs = parserManager.Parse(new ParserManagerArgs()
                 {
                     ContentSHA = fileInfo.ContentSHA,
@@ -2482,8 +2465,32 @@ namespace IronyModManager.Services
                     ModName = modObject.Name,
                     FileLastModified = fileInfo.LastModified
                 });
-                MergeDefinitions(fileDefs);
-                definitions.AddRange(fileDefs);
+                if (fileDefs.Any())
+                {
+                    // Validate and see whether we need to check encoding
+                    if (!fileDefs.Any(p => p.ValueType == ValueType.Invalid))
+                    {
+                        if (definitionInfoProvider != null && !definitionInfoProvider.IsValidEncoding(Path.GetDirectoryName(fileInfo.FileName), fileInfo.Encoding))
+                        {
+                            var definition = DIResolver.Get<IDefinition>();
+                            definition.ErrorMessage = "File has invalid encoding, please use UTF-8-BOM Encoding.";
+                            definition.Id = Path.GetFileName(fileInfo.FileName).ToLowerInvariant();
+                            definition.ValueType = ValueType.Invalid;
+                            definition.OriginalCode = definition.Code = string.Join(Environment.NewLine, fileInfo.Content);
+                            definition.ContentSHA = fileInfo.ContentSHA;
+                            definition.Dependencies = modObject.Dependencies;
+                            definition.ModName = modObject.Name;
+                            definition.OriginalModName = modObject.Name;
+                            definition.OriginalFileName = fileInfo.FileName;
+                            definition.File = fileInfo.FileName;
+                            definition.Type = FormatType(fileInfo.FileName);
+                            definitions.Add(definition);
+                            continue;
+                        }
+                    }
+                    MergeDefinitions(fileDefs);
+                    definitions.AddRange(fileDefs);
+                }
             }
             return definitions;
         }
