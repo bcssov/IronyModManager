@@ -4,8 +4,12 @@
 		<title>Irony Mod Manager</title>
 		<language>en</language>
 		<item>
-			<title>1.22.114-rc</title>
+			<title>1.22.117-rc</title>
 			<description>## Current Release Notes
+* Detect and treat as error files without BOM encoding
+* Minor fixes
+
+## 1.22.114-rc Release Notes
 * Fix #382
 * Minor fixes
 
@@ -21,13 +25,18 @@
 * Add mod search\filtering OR operator support for certain fields
 * Exclude non event related namespaces from definition code extraction
 * Show missing mods notification if mod is deinstalled and is in a collection
-* Auto detect gog games on windows</description>
-			<pubDate>Sun, 17 Jul 2022 17:30:25 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.22.114-rc/linux-x64.zip" sparkle:version="1.22.114.22712" sparkle:shortVersionString="1.22.114" length="88049011" sparkle:os="linux" type="application/zip" sparkle:signature="WcsLnh7exNKUuRseaVK7RyBNh5ZzV6J9dwB47Fsy3jPoBEpNw2NZOaCyJLVhBj6UimzJrIDVsmFbE3zKcWAYDg=="/>
+* Auto detect gog games on windows
+* Detect and treat as error files without BOM encoding</description>
+			<pubDate>Mon, 18 Jul 2022 04:25:09 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.22.117-rc/linux-x64.zip" sparkle:version="1.22.117.32447" sparkle:shortVersionString="1.22.117" length="88157067" sparkle:os="linux" type="application/zip" sparkle:signature="m/sjcYvwbzl0LK67YGav7ZSgu85kh7jwl+7EaRdC3+ICQFgXXEva8bJTrSXDDuym4L2T29G0GOVeTbk1NXYEDw=="/>
 		</item>
 		<item>
-			<title>1.22.114-rc</title>
+			<title>1.22.117-rc</title>
 			<description>## Current Release Notes
+* Detect and treat as error files without BOM encoding
+* Minor fixes
+
+## 1.22.114-rc Release Notes
 * Fix #382
 * Minor fixes
 
@@ -43,13 +52,18 @@
 * Add mod search\filtering OR operator support for certain fields
 * Exclude non event related namespaces from definition code extraction
 * Show missing mods notification if mod is deinstalled and is in a collection
-* Auto detect gog games on windows</description>
-			<pubDate>Sun, 17 Jul 2022 17:30:31 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.22.114-rc/osx-x64.zip" sparkle:version="1.22.114.22712" sparkle:shortVersionString="1.22.114" length="90921015" sparkle:os="osx" type="application/zip" sparkle:signature="ey0zOdtR6zex5+bL3APF8F8nTCwxYFyeB/MQG3AblhN0/hk8UgXjwXOi78EnEgECdCx09SeDeI/dfrHD70ULCg=="/>
+* Auto detect gog games on windows
+* Detect and treat as error files without BOM encoding</description>
+			<pubDate>Mon, 18 Jul 2022 04:25:18 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.22.117-rc/osx-x64.zip" sparkle:version="1.22.117.32447" sparkle:shortVersionString="1.22.117" length="91029111" sparkle:os="osx" type="application/zip" sparkle:signature="52fCWJdP8S2QipRGYigrOQ96nViwcQhkWP10p6bjmk0nFUju+viCUhnz+gcmKxdnGqofTXuF1Sf8JKj1jedxCg=="/>
 		</item>
 		<item>
-			<title>1.22.114-rc</title>
+			<title>1.22.117-rc</title>
 			<description>## Current Release Notes
+* Detect and treat as error files without BOM encoding
+* Minor fixes
+
+## 1.22.114-rc Release Notes
 * Fix #382
 * Minor fixes
 
@@ -65,13 +79,18 @@
 * Add mod search\filtering OR operator support for certain fields
 * Exclude non event related namespaces from definition code extraction
 * Show missing mods notification if mod is deinstalled and is in a collection
-* Auto detect gog games on windows</description>
-			<pubDate>Sun, 17 Jul 2022 17:30:37 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.22.114-rc/win-x64-setup.zip" sparkle:version="1.22.114.22712" sparkle:shortVersionString="1.22.114" length="72119847" sparkle:os="windows" type="application/zip" sparkle:signature="yvryDPZyzBYZUhJKZ247WUnWpgh9mq3YeM8b20mLE56rqwZaWE2EV9VgdyKMubYQYxbu0pkJ+6BTxB9EBJ27Bg=="/>
+* Auto detect gog games on windows
+* Detect and treat as error files without BOM encoding</description>
+			<pubDate>Mon, 18 Jul 2022 04:25:27 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.22.117-rc/win-x64-setup.zip" sparkle:version="1.22.117.32447" sparkle:shortVersionString="1.22.117" length="72193373" sparkle:os="windows" type="application/zip" sparkle:signature="C4EshK9rP5IEPm1Hw42ybzrtqd9YWak0d1Jq63c4eKvueMgFligkIgb41EGAYyhkYbY0bz61IGpxtm0CwxUiDw=="/>
 		</item>
 		<item>
-			<title>1.22.114-rc</title>
+			<title>1.22.117-rc</title>
 			<description>## Current Release Notes
+* Detect and treat as error files without BOM encoding
+* Minor fixes
+
+## 1.22.114-rc Release Notes
 * Fix #382
 * Minor fixes
 
@@ -87,9 +106,10 @@
 * Add mod search\filtering OR operator support for certain fields
 * Exclude non event related namespaces from definition code extraction
 * Show missing mods notification if mod is deinstalled and is in a collection
-* Auto detect gog games on windows</description>
-			<pubDate>Sun, 17 Jul 2022 17:30:37 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.22.114-rc/win-x64.zip" sparkle:version="1.22.114.22712" sparkle:shortVersionString="1.22.114" length="105546721" sparkle:os="windows" type="application/zip" sparkle:signature="7aGcjxRIlEd4B7OFckV/nRzz0hoUhyKKRpCNE573AQiCNrW3Ryr6wNLxSOwBSyn3mfCN0/OkziieczR2j+SeBA=="/>
+* Auto detect gog games on windows
+* Detect and treat as error files without BOM encoding</description>
+			<pubDate>Mon, 18 Jul 2022 04:25:27 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.22.117-rc/win-x64.zip" sparkle:version="1.22.117.32447" sparkle:shortVersionString="1.22.117" length="105654751" sparkle:os="windows" type="application/zip" sparkle:signature="jVnvf2Kyki7EWW+6FrJe4bUlxFqVBCsFtrsdbpzG9hfuYi8dAcu/tv02LPSDQc2NPs8UNsBLvPd4BSJRlpsjBg=="/>
 		</item>
 		<item>
 			<title>1.21.158</title>
