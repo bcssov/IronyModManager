@@ -4,7 +4,7 @@
 // Created          : 02-23-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 07-12-2022
+// Last Modified On : 07-18-2022
 // ***********************************************************************
 // <copyright file="FileInfo.cs" company="Mario">
 //     Mario
@@ -39,6 +39,12 @@ namespace IronyModManager.IO
         /// </summary>
         /// <value>The content sha.</value>
         public string ContentSHA { get; set; }
+
+        /// <summary>
+        /// Gets or sets the encoding.
+        /// </summary>
+        /// <value>The encoding.</value>
+        public EncodingInfo Encoding { get; set; }
 
         /// <summary>
         /// Gets or sets the name of the file.

@@ -4,7 +4,7 @@
 // Created          : 05-26-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 07-13-2022
+// Last Modified On : 07-18-2022
 // ***********************************************************************
 // <copyright file="ModPatchCollectionService.cs" company="Mario">
 //     Mario
@@ -551,7 +551,7 @@ namespace IronyModManager.Services
                     var definitions = overwrittenDefs[newDefinition.TypeAndId].Item2;
                     var definition = overwrittenDefs[newDefinition.TypeAndId].Item3;
                     newDefinition.Order = fullySortedExport.IndexOf(newDefinition) + 1;
-                    var provider = DefinitionInfoProviders.FirstOrDefault(p => p.CanProcess(GameService.GetSelected().Type));
+                    var provider = DefinitionInfoProviders.FirstOrDefault(p => p.CanProcess(GameService.GetSelected().Type) && p.IsFullyImplemented);
                     var oldFileName = newDefinition.File;
                     newDefinition.File = Path.Combine(definition.ParentDirectory, definition.Id.GenerateValidFileName() + Path.GetExtension(definition.File));
                     var overwrittenFileNames = definition.OverwrittenFileNames;
@@ -589,7 +589,7 @@ namespace IronyModManager.Services
                         {
                             var nonPlaceholders = conflict.Where(p => !p.IsPlaceholder).ToList();
                             nonPlaceholders.Add(priority.Definition);
-                            if (nonPlaceholders.Count() > 1)
+                            if (nonPlaceholders.Count > 1)
                             {
                                 filteredConclicts.AddRange(nonPlaceholders);
                             }
@@ -689,12 +689,14 @@ namespace IronyModManager.Services
             double processed = 0;
             double total = mods.Count();
             double previousProgress = 0;
+            // Don't need full implementation just BOM check
+            var provider = DefinitionInfoProviders.FirstOrDefault(p => p.CanProcess(game.Type));
             messageBus.Publish(new ModDefinitionLoadEvent(0));
 
             mods.AsParallel().ForAll((m) =>
             {
                 IEnumerable<IDefinition> result = null;
-                result = ParseModFiles(game, Reader.Read(m.FullPath, game.GameFolders), m);
+                result = ParseModFiles(game, Reader.Read(m.FullPath, game.GameFolders), m, provider);
                 if (result?.Count() > 0)
                 {
                     foreach (var item in result)
@@ -2432,9 +2434,20 @@ namespace IronyModManager.Services
         /// <param name="game">The game.</param>
         /// <param name="fileInfos">The file infos.</param>
         /// <param name="modObject">The mod object.</param>
+        /// <param name="definitionInfoProvider">The definition information provider.</param>
         /// <returns>IEnumerable&lt;IDefinition&gt;.</returns>
-        protected virtual IEnumerable<IDefinition> ParseModFiles(IGame game, IEnumerable<IFileInfo> fileInfos, IModObject modObject)
+        protected virtual IEnumerable<IDefinition> ParseModFiles(IGame game, IEnumerable<IFileInfo> fileInfos, IModObject modObject, IDefinitionInfoProvider definitionInfoProvider)
         {
+            string FormatType(string file)
+            {
+                var formatted = Path.GetDirectoryName(file);
+                var type = Path.GetExtension(file).Trim('.');
+                if (!Shared.Constants.TextExtensions.Any(s => s.EndsWith(type, StringComparison.OrdinalIgnoreCase)))
+                {
+                    type = Parser.Common.Constants.TxtType;
+                }
+                return $"{formatted.ToLowerInvariant()}{Path.DirectorySeparatorChar}{type}";
+            }
             if (fileInfos == null)
             {
                 return null;
@@ -2452,8 +2465,32 @@ namespace IronyModManager.Services
                     ModName = modObject.Name,
                     FileLastModified = fileInfo.LastModified
                 });
-                MergeDefinitions(fileDefs);
-                definitions.AddRange(fileDefs);
+                if (fileDefs.Any())
+                {
+                    // Validate and see whether we need to check encoding
+                    if (!fileDefs.Any(p => p.ValueType == ValueType.Invalid))
+                    {
+                        if (definitionInfoProvider != null && !definitionInfoProvider.IsValidEncoding(Path.GetDirectoryName(fileInfo.FileName), fileInfo.Encoding))
+                        {
+                            var definition = DIResolver.Get<IDefinition>();
+                            definition.ErrorMessage = "File has invalid encoding, please use UTF-8-BOM Encoding.";
+                            definition.Id = Path.GetFileName(fileInfo.FileName).ToLowerInvariant();
+                            definition.ValueType = ValueType.Invalid;
+                            definition.OriginalCode = definition.Code = string.Join(Environment.NewLine, fileInfo.Content);
+                            definition.ContentSHA = fileInfo.ContentSHA;
+                            definition.Dependencies = modObject.Dependencies;
+                            definition.ModName = modObject.Name;
+                            definition.OriginalModName = modObject.Name;
+                            definition.OriginalFileName = fileInfo.FileName;
+                            definition.File = fileInfo.FileName;
+                            definition.Type = FormatType(fileInfo.FileName);
+                            definitions.Add(definition);
+                            continue;
+                        }
+                    }
+                    MergeDefinitions(fileDefs);
+                    definitions.AddRange(fileDefs);
+                }
             }
             return definitions;
         }
@@ -2598,7 +2635,7 @@ namespace IronyModManager.Services
                     File = p.File
                 }).ToList();
                 var sortExport = new List<IDefinition>();
-                var infoProvider = DefinitionInfoProviders.FirstOrDefault(p => p.CanProcess(game.Type));
+                var infoProvider = DefinitionInfoProviders.FirstOrDefault(p => p.CanProcess(game.Type) && p.IsFullyImplemented);
                 var overwrittenFileNames = new HashSet<string>();
 
                 void handleDefinition(IDefinition item)

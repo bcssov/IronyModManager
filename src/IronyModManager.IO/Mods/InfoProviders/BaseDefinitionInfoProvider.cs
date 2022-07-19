@@ -4,7 +4,7 @@
 // Created          : 04-04-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-26-2022
+// Last Modified On : 07-18-2022
 // ***********************************************************************
 // <copyright file="BaseDefinitionInfoProvider.cs" company="Mario">
 //     Mario
@@ -51,6 +51,12 @@ namespace IronyModManager.IO.Mods.InfoProviders
         /// </summary>
         /// <value>The fios paths.</value>
         public abstract IReadOnlyCollection<string> FIOSPaths { get; }
+
+        /// <summary>
+        /// Gets a value indicating whether this instance is fully implemented.
+        /// </summary>
+        /// <value><c>true</c> if this instance is fully implemented; otherwise, <c>false</c>.</value>
+        public abstract bool IsFullyImplemented { get; }
 
         #endregion Properties
 
@@ -106,6 +112,22 @@ namespace IronyModManager.IO.Mods.InfoProviders
         public virtual string GetFileName(IDefinition definition)
         {
             return GenerateFileName(definition, false);
+        }
+
+        /// <summary>
+        /// Determines whether [is valid encoding] [the specified path].
+        /// </summary>
+        /// <param name="path">The path.</param>
+        /// <param name="encoding">The encoding.</param>
+        /// <returns><c>true</c> if [is valid encoding] [the specified path]; otherwise, <c>false</c>.</returns>
+        public virtual bool IsValidEncoding(string path, Shared.EncodingInfo encoding)
+        {
+            var sanitizedPath = path ?? string.Empty;
+            if (sanitizedPath.StartsWith(Shared.Constants.LocalizationDirectory, StringComparison.OrdinalIgnoreCase))
+            {
+                return HasValidUTF8BOMEncoding(encoding);
+            }
+            return true;
         }
 
         /// <summary>
@@ -297,6 +319,20 @@ namespace IronyModManager.IO.Mods.InfoProviders
                 return Path.Combine(definition.ParentDirectory, $"{LIOSName}{definition.Order:D8}{fileName.GenerateValidFileName()}");
             }
             return Path.Combine(definition.ParentDirectory, $"{LIOSName}{fileName.GenerateValidFileName()}");
+        }
+
+        /// <summary>
+        /// Determines whether [has valid ut f8 bom encoding] [the specified encoding information].
+        /// </summary>
+        /// <param name="encodingInfo">The encoding information.</param>
+        /// <returns><c>true</c> if [has valid ut f8 bom encoding] [the specified encoding information]; otherwise, <c>false</c>.</returns>
+        protected virtual bool HasValidUTF8BOMEncoding(Shared.EncodingInfo encodingInfo)
+        {
+            if (encodingInfo != null)
+            {
+                return encodingInfo.Encoding.Equals(Encoding.UTF8) && encodingInfo.HasBOM;
+            }
+            return false;
         }
 
         #endregion Methods

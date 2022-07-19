@@ -4,7 +4,7 @@
 // Created          : 04-02-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 12-07-2020
+// Last Modified On : 07-18-2022
 // ***********************************************************************
 // <copyright file="IDefinitionInfoProvider.cs" company="Mario">
 //     Mario
@@ -30,6 +30,12 @@ namespace IronyModManager.IO.Common.Mods
         /// </summary>
         /// <value>The fios paths.</value>
         IReadOnlyCollection<string> FIOSPaths { get; }
+
+        /// <summary>
+        /// Gets a value indicating whether this instance is fully implemented.
+        /// </summary>
+        /// <value><c>true</c> if this instance is fully implemented; otherwise, <c>false</c>.</value>
+        bool IsFullyImplemented { get; }
 
         #endregion Properties
 
@@ -69,6 +75,14 @@ namespace IronyModManager.IO.Common.Mods
         /// <param name="definition">The definition.</param>
         /// <returns>System.String.</returns>
         string GetFileName(IDefinition definition);
+
+        /// <summary>
+        /// Determines whether [is valid encoding] [the specified path].
+        /// </summary>
+        /// <param name="path">The path.</param>
+        /// <param name="encodingInfo">The encoding information.</param>
+        /// <returns><c>true</c> if [is valid encoding] [the specified path]; otherwise, <c>false</c>.</returns>
+        bool IsValidEncoding(string path, Shared.EncodingInfo encodingInfo);
 
         #endregion Methods
     }

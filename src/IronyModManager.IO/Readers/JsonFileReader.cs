@@ -4,7 +4,7 @@
 // Created          : 09-20-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 07-12-2022
+// Last Modified On : 07-18-2022
 // ***********************************************************************
 // <copyright file="JsonFileReader.cs" company="Mario">
 //     Mario
@@ -77,9 +77,9 @@ namespace IronyModManager.IO.Readers
         /// </summary>
         /// <param name="rootPath">The root path.</param>
         /// <param name="file">The file.</param>
-        /// <returns>Stream.</returns>
+        /// <returns>System.ValueTuple&lt;Stream, System.Boolean, System.Nullable&lt;DateTime&gt;, EncodingInfo&gt;.</returns>
         /// <exception cref="System.NotSupportedException"></exception>
-        public (Stream, bool, DateTime?) GetStream(string rootPath, string file)
+        public (Stream, bool, DateTime?, EncodingInfo) GetStream(string rootPath, string file)
         {
             throw new NotSupportedException();
         }
@@ -117,6 +117,7 @@ namespace IronyModManager.IO.Readers
                 info.Content = content.SplitOnNewLine(false);
                 info.ContentSHA = content.CalculateSHA();
                 info.LastModified = fileInfo.LastWriteTime;
+                info.Encoding = fileInfo.GetEncodingInfo();
                 result.Add(info);
                 return result;
             }

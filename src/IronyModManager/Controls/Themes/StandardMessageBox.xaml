@@ -69,7 +69,6 @@
             <Setter Property="MinHeight" Value="24" />
             <Setter Property="MinWidth" Value="75" />
         </Style>
-
     </Window.Styles>
     <Grid Classes="MsBoxStandardContainer">
         <Grid.ColumnDefinitions>
@@ -77,7 +76,7 @@
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
-            <RowDefinition Height="*" MaxHeight="150" />
+            <RowDefinition Height="*" />
             <RowDefinition Height="15" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
@@ -94,8 +93,8 @@
             <controls:TextBox Grid.Row="0" Classes="header" FontFamily="{Binding FontFamily}" Text="{Binding ContentHeader}"
                      IsVisible="{Binding HasHeader}" />
             <!--Content text-->
-            <controls:TextBox Grid.Row="2" FontFamily="{Binding FontFamily}" Text="{Binding ContentMessage}" MinWidth="600" MinHeight="40" MaxHeight="400" MaxWidth="600" TextWrapping="Wrap" IsVisible="{Binding !Markdown}" />
-            <avalonia:MarkdownScrollViewer Grid.Row="2" Markdown="{Binding ContentMessage}" IsVisible="{Binding Markdown}"/>
+            <controls:TextBox Grid.Row="1" FontFamily="{Binding FontFamily}" Text="{Binding ContentMessage}" MinWidth="600" MinHeight="40" MaxHeight="400" MaxWidth="600" TextWrapping="Wrap" IsVisible="{Binding !Markdown}" />
+            <avalonia:MarkdownScrollViewer Grid.Row="1" Markdown="{Binding ContentMessage}" IsVisible="{Binding Markdown}"/>
         </Grid>
         <!--Buttons-->
         <StackPanel Orientation="Horizontal" Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2"

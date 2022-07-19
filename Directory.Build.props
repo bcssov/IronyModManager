@@ -1,39 +1,39 @@
 <Project>
-    <PropertyGroup>
-        <Authors>Mario</Authors>
-        <Company>Mario</Company>
-        <Product>Irony Mod Manager</Product>
-        <Copyright>Mario</Copyright>
-        <PackageLicenseFile>LICENSE</PackageLicenseFile>
-        <PackageProjectUrl>https://github.com/bcssov/IronyModManager</PackageProjectUrl>
-        <RepositoryUrl>https://github.com/bcssov/IronyModManager</RepositoryUrl>
-        <RepositoryType>GIT</RepositoryType>
-        <ProduceReferenceAssembly>false</ProduceReferenceAssembly>
-        <ErrorOnDuplicatePublishOutputFiles>false</ErrorOnDuplicatePublishOutputFiles>
-    </PropertyGroup>
-    <PropertyGroup Label="BasePath">
-        <SolutionDir Condition="'$(SolutionDir)'==''">$(MSBuildThisFileDirectory)</SolutionDir>
-    </PropertyGroup>
-    <PropertyGroup>
-        <MicrosoftExtensionsDependencyModelVersion>[6.0.0]</MicrosoftExtensionsDependencyModelVersion>
-        <MicrosoftNETCorePlatformsVersion>[6.0.5]</MicrosoftNETCorePlatformsVersion>
-        <MicrosoftWin32Registry>[6.0.0-preview.5.21301.5]</MicrosoftWin32Registry>
-        <MicrosoftExtensionsConfigurationBinder>[6.0.0]</MicrosoftExtensionsConfigurationBinder>
-        <MicrosoftExtensionsConfigurationJson>[6.0.0]</MicrosoftExtensionsConfigurationJson>
-        <MaterialAvalonia>[2.5.1]</MaterialAvalonia>
-        <MessageBoxAvalonia>[2.0.1]</MessageBoxAvalonia>
-        <Avalonia>[0.10.16]</Avalonia>
-        <AvaloniaEdit>[0.10.12.2]</AvaloniaEdit>
-        <Jot>[2.1.13]</Jot>
-         <!-- Recently 2.0 version was released and not all packages were updated  -->
-        <SixLaborsImageSharp>[1.0.4]</SixLaborsImageSharp>
-        <SixLaborsImageSharpDrawing>[1.0.0-beta13.15]</SixLaborsImageSharpDrawing>
-        <SixLaborsImageSharpTextures>[0.0.0-alpha.0.132]</SixLaborsImageSharpTextures>
-    </PropertyGroup>
-    <ItemGroup>
-        <PackageReference Include="Nerdbank.GitVersioning">
-            <Version>3.3.37</Version>
-            <PrivateAssets>all</PrivateAssets>
-        </PackageReference>
-    </ItemGroup>
+  <PropertyGroup>
+    <Authors>Mario</Authors>
+    <Company>Mario</Company>
+    <Product>Irony Mod Manager</Product>
+    <Copyright>Mario</Copyright>
+    <PackageLicenseFile>LICENSE</PackageLicenseFile>
+    <PackageProjectUrl>https://github.com/bcssov/IronyModManager</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/bcssov/IronyModManager</RepositoryUrl>
+    <RepositoryType>GIT</RepositoryType>
+    <ProduceReferenceAssembly>false</ProduceReferenceAssembly>
+    <ErrorOnDuplicatePublishOutputFiles>false</ErrorOnDuplicatePublishOutputFiles>
+  </PropertyGroup>
+  <PropertyGroup Label="BasePath">
+    <SolutionDir Condition="'$(SolutionDir)'==''">$(MSBuildThisFileDirectory)</SolutionDir>
+  </PropertyGroup>
+  <PropertyGroup>
+    <MicrosoftExtensionsDependencyModelVersion>[6.0.0]</MicrosoftExtensionsDependencyModelVersion>
+    <MicrosoftNETCorePlatformsVersion>[6.0.5]</MicrosoftNETCorePlatformsVersion>
+    <MicrosoftWin32Registry>[6.0.0-preview.5.21301.5]</MicrosoftWin32Registry>
+    <MicrosoftExtensionsConfigurationBinder>[6.0.0]</MicrosoftExtensionsConfigurationBinder>
+    <MicrosoftExtensionsConfigurationJson>[6.0.0]</MicrosoftExtensionsConfigurationJson>
+    <MaterialAvalonia>[2.5.1]</MaterialAvalonia>
+    <MessageBoxAvalonia>[2.0.2]</MessageBoxAvalonia>
+    <Avalonia>[0.10.16]</Avalonia>
+    <AvaloniaEdit>[0.10.12.2]</AvaloniaEdit>
+    <Jot>[2.1.13]</Jot>
+    <!-- Recently 2.0 version was released and not all packages were updated  -->
+    <SixLaborsImageSharp>[1.0.4]</SixLaborsImageSharp>
+    <SixLaborsImageSharpDrawing>[1.0.0-beta13.15]</SixLaborsImageSharpDrawing>
+    <SixLaborsImageSharpTextures>[0.0.0-alpha.0.132]</SixLaborsImageSharpTextures>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="Nerdbank.GitVersioning" Condition="!Exists('packages.config')">
+      <Version>3.5.108</Version>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+  </ItemGroup>
 </Project>
