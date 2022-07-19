@@ -14,24 +14,11 @@
     <AssemblyOriginatorKeyFile>../../keys/Irony-Main.snk</AssemblyOriginatorKeyFile>
     <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
     <Configurations>Debug;Release;Functional_Test</Configurations>
-  </PropertyGroup>
-
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+	<PlatformTarget>x64</PlatformTarget>
+	<Platforms>x64</Platforms>
     <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
     <WarningsAsErrors />
-    <NoWarn>1701;1702;NU1603</NoWarn>
-  </PropertyGroup>
-
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Functional_Test|AnyCPU'">
-    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
-    <WarningsAsErrors />
-	<NoWarn>1701;1702;NU1603</NoWarn>
-  </PropertyGroup>
-
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
-    <WarningsAsErrors />
-	<NoWarn>1701;1702;NU1603</NoWarn>
+	<NoWarn>1701;1702;NU1603</NoWarn>	
   </PropertyGroup>
 
   <ItemGroup>
@@ -54,11 +41,11 @@
     <PackageReference Include="Avalonia" Version="$(Avalonia)" allowedVersions="$(Avalonia)" />
     <PackageReference Include="Avalonia.ReactiveUI" Version="$(Avalonia)" allowedVersions="$(Avalonia)" />
     <PackageReference Include="Microsoft.Extensions.DependencyModel" Version="$(MicrosoftExtensionsDependencyModelVersion)" allowedVersions="$(MicrosoftExtensionsDependencyModelVersion)" />
-    <PackageReference Include="Nerdbank.GitVersioning" Version="3.3.37">
+    <PackageReference Include="Nerdbank.GitVersioning" Version="3.5.108">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="ReactiveUI" Version="17.1.17" />
+    <PackageReference Include="ReactiveUI" Version="18.3.1" />
     <PackageReference Include="StrongNamer" Version="0.2.5" />
   </ItemGroup>
 
@@ -66,6 +53,7 @@
     <ProjectReference Include="..\IronyModManager.DI\IronyModManager.DI.csproj" />
     <ProjectReference Include="..\IronyModManager.Localization\IronyModManager.Localization.csproj" />
     <ProjectReference Include="..\IronyModManager.Models.Common\IronyModManager.Models.Common.csproj" />
+    <ProjectReference Include="..\IronyModManager.Platform\IronyModManager.Platform.csproj" />
     <ProjectReference Include="..\IronyModManager.Shared\IronyModManager.Shared.csproj" />
   </ItemGroup>
 

@@ -1409,9 +1409,9 @@ namespace IronyModManager.Services.Tests
 
             parser.Setup(p => p.Parse(It.IsAny<string>(), It.IsAny<string>())).Returns(new SearchParserResult()
             {
-                Name = "test",
+                Name = new List<string>() { "test" },
                 AchievementCompatible = new BoolFilterResult(true),
-                Version = new Version(1, 1)
+                Version = new List<Version>() { new Version(1, 1) }
             });
             lngService.Setup(p => p.GetSelected()).Returns(new Language() { Abrv = "en" });
 
@@ -1450,9 +1450,9 @@ namespace IronyModManager.Services.Tests
 
             parser.Setup(p => p.Parse(It.IsAny<string>(), It.IsAny<string>())).Returns(new SearchParserResult()
             {
-                Name = "test",
+                Name = new List<string>() { "test" },
                 AchievementCompatible = new BoolFilterResult(true),
-                Version = new Version(1, 1)
+                Version = new List<Version>() { new Version(1, 1) }
             });
             lngService.Setup(p => p.GetSelected()).Returns(new Language() { Abrv = "en" });
 
@@ -1495,9 +1495,9 @@ namespace IronyModManager.Services.Tests
 
             parser.Setup(p => p.Parse(It.IsAny<string>(), It.IsAny<string>())).Returns(new SearchParserResult()
             {
-                Name = "test",
+                Name = new List<string>() { "test" },
                 AchievementCompatible = new BoolFilterResult(true),
-                Version = new Version(1, 1)
+                Version = new List<Version>() { new Version(1, 1) }
             });
             lngService.Setup(p => p.GetSelected()).Returns(new Language() { Abrv = "en" });
 

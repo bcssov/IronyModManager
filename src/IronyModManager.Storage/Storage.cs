@@ -4,7 +4,7 @@
 // Created          : 01-11-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-11-2022
+// Last Modified On : 07-15-2022
 // ***********************************************************************
 // <copyright file="Storage.cs" company="Mario">
 //     Mario
@@ -223,6 +223,7 @@ namespace IronyModManager.Storage
                 game.RemoteSteamUserDirectory = gameType.RemoteSteamUserDirectory ?? new List<string>();
                 game.Abrv = gameType.Abrv ?? string.Empty;
                 game.DLCContainer = gameType.DLCContainer ?? string.Empty;
+                game.GogAppId = gameType.GogAppId;
                 Database.Games.Add(game);
                 return true;
             }

@@ -4,7 +4,7 @@
 // Created          : 09-17-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-30-2021
+// Last Modified On : 07-10-2022
 // ***********************************************************************
 // <copyright file="IronySparkleUpdater.cs" company="Mario">
 //     Mario
@@ -13,6 +13,7 @@
 // ***********************************************************************
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -44,6 +45,11 @@ namespace IronyModManager.Implementation.Updater
         /// </summary>
         private readonly IUpdaterService updaterService;
 
+        /// <summary>
+        /// The disposed
+        /// </summary>
+        private bool disposed = false;
+
         #endregion Fields
 
         #region Constructors
@@ -74,6 +80,12 @@ namespace IronyModManager.Implementation.Updater
         public bool IsInstallerVersion { get; private set; }
 
         /// <summary>
+        /// Gets a value indicating whether [update downloading].
+        /// </summary>
+        /// <value><c>true</c> if [update downloading]; otherwise, <c>false</c>.</value>
+        public bool UpdateDownloading { get; private set; }
+
+        /// <summary>
         /// Gets a value indicating whether [update installing].
         /// </summary>
         /// <value><c>true</c> if [update installing]; otherwise, <c>false</c>.</value>
@@ -82,6 +94,18 @@ namespace IronyModManager.Implementation.Updater
         #endregion Properties
 
         #region Methods
+
+        /// <summary>
+        /// Initializes the and begin download.
+        /// </summary>
+        /// <param name="item">The item.</param>
+        public new async Task InitAndBeginDownload(AppCastItem item)
+        {
+            UpdateDownloading = true;
+            await base.InitAndBeginDownload(item);
+            UpdateDownloader.DownloadFileCompleted -= OnDownloadFinished;
+            UpdateDownloader.DownloadFileCompleted += OnDownloadFinished;
+        }
 
         /// <summary>
         /// Installs the update.
@@ -93,6 +117,20 @@ namespace IronyModManager.Implementation.Updater
             // So what to say to this "async void"? I don't know where to even begin.
             UpdateInstalling = true;
             base.InstallUpdate(item, installPath);
+        }
+
+        /// <summary>
+        /// Releases unmanaged and - optionally - managed resources.
+        /// </summary>
+        /// <param name="disposing"><c>true</c> to release both managed and unmanaged resources; <c>false</c> to release only unmanaged resources.</param>
+        protected override void Dispose(bool disposing)
+        {
+            if (!disposed && disposing)
+            {
+                UpdateDownloader.DownloadFileCompleted -= OnDownloadFinished;
+            }
+            disposed = true;
+            base.Dispose(disposing);
         }
 
         /// <summary>
@@ -177,6 +215,16 @@ namespace IronyModManager.Implementation.Updater
         private string GetUpdaterExeFileNameParam(string path)
         {
             return $"\"{GetUpdaterExeFileName(path)}\"";
+        }
+
+        /// <summary>
+        /// Handles the <see cref="E:DownloadFinished" /> event.
+        /// </summary>
+        /// <param name="sender">The sender.</param>
+        /// <param name="e">The <see cref="AsyncCompletedEventArgs" /> instance containing the event data.</param>
+        private void OnDownloadFinished(object sender, AsyncCompletedEventArgs e)
+        {
+            UpdateDownloading = false;
         }
 
         #endregion Methods

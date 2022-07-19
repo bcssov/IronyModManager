@@ -4,7 +4,7 @@
 // Created          : 10-29-2021
 //
 // Last Modified By : Mario
-// Last Modified On : 01-28-2022
+// Last Modified On : 07-10-2022
 // ***********************************************************************
 // <copyright file="IronyFileTarget.cs" company="Mario">
 //     Mario
@@ -15,6 +15,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text;
 using IronyModManager.IO.Common;
 using NLog;
 using NLog.Targets;
@@ -98,8 +99,9 @@ namespace IronyModManager.Log
             {
                 try
                 {
-                    var write = GetBytesToWrite(logEvent);
-                    File.WriteAllBytes(GetLastExceptionFileName(logEvent), write);
+                    var sbOut = new StringBuilder();
+                    RenderFormattedMessage(logEvent, sbOut);
+                    File.WriteAllText(GetLastExceptionFileName(logEvent), sbOut.ToString());
                 }
                 catch
                 {

@@ -4,7 +4,7 @@
 // Created          : 02-23-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-17-2021
+// Last Modified On : 07-18-2022
 // ***********************************************************************
 // <copyright file="IFileInfo.cs" company="Mario">
 //     Mario
@@ -13,6 +13,7 @@
 // ***********************************************************************
 using System;
 using System.Collections.Generic;
+using IronyModManager.Shared;
 
 namespace IronyModManager.IO.Common.Readers
 {
@@ -36,6 +37,12 @@ namespace IronyModManager.IO.Common.Readers
         string ContentSHA { get; set; }
 
         /// <summary>
+        /// Gets or sets the encoding.
+        /// </summary>
+        /// <value>The encoding.</value>
+        public EncodingInfo Encoding { get; set; }
+
+        /// <summary>
         /// Gets or sets the name of the file.
         /// </summary>
         /// <value>The name of the file.</value>
@@ -52,6 +59,12 @@ namespace IronyModManager.IO.Common.Readers
         /// </summary>
         /// <value><c>true</c> if this instance is read only; otherwise, <c>false</c>.</value>
         bool IsReadOnly { get; set; }
+
+        /// <summary>
+        /// Gets or sets the last modified.
+        /// </summary>
+        /// <value>The last modified.</value>
+        public DateTime? LastModified { get; set; }
 
         /// <summary>
         /// Gets or sets the size.

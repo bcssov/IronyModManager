@@ -4,7 +4,7 @@
 // Created          : 03-01-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 05-06-2022
+// Last Modified On : 07-11-2022
 // ***********************************************************************
 // <copyright file="AppAction.cs" company="Mario">
 //     Mario
@@ -14,9 +14,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.IO;
-using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
@@ -100,21 +97,7 @@ namespace IronyModManager.Implementation.Actions
         {
             try
             {
-                if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
-                {
-                    var linuxCommand = $"\"{command}\"";
-                    ShellExec($"xdg-open {linuxCommand}");
-                }
-                else
-                {
-                    using var process = Process.Start(new ProcessStartInfo
-                    {
-                        FileName = RuntimeInformation.IsOSPlatform(OSPlatform.Windows) ? command : "open",
-                        Arguments = RuntimeInformation.IsOSPlatform(OSPlatform.OSX) ? $"{command}" : "",
-                        CreateNoWindow = true,
-                        UseShellExecute = RuntimeInformation.IsOSPlatform(OSPlatform.Windows)
-                    });
-                }
+                ProcessRunner.LaunchExternalCommand(command);
                 return Task.FromResult(true);
             }
             catch (Exception ex)
@@ -134,25 +117,7 @@ namespace IronyModManager.Implementation.Actions
         {
             try
             {
-                if (string.IsNullOrWhiteSpace(args))
-                {
-                    Process.Start(new ProcessStartInfo()
-                    {
-                        FileName = path,
-                        WorkingDirectory = Path.GetDirectoryName(path),
-                        UseShellExecute = RuntimeInformation.IsOSPlatform(OSPlatform.Windows)
-                    });
-                }
-                else
-                {
-                    Process.Start(new ProcessStartInfo()
-                    {
-                        FileName = path,
-                        Arguments = args,
-                        WorkingDirectory = Path.GetDirectoryName(path),
-                        UseShellExecute = RuntimeInformation.IsOSPlatform(OSPlatform.Windows)
-                    });
-                }
+                ProcessRunner.RunExternalProcess(path, args);
                 return Task.FromResult(true);
             }
             catch (Exception ex)
@@ -160,27 +125,6 @@ namespace IronyModManager.Implementation.Actions
                 logger.Error(ex);
                 return Task.FromResult(false);
             }
-        }
-
-        /// <summary>
-        /// Shells the execute.
-        /// </summary>
-        /// <param name="cmd">The command.</param>
-        private void ShellExec(string cmd)
-        {
-            // Bad idea copying this from Avalonia
-            var escapedArgs = cmd.Replace("\"", "\\\"");
-
-            using var process = Process.Start(
-                new ProcessStartInfo
-                {
-                    FileName = "/bin/sh",
-                    Arguments = $"-c \"{escapedArgs}\"",
-                    UseShellExecute = false,
-                    CreateNoWindow = true,
-                    WindowStyle = ProcessWindowStyle.Hidden
-                }
-            );
         }
 
         #endregion Methods

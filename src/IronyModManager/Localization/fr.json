@@ -227,6 +227,10 @@
                 "Delete": "Supprimer",
                 "Close": "Fermer"
             }
+        },
+        "Prompts": {
+            "ModsMissingTitle": "Mods supprimés",
+            "ModsMissingMessage": "Certains mods sont manquants et ont été retirés automatiquement de la collection.:{NewLine}{NewLine}{Mods}"
         }
     },
     "Mod_Actions": {
@@ -382,6 +386,9 @@
             "RegularModeResolvedOnly": "Certains conflits ont été réinitialisés en raison de modifications récente. Voilà les conflits qui ont été réinitialisées en conflits résolus:{NewLine}{NewLine}{ListOfConflictsResolved}",
             "RegularModeIgnoredOnly": "Certains conflits ont été réinitialisés en raison de modifications récente. Voilà les conflits qui ont été réinitialisées en conflits ignorés:{NewLine}{NewLine}{ListOfConflictsIgnored}",
             "ListOfConflictsFormat": "{ParentDirectory}: {Name}"
+        },
+        "Tooltips": {
+            "DefinitionInfo": "Fichier:{File} modifié:{DateTime}"
         }
     },
     "ConflictIgnore": {
@@ -402,7 +409,10 @@
             "Title": "Options de l'éditeur externe",
             "EditorExecutable": "Exécutable de l'éditeur",
             "EditorArgs": "Arguments de l'éditeur",
-            "EditorArgsPlaceholder": "Exemple: fichier gauche:{Left} fichier droit:{Right}"
+            "EditorArgsPlaceholder": "Exemple: fichier gauche:{Left} fichier droit:{Right}",
+            "Test": "Configuration de test",
+            "TestLeft": "faucibus purus in massa tempor, nec feugiat nisl pretium fusce",
+            "TestRight": "faucibus purus in massa tempor nec feugiat nisl pretium fusce"
         },
         "Game": {
             "Title": "Options de jeu",
@@ -538,6 +548,10 @@
         "CollectionMergeNotEnoughSpace": {
             "Title": "Pas assez d'espace libre",
             "Message": "Il n'y a pas assez d'espace libre pour effectuer l'opération de fusion."
+        },
+        "ParadoxLauncherRunning": {
+            "Title": "Lanceur de paradoxe actif",
+            "Message": "Paradox Launcher est en cours d'exécution, veuillez le fermer avant de tenter cette action."
         }
     },
     "Mod_App_Actions": {

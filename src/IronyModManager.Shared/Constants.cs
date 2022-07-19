@@ -4,7 +4,7 @@
 // Created          : 01-17-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-26-2022
+// Last Modified On : 07-15-2022
 // ***********************************************************************
 // <copyright file="Constants.cs" company="Mario">
 //     Mario
@@ -375,6 +375,11 @@ namespace IronyModManager.Shared
                 public const string DocsPath = "Imperator";
 
                 /// <summary>
+                /// The gog identifier
+                /// </summary>
+                public const int GogId = 2131232214;
+
+                /// <summary>
                 /// The identifier
                 /// </summary>
                 public const string Id = "ImperatorRome";
@@ -434,6 +439,11 @@ namespace IronyModManager.Shared
                 /// The docs path
                 /// </summary>
                 public const string DocsPath = Id;
+
+                /// <summary>
+                /// The gog identifier
+                /// </summary>
+                public const int GogId = 1508702879;
 
                 /// <summary>
                 /// The identifier

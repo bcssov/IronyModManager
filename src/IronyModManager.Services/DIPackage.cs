@@ -4,7 +4,7 @@
 // Created          : 01-11-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 05-27-2021
+// Last Modified On : 07-11-2022
 // ***********************************************************************
 // <copyright file="DIPackage.cs" company="IronyModManager.Services">
 //     Mario
@@ -56,6 +56,7 @@ namespace IronyModManager.Services
             container.Register<IPromptNotificationsService, PromptNotificationsService>();
             container.Register<IReportExportService, ReportExportService>();
             container.Register<IGameIndexService, GameIndexService>();
+            container.Register<IExternalProcessHandlerService, ExternalProcessHandlerService>();
         }
 
         #endregion Methods

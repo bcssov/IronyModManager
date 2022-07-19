@@ -4,7 +4,7 @@
 // Created          : 02-23-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 05-28-2021
+// Last Modified On : 07-18-2022
 // ***********************************************************************
 // <copyright file="IFileReader.cs" company="Mario">
 //     Mario
@@ -14,6 +14,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using IronyModManager.Shared;
 
 namespace IronyModManager.IO.Common.Readers
 {
@@ -58,8 +59,8 @@ namespace IronyModManager.IO.Common.Readers
         /// </summary>
         /// <param name="rootPath">The root path.</param>
         /// <param name="file">The file.</param>
-        /// <returns>Stream.</returns>
-        (Stream, bool) GetStream(string rootPath, string file);
+        /// <returns>System.ValueTuple&lt;Stream, System.Boolean, System.Nullable&lt;DateTime&gt;, EncodingInfo&gt;.</returns>
+        (Stream, bool, DateTime?, EncodingInfo encoding) GetStream(string rootPath, string file);
 
         /// <summary>
         /// Gets the total size.

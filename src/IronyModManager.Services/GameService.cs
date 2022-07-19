@@ -4,7 +4,7 @@
 // Created          : 02-12-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 01-28-2022
+// Last Modified On : 07-15-2022
 // ***********************************************************************
 // <copyright file="GameService.cs" company="Mario">
 //     Mario
@@ -522,6 +522,7 @@ namespace IronyModManager.Services
             game.Abrv = gameType.Abrv;
             game.CloseAppAfterGameLaunch = true;
             game.CustomModDirectory = string.Empty;
+            game.GogAppId = gameType.GogAppId;
             var setExeLocation = true;
             var setUserDirLocation = true;
             if (gameSettings != null)

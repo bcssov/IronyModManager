@@ -52,4 +52,5 @@ if "%config%" == "Release" (
 		endlocal
 	)
 )
-xcopy "%solutiondir%References\*.*" "%solutiondir%src\IronyModManager\%outdir%" /Y /S /D
+xcopy "%solutiondir%References\CopyAll\*.*" "%solutiondir%src\IronyModManager\%outdir%" /Y /S /D
+xcopy "%solutiondir%References\Conditional\Steamworks\Windows-x64\*.*" "%solutiondir%src\IronyModManager\%outdir%" /Y /S /D

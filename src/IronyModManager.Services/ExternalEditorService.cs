@@ -4,7 +4,7 @@
 // Created          : 12-07-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-25-2021
+// Last Modified On : 07-10-2022
 // ***********************************************************************
 // <copyright file="ExternalEditorService.cs" company="Mario">
 //     Mario
@@ -21,7 +21,6 @@ using IronyModManager.Services.Common;
 using IronyModManager.Shared;
 using IronyModManager.Shared.Models;
 using IronyModManager.Storage.Common;
-using SmartFormat;
 
 namespace IronyModManager.Services
 {
@@ -103,7 +102,7 @@ namespace IronyModManager.Services
             var opts = Get();
             if (!string.IsNullOrWhiteSpace(opts.ExternalEditorLocation) && !string.IsNullOrWhiteSpace(opts.ExternalEditorParameters))
             {
-                var launchArgs = Smart.Format($"{opts.ExternalEditorParameters}", new { Left = $"\"{leftLocation}\"", Right = $"\"{rightLocation}\"" });
+                var launchArgs = IronyFormatter.Format($"{opts.ExternalEditorParameters}", new { Left = $"\"{leftLocation}\"", Right = $"\"{rightLocation}\"" });
                 return launchArgs;
             }
             return string.Empty;

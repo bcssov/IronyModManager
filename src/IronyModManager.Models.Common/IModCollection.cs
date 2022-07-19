@@ -4,7 +4,7 @@
 // Created          : 03-04-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 08-23-2021
+// Last Modified On : 07-12-2022
 // ***********************************************************************
 // <copyright file="IModCollection.cs" company="Mario">
 //     Mario
@@ -44,6 +44,12 @@ namespace IronyModManager.Models.Common
         /// </summary>
         /// <value>The name of the merged folder.</value>
         string MergedFolderName { get; set; }
+
+        /// <summary>
+        /// Gets or sets the mod ids.
+        /// </summary>
+        /// <value>The mod ids.</value>
+        IEnumerable<IModCollectionSourceInfo> ModIds { get; set; }
 
         /// <summary>
         /// Gets or sets the mod names.

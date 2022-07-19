@@ -4,7 +4,7 @@
 // Created          : 04-05-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 12-08-2020
+// Last Modified On : 07-18-2022
 // ***********************************************************************
 // <copyright file="StellarisDefinitionMergerTests.cs" company="Mario">
 //     Mario
@@ -243,6 +243,72 @@ namespace IronyModManager.IO.Tests
                 Id = "t"
             });
             result.Should().Be("common\\anomalies\\zzzz_t.txt");
+        }
+
+        /// <summary>
+        /// Defines the test method IsValidEncoding_should_return_true_to_valid_name_list_query.
+        /// </summary>
+        [Fact]
+        public void IsValidEncoding_should_return_true_to_valid_name_list_query()
+        {
+            var service = GetService();
+            var result = service.IsValidEncoding("common\\name_lists", new Shared.EncodingInfo() { Encoding = Encoding.UTF8, HasBOM = true });
+            result.Should().BeTrue();
+        }
+
+        /// <summary>
+        /// Defines the test method IsValidEncoding_should_return_false_to_non_bom_name_list_query.
+        /// </summary>
+        [Fact]
+        public void IsValidEncoding_should_return_false_to_non_bom_name_list_query()
+        {
+            var service = GetService();
+            var result = service.IsValidEncoding("common\\name_lists", new Shared.EncodingInfo() { Encoding = Encoding.UTF8, HasBOM = false });
+            result.Should().BeFalse();
+        }
+
+        /// <summary>
+        /// Defines the test method IsValidEncoding_should_return_true_to_valid_localization_query.
+        /// </summary>
+        [Fact]
+        public void IsValidEncoding_should_return_true_to_valid_localization_query()
+        {
+            var service = GetService();
+            var result = service.IsValidEncoding("localisation", new Shared.EncodingInfo() { Encoding = Encoding.UTF8, HasBOM = true });
+            result.Should().BeTrue();
+        }
+
+        /// <summary>
+        /// Defines the test method IsValidEncoding_should_return_false_to_non_bom_localisation_query.
+        /// </summary>
+        [Fact]
+        public void IsValidEncoding_should_return_false_to_non_bom_localisation_query()
+        {
+            var service = GetService();
+            var result = service.IsValidEncoding("localisation", new Shared.EncodingInfo() { Encoding = Encoding.UTF8, HasBOM = false });
+            result.Should().BeFalse();
+        }
+
+        /// <summary>
+        /// Defines the test method IsValidEncoding_should_return_false_to_null_encoding_info_localisation_query.
+        /// </summary>
+        [Fact]
+        public void IsValidEncoding_should_return_false_to_null_encoding_info_localisation_query()
+        {
+            var service = GetService();
+            var result = service.IsValidEncoding("localisation", null);
+            result.Should().BeFalse();
+        }
+
+        /// <summary>
+        /// Defines the test method IsValidEncoding_should_return_true_to_all_other.
+        /// </summary>
+        [Fact]
+        public void IsValidEncoding_should_return_true_to_all_other()
+        {
+            var service = GetService();
+            var result = service.IsValidEncoding("other_folder", new Shared.EncodingInfo() { Encoding = Encoding.ASCII, HasBOM = false });
+            result.Should().BeTrue();
         }
 
         /// <summary>

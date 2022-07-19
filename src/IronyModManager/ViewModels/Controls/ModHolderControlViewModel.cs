@@ -4,7 +4,7 @@
 // Created          : 02-29-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 01-31-2022
+// Last Modified On : 07-11-2022
 // ***********************************************************************
 // <copyright file="ModHolderControlViewModel.cs" company="Mario">
 //     Mario
@@ -14,7 +14,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Reactive;
 using System.Reactive.Disposables;
@@ -23,6 +22,7 @@ using System.Threading.Tasks;
 using IronyModManager.Common;
 using IronyModManager.Common.Events;
 using IronyModManager.Common.ViewModels;
+using IronyModManager.DI;
 using IronyModManager.Implementation.Actions;
 using IronyModManager.Implementation.AppState;
 using IronyModManager.Implementation.MessageBus;
@@ -30,11 +30,11 @@ using IronyModManager.Implementation.Overlay;
 using IronyModManager.Localization;
 using IronyModManager.Localization.Attributes;
 using IronyModManager.Models.Common;
+using IronyModManager.Platform.Configuration;
 using IronyModManager.Services.Common;
 using IronyModManager.Shared;
 using IronyModManager.Shared.MessageBus.Events;
 using ReactiveUI;
-using SmartFormat;
 
 namespace IronyModManager.ViewModels.Controls
 {
@@ -54,19 +54,14 @@ namespace IronyModManager.ViewModels.Controls
         private const string InvalidConflictSolverClass = "InvalidConflictSolver";
 
         /// <summary>
-        /// The steam launch
-        /// </summary>
-        private const string SteamLaunch = SteamProcess + "://open/main";
-
-        /// <summary>
-        /// The steam process
-        /// </summary>
-        private const string SteamProcess = "steam";
-
-        /// <summary>
         /// The application action
         /// </summary>
         private readonly IAppAction appAction;
+
+        /// <summary>
+        /// The external process handler service
+        /// </summary>
+        private readonly IExternalProcessHandlerService externalProcessHandlerService;
 
         /// <summary>
         /// The game definition load progress handler
@@ -205,6 +200,7 @@ namespace IronyModManager.ViewModels.Controls
         /// <summary>
         /// Initializes a new instance of the <see cref="ModHolderControlViewModel" /> class.
         /// </summary>
+        /// <param name="externalProcessHandlerService">The external process handler service.</param>
         /// <param name="gameDefinitionLoadProgressHandler">The game definition load progress handler.</param>
         /// <param name="gameIndexProgressHandler">The game index progress handler.</param>
         /// <param name="gameIndexService">The game index service.</param>
@@ -226,7 +222,7 @@ namespace IronyModManager.ViewModels.Controls
         /// <param name="modDefinitionPatchLoadHandler">The mod definition patch load handler.</param>
         /// <param name="gameDirectoryChangedHandler">The game directory changed handler.</param>
         /// <param name="logger">The logger.</param>
-        public ModHolderControlViewModel(GameDefinitionLoadProgressHandler gameDefinitionLoadProgressHandler, GameIndexProgressHandler gameIndexProgressHandler,
+        public ModHolderControlViewModel(IExternalProcessHandlerService externalProcessHandlerService, GameDefinitionLoadProgressHandler gameDefinitionLoadProgressHandler, GameIndexProgressHandler gameIndexProgressHandler,
             IGameIndexService gameIndexService, IPromptNotificationsService promptNotificationsService,
             ModListInstallRefreshRequestHandler modListInstallRefreshRequestHandler, ModDefinitionInvalidReplaceHandler modDefinitionInvalidReplaceHandler,
             IIDGenerator idGenerator, IShutDownState shutDownState, IModService modService, IModPatchCollectionService modPatchCollectionService, IGameService gameService,
@@ -235,7 +231,7 @@ namespace IronyModManager.ViewModels.Controls
             ModDefinitionAnalyzeHandler modDefinitionAnalyzeHandler, ModDefinitionLoadHandler modDefinitionLoadHandler, ModDefinitionPatchLoadHandler modDefinitionPatchLoadHandler,
             GameUserDirectoryChangedHandler gameDirectoryChangedHandler, ILogger logger)
         {
-            // It was supposed to be a small project and I ended up with this mess I seriously need to introduce facades sometime
+            // Oh boy ctor injection really needs some cleanup huge code smell
             this.promptNotificationsService = promptNotificationsService;
             this.modDefinitionInvalidReplaceHandler = modDefinitionInvalidReplaceHandler;
             this.idGenerator = idGenerator;
@@ -255,6 +251,7 @@ namespace IronyModManager.ViewModels.Controls
             this.gameIndexService = gameIndexService;
             this.gameIndexProgressHandler = gameIndexProgressHandler;
             this.gameDefinitionLoadProgressHandler = gameDefinitionLoadProgressHandler;
+            this.externalProcessHandlerService = externalProcessHandlerService;
             InstalledMods = installedModsControlViewModel;
             CollectionMods = collectionModsControlViewModel;
             if (StaticResources.CommandLineOptions != null && StaticResources.CommandLineOptions.EnableResumeGameButton)
@@ -471,7 +468,7 @@ namespace IronyModManager.ViewModels.Controls
 
             SubscribeToProgressReport(id, Disposables, totalSteps);
 
-            var overlayProgress = Smart.Format(localizationManager.GetResource(LocalizationResources.Mod_Actions.ConflictSolver.Overlay_Conflict_Solver_Progress), new
+            var overlayProgress = IronyFormatter.Format(localizationManager.GetResource(LocalizationResources.Mod_Actions.ConflictSolver.Overlay_Conflict_Solver_Progress), new
             {
                 PercentDone = 0.ToLocalizedPercentage(),
                 Count = 1,
@@ -552,12 +549,23 @@ namespace IronyModManager.ViewModels.Controls
         /// </summary>
         /// <param name="id">The identifier.</param>
         /// <param name="showOverlay">if set to <c>true</c> [show overlay].</param>
+        /// <param name="validateParadoxLauncher">if set to <c>true</c> [validate paradox launcher].</param>
         /// <returns>A Task representing the asynchronous operation.</returns>
-        protected virtual async Task ApplyCollectionAsync(long id, bool showOverlay = true)
+        protected virtual async Task ApplyCollectionAsync(long id, bool showOverlay = true, bool validateParadoxLauncher = false)
         {
             if (ApplyingCollection)
             {
                 return;
+            }
+            if (validateParadoxLauncher)
+            {
+                if (await externalProcessHandlerService.IsParadoxLauncherRunningAsync())
+                {
+                    var title = localizationManager.GetResource(LocalizationResources.Notifications.ParadoxLauncherRunning.Title);
+                    var message = localizationManager.GetResource(LocalizationResources.Notifications.ParadoxLauncherRunning.Message);
+                    notificationAction.ShowNotification(title, message, NotificationType.Error, 30);
+                    return;
+                }
             }
             ApplyingCollection = true;
             if (CollectionMods.SelectedModCollection != null)
@@ -575,12 +583,12 @@ namespace IronyModManager.ViewModels.Controls
                     if (result)
                     {
                         title = localizationManager.GetResource(LocalizationResources.Notifications.CollectionApplied.Title);
-                        message = Smart.Format(localizationManager.GetResource(LocalizationResources.Notifications.CollectionApplied.Message), new { CollectionName = CollectionMods.SelectedModCollection.Name });
+                        message = IronyFormatter.Format(localizationManager.GetResource(LocalizationResources.Notifications.CollectionApplied.Message), new { CollectionName = CollectionMods.SelectedModCollection.Name });
                     }
                     else
                     {
                         title = localizationManager.GetResource(LocalizationResources.Notifications.CollectionNotApplied.Title);
-                        message = Smart.Format(localizationManager.GetResource(LocalizationResources.Notifications.CollectionNotApplied.Message), new { CollectionName = CollectionMods.SelectedModCollection.Name });
+                        message = IronyFormatter.Format(localizationManager.GetResource(LocalizationResources.Notifications.CollectionNotApplied.Message), new { CollectionName = CollectionMods.SelectedModCollection.Name });
                         notificationType = NotificationType.Error;
                     }
                     notificationAction.ShowNotification(title, message, notificationType, 5);
@@ -740,7 +748,7 @@ namespace IronyModManager.ViewModels.Controls
 
             ApplyCommand = ReactiveCommand.Create(() =>
             {
-                ApplyCollectionAsync(idGenerator.GetNextId()).ConfigureAwait(true);
+                ApplyCollectionAsync(idGenerator.GetNextId(), validateParadoxLauncher: true).ConfigureAwait(true);
             }, applyEnabled).DisposeWith(disposables);
 
             AnalyzeCommand = ReactiveCommand.CreateFromTask(async () =>
@@ -798,23 +806,8 @@ namespace IronyModManager.ViewModels.Controls
             {
                 if (gameService.IsSteamGame(args))
                 {
-                    // Check if process is running
-                    var processes = Process.GetProcesses();
-                    if (!processes.Any(p => p.ProcessName.Equals(SteamProcess, StringComparison.OrdinalIgnoreCase)))
-                    {
-                        await appAction.OpenAsync(SteamLaunch);
-                        var attempts = 0;
-                        while (!processes.Any(p => p.ProcessName.Equals(SteamProcess, StringComparison.OrdinalIgnoreCase)))
-                        {
-                            if (attempts > 5)
-                            {
-                                break;
-                            }
-                            await Task.Delay(3000);
-                            processes = Process.GetProcesses();
-                            attempts++;
-                        }
-                    }
+                    var config = DIResolver.Get<IPlatformConfiguration>().GetOptions();
+                    return await externalProcessHandlerService.LaunchSteamAsync(config.Steam.UseLegacyLaunchMethod, gameService.GetSelected());
                 }
                 return true;
             }
@@ -824,6 +817,13 @@ namespace IronyModManager.ViewModels.Controls
                 var game = gameService.GetSelected();
                 if (game != null)
                 {
+                    if (await externalProcessHandlerService.IsParadoxLauncherRunningAsync())
+                    {
+                        var title = localizationManager.GetResource(LocalizationResources.Notifications.ParadoxLauncherRunning.Title);
+                        var message = localizationManager.GetResource(LocalizationResources.Notifications.ParadoxLauncherRunning.Message);
+                        notificationAction.ShowNotification(title, message, NotificationType.Error, 30);
+                        return;
+                    }
                     var args = gameService.GetLaunchSettings(game, continueGame);
                     if (!string.IsNullOrWhiteSpace(args.ExecutableLocation))
                     {
@@ -967,7 +967,7 @@ namespace IronyModManager.ViewModels.Controls
         protected virtual async Task ShowInvalidModsNotificationAsync(IReadOnlyCollection<IModInstallationResult> mods)
         {
             var title = localizationManager.GetResource(LocalizationResources.InvalidModsDetected.Title);
-            var message = localizationManager.GetResource(LocalizationResources.InvalidModsDetected.Message).FormatSmart(new { Environment.NewLine, Mods = string.Join(Environment.NewLine, mods.Select(p => p.Path)) });
+            var message = localizationManager.GetResource(LocalizationResources.InvalidModsDetected.Message).FormatIronySmart(new { Environment.NewLine, Mods = string.Join(Environment.NewLine, mods.Select(p => p.Path)) });
 
             if (!showingInvalidNotification)
             {
@@ -989,7 +989,7 @@ namespace IronyModManager.ViewModels.Controls
             definitionLoadHandler = modDefinitionLoadHandler.Subscribe(s =>
             {
                 var message = localizationManager.GetResource(LocalizationResources.Mod_Actions.ConflictSolver.Overlay_Conflict_Solver_Loading_Definitions);
-                var overlayProgress = Smart.Format(localizationManager.GetResource(LocalizationResources.Mod_Actions.ConflictSolver.Overlay_Conflict_Solver_Progress), new
+                var overlayProgress = IronyFormatter.Format(localizationManager.GetResource(LocalizationResources.Mod_Actions.ConflictSolver.Overlay_Conflict_Solver_Progress), new
                 {
                     PercentDone = s.Percentage.ToLocalizedPercentage(),
                     Count = 1,
@@ -1002,7 +1002,7 @@ namespace IronyModManager.ViewModels.Controls
             modInvalidReplaceHandler = modDefinitionInvalidReplaceHandler.Subscribe(s =>
             {
                 var message = localizationManager.GetResource(LocalizationResources.Mod_Actions.ConflictSolver.Overlay_Conflict_Solver_Replacing_Definitions);
-                var overlayProgress = Smart.Format(localizationManager.GetResource(LocalizationResources.Mod_Actions.ConflictSolver.Overlay_Conflict_Solver_Progress), new
+                var overlayProgress = IronyFormatter.Format(localizationManager.GetResource(LocalizationResources.Mod_Actions.ConflictSolver.Overlay_Conflict_Solver_Progress), new
                 {
                     PercentDone = s.Percentage.ToLocalizedPercentage(),
                     Count = 2,
@@ -1015,7 +1015,7 @@ namespace IronyModManager.ViewModels.Controls
             gameIndexHandler = gameIndexProgressHandler.Subscribe(s =>
             {
                 var message = localizationManager.GetResource(LocalizationResources.Mod_Actions.ConflictSolver.Overlay_Conflict_Solver_Indexing_Game);
-                var overlayProgress = Smart.Format(localizationManager.GetResource(LocalizationResources.Mod_Actions.ConflictSolver.Overlay_Conflict_Solver_Progress), new
+                var overlayProgress = IronyFormatter.Format(localizationManager.GetResource(LocalizationResources.Mod_Actions.ConflictSolver.Overlay_Conflict_Solver_Progress), new
                 {
                     PercentDone = s.Percentage.ToLocalizedPercentage(),
                     Count = 3,
@@ -1028,7 +1028,7 @@ namespace IronyModManager.ViewModels.Controls
             gameDefinitionLoadHandler = gameDefinitionLoadProgressHandler.Subscribe(s =>
             {
                 var message = localizationManager.GetResource(LocalizationResources.Mod_Actions.ConflictSolver.Overlay_Conflict_Solver_Loading_Game_Definitions);
-                var overlayProgress = Smart.Format(localizationManager.GetResource(LocalizationResources.Mod_Actions.ConflictSolver.Overlay_Conflict_Solver_Progress), new
+                var overlayProgress = IronyFormatter.Format(localizationManager.GetResource(LocalizationResources.Mod_Actions.ConflictSolver.Overlay_Conflict_Solver_Progress), new
                 {
                     PercentDone = s.Percentage.ToLocalizedPercentage(),
                     Count = 4,
@@ -1041,7 +1041,7 @@ namespace IronyModManager.ViewModels.Controls
             definitionAnalyzeLoadHandler = modDefinitionAnalyzeHandler.Subscribe(s =>
             {
                 var message = localizationManager.GetResource(LocalizationResources.Mod_Actions.ConflictSolver.Overlay_Conflict_Solver_Analyzing_Conflicts);
-                var overlayProgress = Smart.Format(localizationManager.GetResource(LocalizationResources.Mod_Actions.ConflictSolver.Overlay_Conflict_Solver_Progress), new
+                var overlayProgress = IronyFormatter.Format(localizationManager.GetResource(LocalizationResources.Mod_Actions.ConflictSolver.Overlay_Conflict_Solver_Progress), new
                 {
                     PercentDone = s.Percentage.ToLocalizedPercentage(),
                     Count = totalSteps == 6 ? 5 : 3,
@@ -1054,7 +1054,7 @@ namespace IronyModManager.ViewModels.Controls
             definitionSyncHandler = modDefinitionPatchLoadHandler.Subscribe(s =>
             {
                 var message = localizationManager.GetResource(LocalizationResources.Mod_Actions.ConflictSolver.Overlay_Conflict_Solver_Analyzing_Resolved_Conflicts);
-                var overlayProgress = Smart.Format(localizationManager.GetResource(LocalizationResources.Mod_Actions.ConflictSolver.Overlay_Conflict_Solver_Progress), new
+                var overlayProgress = IronyFormatter.Format(localizationManager.GetResource(LocalizationResources.Mod_Actions.ConflictSolver.Overlay_Conflict_Solver_Progress), new
                 {
                     PercentDone = s.Percentage.ToLocalizedPercentage(),
                     Count = totalSteps == 6 ? 6 : 4,

@@ -4,7 +4,7 @@
 // Created          : 08-29-2021
 //
 // Last Modified By : Mario
-// Last Modified On : 02-08-2022
+// Last Modified On : 07-12-2022
 // ***********************************************************************
 // <copyright file="CollectionImportResult.cs" company="Mario">
 //     Mario
@@ -15,6 +15,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using IronyModManager.IO.Common.Models;
+using IronyModManager.Models.Common;
 
 namespace IronyModManager.IO.Models
 {
@@ -55,7 +56,7 @@ namespace IronyModManager.IO.Models
         /// Gets or sets the ids.
         /// </summary>
         /// <value>The ids.</value>
-        public virtual IEnumerable<string> ModIds { get; set; }
+        public virtual IEnumerable<IModCollectionSourceInfo> ModIds { get; set; }
 
         /// <summary>
         /// Gets or sets the mod names.

@@ -4,7 +4,7 @@
 // Created          : 06-10-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 01-27-2022
+// Last Modified On : 07-11-2022
 // ***********************************************************************
 // <copyright file="MessageBusDependencyResolver.cs" company="Mario">
 //     Mario

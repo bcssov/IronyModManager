@@ -227,6 +227,10 @@
                 "Delete": "Удалить",
                 "Close": "Закрыть"
             }
+        },
+        "Prompts": {
+            "ModsMissingTitle": "Модификации удалены",
+            "ModsMissingMessage": "Некоторые моды отсутствуют и были удалены из коллекции автоматически:{NewLine}{NewLine}{Mods}"
         }
     },
     "Mod_Actions": {
@@ -382,6 +386,9 @@
             "RegularModeResolvedOnly": "Некоторые конфликты были сброшены из-за изменений мода. Они были сброшены разрешенные конфликты:{NewLine}{NewLine}{ListOfConflictsResolved}",
             "RegularModeIgnoredOnly": "Некоторые конфликты были сброшены из-за изменений мода. Они были сброшены игнорированные конфликты:{NewLine}{NewLine}{ListOfConflictsIgnored}",
             "ListOfConflictsFormat": "{ParentDirectory}: {Name}"
+        },
+        "Tooltips": {
+            "DefinitionInfo": "Файл:{File} Модифицировано:{DateTime}"
         }
     },
     "ConflictIgnore": {
@@ -402,7 +409,10 @@
             "Title": "Опции внешнего редактора",
             "EditorExecutable": "Путь к файлу .exe",
             "EditorArgs": "Параметры запуска",
-            "EditorArgsPlaceholder": "Пример: leftFile:{Left} rightFile:{Right}"
+            "EditorArgsPlaceholder": "Пример: leftFile:{Left} rightFile:{Right}",
+            "Test": "Тестовая конфигурация",
+            "TestLeft": "faucibus purus in massa tempor, nec feugiat nisl pretium fusce",
+            "TestRight": "faucibus purus in massa tempor nec feugiat nisl pretium fusce"
         },
         "Game": {
             "Title": "Опции игры",
@@ -538,6 +548,10 @@
         "CollectionMergeNotEnoughSpace": {
             "Title": "Недостаточно места",
             "Message": "На диске недостаточно свободного места, чтобы произвести объединение."
+        },
+        "ParadoxLauncherRunning": {
+            "Title": "Парадокс, запускающий активный",
+            "Message": "Парадокс запускается, пожалуйста, закройте его, прежде чем попытаться сделать это действие."
         }
     },
     "Mod_App_Actions": {

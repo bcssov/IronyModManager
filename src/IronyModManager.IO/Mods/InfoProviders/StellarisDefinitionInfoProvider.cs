@@ -4,7 +4,7 @@
 // Created          : 04-02-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-13-2021
+// Last Modified On : 07-18-2022
 // ***********************************************************************
 // <copyright file="StellarisDefinitionInfoProvider.cs" company="Mario">
 //     Mario
@@ -51,6 +51,12 @@ namespace IronyModManager.IO.Mods.InfoProviders
             "scripted_variables", "section_templates", "ship_behaviors", "special_projects", "star_classes", "static_modifiers", "strategic_resources", "events",
             "solar_system_initializers", "relics", "traits" };
 
+        /// <summary>
+        /// Gets a value indicating whether this instance is fully implemented.
+        /// </summary>
+        /// <value><c>true</c> if this instance is fully implemented; otherwise, <c>false</c>.</value>
+        public override bool IsFullyImplemented => true;
+
         #endregion Properties
 
         #region Methods
@@ -78,6 +84,22 @@ namespace IronyModManager.IO.Mods.InfoProviders
                 return new UTF8Encoding(true);
             }
             return base.GetEncoding(definition);
+        }
+
+        /// <summary>
+        /// Determines whether [is valid encoding] [the specified path].
+        /// </summary>
+        /// <param name="path">The path.</param>
+        /// <param name="encoding">The encoding.</param>
+        /// <returns><c>true</c> if [is valid encoding] [the specified path]; otherwise, <c>false</c>.</returns>
+        public override bool IsValidEncoding(string path, Shared.EncodingInfo encoding)
+        {
+            var sanitizedPath = path ?? string.Empty;
+            if (sanitizedPath.EndsWith(NameLists, StringComparison.OrdinalIgnoreCase))
+            {
+                return HasValidUTF8BOMEncoding(encoding);
+            }
+            return base.IsValidEncoding(path, encoding);
         }
 
         /// <summary>

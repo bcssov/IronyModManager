@@ -4,7 +4,7 @@
 // Created          : 09-16-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 11-04-2021
+// Last Modified On : 07-13-2022
 // ***********************************************************************
 // <copyright file="Updater.cs" company="Mario">
 //     Mario
@@ -210,11 +210,13 @@ namespace IronyModManager.Implementation.Updater
                 lastException = null;
                 updatePath = string.Empty;
                 await updater.InitAndBeginDownload(updateInfo.Updates.FirstOrDefault());
-                while (updater.UpdateDownloader.IsDownloading)
+                while (updater.UpdateDownloading)
                 {
                     // Sigh
                     await Task.Delay(25);
                 }
+                // Slight safety delay
+                await Task.Delay(250);
                 busy = false;
                 var updateSettings = new UpdateSettings()
                 {

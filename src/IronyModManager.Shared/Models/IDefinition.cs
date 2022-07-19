@@ -4,7 +4,7 @@
 // Created          : 02-16-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-26-2022
+// Last Modified On : 07-12-2022
 // ***********************************************************************
 // <copyright file="IDefinition.cs" company="Mario">
 //     Mario
@@ -163,6 +163,19 @@ namespace IronyModManager.Shared.Models
         /// </summary>
         /// <value><c>true</c> if this instance is from game; otherwise, <c>false</c>.</value>
         bool IsFromGame { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether this instance is placeholder.
+        /// </summary>
+        /// <value><c>true</c> if this instance is placeholder; otherwise, <c>false</c>.</value>
+        bool IsPlaceholder { get; set; }
+
+        /// <summary>
+        /// Gets or sets the last modified.
+        /// </summary>
+        /// <value>The last modified.</value>
+        [JsonIgnore]
+        DateTime? LastModified { get; set; }
 
         /// <summary>
         /// Gets or sets the name of the mod.

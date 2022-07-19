@@ -4,7 +4,7 @@
 // Created          : 09-21-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 12-07-2020
+// Last Modified On : 07-12-2022
 // ***********************************************************************
 // <copyright file="DefinitionFileTooltipConverter.cs" company="Mario">
 //     Mario
@@ -16,6 +16,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using Avalonia.Data.Converters;
 using IronyModManager.DI;
+using IronyModManager.Localization;
 using IronyModManager.Services.Common;
 using IronyModManager.Shared;
 using IronyModManager.Shared.Models;
@@ -30,6 +31,11 @@ namespace IronyModManager.Converters
     public class DefinitionFileTooltipConverter : IValueConverter
     {
         #region Fields
+
+        /// <summary>
+        /// The localization manager
+        /// </summary>
+        private ILocalizationManager localizationManager;
 
         /// <summary>
         /// The service
@@ -48,6 +54,9 @@ namespace IronyModManager.Converters
         /// <param name="parameter">The parameter.</param>
         /// <param name="culture">The culture.</param>
         /// <returns>System.Object.</returns>
+        /// <remarks>This method should not throw exceptions. If the value is not convertible, return
+        /// a <see cref="T:Avalonia.Data.BindingNotification" /> in an error state. Any exceptions thrown will be
+        /// treated as an application exception.</remarks>
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
             if (value != null && value is IDefinition definition)
@@ -56,8 +65,17 @@ namespace IronyModManager.Converters
                 {
                     service = DIResolver.Get<IModPatchCollectionService>();
                 }
+                if (localizationManager == null)
+                {
+                    localizationManager = DIResolver.Get<ILocalizationManager>();
+                }
                 if (!service.IsPatchMod(definition.ModName))
                 {
+                    if (definition.LastModified.HasValue)
+                    {
+                        var resource = localizationManager.GetResource(LocalizationResources.Conflict_Solver.Tooltips.DefinitionInfo);
+                        return IronyFormatter.Format(Common.Helpers.GetFormatProvider(), resource, new { definition.File, DateTime = definition.LastModified });
+                    }
                     return definition.File;
                 }
             }
@@ -72,6 +90,9 @@ namespace IronyModManager.Converters
         /// <param name="parameter">The parameter.</param>
         /// <param name="culture">The culture.</param>
         /// <returns>System.Object.</returns>
+        /// <remarks>This method should not throw exceptions. If the value is not convertible, return
+        /// a <see cref="T:Avalonia.Data.BindingNotification" /> in an error state. Any exceptions thrown will be
+        /// treated as an application exception.</remarks>
         [ExcludeFromCoverage("Not being used.")]
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {

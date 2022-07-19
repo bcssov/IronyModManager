@@ -227,6 +227,10 @@
                 "Delete": "Borrar",
                 "Close": "Cerrar"
             }
+        },
+        "Prompts": {
+            "ModsMissingTitle": "Mods eliminados",
+            "ModsMissingMessage": "Faltan algunos mods y se han eliminado de la colección automáticamente:{NewLine}{NewLine}{Mods}"
         }
     },
     "Mod_Actions": {
@@ -382,6 +386,9 @@
             "RegularModeResolvedOnly": "Algunos conflictos se restablecieron debido a cambios de mod. Estos se restablecieron en conflictos resueltos:{NewLine}{NewLine}{ListOfConflictsResolved}",
             "RegularModeIgnoredOnly": "Algunos conflictos se restablecieron debido a cambios de mod. Se restablecieron los conflictos ignorados:{NewLine}{NewLine}{ListOfConflictsIgnored}",
             "ListOfConflictsFormat": "{ParentDirectory}: {Name}"
+        },
+        "Tooltips": {
+            "DefinitionInfo": "Archivo:{File} modificado:{DateTime}"
         }
     },
     "ConflictIgnore": {
@@ -402,7 +409,10 @@
             "Title": "Opciones del Editor externo",
             "EditorExecutable": "Editor Ejecutable",
             "EditorArgs": "Editor Args",
-            "EditorArgsPlaceholder": "Ejemplo: leftFile:{Left} rightFile:{Right}"
+            "EditorArgsPlaceholder": "Ejemplo: leftFile:{Left} rightFile:{Right}",
+            "Test": "Configuración de prueba",
+            "TestLeft": "faucibus purus in massa tempor, nec feugiat nisl pretium fusce",
+            "TestRight": "faucibus purus in massa tempor nec feugiat nisl pretium fusce"
         },
         "Game": {
             "Title": "Opciones de Juego",
@@ -538,6 +548,10 @@
         "CollectionMergeNotEnoughSpace": {
             "Title": "No hay suficiente espacio libre",
             "Message": "No hay suficiente espacio libre para realizar una operación de combinación."
+        },
+        "ParadoxLauncherRunning": {
+            "Title": "Paradox Launcher activo",
+            "Message": "Paradox Launcher se está ejecutando, cierre antes de intentar esta acción."
         }
     },
     "Mod_App_Actions": {

@@ -4,7 +4,7 @@
 // Created          : 02-23-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 05-30-2021
+// Last Modified On : 07-18-2022
 // ***********************************************************************
 // <copyright file="Reader.cs" company="Mario">
 //     Mario
@@ -77,6 +77,8 @@ namespace IronyModManager.IO.Readers
                 info.FileName = file;
                 info.IsReadOnly = fileInfo.Item2;
                 info.Size = stream.Length;
+                info.LastModified = fileInfo.Item3;
+                info.Encoding = fileInfo.Item4;
                 if (Constants.TextExtensions.Any(s => file.EndsWith(s, StringComparison.OrdinalIgnoreCase)))
                 {
                     using var streamReader = new StreamReader(stream, true);
@@ -179,8 +181,8 @@ namespace IronyModManager.IO.Readers
         /// </summary>
         /// <param name="rootPath">The root path.</param>
         /// <param name="file">The file.</param>
-        /// <returns>(System.IO.Stream, bool).</returns>
-        private (Stream, bool) GetStreamInternal(string rootPath, string file)
+        /// <returns>System.ValueTuple&lt;Stream, System.Boolean, System.Nullable&lt;DateTime&gt;, EncodingInfo&gt;.</returns>
+        private (Stream, bool, DateTime?, EncodingInfo) GetStreamInternal(string rootPath, string file)
         {
             rootPath ??= string.Empty;
             var reader = readers.FirstOrDefault(r => r.CanRead(rootPath) && r.CanReadStream(rootPath));
@@ -188,7 +190,7 @@ namespace IronyModManager.IO.Readers
             {
                 return reader.GetStream(rootPath, file);
             }
-            return (null, false);
+            return (null, false, null, null);
         }
 
         #endregion Methods

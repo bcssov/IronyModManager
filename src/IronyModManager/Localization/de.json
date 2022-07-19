@@ -227,6 +227,10 @@
                 "Delete": "Löschen",
                 "Close": "Schließen"
             }
+        },
+        "Prompts": {
+            "ModsMissingTitle": "Mods entfernt",
+            "ModsMissingMessage": "Einige Mods fehlen und wurden automatisch aus der Sammlung entfernt:{NewLine}{NewLine}{Mods}"
         }
     },
     "Mod_Actions": {
@@ -382,6 +386,9 @@
             "RegularModeResolvedOnly": "Einige Konflikte wurden aufgrund von Mod-Änderungen zurückgesetzt. Diese wurden zurückgesetzt. Aufgelöste Konflikte:{NewLine}{NewLine}{ListOfConflictsResolved}",
             "RegularModeIgnoredOnly": "Einige Konflikte wurden aufgrund von Mod-Änderungen zurückgesetzt. Diese wurden ignorierte Konflikte zurückgesetzt:{NewLine}{NewLine}{ListOfConflictsIgnored}",
             "ListOfConflictsFormat": "{ParentDirectory}: {Name}"
+        },
+        "Tooltips": {
+            "DefinitionInfo": "Datei:{File} geändert:{DateTime}"
         }
     },
     "ConflictIgnore": {
@@ -402,7 +409,10 @@
             "Title": "Externe Editoroptionen",
             "EditorExecutable": "Editor Programmdatei",
             "EditorArgs": "Editor Args",
-            "EditorArgsPlaceholder": "Beispiel: leftFile:{Left} rightFile:{Right}"
+            "EditorArgsPlaceholder": "Beispiel: leftFile:{Left} rightFile:{Right}",
+            "Test": "Testkonfiguration",
+            "TestLeft": "faucibus purus in massa tempor, nec feugiat nisl pretium fusce",
+            "TestRight": "faucibus purus in massa tempor nec feugiat nisl pretium fusce"
         },
         "Game": {
             "Title": "Spieleinstellungen",
@@ -538,6 +548,10 @@
         "CollectionMergeNotEnoughSpace": {
             "Title": "Nicht genügend freier Speicherplatz",
             "Message": "Es ist nicht genügend freier Speicherplatz, um den Zusammenführungsvorgang durchzuführen."
+        },
+        "ParadoxLauncherRunning": {
+            "Title": "Paradox Launcher Active",
+            "Message": "Paradox Launcher läuft, bitte schließen Sie ihn, bevor Sie diese Aktion versuchen."
         }
     },
     "Mod_App_Actions": {

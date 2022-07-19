@@ -227,6 +227,10 @@
                 "Delete": "删除",
                 "Close": "关闭"
             }
+        },
+        "Prompts": {
+            "ModsMissingTitle": "撤消了Mods",
+            "ModsMissingMessage": "一些mods缺失，已从收藏中自动删除。:{NewLine}{NewLine}{Mods}"
         }
     },
     "Mod_Actions": {
@@ -382,6 +386,9 @@
             "RegularModeResolvedOnly": "一些冲突由于模组变更而被重置。以下为被重置的已处理的冲突：{NewLine}{NewLine}{ListOfConflictsResolved}",
             "RegularModeIgnoredOnly": "一些冲突由于模组变更而被重置。以下为被重置的已忽略的冲突：{NewLine}{NewLine}{ListOfConflictsIgnored}",
             "ListOfConflictsFormat": "{ParentDirectory}：{Name}"
+        },
+        "Tooltips": {
+            "DefinitionInfo": "文件：{File}修改：{DateTime}"
         }
     },
     "ConflictIgnore": {
@@ -402,7 +409,10 @@
             "Title": "外部编辑器选项",
             "EditorExecutable": "可执行文件",
             "EditorArgs": "启动参数",
-            "EditorArgsPlaceholder": "示例：leftFile:{Left} rightFile:{Right}"
+            "EditorArgsPlaceholder": "示例：leftFile:{Left} rightFile:{Right}",
+            "Test": "测试配置",
+            "TestLeft": "faucibus purus in massa tempor, nec feugiat nisl pretium fusce",
+            "TestRight": "faucibus purus in massa tempor nec feugiat nisl pretium fusce"
         },
         "Game": {
             "Title": "游戏选项",
@@ -538,6 +548,10 @@
         "CollectionMergeNotEnoughSpace": {
             "Title": "存储空间不足",
             "Message": "没有足够的可用存储空间以执行合并操作。"
+        },
+        "ParadoxLauncherRunning": {
+            "Title": "悖论发射器活跃",
+            "Message": "悖论发射器正在运行，请在尝试此操作之前将其关闭。"
         }
     },
     "Mod_App_Actions": {

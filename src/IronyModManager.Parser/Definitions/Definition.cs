@@ -4,7 +4,7 @@
 // Created          : 02-16-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-26-2022
+// Last Modified On : 07-12-2022
 // ***********************************************************************
 // <copyright file="Definition.cs" company="Mario">
 //     Mario
@@ -474,6 +474,19 @@ namespace IronyModManager.Parser.Definitions
         public bool IsFromGame { get; set; }
 
         /// <summary>
+        /// Gets or sets a value indicating whether this instance is placeholder.
+        /// </summary>
+        /// <value><c>true</c> if this instance is placeholder; otherwise, <c>false</c>.</value>
+        public bool IsPlaceholder { get; set; }
+
+        /// <summary>
+        /// Gets or sets the last modified.
+        /// </summary>
+        /// <value>The last modified.</value>
+        [JsonIgnore]
+        public DateTime? LastModified { get; set; }
+
+        /// <summary>
         /// Gets or sets the name of the mod.
         /// </summary>
         /// <value>The name of the mod.</value>
@@ -756,6 +769,8 @@ namespace IronyModManager.Parser.Definitions
                 nameof(AllowDuplicate) => AllowDuplicate,
                 nameof(ResetType) => ResetType,
                 nameof(FileNameSuffix) => FileNameSuffix,
+                nameof(IsPlaceholder) => IsPlaceholder,
+                nameof(LastModified) => LastModified,
                 _ => Id
             };
         }

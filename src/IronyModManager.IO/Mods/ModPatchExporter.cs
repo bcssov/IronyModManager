@@ -4,7 +4,7 @@
 // Created          : 03-31-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-26-2022
+// Last Modified On : 07-18-2022
 // ***********************************************************************
 // <copyright file="ModPatchExporter.cs" company="Mario">
 //     Mario
@@ -217,7 +217,7 @@ namespace IronyModManager.IO.Mods
                 {
                     throw new ArgumentNullException(nameof(parameters), "Definitions.");
                 }
-                var definitionInfoProvider = definitionInfoProviders.FirstOrDefault(p => p.CanProcess(parameters.Game));
+                var definitionInfoProvider = definitionInfoProviders.FirstOrDefault(p => p.CanProcess(parameters.Game) && p.IsFullyImplemented);
                 if (definitionInfoProvider != null)
                 {
                     var results = new List<bool>();
@@ -564,6 +564,8 @@ namespace IronyModManager.IO.Mods
             newInstance.AllowDuplicate = original.AllowDuplicate;
             newInstance.ResetType = original.ResetType;
             newInstance.FileNameSuffix = original.FileNameSuffix;
+            newInstance.IsPlaceholder = original.IsPlaceholder;
+            newInstance.LastModified = original.LastModified;
             return newInstance;
         }
 
@@ -923,7 +925,7 @@ namespace IronyModManager.IO.Mods
 
             foreach (var item in validDefinitions)
             {
-                var infoProvider = definitionInfoProviders.FirstOrDefault(p => p.CanProcess(game));
+                var infoProvider = definitionInfoProviders.FirstOrDefault(p => p.CanProcess(game) && p.IsFullyImplemented);
                 if (infoProvider != null)
                 {
                     string diskFile = string.Empty;

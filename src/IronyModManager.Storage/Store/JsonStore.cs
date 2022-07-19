@@ -4,7 +4,7 @@
 // Created          : 01-20-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-08-2022
+// Last Modified On : 07-14-2022
 // ***********************************************************************
 // <copyright file="JsonStore.cs" company="Mario">
 //     Mario
@@ -35,6 +35,11 @@ namespace IronyModManager.Storage
     internal class JsonStore : IStore
     {
         #region Fields
+
+        /// <summary>
+        /// The converters
+        /// </summary>
+        private static readonly JsonConverter[] converters = new JsonConverter[] { new StoreConverter(), new DIConverter() };
 
         /// <summary>
         /// The root paths
@@ -105,7 +110,7 @@ namespace IronyModManager.Storage
                     try
                     {
                         var fileContents = File.ReadAllText(path);
-                        items = JsonConvert.DeserializeObject<List<StoreItem>>(fileContents, new StoreConverter());
+                        items = JsonConvert.DeserializeObject<List<StoreItem>>(fileContents, converters);
                     }
                     catch { }
                 }

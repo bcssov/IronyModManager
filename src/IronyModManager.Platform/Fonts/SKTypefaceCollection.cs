@@ -4,7 +4,7 @@
 // Created          : 03-13-2021
 //
 // Last Modified By : Mario
-// Last Modified On : 10-27-2021
+// Last Modified On : 07-10-2022
 // ***********************************************************************
 // <copyright file="SKTypefaceCollection.cs" company="Avalonia">
 //     Avalonia
@@ -53,55 +53,146 @@ namespace IronyModManager.Platform.Fonts
         /// <returns>SKTypeface.</returns>
         public SKTypeface Get(Typeface typeface)
         {
-            return GetNearestMatch(typefaces, typeface);
+            return GetNearestMatch(typeface);
         }
 
         /// <summary>
         /// Gets the nearest match.
         /// </summary>
-        /// <param name="typefaces">The typefaces.</param>
         /// <param name="key">The key.</param>
         /// <returns>SKTypeface.</returns>
-        private static SKTypeface GetNearestMatch(IDictionary<Typeface, SKTypeface> typefaces, Typeface key)
+        private SKTypeface GetNearestMatch(Typeface key)
         {
+            if (typefaces.Count == 0)
+            {
+                return null;
+            }
+
             if (typefaces.TryGetValue(key, out var typeface))
             {
                 return typeface;
             }
 
-            var initialWeight = (int)key.Weight;
-
-            var weight = (int)key.Weight;
-
-            weight -= weight % 50; // make sure we start at a full weight
-
-            for (var i = (int)key.Style; i < 2; i++)
+            if (key.Style != FontStyle.Normal)
             {
-                // only try 2 font weights in each direction
-                for (var j = 0; j < initialWeight; j += 50)
+                key = new Typeface(key.FontFamily, FontStyle.Normal, key.Weight);
+            }
+
+            if (TryFindWeightFallback(key, out typeface))
+            {
+                return typeface;
+            }
+
+            //Nothing was found so we try some regular typeface.
+            if (typefaces.TryGetValue(new Typeface(key.FontFamily), out typeface))
+            {
+                return typeface;
+            }
+
+            SKTypeface skTypeface = null;
+
+            foreach (var pair in typefaces)
+            {
+                skTypeface = pair.Value;
+
+                var typefaceFamilyName = skTypeface.FamilyName ?? string.Empty;
+                var familyName = key.FontFamily.Name ?? string.Empty;
+
+                if (typefaceFamilyName.Contains(familyName))
                 {
-                    if (weight - j >= 100)
-                    {
-                        if (typefaces.TryGetValue(new Typeface(key.FontFamily, (FontStyle)i, (FontWeight)(weight - j)), out typeface))
-                        {
-                            return typeface;
-                        }
-                    }
-
-                    if (weight + j > 900)
-                    {
-                        continue;
-                    }
-
-                    if (typefaces.TryGetValue(new Typeface(key.FontFamily, (FontStyle)i, (FontWeight)(weight + j)), out typeface))
-                    {
-                        return typeface;
-                    }
+                    return skTypeface;
                 }
             }
 
             //Nothing was found so we use the first typeface we can get.
-            return typefaces.Values.FirstOrDefault();
+            return skTypeface ?? typefaces.Values.FirstOrDefault();
+        }
+
+        /// <summary>
+        /// Tries the find weight fallback.
+        /// </summary>
+        /// <param name="key">The key.</param>
+        /// <param name="typeface">The typeface.</param>
+        /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
+        private bool TryFindWeightFallback(Typeface key, out SKTypeface typeface)
+        {
+            typeface = null;
+            var weight = (int)key.Weight;
+
+            //If the target weight given is between 400 and 500 inclusive
+            if (weight >= 400 && weight <= 500)
+            {
+                //Look for available weights between the target and 500, in ascending order.
+                for (var i = 0; weight + i <= 500; i += 50)
+                {
+                    if (typefaces.TryGetValue(new Typeface(key.FontFamily, key.Style, (FontWeight)(weight + i)), out typeface))
+                    {
+                        return true;
+                    }
+                }
+
+                //If no match is found, look for available weights less than the target, in descending order.
+                for (var i = 0; weight - i >= 100; i += 50)
+                {
+                    if (typefaces.TryGetValue(new Typeface(key.FontFamily, key.Style, (FontWeight)(weight - i)), out typeface))
+                    {
+                        return true;
+                    }
+                }
+
+                //If no match is found, look for available weights greater than 500, in ascending order.
+                for (var i = 0; weight + i <= 900; i += 50)
+                {
+                    if (typefaces.TryGetValue(new Typeface(key.FontFamily, key.Style, (FontWeight)(weight + i)), out typeface))
+                    {
+                        return true;
+                    }
+                }
+            }
+
+            //If a weight less than 400 is given, look for available weights less than the target, in descending order.
+            if (weight < 400)
+            {
+                for (var i = 0; weight - i >= 100; i += 50)
+                {
+                    if (typefaces.TryGetValue(new Typeface(key.FontFamily, key.Style, (FontWeight)(weight - i)), out typeface))
+                    {
+                        return true;
+                    }
+                }
+
+                //If no match is found, look for available weights less than the target, in descending order.
+                for (var i = 0; weight + i <= 900; i += 50)
+                {
+                    if (typefaces.TryGetValue(new Typeface(key.FontFamily, key.Style, (FontWeight)(weight + i)), out typeface))
+                    {
+                        return true;
+                    }
+                }
+            }
+
+            //If a weight greater than 500 is given, look for available weights greater than the target, in ascending order.
+            if (weight > 500)
+            {
+                for (var i = 0; weight + i <= 900; i += 50)
+                {
+                    if (typefaces.TryGetValue(new Typeface(key.FontFamily, key.Style, (FontWeight)(weight + i)), out typeface))
+                    {
+                        return true;
+                    }
+                }
+
+                //If no match is found, look for available weights less than the target, in descending order.
+                for (var i = 0; weight - i >= 100; i += 50)
+                {
+                    if (typefaces.TryGetValue(new Typeface(key.FontFamily, key.Style, (FontWeight)(weight - i)), out typeface))
+                    {
+                        return true;
+                    }
+                }
+            }
+
+            return false;
         }
 
         #endregion Methods

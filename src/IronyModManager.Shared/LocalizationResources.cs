@@ -302,6 +302,12 @@ namespace IronyModManager.Shared
                     public const string Close = Prefix + "Close";
                 }
             }
+            public static class Prompts
+            {
+                public const string Prefix = "Collection_Mods.Prompts.";
+                public const string ModsMissingTitle = Prefix + "ModsMissingTitle";
+                public const string ModsMissingMessage = Prefix + "ModsMissingMessage";
+            }
         }
         public static class Mod_Actions
         {
@@ -503,6 +509,11 @@ namespace IronyModManager.Shared
                 public const string RegularModeIgnoredOnly = Prefix + "RegularModeIgnoredOnly";
                 public const string ListOfConflictsFormat = Prefix + "ListOfConflictsFormat";
             }
+            public static class Tooltips
+            {
+                public const string Prefix = "Conflict_Solver.Tooltips.";
+                public const string DefinitionInfo = Prefix + "DefinitionInfo";
+            }
         }
         public static class ConflictIgnore
         {
@@ -531,6 +542,9 @@ namespace IronyModManager.Shared
                 public const string EditorExecutable = Prefix + "EditorExecutable";
                 public const string EditorArgs = Prefix + "EditorArgs";
                 public const string EditorArgsPlaceholder = Prefix + "EditorArgsPlaceholder";
+                public const string Test = Prefix + "Test";
+                public const string TestLeft = Prefix + "TestLeft";
+                public const string TestRight = Prefix + "TestRight";
             }
             public static class Game
             {
@@ -726,6 +740,12 @@ namespace IronyModManager.Shared
             public static class CollectionMergeNotEnoughSpace
             {
                 public const string Prefix = "Notifications.CollectionMergeNotEnoughSpace.";
+                public const string Title = Prefix + "Title";
+                public const string Message = Prefix + "Message";
+            }
+            public static class ParadoxLauncherRunning
+            {
+                public const string Prefix = "Notifications.ParadoxLauncherRunning.";
                 public const string Title = Prefix + "Title";
                 public const string Message = Prefix + "Message";
             }
