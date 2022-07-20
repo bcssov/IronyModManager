@@ -2470,13 +2470,13 @@ namespace IronyModManager.Services
                     // Validate and see whether we need to check encoding
                     if (!fileDefs.Any(p => p.ValueType == ValueType.Invalid))
                     {
-                        if (definitionInfoProvider != null && !definitionInfoProvider.IsValidEncoding(Path.GetDirectoryName(fileInfo.FileName), fileInfo.Encoding))
+                        if (!fileDefs.Any(p => p.ValueType == ValueType.Binary) && definitionInfoProvider != null && !definitionInfoProvider.IsValidEncoding(Path.GetDirectoryName(fileInfo.FileName), fileInfo.Encoding))
                         {
                             var definition = DIResolver.Get<IDefinition>();
                             definition.ErrorMessage = "File has invalid encoding, please use UTF-8-BOM Encoding.";
                             definition.Id = Path.GetFileName(fileInfo.FileName).ToLowerInvariant();
                             definition.ValueType = ValueType.Invalid;
-                            definition.OriginalCode = definition.Code = string.Join(Environment.NewLine, fileInfo.Content);
+                            definition.OriginalCode = definition.Code = string.Join(Environment.NewLine, fileInfo.Content ?? new List<string>());
                             definition.ContentSHA = fileInfo.ContentSHA;
                             definition.Dependencies = modObject.Dependencies;
                             definition.ModName = modObject.Name;
