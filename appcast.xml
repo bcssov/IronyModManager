@@ -4,16 +4,8 @@
 		<title>Irony Mod Manager</title>
 		<language>en</language>
 		<item>
-			<title>1.22.117-rc</title>
-			<description>## Current Release Notes
-* Detect and treat as error files without BOM encoding
-* Minor fixes
-
-## 1.22.114-rc Release Notes
-* Fix #382
-* Minor fixes
-
-## Release Notes 1.22
+			<title>1.22.121</title>
+			<description>## Release Notes 1.22
 * Update dependencies
 * Improve detection whether steam is running or not (for steam games)
 * Add paradox launcher running warning
@@ -27,20 +19,12 @@
 * Show missing mods notification if mod is deinstalled and is in a collection
 * Auto detect gog games on windows
 * Detect and treat as error files without BOM encoding</description>
-			<pubDate>Mon, 18 Jul 2022 04:25:09 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.22.117-rc/linux-x64.zip" sparkle:version="1.22.117.32447" sparkle:shortVersionString="1.22.117" length="88157067" sparkle:os="linux" type="application/zip" sparkle:signature="m/sjcYvwbzl0LK67YGav7ZSgu85kh7jwl+7EaRdC3+ICQFgXXEva8bJTrSXDDuym4L2T29G0GOVeTbk1NXYEDw=="/>
+			<pubDate>Wed, 20 Jul 2022 02:08:27 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.22.121/linux-x64.zip" sparkle:version="1.22.121.57000" sparkle:shortVersionString="1.22.121" length="88159217" sparkle:os="linux" type="application/zip" sparkle:signature="2QR0L3ysRIsFat/F5Kj/Rg+8jZF4VqGvAo4tpqiad9vw/I1ryMV7cfLvVmTlKPHPQbzobRuCLGBbm8OEgmH6Bg=="/>
 		</item>
 		<item>
-			<title>1.22.117-rc</title>
-			<description>## Current Release Notes
-* Detect and treat as error files without BOM encoding
-* Minor fixes
-
-## 1.22.114-rc Release Notes
-* Fix #382
-* Minor fixes
-
-## Release Notes 1.22
+			<title>1.22.121</title>
+			<description>## Release Notes 1.22
 * Update dependencies
 * Improve detection whether steam is running or not (for steam games)
 * Add paradox launcher running warning
@@ -54,20 +38,12 @@
 * Show missing mods notification if mod is deinstalled and is in a collection
 * Auto detect gog games on windows
 * Detect and treat as error files without BOM encoding</description>
-			<pubDate>Mon, 18 Jul 2022 04:25:18 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.22.117-rc/osx-x64.zip" sparkle:version="1.22.117.32447" sparkle:shortVersionString="1.22.117" length="91029111" sparkle:os="osx" type="application/zip" sparkle:signature="52fCWJdP8S2QipRGYigrOQ96nViwcQhkWP10p6bjmk0nFUju+viCUhnz+gcmKxdnGqofTXuF1Sf8JKj1jedxCg=="/>
+			<pubDate>Wed, 20 Jul 2022 02:08:34 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.22.121/osx-x64.zip" sparkle:version="1.22.121.57000" sparkle:shortVersionString="1.22.121" length="91031223" sparkle:os="osx" type="application/zip" sparkle:signature="fuB1OpXqgen65RdzRKVLXNIUz2SxInIhnx5uKHELe3gsV8DXy1hONAeeG4OzBUbMYITx7/US+RVukRpgqQmOAA=="/>
 		</item>
 		<item>
-			<title>1.22.117-rc</title>
-			<description>## Current Release Notes
-* Detect and treat as error files without BOM encoding
-* Minor fixes
-
-## 1.22.114-rc Release Notes
-* Fix #382
-* Minor fixes
-
-## Release Notes 1.22
+			<title>1.22.121</title>
+			<description>## Release Notes 1.22
 * Update dependencies
 * Improve detection whether steam is running or not (for steam games)
 * Add paradox launcher running warning
@@ -81,20 +57,12 @@
 * Show missing mods notification if mod is deinstalled and is in a collection
 * Auto detect gog games on windows
 * Detect and treat as error files without BOM encoding</description>
-			<pubDate>Mon, 18 Jul 2022 04:25:27 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.22.117-rc/win-x64-setup.zip" sparkle:version="1.22.117.32447" sparkle:shortVersionString="1.22.117" length="72193373" sparkle:os="windows" type="application/zip" sparkle:signature="C4EshK9rP5IEPm1Hw42ybzrtqd9YWak0d1Jq63c4eKvueMgFligkIgb41EGAYyhkYbY0bz61IGpxtm0CwxUiDw=="/>
+			<pubDate>Wed, 20 Jul 2022 02:08:40 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.22.121/win-x64-setup.zip" sparkle:version="1.22.121.57000" sparkle:shortVersionString="1.22.121" length="72187816" sparkle:os="windows" type="application/zip" sparkle:signature="r9BZK8erXLqKte47cWwxzlAqVjooWOv+wY0X2BKqHe5JgMJBo5C75NO9ikCOaGS2LzxYMevY7EfI7MPZcnU+Cw=="/>
 		</item>
 		<item>
-			<title>1.22.117-rc</title>
-			<description>## Current Release Notes
-* Detect and treat as error files without BOM encoding
-* Minor fixes
-
-## 1.22.114-rc Release Notes
-* Fix #382
-* Minor fixes
-
-## Release Notes 1.22
+			<title>1.22.121</title>
+			<description>## Release Notes 1.22
 * Update dependencies
 * Improve detection whether steam is running or not (for steam games)
 * Add paradox launcher running warning
@@ -108,112 +76,8 @@
 * Show missing mods notification if mod is deinstalled and is in a collection
 * Auto detect gog games on windows
 * Detect and treat as error files without BOM encoding</description>
-			<pubDate>Mon, 18 Jul 2022 04:25:27 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.22.117-rc/win-x64.zip" sparkle:version="1.22.117.32447" sparkle:shortVersionString="1.22.117" length="105654751" sparkle:os="windows" type="application/zip" sparkle:signature="jVnvf2Kyki7EWW+6FrJe4bUlxFqVBCsFtrsdbpzG9hfuYi8dAcu/tv02LPSDQc2NPs8UNsBLvPd4BSJRlpsjBg=="/>
-		</item>
-		<item>
-			<title>1.21.158</title>
-			<description>## Note
-* As of this version Irony supports analyze mode for HOI4. If you see any bugs in how Irony detects any definitions there please report on the issue tracker.
-* Stellaris collections with patch mods are not backwards compatible with older versions. I seriously mean it; importing a collection made in v1.21 will not be recognized in say v1.20.
-
-## Current Release Notes
-* Fix #372
-* Minor fixes
-
-## v1.21.156 Release Notes
-* Add mod name prefix override support (per folder)
-* Resolve #378
-
-## Release Notes 1.21
-* Update dependencies
-* Minor fixes
-* Add conflict solver analyze mode only
-* Add option to export hash analysis report to clipboard
-* HOI4 conflict solver analyze support added (hopefully with no parser mapping errors)
-* Conflict solver reset conflicts notifications, indicators and filter
-* Enhance dds image handling
-* Optimize binary image preview</description>
-			<pubDate>Mon, 27 Jun 2022 18:45:00 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.21.158/linux-x64.zip" sparkle:version="1.21.158.29017" sparkle:shortVersionString="1.21.158" length="88823086" sparkle:os="linux" type="application/zip" sparkle:signature="Tj/upY0VdCCxl0Q9suNG2uMjDvL/rc8HVAGMtMIfPKH8sc+DJsgNL+dW5W65be70qR57jQeZ8Ien5zcxQLCGAw=="/>
-		</item>
-		<item>
-			<title>1.21.158</title>
-			<description>## Note
-* As of this version Irony supports analyze mode for HOI4. If you see any bugs in how Irony detects any definitions there please report on the issue tracker.
-* Stellaris collections with patch mods are not backwards compatible with older versions. I seriously mean it; importing a collection made in v1.21 will not be recognized in say v1.20.
-
-## Current Release Notes
-* Fix #372
-* Minor fixes
-
-## v1.21.156 Release Notes
-* Add mod name prefix override support (per folder)
-* Resolve #378
-
-## Release Notes 1.21
-* Update dependencies
-* Minor fixes
-* Add conflict solver analyze mode only
-* Add option to export hash analysis report to clipboard
-* HOI4 conflict solver analyze support added (hopefully with no parser mapping errors)
-* Conflict solver reset conflicts notifications, indicators and filter
-* Enhance dds image handling
-* Optimize binary image preview</description>
-			<pubDate>Mon, 27 Jun 2022 18:45:09 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.21.158/osx-x64.zip" sparkle:version="1.21.158.29017" sparkle:shortVersionString="1.21.158" length="91543682" sparkle:os="osx" type="application/zip" sparkle:signature="hEAVLHW93AfJZyhMdTx4NNco2bw8pTQO6ZHmCkWqZyyRQqbHHRA1CuduHzpQfUdjDIyuzvXH0Nr4SNJnfppeCg=="/>
-		</item>
-		<item>
-			<title>1.21.158</title>
-			<description>## Note
-* As of this version Irony supports analyze mode for HOI4. If you see any bugs in how Irony detects any definitions there please report on the issue tracker.
-* Stellaris collections with patch mods are not backwards compatible with older versions. I seriously mean it; importing a collection made in v1.21 will not be recognized in say v1.20.
-
-## Current Release Notes
-* Fix #372
-* Minor fixes
-
-## v1.21.156 Release Notes
-* Add mod name prefix override support (per folder)
-* Resolve #378
-
-## Release Notes 1.21
-* Update dependencies
-* Minor fixes
-* Add conflict solver analyze mode only
-* Add option to export hash analysis report to clipboard
-* HOI4 conflict solver analyze support added (hopefully with no parser mapping errors)
-* Conflict solver reset conflicts notifications, indicators and filter
-* Enhance dds image handling
-* Optimize binary image preview</description>
-			<pubDate>Mon, 27 Jun 2022 18:45:18 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.21.158/win-x64-setup.zip" sparkle:version="1.21.158.29017" sparkle:shortVersionString="1.21.158" length="72630051" sparkle:os="windows" type="application/zip" sparkle:signature="J2ukArRtCPB2E254D5s8SCdMXe3F9vSVH0IkTmcIwVT9IgIofnsBKuW3pghyR93KgcaJW2lylhe43ETZur+KCQ=="/>
-		</item>
-		<item>
-			<title>1.21.158</title>
-			<description>## Note
-* As of this version Irony supports analyze mode for HOI4. If you see any bugs in how Irony detects any definitions there please report on the issue tracker.
-* Stellaris collections with patch mods are not backwards compatible with older versions. I seriously mean it; importing a collection made in v1.21 will not be recognized in say v1.20.
-
-## Current Release Notes
-* Fix #372
-* Minor fixes
-
-## v1.21.156 Release Notes
-* Add mod name prefix override support (per folder)
-* Resolve #378
-
-## Release Notes 1.21
-* Update dependencies
-* Minor fixes
-* Add conflict solver analyze mode only
-* Add option to export hash analysis report to clipboard
-* HOI4 conflict solver analyze support added (hopefully with no parser mapping errors)
-* Conflict solver reset conflicts notifications, indicators and filter
-* Enhance dds image handling
-* Optimize binary image preview</description>
-			<pubDate>Mon, 27 Jun 2022 18:45:18 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.21.158/win-x64.zip" sparkle:version="1.21.158.29017" sparkle:shortVersionString="1.21.158" length="106426707" sparkle:os="windows" type="application/zip" sparkle:signature="NqZv6g/GV/SCSgkjkSaqpXME0gZBD4T6TLZzWCrW/BvVzQG48yvwsDGjZh2f0AT4a7J24auv5bCGsDrpcHuHDQ=="/>
+			<pubDate>Wed, 20 Jul 2022 02:08:40 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.22.121/win-x64.zip" sparkle:version="1.22.121.57000" sparkle:shortVersionString="1.22.121" length="105656903" sparkle:os="windows" type="application/zip" sparkle:signature="WQD8IkEUeem5UYjmhlQoorH8QaxIOOPh6B5pqya1VShkatZBmrHBYKg6C0vFz2+EtR8BFtMpn45y5IiAXfx2CQ=="/>
 		</item>
 	</channel>
 </rss>
