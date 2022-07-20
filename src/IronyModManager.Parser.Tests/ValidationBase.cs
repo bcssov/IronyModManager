@@ -83,8 +83,8 @@ namespace IronyModManager.Parser.Tests
             var allowedExtensions = new List<string>();
             foreach (var item in exts)
             {
-                var mimeType = MimeMapping.MimeUtility.GetMimeMapping(item);
-                if (mimeType.Contains("text", StringComparison.OrdinalIgnoreCase) || mimeType == MimeMapping.MimeUtility.UnknownMimeType)
+                var mimeType = MimeTypes.GetMimeType(item);
+                if (mimeType.Contains("text", StringComparison.OrdinalIgnoreCase) || mimeType == MimeTypes.FallbackMimeType)
                 {
                     allowedExtensions.Add(Path.GetExtension(item));
                 }
