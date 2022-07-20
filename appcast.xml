@@ -4,8 +4,11 @@
 		<title>Irony Mod Manager</title>
 		<language>en</language>
 		<item>
-			<title>1.22.121</title>
-			<description>## Release Notes 1.22
+			<title>1.22.123</title>
+			<description>## Current Release Notes
+* Fix NRE when binary file present in localisation files while evaluating encodings
+
+## Release Notes 1.22
 * Update dependencies
 * Improve detection whether steam is running or not (for steam games)
 * Add paradox launcher running warning
@@ -19,12 +22,15 @@
 * Show missing mods notification if mod is deinstalled and is in a collection
 * Auto detect gog games on windows
 * Detect and treat as error files without BOM encoding</description>
-			<pubDate>Wed, 20 Jul 2022 02:08:27 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.22.121/linux-x64.zip" sparkle:version="1.22.121.57000" sparkle:shortVersionString="1.22.121" length="88159217" sparkle:os="linux" type="application/zip" sparkle:signature="2QR0L3ysRIsFat/F5Kj/Rg+8jZF4VqGvAo4tpqiad9vw/I1ryMV7cfLvVmTlKPHPQbzobRuCLGBbm8OEgmH6Bg=="/>
+			<pubDate>Wed, 20 Jul 2022 14:14:34 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.22.123/linux-x64.zip" sparkle:version="1.22.123.33284" sparkle:shortVersionString="1.22.123" length="88159333" sparkle:os="linux" type="application/zip" sparkle:signature="VAsuegi5lprgeCkb787YIiAywEYAjabCxbUbgNQIl22AfdW+Q0cNBdmfd+FFPzryTG0kuXOn3Zxn3lrG704RDQ=="/>
 		</item>
 		<item>
-			<title>1.22.121</title>
-			<description>## Release Notes 1.22
+			<title>1.22.123</title>
+			<description>## Current Release Notes
+* Fix NRE when binary file present in localisation files while evaluating encodings
+
+## Release Notes 1.22
 * Update dependencies
 * Improve detection whether steam is running or not (for steam games)
 * Add paradox launcher running warning
@@ -38,12 +44,15 @@
 * Show missing mods notification if mod is deinstalled and is in a collection
 * Auto detect gog games on windows
 * Detect and treat as error files without BOM encoding</description>
-			<pubDate>Wed, 20 Jul 2022 02:08:34 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.22.121/osx-x64.zip" sparkle:version="1.22.121.57000" sparkle:shortVersionString="1.22.121" length="91031223" sparkle:os="osx" type="application/zip" sparkle:signature="fuB1OpXqgen65RdzRKVLXNIUz2SxInIhnx5uKHELe3gsV8DXy1hONAeeG4OzBUbMYITx7/US+RVukRpgqQmOAA=="/>
+			<pubDate>Wed, 20 Jul 2022 14:14:40 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.22.123/osx-x64.zip" sparkle:version="1.22.123.33284" sparkle:shortVersionString="1.22.123" length="91031354" sparkle:os="osx" type="application/zip" sparkle:signature="AGaHkLRHhr1v4Nnj5c/3Blgp0rQefYwv5qffDrEMeKzBNMqcNSbHfTE/5TmmbHvJAww/bX2ndTXJuEUagt4VCw=="/>
 		</item>
 		<item>
-			<title>1.22.121</title>
-			<description>## Release Notes 1.22
+			<title>1.22.123</title>
+			<description>## Current Release Notes
+* Fix NRE when binary file present in localisation files while evaluating encodings
+
+## Release Notes 1.22
 * Update dependencies
 * Improve detection whether steam is running or not (for steam games)
 * Add paradox launcher running warning
@@ -57,12 +66,15 @@
 * Show missing mods notification if mod is deinstalled and is in a collection
 * Auto detect gog games on windows
 * Detect and treat as error files without BOM encoding</description>
-			<pubDate>Wed, 20 Jul 2022 02:08:40 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.22.121/win-x64-setup.zip" sparkle:version="1.22.121.57000" sparkle:shortVersionString="1.22.121" length="72187816" sparkle:os="windows" type="application/zip" sparkle:signature="r9BZK8erXLqKte47cWwxzlAqVjooWOv+wY0X2BKqHe5JgMJBo5C75NO9ikCOaGS2LzxYMevY7EfI7MPZcnU+Cw=="/>
+			<pubDate>Wed, 20 Jul 2022 14:14:46 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.22.123/win-x64-setup.zip" sparkle:version="1.22.123.33284" sparkle:shortVersionString="1.22.123" length="72196775" sparkle:os="windows" type="application/zip" sparkle:signature="VKmTr8SHScflvInvpMwJvXieMbm5W8Fa7jPuSYJpVFfBFqjIUbmCe2jIuYVtj1yy/SC0BOjBioz/k+UWfEwvCg=="/>
 		</item>
 		<item>
-			<title>1.22.121</title>
-			<description>## Release Notes 1.22
+			<title>1.22.123</title>
+			<description>## Current Release Notes
+* Fix NRE when binary file present in localisation files while evaluating encodings
+
+## Release Notes 1.22
 * Update dependencies
 * Improve detection whether steam is running or not (for steam games)
 * Add paradox launcher running warning
@@ -76,8 +88,8 @@
 * Show missing mods notification if mod is deinstalled and is in a collection
 * Auto detect gog games on windows
 * Detect and treat as error files without BOM encoding</description>
-			<pubDate>Wed, 20 Jul 2022 02:08:40 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.22.121/win-x64.zip" sparkle:version="1.22.121.57000" sparkle:shortVersionString="1.22.121" length="105656903" sparkle:os="windows" type="application/zip" sparkle:signature="WQD8IkEUeem5UYjmhlQoorH8QaxIOOPh6B5pqya1VShkatZBmrHBYKg6C0vFz2+EtR8BFtMpn45y5IiAXfx2CQ=="/>
+			<pubDate>Wed, 20 Jul 2022 14:14:47 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.22.123/win-x64.zip" sparkle:version="1.22.123.33284" sparkle:shortVersionString="1.22.123" length="105657058" sparkle:os="windows" type="application/zip" sparkle:signature="dmT8V+LD040VO4Z001au0Fe1ZOoVDmJ3XQOfrq9gBueR9p9EU6VLn8U7Bgeq6q+aYGn7UTfarcbuJ9XBr3lJAQ=="/>
 		</item>
 	</channel>
 </rss>
