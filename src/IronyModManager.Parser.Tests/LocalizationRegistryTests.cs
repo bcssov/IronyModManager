@@ -37,7 +37,7 @@ namespace IronyModManager.Parser.Tests
         public void Should_have_all_translation_keys()
         {
             var registry = new LocalizationRegistry(new Cache());
-            registry.GetTranslationKeys().Length.Should().Be(11);
+            registry.GetTranslationKeys().Length.Should().Be(14);
         }
 
         /// <summary>

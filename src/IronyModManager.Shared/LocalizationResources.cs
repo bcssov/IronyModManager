@@ -810,5 +810,12 @@ namespace IronyModManager.Shared
             public const string Paradox = Prefix + "Paradox";
             public const string Local = Prefix + "Local";
         }
+        public static class FilterOperators
+        {
+            public const string Prefix = "FilterOperators.";
+            public const string ValueSeparator = Prefix + "ValueSeparator";
+            public const string StatementSeparator = Prefix + "StatementSeparator";
+            public const string OrStatementSeparator = Prefix + "OrStatementSeparator";
+        }
     }
 }

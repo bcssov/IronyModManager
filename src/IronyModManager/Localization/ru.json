@@ -599,5 +599,10 @@
         "Steam": "steam",
         "Paradox": "paradox",
         "Local": "локальный"
+    },
+    "FilterOperators": {
+        "ValueSeparator": ":",
+        "StatementSeparator": "&&",
+        "OrStatementSeparator": "||"
     }
 }

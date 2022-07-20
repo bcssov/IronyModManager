@@ -600,5 +600,10 @@
         "Steam": "steam",
         "Paradox": "paradox",
         "Local": "local"
+    },
+    "FilterOperators": {
+        "ValueSeparator": ":",
+        "StatementSeparator": "&&",
+        "OrStatementSeparator": "||"
     }
 }

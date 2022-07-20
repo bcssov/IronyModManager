@@ -598,6 +598,11 @@
         "False": "netočno",
         "Steam": "steam",
         "Paradox": "paradox",
-        "Local": "lokal"
+        "Local": "lokalno"
+    },
+    "FilterOperators": {
+        "ValueSeparator": ":",
+        "StatementSeparator": "&&",
+        "OrStatementSeparator": "||"
     }
 }
