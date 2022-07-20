@@ -4,7 +4,7 @@
 // Created          : 03-31-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 07-18-2022
+// Last Modified On : 07-20-2022
 // ***********************************************************************
 // <copyright file="ModPatchExporter.cs" company="Mario">
 //     Mario
@@ -684,7 +684,7 @@ namespace IronyModManager.IO.Mods
                 }
                 var stream = reader.GetStream(def.ModPath, def.File);
                 // If image and no stream try switching extension
-                if (Shared.Constants.ImageExtensions.Any(s => def.File.EndsWith(s, StringComparison.OrdinalIgnoreCase)) && stream == null)
+                if (FileSignatureUtility.IsImageFile(def.File) && stream == null)
                 {
                     var segments = def.File.Split(".", StringSplitOptions.RemoveEmptyEntries);
                     var file = string.Join(".", segments.Take(segments.Length - 1));

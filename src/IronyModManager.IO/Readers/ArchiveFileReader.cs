@@ -4,7 +4,7 @@
 // Created          : 02-23-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 07-18-2022
+// Last Modified On : 07-20-2022
 // ***********************************************************************
 // <copyright file="ArchiveFileReader.cs" company="Mario">
 //     Mario
@@ -303,7 +303,7 @@ namespace IronyModManager.IO.Readers
                         memoryStream.Seek(0, SeekOrigin.Begin);
                         info.Encoding = memoryStream.GetEncodingInfo(relativePath);
                         info.FileName = relativePath;
-                        if (Constants.TextExtensions.Any(s => reader.Entry.Key.EndsWith(s, StringComparison.OrdinalIgnoreCase)))
+                        if (FileSignatureUtility.IsTextFile(reader.Entry.Key, memoryStream))
                         {
                             using var streamReader = new StreamReader(memoryStream, true);
                             var text = streamReader.ReadToEnd();
@@ -354,7 +354,7 @@ namespace IronyModManager.IO.Readers
                     memoryStream.Seek(0, SeekOrigin.Begin);
                     info.Encoding = memoryStream.GetEncodingInfo(relativePath);
                     info.FileName = relativePath;
-                    if (Constants.TextExtensions.Any(s => entry.Key.EndsWith(s, StringComparison.OrdinalIgnoreCase)))
+                    if (FileSignatureUtility.IsTextFile(entry.Key, memoryStream))
                     {
                         using var streamReader = new StreamReader(memoryStream, true);
                         var text = streamReader.ReadToEnd();

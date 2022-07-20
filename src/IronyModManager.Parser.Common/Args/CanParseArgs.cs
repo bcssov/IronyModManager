@@ -4,7 +4,7 @@
 // Created          : 02-16-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-25-2020
+// Last Modified On : 07-20-2022
 // ***********************************************************************
 // <copyright file="CanParseArgs.cs" company="Mario">
 //     Mario
@@ -34,6 +34,12 @@ namespace IronyModManager.Parser.Common.Args
         /// </summary>
         /// <value>The type of the game.</value>
         public string GameType { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether this instance is binary.
+        /// </summary>
+        /// <value><c>true</c> if this instance is binary; otherwise, <c>false</c>.</value>
+        public bool IsBinary { get; set; }
 
         /// <summary>
         /// Gets or sets the lines.

@@ -4,7 +4,7 @@
 // Created          : 02-18-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-26-2022
+// Last Modified On : 07-20-2022
 // ***********************************************************************
 // <copyright file="LocalizationParser.cs" company="Mario">
 //     Mario
@@ -169,7 +169,7 @@ namespace IronyModManager.Parser.Generic
                                 {
                                     def.VirtualPath = Path.Combine(args.File.Split(Path.DirectorySeparatorChar)[0], Path.GetFileName(args.File));
                                 }
-                                def.Type = FormatType(def.VirtualPath, $"{selectedLanguage}-{Common.Constants.YmlType}");
+                                def.Type = def.VirtualPath.FormatDefinitionType($"{selectedLanguage}-{Common.Constants.YmlType}");
                                 def.CustomPriorityOrder = order;
                                 def.Code = $"{selectedLanguage}:{Environment.NewLine} {code}";
                                 def.OriginalCode = code;

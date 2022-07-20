@@ -4,7 +4,7 @@
 // Created          : 02-16-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 01-29-2022
+// Last Modified On : 07-20-2022
 // ***********************************************************************
 // <copyright file="ParserArgs.cs" company="Mario">
 //     Mario
@@ -24,14 +24,14 @@ namespace IronyModManager.Parser.Common.Args
         #region Constructors
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="ParserArgs"/> class.
+        /// Initializes a new instance of the <see cref="ParserArgs" /> class.
         /// </summary>
         public ParserArgs()
         {
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="ParserArgs"/> class.
+        /// Initializes a new instance of the <see cref="ParserArgs" /> class.
         /// </summary>
         /// <param name="args">The arguments.</param>
         public ParserArgs(ParserArgs args)
@@ -42,6 +42,7 @@ namespace IronyModManager.Parser.Common.Args
             ModDependencies = args.ModDependencies;
             ModName = args.ModName;
             ValidationType = args.ValidationType;
+            IsBinary = args.IsBinary;
         }
 
         #endregion Constructors
@@ -59,6 +60,12 @@ namespace IronyModManager.Parser.Common.Args
         /// </summary>
         /// <value>The file.</value>
         public string File { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether this instance is binary.
+        /// </summary>
+        /// <value><c>true</c> if this instance is binary; otherwise, <c>false</c>.</value>
+        public bool IsBinary { get; set; }
 
         /// <summary>
         /// Gets or sets the lines.

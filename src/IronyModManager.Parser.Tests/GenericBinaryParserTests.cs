@@ -38,11 +38,13 @@ namespace IronyModManager.Parser.Tests
             var args = new CanParseArgs()
             {
                 File = "common\\gamerules\\test.txt",
-                GameType = "Stellaris"
+                GameType = "Stellaris",
+                IsBinary = false
             };
             var parser = new BinaryParser(new CodeParser(new Logger()), null);
             parser.CanParse(args).Should().BeFalse();
-            args.File = "common\\gfx\\test.png";            
+            args.File = "common\\gfx\\test.png";
+            args.IsBinary = true;
             parser.CanParse(args).Should().BeTrue();
         }
 

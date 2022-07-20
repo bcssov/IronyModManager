@@ -4,7 +4,7 @@
 // Created          : 02-23-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 07-18-2022
+// Last Modified On : 07-20-2022
 // ***********************************************************************
 // <copyright file="DiskFileReader.cs" company="Mario">
 //     Mario
@@ -187,7 +187,7 @@ namespace IronyModManager.IO.Readers
                     using var stream = File.OpenRead(file);
                     info.FileName = relativePath;
                     info.Encoding = fileInfo.GetEncodingInfo();
-                    if (Constants.TextExtensions.Any(s => file.EndsWith(s, StringComparison.OrdinalIgnoreCase)))
+                    if (FileSignatureUtility.IsTextFile(file, stream))
                     {
                         using var streamReader = new StreamReader(stream, true);
                         var text = streamReader.ReadToEnd();

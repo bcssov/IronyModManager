@@ -4,7 +4,7 @@
 // Created          : 02-17-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 01-29-2022
+// Last Modified On : 07-20-2022
 // ***********************************************************************
 // <copyright file="BaseParser.cs" company="Mario">
 //     Mario
@@ -247,23 +247,6 @@ namespace IronyModManager.Parser.Common.Parsers
         }
 
         /// <summary>
-        /// Formats the type.
-        /// </summary>
-        /// <param name="file">The file.</param>
-        /// <param name="typeOverride">The type override.</param>
-        /// <returns>System.String.</returns>
-        protected virtual string FormatType(string file, string typeOverride = Shared.Constants.EmptyParam)
-        {
-            var formatted = Path.GetDirectoryName(file);
-            var type = Path.GetExtension(file).Trim('.');
-            if (!Shared.Constants.TextExtensions.Any(s => s.EndsWith(type, StringComparison.OrdinalIgnoreCase)))
-            {
-                type = Constants.TxtType;
-            }
-            return $"{formatted.ToLowerInvariant()}{Path.DirectorySeparatorChar}{(string.IsNullOrWhiteSpace(typeOverride) ? type : typeOverride)}";
-        }
-
-        /// <summary>
         /// Maps the definition from arguments.
         /// </summary>
         /// <param name="args">The arguments.</param>
@@ -275,7 +258,7 @@ namespace IronyModManager.Parser.Common.Parsers
             args.Definition.OriginalModName = args.Args.ModName;
             args.Definition.OriginalFileName = args.Args.File;
             args.Definition.File = args.Args.File;
-            args.Definition.Type = FormatType(args.Args.File, args.TypeOverride);
+            args.Definition.Type = args.Args.File.FormatDefinitionType(args.TypeOverride);
         }
 
         /// <summary>

@@ -2438,16 +2438,6 @@ namespace IronyModManager.Services
         /// <returns>IEnumerable&lt;IDefinition&gt;.</returns>
         protected virtual IEnumerable<IDefinition> ParseModFiles(IGame game, IEnumerable<IFileInfo> fileInfos, IModObject modObject, IDefinitionInfoProvider definitionInfoProvider)
         {
-            string FormatType(string file)
-            {
-                var formatted = Path.GetDirectoryName(file);
-                var type = Path.GetExtension(file).Trim('.');
-                if (!Shared.Constants.TextExtensions.Any(s => s.EndsWith(type, StringComparison.OrdinalIgnoreCase)))
-                {
-                    type = Parser.Common.Constants.TxtType;
-                }
-                return $"{formatted.ToLowerInvariant()}{Path.DirectorySeparatorChar}{type}";
-            }
             if (fileInfos == null)
             {
                 return null;
@@ -2463,7 +2453,8 @@ namespace IronyModManager.Services
                     Lines = fileInfo.Content,
                     ModDependencies = modObject.Dependencies,
                     ModName = modObject.Name,
-                    FileLastModified = fileInfo.LastModified
+                    FileLastModified = fileInfo.LastModified,
+                    IsBinary = fileInfo.IsBinary
                 });
                 if (fileDefs.Any())
                 {
@@ -2483,7 +2474,7 @@ namespace IronyModManager.Services
                             definition.OriginalModName = modObject.Name;
                             definition.OriginalFileName = fileInfo.FileName;
                             definition.File = fileInfo.FileName;
-                            definition.Type = FormatType(fileInfo.FileName);
+                            definition.Type = fileInfo.FileName.FormatDefinitionType();
                             definitions.Add(definition);
                             continue;
                         }

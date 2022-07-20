@@ -106,7 +106,8 @@ namespace IronyModManager.Parser.Tests
                 ContentSHA = "sha",
                 ModDependencies = new List<string> { "1" },
                 File = "flags\\test.png",
-                ModName = "fake"
+                ModName = "fake",
+                IsBinary = true
             };
             var parser = new Games.Stellaris.FlagsParser(new CodeParser(new Logger()), null);
             var result = parser.Parse(args).ToList();

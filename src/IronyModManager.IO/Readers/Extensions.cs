@@ -4,7 +4,7 @@
 // Created          : 07-18-2022
 //
 // Last Modified By : Mario
-// Last Modified On : 07-18-2022
+// Last Modified On : 07-20-2022
 // ***********************************************************************
 // <copyright file="Extensions.cs" company="Mario">
 //     Mario
@@ -35,7 +35,7 @@ namespace IronyModManager.IO.Readers
         /// <returns>Common.Readers.EncodingInfo.</returns>
         public static EncodingInfo GetEncodingInfo(this Stream stream, string file)
         {
-            if (!Constants.TextExtensions.Any(s => file.EndsWith(s, StringComparison.OrdinalIgnoreCase)))
+            if (!FileSignatureUtility.IsTextFile(file))
             {
                 return null;
             }
@@ -61,7 +61,7 @@ namespace IronyModManager.IO.Readers
         /// <returns>Common.Readers.EncodingInfo.</returns>
         public static EncodingInfo GetEncodingInfo(this string file)
         {
-            if (!Constants.TextExtensions.Any(s => file.EndsWith(s, StringComparison.OrdinalIgnoreCase)))
+            if (!FileSignatureUtility.IsTextFile(file))
             {
                 return null;
             }
@@ -81,7 +81,7 @@ namespace IronyModManager.IO.Readers
         /// <returns>Common.Readers.EncodingInfo.</returns>
         public static EncodingInfo GetEncodingInfo(this System.IO.FileInfo fileInfo)
         {
-            if (!Constants.TextExtensions.Any(s => fileInfo.FullName.EndsWith(s, StringComparison.OrdinalIgnoreCase)))
+            if (!FileSignatureUtility.IsTextFile(fileInfo.FullName))
             {
                 return null;
             }

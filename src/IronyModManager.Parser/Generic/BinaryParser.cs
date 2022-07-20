@@ -4,7 +4,7 @@
 // Created          : 02-18-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 12-07-2020
+// Last Modified On : 07-20-2022
 // ***********************************************************************
 // <copyright file="BinaryParser.cs" company="Mario">
 //     Mario
@@ -70,7 +70,7 @@ namespace IronyModManager.Parser.Generic
         /// <returns><c>true</c> if this instance can parse the specified arguments; otherwise, <c>false</c>.</returns>
         public override bool CanParse(CanParseArgs args)
         {
-            return !Constants.TextExtensions.Any(s => args.File.EndsWith(s, StringComparison.OrdinalIgnoreCase));
+            return args.IsBinary;
         }
 
         /// <summary>
@@ -84,7 +84,7 @@ namespace IronyModManager.Parser.Generic
             var def = GetDefinitionInstance();
             MapDefinitionFromArgs(ConstructArgs(args, def, typeOverride: Common.Constants.BinaryType));
             def.OriginalCode = def.Code = string.Empty;
-            if (Constants.ImageExtensions.Any(s => args.File.EndsWith(s, StringComparison.OrdinalIgnoreCase)))
+            if (FileSignatureUtility.IsImageFile(args.File))
             {
                 def.Id = Path.GetFileNameWithoutExtension(args.File).ToLowerInvariant();
             }
