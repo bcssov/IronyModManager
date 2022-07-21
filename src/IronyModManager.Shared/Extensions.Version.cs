@@ -4,7 +4,7 @@
 // Created          : 02-16-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 01-27-2022
+// Last Modified On : 07-21-2022
 // ***********************************************************************
 // <copyright file="Extensions.Version.cs" company="Mario">
 //     Mario
@@ -31,8 +31,8 @@ namespace IronyModManager.Shared
         /// Converts to version.
         /// </summary>
         /// <param name="value">The value.</param>
-        /// <returns>System.Version?.</returns>
-        public static Version? ToVersion(this string value)
+        /// <returns>System.Nullable&lt;Shared.Version&gt;.</returns>
+        public static Shared.Version? ToVersion(this string value)
         {
             var sb = new StringBuilder();
             var count = 0;
@@ -53,7 +53,7 @@ namespace IronyModManager.Shared
                 }
                 count++;
             }
-            if (Version.TryParse(sb.ToString().Trim().Trim('.'), out var parsedVersion))
+            if (Shared.Version.TryParse(sb.ToString().Trim().Trim('.'), out var parsedVersion))
             {
                 return parsedVersion;
             }

@@ -4,7 +4,7 @@
 // Created          : 02-29-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 08-27-2021
+// Last Modified On : 07-21-2022
 // ***********************************************************************
 // <copyright file="IMod.cs" company="Mario">
 //     Mario
@@ -96,7 +96,7 @@ namespace IronyModManager.Models.Common
         /// Gets or sets the version data.
         /// </summary>
         /// <value>The version data.</value>
-        Version VersionData { get; }
+        Shared.Version VersionData { get; }
 
         #endregion Properties
     }

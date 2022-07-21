@@ -4,7 +4,7 @@
 // Created          : 01-20-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 07-14-2022
+// Last Modified On : 07-21-2022
 // ***********************************************************************
 // <copyright file="JsonStore.cs" company="Mario">
 //     Mario
@@ -288,7 +288,7 @@ namespace IronyModManager.Storage
                             if (item.Contains('_', StringComparison.OrdinalIgnoreCase))
                             {
                                 var versionData = item.Split("_", StringSplitOptions.RemoveEmptyEntries)[1].Replace(Shared.Constants.JsonExtension, string.Empty).Trim();
-                                if (Version.TryParse(versionData, out var parsedVersion))
+                                if (System.Version.TryParse(versionData, out var parsedVersion))
                                 {
                                     dbs.Add(new StorageItem()
                                     {
@@ -301,7 +301,7 @@ namespace IronyModManager.Storage
                                     dbs.Add(new StorageItem()
                                     {
                                         FileName = item,
-                                        Version = new Version(0, 0, 0, 0)
+                                        Version = new System.Version(0, 0, 0, 0)
                                     });
                                 }
                             }
@@ -310,7 +310,7 @@ namespace IronyModManager.Storage
                                 dbs.Add(new StorageItem()
                                 {
                                     FileName = item,
-                                    Version = new Version(0, 0, 0, 0)
+                                    Version = new System.Version(0, 0, 0, 0)
                                 });
                             }
                         }
@@ -346,7 +346,7 @@ namespace IronyModManager.Storage
             /// Gets or sets the version.
             /// </summary>
             /// <value>The version.</value>
-            public Version Version { get; set; }
+            public System.Version Version { get; set; }
 
             #endregion Properties
         }

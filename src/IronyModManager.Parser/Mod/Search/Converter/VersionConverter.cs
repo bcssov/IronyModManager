@@ -4,7 +4,7 @@
 // Created          : 10-26-2021
 //
 // Last Modified By : Mario
-// Last Modified On : 10-26-2021
+// Last Modified On : 07-21-2022
 // ***********************************************************************
 // <copyright file="VersionConverter.cs" company="Mario">
 //     Mario
@@ -23,10 +23,10 @@ namespace IronyModManager.Parser.Mod.Search.Converter
 
     /// <summary>
     /// Class VersionConverter.
-    /// Implements the <see cref="IronyModManager.Parser.Mod.Search.Converter.BaseConverter{System.Version}" />
+    /// Implements the <see cref="IronyModManager.Parser.Mod.Search.Converter.BaseConverter{IronyModManager.Shared.Version}" />
     /// </summary>
-    /// <seealso cref="IronyModManager.Parser.Mod.Search.Converter.BaseConverter{System.Version}" />
-    public class VersionConverter : BaseConverter<Version?>
+    /// <seealso cref="IronyModManager.Parser.Mod.Search.Converter.BaseConverter{IronyModManager.Shared.Version}" />
+    public class VersionConverter : BaseConverter<Shared.Version?>
     {
         #region Constructors
 
@@ -58,7 +58,7 @@ namespace IronyModManager.Parser.Mod.Search.Converter
         /// <param name="locale">The locale.</param>
         /// <param name="value">The value.</param>
         /// <returns>T.</returns>
-        public override Version? Convert(string locale, string value)
+        public override Shared.Version? Convert(string locale, string value)
         {
             value ??= string.Empty;
             return value.ToVersion();

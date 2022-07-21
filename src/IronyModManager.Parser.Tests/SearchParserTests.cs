@@ -75,7 +75,7 @@ namespace IronyModManager.Parser.Tests
             result.Source.Count.Should().Be(1);
             result.Source.FirstOrDefault().Result.Should().Be(Common.Mod.Search.SourceType.Steam);
             result.Version.Count.Should().Be(1);
-            result.Version.First().Equals(new Version(2, 0)).Should().BeTrue();
+            result.Version.First().Equals(new Shared.Version(2, 0)).Should().BeTrue();
             result.Name.Count.Should().Be(1);
             result.Name.FirstOrDefault().Should().Be("test test");
         }
@@ -347,8 +347,8 @@ namespace IronyModManager.Parser.Tests
             result.Source.Count.Should().Be(1);
             result.Source.FirstOrDefault().Result.Should().Be(Common.Mod.Search.SourceType.Steam);
             result.Version.Count.Should().Be(2);
-            result.Version.First().Equals(new Version(2, 0)).Should().BeTrue();
-            result.Version.Last().Equals(new Version(3, 0)).Should().BeTrue();
+            result.Version.First().Equals(new Shared.Version(2, 0)).Should().BeTrue();
+            result.Version.Last().Equals(new Shared.Version(3, 0)).Should().BeTrue();
             result.Name.Count.Should().Be(1);
             result.Name.FirstOrDefault().Should().Be("test test");
         }

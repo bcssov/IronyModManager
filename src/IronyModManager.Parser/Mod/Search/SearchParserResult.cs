@@ -4,7 +4,7 @@
 // Created          : 10-24-2021
 //
 // Last Modified By : Mario
-// Last Modified On : 07-13-2022
+// Last Modified On : 07-21-2022
 // ***********************************************************************
 // <copyright file="SearchParserResult.cs" company="Mario">
 //     Mario
@@ -37,7 +37,7 @@ namespace IronyModManager.Parser.Mod.Search
             AchievementCompatible = new BoolFilterResult(null);
             IsSelected = new BoolFilterResult(null);
             Source = new List<SourceTypeResult>();
-            Version = new List<Version?>();
+            Version = new List<Shared.Version?>();
             Name = new List<string>();
         }
 
@@ -77,7 +77,7 @@ namespace IronyModManager.Parser.Mod.Search
         /// </summary>
         /// <value>The version.</value>
         [DescriptorProperty(Fields.Version, true)]
-        public IList<Version?> Version { get; set; }
+        public IList<Shared.Version?> Version { get; set; }
 
         #endregion Properties
 
