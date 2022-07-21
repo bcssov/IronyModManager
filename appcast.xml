@@ -12,7 +12,7 @@
 * Bugfixes
 
 ## 1.22.123 Release Notes
-Fix NRE when binary file present in localisation files while evaluating encodings
+* Fix NRE when binary file present in localisation files while evaluating encodings
 
 ## Release Notes 1.22
 * Update dependencies
@@ -40,7 +40,7 @@ Fix NRE when binary file present in localisation files while evaluating encoding
 * Bugfixes
 
 ## 1.22.123 Release Notes
-Fix NRE when binary file present in localisation files while evaluating encodings
+* Fix NRE when binary file present in localisation files while evaluating encodings
 
 ## Release Notes 1.22
 * Update dependencies
@@ -68,7 +68,7 @@ Fix NRE when binary file present in localisation files while evaluating encoding
 * Bugfixes
 
 ## 1.22.123 Release Notes
-Fix NRE when binary file present in localisation files while evaluating encodings
+* Fix NRE when binary file present in localisation files while evaluating encodings
 
 ## Release Notes 1.22
 * Update dependencies
@@ -96,7 +96,7 @@ Fix NRE when binary file present in localisation files while evaluating encoding
 * Bugfixes
 
 ## 1.22.123 Release Notes
-Fix NRE when binary file present in localisation files while evaluating encodings
+* Fix NRE when binary file present in localisation files while evaluating encodings
 
 ## Release Notes 1.22
 * Update dependencies
