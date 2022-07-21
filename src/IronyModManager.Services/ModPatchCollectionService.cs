@@ -4,7 +4,7 @@
 // Created          : 05-26-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 07-18-2022
+// Last Modified On : 07-20-2022
 // ***********************************************************************
 // <copyright file="ModPatchCollectionService.cs" company="Mario">
 //     Mario
@@ -2438,16 +2438,6 @@ namespace IronyModManager.Services
         /// <returns>IEnumerable&lt;IDefinition&gt;.</returns>
         protected virtual IEnumerable<IDefinition> ParseModFiles(IGame game, IEnumerable<IFileInfo> fileInfos, IModObject modObject, IDefinitionInfoProvider definitionInfoProvider)
         {
-            string FormatType(string file)
-            {
-                var formatted = Path.GetDirectoryName(file);
-                var type = Path.GetExtension(file).Trim('.');
-                if (!Shared.Constants.TextExtensions.Any(s => s.EndsWith(type, StringComparison.OrdinalIgnoreCase)))
-                {
-                    type = Parser.Common.Constants.TxtType;
-                }
-                return $"{formatted.ToLowerInvariant()}{Path.DirectorySeparatorChar}{type}";
-            }
             if (fileInfos == null)
             {
                 return null;
@@ -2463,27 +2453,28 @@ namespace IronyModManager.Services
                     Lines = fileInfo.Content,
                     ModDependencies = modObject.Dependencies,
                     ModName = modObject.Name,
-                    FileLastModified = fileInfo.LastModified
+                    FileLastModified = fileInfo.LastModified,
+                    IsBinary = fileInfo.IsBinary
                 });
                 if (fileDefs.Any())
                 {
                     // Validate and see whether we need to check encoding
                     if (!fileDefs.Any(p => p.ValueType == ValueType.Invalid))
                     {
-                        if (definitionInfoProvider != null && !definitionInfoProvider.IsValidEncoding(Path.GetDirectoryName(fileInfo.FileName), fileInfo.Encoding))
+                        if (!fileDefs.Any(p => p.ValueType == ValueType.Binary) && definitionInfoProvider != null && !definitionInfoProvider.IsValidEncoding(Path.GetDirectoryName(fileInfo.FileName), fileInfo.Encoding))
                         {
                             var definition = DIResolver.Get<IDefinition>();
                             definition.ErrorMessage = "File has invalid encoding, please use UTF-8-BOM Encoding.";
                             definition.Id = Path.GetFileName(fileInfo.FileName).ToLowerInvariant();
                             definition.ValueType = ValueType.Invalid;
-                            definition.OriginalCode = definition.Code = string.Join(Environment.NewLine, fileInfo.Content);
+                            definition.OriginalCode = definition.Code = string.Join(Environment.NewLine, fileInfo.Content ?? new List<string>());
                             definition.ContentSHA = fileInfo.ContentSHA;
                             definition.Dependencies = modObject.Dependencies;
                             definition.ModName = modObject.Name;
                             definition.OriginalModName = modObject.Name;
                             definition.OriginalFileName = fileInfo.FileName;
                             definition.File = fileInfo.FileName;
-                            definition.Type = FormatType(fileInfo.FileName);
+                            definition.Type = fileInfo.FileName.FormatDefinitionType();
                             definitions.Add(definition);
                             continue;
                         }

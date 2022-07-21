@@ -4,7 +4,7 @@
 // Created          : 02-24-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 07-12-2022
+// Last Modified On : 07-21-2022
 // ***********************************************************************
 // <copyright file="ModService.cs" company="Mario">
 //     Mario
@@ -262,7 +262,7 @@ namespace IronyModManager.Services
                     .ConditionalFilter(parameters.AchievementCompatible.Result.HasValue, x => x.Where(p => p.AchievementStatus == (parameters.AchievementCompatible.Result.GetValueOrDefault() ? AchievementStatus.Compatible : AchievementStatus.NotCompatible)))
                     .ConditionalFilter(parameters.IsSelected.Result.HasValue, x => x.Where(p => p.IsSelected == parameters.IsSelected.Result.GetValueOrDefault()))
                     .ConditionalFilter(parameters.Source.Any(), x => x.Where(p => parameters.Source.Any(s => p.Source == SourceTypeToModSource(s.Result))))
-                    .ConditionalFilter(parameters.Version.Any(), x => x.Where(p => parameters.Version.Any(s => p.VersionData > s)));
+                    .ConditionalFilter(parameters.Version.Any(), x => x.Where(p => parameters.Version.Any(s => IsValidVersion(p.VersionData, s))));
             return result.ToList();
         }
 
@@ -287,7 +287,7 @@ namespace IronyModManager.Services
                     .ConditionalFilter(parameters.AchievementCompatible.Result.HasValue, x => x.Where(p => p.AchievementStatus == (parameters.AchievementCompatible.Result.GetValueOrDefault() ? AchievementStatus.Compatible : AchievementStatus.NotCompatible)))
                     .ConditionalFilter(parameters.IsSelected.Result.HasValue, x => x.Where(p => p.IsSelected == parameters.IsSelected.Result.GetValueOrDefault()))
                     .ConditionalFilter(parameters.Source.Any(), x => x.Where(p => parameters.Source.Any(s => p.Source == SourceTypeToModSource(s.Result))))
-                    .ConditionalFilter(parameters.Version.Any(), x => x.Where(p => parameters.Version.Any(s => p.VersionData > s)));
+                    .ConditionalFilter(parameters.Version.Any(), x => x.Where(p => parameters.Version.Any(s => IsValidVersion(p.VersionData, s))));
             return result.FirstOrDefault();
         }
 
@@ -818,6 +818,54 @@ namespace IronyModManager.Services
             long.TryParse(name.Replace(Constants.Steam_mod_id, string.Empty), out var id);
 #pragma warning restore CA1806 // Do not ignore method results
             return id;
+        }
+
+        /// <summary>
+        /// Determines whether [is valid version] [the specified current version].
+        /// </summary>
+        /// <param name="currentVersion">The current version.</param>
+        /// <param name="requestedVersion">The requested version.</param>
+        /// <returns><c>true</c> if [is valid version] [the specified current version]; otherwise, <c>false</c>.</returns>
+        protected virtual bool IsValidVersion(Shared.Version currentVersion, Shared.Version requestedVersion)
+        {
+            static bool validateValues(int x, int y)
+            {
+                return x > -1 && y > -1 && !(x == int.MaxValue || y == int.MaxValue);
+            }
+
+            if (validateValues(currentVersion.Major, requestedVersion.Major))
+            {
+                var result = currentVersion.Major.CompareTo(requestedVersion.Major);
+                if (result != 0)
+                {
+                    return false;
+                }
+            }
+            if (validateValues(currentVersion.Minor, requestedVersion.Minor))
+            {
+                var result = currentVersion.Minor.CompareTo(requestedVersion.Minor);
+                if (result != 0)
+                {
+                    return false;
+                }
+            }
+            if (validateValues(currentVersion.Build, requestedVersion.Build))
+            {
+                var result = currentVersion.Build.CompareTo(requestedVersion.Build);
+                if (result != 0)
+                {
+                    return false;
+                }
+            }
+            if (validateValues(currentVersion.Revision, requestedVersion.Revision))
+            {
+                var result = currentVersion.Revision.CompareTo(requestedVersion.Revision);
+                if (result != 0)
+                {
+                    return false;
+                }
+            }
+            return true;
         }
 
         /// <summary>

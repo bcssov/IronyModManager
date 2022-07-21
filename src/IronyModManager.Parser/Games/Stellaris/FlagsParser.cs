@@ -4,7 +4,7 @@
 // Created          : 02-18-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 12-07-2020
+// Last Modified On : 07-20-2022
 // ***********************************************************************
 // <copyright file="FlagsParser.cs" company="Mario">
 //     Mario
@@ -80,7 +80,7 @@ namespace IronyModManager.Parser.Games.Stellaris
         /// <returns>IEnumerable&lt;IDefinition&gt;.</returns>
         public override IEnumerable<IDefinition> Parse(ParserArgs args)
         {
-            var valType = !Constants.TextExtensions.Any(s => args.File.EndsWith(s, StringComparison.OrdinalIgnoreCase)) ? ValueType.Binary : ValueType.WholeTextFile;
+            var valType = args.IsBinary ? ValueType.Binary : ValueType.WholeTextFile;
             if (valType == ValueType.WholeTextFile)
             {
                 var errors = EvalForErrorsOnly(args);
@@ -92,7 +92,7 @@ namespace IronyModManager.Parser.Games.Stellaris
 
             var def = GetDefinitionInstance();
             def.OriginalCode = def.Code = args.Lines != null ? string.Join(Environment.NewLine, args.Lines.Where(p => !string.IsNullOrWhiteSpace(p))) : string.Empty;
-            if (Constants.ImageExtensions.Any(s => args.File.EndsWith(s, StringComparison.OrdinalIgnoreCase)))
+            if (FileSignatureUtility.IsImageFile(args.File))
             {
                 def.Id = Path.GetFileNameWithoutExtension(args.File).ToLowerInvariant();
             }

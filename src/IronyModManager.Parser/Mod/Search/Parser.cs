@@ -4,7 +4,7 @@
 // Created          : 10-26-2021
 //
 // Last Modified By : Mario
-// Last Modified On : 07-13-2022
+// Last Modified On : 07-20-2022
 // ***********************************************************************
 // <copyright file="Parser.cs" company="Mario">
 //     Mario
@@ -38,21 +38,6 @@ namespace IronyModManager.Parser.Mod.Search
         private const string NameProperty = "name";
 
         /// <summary>
-        /// The or statement separator
-        /// </summary>
-        private const string OrStatementSeparator = "||";
-
-        /// <summary>
-        /// The statement separator
-        /// </summary>
-        private const string StatementSeparator = "&&";
-
-        /// <summary>
-        /// The value separator
-        /// </summary>
-        private const char ValueSeparator = ':';
-
-        /// <summary>
         /// The search parser properties
         /// </summary>
         private static IEnumerable<PropertyInfo> searchParserProperties;
@@ -61,6 +46,11 @@ namespace IronyModManager.Parser.Mod.Search
         /// The converters
         /// </summary>
         private readonly IEnumerable<ITypeConverter<object>> converters;
+
+        /// <summary>
+        /// The localization registry
+        /// </summary>
+        private readonly ILocalizationRegistry localizationRegistry;
 
         /// <summary>
         /// The logger
@@ -76,10 +66,12 @@ namespace IronyModManager.Parser.Mod.Search
         /// </summary>
         /// <param name="logger">The logger.</param>
         /// <param name="converters">The converters.</param>
-        public Parser(ILogger logger, IEnumerable<ITypeConverter<object>> converters)
+        /// <param name="localizationRegistry">The localization registry.</param>
+        public Parser(ILogger logger, IEnumerable<ITypeConverter<object>> converters, ILocalizationRegistry localizationRegistry)
         {
             this.logger = logger;
             this.converters = converters;
+            this.localizationRegistry = localizationRegistry;
         }
 
         #endregion Constructors
@@ -94,14 +86,18 @@ namespace IronyModManager.Parser.Mod.Search
         /// <returns>ISearchParserResult.</returns>
         public ISearchParserResult Parse(string locale, string text)
         {
+            var orStatementSeparator = localizationRegistry.GetTranslation(locale, LocalizationResources.FilterOperators.OrStatementSeparator);
+            var valueSeparator = localizationRegistry.GetTranslation(locale, LocalizationResources.FilterOperators.ValueSeparator);
+            var statementSeparator = localizationRegistry.GetTranslation(locale, LocalizationResources.FilterOperators.StatementSeparator);
+
             IList<string> parseOrStatements(string text)
             {
                 var list = new List<string>();
                 if (!string.IsNullOrWhiteSpace(text))
                 {
-                    if (text.Contains(OrStatementSeparator))
+                    if (text.Contains(orStatementSeparator))
                     {
-                        var split = text.Split(OrStatementSeparator, StringSplitOptions.RemoveEmptyEntries).ToList();
+                        var split = text.Split(orStatementSeparator, StringSplitOptions.RemoveEmptyEntries).ToList();
                         split.ForEach(x => list.Add(x.Trim()));
                     }
                     else
@@ -121,13 +117,13 @@ namespace IronyModManager.Parser.Mod.Search
             try
             {
                 var tokens = new Dictionary<string, string>();
-                foreach (var item in text.ToLowerInvariant().Split(StatementSeparator))
+                foreach (var item in text.ToLowerInvariant().Split(statementSeparator))
                 {
                     string key = string.Empty;
                     string value = string.Empty;
-                    if (item.Count(p => p == ValueSeparator) == 1)
+                    var split = item.Split(valueSeparator);
+                    if (split.Length == 2)
                     {
-                        var split = item.Split(ValueSeparator);
                         key = split[0].Trim();
                         value = split[1].Trim();
                     }

@@ -4,15 +4,15 @@
 // Created          : 07-28-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 12-08-2020
+// Last Modified On : 07-20-2022
 // ***********************************************************************
 // <copyright file="ConflictSolverCustomConflictsControlViewModel.cs" company="Mario">
 //     Mario
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
-using System.Collections.Generic;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reactive;
 using System.Reactive.Disposables;
@@ -24,6 +24,7 @@ using IronyModManager.Implementation.Actions;
 using IronyModManager.Localization;
 using IronyModManager.Localization.Attributes;
 using IronyModManager.Models.Common;
+using IronyModManager.Parser.Common.Parsers;
 using IronyModManager.Services.Common;
 using IronyModManager.Shared;
 using IronyModManager.Shared.Models;
@@ -307,22 +308,12 @@ namespace IronyModManager.ViewModels.Controls
         /// <returns>IDefinition.</returns>
         protected virtual IDefinition InitDefinition()
         {
-            string formatType(string path)
-            {
-                var formatted = System.IO.Path.GetDirectoryName(path);
-                var type = System.IO.Path.GetExtension(path).Trim('.');
-                if (!Shared.Constants.TextExtensions.Any(s => s.EndsWith(type, StringComparison.OrdinalIgnoreCase)))
-                {
-                    type = "txt";
-                }
-                return $"{formatted.ToLowerInvariant()}{System.IO.Path.DirectorySeparatorChar}{type}";
-            }
             var path = Path.StandardizeDirectorySeparator();
             var definition = DIResolver.Get<IDefinition>();
             definition.Code = CurrentEditText;
             definition.File = path;
             definition.Id = System.IO.Path.GetFileName(path).ToLowerInvariant();
-            definition.Type = formatType(path);
+            definition.Type = path.FormatDefinitionType();
             return definition;
         }
 

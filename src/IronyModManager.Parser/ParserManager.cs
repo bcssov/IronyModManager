@@ -4,7 +4,7 @@
 // Created          : 02-19-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 07-13-2022
+// Last Modified On : 07-20-2022
 // ***********************************************************************
 // <copyright file="ParserManager.cs" company="Mario">
 //     Mario
@@ -100,8 +100,7 @@ namespace IronyModManager.Parser
             }
             // Check if empty text file
             var commentId = args.File.EndsWith(Constants.LuaExtension, StringComparison.OrdinalIgnoreCase) ? Constants.Scripts.LuaScriptCommentId : Constants.Scripts.ScriptCommentId.ToString();
-            if (Shared.Constants.TextExtensions.Any(p => args.File.EndsWith(p, StringComparison.OrdinalIgnoreCase)) &&
-                (args.Lines == null || !args.Lines.Any() || !args.Lines.Any(p => isValidLine(p, commentId))))
+            if (!args.IsBinary && (args.Lines == null || !args.Lines.Any() || !args.Lines.Any(p => isValidLine(p, commentId))))
             {
                 var definition = DIResolver.Get<IDefinition>();
                 definition.OriginalCode = definition.Code = Comments.GetEmptyCommentType(args.File);
@@ -110,7 +109,7 @@ namespace IronyModManager.Parser
                 definition.Dependencies = args.ModDependencies;
                 definition.File = args.File;
                 definition.Id = Path.GetFileName(args.File).ToLowerInvariant();
-                definition.Type = GetType(args.File);
+                definition.Type = args.File.FormatDefinitionType();
                 definition.ModName = args.ModName;
                 definition.OriginalModName = args.ModName;
                 definition.OriginalFileName = args.File;
@@ -120,22 +119,6 @@ namespace IronyModManager.Parser
                 return new List<IDefinition>() { definition };
             }
             return InvokeParsers(args);
-        }
-
-        /// <summary>
-        /// Gets the type.
-        /// </summary>
-        /// <param name="file">The file.</param>
-        /// <returns>System.String.</returns>
-        protected virtual string GetType(string file)
-        {
-            var formatted = Path.GetDirectoryName(file);
-            var type = Path.GetExtension(file).Trim('.');
-            if (!Shared.Constants.TextExtensions.Any(s => s.EndsWith(type, StringComparison.OrdinalIgnoreCase)))
-            {
-                type = Constants.TxtType;
-            }
-            return $"{formatted.ToLowerInvariant()}{Path.DirectorySeparatorChar}{type}";
         }
 
         /// <summary>
@@ -269,7 +252,8 @@ namespace IronyModManager.Parser
             {
                 File = args.File,
                 GameType = args.GameType,
-                Lines = args.Lines ?? new List<string>()
+                Lines = args.Lines ?? new List<string>(),
+                IsBinary = args.IsBinary,
             };
             var parseArgs = new ParserArgs()
             {
@@ -278,7 +262,8 @@ namespace IronyModManager.Parser
                 File = args.File,
                 Lines = args.Lines ?? new List<string>(),
                 ModName = args.ModName,
-                ValidationType = args.ValidationType
+                ValidationType = args.ValidationType,
+                IsBinary = args.IsBinary
             };
             var preferredParserNames = GetPreferredParsers(args.GameType, Path.GetDirectoryName(args.File));
             IDefaultParser preferredParser = null;

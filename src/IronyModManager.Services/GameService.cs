@@ -4,7 +4,7 @@
 // Created          : 02-12-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 07-15-2022
+// Last Modified On : 07-21-2022
 // ***********************************************************************
 // <copyright file="GameService.cs" company="Mario">
 //     Mario
@@ -277,11 +277,11 @@ namespace IronyModManager.Services
                 // Some games use version field (inconsistency again)
                 if (settingsObject != null)
                 {
-                    if (!string.IsNullOrWhiteSpace(settingsObject.RawVersion) && Version.TryParse(settingsObject.RawVersion, out _))
+                    if (!string.IsNullOrWhiteSpace(settingsObject.RawVersion) && Shared.Version.TryParse(settingsObject.RawVersion, out _))
                     {
                         return settingsObject.RawVersion;
                     }
-                    if (!string.IsNullOrWhiteSpace(settingsObject.Version) && Version.TryParse(settingsObject.Version, out _))
+                    if (!string.IsNullOrWhiteSpace(settingsObject.Version) && Shared.Version.TryParse(settingsObject.Version, out _))
                     {
                         return settingsObject.Version;
                     }

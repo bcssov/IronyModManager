@@ -4,7 +4,7 @@
 // Created          : 06-19-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-30-2021
+// Last Modified On : 07-20-2022
 // ***********************************************************************
 // <copyright file="ModMergeExporter.cs" company="Mario">
 //     Mario
@@ -60,9 +60,9 @@ namespace IronyModManager.IO.Mods
         /// </summary>
         /// <param name="parameters">The parameters.</param>
         /// <returns>Task&lt;System.Boolean&gt;.</returns>
-        /// <exception cref="ArgumentNullException">parameters - ExportPath.</exception>
-        /// <exception cref="ArgumentNullException">parameters - ExportFile.</exception>
-        /// <exception cref="ArgumentNullException">parameters - RootModPath</exception>
+        /// <exception cref="ArgumentNullException">nameof(parameters), ExportPath.</exception>
+        /// <exception cref="ArgumentNullException">nameof(parameters), ExportFile.</exception>
+        /// <exception cref="ArgumentNullException">nameof(parameters), RootModPath</exception>
         public Task<bool> ExportFilesAsync(ModMergeFileExporterParameters parameters)
         {
             if (string.IsNullOrWhiteSpace(parameters.ExportPath))
@@ -104,7 +104,7 @@ namespace IronyModManager.IO.Mods
             var outPath = Path.Combine(exportPath, modFile);
             var stream = reader.GetStream(modPath, modFile);
             // If image and no stream try switching extension
-            if (Shared.Constants.ImageExtensions.Any(s => modFile.EndsWith(s, StringComparison.OrdinalIgnoreCase)) && stream == null)
+            if (FileSignatureUtility.IsImageFile(modFile) && stream == null)
             {
                 var segments = modFile.Split(".", StringSplitOptions.RemoveEmptyEntries);
                 var file = string.Join(".", segments.Take(segments.Length - 1));

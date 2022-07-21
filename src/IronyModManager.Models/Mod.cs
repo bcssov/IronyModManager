@@ -4,7 +4,7 @@
 // Created          : 02-29-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 10-25-2021
+// Last Modified On : 07-21-2022
 // ***********************************************************************
 // <copyright file="Mod.cs" company="Mario">
 //     Mario
@@ -37,7 +37,7 @@ namespace IronyModManager.Models
         /// <summary>
         /// The version data
         /// </summary>
-        private Version versionData;
+        private Shared.Version versionData;
 
         #endregion Fields
 
@@ -181,7 +181,7 @@ namespace IronyModManager.Models
         /// Gets or sets the version data.
         /// </summary>
         /// <value>The version data.</value>
-        public virtual Version VersionData
+        public virtual Shared.Version VersionData
         {
             get
             {
@@ -194,12 +194,12 @@ namespace IronyModManager.Models
                     }
                     else
                     {
-                        versionData = new Version();
+                        versionData = new Shared.Version();
                     }
                 }
                 else
                 {
-                    versionData = new Version();
+                    versionData = new Shared.Version();
                 }
                 return versionData;
             }

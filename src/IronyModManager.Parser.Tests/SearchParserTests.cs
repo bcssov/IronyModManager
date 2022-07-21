@@ -62,8 +62,11 @@ namespace IronyModManager.Parser.Tests
             registry.RegisterTranslation("fr", LocalizationResources.FilterCommands.Steam, "fr-steam");
             registry.RegisterTranslation("en", LocalizationResources.FilterCommands.Local, "local");
             registry.RegisterTranslation("fr", LocalizationResources.FilterCommands.Local, "fr-local");
+            registry.RegisterTranslation("en", LocalizationResources.FilterOperators.OrStatementSeparator, "||");
+            registry.RegisterTranslation("en", LocalizationResources.FilterOperators.StatementSeparator, "&&");
+            registry.RegisterTranslation("en", LocalizationResources.FilterOperators.ValueSeparator, ":");
 
-            var parser = new Mod.Search.Parser(new Logger(), new List<ITypeConverter<object>> { new VersionConverter(registry), new BoolConverter(registry), new SourceTypeConverter(registry) });
+            var parser = new Mod.Search.Parser(new Logger(), new List<ITypeConverter<object>> { new VersionConverter(registry), new BoolConverter(registry), new SourceTypeConverter(registry) }, registry);
             var line = "test test &&EN-VER:2.0 &&fr-src:steam &&en-ach:yest &&en-sel:true";
             var result = parser.Parse("en", line);
             result.Should().NotBeNull();
@@ -72,7 +75,7 @@ namespace IronyModManager.Parser.Tests
             result.Source.Count.Should().Be(1);
             result.Source.FirstOrDefault().Result.Should().Be(Common.Mod.Search.SourceType.Steam);
             result.Version.Count.Should().Be(1);
-            result.Version.First().Equals(new Version(2, 0)).Should().BeTrue();
+            result.Version.First().Equals(new Shared.Version(2, 0)).Should().BeTrue();
             result.Name.Count.Should().Be(1);
             result.Name.FirstOrDefault().Should().Be("test test");
         }
@@ -107,8 +110,11 @@ namespace IronyModManager.Parser.Tests
             registry.RegisterTranslation("fr", LocalizationResources.FilterCommands.Steam, "fr-steam");
             registry.RegisterTranslation("en", LocalizationResources.FilterCommands.Local, "local");
             registry.RegisterTranslation("fr", LocalizationResources.FilterCommands.Local, "fr-local");
+            registry.RegisterTranslation("en", LocalizationResources.FilterOperators.OrStatementSeparator, "||");
+            registry.RegisterTranslation("en", LocalizationResources.FilterOperators.StatementSeparator, "&&");
+            registry.RegisterTranslation("en", LocalizationResources.FilterOperators.ValueSeparator, ":");
 
-            var parser = new Mod.Search.Parser(new Logger(), new List<ITypeConverter<object>> { new VersionConverter(registry), new BoolConverter(registry), new SourceTypeConverter(registry) });
+            var parser = new Mod.Search.Parser(new Logger(), new List<ITypeConverter<object>> { new VersionConverter(registry), new BoolConverter(registry), new SourceTypeConverter(registry) }, registry);
             var line = "test test";
             var result = parser.Parse("en", line);
             result.Should().NotBeNull();
@@ -150,8 +156,11 @@ namespace IronyModManager.Parser.Tests
             registry.RegisterTranslation("fr", LocalizationResources.FilterCommands.Steam, "fr-steam");
             registry.RegisterTranslation("en", LocalizationResources.FilterCommands.Local, "local");
             registry.RegisterTranslation("fr", LocalizationResources.FilterCommands.Local, "fr-local");
+            registry.RegisterTranslation("en", LocalizationResources.FilterOperators.OrStatementSeparator, "||");
+            registry.RegisterTranslation("en", LocalizationResources.FilterOperators.StatementSeparator, "&&");
+            registry.RegisterTranslation("en", LocalizationResources.FilterOperators.ValueSeparator, ":");
 
-            var parser = new Mod.Search.Parser(new Logger(), new List<ITypeConverter<object>> { new VersionConverter(registry), new BoolConverter(registry), new SourceTypeConverter(registry) });
+            var parser = new Mod.Search.Parser(new Logger(), new List<ITypeConverter<object>> { new VersionConverter(registry), new BoolConverter(registry), new SourceTypeConverter(registry) }, registry);
             var line = "test test ";
             var result = parser.Parse("en", line);
             result.Should().NotBeNull();
@@ -193,8 +202,11 @@ namespace IronyModManager.Parser.Tests
             registry.RegisterTranslation("fr", LocalizationResources.FilterCommands.Steam, "fr-steam");
             registry.RegisterTranslation("en", LocalizationResources.FilterCommands.Local, "local");
             registry.RegisterTranslation("fr", LocalizationResources.FilterCommands.Local, "fr-local");
+            registry.RegisterTranslation("en", LocalizationResources.FilterOperators.OrStatementSeparator, "||");
+            registry.RegisterTranslation("en", LocalizationResources.FilterOperators.StatementSeparator, "&&");
+            registry.RegisterTranslation("en", LocalizationResources.FilterOperators.ValueSeparator, ":");
 
-            var parser = new Mod.Search.Parser(new Logger(), new List<ITypeConverter<object>> { new VersionConverter(registry), new BoolConverter(registry), new SourceTypeConverter(registry) });
+            var parser = new Mod.Search.Parser(new Logger(), new List<ITypeConverter<object>> { new VersionConverter(registry), new BoolConverter(registry), new SourceTypeConverter(registry) }, registry);
             var line = "en-ach:yes && en-ach:no";
             var result = parser.Parse("en", line);
             result.Should().NotBeNull();
@@ -231,8 +243,11 @@ namespace IronyModManager.Parser.Tests
             registry.RegisterTranslation("fr", LocalizationResources.FilterCommands.Steam, "fr-steam");
             registry.RegisterTranslation("en", LocalizationResources.FilterCommands.Local, "local");
             registry.RegisterTranslation("fr", LocalizationResources.FilterCommands.Local, "fr-local");
+            registry.RegisterTranslation("en", LocalizationResources.FilterOperators.OrStatementSeparator, "||");
+            registry.RegisterTranslation("en", LocalizationResources.FilterOperators.StatementSeparator, "&&");
+            registry.RegisterTranslation("en", LocalizationResources.FilterOperators.ValueSeparator, ":");
 
-            var parser = new Mod.Search.Parser(new Logger(), new List<ITypeConverter<object>> { new VersionConverter(registry), new BoolConverter(registry), new SourceTypeConverter(registry) });
+            var parser = new Mod.Search.Parser(new Logger(), new List<ITypeConverter<object>> { new VersionConverter(registry), new BoolConverter(registry), new SourceTypeConverter(registry) }, registry);
             var line = "en-ach";
             var result = parser.Parse("en", line);
             result.Should().NotBeNull();
@@ -271,8 +286,11 @@ namespace IronyModManager.Parser.Tests
             registry.RegisterTranslation("fr", LocalizationResources.FilterCommands.Steam, "fr-steam");
             registry.RegisterTranslation("en", LocalizationResources.FilterCommands.Local, "local");
             registry.RegisterTranslation("fr", LocalizationResources.FilterCommands.Local, "fr-local");
+            registry.RegisterTranslation("en", LocalizationResources.FilterOperators.OrStatementSeparator, "||");
+            registry.RegisterTranslation("en", LocalizationResources.FilterOperators.StatementSeparator, "&&");
+            registry.RegisterTranslation("en", LocalizationResources.FilterOperators.ValueSeparator, ":");
 
-            var parser = new Mod.Search.Parser(new Logger(), new List<ITypeConverter<object>> { new VersionConverter(registry), new BoolConverter(registry), new SourceTypeConverter(registry) });
+            var parser = new Mod.Search.Parser(new Logger(), new List<ITypeConverter<object>> { new VersionConverter(registry), new BoolConverter(registry), new SourceTypeConverter(registry) }, registry);
             var line = "test:test";
             var result = parser.Parse("en", line);
             result.Should().NotBeNull();
@@ -316,8 +334,11 @@ namespace IronyModManager.Parser.Tests
             registry.RegisterTranslation("fr", LocalizationResources.FilterCommands.Steam, "fr-steam");
             registry.RegisterTranslation("en", LocalizationResources.FilterCommands.Local, "local");
             registry.RegisterTranslation("fr", LocalizationResources.FilterCommands.Local, "fr-local");
+            registry.RegisterTranslation("en", LocalizationResources.FilterOperators.OrStatementSeparator, "||");
+            registry.RegisterTranslation("en", LocalizationResources.FilterOperators.StatementSeparator, "&&");
+            registry.RegisterTranslation("en", LocalizationResources.FilterOperators.ValueSeparator, ":");
 
-            var parser = new Mod.Search.Parser(new Logger(), new List<ITypeConverter<object>> { new VersionConverter(registry), new BoolConverter(registry), new SourceTypeConverter(registry) });
+            var parser = new Mod.Search.Parser(new Logger(), new List<ITypeConverter<object>> { new VersionConverter(registry), new BoolConverter(registry), new SourceTypeConverter(registry) }, registry);
             var line = "test test &&EN-VER:2.0||3.0 &&fr-src:steam &&en-ach:yest &&en-sel:true";
             var result = parser.Parse("en", line);
             result.Should().NotBeNull();
@@ -326,8 +347,8 @@ namespace IronyModManager.Parser.Tests
             result.Source.Count.Should().Be(1);
             result.Source.FirstOrDefault().Result.Should().Be(Common.Mod.Search.SourceType.Steam);
             result.Version.Count.Should().Be(2);
-            result.Version.First().Equals(new Version(2, 0)).Should().BeTrue();
-            result.Version.Last().Equals(new Version(3, 0)).Should().BeTrue();
+            result.Version.First().Equals(new Shared.Version(2, 0)).Should().BeTrue();
+            result.Version.Last().Equals(new Shared.Version(3, 0)).Should().BeTrue();
             result.Name.Count.Should().Be(1);
             result.Name.FirstOrDefault().Should().Be("test test");
         }

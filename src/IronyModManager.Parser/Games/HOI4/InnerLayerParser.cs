@@ -4,7 +4,7 @@
 // Created          : 01-29-2022
 //
 // Last Modified By : Mario
-// Last Modified On : 01-31-2022
+// Last Modified On : 07-20-2022
 // ***********************************************************************
 // <copyright file="InnerLayerParser.cs" company="Mario">
 //     Mario
@@ -109,7 +109,7 @@ namespace IronyModManager.Parser.Games.HOI4
             {
                 foreach (var item in result)
                 {
-                    item.Type = FormatType(args.File, typeOverride: $"{item.CodeTag}-{Common.Constants.TxtType}");
+                    item.Type = args.File.FormatDefinitionType(typeOverride: $"{item.CodeTag}-{Common.Constants.TxtType}");
                 }
             }
             else if (args.File.StartsWith(Common.Constants.HOI4.UnitLeader, StringComparison.OrdinalIgnoreCase))

@@ -4,7 +4,7 @@
 // Created          : 02-18-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 01-29-2022
+// Last Modified On : 07-20-2022
 // ***********************************************************************
 // <copyright file="GraphicsParser.cs" company="Mario">
 //     Mario
@@ -89,7 +89,7 @@ namespace IronyModManager.Parser.Generic
                 foreach (var item in result)
                 {
                     item.VirtualPath = Path.Combine(Path.GetDirectoryName(args.File).Replace(replaceFolder, string.Empty), Path.GetFileName(args.File));
-                    item.Type = FormatType(item.VirtualPath);
+                    item.Type = item.VirtualPath.FormatDefinitionType();
                 }
             }
             return result;

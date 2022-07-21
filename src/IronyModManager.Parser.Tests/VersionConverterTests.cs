@@ -72,7 +72,7 @@ namespace IronyModManager.Parser.Tests
 
             var converter = new VersionConverter(registry);
             var version = converter.Convert("en", "1.0");
-            version.Equals(new Version(1, 0)).Should().BeTrue();
+            version.Equals(new Shared.Version(1, 0)).Should().BeTrue();
         }
 
         /// <summary>

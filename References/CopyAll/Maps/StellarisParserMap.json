@@ -65,6 +65,9 @@
         "DirectoryPath": "common\\colony_automation",
         "PreferredParser": "DefaultParser"
     }, {
+        "DirectoryPath": "common\\colony_automation_categories",
+        "PreferredParser": "DefaultParser"
+    }, {
         "DirectoryPath": "common\\colony_automation_exceptions",
         "PreferredParser": "DefaultParser"
     }, {

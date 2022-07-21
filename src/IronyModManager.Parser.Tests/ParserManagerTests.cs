@@ -44,7 +44,8 @@ namespace IronyModManager.Parser.Tests
             var result = manager.Parse(new ParserManagerArgs()
             {
                 File = "fake-game",
-                GameType = "game"
+                GameType = "game",
+                Lines = new List<string>() { "dummy " }
             });
             result.First().File.Should().Be("game_parser");
             result.First().UsedParser.Should().Be("GameParser");
@@ -64,7 +65,8 @@ namespace IronyModManager.Parser.Tests
             var result = manager.Parse(new ParserManagerArgs()
             {
                 File = "fake-generic",
-                GameType = "game"
+                GameType = "game",
+                Lines = new List<string>() { "dummy " }
             });
             result.First().File.Should().Be("generic_parser");
             result.First().UsedParser.Should().Be("GenericParser");
@@ -84,7 +86,8 @@ namespace IronyModManager.Parser.Tests
             var result = manager.Parse(new ParserManagerArgs()
             {
                 File = "fake",
-                GameType = "game"
+                GameType = "game",
+                Lines = new List<string>() { "dummy "}
             });
             result.First().File.Should().Be("default_parser");
             result.First().UsedParser.Should().Be("DefaultParser");
@@ -107,7 +110,8 @@ namespace IronyModManager.Parser.Tests
                 GameType = "game",
                 Lines = new List<string>()
                 {
-                    Parser.Common.Constants.Scripts.PlaceholderFileComment
+                    Parser.Common.Constants.Scripts.PlaceholderFileComment,
+                    "dummy"
                 }
             });
             var testResult = result.ToList().TrueForAll(p => p.IsPlaceholder);
@@ -131,7 +135,8 @@ namespace IronyModManager.Parser.Tests
                 GameType = "game",
                 Lines = new List<string>()
                 {
-                    Parser.Common.Constants.Scripts.PlaceholderObjectsComment + "id2"
+                    Parser.Common.Constants.Scripts.PlaceholderObjectsComment + "id2",
+                    "dummy"
                 }
             });
             result.FirstOrDefault(p => p.Id.Equals("id2")).IsPlaceholder.Should().BeTrue();
@@ -156,7 +161,8 @@ namespace IronyModManager.Parser.Tests
                 GameType = "game",
                 Lines = new List<string>()
                 {
-                    Parser.Common.Constants.Scripts.PlaceholderObjectsComment
+                    Parser.Common.Constants.Scripts.PlaceholderObjectsComment,
+                    "dummy"
                 }
             });
             var testResult = result.ToList().TrueForAll(p => !p.IsPlaceholder);

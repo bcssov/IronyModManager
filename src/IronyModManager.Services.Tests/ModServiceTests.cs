@@ -1411,7 +1411,7 @@ namespace IronyModManager.Services.Tests
             {
                 Name = new List<string>() { "test" },
                 AchievementCompatible = new BoolFilterResult(true),
-                Version = new List<Version>() { new Version(1, 1) }
+                Version = new List<Shared.Version>() { new Shared.Version(1, 5) }
             });
             lngService.Setup(p => p.GetSelected()).Returns(new Language() { Abrv = "en" });
 
@@ -1452,7 +1452,7 @@ namespace IronyModManager.Services.Tests
             {
                 Name = new List<string>() { "test" },
                 AchievementCompatible = new BoolFilterResult(true),
-                Version = new List<Version>() { new Version(1, 1) }
+                Version = new List<Shared.Version>() { new Shared.Version(1, 5) }
             });
             lngService.Setup(p => p.GetSelected()).Returns(new Language() { Abrv = "en" });
 
@@ -1497,7 +1497,7 @@ namespace IronyModManager.Services.Tests
             {
                 Name = new List<string>() { "test" },
                 AchievementCompatible = new BoolFilterResult(true),
-                Version = new List<Version>() { new Version(1, 1) }
+                Version = new List<Shared.Version>() { new Shared.Version(1, 5) }
             });
             lngService.Setup(p => p.GetSelected()).Returns(new Language() { Abrv = "en" });
 
