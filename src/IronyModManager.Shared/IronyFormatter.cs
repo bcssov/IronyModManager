@@ -4,7 +4,7 @@
 // Created          : 07-10-2022
 //
 // Last Modified By : Mario
-// Last Modified On : 07-12-2022
+// Last Modified On : 07-21-2022
 // ***********************************************************************
 // <copyright file="IronyFormatter.cs" company="Mario">
 //     Mario
@@ -23,16 +23,35 @@ namespace IronyModManager.Shared
     /// </summary>
     public static class IronyFormatter
     {
+#nullable enable
+
         #region Fields
 
         /// <summary>
         /// The smart formatter
         /// </summary>
-        private static readonly SmartFormatter smartFormatter = InitFormatter();
+        [ThreadStatic]
+        private static SmartFormatter? smartFormatter;
 
         #endregion Fields
 
-#nullable enable
+        #region Properties
+
+        /// <summary>
+        /// Gets the formatter.
+        /// </summary>
+        /// <value>The formatter.</value>
+        private static SmartFormatter Formatter
+        {
+            get
+            {
+                smartFormatter ??= InitFormatter();
+                return smartFormatter;
+            }
+        }
+
+        #endregion Properties
+
         /// <summary>
         /// Formats the specified format provider.
         /// </summary>
@@ -43,7 +62,7 @@ namespace IronyModManager.Shared
 
         #region Methods
 
-        public static string Format(IFormatProvider formatProvider, string format, params object?[] args) => smartFormatter.Format(formatProvider, format, args);
+        public static string Format(IFormatProvider formatProvider, string format, params object?[] args) => Formatter.Format(formatProvider, format, args);
 
         /// <summary>
         /// Formats the specified format.
@@ -51,7 +70,7 @@ namespace IronyModManager.Shared
         /// <param name="format">The format.</param>
         /// <param name="args">The arguments.</param>
         /// <returns>System.String.</returns>
-        public static string Format(string format, params object?[] args) => smartFormatter.Format(format, args);
+        public static string Format(string format, params object?[] args) => Formatter.Format(format, args);
 
 #nullable disable
 
