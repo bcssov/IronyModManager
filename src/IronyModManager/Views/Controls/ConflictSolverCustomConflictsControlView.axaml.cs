@@ -46,6 +46,16 @@ namespace IronyModManager.Views.Controls
         /// </summary>
         private readonly IResourceLoader resourceLoader;
 
+        /// <summary>
+        /// The search panel
+        /// </summary>
+        private AvaloniaEdit.Search.SearchPanel searchPanel;
+
+        /// <summary>
+        /// The text editor
+        /// </summary>
+        private IronyModManager.Controls.TextEditor textEditor;
+
         #endregion Fields
 
         #region Constructors
@@ -69,8 +79,10 @@ namespace IronyModManager.Views.Controls
         /// <param name="disposables">The disposables.</param>
         protected override void OnActivated(CompositeDisposable disposables)
         {
-            var editor = this.FindControl<IronyModManager.Controls.TextEditor>("editor");
-            SetEditorOptions(editor);
+            textEditor = this.FindControl<IronyModManager.Controls.TextEditor>("editor");
+            SetEditorOptions(textEditor);
+            searchPanel = AvaloniaEdit.Search.SearchPanel.Install(textEditor);
+            SetEditorContextMenu();
 
             var popup = this.FindControl<Popup>("popup");
             popup.Closed += (sender, args) =>
@@ -90,63 +102,27 @@ namespace IronyModManager.Views.Controls
         }
 
         /// <summary>
+        /// Called when [locale changed].
+        /// </summary>
+        /// <param name="newLocale">The new locale.</param>
+        /// <param name="oldLocale">The old locale.</param>
+        protected override void OnLocaleChanged(string newLocale, string oldLocale)
+        {
+            SetEditorContextMenu();
+            base.OnLocaleChanged(newLocale, oldLocale);
+        }
+
+        /// <summary>
         /// Sets the editor options.
         /// </summary>
         /// <param name="editor">The editor.</param>
         protected virtual void SetEditorOptions(IronyModManager.Controls.TextEditor editor)
         {
-            var ctx = new MenuFlyout
-            {
-                Items = new List<MenuItem>()
-                {
-                    new MenuItem()
-                    {
-                        Header = ViewModel.EditorCopy,
-                        Command = ReactiveCommand.Create(() =>  editor.Copy()).DisposeWith(Disposables)
-                    },
-                    new MenuItem()
-                    {
-                        Header = ViewModel.EditorCut,
-                        Command = ReactiveCommand.Create(() =>  editor.Cut()).DisposeWith(Disposables)
-                    },
-                    new MenuItem()
-                    {
-                        Header = ViewModel.EditorPaste,
-                        Command = ReactiveCommand.Create(() =>  editor.Paste()).DisposeWith(Disposables)
-                    },
-                    new MenuItem()
-                    {
-                        Header = ViewModel.EditorDelete,
-                        Command = ReactiveCommand.Create(() =>  editor.Delete()).DisposeWith(Disposables)
-                    },
-                    new MenuItem()
-                    {
-                        Header = ViewModel.EditorSelectAll,
-                        Command = ReactiveCommand.Create(() =>  editor.SelectAll()).DisposeWith(Disposables)
-                    },
-                    new MenuItem()
-                    {
-                        Header = "-"
-                    },
-                    new MenuItem()
-                    {
-                        Header = ViewModel.EditorUndo,
-                        Command = ReactiveCommand.Create(() =>  editor.Undo()).DisposeWith(Disposables)
-                    },
-                    new MenuItem()
-                    {
-                        Header = ViewModel.EditorRedo,
-                        Command = ReactiveCommand.Create(() =>  editor.Redo()).DisposeWith(Disposables)
-                    }
-                }
-            };
-            editor.ContextFlyout = ctx;
             editor.Options = new TextEditorOptions()
             {
                 ConvertTabsToSpaces = true,
                 IndentationSize = 4
             };
-            editor.TextArea.ActiveInputHandler = new Implementation.AvaloniaEdit.TextAreaInputHandler(editor);
 
             ViewModel.WhenAnyValue(p => p.EditingYaml).Subscribe(s =>
             {
@@ -166,38 +142,31 @@ namespace IronyModManager.Views.Controls
                 }
             }
 
-            bool manualAppend = false;
             editor.TextChanged += (sender, args) =>
             {
-                // It's a hack I know see: https://github.com/AvaloniaUI/AvaloniaEdit/issues/99.
-                // I'd need to go into the code to fix it and it ain't worth it. There doesn't seem to be any feedback on this issue as well.
-                var lines = editor.Text.SplitOnNewLine(false).ToList();
-                if (lines.Count > 3)
-                {
-                    if (manualAppend)
-                    {
-                        manualAppend = false;
-                        return;
-                    }
-                    var carretOffset = editor.CaretOffset;
-                    for (int i = 1; i <= 3; i++)
-                    {
-                        var last = lines[^i];
-                        if (!string.IsNullOrWhiteSpace(last))
-                        {
-                            manualAppend = true;
-                            editor.AppendText("\r\n");
-                        }
-                    }
-                    if (manualAppend)
-                    {
-                        editor.CaretOffset = carretOffset;
-                    }
-                }
-                lines = editor.Text.SplitOnNewLine().ToList();
+                var lines = editor.Text.SplitOnNewLine().ToList();
                 string text = string.Join(Environment.NewLine, lines);
                 ViewModel.CurrentEditText = text;
             };
+        }
+
+        /// <summary>
+        /// Handles the editor find or replace.
+        /// </summary>
+        /// <param name="isReplaceMode">if set to <c>true</c> [is replace mode].</param>
+        private void HandleEditorFindOrReplace(bool isReplaceMode)
+        {
+            if (searchPanel == null || textEditor == null)
+            {
+                return;
+            }
+            searchPanel.IsReplaceMode = isReplaceMode;
+            searchPanel.Open();
+            if (!(textEditor.TextArea.Selection.IsEmpty || textEditor.TextArea.Selection.IsMultiline))
+            {
+                searchPanel.SearchPattern = textEditor.TextArea.Selection.GetText();
+            }
+            Dispatcher.UIThread.Post(searchPanel.Reactivate, DispatcherPriority.Input);
         }
 
         /// <summary>
@@ -206,6 +175,77 @@ namespace IronyModManager.Views.Controls
         private void InitializeComponent()
         {
             AvaloniaXamlLoader.Load(this);
+        }
+
+        /// <summary>
+        /// Sets the editor context menu.
+        /// </summary>
+        private void SetEditorContextMenu()
+        {
+            if (textEditor == null || searchPanel == null)
+            {
+                return;
+            }
+            var ctx = new MenuFlyout
+            {
+                Items = new List<MenuItem>()
+                {
+                    new MenuItem()
+                    {
+                        Header = ViewModel.EditorCopy,
+                        Command = ReactiveCommand.Create(() =>  textEditor.Copy()).DisposeWith(Disposables)
+                    },
+                    new MenuItem()
+                    {
+                        Header = ViewModel.EditorCut,
+                        Command = ReactiveCommand.Create(() =>  textEditor.Cut()).DisposeWith(Disposables)
+                    },
+                    new MenuItem()
+                    {
+                        Header = ViewModel.EditorPaste,
+                        Command = ReactiveCommand.Create(() =>  textEditor.Paste()).DisposeWith(Disposables)
+                    },
+                    new MenuItem()
+                    {
+                        Header = ViewModel.EditorDelete,
+                        Command = ReactiveCommand.Create(() =>  textEditor.Delete()).DisposeWith(Disposables)
+                    },
+                    new MenuItem()
+                    {
+                        Header = ViewModel.EditorSelectAll,
+                        Command = ReactiveCommand.Create(() =>  textEditor.SelectAll()).DisposeWith(Disposables)
+                    },
+                    new MenuItem()
+                    {
+                        Header = "-"
+                    },
+                    new MenuItem()
+                    {
+                        Header = ViewModel.EditorUndo,
+                        Command = ReactiveCommand.Create(() =>  textEditor.Undo()).DisposeWith(Disposables)
+                    },
+                    new MenuItem()
+                    {
+                        Header = ViewModel.EditorRedo,
+                        Command = ReactiveCommand.Create(() =>  textEditor.Redo()).DisposeWith(Disposables)
+                    },
+                    new MenuItem()
+                    {
+                        Header = "-"
+                    },
+                    new MenuItem()
+                    {
+                        Header = ViewModel.EditorFind,
+                        Command = ReactiveCommand.Create(() =>  HandleEditorFindOrReplace(false)).DisposeWith(Disposables)
+                    },
+                    new MenuItem()
+                    {
+                        Header = ViewModel.EditorReplace,
+                        Command = ReactiveCommand.Create(() =>  HandleEditorFindOrReplace(true)).DisposeWith(Disposables)
+                    },
+                }
+            };
+            textEditor.ContextFlyout = ctx;
         }
 
         #endregion Methods

@@ -432,6 +432,8 @@ namespace IronyModManager.Shared
                 public const string Undo = Prefix + "Undo";
                 public const string Redo = Prefix + "Redo";
                 public const string SelectAll = Prefix + "SelectAll";
+                public const string Find = Prefix + "Find";
+                public const string Replace = Prefix + "Replace";
             }
             public static class Modes
             {

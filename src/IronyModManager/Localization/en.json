@@ -328,7 +328,9 @@
             "Paste": "Paste",
             "Undo": "Undo",
             "Redo": "Redo",
-            "SelectAll": "Select All"
+            "SelectAll": "Select All",
+            "Find": "Find",
+            "Replace": "Replace"
         },
         "Modes": {
             "Title": "Select Mode",

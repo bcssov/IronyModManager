@@ -327,7 +327,9 @@
             "Paste": "Zalijepi",
             "Undo": "Poništi",
             "Redo": "Ponovi",
-            "SelectAll": "Odaberi sve"
+            "SelectAll": "Odaberi sve",
+            "Find": "Pronađi",
+            "Replace": "Zamijeni"
         },
         "Modes": {
             "Title": "Odaberi način rada",

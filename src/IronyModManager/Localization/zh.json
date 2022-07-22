@@ -327,7 +327,9 @@
             "Paste": "粘贴",
             "Undo": "撤销",
             "Redo": "重做",
-            "SelectAll": "全选"
+            "SelectAll": "全选",
+            "Find": "查找",
+            "Replace": "替换"
         },
         "Modes": {
             "Title": "选择模式",
