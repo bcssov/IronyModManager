@@ -145,7 +145,7 @@
     <PackageReference Include="NetSparkleUpdater.SparkleUpdater" Version="2.1.2" />
     <PackageReference Include="NLog" Version="5.0.1" />
     <PackageReference Include="ReactiveUI" Version="18.3.1" />
-    <PackageReference Include="SimpleInjector" Version="5.3.3" />
+    <PackageReference Include="SimpleInjector" Version="5.4.0" />
     <PackageReference Include="SimpleInjector.Packaging" Version="5.0.0" />
     <PackageReference Include="Splat.NLog" Version="14.4.1" />
     <PackageReference Include="Splat.SimpleInjector" Version="14.4.1" />

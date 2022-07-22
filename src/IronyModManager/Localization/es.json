@@ -327,7 +327,9 @@
             "Paste": "Pegar",
             "Undo": "Deshacer",
             "Redo": "Rehacer",
-            "SelectAll": "Seleccionar Todo"
+            "SelectAll": "Seleccionar Todo",
+            "Find": "Encuentre",
+            "Replace": "Sustituir"
         },
         "Modes": {
             "Title": "Seleccionar Modo",

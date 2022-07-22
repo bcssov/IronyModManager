@@ -327,7 +327,9 @@
             "Paste": "Coller",
             "Undo": "annuler",
             "Redo": "Refaire",
-            "SelectAll": "Tout sélectionner"
+            "SelectAll": "Tout sélectionner",
+            "Find": "Trouvez",
+            "Replace": "Remplacer"
         },
         "Modes": {
             "Title": "Sélectionnez le mode",

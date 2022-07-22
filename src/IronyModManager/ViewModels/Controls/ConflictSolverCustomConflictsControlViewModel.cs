@@ -4,7 +4,7 @@
 // Created          : 07-28-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 07-20-2022
+// Last Modified On : 07-22-2022
 // ***********************************************************************
 // <copyright file="ConflictSolverCustomConflictsControlViewModel.cs" company="Mario">
 //     Mario
@@ -174,6 +174,13 @@ namespace IronyModManager.ViewModels.Controls
         public virtual string EditorDelete { get; protected set; }
 
         /// <summary>
+        /// Gets or sets the editor find.
+        /// </summary>
+        /// <value>The editor find.</value>
+        [StaticLocalization(LocalizationResources.Conflict_Solver.EditorContextMenu.Find)]
+        public virtual string EditorFind { get; protected set; }
+
+        /// <summary>
         /// Gets or sets the editor paste.
         /// </summary>
         /// <value>The editor paste.</value>
@@ -186,6 +193,13 @@ namespace IronyModManager.ViewModels.Controls
         /// <value>The editor redo.</value>
         [StaticLocalization(LocalizationResources.Conflict_Solver.EditorContextMenu.Redo)]
         public virtual string EditorRedo { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets the editor replace.
+        /// </summary>
+        /// <value>The editor replace.</value>
+        [StaticLocalization(LocalizationResources.Conflict_Solver.EditorContextMenu.Replace)]
+        public virtual string EditorReplace { get; protected set; }
 
         /// <summary>
         /// Gets or sets the editor select all.
