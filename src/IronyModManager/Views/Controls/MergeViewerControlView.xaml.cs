@@ -4,7 +4,7 @@
 // Created          : 03-20-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-14-2021
+// Last Modified On : 07-22-2022
 // ***********************************************************************
 // <copyright file="MergeViewerControlView.xaml.cs" company="Mario">
 //     Mario
@@ -313,7 +313,7 @@ namespace IronyModManager.Views.Controls
         /// <param name="leftSide">if set to <c>true</c> [left side].</param>
         protected virtual void SetEditorOptions(TextEditor editor, bool leftSide)
         {
-            var ctx = new ContextMenu
+            var ctx = new MenuFlyout
             {
                 Items = new List<MenuItem>()
                 {
@@ -358,7 +358,7 @@ namespace IronyModManager.Views.Controls
                     }
                 }
             };
-            editor.ContextMenu = ctx;
+            editor.ContextFlyout = ctx;
             editor.Options = new TextEditorOptions()
             {
                 ConvertTabsToSpaces = true,

@@ -4,7 +4,7 @@
 // Created          : 07-28-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 01-27-2022
+// Last Modified On : 07-22-2022
 // ***********************************************************************
 // <copyright file="ConflictSolverCustomConflictsControlView.axaml.cs" company="Mario">
 //     Mario
@@ -95,7 +95,7 @@ namespace IronyModManager.Views.Controls
         /// <param name="editor">The editor.</param>
         protected virtual void SetEditorOptions(IronyModManager.Controls.TextEditor editor)
         {
-            var ctx = new ContextMenu
+            var ctx = new MenuFlyout
             {
                 Items = new List<MenuItem>()
                 {
@@ -140,7 +140,7 @@ namespace IronyModManager.Views.Controls
                     }
                 }
             };
-            editor.ContextMenu = ctx;
+            editor.ContextFlyout = ctx;
             editor.Options = new TextEditorOptions()
             {
                 ConvertTabsToSpaces = true,

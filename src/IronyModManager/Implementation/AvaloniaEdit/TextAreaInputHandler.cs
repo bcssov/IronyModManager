@@ -4,7 +4,7 @@
 // Created          : 04-14-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-15-2021
+// Last Modified On : 07-22-2022
 // ***********************************************************************
 // <copyright file="TextAreaInputHandler.cs" company="Mario">
 //     Mario
@@ -57,7 +57,7 @@ namespace IronyModManager.Implementation.AvaloniaEdit
         {
             this.editor = editor;
 #pragma warning disable CS0618 // Type or member is obsolete
-            editor.ContextMenu.MenuClosed += ContextMenu_MenuClosed;
+            editor.ContextFlyout.Closed += ContextFlyout_Closed; ;
 #pragma warning restore CS0618 // Type or member is obsolete
         }
 
@@ -90,6 +90,7 @@ namespace IronyModManager.Implementation.AvaloniaEdit
         /// <summary>
         /// reset flag as an asynchronous operation.
         /// </summary>
+        /// <returns>A Task representing the asynchronous operation.</returns>
         protected async Task ResetFlagAsync()
         {
             await Task.Delay(100);
@@ -102,11 +103,11 @@ namespace IronyModManager.Implementation.AvaloniaEdit
         }
 
         /// <summary>
-        /// Handles the MenuClosed event of the ContextMenu control.
+        /// Handles the Closed event of the ContextFlyout control.
         /// </summary>
         /// <param name="sender">The source of the event.</param>
-        /// <param name="e">The <see cref="Avalonia.Interactivity.RoutedEventArgs" /> instance containing the event data.</param>
-        private void ContextMenu_MenuClosed(object sender, Avalonia.Interactivity.RoutedEventArgs e)
+        /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
+        private void ContextFlyout_Closed(object sender, EventArgs e)
         {
             ResetFlagAsync().ConfigureAwait(true);
         }
