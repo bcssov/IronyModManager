@@ -4,15 +4,11 @@
 		<title>Irony Mod Manager</title>
 		<language>en</language>
 		<item>
-			<title>1.22.129</title>
+			<title>1.22.132</title>
 			<description>## Current Release Notes
-* Improve text file detection for conflict solver
-* Expose search filter separators for customization in language localization files
-* Version filter now filters only requested version
-* Bugfixes
-
-## 1.22.123 Release Notes
-* Fix NRE when binary file present in localisation files while evaluating encodings
+* Bump avalonia to fix some framework bugs
+* Fix rich text editor context menu
+* Add find and replace to rich text editors (conflict solver)
 
 ## Release Notes 1.22
 * Update dependencies
@@ -28,19 +24,15 @@
 * Show missing mods notification if mod is deinstalled and is in a collection
 * Auto detect gog games on windows
 * Detect and treat as error files without BOM encoding</description>
-			<pubDate>Thu, 21 Jul 2022 05:49:35 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.22.129/linux-x64.zip" sparkle:version="1.22.129.28025" sparkle:shortVersionString="1.22.129" length="88285028" sparkle:os="linux" type="application/zip" sparkle:signature="0rewU3Q/0NlJnZmr+vDKX/tg/0DQajzl7BXb1jGHBqGcdkOucLK9XKLfeqYxrPH2AAO1VwHQqHHpYXkuRinwBw=="/>
+			<pubDate>Fri, 22 Jul 2022 21:04:32 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.22.132/linux-x64.zip" sparkle:version="1.22.132.21838" sparkle:shortVersionString="1.22.132" length="88286095" sparkle:os="linux" type="application/zip" sparkle:signature="TFa2q2oKaSn0Q4RFSd9T3MjnfkPNJwxTaqBxcpIiDNOQWLDINtfmd0eJ7mVLzX+0n9+bIaryu7HWQRTo5XBRCA=="/>
 		</item>
 		<item>
-			<title>1.22.129</title>
+			<title>1.22.132</title>
 			<description>## Current Release Notes
-* Improve text file detection for conflict solver
-* Expose search filter separators for customization in language localization files
-* Version filter now filters only requested version
-* Bugfixes
-
-## 1.22.123 Release Notes
-* Fix NRE when binary file present in localisation files while evaluating encodings
+* Bump avalonia to fix some framework bugs
+* Fix rich text editor context menu
+* Add find and replace to rich text editors (conflict solver)
 
 ## Release Notes 1.22
 * Update dependencies
@@ -56,19 +48,15 @@
 * Show missing mods notification if mod is deinstalled and is in a collection
 * Auto detect gog games on windows
 * Detect and treat as error files without BOM encoding</description>
-			<pubDate>Thu, 21 Jul 2022 05:49:44 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.22.129/osx-x64.zip" sparkle:version="1.22.129.28025" sparkle:shortVersionString="1.22.129" length="91156943" sparkle:os="osx" type="application/zip" sparkle:signature="RClBBXvquw7f/jTQ4RIBrGR10RRVcDff1P8+oc9TrgIdGGWOnJcB3xzVRWLdtWJHQa5xBjO8qtYXMrO9fb4KCw=="/>
+			<pubDate>Fri, 22 Jul 2022 21:04:38 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.22.132/osx-x64.zip" sparkle:version="1.22.132.21838" sparkle:shortVersionString="1.22.132" length="91158239" sparkle:os="osx" type="application/zip" sparkle:signature="ihJ5oGOZdUIOwSGa2I+HbEyEBE42ypWRZ28/6yf3QqqdscpYi5x/gr3COLzBDaeo5i8/GVEWyTVtnmJiSm6/Aw=="/>
 		</item>
 		<item>
-			<title>1.22.129</title>
+			<title>1.22.132</title>
 			<description>## Current Release Notes
-* Improve text file detection for conflict solver
-* Expose search filter separators for customization in language localization files
-* Version filter now filters only requested version
-* Bugfixes
-
-## 1.22.123 Release Notes
-* Fix NRE when binary file present in localisation files while evaluating encodings
+* Bump avalonia to fix some framework bugs
+* Fix rich text editor context menu
+* Add find and replace to rich text editors (conflict solver)
 
 ## Release Notes 1.22
 * Update dependencies
@@ -84,19 +72,15 @@
 * Show missing mods notification if mod is deinstalled and is in a collection
 * Auto detect gog games on windows
 * Detect and treat as error files without BOM encoding</description>
-			<pubDate>Thu, 21 Jul 2022 05:49:53 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.22.129/win-x64-setup.zip" sparkle:version="1.22.129.28025" sparkle:shortVersionString="1.22.129" length="72273799" sparkle:os="windows" type="application/zip" sparkle:signature="sRGhvPaAjRkJTqtfxLhO+m5+Y6hKbjW1+q1e2IWJBuZgd7CHAAUpAQ86QZpSMRPtlAWayzIw2gCKN4jhWf7lAw=="/>
+			<pubDate>Fri, 22 Jul 2022 21:04:45 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.22.132/win-x64-setup.zip" sparkle:version="1.22.132.21838" sparkle:shortVersionString="1.22.132" length="72295054" sparkle:os="windows" type="application/zip" sparkle:signature="jJa4Hzwr8pN10K3Tz4M0sxvVniD/OZlqNGAt1G/6GNtJRA0XJwiFKHLtXTWZm86a0WlWVEirP7sFkgut/TwFAg=="/>
 		</item>
 		<item>
-			<title>1.22.129</title>
+			<title>1.22.132</title>
 			<description>## Current Release Notes
-* Improve text file detection for conflict solver
-* Expose search filter separators for customization in language localization files
-* Version filter now filters only requested version
-* Bugfixes
-
-## 1.22.123 Release Notes
-* Fix NRE when binary file present in localisation files while evaluating encodings
+* Bump avalonia to fix some framework bugs
+* Fix rich text editor context menu
+* Add find and replace to rich text editors (conflict solver)
 
 ## Release Notes 1.22
 * Update dependencies
@@ -112,8 +96,8 @@
 * Show missing mods notification if mod is deinstalled and is in a collection
 * Auto detect gog games on windows
 * Detect and treat as error files without BOM encoding</description>
-			<pubDate>Thu, 21 Jul 2022 05:49:53 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.22.129/win-x64.zip" sparkle:version="1.22.129.28025" sparkle:shortVersionString="1.22.129" length="105782588" sparkle:os="windows" type="application/zip" sparkle:signature="uNFc1Ja9AzYXBkRBj/tDWuQfAW4W/XYLxQXzj7WqjzFdrSNQdU76QAKeEPORKxhN5Tc9pXWUJtvs9tN056DlDw=="/>
+			<pubDate>Fri, 22 Jul 2022 21:04:45 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.22.132/win-x64.zip" sparkle:version="1.22.132.21838" sparkle:shortVersionString="1.22.132" length="105783662" sparkle:os="windows" type="application/zip" sparkle:signature="AkhIMyOXm1stDkjU0Z6WVyz3TAIPOVxxvCtFEj4FFd33avMIz0b0u3NDcQlnyg1kd6KLbzP2B2NPm4QJMUbeCg=="/>
 		</item>
 	</channel>
 </rss>
