@@ -90,7 +90,7 @@
                                     <ScrollViewer Grid.Column="1"
                                                   HorizontalScrollBarVisibility="{TemplateBinding (ScrollViewer.HorizontalScrollBarVisibility)}"
                                                   VerticalScrollBarVisibility="{TemplateBinding (ScrollViewer.VerticalScrollBarVisibility)}">
-                                        <Panel Name="PART_TextRoot" VerticalAlignment="Bottom">
+                                        <Panel>
                                             <TextBlock Name="watermark"
                                                        Margin="0,6,0,7"
                                                        Classes="Subtitle2"

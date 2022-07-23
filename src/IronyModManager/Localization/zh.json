@@ -331,6 +331,20 @@
             "Find": "查找",
             "Replace": "替换"
         },
+        "EditorResources": {
+            "ReplaceLabel": "替换...",
+            "SearchErrorText": "错误。",
+            "SearchFindNextText": "查找下一个 (F3)",
+            "SearchFindPreviousText": "查找上一个（Shift+F3）。",
+            "SearchLabel": "找到...",
+            "SearchMatchCaseText": "匹配的案例",
+            "SearchMatchWholeWordsText": "匹配整个单词",
+            "SearchNoMatchesFoundText": "没有发现结果!",
+            "SearchReplaceAll": "全部替换(Alt+A)",
+            "SearchReplaceNext": "替换下一个(Alt+R)",
+            "SearchToggleReplace": "在查找和替换模式之间进行切换",
+            "SearchUseRegexText": "使用正则表达式"
+        },
         "Modes": {
             "Title": "选择模式",
             "Default": "默认",

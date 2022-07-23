@@ -331,6 +331,20 @@
             "Find": "Finden",
             "Replace": "Ersetzen"
         },
+        "EditorResources": {
+            "ReplaceLabel": "Ersetzen...",
+            "SearchErrorText": "Fehler: ",
+            "SearchFindNextText": "Weiter suchen (F3)",
+            "SearchFindPreviousText": "Vorherige Suche (Umschalt+F3)",
+            "SearchLabel": "Finden Sie...",
+            "SearchMatchCaseText": "Match-Fall",
+            "SearchMatchWholeWordsText": "Ganze Worte zuordnen",
+            "SearchNoMatchesFoundText": "Keine Ergebnisse gefunden!",
+            "SearchReplaceAll": "Alles ersetzen (Alt+A)",
+            "SearchReplaceNext": "Nächste Ersetzung (Alt+R)",
+            "SearchToggleReplace": "Umschalten zwischen den Modi Suchen und Ersetzen",
+            "SearchUseRegexText": "Reguläre Ausdrücke verwenden"
+        },
         "Modes": {
             "Title": "Auswahlmodus",
             "Default": "Standard",

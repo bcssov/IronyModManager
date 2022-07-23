@@ -331,6 +331,20 @@
             "Find": "Encuentre",
             "Replace": "Sustituir"
         },
+        "EditorResources": {
+            "ReplaceLabel": "Reemplazar...",
+            "SearchErrorText": "Error: ",
+            "SearchFindNextText": "Buscar siguiente (F3)",
+            "SearchFindPreviousText": "Buscar anterior (Shift+F3)",
+            "SearchLabel": "Encuentra...",
+            "SearchMatchCaseText": "Caso de partido",
+            "SearchMatchWholeWordsText": "Emparejar palabras enteras",
+            "SearchNoMatchesFoundText": "No se han encontrado resultados.",
+            "SearchReplaceAll": "Reemplazar todo (Alt+A)",
+            "SearchReplaceNext": "Reemplazar siguiente (Alt+R)",
+            "SearchToggleReplace": "Alternar entre los modos de búsqueda y sustitución",
+            "SearchUseRegexText": "Utilizar expresiones regulares"
+        },
         "Modes": {
             "Title": "Seleccionar Modo",
             "Default": "Defecto",

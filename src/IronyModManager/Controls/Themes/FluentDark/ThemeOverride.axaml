@@ -12,6 +12,7 @@
     <StyleInclude Source="avares://IronyModManager/Controls/Themes/FluentDark/TextBox.axaml"/>
     <StyleInclude Source="avares://IronyModManager/Controls/Themes/FluentDark/NumericEditTextbox.axaml"/>
     <StyleInclude Source="avares://IronyModManager/Controls/Themes/FluentDark/ScrollBar.axaml"/>
+    <StyleInclude Source="avares://IronyModManager/Controls/Themes/SearchPanel.axaml"/>
 
     <!--Individual styles-->
     <Style Selector="NotificationCard">

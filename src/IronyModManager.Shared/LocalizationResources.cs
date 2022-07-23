@@ -435,6 +435,22 @@ namespace IronyModManager.Shared
                 public const string Find = Prefix + "Find";
                 public const string Replace = Prefix + "Replace";
             }
+            public static class EditorResources
+            {
+                public const string Prefix = "Conflict_Solver.EditorResources.";
+                public const string ReplaceLabel = Prefix + "ReplaceLabel";
+                public const string SearchErrorText = Prefix + "SearchErrorText";
+                public const string SearchFindNextText = Prefix + "SearchFindNextText";
+                public const string SearchFindPreviousText = Prefix + "SearchFindPreviousText";
+                public const string SearchLabel = Prefix + "SearchLabel";
+                public const string SearchMatchCaseText = Prefix + "SearchMatchCaseText";
+                public const string SearchMatchWholeWordsText = Prefix + "SearchMatchWholeWordsText";
+                public const string SearchNoMatchesFoundText = Prefix + "SearchNoMatchesFoundText";
+                public const string SearchReplaceAll = Prefix + "SearchReplaceAll";
+                public const string SearchReplaceNext = Prefix + "SearchReplaceNext";
+                public const string SearchToggleReplace = Prefix + "SearchToggleReplace";
+                public const string SearchUseRegexText = Prefix + "SearchUseRegexText";
+            }
             public static class Modes
             {
                 public const string Prefix = "Conflict_Solver.Modes.";
