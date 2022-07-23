@@ -4,7 +4,7 @@
 // Created          : 07-20-2022
 //
 // Last Modified By : Mario
-// Last Modified On : 07-20-2022
+// Last Modified On : 07-23-2022
 // ***********************************************************************
 // <copyright file="FileSignatureUtility.cs" company="Mario">
 //     Mario
@@ -91,9 +91,10 @@ namespace IronyModManager.Shared
             ms.Seek(0, SeekOrigin.Begin);
             if (PommaLabs.MimeTypes.MimeTypeMap.TryGetMimeType(ms, Path.GetFileName(filename), out var mimeType))
             {
+                var result = mimeType.StartsWith(id, StringComparison.OrdinalIgnoreCase) && IsValidTextFile(ms);
                 ms.Close();
                 ms.Dispose();
-                return mimeType.StartsWith(id, StringComparison.OrdinalIgnoreCase);
+                return result;
             }
             else
             {
@@ -132,6 +133,39 @@ namespace IronyModManager.Shared
                 }
             }
             return extensions.Any(s => s.EndsWith(filename, StringComparison.OrdinalIgnoreCase));
+        }
+
+        /// <summary>
+        /// Determines whether [is valid text file] [the specified stream].
+        /// </summary>
+        /// <param name="stream">The stream.</param>
+        /// <returns><c>true</c> if [is valid text file] [the specified stream]; otherwise, <c>false</c>.</returns>
+        private static bool IsValidTextFile(Stream stream)
+        {
+            // Same as the library does only backwards just to be sure
+            try
+            {
+                if (stream.Length < 512)
+                {
+                    return true;
+                }
+                stream.Seek(-512, SeekOrigin.End);
+                var buffer = new byte[512];
+                var byteCount = stream.Read(buffer, 0, buffer.Length);
+
+                for (var i = 1; i < byteCount; i++)
+                {
+                    if (buffer[i] == 0x00 && buffer[i - 1] == 0x00)
+                    {
+                        return false;
+                    }
+                }
+                return true;
+            }
+            catch
+            {
+                return true;
+            }
         }
 
         #endregion Methods
