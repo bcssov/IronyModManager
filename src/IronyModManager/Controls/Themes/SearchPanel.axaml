@@ -10,8 +10,8 @@
               VerticalAlignment="Center"
               HorizontalAlignment="Center"
               Stretch="Uniform"
-              Width="10"
-              Height="10"      
+              Width="13"
+              Height="13"      
               Data="M 0 2 L 4 6 L 0 10 Z" />
             </ControlTemplate>
         </Setter>
