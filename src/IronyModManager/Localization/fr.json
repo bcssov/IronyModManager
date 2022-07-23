@@ -331,6 +331,20 @@
             "Find": "Trouvez",
             "Replace": "Remplacer"
         },
+        "EditorResources": {
+            "ReplaceLabel": "Remplacer...",
+            "SearchErrorText": "Erreur: ",
+            "SearchFindNextText": "Trouver le suivant (F3)",
+            "SearchFindPreviousText": "Trouver le précédent (Shift+F3)",
+            "SearchLabel": "Trouvez...",
+            "SearchMatchCaseText": "Cas d'allumette",
+            "SearchMatchWholeWordsText": "Associez des mots entiers",
+            "SearchNoMatchesFoundText": "Aucun résultat trouvé!",
+            "SearchReplaceAll": "Remplacer tout (Alt+A)",
+            "SearchReplaceNext": "Remplacer le suivant (Alt+R)",
+            "SearchToggleReplace": "Basculer entre les modes recherche et remplacement",
+            "SearchUseRegexText": "Utiliser des expressions régulières"
+        },
         "Modes": {
             "Title": "Sélectionnez le mode",
             "Default": "Simple",

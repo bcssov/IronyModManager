@@ -332,6 +332,20 @@
             "Find": "Find",
             "Replace": "Replace"
         },
+        "EditorResources": {
+            "ReplaceLabel": "Replace...",
+            "SearchErrorText": "Error: ",
+            "SearchFindNextText": "Find next (F3)",
+            "SearchFindPreviousText": "Find previous (Shift+F3)",
+            "SearchLabel": "Find...",
+            "SearchMatchCaseText": "Match case",
+            "SearchMatchWholeWordsText": "Match whole words",
+            "SearchNoMatchesFoundText": "No matches found!",
+            "SearchReplaceAll": "Replace all (Alt+A)",
+            "SearchReplaceNext": "Replace next (Alt+R)",
+            "SearchToggleReplace": "Toggle between find and replace modes",
+            "SearchUseRegexText": "Use regular expressions"
+        },
         "Modes": {
             "Title": "Select Mode",
             "Default": "Default",

@@ -331,6 +331,20 @@
             "Find": "Найти",
             "Replace": "Заменить"
         },
+        "EditorResources": {
+            "ReplaceLabel": "Замените...",
+            "SearchErrorText": "Ошибка: ",
+            "SearchFindNextText": "Найти следующий (F3)",
+            "SearchFindPreviousText": "Найти предыдущий (Shift+F3)",
+            "SearchLabel": "Найти...",
+            "SearchMatchCaseText": "Матчевый случай",
+            "SearchMatchWholeWordsText": "Сопоставьте целые слова",
+            "SearchNoMatchesFoundText": "Результаты не найдены!",
+            "SearchReplaceAll": "Заменить все (Alt+A)",
+            "SearchReplaceNext": "Заменить следующий (Alt+R)",
+            "SearchToggleReplace": "Переключение между режимами поиска и замены",
+            "SearchUseRegexText": "Используйте регулярные выражения"
+        },
         "Modes": {
             "Title": "Режим",
             "Default": "Обычный",

@@ -331,6 +331,20 @@
             "Find": "Pronađi",
             "Replace": "Zamijeni"
         },
+        "EditorResources": {
+            "ReplaceLabel": "Zamijeni...",
+            "SearchErrorText": "Greška: ",
+            "SearchFindNextText": "Traži sljedeće (F3)",
+            "SearchFindPreviousText": "Traži prethodno (Shift+F3)",
+            "SearchLabel": "Traži...",
+            "SearchMatchCaseText": "Slučaj podudaranja",
+            "SearchMatchWholeWordsText": "Podudaranje cijele riječi",
+            "SearchNoMatchesFoundText": "Nema rezultata!",
+            "SearchReplaceAll": "Zamijeni sve (Alt+A)",
+            "SearchReplaceNext": "Zamijeni slijedeće (Alt+R)",
+            "SearchToggleReplace": "Prebacivanje između načina pronalaska i zamjene",
+            "SearchUseRegexText": "Koristi regularni izraz"
+        },
         "Modes": {
             "Title": "Odaberi način rada",
             "Default": "Zadano",

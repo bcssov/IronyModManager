@@ -4,7 +4,7 @@
 // Created          : 01-10-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 10-29-2021
+// Last Modified On : 07-23-2022
 // ***********************************************************************
 // <copyright file="Program.cs" company="IronyModManager">
 //     Copyright (c) Mario. All rights reserved.
@@ -24,6 +24,7 @@ using CommandLine;
 using IronyModManager.Controls.Dialogs;
 using IronyModManager.DI;
 using IronyModManager.Implementation.Actions;
+using IronyModManager.Implementation.AvaloniaEdit;
 using IronyModManager.Localization;
 using IronyModManager.Platform;
 using IronyModManager.Platform.Configuration;
@@ -166,6 +167,7 @@ namespace IronyModManager
         private static void InitDefaultCulture()
         {
             CurrentLocale.SetCurrent(Shared.Constants.DefaultAppCulture);
+            ResourceManager.Init();
         }
 
         /// <summary>
