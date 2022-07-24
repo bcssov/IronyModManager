@@ -62,7 +62,6 @@ namespace IronyModManager.ViewModels.Controls
         private readonly IFileDialogAction fileDialogAction;
 
         /// <summary>
-        /// v
         /// The game service
         /// </summary>
         private readonly IGameService gameService;
@@ -903,6 +902,11 @@ namespace IronyModManager.ViewModels.Controls
 
             TestExternalEditorConfigurationCommand = ReactiveCommand.CreateFromTask(async () =>
             {
+                var opts = externalEditorService.Get();
+                if (string.IsNullOrEmpty(opts.ExternalEditorLocation))
+                {
+                    return;
+                }
                 ITempFile createTempFile(string text)
                 {
                     var file = DIResolver.Get<ITempFile>();
@@ -913,7 +917,6 @@ namespace IronyModManager.ViewModels.Controls
                 var left = createTempFile(localizationManager.GetResource(LocalizationResources.Options.Editor.TestLeft));
                 var right = createTempFile(localizationManager.GetResource(LocalizationResources.Options.Editor.TestRight));
                 var arguments = externalEditorService.GetLaunchArguments(left.File, right.File);
-                var opts = externalEditorService.Get();
                 if (await appAction.RunAsync(opts.ExternalEditorLocation, arguments))
                 {
                     await notificationAction.ShowPromptAsync(TestExternalEditorConfiguration, TestExternalEditorConfiguration, TestExternalEditorConfiguration, NotificationType.Info, PromptType.OK);

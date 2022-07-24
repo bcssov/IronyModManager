@@ -14,7 +14,7 @@
                Topmost="True" ObeyScreenEdges="True" StaysOpen="False" x:Name="popup"
                PlacementTarget="{Binding #openPopupButton}">
             <Border BorderThickness="1,1,1,1" BorderBrush="{DynamicResource IronyButtonBorderBrush}">
-                <Grid RowDefinitions="1*,1*,1*,5*,1*"  ColumnDefinitions="1*,1*" Background="{DynamicResource IronyBackgroundPopupBrush}">
+                <Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto"  ColumnDefinitions="1*,1*" Background="{DynamicResource IronyBackgroundPopupBrush}">
                     <StackPanel Orientation="Vertical" Grid.Row="0" Grid.Column="1" Grid.RowSpan="3" IsVisible="{Binding ShowGameOptions}" Margin="{Binding LeftMargin}">
                         <Border BorderThickness="1,1,1,1" BorderBrush="{DynamicResource IronyButtonBorderBrush}">
                             <TextBlock Text="{Binding GameOptions}" FontSize="14" HorizontalAlignment="Center"></TextBlock>
@@ -78,7 +78,7 @@
                                     HorizontalAlignment="Stretch" VerticalAlignment="Stretch" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" MaxHeight="30"></Button>
                         </Grid>
                     </StackPanel>
-                    <StackPanel Orientation="Vertical" Grid.Row="2" Grid.Column="0" IsVisible="{Binding UpdatesAllowed}">
+                    <StackPanel Orientation="Vertical" Grid.Row="2" Grid.Column="0" IsVisible="{Binding UpdatesAllowed}" Margin="0,15">
                         <Border BorderThickness="1,1,1,1" BorderBrush="{DynamicResource IronyButtonBorderBrush}">
                             <TextBlock Text="{Binding UpdateOptions}" FontSize="14" HorizontalAlignment="Center" TextWrapping="Wrap"></TextBlock>
                         </Border>
@@ -89,7 +89,7 @@
                                     HorizontalAlignment="Stretch" VerticalAlignment="Stretch" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" MaxHeight="30"></Button>
                         </Grid>
                     </StackPanel>
-                    <Panel Grid.Row="3" Grid.ColumnSpan="2" Margin="0,10" IsVisible="{Binding UpdateInfoVisible}">
+                    <Panel Grid.Row="3" Grid.ColumnSpan="2" IsVisible="{Binding UpdateInfoVisible}">
                         <Grid>
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="*" />
