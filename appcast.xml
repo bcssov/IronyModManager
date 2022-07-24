@@ -4,8 +4,12 @@
 		<title>Irony Mod Manager</title>
 		<language>en</language>
 		<item>
-			<title>1.22.136</title>
+			<title>1.22.138</title>
 			<description>## Current Release Notes
+* Fix options popup overlapping on linux\osx
+* ulimit workaround for OSX (needs some setup see FAQ on wiki)
+
+## 1.22.136 Release Notes
 * Fixes in find and replace editor
 * Localize find and replace editor dialog
 * Minor Fixes
@@ -29,12 +33,16 @@
 * Show missing mods notification if mod is deinstalled and is in a collection
 * Auto detect gog games on windows
 * Detect and treat as error files without BOM encoding</description>
-			<pubDate>Sat, 23 Jul 2022 06:05:13 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.22.136/linux-x64.zip" sparkle:version="1.22.136.50661" sparkle:shortVersionString="1.22.136" length="88291366" sparkle:os="linux" type="application/zip" sparkle:signature="DpLtMWq6seKRLRlDht5GEcAxdedtR8cRtRjRQDBZVnxmgEDpjH59uz3IeHIFgf3zdq/VFoRTa2BVdpkm03sgAQ=="/>
+			<pubDate>Sun, 24 Jul 2022 05:09:15 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.22.138/linux-x64.zip" sparkle:version="1.22.138.2925" sparkle:shortVersionString="1.22.138" length="88292042" sparkle:os="linux" type="application/zip" sparkle:signature="GIqLRvwY1g8335kOaU932PjOmJsPd6qA2YvdYQtmr561HRlnY0QuC9G9LdTacN8qV6otG9vBPGchDO4s+S+XCg=="/>
 		</item>
 		<item>
-			<title>1.22.136</title>
+			<title>1.22.138</title>
 			<description>## Current Release Notes
+* Fix options popup overlapping on linux\osx
+* ulimit workaround for OSX (needs some setup see FAQ on wiki)
+
+## 1.22.136 Release Notes
 * Fixes in find and replace editor
 * Localize find and replace editor dialog
 * Minor Fixes
@@ -58,12 +66,16 @@
 * Show missing mods notification if mod is deinstalled and is in a collection
 * Auto detect gog games on windows
 * Detect and treat as error files without BOM encoding</description>
-			<pubDate>Sat, 23 Jul 2022 06:05:21 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.22.136/osx-x64.zip" sparkle:version="1.22.136.50661" sparkle:shortVersionString="1.22.136" length="91163434" sparkle:os="osx" type="application/zip" sparkle:signature="IgcQl3p7705Jeheqqyp/ynoPdQVcLkvqX+j1K6pei2m0OGYX20yLc8oSt39tqAC0p+gMQiudTfU39RvGAbS8DA=="/>
+			<pubDate>Sun, 24 Jul 2022 05:09:21 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.22.138/osx-x64.zip" sparkle:version="1.22.138.2925" sparkle:shortVersionString="1.22.138" length="91164157" sparkle:os="osx" type="application/zip" sparkle:signature="x8W1pKXwdvvN5VIIXapz7haaEu1aevd+tMgct3UMt3+crDA4ERub2e/bS6Ad4jtRhE8SPfITPsrtb4GwgYNQDg=="/>
 		</item>
 		<item>
-			<title>1.22.136</title>
+			<title>1.22.138</title>
 			<description>## Current Release Notes
+* Fix options popup overlapping on linux\osx
+* ulimit workaround for OSX (needs some setup see FAQ on wiki)
+
+## 1.22.136 Release Notes
 * Fixes in find and replace editor
 * Localize find and replace editor dialog
 * Minor Fixes
@@ -87,12 +99,16 @@
 * Show missing mods notification if mod is deinstalled and is in a collection
 * Auto detect gog games on windows
 * Detect and treat as error files without BOM encoding</description>
-			<pubDate>Sat, 23 Jul 2022 06:05:30 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.22.136/win-x64-setup.zip" sparkle:version="1.22.136.50661" sparkle:shortVersionString="1.22.136" length="72284670" sparkle:os="windows" type="application/zip" sparkle:signature="6aXNxsbFn/gPyBQzPuXcuwkOoBxvzlZh3iZNcNA5QoKjtFgnKhXq4u9AxuMmFjvxA9SfN/oit+62r9X9+tMiAw=="/>
+			<pubDate>Sun, 24 Jul 2022 05:09:28 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.22.138/win-x64-setup.zip" sparkle:version="1.22.138.2925" sparkle:shortVersionString="1.22.138" length="72292748" sparkle:os="windows" type="application/zip" sparkle:signature="GwlhqupFL6OFO+b5cxyIcgQ2VHYRY7J/orY7XMsf9kI0hbmq7z2yXzTFCo3+yMt83c+MJvzNPAd9Ol5IRvfaCg=="/>
 		</item>
 		<item>
-			<title>1.22.136</title>
+			<title>1.22.138</title>
 			<description>## Current Release Notes
+* Fix options popup overlapping on linux\osx
+* ulimit workaround for OSX (needs some setup see FAQ on wiki)
+
+## 1.22.136 Release Notes
 * Fixes in find and replace editor
 * Localize find and replace editor dialog
 * Minor Fixes
@@ -116,8 +132,8 @@
 * Show missing mods notification if mod is deinstalled and is in a collection
 * Auto detect gog games on windows
 * Detect and treat as error files without BOM encoding</description>
-			<pubDate>Sat, 23 Jul 2022 06:05:31 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.22.136/win-x64.zip" sparkle:version="1.22.136.50661" sparkle:shortVersionString="1.22.136" length="105788922" sparkle:os="windows" type="application/zip" sparkle:signature="5O7Fcto5OxzDv4OdsniCZEP7bXd4LRYk4VVOhrVTccBtL2eAH0VRsJdXMZ9Sh4w2HC0F92KrWCuZnIc3IOB8Cg=="/>
+			<pubDate>Sun, 24 Jul 2022 05:09:28 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.22.138/win-x64.zip" sparkle:version="1.22.138.2925" sparkle:shortVersionString="1.22.138" length="105789627" sparkle:os="windows" type="application/zip" sparkle:signature="er50QQ93qc1jWWlUqC2763DDiOkV0s8/Q1Ek8ZLNUg7QUEB+qYJcKeCjZ+6PmmF3PPT5wIGSKviZqH3OXJ9xAw=="/>
 		</item>
 	</channel>
 </rss>
