@@ -4,7 +4,7 @@
 // Created          : 07-11-2022
 //
 // Last Modified By : Mario
-// Last Modified On : 07-11-2022
+// Last Modified On : 07-24-2022
 // ***********************************************************************
 // <copyright file="IExternalProcessHandlerService.cs" company="Mario">
 //     Mario
@@ -37,10 +37,9 @@ namespace IronyModManager.Services.Common
         /// <summary>
         /// Launches the steam asynchronous.
         /// </summary>
-        /// <param name="useLegacyMethod">if set to <c>true</c> [use legacy method].</param>
         /// <param name="game">The game.</param>
         /// <returns>Task&lt;System.Boolean&gt;.</returns>
-        Task<bool> LaunchSteamAsync(bool useLegacyMethod, IGame game);
+        Task<bool> LaunchSteamAsync(IGame game);
 
         #endregion Methods
     }

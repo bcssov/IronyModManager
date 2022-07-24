@@ -4,7 +4,7 @@
 // Created          : 07-11-2022
 //
 // Last Modified By : Mario
-// Last Modified On : 07-11-2022
+// Last Modified On : 07-24-2022
 // ***********************************************************************
 // <copyright file="ExternalProcessHandlerServiceTests.cs" company="Mario">
 //     Mario
@@ -20,7 +20,9 @@ using AutoMapper;
 using FluentAssertions;
 using IronyModManager.IO.Common.Platforms;
 using IronyModManager.Models;
+using IronyModManager.Shared.Configuration;
 using IronyModManager.Storage.Common;
+using IronyModManager.Tests.Common;
 using Moq;
 using Xunit;
 
@@ -50,8 +52,11 @@ namespace IronyModManager.Services.Tests
         {
             var steam = new Mock<ISteam>();
 
+            DISetup.SetupContainer();
+            DISetup.Container.Register<IDomainConfiguration>(() => new DomainConfigDummy(true));            
+
             var service = GetService(steam: steam);
-            var result = await service.LaunchSteamAsync(true, null);
+            var result = await service.LaunchSteamAsync(null);
             result.Should().BeFalse();
         }
 
@@ -64,8 +69,11 @@ namespace IronyModManager.Services.Tests
             var steam = new Mock<ISteam>();
             steam.Setup(p => p.InitAlternateAsync()).Returns(Task.FromResult(false));
 
+            DISetup.SetupContainer();
+            DISetup.Container.Register<IDomainConfiguration>(() => new DomainConfigDummy(true));
+
             var service = GetService(steam:steam);
-            var result = await service.LaunchSteamAsync(true, new Game());
+            var result = await service.LaunchSteamAsync(new Game());
             result.Should().BeFalse();
         }
 
@@ -79,8 +87,11 @@ namespace IronyModManager.Services.Tests
             steam.Setup(p => p.InitAsync(It.IsAny<long>())).Returns(Task.FromResult(false));
             steam.Setup(p => p.ShutdownAPIAsync()).Returns(Task.FromResult(true));
 
+            DISetup.SetupContainer();
+            DISetup.Container.Register<IDomainConfiguration>(() => new DomainConfigDummy(false));
+
             var service = GetService(steam:steam);
-            var result = await service.LaunchSteamAsync(false, new Game());
+            var result = await service.LaunchSteamAsync(new Game());
             result.Should().BeFalse();
         }
 
@@ -93,8 +104,11 @@ namespace IronyModManager.Services.Tests
             var steam = new Mock<ISteam>();
             steam.Setup(p => p.InitAlternateAsync()).Returns(Task.FromResult(true));
 
+            DISetup.SetupContainer();
+            DISetup.Container.Register<IDomainConfiguration>(() => new DomainConfigDummy(true));
+
             var service = GetService(steam:steam);
-            var result = await service.LaunchSteamAsync(true, new Game());
+            var result = await service.LaunchSteamAsync(new Game());
             result.Should().BeTrue();
         }
 
@@ -108,8 +122,11 @@ namespace IronyModManager.Services.Tests
             steam.Setup(p => p.InitAsync(It.IsAny<long>())).Returns(Task.FromResult(true));
             steam.Setup(p => p.ShutdownAPIAsync()).Returns(Task.FromResult(true));
 
+            DISetup.SetupContainer();
+            DISetup.Container.Register<IDomainConfiguration>(() => new DomainConfigDummy(false));
+
             var service = GetService(steam:steam);
-            var result = await service.LaunchSteamAsync(false, new Game());
+            var result = await service.LaunchSteamAsync(new Game());
             result.Should().BeTrue();
         }
 
@@ -139,6 +156,36 @@ namespace IronyModManager.Services.Tests
             var service = GetService(launcher: launcher);
             var result = await service.IsParadoxLauncherRunningAsync();
             result.Should().BeTrue();
+        }
+
+        /// <summary>
+        /// Class DomainConfigDummy.
+        /// Implements the <see cref="IDomainConfiguration" />
+        /// </summary>
+        /// <seealso cref="IDomainConfiguration" />
+        private class DomainConfigDummy : Shared.Configuration.IDomainConfiguration
+        {
+            /// <summary>
+            /// The domain
+            /// </summary>
+            DomainConfigurationOptions domain = new DomainConfigurationOptions();
+            /// <summary>
+            /// Initializes a new instance of the <see cref="DomainConfigDummy"/> class.
+            /// </summary>
+            /// <param name="useLegacySteamLaunch">if set to <c>true</c> [use legacy steam launch].</param>
+            public DomainConfigDummy(bool useLegacySteamLaunch)
+            {
+                domain.Steam.UseLegacyLaunchMethod = useLegacySteamLaunch;
+            }
+
+            /// <summary>
+            /// Gets the options.
+            /// </summary>
+            /// <returns>DomainConfigurationOptions.</returns>
+            public DomainConfigurationOptions GetOptions()
+            {
+                return domain;
+            }
         }
     }
 }

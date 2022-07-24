@@ -4,7 +4,7 @@
 // Created          : 07-11-2022
 //
 // Last Modified By : Mario
-// Last Modified On : 07-11-2022
+// Last Modified On : 07-24-2022
 // ***********************************************************************
 // <copyright file="ExternalProcessHandlerService.cs" company="Mario">
 //     Mario
@@ -16,9 +16,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
+using IronyModManager.DI;
 using IronyModManager.IO.Common.Platforms;
 using IronyModManager.Models.Common;
 using IronyModManager.Services.Common;
+using IronyModManager.Shared.Configuration;
 using IronyModManager.Storage.Common;
 
 namespace IronyModManager.Services
@@ -77,16 +79,16 @@ namespace IronyModManager.Services
         /// <summary>
         /// Launches the steam asynchronous.
         /// </summary>
-        /// <param name="useLegacyMethod">if set to <c>true</c> [use legacy method].</param>
         /// <param name="game">The game.</param>
         /// <returns>Task&lt;System.Boolean&gt;.</returns>
         /// <exception cref="System.NotImplementedException"></exception>
-        public async Task<bool> LaunchSteamAsync(bool useLegacyMethod, IGame game)
+        public async Task<bool> LaunchSteamAsync(IGame game)
         {
             if (game is null)
             {
                 return false;
             }
+            var useLegacyMethod = DIResolver.Get<IDomainConfiguration>().GetOptions().Steam.UseLegacyLaunchMethod;
             if (useLegacyMethod)
             {
                 return await steam.InitAlternateAsync();

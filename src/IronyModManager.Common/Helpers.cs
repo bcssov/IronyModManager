@@ -17,6 +17,7 @@ using System.Linq;
 using IronyModManager.DI;
 using IronyModManager.Localization;
 using IronyModManager.Platform.Configuration;
+using IronyModManager.Shared.Configuration;
 
 namespace IronyModManager.Common
 {
@@ -31,7 +32,7 @@ namespace IronyModManager.Common
         /// Gets the format provider.
         /// </summary>
         /// <returns>IFormatProvider.</returns>
-        public static IFormatProvider GetFormatProvider() => DIResolver.Get<IPlatformConfiguration>().GetOptions().Formatting.UseSystemCulture ? CurrentLocale.InitialCulture : CurrentLocale.CurrentCulture;
+        public static IFormatProvider GetFormatProvider() => DIResolver.Get<IDomainConfiguration>().GetOptions().Formatting.UseSystemCulture ? CurrentLocale.InitialCulture : CurrentLocale.CurrentCulture;
 
         #endregion Methods
     }

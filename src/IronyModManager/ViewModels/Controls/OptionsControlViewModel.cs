@@ -4,7 +4,7 @@
 // Created          : 05-30-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 07-11-2022
+// Last Modified On : 07-24-2022
 // ***********************************************************************
 // <copyright file="OptionsControlViewModel.cs" company="Mario">
 //     Mario
@@ -47,6 +47,11 @@ namespace IronyModManager.ViewModels.Controls
         #region Fields
 
         /// <summary>
+        /// The application action
+        /// </summary>
+        private readonly IAppAction appAction;
+
+        /// <summary>
         /// The external editor service
         /// </summary>
         private readonly IExternalEditorService externalEditorService;
@@ -56,7 +61,7 @@ namespace IronyModManager.ViewModels.Controls
         /// </summary>
         private readonly IFileDialogAction fileDialogAction;
 
-        /// <summary>v
+        /// <summary>
         /// The game service
         /// </summary>
         private readonly IGameService gameService;
@@ -100,11 +105,6 @@ namespace IronyModManager.ViewModels.Controls
         /// The updater service
         /// </summary>
         private readonly IUpdaterService updaterService;
-
-        /// <summary>
-        /// The application action
-        /// </summary>
-        private IAppAction appAction;
 
         /// <summary>
         /// The automatic update changed
@@ -902,6 +902,11 @@ namespace IronyModManager.ViewModels.Controls
 
             TestExternalEditorConfigurationCommand = ReactiveCommand.CreateFromTask(async () =>
             {
+                var opts = externalEditorService.Get();
+                if (string.IsNullOrEmpty(opts.ExternalEditorLocation))
+                {
+                    return;
+                }
                 ITempFile createTempFile(string text)
                 {
                     var file = DIResolver.Get<ITempFile>();
@@ -912,7 +917,6 @@ namespace IronyModManager.ViewModels.Controls
                 var left = createTempFile(localizationManager.GetResource(LocalizationResources.Options.Editor.TestLeft));
                 var right = createTempFile(localizationManager.GetResource(LocalizationResources.Options.Editor.TestRight));
                 var arguments = externalEditorService.GetLaunchArguments(left.File, right.File);
-                var opts = externalEditorService.Get();
                 if (await appAction.RunAsync(opts.ExternalEditorLocation, arguments))
                 {
                     await notificationAction.ShowPromptAsync(TestExternalEditorConfiguration, TestExternalEditorConfiguration, TestExternalEditorConfiguration, NotificationType.Info, PromptType.OK);

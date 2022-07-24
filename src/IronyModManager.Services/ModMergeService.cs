@@ -4,7 +4,7 @@
 // Created          : 06-19-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-06-2021
+// Last Modified On : 07-24-2022
 // ***********************************************************************
 // <copyright file="ModMergeService.cs" company="Mario">
 //     Mario
@@ -29,6 +29,7 @@ using IronyModManager.Services.Common;
 using IronyModManager.Services.Common.MessageBus;
 using IronyModManager.Shared;
 using IronyModManager.Shared.Cache;
+using IronyModManager.Shared.Configuration;
 using IronyModManager.Shared.MessageBus;
 using IronyModManager.Storage.Common;
 using Nito.AsyncEx;
@@ -352,6 +353,7 @@ namespace IronyModManager.Services
             }
             modMergeCompressExporter.ProcessedFile += modMergeCompressExporter_ProcessedFile;
 
+            var ulimitBypass = DIResolver.Get<IDomainConfiguration>().GetOptions().OSXOptions.UseFileStreams;
             var exportedMods = new List<IMod>();
             using var semaphore = new SemaphoreSlim(MaxZipsToMerge);
             var zipTasks = collectionMods.AsParallel().Where(p => p.Files != null).Select(async collectionMod =>
@@ -367,7 +369,7 @@ namespace IronyModManager.Services
                         var stream = Reader.GetStream(collectionMod.FullPath, file);
                         if (stream != null)
                         {
-                            if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
+                            if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX) && !ulimitBypass)
                             {
                                 var streamCopy = new MemoryStream();
                                 if (stream.CanSeek)
