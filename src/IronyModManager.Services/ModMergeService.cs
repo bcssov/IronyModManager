@@ -443,14 +443,13 @@ namespace IronyModManager.Services
                     renamePairs.Add(new KeyValuePair<string, string>(collectionMod.DescriptorFile, newMod.DescriptorFile));
                     using var exportModLock = await zipLock.LockAsync();
                     exportedMods.Add(newMod);
-                    exportModLock.Dispose();
-
                     var streamTasks = streams.Select(async p =>
                     {
                         p.Close();
                         await p.DisposeAsync();
                     });
                     await Task.WhenAll(streamTasks);
+                    exportModLock.Dispose();
                 }
                 finally
                 {
