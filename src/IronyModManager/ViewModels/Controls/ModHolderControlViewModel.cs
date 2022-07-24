@@ -4,7 +4,7 @@
 // Created          : 02-29-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 07-11-2022
+// Last Modified On : 07-24-2022
 // ***********************************************************************
 // <copyright file="ModHolderControlViewModel.cs" company="Mario">
 //     Mario
@@ -22,7 +22,6 @@ using System.Threading.Tasks;
 using IronyModManager.Common;
 using IronyModManager.Common.Events;
 using IronyModManager.Common.ViewModels;
-using IronyModManager.DI;
 using IronyModManager.Implementation.Actions;
 using IronyModManager.Implementation.AppState;
 using IronyModManager.Implementation.MessageBus;
@@ -30,7 +29,6 @@ using IronyModManager.Implementation.Overlay;
 using IronyModManager.Localization;
 using IronyModManager.Localization.Attributes;
 using IronyModManager.Models.Common;
-using IronyModManager.Platform.Configuration;
 using IronyModManager.Services.Common;
 using IronyModManager.Shared;
 using IronyModManager.Shared.MessageBus.Events;
@@ -806,8 +804,7 @@ namespace IronyModManager.ViewModels.Controls
             {
                 if (gameService.IsSteamGame(args))
                 {
-                    var config = DIResolver.Get<IPlatformConfiguration>().GetOptions();
-                    return await externalProcessHandlerService.LaunchSteamAsync(config.Steam.UseLegacyLaunchMethod, gameService.GetSelected());
+                    return await externalProcessHandlerService.LaunchSteamAsync(gameService.GetSelected());
                 }
                 return true;
             }

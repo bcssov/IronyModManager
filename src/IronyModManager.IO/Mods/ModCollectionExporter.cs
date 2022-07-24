@@ -4,7 +4,7 @@
 // Created          : 03-09-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-26-2022
+// Last Modified On : 07-24-2022
 // ***********************************************************************
 // <copyright file="ModCollectionExporter.cs" company="Mario">
 //     Mario
@@ -30,6 +30,7 @@ using IronyModManager.IO.Mods.Exporter;
 using IronyModManager.IO.Mods.Importers;
 using IronyModManager.Models.Common;
 using IronyModManager.Shared;
+using IronyModManager.Shared.Configuration;
 using IronyModManager.Shared.MessageBus;
 using Newtonsoft.Json;
 using SharpCompress.Archives;
@@ -147,7 +148,8 @@ namespace IronyModManager.IO.Mods
                 }
             }
 
-            var content = JsonConvert.SerializeObject(parameters.Mod, Formatting.None);
+            var ulimitBypass = DIResolver.Get<IDomainConfiguration>().GetOptions().OSXOptions.UseFileStreams;
+            var content = JsonConvert.SerializeObject(parameters.Mod, Newtonsoft.Json.Formatting.None);
             using var dataStream = new MemoryStream(Encoding.UTF8.GetBytes(content));
 
             var streams = new List<Stream>() { dataStream };
@@ -158,19 +160,7 @@ namespace IronyModManager.IO.Mods
             if (Directory.Exists(parameters.ModDirectory) && !parameters.ExportModOrderOnly)
             {
                 var files = Directory.GetFiles(parameters.ModDirectory, "*.*", SearchOption.AllDirectories);
-                if (!RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
-                {
-                    foreach (var item in files)
-                    {
-                        var fs = new FileStream(item, FileMode.Open, FileAccess.Read, FileShare.Read);
-                        var file = item.Replace(parameters.ModDirectory, string.Empty).Trim('\\').Trim('/');
-                        var entry = zip.AddEntry(file, fs);
-                        entry.AlternateEncoding = Encoding.UTF8;
-                        entry.AlternateEncodingUsage = ZipOption.AsNecessary;
-                        streams.Add(fs);
-                    }
-                }
-                else
+                if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX) && !ulimitBypass)
                 {
                     // Yeah, osx sucks (ulimit bypass)
                     foreach (var item in files)
@@ -187,6 +177,18 @@ namespace IronyModManager.IO.Mods
                         streams.Add(ms);
                     }
                 }
+                else
+                {
+                    foreach (var item in files)
+                    {
+                        var fs = new FileStream(item, FileMode.Open, FileAccess.Read, FileShare.Read);
+                        var file = item.Replace(parameters.ModDirectory, string.Empty).Trim('\\').Trim('/');
+                        var entry = zip.AddEntry(file, fs);
+                        entry.AlternateEncoding = Encoding.UTF8;
+                        entry.AlternateEncodingUsage = ZipOption.AsNecessary;
+                        streams.Add(fs);
+                    }
+                }
             }
             if ((parameters.ExportMods?.Any()).GetValueOrDefault())
             {
@@ -199,19 +201,7 @@ namespace IronyModManager.IO.Mods
                     if (Directory.Exists(mod.FullPath))
                     {
                         var files = Directory.GetFiles(mod.FullPath, "*.*", SearchOption.AllDirectories);
-                        if (!RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
-                        {
-                            foreach (var item in files)
-                            {
-                                var fs = new FileStream(item, FileMode.Open, FileAccess.Read, FileShare.Read);
-                                var file = Path.Combine(Common.Constants.ModExportPath, parameters.Mod.Name.GenerateShortFileNameHashId(4).GenerateValidFileName() + "_" + mod.Name.GenerateValidFileName().GenerateShortFileNameHashId(8), item.Replace(mod.FullPath, string.Empty).Trim('\\').Trim('/'));
-                                var entry = zip.AddEntry(file, fs);
-                                entry.AlternateEncoding = Encoding.UTF8;
-                                entry.AlternateEncodingUsage = ZipOption.AsNecessary;
-                                streams.Add(fs);
-                            }
-                        }
-                        else
+                        if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX) && !ulimitBypass)
                         {
                             foreach (var item in files)
                             {
@@ -227,19 +217,22 @@ namespace IronyModManager.IO.Mods
                                 streams.Add(ms);
                             }
                         }
+                        else
+                        {
+                            foreach (var item in files)
+                            {
+                                var fs = new FileStream(item, FileMode.Open, FileAccess.Read, FileShare.Read);
+                                var file = Path.Combine(Common.Constants.ModExportPath, parameters.Mod.Name.GenerateShortFileNameHashId(4).GenerateValidFileName() + "_" + mod.Name.GenerateValidFileName().GenerateShortFileNameHashId(8), item.Replace(mod.FullPath, string.Empty).Trim('\\').Trim('/'));
+                                var entry = zip.AddEntry(file, fs);
+                                entry.AlternateEncoding = Encoding.UTF8;
+                                entry.AlternateEncodingUsage = ZipOption.AsNecessary;
+                                streams.Add(fs);
+                            }
+                        }
                     }
                     else if (File.Exists(mod.FullPath))
                     {
-                        if (!RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
-                        {
-                            var fs = new FileStream(mod.FullPath, FileMode.Open, FileAccess.Read, FileShare.Read);
-                            var file = Path.Combine(Common.Constants.ModExportPath, parameters.Mod.Name.GenerateShortFileNameHashId(4).GenerateValidFileName() + "_" + Path.GetFileNameWithoutExtension(mod.FullPath).GenerateShortFileNameHashId(8) + Path.GetExtension(mod.FullPath));
-                            var entry = zip.AddEntry(file, fs);
-                            entry.AlternateEncoding = Encoding.UTF8;
-                            entry.AlternateEncodingUsage = ZipOption.AsNecessary;
-                            streams.Add(fs);
-                        }
-                        else
+                        if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX) && !ulimitBypass)
                         {
                             var fs = new FileStream(mod.FullPath, FileMode.Open, FileAccess.Read, FileShare.Read);
                             var ms = new MemoryStream();
@@ -251,6 +244,15 @@ namespace IronyModManager.IO.Mods
                             fs.Close();
                             await fs.DisposeAsync();
                             streams.Add(ms);
+                        }
+                        else
+                        {
+                            var fs = new FileStream(mod.FullPath, FileMode.Open, FileAccess.Read, FileShare.Read);
+                            var file = Path.Combine(Common.Constants.ModExportPath, parameters.Mod.Name.GenerateShortFileNameHashId(4).GenerateValidFileName() + "_" + Path.GetFileNameWithoutExtension(mod.FullPath).GenerateShortFileNameHashId(8) + Path.GetExtension(mod.FullPath));
+                            var entry = zip.AddEntry(file, fs);
+                            entry.AlternateEncoding = Encoding.UTF8;
+                            entry.AlternateEncodingUsage = ZipOption.AsNecessary;
+                            streams.Add(fs);
                         }
                     }
                 }

@@ -4,7 +4,7 @@
 // Created          : 05-30-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 07-11-2022
+// Last Modified On : 07-24-2022
 // ***********************************************************************
 // <copyright file="OptionsControlViewModel.cs" company="Mario">
 //     Mario
@@ -47,6 +47,11 @@ namespace IronyModManager.ViewModels.Controls
         #region Fields
 
         /// <summary>
+        /// The application action
+        /// </summary>
+        private readonly IAppAction appAction;
+
+        /// <summary>
         /// The external editor service
         /// </summary>
         private readonly IExternalEditorService externalEditorService;
@@ -56,7 +61,8 @@ namespace IronyModManager.ViewModels.Controls
         /// </summary>
         private readonly IFileDialogAction fileDialogAction;
 
-        /// <summary>v
+        /// <summary>
+        /// v
         /// The game service
         /// </summary>
         private readonly IGameService gameService;
@@ -100,11 +106,6 @@ namespace IronyModManager.ViewModels.Controls
         /// The updater service
         /// </summary>
         private readonly IUpdaterService updaterService;
-
-        /// <summary>
-        /// The application action
-        /// </summary>
-        private IAppAction appAction;
 
         /// <summary>
         /// The automatic update changed
