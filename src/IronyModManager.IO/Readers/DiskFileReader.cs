@@ -4,7 +4,7 @@
 // Created          : 02-23-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 07-20-2022
+// Last Modified On : 07-24-2022
 // ***********************************************************************
 // <copyright file="DiskFileReader.cs" company="Mario">
 //     Mario
@@ -17,6 +17,7 @@ using System.IO;
 using System.Linq;
 using IronyModManager.DI;
 using IronyModManager.IO.Common.Readers;
+using IronyModManager.IO.Common.Streams;
 using IronyModManager.Shared;
 
 namespace IronyModManager.IO.Readers
@@ -99,9 +100,9 @@ namespace IronyModManager.IO.Readers
         /// <returns>Stream.</returns>
         public virtual (Stream, bool, DateTime?, EncodingInfo) GetStream(string rootPath, string file)
         {
-            static FileStream readStream(string path)
+            static OnDemandFileStream readStream(string path)
             {
-                var fs = new FileStream(path, FileMode.Open, FileAccess.Read);
+                var fs = new OnDemandFileStream(path, FileMode.Open, FileAccess.Read, FileShare.Read);
                 return fs;
             }
             // If using wildcard then we are going to match if it ends with and update this logic if ever needed
@@ -200,7 +201,7 @@ namespace IronyModManager.IO.Readers
                     else
                     {
                         info.IsBinary = true;
-                        using var fs = new FileStream(file, FileMode.Open, FileAccess.Read);
+                        using var fs = new FileStream(file, FileMode.Open, FileAccess.Read, FileShare.Read);
                         info.ContentSHA = fs.CalculateSHA();
                     }
                     result.Add(info);

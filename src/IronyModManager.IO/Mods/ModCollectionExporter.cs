@@ -26,6 +26,7 @@ using IronyModManager.IO.Common;
 using IronyModManager.IO.Common.MessageBus;
 using IronyModManager.IO.Common.Models;
 using IronyModManager.IO.Common.Mods;
+using IronyModManager.IO.Common.Streams;
 using IronyModManager.IO.Mods.Exporter;
 using IronyModManager.IO.Mods.Importers;
 using IronyModManager.Models.Common;
@@ -141,6 +142,11 @@ namespace IronyModManager.IO.Mods
                             messageBus.Publish(new ModExportProgressEvent(perc));
                             previousProgress = perc;
                         }
+                        if (e.CurrentEntry != null && e.CurrentEntry.InputStream != null)
+                        {
+                            e.CurrentEntry.InputStream.Close();
+                            e.CurrentEntry.InputStream.Dispose();
+                        }
                         break;
 
                     default:
@@ -165,7 +171,7 @@ namespace IronyModManager.IO.Mods
                     // Yeah, osx sucks (ulimit bypass)
                     foreach (var item in files)
                     {
-                        var fs = new FileStream(item, FileMode.Open, FileAccess.Read, FileShare.Read);
+                        var fs = new OnDemandFileStream(item, FileMode.Open, FileAccess.Read, FileShare.Read);
                         var ms = new MemoryStream();
                         await fs.CopyToAsync(ms);
                         var file = item.Replace(parameters.ModDirectory, string.Empty).Trim('\\').Trim('/');
@@ -181,7 +187,7 @@ namespace IronyModManager.IO.Mods
                 {
                     foreach (var item in files)
                     {
-                        var fs = new FileStream(item, FileMode.Open, FileAccess.Read, FileShare.Read);
+                        var fs = new OnDemandFileStream(item, FileMode.Open, FileAccess.Read, FileShare.Read);
                         var file = item.Replace(parameters.ModDirectory, string.Empty).Trim('\\').Trim('/');
                         var entry = zip.AddEntry(file, fs);
                         entry.AlternateEncoding = Encoding.UTF8;
@@ -205,7 +211,7 @@ namespace IronyModManager.IO.Mods
                         {
                             foreach (var item in files)
                             {
-                                var fs = new FileStream(item, FileMode.Open, FileAccess.Read, FileShare.Read);
+                                var fs = new OnDemandFileStream(item, FileMode.Open, FileAccess.Read, FileShare.Read);
                                 var ms = new MemoryStream();
                                 await fs.CopyToAsync(ms);
                                 var file = Path.Combine(Common.Constants.ModExportPath, parameters.Mod.Name.GenerateShortFileNameHashId(4).GenerateValidFileName() + "_" + mod.Name.GenerateValidFileName().GenerateShortFileNameHashId(8), item.Replace(mod.FullPath, string.Empty).Trim('\\').Trim('/'));
@@ -221,7 +227,7 @@ namespace IronyModManager.IO.Mods
                         {
                             foreach (var item in files)
                             {
-                                var fs = new FileStream(item, FileMode.Open, FileAccess.Read, FileShare.Read);
+                                var fs = new OnDemandFileStream(item, FileMode.Open, FileAccess.Read, FileShare.Read);
                                 var file = Path.Combine(Common.Constants.ModExportPath, parameters.Mod.Name.GenerateShortFileNameHashId(4).GenerateValidFileName() + "_" + mod.Name.GenerateValidFileName().GenerateShortFileNameHashId(8), item.Replace(mod.FullPath, string.Empty).Trim('\\').Trim('/'));
                                 var entry = zip.AddEntry(file, fs);
                                 entry.AlternateEncoding = Encoding.UTF8;
@@ -234,7 +240,7 @@ namespace IronyModManager.IO.Mods
                     {
                         if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX) && !ulimitBypass)
                         {
-                            var fs = new FileStream(mod.FullPath, FileMode.Open, FileAccess.Read, FileShare.Read);
+                            var fs = new OnDemandFileStream(mod.FullPath, FileMode.Open, FileAccess.Read, FileShare.Read);
                             var ms = new MemoryStream();
                             await fs.CopyToAsync(ms);
                             var file = Path.Combine(Common.Constants.ModExportPath, parameters.Mod.Name.GenerateShortFileNameHashId(4).GenerateValidFileName() + "_" + Path.GetFileNameWithoutExtension(mod.FullPath).GenerateShortFileNameHashId(8) + Path.GetExtension(mod.FullPath));
@@ -247,7 +253,7 @@ namespace IronyModManager.IO.Mods
                         }
                         else
                         {
-                            var fs = new FileStream(mod.FullPath, FileMode.Open, FileAccess.Read, FileShare.Read);
+                            var fs = new OnDemandFileStream(mod.FullPath, FileMode.Open, FileAccess.Read, FileShare.Read);
                             var file = Path.Combine(Common.Constants.ModExportPath, parameters.Mod.Name.GenerateShortFileNameHashId(4).GenerateValidFileName() + "_" + Path.GetFileNameWithoutExtension(mod.FullPath).GenerateShortFileNameHashId(8) + Path.GetExtension(mod.FullPath));
                             var entry = zip.AddEntry(file, fs);
                             entry.AlternateEncoding = Encoding.UTF8;

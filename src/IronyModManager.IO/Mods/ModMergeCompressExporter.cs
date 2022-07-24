@@ -4,7 +4,7 @@
 // Created          : 11-26-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 12-15-2021
+// Last Modified On : 07-24-2022
 // ***********************************************************************
 // <copyright file="ModMergeCompressExporter.cs" company="Mario">
 //     Mario
@@ -104,6 +104,11 @@ namespace IronyModManager.IO.Mods
                         if (ProcessedFile != null)
                         {
                             ProcessedFile?.Invoke(this, EventArgs.Empty);
+                        }
+                        if (e.CurrentEntry != null && e.CurrentEntry.InputStream != null)
+                        {
+                            e.CurrentEntry.InputStream.Close();
+                            e.CurrentEntry.InputStream.Dispose();
                         }
                         break;
 
