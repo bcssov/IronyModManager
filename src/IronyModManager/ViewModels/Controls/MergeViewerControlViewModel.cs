@@ -4,7 +4,7 @@
 // Created          : 03-20-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 07-22-2022
+// Last Modified On : 07-28-2022
 // ***********************************************************************
 // <copyright file="MergeViewerControlViewModel.cs" company="Mario">
 //     Mario
@@ -595,7 +595,7 @@ namespace IronyModManager.ViewModels.Controls
         /// <returns><c>true</c> if [is redo available]; otherwise, <c>false</c>.</returns>
         public virtual bool IsRedoAvailable()
         {
-            return redoStack.Count > 0;
+            return redoStack.Any();
         }
 
         /// <summary>
@@ -604,7 +604,7 @@ namespace IronyModManager.ViewModels.Controls
         /// <returns><c>true</c> if [is undo available]; otherwise, <c>false</c>.</returns>
         public virtual bool IsUndoAvailable()
         {
-            return undoStack.Count > 0;
+            return undoStack.Any();
         }
 
         /// <summary>

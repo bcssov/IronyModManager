@@ -134,6 +134,8 @@
         "Overlay_Rename_Message": "Pričekajte dok se izvrši preimenovanje...",
         "Overlay_Duplicate_Message": "Pričekajte dok se izvrši dupliciranje...",
         "ExportToClipboard": "Kopiraj kolekciju u međuspremnik",
+        "Undo": "Poništi",
+        "Redo": "Ponovi",
         "DeleteMerge": {
             "DeleteTitle": "Želiš li izbrisati spojeni mod?",
             "DeleteHeader": "Potvrdi brisanje spojenog moda",

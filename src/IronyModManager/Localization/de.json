@@ -134,6 +134,8 @@
         "Overlay_Rename_Message": "Bitte warten Sie, während der Umbenennung...",
         "Overlay_Duplicate_Message": "Bitte warten Sie, während der Verdopplung...",
         "ExportToClipboard": "Kollektion in Zwischenablage kopieren",
+        "Undo": "Rückgängig Machen",
+        "Redo": "Wiederholen",
         "DeleteMerge": {
             "DeleteTitle": "Zusammengeführten Mod löschen?",
             "DeleteHeader": "Bestätigen Sie das Löschen des Merge-Mods",

@@ -4,7 +4,7 @@
 // Created          : 03-03-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-11-2022
+// Last Modified On : 07-28-2022
 // ***********************************************************************
 // <copyright file="CollectionModsControlView.xaml.cs" company="Mario">
 //     Mario
@@ -229,6 +229,49 @@ namespace IronyModManager.Views.Controls
             {
                 setUIProperties().ConfigureAwait(false);
             };
+
+            var modListAutoScrollValue = modList.AutoScrollToSelectedItem;
+            int? modListFocusSideScrollItem = null;
+            int previousModListCount = 0;
+            int previousModListIndex = 0;
+            ViewModel.BeforeUndoRedo += (sender, args) =>
+            {
+                modList.AutoScrollToSelectedItem = false;
+                previousModListIndex = modList.SelectedIndex;
+                var visibleItems = modList.ItemContainerGenerator.Containers.ToList();
+                if (visibleItems.Any())
+                {
+                    modListFocusSideScrollItem = visibleItems.FirstOrDefault().Index;
+                    previousModListCount = modList.ItemCount;
+                }
+            };
+            ViewModel.AfterUndoRedo += (sender, args) =>
+            {
+                async Task delay()
+                {
+                    await Task.Delay(50);
+                    modList.AutoScrollToSelectedItem = modListAutoScrollValue;
+                    modList.Focus();
+                    if (modListFocusSideScrollItem.HasValue)
+                    {
+                        if (modList.ItemCount != previousModListCount)
+                        {
+                            modListFocusSideScrollItem -= Math.Abs(previousModListCount - modList.ItemCount);
+                        }                        
+                        if (modListFocusSideScrollItem.GetValueOrDefault() < 0)
+                        {
+                            modListFocusSideScrollItem = 0;
+                        }
+                        else if (modListFocusSideScrollItem.GetValueOrDefault() >= modList.ItemCount)
+                        {
+                            modListFocusSideScrollItem = modList.ItemCount - 1;
+                        }
+                        modList.SelectedIndex = previousModListIndex;
+                        modList.ScrollIntoView(modListFocusSideScrollItem.GetValueOrDefault());
+                    }                    
+                }
+                Dispatcher.UIThread.SafeInvoke(() => delay().ConfigureAwait(false));
+            };
         }
 
         /// <summary>
@@ -237,113 +280,139 @@ namespace IronyModManager.Views.Controls
         /// <returns>List&lt;MenuItem&gt;.</returns>
         private List<MenuItem> GetMenuItems()
         {
-            List<MenuItem> menuItems = null;
-            if (!string.IsNullOrEmpty(ViewModel.GetContextMenuModUrl()) || !string.IsNullOrEmpty(ViewModel.GetContextMenuModSteamUrl()) || !string.IsNullOrWhiteSpace(ViewModel.ContextMenuMod?.FullPath))
+            var menuItems = new List<MenuItem>
             {
-                menuItems = new List<MenuItem>
+                new MenuItem()
                 {
-                    new MenuItem()
+                    Header = ViewModel.CollectionJumpOnPositionChangeLabel,
+                    Command = ViewModel.CollectionJumpOnPositionChangeCommand
+                },
+                new MenuItem()
+                {
+                    Header = "-"
+                },
+                new MenuItem()
+                {
+                    Header = ViewModel.ExportCollectionToClipboard,
+                    Command = ViewModel.ExportCollectionToClipboardCommand
+                },
+                new MenuItem()
+                {
+                    Header = ViewModel.ImportCollectionFromClipboard,
+                    Command = ViewModel.ImportCollectionFromClipboardCommand
+                },
+                new MenuItem()
+                {
+                    Header = "-"
+                }
+            };
+            var counterOffset = 5;
+            var redoAvailable = ViewModel.IsRedoAvailable();
+            var undoAvailable = ViewModel.IsUndoAvailable();
+            if (redoAvailable || undoAvailable)
+            {
+                var offset = 1;
+                if (undoAvailable)
+                {
+                    menuItems.Add(new MenuItem()
                     {
-                        Header = ViewModel.CollectionJumpOnPositionChangeLabel,
-                        Command = ViewModel.CollectionJumpOnPositionChangeCommand
-                    },
-                    new MenuItem()
+                        Header = ViewModel.Undo,
+                        Command = ViewModel.UndoCommand
+                    });
+                    offset++;
+                }
+                if (redoAvailable)
+                {
+                    menuItems.Add(new MenuItem()
                     {
-                        Header = "-"
-                    },
-                    new MenuItem()
+                        Header = ViewModel.Redo,
+                        Command = ViewModel.RedoCommand,
+                    });
+                    offset++;
+                }
+                menuItems.Add(new MenuItem()
+                {
+                    Header = "-"
+                });
+                counterOffset += offset;
+            }
+
+            var canExportGame = ViewModel.CanExportGame();
+            if (ViewModel.CanExportModHashReport || canExportGame)
+            {
+                var offset = 2;
+                if (ViewModel.CanExportModHashReport)
+                {
+                    menuItems.Add(new MenuItem()
                     {
-                        Header = ViewModel.ExportCollectionToClipboard,
-                        Command = ViewModel.ExportCollectionToClipboardCommand
-                    },
-                    new MenuItem()
+                        Header = ViewModel.ExportCollectionReport,
+                        Command = ViewModel.ExportCollectionReportCommand
+                    });
+                    offset++;
+                }
+                if (canExportGame)
+                {
+                    menuItems.Add(new MenuItem()
                     {
-                        Header = ViewModel.ImportCollectionFromClipboard,
-                        Command = ViewModel.ImportCollectionFromClipboardCommand
-                    },
-                    new MenuItem()
-                    {
-                        Header = "-"
-                    }
+                        Header = ViewModel.ExportGameReport,
+                        Command = ViewModel.ExportGameReportCommand
+                    });
+                    offset++;
+                }
+                menuItems.Add(new MenuItem()
+                {
+                    Header = ViewModel.ImportReport,
+                    Command = ViewModel.ImportReportCommand
+                });
+                menuItems.Add(new MenuItem()
+                {
+                    Header = "-"
+                });
+                counterOffset += offset;
+            }
+            if (!string.IsNullOrEmpty(ViewModel.GetContextMenuModUrl()))
+            {
+                menuItems.Add(new MenuItem()
+                {
+                    Header = ViewModel.OpenUrl,
+                    Command = ViewModel.OpenUrlCommand
+                });
+                menuItems.Add(new MenuItem()
+                {
+                    Header = ViewModel.CopyUrl,
+                    Command = ViewModel.CopyUrlCommand
+                });
+            }
+            if (!string.IsNullOrEmpty(ViewModel.GetContextMenuModSteamUrl()))
+            {
+                var menuItem = new MenuItem()
+                {
+                    Header = ViewModel.OpenInSteam,
+                    Command = ViewModel.OpenInSteamCommand
                 };
-                var counterOffset = 5;
-                var canExportGame = ViewModel.CanExportGame();
-                if (ViewModel.CanExportModHashReport || canExportGame)
+                if (menuItems.Count == counterOffset)
                 {
-                    var offset = 2;
-                    if (ViewModel.CanExportModHashReport)
-                    {
-                        menuItems.Add(new MenuItem()
-                        {
-                            Header = ViewModel.ExportCollectionReport,
-                            Command = ViewModel.ExportCollectionReportCommand
-                        });
-                        offset++;
-                    }
-                    if (canExportGame)
-                    {
-                        menuItems.Add(new MenuItem()
-                        {
-                            Header = ViewModel.ExportGameReport,
-                            Command = ViewModel.ExportGameReportCommand
-                        });
-                        offset++;
-                    }
-                    menuItems.Add(new MenuItem()
-                    {
-                        Header = ViewModel.ImportReport,
-                        Command = ViewModel.ImportReportCommand
-                    });
-                    menuItems.Add(new MenuItem()
-                    {
-                        Header = "-"
-                    });
-                    counterOffset += offset;
+                    menuItems.Add(menuItem);
                 }
-                if (!string.IsNullOrEmpty(ViewModel.GetContextMenuModUrl()))
+                else
                 {
-                    menuItems.Add(new MenuItem()
-                    {
-                        Header = ViewModel.OpenUrl,
-                        Command = ViewModel.OpenUrlCommand
-                    });
-                    menuItems.Add(new MenuItem()
-                    {
-                        Header = ViewModel.CopyUrl,
-                        Command = ViewModel.CopyUrlCommand
-                    });
+                    menuItems.Insert(counterOffset + 1, menuItem);
                 }
-                if (!string.IsNullOrEmpty(ViewModel.GetContextMenuModSteamUrl()))
+            }
+            if (!string.IsNullOrWhiteSpace(ViewModel.ContextMenuMod?.FullPath))
+            {
+                var menuItem = new MenuItem()
                 {
-                    var menuItem = new MenuItem()
-                    {
-                        Header = ViewModel.OpenInSteam,
-                        Command = ViewModel.OpenInSteamCommand
-                    };
-                    if (menuItems.Count == counterOffset)
-                    {
-                        menuItems.Add(menuItem);
-                    }
-                    else
-                    {
-                        menuItems.Insert(counterOffset + 1, menuItem);
-                    }
+                    Header = ViewModel.OpenInAssociatedApp,
+                    Command = ViewModel.OpenInAssociatedAppCommand
+                };
+                if (menuItems.Count == counterOffset)
+                {
+                    menuItems.Add(menuItem);
                 }
-                if (!string.IsNullOrWhiteSpace(ViewModel.ContextMenuMod?.FullPath))
+                else
                 {
-                    var menuItem = new MenuItem()
-                    {
-                        Header = ViewModel.OpenInAssociatedApp,
-                        Command = ViewModel.OpenInAssociatedAppCommand
-                    };
-                    if (menuItems.Count == counterOffset)
-                    {
-                        menuItems.Add(menuItem);
-                    }
-                    else
-                    {
-                        menuItems.Insert(counterOffset, menuItem);
-                    }
+                    menuItems.Insert(counterOffset, menuItem);
                 }
             }
             return menuItems;
@@ -368,10 +437,40 @@ namespace IronyModManager.Views.Controls
                 },
                 new MenuItem()
                 {
+                    Header = ViewModel.ExportCollectionToClipboard,
+                    Command = ViewModel.ExportCollectionToClipboardCommand
+                },
+                new MenuItem()
+                {
                     Header = ViewModel.ImportCollectionFromClipboard,
                     Command = ViewModel.ImportCollectionFromClipboardCommand
                 }
             };
+            var redoAvailable = ViewModel.IsRedoAvailable();
+            var undoAvailable = ViewModel.IsUndoAvailable();
+            if (redoAvailable || undoAvailable)
+            {
+                menuItems.Add(new MenuItem()
+                {
+                    Header = "-"
+                });
+                if (undoAvailable)
+                {
+                    menuItems.Add(new MenuItem()
+                    {
+                        Header = ViewModel.Undo,
+                        Command = ViewModel.UndoCommand
+                    });
+                }
+                if (redoAvailable)
+                {
+                    menuItems.Add(new MenuItem()
+                    {
+                        Header = ViewModel.Redo,
+                        Command = ViewModel.RedoCommand,
+                    });
+                }
+            }
             var canExportGame = ViewModel.CanExportGame();
             if (ViewModel.CanExportModHashReport || canExportGame)
             {

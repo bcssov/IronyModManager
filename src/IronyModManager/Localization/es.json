@@ -134,6 +134,8 @@
         "Overlay_Rename_Message": "Por favor espere mientras se renombra...",
         "Overlay_Duplicate_Message": "Por favor espere mientras se duplica...",
         "ExportToClipboard": "Copiar colección al portapapeles",
+        "Undo": "Deshacer",
+        "Redo": "Rehacer",
         "DeleteMerge": {
             "DeleteTitle": "Eliminar mod combinado?",
             "DeleteHeader": "Confirmar Eliminación de mod combinado",
