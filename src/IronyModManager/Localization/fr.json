@@ -134,6 +134,8 @@
         "Overlay_Rename_Message": "Veuillez patienter pendant l'opération de renommage...",
         "Overlay_Duplicate_Message": "Veuillez patienter pendant l'opération de duplication...",
         "ExportToClipboard": "Copier la liste dans le presse-papiers",
+        "Undo": "annuler",
+        "Redo": "Refaire",
         "DeleteMerge": {
             "DeleteTitle": "Supprimer le mod fusionné?",
             "DeleteHeader": "Confirmez la suppression du mod fusionné",

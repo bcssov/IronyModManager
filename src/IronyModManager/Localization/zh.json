@@ -134,6 +134,8 @@
         "Overlay_Rename_Message": "正在重命名……",
         "Overlay_Duplicate_Message": "正在创建合集副本……",
         "ExportToClipboard": "导出合集至剪贴板",
+        "Undo": "撤销",
+        "Redo": "重做",
         "DeleteMerge": {
             "DeleteTitle": "删除合并模组？",
             "DeleteHeader": "确认合并模组删除",

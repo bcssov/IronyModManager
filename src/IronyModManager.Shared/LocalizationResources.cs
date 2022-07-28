@@ -176,6 +176,8 @@ namespace IronyModManager.Shared
             public const string Overlay_Rename_Message = Prefix + "Overlay_Rename_Message";
             public const string Overlay_Duplicate_Message = Prefix + "Overlay_Duplicate_Message";
             public const string ExportToClipboard = Prefix + "ExportToClipboard";
+            public const string Undo = Prefix + "Undo";
+            public const string Redo = Prefix + "Redo";
             public static class DeleteMerge
             {
                 public const string Prefix = "Collection_Mods.DeleteMerge.";
