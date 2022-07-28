@@ -4,7 +4,7 @@
 // Created          : 08-11-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 01-16-2022
+// Last Modified On : 07-28-2022
 // ***********************************************************************
 // <copyright file="SQLiteExporter.cs" company="Mario">
 //     Mario
@@ -90,37 +90,43 @@ namespace IronyModManager.IO.Mods.Exporter
         public async Task<bool> ExportAsync(ModWriterParameters parameters)
         {
             var mutex = await exportLock.LockAsync();
-            // Caching sucks in this ORM
-            DbFieldCache.Flush();
-            FieldCache.Flush();
-            IdentityCache.Flush();
-            PrimaryCache.Flush();
-            EnsureDbExists(parameters);
-            var version = await GetVersionAsync(parameters);
-            switch (version)
+            try
             {
-                case Version.v3:
-                    {
-                        var collection = await RecreateCollectionV3Async(parameters);
-                        await SyncModsV2Async(collection, parameters);
-                    }
-                    break;
+                // Caching sucks in this ORM
+                DbFieldCache.Flush();
+                FieldCache.Flush();
+                IdentityCache.Flush();
+                PrimaryCache.Flush();
+                EnsureDbExists(parameters);
+                var version = await GetVersionAsync(parameters);
+                switch (version)
+                {
+                    case Version.v3:
+                        {
+                            var collection = await RecreateCollectionV3Async(parameters);
+                            await SyncModsV2Async(collection, parameters);
+                        }
+                        break;
 
-                case Version.v4:
-                    {
-                        var collection = await RecreateCollectionV4Async(parameters);
-                        await SyncModsV4Async(collection, parameters);
-                    }
-                    break;
+                    case Version.v4:
+                        {
+                            var collection = await RecreateCollectionV4Async(parameters);
+                            await SyncModsV4Async(collection, parameters);
+                        }
+                        break;
 
-                default:
-                    {
-                        var collection = await RecreateCollectionV2Async(parameters);
-                        await SyncModsV2Async(collection, parameters);
-                    }
-                    break;
+                    default:
+                        {
+                            var collection = await RecreateCollectionV2Async(parameters);
+                            await SyncModsV2Async(collection, parameters);
+                        }
+                        break;
+                }
             }
-            mutex.Dispose();
+            finally
+            {
+                mutex.Dispose();
+            }
             return true;
         }
 

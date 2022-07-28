@@ -34,6 +34,7 @@ using IronyModManager.Parser.Mod;
 using IronyModManager.Services.Common;
 using IronyModManager.Shared;
 using IronyModManager.Shared.Cache;
+using IronyModManager.Shared.Configuration;
 using IronyModManager.Shared.MessageBus;
 using IronyModManager.Shared.Models;
 using IronyModManager.Storage.Common;
@@ -338,6 +339,7 @@ namespace IronyModManager.Services.Tests
             {
                 return false;
             });
+            DISetup.Container.Register<IDomainConfiguration>(() => new DomainConfigDummy(true));
 
 
             var service = new ModMergeService(null, compressExporter.Object, new Cache(), messageBus.Object, modPatchExporter.Object, modMergeExporter.Object,
@@ -583,6 +585,36 @@ namespace IronyModManager.Services.Tests
             var result = await service.HasEnoughFreeSpaceAsync("test");
 
             result.Should().BeFalse();
+        }
+
+        /// <summary>
+        /// Class DomainConfigDummy.
+        /// Implements the <see cref="IDomainConfiguration" />
+        /// </summary>
+        /// <seealso cref="IDomainConfiguration" />
+        private class DomainConfigDummy : Shared.Configuration.IDomainConfiguration
+        {
+            /// <summary>
+            /// The domain
+            /// </summary>
+            DomainConfigurationOptions domain = new DomainConfigurationOptions();
+            /// <summary>
+            /// Initializes a new instance of the <see cref="DomainConfigDummy"/> class.
+            /// </summary>
+            /// <param name="useLegacySteamLaunch">if set to <c>true</c> [use legacy steam launch].</param>
+            public DomainConfigDummy(bool useLegacySteamLaunch)
+            {
+                domain.Steam.UseLegacyLaunchMethod = useLegacySteamLaunch;
+            }
+
+            /// <summary>
+            /// Gets the options.
+            /// </summary>
+            /// <returns>DomainConfigurationOptions.</returns>
+            public DomainConfigurationOptions GetOptions()
+            {
+                return domain;
+            }
         }
     }
 }
