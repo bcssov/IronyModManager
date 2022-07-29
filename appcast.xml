@@ -4,20 +4,11 @@
 		<title>Irony Mod Manager</title>
 		<language>en</language>
 		<item>
-			<title>1.22.138</title>
+			<title>1.22.143</title>
 			<description>## Current Release Notes
-* Fix options popup overlapping on linux\osx
-* ulimit workaround for OSX (needs some setup see FAQ on wiki)
-
-## 1.22.136 Release Notes
-* Fixes in find and replace editor
-* Localize find and replace editor dialog
-* Minor Fixes
-
-## 1.22.132 Release Notes
-* Bump avalonia to fix some framework bugs
-* Fix rich text editor context menu
-* Add find and replace to rich text editors (conflict solver)
+* Add simple on demand stream which should reduce number of open file handles
+* Fix UI locking up if pdx sqlite database is corrupt
+* Mod sorting undo\redo added
 
 ## Release Notes 1.22
 * Update dependencies
@@ -32,25 +23,17 @@
 * Exclude non event related namespaces from definition code extraction
 * Show missing mods notification if mod is deinstalled and is in a collection
 * Auto detect gog games on windows
-* Detect and treat as error files without BOM encoding</description>
-			<pubDate>Sun, 24 Jul 2022 05:09:15 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.22.138/linux-x64.zip" sparkle:version="1.22.138.2925" sparkle:shortVersionString="1.22.138" length="88292042" sparkle:os="linux" type="application/zip" sparkle:signature="GIqLRvwY1g8335kOaU932PjOmJsPd6qA2YvdYQtmr561HRlnY0QuC9G9LdTacN8qV6otG9vBPGchDO4s+S+XCg=="/>
+* Detect and treat as error files without BOM encoding
+* Mod sorting undo\redo added</description>
+			<pubDate>Fri, 29 Jul 2022 02:08:39 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.22.143/linux-x64.zip" sparkle:version="1.22.143.41721" sparkle:shortVersionString="1.22.143" length="88297057" sparkle:os="linux" type="application/zip" sparkle:signature="mrQ7ZY/ZKVXsuG2iyyCgBRzZo42C2Ia+YQ4Kuf9exxADvAqlu80iR9b9yO6cr6FzWsVghgnBjMaEvXMiJh9rAA=="/>
 		</item>
 		<item>
-			<title>1.22.138</title>
+			<title>1.22.143</title>
 			<description>## Current Release Notes
-* Fix options popup overlapping on linux\osx
-* ulimit workaround for OSX (needs some setup see FAQ on wiki)
-
-## 1.22.136 Release Notes
-* Fixes in find and replace editor
-* Localize find and replace editor dialog
-* Minor Fixes
-
-## 1.22.132 Release Notes
-* Bump avalonia to fix some framework bugs
-* Fix rich text editor context menu
-* Add find and replace to rich text editors (conflict solver)
+* Add simple on demand stream which should reduce number of open file handles
+* Fix UI locking up if pdx sqlite database is corrupt
+* Mod sorting undo\redo added
 
 ## Release Notes 1.22
 * Update dependencies
@@ -65,25 +48,17 @@
 * Exclude non event related namespaces from definition code extraction
 * Show missing mods notification if mod is deinstalled and is in a collection
 * Auto detect gog games on windows
-* Detect and treat as error files without BOM encoding</description>
-			<pubDate>Sun, 24 Jul 2022 05:09:21 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.22.138/osx-x64.zip" sparkle:version="1.22.138.2925" sparkle:shortVersionString="1.22.138" length="91164157" sparkle:os="osx" type="application/zip" sparkle:signature="x8W1pKXwdvvN5VIIXapz7haaEu1aevd+tMgct3UMt3+crDA4ERub2e/bS6Ad4jtRhE8SPfITPsrtb4GwgYNQDg=="/>
+* Detect and treat as error files without BOM encoding
+* Mod sorting undo\redo added</description>
+			<pubDate>Fri, 29 Jul 2022 02:08:52 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.22.143/osx-x64.zip" sparkle:version="1.22.143.41721" sparkle:shortVersionString="1.22.143" length="91169139" sparkle:os="osx" type="application/zip" sparkle:signature="3ejizopXZhpgRzNpmf/DoBtggrEwr0f8FXA7JSu6Uvv8l2QZ3aqg3x3H3v83PwBXekIC7SYn7bVdC+zDJ+OMAQ=="/>
 		</item>
 		<item>
-			<title>1.22.138</title>
+			<title>1.22.143</title>
 			<description>## Current Release Notes
-* Fix options popup overlapping on linux\osx
-* ulimit workaround for OSX (needs some setup see FAQ on wiki)
-
-## 1.22.136 Release Notes
-* Fixes in find and replace editor
-* Localize find and replace editor dialog
-* Minor Fixes
-
-## 1.22.132 Release Notes
-* Bump avalonia to fix some framework bugs
-* Fix rich text editor context menu
-* Add find and replace to rich text editors (conflict solver)
+* Add simple on demand stream which should reduce number of open file handles
+* Fix UI locking up if pdx sqlite database is corrupt
+* Mod sorting undo\redo added
 
 ## Release Notes 1.22
 * Update dependencies
@@ -98,25 +73,17 @@
 * Exclude non event related namespaces from definition code extraction
 * Show missing mods notification if mod is deinstalled and is in a collection
 * Auto detect gog games on windows
-* Detect and treat as error files without BOM encoding</description>
-			<pubDate>Sun, 24 Jul 2022 05:09:28 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.22.138/win-x64-setup.zip" sparkle:version="1.22.138.2925" sparkle:shortVersionString="1.22.138" length="72292748" sparkle:os="windows" type="application/zip" sparkle:signature="GwlhqupFL6OFO+b5cxyIcgQ2VHYRY7J/orY7XMsf9kI0hbmq7z2yXzTFCo3+yMt83c+MJvzNPAd9Ol5IRvfaCg=="/>
+* Detect and treat as error files without BOM encoding
+* Mod sorting undo\redo added</description>
+			<pubDate>Fri, 29 Jul 2022 02:08:58 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.22.143/win-x64-setup.zip" sparkle:version="1.22.143.41721" sparkle:shortVersionString="1.22.143" length="72287654" sparkle:os="windows" type="application/zip" sparkle:signature="pCItW3lWfJDb5fcTVzyAzAqz0ceFUfCdh6H1S0TmN5DKuoGv0PJyWAreHFxBwx3138HO8j7OWCNU1FCXjNtHAA=="/>
 		</item>
 		<item>
-			<title>1.22.138</title>
+			<title>1.22.143</title>
 			<description>## Current Release Notes
-* Fix options popup overlapping on linux\osx
-* ulimit workaround for OSX (needs some setup see FAQ on wiki)
-
-## 1.22.136 Release Notes
-* Fixes in find and replace editor
-* Localize find and replace editor dialog
-* Minor Fixes
-
-## 1.22.132 Release Notes
-* Bump avalonia to fix some framework bugs
-* Fix rich text editor context menu
-* Add find and replace to rich text editors (conflict solver)
+* Add simple on demand stream which should reduce number of open file handles
+* Fix UI locking up if pdx sqlite database is corrupt
+* Mod sorting undo\redo added
 
 ## Release Notes 1.22
 * Update dependencies
@@ -131,9 +98,10 @@
 * Exclude non event related namespaces from definition code extraction
 * Show missing mods notification if mod is deinstalled and is in a collection
 * Auto detect gog games on windows
-* Detect and treat as error files without BOM encoding</description>
-			<pubDate>Sun, 24 Jul 2022 05:09:28 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.22.138/win-x64.zip" sparkle:version="1.22.138.2925" sparkle:shortVersionString="1.22.138" length="105789627" sparkle:os="windows" type="application/zip" sparkle:signature="er50QQ93qc1jWWlUqC2763DDiOkV0s8/Q1Ek8ZLNUg7QUEB+qYJcKeCjZ+6PmmF3PPT5wIGSKviZqH3OXJ9xAw=="/>
+* Detect and treat as error files without BOM encoding
+* Mod sorting undo\redo added</description>
+			<pubDate>Fri, 29 Jul 2022 02:08:59 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.22.143/win-x64.zip" sparkle:version="1.22.143.41721" sparkle:shortVersionString="1.22.143" length="105794601" sparkle:os="windows" type="application/zip" sparkle:signature="FP8S++2NdBVC0ddP3EVxahJt0uVmcNXzQ0qjIB/xdRVmxilwr8GEMAQtbk7orQ5QfemYprd40bkcLbzgmSJbCg=="/>
 		</item>
 	</channel>
 </rss>
