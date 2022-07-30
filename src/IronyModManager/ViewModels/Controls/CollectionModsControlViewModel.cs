@@ -4,7 +4,7 @@
 // Created          : 03-03-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 07-28-2022
+// Last Modified On : 07-30-2022
 // ***********************************************************************
 // <copyright file="CollectionModsControlViewModel.cs" company="Mario">
 //     Mario
@@ -974,12 +974,14 @@ namespace IronyModManager.ViewModels.Controls
         /// <param name="activeGame">The active game.</param>
         public virtual void SetMods(IEnumerable<IMod> mods, IGame activeGame)
         {
+            var oldActiveGameType = this.activeGame?.Type ?? string.Empty;
+            var currentActiveGameType = activeGame?.Type ?? string.Empty;
             this.activeGame = activeGame;
             Mods = mods;
 
             skipModCollectionSave = true;
             SubscribeToMods();
-            HandleModCollectionChange();
+            HandleModCollectionChange(!oldActiveGameType.Equals(currentActiveGameType));
             skipModCollectionSave = false;
         }
 
@@ -1111,7 +1113,8 @@ namespace IronyModManager.ViewModels.Controls
         /// <summary>
         /// Handles the mod collection change.
         /// </summary>
-        protected virtual void HandleModCollectionChange()
+        /// <param name="resetStack">if set to <c>true</c> [reset stack].</param>
+        protected virtual void HandleModCollectionChange(bool resetStack)
         {
             if (!string.IsNullOrWhiteSpace(restoreCollectionSelection))
             {
@@ -1171,8 +1174,11 @@ namespace IronyModManager.ViewModels.Controls
                     Dispatcher.UIThread.SafeInvoke(() => notificationAction.ShowPromptAsync(title, title, message, NotificationType.Warning, PromptType.OK));
                 }
             }
-            undoStack.Clear();
-            redoStack.Clear();
+            if (resetStack)
+            {
+                undoStack.Clear();
+                redoStack.Clear();
+            }
             SetSelectedModsState(selectedMods, ignoreStack: true);
             AllModsEnabled = SelectedMods?.Count > 0 && SelectedMods.All(p => p.IsSelected);
             var state = appStateService.Get();
@@ -1426,7 +1432,7 @@ namespace IronyModManager.ViewModels.Controls
             {
                 ModifyCollection.ActiveCollection = o;
                 PatchMod.SetParameters(o);
-                HandleModCollectionChange();
+                HandleModCollectionChange(true);
             }).DisposeWith(disposables);
 
             this.WhenAnyValue(v => v.AddNewCollection.IsActivated).Where(p => p == true).Subscribe(activated =>
@@ -2038,7 +2044,6 @@ namespace IronyModManager.ViewModels.Controls
         /// Performs the redo undo ordering.
         /// </summary>
         /// <param name="descriptors">The descriptors.</param>
-        /// <param name="clearRedo">if set to <c>true</c> [clear redo].</param>
         protected virtual void PerformRedoUndoOrdering(IEnumerable<string> descriptors)
         {
             if (Mods != null)
