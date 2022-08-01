@@ -4,7 +4,7 @@
 // Created          : 03-31-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 12-13-2021
+// Last Modified On : 08-01-2022
 // ***********************************************************************
 // <copyright file="ModWriter.cs" company="Mario">
 //     Mario
@@ -43,6 +43,11 @@ namespace IronyModManager.IO.Mods
         private static readonly AsyncLock writeLock = new();
 
         /// <summary>
+        /// The drive information provider
+        /// </summary>
+        private readonly IDriveInfoProvider driveInfoProvider;
+
+        /// <summary>
         /// The json exporter
         /// </summary>
         private readonly JsonExporter jsonExporter;
@@ -71,12 +76,14 @@ namespace IronyModManager.IO.Mods
         /// </summary>
         /// <param name="logger">The logger.</param>
         /// <param name="mapper">The mapper.</param>
-        public ModWriter(ILogger logger, IMapper mapper)
+        /// <param name="driveInfoProvider">The drive information provider.</param>
+        public ModWriter(ILogger logger, IMapper mapper, IDriveInfoProvider driveInfoProvider)
         {
             jsonExporter = new JsonExporter();
             sqliteExporter = new SQLiteExporter(logger, false);
             sqliteExporterBeta = new SQLiteExporter(logger, true);
             this.mapper = mapper;
+            this.driveInfoProvider = driveInfoProvider;
         }
 
         #endregion Constructors
@@ -103,6 +110,19 @@ namespace IronyModManager.IO.Mods
             }
 
             return tasks.All(p => p.Result);
+        }
+
+        /// <summary>
+        /// Determines whether this instance [can write to mod directory] the specified parameters.
+        /// </summary>
+        /// <param name="parameters">The parameters.</param>
+        /// <returns>Task&lt;System.Boolean&gt;.</returns>
+        public Task<bool> CanWriteToModDirectoryAsync(ModWriterParameters parameters)
+        {
+            var fullPath = Path.Combine(parameters.RootDirectory ?? string.Empty, parameters.Path ?? string.Empty);
+            // If drive doesn't exist it should not return a value
+            var size = driveInfoProvider.GetFreeSpace(fullPath);
+            return Task.FromResult(size.HasValue);
         }
 
         /// <summary>

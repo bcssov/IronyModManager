@@ -4,7 +4,7 @@
 // Created          : 03-31-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-06-2021
+// Last Modified On : 08-01-2022
 // ***********************************************************************
 // <copyright file="IModWriter.cs" company="Mario">
 //     Mario
@@ -31,6 +31,13 @@ namespace IronyModManager.IO.Common.Mods
         /// <param name="parameters">The parameters.</param>
         /// <returns>Task&lt;System.Boolean&gt;.</returns>
         Task<bool> ApplyModsAsync(ModWriterParameters parameters);
+
+        /// <summary>
+        /// Determines whether this instance [can write to mod directory] the specified parameters.
+        /// </summary>
+        /// <param name="parameters">The parameters.</param>
+        /// <returns>Task&lt;System.Boolean&gt;.</returns>
+        Task<bool> CanWriteToModDirectoryAsync(ModWriterParameters parameters);
 
         /// <summary>
         /// Creates the mod directory asynchronous.

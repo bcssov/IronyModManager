@@ -4,7 +4,7 @@
 // Created          : 02-24-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 07-21-2022
+// Last Modified On : 08-01-2022
 // ***********************************************************************
 // <copyright file="ModService.cs" company="Mario">
 //     Mario
@@ -371,7 +371,11 @@ namespace IronyModManager.Services
         {
             using var mutex = await modReadLock.LockAsync();
             var game = GameService.GetSelected();
-            if (game == null)
+            if (game == null || !await ModWriter.CanWriteToModDirectoryAsync(new ModWriterParameters()
+            {
+                RootDirectory = game.UserDirectory,
+                Path = Shared.Constants.ModDirectory
+            }))
             {
                 mutex.Dispose();
                 return null;
