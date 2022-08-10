@@ -25,5 +25,5 @@ del "src\IronyModManager\bin\x64\Release\net6.0\publish\osx-x64\IronyModManager.
 del "src\IronyModManager\bin\x64\Release\net6.0\publish\osx-x64\steam_api64.dll" /S /Q
 xcopy "References\CopyAll\*.*" "src\IronyModManager\bin\x64\Release\net6.0\publish\osx-x64\" /Y /S /D
 REM Why on earth cannot nuget include these? Also the documentation sucks in this regard
-xcopy "References\Conditional\Steamworks\OSX-Linux-x64\steam_api.bundle" "src\IronyModManager\bin\x64\Release\net6.0\publish\osx-x64\steam_api.bundle\" /S /E /H
+xcopy "References\Conditional\Steamworks\OSX-Linux-x64\steam_api.bundle\Contents\MacOS\*.*" "src\IronyModManager\bin\x64\Release\net6.0\publish\osx-x64\" /Y /S /D
 cd publish

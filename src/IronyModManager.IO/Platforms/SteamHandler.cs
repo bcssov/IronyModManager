@@ -4,7 +4,7 @@
 // Created          : 07-11-2022
 //
 // Last Modified By : Mario
-// Last Modified On : 07-11-2022
+// Last Modified On : 08-04-2022
 // ***********************************************************************
 // <copyright file="SteamHandler.cs" company="Mario">
 //     Mario
@@ -147,6 +147,7 @@ namespace IronyModManager.IO.Platforms
                     break;
                 }
                 result = await InitializeAndValidateAsync();
+                await Task.Delay(Delay);
                 initCheckAttempts++;
             }
             return result;
