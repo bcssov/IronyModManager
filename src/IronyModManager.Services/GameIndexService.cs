@@ -4,7 +4,7 @@
 // Created          : 05-27-2021
 //
 // Last Modified By : Mario
-// Last Modified On : 01-28-2022
+// Last Modified On : 08-12-2022
 // ***********************************************************************
 // <copyright file="GameIndexService.cs" company="Mario">
 //     Mario
@@ -191,20 +191,30 @@ namespace IronyModManager.Services
                             def.ModName = game.Name;
                             def.IsFromGame = true;
                         }
-                        foreach (var item in definitions)
+                        return definitions;
+                    }
+                    return null;
+                }).ToList();
+                while (tasks.Any())
+                {
+                    var result = await Task.WhenAny(tasks);
+                    tasks.Remove(result);
+                    if (result.Result != null)
+                    {
+                        foreach (var item in result.Result)
                         {
                             gameDefinitions.Add(item);
                         }
-                        processed++;
-                        var perc = GetProgressPercentage(total, processed, 100);
-                        if (perc != previousProgress)
-                        {
-                            await messageBus.PublishAsync(new GameDefinitionLoadProgressEvent(perc));
-                            previousProgress = perc;
-                        }
                     }
-                });
-                await Task.WhenAll(tasks);
+                    processed++;
+                    var perc = GetProgressPercentage(total, processed, 100);
+                    if (perc != previousProgress)
+                    {
+                        await messageBus.PublishAsync(new GameDefinitionLoadProgressEvent(perc));
+                        previousProgress = perc;
+                    }
+                    GC.Collect();
+                }
                 var indexed = DIResolver.Get<IIndexedDefinitions>();
                 indexed.InitMap(modDefinitions.GetAll().Concat(gameDefinitions));
                 return indexed;
