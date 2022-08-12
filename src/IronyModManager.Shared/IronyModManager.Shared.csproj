@@ -36,7 +36,7 @@
 
   <ItemGroup>
     <PackageReference Include="AutoMapper" Version="11.0.1" />
-    <PackageReference Include="Castle.Core" Version="5.0.0" />
+    <PackageReference Include="Castle.Core" Version="5.1.0" />
     <PackageReference Include="CodexMicroORM.Core" Version="1.0.2" />
     <PackageReference Include="Microsoft.Extensions.DependencyModel" Version="$(MicrosoftExtensionsDependencyModelVersion)" allowedVersions="$(MicrosoftExtensionsDependencyModelVersion)" />
     <PackageReference Include="MimeTypes" Version="2.4.0">
