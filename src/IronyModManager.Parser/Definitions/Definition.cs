@@ -4,7 +4,7 @@
 // Created          : 02-16-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 07-12-2022
+// Last Modified On : 08-12-2022
 // ***********************************************************************
 // <copyright file="Definition.cs" company="Mario">
 //     Mario
@@ -752,7 +752,7 @@ namespace IronyModManager.Parser.Definitions
                 nameof(ModPath) => ModPath,
                 nameof(CodeSeparator) => CodeSeparator,
                 nameof(CodeTag) => CodeTag,
-                nameof(OriginalCode) => originalCode,
+                nameof(OriginalCode) => OriginalCode,
                 nameof(Tags) => Tags,
                 nameof(Order) => Order,
                 nameof(DiskFile) => DiskFile,
