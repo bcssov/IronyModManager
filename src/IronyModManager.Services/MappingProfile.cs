@@ -4,7 +4,7 @@
 // Created          : 01-11-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 01-27-2022
+// Last Modified On : 08-12-2022
 // ***********************************************************************
 // <copyright file="MappingProfile.cs" company="Mario">
 //     Copyright (c) Mario. All rights reserved.
@@ -18,7 +18,7 @@ using IronyModManager.Models.Common;
 using IronyModManager.Shared;
 using IronyModManager.Shared.Models;
 
-namespace IronyModManager.Models
+namespace IronyModManager.Services
 {
     /// <summary>
     /// Class MappingProfile.
@@ -59,6 +59,7 @@ namespace IronyModManager.Models
                 .ForMember(m => m.ConflictSolverPromptShown, o => o.MapFrom(s => s.ConflictSolverPromptShown))
                 .ReverseMap()
                 .IgnoreAllUnmappedMembers();
+            CreateMap<IDefinition, Services.ModPatchCollectionService.Definition>().ReverseMap();
         }
 
         #endregion Constructors
