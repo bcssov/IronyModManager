@@ -4,7 +4,7 @@
 // Created          : 02-12-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 07-15-2022
+// Last Modified On : 08-12-2022
 // ***********************************************************************
 // <copyright file="GameRegistration.cs" company="Mario">
 //     Mario
@@ -177,7 +177,7 @@ namespace IronyModManager.Services.Registrations
             game.RemoteSteamUserDirectory = SteamDirectory.GetUserDataFolders(game.SteamAppId).Select(p => p.StandardizeDirectorySeparator()).ToList();
             game.AdvancedFeatures = IronyModManager.Models.Common.GameAdvancedFeatures.ReadOnly;
             game.ParadoxGameId = Shared.Constants.GamesTypes.HeartsOfIron4.ParadoxGameId;
-            game.GameIndexCacheVersion = 2;
+            game.GameIndexCacheVersion = 3;
             MapGameSettings(game, GetExecutableSettings(game));
             return game;
         }
@@ -234,7 +234,7 @@ namespace IronyModManager.Services.Registrations
             game.AdvancedFeatures = IronyModManager.Models.Common.GameAdvancedFeatures.Full;
             game.ParadoxGameId = Shared.Constants.GamesTypes.Stellaris.ParadoxGameId;
             game.GogAppId = Shared.Constants.GamesTypes.Stellaris.GogId;
-            game.GameIndexCacheVersion = 7;
+            game.GameIndexCacheVersion = 8;
             MapGameSettings(game, GetExecutableSettings(game));
             return game;
         }
