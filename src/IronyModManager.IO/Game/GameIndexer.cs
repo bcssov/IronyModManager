@@ -4,7 +4,7 @@
 // Created          : 05-27-2021
 //
 // Last Modified By : Mario
-// Last Modified On : 09-05-2021
+// Last Modified On : 08-12-2022
 // ***********************************************************************
 // <copyright file="GameIndexer.cs" company="Mario">
 //     Mario
@@ -14,16 +14,14 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.IO.Compression;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
-using IronyModManager.DI;
 using IronyModManager.IO.Common;
 using IronyModManager.IO.Common.Game;
 using IronyModManager.Models.Common;
 using IronyModManager.Shared;
 using IronyModManager.Shared.Models;
+using LiteDB;
 
 namespace IronyModManager.IO.Game
 {
@@ -45,7 +43,7 @@ namespace IronyModManager.IO.Game
         /// <summary>
         /// The extension
         /// </summary>
-        private const string Extension = ".irony";
+        private const string Extension = ".db";
 
         /// <summary>
         /// The version file
@@ -56,6 +54,11 @@ namespace IronyModManager.IO.Game
         /// The storage sub folder
         /// </summary>
         private const string StorageSubFolder = "IndexCache";
+
+        /// <summary>
+        /// The table name
+        /// </summary>
+        private const string TableName = "definitions";
 
         #endregion Fields
 
@@ -145,29 +148,19 @@ namespace IronyModManager.IO.Game
         /// <param name="game">The game.</param>
         /// <param name="path">The path.</param>
         /// <returns>Task&lt;IEnumerable&lt;IDefinition&gt;&gt;.</returns>
-        public virtual async Task<IEnumerable<IDefinition>> GetDefinitionsAsync(string storagePath, IGame game, string path)
+        public virtual Task<IEnumerable<IDefinition>> GetDefinitionsAsync(string storagePath, IGame game, string path)
         {
             storagePath = ResolveStoragePath(storagePath);
             path = SanitizePath(path);
             var fullPath = Path.Combine(storagePath, game.Type, path);
             if (File.Exists(fullPath))
             {
-                var bytes = await File.ReadAllBytesAsync(fullPath);
-                if (bytes.Any())
-                {
-                    using var source = new MemoryStream(bytes);
-                    using var destination = new MemoryStream();
-                    using var compress = new DeflateStream(source, CompressionMode.Decompress);
-                    await compress.CopyToAsync(destination);
-                    var text = Encoding.UTF8.GetString(destination.ToArray());
-                    if (!string.IsNullOrWhiteSpace(text))
-                    {
-                        var result = JsonDISerializer.Deserialize<List<IDefinition>>(text);
-                        return result;
-                    }
-                }
+                using var db = GetDatabase(fullPath);
+                var col = db.GetCollection<IDefinition>(TableName);
+                var result = col.FindAll().ToList() as IEnumerable<IDefinition>;
+                return Task.FromResult(result);
             }
-            return null;
+            return Task.FromResult<IEnumerable<IDefinition>>(null);
         }
 
         /// <summary>
@@ -177,8 +170,8 @@ namespace IronyModManager.IO.Game
         /// <param name="game">The game.</param>
         /// <param name="definitions">The definitions.</param>
         /// <returns>Task&lt;System.Boolean&gt;.</returns>
-        /// <exception cref="ArgumentException">Definitions types differ.</exception>
-        public virtual async Task<bool> SaveDefinitionsAsync(string storagePath, IGame game, IEnumerable<IDefinition> definitions)
+        /// <exception cref="System.ArgumentException">Definitions types differ.</exception>
+        public virtual Task<bool> SaveDefinitionsAsync(string storagePath, IGame game, IEnumerable<IDefinition> definitions)
         {
             storagePath = ResolveStoragePath(storagePath);
             if (definitions.GroupBy(p => p.ParentDirectory).Count() > 1)
@@ -187,7 +180,7 @@ namespace IronyModManager.IO.Game
             }
             if (definitions == null || !definitions.Any())
             {
-                return false;
+                return Task.FromResult(false);
             }
             var path = SanitizePath(definitions.FirstOrDefault().ParentDirectory);
             var fullPath = Path.Combine(storagePath, game.Type, path);
@@ -195,19 +188,14 @@ namespace IronyModManager.IO.Game
             {
                 DiskOperations.DeleteFile(fullPath);
             }
-            var json = JsonDISerializer.Serialize(definitions.ToList());
-            var bytes = Encoding.UTF8.GetBytes(json);
-            using var source = new MemoryStream(bytes);
-            using var destination = new MemoryStream();
-            using var compress = new DeflateStream(destination, CompressionLevel.Fastest, true);
-            await source.CopyToAsync(compress);
-            await compress.FlushAsync();
             if (!Directory.Exists(Path.GetDirectoryName(fullPath)))
             {
                 Directory.CreateDirectory(Path.GetDirectoryName(fullPath));
             }
-            await File.WriteAllBytesAsync(fullPath, destination.ToArray());
-            return true;
+            using var db = GetDatabase(fullPath);
+            var col = db.GetCollection<IDefinition>(TableName);
+            var inserted = col.InsertBulk(definitions);
+            return Task.FromResult(inserted > 0);
         }
 
         /// <summary>
@@ -238,6 +226,16 @@ namespace IronyModManager.IO.Game
             await File.WriteAllTextAsync(gameVersionFullPath, string.Join(Environment.NewLine, gameVersion));
             await File.WriteAllTextAsync(cacheVersionFullPath, cacheVersion.ToString());
             return false;
+        }
+
+        /// <summary>
+        /// Gets the database.
+        /// </summary>
+        /// <param name="path">The path.</param>
+        /// <returns>LiteDatabase.</returns>
+        protected virtual LiteDatabase GetDatabase(string path)
+        {
+            return new LiteDatabase(path, new DefinitionBsonMapper());
         }
 
         /// <summary>
