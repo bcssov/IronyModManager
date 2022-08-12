@@ -59,7 +59,6 @@ namespace IronyModManager.Services
                 .ForMember(m => m.ConflictSolverPromptShown, o => o.MapFrom(s => s.ConflictSolverPromptShown))
                 .ReverseMap()
                 .IgnoreAllUnmappedMembers();
-            CreateMap<IDefinition, Services.ModPatchCollectionService.Definition>().ReverseMap();
         }
 
         #endregion Constructors
