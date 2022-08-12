@@ -31,8 +31,8 @@
     <SixLaborsImageSharpTextures>[0.0.0-alpha.0.132]</SixLaborsImageSharpTextures>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Nerdbank.GitVersioning" Condition="!Exists('packages.config')">
-      <Version>3.5.108</Version>
+    <PackageReference Update="Nerdbank.GitVersioning" Condition="!Exists('packages.config')">
+      <Version>3.5.109</Version>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
   </ItemGroup>
