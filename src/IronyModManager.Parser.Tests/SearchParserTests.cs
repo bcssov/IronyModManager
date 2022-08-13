@@ -414,7 +414,7 @@ namespace IronyModManager.Parser.Tests
             result.Version.First().Negate.Should().BeTrue();
             result.Version.First().Version.Equals(new Shared.Version(2, 0)).Should().BeTrue();
             result.Version.Last().Version.Equals(new Shared.Version(3, 0)).Should().BeTrue();
-            result.Version.First().Negate.Should().BeFalse();
+            result.Version.Last().Negate.Should().BeFalse();
             result.Name.Count.Should().Be(1);
             result.Name.FirstOrDefault().Negate.Should().BeTrue();
             result.Name.FirstOrDefault().Text.Should().Be("test test");
