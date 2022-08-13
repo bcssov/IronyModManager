@@ -4,7 +4,7 @@
 // Created          : 02-24-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-16-2021
+// Last Modified On : 08-12-2022
 // ***********************************************************************
 // <copyright file="ModServiceTests.cs" company="Mario">
 //     Mario
@@ -60,6 +60,8 @@ namespace IronyModManager.Services.Tests
         /// <param name="mapper">The mapper.</param>
         /// <param name="modWriter">The mod writer.</param>
         /// <param name="gameService">The game service.</param>
+        /// <param name="parser">The parser.</param>
+        /// <param name="languageService">The language service.</param>
         /// <returns>ModService.</returns>
         private static ModService GetService(Mock<IStorageProvider> storageProvider, Mock<IModParser> modParser,
              Mock<IReader> reader, Mock<IMapper> mapper, Mock<IModWriter> modWriter,
@@ -1484,9 +1486,9 @@ namespace IronyModManager.Services.Tests
 
             parser.Setup(p => p.Parse(It.IsAny<string>(), It.IsAny<string>())).Returns(new SearchParserResult()
             {
-                Name = new List<string>() { "test" },
+                Name = new List<NameFilterResult>() { new NameFilterResult("test") },
                 AchievementCompatible = new BoolFilterResult(true),
-                Version = new List<Shared.Version>() { new Shared.Version(1, 5) }
+                Version = new List<VersionTypeResult>() { new VersionTypeResult(new Shared.Version(1, 5)) }
             });
             lngService.Setup(p => p.GetSelected()).Returns(new Language() { Abrv = "en" });
 
@@ -1525,9 +1527,9 @@ namespace IronyModManager.Services.Tests
 
             parser.Setup(p => p.Parse(It.IsAny<string>(), It.IsAny<string>())).Returns(new SearchParserResult()
             {
-                Name = new List<string>() { "test" },
+                Name = new List<NameFilterResult>() { new NameFilterResult("test") },
                 AchievementCompatible = new BoolFilterResult(true),
-                Version = new List<Shared.Version>() { new Shared.Version(1, 5) }
+                Version = new List<VersionTypeResult>() { new VersionTypeResult(new Shared.Version(1, 5)) }
             });
             lngService.Setup(p => p.GetSelected()).Returns(new Language() { Abrv = "en" });
 
@@ -1570,9 +1572,9 @@ namespace IronyModManager.Services.Tests
 
             parser.Setup(p => p.Parse(It.IsAny<string>(), It.IsAny<string>())).Returns(new SearchParserResult()
             {
-                Name = new List<string>() { "test" },
+                Name = new List<NameFilterResult>() { new NameFilterResult("test") },
                 AchievementCompatible = new BoolFilterResult(true),
-                Version = new List<Shared.Version>() { new Shared.Version(1, 5) }
+                Version = new List<VersionTypeResult>() { new VersionTypeResult(new Shared.Version(1, 5)) }
             });
             lngService.Setup(p => p.GetSelected()).Returns(new Language() { Abrv = "en" });
 

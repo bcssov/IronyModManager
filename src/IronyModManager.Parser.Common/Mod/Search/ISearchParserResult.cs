@@ -4,7 +4,7 @@
 // Created          : 10-24-2021
 //
 // Last Modified By : Mario
-// Last Modified On : 07-21-2022
+// Last Modified On : 08-12-2022
 // ***********************************************************************
 // <copyright file="ISearchParserResult.cs" company="Mario">
 //     Mario
@@ -44,7 +44,7 @@ namespace IronyModManager.Parser.Common.Mod.Search
         /// Gets or sets the name.
         /// </summary>
         /// <value>The name.</value>
-        IList<string> Name { get; set; }
+        IList<NameFilterResult> Name { get; set; }
 
         /// <summary>
         /// Gets or sets the source.
@@ -58,7 +58,7 @@ namespace IronyModManager.Parser.Common.Mod.Search
         /// </summary>
         /// <value>The version.</value>
         [DescriptorProperty(Fields.Version, true)]
-        IList<Shared.Version?> Version { get; set; }
+        IList<VersionTypeResult> Version { get; set; }
 
         #endregion Properties
 

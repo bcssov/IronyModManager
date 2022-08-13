@@ -621,6 +621,7 @@
     "FilterOperators": {
         "ValueSeparator": ":",
         "StatementSeparator": "&&",
-        "OrStatementSeparator": "||"
+        "OrStatementSeparator": "||",
+        "Negate": "--"
     }
 }

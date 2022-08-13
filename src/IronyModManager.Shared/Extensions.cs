@@ -4,7 +4,7 @@
 // Created          : 02-16-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 07-11-2022
+// Last Modified On : 08-13-2022
 // ***********************************************************************
 // <copyright file="Extensions.cs" company="Mario">
 //     Mario
@@ -175,7 +175,7 @@ namespace IronyModManager.Shared
             {
                 while (!string.IsNullOrEmpty(input) && input.StartsWith(value, type))
                 {
-                    input = input[(value.Length - 1)..];
+                    input = input[(value.Length)..];
                 }
             }
 

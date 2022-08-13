@@ -4,7 +4,7 @@
 // Created          : 10-26-2021
 //
 // Last Modified By : Mario
-// Last Modified On : 10-26-2021
+// Last Modified On : 08-12-2022
 // ***********************************************************************
 // <copyright file="VersionConverterTests.cs" company="Mario">
 //     Mario
@@ -72,7 +72,7 @@ namespace IronyModManager.Parser.Tests
 
             var converter = new VersionConverter(registry);
             var version = converter.Convert("en", "1.0");
-            version.Equals(new Shared.Version(1, 0)).Should().BeTrue();
+            version.Version.Equals(new Shared.Version(1, 0)).Should().BeTrue();
         }
 
         /// <summary>
@@ -85,7 +85,7 @@ namespace IronyModManager.Parser.Tests
 
             var converter = new VersionConverter(registry);
             var version = converter.Convert("en", "test");
-            version.Should().BeNull();
+            version.Version.Should().BeNull();
         }
     }
 }
