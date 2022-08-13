@@ -4,7 +4,7 @@
 // Created          : 10-26-2021
 //
 // Last Modified By : Mario
-// Last Modified On : 07-20-2022
+// Last Modified On : 08-12-2022
 // ***********************************************************************
 // <copyright file="Parser.cs" company="Mario">
 //     Mario
@@ -89,20 +89,26 @@ namespace IronyModManager.Parser.Mod.Search
             var orStatementSeparator = localizationRegistry.GetTranslation(locale, LocalizationResources.FilterOperators.OrStatementSeparator);
             var valueSeparator = localizationRegistry.GetTranslation(locale, LocalizationResources.FilterOperators.ValueSeparator);
             var statementSeparator = localizationRegistry.GetTranslation(locale, LocalizationResources.FilterOperators.StatementSeparator);
+            var negateOperator = localizationRegistry.GetTranslation(locale, LocalizationResources.FilterOperators.Negate);
 
-            IList<string> parseOrStatements(string text)
+            IList<NameFilterResult> parseOrStatements(string text)
             {
-                var list = new List<string>();
+                var list = new List<NameFilterResult>();
                 if (!string.IsNullOrWhiteSpace(text))
                 {
                     if (text.Contains(orStatementSeparator))
                     {
                         var split = text.Split(orStatementSeparator, StringSplitOptions.RemoveEmptyEntries).ToList();
-                        split.ForEach(x => list.Add(x.Trim()));
+                        split.ForEach(x =>
+                        {
+                            var negate = x.StartsWith(negateOperator);
+                            list.Add(new NameFilterResult(x.TrimStart(negateOperator)) { Negate = negate });
+                        });
                     }
                     else
                     {
-                        list.Add(text);
+                        var negate = text.StartsWith(negateOperator);
+                        list.Add(new NameFilterResult(text.TrimStart(negateOperator)) { Negate = negate });
                     }
                 }
                 return list;
@@ -166,13 +172,17 @@ namespace IronyModManager.Parser.Mod.Search
                                     var col = property.GetValue(result, null) as IList;
                                     foreach (var val in values)
                                     {
-                                        var value = converter.Convert(locale, val);
+                                        var value = converter.Convert(locale, val.Text);
+                                        ((BaseFilterResult)value).Negate = val.Negate;
                                         col.Add(value);
                                     }
                                 }
                                 else
                                 {
-                                    var value = converter.Convert(locale, item.Value);
+                                    var negate = item.Value.StartsWith(negateOperator);
+                                    var parsedVal = item.Value.TrimStart(negateOperator);
+                                    var value = converter.Convert(locale, parsedVal);
+                                    ((BaseFilterResult)value).Negate = negate;
                                     property.SetValue(result, value);
                                 }
                                 nothingSet = false;
@@ -204,10 +214,7 @@ namespace IronyModManager.Parser.Mod.Search
         /// <returns>IEnumerable&lt;PropertyInfo&gt;.</returns>
         private static IEnumerable<PropertyInfo> GetProperties()
         {
-            if (searchParserProperties == null)
-            {
-                searchParserProperties = typeof(ISearchParserResult).GetProperties().Where(p => Attribute.IsDefined(p, typeof(Common.Mod.Search.DescriptorPropertyAttribute)));
-            }
+            searchParserProperties ??= typeof(ISearchParserResult).GetProperties().Where(p => Attribute.IsDefined(p, typeof(Common.Mod.Search.DescriptorPropertyAttribute)));
             return searchParserProperties;
         }
 

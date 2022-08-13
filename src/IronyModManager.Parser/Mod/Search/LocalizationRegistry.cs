@@ -4,7 +4,7 @@
 // Created          : 10-25-2021
 //
 // Last Modified By : Mario
-// Last Modified On : 07-20-2022
+// Last Modified On : 08-12-2022
 // ***********************************************************************
 // <copyright file="LocalizationRegistry.cs" company="Mario">
 //     Mario
@@ -42,10 +42,12 @@ namespace IronyModManager.Parser.Mod.Search
         /// <summary>
         /// The translation keys
         /// </summary>
-        private static readonly string[] translationKeys = new string[] { LocalizationResources.FilterCommands.Achievements, LocalizationResources.FilterCommands.False, LocalizationResources.FilterCommands.No,
-            LocalizationResources.FilterCommands.Selected, LocalizationResources.FilterCommands.Source, LocalizationResources.FilterCommands.True, LocalizationResources.FilterCommands.Version, LocalizationResources.FilterCommands.Yes,
-            LocalizationResources.FilterCommands.Steam, LocalizationResources.FilterCommands.Paradox, LocalizationResources.FilterCommands.Local,
-            LocalizationResources.FilterOperators.StatementSeparator, LocalizationResources.FilterOperators.OrStatementSeparator, LocalizationResources.FilterOperators.ValueSeparator };
+        private static readonly string[] translationKeys = new string[] { LocalizationResources.FilterCommands.Achievements,
+            LocalizationResources.FilterCommands.False, LocalizationResources.FilterCommands.No,
+            LocalizationResources.FilterCommands.Selected, LocalizationResources.FilterCommands.Source, LocalizationResources.FilterCommands.True,
+            LocalizationResources.FilterCommands.Version, LocalizationResources.FilterCommands.Yes, LocalizationResources.FilterCommands.Steam,
+            LocalizationResources.FilterCommands.Paradox, LocalizationResources.FilterCommands.Local, LocalizationResources.FilterOperators.StatementSeparator,
+            LocalizationResources.FilterOperators.OrStatementSeparator, LocalizationResources.FilterOperators.ValueSeparator, LocalizationResources.FilterOperators.Negate };
 
         /// <summary>
         /// The cache

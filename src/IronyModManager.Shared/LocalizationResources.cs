@@ -836,6 +836,7 @@ namespace IronyModManager.Shared
             public const string ValueSeparator = Prefix + "ValueSeparator";
             public const string StatementSeparator = Prefix + "StatementSeparator";
             public const string OrStatementSeparator = Prefix + "OrStatementSeparator";
+            public const string Negate = Prefix + "Negate";
         }
     }
 }
