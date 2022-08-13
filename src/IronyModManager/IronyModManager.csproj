@@ -384,8 +384,7 @@
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Avalonia.HtmlRenderer">
-      <HintPath>References\Avalonia.HtmlRenderer.dll</HintPath>
-      <Private>true</Private>
+      <HintPath>..\..\References\Direct\Avalonia.HtmlRenderer.dll</HintPath>
     </Reference>
   </ItemGroup>
 </Project>

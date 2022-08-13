@@ -4,7 +4,7 @@
 // Created          : 05-27-2021
 //
 // Last Modified By : Mario
-// Last Modified On : 08-12-2022
+// Last Modified On : 08-13-2022
 // ***********************************************************************
 // <copyright file="GameIndexer.cs" company="Mario">
 //     Mario
@@ -16,6 +16,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using Ionic.Zip;
 using IronyModManager.IO.Common;
 using IronyModManager.IO.Common.Game;
 using IronyModManager.Models.Common;
@@ -41,9 +42,14 @@ namespace IronyModManager.IO.Game
         private const string CacheVersionFile = "cache-version.txt";
 
         /// <summary>
+        /// The database extension
+        /// </summary>
+        private const string DBExtension = ".db";
+
+        /// <summary>
         /// The extension
         /// </summary>
-        private const string Extension = ".db";
+        private const string Extension = ".irony";
 
         /// <summary>
         /// The version file
@@ -148,19 +154,27 @@ namespace IronyModManager.IO.Game
         /// <param name="game">The game.</param>
         /// <param name="path">The path.</param>
         /// <returns>Task&lt;IEnumerable&lt;IDefinition&gt;&gt;.</returns>
-        public virtual Task<IEnumerable<IDefinition>> GetDefinitionsAsync(string storagePath, IGame game, string path)
+        public virtual async Task<IEnumerable<IDefinition>> GetDefinitionsAsync(string storagePath, IGame game, string path)
         {
             storagePath = ResolveStoragePath(storagePath);
             path = SanitizePath(path);
             var fullPath = Path.Combine(storagePath, game.Type, path);
             if (File.Exists(fullPath))
             {
-                using var db = GetDatabase(fullPath);
+                var zip = ZipFile.Read(fullPath);
+                var entry = zip.Entries.FirstOrDefault(p => !p.IsDirectory);
+                var ms = new MemoryStream();
+                entry.Extract(ms);
+                var db = GetDatabase(ms);
                 var col = db.GetCollection<IDefinition>(TableName);
                 var result = col.FindAll().ToList() as IEnumerable<IDefinition>;
-                return Task.FromResult(result);
+                db.Dispose();
+                zip.Dispose();
+                ms.Close();
+                await ms.DisposeAsync();
+                return result;
             }
-            return Task.FromResult<IEnumerable<IDefinition>>(null);
+            return null;
         }
 
         /// <summary>
@@ -184,17 +198,32 @@ namespace IronyModManager.IO.Game
             }
             var path = SanitizePath(definitions.FirstOrDefault().ParentDirectory);
             var fullPath = Path.Combine(storagePath, game.Type, path);
+            var dbPath = fullPath + DBExtension;
             if (File.Exists(fullPath))
             {
                 DiskOperations.DeleteFile(fullPath);
+            }
+            if (File.Exists(dbPath))
+            {
+                DiskOperations.DeleteFile(dbPath);
             }
             if (!Directory.Exists(Path.GetDirectoryName(fullPath)))
             {
                 Directory.CreateDirectory(Path.GetDirectoryName(fullPath));
             }
-            using var db = GetDatabase(fullPath);
+            var db = GetDatabase(dbPath);
             var col = db.GetCollection<IDefinition>(TableName);
             var inserted = col.InsertBulk(definitions);
+            db.Dispose();
+            // Now compress the table to reduce space
+            var zip = new ZipFile();
+            zip.AddFile(dbPath, Shared.Constants.EmptyParam);
+            zip.Save(fullPath);
+            zip.Dispose();
+            if (File.Exists(dbPath))
+            {
+                DiskOperations.DeleteFile(dbPath);
+            }
             return Task.FromResult(inserted > 0);
         }
 
@@ -236,6 +265,16 @@ namespace IronyModManager.IO.Game
         protected virtual LiteDatabase GetDatabase(string path)
         {
             return new LiteDatabase(path, new DefinitionBsonMapper());
+        }
+
+        /// <summary>
+        /// Gets the database.
+        /// </summary>
+        /// <param name="stream">The stream.</param>
+        /// <returns>LiteDatabase.</returns>
+        protected virtual LiteDatabase GetDatabase(Stream stream)
+        {
+            return new LiteDatabase(stream, new DefinitionBsonMapper());
         }
 
         /// <summary>
