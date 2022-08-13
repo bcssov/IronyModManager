@@ -4,6 +4,50 @@
 		<title>Irony Mod Manager</title>
 		<language>en</language>
 		<item>
+			<title>1.23.33-rc</title>
+			<description>## Release Notes 1.23
+* Update dependencies
+* Fix OSX package publish procedure rendering launching games inoperable
+* Small fixes
+* Improve game definition saving and loading memory consumption
+* Add inverse search filters</description>
+			<pubDate>Sat, 13 Aug 2022 06:11:22 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.23.33-rc/linux-x64.zip" sparkle:version="1.23.33.30066" sparkle:shortVersionString="1.23.33" length="88493888" sparkle:os="linux" type="application/zip" sparkle:signature="WdpNtmvxIYaPioY8GyjLPtbKneLCYFCA1u29H4Ddsv3lXR8ZhdCPcmWErwxkJCwYpdP00WSwTnBz3dUb1HbUDA=="/>
+		</item>
+		<item>
+			<title>1.23.33-rc</title>
+			<description>## Release Notes 1.23
+* Update dependencies
+* Fix OSX package publish procedure rendering launching games inoperable
+* Small fixes
+* Improve game definition saving and loading memory consumption
+* Add inverse search filters</description>
+			<pubDate>Sat, 13 Aug 2022 06:11:31 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.23.33-rc/osx-x64.zip" sparkle:version="1.23.33.30066" sparkle:shortVersionString="1.23.33" length="91361139" sparkle:os="osx" type="application/zip" sparkle:signature="PhYs9m7mTVnNcdNortiIIwGkDViRdpiwbIZ1t6MYjvw2hwIRmUwwdYG3x5hq2FoODfsFER0l5g1F+wq/cM56Bw=="/>
+		</item>
+		<item>
+			<title>1.23.33-rc</title>
+			<description>## Release Notes 1.23
+* Update dependencies
+* Fix OSX package publish procedure rendering launching games inoperable
+* Small fixes
+* Improve game definition saving and loading memory consumption
+* Add inverse search filters</description>
+			<pubDate>Sat, 13 Aug 2022 06:11:40 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.23.33-rc/win-x64-setup.zip" sparkle:version="1.23.33.30066" sparkle:shortVersionString="1.23.33" length="72472982" sparkle:os="windows" type="application/zip" sparkle:signature="zmsPCwnW8R8exzcgYo5PRu0R2tb6kXwV05gepgdcvqzZ6DkFW8kPtjWtPQu64QQG//5SytzDq8r0PkxR0j/OAQ=="/>
+		</item>
+		<item>
+			<title>1.23.33-rc</title>
+			<description>## Release Notes 1.23
+* Update dependencies
+* Fix OSX package publish procedure rendering launching games inoperable
+* Small fixes
+* Improve game definition saving and loading memory consumption
+* Add inverse search filters</description>
+			<pubDate>Sat, 13 Aug 2022 06:11:40 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.23.33-rc/win-x64.zip" sparkle:version="1.23.33.30066" sparkle:shortVersionString="1.23.33" length="105993855" sparkle:os="windows" type="application/zip" sparkle:signature="4l1aGHs3VRuoi+P4hmDK7Eo8c6VHk3v1/NBxgZe2Chv8xW+qgAYLwzD3Ae8+0KtJ0ogKw3eMshL3ghdWYkVdBA=="/>
+		</item>
+		<item>
 			<title>1.22.147</title>
 			<description>## Current Release Notes
 * Tweak mod sorting undo\redo
