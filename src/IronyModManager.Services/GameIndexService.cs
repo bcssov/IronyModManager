@@ -169,7 +169,6 @@ namespace IronyModManager.Services
                             finally
                             {
                                 semaphore.Release();
-                                GC.Collect();
                             }
                         });
                         await Task.WhenAll(tasks);
@@ -217,7 +216,6 @@ namespace IronyModManager.Services
                     finally
                     {
                         semaphore.Release();
-                        GC.Collect();
                     }
                     return null;
                 }).ToList();

@@ -257,7 +257,7 @@ namespace IronyModManager.Services
             }
             var parameters = CleanSearchResult(searchParser.Parse(languageService.GetSelected().Abrv, text));
             var result = collection.ConditionalFilter(parameters.Name.Any(), q => q.Where(p => parameters.Name.Any(x => !x.Negate ? p.Name.Contains(x.Text, StringComparison.OrdinalIgnoreCase) : !p.Name.Contains(x.Text, StringComparison.OrdinalIgnoreCase))))
-                    .ConditionalFilter(parameters.RemoteIds.Any(), q => q.Where(p => p.RemoteId.HasValue && parameters.Name.Any(x => !x.Negate ? p.RemoteId.GetValueOrDefault().ToString().Contains(x.Text, StringComparison.OrdinalIgnoreCase)
+                    .ConditionalFilter(parameters.RemoteIds.Any(), q => q.Where(p => p.RemoteId.HasValue && parameters.RemoteIds.Any(x => !x.Negate ? p.RemoteId.GetValueOrDefault().ToString().Contains(x.Text, StringComparison.OrdinalIgnoreCase)
                     : !p.RemoteId.GetValueOrDefault().ToString().Contains(x.Text, StringComparison.OrdinalIgnoreCase))))
                     .ConditionalFilter(parameters.AchievementCompatible.Result.HasValue, q => q.Where(p =>
                     {
@@ -294,7 +294,7 @@ namespace IronyModManager.Services
             var parameters = CleanSearchResult(searchParser.Parse(languageService.GetSelected().Abrv, text));
             var result = !reverse ? collection.Skip(skipIndex.GetValueOrDefault()) : collection.Reverse().Skip(skipIndex.GetValueOrDefault());
             result = result.ConditionalFilter(parameters.Name.Any(), q => q.Where(p => parameters.Name.Any(x => !x.Negate ? p.Name.Contains(x.Text, StringComparison.OrdinalIgnoreCase) : !p.Name.Contains(x.Text, StringComparison.OrdinalIgnoreCase))))
-                    .ConditionalFilter(parameters.RemoteIds.Any(), q => q.Where(p => p.RemoteId.HasValue && parameters.Name.Any(x => !x.Negate ? p.RemoteId.GetValueOrDefault().ToString().Contains(x.Text, StringComparison.OrdinalIgnoreCase)
+                    .ConditionalFilter(parameters.RemoteIds.Any(), q => q.Where(p => p.RemoteId.HasValue && parameters.RemoteIds.Any(x => !x.Negate ? p.RemoteId.GetValueOrDefault().ToString().Contains(x.Text, StringComparison.OrdinalIgnoreCase)
                     : !p.RemoteId.GetValueOrDefault().ToString().Contains(x.Text, StringComparison.OrdinalIgnoreCase))))
                     .ConditionalFilter(parameters.AchievementCompatible.Result.HasValue, q => q.Where(p =>
                     {
@@ -655,15 +655,18 @@ namespace IronyModManager.Services
         /// <returns>ISearchParserResult.</returns>
         protected virtual ParsedSearchResult CleanSearchResult(ISearchParserResult parserResult)
         {
+            var names = parserResult.Name.Where(p => !string.IsNullOrWhiteSpace(p.Text)).ToList();
+            var remoteIds = names.Where(p => long.TryParse(p.Text, out var _)).ToList();
+            remoteIds.ForEach(p => names.Remove(p));
             var result = new ParsedSearchResult
             {
                 AchievementCompatible = parserResult.AchievementCompatible,
                 Source = parserResult.Source.Where(p => p.Result != SourceType.None).ToList(),
                 Version = parserResult.Version.Where(p => p.Version != null).ToList(),
                 IsSelected = parserResult.IsSelected,
-                Name = parserResult.Name.Where(p => !string.IsNullOrWhiteSpace(p.Text)).ToList()
+                Name = names,
+                RemoteIds = remoteIds
             };
-            result.RemoteIds = result.Name.Where(p => long.TryParse(p.Text, out var _)).ToList();
             return result;
         }
 
