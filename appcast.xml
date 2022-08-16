@@ -4,148 +4,52 @@
 		<title>Irony Mod Manager</title>
 		<language>en</language>
 		<item>
-			<title>1.23.33-rc</title>
+			<title>1.23.39</title>
 			<description>## Release Notes 1.23
 * Update dependencies
 * Fix OSX package publish procedure rendering launching games inoperable
 * Small fixes
 * Improve game definition saving and loading memory consumption
-* Add inverse search filters</description>
-			<pubDate>Sat, 13 Aug 2022 06:11:22 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.23.33-rc/linux-x64.zip" sparkle:version="1.23.33.30066" sparkle:shortVersionString="1.23.33" length="88493888" sparkle:os="linux" type="application/zip" sparkle:signature="WdpNtmvxIYaPioY8GyjLPtbKneLCYFCA1u29H4Ddsv3lXR8ZhdCPcmWErwxkJCwYpdP00WSwTnBz3dUb1HbUDA=="/>
+* Add inverse search filters
+* Update fios\lios stellaris handling</description>
+			<pubDate>Tue, 16 Aug 2022 02:33:11 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.23.39/linux-x64.zip" sparkle:version="1.23.39.43390" sparkle:shortVersionString="1.23.39" length="88529690" sparkle:os="linux" type="application/zip" sparkle:signature="Z9JxKIXEZmcG5fqUlewAqkVoJ21mhF+JEWfMdVXJbXYEjWmi5IWBzmotb3fflQ+v1/ekqRjXuQKHvdK+HeE1BQ=="/>
 		</item>
 		<item>
-			<title>1.23.33-rc</title>
+			<title>1.23.39</title>
 			<description>## Release Notes 1.23
 * Update dependencies
 * Fix OSX package publish procedure rendering launching games inoperable
 * Small fixes
 * Improve game definition saving and loading memory consumption
-* Add inverse search filters</description>
-			<pubDate>Sat, 13 Aug 2022 06:11:31 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.23.33-rc/osx-x64.zip" sparkle:version="1.23.33.30066" sparkle:shortVersionString="1.23.33" length="91361139" sparkle:os="osx" type="application/zip" sparkle:signature="PhYs9m7mTVnNcdNortiIIwGkDViRdpiwbIZ1t6MYjvw2hwIRmUwwdYG3x5hq2FoODfsFER0l5g1F+wq/cM56Bw=="/>
+* Add inverse search filters
+* Update fios\lios stellaris handling</description>
+			<pubDate>Tue, 16 Aug 2022 02:33:20 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.23.39/osx-x64.zip" sparkle:version="1.23.39.43390" sparkle:shortVersionString="1.23.39" length="91414030" sparkle:os="osx" type="application/zip" sparkle:signature="bACSrGVTfi76c6K4yLVyDEX0/Suc0zLtGZb27SaIAB5Fi2gtA23kjJ5jkWrjYzb+CoIpFPxmCG82AANBmpbkAw=="/>
 		</item>
 		<item>
-			<title>1.23.33-rc</title>
+			<title>1.23.39</title>
 			<description>## Release Notes 1.23
 * Update dependencies
 * Fix OSX package publish procedure rendering launching games inoperable
 * Small fixes
 * Improve game definition saving and loading memory consumption
-* Add inverse search filters</description>
-			<pubDate>Sat, 13 Aug 2022 06:11:40 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.23.33-rc/win-x64-setup.zip" sparkle:version="1.23.33.30066" sparkle:shortVersionString="1.23.33" length="72472982" sparkle:os="windows" type="application/zip" sparkle:signature="zmsPCwnW8R8exzcgYo5PRu0R2tb6kXwV05gepgdcvqzZ6DkFW8kPtjWtPQu64QQG//5SytzDq8r0PkxR0j/OAQ=="/>
+* Add inverse search filters
+* Update fios\lios stellaris handling</description>
+			<pubDate>Tue, 16 Aug 2022 02:33:29 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.23.39/win-x64-setup.zip" sparkle:version="1.23.39.43390" sparkle:shortVersionString="1.23.39" length="72469638" sparkle:os="windows" type="application/zip" sparkle:signature="OjY6bomH0FK+bxJ3R/WCyMsupUFrcwnBiUxSyuzda6I4oTsNwPCwTETtpKCBsdbKe3vlh89CehhsvAIOIl1qBA=="/>
 		</item>
 		<item>
-			<title>1.23.33-rc</title>
+			<title>1.23.39</title>
 			<description>## Release Notes 1.23
 * Update dependencies
 * Fix OSX package publish procedure rendering launching games inoperable
 * Small fixes
 * Improve game definition saving and loading memory consumption
-* Add inverse search filters</description>
-			<pubDate>Sat, 13 Aug 2022 06:11:40 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.23.33-rc/win-x64.zip" sparkle:version="1.23.33.30066" sparkle:shortVersionString="1.23.33" length="105993855" sparkle:os="windows" type="application/zip" sparkle:signature="4l1aGHs3VRuoi+P4hmDK7Eo8c6VHk3v1/NBxgZe2Chv8xW+qgAYLwzD3Ae8+0KtJ0ogKw3eMshL3ghdWYkVdBA=="/>
-		</item>
-		<item>
-			<title>1.22.147</title>
-			<description>## Current Release Notes
-* Tweak mod sorting undo\redo
-* Attempt not to crash if drive where mods are stored no longer exists
-* Fix small issue while waiting for steam to boot up
-
-## Release Notes 1.22
-* Update dependencies
-* Improve detection whether steam is running or not (for steam games)
-* Add paradox launcher running warning
-* Button to test configured external diff tool added
-* Add placeholder logic to let Irony know to ignore certain types (for mod devs)
-* Change default path for dialogs
-* Add mod id info to mod collection export metadata
-* Add definition last modified date info in conflict solver (in tooltips)
-* Add mod search\filtering OR operator support for certain fields
-* Exclude non event related namespaces from definition code extraction
-* Show missing mods notification if mod is deinstalled and is in a collection
-* Auto detect gog games on windows
-* Detect and treat as error files without BOM encoding
-* Mod sorting undo\redo added</description>
-			<pubDate>Thu, 04 Aug 2022 15:45:11 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.22.147/linux-x64.zip" sparkle:version="1.22.147.6709" sparkle:shortVersionString="1.22.147" length="88298148" sparkle:os="linux" type="application/zip" sparkle:signature="kGaoCd5VxMkv2WPbbhnwE+u0i4ODaYFQOaa69UInjlIG3XPpxxVfIUGxjCZHhR0KW4NrduPtVNKnsslfO7XiDw=="/>
-		</item>
-		<item>
-			<title>1.22.147</title>
-			<description>## Current Release Notes
-* Tweak mod sorting undo\redo
-* Attempt not to crash if drive where mods are stored no longer exists
-* Fix small issue while waiting for steam to boot up
-
-## Release Notes 1.22
-* Update dependencies
-* Improve detection whether steam is running or not (for steam games)
-* Add paradox launcher running warning
-* Button to test configured external diff tool added
-* Add placeholder logic to let Irony know to ignore certain types (for mod devs)
-* Change default path for dialogs
-* Add mod id info to mod collection export metadata
-* Add definition last modified date info in conflict solver (in tooltips)
-* Add mod search\filtering OR operator support for certain fields
-* Exclude non event related namespaces from definition code extraction
-* Show missing mods notification if mod is deinstalled and is in a collection
-* Auto detect gog games on windows
-* Detect and treat as error files without BOM encoding
-* Mod sorting undo\redo added</description>
-			<pubDate>Thu, 04 Aug 2022 15:45:20 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.22.147/osx-x64.zip" sparkle:version="1.22.147.6709" sparkle:shortVersionString="1.22.147" length="91170231" sparkle:os="osx" type="application/zip" sparkle:signature="U2Eq7yi+u5fOUP97alJvpRyaDGvMQQaz/vEHH1kB5O8hRKLQqjRXRJjetChiC3CxvRTqJLzsIPmNWatBEYnzCw=="/>
-		</item>
-		<item>
-			<title>1.22.147</title>
-			<description>## Current Release Notes
-* Tweak mod sorting undo\redo
-* Attempt not to crash if drive where mods are stored no longer exists
-* Fix small issue while waiting for steam to boot up
-
-## Release Notes 1.22
-* Update dependencies
-* Improve detection whether steam is running or not (for steam games)
-* Add paradox launcher running warning
-* Button to test configured external diff tool added
-* Add placeholder logic to let Irony know to ignore certain types (for mod devs)
-* Change default path for dialogs
-* Add mod id info to mod collection export metadata
-* Add definition last modified date info in conflict solver (in tooltips)
-* Add mod search\filtering OR operator support for certain fields
-* Exclude non event related namespaces from definition code extraction
-* Show missing mods notification if mod is deinstalled and is in a collection
-* Auto detect gog games on windows
-* Detect and treat as error files without BOM encoding
-* Mod sorting undo\redo added</description>
-			<pubDate>Thu, 04 Aug 2022 15:45:29 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.22.147/win-x64-setup.zip" sparkle:version="1.22.147.6709" sparkle:shortVersionString="1.22.147" length="72292398" sparkle:os="windows" type="application/zip" sparkle:signature="CQKdPYoYSffTfy/LOA967C1ofPgto8AbpeviIrmECKdXDP82qeW49OhZyUI4PCtJmKrC+Aa521tDy9hRYCa1DQ=="/>
-		</item>
-		<item>
-			<title>1.22.147</title>
-			<description>## Current Release Notes
-* Tweak mod sorting undo\redo
-* Attempt not to crash if drive where mods are stored no longer exists
-* Fix small issue while waiting for steam to boot up
-
-## Release Notes 1.22
-* Update dependencies
-* Improve detection whether steam is running or not (for steam games)
-* Add paradox launcher running warning
-* Button to test configured external diff tool added
-* Add placeholder logic to let Irony know to ignore certain types (for mod devs)
-* Change default path for dialogs
-* Add mod id info to mod collection export metadata
-* Add definition last modified date info in conflict solver (in tooltips)
-* Add mod search\filtering OR operator support for certain fields
-* Exclude non event related namespaces from definition code extraction
-* Show missing mods notification if mod is deinstalled and is in a collection
-* Auto detect gog games on windows
-* Detect and treat as error files without BOM encoding
-* Mod sorting undo\redo added</description>
-			<pubDate>Thu, 04 Aug 2022 15:45:29 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.22.147/win-x64.zip" sparkle:version="1.22.147.6709" sparkle:shortVersionString="1.22.147" length="105795679" sparkle:os="windows" type="application/zip" sparkle:signature="uD1MePGvFlgskxR9thGFkwPxS5mB0ISNodz6TqJbkwFl3aowE9Ygi8GuD1yl42+0DCpx3tlFIwUPAm+6ARzpCg=="/>
+* Add inverse search filters
+* Update fios\lios stellaris handling</description>
+			<pubDate>Tue, 16 Aug 2022 02:33:30 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.23.39/win-x64.zip" sparkle:version="1.23.39.43390" sparkle:shortVersionString="1.23.39" length="105994770" sparkle:os="windows" type="application/zip" sparkle:signature="ITGkHb6ZiEBCSagiofWWIPxBS1QfMFRWsBrUXQtjM63L7oyCSO40TSDWSaft6j6mSjPY2Jn7nWFam+YmWs2nDw=="/>
 		</item>
 	</channel>
 </rss>
