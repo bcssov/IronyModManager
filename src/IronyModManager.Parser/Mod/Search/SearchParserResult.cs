@@ -4,7 +4,7 @@
 // Created          : 10-24-2021
 //
 // Last Modified By : Mario
-// Last Modified On : 07-21-2022
+// Last Modified On : 08-12-2022
 // ***********************************************************************
 // <copyright file="SearchParserResult.cs" company="Mario">
 //     Mario
@@ -25,8 +25,6 @@ namespace IronyModManager.Parser.Mod.Search
     /// <seealso cref="IronyModManager.Parser.Common.Mod.Search.ISearchParserResult" />
     public class SearchParserResult : ISearchParserResult
     {
-#nullable enable
-
         #region Constructors
 
         /// <summary>
@@ -37,8 +35,8 @@ namespace IronyModManager.Parser.Mod.Search
             AchievementCompatible = new BoolFilterResult(null);
             IsSelected = new BoolFilterResult(null);
             Source = new List<SourceTypeResult>();
-            Version = new List<Shared.Version?>();
-            Name = new List<string>();
+            Version = new List<VersionTypeResult>();
+            Name = new List<NameFilterResult>();
         }
 
         #endregion Constructors
@@ -63,7 +61,7 @@ namespace IronyModManager.Parser.Mod.Search
         /// Gets or sets the name.
         /// </summary>
         /// <value>The name.</value>
-        public IList<string> Name { get; set; }
+        public IList<NameFilterResult> Name { get; set; }
 
         /// <summary>
         /// Gets or sets the source.
@@ -77,10 +75,8 @@ namespace IronyModManager.Parser.Mod.Search
         /// </summary>
         /// <value>The version.</value>
         [DescriptorProperty(Fields.Version, true)]
-        public IList<Shared.Version?> Version { get; set; }
+        public IList<VersionTypeResult> Version { get; set; }
 
         #endregion Properties
-
-#nullable disable
     }
 }

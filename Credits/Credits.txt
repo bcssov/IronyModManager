@@ -20,6 +20,13 @@ licenseUrl:https://github.com/ahopper/Avalonia.IconPacks/blob/master/LICENSE
 license Type:MIT
 
 #########################
+Package:LiteDB
+project URL:https://github.com/mbdavid/litedb
+Description:LiteDB - A .NET NoSQL Document Store in a single data file
+licenseUrl:https://github.com/mbdavid/LiteDB/blob/master/LICENSE
+license Type:MIT
+
+#########################
 Package:AutoMapper
 Version:11.0.1
 project URL:https://automapper.org/
@@ -95,7 +102,7 @@ license Type:MIT OR Unlicense
 
 #########################
 Package:Castle.Core
-Version:5.0.0
+Version:5.1.0
 project URL:http://www.castleproject.org/
 Description:Castle Core, including DynamicProxy, Logging Abstractions and DictionaryAdapter
 licenseUrl:https://licenses.nuget.org/Apache-2.0
@@ -201,7 +208,7 @@ license Type:Microsoft Public License (MS-PL)
 
 #########################
 Package:Magick.NET-Q8-x64
-Version:11.3.0
+Version:12.0.1
 project URL:https://github.com/dlemstra/Magick.NET
 Description:ImageMagick is a powerful image manipulation library that supports over 100 major file formats (not including sub-formats). With Magick.NET you can use ImageMagick without having to install ImageMagick on your server or desktop. Visit https://github.com/dlemstra/Magick.NET/tree/main/docs before installing to help you decide the best version.
 licenseUrl:https://licenses.nuget.org/Apache-2.0
@@ -254,10 +261,10 @@ license Type:MIT
 
 #########################
 Package:Microsoft.NET.Test.Sdk
-Version:17.2.0
+Version:17.3.0
 project URL:https://github.com/microsoft/vstest/
 Description:The MSbuild targets and properties for building .NET test projects.
-licenseUrl:https://www.nuget.org/packages/Microsoft.NET.Test.Sdk/17.2.0/License
+licenseUrl:https://www.nuget.org/packages/Microsoft.NET.Test.Sdk/17.3.0/License
 license Type:MICROSOFT SOFTWARE LICENSE TERMS
 
 #########################
@@ -295,17 +302,17 @@ license Type:Apache-2.0
 
 #########################
 Package:Moq
-Version:4.18.1
+Version:4.18.2
 project URL:https://github.com/moq/moq4
 Description:Moq is the most popular and friendly mocking framework for .NET.
 
-Built from https://github.com/moq/moq4/tree/ecd540409
+Built from https://github.com/moq/moq4/tree/c60833da6
 licenseUrl:https://raw.githubusercontent.com/moq/moq4/main/License.txt
 license Type:BSD 3-Clause License
 
 #########################
 Package:Nerdbank.GitVersioning
-Version:3.5.108
+Version:3.5.109
 project URL:https://github.com/dotnet/Nerdbank.GitVersioning
 Description:Stamps your assemblies with semver 2.0 compliant git commit specific version information and provides NuGet versioning information as well.
 licenseUrl:https://licenses.nuget.org/MIT
@@ -316,7 +323,7 @@ Package:NetSparkleUpdater.SparkleUpdater
 Version:2.1.2
 project URL:https://github.com/NetSparkleUpdater/NetSparkle
 Description:NetSparkleUpdater/NetSparkle is a C# .NET software update framework that allows you to easily download installer files and update your C# .NET Framework or .NET Core software. Built-in UIs are available for WinForms, WPF, and Avalonia; if you want a built-in UI, please reference a NetSparkleUpdater.UI package. You provide, somewhere on the internet, an XML appcast with software version information along with release notes in Markdown or HTML format. The NetSparkle framework then checks for an update in the background, displays the release notes to the user, and lets users download or skip the software update. The framework can also perform silent downloads so that you can present all of the UI yourself or set up your own silent software update system, as allowed by your software architecture. It was inspired by the Sparkle (https://sparkle-project.org/) project for Cocoa developers and the WinSparkle (https://winsparkle.org/) project (a Win32 port).
-licenseUrl:https://www.nuget.org/packages/NetSparkleUpdater.SparkleUpdater/2.1.1/License
+licenseUrl:https://www.nuget.org/packages/NetSparkleUpdater.SparkleUpdater/2.1.2/License
 license Type:MIT
 
 #########################
@@ -405,15 +412,15 @@ license Type:Apache License 2.0
 
 #########################
 Package:SharpCompress
-Version:0.32.1
+Version:0.32.2
 project URL:https://github.com/adamhathcock/sharpcompress
 Description:SharpCompress is a compression library for NET Standard 2.0/2.1/NET 5.0 that can unrar, decompress 7zip, decompress xz, zip/unzip, tar/untar lzip/unlzip, bzip2/unbzip2 and gzip/ungzip with forward-only reading and file random access APIs. Write support for zip/tar/bzip2/gzip is implemented.
-licenseUrl:https://github.com/adamhathcock/sharpcompress/blob/master/LICENSE.txt
+licenseUrl:https://www.nuget.org/packages/SharpCompress/0.32.2/License
 license Type:MIT
 
 #########################
 Package:SimpleInjector
-Version:5.3.3
+Version:5.4.0
 project URL:https://simpleinjector.org/
 Description:Simple Injector is an easy, flexible and fast dependency injection library that uses best practice to guide your solutions toward the pit of success.
 licenseUrl:https://licenses.nuget.org/MIT
@@ -445,7 +452,7 @@ license Type:Apache-2.0
 
 #########################
 Package:SlimMessageBus.Host.Memory
-Version:1.19.1
+Version:1.19.3
 project URL:https://github.com/zarusz/SlimMessageBus
 Description:Simple provider for SlimMessageBus for in process message passing. Messages are stored in memory (state is transient).
 licenseUrl:https://licenses.nuget.org/Apache-2.0
@@ -548,12 +555,12 @@ license Type:Mozilla Public License
 
 #########################
 Package:xunit
-Version:2.4.1
+Version:2.4.2
 project URL:https://github.com/xunit/xunit
 Description:xUnit.net is a developer testing framework, built to support Test Driven Development, with a design goal of extreme simplicity and alignment with framework features.
 
 Installing this package installs xunit.core, xunit.assert, and xunit.analyzers.
-licenseUrl:https://raw.githubusercontent.com/xunit/xunit/master/license.txt
+licenseUrl:https://licenses.nuget.org/Apache-2.0
 license Type:Apache-2
 
 #########################
