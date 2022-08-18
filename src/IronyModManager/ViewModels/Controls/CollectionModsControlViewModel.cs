@@ -4,7 +4,7 @@
 // Created          : 03-03-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 07-30-2022
+// Last Modified On : 08-18-2022
 // ***********************************************************************
 // <copyright file="CollectionModsControlViewModel.cs" company="Mario">
 //     Mario
@@ -30,6 +30,7 @@ using IronyModManager.Common.ViewModels;
 using IronyModManager.DI;
 using IronyModManager.Implementation;
 using IronyModManager.Implementation.Actions;
+using IronyModManager.Implementation.AppState;
 using IronyModManager.Implementation.Hotkey;
 using IronyModManager.Implementation.MessageBus;
 using IronyModManager.Implementation.MessageBus.Events;
@@ -151,6 +152,11 @@ namespace IronyModManager.ViewModels.Controls
         private readonly IReportExportService reportExportService;
 
         /// <summary>
+        /// The scroll state
+        /// </summary>
+        private readonly IScrollState scrollState;
+
+        /// <summary>
         /// The undo stack
         /// </summary>
         private readonly Stack<IEnumerable<string>> undoStack = new();
@@ -217,6 +223,7 @@ namespace IronyModManager.ViewModels.Controls
         /// <summary>
         /// Initializes a new instance of the <see cref="CollectionModsControlViewModel" /> class.
         /// </summary>
+        /// <param name="scrollState">State of the scroll.</param>
         /// <param name="modExportProgressHandler">The mod export progress handler.</param>
         /// <param name="reportExportService">The report export service.</param>
         /// <param name="hotkeyPressedHandler">The hotkey pressed handler.</param>
@@ -238,7 +245,7 @@ namespace IronyModManager.ViewModels.Controls
         /// <param name="localizationManager">The localization manager.</param>
         /// <param name="notificationAction">The notification action.</param>
         /// <param name="appAction">The application action.</param>
-        public CollectionModsControlViewModel(ModExportProgressHandler modExportProgressHandler, IReportExportService reportExportService,
+        public CollectionModsControlViewModel(IScrollState scrollState, ModExportProgressHandler modExportProgressHandler, IReportExportService reportExportService,
             MainViewHotkeyPressedHandler hotkeyPressedHandler, PatchModControlViewModel patchMod,
             IIDGenerator idGenerator, HashReportControlViewModel hashReportView, ModReportExportHandler modReportExportHandler,
             IFileDialogAction fileDialogAction, IModCollectionService modCollectionService,
@@ -247,6 +254,7 @@ namespace IronyModManager.ViewModels.Controls
             SearchModsControlViewModel searchMods, SortOrderControlViewModel modNameSort, ILocalizationManager localizationManager,
             INotificationAction notificationAction, IAppAction appAction)
         {
+            this.scrollState = scrollState;
             this.reportExportService = reportExportService;
             PatchMod = patchMod;
             this.idGenerator = idGenerator;
@@ -1986,6 +1994,7 @@ namespace IronyModManager.ViewModels.Controls
                     using var mutex = await reorderLock.LockAsync(cancellationToken);
                     if (reorderQueue.Any())
                     {
+                        scrollState.SetState(false);
                         skipModSelectionSave = true;
                         var mods = SelectedMods.Select(m => new OrderedMod { Order = m.Order, Mod = m }).ToList();
                         foreach (var mod in reorderQueue)
@@ -2021,6 +2030,7 @@ namespace IronyModManager.ViewModels.Controls
                         ModReordered?.Invoke(reorderQueue.Last(), instant);
                         skipModSelectionSave = false;
                         reorderQueue.Clear();
+                        scrollState.SetState(true);
                     }
                     mutex.Dispose();
                 }

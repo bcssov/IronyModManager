@@ -18,6 +18,7 @@
     <StyleInclude Source="avares://IronyModManager/Controls/Themes/MaterialLight/MenuFlyoutPresenter.axaml"/>
     <StyleInclude Source="avares://IronyModManager/Controls/Themes/MaterialLight/ScrollBar.axaml"/>
     <StyleInclude Source="avares://IronyModManager/Controls/Themes/SearchPanel.axaml"/>
+    <StyleInclude Source="avares://IronyModManager/Controls/Themes/MaterialLight/ScrollViewer.axaml"/>
 
     <!--Individual styles-->
     <Style Selector="NotificationCard">

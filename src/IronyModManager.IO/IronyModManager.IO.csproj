@@ -46,7 +46,7 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
-    <PackageReference Include="Pfim" Version="0.10.3" />
+    <PackageReference Include="Pfim" Version="0.11.1" />
     <PackageReference Include="SharpCompress" Version="0.32.2" />
     <PackageReference Include="SimpleInjector.Packaging" Version="5.0.0" />
     <PackageReference Include="SixLabors.ImageSharp" Version="$(SixLaborsImageSharp)" allowedVersions="$(SixLaborsImageSharp)" />
