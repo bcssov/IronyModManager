@@ -4,10 +4,9 @@
 		<title>Irony Mod Manager</title>
 		<language>en</language>
 		<item>
-			<title>1.23.42</title>
+			<title>1.23.43</title>
 			<description>## Current Release Notes
-* Update dependencies
-* Attempt to bypass scroll related avalonia CTDs
+* Fix parsing HOI4 scripted_diplomatic_actions folder
 
 ## Release Notes 1.23
 * Update dependencies
@@ -16,14 +15,13 @@
 * Improve game definition saving and loading memory consumption
 * Add inverse search filters
 * Update fios\lios stellaris handling</description>
-			<pubDate>Thu, 18 Aug 2022 19:58:19 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.23.42/linux-x64.zip" sparkle:version="1.23.42.2478" sparkle:shortVersionString="1.23.42" length="88537924" sparkle:os="linux" type="application/zip" sparkle:signature="Km07F0p31GbzU1apgwJ43xnB94BAgHOXQ7waFJuxFiwl13SFsPsZFL9GpD1qGRC1xF7U6oi2APnXznejxD0zBQ=="/>
+			<pubDate>Sat, 20 Aug 2022 20:16:18 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.23.43/linux-x64.zip" sparkle:version="1.23.43.52736" sparkle:shortVersionString="1.23.43" length="88537839" sparkle:os="linux" type="application/zip" sparkle:signature="0e7lkXUZdkjm2B1x+JAnsHISTfBtL5zSNF7aA15Usdrl+STq6JseKrhOms7gysNt4GuLtBuYSpr7U6npNaL0Aw=="/>
 		</item>
 		<item>
-			<title>1.23.42</title>
+			<title>1.23.43</title>
 			<description>## Current Release Notes
-* Update dependencies
-* Attempt to bypass scroll related avalonia CTDs
+* Fix parsing HOI4 scripted_diplomatic_actions folder
 
 ## Release Notes 1.23
 * Update dependencies
@@ -32,14 +30,13 @@
 * Improve game definition saving and loading memory consumption
 * Add inverse search filters
 * Update fios\lios stellaris handling</description>
-			<pubDate>Thu, 18 Aug 2022 19:58:26 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.23.42/osx-x64.zip" sparkle:version="1.23.42.2478" sparkle:shortVersionString="1.23.42" length="91422312" sparkle:os="osx" type="application/zip" sparkle:signature="w3Vq+t5HAwDuCGSBK8fCaSYc+FSNR6m9OV1oFDC2gK72b42Vmg3d9oF3QljBRt5nG3ENm8ORI9P9U+vwSPB/DA=="/>
+			<pubDate>Sat, 20 Aug 2022 20:16:27 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.23.43/osx-x64.zip" sparkle:version="1.23.43.52736" sparkle:shortVersionString="1.23.43" length="91422180" sparkle:os="osx" type="application/zip" sparkle:signature="IGhR7d0WgyRXOtoh56bHcW+ZKYL0+Rq7ZFMZ4/sz4aqVOAU8vu8d6mqxmYmnBJYnIFoSVtBzL5BlwXOUgQYhDg=="/>
 		</item>
 		<item>
-			<title>1.23.42</title>
+			<title>1.23.43</title>
 			<description>## Current Release Notes
-* Update dependencies
-* Attempt to bypass scroll related avalonia CTDs
+* Fix parsing HOI4 scripted_diplomatic_actions folder
 
 ## Release Notes 1.23
 * Update dependencies
@@ -48,14 +45,13 @@
 * Improve game definition saving and loading memory consumption
 * Add inverse search filters
 * Update fios\lios stellaris handling</description>
-			<pubDate>Thu, 18 Aug 2022 19:58:32 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.23.42/win-x64-setup.zip" sparkle:version="1.23.42.2478" sparkle:shortVersionString="1.23.42" length="72471121" sparkle:os="windows" type="application/zip" sparkle:signature="PtsQF+K2HojEChXiNjIxNQppPoPutTs56/0mhb6pxXo7U++AjGGvDyR6Ux2FFJx6sszWG1XilXQvYN6VPnxXCQ=="/>
+			<pubDate>Sat, 20 Aug 2022 20:16:36 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.23.43/win-x64-setup.zip" sparkle:version="1.23.43.52736" sparkle:shortVersionString="1.23.43" length="72480870" sparkle:os="windows" type="application/zip" sparkle:signature="bSrny+P4CjqwgBdMDyjmXHkmia3ueeFHHOf9IlZsiISa0ddmqHUoVAalAqHlPN6HiHfFPsjv3pKIs8YIN/huAA=="/>
 		</item>
 		<item>
-			<title>1.23.42</title>
+			<title>1.23.43</title>
 			<description>## Current Release Notes
-* Update dependencies
-* Attempt to bypass scroll related avalonia CTDs
+* Fix parsing HOI4 scripted_diplomatic_actions folder
 
 ## Release Notes 1.23
 * Update dependencies
@@ -64,8 +60,8 @@
 * Improve game definition saving and loading memory consumption
 * Add inverse search filters
 * Update fios\lios stellaris handling</description>
-			<pubDate>Thu, 18 Aug 2022 19:58:32 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.23.42/win-x64.zip" sparkle:version="1.23.42.2478" sparkle:shortVersionString="1.23.42" length="106003028" sparkle:os="windows" type="application/zip" sparkle:signature="TI2zZHs+AXR/hpa9LkwoSIuGLsLkRUq4quM1MeidYkGjqU3kmQjBQHEHNEUPVpfA8g0MHkfObVbFjoV6qYcuDg=="/>
+			<pubDate>Sat, 20 Aug 2022 20:16:36 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.23.43/win-x64.zip" sparkle:version="1.23.43.52736" sparkle:shortVersionString="1.23.43" length="106002911" sparkle:os="windows" type="application/zip" sparkle:signature="3KMUcrWFRZF6YeYVcjKzrjGU0v9yX/Z6nHSilZHuYHOIzOvbz3xXnj+x0+XLG7DdngqHduv9ymD6IiPVI9GyBA=="/>
 		</item>
 	</channel>
 </rss>
