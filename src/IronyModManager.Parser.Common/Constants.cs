@@ -4,7 +4,7 @@
 // Created          : 02-16-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 07-12-2022
+// Last Modified On : 08-20-2022
 // ***********************************************************************
 // <copyright file="Constants.cs" company="Mario">
 //     Mario
@@ -278,6 +278,11 @@ namespace IronyModManager.Parser.Common
             /// The resources
             /// </summary>
             public static readonly string Resources = MergePath(CommonPath, "resources");
+
+            /// <summary>
+            /// The scripted diplomatic actions
+            /// </summary>
+            public static readonly string ScriptedDiplomaticActions = MergePath(CommonPath, "scripted_diplomatic_actions");
 
             /// <summary>
             /// The scripted GUI

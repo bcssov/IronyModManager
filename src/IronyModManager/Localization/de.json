@@ -1,8 +1,7 @@
 ﻿{
-    // Do NOT Translate anything in curly ({}) braces inside strings. These are used for formatting.
     "App": {
-        "FontFamily": "Noto Sans", // Do not translate this, this is the font used by this locale
-        "SupportedNameBlock": "", // Leave empty for latin alphabets. Reference here: https://docs.microsoft.com/en-us/dotnet/standard/base-types/character-classes-in-regular-expressions#supported-named-blocks
+        "FontFamily": "Noto Sans",
+        "SupportedNameBlock": "",
         "Title": "Irony Mod Manager: v{AppVersion}",
         "BackgroundOperationMessage": "Bitte warten Sie, bis eine Hintergrundoperation ausgeführt wird. Anwendung wird heruntergefahren, sobald dies abgeschlossen ist...",
         "WaitBackgroundOperationMessage": "Bitte warten Sie, bis eine Hintergrundoperation ausgeführt wird.",
@@ -191,8 +190,8 @@
         },
         "MergeCollection": {
             "Name": "Zusammenführen",
-            "MergedCollectionPrefix": "(Zusammengeführt)", // It's used in path generation so should not be translated (depending on the type of language)
-            "MergeCompressModPrefix": "(Zusammengeführt {Name})", // It's used in path generation so should not be translated (depending on the type of language)
+            "MergedCollectionPrefix": "(Zusammengeführt)",
+            "MergeCompressModPrefix": "(Zusammengeführt {Name})",
             "Overlay_Progress": "Schritt {Count}/{TotalCount}: {PercentDone}",
             "DiskInfoOverlay": "Überprüfen des verfügbaren Speicherplatzes...",
             "Options": {
