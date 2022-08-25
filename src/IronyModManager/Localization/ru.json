@@ -1,5 +1,4 @@
 {
-
     "App": {
         "FontFamily": "Noto Sans",
         "SupportedNameBlock": "",
@@ -234,6 +233,7 @@
             "ModsMissingTitle": "Модификации удалены",
             "ModsMissingMessage": "Некоторые моды отсутствуют и были удалены из коллекции автоматически:{NewLine}{NewLine}{Mods}"
         }
+
     },
     "Mod_Actions": {
         "Apply": "Применить",
@@ -517,15 +517,15 @@
         },
         "DescriptorsRefreshed": {
             "Title": "Дескрипторы обновлены",
-            "Message": ""
+            "Message": "Дескрипторы были обновлены."
         },
         "DescriptorsLocked": {
             "Title": "Дескрипторы заблокированы",
-            "Message": ""
+            "Message": "Дескрипторы были заблокированы."
         },
         "DescriptorsUnlocked": {
             "Title": "Дескрипторы разблокированы",
-            "Message": ""
+            "Message": "Дескрипторы были разблокированы."
         },
         "NewDescriptorsChecked": {
             "Title": "Список обновлен",
@@ -553,7 +553,7 @@
         },
         "ReportExported": {
             "Title": "Отчет выгружен",
-            "Message": ""
+            "Message": "Отчет был экспортирован."
         },
         "ReportValid": {
             "Title": "Хэш файлов совпадает",
