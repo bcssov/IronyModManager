@@ -17,6 +17,9 @@ Check out the detailed overview on the [wiki](https://github.com/bcssov/IronyMod
 
 Or until recently what used to be primary discord over at Stellaris Modding Den: [https://discord.gg/ezzCnwP7fj](https://discord.gg/ezzCnwP7fj) where under hosted tools you can find #irony-mod-manager channel.
 
+### Translations
+Translation wrong? Want to help? See [here](https://github.com/bcssov/IronyModManager/discussions/231).
+
 ### New users
 Check this [checklist](https://github.com/bcssov/IronyModManager/wiki/New-User-Checklist) if you are a first time user of Irony.
 
