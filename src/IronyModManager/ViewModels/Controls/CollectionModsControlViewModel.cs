@@ -4,7 +4,7 @@
 // Created          : 03-03-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 08-18-2022
+// Last Modified On : 09-18-2022
 // ***********************************************************************
 // <copyright file="CollectionModsControlViewModel.cs" company="Mario">
 //     Mario
@@ -2030,6 +2030,7 @@ namespace IronyModManager.ViewModels.Controls
                         ModReordered?.Invoke(reorderQueue.Last(), instant);
                         skipModSelectionSave = false;
                         reorderQueue.Clear();
+                        await Task.Delay(100);
                         scrollState.SetState(true);
                     }
                     mutex.Dispose();

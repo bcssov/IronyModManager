@@ -4,7 +4,7 @@
 // Created          : 09-16-2021
 //
 // Last Modified By : Mario
-// Last Modified On : 09-16-2021
+// Last Modified On : 09-18-2022
 // ***********************************************************************
 // <copyright file="ScrollState.cs" company="Mario">
 //     Mario
@@ -32,6 +32,11 @@ namespace IronyModManager.Implementation.AppState
         /// </summary>
         private readonly Subject<bool> scrollAllowed;
 
+        /// <summary>
+        /// The current state
+        /// </summary>
+        private bool currentState;
+
         #endregion Fields
 
         #region Constructors
@@ -42,6 +47,7 @@ namespace IronyModManager.Implementation.AppState
         public ScrollState()
         {
             scrollAllowed = new Subject<bool>();
+            currentState = true;
         }
 
         #endregion Constructors
@@ -59,11 +65,21 @@ namespace IronyModManager.Implementation.AppState
         #region Methods
 
         /// <summary>
+        /// Gets the state of the current.
+        /// </summary>
+        /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
+        public bool GetCurrentState()
+        {
+            return currentState;
+        }
+
+        /// <summary>
         /// Sets the state.
         /// </summary>
         /// <param name="allowScroll">if set to <c>true</c> [allow scroll].</param>
         public void SetState(bool allowScroll)
         {
+            currentState = allowScroll;
             scrollAllowed.OnNext(allowScroll);
         }
 
