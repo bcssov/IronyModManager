@@ -4,7 +4,7 @@
 // Created          : 08-18-2022
 //
 // Last Modified By : Mario
-// Last Modified On : 08-18-2022
+// Last Modified On : 09-18-2022
 // ***********************************************************************
 // <copyright file="ScrollContentPresenter.cs" company="Mario">
 //     Mario
@@ -17,6 +17,7 @@ using System.Linq;
 using Avalonia.Input;
 using Avalonia.Styling;
 using IronyModManager.DI;
+using IronyModManager.Implementation.AppState;
 using IronyModManager.Shared;
 
 namespace IronyModManager.Controls
@@ -30,6 +31,15 @@ namespace IronyModManager.Controls
     /// <seealso cref="IStyleable" />
     public class ScrollContentPresenter : Avalonia.Controls.Presenters.ScrollContentPresenter, IStyleable
     {
+        #region Fields
+
+        /// <summary>
+        /// The scroll state
+        /// </summary>
+        private IScrollState scrollState;
+
+        #endregion Fields
+
         #region Properties
 
         /// <summary>
@@ -49,21 +59,41 @@ namespace IronyModManager.Controls
         /// <inheritdoc />
         protected override void OnPointerWheelChanged(PointerWheelEventArgs e)
         {
-            try
+            if (GetScrollState().GetCurrentState())
             {
-                base.OnPointerWheelChanged(e);
+                try
+                {
+                    base.OnPointerWheelChanged(e);
+                }
+                catch (IndexOutOfRangeException ex)
+                {
+                    // Unresolved issue in Avalonia, attempt not to crash
+                    var logger = DIResolver.Get<ILogger>();
+                    logger.Error(ex);
+                    e.Handled = false;
+                }
+                catch (Exception)
+                {
+                    throw;
+                }
             }
-            catch (IndexOutOfRangeException ex)
+            else
             {
-                // Unresolved issue in Avalonia, attempt not to crash
-                var logger = DIResolver.Get<ILogger>();
-                logger.Error(ex);
-                e.Handled = false;
+                e.Handled = true;
             }
-            catch (Exception)
+        }
+
+        /// <summary>
+        /// Gets the state of the scroll.
+        /// </summary>
+        /// <returns>IScrollState.</returns>
+        private IScrollState GetScrollState()
+        {
+            if (scrollState == null)
             {
-                throw;
+                scrollState = DIResolver.Get<IScrollState>();
             }
+            return scrollState;
         }
 
         #endregion Methods

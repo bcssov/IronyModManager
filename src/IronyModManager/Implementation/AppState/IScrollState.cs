@@ -4,7 +4,7 @@
 // Created          : 09-16-2021
 //
 // Last Modified By : Mario
-// Last Modified On : 09-16-2021
+// Last Modified On : 09-18-2022
 // ***********************************************************************
 // <copyright file="IScrollState.cs" company="Mario">
 //     Mario
@@ -33,6 +33,12 @@ namespace IronyModManager.Implementation.AppState
         #endregion Properties
 
         #region Methods
+
+        /// <summary>
+        /// Gets the state of the current.
+        /// </summary>
+        /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
+        bool GetCurrentState();
 
         /// <summary>
         /// Sets the state.
