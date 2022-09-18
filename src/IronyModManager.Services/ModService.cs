@@ -4,7 +4,7 @@
 // Created          : 02-24-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 08-13-2022
+// Last Modified On : 09-18-2022
 // ***********************************************************************
 // <copyright file="ModService.cs" company="Mario">
 //     Mario
@@ -728,6 +728,13 @@ namespace IronyModManager.Services
                     }
                     var mod = Mapper.Map<IMod>(ModParser.Parse(fileInfo.Content));
                     mod.Name = FormatPrefixModName(modNamePrefix, mod.Name);
+                    if (!string.IsNullOrWhiteSpace(modNamePrefix) && mod.Dependencies != null && mod.Dependencies.Any())
+                    {
+                        var dependencies = mod.Dependencies;
+                        var newDependencies = new List<string>();
+                        dependencies.ToList().ForEach(p => newDependencies.Add(FormatPrefixModName(modNamePrefix, p)));
+                        mod.Dependencies = newDependencies;
+                    }
                     mod.FileName = path.Replace("\\", "/");
                     mod.FullPath = path.StandardizeDirectorySeparator();
                     mod.IsLocked = fileInfo.IsReadOnly;
