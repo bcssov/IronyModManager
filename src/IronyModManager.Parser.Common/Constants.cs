@@ -4,7 +4,7 @@
 // Created          : 02-16-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 08-20-2022
+// Last Modified On : 09-20-2022
 // ***********************************************************************
 // <copyright file="Constants.cs" company="Mario">
 //     Mario
@@ -553,6 +553,11 @@ namespace IronyModManager.Parser.Common
             /// The government authorities
             /// </summary>
             public static readonly string GovernmentAuthorities = MergePath(CommonPath, "governments", "authorities");
+
+            /// <summary>
+            /// The inline scripts
+            /// </summary>
+            public static readonly string InlineScripts = MergePath(CommonPath, "inline_scripts");
 
             /// <summary>
             /// The map galaxy

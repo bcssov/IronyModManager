@@ -213,6 +213,21 @@ namespace IronyModManager.Parser.Tests
         }
 
         /// <summary>
+        /// Defines the test method CanParse_inline_scripts_should_be_true.
+        /// </summary>
+        [Fact]
+        public void CanParse_inline_scripts_should_be_true()
+        {
+            var args = new CanParseArgs()
+            {
+                File = "common\\inline_scripts\\test.txt",
+                GameType = "Stellaris"
+            };
+            var parser = new WholeTextParser(new CodeParser(new Logger()), null);
+            parser.CanParse(args).Should().BeTrue();
+        }
+
+        /// <summary>
         /// Defines the test method Parse_should_yield_results.
         /// </summary>
         [Fact]
