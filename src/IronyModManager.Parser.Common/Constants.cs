@@ -4,7 +4,7 @@
 // Created          : 02-16-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 09-20-2022
+// Last Modified On : 09-27-2022
 // ***********************************************************************
 // <copyright file="Constants.cs" company="Mario">
 //     Mario
@@ -270,14 +270,34 @@ namespace IronyModManager.Parser.Common
             public static readonly string IntelligenceAgencies = MergePath(CommonPath, "intelligence_agencies");
 
             /// <summary>
+            /// The medals
+            /// </summary>
+            public static readonly string Medals = MergePath(CommonPath, "medals");
+
+            /// <summary>
             /// The opinion modifiers
             /// </summary>
             public static readonly string OpinionModifiers = MergePath(CommonPath, "opinion_modifiers");
 
             /// <summary>
+            /// The peace conference
+            /// </summary>
+            public static readonly string PeaceConference = MergePath(CommonPath, "peace_conference");
+
+            /// <summary>
+            /// The profile pictures
+            /// </summary>
+            public static readonly string ProfilePictures = MergePath(CommonPath, "profile_pictures");
+
+            /// <summary>
             /// The resources
             /// </summary>
             public static readonly string Resources = MergePath(CommonPath, "resources");
+
+            /// <summary>
+            /// The ribbons
+            /// </summary>
+            public static readonly string Ribbons = MergePath(CommonPath, "ribbons");
 
             /// <summary>
             /// The scripted diplomatic actions
@@ -308,6 +328,11 @@ namespace IronyModManager.Parser.Common
             /// The unit leader
             /// </summary>
             public static readonly string UnitLeader = MergePath(CommonPath, "unit_leader");
+
+            /// <summary>
+            /// The unit medals
+            /// </summary>
+            public static readonly string UnitMedals = MergePath(CommonPath, "unit_medals");
 
             /// <summary>
             /// The units
