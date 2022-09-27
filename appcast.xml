@@ -4,11 +4,9 @@
 		<title>Irony Mod Manager</title>
 		<language>en</language>
 		<item>
-			<title>1.23.53</title>
+			<title>1.23.54</title>
 			<description>## Current Release Notes
-* Fix dependency tags when using full collection export
-* Prevent listbox scroll while changing datasource
-* Stellaris 3.5 support
+* HOI4 1.12 support
 
 ## Release Notes 1.23
 * Update dependencies
@@ -17,15 +15,13 @@
 * Improve game definition saving and loading memory consumption
 * Add inverse search filters
 * Update fios\lios stellaris handling</description>
-			<pubDate>Tue, 20 Sep 2022 20:30:56 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.23.53/linux-x64.zip" sparkle:version="1.23.53.44149" sparkle:shortVersionString="1.23.53" length="88548422" sparkle:os="linux" type="application/zip" sparkle:signature="Xgjjf2s5D/9W41oiILxeo1splMn6aIqXYat/KXwUviIuT1oUNCWyp9wB+uBvay28yFlMaUAAmTxM75KHRFGNCg=="/>
+			<pubDate>Tue, 27 Sep 2022 21:03:44 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.23.54/linux-x64.zip" sparkle:version="1.23.54.51403" sparkle:shortVersionString="1.23.54" length="88548684" sparkle:os="linux" type="application/zip" sparkle:signature="8X0wHAN7L/u61z3zN0b2CooIY9VADjBCk+73i2OhihDgLKeqcUHQiuDUY9zbOP/LxHnL1k90Ht7YLUAIhfmTBA=="/>
 		</item>
 		<item>
-			<title>1.23.53</title>
+			<title>1.23.54</title>
 			<description>## Current Release Notes
-* Fix dependency tags when using full collection export
-* Prevent listbox scroll while changing datasource
-* Stellaris 3.5 support
+* HOI4 1.12 support
 
 ## Release Notes 1.23
 * Update dependencies
@@ -34,15 +30,13 @@
 * Improve game definition saving and loading memory consumption
 * Add inverse search filters
 * Update fios\lios stellaris handling</description>
-			<pubDate>Tue, 20 Sep 2022 20:31:05 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.23.53/osx-x64.zip" sparkle:version="1.23.53.44149" sparkle:shortVersionString="1.23.53" length="91431647" sparkle:os="osx" type="application/zip" sparkle:signature="xRokiir5BZgAjE77oMwn2nlavYglfoVDioHAv06JMCkhQpbNvsaVZb75vm8qHBUgrBvi6mBdpPuCStz6YJCQBg=="/>
+			<pubDate>Tue, 27 Sep 2022 21:03:53 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.23.54/osx-x64.zip" sparkle:version="1.23.54.51403" sparkle:shortVersionString="1.23.54" length="91431895" sparkle:os="osx" type="application/zip" sparkle:signature="2/szZUDFQWAB185uMU7moAXmubv9Xx7Yfwabh1lu89WndE8xrSme90Vas2JLq0cvhA52M3EzUWJmuYpYi6o2Ag=="/>
 		</item>
 		<item>
-			<title>1.23.53</title>
+			<title>1.23.54</title>
 			<description>## Current Release Notes
-* Fix dependency tags when using full collection export
-* Prevent listbox scroll while changing datasource
-* Stellaris 3.5 support
+* HOI4 1.12 support
 
 ## Release Notes 1.23
 * Update dependencies
@@ -51,15 +45,13 @@
 * Improve game definition saving and loading memory consumption
 * Add inverse search filters
 * Update fios\lios stellaris handling</description>
-			<pubDate>Tue, 20 Sep 2022 20:31:14 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.23.53/win-x64-setup.zip" sparkle:version="1.23.53.44149" sparkle:shortVersionString="1.23.53" length="72455710" sparkle:os="windows" type="application/zip" sparkle:signature="7k5mWzK8znEqm/r6ri50HSWulp6ifG56FJtlvIuvH0fvhifz4vi/ehOOb4Qh2zraKXE07lE6mJQc1zTjgmQUAg=="/>
+			<pubDate>Tue, 27 Sep 2022 21:04:02 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.23.54/win-x64-setup.zip" sparkle:version="1.23.54.51403" sparkle:shortVersionString="1.23.54" length="72464292" sparkle:os="windows" type="application/zip" sparkle:signature="afkYXqVcHR47uBQXKGOMPog1+7vrQNLTQd/EiDWi70RUYKR3WsirKy17pSaNfw7vNJwswz75+viNVXWHDf+KBw=="/>
 		</item>
 		<item>
-			<title>1.23.53</title>
+			<title>1.23.54</title>
 			<description>## Current Release Notes
-* Fix dependency tags when using full collection export
-* Prevent listbox scroll while changing datasource
-* Stellaris 3.5 support
+* HOI4 1.12 support
 
 ## Release Notes 1.23
 * Update dependencies
@@ -68,8 +60,8 @@
 * Improve game definition saving and loading memory consumption
 * Add inverse search filters
 * Update fios\lios stellaris handling</description>
-			<pubDate>Tue, 20 Sep 2022 20:31:14 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.23.53/win-x64.zip" sparkle:version="1.23.53.44149" sparkle:shortVersionString="1.23.53" length="106012757" sparkle:os="windows" type="application/zip" sparkle:signature="t8LA8FI9QpegfyIIAdOTXkyuIhAu7emfSfluLhplyrhByvX/xUsE2s64a0oqFSbcTsPV5vYfkU/yelOhEbOHAw=="/>
+			<pubDate>Tue, 27 Sep 2022 21:04:02 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.23.54/win-x64.zip" sparkle:version="1.23.54.51403" sparkle:shortVersionString="1.23.54" length="106013017" sparkle:os="windows" type="application/zip" sparkle:signature="ch1K5TsMRCJFv72kypZUcbIC4fb0QCxCZ53HqUaprh+mgiSkqbIskb4kIZ3WQ8GCuAQjyzhvBECuFF/YWumKCg=="/>
 		</item>
 	</channel>
 </rss>
