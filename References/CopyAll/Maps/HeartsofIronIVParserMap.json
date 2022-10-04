@@ -35,6 +35,9 @@
         "DirectoryPath": "common\\bookmarks",
         "PreferredParser": "HOI4KeyParser"
     }, {
+        "DirectoryPath": "common\\bop",
+        "PreferredParser": "DefaultParser"
+    }, {
         "DirectoryPath": "common\\buildings",
         "PreferredParser": "HOI4InnerLayerParser"
     }, {
@@ -92,6 +95,9 @@
         "DirectoryPath": "common\\intelligence_agency_upgrades",
         "PreferredParser": "DefaultParser"
     }, {
+        "DirectoryPath": "common\\medals",
+        "PreferredParser": "HOI4InnerLayerParser"
+    }, {
         "DirectoryPath": "common\\modifiers",
         "PreferredParser": "DefaultParser"
     }, {
@@ -122,6 +128,18 @@
         "DirectoryPath": "common\\opinion_modifiers",
         "PreferredParser": "HOI4InnerLayerParser"
     }, {
+        "DirectoryPath": "common\\peace_conference\\ai_peace",
+        "PreferredParser": "HOI4WholeTextParser"
+    }, {
+        "DirectoryPath": "common\\peace_conference\\categories",
+        "PreferredParser": "HOI4WholeTextParser"
+    }, {
+        "DirectoryPath": "common\\peace_conference\\cost_modifiers",
+        "PreferredParser": "HOI4WholeTextParser"
+    }, {
+        "DirectoryPath": "common\\profile_pictures",
+        "PreferredParser": "HOI4WholeTextParser"
+    }, {
         "DirectoryPath": "common\\resistance_activity",
         "PreferredParser": "DefaultParser"
     }, {
@@ -129,6 +147,9 @@
         "PreferredParser": "DefaultParser"
     }, {
         "DirectoryPath": "common\\resources",
+        "PreferredParser": "HOI4InnerLayerParser"
+    }, {
+        "DirectoryPath": "common\\ribbons",
         "PreferredParser": "HOI4InnerLayerParser"
     }, {
         "DirectoryPath": "common\\scorers\\country",
@@ -200,6 +221,9 @@
         "DirectoryPath": "common\\unit_leader",
         "PreferredParser": "HOI4InnerLayerParser"
     }, {
+        "DirectoryPath": "common\\unit_medals",
+        "PreferredParser": "HOI4InnerLayerParser"
+    }, {
         "DirectoryPath": "common\\unit_tags",
         "PreferredParser": "DefaultParser"
     }, {
@@ -260,7 +284,7 @@
         "DirectoryPath": "gfx\\FX",
         "PreferredParser": "GenericWholeTextParser"
     }, {
-        "DirectoryPath": "gfx\\interface\\equipmentdesigner\\tanks\\designer",
+        "DirectoryPath": "gfx\\interface\\equipmentdesigner\\graphic_db",
         "PreferredParser": "HOI4WholeTextParser"
     }, {
         "DirectoryPath": "gfx\\maparrows",
@@ -359,7 +383,13 @@
         "DirectoryPath": "interface\\career_profile",
         "PreferredParser": "GenericGraphicsParser"
     }, {
-        "DirectoryPath": "interface\\equipmentdesigner",
+        "DirectoryPath": "interface\\equipmentdesigner\\planes",
+        "PreferredParser": "GenericGraphicsParser"
+    }, {
+        "DirectoryPath": "interface\\equipmentdesigner\\ships",
+        "PreferredParser": "GenericGraphicsParser"
+    }, {
+        "DirectoryPath": "interface\\equipmentdesigner\\tanks",
         "PreferredParser": "GenericGraphicsParser"
     }, {
         "DirectoryPath": "interface\\pdx_online",

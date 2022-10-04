@@ -4,7 +4,7 @@
 // Created          : 02-18-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 01-31-2022
+// Last Modified On : 09-27-2022
 // ***********************************************************************
 // <copyright file="WholeTextParser.cs" company="Mario">
 //     Mario
@@ -48,7 +48,8 @@ namespace IronyModManager.Parser.Games.HOI4
             Common.Constants.HOI4.AIStrategyPlanes, Common.Constants.HOI4.AIStrategy,
             Common.Constants.HOI4.IntelligenceAgencies, Common.Constants.HOI4.ScriptedGui,
             Common.Constants.HOI4.Units, Common.Constants.HOI4.History, Common.Constants.HOI4.Generation,
-            Common.Constants.HOI4.IdeaTags, Common.Constants.HOI4.Terrain
+            Common.Constants.HOI4.IdeaTags, Common.Constants.HOI4.Terrain, Common.Constants.HOI4.ProfilePictures,
+            Common.Constants.HOI4.PeaceConference
         };
 
         #endregion Fields

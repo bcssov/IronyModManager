@@ -4,7 +4,7 @@
 // Created          : 02-18-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 01-30-2022
+// Last Modified On : 09-20-2022
 // ***********************************************************************
 // <copyright file="WholeTextParser.cs" company="Mario">
 //     Mario
@@ -40,7 +40,7 @@ namespace IronyModManager.Parser.Games.Stellaris
             Common.Constants.Stellaris.SpeciesNames, Common.Constants.Stellaris.Portraits,
             Common.Constants.Stellaris.ComponentTags, Common.Constants.Stellaris.RandomNamesBase, Common.Constants.Stellaris.RandomNames,
             Common.Constants.Stellaris.StartScreenMessages, Common.Constants.Stellaris.MapSetupScenarios, Common.Constants.Stellaris.CountryContainer,
-            Common.Constants.Stellaris.DiplomacyEconomy
+            Common.Constants.Stellaris.DiplomacyEconomy, Common.Constants.Stellaris.InlineScripts
         };
 
         #endregion Fields

@@ -26,6 +26,9 @@
         "DirectoryPath": "common\\ai_espionage\\spynetworks",
         "PreferredParser": "DefaultParser"
     }, {
+        "DirectoryPath": "common\\ai_force_species",
+        "PreferredParser": "DefaultParser"
+    }, {
         "DirectoryPath": "common\\ambient_objects",
         "PreferredParser": "GenericKeyParser"
     }, {
@@ -205,6 +208,15 @@
     }, {
         "DirectoryPath": "common\\greeting_overlay_sounds",
         "PreferredParser": "DefaultParser"
+    }, {
+        "DirectoryPath": "common\\inline_scripts",
+        "PreferredParser": "StellarisWholeTextParser"
+    }, {
+        "DirectoryPath": "common\\inline_scripts\\enclaves",
+        "PreferredParser": "StellarisWholeTextParser"
+    }, {
+        "DirectoryPath": "common\\inline_scripts\\jobs",
+        "PreferredParser": "StellarisWholeTextParser"
     }, {
         "DirectoryPath": "common\\intel_categories",
         "PreferredParser": "DefaultParser"
@@ -455,6 +467,9 @@
         "DirectoryPath": "flags\\special",
         "PreferredParser": "StellarisFlagsParser"
     }, {
+        "DirectoryPath": "flags\\toxoid",
+        "PreferredParser": "StellarisFlagsParser"
+    }, {
         "DirectoryPath": "fonts",
         "PreferredParser": "GenericKeyParser"
     }, {
@@ -665,6 +680,12 @@
         "DirectoryPath": "gfx\\models\\portraits\\synthetic_dawn",
         "PreferredParser": "GenericGraphicsParser"
     }, {
+        "DirectoryPath": "gfx\\models\\portraits\\toxoid",
+        "PreferredParser": "GenericKeyParser"
+    }, {
+        "DirectoryPath": "gfx\\models\\portraits\\toxoid",
+        "PreferredParser": "GenericGraphicsParser"
+    }, {
         "DirectoryPath": "gfx\\models\\ships",
         "PreferredParser": "GenericKeyParser"
     }, {
@@ -776,6 +797,12 @@
         "DirectoryPath": "gfx\\models\\ships\\colossus\\reptilian_01",
         "PreferredParser": "GenericGraphicsParser"
     }, {
+        "DirectoryPath": "gfx\\models\\ships\\colossus\\toxoid_01",
+        "PreferredParser": "GenericKeyParser"
+    }, {
+        "DirectoryPath": "gfx\\models\\ships\\colossus\\toxoid_01",
+        "PreferredParser": "GenericGraphicsParser"
+    }, {
         "DirectoryPath": "gfx\\models\\ships\\extra_dimensional_01",
         "PreferredParser": "GenericKeyParser"
     }, {
@@ -872,6 +899,12 @@
         "DirectoryPath": "gfx\\models\\ships\\guardians\\technosphere",
         "PreferredParser": "GenericGraphicsParser"
     }, {
+        "DirectoryPath": "gfx\\models\\ships\\guardians\\toxic_god",
+        "PreferredParser": "GenericKeyParser"
+    }, {
+        "DirectoryPath": "gfx\\models\\ships\\guardians\\toxic_god",
+        "PreferredParser": "GenericGraphicsParser"
+    }, {
         "DirectoryPath": "gfx\\models\\ships\\guardians\\voidspawn",
         "PreferredParser": "GenericKeyParser"
     }, {
@@ -960,6 +993,12 @@
         "PreferredParser": "GenericKeyParser"
     }, {
         "DirectoryPath": "gfx\\models\\ships\\juggernauts\\reptilian_01",
+        "PreferredParser": "GenericGraphicsParser"
+    }, {
+        "DirectoryPath": "gfx\\models\\ships\\juggernauts\\toxoid_01",
+        "PreferredParser": "GenericKeyParser"
+    }, {
+        "DirectoryPath": "gfx\\models\\ships\\juggernauts\\toxoid_01",
         "PreferredParser": "GenericGraphicsParser"
     }, {
         "DirectoryPath": "gfx\\models\\ships\\lithoid_01",
@@ -1200,6 +1239,18 @@
         "PreferredParser": "GenericKeyParser"
     }, {
         "DirectoryPath": "gfx\\models\\ships\\titans\\reptilian_01",
+        "PreferredParser": "GenericGraphicsParser"
+    }, {
+        "DirectoryPath": "gfx\\models\\ships\\titans\\toxoid_01",
+        "PreferredParser": "GenericKeyParser"
+    }, {
+        "DirectoryPath": "gfx\\models\\ships\\titans\\toxoid_01",
+        "PreferredParser": "GenericGraphicsParser"
+    }, {
+        "DirectoryPath": "gfx\\models\\ships\\toxoid_01",
+        "PreferredParser": "GenericKeyParser"
+    }, {
+        "DirectoryPath": "gfx\\models\\ships\\toxoid_01",
         "PreferredParser": "GenericGraphicsParser"
     }, {
         "DirectoryPath": "gfx\\models\\system_map",
@@ -1434,6 +1485,24 @@
         "PreferredParser": "GenericWholeTextParser"
     }, {
         "DirectoryPath": "sound\\synthetic_dawn",
+        "PreferredParser": "GenericWholeTextParser"
+    }, {
+        "DirectoryPath": "sound\\toxoids\\events",
+        "PreferredParser": "GenericWholeTextParser"
+    }, {
+        "DirectoryPath": "sound\\toxoids\\planets",
+        "PreferredParser": "GenericWholeTextParser"
+    }, {
+        "DirectoryPath": "sound\\toxoids\\portraits",
+        "PreferredParser": "GenericWholeTextParser"
+    }, {
+        "DirectoryPath": "sound\\toxoids\\ships",
+        "PreferredParser": "GenericWholeTextParser"
+    }, {
+        "DirectoryPath": "sound\\toxoids\\stations",
+        "PreferredParser": "GenericWholeTextParser"
+    }, {
+        "DirectoryPath": "sound\\toxoids\\weapons",
         "PreferredParser": "GenericWholeTextParser"
     }, {
         "DirectoryPath": "sound\\utopia",
