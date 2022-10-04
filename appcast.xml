@@ -4,9 +4,9 @@
 		<title>Irony Mod Manager</title>
 		<language>en</language>
 		<item>
-			<title>1.23.54</title>
+			<title>1.23.55</title>
 			<description>## Current Release Notes
-* HOI4 1.12 support
+* Tweak listbox scroll
 
 ## Release Notes 1.23
 * Update dependencies
@@ -15,13 +15,13 @@
 * Improve game definition saving and loading memory consumption
 * Add inverse search filters
 * Update fios\lios stellaris handling</description>
-			<pubDate>Tue, 27 Sep 2022 21:03:44 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.23.54/linux-x64.zip" sparkle:version="1.23.54.51403" sparkle:shortVersionString="1.23.54" length="88548684" sparkle:os="linux" type="application/zip" sparkle:signature="8X0wHAN7L/u61z3zN0b2CooIY9VADjBCk+73i2OhihDgLKeqcUHQiuDUY9zbOP/LxHnL1k90Ht7YLUAIhfmTBA=="/>
+			<pubDate>Tue, 04 Oct 2022 05:37:27 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.23.55/linux-x64.zip" sparkle:version="1.23.55.28065" sparkle:shortVersionString="1.23.55" length="88548826" sparkle:os="linux" type="application/zip" sparkle:signature="poMmZMBvmA4FO2lwi2ko0Q72S4Az2iFDw04V9ylbBVtm3O8FX3VhAut92ux2Ht3djzTvMET2rStGAHvsl6sGBQ=="/>
 		</item>
 		<item>
-			<title>1.23.54</title>
+			<title>1.23.55</title>
 			<description>## Current Release Notes
-* HOI4 1.12 support
+* Tweak listbox scroll
 
 ## Release Notes 1.23
 * Update dependencies
@@ -30,13 +30,13 @@
 * Improve game definition saving and loading memory consumption
 * Add inverse search filters
 * Update fios\lios stellaris handling</description>
-			<pubDate>Tue, 27 Sep 2022 21:03:53 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.23.54/osx-x64.zip" sparkle:version="1.23.54.51403" sparkle:shortVersionString="1.23.54" length="91431895" sparkle:os="osx" type="application/zip" sparkle:signature="2/szZUDFQWAB185uMU7moAXmubv9Xx7Yfwabh1lu89WndE8xrSme90Vas2JLq0cvhA52M3EzUWJmuYpYi6o2Ag=="/>
+			<pubDate>Tue, 04 Oct 2022 05:37:35 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.23.55/osx-x64.zip" sparkle:version="1.23.55.28065" sparkle:shortVersionString="1.23.55" length="91432052" sparkle:os="osx" type="application/zip" sparkle:signature="RrzOGHHg0THnQdPv/oNtCKzfCrMXc/EgFGcmtX+X7GCtxi1CZTbZnL+4NXWu05ENfYn0FTcE/ExY8M2uYlNMBw=="/>
 		</item>
 		<item>
-			<title>1.23.54</title>
+			<title>1.23.55</title>
 			<description>## Current Release Notes
-* HOI4 1.12 support
+* Tweak listbox scroll
 
 ## Release Notes 1.23
 * Update dependencies
@@ -45,13 +45,13 @@
 * Improve game definition saving and loading memory consumption
 * Add inverse search filters
 * Update fios\lios stellaris handling</description>
-			<pubDate>Tue, 27 Sep 2022 21:04:02 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.23.54/win-x64-setup.zip" sparkle:version="1.23.54.51403" sparkle:shortVersionString="1.23.54" length="72464292" sparkle:os="windows" type="application/zip" sparkle:signature="afkYXqVcHR47uBQXKGOMPog1+7vrQNLTQd/EiDWi70RUYKR3WsirKy17pSaNfw7vNJwswz75+viNVXWHDf+KBw=="/>
+			<pubDate>Tue, 04 Oct 2022 05:37:44 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.23.55/win-x64-setup.zip" sparkle:version="1.23.55.28065" sparkle:shortVersionString="1.23.55" length="72464805" sparkle:os="windows" type="application/zip" sparkle:signature="6pF7ThEc5V26xHQ+kTJ6ZwIovBvoZU4DmAMogNttl+/tyPGc9EXw195Kbh83D+THCAMRlYvBiBHtei717//fCw=="/>
 		</item>
 		<item>
-			<title>1.23.54</title>
+			<title>1.23.55</title>
 			<description>## Current Release Notes
-* HOI4 1.12 support
+* Tweak listbox scroll
 
 ## Release Notes 1.23
 * Update dependencies
@@ -60,8 +60,8 @@
 * Improve game definition saving and loading memory consumption
 * Add inverse search filters
 * Update fios\lios stellaris handling</description>
-			<pubDate>Tue, 27 Sep 2022 21:04:02 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.23.54/win-x64.zip" sparkle:version="1.23.54.51403" sparkle:shortVersionString="1.23.54" length="106013017" sparkle:os="windows" type="application/zip" sparkle:signature="ch1K5TsMRCJFv72kypZUcbIC4fb0QCxCZ53HqUaprh+mgiSkqbIskb4kIZ3WQ8GCuAQjyzhvBECuFF/YWumKCg=="/>
+			<pubDate>Tue, 04 Oct 2022 05:37:44 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.23.55/win-x64.zip" sparkle:version="1.23.55.28065" sparkle:shortVersionString="1.23.55" length="106013109" sparkle:os="windows" type="application/zip" sparkle:signature="8CE/fAui0uhgYr2Sjs/zQdKMUxYWc4gZ6zlIMEtWfz8uIcW7csGsoBXtCml5Z0P1+YMaw1QuXhuLwYvVltLKDw=="/>
 		</item>
 	</channel>
 </rss>
