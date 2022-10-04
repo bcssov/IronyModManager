@@ -4,7 +4,7 @@
 // Created          : 02-29-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-27-2021
+// Last Modified On : 10-04-2022
 // ***********************************************************************
 // <copyright file="InstalledModsControlView.xaml.cs" company="Mario">
 //     Mario
@@ -79,9 +79,9 @@ namespace IronyModManager.Views.Controls
                             {
                                 var col = grid.ColumnDefinitions[i];
                                 var width = header.ColumnDefinitions[i].ActualWidth;
-                                if (width >= 0 && !double.IsInfinity(width) && !double.IsNaN(width))
+                                if (width >= 0 && !double.IsInfinity(width) && !double.IsNaN(width) && width != col.Width.Value)
                                 {
-                                    col.Width = new GridLength(header.ColumnDefinitions[i].ActualWidth);
+                                    col.Width = new GridLength(width);
                                 }
                             }
                         }

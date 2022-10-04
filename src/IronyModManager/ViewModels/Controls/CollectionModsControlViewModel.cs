@@ -4,7 +4,7 @@
 // Created          : 03-03-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 09-18-2022
+// Last Modified On : 10-04-2022
 // ***********************************************************************
 // <copyright file="CollectionModsControlViewModel.cs" company="Mario">
 //     Mario
@@ -2030,7 +2030,6 @@ namespace IronyModManager.ViewModels.Controls
                         ModReordered?.Invoke(reorderQueue.Last(), instant);
                         skipModSelectionSave = false;
                         reorderQueue.Clear();
-                        await Task.Delay(100);
                         scrollState.SetState(true);
                     }
                     mutex.Dispose();
@@ -2344,13 +2343,14 @@ namespace IronyModManager.ViewModels.Controls
                     if (!skipModCollectionSave && !refreshInProgress)
                     {
                         var needsSave = false;
-                        if (SelectedMods != null)
+                        var selectedMods = SelectedMods.ToList();
+                        if (selectedMods != null)
                         {
                             if (s.Value)
                             {
-                                if (!SelectedMods.Contains(s.Sender))
+                                if (!selectedMods.Contains(s.Sender))
                                 {
-                                    SelectedMods.Add(s.Sender);
+                                    selectedMods.Add(s.Sender);
                                     if (!string.IsNullOrWhiteSpace(SelectedModCollection?.Name))
                                     {
                                         SaveState();
@@ -2360,9 +2360,9 @@ namespace IronyModManager.ViewModels.Controls
                             }
                             else
                             {
-                                if (SelectedMods.Contains(s.Sender))
+                                if (selectedMods.Contains(s.Sender))
                                 {
-                                    SelectedMods.Remove(s.Sender);
+                                    selectedMods.Remove(s.Sender);
                                     needsSave = true;
                                 }
                             }
@@ -2371,12 +2371,15 @@ namespace IronyModManager.ViewModels.Controls
                         {
                             SaveSelectedCollection();
                         }
-                        SetSelectedModsState(SelectedMods, false);
-                        if (s.Sender != null)
+                        Dispatcher.UIThread.SafeInvoke(() =>
                         {
-                            InstantReorderSelectedItems(s.Sender, s.Sender.Order);
-                        }
-                        RecognizeSortOrder(SelectedModCollection);
+                            SetSelectedModsState(selectedMods, false);
+                            if (s.Sender != null)
+                            {
+                                InstantReorderSelectedItems(s.Sender, s.Sender.Order);
+                            }
+                            RecognizeSortOrder(SelectedModCollection);
+                        });
                     }
                     AllModsEnabled = SelectedMods?.Count > 0 && SelectedMods.All(p => p.IsSelected);
                     skipReorder = false;

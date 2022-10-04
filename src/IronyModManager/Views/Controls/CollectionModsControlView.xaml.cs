@@ -4,7 +4,7 @@
 // Created          : 03-03-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 07-28-2022
+// Last Modified On : 10-04-2022
 // ***********************************************************************
 // <copyright file="CollectionModsControlView.xaml.cs" company="Mario">
 //     Mario
@@ -196,9 +196,9 @@ namespace IronyModManager.Views.Controls
                             {
                                 var col = grid.ColumnDefinitions[i];
                                 var width = header.ColumnDefinitions[i].ActualWidth;
-                                if (width >= 0 && !double.IsInfinity(width) && !double.IsNaN(width))
+                                if (width >= 0 && !double.IsInfinity(width) && !double.IsNaN(width) && width != col.Width.Value)
                                 {
-                                    col.Width = new GridLength(header.ColumnDefinitions[i].ActualWidth);
+                                    col.Width = new GridLength(width);
                                 }
                             }
                             var orderCtrl = grid.GetLogicalChildren().OfType<MinMaxNumericUpDown>().FirstOrDefault(p => p.Name == OrderName);
@@ -257,7 +257,7 @@ namespace IronyModManager.Views.Controls
                         if (modList.ItemCount != previousModListCount)
                         {
                             modListFocusSideScrollItem -= Math.Abs(previousModListCount - modList.ItemCount);
-                        }                        
+                        }
                         if (modListFocusSideScrollItem.GetValueOrDefault() < 0)
                         {
                             modListFocusSideScrollItem = 0;
@@ -268,7 +268,7 @@ namespace IronyModManager.Views.Controls
                         }
                         modList.SelectedIndex = previousModListIndex;
                         modList.ScrollIntoView(modListFocusSideScrollItem.GetValueOrDefault());
-                    }                    
+                    }
                 }
                 Dispatcher.UIThread.SafeInvoke(() => delay().ConfigureAwait(false));
             };
