@@ -4,7 +4,7 @@
 // Created          : 05-25-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 10-25-2021
+// Last Modified On : 10-14-2022
 // ***********************************************************************
 // <copyright file="StellarisOverwrittenParserTests.cs" company="Mario">
 //     Mario
@@ -266,6 +266,21 @@ namespace IronyModManager.Parser.Tests
             var args = new CanParseArgs()
             {
                 File = "common\\opinion_modifiers\\test.txt",
+                GameType = "Stellaris"
+            };
+            var parser = new OverwrittenParser(new CodeParser(new Logger()), null);
+            parser.CanParse(args).Should().BeTrue();
+        }
+
+        /// <summary>
+        /// Defines the test method CanParse_species_rights_should_be_true.
+        /// </summary>
+        [Fact]
+        public void CanParse_species_rights_should_be_true()
+        {
+            var args = new CanParseArgs()
+            {
+                File = "common\\species_rights\\test\\test.txt",
                 GameType = "Stellaris"
             };
             var parser = new OverwrittenParser(new CodeParser(new Logger()), null);

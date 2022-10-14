@@ -161,6 +161,9 @@
         "DirectoryPath": "common\\ethics",
         "PreferredParser": "StellarisOverwrittenObjectSingleFileParser"
     }, {
+        "DirectoryPath": "common\\ethic_categories",
+        "PreferredParser": "DefaultParser"
+    }, {
         "DirectoryPath": "common\\event_chains",
         "PreferredParser": "DefaultParser"
     }, {
@@ -216,6 +219,12 @@
         "PreferredParser": "StellarisWholeTextParser"
     }, {
         "DirectoryPath": "common\\inline_scripts\\jobs",
+        "PreferredParser": "StellarisWholeTextParser"
+    }, {
+        "DirectoryPath": "common\\inline_scripts\\pop_categories",
+        "PreferredParser": "StellarisWholeTextParser"
+    }, {
+        "DirectoryPath": "common\\inline_scripts\\traits",
         "PreferredParser": "StellarisWholeTextParser"
     }, {
         "DirectoryPath": "common\\intel_categories",
@@ -356,8 +365,29 @@
         "DirectoryPath": "common\\species_names",
         "PreferredParser": "StellarisWholeTextParser"
     }, {
-        "DirectoryPath": "common\\species_rights",
-        "PreferredParser": "DefaultParser"
+        "DirectoryPath": "common\\species_rights\\citizenship_types",
+        "PreferredParser": "StellarisOverwrittenParser"
+    }, {
+        "DirectoryPath": "common\\species_rights\\colonization_controls",
+        "PreferredParser": "StellarisOverwrittenParser"
+    }, {
+        "DirectoryPath": "common\\species_rights\\living_standards",
+        "PreferredParser": "StellarisOverwrittenParser"
+    }, {
+        "DirectoryPath": "common\\species_rights\\migration_controls",
+        "PreferredParser": "StellarisOverwrittenParser"
+    }, {
+        "DirectoryPath": "common\\species_rights\\military_service_types",
+        "PreferredParser": "StellarisOverwrittenParser"
+    }, {
+        "DirectoryPath": "common\\species_rights\\population_controls",
+        "PreferredParser": "StellarisOverwrittenParser"
+    }, {
+        "DirectoryPath": "common\\species_rights\\purge_types",
+        "PreferredParser": "StellarisOverwrittenParser"
+    }, {
+        "DirectoryPath": "common\\species_rights\\slavery_types",
+        "PreferredParser": "StellarisOverwrittenParser"
     }, {
         "DirectoryPath": "common\\starbase_buildings",
         "PreferredParser": "DefaultParser"

@@ -4,7 +4,7 @@
 // Created          : 02-12-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 08-20-2022
+// Last Modified On : 10-14-2022
 // ***********************************************************************
 // <copyright file="GameRegistration.cs" company="Mario">
 //     Mario
@@ -234,7 +234,7 @@ namespace IronyModManager.Services.Registrations
             game.AdvancedFeatures = IronyModManager.Models.Common.GameAdvancedFeatures.Full;
             game.ParadoxGameId = Shared.Constants.GamesTypes.Stellaris.ParadoxGameId;
             game.GogAppId = Shared.Constants.GamesTypes.Stellaris.GogId;
-            game.GameIndexCacheVersion = 8;
+            game.GameIndexCacheVersion = 9;
             MapGameSettings(game, GetExecutableSettings(game));
             return game;
         }
