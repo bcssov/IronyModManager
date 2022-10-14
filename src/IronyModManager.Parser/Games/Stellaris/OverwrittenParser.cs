@@ -4,7 +4,7 @@
 // Created          : 05-25-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 10-31-2021
+// Last Modified On : 10-14-2022
 // ***********************************************************************
 // <copyright file="OverwrittenParser.cs" company="Mario">
 //     Mario
@@ -47,6 +47,14 @@ namespace IronyModManager.Parser.Games.Stellaris
             Common.Constants.Stellaris.CountryTypes, Common.Constants.Stellaris.Terraform,
             Common.Constants.Stellaris.Relics, Common.Constants.Stellaris.OpinionModifiers,
             Common.Constants.Stellaris.SectionTemplates
+        };
+
+        /// <summary>
+        /// The partial directory names
+        /// </summary>
+        private static readonly string[] partialDirectoryNames = new string[]
+        {
+            Common.Constants.Stellaris.SpeciesRights
         };
 
         /// <summary>
@@ -140,7 +148,7 @@ namespace IronyModManager.Parser.Games.Stellaris
         protected virtual bool CanParseStartsWith(CanParseArgs args)
         {
             var directoryName = System.IO.Path.GetDirectoryName(args.File);
-            return directoryNames.Any(s => directoryName.Equals(s, StringComparison.OrdinalIgnoreCase));
+            return directoryNames.Any(s => directoryName.Equals(s, StringComparison.OrdinalIgnoreCase)) || partialDirectoryNames.Any(s => directoryName.StartsWith(s, StringComparison.OrdinalIgnoreCase));
         }
 
         /// <summary>

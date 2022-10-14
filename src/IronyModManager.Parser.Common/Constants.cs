@@ -4,7 +4,7 @@
 // Created          : 02-16-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 09-27-2022
+// Last Modified On : 10-14-2022
 // ***********************************************************************
 // <copyright file="Constants.cs" company="Mario">
 //     Mario
@@ -663,6 +663,11 @@ namespace IronyModManager.Parser.Common
             /// The species names
             /// </summary>
             public static readonly string SpeciesNames = MergePath(CommonPath, "species_names");
+
+            /// <summary>
+            /// The species rights
+            /// </summary>
+            public static readonly string SpeciesRights = MergePath(CommonPath, "species_rights");
 
             /// <summary>
             /// The starbase modules
