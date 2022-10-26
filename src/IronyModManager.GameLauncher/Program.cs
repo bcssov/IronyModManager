@@ -43,6 +43,7 @@ namespace IronyModManager.GameLauncher
             Environment.CurrentDirectory = AppDomain.CurrentDomain.BaseDirectory;
             ParseArguments(args);
 
+            Console.WriteLine("Preparing to launch game.");
             MainAsync().Wait();
         }
 
@@ -54,16 +55,20 @@ namespace IronyModManager.GameLauncher
         {
             if (!commandLineArgs.SteamAppId.HasValue)
             {
+                Console.WriteLine("Invalid parameters sent, no app id quitting.");
                 return;
             }
+            Console.WriteLine("Preparing to check whether steam is running, this might take some time.");
             var logger = new Logger();
             var handler = new SteamHandler(logger);
             if (commandLineArgs.UseAlternateLaunchMethod)
             {
+                Console.WriteLine("Using alternate launch method to see whether steam is running. You can just turn off launcher usage in appSettings.json.");
                 await handler.InitAlternateAsync();
             }
             else
             {
+                Console.WriteLine("Checking whether steam is running using direct steam integration method.");
                 await handler.InitAsync(commandLineArgs.SteamAppId.GetValueOrDefault());
             }
         }
