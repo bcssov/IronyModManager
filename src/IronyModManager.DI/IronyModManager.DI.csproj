@@ -44,15 +44,15 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="AutoMapper" Version="11.0.1" />
+    <PackageReference Include="AutoMapper" Version="12.0.0" />
     <PackageReference Include="Castle.Core" Version="5.1.0" />
     <PackageReference Include="Microsoft.Extensions.DependencyModel" Version="$(MicrosoftExtensionsDependencyModelVersion)" allowedVersions="$(MicrosoftExtensionsDependencyModelVersion)" />
-    <PackageReference Include="Nerdbank.GitVersioning" Version="3.5.109">
+    <PackageReference Include="Nerdbank.GitVersioning" Version="3.5.119">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
-    <PackageReference Include="SimpleInjector" Version="5.4.0" />
+    <PackageReference Include="SimpleInjector" Version="5.4.1" />
     <PackageReference Include="SimpleInjector.Packaging" Version="5.0.0" />
     <PackageReference Include="StrongNamer" Version="0.2.5" />
   </ItemGroup>

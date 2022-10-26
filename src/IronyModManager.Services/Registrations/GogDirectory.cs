@@ -4,7 +4,7 @@
 // Created          : 07-15-2022
 //
 // Last Modified By : Mario
-// Last Modified On : 07-15-2022
+// Last Modified On : 10-26-2022
 // ***********************************************************************
 // <copyright file="GogDirectory.cs" company="Mario">
 //     Mario
@@ -47,7 +47,7 @@ namespace IronyModManager.Services.Registrations
             InitGames();
             if (games != null)
             {
-                var game = games.FirstOrDefault(p => p.GameID == appId.GetValueOrDefault());
+                var game = games.FirstOrDefault(p => p.Id == appId.GetValueOrDefault());
                 if (game != null)
                 {
                     return game.Path;
@@ -68,8 +68,8 @@ namespace IronyModManager.Services.Registrations
             if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
             {
                 var gogHandler = new GOGHandler();
-                gogHandler.FindAllGames();
-                games = gogHandler.Games;
+                var result = gogHandler.FindAllGames();
+                games = result.Where(p => p.Game != null).Select(p => p.Game).ToList();
             }
         }
 
