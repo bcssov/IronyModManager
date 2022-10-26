@@ -4,7 +4,7 @@
 // Created          : 09-17-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 07-10-2022
+// Last Modified On : 10-26-2022
 // ***********************************************************************
 // <copyright file="IronySparkleUpdater.cs" company="Mario">
 //     Mario
@@ -14,13 +14,13 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using IronyModManager.Implementation.Actions;
 using IronyModManager.Services.Common;
+using IronyModManager.Shared;
 using NetSparkleUpdater;
 using NetSparkleUpdater.SignatureVerifiers;
 
@@ -158,7 +158,7 @@ namespace IronyModManager.Implementation.Updater
                 }
                 else
                 {
-                    EnsurePermissions(GetUpdaterExeFileNameParam(extractPath));
+                    ProcessRunner.EnsurePermissions(GetUpdaterExeFileNameParam(extractPath));
                     if (await appAction.RunAsync(GetUpdaterExeFileName(extractPath)))
                     {
                         await appAction.ExitAppAsync();
@@ -166,31 +166,6 @@ namespace IronyModManager.Implementation.Updater
                 }
             }
             UpdateInstalling = false;
-        }
-
-        /// <summary>
-        /// Ensures the permissions.
-        /// </summary>
-        /// <param name="path">The path.</param>
-        private void EnsurePermissions(string path)
-        {
-            if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux) || RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
-            {
-                var sanitizedCmd = path.Replace("\"", "\\\"");
-                var process = new Process
-                {
-                    StartInfo = new ProcessStartInfo
-                    {
-                        FileName = "/bin/bash",
-                        Arguments = $"-c \"chmod +x {sanitizedCmd}\"",
-                        UseShellExecute = false,
-                        RedirectStandardOutput = true,
-                        CreateNoWindow = true
-                    }
-                };
-                process.Start();
-                process.WaitForExit();
-            }
         }
 
         /// <summary>
