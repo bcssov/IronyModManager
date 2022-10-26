@@ -4,7 +4,7 @@
 // Created          : 06-19-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 07-24-2022
+// Last Modified On : 10-26-2022
 // ***********************************************************************
 // <copyright file="ModMergeService.cs" company="Mario">
 //     Mario
@@ -200,6 +200,14 @@ namespace IronyModManager.Services
             mod.Source = ModSource.Local;
             mod.Version = allMods.OrderByDescending(p => p.VersionData).FirstOrDefault() != null ? allMods.OrderByDescending(p => p.VersionData).FirstOrDefault().Version : string.Empty;
             mod.FullPath = modDirPath;
+            if (collectionMods.Any(p => p.UserDir != null && p.UserDir.Any()))
+            {
+                mod.UserDir = collectionMods.Where(p => p.UserDir != null && p.UserDir.Any()).SelectMany(p => p.UserDir).ToList();
+            }
+            if (collectionMods.Any(p => p.ReplacePath != null && p.ReplacePath.Any()))
+            {
+                mod.ReplacePath = collectionMods.Where(p => p.ReplacePath != null && p.ReplacePath.Any()).SelectMany(p => p.ReplacePath).ToList();
+            }
             await ModWriter.WriteDescriptorAsync(new ModWriterParameters()
             {
                 Mod = mod,
