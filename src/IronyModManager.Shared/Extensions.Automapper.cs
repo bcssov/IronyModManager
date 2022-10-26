@@ -4,7 +4,7 @@
 // Created          : 02-16-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 01-27-2022
+// Last Modified On : 10-26-2022
 // ***********************************************************************
 // <copyright file="Extensions.Automapper.cs" company="Mario">
 //     Mario
@@ -17,7 +17,6 @@ using System.Linq;
 using System.Reflection;
 using AutoMapper;
 using AutoMapper.Configuration;
-using static AutoMapper.Configuration.MappingExpression;
 
 namespace IronyModManager.Shared
 {
@@ -40,7 +39,7 @@ namespace IronyModManager.Shared
             // Code smell? Yes. Why? A BS excuse from automapper to remove ForAllOtherMembers.
             var memberConfigurations = expression.GetType().GetProperty("MemberConfigurations", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(expression) as List<IPropertyMapConfiguration>;
             var typeMapActions = expression.GetType().GetProperty("TypeMapActions", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(expression) as List<Action<TypeMap>>;
-            var types = ((ITypeMapConfiguration)expression).Types;
+            var types = ((TypeMapConfiguration)expression).Types;
             bool hasDestinationMemberConfiguration(string name)
             {
                 return memberConfigurations.Any(m => m.DestinationMember.Name == name);
