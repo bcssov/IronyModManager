@@ -1,0 +1,43 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net6.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+	<ApplicationIcon>../IronyModManager/Assets/logo.ico</ApplicationIcon>
+    <Description>IronyModManager Game Launcher Component</Description>	
+	<PackageLicenseFile>LICENSE</PackageLicenseFile>
+    <PackageIcon>logo.png</PackageIcon>
+    <PackageTags>IronyModManager Game Launcher Component</PackageTags>
+    <PackageReleaseNotes>IronyModManager Game Launcher Component</PackageReleaseNotes>	
+    <SignAssembly>true</SignAssembly>
+    <AssemblyOriginatorKeyFile>../../keys/Irony-Main.snk</AssemblyOriginatorKeyFile>
+    <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>	
+	<PlatformTarget>x64</PlatformTarget>	
+	<Platforms>x64</Platforms>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <NoWarn>1701;1702;NU1603</NoWarn>		
+  </PropertyGroup>
+  
+  <ItemGroup>
+    <Compile Include="..\..\GlobalSuppressions.cs" Link="GlobalSuppressions.cs" />
+  </ItemGroup>  
+  
+  <ItemGroup>
+    <None Include="..\..\LICENSE">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+    </None>
+    <None Include="..\IronyModManager\Assets\logo.png">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+    </None>
+  </ItemGroup>  
+
+  <ItemGroup>
+	<PackageReference Include="StrongNamer" Version="0.2.5" />
+    <PackageReference Update="Nerdbank.GitVersioning" Version="3.5.108" />
+  </ItemGroup>
+
+</Project>

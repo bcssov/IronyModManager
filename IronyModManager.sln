@@ -74,6 +74,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IronyModManager.Updater", "
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IronyModManager.Platform", "src\IronyModManager.Platform\IronyModManager.Platform.csproj", "{2A528AAE-CD48-41BA-8839-52162A9659F8}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IronyModManager.GameLauncher", "src\IronyModManager.GameLauncher\IronyModManager.GameLauncher.csproj", "{06326152-831F-46B1-A777-CB521C448510}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -229,6 +231,12 @@ Global
 		{2A528AAE-CD48-41BA-8839-52162A9659F8}.Functional_Test|x64.Build.0 = Release|x64
 		{2A528AAE-CD48-41BA-8839-52162A9659F8}.Release|x64.ActiveCfg = Release|x64
 		{2A528AAE-CD48-41BA-8839-52162A9659F8}.Release|x64.Build.0 = Release|x64
+		{06326152-831F-46B1-A777-CB521C448510}.Debug|x64.ActiveCfg = Debug|x64
+		{06326152-831F-46B1-A777-CB521C448510}.Debug|x64.Build.0 = Debug|x64
+		{06326152-831F-46B1-A777-CB521C448510}.Functional_Test|x64.ActiveCfg = Debug|x64
+		{06326152-831F-46B1-A777-CB521C448510}.Functional_Test|x64.Build.0 = Debug|x64
+		{06326152-831F-46B1-A777-CB521C448510}.Release|x64.ActiveCfg = Release|x64
+		{06326152-831F-46B1-A777-CB521C448510}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -260,6 +268,7 @@ Global
 		{2FBA0BF4-C559-4778-A105-F60431A05408} = {7BF4F92B-82C0-42D2-8D3B-13783E67E6C4}
 		{F8C4879F-DCA8-466E-AE6A-047B5DF33EF7} = {7BF4F92B-82C0-42D2-8D3B-13783E67E6C4}
 		{2A528AAE-CD48-41BA-8839-52162A9659F8} = {7BF4F92B-82C0-42D2-8D3B-13783E67E6C4}
+		{06326152-831F-46B1-A777-CB521C448510} = {7BF4F92B-82C0-42D2-8D3B-13783E67E6C4}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {D1256133-6A57-4335-B3F9-4028F01166F2}
