@@ -11,6 +11,11 @@
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
+using System;
+using System.Threading.Tasks;
+using CommandLine;
+using IronyModManager.IO.Platforms;
+
 namespace IronyModManager.GameLauncher
 {
     /// <summary>
@@ -18,6 +23,15 @@ namespace IronyModManager.GameLauncher
     /// </summary>
     internal class Program
     {
+        #region Fields
+
+        /// <summary>
+        /// The command line arguments
+        /// </summary>
+        private static CommandLineArgs commandLineArgs;
+
+        #endregion Fields
+
         #region Methods
 
         /// <summary>
@@ -26,7 +40,44 @@ namespace IronyModManager.GameLauncher
         /// <param name="args">The arguments.</param>
         private static void Main(string[] args)
         {
-            Console.WriteLine("Hello, World!");
+            Environment.CurrentDirectory = AppDomain.CurrentDomain.BaseDirectory;
+            ParseArguments(args);
+
+            MainAsync().Wait();
+        }
+
+        /// <summary>
+        /// Main as an asynchronous operation.
+        /// </summary>
+        /// <returns>A Task representing the asynchronous operation.</returns>
+        private static async Task MainAsync()
+        {
+            if (!commandLineArgs.SteamAppId.HasValue)
+            {
+                return;
+            }
+            var logger = new Logger();
+            var handler = new SteamHandler(logger);
+            if (commandLineArgs.UseAlternateLaunchMethod)
+            {
+                await handler.InitAlternateAsync();
+            }
+            else
+            {
+                await handler.InitAsync(commandLineArgs.SteamAppId.GetValueOrDefault());
+            }
+        }
+
+        /// <summary>
+        /// Parses the arguments.
+        /// </summary>
+        /// <param name="args">The arguments.</param>
+        private static void ParseArguments(string[] args)
+        {
+            Parser.Default.ParseArguments<CommandLineArgs>(args).WithParsed(a =>
+            {
+                commandLineArgs = a;
+            });
         }
 
         #endregion Methods
