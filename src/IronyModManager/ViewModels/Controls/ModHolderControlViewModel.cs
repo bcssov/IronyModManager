@@ -4,7 +4,7 @@
 // Created          : 02-29-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 07-24-2022
+// Last Modified On : 10-26-2022
 // ***********************************************************************
 // <copyright file="ModHolderControlViewModel.cs" company="Mario">
 //     Mario
@@ -612,10 +612,7 @@ namespace IronyModManager.ViewModels.Controls
         /// <param name="game">The game.</param>
         protected virtual void EvalResumeAvailability(IGame game = null)
         {
-            if (game == null)
-            {
-                game = gameService.GetSelected();
-            }
+            game ??= gameService.GetSelected();
             if (game != null)
             {
                 ResumeGameVisible = gameService.IsContinueGameAllowed(game) || forceEnableResumeButton;

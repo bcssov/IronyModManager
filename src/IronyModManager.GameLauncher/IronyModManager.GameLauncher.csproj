@@ -1,0 +1,56 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net6.0</TargetFramework>
+	<ApplicationIcon>../IronyModManager/Assets/logo.ico</ApplicationIcon>
+    <Description>IronyModManager Game Launcher Component</Description>	
+	<PackageLicenseFile>LICENSE</PackageLicenseFile>
+    <PackageIcon>logo.png</PackageIcon>
+    <PackageTags>IronyModManager Game Launcher Component</PackageTags>
+    <PackageReleaseNotes>IronyModManager Game Launcher Component</PackageReleaseNotes>	
+    <SignAssembly>true</SignAssembly>
+    <AssemblyOriginatorKeyFile>../../keys/Irony-Main.snk</AssemblyOriginatorKeyFile>
+    <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>	
+    <Configurations>Debug;Release;osx-x64;linux-x64;win-x64</Configurations>
+	<PlatformTarget>x64</PlatformTarget>	
+	<Platforms>x64</Platforms>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <NoWarn>1701;1702;NU1603</NoWarn>		
+  </PropertyGroup>
+  
+  <ItemGroup>
+    <Compile Include="..\..\GlobalSuppressions.cs" Link="GlobalSuppressions.cs" />
+    <Compile Include="..\IronyModManager.IO.Common\Platforms\ISteam.cs" Link="IO\ISteam.cs" />
+    <Compile Include="..\IronyModManager.IO\Platforms\SteamHandler.cs" Link="IO\SteamHandler.cs" />
+    <Compile Include="..\IronyModManager.Shared\Constants.cs" Link="Shared\Constants.cs" />
+    <Compile Include="..\IronyModManager.Shared\ExcludeFromCoverageAttribute.cs" Link="Shared\ExcludeFromCoverageAttribute.cs" />
+    <Compile Include="..\IronyModManager.Shared\ILogger.cs" Link="Shared\ILogger.cs" />
+    <Compile Include="..\IronyModManager.Shared\ProcessRunner.cs" Link="Shared\ProcessRunner.cs" />
+  </ItemGroup>  
+  
+  <ItemGroup>
+    <None Include="..\..\LICENSE">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+    </None>
+    <None Include="..\IronyModManager\Assets\logo.png">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+    </None>
+  </ItemGroup>  
+
+  <ItemGroup>
+	<PackageReference Include="CommandLineParser" Version="2.9.1" />
+	<PackageReference Include="NLog" Version="5.0.4" />
+	<PackageReference Include="Steamworks.NET" Version="20.1.0" />
+	<PackageReference Include="StrongNamer" Version="0.2.5" />
+	<PackageReference Update="Nerdbank.GitVersioning" Version="3.5.119" />
+  </ItemGroup>  
+
+  <ItemGroup>
+    <Folder Include="IO\" />
+    <Folder Include="Shared\" />
+  </ItemGroup>
+
+</Project>

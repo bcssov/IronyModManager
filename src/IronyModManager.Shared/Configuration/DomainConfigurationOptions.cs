@@ -4,7 +4,7 @@
 // Created          : 07-24-2022
 //
 // Last Modified By : Mario
-// Last Modified On : 07-24-2022
+// Last Modified On : 10-26-2022
 // ***********************************************************************
 // <copyright file="DomainConfigurationOptions.cs" company="Mario">
 //     Mario
@@ -83,6 +83,18 @@ namespace IronyModManager.Shared.Configuration
     public class Steam
     {
         #region Properties
+
+        /// <summary>
+        /// Gets or sets the game launcher path.
+        /// </summary>
+        /// <value>The game launcher path.</value>
+        public string GameLauncherPath { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether [use game launcher].
+        /// </summary>
+        /// <value><c>true</c> if [use game launcher]; otherwise, <c>false</c>.</value>
+        public bool UseGameLauncher { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether [use legacy launch method].

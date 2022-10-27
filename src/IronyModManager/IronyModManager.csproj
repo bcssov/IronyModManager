@@ -22,7 +22,7 @@
     <AssemblyOriginatorKeyFile>../../keys/Irony-Main.snk</AssemblyOriginatorKeyFile>
     <RunPostBuildEvent>OnBuildSuccess</RunPostBuildEvent>
     <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
-    <Configurations>Debug;Release</Configurations>
+    <Configurations>Debug;Release;osx-x64;linux-x64;win-x64</Configurations>
 	<PlatformTarget>x64</PlatformTarget>
 	<Platforms>x64</Platforms>
     <NoWarn>1701;1702;NU1603</NoWarn>	
@@ -244,8 +244,29 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
+    <None Update="appSettings.Debug.json">
+      <IsTransformFile>true</IsTransformFile>
+      <DependentUpon>appSettings.json</DependentUpon>
+    </None>
     <None Update="appSettings.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <TransformOnBuild>true</TransformOnBuild>
+    </None>
+    <None Update="appSettings.linux-x64.json">
+      <IsTransformFile>true</IsTransformFile>
+      <DependentUpon>appSettings.json</DependentUpon>
+    </None>
+    <None Update="appSettings.osx-x64.json">
+      <IsTransformFile>true</IsTransformFile>
+      <DependentUpon>appSettings.json</DependentUpon>
+    </None>
+    <None Update="appSettings.Release.json">
+      <IsTransformFile>true</IsTransformFile>
+      <DependentUpon>appSettings.json</DependentUpon>
+    </None>
+    <None Update="appSettings.win-x64.json">
+      <IsTransformFile>true</IsTransformFile>
+      <DependentUpon>appSettings.json</DependentUpon>
     </None>
     <None Update="Assets\logo.png">
       <Pack>True</Pack>
