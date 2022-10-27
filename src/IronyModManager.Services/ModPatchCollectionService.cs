@@ -680,13 +680,14 @@ namespace IronyModManager.Services
         }
 
         /// <summary>
-        /// Gets the mod objects.
+        /// Get mod objects as an asynchronous operation.
         /// </summary>
         /// <param name="game">The game.</param>
         /// <param name="mods">The mods.</param>
         /// <param name="collectionName">Name of the collection.</param>
-        /// <returns>IIndexedDefinitions.</returns>
-        public virtual async Task<IIndexedDefinitions> GetModObjectsAsync(IGame game, IEnumerable<IMod> mods, string collectionName)
+        /// <param name="mode">The mode.</param>
+        /// <returns>A Task&lt;IIndexedDefinitions&gt; representing the asynchronous operation.</returns>
+        public virtual async Task<IIndexedDefinitions> GetModObjectsAsync(IGame game, IEnumerable<IMod> mods, string collectionName, PatchStateMode mode)
         {
             if (game == null || mods == null || !mods.Any())
             {
@@ -701,10 +702,16 @@ namespace IronyModManager.Services
             var provider = DefinitionInfoProviders.FirstOrDefault(p => p.CanProcess(game.Type));
             messageBus.Publish(new ModDefinitionLoadEvent(0));
 
+            var gameFolders = game.GameFolders.ToList();
+            if (mode == PatchStateMode.DefaultWithoutLocalization || mode == PatchStateMode.AdvancedWithoutLocalization || mode == PatchStateMode.ReadOnlyWithoutLocalization)
+            {
+                gameFolders = gameFolders.Where(p => !p.StartsWith(Shared.Constants.LocalizationDirectory, StringComparison.OrdinalIgnoreCase)).ToList();
+            }
+
             mods.AsParallel().ForAll((m) =>
             {
                 IEnumerable<IDefinition> result = null;
-                result = ParseModFiles(game, Reader.Read(m.FullPath, game.GameFolders), m, provider);
+                result = ParseModFiles(game, Reader.Read(m.FullPath, gameFolders), m, provider);
                 if (result?.Count() > 0)
                 {
                     foreach (var item in result)
@@ -1368,10 +1375,7 @@ namespace IronyModManager.Services
                                 else
                                 {
                                     var info = Reader.GetFileInfo(mod.FullPath, definition.FileName);
-                                    if (info == null)
-                                    {
-                                        info = Reader.GetFileInfo(mod.FullPath, definition.FallBackFileName);
-                                    }
+                                    info ??= Reader.GetFileInfo(mod.FullPath, definition.FallBackFileName);
                                     if (info == null || !info.ContentSHA.Equals(definition.ContentSha))
                                     {
                                         // File no longer in collection or content does not match, break further checks
@@ -2695,10 +2699,7 @@ namespace IronyModManager.Services
                         if (other.AllowDuplicate)
                         {
                             var match = fullyOrdered.FirstOrDefault(p => p.TypeAndId == definition.TypeAndId && p.File == Path.GetFileNameWithoutExtension(other.File));
-                            if (match == null)
-                            {
-                                match = fullyOrdered.FirstOrDefault(p => p.TypeAndId == definition.TypeAndId);
-                            }
+                            match ??= fullyOrdered.FirstOrDefault(p => p.TypeAndId == definition.TypeAndId);
                             exportCopy.Order = match.Order;
                         }
                         else
@@ -2906,10 +2907,7 @@ namespace IronyModManager.Services
                             }
                             if (IsOverwrittenType(item.ValueType))
                             {
-                                if (collectionMods == null)
-                                {
-                                    collectionMods = GetCollectionMods();
-                                }
+                                collectionMods ??= GetCollectionMods();
                                 var overwritten = conflictResult.OverwrittenConflicts.GetByTypeAndId(typeAndId);
                                 if (overwritten.Any())
                                 {

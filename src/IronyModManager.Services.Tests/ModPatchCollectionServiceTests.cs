@@ -140,13 +140,13 @@ namespace IronyModManager.Services.Tests
             var modPatchExporter = new Mock<IModPatchExporter>();
 
             var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter);
-            var result = await service.GetModObjectsAsync(null, new List<IMod>(), string.Empty);
+            var result = await service.GetModObjectsAsync(null, new List<IMod>(), string.Empty, IronyModManager.Models.Common.PatchStateMode.Advanced);
             result.Should().BeNull();
 
-            result = await service.GetModObjectsAsync(new Game(), new List<IMod>(), string.Empty);
+            result = await service.GetModObjectsAsync(new Game(), new List<IMod>(), string.Empty, IronyModManager.Models.Common.PatchStateMode.Advanced);
             result.Should().BeNull();
 
-            result = await service.GetModObjectsAsync(new Game(), null, string.Empty);
+            result = await service.GetModObjectsAsync(new Game(), null, string.Empty, IronyModManager.Models.Common.PatchStateMode.Advanced);
             result.Should().BeNull();
         }
 
@@ -181,7 +181,7 @@ namespace IronyModManager.Services.Tests
                     FileName = Assembly.GetExecutingAssembly().Location,
                     Name = "fake"
                 }
-            }, string.Empty);
+            }, string.Empty, IronyModManager.Models.Common.PatchStateMode.Advanced);
             result.GetAll().Count().Should().Be(2);
             var ordered = result.GetAll().OrderBy(p => p.Id);
             ordered.First().Id.Should().Be("fake1.txt");
@@ -219,7 +219,7 @@ namespace IronyModManager.Services.Tests
                     FileName = Path.GetFileName(Assembly.GetExecutingAssembly().Location),
                     Name = "fake"
                 }
-            }, string.Empty);
+            }, string.Empty, IronyModManager.Models.Common.PatchStateMode.Advanced);
             result.GetAll().Count().Should().Be(2);
             var ordered = result.GetAll().OrderBy(p => p.Id);
             ordered.First().Id.Should().Be("fake1.txt");
@@ -257,7 +257,7 @@ namespace IronyModManager.Services.Tests
                     FileName = Path.GetFileName(Assembly.GetExecutingAssembly().Location),
                     Name = "fake"
                 }
-            }, string.Empty);
+            }, string.Empty, IronyModManager.Models.Common.PatchStateMode.Advanced);
             result.GetAll().Count().Should().Be(2);
             var ordered = result.GetAll().OrderBy(p => p.Id);
             ordered.First().Id.Should().Be("fake1.txt");
@@ -5317,7 +5317,7 @@ namespace IronyModManager.Services.Tests
             registration.OnPostStartup();
             var game = DISetup.Container.GetInstance<IGameService>().Get().First(s => s.Type == "Stellaris");
             var mods = await DISetup.Container.GetInstance<IModService>().GetInstalledModsAsync(game);
-            var defs = await DISetup.Container.GetInstance<IModPatchCollectionService>().GetModObjectsAsync(game, mods, string.Empty);
+            var defs = await DISetup.Container.GetInstance<IModPatchCollectionService>().GetModObjectsAsync(game, mods, string.Empty, IronyModManager.Models.Common.PatchStateMode.Advanced);
         }
     }
 }

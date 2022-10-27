@@ -4,7 +4,7 @@
 // Created          : 02-29-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 10-26-2022
+// Last Modified On : 10-27-2022
 // ***********************************************************************
 // <copyright file="ModHolderControlViewModel.cs" company="Mario">
 //     Mario
@@ -480,7 +480,7 @@ namespace IronyModManager.ViewModels.Controls
             var game = gameService.GetSelected();
             var definitions = await Task.Run(async () =>
             {
-                var result = await modPatchCollectionService.GetModObjectsAsync(gameService.GetSelected(), CollectionMods.SelectedMods, CollectionMods.SelectedModCollection.Name).ConfigureAwait(false);
+                var result = await modPatchCollectionService.GetModObjectsAsync(gameService.GetSelected(), CollectionMods.SelectedMods, CollectionMods.SelectedModCollection.Name, mode).ConfigureAwait(false);
                 // To stop people from whining
                 GC.Collect();
                 return result;
@@ -527,7 +527,7 @@ namespace IronyModManager.ViewModels.Controls
             {
                 SelectedCollection = CollectionMods.SelectedModCollection,
                 Results = conflicts,
-                State = mode == PatchStateMode.ReadOnly ? NavigationState.ReadOnlyConflictSolver : NavigationState.ConflictSolver,
+                State = mode == PatchStateMode.ReadOnly || mode == PatchStateMode.ReadOnlyWithoutLocalization ? NavigationState.ReadOnlyConflictSolver : NavigationState.ConflictSolver,
                 SelectedMods = CollectionMods.SelectedMods.Select(p => p.Name).ToList()
             };
             ReactiveUI.MessageBus.Current.SendMessage(args);
