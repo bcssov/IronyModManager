@@ -352,6 +352,9 @@
             "Default": "Default",
             "Advanced": "Advanced",
             "Analyze": "Analyze Only",
+            "AnalyzeWithoutLocalization": "Analyze Only Without Localization",
+            "DefaultWithoutLocalization": "Default Without Localization",
+            "AdvancedWithoutLocalization": "Advanced Without Localization",
             "Close": "Close"
         },
         "ModFilter": {

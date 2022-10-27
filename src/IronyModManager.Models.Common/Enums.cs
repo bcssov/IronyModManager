@@ -4,7 +4,7 @@
 // Created          : 03-01-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 01-29-2022
+// Last Modified On : 10-27-2022
 // ***********************************************************************
 // <copyright file="Enums.cs" company="Mario">
 //     Mario
@@ -180,6 +180,21 @@ namespace IronyModManager.Models.Common
         /// <summary>
         /// The read only
         /// </summary>
-        ReadOnly
+        ReadOnly,
+
+        /// <summary>
+        /// The default without localization
+        /// </summary>
+        DefaultWithoutLocalization,
+
+        /// <summary>
+        /// The advanced without localization
+        /// </summary>
+        AdvancedWithoutLocalization,
+
+        /// <summary>
+        /// The read only without localization
+        /// </summary>
+        ReadOnlyWithoutLocalization
     }
 }

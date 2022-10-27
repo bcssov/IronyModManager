@@ -233,6 +233,7 @@
             "ModsMissingTitle": "撤消了Mods",
             "ModsMissingMessage": "一些mods缺失，已从收藏中自动删除。:{NewLine}{NewLine}{Mods}"
         }
+
     },
     "Mod_Actions": {
         "Apply": "加载合集",
@@ -351,6 +352,9 @@
             "Default": "默认",
             "Advanced": "高级",
             "Analyze": "仅分析",
+            "AnalyzeWithoutLocalization": "只进行分析而不进行本地化",
+            "DefaultWithoutLocalization": "默认情况下没有本地化",
+            "AdvancedWithoutLocalization": "先进的不需要本地化",
             "Close": "关闭"
         },
         "ModFilter": {

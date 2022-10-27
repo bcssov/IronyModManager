@@ -4,7 +4,7 @@
 // Created          : 02-29-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 10-26-2022
+// Last Modified On : 10-27-2022
 // ***********************************************************************
 // <copyright file="ModHolderControlViewModel.cs" company="Mario">
 //     Mario
@@ -282,6 +282,25 @@ namespace IronyModManager.ViewModels.Controls
         public virtual bool AdvancedModeVisible { get; protected set; }
 
         /// <summary>
+        /// Gets or sets the advanced without localization mode.
+        /// </summary>
+        /// <value>The advanced without localization mode.</value>
+        [StaticLocalization(LocalizationResources.Conflict_Solver.Modes.AdvancedWithoutLocalization)]
+        public virtual string AdvancedWithoutLocalizationMode { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets the advanced without localization mode command.
+        /// </summary>
+        /// <value>The advanced without localization mode command.</value>
+        public virtual ReactiveCommand<Unit, Unit> AdvancedWithoutLocalizationModeCommand { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether [advanced without localization mode visible].
+        /// </summary>
+        /// <value><c>true</c> if [advanced without localization mode visible]; otherwise, <c>false</c>.</value>
+        public virtual bool AdvancedWithoutLocalizationModeVisible { get; protected set; }
+
+        /// <summary>
         /// Gets or sets a value indicating whether [allow mod selection].
         /// </summary>
         /// <value><c>true</c> if [allow mod selection]; otherwise, <c>false</c>.</value>
@@ -318,6 +337,19 @@ namespace IronyModManager.ViewModels.Controls
         /// </summary>
         /// <value>The analyze mode command.</value>
         public virtual ReactiveCommand<Unit, Unit> AnalyzeModeCommand { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets the analyze mode without localization command.
+        /// </summary>
+        /// <value>The analyze mode without localization command.</value>
+        public virtual ReactiveCommand<Unit, Unit> AnalyzeModeWithoutLocalizationCommand { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets the analyze without localization mode.
+        /// </summary>
+        /// <value>The analyze without localization mode.</value>
+        [StaticLocalization(LocalizationResources.Conflict_Solver.Modes.AnalyzeWithoutLocalization)]
+        public virtual string AnalyzeWithoutLocalizationMode { get; protected set; }
 
         /// <summary>
         /// Gets or sets the apply.
@@ -375,6 +407,25 @@ namespace IronyModManager.ViewModels.Controls
         /// </summary>
         /// <value><c>true</c> if [default mode visible]; otherwise, <c>false</c>.</value>
         public virtual bool DefaultModeVisible { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets the default without localization mode.
+        /// </summary>
+        /// <value>The default without localization mode.</value>
+        [StaticLocalization(LocalizationResources.Conflict_Solver.Modes.DefaultWithoutLocalization)]
+        public virtual string DefaultWithoutLocalizationMode { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets the default without localization mode command.
+        /// </summary>
+        /// <value>The default without localization mode command.</value>
+        public virtual ReactiveCommand<Unit, Unit> DefaultWithoutLocalizationModeCommand { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether [default without localization mode w visible].
+        /// </summary>
+        /// <value><c>true</c> if [default without localization mode w visible]; otherwise, <c>false</c>.</value>
+        public virtual bool DefaultWithoutLocalizationModeWVisible { get; protected set; }
 
         /// <summary>
         /// Gets or sets the installed mods.
@@ -480,7 +531,7 @@ namespace IronyModManager.ViewModels.Controls
             var game = gameService.GetSelected();
             var definitions = await Task.Run(async () =>
             {
-                var result = await modPatchCollectionService.GetModObjectsAsync(gameService.GetSelected(), CollectionMods.SelectedMods, CollectionMods.SelectedModCollection.Name).ConfigureAwait(false);
+                var result = await modPatchCollectionService.GetModObjectsAsync(gameService.GetSelected(), CollectionMods.SelectedMods, CollectionMods.SelectedModCollection.Name, mode).ConfigureAwait(false);
                 // To stop people from whining
                 GC.Collect();
                 return result;
@@ -527,7 +578,7 @@ namespace IronyModManager.ViewModels.Controls
             {
                 SelectedCollection = CollectionMods.SelectedModCollection,
                 Results = conflicts,
-                State = mode == PatchStateMode.ReadOnly ? NavigationState.ReadOnlyConflictSolver : NavigationState.ConflictSolver,
+                State = mode == PatchStateMode.ReadOnly || mode == PatchStateMode.ReadOnlyWithoutLocalization ? NavigationState.ReadOnlyConflictSolver : NavigationState.ConflictSolver,
                 SelectedMods = CollectionMods.SelectedMods.Select(p => p.Name).ToList()
             };
             ReactiveUI.MessageBus.Current.SendMessage(args);
@@ -773,16 +824,36 @@ namespace IronyModManager.ViewModels.Controls
                             case PatchStateMode.Default:
                                 AdvancedModeVisible = false;
                                 DefaultModeVisible = true;
+                                DefaultWithoutLocalizationModeWVisible = false;
+                                AdvancedWithoutLocalizationModeVisible = false;
                                 break;
 
                             case PatchStateMode.Advanced:
                                 AdvancedModeVisible = true;
                                 DefaultModeVisible = false;
+                                DefaultWithoutLocalizationModeWVisible = false;
+                                AdvancedWithoutLocalizationModeVisible = false;
+                                break;
+
+                            case PatchStateMode.DefaultWithoutLocalization:
+                                AdvancedModeVisible = false;
+                                DefaultModeVisible = false;
+                                DefaultWithoutLocalizationModeWVisible = true;
+                                AdvancedWithoutLocalizationModeVisible = false;
+                                break;
+
+                            case PatchStateMode.AdvancedWithoutLocalization:
+                                AdvancedModeVisible = false;
+                                DefaultModeVisible = false;
+                                DefaultWithoutLocalizationModeWVisible = false;
+                                AdvancedWithoutLocalizationModeVisible = true;
                                 break;
 
                             default:
                                 AdvancedModeVisible = true;
                                 DefaultModeVisible = true;
+                                DefaultWithoutLocalizationModeWVisible = true;
+                                AdvancedWithoutLocalizationModeVisible = true;
                                 break;
                         }
                     }
@@ -899,6 +970,21 @@ namespace IronyModManager.ViewModels.Controls
             AnalyzeModeCommand = ReactiveCommand.CreateFromTask(() =>
             {
                 return runAnalysis(PatchStateMode.ReadOnly);
+            }).DisposeWith(disposables);
+
+            AnalyzeModeWithoutLocalizationCommand = ReactiveCommand.CreateFromTask(() =>
+            {
+                return runAnalysis(PatchStateMode.ReadOnlyWithoutLocalization);
+            }).DisposeWith(disposables);
+
+            DefaultWithoutLocalizationModeCommand = ReactiveCommand.CreateFromTask(() =>
+            {
+                return runAnalysis(PatchStateMode.DefaultWithoutLocalization);
+            }).DisposeWith(disposables);
+
+            AdvancedWithoutLocalizationModeCommand = ReactiveCommand.CreateFromTask(() =>
+            {
+                return runAnalysis(PatchStateMode.AdvancedWithoutLocalization);
             }).DisposeWith(disposables);
 
             CloseModeCommand = ReactiveCommand.Create(() =>
