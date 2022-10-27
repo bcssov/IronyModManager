@@ -4,7 +4,7 @@
 // Created          : 05-26-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 07-20-2022
+// Last Modified On : 10-27-2022
 // ***********************************************************************
 // <copyright file="ModPatchCollectionService.cs" company="Mario">
 //     Mario
@@ -342,7 +342,15 @@ namespace IronyModManager.Services
         /// <returns>IConflictResult.</returns>
         public virtual IConflictResult FindConflicts(IIndexedDefinitions indexedDefinitions, IList<string> modOrder, PatchStateMode patchStateMode)
         {
-            var actualMode = patchStateMode == PatchStateMode.ReadOnly ? PatchStateMode.Advanced : patchStateMode;
+            var actualMode = patchStateMode;
+            if (patchStateMode == PatchStateMode.ReadOnly)
+            {
+                actualMode = PatchStateMode.Advanced;
+            }
+            else if (patchStateMode == PatchStateMode.ReadOnlyWithoutLocalization)
+            {
+                actualMode = PatchStateMode.AdvancedWithoutLocalization;
+            }
             var conflicts = new HashSet<IDefinition>();
             var fileConflictCache = new Dictionary<string, bool>();
             var fileKeys = indexedDefinitions.GetAllFileKeys();
@@ -854,7 +862,7 @@ namespace IronyModManager.Services
         {
             var game = GameService.GetSelected();
             double previousProgress = 0;
-            var allowCleanup = conflictResult != null && conflictResult.Mode != PatchStateMode.ReadOnly;
+            var allowCleanup = conflictResult != null && conflictResult.Mode != PatchStateMode.ReadOnly && conflictResult.Mode != PatchStateMode.ReadOnlyWithoutLocalization;
             async Task cleanSingleMergeFiles(string directory, string patchName)
             {
                 if (!allowCleanup)
@@ -1547,7 +1555,7 @@ namespace IronyModManager.Services
                 return Task.FromResult(false);
             }
             EvalModIgnoreDefinitions(conflictResult);
-            if (conflictResult.Mode != PatchStateMode.ReadOnly)
+            if (conflictResult.Mode != PatchStateMode.ReadOnly && conflictResult.Mode != PatchStateMode.ReadOnlyWithoutLocalization)
             {
                 var patchName = GenerateCollectionPatchName(collectionName);
                 return modPatchExporter.SaveStateAsync(new ModPatchExporterParameters()
@@ -1774,7 +1782,7 @@ namespace IronyModManager.Services
                                 continue;
                             }
                             var hasOverrides = allConflicts.Any(p => !p.IsCustomPatch && p.Dependencies != null && p.Dependencies.Any(p => p.Equals(conflict.ModName)));
-                            if (hasOverrides && patchStateMode == PatchStateMode.Default)
+                            if (hasOverrides && (patchStateMode == PatchStateMode.Default || patchStateMode == PatchStateMode.DefaultWithoutLocalization))
                             {
                                 var existing = allConflicts.Where(p => !p.IsCustomPatch && p.Dependencies != null && p.Dependencies.Any(p => p.Equals(conflict.ModName)));
                                 if (existing.Any())
@@ -1855,7 +1863,7 @@ namespace IronyModManager.Services
                             if (fileDefs.GroupBy(p => p.ModName).Count() > 1)
                             {
                                 var hasOverrides = !def.IsCustomPatch && def.Dependencies != null && def.Dependencies.Any(p => fileDefs.Any(s => s.ModName.Equals(p)));
-                                if (hasOverrides && patchStateMode == PatchStateMode.Default)
+                                if (hasOverrides && (patchStateMode == PatchStateMode.Default || patchStateMode == PatchStateMode.DefaultWithoutLocalization))
                                 {
                                     fileConflictCache.TryAdd(def.FileCI, false);
                                 }
@@ -2293,6 +2301,8 @@ namespace IronyModManager.Services
             {
                 IO.Common.PatchStateMode.Default => PatchStateMode.Default,
                 IO.Common.PatchStateMode.Advanced => PatchStateMode.Advanced,
+                IO.Common.PatchStateMode.AdvancedWithoutLocalization => PatchStateMode.AdvancedWithoutLocalization,
+                IO.Common.PatchStateMode.DefaultWithoutLocalization => PatchStateMode.DefaultWithoutLocalization,
                 _ => PatchStateMode.None,
             };
         }
@@ -2305,7 +2315,7 @@ namespace IronyModManager.Services
         /// <exception cref="System.ArgumentException">Invalid readonly mode</exception>
         protected virtual IO.Common.PatchStateMode MapPatchStateMode(PatchStateMode mode)
         {
-            if (mode == PatchStateMode.ReadOnly)
+            if (mode == PatchStateMode.ReadOnly || mode == PatchStateMode.ReadOnlyWithoutLocalization)
             {
                 throw new ArgumentException("Invalid readonly mode");
             }
@@ -2313,6 +2323,8 @@ namespace IronyModManager.Services
             {
                 PatchStateMode.Default => IO.Common.PatchStateMode.Default,
                 PatchStateMode.Advanced => IO.Common.PatchStateMode.Advanced,
+                PatchStateMode.AdvancedWithoutLocalization => IO.Common.PatchStateMode.AdvancedWithoutLocalization,
+                PatchStateMode.DefaultWithoutLocalization => IO.Common.PatchStateMode.DefaultWithoutLocalization,
                 _ => IO.Common.PatchStateMode.None,
             };
         }
