@@ -22,7 +22,7 @@
     <AssemblyOriginatorKeyFile>../../keys/Irony-Main.snk</AssemblyOriginatorKeyFile>
     <RunPostBuildEvent>OnBuildSuccess</RunPostBuildEvent>
     <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
-    <Configurations>Debug;Release</Configurations>
+    <Configurations>Debug;Release;osx-x64;linux-x64;win-x64</Configurations>
 	<PlatformTarget>x64</PlatformTarget>
 	<Platforms>x64</Platforms>
     <NoWarn>1701;1702;NU1603</NoWarn>	
