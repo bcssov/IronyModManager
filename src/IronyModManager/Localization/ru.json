@@ -352,6 +352,9 @@
             "Default": "Обычный",
             "Advanced": "Расширенный",
             "Analyze": "Только анализ",
+            "AnalyzeWithoutLocalization": "Только анализ без локализации",
+            "DefaultWithoutLocalization": "По умолчанию без локализации",
+            "AdvancedWithoutLocalization": "Продвинутый без локализации",
             "Close": "Закрыть"
         },
         "ModFilter": {

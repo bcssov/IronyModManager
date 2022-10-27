@@ -234,6 +234,7 @@
             "ModsMissingTitle": "Mods supprimés",
             "ModsMissingMessage": "Certains mods sont manquants et ont été retirés automatiquement de la collection.:{NewLine}{NewLine}{Mods}"
         }
+
     },
     "Mod_Actions": {
         "Apply": "Appliquer",
@@ -352,6 +353,9 @@
             "Default": "Simple",
             "Advanced": "Avancée",
             "Analyze": "Analyser uniquement",
+            "AnalyzeWithoutLocalization": "Analyser seulement sans localisation",
+            "DefaultWithoutLocalization": "Par défaut sans localisation",
+            "AdvancedWithoutLocalization": "Avancé sans localisation",
             "Close": "Fermer"
         },
         "ModFilter": {
