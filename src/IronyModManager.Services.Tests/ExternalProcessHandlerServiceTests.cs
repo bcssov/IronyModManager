@@ -140,17 +140,17 @@ namespace IronyModManager.Services.Tests
             var steam = new Mock<ISteam>();
             steam.Setup(p => p.InitAlternateAsync()).Returns(() =>
             {
-                var isValid = false;
+                isValid = false;
                 return Task.FromResult(true);
             });
             steam.Setup(p => p.InitAsync(It.IsAny<long>())).Returns((long i) =>
             {
-                var isValid = false;
+                isValid = false;
                 return Task.FromResult(true);
             });
             steam.Setup(p => p.ShutdownAPIAsync()).Returns(() =>
             {
-                var isValid = false;
+                isValid = false;
                 return Task.FromResult(true);
             });
 
