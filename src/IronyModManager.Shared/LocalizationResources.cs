@@ -460,6 +460,9 @@ namespace IronyModManager.Shared
                 public const string Default = Prefix + "Default";
                 public const string Advanced = Prefix + "Advanced";
                 public const string Analyze = Prefix + "Analyze";
+                public const string AnalyzeWithoutLocalization = Prefix + "AnalyzeWithoutLocalization";
+                public const string DefaultWithoutLocalization = Prefix + "DefaultWithoutLocalization";
+                public const string AdvancedWithoutLocalization = Prefix + "AdvancedWithoutLocalization";
                 public const string Close = Prefix + "Close";
             }
             public static class ModFilter
