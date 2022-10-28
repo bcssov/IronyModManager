@@ -4,7 +4,7 @@
 // Created          : 02-12-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 07-21-2022
+// Last Modified On : 10-28-2022
 // ***********************************************************************
 // <copyright file="GameService.cs" company="Mario">
 //     Mario
@@ -514,6 +514,8 @@ namespace IronyModManager.Services
             game.GameFolders = gameType.GameFolders ?? new List<string>();
             game.BaseSteamGameDirectory = gameType.BaseSteamGameDirectory;
             game.AdvancedFeatures = gameType.AdvancedFeatures;
+            game.SupportedMergeTypes = gameType.SupportedMergeTypes;
+            game.ModDestriptorType = gameType.ModDestriptorType;
             game.GameIndexCacheVersion = gameType.GameIndexCacheVersion;
             game.ParadoxGameId = gameType.ParadoxGameId;
             game.LauncherSettingsFileName = gameType.LauncherSettingsFileName;

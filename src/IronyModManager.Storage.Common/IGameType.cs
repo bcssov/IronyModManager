@@ -4,7 +4,7 @@
 // Created          : 02-12-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 07-15-2022
+// Last Modified On : 10-28-2022
 // ***********************************************************************
 // <copyright file="IGameType.cs" company="Mario">
 //     Mario
@@ -103,6 +103,12 @@ namespace IronyModManager.Storage.Common
         string LogLocation { get; set; }
 
         /// <summary>
+        /// Gets or sets the type of the mod destriptor.
+        /// </summary>
+        /// <value>The type of the mod destriptor.</value>
+        ModDescriptorType ModDestriptorType { get; set; }
+
+        /// <summary>
         /// Gets or sets the name.
         /// </summary>
         /// <value>The name.</value>
@@ -125,6 +131,12 @@ namespace IronyModManager.Storage.Common
         /// </summary>
         /// <value>The steam application identifier.</value>
         int SteamAppId { get; set; }
+
+        /// <summary>
+        /// Gets or sets the supported merge types.
+        /// </summary>
+        /// <value>The supported merge types.</value>
+        SupportedMergeTypes SupportedMergeTypes { get; set; }
 
         /// <summary>
         /// Gets or sets the user directory.
