@@ -223,6 +223,7 @@ namespace IronyModManager.Common.Views
         /// <exception cref="System.InvalidOperationException">Cannot show window with non-visible parent.</exception>
         private void ShowCore(Window parent)
         {
+            //TODO: Remove this override once upgraded to 0.11
             if (PlatformImpl == null)
             {
                 throw new InvalidOperationException("Cannot re-show a closed window.");
