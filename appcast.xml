@@ -4,9 +4,9 @@
 		<title>Irony Mod Manager</title>
 		<language>en</language>
 		<item>
-			<title>1.23.56</title>
+			<title>1.23.59</title>
 			<description>## Current Release Notes
-* Stellaris 3.6 support
+* Fix maximized window state not being restored due to framework bug
 
 ## Release Notes 1.23
 * Update dependencies
@@ -15,13 +15,13 @@
 * Improve game definition saving and loading memory consumption
 * Add inverse search filters
 * Update fios\lios stellaris handling</description>
-			<pubDate>Fri, 14 Oct 2022 16:43:44 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.23.56/linux-x64.zip" sparkle:version="1.23.56.65426" sparkle:shortVersionString="1.23.56" length="88552878" sparkle:os="linux" type="application/zip" sparkle:signature="KC2bACrgmDld2ycjNXqQt792/TNuxBQUWiNCy/VbBCISTl2MfU/7LRqNLXFDBwfstUmlZfSfDpYHmiooetg1Dg=="/>
+			<pubDate>Fri, 28 Oct 2022 21:18:27 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.23.59/linux-x64.zip" sparkle:version="1.23.59.23288" sparkle:shortVersionString="1.23.59" length="88554942" sparkle:os="linux" type="application/zip" sparkle:signature="B+fM+ReZMVmBmjnsBjkP7DyaEVyEeDmH2lKWEtZTgQmPieWuycaAtN0eOcmTfY/xLyQ8MKsKYhXlNg7hiKiNBg=="/>
 		</item>
 		<item>
-			<title>1.23.56</title>
+			<title>1.23.59</title>
 			<description>## Current Release Notes
-* Stellaris 3.6 support
+* Fix maximized window state not being restored due to framework bug
 
 ## Release Notes 1.23
 * Update dependencies
@@ -30,13 +30,13 @@
 * Improve game definition saving and loading memory consumption
 * Add inverse search filters
 * Update fios\lios stellaris handling</description>
-			<pubDate>Fri, 14 Oct 2022 16:43:53 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.23.56/osx-x64.zip" sparkle:version="1.23.56.65426" sparkle:shortVersionString="1.23.56" length="91409587" sparkle:os="osx" type="application/zip" sparkle:signature="bQ3ehR9Vi9ry7gibWJ9GG3lNvlwjFs8vbzgVi8+ZMGRH4jTG2k3WCpaKMXiXsnmlowiYXDfFhMLr4Ct5ca/KAQ=="/>
+			<pubDate>Fri, 28 Oct 2022 21:18:37 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.23.59/osx-x64.zip" sparkle:version="1.23.59.23288" sparkle:shortVersionString="1.23.59" length="91411662" sparkle:os="osx" type="application/zip" sparkle:signature="tLJHARhI7ErmTGBu4tm0ALRgmRjsJ12bMwUqtqSXrYoIIYTLMyOT/1q3UTIb4teZAK/I2+ZEibYVBAuMPg7rBQ=="/>
 		</item>
 		<item>
-			<title>1.23.56</title>
+			<title>1.23.59</title>
 			<description>## Current Release Notes
-* Stellaris 3.6 support
+* Fix maximized window state not being restored due to framework bug
 
 ## Release Notes 1.23
 * Update dependencies
@@ -45,13 +45,13 @@
 * Improve game definition saving and loading memory consumption
 * Add inverse search filters
 * Update fios\lios stellaris handling</description>
-			<pubDate>Fri, 14 Oct 2022 16:44:02 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.23.56/win-x64-setup.zip" sparkle:version="1.23.56.65426" sparkle:shortVersionString="1.23.56" length="72457897" sparkle:os="windows" type="application/zip" sparkle:signature="XZeprQb5h7InbxaFBlNjd8wB6dvkHwkbvDujh8OcM5kAbHd0pdkRuCC1VWlKvjbO/vTkHgleeHMwZUnxwog4CA=="/>
+			<pubDate>Fri, 28 Oct 2022 21:18:46 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.23.59/win-x64-setup.zip" sparkle:version="1.23.59.23288" sparkle:shortVersionString="1.23.59" length="72474054" sparkle:os="windows" type="application/zip" sparkle:signature="QjiQrlPezwh6oT8CAhFfKhSRqgHpyB+h37gwxhqByKKzi5B0AMM4qKJ8vIHUPVzAV0Tzb5MITo5mDmx81XTsBA=="/>
 		</item>
 		<item>
-			<title>1.23.56</title>
+			<title>1.23.59</title>
 			<description>## Current Release Notes
-* Stellaris 3.6 support
+* Fix maximized window state not being restored due to framework bug
 
 ## Release Notes 1.23
 * Update dependencies
@@ -60,8 +60,8 @@
 * Improve game definition saving and loading memory consumption
 * Add inverse search filters
 * Update fios\lios stellaris handling</description>
-			<pubDate>Fri, 14 Oct 2022 16:44:02 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.23.56/win-x64.zip" sparkle:version="1.23.56.65426" sparkle:shortVersionString="1.23.56" length="106015543" sparkle:os="windows" type="application/zip" sparkle:signature="BklrzBUgQehS8OsUDWeN585SVvg25gYgY/WPd3s5Oi6lG783izAcey2a5yuf/J7mWKXgCHa2V5tSHsL+yynoCA=="/>
+			<pubDate>Fri, 28 Oct 2022 21:18:46 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.23.59/win-x64.zip" sparkle:version="1.23.59.23288" sparkle:shortVersionString="1.23.59" length="106017606" sparkle:os="windows" type="application/zip" sparkle:signature="78teK1ewtIxybYokheGwapXO3nxdArRoG79P+CzoLI5biAFPbDy5AnLLKsq3dVn5alJVDGed6yrETtRCKSOXCw=="/>
 		</item>
 	</channel>
 </rss>
