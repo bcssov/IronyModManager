@@ -4,7 +4,7 @@
 // Created          : 01-15-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 07-04-2021
+// Last Modified On : 10-28-2022
 // ***********************************************************************
 // <copyright file="BaseWindow.cs" company="Mario">
 //     Mario
@@ -14,8 +14,11 @@
 using System;
 using System.Collections.Generic;
 using System.Reactive.Disposables;
+using System.Reflection;
 using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Interactivity;
+using Avalonia.Platform;
 using Avalonia.ReactiveUI;
 using IronyModManager.Common.ViewModels;
 using IronyModManager.Shared;
@@ -94,6 +97,33 @@ namespace IronyModManager.Common.Views
         #region Methods
 
         /// <summary>
+        /// Shows the window.
+        /// </summary>
+        public override void Show()
+        {
+            // If someome in the future is asking why is this overriden and then why it's using reflection in a private method.
+            // 1. Window state in Avalonia version 0.10.18 is broken as in not working.
+            // 2. It is reported on github but god forbid they include a backport to 0.10 branch,
+            //    at the moment of implementing this fix this is only available on 0.11 preview version.
+            //    Yes you read that right a preview version so who cares for people on stable version.
+            ShowCore(null);
+        }
+
+        /// <summary>
+        /// Shows the specified parent.
+        /// </summary>
+        /// <param name="parent">Window that will be a parent of the shown window.</param>
+        /// <exception cref="System.ArgumentNullException">parent - Showing a child window requires valid parent.</exception>
+        public new void Show(Window parent)
+        {
+            if (parent is null)
+            {
+                throw new ArgumentNullException(nameof(parent), "Showing a child window requires valid parent.");
+            }
+            ShowCore(parent);
+        }
+
+        /// <summary>
         /// Called when [activated].
         /// </summary>
         /// <param name="disposables">The disposables.</param>
@@ -115,13 +145,149 @@ namespace IronyModManager.Common.Views
         /// Handles the PropertyChanged event of the BaseWindow control.
         /// </summary>
         /// <param name="sender">The source of the event.</param>
-        /// <param name="e">The <see cref="AvaloniaPropertyChangedEventArgs"/> instance containing the event data.</param>
+        /// <param name="e">The <see cref="AvaloniaPropertyChangedEventArgs" /> instance containing the event data.</param>
         private void BaseWindow_PropertyChanged(object sender, AvaloniaPropertyChangedEventArgs e)
         {
             if (e.Property == WindowStartupLocationProperty)
             {
                 IsCenterScreen = WindowStartupLocation == WindowStartupLocation.CenterScreen;
             }
+        }
+
+        /// <summary>
+        /// Sets the window startup location.
+        /// </summary>
+        /// <param name="owner">The owner.</param>
+        private void SetWindowStartupLocation(IWindowBaseImpl owner = null)
+        {
+            var startupLocation = WindowStartupLocation;
+
+            if (startupLocation == WindowStartupLocation.CenterOwner &&
+                Owner is Window ownerWindow &&
+                ownerWindow.WindowState == WindowState.Minimized)
+            {
+                startupLocation = WindowStartupLocation.CenterScreen;
+            }
+
+            var scaling = owner?.DesktopScaling ?? PlatformImpl?.DesktopScaling ?? 1;
+
+            var rect = FrameSize.HasValue ?
+                new PixelRect(PixelSize.FromSize(FrameSize.Value, scaling)) :
+                new PixelRect(PixelSize.FromSize(ClientSize, scaling));
+
+            if (startupLocation == WindowStartupLocation.CenterScreen)
+            {
+#pragma warning disable CS8632 // The annotation for nullable reference types should only be used in code within a '#nullable' annotations context.
+                Screen? screen = null;
+#pragma warning restore CS8632 // The annotation for nullable reference types should only be used in code within a '#nullable' annotations context.
+
+                if (owner is not null)
+                {
+                    screen = Screens.ScreenFromWindow(owner);
+
+                    screen ??= Screens.ScreenFromPoint(owner.Position);
+                }
+
+#pragma warning disable IDE0074 // Use compound assignment
+                if (screen is null)
+                {
+                    screen = Screens.ScreenFromPoint(Position);
+                }
+#pragma warning restore IDE0074 // Use compound assignment
+
+                if (screen != null)
+                {
+                    Position = screen.WorkingArea.CenterRect(rect).Position;
+                }
+            }
+            else if (startupLocation == WindowStartupLocation.CenterOwner)
+            {
+                if (owner != null)
+                {
+                    var ownerSize = owner.FrameSize ?? owner.ClientSize;
+                    var ownerRect = new PixelRect(
+                        owner.Position,
+                        PixelSize.FromSize(ownerSize, scaling));
+                    Position = ownerRect.CenterRect(rect).Position;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Shows the core.
+        /// </summary>
+        /// <param name="parent">The parent.</param>
+        /// <exception cref="System.InvalidOperationException">Cannot re-show a closed window.</exception>
+        /// <exception cref="System.InvalidOperationException">Cannot show a window with a closed parent.</exception>
+        /// <exception cref="System.InvalidOperationException">A Window cannot be its own parent.</exception>
+        /// <exception cref="System.InvalidOperationException">Cannot show window with non-visible parent.</exception>
+        private void ShowCore(Window parent)
+        {
+            if (PlatformImpl == null)
+            {
+                throw new InvalidOperationException("Cannot re-show a closed window.");
+            }
+
+            if (parent != null)
+            {
+                if (parent.PlatformImpl == null)
+                {
+                    throw new InvalidOperationException("Cannot show a window with a closed parent.");
+                }
+                else if (parent == this)
+                {
+                    throw new InvalidOperationException("A Window cannot be its own parent.");
+                }
+                else if (!parent.IsVisible)
+                {
+                    throw new InvalidOperationException("Cannot show window with non-visible parent.");
+                }
+            }
+
+            if (IsVisible)
+            {
+                return;
+            }
+
+            var windowState = WindowState;
+
+            RaiseEvent(new RoutedEventArgs(WindowOpenedEvent));
+
+            EnsureInitialized();
+            IsVisible = true;
+
+            var initialSize = new Size(
+                double.IsNaN(Width) ? Math.Max(MinWidth, ClientSize.Width) : Width,
+                double.IsNaN(Height) ? Math.Max(MinHeight, ClientSize.Height) : Height);
+
+            if (initialSize != ClientSize)
+            {
+                PlatformImpl?.Resize(initialSize, PlatformResizeReason.Layout);
+            }
+            if (windowState != WindowState)
+            {
+                WindowState = windowState;
+            }
+
+            LayoutManager.ExecuteInitialLayoutPass();
+
+            if (parent != null)
+            {
+                PlatformImpl?.SetParent(parent.PlatformImpl);
+            }
+
+            Owner = parent;
+            if (parent != null)
+            {
+                var addChild = typeof(Window).GetMethod("AddChild", BindingFlags.NonPublic | BindingFlags.Instance);
+                addChild.Invoke(this, new object[] { this, false });
+            }
+
+            SetWindowStartupLocation(Owner?.PlatformImpl);
+
+            PlatformImpl?.Show(ShowActivated, false);
+            Renderer?.Start();
+            OnOpened(EventArgs.Empty);
         }
 
         #endregion Methods
