@@ -4,7 +4,7 @@
 // Created          : 05-07-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-16-2021
+// Last Modified On : 10-28-2022
 // ***********************************************************************
 // <copyright file="StaticResources.cs" company="Mario">
 //     Mario
@@ -35,6 +35,16 @@ namespace IronyModManager
         /// The application icon
         /// </summary>
         private static Bitmap iconBitmap;
+
+        /// <summary>
+        /// The last known location
+        /// </summary>
+        private static string lastKnownLocation = string.Empty;
+
+        /// <summary>
+        /// The log location
+        /// </summary>
+        private static string logLocation = string.Empty;
 
         /// <summary>
         /// The updater path
@@ -94,7 +104,33 @@ namespace IronyModManager
             return iconBitmap;
         }
 
-        private static string logLocation = string.Empty;
+        /// <summary>
+        /// Gets the last known location information.
+        /// </summary>
+        /// <returns>System.String.</returns>
+        public static string GetLastKnownLocationInfo()
+        {
+            if (!string.IsNullOrWhiteSpace(lastKnownLocation))
+            {
+                return lastKnownLocation;
+            }
+            var firstSegment = string.Empty;
+            var secondSegment = string.Empty;
+
+            var entryAssembly = Assembly.GetEntryAssembly();
+            var companyAttribute = (AssemblyCompanyAttribute)Attribute.GetCustomAttribute(entryAssembly, typeof(AssemblyCompanyAttribute));
+            if (!string.IsNullOrEmpty(companyAttribute.Company))
+            {
+                firstSegment = $"{companyAttribute.Company}{Path.DirectorySeparatorChar}";
+            }
+            var titleAttribute = (AssemblyTitleAttribute)Attribute.GetCustomAttribute(entryAssembly, typeof(AssemblyTitleAttribute));
+            if (!string.IsNullOrEmpty(titleAttribute.Title))
+            {
+                secondSegment = $"{titleAttribute.Title}-Location{Path.DirectorySeparatorChar}";
+            }
+            lastKnownLocation = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), $@"{firstSegment}{secondSegment}");
+            return lastKnownLocation;
+        }
 
         /// <summary>
         /// Gets the log location.
