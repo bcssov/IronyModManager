@@ -76,7 +76,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IronyModManager.Updater", "
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IronyModManager.Platform", "src\IronyModManager.Platform\IronyModManager.Platform.csproj", "{2A528AAE-CD48-41BA-8839-52162A9659F8}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IronyModManager.GameLauncher", "src\IronyModManager.GameLauncher\IronyModManager.GameLauncher.csproj", "{06326152-831F-46B1-A777-CB521C448510}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IronyModManager.GameHandler", "src\IronyModManager.GameHandler\IronyModManager.GameHandler.csproj", "{06326152-831F-46B1-A777-CB521C448510}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

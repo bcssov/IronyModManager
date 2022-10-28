@@ -174,7 +174,7 @@ namespace IronyModManager.Services.Tests
             SetupMockCase(reader, parserManager, modParser);
 
             var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter, new List<IDefinitionInfoProvider>() { infoProvider.Object });
-            var result = await service.GetModObjectsAsync(new Game() { UserDirectory = "c:\\fake" }, new List<IMod>()
+            var result = await service.GetModObjectsAsync(new Game() { UserDirectory = "c:\\fake", GameFolders = new List<string>() }, new List<IMod>()
             {
                 new Mod()
                 {
@@ -212,7 +212,7 @@ namespace IronyModManager.Services.Tests
             SetupMockCase(reader, parserManager, modParser);
 
             var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter, new List<IDefinitionInfoProvider>() { infoProvider.Object });
-            var result = await service.GetModObjectsAsync(new Game() { UserDirectory = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), WorkshopDirectory = new List<string>() { "fake1" } }, new List<IMod>()
+            var result = await service.GetModObjectsAsync(new Game() { UserDirectory = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), WorkshopDirectory = new List<string>(), GameFolders = new List<string>() { "fake1" } }, new List<IMod>()
             {
                 new Mod()
                 {
@@ -250,7 +250,7 @@ namespace IronyModManager.Services.Tests
             SetupMockCase(reader, parserManager, modParser);
 
             var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter, new List<IDefinitionInfoProvider>() { infoProvider.Object });
-            var result = await service.GetModObjectsAsync(new Game() { WorkshopDirectory = new List<string>() { Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) }, UserDirectory = "fake1" }, new List<IMod>()
+            var result = await service.GetModObjectsAsync(new Game() { WorkshopDirectory = new List<string>() { Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) }, UserDirectory = "fake1", GameFolders = new List<string>() }, new List<IMod>()
             {
                 new Mod()
                 {

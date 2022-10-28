@@ -237,7 +237,7 @@ namespace IronyModManager.Services.Tests
             public DomainConfigDummyExternal()
             {
                 domain.Steam.UseLegacyLaunchMethod = false;
-                domain.Steam.UseGameLauncher = true;                
+                domain.Steam.UseGameHandler = true;                
             }
 
             /// <summary>

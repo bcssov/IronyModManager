@@ -4,7 +4,7 @@
 // Created          : 04-16-2021
 //
 // Last Modified By : Mario
-// Last Modified On : 10-26-2022
+// Last Modified On : 10-28-2022
 // ***********************************************************************
 // <copyright file="PlatformConfiguration.cs" company="Mario">
 //     Mario
@@ -92,11 +92,11 @@ namespace IronyModManager.Implementation.Config
                 domainConfiguration = new DomainConfigurationOptions();
                 domainConfiguration.OSXOptions.UseFileStreams = configuration.GetSection("OSXOptions").GetSection("UseFileStreams").Get<bool>();
                 domainConfiguration.Steam.UseLegacyLaunchMethod = steamSection.GetSection("UseLegacyLaunchMethod").Get<bool>();
-                domainConfiguration.Steam.UseGameLauncher = steamSection.GetSection("UseGameLauncher").Get<bool>();
-                domainConfiguration.Steam.GameLauncherPath = steamSection.GetSection("GameLauncherPath").Get<string>();
-                if (!Path.IsPathFullyQualified(domainConfiguration.Steam.GameLauncherPath))
+                domainConfiguration.Steam.UseGameHandler = steamSection.GetSection("UseGameHandler").Get<bool>();
+                domainConfiguration.Steam.GameHandlerPath = steamSection.GetSection("GameHandlerPath").Get<string>();
+                if (!Path.IsPathFullyQualified(domainConfiguration.Steam.GameHandlerPath))
                 {
-                    domainConfiguration.Steam.GameLauncherPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, domainConfiguration.Steam.GameLauncherPath);
+                    domainConfiguration.Steam.GameHandlerPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, domainConfiguration.Steam.GameHandlerPath);
                 }
                 domainConfiguration.Formatting.UseSystemCulture = configuration.GetSection("Formatting").GetSection("UseSystemCulture").Get<bool>();
             }

@@ -15,18 +15,18 @@ dotnet publish src\IronyModManager.DI\IronyModManager.DI.csproj  /p:PublishProfi
 dotnet publish src\IronyModManager.Platform\IronyModManager.Platform.csproj  /p:PublishProfile=src\IronyModManager.Platform\Properties\PublishProfiles\win-x64.pubxml --configuration win-x64
 dotnet publish src\IronyModManager.Common\IronyModManager.Common.csproj  /p:PublishProfile=src\IronyModManager.Common\Properties\PublishProfiles\win-x64.pubxml --configuration win-x64
 dotnet publish src\IronyModManager.Updater\IronyModManager.Updater.csproj  /p:PublishProfile=src\IronyModManager.Updater\Properties\PublishProfiles\win-x64.pubxml --configuration win-x64
-dotnet publish src\IronyModManager.GameLauncher\IronyModManager.GameLauncher.csproj  /p:PublishProfile=src\IronyModManager.GameLauncher\Properties\PublishProfiles\win-x64.pubxml --configuration win-x64
+dotnet publish src\IronyModManager.GameHandler\IronyModManager.GameHandler.csproj  /p:PublishProfile=src\IronyModManager.GameHandler\Properties\PublishProfiles\win-x64.pubxml --configuration win-x64
 dotnet publish src\IronyModManager\IronyModManager.csproj  /p:PublishProfile=src\IronyModManager\Properties\PublishProfiles\win-x64.pubxml --configuration win-x64
 xcopy "src\IronyModManager\bin\win-x64\net6.0\win-x64\*.dll" "src\IronyModManager\bin\x64\win-x64\net6.0\publish\win-x64\" /Y /S /D
 xcopy "src\IronyModManager\bin\win-x64\net6.0\win-x64\*.json" "src\IronyModManager\bin\x64\win-x64\net6.0\publish\win-x64\" /Y /S /D
 xcopy "src\IronyModManager\bin\win-x64\net6.0\win-x64\*.pdb" "src\IronyModManager\bin\x64\win-x64\net6.0\publish\win-x64\" /Y /S /D
 xcopy "src\IronyModManager.Updater\bin\x64\win-x64\net6.0\publish\win-x64\*.*" "src\IronyModManager\bin\x64\win-x64\net6.0\publish\win-x64\" /Y /S /D
-xcopy "src\IronyModManager.GameLauncher\bin\x64\win-x64\net6.0\publish\win-x64\*.*" "src\IronyModManager\bin\x64\win-x64\net6.0\publish\win-x64\" /Y /S /D
+xcopy "src\IronyModManager.GameHandler\bin\x64\win-x64\net6.0\publish\win-x64\*.*" "src\IronyModManager\bin\x64\win-x64\net6.0\publish\win-x64\" /Y /S /D
 REM Temp fix due to avalonia bug
 xcopy "%userprofile%\.nuget\packages\avalonia.angle.windows.natives\2.1.0.2020091801\runtimes\win7-x64\native\av_libglesv2.dll" "src\IronyModManager\bin\x64\win-x64\net6.0\publish\win-x64\" /Y /S /D
 del "src\IronyModManager\bin\x64\win-x64\net6.0\publish\win-x64\IronyModManager.runtimeconfig.dev.json" /S /Q
 del "src\IronyModManager\bin\x64\win-x64\net6.0\publish\win-x64\IronyModManager.Updater.runtimeconfig.dev.json" /S /Q
-del "src\IronyModManager\bin\x64\win-x64\net6.0\publish\win-x64\IronyModManager.GameLauncher.runtimeconfig.dev.json" /S /Q
+del "src\IronyModManager\bin\x64\win-x64\net6.0\publish\win-x64\IronyModManager.GameHandler.runtimeconfig.dev.json" /S /Q
 del "src\IronyModManager\bin\x64\win-x64\net6.0\publish\win-x64\steam_api64.dll" /S /Q
 xcopy "References\CopyAll\*.*" "src\IronyModManager\bin\x64\win-x64\net6.0\publish\win-x64\" /Y /S /D
 xcopy "References\Conditional\Steamworks\Windows-x64\*.*" "src\IronyModManager\bin\x64\win-x64\net6.0\publish\win-x64\" /Y /S /D

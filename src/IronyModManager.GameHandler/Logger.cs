@@ -1,10 +1,10 @@
 ﻿// ***********************************************************************
-// Assembly         : IronyModManager.GameLauncher
+// Assembly         : IronyModManager.GameHandler
 // Author           : Mario
 // Created          : 10-26-2022
 //
 // Last Modified By : Mario
-// Last Modified On : 10-26-2022
+// Last Modified On : 10-28-2022
 // ***********************************************************************
 // <copyright file="Logger.cs" company="Mario">
 //     Mario
@@ -19,7 +19,7 @@ using System.Runtime.InteropServices;
 using System.Text;
 using NLog;
 
-namespace IronyModManager.GameLauncher
+namespace IronyModManager.GameHandler
 {
     /// <summary>
     /// Class Logger.

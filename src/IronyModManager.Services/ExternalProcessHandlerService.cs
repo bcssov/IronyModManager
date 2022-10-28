@@ -4,7 +4,7 @@
 // Created          : 07-11-2022
 //
 // Last Modified By : Mario
-// Last Modified On : 10-26-2022
+// Last Modified On : 10-28-2022
 // ***********************************************************************
 // <copyright file="ExternalProcessHandlerService.cs" company="Mario">
 //     Mario
@@ -90,7 +90,7 @@ namespace IronyModManager.Services
                 return false;
             }
             var options = DIResolver.Get<IDomainConfiguration>().GetOptions();
-            if (!options.Steam.UseGameLauncher)
+            if (!options.Steam.UseGameHandler)
             {
                 var useLegacyMethod = options.Steam.UseLegacyLaunchMethod;
                 if (useLegacyMethod)
@@ -106,8 +106,8 @@ namespace IronyModManager.Services
             }
             else
             {
-                ProcessRunner.EnsurePermissions(options.Steam.GameLauncherPath);
-                ProcessRunner.RunExternalProcess(options.Steam.GameLauncherPath, options.Steam.UseLegacyLaunchMethod ? $"-a -i {game.SteamAppId}" : $"-i {game.SteamAppId}", true);
+                ProcessRunner.EnsurePermissions(options.Steam.GameHandlerPath);
+                ProcessRunner.RunExternalProcess(options.Steam.GameHandlerPath, options.Steam.UseLegacyLaunchMethod ? $"-a -i {game.SteamAppId}" : $"-i {game.SteamAppId}", true);
                 return true;
             }
         }

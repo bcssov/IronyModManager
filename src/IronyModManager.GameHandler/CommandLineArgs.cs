@@ -1,10 +1,10 @@
 ﻿// ***********************************************************************
-// Assembly         : IronyModManager.GameLauncher
+// Assembly         : IronyModManager.GameHandler
 // Author           : Mario
 // Created          : 10-26-2022
 //
 // Last Modified By : Mario
-// Last Modified On : 10-26-2022
+// Last Modified On : 10-28-2022
 // ***********************************************************************
 // <copyright file="CommandLineArgs.cs" company="Mario">
 //     Mario
@@ -16,7 +16,7 @@ using System.Collections.Generic;
 using System.Linq;
 using CommandLine;
 
-namespace IronyModManager.GameLauncher
+namespace IronyModManager.GameHandler
 {
     /// <summary>
     /// Class CommandLineArgs.

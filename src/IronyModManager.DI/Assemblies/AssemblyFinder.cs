@@ -4,7 +4,7 @@
 // Created          : 01-12-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 10-26-2022
+// Last Modified On : 10-28-2022
 // ***********************************************************************
 // <copyright file="AssemblyFinder.cs" company="Mario">
 //     Mario
@@ -31,7 +31,7 @@ namespace IronyModManager.DI.Assemblies
         /// <summary>
         /// The excluded assemblies
         /// </summary>
-        private static readonly string[] ExcludedAssemblies = new string[] { "IronyModManager.Updater", "IronyModManager.GameLauncher" };
+        private static readonly string[] ExcludedAssemblies = new string[] { "IronyModManager.Updater", "IronyModManager.GameHandler" };
 
         #endregion Fields
 

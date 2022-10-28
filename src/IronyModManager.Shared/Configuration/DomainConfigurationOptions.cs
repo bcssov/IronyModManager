@@ -4,7 +4,7 @@
 // Created          : 07-24-2022
 //
 // Last Modified By : Mario
-// Last Modified On : 10-26-2022
+// Last Modified On : 10-28-2022
 // ***********************************************************************
 // <copyright file="DomainConfigurationOptions.cs" company="Mario">
 //     Mario
@@ -85,16 +85,16 @@ namespace IronyModManager.Shared.Configuration
         #region Properties
 
         /// <summary>
-        /// Gets or sets the game launcher path.
+        /// Gets or sets the game handler path.
         /// </summary>
-        /// <value>The game launcher path.</value>
-        public string GameLauncherPath { get; set; }
+        /// <value>The game handler path.</value>
+        public string GameHandlerPath { get; set; }
 
         /// <summary>
-        /// Gets or sets a value indicating whether [use game launcher].
+        /// Gets or sets a value indicating whether [use game handler].
         /// </summary>
-        /// <value><c>true</c> if [use game launcher]; otherwise, <c>false</c>.</value>
-        public bool UseGameLauncher { get; set; }
+        /// <value><c>true</c> if [use game handler]; otherwise, <c>false</c>.</value>
+        public bool UseGameHandler { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether [use legacy launch method].
