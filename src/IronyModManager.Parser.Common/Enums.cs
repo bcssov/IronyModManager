@@ -4,7 +4,7 @@
 // Created          : 01-28-2022
 //
 // Last Modified By : Mario
-// Last Modified On : 01-29-2022
+// Last Modified On : 10-28-2022
 // ***********************************************************************
 // <copyright file="Enums.cs" company="Mario">
 //     Mario
@@ -17,6 +17,22 @@ using System.Linq;
 
 namespace IronyModManager.Parser.Common
 {
+    /// <summary>
+    /// Enum DescriptorModType
+    /// </summary>
+    public enum DescriptorModType
+    {
+        /// <summary>
+        /// The descriptor mod
+        /// </summary>
+        DescriptorMod,
+
+        /// <summary>
+        /// The json metadata
+        /// </summary>
+        JsonMetadata
+    }
+
     /// <summary>
     /// Enum ValidationType
     /// </summary>

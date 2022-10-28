@@ -4,7 +4,7 @@
 // Created          : 02-24-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 09-18-2022
+// Last Modified On : 10-28-2022
 // ***********************************************************************
 // <copyright file="ModService.cs" company="Mario">
 //     Mario
@@ -405,20 +405,20 @@ namespace IronyModManager.Services
             }
             var mods = GetInstalledModsInternal(game, false);
             var descriptors = new List<IModInstallationResult>();
-            var userDirectoryMods = GetAllModDescriptors(Path.Combine(game.UserDirectory, Shared.Constants.ModDirectory), ModSource.Local);
+            var userDirectoryMods = GetAllModDescriptors(Path.Combine(game.UserDirectory, Shared.Constants.ModDirectory), ModSource.Local, game.ModDestriptorType);
             if (userDirectoryMods?.Count() > 0)
             {
                 descriptors.AddRange(userDirectoryMods);
             }
             if (!string.IsNullOrWhiteSpace(game.CustomModDirectory))
             {
-                var customMods = GetAllModDescriptors(GetModDirectoryRootPath(game), ModSource.Local);
+                var customMods = GetAllModDescriptors(GetModDirectoryRootPath(game), ModSource.Local, game.ModDestriptorType);
                 if (customMods != null && customMods.Any())
                 {
                     descriptors.AddRange(customMods);
                 }
             }
-            var workshopDirectoryMods = game.WorkshopDirectory.SelectMany(p => GetAllModDescriptors(p, ModSource.Steam));
+            var workshopDirectoryMods = game.WorkshopDirectory.SelectMany(p => GetAllModDescriptors(p, ModSource.Steam, game.ModDestriptorType));
             if (workshopDirectoryMods.Any())
             {
                 descriptors.AddRange(workshopDirectoryMods);
@@ -675,8 +675,9 @@ namespace IronyModManager.Services
         /// </summary>
         /// <param name="path">The path.</param>
         /// <param name="modSource">The mod source.</param>
-        /// <returns>IEnumerable&lt;IMod&gt;.</returns>
-        protected virtual IEnumerable<IModInstallationResult> GetAllModDescriptors(string path, ModSource modSource)
+        /// <param name="modDescriptorType">Type of the mod descriptor.</param>
+        /// <returns>IEnumerable&lt;IModInstallationResult&gt;.</returns>
+        protected virtual IEnumerable<IModInstallationResult> GetAllModDescriptors(string path, ModSource modSource, ModDescriptorType modDescriptorType)
         {
             var files = Directory.Exists(path) ? Directory.EnumerateFiles(path, $"*{Shared.Constants.ZipExtension}").Union(Directory.EnumerateFiles(path, $"*{Shared.Constants.BinExtension}")) : Array.Empty<string>();
             var directories = Directory.Exists(path) ? Directory.EnumerateDirectories(path) : Array.Empty<string>();
@@ -726,7 +727,7 @@ namespace IronyModManager.Services
                             return;
                         }
                     }
-                    var mod = Mapper.Map<IMod>(ModParser.Parse(fileInfo.Content));
+                    var mod = Mapper.Map<IMod>(ModParser.Parse(fileInfo.Content, MapDescriptorModType(modDescriptorType)));
                     mod.Name = FormatPrefixModName(modNamePrefix, mod.Name);
                     if (!string.IsNullOrWhiteSpace(modNamePrefix) && mod.Dependencies != null && mod.Dependencies.Any())
                     {

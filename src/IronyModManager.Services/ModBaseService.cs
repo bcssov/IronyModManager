@@ -4,7 +4,7 @@
 // Created          : 04-07-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 07-18-2022
+// Last Modified On : 10-28-2022
 // ***********************************************************************
 // <copyright file="ModBaseService.cs" company="Mario">
 //     Mario
@@ -285,10 +285,7 @@ namespace IronyModManager.Services
                         if (uniqueDefinitions.Count() == 1)
                         {
                             var definition = uniqueDefinitions.FirstOrDefault(p => !p.IsFromGame);
-                            if (definition == null)
-                            {
-                                definition = uniqueDefinitions.FirstOrDefault();
-                            }
+                            definition ??= uniqueDefinitions.FirstOrDefault();
                             result.Definition = definition;
                             result.FileName = definition.File;
                         }
@@ -364,10 +361,7 @@ namespace IronyModManager.Services
                             if (uniqueDefinitions.Count == 1 && (overrideSkipped || filteredGameDefinitions))
                             {
                                 var definition = definitionEvals.FirstOrDefault(p => !p.Definition.IsFromGame);
-                                if (definition == null)
-                                {
-                                    definition = definitionEvals.FirstOrDefault();
-                                }
+                                definition ??= definitionEvals.FirstOrDefault();
                                 result.Definition = definition.Definition;
                                 result.FileName = definition.FileName;
                                 if (overrideSkipped)
@@ -543,10 +537,7 @@ namespace IronyModManager.Services
         /// <returns>IEnumerable&lt;IMod&gt;.</returns>
         protected virtual IEnumerable<IMod> GetCollectionMods(IEnumerable<IMod> mods = null, string collectionName = Shared.Constants.EmptyParam)
         {
-            if (mods == null)
-            {
-                mods = GetInstalledModsInternal(GameService.GetSelected(), false);
-            }
+            mods ??= GetInstalledModsInternal(GameService.GetSelected(), false);
             var collectionMods = new List<IMod>();
             var collections = GetAllModCollectionsInternal();
             if (collections?.Count() > 0)
@@ -613,7 +604,7 @@ namespace IronyModManager.Services
                 {
                     foreach (var installedMod in installedMods.Where(p => p.Content.Any()))
                     {
-                        var mod = Mapper.Map<IMod>(ModParser.Parse(installedMod.Content));
+                        var mod = Mapper.Map<IMod>(ModParser.Parse(installedMod.Content, MapDescriptorModType(game.ModDestriptorType)));
                         if (ignorePatchMods && IsPatchModInternal(mod))
                         {
                             continue;
@@ -788,6 +779,20 @@ namespace IronyModManager.Services
                 definition.ValueType != ValueType.Namespace &&
                 definition.ValueType != ValueType.Invalid &&
                 definition.ValueType != ValueType.EmptyFile;
+        }
+
+        /// <summary>
+        /// Maps the type of the descriptor mod.
+        /// </summary>
+        /// <param name="modDescriptorType">Type of the mod descriptor.</param>
+        /// <returns>Parser.Common.DescriptorModType.</returns>
+        protected virtual Parser.Common.DescriptorModType MapDescriptorModType(ModDescriptorType modDescriptorType)
+        {
+            return modDescriptorType switch
+            {
+                ModDescriptorType.JsonMetadata => Parser.Common.DescriptorModType.JsonMetadata,
+                _ => Parser.Common.DescriptorModType.DescriptorMod,
+            };
         }
 
         /// <summary>
