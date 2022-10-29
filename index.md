@@ -6,11 +6,13 @@ Irony Mod Manager is a new advanced mod manager for Paradox Games, it started ou
 * Hearts of Iron IV
 * Imperator Rome
 * Stellaris
+* Victoria 3
 
 Check out the detailed overview on the [wiki](https://github.com/bcssov/IronyModManager/wiki).
 
 ### Download
 * Latest stable version: [v1.23.59](https://github.com/bcssov/IronyModManager/releases/tag/v1.23.59)
+* Latest alpha version: [v1.24.59-alpha](https://github.com/bcssov/IronyModManager/releases/tag/v1.24.59-alpha)
 
 ### Discord
 [https://discord.gg/t9JmY8KFrV](https://discord.gg/t9JmY8KFrV)
