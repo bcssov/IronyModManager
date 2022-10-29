@@ -293,7 +293,7 @@ namespace IronyModManager.Services.Tests
                 Type = "Should_create_file_merge_mod",
                 UserDirectory = "C:\\Users\\Fake",
                 WorkshopDirectory = new List<string>() { "C:\\fake" },
-                CustomModDirectory = string.Empty
+                CustomModDirectory = string.Empty,
             });
             var collections = new List<IModCollection>()
             {

@@ -4,7 +4,7 @@
 // Created          : 03-31-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 08-01-2022
+// Last Modified On : 10-29-2022
 // ***********************************************************************
 // <copyright file="IModWriter.cs" company="Mario">
 //     Mario
@@ -59,6 +59,14 @@ namespace IronyModManager.IO.Common.Mods
         /// <param name="parameters">The parameters.</param>
         /// <returns>Task&lt;System.Boolean&gt;.</returns>
         Task<bool> DescriptorExistsAsync(ModWriterParameters parameters);
+
+        /// <summary>
+        /// Formats the name of the prefix mod.
+        /// </summary>
+        /// <param name="prefix">The prefix.</param>
+        /// <param name="name">The name.</param>
+        /// <returns>System.String.</returns>
+        string FormatPrefixModName(string prefix, string name);
 
         /// <summary>
         /// Mods the directory exists.

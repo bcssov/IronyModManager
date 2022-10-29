@@ -726,12 +726,16 @@ namespace IronyModManager.Services
 
             string readModPrefix(string path)
             {
-                var fileInfo = Reader.GetFileInfo(path, Shared.Constants.ModNamePrefixOverride);
-                if (fileInfo == null)
+                if (modDescriptorType == ModDescriptorType.DescriptorMod)
                 {
-                    return string.Empty;
+                    var fileInfo = Reader.GetFileInfo(path, Shared.Constants.ModNamePrefixOverride);
+                    if (fileInfo == null)
+                    {
+                        return string.Empty;
+                    }
+                    return fileInfo.Content.FirstOrDefault();
                 }
-                return fileInfo.Content.FirstOrDefault();
+                return string.Empty;
             }
 
             void parseModFiles(string path, ModSource source, bool isDirectory, string modNamePrefix)
@@ -761,12 +765,12 @@ namespace IronyModManager.Services
                         }
                     }
                     var mod = Mapper.Map<IMod>(ModParser.Parse(fileInfo.Content, MapDescriptorModType(modDescriptorType)));
-                    mod.Name = FormatPrefixModName(modNamePrefix, mod.Name);
+                    mod.Name = ModWriter.FormatPrefixModName(modNamePrefix, mod.Name);
                     if (!string.IsNullOrWhiteSpace(modNamePrefix) && mod.Dependencies != null && mod.Dependencies.Any())
                     {
                         var dependencies = mod.Dependencies;
                         var newDependencies = new List<string>();
-                        dependencies.ToList().ForEach(p => newDependencies.Add(FormatPrefixModName(modNamePrefix, p)));
+                        dependencies.ToList().ForEach(p => newDependencies.Add(ModWriter.FormatPrefixModName(modNamePrefix, p)));
                         mod.Dependencies = newDependencies;
                     }
                     mod.FileName = path.Replace("\\", "/");

@@ -65,6 +65,11 @@ namespace IronyModManager.IO.Mods
         private readonly IMessageBus messageBus;
 
         /// <summary>
+        /// The mod writer
+        /// </summary>
+        private readonly IModWriter modWriter;
+
+        /// <summary>
         /// The paradox importer
         /// </summary>
         private readonly ParadoxImporter paradoxImporter;
@@ -101,10 +106,11 @@ namespace IronyModManager.IO.Mods
         /// <summary>
         /// Initializes a new instance of the <see cref="ModCollectionExporter" /> class.
         /// </summary>
+        /// <param name="modWriter">The mod writer.</param>
         /// <param name="logger">The logger.</param>
         /// <param name="messageBus">The message bus.</param>
         /// <param name="mapper">The mapper.</param>
-        public ModCollectionExporter(ILogger logger, IMessageBus messageBus, IMapper mapper)
+        public ModCollectionExporter(IModWriter modWriter, ILogger logger, IMessageBus messageBus, IMapper mapper)
         {
             paradoxosImporter = new ParadoxosImporter(logger);
             paradoxImporter = new ParadoxImporter(logger);
@@ -115,6 +121,7 @@ namespace IronyModManager.IO.Mods
             this.logger = logger;
             this.messageBus = messageBus;
             this.mapper = mapper;
+            this.modWriter = modWriter;
         }
 
         #endregion Constructors
@@ -126,8 +133,13 @@ namespace IronyModManager.IO.Mods
         /// </summary>
         /// <param name="parameters">The parameters.</param>
         /// <returns>Task&lt;System.Boolean&gt;.</returns>
+        /// <exception cref="System.ArgumentException">Invalid descriptor type</exception>
         public async Task<bool> ExportAsync(ModCollectionExporterParams parameters)
         {
+            if (parameters.DescriptorType == DescriptorType.None)
+            {
+                throw new ArgumentException("Invalid descriptor type");
+            }
             double processed = 0;
             double previousProgress = 0;
             void saveProgress(object sender, SaveProgressEventArgs e)
@@ -152,6 +164,33 @@ namespace IronyModManager.IO.Mods
                     default:
                         break;
                 }
+            }
+            IMod cloneMod(IMod mod)
+            {
+                var newMod = DIResolver.Get<IMod>();
+                newMod.DescriptorFile = mod.DescriptorFile;
+                newMod.FileName = mod.FileName;
+                newMod.Name = modWriter.FormatPrefixModName(parameters.ModNameOverride, mod.Name);
+                newMod.Source = mod.Source;
+                newMod.Version = mod.Version;
+                newMod.FullPath = mod.FullPath;
+                newMod.RemoteId = mod.RemoteId;
+                newMod.Picture = mod.Picture;
+                newMod.ReplacePath = mod.ReplacePath;
+                newMod.Tags = mod.Tags;
+                newMod.UserDir = mod.UserDir;
+                newMod.Order = mod.Order;
+                var dependencies = mod.Dependencies;
+                if (dependencies != null && dependencies.Any())
+                {
+                    var newDependencies = new List<string>();
+                    foreach (var item in dependencies)
+                    {
+                        newDependencies.Add(modWriter.FormatPrefixModName(parameters.ModNameOverride, item));
+                    }
+                    newMod.Dependencies = newDependencies;
+                }
+                return newMod;
             }
 
             var ulimitBypass = DIResolver.Get<IDomainConfiguration>().GetOptions().OSXOptions.UseFileStreams;
@@ -198,9 +237,12 @@ namespace IronyModManager.IO.Mods
             }
             if ((parameters.ExportMods?.Any()).GetValueOrDefault())
             {
-                var prefixDataStream = new MemoryStream(Encoding.UTF8.GetBytes(parameters.ModNameOverride));
-                streams.Add(prefixDataStream);
-                zip.AddEntry(Path.Combine(Common.Constants.ModExportPath, Shared.Constants.ModNamePrefixOverride), prefixDataStream);
+                if (parameters.DescriptorType == DescriptorType.DescriptorMod)
+                {
+                    var prefixDataStream = new MemoryStream(Encoding.UTF8.GetBytes(parameters.ModNameOverride));
+                    streams.Add(prefixDataStream);
+                    zip.AddEntry(Path.Combine(Common.Constants.ModExportPath, Shared.Constants.ModNamePrefixOverride), prefixDataStream);
+                }
 
                 foreach (var mod in parameters.ExportMods)
                 {
@@ -211,32 +253,66 @@ namespace IronyModManager.IO.Mods
                         {
                             foreach (var item in files)
                             {
-                                var fs = new OnDemandFileStream(item, FileMode.Open, FileAccess.Read, FileShare.Read);
-                                var ms = new MemoryStream();
-                                await fs.CopyToAsync(ms);
                                 var file = Path.Combine(Common.Constants.ModExportPath, parameters.Mod.Name.GenerateShortFileNameHashId(4).GenerateValidFileName() + "_" + mod.Name.GenerateValidFileName().GenerateShortFileNameHashId(8), item.Replace(mod.FullPath, string.Empty).Trim('\\').Trim('/'));
-                                var entry = zip.AddEntry(file, ms);
-                                entry.AlternateEncoding = Encoding.UTF8;
-                                entry.AlternateEncodingUsage = ZipOption.AsNecessary;
-                                fs.Close();
-                                await fs.DisposeAsync();
-                                streams.Add(ms);
+                                if (item.EndsWith(Shared.Constants.DescriptorJsonMetadata) && parameters.DescriptorType == DescriptorType.JsonMetadata)
+                                {
+                                    var ms = new MemoryStream();
+                                    await modWriter.WriteDescriptorToStreamAsync(new ModWriterParameters()
+                                    {
+                                        Mod = cloneMod(mod),
+                                        DescriptorType = parameters.DescriptorType
+                                    }, ms, true);
+                                    ms.Seek(0, SeekOrigin.Begin);
+                                    var entry = zip.AddEntry(file, ms);
+                                    entry.AlternateEncoding = Encoding.UTF8;
+                                    entry.AlternateEncodingUsage = ZipOption.AsNecessary;
+                                    streams.Add(ms);
+                                }
+                                else
+                                {
+                                    var fs = new OnDemandFileStream(item, FileMode.Open, FileAccess.Read, FileShare.Read);
+                                    var ms = new MemoryStream();
+                                    await fs.CopyToAsync(ms);
+                                    var entry = zip.AddEntry(file, ms);
+                                    entry.AlternateEncoding = Encoding.UTF8;
+                                    entry.AlternateEncodingUsage = ZipOption.AsNecessary;
+                                    fs.Close();
+                                    await fs.DisposeAsync();
+                                    streams.Add(ms);
+                                }
                             }
                         }
                         else
                         {
                             foreach (var item in files)
                             {
-                                var fs = new OnDemandFileStream(item, FileMode.Open, FileAccess.Read, FileShare.Read);
                                 var file = Path.Combine(Common.Constants.ModExportPath, parameters.Mod.Name.GenerateShortFileNameHashId(4).GenerateValidFileName() + "_" + mod.Name.GenerateValidFileName().GenerateShortFileNameHashId(8), item.Replace(mod.FullPath, string.Empty).Trim('\\').Trim('/'));
-                                var entry = zip.AddEntry(file, fs);
-                                entry.AlternateEncoding = Encoding.UTF8;
-                                entry.AlternateEncodingUsage = ZipOption.AsNecessary;
-                                streams.Add(fs);
+                                if (item.EndsWith(Shared.Constants.DescriptorJsonMetadata) && parameters.DescriptorType == DescriptorType.JsonMetadata)
+                                {
+                                    var ms = new MemoryStream();
+                                    await modWriter.WriteDescriptorToStreamAsync(new ModWriterParameters()
+                                    {
+                                        Mod = cloneMod(mod),
+                                        DescriptorType = parameters.DescriptorType
+                                    }, ms, true);
+                                    ms.Seek(0, SeekOrigin.Begin);
+                                    var entry = zip.AddEntry(file, ms);
+                                    entry.AlternateEncoding = Encoding.UTF8;
+                                    entry.AlternateEncodingUsage = ZipOption.AsNecessary;
+                                    streams.Add(ms);
+                                }
+                                else
+                                {
+                                    var fs = new OnDemandFileStream(item, FileMode.Open, FileAccess.Read, FileShare.Read);
+                                    var entry = zip.AddEntry(file, fs);
+                                    entry.AlternateEncoding = Encoding.UTF8;
+                                    entry.AlternateEncodingUsage = ZipOption.AsNecessary;
+                                    streams.Add(fs);
+                                }
                             }
                         }
                     }
-                    else if (File.Exists(mod.FullPath))
+                    else if (File.Exists(mod.FullPath) && parameters.DescriptorType == DescriptorType.DescriptorMod) // Zips not allowed in json metadata type games (vicky 3)
                     {
                         if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX) && !ulimitBypass)
                         {

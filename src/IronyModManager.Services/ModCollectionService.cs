@@ -219,7 +219,7 @@ namespace IronyModManager.Services
             {
                 parameters.ExportMods = GetCollectionMods(collectionName: modCollection.Name);
                 var prefixModNames = new List<string>();
-                collection.ModNames.ToList().ForEach(p => prefixModNames.Add(FormatPrefixModName(modNameOverride, p)));
+                collection.ModNames.ToList().ForEach(p => prefixModNames.Add(ModWriter.FormatPrefixModName(modNameOverride, p)));
                 collection.ModNames = prefixModNames;
             }
             return modCollectionExporter.ExportAsync(parameters);

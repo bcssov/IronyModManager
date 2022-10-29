@@ -36,6 +36,7 @@ using IronyModManager.Storage.Common;
 using IronyModManager.Tests.Common;
 using Moq;
 using Xunit;
+using static IronyModManager.Services.DLCService;
 
 namespace IronyModManager.Services.Tests
 {
@@ -105,7 +106,7 @@ namespace IronyModManager.Services.Tests
                 Path = "test"
             } };
             var cache = new Cache();
-            cache.Set(new CacheAddParameters<List<IDLC>>() { Region = "DLC", Key = "Should_return_dlc_object_from_cache", Value = dlcs });
+            cache.Set(new CacheAddParameters<DLCCacheHolder>() { Region = "DLC", Key = "Should_return_dlc_object_from_cache", Value = new DLCCacheHolder(dlcs, AppDomain.CurrentDomain.BaseDirectory + "\\test.exe") });
 
             var service = new DLCService(null, cache, null, null, null, null);
             var result = await service.GetAsync(new Game()
@@ -129,7 +130,7 @@ namespace IronyModManager.Services.Tests
                 Path = "test"
             } };
             var cache = new Cache();
-            cache.Set(new CacheAddParameters<List<IDLC>>() { Region = "DLC", Key = "Should_return_dlc_object_from_cache_when_exe_path_in_subfolder", Value = dlcs });            
+            cache.Set(new CacheAddParameters<DLCCacheHolder>() { Region = "DLC", Key = "Should_return_dlc_object_from_cache_when_exe_path_in_subfolder", Value = new DLCCacheHolder(dlcs, AppDomain.CurrentDomain.BaseDirectory + "\\subfolder\\test.exe") });
 
             var service = new DLCService(null, cache, null, null, null, null);
             var result = await service.GetAsync(new Game()

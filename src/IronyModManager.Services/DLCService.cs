@@ -131,7 +131,7 @@ namespace IronyModManager.Services
             if (game != null)
             {
                 var cached = cache.Get<DLCCacheHolder>(new CacheGetParameters() { Region = CacheRegion, Key = game.Type });
-                var exeLoc = string.IsNullOrWhiteSpace(game.ExecutableLocation) ? game.ExecutableLocation : string.Empty;
+                var exeLoc = !string.IsNullOrWhiteSpace(game.ExecutableLocation) ? game.ExecutableLocation : string.Empty;
                 if (cached != null && cached.GameExe.Equals(exeLoc))
                 {
                     return Task.FromResult((IReadOnlyCollection<IDLC>)cached.DLC);
@@ -216,12 +216,12 @@ namespace IronyModManager.Services
         /// <summary>
         /// Class DLCCacheHolder.
         /// </summary>
-        private class DLCCacheHolder
+        public class DLCCacheHolder
         {
             #region Constructors
 
             /// <summary>
-            /// Initializes a new instance of the <see cref="DLCCacheHolder"/> class.
+            /// Initializes a new instance of the <see cref="DLCCacheHolder" /> class.
             /// </summary>
             /// <param name="dlc">The DLC.</param>
             /// <param name="gameExe">The game executable.</param>

@@ -186,6 +186,21 @@ namespace IronyModManager.IO.Mods
         }
 
         /// <summary>
+        /// Formats the name of the prefix mod.
+        /// </summary>
+        /// <param name="prefix">The prefix.</param>
+        /// <param name="name">The name.</param>
+        /// <returns>System.String.</returns>
+        public string FormatPrefixModName(string prefix, string name)
+        {
+            if (!string.IsNullOrWhiteSpace(prefix))
+            {
+                return $"{prefix}{name}";
+            }
+            return name;
+        }
+
+        /// <summary>
         /// Mods the directory exists.
         /// </summary>
         /// <param name="parameters">The parameters.</param>
@@ -467,6 +482,13 @@ namespace IronyModManager.IO.Mods
             #region Properties
 
             /// <summary>
+            /// Gets or sets the game custom data.
+            /// </summary>
+            /// <value>The game custom data.</value>
+            [JsonProperty("game_custom_data", NullValueHandling = NullValueHandling.Include)]
+            public Dictionary<string, string> GameCustomData { get; set; }
+
+            /// <summary>
             /// Gets or sets the identifier.
             /// </summary>
             /// <value>The identifier.</value>
@@ -535,9 +557,6 @@ namespace IronyModManager.IO.Mods
             /// <value>The version.</value>
             [JsonProperty("version", NullValueHandling = NullValueHandling.Include)]
             public string Version { get; set; }
-
-            [JsonProperty("game_custom_data", NullValueHandling = NullValueHandling.Include)]
-            public Dictionary<string, string> GameCustomData { get; set; }
 
             #endregion Properties
         }

@@ -456,21 +456,6 @@ namespace IronyModManager.Services
         }
 
         /// <summary>
-        /// Formats the name of the prefix mod.
-        /// </summary>
-        /// <param name="prefix">The prefix.</param>
-        /// <param name="name">The name.</param>
-        /// <returns>System.String.</returns>
-        protected virtual string FormatPrefixModName(string prefix, string name)
-        {
-            if (!string.IsNullOrWhiteSpace(prefix))
-            {
-                return $"{prefix}{name}";
-            }
-            return name;
-        }
-
-        /// <summary>
         /// Generates the name of the collection patch.
         /// </summary>
         /// <param name="collectionName">Name of the collection.</param>

@@ -461,7 +461,7 @@ namespace IronyModManager.Services
                         DescriptorType = MapDescriptorType(game.ModDescriptorType)
                     }, ms, true);
                     ms.Seek(0, SeekOrigin.Begin);
-                    if (game.ModDescriptorType == ModDescriptorType.JsonMetadata)
+                    if (game.ModDescriptorType == ModDescriptorType.DescriptorMod)
                     {
                         modMergeCompressExporter.AddFile(new ModMergeCompressExporterParameters()
                         {
