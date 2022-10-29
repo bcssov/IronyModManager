@@ -48,7 +48,7 @@
                                 <Button Content="{Binding DefaultWithoutLocalizationMode}" Command="{Binding DefaultWithoutLocalizationModeCommand}"
                                         Grid.Row="4" Grid.Column="0"
                                         HorizontalAlignment="Stretch" VerticalAlignment="Stretch" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"
-                                        IsVisible="{Binding DefaultWithoutLocalizationModeWVisible}"></Button>
+                                        IsVisible="{Binding DefaultWithoutLocalizationModeVisible}"></Button>
                                 <Button Content="{Binding AdvancedMode}" Command="{Binding AdvancedModeCommand}"
                                         Grid.Row="5" Grid.Column="0"
                                         HorizontalAlignment="Stretch" VerticalAlignment="Stretch" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"

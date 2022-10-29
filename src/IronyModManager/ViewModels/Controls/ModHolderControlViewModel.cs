@@ -4,7 +4,7 @@
 // Created          : 02-29-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 10-27-2022
+// Last Modified On : 10-29-2022
 // ***********************************************************************
 // <copyright file="ModHolderControlViewModel.cs" company="Mario">
 //     Mario
@@ -422,10 +422,10 @@ namespace IronyModManager.ViewModels.Controls
         public virtual ReactiveCommand<Unit, Unit> DefaultWithoutLocalizationModeCommand { get; protected set; }
 
         /// <summary>
-        /// Gets or sets a value indicating whether [default without localization mode w visible].
+        /// Gets or sets a value indicating whether [default without localization mode visible].
         /// </summary>
-        /// <value><c>true</c> if [default without localization mode w visible]; otherwise, <c>false</c>.</value>
-        public virtual bool DefaultWithoutLocalizationModeWVisible { get; protected set; }
+        /// <value><c>true</c> if [default without localization mode visible]; otherwise, <c>false</c>.</value>
+        public virtual bool DefaultWithoutLocalizationModeVisible { get; protected set; }
 
         /// <summary>
         /// Gets or sets the installed mods.
@@ -824,35 +824,35 @@ namespace IronyModManager.ViewModels.Controls
                             case PatchStateMode.Default:
                                 AdvancedModeVisible = false;
                                 DefaultModeVisible = true;
-                                DefaultWithoutLocalizationModeWVisible = false;
+                                DefaultWithoutLocalizationModeVisible = false;
                                 AdvancedWithoutLocalizationModeVisible = false;
                                 break;
 
                             case PatchStateMode.Advanced:
                                 AdvancedModeVisible = true;
                                 DefaultModeVisible = false;
-                                DefaultWithoutLocalizationModeWVisible = false;
+                                DefaultWithoutLocalizationModeVisible = false;
                                 AdvancedWithoutLocalizationModeVisible = false;
                                 break;
 
                             case PatchStateMode.DefaultWithoutLocalization:
                                 AdvancedModeVisible = false;
                                 DefaultModeVisible = false;
-                                DefaultWithoutLocalizationModeWVisible = true;
+                                DefaultWithoutLocalizationModeVisible = true;
                                 AdvancedWithoutLocalizationModeVisible = false;
                                 break;
 
                             case PatchStateMode.AdvancedWithoutLocalization:
                                 AdvancedModeVisible = false;
                                 DefaultModeVisible = false;
-                                DefaultWithoutLocalizationModeWVisible = false;
+                                DefaultWithoutLocalizationModeVisible = false;
                                 AdvancedWithoutLocalizationModeVisible = true;
                                 break;
 
                             default:
                                 AdvancedModeVisible = true;
                                 DefaultModeVisible = true;
-                                DefaultWithoutLocalizationModeWVisible = true;
+                                DefaultWithoutLocalizationModeVisible = true;
                                 AdvancedWithoutLocalizationModeVisible = true;
                                 break;
                         }
@@ -861,6 +861,8 @@ namespace IronyModManager.ViewModels.Controls
                     {
                         AdvancedModeVisible = false;
                         DefaultModeVisible = false;
+                        AdvancedWithoutLocalizationModeVisible = false;
+                        DefaultWithoutLocalizationModeVisible = false;
                     }
                     await TriggerOverlayAsync(id, false);
                     await Task.Delay(50);
