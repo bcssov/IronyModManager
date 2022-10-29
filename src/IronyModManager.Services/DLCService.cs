@@ -181,7 +181,8 @@ namespace IronyModManager.Services
                 }
                 var disabledDLC = await dlcExporter.GetDisabledDLCAsync(new DLCParameters()
                 {
-                    RootPath = game.UserDirectory
+                    RootPath = game.UserDirectory,
+                    DescriptorType = MapDescriptorType(game.ModDescriptorType)
                 });
                 if ((disabledDLC?.Any()).GetValueOrDefault())
                 {
