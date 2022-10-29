@@ -4,17 +4,18 @@
 // Created          : 02-13-2021
 //
 // Last Modified By : Mario
-// Last Modified On : 02-13-2021
+// Last Modified On : 10-29-2022
 // ***********************************************************************
 // <copyright file="DLCFileReader.cs" company="Mario">
 //     Mario
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
-using System.Collections.Generic;
-using System.Linq;
 using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
+using IronyModManager.IO.Common.Readers;
 using IronyModManager.Shared;
 
 namespace IronyModManager.IO.Readers
@@ -48,5 +49,29 @@ namespace IronyModManager.IO.Readers
         public override string SearchPattern => "*.dlc";
 
         #endregion Properties
+
+        #region Methods
+
+        /// <summary>
+        /// Reads the specified path.
+        /// </summary>
+        /// <param name="path">The path.</param>
+        /// <param name="allowedPaths">The allowed paths.</param>
+        /// <param name="searchSubFolders">if set to <c>true</c> [search sub folders].</param>
+        /// <returns>IReadOnlyCollection&lt;IFileInfo&gt;.</returns>
+        public override IReadOnlyCollection<IFileInfo> Read(string path, IEnumerable<string> allowedPaths = null, bool searchSubFolders = true)
+        {
+            var result = ReadInternal(Directory.GetFiles(path, "*.json", SearchOption), path);
+            if (result != null && result.Any())
+            {
+                return result;
+            }
+            else
+            {
+                return base.Read(path, allowedPaths, searchSubFolders);
+            }
+        }
+
+        #endregion Methods
     }
 }

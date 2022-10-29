@@ -57,10 +57,21 @@ namespace IronyModManager.IO.Mods.Exporter
         {
             using var mutex = await writeLock.LockAsync();
 
-            var dlcPath = Path.Combine(parameters.RootPath, Constants.DLC_load_path);
-            var dLCLoad = await LoadPdxModelAsync<DLCLoad>(dlcPath) ?? new DLCLoad();
-            dLCLoad.DisabledDlcs = parameters.DLC.Select(p => p.Path).ToList();
-            var result = await WritePdxModelAsync(dLCLoad, dlcPath);
+            bool result = false;
+            if (parameters.DescriptorType == Common.DescriptorType.DescriptorMod)
+            {
+                var dlcPath = Path.Combine(parameters.RootPath, Constants.DLC_load_path);
+                var dLCLoad = await LoadPdxModelAsync<DLCLoad>(dlcPath) ?? new DLCLoad();
+                dLCLoad.DisabledDlcs = parameters.DLC.Select(p => p.Path).ToList();
+                result = await WritePdxModelAsync(dLCLoad, dlcPath);
+            }
+            else
+            {
+                var contentPath = Path.Combine(parameters.RootPath, Constants.Content_load_path);
+                var contentLoad = await LoadPdxModelAsync<ContentLoad>(contentPath) ?? new ContentLoad();
+                contentLoad.DisabledDLC = parameters.DLC.Select(p => new DisabledDLC() { ParadoxAppId = p.AppId }).ToList();
+                result = await WritePdxModelAsync(contentLoad, contentPath);
+            }
 
             mutex.Dispose();
 
@@ -96,17 +107,35 @@ namespace IronyModManager.IO.Mods.Exporter
         /// <returns>IReadOnlyCollection&lt;IDLCObject&gt;.</returns>
         public async Task<IReadOnlyCollection<IDLCObject>> GetDisabledDLCAsync(DLCParameters parameters)
         {
-            var dlcPath = Path.Combine(parameters.RootPath, Constants.DLC_load_path);
-            var dLCLoad = await LoadPdxModelAsync<DLCLoad>(dlcPath) ?? new DLCLoad();
-            if ((dLCLoad.DisabledDlcs?.Any()).GetValueOrDefault())
+            if (parameters.DescriptorType == Common.DescriptorType.DescriptorMod)
             {
-                var result = dLCLoad.DisabledDlcs.Select(p =>
+                var dlcPath = Path.Combine(parameters.RootPath, Constants.DLC_load_path);
+                var dLCLoad = await LoadPdxModelAsync<DLCLoad>(dlcPath) ?? new DLCLoad();
+                if ((dLCLoad.DisabledDlcs?.Any()).GetValueOrDefault())
                 {
-                    var model = DIResolver.Get<IDLCObject>();
-                    model.Path = p;
-                    return model;
-                }).ToList();
-                return result;
+                    var result = dLCLoad.DisabledDlcs.Select(p =>
+                    {
+                        var model = DIResolver.Get<IDLCObject>();
+                        model.Path = p;
+                        return model;
+                    }).ToList();
+                    return result;
+                }
+            }
+            else
+            {
+                var contentPath = Path.Combine(parameters.RootPath, Constants.Content_load_path);
+                var contentLoad = await LoadPdxModelAsync<ContentLoad>(contentPath) ?? new ContentLoad();
+                if ((contentLoad.DisabledDLC?.Any()).GetValueOrDefault())
+                {
+                    var result = contentLoad.DisabledDLC.Select(p =>
+                    {
+                        var model = DIResolver.Get<IDLCObject>();
+                        model.AppId = p.ParadoxAppId;
+                        return model;
+                    }).ToList();
+                    return result;
+                }
             }
             return null;
         }

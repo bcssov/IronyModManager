@@ -4,7 +4,7 @@
 // Created          : 02-13-2021
 //
 // Last Modified By : Mario
-// Last Modified On : 07-18-2022
+// Last Modified On : 10-29-2022
 // ***********************************************************************
 // <copyright file="BaseSpecializedDiskReader.cs" company="Mario">
 //     Mario
@@ -126,7 +126,17 @@ namespace IronyModManager.IO.Readers
         /// <returns>IReadOnlyCollection&lt;IFileInfo&gt;.</returns>
         public virtual IReadOnlyCollection<IFileInfo> Read(string path, IEnumerable<string> allowedPaths = null, bool searchSubFolders = true)
         {
-            var files = Directory.GetFiles(path, SearchPattern, SearchOption);
+            return ReadInternal(Directory.GetFiles(path, SearchPattern, SearchOption), path);
+        }
+
+        /// <summary>
+        /// Reads the internal.
+        /// </summary>
+        /// <param name="files">The files.</param>
+        /// <param name="path">The path.</param>
+        /// <returns>IReadOnlyCollection&lt;IFileInfo&gt;.</returns>
+        protected virtual IReadOnlyCollection<IFileInfo> ReadInternal(string[] files, string path)
+        {
             if (files?.Length > 0)
             {
                 var result = new List<IFileInfo>();

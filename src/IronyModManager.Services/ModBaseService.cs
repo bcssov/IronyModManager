@@ -20,7 +20,6 @@ using System.Text;
 using System.Threading.Tasks;
 using AutoMapper;
 using IronyModManager.DI;
-using IronyModManager.IO.Common;
 using IronyModManager.IO.Common.Mods;
 using IronyModManager.IO.Common.Readers;
 using IronyModManager.Models.Common;
@@ -794,34 +793,6 @@ namespace IronyModManager.Services
                 definition.ValueType != ValueType.Namespace &&
                 definition.ValueType != ValueType.Invalid &&
                 definition.ValueType != ValueType.EmptyFile;
-        }
-
-        /// <summary>
-        /// Maps the type of the descriptor mod.
-        /// </summary>
-        /// <param name="modDescriptorType">Type of the mod descriptor.</param>
-        /// <returns>Parser.Common.DescriptorModType.</returns>
-        protected virtual Parser.Common.DescriptorModType MapDescriptorModType(ModDescriptorType modDescriptorType)
-        {
-            return modDescriptorType switch
-            {
-                ModDescriptorType.JsonMetadata => Parser.Common.DescriptorModType.JsonMetadata,
-                _ => Parser.Common.DescriptorModType.DescriptorMod,
-            };
-        }
-
-        /// <summary>
-        /// Maps the type of the descriptor.
-        /// </summary>
-        /// <param name="modDescriptorType">Type of the mod descriptor.</param>
-        /// <returns>DescriptorType.</returns>
-        protected virtual DescriptorType MapDescriptorType(ModDescriptorType modDescriptorType)
-        {
-            return modDescriptorType switch
-            {
-                ModDescriptorType.JsonMetadata => DescriptorType.JsonMetadata,
-                _ => DescriptorType.DescriptorMod,
-            };
         }
 
         /// <summary>

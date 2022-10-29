@@ -4,7 +4,7 @@
 // Created          : 02-13-2021
 //
 // Last Modified By : Mario
-// Last Modified On : 02-13-2021
+// Last Modified On : 10-29-2022
 // ***********************************************************************
 // <copyright file="IDLCObject.cs" company="Mario">
 //     Mario
@@ -12,8 +12,8 @@
 // <summary></summary>
 // ***********************************************************************
 using System;
-using System.Linq;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace IronyModManager.Shared.Models
 {
@@ -23,6 +23,12 @@ namespace IronyModManager.Shared.Models
     public interface IDLCObject
     {
         #region Properties
+
+        /// <summary>
+        /// Gets or sets the application identifier.
+        /// </summary>
+        /// <value>The application identifier.</value>
+        string AppId { get; set; }
 
         /// <summary>
         /// Gets or sets the name.

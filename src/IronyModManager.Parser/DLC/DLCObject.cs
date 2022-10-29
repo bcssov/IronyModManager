@@ -4,16 +4,16 @@
 // Created          : 02-13-2021
 //
 // Last Modified By : Mario
-// Last Modified On : 02-13-2021
+// Last Modified On : 10-29-2022
 // ***********************************************************************
 // <copyright file="DLCObject.cs" company="Mario">
 //     Mario
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using System;
 using IronyModManager.Shared.Models;
 
 namespace IronyModManager.Parser.DLC
@@ -26,6 +26,12 @@ namespace IronyModManager.Parser.DLC
     public class DLCObject : IDLCObject
     {
         #region Properties
+
+        /// <summary>
+        /// Gets or sets the application identifier.
+        /// </summary>
+        /// <value>The application identifier.</value>
+        public virtual string AppId { get; set; }
 
         /// <summary>
         /// Gets or sets the name.
