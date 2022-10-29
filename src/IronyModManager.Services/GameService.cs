@@ -57,6 +57,11 @@ namespace IronyModManager.Services
         private const string SteamLaunchArgs = "steam://run/";
 
         /// <summary>
+        /// The game path resolver
+        /// </summary>
+        private readonly GameRootPathResolver gamePathResolver;
+
+        /// <summary>
         /// The message bus
         /// </summary>
         private readonly IMessageBus messageBus;
@@ -102,6 +107,7 @@ namespace IronyModManager.Services
             this.preferencesService = preferencesService;
             this.reader = reader;
             pathResolver = new PathResolver();
+            gamePathResolver = new GameRootPathResolver();
         }
 
         #endregion Constructors
@@ -120,12 +126,18 @@ namespace IronyModManager.Services
             {
                 return false;
             }
-            var basePath = Path.GetDirectoryName(game.ExecutableLocation);
-            var files = reader.GetFiles(basePath);
-            if (files != null && files.Any())
+            if (!string.IsNullOrWhiteSpace(game.ExecutableLocation))
             {
-                var reports = await ParseReportAsync(game, basePath, files);
-                return await reportExportService.ExportAsync(reports, path);
+                var basePath = gamePathResolver.GetPath(game);
+                if (!string.IsNullOrWhiteSpace(basePath))
+                {
+                    var files = reader.GetFiles(basePath);
+                    if (files != null && files.Any())
+                    {
+                        var reports = await ParseReportAsync(game, basePath, files);
+                        return await reportExportService.ExportAsync(reports, path);
+                    }
+                }
             }
             return false;
         }
