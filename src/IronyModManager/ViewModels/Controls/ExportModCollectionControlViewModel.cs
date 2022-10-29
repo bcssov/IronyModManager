@@ -4,7 +4,7 @@
 // Created          : 03-09-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 01-27-2022
+// Last Modified On : 10-29-2022
 // ***********************************************************************
 // <copyright file="ExportModCollectionControlViewModel.cs" company="Mario">
 //     Mario
@@ -19,6 +19,7 @@ using IronyModManager.Common.ViewModels;
 using IronyModManager.Implementation;
 using IronyModManager.Implementation.Actions;
 using IronyModManager.Localization.Attributes;
+using IronyModManager.Models.Common;
 using IronyModManager.Services.Common;
 using IronyModManager.Shared;
 using ReactiveUI;
@@ -298,6 +299,12 @@ namespace IronyModManager.ViewModels.Controls
         public virtual bool IsImportOpen { get; protected set; }
 
         /// <summary>
+        /// Gets or sets a value indicating whether [legacy export visible].
+        /// </summary>
+        /// <value><c>true</c> if [legacy export visible]; otherwise, <c>false</c>.</value>
+        public virtual bool LegacyExportVisible { get; protected set; }
+
+        /// <summary>
         /// Gets or sets a value indicating whether [show advanced features].
         /// </summary>
         /// <value><c>true</c> if [show advanced features]; otherwise, <c>false</c>.</value>
@@ -317,12 +324,14 @@ namespace IronyModManager.ViewModels.Controls
         }
 
         /// <summary>
-        /// Evals the advanced features visibility.
+        /// Evals the game specific visibility.
         /// </summary>
-        protected virtual void EvalAdvancedFeaturesVisibility()
+        /// <param name="game">The game.</param>
+        protected virtual void EvalGameSpecificVisibility(IGame game = null)
         {
-            var game = gameService.GetSelected();
-            ShowAdvancedFeatures = (game?.AdvancedFeatures) == Models.Common.GameAdvancedFeatures.Full;
+            game ??= gameService.GetSelected();
+            ShowAdvancedFeatures = (game?.AdvancedFeatures) == GameAdvancedFeatures.Full;
+            LegacyExportVisible = game != null && game.ModDescriptorType == ModDescriptorType.DescriptorMod;
         }
 
         /// <summary>
@@ -331,7 +340,7 @@ namespace IronyModManager.ViewModels.Controls
         /// <param name="disposables">The disposables.</param>
         protected override void OnActivated(CompositeDisposable disposables)
         {
-            EvalAdvancedFeaturesVisibility();
+            EvalGameSpecificVisibility();
 
             var allowModSelectionEnabled = this.WhenAnyValue(v => v.AllowModSelection);
 
@@ -426,10 +435,10 @@ namespace IronyModManager.ViewModels.Controls
         /// Called when [selected game changed].
         /// </summary>
         /// <param name="game">The game.</param>
-        protected override void OnSelectedGameChanged(Models.Common.IGame game)
+        protected override void OnSelectedGameChanged(IGame game)
         {
             base.OnSelectedGameChanged(game);
-            EvalAdvancedFeaturesVisibility();
+            EvalGameSpecificVisibility(game);
         }
 
         #endregion Methods

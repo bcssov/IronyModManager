@@ -4,7 +4,7 @@
 // Created          : 05-09-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 10-28-2022
+// Last Modified On : 10-29-2022
 // ***********************************************************************
 // <copyright file="ModifyCollectionControlViewModel.cs" company="Mario">
 //     Mario
@@ -43,6 +43,11 @@ namespace IronyModManager.ViewModels.Controls
     public class ModifyCollectionControlViewModel : BaseViewModel
     {
         #region Fields
+
+        /// <summary>
+        /// The game service
+        /// </summary>
+        private readonly IGameService gameService;
 
         /// <summary>
         /// The identifier generator
@@ -108,11 +113,6 @@ namespace IronyModManager.ViewModels.Controls
         /// The free space check handler
         /// </summary>
         private IDisposable freeSpaceCheckHandler = null;
-
-        /// <summary>
-        /// The game service
-        /// </summary>
-        private IGameService gameService;
 
         /// <summary>
         /// The mod compress progress handler
@@ -245,6 +245,10 @@ namespace IronyModManager.ViewModels.Controls
         /// <value><c>true</c> if this instance is merge open; otherwise, <c>false</c>.</value>
         public virtual bool IsMergeOpen { get; protected set; }
 
+        /// <summary>
+        /// Gets or sets a value indicating whether [merge allowed].
+        /// </summary>
+        /// <value><c>true</c> if [merge allowed]; otherwise, <c>false</c>.</value>
         public virtual bool MergeAllowed { get; protected set; }
 
         /// <summary>
@@ -379,10 +383,7 @@ namespace IronyModManager.ViewModels.Controls
         /// <param name="game">The game.</param>
         protected virtual void EvalGameSpecificVisibility(IGame game = null)
         {
-            if (game == null)
-            {
-                game = gameService.GetSelected();
-            }
+            game ??= gameService.GetSelected();
             if (game != null)
             {
                 MergeAllowed = game.SupportedMergeTypes.HasAnyFlag();

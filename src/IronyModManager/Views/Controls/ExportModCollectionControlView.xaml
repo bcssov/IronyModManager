@@ -24,7 +24,8 @@
                               HorizontalAlignment="Stretch" VerticalAlignment="Stretch" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"></Button>
                             <Button Content="{Binding ExportParadoxLauncherJson}" Command="{Binding ExportParadoxLauncherJsonCommand}"
                               Grid.Row="2" Grid.Column="0"
-                              HorizontalAlignment="Stretch" VerticalAlignment="Stretch" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"></Button>
+                              HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
+                              HorizontalContentAlignment="Center" VerticalContentAlignment="Center" IsVisible="{Binding LegacyExportVisible}"></Button>
                             <Button Content="{Binding ExportParadoxLauncherJson202110}" Command="{Binding ExportParadoxLauncherJson202110Command}"
                               Grid.Row="3" Grid.Column="0"
                               HorizontalAlignment="Stretch" VerticalAlignment="Stretch" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"></Button>
@@ -47,7 +48,7 @@
                         <Grid RowDefinitions="1*,1*,1*,1*,1*,1*" Background="{DynamicResource IronyBackgroundPopupBrush}">
                             <Button Content="{Binding ImportOtherParadoxos}" Command="{Binding ImportOtherParadoxosCommand}"
                               Grid.Row="0" Grid.Column="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
-                              HorizontalContentAlignment="Center" VerticalContentAlignment="Center"></Button>
+                              HorizontalContentAlignment="Center" VerticalContentAlignment="Center" IsVisible="{Binding LegacyExportVisible}"></Button>
                             <Button Content="{Binding ImportOtherParadox}" Command="{Binding ImportOtherParadoxCommand}"
                               Grid.Row="1" Grid.Column="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
                               HorizontalContentAlignment="Center" VerticalContentAlignment="Center"></Button>
