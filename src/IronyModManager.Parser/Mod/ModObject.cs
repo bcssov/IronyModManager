@@ -4,7 +4,7 @@
 // Created          : 02-22-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 12-07-2020
+// Last Modified On : 10-29-2022
 // ***********************************************************************
 // <copyright file="ModObject.cs" company="Mario">
 //     Mario
@@ -15,6 +15,7 @@ using System;
 using System.Collections.Generic;
 using IronyModManager.Shared;
 using IronyModManager.Shared.Models;
+using Newtonsoft.Json;
 
 namespace IronyModManager.Parser.Mod
 {
@@ -32,6 +33,7 @@ namespace IronyModManager.Parser.Mod
         /// </summary>
         /// <value>The dependencies.</value>
         [DescriptorProperty("dependencies")]
+        [JsonProperty("relationships")]
         public IEnumerable<string> Dependencies { get; set; }
 
         /// <summary>
@@ -46,6 +48,7 @@ namespace IronyModManager.Parser.Mod
         /// </summary>
         /// <value>The name.</value>
         [DescriptorProperty("name")]
+        [JsonProperty("name")]
         public string Name { get; set; }
 
         /// <summary>
@@ -60,6 +63,7 @@ namespace IronyModManager.Parser.Mod
         /// </summary>
         /// <value>The remote identifier.</value>
         [DescriptorProperty("remote_file_id")]
+        [JsonProperty("id")]
         public long? RemoteId { get; set; }
 
         /// <summary>
@@ -67,6 +71,7 @@ namespace IronyModManager.Parser.Mod
         /// </summary>
         /// <value>The replace path.</value>
         [DescriptorProperty("replace_path", true)]
+        [JsonProperty("replace_paths")]
         public IEnumerable<string> ReplacePath { get; set; }
 
         /// <summary>
@@ -74,6 +79,7 @@ namespace IronyModManager.Parser.Mod
         /// </summary>
         /// <value>The tags.</value>
         [DescriptorProperty("tags")]
+        [JsonProperty("tags")]
         public IEnumerable<string> Tags { get; set; }
 
         /// <summary>
@@ -81,6 +87,7 @@ namespace IronyModManager.Parser.Mod
         /// </summary>
         /// <value>The user dir.</value>
         [DescriptorProperty("user_dir", true)]
+        [JsonProperty("user_dir")]
         public IEnumerable<string> UserDir { get; set; }
 
         /// <summary>
@@ -88,6 +95,7 @@ namespace IronyModManager.Parser.Mod
         /// </summary>
         /// <value>The version.</value>
         [DescriptorProperty("supported_version")]
+        [JsonProperty("supported_game_version")]
         public string Version { get; set; }
 
         #endregion Properties

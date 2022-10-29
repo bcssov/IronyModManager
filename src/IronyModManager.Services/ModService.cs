@@ -679,7 +679,8 @@ namespace IronyModManager.Services
         /// <returns>IEnumerable&lt;IModInstallationResult&gt;.</returns>
         protected virtual IEnumerable<IModInstallationResult> GetAllModDescriptors(string path, ModSource modSource, ModDescriptorType modDescriptorType)
         {
-            var files = Directory.Exists(path) ? Directory.EnumerateFiles(path, $"*{Shared.Constants.ZipExtension}").Union(Directory.EnumerateFiles(path, $"*{Shared.Constants.BinExtension}")) : Array.Empty<string>();
+            // Json metadata doesn't support zips to ignore them
+            var files = Directory.Exists(path) && modDescriptorType == ModDescriptorType.DescriptorMod ? Directory.EnumerateFiles(path, $"*{Shared.Constants.ZipExtension}").Union(Directory.EnumerateFiles(path, $"*{Shared.Constants.BinExtension}")) : Array.Empty<string>();
             var directories = Directory.Exists(path) ? Directory.EnumerateDirectories(path) : Array.Empty<string>();
             var mods = new List<IModInstallationResult>();
 

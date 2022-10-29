@@ -4,7 +4,7 @@
 // Created          : 08-11-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 07-28-2022
+// Last Modified On : 10-29-2022
 // ***********************************************************************
 // <copyright file="SQLiteExporter.cs" company="Mario">
 //     Mario
@@ -185,11 +185,11 @@ namespace IronyModManager.IO.Mods.Exporter
                 var changes = await con.QueryAllAsync<Models.Paradox.v2.KnoxMigrations>();
                 if (changes != null)
                 {
-                    if (changes.Any(c => c.Name.Equals(Constants.SqlV4Id.Name, StringComparison.OrdinalIgnoreCase) && c.Id.Equals(Constants.SqlV4Id.Id)))
+                    if (changes.Any(c => c.Name.Equals(Constants.SqlV4Id.Name, StringComparison.OrdinalIgnoreCase)))
                     {
                         return Version.v4;
                     }
-                    if (changes.Any(c => c.Name.Equals(Constants.SqlV3Id.Name, StringComparison.OrdinalIgnoreCase) && c.Id.Equals(Constants.SqlV3Id.Id)))
+                    if (changes.Any(c => c.Name.Equals(Constants.SqlV3Id.Name, StringComparison.OrdinalIgnoreCase)))
                     {
                         return Version.v3;
                     }

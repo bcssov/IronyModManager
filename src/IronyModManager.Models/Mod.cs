@@ -4,7 +4,7 @@
 // Created          : 02-29-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 07-21-2022
+// Last Modified On : 10-29-2022
 // ***********************************************************************
 // <copyright file="Mod.cs" company="Mario">
 //     Mario
@@ -15,6 +15,7 @@ using System;
 using System.Collections.Generic;
 using IronyModManager.Models.Common;
 using IronyModManager.Shared;
+using Newtonsoft.Json;
 
 namespace IronyModManager.Models
 {
@@ -54,6 +55,7 @@ namespace IronyModManager.Models
         /// </summary>
         /// <value>The dependencies.</value>
         [DescriptorProperty("dependencies")]
+        [JsonProperty("relationships")]
         public virtual IEnumerable<string> Dependencies { get; set; }
 
         /// <summary>
@@ -110,6 +112,7 @@ namespace IronyModManager.Models
         /// </summary>
         /// <value>The name.</value>
         [DescriptorProperty("name")]
+        [JsonProperty("name")]
         public virtual string Name { get; set; }
 
         /// <summary>
@@ -129,6 +132,7 @@ namespace IronyModManager.Models
         /// Gets or sets the remote identifier.
         /// </summary>
         /// <value>The remote identifier.</value>
+        [JsonProperty("id")]
         [DescriptorProperty("remote_file_id")]
         public virtual long? RemoteId { get; set; }
 
@@ -137,6 +141,7 @@ namespace IronyModManager.Models
         /// </summary>
         /// <value>The replace path.</value>
         [DescriptorProperty("replace_path", true)]
+        [JsonProperty("replace_paths")]
         public virtual IEnumerable<string> ReplacePath { get; set; }
 
         /// <summary>
@@ -150,6 +155,7 @@ namespace IronyModManager.Models
         /// </summary>
         /// <value>The tags.</value>
         [DescriptorProperty("tags")]
+        [JsonProperty("tags")]
         public virtual IEnumerable<string> Tags { get; set; }
 
         /// <summary>
@@ -157,6 +163,7 @@ namespace IronyModManager.Models
         /// </summary>
         /// <value>The user dir.</value>
         [DescriptorProperty("user_dir", true)]
+        [JsonProperty("user_dir")]
         public virtual IEnumerable<string> UserDir { get; set; }
 
         /// <summary>
@@ -164,6 +171,7 @@ namespace IronyModManager.Models
         /// </summary>
         /// <value>The version.</value>
         [DescriptorProperty("supported_version")]
+        [JsonProperty("supported_game_version")]
         public virtual string Version
         {
             get
