@@ -128,7 +128,7 @@ namespace IronyModManager.Services
             }
             if (!string.IsNullOrWhiteSpace(game.ExecutableLocation))
             {
-                var basePath = gamePathResolver.GetPath(game);
+                var basePath = Path.GetDirectoryName(Path.Combine(gamePathResolver.GetPath(game), gamePathResolver.ResolveDLCDirectory(game.DLCContainer, GameRootPathResolver.DLCFolder)));
                 if (!string.IsNullOrWhiteSpace(basePath))
                 {
                     var files = reader.GetFiles(basePath);
@@ -343,10 +343,17 @@ namespace IronyModManager.Services
             {
                 return null;
             }
-            var basePath = Path.GetDirectoryName(game.ExecutableLocation);
-            var files = reader.GetFiles(basePath);
-            var currentReports = await ParseReportAsync(game, basePath, files);
-            return reportExportService.CompareReports(currentReports.ToList(), importedReports.ToList());
+            if (!string.IsNullOrWhiteSpace(game.ExecutableLocation))
+            {
+                var basePath = Path.GetDirectoryName(Path.Combine(gamePathResolver.GetPath(game), gamePathResolver.ResolveDLCDirectory(game.DLCContainer, GameRootPathResolver.DLCFolder)));
+                if (!string.IsNullOrWhiteSpace(basePath))
+                {
+                    var files = reader.GetFiles(basePath);
+                    var currentReports = await ParseReportAsync(game, basePath, files);
+                    return reportExportService.CompareReports(currentReports.ToList(), importedReports.ToList());
+                }
+            }
+            return null;
         }
 
         /// <summary>
