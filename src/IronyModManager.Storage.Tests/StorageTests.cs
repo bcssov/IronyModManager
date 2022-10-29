@@ -295,7 +295,7 @@ namespace IronyModManager.Storage.Tests
                 DLCContainer = "container",
                 GameIndexCacheVersion = 2,
                 GogAppId = 3,
-                ModDestriptorType = ModDescriptorType.DescriptorMod,
+                ModDescriptorType = ModDescriptorType.DescriptorMod,
                 SupportedMergeTypes = SupportedMergeTypes.Zip
             };
             storage.RegisterGame(game);
@@ -319,7 +319,7 @@ namespace IronyModManager.Storage.Tests
             dbMock.Games.FirstOrDefault(p => p.Name == key).DLCContainer.Should().Be("container");
             dbMock.Games.FirstOrDefault(p => p.Name == key).GameIndexCacheVersion.Should().Be(2);
             dbMock.Games.FirstOrDefault(p => p.Name == key).GogAppId.Should().Be(3);
-            dbMock.Games.FirstOrDefault(p => p.Name == key).ModDestriptorType.Should().Be(ModDescriptorType.DescriptorMod);
+            dbMock.Games.FirstOrDefault(p => p.Name == key).ModDescriptorType.Should().Be(ModDescriptorType.DescriptorMod);
             dbMock.Games.FirstOrDefault(p => p.Name == key).SupportedMergeTypes.HasFlag(SupportedMergeTypes.Zip).Should().BeTrue();
             dbMock.Games.FirstOrDefault(p => p.Name == key).SupportedMergeTypes.HasFlag(SupportedMergeTypes.Basic).Should().BeFalse();
         }
@@ -532,7 +532,7 @@ namespace IronyModManager.Storage.Tests
                 DLCContainer = "container",
                 GameIndexCacheVersion = 2,
                 GogAppId = 3,
-                ModDestriptorType = ModDescriptorType.DescriptorMod,
+                ModDescriptorType = ModDescriptorType.DescriptorMod,
                 SupportedMergeTypes = SupportedMergeTypes.Basic
             };
             storage.RegisterGame(game);
@@ -557,7 +557,7 @@ namespace IronyModManager.Storage.Tests
             result.FirstOrDefault(p => p.Name == key).DLCContainer.Should().Be("container");
             result.FirstOrDefault(p => p.Name == key).GameIndexCacheVersion.Should().Be(2);
             result.FirstOrDefault(p => p.Name == key).GogAppId.Should().Be(3);
-            result.FirstOrDefault(p => p.Name == key).ModDestriptorType.Should().Be(ModDescriptorType.DescriptorMod);
+            result.FirstOrDefault(p => p.Name == key).ModDescriptorType.Should().Be(ModDescriptorType.DescriptorMod);
             result.FirstOrDefault(p => p.Name == key).SupportedMergeTypes.HasFlag(SupportedMergeTypes.Zip).Should().BeFalse();
             result.FirstOrDefault(p => p.Name == key).SupportedMergeTypes.HasFlag(SupportedMergeTypes.Basic).Should().BeTrue();
         }

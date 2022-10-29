@@ -4,7 +4,7 @@
 // Created          : 04-07-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 10-28-2022
+// Last Modified On : 10-29-2022
 // ***********************************************************************
 // <copyright file="ModBaseService.cs" company="Mario">
 //     Mario
@@ -20,6 +20,7 @@ using System.Text;
 using System.Threading.Tasks;
 using AutoMapper;
 using IronyModManager.DI;
+using IronyModManager.IO.Common;
 using IronyModManager.IO.Common.Mods;
 using IronyModManager.IO.Common.Readers;
 using IronyModManager.Models.Common;
@@ -491,7 +492,14 @@ namespace IronyModManager.Services
         protected virtual IMod GeneratePatchModDescriptor(IEnumerable<IMod> allMods, IGame game, string patchName)
         {
             var mod = DIResolver.Get<IMod>();
-            mod.DescriptorFile = $"{Shared.Constants.ModDirectory}/{patchName}{Shared.Constants.ModExtension}";
+            if (game.ModDescriptorType == ModDescriptorType.DescriptorMod)
+            {
+                mod.DescriptorFile = $"{Shared.Constants.ModDirectory}/{patchName}{Shared.Constants.ModExtension}";
+            }
+            else
+            {
+                mod.DescriptorFile = $"{Shared.Constants.JsonModDirectory}/{patchName}{Shared.Constants.JsonExtension}";
+            }
             mod.FileName = GetPatchModDirectory(game, patchName).Replace("\\", "/");
             mod.Name = patchName;
             mod.Source = ModSource.Local;
@@ -599,12 +607,12 @@ namespace IronyModManager.Services
             else
             {
                 var result = new List<IMod>();
-                var installedMods = Reader.Read(Path.Combine(game.UserDirectory, Shared.Constants.ModDirectory));
+                var installedMods = Reader.Read(Path.Combine(game.UserDirectory, game.ModDescriptorType == ModDescriptorType.DescriptorMod ? Shared.Constants.ModDirectory : Shared.Constants.JsonModDirectory));
                 if (installedMods?.Count() > 0)
                 {
                     foreach (var installedMod in installedMods.Where(p => p.Content.Any()))
                     {
-                        var mod = Mapper.Map<IMod>(ModParser.Parse(installedMod.Content, MapDescriptorModType(game.ModDestriptorType)));
+                        var mod = Mapper.Map<IMod>(ModParser.Parse(installedMod.Content, MapDescriptorModType(game.ModDescriptorType)));
                         if (ignorePatchMods && IsPatchModInternal(mod))
                         {
                             continue;
@@ -612,7 +620,14 @@ namespace IronyModManager.Services
                         mod.Name = string.IsNullOrWhiteSpace(mod.Name) ? string.Empty : mod.Name;
                         mod.Version = string.IsNullOrWhiteSpace(mod.Version) ? string.Empty : mod.Version;
                         mod.IsLocked = installedMod.IsReadOnly;
-                        mod.DescriptorFile = $"{Shared.Constants.ModDirectory}/{installedMod.FileName}";
+                        if (game.ModDescriptorType == ModDescriptorType.DescriptorMod)
+                        {
+                            mod.DescriptorFile = $"{Shared.Constants.ModDirectory}/{installedMod.FileName}";
+                        }
+                        else
+                        {
+                            mod.DescriptorFile = $"{Shared.Constants.JsonModDirectory}/{installedMod.FileName}";
+                        }
                         mod.Source = GetModSource(installedMod);
                         if (mod.Source == ModSource.Paradox)
                         {
@@ -792,6 +807,20 @@ namespace IronyModManager.Services
             {
                 ModDescriptorType.JsonMetadata => Parser.Common.DescriptorModType.JsonMetadata,
                 _ => Parser.Common.DescriptorModType.DescriptorMod,
+            };
+        }
+
+        /// <summary>
+        /// Maps the type of the descriptor.
+        /// </summary>
+        /// <param name="modDescriptorType">Type of the mod descriptor.</param>
+        /// <returns>DescriptorType.</returns>
+        protected virtual DescriptorType MapDescriptorType(ModDescriptorType modDescriptorType)
+        {
+            return modDescriptorType switch
+            {
+                ModDescriptorType.JsonMetadata => DescriptorType.JsonMetadata,
+                _ => DescriptorType.DescriptorMod,
             };
         }
 

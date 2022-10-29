@@ -4,7 +4,7 @@
 // Created          : 03-31-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 08-01-2022
+// Last Modified On : 10-29-2022
 // ***********************************************************************
 // <copyright file="ModWriter.cs" company="Mario">
 //     Mario
@@ -18,6 +18,7 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
+using IronyModManager.DI;
 using IronyModManager.IO.Common;
 using IronyModManager.IO.Common.Mods;
 using IronyModManager.IO.Mods.Exporter;
@@ -91,12 +92,17 @@ namespace IronyModManager.IO.Mods
         #region Methods
 
         /// <summary>
-        /// apply mods as an asynchronous operation.
+        /// Apply mods as an asynchronous operation.
         /// </summary>
         /// <param name="parameters">The parameters.</param>
-        /// <returns>Task&lt;System.Boolean&gt;.</returns>
+        /// <returns>A Task&lt;System.Boolean&gt; representing the asynchronous operation.</returns>
+        /// <exception cref="System.ArgumentException">Invalid descriptor type.</exception>
         public async Task<bool> ApplyModsAsync(ModWriterParameters parameters)
         {
+            if (parameters.DescriptorType == DescriptorType.None)
+            {
+                throw new ArgumentException("Invalid descriptor type.");
+            }
             Task<bool>[] tasks;
             using (var mutex = await writeLock.LockAsync())
             {
@@ -267,13 +273,18 @@ namespace IronyModManager.IO.Mods
         }
 
         /// <summary>
-        /// write descriptor as an asynchronous operation.
+        /// Write descriptor as an asynchronous operation.
         /// </summary>
         /// <param name="parameters">The parameters.</param>
         /// <param name="writeDescriptorInModDirectory">if set to <c>true</c> [write descriptor in mod directory].</param>
-        /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
+        /// <returns>A Task&lt;System.Boolean&gt; representing the asynchronous operation.</returns>
+        /// <exception cref="System.ArgumentException">Invalid descriptor type.</exception>
         public async Task<bool> WriteDescriptorAsync(ModWriterParameters parameters, bool writeDescriptorInModDirectory)
         {
+            if (parameters.DescriptorType == DescriptorType.None)
+            {
+                throw new ArgumentException("Invalid descriptor type.");
+            }
             async Task<bool> writeDescriptors()
             {
                 // If needed I've got a much more complex serializer, it is written for Kerbal Space Program but the structure seems to be the same though this is much more simpler
@@ -323,15 +334,20 @@ namespace IronyModManager.IO.Mods
         }
 
         /// <summary>
-        /// write descriptor to stream as an asynchronous operation.
+        /// Writes the descriptor to stream asynchronous.
         /// </summary>
         /// <param name="parameters">The parameters.</param>
         /// <param name="stream">The stream.</param>
         /// <param name="truncatePath">if set to <c>true</c> [truncate path].</param>
         /// <returns>Task&lt;System.Boolean&gt;.</returns>
+        /// <exception cref="System.ArgumentException">Invalid descriptor type.</exception>
         public Task<bool> WriteDescriptorToStreamAsync(ModWriterParameters parameters, Stream stream, bool truncatePath = false)
         {
-            return WriteDescriptorToStreamInternalAsync(parameters.Mod, stream, truncatePath);
+            if (parameters.DescriptorType == DescriptorType.None)
+            {
+                throw new ArgumentException("Invalid descriptor type.");
+            }
+            return WriteDescriptorToStreamInternalAsync(parameters.Mod, stream, parameters.DescriptorType, truncatePath);
         }
 
         /// <summary>
@@ -339,57 +355,75 @@ namespace IronyModManager.IO.Mods
         /// </summary>
         /// <param name="mod">The mod.</param>
         /// <param name="stream">The stream.</param>
+        /// <param name="descriptorType">Type of the descriptor.</param>
         /// <param name="truncatePath">if set to <c>true</c> [truncate path].</param>
         /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
-        protected async Task<bool> WriteDescriptorToStreamInternalAsync(IMod mod, Stream stream, bool truncatePath = false)
+        protected async Task<bool> WriteDescriptorToStreamInternalAsync(IMod mod, Stream stream, DescriptorType descriptorType, bool truncatePath = false)
         {
+            static async Task serializeDescriptorMod(IMod content, StreamWriter sw)
+            {
+                var props = content.GetType().GetProperties().Where(p => Attribute.IsDefined(p, typeof(DescriptorPropertyAttribute)));
+                foreach (var prop in props)
+                {
+                    var attr = Attribute.GetCustomAttribute(prop, typeof(DescriptorPropertyAttribute), true) as DescriptorPropertyAttribute;
+                    var val = prop.GetValue(content, null);
+                    if (val is IEnumerable<string> col)
+                    {
+                        if (col.Any())
+                        {
+                            if (attr.KeyedArray)
+                            {
+                                foreach (var item in col)
+                                {
+                                    await sw.WriteLineAsync($"{attr.PropertyName}=\"{item.Replace("\"", "\\\"")}\"");
+                                }
+                            }
+                            else
+                            {
+                                await sw.WriteLineAsync($"{attr.PropertyName}={{");
+                                foreach (var item in col)
+                                {
+                                    await sw.WriteLineAsync($"\t\"{item.Replace("\"", "\\\"")}\"");
+                                }
+                                await sw.WriteLineAsync("}");
+                            }
+                        }
+                    }
+                    else
+                    {
+                        if (!string.IsNullOrWhiteSpace(val != null ? val.ToString() : string.Empty))
+                        {
+                            if (attr.AlternateNameEndsWithCondition?.Count() > 0 && attr.AlternateNameEndsWithCondition.Any(p => val.ToString().EndsWith(p, StringComparison.OrdinalIgnoreCase)))
+                            {
+                                await sw.WriteLineAsync($"{attr.AlternatePropertyName}=\"{val.ToString().Replace("\"", "\\\"")}\"");
+                            }
+                            else
+                            {
+                                await sw.WriteLineAsync($"{attr.PropertyName}=\"{val.ToString().Replace("\"", "\\\"")}\"");
+                            }
+                        }
+                    }
+                }
+            }
+            static async Task serializeJsonDescriptorMod(IMod content, StreamWriter sw)
+            {
+                var json = JsonDISerializer.Serialize(content);
+                await sw.WriteAsync(json);
+            }
+
             if (truncatePath)
             {
                 mod = mapper.Map<IMod>(mod);
                 mod.FileName = string.Empty;
             }
             using var sw = new StreamWriter(stream, leaveOpen: true);
-            var props = mod.GetType().GetProperties().Where(p => Attribute.IsDefined(p, typeof(DescriptorPropertyAttribute)));
-            foreach (var prop in props)
+            if (descriptorType == DescriptorType.DescriptorMod)
             {
-                var attr = Attribute.GetCustomAttribute(prop, typeof(DescriptorPropertyAttribute), true) as DescriptorPropertyAttribute;
-                var val = prop.GetValue(mod, null);
-                if (val is IEnumerable<string> col)
-                {
-                    if (col.Any())
-                    {
-                        if (attr.KeyedArray)
-                        {
-                            foreach (var item in col)
-                            {
-                                await sw.WriteLineAsync($"{attr.PropertyName}=\"{item.Replace("\"", "\\\"")}\"");
-                            }
-                        }
-                        else
-                        {
-                            await sw.WriteLineAsync($"{attr.PropertyName}={{");
-                            foreach (var item in col)
-                            {
-                                await sw.WriteLineAsync($"\t\"{item.Replace("\"", "\\\"")}\"");
-                            }
-                            await sw.WriteLineAsync("}");
-                        }
-                    }
-                }
-                else
-                {
-                    if (!string.IsNullOrWhiteSpace(val != null ? val.ToString() : string.Empty))
-                    {
-                        if (attr.AlternateNameEndsWithCondition?.Count() > 0 && attr.AlternateNameEndsWithCondition.Any(p => val.ToString().EndsWith(p, StringComparison.OrdinalIgnoreCase)))
-                        {
-                            await sw.WriteLineAsync($"{attr.AlternatePropertyName}=\"{val.ToString().Replace("\"", "\\\"")}\"");
-                        }
-                        else
-                        {
-                            await sw.WriteLineAsync($"{attr.PropertyName}=\"{val.ToString().Replace("\"", "\\\"")}\"");
-                        }
-                    }
-                }
+                await serializeDescriptorMod(mod, sw);
+            }
+            else
+            {
+                await serializeJsonDescriptorMod(mod, sw);
             }
             await sw.FlushAsync();
             return true;

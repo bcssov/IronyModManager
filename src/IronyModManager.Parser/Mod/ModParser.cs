@@ -4,7 +4,7 @@
 // Created          : 02-22-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 10-28-2022
+// Last Modified On : 10-29-2022
 // ***********************************************************************
 // <copyright file="ModParser.cs" company="Mario">
 //     Mario
@@ -115,6 +115,7 @@ namespace IronyModManager.Parser.Mod
                 });
                 obj.ReplacePath = result.ReplacePaths;
                 obj.UserDir = result.UserDir;
+                obj.FileName = result.Path;
                 obj.Name = result.Name;
                 obj.Version = !string.IsNullOrWhiteSpace(result.SupportedGameVersion) ? result.SupportedGameVersion : result.Version;
                 obj.Tags = result.Tags;
@@ -155,6 +156,13 @@ namespace IronyModManager.Parser.Mod
             /// <value>The name.</value>
             [JsonProperty("name")]
             public string Name { get; set; }
+
+            /// <summary>
+            /// Gets or sets the path.
+            /// </summary>
+            /// <value>The path.</value>
+            [JsonProperty("path")]
+            public string Path { get; set; }
 
             /// <summary>
             /// Gets or sets the relationships.

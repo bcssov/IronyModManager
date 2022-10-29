@@ -4,7 +4,7 @@
 // Created          : 06-19-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 10-26-2022
+// Last Modified On : 10-29-2022
 // ***********************************************************************
 // <copyright file="ModMergeService.cs" company="Mario">
 //     Mario
@@ -33,6 +33,7 @@ using IronyModManager.Shared.Configuration;
 using IronyModManager.Shared.MessageBus;
 using IronyModManager.Storage.Common;
 using Nito.AsyncEx;
+using ModSource = IronyModManager.Models.Common.ModSource;
 
 namespace IronyModManager.Services
 {
@@ -192,9 +193,24 @@ namespace IronyModManager.Services
             {
                 RootDirectory = modDirPath
             });
+            if (game.ModDescriptorType == ModDescriptorType.JsonMetadata)
+            {
+                await ModWriter.CreateModDirectoryAsync(new ModWriterParameters()
+                {
+                    RootDirectory = game.UserDirectory,
+                    Path = Shared.Constants.JsonModDirectory
+                });
+            }
 
             var mod = DIResolver.Get<IMod>();
-            mod.DescriptorFile = $"{Shared.Constants.ModDirectory}/{mergeCollectionPath}{Shared.Constants.ModExtension}";
+            if (game.ModDescriptorType == ModDescriptorType.DescriptorMod)
+            {
+                mod.DescriptorFile = $"{Shared.Constants.ModDirectory}/{mergeCollectionPath}{Shared.Constants.ModExtension}";
+            }
+            else
+            {
+                mod.DescriptorFile = $"{Shared.Constants.JsonModDirectory}/{mergeCollectionPath}{Shared.Constants.JsonExtension}";
+            }
             mod.FileName = modDirPath.Replace("\\", "/");
             mod.Name = collectionName;
             mod.Source = ModSource.Local;
@@ -213,7 +229,8 @@ namespace IronyModManager.Services
                 Mod = mod,
                 RootDirectory = game.UserDirectory,
                 Path = mod.DescriptorFile,
-                LockDescriptor = CheckIfModShouldBeLocked(game, mod)
+                LockDescriptor = CheckIfModShouldBeLocked(game, mod),
+                DescriptorType = MapDescriptorType(game.ModDescriptorType)
             }, true);
             Cache.Invalidate(new CacheInvalidateParameters() { Region = ModsCacheRegion, Prefix = game.Type, Keys = new List<string>() { GetModsCacheKey(true), GetModsCacheKey(false) } });
 
@@ -286,7 +303,14 @@ namespace IronyModManager.Services
             {
                 var modDirPath = GetPatchModDirectory(game, fileName);
                 var newMod = DIResolver.Get<IMod>();
-                newMod.DescriptorFile = $"{Shared.Constants.ModDirectory}/{Path.GetFileNameWithoutExtension(fileName)}{Shared.Constants.ModExtension}";
+                if (game.ModDescriptorType == ModDescriptorType.DescriptorMod)
+                {
+                    newMod.DescriptorFile = $"{Shared.Constants.ModDirectory}/{Path.GetFileNameWithoutExtension(fileName)}{Shared.Constants.ModExtension}";
+                }
+                else
+                {
+                    newMod.DescriptorFile = $"{Shared.Constants.JsonModDirectory}/{Path.GetFileNameWithoutExtension(fileName)}{Shared.Constants.JsonExtension}";
+                }
                 newMod.FileName = modDirPath.Replace("\\", "/");
                 newMod.Name = !string.IsNullOrWhiteSpace(copiedNamePrefix) ? $"{copiedNamePrefix} {mod.Name}" : mod.Name;
                 newMod.Source = ModSource.Local;
@@ -333,6 +357,14 @@ namespace IronyModManager.Services
             {
                 Path = modDirPath
             });
+            if (game.ModDescriptorType == ModDescriptorType.JsonMetadata)
+            {
+                await ModWriter.CreateModDirectoryAsync(new ModWriterParameters()
+                {
+                    RootDirectory = game.UserDirectory,
+                    Path = Shared.Constants.JsonModDirectory
+                });
+            }
 
             var collection = GetAllModCollectionsInternal().FirstOrDefault(p => p.IsSelected);
             var patchName = GenerateCollectionPatchName(collection.Name);
@@ -425,7 +457,8 @@ namespace IronyModManager.Services
                     var ms = new MemoryStream();
                     await ModWriter.WriteDescriptorToStreamAsync(new ModWriterParameters()
                     {
-                        Mod = newMod
+                        Mod = newMod,
+                        DescriptorType = MapDescriptorType(game.ModDescriptorType)
                     }, ms, true);
                     ms.Seek(0, SeekOrigin.Begin);
                     modMergeCompressExporter.AddFile(new ModMergeCompressExporterParameters()

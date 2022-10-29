@@ -225,7 +225,7 @@ namespace IronyModManager.Storage
                 game.DLCContainer = gameType.DLCContainer ?? string.Empty;
                 game.GogAppId = gameType.GogAppId;
                 game.SupportedMergeTypes = gameType.SupportedMergeTypes;
-                game.ModDestriptorType = gameType.ModDestriptorType;
+                game.ModDescriptorType = gameType.ModDescriptorType;
                 Database.Games.Add(game);
                 return true;
             }

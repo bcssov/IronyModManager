@@ -24,6 +24,11 @@ namespace IronyModManager.IO.Mods
         #region Fields
 
         /// <summary>
+        /// The content load path
+        /// </summary>
+        public const string Content_load_path = "content_load.json";
+
+        /// <summary>
         /// The DLC load path
         /// </summary>
         public const string DLC_load_path = "dlc_load.json";

@@ -4,7 +4,7 @@
 // Created          : 08-11-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-14-2021
+// Last Modified On : 10-29-2022
 // ***********************************************************************
 // <copyright file="JsonExporter.cs" company="Mario">
 //     Mario
@@ -75,7 +75,107 @@ namespace IronyModManager.IO.Mods.Exporter
         public async Task<bool> ExportModsAsync(ModWriterParameters parameters)
         {
             using var mutex = await writeLock.LockAsync();
+            if (parameters.DescriptorType == Common.DescriptorType.JsonMetadata)
+            {
+                var result = await ExportContentLoadModsAsync(parameters);
+                mutex.Dispose();
+                return result;
+            }
+            else
+            {
+                var result = await ExportDLCLoadModsAsync(parameters);
+                mutex.Dispose();
+                return result;
+            }
+        }
 
+        /// <summary>
+        /// get disabled DLC as an asynchronous operation.
+        /// </summary>
+        /// <param name="parameters">The parameters.</param>
+        /// <returns>IReadOnlyCollection&lt;IDLCObject&gt;.</returns>
+        public async Task<IReadOnlyCollection<IDLCObject>> GetDisabledDLCAsync(DLCParameters parameters)
+        {
+            var dlcPath = Path.Combine(parameters.RootPath, Constants.DLC_load_path);
+            var dLCLoad = await LoadPdxModelAsync<DLCLoad>(dlcPath) ?? new DLCLoad();
+            if ((dLCLoad.DisabledDlcs?.Any()).GetValueOrDefault())
+            {
+                var result = dLCLoad.DisabledDlcs.Select(p =>
+                {
+                    var model = DIResolver.Get<IDLCObject>();
+                    model.Path = p;
+                    return model;
+                }).ToList();
+                return result;
+            }
+            return null;
+        }
+
+        /// <summary>
+        /// load PDX model as an asynchronous operation.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="path">The path.</param>
+        /// <returns>Task&lt;T&gt;.</returns>
+        private static async Task<T> LoadPdxModelAsync<T>(string path) where T : IPdxFormat
+        {
+            if (File.Exists(path))
+            {
+                var content = await File.ReadAllTextAsync(path);
+                if (!string.IsNullOrWhiteSpace(content))
+                {
+                    var result = JsonConvert.DeserializeObject<T>(content);
+                    return result;
+                }
+            }
+            return default;
+        }
+
+        /// <summary>
+        /// Export content load mods as an asynchronous operation.
+        /// </summary>
+        /// <param name="parameters">The parameters.</param>
+        /// <returns>A Task&lt;System.Boolean&gt; representing the asynchronous operation.</returns>
+        private async Task<bool> ExportContentLoadModsAsync(ModWriterParameters parameters)
+        {
+            var contentPath = Path.Combine(parameters.RootDirectory, Constants.Content_load_path);
+            var contentLoad = await LoadPdxModelAsync<ContentLoad>(contentPath) ?? new ContentLoad();
+
+            if (!parameters.AppendOnly)
+            {
+                contentLoad.EnabledMods.Clear();
+            }
+
+            if (parameters.EnabledMods != null)
+            {
+                parameters.EnabledMods.ToList().ForEach(p =>
+                {
+                    contentLoad.EnabledMods.Add(new EnabledMod()
+                    {
+                        Path = p.FullPath
+                    });
+                });
+            }
+            if (parameters.TopPriorityMods != null)
+            {
+                parameters.TopPriorityMods.ToList().ForEach(p =>
+                {
+                    contentLoad.EnabledMods.Add(new EnabledMod()
+                    {
+                        Path = p.FullPath
+                    });
+                });
+            }
+            return await WritePdxModelAsync(contentLoad, contentPath);
+        }
+
+        /// <summary>
+        /// Export DLC load mods as an asynchronous operation.
+        /// </summary>
+        /// <param name="parameters">The parameters.</param>
+        /// <returns>A Task&lt;System.Boolean&gt; representing the asynchronous operation.</returns>
+        private async Task<bool> ExportDLCLoadModsAsync(ModWriterParameters parameters)
+        {
             var dlcPath = Path.Combine(parameters.RootDirectory, Constants.DLC_load_path);
             var gameDataPath = Path.Combine(parameters.RootDirectory, Constants.Game_data_path);
             var modRegistryPath = Path.Combine(parameters.RootDirectory, Constants.Mod_registry_path);
@@ -145,51 +245,7 @@ namespace IronyModManager.IO.Mods.Exporter
             };
             await Task.WhenAll(tasks);
 
-            mutex.Dispose();
-
             return tasks.All(p => p.Result);
-        }
-
-        /// <summary>
-        /// get disabled DLC as an asynchronous operation.
-        /// </summary>
-        /// <param name="parameters">The parameters.</param>
-        /// <returns>IReadOnlyCollection&lt;IDLCObject&gt;.</returns>
-        public async Task<IReadOnlyCollection<IDLCObject>> GetDisabledDLCAsync(DLCParameters parameters)
-        {
-            var dlcPath = Path.Combine(parameters.RootPath, Constants.DLC_load_path);
-            var dLCLoad = await LoadPdxModelAsync<DLCLoad>(dlcPath) ?? new DLCLoad();
-            if ((dLCLoad.DisabledDlcs?.Any()).GetValueOrDefault())
-            {
-                var result = dLCLoad.DisabledDlcs.Select(p =>
-                {
-                    var model = DIResolver.Get<IDLCObject>();
-                    model.Path = p;
-                    return model;
-                }).ToList();
-                return result;
-            }
-            return null;
-        }
-
-        /// <summary>
-        /// load PDX model as an asynchronous operation.
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="path">The path.</param>
-        /// <returns>Task&lt;T&gt;.</returns>
-        private static async Task<T> LoadPdxModelAsync<T>(string path) where T : IPdxFormat
-        {
-            if (File.Exists(path))
-            {
-                var content = await File.ReadAllTextAsync(path);
-                if (!string.IsNullOrWhiteSpace(content))
-                {
-                    var result = JsonConvert.DeserializeObject<T>(content);
-                    return result;
-                }
-            }
-            return default;
         }
 
         /// <summary>

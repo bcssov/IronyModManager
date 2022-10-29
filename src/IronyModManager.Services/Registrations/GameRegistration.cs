@@ -83,7 +83,7 @@ namespace IronyModManager.Services.Registrations
             game.AdvancedFeatures = IronyModManager.Models.Common.GameAdvancedFeatures.None;
             game.ParadoxGameId = Shared.Constants.GamesTypes.CrusaderKings3.ParadoxGameId;
             game.SupportedMergeTypes = IronyModManager.Models.Common.SupportedMergeTypes.Zip | IronyModManager.Models.Common.SupportedMergeTypes.Basic;
-            game.ModDestriptorType = IronyModManager.Models.Common.ModDescriptorType.DescriptorMod;
+            game.ModDescriptorType = IronyModManager.Models.Common.ModDescriptorType.DescriptorMod;
             game.GameIndexCacheVersion = 1;
             MapGameSettings(game, GetExecutableSettings(game));
             return game;
@@ -112,7 +112,7 @@ namespace IronyModManager.Services.Registrations
             game.AdvancedFeatures = IronyModManager.Models.Common.GameAdvancedFeatures.None;
             game.ParadoxGameId = Shared.Constants.GamesTypes.EuropaUniversalis4.ParadoxGameId;
             game.SupportedMergeTypes = IronyModManager.Models.Common.SupportedMergeTypes.Zip | IronyModManager.Models.Common.SupportedMergeTypes.Basic;
-            game.ModDestriptorType = IronyModManager.Models.Common.ModDescriptorType.DescriptorMod;
+            game.ModDescriptorType = IronyModManager.Models.Common.ModDescriptorType.DescriptorMod;
             game.GameIndexCacheVersion = 1;
             MapGameSettings(game, GetExecutableSettings(game));
             return game;
@@ -182,7 +182,7 @@ namespace IronyModManager.Services.Registrations
             game.AdvancedFeatures = IronyModManager.Models.Common.GameAdvancedFeatures.ReadOnly;
             game.ParadoxGameId = Shared.Constants.GamesTypes.HeartsOfIron4.ParadoxGameId;
             game.SupportedMergeTypes = IronyModManager.Models.Common.SupportedMergeTypes.Zip | IronyModManager.Models.Common.SupportedMergeTypes.Basic;
-            game.ModDestriptorType = IronyModManager.Models.Common.ModDescriptorType.DescriptorMod;
+            game.ModDescriptorType = IronyModManager.Models.Common.ModDescriptorType.DescriptorMod;
             game.GameIndexCacheVersion = 4;
             MapGameSettings(game, GetExecutableSettings(game));
             return game;
@@ -213,7 +213,7 @@ namespace IronyModManager.Services.Registrations
             game.ParadoxGameId = Shared.Constants.GamesTypes.ImperatorRome.ParadoxGameId;
             game.GogAppId = Shared.Constants.GamesTypes.ImperatorRome.GogId;
             game.SupportedMergeTypes = IronyModManager.Models.Common.SupportedMergeTypes.Zip | IronyModManager.Models.Common.SupportedMergeTypes.Basic;
-            game.ModDestriptorType = IronyModManager.Models.Common.ModDescriptorType.DescriptorMod;
+            game.ModDescriptorType = IronyModManager.Models.Common.ModDescriptorType.DescriptorMod;
             game.GameIndexCacheVersion = 1;
             MapGameSettings(game, GetExecutableSettings(game));
             return game;
@@ -243,7 +243,7 @@ namespace IronyModManager.Services.Registrations
             game.ParadoxGameId = Shared.Constants.GamesTypes.Stellaris.ParadoxGameId;
             game.GogAppId = Shared.Constants.GamesTypes.Stellaris.GogId;
             game.SupportedMergeTypes = IronyModManager.Models.Common.SupportedMergeTypes.Zip | IronyModManager.Models.Common.SupportedMergeTypes.Basic;
-            game.ModDestriptorType = IronyModManager.Models.Common.ModDescriptorType.DescriptorMod;
+            game.ModDescriptorType = IronyModManager.Models.Common.ModDescriptorType.DescriptorMod;
             game.GameIndexCacheVersion = 9;
             MapGameSettings(game, GetExecutableSettings(game));
             return game;

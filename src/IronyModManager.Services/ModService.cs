@@ -4,7 +4,7 @@
 // Created          : 02-24-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 10-28-2022
+// Last Modified On : 10-29-2022
 // ***********************************************************************
 // <copyright file="ModService.cs" company="Mario">
 //     Mario
@@ -210,7 +210,8 @@ namespace IronyModManager.Services
             {
                 OtherMods = regularMods.Where(p => !enabledMods.Any(m => m.DescriptorFile.Equals(p.DescriptorFile))).ToList(),
                 EnabledMods = enabledMods,
-                RootDirectory = game.UserDirectory
+                RootDirectory = game.UserDirectory,
+                DescriptorType = MapDescriptorType(game.ModDescriptorType)
             };
             if (await ModWriter.ModDirectoryExistsAsync(new ModWriterParameters()
             {
@@ -224,7 +225,8 @@ namespace IronyModManager.Services
                         Mod = mod,
                         RootDirectory = game.UserDirectory,
                         Path = mod.DescriptorFile,
-                        LockDescriptor = CheckIfModShouldBeLocked(game, mod)
+                        LockDescriptor = CheckIfModShouldBeLocked(game, mod),
+                        DescriptorType = MapDescriptorType(game.ModDescriptorType)
                     }, IsPatchModInternal(mod)))
                     {
                         applyModParams.TopPriorityMods = new List<IMod>() { mod };
@@ -403,22 +405,31 @@ namespace IronyModManager.Services
                 mutex.Dispose();
                 return null;
             }
+            if (game.ModDescriptorType == ModDescriptorType.JsonMetadata && !await ModWriter.CanWriteToModDirectoryAsync(new ModWriterParameters()
+            {
+                RootDirectory = game.UserDirectory,
+                Path = Shared.Constants.JsonModDirectory
+            }))
+            {
+                mutex.Dispose();
+                return null;
+            }
             var mods = GetInstalledModsInternal(game, false);
             var descriptors = new List<IModInstallationResult>();
-            var userDirectoryMods = GetAllModDescriptors(Path.Combine(game.UserDirectory, Shared.Constants.ModDirectory), ModSource.Local, game.ModDestriptorType);
+            var userDirectoryMods = GetAllModDescriptors(Path.Combine(game.UserDirectory, Shared.Constants.ModDirectory), ModSource.Local, game.ModDescriptorType);
             if (userDirectoryMods?.Count() > 0)
             {
                 descriptors.AddRange(userDirectoryMods);
             }
             if (!string.IsNullOrWhiteSpace(game.CustomModDirectory))
             {
-                var customMods = GetAllModDescriptors(GetModDirectoryRootPath(game), ModSource.Local, game.ModDestriptorType);
+                var customMods = GetAllModDescriptors(GetModDirectoryRootPath(game), ModSource.Local, game.ModDescriptorType);
                 if (customMods != null && customMods.Any())
                 {
                     descriptors.AddRange(customMods);
                 }
             }
-            var workshopDirectoryMods = game.WorkshopDirectory.SelectMany(p => GetAllModDescriptors(p, ModSource.Steam, game.ModDestriptorType));
+            var workshopDirectoryMods = game.WorkshopDirectory.SelectMany(p => GetAllModDescriptors(p, ModSource.Steam, game.ModDescriptorType));
             if (workshopDirectoryMods.Any())
             {
                 descriptors.AddRange(workshopDirectoryMods);
@@ -448,6 +459,14 @@ namespace IronyModManager.Services
                     RootDirectory = game.UserDirectory,
                     Path = Shared.Constants.ModDirectory
                 });
+                if (game.ModDescriptorType == ModDescriptorType.JsonMetadata)
+                {
+                    await ModWriter.CreateModDirectoryAsync(new ModWriterParameters()
+                    {
+                        RootDirectory = game.UserDirectory,
+                        Path = Shared.Constants.JsonModDirectory
+                    });
+                }
                 var tasks = new List<Task>();
                 foreach (var diff in diffs.GroupBy(p => p.Mod.DescriptorFile))
                 {
@@ -477,7 +496,8 @@ namespace IronyModManager.Services
                             Mod = localDiff,
                             RootDirectory = game.UserDirectory,
                             Path = localDiff.DescriptorFile,
-                            LockDescriptor = shouldLock
+                            LockDescriptor = shouldLock,
+                            DescriptorType = MapDescriptorType(game.ModDescriptorType)
                         }, IsPatchModInternal(localDiff));
                     }));
                     installResult.Installed = true;
@@ -719,13 +739,21 @@ namespace IronyModManager.Services
                 var result = GetModelInstance<IModInstallationResult>();
                 try
                 {
-                    var fileInfo = Reader.GetFileInfo(path, Shared.Constants.DescriptorFile);
-                    if (fileInfo == null)
+                    IFileInfo fileInfo;
+                    if (modDescriptorType == ModDescriptorType.JsonMetadata)
                     {
-                        fileInfo = Reader.GetFileInfo(path, $"*{Shared.Constants.ModExtension}");
+                        fileInfo = Reader.GetFileInfo(path, Shared.Constants.DescriptorJsonMetadata);
+                    }
+                    else
+                    {
+                        fileInfo = Reader.GetFileInfo(path, Shared.Constants.DescriptorFile);
                         if (fileInfo == null)
                         {
-                            return;
+                            fileInfo = Reader.GetFileInfo(path, $"*{Shared.Constants.ModExtension}");
+                            if (fileInfo == null)
+                            {
+                                return;
+                            }
                         }
                     }
                     var mod = Mapper.Map<IMod>(ModParser.Parse(fileInfo.Content, MapDescriptorModType(modDescriptorType)));
@@ -747,7 +775,15 @@ namespace IronyModManager.Services
                         cleanedPath = Path.Combine(Path.GetDirectoryName(path), Path.GetFileNameWithoutExtension(path));
                     }
 
-                    var localPath = $"{Shared.Constants.ModDirectory}/{cleanedPath.Split(Path.DirectorySeparatorChar, StringSplitOptions.RemoveEmptyEntries).LastOrDefault()}{Shared.Constants.ModExtension}";
+                    string localPath;
+                    if (modDescriptorType == ModDescriptorType.DescriptorMod)
+                    {
+                        localPath = $"{Shared.Constants.ModDirectory}/{cleanedPath.Split(Path.DirectorySeparatorChar, StringSplitOptions.RemoveEmptyEntries).LastOrDefault()}{Shared.Constants.ModExtension}";
+                    }
+                    else
+                    {
+                        localPath = $"{Shared.Constants.JsonModDirectory}/{cleanedPath.Split(Path.DirectorySeparatorChar, StringSplitOptions.RemoveEmptyEntries).LastOrDefault()}{Shared.Constants.JsonExtension}";
+                    }
                     switch (mod.Source)
                     {
                         case ModSource.Local:
@@ -767,7 +803,16 @@ namespace IronyModManager.Services
                                     mod.RemoteId = GetSteamModId(path, isDirectory);
                                 }
                             }
-                            setDescriptorPath(mod, $"{Shared.Constants.ModDirectory}/{Constants.Steam_mod_id}{mod.RemoteId}{Shared.Constants.ModExtension}", localPath);
+                            string steamPath;
+                            if (modDescriptorType == ModDescriptorType.DescriptorMod)
+                            {
+                                steamPath = $"{Shared.Constants.ModDirectory}/{Constants.Steam_mod_id}{mod.RemoteId}{Shared.Constants.ModExtension}";
+                            }
+                            else
+                            {
+                                steamPath = $"{Shared.Constants.JsonModDirectory}/{Constants.Steam_mod_id}{mod.RemoteId}{Shared.Constants.JsonExtension}";
+                            }
+                            setDescriptorPath(mod, steamPath, localPath);
                             break;
 
                         case ModSource.Paradox:
@@ -780,7 +825,16 @@ namespace IronyModManager.Services
                             {
                                 mod.RemoteId = GetPdxModId(path, isDirectory);
                             }
-                            setDescriptorPath(mod, $"{Shared.Constants.ModDirectory}/{Constants.Paradox_mod_id}{mod.RemoteId}{Shared.Constants.ModExtension}", localPath);
+                            string pdxPath;
+                            if (modDescriptorType == ModDescriptorType.DescriptorMod)
+                            {
+                                pdxPath = $"{Shared.Constants.ModDirectory}/{Constants.Paradox_mod_id}{mod.RemoteId}{Shared.Constants.ModExtension}";
+                            }
+                            else
+                            {
+                                pdxPath = $"{Shared.Constants.JsonModDirectory}/{Constants.Paradox_mod_id}{mod.RemoteId}{Shared.Constants.JsonExtension}";
+                            }
+                            setDescriptorPath(mod, pdxPath, localPath);
                             break;
 
                         default:

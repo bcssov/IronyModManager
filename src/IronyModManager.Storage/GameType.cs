@@ -4,7 +4,7 @@
 // Created          : 02-12-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 10-28-2022
+// Last Modified On : 10-29-2022
 // ***********************************************************************
 // <copyright file="GameType.cs" company="Mario">
 //     Mario
@@ -106,10 +106,10 @@ namespace IronyModManager.Storage
         public string LogLocation { get; set; }
 
         /// <summary>
-        /// Gets or sets the type of the mod destriptor.
+        /// Gets or sets the type of the mod descriptor.
         /// </summary>
-        /// <value>The type of the mod destriptor.</value>
-        public virtual ModDescriptorType ModDestriptorType { get; set; }
+        /// <value>The type of the mod descriptor.</value>
+        public virtual ModDescriptorType ModDescriptorType { get; set; }
 
         /// <summary>
         /// Gets or sets the name.

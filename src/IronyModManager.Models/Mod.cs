@@ -48,6 +48,7 @@ namespace IronyModManager.Models
         /// Gets or sets the achievement status.
         /// </summary>
         /// <value>The achievement status.</value>
+        [JsonIgnore]
         public virtual AchievementStatus AchievementStatus { get; set; }
 
         /// <summary>
@@ -62,6 +63,7 @@ namespace IronyModManager.Models
         /// Gets or sets the descriptor file.
         /// </summary>
         /// <value>The descriptor file.</value>
+        [JsonIgnore]
         public virtual string DescriptorFile { get; set; }
 
         /// <summary>
@@ -69,42 +71,49 @@ namespace IronyModManager.Models
         /// </summary>
         /// <value>The name of the file.</value>
         [DescriptorProperty("path", "archive", ".zip", ".bin")]
+        [JsonProperty("path")]
         public virtual string FileName { get; set; }
 
         /// <summary>
         /// Gets or sets the files.
         /// </summary>
         /// <value>The files.</value>
+        [JsonIgnore]
         public virtual IEnumerable<string> Files { get; set; }
 
         /// <summary>
         /// Gets or sets the full path.
         /// </summary>
         /// <value>The full path.</value>
+        [JsonIgnore]
         public virtual string FullPath { get; set; }
 
         /// <summary>
         /// Gets or sets the game.
         /// </summary>
         /// <value>The game.</value>
+        [JsonIgnore]
         public virtual string Game { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether this instance is locked.
         /// </summary>
         /// <value><c>true</c> if this instance is locked; otherwise, <c>false</c>.</value>
+        [JsonIgnore]
         public virtual bool IsLocked { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether this instance is selected.
         /// </summary>
         /// <value><c>true</c> if this instance is selected; otherwise, <c>false</c>.</value>
+        [JsonIgnore]
         public virtual bool IsSelected { get; set; }
 
         /// <summary>
         /// Returns true if ... is valid.
         /// </summary>
         /// <value><c>true</c> if this instance is valid; otherwise, <c>false</c>.</value>
+        [JsonIgnore]
         public virtual bool IsValid { get; set; }
 
         /// <summary>
@@ -119,6 +128,7 @@ namespace IronyModManager.Models
         /// Gets or sets the order.
         /// </summary>
         /// <value>The order.</value>
+        [JsonIgnore]
         public virtual int Order { get; set; }
 
         /// <summary>
@@ -148,6 +158,7 @@ namespace IronyModManager.Models
         /// Gets or sets the source.
         /// </summary>
         /// <value>The source.</value>
+        [JsonIgnore]
         public virtual ModSource Source { get; set; }
 
         /// <summary>
@@ -189,6 +200,7 @@ namespace IronyModManager.Models
         /// Gets or sets the version data.
         /// </summary>
         /// <value>The version data.</value>
+        [JsonIgnore]
         public virtual Shared.Version VersionData
         {
             get

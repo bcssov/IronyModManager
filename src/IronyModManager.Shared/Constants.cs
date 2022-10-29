@@ -4,7 +4,7 @@
 // Created          : 01-17-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 07-15-2022
+// Last Modified On : 10-29-2022
 // ***********************************************************************
 // <copyright file="Constants.cs" company="Mario">
 //     Mario
@@ -75,6 +75,11 @@ namespace IronyModManager.Shared
         public const string ModDirectory = "mod";
 
         /// <summary>
+        /// The json mod directory
+        /// </summary>
+        public const string JsonModDirectory = "irony-mod";
+
+        /// <summary>
         /// The mod extension
         /// </summary>
         public const string ModExtension = "." + ModDirectory;
@@ -113,6 +118,11 @@ namespace IronyModManager.Shared
         /// The zip extension without dot
         /// </summary>
         public const string ZipExtensionWithoutDot = "zip";
+
+        /// <summary>
+        /// The descriptor json metadata
+        /// </summary>
+        public static readonly string DescriptorJsonMetadata = ".metadata" + Path.DirectorySeparatorChar + "metadata.json";
 
         /// <summary>
         /// The image extensions

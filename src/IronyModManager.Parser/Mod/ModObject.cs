@@ -41,6 +41,7 @@ namespace IronyModManager.Parser.Mod
         /// </summary>
         /// <value>The name of the file.</value>
         [DescriptorProperty("path", "archive", ".zip", ".bin")]
+        [JsonProperty("path")]
         public string FileName { get; set; }
 
         /// <summary>
@@ -56,6 +57,7 @@ namespace IronyModManager.Parser.Mod
         /// </summary>
         /// <value>The picture.</value>
         [DescriptorProperty("picture")]
+        [JsonIgnore]
         public string Picture { get; set; }
 
         /// <summary>
