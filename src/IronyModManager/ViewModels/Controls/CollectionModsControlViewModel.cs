@@ -4,7 +4,7 @@
 // Created          : 03-03-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 10-28-2022
+// Last Modified On : 10-29-2022
 // ***********************************************************************
 // <copyright file="CollectionModsControlViewModel.cs" company="Mario">
 //     Mario
@@ -2348,27 +2348,24 @@ namespace IronyModManager.ViewModels.Controls
                     {
                         var needsSave = false;
                         var selectedMods = SelectedMods.ToList();
-                        if (selectedMods != null)
+                        if (s.Value)
                         {
-                            if (s.Value)
+                            if (!selectedMods.Contains(s.Sender))
                             {
-                                if (!selectedMods.Contains(s.Sender))
+                                selectedMods.Add(s.Sender);
+                                if (!string.IsNullOrWhiteSpace(SelectedModCollection?.Name))
                                 {
-                                    selectedMods.Add(s.Sender);
-                                    if (!string.IsNullOrWhiteSpace(SelectedModCollection?.Name))
-                                    {
-                                        SaveState();
-                                    }
-                                    needsSave = true;
+                                    SaveState();
                                 }
+                                needsSave = true;
                             }
-                            else
+                        }
+                        else
+                        {
+                            if (selectedMods.Contains(s.Sender))
                             {
-                                if (selectedMods.Contains(s.Sender))
-                                {
-                                    selectedMods.Remove(s.Sender);
-                                    needsSave = true;
-                                }
+                                selectedMods.Remove(s.Sender);
+                                needsSave = true;
                             }
                         }
                         if (!string.IsNullOrWhiteSpace(SelectedModCollection?.Name) && needsSave)

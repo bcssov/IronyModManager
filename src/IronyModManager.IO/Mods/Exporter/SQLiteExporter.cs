@@ -696,10 +696,7 @@ namespace IronyModManager.IO.Mods.Exporter
                         toInsert.Add(mapMod(item, pos));
                         pos++;
                     }
-                    if (toInsert.Count > 0)
-                    {
-                        await con.InsertAllAsync(toInsert, transaction: transaction, trace: trace);
-                    }
+                    await con.InsertAllAsync(toInsert, transaction: transaction, trace: trace);
                 }
                 else
                 {
@@ -788,10 +785,7 @@ namespace IronyModManager.IO.Mods.Exporter
                         toInsert.Add(mapMod(item, pos));
                         pos++;
                     }
-                    if (toInsert.Count > 0)
-                    {
-                        await con.InsertAllAsync(toInsert, transaction: transaction, trace: trace);
-                    }
+                    await con.InsertAllAsync(toInsert, transaction: transaction, trace: trace);
                 }
                 else
                 {
