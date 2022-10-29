@@ -4,6 +4,54 @@
 		<title>Irony Mod Manager</title>
 		<language>en</language>
 		<item>
+			<title>1.24.59-alpha</title>
+			<description>## Release Notes 1.24
+* Update dependencies
+* Handle replace path in basic mod merge
+* Bypass steam thinking that Irony is a game host process (valve should seriously tweak logic of theirs)
+* Add conflict solver modes which skip localization
+* Write last known Irony location to %appdata% directory so other programs can find it
+* Add support for metadata descriptor type games (Victoria 3 support)</description>
+			<pubDate>Sat, 29 Oct 2022 22:20:32 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.24.59-alpha/linux-x64.zip" sparkle:version="1.24.59.6203" sparkle:shortVersionString="1.24.59" length="90112216" sparkle:os="linux" type="application/zip" sparkle:signature="ehOmQWPS5lqKXDGZN6PeskJ63YrSQjVHyMUCHEpG+UJKNik5zK4pkBE1WkmHfqyWiI0c8Y9yBK4ZmRrjLlWUBw=="/>
+		</item>
+		<item>
+			<title>1.24.59-alpha</title>
+			<description>## Release Notes 1.24
+* Update dependencies
+* Handle replace path in basic mod merge
+* Bypass steam thinking that Irony is a game host process (valve should seriously tweak logic of theirs)
+* Add conflict solver modes which skip localization
+* Write last known Irony location to %appdata% directory so other programs can find it
+* Add support for metadata descriptor type games (Victoria 3 support)</description>
+			<pubDate>Sat, 29 Oct 2022 22:20:39 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.24.59-alpha/osx-x64.zip" sparkle:version="1.24.59.6203" sparkle:shortVersionString="1.24.59" length="92945149" sparkle:os="osx" type="application/zip" sparkle:signature="TgTkgVYnpL5JbfcsnLeDtRTjUyrCJkC4b1kpG5J49yL4IV/n9aHPFIWCPo1d6FjMwNubxVBAp8FFLxBOqcr1DA=="/>
+		</item>
+		<item>
+			<title>1.24.59-alpha</title>
+			<description>## Release Notes 1.24
+* Update dependencies
+* Handle replace path in basic mod merge
+* Bypass steam thinking that Irony is a game host process (valve should seriously tweak logic of theirs)
+* Add conflict solver modes which skip localization
+* Write last known Irony location to %appdata% directory so other programs can find it
+* Add support for metadata descriptor type games (Victoria 3 support)</description>
+			<pubDate>Sat, 29 Oct 2022 22:20:45 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.24.59-alpha/win-x64-setup.zip" sparkle:version="1.24.59.6203" sparkle:shortVersionString="1.24.59" length="71389461" sparkle:os="windows" type="application/zip" sparkle:signature="EzhBAVtiMsBiRX0W9qnsn9qjKA0P33Kl9bPMu3B7HrFHr7K/Sho/mhX0b3v3tpOp1i/kgtNN4cMbMhKoK27nAw=="/>
+		</item>
+		<item>
+			<title>1.24.59-alpha</title>
+			<description>## Release Notes 1.24
+* Update dependencies
+* Handle replace path in basic mod merge
+* Bypass steam thinking that Irony is a game host process (valve should seriously tweak logic of theirs)
+* Add conflict solver modes which skip localization
+* Write last known Irony location to %appdata% directory so other programs can find it
+* Add support for metadata descriptor type games (Victoria 3 support)</description>
+			<pubDate>Sat, 29 Oct 2022 22:20:45 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.24.59-alpha/win-x64.zip" sparkle:version="1.24.59.6203" sparkle:shortVersionString="1.24.59" length="105202523" sparkle:os="windows" type="application/zip" sparkle:signature="+TxQjzO+GBqH7CmLkD++XAJkxzPqt+NPD77vgVQ4PSnpK/AqyDp3pEl07LT7zu6Dc2AjVcGC1m5o7sfnbNOjDQ=="/>
+		</item>
+		<item>
 			<title>1.23.59</title>
 			<description>## Current Release Notes
 * Fix maximized window state not being restored due to framework bug
