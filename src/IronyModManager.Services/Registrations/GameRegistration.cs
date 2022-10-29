@@ -4,7 +4,7 @@
 // Created          : 02-12-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 10-28-2022
+// Last Modified On : 10-29-2022
 // ***********************************************************************
 // <copyright file="GameRegistration.cs" company="Mario">
 //     Mario
@@ -57,6 +57,7 @@ namespace IronyModManager.Services.Registrations
             storage.RegisterGame(GetHOI4(userDir));
             storage.RegisterGame(GetImperator(userDir));
             storage.RegisterGame(GetCK3(userDir));
+            storage.RegisterGame(GetVicky3(userDir));
         }
 
         /// <summary>
@@ -245,6 +246,36 @@ namespace IronyModManager.Services.Registrations
             game.SupportedMergeTypes = IronyModManager.Models.Common.SupportedMergeTypes.Zip | IronyModManager.Models.Common.SupportedMergeTypes.Basic;
             game.ModDescriptorType = IronyModManager.Models.Common.ModDescriptorType.DescriptorMod;
             game.GameIndexCacheVersion = 9;
+            MapGameSettings(game, GetExecutableSettings(game));
+            return game;
+        }
+
+        /// <summary>
+        /// Gets the vicky3.
+        /// </summary>
+        /// <param name="baseUserDir">The base user dir.</param>
+        /// <returns>IGameType.</returns>
+        private IGameType GetVicky3(string baseUserDir)
+        {
+            var game = DIResolver.Get<IGameType>();
+            game.DLCContainer = Shared.Constants.GamesTypes.Victoria3.DLCContainer;
+            game.ChecksumFolders = Shared.Constants.GamesTypes.Victoria3.ChecksumFolders;
+            game.GameFolders = Shared.Constants.GamesTypes.Victoria3.GameFolders;
+            game.LogLocation = Path.Combine(Path.Combine(baseUserDir, Shared.Constants.GamesTypes.Victoria3.DocsPath), Shared.Constants.GamesTypes.LogLocation).StandardizeDirectorySeparator();
+            game.Name = Shared.Constants.GamesTypes.Victoria3.Id;
+            game.Abrv = Shared.Constants.GamesTypes.Victoria3.Abrv;
+            game.SteamAppId = Shared.Constants.GamesTypes.Victoria3.SteamAppId;
+            game.UserDirectory = Path.Combine(baseUserDir, Shared.Constants.GamesTypes.Victoria3.DocsPath).StandardizeDirectorySeparator();
+            game.WorkshopDirectory = SteamDirectory.GetWorkshopDirectory(Shared.Constants.GamesTypes.Victoria3.SteamAppId).Select(p => p.StandardizeDirectorySeparator()).ToList();
+            game.BaseSteamGameDirectory = SteamDirectory.GetGameDirectory(Shared.Constants.GamesTypes.Victoria3.SteamAppId).StandardizeDirectorySeparator();
+            game.LauncherSettingsFileName = Shared.Constants.GamesTypes.Victoria3.LauncherSettingsFileName;
+            game.LauncherSettingsPrefix = Shared.Constants.GamesTypes.Victoria3.LauncherSettingsPrefix;
+            game.RemoteSteamUserDirectory = SteamDirectory.GetUserDataFolders(game.SteamAppId).Select(p => p.StandardizeDirectorySeparator()).ToList();
+            game.AdvancedFeatures = IronyModManager.Models.Common.GameAdvancedFeatures.None;
+            game.ParadoxGameId = Shared.Constants.GamesTypes.Victoria3.ParadoxGameId;
+            game.SupportedMergeTypes = IronyModManager.Models.Common.SupportedMergeTypes.Basic;
+            game.ModDescriptorType = IronyModManager.Models.Common.ModDescriptorType.JsonMetadata;
+            game.GameIndexCacheVersion = 1;
             MapGameSettings(game, GetExecutableSettings(game));
             return game;
         }

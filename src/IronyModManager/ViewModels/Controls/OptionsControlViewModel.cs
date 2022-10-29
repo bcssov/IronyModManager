@@ -4,7 +4,7 @@
 // Created          : 05-30-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 07-24-2022
+// Last Modified On : 10-29-2022
 // ***********************************************************************
 // <copyright file="OptionsControlViewModel.cs" company="Mario">
 //     Mario
@@ -956,6 +956,7 @@ namespace IronyModManager.ViewModels.Controls
         protected virtual void SaveGame()
         {
             var game = gameService.GetSelected();
+            bool exeChanged = game.ExecutableLocation != Game.ExecutableLocation;
             game.ExecutableLocation = Game.ExecutableLocation;
             game.LaunchArguments = Game.LaunchArguments;
             game.RefreshDescriptors = Game.RefreshDescriptors;
@@ -964,9 +965,16 @@ namespace IronyModManager.ViewModels.Controls
             game.UserDirectory = Game.UserDirectory;
             bool customDirectoryChanged = game.CustomModDirectory != Game.CustomModDirectory;
             game.CustomModDirectory = Game.CustomModDirectory;
-            if (gameService.Save(game) && (dirChanged) || customDirectoryChanged)
+            if (gameService.Save(game))
             {
-                MessageBus.PublishAsync(new GameUserDirectoryChangedEvent(game, customDirectoryChanged));
+                if (dirChanged || customDirectoryChanged)
+                {
+                    MessageBus.PublishAsync(new GameUserDirectoryChangedEvent(game, customDirectoryChanged));
+                }
+                if (exeChanged)
+                {
+                    MessageBus.PublishAsync(new GameExeChangedEvent(game.ExecutableLocation));
+                }
             }
             SetGame(game);
         }

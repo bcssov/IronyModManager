@@ -743,6 +743,10 @@ namespace IronyModManager.Services
                     if (modDescriptorType == ModDescriptorType.JsonMetadata)
                     {
                         fileInfo = Reader.GetFileInfo(path, Shared.Constants.DescriptorJsonMetadata);
+                        if (fileInfo == null)
+                        {
+                            return;
+                        }
                     }
                     else
                     {

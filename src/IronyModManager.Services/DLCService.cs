@@ -130,10 +130,11 @@ namespace IronyModManager.Services
         {
             if (game != null)
             {
-                var cached = cache.Get<List<IDLC>>(new CacheGetParameters() { Region = CacheRegion, Key = game.Type });
-                if (cached != null)
+                var cached = cache.Get<DLCCacheHolder>(new CacheGetParameters() { Region = CacheRegion, Key = game.Type });
+                var exeLoc = string.IsNullOrWhiteSpace(game.ExecutableLocation) ? game.ExecutableLocation : string.Empty;
+                if (cached != null && cached.GameExe.Equals(exeLoc))
                 {
-                    return Task.FromResult((IReadOnlyCollection<IDLC>)cached);
+                    return Task.FromResult((IReadOnlyCollection<IDLC>)cached.DLC);
                 }
                 var result = new List<IDLC>();
                 if (!string.IsNullOrWhiteSpace(game.ExecutableLocation))
@@ -158,7 +159,7 @@ namespace IronyModManager.Services
                             }
                         }
                     }
-                    cache.Set(new CacheAddParameters<List<IDLC>>() { Region = CacheRegion, Key = game.Type, Value = result });
+                    cache.Set(new CacheAddParameters<DLCCacheHolder>() { Region = CacheRegion, Key = game.Type, Value = new DLCCacheHolder(result, game.ExecutableLocation) });
                 }
                 return Task.FromResult((IReadOnlyCollection<IDLC>)result);
             }
@@ -209,5 +210,46 @@ namespace IronyModManager.Services
         }
 
         #endregion Methods
+
+        #region Classes
+
+        /// <summary>
+        /// Class DLCCacheHolder.
+        /// </summary>
+        private class DLCCacheHolder
+        {
+            #region Constructors
+
+            /// <summary>
+            /// Initializes a new instance of the <see cref="DLCCacheHolder"/> class.
+            /// </summary>
+            /// <param name="dlc">The DLC.</param>
+            /// <param name="gameExe">The game executable.</param>
+            public DLCCacheHolder(List<IDLC> dlc, string gameExe)
+            {
+                DLC = dlc;
+                GameExe = gameExe ?? string.Empty;
+            }
+
+            #endregion Constructors
+
+            #region Properties
+
+            /// <summary>
+            /// Gets or sets the DLC.
+            /// </summary>
+            /// <value>The DLC.</value>
+            public List<IDLC> DLC { get; set; }
+
+            /// <summary>
+            /// Gets or sets the game executable.
+            /// </summary>
+            /// <value>The game executable.</value>
+            public string GameExe { get; set; }
+
+            #endregion Properties
+        }
+
+        #endregion Classes
     }
 }
