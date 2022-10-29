@@ -303,7 +303,15 @@ namespace IronyModManager.IO.Mods
                 }
                 if (writeDescriptorInModDirectory)
                 {
-                    var modPath = Path.Combine(parameters.Mod.FileName ?? string.Empty, Shared.Constants.DescriptorFile);
+                    var modPath = Path.Combine(parameters.Mod.FileName ?? string.Empty, parameters.DescriptorType == DescriptorType.DescriptorMod ? Shared.Constants.DescriptorFile : Shared.Constants.DescriptorJsonMetadata);
+                    if (parameters.DescriptorType == DescriptorType.JsonMetadata)
+                    {
+                        var dir = Path.GetDirectoryName(modPath);
+                        if (!Directory.Exists(dir))
+                        {
+                            Directory.CreateDirectory(dir);
+                        }
+                    }
                     await writeDescriptor(modPath, true);
                 }
                 return true;

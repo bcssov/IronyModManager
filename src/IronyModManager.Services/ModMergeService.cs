@@ -461,12 +461,24 @@ namespace IronyModManager.Services
                         DescriptorType = MapDescriptorType(game.ModDescriptorType)
                     }, ms, true);
                     ms.Seek(0, SeekOrigin.Begin);
-                    modMergeCompressExporter.AddFile(new ModMergeCompressExporterParameters()
+                    if (game.ModDescriptorType == ModDescriptorType.JsonMetadata)
                     {
-                        FileName = Shared.Constants.DescriptorFile,
-                        QueueId = queueId,
-                        Stream = ms
-                    });
+                        modMergeCompressExporter.AddFile(new ModMergeCompressExporterParameters()
+                        {
+                            FileName = Shared.Constants.DescriptorFile,
+                            QueueId = queueId,
+                            Stream = ms
+                        });
+                    }
+                    else
+                    {
+                        modMergeCompressExporter.AddFile(new ModMergeCompressExporterParameters()
+                        {
+                            FileName = Shared.Constants.DescriptorJsonMetadata,
+                            QueueId = queueId,
+                            Stream = ms
+                        });
+                    }
                     streams.Add(ms);
 
                     using var outerProgressLock = await zipLock.LockAsync();
