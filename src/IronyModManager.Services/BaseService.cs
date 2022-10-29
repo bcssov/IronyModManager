@@ -4,17 +4,18 @@
 // Created          : 02-12-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-11-2020
+// Last Modified On : 10-29-2022
 // ***********************************************************************
 // <copyright file="BaseService.cs" company="Mario">
 //     Mario
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
-using System.Collections.Generic;
 using System;
+using System.Collections.Generic;
 using AutoMapper;
 using IronyModManager.DI;
+using IronyModManager.IO.Common;
 using IronyModManager.Models.Common;
 using IronyModManager.Services.Common;
 using IronyModManager.Storage.Common;
@@ -69,6 +70,34 @@ namespace IronyModManager.Services
         protected virtual T GetModelInstance<T>() where T : class, IModel
         {
             return DIResolver.Get<T>();
+        }
+
+        /// <summary>
+        /// Maps the type of the descriptor mod.
+        /// </summary>
+        /// <param name="modDescriptorType">Type of the mod descriptor.</param>
+        /// <returns>Parser.Common.DescriptorModType.</returns>
+        protected virtual Parser.Common.DescriptorModType MapDescriptorModType(ModDescriptorType modDescriptorType)
+        {
+            return modDescriptorType switch
+            {
+                ModDescriptorType.JsonMetadata => Parser.Common.DescriptorModType.JsonMetadata,
+                _ => Parser.Common.DescriptorModType.DescriptorMod,
+            };
+        }
+
+        /// <summary>
+        /// Maps the type of the descriptor.
+        /// </summary>
+        /// <param name="modDescriptorType">Type of the mod descriptor.</param>
+        /// <returns>DescriptorType.</returns>
+        protected virtual DescriptorType MapDescriptorType(ModDescriptorType modDescriptorType)
+        {
+            return modDescriptorType switch
+            {
+                ModDescriptorType.JsonMetadata => DescriptorType.JsonMetadata,
+                _ => DescriptorType.DescriptorMod,
+            };
         }
 
         #endregion Methods

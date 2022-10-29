@@ -4,7 +4,7 @@
 // Created          : 02-14-2021
 //
 // Last Modified By : Mario
-// Last Modified On : 03-25-2021
+// Last Modified On : 10-29-2022
 // ***********************************************************************
 // <copyright file="DLCServiceTests.cs" company="Mario">
 //     Mario
@@ -25,6 +25,7 @@ using IronyModManager.IO.Common.DLC;
 using IronyModManager.IO.Common.Readers;
 using IronyModManager.Models;
 using IronyModManager.Models.Common;
+using IronyModManager.Parser.Common;
 using IronyModManager.Parser.Common.DLC;
 using IronyModManager.Parser.DLC;
 using IronyModManager.Services.Common;
@@ -75,7 +76,7 @@ namespace IronyModManager.Services.Tests
             };
             reader.Setup(s => s.Read(It.IsAny<string>(), It.IsAny<IEnumerable<string>>(), It.IsAny<bool>())).Returns(fileInfos);
             var parser = new Mock<IDLCParser>();
-            parser.Setup(s => s.Parse(It.IsAny<string>(), It.IsAny<IEnumerable<string>>())).Returns((string path, IEnumerable<string> values) =>
+            parser.Setup(s => s.Parse(It.IsAny<string>(), It.IsAny<IEnumerable<string>>(), It.IsAny<DescriptorModType>())).Returns((string path, IEnumerable<string> values, DescriptorModType t) =>
             {
                 return new DLCObject()
                 {

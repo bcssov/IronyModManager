@@ -4,7 +4,7 @@
 // Created          : 02-22-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 12-07-2020
+// Last Modified On : 10-28-2022
 // ***********************************************************************
 // <copyright file="IModParser.cs" company="Mario">
 //     Mario
@@ -28,8 +28,9 @@ namespace IronyModManager.Parser.Common.Mod
         /// Parses the specified lines.
         /// </summary>
         /// <param name="lines">The lines.</param>
+        /// <param name="descriptorModType">Type of the descriptor mod.</param>
         /// <returns>IModObject.</returns>
-        IModObject Parse(IEnumerable<string> lines);
+        IModObject Parse(IEnumerable<string> lines, DescriptorModType descriptorModType);
 
         #endregion Methods
     }

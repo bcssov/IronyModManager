@@ -8,186 +8,186 @@
              xmlns:converter="clr-namespace:IronyModManager.Converters;assembly=IronyModManager"
              xmlns:controls="clr-namespace:IronyModManager.Controls;assembly=IronyModManager"
              x:Name="collectionMods">
-  <UserControl.Resources>
-    <converter:MathConverter x:Key="MathConverter" />
-    <converter:AchievementStatusCompatibleConverter x:Key="AchievementStatusCompatibleConverter" />
-    <converter:AchievementStatusNotCompatibleConverter x:Key="AchievementStatusNotCompatibleConverter" />
-    <converter:LocalModConverter x:Key="LocalModConverter" />
-    <converter:ParadoxModConverter x:Key="ParadoxModConverter" />
-    <converter:SteamModConverter x:Key="SteamModConverter" />
-    <converter:TextTypeFontFamilyConverter x:Key="TextTypeFontFamilyConverter" />
-  </UserControl.Resources>
-  <Panel Height="{Binding $parent[Window].Height, 
+    <UserControl.Resources>
+        <converter:MathConverter x:Key="MathConverter" />
+        <converter:AchievementStatusCompatibleConverter x:Key="AchievementStatusCompatibleConverter" />
+        <converter:AchievementStatusNotCompatibleConverter x:Key="AchievementStatusNotCompatibleConverter" />
+        <converter:LocalModConverter x:Key="LocalModConverter" />
+        <converter:ParadoxModConverter x:Key="ParadoxModConverter" />
+        <converter:SteamModConverter x:Key="SteamModConverter" />
+        <converter:TextTypeFontFamilyConverter x:Key="TextTypeFontFamilyConverter" />
+    </UserControl.Resources>
+    <Panel Height="{Binding $parent[Window].Height, 
          Converter={StaticResource MathConverter} 
          ConverterParameter=x-110}"
-         Width="{Binding $parent[Window].Width, 
+           Width="{Binding $parent[Window].Width, 
          Converter={StaticResource MathConverter} 
          ConverterParameter=x/2.1}">
-    <Grid IsSharedSizeScope="True">
-      <DockPanel LastChildFill="True">
-        <TextBlock FontSize="14" Text="{Binding Title}" DockPanel.Dock="Top" HorizontalAlignment="Center"></TextBlock>
-        <Panel IsVisible="{Binding !EnteringNewCollection}" HorizontalAlignment="Stretch"
-               VerticalAlignment="Top" DockPanel.Dock="Top">
-          <Grid DockPanel.Dock="Top" HorizontalAlignment="Stretch" VerticalAlignment="Top" ShowGridLines="False">
-            <Grid.ColumnDefinitions>
-              <ColumnDefinition Width="{Binding $parent[Window].Width, 
+        <Grid IsSharedSizeScope="True">
+            <DockPanel LastChildFill="True">
+                <TextBlock FontSize="14" Text="{Binding Title}" DockPanel.Dock="Top" HorizontalAlignment="Center"></TextBlock>
+                <Panel IsVisible="{Binding !EnteringNewCollection}" HorizontalAlignment="Stretch"
+                       VerticalAlignment="Top" DockPanel.Dock="Top">
+                    <Grid DockPanel.Dock="Top" HorizontalAlignment="Stretch" VerticalAlignment="Top" ShowGridLines="False">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="{Binding $parent[Window].Width, 
                              Converter={StaticResource MathConverter} 
                              ConverterParameter=x/4.2}"></ColumnDefinition>
-              <ColumnDefinition Width="{Binding $parent[Window].Width, 
+                            <ColumnDefinition Width="{Binding $parent[Window].Width, 
                              Converter={StaticResource MathConverter} 
                              ConverterParameter=x/4.2}"></ColumnDefinition>
-            </Grid.ColumnDefinitions>
-            <Grid.RowDefinitions>
-              <RowDefinition Height="30"></RowDefinition>
-              <RowDefinition Height="50"></RowDefinition>
-              <RowDefinition Height="30"></RowDefinition>
-              <RowDefinition Height="30"></RowDefinition>
-              <RowDefinition Height="*"></RowDefinition>
-            </Grid.RowDefinitions>
-            <Panel Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="2" Margin="0,0,0,-10"
-                   Width="{Binding $parent[Window].Width, 
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="30"></RowDefinition>
+                            <RowDefinition Height="50"></RowDefinition>
+                            <RowDefinition Height="30"></RowDefinition>
+                            <RowDefinition Height="30"></RowDefinition>
+                            <RowDefinition Height="*"></RowDefinition>
+                        </Grid.RowDefinitions>
+                        <Panel Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="2" Margin="0,0,0,-10"
+                               Width="{Binding $parent[Window].Width, 
                            Converter={StaticResource MathConverter} 
                            ConverterParameter=(x/2.1)}">
-              <Grid ColumnDefinitions="2*,3*">
-                <ContentControl Content="{Binding ExportCollection}" MaxHeight="30" Grid.Column="0"></ContentControl>
-                <ContentControl Content="{Binding ModifyCollection}" MaxHeight="30" Grid.Column="1"></ContentControl>
-              </Grid>
-            </Panel>
-            <Panel Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="2">
-              <DockPanel HorizontalAlignment="Right">
-                <Button Content="{Binding Remove}" MaxHeight="30"
-                Command="{Binding RemoveCommand}" Margin="5,0,0,0" Width="30"></Button>
-                <!-- For the love of God I can't force this piece of shit to set its width properly -->
-                <controls:ComboBox Items="{Binding ModCollections}" SelectedItem="{Binding SelectedModCollection}"
-                          Height="32" Margin="10"
-                          Width="{Binding $parent[Window].Width, 
+                            <Grid ColumnDefinitions="2*,3*">
+                                <ContentControl Content="{Binding ExportCollection}" MaxHeight="30" Grid.Column="0"></ContentControl>
+                                <ContentControl Content="{Binding ModifyCollection}" MaxHeight="30" Grid.Column="1"></ContentControl>
+                            </Grid>
+                        </Panel>
+                        <Panel Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="2">
+                            <DockPanel HorizontalAlignment="Right">
+                                <Button Content="{Binding Remove}" MaxHeight="30"
+                                Command="{Binding RemoveCommand}" Margin="5,0,0,0" Width="30"></Button>
+                                <!-- For the love of God I can't force this piece of shit to set its width properly -->
+                                <controls:ComboBox Items="{Binding ModCollections}" SelectedItem="{Binding SelectedModCollection}"
+                                          Height="32" Margin="10"
+                                          Width="{Binding $parent[Window].Width, 
                            Converter={StaticResource MathConverter} 
                            ConverterParameter=(x/2.1)-90}">
-                  <controls:ComboBox.ItemTemplate>
-                    <DataTemplate>
-                      <ComboBoxItem Content="{Binding Name}" IsSelected="{Binding IsSelected}"></ComboBoxItem>
-                    </DataTemplate>
-                  </controls:ComboBox.ItemTemplate>
-                </controls:ComboBox>
-                <Button Content="{Binding Create}" MaxHeight="30"
-                        Command="{Binding CreateCommand}" Margin="0,0,5,0" Width="30"></Button>
-              </DockPanel>
-            </Panel>
-            <Panel Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="2">
-              <Grid ColumnDefinitions="1.5*,1*">
-                <ContentControl Content="{Binding SearchMods}" MaxHeight="30" Grid.Column="0" Grid.ColumnSpan="{Binding SearchModsColSpan}"></ContentControl>
-                <ContentControl Content="{Binding PatchMod}" MaxHeight="30" Grid.Column="1" IsVisible="{Binding ShowAdvancedFeatures}"></ContentControl>
-              </Grid>
-            </Panel>
-            <Grid Margin="0,30,0,0" Grid.Column="0" Grid.Row="3" Grid.ColumnSpan="2" x:Name="header">
-              <Grid.ColumnDefinitions>
-                <ColumnDefinition MaxWidth="50" Width="1.5*" />
-                <ColumnDefinition MaxWidth="80" Width="2*" />
-                <ColumnDefinition MinWidth="100" Width="2*" />
-                <ColumnDefinition Width="5*" />
-                <ColumnDefinition Width="30" />
-              </Grid.ColumnDefinitions>
-              <Border BorderThickness="1,1,0,0" Grid.Column="0" BorderBrush="{DynamicResource ThemeBorderMidBrush}" Height="40">
-                <CheckBox IsEnabled="{Binding AllowModSelection}" IsChecked="{Binding AllModsEnabled}"
-                          Command="{Binding EnableAllCommand}" HorizontalAlignment="Left" Margin="6,-7,0,0"></CheckBox>
-              </Border>
-              <Border BorderThickness="0,1,0,0" Grid.Column="1" BorderBrush="{DynamicResource ThemeBorderMidBrush}" Height="40">
-                <TextBlock Text="{Binding ModSelected}" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,-5,0,0"></TextBlock>
-              </Border>
-              <Border BorderThickness="1,1,0,0" Grid.Column="2" BorderBrush="{DynamicResource ThemeBorderMidBrush}" Height="40">
-                <TextBlock Text="{Binding ModOrder}" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,-5,0,0"></TextBlock>
-              </Border>
-              <Border BorderThickness="1,1,1,0" Grid.Column="3" BorderBrush="{DynamicResource ThemeBorderMidBrush}" Height="40" Grid.ColumnSpan="2">
-                <ContentControl Content="{Binding ModNameSortOrder}"></ContentControl>
-              </Border>
-            </Grid>
-            <ContentControl Content="{Binding HashReportView}"></ContentControl>
-            <controls:DragDropListBox Margin="0,10,0,0" Items="{Binding SelectedMods}" ScrollViewer.HorizontalScrollBarVisibility="Disabled"
-                     x:Name="modList" Grid.Row="4" Grid.ColumnSpan="2"
-                     MinHeight="{Binding $parent[Window].Height, 
+                                    <controls:ComboBox.ItemTemplate>
+                                        <DataTemplate>
+                                            <ComboBoxItem Content="{Binding Name}" IsSelected="{Binding IsSelected}"></ComboBoxItem>
+                                        </DataTemplate>
+                                    </controls:ComboBox.ItemTemplate>
+                                </controls:ComboBox>
+                                <Button Content="{Binding Create}" MaxHeight="30"
+                                        Command="{Binding CreateCommand}" Margin="0,0,5,0" Width="30"></Button>
+                            </DockPanel>
+                        </Panel>
+                        <Panel Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="2">
+                            <Grid ColumnDefinitions="1.5*,1*">
+                                <ContentControl Content="{Binding SearchMods}" MaxHeight="30" Grid.Column="0" Grid.ColumnSpan="{Binding SearchModsColSpan}"></ContentControl>
+                                <ContentControl Content="{Binding PatchMod}" MaxHeight="30" Grid.Column="1" IsVisible="{Binding ShowAdvancedFeatures}"></ContentControl>
+                            </Grid>
+                        </Panel>
+                        <Grid Margin="0,30,0,0" Grid.Column="0" Grid.Row="3" Grid.ColumnSpan="2" x:Name="header">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition MaxWidth="50" Width="1.5*" />
+                                <ColumnDefinition MaxWidth="80" Width="2*" />
+                                <ColumnDefinition MinWidth="100" Width="2*" />
+                                <ColumnDefinition Width="5*" />
+                                <ColumnDefinition Width="30" />
+                            </Grid.ColumnDefinitions>
+                            <Border BorderThickness="1,1,0,0" Grid.Column="0" BorderBrush="{DynamicResource ThemeBorderMidBrush}" Height="40">
+                                <CheckBox IsEnabled="{Binding AllowModSelection}" IsChecked="{Binding AllModsEnabled}"
+                                          Command="{Binding EnableAllCommand}" HorizontalAlignment="Left" Margin="6,-7,0,0"></CheckBox>
+                            </Border>
+                            <Border BorderThickness="0,1,0,0" Grid.Column="1" BorderBrush="{DynamicResource ThemeBorderMidBrush}" Height="40">
+                                <TextBlock Text="{Binding ModSelected}" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,-5,0,0"></TextBlock>
+                            </Border>
+                            <Border BorderThickness="1,1,0,0" Grid.Column="2" BorderBrush="{DynamicResource ThemeBorderMidBrush}" Height="40">
+                                <TextBlock Text="{Binding ModOrder}" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,-5,0,0"></TextBlock>
+                            </Border>
+                            <Border BorderThickness="1,1,1,0" Grid.Column="3" BorderBrush="{DynamicResource ThemeBorderMidBrush}" Height="40" Grid.ColumnSpan="2">
+                                <ContentControl Content="{Binding ModNameSortOrder}"></ContentControl>
+                            </Border>
+                        </Grid>
+                        <ContentControl Content="{Binding HashReportView}"></ContentControl>
+                        <controls:DragDropListBox Margin="0,10,0,0" Items="{Binding SelectedMods}" ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                                 x:Name="modList" Grid.Row="4" Grid.ColumnSpan="2"
+                                 MinHeight="{Binding $parent[Window].Height, 
                      Converter={StaticResource MathConverter} 
                      ConverterParameter=x-300}"
-                     SelectedItem="{Binding SelectedMod}"
-                     IsTextSearchEnabled="True">
-              <controls:DragDropListBox.ItemTemplate>
-                <DataTemplate>
-                  <Grid Background="Transparent">
-                    <Grid.ColumnDefinitions>
-                      <ColumnDefinition MaxWidth="50" Width="1.5*" />
-                      <ColumnDefinition MaxWidth="80" Width="2*" />
-                      <ColumnDefinition MinWidth="100" Width="2*" />
-                      <ColumnDefinition Width="5*" />
-                      <ColumnDefinition Width="30" />
-                    </Grid.ColumnDefinitions>
-                    <Grid Grid.Column="0" Grid.ColumnSpan="2" ColumnDefinitions="*,38">
-                      <CheckBox IsChecked="{Binding IsSelected}" Grid.Column="0"></CheckBox>
-                      <Panel Grid.Column="1" HorizontalAlignment="Left">
-                        <controls:IronyToolTip Background="Transparent" BorderThickness="0,0,0,0"  IsVisible="{Binding Source, Converter={StaticResource LocalModConverter}}">
-                          <Image Width="14" Height="14"
-                                 controls:IronyToolTip.Tip="{Binding Path=DataContext.LocalModTooltip, ElementName=collectionMods}"
-                                 controls:IronyToolTip.ShowDelay="0" controls:IronyToolTip.ReactToParent="true">
-                            <Image.Source>
-                              <DrawingImage Drawing="{DynamicResource Icons.LocalMod}"></DrawingImage>
-                            </Image.Source>
-                          </Image>
-                        </controls:IronyToolTip>
-                        <controls:IronyToolTip Background="Transparent" BorderThickness="0,0,0,0"  IsVisible="{Binding Source, Converter={StaticResource ParadoxModConverter}}">
-                          <Image Width="14" Height="14"
-                                 controls:IronyToolTip.Tip="{Binding Path=DataContext.ParadoxModTooltip, ElementName=collectionMods}"
-                                 controls:IronyToolTip.ShowDelay="0" controls:IronyToolTip.ReactToParent="true">
-                            <Image.Source>
-                              <DrawingImage Drawing="{DynamicResource Icons.ParadoxMod}"></DrawingImage>
-                            </Image.Source>
-                          </Image>
-                        </controls:IronyToolTip>
-                        <controls:IronyToolTip Background="Transparent" BorderThickness="0,0,0,0"  IsVisible="{Binding Source, Converter={StaticResource SteamModConverter}}">
-                          <Image Width="14" Height="14"
-                                 controls:IronyToolTip.Tip="{Binding Path=DataContext.SteamModTooltip, ElementName=collectionMods}"
-                                 controls:IronyToolTip.ShowDelay="0" controls:IronyToolTip.ReactToParent="true">
-                            <Image.Source>
-                              <DrawingImage Drawing="{DynamicResource Icons.SteamMod}"></DrawingImage>
-                            </Image.Source>
-                          </Image>
-                        </controls:IronyToolTip>
-                      </Panel>
+                                 SelectedItem="{Binding SelectedMod}"
+                                 IsTextSearchEnabled="True">
+                            <controls:DragDropListBox.ItemTemplate>
+                                <DataTemplate>
+                                    <Grid Background="Transparent">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition MaxWidth="50" Width="1.5*" />
+                                            <ColumnDefinition MaxWidth="80" Width="2*" />
+                                            <ColumnDefinition MinWidth="100" Width="2*" />
+                                            <ColumnDefinition Width="5*" />
+                                            <ColumnDefinition Width="30" />
+                                        </Grid.ColumnDefinitions>
+                                        <Grid Grid.Column="0" Grid.ColumnSpan="2" ColumnDefinitions="*,38">
+                                            <CheckBox IsChecked="{Binding IsSelected}" Grid.Column="0"></CheckBox>
+                                            <Panel Grid.Column="1" HorizontalAlignment="Left">
+                                                <controls:IronyToolTip Background="Transparent" BorderThickness="0,0,0,0"  IsVisible="{Binding Source, Converter={StaticResource LocalModConverter}}">
+                                                    <Image Width="14" Height="14"
+                                                           controls:IronyToolTip.Tip="{Binding Path=DataContext.LocalModTooltip, ElementName=collectionMods}"
+                                                           controls:IronyToolTip.ShowDelay="0" controls:IronyToolTip.ReactToParent="true">
+                                                        <Image.Source>
+                                                            <DrawingImage Drawing="{DynamicResource Icons.LocalMod}"></DrawingImage>
+                                                        </Image.Source>
+                                                    </Image>
+                                                </controls:IronyToolTip>
+                                                <controls:IronyToolTip Background="Transparent" BorderThickness="0,0,0,0"  IsVisible="{Binding Source, Converter={StaticResource ParadoxModConverter}}">
+                                                    <Image Width="14" Height="14"
+                                                           controls:IronyToolTip.Tip="{Binding Path=DataContext.ParadoxModTooltip, ElementName=collectionMods}"
+                                                           controls:IronyToolTip.ShowDelay="0" controls:IronyToolTip.ReactToParent="true">
+                                                        <Image.Source>
+                                                            <DrawingImage Drawing="{DynamicResource Icons.ParadoxMod}"></DrawingImage>
+                                                        </Image.Source>
+                                                    </Image>
+                                                </controls:IronyToolTip>
+                                                <controls:IronyToolTip Background="Transparent" BorderThickness="0,0,0,0"  IsVisible="{Binding Source, Converter={StaticResource SteamModConverter}}">
+                                                    <Image Width="14" Height="14"
+                                                           controls:IronyToolTip.Tip="{Binding Path=DataContext.SteamModTooltip, ElementName=collectionMods}"
+                                                           controls:IronyToolTip.ShowDelay="0" controls:IronyToolTip.ReactToParent="true">
+                                                        <Image.Source>
+                                                            <DrawingImage Drawing="{DynamicResource Icons.SteamMod}"></DrawingImage>
+                                                        </Image.Source>
+                                                    </Image>
+                                                </controls:IronyToolTip>
+                                            </Panel>
+                                        </Grid>
+                                        <controls:MinMaxNumericUpDown x:Name="order" Value="{Binding Order}" ClipValueToMinMax="True" MinMaxAllowSpin="True"
+                                                                Grid.Column="2" MaxHeight="30" HorizontalAlignment="Stretch" Margin="0,0,10,0"></controls:MinMaxNumericUpDown>
+                                        <Grid Grid.Column="3" ColumnDefinitions="*,16">
+                                            <TextBlock Text="{Binding Name}" VerticalAlignment="Center"
+                                                       TextWrapping="Wrap" Grid.Column="0" Margin="8,0,0,0" FontFamily="{Binding Name,Converter={StaticResource TextTypeFontFamilyConverter}}"></TextBlock>
+                                            <Panel Grid.Column="1">
+                                                <!-- Because Avalonia sucks in this regard, that's why -->
+                                                <controls:IronyToolTip Background="Transparent" BorderThickness="0,0,0,0" IsVisible="{Binding AchievementStatus, Converter={StaticResource AchievementStatusCompatibleConverter}}">
+                                                    <Image Width="14" Height="14"
+                                                           controls:IronyToolTip.Tip="{Binding Path=DataContext.AchievementCompatible, ElementName=collectionMods}"
+                                                           controls:IronyToolTip.ShowDelay="0" controls:IronyToolTip.ReactToParent="true">
+                                                        <Image.Source>
+                                                            <DrawingImage Drawing="{DynamicResource Icons.Achievements}"></DrawingImage>
+                                                        </Image.Source>
+                                                    </Image>
+                                                </controls:IronyToolTip>
+                                                <controls:IronyToolTip Background="Transparent" BorderThickness="0,0,0,0" IsVisible="{Binding AchievementStatus, Converter={StaticResource AchievementStatusNotCompatibleConverter}}">
+                                                    <Image Width="14" Height="14"
+                                                           controls:IronyToolTip.Tip="{Binding Path=DataContext.NotAchievementCompatible, ElementName=collectionMods}"
+                                                           controls:IronyToolTip.ShowDelay="0" controls:IronyToolTip.ReactToParent="true">
+                                                        <Image.Source>
+                                                            <DrawingImage Drawing="{DynamicResource Icons.NoAchievements}"></DrawingImage>
+                                                        </Image.Source>
+                                                    </Image>
+                                                </controls:IronyToolTip>
+                                            </Panel>
+                                        </Grid>
+                                    </Grid>
+                                </DataTemplate>
+                            </controls:DragDropListBox.ItemTemplate>
+                        </controls:DragDropListBox>
                     </Grid>
-                    <controls:MinMaxNumericUpDown x:Name="order" Value="{Binding Order}" ClipValueToMinMax="True" MinMaxAllowSpin="True"
-                                            Grid.Column="2" MaxHeight="30" HorizontalAlignment="Stretch" Margin="0,0,10,0"></controls:MinMaxNumericUpDown>
-                    <Grid Grid.Column="3" ColumnDefinitions="*,16">
-                      <TextBlock Text="{Binding Name}" VerticalAlignment="Center"
-                                 TextWrapping="Wrap" Grid.Column="0" Margin="8,0,0,0" FontFamily="{Binding Name,Converter={StaticResource TextTypeFontFamilyConverter}}"></TextBlock>
-                      <Panel Grid.Column="1">
-                        <!-- Because Avalonia sucks in this regard, that's why -->
-                        <controls:IronyToolTip Background="Transparent" BorderThickness="0,0,0,0" IsVisible="{Binding AchievementStatus, Converter={StaticResource AchievementStatusCompatibleConverter}}">
-                          <Image Width="14" Height="14"
-                                 controls:IronyToolTip.Tip="{Binding Path=DataContext.AchievementCompatible, ElementName=collectionMods}"
-                                 controls:IronyToolTip.ShowDelay="0" controls:IronyToolTip.ReactToParent="true">
-                            <Image.Source>
-                              <DrawingImage Drawing="{DynamicResource Icons.Achievements}"></DrawingImage>
-                            </Image.Source>
-                          </Image>
-                        </controls:IronyToolTip>
-                        <controls:IronyToolTip Background="Transparent" BorderThickness="0,0,0,0" IsVisible="{Binding AchievementStatus, Converter={StaticResource AchievementStatusNotCompatibleConverter}}">
-                          <Image Width="14" Height="14"
-                                 controls:IronyToolTip.Tip="{Binding Path=DataContext.NotAchievementCompatible, ElementName=collectionMods}"
-                                 controls:IronyToolTip.ShowDelay="0" controls:IronyToolTip.ReactToParent="true">
-                            <Image.Source>
-                              <DrawingImage Drawing="{DynamicResource Icons.NoAchievements}"></DrawingImage>
-                            </Image.Source>
-                          </Image>
-                        </controls:IronyToolTip>
-                      </Panel>
-                    </Grid>
-                  </Grid>
-                </DataTemplate>
-              </controls:DragDropListBox.ItemTemplate>
-            </controls:DragDropListBox>
-          </Grid>
-        </Panel>
-        <Panel IsVisible="{Binding EnteringNewCollection}" HorizontalAlignment="Stretch" DockPanel.Dock="Top">
-          <ContentControl Content="{Binding AddNewCollection}"></ContentControl>
-        </Panel>
-      </DockPanel>
-    </Grid>
-  </Panel>
+                </Panel>
+                <Panel IsVisible="{Binding EnteringNewCollection}" HorizontalAlignment="Stretch" DockPanel.Dock="Top">
+                    <ContentControl Content="{Binding AddNewCollection}"></ContentControl>
+                </Panel>
+            </DockPanel>
+        </Grid>
+    </Panel>
 </UserControl>

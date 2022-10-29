@@ -9,7 +9,7 @@
                 HorizontalAlignment="Left" MaxHeight="30" Margin="10,0,0,0"></Button>
         <Button Content="{Binding Duplicate}" Command="{Binding DuplicateCommand}"
                 HorizontalAlignment="Center" MaxHeight="30"  Margin="0,0,10,0"></Button>
-        <Panel HorizontalAlignment="Right">
+        <Panel HorizontalAlignment="Right" IsVisible="{Binding MergeAllowed}">
             <Button Content="{Binding MergeOpen}" Command="{Binding MergeOpenCommand}"
                         MaxHeight="30"  Margin="0,0,10,0" x:Name="openPopupButton"></Button>
             <Popup PlacementMode="AnchorAndGravity" PlacementGravity="Bottom" VerticalOffset="15" IsOpen="{Binding IsMergeOpen}"
@@ -21,10 +21,12 @@
                                    MinHeight="20" Margin="0,5" VerticalAlignment="Center" HorizontalAlignment="Center"></TextBlock>
                         <Button Content="{Binding MergeBasic}" Command="{Binding MergeBasicCommand}"
                                 Grid.Row="1" Grid.Column="0"
-                                HorizontalAlignment="Stretch" VerticalAlignment="Stretch" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"></Button>
+                                HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
+                                HorizontalContentAlignment="Center" VerticalContentAlignment="Center" IsVisible="{Binding BasicVisible}"></Button>
                         <Button Content="{Binding MergeCompress}" Command="{Binding MergeCompressCommand}"
                                 Grid.Row="2" Grid.Column="0"
-                                HorizontalAlignment="Stretch" VerticalAlignment="Stretch" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"></Button>
+                                HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
+                                HorizontalContentAlignment="Center" VerticalContentAlignment="Center" IsVisible="{Binding CompressVisible}"></Button>
                         <Button Content="{Binding MergeClose}" Command="{Binding MergeCloseCommand}"
                                 Grid.Row="4" Grid.Column="0"
                                 HorizontalAlignment="Stretch" VerticalAlignment="Stretch" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"></Button>

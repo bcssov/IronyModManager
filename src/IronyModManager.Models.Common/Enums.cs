@@ -4,7 +4,7 @@
 // Created          : 03-01-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 10-27-2022
+// Last Modified On : 10-28-2022
 // ***********************************************************************
 // <copyright file="Enums.cs" company="Mario">
 //     Mario
@@ -111,6 +111,22 @@ namespace IronyModManager.Models.Common
     }
 
     /// <summary>
+    /// Enum ModDescriptorType
+    /// </summary>
+    public enum ModDescriptorType
+    {
+        /// <summary>
+        /// The descriptor mod
+        /// </summary>
+        DescriptorMod,
+
+        /// <summary>
+        /// The json metadata
+        /// </summary>
+        JsonMetadata
+    }
+
+    /// <summary>
     /// Enum ModSource
     /// </summary>
     public enum ModSource
@@ -196,5 +212,22 @@ namespace IronyModManager.Models.Common
         /// The read only without localization
         /// </summary>
         ReadOnlyWithoutLocalization
+    }
+
+    /// <summary>
+    /// Enum SupportedMergeTypes
+    /// </summary>
+    [Flags]
+    public enum SupportedMergeTypes
+    {
+        /// <summary>
+        /// The basic
+        /// </summary>
+        Basic = 1,
+
+        /// <summary>
+        /// The zip
+        /// </summary>
+        Zip = 2
     }
 }

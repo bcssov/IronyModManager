@@ -4,7 +4,7 @@
 // Created          : 07-30-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-28-2021
+// Last Modified On : 10-29-2022
 // ***********************************************************************
 // <copyright file="ActionsControlViewModel.cs" company="Mario">
 //     Mario
@@ -20,6 +20,7 @@ using System.Reactive.Linq;
 using System.Threading.Tasks;
 using IronyModManager.Common.ViewModels;
 using IronyModManager.Implementation.Actions;
+using IronyModManager.Implementation.MessageBus;
 using IronyModManager.Localization.Attributes;
 using IronyModManager.Models.Common;
 using IronyModManager.Services.Common;
@@ -48,6 +49,11 @@ namespace IronyModManager.ViewModels.Controls
         /// </summary>
         private readonly IGameService gameService;
 
+        /// <summary>
+        /// The game executable changed handler
+        /// </summary>
+        private GameExeChangedHandler gameExeChangedHandler;
+
         #endregion Fields
 
         #region Constructors
@@ -55,14 +61,16 @@ namespace IronyModManager.ViewModels.Controls
         /// <summary>
         /// Initializes a new instance of the <see cref="ShortcutsControlViewModel" /> class.
         /// </summary>
+        /// <param name="gameExeChangedHandler">The game executable changed handler.</param>
         /// <param name="dlcManager">The DLC manager.</param>
         /// <param name="appAction">The application action.</param>
         /// <param name="gameService">The game service.</param>
-        public ActionsControlViewModel(DLCManagerControlViewModel dlcManager, IAppAction appAction, IGameService gameService)
+        public ActionsControlViewModel(GameExeChangedHandler gameExeChangedHandler, DLCManagerControlViewModel dlcManager, IAppAction appAction, IGameService gameService)
         {
             this.appAction = appAction;
             this.gameService = gameService;
             DLCManager = dlcManager;
+            this.gameExeChangedHandler = gameExeChangedHandler;
         }
 
         #endregion Constructors
@@ -243,6 +251,11 @@ namespace IronyModManager.ViewModels.Controls
             this.WhenAnyValue(p => p.IsOpen).Where(p => p).Subscribe(s =>
             {
                 evaluateVisibility();
+            }).DisposeWith(disposables);
+
+            gameExeChangedHandler.Subscribe(s =>
+            {
+                Task.Run(async () => await DLCManager.RefreshDLCAsync(gameService.GetSelected()).ConfigureAwait(false)).ConfigureAwait(false);
             }).DisposeWith(disposables);
 
             base.OnActivated(disposables);

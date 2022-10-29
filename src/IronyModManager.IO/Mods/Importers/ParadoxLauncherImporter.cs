@@ -4,7 +4,7 @@
 // Created          : 08-12-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 07-12-2022
+// Last Modified On : 10-29-2022
 // ***********************************************************************
 // <copyright file="ParadoxLauncherImporter.cs" company="Mario">
 //     Mario
@@ -307,7 +307,7 @@ namespace IronyModManager.IO.Mods.Importers
             {
                 using var con = GetConnection(parameters);
                 var changes = await con.QueryAllAsync<Models.Paradox.v2.KnoxMigrations>();
-                return changes != null && changes.Any(c => c.Name.Equals(Constants.SqlV4Id.Name, StringComparison.OrdinalIgnoreCase) && c.Id.Equals(Constants.SqlV4Id.Id));
+                return changes != null && changes.Any(c => c.Name.Equals(Constants.SqlV4Id.Name, StringComparison.OrdinalIgnoreCase));
             }
             catch
             {

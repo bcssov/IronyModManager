@@ -4,7 +4,7 @@
 // Created          : 01-17-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 07-15-2022
+// Last Modified On : 10-29-2022
 // ***********************************************************************
 // <copyright file="Constants.cs" company="Mario">
 //     Mario
@@ -58,6 +58,11 @@ namespace IronyModManager.Shared
         /// The json extension without dot
         /// </summary>
         public const string JsonExtensionWithoutDot = "json";
+
+        /// <summary>
+        /// The json mod directory
+        /// </summary>
+        public const string JsonModDirectory = "irony-mod";
 
         /// <summary>
         /// The localization directory
@@ -115,6 +120,11 @@ namespace IronyModManager.Shared
         public const string ZipExtensionWithoutDot = "zip";
 
         /// <summary>
+        /// The descriptor json metadata
+        /// </summary>
+        public static readonly string DescriptorJsonMetadata = ".metadata" + Path.DirectorySeparatorChar + "metadata.json";
+
+        /// <summary>
         /// The image extensions
         /// </summary>
         public static readonly string[] ImageExtensions = new string[] { ".gif", ".jpg", ".jpeg", ".png", ".dds", ".tga", ".bmp", ".tiff", ".tif" };
@@ -122,7 +132,7 @@ namespace IronyModManager.Shared
         /// <summary>
         /// The text extensions
         /// </summary>
-        public static readonly string[] TextExtensions = new string[] { ".lua", ".txt", ".asset", ".gui", ".gfx", ".yml", ".csv", ".shader", ".fxh", ".mod", ".sfx" };
+        public static readonly string[] TextExtensions = new string[] { ".lua", ".txt", ".asset", ".gui", ".gfx", ".yml", ".csv", ".shader", ".fxh", ".mod", ".sfx", ".json" };
 
         #endregion Fields
 
@@ -471,6 +481,66 @@ namespace IronyModManager.Shared
                 /// The paradox game identifier
                 /// </summary>
                 public static readonly string ParadoxGameId = "stellaris";
+
+                #endregion Fields
+            }
+
+            /// <summary>
+            /// Class Victoria3.
+            /// </summary>
+            public static class Victoria3
+            {
+                #region Fields
+
+                /// <summary>
+                /// The abrv
+                /// </summary>
+                public const string Abrv = "Vicky3";
+
+                /// <summary>
+                /// The docs path
+                /// </summary>
+                public const string DocsPath = "Victoria 3";
+
+                /// <summary>
+                /// The identifier
+                /// </summary>
+                public const string Id = "Victoria3";
+
+                /// <summary>
+                /// The steam application identifier
+                /// </summary>
+                public const int SteamAppId = 529340;
+
+                /// <summary>
+                /// The checksum folders
+                /// </summary>
+                public static readonly string[] ChecksumFolders = new string[] { "common", "events", "map_data", "gui", "localization" };
+
+                /// <summary>
+                /// The DLC container
+                /// </summary>
+                public static readonly string DLCContainer = "game";
+
+                /// <summary>
+                /// The game folders
+                /// </summary>
+                public static readonly string[] GameFolders = new string[] { "localization", "map_data", "music", "notifications", "sound", "soundtrack", "tools", "common", "content_source", "dlc", "events", "fonts", "gfx", "gui", "interface", "licenses" };
+
+                /// <summary>
+                /// The launcher settings file name
+                /// </summary>
+                public static readonly string LauncherSettingsFileName = "launcher" + Path.DirectorySeparatorChar + "launcher-settings.json";
+
+                /// <summary>
+                /// The launcher settings prefix
+                /// </summary>
+                public static readonly string LauncherSettingsPrefix = ".." + Path.DirectorySeparatorChar;
+
+                /// <summary>
+                /// The paradox game identifier
+                /// </summary>
+                public static readonly string ParadoxGameId = "victoria3";
 
                 #endregion Fields
             }

@@ -4,7 +4,7 @@
 // Created          : 02-14-2021
 //
 // Last Modified By : Mario
-// Last Modified On : 02-15-2021
+// Last Modified On : 10-29-2022
 // ***********************************************************************
 // <copyright file="DLC.cs" company="Mario">
 //     Mario
@@ -28,6 +28,12 @@ namespace IronyModManager.Models
     public class DLC : BaseModel, IDLC
     {
         #region Properties
+
+        /// <summary>
+        /// Gets or sets the application identifier.
+        /// </summary>
+        /// <value>The application identifier.</value>
+        public virtual string AppId { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether this instance is enabled.

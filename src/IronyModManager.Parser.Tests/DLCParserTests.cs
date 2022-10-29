@@ -4,7 +4,7 @@
 // Created          : 02-13-2021
 //
 // Last Modified By : Mario
-// Last Modified On : 02-13-2021
+// Last Modified On : 10-29-2022
 // ***********************************************************************
 // <copyright file="DLCParserTests.cs" company="Mario">
 //     Mario
@@ -51,9 +51,49 @@ namespace IronyModManager.Parser.Tests
 
 
             var parser = new DLCParser(new CodeParser(new Logger()));
-            var result = parser.Parse("dlc\\dlc01.dlc", sb.ToString().Split(Environment.NewLine, StringSplitOptions.RemoveEmptyEntries));
+            var result = parser.Parse("dlc\\dlc01.dlc", sb.ToString().Split(Environment.NewLine, StringSplitOptions.RemoveEmptyEntries), Common.DescriptorModType.DescriptorMod);
             result.Name.Should().Be("Horizon Signal");
             result.Path.Should().Be("dlc/dlc01.dlc");
+            result.AppId.Should().BeNullOrEmpty();
+        }
+
+        /// <summary>
+        /// Defines the test method Should_parse_json_dlc_file.
+        /// </summary>
+        [Fact]
+        public void Should_parse_json_dlc_file()
+        {
+            DISetup.SetupContainer();
+
+            var sb = new StringBuilder();
+            sb.AppendLine(@"{");
+            sb.AppendLine(@"	""id"":");
+            sb.AppendLine(@"	{");
+            sb.AppendLine(@"		""steam"": ""2071471"",");
+            sb.AppendLine(@"		""paradox"": ""dlc002_american_buildings""");
+            sb.AppendLine(@"	},");
+            sb.AppendLine(@"	""displayName"":");
+            sb.AppendLine(@"	{");
+            sb.AppendLine(@"		""en"": ""American Buildings Pack""");
+            sb.AppendLine(@"	},");
+            sb.AppendLine(@"	""category"":");
+            sb.AppendLine(@"	{");
+            sb.AppendLine(@"		""en"": ""DLC""");
+            sb.AppendLine(@"	},");
+            sb.AppendLine(@"	""description"":");
+            sb.AppendLine(@"	{");
+            sb.AppendLine(@"		""en"": ""Victoria 3: American Buildings Pack""");
+            sb.AppendLine(@"	},");
+            sb.AppendLine(@"	""thumbnailPath"": ""thumbnail.png"",");
+            sb.AppendLine(@"	""thirdPartyContent"": false");
+            sb.AppendLine(@"}");
+
+
+            var parser = new DLCParser(new CodeParser(new Logger()));
+            var result = parser.Parse("dlc\\dlc01.dlc", sb.ToString().Split(Environment.NewLine, StringSplitOptions.RemoveEmptyEntries), Common.DescriptorModType.JsonMetadata);
+            result.Name.Should().Be("American Buildings Pack");
+            result.Path.Should().Be("dlc/dlc01.dlc");
+            result.AppId.Should().Be("dlc002_american_buildings");
         }
     }
 }

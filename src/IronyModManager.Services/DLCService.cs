@@ -4,7 +4,7 @@
 // Created          : 02-14-2021
 //
 // Last Modified By : Mario
-// Last Modified On : 10-24-2021
+// Last Modified On : 10-29-2022
 // ***********************************************************************
 // <copyright file="DLCService.cs" company="Mario">
 //     Mario
@@ -114,7 +114,8 @@ namespace IronyModManager.Services
                 return dlcExporter.ExportDLCAsync(new DLCParameters()
                 {
                     RootPath = game.UserDirectory,
-                    DLC = disabledDLC
+                    DLC = disabledDLC,
+                    DescriptorType = MapDescriptorType(game.ModDescriptorType)
                 });
             }
             return Task.FromResult(false);
@@ -129,10 +130,11 @@ namespace IronyModManager.Services
         {
             if (game != null)
             {
-                var cached = cache.Get<List<IDLC>>(new CacheGetParameters() { Region = CacheRegion, Key = game.Type });
-                if (cached != null)
+                var cached = cache.Get<DLCCacheHolder>(new CacheGetParameters() { Region = CacheRegion, Key = game.Type });
+                var exeLoc = string.IsNullOrWhiteSpace(game.ExecutableLocation) ? game.ExecutableLocation : string.Empty;
+                if (cached != null && cached.GameExe.Equals(exeLoc))
                 {
-                    return Task.FromResult((IReadOnlyCollection<IDLC>)cached);
+                    return Task.FromResult((IReadOnlyCollection<IDLC>)cached.DLC);
                 }
                 var result = new List<IDLC>();
                 if (!string.IsNullOrWhiteSpace(game.ExecutableLocation))
@@ -150,14 +152,14 @@ namespace IronyModManager.Services
                                 {
                                     foreach (var item in infos)
                                     {
-                                        var dlcObject = dlcParser.Parse(Path.Combine(dlcFolder, item.FileName), item.Content);
+                                        var dlcObject = dlcParser.Parse(Path.Combine(dlcFolder, item.FileName), item.Content, MapDescriptorModType(game.ModDescriptorType));
                                         result.Add(Mapper.Map<IDLC>(dlcObject));
                                     }
                                 }
                             }
                         }
                     }
-                    cache.Set(new CacheAddParameters<List<IDLC>>() { Region = CacheRegion, Key = game.Type, Value = result });
+                    cache.Set(new CacheAddParameters<DLCCacheHolder>() { Region = CacheRegion, Key = game.Type, Value = new DLCCacheHolder(result, game.ExecutableLocation) });
                 }
                 return Task.FromResult((IReadOnlyCollection<IDLC>)result);
             }
@@ -180,13 +182,22 @@ namespace IronyModManager.Services
                 }
                 var disabledDLC = await dlcExporter.GetDisabledDLCAsync(new DLCParameters()
                 {
-                    RootPath = game.UserDirectory
+                    RootPath = game.UserDirectory,
+                    DescriptorType = MapDescriptorType(game.ModDescriptorType)
                 });
                 if ((disabledDLC?.Any()).GetValueOrDefault())
                 {
                     foreach (var item in disabledDLC)
                     {
-                        var matchedDLC = dlc.FirstOrDefault(p => p.Path.Equals(item.Path, StringComparison.OrdinalIgnoreCase));
+                        IDLC matchedDLC;
+                        if (game.ModDescriptorType == ModDescriptorType.DescriptorMod)
+                        {
+                            matchedDLC = dlc.FirstOrDefault(p => p.Path.Equals(item.Path, StringComparison.OrdinalIgnoreCase));
+                        }
+                        else
+                        {
+                            matchedDLC = dlc.FirstOrDefault(p => p.AppId.Equals(item.AppId, StringComparison.OrdinalIgnoreCase));
+                        }
                         if (matchedDLC != null)
                         {
                             matchedDLC.IsEnabled = false;
@@ -199,5 +210,46 @@ namespace IronyModManager.Services
         }
 
         #endregion Methods
+
+        #region Classes
+
+        /// <summary>
+        /// Class DLCCacheHolder.
+        /// </summary>
+        private class DLCCacheHolder
+        {
+            #region Constructors
+
+            /// <summary>
+            /// Initializes a new instance of the <see cref="DLCCacheHolder"/> class.
+            /// </summary>
+            /// <param name="dlc">The DLC.</param>
+            /// <param name="gameExe">The game executable.</param>
+            public DLCCacheHolder(List<IDLC> dlc, string gameExe)
+            {
+                DLC = dlc;
+                GameExe = gameExe ?? string.Empty;
+            }
+
+            #endregion Constructors
+
+            #region Properties
+
+            /// <summary>
+            /// Gets or sets the DLC.
+            /// </summary>
+            /// <value>The DLC.</value>
+            public List<IDLC> DLC { get; set; }
+
+            /// <summary>
+            /// Gets or sets the game executable.
+            /// </summary>
+            /// <value>The game executable.</value>
+            public string GameExe { get; set; }
+
+            #endregion Properties
+        }
+
+        #endregion Classes
     }
 }

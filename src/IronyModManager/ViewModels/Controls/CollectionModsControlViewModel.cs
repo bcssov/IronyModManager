@@ -4,7 +4,7 @@
 // Created          : 03-03-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 10-04-2022
+// Last Modified On : 10-28-2022
 // ***********************************************************************
 // <copyright file="CollectionModsControlViewModel.cs" company="Mario">
 //     Mario
@@ -1043,11 +1043,15 @@ namespace IronyModManager.ViewModels.Controls
         }
 
         /// <summary>
-        /// Evals the advanced features visibility.
+        /// Evals the game specific visibility.
         /// </summary>
-        protected virtual void EvalAdvancedFeaturesVisibility()
+        /// <param name="game">The game.</param>
+        protected virtual void EvalGameSpecificVisibility(IGame game = null)
         {
-            var game = gameService.GetSelected();
+            if (game == null)
+            {
+                game = gameService.GetSelected();
+            }
             ShowAdvancedFeatures = (game?.AdvancedFeatures) == GameAdvancedFeatures.Full;
             SearchModsColSpan = ShowAdvancedFeatures ? 1 : 2;
         }
@@ -1404,7 +1408,7 @@ namespace IronyModManager.ViewModels.Controls
         /// <param name="disposables">The disposables.</param>
         protected override void OnActivated(CompositeDisposable disposables)
         {
-            EvalAdvancedFeaturesVisibility();
+            EvalGameSpecificVisibility();
             SetSelectedModsState(Mods != null ? Mods.Where(p => p.IsSelected).ToObservableCollection() : new ObservableCollection<IMod>());
             SubscribeToMods();
 
@@ -1972,7 +1976,7 @@ namespace IronyModManager.ViewModels.Controls
         protected override void OnSelectedGameChanged(IGame game)
         {
             base.OnSelectedGameChanged(game);
-            EvalAdvancedFeaturesVisibility();
+            EvalGameSpecificVisibility(game);
         }
 
         /// <summary>

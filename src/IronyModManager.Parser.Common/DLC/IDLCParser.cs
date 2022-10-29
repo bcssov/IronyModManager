@@ -4,7 +4,7 @@
 // Created          : 02-13-2021
 //
 // Last Modified By : Mario
-// Last Modified On : 02-13-2021
+// Last Modified On : 10-29-2022
 // ***********************************************************************
 // <copyright file="IDLCParser.cs" company="Mario">
 //     Mario
@@ -30,8 +30,9 @@ namespace IronyModManager.Parser.Common.DLC
         /// </summary>
         /// <param name="path">The path.</param>
         /// <param name="lines">The lines.</param>
+        /// <param name="descriptorModType">Type of the descriptor mod.</param>
         /// <returns>IDLCObject.</returns>
-        IDLCObject Parse(string path, IEnumerable<string> lines);
+        IDLCObject Parse(string path, IEnumerable<string> lines, DescriptorModType descriptorModType);
 
         #endregion Methods
     }

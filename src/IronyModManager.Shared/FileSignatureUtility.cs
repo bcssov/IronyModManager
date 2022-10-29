@@ -4,7 +4,7 @@
 // Created          : 07-20-2022
 //
 // Last Modified By : Mario
-// Last Modified On : 07-23-2022
+// Last Modified On : 10-29-2022
 // ***********************************************************************
 // <copyright file="FileSignatureUtility.cs" company="Mario">
 //     Mario
@@ -28,12 +28,12 @@ namespace IronyModManager.Shared
         /// <summary>
         /// The image identifier
         /// </summary>
-        private const string ImageId = "image";
+        private static readonly string[] ImageIds = new[] { "image" };
 
         /// <summary>
         /// The text identifier
         /// </summary>
-        private const string TextId = "text";
+        private static readonly string[] TextIds = new[] { "text", "application/json" };
 
         #endregion Fields
 
@@ -46,7 +46,7 @@ namespace IronyModManager.Shared
         /// <returns><c>true</c> if [is image file] [the specified filename]; otherwise, <c>false</c>.</returns>
         public static bool IsImageFile(string filename)
         {
-            return IsOfType(filename, ImageId, Constants.ImageExtensions);
+            return IsOfType(filename, ImageIds, Constants.ImageExtensions);
         }
 
         /// <summary>
@@ -57,7 +57,7 @@ namespace IronyModManager.Shared
         /// <returns><c>true</c> if [is text file] [the specified filename]; otherwise, <c>false</c>.</returns>
         public static bool IsTextFile(string filename, Stream stream)
         {
-            return IsOfType(filename, stream, TextId, Constants.TextExtensions);
+            return IsOfType(filename, stream, TextIds, Constants.TextExtensions);
         }
 
         /// <summary>
@@ -67,7 +67,7 @@ namespace IronyModManager.Shared
         /// <returns><c>true</c> if [is text file] [the specified filename]; otherwise, <c>false</c>.</returns>
         public static bool IsTextFile(string filename)
         {
-            return IsOfType(filename, TextId, Constants.TextExtensions);
+            return IsOfType(filename, TextIds, Constants.TextExtensions);
         }
 
         /// <summary>
@@ -75,10 +75,10 @@ namespace IronyModManager.Shared
         /// </summary>
         /// <param name="filename">The filename.</param>
         /// <param name="stream">The stream.</param>
-        /// <param name="id">The identifier.</param>
+        /// <param name="ids">The ids.</param>
         /// <param name="extensions">The extensions.</param>
         /// <returns><c>true</c> if [is of type] [the specified filename]; otherwise, <c>false</c>.</returns>
-        private static bool IsOfType(string filename, Stream stream, string id, string[] extensions)
+        private static bool IsOfType(string filename, Stream stream, string[] ids, string[] extensions)
         {
             if (stream == null)
             {
@@ -91,7 +91,7 @@ namespace IronyModManager.Shared
             ms.Seek(0, SeekOrigin.Begin);
             if (PommaLabs.MimeTypes.MimeTypeMap.TryGetMimeType(ms, Path.GetFileName(filename), out var mimeType))
             {
-                var result = mimeType.StartsWith(id, StringComparison.OrdinalIgnoreCase) && IsValidTextFile(ms);
+                var result = ids.Any(p => mimeType.StartsWith(p, StringComparison.OrdinalIgnoreCase) && IsValidTextFile(ms));
                 ms.Close();
                 ms.Dispose();
                 return result;
@@ -103,7 +103,7 @@ namespace IronyModManager.Shared
                 {
                     ms.Close();
                     ms.Dispose();
-                    return mimeType.StartsWith(id, StringComparison.OrdinalIgnoreCase);
+                    return ids.Any(p => mimeType.StartsWith(p, StringComparison.OrdinalIgnoreCase));
                 }
             }
             ms.Close();
@@ -115,21 +115,21 @@ namespace IronyModManager.Shared
         /// Determines whether [is of type] [the specified filename].
         /// </summary>
         /// <param name="filename">The filename.</param>
-        /// <param name="id">The identifier.</param>
+        /// <param name="ids">The ids.</param>
         /// <param name="extensions">The extensions.</param>
         /// <returns><c>true</c> if [is of type] [the specified filename]; otherwise, <c>false</c>.</returns>
-        private static bool IsOfType(string filename, string id, string[] extensions)
+        private static bool IsOfType(string filename, string[] ids, string[] extensions)
         {
             if (PommaLabs.MimeTypes.MimeTypeMap.TryGetMimeType(Path.GetFileName(filename), out var mimeType))
             {
-                return mimeType.StartsWith(id, StringComparison.OrdinalIgnoreCase);
+                return ids.Any(p => mimeType.StartsWith(p, StringComparison.OrdinalIgnoreCase));
             }
             else
             {
                 mimeType = MimeTypes.GetMimeType(filename);
                 if (mimeType != MimeTypes.FallbackMimeType)
                 {
-                    return mimeType.StartsWith(id, StringComparison.OrdinalIgnoreCase);
+                    return ids.Any(p => mimeType.StartsWith(p, StringComparison.OrdinalIgnoreCase));
                 }
             }
             return extensions.Any(s => s.EndsWith(filename, StringComparison.OrdinalIgnoreCase));

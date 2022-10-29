@@ -4,7 +4,7 @@
 // Created          : 05-26-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 10-27-2022
+// Last Modified On : 10-29-2022
 // ***********************************************************************
 // <copyright file="ModPatchCollectionService.cs" company="Mario">
 //     Mario
@@ -2090,12 +2090,21 @@ namespace IronyModManager.Services
                     {
                         RootDirectory = GetPatchModDirectory(game, patchName),
                     });
+                    if (game.ModDescriptorType == ModDescriptorType.JsonMetadata)
+                    {
+                        await ModWriter.CreateModDirectoryAsync(new ModWriterParameters()
+                        {
+                            RootDirectory = game.UserDirectory,
+                            Path = Shared.Constants.JsonModDirectory
+                        });
+                    }
                     await ModWriter.WriteDescriptorAsync(new ModWriterParameters()
                     {
                         Mod = mod,
                         RootDirectory = game.UserDirectory,
                         Path = mod.DescriptorFile,
-                        LockDescriptor = CheckIfModShouldBeLocked(game, mod)
+                        LockDescriptor = CheckIfModShouldBeLocked(game, mod),
+                        DescriptorType = MapDescriptorType(game.ModDescriptorType)
                     }, IsPatchMod(mod));
                     allMods.Add(mod);
                     Cache.Invalidate(new CacheInvalidateParameters() { Region = ModsCacheRegion, Prefix = game.Type, Keys = new List<string> { GetModsCacheKey(true), GetModsCacheKey(false) } });
@@ -2142,7 +2151,8 @@ namespace IronyModManager.Services
                             {
                                 AppendOnly = true,
                                 TopPriorityMods = new List<IMod>() { mod },
-                                RootDirectory = game.UserDirectory
+                                RootDirectory = game.UserDirectory,
+                                DescriptorType = MapDescriptorType(game.ModDescriptorType)
                             }).ConfigureAwait(false);
                         }).ConfigureAwait(false);
                         Cache.Set(new CacheAddParameters<ModsExportedState>() { Region = ModsExportedRegion, Key = ModExportedKey, Value = new ModsExportedState() { Exported = true } });
@@ -2953,12 +2963,21 @@ namespace IronyModManager.Services
                         {
                             RootDirectory = GetPatchModDirectory(game, patchName)
                         });
+                        if (game.ModDescriptorType == ModDescriptorType.JsonMetadata)
+                        {
+                            await ModWriter.CreateModDirectoryAsync(new ModWriterParameters()
+                            {
+                                RootDirectory = game.UserDirectory,
+                                Path = Shared.Constants.JsonModDirectory
+                            });
+                        }
                         await ModWriter.WriteDescriptorAsync(new ModWriterParameters()
                         {
                             Mod = mod,
                             RootDirectory = game.UserDirectory,
                             Path = mod.DescriptorFile,
-                            LockDescriptor = CheckIfModShouldBeLocked(game, mod)
+                            LockDescriptor = CheckIfModShouldBeLocked(game, mod),
+                            DescriptorType = MapDescriptorType(game.ModDescriptorType)
                         }, IsPatchMod(mod));
                         allMods.Add(mod);
                         Cache.Invalidate(new CacheInvalidateParameters() { Region = ModsCacheRegion, Prefix = game.Type, Keys = new List<string> { GetModsCacheKey(true), GetModsCacheKey(false) } });
@@ -2977,7 +2996,8 @@ namespace IronyModManager.Services
                             {
                                 AppendOnly = true,
                                 TopPriorityMods = new List<IMod>() { mod },
-                                RootDirectory = game.UserDirectory
+                                RootDirectory = game.UserDirectory,
+                                DescriptorType = MapDescriptorType(game.ModDescriptorType)
                             }).ConfigureAwait(false);
                         }).ConfigureAwait(false);
                         Cache.Set(new CacheAddParameters<ModsExportedState>() { Region = ModsExportedRegion, Key = ModExportedKey, Value = new ModsExportedState() { Exported = true } });
