@@ -4,7 +4,7 @@
 // Created          : 03-09-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 07-24-2022
+// Last Modified On : 10-29-2022
 // ***********************************************************************
 // <copyright file="ModCollectionExporter.cs" company="Mario">
 //     Mario
@@ -331,8 +331,13 @@ namespace IronyModManager.IO.Mods
         /// </summary>
         /// <param name="parameters">The parameters.</param>
         /// <returns>Task&lt;System.Boolean&gt;.</returns>
+        /// <exception cref="System.ArgumentException">Invalid descriptor type.</exception>
         public Task<ICollectionImportResult> ImportParadoxAsync(ModCollectionExporterParams parameters)
         {
+            if (parameters.DescriptorType == DescriptorType.None)
+            {
+                throw new ArgumentException("Invalid descriptor type.");
+            }
             return paradoxImporter.ImportAsync(parameters);
         }
 
