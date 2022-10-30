@@ -495,7 +495,7 @@ namespace IronyModManager.Shared
                 /// <summary>
                 /// The abrv
                 /// </summary>
-                public const string Abrv = "Vicky3";
+                public const string Abrv = "Vic3";
 
                 /// <summary>
                 /// The docs path
