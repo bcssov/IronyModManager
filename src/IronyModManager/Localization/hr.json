@@ -454,6 +454,7 @@
             "CheckForUpdates": "Provjeri ima li ažuriranja",
             "Install": "Instaliraj ažuriranja",
             "Version": "Verzija: {Version}",
+            "Skip": "Zanemari ažuriranje",
             "Overlay": {
                 "UpdateDownloading": "Preuzimanje ažuriranja...",
                 "UpdateDownloadProgress": "{Progress}",

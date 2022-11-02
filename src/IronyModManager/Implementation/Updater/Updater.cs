@@ -184,10 +184,10 @@ namespace IronyModManager.Implementation.Updater
             var settings = updaterService.Get();
             var elapsedTime = DateTime.Now - updater.Configuration.LastCheckTime;
             if (elapsedTime >= updateCheckThreshold || updateInfo == null ||
-                updateInfo.Status == NetSparkleUpdater.Enums.UpdateStatus.CouldNotDetermine || updateInfo.Status == NetSparkleUpdater.Enums.UpdateStatus.UserSkipped ||
+                updateInfo.Status == NetSparkleUpdater.Enums.UpdateStatus.CouldNotDetermine ||
                 settings.CheckForPrerelease != allowPrerelease)
             {
-                updateInfo = await updater.CheckForUpdatesQuietly(true);
+                updateInfo = await updater.CheckForUpdatesQuietly();
                 allowPrerelease = settings.CheckForPrerelease;
             }
             if (updateInfo == null)
@@ -253,11 +253,24 @@ namespace IronyModManager.Implementation.Updater
         /// Gets the version.
         /// </summary>
         /// <returns>System.String.</returns>
-        public string GetVersion()
+        public string GetTitle()
         {
             if (updateInfo != null && updateInfo.Updates.Any())
             {
                 return updateInfo.Updates.FirstOrDefault().Title;
+            }
+            return string.Empty;
+        }
+
+        /// <summary>
+        /// Gets the version.
+        /// </summary>
+        /// <returns>System.String.</returns>
+        public string GetVersion()
+        {
+            if (updateInfo != null && updateInfo.Updates.Any())
+            {
+                return updateInfo.Updates.FirstOrDefault().Version;
             }
             return string.Empty;
         }
@@ -291,6 +304,7 @@ namespace IronyModManager.Implementation.Updater
         public bool SetSkippedVersion(string version)
         {
             updaterConfiguration.SetVersionToSkip(version);
+            updateInfo = null;
             return true;
         }
 

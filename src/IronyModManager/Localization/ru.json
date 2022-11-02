@@ -454,6 +454,7 @@
             "CheckForUpdates": "Проверить обновления",
             "Install": "Установить",
             "Version": "Версия: {Version}",
+            "Skip": "Игнорировать обновление",
             "Overlay": {
                 "UpdateDownloading": "Загрузка обновления...",
                 "UpdateDownloadProgress": "{Progress}",

@@ -152,6 +152,11 @@ namespace IronyModManager.ViewModels.Controls
         private bool isUpdateReloading = false;
 
         /// <summary>
+        /// The last skipped version changed
+        /// </summary>
+        private IDisposable lastSkippedVersionChanged;
+
+        /// <summary>
         /// The notification position changed
         /// </summary>
         private IDisposable notificationPositionChanged;
@@ -160,6 +165,11 @@ namespace IronyModManager.ViewModels.Controls
         /// The refresh descriptors changed
         /// </summary>
         private IDisposable refreshDescriptorsChanged;
+
+        /// <summary>
+        /// The version
+        /// </summary>
+        private string version;
 
         #endregion Fields
 
@@ -540,6 +550,19 @@ namespace IronyModManager.ViewModels.Controls
         public virtual bool ShowGameOptions { get; protected set; }
 
         /// <summary>
+        /// Gets or sets the skip update.
+        /// </summary>
+        /// <value>The skip update.</value>
+        [StaticLocalization(LocalizationResources.Options.Updates.Skip)]
+        public virtual string SkipUpdate { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets the skip update command.
+        /// </summary>
+        /// <value>The skip update command.</value>
+        public virtual ReactiveCommand<Unit, Unit> SkipUpdateCommand { get; protected set; }
+
+        /// <summary>
         /// Gets or sets the test external editor configuration.
         /// </summary>
         /// <value>The test external editor configuration.</value>
@@ -631,7 +654,8 @@ namespace IronyModManager.ViewModels.Controls
             if (updatesAvailable)
             {
                 Changelog = updater.GetChangeLog();
-                VersionContent = updater.GetVersion();
+                VersionContent = updater.GetTitle();
+                version = updater.GetVersion();
                 UpdateInfoVisible = true;
                 var openState = IsOpen;
                 IsOpen = false;
@@ -841,6 +865,15 @@ namespace IronyModManager.ViewModels.Controls
                 }
             }).DisposeWith(disposables);
 
+            SkipUpdateCommand = ReactiveCommand.Create(() =>
+            {
+                if (!string.IsNullOrWhiteSpace(version))
+                {
+                    updater.SetSkippedVersion(version);
+                }
+                UpdateSettings.LastSkippedVersion = version;
+            });
+
             NavigateCustomDirectoryCommand = ReactiveCommand.CreateFromTask(async () =>
             {
                 IsOpen = false;
@@ -998,6 +1031,7 @@ namespace IronyModManager.ViewModels.Controls
             var settings = updaterService.Get();
             settings.AutoUpdates = UpdateSettings.AutoUpdates;
             settings.CheckForPrerelease = UpdateSettings.CheckForPrerelease;
+            settings.LastSkippedVersion = UpdateSettings.LastSkippedVersion;
             updaterService.Save(settings);
             SetUpdateSettings(settings);
         }
@@ -1084,12 +1118,18 @@ namespace IronyModManager.ViewModels.Controls
             isUpdateReloading = true;
             autoUpdateChanged?.Dispose();
             checkForPrereleaseChanged?.Dispose();
+            lastSkippedVersionChanged?.Dispose();
             UpdateSettings = updateSettings;
             autoUpdateChanged = this.WhenAnyValue(p => p.UpdateSettings.AutoUpdates).Where(v => !isUpdateReloading).Subscribe(s =>
             {
                 SaveUpdateSettings();
             }).DisposeWith(Disposables);
             checkForPrereleaseChanged = this.WhenAnyValue(p => p.UpdateSettings.CheckForPrerelease).Where(v => !isUpdateReloading).Subscribe(s =>
+            {
+                UpdateInfoVisible = false;
+                SaveUpdateSettings();
+            }).DisposeWith(Disposables);
+            lastSkippedVersionChanged = this.WhenAnyValue(p => p.UpdateSettings.LastSkippedVersion).Where(v => !isUpdateReloading).Subscribe(s =>
             {
                 UpdateInfoVisible = false;
                 SaveUpdateSettings();

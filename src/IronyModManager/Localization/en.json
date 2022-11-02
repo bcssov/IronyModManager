@@ -454,6 +454,7 @@
             "CheckForUpdates": "Check For Updates",
             "Install": "Install Updates",
             "Version": "Version: {Version}",
+            "Skip": "Ignore Update",
             "Overlay": {
                 "UpdateDownloading": "Downloading Updates...",
                 "UpdateDownloadProgress": "{Progress}",

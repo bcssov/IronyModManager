@@ -454,6 +454,7 @@
             "CheckForUpdates": "检查更新",
             "Install": "安装更新",
             "Version": "版本：{Version}",
+            "Skip": "忽略更新",
             "Overlay": {
                 "UpdateDownloading": "正在下载更新……",
                 "UpdateDownloadProgress": "{Progress}",

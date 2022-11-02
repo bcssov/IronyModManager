@@ -58,6 +58,12 @@ namespace IronyModManager.Implementation.Updater
         string GetChangeLog();
 
         /// <summary>
+        /// Gets the title.
+        /// </summary>
+        /// <returns>System.String.</returns>
+        string GetTitle();
+
+        /// <summary>
         /// Gets the version.
         /// </summary>
         /// <returns>System.String.</returns>

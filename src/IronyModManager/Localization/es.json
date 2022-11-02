@@ -1,5 +1,4 @@
 {
-
     "App": {
         "FontFamily": "Noto Sans",
         "SupportedNameBlock": "",
@@ -455,6 +454,7 @@
             "CheckForUpdates": "Buscar Actualizaciones",
             "Install": "Instalar Actualizaciones",
             "Version": "Version: {Version}",
+            "Skip": "Ignorar la actualización",
             "Overlay": {
                 "UpdateDownloading": "Descargando Actualizaciones...",
                 "UpdateDownloadProgress": "{Progress}",
