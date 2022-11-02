@@ -4,7 +4,7 @@
 // Created          : 02-04-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 12-07-2020
+// Last Modified On : 11-02-2022
 // ***********************************************************************
 // <copyright file="UpdaterServiceTests.cs" company="Mario">
 //     Mario
@@ -72,7 +72,8 @@ namespace IronyModManager.Services.Tests
                 return new UpdateSettings()
                 {
                     AutoUpdates = o.AutoUpdates,
-                    CheckForPrerelease = o.CheckForPrerelease
+                    CheckForPrerelease = o.CheckForPrerelease,
+                    LastSkippedVersion = "1.2.3"
                 };
             });
             SetupMocks(preferencesService);
@@ -81,6 +82,7 @@ namespace IronyModManager.Services.Tests
             var result = service.Get();
             result.CheckForPrerelease.Should().BeFalse();
             result.AutoUpdates.Should().BeTrue();
+            result.LastSkippedVersion.Should().Be("1.2.3");
         }
 
 
@@ -99,7 +101,8 @@ namespace IronyModManager.Services.Tests
             var result = service.Save(new UpdateSettings()
             {
                 CheckForPrerelease = true,
-                AutoUpdates = false
+                AutoUpdates = false,
+                LastSkippedVersion = "3.2.1"
             });
             result.Should().Be(true);
         }

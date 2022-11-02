@@ -4,7 +4,7 @@
 // Created          : 01-11-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 08-12-2022
+// Last Modified On : 11-02-2022
 // ***********************************************************************
 // <copyright file="MappingProfile.cs" company="Mario">
 //     Copyright (c) Mario. All rights reserved.
@@ -44,6 +44,7 @@ namespace IronyModManager.Services
             CreateMap<IUpdateSettings, IPreferences>()
                 .ForMember(m => m.AutoUpdates, o => o.MapFrom(s => s.AutoUpdates))
                 .ForMember(m => m.CheckForPrerelease, o => o.MapFrom(s => s.CheckForPrerelease))
+                .ForMember(m => m.LastSkippedVersion, o => o.MapFrom(s => s.LastSkippedVersion))
                 .ReverseMap()
                 .IgnoreAllUnmappedMembers();
             CreateMap<IExternalEditor, IPreferences>()

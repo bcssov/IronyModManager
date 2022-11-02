@@ -4,7 +4,7 @@
 // Created          : 09-17-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 09-17-2020
+// Last Modified On : 11-02-2022
 // ***********************************************************************
 // <copyright file="IUpdateSettings.cs" company="Mario">
 //     Mario
@@ -36,6 +36,12 @@ namespace IronyModManager.Models.Common
         /// </summary>
         /// <value><c>true</c> if [check for prerelease]; otherwise, <c>false</c>.</value>
         bool CheckForPrerelease { get; set; }
+
+        /// <summary>
+        /// Gets or sets the last skipped version.
+        /// </summary>
+        /// <value>The last skipped version.</value>
+        string LastSkippedVersion { get; set; }
 
         #endregion Properties
     }

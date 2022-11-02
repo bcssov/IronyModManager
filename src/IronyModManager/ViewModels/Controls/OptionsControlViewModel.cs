@@ -4,7 +4,7 @@
 // Created          : 05-30-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 10-29-2022
+// Last Modified On : 11-02-2022
 // ***********************************************************************
 // <copyright file="OptionsControlViewModel.cs" company="Mario">
 //     Mario
@@ -625,6 +625,8 @@ namespace IronyModManager.ViewModels.Controls
         {
             CheckingForUpdates = true;
             UpdateInfoVisible = false;
+            var updateSettings = updaterService.Get();
+            updater.SetSkippedVersion(updateSettings.LastSkippedVersion);
             var updatesAvailable = await updater.CheckForUpdatesAsync();
             if (updatesAvailable)
             {
