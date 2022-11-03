@@ -202,13 +202,13 @@ namespace IronyModManager.Parser.Tests
             sb.AppendLine(@"  ""short_description"" : """",");
             sb.AppendLine(@"  ""tags"" : [""test"", ""test2"",],");
             sb.AppendLine(@"  ""relationships"" : [""mod1""],");
-            sb.AppendLine(@"  ""replace_paths"" : [");
-            sb.AppendLine(@"    ""gfx/FX""");
-            sb.AppendLine(@"  ],");
+            sb.AppendLine(@"  ""game_custom_data"" : {    ");
             sb.AppendLine(@"  ""user_dir"": [");
             sb.AppendLine(@"	1");
             sb.AppendLine(@"   ],   ");
-            sb.AppendLine(@"  ""game_custom_data"" : {    ");
+            sb.AppendLine(@"  ""replace_paths"" : [");
+            sb.AppendLine(@"    ""gfx/FX""");
+            sb.AppendLine(@"  ]");
             sb.AppendLine(@"  }");
             sb.AppendLine(@"}");
 
