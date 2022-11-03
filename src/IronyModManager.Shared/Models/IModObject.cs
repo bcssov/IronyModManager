@@ -4,7 +4,7 @@
 // Created          : 02-22-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 12-07-2020
+// Last Modified On : 11-03-2022
 // ***********************************************************************
 // <copyright file="IModObject.cs" company="Mario">
 //     Mario
@@ -22,6 +22,12 @@ namespace IronyModManager.Shared.Models
     public interface IModObject
     {
         #region Properties
+
+        /// <summary>
+        /// Gets or sets the additional data.
+        /// </summary>
+        /// <value>The additional data.</value>
+        IDictionary<string, object> AdditionalData { get; set; }
 
         /// <summary>
         /// Gets or sets the dependencies.

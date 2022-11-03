@@ -4,7 +4,7 @@
 // Created          : 03-31-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 10-29-2022
+// Last Modified On : 11-03-2022
 // ***********************************************************************
 // <copyright file="ModWriter.cs" company="Mario">
 //     Mario
@@ -434,21 +434,29 @@ namespace IronyModManager.IO.Mods
             }
             static async Task serializeJsonDescriptorMod(IMod content, StreamWriter sw)
             {
+                var customData = content.AdditionalData != null ? new Dictionary<string, object>(content.AdditionalData) : new Dictionary<string, object>();
+                if (content.ReplacePath != null)
+                {
+                    customData[Shared.Constants.JsonMetadataReplacePaths] = content.ReplacePath;
+                }
+                if (content.UserDir != null)
+                {
+                    customData[Shared.Constants.DescriptorUserDir] = content.UserDir;
+                }
+
                 var metaData = new JsonMetadata()
                 {
                     Id = content.RemoteId.HasValue ? content.RemoteId.ToString() : "",
                     Name = content.Name,
                     Path = content.FileName,
                     Relationships = content.Dependencies != null ? content.Dependencies.ToList() : new List<string>(),
-                    ReplacePaths = content.ReplacePath != null ? content.ReplacePath.ToList() : new List<string>(),
                     SupportedGameVersion = content.Version,
                     Tags = content.Tags != null ? content.Tags.ToList() : new List<string>(),
-                    UserDir = content.UserDir != null ? content.UserDir.ToList() : new List<string>(),
                     ShortDescription = "",
                     Version = "",
-                    GameCustomData = new Dictionary<string, string>()
+                    GameCustomData = customData
                 };
-                var json = JsonDISerializer.Serialize(metaData);
+                var json = JsonConvert.SerializeObject(metaData, Formatting.Indented);
                 await sw.WriteAsync(json);
             }
 
@@ -486,7 +494,7 @@ namespace IronyModManager.IO.Mods
             /// </summary>
             /// <value>The game custom data.</value>
             [JsonProperty("game_custom_data", NullValueHandling = NullValueHandling.Include)]
-            public Dictionary<string, string> GameCustomData { get; set; }
+            public Dictionary<string, object> GameCustomData { get; set; }
 
             /// <summary>
             /// Gets or sets the identifier.
@@ -517,13 +525,6 @@ namespace IronyModManager.IO.Mods
             public List<string> Relationships { get; set; }
 
             /// <summary>
-            /// Gets or sets the replace paths.
-            /// </summary>
-            /// <value>The replace paths.</value>
-            [JsonProperty("replace_paths", NullValueHandling = NullValueHandling.Include)]
-            public List<string> ReplacePaths { get; set; }
-
-            /// <summary>
             /// Gets or sets the short description.
             /// </summary>
             /// <value>The short description.</value>
@@ -543,13 +544,6 @@ namespace IronyModManager.IO.Mods
             /// <value>The tags.</value>
             [JsonProperty("tags", NullValueHandling = NullValueHandling.Include)]
             public List<string> Tags { get; set; }
-
-            /// <summary>
-            /// Gets or sets the user dir.
-            /// </summary>
-            /// <value>The user dir.</value>
-            [JsonProperty("user_dir", NullValueHandling = NullValueHandling.Include)]
-            public List<string> UserDir { get; set; }
 
             /// <summary>
             /// Gets or sets the version.

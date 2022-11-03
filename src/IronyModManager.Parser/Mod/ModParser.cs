@@ -4,7 +4,7 @@
 // Created          : 02-22-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 10-29-2022
+// Last Modified On : 11-03-2022
 // ***********************************************************************
 // <copyright file="ModParser.cs" company="Mario">
 //     Mario
@@ -21,6 +21,7 @@ using IronyModManager.Parser.Common.Parsers;
 using IronyModManager.Shared;
 using IronyModManager.Shared.Models;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace IronyModManager.Parser.Mod
 {
@@ -34,6 +35,11 @@ namespace IronyModManager.Parser.Mod
     public class ModParser : BaseGenericObjectParser, IModParser
     {
         #region Fields
+
+        /// <summary>
+        /// The json serializer settings
+        /// </summary>
+        private static JsonSerializerSettings jsonSerializerSettings = null;
 
         /// <summary>
         /// The logger
@@ -74,6 +80,20 @@ namespace IronyModManager.Parser.Mod
         }
 
         /// <summary>
+        /// Gets the json serializer settings.
+        /// </summary>
+        /// <returns>JsonSerializerSettings.</returns>
+        private JsonSerializerSettings GetJsonSerializerSettings()
+        {
+            jsonSerializerSettings ??= new JsonSerializerSettings()
+            {
+                Error = (sender, error) => error.ErrorContext.Handled = true,
+                NullValueHandling = NullValueHandling.Ignore
+            };
+            return jsonSerializerSettings;
+        }
+
+        /// <summary>
         /// Parses the descriptor mod.
         /// </summary>
         /// <param name="lines">The lines.</param>
@@ -108,13 +128,25 @@ namespace IronyModManager.Parser.Mod
             try
             {
                 var json = string.Join(Environment.NewLine, lines);
-                var result = JsonConvert.DeserializeObject<JsonMetadata>(json, new JsonSerializerSettings()
+                var result = JsonConvert.DeserializeObject<JsonMetadata>(json, GetJsonSerializerSettings());
+                if (result.GameCustomData != null)
                 {
-                    Error = (sender, error) => error.ErrorContext.Handled = true,
-                    NullValueHandling = NullValueHandling.Ignore
-                });
-                obj.ReplacePath = result.ReplacePaths;
-                obj.UserDir = result.UserDir;
+                    if (result.GameCustomData.ContainsKey(Shared.Constants.JsonMetadataReplacePaths))
+                    {
+                        if (result.GameCustomData[Shared.Constants.JsonMetadataReplacePaths] is JArray jArray)
+                        {
+                            obj.ReplacePath = jArray.ToObject<List<string>>();
+                        }
+                    }
+                    if (result.GameCustomData.ContainsKey(Shared.Constants.DescriptorUserDir))
+                    {
+                        if (result.GameCustomData[Shared.Constants.DescriptorUserDir] is JArray jArray)
+                        {
+                            obj.UserDir = jArray.ToObject<List<string>>();
+                        }
+                    }
+                    obj.AdditionalData = result.GameCustomData.Where(p => p.Key != Shared.Constants.JsonMetadataReplacePaths && p.Key != Shared.Constants.DescriptorUserDir).ToDictionary(p => p.Key, p => p.Value);
+                }
                 obj.FileName = result.Path;
                 obj.Name = result.Name;
                 obj.Version = !string.IsNullOrWhiteSpace(result.SupportedGameVersion) ? result.SupportedGameVersion : result.Version;
@@ -142,6 +174,13 @@ namespace IronyModManager.Parser.Mod
         private class JsonMetadata
         {
             #region Properties
+
+            /// <summary>
+            /// Gets or sets the game custom data.
+            /// </summary>
+            /// <value>The game custom data.</value>
+            [JsonProperty("game_custom_data")]
+            public Dictionary<string, object> GameCustomData { get; set; }
 
             /// <summary>
             /// Gets or sets the identifier.
@@ -172,13 +211,6 @@ namespace IronyModManager.Parser.Mod
             public List<string> Relationships { get; set; }
 
             /// <summary>
-            /// Gets or sets the replace paths.
-            /// </summary>
-            /// <value>The replace paths.</value>
-            [JsonProperty("replace_paths")]
-            public List<string> ReplacePaths { get; set; }
-
-            /// <summary>
             /// Gets or sets the short description.
             /// </summary>
             /// <value>The short description.</value>
@@ -198,13 +230,6 @@ namespace IronyModManager.Parser.Mod
             /// <value>The tags.</value>
             [JsonProperty("tags")]
             public List<string> Tags { get; set; }
-
-            /// <summary>
-            /// Gets or sets the user dir.
-            /// </summary>
-            /// <value>The user dir.</value>
-            [JsonProperty("user_dir")]
-            public List<string> UserDir { get; set; }
 
             /// <summary>
             /// Gets or sets the version.

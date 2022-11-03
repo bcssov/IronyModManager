@@ -4,7 +4,7 @@
 // Created          : 01-17-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 10-29-2022
+// Last Modified On : 11-03-2022
 // ***********************************************************************
 // <copyright file="Constants.cs" company="Mario">
 //     Mario
@@ -45,6 +45,11 @@ namespace IronyModManager.Shared
         public const string DescriptorFile = "descriptor" + ModExtension;
 
         /// <summary>
+        /// The user dir
+        /// </summary>
+        public const string DescriptorUserDir = "user_dir";
+
+        /// <summary>
         /// The empty parameter
         /// </summary>
         public const string EmptyParam = "";
@@ -58,6 +63,11 @@ namespace IronyModManager.Shared
         /// The json extension without dot
         /// </summary>
         public const string JsonExtensionWithoutDot = "json";
+
+        /// <summary>
+        /// The replace paths
+        /// </summary>
+        public const string JsonMetadataReplacePaths = "replace_paths";
 
         /// <summary>
         /// The json mod directory

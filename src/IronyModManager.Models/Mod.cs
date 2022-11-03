@@ -4,7 +4,7 @@
 // Created          : 02-29-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 10-29-2022
+// Last Modified On : 11-03-2022
 // ***********************************************************************
 // <copyright file="Mod.cs" company="Mario">
 //     Mario
@@ -48,6 +48,12 @@ namespace IronyModManager.Models
         /// </summary>
         /// <value>The achievement status.</value>
         public virtual AchievementStatus AchievementStatus { get; set; }
+
+        /// <summary>
+        /// Gets or sets the additional data.
+        /// </summary>
+        /// <value>The additional data.</value>
+        public virtual IDictionary<string, object> AdditionalData { get; set; }
 
         /// <summary>
         /// Gets or sets the dependencies.
@@ -156,7 +162,7 @@ namespace IronyModManager.Models
         /// Gets or sets the user dir.
         /// </summary>
         /// <value>The user dir.</value>
-        [DescriptorProperty("user_dir", true)]
+        [DescriptorProperty(Constants.DescriptorUserDir, true)]
         public virtual IEnumerable<string> UserDir { get; set; }
 
         /// <summary>

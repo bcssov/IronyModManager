@@ -4,7 +4,7 @@
 // Created          : 02-22-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 10-29-2022
+// Last Modified On : 11-03-2022
 // ***********************************************************************
 // <copyright file="ModObject.cs" company="Mario">
 //     Mario
@@ -26,6 +26,12 @@ namespace IronyModManager.Parser.Mod
     public class ModObject : IModObject
     {
         #region Properties
+
+        /// <summary>
+        /// Gets or sets the additional data.
+        /// </summary>
+        /// <value>The additional data.</value>
+        public IDictionary<string, object> AdditionalData { get; set; }
 
         /// <summary>
         /// Gets or sets the dependencies.
