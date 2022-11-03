@@ -4,52 +4,76 @@
 		<title>Irony Mod Manager</title>
 		<language>en</language>
 		<item>
-			<title>1.24.59-alpha</title>
-			<description>## Release Notes 1.24
+			<title>1.24.66-rc</title>
+			<description>## Current Release Notes
+* Minor fixes
+* Add option to ignore update
+* Fix handling replace_paths in new json metadata
+
+## Release Notes 1.24
 * Update dependencies
 * Handle replace path in basic mod merge
 * Bypass steam thinking that Irony is a game host process (valve should seriously tweak logic of theirs)
 * Add conflict solver modes which skip localization
 * Write last known Irony location to %appdata% directory so other programs can find it
-* Add support for metadata descriptor type games (Victoria 3 support)</description>
-			<pubDate>Sat, 29 Oct 2022 22:20:32 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.24.59-alpha/linux-x64.zip" sparkle:version="1.24.59.6203" sparkle:shortVersionString="1.24.59" length="90112216" sparkle:os="linux" type="application/zip" sparkle:signature="ehOmQWPS5lqKXDGZN6PeskJ63YrSQjVHyMUCHEpG+UJKNik5zK4pkBE1WkmHfqyWiI0c8Y9yBK4ZmRrjLlWUBw=="/>
+* Add support for metadata descriptor type games (Victoria 3 support)
+* Add option to ignore update</description>
+			<pubDate>Thu, 03 Nov 2022 23:41:39 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.24.66-rc/linux-x64.zip" sparkle:version="1.24.66.44527" sparkle:shortVersionString="1.24.66" length="90113810" sparkle:os="linux" type="application/zip" sparkle:signature="nxQPmy9KTAQ1QRN7r3/QXrt2N4Cyf7in3CRJWP6enpdspHbwyavtjFOhL4f01KrIfFgFU3XenKu4gBmutxD4BQ=="/>
 		</item>
 		<item>
-			<title>1.24.59-alpha</title>
-			<description>## Release Notes 1.24
+			<title>1.24.66-rc</title>
+			<description>## Current Release Notes
+* Minor fixes
+* Add option to ignore update
+* Fix handling replace_paths in new json metadata
+
+## Release Notes 1.24
 * Update dependencies
 * Handle replace path in basic mod merge
 * Bypass steam thinking that Irony is a game host process (valve should seriously tweak logic of theirs)
 * Add conflict solver modes which skip localization
 * Write last known Irony location to %appdata% directory so other programs can find it
-* Add support for metadata descriptor type games (Victoria 3 support)</description>
-			<pubDate>Sat, 29 Oct 2022 22:20:39 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.24.59-alpha/osx-x64.zip" sparkle:version="1.24.59.6203" sparkle:shortVersionString="1.24.59" length="92945149" sparkle:os="osx" type="application/zip" sparkle:signature="TgTkgVYnpL5JbfcsnLeDtRTjUyrCJkC4b1kpG5J49yL4IV/n9aHPFIWCPo1d6FjMwNubxVBAp8FFLxBOqcr1DA=="/>
+* Add support for metadata descriptor type games (Victoria 3 support)
+* Add option to ignore update</description>
+			<pubDate>Thu, 03 Nov 2022 23:41:46 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.24.66-rc/osx-x64.zip" sparkle:version="1.24.66.44527" sparkle:shortVersionString="1.24.66" length="92946724" sparkle:os="osx" type="application/zip" sparkle:signature="54Tp0L3sZ7MdNPBvslrPMEYifol2kGmlwgRjTt/LYM4eSgUYUKthnIEKsSfaa2p+bVN/MKAAdYsjoRH6gyYNCQ=="/>
 		</item>
 		<item>
-			<title>1.24.59-alpha</title>
-			<description>## Release Notes 1.24
+			<title>1.24.66-rc</title>
+			<description>## Current Release Notes
+* Minor fixes
+* Add option to ignore update
+* Fix handling replace_paths in new json metadata
+
+## Release Notes 1.24
 * Update dependencies
 * Handle replace path in basic mod merge
 * Bypass steam thinking that Irony is a game host process (valve should seriously tweak logic of theirs)
 * Add conflict solver modes which skip localization
 * Write last known Irony location to %appdata% directory so other programs can find it
-* Add support for metadata descriptor type games (Victoria 3 support)</description>
-			<pubDate>Sat, 29 Oct 2022 22:20:45 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.24.59-alpha/win-x64-setup.zip" sparkle:version="1.24.59.6203" sparkle:shortVersionString="1.24.59" length="71389461" sparkle:os="windows" type="application/zip" sparkle:signature="EzhBAVtiMsBiRX0W9qnsn9qjKA0P33Kl9bPMu3B7HrFHr7K/Sho/mhX0b3v3tpOp1i/kgtNN4cMbMhKoK27nAw=="/>
+* Add support for metadata descriptor type games (Victoria 3 support)
+* Add option to ignore update</description>
+			<pubDate>Thu, 03 Nov 2022 23:41:53 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.24.66-rc/win-x64-setup.zip" sparkle:version="1.24.66.44527" sparkle:shortVersionString="1.24.66" length="71391858" sparkle:os="windows" type="application/zip" sparkle:signature="c+EjscPIUfpj1jDXSyyqu/Nw0Jk7VbNWj1BgVysQuC1mm4OFGS9MjUMYVWNaMEtRFQk4RVW+TZJcY3fupNHuBQ=="/>
 		</item>
 		<item>
-			<title>1.24.59-alpha</title>
-			<description>## Release Notes 1.24
+			<title>1.24.66-rc</title>
+			<description>## Current Release Notes
+* Minor fixes
+* Add option to ignore update
+* Fix handling replace_paths in new json metadata
+
+## Release Notes 1.24
 * Update dependencies
 * Handle replace path in basic mod merge
 * Bypass steam thinking that Irony is a game host process (valve should seriously tweak logic of theirs)
 * Add conflict solver modes which skip localization
 * Write last known Irony location to %appdata% directory so other programs can find it
-* Add support for metadata descriptor type games (Victoria 3 support)</description>
-			<pubDate>Sat, 29 Oct 2022 22:20:45 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.24.59-alpha/win-x64.zip" sparkle:version="1.24.59.6203" sparkle:shortVersionString="1.24.59" length="105202523" sparkle:os="windows" type="application/zip" sparkle:signature="+TxQjzO+GBqH7CmLkD++XAJkxzPqt+NPD77vgVQ4PSnpK/AqyDp3pEl07LT7zu6Dc2AjVcGC1m5o7sfnbNOjDQ=="/>
+* Add support for metadata descriptor type games (Victoria 3 support)
+* Add option to ignore update</description>
+			<pubDate>Thu, 03 Nov 2022 23:41:53 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.24.66-rc/win-x64.zip" sparkle:version="1.24.66.44527" sparkle:shortVersionString="1.24.66" length="105204087" sparkle:os="windows" type="application/zip" sparkle:signature="YTYaxiqN/AqHsXZ+UJE9wFluKQzTnIDBkv8va3ByjZZHbX+DrhfU6TI3r7F+oIamuXj8ZC+Br6mkd/Cuev0UAw=="/>
 		</item>
 		<item>
 			<title>1.23.59</title>
@@ -110,6 +134,6 @@
 * Update fios\lios stellaris handling</description>
 			<pubDate>Fri, 28 Oct 2022 21:18:46 +02:00</pubDate>
 			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.23.59/win-x64.zip" sparkle:version="1.23.59.23288" sparkle:shortVersionString="1.23.59" length="106017606" sparkle:os="windows" type="application/zip" sparkle:signature="78teK1ewtIxybYokheGwapXO3nxdArRoG79P+CzoLI5biAFPbDy5AnLLKsq3dVn5alJVDGed6yrETtRCKSOXCw=="/>
-		</item>
+		</item>		
 	</channel>
 </rss>
