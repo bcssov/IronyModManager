@@ -4,7 +4,7 @@
 // Created          : 03-03-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 11-05-2022
+// Last Modified On : 11-06-2022
 // ***********************************************************************
 // <copyright file="CollectionModsControlViewModel.cs" company="Mario">
 //     Mario
@@ -465,6 +465,12 @@ namespace IronyModManager.ViewModels.Controls
         /// <value>The create.</value>
         [StaticLocalization(LocalizationResources.Collection_Mods.Create)]
         public virtual string Create { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets the create class.
+        /// </summary>
+        /// <value>The create class.</value>
+        public virtual string CreateClass { get; protected set; }
 
         /// <summary>
         /// Gets or sets the create command.
@@ -1057,6 +1063,14 @@ namespace IronyModManager.ViewModels.Controls
         }
 
         /// <summary>
+        /// Evaluates the highlight.
+        /// </summary>
+        protected virtual void EvaluateHighlight()
+        {
+            CreateClass = ModCollections == null || !ModCollections.Any() ? "CreateHighlight" : string.Empty;
+        }
+
+        /// <summary>
         /// export collection as an asynchronous operation.
         /// </summary>
         /// <param name="path">The path.</param>
@@ -1128,6 +1142,7 @@ namespace IronyModManager.ViewModels.Controls
         /// <param name="resetStack">if set to <c>true</c> [reset stack].</param>
         protected virtual void HandleModCollectionChange(bool resetStack)
         {
+            EvaluateHighlight();
             if (!string.IsNullOrWhiteSpace(restoreCollectionSelection))
             {
                 if (ModCollections?.Count() > 0)
@@ -1408,6 +1423,7 @@ namespace IronyModManager.ViewModels.Controls
         /// <param name="disposables">The disposables.</param>
         protected override void OnActivated(CompositeDisposable disposables)
         {
+            EvaluateHighlight();
             EvalGameSpecificVisibility();
             SetSelectedModsState(Mods != null ? Mods.Where(p => p.IsSelected).ToObservableCollection() : new ObservableCollection<IMod>());
             SubscribeToMods();

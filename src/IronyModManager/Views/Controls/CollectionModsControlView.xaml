@@ -69,8 +69,10 @@
                                         </DataTemplate>
                                     </controls:ComboBox.ItemTemplate>
                                 </controls:ComboBox>
-                                <Button Content="{Binding Create}" MaxHeight="30"
-                                        Command="{Binding CreateCommand}" Margin="0,0,5,0" Width="30"></Button>
+                                <controls:BoundClassBorder BoundClasses="{Binding CreateClass}" MaxHeight="30" Width="30">
+                                    <Button Content="{Binding Create}" MaxHeight="30"
+                                            Command="{Binding CreateCommand}" Margin="0,0,5,0" Width="30"></Button>
+                                </controls:BoundClassBorder>
                             </DockPanel>
                         </Panel>
                         <Panel Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="2">
