@@ -4,7 +4,7 @@
 // Created          : 03-03-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 10-04-2022
+// Last Modified On : 11-06-2022
 // ***********************************************************************
 // <copyright file="CollectionModsControlView.xaml.cs" company="Mario">
 //     Mario
@@ -24,6 +24,8 @@ using Avalonia.Threading;
 using IronyModManager.Common;
 using IronyModManager.Common.Views;
 using IronyModManager.Controls;
+using IronyModManager.DI;
+using IronyModManager.Implementation.MessageBus.Events;
 using IronyModManager.Models.Common;
 using IronyModManager.Shared;
 using IronyModManager.ViewModels.Controls;
@@ -163,10 +165,7 @@ namespace IronyModManager.Views.Controls
                     ViewModel.ContextMenuMod = item.Content as IMod;
                     menuItems = GetMenuItems();
                 }
-                if (menuItems == null)
-                {
-                    menuItems = GetStaticMenuItems();
-                }
+                menuItems ??= GetStaticMenuItems();
                 modList.SetContextMenuItems(menuItems);
             };
         }
@@ -225,8 +224,22 @@ namespace IronyModManager.Views.Controls
                 setUIProperties().ConfigureAwait(false);
             }).DisposeWith(Disposables);
 
+            var mbus = DIResolver.Get<Shared.MessageBus.IMessageBus>();
             modList.LayoutUpdated += (sender, args) =>
             {
+                var visibleItems = modList.ItemContainerGenerator.Containers.ToList();
+                if (visibleItems.Any())
+                {
+                    var mods = visibleItems.Select(p => p.Item).OfType<IMod>().ToList();
+                    if (mods.Any())
+                    {
+                        mods = mods.Where(p => p.Files == null || !p.Files.Any() || p.AchievementStatus == AchievementStatus.NotEvaluated).ToList();
+                        if (mods.Any())
+                        {
+                            mbus.Publish(new EvalModAchievementsCompatibilityEvent(mods));
+                        }
+                    }
+                }
                 setUIProperties().ConfigureAwait(false);
             };
 
@@ -338,10 +351,11 @@ namespace IronyModManager.Views.Controls
             }
 
             var canExportGame = ViewModel.CanExportGame();
-            if (ViewModel.CanExportModHashReport || canExportGame)
+            var canExportMods = ViewModel.CanExportMods();
+            if (canExportMods || canExportGame)
             {
                 var offset = 2;
-                if (ViewModel.CanExportModHashReport)
+                if (canExportMods)
                 {
                     menuItems.Add(new MenuItem()
                     {
@@ -472,13 +486,14 @@ namespace IronyModManager.Views.Controls
                 }
             }
             var canExportGame = ViewModel.CanExportGame();
-            if (ViewModel.CanExportModHashReport || canExportGame)
+            var canExportMods = ViewModel.CanExportMods();
+            if (canExportMods || canExportGame)
             {
                 menuItems.Add(new MenuItem()
                 {
                     Header = "-"
                 });
-                if (ViewModel.CanExportModHashReport)
+                if (canExportMods)
                 {
                     menuItems.Add(new MenuItem()
                     {

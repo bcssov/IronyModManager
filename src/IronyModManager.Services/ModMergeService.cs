@@ -4,7 +4,7 @@
 // Created          : 06-19-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 10-29-2022
+// Last Modified On : 11-05-2022
 // ***********************************************************************
 // <copyright file="ModMergeService.cs" company="Mario">
 //     Mario
@@ -249,10 +249,6 @@ namespace IronyModManager.Services
             }
             if (patchMod != null && collection.PatchModEnabled)
             {
-                if (patchMod.Files == null || !patchMod.Files.Any())
-                {
-                    await PopulateModFilesInternalAsync(new List<IMod>() { patchMod });
-                }
                 collectionMods.Add(patchMod);
             }
 

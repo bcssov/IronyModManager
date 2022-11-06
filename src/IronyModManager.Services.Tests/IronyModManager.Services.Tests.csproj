@@ -69,6 +69,9 @@
     <None Update="dlc\dlc01_fake\dlc01.dlc">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="mod\fakemod2.zip">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="mod\fakemod.zip">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

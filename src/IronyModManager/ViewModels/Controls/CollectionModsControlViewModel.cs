@@ -4,7 +4,7 @@
 // Created          : 03-03-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 10-29-2022
+// Last Modified On : 11-05-2022
 // ***********************************************************************
 // <copyright file="CollectionModsControlViewModel.cs" company="Mario">
 //     Mario
@@ -423,12 +423,6 @@ namespace IronyModManager.ViewModels.Controls
         public virtual bool AllowModSelection { get; set; }
 
         /// <summary>
-        /// Gets or sets a value indicating whether this instance can export mod hash report.
-        /// </summary>
-        /// <value><c>true</c> if this instance can export mod hash report; otherwise, <c>false</c>.</value>
-        public virtual bool CanExportModHashReport { get; set; }
-
-        /// <summary>
         /// Gets or sets a value indicating whether [collection jump on position change].
         /// </summary>
         /// <value><c>true</c> if [collection jump on position change]; otherwise, <c>false</c>.</value>
@@ -806,6 +800,15 @@ namespace IronyModManager.ViewModels.Controls
         }
 
         /// <summary>
+        /// Determines whether this instance [can export mods].
+        /// </summary>
+        /// <returns><c>true</c> if this instance [can export mods]; otherwise, <c>false</c>.</returns>
+        public virtual bool CanExportMods()
+        {
+            return activeGame != null && SelectedMods != null && SelectedMods.Any();
+        }
+
+        /// <summary>
         /// Gets the context menu mod steam URL.
         /// </summary>
         /// <returns>System.String.</returns>
@@ -1048,10 +1051,7 @@ namespace IronyModManager.ViewModels.Controls
         /// <param name="game">The game.</param>
         protected virtual void EvalGameSpecificVisibility(IGame game = null)
         {
-            if (game == null)
-            {
-                game = gameService.GetSelected();
-            }
+            game ??= gameService.GetSelected();
             ShowAdvancedFeatures = (game?.AdvancedFeatures) == GameAdvancedFeatures.Full;
             SearchModsColSpan = ShowAdvancedFeatures ? 1 : 2;
         }

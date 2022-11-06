@@ -1370,7 +1370,8 @@ namespace IronyModManager.Services.Tests
                 new Mod()
                 {
                     Name = "test",
-                    Files = new List<string>() {"test\\test"}
+                    Files = new List<string>() {"test\\test"},
+                    IsValid = true
                 } }, "test");
             result.Should().BeTrue();
         }

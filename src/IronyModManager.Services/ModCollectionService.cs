@@ -4,7 +4,7 @@
 // Created          : 03-04-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 10-29-2022
+// Last Modified On : 11-05-2022
 // ***********************************************************************
 // <copyright file="ModCollectionService.cs" company="Mario">
 //     Mario
@@ -253,12 +253,9 @@ namespace IronyModManager.Services
                 }
                 if (patchMod != null && collection.PatchModEnabled)
                 {
-                    if (patchMod.Files == null || !patchMod.Files.Any())
-                    {
-                        await PopulateModFilesInternalAsync(new List<IMod>() { patchMod });
-                    }
                     modExport.Add(patchMod);
                 }
+                await PopulateModFilesInternalAsync(modExport);
                 var reports = await ParseReportAsync(modExport);
                 return await exportService.ExportAsync(reports, path);
             }
@@ -441,12 +438,9 @@ namespace IronyModManager.Services
             }
             if (patchMod != null)
             {
-                if (patchMod.Files == null || !patchMod.Files.Any())
-                {
-                    await PopulateModFilesInternalAsync(new List<IMod>() { patchMod });
-                }
                 modExport.Add(patchMod);
             }
+            await PopulateModFilesInternalAsync(modExport);
             var currentReports = await ParseReportAsync(modExport);
             return exportService.CompareReports(currentReports.ToList(), importedReports.ToList());
         }

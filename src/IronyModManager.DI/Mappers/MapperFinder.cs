@@ -4,7 +4,7 @@
 // Created          : 01-21-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 10-26-2022
+// Last Modified On : 11-05-2022
 // ***********************************************************************
 // <copyright file="MapperFinder.cs" company="Mario">
 //     Mario
@@ -13,6 +13,7 @@
 // ***********************************************************************
 
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -46,7 +47,7 @@ namespace IronyModManager.DI.Mappers
         /// <summary>
         /// The type map cache
         /// </summary>
-        private static Dictionary<TypeMap, Tuple<bool, AutoMapper.Configuration.TypeMapConfiguration[]>> typeMapCache = new();
+        private static ConcurrentDictionary<TypeMap, Tuple<bool, TypeMapConfiguration[]>> typeMapCache = new();
 
         #endregion Fields
 
@@ -101,12 +102,11 @@ namespace IronyModManager.DI.Mappers
         /// <returns>Type.</returns>
         private static Type GetDerivedTypeFor(TypeMap typeMap, Type derivedSourceType)
         {
-            if (!typeMapCache.ContainsKey(typeMap))
+            var derivedOverride = typeMapCache.GetOrAdd(typeMap, (k) =>
             {
                 var configurations = typeMap.Profile.GetType().GetField("_typeMapConfigs", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(typeMap.Profile) as TypeMapConfiguration[];
-                typeMapCache.Add(typeMap, Tuple.Create(configurations != null, configurations));
-            }
-            var derivedOverride = typeMapCache[typeMap];
+                return Tuple.Create(configurations != null, configurations);
+            });
             // Works only in theory
             if (derivedOverride.Item1 && derivedOverride.Item2.Any(p => p.SourceType == typeMap.SourceType && p.DestinationTypeOverride != null))
             {
