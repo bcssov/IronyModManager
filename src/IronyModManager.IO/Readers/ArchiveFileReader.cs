@@ -4,7 +4,7 @@
 // Created          : 02-23-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 07-20-2022
+// Last Modified On : 11-06-2022
 // ***********************************************************************
 // <copyright file="ArchiveFileReader.cs" company="Mario">
 //     Mario
@@ -93,42 +93,14 @@ namespace IronyModManager.IO.Readers
         /// <returns>IList&lt;System.String&gt;.</returns>
         public virtual IEnumerable<string> GetFiles(string path)
         {
-            IEnumerable<string> getUsingReaderFactory()
+            using var zip = Ionic.Zip.ZipFile.Read(path);
+            var files = new List<string>();
+            foreach (var entry in zip.EntryFileNames)
             {
-                using var fileStream = File.OpenRead(path);
-                using var reader = ReaderFactory.Open(fileStream);
-                var files = new List<string>();
-                while (reader.MoveToNextEntry())
-                {
-                    if (!reader.Entry.IsDirectory)
-                    {
-                        var relativePath = reader.Entry.Key.StandardizeDirectorySeparator().Trim(Path.DirectorySeparatorChar);
-                        files.Add(relativePath);
-                    }
-                }
-                return files;
+                var relativePath = entry.StandardizeDirectorySeparator().Trim(Path.DirectorySeparatorChar);
+                files.Add(relativePath);
             }
-            IEnumerable<string> getUsingArchiveFactory()
-            {
-                using var fileStream = File.OpenRead(path);
-                using var reader = ArchiveFactory.Open(fileStream);
-                var files = new List<string>();
-                foreach (var entry in reader.Entries.Where(entry => !entry.IsDirectory))
-                {
-                    var relativePath = entry.Key.StandardizeDirectorySeparator().Trim(Path.DirectorySeparatorChar);
-                    files.Add(relativePath);
-                }
-                return files;
-            }
-            try
-            {
-                return getUsingArchiveFactory();
-            }
-            catch (Exception ex)
-            {
-                logger.Error(ex);
-                return getUsingReaderFactory();
-            }
+            return files;
         }
 
         /// <summary>
