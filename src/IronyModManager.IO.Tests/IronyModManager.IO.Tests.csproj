@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net6.0</TargetFramework>
+    <TargetFramework>net7.0</TargetFramework>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>../../keys/Irony-Main.snk</AssemblyOriginatorKeyFile>
     <Configurations>Debug;Release;Functional_Test;osx-x64;linux-x64;win-x64</Configurations>
