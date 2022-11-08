@@ -4,11 +4,11 @@
 		<title>Irony Mod Manager</title>
 		<language>en</language>
 		<item>
-			<title>1.24.70-rc</title>
+			<title>1.24.76-rc</title>
 			<description>## Current Release Notes
-* Minor updates
-* Improve mod loading performance
-* Highlight create button if no collections
+* Minor fixes and improvements
+* Bump to net7
+* Remove mod folder if found in data directory path
 
 ## Release Notes 1.24
 * Update dependencies
@@ -19,15 +19,15 @@
 * Add support for metadata descriptor type games (Victoria 3 support)
 * Add option to ignore update
 * Improve mod loading performance</description>
-			<pubDate>Sun, 06 Nov 2022 06:13:18 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.24.70-rc/linux-x64.zip" sparkle:version="1.24.70.10375" sparkle:shortVersionString="1.24.70" length="89000433" sparkle:os="linux" type="application/zip" sparkle:signature="uN8UBUaS113GWASznOd6iGbuu3Nc0VSopk5Ful70o2Z7NGPTplQZOFPER3DsihUeEJHUNFZ7uudNDpgFKwJ5Dg=="/>
+			<pubDate>Tue, 08 Nov 2022 23:10:11 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.24.76-rc/linux-x64.zip" sparkle:version="1.24.76.48627" sparkle:shortVersionString="1.24.76" length="89877664" sparkle:os="linux" type="application/zip" sparkle:signature="W8hhuzw5uvEaq6reFk1OmdrXLB2+3C80JagwgTwWg05MwL6227VzJxyI13k8qPOQMxNo63BVSgmr/kPyHxIXBw=="/>
 		</item>
 		<item>
-			<title>1.24.70-rc</title>
+			<title>1.24.76-rc</title>
 			<description>## Current Release Notes
-* Minor updates
-* Improve mod loading performance
-* Highlight create button if no collections
+* Minor fixes and improvements
+* Bump to net7
+* Remove mod folder if found in data directory path
 
 ## Release Notes 1.24
 * Update dependencies
@@ -38,15 +38,15 @@
 * Add support for metadata descriptor type games (Victoria 3 support)
 * Add option to ignore update
 * Improve mod loading performance</description>
-			<pubDate>Sun, 06 Nov 2022 06:13:24 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.24.70-rc/osx-x64.zip" sparkle:version="1.24.70.10375" sparkle:shortVersionString="1.24.70" length="92174626" sparkle:os="osx" type="application/zip" sparkle:signature="nZXxQDkW4B8W6F51ZxCL7WyYFLUh//LpqarhkYcIbQwA/fSN9wEhDjcF7LNQBl9KvyiPoFlf5KQpozf0EpNNAg=="/>
+			<pubDate>Tue, 08 Nov 2022 23:10:17 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.24.76-rc/osx-x64.zip" sparkle:version="1.24.76.48627" sparkle:shortVersionString="1.24.76" length="93039681" sparkle:os="osx" type="application/zip" sparkle:signature="usXBgbr6p8zx5If7M8HV+wA46gfVDOTV2IRKQ8cpJLBRSQWu0/5JAlHkYYK1a7bKlcBhmsBXlrtx/ADR/GcDDA=="/>
 		</item>
 		<item>
-			<title>1.24.70-rc</title>
+			<title>1.24.76-rc</title>
 			<description>## Current Release Notes
-* Minor updates
-* Improve mod loading performance
-* Highlight create button if no collections
+* Minor fixes and improvements
+* Bump to net7
+* Remove mod folder if found in data directory path
 
 ## Release Notes 1.24
 * Update dependencies
@@ -57,15 +57,15 @@
 * Add support for metadata descriptor type games (Victoria 3 support)
 * Add option to ignore update
 * Improve mod loading performance</description>
-			<pubDate>Sun, 06 Nov 2022 06:13:29 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.24.70-rc/win-x64-setup.zip" sparkle:version="1.24.70.10375" sparkle:shortVersionString="1.24.70" length="70714245" sparkle:os="windows" type="application/zip" sparkle:signature="PyF4GyU8mzPerp3YdZyrgm3o9iv5R+rewWXR7tXXR5cFiYo6cr66+HGZK9P4gHuC5XbpANxq1R5zFus3zxmKBw=="/>
+			<pubDate>Tue, 08 Nov 2022 23:10:24 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.24.76-rc/win-x64-setup.zip" sparkle:version="1.24.76.48627" sparkle:shortVersionString="1.24.76" length="71235344" sparkle:os="windows" type="application/zip" sparkle:signature="TFvzih+M6r68zuE8NqW2NSJyFSoJAKj7KuSGxufi9QLDPn4pv0BsMdfhcnnnCL5pw6/SFdre01daBupz8vA5AA=="/>
 		</item>
 		<item>
-			<title>1.24.70-rc</title>
+			<title>1.24.76-rc</title>
 			<description>## Current Release Notes
-* Minor updates
-* Improve mod loading performance
-* Highlight create button if no collections
+* Minor fixes and improvements
+* Bump to net7
+* Remove mod folder if found in data directory path
 
 ## Release Notes 1.24
 * Update dependencies
@@ -76,8 +76,8 @@
 * Add support for metadata descriptor type games (Victoria 3 support)
 * Add option to ignore update
 * Improve mod loading performance</description>
-			<pubDate>Sun, 06 Nov 2022 06:13:30 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.24.70-rc/win-x64.zip" sparkle:version="1.24.70.10375" sparkle:shortVersionString="1.24.70" length="104328625" sparkle:os="windows" type="application/zip" sparkle:signature="hZl/ay6qm32Yp2ok2CI78zVYmvX65WzMjnNciLrMfmAKSsuohSd7N0xIBqjKHx3fRJuFWOKadsSfGKS19nFlCA=="/>
+			<pubDate>Tue, 08 Nov 2022 23:10:24 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.24.76-rc/win-x64.zip" sparkle:version="1.24.76.48627" sparkle:shortVersionString="1.24.76" length="104612427" sparkle:os="windows" type="application/zip" sparkle:signature="uEGYEFD+GA8kycWbW4O6Dz1iOx0LgCq1ryUVvexC6DqWPWYYSxNVpmQRPq36nGQq4cxAQeY2duAOWtkJbZPtAw=="/>
 		</item>
 		<item>
 			<title>1.23.59</title>
