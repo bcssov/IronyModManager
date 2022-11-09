@@ -4,7 +4,7 @@
 // Created          : 07-18-2022
 //
 // Last Modified By : Mario
-// Last Modified On : 07-20-2022
+// Last Modified On : 11-09-2022
 // ***********************************************************************
 // <copyright file="Extensions.cs" company="Mario">
 //     Mario
@@ -90,7 +90,12 @@ namespace IronyModManager.IO.Readers
             {
                 return null;
             }
-            var result = new EncodingInfo() { Encoding = encoding.Detected.Encoding, HasBOM = encoding.Detected.HasBOM };
+            var detected = encoding.Detected;
+            if (detected.Encoding == null)
+            {
+                detected = encoding.Details.FirstOrDefault(p => p.Encoding != null);
+            }
+            var result = new EncodingInfo() { Encoding = detected.Encoding, HasBOM = detected.HasBOM };
             return result;
         }
 
