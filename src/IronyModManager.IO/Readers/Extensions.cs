@@ -48,7 +48,7 @@ namespace IronyModManager.IO.Readers
             {
                 return null;
             }
-            var result = new EncodingInfo() { Encoding = encoding.Detected.Encoding, HasBOM = encoding.Detected.HasBOM };
+            var result = new EncodingInfo() { Encoding = encoding.Detected.EncodingName, HasBOM = encoding.Detected.HasBOM };
             memoryStream.Close();
             memoryStream.Dispose();
             return result;
@@ -70,7 +70,7 @@ namespace IronyModManager.IO.Readers
             {
                 return null;
             }
-            var result = new EncodingInfo() { Encoding = encoding.Detected.Encoding, HasBOM = encoding.Detected.HasBOM };
+            var result = new EncodingInfo() { Encoding = encoding.Detected.EncodingName, HasBOM = encoding.Detected.HasBOM };
             return result;
         }
 
@@ -90,12 +90,7 @@ namespace IronyModManager.IO.Readers
             {
                 return null;
             }
-            var detected = encoding.Detected;
-            if (detected.Encoding == null)
-            {
-                detected = encoding.Details.FirstOrDefault(p => p.Encoding != null);
-            }
-            var result = new EncodingInfo() { Encoding = detected.Encoding, HasBOM = detected.HasBOM };
+            var result = new EncodingInfo() { Encoding = encoding.Detected.EncodingName, HasBOM = encoding.Detected.HasBOM };
             return result;
         }
 
