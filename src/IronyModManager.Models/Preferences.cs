@@ -4,7 +4,7 @@
 // Created          : 01-11-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-26-2021
+// Last Modified On : 11-02-2022
 // ***********************************************************************
 // <copyright file="Preferences.cs" company="Mario">
 //     Mario
@@ -67,6 +67,12 @@ namespace IronyModManager.Models
         /// </summary>
         /// <value>The game.</value>
         public virtual string Game { get; set; }
+
+        /// <summary>
+        /// Gets or sets the last skipped version.
+        /// </summary>
+        /// <value>The last skipped version.</value>
+        public virtual string LastSkippedVersion { get; set; }
 
         /// <summary>
         /// Gets or sets the locale.

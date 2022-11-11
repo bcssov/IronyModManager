@@ -4,7 +4,7 @@
 // Created          : 06-22-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 08-29-2021
+// Last Modified On : 10-29-2022
 // ***********************************************************************
 // <copyright file="ParadoxImporter.cs" company="Mario">
 //     Mario
@@ -14,6 +14,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 using IronyModManager.DI;
 using IronyModManager.IO.Common.Models;
@@ -66,26 +67,55 @@ namespace IronyModManager.IO.Mods.Importers
         /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
         public async Task<ICollectionImportResult> ImportAsync(ModCollectionExporterParams parameters)
         {
-            var path = Path.Combine(Path.GetDirectoryName(parameters.ModDirectory), Constants.DLC_load_path);
-            if (File.Exists(path))
+            if (parameters.DescriptorType == Common.DescriptorType.DescriptorMod)
             {
-                var result = DIResolver.Get<ICollectionImportResult>();
-                var content = await File.ReadAllTextAsync(path);
-                if (!string.IsNullOrWhiteSpace(content))
+                var path = Path.Combine(Path.GetDirectoryName(parameters.ModDirectory), Constants.DLC_load_path);
+                if (File.Exists(path))
                 {
-                    try
+                    var result = DIResolver.Get<ICollectionImportResult>();
+                    var content = await File.ReadAllTextAsync(path);
+                    if (!string.IsNullOrWhiteSpace(content))
                     {
-                        var model = JsonConvert.DeserializeObject<DLCLoad>(content);
-                        if (model.EnabledMods?.Count > 0)
+                        try
                         {
-                            result.Name = CollectionName;
-                            result.Descriptors = model.EnabledMods;
-                            return result;
+                            var model = JsonConvert.DeserializeObject<DLCLoad>(content);
+                            if (model.EnabledMods?.Count > 0)
+                            {
+                                result.Name = CollectionName;
+                                result.Descriptors = model.EnabledMods;
+                                return result;
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            logger.Error(ex);
                         }
                     }
-                    catch (Exception ex)
+                }
+            }
+            else
+            {
+                var path = Path.Combine(Path.GetDirectoryName(parameters.ModDirectory), Constants.Content_load_path);
+                if (File.Exists(path))
+                {
+                    var result = DIResolver.Get<ICollectionImportResult>();
+                    var content = await File.ReadAllTextAsync(path);
+                    if (!string.IsNullOrWhiteSpace(content))
                     {
-                        logger.Error(ex);
+                        try
+                        {
+                            var model = JsonConvert.DeserializeObject<ContentLoad>(content);
+                            if (model.EnabledMods?.Count > 0)
+                            {
+                                result.Name = CollectionName;
+                                result.FullPaths = model.EnabledMods.Where(p => p != null && !string.IsNullOrWhiteSpace(p.Path)).Select(m => m.Path).ToList();
+                                return result;
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            logger.Error(ex);
+                        }
                     }
                 }
             }

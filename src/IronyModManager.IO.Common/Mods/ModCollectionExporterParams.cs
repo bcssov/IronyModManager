@@ -4,7 +4,7 @@
 // Created          : 04-02-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-26-2022
+// Last Modified On : 10-29-2022
 // ***********************************************************************
 // <copyright file="ModCollectionExporterParams.cs" company="Mario">
 //     Mario
@@ -25,6 +25,12 @@ namespace IronyModManager.IO.Common.Mods
     public class ModCollectionExporterParams
     {
         #region Properties
+
+        /// <summary>
+        /// Gets or sets the type of the descriptor.
+        /// </summary>
+        /// <value>The type of the descriptor.</value>
+        public DescriptorType DescriptorType { get; set; }
 
         /// <summary>
         /// Gets or sets the export mod directory.

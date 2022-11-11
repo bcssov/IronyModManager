@@ -4,7 +4,7 @@
 // Created          : 08-11-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 01-16-2022
+// Last Modified On : 11-04-2022
 // ***********************************************************************
 // <copyright file="JsonStringToListHandler.cs" company="Mario">
 //     Mario
@@ -14,8 +14,8 @@
 using System;
 using System.Collections.Generic;
 using Newtonsoft.Json.Linq;
-using RepoDb;
 using RepoDb.Interfaces;
+using RepoDb.Options;
 
 namespace IronyModManager.IO.Mods.Models.Paradox.PropertyHandlers
 {
@@ -32,9 +32,9 @@ namespace IronyModManager.IO.Mods.Models.Paradox.PropertyHandlers
         /// Gets the specified input.
         /// </summary>
         /// <param name="input">The input.</param>
-        /// <param name="property">The property.</param>
+        /// <param name="options">The options.</param>
         /// <returns>List&lt;System.String&gt;.</returns>
-        public List<string> Get(string input, ClassProperty property)
+        public List<string> Get(string input, PropertyHandlerGetOptions options)
         {
             if (string.IsNullOrWhiteSpace(input))
             {
@@ -48,9 +48,9 @@ namespace IronyModManager.IO.Mods.Models.Paradox.PropertyHandlers
         /// Sets the specified input.
         /// </summary>
         /// <param name="input">The input.</param>
-        /// <param name="property">The property.</param>
+        /// <param name="options">The options.</param>
         /// <returns>System.String.</returns>
-        public string Set(List<string> input, ClassProperty property)
+        public string Set(List<string> input, PropertyHandlerSetOptions options)
         {
             if (input == null || input.Count == 0)
             {

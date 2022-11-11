@@ -4,7 +4,7 @@
 // Created          : 08-11-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 01-16-2022
+// Last Modified On : 10-29-2022
 // ***********************************************************************
 // <copyright file="Constants.cs" company="Mario">
 //     Mario
@@ -22,6 +22,11 @@ namespace IronyModManager.IO.Mods
     internal class Constants
     {
         #region Fields
+
+        /// <summary>
+        /// The content load path
+        /// </summary>
+        public const string Content_load_path = "content_load.json";
 
         /// <summary>
         /// The DLC load path
@@ -70,11 +75,6 @@ namespace IronyModManager.IO.Mods
             #region Fields
 
             /// <summary>
-            /// The identifier
-            /// </summary>
-            public const int Id = 6;
-
-            /// <summary>
             /// The SQL v5 identifier
             /// </summary>
             public const string Name = "addCreatedAndSubscribedDate";
@@ -88,11 +88,6 @@ namespace IronyModManager.IO.Mods
         public class SqlV4Id
         {
             #region Fields
-
-            /// <summary>
-            /// The identifier
-            /// </summary>
-            public const int Id = 13;
 
             /// <summary>
             /// The SQL v5 identifier

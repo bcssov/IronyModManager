@@ -94,7 +94,7 @@ namespace IronyModManager.Services.Tests
             };
             reader.Setup(s => s.Read(It.IsAny<string>(), It.IsAny<IEnumerable<string>>(), It.IsAny<bool>())).Returns(fileInfos);
 
-            modParser.Setup(s => s.Parse(It.IsAny<IEnumerable<string>>())).Returns((IEnumerable<string> values) =>
+            modParser.Setup(s => s.Parse(It.IsAny<IEnumerable<string>>(), It.IsAny<DescriptorModType>())).Returns((IEnumerable<string> values, DescriptorModType t) =>
             {
                 return new ModObject()
                 {
@@ -132,8 +132,8 @@ namespace IronyModManager.Services.Tests
             var service = GetService(storageProvider, modParser, reader, mapper, modWriter, gameService);
             var result = await service.GetInstalledModsAsync(new Game() { UserDirectory = "fake1", WorkshopDirectory = new List<string>() { "fake2" }, Type = "Should_return_installed_mods", CustomModDirectory = string.Empty });
             result.Count().Should().Be(2);
-            result.First().FileName.Should().Be("1");
-            result.Last().FileName.Should().Be("2");
+            result.Any(f => f.FileName == "1").Should().BeTrue();
+            result.Any(f => f.FileName == "2").Should().BeTrue();
         }
 
         /// <summary>
@@ -189,8 +189,8 @@ namespace IronyModManager.Services.Tests
             var service = GetService(storageProvider, modParser, reader, mapper, modWriter, gameService);
             var result = await service.GetInstalledModsAsync(new Game() { UserDirectory = "fake1", WorkshopDirectory = new List<string>() { "fake2" }, Type = "Should_return_available_mods", CustomModDirectory = string.Empty });
             result.Count().Should().Be(2);
-            result.First().FileName.Should().Be("1");
-            result.Last().FileName.Should().Be("2");
+            result.Any(p => p.FileName == "1").Should().BeTrue();
+            result.Any(p => p.FileName == "2").Should().BeTrue();
         }
 
         /// <summary>

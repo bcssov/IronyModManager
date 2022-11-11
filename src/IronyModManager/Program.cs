@@ -4,7 +4,7 @@
 // Created          : 01-10-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 07-23-2022
+// Last Modified On : 11-06-2022
 // ***********************************************************************
 // <copyright file="Program.cs" company="IronyModManager">
 //     Copyright (c) Mario. All rights reserved.
@@ -207,7 +207,7 @@ namespace IronyModManager
                 {
                     var path = Process.GetCurrentProcess().MainModule.FileName;
                     var appAction = DIResolver.Get<IAppAction>();
-                    await appAction.RunAsync(path, "--fatal-error");
+                    await appAction.RunAsync(path, "--fatal-error").ConfigureAwait(false);
                     ExternalNotificationShown = true;
                 }
                 // Force exit as it seems that sometimes the app doesn't quit on such an error

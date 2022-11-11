@@ -4,7 +4,7 @@
 // Created          : 03-01-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 01-29-2022
+// Last Modified On : 11-05-2022
 // ***********************************************************************
 // <copyright file="Enums.cs" company="Mario">
 //     Mario
@@ -34,7 +34,12 @@ namespace IronyModManager.Models.Common
         /// <summary>
         /// The not compatible
         /// </summary>
-        NotCompatible
+        NotCompatible,
+
+        /// <summary>
+        /// The attempted evaluation
+        /// </summary>
+        AttemptedEvaluation
     }
 
     /// <summary>
@@ -111,6 +116,22 @@ namespace IronyModManager.Models.Common
     }
 
     /// <summary>
+    /// Enum ModDescriptorType
+    /// </summary>
+    public enum ModDescriptorType
+    {
+        /// <summary>
+        /// The descriptor mod
+        /// </summary>
+        DescriptorMod,
+
+        /// <summary>
+        /// The json metadata
+        /// </summary>
+        JsonMetadata
+    }
+
+    /// <summary>
     /// Enum ModSource
     /// </summary>
     public enum ModSource
@@ -180,6 +201,38 @@ namespace IronyModManager.Models.Common
         /// <summary>
         /// The read only
         /// </summary>
-        ReadOnly
+        ReadOnly,
+
+        /// <summary>
+        /// The default without localization
+        /// </summary>
+        DefaultWithoutLocalization,
+
+        /// <summary>
+        /// The advanced without localization
+        /// </summary>
+        AdvancedWithoutLocalization,
+
+        /// <summary>
+        /// The read only without localization
+        /// </summary>
+        ReadOnlyWithoutLocalization
+    }
+
+    /// <summary>
+    /// Enum SupportedMergeTypes
+    /// </summary>
+    [Flags]
+    public enum SupportedMergeTypes
+    {
+        /// <summary>
+        /// The basic
+        /// </summary>
+        Basic = 1,
+
+        /// <summary>
+        /// The zip
+        /// </summary>
+        Zip = 2
     }
 }

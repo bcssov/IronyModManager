@@ -4,7 +4,7 @@
 // Created          : 07-18-2022
 //
 // Last Modified By : Mario
-// Last Modified On : 07-20-2022
+// Last Modified On : 11-09-2022
 // ***********************************************************************
 // <copyright file="Extensions.cs" company="Mario">
 //     Mario
@@ -48,7 +48,7 @@ namespace IronyModManager.IO.Readers
             {
                 return null;
             }
-            var result = new EncodingInfo() { Encoding = encoding.Detected.Encoding, HasBOM = encoding.Detected.HasBOM };
+            var result = new EncodingInfo() { Encoding = encoding.Detected.EncodingName, HasBOM = encoding.Detected.HasBOM };
             memoryStream.Close();
             memoryStream.Dispose();
             return result;
@@ -70,7 +70,7 @@ namespace IronyModManager.IO.Readers
             {
                 return null;
             }
-            var result = new EncodingInfo() { Encoding = encoding.Detected.Encoding, HasBOM = encoding.Detected.HasBOM };
+            var result = new EncodingInfo() { Encoding = encoding.Detected.EncodingName, HasBOM = encoding.Detected.HasBOM };
             return result;
         }
 
@@ -90,7 +90,7 @@ namespace IronyModManager.IO.Readers
             {
                 return null;
             }
-            var result = new EncodingInfo() { Encoding = encoding.Detected.Encoding, HasBOM = encoding.Detected.HasBOM };
+            var result = new EncodingInfo() { Encoding = encoding.Detected.EncodingName, HasBOM = encoding.Detected.HasBOM };
             return result;
         }
 

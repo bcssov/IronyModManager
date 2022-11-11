@@ -4,15 +4,17 @@
 // Created          : 08-11-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 08-13-2020
+// Last Modified On : 11-04-2022
 // ***********************************************************************
 // <copyright file="SQLTraceLog.cs" company="Mario">
 //     Mario
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
-using System.Collections.Generic;
 using System;
+using System.Collections.Generic;
+using System.Threading;
+using System.Threading.Tasks;
 using IronyModManager.Shared;
 using Newtonsoft.Json;
 using RepoDb;
@@ -149,6 +151,29 @@ namespace IronyModManager.IO.Mods
         public void AfterExecuteScalar(TraceLog log)
         {
             TraceQuery(log);
+        }
+
+        /// <summary>
+        /// Afters the execution.
+        /// </summary>
+        /// <typeparam name="TResult">The type of the t result.</typeparam>
+        /// <param name="log">The log.</param>
+        public void AfterExecution<TResult>(ResultTraceLog<TResult> log)
+        {
+            TraceQuery(log);
+        }
+
+        /// <summary>
+        /// Afters the execution asynchronous.
+        /// </summary>
+        /// <typeparam name="TResult">The type of the t result.</typeparam>
+        /// <param name="log">The log.</param>
+        /// <param name="cancellationToken">The cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <returns>Task.</returns>
+        public Task AfterExecutionAsync<TResult>(ResultTraceLog<TResult> log, CancellationToken cancellationToken = default)
+        {
+            TraceQuery(log);
+            return Task.CompletedTask;
         }
 
         /// <summary>
@@ -401,6 +426,27 @@ namespace IronyModManager.IO.Mods
         public void BeforeExecuteScalar(CancellableTraceLog log)
         {
             TraceQuery(log);
+        }
+
+        /// <summary>
+        /// Befores the execution.
+        /// </summary>
+        /// <param name="log">The log.</param>
+        public void BeforeExecution(CancellableTraceLog log)
+        {
+            TraceQuery(log);
+        }
+
+        /// <summary>
+        /// Befores the execution asynchronous.
+        /// </summary>
+        /// <param name="log">The log.</param>
+        /// <param name="cancellationToken">The cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <returns>Task.</returns>
+        public Task BeforeExecutionAsync(CancellableTraceLog log, CancellationToken cancellationToken = default)
+        {
+            TraceQuery(log);
+            return Task.CompletedTask;
         }
 
         /// <summary>

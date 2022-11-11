@@ -102,7 +102,7 @@ namespace IronyModManager.Services.Tests
             };
             reader.Setup(s => s.Read(It.IsAny<string>(), It.IsAny<IEnumerable<string>>(), It.IsAny<bool>())).Returns(fileInfos);
 
-            modParser.Setup(s => s.Parse(It.IsAny<IEnumerable<string>>())).Returns((IEnumerable<string> values) =>
+            modParser.Setup(s => s.Parse(It.IsAny<IEnumerable<string>>(), It.IsAny<DescriptorModType>())).Returns((IEnumerable<string> values, DescriptorModType t) =>
             {
                 return new ModObject()
                 {
@@ -140,13 +140,13 @@ namespace IronyModManager.Services.Tests
             var modPatchExporter = new Mock<IModPatchExporter>();
 
             var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter);
-            var result = await service.GetModObjectsAsync(null, new List<IMod>(), string.Empty);
+            var result = await service.GetModObjectsAsync(null, new List<IMod>(), string.Empty, IronyModManager.Models.Common.PatchStateMode.Advanced);
             result.Should().BeNull();
 
-            result = await service.GetModObjectsAsync(new Game(), new List<IMod>(), string.Empty);
+            result = await service.GetModObjectsAsync(new Game(), new List<IMod>(), string.Empty, IronyModManager.Models.Common.PatchStateMode.Advanced);
             result.Should().BeNull();
 
-            result = await service.GetModObjectsAsync(new Game(), null, string.Empty);
+            result = await service.GetModObjectsAsync(new Game(), null, string.Empty, IronyModManager.Models.Common.PatchStateMode.Advanced);
             result.Should().BeNull();
         }
 
@@ -174,14 +174,14 @@ namespace IronyModManager.Services.Tests
             SetupMockCase(reader, parserManager, modParser);
 
             var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter, new List<IDefinitionInfoProvider>() { infoProvider.Object });
-            var result = await service.GetModObjectsAsync(new Game() { UserDirectory = "c:\\fake" }, new List<IMod>()
+            var result = await service.GetModObjectsAsync(new Game() { UserDirectory = "c:\\fake", GameFolders = new List<string>() }, new List<IMod>()
             {
                 new Mod()
                 {
                     FileName = Assembly.GetExecutingAssembly().Location,
                     Name = "fake"
                 }
-            }, string.Empty);
+            }, string.Empty, IronyModManager.Models.Common.PatchStateMode.Advanced);
             result.GetAll().Count().Should().Be(2);
             var ordered = result.GetAll().OrderBy(p => p.Id);
             ordered.First().Id.Should().Be("fake1.txt");
@@ -212,14 +212,14 @@ namespace IronyModManager.Services.Tests
             SetupMockCase(reader, parserManager, modParser);
 
             var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter, new List<IDefinitionInfoProvider>() { infoProvider.Object });
-            var result = await service.GetModObjectsAsync(new Game() { UserDirectory = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), WorkshopDirectory = new List<string>() { "fake1" } }, new List<IMod>()
+            var result = await service.GetModObjectsAsync(new Game() { UserDirectory = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), WorkshopDirectory = new List<string>(), GameFolders = new List<string>() { "fake1" } }, new List<IMod>()
             {
                 new Mod()
                 {
                     FileName = Path.GetFileName(Assembly.GetExecutingAssembly().Location),
                     Name = "fake"
                 }
-            }, string.Empty);
+            }, string.Empty, IronyModManager.Models.Common.PatchStateMode.Advanced);
             result.GetAll().Count().Should().Be(2);
             var ordered = result.GetAll().OrderBy(p => p.Id);
             ordered.First().Id.Should().Be("fake1.txt");
@@ -250,14 +250,14 @@ namespace IronyModManager.Services.Tests
             SetupMockCase(reader, parserManager, modParser);
 
             var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter, new List<IDefinitionInfoProvider>() { infoProvider.Object });
-            var result = await service.GetModObjectsAsync(new Game() { WorkshopDirectory = new List<string>() { Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) }, UserDirectory = "fake1" }, new List<IMod>()
+            var result = await service.GetModObjectsAsync(new Game() { WorkshopDirectory = new List<string>() { Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) }, UserDirectory = "fake1", GameFolders = new List<string>() }, new List<IMod>()
             {
                 new Mod()
                 {
                     FileName = Path.GetFileName(Assembly.GetExecutingAssembly().Location),
                     Name = "fake"
                 }
-            }, string.Empty);
+            }, string.Empty, IronyModManager.Models.Common.PatchStateMode.Advanced);
             result.GetAll().Count().Should().Be(2);
             var ordered = result.GetAll().OrderBy(p => p.Id);
             ordered.First().Id.Should().Be("fake1.txt");
@@ -3403,7 +3403,7 @@ namespace IronyModManager.Services.Tests
                 }
             };
             reader.Setup(s => s.Read(It.IsAny<string>(), It.IsAny<IEnumerable<string>>(), It.IsAny<bool>())).Returns(fileInfos);
-            modParser.Setup(s => s.Parse(It.IsAny<IEnumerable<string>>())).Returns((IEnumerable<string> values) =>
+            modParser.Setup(s => s.Parse(It.IsAny<IEnumerable<string>>(), It.IsAny<DescriptorModType>())).Returns((IEnumerable<string> values, DescriptorModType t) =>
             {
                 return new ModObject()
                 {
@@ -3481,7 +3481,7 @@ namespace IronyModManager.Services.Tests
                 }
             };
             reader.Setup(s => s.Read(It.IsAny<string>(), It.IsAny<IEnumerable<string>>(), It.IsAny<bool>())).Returns(fileInfos);
-            modParser.Setup(s => s.Parse(It.IsAny<IEnumerable<string>>())).Returns((IEnumerable<string> values) =>
+            modParser.Setup(s => s.Parse(It.IsAny<IEnumerable<string>>(), It.IsAny<DescriptorModType>())).Returns((IEnumerable<string> values, DescriptorModType t) =>
             {
                 return new ModObject()
                 {
@@ -5317,7 +5317,7 @@ namespace IronyModManager.Services.Tests
             registration.OnPostStartup();
             var game = DISetup.Container.GetInstance<IGameService>().Get().First(s => s.Type == "Stellaris");
             var mods = await DISetup.Container.GetInstance<IModService>().GetInstalledModsAsync(game);
-            var defs = await DISetup.Container.GetInstance<IModPatchCollectionService>().GetModObjectsAsync(game, mods, string.Empty);
+            var defs = await DISetup.Container.GetInstance<IModPatchCollectionService>().GetModObjectsAsync(game, mods, string.Empty, IronyModManager.Models.Common.PatchStateMode.Advanced);
         }
     }
 }

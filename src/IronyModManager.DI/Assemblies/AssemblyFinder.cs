@@ -4,7 +4,7 @@
 // Created          : 01-12-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 09-16-2020
+// Last Modified On : 10-28-2022
 // ***********************************************************************
 // <copyright file="AssemblyFinder.cs" company="Mario">
 //     Mario
@@ -31,7 +31,7 @@ namespace IronyModManager.DI.Assemblies
         /// <summary>
         /// The excluded assemblies
         /// </summary>
-        private static readonly string[] ExcludedAssemblies = new string[] { "IronyModManager.Updater" };
+        private static readonly string[] ExcludedAssemblies = new string[] { "IronyModManager.Updater", "IronyModManager.GameHandler" };
 
         #endregion Fields
 
@@ -158,7 +158,7 @@ namespace IronyModManager.DI.Assemblies
         /// </summary>
         /// <param name="assemblies">The assemblies.</param>
         /// <param name="finderParams">The finder parameters.</param>
-        /// <exception cref="InvalidOperationException">Assembly {assembly.FullName} does not belong to {finderParams.Path}, application execution has been stopped due to security reasons.</exception>
+        /// <exception cref="System.InvalidOperationException">Assembly {assembly.FullName} does not belong to {finderParams.Path}, application execution has been stopped due to security reasons.</exception>
         private static void ValidateAssemblies(IEnumerable<Assembly> assemblies, AssemblyFinderParams finderParams)
         {
             var thisAssembly = Assembly.GetExecutingAssembly();

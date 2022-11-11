@@ -4,7 +4,7 @@
 // Created          : 06-06-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-06-2020
+// Last Modified On : 10-29-2022
 // ***********************************************************************
 // <copyright file="Enums.cs" company="Mario">
 //     Mario
@@ -16,6 +16,27 @@ using System.Collections.Generic;
 
 namespace IronyModManager.IO.Common
 {
+    /// <summary>
+    /// Enum DescriptorType
+    /// </summary>
+    public enum DescriptorType
+    {
+        /// <summary>
+        /// The none
+        /// </summary>
+        None,
+
+        /// <summary>
+        /// The descriptor mod
+        /// </summary>
+        DescriptorMod,
+
+        /// <summary>
+        /// The json metadata
+        /// </summary>
+        JsonMetadata
+    }
+
     /// <summary>
     /// Enum PatchStateMode
     /// </summary>
@@ -34,6 +55,16 @@ namespace IronyModManager.IO.Common
         /// <summary>
         /// The advanced
         /// </summary>
-        Advanced
+        Advanced,
+
+        /// <summary>
+        /// The default without localization
+        /// </summary>
+        DefaultWithoutLocalization,
+
+        /// <summary>
+        /// The advanced without localization
+        /// </summary>
+        AdvancedWithoutLocalization,
     }
 }

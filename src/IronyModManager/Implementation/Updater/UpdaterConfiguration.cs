@@ -4,7 +4,7 @@
 // Created          : 09-17-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 09-17-2020
+// Last Modified On : 11-02-2022
 // ***********************************************************************
 // <copyright file="UpdaterConfiguration.cs" company="Mario">
 //     Mario
@@ -28,7 +28,7 @@ namespace IronyModManager.Implementation.Updater
         #region Constructors
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="UpdaterConfiguration"/> class.
+        /// Initializes a new instance of the <see cref="UpdaterConfiguration" /> class.
         /// </summary>
         /// <param name="assemblyAccessor">The assembly accessor.</param>
         public UpdaterConfiguration(IAssemblyAccessor assemblyAccessor) : base(assemblyAccessor)
@@ -51,6 +51,15 @@ namespace IronyModManager.Implementation.Updater
             LastCheckTime = DateTime.MinValue;
             LastConfigUpdate = DateTime.MinValue;
             LastVersionSkipped = string.Empty;
+        }
+
+        /// <summary>
+        /// Sets the version to skip.
+        /// </summary>
+        /// <param name="version">The version.</param>
+        public override void SetVersionToSkip(string version)
+        {
+            base.SetVersionToSkip(version ?? string.Empty);
         }
 
         #endregion Methods

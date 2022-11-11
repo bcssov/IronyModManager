@@ -4,7 +4,7 @@
 // Created          : 05-09-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 07-10-2022
+// Last Modified On : 10-29-2022
 // ***********************************************************************
 // <copyright file="ModifyCollectionControlViewModel.cs" company="Mario">
 //     Mario
@@ -43,6 +43,11 @@ namespace IronyModManager.ViewModels.Controls
     public class ModifyCollectionControlViewModel : BaseViewModel
     {
         #region Fields
+
+        /// <summary>
+        /// The game service
+        /// </summary>
+        private readonly IGameService gameService;
 
         /// <summary>
         /// The identifier generator
@@ -121,6 +126,7 @@ namespace IronyModManager.ViewModels.Controls
         /// <summary>
         /// Initializes a new instance of the <see cref="ModifyCollectionControlViewModel" /> class.
         /// </summary>
+        /// <param name="gameService">The game service.</param>
         /// <param name="modMergeFreeSpaceCheckHandler">The mod merge free space check handler.</param>
         /// <param name="modService">The mod service.</param>
         /// <param name="idGenerator">The identifier generator.</param>
@@ -132,7 +138,7 @@ namespace IronyModManager.ViewModels.Controls
         /// <param name="modPatchCollectionService">The mod patch collection service.</param>
         /// <param name="localizationManager">The localization manager.</param>
         /// <param name="notificationAction">The notification action.</param>
-        public ModifyCollectionControlViewModel(ModMergeFreeSpaceCheckHandler modMergeFreeSpaceCheckHandler, IModService modService, IIDGenerator idGenerator,
+        public ModifyCollectionControlViewModel(IGameService gameService, ModMergeFreeSpaceCheckHandler modMergeFreeSpaceCheckHandler, IModService modService, IIDGenerator idGenerator,
             ModCompressMergeProgressHandler modCompressMergeProgressHandler, ModFileMergeProgressHandler modFileMergeProgressHandler, IShutDownState shutDownState,
             IModMergeService modMergeService, IModCollectionService modCollectionService, IModPatchCollectionService modPatchCollectionService,
             ILocalizationManager localizationManager, INotificationAction notificationAction)
@@ -148,6 +154,7 @@ namespace IronyModManager.ViewModels.Controls
             this.modCompressMergeProgressHandler = modCompressMergeProgressHandler;
             this.modService = modService;
             this.modMergeFreeSpaceCheckHandler = modMergeFreeSpaceCheckHandler;
+            this.gameService = gameService;
         }
 
         #endregion Constructors
@@ -208,6 +215,18 @@ namespace IronyModManager.ViewModels.Controls
         public virtual bool AllowModSelection { get; set; }
 
         /// <summary>
+        /// Gets or sets a value indicating whether [basic visible].
+        /// </summary>
+        /// <value><c>true</c> if [basic visible]; otherwise, <c>false</c>.</value>
+        public virtual bool BasicVisible { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether [compress visible].
+        /// </summary>
+        /// <value><c>true</c> if [compress visible]; otherwise, <c>false</c>.</value>
+        public virtual bool CompressVisible { get; protected set; }
+
+        /// <summary>
         /// Gets or sets the duplicate.
         /// </summary>
         /// <value>The duplicate.</value>
@@ -225,6 +244,12 @@ namespace IronyModManager.ViewModels.Controls
         /// </summary>
         /// <value><c>true</c> if this instance is merge open; otherwise, <c>false</c>.</value>
         public virtual bool IsMergeOpen { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether [merge allowed].
+        /// </summary>
+        /// <value><c>true</c> if [merge allowed]; otherwise, <c>false</c>.</value>
+        public virtual bool MergeAllowed { get; protected set; }
 
         /// <summary>
         /// Gets or sets the merge basic.
@@ -353,6 +378,27 @@ namespace IronyModManager.ViewModels.Controls
         }
 
         /// <summary>
+        /// Evals the game specific visibility.
+        /// </summary>
+        /// <param name="game">The game.</param>
+        protected virtual void EvalGameSpecificVisibility(IGame game = null)
+        {
+            game ??= gameService.GetSelected();
+            if (game != null)
+            {
+                MergeAllowed = game.SupportedMergeTypes.HasAnyFlag();
+                CompressVisible = game.SupportedMergeTypes.HasFlag(SupportedMergeTypes.Zip);
+                BasicVisible = game.SupportedMergeTypes.HasFlag(SupportedMergeTypes.Basic);
+            }
+            else
+            {
+                MergeAllowed = false;
+                BasicVisible = false;
+                CompressVisible = false;
+            }
+        }
+
+        /// <summary>
         /// get merged collection as an asynchronous operation.
         /// </summary>
         /// <returns>IModCollection.</returns>
@@ -379,6 +425,7 @@ namespace IronyModManager.ViewModels.Controls
         /// <param name="disposables">The disposables.</param>
         protected override void OnActivated(CompositeDisposable disposables)
         {
+            EvalGameSpecificVisibility();
             var allowModSelectionEnabled = this.WhenAnyValue(v => v.AllowModSelection);
 
             RenameCommand = ReactiveCommand.Create(() =>
@@ -560,6 +607,16 @@ namespace IronyModManager.ViewModels.Controls
             }, allowModSelectionEnabled).DisposeWith(disposables);
 
             base.OnActivated(disposables);
+        }
+
+        /// <summary>
+        /// Called when [selected game changed].
+        /// </summary>
+        /// <param name="game">The game.</param>
+        protected override void OnSelectedGameChanged(IGame game)
+        {
+            base.OnSelectedGameChanged(game);
+            EvalGameSpecificVisibility(game);
         }
 
         /// <summary>

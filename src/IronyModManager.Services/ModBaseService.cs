@@ -4,7 +4,7 @@
 // Created          : 04-07-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 07-18-2022
+// Last Modified On : 11-05-2022
 // ***********************************************************************
 // <copyright file="ModBaseService.cs" company="Mario">
 //     Mario
@@ -13,10 +13,12 @@
 // ***********************************************************************
 
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
 using IronyModManager.DI;
@@ -46,6 +48,11 @@ namespace IronyModManager.Services
         /// All mods cache key
         /// </summary>
         protected const string AllModsCacheKey = "AllMods";
+
+        /// <summary>
+        /// The maximum mods to process
+        /// </summary>
+        protected const int MaxModsToProcess = 4;
 
         /// <summary>
         /// The mods cache prefix
@@ -285,10 +292,7 @@ namespace IronyModManager.Services
                         if (uniqueDefinitions.Count() == 1)
                         {
                             var definition = uniqueDefinitions.FirstOrDefault(p => !p.IsFromGame);
-                            if (definition == null)
-                            {
-                                definition = uniqueDefinitions.FirstOrDefault();
-                            }
+                            definition ??= uniqueDefinitions.FirstOrDefault();
                             result.Definition = definition;
                             result.FileName = definition.File;
                         }
@@ -364,10 +368,7 @@ namespace IronyModManager.Services
                             if (uniqueDefinitions.Count == 1 && (overrideSkipped || filteredGameDefinitions))
                             {
                                 var definition = definitionEvals.FirstOrDefault(p => !p.Definition.IsFromGame);
-                                if (definition == null)
-                                {
-                                    definition = definitionEvals.FirstOrDefault();
-                                }
+                                definition ??= definitionEvals.FirstOrDefault();
                                 result.Definition = definition.Definition;
                                 result.FileName = definition.FileName;
                                 if (overrideSkipped)
@@ -462,21 +463,6 @@ namespace IronyModManager.Services
         }
 
         /// <summary>
-        /// Formats the name of the prefix mod.
-        /// </summary>
-        /// <param name="prefix">The prefix.</param>
-        /// <param name="name">The name.</param>
-        /// <returns>System.String.</returns>
-        protected virtual string FormatPrefixModName(string prefix, string name)
-        {
-            if (!string.IsNullOrWhiteSpace(prefix))
-            {
-                return $"{prefix}{name}";
-            }
-            return name;
-        }
-
-        /// <summary>
         /// Generates the name of the collection patch.
         /// </summary>
         /// <param name="collectionName">Name of the collection.</param>
@@ -497,7 +483,14 @@ namespace IronyModManager.Services
         protected virtual IMod GeneratePatchModDescriptor(IEnumerable<IMod> allMods, IGame game, string patchName)
         {
             var mod = DIResolver.Get<IMod>();
-            mod.DescriptorFile = $"{Shared.Constants.ModDirectory}/{patchName}{Shared.Constants.ModExtension}";
+            if (game.ModDescriptorType == ModDescriptorType.DescriptorMod)
+            {
+                mod.DescriptorFile = $"{Shared.Constants.ModDirectory}/{patchName}{Shared.Constants.ModExtension}";
+            }
+            else
+            {
+                mod.DescriptorFile = $"{Shared.Constants.JsonModDirectory}/{patchName}{Shared.Constants.JsonExtension}";
+            }
             mod.FileName = GetPatchModDirectory(game, patchName).Replace("\\", "/");
             mod.Name = patchName;
             mod.Source = ModSource.Local;
@@ -543,10 +536,7 @@ namespace IronyModManager.Services
         /// <returns>IEnumerable&lt;IMod&gt;.</returns>
         protected virtual IEnumerable<IMod> GetCollectionMods(IEnumerable<IMod> mods = null, string collectionName = Shared.Constants.EmptyParam)
         {
-            if (mods == null)
-            {
-                mods = GetInstalledModsInternal(GameService.GetSelected(), false);
-            }
+            mods ??= GetInstalledModsInternal(GameService.GetSelected(), false);
             var collectionMods = new List<IMod>();
             var collections = GetAllModCollectionsInternal();
             if (collections?.Count() > 0)
@@ -607,21 +597,28 @@ namespace IronyModManager.Services
             }
             else
             {
-                var result = new List<IMod>();
-                var installedMods = Reader.Read(Path.Combine(game.UserDirectory, Shared.Constants.ModDirectory));
+                var result = new ConcurrentBag<IMod>();
+                var installedMods = Reader.Read(Path.Combine(game.UserDirectory, game.ModDescriptorType == ModDescriptorType.DescriptorMod ? Shared.Constants.ModDirectory : Shared.Constants.JsonModDirectory));
                 if (installedMods?.Count() > 0)
                 {
-                    foreach (var installedMod in installedMods.Where(p => p.Content.Any()))
+                    installedMods.Where(p => p.Content.Any()).AsParallel().WithDegreeOfParallelism(MaxModsToProcess).ForAll(installedMod =>
                     {
-                        var mod = Mapper.Map<IMod>(ModParser.Parse(installedMod.Content));
+                        var mod = Mapper.Map<IMod>(ModParser.Parse(installedMod.Content, MapDescriptorModType(game.ModDescriptorType)));
                         if (ignorePatchMods && IsPatchModInternal(mod))
                         {
-                            continue;
+                            return;
                         }
                         mod.Name = string.IsNullOrWhiteSpace(mod.Name) ? string.Empty : mod.Name;
                         mod.Version = string.IsNullOrWhiteSpace(mod.Version) ? string.Empty : mod.Version;
                         mod.IsLocked = installedMod.IsReadOnly;
-                        mod.DescriptorFile = $"{Shared.Constants.ModDirectory}/{installedMod.FileName}";
+                        if (game.ModDescriptorType == ModDescriptorType.DescriptorMod)
+                        {
+                            mod.DescriptorFile = $"{Shared.Constants.ModDirectory}/{installedMod.FileName}";
+                        }
+                        else
+                        {
+                            mod.DescriptorFile = $"{Shared.Constants.JsonModDirectory}/{installedMod.FileName}";
+                        }
                         mod.Source = GetModSource(installedMod);
                         if (mod.Source == ModSource.Paradox)
                         {
@@ -657,9 +654,9 @@ namespace IronyModManager.Services
                         mod.IsValid = File.Exists(mod.FullPath) || Directory.Exists(mod.FullPath);
                         mod.Game = game.Type;
                         result.Add(mod);
-                    }
+                    });
                 }
-                Cache.Set(new CacheAddParameters<IEnumerable<IMod>>() { Region = ModsCacheRegion, Prefix = game.Type, Key = GetModsCacheKey(ignorePatchMods), Value = result });
+                Cache.Set(new CacheAddParameters<IEnumerable<IMod>>() { Region = ModsCacheRegion, Prefix = game.Type, Key = GetModsCacheKey(ignorePatchMods), Value = result.ToList() });
                 return result;
             }
         }
@@ -889,33 +886,45 @@ namespace IronyModManager.Services
             var logger = DIResolver.Get<ILogger>();
             if (mods?.Count() > 0)
             {
-                var tasks = new List<Task>();
+                var analyzeList = new List<IMod>();
                 foreach (var mod in mods)
                 {
-                    if (mod.IsValid)
-                    {
-                        var task = Task.Run(() =>
-                        {
-                            var localMod = mod;
-                            try
-                            {
-                                var files = Reader.GetFiles(mod.FullPath);
-                                localMod.Files = files ?? new List<string>();
-                            }
-                            catch (Exception ex)
-                            {
-                                mod.Files = new List<string>();
-                                logger.Error(ex);
-                            }
-                        });
-                        tasks.Add(task);
-                    }
-                    else
+                    if (!mod.IsValid)
                     {
                         mod.Files = new List<string>();
                     }
+                    else
+                    {
+                        if (mod.Files == null || !mod.Files.Any())
+                        {
+                            analyzeList.Add(mod);
+                        }
+                    }
                 }
-                await Task.WhenAll(tasks);
+                if (analyzeList.Any())
+                {
+                    using var semaphore = new SemaphoreSlim(MaxModsToProcess);
+                    var tasks = analyzeList.Select(async mod =>
+                    {
+                        await semaphore.WaitAsync();
+                        var localMod = mod;
+                        try
+                        {
+                            var files = Reader.GetFiles(localMod.FullPath);
+                            localMod.Files = files ?? new List<string>();
+                        }
+                        catch (Exception ex)
+                        {
+                            localMod.Files = new List<string>();
+                            logger.Error(ex);
+                        }
+                        finally
+                        {
+                            semaphore.Release();
+                        }
+                    });
+                    await Task.WhenAll(tasks);
+                }
                 return true;
             }
             return false;

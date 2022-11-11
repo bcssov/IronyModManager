@@ -129,6 +129,7 @@ namespace IronyModManager.Shared
             public const string HeartsofIronIV = Prefix + "HeartsofIronIV";
             public const string ImperatorRome = Prefix + "ImperatorRome";
             public const string CrusaderKings3 = Prefix + "CrusaderKings3";
+            public const string Victoria3 = Prefix + "Victoria3";
         }
         public static class Installed_Mods
         {
@@ -460,6 +461,9 @@ namespace IronyModManager.Shared
                 public const string Default = Prefix + "Default";
                 public const string Advanced = Prefix + "Advanced";
                 public const string Analyze = Prefix + "Analyze";
+                public const string AnalyzeWithoutLocalization = Prefix + "AnalyzeWithoutLocalization";
+                public const string DefaultWithoutLocalization = Prefix + "DefaultWithoutLocalization";
+                public const string AdvancedWithoutLocalization = Prefix + "AdvancedWithoutLocalization";
                 public const string Close = Prefix + "Close";
             }
             public static class ModFilter
@@ -588,6 +592,7 @@ namespace IronyModManager.Shared
                 public const string CheckForUpdates = Prefix + "CheckForUpdates";
                 public const string Install = Prefix + "Install";
                 public const string Version = Prefix + "Version";
+                public const string Skip = Prefix + "Skip";
                 public static class Overlay
                 {
                     public const string Prefix = "Options.Updates.Overlay.";

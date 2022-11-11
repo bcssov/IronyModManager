@@ -4,7 +4,7 @@
 // Created          : 08-13-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 01-16-2022
+// Last Modified On : 11-04-2022
 // ***********************************************************************
 // <copyright file="ObjectToBoolHandler.cs" company="Mario">
 //     Mario
@@ -13,8 +13,8 @@
 // ***********************************************************************
 using System;
 using System.Collections.Generic;
-using RepoDb;
 using RepoDb.Interfaces;
+using RepoDb.Options;
 
 namespace IronyModManager.IO.Mods.Models.Paradox.PropertyHandlers
 {
@@ -31,9 +31,9 @@ namespace IronyModManager.IO.Mods.Models.Paradox.PropertyHandlers
         /// Gets the specified input.
         /// </summary>
         /// <param name="input">The input.</param>
-        /// <param name="property">The property.</param>
+        /// <param name="options">The options.</param>
         /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
-        public bool Get(object input, ClassProperty property)
+        public bool Get(object input, PropertyHandlerGetOptions options)
         {
             // The ORM now is officially giving me headaches... it just can't resolve a proper type, and I cannot target it with a specific type either.
             if (input == null)
@@ -63,9 +63,9 @@ namespace IronyModManager.IO.Mods.Models.Paradox.PropertyHandlers
         /// Sets the specified input.
         /// </summary>
         /// <param name="input">if set to <c>true</c> [input].</param>
-        /// <param name="property">The property.</param>
+        /// <param name="options">The options.</param>
         /// <returns>System.Object.</returns>
-        public object Set(bool input, ClassProperty property)
+        public object Set(bool input, PropertyHandlerSetOptions options)
         {
             return input ? 1 : 0;
         }

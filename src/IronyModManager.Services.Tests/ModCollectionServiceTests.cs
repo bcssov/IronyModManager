@@ -26,6 +26,7 @@ using IronyModManager.IO.Common.Readers;
 using IronyModManager.IO.Models;
 using IronyModManager.Models;
 using IronyModManager.Models.Common;
+using IronyModManager.Parser.Common;
 using IronyModManager.Parser.Common.Mod;
 using IronyModManager.Parser.Mod;
 using IronyModManager.Services.Common;
@@ -601,7 +602,7 @@ namespace IronyModManager.Services.Tests
                 }
             };
             reader.Setup(s => s.Read(It.IsAny<string>(), It.IsAny<IEnumerable<string>>(), It.IsAny<bool>())).Returns(fileInfos);
-            modParser.Setup(s => s.Parse(It.IsAny<IEnumerable<string>>())).Returns((IEnumerable<string> values) =>
+            modParser.Setup(s => s.Parse(It.IsAny<IEnumerable<string>>(), It.IsAny<DescriptorModType>())).Returns((IEnumerable<string> values, DescriptorModType t) =>
             {
                 return new ModObject()
                 {
@@ -687,7 +688,7 @@ namespace IronyModManager.Services.Tests
                 }
             };
             reader.Setup(s => s.Read(It.IsAny<string>(), It.IsAny<IEnumerable<string>>(), It.IsAny<bool>())).Returns(fileInfos);
-            modParser.Setup(s => s.Parse(It.IsAny<IEnumerable<string>>())).Returns((IEnumerable<string> values) =>
+            modParser.Setup(s => s.Parse(It.IsAny<IEnumerable<string>>(), It.IsAny<DescriptorModType>())).Returns((IEnumerable<string> values, DescriptorModType t) =>
             {
                 return new ModObject()
                 {
@@ -773,7 +774,7 @@ namespace IronyModManager.Services.Tests
                 }
             };
             reader.Setup(s => s.Read(It.IsAny<string>(), It.IsAny<IEnumerable<string>>(), It.IsAny<bool>())).Returns(fileInfos);
-            modParser.Setup(s => s.Parse(It.IsAny<IEnumerable<string>>())).Returns((IEnumerable<string> values) =>
+            modParser.Setup(s => s.Parse(It.IsAny<IEnumerable<string>>(), It.IsAny<DescriptorModType>())).Returns((IEnumerable<string> values, DescriptorModType t) =>
             {
                 return new ModObject()
                 {
@@ -1369,7 +1370,8 @@ namespace IronyModManager.Services.Tests
                 new Mod()
                 {
                     Name = "test",
-                    Files = new List<string>() {"test\\test"}
+                    Files = new List<string>() {"test\\test"},
+                    IsValid = true
                 } }, "test");
             result.Should().BeTrue();
         }

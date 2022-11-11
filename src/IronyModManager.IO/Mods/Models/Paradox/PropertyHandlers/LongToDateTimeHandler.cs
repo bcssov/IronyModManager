@@ -4,7 +4,7 @@
 // Created          : 11-16-2021
 //
 // Last Modified By : Mario
-// Last Modified On : 01-16-2022
+// Last Modified On : 11-04-2022
 // ***********************************************************************
 // <copyright file="LongToDateTimeHandler.cs" company="Mario">
 //     Mario
@@ -15,8 +15,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using RepoDb;
 using RepoDb.Interfaces;
+using RepoDb.Options;
 
 namespace IronyModManager.IO.Mods.Models.Paradox.PropertyHandlers
 {
@@ -33,9 +33,9 @@ namespace IronyModManager.IO.Mods.Models.Paradox.PropertyHandlers
         /// Gets the specified input.
         /// </summary>
         /// <param name="input">The input.</param>
-        /// <param name="property">The property.</param>
+        /// <param name="options">The options.</param>
         /// <returns>DateTime.</returns>
-        public DateTime Get(long input, ClassProperty property)
+        public DateTime Get(long input, PropertyHandlerGetOptions options)
         {
             return DateTimeOffset.FromUnixTimeMilliseconds(input).DateTime;
         }
@@ -44,9 +44,9 @@ namespace IronyModManager.IO.Mods.Models.Paradox.PropertyHandlers
         /// Sets the specified input.
         /// </summary>
         /// <param name="input">The input.</param>
-        /// <param name="property">The property.</param>
+        /// <param name="options">The options.</param>
         /// <returns>System.Int64.</returns>
-        public long Set(DateTime input, ClassProperty property)
+        public long Set(DateTime input, PropertyHandlerSetOptions options)
         {
             return Convert.ToInt64((input - DateTime.UnixEpoch).TotalMilliseconds);
         }

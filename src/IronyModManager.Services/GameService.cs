@@ -4,7 +4,7 @@
 // Created          : 02-12-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 07-21-2022
+// Last Modified On : 10-29-2022
 // ***********************************************************************
 // <copyright file="GameService.cs" company="Mario">
 //     Mario
@@ -57,6 +57,11 @@ namespace IronyModManager.Services
         private const string SteamLaunchArgs = "steam://run/";
 
         /// <summary>
+        /// The game path resolver
+        /// </summary>
+        private readonly GameRootPathResolver gamePathResolver;
+
+        /// <summary>
         /// The message bus
         /// </summary>
         private readonly IMessageBus messageBus;
@@ -102,6 +107,7 @@ namespace IronyModManager.Services
             this.preferencesService = preferencesService;
             this.reader = reader;
             pathResolver = new PathResolver();
+            gamePathResolver = new GameRootPathResolver();
         }
 
         #endregion Constructors
@@ -120,12 +126,18 @@ namespace IronyModManager.Services
             {
                 return false;
             }
-            var basePath = Path.GetDirectoryName(game.ExecutableLocation);
-            var files = reader.GetFiles(basePath);
-            if (files != null && files.Any())
+            if (!string.IsNullOrWhiteSpace(game.ExecutableLocation))
             {
-                var reports = await ParseReportAsync(game, basePath, files);
-                return await reportExportService.ExportAsync(reports, path);
+                var basePath = Path.GetDirectoryName(Path.Combine(gamePathResolver.GetPath(game), gamePathResolver.ResolveDLCDirectory(game.DLCContainer, GameRootPathResolver.DLCFolder)));
+                if (!string.IsNullOrWhiteSpace(basePath))
+                {
+                    var files = reader.GetFiles(basePath);
+                    if (files != null && files.Any())
+                    {
+                        var reports = await ParseReportAsync(game, basePath, files);
+                        return await reportExportService.ExportAsync(reports, path);
+                    }
+                }
             }
             return false;
         }
@@ -331,10 +343,17 @@ namespace IronyModManager.Services
             {
                 return null;
             }
-            var basePath = Path.GetDirectoryName(game.ExecutableLocation);
-            var files = reader.GetFiles(basePath);
-            var currentReports = await ParseReportAsync(game, basePath, files);
-            return reportExportService.CompareReports(currentReports.ToList(), importedReports.ToList());
+            if (!string.IsNullOrWhiteSpace(game.ExecutableLocation))
+            {
+                var basePath = Path.GetDirectoryName(Path.Combine(gamePathResolver.GetPath(game), gamePathResolver.ResolveDLCDirectory(game.DLCContainer, GameRootPathResolver.DLCFolder)));
+                if (!string.IsNullOrWhiteSpace(basePath))
+                {
+                    var files = reader.GetFiles(basePath);
+                    var currentReports = await ParseReportAsync(game, basePath, files);
+                    return reportExportService.CompareReports(currentReports.ToList(), importedReports.ToList());
+                }
+            }
+            return null;
         }
 
         /// <summary>
@@ -514,6 +533,8 @@ namespace IronyModManager.Services
             game.GameFolders = gameType.GameFolders ?? new List<string>();
             game.BaseSteamGameDirectory = gameType.BaseSteamGameDirectory;
             game.AdvancedFeatures = gameType.AdvancedFeatures;
+            game.SupportedMergeTypes = gameType.SupportedMergeTypes;
+            game.ModDescriptorType = gameType.ModDescriptorType;
             game.GameIndexCacheVersion = gameType.GameIndexCacheVersion;
             game.ParadoxGameId = gameType.ParadoxGameId;
             game.LauncherSettingsFileName = gameType.LauncherSettingsFileName;

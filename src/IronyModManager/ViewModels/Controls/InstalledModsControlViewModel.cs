@@ -4,7 +4,7 @@
 // Created          : 02-29-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 07-10-2022
+// Last Modified On : 11-05-2022
 // ***********************************************************************
 // <copyright file="InstalledModsControlViewModel.cs" company="Mario">
 //     Mario
@@ -13,17 +13,20 @@
 // ***********************************************************************
 
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reactive;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using Avalonia.Threading;
 using DynamicData;
 using IronyModManager.Common;
 using IronyModManager.Common.ViewModels;
 using IronyModManager.Implementation.Actions;
+using IronyModManager.Implementation.MessageBus;
 using IronyModManager.Implementation.Overlay;
 using IronyModManager.Localization;
 using IronyModManager.Localization.Attributes;
@@ -70,6 +73,16 @@ namespace IronyModManager.ViewModels.Controls
         private readonly IAppStateService appStateService;
 
         /// <summary>
+        /// The eval mod achievements compatibility handler
+        /// </summary>
+        private readonly EvalModAchievementCompatibilityHandler evalModAchievementsCompatibilityHandler;
+
+        /// <summary>
+        /// The eval mods queue
+        /// </summary>
+        private readonly ConcurrentBag<IMod> evalModsQueue;
+
+        /// <summary>
         /// The game service
         /// </summary>
         private readonly IGameService gameService;
@@ -100,6 +113,11 @@ namespace IronyModManager.ViewModels.Controls
         private bool checkingState = false;
 
         /// <summary>
+        /// The eval mod token
+        /// </summary>
+        private CancellationTokenSource evalModToken;
+
+        /// <summary>
         /// The mod order changed
         /// </summary>
         private IDisposable modChanged;
@@ -126,6 +144,7 @@ namespace IronyModManager.ViewModels.Controls
         /// <summary>
         /// Initializes a new instance of the <see cref="InstalledModsControlViewModel" /> class.
         /// </summary>
+        /// <param name="evalModAchievementsCompatibilityHandler">The eval mod achievements compatibility handler.</param>
         /// <param name="idGenerator">The identifier generator.</param>
         /// <param name="gameService">The game service.</param>
         /// <param name="localizationManager">The localization manager.</param>
@@ -137,7 +156,7 @@ namespace IronyModManager.ViewModels.Controls
         /// <param name="filterMods">The filter mods.</param>
         /// <param name="appAction">The application action.</param>
         /// <param name="notificationAction">The notification action.</param>
-        public InstalledModsControlViewModel(IIDGenerator idGenerator, IGameService gameService, ILocalizationManager localizationManager,
+        public InstalledModsControlViewModel(EvalModAchievementCompatibilityHandler evalModAchievementsCompatibilityHandler, IIDGenerator idGenerator, IGameService gameService, ILocalizationManager localizationManager,
             IModService modService, IAppStateService appStateService, SortOrderControlViewModel modSelectedSortOrder,
             SortOrderControlViewModel modNameSortOrder, SortOrderControlViewModel modVersionSortOrder,
             SearchModsControlViewModel filterMods, IAppAction appAction, INotificationAction notificationAction)
@@ -153,6 +172,8 @@ namespace IronyModManager.ViewModels.Controls
             ModVersionSortOrder = modVersionSortOrder;
             ModSelectedSortOrder = modSelectedSortOrder;
             FilterMods = filterMods;
+            this.evalModAchievementsCompatibilityHandler = evalModAchievementsCompatibilityHandler;
+            evalModsQueue = new ConcurrentBag<IMod>();
         }
 
         #endregion Constructors
@@ -311,12 +332,6 @@ namespace IronyModManager.ViewModels.Controls
         /// </summary>
         /// <value>The lock descriptor command.</value>
         public virtual ReactiveCommand<Unit, Unit> LockDescriptorCommand { get; protected set; }
-
-        /// <summary>
-        /// Gets or sets a value indicating whether [mod file population completed].
-        /// </summary>
-        /// <value><c>true</c> if [mod file population completed]; otherwise, <c>false</c>.</value>
-        public virtual bool ModFilePopulationCompleted { get; protected set; }
 
         /// <summary>
         /// Gets or sets the name of the mod.
@@ -605,11 +620,7 @@ namespace IronyModManager.ViewModels.Controls
             {
                 await TriggerOverlayAsync(id, true, localizationManager.GetResource(LocalizationResources.Installed_Mods.LoadingMods));
             }
-            if (game == null)
-            {
-                game = gameService.GetSelected();
-            }
-            ModFilePopulationCompleted = false;
+            game ??= gameService.GetSelected();
             ActiveGame = game;
             if (game != null)
             {
@@ -618,12 +629,6 @@ namespace IronyModManager.ViewModels.Controls
                     GameChangedRefresh = true;
                 }
                 var mods = await Task.Run(async () => await modService.GetInstalledModsAsync(game));
-                await Task.Run(async () =>
-                {
-                    await PopulateModFilesAsyncAsync(mods).ConfigureAwait(false);
-                    ModFilePopulationCompleted = true;
-                    EvalAchievementCompatibility(mods);
-                });
                 await Task.Delay(100);
                 Mods = mods.ToObservableCollection();
                 AllMods = Mods.ToHashSet();
@@ -730,12 +735,36 @@ namespace IronyModManager.ViewModels.Controls
         }
 
         /// <summary>
-        /// Evals the achievement compatibility.
+        /// Eval mod achievement as an asynchronous operation.
         /// </summary>
         /// <param name="mods">The mods.</param>
-        protected virtual void EvalAchievementCompatibility(IEnumerable<IMod> mods)
+        /// <returns>A Task representing the asynchronous operation.</returns>
+        protected virtual async Task EvalModAchievementAsync(IEnumerable<IMod> mods)
         {
-            modService.EvalAchievementCompatibility(mods);
+            async Task performEval(CancellationToken token)
+            {
+                await Task.Delay(100, token);
+                if (!token.IsCancellationRequested)
+                {
+                    if (evalModsQueue.Any())
+                    {
+                        var col = evalModsQueue.Distinct().ToList();
+                        evalModsQueue.Clear();
+                        await modService.PopulateModFilesAsync(col);
+                        modService.EvalAchievementCompatibility(col);                        
+                    }
+                }
+            }
+            if (evalModToken != null)
+            {
+                evalModToken.Cancel();
+            }
+            evalModToken = new CancellationTokenSource();
+            if (mods.Any())
+            {
+                mods.ToList().ForEach(m => evalModsQueue.Add(m));
+                await performEval(evalModToken.Token);
+            }
         }
 
         /// <summary>
@@ -934,6 +963,11 @@ namespace IronyModManager.ViewModels.Controls
                 await CheckNewModsAsync().ConfigureAwait(true);
             }).DisposeWith(disposables);
 
+            evalModAchievementsCompatibilityHandler.Subscribe(s =>
+            {
+                Task.Run(() => EvalModAchievementAsync(s.Mods).ConfigureAwait(false));
+            }).DisposeWith(disposables);
+
             base.OnActivated(disposables);
         }
 
@@ -946,16 +980,6 @@ namespace IronyModManager.ViewModels.Controls
             Bind(game);
 
             base.OnSelectedGameChanged(game);
-        }
-
-        /// <summary>
-        /// eval achievement compatibility as an asynchronous operation.
-        /// </summary>
-        /// <param name="mods">The mods.</param>
-        /// <returns>A Task representing the asynchronous operation.</returns>
-        protected virtual async Task PopulateModFilesAsyncAsync(IEnumerable<IMod> mods)
-        {
-            await modService.PopulateModFilesAsync(mods);
         }
 
         /// <summary>

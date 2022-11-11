@@ -4,7 +4,7 @@
 // Created          : 05-30-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 07-24-2022
+// Last Modified On : 11-08-2022
 // ***********************************************************************
 // <copyright file="OptionsControlViewModel.cs" company="Mario">
 //     Mario
@@ -13,6 +13,7 @@
 // ***********************************************************************
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Reactive;
 using System.Reactive.Disposables;
@@ -152,6 +153,11 @@ namespace IronyModManager.ViewModels.Controls
         private bool isUpdateReloading = false;
 
         /// <summary>
+        /// The last skipped version changed
+        /// </summary>
+        private IDisposable lastSkippedVersionChanged;
+
+        /// <summary>
         /// The notification position changed
         /// </summary>
         private IDisposable notificationPositionChanged;
@@ -160,6 +166,11 @@ namespace IronyModManager.ViewModels.Controls
         /// The refresh descriptors changed
         /// </summary>
         private IDisposable refreshDescriptorsChanged;
+
+        /// <summary>
+        /// The version
+        /// </summary>
+        private string version;
 
         #endregion Fields
 
@@ -540,6 +551,19 @@ namespace IronyModManager.ViewModels.Controls
         public virtual bool ShowGameOptions { get; protected set; }
 
         /// <summary>
+        /// Gets or sets the skip update.
+        /// </summary>
+        /// <value>The skip update.</value>
+        [StaticLocalization(LocalizationResources.Options.Updates.Skip)]
+        public virtual string SkipUpdate { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets the skip update command.
+        /// </summary>
+        /// <value>The skip update command.</value>
+        public virtual ReactiveCommand<Unit, Unit> SkipUpdateCommand { get; protected set; }
+
+        /// <summary>
         /// Gets or sets the test external editor configuration.
         /// </summary>
         /// <value>The test external editor configuration.</value>
@@ -625,11 +649,14 @@ namespace IronyModManager.ViewModels.Controls
         {
             CheckingForUpdates = true;
             UpdateInfoVisible = false;
+            var updateSettings = updaterService.Get();
+            updater.SetSkippedVersion(updateSettings.LastSkippedVersion);
             var updatesAvailable = await updater.CheckForUpdatesAsync();
             if (updatesAvailable)
             {
                 Changelog = updater.GetChangeLog();
-                VersionContent = updater.GetVersion();
+                VersionContent = updater.GetTitle();
+                version = updater.GetVersion();
                 UpdateInfoVisible = true;
                 var openState = IsOpen;
                 IsOpen = false;
@@ -748,6 +775,15 @@ namespace IronyModManager.ViewModels.Controls
                 IsOpen = true;
                 if (!string.IsNullOrWhiteSpace(result))
                 {
+                    result = result.StandardizeDirectorySeparator();
+                    if (result.EndsWith(Path.DirectorySeparatorChar + Shared.Constants.ModDirectory))
+                    {
+                        result = result.TrimEnd(Path.DirectorySeparatorChar + Shared.Constants.ModDirectory);
+                    }
+                    else if (result.EndsWith(Path.DirectorySeparatorChar + Shared.Constants.JsonModDirectory))
+                    {
+                        result = result.TrimEnd(Path.DirectorySeparatorChar + Shared.Constants.JsonModDirectory);
+                    }
                     Game.UserDirectory = result;
                     SaveGame();
                 }
@@ -838,6 +874,15 @@ namespace IronyModManager.ViewModels.Controls
                     await TriggerOverlayAsync(messageId, false);
                 }
             }).DisposeWith(disposables);
+
+            SkipUpdateCommand = ReactiveCommand.Create(() =>
+            {
+                if (!string.IsNullOrWhiteSpace(version))
+                {
+                    updater.SetSkippedVersion(version);
+                }
+                UpdateSettings.LastSkippedVersion = version;
+            });
 
             NavigateCustomDirectoryCommand = ReactiveCommand.CreateFromTask(async () =>
             {
@@ -956,6 +1001,7 @@ namespace IronyModManager.ViewModels.Controls
         protected virtual void SaveGame()
         {
             var game = gameService.GetSelected();
+            bool exeChanged = game.ExecutableLocation != Game.ExecutableLocation;
             game.ExecutableLocation = Game.ExecutableLocation;
             game.LaunchArguments = Game.LaunchArguments;
             game.RefreshDescriptors = Game.RefreshDescriptors;
@@ -964,9 +1010,16 @@ namespace IronyModManager.ViewModels.Controls
             game.UserDirectory = Game.UserDirectory;
             bool customDirectoryChanged = game.CustomModDirectory != Game.CustomModDirectory;
             game.CustomModDirectory = Game.CustomModDirectory;
-            if (gameService.Save(game) && (dirChanged) || customDirectoryChanged)
+            if (gameService.Save(game))
             {
-                MessageBus.PublishAsync(new GameUserDirectoryChangedEvent(game, customDirectoryChanged));
+                if (dirChanged || customDirectoryChanged)
+                {
+                    MessageBus.PublishAsync(new GameUserDirectoryChangedEvent(game, customDirectoryChanged));
+                }
+                if (exeChanged)
+                {
+                    MessageBus.PublishAsync(new GameExeChangedEvent(game.ExecutableLocation));
+                }
             }
             SetGame(game);
         }
@@ -988,6 +1041,7 @@ namespace IronyModManager.ViewModels.Controls
             var settings = updaterService.Get();
             settings.AutoUpdates = UpdateSettings.AutoUpdates;
             settings.CheckForPrerelease = UpdateSettings.CheckForPrerelease;
+            settings.LastSkippedVersion = UpdateSettings.LastSkippedVersion;
             updaterService.Save(settings);
             SetUpdateSettings(settings);
         }
@@ -1074,12 +1128,18 @@ namespace IronyModManager.ViewModels.Controls
             isUpdateReloading = true;
             autoUpdateChanged?.Dispose();
             checkForPrereleaseChanged?.Dispose();
+            lastSkippedVersionChanged?.Dispose();
             UpdateSettings = updateSettings;
             autoUpdateChanged = this.WhenAnyValue(p => p.UpdateSettings.AutoUpdates).Where(v => !isUpdateReloading).Subscribe(s =>
             {
                 SaveUpdateSettings();
             }).DisposeWith(Disposables);
             checkForPrereleaseChanged = this.WhenAnyValue(p => p.UpdateSettings.CheckForPrerelease).Where(v => !isUpdateReloading).Subscribe(s =>
+            {
+                UpdateInfoVisible = false;
+                SaveUpdateSettings();
+            }).DisposeWith(Disposables);
+            lastSkippedVersionChanged = this.WhenAnyValue(p => p.UpdateSettings.LastSkippedVersion).Where(v => !isUpdateReloading).Subscribe(s =>
             {
                 UpdateInfoVisible = false;
                 SaveUpdateSettings();

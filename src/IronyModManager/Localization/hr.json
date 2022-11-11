@@ -1,5 +1,4 @@
 {
-
     "App": {
         "FontFamily": "Noto Sans",
         "SupportedNameBlock": "",
@@ -92,7 +91,8 @@
         "EuropaUniversalisIV": "Europa Universalis IV",
         "HeartsofIronIV": "Hearts of Iron IV",
         "ImperatorRome": "Imperator Rome",
-        "CrusaderKings3": "Crusader Kings III"
+        "CrusaderKings3": "Crusader Kings III",
+        "Victoria3": "Victoria 3"
     },
     "Installed_Mods": {
         "Name": "Instalirani modovi",
@@ -234,6 +234,7 @@
             "ModsMissingTitle": "Modovi uklonjeni",
             "ModsMissingMessage": "Neki modovi nedostaju i automatski su uklonjeni iz kolekcije:{NewLine}{NewLine}{Mods}"
         }
+
     },
     "Mod_Actions": {
         "Apply": "Primjeni",
@@ -243,9 +244,9 @@
             "Overlay_Conflict_Solver_Indexing_Game": "Pričekaj dok se indexiraju definicije igre...",
             "Overlay_Conflict_Solver_Loading_Game_Definitions": "Pričekaj dok se učitavaju definicije igre...",
             "Overlay_Conflict_Solver_Loading_Definitions": "Pričekaj dok se učitavaju definicije modova...",
-            "Overlay_Conflict_Solver_Replacing_Definitions": "Pričekaj dok se zamjenjuju definicije...",
             "Overlay_Conflict_Solver_Analyzing_Conflicts": "Pričekaj dok se analiziraju definicije za sukobe...",
             "Overlay_Conflict_Solver_Analyzing_Resolved_Conflicts": "Pričekaj dok se analiziraju riješene definicije...",
+            "Overlay_Conflict_Solver_Replacing_Definitions": "Pričekaj dok se zamjenjuju definicije...",
             "Overlay_Conflict_Solver_Progress": "Korak {Count}/{TotalCount}: {PercentDone}",
             "FirstUsePrompt": {
                 "Title": "Pažnja",
@@ -352,6 +353,9 @@
             "Default": "Zadano",
             "Advanced": "Napredno",
             "Analyze": "Samo analiziraj",
+            "AnalyzeWithoutLocalization": "Analiziraj samo bez lokalizacije",
+            "DefaultWithoutLocalization": "Zadano bez lokalizacije",
+            "AdvancedWithoutLocalization": "Napredno bez lokalizacije",
             "Close": "Zatvori"
         },
         "ModFilter": {
@@ -450,6 +454,7 @@
             "CheckForUpdates": "Provjeri ima li ažuriranja",
             "Install": "Instaliraj ažuriranja",
             "Version": "Verzija: {Version}",
+            "Skip": "Zanemari ažuriranje",
             "Overlay": {
                 "UpdateDownloading": "Preuzimanje ažuriranja...",
                 "UpdateDownloadProgress": "{Progress}",

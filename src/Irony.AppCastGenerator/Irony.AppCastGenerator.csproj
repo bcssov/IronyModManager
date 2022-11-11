@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <TargetFramework>net6.0</TargetFramework>
+    <TargetFramework>net7.0</TargetFramework>
     <ApplicationIcon>../IronyModManager/Assets/logo.ico</ApplicationIcon>
     <Description>Irony App Cast Generator Component</Description>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
@@ -28,13 +28,13 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="NetSparkleUpdater.SparkleUpdater" Version="2.1.2" />
+    <PackageReference Include="NetSparkleUpdater.SparkleUpdater" Version="2.1.3" />
     <PackageReference Include="Portable.BouncyCastle" Version="1.9.0" />
     <PackageReference Include="StrongNamer" Version="0.2.5" />
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Update="Nerdbank.GitVersioning" Version="3.5.108" />
+    <PackageReference Update="Nerdbank.GitVersioning" Version="3.5.119" />
   </ItemGroup>
 
   <ItemGroup>

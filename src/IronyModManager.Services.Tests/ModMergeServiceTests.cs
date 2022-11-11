@@ -163,7 +163,7 @@ namespace IronyModManager.Services.Tests
                 }
             };
             reader.Setup(s => s.Read(It.IsAny<string>(), It.IsAny<IEnumerable<string>>(), It.IsAny<bool>())).Returns(fileInfos);
-            modParser.Setup(s => s.Parse(It.IsAny<IEnumerable<string>>())).Returns((IEnumerable<string> values) =>
+            modParser.Setup(s => s.Parse(It.IsAny<IEnumerable<string>>(), It.IsAny<DescriptorModType>())).Returns((IEnumerable<string> values, DescriptorModType t) =>
             {
                 return new ModObject()
                 {
@@ -293,7 +293,7 @@ namespace IronyModManager.Services.Tests
                 Type = "Should_create_file_merge_mod",
                 UserDirectory = "C:\\Users\\Fake",
                 WorkshopDirectory = new List<string>() { "C:\\fake" },
-                CustomModDirectory = string.Empty
+                CustomModDirectory = string.Empty,
             });
             var collections = new List<IModCollection>()
             {
@@ -319,7 +319,7 @@ namespace IronyModManager.Services.Tests
                 }
             };
             reader.Setup(s => s.Read(It.IsAny<string>(), It.IsAny<IEnumerable<string>>(), It.IsAny<bool>())).Returns(fileInfos);
-            modParser.Setup(s => s.Parse(It.IsAny<IEnumerable<string>>())).Returns((IEnumerable<string> values) =>
+            modParser.Setup(s => s.Parse(It.IsAny<IEnumerable<string>>(), It.IsAny<DescriptorModType>())).Returns((IEnumerable<string> values, DescriptorModType t) =>
             {
                 return new ModObject()
                 {
@@ -471,7 +471,7 @@ namespace IronyModManager.Services.Tests
                 }
             };
             reader.Setup(s => s.Read(It.IsAny<string>(), It.IsAny<IEnumerable<string>>(), It.IsAny<bool>())).Returns(fileInfos);
-            modParser.Setup(s => s.Parse(It.IsAny<IEnumerable<string>>())).Returns((IEnumerable<string> values) =>
+            modParser.Setup(s => s.Parse(It.IsAny<IEnumerable<string>>(), It.IsAny<DescriptorModType>())).Returns((IEnumerable<string> values, DescriptorModType t) =>
             {
                 return new ModObject()
                 {
@@ -556,7 +556,7 @@ namespace IronyModManager.Services.Tests
                 }
             };
             reader.Setup(s => s.Read(It.IsAny<string>(), It.IsAny<IEnumerable<string>>(), It.IsAny<bool>())).Returns(fileInfos);
-            modParser.Setup(s => s.Parse(It.IsAny<IEnumerable<string>>())).Returns((IEnumerable<string> values) =>
+            modParser.Setup(s => s.Parse(It.IsAny<IEnumerable<string>>(), It.IsAny<DescriptorModType>())).Returns((IEnumerable<string> values, DescriptorModType t) =>
             {
                 return new ModObject()
                 {
@@ -597,7 +597,7 @@ namespace IronyModManager.Services.Tests
             /// <summary>
             /// The domain
             /// </summary>
-            DomainConfigurationOptions domain = new DomainConfigurationOptions();
+            readonly DomainConfigurationOptions domain = new();
             /// <summary>
             /// Initializes a new instance of the <see cref="DomainConfigDummy"/> class.
             /// </summary>

@@ -1,5 +1,4 @@
 {
-
     "App": {
         "FontFamily": "Noto Sans",
         "SupportedNameBlock": "",
@@ -59,14 +58,14 @@
             "Pictures": "Imagenes"
         }
     },
-    "Languages": {
-        "Name": "Idioma"
-    },
     "TextBox": {
         "Copy": "Copiar",
         "Cut": "Cortar",
         "Paste": "Pegar",
         "SelectAll": "Seleccionar Todo"
+    },
+    "Languages": {
+        "Name": "Idioma"
     },
     "Themes": {
         "Name": "Tema",
@@ -92,7 +91,8 @@
         "EuropaUniversalisIV": "Europa Universalis IV",
         "HeartsofIronIV": "Hearts of Iron IV",
         "ImperatorRome": "Imperator Rome",
-        "CrusaderKings3": "Crusader Kings III"
+        "CrusaderKings3": "Crusader Kings III",
+        "Victoria3": "Victoria 3"
     },
     "Installed_Mods": {
         "Name": "Mods Instalados",
@@ -234,6 +234,7 @@
             "ModsMissingTitle": "Mods eliminados",
             "ModsMissingMessage": "Faltan algunos mods y se han eliminado de la colección automáticamente:{NewLine}{NewLine}{Mods}"
         }
+
     },
     "Mod_Actions": {
         "Apply": "Aplicar",
@@ -352,6 +353,9 @@
             "Default": "Defecto",
             "Advanced": "Avanzado",
             "Analyze": "Analizar solo",
+            "AnalyzeWithoutLocalization": "Analizar sólo sin localización",
+            "DefaultWithoutLocalization": "Por defecto sin localización",
+            "AdvancedWithoutLocalization": "Avanzado sin localización",
             "Close": "Cerrar"
         },
         "ModFilter": {
@@ -450,6 +454,7 @@
             "CheckForUpdates": "Buscar Actualizaciones",
             "Install": "Instalar Actualizaciones",
             "Version": "Version: {Version}",
+            "Skip": "Ignorar la actualización",
             "Overlay": {
                 "UpdateDownloading": "Descargando Actualizaciones...",
                 "UpdateDownloadProgress": "{Progress}",

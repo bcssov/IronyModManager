@@ -4,7 +4,7 @@
 // Created          : 07-11-2022
 //
 // Last Modified By : Mario
-// Last Modified On : 07-24-2022
+// Last Modified On : 10-28-2022
 // ***********************************************************************
 // <copyright file="ExternalProcessHandlerService.cs" company="Mario">
 //     Mario
@@ -20,6 +20,7 @@ using IronyModManager.DI;
 using IronyModManager.IO.Common.Platforms;
 using IronyModManager.Models.Common;
 using IronyModManager.Services.Common;
+using IronyModManager.Shared;
 using IronyModManager.Shared.Configuration;
 using IronyModManager.Storage.Common;
 
@@ -88,16 +89,26 @@ namespace IronyModManager.Services
             {
                 return false;
             }
-            var useLegacyMethod = DIResolver.Get<IDomainConfiguration>().GetOptions().Steam.UseLegacyLaunchMethod;
-            if (useLegacyMethod)
+            var options = DIResolver.Get<IDomainConfiguration>().GetOptions();
+            if (!options.Steam.UseGameHandler)
             {
-                return await steam.InitAlternateAsync();
+                var useLegacyMethod = options.Steam.UseLegacyLaunchMethod;
+                if (useLegacyMethod)
+                {
+                    return await steam.InitAlternateAsync();
+                }
+                else
+                {
+                    var result = await steam.InitAsync(game.SteamAppId);
+                    await steam.ShutdownAPIAsync();
+                    return result;
+                }
             }
             else
             {
-                var result = await steam.InitAsync(game.SteamAppId);
-                await steam.ShutdownAPIAsync();
-                return result;
+                ProcessRunner.EnsurePermissions(options.Steam.GameHandlerPath);
+                ProcessRunner.RunExternalProcess(options.Steam.GameHandlerPath, options.Steam.UseLegacyLaunchMethod ? $"-a -i {game.SteamAppId}" : $"-i {game.SteamAppId}", true);
+                return true;
             }
         }
 

@@ -4,7 +4,7 @@
 // Created          : 09-16-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 09-19-2020
+// Last Modified On : 11-02-2022
 // ***********************************************************************
 // <copyright file="IUpdater.cs" company="Mario">
 //     Mario
@@ -58,6 +58,12 @@ namespace IronyModManager.Implementation.Updater
         string GetChangeLog();
 
         /// <summary>
+        /// Gets the title.
+        /// </summary>
+        /// <returns>System.String.</returns>
+        string GetTitle();
+
+        /// <summary>
         /// Gets the version.
         /// </summary>
         /// <returns>System.String.</returns>
@@ -68,6 +74,13 @@ namespace IronyModManager.Implementation.Updater
         /// </summary>
         /// <returns>Task&lt;System.Boolean&gt;.</returns>
         Task<bool> InstallUpdateAsync();
+
+        /// <summary>
+        /// Sets the skipped version.
+        /// </summary>
+        /// <param name="version">The version.</param>
+        /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
+        bool SetSkippedVersion(string version);
 
         #endregion Methods
     }

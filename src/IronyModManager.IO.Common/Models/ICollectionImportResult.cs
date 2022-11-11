@@ -4,7 +4,7 @@
 // Created          : 08-29-2021
 //
 // Last Modified By : Mario
-// Last Modified On : 07-12-2022
+// Last Modified On : 10-29-2022
 // ***********************************************************************
 // <copyright file="ICollectionImportResult.cs" company="Mario">
 //     Mario
@@ -30,6 +30,12 @@ namespace IronyModManager.IO.Common.Models
         /// </summary>
         /// <value>The descriptors.</value>
         IEnumerable<string> Descriptors { get; set; }
+
+        /// <summary>
+        /// Gets or sets the full paths.
+        /// </summary>
+        /// <value>The full paths.</value>
+        IEnumerable<string> FullPaths { get; set; }
 
         /// <summary>
         /// Gets or sets the game identifier.

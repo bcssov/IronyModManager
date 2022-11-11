@@ -4,7 +4,7 @@
 // Created          : 06-19-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 07-24-2022
+// Last Modified On : 11-05-2022
 // ***********************************************************************
 // <copyright file="ModMergeService.cs" company="Mario">
 //     Mario
@@ -33,6 +33,7 @@ using IronyModManager.Shared.Configuration;
 using IronyModManager.Shared.MessageBus;
 using IronyModManager.Storage.Common;
 using Nito.AsyncEx;
+using ModSource = IronyModManager.Models.Common.ModSource;
 
 namespace IronyModManager.Services
 {
@@ -192,20 +193,44 @@ namespace IronyModManager.Services
             {
                 RootDirectory = modDirPath
             });
+            if (game.ModDescriptorType == ModDescriptorType.JsonMetadata)
+            {
+                await ModWriter.CreateModDirectoryAsync(new ModWriterParameters()
+                {
+                    RootDirectory = game.UserDirectory,
+                    Path = Shared.Constants.JsonModDirectory
+                });
+            }
 
             var mod = DIResolver.Get<IMod>();
-            mod.DescriptorFile = $"{Shared.Constants.ModDirectory}/{mergeCollectionPath}{Shared.Constants.ModExtension}";
+            if (game.ModDescriptorType == ModDescriptorType.DescriptorMod)
+            {
+                mod.DescriptorFile = $"{Shared.Constants.ModDirectory}/{mergeCollectionPath}{Shared.Constants.ModExtension}";
+            }
+            else
+            {
+                mod.DescriptorFile = $"{Shared.Constants.JsonModDirectory}/{mergeCollectionPath}{Shared.Constants.JsonExtension}";
+            }
             mod.FileName = modDirPath.Replace("\\", "/");
             mod.Name = collectionName;
             mod.Source = ModSource.Local;
             mod.Version = allMods.OrderByDescending(p => p.VersionData).FirstOrDefault() != null ? allMods.OrderByDescending(p => p.VersionData).FirstOrDefault().Version : string.Empty;
             mod.FullPath = modDirPath;
+            if (collectionMods.Any(p => p.UserDir != null && p.UserDir.Any()))
+            {
+                mod.UserDir = collectionMods.Where(p => p.UserDir != null && p.UserDir.Any()).SelectMany(p => p.UserDir).ToList();
+            }
+            if (collectionMods.Any(p => p.ReplacePath != null && p.ReplacePath.Any()))
+            {
+                mod.ReplacePath = collectionMods.Where(p => p.ReplacePath != null && p.ReplacePath.Any()).SelectMany(p => p.ReplacePath).ToList();
+            }
             await ModWriter.WriteDescriptorAsync(new ModWriterParameters()
             {
                 Mod = mod,
                 RootDirectory = game.UserDirectory,
                 Path = mod.DescriptorFile,
-                LockDescriptor = CheckIfModShouldBeLocked(game, mod)
+                LockDescriptor = CheckIfModShouldBeLocked(game, mod),
+                DescriptorType = MapDescriptorType(game.ModDescriptorType)
             }, true);
             Cache.Invalidate(new CacheInvalidateParameters() { Region = ModsCacheRegion, Prefix = game.Type, Keys = new List<string>() { GetModsCacheKey(true), GetModsCacheKey(false) } });
 
@@ -224,10 +249,6 @@ namespace IronyModManager.Services
             }
             if (patchMod != null && collection.PatchModEnabled)
             {
-                if (patchMod.Files == null || !patchMod.Files.Any())
-                {
-                    await PopulateModFilesInternalAsync(new List<IMod>() { patchMod });
-                }
                 collectionMods.Add(patchMod);
             }
 
@@ -278,7 +299,14 @@ namespace IronyModManager.Services
             {
                 var modDirPath = GetPatchModDirectory(game, fileName);
                 var newMod = DIResolver.Get<IMod>();
-                newMod.DescriptorFile = $"{Shared.Constants.ModDirectory}/{Path.GetFileNameWithoutExtension(fileName)}{Shared.Constants.ModExtension}";
+                if (game.ModDescriptorType == ModDescriptorType.DescriptorMod)
+                {
+                    newMod.DescriptorFile = $"{Shared.Constants.ModDirectory}/{Path.GetFileNameWithoutExtension(fileName)}{Shared.Constants.ModExtension}";
+                }
+                else
+                {
+                    newMod.DescriptorFile = $"{Shared.Constants.JsonModDirectory}/{Path.GetFileNameWithoutExtension(fileName)}{Shared.Constants.JsonExtension}";
+                }
                 newMod.FileName = modDirPath.Replace("\\", "/");
                 newMod.Name = !string.IsNullOrWhiteSpace(copiedNamePrefix) ? $"{copiedNamePrefix} {mod.Name}" : mod.Name;
                 newMod.Source = ModSource.Local;
@@ -325,6 +353,14 @@ namespace IronyModManager.Services
             {
                 Path = modDirPath
             });
+            if (game.ModDescriptorType == ModDescriptorType.JsonMetadata)
+            {
+                await ModWriter.CreateModDirectoryAsync(new ModWriterParameters()
+                {
+                    RootDirectory = game.UserDirectory,
+                    Path = Shared.Constants.JsonModDirectory
+                });
+            }
 
             var collection = GetAllModCollectionsInternal().FirstOrDefault(p => p.IsSelected);
             var patchName = GenerateCollectionPatchName(collection.Name);
@@ -417,15 +453,28 @@ namespace IronyModManager.Services
                     var ms = new MemoryStream();
                     await ModWriter.WriteDescriptorToStreamAsync(new ModWriterParameters()
                     {
-                        Mod = newMod
+                        Mod = newMod,
+                        DescriptorType = MapDescriptorType(game.ModDescriptorType)
                     }, ms, true);
                     ms.Seek(0, SeekOrigin.Begin);
-                    modMergeCompressExporter.AddFile(new ModMergeCompressExporterParameters()
+                    if (game.ModDescriptorType == ModDescriptorType.DescriptorMod)
                     {
-                        FileName = Shared.Constants.DescriptorFile,
-                        QueueId = queueId,
-                        Stream = ms
-                    });
+                        modMergeCompressExporter.AddFile(new ModMergeCompressExporterParameters()
+                        {
+                            FileName = Shared.Constants.DescriptorFile,
+                            QueueId = queueId,
+                            Stream = ms
+                        });
+                    }
+                    else
+                    {
+                        modMergeCompressExporter.AddFile(new ModMergeCompressExporterParameters()
+                        {
+                            FileName = Shared.Constants.DescriptorJsonMetadata,
+                            QueueId = queueId,
+                            Stream = ms
+                        });
+                    }
                     streams.Add(ms);
 
                     using var outerProgressLock = await zipLock.LockAsync();

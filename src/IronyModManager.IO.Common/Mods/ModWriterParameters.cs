@@ -4,7 +4,7 @@
 // Created          : 04-02-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 12-04-2020
+// Last Modified On : 10-29-2022
 // ***********************************************************************
 // <copyright file="ModWriterParameters.cs" company="Mario">
 //     Mario
@@ -31,6 +31,12 @@ namespace IronyModManager.IO.Common.Mods
         /// </summary>
         /// <value><c>true</c> if [append only]; otherwise, <c>false</c>.</value>
         public bool AppendOnly { get; set; }
+
+        /// <summary>
+        /// Gets or sets the type of the descriptor.
+        /// </summary>
+        /// <value>The type of the descriptor.</value>
+        public DescriptorType DescriptorType { get; set; }
 
         /// <summary>
         /// Gets or sets the enabled mods.

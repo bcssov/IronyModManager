@@ -4,7 +4,7 @@
 // Created          : 09-16-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 07-13-2022
+// Last Modified On : 11-02-2022
 // ***********************************************************************
 // <copyright file="Updater.cs" company="Mario">
 //     Mario
@@ -68,6 +68,11 @@ namespace IronyModManager.Implementation.Updater
         private readonly IronySparkleUpdater updater;
 
         /// <summary>
+        /// The updater configuration
+        /// </summary>
+        private readonly UpdaterConfiguration updaterConfiguration;
+
+        /// <summary>
         /// The updater service
         /// </summary>
         private readonly IUpdaterService updaterService;
@@ -115,11 +120,12 @@ namespace IronyModManager.Implementation.Updater
             this.updaterService = updaterService;
             progress = new Subject<int>();
             error = new Subject<Exception>();
+            updaterConfiguration = new UpdaterConfiguration(new EntryAssemblyAccessor());
             updater = new IronySparkleUpdater(isInstallerVersion, updaterService, appAction)
             {
                 SecurityProtocolType = System.Net.SecurityProtocolType.Tls12,
                 AppCastHandler = new IronyAppCast(isInstallerVersion, updaterService),
-                Configuration = new UpdaterConfiguration(new EntryAssemblyAccessor()),
+                Configuration = updaterConfiguration,
                 TmpDownloadFilePath = StaticResources.GetUpdaterPath().FirstOrDefault()
             };
             updater.DownloadStarted += (sender, path) =>
@@ -178,7 +184,7 @@ namespace IronyModManager.Implementation.Updater
             var settings = updaterService.Get();
             var elapsedTime = DateTime.Now - updater.Configuration.LastCheckTime;
             if (elapsedTime >= updateCheckThreshold || updateInfo == null ||
-                updateInfo.Status == NetSparkleUpdater.Enums.UpdateStatus.CouldNotDetermine || updateInfo.Status == NetSparkleUpdater.Enums.UpdateStatus.UserSkipped ||
+                updateInfo.Status == NetSparkleUpdater.Enums.UpdateStatus.CouldNotDetermine ||
                 settings.CheckForPrerelease != allowPrerelease)
             {
                 updateInfo = await updater.CheckForUpdatesQuietly();
@@ -247,11 +253,24 @@ namespace IronyModManager.Implementation.Updater
         /// Gets the version.
         /// </summary>
         /// <returns>System.String.</returns>
-        public string GetVersion()
+        public string GetTitle()
         {
             if (updateInfo != null && updateInfo.Updates.Any())
             {
                 return updateInfo.Updates.FirstOrDefault().Title;
+            }
+            return string.Empty;
+        }
+
+        /// <summary>
+        /// Gets the version.
+        /// </summary>
+        /// <returns>System.String.</returns>
+        public string GetVersion()
+        {
+            if (updateInfo != null && updateInfo.Updates.Any())
+            {
+                return updateInfo.Updates.FirstOrDefault().Version;
             }
             return string.Empty;
         }
@@ -274,6 +293,18 @@ namespace IronyModManager.Implementation.Updater
                 await Task.Delay(25);
             }
             busy = false;
+            return true;
+        }
+
+        /// <summary>
+        /// Sets the skipped version.
+        /// </summary>
+        /// <param name="version">The version.</param>
+        /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
+        public bool SetSkippedVersion(string version)
+        {
+            updaterConfiguration.SetVersionToSkip(version);
+            updateInfo = null;
             return true;
         }
 

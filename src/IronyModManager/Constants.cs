@@ -4,7 +4,7 @@
 // Created          : 01-13-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-14-2021
+// Last Modified On : 10-28-2022
 // ***********************************************************************
 // <copyright file="Constants.cs" company="Mario">
 //     Mario
@@ -37,6 +37,11 @@ namespace IronyModManager
         /// The application settings override
         /// </summary>
         public const string AppSettingsOverride = "appSettings.override.json";
+
+        /// <summary>
+        /// The last run location
+        /// </summary>
+        public const string LastRunLocation = "last-known-location.json";
 
         /// <summary>
         /// The localizations path

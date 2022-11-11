@@ -91,19 +91,26 @@
                     </StackPanel>
                     <Panel Grid.Row="3" Grid.ColumnSpan="2" IsVisible="{Binding UpdateInfoVisible}">
                         <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="330" />
+                                <ColumnDefinition Width="330"/>
+                            </Grid.ColumnDefinitions>
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="*" />
                                 <RowDefinition Height="*" MaxHeight="300" />
                                 <RowDefinition Height="*" />
                             </Grid.RowDefinitions>
-                            <Border BorderThickness="1,1,1,1" BorderBrush="{DynamicResource IronyButtonBorderBrush}" Grid.Row="0">
+                            <Border BorderThickness="1,1,1,1" BorderBrush="{DynamicResource IronyButtonBorderBrush}" Grid.Row="0" Grid.ColumnSpan="2">
                                 <TextBlock Text="{Binding UpdateReleaseInfo}" FontSize="14" HorizontalAlignment="Center" TextWrapping="Wrap"></TextBlock>
                             </Border>
-                            <ScrollViewer Grid.Row="1" HorizontalScrollBarVisibility="Visible" MaxWidth="660" MaxHeight="300">
+                            <ScrollViewer Grid.Row="1" HorizontalScrollBarVisibility="Visible" MaxWidth="660" MaxHeight="300" Grid.ColumnSpan="2">
                                 <html:HtmlLabel Name="changelog"/>
                             </ScrollViewer>
+                            <Button Margin="0,5" Content="{Binding SkipUpdate}"
+                                    Command="{Binding SkipUpdateCommand}" Grid.Row="2" Grid.Column="0"
+                                    HorizontalAlignment="Stretch" VerticalAlignment="Stretch" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" MaxHeight="30"></Button>
                             <Button Margin="0,5" Content="{Binding InstallUpdates}"
-                                    Command="{Binding InstallUpdatesCommand}" Grid.Row="2"
+                                    Command="{Binding InstallUpdatesCommand}" Grid.Row="2" Grid.Column="1"
                                     HorizontalAlignment="Stretch" VerticalAlignment="Stretch" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" MaxHeight="30"></Button>
                         </Grid>
                     </Panel>

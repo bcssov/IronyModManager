@@ -4,7 +4,7 @@
 // Created          : 02-14-2021
 //
 // Last Modified By : Mario
-// Last Modified On : 02-14-2021
+// Last Modified On : 10-29-2022
 // ***********************************************************************
 // <copyright file="DLCParameters.cs" company="Mario">
 //     Mario
@@ -25,6 +25,12 @@ namespace IronyModManager.IO.Common.DLC
     public class DLCParameters
     {
         #region Properties
+
+        /// <summary>
+        /// Gets or sets the type of the descriptor.
+        /// </summary>
+        /// <value>The type of the descriptor.</value>
+        public DescriptorType DescriptorType { get; set; }
 
         /// <summary>
         /// Gets or sets the DLC.

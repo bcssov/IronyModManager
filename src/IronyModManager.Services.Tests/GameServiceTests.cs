@@ -915,7 +915,7 @@ namespace IronyModManager.Services.Tests
             });
             result.Should().NotBeNull();
             result.Count().Should().Be(1);
-            result.FirstOrDefault().Should().Be("3.0.3");            
+            result.FirstOrDefault().Should().Be("3.0.3");
         }
 
         /// <summary>
@@ -993,9 +993,9 @@ namespace IronyModManager.Services.Tests
                "test\\test"
             });
             DISetup.SetupContainer();
-            
+
             var service = new GameService(messageBus.Object, hashExport.Object, reader.Object, storageProvider.Object, preferencesService.Object, new Mock<IMapper>().Object);
-            var result = await service.ImportHashReportAsync(new Game() { GameFolders = new List<string>() { "test" } }, outerReports);
+            var result = await service.ImportHashReportAsync(new Game() { GameFolders = new List<string>() { "test" }, ExecutableLocation = AppDomain.CurrentDomain.BaseDirectory + "\\test.exe" }, outerReports);
             result.Should().NotBeNull();
             result.Count().Should().Be(1);
             result.FirstOrDefault().Reports.Count.Should().Be(1);
@@ -1069,7 +1069,7 @@ namespace IronyModManager.Services.Tests
 
             var service = new GameService(messageBus.Object, hashExport.Object, reader.Object, storageProvider.Object, preferencesService.Object, new Mock<IMapper>().Object);
 
-            var result = await service.ExportHashReportAsync(new Game() { GameFolders = new List<string>() { "test" } }, "test");
+            var result = await service.ExportHashReportAsync(new Game() { GameFolders = new List<string>() { "test" }, ExecutableLocation = AppDomain.CurrentDomain.BaseDirectory + "\\test.exe" }, "test");
             result.Should().BeTrue();
         }
     }

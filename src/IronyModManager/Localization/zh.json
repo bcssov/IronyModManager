@@ -91,7 +91,8 @@
         "EuropaUniversalisIV": "欧陆风云 Ⅳ",
         "HeartsofIronIV": "钢铁雄心 Ⅳ",
         "ImperatorRome": "帝皇：罗马",
-        "CrusaderKings3": "十字军之王 Ⅲ"
+        "CrusaderKings3": "十字军之王 Ⅲ",
+        "Victoria3": "Victoria 3"
     },
     "Installed_Mods": {
         "Name": "已安装模组",
@@ -233,6 +234,7 @@
             "ModsMissingTitle": "撤消了Mods",
             "ModsMissingMessage": "一些mods缺失，已从收藏中自动删除。:{NewLine}{NewLine}{Mods}"
         }
+
     },
     "Mod_Actions": {
         "Apply": "加载合集",
@@ -351,6 +353,9 @@
             "Default": "默认",
             "Advanced": "高级",
             "Analyze": "仅分析",
+            "AnalyzeWithoutLocalization": "只进行分析而不进行本地化",
+            "DefaultWithoutLocalization": "默认情况下没有本地化",
+            "AdvancedWithoutLocalization": "先进的不需要本地化",
             "Close": "关闭"
         },
         "ModFilter": {
@@ -449,6 +454,7 @@
             "CheckForUpdates": "检查更新",
             "Install": "安装更新",
             "Version": "版本：{Version}",
+            "Skip": "忽略更新",
             "Overlay": {
                 "UpdateDownloading": "正在下载更新……",
                 "UpdateDownloadProgress": "{Progress}",

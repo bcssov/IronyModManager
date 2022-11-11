@@ -4,7 +4,7 @@
 // Created          : 05-26-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 01-31-2022
+// Last Modified On : 10-27-2022
 // ***********************************************************************
 // <copyright file="IModPatchCollectionService.cs" company="Mario">
 //     Mario
@@ -114,8 +114,9 @@ namespace IronyModManager.Services.Common
         /// <param name="game">The game.</param>
         /// <param name="mods">The mods.</param>
         /// <param name="collectionName">Name of the collection.</param>
+        /// <param name="mode">The mode.</param>
         /// <returns>Task&lt;IIndexedDefinitions&gt;.</returns>
-        Task<IIndexedDefinitions> GetModObjectsAsync(IGame game, IEnumerable<IMod> mods, string collectionName);
+        Task<IIndexedDefinitions> GetModObjectsAsync(IGame game, IEnumerable<IMod> mods, string collectionName, PatchStateMode mode);
 
         /// <summary>
         /// Gets the patch state mode asynchronous.

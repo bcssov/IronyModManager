@@ -4,7 +4,7 @@
 // Created          : 05-26-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 07-20-2022
+// Last Modified On : 10-29-2022
 // ***********************************************************************
 // <copyright file="ModPatchCollectionService.cs" company="Mario">
 //     Mario
@@ -342,7 +342,15 @@ namespace IronyModManager.Services
         /// <returns>IConflictResult.</returns>
         public virtual IConflictResult FindConflicts(IIndexedDefinitions indexedDefinitions, IList<string> modOrder, PatchStateMode patchStateMode)
         {
-            var actualMode = patchStateMode == PatchStateMode.ReadOnly ? PatchStateMode.Advanced : patchStateMode;
+            var actualMode = patchStateMode;
+            if (patchStateMode == PatchStateMode.ReadOnly)
+            {
+                actualMode = PatchStateMode.Advanced;
+            }
+            else if (patchStateMode == PatchStateMode.ReadOnlyWithoutLocalization)
+            {
+                actualMode = PatchStateMode.AdvancedWithoutLocalization;
+            }
             var conflicts = new HashSet<IDefinition>();
             var fileConflictCache = new Dictionary<string, bool>();
             var fileKeys = indexedDefinitions.GetAllFileKeys();
@@ -672,13 +680,14 @@ namespace IronyModManager.Services
         }
 
         /// <summary>
-        /// Gets the mod objects.
+        /// Get mod objects as an asynchronous operation.
         /// </summary>
         /// <param name="game">The game.</param>
         /// <param name="mods">The mods.</param>
         /// <param name="collectionName">Name of the collection.</param>
-        /// <returns>IIndexedDefinitions.</returns>
-        public virtual async Task<IIndexedDefinitions> GetModObjectsAsync(IGame game, IEnumerable<IMod> mods, string collectionName)
+        /// <param name="mode">The mode.</param>
+        /// <returns>A Task&lt;IIndexedDefinitions&gt; representing the asynchronous operation.</returns>
+        public virtual async Task<IIndexedDefinitions> GetModObjectsAsync(IGame game, IEnumerable<IMod> mods, string collectionName, PatchStateMode mode)
         {
             if (game == null || mods == null || !mods.Any())
             {
@@ -693,10 +702,16 @@ namespace IronyModManager.Services
             var provider = DefinitionInfoProviders.FirstOrDefault(p => p.CanProcess(game.Type));
             messageBus.Publish(new ModDefinitionLoadEvent(0));
 
+            var gameFolders = game.GameFolders.ToList();
+            if (mode == PatchStateMode.DefaultWithoutLocalization || mode == PatchStateMode.AdvancedWithoutLocalization || mode == PatchStateMode.ReadOnlyWithoutLocalization)
+            {
+                gameFolders = gameFolders.Where(p => !p.StartsWith(Shared.Constants.LocalizationDirectory, StringComparison.OrdinalIgnoreCase)).ToList();
+            }
+
             mods.AsParallel().ForAll((m) =>
             {
                 IEnumerable<IDefinition> result = null;
-                result = ParseModFiles(game, Reader.Read(m.FullPath, game.GameFolders), m, provider);
+                result = ParseModFiles(game, Reader.Read(m.FullPath, gameFolders), m, provider);
                 if (result?.Count() > 0)
                 {
                     foreach (var item in result)
@@ -854,7 +869,7 @@ namespace IronyModManager.Services
         {
             var game = GameService.GetSelected();
             double previousProgress = 0;
-            var allowCleanup = conflictResult != null && conflictResult.Mode != PatchStateMode.ReadOnly;
+            var allowCleanup = conflictResult != null && conflictResult.Mode != PatchStateMode.ReadOnly && conflictResult.Mode != PatchStateMode.ReadOnlyWithoutLocalization;
             async Task cleanSingleMergeFiles(string directory, string patchName)
             {
                 if (!allowCleanup)
@@ -1360,10 +1375,7 @@ namespace IronyModManager.Services
                                 else
                                 {
                                     var info = Reader.GetFileInfo(mod.FullPath, definition.FileName);
-                                    if (info == null)
-                                    {
-                                        info = Reader.GetFileInfo(mod.FullPath, definition.FallBackFileName);
-                                    }
+                                    info ??= Reader.GetFileInfo(mod.FullPath, definition.FallBackFileName);
                                     if (info == null || !info.ContentSHA.Equals(definition.ContentSha))
                                     {
                                         // File no longer in collection or content does not match, break further checks
@@ -1547,7 +1559,7 @@ namespace IronyModManager.Services
                 return Task.FromResult(false);
             }
             EvalModIgnoreDefinitions(conflictResult);
-            if (conflictResult.Mode != PatchStateMode.ReadOnly)
+            if (conflictResult.Mode != PatchStateMode.ReadOnly && conflictResult.Mode != PatchStateMode.ReadOnlyWithoutLocalization)
             {
                 var patchName = GenerateCollectionPatchName(collectionName);
                 return modPatchExporter.SaveStateAsync(new ModPatchExporterParameters()
@@ -1774,7 +1786,7 @@ namespace IronyModManager.Services
                                 continue;
                             }
                             var hasOverrides = allConflicts.Any(p => !p.IsCustomPatch && p.Dependencies != null && p.Dependencies.Any(p => p.Equals(conflict.ModName)));
-                            if (hasOverrides && patchStateMode == PatchStateMode.Default)
+                            if (hasOverrides && (patchStateMode == PatchStateMode.Default || patchStateMode == PatchStateMode.DefaultWithoutLocalization))
                             {
                                 var existing = allConflicts.Where(p => !p.IsCustomPatch && p.Dependencies != null && p.Dependencies.Any(p => p.Equals(conflict.ModName)));
                                 if (existing.Any())
@@ -1855,7 +1867,7 @@ namespace IronyModManager.Services
                             if (fileDefs.GroupBy(p => p.ModName).Count() > 1)
                             {
                                 var hasOverrides = !def.IsCustomPatch && def.Dependencies != null && def.Dependencies.Any(p => fileDefs.Any(s => s.ModName.Equals(p)));
-                                if (hasOverrides && patchStateMode == PatchStateMode.Default)
+                                if (hasOverrides && (patchStateMode == PatchStateMode.Default || patchStateMode == PatchStateMode.DefaultWithoutLocalization))
                                 {
                                     fileConflictCache.TryAdd(def.FileCI, false);
                                 }
@@ -2078,12 +2090,21 @@ namespace IronyModManager.Services
                     {
                         RootDirectory = GetPatchModDirectory(game, patchName),
                     });
+                    if (game.ModDescriptorType == ModDescriptorType.JsonMetadata)
+                    {
+                        await ModWriter.CreateModDirectoryAsync(new ModWriterParameters()
+                        {
+                            RootDirectory = game.UserDirectory,
+                            Path = Shared.Constants.JsonModDirectory
+                        });
+                    }
                     await ModWriter.WriteDescriptorAsync(new ModWriterParameters()
                     {
                         Mod = mod,
                         RootDirectory = game.UserDirectory,
                         Path = mod.DescriptorFile,
-                        LockDescriptor = CheckIfModShouldBeLocked(game, mod)
+                        LockDescriptor = CheckIfModShouldBeLocked(game, mod),
+                        DescriptorType = MapDescriptorType(game.ModDescriptorType)
                     }, IsPatchMod(mod));
                     allMods.Add(mod);
                     Cache.Invalidate(new CacheInvalidateParameters() { Region = ModsCacheRegion, Prefix = game.Type, Keys = new List<string> { GetModsCacheKey(true), GetModsCacheKey(false) } });
@@ -2130,7 +2151,8 @@ namespace IronyModManager.Services
                             {
                                 AppendOnly = true,
                                 TopPriorityMods = new List<IMod>() { mod },
-                                RootDirectory = game.UserDirectory
+                                RootDirectory = game.UserDirectory,
+                                DescriptorType = MapDescriptorType(game.ModDescriptorType)
                             }).ConfigureAwait(false);
                         }).ConfigureAwait(false);
                         Cache.Set(new CacheAddParameters<ModsExportedState>() { Region = ModsExportedRegion, Key = ModExportedKey, Value = new ModsExportedState() { Exported = true } });
@@ -2293,6 +2315,8 @@ namespace IronyModManager.Services
             {
                 IO.Common.PatchStateMode.Default => PatchStateMode.Default,
                 IO.Common.PatchStateMode.Advanced => PatchStateMode.Advanced,
+                IO.Common.PatchStateMode.AdvancedWithoutLocalization => PatchStateMode.AdvancedWithoutLocalization,
+                IO.Common.PatchStateMode.DefaultWithoutLocalization => PatchStateMode.DefaultWithoutLocalization,
                 _ => PatchStateMode.None,
             };
         }
@@ -2305,7 +2329,7 @@ namespace IronyModManager.Services
         /// <exception cref="System.ArgumentException">Invalid readonly mode</exception>
         protected virtual IO.Common.PatchStateMode MapPatchStateMode(PatchStateMode mode)
         {
-            if (mode == PatchStateMode.ReadOnly)
+            if (mode == PatchStateMode.ReadOnly || mode == PatchStateMode.ReadOnlyWithoutLocalization)
             {
                 throw new ArgumentException("Invalid readonly mode");
             }
@@ -2313,6 +2337,8 @@ namespace IronyModManager.Services
             {
                 PatchStateMode.Default => IO.Common.PatchStateMode.Default,
                 PatchStateMode.Advanced => IO.Common.PatchStateMode.Advanced,
+                PatchStateMode.AdvancedWithoutLocalization => IO.Common.PatchStateMode.AdvancedWithoutLocalization,
+                PatchStateMode.DefaultWithoutLocalization => IO.Common.PatchStateMode.DefaultWithoutLocalization,
                 _ => IO.Common.PatchStateMode.None,
             };
         }
@@ -2683,10 +2709,7 @@ namespace IronyModManager.Services
                         if (other.AllowDuplicate)
                         {
                             var match = fullyOrdered.FirstOrDefault(p => p.TypeAndId == definition.TypeAndId && p.File == Path.GetFileNameWithoutExtension(other.File));
-                            if (match == null)
-                            {
-                                match = fullyOrdered.FirstOrDefault(p => p.TypeAndId == definition.TypeAndId);
-                            }
+                            match ??= fullyOrdered.FirstOrDefault(p => p.TypeAndId == definition.TypeAndId);
                             exportCopy.Order = match.Order;
                         }
                         else
@@ -2894,10 +2917,7 @@ namespace IronyModManager.Services
                             }
                             if (IsOverwrittenType(item.ValueType))
                             {
-                                if (collectionMods == null)
-                                {
-                                    collectionMods = GetCollectionMods();
-                                }
+                                collectionMods ??= GetCollectionMods();
                                 var overwritten = conflictResult.OverwrittenConflicts.GetByTypeAndId(typeAndId);
                                 if (overwritten.Any())
                                 {
@@ -2943,12 +2963,21 @@ namespace IronyModManager.Services
                         {
                             RootDirectory = GetPatchModDirectory(game, patchName)
                         });
+                        if (game.ModDescriptorType == ModDescriptorType.JsonMetadata)
+                        {
+                            await ModWriter.CreateModDirectoryAsync(new ModWriterParameters()
+                            {
+                                RootDirectory = game.UserDirectory,
+                                Path = Shared.Constants.JsonModDirectory
+                            });
+                        }
                         await ModWriter.WriteDescriptorAsync(new ModWriterParameters()
                         {
                             Mod = mod,
                             RootDirectory = game.UserDirectory,
                             Path = mod.DescriptorFile,
-                            LockDescriptor = CheckIfModShouldBeLocked(game, mod)
+                            LockDescriptor = CheckIfModShouldBeLocked(game, mod),
+                            DescriptorType = MapDescriptorType(game.ModDescriptorType)
                         }, IsPatchMod(mod));
                         allMods.Add(mod);
                         Cache.Invalidate(new CacheInvalidateParameters() { Region = ModsCacheRegion, Prefix = game.Type, Keys = new List<string> { GetModsCacheKey(true), GetModsCacheKey(false) } });
@@ -2967,7 +2996,8 @@ namespace IronyModManager.Services
                             {
                                 AppendOnly = true,
                                 TopPriorityMods = new List<IMod>() { mod },
-                                RootDirectory = game.UserDirectory
+                                RootDirectory = game.UserDirectory,
+                                DescriptorType = MapDescriptorType(game.ModDescriptorType)
                             }).ConfigureAwait(false);
                         }).ConfigureAwait(false);
                         Cache.Set(new CacheAddParameters<ModsExportedState>() { Region = ModsExportedRegion, Key = ModExportedKey, Value = new ModsExportedState() { Exported = true } });

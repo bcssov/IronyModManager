@@ -91,7 +91,8 @@
         "EuropaUniversalisIV": "Europa Universalis IV",
         "HeartsofIronIV": "Hearts of Iron IV",
         "ImperatorRome": "Imperator Rome",
-        "CrusaderKings3": "Crusader Kings III"
+        "CrusaderKings3": "Crusader Kings III",
+        "Victoria3": "Victoria 3"
     },
     "Installed_Mods": {
         "Name": "Installed Mods",
@@ -352,6 +353,9 @@
             "Default": "Default",
             "Advanced": "Advanced",
             "Analyze": "Analyze Only",
+            "AnalyzeWithoutLocalization": "Analyze Only Without Localization",
+            "DefaultWithoutLocalization": "Default Without Localization",
+            "AdvancedWithoutLocalization": "Advanced Without Localization",
             "Close": "Close"
         },
         "ModFilter": {
@@ -450,6 +454,7 @@
             "CheckForUpdates": "Check For Updates",
             "Install": "Install Updates",
             "Version": "Version: {Version}",
+            "Skip": "Ignore Update",
             "Overlay": {
                 "UpdateDownloading": "Downloading Updates...",
                 "UpdateDownloadProgress": "{Progress}",
