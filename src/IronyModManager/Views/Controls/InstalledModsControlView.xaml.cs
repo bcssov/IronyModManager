@@ -4,7 +4,7 @@
 // Created          : 02-29-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 10-04-2022
+// Last Modified On : 11-05-2022
 // ***********************************************************************
 // <copyright file="InstalledModsControlView.xaml.cs" company="Mario">
 //     Mario
@@ -22,6 +22,8 @@ using Avalonia.Markup.Xaml;
 using Avalonia.Threading;
 using IronyModManager.Common;
 using IronyModManager.Common.Views;
+using IronyModManager.DI;
+using IronyModManager.Implementation.MessageBus.Events;
 using IronyModManager.Models.Common;
 using IronyModManager.Shared;
 using IronyModManager.ViewModels.Controls;
@@ -100,14 +102,25 @@ namespace IronyModManager.Views.Controls
                         ViewModel.ContextMenuMod = item.Content as IMod;
                         menuItems = !string.IsNullOrEmpty(ViewModel.GetContextMenuModModUrl()) || !string.IsNullOrEmpty(ViewModel.GetContextMenuModModSteamUrl()) ? GetAllMenuItems() : GetActionMenuItems();
                     }
-                    if (menuItems == null)
-                    {
-                        menuItems = GetStaticMenuItems();
-                    }
+                    menuItems ??= GetStaticMenuItems();
                     modList.SetContextMenuItems(menuItems);
                 };
+                var mbus = DIResolver.Get<Shared.MessageBus.IMessageBus>();
                 modList.LayoutUpdated += (sender, args) =>
                 {
+                    var visibleItems = modList.ItemContainerGenerator.Containers.ToList();
+                    if (visibleItems.Any())
+                    {
+                        var mods = visibleItems.Select(p => p.Item).OfType<IMod>().ToList();
+                        if (mods.Any())
+                        {
+                            mods = mods.Where(p => p.Files == null || !p.Files.Any() || p.AchievementStatus == AchievementStatus.NotEvaluated).ToList();
+                            if (mods.Any())
+                            {
+                                mbus.Publish(new EvalModAchievementsCompatibilityEvent(mods));
+                            }
+                        }
+                    }
                     updateLayout().ConfigureAwait(false);
                 };
             }

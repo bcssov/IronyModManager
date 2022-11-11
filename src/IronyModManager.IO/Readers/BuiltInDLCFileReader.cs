@@ -4,7 +4,7 @@
 // Created          : 08-29-2021
 //
 // Last Modified By : Mario
-// Last Modified On : 08-29-2021
+// Last Modified On : 11-06-2022
 // ***********************************************************************
 // <copyright file="BuiltInDLCFileReader.cs" company="Mario">
 //     Mario
@@ -21,11 +21,11 @@ namespace IronyModManager.IO.Readers
 {
     /// <summary>
     /// Class BuiltInDLCFileReader.
-    /// Implements the <see cref="IronyModManager.IO.Readers.BaseSpecializedDiskReader" />
+    /// Implements the <see cref="IronyModManager.IO.Readers.DLCFileReader" />
     /// </summary>
-    /// <seealso cref="IronyModManager.IO.Readers.BaseSpecializedDiskReader" />
+    /// <seealso cref="IronyModManager.IO.Readers.DLCFileReader" />
     [ExcludeFromCoverage("Skipping testing IO logic.")]
-    public class BuiltInDLCFileReader : BaseSpecializedDiskReader
+    public class BuiltInDLCFileReader : DLCFileReader
     {
         #region Properties
 

@@ -4,7 +4,7 @@
 // Created          : 03-03-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 10-29-2022
+// Last Modified On : 11-06-2022
 // ***********************************************************************
 // <copyright file="CollectionModsControlViewModel.cs" company="Mario">
 //     Mario
@@ -423,12 +423,6 @@ namespace IronyModManager.ViewModels.Controls
         public virtual bool AllowModSelection { get; set; }
 
         /// <summary>
-        /// Gets or sets a value indicating whether this instance can export mod hash report.
-        /// </summary>
-        /// <value><c>true</c> if this instance can export mod hash report; otherwise, <c>false</c>.</value>
-        public virtual bool CanExportModHashReport { get; set; }
-
-        /// <summary>
         /// Gets or sets a value indicating whether [collection jump on position change].
         /// </summary>
         /// <value><c>true</c> if [collection jump on position change]; otherwise, <c>false</c>.</value>
@@ -471,6 +465,12 @@ namespace IronyModManager.ViewModels.Controls
         /// <value>The create.</value>
         [StaticLocalization(LocalizationResources.Collection_Mods.Create)]
         public virtual string Create { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets the create class.
+        /// </summary>
+        /// <value>The create class.</value>
+        public virtual string CreateClass { get; protected set; }
 
         /// <summary>
         /// Gets or sets the create command.
@@ -806,6 +806,15 @@ namespace IronyModManager.ViewModels.Controls
         }
 
         /// <summary>
+        /// Determines whether this instance [can export mods].
+        /// </summary>
+        /// <returns><c>true</c> if this instance [can export mods]; otherwise, <c>false</c>.</returns>
+        public virtual bool CanExportMods()
+        {
+            return activeGame != null && SelectedMods != null && SelectedMods.Any();
+        }
+
+        /// <summary>
         /// Gets the context menu mod steam URL.
         /// </summary>
         /// <returns>System.String.</returns>
@@ -1048,12 +1057,17 @@ namespace IronyModManager.ViewModels.Controls
         /// <param name="game">The game.</param>
         protected virtual void EvalGameSpecificVisibility(IGame game = null)
         {
-            if (game == null)
-            {
-                game = gameService.GetSelected();
-            }
+            game ??= gameService.GetSelected();
             ShowAdvancedFeatures = (game?.AdvancedFeatures) == GameAdvancedFeatures.Full;
             SearchModsColSpan = ShowAdvancedFeatures ? 1 : 2;
+        }
+
+        /// <summary>
+        /// Evaluates the highlight.
+        /// </summary>
+        protected virtual void EvaluateHighlight()
+        {
+            CreateClass = ModCollections == null || !ModCollections.Any() ? "CreateHighlight" : string.Empty;
         }
 
         /// <summary>
@@ -1128,6 +1142,7 @@ namespace IronyModManager.ViewModels.Controls
         /// <param name="resetStack">if set to <c>true</c> [reset stack].</param>
         protected virtual void HandleModCollectionChange(bool resetStack)
         {
+            EvaluateHighlight();
             if (!string.IsNullOrWhiteSpace(restoreCollectionSelection))
             {
                 if (ModCollections?.Count() > 0)
@@ -1408,6 +1423,7 @@ namespace IronyModManager.ViewModels.Controls
         /// <param name="disposables">The disposables.</param>
         protected override void OnActivated(CompositeDisposable disposables)
         {
+            EvaluateHighlight();
             EvalGameSpecificVisibility();
             SetSelectedModsState(Mods != null ? Mods.Where(p => p.IsSelected).ToObservableCollection() : new ObservableCollection<IMod>());
             SubscribeToMods();

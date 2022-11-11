@@ -4,7 +4,7 @@
 // Created          : 02-23-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 10-29-2022
+// Last Modified On : 11-06-2022
 // ***********************************************************************
 // <copyright file="DiskFileReader.cs" company="Mario">
 //     Mario
@@ -139,21 +139,13 @@ namespace IronyModManager.IO.Readers
         /// <returns>System.Int64.</returns>
         public virtual long GetTotalSize(string path)
         {
-            var files = GetFiles(path);
-            long total = 0;
-            if (files.Any())
+            DirectoryInfo info = new DirectoryInfo(path);
+            if (info.Exists)
             {
-                foreach (var item in files)
-                {
-                    var file = Path.Combine(path, item);
-                    if (File.Exists(file))
-                    {
-                        var info = new System.IO.FileInfo(file);
-                        total += info.Length;
-                    }
-                }
+                var total = info.EnumerateFiles("*.*", SearchOption.AllDirectories).Sum(fi => fi.Length);
+                return total;
             }
-            return total;
+            return 0;
         }
 
         /// <summary>

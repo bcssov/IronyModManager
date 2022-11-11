@@ -5,8 +5,8 @@
 #define MyAppPublisher "Mario"
 #define MyAppURL "https://bcssov.github.io/IronyModManager/"
 #define MyAppExeName "IronyModManager.exe"
-#define PublishPath "..\..\src\IronyModManager\bin\x64\win-x64\net6.0\publish"
-#define SourcePath "..\..\src\IronyModManager\bin\x64\win-x64\net6.0\publish\win-x64"
+#define PublishPath "..\..\src\IronyModManager\bin\x64\win-x64\net7.0\publish"
+#define SourcePath "..\..\src\IronyModManager\bin\x64\win-x64\net7.0\publish\win-x64"
 #define MyAppVersion GetStringFileInfo(SourcePath + "\" + MyAppExeName, "ProductVersion")
 
 [Code]

@@ -4,7 +4,7 @@
 // Created          : 05-30-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 11-02-2022
+// Last Modified On : 11-08-2022
 // ***********************************************************************
 // <copyright file="OptionsControlViewModel.cs" company="Mario">
 //     Mario
@@ -13,6 +13,7 @@
 // ***********************************************************************
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Reactive;
 using System.Reactive.Disposables;
@@ -774,6 +775,15 @@ namespace IronyModManager.ViewModels.Controls
                 IsOpen = true;
                 if (!string.IsNullOrWhiteSpace(result))
                 {
+                    result = result.StandardizeDirectorySeparator();
+                    if (result.EndsWith(Path.DirectorySeparatorChar + Shared.Constants.ModDirectory))
+                    {
+                        result = result.TrimEnd(Path.DirectorySeparatorChar + Shared.Constants.ModDirectory);
+                    }
+                    else if (result.EndsWith(Path.DirectorySeparatorChar + Shared.Constants.JsonModDirectory))
+                    {
+                        result = result.TrimEnd(Path.DirectorySeparatorChar + Shared.Constants.JsonModDirectory);
+                    }
                     Game.UserDirectory = result;
                     SaveGame();
                 }

@@ -4,7 +4,7 @@
 // Created          : 03-01-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 10-28-2022
+// Last Modified On : 11-05-2022
 // ***********************************************************************
 // <copyright file="Enums.cs" company="Mario">
 //     Mario
@@ -34,7 +34,12 @@ namespace IronyModManager.Models.Common
         /// <summary>
         /// The not compatible
         /// </summary>
-        NotCompatible
+        NotCompatible,
+
+        /// <summary>
+        /// The attempted evaluation
+        /// </summary>
+        AttemptedEvaluation
     }
 
     /// <summary>

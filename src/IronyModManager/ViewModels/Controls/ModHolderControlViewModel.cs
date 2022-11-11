@@ -4,7 +4,7 @@
 // Created          : 02-29-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 10-29-2022
+// Last Modified On : 11-05-2022
 // ***********************************************************************
 // <copyright file="ModHolderControlViewModel.cs" company="Mario">
 //     Mario
@@ -1014,11 +1014,6 @@ namespace IronyModManager.ViewModels.Controls
                 }
                 await InstalledMods.RefreshModsAsync();
                 EvalResumeAvailability(s.Game);
-            }).DisposeWith(disposables);
-
-            this.WhenAnyValue(v => v.InstalledMods.ModFilePopulationCompleted).Subscribe(s =>
-            {
-                CollectionMods.CanExportModHashReport = s;
             }).DisposeWith(disposables);
 
             modListInstallRefreshRequestHandler.Subscribe(async m =>

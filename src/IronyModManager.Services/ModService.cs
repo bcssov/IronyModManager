@@ -4,7 +4,7 @@
 // Created          : 02-24-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 10-29-2022
+// Last Modified On : 11-05-2022
 // ***********************************************************************
 // <copyright file="ModService.cs" company="Mario">
 //     Mario
@@ -13,6 +13,7 @@
 // ***********************************************************************
 
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -170,22 +171,30 @@ namespace IronyModManager.Services
         /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
         public virtual bool EvalAchievementCompatibility(IEnumerable<IMod> mods)
         {
-            var game = GameService.GetSelected();
-            if (game != null && mods?.Count() > 0)
+            if (mods?.Count() > 0)
             {
-                foreach (var item in mods.Where(p => p.IsValid))
+                var filtered = mods.Where(p => p.IsValid && p.AchievementStatus == AchievementStatus.NotEvaluated);
+                if (filtered.Any())
                 {
-                    if (item.Files.Any())
+                    var game = GameService.GetSelected();
+                    if (game == null)
                     {
-                        var isAchievementCompatible = !item.Files.Any(p => game.ChecksumFolders.Any(s => p.StartsWith(s, StringComparison.OrdinalIgnoreCase)));
-                        item.AchievementStatus = isAchievementCompatible ? AchievementStatus.Compatible : AchievementStatus.NotCompatible;
+                        return false;
                     }
-                    else
+                    foreach (var item in filtered)
                     {
-                        item.AchievementStatus = AchievementStatus.NotEvaluated;
+                        if (item.Files.Any())
+                        {
+                            var isAchievementCompatible = !item.Files.Any(p => game.ChecksumFolders.Any(s => p.StartsWith(s, StringComparison.OrdinalIgnoreCase)));
+                            item.AchievementStatus = isAchievementCompatible ? AchievementStatus.Compatible : AchievementStatus.NotCompatible;
+                        }
+                        else
+                        {
+                            item.AchievementStatus = AchievementStatus.AttemptedEvaluation;
+                        }
                     }
+                    return true;
                 }
-                return true;
             }
             return false;
         }
@@ -702,7 +711,7 @@ namespace IronyModManager.Services
             // Json metadata doesn't support zips to ignore them
             var files = Directory.Exists(path) && modDescriptorType == ModDescriptorType.DescriptorMod ? Directory.EnumerateFiles(path, $"*{Shared.Constants.ZipExtension}").Union(Directory.EnumerateFiles(path, $"*{Shared.Constants.BinExtension}")) : Array.Empty<string>();
             var directories = Directory.Exists(path) ? Directory.EnumerateDirectories(path) : Array.Empty<string>();
-            var mods = new List<IModInstallationResult>();
+            var mods = new ConcurrentBag<IModInstallationResult>();
 
             static void setDescriptorPath(IMod mod, string desiredPath, string localPath)
             {
@@ -870,14 +879,14 @@ namespace IronyModManager.Services
 
             if (files.Any())
             {
-                foreach (var file in files)
+                files.AsParallel().WithDegreeOfParallelism(MaxModsToProcess).ForAll(file =>
                 {
                     parseModFiles(file, modSource, false, string.Empty);
-                }
+                });
             }
             if (directories.Any())
             {
-                foreach (var directory in directories)
+                directories.AsParallel().WithDegreeOfParallelism(MaxModsToProcess).ForAll(directory =>
                 {
                     var modSourceOverride = directory.Split(Path.DirectorySeparatorChar, StringSplitOptions.RemoveEmptyEntries).
                             LastOrDefault().Contains(Constants.Paradox_mod_id, StringComparison.OrdinalIgnoreCase) ? ModSource.Paradox : modSource;
@@ -904,9 +913,9 @@ namespace IronyModManager.Services
                             parseModFiles(subdirectory, subDirectoryModSourceOverride, true, modNamePrefix);
                         }
                     }
-                }
+                });
             }
-            return mods;
+            return mods.ToList();
         }
 
         /// <summary>

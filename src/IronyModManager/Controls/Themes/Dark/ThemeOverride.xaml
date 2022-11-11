@@ -85,6 +85,10 @@
         <Setter Property="BorderThickness" Value="2,2,2,2"/>
         <Setter Property="BorderBrush" Value="Red"/>
     </Style>
+    <Style Selector="Border.CreateHighlight">
+        <Setter Property="BorderThickness" Value="2,2,2,2"/>
+        <Setter Property="BorderBrush" Value="Red"/>
+    </Style>    
     <Style Selector="Border.ResolvedResetMod">
         <Setter Property="BorderThickness" Value="2,2,2,2"/>
         <Setter Property="BorderBrush" Value="Red" />

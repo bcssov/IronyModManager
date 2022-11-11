@@ -4,15 +4,15 @@
 // Created          : 08-11-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 08-13-2020
+// Last Modified On : 11-04-2022
 // ***********************************************************************
 // <copyright file="OrmInitialization.cs" company="Mario">
 //     Mario
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
-using System.Collections.Generic;
 using System;
+using System.Collections.Generic;
 using IronyModManager.Shared;
 using RepoDb;
 
@@ -34,9 +34,9 @@ namespace IronyModManager.IO
         public override void OnPostStartup()
         {
             // Initialize ORM
-            SqLiteBootstrap.Initialize();
+            GlobalConfiguration.Setup().UseSqlite();
             // Doesn't work as well with MDS which I prefer to use... Reported to the authors who said it should be turned on if you use MDS.
-            Converter.ConversionType = RepoDb.Enumerations.ConversionType.Automatic;
+            GlobalConfiguration.Options.ConversionType = RepoDb.Enumerations.ConversionType.Automatic;
         }
 
         #endregion Methods

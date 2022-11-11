@@ -4,7 +4,7 @@
 // Created          : 04-04-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 07-18-2022
+// Last Modified On : 11-09-2022
 // ***********************************************************************
 // <copyright file="BaseDefinitionInfoProvider.cs" company="Mario">
 //     Mario
@@ -330,7 +330,7 @@ namespace IronyModManager.IO.Mods.InfoProviders
         {
             if (encodingInfo != null)
             {
-                return encodingInfo.Encoding.Equals(Encoding.UTF8) && encodingInfo.HasBOM;
+                return encodingInfo.Encoding.Equals(Encoding.UTF8.EncodingName, StringComparison.OrdinalIgnoreCase) && encodingInfo.HasBOM;
             }
             return false;
         }

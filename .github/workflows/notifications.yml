@@ -16,3 +16,4 @@ jobs:
           webhook_url: ${{ secrets.WEBHOOK_URL }}
           color: "2105893"
           username: "GitHub Releases"
+          avatar_url: "https://cdn.discordapp.com/avatars/972247312782987334/139d847c8df1ad7b14f04b68fa382646.webp?size=80"
