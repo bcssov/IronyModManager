@@ -67,7 +67,7 @@ namespace IronyModManager.Parser.Tests
             registry.RegisterTranslation("en", LocalizationResources.FilterOperators.ValueSeparator, ":");
             registry.RegisterTranslation("en", LocalizationResources.FilterOperators.Negate, "--");
 
-            var parser = new Mod.Search.Parser(new Logger(), new List<ITypeConverter<object>> { new VersionConverter(registry), new BoolConverter(registry), new SourceTypeConverter(registry) }, registry);
+            var parser = new Mod.Search.Parser(new Cache(), new Logger(), new List<ITypeConverter<object>> { new VersionConverter(registry), new BoolConverter(registry), new SourceTypeConverter(registry) }, registry);
             var line = "test test &&EN-VER:2.0 &&fr-src:steam &&en-ach:yest &&en-sel:true";
             var result = parser.Parse("en", line);
             result.Should().NotBeNull();
@@ -117,7 +117,7 @@ namespace IronyModManager.Parser.Tests
             registry.RegisterTranslation("en", LocalizationResources.FilterOperators.ValueSeparator, ":");
             registry.RegisterTranslation("en", LocalizationResources.FilterOperators.Negate, "--");
 
-            var parser = new Mod.Search.Parser(new Logger(), new List<ITypeConverter<object>> { new VersionConverter(registry), new BoolConverter(registry), new SourceTypeConverter(registry) }, registry);
+            var parser = new Mod.Search.Parser(new Cache(), new Logger(), new List<ITypeConverter<object>> { new VersionConverter(registry), new BoolConverter(registry), new SourceTypeConverter(registry) }, registry);
             var line = "test test";
             var result = parser.Parse("en", line);
             result.Should().NotBeNull();
@@ -165,7 +165,7 @@ namespace IronyModManager.Parser.Tests
             registry.RegisterTranslation("en", LocalizationResources.FilterOperators.ValueSeparator, ":");
             registry.RegisterTranslation("en", LocalizationResources.FilterOperators.Negate, "--");
 
-            var parser = new Mod.Search.Parser(new Logger(), new List<ITypeConverter<object>> { new VersionConverter(registry), new BoolConverter(registry), new SourceTypeConverter(registry) }, registry);
+            var parser = new Mod.Search.Parser(new Cache(), new Logger(), new List<ITypeConverter<object>> { new VersionConverter(registry), new BoolConverter(registry), new SourceTypeConverter(registry) }, registry);
             var line = "test test ";
             var result = parser.Parse("en", line);
             result.Should().NotBeNull();
@@ -213,7 +213,7 @@ namespace IronyModManager.Parser.Tests
             registry.RegisterTranslation("en", LocalizationResources.FilterOperators.ValueSeparator, ":");
             registry.RegisterTranslation("en", LocalizationResources.FilterOperators.Negate, "--");
 
-            var parser = new Mod.Search.Parser(new Logger(), new List<ITypeConverter<object>> { new VersionConverter(registry), new BoolConverter(registry), new SourceTypeConverter(registry) }, registry);
+            var parser = new Mod.Search.Parser(new Cache(), new Logger(), new List<ITypeConverter<object>> { new VersionConverter(registry), new BoolConverter(registry), new SourceTypeConverter(registry) }, registry);
             var line = "en-ach:yes && en-ach:no";
             var result = parser.Parse("en", line);
             result.Should().NotBeNull();
@@ -255,7 +255,7 @@ namespace IronyModManager.Parser.Tests
             registry.RegisterTranslation("en", LocalizationResources.FilterOperators.ValueSeparator, ":");
             registry.RegisterTranslation("en", LocalizationResources.FilterOperators.Negate, "--");
 
-            var parser = new Mod.Search.Parser(new Logger(), new List<ITypeConverter<object>> { new VersionConverter(registry), new BoolConverter(registry), new SourceTypeConverter(registry) }, registry);
+            var parser = new Mod.Search.Parser(new Cache(), new Logger(), new List<ITypeConverter<object>> { new VersionConverter(registry), new BoolConverter(registry), new SourceTypeConverter(registry) }, registry);
             var line = "en-ach";
             var result = parser.Parse("en", line);
             result.Should().NotBeNull();
@@ -300,7 +300,7 @@ namespace IronyModManager.Parser.Tests
             registry.RegisterTranslation("en", LocalizationResources.FilterOperators.ValueSeparator, ":");
             registry.RegisterTranslation("en", LocalizationResources.FilterOperators.Negate, "--");
 
-            var parser = new Mod.Search.Parser(new Logger(), new List<ITypeConverter<object>> { new VersionConverter(registry), new BoolConverter(registry), new SourceTypeConverter(registry) }, registry);
+            var parser = new Mod.Search.Parser(new Cache(), new Logger(), new List<ITypeConverter<object>> { new VersionConverter(registry), new BoolConverter(registry), new SourceTypeConverter(registry) }, registry);
             var line = "test:test";
             var result = parser.Parse("en", line);
             result.Should().NotBeNull();
@@ -351,7 +351,7 @@ namespace IronyModManager.Parser.Tests
             registry.RegisterTranslation("en", LocalizationResources.FilterOperators.ValueSeparator, ":");
             registry.RegisterTranslation("en", LocalizationResources.FilterOperators.Negate, "--");
 
-            var parser = new Mod.Search.Parser(new Logger(), new List<ITypeConverter<object>> { new VersionConverter(registry), new BoolConverter(registry), new SourceTypeConverter(registry) }, registry);
+            var parser = new Mod.Search.Parser(new Cache(), new Logger(), new List<ITypeConverter<object>> { new VersionConverter(registry), new BoolConverter(registry), new SourceTypeConverter(registry) }, registry);
             var line = "test test &&EN-VER:2.0||3.0 &&fr-src:steam &&en-ach:yest &&en-sel:true";
             var result = parser.Parse("en", line);
             result.Should().NotBeNull();
@@ -402,7 +402,7 @@ namespace IronyModManager.Parser.Tests
             registry.RegisterTranslation("en", LocalizationResources.FilterOperators.ValueSeparator, ":");
             registry.RegisterTranslation("en", LocalizationResources.FilterOperators.Negate, "--");
 
-            var parser = new Mod.Search.Parser(new Logger(), new List<ITypeConverter<object>> { new VersionConverter(registry), new BoolConverter(registry), new SourceTypeConverter(registry) }, registry);
+            var parser = new Mod.Search.Parser(new Cache(), new Logger(), new List<ITypeConverter<object>> { new VersionConverter(registry), new BoolConverter(registry), new SourceTypeConverter(registry) }, registry);
             var line = "--test test &&EN-VER:--2.0||3.0 &&fr-src:steam &&en-ach:yest &&en-sel:true";
             var result = parser.Parse("en", line);
             result.Should().NotBeNull();

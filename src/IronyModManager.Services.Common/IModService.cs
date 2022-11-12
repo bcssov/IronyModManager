@@ -4,7 +4,7 @@
 // Created          : 02-24-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-08-2022
+// Last Modified On : 11-12-2022
 // ***********************************************************************
 // <copyright file="IModService.cs" company="Mario">
 //     Mario
@@ -171,6 +171,13 @@ namespace IronyModManager.Services.Common
         /// <param name="collectionName">Name of the collection.</param>
         /// <returns>Task&lt;System.Boolean&gt;.</returns>
         Task<bool> PurgeModPatchAsync(string collectionName);
+
+        /// <summary>
+        /// Queries the contains achievements.
+        /// </summary>
+        /// <param name="query">The query.</param>
+        /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
+        bool QueryContainsAchievements(string query);
 
         #endregion Methods
     }

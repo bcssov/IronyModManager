@@ -4,7 +4,7 @@
 // Created          : 04-07-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 11-05-2022
+// Last Modified On : 11-12-2022
 // ***********************************************************************
 // <copyright file="ModBaseService.cs" company="Mario">
 //     Mario
@@ -811,9 +811,9 @@ namespace IronyModManager.Services
             }
             static string mergeCode(string codeTag, string separator, IEnumerable<string> lines)
             {
-                if (Shared.Constants.CodeSeparators.ClosingSeparators.Map.ContainsKey(separator))
+                if (Shared.Constants.CodeSeparators.ClosingSeparators.Map.TryGetValue(separator, out var value))
                 {
-                    var closingTag = Shared.Constants.CodeSeparators.ClosingSeparators.Map[separator];
+                    var closingTag = value;
                     var sb = new StringBuilder();
                     sb.AppendLine($"{codeTag} = {separator}");
                     foreach (var item in lines)
@@ -908,17 +908,28 @@ namespace IronyModManager.Services
                     {
                         await semaphore.WaitAsync();
                         var localMod = mod;
-                        try
-                        {
-                            var files = Reader.GetFiles(localMod.FullPath);
-                            localMod.Files = files ?? new List<string>();
-                        }
-                        catch (Exception ex)
+                        if (!localMod.IsValid)
                         {
                             localMod.Files = new List<string>();
-                            logger.Error(ex);
                         }
-                        finally
+                        else if (localMod.Files == null || !localMod.Files.Any())
+                        {
+                            try
+                            {
+                                var files = Reader.GetFiles(localMod.FullPath);
+                                localMod.Files = files ?? new List<string>();
+                            }
+                            catch (Exception ex)
+                            {
+                                localMod.Files = new List<string>();
+                                logger.Error(ex);
+                            }
+                            finally
+                            {
+                                semaphore.Release();
+                            }
+                        }
+                        else
                         {
                             semaphore.Release();
                         }

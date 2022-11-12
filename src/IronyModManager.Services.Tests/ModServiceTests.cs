@@ -1595,5 +1595,76 @@ namespace IronyModManager.Services.Tests
             result.Should().NotBeNull();
             result.Name.Should().Be("test 5");
         }
+
+        /// <summary>
+        /// Defines the test method Should_contain_achievement_query.
+        /// </summary>
+        [Fact]
+        public void Should_contain_achievement_query()
+        {
+            var storageProvider = new Mock<IStorageProvider>();
+            var modParser = new Mock<IModParser>();
+            var reader = new Mock<IReader>();
+            var modWriter = new Mock<IModWriter>();
+            var gameService = new Mock<IGameService>();
+            var mapper = new Mock<IMapper>();
+            var parser = new Mock<IParser>();
+            var lngService = new Mock<ILanguagesService>();
+
+            var service = GetService(storageProvider, modParser, reader, mapper, modWriter, gameService, parser: parser, lngService);
+
+            parser.Setup(p => p.Parse(It.IsAny<string>(), It.IsAny<string>())).Returns(new SearchParserResult()
+            {
+                Name = new List<NameFilterResult>() { new NameFilterResult("test") },
+                AchievementCompatible = new BoolFilterResult(true),
+                Version = new List<VersionTypeResult>() { new VersionTypeResult(new Shared.Version(1, 5)) }
+            });
+            lngService.Setup(p => p.GetSelected()).Returns(new Language() { Abrv = "en" });
+
+            var mods = new List<IMod>()
+            {
+                new Mod() { Name = "test", Version = "1.0", AchievementStatus = AchievementStatus.Compatible },
+                new Mod() { Name = "test 2", Version = "1.5", AchievementStatus = AchievementStatus.NotCompatible },
+                new Mod() { Name = "test 3", Version = "1.5", AchievementStatus = AchievementStatus.Compatible }
+            };
+
+            var result = service.QueryContainsAchievements("test");
+            result.Should().BeTrue();
+        }
+
+        /// <summary>
+        /// Defines the test method Should_not_contain_achievement_query.
+        /// </summary>
+        [Fact]
+        public void Should_not_contain_achievement_query()
+        {
+            var storageProvider = new Mock<IStorageProvider>();
+            var modParser = new Mock<IModParser>();
+            var reader = new Mock<IReader>();
+            var modWriter = new Mock<IModWriter>();
+            var gameService = new Mock<IGameService>();
+            var mapper = new Mock<IMapper>();
+            var parser = new Mock<IParser>();
+            var lngService = new Mock<ILanguagesService>();
+
+            var service = GetService(storageProvider, modParser, reader, mapper, modWriter, gameService, parser: parser, lngService);
+
+            parser.Setup(p => p.Parse(It.IsAny<string>(), It.IsAny<string>())).Returns(new SearchParserResult()
+            {
+                Name = new List<NameFilterResult>() { new NameFilterResult("test") },                
+                Version = new List<VersionTypeResult>() { new VersionTypeResult(new Shared.Version(1, 5)) }
+            });
+            lngService.Setup(p => p.GetSelected()).Returns(new Language() { Abrv = "en" });
+
+            var mods = new List<IMod>()
+            {
+                new Mod() { Name = "test", Version = "1.0", AchievementStatus = AchievementStatus.Compatible },
+                new Mod() { Name = "test 2", Version = "1.5", AchievementStatus = AchievementStatus.NotCompatible },
+                new Mod() { Name = "test 3", Version = "1.5", AchievementStatus = AchievementStatus.Compatible }
+            };
+
+            var result = service.QueryContainsAchievements("test");
+            result.Should().BeFalse();
+        }
     }
 }
