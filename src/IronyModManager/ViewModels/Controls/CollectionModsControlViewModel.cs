@@ -4,7 +4,7 @@
 // Created          : 03-03-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 11-06-2022
+// Last Modified On : 11-12-2022
 // ***********************************************************************
 // <copyright file="CollectionModsControlViewModel.cs" company="Mario">
 //     Mario
@@ -1620,11 +1620,15 @@ namespace IronyModManager.ViewModels.Controls
 
             this.WhenAnyValue(s => s.SearchMods.IsActivated).Where(p => p).Subscribe(s =>
             {
-                this.WhenAnyValue(s => s.SearchMods.Text).Subscribe(s =>
+                this.WhenAnyValue(s => s.SearchMods.Text).Subscribe(async s =>
                 {
                     skipModSelectionSave = true;
                     if (!string.IsNullOrWhiteSpace(s) && SelectedMods != null)
                     {
+                        if (SelectedMods != null && SelectedMods.Any(p => p.AchievementStatus == AchievementStatus.NotEvaluated) && modService.QueryContainsAchievements(s))
+                        {
+                            await MessageBus.PublishAsync(new EvalModAchievementsCompatibilityEvent(Mods, true, true));
+                        }
                         SelectedMod = modService.FindMod(SelectedMods, s, false, null);
                     }
                     var modCount = SelectedModCollection?.Mods.Count();
@@ -1641,7 +1645,7 @@ namespace IronyModManager.ViewModels.Controls
                     skipModSelectionSave = false;
                 }).DisposeWith(disposables);
 
-                Observable.Merge(SearchMods.DownArrowCommand, SearchMods.UpArrowCommand).Subscribe(s =>
+                Observable.Merge(SearchMods.DownArrowCommand, SearchMods.UpArrowCommand).Subscribe(async s =>
                 {
                     if (SelectedMods == null)
                     {
@@ -1656,6 +1660,10 @@ namespace IronyModManager.ViewModels.Controls
                     var searchString = SearchMods.Text ?? string.Empty;
                     if (!s.Result)
                     {
+                        if (SelectedMods != null && SelectedMods.Any(p => p.AchievementStatus == AchievementStatus.NotEvaluated) && modService.QueryContainsAchievements(searchString))
+                        {
+                            await MessageBus.PublishAsync(new EvalModAchievementsCompatibilityEvent(Mods, true, true));
+                        }
                         var mod = modService.FindMod(SelectedMods, searchString, false, index + 1);
                         if (mod != null && mod != SelectedMod)
                         {
@@ -1665,6 +1673,10 @@ namespace IronyModManager.ViewModels.Controls
                     else
                     {
                         var reverseIndex = SelectedMods.Count - index;
+                        if (SelectedMods != null && SelectedMods.Any(p => p.AchievementStatus == AchievementStatus.NotEvaluated) && modService.QueryContainsAchievements(searchString))
+                        {
+                            await MessageBus.PublishAsync(new EvalModAchievementsCompatibilityEvent(Mods, true, true));
+                        }
                         var mod = modService.FindMod(SelectedMods, searchString, true, reverseIndex);
                         if (mod != null && mod != SelectedMod)
                         {

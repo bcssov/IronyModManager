@@ -4,7 +4,7 @@
 // Created          : 02-24-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 11-05-2022
+// Last Modified On : 11-12-2022
 // ***********************************************************************
 // <copyright file="ModService.cs" company="Mario">
 //     Mario
@@ -658,6 +658,17 @@ namespace IronyModManager.Services
         public virtual Task<bool> PurgeModPatchAsync(string collectionName)
         {
             return PurgeModDirectoryAsync(GenerateCollectionPatchName(collectionName));
+        }
+
+        /// <summary>
+        /// Queries the contains achievements.
+        /// </summary>
+        /// <param name="query">The query.</param>
+        /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
+        public virtual bool QueryContainsAchievements(string query)
+        {
+            var result = searchParser.Parse(languageService.GetSelected().Abrv, query);
+            return result != null && result.AchievementCompatible != null && result.AchievementCompatible.Result.HasValue;
         }
 
         /// <summary>

@@ -4,7 +4,7 @@
 // Created          : 10-26-2021
 //
 // Last Modified By : Mario
-// Last Modified On : 08-12-2022
+// Last Modified On : 11-12-2022
 // ***********************************************************************
 // <copyright file="Parser.cs" company="Mario">
 //     Mario
@@ -20,6 +20,7 @@ using IronyModManager.DI;
 using IronyModManager.Parser.Common.Mod.Search;
 using IronyModManager.Parser.Common.Mod.Search.Converter;
 using IronyModManager.Shared;
+using IronyModManager.Shared.Cache;
 
 namespace IronyModManager.Parser.Mod.Search
 {
@@ -33,6 +34,21 @@ namespace IronyModManager.Parser.Mod.Search
         #region Fields
 
         /// <summary>
+        /// The cache prefix
+        /// </summary>
+        private const string CachePrefix = "SearchParserEntry-";
+
+        /// <summary>
+        /// The cache region
+        /// </summary>
+        private const string CacheRegion = "SearchParserRegion";
+
+        /// <summary>
+        /// The maximum records to cache
+        /// </summary>
+        private const int MaxRecordsToCache = 1000;
+
+        /// <summary>
         /// The name property
         /// </summary>
         private const string NameProperty = "name";
@@ -41,6 +57,11 @@ namespace IronyModManager.Parser.Mod.Search
         /// The search parser properties
         /// </summary>
         private static IEnumerable<PropertyInfo> searchParserProperties;
+
+        /// <summary>
+        /// The cache
+        /// </summary>
+        private readonly ICache cache;
 
         /// <summary>
         /// The converters
@@ -64,14 +85,16 @@ namespace IronyModManager.Parser.Mod.Search
         /// <summary>
         /// Initializes a new instance of the <see cref="Parser" /> class.
         /// </summary>
+        /// <param name="cache">The cache.</param>
         /// <param name="logger">The logger.</param>
         /// <param name="converters">The converters.</param>
         /// <param name="localizationRegistry">The localization registry.</param>
-        public Parser(ILogger logger, IEnumerable<ITypeConverter<object>> converters, ILocalizationRegistry localizationRegistry)
+        public Parser(ICache cache, ILogger logger, IEnumerable<ITypeConverter<object>> converters, ILocalizationRegistry localizationRegistry)
         {
             this.logger = logger;
             this.converters = converters;
             this.localizationRegistry = localizationRegistry;
+            this.cache = cache;
         }
 
         #endregion Constructors
@@ -86,6 +109,13 @@ namespace IronyModManager.Parser.Mod.Search
         /// <returns>ISearchParserResult.</returns>
         public ISearchParserResult Parse(string locale, string text)
         {
+            var cacheKey = GetCacheKey(text);
+            var cacheEntry = cache.Get<CacheEntry>(new CacheGetParameters() { Region = CacheRegion, Key = cacheKey });
+            if (cacheEntry != null)
+            {
+                return cacheEntry.SearchResult;
+            }
+
             var orStatementSeparator = localizationRegistry.GetTranslation(locale, LocalizationResources.FilterOperators.OrStatementSeparator);
             var valueSeparator = localizationRegistry.GetTranslation(locale, LocalizationResources.FilterOperators.ValueSeparator);
             var statementSeparator = localizationRegistry.GetTranslation(locale, LocalizationResources.FilterOperators.StatementSeparator);
@@ -118,6 +148,7 @@ namespace IronyModManager.Parser.Mod.Search
             {
                 var result = DIResolver.Get<ISearchParserResult>();
                 result.Name = parseOrStatements((text ?? string.Empty).ToLowerInvariant().Trim());
+                cache.Set(new CacheAddParameters<CacheEntry>() { MaxItems = MaxRecordsToCache, Region = CacheRegion, Key = cacheKey, Value = new CacheEntry(result) });
                 return result;
             }
             try
@@ -195,6 +226,7 @@ namespace IronyModManager.Parser.Mod.Search
                     }
                     if (!nothingSet)
                     {
+                        cache.Set(new CacheAddParameters<CacheEntry>() { MaxItems = MaxRecordsToCache, Region = CacheRegion, Key = cacheKey, Value = new CacheEntry(result) });
                         return result;
                     }
                 }
@@ -205,6 +237,7 @@ namespace IronyModManager.Parser.Mod.Search
             }
             var emptyResult = DIResolver.Get<ISearchParserResult>();
             emptyResult.Name = parseOrStatements(text.ToLowerInvariant().Trim());
+            cache.Set(new CacheAddParameters<CacheEntry>() { MaxItems = MaxRecordsToCache, Region = CacheRegion, Key = cacheKey, Value = new CacheEntry(emptyResult) });
             return emptyResult;
         }
 
@@ -218,6 +251,50 @@ namespace IronyModManager.Parser.Mod.Search
             return searchParserProperties;
         }
 
+        /// <summary>
+        /// Gets the cache key.
+        /// </summary>
+        /// <param name="text">The text.</param>
+        /// <returns>System.String.</returns>
+        private string GetCacheKey(string text)
+        {
+            text ??= string.Empty;
+            return $"{CachePrefix}{text.Replace(" ", string.Empty)}";
+        }
+
         #endregion Methods
+
+        #region Classes
+
+        /// <summary>
+        /// Class CacheEntry.
+        /// </summary>
+        private class CacheEntry
+        {
+            #region Constructors
+
+            /// <summary>
+            /// Initializes a new instance of the <see cref="CacheEntry"/> class.
+            /// </summary>
+            /// <param name="searchResult">The search result.</param>
+            public CacheEntry(ISearchParserResult searchResult)
+            {
+                SearchResult = searchResult;
+            }
+
+            #endregion Constructors
+
+            #region Properties
+
+            /// <summary>
+            /// Gets or sets the search result.
+            /// </summary>
+            /// <value>The search result.</value>
+            public ISearchParserResult SearchResult { get; set; }
+
+            #endregion Properties
+        }
+
+        #endregion Classes
     }
 }

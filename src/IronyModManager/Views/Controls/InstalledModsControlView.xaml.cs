@@ -4,7 +4,7 @@
 // Created          : 02-29-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 11-05-2022
+// Last Modified On : 11-12-2022
 // ***********************************************************************
 // <copyright file="InstalledModsControlView.xaml.cs" company="Mario">
 //     Mario
@@ -117,7 +117,7 @@ namespace IronyModManager.Views.Controls
                             mods = mods.Where(p => p.Files == null || !p.Files.Any() || p.AchievementStatus == AchievementStatus.NotEvaluated).ToList();
                             if (mods.Any())
                             {
-                                mbus.Publish(new EvalModAchievementsCompatibilityEvent(mods));
+                                Task.Run(() => mbus.Publish(new EvalModAchievementsCompatibilityEvent(mods)));
                             }
                         }
                     }

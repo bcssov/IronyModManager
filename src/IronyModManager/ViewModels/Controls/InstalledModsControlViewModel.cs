@@ -4,7 +4,7 @@
 // Created          : 02-29-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 11-05-2022
+// Last Modified On : 11-12-2022
 // ***********************************************************************
 // <copyright file="InstalledModsControlViewModel.cs" company="Mario">
 //     Mario
@@ -27,12 +27,14 @@ using IronyModManager.Common;
 using IronyModManager.Common.ViewModels;
 using IronyModManager.Implementation.Actions;
 using IronyModManager.Implementation.MessageBus;
+using IronyModManager.Implementation.MessageBus.Events;
 using IronyModManager.Implementation.Overlay;
 using IronyModManager.Localization;
 using IronyModManager.Localization.Attributes;
 using IronyModManager.Models.Common;
 using IronyModManager.Services.Common;
 using IronyModManager.Shared;
+using Nito.AsyncEx;
 using ReactiveUI;
 
 namespace IronyModManager.ViewModels.Controls
@@ -71,6 +73,11 @@ namespace IronyModManager.ViewModels.Controls
         /// The preferences service
         /// </summary>
         private readonly IAppStateService appStateService;
+
+        /// <summary>
+        /// The eval lock
+        /// </summary>
+        private readonly AsyncLock evalLock = new();
 
         /// <summary>
         /// The eval mod achievements compatibility handler
@@ -641,6 +648,10 @@ namespace IronyModManager.ViewModels.Controls
                     });
                 }
                 var searchString = FilterMods.Text ?? string.Empty;
+                if (Mods != null && Mods.Any(p => p.AchievementStatus == AchievementStatus.NotEvaluated) && modService.QueryContainsAchievements(searchString))
+                {
+                    await MessageBus.PublishAsync(new EvalModAchievementsCompatibilityEvent(Mods, skipOverlay, true));
+                }
                 FilteredMods = modService.FilterMods(Mods, searchString).ToObservableCollection();
                 AllModsEnabled = FilteredMods.Where(p => p.IsValid).Any() && FilteredMods.Where(p => p.IsValid).All(p => p.IsSelected);
 
@@ -738,32 +749,45 @@ namespace IronyModManager.ViewModels.Controls
         /// Eval mod achievement as an asynchronous operation.
         /// </summary>
         /// <param name="mods">The mods.</param>
+        /// <param name="hasPriority">if set to <c>true</c> [has priority].</param>
         /// <returns>A Task representing the asynchronous operation.</returns>
-        protected virtual async Task EvalModAchievementAsync(IEnumerable<IMod> mods)
+        protected virtual async Task EvalModAchievementAsync(IEnumerable<IMod> mods, bool hasPriority = false)
         {
             async Task performEval(CancellationToken token)
             {
-                await Task.Delay(100, token);
-                if (!token.IsCancellationRequested)
+                if (!hasPriority)
+                {
+                    await Task.Delay(100, token);
+                }
+                if (!token.IsCancellationRequested || hasPriority)
                 {
                     if (evalModsQueue.Any())
                     {
                         var col = evalModsQueue.Distinct().ToList();
                         evalModsQueue.Clear();
                         await modService.PopulateModFilesAsync(col);
-                        modService.EvalAchievementCompatibility(col);                        
+                        modService.EvalAchievementCompatibility(col);
                     }
                 }
             }
-            if (evalModToken != null)
-            {
-                evalModToken.Cancel();
-            }
+            evalModToken?.Cancel();
             evalModToken = new CancellationTokenSource();
             if (mods.Any())
             {
+                IDisposable mutex = null;
+                if (hasPriority)
+                {
+                    mutex = await evalLock.LockAsync();
+                }
                 mods.ToList().ForEach(m => evalModsQueue.Add(m));
-                await performEval(evalModToken.Token);
+                try
+                {
+                    await performEval(evalModToken.Token);
+                }
+                catch (OperationCanceledException)
+                {
+                }
+                mutex?.Dispose();
             }
         }
 
@@ -886,9 +910,13 @@ namespace IronyModManager.ViewModels.Controls
                 }
             }).DisposeWith(disposables);
 
-            this.WhenAnyValue(s => s.FilterMods.Text).Subscribe(s =>
+            this.WhenAnyValue(s => s.FilterMods.Text).Subscribe(async s =>
             {
                 var searchString = FilterMods.Text ?? string.Empty;
+                if (Mods != null && Mods.Any(p => p.AchievementStatus == AchievementStatus.NotEvaluated) && modService.QueryContainsAchievements(searchString))
+                {
+                    await MessageBus.PublishAsync(new EvalModAchievementsCompatibilityEvent(Mods, true, true));
+                }
                 FilteredMods = modService.FilterMods(Mods, searchString);
                 AllModsEnabled = FilteredMods != null && FilteredMods.Where(p => p.IsValid).Any() && FilteredMods.Where(p => p.IsValid).All(p => p.IsSelected);
                 ApplyDefaultSort();
@@ -963,9 +991,18 @@ namespace IronyModManager.ViewModels.Controls
                 await CheckNewModsAsync().ConfigureAwait(true);
             }).DisposeWith(disposables);
 
-            evalModAchievementsCompatibilityHandler.Subscribe(s =>
+            evalModAchievementsCompatibilityHandler.Subscribe(async s =>
             {
-                Task.Run(() => EvalModAchievementAsync(s.Mods).ConfigureAwait(false));
+                var id = idGenerator.GetNextId();
+                if (s.ShowOverlay)
+                {
+                    await TriggerOverlayAsync(id, true, localizationManager.GetResource(LocalizationResources.Installed_Mods.LoadingMods));
+                }
+                await EvalModAchievementAsync(s.Mods, s.HasPriority).ConfigureAwait(false);
+                if (s.ShowOverlay)
+                {
+                    await TriggerOverlayAsync(id, false);
+                }
             }).DisposeWith(disposables);
 
             base.OnActivated(disposables);
