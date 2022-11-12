@@ -4,7 +4,7 @@
 // Created          : 01-21-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 11-05-2022
+// Last Modified On : 11-12-2022
 // ***********************************************************************
 // <copyright file="MapperFinder.cs" company="Mario">
 //     Mario
@@ -47,7 +47,7 @@ namespace IronyModManager.DI.Mappers
         /// <summary>
         /// The type map cache
         /// </summary>
-        private static ConcurrentDictionary<TypeMap, Tuple<bool, TypeMapConfiguration[]>> typeMapCache = new();
+        private static readonly ConcurrentDictionary<TypeMap, Tuple<bool, TypeMapConfiguration[]>> typeMapCache = new();
 
         #endregion Fields
 
