@@ -4,7 +4,7 @@
 // Created          : 06-19-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 07-20-2022
+// Last Modified On : 11-13-2022
 // ***********************************************************************
 // <copyright file="ModMergeExporter.cs" company="Mario">
 //     Mario
@@ -117,9 +117,28 @@ namespace IronyModManager.IO.Mods
                     }
                 }
             }
-            if (!Directory.Exists(Path.GetDirectoryName(outPath)))
+            // Potentially malicious if you have a directory named events\test.txt folder
+            if (Directory.Exists(outPath) && string.IsNullOrWhiteSpace(Path.GetExtension(outPath)))
             {
-                Directory.CreateDirectory(Path.GetDirectoryName(outPath));
+                // Some really crap mods seem to have "common" file instead of folder ie
+                return Task.FromResult(false);
+            }
+            var outDir = Path.GetDirectoryName(outPath);
+            if (!Directory.Exists(outDir))
+            {
+                var partialModDirectory = Path.GetDirectoryName(modFile);
+                var partialExportPath = Path.Combine(exportPath, partialModDirectory);
+                while (!string.IsNullOrWhiteSpace(partialModDirectory))
+                {
+                    // Some really crap mods seem to have "common" file instead of folder ie
+                    if (File.Exists(partialExportPath))
+                    {
+                        DiskOperations.DeleteFile(partialExportPath);
+                    }
+                    partialModDirectory = Path.GetDirectoryName(partialModDirectory);
+                    partialExportPath = Path.Combine(exportPath, partialModDirectory);
+                }
+                Directory.CreateDirectory(outDir);
             }
             if (File.Exists(outPath))
             {
