@@ -4,7 +4,7 @@
 // Created          : 04-04-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 11-09-2022
+// Last Modified On : 11-14-2022
 // ***********************************************************************
 // <copyright file="BaseDefinitionInfoProvider.cs" company="Mario">
 //     Mario
@@ -41,6 +41,21 @@ namespace IronyModManager.IO.Mods.InfoProviders
         /// The lios name
         /// </summary>
         protected const string LIOSName = "zzz_";
+
+        /// <summary>
+        /// The ut f8 body name
+        /// </summary>
+        private const string UTF8BodyName = "utf-8";
+
+        /// <summary>
+        /// The UTF8
+        /// </summary>
+        private static Encoding utf8 = null;
+
+        /// <summary>
+        /// The UTF8 bom
+        /// </summary>
+        private static Encoding utf8Bom = null;
 
         #endregion Fields
 
@@ -99,9 +114,9 @@ namespace IronyModManager.IO.Mods.InfoProviders
             EnsureValidType(definition);
             if (!definition.ParentDirectory.StartsWith(Shared.Constants.LocalizationDirectory, StringComparison.OrdinalIgnoreCase))
             {
-                return new UTF8Encoding(false);
+                return GetUTF8Encoding();
             }
-            return new UTF8Encoding(true);
+            return GetUTF8BomEncoding();
         }
 
         /// <summary>
@@ -330,9 +345,29 @@ namespace IronyModManager.IO.Mods.InfoProviders
         {
             if (encodingInfo != null)
             {
-                return encodingInfo.Encoding.Equals(Encoding.UTF8.EncodingName, StringComparison.OrdinalIgnoreCase) && encodingInfo.HasBOM;
+                return encodingInfo.Encoding.Equals(UTF8BodyName, StringComparison.OrdinalIgnoreCase) && encodingInfo.HasBOM;
             }
             return false;
+        }
+
+        /// <summary>
+        /// Gets the ut f8 bom encoding.
+        /// </summary>
+        /// <returns>Encoding.</returns>
+        private Encoding GetUTF8BomEncoding()
+        {
+            utf8Bom ??= new UTF8Encoding(true);
+            return utf8Bom;
+        }
+
+        /// <summary>
+        /// Gets the ut f8 encoding.
+        /// </summary>
+        /// <returns>Encoding.</returns>
+        private Encoding GetUTF8Encoding()
+        {
+            utf8 ??= new UTF8Encoding(false);
+            return utf8;
         }
 
         #endregion Methods
