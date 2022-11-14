@@ -4,9 +4,11 @@
 		<title>Irony Mod Manager</title>
 		<language>en</language>
 		<item>
-			<title>1.24.81</title>
+			<title>1.24.85</title>
 			<description>## Current Release Notes
-* Minor fixes
+* Fix partially working achievements filter (caused by optimized mod loading changes)
+* Basic mod merge fixes (caused by badly made mods)
+* Fix broken encoding detection (a fix for a fix)
 
 ## Release Notes 1.24
 * Update dependencies
@@ -17,13 +19,15 @@
 * Add support for metadata descriptor type games (Victoria 3 support)
 * Add option to ignore update
 * Improve mod loading performance</description>
-			<pubDate>Fri, 11 Nov 2022 06:18:30 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.24.81/linux-x64.zip" sparkle:version="1.24.81.60342" sparkle:shortVersionString="1.24.81" length="89877493" sparkle:os="linux" type="application/zip" sparkle:signature="mHYHeeUC6b3JDAnVB96RQEY9h5CQhpg+DnECZVgJ0/phgQkvC+DEQh3Lb2zqD5ruONs+b4jOJFSg8RvAu4i6CA=="/>
+			<pubDate>Mon, 14 Nov 2022 04:54:28 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.24.85/linux-x64.zip" sparkle:version="1.24.85.54798" sparkle:shortVersionString="1.24.85" length="89880000" sparkle:os="linux" type="application/zip" sparkle:signature="+LZh6OGAFKacLWCYhs8ppF5B8J7xhyHOuyZzVCPwMutMOfxJNPm61qz89SEcYSlsNnmblNCJrsp21TB3XOS/BA=="/>
 		</item>
 		<item>
-			<title>1.24.81</title>
+			<title>1.24.85</title>
 			<description>## Current Release Notes
-* Minor fixes
+* Fix partially working achievements filter (caused by optimized mod loading changes)
+* Basic mod merge fixes (caused by badly made mods)
+* Fix broken encoding detection (a fix for a fix)
 
 ## Release Notes 1.24
 * Update dependencies
@@ -34,13 +38,15 @@
 * Add support for metadata descriptor type games (Victoria 3 support)
 * Add option to ignore update
 * Improve mod loading performance</description>
-			<pubDate>Fri, 11 Nov 2022 06:18:37 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.24.81/osx-x64.zip" sparkle:version="1.24.81.60342" sparkle:shortVersionString="1.24.81" length="93039508" sparkle:os="osx" type="application/zip" sparkle:signature="wqvXReZfz0J6e3HVZ5rM/gN3UKAvMzaRY5tX10gdpKoKvMr27su0qsl1zxLtT5uZT1M7b8hsecjcq9xSdkU/AQ=="/>
+			<pubDate>Mon, 14 Nov 2022 04:54:34 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.24.85/osx-x64.zip" sparkle:version="1.24.85.54798" sparkle:shortVersionString="1.24.85" length="93041898" sparkle:os="osx" type="application/zip" sparkle:signature="RLLK52BaMLFl+wn9gGU/WbYROHapXiQBCABMZNFXV5nV2bwsDVCIcTFPv3wikzhIlPqJxvUaMKvjS5lhx+8GBg=="/>
 		</item>
 		<item>
-			<title>1.24.81</title>
+			<title>1.24.85</title>
 			<description>## Current Release Notes
-* Minor fixes
+* Fix partially working achievements filter (caused by optimized mod loading changes)
+* Basic mod merge fixes (caused by badly made mods)
+* Fix broken encoding detection (a fix for a fix)
 
 ## Release Notes 1.24
 * Update dependencies
@@ -51,13 +57,15 @@
 * Add support for metadata descriptor type games (Victoria 3 support)
 * Add option to ignore update
 * Improve mod loading performance</description>
-			<pubDate>Fri, 11 Nov 2022 06:18:43 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.24.81/win-x64-setup.zip" sparkle:version="1.24.81.60342" sparkle:shortVersionString="1.24.81" length="71217511" sparkle:os="windows" type="application/zip" sparkle:signature="jhFCDbMaM6Tenw9aOWa58KHiorT6ZBQN5QSNfT3iVp+fsuCtMcndHQRQIeXUHBYuVdgKEldR0eltM5gLxWRUBA=="/>
+			<pubDate>Mon, 14 Nov 2022 04:54:41 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.24.85/win-x64-setup.zip" sparkle:version="1.24.85.54798" sparkle:shortVersionString="1.24.85" length="71225770" sparkle:os="windows" type="application/zip" sparkle:signature="UqS6WkSBuTd3pt9kHpkJQDoouHjoO7pR3eeKY+nNt4Uk/x4OYuhJn6MK12h3EUP1GOnxPrlM5vqK2FrrHwNvAg=="/>
 		</item>
 		<item>
-			<title>1.24.81</title>
+			<title>1.24.85</title>
 			<description>## Current Release Notes
-* Minor fixes
+* Fix partially working achievements filter (caused by optimized mod loading changes)
+* Basic mod merge fixes (caused by badly made mods)
+* Fix broken encoding detection (a fix for a fix)
 
 ## Release Notes 1.24
 * Update dependencies
@@ -68,8 +76,8 @@
 * Add support for metadata descriptor type games (Victoria 3 support)
 * Add option to ignore update
 * Improve mod loading performance</description>
-			<pubDate>Fri, 11 Nov 2022 06:18:43 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.24.81/win-x64.zip" sparkle:version="1.24.81.60342" sparkle:shortVersionString="1.24.81" length="104612267" sparkle:os="windows" type="application/zip" sparkle:signature="/guqu8qkWu3KMkhmtzf4tQ3pz7k3S0Kk0w7D7LuPBB2y4Mm67nATIULjLgE7amntkauwJRO7kQJpmhQOY17mAA=="/>
+			<pubDate>Mon, 14 Nov 2022 04:54:41 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.24.85/win-x64.zip" sparkle:version="1.24.85.54798" sparkle:shortVersionString="1.24.85" length="104614627" sparkle:os="windows" type="application/zip" sparkle:signature="gNm7wnv9IDQOlHe8vxeEexcVB06J0Zfh2nNKR+7iUf7z4kMgDYO88FidDTe3xzlstPHEdCS7peRP/mwYSClTDA=="/>
 		</item>
 	</channel>
 </rss>
