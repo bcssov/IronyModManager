@@ -252,7 +252,7 @@ namespace IronyModManager.IO.Tests
         public void IsValidEncoding_should_return_true_to_valid_name_list_query()
         {
             var service = GetService();
-            var result = service.IsValidEncoding("common\\name_lists", new Shared.EncodingInfo() { Encoding = Encoding.UTF8.EncodingName, HasBOM = true });
+            var result = service.IsValidEncoding("common\\name_lists", new Shared.EncodingInfo() { Encoding = Encoding.UTF8.BodyName, HasBOM = true });
             result.Should().BeTrue();
         }
 
@@ -263,7 +263,7 @@ namespace IronyModManager.IO.Tests
         public void IsValidEncoding_should_return_false_to_non_bom_name_list_query()
         {
             var service = GetService();
-            var result = service.IsValidEncoding("common\\name_lists", new Shared.EncodingInfo() { Encoding = Encoding.UTF8.EncodingName, HasBOM = false });
+            var result = service.IsValidEncoding("common\\name_lists", new Shared.EncodingInfo() { Encoding = Encoding.UTF8.BodyName, HasBOM = false });
             result.Should().BeFalse();
         }
 
@@ -274,7 +274,7 @@ namespace IronyModManager.IO.Tests
         public void IsValidEncoding_should_return_true_to_valid_localization_query()
         {
             var service = GetService();
-            var result = service.IsValidEncoding("localisation", new Shared.EncodingInfo() { Encoding = Encoding.UTF8.EncodingName, HasBOM = true });
+            var result = service.IsValidEncoding("localisation", new Shared.EncodingInfo() { Encoding = Encoding.UTF8.BodyName, HasBOM = true });
             result.Should().BeTrue();
         }
 
@@ -285,7 +285,7 @@ namespace IronyModManager.IO.Tests
         public void IsValidEncoding_should_return_false_to_non_bom_localisation_query()
         {
             var service = GetService();
-            var result = service.IsValidEncoding("localisation", new Shared.EncodingInfo() { Encoding = Encoding.UTF8.EncodingName, HasBOM = false });
+            var result = service.IsValidEncoding("localisation", new Shared.EncodingInfo() { Encoding = Encoding.UTF8.BodyName, HasBOM = false });
             result.Should().BeFalse();
         }
 
@@ -307,7 +307,7 @@ namespace IronyModManager.IO.Tests
         public void IsValidEncoding_should_return_true_to_all_other()
         {
             var service = GetService();
-            var result = service.IsValidEncoding("other_folder", new Shared.EncodingInfo() { Encoding = Encoding.ASCII.EncodingName, HasBOM = false });
+            var result = service.IsValidEncoding("other_folder", new Shared.EncodingInfo() { Encoding = Encoding.ASCII.BodyName, HasBOM = false });
             result.Should().BeTrue();
         }
 
