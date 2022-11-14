@@ -4,7 +4,7 @@
 // Created          : 09-17-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 10-26-2022
+// Last Modified On : 11-14-2022
 // ***********************************************************************
 // <copyright file="IronySparkleUpdater.cs" company="Mario">
 //     Mario
@@ -13,7 +13,6 @@
 // ***********************************************************************
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
@@ -67,6 +66,7 @@ namespace IronyModManager.Implementation.Updater
             IsInstallerVersion = isInstallerVersion;
             this.updaterService = updaterService;
             this.appAction = appAction;
+            DownloadFinished += OnDownloadFinished;
         }
 
         #endregion Constructors
@@ -103,8 +103,6 @@ namespace IronyModManager.Implementation.Updater
         {
             UpdateDownloading = true;
             await base.InitAndBeginDownload(item);
-            UpdateDownloader.DownloadFileCompleted -= OnDownloadFinished;
-            UpdateDownloader.DownloadFileCompleted += OnDownloadFinished;
         }
 
         /// <summary>
@@ -127,7 +125,7 @@ namespace IronyModManager.Implementation.Updater
         {
             if (!disposed && disposing)
             {
-                UpdateDownloader.DownloadFileCompleted -= OnDownloadFinished;
+                DownloadFinished -= OnDownloadFinished;
             }
             disposed = true;
             base.Dispose(disposing);
@@ -195,9 +193,9 @@ namespace IronyModManager.Implementation.Updater
         /// <summary>
         /// Handles the <see cref="E:DownloadFinished" /> event.
         /// </summary>
-        /// <param name="sender">The sender.</param>
-        /// <param name="e">The <see cref="AsyncCompletedEventArgs" /> instance containing the event data.</param>
-        private void OnDownloadFinished(object sender, AsyncCompletedEventArgs e)
+        /// <param name="item">The item.</param>
+        /// <param name="path">The path.</param>
+        private void OnDownloadFinished(AppCastItem item, string path)
         {
             UpdateDownloading = false;
         }
