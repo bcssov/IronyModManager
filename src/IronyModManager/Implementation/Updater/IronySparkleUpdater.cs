@@ -4,7 +4,7 @@
 // Created          : 09-17-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 11-14-2022
+// Last Modified On : 11-17-2022
 // ***********************************************************************
 // <copyright file="IronySparkleUpdater.cs" company="Mario">
 //     Mario
@@ -156,7 +156,7 @@ namespace IronyModManager.Implementation.Updater
                 }
                 else
                 {
-                    ProcessRunner.EnsurePermissions(GetUpdaterExeFileNameParam(extractPath));
+                    ProcessRunner.EnsurePermissions(GetUpdaterExeFileName(extractPath));
                     if (await appAction.RunAsync(GetUpdaterExeFileName(extractPath)))
                     {
                         await appAction.ExitAppAsync();
@@ -178,16 +178,6 @@ namespace IronyModManager.Implementation.Updater
                 return Path.Combine(path, "IronyModManager.Updater.exe");
             }
             return Path.Combine(path, "IronyModManager.Updater");
-        }
-
-        /// <summary>
-        /// Gets the updater executable file name parameter.
-        /// </summary>
-        /// <param name="path">The path.</param>
-        /// <returns>System.String.</returns>
-        private string GetUpdaterExeFileNameParam(string path)
-        {
-            return $"\"{GetUpdaterExeFileName(path)}\"";
         }
 
         /// <summary>

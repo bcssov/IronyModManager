@@ -4,7 +4,7 @@
 // Created          : 07-11-2022
 //
 // Last Modified By : Mario
-// Last Modified On : 08-04-2022
+// Last Modified On : 11-17-2022
 // ***********************************************************************
 // <copyright file="SteamHandler.cs" company="Mario">
 //     Mario
@@ -120,6 +120,7 @@ namespace IronyModManager.IO.Platforms
         {
             SetAppId(appId);
 
+            var canProceed = true;
             if (!SteamAPI.IsSteamRunning())
             {
                 if (!await OpenAsync(SteamLaunch))
@@ -131,11 +132,16 @@ namespace IronyModManager.IO.Platforms
                 {
                     if (runCheckAttempts > MaxAttempts)
                     {
+                        canProceed = false;
                         break;
                     }
                     await Task.Delay(Delay);
                     runCheckAttempts++;
                 }
+            }
+            if (!canProceed)
+            {
+                return false;
             }
             var result = await InitializeAndValidateAsync();
             var initCheckAttempts = 0;

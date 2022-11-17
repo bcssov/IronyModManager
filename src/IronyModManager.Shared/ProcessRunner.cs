@@ -4,7 +4,7 @@
 // Created          : 07-11-2022
 //
 // Last Modified By : Mario
-// Last Modified On : 10-26-2022
+// Last Modified On : 11-17-2022
 // ***********************************************************************
 // <copyright file="ProcessRunner.cs" company="Mario">
 //     Mario
@@ -38,9 +38,10 @@ namespace IronyModManager.Shared
             {
                 return;
             }
+            var wrappedPath = WrapPath(path);
             if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux) || RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
             {
-                var sanitizedCmd = path.Replace("\"", "\\\"");
+                var sanitizedCmd = wrappedPath.Replace("\"", "\\\"");
                 var process = new Process
                 {
                     StartInfo = new ProcessStartInfo
@@ -100,9 +101,24 @@ namespace IronyModManager.Shared
                     WorkingDirectory = Path.GetDirectoryName(path),
                     UseShellExecute = RuntimeInformation.IsOSPlatform(OSPlatform.Windows)
                 });
-                if (waitForExit)
+                if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
                 {
-                    process.WaitForExit(120 * 1000);
+                    if (waitForExit)
+                    {
+                        process.WaitForExit(120 * 1000);
+                    }
+                }
+                else
+                {
+                    var now = DateTime.UtcNow;
+                    while (!process.HasExited)
+                    {
+                        if (DateTime.UtcNow.Subtract(now).TotalSeconds > 120)
+                        {
+                            process.Kill(true);
+                            break;
+                        }
+                    }
                 }
             }
             else
@@ -114,9 +130,24 @@ namespace IronyModManager.Shared
                     WorkingDirectory = Path.GetDirectoryName(path),
                     UseShellExecute = RuntimeInformation.IsOSPlatform(OSPlatform.Windows)
                 });
-                if (waitForExit)
+                if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
                 {
-                    process.WaitForExit(120 * 1000);
+                    if (waitForExit)
+                    {
+                        process.WaitForExit(120 * 1000);
+                    }
+                }
+                else
+                {
+                    var now = DateTime.UtcNow;
+                    while (!process.HasExited)
+                    {
+                        if (DateTime.UtcNow.Subtract(now).TotalSeconds > 120)
+                        {
+                            process.Kill(true);
+                            break;
+                        }
+                    }
                 }
             }
         }
@@ -138,6 +169,16 @@ namespace IronyModManager.Shared
                 CreateNoWindow = true,
                 WindowStyle = ProcessWindowStyle.Hidden
             });
+        }
+
+        /// <summary>
+        /// Wraps the path.
+        /// </summary>
+        /// <param name="path">The path.</param>
+        /// <returns>System.String.</returns>
+        private static string WrapPath(string path)
+        {
+            return $"\"{path}\"";
         }
 
         #endregion Methods
