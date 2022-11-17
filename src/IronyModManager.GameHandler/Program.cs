@@ -72,6 +72,7 @@ namespace IronyModManager.GameHandler
                 {
                     Console.WriteLine("Checking whether steam is running using direct steam integration method.");
                     await handler.InitAsync(commandLineArgs.SteamAppId.GetValueOrDefault());
+                    await handler.ShutdownAPIAsync();
                 }
                 Console.WriteLine("Done exiting.");
                 Environment.Exit(0);

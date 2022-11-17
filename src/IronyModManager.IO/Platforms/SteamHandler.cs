@@ -14,7 +14,9 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using IronyModManager.IO.Common.Platforms;
 using IronyModManager.Shared;
@@ -51,6 +53,11 @@ namespace IronyModManager.IO.Platforms
         /// The maximum attempts
         /// </summary>
         private const int MaxAttempts = 60 * 4;
+
+        /// <summary>
+        /// The steam application identifier file
+        /// </summary>
+        private const string SteamAppIdFile = "steam_appid.txt";
 
         /// <summary>
         /// The steam launch
@@ -118,13 +125,14 @@ namespace IronyModManager.IO.Platforms
         /// <returns>A Task&lt;System.Boolean&gt; representing the asynchronous operation.</returns>
         public async Task<bool> InitAsync(long appId)
         {
-            SetAppId(appId);
+            await SetAppId(appId);
 
             var canProceed = true;
             if (!SteamAPI.IsSteamRunning())
             {
                 if (!await OpenAsync(SteamLaunch))
                 {
+                    CleanupAppId();
                     return false;
                 }
                 var runCheckAttempts = 0;
@@ -166,7 +174,29 @@ namespace IronyModManager.IO.Platforms
         public Task<bool> ShutdownAPIAsync()
         {
             SteamAPI.Shutdown();
+            CleanupAppId();
             return Task.FromResult(true);
+        }
+
+        /// <summary>
+        /// Cleanups the application identifier.
+        /// </summary>
+        private void CleanupAppId()
+        {
+            try
+            {
+                if (File.Exists(SteamAppIdFile))
+                {
+                    var fileInfo = new System.IO.FileInfo(SteamAppIdFile)
+                    {
+                        Attributes = FileAttributes.Normal
+                    };
+                    fileInfo.Delete();
+                }
+            }
+            catch
+            {
+            }
         }
 
         /// <summary>
@@ -215,12 +245,23 @@ namespace IronyModManager.IO.Platforms
         /// Sets the application identifier.
         /// </summary>
         /// <param name="appId">The application identifier.</param>
-        private void SetAppId(long appId)
+        /// <returns>System.Threading.Tasks.Task.</returns>
+        private async Task SetAppId(long appId)
         {
             var appIdValue = appId.ToString();
             Environment.SetEnvironmentVariable("SteamAppId", appIdValue);
             Environment.SetEnvironmentVariable("SteamOverlayGameId", appIdValue);
             Environment.SetEnvironmentVariable("SteamGameId", appIdValue);
+            if (!RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+            {
+                try
+                {
+                    await File.WriteAllTextAsync(SteamAppIdFile, appIdValue);
+                }
+                catch
+                {
+                }
+            }
         }
 
         #endregion Methods
