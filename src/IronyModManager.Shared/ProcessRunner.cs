@@ -4,7 +4,7 @@
 // Created          : 07-11-2022
 //
 // Last Modified By : Mario
-// Last Modified On : 11-17-2022
+// Last Modified On : 11-18-2022
 // ***********************************************************************
 // <copyright file="ProcessRunner.cs" company="Mario">
 //     Mario
@@ -110,13 +110,16 @@ namespace IronyModManager.Shared
                 }
                 else
                 {
-                    var now = DateTime.UtcNow;
-                    while (!process.HasExited)
+                    if (waitForExit)
                     {
-                        if (DateTime.UtcNow.Subtract(now).TotalSeconds > 120)
+                        var now = DateTime.UtcNow;
+                        while (!process.HasExited)
                         {
-                            process.Kill(true);
-                            break;
+                            if (DateTime.UtcNow.Subtract(now).TotalSeconds > 120)
+                            {
+                                process.Kill(true);
+                                break;
+                            }
                         }
                     }
                 }
@@ -139,13 +142,16 @@ namespace IronyModManager.Shared
                 }
                 else
                 {
-                    var now = DateTime.UtcNow;
-                    while (!process.HasExited)
+                    if (waitForExit)
                     {
-                        if (DateTime.UtcNow.Subtract(now).TotalSeconds > 120)
+                        var now = DateTime.UtcNow;
+                        while (!process.HasExited)
                         {
-                            process.Kill(true);
-                            break;
+                            if (DateTime.UtcNow.Subtract(now).TotalSeconds > 120)
+                            {
+                                process.Kill(true);
+                                break;
+                            }
                         }
                     }
                 }

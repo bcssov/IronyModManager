@@ -4,7 +4,7 @@
 // Created          : 02-12-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 10-29-2022
+// Last Modified On : 11-18-2022
 // ***********************************************************************
 // <copyright file="GameService.cs" company="Mario">
 //     Mario
@@ -364,11 +364,11 @@ namespace IronyModManager.Services
         public virtual bool IsContinueGameAllowed(IGame game)
         {
             const string saveGames = "save games";
-            var continueGameFile = Path.Combine(game.UserDirectory, ContinueGameFileName);
-            var parsed = reader.Read(continueGameFile);
-            if (parsed?.Count() == 1)
+            try
             {
-                try
+                var continueGameFile = Path.Combine(game.UserDirectory, ContinueGameFileName);
+                var parsed = reader.Read(continueGameFile);
+                if (parsed?.Count() == 1)
                 {
                     var data = JsonConvert.DeserializeObject<Models.ContinueGame>(string.Join(Environment.NewLine, parsed.FirstOrDefault().Content));
                     var path = string.IsNullOrWhiteSpace(data.Filename) ? data.Title : data.Filename;
@@ -408,10 +408,10 @@ namespace IronyModManager.Services
                     }
                     return files.Any(p => Path.GetFileNameWithoutExtension(p).Equals(fileWithoutExtension, StringComparison.OrdinalIgnoreCase) || Path.GetFileNameWithoutExtension(p).Equals(fileWithExtension, StringComparison.OrdinalIgnoreCase));
                 }
-                catch
-                {
-                    return false;
-                }
+            }
+            catch
+            {
+                return false;
             }
             return false;
         }
