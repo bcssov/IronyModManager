@@ -4,7 +4,7 @@
 // Created          : 01-10-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-05-2022
+// Last Modified On : 11-21-2022
 // ***********************************************************************
 // <copyright file="MainWindowViewModel.cs" company="Mario">
 //     Mario
@@ -223,6 +223,17 @@ namespace IronyModManager.ViewModels
         }
 
         /// <summary>
+        /// Free memory as an asynchronous operation.
+        /// </summary>
+        /// <returns>A Task representing the asynchronous operation.</returns>
+        protected async Task FreeMemoryAsync()
+        {
+            GC.Collect(GC.MaxGeneration, GCCollectionMode.Aggressive, true, true);
+            await Task.Delay(1000);
+            GC.Collect(GC.MaxGeneration, GCCollectionMode.Aggressive, true, true);
+        }
+
+        /// <summary>
         /// Initializes the overlay loop.
         /// </summary>
         protected void InitOverlayLoop()
@@ -262,7 +273,7 @@ namespace IronyModManager.ViewModels
                         default:
                             AnimateTransitionAsync(true).ConfigureAwait(true);
                             Main.Reset();
-                            GC.Collect();
+                            FreeMemoryAsync().ConfigureAwait(true);
                             break;
                     }
                 }).DisposeWith(disposables);

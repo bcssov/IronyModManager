@@ -4,7 +4,7 @@
 // Created          : 02-29-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 11-05-2022
+// Last Modified On : 11-21-2022
 // ***********************************************************************
 // <copyright file="ModHolderControlViewModel.cs" company="Mario">
 //     Mario
@@ -533,7 +533,7 @@ namespace IronyModManager.ViewModels.Controls
             {
                 var result = await modPatchCollectionService.GetModObjectsAsync(gameService.GetSelected(), CollectionMods.SelectedMods, CollectionMods.SelectedModCollection.Name, mode).ConfigureAwait(false);
                 // To stop people from whining
-                GC.Collect();
+                GC.Collect(GC.MaxGeneration, GCCollectionMode.Aggressive, true, true);
                 return result;
             }).ConfigureAwait(false);
             if (versions != null && versions.Any())
@@ -542,13 +542,13 @@ namespace IronyModManager.ViewModels.Controls
                 {
                     await gameIndexService.IndexDefinitionsAsync(game, versions, definitions);
                     // To stop people from whining
-                    GC.Collect();
+                    GC.Collect(GC.MaxGeneration, GCCollectionMode.Aggressive, true, true);
                 });
                 definitions = await Task.Run(async () =>
                 {
                     var result = await gameIndexService.LoadDefinitionsAsync(definitions, game, versions);
                     // To stop people from whining
-                    GC.Collect();
+                    GC.Collect(GC.MaxGeneration, GCCollectionMode.Aggressive, true, true);
                     return result;
                 }).ConfigureAwait(false);
             }
@@ -558,7 +558,7 @@ namespace IronyModManager.ViewModels.Controls
                 {
                     // To stop people from whining
                     var result = modPatchCollectionService.FindConflicts(definitions, CollectionMods.SelectedMods.Select(p => p.Name).ToList(), mode);
-                    GC.Collect();
+                    GC.Collect(GC.MaxGeneration, GCCollectionMode.Aggressive, true, true);
                     return result;
                 }
                 return null;
@@ -567,7 +567,7 @@ namespace IronyModManager.ViewModels.Controls
             {
                 var result = await modPatchCollectionService.InitializePatchStateAsync(conflicts, CollectionMods.SelectedModCollection.Name).ConfigureAwait(false);
                 // To stop people from whining
-                GC.Collect();
+                GC.Collect(GC.MaxGeneration, GCCollectionMode.Aggressive, true, true);
                 return result;
             }).ConfigureAwait(false);
             if (syncedConflicts != null)
