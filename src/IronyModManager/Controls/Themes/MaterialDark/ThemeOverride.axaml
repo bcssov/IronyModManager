@@ -19,6 +19,11 @@
     <StyleInclude Source="avares://IronyModManager/Controls/Themes/MaterialDark/ScrollBar.axaml"/>
     <StyleInclude Source="avares://IronyModManager/Controls/Themes/SearchPanel.axaml"/>
     <StyleInclude Source="avares://IronyModManager/Controls/Themes/MaterialDark/ScrollViewer.axaml"/>
+    <StyleInclude Source="avares://IronyModManager/Controls/Themes/MaterialDark/IronyCaptionButtons.axaml"/>
+    <StyleInclude Source="avares://IronyModManager/Controls/Themes/MaterialDark/IronyTitleBar.axaml"/>
+    <StyleInclude Source="avares://IronyModManager/Controls/Themes/MaterialDark/IronyResizeBorder.axaml"/>
+    <StyleInclude Source="avares://IronyModManager/Controls/Themes/MaterialDark/IronyClientSideDecorations.axaml"/>
+    <StyleInclude Source="avares://IronyModManager/Controls/Themes/MaterialDark/Window.axaml"/>
 
     <!--Individual styles-->
     <Style Selector="NotificationCard">
@@ -136,5 +141,9 @@
         <SolidColorBrush x:Key="IronyButtonBorderBrush" Color="{DynamicResource IronyButtonBorderColor}" />
         <Color x:Key="IronyBackgroundPopupColor">#424242</Color>
         <SolidColorBrush x:Key="IronyBackgroundPopupBrush" Color="{DynamicResource IronyBackgroundPopupColor}" />
+        <!-- Title bar related-->
+        <Color x:Key="SystemAccentColor">#FF0078D7</Color>
+        <Color x:Key="SystemBaseHighColor">#FFFFFFFF</Color>
+        <SolidColorBrush x:Key="SystemControlForegroundBaseHighBrush" Color="{StaticResource SystemBaseHighColor}" />
     </Styles.Resources>
 </Styles>

@@ -59,5 +59,15 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
 	<PackageReference Include="StrongNamer" Version="0.2.5" />
+	<PackageReference Include="Wanhjor.ObjectInspector" Version="0.4.0" />
+   </ItemGroup>
+  
+   <ItemGroup>
+     <Reference Include="Avalonia.Wayland">
+       <HintPath>..\..\References\Direct\Avalonia.Wayland.dll</HintPath>
+     </Reference>
+     <Reference Include="NWayland">
+       <HintPath>..\..\References\Direct\NWayland.dll</HintPath>
+     </Reference>
    </ItemGroup>
 </Project>

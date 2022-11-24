@@ -40,7 +40,7 @@
                     </controls:ComboBox>
                     <controls:ListBox Items="{Binding SelectedParentConflict.Children}" SelectedItem="SelectedConflict"
                              ScrollViewer.HorizontalScrollBarVisibility="Disabled" SelectionMode="Single" x:Name="conflictList"
-                             Height="{Binding $parent[Window].Height,
+                             Height="{Binding $parent[Window].ActualHeight,
                                      Converter={StaticResource MathConverter}
                                      ConverterParameter=x-160}" IsTextSearchEnabled="True">
                         <controls:ListBox.ItemTemplate>

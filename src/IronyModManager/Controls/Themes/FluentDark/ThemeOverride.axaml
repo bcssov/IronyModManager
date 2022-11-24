@@ -14,6 +14,12 @@
     <StyleInclude Source="avares://IronyModManager/Controls/Themes/FluentDark/ScrollBar.axaml"/>
     <StyleInclude Source="avares://IronyModManager/Controls/Themes/SearchPanel.axaml"/>
     <StyleInclude Source="avares://IronyModManager/Controls/Themes/FluentDark/ScrollViewer.axaml"/>
+    <StyleInclude Source="avares://IronyModManager/Controls/Themes/FluentDark/IronyCaptionButtons.axaml"/>
+    <StyleInclude Source="avares://IronyModManager/Controls/Themes/FluentDark/IronyTitleBar.axaml"/>
+    <StyleInclude Source="avares://IronyModManager/Controls/Themes/FluentDark/IronyResizeBorder.axaml"/>
+    <StyleInclude Source="avares://IronyModManager/Controls/Themes/FluentDark/IronyClientSideDecorations.axaml"/>    
+    <StyleInclude Source="avares://IronyModManager/Controls/Themes/FluentDark/Window.axaml"/>
+
 
     <!--Individual styles-->
     <Style Selector="NotificationCard">

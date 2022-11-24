@@ -4,7 +4,7 @@
 // Created          : 04-16-2021
 //
 // Last Modified By : Mario
-// Last Modified On : 10-28-2022
+// Last Modified On : 11-24-2022
 // ***********************************************************************
 // <copyright file="PlatformConfiguration.cs" company="Mario">
 //     Mario
@@ -15,6 +15,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using IronyModManager.Platform;
 using IronyModManager.Platform.Configuration;
 using IronyModManager.Shared.Configuration;
 using Microsoft.Extensions.Configuration;
@@ -107,6 +108,7 @@ namespace IronyModManager.Implementation.Config
         /// Gets the platform options.
         /// </summary>
         /// <returns>PlatformConfigurationOptions.</returns>
+        /// <exception cref="System.ArgumentException">Invalid display server type. Valida values are: x11, wayland or auto</exception>
         private PlatformConfigurationOptions GetPlatformOptions()
         {
             if (platformConfiguration == null)
@@ -114,6 +116,12 @@ namespace IronyModManager.Implementation.Config
                 platformConfiguration = new PlatformConfigurationOptions();
                 platformConfiguration.Logging.EnableAvaloniaLogger = configuration.GetSection("Logging").GetSection("EnableAvaloniaLogger").Get<bool?>().GetValueOrDefault();
                 var linuxSection = configuration.GetSection("LinuxOptions");
+                platformConfiguration.LinuxOptions.DisplayServer = linuxSection.GetSection("DisplayServer").Get<string>();
+                var displayServerState = LinuxDisplayServer.IsWayland(platformConfiguration.LinuxOptions.DisplayServer) || LinuxDisplayServer.IsX11(platformConfiguration.LinuxOptions.DisplayServer) || LinuxDisplayServer.IsAuto(platformConfiguration.LinuxOptions.DisplayServer);
+                if (!displayServerState)
+                {
+                    throw new ArgumentException("Invalid display server type. Valida values are: x11, wayland or auto");
+                }
                 platformConfiguration.LinuxOptions.UseGPU = linuxSection.GetSection("UseGPU").Get<bool?>();
                 platformConfiguration.LinuxOptions.UseEGL = linuxSection.GetSection("UseEGL").Get<bool?>();
                 platformConfiguration.LinuxOptions.UseDBusMenu = linuxSection.GetSection("UseDBusMenu").Get<bool?>();
@@ -121,6 +129,7 @@ namespace IronyModManager.Implementation.Config
                 platformConfiguration.Tooltips.Disable = configuration.GetSection("Tooltips").GetSection("Disable").Get<bool>();
                 platformConfiguration.Fonts.UseInbuiltFontsOnly = configuration.GetSection("Fonts").GetSection("UseInbuiltFontsOnly").Get<bool>();
                 platformConfiguration.Updates.Disable = configuration.GetSection("Updates").GetSection("Disable").Get<bool>();
+                platformConfiguration.TitleBar.Native = configuration.GetSection("TitleBar").GetSection("Native").Get<bool>();
             }
             return platformConfiguration;
         }

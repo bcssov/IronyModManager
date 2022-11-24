@@ -5,3 +5,7 @@ Had to build due to not being able to use custom fonts
 2. LiteDB
 Source: https://github.com/bcssov/LiteDB
 Had to build to remove hardcoded document size limit
+3. NWayland & Avalonia.Wayland
+Source: https://github.com/bcssov/NWayland
+Check Irony branch. The functionality is still a PR and not compatible with 0.10 (only 0.11 preview). Therefore the logic was ripped from there. 
+Depends on nuget: Wanhjor.ObjectInspector

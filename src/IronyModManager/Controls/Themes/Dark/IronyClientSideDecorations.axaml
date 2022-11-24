@@ -1,0 +1,27 @@
+<Styles xmlns="https://github.com/avaloniaui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:controls="clr-namespace:IronyModManager.Controls.ClientSideDecorations;assembly=IronyModManager">
+
+    <Style Selector="controls|IronyClientSideDecorations">
+        <Setter Property="Foreground" Value="{DynamicResource SystemControlForegroundBaseHighBrush}" />
+        <Setter Property="VerticalAlignment" Value="Stretch" />
+        <Setter Property="HorizontalAlignment" Value="Stretch" />
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="Template">
+            <ControlTemplate>
+                <Panel HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+                    <controls:IronyTitleBar />
+                    <controls:IronyResizeBorder x:Name="PART_ResizeTop" HorizontalAlignment="Stretch" VerticalAlignment="Top" Height="5" />
+                    <controls:IronyResizeBorder x:Name="PART_ResizeRight" HorizontalAlignment="Right" VerticalAlignment="Stretch" Width="5" />
+                    <controls:IronyResizeBorder x:Name="PART_ResizeBottom" HorizontalAlignment="Stretch" VerticalAlignment="Bottom" Height="5" />
+                    <controls:IronyResizeBorder x:Name="PART_ResizeLeft" HorizontalAlignment="Left" VerticalAlignment="Stretch" Width="5" />
+                    <controls:IronyResizeBorder x:Name="PART_ResizeTopLeft" HorizontalAlignment="Left" VerticalAlignment="Top" Width="5" Height="5" />
+                    <controls:IronyResizeBorder x:Name="PART_ResizeTopRight" HorizontalAlignment="Right" VerticalAlignment="Top" Width="5" Height="5" />
+                    <controls:IronyResizeBorder x:Name="PART_ResizeBottomLeft" HorizontalAlignment="Left" VerticalAlignment="Bottom" Width="5" Height="5" />
+                    <controls:IronyResizeBorder x:Name="PART_ResizeBottomRight" HorizontalAlignment="Right" VerticalAlignment="Bottom" Width="5" Height="5" />
+                </Panel>
+            </ControlTemplate>
+        </Setter>
+
+    </Style>
+</Styles>

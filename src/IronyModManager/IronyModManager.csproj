@@ -410,5 +410,8 @@
     <Reference Include="Avalonia.HtmlRenderer">
       <HintPath>..\..\References\Direct\Avalonia.HtmlRenderer.dll</HintPath>
     </Reference>
+    <Reference Include="Avalonia.Wayland">
+      <HintPath>..\..\References\Direct\Avalonia.Wayland.dll</HintPath>
+    </Reference>
   </ItemGroup>
 </Project>
