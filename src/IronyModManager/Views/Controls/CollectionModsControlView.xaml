@@ -17,7 +17,7 @@
         <converter:SteamModConverter x:Key="SteamModConverter" />
         <converter:TextTypeFontFamilyConverter x:Key="TextTypeFontFamilyConverter" />
     </UserControl.Resources>
-    <Panel Height="{Binding $parent[Window].Height, 
+    <Panel Height="{Binding $parent[Window].ActualHeight, 
          Converter={StaticResource MathConverter} 
          ConverterParameter=x-110}"
            Width="{Binding $parent[Window].Width, 
@@ -106,7 +106,7 @@
                         <ContentControl Content="{Binding HashReportView}"></ContentControl>
                         <controls:DragDropListBox Margin="0,10,0,0" Items="{Binding SelectedMods}" ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                                  x:Name="modList" Grid.Row="4" Grid.ColumnSpan="2"
-                                 MinHeight="{Binding $parent[Window].Height, 
+                                 MinHeight="{Binding $parent[Window].ActualHeight, 
                      Converter={StaticResource MathConverter} 
                      ConverterParameter=x-300}"
                                  SelectedItem="{Binding SelectedMod}"

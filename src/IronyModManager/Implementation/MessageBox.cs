@@ -4,7 +4,7 @@
 // Created          : 01-22-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 01-27-2022
+// Last Modified On : 11-24-2022
 // ***********************************************************************
 // <copyright file="MessageBox.cs" company="Mario">
 //     Mario
@@ -13,9 +13,11 @@
 // ***********************************************************************
 using System;
 using System.Collections.Generic;
+using Avalonia;
 using Avalonia.Controls;
 using IronyModManager.DI;
 using IronyModManager.Implementation.Actions;
+using IronyModManager.Platform.Configuration;
 using IronyModManager.Platform.Fonts;
 using IronyModManager.Services.Common;
 using IronyModManager.Shared;
@@ -57,6 +59,13 @@ namespace IronyModManager.Implementation
                 WindowIcon = StaticResources.GetAppIcon()
             };
             var window = new Controls.Themes.CustomMessageBox();
+            var config = DIResolver.Get<IPlatformConfiguration>().GetOptions();
+            if (!config.TitleBar.Native)
+            {
+                window.ExtendClientAreaToDecorationsHint = true;
+                window.ExtendClientAreaTitleBarHeightHint = 30d;
+                window.Padding = new Thickness(0, 30, 0, 0);
+            }
             window.DataContext = new MsBoxCustomViewModel(new MsCustomParams(parameters), window);
             return window;
         }
@@ -93,6 +102,13 @@ namespace IronyModManager.Implementation
                 WindowIcon = StaticResources.GetAppIcon()
             };
             var window = new Controls.Themes.StandardMessageBox(buttonEnum);
+            var config = DIResolver.Get<IPlatformConfiguration>().GetOptions();
+            if (!config.TitleBar.Native)
+            {
+                window.ExtendClientAreaToDecorationsHint = true;
+                window.ExtendClientAreaTitleBarHeightHint = 30d;
+                window.Padding = new Thickness(0, 30, 0, 0);
+            }
             window.DataContext = new MsBoxStandardViewModel(parameters, window);
             return new StandardMessageBox(window);
         }

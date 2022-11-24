@@ -4,7 +4,7 @@
 // Created          : 01-10-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 07-11-2022
+// Last Modified On : 11-24-2022
 // ***********************************************************************
 // <copyright file="App.xaml.cs" company="Mario">
 //     Mario
@@ -28,6 +28,7 @@ using IronyModManager.Implementation.Actions;
 using IronyModManager.Implementation.Overlay;
 using IronyModManager.Localization;
 using IronyModManager.Models.Common;
+using IronyModManager.Platform.Configuration;
 using IronyModManager.Platform.Fonts;
 using IronyModManager.Platform.Themes;
 using IronyModManager.Services.Common;
@@ -130,7 +131,7 @@ namespace IronyModManager
                 return value;
             }
             var stateService = DIResolver.Get<IWindowStateService>();
-            desktop.MainWindow.Height = validateSize(desktop.MainWindow.MinHeight, desktop.MainWindow.Height);
+            desktop.MainWindow.Height = validateSize(desktop.MainWindow.MinHeight, desktop.MainWindow.Height) + desktop.MainWindow.ExtendClientAreaTitleBarHeightHint;
             desktop.MainWindow.Width = validateSize(desktop.MainWindow.MinWidth, desktop.MainWindow.Width);
             if (!stateService.IsDefined() && !stateService.IsMaximized())
             {
@@ -207,7 +208,13 @@ namespace IronyModManager
             SetFontFamily(mainWindow);
             var vm = (MainWindowViewModel)resolver.ResolveViewModel<MainWindow>();
             mainWindow.DataContext = vm;
-            mainWindow.ExtendClientAreaChromeHints = Avalonia.Platform.ExtendClientAreaChromeHints.PreferSystemChrome;
+            var config = DIResolver.Get<IPlatformConfiguration>().GetOptions();
+            if (!config.TitleBar.Native)
+            {
+                mainWindow.ExtendClientAreaToDecorationsHint = true;
+                mainWindow.ExtendClientAreaTitleBarHeightHint = 30d;
+                mainWindow.Padding = new Thickness(0, 30, 0, 0);
+            }
             desktop.MainWindow = mainWindow;
         }
 
@@ -233,7 +240,6 @@ namespace IronyModManager
             var message = string.IsNullOrWhiteSpace(lastException) ? locManager.GetResource(LocalizationResources.FatalError.Message) : locManager.GetResource(LocalizationResources.FatalError.MessageWithLastError).FormatIronySmart(new { Environment.NewLine, Message = string.Join(Environment.NewLine, lastException.SplitOnNewLine()) });
             var header = locManager.GetResource(LocalizationResources.FatalError.Header);
             var messageBox = MessageBoxes.GetFatalErrorWindow(title, header, message);
-            messageBox.ExtendClientAreaChromeHints = Avalonia.Platform.ExtendClientAreaChromeHints.PreferSystemChrome;
 
             SetFontFamily(messageBox);
             desktop.MainWindow = messageBox;

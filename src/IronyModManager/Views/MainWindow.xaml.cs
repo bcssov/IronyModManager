@@ -4,7 +4,7 @@
 // Created          : 01-10-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-11-2022
+// Last Modified On : 11-24-2022
 // ***********************************************************************
 // <copyright file="MainWindow.xaml.cs" company="Mario">
 //     Mario
@@ -126,42 +126,6 @@ namespace IronyModManager.Views
                 }
             }
             return hotkeyGestures;
-        }
-
-        /// <summary>
-        /// Handles the closing.
-        /// </summary>
-        /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
-        protected override bool HandleClosing()
-        {
-            var service = DIResolver.Get<IWindowStateService>();
-            var state = service.Get();
-            if (WindowState == WindowState.Maximized)
-            {
-                state.IsMaximized = true;
-            }
-            else
-            {
-                var totalScreenX = Screens.All.Sum(p => p.WorkingArea.Width);
-                var totalScreenY = Screens.All.Max(p => p.WorkingArea.Height);
-                var locX = Position.X + ClientSize.Width > totalScreenX ? totalScreenX - ClientSize.Width : Position.X;
-                var locY = Position.Y + ClientSize.Height > totalScreenY ? totalScreenY - ClientSize.Height : Position.Y;
-                if (locX < 0.0)
-                {
-                    locX = 0;
-                }
-                if (locY < 0.0)
-                {
-                    locY = 0;
-                }
-                state.Height = Convert.ToInt32(ClientSize.Height);
-                state.Width = Convert.ToInt32(ClientSize.Width);
-                state.IsMaximized = false;
-                state.LocationX = Convert.ToInt32(locX);
-                state.LocationY = Convert.ToInt32(locY);
-            }
-            service.Save(state);
-            return base.HandleClosing();
         }
 
         /// <summary>
@@ -352,6 +316,10 @@ namespace IronyModManager.Views
                 var id = DIResolver.Get<IIDGenerator>().GetNextId();
                 ViewModel.TriggerManualOverlay(id, true, message);
             }
+            else
+            {
+                SaveWindowState();
+            }
             base.OnClosing(e);
         }
 
@@ -365,6 +333,40 @@ namespace IronyModManager.Views
             {
                 InitWindowSize();
             }
+        }
+
+        /// <summary>
+        /// Saves the state of the window.
+        /// </summary>
+        private void SaveWindowState()
+        {
+            var service = DIResolver.Get<IWindowStateService>();
+            var state = service.Get();
+            if (WindowState == WindowState.Maximized)
+            {
+                state.IsMaximized = true;
+            }
+            else
+            {
+                var totalScreenX = Screens.All.Sum(p => p.WorkingArea.Width);
+                var totalScreenY = Screens.All.Max(p => p.WorkingArea.Height);
+                var locX = Position.X + ClientSize.Width > totalScreenX ? totalScreenX - ClientSize.Width : Position.X;
+                var locY = Position.Y + ClientSize.Height > totalScreenY ? totalScreenY - ClientSize.Height : Position.Y;
+                if (locX < 0.0)
+                {
+                    locX = 0;
+                }
+                if (locY < 0.0)
+                {
+                    locY = 0;
+                }
+                state.Height = Convert.ToInt32(ClientSize.Height) - Convert.ToInt32(ExtendClientAreaTitleBarHeightHint);
+                state.Width = Convert.ToInt32(ClientSize.Width);
+                state.IsMaximized = false;
+                state.LocationX = Convert.ToInt32(locX);
+                state.LocationY = Convert.ToInt32(locY);
+            }
+            service.Save(state);
         }
 
         #endregion Methods

@@ -13,6 +13,11 @@
     <StyleInclude Source="avares://IronyModManager/Controls/Themes/Dark/ScrollBar.axaml"/>
     <StyleInclude Source="avares://IronyModManager/Controls/Themes/SearchPanel.axaml"/>
     <StyleInclude Source="avares://IronyModManager/Controls/Themes/Dark/ScrollViewer.axaml"/>
+    <StyleInclude Source="avares://IronyModManager/Controls/Themes/Dark/IronyCaptionButtons.axaml"/>
+    <StyleInclude Source="avares://IronyModManager/Controls/Themes/Dark/IronyTitleBar.axaml"/>
+    <StyleInclude Source="avares://IronyModManager/Controls/Themes/Dark/IronyResizeBorder.axaml"/>
+    <StyleInclude Source="avares://IronyModManager/Controls/Themes/Dark/IronyClientSideDecorations.axaml"/>
+    <StyleInclude Source="avares://IronyModManager/Controls/Themes/Dark/Window.axaml"/>
 
     <!--Individual styles-->
     <Style Selector="NotificationCard">
@@ -88,7 +93,7 @@
     <Style Selector="Border.CreateHighlight">
         <Setter Property="BorderThickness" Value="2,2,2,2"/>
         <Setter Property="BorderBrush" Value="Red"/>
-    </Style>    
+    </Style>
     <Style Selector="Border.ResolvedResetMod">
         <Setter Property="BorderThickness" Value="2,2,2,2"/>
         <Setter Property="BorderBrush" Value="Red" />

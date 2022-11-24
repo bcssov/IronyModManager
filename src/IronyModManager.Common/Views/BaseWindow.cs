@@ -4,7 +4,7 @@
 // Created          : 01-15-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 10-28-2022
+// Last Modified On : 11-24-2022
 // ***********************************************************************
 // <copyright file="BaseWindow.cs" company="Mario">
 //     Mario
@@ -40,6 +40,11 @@ namespace IronyModManager.Common.Views
         #region Fields
 
         /// <summary>
+        /// The actual height property
+        /// </summary>
+        public static readonly StyledProperty<double> ActualHeightProperty = AvaloniaProperty.Register<BaseWindow<TViewModel>, double>(nameof(ActualHeight), 0d);
+
+        /// <summary>
         /// The is activated property
         /// </summary>
         public static readonly StyledProperty<bool> IsActivatedProperty = AvaloniaProperty.Register<BaseWindow<TViewModel>, bool>(nameof(IsActivated), true);
@@ -69,6 +74,16 @@ namespace IronyModManager.Common.Views
         #endregion Constructors
 
         #region Properties
+
+        /// <summary>
+        /// Gets the actual height.
+        /// </summary>
+        /// <value>The actual height.</value>
+        public double ActualHeight
+        {
+            get => GetValue(ActualHeightProperty);
+            protected set => SetValue(ActualHeightProperty, value);
+        }
 
         /// <summary>
         /// Gets or sets a value indicating whether this instance is activated.
@@ -151,6 +166,10 @@ namespace IronyModManager.Common.Views
             if (e.Property == WindowStartupLocationProperty)
             {
                 IsCenterScreen = WindowStartupLocation == WindowStartupLocation.CenterScreen;
+            }
+            else if (e.Property == ExtendClientAreaTitleBarHeightHintProperty || e.Property == HeightProperty)
+            {
+                ActualHeight = Height - ExtendClientAreaTitleBarHeightHint;
             }
         }
 

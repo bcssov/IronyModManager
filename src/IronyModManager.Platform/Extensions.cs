@@ -4,7 +4,7 @@
 // Created          : 10-29-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-23-2021
+// Last Modified On : 11-24-2022
 // ***********************************************************************
 // <copyright file="Extensions.cs" company="Mario">
 //     Mario
@@ -18,8 +18,10 @@ using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Input.Platform;
 using Avalonia.Platform;
+using IronyModManager.DI;
 using IronyModManager.Platform.Assets;
 using IronyModManager.Platform.Clipboard;
+using IronyModManager.Platform.Configuration;
 using IronyModManager.Platform.Fonts;
 using IronyModManager.Shared;
 
@@ -42,7 +44,39 @@ namespace IronyModManager.Platform
         public static TAppBuilder UseIronyPlatformDetect<TAppBuilder>(this TAppBuilder builder)
             where TAppBuilder : AppBuilderBase<TAppBuilder>, new()
         {
-            builder.UsePlatformDetect();
+            var os = builder.RuntimePlatform.GetRuntimeInfo().OperatingSystem;
+            var options = DIResolver.Get<IPlatformConfiguration>().GetOptions().LinuxOptions;
+            if (LinuxDisplayServer.IsAuto(options.DisplayServer))
+            {
+                // Use the same logic from the fork, if env variable is set then use wayland display otherwise fallback
+                if (Environment.GetEnvironmentVariable("WAYLAND_DISPLAY") is not null)
+                {
+                    LoadWayland(builder);
+                    builder.UseSkia();
+                }
+                else
+                {
+                    builder.UsePlatformDetect();
+                }
+            }
+            else if (LinuxDisplayServer.IsX11(options.DisplayServer))
+            {
+                // Standard check if x11 it will fallback to x11 itself
+                builder.UsePlatformDetect();
+            }
+            else if (LinuxDisplayServer.IsWayland(options.DisplayServer))
+            {
+                // User says I want wayland give them wayland
+                if (os == OperatingSystemType.Linux)
+                {
+                    LoadWayland(builder);
+                    builder.UseSkia();
+                }
+                else
+                {
+                    builder.UsePlatformDetect();
+                }
+            }
             builder.AfterSetup(s =>
             {
                 // Use already registered manager as a proxy -- doing it like this because the implementation is hidden away as internal
@@ -60,6 +94,13 @@ namespace IronyModManager.Platform
             });
             return builder;
         }
+
+        /// <summary>
+        /// Loads the wayland.
+        /// </summary>
+        /// <typeparam name="TAppBuilder">The type of the t application builder.</typeparam>
+        /// <param name="builder">The builder.</param>
+        private static void LoadWayland<TAppBuilder>(TAppBuilder builder) where TAppBuilder : AppBuilderBase<TAppBuilder>, new() => builder.UseWayland();
 
         #endregion Methods
     }

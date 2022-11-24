@@ -4,7 +4,7 @@
 // Created          : 01-10-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 11-06-2022
+// Last Modified On : 11-23-2022
 // ***********************************************************************
 // <copyright file="Program.cs" company="IronyModManager">
 //     Copyright (c) Mario. All rights reserved.
@@ -15,7 +15,6 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using System.Runtime.InteropServices;
 using System.Threading;
 using System.Threading.Tasks;
 using Avalonia;
@@ -135,30 +134,32 @@ namespace IronyModManager
                 var configuration = DIResolver.Get<IPlatformConfiguration>().GetOptions().LinuxOptions;
                 if (configuration.UseGPU.HasValue || configuration.UseEGL.HasValue || configuration.UseDBusMenu.HasValue || configuration.UseDeferredRendering.HasValue)
                 {
-                    var opts = new X11PlatformOptions();
+                    var x11Opts = new X11PlatformOptions();
+                    var waylandOpts = new WaylandPlatformOptions();
+                    waylandOpts.AppId = nameof(IronyModManager);
                     if (configuration.UseGPU.HasValue)
                     {
-                        opts.UseGpu = configuration.UseGPU.GetValueOrDefault();
+                        x11Opts.UseGpu = configuration.UseGPU.GetValueOrDefault();
+                        waylandOpts.UseGpu = configuration.UseGPU.GetValueOrDefault();
                     }
                     if (configuration.UseEGL.HasValue)
                     {
-                        opts.UseEGL = configuration.UseEGL.GetValueOrDefault();
+                        x11Opts.UseEGL = configuration.UseEGL.GetValueOrDefault();
                     }
                     if (configuration.UseDBusMenu.HasValue)
                     {
-                        opts.UseDBusMenu = configuration.UseDBusMenu.GetValueOrDefault();
+                        x11Opts.UseDBusMenu = configuration.UseDBusMenu.GetValueOrDefault();
                     }
                     if (configuration.UseDeferredRendering.HasValue)
                     {
-                        opts.UseDeferredRendering = configuration.UseDeferredRendering.GetValueOrDefault();
+                        x11Opts.UseDeferredRendering = configuration.UseDeferredRendering.GetValueOrDefault();
+                        waylandOpts.UseDeferredRendering = configuration.UseDeferredRendering.GetValueOrDefault();
                     }
-                    app.With(opts);
+                    app.With(x11Opts);
+                    app.With(waylandOpts);
                 }
             }
-            if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
-            {
-                configureLinux();
-            }
+            configureLinux();
         }
 
         /// <summary>
