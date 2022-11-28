@@ -132,35 +132,32 @@ namespace IronyModManager
             void configureLinux()
             {
                 var configuration = DIResolver.Get<IPlatformConfiguration>().GetOptions().LinuxOptions;
-                if (configuration.UseGPU.HasValue || configuration.UseEGL.HasValue || configuration.UseDBusMenu.HasValue || configuration.UseDeferredRendering.HasValue)
+                var x11Opts = new X11PlatformOptions();
+                var waylandOpts = new WaylandPlatformOptions();
+                if (!string.IsNullOrWhiteSpace(configuration.WaylandAppId))
                 {
-                    var x11Opts = new X11PlatformOptions();
-                    var waylandOpts = new WaylandPlatformOptions();
-                    if (!string.IsNullOrWhiteSpace(configuration.WaylandAppId))
-                    {
-                        waylandOpts.AppId = configuration.WaylandAppId;
-                    }
-                    if (configuration.UseGPU.HasValue)
-                    {
-                        x11Opts.UseGpu = configuration.UseGPU.GetValueOrDefault();
-                        waylandOpts.UseGpu = configuration.UseGPU.GetValueOrDefault();
-                    }
-                    if (configuration.UseEGL.HasValue)
-                    {
-                        x11Opts.UseEGL = configuration.UseEGL.GetValueOrDefault();
-                    }
-                    if (configuration.UseDBusMenu.HasValue)
-                    {
-                        x11Opts.UseDBusMenu = configuration.UseDBusMenu.GetValueOrDefault();
-                    }
-                    if (configuration.UseDeferredRendering.HasValue)
-                    {
-                        x11Opts.UseDeferredRendering = configuration.UseDeferredRendering.GetValueOrDefault();
-                        waylandOpts.UseDeferredRendering = configuration.UseDeferredRendering.GetValueOrDefault();
-                    }
-                    app.With(x11Opts);
-                    app.With(waylandOpts);
+                    waylandOpts.AppId = configuration.WaylandAppId;
                 }
+                if (configuration.UseGPU.HasValue)
+                {
+                    x11Opts.UseGpu = configuration.UseGPU.GetValueOrDefault();
+                    waylandOpts.UseGpu = configuration.UseGPU.GetValueOrDefault();
+                }
+                if (configuration.UseEGL.HasValue)
+                {
+                    x11Opts.UseEGL = configuration.UseEGL.GetValueOrDefault();
+                }
+                if (configuration.UseDBusMenu.HasValue)
+                {
+                    x11Opts.UseDBusMenu = configuration.UseDBusMenu.GetValueOrDefault();
+                }
+                if (configuration.UseDeferredRendering.HasValue)
+                {
+                    x11Opts.UseDeferredRendering = configuration.UseDeferredRendering.GetValueOrDefault();
+                    waylandOpts.UseDeferredRendering = configuration.UseDeferredRendering.GetValueOrDefault();
+                }
+                app.With(x11Opts);
+                app.With(waylandOpts);
             }
             configureLinux();
         }
