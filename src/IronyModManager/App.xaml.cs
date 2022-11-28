@@ -4,7 +4,7 @@
 // Created          : 01-10-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 11-24-2022
+// Last Modified On : 11-28-2022
 // ***********************************************************************
 // <copyright file="App.xaml.cs" company="Mario">
 //     Mario
@@ -55,6 +55,18 @@ namespace IronyModManager
         private bool showFatalNotification = false;
 
         #endregion Fields
+
+        #region Constructors
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="App"/> class.
+        /// </summary>
+        public App()
+        {
+            DataContext = new AppViewModel();
+        }
+
+        #endregion Constructors
 
         #region Methods
 
@@ -294,7 +306,7 @@ namespace IronyModManager
             var header = locManager.GetResource(LocalizationResources.Themes.Restart_Header);
             if (await notificationAction.ShowPromptAsync(title, header, message, NotificationType.Info))
             {
-                var path = Process.GetCurrentProcess().MainModule.FileName;
+                var path = Environment.ProcessPath;
                 var appAction = DIResolver.Get<IAppAction>();
                 if (await appAction.RunAsync(path))
                 {

@@ -1,0 +1,39 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        MaxWidth="700"
+        MaxHeight="200"
+        MinWidth="700"
+        MinHeight="200"
+        Title="About Irony Mod Manager"
+        Background="Black"
+        x:Class="IronyModManager.Views.AboutDialog">
+    <Window.Styles>
+        <Style Selector="Rectangle.Abstract">
+            <Setter Property="Fill" Value="White" />
+            <Setter Property="Width" Value="750" />
+            <Setter Property="Height" Value="700" />
+        </Style>
+        <Style Selector="Button.Hyperlink">
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="BorderThickness" Value="0" />
+            <Setter Property="Margin" Value="-5"/>
+            <Setter Property="Foreground" Value="#419df2" />
+            <Setter Property="Command" Value="{Binding OpenBrowser}" />
+            <Setter Property="Content" Value="{Binding $self.CommandParameter}" />
+            <Setter Property="HorizontalAlignment" Value="Center" />
+            <Setter Property="Cursor" Value="Hand" />
+        </Style>
+    </Window.Styles>
+    <Grid Background="#2B2B2B">
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="18">
+            <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Margin="10,-10,0,0">
+                <TextBlock Text="{Binding Data}" FontSize="40" Foreground="White" />                
+            </StackPanel>
+        </StackPanel>
+        <StackPanel HorizontalAlignment="Stretch" VerticalAlignment="Center" Spacing="10" Margin="10 20 10 0">            
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" >                
+                <Button Classes="Hyperlink" FontSize="20"  CommandParameter="https://bcssov.github.io/IronyModManager/"  />
+            </StackPanel>            
+        </StackPanel>        
+    </Grid>
+</Window>

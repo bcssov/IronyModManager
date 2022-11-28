@@ -2,9 +2,15 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:local="clr-namespace:IronyModManager.Implementation"
              x:Class="IronyModManager.App">
-  <Application.DataTemplates>
-    <local:ViewLocator/>
-  </Application.DataTemplates>
-  <Application.Styles>
-  </Application.Styles>
+    <Application.DataTemplates>
+        <local:ViewLocator/>
+    </Application.DataTemplates>
+    <Application.Styles>
+    </Application.Styles>
+    <Application.Name>Irony Mod Manager</Application.Name>
+    <NativeMenu.Menu>
+        <NativeMenu>
+            <NativeMenuItem Header="About Irony Mod Manager" Command="{Binding AboutCommand}"/>
+        </NativeMenu>
+    </NativeMenu.Menu>
 </Application>
