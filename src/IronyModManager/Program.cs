@@ -4,7 +4,7 @@
 // Created          : 01-10-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 11-23-2022
+// Last Modified On : 11-28-2022
 // ***********************************************************************
 // <copyright file="Program.cs" company="IronyModManager">
 //     Copyright (c) Mario. All rights reserved.
@@ -136,7 +136,10 @@ namespace IronyModManager
                 {
                     var x11Opts = new X11PlatformOptions();
                     var waylandOpts = new WaylandPlatformOptions();
-                    waylandOpts.AppId = nameof(IronyModManager);
+                    if (!string.IsNullOrWhiteSpace(configuration.WaylandAppId))
+                    {
+                        waylandOpts.AppId = configuration.WaylandAppId;
+                    }
                     if (configuration.UseGPU.HasValue)
                     {
                         x11Opts.UseGpu = configuration.UseGPU.GetValueOrDefault();

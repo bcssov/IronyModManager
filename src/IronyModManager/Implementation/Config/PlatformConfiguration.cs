@@ -4,7 +4,7 @@
 // Created          : 04-16-2021
 //
 // Last Modified By : Mario
-// Last Modified On : 11-24-2022
+// Last Modified On : 11-28-2022
 // ***********************************************************************
 // <copyright file="PlatformConfiguration.cs" company="Mario">
 //     Mario
@@ -122,6 +122,7 @@ namespace IronyModManager.Implementation.Config
                 {
                     throw new ArgumentException("Invalid display server type. Valida values are: x11, wayland or auto");
                 }
+                platformConfiguration.LinuxOptions.WaylandAppId = linuxSection.GetSection("WaylandAppId").Get<string>();
                 platformConfiguration.LinuxOptions.UseGPU = linuxSection.GetSection("UseGPU").Get<bool?>();
                 platformConfiguration.LinuxOptions.UseEGL = linuxSection.GetSection("UseEGL").Get<bool?>();
                 platformConfiguration.LinuxOptions.UseDBusMenu = linuxSection.GetSection("UseDBusMenu").Get<bool?>();

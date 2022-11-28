@@ -4,7 +4,7 @@
 // Created          : 04-16-2021
 //
 // Last Modified By : Mario
-// Last Modified On : 11-24-2022
+// Last Modified On : 11-28-2022
 // ***********************************************************************
 // <copyright file="PlatformConfigurationOptions.cs" company="Mario">
 //     Mario
@@ -69,6 +69,12 @@ namespace IronyModManager.Platform.Configuration
         /// </summary>
         /// <value><c>null</c> if [use gpu] contains no value, <c>true</c> if [use gpu]; otherwise, <c>false</c>.</value>
         public bool? UseGPU { get; set; }
+
+        /// <summary>
+        /// Gets or sets the wayland application identifier.
+        /// </summary>
+        /// <value>The wayland application identifier.</value>
+        public string WaylandAppId { get; set; }
 
         #endregion Properties
     }
