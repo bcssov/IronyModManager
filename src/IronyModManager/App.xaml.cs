@@ -4,7 +4,7 @@
 // Created          : 01-10-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 11-28-2022
+// Last Modified On : 11-29-2022
 // ***********************************************************************
 // <copyright file="App.xaml.cs" company="Mario">
 //     Mario
@@ -28,7 +28,6 @@ using IronyModManager.Implementation.Actions;
 using IronyModManager.Implementation.Overlay;
 using IronyModManager.Localization;
 using IronyModManager.Models.Common;
-using IronyModManager.Platform.Configuration;
 using IronyModManager.Platform.Fonts;
 using IronyModManager.Platform.Themes;
 using IronyModManager.Services.Common;
@@ -59,7 +58,7 @@ namespace IronyModManager
         #region Constructors
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="App"/> class.
+        /// Initializes a new instance of the <see cref="App" /> class.
         /// </summary>
         public App()
         {
@@ -220,13 +219,7 @@ namespace IronyModManager
             SetFontFamily(mainWindow);
             var vm = (MainWindowViewModel)resolver.ResolveViewModel<MainWindow>();
             mainWindow.DataContext = vm;
-            var config = DIResolver.Get<IPlatformConfiguration>().GetOptions();
-            if (!config.TitleBar.Native)
-            {
-                mainWindow.ExtendClientAreaToDecorationsHint = true;
-                mainWindow.ExtendClientAreaTitleBarHeightHint = 30d;
-                mainWindow.Padding = new Thickness(0, 30, 0, 0);
-            }
+            mainWindow.EnsureTitlebarSpacing();
             desktop.MainWindow = mainWindow;
         }
 

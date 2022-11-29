@@ -4,7 +4,7 @@
 // Created          : 08-12-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 10-29-2022
+// Last Modified On : 11-29-2022
 // ***********************************************************************
 // <copyright file="ParadoxLauncherImporter.cs" company="Mario">
 //     Mario
@@ -70,6 +70,10 @@ namespace IronyModManager.IO.Mods.Importers
         /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
         public async Task<ICollectionImportResult> DatabaseImportAsync(ModCollectionExporterParams parameters)
         {
+            if (!File.Exists(GetDbPath(parameters)))
+            {
+                return null;
+            }
             // Caching sucks in this ORM
             DbFieldCache.Flush();
             FieldCache.Flush();

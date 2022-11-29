@@ -4,7 +4,7 @@
 // Created          : 01-14-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 07-12-2022
+// Last Modified On : 11-29-2022
 // ***********************************************************************
 // <copyright file="Extensions.cs" company="Mario">
 //     Mario
@@ -17,9 +17,13 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Avalonia;
 using Avalonia.Collections;
+using Avalonia.Controls;
 using Avalonia.Threading;
 using DynamicData;
+using IronyModManager.DI;
+using IronyModManager.Platform.Configuration;
 using IronyModManager.Shared;
 
 namespace IronyModManager.Common
@@ -31,6 +35,21 @@ namespace IronyModManager.Common
     public static class Extensions
     {
         #region Methods
+
+        /// <summary>
+        /// Ensures the titlebar spacing.
+        /// </summary>
+        /// <param name="window">The window.</param>
+        public static void EnsureTitlebarSpacing(this Window window)
+        {
+            var config = DIResolver.Get<IPlatformConfiguration>().GetOptions();
+            if (!config.TitleBar.Native)
+            {
+                window.ExtendClientAreaToDecorationsHint = true;
+                window.ExtendClientAreaTitleBarHeightHint = 30d;
+                window.Padding = new Thickness(0, 30, 0, 0);
+            }
+        }
 
         /// <summary>
         /// Safes the invoke.
