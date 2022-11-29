@@ -4,7 +4,7 @@
 // Created          : 03-09-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 07-12-2022
+// Last Modified On : 11-29-2022
 // ***********************************************************************
 // <copyright file="FileDialogAction.cs" company="Mario">
 //     Mario
@@ -17,6 +17,7 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Avalonia.Controls;
+using IronyModManager.Common.Events;
 using IronyModManager.Shared;
 
 namespace IronyModManager.Implementation.Actions
@@ -49,6 +50,7 @@ namespace IronyModManager.Implementation.Actions
         /// <returns>Task&lt;System.String&gt;.</returns>
         public async Task<string> OpenDialogAsync(string title, string initialFileName = Shared.Constants.EmptyParam, params string[] extensions)
         {
+            ReactiveUI.MessageBus.Current.SendMessage(new ForceClosePopulsEventArgs());
             var dialog = new OpenFileDialog
             {
                 Title = title,
@@ -76,6 +78,7 @@ namespace IronyModManager.Implementation.Actions
         /// <returns>Task&lt;System.String&gt;.</returns>
         public async Task<string> OpenFolderDialogAsync(string title)
         {
+            ReactiveUI.MessageBus.Current.SendMessage(new ForceClosePopulsEventArgs());
             var dialog = new OpenFolderDialog()
             {
                 Title = title,
@@ -98,6 +101,7 @@ namespace IronyModManager.Implementation.Actions
         /// <returns>Task&lt;System.String&gt;.</returns>
         public async Task<string> SaveDialogAsync(string title, string initialFileName = Shared.Constants.EmptyParam, params string[] extensions)
         {
+            ReactiveUI.MessageBus.Current.SendMessage(new ForceClosePopulsEventArgs());
             var dialog = new SaveFileDialog
             {
                 Title = title,

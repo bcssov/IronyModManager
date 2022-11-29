@@ -4,7 +4,7 @@
 // Created          : 05-07-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-20-2021
+// Last Modified On : 11-29-2022
 // ***********************************************************************
 // <copyright file="ManagedDialogExtensions.cs" company="Avalonia">
 //     Avalonia
@@ -22,6 +22,7 @@ using System.Threading.Tasks;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Platform;
+using IronyModManager.Common;
 using IronyModManager.Controls.Themes;
 using IronyModManager.DI;
 using IronyModManager.Platform.Fonts;
@@ -131,6 +132,7 @@ namespace IronyModManager.Controls.Dialogs
                     FontFamily = font.GetFontFamily(),
                     Height = 700
                 };
+                dialog.EnsureTitlebarSpacing();
 
                 dialog.Closed += delegate { model.Cancel(); };
 
