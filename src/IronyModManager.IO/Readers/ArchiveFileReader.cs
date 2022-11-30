@@ -4,7 +4,7 @@
 // Created          : 02-23-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 11-06-2022
+// Last Modified On : 11-30-2022
 // ***********************************************************************
 // <copyright file="ArchiveFileReader.cs" company="Mario">
 //     Mario
@@ -97,8 +97,11 @@ namespace IronyModManager.IO.Readers
             var files = new List<string>();
             foreach (var entry in zip.EntryFileNames)
             {
-                var relativePath = entry.StandardizeDirectorySeparator().Trim(Path.DirectorySeparatorChar);
-                files.Add(relativePath);
+                if (!zip[entry].IsDirectory)
+                {
+                    var relativePath = entry.StandardizeDirectorySeparator().Trim(Path.DirectorySeparatorChar);
+                    files.Add(relativePath);
+                }
             }
             return files;
         }
