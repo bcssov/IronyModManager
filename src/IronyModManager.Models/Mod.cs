@@ -4,7 +4,7 @@
 // Created          : 02-29-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 11-03-2022
+// Last Modified On : 11-30-2022
 // ***********************************************************************
 // <copyright file="Mod.cs" company="Mario">
 //     Mario
@@ -13,6 +13,7 @@
 // ***********************************************************************
 using System;
 using System.Collections.Generic;
+using System.IO;
 using IronyModManager.Models.Common;
 using IronyModManager.Shared;
 
@@ -123,6 +124,26 @@ namespace IronyModManager.Models
         /// </summary>
         /// <value>The order.</value>
         public virtual int Order { get; set; }
+
+        /// <summary>
+        /// Gets the parent directory.
+        /// </summary>
+        /// <value>The parent directory.</value>
+        public virtual string ParentDirectory
+        {
+            get
+            {
+                if (string.IsNullOrWhiteSpace(FullPath))
+                {
+                    return FullPath;
+                }
+                if (!string.IsNullOrWhiteSpace(Path.GetExtension(FullPath)))
+                {
+                    return Path.GetDirectoryName(FullPath);
+                }
+                return FullPath;
+            }
+        }
 
         /// <summary>
         /// Gets or sets the picture.

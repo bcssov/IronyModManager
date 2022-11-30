@@ -4,7 +4,7 @@
 // Created          : 05-09-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 10-29-2022
+// Last Modified On : 11-30-2022
 // ***********************************************************************
 // <copyright file="ModifyCollectionControlViewModel.cs" company="Mario">
 //     Mario
@@ -495,6 +495,15 @@ namespace IronyModManager.ViewModels.Controls
                     var message = localizationManager.GetResource(LocalizationResources.Collection_Mods.MergeCollection.DiskInfoOverlay);
                     await TriggerOverlayAsync(id, true, message, overlayProgress);
 
+                    var canMerge = await modMergeService.AllowModMergeAsync(copy.Name);
+                    if (!canMerge)
+                    {
+                        await TriggerOverlayAsync(id, false);
+                        freeSpaceCheckHandler?.Dispose();
+                        fileMergeProgressHandler?.Dispose();
+                        return new CommandResult<ModifyAction>(ModifyAction.Merge, CommandState.Failed);
+                    }
+
                     var result = await Task.Run(async () => await modMergeService.HasEnoughFreeSpaceAsync(copy.Name));
                     if (!result)
                     {
@@ -560,6 +569,15 @@ namespace IronyModManager.ViewModels.Controls
                     });
                     var message = localizationManager.GetResource(LocalizationResources.Collection_Mods.MergeCollection.DiskInfoOverlay);
                     await TriggerOverlayAsync(id, true, message, overlayProgress);
+
+                    var canMerge = await modMergeService.AllowModMergeAsync(copy.Name);
+                    if (!canMerge)
+                    {
+                        await TriggerOverlayAsync(id, false);
+                        freeSpaceCheckHandler?.Dispose();
+                        fileMergeProgressHandler?.Dispose();
+                        return new CommandResult<ModifyAction>(ModifyAction.Merge, CommandState.Failed);
+                    }
 
                     var result = await Task.Run(async () => await modMergeService.HasEnoughFreeSpaceAsync(copy.Name));
                     if (!result)

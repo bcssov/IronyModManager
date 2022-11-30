@@ -4,7 +4,7 @@
 // Created          : 02-29-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 07-21-2022
+// Last Modified On : 11-30-2022
 // ***********************************************************************
 // <copyright file="IMod.cs" company="Mario">
 //     Mario
@@ -85,6 +85,12 @@ namespace IronyModManager.Models.Common
         /// </summary>
         /// <value>The order.</value>
         int Order { get; set; }
+
+        /// <summary>
+        /// Gets the parent directory.
+        /// </summary>
+        /// <value>The parent directory.</value>
+        string ParentDirectory { get; }
 
         /// <summary>
         /// Gets or sets the source.

@@ -4,7 +4,7 @@
 // Created          : 06-19-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 11-05-2022
+// Last Modified On : 11-30-2022
 // ***********************************************************************
 // <copyright file="ModMergeService.cs" company="Mario">
 //     Mario
@@ -120,6 +120,29 @@ namespace IronyModManager.Services
         #endregion Constructors
 
         #region Methods
+
+        /// <summary>
+        /// Allow mod merge as an asynchronous operation.
+        /// </summary>
+        /// <param name="collectionName">Name of the collection.</param>
+        /// <returns>A Task&lt;System.Boolean&gt; representing the asynchronous operation.</returns>
+        public virtual ValueTask<bool> AllowModMergeAsync(string collectionName)
+        {
+            var game = GameService.GetSelected();
+            if (game == null || string.IsNullOrWhiteSpace(collectionName))
+            {
+                return ValueTask.FromResult(false);
+            }
+            var allMods = GetInstalledModsInternal(game, false).ToList();
+            var collectionMods = GetCollectionMods(allMods).ToList();
+            if (collectionMods.Count == 0)
+            {
+                return ValueTask.FromResult(false);
+            }
+            var mergeCollectionPath = collectionName.GenerateValidFileName();
+            var modDirPath = GetPatchModDirectory(game, mergeCollectionPath);
+            return ValueTask.FromResult(!collectionMods.Any(p => p.ParentDirectory.Equals(modDirPath, StringComparison.OrdinalIgnoreCase)));
+        }
 
         /// <summary>
         /// has enough free space as an asynchronous operation.
