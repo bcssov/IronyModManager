@@ -412,6 +412,41 @@ namespace IronyModManager.Services.Tests
                 new List<IDefinitionInfoProvider>() { infoProvider.Object }, reader.Object, modWriter.Object,
                 modParser.Object, gameService.Object, storageProvider.Object, mapper.Object);
 
+            var result = await service.HasEnoughFreeSpaceAsync(string.Empty);
+
+            result.Should().BeFalse();
+        }
+
+        /// <summary>
+        /// Defines the test method Should_not_have_free_space_due_to_no_mods.
+        /// </summary>
+        [Fact]
+        public async Task Should_not_have_free_space_due_to_no_mods()
+        {
+            var messageBus = new Mock<IMessageBus>();
+            messageBus.Setup(p => p.PublishAsync(It.IsAny<IMessageBusEvent>()));
+            messageBus.Setup(p => p.Publish(It.IsAny<IMessageBusEvent>()));
+            var storageProvider = new Mock<IStorageProvider>();
+            var modParser = new Mock<IModParser>();
+            var reader = new Mock<IReader>();
+            var modWriter = new Mock<IModWriter>();
+            var gameService = new Mock<IGameService>();
+            var mapper = new Mock<IMapper>();
+            var modPatchExporter = new Mock<IModPatchExporter>();
+            var modMergeExporter = new Mock<IModMergeExporter>();
+            var infoProvider = new Mock<IDefinitionInfoProvider>();
+            gameService.Setup(p => p.GetSelected()).Returns(new Game()
+            {
+                Type = "Should_not_have_free_space_due_to_no_mods",
+                UserDirectory = "C:\\Users\\Fake",
+                WorkshopDirectory = new List<string>() { "C:\\fake" },
+                CustomModDirectory = string.Empty
+            });
+
+            var service = new ModMergeService(null, null, new Cache(), messageBus.Object, modPatchExporter.Object, modMergeExporter.Object,
+                new List<IDefinitionInfoProvider>() { infoProvider.Object }, reader.Object, modWriter.Object,
+                modParser.Object, gameService.Object, storageProvider.Object, mapper.Object);
+
             var result = await service.HasEnoughFreeSpaceAsync("test");
 
             result.Should().BeFalse();
@@ -585,6 +620,277 @@ namespace IronyModManager.Services.Tests
             var result = await service.HasEnoughFreeSpaceAsync("test");
 
             result.Should().BeFalse();
+        }
+
+        /// <summary>
+        /// Defines the test method Should_not_allow_merge_when_no_game_set.
+        /// </summary>
+        [Fact]
+        public async Task Should_not_allow_merge_when_no_game_set()
+        {
+            var messageBus = new Mock<IMessageBus>();
+            messageBus.Setup(p => p.PublishAsync(It.IsAny<IMessageBusEvent>()));
+            messageBus.Setup(p => p.Publish(It.IsAny<IMessageBusEvent>()));
+            var storageProvider = new Mock<IStorageProvider>();
+            var modParser = new Mock<IModParser>();
+            var reader = new Mock<IReader>();
+            var modWriter = new Mock<IModWriter>();
+            var gameService = new Mock<IGameService>();
+            var mapper = new Mock<IMapper>();
+            var modPatchExporter = new Mock<IModPatchExporter>();
+            var modMergeExporter = new Mock<IModMergeExporter>();
+            var infoProvider = new Mock<IDefinitionInfoProvider>();
+            gameService.Setup(p => p.GetSelected()).Returns((IGame)null);
+
+            var service = new ModMergeService(null, null, new Cache(), messageBus.Object, modPatchExporter.Object, modMergeExporter.Object,
+                new List<IDefinitionInfoProvider>() { infoProvider.Object }, reader.Object, modWriter.Object,
+                modParser.Object, gameService.Object, storageProvider.Object, mapper.Object);
+
+            var result = await service.AllowModMergeAsync("test");
+
+            result.Should().BeFalse();
+        }
+
+        /// <summary>
+        /// Defines the test method Should_not_allow_merge_when_no_collection_name.
+        /// </summary>
+        [Fact]
+        public async Task Should_not_allow_merge_when_no_collection_name()
+        {
+            var messageBus = new Mock<IMessageBus>();
+            messageBus.Setup(p => p.PublishAsync(It.IsAny<IMessageBusEvent>()));
+            messageBus.Setup(p => p.Publish(It.IsAny<IMessageBusEvent>()));
+            var storageProvider = new Mock<IStorageProvider>();
+            var modParser = new Mock<IModParser>();
+            var reader = new Mock<IReader>();
+            var modWriter = new Mock<IModWriter>();
+            var gameService = new Mock<IGameService>();
+            var mapper = new Mock<IMapper>();
+            var modPatchExporter = new Mock<IModPatchExporter>();
+            var modMergeExporter = new Mock<IModMergeExporter>();
+            var infoProvider = new Mock<IDefinitionInfoProvider>();
+            gameService.Setup(p => p.GetSelected()).Returns(new Game()
+            {
+                Type = "Should_not_allow_merge_when_no_collection_name",
+                UserDirectory = "C:\\Users\\Fake",
+                WorkshopDirectory = new List<string>() { "C:\\fake" },
+                CustomModDirectory = string.Empty
+            });
+
+            var service = new ModMergeService(null, null, new Cache(), messageBus.Object, modPatchExporter.Object, modMergeExporter.Object,
+                new List<IDefinitionInfoProvider>() { infoProvider.Object }, reader.Object, modWriter.Object,
+                modParser.Object, gameService.Object, storageProvider.Object, mapper.Object);
+
+            var result = await service.AllowModMergeAsync(string.Empty);
+
+            result.Should().BeFalse();
+        }
+
+        /// <summary>
+        /// Defines the test method Should_not_allow_merge_when_no_collection_mods.
+        /// </summary>
+        [Fact]
+        public async Task Should_not_allow_merge_when_no_collection_mods()
+        {
+            var messageBus = new Mock<IMessageBus>();
+            messageBus.Setup(p => p.PublishAsync(It.IsAny<IMessageBusEvent>()));
+            messageBus.Setup(p => p.Publish(It.IsAny<IMessageBusEvent>()));
+            var storageProvider = new Mock<IStorageProvider>();
+            var modParser = new Mock<IModParser>();
+            var reader = new Mock<IReader>();
+            var modWriter = new Mock<IModWriter>();
+            var gameService = new Mock<IGameService>();
+            var mapper = new Mock<IMapper>();
+            var modPatchExporter = new Mock<IModPatchExporter>();
+            var modMergeExporter = new Mock<IModMergeExporter>();
+            var infoProvider = new Mock<IDefinitionInfoProvider>();
+            gameService.Setup(p => p.GetSelected()).Returns(new Game()
+            {
+                Type = "Should_not_allow_merge_when_no_collection_mods",
+                UserDirectory = "C:\\Users\\Fake",
+                WorkshopDirectory = new List<string>() { "C:\\fake" },
+                CustomModDirectory = string.Empty
+            });
+
+            var service = new ModMergeService(null, null, new Cache(), messageBus.Object, modPatchExporter.Object, modMergeExporter.Object,
+                new List<IDefinitionInfoProvider>() { infoProvider.Object }, reader.Object, modWriter.Object,
+                modParser.Object, gameService.Object, storageProvider.Object, mapper.Object);
+
+            var result = await service.AllowModMergeAsync("test");
+
+            result.Should().BeFalse();
+        }
+
+        /// <summary>
+        /// Defines the test method Should_not_allow_merge_mods.
+        /// </summary>
+        [Fact]
+        public async Task Should_not_allow_merge_mods()
+        {
+            DISetup.SetupContainer();
+
+            var messageBus = new Mock<IMessageBus>();
+            messageBus.Setup(p => p.PublishAsync(It.IsAny<IMessageBusEvent>()));
+            messageBus.Setup(p => p.Publish(It.IsAny<IMessageBusEvent>()));
+            var storageProvider = new Mock<IStorageProvider>();
+            var modParser = new Mock<IModParser>();
+            var reader = new Mock<IReader>();
+            var modWriter = new Mock<IModWriter>();
+            var gameService = new Mock<IGameService>();
+            var mapper = new Mock<IMapper>();
+            var modPatchExporter = new Mock<IModPatchExporter>();
+            var modMergeExporter = new Mock<IModMergeExporter>();
+            var infoProvider = new Mock<IDefinitionInfoProvider>();
+            var diskInfoProvider = new Mock<IDriveInfoProvider>();
+
+            modMergeExporter.Setup(p => p.ExportFilesAsync(It.IsAny<ModMergeFileExporterParameters>())).Returns(Task.FromResult(true));
+            gameService.Setup(p => p.GetSelected()).Returns(new Game()
+            {
+                Type = "Should_not_allow_merge_mods",
+                UserDirectory = "C:\\Users\\Fake",
+                WorkshopDirectory = new List<string>() { "C:\\fake" },
+                CustomModDirectory = string.Empty
+            });
+            var collections = new List<IModCollection>()
+            {
+                new ModCollection()
+                {
+                    IsSelected = true,
+                    Mods = new List<string>() { "mod/fakemod.mod"},
+                    Name = "test",
+                    Game = "Should_not_allow_merge_mods",
+                }
+            };
+            storageProvider.Setup(s => s.GetModCollections()).Returns(() =>
+            {
+                return collections;
+            });
+            var fileInfos = new List<IFileInfo>()
+            {
+                new FileInfo()
+                {
+                    Content = new List<string>() { "a" },
+                    FileName = "fakemod.mod",
+                    IsBinary = false
+                }
+            };
+            reader.Setup(s => s.Read(It.IsAny<string>(), It.IsAny<IEnumerable<string>>(), It.IsAny<bool>())).Returns(fileInfos);
+            modParser.Setup(s => s.Parse(It.IsAny<IEnumerable<string>>(), It.IsAny<DescriptorModType>())).Returns((IEnumerable<string> values, DescriptorModType t) =>
+            {
+                return new ModObject()
+                {
+                    FileName = values.First(),
+                    Name = values.First(),
+                };
+            });
+            mapper.Setup(s => s.Map<IMod>(It.IsAny<IModObject>())).Returns((IModObject o) =>
+            {
+                return new Mod()
+                {
+                    FileName = o.FileName,
+                    Name = o.Name,
+                    FullPath = "C:\\Users\\Fake\\mod\\test"
+                };
+            });
+            diskInfoProvider.Setup(p => p.HasFreeSpace(It.IsAny<string>(), It.IsAny<long>())).Returns(true);
+            modWriter.Setup(p => p.ModDirectoryExists(It.IsAny<ModWriterParameters>())).Returns((ModWriterParameters p) =>
+            {
+                return false;
+            });
+
+            var service = new ModMergeService(diskInfoProvider.Object, null, new Cache(), messageBus.Object, modPatchExporter.Object, modMergeExporter.Object,
+                new List<IDefinitionInfoProvider>() { infoProvider.Object }, reader.Object, modWriter.Object,
+                modParser.Object, gameService.Object, storageProvider.Object, mapper.Object);
+
+            var result = await service.AllowModMergeAsync("test");
+
+            result.Should().BeFalse();
+        }
+
+        /// <summary>
+        /// Defines the test method Should_allow_merge_mods.
+        /// </summary>
+        [Fact]
+        public async Task Should_allow_merge_mods()
+        {
+            DISetup.SetupContainer();
+
+            var messageBus = new Mock<IMessageBus>();
+            messageBus.Setup(p => p.PublishAsync(It.IsAny<IMessageBusEvent>()));
+            messageBus.Setup(p => p.Publish(It.IsAny<IMessageBusEvent>()));
+            var storageProvider = new Mock<IStorageProvider>();
+            var modParser = new Mock<IModParser>();
+            var reader = new Mock<IReader>();
+            var modWriter = new Mock<IModWriter>();
+            var gameService = new Mock<IGameService>();
+            var mapper = new Mock<IMapper>();
+            var modPatchExporter = new Mock<IModPatchExporter>();
+            var modMergeExporter = new Mock<IModMergeExporter>();
+            var infoProvider = new Mock<IDefinitionInfoProvider>();
+            var diskInfoProvider = new Mock<IDriveInfoProvider>();
+
+            modMergeExporter.Setup(p => p.ExportFilesAsync(It.IsAny<ModMergeFileExporterParameters>())).Returns(Task.FromResult(true));
+            gameService.Setup(p => p.GetSelected()).Returns(new Game()
+            {
+                Type = "Should_allow_merge_mods",
+                UserDirectory = "C:\\Users\\Fake",
+                WorkshopDirectory = new List<string>() { "C:\\fake" },
+                CustomModDirectory = string.Empty
+            });
+            var collections = new List<IModCollection>()
+            {
+                new ModCollection()
+                {
+                    IsSelected = true,
+                    Mods = new List<string>() { "mod/fakemod.mod"},
+                    Name = "test",
+                    Game = "Should_allow_merge_mods",
+                }
+            };
+            storageProvider.Setup(s => s.GetModCollections()).Returns(() =>
+            {
+                return collections;
+            });
+            var fileInfos = new List<IFileInfo>()
+            {
+                new FileInfo()
+                {
+                    Content = new List<string>() { "a" },
+                    FileName = "fakemod.mod",
+                    IsBinary = false
+                }
+            };
+            reader.Setup(s => s.Read(It.IsAny<string>(), It.IsAny<IEnumerable<string>>(), It.IsAny<bool>())).Returns(fileInfos);
+            modParser.Setup(s => s.Parse(It.IsAny<IEnumerable<string>>(), It.IsAny<DescriptorModType>())).Returns((IEnumerable<string> values, DescriptorModType t) =>
+            {
+                return new ModObject()
+                {
+                    FileName = values.First(),
+                    Name = values.First(),
+                };
+            });
+            mapper.Setup(s => s.Map<IMod>(It.IsAny<IModObject>())).Returns((IModObject o) =>
+            {
+                return new Mod()
+                {
+                    FileName = o.FileName,
+                    Name = o.Name,
+                    FullPath = "C:\\Users\\Fake\\mod\\faketest"
+                };
+            });
+            diskInfoProvider.Setup(p => p.HasFreeSpace(It.IsAny<string>(), It.IsAny<long>())).Returns(true);
+            modWriter.Setup(p => p.ModDirectoryExists(It.IsAny<ModWriterParameters>())).Returns((ModWriterParameters p) =>
+            {
+                return false;
+            });
+
+            var service = new ModMergeService(diskInfoProvider.Object, null, new Cache(), messageBus.Object, modPatchExporter.Object, modMergeExporter.Object,
+                new List<IDefinitionInfoProvider>() { infoProvider.Object }, reader.Object, modWriter.Object,
+                modParser.Object, gameService.Object, storageProvider.Object, mapper.Object);
+
+            var result = await service.AllowModMergeAsync("test");
+
+            result.Should().BeTrue();
         }
 
         /// <summary>
