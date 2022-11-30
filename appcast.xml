@@ -4,19 +4,17 @@
 		<title>Irony Mod Manager</title>
 		<language>en</language>
 		<item>
-			<title>1.24.93</title>
+			<title>1.24.103</title>
 			<description># OSX\Linux Notice
 Autoupdate might be broken in previous versions, if that is the case please download manually (fixed in at least &gt;= 1.24.90)
 
 ## Current Release Notes
-* Minor fixes\changes
-* Fix Irony killing the game on linux (my bad)
-
-## 1.24.90 Release Notes
+* Make more aggressive memory cleanup once navigating back from conflict solver
+* Add experimental native linux wayland support (see appSettings.json)
+* Add alternate titlebars (off by default see appSettings.json)
 * Bump dependencies
-* Make updater more robust
-* Fix game handler not working on linux
-* Fix steam api init on linux being slow (blame valve)
+* Fix compress merge failing due to bad file listing including directories
+* Various fixes &amp; changes
 
 ## Release Notes 1.24
 * Update dependencies
@@ -27,23 +25,21 @@ Autoupdate might be broken in previous versions, if that is the case please down
 * Add support for metadata descriptor type games (Victoria 3 support)
 * Add option to ignore update
 * Improve mod loading performance</description>
-			<pubDate>Fri, 18 Nov 2022 08:23:13 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.24.93/linux-x64.zip" sparkle:version="1.24.93.46152" sparkle:shortVersionString="1.24.93" length="89885332" sparkle:os="linux" type="application/zip" sparkle:signature="wjiUXCHwRzIaJ8vPSFhENmFCfW8UMYudQOaW4o7E1aKAeGYVW0sfZS3q6iUsQo3bYPzrdPSY164WkxdLnuaOAw=="/>
+			<pubDate>Wed, 30 Nov 2022 05:47:48 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.24.103/linux-x64.zip" sparkle:version="1.24.103.20738" sparkle:shortVersionString="1.24.103" length="90085829" sparkle:os="linux" type="application/zip" sparkle:signature="ZgHxenT2V8hrNH4OgHFUup+TOnhNPk7lCFWrWoyAdo2iSac3q0bsAkUyYMfu/bCGA/HeGGvdyW2ccjpz/km7Aw=="/>
 		</item>
 		<item>
-			<title>1.24.93</title>
+			<title>1.24.103</title>
 			<description># OSX\Linux Notice
 Autoupdate might be broken in previous versions, if that is the case please download manually (fixed in at least &gt;= 1.24.90)
 
 ## Current Release Notes
-* Minor fixes\changes
-* Fix Irony killing the game on linux (my bad)
-
-## 1.24.90 Release Notes
+* Make more aggressive memory cleanup once navigating back from conflict solver
+* Add experimental native linux wayland support (see appSettings.json)
+* Add alternate titlebars (off by default see appSettings.json)
 * Bump dependencies
-* Make updater more robust
-* Fix game handler not working on linux
-* Fix steam api init on linux being slow (blame valve)
+* Fix compress merge failing due to bad file listing including directories
+* Various fixes &amp; changes
 
 ## Release Notes 1.24
 * Update dependencies
@@ -54,23 +50,21 @@ Autoupdate might be broken in previous versions, if that is the case please down
 * Add support for metadata descriptor type games (Victoria 3 support)
 * Add option to ignore update
 * Improve mod loading performance</description>
-			<pubDate>Fri, 18 Nov 2022 08:23:20 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.24.93/osx-x64.zip" sparkle:version="1.24.93.46152" sparkle:shortVersionString="1.24.93" length="93047195" sparkle:os="osx" type="application/zip" sparkle:signature="BzYjCEteDCag+P8+QNxdnXbmjUMaAOTyqIdcEeizFLdSPj6fFHFRxfpZaZJc2AYcNbI0yZ1hx+zhLxrbkMwmDw=="/>
+			<pubDate>Wed, 30 Nov 2022 05:47:54 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.24.103/osx-x64.zip" sparkle:version="1.24.103.20738" sparkle:shortVersionString="1.24.103" length="93247754" sparkle:os="osx" type="application/zip" sparkle:signature="3+xDNWDJKugXVjRcs1J0o+5pz9dKtHVKDcWGsZR1Oh8F9qY3i+QZFzgv15T6k7NKgb9l2TbpscOm4j9jUEvyCQ=="/>
 		</item>
 		<item>
-			<title>1.24.93</title>
+			<title>1.24.103</title>
 			<description># OSX\Linux Notice
 Autoupdate might be broken in previous versions, if that is the case please download manually (fixed in at least &gt;= 1.24.90)
 
 ## Current Release Notes
-* Minor fixes\changes
-* Fix Irony killing the game on linux (my bad)
-
-## 1.24.90 Release Notes
+* Make more aggressive memory cleanup once navigating back from conflict solver
+* Add experimental native linux wayland support (see appSettings.json)
+* Add alternate titlebars (off by default see appSettings.json)
 * Bump dependencies
-* Make updater more robust
-* Fix game handler not working on linux
-* Fix steam api init on linux being slow (blame valve)
+* Fix compress merge failing due to bad file listing including directories
+* Various fixes &amp; changes
 
 ## Release Notes 1.24
 * Update dependencies
@@ -81,23 +75,21 @@ Autoupdate might be broken in previous versions, if that is the case please down
 * Add support for metadata descriptor type games (Victoria 3 support)
 * Add option to ignore update
 * Improve mod loading performance</description>
-			<pubDate>Fri, 18 Nov 2022 08:23:27 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.24.93/win-x64-setup.zip" sparkle:version="1.24.93.46152" sparkle:shortVersionString="1.24.93" length="71239435" sparkle:os="windows" type="application/zip" sparkle:signature="P8jFGveTEdJPnUs/xFWHoKaGDSyBs8A5eJxPqSqZQdnKRs6Hou6C9TadYzYuGTi/WwWf93hDQkH0IVCbk262CQ=="/>
+			<pubDate>Wed, 30 Nov 2022 05:48:01 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.24.103/win-x64-setup.zip" sparkle:version="1.24.103.20738" sparkle:shortVersionString="1.24.103" length="71364199" sparkle:os="windows" type="application/zip" sparkle:signature="jZUL1nX8QDx/9b7pCiu8s9EpMyBcujhiLxfvozfXWydySZcdB61mSicQddgcpbbggl1fe61dm19YUD+zf/uGDw=="/>
 		</item>
 		<item>
-			<title>1.24.93</title>
+			<title>1.24.103</title>
 			<description># OSX\Linux Notice
 Autoupdate might be broken in previous versions, if that is the case please download manually (fixed in at least &gt;= 1.24.90)
 
 ## Current Release Notes
-* Minor fixes\changes
-* Fix Irony killing the game on linux (my bad)
-
-## 1.24.90 Release Notes
+* Make more aggressive memory cleanup once navigating back from conflict solver
+* Add experimental native linux wayland support (see appSettings.json)
+* Add alternate titlebars (off by default see appSettings.json)
 * Bump dependencies
-* Make updater more robust
-* Fix game handler not working on linux
-* Fix steam api init on linux being slow (blame valve)
+* Fix compress merge failing due to bad file listing including directories
+* Various fixes &amp; changes
 
 ## Release Notes 1.24
 * Update dependencies
@@ -108,8 +100,8 @@ Autoupdate might be broken in previous versions, if that is the case please down
 * Add support for metadata descriptor type games (Victoria 3 support)
 * Add option to ignore update
 * Improve mod loading performance</description>
-			<pubDate>Fri, 18 Nov 2022 08:23:27 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.24.93/win-x64.zip" sparkle:version="1.24.93.46152" sparkle:shortVersionString="1.24.93" length="104619974" sparkle:os="windows" type="application/zip" sparkle:signature="1MMumPwFqAE144yiXNybiO7V4WkvUP99WsLQ87cuKFJkBd3sgidHSE1qHMJiQGBvjSFi/5K+53UTt2WZtX0aDg=="/>
+			<pubDate>Wed, 30 Nov 2022 05:48:01 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.24.103/win-x64.zip" sparkle:version="1.24.103.20738" sparkle:shortVersionString="1.24.103" length="104820515" sparkle:os="windows" type="application/zip" sparkle:signature="r7VlbY9hLimIHxRm8HCar4nlKx55dYh9hNr+ITp0L5bg/1CTHKZ3URKvHRjRIwL7+fZk/W1NlT4OQAIHZQJhAQ=="/>
 		</item>
 	</channel>
 </rss>
