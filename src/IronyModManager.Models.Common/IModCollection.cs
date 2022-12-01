@@ -4,7 +4,7 @@
 // Created          : 03-04-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 07-12-2022
+// Last Modified On : 12-01-2022
 // ***********************************************************************
 // <copyright file="IModCollection.cs" company="Mario">
 //     Mario
@@ -56,6 +56,12 @@ namespace IronyModManager.Models.Common
         /// </summary>
         /// <value>The mod names.</value>
         IEnumerable<string> ModNames { get; set; }
+
+        /// <summary>
+        /// Gets or sets the mod paths.
+        /// </summary>
+        /// <value>The mod paths.</value>
+        IEnumerable<string> ModPaths { get; set; }
 
         /// <summary>
         /// Gets or sets the mods.

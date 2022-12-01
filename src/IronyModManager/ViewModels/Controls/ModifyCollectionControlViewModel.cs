@@ -4,7 +4,7 @@
 // Created          : 05-09-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 11-30-2022
+// Last Modified On : 12-01-2022
 // ***********************************************************************
 // <copyright file="ModifyCollectionControlViewModel.cs" company="Mario">
 //     Mario
@@ -372,6 +372,7 @@ namespace IronyModManager.ViewModels.Controls
             var copied = modCollectionService.Create();
             copied.IsSelected = true;
             copied.Mods = ActiveCollection.Mods;
+            copied.ModPaths = ActiveCollection.ModPaths;
             copied.Name = name;
             copied.PatchModEnabled = true;
             return copied;
@@ -523,6 +524,7 @@ namespace IronyModManager.ViewModels.Controls
                         return await modMergeService.MergeCollectionByFilesAsync(copy.Name);
                     }).ConfigureAwait(false);
                     copy.Mods = new List<string>() { mergeMod.DescriptorFile };
+                    copy.ModPaths = new List<string>() { mergeMod.FullPath };
 
                     await TriggerOverlayAsync(id, false);
                     freeSpaceCheckHandler?.Dispose();
@@ -601,6 +603,7 @@ namespace IronyModManager.ViewModels.Controls
                         }));
                     }).ConfigureAwait(false);
                     copy.Mods = mergeMods.Select(p => p.DescriptorFile).ToList();
+                    copy.ModPaths = mergeMods.Select(p => p.FullPath).ToList();
                     copy.PatchModEnabled = ActiveCollection.PatchModEnabled;
 
                     // I know bad

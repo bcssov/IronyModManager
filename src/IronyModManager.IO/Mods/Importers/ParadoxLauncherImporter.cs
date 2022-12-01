@@ -4,7 +4,7 @@
 // Created          : 08-12-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 11-29-2022
+// Last Modified On : 12-01-2022
 // ***********************************************************************
 // <copyright file="ParadoxLauncherImporter.cs" company="Mario">
 //     Mario
@@ -229,7 +229,14 @@ namespace IronyModManager.IO.Mods.Importers
                         {
                             var result = DIResolver.Get<ICollectionImportResult>();
                             result.Name = activeCollection.Name;
-                            result.Descriptors = validMods.Select(p => p.GameRegistryId).ToList();
+                            if (parameters.DescriptorType == Common.DescriptorType.DescriptorMod)
+                            {
+                                result.Descriptors = validMods.Select(p => p.GameRegistryId).ToList();
+                            }
+                            else
+                            {
+                                result.FullPaths = validMods.Select(p => p.DirPath.StandardizeDirectorySeparator()).ToList();
+                            }
                             result.ModNames = validMods.Select(p => p.DisplayName).ToList();
                             return result;
                         }
@@ -266,7 +273,14 @@ namespace IronyModManager.IO.Mods.Importers
                         {
                             var result = DIResolver.Get<ICollectionImportResult>();
                             result.Name = activeCollection.Name;
-                            result.Descriptors = validMods.Select(p => p.GameRegistryId).ToList();
+                            if (parameters.DescriptorType == Common.DescriptorType.DescriptorMod)
+                            {
+                                result.Descriptors = validMods.Select(p => p.GameRegistryId).ToList();
+                            }
+                            else
+                            {
+                                result.FullPaths = validMods.Select(p => p.DirPath.StandardizeDirectorySeparator()).ToList();
+                            }
                             result.ModNames = validMods.Select(p => p.DisplayName).ToList();
                             return result;
                         }

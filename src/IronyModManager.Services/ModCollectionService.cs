@@ -4,7 +4,7 @@
 // Created          : 03-04-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 11-05-2022
+// Last Modified On : 12-01-2022
 // ***********************************************************************
 // <copyright file="ModCollectionService.cs" company="Mario">
 //     Mario
@@ -222,6 +222,8 @@ namespace IronyModManager.Services
                 collection.ModNames.ToList().ForEach(p => prefixModNames.Add(ModWriter.FormatPrefixModName(modNameOverride, p)));
                 collection.ModNames = prefixModNames;
             }
+            // Privacy
+            collection.ModPaths = null;
             return modCollectionExporter.ExportAsync(parameters);
         }
 
@@ -647,9 +649,11 @@ namespace IronyModManager.Services
                     {
                         var sort = importResult.ModIds.ToList();
                         var collectionMods = mods.Where(p => importResult.ModIds.Any(x => (x.ParadoxId.HasValue && x.ParadoxId.GetValueOrDefault() == p.RemoteId.GetValueOrDefault()) || (x.SteamId.HasValue && x.SteamId.GetValueOrDefault() == p.RemoteId.GetValueOrDefault()))).
-                            OrderBy(p => sort.IndexOf(sort.FirstOrDefault(x => (x.ParadoxId.HasValue && x.ParadoxId.GetValueOrDefault() == p.RemoteId.GetValueOrDefault()) || (x.SteamId.HasValue && x.SteamId.GetValueOrDefault() == p.RemoteId.GetValueOrDefault()))));
+                            OrderBy(p => sort.IndexOf(sort.FirstOrDefault(x => (x.ParadoxId.HasValue && x.ParadoxId.GetValueOrDefault() == p.RemoteId.GetValueOrDefault()) || (x.SteamId.HasValue && x.SteamId.GetValueOrDefault() == p.RemoteId.GetValueOrDefault())))).ToList();
+                        collectionMods = collectionMods.GroupBy(p => p.FullPath).Select(p => p.FirstOrDefault()).ToList();
                         modCollection.Mods = collectionMods.Select(p => p.DescriptorFile).ToList();
                         modCollection.ModNames = collectionMods.Select(p => p.Name).ToList();
+                        modCollection.ModPaths = collectionMods.Select(p => p.FullPath).ToList();
                     }
                 }
                 else if (importResult.FullPaths != null && importResult.FullPaths.Any())
@@ -658,10 +662,29 @@ namespace IronyModManager.Services
                     if (mods.Any())
                     {
                         var sort = importResult.FullPaths.ToList();
-                        var collectionMods = mods.Where(p => importResult.FullPaths.Any(x => x.Equals(p.FullPath))).
-                            OrderBy(p => sort.IndexOf(sort.FirstOrDefault(x => x.Equals(p.FullPath))));
+                        var collectionMods = mods.Where(p => importResult.FullPaths.Any(x => x.StandardizeDirectorySeparator().Equals(p.FullPath.StandardizeDirectorySeparator(), StringComparison.OrdinalIgnoreCase))).
+                            OrderBy(p => sort.IndexOf(sort.FirstOrDefault(x => x.StandardizeDirectorySeparator().Equals(p.FullPath.StandardizeDirectorySeparator(), StringComparison.OrdinalIgnoreCase)))).ToList();
+                        collectionMods = collectionMods.GroupBy(p => p.FullPath).Select(p => p.FirstOrDefault()).ToList();
                         modCollection.Mods = collectionMods.Select(p => p.DescriptorFile).ToList();
                         modCollection.ModNames = collectionMods.Select(p => p.Name).ToList();
+                        modCollection.ModPaths = collectionMods.Select(p => p.FullPath).ToList();
+                    }
+                }
+            }
+            else
+            {
+                var mods = GetInstalledModsInternal(modCollection.Game, false);
+                if (mods.Any())
+                {
+                    var sort = importResult.Descriptors.ToList();
+                    var collectionMods = mods.Where(p => importResult.Descriptors.Any(x => x.Equals(p.DescriptorFile, StringComparison.OrdinalIgnoreCase))).OrderBy(p => sort.IndexOf(sort.FirstOrDefault(x => x.Equals(p.DescriptorFile, StringComparison.OrdinalIgnoreCase)))).ToList();
+                    modCollection.ModPaths = collectionMods.Select(p => p.FullPath).ToList();
+                    if (modCollection.ModPaths.Count() != modCollection.Mods.Count() && importResult.ModNames.Any())
+                    {
+                        sort = importResult.ModNames.ToList();
+                        collectionMods = mods.Where(p => importResult.ModNames.Any(x => x.Equals(p.Name))).OrderBy(p => sort.IndexOf(sort.FirstOrDefault(x => x.Equals(p.Name)))).ToList();
+                        collectionMods = collectionMods.GroupBy(p => p.FullPath).Select(p => p.FirstOrDefault()).ToList();
+                        modCollection.ModPaths = collectionMods.Select(p => p.FullPath).ToList();
                     }
                 }
             }
