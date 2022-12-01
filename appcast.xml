@@ -4,17 +4,22 @@
 		<title>Irony Mod Manager</title>
 		<language>en</language>
 		<item>
-			<title>1.24.103</title>
+			<title>1.24.104</title>
 			<description># OSX\Linux Notice
 Autoupdate might be broken in previous versions, if that is the case please download manually (fixed in at least &gt;= 1.24.90)
 
 ## Current Release Notes
+* Fix Victoria 3 import and mod type indicators. If you end up with duplicate mod entries right click on installed mods area and select Delete all and Reload (backup your mod collections first)
+* Make Irony able to locate mods with differently named descriptors but still pointing towards the same path
+
+## 1.24.103 Release Notes
 * Make more aggressive memory cleanup once navigating back from conflict solver
 * Add experimental native linux wayland support (see appSettings.json)
 * Add alternate titlebars (off by default see appSettings.json)
 * Bump dependencies
 * Fix compress merge failing due to bad file listing including directories
 * Various fixes &amp; changes
+
 
 ## Release Notes 1.24
 * Update dependencies
@@ -25,21 +30,26 @@ Autoupdate might be broken in previous versions, if that is the case please down
 * Add support for metadata descriptor type games (Victoria 3 support)
 * Add option to ignore update
 * Improve mod loading performance</description>
-			<pubDate>Wed, 30 Nov 2022 05:47:48 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.24.103/linux-x64.zip" sparkle:version="1.24.103.20738" sparkle:shortVersionString="1.24.103" length="90085829" sparkle:os="linux" type="application/zip" sparkle:signature="ZgHxenT2V8hrNH4OgHFUup+TOnhNPk7lCFWrWoyAdo2iSac3q0bsAkUyYMfu/bCGA/HeGGvdyW2ccjpz/km7Aw=="/>
+			<pubDate>Thu, 01 Dec 2022 23:51:08 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.24.104/linux-x64.zip" sparkle:version="1.24.104.16485" sparkle:shortVersionString="1.24.104" length="90088841" sparkle:os="linux" type="application/zip" sparkle:signature="8sJMxLiH8n+AwqhXkPzhdeGsTWLmpbPnewKXxXR4aiRuB5fIuwPba2qMf9Ih81qpiKf7SZh6fflIX5qrwJ7oDA=="/>
 		</item>
 		<item>
-			<title>1.24.103</title>
+			<title>1.24.104</title>
 			<description># OSX\Linux Notice
 Autoupdate might be broken in previous versions, if that is the case please download manually (fixed in at least &gt;= 1.24.90)
 
 ## Current Release Notes
+* Fix Victoria 3 import and mod type indicators. If you end up with duplicate mod entries right click on installed mods area and select Delete all and Reload (backup your mod collections first)
+* Make Irony able to locate mods with differently named descriptors but still pointing towards the same path
+
+## 1.24.103 Release Notes
 * Make more aggressive memory cleanup once navigating back from conflict solver
 * Add experimental native linux wayland support (see appSettings.json)
 * Add alternate titlebars (off by default see appSettings.json)
 * Bump dependencies
 * Fix compress merge failing due to bad file listing including directories
 * Various fixes &amp; changes
+
 
 ## Release Notes 1.24
 * Update dependencies
@@ -50,21 +60,26 @@ Autoupdate might be broken in previous versions, if that is the case please down
 * Add support for metadata descriptor type games (Victoria 3 support)
 * Add option to ignore update
 * Improve mod loading performance</description>
-			<pubDate>Wed, 30 Nov 2022 05:47:54 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.24.103/osx-x64.zip" sparkle:version="1.24.103.20738" sparkle:shortVersionString="1.24.103" length="93247754" sparkle:os="osx" type="application/zip" sparkle:signature="3+xDNWDJKugXVjRcs1J0o+5pz9dKtHVKDcWGsZR1Oh8F9qY3i+QZFzgv15T6k7NKgb9l2TbpscOm4j9jUEvyCQ=="/>
+			<pubDate>Thu, 01 Dec 2022 23:51:14 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.24.104/osx-x64.zip" sparkle:version="1.24.104.16485" sparkle:shortVersionString="1.24.104" length="93250801" sparkle:os="osx" type="application/zip" sparkle:signature="oYwLuxwD9usFqQw3VLXw4T2G5w9w+JWP+K47icQ4hHslzl5SeY+tE5WiGpkerQCJROJMrsVQa9ZkhKVg8JwVDg=="/>
 		</item>
 		<item>
-			<title>1.24.103</title>
+			<title>1.24.104</title>
 			<description># OSX\Linux Notice
 Autoupdate might be broken in previous versions, if that is the case please download manually (fixed in at least &gt;= 1.24.90)
 
 ## Current Release Notes
+* Fix Victoria 3 import and mod type indicators. If you end up with duplicate mod entries right click on installed mods area and select Delete all and Reload (backup your mod collections first)
+* Make Irony able to locate mods with differently named descriptors but still pointing towards the same path
+
+## 1.24.103 Release Notes
 * Make more aggressive memory cleanup once navigating back from conflict solver
 * Add experimental native linux wayland support (see appSettings.json)
 * Add alternate titlebars (off by default see appSettings.json)
 * Bump dependencies
 * Fix compress merge failing due to bad file listing including directories
 * Various fixes &amp; changes
+
 
 ## Release Notes 1.24
 * Update dependencies
@@ -75,21 +90,26 @@ Autoupdate might be broken in previous versions, if that is the case please down
 * Add support for metadata descriptor type games (Victoria 3 support)
 * Add option to ignore update
 * Improve mod loading performance</description>
-			<pubDate>Wed, 30 Nov 2022 05:48:01 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.24.103/win-x64-setup.zip" sparkle:version="1.24.103.20738" sparkle:shortVersionString="1.24.103" length="71364199" sparkle:os="windows" type="application/zip" sparkle:signature="jZUL1nX8QDx/9b7pCiu8s9EpMyBcujhiLxfvozfXWydySZcdB61mSicQddgcpbbggl1fe61dm19YUD+zf/uGDw=="/>
+			<pubDate>Thu, 01 Dec 2022 23:51:19 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.24.104/win-x64-setup.zip" sparkle:version="1.24.104.16485" sparkle:shortVersionString="1.24.104" length="71373316" sparkle:os="windows" type="application/zip" sparkle:signature="WhLDtE9LQMLf0UzHj2RmSNpHVqOG3g3Xg8G7mnYcqD/eqfZF2Jm0L7Xmxpza0jn3TKSQ202vq6GxeoHS6OQUDg=="/>
 		</item>
 		<item>
-			<title>1.24.103</title>
+			<title>1.24.104</title>
 			<description># OSX\Linux Notice
 Autoupdate might be broken in previous versions, if that is the case please download manually (fixed in at least &gt;= 1.24.90)
 
 ## Current Release Notes
+* Fix Victoria 3 import and mod type indicators. If you end up with duplicate mod entries right click on installed mods area and select Delete all and Reload (backup your mod collections first)
+* Make Irony able to locate mods with differently named descriptors but still pointing towards the same path
+
+## 1.24.103 Release Notes
 * Make more aggressive memory cleanup once navigating back from conflict solver
 * Add experimental native linux wayland support (see appSettings.json)
 * Add alternate titlebars (off by default see appSettings.json)
 * Bump dependencies
 * Fix compress merge failing due to bad file listing including directories
 * Various fixes &amp; changes
+
 
 ## Release Notes 1.24
 * Update dependencies
@@ -100,8 +120,8 @@ Autoupdate might be broken in previous versions, if that is the case please down
 * Add support for metadata descriptor type games (Victoria 3 support)
 * Add option to ignore update
 * Improve mod loading performance</description>
-			<pubDate>Wed, 30 Nov 2022 05:48:01 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.24.103/win-x64.zip" sparkle:version="1.24.103.20738" sparkle:shortVersionString="1.24.103" length="104820515" sparkle:os="windows" type="application/zip" sparkle:signature="r7VlbY9hLimIHxRm8HCar4nlKx55dYh9hNr+ITp0L5bg/1CTHKZ3URKvHRjRIwL7+fZk/W1NlT4OQAIHZQJhAQ=="/>
+			<pubDate>Thu, 01 Dec 2022 23:51:20 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.24.104/win-x64.zip" sparkle:version="1.24.104.16485" sparkle:shortVersionString="1.24.104" length="104823516" sparkle:os="windows" type="application/zip" sparkle:signature="HB5TW72iYT2uvbxCeXgBkNgx4rMxLV6YJENHOoBafa/HIHHx6ywjoBcLQgB4oMSldlpy2w0rXG2sng/TkkfYBA=="/>
 		</item>
 	</channel>
 </rss>
