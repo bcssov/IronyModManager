@@ -4,7 +4,7 @@
 // Created          : 02-24-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 11-12-2022
+// Last Modified On : 12-01-2022
 // ***********************************************************************
 // <copyright file="ModService.cs" company="Mario">
 //     Mario
@@ -819,17 +819,14 @@ namespace IronyModManager.Services
                             break;
 
                         case ModSource.Steam:
-                            if (mod.RemoteId.GetValueOrDefault() == 0)
+                            if (!isDirectory)
                             {
-                                if (!isDirectory)
-                                {
-                                    var modParentDirectory = Path.GetDirectoryName(path);
-                                    mod.RemoteId = GetSteamModId(modParentDirectory, isDirectory);
-                                }
-                                else
-                                {
-                                    mod.RemoteId = GetSteamModId(path, isDirectory);
-                                }
+                                var modParentDirectory = Path.GetDirectoryName(path);
+                                mod.RemoteId = GetSteamModId(modParentDirectory);
+                            }
+                            else
+                            {
+                                mod.RemoteId = GetSteamModId(path);
                             }
                             string steamPath;
                             if (modDescriptorType == ModDescriptorType.DescriptorMod)
@@ -847,11 +844,11 @@ namespace IronyModManager.Services
                             if (!isDirectory)
                             {
                                 var modParentDirectory = Path.GetDirectoryName(path);
-                                mod.RemoteId = GetPdxModId(modParentDirectory, isDirectory);
+                                mod.RemoteId = GetPdxModId(modParentDirectory);
                             }
                             else
                             {
-                                mod.RemoteId = GetPdxModId(path, isDirectory);
+                                mod.RemoteId = GetPdxModId(path);
                             }
                             string pdxPath;
                             if (modDescriptorType == ModDescriptorType.DescriptorMod)
@@ -933,11 +930,10 @@ namespace IronyModManager.Services
         /// Gets the steam mod identifier.
         /// </summary>
         /// <param name="path">The path.</param>
-        /// <param name="isDirectory">if set to <c>true</c> [is directory].</param>
         /// <returns>System.Int32.</returns>
-        protected virtual long GetSteamModId(string path, bool isDirectory = false)
+        protected virtual long GetSteamModId(string path)
         {
-            var name = !isDirectory ? Path.GetFileNameWithoutExtension(path) : path;
+            var name = Path.GetFileNameWithoutExtension(path);
 #pragma warning disable CA1806 // Do not ignore method results
             long.TryParse(name.Replace(Constants.Steam_mod_id, string.Empty), out var id);
 #pragma warning restore CA1806 // Do not ignore method results

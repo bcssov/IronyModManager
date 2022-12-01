@@ -4,7 +4,7 @@
 // Created          : 04-07-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 11-12-2022
+// Last Modified On : 12-01-2022
 // ***********************************************************************
 // <copyright file="ModBaseService.cs" company="Mario">
 //     Mario
@@ -553,9 +553,17 @@ namespace IronyModManager.Services
 
                 if (collection != null)
                 {
-                    foreach (var item in collection.Mods)
+                    var colMods = collection.Mods.ToList();
+                    var colModPaths = collection.ModPaths.ToList();
+                    for (int i = 0; i < colMods.Count; i++)
                     {
+                        var item = colMods[i];
                         var mod = mods.FirstOrDefault(p => p.DescriptorFile.Equals(item, StringComparison.OrdinalIgnoreCase));
+                        if (mod == null && colModPaths.Count == colMods.Count)
+                        {
+                            item = colModPaths[i];
+                            mod = mods.FirstOrDefault(p => p.FullPath.Equals(item, StringComparison.OrdinalIgnoreCase));
+                        }
                         if (mod != null)
                         {
                             collectionMods.Add(mod);
@@ -735,11 +743,10 @@ namespace IronyModManager.Services
         /// Gets the PDX mod identifier.
         /// </summary>
         /// <param name="path">The path.</param>
-        /// <param name="isDirectory">if set to <c>true</c> [is directory].</param>
         /// <returns>System.Int32.</returns>
-        protected virtual long GetPdxModId(string path, bool isDirectory = false)
+        protected virtual long GetPdxModId(string path)
         {
-            var name = !isDirectory ? Path.GetFileNameWithoutExtension(path) : path;
+            var name = Path.GetFileNameWithoutExtension(path);
 #pragma warning disable CA1806 // Do not ignore method results
             long.TryParse(name.Replace(Constants.Paradox_mod_id, string.Empty), out var id);
 #pragma warning restore CA1806 // Do not ignore method results

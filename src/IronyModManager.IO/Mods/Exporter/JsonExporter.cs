@@ -4,7 +4,7 @@
 // Created          : 08-11-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 10-29-2022
+// Last Modified On : 12-01-2022
 // ***********************************************************************
 // <copyright file="JsonExporter.cs" company="Mario">
 //     Mario
@@ -175,26 +175,20 @@ namespace IronyModManager.IO.Mods.Exporter
                 contentLoad.EnabledMods.Clear();
             }
 
-            if (parameters.EnabledMods != null)
-            {
-                parameters.EnabledMods.ToList().ForEach(p =>
+            parameters.EnabledMods?.ToList().ForEach(p =>
                 {
                     contentLoad.EnabledMods.Add(new EnabledMod()
                     {
                         Path = p.FullPath
                     });
                 });
-            }
-            if (parameters.TopPriorityMods != null)
-            {
-                parameters.TopPriorityMods.ToList().ForEach(p =>
+            parameters.TopPriorityMods?.ToList().ForEach(p =>
                 {
                     contentLoad.EnabledMods.Add(new EnabledMod()
                     {
                         Path = p.FullPath
                     });
                 });
-            }
             return await WritePdxModelAsync(contentLoad, contentPath);
         }
 

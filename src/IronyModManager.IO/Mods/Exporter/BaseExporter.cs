@@ -4,15 +4,15 @@
 // Created          : 08-11-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 10-06-2020
+// Last Modified On : 12-01-2022
 // ***********************************************************************
 // <copyright file="BaseExporter.cs" company="Mario">
 //     Mario
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
-using System.Collections.Generic;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using IronyModManager.IO.Mods.Models.Paradox;
@@ -28,6 +28,16 @@ namespace IronyModManager.IO.Mods.Exporter
     internal abstract class BaseExporter
     {
         #region Methods
+
+        /// <summary>
+        /// Maps the name of the file.
+        /// </summary>
+        /// <param name="mod">The mod.</param>
+        /// <returns>System.String.</returns>
+        protected virtual string MapFileName(IMod mod)
+        {
+            return mod.FileName;
+        }
 
         /// <summary>
         /// Maps the mod data.
@@ -79,15 +89,15 @@ namespace IronyModManager.IO.Mods.Exporter
             if (mod.FileName.EndsWith(Shared.Constants.ZipExtension, StringComparison.OrdinalIgnoreCase) ||
                 mod.FileName.EndsWith(Shared.Constants.BinExtension, StringComparison.OrdinalIgnoreCase))
             {
-                pdxMod.ArchivePath = mod.FileName;
+                pdxMod.ArchivePath = MapFileName(mod);
                 if (mod.Source != ModSource.Local)
                 {
-                    pdxMod.DirPath = Path.GetDirectoryName(mod.FileName);
+                    pdxMod.DirPath = Path.GetDirectoryName(MapFileName(mod));
                 }
             }
             else
             {
-                pdxMod.DirPath = mod.FileName;
+                pdxMod.DirPath = MapFileName(mod);
             }
         }
 

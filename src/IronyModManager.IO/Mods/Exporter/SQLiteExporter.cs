@@ -4,7 +4,7 @@
 // Created          : 08-11-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 10-29-2022
+// Last Modified On : 12-01-2022
 // ***********************************************************************
 // <copyright file="SQLiteExporter.cs" company="Mario">
 //     Mario
@@ -18,6 +18,7 @@ using System.Data;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using IronyModManager.IO.Common;
 using IronyModManager.IO.Common.Mods;
 using IronyModManager.Models.Common;
 using IronyModManager.Shared;
@@ -451,17 +452,19 @@ namespace IronyModManager.IO.Mods.Exporter
         /// </summary>
         /// <param name="pdxMod">The PDX mod.</param>
         /// <param name="mod">The mod.</param>
+        /// <param name="descriptorType">Type of the descriptor.</param>
         /// <returns>Models.Paradox.v2.Mods.</returns>
-        private Models.Paradox.v2.Mods MapPdxModV2(Models.Paradox.v2.Mods pdxMod, IMod mod)
+        private Models.Paradox.v2.Mods MapPdxModV2(Models.Paradox.v2.Mods pdxMod, IMod mod, DescriptorType descriptorType)
         {
-            if (pdxMod == null)
+            pdxMod ??= new Models.Paradox.v2.Mods()
             {
-                pdxMod = new Models.Paradox.v2.Mods()
-                {
-                    Id = Guid.NewGuid().ToString()
-                };
-            }
+                Id = Guid.NewGuid().ToString()
+            };
             MapModData(pdxMod, mod);
+            if (descriptorType == DescriptorType.JsonMetadata)
+            {
+                pdxMod.GameRegistryId = null;
+            }
             return pdxMod;
         }
 
@@ -470,18 +473,30 @@ namespace IronyModManager.IO.Mods.Exporter
         /// </summary>
         /// <param name="pdxMod">The PDX mod.</param>
         /// <param name="mod">The mod.</param>
+        /// <param name="descriptorType">Type of the descriptor.</param>
         /// <returns>Models.Paradox.v4.Mods.</returns>
-        private Models.Paradox.v4.Mods MapPdxModV4(Models.Paradox.v4.Mods pdxMod, IMod mod)
+        private Models.Paradox.v4.Mods MapPdxModV4(Models.Paradox.v4.Mods pdxMod, IMod mod, DescriptorType descriptorType)
         {
-            if (pdxMod == null)
+            pdxMod ??= new Models.Paradox.v4.Mods()
             {
-                pdxMod = new Models.Paradox.v4.Mods()
-                {
-                    Id = Guid.NewGuid().ToString()
-                };
-            }
+                Id = Guid.NewGuid().ToString()
+            };
             MapModData(pdxMod, mod);
+            if (descriptorType == DescriptorType.JsonMetadata)
+            {
+                pdxMod.GameRegistryId = null;
+            }
             return pdxMod;
+        }
+
+        /// <summary>
+        /// Maps the name of the file.
+        /// </summary>
+        /// <param name="mod">The mod.</param>
+        /// <returns>System.String.</returns>
+        protected override string MapFileName(IMod mod)
+        {
+            return mod.FileName.StandardizeDirectorySeparator();
         }
 
         /// <summary>
@@ -492,8 +507,9 @@ namespace IronyModManager.IO.Mods.Exporter
         /// <param name="exportMods">The export mods.</param>
         /// <param name="mods">The mods.</param>
         /// <param name="removeInvalid">if set to <c>true</c> [remove invalid].</param>
+        /// <param name="descriptorType">Type of the descriptor.</param>
         /// <returns>IEnumerable&lt;Models.Paradox.v2.Mods&gt;.</returns>
-        private async Task<IEnumerable<Models.Paradox.v2.Mods>> PrepareModsTransactionV2Async(IDbConnection con, IDbTransaction transaction, List<IMod> exportMods, IEnumerable<Models.Paradox.v2.Mods> mods, bool removeInvalid)
+        private async Task<IEnumerable<Models.Paradox.v2.Mods>> PrepareModsTransactionV2Async(IDbConnection con, IDbTransaction transaction, List<IMod> exportMods, IEnumerable<Models.Paradox.v2.Mods> mods, bool removeInvalid, DescriptorType descriptorType)
         {
             var result = new HashSet<Models.Paradox.v2.Mods>();
             if (mods?.Count() > 0)
@@ -513,10 +529,10 @@ namespace IronyModManager.IO.Mods.Exporter
                 }
                 foreach (var item in exportMods)
                 {
-                    var pdxMod = mods.FirstOrDefault(p => p.GameRegistryId.Equals(item.DescriptorFile, StringComparison.OrdinalIgnoreCase));
+                    var pdxMod = descriptorType == DescriptorType.DescriptorMod ? mods.FirstOrDefault(p => p.GameRegistryId.Equals(item.DescriptorFile, StringComparison.OrdinalIgnoreCase)) : mods.FirstOrDefault(p => p.DirPath.StandardizeDirectorySeparator().Equals(item.FileName.StandardizeDirectorySeparator(), StringComparison.OrdinalIgnoreCase));
                     if (pdxMod == null)
                     {
-                        var newPdxMod = MapPdxModV2(null, item);
+                        var newPdxMod = MapPdxModV2(null, item, descriptorType);
                         toInsert.Add(newPdxMod);
                         result.Add(newPdxMod);
                     }
@@ -525,13 +541,13 @@ namespace IronyModManager.IO.Mods.Exporter
                         // Pending delete, insert a new entry instead
                         if (toRemove.Contains(pdxMod))
                         {
-                            var newPdxMod = MapPdxModV2(null, item);
+                            var newPdxMod = MapPdxModV2(null, item, descriptorType);
                             toInsert.Add(newPdxMod);
                             result.Add(newPdxMod);
                         }
                         else
                         {
-                            var updatedPdxMod = MapPdxModV2(pdxMod, item);
+                            var updatedPdxMod = MapPdxModV2(pdxMod, item, descriptorType);
                             toUpdate.Add(updatedPdxMod);
                             result.Add(updatedPdxMod);
                         }
@@ -555,7 +571,7 @@ namespace IronyModManager.IO.Mods.Exporter
                 var toInsert = new HashSet<Models.Paradox.v2.Mods>();
                 foreach (var mod in exportMods)
                 {
-                    var pdxMod = MapPdxModV2(null, mod);
+                    var pdxMod = MapPdxModV2(null, mod, descriptorType);
                     toInsert.Add(pdxMod);
                     result.Add(pdxMod);
                 }
@@ -575,8 +591,9 @@ namespace IronyModManager.IO.Mods.Exporter
         /// <param name="exportMods">The export mods.</param>
         /// <param name="mods">The mods.</param>
         /// <param name="removeInvalid">if set to <c>true</c> [remove invalid].</param>
+        /// <param name="descriptorType">Type of the descriptor.</param>
         /// <returns>A Task&lt;IEnumerable`1&gt; representing the asynchronous operation.</returns>
-        private async Task<IEnumerable<Models.Paradox.v4.Mods>> PrepareModsTransactionV4Async(IDbConnection con, IDbTransaction transaction, List<IMod> exportMods, IEnumerable<Models.Paradox.v4.Mods> mods, bool removeInvalid)
+        private async Task<IEnumerable<Models.Paradox.v4.Mods>> PrepareModsTransactionV4Async(IDbConnection con, IDbTransaction transaction, List<IMod> exportMods, IEnumerable<Models.Paradox.v4.Mods> mods, bool removeInvalid, DescriptorType descriptorType)
         {
             var result = new HashSet<Models.Paradox.v4.Mods>();
             if (mods?.Count() > 0)
@@ -596,10 +613,10 @@ namespace IronyModManager.IO.Mods.Exporter
                 }
                 foreach (var item in exportMods)
                 {
-                    var pdxMod = mods.FirstOrDefault(p => p.GameRegistryId.Equals(item.DescriptorFile, StringComparison.OrdinalIgnoreCase));
+                    var pdxMod = descriptorType == DescriptorType.DescriptorMod ? mods.FirstOrDefault(p => p.GameRegistryId.Equals(item.DescriptorFile, StringComparison.OrdinalIgnoreCase)) : mods.FirstOrDefault(p => p.DirPath.StandardizeDirectorySeparator().Equals(item.FileName.StandardizeDirectorySeparator(), StringComparison.OrdinalIgnoreCase));
                     if (pdxMod == null)
                     {
-                        var newPdxMod = MapPdxModV4(null, item);
+                        var newPdxMod = MapPdxModV4(null, item, descriptorType);
                         toInsert.Add(newPdxMod);
                         result.Add(newPdxMod);
                     }
@@ -608,13 +625,13 @@ namespace IronyModManager.IO.Mods.Exporter
                         // Pending delete, insert a new entry instead
                         if (toRemove.Contains(pdxMod))
                         {
-                            var newPdxMod = MapPdxModV4(null, item);
+                            var newPdxMod = MapPdxModV4(null, item, descriptorType);
                             toInsert.Add(newPdxMod);
                             result.Add(newPdxMod);
                         }
                         else
                         {
-                            var updatedPdxMod = MapPdxModV4(pdxMod, item);
+                            var updatedPdxMod = MapPdxModV4(pdxMod, item, descriptorType);
                             toUpdate.Add(updatedPdxMod);
                             result.Add(updatedPdxMod);
                         }
@@ -638,7 +655,7 @@ namespace IronyModManager.IO.Mods.Exporter
                 var toInsert = new HashSet<Models.Paradox.v4.Mods>();
                 foreach (var mod in exportMods)
                 {
-                    var pdxMod = MapPdxModV4(null, mod);
+                    var pdxMod = MapPdxModV4(null, mod, descriptorType);
                     toInsert.Add(pdxMod);
                     result.Add(pdxMod);
                 }
@@ -864,8 +881,12 @@ namespace IronyModManager.IO.Mods.Exporter
             using var transaction = con.BeginTransaction();
             try
             {
-                var allMods = await PrepareModsTransactionV2Async(con, transaction, exportMods, mods, !parameters.AppendOnly);
-                await PreparePlaysetModsTransactionV2Async(con, transaction, collection, allMods.Where(p => enabledMods.Any(s => s.DescriptorFile.Equals(p.GameRegistryId))), !parameters.AppendOnly);
+                var allMods = await PrepareModsTransactionV2Async(con, transaction, exportMods, mods, !parameters.AppendOnly, parameters.DescriptorType);
+                await PreparePlaysetModsTransactionV2Async(con, transaction, collection, 
+                    parameters.DescriptorType == DescriptorType.DescriptorMod ? 
+                    allMods.Where(p => enabledMods.Any(s => s.DescriptorFile.Equals(p.GameRegistryId, StringComparison.OrdinalIgnoreCase))) : 
+                    allMods.Where(p => enabledMods.Any(s => s.FileName.StandardizeDirectorySeparator().Equals(p.DirPath.StandardizeDirectorySeparator(), StringComparison.OrdinalIgnoreCase))), 
+                    !parameters.AppendOnly);
                 transaction.Commit();
             }
             catch (Exception ex)
@@ -906,8 +927,12 @@ namespace IronyModManager.IO.Mods.Exporter
             using var transaction = con.BeginTransaction();
             try
             {
-                var allMods = await PrepareModsTransactionV4Async(con, transaction, exportMods, mods, !parameters.AppendOnly);
-                await PreparePlaysetModsTransactionV4Async(con, transaction, collection, allMods.Where(p => enabledMods.Any(s => s.DescriptorFile.Equals(p.GameRegistryId))), !parameters.AppendOnly);
+                var allMods = await PrepareModsTransactionV4Async(con, transaction, exportMods, mods, !parameters.AppendOnly, parameters.DescriptorType);
+                await PreparePlaysetModsTransactionV4Async(con, transaction, collection,
+                    parameters.DescriptorType == DescriptorType.DescriptorMod ?
+                    allMods.Where(p => enabledMods.Any(s => s.DescriptorFile.Equals(p.GameRegistryId, StringComparison.OrdinalIgnoreCase))) :
+                    allMods.Where(p => enabledMods.Any(s => s.FileName.StandardizeDirectorySeparator().Equals(p.DirPath.StandardizeDirectorySeparator(), StringComparison.OrdinalIgnoreCase))),
+                    !parameters.AppendOnly);
                 transaction.Commit();
             }
             catch (Exception ex)

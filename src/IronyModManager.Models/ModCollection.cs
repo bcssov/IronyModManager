@@ -4,7 +4,7 @@
 // Created          : 03-04-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 07-12-2022
+// Last Modified On : 12-01-2022
 // ***********************************************************************
 // <copyright file="ModCollection.cs" company="Mario">
 //     Mario
@@ -36,6 +36,7 @@ namespace IronyModManager.Models
             Mods = new List<string>();
             ModNames = new List<string>();
             ModIds = new List<IModCollectionSourceInfo>();
+            ModPaths = new List<string>();
         }
 
         #endregion Constructors
@@ -71,6 +72,12 @@ namespace IronyModManager.Models
         /// </summary>
         /// <value>The mod names.</value>
         public virtual IEnumerable<string> ModNames { get; set; }
+
+        /// <summary>
+        /// Gets or sets the mod paths.
+        /// </summary>
+        /// <value>The mod paths.</value>
+        public virtual IEnumerable<string> ModPaths { get; set; }
 
         /// <summary>
         /// Gets or sets the mods.
