@@ -4,7 +4,7 @@
 // Created          : 03-04-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 12-01-2022
+// Last Modified On : 12-02-2022
 // ***********************************************************************
 // <copyright file="ModCollectionService.cs" company="Mario">
 //     Mario
@@ -674,12 +674,12 @@ namespace IronyModManager.Services
             else
             {
                 var mods = GetInstalledModsInternal(modCollection.Game, false);
-                if (mods.Any())
+                if (mods.Any() && importResult.Descriptors != null && importResult.Descriptors.Any())
                 {
                     var sort = importResult.Descriptors.ToList();
                     var collectionMods = mods.Where(p => importResult.Descriptors.Any(x => x.Equals(p.DescriptorFile, StringComparison.OrdinalIgnoreCase))).OrderBy(p => sort.IndexOf(sort.FirstOrDefault(x => x.Equals(p.DescriptorFile, StringComparison.OrdinalIgnoreCase)))).ToList();
                     modCollection.ModPaths = collectionMods.Select(p => p.FullPath).ToList();
-                    if (modCollection.ModPaths.Count() != modCollection.Mods.Count() && importResult.ModNames.Any())
+                    if (modCollection.ModPaths.Count() != modCollection.Mods.Count() && importResult.ModNames != null && importResult.ModNames.Any())
                     {
                         sort = importResult.ModNames.ToList();
                         collectionMods = mods.Where(p => importResult.ModNames.Any(x => x.Equals(p.Name))).OrderBy(p => sort.IndexOf(sort.FirstOrDefault(x => x.Equals(p.Name)))).ToList();
