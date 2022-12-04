@@ -168,9 +168,12 @@ namespace IronyModManager.Parser.Tests
             sb.AppendLine(@"	""");
             sb.AppendLine(@"}");
 
+            // Behavior changes, parsed as the game would see it (I think)
             var parser = new ModParser(new Logger(), new CodeParser(new Logger()));
             var result = parser.Parse(sb.ToString().Split(Environment.NewLine, StringSplitOptions.RemoveEmptyEntries), Common.DescriptorModType.DescriptorMod);
-            result.Dependencies.Should().BeNull();
+            result.Dependencies.Should().NotBeNull();
+            result.Dependencies.Count().Should().Be(1);
+            result.Dependencies.FirstOrDefault().Should().Be("\r\n}");
             result.FileName.Should().Be("path");
             result.Name.Should().Be("AI Species \"Limit\"");
             result.Picture.Should().Be("thumbnail.png");
