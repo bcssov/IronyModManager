@@ -89,9 +89,8 @@ namespace IronyModManager.Parser
         public virtual IEnumerable<string> CleanCode(string file, IEnumerable<string> lines)
         {
             var commentId = IsLua(file) ? Common.Constants.Scripts.LuaScriptCommentId : Common.Constants.Scripts.ScriptCommentId.ToString();
-            var cleaned = FormatCurlyBraces(string.Join(Environment.NewLine, lines)).Split(Environment.NewLine, StringSplitOptions.RemoveEmptyEntries);
-            return cleaned.Where(p => !string.IsNullOrWhiteSpace(p) && !p.Trim().StartsWith(commentId))
-               .Select(p => FormatCodeTerminators(RemoveInlineComments(commentId, p)));
+            var validCodeLines = lines.Where(p => !string.IsNullOrWhiteSpace(p) && !p.Trim().StartsWith(commentId)).Select(p => RemoveInlineComments(commentId, p));
+            return FormatCurlyBraces(string.Join(Environment.NewLine, validCodeLines)).Split(Environment.NewLine, StringSplitOptions.RemoveEmptyEntries).Select(FormatCodeTerminators);
         }
 
         /// <summary>
