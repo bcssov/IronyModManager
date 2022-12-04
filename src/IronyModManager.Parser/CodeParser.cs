@@ -4,7 +4,7 @@
 // Created          : 02-22-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-06-2022
+// Last Modified On : 12-04-2022
 // ***********************************************************************
 // <copyright file="CodeParser.cs" company="Mario">
 //     Mario
@@ -54,14 +54,8 @@ namespace IronyModManager.Parser
         };
 
         /// <summary>
-        /// The code terminator map
+        /// The quotes regex
         /// </summary>
-        protected static readonly Dictionary<string, string> codeTerminatorMap = new()
-        {
-            { $"{Common.Constants.Scripts.OpenObject}", $" {Common.Constants.Scripts.OpenObject} " },
-            { $"{Common.Constants.Scripts.CloseObject}", $" {Common.Constants.Scripts.CloseObject} " }
-        };
-
         protected static readonly Regex quotesRegex = new("\".*?\"", RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
         /// <summary>
@@ -95,7 +89,8 @@ namespace IronyModManager.Parser
         public virtual IEnumerable<string> CleanCode(string file, IEnumerable<string> lines)
         {
             var commentId = IsLua(file) ? Common.Constants.Scripts.LuaScriptCommentId : Common.Constants.Scripts.ScriptCommentId.ToString();
-            return lines.Where(p => !string.IsNullOrWhiteSpace(p) && !p.Trim().StartsWith(commentId))
+            var cleaned = FormatCurlyBraces(string.Join(Environment.NewLine, lines)).Split(Environment.NewLine, StringSplitOptions.RemoveEmptyEntries);
+            return cleaned.Where(p => !string.IsNullOrWhiteSpace(p) && !p.Trim().StartsWith(commentId))
                .Select(p => FormatCodeTerminators(RemoveInlineComments(commentId, p)));
         }
 
@@ -300,11 +295,47 @@ namespace IronyModManager.Parser
                     cleaned = cleaned.Remove(cleanedRegexHits[i].Index, cleanedRegexHits[i].Length).Insert(cleanedRegexHits[i].Index, insert);
                 }
             }
-            foreach (var item in codeTerminatorMap)
+            return cleaned.Trim();
+        }
+
+        /// <summary>
+        /// Formats the curly braces.
+        /// </summary>
+        /// <param name="code">The code.</param>
+        /// <returns>System.String.</returns>
+        protected string FormatCurlyBraces(string code)
+        {
+            var sb = new StringBuilder();
+            var quoteOpened = false;
+            for (int i = 0; i < code.Length; i++)
             {
-                cleaned = cleaned.Replace(item.Key, item.Value).Trim();
+                var c = code[i];
+                if (c == Common.Constants.Scripts.Quote)
+                {
+                    if (quoteOpened)
+                    {
+                        quoteOpened = false;
+                    }
+                    else
+                    {
+                        quoteOpened = true;
+                    }
+                }
+                var addLine = true;
+                if (c == Common.Constants.Scripts.OpenObject || c == Common.Constants.Scripts.CloseObject)
+                {
+                    if (!quoteOpened)
+                    {
+                        sb.Append($" {c} ");
+                        addLine = false;
+                    }
+                }
+                if (addLine)
+                {
+                    sb.Append(c);
+                }
             }
-            return cleaned;
+            return sb.ToString();
         }
 
         /// <summary>
@@ -599,7 +630,7 @@ namespace IronyModManager.Parser
                         }
                     }
                 }
-                else if (Common.Constants.Scripts.CodeTerminators.Any(p => p == character.GetValueOrDefault()))
+                else if (Common.Constants.Scripts.CodeTerminators.Any(p => p == character.GetValueOrDefault()) && !openQuote)
                 {
                     terminator = character;
                     index = i;
