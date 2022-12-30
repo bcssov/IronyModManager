@@ -4,7 +4,7 @@
 // Created          : 08-12-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 12-01-2022
+// Last Modified On : 12-30-2022
 // ***********************************************************************
 // <copyright file="ParadoxLauncherImporter.cs" company="Mario">
 //     Mario
@@ -213,9 +213,9 @@ namespace IronyModManager.IO.Mods.Importers
         /// <returns>A Task&lt;ICollectionImportResult&gt; representing the asynchronous operation.</returns>
         protected virtual async Task<ICollectionImportResult> DatabaseImportv2Async(ModCollectionExporterParams parameters)
         {
+            using var con = GetConnection(parameters);
             try
             {
-                using var con = GetConnection(parameters);
                 var activeCollection = (await con.QueryAsync<Models.Paradox.v2.Playsets>(p => p.IsActive == true, trace: trace)).FirstOrDefault();
                 if (activeCollection != null)
                 {
@@ -247,6 +247,8 @@ namespace IronyModManager.IO.Mods.Importers
             {
                 logger.Error(ex);
             }
+            con.Close();
+            con.Dispose();
             return null;
         }
 
@@ -257,9 +259,9 @@ namespace IronyModManager.IO.Mods.Importers
         /// <returns>A Task&lt;ICollectionImportResult&gt; representing the asynchronous operation.</returns>
         protected virtual async Task<ICollectionImportResult> DatabaseImportv3Async(ModCollectionExporterParams parameters)
         {
+            using var con = GetConnection(parameters);
             try
             {
-                using var con = GetConnection(parameters);
                 var activeCollection = (await con.QueryAsync<Models.Paradox.v4.Playsets>(p => p.IsActive == true, trace: trace)).FirstOrDefault();
                 if (activeCollection != null)
                 {
@@ -291,6 +293,8 @@ namespace IronyModManager.IO.Mods.Importers
             {
                 logger.Error(ex);
             }
+            con.Close();
+            con.Dispose();
             return null;
         }
 
@@ -321,15 +325,20 @@ namespace IronyModManager.IO.Mods.Importers
         /// <returns>A Task&lt;System.Boolean&gt; representing the asynchronous operation.</returns>
         private async Task<bool> IsV4Async(ModCollectionExporterParams parameters)
         {
+            using var con = GetConnection(parameters);
             try
             {
-                using var con = GetConnection(parameters);
                 var changes = await con.QueryAllAsync<Models.Paradox.v2.KnoxMigrations>();
                 return changes != null && changes.Any(c => c.Name.Equals(Constants.SqlV4Id.Name, StringComparison.OrdinalIgnoreCase));
             }
             catch
             {
                 return false;
+            }
+            finally
+            {
+                con.Close();
+                con.Dispose();
             }
         }
 
