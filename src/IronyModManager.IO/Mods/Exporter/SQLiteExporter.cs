@@ -4,7 +4,7 @@
 // Created          : 08-11-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 12-01-2022
+// Last Modified On : 12-30-2022
 // ***********************************************************************
 // <copyright file="SQLiteExporter.cs" company="Mario">
 //     Mario
@@ -180,9 +180,9 @@ namespace IronyModManager.IO.Mods.Exporter
         /// <returns>A Task&lt;System.Boolean&gt; representing the asynchronous operation.</returns>
         private async Task<Version> GetVersionAsync(ModWriterParameters parameters)
         {
+            using var con = GetConnection(parameters);
             try
             {
-                using var con = GetConnection(parameters);
                 var changes = await con.QueryAllAsync<Models.Paradox.v2.KnoxMigrations>();
                 if (changes != null)
                 {
@@ -199,6 +199,8 @@ namespace IronyModManager.IO.Mods.Exporter
             catch
             {
             }
+            con.Close();
+            con.Dispose();
             return Version.Default;
         }
 
@@ -273,12 +275,17 @@ namespace IronyModManager.IO.Mods.Exporter
 
                 transaction.Commit();
 
+                con.Close();
+                con.Dispose();
+
                 return ironyCollection;
             }
             catch (Exception ex)
             {
                 logger.Error(ex);
                 transaction.Rollback();
+                con.Close();
+                con.Dispose();
                 throw;
             }
         }
@@ -355,12 +362,17 @@ namespace IronyModManager.IO.Mods.Exporter
 
                 transaction.Commit();
 
+                con.Close();
+                con.Dispose();
+
                 return ironyCollection;
             }
             catch (Exception ex)
             {
                 logger.Error(ex);
                 transaction.Rollback();
+                con.Close();
+                con.Dispose();
                 throw;
             }
         }
@@ -437,12 +449,17 @@ namespace IronyModManager.IO.Mods.Exporter
 
                 transaction.Commit();
 
+                con.Close();
+                con.Dispose();
+
                 return ironyCollection;
             }
             catch (Exception ex)
             {
                 logger.Error(ex);
                 transaction.Rollback();
+                con.Close();
+                con.Dispose();
                 throw;
             }
         }
@@ -882,17 +899,21 @@ namespace IronyModManager.IO.Mods.Exporter
             try
             {
                 var allMods = await PrepareModsTransactionV2Async(con, transaction, exportMods, mods, !parameters.AppendOnly, parameters.DescriptorType);
-                await PreparePlaysetModsTransactionV2Async(con, transaction, collection, 
-                    parameters.DescriptorType == DescriptorType.DescriptorMod ? 
-                    allMods.Where(p => enabledMods.Any(s => s.DescriptorFile.Equals(p.GameRegistryId, StringComparison.OrdinalIgnoreCase))) : 
-                    allMods.Where(p => enabledMods.Any(s => s.FileName.StandardizeDirectorySeparator().Equals(p.DirPath.StandardizeDirectorySeparator(), StringComparison.OrdinalIgnoreCase))), 
+                await PreparePlaysetModsTransactionV2Async(con, transaction, collection,
+                    parameters.DescriptorType == DescriptorType.DescriptorMod ?
+                    allMods.Where(p => enabledMods.Any(s => s.DescriptorFile.Equals(p.GameRegistryId, StringComparison.OrdinalIgnoreCase))) :
+                    allMods.Where(p => enabledMods.Any(s => s.FileName.StandardizeDirectorySeparator().Equals(p.DirPath.StandardizeDirectorySeparator(), StringComparison.OrdinalIgnoreCase))),
                     !parameters.AppendOnly);
                 transaction.Commit();
+                con.Close();
+                con.Dispose();
             }
             catch (Exception ex)
             {
                 logger.Error(ex);
                 transaction.Rollback();
+                con.Close();
+                con.Dispose();
                 throw;
             }
         }
@@ -934,11 +955,15 @@ namespace IronyModManager.IO.Mods.Exporter
                     allMods.Where(p => enabledMods.Any(s => s.FileName.StandardizeDirectorySeparator().Equals(p.DirPath.StandardizeDirectorySeparator(), StringComparison.OrdinalIgnoreCase))),
                     !parameters.AppendOnly);
                 transaction.Commit();
+                con.Close();
+                con.Dispose();
             }
             catch (Exception ex)
             {
                 logger.Error(ex);
                 transaction.Rollback();
+                con.Close();
+                con.Dispose();
                 throw;
             }
         }
