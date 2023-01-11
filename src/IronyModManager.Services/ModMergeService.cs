@@ -4,7 +4,7 @@
 // Created          : 06-19-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 11-30-2022
+// Last Modified On : 01-11-2023
 // ***********************************************************************
 // <copyright file="ModMergeService.cs" company="Mario">
 //     Mario
@@ -246,6 +246,10 @@ namespace IronyModManager.Services
             if (collectionMods.Any(p => p.ReplacePath != null && p.ReplacePath.Any()))
             {
                 mod.ReplacePath = collectionMods.Where(p => p.ReplacePath != null && p.ReplacePath.Any()).SelectMany(p => p.ReplacePath).ToList();
+            }
+            if (collectionMods.Any(p => p.AdditionalData != null))
+            {
+                mod.AdditionalData = collectionMods.Where(p => p.AdditionalData != null).SelectMany(p => p.AdditionalData).ToLookup(p => p.Key, p => p.Value).ToDictionary(p => p.Key, p => p.First());
             }
             await ModWriter.WriteDescriptorAsync(new ModWriterParameters()
             {
