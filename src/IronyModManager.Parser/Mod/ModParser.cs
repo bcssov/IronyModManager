@@ -4,7 +4,7 @@
 // Created          : 02-22-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 11-03-2022
+// Last Modified On : 01-11-2023
 // ***********************************************************************
 // <copyright file="ModParser.cs" company="Mario">
 //     Mario
@@ -149,7 +149,7 @@ namespace IronyModManager.Parser.Mod
                 }
                 obj.FileName = result.Path;
                 obj.Name = result.Name;
-                obj.Version = !string.IsNullOrWhiteSpace(result.SupportedGameVersion) ? result.SupportedGameVersion : result.Version;
+                obj.Version = result.SupportedGameVersion;
                 obj.Tags = result.Tags;
                 if (long.TryParse(result.Id, out var id))
                 {

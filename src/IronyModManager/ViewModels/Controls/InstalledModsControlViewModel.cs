@@ -4,7 +4,7 @@
 // Created          : 02-29-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 11-12-2022
+// Last Modified On : 01-11-2023
 // ***********************************************************************
 // <copyright file="InstalledModsControlViewModel.cs" company="Mario">
 //     Mario
@@ -818,7 +818,7 @@ namespace IronyModManager.ViewModels.Controls
                 vm.SortOrder = defaultOrder;
             }
             vm.Text = text;
-            sortOrders.Add(dictKey, vm);
+            sortOrders[dictKey] = vm;
         }
 
         /// <summary>

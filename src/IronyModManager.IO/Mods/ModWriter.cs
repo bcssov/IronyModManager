@@ -4,7 +4,7 @@
 // Created          : 03-31-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 11-03-2022
+// Last Modified On : 01-11-2023
 // ***********************************************************************
 // <copyright file="ModWriter.cs" company="Mario">
 //     Mario
@@ -18,7 +18,6 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
-using IronyModManager.DI;
 using IronyModManager.IO.Common;
 using IronyModManager.IO.Common.Mods;
 using IronyModManager.IO.Mods.Exporter;
@@ -435,25 +434,25 @@ namespace IronyModManager.IO.Mods
             static async Task serializeJsonDescriptorMod(IMod content, StreamWriter sw)
             {
                 var customData = content.AdditionalData != null ? new Dictionary<string, object>(content.AdditionalData) : new Dictionary<string, object>();
-                if (content.ReplacePath != null)
+                if (content.ReplacePath != null && content.ReplacePath.Any())
                 {
                     customData[Shared.Constants.JsonMetadataReplacePaths] = content.ReplacePath;
                 }
-                if (content.UserDir != null)
+                if (content.UserDir != null && content.UserDir.Any())
                 {
                     customData[Shared.Constants.DescriptorUserDir] = content.UserDir;
                 }
 
                 var metaData = new JsonMetadata()
                 {
-                    Id = content.RemoteId.HasValue ? content.RemoteId.ToString() : "",
+                    Id = content.RemoteId.HasValue ? content.RemoteId.ToString() : string.Empty,
                     Name = content.Name,
                     Path = content.FileName,
                     Relationships = content.Dependencies != null ? content.Dependencies.ToList() : new List<string>(),
                     SupportedGameVersion = content.Version,
                     Tags = content.Tags != null ? content.Tags.ToList() : new List<string>(),
-                    ShortDescription = "",
-                    Version = "",
+                    ShortDescription = string.Empty,
+                    Version = string.Empty,
                     GameCustomData = customData
                 };
                 var json = JsonConvert.SerializeObject(metaData, Formatting.Indented);
@@ -463,7 +462,7 @@ namespace IronyModManager.IO.Mods
             if (truncatePath)
             {
                 mod = mapper.Map<IMod>(mod);
-                mod.FileName = string.Empty;
+                mod.FileName = descriptorType == DescriptorType.JsonMetadata ? null : string.Empty;
             }
             using var sw = new StreamWriter(stream, leaveOpen: true);
             if (descriptorType == DescriptorType.DescriptorMod)
@@ -514,7 +513,7 @@ namespace IronyModManager.IO.Mods
             /// Gets or sets the path.
             /// </summary>
             /// <value>The path.</value>
-            [JsonProperty("path")]
+            [JsonProperty("path", NullValueHandling = NullValueHandling.Ignore)]
             public string Path { get; set; }
 
             /// <summary>
