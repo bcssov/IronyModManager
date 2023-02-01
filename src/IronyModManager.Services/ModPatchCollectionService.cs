@@ -4,7 +4,7 @@
 // Created          : 05-26-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 10-29-2022
+// Last Modified On : 02-01-2023
 // ***********************************************************************
 // <copyright file="ModPatchCollectionService.cs" company="Mario">
 //     Mario
@@ -1778,6 +1778,12 @@ namespace IronyModManager.Services
                 {
                     if (!allConflicts.All(p => p.DefinitionSHA.Equals(def.DefinitionSHA)))
                     {
+                        // What if the game is the cause of the conflict
+                        var modConflics = allConflicts.Where(p => !p.IsFromGame);
+                        if (modConflics.Any() && modConflics.GroupBy(p => p.DefinitionSHA).Count() == 1)
+                        {
+                            continue;
+                        }
                         var validConflicts = new HashSet<IDefinition>();
                         foreach (var conflict in allConflicts)
                         {
