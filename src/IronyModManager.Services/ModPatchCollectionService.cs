@@ -4,7 +4,7 @@
 // Created          : 05-26-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-01-2023
+// Last Modified On : 02-04-2023
 // ***********************************************************************
 // <copyright file="ModPatchCollectionService.cs" company="Mario">
 //     Mario
@@ -353,6 +353,7 @@ namespace IronyModManager.Services
             }
             var conflicts = new HashSet<IDefinition>();
             var fileConflictCache = new Dictionary<string, bool>();
+            var modShaConflictCache = new Dictionary<string, List<string>>();
             var fileKeys = indexedDefinitions.GetAllFileKeys();
             var typeAndIdKeys = indexedDefinitions.GetAllTypeAndIdKeys();
             var overwritten = indexedDefinitions.GetByValueType(ValueType.OverwrittenObject).Concat(indexedDefinitions.GetByValueType(ValueType.OverwrittenObjectSingleFile));
@@ -411,7 +412,7 @@ namespace IronyModManager.Services
             foreach (var item in fileKeys)
             {
                 var definitions = indexedDefinitions.GetByFile(item);
-                EvalDefinitions(indexedDefinitions, conflicts, definitions.OrderBy(p => modOrder.IndexOf(p.ModName)), modOrder, actualMode, fileConflictCache);
+                EvalDefinitions(indexedDefinitions, conflicts, definitions.OrderBy(p => modOrder.IndexOf(p.ModName)), modOrder, actualMode, fileConflictCache, modShaConflictCache);
                 processed++;
                 var perc = GetProgressPercentage(total, processed, 99.9);
                 if (perc != previousProgress)
@@ -424,7 +425,7 @@ namespace IronyModManager.Services
             foreach (var item in typeAndIdKeys)
             {
                 var definitions = indexedDefinitions.GetByTypeAndId(item);
-                EvalDefinitions(indexedDefinitions, conflicts, definitions.OrderBy(p => modOrder.IndexOf(p.ModName)), modOrder, actualMode, fileConflictCache);
+                EvalDefinitions(indexedDefinitions, conflicts, definitions.OrderBy(p => modOrder.IndexOf(p.ModName)), modOrder, actualMode, fileConflictCache, modShaConflictCache);
                 processed++;
                 var perc = GetProgressPercentage(total, processed, 99.9);
                 if (perc != previousProgress)
@@ -1744,7 +1745,8 @@ namespace IronyModManager.Services
         /// <param name="modOrder">The mod order.</param>
         /// <param name="patchStateMode">The patch state mode.</param>
         /// <param name="fileConflictCache">The file conflict cache.</param>
-        protected virtual void EvalDefinitions(IIndexedDefinitions indexedDefinitions, HashSet<IDefinition> conflicts, IEnumerable<IDefinition> definitions, IList<string> modOrder, PatchStateMode patchStateMode, Dictionary<string, bool> fileConflictCache)
+        /// <param name="modShaConflictCache">The mod sha conflict cache.</param>
+        protected virtual void EvalDefinitions(IIndexedDefinitions indexedDefinitions, HashSet<IDefinition> conflicts, IEnumerable<IDefinition> definitions, IList<string> modOrder, PatchStateMode patchStateMode, Dictionary<string, bool> fileConflictCache, Dictionary<string, List<string>> modShaConflictCache)
         {
             bool existsInLastFile(IDefinition definition)
             {
@@ -1778,12 +1780,6 @@ namespace IronyModManager.Services
                 {
                     if (!allConflicts.All(p => p.DefinitionSHA.Equals(def.DefinitionSHA)))
                     {
-                        // What if the game is the cause of the conflict
-                        var modConflics = allConflicts.Where(p => !p.IsFromGame);
-                        if (modConflics.Any() && modConflics.GroupBy(p => p.DefinitionSHA).Count() == 1)
-                        {
-                            continue;
-                        }
                         var validConflicts = new HashSet<IDefinition>();
                         foreach (var conflict in allConflicts)
                         {
@@ -1820,6 +1816,13 @@ namespace IronyModManager.Services
                             {
                                 if (!conflicts.Contains(item) && IsValidDefinitionType(item))
                                 {
+                                    if (!item.IsFromGame)
+                                    {
+                                        if (modShaConflictCache.TryGetValue(item.TypeAndId, out var value) && value.Contains(item.DefinitionSHA))
+                                        {
+                                            continue;
+                                        }
+                                    }
                                     var shaMatches = validConflictsGroup.FirstOrDefault(p => p.Key == item.DefinitionSHA);
                                     if (shaMatches.Count() > 1)
                                     {
@@ -1840,6 +1843,21 @@ namespace IronyModManager.Services
                                     }
                                     item.ExistsInLastFile = existsInLastFile(item);
                                     conflicts.Add(item);
+                                    if (!item.IsFromGame)
+                                    {
+                                        if (modShaConflictCache.TryGetValue(item.TypeAndId, out var value))
+                                        {
+                                            value.Add(item.DefinitionSHA);
+                                        }
+                                        else
+                                        {
+                                            var sha = new List<string>
+                                            {
+                                                item.DefinitionSHA
+                                            };
+                                            modShaConflictCache[item.TypeAndId] = sha;
+                                        }
+                                    }
                                 }
                             }
                         }
@@ -1863,6 +1881,21 @@ namespace IronyModManager.Services
                                     if (!def.ExistsInLastFile)
                                     {
                                         conflicts.Add(def);
+                                        if (!def.IsFromGame)
+                                        {
+                                            if (modShaConflictCache.TryGetValue(def.TypeAndId, out var value))
+                                            {
+                                                value.Add(def.DefinitionSHA);
+                                            }
+                                            else
+                                            {
+                                                var sha = new List<string>
+                                                {
+                                                    def.DefinitionSHA
+                                                };
+                                                modShaConflictCache[def.TypeAndId] = sha;
+                                            }
+                                        }
                                     }
                                 }
                             }
@@ -1886,6 +1919,21 @@ namespace IronyModManager.Services
                                         if (!def.ExistsInLastFile)
                                         {
                                             conflicts.Add(def);
+                                            if (!def.IsFromGame)
+                                            {
+                                                if (modShaConflictCache.TryGetValue(def.TypeAndId, out var value))
+                                                {
+                                                    value.Add(def.DefinitionSHA);
+                                                }
+                                                else
+                                                {
+                                                    var sha = new List<string>
+                                                    {
+                                                        def.DefinitionSHA
+                                                    };
+                                                    modShaConflictCache[def.TypeAndId] = sha;
+                                                }
+                                            }
                                         }
                                     }
                                 }
