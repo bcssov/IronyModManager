@@ -4,7 +4,7 @@
 // Created          : 02-16-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 10-14-2022
+// Last Modified On : 02-04-2023
 // ***********************************************************************
 // <copyright file="Constants.cs" company="Mario">
 //     Mario
@@ -268,6 +268,11 @@ namespace IronyModManager.Parser.Common
             /// The intelligence agencies
             /// </summary>
             public static readonly string IntelligenceAgencies = MergePath(CommonPath, "intelligence_agencies");
+
+            /// <summary>
+            /// The map modes
+            /// </summary>
+            public static readonly string MapModes = MergePath(CommonPath, "map_modes");
 
             /// <summary>
             /// The medals

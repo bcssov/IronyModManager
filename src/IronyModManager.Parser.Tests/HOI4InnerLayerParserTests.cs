@@ -4,7 +4,7 @@
 // Created          : 01-29-2022
 //
 // Last Modified By : Mario
-// Last Modified On : 01-29-2022
+// Last Modified On : 02-04-2023
 // ***********************************************************************
 // <copyright file="HOI4InnerLayerParserTests.cs" company="Mario">
 //     Mario
@@ -323,6 +323,21 @@ namespace IronyModManager.Parser.Tests
             var args = new CanParseArgs()
             {
                 File = "common\\unit_medals\\test.txt",
+                GameType = "HeartsofIronIV"
+            };
+            var parser = new Games.HOI4.InnerLayerParser(new CodeParser(new Logger()), null);
+            parser.CanParse(args).Should().BeTrue();
+        }
+
+        /// <summary>
+        /// Defines the test method CanParse_map_modes_should_be_true.
+        /// </summary>
+        [Fact]
+        public void CanParse_map_modes_should_be_true()
+        {
+            var args = new CanParseArgs()
+            {
+                File = "common\\map_modes\\test.txt",
                 GameType = "HeartsofIronIV"
             };
             var parser = new Games.HOI4.InnerLayerParser(new CodeParser(new Logger()), null);
