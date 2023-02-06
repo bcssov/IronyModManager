@@ -4,10 +4,11 @@
 		<title>Irony Mod Manager</title>
 		<language>en</language>
 		<item>
-			<title>1.24.107</title>
+			<title>1.24.114</title>
 			<description>## Current Release Notes
 * Minor fixes
-* Fix parsing curly braces in quotes
+* Json metadata merge fixes
+* HOI4 conflict detection fixes
 
 ## Release Notes 1.24
 * Update dependencies
@@ -18,14 +19,15 @@
 * Add support for metadata descriptor type games (Victoria 3 support)
 * Add option to ignore update
 * Improve mod loading performance</description>
-			<pubDate>Sun, 04 Dec 2022 06:32:28 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.24.107/linux-x64.zip" sparkle:version="1.24.107.14212" sparkle:shortVersionString="1.24.107" length="90089176" sparkle:os="linux" type="application/zip" sparkle:signature="JqYi1uRUrNphQumaTrxzQ9QCFLwCMDdQPq71kjsur4cQZYVljh7hmoJBZ9DMOOGAKgwc+wC/cxNV0aNRMqW0BA=="/>
+			<pubDate>Mon, 06 Feb 2023 20:34:58 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.24.114/linux-x64.zip" sparkle:version="1.24.114.5710" sparkle:shortVersionString="1.24.114" length="90086935" sparkle:os="linux" type="application/zip" sparkle:signature="HGaRYSdSe9Uod+/oRFi9wI/8VfrwH3d0/9/ZGY7z6896q8cTZP5Yn5JpiGP3pjnW7DkJYSpUCaxOQvcv71NGBQ=="/>
 		</item>
 		<item>
-			<title>1.24.107</title>
+			<title>1.24.114</title>
 			<description>## Current Release Notes
 * Minor fixes
-* Fix parsing curly braces in quotes
+* Json metadata merge fixes
+* HOI4 conflict detection fixes
 
 ## Release Notes 1.24
 * Update dependencies
@@ -36,14 +38,15 @@
 * Add support for metadata descriptor type games (Victoria 3 support)
 * Add option to ignore update
 * Improve mod loading performance</description>
-			<pubDate>Sun, 04 Dec 2022 06:32:35 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.24.107/osx-x64.zip" sparkle:version="1.24.107.14212" sparkle:shortVersionString="1.24.107" length="93251157" sparkle:os="osx" type="application/zip" sparkle:signature="A/QffkLwAxMwurC40Xa5XnfGAWQA/VVQLXgjmzPRXtTY6o2tN143r4A4IIFF3AdLfVBMutqG/027XIYq7tzVCw=="/>
+			<pubDate>Mon, 06 Feb 2023 20:35:03 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.24.114/osx-x64.zip" sparkle:version="1.24.114.5710" sparkle:shortVersionString="1.24.114" length="93241609" sparkle:os="osx" type="application/zip" sparkle:signature="7k93B6/JMsRDJskoq7uiKHxrW/0SAQNVLzn+uowpXtXDtvyZUDQyGJuMMFFsuuwqn83EUwFxSXRWfEPDiqutAw=="/>
 		</item>
 		<item>
-			<title>1.24.107</title>
+			<title>1.24.114</title>
 			<description>## Current Release Notes
 * Minor fixes
-* Fix parsing curly braces in quotes
+* Json metadata merge fixes
+* HOI4 conflict detection fixes
 
 ## Release Notes 1.24
 * Update dependencies
@@ -54,14 +57,15 @@
 * Add support for metadata descriptor type games (Victoria 3 support)
 * Add option to ignore update
 * Improve mod loading performance</description>
-			<pubDate>Sun, 04 Dec 2022 06:32:42 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.24.107/win-x64-setup.zip" sparkle:version="1.24.107.14212" sparkle:shortVersionString="1.24.107" length="71364813" sparkle:os="windows" type="application/zip" sparkle:signature="vGkc8ZTR1/GXPQs3/u4a/j39gVxgKOZsMDMH0zbzZQ3zH9tuZJWHaszQtIUg061K8npb/cQg7FTihNjj0G5WDA=="/>
+			<pubDate>Mon, 06 Feb 2023 20:35:09 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.24.114/win-x64-setup.zip" sparkle:version="1.24.114.5710" sparkle:shortVersionString="1.24.114" length="71342510" sparkle:os="windows" type="application/zip" sparkle:signature="eJ/SntJk9CFE9q9WHMR6KJWSF1TK+bfyWlhE38g3DAcIxmFYY1pR/Jgo0Mx76V6j6NMLgmz+o53cLUNkLDvECQ=="/>
 		</item>
 		<item>
-			<title>1.24.107</title>
+			<title>1.24.114</title>
 			<description>## Current Release Notes
 * Minor fixes
-* Fix parsing curly braces in quotes
+* Json metadata merge fixes
+* HOI4 conflict detection fixes
 
 ## Release Notes 1.24
 * Update dependencies
@@ -72,8 +76,8 @@
 * Add support for metadata descriptor type games (Victoria 3 support)
 * Add option to ignore update
 * Improve mod loading performance</description>
-			<pubDate>Sun, 04 Dec 2022 06:32:43 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.24.107/win-x64.zip" sparkle:version="1.24.107.14212" sparkle:shortVersionString="1.24.107" length="104823895" sparkle:os="windows" type="application/zip" sparkle:signature="olMVDoSMxGfnGajGn7WZ1qiZl2DTG+8xlIjTL6YPEYHo4+ftjSCemh9PX/ULSPR0qiQlMNX5BjJgZIkzgfchAw=="/>
+			<pubDate>Mon, 06 Feb 2023 20:35:09 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.24.114/win-x64.zip" sparkle:version="1.24.114.5710" sparkle:shortVersionString="1.24.114" length="104818544" sparkle:os="windows" type="application/zip" sparkle:signature="inwEYAEyacl4V8iJ277z+h2wcsmYSIDnPfx7U0YsBbQ58yrej10eXPv4eo4QBiVBmFtsXPupKYKomAO/Ui0ADw=="/>
 		</item>
 	</channel>
 </rss>
