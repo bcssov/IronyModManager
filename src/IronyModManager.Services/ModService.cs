@@ -267,6 +267,8 @@ namespace IronyModManager.Services
                 return collection;
             }
             var parameters = CleanSearchResult(searchParser.Parse(languageService.GetSelected().Abrv, text));
+            var sourceNegateCol = parameters.Source.Any() ? parameters.Source.Where(p => p.Negate).ToList() : new List<SourceTypeResult>();
+            var versionNegateCol = parameters.Version.Any() ? parameters.Version.Where(p => p.Negate).ToList() : new List<VersionTypeResult>();
             var result = collection.ConditionalFilter(parameters.Name.Any(), q => q.Where(p => parameters.Name.Any(x => !x.Negate ? p.Name.Contains(x.Text, StringComparison.OrdinalIgnoreCase) : !p.Name.Contains(x.Text, StringComparison.OrdinalIgnoreCase))))
                     .ConditionalFilter(parameters.RemoteIds.Any(), q => q.Where(p => p.RemoteId.HasValue && parameters.RemoteIds.Any(x => !x.Negate ? p.RemoteId.GetValueOrDefault().ToString().Contains(x.Text, StringComparison.OrdinalIgnoreCase)
                     : !p.RemoteId.GetValueOrDefault().ToString().Contains(x.Text, StringComparison.OrdinalIgnoreCase))))
@@ -283,8 +285,8 @@ namespace IronyModManager.Services
                         }
                         return q.Where(p => p.IsSelected == parameters.IsSelected.Result.GetValueOrDefault());
                     })
-                    .ConditionalFilter(parameters.Source.Any(), q => q.Where(p => parameters.Source.Any(s => !s.Negate ? p.Source == SourceTypeToModSource(s.Result) : p.Source != SourceTypeToModSource(s.Result))))
-                    .ConditionalFilter(parameters.Version.Any(), q => q.Where(p => parameters.Version.Any(s => !s.Negate ? IsValidVersion(p.VersionData, s.Version) : !IsValidVersion(p.VersionData, s.Version))));
+                    .ConditionalFilter(parameters.Source.Any(), q => q.Where(p => parameters.Source.Any(s => !s.Negate ? p.Source == SourceTypeToModSource(s.Result) : !sourceNegateCol.Any(a => p.Source == SourceTypeToModSource(a.Result)))))
+                    .ConditionalFilter(parameters.Version.Any(), q => q.Where(p => parameters.Version.Any(s => !s.Negate ? IsValidVersion(p.VersionData, s.Version) : !versionNegateCol.Any(a => IsValidVersion(p.VersionData, a.Version)))));
             return result.ToList();
         }
 
@@ -303,6 +305,8 @@ namespace IronyModManager.Services
                 return null;
             }
             var parameters = CleanSearchResult(searchParser.Parse(languageService.GetSelected().Abrv, text));
+            var sourceNegateCol = parameters.Source.Any() ? parameters.Source.Where(p => p.Negate).ToList() : new List<SourceTypeResult>();
+            var versionNegateCol = parameters.Version.Any() ? parameters.Version.Where(p => p.Negate).ToList() : new List<VersionTypeResult>();
             var result = !reverse ? collection.Skip(skipIndex.GetValueOrDefault()) : collection.Reverse().Skip(skipIndex.GetValueOrDefault());
             result = result.ConditionalFilter(parameters.Name.Any(), q => q.Where(p => parameters.Name.Any(x => !x.Negate ? p.Name.Contains(x.Text, StringComparison.OrdinalIgnoreCase) : !p.Name.Contains(x.Text, StringComparison.OrdinalIgnoreCase))))
                     .ConditionalFilter(parameters.RemoteIds.Any(), q => q.Where(p => p.RemoteId.HasValue && parameters.RemoteIds.Any(x => !x.Negate ? p.RemoteId.GetValueOrDefault().ToString().Contains(x.Text, StringComparison.OrdinalIgnoreCase)
@@ -320,8 +324,8 @@ namespace IronyModManager.Services
                         }
                         return q.Where(p => p.IsSelected == parameters.IsSelected.Result.GetValueOrDefault());
                     })
-                    .ConditionalFilter(parameters.Source.Any(), q => q.Where(p => parameters.Source.Any(s => !s.Negate ? p.Source == SourceTypeToModSource(s.Result) : p.Source != SourceTypeToModSource(s.Result))))
-                    .ConditionalFilter(parameters.Version.Any(), q => q.Where(p => parameters.Version.Any(s => !s.Negate ? IsValidVersion(p.VersionData, s.Version) : !IsValidVersion(p.VersionData, s.Version))));
+                    .ConditionalFilter(parameters.Source.Any(), q => q.Where(p => parameters.Source.Any(s => !s.Negate ? p.Source == SourceTypeToModSource(s.Result) : !sourceNegateCol.Any(a => p.Source == SourceTypeToModSource(a.Result)))))
+                    .ConditionalFilter(parameters.Version.Any(), q => q.Where(p => parameters.Version.Any(s => !s.Negate ? IsValidVersion(p.VersionData, s.Version) : !versionNegateCol.Any(a => IsValidVersion(p.VersionData, a.Version)))));
             return result.FirstOrDefault();
         }
 
