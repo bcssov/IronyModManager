@@ -4,7 +4,7 @@
 // Created          : 08-12-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 12-30-2022
+// Last Modified On : 02-23-2023
 // ***********************************************************************
 // <copyright file="ParadoxLauncherImporter.cs" company="Mario">
 //     Mario
@@ -61,6 +61,31 @@ namespace IronyModManager.IO.Mods.Importers
 
         #endregion Constructors
 
+        #region Enums
+
+        /// <summary>
+        /// Enum Version
+        /// </summary>
+        private enum Version
+        {
+            /// <summary>
+            /// The default
+            /// </summary>
+            Default,
+
+            /// <summary>
+            /// The v4
+            /// </summary>
+            v4,
+
+            /// <summary>
+            /// The v5
+            /// </summary>
+            v5
+        }
+
+        #endregion Enums
+
         #region Methods
 
         /// <summary>
@@ -79,11 +104,18 @@ namespace IronyModManager.IO.Mods.Importers
             FieldCache.Flush();
             IdentityCache.Flush();
             PrimaryCache.Flush();
-            if (await IsV4Async(parameters))
+            var version = await GetVersionAsync(parameters);
+            switch (version)
             {
-                return await DatabaseImportv3Async(parameters);
+                case Version.v4:
+                    return await DatabaseImportv3Async(parameters);
+
+                case Version.v5:
+                    return await DatabaseImportv4Async(parameters);
+
+                default:
+                    return await DatabaseImportv2Async(parameters);
             }
-            return await DatabaseImportv2Async(parameters);
         }
 
         /// <summary>
@@ -299,6 +331,52 @@ namespace IronyModManager.IO.Mods.Importers
         }
 
         /// <summary>
+        /// Database importv4 as an asynchronous operation.
+        /// </summary>
+        /// <param name="parameters">The parameters.</param>
+        /// <returns>A Task&lt;ICollectionImportResult&gt; representing the asynchronous operation.</returns>
+        protected virtual async Task<ICollectionImportResult> DatabaseImportv4Async(ModCollectionExporterParams parameters)
+        {
+            using var con = GetConnection(parameters);
+            try
+            {
+                var activeCollection = (await con.QueryAsync<Models.Paradox.v4.Playsets>(p => p.IsActive == true, trace: trace)).FirstOrDefault();
+                if (activeCollection != null)
+                {
+                    var collectionMods = await con.QueryAsync<Models.Paradox.v4.PlaysetsMods>(p => p.PlaysetId == activeCollection.Id.ToString(), trace: trace);
+                    if (collectionMods?.Count() > 0)
+                    {
+                        var mods = await con.QueryAllAsync<Models.Paradox.v5.Mods>(trace: trace);
+                        var ordered = collectionMods.Where(p => p.Enabled).OrderBy(p => p.Position).ToList();
+                        var validMods = mods.Where(p => ordered.Any(m => m.ModId.Equals(p.Id))).OrderBy(p => ordered.FindIndex(o => o.ModId == p.Id));
+                        if (validMods.Any())
+                        {
+                            var result = DIResolver.Get<ICollectionImportResult>();
+                            result.Name = activeCollection.Name;
+                            if (parameters.DescriptorType == Common.DescriptorType.DescriptorMod)
+                            {
+                                result.Descriptors = validMods.Select(p => p.GameRegistryId).ToList();
+                            }
+                            else
+                            {
+                                result.FullPaths = validMods.Select(p => p.DirPath.StandardizeDirectorySeparator()).ToList();
+                            }
+                            result.ModNames = validMods.Select(p => p.DisplayName).ToList();
+                            return result;
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                logger.Error(ex);
+            }
+            con.Close();
+            con.Dispose();
+            return null;
+        }
+
+        /// <summary>
         /// Gets the database path.
         /// </summary>
         /// <param name="parameters">The parameters.</param>
@@ -323,23 +401,30 @@ namespace IronyModManager.IO.Mods.Importers
         /// </summary>
         /// <param name="parameters">The parameters.</param>
         /// <returns>A Task&lt;System.Boolean&gt; representing the asynchronous operation.</returns>
-        private async Task<bool> IsV4Async(ModCollectionExporterParams parameters)
+        private async Task<Version> GetVersionAsync(ModCollectionExporterParams parameters)
         {
             using var con = GetConnection(parameters);
             try
             {
                 var changes = await con.QueryAllAsync<Models.Paradox.v2.KnoxMigrations>();
-                return changes != null && changes.Any(c => c.Name.Equals(Constants.SqlV4Id.Name, StringComparison.OrdinalIgnoreCase));
+                if (changes != null)
+                {
+                    if (changes.Any(c => c.Name.Equals(Constants.SqlV5Idd.Name, StringComparison.OrdinalIgnoreCase)))
+                    {
+                        return Version.v5;
+                    }
+                    if (changes.Any(c => c.Name.Equals(Constants.SqlV4Id.Name, StringComparison.OrdinalIgnoreCase)))
+                    {
+                        return Version.v4;
+                    }
+                }
             }
             catch
             {
-                return false;
             }
-            finally
-            {
-                con.Close();
-                con.Dispose();
-            }
+            con.Close();
+            con.Dispose();
+            return Version.Default;
         }
 
         #endregion Methods

@@ -4,7 +4,7 @@
 // Created          : 08-11-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 01-16-2022
+// Last Modified On : 02-23-2023
 // ***********************************************************************
 // <copyright file="Mods.cs" company="Mario">
 //     Mario
@@ -80,7 +80,7 @@ namespace IronyModManager.IO.Mods.Models.Paradox.v4
         /// </summary>
         /// <value>The description.</value>
         [Map("description")]
-        public string Description { get; set; }
+        public virtual string Description { get; set; }
 
         /// <summary>
         /// Gets or sets the dir path.

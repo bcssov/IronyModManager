@@ -4,7 +4,7 @@
 // Created          : 08-11-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 10-29-2022
+// Last Modified On : 02-23-2023
 // ***********************************************************************
 // <copyright file="Constants.cs" company="Mario">
 //     Mario
@@ -93,6 +93,21 @@ namespace IronyModManager.IO.Mods
             /// The SQL v5 identifier
             /// </summary>
             public const string Name = "modifyPositionToInteger";
+
+            #endregion Fields
+        }
+
+        /// <summary>
+        /// Class SqlV5Idd.
+        /// </summary>
+        public class SqlV5Idd
+        {
+            #region Fields
+
+            /// <summary>
+            /// The name
+            /// </summary>
+            public const string Name = "addModShortDescription";
 
             #endregion Fields
         }
