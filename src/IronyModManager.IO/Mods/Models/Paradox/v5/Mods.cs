@@ -4,7 +4,7 @@
 // Created          : 02-23-2023
 //
 // Last Modified By : Mario
-// Last Modified On : 02-23-2023
+// Last Modified On : 03-03-2023
 // ***********************************************************************
 // <copyright file="Mods.cs" company="Mario">
 //     Mario
@@ -31,7 +31,6 @@ namespace IronyModManager.IO.Mods.Models.Paradox.v5
         /// Gets or sets the description paradox.
         /// </summary>
         /// <value>The description paradox.</value>
-        [Map("descriptionPdx")]
         private string descParadox;
 
         /// <summary>
