@@ -14,7 +14,7 @@ Irony project will be shutdown, looking for another maintainer. See [here](https
 Check out the detailed overview on the [wiki](https://github.com/bcssov/IronyModManager/wiki).
 
 ### Download
-* Latest stable version: [v1.24.114](https://github.com/bcssov/IronyModManager/releases/tag/v1.24.114)
+* Latest stable version: [v1.24.119](https://github.com/bcssov/IronyModManager/releases/tag/v1.24.119)
 
 ### Discord
 [https://discord.gg/t9JmY8KFrV](https://discord.gg/t9JmY8KFrV)
