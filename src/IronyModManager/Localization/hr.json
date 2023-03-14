@@ -16,7 +16,7 @@
     },
     "FatalError": {
         "Message": "Došlo je do greške. Aplikacija će se automatski zatvoriti.",
-        "MessageWithLastError": "Unhandled error ocurred. Koristite ovu informaciju da biste podnijeli izvješće o greški:{NewLine}{NewLine}{Message}",
+        "MessageWithLastError": "Došlo je do greške. Koristite ovu informaciju da biste podnijeli izvješće o greški:{NewLine}{NewLine}{Message}",
         "Title": "Greška",
         "Header": "Fatalna pogreška"
     },
