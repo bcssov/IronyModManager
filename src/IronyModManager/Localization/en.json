@@ -16,7 +16,7 @@
     },
     "FatalError": {
         "Message": "Unhandled error occurred. App will close automatically.",
-        "MessageWithLastError": "Unhandled error ocurred. Please use this information to file a bug report:{NewLine}{NewLine}{Message}",
+        "MessageWithLastError": "Unhandled error occurred. Please use this information to file a bug report:{NewLine}{NewLine}{Message}",
         "Title": "Error",
         "Header": "Fatal Error"
     },
