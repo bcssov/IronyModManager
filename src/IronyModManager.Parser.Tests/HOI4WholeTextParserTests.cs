@@ -4,7 +4,7 @@
 // Created          : 02-18-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 01-29-2022
+// Last Modified On : 03-15-2023
 // ***********************************************************************
 // <copyright file="HOI4WholeTextParserTests.cs" company="Mario">
 //     Mario
@@ -385,6 +385,21 @@ namespace IronyModManager.Parser.Tests
             var args = new CanParseArgs()
             {
                 File = "common\\peace_conference\\fake.txt",
+                GameType = "HeartsofIronIV"
+            };
+            var parser = new WholeTextParser(new CodeParser(new Logger()), null);
+            parser.CanParse(args).Should().BeTrue();
+        }
+
+        /// <summary>
+        /// Defines the test method CanParse_profile_backgrounds_should_be_true.
+        /// </summary>
+        [Fact]
+        public void CanParse_profile_backgrounds_should_be_true()
+        {
+            var args = new CanParseArgs()
+            {
+                File = "common\\profile_backgrounds\\fake.txt",
                 GameType = "HeartsofIronIV"
             };
             var parser = new WholeTextParser(new CodeParser(new Logger()), null);

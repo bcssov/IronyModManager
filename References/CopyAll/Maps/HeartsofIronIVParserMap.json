@@ -137,6 +137,9 @@
         "DirectoryPath": "common\\peace_conference\\cost_modifiers",
         "PreferredParser": "HOI4WholeTextParser"
     }, {
+        "DirectoryPath": "common\\profile_backgrounds",
+        "PreferredParser": "HOI4WholeTextParser"
+    }, {
         "DirectoryPath": "common\\profile_pictures",
         "PreferredParser": "HOI4WholeTextParser"
     }, {
@@ -261,6 +264,9 @@
         "PreferredParser": "GenericKeyParser"
     }, {
         "DirectoryPath": "dlc_metadata\\dlc_info",
+        "PreferredParser": "DefaultParser"
+    }, {
+        "DirectoryPath": "documentation",
         "PreferredParser": "DefaultParser"
     }, {
         "DirectoryPath": "events",
@@ -395,6 +401,9 @@
         "DirectoryPath": "interface\\pdx_online",
         "PreferredParser": "GenericGraphicsParser"
     }, {
+        "DirectoryPath": "launcher-assets",
+        "PreferredParser": "DefaultParser"
+    }, {
         "DirectoryPath": "interface\\video",
         "PreferredParser": "GenericGraphicsParser"
     }, {
@@ -481,6 +490,9 @@
     }, {
         "DirectoryPath": "tests",
         "PreferredParser": "HOI4WholeTextParser"
+    }, {
+        "DirectoryPath": "tools",
+        "PreferredParser": "DefaultParser"
     }, {
         "DirectoryPath": "tutorial",
         "PreferredParser": "HOI4WholeTextParser"

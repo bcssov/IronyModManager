@@ -4,7 +4,7 @@
 // Created          : 02-12-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-04-2023
+// Last Modified On : 03-15-2023
 // ***********************************************************************
 // <copyright file="GameRegistration.cs" company="Mario">
 //     Mario
@@ -184,7 +184,7 @@ namespace IronyModManager.Services.Registrations
             game.ParadoxGameId = Shared.Constants.GamesTypes.HeartsOfIron4.ParadoxGameId;
             game.SupportedMergeTypes = IronyModManager.Models.Common.SupportedMergeTypes.Zip | IronyModManager.Models.Common.SupportedMergeTypes.Basic;
             game.ModDescriptorType = IronyModManager.Models.Common.ModDescriptorType.DescriptorMod;
-            game.GameIndexCacheVersion = 6;
+            game.GameIndexCacheVersion = 7;
             MapGameSettings(game, GetExecutableSettings(game));
             return game;
         }
