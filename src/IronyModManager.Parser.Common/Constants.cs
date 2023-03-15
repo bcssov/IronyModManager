@@ -4,7 +4,7 @@
 // Created          : 02-16-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-04-2023
+// Last Modified On : 03-15-2023
 // ***********************************************************************
 // <copyright file="Constants.cs" company="Mario">
 //     Mario
@@ -288,6 +288,11 @@ namespace IronyModManager.Parser.Common
             /// The peace conference
             /// </summary>
             public static readonly string PeaceConference = MergePath(CommonPath, "peace_conference");
+
+            /// <summary>
+            /// The profile backgrounds
+            /// </summary>
+            public static readonly string ProfileBackgrounds = MergePath(CommonPath, "profile_backgrounds");
 
             /// <summary>
             /// The profile pictures

@@ -2,6 +2,9 @@
         "DirectoryPath": "common",
         "PreferredParser": "GenericWholeTextParser"
     }, {
+        "DirectoryPath": "common\\achievements",
+        "PreferredParser": "DefaultParser"
+    }, {
         "DirectoryPath": "common\\agendas",
         "PreferredParser": "DefaultParser"
     }, {
@@ -63,6 +66,9 @@
         "PreferredParser": "DefaultParser"
     }, {
         "DirectoryPath": "common\\casus_belli",
+        "PreferredParser": "DefaultParser"
+    }, {
+        "DirectoryPath": "common\\cloaking_strength_levels",
         "PreferredParser": "DefaultParser"
     }, {
         "DirectoryPath": "common\\colony_automation",
@@ -215,6 +221,9 @@
         "DirectoryPath": "common\\inline_scripts",
         "PreferredParser": "StellarisWholeTextParser"
     }, {
+        "DirectoryPath": "common\\inline_scripts\\deposits",
+        "PreferredParser": "StellarisWholeTextParser"
+    }, {
         "DirectoryPath": "common\\inline_scripts\\enclaves",
         "PreferredParser": "StellarisWholeTextParser"
     }, {
@@ -222,6 +231,15 @@
         "PreferredParser": "StellarisWholeTextParser"
     }, {
         "DirectoryPath": "common\\inline_scripts\\pop_categories",
+        "PreferredParser": "StellarisWholeTextParser"
+    }, {
+        "DirectoryPath": "common\\inline_scripts\\pop_faction_types",
+        "PreferredParser": "StellarisWholeTextParser"
+    }, {
+        "DirectoryPath": "common\\inline_scripts\\ship_components\\weights",
+        "PreferredParser": "StellarisWholeTextParser"
+    }, {
+        "DirectoryPath": "common\\inline_scripts\\technology",
         "PreferredParser": "StellarisWholeTextParser"
     }, {
         "DirectoryPath": "common\\inline_scripts\\traits",
@@ -428,6 +446,9 @@
         "DirectoryPath": "common\\technology\\tier",
         "PreferredParser": "DefaultParser"
     }, {
+        "DirectoryPath": "common\\technology_ages\\preftl",
+        "PreferredParser": "DefaultParser"
+    }, {
         "DirectoryPath": "common\\terraform",
         "PreferredParser": "StellarisOverwrittenParser"
     }, {
@@ -492,6 +513,9 @@
         "PreferredParser": "StellarisFlagsParser"
     }, {
         "DirectoryPath": "flags\\plantoid",
+        "PreferredParser": "StellarisFlagsParser"
+    }, {
+        "DirectoryPath": "flags\\pre_ftl",
         "PreferredParser": "StellarisFlagsParser"
     }, {
         "DirectoryPath": "flags\\special",
@@ -612,6 +636,12 @@
         "PreferredParser": "GenericKeyParser"
     }, {
         "DirectoryPath": "gfx\\models\\portraits\\extradimensional",
+        "PreferredParser": "GenericGraphicsParser"
+    }, {
+        "DirectoryPath": "gfx\\models\\portraits\\first_contact",
+        "PreferredParser": "GenericKeyParser"
+    }, {
+        "DirectoryPath": "gfx\\models\\portraits\\first_contact",
         "PreferredParser": "GenericGraphicsParser"
     }, {
         "DirectoryPath": "gfx\\models\\portraits\\fungoid",
@@ -1352,6 +1382,9 @@
         "DirectoryPath": "interface\\resource_groups",
         "PreferredParser": "DefaultParser"
     }, {
+        "DirectoryPath": "launcher-assets",
+        "PreferredParser": "DefaultParser"
+    }, {
         "DirectoryPath": "localisation",
         "PreferredParser": "GenericLocalizationParser"
     }, {
@@ -1472,6 +1505,18 @@
         "DirectoryPath": "sound\\federations",
         "PreferredParser": "GenericWholeTextParser"
     }, {
+        "DirectoryPath": "sound\\firstcontact\\cloaking",
+        "PreferredParser": "GenericWholeTextParser"
+    }, {
+        "DirectoryPath": "sound\\firstcontact\\events",
+        "PreferredParser": "GenericWholeTextParser"
+    }, {
+        "DirectoryPath": "sound\\firstcontact\\ships",
+        "PreferredParser": "GenericWholeTextParser"
+    }, {
+        "DirectoryPath": "sound\\firstcontact\\ui",
+        "PreferredParser": "GenericWholeTextParser"
+    }, {
         "DirectoryPath": "sound\\guardians",
         "PreferredParser": "GenericWholeTextParser"
     }, {
@@ -1514,6 +1559,9 @@
         "DirectoryPath": "sound\\portrait",
         "PreferredParser": "GenericWholeTextParser"
     }, {
+        "DirectoryPath": "sound\\reanimated",
+        "PreferredParser": "GenericWholeTextParser"
+    }, {
         "DirectoryPath": "sound\\synthetic_dawn",
         "PreferredParser": "GenericWholeTextParser"
     }, {
@@ -1537,6 +1585,9 @@
     }, {
         "DirectoryPath": "sound\\utopia",
         "PreferredParser": "GenericWholeTextParser"
+    }, {
+        "DirectoryPath": "tools",
+        "PreferredParser": "DefaultParser"
     }, {
         "DirectoryPath": "tweakergui_assets\\gfx\\FX",
         "PreferredParser": "GenericWholeTextParser"
