@@ -92,7 +92,7 @@
         "HeartsofIronIV": "钢铁雄心 Ⅳ",
         "ImperatorRome": "帝皇：罗马",
         "CrusaderKings3": "十字军之王 Ⅲ",
-        "Victoria3": "Victoria 3"
+        "Victoria3": "维多利亚 Ⅲ"
     },
     "Installed_Mods": {
         "Name": "已安装模组",
@@ -231,8 +231,8 @@
             }
         },
         "Prompts": {
-            "ModsMissingTitle": "撤消了Mods",
-            "ModsMissingMessage": "一些mods缺失，已从收藏中自动删除。:{NewLine}{NewLine}{Mods}"
+            "ModsMissingTitle": "模组已移除",
+            "ModsMissingMessage": "一些模组缺失，已自动从合集中移除：{NewLine}{NewLine}{Mods}"
         }
 
     },
@@ -335,17 +335,17 @@
             "Replace": "替换"
         },
         "EditorResources": {
-            "ReplaceLabel": "替换...",
-            "SearchErrorText": "错误。",
-            "SearchFindNextText": "查找下一个 (F3)",
-            "SearchFindPreviousText": "查找上一个（Shift+F3）。",
-            "SearchLabel": "找到...",
-            "SearchMatchCaseText": "匹配的案例",
-            "SearchMatchWholeWordsText": "匹配整个单词",
-            "SearchNoMatchesFoundText": "没有发现结果!",
-            "SearchReplaceAll": "全部替换(Alt+A)",
-            "SearchReplaceNext": "替换下一个(Alt+R)",
-            "SearchToggleReplace": "在查找和替换模式之间进行切换",
+            "ReplaceLabel": "替换",
+            "SearchErrorText": "错误：",
+            "SearchFindNextText": "查找下一个（F3）",
+            "SearchFindPreviousText": "查找上一个（Shift+F3）",
+            "SearchLabel": "查找",
+            "SearchMatchCaseText": "区分大小写",
+            "SearchMatchWholeWordsText": "全字匹配",
+            "SearchNoMatchesFoundText": "无结果！",
+            "SearchReplaceAll": "全部替换（Alt+A）",
+            "SearchReplaceNext": "替换下一个（Alt+R）",
+            "SearchToggleReplace": "切换查找/替换模式",
             "SearchUseRegexText": "使用正则表达式"
         },
         "Modes": {
@@ -353,9 +353,9 @@
             "Default": "默认",
             "Advanced": "高级",
             "Analyze": "仅分析",
-            "AnalyzeWithoutLocalization": "只进行分析而不进行本地化",
-            "DefaultWithoutLocalization": "默认情况下没有本地化",
-            "AdvancedWithoutLocalization": "先进的不需要本地化",
+            "AnalyzeWithoutLocalization": "仅分析（无本地化）",
+            "DefaultWithoutLocalization": "默认（无本地化）",
+            "AdvancedWithoutLocalization": "高级（无本地化）",
             "Close": "关闭"
         },
         "ModFilter": {
@@ -410,7 +410,7 @@
             "ListOfConflictsFormat": "{ParentDirectory}：{Name}"
         },
         "Tooltips": {
-            "DefinitionInfo": "文件：{File}修改：{DateTime}"
+            "DefinitionInfo": "文件：{File} 修改时间：{DateTime}"
         }
     },
     "ConflictIgnore": {
@@ -433,8 +433,8 @@
             "EditorArgs": "启动参数",
             "EditorArgsPlaceholder": "示例：leftFile:{Left} rightFile:{Right}",
             "Test": "测试配置",
-            "TestLeft": "faucibus purus in massa tempor, nec feugiat nisl pretium fusce",
-            "TestRight": "faucibus purus in massa tempor nec feugiat nisl pretium fusce"
+            "TestLeft": "我是测试，nec feugiat nisl pretium fusce",
+            "TestRight": "测试是我 nec feugiat nisl pretium fusce"
         },
         "Game": {
             "Title": "游戏选项",
@@ -573,8 +573,8 @@
             "Message": "没有足够的可用存储空间以执行合并操作。"
         },
         "ParadoxLauncherRunning": {
-            "Title": "悖论发射器活跃",
-            "Message": "悖论发射器正在运行，请在尝试此操作之前将其关闭。"
+            "Title": "官方启动器运行中",
+            "Message": "官方启动器正在运行，请先将其关闭再执行此操作。"
         }
     },
     "Mod_App_Actions": {
