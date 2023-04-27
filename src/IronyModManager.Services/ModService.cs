@@ -4,7 +4,7 @@
 // Created          : 02-24-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-23-2023
+// Last Modified On : 04-27-2023
 // ***********************************************************************
 // <copyright file="ModService.cs" company="Mario">
 //     Mario
@@ -267,9 +267,10 @@ namespace IronyModManager.Services
                 return collection;
             }
             var parameters = CleanSearchResult(searchParser.Parse(languageService.GetSelected().Abrv, text));
+            var nameNegateCol = parameters.Name.Any() ? parameters.Name.Where(p => p.Negate).ToList() : new List<NameFilterResult>();
             var sourceNegateCol = parameters.Source.Any() ? parameters.Source.Where(p => p.Negate).ToList() : new List<SourceTypeResult>();
             var versionNegateCol = parameters.Version.Any() ? parameters.Version.Where(p => p.Negate).ToList() : new List<VersionTypeResult>();
-            var result = collection.ConditionalFilter(parameters.Name.Any(), q => q.Where(p => parameters.Name.Any(x => !x.Negate ? p.Name.Contains(x.Text, StringComparison.OrdinalIgnoreCase) : !p.Name.Contains(x.Text, StringComparison.OrdinalIgnoreCase))))
+            var result = collection.ConditionalFilter(parameters.Name.Any(), q => q.Where(p => parameters.Name.Any(x => !x.Negate ? p.Name.Contains(x.Text, StringComparison.OrdinalIgnoreCase) : !nameNegateCol.Any(a => p.Name.Contains(a.Text, StringComparison.OrdinalIgnoreCase)))))
                     .ConditionalFilter(parameters.RemoteIds.Any(), q => q.Where(p => p.RemoteId.HasValue && parameters.RemoteIds.Any(x => !x.Negate ? p.RemoteId.GetValueOrDefault().ToString().Contains(x.Text, StringComparison.OrdinalIgnoreCase)
                     : !p.RemoteId.GetValueOrDefault().ToString().Contains(x.Text, StringComparison.OrdinalIgnoreCase))))
                     .ConditionalFilter(parameters.AchievementCompatible.Result.HasValue, q => q.Where(p =>
@@ -305,10 +306,11 @@ namespace IronyModManager.Services
                 return null;
             }
             var parameters = CleanSearchResult(searchParser.Parse(languageService.GetSelected().Abrv, text));
+            var nameNegateCol = parameters.Name.Any() ? parameters.Name.Where(p => p.Negate).ToList() : new List<NameFilterResult>();
             var sourceNegateCol = parameters.Source.Any() ? parameters.Source.Where(p => p.Negate).ToList() : new List<SourceTypeResult>();
             var versionNegateCol = parameters.Version.Any() ? parameters.Version.Where(p => p.Negate).ToList() : new List<VersionTypeResult>();
             var result = !reverse ? collection.Skip(skipIndex.GetValueOrDefault()) : collection.Reverse().Skip(skipIndex.GetValueOrDefault());
-            result = result.ConditionalFilter(parameters.Name.Any(), q => q.Where(p => parameters.Name.Any(x => !x.Negate ? p.Name.Contains(x.Text, StringComparison.OrdinalIgnoreCase) : !p.Name.Contains(x.Text, StringComparison.OrdinalIgnoreCase))))
+            result = result.ConditionalFilter(parameters.Name.Any(), q => q.Where(p => parameters.Name.Any(x => !x.Negate ? p.Name.Contains(x.Text, StringComparison.OrdinalIgnoreCase) : !nameNegateCol.Any(a => p.Name.Contains(a.Text, StringComparison.OrdinalIgnoreCase)))))
                     .ConditionalFilter(parameters.RemoteIds.Any(), q => q.Where(p => p.RemoteId.HasValue && parameters.RemoteIds.Any(x => !x.Negate ? p.RemoteId.GetValueOrDefault().ToString().Contains(x.Text, StringComparison.OrdinalIgnoreCase)
                     : !p.RemoteId.GetValueOrDefault().ToString().Contains(x.Text, StringComparison.OrdinalIgnoreCase))))
                     .ConditionalFilter(parameters.AchievementCompatible.Result.HasValue, q => q.Where(p =>
