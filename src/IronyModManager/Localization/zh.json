@@ -321,7 +321,8 @@
             "Delete": "删除",
             "Undo": "撤销",
             "Redo": "重做",
-            "Editor": "外部合并"
+            "Editor": "外部合并",
+            "ReadonlyEditor": "外部比较"
         },
         "EditorContextMenu": {
             "Copy": "复制",
@@ -390,6 +391,10 @@
         "Editor": {
             "Title": "外部合并",
             "Message": "外部合并完成后，请点击确认。"
+        },
+        "ReadonlyEditor": {
+            "Title": "外部比较",
+            "Message": "比较完毕后按 \"确定\"。"
         },
         "ResolutionSaveError": {
             "Title": "虚拟定义验证失败",

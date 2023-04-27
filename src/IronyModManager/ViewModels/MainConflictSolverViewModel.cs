@@ -4,7 +4,7 @@
 // Created          : 03-18-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 07-11-2022
+// Last Modified On : 04-27-2023
 // ***********************************************************************
 // <copyright file="MainConflictSolverViewModel.cs" company="Mario">
 //     Mario
@@ -488,6 +488,7 @@ namespace IronyModManager.ViewModels
             ResetConflictsColumn = readOnly ? 0 : 1;
             ResetConflicts.SetParameters(readOnly);
             BinaryMergeViewer.SetParameters(readOnly);
+            MergeViewer.SetParameters(readOnly);
             ModCompareSelector.Reset();
             IgnoreEnabled = false;
             BackTriggered = false;

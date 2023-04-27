@@ -4,7 +4,7 @@
 // Created          : 03-20-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 07-28-2022
+// Last Modified On : 04-27-2023
 // ***********************************************************************
 // <copyright file="MergeViewerControlViewModel.cs" company="Mario">
 //     Mario
@@ -180,7 +180,7 @@ namespace IronyModManager.ViewModels.Controls
         /// Gets or sets the bracket mismatch text.
         /// </summary>
         /// <value>The bracket mismatch text.</value>
-        public virtual string BracketMismatchText { get; set; }
+        public virtual string BracketMismatchText { get; protected set; }
 
         /// <summary>
         /// Gets or sets the cancel.
@@ -411,6 +411,12 @@ namespace IronyModManager.ViewModels.Controls
         public virtual ReactiveCommand<bool, Unit> EditThisCommand { get; protected set; }
 
         /// <summary>
+        /// Gets or sets a value indicating whether this instance is read only mode.
+        /// </summary>
+        /// <value><c>true</c> if this instance is read only mode; otherwise, <c>false</c>.</value>
+        public virtual bool IsReadOnlyMode { get; protected set; }
+
+        /// <summary>
         /// Gets or sets the difference.
         /// </summary>
         /// <value>The difference.</value>
@@ -504,6 +510,19 @@ namespace IronyModManager.ViewModels.Controls
         /// </summary>
         /// <value>The previous conflict command.</value>
         public virtual ReactiveCommand<bool, Unit> PrevConflictCommand { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets the read only editor.
+        /// </summary>
+        /// <value>The read only editor.</value>
+        [StaticLocalization(LocalizationResources.Conflict_Solver.ContextMenu.ReadonlyEditor)]
+        public virtual string ReadOnlyEditor { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets the read only editor command.
+        /// </summary>
+        /// <value>The read only editor command.</value>
+        public virtual ReactiveCommand<bool, Unit> ReadOnlyEditorCommand { get; protected set; }
 
         /// <summary>
         /// Gets or sets the redo.
@@ -605,6 +624,15 @@ namespace IronyModManager.ViewModels.Controls
         public virtual bool IsUndoAvailable()
         {
             return undoStack.Any();
+        }
+
+        /// <summary>
+        /// Sets the parameters.
+        /// </summary>
+        /// <param name="readOnly">if set to <c>true</c> [read only].</param>
+        public virtual void SetParameters(bool readOnly)
+        {
+            IsReadOnlyMode = readOnly;
         }
 
         /// <summary>
@@ -1269,6 +1297,11 @@ namespace IronyModManager.ViewModels.Controls
                 return LaunchExternalEditor(leftSide);
             }).DisposeWith(disposables);
 
+            ReadOnlyEditorCommand = ReactiveCommand.CreateFromTask((bool leftSide) =>
+            {
+                return LaunchExternalEditor(leftSide, true);
+            }).DisposeWith(disposables);
+
             var previousEditTextState = false;
             this.WhenAnyValue(v => v.EditingText).Subscribe(s =>
             {
@@ -1393,6 +1426,10 @@ namespace IronyModManager.ViewModels.Controls
                             if (LeftSidePatchMod || RightSidePatchMod)
                             {
                                 LaunchExternalEditor(LeftSidePatchMod).ConfigureAwait(true);
+                            }
+                            else
+                            {
+                                LaunchExternalEditor(LeftSidePatchMod, true).ConfigureAwait(true);
                             }
                             break;
 
@@ -1528,8 +1565,8 @@ namespace IronyModManager.ViewModels.Controls
         /// Launches the external editor.
         /// </summary>
         /// <param name="leftSide">if set to <c>true</c> [left side].</param>
-        /// <returns>System.Threading.Tasks.Task.</returns>
-        private async Task LaunchExternalEditor(bool leftSide)
+        /// <param name="noPatchModEdit">if set to <c>true</c> [no patch mod edit].</param>
+        private async Task LaunchExternalEditor(bool leftSide, bool noPatchModEdit = false)
         {
             var opts = externalEditorService.Get();
             var left = leftDefinition;
@@ -1540,23 +1577,41 @@ namespace IronyModManager.ViewModels.Controls
                 files.LeftDiff.Text = LeftSide;
                 files.RightDiff.Text = RightSide;
                 var arguments = externalEditorService.GetLaunchArguments(files.LeftDiff.File, files.RightDiff.File);
+                if (IsReadOnlyMode)
+                {
+                    // Override if analyze mode only
+                    noPatchModEdit = true;
+                }
                 if (await appAction.RunAsync(opts.ExternalEditorLocation, arguments))
                 {
-                    var title = localizationManager.GetResource(LocalizationResources.Conflict_Solver.Editor.Title);
-                    var message = localizationManager.GetResource(LocalizationResources.Conflict_Solver.Editor.Message);
-                    if (await notificationAction.ShowPromptAsync(title, title, message, NotificationType.Info, PromptType.ConfirmCancel))
+                    string title;
+                    string message;
+                    if (!noPatchModEdit)
                     {
-                        if (leftSide)
+                        message = localizationManager.GetResource(LocalizationResources.Conflict_Solver.Editor.Message);
+                        title = localizationManager.GetResource(LocalizationResources.Conflict_Solver.Editor.Title);
+                    }
+                    else
+                    {
+                        message = localizationManager.GetResource(LocalizationResources.Conflict_Solver.ReadonlyEditor.Message);
+                        title = localizationManager.GetResource(LocalizationResources.Conflict_Solver.ReadonlyEditor.Title);
+                    }
+                    if (await notificationAction.ShowPromptAsync(title, title, message, NotificationType.Info, !noPatchModEdit ? PromptType.ConfirmCancel : PromptType.OK))
+                    {
+                        if (!noPatchModEdit)
                         {
-                            var text = files.LeftDiff.Text ?? string.Empty;
-                            string merged = string.Join(Environment.NewLine, text.ReplaceTabs());
-                            SetText(merged, RightSide);
-                        }
-                        else
-                        {
-                            var text = files.RightDiff.Text ?? string.Empty;
-                            string merged = string.Join(Environment.NewLine, text.ReplaceTabs());
-                            SetText(LeftSide, merged);
+                            if (leftSide)
+                            {
+                                var text = files.LeftDiff.Text ?? string.Empty;
+                                string merged = string.Join(Environment.NewLine, text.ReplaceTabs());
+                                SetText(merged, RightSide);
+                            }
+                            else
+                            {
+                                var text = files.RightDiff.Text ?? string.Empty;
+                                string merged = string.Join(Environment.NewLine, text.ReplaceTabs());
+                                SetText(LeftSide, merged);
+                            }
                         }
                     }
                 }
