@@ -3,9 +3,6 @@ Irony Mod Manager is a new advanced mod manager for Paradox Games, it started ou
 ## Survey
 **Really important please fill this survey**: [Link](https://docs.google.com/forms/d/e/1FAIpQLSfTsbsN9YJuKZuzal1nK89Cx9EimbFJx5vAD6GmT4eZdtdTdQ/viewform?usp=sf_link)
 
-## Project Shutdown
-Irony project will be shutdown, looking for another maintainer. See [here](https://github.com/bcssov/IronyModManager/discussions/425) for more info.
-
 ### Supported Games
 * Crusader Kings III
 * Europa Universalis IV
@@ -17,7 +14,7 @@ Irony project will be shutdown, looking for another maintainer. See [here](https
 Check out the detailed overview on the [wiki](https://github.com/bcssov/IronyModManager/wiki).
 
 ### Download
-* Latest stable version: [v1.24.119](https://github.com/bcssov/IronyModManager/releases/tag/v1.24.119)
+* Latest stable version: [v1.24.127](https://github.com/bcssov/IronyModManager/releases/tag/v1.24.127)
 
 ### Discord
 [https://discord.gg/t9JmY8KFrV](https://discord.gg/t9JmY8KFrV)
