@@ -4,7 +4,7 @@
 // Created          : 02-12-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-15-2023
+// Last Modified On : 04-28-2023
 // ***********************************************************************
 // <copyright file="GameRegistration.cs" company="Mario">
 //     Mario
@@ -245,7 +245,7 @@ namespace IronyModManager.Services.Registrations
             game.GogAppId = Shared.Constants.GamesTypes.Stellaris.GogId;
             game.SupportedMergeTypes = IronyModManager.Models.Common.SupportedMergeTypes.Zip | IronyModManager.Models.Common.SupportedMergeTypes.Basic;
             game.ModDescriptorType = IronyModManager.Models.Common.ModDescriptorType.DescriptorMod;
-            game.GameIndexCacheVersion = 10;
+            game.GameIndexCacheVersion = 11;
             MapGameSettings(game, GetExecutableSettings(game));
             return game;
         }
