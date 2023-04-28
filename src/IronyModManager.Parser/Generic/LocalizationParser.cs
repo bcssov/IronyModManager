@@ -4,7 +4,7 @@
 // Created          : 02-18-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 07-20-2022
+// Last Modified On : 04-28-2023
 // ***********************************************************************
 // <copyright file="LocalizationParser.cs" company="Mario">
 //     Mario
@@ -251,10 +251,16 @@ namespace IronyModManager.Parser.Generic
             }
             else
             {
-                var key = cleaned.Split(Common.Constants.Localization.YmlSeparator)[0].Trim();
+                var values = cleaned.Split(Common.Constants.Localization.YmlSeparator, 2);
+                var key = values[0].Trim();
                 if (!keyRegex.IsMatch(key))
                 {
                     return $"Line contains invalid characters in key: {key}.";
+                }
+                var value = values[1];
+                if (string.IsNullOrWhiteSpace(value.Trim()))
+                {
+                    return $"Key must contain a value: {key}.";
                 }
             }
             return string.Empty;
