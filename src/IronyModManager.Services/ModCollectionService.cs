@@ -4,7 +4,7 @@
 // Created          : 03-04-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 12-02-2022
+// Last Modified On : 04-28-2023
 // ***********************************************************************
 // <copyright file="ModCollectionService.cs" company="Mario">
 //     Mario
@@ -648,7 +648,9 @@ namespace IronyModManager.Services
                     if (mods.Any())
                     {
                         var sort = importResult.ModIds.ToList();
-                        var collectionMods = mods.Where(p => importResult.ModIds.Any(x => (x.ParadoxId.HasValue && x.ParadoxId.GetValueOrDefault() == p.RemoteId.GetValueOrDefault()) || (x.SteamId.HasValue && x.SteamId.GetValueOrDefault() == p.RemoteId.GetValueOrDefault()))).
+                        // Filtering as local mods don't have priority in case of paradox launcher json import
+                        var filteredMods = mods.GroupBy(p => p.RemoteId).Select(p => p.Any(o => o.Source != ModSource.Local) ? p.FirstOrDefault(o => o.Source != ModSource.Local) : p.FirstOrDefault());
+                        var collectionMods = filteredMods.Where(p => importResult.ModIds.Any(x => (x.ParadoxId.HasValue && x.ParadoxId.GetValueOrDefault() == p.RemoteId.GetValueOrDefault()) || (x.SteamId.HasValue && x.SteamId.GetValueOrDefault() == p.RemoteId.GetValueOrDefault()))).
                             OrderBy(p => sort.IndexOf(sort.FirstOrDefault(x => (x.ParadoxId.HasValue && x.ParadoxId.GetValueOrDefault() == p.RemoteId.GetValueOrDefault()) || (x.SteamId.HasValue && x.SteamId.GetValueOrDefault() == p.RemoteId.GetValueOrDefault())))).ToList();
                         collectionMods = collectionMods.GroupBy(p => p.FullPath).Select(p => p.FirstOrDefault()).ToList();
                         modCollection.Mods = collectionMods.Select(p => p.DescriptorFile).ToList();
