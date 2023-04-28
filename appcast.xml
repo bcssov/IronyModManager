@@ -4,10 +4,14 @@
 		<title>Irony Mod Manager</title>
 		<language>en</language>
 		<item>
-			<title>1.24.119</title>
+			<title>1.24.127</title>
 			<description>## Current Release Notes
-* Make negate filter for lists useful
-* PDX Launcher compatibility (thank paradox for breaking compatibility)
+* Add external compare context option for all modes
+* Fix search term multiple negate filtering
+* Stellaris star_classes is now considered LIOS
+* Stellaris government authority is now generated as single file
+* Throw a warning on empty localization key
+* Ensure no duplicate mods are imported via paradox launcher (when merge compress was used)
 
 ## Release Notes 1.24
 * Update dependencies
@@ -18,14 +22,18 @@
 * Add support for metadata descriptor type games (Victoria 3 support)
 * Add option to ignore update
 * Improve mod loading performance</description>
-			<pubDate>Tue, 14 Mar 2023 21:28:39 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.24.119/linux-x64.zip" sparkle:version="1.24.119.38302" sparkle:shortVersionString="1.24.119" length="90093193" sparkle:os="linux" type="application/zip" sparkle:signature="g31kVwe3hNVhgozgSMyoIJlYnQCjfTHHiXlzvexeRCgEXYeiyOrMzpaqkbGFyk91wQI1yax1nvVlyI8Ovkz/Bw=="/>
+			<pubDate>Fri, 28 Apr 2023 21:53:15 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.24.127/linux-x64.zip" sparkle:version="1.24.127.21007" sparkle:shortVersionString="1.24.127" length="90104179" sparkle:os="linux" type="application/zip" sparkle:signature="fP33GKsIP2QvMQORQpBGdT3Jpn/IGMsxWhtv40FjJLWGNvSnlwg45YFZ8c6cHgPGtV5Cs7IlDxJJmsEWCQptAw=="/>
 		</item>
 		<item>
-			<title>1.24.119</title>
+			<title>1.24.127</title>
 			<description>## Current Release Notes
-* Make negate filter for lists useful
-* PDX Launcher compatibility (thank paradox for breaking compatibility)
+* Add external compare context option for all modes
+* Fix search term multiple negate filtering
+* Stellaris star_classes is now considered LIOS
+* Stellaris government authority is now generated as single file
+* Throw a warning on empty localization key
+* Ensure no duplicate mods are imported via paradox launcher (when merge compress was used)
 
 ## Release Notes 1.24
 * Update dependencies
@@ -36,14 +44,18 @@
 * Add support for metadata descriptor type games (Victoria 3 support)
 * Add option to ignore update
 * Improve mod loading performance</description>
-			<pubDate>Tue, 14 Mar 2023 21:28:46 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.24.119/osx-x64.zip" sparkle:version="1.24.119.38302" sparkle:shortVersionString="1.24.119" length="93246814" sparkle:os="osx" type="application/zip" sparkle:signature="7BOL8ibJBkxu306RSbVfJXV4SXJTD9Ox5f002w4EYYIkHNtSW+DJoNQfVzvBiGYKisjZ8WNs+9AQ2dAwKEOvCQ=="/>
+			<pubDate>Fri, 28 Apr 2023 21:53:22 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.24.127/osx-x64.zip" sparkle:version="1.24.127.21007" sparkle:shortVersionString="1.24.127" length="93256112" sparkle:os="osx" type="application/zip" sparkle:signature="EvVVQU0gx/FMoiUnE9HF06IF78rwMhAg0V6p6g9BNTBkdZoUunp2o5E5BNspVymGYRVcbLRZ2io5VJUW2bjsCQ=="/>
 		</item>
 		<item>
-			<title>1.24.119</title>
+			<title>1.24.127</title>
 			<description>## Current Release Notes
-* Make negate filter for lists useful
-* PDX Launcher compatibility (thank paradox for breaking compatibility)
+* Add external compare context option for all modes
+* Fix search term multiple negate filtering
+* Stellaris star_classes is now considered LIOS
+* Stellaris government authority is now generated as single file
+* Throw a warning on empty localization key
+* Ensure no duplicate mods are imported via paradox launcher (when merge compress was used)
 
 ## Release Notes 1.24
 * Update dependencies
@@ -54,14 +66,18 @@
 * Add support for metadata descriptor type games (Victoria 3 support)
 * Add option to ignore update
 * Improve mod loading performance</description>
-			<pubDate>Tue, 14 Mar 2023 21:28:52 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.24.119/win-x64-setup.zip" sparkle:version="1.24.119.38302" sparkle:shortVersionString="1.24.119" length="71346785" sparkle:os="windows" type="application/zip" sparkle:signature="LQsX5l5JiQrW316k2lm5SlY8NW6vAZw7hc0oVOmWz2qJQBQwtM92A9b4p6HXEH9vqjiQa78Ez1JUzB8XRHN9Cg=="/>
+			<pubDate>Fri, 28 Apr 2023 21:53:28 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.24.127/win-x64-setup.zip" sparkle:version="1.24.127.21007" sparkle:shortVersionString="1.24.127" length="71405011" sparkle:os="windows" type="application/zip" sparkle:signature="BToptJrIn45pqWTMmfAZc4ytG/ywoF6c6FzsRikM3CWORBsp8Q1NyACQ2QPnfbtYrS1rrrV5W7EqjiSuo1UXCA=="/>
 		</item>
 		<item>
-			<title>1.24.119</title>
+			<title>1.24.127</title>
 			<description>## Current Release Notes
-* Make negate filter for lists useful
-* PDX Launcher compatibility (thank paradox for breaking compatibility)
+* Add external compare context option for all modes
+* Fix search term multiple negate filtering
+* Stellaris star_classes is now considered LIOS
+* Stellaris government authority is now generated as single file
+* Throw a warning on empty localization key
+* Ensure no duplicate mods are imported via paradox launcher (when merge compress was used)
 
 ## Release Notes 1.24
 * Update dependencies
@@ -72,8 +88,8 @@
 * Add support for metadata descriptor type games (Victoria 3 support)
 * Add option to ignore update
 * Improve mod loading performance</description>
-			<pubDate>Tue, 14 Mar 2023 21:28:53 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.24.119/win-x64.zip" sparkle:version="1.24.119.38302" sparkle:shortVersionString="1.24.119" length="104840452" sparkle:os="windows" type="application/zip" sparkle:signature="CrJwLTLQmFrPXV5FUvi4xuO2qJkihiWuziLOsMcbd7Re3uQf90G2oGK0Kmk7KfWmMd8wfbYRS46A8FDWBwa4Ag=="/>
+			<pubDate>Fri, 28 Apr 2023 21:53:29 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.24.127/win-x64.zip" sparkle:version="1.24.127.21007" sparkle:shortVersionString="1.24.127" length="104843743" sparkle:os="windows" type="application/zip" sparkle:signature="sYprMP6I7US2OhnAawWawRCWhBLvYMFX7X0uxZy/348V2xmd26IUlIurWO1x6wbtlyOKvLk+F8r7mzGf4Xz1Dw=="/>
 		</item>
 	</channel>
 </rss>
