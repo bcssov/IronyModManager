@@ -4,14 +4,9 @@
 		<title>Irony Mod Manager</title>
 		<language>en</language>
 		<item>
-			<title>1.24.127</title>
+			<title>1.24.128</title>
 			<description>## Current Release Notes
-* Add external compare context option for all modes
-* Fix search term multiple negate filtering
-* Stellaris star_classes is now considered LIOS
-* Stellaris government authority is now generated as single file
-* Throw a warning on empty localization key
-* Ensure no duplicate mods are imported via paradox launcher (when merge compress was used)
+* Stellaris 3.8 support
 
 ## Release Notes 1.24
 * Update dependencies
@@ -22,18 +17,13 @@
 * Add support for metadata descriptor type games (Victoria 3 support)
 * Add option to ignore update
 * Improve mod loading performance</description>
-			<pubDate>Fri, 28 Apr 2023 21:53:15 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.24.127/linux-x64.zip" sparkle:version="1.24.127.21007" sparkle:shortVersionString="1.24.127" length="90104179" sparkle:os="linux" type="application/zip" sparkle:signature="fP33GKsIP2QvMQORQpBGdT3Jpn/IGMsxWhtv40FjJLWGNvSnlwg45YFZ8c6cHgPGtV5Cs7IlDxJJmsEWCQptAw=="/>
+			<pubDate>Tue, 09 May 2023 21:21:50 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.24.128/linux-x64.zip" sparkle:version="1.24.128.61962" sparkle:shortVersionString="1.24.128" length="90104478" sparkle:os="linux" type="application/zip" sparkle:signature="kw7qIQyKFLps2C+blKNo/EPGQBjUtG8sb7O+TS2RRXUChS83uDDaqcD/w3Yb3OjHvhAd88X2S/ZEMAryUG3oBw=="/>
 		</item>
 		<item>
-			<title>1.24.127</title>
+			<title>1.24.128</title>
 			<description>## Current Release Notes
-* Add external compare context option for all modes
-* Fix search term multiple negate filtering
-* Stellaris star_classes is now considered LIOS
-* Stellaris government authority is now generated as single file
-* Throw a warning on empty localization key
-* Ensure no duplicate mods are imported via paradox launcher (when merge compress was used)
+* Stellaris 3.8 support
 
 ## Release Notes 1.24
 * Update dependencies
@@ -44,18 +34,13 @@
 * Add support for metadata descriptor type games (Victoria 3 support)
 * Add option to ignore update
 * Improve mod loading performance</description>
-			<pubDate>Fri, 28 Apr 2023 21:53:22 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.24.127/osx-x64.zip" sparkle:version="1.24.127.21007" sparkle:shortVersionString="1.24.127" length="93256112" sparkle:os="osx" type="application/zip" sparkle:signature="EvVVQU0gx/FMoiUnE9HF06IF78rwMhAg0V6p6g9BNTBkdZoUunp2o5E5BNspVymGYRVcbLRZ2io5VJUW2bjsCQ=="/>
+			<pubDate>Tue, 09 May 2023 21:21:57 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.24.128/osx-x64.zip" sparkle:version="1.24.128.61962" sparkle:shortVersionString="1.24.128" length="93256379" sparkle:os="osx" type="application/zip" sparkle:signature="zU+WtkphkxHjMbnHppb+VggTPwXBIOHQaYXjRt9+fN49dWzIAgGR7Qx7/eN9AS+HzynyB98v6Bj5P/LzQ/7aAQ=="/>
 		</item>
 		<item>
-			<title>1.24.127</title>
+			<title>1.24.128</title>
 			<description>## Current Release Notes
-* Add external compare context option for all modes
-* Fix search term multiple negate filtering
-* Stellaris star_classes is now considered LIOS
-* Stellaris government authority is now generated as single file
-* Throw a warning on empty localization key
-* Ensure no duplicate mods are imported via paradox launcher (when merge compress was used)
+* Stellaris 3.8 support
 
 ## Release Notes 1.24
 * Update dependencies
@@ -66,18 +51,13 @@
 * Add support for metadata descriptor type games (Victoria 3 support)
 * Add option to ignore update
 * Improve mod loading performance</description>
-			<pubDate>Fri, 28 Apr 2023 21:53:28 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.24.127/win-x64-setup.zip" sparkle:version="1.24.127.21007" sparkle:shortVersionString="1.24.127" length="71405011" sparkle:os="windows" type="application/zip" sparkle:signature="BToptJrIn45pqWTMmfAZc4ytG/ywoF6c6FzsRikM3CWORBsp8Q1NyACQ2QPnfbtYrS1rrrV5W7EqjiSuo1UXCA=="/>
+			<pubDate>Tue, 09 May 2023 21:22:04 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.24.128/win-x64-setup.zip" sparkle:version="1.24.128.61962" sparkle:shortVersionString="1.24.128" length="71391815" sparkle:os="windows" type="application/zip" sparkle:signature="oTDWgXtrNaK8GIUpR/oflndBxcS1oN81rj9CDqFEvV8bpehOGYqMEWGSGV1nycxZyMuUqg4+xpMSqt42gNyCCA=="/>
 		</item>
 		<item>
-			<title>1.24.127</title>
+			<title>1.24.128</title>
 			<description>## Current Release Notes
-* Add external compare context option for all modes
-* Fix search term multiple negate filtering
-* Stellaris star_classes is now considered LIOS
-* Stellaris government authority is now generated as single file
-* Throw a warning on empty localization key
-* Ensure no duplicate mods are imported via paradox launcher (when merge compress was used)
+* Stellaris 3.8 support
 
 ## Release Notes 1.24
 * Update dependencies
@@ -88,8 +68,8 @@
 * Add support for metadata descriptor type games (Victoria 3 support)
 * Add option to ignore update
 * Improve mod loading performance</description>
-			<pubDate>Fri, 28 Apr 2023 21:53:29 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.24.127/win-x64.zip" sparkle:version="1.24.127.21007" sparkle:shortVersionString="1.24.127" length="104843743" sparkle:os="windows" type="application/zip" sparkle:signature="sYprMP6I7US2OhnAawWawRCWhBLvYMFX7X0uxZy/348V2xmd26IUlIurWO1x6wbtlyOKvLk+F8r7mzGf4Xz1Dw=="/>
+			<pubDate>Tue, 09 May 2023 21:22:04 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.24.128/win-x64.zip" sparkle:version="1.24.128.61962" sparkle:shortVersionString="1.24.128" length="104844039" sparkle:os="windows" type="application/zip" sparkle:signature="mtY2Tri/s0Wy66L4JYz6TysGCZ8gVs8LS7bB3ClGmDv6qfHnlYwsuhT78Laqo8l0GKL4jzV2sn8L/2TZ24ZsCg=="/>
 		</item>
 	</channel>
 </rss>
