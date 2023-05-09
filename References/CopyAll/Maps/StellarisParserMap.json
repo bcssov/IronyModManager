@@ -101,6 +101,9 @@
         "DirectoryPath": "common\\component_templates",
         "PreferredParser": "GenericWholeTextParser"
     }, {
+        "DirectoryPath": "common\\council_agendas",
+        "PreferredParser": "DefaultParser"
+    }, {
         "DirectoryPath": "common\\country_container",
         "PreferredParser": "StellarisWholeTextParser"
     }, {
@@ -150,7 +153,7 @@
         "PreferredParser": "DefaultParser"
     }, {
         "DirectoryPath": "common\\economic_plans",
-        "PreferredParser": "DefaultParser"
+        "PreferredParser": "StellarisWholeTextParser"
     }, {
         "DirectoryPath": "common\\edicts",
         "PreferredParser": "DefaultParser"
@@ -197,6 +200,9 @@
         "DirectoryPath": "common\\galactic_focuses",
         "PreferredParser": "DefaultParser"
     }, {
+        "DirectoryPath": "common\\game_concepts",
+        "PreferredParser": "DefaultParser"
+    }, {
         "DirectoryPath": "common\\game_rules",
         "PreferredParser": "DefaultParser"
     }, {
@@ -207,9 +213,12 @@
         "PreferredParser": "DefaultParser"
     }, {
         "DirectoryPath": "common\\governments\\authorities",
-        "PreferredParser": "StellarisOverwrittenParser"
+        "PreferredParser": "StellarisOverwrittenObjectSingleFileParser"
     }, {
         "DirectoryPath": "common\\governments\\civics",
+        "PreferredParser": "DefaultParser"
+    }, {
+        "DirectoryPath": "common\\governments\\councilors",
         "PreferredParser": "DefaultParser"
     }, {
         "DirectoryPath": "common\\graphical_culture",
@@ -221,13 +230,22 @@
         "DirectoryPath": "common\\inline_scripts",
         "PreferredParser": "StellarisWholeTextParser"
     }, {
+        "DirectoryPath": "common\\inline_scripts\\buildings",
+        "PreferredParser": "StellarisWholeTextParser"
+    }, {
         "DirectoryPath": "common\\inline_scripts\\deposits",
         "PreferredParser": "StellarisWholeTextParser"
     }, {
         "DirectoryPath": "common\\inline_scripts\\enclaves",
         "PreferredParser": "StellarisWholeTextParser"
     }, {
+        "DirectoryPath": "common\\inline_scripts\\events",
+        "PreferredParser": "StellarisWholeTextParser"
+    }, {
         "DirectoryPath": "common\\inline_scripts\\jobs",
+        "PreferredParser": "StellarisWholeTextParser"
+    }, {
+        "DirectoryPath": "common\\inline_scripts\\paragon",
         "PreferredParser": "StellarisWholeTextParser"
     }, {
         "DirectoryPath": "common\\inline_scripts\\pop_categories",
@@ -242,7 +260,16 @@
         "DirectoryPath": "common\\inline_scripts\\technology",
         "PreferredParser": "StellarisWholeTextParser"
     }, {
+        "DirectoryPath": "common\\inline_scripts\\trait",
+        "PreferredParser": "StellarisWholeTextParser"
+    }, {
         "DirectoryPath": "common\\inline_scripts\\traits",
+        "PreferredParser": "StellarisWholeTextParser"
+    }, {
+        "DirectoryPath": "common\\inline_scripts\\trait\\icon_element",
+        "PreferredParser": "StellarisWholeTextParser"
+    }, {
+        "DirectoryPath": "common\\inline_scripts\\trait\\subtitle",
         "PreferredParser": "StellarisWholeTextParser"
     }, {
         "DirectoryPath": "common\\intel_categories",
@@ -268,6 +295,9 @@
     }, {
         "DirectoryPath": "common\\message_types",
         "PreferredParser": "GenericKeyParser"
+    }, {
+        "DirectoryPath": "common\\named_colors",
+        "PreferredParser": "DefaultParser"
     }, {
         "DirectoryPath": "common\\name_lists",
         "PreferredParser": "StellarisWholeTextParser"
@@ -626,6 +656,12 @@
         "DirectoryPath": "gfx\\models\\portraits\\avian",
         "PreferredParser": "GenericGraphicsParser"
     }, {
+        "DirectoryPath": "gfx\\models\\portraits\\custodian_paragon_leaders",
+        "PreferredParser": "GenericKeyParser"
+    }, {
+        "DirectoryPath": "gfx\\models\\portraits\\custodian_paragon_leaders",
+        "PreferredParser": "GenericGraphicsParser"
+    }, {
         "DirectoryPath": "gfx\\models\\portraits\\distant_stars",
         "PreferredParser": "GenericKeyParser"
     }, {
@@ -690,6 +726,12 @@
         "PreferredParser": "GenericKeyParser"
     }, {
         "DirectoryPath": "gfx\\models\\portraits\\necroid",
+        "PreferredParser": "GenericGraphicsParser"
+    }, {
+        "DirectoryPath": "gfx\\models\\portraits\\paragon",
+        "PreferredParser": "GenericKeyParser"
+    }, {
+        "DirectoryPath": "gfx\\models\\portraits\\paragon",
         "PreferredParser": "GenericGraphicsParser"
     }, {
         "DirectoryPath": "gfx\\models\\portraits\\plantoid",
@@ -1193,6 +1235,12 @@
         "DirectoryPath": "gfx\\models\\ships\\other",
         "PreferredParser": "GenericGraphicsParser"
     }, {
+        "DirectoryPath": "gfx\\models\\ships\\paragon_01",
+        "PreferredParser": "GenericKeyParser"
+    }, {
+        "DirectoryPath": "gfx\\models\\ships\\paragon_01",
+        "PreferredParser": "GenericGraphicsParser"
+    }, {
         "DirectoryPath": "gfx\\models\\ships\\pirate_01",
         "PreferredParser": "GenericKeyParser"
     }, {
@@ -1370,7 +1418,13 @@
         "DirectoryPath": "interface",
         "PreferredParser": "GenericKeyParser"
     }, {
+        "DirectoryPath": "interface\\common",
+        "PreferredParser": "GenericGraphicsParser"
+    }, {
         "DirectoryPath": "interface\\game_setup",
+        "PreferredParser": "GenericGraphicsParser"
+    }, {
+        "DirectoryPath": "interface\\icons\\traits",
         "PreferredParser": "GenericGraphicsParser"
     }, {
         "DirectoryPath": "interface\\pdx_online",
@@ -1554,6 +1608,21 @@
         "PreferredParser": "GenericWholeTextParser"
     }, {
         "DirectoryPath": "sound\\overlord\\Starbases",
+        "PreferredParser": "GenericWholeTextParser"
+    }, {
+        "DirectoryPath": "sound\\paragon\\events",
+        "PreferredParser": "GenericWholeTextParser"
+    }, {
+        "DirectoryPath": "sound\\paragon\\notifications",
+        "PreferredParser": "GenericWholeTextParser"
+    }, {
+        "DirectoryPath": "sound\\paragon\\portraits",
+        "PreferredParser": "GenericWholeTextParser"
+    }, {
+        "DirectoryPath": "sound\\paragon\\ships",
+        "PreferredParser": "GenericWholeTextParser"
+    }, {
+        "DirectoryPath": "sound\\paragon\\ui",
         "PreferredParser": "GenericWholeTextParser"
     }, {
         "DirectoryPath": "sound\\portrait",
