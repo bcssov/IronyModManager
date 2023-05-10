@@ -3,20 +3,22 @@
 // Author           : Mario
 // Created          : 07-15-2022
 //
-// Last Modified By : Mario
-// Last Modified On : 10-26-2022
+// Last Modified By : erri120
+// Last Modified On : 05-10-2023
 // ***********************************************************************
 // <copyright file="GogDirectory.cs" company="Mario">
 //     Mario
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
-using System;
+
+#nullable enable
 using System.Collections.Generic;
-using System.Linq;
 using System.Runtime.InteropServices;
+using GameFinder.RegistryUtils;
 using GameFinder.StoreHandlers.GOG;
 using IronyModManager.Shared;
+using NexusMods.Paths;
 
 namespace IronyModManager.Services.Registrations
 {
@@ -31,7 +33,7 @@ namespace IronyModManager.Services.Registrations
         /// <summary>
         /// The games
         /// </summary>
-        private static List<GOGGame> games;
+        private static IReadOnlyDictionary<GOGGameId, GOGGame>? _games;
 
         #endregion Fields
 
@@ -44,33 +46,21 @@ namespace IronyModManager.Services.Registrations
         /// <returns>System.String.</returns>
         public static string GetGameDirectory(int? appId)
         {
-            InitGames();
-            if (games != null)
-            {
-                var game = games.FirstOrDefault(p => p.Id == appId.GetValueOrDefault());
-                if (game != null)
-                {
-                    return game.Path;
-                }
-            }
-            return string.Empty;
-        }
+            if (!appId.HasValue) return string.Empty;
 
-        /// <summary>
-        /// Initializes the games.
-        /// </summary>
-        private static void InitGames()
-        {
-            if (games != null)
+            // TODO: GOG is supported in Wine using GameFinder.Wine (https://github.com/erri120/GameFinder/tree/master#gog-galaxy)
+            if (!RuntimeInformation.IsOSPlatform(OSPlatform.Windows)) return string.Empty;
+
+            if (_games is null)
             {
-                return;
+                var handler = new GOGHandler(new WindowsRegistry(), FileSystem.Shared);
+                _games = handler.FindAllGamesById(out var errors);
+                // TODO: log error messages
             }
-            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
-            {
-                var gogHandler = new GOGHandler();
-                var result = gogHandler.FindAllGames();
-                games = result.Where(p => p.Game != null).Select(p => p.Game).ToList();
-            }
+
+            return _games.TryGetValue(GOGGameId.From(appId.Value), out var game)
+                ? game.Path.GetFullPath()
+                : string.Empty;
         }
 
         #endregion Methods
