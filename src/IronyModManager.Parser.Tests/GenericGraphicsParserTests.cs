@@ -112,7 +112,7 @@ namespace IronyModManager.Parser.Tests
                         break;
                 }
                 result[i].ModName.Should().Be("fake");
-                result[i].Type.Should().Be("gui\\gui");
+                result[i].Type.Should().Be("gui\\gui\\gui");
             }
         }
 
@@ -165,7 +165,7 @@ namespace IronyModManager.Parser.Tests
                         break;
                 }
                 result[i].ModName.Should().Be("fake");
-                result[i].Type.Should().Be("gui\\gui");
+                result[i].Type.Should().Be("gui\\gui\\gui");
             }
         }
 
@@ -215,7 +215,7 @@ namespace IronyModManager.Parser.Tests
                         break;
                 }
                 result[i].ModName.Should().Be("fake");
-                result[i].Type.Should().Be("gui\\gui");
+                result[i].Type.Should().Be("gui\\gui\\gui");
             }
         }
 
@@ -287,7 +287,7 @@ namespace IronyModManager.Parser.Tests
                         break;
                 }
                 result[i].ModName.Should().Be("fake");
-                result[i].Type.Should().Be("gui\\gui");
+                result[i].Type.Should().Be("gui\\gui\\gui");
             }
         }
 
@@ -385,7 +385,7 @@ namespace IronyModManager.Parser.Tests
                         break;
                 }
                 result[i].ModName.Should().Be("fake");
-                result[i].Type.Should().Be("gfx\\gfx");
+                result[i].Type.Should().Be("gfx\\gfx\\gfx");
             }
         }
 
@@ -441,7 +441,7 @@ namespace IronyModManager.Parser.Tests
                         break;
                 }
                 result[i].ModName.Should().Be("fake");
-                result[i].Type.Should().Be("gfx\\gfx");
+                result[i].Type.Should().Be("gfx\\gfx\\gfx");
             }
         }
 
@@ -518,7 +518,7 @@ namespace IronyModManager.Parser.Tests
                         break;
                 }
                 result[i].ModName.Should().Be("fake");
-                result[i].Type.Should().Be("gfx\\gfx");
+                result[i].Type.Should().Be("gfx\\gfx\\gfx");
             }
         }
 
@@ -585,7 +585,7 @@ namespace IronyModManager.Parser.Tests
                         break;
                 }
                 result[i].ModName.Should().Be("fake");
-                result[i].Type.Should().Be("gfx\\gfx");
+                result[i].Type.Should().Be("gfx\\gfx\\gfx");
             }
         }
 
@@ -652,7 +652,7 @@ namespace IronyModManager.Parser.Tests
                         break;
                 }
                 result[i].ModName.Should().Be("fake");
-                result[i].Type.Should().Be("gui\\gui");
+                result[i].Type.Should().Be("gui\\gui\\gui");
             }
         }
 
@@ -698,8 +698,8 @@ namespace IronyModManager.Parser.Tests
                         break;
                 }
                 result[i].ModName.Should().Be("fake");
-                result[i].Type.Should().Be("interface\\gfx");
-                result[i].VirtualPath.Should().Be("interface\\gfx.gfx");
+                result[i].Type.Should().Be("interface\\gfx\\gfx");
+                result[i].VirtualPath.Should().Be("interface\\gfx\\gfx.gfx");
             }
         }
     }
