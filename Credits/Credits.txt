@@ -28,7 +28,7 @@ license Type:MIT
 
 #########################
 Package:AutoMapper
-Version:11.0.1
+Version:12.0.0
 project URL:https://automapper.org/
 Description:A convention-based object-object mapper.
 licenseUrl:https://licenses.nuget.org/MIT
@@ -126,7 +126,7 @@ license Type:MIT
 
 #########################
 Package:CompareNETObjects
-Version:4.77.0
+Version:4.78.0
 project URL:https://github.com/GregFinzer/Compare-Net-Objects
 Description:What you have been waiting for. Perform a deep compare of any two .NET objects using reflection. Shows the differences between the two objects.
 licenseUrl:https://www.nuget.org/packages/CompareNETObjects/4.77.0/License
@@ -158,27 +158,29 @@ license Type:BSD, Apache, zlib and MIT
 
 #########################
 Package:FluentAssertions
-Version:6.7.0
+Version:6.8.0
 project URL:https://www.fluentassertions.com/
 Description:A very extensive set of extension methods that allow you to more naturally specify the expected outcome of a TDD or
       BDD-style unit tests. Targets .NET Framework 4.7, .NET Core 2.1 and 3.0, .NET 6, as well as .NET Standard 2.0 and 2.1.
-      Supports the unit test frameworks MSTest2, NUnit3, XUnit2, MSpec, and NSpec3.
+      Supports the unit test frameworks MSTest2, NUnit3, XUnit2, MSpec, and NSpec3. 
+      
+      Supported by InfoSupport B.V.
 licenseUrl:https://licenses.nuget.org/Apache-2.0
 license Type:Apache-2.0
 
 #########################
 Package:FSharp.Core
-Version:6.0.5
+Version:7.0.0
 project URL:https://github.com/dotnet/fsharp
-Description:FSharp.Core redistributables from F# Tools version 12.0.4 For F# 6.0.  Contains code from the F# Software Foundation.
+Description:FSharp.Core redistributables from F# Tools version 12.4.0 For F# 7.0.  Contains code from the F# Software Foundation.
 licenseUrl:https://licenses.nuget.org/MIT
 license Type:MIT
 
 #########################
 Package:GameFinder.StoreHandlers.GOG
-Version:1.8.0
+Version:2.2.2
 project URL:https://github.com/erri120/GameFinder
-Description:.NET library for finding games on Windows.
+Description:Library for finding games installed with GOG Galaxy.
 licenseUrl:https://licenses.nuget.org/MIT
 license Type:MIT
 
@@ -208,7 +210,7 @@ license Type:Microsoft Public License (MS-PL)
 
 #########################
 Package:Magick.NET-Q8-x64
-Version:12.0.1
+Version:12.2.1
 project URL:https://github.com/dlemstra/Magick.NET
 Description:ImageMagick is a powerful image manipulation library that supports over 100 major file formats (not including sub-formats). With Magick.NET you can use ImageMagick without having to install ImageMagick on your server or desktop. Visit https://github.com/dlemstra/Magick.NET/tree/main/docs before installing to help you decide the best version.
 licenseUrl:https://licenses.nuget.org/Apache-2.0
@@ -248,7 +250,7 @@ license Type:MIT
 
 #########################
 Package:Microsoft.Bcl.AsyncInterfaces
-Version:6.0.0
+Version:7.0.0
 project URL:https://dot.net/
 Description:Provides the IAsyncEnumerable<T> and IAsyncDisposable interfaces and helper types for .NET Standard 2.0. This package is not required starting with .NET Standard 2.1 and .NET Core 3.0.
 
@@ -261,7 +263,7 @@ license Type:MIT
 
 #########################
 Package:Microsoft.NET.Test.Sdk
-Version:17.3.0
+Version:17.4.0
 project URL:https://github.com/microsoft/vstest/
 Description:The MSbuild targets and properties for building .NET test projects.
 licenseUrl:https://www.nuget.org/packages/Microsoft.NET.Test.Sdk/17.3.0/License
@@ -312,7 +314,7 @@ license Type:BSD 3-Clause License
 
 #########################
 Package:Nerdbank.GitVersioning
-Version:3.5.109
+Version:3.5.119
 project URL:https://github.com/dotnet/Nerdbank.GitVersioning
 Description:Stamps your assemblies with semver 2.0 compliant git commit specific version information and provides NuGet versioning information as well.
 licenseUrl:https://licenses.nuget.org/MIT
@@ -320,7 +322,7 @@ license Type:MIT
 
 #########################
 Package:NetSparkleUpdater.SparkleUpdater
-Version:2.1.2
+Version:2.2.1
 project URL:https://github.com/NetSparkleUpdater/NetSparkle
 Description:NetSparkleUpdater/NetSparkle is a C# .NET software update framework that allows you to easily download installer files and update your C# .NET Framework or .NET Core software. Built-in UIs are available for WinForms, WPF, and Avalonia; if you want a built-in UI, please reference a NetSparkleUpdater.UI package. You provide, somewhere on the internet, an XML appcast with software version information along with release notes in Markdown or HTML format. The NetSparkle framework then checks for an update in the background, displays the release notes to the user, and lets users download or skip the software update. The framework can also perform silent downloads so that you can present all of the UI yourself or set up your own silent software update system, as allowed by your software architecture. It was inspired by the Sparkle (https://sparkle-project.org/) project for Cocoa developers and the WinSparkle (https://winsparkle.org/) project (a Win32 port).
 licenseUrl:https://www.nuget.org/packages/NetSparkleUpdater.SparkleUpdater/2.1.2/License
@@ -328,7 +330,7 @@ license Type:MIT
 
 #########################
 Package:Newtonsoft.Json
-Version:13.0.1
+Version:13.0.3
 project URL:https://www.newtonsoft.com/json
 Description:Json.NET is a popular high-performance JSON framework for .NET
 licenseUrl:https://licenses.nuget.org/MIT
@@ -344,7 +346,7 @@ license Type:MIT
 
 #########################
 Package:NLog
-Version:5.0.1
+Version:5.0.5
 project URL:https://nlog-project.org/
 Description:NLog is a logging platform for .NET with rich log routing and management capabilities.
 NLog supports traditional logging, structured logging and the combination of both.
@@ -364,7 +366,7 @@ license Type:BSD-3-Clause
 
 #########################
 Package:Pfim
-Version:0.10.3
+Version:0.11.1
 project URL:https://nickbabcock.github.io/Pfim/
 Description:A simple and fast .NET Standard image decoder for targa (.tga) and direct draw surface (.dds) images
 licenseUrl:https://raw.githubusercontent.com/nickbabcock/Pfim/master/LICENSE.txt
@@ -372,9 +374,9 @@ license Type:MIT
 
 #########################
 Package:PommaLabs.MimeTypes
-Version:2.7.0+c6194cd
+Version:2.7.2+92dcc3e
 project URL:https://gitlab.com/pommalabs/mime-types
-Description:Provides a library and registry for information about MIME content type definitions.
+Description:MIME content type definitions mapped with file extensions and file signatures.
 licenseUrl:https://licenses.nuget.org/MIT
 license Type:MIT
 
@@ -388,7 +390,7 @@ license Type:Adapted MIT License
 
 #########################
 Package:ReactiveUI
-Version:18.3.1
+Version:18.4.1
 project URL:https://reactiveui.net/
 Description:A MVVM framework that integrates with the Reactive Extensions for .NET to create elegant, testable User Interfaces that run on any mobile or desktop platform. This is the base package with the base platform implementations
 licenseUrl:https://licenses.nuget.org/MIT
@@ -396,19 +398,27 @@ license Type:MIT
 
 #########################
 Package:RepoDb
-Version:1.12.10
+Version:1.13.0
 project URL:https://repodb.net/
 Description:A hybrid ORM library for .NET.
 licenseUrl:https://www.nuget.org/packages/RepoDb/1.12.10/License
 license Type:Apache License 2.0
 
 #########################
-Package:RepoDb.SqLite
-Version:1.1.4
+Package:RepoDb.Sqlite.Microsoft
+Version:1.13.0
 project URL:https://repodb.net/tutorial/get-started-sqlite
-Description:A hybrid .NET ORM library for SqLite.
-licenseUrl:https://www.nuget.org/packages/RepoDb.SqLite/1.1.4/License
+Description:A hybrid .NET ORM library for SQLite (using Microsoft.Data.Sqlite).
+licenseUrl:https://www.nuget.org/packages/RepoDb.Sqlite.Microsoft/1.13.0/License
 license Type:Apache License 2.0
+
+#########################
+Package:Sajidur78.StrongNamer
+Version:0.2.8
+project URL:https://github.com/sajidur78/strongnamer
+Description:Strong Namer will automatically add strong names to referenced assemblies which do not already have a strong name.
+licenseUrl:https://github.com/Sajidur78/strongnamer/blob/master/LICENSE
+license Type:MIT
 
 #########################
 Package:SharpCompress
@@ -420,7 +430,7 @@ license Type:MIT
 
 #########################
 Package:SimpleInjector
-Version:5.4.0
+Version:5.4.1
 project URL:https://simpleinjector.org/
 Description:Simple Injector is an easy, flexible and fast dependency injection library that uses best practice to guide your solutions toward the pit of success.
 licenseUrl:https://licenses.nuget.org/MIT
@@ -452,7 +462,7 @@ license Type:Apache-2.0
 
 #########################
 Package:SlimMessageBus.Host.Memory
-Version:1.19.3
+Version:1.22.1
 project URL:https://github.com/zarusz/SlimMessageBus
 Description:Simple provider for SlimMessageBus for in process message passing. Messages are stored in memory (state is transient).
 licenseUrl:https://licenses.nuget.org/Apache-2.0
@@ -460,7 +470,7 @@ license Type:Apache-2.0
 
 #########################
 Package:SmartFormat
-Version:3.1.0
+Version:3.2.0
 project URL:https://github.com/axuno/SmartFormat
 Description:This package contains the core SmartFormat assemblies with core extensions built-in.
 
@@ -472,7 +482,7 @@ license Type:MIT
 
 #########################
 Package:Splat.NLog
-Version:14.4.1
+Version:14.5.1
 project URL:https://github.com/reactiveui/splat/
 Description:A library to make things cross-platform that should be.
 licenseUrl:https://licenses.nuget.org/MIT
@@ -480,7 +490,7 @@ license Type:MIT
 
 #########################
 Package:Splat.SimpleInjector
-Version:14.4.1
+Version:14.5.1
 project URL:https://github.com/reactiveui/splat/
 Description:A library to make things cross-platform that should be.
 licenseUrl:https://licenses.nuget.org/MIT
@@ -493,14 +503,6 @@ project URL:https://github.com/rlabrecque/Steamworks.NET
 Description:Steamworks.NET
 licenseUrl:https://licenses.nuget.org/MIT
 license Type:MIT
-
-#########################
-Package:StrongNamer
-Version:0.2.5
-project URL:https://github.com/dsplaisted/strongnamer
-Description:Strong Namer will automatically add strong names to referenced assemblies which do not already have a strong name.
-licenseUrl:
-license Type:
 
 #########################
 Package:Syroot.Windows.IO.KnownFolders
@@ -554,6 +556,14 @@ licenseUrl:https://github.com/CharsetDetector/UTF-unknown/blob/master/license/MP
 license Type:Mozilla Public License
 
 #########################
+Package:Wanhjor.ObjectInspector
+Version:0.4.0
+project URL:https://github.com/tonyredondo/ObjectInspector
+Description:An efficient .NET object inspector/accesor to avoid reflection usage with duck typing support.
+licenseUrl:https://www.nuget.org/packages/Wanhjor.ObjectInspector/0.4.0/License
+license Type:MIT
+
+#########################
 Package:xunit
 Version:2.4.2
 project URL:https://github.com/xunit/xunit
@@ -561,7 +571,7 @@ Description:xUnit.net is a developer testing framework, built to support Test Dr
 
 Installing this package installs xunit.core, xunit.assert, and xunit.analyzers.
 licenseUrl:https://licenses.nuget.org/Apache-2.0
-license Type:Apache-2
+license Type:Apache-2.0
 
 #########################
 Package:xunit.runner.visualstudio
