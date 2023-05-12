@@ -115,7 +115,8 @@
                           Foreground="{Binding Foreground, RelativeSource={RelativeSource TemplatedParent}}"
                           IsChecked="{TemplateBinding IsSubMenuOpen, Mode=TwoWay}"
                           Content="{TemplateBinding Header}"
-                          Padding="{Binding Padding, RelativeSource={RelativeSource TemplatedParent}}">
+                          Padding="{Binding Padding, RelativeSource={RelativeSource TemplatedParent}}"
+                          Command="{TemplateBinding Command}">
               <ToggleButton.Styles>
                 <Style Selector="ToggleButton AccessText">
                   <Setter Property="Foreground" Value="{TemplateBinding Foreground}" />
