@@ -16,6 +16,8 @@ using System.Collections.Generic;
 using System.Linq;
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
+using Avalonia.Input;
+using Avalonia.LogicalTree;
 using Avalonia.Styling;
 
 namespace IronyModManager.Controls
@@ -63,6 +65,24 @@ namespace IronyModManager.Controls
             if (popup != null)
             {
                 popup.PlacementMode = PlacementMode.Right;
+            }
+        }
+
+        /// <summary>
+        /// Handles the <see cref="E:PointerEnter" /> event.
+        /// </summary>
+        /// <param name="e">The <see cref="PointerEventArgs"/> instance containing the event data.</param>
+        /// <inheritdoc />
+        protected override void OnPointerEnter(PointerEventArgs e)
+        {
+            base.OnPointerEnter(e);
+            if (IsPointerOver)
+            {
+                var hasChildren = this.GetLogicalChildren().OfType<MenuItem>().Any();
+                if (hasChildren)
+                {
+                    Open();
+                }
             }
         }
 
