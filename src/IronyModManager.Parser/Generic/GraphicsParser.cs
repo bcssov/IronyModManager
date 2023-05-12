@@ -37,7 +37,7 @@ namespace IronyModManager.Parser.Generic
         /// <summary>
         /// The asset identifier
         /// </summary>
-        protected const string assetId = "entity={";
+        protected const string AssetId = "entity={";
 
         /// <summary>
         /// The expected graphics folders
@@ -47,7 +47,7 @@ namespace IronyModManager.Parser.Generic
         /// <summary>
         /// The expected graphics ids
         /// </summary>
-        protected static readonly string[] expectedGraphicsIds = new string[] { "guiTypes={", "spriteTypes={", "objectTypes={", assetId };
+        protected static readonly string[] expectedGraphicsIds = new string[] { "guiTypes={", "spriteTypes={", "objectTypes={", AssetId };
 
         /// <summary>
         /// The valid extensions
@@ -151,7 +151,7 @@ namespace IronyModManager.Parser.Generic
                 }
             }
             else
-            {                
+            {
                 foreach (var definition in result)
                 {
                     definition.VirtualPath = Path.Combine(parent, Path.GetExtension(args.File).Trim("."), Path.GetFileName(args.File));
@@ -206,10 +206,10 @@ namespace IronyModManager.Parser.Generic
                             merged = merged[..merged.IndexOf(Common.Constants.Scripts.OpenObject)];
                             if (expectedGraphicsIds.Any(a => merged.Contains(a, StringComparison.OrdinalIgnoreCase)))
                             {
-                                isAsset = merged.Contains(assetId, StringComparison.OrdinalIgnoreCase);
+                                isAsset = merged.Contains(AssetId, StringComparison.OrdinalIgnoreCase);
                                 return true;
                             }
-                        }                        
+                        }
                     }
                 }
             }

@@ -4,7 +4,7 @@
 // Created          : 04-16-2021
 //
 // Last Modified By : Mario
-// Last Modified On : 11-28-2022
+// Last Modified On : 05-12-2023
 // ***********************************************************************
 // <copyright file="PlatformConfigurationOptions.cs" company="Mario">
 //     Mario
@@ -17,6 +17,22 @@ using System.Linq;
 
 namespace IronyModManager.Platform.Configuration
 {
+    /// <summary>
+    /// Class ConflictSolver.
+    /// </summary>
+    public class ConflictSolver
+    {
+        #region Properties
+
+        /// <summary>
+        /// Gets or sets the use sub menus.
+        /// </summary>
+        /// <value>The use sub menus.</value>
+        public bool UseSubMenus { get; set; }
+
+        #endregion Properties
+    }
+
     /// <summary>
     /// Class Fonts.
     /// </summary>
@@ -101,6 +117,12 @@ namespace IronyModManager.Platform.Configuration
     public class PlatformConfigurationOptions
     {
         #region Properties
+
+        /// <summary>
+        /// Gets the conflict solver.
+        /// </summary>
+        /// <value>The conflict solver.</value>
+        public ConflictSolver ConflictSolver { get; } = new ConflictSolver();
 
         /// <summary>
         /// Gets the fonts.

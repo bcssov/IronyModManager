@@ -4,7 +4,7 @@
 // Created          : 04-16-2021
 //
 // Last Modified By : Mario
-// Last Modified On : 11-28-2022
+// Last Modified On : 05-12-2023
 // ***********************************************************************
 // <copyright file="PlatformConfiguration.cs" company="Mario">
 //     Mario
@@ -131,6 +131,7 @@ namespace IronyModManager.Implementation.Config
                 platformConfiguration.Fonts.UseInbuiltFontsOnly = configuration.GetSection("Fonts").GetSection("UseInbuiltFontsOnly").Get<bool>();
                 platformConfiguration.Updates.Disable = configuration.GetSection("Updates").GetSection("Disable").Get<bool>();
                 platformConfiguration.TitleBar.Native = configuration.GetSection("TitleBar").GetSection("Native").Get<bool>();
+                platformConfiguration.ConflictSolver.UseSubMenus = configuration.GetSection("ConflictSolver").GetSection("UseSubMenus").Get<bool>();
             }
             return platformConfiguration;
         }

@@ -31,36 +31,65 @@
                      Topmost="True" ObeyScreenEdges="True" StaysOpen="False" x:Name="popup"
                            PlacementTarget="{Binding #openPopupButton}">
                         <Border BorderThickness="1,1,1,1" BorderBrush="{DynamicResource IronyButtonBorderBrush}">
-                            <Grid RowDefinitions="1*,1*,1*,1*,1*,1*,1*,1*" Background="{DynamicResource IronyBackgroundPopupBrush}">
-                                <TextBlock Text="{Binding ModeTitle}" Grid.Column="0"
-                                           Grid.Row="0" VerticalAlignment="Center" HorizontalAlignment="Center"
-                                           MinHeight="20" Margin="0,5"></TextBlock>
-                                <Button Content="{Binding AnalyzeMode}" Command="{Binding AnalyzeModeCommand}"
-                                        Grid.Row="1" Grid.Column="0"
-                                        HorizontalAlignment="Stretch" VerticalAlignment="Stretch" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"></Button>
-                                <Button Content="{Binding AnalyzeWithoutLocalizationMode}" Command="{Binding AnalyzeModeWithoutLocalizationCommand}"
-                                        Grid.Row="2" Grid.Column="0"
-                                        HorizontalAlignment="Stretch" VerticalAlignment="Stretch" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"></Button>
-                                <Button Content="{Binding DefaultMode}" Command="{Binding DefaultModeCommand}"
-                                        Grid.Row="3" Grid.Column="0"
-                                        HorizontalAlignment="Stretch" VerticalAlignment="Stretch" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"
-                                        IsVisible="{Binding DefaultModeVisible}"></Button>
-                                <Button Content="{Binding DefaultWithoutLocalizationMode}" Command="{Binding DefaultWithoutLocalizationModeCommand}"
-                                        Grid.Row="4" Grid.Column="0"
-                                        HorizontalAlignment="Stretch" VerticalAlignment="Stretch" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"
-                                        IsVisible="{Binding DefaultWithoutLocalizationModeVisible}"></Button>
-                                <Button Content="{Binding AdvancedMode}" Command="{Binding AdvancedModeCommand}"
-                                        Grid.Row="5" Grid.Column="0"
-                                        HorizontalAlignment="Stretch" VerticalAlignment="Stretch" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"
-                                        IsVisible="{Binding AdvancedModeVisible}"></Button>
-                                <Button Content="{Binding AdvancedWithoutLocalizationMode}" Command="{Binding AdvancedWithoutLocalizationModeCommand}"
-                                        Grid.Row="6" Grid.Column="0"
-                                        HorizontalAlignment="Stretch" VerticalAlignment="Stretch" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"
-                                        IsVisible="{Binding AdvancedWithoutLocalizationModeVisible}"></Button>
-                                <Button Content="{Binding CloseMode}" Command="{Binding CloseModeCommand}"
-                                        Grid.Row="7" Grid.Column="0"
-                                        HorizontalAlignment="Stretch" VerticalAlignment="Stretch" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"></Button>
-                            </Grid>
+                            <Panel>
+                                <Grid RowDefinitions="1*,1*,1*,1*,1*,1*,1*,1*" Background="{DynamicResource IronyBackgroundPopupBrush}" IsVisible="{Binding UseSimpleLayout}">
+                                    <TextBlock Text="{Binding ModeTitle}" Grid.Column="0"
+                                               Grid.Row="0" VerticalAlignment="Center" HorizontalAlignment="Center"
+                                               MinHeight="20" Margin="0,5"></TextBlock>
+                                    <Button Content="{Binding AnalyzeMode}" Command="{Binding AnalyzeModeCommand}"
+                                            Grid.Row="1" Grid.Column="0"
+                                            HorizontalAlignment="Stretch" VerticalAlignment="Stretch" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"></Button>
+                                    <Button Content="{Binding AnalyzeWithoutLocalizationMode}" Command="{Binding AnalyzeModeWithoutLocalizationCommand}"
+                                            Grid.Row="2" Grid.Column="0"
+                                            HorizontalAlignment="Stretch" VerticalAlignment="Stretch" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"></Button>
+                                    <Button Content="{Binding DefaultMode}" Command="{Binding DefaultModeCommand}"
+                                            Grid.Row="3" Grid.Column="0"
+                                            HorizontalAlignment="Stretch" VerticalAlignment="Stretch" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"
+                                            IsVisible="{Binding DefaultModeVisible}"></Button>
+                                    <Button Content="{Binding DefaultWithoutLocalizationMode}" Command="{Binding DefaultWithoutLocalizationModeCommand}"
+                                            Grid.Row="4" Grid.Column="0"
+                                            HorizontalAlignment="Stretch" VerticalAlignment="Stretch" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"
+                                            IsVisible="{Binding DefaultWithoutLocalizationModeVisible}"></Button>
+                                    <Button Content="{Binding AdvancedMode}" Command="{Binding AdvancedModeCommand}"
+                                            Grid.Row="5" Grid.Column="0"
+                                            HorizontalAlignment="Stretch" VerticalAlignment="Stretch" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"
+                                            IsVisible="{Binding AdvancedModeVisible}"></Button>
+                                    <Button Content="{Binding AdvancedWithoutLocalizationMode}" Command="{Binding AdvancedWithoutLocalizationModeCommand}"
+                                            Grid.Row="6" Grid.Column="0"
+                                            HorizontalAlignment="Stretch" VerticalAlignment="Stretch" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"
+                                            IsVisible="{Binding AdvancedWithoutLocalizationModeVisible}"></Button>
+                                    <Button Content="{Binding CloseMode}" Command="{Binding CloseModeCommand}"
+                                            Grid.Row="7" Grid.Column="0"
+                                            HorizontalAlignment="Stretch" VerticalAlignment="Stretch" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"></Button>
+                                </Grid>
+                                <Grid RowDefinitions="1*,1*" Background="{DynamicResource IronyBackgroundPopupBrush}" IsVisible="{Binding !UseSimpleLayout}">
+                                    <TextBlock Text="{Binding ModeTitle}" Grid.Column="0"
+                                               Grid.Row="0" VerticalAlignment="Center" HorizontalAlignment="Center"
+                                               MinHeight="20" Margin="0,5"></TextBlock>
+                                    <DockPanel Grid.Row="1" Grid.Column="0">
+                                        <Menu DockPanel.Dock="Bottom">
+                                            <MenuItem Header="{Binding AnalyzeMode}">
+                                                <MenuItem Header="{Binding AnalyzeMode}" Command="{Binding AnalyzeModeCommand}"/>
+                                                <MenuItem Header="{Binding AnalyzeWithoutLocalizationMode}" Command="{Binding AnalyzeModeWithoutLocalizationCommand}"/>
+                                            </MenuItem>
+                                            <MenuItem Header="{Binding DefaultMode}" IsVisible="{Binding DefaultParentVisible}">
+                                                <MenuItem Header="{Binding DefaultMode}"
+                                                          Command="{Binding DefaultModeCommand}" IsVisible="{Binding DefaultModeVisible}"/>
+                                                <MenuItem Header="{Binding DefaultWithoutLocalizationMode}"
+                                                          Command="{Binding DefaultWithoutLocalizationModeCommand}" IsVisible="{Binding DefaultWithoutLocalizationModeVisible}" />
+                                            </MenuItem>
+                                            <MenuItem Header="{Binding AdvancedMode}" IsVisible="{Binding AdvancedParentVisible}">
+                                                <MenuItem Header="{Binding AdvancedMode}"
+                                                          Command="{Binding AdvancedModeCommand}" IsVisible="{Binding AdvancedModeVisible}"/>
+                                                <MenuItem Header="{Binding AdvancedWithoutLocalizationMode}"
+                                                          Command="{Binding AdvancedWithoutLocalizationModeCommand}" IsVisible="{Binding AdvancedWithoutLocalizationModeVisible}"/>
+                                            </MenuItem>
+                                            <MenuItem Header="{Binding CloseMode}"
+                                                          Command="{Binding CloseModeCommand}"/>
+                                        </Menu>
+                                    </DockPanel>
+                                </Grid>
+                            </Panel>
                         </Border>
                     </Popup>
                 </Panel>
