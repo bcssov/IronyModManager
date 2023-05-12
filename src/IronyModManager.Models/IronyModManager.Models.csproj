@@ -38,6 +38,11 @@
       <Pack>True</Pack>
       <PackagePath></PackagePath>
     </None>
+    <None Include="..\\..\\Credits\\Credits.txt">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>	
   </ItemGroup>
 
   <ItemGroup>

@@ -66,26 +66,32 @@
                                     <TextBlock Text="{Binding ModeTitle}" Grid.Column="0"
                                                Grid.Row="0" VerticalAlignment="Center" HorizontalAlignment="Center"
                                                MinHeight="20" Margin="0,5"></TextBlock>
+                                    <!-- Getting this to work is becomin a pain -->
                                     <DockPanel Grid.Row="1" Grid.Column="0">
-                                        <Menu DockPanel.Dock="Bottom">
-                                            <MenuItem Header="{Binding AnalyzeMode}">
-                                                <MenuItem Header="{Binding AnalyzeMode}" Command="{Binding AnalyzeModeCommand}"/>
-                                                <MenuItem Header="{Binding AnalyzeWithoutLocalizationMode}" Command="{Binding AnalyzeModeWithoutLocalizationCommand}"/>
-                                            </MenuItem>
-                                            <MenuItem Header="{Binding DefaultMode}" IsVisible="{Binding DefaultParentVisible}">
-                                                <MenuItem Header="{Binding DefaultMode}"
+                                        <Menu DockPanel.Dock="Bottom" Height="{Binding VerticalMenuHeight}">
+                                            <Menu.ItemsPanel>
+                                                <ItemsPanelTemplate>
+                                                    <VirtualizingStackPanel Orientation="Vertical" Spacing="{Binding VerticalMenuSpacing}"/>
+                                                </ItemsPanelTemplate>
+                                            </Menu.ItemsPanel>
+                                            <controls:VerticalMenuItem Header="{Binding AnalyzeMode}" Height="{Binding VerticalMenuItemHeight}">
+                                                <controls:VerticalMenuItem Header="{Binding AnalyzeMode}" Command="{Binding AnalyzeModeCommand}"/>
+                                                <controls:VerticalMenuItem Header="{Binding AnalyzeWithoutLocalizationMode}" Command="{Binding AnalyzeModeWithoutLocalizationCommand}"/>
+                                            </controls:VerticalMenuItem>
+                                            <controls:VerticalMenuItem Header="{Binding DefaultMode}" IsVisible="{Binding DefaultParentVisible}" Height="{Binding VerticalMenuItemHeight}">
+                                                <controls:VerticalMenuItem Header="{Binding DefaultMode}"
                                                           Command="{Binding DefaultModeCommand}" IsVisible="{Binding DefaultModeVisible}"/>
-                                                <MenuItem Header="{Binding DefaultWithoutLocalizationMode}"
+                                                <controls:VerticalMenuItem Header="{Binding DefaultWithoutLocalizationMode}"
                                                           Command="{Binding DefaultWithoutLocalizationModeCommand}" IsVisible="{Binding DefaultWithoutLocalizationModeVisible}" />
-                                            </MenuItem>
-                                            <MenuItem Header="{Binding AdvancedMode}" IsVisible="{Binding AdvancedParentVisible}">
-                                                <MenuItem Header="{Binding AdvancedMode}"
+                                            </controls:VerticalMenuItem>
+                                            <controls:VerticalMenuItem Header="{Binding AdvancedMode}" IsVisible="{Binding AdvancedParentVisible}" Height="{Binding VerticalMenuItemHeight}">
+                                                <controls:VerticalMenuItem Header="{Binding AdvancedMode}"
                                                           Command="{Binding AdvancedModeCommand}" IsVisible="{Binding AdvancedModeVisible}"/>
-                                                <MenuItem Header="{Binding AdvancedWithoutLocalizationMode}"
+                                                <controls:VerticalMenuItem Header="{Binding AdvancedWithoutLocalizationMode}"
                                                           Command="{Binding AdvancedWithoutLocalizationModeCommand}" IsVisible="{Binding AdvancedWithoutLocalizationModeVisible}"/>
-                                            </MenuItem>
-                                            <MenuItem Header="{Binding CloseMode}"
-                                                          Command="{Binding CloseModeCommand}"/>
+                                            </controls:VerticalMenuItem>
+                                            <controls:VerticalMenuItem Header="{Binding CloseMode}"
+                                                          Command="{Binding CloseModeCommand}" Height="{Binding VerticalMenuItemHeight}" />
                                         </Menu>
                                     </DockPanel>
                                 </Grid>

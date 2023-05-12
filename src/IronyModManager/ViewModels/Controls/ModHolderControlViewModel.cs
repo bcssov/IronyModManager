@@ -505,6 +505,24 @@ namespace IronyModManager.ViewModels.Controls
         /// <value><c>true</c> if [use simple layout]; otherwise, <c>false</c>.</value>
         public virtual bool UseSimpleLayout { get; protected set; }
 
+        /// <summary>
+        /// Gets or sets the height of the vertical menu.
+        /// </summary>
+        /// <value>The height of the vertical menu.</value>
+        public virtual int VerticalMenuHeight { get; protected set; } = 140;
+
+        /// <summary>
+        /// Gets the height of the vertical menu item.
+        /// </summary>
+        /// <value>The height of the vertical menu item.</value>
+        public virtual int VerticalMenuItemHeight { get; } = 30;
+
+        /// <summary>
+        /// Gets the vertical menu spacing.
+        /// </summary>
+        /// <value>The vertical menu spacing.</value>
+        public virtual int VerticalMenuSpacing { get; } = 5;
+
         #endregion Properties
 
         #region Methods
@@ -885,8 +903,18 @@ namespace IronyModManager.ViewModels.Controls
                         AdvancedWithoutLocalizationModeVisible = false;
                         DefaultWithoutLocalizationModeVisible = false;
                     }
+                    var height = (VerticalMenuSpacing + VerticalMenuItemHeight) * 2;
                     AdvancedParentVisible = AdvancedModeVisible || AdvancedWithoutLocalizationModeVisible;
                     DefaultParentVisible = DefaultModeVisible || DefaultWithoutLocalizationModeVisible;
+                    if (AdvancedParentVisible)
+                    {
+                        height += VerticalMenuSpacing + VerticalMenuItemHeight;
+                    }
+                    if (DefaultParentVisible)
+                    {
+                        height += VerticalMenuSpacing + VerticalMenuItemHeight;
+                    }
+                    VerticalMenuHeight = height;
                     await TriggerOverlayAsync(id, false);
                     await Task.Delay(50);
                     IsModeOpen = true;
