@@ -4,9 +4,11 @@
 		<title>Irony Mod Manager</title>
 		<language>en</language>
 		<item>
-			<title>1.24.128</title>
+			<title>1.24.136</title>
 			<description>## Current Release Notes
-* Stellaris 3.8 support
+* Improve gfx conflict detection
+* Organize conflict solver options to submenus (appSettings option exists to get old behavior back)
+* Fix #440
 
 ## Release Notes 1.24
 * Update dependencies
@@ -17,13 +19,15 @@
 * Add support for metadata descriptor type games (Victoria 3 support)
 * Add option to ignore update
 * Improve mod loading performance</description>
-			<pubDate>Tue, 09 May 2023 21:21:50 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.24.128/linux-x64.zip" sparkle:version="1.24.128.61962" sparkle:shortVersionString="1.24.128" length="90104478" sparkle:os="linux" type="application/zip" sparkle:signature="kw7qIQyKFLps2C+blKNo/EPGQBjUtG8sb7O+TS2RRXUChS83uDDaqcD/w3Yb3OjHvhAd88X2S/ZEMAryUG3oBw=="/>
+			<pubDate>Fri, 12 May 2023 02:36:55 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.24.136/linux-x64.zip" sparkle:version="1.24.136.34400" sparkle:shortVersionString="1.24.136" length="90108487" sparkle:os="linux" type="application/zip" sparkle:signature="G27DF00ZBjwgkDOSQNqSPLQxaC0NZLr2qJ+wFulrSLUb/6T5o+iyYHhZ/ArznqmOBubyaPIH/tkRYgMMfoeFDg=="/>
 		</item>
 		<item>
-			<title>1.24.128</title>
+			<title>1.24.136</title>
 			<description>## Current Release Notes
-* Stellaris 3.8 support
+* Improve gfx conflict detection
+* Organize conflict solver options to submenus (appSettings option exists to get old behavior back)
+* Fix #440
 
 ## Release Notes 1.24
 * Update dependencies
@@ -34,13 +38,15 @@
 * Add support for metadata descriptor type games (Victoria 3 support)
 * Add option to ignore update
 * Improve mod loading performance</description>
-			<pubDate>Tue, 09 May 2023 21:21:57 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.24.128/osx-x64.zip" sparkle:version="1.24.128.61962" sparkle:shortVersionString="1.24.128" length="93256379" sparkle:os="osx" type="application/zip" sparkle:signature="zU+WtkphkxHjMbnHppb+VggTPwXBIOHQaYXjRt9+fN49dWzIAgGR7Qx7/eN9AS+HzynyB98v6Bj5P/LzQ/7aAQ=="/>
+			<pubDate>Fri, 12 May 2023 02:37:02 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.24.136/osx-x64.zip" sparkle:version="1.24.136.34400" sparkle:shortVersionString="1.24.136" length="93260365" sparkle:os="osx" type="application/zip" sparkle:signature="BzdfTGw4qzbjYkhIm+DP8KZgHliP9fZFmkGbIoWr93oGHVY2PoE6Es3JyV9llGBNVbDrgrVy8pbW/7+yK0C3DA=="/>
 		</item>
 		<item>
-			<title>1.24.128</title>
+			<title>1.24.136</title>
 			<description>## Current Release Notes
-* Stellaris 3.8 support
+* Improve gfx conflict detection
+* Organize conflict solver options to submenus (appSettings option exists to get old behavior back)
+* Fix #440
 
 ## Release Notes 1.24
 * Update dependencies
@@ -51,13 +57,15 @@
 * Add support for metadata descriptor type games (Victoria 3 support)
 * Add option to ignore update
 * Improve mod loading performance</description>
-			<pubDate>Tue, 09 May 2023 21:22:04 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.24.128/win-x64-setup.zip" sparkle:version="1.24.128.61962" sparkle:shortVersionString="1.24.128" length="71391815" sparkle:os="windows" type="application/zip" sparkle:signature="oTDWgXtrNaK8GIUpR/oflndBxcS1oN81rj9CDqFEvV8bpehOGYqMEWGSGV1nycxZyMuUqg4+xpMSqt42gNyCCA=="/>
+			<pubDate>Fri, 12 May 2023 02:37:09 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.24.136/win-x64-setup.zip" sparkle:version="1.24.136.34400" sparkle:shortVersionString="1.24.136" length="71386728" sparkle:os="windows" type="application/zip" sparkle:signature="XpUAqrTJWnkwIUuPyZ/V/YahVcqhE3uPk+Dkubp8EdzFaTBkM0LCdlmZe8s5fU4JFKEJ+1PTsj+XHFsLn1mZDA=="/>
 		</item>
 		<item>
-			<title>1.24.128</title>
+			<title>1.24.136</title>
 			<description>## Current Release Notes
-* Stellaris 3.8 support
+* Improve gfx conflict detection
+* Organize conflict solver options to submenus (appSettings option exists to get old behavior back)
+* Fix #440
 
 ## Release Notes 1.24
 * Update dependencies
@@ -68,8 +76,8 @@
 * Add support for metadata descriptor type games (Victoria 3 support)
 * Add option to ignore update
 * Improve mod loading performance</description>
-			<pubDate>Tue, 09 May 2023 21:22:04 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.24.128/win-x64.zip" sparkle:version="1.24.128.61962" sparkle:shortVersionString="1.24.128" length="104844039" sparkle:os="windows" type="application/zip" sparkle:signature="mtY2Tri/s0Wy66L4JYz6TysGCZ8gVs8LS7bB3ClGmDv6qfHnlYwsuhT78Laqo8l0GKL4jzV2sn8L/2TZ24ZsCg=="/>
+			<pubDate>Fri, 12 May 2023 02:37:09 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.24.136/win-x64.zip" sparkle:version="1.24.136.34400" sparkle:shortVersionString="1.24.136" length="104848039" sparkle:os="windows" type="application/zip" sparkle:signature="0jn5amZRfz4I+tJ8OZegEFz5kf49J+VbDV8Xl03DJoLOOjcngI0OlQHv0ZkT67xa2ubiWWWThacmSNrwypL5Cg=="/>
 		</item>
 	</channel>
 </rss>
