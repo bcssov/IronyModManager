@@ -424,6 +424,7 @@ namespace IronyModManager.Shared
                 public const string Undo = Prefix + "Undo";
                 public const string Redo = Prefix + "Redo";
                 public const string Editor = Prefix + "Editor";
+                public const string ReadonlyEditor = Prefix + "ReadonlyEditor";
             }
             public static class EditorContextMenu
             {
@@ -506,6 +507,12 @@ namespace IronyModManager.Shared
             public static class Editor
             {
                 public const string Prefix = "Conflict_Solver.Editor.";
+                public const string Title = Prefix + "Title";
+                public const string Message = Prefix + "Message";
+            }
+            public static class ReadonlyEditor
+            {
+                public const string Prefix = "Conflict_Solver.ReadonlyEditor.";
                 public const string Title = Prefix + "Title";
                 public const string Message = Prefix + "Message";
             }

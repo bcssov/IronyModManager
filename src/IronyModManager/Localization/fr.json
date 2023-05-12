@@ -321,7 +321,8 @@
             "Delete": "Supprimer",
             "Undo": "annuler",
             "Redo": "Refaire",
-            "Editor": "Fusion externe"
+            "Editor": "Fusion externe",
+            "ReadonlyEditor": "Comparaison externe"
         },
         "EditorContextMenu": {
             "Copy": "Copier",
@@ -390,6 +391,10 @@
         "Editor": {
             "Title": "Fusion externe",
             "Message": "Appuyez sur Confirmer lorsque vous êtes satisfait de la fusion externe."
+        },
+        "ReadonlyEditor": {
+            "Title": "Comparaison externe",
+            "Message": "Appuyez sur OK lorsque vous avez terminé la comparaison."
         },
         "ResolutionSaveError": {
             "Title": "Échec de la validation de la définition virtuelle",

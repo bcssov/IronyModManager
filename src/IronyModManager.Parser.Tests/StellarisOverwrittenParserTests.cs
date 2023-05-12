@@ -183,21 +183,6 @@ namespace IronyModManager.Parser.Tests
         }
 
         /// <summary>
-        /// Defines the test method CanParse_gov_authorities_should_be_true.
-        /// </summary>
-        [Fact]
-        public void CanParse_gov_authorities_should_be_true()
-        {
-            var args = new CanParseArgs()
-            {
-                File = "common\\governments\\authorities\\t.txt",
-                GameType = "Stellaris"
-            };
-            var parser = new OverwrittenParser(new CodeParser(new Logger()), null);
-            parser.CanParse(args).Should().BeTrue();
-        }
-
-        /// <summary>
         /// Defines the test method CanParse_country_types_should_be_true.
         /// </summary>
         [Fact]

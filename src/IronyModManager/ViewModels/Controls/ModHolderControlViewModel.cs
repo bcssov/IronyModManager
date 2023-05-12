@@ -4,7 +4,7 @@
 // Created          : 02-29-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 11-21-2022
+// Last Modified On : 05-12-2023
 // ***********************************************************************
 // <copyright file="ModHolderControlViewModel.cs" company="Mario">
 //     Mario
@@ -22,6 +22,7 @@ using System.Threading.Tasks;
 using IronyModManager.Common;
 using IronyModManager.Common.Events;
 using IronyModManager.Common.ViewModels;
+using IronyModManager.DI;
 using IronyModManager.Implementation.Actions;
 using IronyModManager.Implementation.AppState;
 using IronyModManager.Implementation.MessageBus;
@@ -29,6 +30,7 @@ using IronyModManager.Implementation.Overlay;
 using IronyModManager.Localization;
 using IronyModManager.Localization.Attributes;
 using IronyModManager.Models.Common;
+using IronyModManager.Platform.Configuration;
 using IronyModManager.Services.Common;
 using IronyModManager.Shared;
 using IronyModManager.Shared.MessageBus.Events;
@@ -252,6 +254,7 @@ namespace IronyModManager.ViewModels.Controls
             this.externalProcessHandlerService = externalProcessHandlerService;
             InstalledMods = installedModsControlViewModel;
             CollectionMods = collectionModsControlViewModel;
+            UseSimpleLayout = !DIResolver.Get<IPlatformConfiguration>().GetOptions().ConflictSolver.UseSubMenus;
             if (StaticResources.CommandLineOptions != null && StaticResources.CommandLineOptions.EnableResumeGameButton)
             {
                 forceEnableResumeButton = true;
@@ -280,6 +283,12 @@ namespace IronyModManager.ViewModels.Controls
         /// </summary>
         /// <value><c>true</c> if [advanced mode visible]; otherwise, <c>false</c>.</value>
         public virtual bool AdvancedModeVisible { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether [advanced parent visible].
+        /// </summary>
+        /// <value><c>true</c> if [advanced parent visible]; otherwise, <c>false</c>.</value>
+        public virtual bool AdvancedParentVisible { get; protected set; }
 
         /// <summary>
         /// Gets or sets the advanced without localization mode.
@@ -409,6 +418,12 @@ namespace IronyModManager.ViewModels.Controls
         public virtual bool DefaultModeVisible { get; protected set; }
 
         /// <summary>
+        /// Gets or sets a value indicating whether [default parent visible].
+        /// </summary>
+        /// <value><c>true</c> if [default parent visible]; otherwise, <c>false</c>.</value>
+        public virtual bool DefaultParentVisible { get; protected set; }
+
+        /// <summary>
         /// Gets or sets the default without localization mode.
         /// </summary>
         /// <value>The default without localization mode.</value>
@@ -483,6 +498,12 @@ namespace IronyModManager.ViewModels.Controls
         /// </summary>
         /// <value><c>true</c> if [show advanced features]; otherwise, <c>false</c>.</value>
         public virtual bool ShowAdvancedFeatures { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether [use simple layout].
+        /// </summary>
+        /// <value><c>true</c> if [use simple layout]; otherwise, <c>false</c>.</value>
+        public virtual bool UseSimpleLayout { get; protected set; }
 
         #endregion Properties
 
@@ -864,6 +885,8 @@ namespace IronyModManager.ViewModels.Controls
                         AdvancedWithoutLocalizationModeVisible = false;
                         DefaultWithoutLocalizationModeVisible = false;
                     }
+                    AdvancedParentVisible = AdvancedModeVisible || AdvancedWithoutLocalizationModeVisible;
+                    DefaultParentVisible = DefaultModeVisible || DefaultWithoutLocalizationModeVisible;
                     await TriggerOverlayAsync(id, false);
                     await Task.Delay(50);
                     IsModeOpen = true;

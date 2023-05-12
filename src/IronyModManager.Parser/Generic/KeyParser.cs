@@ -4,7 +4,7 @@
 // Created          : 02-16-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 05-06-2022
+// Last Modified On : 05-11-2023
 // ***********************************************************************
 // <copyright file="KeyParser.cs" company="Mario">
 //     Mario
@@ -70,6 +70,40 @@ namespace IronyModManager.Parser.Generic
         /// <returns><c>true</c> if this instance can parse the specified arguments; otherwise, <c>false</c>.</returns>
         public override bool CanParse(CanParseArgs args)
         {
+            return IsKeyType(args);
+        }
+
+        /// <summary>
+        /// Parses the specified arguments.
+        /// </summary>
+        /// <param name="args">The arguments.</param>
+        /// <returns>IEnumerable&lt;IDefinition&gt;.</returns>
+        public override IEnumerable<IDefinition> Parse(ParserArgs args)
+        {
+            return ParseRoot(args);
+        }
+
+        /// <summary>
+        /// Evals the element for identifier.
+        /// </summary>
+        /// <param name="value">The value.</param>
+        /// <returns>System.String.</returns>
+        protected override string EvalElementForId(IScriptElement value)
+        {
+            if (Constants.Scripts.GenericKeys.Any(s => s.Equals(value.Key, StringComparison.OrdinalIgnoreCase)))
+            {
+                return value.Value;
+            }
+            return base.EvalElementForId(value);
+        }
+
+        /// <summary>
+        /// Determines whether [is key type] [the specified arguments].
+        /// </summary>
+        /// <param name="args">The arguments.</param>
+        /// <returns><c>true</c> if [is key type] [the specified arguments]; otherwise, <c>false</c>.</returns>
+        protected virtual bool IsKeyType(CanParseArgs args)
+        {
             int? openBrackets = null;
             int closeBrackets = 0;
             foreach (var line in args.Lines)
@@ -133,30 +167,6 @@ namespace IronyModManager.Parser.Generic
                 }
             }
             return false;
-        }
-
-        /// <summary>
-        /// Parses the specified arguments.
-        /// </summary>
-        /// <param name="args">The arguments.</param>
-        /// <returns>IEnumerable&lt;IDefinition&gt;.</returns>
-        public override IEnumerable<IDefinition> Parse(ParserArgs args)
-        {
-            return ParseRoot(args);
-        }
-
-        /// <summary>
-        /// Evals the element for identifier.
-        /// </summary>
-        /// <param name="value">The value.</param>
-        /// <returns>System.String.</returns>
-        protected override string EvalElementForId(IScriptElement value)
-        {
-            if (Constants.Scripts.GenericKeys.Any(s => s.Equals(value.Key, StringComparison.OrdinalIgnoreCase)))
-            {
-                return value.Value;
-            }
-            return base.EvalElementForId(value);
         }
 
         #endregion Methods

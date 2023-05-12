@@ -4,7 +4,7 @@
 // Created          : 02-18-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 07-20-2022
+// Last Modified On : 05-11-2023
 // ***********************************************************************
 // <copyright file="GraphicsParser.cs" company="Mario">
 //     Mario
@@ -25,15 +25,42 @@ namespace IronyModManager.Parser.Generic
 {
     /// <summary>
     /// Class GraphicsParser.
-    /// Implements the <see cref="IronyModManager.Parser.Generic.BaseGraphicsParser" />
-    /// Implements the <see cref="IronyModManager.Parser.Common.Parsers.IGenericParser" />
-    /// Implements the <see cref="IronyModManager.Parser.Common.Parsers.BaseParser" />
+    /// Implements the <see cref="IronyModManager.Parser.Generic.KeyParser" />
+    /// Implements the <see cref="IGenericParser" />
     /// </summary>
-    /// <seealso cref="IronyModManager.Parser.Common.Parsers.BaseParser" />
-    /// <seealso cref="IronyModManager.Parser.Generic.BaseGraphicsParser" />
-    /// <seealso cref="IronyModManager.Parser.Common.Parsers.IGenericParser" />
-    public class GraphicsParser : BaseParser, IGenericParser
+    /// <seealso cref="IronyModManager.Parser.Generic.KeyParser" />
+    /// <seealso cref="IGenericParser" />
+    public class GraphicsParser : KeyParser, IGenericParser
     {
+        #region Fields
+
+        /// <summary>
+        /// The asset identifier
+        /// </summary>
+        protected const string AssetId = "entity={";
+
+        /// <summary>
+        /// The expected graphics folders
+        /// </summary>
+        protected static readonly string[] expectedGraphicsFolders = new string[] { "gfx", "interface" };
+
+        /// <summary>
+        /// The expected graphics ids
+        /// </summary>
+        protected static readonly string[] expectedGraphicsIds = new string[] { "guiTypes={", "spriteTypes={", "objectTypes={", AssetId };
+
+        /// <summary>
+        /// The valid extensions
+        /// </summary>
+        protected static readonly string[] validExtensions = new string[] { Common.Constants.GuiExtension, Common.Constants.GfxExtension, Common.Constants.AssetExtension };
+
+        /// <summary>
+        /// The is generic key type
+        /// </summary>
+        private bool isGenericKeyType = false;
+
+        #endregion Fields
+
         #region Constructors
 
         /// <summary>
@@ -59,7 +86,7 @@ namespace IronyModManager.Parser.Generic
         /// Gets the priority.
         /// </summary>
         /// <value>The priority.</value>
-        public int Priority => 2;
+        public override int Priority => 2;
 
         #endregion Properties
 
@@ -72,7 +99,7 @@ namespace IronyModManager.Parser.Generic
         /// <returns><c>true</c> if this instance can parse the specified arguments; otherwise, <c>false</c>.</returns>
         public override bool CanParse(CanParseArgs args)
         {
-            return args.File.EndsWith(Common.Constants.GuiExtension, StringComparison.OrdinalIgnoreCase) || args.File.EndsWith(Common.Constants.GfxExtension, StringComparison.OrdinalIgnoreCase);
+            return validExtensions.Any(a => args.File.EndsWith(a, StringComparison.OrdinalIgnoreCase)) || IsContentGraphics(args, out var _);
         }
 
         /// <summary>
@@ -82,14 +109,53 @@ namespace IronyModManager.Parser.Generic
         /// <returns>IEnumerable&lt;IDefinition&gt;.</returns>
         public override IEnumerable<IDefinition> Parse(ParserArgs args)
         {
-            var result = ParseSecondLevel(args);
+            var canParseArgs = new CanParseArgs()
+            {
+                File = args.File,
+                GameType = args.GameType,
+                IsBinary = args.IsBinary,
+                Lines = args.Lines
+            };
+            IEnumerable<IDefinition> result;
+            if (args.File.EndsWith(Common.Constants.AssetExtension, StringComparison.OrdinalIgnoreCase))
+            {
+                isGenericKeyType = IsKeyType(canParseArgs);
+                result = base.ParseRoot(args);
+            }
+            else if (args.File.EndsWith(Common.Constants.GfxExtension, StringComparison.OrdinalIgnoreCase) || args.File.EndsWith(Common.Constants.GuiExtension, StringComparison.OrdinalIgnoreCase))
+            {
+                result = ParseSecondLevel(args);
+            }
+            else
+            {
+                IsContentGraphics(canParseArgs, out var isAsset);
+                if (isAsset)
+                {
+                    isGenericKeyType = IsKeyType(canParseArgs);
+                    result = base.ParseRoot(args);
+                }
+                else
+                {
+                    result = ParseSecondLevel(args);
+                }
+            }
+            // Flatten structure
             var replaceFolder = Path.DirectorySeparatorChar + "replace";
-            if (Path.GetDirectoryName(args.File).EndsWith(replaceFolder))
+            var parent = args.File.StandardizeDirectorySeparator().Split(Path.DirectorySeparatorChar)[0];
+            if (Path.GetDirectoryName(args.File).EndsWith(replaceFolder, StringComparison.OrdinalIgnoreCase))
             {
                 foreach (var item in result)
                 {
-                    item.VirtualPath = Path.Combine(Path.GetDirectoryName(args.File).Replace(replaceFolder, string.Empty), Path.GetFileName(args.File));
+                    item.VirtualPath = Path.Combine(parent.Replace(replaceFolder, string.Empty), Path.GetExtension(args.File).Trim("."), Path.GetFileName(args.File));
                     item.Type = item.VirtualPath.FormatDefinitionType();
+                }
+            }
+            else
+            {
+                foreach (var definition in result)
+                {
+                    definition.VirtualPath = Path.Combine(parent, Path.GetExtension(args.File).Trim("."), Path.GetFileName(args.File));
+                    definition.Type = definition.VirtualPath.FormatDefinitionType();
                 }
             }
             return result;
@@ -102,11 +168,52 @@ namespace IronyModManager.Parser.Generic
         /// <returns>System.String.</returns>
         protected override string EvalElementForId(IScriptElement value)
         {
-            if (Common.Constants.Scripts.GraphicsTypeName.Equals(value.Key, StringComparison.OrdinalIgnoreCase))
+            if (isGenericKeyType)
             {
-                return value.Value;
+                return base.EvalElementForId(value);
             }
-            return base.EvalElementForId(value);
+            else
+            {
+                if (Common.Constants.Scripts.GraphicsTypeName.Equals(value.Key, StringComparison.OrdinalIgnoreCase))
+                {
+                    return value.Value;
+                }
+                return base.EvalElementForId(value);
+            }
+        }
+
+        /// <summary>
+        /// Determines whether [is content graphics] [the specified arguments].
+        /// </summary>
+        /// <param name="args">The arguments.</param>
+        /// <param name="isAsset">if set to <c>true</c> [is asset].</param>
+        /// <returns><c>true</c> if [is content graphics] [the specified arguments]; otherwise, <c>false</c>.</returns>
+        protected virtual bool IsContentGraphics(CanParseArgs args, out bool isAsset)
+        {
+            isAsset = false;
+            if (!args.IsBinary)
+            {
+                var isValidExistingTextFile = Constants.TextExtensions.Any(s => args.File.EndsWith(s, StringComparison.OrdinalIgnoreCase));
+                if (!isValidExistingTextFile)
+                {
+                    var parent = args.File.StandardizeDirectorySeparator().Split(Path.DirectorySeparatorChar)[0];
+                    if (!string.IsNullOrWhiteSpace(parent) && expectedGraphicsFolders.Any(a => parent.Equals(a, StringComparison.OrdinalIgnoreCase)))
+                    {
+                        // Means a wise guy used .bak extension
+                        var merged = string.Join(string.Empty, args.Lines).ReplaceTabs().Replace(" ", string.Empty);
+                        if (merged.Contains(Common.Constants.Scripts.OpenObject))
+                        {
+                            merged = merged[..merged.IndexOf(Common.Constants.Scripts.OpenObject)];
+                            if (expectedGraphicsIds.Any(a => merged.Contains(a, StringComparison.OrdinalIgnoreCase)))
+                            {
+                                isAsset = merged.Contains(AssetId, StringComparison.OrdinalIgnoreCase);
+                                return true;
+                            }
+                        }
+                    }
+                }
+            }
+            return false;
         }
 
         #endregion Methods

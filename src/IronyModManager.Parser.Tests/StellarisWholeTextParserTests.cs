@@ -4,7 +4,7 @@
 // Created          : 02-18-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 01-29-2022
+// Last Modified On : 05-09-2023
 // ***********************************************************************
 // <copyright file="StellarisWholeTextParserTests.cs" company="Mario">
 //     Mario
@@ -221,6 +221,21 @@ namespace IronyModManager.Parser.Tests
             var args = new CanParseArgs()
             {
                 File = "common\\inline_scripts\\test.txt",
+                GameType = "Stellaris"
+            };
+            var parser = new WholeTextParser(new CodeParser(new Logger()), null);
+            parser.CanParse(args).Should().BeTrue();
+        }
+
+        /// <summary>
+        /// Defines the test method CanParse_economic_plans_should_be_true.
+        /// </summary>
+        [Fact]
+        public void CanParse_economic_plans_should_be_true()
+        {
+            var args = new CanParseArgs()
+            {
+                File = "common\\economic_plans\\test.txt",
                 GameType = "Stellaris"
             };
             var parser = new WholeTextParser(new CodeParser(new Logger()), null);

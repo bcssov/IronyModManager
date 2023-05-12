@@ -4,7 +4,7 @@
 // Created          : 10-25-2021
 //
 // Last Modified By : Mario
-// Last Modified On : 11-01-2021
+// Last Modified On : 04-28-2023
 // ***********************************************************************
 // <copyright file="StellarisOverwrittenObjectSingleFileParserTests.cs" company="Mario">
 //     Mario
@@ -87,6 +87,21 @@ namespace IronyModManager.Parser.Tests
             var args = new CanParseArgs()
             {
                 File = "common\\strategic_resources\\t.txt",
+                GameType = "Stellaris"
+            };
+            var parser = new OverwrittenObjectSingleFileParser(new CodeParser(new Logger()), null);
+            parser.CanParse(args).Should().BeTrue();
+        }
+
+        /// <summary>
+        /// Defines the test method CanParse_gov_authorities_should_be_true.
+        /// </summary>
+        [Fact]
+        public void CanParse_gov_authorities_should_be_true()
+        {
+            var args = new CanParseArgs()
+            {
+                File = "common\\governments\\authorities\\t.txt",
                 GameType = "Stellaris"
             };
             var parser = new OverwrittenObjectSingleFileParser(new CodeParser(new Logger()), null);

@@ -4,7 +4,7 @@
 // Created          : 02-16-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 07-20-2022
+// Last Modified On : 05-11-2023
 // ***********************************************************************
 // <copyright file="ParserArgs.cs" company="Mario">
 //     Mario
@@ -43,6 +43,7 @@ namespace IronyModManager.Parser.Common.Args
             ModName = args.ModName;
             ValidationType = args.ValidationType;
             IsBinary = args.IsBinary;
+            GameType = args.GameType;
         }
 
         #endregion Constructors
@@ -60,6 +61,12 @@ namespace IronyModManager.Parser.Common.Args
         /// </summary>
         /// <value>The file.</value>
         public string File { get; set; }
+
+        /// <summary>
+        /// Gets or sets the type of the game.
+        /// </summary>
+        /// <value>The type of the game.</value>
+        public string GameType { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether this instance is binary.

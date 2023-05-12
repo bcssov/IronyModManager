@@ -4,7 +4,7 @@
 // Created          : 10-29-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 11-24-2022
+// Last Modified On : 05-12-2023
 // ***********************************************************************
 // <copyright file="Extensions.cs" company="Mario">
 //     Mario
@@ -15,6 +15,7 @@ using System;
 using System.Collections.Generic;
 using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Controls.Platform;
 using Avalonia.Input;
 using Avalonia.Input.Platform;
 using Avalonia.Platform;
@@ -22,6 +23,7 @@ using IronyModManager.DI;
 using IronyModManager.Platform.Assets;
 using IronyModManager.Platform.Clipboard;
 using IronyModManager.Platform.Configuration;
+using IronyModManager.Platform.Drives;
 using IronyModManager.Platform.Fonts;
 using IronyModManager.Shared;
 
@@ -91,6 +93,11 @@ namespace IronyModManager.Platform
                 // Input manager
                 var inputManager = AvaloniaLocator.Current.GetService<IInputManager>();
                 AvaloniaLocator.CurrentMutable.Bind<IInputManager>().ToConstant(new InputManager.InputManager(inputManager));
+                // Windows only
+                if (os == OperatingSystemType.WinNT)
+                {
+                    AvaloniaLocator.CurrentMutable.Bind<IMountedVolumeInfoProvider>().ToConstant(new WindowsMountedVolumeInfoProvider());
+                }
             });
             return builder;
         }

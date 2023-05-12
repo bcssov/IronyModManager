@@ -321,7 +321,8 @@
             "Delete": "Löschen",
             "Undo": "Rückgängig Machen",
             "Redo": "Wiederholen",
-            "Editor": "Externe Zusammenführung"
+            "Editor": "Externe Zusammenführung",
+            "ReadonlyEditor": "Externer Vergleich"
         },
         "EditorContextMenu": {
             "Copy": "Kopieren",
@@ -390,6 +391,10 @@
         "Editor": {
             "Title": "Externe Zusammenführung",
             "Message": "Drücken Sie auf Bestätigen, sobald Sie mit der externen Zusammenführung zufrieden sind."
+        },
+        "ReadonlyEditor": {
+            "Title": "Externer Vergleich",
+            "Message": "Drücken Sie OK, wenn Sie den Vergleich abgeschlossen haben."
         },
         "ResolutionSaveError": {
             "Title": "Validierung der virtuellen Definition fehlgeschlagen",

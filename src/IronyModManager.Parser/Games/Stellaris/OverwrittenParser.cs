@@ -43,7 +43,7 @@ namespace IronyModManager.Parser.Games.Stellaris
             Common.Constants.Stellaris.Districts, Common.Constants.Stellaris.PlanetClasses,
             Common.Constants.Stellaris.PrescriptedCountries, Common.Constants.Stellaris.SpeciesArchetypes,
             Common.Constants.Stellaris.Buildings, Common.Constants.Stellaris.DiplomaticActions,
-            Common.Constants.Stellaris.Technology, Common.Constants.Stellaris.GovernmentAuthorities,
+            Common.Constants.Stellaris.Technology,
             Common.Constants.Stellaris.CountryTypes, Common.Constants.Stellaris.Terraform,
             Common.Constants.Stellaris.Relics, Common.Constants.Stellaris.OpinionModifiers,
             Common.Constants.Stellaris.SectionTemplates

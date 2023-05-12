@@ -46,7 +46,8 @@ namespace IronyModManager.Parser.Games.Stellaris
         private static readonly string[] directoryNames = new string[]
         {
             Common.Constants.Stellaris.Ethics,  Common.Constants.Stellaris.StarbaseModules,
-            Common.Constants.Stellaris.ShipSizes, Common.Constants.Stellaris.StrategicResources
+            Common.Constants.Stellaris.ShipSizes, Common.Constants.Stellaris.StrategicResources,
+            Common.Constants.Stellaris.GovernmentAuthorities
         };
 
         #endregion Fields

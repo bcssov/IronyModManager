@@ -4,7 +4,7 @@
 // Created          : 03-20-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 07-22-2022
+// Last Modified On : 04-27-2023
 // ***********************************************************************
 // <copyright file="MergeViewerControlView.xaml.cs" company="Mario">
 //     Mario
@@ -126,7 +126,7 @@ namespace IronyModManager.Views.Controls
             List<MenuItem> menuItems = null;
             if (hoveredItem != null)
             {
-                if (!ViewModel.RightSidePatchMod && !ViewModel.LeftSidePatchMod)
+                if ((!ViewModel.RightSidePatchMod && !ViewModel.LeftSidePatchMod) || ViewModel.IsReadOnlyMode)
                 {
                     menuItems = GetNonEditableMenuItems(leftSide);
                 }
@@ -425,7 +425,22 @@ namespace IronyModManager.Views.Controls
         /// <returns>List&lt;MenuItem&gt;.</returns>
         private List<MenuItem> GetActionsMenuItems(bool leftSide)
         {
-            var menuItems = new List<MenuItem>()
+            var menuItems = new List<MenuItem>();
+            if (ViewModel.EditorAvailable)
+            {
+                menuItems.Add(new MenuItem()
+                {
+                    Header = ViewModel.Editor,
+                    Command = ViewModel.EditorCommand,
+                    CommandParameter = !leftSide
+                });
+                menuItems.Add(new MenuItem()
+                {
+                    Header = "-"
+                });
+            }
+
+            var mainEditingItems = new List<MenuItem>()
             {
                 new MenuItem()
                 {
@@ -478,6 +493,8 @@ namespace IronyModManager.Views.Controls
                     CommandParameter = leftSide
                 }
             };
+            menuItems.AddRange(mainEditingItems);
+
             return menuItems;
         }
 
@@ -595,7 +612,22 @@ namespace IronyModManager.Views.Controls
         /// <returns>System.Collections.Generic.List&lt;Avalonia.Controls.MenuItem&gt;.</returns>
         private List<MenuItem> GetNonEditableMenuItems(bool leftSide)
         {
-            var menuItems = new List<MenuItem>()
+            var menuItems = new List<MenuItem>();
+            if (ViewModel.EditorAvailable)
+            {
+                menuItems.Add(new MenuItem()
+                {
+                    Header = ViewModel.ReadOnlyEditor,
+                    Command = ViewModel.ReadOnlyEditorCommand,
+                    CommandParameter = leftSide
+                });
+                menuItems.Add(new MenuItem()
+                {
+                    Header = "-"
+                });
+            }
+
+            var mainEditingItems = new List<MenuItem>()
             {
                 new MenuItem()
                 {
@@ -620,6 +652,8 @@ namespace IronyModManager.Views.Controls
                     CommandParameter = leftSide
                 }
             };
+            menuItems.AddRange(mainEditingItems);
+
             return menuItems;
         }
 

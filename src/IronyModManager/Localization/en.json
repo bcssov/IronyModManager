@@ -321,7 +321,8 @@
             "Delete": "Delete",
             "Undo": "Undo",
             "Redo": "Redo",
-            "Editor": "External Merge"
+            "Editor": "External Merge",
+            "ReadonlyEditor": "External Compare"
         },
         "EditorContextMenu": {
             "Copy": "Copy",
@@ -390,6 +391,10 @@
         "Editor": {
             "Title": "External Merge",
             "Message": "Press confirm once you are satisfied with external merge."
+        },
+        "ReadonlyEditor": {
+            "Title": "External Compare",
+            "Message": "Press OK once you are done comparing."
         },
         "ResolutionSaveError": {
             "Title": "Virtual Definition Validation Failed",

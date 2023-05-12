@@ -4,7 +4,7 @@
 // Created          : 02-16-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-15-2023
+// Last Modified On : 05-11-2023
 // ***********************************************************************
 // <copyright file="Constants.cs" company="Mario">
 //     Mario
@@ -23,6 +23,11 @@ namespace IronyModManager.Parser.Common
     public static class Constants
     {
         #region Fields
+
+        /// <summary>
+        /// The asset extension
+        /// </summary>
+        public const string AssetExtension = ".asset";
 
         /// <summary>
         /// The binary type
@@ -578,6 +583,11 @@ namespace IronyModManager.Parser.Common
             /// The districts
             /// </summary>
             public static readonly string Districts = MergePath(CommonPath, "districts");
+
+            /// <summary>
+            /// The economic plans
+            /// </summary>
+            public static readonly string EconomicPlans = MergePath(CommonPath, "economic_plans");
 
             /// <summary>
             /// The ethics

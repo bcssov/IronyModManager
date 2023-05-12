@@ -321,7 +321,8 @@
             "Delete": "Obriši",
             "Undo": "Poništi",
             "Redo": "Ponovi",
-            "Editor": "Vanjsko spajanje"
+            "Editor": "Vanjsko spajanje",
+            "ReadonlyEditor": "Vanjska usporedba"
         },
         "EditorContextMenu": {
             "Copy": "Kopiraj",
@@ -389,7 +390,11 @@
         },
         "Editor": {
             "Title": "Vanjsko spajanje",
-            "Message": "Pritisnite potvrdi nakon što ste zadovoljni vanjskim spajanjem."
+            "Message": "Pritisnite potvrdi nakon što ste zadovoljni s vanjskim spajanjem."
+        },
+        "ReadonlyEditor": {
+            "Title": "Vanjska usporedba",
+            "Message": "Pritisnite U redu nakon što završite s usporedbom."
         },
         "ResolutionSaveError": {
             "Title": "Provjera valjanosti virtualne definicije nije uspjela",

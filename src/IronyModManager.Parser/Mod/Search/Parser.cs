@@ -4,7 +4,7 @@
 // Created          : 10-26-2021
 //
 // Last Modified By : Mario
-// Last Modified On : 11-12-2022
+// Last Modified On : 04-27-2023
 // ***********************************************************************
 // <copyright file="Parser.cs" company="Mario">
 //     Mario
@@ -131,14 +131,14 @@ namespace IronyModManager.Parser.Mod.Search
                         var split = text.Split(orStatementSeparator, StringSplitOptions.RemoveEmptyEntries).ToList();
                         split.ForEach(x =>
                         {
-                            var negate = x.StartsWith(negateOperator);
-                            list.Add(new NameFilterResult(x.TrimStart(negateOperator)) { Negate = negate });
+                            var negate = x.Trim().StartsWith(negateOperator);
+                            list.Add(new NameFilterResult(x.Trim().TrimStart(negateOperator).Trim()) { Negate = negate });
                         });
                     }
                     else
                     {
-                        var negate = text.StartsWith(negateOperator);
-                        list.Add(new NameFilterResult(text.TrimStart(negateOperator)) { Negate = negate });
+                        var negate = text.Trim().StartsWith(negateOperator);
+                        list.Add(new NameFilterResult(text.Trim().TrimStart(negateOperator).Trim()) { Negate = negate });
                     }
                 }
                 return list;
@@ -210,8 +210,8 @@ namespace IronyModManager.Parser.Mod.Search
                                 }
                                 else
                                 {
-                                    var negate = item.Value.StartsWith(negateOperator);
-                                    var parsedVal = item.Value.TrimStart(negateOperator);
+                                    var negate = item.Value.Trim().StartsWith(negateOperator);
+                                    var parsedVal = item.Value.Trim().TrimStart(negateOperator).Trim();
                                     var value = converter.Convert(locale, parsedVal);
                                     ((BaseFilterResult)value).Negate = negate;
                                     property.SetValue(result, value);
@@ -274,7 +274,7 @@ namespace IronyModManager.Parser.Mod.Search
             #region Constructors
 
             /// <summary>
-            /// Initializes a new instance of the <see cref="CacheEntry"/> class.
+            /// Initializes a new instance of the <see cref="CacheEntry" /> class.
             /// </summary>
             /// <param name="searchResult">The search result.</param>
             public CacheEntry(ISearchParserResult searchResult)

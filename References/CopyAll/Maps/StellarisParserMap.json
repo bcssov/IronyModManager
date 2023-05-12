@@ -101,6 +101,9 @@
         "DirectoryPath": "common\\component_templates",
         "PreferredParser": "GenericWholeTextParser"
     }, {
+        "DirectoryPath": "common\\council_agendas",
+        "PreferredParser": "DefaultParser"
+    }, {
         "DirectoryPath": "common\\country_container",
         "PreferredParser": "StellarisWholeTextParser"
     }, {
@@ -150,7 +153,7 @@
         "PreferredParser": "DefaultParser"
     }, {
         "DirectoryPath": "common\\economic_plans",
-        "PreferredParser": "DefaultParser"
+        "PreferredParser": "StellarisWholeTextParser"
     }, {
         "DirectoryPath": "common\\edicts",
         "PreferredParser": "DefaultParser"
@@ -197,6 +200,9 @@
         "DirectoryPath": "common\\galactic_focuses",
         "PreferredParser": "DefaultParser"
     }, {
+        "DirectoryPath": "common\\game_concepts",
+        "PreferredParser": "DefaultParser"
+    }, {
         "DirectoryPath": "common\\game_rules",
         "PreferredParser": "DefaultParser"
     }, {
@@ -207,9 +213,12 @@
         "PreferredParser": "DefaultParser"
     }, {
         "DirectoryPath": "common\\governments\\authorities",
-        "PreferredParser": "StellarisOverwrittenParser"
+        "PreferredParser": "StellarisOverwrittenObjectSingleFileParser"
     }, {
         "DirectoryPath": "common\\governments\\civics",
+        "PreferredParser": "DefaultParser"
+    }, {
+        "DirectoryPath": "common\\governments\\councilors",
         "PreferredParser": "DefaultParser"
     }, {
         "DirectoryPath": "common\\graphical_culture",
@@ -221,13 +230,22 @@
         "DirectoryPath": "common\\inline_scripts",
         "PreferredParser": "StellarisWholeTextParser"
     }, {
+        "DirectoryPath": "common\\inline_scripts\\buildings",
+        "PreferredParser": "StellarisWholeTextParser"
+    }, {
         "DirectoryPath": "common\\inline_scripts\\deposits",
         "PreferredParser": "StellarisWholeTextParser"
     }, {
         "DirectoryPath": "common\\inline_scripts\\enclaves",
         "PreferredParser": "StellarisWholeTextParser"
     }, {
+        "DirectoryPath": "common\\inline_scripts\\events",
+        "PreferredParser": "StellarisWholeTextParser"
+    }, {
         "DirectoryPath": "common\\inline_scripts\\jobs",
+        "PreferredParser": "StellarisWholeTextParser"
+    }, {
+        "DirectoryPath": "common\\inline_scripts\\paragon",
         "PreferredParser": "StellarisWholeTextParser"
     }, {
         "DirectoryPath": "common\\inline_scripts\\pop_categories",
@@ -242,7 +260,16 @@
         "DirectoryPath": "common\\inline_scripts\\technology",
         "PreferredParser": "StellarisWholeTextParser"
     }, {
+        "DirectoryPath": "common\\inline_scripts\\trait",
+        "PreferredParser": "StellarisWholeTextParser"
+    }, {
         "DirectoryPath": "common\\inline_scripts\\traits",
+        "PreferredParser": "StellarisWholeTextParser"
+    }, {
+        "DirectoryPath": "common\\inline_scripts\\trait\\icon_element",
+        "PreferredParser": "StellarisWholeTextParser"
+    }, {
+        "DirectoryPath": "common\\inline_scripts\\trait\\subtitle",
         "PreferredParser": "StellarisWholeTextParser"
     }, {
         "DirectoryPath": "common\\intel_categories",
@@ -268,6 +295,9 @@
     }, {
         "DirectoryPath": "common\\message_types",
         "PreferredParser": "GenericKeyParser"
+    }, {
+        "DirectoryPath": "common\\named_colors",
+        "PreferredParser": "DefaultParser"
     }, {
         "DirectoryPath": "common\\name_lists",
         "PreferredParser": "StellarisWholeTextParser"
@@ -525,7 +555,7 @@
         "PreferredParser": "StellarisFlagsParser"
     }, {
         "DirectoryPath": "fonts",
-        "PreferredParser": "GenericKeyParser"
+        "PreferredParser": "GenericGraphicsParser"
     }, {
         "DirectoryPath": "gfx\\advisorwindow",
         "PreferredParser": "DefaultParser"
@@ -534,814 +564,10 @@
         "PreferredParser": "GenericWholeTextParser"
     }, {
         "DirectoryPath": "gfx\\lights",
-        "PreferredParser": "GenericKeyParser"
-    }, {
-        "DirectoryPath": "gfx\\models",
-        "PreferredParser": "GenericKeyParser"
+        "PreferredParser": "GenericGraphicsParser"
     }, {
         "DirectoryPath": "gfx\\models",
         "PreferredParser": "GenericGraphicsParser"
-    }, {
-        "DirectoryPath": "gfx\\models\\add_ons",
-        "PreferredParser": "GenericKeyParser"
-    }, {
-        "DirectoryPath": "gfx\\models\\add_ons",
-        "PreferredParser": "GenericGraphicsParser"
-    }, {
-        "DirectoryPath": "gfx\\models\\combat_items",
-        "PreferredParser": "GenericKeyParser"
-    }, {
-        "DirectoryPath": "gfx\\models\\combat_items",
-        "PreferredParser": "GenericGraphicsParser"
-    }, {
-        "DirectoryPath": "gfx\\models\\effects",
-        "PreferredParser": "GenericKeyParser"
-    }, {
-        "DirectoryPath": "gfx\\models\\effects",
-        "PreferredParser": "GenericGraphicsParser"
-    }, {
-        "DirectoryPath": "gfx\\models\\effects\\crisis",
-        "PreferredParser": "GenericGraphicsParser"
-    }, {
-        "DirectoryPath": "gfx\\models\\effects\\crisis",
-        "PreferredParser": "GenericKeyParser"
-    }, {
-        "DirectoryPath": "gfx\\models\\galaxy_map",
-        "PreferredParser": "GenericKeyParser"
-    }, {
-        "DirectoryPath": "gfx\\models\\galaxy_map",
-        "PreferredParser": "GenericGraphicsParser"
-    }, {
-        "DirectoryPath": "gfx\\models\\planets",
-        "PreferredParser": "GenericKeyParser"
-    }, {
-        "DirectoryPath": "gfx\\models\\planets",
-        "PreferredParser": "GenericGraphicsParser"
-    }, {
-        "DirectoryPath": "gfx\\models\\planets\\apocalypse_planet_effects",
-        "PreferredParser": "GenericKeyParser"
-    }, {
-        "DirectoryPath": "gfx\\models\\planets\\apocalypse_planet_effects",
-        "PreferredParser": "GenericGraphicsParser"
-    }, {
-        "DirectoryPath": "gfx\\models\\planets\\distant_stars_planets",
-        "PreferredParser": "GenericKeyParser"
-    }, {
-        "DirectoryPath": "gfx\\models\\planets\\distant_stars_planets",
-        "PreferredParser": "GenericGraphicsParser"
-    }, {
-        "DirectoryPath": "gfx\\models\\portraits\\advisor",
-        "PreferredParser": "GenericGraphicsParser"
-    }, {
-        "DirectoryPath": "gfx\\models\\portraits\\advisor",
-        "PreferredParser": "GenericKeyParser"
-    }, {
-        "DirectoryPath": "gfx\\models\\portraits\\AI",
-        "PreferredParser": "GenericKeyParser"
-    }, {
-        "DirectoryPath": "gfx\\models\\portraits\\AI",
-        "PreferredParser": "GenericGraphicsParser"
-    }, {
-        "DirectoryPath": "gfx\\models\\portraits\\ancient_relics",
-        "PreferredParser": "GenericKeyParser"
-    }, {
-        "DirectoryPath": "gfx\\models\\portraits\\ancient_relics",
-        "PreferredParser": "GenericGraphicsParser"
-    }, {
-        "DirectoryPath": "gfx\\models\\portraits\\aquatic",
-        "PreferredParser": "GenericKeyParser"
-    }, {
-        "DirectoryPath": "gfx\\models\\portraits\\aquatic",
-        "PreferredParser": "GenericGraphicsParser"
-    }, {
-        "DirectoryPath": "gfx\\models\\portraits\\arthropoid",
-        "PreferredParser": "GenericKeyParser"
-    }, {
-        "DirectoryPath": "gfx\\models\\portraits\\arthropoid",
-        "PreferredParser": "GenericGraphicsParser"
-    }, {
-        "DirectoryPath": "gfx\\models\\portraits\\avian",
-        "PreferredParser": "GenericKeyParser"
-    }, {
-        "DirectoryPath": "gfx\\models\\portraits\\avian",
-        "PreferredParser": "GenericGraphicsParser"
-    }, {
-        "DirectoryPath": "gfx\\models\\portraits\\distant_stars",
-        "PreferredParser": "GenericKeyParser"
-    }, {
-        "DirectoryPath": "gfx\\models\\portraits\\distant_stars",
-        "PreferredParser": "GenericGraphicsParser"
-    }, {
-        "DirectoryPath": "gfx\\models\\portraits\\extradimensional",
-        "PreferredParser": "GenericKeyParser"
-    }, {
-        "DirectoryPath": "gfx\\models\\portraits\\extradimensional",
-        "PreferredParser": "GenericGraphicsParser"
-    }, {
-        "DirectoryPath": "gfx\\models\\portraits\\first_contact",
-        "PreferredParser": "GenericKeyParser"
-    }, {
-        "DirectoryPath": "gfx\\models\\portraits\\first_contact",
-        "PreferredParser": "GenericGraphicsParser"
-    }, {
-        "DirectoryPath": "gfx\\models\\portraits\\fungoid",
-        "PreferredParser": "GenericKeyParser"
-    }, {
-        "DirectoryPath": "gfx\\models\\portraits\\fungoid",
-        "PreferredParser": "GenericGraphicsParser"
-    }, {
-        "DirectoryPath": "gfx\\models\\portraits\\human",
-        "PreferredParser": "GenericKeyParser"
-    }, {
-        "DirectoryPath": "gfx\\models\\portraits\\human",
-        "PreferredParser": "GenericGraphicsParser"
-    }, {
-        "DirectoryPath": "gfx\\models\\portraits\\humanoid",
-        "PreferredParser": "GenericGraphicsParser"
-    }, {
-        "DirectoryPath": "gfx\\models\\portraits\\humanoid",
-        "PreferredParser": "GenericKeyParser"
-    }, {
-        "DirectoryPath": "gfx\\models\\portraits\\human\\new_human",
-        "PreferredParser": "GenericKeyParser"
-    }, {
-        "DirectoryPath": "gfx\\models\\portraits\\human\\new_human",
-        "PreferredParser": "GenericGraphicsParser"
-    }, {
-        "DirectoryPath": "gfx\\models\\portraits\\lithoid",
-        "PreferredParser": "GenericKeyParser"
-    }, {
-        "DirectoryPath": "gfx\\models\\portraits\\lithoid",
-        "PreferredParser": "GenericGraphicsParser"
-    }, {
-        "DirectoryPath": "gfx\\models\\portraits\\mammalian",
-        "PreferredParser": "GenericKeyParser"
-    }, {
-        "DirectoryPath": "gfx\\models\\portraits\\mammalian",
-        "PreferredParser": "GenericGraphicsParser"
-    }, {
-        "DirectoryPath": "gfx\\models\\portraits\\molluscoid",
-        "PreferredParser": "GenericKeyParser"
-    }, {
-        "DirectoryPath": "gfx\\models\\portraits\\molluscoid",
-        "PreferredParser": "GenericGraphicsParser"
-    }, {
-        "DirectoryPath": "gfx\\models\\portraits\\necroid",
-        "PreferredParser": "GenericKeyParser"
-    }, {
-        "DirectoryPath": "gfx\\models\\portraits\\necroid",
-        "PreferredParser": "GenericGraphicsParser"
-    }, {
-        "DirectoryPath": "gfx\\models\\portraits\\plantoid",
-        "PreferredParser": "GenericKeyParser"
-    }, {
-        "DirectoryPath": "gfx\\models\\portraits\\plantoid",
-        "PreferredParser": "GenericGraphicsParser"
-    }, {
-        "DirectoryPath": "gfx\\models\\portraits\\portrait_items",
-        "PreferredParser": "GenericKeyParser"
-    }, {
-        "DirectoryPath": "gfx\\models\\portraits\\portrait_items",
-        "PreferredParser": "GenericGraphicsParser"
-    }, {
-        "DirectoryPath": "gfx\\models\\portraits\\reptilian",
-        "PreferredParser": "GenericKeyParser"
-    }, {
-        "DirectoryPath": "gfx\\models\\portraits\\reptilian",
-        "PreferredParser": "GenericGraphicsParser"
-    }, {
-        "DirectoryPath": "gfx\\models\\portraits\\salvager",
-        "PreferredParser": "GenericKeyParser"
-    }, {
-        "DirectoryPath": "gfx\\models\\portraits\\salvager",
-        "PreferredParser": "GenericGraphicsParser"
-    }, {
-        "DirectoryPath": "gfx\\models\\portraits\\shroud",
-        "PreferredParser": "GenericKeyParser"
-    }, {
-        "DirectoryPath": "gfx\\models\\portraits\\shroud",
-        "PreferredParser": "GenericGraphicsParser"
-    }, {
-        "DirectoryPath": "gfx\\models\\portraits\\shroudwalker",
-        "PreferredParser": "GenericKeyParser"
-    }, {
-        "DirectoryPath": "gfx\\models\\portraits\\shroudwalker",
-        "PreferredParser": "GenericGraphicsParser"
-    }, {
-        "DirectoryPath": "gfx\\models\\portraits\\swarm",
-        "PreferredParser": "GenericKeyParser"
-    }, {
-        "DirectoryPath": "gfx\\models\\portraits\\swarm",
-        "PreferredParser": "GenericGraphicsParser"
-    }, {
-        "DirectoryPath": "gfx\\models\\portraits\\synthetic_dawn",
-        "PreferredParser": "GenericKeyParser"
-    }, {
-        "DirectoryPath": "gfx\\models\\portraits\\synthetic_dawn",
-        "PreferredParser": "GenericGraphicsParser"
-    }, {
-        "DirectoryPath": "gfx\\models\\portraits\\toxoid",
-        "PreferredParser": "GenericKeyParser"
-    }, {
-        "DirectoryPath": "gfx\\models\\portraits\\toxoid",
-        "PreferredParser": "GenericGraphicsParser"
-    }, {
-        "DirectoryPath": "gfx\\models\\ships",
-        "PreferredParser": "GenericKeyParser"
-    }, {
-        "DirectoryPath": "gfx\\models\\ships\\ai_01",
-        "PreferredParser": "GenericKeyParser"
-    }, {
-        "DirectoryPath": "gfx\\models\\ships\\ai_01",
-        "PreferredParser": "GenericGraphicsParser"
-    }, {
-        "DirectoryPath": "gfx\\models\\ships\\aquatic_01",
-        "PreferredParser": "GenericKeyParser"
-    }, {
-        "DirectoryPath": "gfx\\models\\ships\\aquatic_01",
-        "PreferredParser": "GenericGraphicsParser"
-    }, {
-        "DirectoryPath": "gfx\\models\\ships\\arthropoid_01",
-        "PreferredParser": "GenericKeyParser"
-    }, {
-        "DirectoryPath": "gfx\\models\\ships\\arthropoid_01",
-        "PreferredParser": "GenericGraphicsParser"
-    }, {
-        "DirectoryPath": "gfx\\models\\ships\\avian_01",
-        "PreferredParser": "GenericKeyParser"
-    }, {
-        "DirectoryPath": "gfx\\models\\ships\\avian_01",
-        "PreferredParser": "GenericGraphicsParser"
-    }, {
-        "DirectoryPath": "gfx\\models\\ships\\caravaneer_01",
-        "PreferredParser": "GenericKeyParser"
-    }, {
-        "DirectoryPath": "gfx\\models\\ships\\caravaneer_01",
-        "PreferredParser": "GenericGraphicsParser"
-    }, {
-        "DirectoryPath": "gfx\\models\\ships\\colossus\\aquatic_01",
-        "PreferredParser": "GenericKeyParser"
-    }, {
-        "DirectoryPath": "gfx\\models\\ships\\colossus\\aquatic_01",
-        "PreferredParser": "GenericGraphicsParser"
-    }, {
-        "DirectoryPath": "gfx\\models\\ships\\colossus\\arthropoid_01",
-        "PreferredParser": "GenericKeyParser"
-    }, {
-        "DirectoryPath": "gfx\\models\\ships\\colossus\\arthropoid_01",
-        "PreferredParser": "GenericGraphicsParser"
-    }, {
-        "DirectoryPath": "gfx\\models\\ships\\colossus\\avian_01",
-        "PreferredParser": "GenericKeyParser"
-    }, {
-        "DirectoryPath": "gfx\\models\\ships\\colossus\\avian_01",
-        "PreferredParser": "GenericGraphicsParser"
-    }, {
-        "DirectoryPath": "gfx\\models\\ships\\colossus\\fallen_empire_01",
-        "PreferredParser": "GenericKeyParser"
-    }, {
-        "DirectoryPath": "gfx\\models\\ships\\colossus\\fallen_empire_01",
-        "PreferredParser": "GenericGraphicsParser"
-    }, {
-        "DirectoryPath": "gfx\\models\\ships\\colossus\\fungoid_01",
-        "PreferredParser": "GenericKeyParser"
-    }, {
-        "DirectoryPath": "gfx\\models\\ships\\colossus\\fungoid_01",
-        "PreferredParser": "GenericGraphicsParser"
-    }, {
-        "DirectoryPath": "gfx\\models\\ships\\colossus\\humanoid_01",
-        "PreferredParser": "GenericKeyParser"
-    }, {
-        "DirectoryPath": "gfx\\models\\ships\\colossus\\humanoid_01",
-        "PreferredParser": "GenericGraphicsParser"
-    }, {
-        "DirectoryPath": "gfx\\models\\ships\\colossus\\lithoid_01",
-        "PreferredParser": "GenericKeyParser"
-    }, {
-        "DirectoryPath": "gfx\\models\\ships\\colossus\\lithoid_01",
-        "PreferredParser": "GenericGraphicsParser"
-    }, {
-        "DirectoryPath": "gfx\\models\\ships\\colossus\\mammalian_01",
-        "PreferredParser": "GenericKeyParser"
-    }, {
-        "DirectoryPath": "gfx\\models\\ships\\colossus\\mammalian_01",
-        "PreferredParser": "GenericGraphicsParser"
-    }, {
-        "DirectoryPath": "gfx\\models\\ships\\colossus\\molluscoid_01",
-        "PreferredParser": "GenericKeyParser"
-    }, {
-        "DirectoryPath": "gfx\\models\\ships\\colossus\\molluscoid_01",
-        "PreferredParser": "GenericGraphicsParser"
-    }, {
-        "DirectoryPath": "gfx\\models\\ships\\colossus\\necroid_01",
-        "PreferredParser": "GenericKeyParser"
-    }, {
-        "DirectoryPath": "gfx\\models\\ships\\colossus\\necroid_01",
-        "PreferredParser": "GenericGraphicsParser"
-    }, {
-        "DirectoryPath": "gfx\\models\\ships\\colossus\\nemesis_01",
-        "PreferredParser": "GenericKeyParser"
-    }, {
-        "DirectoryPath": "gfx\\models\\ships\\colossus\\nemesis_01",
-        "PreferredParser": "GenericGraphicsParser"
-    }, {
-        "DirectoryPath": "gfx\\models\\ships\\colossus\\plantoid_01",
-        "PreferredParser": "GenericKeyParser"
-    }, {
-        "DirectoryPath": "gfx\\models\\ships\\colossus\\plantoid_01",
-        "PreferredParser": "GenericGraphicsParser"
-    }, {
-        "DirectoryPath": "gfx\\models\\ships\\colossus\\reptilian_01",
-        "PreferredParser": "GenericKeyParser"
-    }, {
-        "DirectoryPath": "gfx\\models\\ships\\colossus\\reptilian_01",
-        "PreferredParser": "GenericGraphicsParser"
-    }, {
-        "DirectoryPath": "gfx\\models\\ships\\colossus\\toxoid_01",
-        "PreferredParser": "GenericKeyParser"
-    }, {
-        "DirectoryPath": "gfx\\models\\ships\\colossus\\toxoid_01",
-        "PreferredParser": "GenericGraphicsParser"
-    }, {
-        "DirectoryPath": "gfx\\models\\ships\\extra_dimensional_01",
-        "PreferredParser": "GenericKeyParser"
-    }, {
-        "DirectoryPath": "gfx\\models\\ships\\extra_dimensional_01",
-        "PreferredParser": "GenericGraphicsParser"
-    }, {
-        "DirectoryPath": "gfx\\models\\ships\\fallen_empire_01",
-        "PreferredParser": "GenericKeyParser"
-    }, {
-        "DirectoryPath": "gfx\\models\\ships\\fallen_empire_01",
-        "PreferredParser": "GenericGraphicsParser"
-    }, {
-        "DirectoryPath": "gfx\\models\\ships\\fallen_machine_empire_01",
-        "PreferredParser": "GenericKeyParser"
-    }, {
-        "DirectoryPath": "gfx\\models\\ships\\fallen_machine_empire_01",
-        "PreferredParser": "GenericGraphicsParser"
-    }, {
-        "DirectoryPath": "gfx\\models\\ships\\fungoid_01",
-        "PreferredParser": "GenericKeyParser"
-    }, {
-        "DirectoryPath": "gfx\\models\\ships\\fungoid_01",
-        "PreferredParser": "GenericGraphicsParser"
-    }, {
-        "DirectoryPath": "gfx\\models\\ships\\gatebuilder_01",
-        "PreferredParser": "GenericKeyParser"
-    }, {
-        "DirectoryPath": "gfx\\models\\ships\\gatebuilder_01",
-        "PreferredParser": "GenericGraphicsParser"
-    }, {
-        "DirectoryPath": "gfx\\models\\ships\\guardians\\ancient_station",
-        "PreferredParser": "GenericKeyParser"
-    }, {
-        "DirectoryPath": "gfx\\models\\ships\\guardians\\ancient_station",
-        "PreferredParser": "GenericGraphicsParser"
-    }, {
-        "DirectoryPath": "gfx\\models\\ships\\guardians\\dimensional_horror",
-        "PreferredParser": "GenericKeyParser"
-    }, {
-        "DirectoryPath": "gfx\\models\\ships\\guardians\\dimensional_horror",
-        "PreferredParser": "GenericGraphicsParser"
-    }, {
-        "DirectoryPath": "gfx\\models\\ships\\guardians\\dreadnought",
-        "PreferredParser": "GenericKeyParser"
-    }, {
-        "DirectoryPath": "gfx\\models\\ships\\guardians\\dreadnought",
-        "PreferredParser": "GenericGraphicsParser"
-    }, {
-        "DirectoryPath": "gfx\\models\\ships\\guardians\\drone_homebase",
-        "PreferredParser": "GenericKeyParser"
-    }, {
-        "DirectoryPath": "gfx\\models\\ships\\guardians\\drone_homebase",
-        "PreferredParser": "GenericGraphicsParser"
-    }, {
-        "DirectoryPath": "gfx\\models\\ships\\guardians\\elder_tiyanki",
-        "PreferredParser": "GenericKeyParser"
-    }, {
-        "DirectoryPath": "gfx\\models\\ships\\guardians\\elder_tiyanki",
-        "PreferredParser": "GenericGraphicsParser"
-    }, {
-        "DirectoryPath": "gfx\\models\\ships\\guardians\\hive_asteroids",
-        "PreferredParser": "GenericKeyParser"
-    }, {
-        "DirectoryPath": "gfx\\models\\ships\\guardians\\hive_asteroids",
-        "PreferredParser": "GenericGraphicsParser"
-    }, {
-        "DirectoryPath": "gfx\\models\\ships\\guardians\\pirate_galleon",
-        "PreferredParser": "GenericKeyParser"
-    }, {
-        "DirectoryPath": "gfx\\models\\ships\\guardians\\pirate_galleon",
-        "PreferredParser": "GenericGraphicsParser"
-    }, {
-        "DirectoryPath": "gfx\\models\\ships\\guardians\\scavenger_bot",
-        "PreferredParser": "GenericKeyParser"
-    }, {
-        "DirectoryPath": "gfx\\models\\ships\\guardians\\scavenger_bot",
-        "PreferredParser": "GenericGraphicsParser"
-    }, {
-        "DirectoryPath": "gfx\\models\\ships\\guardians\\space_dragon",
-        "PreferredParser": "GenericKeyParser"
-    }, {
-        "DirectoryPath": "gfx\\models\\ships\\guardians\\space_dragon",
-        "PreferredParser": "GenericGraphicsParser"
-    }, {
-        "DirectoryPath": "gfx\\models\\ships\\guardians\\stellarite",
-        "PreferredParser": "GenericKeyParser"
-    }, {
-        "DirectoryPath": "gfx\\models\\ships\\guardians\\stellarite",
-        "PreferredParser": "GenericGraphicsParser"
-    }, {
-        "DirectoryPath": "gfx\\models\\ships\\guardians\\technosphere",
-        "PreferredParser": "GenericKeyParser"
-    }, {
-        "DirectoryPath": "gfx\\models\\ships\\guardians\\technosphere",
-        "PreferredParser": "GenericGraphicsParser"
-    }, {
-        "DirectoryPath": "gfx\\models\\ships\\guardians\\toxic_god",
-        "PreferredParser": "GenericKeyParser"
-    }, {
-        "DirectoryPath": "gfx\\models\\ships\\guardians\\toxic_god",
-        "PreferredParser": "GenericGraphicsParser"
-    }, {
-        "DirectoryPath": "gfx\\models\\ships\\guardians\\voidspawn",
-        "PreferredParser": "GenericKeyParser"
-    }, {
-        "DirectoryPath": "gfx\\models\\ships\\guardians\\voidspawn",
-        "PreferredParser": "GenericGraphicsParser"
-    }, {
-        "DirectoryPath": "gfx\\models\\ships\\guardians\\wraith",
-        "PreferredParser": "GenericKeyParser"
-    }, {
-        "DirectoryPath": "gfx\\models\\ships\\guardians\\wraith",
-        "PreferredParser": "GenericGraphicsParser"
-    }, {
-        "DirectoryPath": "gfx\\models\\ships\\humanoid_01",
-        "PreferredParser": "GenericKeyParser"
-    }, {
-        "DirectoryPath": "gfx\\models\\ships\\humanoid_01",
-        "PreferredParser": "GenericGraphicsParser"
-    }, {
-        "DirectoryPath": "gfx\\models\\ships\\juggernauts\\aquatics_01",
-        "PreferredParser": "GenericKeyParser"
-    }, {
-        "DirectoryPath": "gfx\\models\\ships\\juggernauts\\aquatics_01",
-        "PreferredParser": "GenericGraphicsParser"
-    }, {
-        "DirectoryPath": "gfx\\models\\ships\\juggernauts\\arthropoid_01",
-        "PreferredParser": "GenericKeyParser"
-    }, {
-        "DirectoryPath": "gfx\\models\\ships\\juggernauts\\arthropoid_01",
-        "PreferredParser": "GenericGraphicsParser"
-    }, {
-        "DirectoryPath": "gfx\\models\\ships\\juggernauts\\avian_01",
-        "PreferredParser": "GenericKeyParser"
-    }, {
-        "DirectoryPath": "gfx\\models\\ships\\juggernauts\\avian_01",
-        "PreferredParser": "GenericGraphicsParser"
-    }, {
-        "DirectoryPath": "gfx\\models\\ships\\juggernauts\\fungoid_01",
-        "PreferredParser": "GenericKeyParser"
-    }, {
-        "DirectoryPath": "gfx\\models\\ships\\juggernauts\\fungoid_01",
-        "PreferredParser": "GenericGraphicsParser"
-    }, {
-        "DirectoryPath": "gfx\\models\\ships\\juggernauts\\humanoid_01",
-        "PreferredParser": "GenericKeyParser"
-    }, {
-        "DirectoryPath": "gfx\\models\\ships\\juggernauts\\humanoid_01",
-        "PreferredParser": "GenericGraphicsParser"
-    }, {
-        "DirectoryPath": "gfx\\models\\ships\\juggernauts\\lithoid_01",
-        "PreferredParser": "GenericKeyParser"
-    }, {
-        "DirectoryPath": "gfx\\models\\ships\\juggernauts\\lithoid_01",
-        "PreferredParser": "GenericGraphicsParser"
-    }, {
-        "DirectoryPath": "gfx\\models\\ships\\juggernauts\\mammalian_01",
-        "PreferredParser": "GenericKeyParser"
-    }, {
-        "DirectoryPath": "gfx\\models\\ships\\juggernauts\\mammalian_01",
-        "PreferredParser": "GenericGraphicsParser"
-    }, {
-        "DirectoryPath": "gfx\\models\\ships\\juggernauts\\molluscoid_01",
-        "PreferredParser": "GenericKeyParser"
-    }, {
-        "DirectoryPath": "gfx\\models\\ships\\juggernauts\\molluscoid_01",
-        "PreferredParser": "GenericGraphicsParser"
-    }, {
-        "DirectoryPath": "gfx\\models\\ships\\juggernauts\\necroid_01",
-        "PreferredParser": "GenericKeyParser"
-    }, {
-        "DirectoryPath": "gfx\\models\\ships\\juggernauts\\necroid_01",
-        "PreferredParser": "GenericGraphicsParser"
-    }, {
-        "DirectoryPath": "gfx\\models\\ships\\juggernauts\\nemesis_01",
-        "PreferredParser": "GenericKeyParser"
-    }, {
-        "DirectoryPath": "gfx\\models\\ships\\juggernauts\\nemesis_01",
-        "PreferredParser": "GenericGraphicsParser"
-    }, {
-        "DirectoryPath": "gfx\\models\\ships\\juggernauts\\plantoid_01",
-        "PreferredParser": "GenericKeyParser"
-    }, {
-        "DirectoryPath": "gfx\\models\\ships\\juggernauts\\plantoid_01",
-        "PreferredParser": "GenericGraphicsParser"
-    }, {
-        "DirectoryPath": "gfx\\models\\ships\\juggernauts\\reptilian_01",
-        "PreferredParser": "GenericKeyParser"
-    }, {
-        "DirectoryPath": "gfx\\models\\ships\\juggernauts\\reptilian_01",
-        "PreferredParser": "GenericGraphicsParser"
-    }, {
-        "DirectoryPath": "gfx\\models\\ships\\juggernauts\\toxoid_01",
-        "PreferredParser": "GenericKeyParser"
-    }, {
-        "DirectoryPath": "gfx\\models\\ships\\juggernauts\\toxoid_01",
-        "PreferredParser": "GenericGraphicsParser"
-    }, {
-        "DirectoryPath": "gfx\\models\\ships\\lithoid_01",
-        "PreferredParser": "GenericKeyParser"
-    }, {
-        "DirectoryPath": "gfx\\models\\ships\\lithoid_01",
-        "PreferredParser": "GenericGraphicsParser"
-    }, {
-        "DirectoryPath": "gfx\\models\\ships\\lithoid_01\\effects",
-        "PreferredParser": "GenericKeyParser"
-    }, {
-        "DirectoryPath": "gfx\\models\\ships\\lithoid_01\\effects",
-        "PreferredParser": "GenericGraphicsParser"
-    }, {
-        "DirectoryPath": "gfx\\models\\ships\\mammalian_01",
-        "PreferredParser": "GenericKeyParser"
-    }, {
-        "DirectoryPath": "gfx\\models\\ships\\mammalian_01",
-        "PreferredParser": "GenericGraphicsParser"
-    }, {
-        "DirectoryPath": "gfx\\models\\ships\\megastructures\\construction_platform",
-        "PreferredParser": "GenericKeyParser"
-    }, {
-        "DirectoryPath": "gfx\\models\\ships\\megastructures\\construction_platform",
-        "PreferredParser": "GenericGraphicsParser"
-    }, {
-        "DirectoryPath": "gfx\\models\\ships\\megastructures\\dyson_sphere",
-        "PreferredParser": "GenericKeyParser"
-    }, {
-        "DirectoryPath": "gfx\\models\\ships\\megastructures\\dyson_sphere",
-        "PreferredParser": "GenericGraphicsParser"
-    }, {
-        "DirectoryPath": "gfx\\models\\ships\\megastructures\\gateway",
-        "PreferredParser": "GenericKeyParser"
-    }, {
-        "DirectoryPath": "gfx\\models\\ships\\megastructures\\gateway",
-        "PreferredParser": "GenericGraphicsParser"
-    }, {
-        "DirectoryPath": "gfx\\models\\ships\\megastructures\\hyper_relay",
-        "PreferredParser": "GenericKeyParser"
-    }, {
-        "DirectoryPath": "gfx\\models\\ships\\megastructures\\hyper_relay",
-        "PreferredParser": "GenericGraphicsParser"
-    }, {
-        "DirectoryPath": "gfx\\models\\ships\\megastructures\\interstellar_assembly",
-        "PreferredParser": "GenericKeyParser"
-    }, {
-        "DirectoryPath": "gfx\\models\\ships\\megastructures\\interstellar_assembly",
-        "PreferredParser": "GenericGraphicsParser"
-    }, {
-        "DirectoryPath": "gfx\\models\\ships\\megastructures\\interstellar_assembly\\effects",
-        "PreferredParser": "GenericKeyParser"
-    }, {
-        "DirectoryPath": "gfx\\models\\ships\\megastructures\\interstellar_assembly\\effects",
-        "PreferredParser": "GenericGraphicsParser"
-    }, {
-        "DirectoryPath": "gfx\\models\\ships\\megastructures\\matter_decompressor",
-        "PreferredParser": "GenericKeyParser"
-    }, {
-        "DirectoryPath": "gfx\\models\\ships\\megastructures\\matter_decompressor",
-        "PreferredParser": "GenericGraphicsParser"
-    }, {
-        "DirectoryPath": "gfx\\models\\ships\\megastructures\\mega_art_institution",
-        "PreferredParser": "GenericKeyParser"
-    }, {
-        "DirectoryPath": "gfx\\models\\ships\\megastructures\\mega_art_institution",
-        "PreferredParser": "GenericGraphicsParser"
-    }, {
-        "DirectoryPath": "gfx\\models\\ships\\megastructures\\mega_shipyard",
-        "PreferredParser": "GenericKeyParser"
-    }, {
-        "DirectoryPath": "gfx\\models\\ships\\megastructures\\mega_shipyard",
-        "PreferredParser": "GenericGraphicsParser"
-    }, {
-        "DirectoryPath": "gfx\\models\\ships\\megastructures\\orbital_ring",
-        "PreferredParser": "GenericKeyParser"
-    }, {
-        "DirectoryPath": "gfx\\models\\ships\\megastructures\\orbital_ring",
-        "PreferredParser": "GenericGraphicsParser"
-    }, {
-        "DirectoryPath": "gfx\\models\\ships\\megastructures\\quantum_catapult",
-        "PreferredParser": "GenericKeyParser"
-    }, {
-        "DirectoryPath": "gfx\\models\\ships\\megastructures\\quantum_catapult",
-        "PreferredParser": "GenericGraphicsParser"
-    }, {
-        "DirectoryPath": "gfx\\models\\ships\\megastructures\\spy_orb",
-        "PreferredParser": "GenericKeyParser"
-    }, {
-        "DirectoryPath": "gfx\\models\\ships\\megastructures\\spy_orb",
-        "PreferredParser": "GenericGraphicsParser"
-    }, {
-        "DirectoryPath": "gfx\\models\\ships\\megastructures\\star_eater",
-        "PreferredParser": "GenericKeyParser"
-    }, {
-        "DirectoryPath": "gfx\\models\\ships\\megastructures\\star_eater",
-        "PreferredParser": "GenericGraphicsParser"
-    }, {
-        "DirectoryPath": "gfx\\models\\ships\\megastructures\\strategic_coordination_center",
-        "PreferredParser": "GenericKeyParser"
-    }, {
-        "DirectoryPath": "gfx\\models\\ships\\megastructures\\strategic_coordination_center",
-        "PreferredParser": "GenericGraphicsParser"
-    }, {
-        "DirectoryPath": "gfx\\models\\ships\\megastructures\\think_tank",
-        "PreferredParser": "GenericKeyParser"
-    }, {
-        "DirectoryPath": "gfx\\models\\ships\\megastructures\\think_tank",
-        "PreferredParser": "GenericGraphicsParser"
-    }, {
-        "DirectoryPath": "gfx\\models\\ships\\molluscoid_01",
-        "PreferredParser": "GenericKeyParser"
-    }, {
-        "DirectoryPath": "gfx\\models\\ships\\molluscoid_01",
-        "PreferredParser": "GenericGraphicsParser"
-    }, {
-        "DirectoryPath": "gfx\\models\\ships\\necroid_01",
-        "PreferredParser": "GenericKeyParser"
-    }, {
-        "DirectoryPath": "gfx\\models\\ships\\necroid_01",
-        "PreferredParser": "GenericGraphicsParser"
-    }, {
-        "DirectoryPath": "gfx\\models\\ships\\nemesis_01",
-        "PreferredParser": "GenericGraphicsParser"
-    }, {
-        "DirectoryPath": "gfx\\models\\ships\\nemesis_01",
-        "PreferredParser": "GenericKeyParser"
-    }, {
-        "DirectoryPath": "gfx\\models\\ships\\other",
-        "PreferredParser": "GenericKeyParser"
-    }, {
-        "DirectoryPath": "gfx\\models\\ships\\other",
-        "PreferredParser": "GenericGraphicsParser"
-    }, {
-        "DirectoryPath": "gfx\\models\\ships\\pirate_01",
-        "PreferredParser": "GenericKeyParser"
-    }, {
-        "DirectoryPath": "gfx\\models\\ships\\pirate_01",
-        "PreferredParser": "GenericGraphicsParser"
-    }, {
-        "DirectoryPath": "gfx\\models\\ships\\plantoid_01",
-        "PreferredParser": "GenericKeyParser"
-    }, {
-        "DirectoryPath": "gfx\\models\\ships\\plantoid_01",
-        "PreferredParser": "GenericGraphicsParser"
-    }, {
-        "DirectoryPath": "gfx\\models\\ships\\reptilian_01",
-        "PreferredParser": "GenericKeyParser"
-    }, {
-        "DirectoryPath": "gfx\\models\\ships\\reptilian_01",
-        "PreferredParser": "GenericGraphicsParser"
-    }, {
-        "DirectoryPath": "gfx\\models\\ships\\shroud_01",
-        "PreferredParser": "GenericKeyParser"
-    }, {
-        "DirectoryPath": "gfx\\models\\ships\\shroud_01",
-        "PreferredParser": "GenericGraphicsParser"
-    }, {
-        "DirectoryPath": "gfx\\models\\ships\\starbases",
-        "PreferredParser": "GenericKeyParser"
-    }, {
-        "DirectoryPath": "gfx\\models\\ships\\starbases",
-        "PreferredParser": "GenericGraphicsParser"
-    }, {
-        "DirectoryPath": "gfx\\models\\ships\\swarm_01",
-        "PreferredParser": "GenericKeyParser"
-    }, {
-        "DirectoryPath": "gfx\\models\\ships\\swarm_01",
-        "PreferredParser": "GenericGraphicsParser"
-    }, {
-        "DirectoryPath": "gfx\\models\\ships\\titans\\aquatic_01",
-        "PreferredParser": "GenericKeyParser"
-    }, {
-        "DirectoryPath": "gfx\\models\\ships\\titans\\aquatic_01",
-        "PreferredParser": "GenericGraphicsParser"
-    }, {
-        "DirectoryPath": "gfx\\models\\ships\\titans\\arthropoid_01",
-        "PreferredParser": "GenericKeyParser"
-    }, {
-        "DirectoryPath": "gfx\\models\\ships\\titans\\arthropoid_01",
-        "PreferredParser": "GenericGraphicsParser"
-    }, {
-        "DirectoryPath": "gfx\\models\\ships\\titans\\avian_01",
-        "PreferredParser": "GenericKeyParser"
-    }, {
-        "DirectoryPath": "gfx\\models\\ships\\titans\\avian_01",
-        "PreferredParser": "GenericGraphicsParser"
-    }, {
-        "DirectoryPath": "gfx\\models\\ships\\titans\\fungoid_01",
-        "PreferredParser": "GenericKeyParser"
-    }, {
-        "DirectoryPath": "gfx\\models\\ships\\titans\\fungoid_01",
-        "PreferredParser": "GenericGraphicsParser"
-    }, {
-        "DirectoryPath": "gfx\\models\\ships\\titans\\humanoid_01",
-        "PreferredParser": "GenericKeyParser"
-    }, {
-        "DirectoryPath": "gfx\\models\\ships\\titans\\humanoid_01",
-        "PreferredParser": "GenericGraphicsParser"
-    }, {
-        "DirectoryPath": "gfx\\models\\ships\\titans\\lithoid_01",
-        "PreferredParser": "GenericKeyParser"
-    }, {
-        "DirectoryPath": "gfx\\models\\ships\\titans\\lithoid_01",
-        "PreferredParser": "GenericGraphicsParser"
-    }, {
-        "DirectoryPath": "gfx\\models\\ships\\titans\\mammalian_01",
-        "PreferredParser": "GenericKeyParser"
-    }, {
-        "DirectoryPath": "gfx\\models\\ships\\titans\\mammalian_01",
-        "PreferredParser": "GenericGraphicsParser"
-    }, {
-        "DirectoryPath": "gfx\\models\\ships\\titans\\molluscoid_01",
-        "PreferredParser": "GenericKeyParser"
-    }, {
-        "DirectoryPath": "gfx\\models\\ships\\titans\\molluscoid_01",
-        "PreferredParser": "GenericGraphicsParser"
-    }, {
-        "DirectoryPath": "gfx\\models\\ships\\titans\\necroid_01",
-        "PreferredParser": "GenericKeyParser"
-    }, {
-        "DirectoryPath": "gfx\\models\\ships\\titans\\necroid_01",
-        "PreferredParser": "GenericGraphicsParser"
-    }, {
-        "DirectoryPath": "gfx\\models\\ships\\titans\\nemesis_01",
-        "PreferredParser": "GenericKeyParser"
-    }, {
-        "DirectoryPath": "gfx\\models\\ships\\titans\\nemesis_01",
-        "PreferredParser": "GenericGraphicsParser"
-    }, {
-        "DirectoryPath": "gfx\\models\\ships\\titans\\plantoid_01",
-        "PreferredParser": "GenericKeyParser"
-    }, {
-        "DirectoryPath": "gfx\\models\\ships\\titans\\plantoid_01",
-        "PreferredParser": "GenericGraphicsParser"
-    }, {
-        "DirectoryPath": "gfx\\models\\ships\\titans\\reptilian_01",
-        "PreferredParser": "GenericKeyParser"
-    }, {
-        "DirectoryPath": "gfx\\models\\ships\\titans\\reptilian_01",
-        "PreferredParser": "GenericGraphicsParser"
-    }, {
-        "DirectoryPath": "gfx\\models\\ships\\titans\\toxoid_01",
-        "PreferredParser": "GenericKeyParser"
-    }, {
-        "DirectoryPath": "gfx\\models\\ships\\titans\\toxoid_01",
-        "PreferredParser": "GenericGraphicsParser"
-    }, {
-        "DirectoryPath": "gfx\\models\\ships\\toxoid_01",
-        "PreferredParser": "GenericKeyParser"
-    }, {
-        "DirectoryPath": "gfx\\models\\ships\\toxoid_01",
-        "PreferredParser": "GenericGraphicsParser"
-    }, {
-        "DirectoryPath": "gfx\\models\\system_map",
-        "PreferredParser": "GenericKeyParser"
-    }, {
-        "DirectoryPath": "gfx\\models\\system_map",
-        "PreferredParser": "GenericGraphicsParser"
-    }, {
-        "DirectoryPath": "gfx\\models\\ui",
-        "PreferredParser": "GenericKeyParser"
-    }, {
-        "DirectoryPath": "gfx\\models\\ui",
-        "PreferredParser": "GenericGraphicsParser"
-    }, {
-        "DirectoryPath": "gfx\\particles",
-        "PreferredParser": "GenericKeyParser"
-    }, {
-        "DirectoryPath": "gfx\\particles",
-        "PreferredParser": "GenericGraphicsParser"
-    }, {
-        "DirectoryPath": "gfx\\particles\\combat",
-        "PreferredParser": "GenericKeyParser"
-    }, {
-        "DirectoryPath": "gfx\\particles\\misc",
-        "PreferredParser": "GenericKeyParser"
-    }, {
-        "DirectoryPath": "gfx\\particles\\ships",
-        "PreferredParser": "GenericKeyParser"
-    }, {
-        "DirectoryPath": "gfx\\particles\\stars_and_planets",
-        "PreferredParser": "GenericKeyParser"
     }, {
         "DirectoryPath": "gfx\\pingmap",
         "PreferredParser": "DefaultParser"
@@ -1369,15 +595,6 @@
     }, {
         "DirectoryPath": "interface",
         "PreferredParser": "GenericKeyParser"
-    }, {
-        "DirectoryPath": "interface\\game_setup",
-        "PreferredParser": "GenericGraphicsParser"
-    }, {
-        "DirectoryPath": "interface\\pdx_online",
-        "PreferredParser": "GenericGraphicsParser"
-    }, {
-        "DirectoryPath": "interface\\portraits",
-        "PreferredParser": "GenericGraphicsParser"
     }, {
         "DirectoryPath": "interface\\resource_groups",
         "PreferredParser": "DefaultParser"
@@ -1428,6 +645,9 @@
         "PreferredParser": "StellarisWholeTextParser"
     }, {
         "DirectoryPath": "music",
+        "PreferredParser": "GenericGraphicsParser"
+    }, {
+        "DirectoryPath": "music",
         "PreferredParser": "GenericKeyParser"
     }, {
         "DirectoryPath": "pdx_launcher\\common\\interface",
@@ -1440,16 +660,7 @@
         "PreferredParser": "DefaultParser"
     }, {
         "DirectoryPath": "pdx_launcher\\game\\fonts",
-        "PreferredParser": "GenericKeyParser"
-    }, {
-        "DirectoryPath": "pdx_launcher\\game\\interface",
         "PreferredParser": "GenericGraphicsParser"
-    }, {
-        "DirectoryPath": "pdx_launcher\\game\\music",
-        "PreferredParser": "DefaultParser"
-    }, {
-        "DirectoryPath": "pdx_launcher\\game\\sound",
-        "PreferredParser": "GenericKeyParser"
     }, {
         "DirectoryPath": "pdx_online_assets\\gfx\\FX",
         "PreferredParser": "GenericWholeTextParser"
@@ -1554,6 +765,21 @@
         "PreferredParser": "GenericWholeTextParser"
     }, {
         "DirectoryPath": "sound\\overlord\\Starbases",
+        "PreferredParser": "GenericWholeTextParser"
+    }, {
+        "DirectoryPath": "sound\\paragon\\events",
+        "PreferredParser": "GenericWholeTextParser"
+    }, {
+        "DirectoryPath": "sound\\paragon\\notifications",
+        "PreferredParser": "GenericWholeTextParser"
+    }, {
+        "DirectoryPath": "sound\\paragon\\portraits",
+        "PreferredParser": "GenericWholeTextParser"
+    }, {
+        "DirectoryPath": "sound\\paragon\\ships",
+        "PreferredParser": "GenericWholeTextParser"
+    }, {
+        "DirectoryPath": "sound\\paragon\\ui",
         "PreferredParser": "GenericWholeTextParser"
     }, {
         "DirectoryPath": "sound\\portrait",

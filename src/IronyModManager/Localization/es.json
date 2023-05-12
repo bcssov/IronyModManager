@@ -321,7 +321,8 @@
             "Delete": "Eliminar",
             "Undo": "Deshacer",
             "Redo": "Rehacer",
-            "Editor": "Fusión Externa"
+            "Editor": "Fusión Externa",
+            "ReadonlyEditor": "Comparación externa"
         },
         "EditorContextMenu": {
             "Copy": "Copiar",
@@ -390,6 +391,10 @@
         "Editor": {
             "Title": "Fusión Externa",
             "Message": "Presione confirmar una vez que esté satisfecho con la Fusión Externa."
+        },
+        "ReadonlyEditor": {
+            "Title": "Comparación externa",
+            "Message": "Pulse OK cuando haya terminado de comparar."
         },
         "ResolutionSaveError": {
             "Title": "Error de validación de definición virtual",
