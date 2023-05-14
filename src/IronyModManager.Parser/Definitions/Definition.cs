@@ -4,7 +4,7 @@
 // Created          : 02-16-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 08-12-2022
+// Last Modified On : 05-14-2023
 // ***********************************************************************
 // <copyright file="Definition.cs" company="Mario">
 //     Mario
@@ -539,6 +539,13 @@ namespace IronyModManager.Parser.Definitions
         }
 
         /// <summary>
+        /// Gets or sets the original identifier.
+        /// </summary>
+        /// <value>The original identifier.</value>
+        [JsonIgnore]
+        public string OriginalId { get; set; }
+
+        /// <summary>
         /// Gets or sets the name of the original mod.
         /// </summary>
         /// <value>The name of the original mod.</value>
@@ -771,6 +778,7 @@ namespace IronyModManager.Parser.Definitions
                 nameof(FileNameSuffix) => FileNameSuffix,
                 nameof(IsPlaceholder) => IsPlaceholder,
                 nameof(LastModified) => LastModified,
+                nameof(OriginalId) => OriginalId,
                 _ => Id
             };
         }

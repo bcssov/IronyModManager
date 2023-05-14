@@ -204,6 +204,7 @@ namespace IronyModManager.Parser.Generic
                                     var type = $"{dataItem.Key}.{middleValue.Key}";
                                     MapDefinitionFromArgs(ConstructArgs(localArgs, definition, typeOverride: $"{type}-{Common.Constants.TxtType}"));
                                     definition.Id = TrimId(id);
+                                    definition.OriginalId = TrimId(item.Key);
                                     definition.ValueType = ValueType.SpecialVariable;
                                     definition.OriginalCode = definition.Code = $"{type}.{FormatCode(item, skipVariables: true)}";
                                     var tags = ParseScriptTags(item.Values, item.Key);
@@ -230,6 +231,7 @@ namespace IronyModManager.Parser.Generic
                                 string id = EvalDefinitionId(item.Values, item.Key);
                                 MapDefinitionFromArgs(ConstructArgs(localArgs, definition, typeOverride: $"{dataItem.Key}-{Common.Constants.TxtType}"));
                                 definition.Id = TrimId(id);
+                                definition.OriginalId = TrimId(item.Key);
                                 definition.ValueType = ValueType.SpecialVariable;
                                 definition.Code = FormatCode(item, dataItem.Key);
                                 definition.OriginalCode = FormatCode(item, skipVariables: true);

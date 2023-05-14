@@ -569,6 +569,15 @@
         "DirectoryPath": "gfx\\models",
         "PreferredParser": "GenericGraphicsParser"
     }, {
+        "DirectoryPath": "gfx\\models\\add_ons",
+        "PreferredParser": "GenericGraphicsParser"
+    }, {
+        "DirectoryPath": "gfx\\models\\combat_items",
+        "PreferredParser": "GenericGraphicsParser"
+    }, {
+        "DirectoryPath": "gfx\\particles",
+        "PreferredParser": "GenericGraphicsParser"
+    }, {
         "DirectoryPath": "gfx\\pingmap",
         "PreferredParser": "DefaultParser"
     }, {
@@ -660,6 +669,15 @@
         "PreferredParser": "DefaultParser"
     }, {
         "DirectoryPath": "pdx_launcher\\game\\fonts",
+        "PreferredParser": "GenericGraphicsParser"
+    }, {
+        "DirectoryPath": "pdx_launcher\\game\\interface",
+        "PreferredParser": "GenericGraphicsParser"
+    }, {
+        "DirectoryPath": "pdx_launcher\\game\\music",
+        "PreferredParser": "GenericGraphicsParser"
+    }, {
+        "DirectoryPath": "pdx_launcher\\game\\sound",
         "PreferredParser": "GenericGraphicsParser"
     }, {
         "DirectoryPath": "pdx_online_assets\\gfx\\FX",

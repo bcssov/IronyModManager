@@ -4,7 +4,7 @@
 // Created          : 01-29-2022
 //
 // Last Modified By : Mario
-// Last Modified On : 01-29-2022
+// Last Modified On : 05-14-2023
 // ***********************************************************************
 // <copyright file="KeyValuePairParser.cs" company="Mario">
 //     Mario
@@ -92,6 +92,7 @@ namespace IronyModManager.Parser.Games.HOI4
                     string id = EvalDefinitionId(item.Values, item.Key);
                     MapDefinitionFromArgs(ConstructArgs(args, definition));
                     definition.Id = TrimId(id);
+                    definition.OriginalId = TrimId(item.Key);
                     definition.ValueType = Shared.Models.ValueType.Object;
                     definition.OriginalCode = definition.Code = FormatCode(item);
                     var tags = ParseScriptTags(item.Values, item.Key);

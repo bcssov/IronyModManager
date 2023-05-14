@@ -112,7 +112,7 @@ namespace IronyModManager.Parser.Tests
                         break;
                 }
                 result[i].ModName.Should().Be("fake");
-                result[i].Type.Should().Be("gui\\gui\\gui");
+                result[i].Type.Should().Be("gui\\guitypes\\gui");
             }
         }
 
@@ -165,7 +165,7 @@ namespace IronyModManager.Parser.Tests
                         break;
                 }
                 result[i].ModName.Should().Be("fake");
-                result[i].Type.Should().Be("gui\\gui\\gui");
+                result[i].Type.Should().Be("gui\\guitypes\\gui");
             }
         }
 
@@ -215,7 +215,7 @@ namespace IronyModManager.Parser.Tests
                         break;
                 }
                 result[i].ModName.Should().Be("fake");
-                result[i].Type.Should().Be("gui\\gui\\gui");
+                result[i].Type.Should().Be("gui\\guitypes\\gui");
             }
         }
 
@@ -287,7 +287,7 @@ namespace IronyModManager.Parser.Tests
                         break;
                 }
                 result[i].ModName.Should().Be("fake");
-                result[i].Type.Should().Be("gui\\gui\\gui");
+                result[i].Type.Should().Be("gui\\guitypes\\gui");
             }
         }
 
@@ -385,7 +385,7 @@ namespace IronyModManager.Parser.Tests
                         break;
                 }
                 result[i].ModName.Should().Be("fake");
-                result[i].Type.Should().Be("gfx\\gfx\\gfx");
+                result[i].Type.Should().Be("gfx\\bitmapfonts\\gfx");
             }
         }
 
@@ -441,7 +441,7 @@ namespace IronyModManager.Parser.Tests
                         break;
                 }
                 result[i].ModName.Should().Be("fake");
-                result[i].Type.Should().Be("gfx\\gfx\\gfx");
+                result[i].Type.Should().Be("gfx\\bitmapfonts\\gfx");
             }
         }
 
@@ -518,7 +518,7 @@ namespace IronyModManager.Parser.Tests
                         break;
                 }
                 result[i].ModName.Should().Be("fake");
-                result[i].Type.Should().Be("gfx\\gfx\\gfx");
+                result[i].Type.Should().Be("gfx\\bitmapfonts\\gfx");
             }
         }
 
@@ -560,17 +560,17 @@ namespace IronyModManager.Parser.Tests
                 switch (i)
                 {
 
-                    case 0:
+                    case 1:
                         result[i].Id.Should().Be("@test1");
                         result[i].CodeTag.Should().BeNullOrWhiteSpace();
                         result[i].ValueType.Should().Be(ValueType.Variable);
                         break;
-                    case 1:
+                    case 2:
                         result[i].Id.Should().Be("@test2");
                         result[i].CodeTag.Should().Be("spriteTypes");
                         result[i].ValueType.Should().Be(ValueType.Variable);
                         break;                    
-                    case 2:
+                    case 0:
                         result[i].Id.Should().Be("GFX_dmm_mod_1");
                         result[i].ValueType.Should().Be(ValueType.Object);
                         break;
@@ -585,7 +585,7 @@ namespace IronyModManager.Parser.Tests
                         break;
                 }
                 result[i].ModName.Should().Be("fake");
-                result[i].Type.Should().Be("gfx\\gfx\\gfx");
+                result[i].Type.Should().Be("gfx\\spritetypes\\gfx");
             }
         }
 
@@ -629,17 +629,17 @@ namespace IronyModManager.Parser.Tests
                 result[i].File.Should().Be("gui\\gui.gui");
                 switch (i)
                 {
-                    case 0:
+                    case 1:
                         result[i].Id.Should().Be("@sort_button_height");
                         result[i].CodeTag.Should().BeNullOrWhiteSpace();
                         result[i].ValueType.Should().Be(ValueType.Variable);
                         break;
-                    case 1:
+                    case 2:
                         result[i].Id.Should().Be("@entry_info_height");
                         result[i].CodeTag.Should().Be("guiTypes");
                         result[i].ValueType.Should().Be(ValueType.Variable);
                         break;                    
-                    case 2:
+                    case 0:
                         result[i].Id.Should().Be("alliance_button_window");
                         result[i].ValueType.Should().Be(ValueType.Object);
                         break;
@@ -652,7 +652,7 @@ namespace IronyModManager.Parser.Tests
                         break;
                 }
                 result[i].ModName.Should().Be("fake");
-                result[i].Type.Should().Be("gui\\gui\\gui");
+                result[i].Type.Should().Be("gui\\guitypes\\gui");
             }
         }
 
@@ -698,8 +698,8 @@ namespace IronyModManager.Parser.Tests
                         break;
                 }
                 result[i].ModName.Should().Be("fake");
-                result[i].Type.Should().Be("interface\\gfx\\gfx");
-                result[i].VirtualPath.Should().Be("interface\\gfx\\gfx.gfx");
+                result[i].Type.Should().Be("interface\\spritetypes\\gfx");
+                result[i].VirtualPath.Should().Be("interface\\spriteTypes\\gfx.gfx");
             }
         }
     }

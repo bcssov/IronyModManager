@@ -149,6 +149,7 @@ namespace IronyModManager.Parser.Tests
             var files = Directory.EnumerateFiles(rootPath, "*", SearchOption.AllDirectories).Where(s => IsValidExtension(s));
             var result = new List<IDefinition>();
             var undefined = new List<string>();
+            var assetTypes = new HashSet<string>();
             foreach (var item in files)
             {
                 var relativePath = item.Replace(rootPath, string.Empty);
@@ -199,6 +200,17 @@ namespace IronyModManager.Parser.Tests
                     if (parseResult?.Count() > 0)
                     {
                         result.AddRange(parseResult);
+                        foreach (var p in parseResult)
+                        {
+                            if (p.File.EndsWith(".asset", StringComparison.OrdinalIgnoreCase) || p.File.EndsWith(".gui", StringComparison.OrdinalIgnoreCase) || p.File.EndsWith(".gfx", StringComparison.OrdinalIgnoreCase))
+                            {
+                                var id = getKey(p.Code.SplitOnNewLine().First(), "=");
+                                if (!id.StartsWith("@"))
+                                {
+                                    assetTypes.Add(id.ToLowerInvariant());
+                                }
+                            }
+                        }
                     }
                     else
                     {
@@ -346,6 +358,7 @@ namespace IronyModManager.Parser.Tests
             sb.AppendLine($"{Environment.NewLine}-------------------{Environment.NewLine}Invalid{Environment.NewLine}-------------------{Environment.NewLine}{string.Join(Environment.NewLine, invalid.OrderBy(s => s))}");
             sb.AppendLine($"{Environment.NewLine}-------------------{Environment.NewLine}Single Objects{Environment.NewLine}-------------------{Environment.NewLine}{string.Join(Environment.NewLine, singleObjects.OrderBy(s => s))}");
             sb.AppendLine($"{Environment.NewLine}-------------------{Environment.NewLine}Objects{Environment.NewLine}-------------------{Environment.NewLine}{string.Join(Environment.NewLine, objects.OrderBy(s => s))}");
+            sb.AppendLine($"{Environment.NewLine}-------------------{Environment.NewLine}Asset types{Environment.NewLine}-------------------{Environment.NewLine}{string.Join(Environment.NewLine, assetTypes.OrderBy(s => s))}");
 
             if (!Directory.Exists("..\\..\\..\\..\\IronyModManager\\Maps"))
             {
