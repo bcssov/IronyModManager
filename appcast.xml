@@ -4,8 +4,11 @@
 		<title>Irony Mod Manager</title>
 		<language>en</language>
 		<item>
-			<title>1.24.141</title>
+			<title>1.24.142</title>
 			<description>## Current Release Notes
+* Fix not grouping properly certain types of graphics assets
+
+## 1.24.141 Release Notes
 * Tweak new conflict solver menu (is vertical now)
 * Fixes
 
@@ -23,12 +26,15 @@
 * Add support for metadata descriptor type games (Victoria 3 support)
 * Add option to ignore update
 * Improve mod loading performance</description>
-			<pubDate>Fri, 12 May 2023 21:23:51 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.24.141/linux-x64.zip" sparkle:version="1.24.141.51566" sparkle:shortVersionString="1.24.141" length="90115609" sparkle:os="linux" type="application/zip" sparkle:signature="y9GpEkkoyxbKa6Ly+4IE8K8eOFernnEc76D6aYp9XgxYN8DUW0tLeCa+/5frurHmPr2hIv42a7a2FVOy3XazDw=="/>
+			<pubDate>Sun, 14 May 2023 03:47:04 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.24.142/linux-x64.zip" sparkle:version="1.24.142.55881" sparkle:shortVersionString="1.24.142" length="90117071" sparkle:os="linux" type="application/zip" sparkle:signature="WEPj6GFuT8eOeFJhzV/aiXNQEP7+Y/Hfcxx3ww4lwv13o/zID8ui58pAdl3xEKUelzZvUsK/bXlNzXZqDgFVBw=="/>
 		</item>
 		<item>
-			<title>1.24.141</title>
+			<title>1.24.142</title>
 			<description>## Current Release Notes
+* Fix not grouping properly certain types of graphics assets
+
+## 1.24.141 Release Notes
 * Tweak new conflict solver menu (is vertical now)
 * Fixes
 
@@ -46,12 +52,15 @@
 * Add support for metadata descriptor type games (Victoria 3 support)
 * Add option to ignore update
 * Improve mod loading performance</description>
-			<pubDate>Fri, 12 May 2023 21:23:58 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.24.141/osx-x64.zip" sparkle:version="1.24.141.51566" sparkle:shortVersionString="1.24.141" length="93267474" sparkle:os="osx" type="application/zip" sparkle:signature="/Nrw8z/+oyU1g7NivHxGPZ1Umii3cIKtP2q/9jKi6m3q8odNJe6G+f9ER3bVocxnAiKKYkk4NdPZQ+/jcc9SAQ=="/>
+			<pubDate>Sun, 14 May 2023 03:47:11 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.24.142/osx-x64.zip" sparkle:version="1.24.142.55881" sparkle:shortVersionString="1.24.142" length="93268939" sparkle:os="osx" type="application/zip" sparkle:signature="slGB4U00nfxroSonJnOf+PwRlKvHxHmws+Xgl5zs7tMa4yY7oiz/Y8kA27+ht75Ksbg1jz6QdhuTa0v05DXADg=="/>
 		</item>
 		<item>
-			<title>1.24.141</title>
+			<title>1.24.142</title>
 			<description>## Current Release Notes
+* Fix not grouping properly certain types of graphics assets
+
+## 1.24.141 Release Notes
 * Tweak new conflict solver menu (is vertical now)
 * Fixes
 
@@ -69,12 +78,15 @@
 * Add support for metadata descriptor type games (Victoria 3 support)
 * Add option to ignore update
 * Improve mod loading performance</description>
-			<pubDate>Fri, 12 May 2023 21:24:05 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.24.141/win-x64-setup.zip" sparkle:version="1.24.141.51566" sparkle:shortVersionString="1.24.141" length="71416273" sparkle:os="windows" type="application/zip" sparkle:signature="g8Z0ZtHFOYl2e8NPVmFsO58MwyvBykq8lXUU8FWam+bJhp+4HvK8tase1NVxKeC+R379PnDXjdtwqCg+FSMPAg=="/>
+			<pubDate>Sun, 14 May 2023 03:47:17 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.24.142/win-x64-setup.zip" sparkle:version="1.24.142.55881" sparkle:shortVersionString="1.24.142" length="71394046" sparkle:os="windows" type="application/zip" sparkle:signature="tCJPFlA59JSB/W2EG8dCnlY8lYmRywzqxBpK1DvzKm2EMr8RREuEygYlcbaBd1JzFyjIoEpj49g+cN9vN4rCAA=="/>
 		</item>
 		<item>
-			<title>1.24.141</title>
+			<title>1.24.142</title>
 			<description>## Current Release Notes
+* Fix not grouping properly certain types of graphics assets
+
+## 1.24.141 Release Notes
 * Tweak new conflict solver menu (is vertical now)
 * Fixes
 
@@ -92,8 +104,8 @@
 * Add support for metadata descriptor type games (Victoria 3 support)
 * Add option to ignore update
 * Improve mod loading performance</description>
-			<pubDate>Fri, 12 May 2023 21:24:05 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.24.141/win-x64.zip" sparkle:version="1.24.141.51566" sparkle:shortVersionString="1.24.141" length="104855164" sparkle:os="windows" type="application/zip" sparkle:signature="a1KS++D6BL7rfS65eRLJr3EtZIB7Y1lqch1HyyYpY/zXlivsCJQ5yIoDmPWdEb0u7wFFMLRbjr5+ROUVge8RBg=="/>
+			<pubDate>Sun, 14 May 2023 03:47:18 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.24.142/win-x64.zip" sparkle:version="1.24.142.55881" sparkle:shortVersionString="1.24.142" length="104856592" sparkle:os="windows" type="application/zip" sparkle:signature="Lctb+GmqHmvyOciEDaDU4ZrLBwyXeK3bEFNX0QJUOgsZnbUbtedrG/om66Lu7QkbUS9qctJYZsuZDyCEhC36Bg=="/>
 		</item>
 	</channel>
 </rss>
