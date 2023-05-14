@@ -64,6 +64,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\IronyModManager.Parser\IronyModManager.Parser.csproj" />
+    <ProjectReference Include="..\IronyModManager.Services\IronyModManager.Services.csproj" />
     <ProjectReference Include="..\IronyModManager.Shared\IronyModManager.Shared.csproj" />
     <ProjectReference Include="..\IronyModManager.Tests.Common\IronyModManager.Tests.Common.csproj" />
   </ItemGroup>

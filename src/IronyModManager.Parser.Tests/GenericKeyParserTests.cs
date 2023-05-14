@@ -176,10 +176,10 @@ namespace IronyModManager.Parser.Tests
             DISetup.SetupContainer();
 
             var sb = new StringBuilder();
-            sb.AppendLine(@"entity = { name = ""ai_01_blue_sponsored_colonizer_entity"" clone = ""ai_01_blue_colonizer_entity"" }");
+            sb.AppendLine(@"code = { name = ""ai_01_blue_sponsored_colonizer_entity"" clone = ""ai_01_blue_colonizer_entity"" }");
 
             var sb2 = new StringBuilder();
-            sb2.AppendLine(@"entity = {");
+            sb2.AppendLine(@"code = {");
             sb2.AppendLine(@"    name = ""ai_01_blue_sponsored_colonizer_entity""");
             sb2.AppendLine(@"    clone = ""ai_01_blue_colonizer_entity""");
             sb2.AppendLine(@"}");
@@ -334,7 +334,7 @@ namespace IronyModManager.Parser.Tests
             DISetup.SetupContainer();
 
             var sb = new StringBuilder();
-            sb.AppendLine(@"entity = { name = ""ai_01_blue_sponsored_colonizer_entity"" clone = ""ai_01_blue_colonizer_entity"" }");
+            sb.AppendLine(@"code = { name = ""ai_01_blue_sponsored_colonizer_entity"" clone = ""ai_01_blue_colonizer_entity"" }");
 
             var args = new CanParseArgs()
             {

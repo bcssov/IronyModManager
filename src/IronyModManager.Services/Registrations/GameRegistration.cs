@@ -38,12 +38,12 @@ namespace IronyModManager.Services.Registrations
         /// <summary>
         /// The hoi4 cache version
         /// </summary>
-        private const int HOI4CacheVersion = 9;
+        private const int HOI4CacheVersion = 10;
 
         /// <summary>
         /// The stellaris cache version
         /// </summary>
-        private const int StellarisCacheVersion = 14;
+        private const int StellarisCacheVersion = 15;
 
         /// <summary>
         /// The path resolver
