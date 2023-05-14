@@ -15,7 +15,6 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using IronyModManager.DI;
 using IronyModManager.Parser.Common.Args;
 using IronyModManager.Parser.Common.Parsers;
 using IronyModManager.Parser.Common.Parsers.Models;
@@ -36,6 +35,11 @@ namespace IronyModManager.Parser.Generic
         #region Fields
 
         /// <summary>
+        /// The GUI types identifier
+        /// </summary>
+        protected const string GuiTypesId = "guiTypes={";
+
+        /// <summary>
         /// The asset ids
         /// </summary>
         protected static readonly string[] assetIds = new string[] { "animation={", "category={", "entity={", "falloff={", "font={", "light={", "master_compressor={", "particle={", "music={", "sound={", "soundeffect={", "soundgroup={" };
@@ -48,7 +52,7 @@ namespace IronyModManager.Parser.Generic
         /// <summary>
         /// The expected graphics ids
         /// </summary>
-        protected static readonly string[] expectedGraphicsIds = new string[] { "guiTypes={", "spriteTypes={", "objectTypes={", "bitmapfonts={" };
+        protected static readonly string[] expectedGraphicsIds = new string[] { GuiTypesId, "spriteTypes={", "objectTypes={", "bitmapfonts={" };
 
         /// <summary>
         /// The valid extensions
@@ -56,9 +60,14 @@ namespace IronyModManager.Parser.Generic
         protected static readonly string[] validExtensions = new string[] { Common.Constants.GuiExtension, Common.Constants.GfxExtension, Common.Constants.AssetExtension };
 
         /// <summary>
+        /// The object clone
+        /// </summary>
+        protected readonly IObjectClone objectClone;
+
+        /// <summary>
         /// The is generic key type
         /// </summary>
-        private bool isGenericKeyType = false;
+        protected bool isGenericKeyType = false;
 
         #endregion Fields
 
@@ -67,10 +76,12 @@ namespace IronyModManager.Parser.Generic
         /// <summary>
         /// Initializes a new instance of the <see cref="GraphicsParser" /> class.
         /// </summary>
+        /// <param name="objectClone">The object clone.</param>
         /// <param name="codeParser">The code parser.</param>
         /// <param name="logger">The logger.</param>
-        public GraphicsParser(ICodeParser codeParser, ILogger logger) : base(codeParser, logger)
+        public GraphicsParser(IObjectClone objectClone, ICodeParser codeParser, ILogger logger) : base(codeParser, logger)
         {
+            this.objectClone = objectClone;
         }
 
         #endregion Constructors
@@ -100,7 +111,7 @@ namespace IronyModManager.Parser.Generic
         /// <returns><c>true</c> if this instance can parse the specified arguments; otherwise, <c>false</c>.</returns>
         public override bool CanParse(CanParseArgs args)
         {
-            return validExtensions.Any(a => args.File.EndsWith(a, StringComparison.OrdinalIgnoreCase)) || IsContentGraphics(args, false, out var _);
+            return validExtensions.Any(a => args.File.EndsWith(a, StringComparison.OrdinalIgnoreCase)) || IsContentGraphics(args, false, out var _, out var _);
         }
 
         /// <summary>
@@ -118,7 +129,7 @@ namespace IronyModManager.Parser.Generic
                 Lines = args.Lines
             };
             IEnumerable<IDefinition> result;
-            IsContentGraphics(canParseArgs, true, out var isAsset);
+            IsContentGraphics(canParseArgs, true, out var isAsset, out var type);
             if (isAsset)
             {
                 isGenericKeyType = IsKeyType(canParseArgs);
@@ -134,7 +145,7 @@ namespace IronyModManager.Parser.Generic
             var parent = args.File.StandardizeDirectorySeparator().Split(Path.DirectorySeparatorChar)[0];
             bool hasReplaceFolder = Path.GetDirectoryName(args.File).EndsWith(replaceFolder, StringComparison.OrdinalIgnoreCase);
             foreach (var definition in result.Where(p => p.ValueType != Shared.Models.ValueType.Namespace && p.ValueType != Shared.Models.ValueType.Variable))
-            {                
+            {
                 if (hasReplaceFolder)
                 {
                     definition.VirtualPath = Path.Combine(parent.Replace(replaceFolder, string.Empty), definition.OriginalId, Path.GetFileName(args.File));
@@ -143,13 +154,13 @@ namespace IronyModManager.Parser.Generic
                 {
                     definition.VirtualPath = Path.Combine(parent, definition.OriginalId, Path.GetFileName(args.File));
                 }
-                definition.Type = definition.VirtualPath.FormatDefinitionType();
+                definition.Type = definition.VirtualPath.FormatDefinitionType(type);
                 parsedResult.Add(definition);
                 if (result.Any(p => p.ValueType == Shared.Models.ValueType.Variable || p.ValueType == Shared.Models.ValueType.Namespace))
                 {
                     foreach (var item in result.Where(p => p.ValueType == Shared.Models.ValueType.Variable || p.ValueType == Shared.Models.ValueType.Namespace))
                     {
-                        var copy = CopyDefinition(item);
+                        var copy = objectClone.CloneDefinition(item, true);
                         copy.VirtualPath = definition.VirtualPath;
                         copy.Type = definition.Type;
                         if (!parsedResult.Any(p => p.TypeAndId == copy.TypeAndId))
@@ -160,53 +171,6 @@ namespace IronyModManager.Parser.Generic
                 }
             }
             return parsedResult;
-        }
-
-        /// <summary>
-        /// Copies the definition.
-        /// </summary>
-        /// <param name="definition">The definition.</param>
-        /// <returns>IDefinition.</returns>
-        protected virtual IDefinition CopyDefinition(IDefinition definition)
-        {
-            var newDefinition = DIResolver.Get<IDefinition>();
-            newDefinition.Code = definition.Code;
-            newDefinition.ContentSHA = definition.ContentSHA;
-            newDefinition.DefinitionSHA = definition.DefinitionSHA;
-            newDefinition.Dependencies = definition.Dependencies;
-            newDefinition.ErrorColumn = definition.ErrorColumn;
-            newDefinition.ErrorLine = definition.ErrorLine;
-            newDefinition.ErrorMessage = definition.ErrorMessage;
-            newDefinition.File = definition.File;
-            newDefinition.GeneratedFileNames = definition.GeneratedFileNames;
-            newDefinition.OverwrittenFileNames = definition.OverwrittenFileNames;
-            newDefinition.AdditionalFileNames = definition.AdditionalFileNames;
-            newDefinition.Id = definition.Id;
-            newDefinition.ModName = definition.ModName;
-            newDefinition.Type = definition.Type;
-            newDefinition.UsedParser = definition.UsedParser;
-            newDefinition.ValueType = definition.ValueType;
-            newDefinition.Tags = definition.Tags;
-            newDefinition.OriginalCode = definition.OriginalCode;
-            newDefinition.CodeSeparator = definition.CodeSeparator;
-            newDefinition.CodeTag = definition.CodeTag;
-            newDefinition.Order = definition.Order;
-            newDefinition.OriginalModName = definition.OriginalModName;
-            newDefinition.OriginalFileName = definition.OriginalFileName;
-            newDefinition.DiskFile = definition.DiskFile;
-            newDefinition.Variables = definition.Variables;
-            newDefinition.ExistsInLastFile = definition.ExistsInLastFile;
-            newDefinition.VirtualPath = definition.VirtualPath;
-            newDefinition.CustomPriorityOrder = definition.CustomPriorityOrder;
-            newDefinition.IsCustomPatch = definition.IsCustomPatch;
-            newDefinition.IsFromGame = definition.IsFromGame;
-            newDefinition.AllowDuplicate = definition.AllowDuplicate;
-            newDefinition.ResetType = definition.ResetType;
-            newDefinition.FileNameSuffix = definition.FileNameSuffix;
-            newDefinition.IsPlaceholder = definition.IsPlaceholder;
-            newDefinition.LastModified = definition.LastModified;
-            newDefinition.OriginalId = definition.OriginalId;
-            return newDefinition;
         }
 
         /// <summary>
@@ -236,10 +200,12 @@ namespace IronyModManager.Parser.Generic
         /// <param name="args">The arguments.</param>
         /// <param name="skipExtensionValidation">if set to <c>true</c> [skip extension validation].</param>
         /// <param name="isAsset">if set to <c>true</c> [is asset].</param>
+        /// <param name="type">The type.</param>
         /// <returns><c>true</c> if [is content graphics] [the specified arguments]; otherwise, <c>false</c>.</returns>
-        protected virtual bool IsContentGraphics(CanParseArgs args, bool skipExtensionValidation, out bool isAsset)
+        protected virtual bool IsContentGraphics(CanParseArgs args, bool skipExtensionValidation, out bool isAsset, out string type)
         {
             isAsset = false;
+            type = string.Empty;
             if (!args.IsBinary)
             {
                 var isValidExistingTextFile = Constants.TextExtensions.Any(s => args.File.EndsWith(s, StringComparison.OrdinalIgnoreCase));
@@ -256,10 +222,19 @@ namespace IronyModManager.Parser.Generic
                             merged = merged[..(merged.IndexOf(Common.Constants.Scripts.OpenObject) + 1)];
                             if (expectedGraphicsIds.Any(a => merged.Contains(a, StringComparison.OrdinalIgnoreCase)))
                             {
+                                if (merged.Contains(GuiTypesId, StringComparison.OrdinalIgnoreCase))
+                                {
+                                    type = Path.GetExtension(Common.Constants.GuiExtension).Trim('.');
+                                }
+                                else
+                                {
+                                    type = Path.GetExtension(Common.Constants.GfxExtension).Trim('.');
+                                }
                                 return true;
                             }
                             else if (assetIds.Any(a => merged.Contains(a, StringComparison.OrdinalIgnoreCase)))
                             {
+                                type = Path.GetExtension(Common.Constants.AssetExtension).Trim('.');
                                 isAsset = true;
                                 return true;
                             }

@@ -171,44 +171,8 @@ namespace IronyModManager.Services
         /// <returns>IDefinition.</returns>
         protected virtual IDefinition CopyDefinition(IDefinition definition)
         {
-            var newDefinition = DIResolver.Get<IDefinition>();
-            newDefinition.Code = definition.Code;
-            newDefinition.ContentSHA = definition.ContentSHA;
-            newDefinition.DefinitionSHA = definition.DefinitionSHA;
-            newDefinition.Dependencies = definition.Dependencies;
-            newDefinition.ErrorColumn = definition.ErrorColumn;
-            newDefinition.ErrorLine = definition.ErrorLine;
-            newDefinition.ErrorMessage = definition.ErrorMessage;
-            newDefinition.File = definition.File;
-            newDefinition.GeneratedFileNames = definition.GeneratedFileNames;
-            newDefinition.OverwrittenFileNames = definition.OverwrittenFileNames;
-            newDefinition.AdditionalFileNames = definition.AdditionalFileNames;
-            newDefinition.Id = definition.Id;
-            newDefinition.ModName = definition.ModName;
-            newDefinition.Type = definition.Type;
-            newDefinition.UsedParser = definition.UsedParser;
-            newDefinition.ValueType = definition.ValueType;
-            newDefinition.Tags = definition.Tags;
-            newDefinition.OriginalCode = definition.OriginalCode;
-            newDefinition.CodeSeparator = definition.CodeSeparator;
-            newDefinition.CodeTag = definition.CodeTag;
-            newDefinition.Order = definition.Order;
-            newDefinition.OriginalModName = definition.OriginalModName;
-            newDefinition.OriginalFileName = definition.OriginalFileName;
-            newDefinition.DiskFile = definition.DiskFile;
-            newDefinition.Variables = definition.Variables;
-            newDefinition.ExistsInLastFile = definition.ExistsInLastFile;
-            newDefinition.VirtualPath = definition.VirtualPath;
-            newDefinition.CustomPriorityOrder = definition.CustomPriorityOrder;
-            newDefinition.IsCustomPatch = definition.IsCustomPatch;
-            newDefinition.IsFromGame = definition.IsFromGame;
-            newDefinition.AllowDuplicate = definition.AllowDuplicate;
-            newDefinition.ResetType = definition.ResetType;
-            newDefinition.FileNameSuffix = definition.FileNameSuffix;
-            newDefinition.IsPlaceholder = definition.IsPlaceholder;
-            newDefinition.LastModified = definition.LastModified;
-            newDefinition.OriginalId = definition.OriginalId;
-            return newDefinition;
+            var clone = DIResolver.Get<IObjectClone>();
+            return clone.CloneDefinition(definition, true);
         }
 
         /// <summary>

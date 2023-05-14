@@ -122,6 +122,11 @@ namespace IronyModManager.IO.Mods
         private readonly IMessageBus messageBus;
 
         /// <summary>
+        /// The object clone
+        /// </summary>
+        private readonly IObjectClone objectClone;
+
+        /// <summary>
         /// The reader
         /// </summary>
         private readonly IReader reader;
@@ -143,16 +148,18 @@ namespace IronyModManager.IO.Mods
         /// <summary>
         /// Initializes a new instance of the <see cref="ModPatchExporter" /> class.
         /// </summary>
+        /// <param name="objectClone">The object clone.</param>
         /// <param name="cache">The cache.</param>
         /// <param name="reader">The reader.</param>
         /// <param name="definitionInfoProviders">The definition information providers.</param>
         /// <param name="messageBus">The message bus.</param>
-        public ModPatchExporter(ICache cache, IReader reader, IEnumerable<IDefinitionInfoProvider> definitionInfoProviders, IMessageBus messageBus)
+        public ModPatchExporter(IObjectClone objectClone, ICache cache, IReader reader, IEnumerable<IDefinitionInfoProvider> definitionInfoProviders, IMessageBus messageBus)
         {
             this.cache = cache;
             this.definitionInfoProviders = definitionInfoProviders;
             this.reader = reader;
             this.messageBus = messageBus;
+            this.objectClone = objectClone;
         }
 
         #endregion Constructors
@@ -366,10 +373,7 @@ namespace IronyModManager.IO.Mods
         public async Task<bool> SaveStateAsync(ModPatchExporterParameters parameters)
         {
             var state = await GetPatchStateInternalAsync(parameters, true);
-            if (state == null)
-            {
-                state = DIResolver.Get<IPatchState>();
-            }
+            state ??= DIResolver.Get<IPatchState>();
             var modifiedHistory = new ConcurrentDictionary<string, IDefinition>();
             var path = Path.Combine(GetPatchRootPath(parameters.RootPath, parameters.PatchPath));
             state.IgnoreConflictPaths = parameters.IgnoreConflictPaths;
@@ -517,96 +521,6 @@ namespace IronyModManager.IO.Mods
         private static string GetPatchRootPath(string path, string patchPath)
         {
             return Path.Combine(path, patchPath);
-        }
-
-        /// <summary>
-        /// Maps the definition.
-        /// </summary>
-        /// <param name="original">The original.</param>
-        /// <param name="includeCode">if set to <c>true</c> [include code].</param>
-        /// <returns>IDefinition.</returns>
-        private static IDefinition MapDefinition(IDefinition original, bool includeCode)
-        {
-            var newInstance = DIResolver.Get<IDefinition>();
-            if (includeCode)
-            {
-                // Most don't require except conflict history. Further reduces the json.
-                newInstance.Code = original.Code;
-            }
-            newInstance.ContentSHA = original.ContentSHA;
-            newInstance.DefinitionSHA = original.DefinitionSHA;
-            newInstance.Dependencies = original.Dependencies;
-            newInstance.File = original.File;
-            newInstance.Id = original.Id;
-            newInstance.ModName = original.ModName;
-            newInstance.Type = original.Type;
-            newInstance.UsedParser = original.UsedParser;
-            newInstance.ValueType = original.ValueType;
-            newInstance.ErrorColumn = original.ErrorColumn;
-            newInstance.ErrorLine = original.ErrorLine;
-            newInstance.ErrorMessage = original.ErrorMessage;
-            newInstance.GeneratedFileNames = original.GeneratedFileNames;
-            newInstance.AdditionalFileNames = original.AdditionalFileNames;
-            newInstance.OverwrittenFileNames = original.OverwrittenFileNames;
-            newInstance.OriginalCode = original.OriginalCode;
-            newInstance.CodeSeparator = original.CodeSeparator;
-            newInstance.CodeTag = original.CodeTag;
-            newInstance.Order = original.Order;
-            newInstance.OriginalModName = original.OriginalModName;
-            newInstance.OriginalFileName = original.OriginalFileName;
-            newInstance.DiskFile = original.DiskFile;
-            newInstance.Variables = original.Variables;
-            newInstance.ExistsInLastFile = original.ExistsInLastFile;
-            newInstance.VirtualPath = original.VirtualPath;
-            newInstance.CustomPriorityOrder = original.CustomPriorityOrder;
-            newInstance.IsCustomPatch = original.IsCustomPatch;
-            newInstance.IsFromGame = original.IsFromGame;
-            newInstance.AllowDuplicate = original.AllowDuplicate;
-            newInstance.ResetType = original.ResetType;
-            newInstance.FileNameSuffix = original.FileNameSuffix;
-            newInstance.IsPlaceholder = original.IsPlaceholder;
-            newInstance.LastModified = original.LastModified;
-            newInstance.OriginalId = original.OriginalId;
-            return newInstance;
-        }
-
-        /// <summary>
-        /// Maps the definitions.
-        /// </summary>
-        /// <param name="originals">The originals.</param>
-        /// <param name="includeCode">if set to <c>true</c> [include code].</param>
-        /// <returns>IEnumerable&lt;IDefinition&gt;.</returns>
-        private static IEnumerable<IDefinition> MapDefinitions(IEnumerable<IDefinition> originals, bool includeCode)
-        {
-            var col = new List<IDefinition>();
-            if (originals != null)
-            {
-                foreach (var original in originals)
-                {
-                    col.Add(MapDefinition(original, includeCode));
-                }
-            }
-            return col;
-        }
-
-        /// <summary>
-        /// Maps the state of the patch.
-        /// </summary>
-        /// <param name="source">The source.</param>
-        /// <param name="destination">The destination.</param>
-        /// <param name="includeCode">if set to <c>true</c> [include code].</param>
-        private static void MapPatchState(IPatchState source, IPatchState destination, bool includeCode)
-        {
-            destination.ConflictHistory = MapDefinitions(source.ConflictHistory, includeCode);
-            destination.Conflicts = MapDefinitions(source.Conflicts, includeCode);
-            destination.IgnoreConflictPaths = source.IgnoreConflictPaths;
-            destination.IgnoredConflicts = MapDefinitions(source.IgnoredConflicts, includeCode);
-            destination.ResolvedConflicts = MapDefinitions(source.ResolvedConflicts, includeCode);
-            destination.OverwrittenConflicts = MapDefinitions(source.OverwrittenConflicts, includeCode);
-            destination.CustomConflicts = MapDefinitions(source.CustomConflicts, includeCode);
-            destination.Mode = source.Mode;
-            destination.LoadOrder = source.LoadOrder;
-            destination.HasGameDefinitions = source.HasGameDefinitions;
         }
 
         /// <summary>
@@ -818,10 +732,7 @@ namespace IronyModManager.IO.Mods
                     {
                         StandardizeDefinitionPaths(cached.CustomConflicts);
                     }
-                    if (cached.LoadOrder == null)
-                    {
-                        cached.LoadOrder = new List<string>();
-                    }
+                    cached.LoadOrder ??= new List<string>();
                     // If not allowing full load don't cache anything
                     if (loadExternalCode)
                     {
@@ -863,6 +774,56 @@ namespace IronyModManager.IO.Mods
         }
 
         /// <summary>
+        /// Maps the definition.
+        /// </summary>
+        /// <param name="original">The original.</param>
+        /// <param name="includeCode">if set to <c>true</c> [include code].</param>
+        /// <returns>IDefinition.</returns>
+        private IDefinition MapDefinition(IDefinition original, bool includeCode)
+        {
+            return objectClone.CloneDefinition(original, includeCode);
+        }
+
+        /// <summary>
+        /// Maps the definitions.
+        /// </summary>
+        /// <param name="originals">The originals.</param>
+        /// <param name="includeCode">if set to <c>true</c> [include code].</param>
+        /// <returns>IEnumerable&lt;IDefinition&gt;.</returns>
+        private IEnumerable<IDefinition> MapDefinitions(IEnumerable<IDefinition> originals, bool includeCode)
+        {
+            var col = new List<IDefinition>();
+            if (originals != null)
+            {
+                foreach (var original in originals)
+                {
+                    col.Add(MapDefinition(original, includeCode));
+                }
+            }
+            return col;
+        }
+
+        /// <summary>
+        /// Maps the state of the patch.
+        /// </summary>
+        /// <param name="source">The source.</param>
+        /// <param name="destination">The destination.</param>
+        /// <param name="includeCode">if set to <c>true</c> [include code].</param>
+        private void MapPatchState(IPatchState source, IPatchState destination, bool includeCode)
+        {
+            destination.ConflictHistory = MapDefinitions(source.ConflictHistory, includeCode);
+            destination.Conflicts = MapDefinitions(source.Conflicts, includeCode);
+            destination.IgnoreConflictPaths = source.IgnoreConflictPaths;
+            destination.IgnoredConflicts = MapDefinitions(source.IgnoredConflicts, includeCode);
+            destination.ResolvedConflicts = MapDefinitions(source.ResolvedConflicts, includeCode);
+            destination.OverwrittenConflicts = MapDefinitions(source.OverwrittenConflicts, includeCode);
+            destination.CustomConflicts = MapDefinitions(source.CustomConflicts, includeCode);
+            destination.Mode = source.Mode;
+            destination.LoadOrder = source.LoadOrder;
+            destination.HasGameDefinitions = source.HasGameDefinitions;
+        }
+
+        /// <summary>
         /// Stores the state.
         /// </summary>
         /// <param name="model">The model.</param>
@@ -875,18 +836,12 @@ namespace IronyModManager.IO.Mods
             var statePath = Path.Combine(path, StateName);
 
             var cachedItem = cache.Get<CachedState>(new CacheGetParameters() { Key = CacheStateKey, Region = CacheStateRegion });
-            if (cachedItem == null)
-            {
-                cachedItem = new CachedState();
-            }
+            cachedItem ??= new CachedState();
             cachedItem.LastCachedPath = statePath;
             cachedItem.PatchState = model;
             cache.Set(new CacheAddParameters<CachedState>() { Key = CacheStateKey, Value = cachedItem, Region = CacheStateRegion });
 
-            if (savingToken != null)
-            {
-                savingToken.Cancel();
-            }
+            savingToken?.Cancel();
             savingToken = new CancellationTokenSource();
             WriteStateInBackground(model, modifiedHistory, externalCode, path, savingToken.Token).ConfigureAwait(false);
             return true;
@@ -1039,9 +994,9 @@ namespace IronyModManager.IO.Mods
                     if (externalCode != null && !externalCode.Contains(item.TypeAndId))
                     {
                         loadedCode.Add(item.TypeAndId);
-                        if (patchState.IndexedConflictHistory.ContainsKey(item.TypeAndId))
+                        if (patchState.IndexedConflictHistory.TryGetValue(item.TypeAndId, out var value))
                         {
-                            var existingHistory = patchState.IndexedConflictHistory[item.TypeAndId];
+                            var existingHistory = value;
                             foreach (var existing in existingHistory)
                             {
                                 existing.Code = null;

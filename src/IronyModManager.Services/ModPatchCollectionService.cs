@@ -4,7 +4,7 @@
 // Created          : 05-26-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-04-2023
+// Last Modified On : 05-14-2023
 // ***********************************************************************
 // <copyright file="ModPatchCollectionService.cs" company="Mario">
 //     Mario
@@ -359,7 +359,7 @@ namespace IronyModManager.Services
             var overwritten = indexedDefinitions.GetByValueType(ValueType.OverwrittenObject).Concat(indexedDefinitions.GetByValueType(ValueType.OverwrittenObjectSingleFile));
             var empty = indexedDefinitions.GetByValueType(ValueType.EmptyFile);
 
-            double total = fileKeys.Count() + (typeAndIdKeys.Count() * 2) + overwritten.Count() + empty.Count();
+            double total = (typeAndIdKeys.Count() * 3) + overwritten.Count() + empty.Count(); //typeAndIdKeys eval definitions both times thus the magic number 3
             double processed = 0;
             double previousProgress = 0;
             messageBus.Publish(new ModDefinitionAnalyzeEvent(0));
@@ -413,7 +413,7 @@ namespace IronyModManager.Services
             {
                 var definitions = indexedDefinitions.GetByFile(item);
                 EvalDefinitions(indexedDefinitions, conflicts, definitions.OrderBy(p => modOrder.IndexOf(p.ModName)), modOrder, actualMode, fileConflictCache, modShaConflictCache);
-                processed++;
+                processed += definitions.Count();
                 var perc = GetProgressPercentage(total, processed, 99.9);
                 if (perc != previousProgress)
                 {
