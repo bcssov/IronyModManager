@@ -4,7 +4,7 @@
 // Created          : 02-12-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 05-11-2023
+// Last Modified On : 05-14-2023
 // ***********************************************************************
 // <copyright file="GameRegistration.cs" company="Mario">
 //     Mario
@@ -38,12 +38,12 @@ namespace IronyModManager.Services.Registrations
         /// <summary>
         /// The hoi4 cache version
         /// </summary>
-        private const int HOI4CacheVersion = 8;
+        private const int HOI4CacheVersion = 9;
 
         /// <summary>
         /// The stellaris cache version
         /// </summary>
-        private const int StellarisCacheVersion = 13;
+        private const int StellarisCacheVersion = 14;
 
         /// <summary>
         /// The path resolver

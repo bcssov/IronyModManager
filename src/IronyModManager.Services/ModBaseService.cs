@@ -4,7 +4,7 @@
 // Created          : 04-07-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 12-01-2022
+// Last Modified On : 05-14-2023
 // ***********************************************************************
 // <copyright file="ModBaseService.cs" company="Mario">
 //     Mario
@@ -207,6 +207,7 @@ namespace IronyModManager.Services
             newDefinition.FileNameSuffix = definition.FileNameSuffix;
             newDefinition.IsPlaceholder = definition.IsPlaceholder;
             newDefinition.LastModified = definition.LastModified;
+            newDefinition.OriginalId = definition.OriginalId;
             return newDefinition;
         }
 

@@ -4,7 +4,7 @@
 // Created          : 02-17-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 07-20-2022
+// Last Modified On : 05-14-2023
 // ***********************************************************************
 // <copyright file="BaseParser.cs" company="Mario">
 //     Mario
@@ -297,6 +297,7 @@ namespace IronyModManager.Parser.Common.Parsers
                     }
                     MapDefinitionFromArgs(ConstructArgs(args, definition, typeOverride: typeOverride, isFirstLevel: isFirstLevel));
                     definition.Id = TrimId(id);
+                    definition.OriginalId = isFirstLevel ? TrimId(item.Key) : TrimId(parent);
                     definition.ValueType = ValueType.Object;
                     definition.OriginalCode = definition.Code = FormatCode(item, parent);
                     if (!isFirstLevel)

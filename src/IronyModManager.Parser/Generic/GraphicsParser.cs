@@ -4,7 +4,7 @@
 // Created          : 02-18-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 05-11-2023
+// Last Modified On : 05-14-2023
 // ***********************************************************************
 // <copyright file="GraphicsParser.cs" company="Mario">
 //     Mario
@@ -15,6 +15,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using IronyModManager.DI;
 using IronyModManager.Parser.Common.Args;
 using IronyModManager.Parser.Common.Parsers;
 using IronyModManager.Parser.Common.Parsers.Models;
@@ -35,19 +36,19 @@ namespace IronyModManager.Parser.Generic
         #region Fields
 
         /// <summary>
-        /// The asset identifier
+        /// The asset ids
         /// </summary>
-        protected const string AssetId = "entity={";
+        protected static readonly string[] assetIds = new string[] { "animation={", "category={", "entity={", "falloff={", "font={", "light={", "master_compressor={", "particle={", "music={", "sound={", "soundeffect={", "soundgroup={" };
 
         /// <summary>
         /// The expected graphics folders
         /// </summary>
-        protected static readonly string[] expectedGraphicsFolders = new string[] { "gfx", "interface" };
+        protected static readonly string[] expectedGraphicsFolders = new string[] { "gui", "gfx", "interface", "fonts", "dlc", "sound", "music", "pdx_launcher" };
 
         /// <summary>
         /// The expected graphics ids
         /// </summary>
-        protected static readonly string[] expectedGraphicsIds = new string[] { "guiTypes={", "spriteTypes={", "objectTypes={", AssetId };
+        protected static readonly string[] expectedGraphicsIds = new string[] { "guiTypes={", "spriteTypes={", "objectTypes={", "bitmapfonts={" };
 
         /// <summary>
         /// The valid extensions
@@ -99,7 +100,7 @@ namespace IronyModManager.Parser.Generic
         /// <returns><c>true</c> if this instance can parse the specified arguments; otherwise, <c>false</c>.</returns>
         public override bool CanParse(CanParseArgs args)
         {
-            return validExtensions.Any(a => args.File.EndsWith(a, StringComparison.OrdinalIgnoreCase)) || IsContentGraphics(args, out var _);
+            return validExtensions.Any(a => args.File.EndsWith(a, StringComparison.OrdinalIgnoreCase)) || IsContentGraphics(args, false, out var _);
         }
 
         /// <summary>
@@ -117,48 +118,95 @@ namespace IronyModManager.Parser.Generic
                 Lines = args.Lines
             };
             IEnumerable<IDefinition> result;
-            if (args.File.EndsWith(Common.Constants.AssetExtension, StringComparison.OrdinalIgnoreCase))
+            IsContentGraphics(canParseArgs, true, out var isAsset);
+            if (isAsset)
             {
                 isGenericKeyType = IsKeyType(canParseArgs);
                 result = base.ParseRoot(args);
             }
-            else if (args.File.EndsWith(Common.Constants.GfxExtension, StringComparison.OrdinalIgnoreCase) || args.File.EndsWith(Common.Constants.GuiExtension, StringComparison.OrdinalIgnoreCase))
+            else
             {
                 result = ParseSecondLevel(args);
             }
-            else
-            {
-                IsContentGraphics(canParseArgs, out var isAsset);
-                if (isAsset)
+            // Flatten structure
+            var parsedResult = new List<IDefinition>();
+            var replaceFolder = Path.DirectorySeparatorChar + "replace";
+            var parent = args.File.StandardizeDirectorySeparator().Split(Path.DirectorySeparatorChar)[0];
+            bool hasReplaceFolder = Path.GetDirectoryName(args.File).EndsWith(replaceFolder, StringComparison.OrdinalIgnoreCase);
+            foreach (var definition in result.Where(p => p.ValueType != Shared.Models.ValueType.Namespace && p.ValueType != Shared.Models.ValueType.Variable))
+            {                
+                if (hasReplaceFolder)
                 {
-                    isGenericKeyType = IsKeyType(canParseArgs);
-                    result = base.ParseRoot(args);
+                    definition.VirtualPath = Path.Combine(parent.Replace(replaceFolder, string.Empty), definition.OriginalId, Path.GetFileName(args.File));
                 }
                 else
                 {
-                    result = ParseSecondLevel(args);
+                    definition.VirtualPath = Path.Combine(parent, definition.OriginalId, Path.GetFileName(args.File));
                 }
-            }
-            // Flatten structure
-            var replaceFolder = Path.DirectorySeparatorChar + "replace";
-            var parent = args.File.StandardizeDirectorySeparator().Split(Path.DirectorySeparatorChar)[0];
-            if (Path.GetDirectoryName(args.File).EndsWith(replaceFolder, StringComparison.OrdinalIgnoreCase))
-            {
-                foreach (var item in result)
+                definition.Type = definition.VirtualPath.FormatDefinitionType();
+                parsedResult.Add(definition);
+                if (result.Any(p => p.ValueType == Shared.Models.ValueType.Variable || p.ValueType == Shared.Models.ValueType.Namespace))
                 {
-                    item.VirtualPath = Path.Combine(parent.Replace(replaceFolder, string.Empty), Path.GetExtension(args.File).Trim("."), Path.GetFileName(args.File));
-                    item.Type = item.VirtualPath.FormatDefinitionType();
+                    foreach (var item in result.Where(p => p.ValueType == Shared.Models.ValueType.Variable || p.ValueType == Shared.Models.ValueType.Namespace))
+                    {
+                        var copy = CopyDefinition(item);
+                        copy.VirtualPath = definition.VirtualPath;
+                        copy.Type = definition.Type;
+                        if (!parsedResult.Any(p => p.TypeAndId == copy.TypeAndId))
+                        {
+                            parsedResult.Add(copy);
+                        }
+                    }
                 }
             }
-            else
-            {
-                foreach (var definition in result)
-                {
-                    definition.VirtualPath = Path.Combine(parent, Path.GetExtension(args.File).Trim("."), Path.GetFileName(args.File));
-                    definition.Type = definition.VirtualPath.FormatDefinitionType();
-                }
-            }
-            return result;
+            return parsedResult;
+        }
+
+        /// <summary>
+        /// Copies the definition.
+        /// </summary>
+        /// <param name="definition">The definition.</param>
+        /// <returns>IDefinition.</returns>
+        protected virtual IDefinition CopyDefinition(IDefinition definition)
+        {
+            var newDefinition = DIResolver.Get<IDefinition>();
+            newDefinition.Code = definition.Code;
+            newDefinition.ContentSHA = definition.ContentSHA;
+            newDefinition.DefinitionSHA = definition.DefinitionSHA;
+            newDefinition.Dependencies = definition.Dependencies;
+            newDefinition.ErrorColumn = definition.ErrorColumn;
+            newDefinition.ErrorLine = definition.ErrorLine;
+            newDefinition.ErrorMessage = definition.ErrorMessage;
+            newDefinition.File = definition.File;
+            newDefinition.GeneratedFileNames = definition.GeneratedFileNames;
+            newDefinition.OverwrittenFileNames = definition.OverwrittenFileNames;
+            newDefinition.AdditionalFileNames = definition.AdditionalFileNames;
+            newDefinition.Id = definition.Id;
+            newDefinition.ModName = definition.ModName;
+            newDefinition.Type = definition.Type;
+            newDefinition.UsedParser = definition.UsedParser;
+            newDefinition.ValueType = definition.ValueType;
+            newDefinition.Tags = definition.Tags;
+            newDefinition.OriginalCode = definition.OriginalCode;
+            newDefinition.CodeSeparator = definition.CodeSeparator;
+            newDefinition.CodeTag = definition.CodeTag;
+            newDefinition.Order = definition.Order;
+            newDefinition.OriginalModName = definition.OriginalModName;
+            newDefinition.OriginalFileName = definition.OriginalFileName;
+            newDefinition.DiskFile = definition.DiskFile;
+            newDefinition.Variables = definition.Variables;
+            newDefinition.ExistsInLastFile = definition.ExistsInLastFile;
+            newDefinition.VirtualPath = definition.VirtualPath;
+            newDefinition.CustomPriorityOrder = definition.CustomPriorityOrder;
+            newDefinition.IsCustomPatch = definition.IsCustomPatch;
+            newDefinition.IsFromGame = definition.IsFromGame;
+            newDefinition.AllowDuplicate = definition.AllowDuplicate;
+            newDefinition.ResetType = definition.ResetType;
+            newDefinition.FileNameSuffix = definition.FileNameSuffix;
+            newDefinition.IsPlaceholder = definition.IsPlaceholder;
+            newDefinition.LastModified = definition.LastModified;
+            newDefinition.OriginalId = definition.OriginalId;
+            return newDefinition;
         }
 
         /// <summary>
@@ -186,27 +234,33 @@ namespace IronyModManager.Parser.Generic
         /// Determines whether [is content graphics] [the specified arguments].
         /// </summary>
         /// <param name="args">The arguments.</param>
+        /// <param name="skipExtensionValidation">if set to <c>true</c> [skip extension validation].</param>
         /// <param name="isAsset">if set to <c>true</c> [is asset].</param>
         /// <returns><c>true</c> if [is content graphics] [the specified arguments]; otherwise, <c>false</c>.</returns>
-        protected virtual bool IsContentGraphics(CanParseArgs args, out bool isAsset)
+        protected virtual bool IsContentGraphics(CanParseArgs args, bool skipExtensionValidation, out bool isAsset)
         {
             isAsset = false;
             if (!args.IsBinary)
             {
                 var isValidExistingTextFile = Constants.TextExtensions.Any(s => args.File.EndsWith(s, StringComparison.OrdinalIgnoreCase));
-                if (!isValidExistingTextFile)
+                if (!isValidExistingTextFile || skipExtensionValidation)
                 {
+                    var lines = codeParser.CleanCode(args.File, args.Lines);
                     var parent = args.File.StandardizeDirectorySeparator().Split(Path.DirectorySeparatorChar)[0];
                     if (!string.IsNullOrWhiteSpace(parent) && expectedGraphicsFolders.Any(a => parent.Equals(a, StringComparison.OrdinalIgnoreCase)))
                     {
                         // Means a wise guy used .bak extension
-                        var merged = string.Join(string.Empty, args.Lines).ReplaceTabs().Replace(" ", string.Empty);
+                        var merged = string.Join(string.Empty, lines).ReplaceTabs().Replace(" ", string.Empty);
                         if (merged.Contains(Common.Constants.Scripts.OpenObject))
                         {
-                            merged = merged[..merged.IndexOf(Common.Constants.Scripts.OpenObject)];
+                            merged = merged[..(merged.IndexOf(Common.Constants.Scripts.OpenObject) + 1)];
                             if (expectedGraphicsIds.Any(a => merged.Contains(a, StringComparison.OrdinalIgnoreCase)))
                             {
-                                isAsset = merged.Contains(AssetId, StringComparison.OrdinalIgnoreCase);
+                                return true;
+                            }
+                            else if (assetIds.Any(a => merged.Contains(a, StringComparison.OrdinalIgnoreCase)))
+                            {
+                                isAsset = true;
                                 return true;
                             }
                         }

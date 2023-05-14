@@ -4,7 +4,7 @@
 // Created          : 02-16-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 07-12-2022
+// Last Modified On : 05-14-2023
 // ***********************************************************************
 // <copyright file="IDefinition.cs" company="Mario">
 //     Mario
@@ -208,6 +208,12 @@ namespace IronyModManager.Shared.Models
         /// </summary>
         /// <value>The name of the original file.</value>
         string OriginalFileName { get; set; }
+
+        /// <summary>
+        /// Gets or sets the original identifier.
+        /// </summary>
+        /// <value>The original identifier.</value>
+        string OriginalId { get; set; }
 
         /// <summary>
         /// Gets or sets the name of the original mod.

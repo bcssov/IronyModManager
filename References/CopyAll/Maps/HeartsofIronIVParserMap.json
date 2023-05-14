@@ -242,6 +242,12 @@
         "DirectoryPath": "dlc\\dlc001_german_historical_portraits\\interface",
         "PreferredParser": "GenericGraphicsParser"
     }, {
+        "DirectoryPath": "dlc\\dlc002_polish_content_pack\\gfx\\entities",
+        "PreferredParser": "GenericGraphicsParser"
+    }, {
+        "DirectoryPath": "dlc\\dlc002_polish_content_pack\\gfx\\models\\units\\pol_dlc",
+        "PreferredParser": "GenericGraphicsParser"
+    }, {
         "DirectoryPath": "dlc\\dlc021_anniversary_pack\\portraits",
         "PreferredParser": "GenericKeyParser"
     }, {
@@ -278,11 +284,17 @@
         "DirectoryPath": "gfx\\maparrows",
         "PreferredParser": "HOI4WholeTextParser"
     }, {
+        "DirectoryPath": "gfx\\models",
+        "PreferredParser": "GenericGraphicsParser"
+    }, {
         "DirectoryPath": "gfx\\models\\supply",
         "PreferredParser": "GenericWholeTextParser"
     }, {
         "DirectoryPath": "gfx\\particles",
         "PreferredParser": "HOI4WholeTextParser"
+    }, {
+        "DirectoryPath": "gfx\\particles",
+        "PreferredParser": "GenericGraphicsParser"
     }, {
         "DirectoryPath": "gfx\\train_gfx_database",
         "PreferredParser": "HOI4WholeTextParser"
@@ -345,6 +357,9 @@
         "PreferredParser": "GenericLocalizationParser"
     }, {
         "DirectoryPath": "pdx_launcher\\game\\music",
+        "PreferredParser": "GenericGraphicsParser"
+    }, {
+        "DirectoryPath": "pdx_launcher\\game\\sound",
         "PreferredParser": "GenericGraphicsParser"
     }, {
         "DirectoryPath": "pdx_online_assets\\gfx\\FX",
