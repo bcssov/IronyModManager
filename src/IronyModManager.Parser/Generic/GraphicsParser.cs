@@ -139,8 +139,11 @@ namespace IronyModManager.Parser.Generic
             {
                 result = ParseSecondLevel(args);
             }
-            // Flatten structure
-            var parsedResult = new List<IDefinition>();
+            if (result.Any(p => p.ValueType == Shared.Models.ValueType.Invalid))
+            {
+                return result;
+            }            
+            var parsedResult = new List<IDefinition>();            
             var replaceFolder = Path.DirectorySeparatorChar + "replace";
             var parent = args.File.StandardizeDirectorySeparator().Split(Path.DirectorySeparatorChar)[0];
             bool hasReplaceFolder = Path.GetDirectoryName(args.File).EndsWith(replaceFolder, StringComparison.OrdinalIgnoreCase);
