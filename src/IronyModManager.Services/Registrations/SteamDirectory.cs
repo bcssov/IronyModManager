@@ -1,10 +1,11 @@
-﻿// ***********************************************************************
+﻿
+// ***********************************************************************
 // Assembly         : IronyModManager.Services
 // Author           : Mario
 // Created          : 02-24-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-11-2022
+// Last Modified On : 05-26-2023
 // ***********************************************************************
 // <copyright file="SteamDirectory.cs" company="Mario">
 //     Mario
@@ -26,6 +27,7 @@ using Microsoft.Win32;
 
 namespace IronyModManager.Services.Registrations
 {
+
     /// <summary>
     /// Class SteamDirectory.
     /// </summary>
@@ -175,6 +177,7 @@ namespace IronyModManager.Services.Registrations
         {
             var userDataFolders = new List<string>();
             var steamInstallDirectory = GetSteamRootPath();
+
             // I always thought that steam would create this folder during installation
             var path = Path.Combine(steamInstallDirectory, SteamUserDataDirectory);
             if (Directory.Exists(path))
@@ -266,10 +269,10 @@ namespace IronyModManager.Services.Registrations
         {
 #pragma warning disable CA1416 // Validate platform compatibility
             // I know it's supported only on windows hence the OS detection.
-            var key = ReadSteamWindowsRegistryKey(Registry.CurrentUser);
+            var key = ReadSteamWindowsRegistryKey(RegistryHive.CurrentUser);
             if (string.IsNullOrWhiteSpace(key))
             {
-                key = ReadSteamWindowsRegistryKey(Registry.LocalMachine);
+                key = ReadSteamWindowsRegistryKey(RegistryHive.LocalMachine);
             }
 #pragma warning restore CA1416 // Validate platform compatibility
             return key;
@@ -394,12 +397,12 @@ namespace IronyModManager.Services.Registrations
         /// <summary>
         /// Reads the steam windows registry key.
         /// </summary>
-        /// <param name="registryKey">The registry key.</param>
+        /// <param name="registryHive">The registry hive.</param>
         /// <returns>System.String.</returns>
-        private static string ReadSteamWindowsRegistryKey(RegistryKey registryKey)
+        private static string ReadSteamWindowsRegistryKey(RegistryHive registryHive)
         {
 #pragma warning disable CA1416 // Validate platform compatibility
-            using var key = registryKey.OpenSubKey(SteamRegistryPath);
+            using var key = registryHive.GetRegistryKey(SteamRegistryPath);
             if (key != null)
             {
                 var value = key.GetValue(SteamRegistrySubKey);
