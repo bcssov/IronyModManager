@@ -1,8 +1,5 @@
 Irony Mod Manager is a new advanced mod manager for Paradox Games, it started out as a Stellaris oriented Mod Manager at first with plans to add additional games later. Not all of the advanced Stellaris equivalent features might be available for most supported games but that might change depending on community support in these games. In order to have a fully operational conflict solver Irony needs to understand the game structure and whether certain game folders utilize FIOS\LIOS rules.
 
-## Survey
-**Really important please fill this survey**: [Link](https://docs.google.com/forms/d/e/1FAIpQLSfTsbsN9YJuKZuzal1nK89Cx9EimbFJx5vAD6GmT4eZdtdTdQ/viewform?usp=sf_link)
-
 ### Supported Games
 * Crusader Kings III
 * Europa Universalis IV
