@@ -5,7 +5,7 @@
 // Created          : 05-26-2023
 //
 // Last Modified By : Mario
-// Last Modified On : 05-26-2023
+// Last Modified On : 06-10-2023
 // ***********************************************************************
 // <copyright file="Extensions.Registry.cs" company="Mario">
 //     Mario
@@ -66,7 +66,6 @@ namespace IronyModManager.Shared
             {
                 return regKey;
             }
-            regKey?.Dispose();
             return null;
         }
 
