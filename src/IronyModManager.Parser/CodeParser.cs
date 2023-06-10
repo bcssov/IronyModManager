@@ -1,10 +1,11 @@
-﻿// ***********************************************************************
+﻿
+// ***********************************************************************
 // Assembly         : IronyModManager.Parser
 // Author           : Mario
 // Created          : 02-22-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 12-04-2022
+// Last Modified On : 06-10-2023
 // ***********************************************************************
 // <copyright file="CodeParser.cs" company="Mario">
 //     Mario
@@ -25,6 +26,7 @@ using IronyModManager.Shared;
 
 namespace IronyModManager.Parser
 {
+
     /// <summary>
     /// Class TextParser.
     /// Implements the <see cref="IronyModManager.Parser.Common.Parsers.ICodeParser" />
@@ -56,7 +58,7 @@ namespace IronyModManager.Parser
         /// <summary>
         /// The quotes regex
         /// </summary>
-        protected static readonly Regex quotesRegex = new("\".*?\"", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+        protected static readonly Regex quotesRegex = new Regex(@"""(\\""|\\\\|[^""\\])*""", RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
         /// <summary>
         /// The logger
@@ -311,7 +313,16 @@ namespace IronyModManager.Parser
                 var c = code[i];
                 if (c == Common.Constants.Scripts.Quote)
                 {
-                    if (quoteOpened)
+                    var canCloseQuote = true;
+                    if (i - 1 > 0)
+                    {
+                        var prev = code[i - 1];
+                        if (prev == Common.Constants.Scripts.EscapeCharacter)
+                        {
+                            canCloseQuote = false;
+                        }
+                    }
+                    if (quoteOpened && canCloseQuote)
                     {
                         quoteOpened = false;
                     }
@@ -494,6 +505,7 @@ namespace IronyModManager.Parser
                 {
                     values.Add(el);
                 }
+
                 // Move position back by
                 i = index = i - 1;
                 if (prevIndex >= index)
@@ -621,6 +633,7 @@ namespace IronyModManager.Parser
                         {
                             sbOperator.Append(character.GetValueOrDefault());
                             IgnoreElementWhiteSpace(code, ref i);
+
                             // Move back by 1
                             i--;
                             operatorOpened = false;
