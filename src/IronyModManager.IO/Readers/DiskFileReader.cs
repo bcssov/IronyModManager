@@ -1,10 +1,11 @@
-﻿// ***********************************************************************
+﻿
+// ***********************************************************************
 // Assembly         : IronyModManager.IO
 // Author           : Mario
 // Created          : 02-23-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 11-06-2022
+// Last Modified On : 06-10-2023
 // ***********************************************************************
 // <copyright file="DiskFileReader.cs" company="Mario">
 //     Mario
@@ -22,6 +23,7 @@ using IronyModManager.Shared;
 
 namespace IronyModManager.IO.Readers
 {
+
     /// <summary>
     /// Class DiskFileReader.
     /// Implements the <see cref="IronyModManager.IO.Common.Readers.IFileReader" />
@@ -30,13 +32,16 @@ namespace IronyModManager.IO.Readers
     [ExcludeFromCoverage("Skipping testing IO logic.")]
     public class DiskFileReader : IFileReader
     {
+
         #region Fields
 
         /// <summary>
         /// The disallowed paths
         /// </summary>
-        private static readonly string[] disallowedPaths = new string[] { Common.Constants.ModDirectory,
-            Common.Constants.DLCDirectory, Common.Constants.BuiltInDLCDirectory, Common.Constants.JsonModDirectoy };
+        private static readonly string[] disallowedPaths = new string[]
+        {
+            Common.Constants.ModDirectory, Common.Constants.DLCDirectory, Common.Constants.BuiltInDLCDirectory, Common.Constants.JsonModDirectoy
+        };
 
         #endregion Fields
 
@@ -106,6 +111,7 @@ namespace IronyModManager.IO.Readers
                 var fs = new OnDemandFileStream(path, FileMode.Open, FileAccess.Read, FileShare.Read);
                 return fs;
             }
+
             // If using wildcard then we are going to match if it ends with and update this logic if ever needed
             if (file.StartsWith("*"))
             {
@@ -136,14 +142,23 @@ namespace IronyModManager.IO.Readers
         /// Gets the size of the file.
         /// </summary>
         /// <param name="path">The path.</param>
+        /// <param name="extensions">The extensions.</param>
         /// <returns>System.Int64.</returns>
-        public virtual long GetTotalSize(string path)
+        public virtual long GetTotalSize(string path, string[] extensions = null)
         {
             DirectoryInfo info = new DirectoryInfo(path);
             if (info.Exists)
             {
-                var total = info.EnumerateFiles("*.*", SearchOption.AllDirectories).Sum(fi => fi.Length);
-                return total;
+                if (extensions != null && extensions.Any())
+                {
+                    var total = info.EnumerateFiles("*.*", SearchOption.AllDirectories).Where(p => extensions.Any(e => p.FullName.EndsWith(e, StringComparison.OrdinalIgnoreCase))).Sum(fi => fi.Length);
+                    return total;
+                }
+                else
+                {
+                    var total = info.EnumerateFiles("*.*", SearchOption.AllDirectories).Sum(fi => fi.Length);
+                    return total;
+                }
             }
             return 0;
         }

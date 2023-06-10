@@ -340,6 +340,12 @@ namespace IronyModManager.Shared
                     public const string Title = Prefix + "Title";
                     public const string Message = Prefix + "Message";
                 }
+                public static class TooLargePrompt
+                {
+                    public const string Prefix = "Mod_Actions.ConflictSolver.TooLargePrompt.";
+                    public const string Title = Prefix + "Title";
+                    public const string Message = Prefix + "Message";
+                }
             }
             public static class LaunchGame
             {

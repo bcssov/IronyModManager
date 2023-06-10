@@ -1,10 +1,11 @@
-﻿// ***********************************************************************
+﻿
+// ***********************************************************************
 // Assembly         : IronyModManager
 // Author           : Mario
 // Created          : 03-18-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-27-2023
+// Last Modified On : 06-10-2023
 // ***********************************************************************
 // <copyright file="MainConflictSolverViewModel.cs" company="Mario">
 //     Mario
@@ -41,6 +42,7 @@ using ValueType = IronyModManager.Shared.Models.ValueType;
 
 namespace IronyModManager.ViewModels
 {
+
     /// <summary>
     /// Class MainConflictSolverControlViewModel.
     /// Implements the <see cref="IronyModManager.Common.ViewModels.BaseViewModel" />
@@ -183,17 +185,16 @@ namespace IronyModManager.ViewModels
         public virtual string Back { get; protected set; }
 
         /// <summary>
+        /// Gets or sets a value indicating whether [back allowed].
+        /// </summary>
+        /// <value><c>true</c> if [back allowed]; otherwise, <c>false</c>.</value>
+        public virtual bool BackAllowed { get; protected set; }
+
+        /// <summary>
         /// Gets or sets the back command.
         /// </summary>
         /// <value>The back command.</value>
         public virtual ReactiveCommand<Unit, Unit> BackCommand { get; set; }
-
-        /// <summary>
-        /// Gets or sets a value indicating whether [back triggered].
-        /// </summary>
-        /// <value><c>true</c> if [back triggered]; otherwise, <c>false</c>.</value>
-        public virtual bool BackTriggered { get; protected set; }
-
         /// <summary>
         /// Gets or sets the binary merge viewer.
         /// </summary>
@@ -491,7 +492,7 @@ namespace IronyModManager.ViewModels
             MergeViewer.SetParameters(readOnly);
             ModCompareSelector.Reset();
             IgnoreEnabled = false;
-            BackTriggered = false;
+            BackAllowed = true;
             if (Conflicts.Conflicts.HasResetDefinitions())
             {
                 var sbResolved = new StringBuilder();
@@ -593,6 +594,7 @@ namespace IronyModManager.ViewModels
         /// <returns>System.Threading.Tasks.Task.</returns>
         protected virtual async Task EvaluateDefinitionValidity()
         {
+            BackAllowed = false;
             var patchDefinition = ModCompareSelector.VirtualDefinitions.FirstOrDefault(p => modPatchCollectionService.IsPatchMod(p.ModName));
             var validationResult = modPatchCollectionService.Validate(patchDefinition);
             if (!validationResult.IsValid)
@@ -605,6 +607,7 @@ namespace IronyModManager.ViewModels
             {
                 await Dispatcher.UIThread.SafeInvokeAsync(async () => await ResolveConflictAsync(true).ConfigureAwait(true));
             }
+            BackAllowed = true;
         }
 
         /// <summary>
@@ -762,7 +765,7 @@ namespace IronyModManager.ViewModels
         protected override void OnActivated(CompositeDisposable disposables)
         {
             var resolvingEnabled = this.WhenAnyValue(v => v.ResolvingConflict, v => !v);
-            var backTriggered = this.WhenAnyValue(v => v.BackTriggered, v => !v);
+            var backAllowed = this.WhenAnyValue(v => v.BackAllowed, v => v == true);
 
             BackCommand = ReactiveCommand.CreateFromTask(async () =>
             {
@@ -770,7 +773,7 @@ namespace IronyModManager.ViewModels
                 await TriggerOverlayAsync(id, true);
                 await Task.Delay(100);
                 BinaryMergeViewer.Reset(true);
-                BackTriggered = true;
+                BackAllowed = false;
                 Conflicts?.Dispose();
                 Conflicts = null;
                 SelectedModsOrder = null;
@@ -782,9 +785,9 @@ namespace IronyModManager.ViewModels
                     State = NavigationState.Main
                 };
                 ReactiveUI.MessageBus.Current.SendMessage(args);
-                BackTriggered = false;
+                BackAllowed = true;
                 await TriggerOverlayAsync(id, false);
-            }, backTriggered).DisposeWith(disposables);
+            }, backAllowed).DisposeWith(disposables);
 
             ResolveCommand = ReactiveCommand.CreateFromTask(() =>
             {
@@ -1142,6 +1145,7 @@ namespace IronyModManager.ViewModels
         /// <returns>A Task representing the asynchronous operation.</returns>
         protected virtual async Task ResolveConflictAsync(bool resolve)
         {
+            BackAllowed = false;
             if (ResolvingConflict)
             {
                 return;
@@ -1258,6 +1262,7 @@ namespace IronyModManager.ViewModels
                 await TriggerOverlayAsync(id, false);
             }
             ResolvingConflict = false;
+            BackAllowed = true;
         }
 
         /// <summary>

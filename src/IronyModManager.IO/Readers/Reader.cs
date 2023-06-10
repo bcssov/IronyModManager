@@ -1,10 +1,11 @@
-﻿// ***********************************************************************
+﻿
+// ***********************************************************************
 // Assembly         : IronyModManager.IO
 // Author           : Mario
 // Created          : 02-23-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 07-20-2022
+// Last Modified On : 06-10-2023
 // ***********************************************************************
 // <copyright file="Reader.cs" company="Mario">
 //     Mario
@@ -23,6 +24,7 @@ using IronyModManager.Shared;
 
 namespace IronyModManager.IO.Readers
 {
+
     /// <summary>
     /// Class Reader.
     /// Implements the <see cref="IronyModManager.IO.Common.Readers.IReader" />
@@ -146,14 +148,15 @@ namespace IronyModManager.IO.Readers
         /// Gets the total size.
         /// </summary>
         /// <param name="path">The path.</param>
+        /// <param name="extensions">The extensions.</param>
         /// <returns>System.Int64.</returns>
-        public virtual long GetTotalSize(string path)
+        public virtual long GetTotalSize(string path, string[] extensions = null)
         {
             path ??= string.Empty;
             var reader = readers.FirstOrDefault(p => p.CanRead(path) && p.CanListFiles(path));
             if (reader != null)
             {
-                return reader.GetTotalSize(path);
+                return reader.GetTotalSize(path, extensions);
             }
             return 0;
         }

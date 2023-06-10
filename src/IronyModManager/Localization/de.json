@@ -255,6 +255,10 @@
             "GameExecutableNotSetPrompt": {
                 "Title": "Spielausführbare Datei nicht festgelegt",
                 "Message": "Die ausführbare Spieldatei wurde in den Optionen nicht festgelegt. Diese Mod-Sammlung hat zuvor Spieledateien in ihre Analyse einbezogen. Der Konfliktlöser kann keine Spieledateien analysieren und einige Auflösungen werden möglicherweise zurückgesetzt. Möchten Sie fortfahren?"
+            },
+            "TooLargePrompt": {
+                "Title": "Zu groß",
+                "Message": "Es wurde ein Mod mit großem Quellcode entdeckt, der möglicherweise zu einem Absturz von Irony führen kann. Das Spiel wird möglicherweise auch nicht in der Lage sein, solche großen Quelldateien zu verarbeiten."
             }
         },
         "LaunchGame": {

@@ -255,6 +255,10 @@
             "GameExecutableNotSetPrompt": {
                 "Title": "Game Executable Not Set",
                 "Message": "Game executable has not been set in the options. This mod collection previously included game files in its analysis. Conflict solver will not be able to analyze game files and some resolutions might be reset. Do you wish to proceed?"
+            },
+            "TooLargePrompt": {
+                "Title": "Too Large",
+                "Message": "A mod with large source code has been detected this will potentially cause an out of memory crash in Irony. Game will potentially be also unlikely to be able to handle such large source files."
             }
         },
         "LaunchGame": {

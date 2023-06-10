@@ -1,10 +1,11 @@
-﻿// ***********************************************************************
+﻿
+// ***********************************************************************
 // Assembly         : IronyModManager.IO
 // Author           : Mario
 // Created          : 02-13-2021
 //
 // Last Modified By : Mario
-// Last Modified On : 10-29-2022
+// Last Modified On : 06-10-2023
 // ***********************************************************************
 // <copyright file="BaseSpecializedDiskReader.cs" company="Mario">
 //     Mario
@@ -21,6 +22,7 @@ using IronyModManager.Shared;
 
 namespace IronyModManager.IO.Readers
 {
+
     /// <summary>
     /// Class BaseSpecializedDiskReader.
     /// Implements the <see cref="IronyModManager.IO.Common.Readers.IFileReader" />
@@ -110,9 +112,10 @@ namespace IronyModManager.IO.Readers
         /// Gets the total size.
         /// </summary>
         /// <param name="path">The path.</param>
+        /// <param name="extensions">The extensions.</param>
         /// <returns>System.Int64.</returns>
         /// <exception cref="System.NotSupportedException"></exception>
-        public virtual long GetTotalSize(string path)
+        public virtual long GetTotalSize(string path, string[] extensions = null)
         {
             throw new NotSupportedException();
         }
