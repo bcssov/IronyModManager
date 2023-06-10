@@ -1,10 +1,11 @@
-﻿// ***********************************************************************
+﻿
+// ***********************************************************************
 // Assembly         : IronyModManager.Services
 // Author           : Mario
 // Created          : 05-26-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 05-14-2023
+// Last Modified On : 06-10-2023
 // ***********************************************************************
 // <copyright file="ModPatchCollectionService.cs" company="Mario">
 //     Mario
@@ -43,6 +44,7 @@ using ValueType = IronyModManager.Shared.Models.ValueType;
 
 namespace IronyModManager.Services
 {
+
     /// <summary>
     /// Class ModPatchCollectionService.
     /// Implements the <see cref="IronyModManager.Services.ModBaseService" />
@@ -52,6 +54,7 @@ namespace IronyModManager.Services
     /// <seealso cref="IronyModManager.Services.Common.IModPatchCollectionService" />
     public class ModPatchCollectionService : ModBaseService, IModPatchCollectionService
     {
+
         #region Fields
 
         /// <summary>
@@ -73,6 +76,11 @@ namespace IronyModManager.Services
         /// The maximum mod conflicts to check
         /// </summary>
         private const int MaxModConflictsToCheck = 4;
+
+        /// <summary>
+        /// The maximum mods to process in parallel
+        /// </summary>
+        private const int MaxModsToProcessInParallel = 6;
 
         /// <summary>
         /// The mod name ignore identifier
@@ -593,6 +601,7 @@ namespace IronyModManager.Services
                     if (!conflict.All(p => p.IsPlaceholder))
                     {
                         var priority = EvalDefinitionPriority(conflict.OrderBy(m => modOrder.IndexOf(m.ModName)));
+
                         // If priority definition is placeholder then we need to show this as the mod author messed up or Irony messed up
                         if (priority.Definition.IsPlaceholder)
                         {
@@ -699,6 +708,7 @@ namespace IronyModManager.Services
             double processed = 0;
             double total = mods.Count();
             double previousProgress = 0;
+
             // Don't need full implementation just BOM check
             var provider = DefinitionInfoProviders.FirstOrDefault(p => p.CanProcess(game.Type));
             messageBus.Publish(new ModDefinitionLoadEvent(0));
@@ -709,7 +719,7 @@ namespace IronyModManager.Services
                 gameFolders = gameFolders.Where(p => !p.StartsWith(Shared.Constants.LocalizationDirectory, StringComparison.OrdinalIgnoreCase)).ToList();
             }
 
-            mods.AsParallel().ForAll((m) =>
+            mods.AsParallel().WithDegreeOfParallelism(MaxModsToProcessInParallel).WithExecutionMode(ParallelExecutionMode.ForceParallelism).ForAll((m) =>
             {
                 IEnumerable<IDefinition> result = null;
                 result = ParseModFiles(game, Reader.Read(m.FullPath, gameFolders), m, provider);
@@ -892,6 +902,7 @@ namespace IronyModManager.Services
                     if (allowCleanup)
                     {
                         var cleaned = false;
+
                         // Skip single file overwrites as they are cleaned at the beginning of the process
                         var folderConflicts = conflicts.AllConflicts.GetByParentDirectory(Path.GetDirectoryName(file));
                         if (folderConflicts.Any() && folderConflicts.Any(p => p.ValueType == ValueType.OverwrittenObjectSingleFile))
@@ -1345,6 +1356,7 @@ namespace IronyModManager.Services
                     Cache.Set(new CacheAddParameters<PatchCollectionState>() { Region = CacheRegion, Prefix = game.Type, Key = patchName, Value = new PatchCollectionState() { NeedsUpdate = false, CheckInProgress = false } });
                     return false;
                 }
+
                 // Check load order first
                 if (!state.LoadOrder.SequenceEqual(loadOrder))
                 {
@@ -2691,12 +2703,15 @@ namespace IronyModManager.Services
                         var partialCopy = new List<IDefinition>();
                         p.ToList().ForEach(x => partialCopy.Add(PartialDefinitionCopy(x, false)));
                         var priority = EvalDefinitionPriorityInternal(partialCopy.OrderBy(x => modOrder.IndexOf(x.ModName)), true);
-                        return new List<DefinitionOrderSort>() { new DefinitionOrderSort()
+                        return new List<DefinitionOrderSort>()
                         {
-                            TypeAndId = priority.Definition.TypeAndId,
-                            Order = priority.Definition.Order,
-                            File = Path.GetFileNameWithoutExtension(priority.FileName)
-                        }};
+                            new DefinitionOrderSort()
+                            {
+                                TypeAndId = priority.Definition.TypeAndId,
+                                Order = priority.Definition.Order,
+                                File = Path.GetFileNameWithoutExtension(priority.FileName)
+                            }
+                        };
                     }
                 }).SelectMany(p => p).GroupBy(p => p.File).OrderBy(p => p.Key, StringComparer.Ordinal).SelectMany(p => p.OrderBy(x => x.Order)).ToList();
                 var fullyOrdered = ordered.Select(p => new DefinitionOrderSort()
@@ -2721,6 +2736,7 @@ namespace IronyModManager.Services
                     {
                         resolved = conflictResult.ResolvedConflicts.GetByTypeAndId(item.TypeAndId);
                     }
+
                     // Only need to check for resolution, since overwritten objects already have sorted out priority
                     if (resolved.Any())
                     {
@@ -2731,6 +2747,7 @@ namespace IronyModManager.Services
                             definition.DiskFile = item.DiskFile;
                             definition.File = item.File;
                             definition.OverwrittenFileNames = item.OverwrittenFileNames;
+
                             // If state is provided assume we need to load from conflict history
                             if (stateProvinder.Item1 != null && stateProvinder.Item1.IndexedConflictHistory != null && stateProvinder.Item1.IndexedConflictHistory.Any() && stateProvinder.Item1.IndexedConflictHistory.ContainsKey(definition.TypeAndId))
                             {
@@ -3085,6 +3102,7 @@ namespace IronyModManager.Services
         /// </summary>
         private class DefinitionOrderSort
         {
+
             #region Properties
 
             /// <summary>
@@ -3106,6 +3124,7 @@ namespace IronyModManager.Services
             public string TypeAndId { get; set; }
 
             #endregion Properties
+
         }
 
         /// <summary>
@@ -3113,6 +3132,7 @@ namespace IronyModManager.Services
         /// </summary>
         private class EvalState
         {
+
             #region Properties
 
             /// <summary>
@@ -3140,6 +3160,7 @@ namespace IronyModManager.Services
             public string ModName { get; set; }
 
             #endregion Properties
+
         }
 
         /// <summary>
@@ -3147,6 +3168,7 @@ namespace IronyModManager.Services
         /// </summary>
         private class ModsExportedState
         {
+
             #region Properties
 
             /// <summary>
@@ -3156,6 +3178,7 @@ namespace IronyModManager.Services
             public bool? Exported { get; set; }
 
             #endregion Properties
+
         }
 
         /// <summary>
@@ -3163,6 +3186,7 @@ namespace IronyModManager.Services
         /// </summary>
         private class PatchCollectionState
         {
+
             #region Properties
 
             /// <summary>
@@ -3178,8 +3202,10 @@ namespace IronyModManager.Services
             public bool NeedsUpdate { get; set; }
 
             #endregion Properties
+
         }
 
         #endregion Classes
+
     }
 }
