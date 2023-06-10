@@ -255,6 +255,10 @@
             "GameExecutableNotSetPrompt": {
                 "Title": "Exécutable du jeu non défini",
                 "Message": "L'exécutable du jeu n'a pas été défini dans les options. Cette liste de mods incluait auparavant des fichiers de jeu dans son analyse. Le correcteur de conflits ne pourra pas analyser les fichiers du jeu et certaines corrections pourraient être réinitialisées. Voulez-vous continuer?"
+            },
+            "TooLargePrompt": {
+                "Title": "Trop grand",
+                "Message": "Un mod avec un code source volumineux a été détecté, ce qui pourrait causer un crash de la mémoire dans Irony. Le jeu n'est pas non plus en mesure de gérer des fichiers sources aussi volumineux."
             }
         },
         "LaunchGame": {

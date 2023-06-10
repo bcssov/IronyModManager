@@ -1,10 +1,11 @@
-﻿// ***********************************************************************
+﻿
+// ***********************************************************************
 // Assembly         : IronyModManager.IO
 // Author           : Mario
 // Created          : 02-23-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 11-30-2022
+// Last Modified On : 06-10-2023
 // ***********************************************************************
 // <copyright file="ArchiveFileReader.cs" company="Mario">
 //     Mario
@@ -23,6 +24,7 @@ using SharpCompress.Readers;
 
 namespace IronyModManager.IO.Readers
 {
+
     /// <summary>
     /// Class ArchiveFileReader.
     /// Implements the <see cref="IronyModManager.IO.Common.Readers.IFileReader" />
@@ -131,6 +133,7 @@ namespace IronyModManager.IO.Readers
                     {
                         var relativePath = reader.Entry.Key.StandardizeDirectorySeparator().Trim(Path.DirectorySeparatorChar);
                         var filePath = file.StandardizeDirectorySeparator();
+
                         // If using wildcard then we are going to match if it ends with and update this logic if ever needed
                         if (file.StartsWith("*"))
                         {
@@ -158,6 +161,7 @@ namespace IronyModManager.IO.Readers
                 {
                     var relativePath = entry.Key.StandardizeDirectorySeparator().Trim(Path.DirectorySeparatorChar);
                     var filePath = file.StandardizeDirectorySeparator();
+
                     // If using wildcard then we are going to match if it ends with and update this logic if ever needed
                     if (file.StartsWith("*"))
                     {
@@ -195,8 +199,9 @@ namespace IronyModManager.IO.Readers
         /// Gets the size of the file.
         /// </summary>
         /// <param name="path">The path.</param>
+        /// <param name="extensions">The extensions.</param>
         /// <returns>System.Int64.</returns>
-        public virtual long GetTotalSize(string path)
+        public virtual long GetTotalSize(string path, string[] extensions = null)
         {
             long getUsingReaderFactory()
             {
@@ -207,7 +212,17 @@ namespace IronyModManager.IO.Readers
                 {
                     if (!reader.Entry.IsDirectory)
                     {
-                        total += reader.Entry.Size;
+                        if (extensions != null && extensions.Any())
+                        {
+                            if (extensions.Any(p => reader.Entry.Key.EndsWith(p, StringComparison.OrdinalIgnoreCase)))
+                            {
+                                total += reader.Entry.Size;
+                            }
+                        }
+                        else
+                        {
+                            total += reader.Entry.Size;
+                        }
                     }
                 }
                 return total;
@@ -220,6 +235,17 @@ namespace IronyModManager.IO.Readers
                 foreach (var entry in reader.Entries.Where(entry => !entry.IsDirectory))
                 {
                     total += entry.Size;
+                    if (extensions != null && extensions.Any())
+                    {
+                        if (extensions.Any(p => entry.Key.EndsWith(p, StringComparison.OrdinalIgnoreCase)))
+                        {
+                            total += entry.Size;
+                        }
+                    }
+                    else
+                    {
+                        total += entry.Size;
+                    }
                 }
                 return total;
             }

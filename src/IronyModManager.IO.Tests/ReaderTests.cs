@@ -276,7 +276,7 @@ namespace IronyModManager.IO.Tests
             /// </summary>
             /// <param name="path">The path.</param>
             /// <returns>System.Int64.</returns>
-            public long GetTotalSize(string path)
+            public long GetTotalSize(string path, string[] extensions)
             {
                 return 0;
             }
@@ -366,7 +366,7 @@ namespace IronyModManager.IO.Tests
             /// </summary>
             /// <param name="path">The path.</param>
             /// <returns>System.Int64.</returns>
-            public long GetTotalSize(string path)
+            public long GetTotalSize(string path, string[] extensions)
             {
                 return 0;
             }

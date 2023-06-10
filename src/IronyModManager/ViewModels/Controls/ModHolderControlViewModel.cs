@@ -1,10 +1,11 @@
-﻿// ***********************************************************************
+﻿
+// ***********************************************************************
 // Assembly         : IronyModManager
 // Author           : Mario
 // Created          : 02-29-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 05-12-2023
+// Last Modified On : 06-10-2023
 // ***********************************************************************
 // <copyright file="ModHolderControlViewModel.cs" company="Mario">
 //     Mario
@@ -32,12 +33,15 @@ using IronyModManager.Localization.Attributes;
 using IronyModManager.Models.Common;
 using IronyModManager.Platform.Configuration;
 using IronyModManager.Services.Common;
+using IronyModManager.Services.Common.Exceptions;
 using IronyModManager.Shared;
 using IronyModManager.Shared.MessageBus.Events;
+using IronyModManager.Shared.Models;
 using ReactiveUI;
 
 namespace IronyModManager.ViewModels.Controls
 {
+
     /// <summary>
     /// Class ModHolderViewModel.
     /// Implements the <see cref="IronyModManager.Common.ViewModels.BaseViewModel" />
@@ -567,25 +571,55 @@ namespace IronyModManager.ViewModels.Controls
             modPatchCollectionService.InvalidatePatchModState(CollectionMods.SelectedModCollection.Name);
             modPatchCollectionService.ResetPatchStateCache();
 
+            var tooLargeMod = false;
             var game = gameService.GetSelected();
             var definitions = await Task.Run(async () =>
             {
-                var result = await modPatchCollectionService.GetModObjectsAsync(gameService.GetSelected(), CollectionMods.SelectedMods, CollectionMods.SelectedModCollection.Name, mode).ConfigureAwait(false);
+                IIndexedDefinitions result = null;
+                try
+                {
+                    result = await modPatchCollectionService.GetModObjectsAsync(gameService.GetSelected(), CollectionMods.SelectedMods, CollectionMods.SelectedModCollection.Name, mode).ConfigureAwait(false);
+                }
+                catch (ModTooLargeException)
+                {
+                    tooLargeMod = true;
+                }
+
                 // To stop people from whining
                 GC.Collect(GC.MaxGeneration, GCCollectionMode.Aggressive, true, true);
                 return result;
             }).ConfigureAwait(false);
+            if (tooLargeMod)
+            {
+                await TriggerOverlayAsync(id, false);
+
+                definitionAnalyzeLoadHandler?.Dispose();
+                definitionLoadHandler?.Dispose();
+                definitionSyncHandler?.Dispose();
+                gameIndexHandler?.Dispose();
+                gameDefinitionLoadHandler?.Dispose();
+
+                // I know, I know... but I wanna force a cleanup
+                GC.Collect();
+
+                var largeMessageTitle = localizationManager.GetResource(LocalizationResources.Mod_Actions.ConflictSolver.TooLargePrompt.Title);
+                var largeMessageBody = localizationManager.GetResource(LocalizationResources.Mod_Actions.ConflictSolver.TooLargePrompt.Message);
+                notificationAction.ShowNotification(largeMessageTitle, largeMessageBody, NotificationType.Error, 60);
+                return;
+            }
             if (versions != null && versions.Any())
             {
                 await Task.Run(async () =>
                 {
                     await gameIndexService.IndexDefinitionsAsync(game, versions, definitions);
+
                     // To stop people from whining
                     GC.Collect(GC.MaxGeneration, GCCollectionMode.Aggressive, true, true);
                 });
                 definitions = await Task.Run(async () =>
                 {
                     var result = await gameIndexService.LoadDefinitionsAsync(definitions, game, versions);
+
                     // To stop people from whining
                     GC.Collect(GC.MaxGeneration, GCCollectionMode.Aggressive, true, true);
                     return result;
@@ -605,6 +639,7 @@ namespace IronyModManager.ViewModels.Controls
             var syncedConflicts = await Task.Run(async () =>
             {
                 var result = await modPatchCollectionService.InitializePatchStateAsync(conflicts, CollectionMods.SelectedModCollection.Name).ConfigureAwait(false);
+
                 // To stop people from whining
                 GC.Collect(GC.MaxGeneration, GCCollectionMode.Aggressive, true, true);
                 return result;
@@ -628,6 +663,7 @@ namespace IronyModManager.ViewModels.Controls
             definitionSyncHandler?.Dispose();
             gameIndexHandler?.Dispose();
             gameDefinitionLoadHandler?.Dispose();
+
             // I know, I know... but I wanna force a cleanup
             GC.Collect();
         }

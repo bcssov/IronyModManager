@@ -255,6 +255,10 @@
             "GameExecutableNotSetPrompt": {
                 "Title": "Ejecutable del juego no establecido",
                 "Message": "El ejecutable del juego no se ha configurado en las opciones. Esta colección de mods incluía previamente archivos de juegos en su análisis. El solucionador de conflictos no podrá analizar los archivos del juego y es posible que se restablezcan algunas resoluciones. ¿Desea continuar?"
+            },
+            "TooLargePrompt": {
+                "Title": "Demasiado grande",
+                "Message": "Se ha detectado un mod con un código fuente de gran tamaño que puede provocar un fallo de memoria en Irony. Además, es poco probable que el juego sea capaz de manejar archivos fuente tan grandes."
             }
         },
         "LaunchGame": {

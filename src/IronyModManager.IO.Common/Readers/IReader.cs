@@ -1,10 +1,11 @@
-﻿// ***********************************************************************
+﻿
+// ***********************************************************************
 // Assembly         : IronyModManager.IO.Common
 // Author           : Mario
 // Created          : 02-23-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 05-28-2021
+// Last Modified On : 06-10-2023
 // ***********************************************************************
 // <copyright file="IReader.cs" company="Mario">
 //     Mario
@@ -18,6 +19,7 @@ using System.Threading.Tasks;
 
 namespace IronyModManager.IO.Common.Readers
 {
+
     /// <summary>
     /// Interface IReader
     /// </summary>
@@ -60,8 +62,9 @@ namespace IronyModManager.IO.Common.Readers
         /// Gets the total size.
         /// </summary>
         /// <param name="path">The path.</param>
+        /// <param name="extensions">The extensions.</param>
         /// <returns>System.Int64.</returns>
-        long GetTotalSize(string path);
+        long GetTotalSize(string path, string[] extensions = null);
 
         /// <summary>
         /// Reads the specified path.

@@ -33,6 +33,7 @@ using IronyModManager.Parser.Common.Mod;
 using IronyModManager.Parser.Common.Parsers;
 using IronyModManager.Parser.Common.Parsers.Models;
 using IronyModManager.Services.Common;
+using IronyModManager.Services.Common.Exceptions;
 using IronyModManager.Services.Common.MessageBus;
 using IronyModManager.Shared;
 using IronyModManager.Shared.Cache;
@@ -54,7 +55,6 @@ namespace IronyModManager.Services
     /// <seealso cref="IronyModManager.Services.Common.IModPatchCollectionService" />
     public class ModPatchCollectionService : ModBaseService, IModPatchCollectionService
     {
-
         #region Fields
 
         /// <summary>
@@ -71,6 +71,11 @@ namespace IronyModManager.Services
         /// The cache region
         /// </summary>
         private const string CacheRegion = "CollectionPatchState";
+
+        /// <summary>
+        /// The maximum allowed source
+        /// </summary>
+        private const double MaxAllowedSource = 1e+10;
 
         /// <summary>
         /// The maximum mod conflicts to check
@@ -697,12 +702,33 @@ namespace IronyModManager.Services
         /// <param name="collectionName">Name of the collection.</param>
         /// <param name="mode">The mode.</param>
         /// <returns>A Task&lt;IIndexedDefinitions&gt; representing the asynchronous operation.</returns>
+        /// <exception cref="IronyModManager.Services.Common.Exceptions.ModTooLargeException">Detected a mod which is potentially to large to parse.</exception>
         public virtual async Task<IIndexedDefinitions> GetModObjectsAsync(IGame game, IEnumerable<IMod> mods, string collectionName, PatchStateMode mode)
         {
             if (game == null || mods == null || !mods.Any())
             {
                 return null;
             }
+
+            var tooLargeMod = false;
+            mods.AsParallel().WithDegreeOfParallelism(MaxModsToProcessInParallel).ForAll((m) =>
+            {
+                if (tooLargeMod)
+                {
+                    return;
+                }
+                var size = Reader.GetTotalSize(m.FullPath, Shared.Constants.TextExtensions);
+                if (size > MaxAllowedSource)
+                {
+                    tooLargeMod = true;
+                }
+            });
+
+            if (tooLargeMod)
+            {
+                throw new ModTooLargeException("Detected a mod which is potentially to large to parse.");
+            }
+
             var definitions = new ConcurrentBag<IDefinition>();
 
             double processed = 0;
@@ -3102,7 +3128,6 @@ namespace IronyModManager.Services
         /// </summary>
         private class DefinitionOrderSort
         {
-
             #region Properties
 
             /// <summary>
@@ -3124,7 +3149,6 @@ namespace IronyModManager.Services
             public string TypeAndId { get; set; }
 
             #endregion Properties
-
         }
 
         /// <summary>
@@ -3132,7 +3156,6 @@ namespace IronyModManager.Services
         /// </summary>
         private class EvalState
         {
-
             #region Properties
 
             /// <summary>
@@ -3160,7 +3183,6 @@ namespace IronyModManager.Services
             public string ModName { get; set; }
 
             #endregion Properties
-
         }
 
         /// <summary>
@@ -3168,7 +3190,6 @@ namespace IronyModManager.Services
         /// </summary>
         private class ModsExportedState
         {
-
             #region Properties
 
             /// <summary>
@@ -3178,7 +3199,6 @@ namespace IronyModManager.Services
             public bool? Exported { get; set; }
 
             #endregion Properties
-
         }
 
         /// <summary>
@@ -3186,7 +3206,6 @@ namespace IronyModManager.Services
         /// </summary>
         private class PatchCollectionState
         {
-
             #region Properties
 
             /// <summary>
@@ -3202,10 +3221,8 @@ namespace IronyModManager.Services
             public bool NeedsUpdate { get; set; }
 
             #endregion Properties
-
         }
 
         #endregion Classes
-
     }
 }
