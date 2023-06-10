@@ -4,23 +4,13 @@
 		<title>Irony Mod Manager</title>
 		<language>en</language>
 		<item>
-			<title>1.24.145</title>
+			<title>1.24.151</title>
 			<description>## Current Release Notes
-* Further increase sensitivity of graphics types
-* Rework progress report of step 5 conflict solver to better present progress
-* Fix #444
-
-## 1.24.142 Release Notes
-* Fix not grouping properly certain types of graphics assets
-
-## 1.24.141 Release Notes
-* Tweak new conflict solver menu (is vertical now)
-* Fixes
-
-## 1.24.136 Release Notes
-* Improve gfx conflict detection
-* Organize conflict solver options to submenus (appSettings option exists to get old behavior back)
-* Fix #440
+* Remove GameFinder as a dependency
+* Fix rare CTD when you were fast enough to hit back and resolve at similar time
+* Limit parallel processing of mods during 1st phase of analysis
+* Show an error message if mod source code exceeds 20 GB, that it's probably not a good idea to use it
+* Fix bug in handling code terminators inside quotes
 
 ## Release Notes 1.24
 * Update dependencies
@@ -31,27 +21,17 @@
 * Add support for metadata descriptor type games (Victoria 3 support)
 * Add option to ignore update
 * Improve mod loading performance</description>
-			<pubDate>Sun, 14 May 2023 11:42:23 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.24.145/linux-x64.zip" sparkle:version="1.24.145.49260" sparkle:shortVersionString="1.24.145" length="90116503" sparkle:os="linux" type="application/zip" sparkle:signature="NmZzyMabwG9T4TuFGXplsTnLsoMvY4+k5tGi1+i6VvrM10aX80zyAQGdyBNGs6gIjCXAssYKtR28TlaaTqrCBg=="/>
+			<pubDate>Sat, 10 Jun 2023 22:43:17 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.24.151/linux-x64.zip" sparkle:version="1.24.151.3244" sparkle:shortVersionString="1.24.151" length="90103706" sparkle:os="linux" type="application/zip" sparkle:signature="EYOCkXkSZfvwBVS8ufikHCKHPQIZ+kiarvTzEKcvsD0YM0z2BnCFUYVo2xPOmEoxbwFXvwEf5d+6uvGVU3CyCw=="/>
 		</item>
 		<item>
-			<title>1.24.145</title>
+			<title>1.24.151</title>
 			<description>## Current Release Notes
-* Further increase sensitivity of graphics types
-* Rework progress report of step 5 conflict solver to better present progress
-* Fix #444
-
-## 1.24.142 Release Notes
-* Fix not grouping properly certain types of graphics assets
-
-## 1.24.141 Release Notes
-* Tweak new conflict solver menu (is vertical now)
-* Fixes
-
-## 1.24.136 Release Notes
-* Improve gfx conflict detection
-* Organize conflict solver options to submenus (appSettings option exists to get old behavior back)
-* Fix #440
+* Remove GameFinder as a dependency
+* Fix rare CTD when you were fast enough to hit back and resolve at similar time
+* Limit parallel processing of mods during 1st phase of analysis
+* Show an error message if mod source code exceeds 20 GB, that it's probably not a good idea to use it
+* Fix bug in handling code terminators inside quotes
 
 ## Release Notes 1.24
 * Update dependencies
@@ -62,27 +42,17 @@
 * Add support for metadata descriptor type games (Victoria 3 support)
 * Add option to ignore update
 * Improve mod loading performance</description>
-			<pubDate>Sun, 14 May 2023 11:42:29 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.24.145/osx-x64.zip" sparkle:version="1.24.145.49260" sparkle:shortVersionString="1.24.145" length="93268432" sparkle:os="osx" type="application/zip" sparkle:signature="3NDjA8ABg/Tm2usrY/MWqlItQwHb4iAE65vTW0ZWFCvfvXXUekPre/teyvDBzcL3U8ub29rysq4PcvQQjJTdAQ=="/>
+			<pubDate>Sat, 10 Jun 2023 22:43:23 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.24.151/osx-x64.zip" sparkle:version="1.24.151.3244" sparkle:shortVersionString="1.24.151" length="93255549" sparkle:os="osx" type="application/zip" sparkle:signature="7qPKyKTd77LvFEPlTbTJpKclclSuK8F/wlV9UBcLdcVIP20R0iAIVqr8FKk2ZL+Bd5VWsYiQgE1Q87TOXuT0DQ=="/>
 		</item>
 		<item>
-			<title>1.24.145</title>
+			<title>1.24.151</title>
 			<description>## Current Release Notes
-* Further increase sensitivity of graphics types
-* Rework progress report of step 5 conflict solver to better present progress
-* Fix #444
-
-## 1.24.142 Release Notes
-* Fix not grouping properly certain types of graphics assets
-
-## 1.24.141 Release Notes
-* Tweak new conflict solver menu (is vertical now)
-* Fixes
-
-## 1.24.136 Release Notes
-* Improve gfx conflict detection
-* Organize conflict solver options to submenus (appSettings option exists to get old behavior back)
-* Fix #440
+* Remove GameFinder as a dependency
+* Fix rare CTD when you were fast enough to hit back and resolve at similar time
+* Limit parallel processing of mods during 1st phase of analysis
+* Show an error message if mod source code exceeds 20 GB, that it's probably not a good idea to use it
+* Fix bug in handling code terminators inside quotes
 
 ## Release Notes 1.24
 * Update dependencies
@@ -93,27 +63,17 @@
 * Add support for metadata descriptor type games (Victoria 3 support)
 * Add option to ignore update
 * Improve mod loading performance</description>
-			<pubDate>Sun, 14 May 2023 11:42:34 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.24.145/win-x64-setup.zip" sparkle:version="1.24.145.49260" sparkle:shortVersionString="1.24.145" length="71403309" sparkle:os="windows" type="application/zip" sparkle:signature="LuF7/Mz6WKvIxFV9741cKbsSGLWSojgProz2fkpki8VoILjbf5UizMNdkAQopt7H0FdxkcYiUpr4JUgYThz5Aw=="/>
+			<pubDate>Sat, 10 Jun 2023 22:43:31 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.24.151/win-x64-setup.zip" sparkle:version="1.24.151.3244" sparkle:shortVersionString="1.24.151" length="71394710" sparkle:os="windows" type="application/zip" sparkle:signature="quXE1gLRDRswtiudIoJnjPYOMsvVMDHbp3a0A55PvPlQnTqR1hLA8OvXEyRKyUe42ObocS7ChDOnZC/eRI3cBA=="/>
 		</item>
 		<item>
-			<title>1.24.145</title>
+			<title>1.24.151</title>
 			<description>## Current Release Notes
-* Further increase sensitivity of graphics types
-* Rework progress report of step 5 conflict solver to better present progress
-* Fix #444
-
-## 1.24.142 Release Notes
-* Fix not grouping properly certain types of graphics assets
-
-## 1.24.141 Release Notes
-* Tweak new conflict solver menu (is vertical now)
-* Fixes
-
-## 1.24.136 Release Notes
-* Improve gfx conflict detection
-* Organize conflict solver options to submenus (appSettings option exists to get old behavior back)
-* Fix #440
+* Remove GameFinder as a dependency
+* Fix rare CTD when you were fast enough to hit back and resolve at similar time
+* Limit parallel processing of mods during 1st phase of analysis
+* Show an error message if mod source code exceeds 20 GB, that it's probably not a good idea to use it
+* Fix bug in handling code terminators inside quotes
 
 ## Release Notes 1.24
 * Update dependencies
@@ -124,8 +84,8 @@
 * Add support for metadata descriptor type games (Victoria 3 support)
 * Add option to ignore update
 * Improve mod loading performance</description>
-			<pubDate>Sun, 14 May 2023 11:42:35 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.24.145/win-x64.zip" sparkle:version="1.24.145.49260" sparkle:shortVersionString="1.24.145" length="104856052" sparkle:os="windows" type="application/zip" sparkle:signature="6/hOmytzHVW9Bt56LZ0YItGtkxRQ0r+PWJPZu/67FPWaptCGVdm4x+p8s8DBA2+aD1gmf5N1JY8gjtICU9zoDw=="/>
+			<pubDate>Sat, 10 Jun 2023 22:43:32 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.24.151/win-x64.zip" sparkle:version="1.24.151.3244" sparkle:shortVersionString="1.24.151" length="104843211" sparkle:os="windows" type="application/zip" sparkle:signature="78FaZnjhseMoOId8Jyw3IBwPwQVoYFmTzX+FKjec5za0AUpc9ubtlyJNboW1TEQM8vTvmwaJAz+tMXcFHdcyDg=="/>
 		</item>
 	</channel>
 </rss>
