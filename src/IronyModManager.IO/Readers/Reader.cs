@@ -156,7 +156,7 @@ namespace IronyModManager.IO.Readers
             var reader = readers.FirstOrDefault(p => p.CanRead(path) && p.CanListFiles(path));
             if (reader != null)
             {
-                return reader.GetTotalSize(path);
+                return reader.GetTotalSize(path, extensions);
             }
             return 0;
         }
