@@ -4,7 +4,7 @@
 // Created          : 03-03-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 12-30-2022
+// Last Modified On : 06-12-2023
 // ***********************************************************************
 // <copyright file="CollectionModsControlViewModel.cs" company="Mario">
 //     Mario
@@ -1139,6 +1139,7 @@ namespace IronyModManager.ViewModels.Controls
         /// <param name="resetStack">if set to <c>true</c> [reset stack].</param>
         protected virtual void HandleModCollectionChange(bool resetStack)
         {
+            var localMods = Mods;
             EvaluateHighlight();
             if (!string.IsNullOrWhiteSpace(restoreCollectionSelection))
             {
@@ -1156,16 +1157,16 @@ namespace IronyModManager.ViewModels.Controls
             skipModSelectionSave = true;
             ExportCollection.CollectionName = SelectedModCollection?.Name;
             SaveState(true);
-            if (Mods != null)
+            if (localMods != null)
             {
-                foreach (var item in Mods)
+                foreach (var item in localMods)
                 {
                     item.IsSelected = false;
                 }
             }
             var existingCollection = modCollectionService.Get(SelectedModCollection?.Name ?? string.Empty);
             var selectedMods = new ObservableCollection<IMod>();
-            if (existingCollection?.Mods?.Count() > 0 && Mods != null)
+            if (existingCollection?.Mods?.Count() > 0 && localMods != null)
             {
                 var missingMods = new List<string>();
                 var hasModNames = existingCollection.ModNames != null && existingCollection.ModNames.Count() == existingCollection.Mods.Count();
@@ -1175,11 +1176,11 @@ namespace IronyModManager.ViewModels.Controls
                 for (int i = 0; i < mods.Count; i++)
                 {
                     var item = mods[i];
-                    var mod = Mods.FirstOrDefault(p => p.DescriptorFile.Equals(item, StringComparison.InvariantCultureIgnoreCase));
+                    var mod = localMods.FirstOrDefault(p => p.DescriptorFile.Equals(item, StringComparison.InvariantCultureIgnoreCase));
                     if (mod == null && mods.Count == modPaths.Count)
                     {
                         item = modPaths[i];
-                        mod = Mods.FirstOrDefault(p => p.FullPath.Equals(item, StringComparison.OrdinalIgnoreCase));
+                        mod = localMods.FirstOrDefault(p => p.FullPath.Equals(item, StringComparison.OrdinalIgnoreCase));
                     }
                     if (mod != null)
                     {
