@@ -229,12 +229,12 @@ namespace IronyModManager.Parser.Tests
             var invalid = new HashSet<string>();
             var indexed = new IndexedDefinitions();
             await indexed.InitMapAsync(result);
-            var typesKeys = indexed.GetAllTypeKeys();
+            var typesKeys = await indexed.GetAllTypeKeysAsync();
             var objects = new List<string>();
             var singleObjects = new List<string>();
             var parserMap = new List<IParserMap>();
 
-            var dirs = indexed.GetAllDirectoryKeys();
+            var dirs = await indexed.GetAllDirectoryKeysAsync();
 
             foreach (var dir in dirs)
             {

@@ -310,7 +310,7 @@ namespace IronyModManager.Services.Tests
             await indexed.InitMapAsync(definitions);
             var result = await service.FindConflictsAsync(indexed, new List<string>(), IronyModManager.Models.Common.PatchStateMode.Default);
             (await result.Conflicts.GetAllAsync()).Count().Should().Be(2);
-            result.Conflicts.GetAllFileKeys().Count().Should().Be(1);
+            (await result.Conflicts.GetAllFileKeysAsync()).Count().Should().Be(1);
             (await result.Conflicts.GetAllAsync()).All(p => p.ModName == "test1" || p.ModName == "test2").Should().BeTrue();
         }
 
@@ -368,7 +368,7 @@ namespace IronyModManager.Services.Tests
             await indexed.InitMapAsync(definitions);
             var result = await service.FindConflictsAsync(indexed, new List<string>() { "test2", "test1" }, IronyModManager.Models.Common.PatchStateMode.Default);
             (await result.Conflicts.GetAllAsync()).Count().Should().Be(4);
-            result.Conflicts.GetAllFileKeys().Count().Should().Be(1);
+            (await result.Conflicts.GetAllFileKeysAsync()).Count().Should().Be(1);
             (await result.Conflicts.GetAllAsync()).All(p => p.ModName == "test1" || p.ModName == "test2").Should().BeTrue();
             (await result.Conflicts.GetAllAsync()).Count(p => p.Code == Parser.Common.Constants.EmptyOverwriteComment).Should().Be(1);
         }
@@ -429,7 +429,7 @@ namespace IronyModManager.Services.Tests
             await indexed.InitMapAsync(definitions);
             var result = await service.FindConflictsAsync(indexed, new List<string>() { "test2", "test1" }, IronyModManager.Models.Common.PatchStateMode.Default);
             (await result.Conflicts.GetAllAsync()).Count().Should().Be(4);
-            result.Conflicts.GetAllFileKeys().Count().Should().Be(1);
+            (await result.Conflicts.GetAllFileKeysAsync()).Count().Should().Be(1);
             (await result.Conflicts.GetAllAsync()).All(p => p.ModName == "test1" || p.ModName == "test2").Should().BeTrue();
             (await result.Conflicts.GetAllAsync()).Count(p => p.Code == Parser.Common.Constants.EmptyOverwriteComment).Should().Be(1);
         }
@@ -479,7 +479,7 @@ namespace IronyModManager.Services.Tests
             await indexed.InitMapAsync(definitions);
             var result = await service.FindConflictsAsync(indexed, new List<string>(), IronyModManager.Models.Common.PatchStateMode.Default);
             (await result.Conflicts.GetAllAsync()).Count().Should().Be(2);
-            result.Conflicts.GetAllFileKeys().Count().Should().Be(2);
+            (await result.Conflicts.GetAllFileKeysAsync()).Count().Should().Be(2);
             (await result.Conflicts.GetAllAsync()).All(p => p.ModName == "test1" || p.ModName == "test2").Should().BeTrue();
         }
 
@@ -538,7 +538,7 @@ namespace IronyModManager.Services.Tests
             await indexed.InitMapAsync(definitions);
             var result = await service.FindConflictsAsync(indexed, new List<string>(), IronyModManager.Models.Common.PatchStateMode.Default);
             (await result.Conflicts.GetAllAsync()).Count().Should().Be(0);
-            result.Conflicts.GetAllFileKeys().Count().Should().Be(0);
+            (await result.Conflicts.GetAllFileKeysAsync()).Count().Should().Be(0);
         }
 
         /// <summary>
@@ -596,7 +596,7 @@ namespace IronyModManager.Services.Tests
             await indexed.InitMapAsync(definitions);
             var result = await service.FindConflictsAsync(indexed, new List<string>(), IronyModManager.Models.Common.PatchStateMode.Default);
             (await result.Conflicts.GetAllAsync()).Count().Should().Be(0);
-            result.Conflicts.GetAllFileKeys().Count().Should().Be(0);
+            (await result.Conflicts.GetAllFileKeysAsync()).Count().Should().Be(0);
         }
 
         /// <summary>
@@ -654,7 +654,7 @@ namespace IronyModManager.Services.Tests
             await indexed.InitMapAsync(definitions);
             var result = await service.FindConflictsAsync(indexed, new List<string>(), IronyModManager.Models.Common.PatchStateMode.Default);
             (await result.Conflicts.GetAllAsync()).Count().Should().Be(2);
-            result.Conflicts.GetAllFileKeys().Count().Should().Be(1);
+            (await result.Conflicts.GetAllFileKeysAsync()).Count().Should().Be(1);
             (await result.Conflicts.GetAllAsync()).All(p => p.ModName == "test1" || p.ModName == "test3").Should().BeTrue();
         }
 
@@ -722,7 +722,7 @@ namespace IronyModManager.Services.Tests
             await indexed.InitMapAsync(definitions);
             var result = await service.FindConflictsAsync(indexed, new List<string>(), IronyModManager.Models.Common.PatchStateMode.Default);
             (await result.Conflicts.GetAllAsync()).Count().Should().Be(2);
-            result.Conflicts.GetAllFileKeys().Count().Should().Be(1);
+            (await result.Conflicts.GetAllFileKeysAsync()).Count().Should().Be(1);
             (await result.Conflicts.GetAllAsync()).All(p => p.ModName == "test3" || p.ModName == "test4").Should().BeTrue();
         }
 
@@ -789,7 +789,7 @@ namespace IronyModManager.Services.Tests
             await indexed.InitMapAsync(definitions);
             var result = await service.FindConflictsAsync(indexed, new List<string>(), IronyModManager.Models.Common.PatchStateMode.Default);
             (await result.Conflicts.GetAllAsync()).Count().Should().Be(0);
-            result.Conflicts.GetAllFileKeys().Count().Should().Be(0);
+            (await result.Conflicts.GetAllFileKeysAsync()).Count().Should().Be(0);
         }
 
         /// <summary>

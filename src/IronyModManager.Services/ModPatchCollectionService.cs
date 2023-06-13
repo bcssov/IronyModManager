@@ -368,8 +368,8 @@ namespace IronyModManager.Services
             var conflicts = new HashSet<IDefinition>();
             var fileConflictCache = new Dictionary<string, bool>();
             var modShaConflictCache = new Dictionary<string, List<string>>();
-            var fileKeys = indexedDefinitions.GetAllFileKeys();
-            var typeAndIdKeys = indexedDefinitions.GetAllTypeAndIdKeys();
+            var fileKeys = await indexedDefinitions.GetAllFileKeysAsync();
+            var typeAndIdKeys = await indexedDefinitions.GetAllTypeAndIdKeysAsync();
             var overwritten = indexedDefinitions.GetByValueType(ValueType.OverwrittenObject).Concat(indexedDefinitions.GetByValueType(ValueType.OverwrittenObjectSingleFile));
             var empty = indexedDefinitions.GetByValueType(ValueType.EmptyFile);
 

@@ -5,7 +5,7 @@
 // Created          : 02-16-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-13-2023
+// Last Modified On : 06-14-2023
 // ***********************************************************************
 // <copyright file="IndexedDefinitions.cs" company="Mario">
 //     Mario
@@ -245,36 +245,36 @@ namespace IronyModManager.Parser.Definitions
         /// Gets all directory keys.
         /// </summary>
         /// <returns>IEnumerable&lt;System.String&gt;.</returns>
-        public IEnumerable<string> GetAllDirectoryKeys()
+        public Task<IEnumerable<string>> GetAllDirectoryKeysAsync()
         {
-            return directoryKeys.ToHashSet();
+            return Task.FromResult<IEnumerable<string>>(directoryKeys.ToHashSet());
         }
 
         /// <summary>
         /// Gets all file keys.
         /// </summary>
         /// <returns>IEnumerable&lt;System.String&gt;.</returns>
-        public IEnumerable<string> GetAllFileKeys()
+        public Task<IEnumerable<string>> GetAllFileKeysAsync()
         {
-            return fileKeys.ToHashSet();
+            return Task.FromResult<IEnumerable<string>>(fileKeys.ToHashSet());
         }
 
         /// <summary>
         /// Gets all type and identifier keys.
         /// </summary>
         /// <returns>IEnumerable&lt;System.String&gt;.</returns>
-        public IEnumerable<string> GetAllTypeAndIdKeys()
+        public Task<IEnumerable<string>> GetAllTypeAndIdKeysAsync()
         {
-            return typeAndIdKeys.ToHashSet();
+            return Task.FromResult<IEnumerable<string>>(typeAndIdKeys.ToHashSet());
         }
 
         /// <summary>
         /// Gets all type keys.
         /// </summary>
         /// <returns>IEnumerable&lt;System.String&gt;.</returns>
-        public IEnumerable<string> GetAllTypeKeys()
+        public Task<IEnumerable<string>> GetAllTypeKeysAsync()
         {
-            return typeKeys.ToHashSet();
+            return Task.FromResult<IEnumerable<string>>(typeKeys.ToHashSet());
         }
 
         /// <summary>

@@ -250,7 +250,7 @@ namespace IronyModManager.Parser.Tests
             }
             var service = new IndexedDefinitions();
             await service.InitMapAsync(defs);
-            var results = service.GetAllFileKeys();
+            var results = await service.GetAllFileKeysAsync();
             results.Count().Should().Be(defs.Count);
         }
 
@@ -277,7 +277,7 @@ namespace IronyModManager.Parser.Tests
             }
             var service = new IndexedDefinitions();
             await service.InitMapAsync(defs);
-            var results = service.GetAllDirectoryKeys();
+            var results = await service.GetAllDirectoryKeysAsync();
             results.Count().Should().Be(1);
         }
 
@@ -591,7 +591,7 @@ namespace IronyModManager.Parser.Tests
             }
             var service = new IndexedDefinitions();
             await service.InitMapAsync(defs);
-            var results = service.GetAllTypeKeys();
+            var results = await service.GetAllTypeKeysAsync();
             results.Count().Should().Be(defs.Count);
         }
 
@@ -690,7 +690,7 @@ namespace IronyModManager.Parser.Tests
             }
             var service = new IndexedDefinitions();
             await service.InitMapAsync(defs);
-            var results = service.GetAllTypeAndIdKeys();
+            var results = await service.GetAllTypeAndIdKeysAsync();
             results.Count().Should().Be(defs.Count);
         }
 

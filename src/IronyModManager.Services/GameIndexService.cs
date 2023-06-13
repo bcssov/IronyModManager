@@ -130,7 +130,7 @@ namespace IronyModManager.Services
                 if (files != null && files.Any())
                 {
                     files = files.Where(p => game.GameFolders.Any(x => p.StartsWith(x)));
-                    var indexedFolders = indexedDefinitions.GetAllDirectoryKeys().Select(p => p.ToLowerInvariant());
+                    var indexedFolders = (await indexedDefinitions.GetAllDirectoryKeysAsync()).Select(p => p.ToLowerInvariant());
                     var validFolders = files.Select(p => Path.GetDirectoryName(p)).GroupBy(p => p).Select(p => p.FirstOrDefault()).Where(p => indexedFolders.Any(a => a.ToLowerInvariant().Equals(p.ToLowerInvariant())));
                     var folders = new List<string>();
                     foreach (var item in validFolders)
@@ -195,7 +195,7 @@ namespace IronyModManager.Services
             if (game != null && versions != null && versions.Any() && await gameIndexer.GameVersionsSameAsync(GetStoragePath(), game, versions))
             {
                 var gameDefinitions = new ConcurrentBag<IDefinition>();
-                var directories = modDefinitions.GetAllDirectoryKeys();
+                var directories = await modDefinitions.GetAllDirectoryKeysAsync();
                 double processed = 0;
                 double total = directories.Count();
                 double previousProgress = 0;

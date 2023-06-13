@@ -5,7 +5,7 @@
 // Created          : 02-16-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-13-2023
+// Last Modified On : 06-14-2023
 // ***********************************************************************
 // <copyright file="IIndexedDefinitions.cs" company="Mario">
 //     Mario
@@ -60,25 +60,25 @@ namespace IronyModManager.Shared.Models
         /// Gets all directory keys.
         /// </summary>
         /// <returns>IEnumerable&lt;System.String&gt;.</returns>
-        IEnumerable<string> GetAllDirectoryKeys();
+        Task<IEnumerable<string>> GetAllDirectoryKeysAsync();
 
         /// <summary>
         /// Gets all file keys.
         /// </summary>
         /// <returns>IEnumerable&lt;System.String&gt;.</returns>
-        IEnumerable<string> GetAllFileKeys();
+        Task<IEnumerable<string>> GetAllFileKeysAsync();
 
         /// <summary>
         /// Gets all type and identifier keys.
         /// </summary>
         /// <returns>IEnumerable&lt;System.String&gt;.</returns>
-        IEnumerable<string> GetAllTypeAndIdKeys();
+        Task<IEnumerable<string>> GetAllTypeAndIdKeysAsync();
 
         /// <summary>
         /// Gets all type keys.
         /// </summary>
         /// <returns>IEnumerable&lt;System.String&gt;.</returns>
-        IEnumerable<string> GetAllTypeKeys();
+        Task<IEnumerable<string>> GetAllTypeKeysAsync();
 
         /// <summary>
         /// Gets the by disk file.
