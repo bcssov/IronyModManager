@@ -354,7 +354,7 @@ namespace IronyModManager.Services
         /// <param name="modOrder">The mod order.</param>
         /// <param name="patchStateMode">The patch state mode.</param>
         /// <returns>IConflictResult.</returns>
-        public virtual IConflictResult FindConflicts(IIndexedDefinitions indexedDefinitions, IList<string> modOrder, PatchStateMode patchStateMode)
+        public virtual async Task<IConflictResult> FindConflictsAsync(IIndexedDefinitions indexedDefinitions, IList<string> modOrder, PatchStateMode patchStateMode)
         {
             var actualMode = patchStateMode;
             if (patchStateMode == PatchStateMode.ReadOnly)
@@ -404,7 +404,7 @@ namespace IronyModManager.Services
                             copy.Variables = item.Variables;
                             copy.IsFromGame = item.IsFromGame;
                             copy.FileNameSuffix = item.FileNameSuffix;
-                            indexedDefinitions.AddToMap(copy);
+                            await indexedDefinitions.AddToMapAsync(copy);
                         }
                         var fileNames = copy.AdditionalFileNames;
                         foreach (var fileName in item.AdditionalFileNames)
@@ -450,7 +450,7 @@ namespace IronyModManager.Services
             }
 
             var indexedConflicts = DIResolver.Get<IIndexedDefinitions>();
-            indexedConflicts.InitMap(conflicts);
+            await indexedConflicts.InitMapAsync(conflicts);
 
             foreach (var typeId in typeAndIdKeys)
             {
@@ -479,8 +479,8 @@ namespace IronyModManager.Services
                     copy.ExistsInLastFile = true;
                     copy.IsFromGame = lastMod.IsFromGame;
                     copy.LastModified = null;
-                    indexedConflicts.AddToMap(copy);
-                    indexedDefinitions.AddToMap(copy);
+                    await indexedConflicts.AddToMapAsync(copy);
+                    await indexedDefinitions.AddToMapAsync(copy);
                     conflicts.Add(copy);
                 }
                 processed++;
@@ -636,23 +636,23 @@ namespace IronyModManager.Services
             var result = GetModelInstance<IConflictResult>();
             result.Mode = patchStateMode;
             var conflictsIndexed = DIResolver.Get<IIndexedDefinitions>();
-            conflictsIndexed.InitMap(filteredConclicts, true);
+            await conflictsIndexed.InitMapAsync(filteredConclicts, true);
             result.AllConflicts = indexedDefinitions;
             result.Conflicts = conflictsIndexed;
             var resolvedConflicts = DIResolver.Get<IIndexedDefinitions>();
-            resolvedConflicts.InitMap(null, true);
+            await resolvedConflicts.InitMapAsync(null, true);
             result.ResolvedConflicts = resolvedConflicts;
             var ignoredConflicts = DIResolver.Get<IIndexedDefinitions>();
-            ignoredConflicts.InitMap(null, true);
+            await ignoredConflicts.InitMapAsync(null, true);
             result.IgnoredConflicts = ignoredConflicts;
             var ruleIgnoredDefinitions = DIResolver.Get<IIndexedDefinitions>();
-            ruleIgnoredDefinitions.InitMap(null, true);
+            await ruleIgnoredDefinitions.InitMapAsync(null, true);
             result.RuleIgnoredConflicts = ruleIgnoredDefinitions;
             var overwrittenDefinitions = DIResolver.Get<IIndexedDefinitions>();
-            overwrittenDefinitions.InitMap(overwrittenDefs.Select(a => a.Value.Item1));
+            await overwrittenDefinitions.InitMapAsync(overwrittenDefs.Select(a => a.Value.Item1));
             result.OverwrittenConflicts = overwrittenDefinitions;
             var customConflicts = DIResolver.Get<IIndexedDefinitions>();
-            customConflicts.InitMap(null, true);
+            await customConflicts.InitMapAsync(null, true);
             result.CustomConflicts = customConflicts;
             messageBus.Publish(new ModDefinitionAnalyzeEvent(100));
 
@@ -784,7 +784,7 @@ namespace IronyModManager.Services
             {
                 prunedDefinitions = new List<IDefinition>();
                 var customIndexed = DIResolver.Get<IIndexedDefinitions>();
-                customIndexed.InitMap(state.CustomConflicts);
+                await customIndexed.InitMapAsync(state.CustomConflicts);
                 foreach (var item in definitions)
                 {
                     bool addDefault = true;
@@ -847,7 +847,7 @@ namespace IronyModManager.Services
 
             await messageBus.PublishAsync(new ModDefinitionInvalidReplaceEvent(99.9));
             var indexed = DIResolver.Get<IIndexedDefinitions>();
-            indexed.InitMap(prunedDefinitions);
+            await indexed.InitMapAsync(prunedDefinitions);
             await messageBus.PublishAsync(new ModDefinitionInvalidReplaceEvent(100));
             return indexed;
         }
@@ -978,7 +978,7 @@ namespace IronyModManager.Services
                 var copy = DIResolver.Get<IIndexedDefinitions>();
                 foreach (var item in indexedDefinitions.GetAll())
                 {
-                    copy.AddToMap(PartialDefinitionCopy(item));
+                    await copy.AddToMapAsync(PartialDefinitionCopy(item));
                     processed++;
                     var perc = GetProgressPercentage(total, processed, maxProgress);
                     if (previousProgress != perc)
@@ -1055,7 +1055,7 @@ namespace IronyModManager.Services
                     }
 
                     var resolvedIndex = DIResolver.Get<IIndexedDefinitions>();
-                    resolvedIndex.InitMap(resolvedConflicts, true);
+                    await resolvedIndex.InitMapAsync(resolvedConflicts, true);
 
                     if (conflictResult.OverwrittenConflicts.GetAll().Any())
                     {
@@ -1125,19 +1125,19 @@ namespace IronyModManager.Services
                     processed = partialCopyResult.Item2;
 
                     var conflictsIndex = DIResolver.Get<IIndexedDefinitions>();
-                    conflictsIndex.InitMap(conflictResult.Conflicts.GetAll(), true);
+                    await conflictsIndex.InitMapAsync(conflictResult.Conflicts.GetAll(), true);
                     conflicts.Conflicts = conflictsIndex;
                     conflicts.ResolvedConflicts = resolvedIndex;
                     var ignoredIndex = DIResolver.Get<IIndexedDefinitions>();
-                    ignoredIndex.InitMap(ignoredConflicts, true);
+                    await ignoredIndex.InitMapAsync(ignoredConflicts, true);
                     conflicts.IgnoredConflicts = ignoredIndex;
                     conflicts.IgnoredPaths = state.IgnoreConflictPaths ?? string.Empty;
                     conflicts.OverwrittenConflicts = conflictResult.OverwrittenConflicts;
                     var customConflicts = DIResolver.Get<IIndexedDefinitions>();
-                    customConflicts.InitMap(state.CustomConflicts, true);
+                    await customConflicts.InitMapAsync(state.CustomConflicts, true);
                     conflicts.CustomConflicts = customConflicts;
                     conflicts.Mode = conflictResult.Mode;
-                    EvalModIgnoreDefinitions(conflicts);
+                    await EvalModIgnoreDefinitionsAsync(conflicts);
                     processed = await syncPatchFiles(conflicts, patchFiles, patchName, total, processed, 100);
 
                     if (allowCleanup)
@@ -1226,7 +1226,7 @@ namespace IronyModManager.Services
                         }
                     }
 
-                    EvalModIgnoreDefinitions(conflictResult);
+                    await EvalModIgnoreDefinitionsAsync(conflictResult);
 
                     if (exportedConflicts && allowCleanup)
                     {
@@ -1591,18 +1591,18 @@ namespace IronyModManager.Services
         /// <param name="conflictResult">The conflict result.</param>
         /// <param name="collectionName">Name of the collection.</param>
         /// <returns>Task&lt;System.Boolean&gt;.</returns>
-        public virtual Task<bool> SaveIgnoredPathsAsync(IConflictResult conflictResult, string collectionName)
+        public virtual async Task<bool> SaveIgnoredPathsAsync(IConflictResult conflictResult, string collectionName)
         {
             var game = GameService.GetSelected();
             if (game == null)
             {
-                return Task.FromResult(false);
+                return false;
             }
-            EvalModIgnoreDefinitions(conflictResult);
+            await EvalModIgnoreDefinitionsAsync(conflictResult);
             if (conflictResult.Mode != PatchStateMode.ReadOnly && conflictResult.Mode != PatchStateMode.ReadOnlyWithoutLocalization)
             {
                 var patchName = GenerateCollectionPatchName(collectionName);
-                return modPatchExporter.SaveStateAsync(new ModPatchExporterParameters()
+                return await modPatchExporter.SaveStateAsync(new ModPatchExporterParameters()
                 {
                     LoadOrder = GetCollectionMods(collectionName: collectionName).Select(p => p.DescriptorFile),
                     Mode = MapPatchStateMode(conflictResult.Mode),
@@ -1617,7 +1617,7 @@ namespace IronyModManager.Services
                     HasGameDefinitions = conflictResult.AllConflicts.HasGameDefinitions()
                 });
             }
-            return Task.FromResult(true);
+            return true;
         }
 
         /// <summary>
@@ -1999,10 +1999,11 @@ namespace IronyModManager.Services
         /// Evals the mod ignore definitions.
         /// </summary>
         /// <param name="conflictResult">The conflict result.</param>
-        protected virtual void EvalModIgnoreDefinitions(IConflictResult conflictResult)
+        /// <returns>A Task representing the asynchronous operation.</returns>
+        protected virtual async Task EvalModIgnoreDefinitionsAsync(IConflictResult conflictResult)
         {
             var ruleIgnoredDefinitions = DIResolver.Get<IIndexedDefinitions>();
-            ruleIgnoredDefinitions.InitMap(null, true);
+            await ruleIgnoredDefinitions.InitMapAsync(null, true);
             var showResetConflicts = false;
             var ignoreGameMods = true;
             var ignoreSelfConflicts = true;
@@ -2062,7 +2063,7 @@ namespace IronyModManager.Services
                                     if (!alreadyIgnored.Contains(item.Key))
                                     {
                                         alreadyIgnored.Add(item.Key);
-                                        ruleIgnoredDefinitions.AddToMap(conflictResult.Conflicts.GetByTypeAndId(item.Key).First());
+                                        await ruleIgnoredDefinitions.AddToMapAsync(conflictResult.Conflicts.GetByTypeAndId(item.Key).First());
                                     }
                                 }
                             }
@@ -2077,7 +2078,7 @@ namespace IronyModManager.Services
                                 if (!alreadyIgnored.Contains(item.Key))
                                 {
                                     alreadyIgnored.Add(item.Key);
-                                    ruleIgnoredDefinitions.AddToMap(conflictResult.Conflicts.GetByTypeAndId(item.Key).First());
+                                    await ruleIgnoredDefinitions.AddToMapAsync(conflictResult.Conflicts.GetByTypeAndId(item.Key).First());
                                 }
                             }
                         }
@@ -2088,7 +2089,7 @@ namespace IronyModManager.Services
                                 if (!alreadyIgnored.Contains(item.Key))
                                 {
                                     alreadyIgnored.Add(item.Key);
-                                    ruleIgnoredDefinitions.AddToMap(conflictResult.Conflicts.GetByTypeAndId(item.Key).First());
+                                    await ruleIgnoredDefinitions.AddToMapAsync(conflictResult.Conflicts.GetByTypeAndId(item.Key).First());
                                 }
                             }
                         }
@@ -2104,7 +2105,7 @@ namespace IronyModManager.Services
                         if (item.ResetType == ResetType.None && !alreadyIgnored.Contains(item.Key))
                         {
                             alreadyIgnored.Add(item.Key);
-                            ruleIgnoredDefinitions.AddToMap(conflictResult.Conflicts.GetByTypeAndId(item.Key).First());
+                            await ruleIgnoredDefinitions.AddToMapAsync(conflictResult.Conflicts.GetByTypeAndId(item.Key).First());
                         }
                     }
                 }
@@ -2120,12 +2121,12 @@ namespace IronyModManager.Services
                             if (ignoreGameMods && item.NonGameDefinitions <= 1 && !alreadyIgnored.Contains(item.Key))
                             {
                                 alreadyIgnored.Add(item.Key);
-                                ruleIgnoredDefinitions.AddToMap(conflictResult.Conflicts.GetByTypeAndId(item.Key).First());
+                                await ruleIgnoredDefinitions.AddToMapAsync(conflictResult.Conflicts.GetByTypeAndId(item.Key).First());
                             }
                             if (ignoreSelfConflicts && item.NonGameDefinitions > 1 && !alreadyIgnored.Contains(item.Key))
                             {
                                 alreadyIgnored.Add(item.Key);
-                                ruleIgnoredDefinitions.AddToMap(conflictResult.Conflicts.GetByTypeAndId(item.Key).First());
+                                await ruleIgnoredDefinitions.AddToMapAsync(conflictResult.Conflicts.GetByTypeAndId(item.Key).First());
                             }
                         }
                     }
@@ -2227,17 +2228,17 @@ namespace IronyModManager.Services
                     switch (exportType)
                     {
                         case ExportType.Ignored:
-                            conflictResult.IgnoredConflicts.AddToMap(definition);
+                            await conflictResult.IgnoredConflicts.AddToMapAsync(definition);
                             break;
 
                         case ExportType.Custom:
-                            conflictResult.CustomConflicts.AddToMap(definition);
+                            await conflictResult.CustomConflicts.AddToMapAsync(definition);
                             exportPatches.Add(definition);
                             args.CustomConflicts = PopulateModPath(exportPatches, GetCollectionMods(allMods));
                             break;
 
                         default:
-                            conflictResult.ResolvedConflicts.AddToMap(definition);
+                            await conflictResult.ResolvedConflicts.AddToMapAsync(definition);
                             exportPatches.Add(definition);
                             args.Definitions = PopulateModPath(exportPatches, GetCollectionMods(allMods));
                             break;

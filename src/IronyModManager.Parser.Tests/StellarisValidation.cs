@@ -14,6 +14,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Xunit;
 using Xunit.Abstractions;
 
@@ -50,9 +51,9 @@ namespace IronyModManager.Parser.Tests
         /// Defines the test method Detect.
         /// </summary>
         /// <exception cref="ArgumentException">Fatal error. Check parsers.</exception>
-        public void StellarisDetectDuplicatesAndGenerateParserMap()
+        public async Task StellarisDetectDuplicatesAndGenerateParserMap()
         {
-            DetectDuplicatesAndGenerateParserMap();
+            await DetectDuplicatesAndGenerateParserMap();
         }
 
 #if !FUNCTIONAL_TEST

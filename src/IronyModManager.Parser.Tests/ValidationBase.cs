@@ -17,6 +17,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 using IronyModManager.DI;
 using IronyModManager.Parser.Common;
 using IronyModManager.Parser.Common.Args;
@@ -97,7 +98,7 @@ namespace IronyModManager.Parser.Tests
         /// </summary>
         /// <exception cref="System.ArgumentException">Fatal error. Check parsers.</exception>
         /// <exception cref="System.ArgumentException">Fatal error. Check parsers.</exception>
-        protected void DetectDuplicatesAndGenerateParserMap()
+        protected async Task DetectDuplicatesAndGenerateParserMap()
         {
             var codeParser = new CodeParser(new Logger());
             var quotesRegex = new Regex("\".*?\"", RegexOptions.Compiled | RegexOptions.IgnoreCase);
@@ -227,7 +228,7 @@ namespace IronyModManager.Parser.Tests
 
             var invalid = new HashSet<string>();
             var indexed = new IndexedDefinitions();
-            indexed.InitMap(result);
+            await indexed.InitMapAsync(result);
             var typesKeys = indexed.GetAllTypeKeys();
             var objects = new List<string>();
             var singleObjects = new List<string>();

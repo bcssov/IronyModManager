@@ -169,7 +169,7 @@ namespace IronyModManager.Services.Tests
 
             var service = GetService(gameIndexer, storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService);
             var indexed = new IndexedDefinitions();
-            indexed.InitMap(new List<IDefinition>() { new Definition() { File = "test1\\1.txt" }, new Definition() { File = "test2\\3.txt" } });
+            await indexed.InitMapAsync(new List<IDefinition>() { new Definition() { File = "test1\\1.txt" }, new Definition() { File = "test2\\3.txt" } });
             var result = await service.IndexDefinitionsAsync(new Game() { ExecutableLocation = System.IO.Path.Combine(System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location)), GameFolders = new List<string>() { "test1", "test2" } }, new List<string>() { "3.0.3" }, indexed);
             result.Should().BeTrue();
             saved.Count.Should().Be(2);
@@ -238,7 +238,7 @@ namespace IronyModManager.Services.Tests
 
             var service = GetService(gameIndexer, storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService);
             var indexed = new IndexedDefinitions();
-            indexed.InitMap(new List<IDefinition>() { new Definition() { File = "test1\\1.txt" }, new Definition() { File = "test2\\3.txt" } });
+            await indexed.InitMapAsync(new List<IDefinition>() { new Definition() { File = "test1\\1.txt" }, new Definition() { File = "test2\\3.txt" } });
             var result = await service.IndexDefinitionsAsync(new Game() { ExecutableLocation = System.IO.Path.Combine(System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location)), GameFolders = new List<string>() { "test1", "test2" } }, new List<string>() { "3.0.3" }, indexed);
             result.Should().BeTrue();
             saved.Count.Should().Be(2);
@@ -314,7 +314,7 @@ namespace IronyModManager.Services.Tests
 
             var service = GetService(gameIndexer, storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService);
             var indexed = new IndexedDefinitions();
-            indexed.InitMap(new List<IDefinition>() { new Definition() { File = "test1\\1.txt" }, new Definition() { File = "test2\\3.txt" } });
+            await indexed.InitMapAsync(new List<IDefinition>() { new Definition() { File = "test1\\1.txt" }, new Definition() { File = "test2\\3.txt" } });
             var result = await service.IndexDefinitionsAsync(new Game() { ExecutableLocation = System.IO.Path.Combine(System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location)), GameFolders = new List<string>() { "test1", "test2" } }, new List<string>() { "3.0.3" }, indexed);
             result.Should().BeTrue();
             saved.Count.Should().Be(1);
@@ -383,7 +383,7 @@ namespace IronyModManager.Services.Tests
 
             var service = GetService(gameIndexer, storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService);
             var indexed = new IndexedDefinitions();
-            indexed.InitMap(new List<IDefinition>() { new Definition() { File = "test1\\1.txt" }, new Definition() { File = "test2\\3.txt" } });
+            await indexed.InitMapAsync(new List<IDefinition>() { new Definition() { File = "test1\\1.txt" }, new Definition() { File = "test2\\3.txt" } });
             var result = await service.IndexDefinitionsAsync(new Game() { ExecutableLocation = "c:\\test\\test.exe", GameFolders = new List<string>() { "test1", "test2" } }, new List<string>() { "3.0.3" }, indexed);
             result.Should().BeTrue();
             saved.Count.Should().Be(0);
@@ -405,7 +405,7 @@ namespace IronyModManager.Services.Tests
             var gameIndexer = new Mock<IGameIndexer>();
 
             var defs = new IndexedDefinitions();
-            defs.InitMap(new List<IDefinition>()
+            await defs.InitMapAsync(new List<IDefinition>()
             {
                 new Definition()
                 {
@@ -435,7 +435,7 @@ namespace IronyModManager.Services.Tests
             var gameIndexer = new Mock<IGameIndexer>();
 
             var defs = new IndexedDefinitions();
-            defs.InitMap(new List<IDefinition>()
+            await defs.InitMapAsync(new List<IDefinition>()
             {
                 new Definition()
                 {
@@ -467,7 +467,7 @@ namespace IronyModManager.Services.Tests
             gameIndexer.Setup(p => p.GameVersionsSameAsync(It.IsAny<string>(), It.IsAny<IGame>(), It.IsAny<IEnumerable<string>>())).Returns((string p1, IGame p2, IEnumerable<string> p3) => Task.FromResult(false));
 
             var defs = new IndexedDefinitions();
-            defs.InitMap(new List<IDefinition>()
+            await defs.InitMapAsync(new List<IDefinition>()
             {
                 new Definition()
                 {
@@ -503,7 +503,7 @@ namespace IronyModManager.Services.Tests
             gameIndexer.Setup(p => p.GetDefinitionsAsync(It.IsAny<string>(), It.IsAny<IGame>(), It.IsAny<string>())).Returns((string p1, IGame p2, string p3) => Task.FromResult(gameDefs as IEnumerable<IDefinition>));
 
             var defs = new IndexedDefinitions();
-            defs.InitMap(new List<IDefinition>()
+            await defs.InitMapAsync(new List<IDefinition>()
             {
                 new Definition()
                 {

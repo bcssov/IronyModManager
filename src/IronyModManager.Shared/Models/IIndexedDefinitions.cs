@@ -1,10 +1,11 @@
-﻿// ***********************************************************************
+﻿
+// ***********************************************************************
 // Assembly         : IronyModManager.Shared
 // Author           : Mario
 // Created          : 02-16-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-02-2022
+// Last Modified On : 06-13-2023
 // ***********************************************************************
 // <copyright file="IIndexedDefinitions.cs" company="Mario">
 //     Mario
@@ -13,9 +14,11 @@
 // ***********************************************************************
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace IronyModManager.Shared.Models
 {
+
     /// <summary>
     /// Interface IIndexedDefinitions
     /// Implements the <see cref="System.IDisposable" />
@@ -26,11 +29,12 @@ namespace IronyModManager.Shared.Models
         #region Methods
 
         /// <summary>
-        /// Adds to map.
+        /// Adds to map asynchronous.
         /// </summary>
         /// <param name="definition">The definition.</param>
         /// <param name="forceIgnoreHierarchical">if set to <c>true</c> [force ignore hierarchical].</param>
-        void AddToMap(IDefinition definition, bool forceIgnoreHierarchical = false);
+        /// <returns>Task.</returns>
+        Task AddToMapAsync(IDefinition definition, bool forceIgnoreHierarchical = false);
 
         /// <summary>
         /// Changes the state of the hierarchical reset.
@@ -145,11 +149,12 @@ namespace IronyModManager.Shared.Models
         bool HasResetDefinitions();
 
         /// <summary>
-        /// Initializes the map.
+        /// Initializes the map asynchronous.
         /// </summary>
         /// <param name="definitions">The definitions.</param>
         /// <param name="mapHierarchicalDefinitions">if set to <c>true</c> [map hierarchical definitions].</param>
-        void InitMap(IEnumerable<IDefinition> definitions, bool mapHierarchicalDefinitions = false);
+        /// <returns>Task.</returns>
+        Task InitMapAsync(IEnumerable<IDefinition> definitions, bool mapHierarchicalDefinitions = false);
 
         /// <summary>
         /// Initializes the search.

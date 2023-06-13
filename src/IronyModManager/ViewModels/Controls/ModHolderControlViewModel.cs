@@ -5,7 +5,7 @@
 // Created          : 02-29-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-10-2023
+// Last Modified On : 06-13-2023
 // ***********************************************************************
 // <copyright file="ModHolderControlViewModel.cs" company="Mario">
 //     Mario
@@ -625,12 +625,12 @@ namespace IronyModManager.ViewModels.Controls
                     return result;
                 }).ConfigureAwait(false);
             }
-            var conflicts = await Task.Run(() =>
+            var conflicts = await Task.Run(async () =>
             {
                 if (definitions != null)
                 {
                     // To stop people from whining
-                    var result = modPatchCollectionService.FindConflicts(definitions, CollectionMods.SelectedMods.Select(p => p.Name).ToList(), mode);
+                    var result = await modPatchCollectionService.FindConflictsAsync(definitions, CollectionMods.SelectedMods.Select(p => p.Name).ToList(), mode);
                     GC.Collect(GC.MaxGeneration, GCCollectionMode.Aggressive, true, true);
                     return result;
                 }

@@ -1,10 +1,11 @@
-﻿// ***********************************************************************
+﻿
+// ***********************************************************************
 // Assembly         : IronyModManager.Services
 // Author           : Mario
 // Created          : 05-27-2021
 //
 // Last Modified By : Mario
-// Last Modified On : 08-13-2022
+// Last Modified On : 06-13-2023
 // ***********************************************************************
 // <copyright file="GameIndexService.cs" company="Mario">
 //     Mario
@@ -37,6 +38,7 @@ using Nito.AsyncEx;
 
 namespace IronyModManager.Services
 {
+
     /// <summary>
     /// Class GameIndexService.
     /// Implements the <see cref="IronyModManager.Services.ModBaseService" />
@@ -123,6 +125,7 @@ namespace IronyModManager.Services
                 }
                 var gamePath = pathResolver.GetPath(game);
                 var files = Reader.GetFiles(gamePath);
+
                 // No clue how someone got reader to return 0 based on configuration alone but just in case to ignore this mess
                 if (files != null && files.Any())
                 {
@@ -239,7 +242,7 @@ namespace IronyModManager.Services
                     }
                 }
                 var indexed = DIResolver.Get<IIndexedDefinitions>();
-                indexed.InitMap(modDefinitions.GetAll().Concat(gameDefinitions));
+                await indexed.InitMapAsync(modDefinitions.GetAll().Concat(gameDefinitions));
                 return indexed;
             }
             return modDefinitions;

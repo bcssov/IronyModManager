@@ -1,10 +1,11 @@
-﻿// ***********************************************************************
+﻿
+// ***********************************************************************
 // Assembly         : IronyModManager.Parser.Definitions
 // Author           : Mario
 // Created          : 02-16-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-09-2022
+// Last Modified On : 06-13-2023
 // ***********************************************************************
 // <copyright file="IndexedDefinitions.cs" company="Mario">
 //     Mario
@@ -15,6 +16,7 @@ using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using CodexMicroORM.Core.Collections;
 using IronyModManager.DI;
 using IronyModManager.Shared.Models;
@@ -23,6 +25,7 @@ using ValueType = IronyModManager.Shared.Models.ValueType;
 
 namespace IronyModManager.Parser.Definitions
 {
+
     /// <summary>
     /// Class IndexedDefinitions.
     /// Implements the <see cref="IronyModManager.Shared.Models.IIndexedDefinitions" />
@@ -127,7 +130,8 @@ namespace IronyModManager.Parser.Definitions
         /// </summary>
         /// <param name="definition">The definition.</param>
         /// <param name="forceIgnoreHierarchical">if set to <c>true</c> [force ignore hierarchical].</param>
-        public void AddToMap(IDefinition definition, bool forceIgnoreHierarchical = false)
+        /// <returns>Task.</returns>
+        public Task AddToMapAsync(IDefinition definition, bool forceIgnoreHierarchical = false)
         {
             MapKeys(fileKeys, definition.FileCI);
             MapKeys(typeKeys, definition.Type);
@@ -154,6 +158,7 @@ namespace IronyModManager.Parser.Definitions
                 gameDefinitionsCount++;
             }
             definitions.Add(definition);
+            return Task.CompletedTask;
         }
 
         /// <summary>
@@ -383,14 +388,15 @@ namespace IronyModManager.Parser.Definitions
         /// </summary>
         /// <param name="definitions">The definitions.</param>
         /// <param name="mapHierarchicalDefinitions">if set to <c>true</c> [map hierarchical definitions].</param>
-        public void InitMap(IEnumerable<IDefinition> definitions, bool mapHierarchicalDefinitions = false)
+        /// <returns>A Task representing the asynchronous operation.</returns>
+        public async Task InitMapAsync(IEnumerable<IDefinition> definitions, bool mapHierarchicalDefinitions = false)
         {
             useHierarchalMap = mapHierarchicalDefinitions;
             if (definitions != null)
             {
                 foreach (var item in definitions)
                 {
-                    AddToMap(item);
+                    await AddToMapAsync(item);
                 }
             }
         }
@@ -401,6 +407,7 @@ namespace IronyModManager.Parser.Definitions
         public void InitSearch()
         {
             trie = new Trie<IDefinition>();
+
             // We're not indexing definitions from the game
             foreach (var item in definitions.Where(p => (p.Tags?.Any()).GetValueOrDefault() && !p.IsFromGame))
             {
@@ -591,10 +598,7 @@ namespace IronyModManager.Parser.Definitions
                 hierarchicalDefinition.ResetType = ResetType.Any;
                 AddOrRemoveFromResetDefinitions(definition, true);
             }
-            if (child.Mods == null)
-            {
-                child.Mods = new List<string>();
-            }
+            child.Mods ??= new List<string>();
             if (!child.Mods.Contains(definition.ModName) && !definition.IsFromGame)
             {
                 child.Mods.Add(definition.ModName);
@@ -604,10 +608,7 @@ namespace IronyModManager.Parser.Definitions
                 child.NonGameDefinitions++;
                 hierarchicalDefinition.NonGameDefinitions++;
             }
-            if (hierarchicalDefinition.Mods == null)
-            {
-                hierarchicalDefinition.Mods = new List<string>();
-            }
+            hierarchicalDefinition.Mods ??= new List<string>();
             if (!hierarchicalDefinition.Mods.Contains(definition.ModName) && !definition.IsFromGame)
             {
                 hierarchicalDefinition.Mods.Add(definition.ModName);

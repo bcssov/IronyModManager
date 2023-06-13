@@ -269,7 +269,7 @@ namespace IronyModManager.Services.Tests
         /// Defines the test method Should_find_filename_conflicts.
         /// </summary>
         [Fact]
-        public void Should_find_filename_conflicts()
+        public async Task Should_find_filename_conflicts()
         {
             DISetup.SetupContainer();
 
@@ -307,8 +307,8 @@ namespace IronyModManager.Services.Tests
                 }
             };
             var indexed = new IndexedDefinitions();
-            indexed.InitMap(definitions);
-            var result = service.FindConflicts(indexed, new List<string>(), IronyModManager.Models.Common.PatchStateMode.Default);
+            await indexed.InitMapAsync(definitions);
+            var result = await service.FindConflictsAsync(indexed, new List<string>(), IronyModManager.Models.Common.PatchStateMode.Default);
             result.Conflicts.GetAll().Count().Should().Be(2);
             result.Conflicts.GetAllFileKeys().Count().Should().Be(1);
             result.Conflicts.GetAll().All(p => p.ModName == "test1" || p.ModName == "test2").Should().BeTrue();
@@ -318,7 +318,7 @@ namespace IronyModManager.Services.Tests
         /// Defines the test method Should_find_orphan_filename_conflicts.
         /// </summary>
         [Fact]
-        public void Should_find_orphan_filename_conflicts()
+        public async Task Should_find_orphan_filename_conflicts()
         {
             DISetup.SetupContainer();
 
@@ -365,8 +365,8 @@ namespace IronyModManager.Services.Tests
                 }
             };
             var indexed = new IndexedDefinitions();
-            indexed.InitMap(definitions);
-            var result = service.FindConflicts(indexed, new List<string>() { "test2", "test1" }, IronyModManager.Models.Common.PatchStateMode.Default);
+            await indexed.InitMapAsync(definitions);
+            var result = await service.FindConflictsAsync(indexed, new List<string>() { "test2", "test1" }, IronyModManager.Models.Common.PatchStateMode.Default);
             result.Conflicts.GetAll().Count().Should().Be(4);
             result.Conflicts.GetAllFileKeys().Count().Should().Be(1);
             result.Conflicts.GetAll().All(p => p.ModName == "test1" || p.ModName == "test2").Should().BeTrue();
@@ -379,7 +379,7 @@ namespace IronyModManager.Services.Tests
         /// Defines the test method Should_ignore_orphan_filename_conflicts.
         /// </summary>
         [Fact]
-        public void Should_not_ignore_orphan_localisation_filename_conflicts()
+        public async Task Should_not_ignore_orphan_localisation_filename_conflicts()
         {
             DISetup.SetupContainer();
 
@@ -426,8 +426,8 @@ namespace IronyModManager.Services.Tests
                 }
             };
             var indexed = new IndexedDefinitions();
-            indexed.InitMap(definitions);
-            var result = service.FindConflicts(indexed, new List<string>() { "test2", "test1" }, IronyModManager.Models.Common.PatchStateMode.Default);
+            await indexed.InitMapAsync(definitions);
+            var result = await service.FindConflictsAsync(indexed, new List<string>() { "test2", "test1" }, IronyModManager.Models.Common.PatchStateMode.Default);
             result.Conflicts.GetAll().Count().Should().Be(4);
             result.Conflicts.GetAllFileKeys().Count().Should().Be(1);
             result.Conflicts.GetAll().All(p => p.ModName == "test1" || p.ModName == "test2").Should().BeTrue();
@@ -438,7 +438,7 @@ namespace IronyModManager.Services.Tests
         /// Defines the test method Should_find_definition_conflicts.
         /// </summary>
         [Fact]
-        public void Should_find_definition_conflicts()
+        public async Task Should_find_definition_conflicts()
         {
             DISetup.SetupContainer();
 
@@ -476,8 +476,8 @@ namespace IronyModManager.Services.Tests
                 }
             };
             var indexed = new IndexedDefinitions();
-            indexed.InitMap(definitions);
-            var result = service.FindConflicts(indexed, new List<string>(), IronyModManager.Models.Common.PatchStateMode.Default);
+            await indexed.InitMapAsync(definitions);
+            var result = await service.FindConflictsAsync(indexed, new List<string>(), IronyModManager.Models.Common.PatchStateMode.Default);
             result.Conflicts.GetAll().Count().Should().Be(2);
             result.Conflicts.GetAllFileKeys().Count().Should().Be(2);
             result.Conflicts.GetAll().All(p => p.ModName == "test1" || p.ModName == "test2").Should().BeTrue();
@@ -487,7 +487,7 @@ namespace IronyModManager.Services.Tests
         /// Defines the test method Should_not_find_override_conflicts.
         /// </summary>
         [Fact]
-        public void Should_not_find_override_conflicts()
+        public async Task Should_not_find_override_conflicts()
         {
             DISetup.SetupContainer();
 
@@ -535,8 +535,8 @@ namespace IronyModManager.Services.Tests
                 }
             };
             var indexed = new IndexedDefinitions();
-            indexed.InitMap(definitions);
-            var result = service.FindConflicts(indexed, new List<string>(), IronyModManager.Models.Common.PatchStateMode.Default);
+            await indexed.InitMapAsync(definitions);
+            var result = await service.FindConflictsAsync(indexed, new List<string>(), IronyModManager.Models.Common.PatchStateMode.Default);
             result.Conflicts.GetAll().Count().Should().Be(0);
             result.Conflicts.GetAllFileKeys().Count().Should().Be(0);
         }
@@ -545,7 +545,7 @@ namespace IronyModManager.Services.Tests
         /// Defines the test method Should_not_find_dependency_conflicts.
         /// </summary>
         [Fact]
-        public void Should_not_find_dependency_conflicts()
+        public async Task Should_not_find_dependency_conflicts()
         {
             DISetup.SetupContainer();
 
@@ -593,8 +593,8 @@ namespace IronyModManager.Services.Tests
                 }
             };
             var indexed = new IndexedDefinitions();
-            indexed.InitMap(definitions);
-            var result = service.FindConflicts(indexed, new List<string>(), IronyModManager.Models.Common.PatchStateMode.Default);
+            await indexed.InitMapAsync(definitions);
+            var result = await service.FindConflictsAsync(indexed, new List<string>(), IronyModManager.Models.Common.PatchStateMode.Default);
             result.Conflicts.GetAll().Count().Should().Be(0);
             result.Conflicts.GetAllFileKeys().Count().Should().Be(0);
         }
@@ -603,7 +603,7 @@ namespace IronyModManager.Services.Tests
         /// Defines the test method Should_find_dependency_conflicts.
         /// </summary>
         [Fact]
-        public void Should_find_dependency_conflicts()
+        public async Task Should_find_dependency_conflicts()
         {
             DISetup.SetupContainer();
 
@@ -651,8 +651,8 @@ namespace IronyModManager.Services.Tests
                 }
             };
             var indexed = new IndexedDefinitions();
-            indexed.InitMap(definitions);
-            var result = service.FindConflicts(indexed, new List<string>(), IronyModManager.Models.Common.PatchStateMode.Default);
+            await indexed.InitMapAsync(definitions);
+            var result = await service.FindConflictsAsync(indexed, new List<string>(), IronyModManager.Models.Common.PatchStateMode.Default);
             result.Conflicts.GetAll().Count().Should().Be(2);
             result.Conflicts.GetAllFileKeys().Count().Should().Be(1);
             result.Conflicts.GetAll().All(p => p.ModName == "test1" || p.ModName == "test3").Should().BeTrue();
@@ -662,7 +662,7 @@ namespace IronyModManager.Services.Tests
         /// Defines the test method Should_find_multiple_dependency_conflicts.
         /// </summary>
         [Fact]
-        public void Should_find_multiple_dependency_conflicts()
+        public async Task Should_find_multiple_dependency_conflicts()
         {
             DISetup.SetupContainer();
 
@@ -719,8 +719,8 @@ namespace IronyModManager.Services.Tests
                 }
             };
             var indexed = new IndexedDefinitions();
-            indexed.InitMap(definitions);
-            var result = service.FindConflicts(indexed, new List<string>(), IronyModManager.Models.Common.PatchStateMode.Default);
+            await indexed.InitMapAsync(definitions);
+            var result = await service.FindConflictsAsync(indexed, new List<string>(), IronyModManager.Models.Common.PatchStateMode.Default);
             result.Conflicts.GetAll().Count().Should().Be(2);
             result.Conflicts.GetAllFileKeys().Count().Should().Be(1);
             result.Conflicts.GetAll().All(p => p.ModName == "test3" || p.ModName == "test4").Should().BeTrue();
@@ -730,7 +730,7 @@ namespace IronyModManager.Services.Tests
         /// Defines the test method Should_find_variable_conflicts_in_different_filenames.
         /// </summary>
         [Fact]
-        public void Should_not_include_variable_conflicts()
+        public async Task Should_not_include_variable_conflicts()
         {
             DISetup.SetupContainer();
 
@@ -786,8 +786,8 @@ namespace IronyModManager.Services.Tests
                 },
             };
             var indexed = new IndexedDefinitions();
-            indexed.InitMap(definitions);
-            var result = service.FindConflicts(indexed, new List<string>(), IronyModManager.Models.Common.PatchStateMode.Default);
+            await indexed.InitMapAsync(definitions);
+            var result = await service.FindConflictsAsync(indexed, new List<string>(), IronyModManager.Models.Common.PatchStateMode.Default);
             result.Conflicts.GetAll().Count().Should().Be(0);
             result.Conflicts.GetAllFileKeys().Count().Should().Be(0);
         }
@@ -796,7 +796,7 @@ namespace IronyModManager.Services.Tests
         /// Defines the test method Should_return_all_conflicts.
         /// </summary>
         [Fact]
-        public void Should_return_all_conflicts()
+        public async Task Should_return_all_conflicts()
         {
             DISetup.SetupContainer();
 
@@ -834,8 +834,8 @@ namespace IronyModManager.Services.Tests
                 }
             };
             var indexed = new IndexedDefinitions();
-            indexed.InitMap(definitions);
-            var result = service.FindConflicts(indexed, new List<string>(), IronyModManager.Models.Common.PatchStateMode.Default);
+            await indexed.InitMapAsync(definitions);
+            var result = await service.FindConflictsAsync(indexed, new List<string>(), IronyModManager.Models.Common.PatchStateMode.Default);
             result.AllConflicts.GetAll().Count().Should().Be(2);
         }
 
@@ -909,7 +909,7 @@ namespace IronyModManager.Services.Tests
             var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter);
 
             var indexed = new IndexedDefinitions();
-            indexed.InitMap(new List<IDefinition>());
+            await indexed.InitMapAsync(new List<IDefinition>());
             var c = new ConflictResult()
             {
                 AllConflicts = indexed,
@@ -1006,13 +1006,13 @@ namespace IronyModManager.Services.Tests
                 },
             };
             var all = new IndexedDefinitions();
-            all.InitMap(definitions);
+            await all.InitMapAsync(definitions);
 
             var overwritten = new IndexedDefinitions();
-            overwritten.InitMap(new List<IDefinition>());
+            await overwritten.InitMapAsync(new List<IDefinition>());
 
             var resolved = new IndexedDefinitions();
-            resolved.InitMap(new List<IDefinition>());
+            await resolved.InitMapAsync(new List<IDefinition>());
 
             var c = new ConflictResult()
             {
@@ -1191,7 +1191,7 @@ namespace IronyModManager.Services.Tests
             gameService.Setup(p => p.GetSelected()).Returns((IGame)null);
 
             var indexed = new IndexedDefinitions();
-            indexed.InitMap(new List<IDefinition>());
+            await indexed.InitMapAsync(new List<IDefinition>());
             var c = new ConflictResult()
             {
                 AllConflicts = indexed,
@@ -1222,7 +1222,7 @@ namespace IronyModManager.Services.Tests
             gameService.Setup(p => p.GetSelected()).Returns((IGame)null);
 
             var indexed = new IndexedDefinitions();
-            indexed.InitMap(new List<IDefinition>());
+            await indexed.InitMapAsync(new List<IDefinition>());
             var c = new ConflictResult()
             {
                 AllConflicts = indexed,
@@ -1302,16 +1302,16 @@ namespace IronyModManager.Services.Tests
             modWriter.Setup(p => p.PurgeModDirectoryAsync(It.IsAny<ModWriterParameters>(), It.IsAny<bool>())).Returns(Task.FromResult(true));
 
             var all = new IndexedDefinitions();
-            all.InitMap(definitions);
+            await all.InitMapAsync(definitions);
 
             var conflicts = new IndexedDefinitions();
-            conflicts.InitMap(definitions);
+            await conflicts.InitMapAsync(definitions);
 
             var overwritten = new IndexedDefinitions();
-            overwritten.InitMap(new List<IDefinition>());
+            await overwritten.InitMapAsync(new List<IDefinition>());
 
             var resolved = new IndexedDefinitions();
-            resolved.InitMap(new List<IDefinition>());
+            await resolved.InitMapAsync(new List<IDefinition>());
 
             var c = new ConflictResult()
             {
@@ -1411,16 +1411,16 @@ namespace IronyModManager.Services.Tests
             modWriter.Setup(p => p.PurgeModDirectoryAsync(It.IsAny<ModWriterParameters>(), It.IsAny<bool>())).Returns(Task.FromResult(true));
 
             var all = new IndexedDefinitions();
-            all.InitMap(definitions);
+            await all.InitMapAsync(definitions);
 
             var conflicts = new IndexedDefinitions();
-            conflicts.InitMap(definitions);
+            await conflicts.InitMapAsync(definitions);
 
             var overwritten = new IndexedDefinitions();
-            overwritten.InitMap(new List<IDefinition>());
+            await overwritten.InitMapAsync(new List<IDefinition>());
 
             var resolved = new IndexedDefinitions();
-            resolved.InitMap(new List<IDefinition>());
+            await resolved.InitMapAsync(new List<IDefinition>());
 
             var c = new ConflictResult()
             {
@@ -1606,7 +1606,7 @@ namespace IronyModManager.Services.Tests
             var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter);
 
             var indexed = new IndexedDefinitions();
-            indexed.InitMap(new List<IDefinition>());
+            await indexed.InitMapAsync(new List<IDefinition>());
             var c = new ConflictResult()
             {
                 AllConflicts = indexed,
@@ -1690,13 +1690,13 @@ namespace IronyModManager.Services.Tests
                 },
             };
             var all = new IndexedDefinitions();
-            all.InitMap(definitions);
+            await all.InitMapAsync(definitions);
 
             var resolved = new IndexedDefinitions();
-            resolved.InitMap(new List<IDefinition>());
+            await resolved.InitMapAsync(new List<IDefinition>());
 
             var ignored = new IndexedDefinitions();
-            ignored.InitMap(new List<IDefinition>());
+            await ignored.InitMapAsync(new List<IDefinition>());
 
 
             var c = new ConflictResult()
@@ -3573,7 +3573,7 @@ namespace IronyModManager.Services.Tests
             var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter);
 
             var resolved = new IndexedDefinitions();
-            resolved.InitMap(new List<IDefinition>()
+            await resolved.InitMapAsync(new List<IDefinition>()
             {
                 new Definition()
                 {
@@ -3614,7 +3614,7 @@ namespace IronyModManager.Services.Tests
             });
             var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter);
             var resolved = new IndexedDefinitions();
-            resolved.InitMap(new List<IDefinition>()
+            await resolved.InitMapAsync(new List<IDefinition>()
             {
                 new Definition()
                 {
@@ -3656,7 +3656,7 @@ namespace IronyModManager.Services.Tests
             var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter);
 
             var ignored = new IndexedDefinitions();
-            ignored.InitMap(new List<IDefinition>()
+            await ignored.InitMapAsync(new List<IDefinition>()
             {
                 new Definition()
                 {
@@ -3698,7 +3698,7 @@ namespace IronyModManager.Services.Tests
             var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter);
 
             var ignored = new IndexedDefinitions();
-            ignored.InitMap(new List<IDefinition>()
+            await ignored.InitMapAsync(new List<IDefinition>()
             {
                 new Definition()
                 {
@@ -3791,7 +3791,7 @@ namespace IronyModManager.Services.Tests
             var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter);
 
             var indexed = new IndexedDefinitions();
-            indexed.InitMap(new List<IDefinition>());
+            await indexed.InitMapAsync(new List<IDefinition>());
             var c = new ConflictResult()
             {
                 AllConflicts = indexed,
@@ -3889,13 +3889,13 @@ namespace IronyModManager.Services.Tests
                 },
             };
             var all = new IndexedDefinitions();
-            all.InitMap(definitions);
+            await all.InitMapAsync(definitions);
 
             var resolved = new IndexedDefinitions();
-            resolved.InitMap(new List<IDefinition>());
+            await resolved.InitMapAsync(new List<IDefinition>());
 
             var custom = new IndexedDefinitions();
-            custom.InitMap(new List<IDefinition>());
+            await custom.InitMapAsync(new List<IDefinition>());
 
             var c = new ConflictResult()
             {
@@ -3995,13 +3995,13 @@ namespace IronyModManager.Services.Tests
                 },
             };
             var all = new IndexedDefinitions();
-            all.InitMap(definitions);
+            await all.InitMapAsync(definitions);
 
             var resolved = new IndexedDefinitions();
-            resolved.InitMap(new List<IDefinition>());
+            await resolved.InitMapAsync(new List<IDefinition>());
 
             var custom = new IndexedDefinitions();
-            custom.InitMap(new List<IDefinition>());
+            await custom.InitMapAsync(new List<IDefinition>());
 
             var c = new ConflictResult()
             {
@@ -4048,7 +4048,7 @@ namespace IronyModManager.Services.Tests
             var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter);
 
             var custom = new IndexedDefinitions();
-            custom.InitMap(new List<IDefinition>()
+            await custom.InitMapAsync(new List<IDefinition>()
             {
                 new Definition()
                 {
@@ -4090,7 +4090,7 @@ namespace IronyModManager.Services.Tests
             var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter);
 
             var custom = new IndexedDefinitions();
-            custom.InitMap(new List<IDefinition>()
+            await custom.InitMapAsync(new List<IDefinition>()
             {
                 new Definition()
                 {
@@ -4141,7 +4141,7 @@ namespace IronyModManager.Services.Tests
             });
             var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter);
             var custom = new IndexedDefinitions();
-            custom.InitMap(new List<IDefinition>()
+            await custom.InitMapAsync(new List<IDefinition>()
             {
                 new Definition()
                 {

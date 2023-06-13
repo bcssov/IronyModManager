@@ -21,6 +21,7 @@ using IronyModManager.Tests.Common;
 using IronyModManager.Shared.Models;
 using Xunit;
 using ValueType = IronyModManager.Shared.Models.ValueType;
+using System.Threading.Tasks;
 
 namespace IronyModManager.Parser.Tests
 {
@@ -33,7 +34,7 @@ namespace IronyModManager.Parser.Tests
         /// Defines the test method Returns_all_definitions.
         /// </summary>
         [Fact]
-        public void Returns_all_definitions()
+        public async Task Returns_all_definitions()
         {
             DISetup.SetupContainer();
             var defs = new List<IDefinition>();
@@ -51,7 +52,7 @@ namespace IronyModManager.Parser.Tests
                 });
             }
             var service = new IndexedDefinitions();
-            service.InitMap(defs);
+            await service.InitMapAsync(defs);
             var results = service.GetAll();
             results.Count().Should().Be(defs.Count);
             int match = 0;
@@ -69,7 +70,7 @@ namespace IronyModManager.Parser.Tests
         /// Defines the test method Returns_all_definitions_and_added_definitions.
         /// </summary>
         [Fact]
-        public void Returns_all_definitions_and_added_definitions()
+        public async Task Returns_all_definitions_and_added_definitions()
         {
             DISetup.SetupContainer();
             var defs = new List<IDefinition>();
@@ -87,8 +88,8 @@ namespace IronyModManager.Parser.Tests
                 });
             }
             var service = new IndexedDefinitions();
-            service.InitMap(defs);
-            service.AddToMap(new Definition()
+            await service.InitMapAsync(defs);
+            await service.AddToMapAsync(new Definition()
             {
                 Code = "a",
                 Id = "14",
@@ -102,7 +103,7 @@ namespace IronyModManager.Parser.Tests
         /// Defines the test method Returns_by_file.
         /// </summary>
         [Fact]
-        public void Returns_by_file()
+        public async Task Returns_by_file()
         {
             DISetup.SetupContainer();
             var defs = new List<IDefinition>();
@@ -120,7 +121,7 @@ namespace IronyModManager.Parser.Tests
                 });
             }
             var service = new IndexedDefinitions();
-            service.InitMap(defs);
+            await service.InitMapAsync(defs);
             var results = service.GetByFile("file");
             results.Count().Should().Be(defs.Where(s => s.File == "file").Count());
             int match = 0;
@@ -138,7 +139,7 @@ namespace IronyModManager.Parser.Tests
         /// Defines the test method Returns_by_disk_file.
         /// </summary>
         [Fact]
-        public void Returns_by_disk_file()
+        public async Task Returns_by_disk_file()
         {
             DISetup.SetupContainer();
             var defs = new List<IDefinition>();
@@ -157,7 +158,7 @@ namespace IronyModManager.Parser.Tests
                 });
             }
             var service = new IndexedDefinitions();
-            service.InitMap(defs);
+            await service.InitMapAsync(defs);
             var results = service.GetByDiskFile("diskfile");
             results.Count().Should().Be(defs.Where(s => s.DiskFile == "diskfile").Count());
             int match = 0;
@@ -175,7 +176,7 @@ namespace IronyModManager.Parser.Tests
         /// Defines the test method Returns_by_value_type.
         /// </summary>
         [Fact]
-        public void Returns_by_value_type()
+        public async Task Returns_by_value_type()
         {
             DISetup.SetupContainer();
             var defs = new List<IDefinition>();
@@ -194,7 +195,7 @@ namespace IronyModManager.Parser.Tests
                 });
             }
             var service = new IndexedDefinitions();
-            service.InitMap(defs);
+            await service.InitMapAsync(defs);
             var results = service.GetByValueType(ValueType.Object);
             results.Count().Should().Be(10);
         }
@@ -203,7 +204,7 @@ namespace IronyModManager.Parser.Tests
         /// Defines the test method Returns_by_parent_directory.
         /// </summary>
         [Fact]
-        public void Returns_by_parent_directory()
+        public async Task Returns_by_parent_directory()
         {
             DISetup.SetupContainer();
             var defs = new List<IDefinition>();
@@ -221,7 +222,7 @@ namespace IronyModManager.Parser.Tests
                 });
             }
             var service = new IndexedDefinitions();
-            service.InitMap(defs);
+            await service.InitMapAsync(defs);
             var results = service.GetByParentDirectory("events");
             results.Count().Should().Be(defs.Count);
         }
@@ -230,7 +231,7 @@ namespace IronyModManager.Parser.Tests
         /// Defines the test method Returns_all_file_keys.
         /// </summary>
         [Fact]
-        public void Returns_all_file_keys()
+        public async Task Returns_all_file_keys()
         {
             DISetup.SetupContainer();
             var defs = new List<IDefinition>();
@@ -248,7 +249,7 @@ namespace IronyModManager.Parser.Tests
                 });
             }
             var service = new IndexedDefinitions();
-            service.InitMap(defs);
+            await service.InitMapAsync(defs);
             var results = service.GetAllFileKeys();
             results.Count().Should().Be(defs.Count);
         }
@@ -257,7 +258,7 @@ namespace IronyModManager.Parser.Tests
         /// Defines the test method Returns_all_directory_keys.
         /// </summary>
         [Fact]
-        public void Returns_all_directory_keys()
+        public async Task Returns_all_directory_keys()
         {
             DISetup.SetupContainer();
             var defs = new List<IDefinition>();
@@ -275,7 +276,7 @@ namespace IronyModManager.Parser.Tests
                 });
             }
             var service = new IndexedDefinitions();
-            service.InitMap(defs);
+            await service.InitMapAsync(defs);
             var results = service.GetAllDirectoryKeys();
             results.Count().Should().Be(1);
         }
@@ -284,7 +285,7 @@ namespace IronyModManager.Parser.Tests
         /// Defines the test method HasGameDefinitions_should_be_false.
         /// </summary>
         [Fact]
-        public void HasGameDefinitions_should_be_false()
+        public async Task HasGameDefinitions_should_be_false()
         {
             DISetup.SetupContainer();
             var defs = new List<IDefinition>();
@@ -302,7 +303,7 @@ namespace IronyModManager.Parser.Tests
                 });
             }
             var service = new IndexedDefinitions();
-            service.InitMap(defs);
+            await service.InitMapAsync(defs);
             var results = service.HasGameDefinitions();
             results.Should().BeFalse();
         }
@@ -311,7 +312,7 @@ namespace IronyModManager.Parser.Tests
         /// Defines the test method HasGameDefinitions_should_be_true.
         /// </summary>
         [Fact]
-        public void HasGameDefinitions_should_be_true()
+        public async Task HasGameDefinitions_should_be_true()
         {
             DISetup.SetupContainer();
             var defs = new List<IDefinition>();
@@ -330,7 +331,7 @@ namespace IronyModManager.Parser.Tests
                 });
             }
             var service = new IndexedDefinitions();
-            service.InitMap(defs);
+            await service.InitMapAsync(defs);
             var results = service.HasGameDefinitions();
             results.Should().BeTrue();
         }
@@ -339,7 +340,7 @@ namespace IronyModManager.Parser.Tests
         /// Defines the test method HasResetDefinitions_should_be_false.
         /// </summary>
         [Fact]
-        public void HasResetDefinitions_should_be_false()
+        public async Task HasResetDefinitions_should_be_false()
         {
             DISetup.SetupContainer();
             var defs = new List<IDefinition>();
@@ -357,7 +358,7 @@ namespace IronyModManager.Parser.Tests
                 });
             }
             var service = new IndexedDefinitions();
-            service.InitMap(defs);
+            await service.InitMapAsync(defs);
             var results = service.HasResetDefinitions();
             results.Should().BeFalse();
         }
@@ -367,7 +368,7 @@ namespace IronyModManager.Parser.Tests
         /// Defines the test method HasResetDefinitions_should_be_false_due_to_no_hierarchical_definition.
         /// </summary>
         [Fact]
-        public void HasResetDefinitions_should_be_false_due_to_no_hierarchical_definition()
+        public async Task HasResetDefinitions_should_be_false_due_to_no_hierarchical_definition()
         {
             DISetup.SetupContainer();
             var defs = new List<IDefinition>();
@@ -386,7 +387,7 @@ namespace IronyModManager.Parser.Tests
                 });
             }
             var service = new IndexedDefinitions();
-            service.InitMap(defs);
+            await service.InitMapAsync(defs);
             var results = service.HasResetDefinitions();
             results.Should().BeFalse();
         }
@@ -395,7 +396,7 @@ namespace IronyModManager.Parser.Tests
         /// Defines the test method HasResetDefinitions_should_be_true.
         /// </summary>
         [Fact]
-        public void HasResetDefinitions_should_be_true()
+        public async Task HasResetDefinitions_should_be_true()
         {
             DISetup.SetupContainer();
             var defs = new List<IDefinition>();
@@ -414,7 +415,7 @@ namespace IronyModManager.Parser.Tests
                 });
             }
             var service = new IndexedDefinitions();
-            service.InitMap(defs, true);
+            await service.InitMapAsync(defs, true);
             var results = service.HasResetDefinitions();
             results.Should().BeTrue();
         }
@@ -423,7 +424,7 @@ namespace IronyModManager.Parser.Tests
         /// Defines the test method ChaneHierarchicalResetState_should_be_false_due_to_no_map_initalized.
         /// </summary>
         [Fact]
-        public void ChaneHierarchicalResetState_should_be_false_due_to_no_map_initalized()
+        public async Task ChaneHierarchicalResetState_should_be_false_due_to_no_map_initalized()
         {
             DISetup.SetupContainer();
             var defs = new List<IDefinition>();
@@ -442,7 +443,7 @@ namespace IronyModManager.Parser.Tests
                 });
             }
             var service = new IndexedDefinitions();
-            service.InitMap(defs, false);
+            await service.InitMapAsync(defs, false);
             var results = service.ChangeHierarchicalResetState(new Definition() { ResetType = ResetType.Resolved, Id = "1", Type = "1", File = "test\\1" });
             results.Should().BeFalse();
         }
@@ -451,7 +452,7 @@ namespace IronyModManager.Parser.Tests
         /// Defines the test method ChaneHierarchicalResetState_should_be_false_due_to_no_definition.
         /// </summary>
         [Fact]
-        public void ChaneHierarchicalResetState_should_be_false_due_to_no_definition()
+        public async Task ChanegHierarchicalResetState_should_be_false_due_to_no_definition()
         {
             DISetup.SetupContainer();
             var defs = new List<IDefinition>();
@@ -470,7 +471,7 @@ namespace IronyModManager.Parser.Tests
                 });
             }
             var service = new IndexedDefinitions();
-            service.InitMap(defs, true);
+            await service.InitMapAsync(defs, true);
             var results = service.ChangeHierarchicalResetState(null);
             results.Should().BeFalse();
         }
@@ -479,7 +480,7 @@ namespace IronyModManager.Parser.Tests
         /// Defines the test method ChaneHierarchicalResetState_should_be_true.
         /// </summary>
         [Fact]
-        public void ChaneHierarchicalResetState_should_be_true()
+        public async Task ChaneHierarchicalResetState_should_be_true()
         {
             DISetup.SetupContainer();
             var defs = new List<IDefinition>();
@@ -498,7 +499,7 @@ namespace IronyModManager.Parser.Tests
                 });
             }
             var service = new IndexedDefinitions();
-            service.InitMap(defs, true);
+            await service.InitMapAsync(defs, true);
             var results = service.ChangeHierarchicalResetState(new Definition() { ResetType = ResetType.None, Id = "1", Type = "1", File = "test\\1" });
             results.Should().BeTrue();
         }
@@ -507,7 +508,7 @@ namespace IronyModManager.Parser.Tests
         /// Defines the test method Returns_by_type.
         /// </summary>
         [Fact]
-        public void Returns_by_type()
+        public async Task Returns_by_type()
         {
             DISetup.SetupContainer();
             var defs = new List<IDefinition>();
@@ -525,7 +526,7 @@ namespace IronyModManager.Parser.Tests
                 });
             }
             var service = new IndexedDefinitions();
-            service.InitMap(defs);
+            await service.InitMapAsync(defs);
             var results = service.GetByType("type");
             results.Count().Should().Be(defs.Where(s => s.Type == "type").Count());
             int match = 0;
@@ -543,7 +544,7 @@ namespace IronyModManager.Parser.Tests
         /// Defines the test method Returns_hierarchical_objects.
         /// </summary>
         [Fact]
-        public void Returns_hierarchical_objects()
+        public async Task Returns_hierarchical_objects()
         {
             DISetup.SetupContainer();
             var defs = new List<IDefinition>();
@@ -561,7 +562,7 @@ namespace IronyModManager.Parser.Tests
                 });
             }
             var service = new IndexedDefinitions();
-            service.InitMap(defs, true);
+            await service.InitMapAsync(defs, true);
             var results = service.GetHierarchicalDefinitions();
             results.Count().Should().Be(1);
             results.First().Children.Count.Should().Be(10);
@@ -571,7 +572,7 @@ namespace IronyModManager.Parser.Tests
         /// Defines the test method Returns_all_type_keys.
         /// </summary>
         [Fact]
-        public void Returns_all_type_keys()
+        public async Task Returns_all_type_keys()
         {
             DISetup.SetupContainer();
             var defs = new List<IDefinition>();
@@ -589,7 +590,7 @@ namespace IronyModManager.Parser.Tests
                 });
             }
             var service = new IndexedDefinitions();
-            service.InitMap(defs);
+            await service.InitMapAsync(defs);
             var results = service.GetAllTypeKeys();
             results.Count().Should().Be(defs.Count);
         }
@@ -598,7 +599,7 @@ namespace IronyModManager.Parser.Tests
         /// Defines the test method Returns_by_type_and_id_constructed_key.
         /// </summary>
         [Fact]
-        public void Returns_by_type_and_id_constructed_key()
+        public async Task Returns_by_type_and_id_constructed_key()
         {
             DISetup.SetupContainer();
             var defs = new List<IDefinition>();
@@ -616,7 +617,7 @@ namespace IronyModManager.Parser.Tests
                 });
             }
             var service = new IndexedDefinitions();
-            service.InitMap(defs);
+            await service.InitMapAsync(defs);
             var results = service.GetByTypeAndId("type", "id");
             results.Count().Should().Be(defs.Where(s => s.Type == "type" && s.Id == "id").Count());
             int match = 0;
@@ -634,7 +635,7 @@ namespace IronyModManager.Parser.Tests
         /// Defines the test method Returns_by_type_and_id_non_constructed_key.
         /// </summary>
         [Fact]
-        public void Returns_by_type_and_id_non_constructed_key()
+        public async Task Returns_by_type_and_id_non_constructed_key()
         {
             DISetup.SetupContainer();
             var defs = new List<IDefinition>();
@@ -652,7 +653,7 @@ namespace IronyModManager.Parser.Tests
                 });
             }
             var service = new IndexedDefinitions();
-            service.InitMap(defs);
+            await service.InitMapAsync(defs);
             var results = service.GetByTypeAndId("type-id");
             results.Count().Should().Be(defs.Where(s => s.Type == "type" && s.Id == "id").Count());
             int match = 0;
@@ -670,7 +671,7 @@ namespace IronyModManager.Parser.Tests
         /// Defines the test method Returns_all_type_and_id_keys.
         /// </summary>
         [Fact]
-        public void Returns_all_type_and_id_keys()
+        public async Task Returns_all_type_and_id_keys()
         {
             DISetup.SetupContainer();
             var defs = new List<IDefinition>();
@@ -688,7 +689,7 @@ namespace IronyModManager.Parser.Tests
                 });
             }
             var service = new IndexedDefinitions();
-            service.InitMap(defs);
+            await service.InitMapAsync(defs);
             var results = service.GetAllTypeAndIdKeys();
             results.Count().Should().Be(defs.Count);
         }
@@ -697,7 +698,7 @@ namespace IronyModManager.Parser.Tests
         /// Defines the test method Deletes_specified_definition.
         /// </summary>
         [Fact]
-        public void Deletes_specified_definition()
+        public async Task Deletes_specified_definition()
         {
             DISetup.SetupContainer();
             var defs = new List<IDefinition>();
@@ -715,7 +716,7 @@ namespace IronyModManager.Parser.Tests
                 });
             }
             var service = new IndexedDefinitions();
-            service.InitMap(defs, true);
+            await service.InitMapAsync(defs, true);
             service.Remove(defs.First());
             var result = service.GetAll();
             result.Count().Should().Be(defs.Count - 1);
@@ -730,7 +731,7 @@ namespace IronyModManager.Parser.Tests
         /// Defines the test method Should_not_find_definition.
         /// </summary>
         [Fact]
-        public void Should_not_find_definition()
+        public async Task Should_not_find_definition()
         {
             DISetup.SetupContainer();
             var defs = new List<IDefinition>();
@@ -748,7 +749,7 @@ namespace IronyModManager.Parser.Tests
                 });
             }
             var service = new IndexedDefinitions();
-            service.InitMap(defs);
+            await service.InitMapAsync(defs);
             var results = service.SearchDefinitions("1");
             results.Should().BeNull();
         }
@@ -758,7 +759,7 @@ namespace IronyModManager.Parser.Tests
         /// Defines the test method Should_find_definition.
         /// </summary>
         [Fact]
-        public void Should_find_definition()
+        public async Task Should_find_definition()
         {
             DISetup.SetupContainer();
             var defs = new List<IDefinition>();
@@ -777,7 +778,7 @@ namespace IronyModManager.Parser.Tests
                 });
             }
             var service = new IndexedDefinitions();
-            service.InitMap(defs);
+            await service.InitMapAsync(defs);
             service.InitSearch();
             var results = service.SearchDefinitions("1");
             results.Count().Should().Be(1);
@@ -788,7 +789,7 @@ namespace IronyModManager.Parser.Tests
         /// Defines the test method Should_exist_by_file.
         /// </summary>
         [Fact]
-        public void Should_exist_by_file()
+        public async Task Should_exist_by_file()
         {
             DISetup.SetupContainer();
             var defs = new List<IDefinition>();
@@ -806,7 +807,7 @@ namespace IronyModManager.Parser.Tests
                 });
             }
             var service = new IndexedDefinitions();
-            service.InitMap(defs);
+            await service.InitMapAsync(defs);
             var results = service.ExistsByFile("1");
             results.Should().BeTrue();
         }
