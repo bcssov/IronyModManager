@@ -600,7 +600,7 @@ namespace IronyModManager.ViewModels.Controls
                 gameDefinitionLoadHandler?.Dispose();
 
                 // I know, I know... but I wanna force a cleanup
-                GC.Collect();
+                GC.Collect(GC.MaxGeneration, GCCollectionMode.Aggressive, true, true);
 
                 var largeMessageTitle = localizationManager.GetResource(LocalizationResources.Mod_Actions.ConflictSolver.TooLargePrompt.Title);
                 var largeMessageBody = localizationManager.GetResource(LocalizationResources.Mod_Actions.ConflictSolver.TooLargePrompt.Message);
@@ -665,7 +665,7 @@ namespace IronyModManager.ViewModels.Controls
             gameDefinitionLoadHandler?.Dispose();
 
             // I know, I know... but I wanna force a cleanup
-            GC.Collect();
+            GC.Collect(GC.MaxGeneration, GCCollectionMode.Aggressive, true, true);
         }
 
         /// <summary>

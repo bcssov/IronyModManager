@@ -789,6 +789,7 @@ namespace IronyModManager.ViewModels
                 BackAllowed = false;
                 Conflicts?.Dispose();
                 Conflicts = null;
+                modPatchCollectionService.ResetPatchStateCache();
                 SelectedModsOrder = null;
                 SelectedModCollection = null;
                 cachedInvalids = null;
@@ -800,6 +801,7 @@ namespace IronyModManager.ViewModels
                 ReactiveUI.MessageBus.Current.SendMessage(args);
                 BackAllowed = true;
                 await TriggerOverlayAsync(id, false);
+                GC.Collect(GC.MaxGeneration, GCCollectionMode.Aggressive, true, true);
             }, backAllowed).DisposeWith(disposables);
 
             ResolveCommand = ReactiveCommand.CreateFromTask(() =>
