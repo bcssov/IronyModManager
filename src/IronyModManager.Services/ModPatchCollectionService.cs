@@ -936,9 +936,9 @@ namespace IronyModManager.Services
                         {
                             continue;
                         }
-                        if (!conflicts.CustomConflicts.ExistsByFile(file) &&
-                            !conflicts.OverwrittenConflicts.ExistsByFile(file) &&
-                            !conflicts.ResolvedConflicts.ExistsByFile(file))
+                        if (!await conflicts.CustomConflicts.ExistsByFileAsync(file) &&
+                            !await conflicts.OverwrittenConflicts.ExistsByFileAsync(file) &&
+                            !await conflicts.ResolvedConflicts.ExistsByFileAsync(file))
                         {
                             cleaned = await ModWriter.PurgeModDirectoryAsync(new ModWriterParameters()
                             {
@@ -976,7 +976,7 @@ namespace IronyModManager.Services
             async Task<(IIndexedDefinitions, int)> partialCopyIndexedDefinitions(IIndexedDefinitions indexedDefinitions, int total, int processed, int maxProgress)
             {
                 var copy = DIResolver.Get<IIndexedDefinitions>();
-                foreach (var item in indexedDefinitions.GetAll())
+                foreach (var item in await indexedDefinitions.GetAllAsync())
                 {
                     await copy.AddToMapAsync(PartialDefinitionCopy(item));
                     processed++;
@@ -1005,11 +1005,11 @@ namespace IronyModManager.Services
                     RootPath = GetModDirectoryRootPath(game),
                     PatchPath = EvaluatePatchNamePath(game, patchName)
                 });
-                foreach (var item in conflictResult.OverwrittenConflicts.GetAll().GroupBy(p => p.ParentDirectory))
+                foreach (var item in (await conflictResult.OverwrittenConflicts.GetAllAsync()).GroupBy(p => p.ParentDirectory))
                 {
                     await cleanSingleMergeFiles(item.First().ParentDirectory, patchName);
                 }
-                var total = patchFiles.Count() + conflictResult.AllConflicts.GetAll().Count();
+                var total = patchFiles.Count() + (await conflictResult.AllConflicts.GetAllAsync()).Count();
                 if (state != null)
                 {
                     var resolvedConflicts = new List<IDefinition>(state.ResolvedConflicts);
@@ -1057,10 +1057,10 @@ namespace IronyModManager.Services
                     var resolvedIndex = DIResolver.Get<IIndexedDefinitions>();
                     await resolvedIndex.InitMapAsync(resolvedConflicts, true);
 
-                    if (conflictResult.OverwrittenConflicts.GetAll().Any())
+                    if ((await conflictResult.OverwrittenConflicts.GetAllAsync()).Any())
                     {
                         var alreadyMergedTypes = new HashSet<string>();
-                        var overwrittenConflicts = PopulateModPath(conflictResult.OverwrittenConflicts.GetAll(), GetCollectionMods());
+                        var overwrittenConflicts = PopulateModPath(await conflictResult.OverwrittenConflicts.GetAllAsync(), GetCollectionMods());
                         foreach (var item in overwrittenConflicts)
                         {
                             var definition = item;
@@ -1125,7 +1125,7 @@ namespace IronyModManager.Services
                     processed = partialCopyResult.Item2;
 
                     var conflictsIndex = DIResolver.Get<IIndexedDefinitions>();
-                    await conflictsIndex.InitMapAsync(conflictResult.Conflicts.GetAll(), true);
+                    await conflictsIndex.InitMapAsync(await conflictResult.Conflicts.GetAllAsync(), true);
                     conflicts.Conflicts = conflictsIndex;
                     conflicts.ResolvedConflicts = resolvedIndex;
                     var ignoredIndex = DIResolver.Get<IIndexedDefinitions>();
@@ -1147,11 +1147,11 @@ namespace IronyModManager.Services
                             LoadOrder = GetCollectionMods(collectionName: collectionName).Select(p => p.DescriptorFile),
                             Mode = MapPatchStateMode(conflicts.Mode),
                             IgnoreConflictPaths = conflicts.IgnoredPaths,
-                            Conflicts = GetDefinitionOrDefault(conflicts.Conflicts),
-                            ResolvedConflicts = GetDefinitionOrDefault(conflicts.ResolvedConflicts),
-                            IgnoredConflicts = GetDefinitionOrDefault(conflicts.IgnoredConflicts),
-                            OverwrittenConflicts = GetDefinitionOrDefault(conflicts.OverwrittenConflicts),
-                            CustomConflicts = GetDefinitionOrDefault(conflicts.CustomConflicts),
+                            Conflicts = await GetDefinitionOrDefaultAsync(conflicts.Conflicts),
+                            ResolvedConflicts = await GetDefinitionOrDefaultAsync(conflicts.ResolvedConflicts),
+                            IgnoredConflicts = await GetDefinitionOrDefaultAsync(conflicts.IgnoredConflicts),
+                            OverwrittenConflicts = await GetDefinitionOrDefaultAsync(conflicts.OverwrittenConflicts),
+                            CustomConflicts = await GetDefinitionOrDefaultAsync(conflicts.CustomConflicts),
                             RootPath = GetModDirectoryRootPath(game),
                             PatchPath = EvaluatePatchNamePath(game, patchName),
                             HasGameDefinitions = conflicts.AllConflicts.HasGameDefinitions()
@@ -1170,10 +1170,10 @@ namespace IronyModManager.Services
                     processed = await syncPatchFiles(conflictResult, patchFiles, patchName, total, processed, 100);
 
                     var exportedConflicts = false;
-                    if (conflictResult.OverwrittenConflicts.GetAll().Any())
+                    if ((await conflictResult.OverwrittenConflicts.GetAllAsync()).Any())
                     {
                         var alreadyMergedTypes = new HashSet<string>();
-                        var overwrittenConflicts = PopulateModPath(conflictResult.OverwrittenConflicts.GetAll(), GetCollectionMods());
+                        var overwrittenConflicts = PopulateModPath(await conflictResult.OverwrittenConflicts.GetAllAsync(), GetCollectionMods());
                         foreach (var item in overwrittenConflicts)
                         {
                             var definition = item;
@@ -1235,11 +1235,11 @@ namespace IronyModManager.Services
                             LoadOrder = GetCollectionMods(collectionName: collectionName).Select(p => p.DescriptorFile),
                             Mode = MapPatchStateMode(conflictResult.Mode),
                             IgnoreConflictPaths = conflictResult.IgnoredPaths,
-                            Conflicts = GetDefinitionOrDefault(conflictResult.Conflicts),
-                            ResolvedConflicts = GetDefinitionOrDefault(conflictResult.ResolvedConflicts),
-                            IgnoredConflicts = GetDefinitionOrDefault(conflictResult.IgnoredConflicts),
-                            OverwrittenConflicts = GetDefinitionOrDefault(conflictResult.OverwrittenConflicts),
-                            CustomConflicts = GetDefinitionOrDefault(conflictResult.CustomConflicts),
+                            Conflicts = await GetDefinitionOrDefaultAsync(conflictResult.Conflicts),
+                            ResolvedConflicts = await GetDefinitionOrDefaultAsync(conflictResult.ResolvedConflicts),
+                            IgnoredConflicts = await GetDefinitionOrDefaultAsync(conflictResult.IgnoredConflicts),
+                            OverwrittenConflicts = await GetDefinitionOrDefaultAsync(conflictResult.OverwrittenConflicts),
+                            CustomConflicts = await GetDefinitionOrDefaultAsync(conflictResult.CustomConflicts),
                             RootPath = GetModDirectoryRootPath(game),
                             PatchPath = EvaluatePatchNamePath(game, patchName),
                             HasGameDefinitions = conflictResult.AllConflicts.HasGameDefinitions()
@@ -1607,11 +1607,11 @@ namespace IronyModManager.Services
                     LoadOrder = GetCollectionMods(collectionName: collectionName).Select(p => p.DescriptorFile),
                     Mode = MapPatchStateMode(conflictResult.Mode),
                     IgnoreConflictPaths = conflictResult.IgnoredPaths,
-                    Conflicts = GetDefinitionOrDefault(conflictResult.Conflicts),
-                    ResolvedConflicts = GetDefinitionOrDefault(conflictResult.ResolvedConflicts),
-                    IgnoredConflicts = GetDefinitionOrDefault(conflictResult.IgnoredConflicts),
-                    OverwrittenConflicts = GetDefinitionOrDefault(conflictResult.OverwrittenConflicts),
-                    CustomConflicts = GetDefinitionOrDefault(conflictResult.CustomConflicts),
+                    Conflicts = await GetDefinitionOrDefaultAsync(conflictResult.Conflicts),
+                    ResolvedConflicts = await GetDefinitionOrDefaultAsync(conflictResult.ResolvedConflicts),
+                    IgnoredConflicts = await GetDefinitionOrDefaultAsync(conflictResult.IgnoredConflicts),
+                    OverwrittenConflicts = await GetDefinitionOrDefaultAsync(conflictResult.OverwrittenConflicts),
+                    CustomConflicts = await GetDefinitionOrDefaultAsync(conflictResult.CustomConflicts),
                     RootPath = GetModDirectoryRootPath(game),
                     PatchPath = EvaluatePatchNamePath(game, patchName),
                     HasGameDefinitions = conflictResult.AllConflicts.HasGameDefinitions()
@@ -2262,7 +2262,7 @@ namespace IronyModManager.Services
 
                     // Reset type flag since it was resolved now
                     definition.ResetType = ResetType.None;
-                    conflictResult.ResolvedConflicts.ChangeHierarchicalResetState(definition);
+                    await conflictResult.ResolvedConflicts.ChangeHierarchicalResetStateAsync(definition);
 
                     var exportResult = false;
                     if (exportPatches.Any())
@@ -2305,11 +2305,11 @@ namespace IronyModManager.Services
                         Mode = MapPatchStateMode(conflictResult.Mode),
                         IgnoreConflictPaths = conflictResult.IgnoredPaths,
                         Definitions = exportPatches,
-                        Conflicts = GetDefinitionOrDefault(conflictResult.Conflicts),
-                        ResolvedConflicts = GetDefinitionOrDefault(conflictResult.ResolvedConflicts),
-                        IgnoredConflicts = GetDefinitionOrDefault(conflictResult.IgnoredConflicts),
-                        OverwrittenConflicts = GetDefinitionOrDefault(conflictResult.OverwrittenConflicts),
-                        CustomConflicts = GetDefinitionOrDefault(conflictResult.CustomConflicts),
+                        Conflicts = await GetDefinitionOrDefaultAsync(conflictResult.Conflicts),
+                        ResolvedConflicts = await GetDefinitionOrDefaultAsync(conflictResult.ResolvedConflicts),
+                        IgnoredConflicts = await GetDefinitionOrDefaultAsync(conflictResult.IgnoredConflicts),
+                        OverwrittenConflicts = await GetDefinitionOrDefaultAsync(conflictResult.OverwrittenConflicts),
+                        CustomConflicts = await GetDefinitionOrDefaultAsync(conflictResult.CustomConflicts),
                         RootPath = GetModDirectoryRootPath(game),
                         PatchPath = EvaluatePatchNamePath(game, patchName),
                         HasGameDefinitions = conflictResult.AllConflicts.HasGameDefinitions()
@@ -2350,13 +2350,18 @@ namespace IronyModManager.Services
         }
 
         /// <summary>
-        /// Gets the definition or default.
+        /// Get definition or default as an asynchronous operation.
         /// </summary>
         /// <param name="definitions">The definitions.</param>
-        /// <returns>IList&lt;IDefinition&gt;.</returns>
-        protected virtual IList<IDefinition> GetDefinitionOrDefault(IIndexedDefinitions definitions)
+        /// <returns>A Task&lt;IList`1&gt; representing the asynchronous operation.</returns>
+        protected virtual async Task<IList<IDefinition>> GetDefinitionOrDefaultAsync(IIndexedDefinitions definitions)
         {
-            return definitions != null && definitions.GetAll() != null ? definitions.GetAll().ToList() : new List<IDefinition>();
+            if (definitions != null)
+            {
+                var defs = await definitions.GetAllAsync();
+                return defs.ToList();
+            }
+            return new List<IDefinition>();            
         }
 
         /// <summary>
@@ -3115,11 +3120,11 @@ namespace IronyModManager.Services
                         LoadOrder = GetCollectionMods(collectionName: collectionName).Select(p => p.DescriptorFile),
                         Mode = MapPatchStateMode(conflictResult.Mode),
                         IgnoreConflictPaths = conflictResult.IgnoredPaths,
-                        Conflicts = GetDefinitionOrDefault(conflictResult.Conflicts),
-                        ResolvedConflicts = GetDefinitionOrDefault(conflictResult.ResolvedConflicts),
-                        IgnoredConflicts = GetDefinitionOrDefault(conflictResult.IgnoredConflicts),
-                        OverwrittenConflicts = GetDefinitionOrDefault(conflictResult.OverwrittenConflicts),
-                        CustomConflicts = GetDefinitionOrDefault(conflictResult.CustomConflicts),
+                        Conflicts = await GetDefinitionOrDefaultAsync(conflictResult.Conflicts),
+                        ResolvedConflicts = await GetDefinitionOrDefaultAsync(conflictResult.ResolvedConflicts),
+                        IgnoredConflicts = await GetDefinitionOrDefaultAsync(conflictResult.IgnoredConflicts),
+                        OverwrittenConflicts = await GetDefinitionOrDefaultAsync(conflictResult.OverwrittenConflicts),
+                        CustomConflicts = await GetDefinitionOrDefaultAsync(conflictResult.CustomConflicts),
                         RootPath = GetModDirectoryRootPath(game),
                         PatchPath = EvaluatePatchNamePath(game, patchName),
                         HasGameDefinitions = conflictResult.AllConflicts.HasGameDefinitions()

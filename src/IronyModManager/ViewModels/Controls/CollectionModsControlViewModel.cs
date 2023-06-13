@@ -1,10 +1,11 @@
-﻿// ***********************************************************************
+﻿
+// ***********************************************************************
 // Assembly         : IronyModManager
 // Author           : Mario
 // Created          : 03-03-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-12-2023
+// Last Modified On : 06-13-2023
 // ***********************************************************************
 // <copyright file="CollectionModsControlViewModel.cs" company="Mario">
 //     Mario
@@ -46,6 +47,7 @@ using static IronyModManager.ViewModels.Controls.ModifyCollectionControlViewMode
 
 namespace IronyModManager.ViewModels.Controls
 {
+
     /// <summary>
     /// Class CollectionModsControlViewModel.
     /// Implements the <see cref="IronyModManager.Common.ViewModels.BaseViewModel" />
@@ -1334,10 +1336,7 @@ namespace IronyModManager.ViewModels.Controls
                                 if (descriptors.Count == paths.Count)
                                 {
                                     var existingMod = mods.FirstOrDefault(p => p.DescriptorFile.Equals(descriptor, StringComparison.OrdinalIgnoreCase));
-                                    if (existingMod == null)
-                                    {
-                                        existingMod = mods.FirstOrDefault(p => p.FullPath.Equals(paths[i], StringComparison.OrdinalIgnoreCase));
-                                    }
+                                    existingMod ??= mods.FirstOrDefault(p => p.FullPath.Equals(paths[i], StringComparison.OrdinalIgnoreCase));
                                     importedMods.Add(existingMod != null ? existingMod.DescriptorFile : descriptor);
                                 }
                                 else
@@ -1354,6 +1353,7 @@ namespace IronyModManager.ViewModels.Controls
                     restoreCollectionSelection = result.Name;
                     LoadModCollections();
                     var showImportNotification = true;
+
                     // Check if any mods do not exist
                     if (hasMods && mods.Any())
                     {
@@ -1490,12 +1490,12 @@ namespace IronyModManager.ViewModels.Controls
             }).DisposeWith(disposables);
 
             RemoveCommand = ReactiveCommand.CreateFromTask(async () =>
-           {
-               if (SelectedModCollection != null)
-               {
-                   await RemoveCollectionAsync(SelectedModCollection.Name);
-               }
-           }, allowModSelectionEnabled).DisposeWith(disposables);
+            {
+                if (SelectedModCollection != null)
+                {
+                    await RemoveCollectionAsync(SelectedModCollection.Name);
+                }
+            }, allowModSelectionEnabled).DisposeWith(disposables);
 
             this.WhenAnyValue(c => c.SelectedModCollection).Subscribe(o =>
             {
@@ -1674,6 +1674,7 @@ namespace IronyModManager.ViewModels.Controls
                     }
                     var modCount = SelectedModCollection?.Mods.Count();
                     var selectedModsCount = SelectedMods?.Count;
+
                     // Save only if the collection is fully loaded
                     if (modCount.GetValueOrDefault() == selectedModsCount.GetValueOrDefault())
                     {
@@ -1970,6 +1971,7 @@ namespace IronyModManager.ViewModels.Controls
             {
                 var modCount = SelectedModCollection?.Mods.Count();
                 var selectedModsCount = SelectedMods?.Count;
+
                 // Save only if the collection is fully loaded
                 if (modCount.GetValueOrDefault() == selectedModsCount.GetValueOrDefault())
                 {
@@ -2284,6 +2286,7 @@ namespace IronyModManager.ViewModels.Controls
         {
             var game = gameService.GetSelected()?.Type ?? string.Empty;
             var collection = modCollectionService.Create();
+
             // Due to async nature ensure that the game and mods are from the same source before saving
             if (collection != null && SelectedModCollection != null && Mods != null && game.Equals(SelectedModCollection.Game) && activeGame != null && activeGame.Type.Equals(game))
             {

@@ -515,8 +515,8 @@ namespace IronyModManager.Services.Tests
             });
             var service = GetService(gameIndexer, storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService);
             var result = await service.LoadDefinitionsAsync(defs, new Game() { Name = "fake game" }, new List<string>() { "3.0.3" });
-            result.GetAll().Count().Should().Be(2);
-            result.GetAll().FirstOrDefault(p => p.ModName == "fake game").Should().NotBeNull();
+            (await result.GetAllAsync()).Count().Should().Be(2);
+            (await result.GetAllAsync()).FirstOrDefault(p => p.ModName == "fake game").Should().NotBeNull();
         }
     }
 }

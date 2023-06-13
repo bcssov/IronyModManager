@@ -53,7 +53,7 @@ namespace IronyModManager.Parser.Tests
             }
             var service = new IndexedDefinitions();
             await service.InitMapAsync(defs);
-            var results = service.GetAll();
+            var results = await service.GetAllAsync();
             results.Count().Should().Be(defs.Count);
             int match = 0;
             foreach (var item in defs)
@@ -95,7 +95,7 @@ namespace IronyModManager.Parser.Tests
                 Id = "14",
                 Type = "14"
             });
-            var results = service.GetAll();
+            var results = await service.GetAllAsync();
             results.Count().Should().Be(defs.Count + 1);
         }
 
@@ -444,7 +444,7 @@ namespace IronyModManager.Parser.Tests
             }
             var service = new IndexedDefinitions();
             await service.InitMapAsync(defs, false);
-            var results = service.ChangeHierarchicalResetState(new Definition() { ResetType = ResetType.Resolved, Id = "1", Type = "1", File = "test\\1" });
+            var results = await service.ChangeHierarchicalResetStateAsync(new Definition() { ResetType = ResetType.Resolved, Id = "1", Type = "1", File = "test\\1" });
             results.Should().BeFalse();
         }
 
@@ -472,7 +472,7 @@ namespace IronyModManager.Parser.Tests
             }
             var service = new IndexedDefinitions();
             await service.InitMapAsync(defs, true);
-            var results = service.ChangeHierarchicalResetState(null);
+            var results = await service.ChangeHierarchicalResetStateAsync(null);
             results.Should().BeFalse();
         }
 
@@ -500,7 +500,7 @@ namespace IronyModManager.Parser.Tests
             }
             var service = new IndexedDefinitions();
             await service.InitMapAsync(defs, true);
-            var results = service.ChangeHierarchicalResetState(new Definition() { ResetType = ResetType.None, Id = "1", Type = "1", File = "test\\1" });
+            var results = await service.ChangeHierarchicalResetStateAsync(new Definition() { ResetType = ResetType.None, Id = "1", Type = "1", File = "test\\1" });
             results.Should().BeTrue();
         }
 
@@ -718,7 +718,7 @@ namespace IronyModManager.Parser.Tests
             var service = new IndexedDefinitions();
             await service.InitMapAsync(defs, true);
             service.Remove(defs.First());
-            var result = service.GetAll();
+            var result = await service.GetAllAsync();
             result.Count().Should().Be(defs.Count - 1);
             result.FirstOrDefault(p => p.Id == "0").Should().BeNull();
             var hierarchalResult = service.GetHierarchicalDefinitions();
@@ -808,7 +808,7 @@ namespace IronyModManager.Parser.Tests
             }
             var service = new IndexedDefinitions();
             await service.InitMapAsync(defs);
-            var results = service.ExistsByFile("1");
+            var results = await service.ExistsByFileAsync("1");
             results.Should().BeTrue();
         }
 

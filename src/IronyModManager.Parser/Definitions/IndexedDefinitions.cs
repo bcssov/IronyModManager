@@ -166,7 +166,7 @@ namespace IronyModManager.Parser.Definitions
         /// </summary>
         /// <param name="definition">The definition.</param>
         /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
-        public bool ChangeHierarchicalResetState(IDefinition definition)
+        public Task<bool> ChangeHierarchicalResetStateAsync(IDefinition definition)
         {
             if (definition != null)
             {
@@ -182,12 +182,12 @@ namespace IronyModManager.Parser.Definitions
                             child.ResetType = definition.ResetType;
                             AddOrRemoveFromResetDefinitions(definition, false);
                             hierarchicalDefinition.ResetType = children.Any(p => p.ResetType != ResetType.None) ? ResetType.Any : ResetType.None;
-                            return true;
+                            return Task.FromResult(true);
                         }
                     }
                 }
             }
-            return false;
+            return Task.FromResult(false);
         }
 
         /// <summary>
@@ -223,22 +223,22 @@ namespace IronyModManager.Parser.Definitions
         }
 
         /// <summary>
-        /// Existses the by file.
+        /// Exists by file asynchronous.
         /// </summary>
         /// <param name="file">The file.</param>
-        /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
-        public bool ExistsByFile(string file)
+        /// <returns>Task&lt;System.Boolean&gt;.</returns>
+        public Task<bool> ExistsByFileAsync(string file)
         {
-            return allFileKeys.Contains(file.ToLowerInvariant());
+            return Task.FromResult(allFileKeys.Contains(file.ToLowerInvariant()));
         }
 
         /// <summary>
         /// Gets all.
         /// </summary>
         /// <returns>IEnumerable&lt;IDefinition&gt;.</returns>
-        public IEnumerable<IDefinition> GetAll()
+        public Task<IEnumerable<IDefinition>> GetAllAsync()
         {
-            return new HashSet<IDefinition>(definitions);
+            return Task.FromResult<IEnumerable<IDefinition>>(new HashSet<IDefinition>(definitions));
         }
 
         /// <summary>

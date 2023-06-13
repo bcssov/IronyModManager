@@ -41,20 +41,20 @@ namespace IronyModManager.Shared.Models
         /// </summary>
         /// <param name="definition">The definition.</param>
         /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
-        bool ChangeHierarchicalResetState(IDefinition definition);
+        Task<bool> ChangeHierarchicalResetStateAsync(IDefinition definition);
 
         /// <summary>
-        /// Existses the by file.
+        /// Existses the by file asynchronous.
         /// </summary>
         /// <param name="file">The file.</param>
-        /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
-        bool ExistsByFile(string file);
+        /// <returns>Task&lt;System.Boolean&gt;.</returns>
+        Task<bool> ExistsByFileAsync(string file);
 
         /// <summary>
-        /// Gets all.
+        /// Gets all asynchronous.
         /// </summary>
-        /// <returns>IEnumerable&lt;IDefinition&gt;.</returns>
-        IEnumerable<IDefinition> GetAll();
+        /// <returns>Task&lt;IEnumerable&lt;IDefinition&gt;&gt;.</returns>
+        Task<IEnumerable<IDefinition>> GetAllAsync();
 
         /// <summary>
         /// Gets all directory keys.
