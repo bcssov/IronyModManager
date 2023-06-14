@@ -255,7 +255,7 @@ namespace IronyModManager.ViewModels
             BindOverlay();
 
             ReactiveUI.MessageBus.Current.Listen<NavigationEventArgs>()
-                .Subscribe(s =>
+                .Subscribe(async s =>
                 {
                     ReactiveUI.MessageBus.Current.SendMessage(new ForceClosePopulsEventArgs());
                     state = s.State;
@@ -266,14 +266,14 @@ namespace IronyModManager.ViewModels
                             ConflictSolver.SelectedModCollection = s.SelectedCollection;
                             ConflictSolver.SelectedModsOrder = s.SelectedMods;
                             ConflictSolver.Conflicts = s.Results;
-                            ConflictSolver.InitializeAsync(s.State == NavigationState.ReadOnlyConflictSolver).ConfigureAwait(true);
-                            AnimateTransitionAsync(false).ConfigureAwait(true);
+                            await ConflictSolver.InitializeAsync(s.State == NavigationState.ReadOnlyConflictSolver).ConfigureAwait(true);
+                            await AnimateTransitionAsync(false).ConfigureAwait(true);
                             break;
 
                         default:
-                            AnimateTransitionAsync(true).ConfigureAwait(true);
+                            await AnimateTransitionAsync(true).ConfigureAwait(true);
                             Main.Reset();
-                            FreeMemoryAsync().ConfigureAwait(true);
+                            await Task.Run(() => FreeMemoryAsync().ConfigureAwait(true));
                             break;
                     }
                 }).DisposeWith(disposables);
