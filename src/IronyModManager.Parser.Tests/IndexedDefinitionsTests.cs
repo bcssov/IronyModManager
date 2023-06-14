@@ -122,7 +122,7 @@ namespace IronyModManager.Parser.Tests
             }
             var service = new IndexedDefinitions();
             await service.InitMapAsync(defs);
-            var results = service.GetByFile("file");
+            var results = await service.GetByFileAsync("file");
             results.Count().Should().Be(defs.Where(s => s.File == "file").Count());
             int match = 0;
             foreach (var item in defs.Where(s => s.File == "file"))
@@ -159,7 +159,7 @@ namespace IronyModManager.Parser.Tests
             }
             var service = new IndexedDefinitions();
             await service.InitMapAsync(defs);
-            var results = service.GetByDiskFile("diskfile");
+            var results = await service.GetByDiskFileAsync("diskfile");
             results.Count().Should().Be(defs.Where(s => s.DiskFile == "diskfile").Count());
             int match = 0;
             foreach (var item in defs.Where(s => s.DiskFile == "diskfile"))
@@ -196,7 +196,7 @@ namespace IronyModManager.Parser.Tests
             }
             var service = new IndexedDefinitions();
             await service.InitMapAsync(defs);
-            var results = service.GetByValueType(ValueType.Object);
+            var results = (await service.GetByValueTypeAsync(ValueType.Object));
             results.Count().Should().Be(10);
         }
 
@@ -223,7 +223,7 @@ namespace IronyModManager.Parser.Tests
             }
             var service = new IndexedDefinitions();
             await service.InitMapAsync(defs);
-            var results = service.GetByParentDirectory("events");
+            var results = await service.GetByParentDirectoryAsync("events");
             results.Count().Should().Be(defs.Count);
         }
 
@@ -527,7 +527,7 @@ namespace IronyModManager.Parser.Tests
             }
             var service = new IndexedDefinitions();
             await service.InitMapAsync(defs);
-            var results = service.GetByType("type");
+            var results = await service.GetByTypeAsync("type");
             results.Count().Should().Be(defs.Where(s => s.Type == "type").Count());
             int match = 0;
             foreach (var item in defs.Where(s => s.Type == "type"))
@@ -618,7 +618,7 @@ namespace IronyModManager.Parser.Tests
             }
             var service = new IndexedDefinitions();
             await service.InitMapAsync(defs);
-            var results = service.GetByTypeAndId("type", "id");
+            var results = await service.GetByTypeAndIdAsync("type", "id");
             results.Count().Should().Be(defs.Where(s => s.Type == "type" && s.Id == "id").Count());
             int match = 0;
             foreach (var item in defs.Where(s => s.Type == "type" && s.Id == "id"))
@@ -654,7 +654,7 @@ namespace IronyModManager.Parser.Tests
             }
             var service = new IndexedDefinitions();
             await service.InitMapAsync(defs);
-            var results = service.GetByTypeAndId("type-id");
+            var results = await service.GetByTypeAndIdAsync("type-id");
             results.Count().Should().Be(defs.Where(s => s.Type == "type" && s.Id == "id").Count());
             int match = 0;
             foreach (var item in defs.Where(s => s.Type == "type" && s.Id == "id"))
@@ -723,8 +723,8 @@ namespace IronyModManager.Parser.Tests
             result.FirstOrDefault(p => p.Id == "0").Should().BeNull();
             var hierarchalResult = service.GetHierarchicalDefinitions();
             hierarchalResult.First().Children.Count.Should().Be(defs.Count - 1);
-            hierarchalResult.First().Children.FirstOrDefault(p => p.Key.StartsWith("0")).Should().BeNull();
-            service.GetByTypeAndId(defs.First().TypeAndId).Count().Should().Be(0);
+            hierarchalResult.First().Children.FirstOrDefault(p => p.Key.StartsWith("0")).Should().BeNull();            
+            (await service.GetByTypeAndIdAsync(defs.First().TypeAndId)).Count().Should().Be(0);
         }
 
         /// <summary>

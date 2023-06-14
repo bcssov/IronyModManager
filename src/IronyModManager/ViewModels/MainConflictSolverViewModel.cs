@@ -695,7 +695,7 @@ namespace IronyModManager.ViewModels
                 if (!invalidsChecked)
                 {
                     invalidsChecked = true;
-                    var invalid = conflictResult.AllConflicts.GetByValueType(ValueType.Invalid);
+                    var invalid = (await conflictResult.AllConflicts.GetByValueTypeAsync(ValueType.Invalid));
                     if (invalid?.Count() > 0)
                     {
                         var invalidDef = DIResolver.Get<IHierarchicalDefinitions>();
@@ -851,12 +851,12 @@ namespace IronyModManager.ViewModels
                 EvalViewerVisibility();
             }).DisposeWith(disposables);
 
-            this.WhenAnyValue(v => v.SelectedConflict).Subscribe(s =>
+            this.WhenAnyValue(v => v.SelectedConflict).Subscribe(async s =>
             {
                 if (Conflicts?.Conflicts != null && !string.IsNullOrWhiteSpace(s?.Key) && IsConflictSolverAvailable)
                 {
                     PreviousConflictIndex = SelectedParentConflict.Children.ToList().IndexOf(s);
-                    var conflicts = Conflicts.Conflicts.GetByTypeAndId(s.Key).ToObservableCollection();
+                    var conflicts = (await Conflicts.Conflicts.GetByTypeAndIdAsync(s.Key)).ToObservableCollection();
                     ModCompareSelector.SelectedModsOrder = SelectedModsOrder;
                     ModCompareSelector.CollectionName = SelectedModCollection.Name;
                     ModCompareSelector.IsBinaryConflict = IsBinaryConflict = conflicts?.FirstOrDefault()?.ValueType == ValueType.Binary;

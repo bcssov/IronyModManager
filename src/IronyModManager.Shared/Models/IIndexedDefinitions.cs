@@ -85,35 +85,28 @@ namespace IronyModManager.Shared.Models
         /// </summary>
         /// <param name="file">The file.</param>
         /// <returns>IEnumerable&lt;IDefinition&gt;.</returns>
-        IEnumerable<IDefinition> GetByDiskFile(string file);
+        Task<IEnumerable<IDefinition>> GetByDiskFileAsync(string file);
 
         /// <summary>
         /// Gets the by file.
         /// </summary>
         /// <param name="file">The file.</param>
         /// <returns>IEnumerable&lt;IDefinition&gt;.</returns>
-        IEnumerable<IDefinition> GetByFile(string file);
+        Task<IEnumerable<IDefinition>> GetByFileAsync(string file);
 
         /// <summary>
         /// Gets the by parent directory.
         /// </summary>
         /// <param name="directory">The directory.</param>
         /// <returns>IEnumerable&lt;IDefinition&gt;.</returns>
-        IEnumerable<IDefinition> GetByParentDirectory(string directory);
-
-        /// <summary>
-        /// Gets the type of the by.
-        /// </summary>
-        /// <param name="type">The type.</param>
-        /// <returns>IEnumerable&lt;IDefinition&gt;.</returns>
-        IEnumerable<IDefinition> GetByType(string type);
+        Task<IEnumerable<IDefinition>> GetByParentDirectoryAsync(string directory);
 
         /// <summary>
         /// Gets the by type andi d.
         /// </summary>
         /// <param name="typeAndId">The type and identifier.</param>
         /// <returns>IEnumerable&lt;IDefinition&gt;.</returns>
-        IEnumerable<IDefinition> GetByTypeAndId(string typeAndId);
+        Task<IEnumerable<IDefinition>> GetByTypeAndIdAsync(string typeAndId);
 
         /// <summary>
         /// Gets the by type and identifier.
@@ -121,14 +114,21 @@ namespace IronyModManager.Shared.Models
         /// <param name="type">The type.</param>
         /// <param name="id">The identifier.</param>
         /// <returns>IEnumerable&lt;IDefinition&gt;.</returns>
-        IEnumerable<IDefinition> GetByTypeAndId(string type, string id);
+        Task<IEnumerable<IDefinition>> GetByTypeAndIdAsync(string type, string id);
 
         /// <summary>
-        /// Gets the type of the by value.
+        /// Gets the type of the by.
         /// </summary>
         /// <param name="type">The type.</param>
         /// <returns>IEnumerable&lt;IDefinition&gt;.</returns>
-        IEnumerable<IDefinition> GetByValueType(ValueType type);
+        Task<IEnumerable<IDefinition>> GetByTypeAsync(string type);
+
+        /// <summary>
+        /// Gets the by value type asynchronous.
+        /// </summary>
+        /// <param name="type">The type.</param>
+        /// <returns>Task&lt;IEnumerable&lt;IDefinition&gt;&gt;.</returns>
+        Task<IEnumerable<IDefinition>> GetByValueTypeAsync(ValueType type);
 
         /// <summary>
         /// Gets the hierarchical definitions.

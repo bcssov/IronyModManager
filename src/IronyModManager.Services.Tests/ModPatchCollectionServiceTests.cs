@@ -1431,7 +1431,7 @@ namespace IronyModManager.Services.Tests
             var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter);
             var result = await service.InitializePatchStateAsync(c, "fake");
             (await result.Conflicts.GetAllAsync()).Count().Should().Be(2);
-            (await result.Conflicts.GetAllAsync()).Count().Should().Be(0);
+            (await result.ResolvedConflicts.GetAllAsync()).Count().Should().Be(0);
         }
 
 

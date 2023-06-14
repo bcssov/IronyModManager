@@ -238,7 +238,7 @@ namespace IronyModManager.Parser.Tests
 
             foreach (var dir in dirs)
             {
-                var all = indexed.GetByParentDirectory(dir);
+                var all = await indexed.GetByParentDirectoryAsync(dir);
                 if (all.Count() <= 2 && !all.All(p => p.ValueType == ValueType.WholeTextFile))
                 {
                     if (!singleObjects.Contains(all.First().File))
@@ -250,7 +250,7 @@ namespace IronyModManager.Parser.Tests
 
             foreach (var item in typesKeys)
             {
-                var all = indexed.GetByType(item);
+                var all = await indexed.GetByTypeAsync(item);
                 var types = all.Where(p => p.ValueType != ValueType.Invalid).ToHashSet();
                 if (all.Any(p => p.ValueType == ValueType.Invalid))
                 {

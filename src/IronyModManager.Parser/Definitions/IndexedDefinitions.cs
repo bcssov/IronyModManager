@@ -282,9 +282,9 @@ namespace IronyModManager.Parser.Definitions
         /// </summary>
         /// <param name="file">The file.</param>
         /// <returns>IEnumerable&lt;IDefinition&gt;.</returns>
-        public IEnumerable<IDefinition> GetByDiskFile(string file)
+        public Task<IEnumerable<IDefinition>> GetByDiskFileAsync(string file)
         {
-            return definitions.GetAllByNameNoLock(nameof(IDefinition.DiskFileCI), file.ToLowerInvariant());
+            return Task.FromResult(definitions.GetAllByNameNoLock(nameof(IDefinition.DiskFileCI), file.ToLowerInvariant()));
         }
 
         /// <summary>
@@ -292,9 +292,9 @@ namespace IronyModManager.Parser.Definitions
         /// </summary>
         /// <param name="file">The file.</param>
         /// <returns>IEnumerable&lt;IDefinition&gt;.</returns>
-        public IEnumerable<IDefinition> GetByFile(string file)
+        public Task<IEnumerable<IDefinition>> GetByFileAsync(string file)
         {
-            return definitions.GetAllByNameNoLock(nameof(IDefinition.FileCI), file.ToLowerInvariant());
+            return Task.FromResult(definitions.GetAllByNameNoLock(nameof(IDefinition.FileCI), file.ToLowerInvariant()));
         }
 
         /// <summary>
@@ -302,19 +302,9 @@ namespace IronyModManager.Parser.Definitions
         /// </summary>
         /// <param name="directory">The directory.</param>
         /// <returns>IEnumerable&lt;IDefinition&gt;.</returns>
-        public IEnumerable<IDefinition> GetByParentDirectory(string directory)
+        public Task<IEnumerable<IDefinition>> GetByParentDirectoryAsync(string directory)
         {
-            return definitions.GetAllByNameNoLock(nameof(IDefinition.ParentDirectoryCI), directory.ToLowerInvariant());
-        }
-
-        /// <summary>
-        /// Gets the type of the by.
-        /// </summary>
-        /// <param name="type">The type.</param>
-        /// <returns>IEnumerable&lt;IDefinition&gt;.</returns>
-        public IEnumerable<IDefinition> GetByType(string type)
-        {
-            return definitions.GetAllByNameNoLock(nameof(IDefinition.Type), type);
+            return Task.FromResult(definitions.GetAllByNameNoLock(nameof(IDefinition.ParentDirectoryCI), directory.ToLowerInvariant()));
         }
 
         /// <summary>
@@ -323,9 +313,9 @@ namespace IronyModManager.Parser.Definitions
         /// <param name="type">The type.</param>
         /// <param name="id">The identifier.</param>
         /// <returns>IEnumerable&lt;IDefinition&gt;.</returns>
-        public IEnumerable<IDefinition> GetByTypeAndId(string type, string id)
+        public Task<IEnumerable<IDefinition>> GetByTypeAndIdAsync(string type, string id)
         {
-            return GetByTypeAndId(ConstructKey(type, id));
+            return GetByTypeAndIdAsync(ConstructKey(type, id));
         }
 
         /// <summary>
@@ -333,9 +323,19 @@ namespace IronyModManager.Parser.Definitions
         /// </summary>
         /// <param name="typeAndId">The type and identifier.</param>
         /// <returns>IEnumerable&lt;IDefinition&gt;.</returns>
-        public IEnumerable<IDefinition> GetByTypeAndId(string typeAndId)
+        public Task<IEnumerable<IDefinition>> GetByTypeAndIdAsync(string typeAndId)
         {
-            return definitions.GetAllByNameNoLock(nameof(IDefinition.TypeAndId), typeAndId);
+            return Task.FromResult(definitions.GetAllByNameNoLock(nameof(IDefinition.TypeAndId), typeAndId));
+        }
+
+        /// <summary>
+        /// Gets the type of the by.
+        /// </summary>
+        /// <param name="type">The type.</param>
+        /// <returns>IEnumerable&lt;IDefinition&gt;.</returns>
+        public Task<IEnumerable<IDefinition>> GetByTypeAsync(string type)
+        {
+            return Task.FromResult(definitions.GetAllByNameNoLock(nameof(IDefinition.Type), type));
         }
 
         /// <summary>
@@ -343,9 +343,9 @@ namespace IronyModManager.Parser.Definitions
         /// </summary>
         /// <param name="type">The type.</param>
         /// <returns>IEnumerable&lt;IDefinition&gt;.</returns>
-        public IEnumerable<IDefinition> GetByValueType(ValueType type)
+        public Task<IEnumerable<IDefinition>> GetByValueTypeAsync(ValueType type)
         {
-            return definitions.GetAllByNameNoLock(nameof(IDefinition.ValueType), type);
+            return Task.FromResult(definitions.GetAllByNameNoLock(nameof(IDefinition.ValueType), type));
         }
 
         /// <summary>

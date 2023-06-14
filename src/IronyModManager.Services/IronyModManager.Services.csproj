@@ -55,6 +55,7 @@
     </PackageReference>    
     <PackageReference Include="Sajidur78.StrongNamer" Version="0.2.8" />
     <PackageReference Include="SimpleInjector.Packaging" Version="5.0.0" />
+    <PackageReference Include="System.Linq.Async" Version="6.0.1" />
   </ItemGroup>
 
   <ItemGroup>
