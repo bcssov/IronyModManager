@@ -1154,7 +1154,7 @@ namespace IronyModManager.Services
                             CustomConflicts = await GetDefinitionOrDefaultAsync(conflicts.CustomConflicts),
                             RootPath = GetModDirectoryRootPath(game),
                             PatchPath = EvaluatePatchNamePath(game, patchName),
-                            HasGameDefinitions = conflicts.AllConflicts.HasGameDefinitions()
+                            HasGameDefinitions = await conflicts.AllConflicts.HasGameDefinitionsAsync()
                         });
                     }
                     await messageBus.PublishAsync(new ModDefinitionPatchLoadEvent(100));
@@ -1242,7 +1242,7 @@ namespace IronyModManager.Services
                             CustomConflicts = await GetDefinitionOrDefaultAsync(conflictResult.CustomConflicts),
                             RootPath = GetModDirectoryRootPath(game),
                             PatchPath = EvaluatePatchNamePath(game, patchName),
-                            HasGameDefinitions = conflictResult.AllConflicts.HasGameDefinitions()
+                            HasGameDefinitions = await conflictResult.AllConflicts.HasGameDefinitionsAsync()
                         });
                     }
 
@@ -1614,7 +1614,7 @@ namespace IronyModManager.Services
                     CustomConflicts = await GetDefinitionOrDefaultAsync(conflictResult.CustomConflicts),
                     RootPath = GetModDirectoryRootPath(game),
                     PatchPath = EvaluatePatchNamePath(game, patchName),
-                    HasGameDefinitions = conflictResult.AllConflicts.HasGameDefinitions()
+                    HasGameDefinitions = await conflictResult.AllConflicts.HasGameDefinitionsAsync()
                 });
             }
             return true;
@@ -1793,6 +1793,7 @@ namespace IronyModManager.Services
         /// <param name="patchStateMode">The patch state mode.</param>
         /// <param name="fileConflictCache">The file conflict cache.</param>
         /// <param name="modShaConflictCache">The mod sha conflict cache.</param>
+        /// <returns>A Task representing the asynchronous operation.</returns>
         protected virtual async Task EvalDefinitionsAsync(IIndexedDefinitions indexedDefinitions, HashSet<IDefinition> conflicts, IEnumerable<IDefinition> definitions, IList<string> modOrder, PatchStateMode patchStateMode, Dictionary<string, bool> fileConflictCache, Dictionary<string, List<string>> modShaConflictCache)
         {
             async Task<bool> existsInLastFile(IDefinition definition)
@@ -2033,7 +2034,7 @@ namespace IronyModManager.Services
                     else if (parsed.Equals(ShowResetConflicts))
                     {
                         // Only filter if there's actually something to filter
-                        if (conflictResult.Conflicts.HasResetDefinitions())
+                        if (await conflictResult.Conflicts.HasResetDefinitionsAsync())
                         {
                             showResetConflicts = true;
                         }
@@ -2312,7 +2313,7 @@ namespace IronyModManager.Services
                         CustomConflicts = await GetDefinitionOrDefaultAsync(conflictResult.CustomConflicts),
                         RootPath = GetModDirectoryRootPath(game),
                         PatchPath = EvaluatePatchNamePath(game, patchName),
-                        HasGameDefinitions = conflictResult.AllConflicts.HasGameDefinitions()
+                        HasGameDefinitions = await conflictResult.AllConflicts.HasGameDefinitionsAsync()
                     });
                     return exportPatches.Any() ? exportResult && stateResult : stateResult;
                 }
@@ -2361,7 +2362,7 @@ namespace IronyModManager.Services
                 var defs = await definitions.GetAllAsync();
                 return defs.ToList();
             }
-            return new List<IDefinition>();            
+            return new List<IDefinition>();
         }
 
         /// <summary>
@@ -3050,7 +3051,6 @@ namespace IronyModManager.Services
                                     }
                                     else
                                     {
-                                        
                                         await modPatchExporter.ExportDefinitionAsync(new ModPatchExporterParameters()
                                         {
                                             Game = game.Type,
@@ -3128,7 +3128,7 @@ namespace IronyModManager.Services
                         CustomConflicts = await GetDefinitionOrDefaultAsync(conflictResult.CustomConflicts),
                         RootPath = GetModDirectoryRootPath(game),
                         PatchPath = EvaluatePatchNamePath(game, patchName),
-                        HasGameDefinitions = conflictResult.AllConflicts.HasGameDefinitions()
+                        HasGameDefinitions = await conflictResult.AllConflicts.HasGameDefinitionsAsync()
                     });
                     return true;
                 }

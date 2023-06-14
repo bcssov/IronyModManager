@@ -266,7 +266,7 @@ namespace IronyModManager.ViewModels
                             ConflictSolver.SelectedModCollection = s.SelectedCollection;
                             ConflictSolver.SelectedModsOrder = s.SelectedMods;
                             ConflictSolver.Conflicts = s.Results;
-                            ConflictSolver.Initialize(s.State == NavigationState.ReadOnlyConflictSolver);
+                            ConflictSolver.InitializeAsync(s.State == NavigationState.ReadOnlyConflictSolver).ConfigureAwait(true);
                             AnimateTransitionAsync(false).ConfigureAwait(true);
                             break;
 

@@ -483,7 +483,7 @@ namespace IronyModManager.ViewModels
         /// Initializes the specified read only.
         /// </summary>
         /// <param name="readOnly">if set to <c>true</c> [read only].</param>
-        public void Initialize(bool readOnly)
+        public async Task InitializeAsync(bool readOnly)
         {
             ReadOnly = readOnly;
             ResetConflictsColumn = readOnly ? 0 : 1;
@@ -493,7 +493,7 @@ namespace IronyModManager.ViewModels
             ModCompareSelector.Reset();
             IgnoreEnabled = false;
             BackAllowed = true;
-            if (Conflicts.Conflicts.HasResetDefinitions())
+            if (await Conflicts.Conflicts.HasResetDefinitionsAsync())
             {
                 var sbResolved = new StringBuilder();
                 var sbIgnored = new StringBuilder();

@@ -304,7 +304,7 @@ namespace IronyModManager.Parser.Tests
             }
             var service = new IndexedDefinitions();
             await service.InitMapAsync(defs);
-            var results = service.HasGameDefinitions();
+            var results = await service.HasGameDefinitionsAsync();
             results.Should().BeFalse();
         }
 
@@ -332,7 +332,7 @@ namespace IronyModManager.Parser.Tests
             }
             var service = new IndexedDefinitions();
             await service.InitMapAsync(defs);
-            var results = service.HasGameDefinitions();
+            var results = await service.HasGameDefinitionsAsync();
             results.Should().BeTrue();
         }
 
@@ -359,7 +359,7 @@ namespace IronyModManager.Parser.Tests
             }
             var service = new IndexedDefinitions();
             await service.InitMapAsync(defs);
-            var results = service.HasResetDefinitions();
+            var results = await service.HasResetDefinitionsAsync();
             results.Should().BeFalse();
         }
 
@@ -388,7 +388,7 @@ namespace IronyModManager.Parser.Tests
             }
             var service = new IndexedDefinitions();
             await service.InitMapAsync(defs);
-            var results = service.HasResetDefinitions();
+            var results = await service.HasResetDefinitionsAsync();
             results.Should().BeFalse();
         }
 
@@ -416,7 +416,7 @@ namespace IronyModManager.Parser.Tests
             }
             var service = new IndexedDefinitions();
             await service.InitMapAsync(defs, true);
-            var results = service.HasResetDefinitions();
+            var results = await service.HasResetDefinitionsAsync();
             results.Should().BeTrue();
         }
 

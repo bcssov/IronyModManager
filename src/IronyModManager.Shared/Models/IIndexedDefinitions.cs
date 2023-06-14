@@ -137,16 +137,16 @@ namespace IronyModManager.Shared.Models
         IEnumerable<IHierarchicalDefinitions> GetHierarchicalDefinitions();
 
         /// <summary>
-        /// Determines whether [has game definitions].
+        /// Determines whether [has game definitions asynchronous].
         /// </summary>
-        /// <returns><c>true</c> if [has game definitions]; otherwise, <c>false</c>.</returns>
-        bool HasGameDefinitions();
+        /// <returns>Task&lt;System.Boolean&gt;.</returns>
+        Task<bool> HasGameDefinitionsAsync();
 
         /// <summary>
-        /// Determines whether [has reset definitions].
+        /// Determines whether [has reset definitions asynchronous].
         /// </summary>
-        /// <returns><c>true</c> if [has reset definitions]; otherwise, <c>false</c>.</returns>
-        bool HasResetDefinitions();
+        /// <returns>Task&lt;System.Boolean&gt;.</returns>
+        Task<bool> HasResetDefinitionsAsync();
 
         /// <summary>
         /// Initializes the map asynchronous.

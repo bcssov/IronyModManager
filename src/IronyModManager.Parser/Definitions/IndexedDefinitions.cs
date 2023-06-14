@@ -369,18 +369,18 @@ namespace IronyModManager.Parser.Definitions
         /// Determines whether [has game definitions].
         /// </summary>
         /// <returns><c>true</c> if [has game definitions]; otherwise, <c>false</c>.</returns>
-        public bool HasGameDefinitions()
+        public Task<bool> HasGameDefinitionsAsync()
         {
-            return gameDefinitionsCount > 0;
+            return Task.FromResult(gameDefinitionsCount > 0);
         }
 
         /// <summary>
         /// Determines whether [has reset definitions].
         /// </summary>
         /// <returns><c>true</c> if [has reset definitions]; otherwise, <c>false</c>.</returns>
-        public bool HasResetDefinitions()
+        public Task<bool> HasResetDefinitionsAsync()
         {
-            return resetDefinitions.Any();
+            return Task.FromResult(resetDefinitions.Any());
         }
 
         /// <summary>
