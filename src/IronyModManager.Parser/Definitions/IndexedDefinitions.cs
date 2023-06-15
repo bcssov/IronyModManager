@@ -5,7 +5,7 @@
 // Created          : 02-16-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-14-2023
+// Last Modified On : 06-15-2023
 // ***********************************************************************
 // <copyright file="IndexedDefinitions.cs" company="Mario">
 //     Mario
@@ -404,7 +404,8 @@ namespace IronyModManager.Parser.Definitions
         /// <summary>
         /// Initializes the search.
         /// </summary>
-        public void InitSearch()
+        /// <returns>Task.</returns>
+        public Task InitSearchAsync()
         {
             trie = new Trie<IDefinition>();
 
@@ -413,13 +414,15 @@ namespace IronyModManager.Parser.Definitions
             {
                 trie.Add(item, item.Tags);
             }
+            return Task.CompletedTask;
         }
 
         /// <summary>
         /// Removes the specified definition.
         /// </summary>
         /// <param name="definition">The definition.</param>
-        public void Remove(IDefinition definition)
+        /// <returns>Task.</returns>
+        public Task RemoveAsync(IDefinition definition)
         {
             if (definition.IsFromGame)
             {
@@ -454,6 +457,7 @@ namespace IronyModManager.Parser.Definitions
                     }
                 }
             }
+            return Task.CompletedTask;
         }
 
         /// <summary>
@@ -461,13 +465,13 @@ namespace IronyModManager.Parser.Definitions
         /// </summary>
         /// <param name="searchTerm">The search term.</param>
         /// <returns>IEnumerable&lt;IDefinition&gt;.</returns>
-        public IEnumerable<IDefinition> SearchDefinitions(string searchTerm)
+        public Task<IEnumerable<IDefinition>> SearchDefinitionsAsync(string searchTerm)
         {
             if (trie != null)
             {
-                return trie.Get(searchTerm.ToLowerInvariant());
+                return Task.FromResult<IEnumerable<IDefinition>>(trie.Get(searchTerm.ToLowerInvariant()));
             }
-            return null;
+            return Task.FromResult<IEnumerable<IDefinition>>(null);
         }
 
         /// <summary>

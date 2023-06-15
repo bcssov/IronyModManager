@@ -1160,7 +1160,7 @@ namespace IronyModManager.Services
                     await messageBus.PublishAsync(new ModDefinitionPatchLoadEvent(100));
 
                     // Initialize search here
-                    conflicts.AllConflicts.InitSearch();
+                    await conflicts.AllConflicts.InitSearchAsync();
 
                     return conflicts;
                 }
@@ -1254,7 +1254,7 @@ namespace IronyModManager.Services
                     await messageBus.PublishAsync(new ModDefinitionPatchLoadEvent(100));
 
                     // Initialize search here
-                    conflictResult.AllConflicts.InitSearch();
+                    await conflictResult.AllConflicts.InitSearchAsync();
 
                     return conflictResult;
                 }
@@ -3012,7 +3012,7 @@ namespace IronyModManager.Services
                     IEnumerable<IMod> collectionMods = null;
                     foreach (var item in result)
                     {
-                        indexed.Remove(item);
+                        await indexed.RemoveAsync(item);
                         if (purgeFiles)
                         {
                             var patchModDirectory = GetPatchModDirectory(game, patchName);

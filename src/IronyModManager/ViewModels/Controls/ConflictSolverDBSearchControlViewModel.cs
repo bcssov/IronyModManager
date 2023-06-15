@@ -1,10 +1,11 @@
-﻿// ***********************************************************************
+﻿
+// ***********************************************************************
 // Assembly         : IronyModManager
 // Author           : Mario
 // Created          : 06-14-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 12-07-2020
+// Last Modified On : 06-15-2023
 // ***********************************************************************
 // <copyright file="ConflictSolverDBSearchControlViewModel.cs" company="Mario">
 //     Mario
@@ -27,6 +28,7 @@ using ReactiveUI;
 
 namespace IronyModManager.ViewModels.Controls
 {
+
     /// <summary>
     /// Class ConflictSolverDBSearchControlViewModel.
     /// Implements the <see cref="IronyModManager.Common.ViewModels.BaseViewModel" />
@@ -35,6 +37,7 @@ namespace IronyModManager.ViewModels.Controls
     [ExcludeFromCoverage("This should be tested via functional testing.")]
     public class ConflictSolverDBSearchControlViewModel : BaseViewModel
     {
+
         #region Properties
 
         /// <summary>
@@ -150,11 +153,11 @@ namespace IronyModManager.ViewModels.Controls
                 Definitions = null;
             }).DisposeWith(disposables);
 
-            this.WhenAnyValue(p => p.SearchTerm).Where(s => !string.IsNullOrWhiteSpace(s) && s.Length >= 2).Subscribe(s =>
+            this.WhenAnyValue(p => p.SearchTerm).Where(s => !string.IsNullOrWhiteSpace(s) && s.Length >= 2).Subscribe(async s =>
             {
                 if (ConflictResult != null && ConflictResult.AllConflicts != null)
                 {
-                    var result = ConflictResult.AllConflicts.SearchDefinitions(s);
+                    var result = await ConflictResult.AllConflicts.SearchDefinitionsAsync(s);
                     if (result != null)
                     {
                         Definitions = result.OrderBy(p => p.TypeAndId, StringComparer.OrdinalIgnoreCase).ToObservableCollection();

@@ -5,7 +5,7 @@
 // Created          : 02-16-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-14-2023
+// Last Modified On : 06-15-2023
 // ***********************************************************************
 // <copyright file="IIndexedDefinitions.cs" company="Mario">
 //     Mario
@@ -157,22 +157,24 @@ namespace IronyModManager.Shared.Models
         Task InitMapAsync(IEnumerable<IDefinition> definitions, bool mapHierarchicalDefinitions = false);
 
         /// <summary>
-        /// Initializes the search.
+        /// Initializes the search asynchronous.
         /// </summary>
-        void InitSearch();
+        /// <returns>Task.</returns>
+        Task InitSearchAsync();
 
         /// <summary>
-        /// Removes the specified definition.
+        /// Removes the asynchronous.
         /// </summary>
         /// <param name="definition">The definition.</param>
-        void Remove(IDefinition definition);
+        /// <returns>Task.</returns>
+        Task RemoveAsync(IDefinition definition);
 
         /// <summary>
-        /// Searches the definitions.
+        /// Searches the definitions asynchronous.
         /// </summary>
         /// <param name="searchTerm">The search term.</param>
-        /// <returns>IEnumerable&lt;IDefinition&gt;.</returns>
-        IEnumerable<IDefinition> SearchDefinitions(string searchTerm);
+        /// <returns>Task&lt;IEnumerable&lt;IDefinition&gt;&gt;.</returns>
+        Task<IEnumerable<IDefinition>> SearchDefinitionsAsync(string searchTerm);
 
         #endregion Methods
     }

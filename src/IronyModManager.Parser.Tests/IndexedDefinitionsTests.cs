@@ -717,7 +717,7 @@ namespace IronyModManager.Parser.Tests
             }
             var service = new IndexedDefinitions();
             await service.InitMapAsync(defs, true);
-            service.Remove(defs.First());
+            await service.RemoveAsync(defs.First());
             var result = await service.GetAllAsync();
             result.Count().Should().Be(defs.Count - 1);
             result.FirstOrDefault(p => p.Id == "0").Should().BeNull();
@@ -750,7 +750,7 @@ namespace IronyModManager.Parser.Tests
             }
             var service = new IndexedDefinitions();
             await service.InitMapAsync(defs);
-            var results = service.SearchDefinitions("1");
+            var results = await service.SearchDefinitionsAsync("1");
             results.Should().BeNull();
         }
 
@@ -779,8 +779,8 @@ namespace IronyModManager.Parser.Tests
             }
             var service = new IndexedDefinitions();
             await service.InitMapAsync(defs);
-            service.InitSearch();
-            var results = service.SearchDefinitions("1");
+            await service.InitSearchAsync();
+            var results = await service.SearchDefinitionsAsync("1");
             results.Count().Should().Be(1);
             results.First().Id.Should().Be("1");
         }
