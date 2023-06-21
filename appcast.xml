@@ -4,13 +4,11 @@
 		<title>Irony Mod Manager</title>
 		<language>en</language>
 		<item>
-			<title>1.24.151</title>
+			<title>1.24.155</title>
 			<description>## Current Release Notes
-* Remove GameFinder as a dependency
-* Fix rare CTD when you were fast enough to hit back and resolve at similar time
-* Limit parallel processing of mods during 1st phase of analysis
-* Show an error message if mod source code exceeds 20 GB, that it's probably not a good idea to use it
-* Fix bug in handling code terminators inside quotes
+* Fix potential CTD while switching mod collections
+* Stellaris Conflict Solver now treats species_classes as file type overwrite
+* Stellaris Conflict Solver now respects "simple validation" declaration during manual code validation
 
 ## Release Notes 1.24
 * Update dependencies
@@ -21,17 +19,15 @@
 * Add support for metadata descriptor type games (Victoria 3 support)
 * Add option to ignore update
 * Improve mod loading performance</description>
-			<pubDate>Sat, 10 Jun 2023 22:43:17 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.24.151/linux-x64.zip" sparkle:version="1.24.151.3244" sparkle:shortVersionString="1.24.151" length="90103706" sparkle:os="linux" type="application/zip" sparkle:signature="EYOCkXkSZfvwBVS8ufikHCKHPQIZ+kiarvTzEKcvsD0YM0z2BnCFUYVo2xPOmEoxbwFXvwEf5d+6uvGVU3CyCw=="/>
+			<pubDate>Wed, 21 Jun 2023 22:18:06 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.24.155/linux-x64.zip" sparkle:version="1.24.155.45564" sparkle:shortVersionString="1.24.155" length="90109307" sparkle:os="linux" type="application/zip" sparkle:signature="waWnQiwdKmedADqMkTAcTOd1lMjZkoTUnC0zGfbkn5tIbykA66d3O939MQjtgCQ8AjX8kShmAiTqxnJYRaNdDQ=="/>
 		</item>
 		<item>
-			<title>1.24.151</title>
+			<title>1.24.155</title>
 			<description>## Current Release Notes
-* Remove GameFinder as a dependency
-* Fix rare CTD when you were fast enough to hit back and resolve at similar time
-* Limit parallel processing of mods during 1st phase of analysis
-* Show an error message if mod source code exceeds 20 GB, that it's probably not a good idea to use it
-* Fix bug in handling code terminators inside quotes
+* Fix potential CTD while switching mod collections
+* Stellaris Conflict Solver now treats species_classes as file type overwrite
+* Stellaris Conflict Solver now respects "simple validation" declaration during manual code validation
 
 ## Release Notes 1.24
 * Update dependencies
@@ -42,17 +38,15 @@
 * Add support for metadata descriptor type games (Victoria 3 support)
 * Add option to ignore update
 * Improve mod loading performance</description>
-			<pubDate>Sat, 10 Jun 2023 22:43:23 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.24.151/osx-x64.zip" sparkle:version="1.24.151.3244" sparkle:shortVersionString="1.24.151" length="93255549" sparkle:os="osx" type="application/zip" sparkle:signature="7qPKyKTd77LvFEPlTbTJpKclclSuK8F/wlV9UBcLdcVIP20R0iAIVqr8FKk2ZL+Bd5VWsYiQgE1Q87TOXuT0DQ=="/>
+			<pubDate>Wed, 21 Jun 2023 22:18:12 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.24.155/osx-x64.zip" sparkle:version="1.24.155.45564" sparkle:shortVersionString="1.24.155" length="93265281" sparkle:os="osx" type="application/zip" sparkle:signature="pB3Csp+Ss9vXfRqNJ34DXoPIzEvGt0ZiMaEOx00NA4v1OINJav3dTyoELARMNXu0Zs2fYuMJJ5JGyjpIfbWyAg=="/>
 		</item>
 		<item>
-			<title>1.24.151</title>
+			<title>1.24.155</title>
 			<description>## Current Release Notes
-* Remove GameFinder as a dependency
-* Fix rare CTD when you were fast enough to hit back and resolve at similar time
-* Limit parallel processing of mods during 1st phase of analysis
-* Show an error message if mod source code exceeds 20 GB, that it's probably not a good idea to use it
-* Fix bug in handling code terminators inside quotes
+* Fix potential CTD while switching mod collections
+* Stellaris Conflict Solver now treats species_classes as file type overwrite
+* Stellaris Conflict Solver now respects "simple validation" declaration during manual code validation
 
 ## Release Notes 1.24
 * Update dependencies
@@ -63,17 +57,15 @@
 * Add support for metadata descriptor type games (Victoria 3 support)
 * Add option to ignore update
 * Improve mod loading performance</description>
-			<pubDate>Sat, 10 Jun 2023 22:43:31 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.24.151/win-x64-setup.zip" sparkle:version="1.24.151.3244" sparkle:shortVersionString="1.24.151" length="71394710" sparkle:os="windows" type="application/zip" sparkle:signature="quXE1gLRDRswtiudIoJnjPYOMsvVMDHbp3a0A55PvPlQnTqR1hLA8OvXEyRKyUe42ObocS7ChDOnZC/eRI3cBA=="/>
+			<pubDate>Wed, 21 Jun 2023 22:18:17 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.24.155/win-x64-setup.zip" sparkle:version="1.24.155.45564" sparkle:shortVersionString="1.24.155" length="71396508" sparkle:os="windows" type="application/zip" sparkle:signature="iQTA4t7jCGojWY64G65OK84a7GtHXJE1AJ4Ha6rOKQLBNp/aBj9IUukWCVKofxyVV2xZQGkpK8iG7/BLRYnbAQ=="/>
 		</item>
 		<item>
-			<title>1.24.151</title>
+			<title>1.24.155</title>
 			<description>## Current Release Notes
-* Remove GameFinder as a dependency
-* Fix rare CTD when you were fast enough to hit back and resolve at similar time
-* Limit parallel processing of mods during 1st phase of analysis
-* Show an error message if mod source code exceeds 20 GB, that it's probably not a good idea to use it
-* Fix bug in handling code terminators inside quotes
+* Fix potential CTD while switching mod collections
+* Stellaris Conflict Solver now treats species_classes as file type overwrite
+* Stellaris Conflict Solver now respects "simple validation" declaration during manual code validation
 
 ## Release Notes 1.24
 * Update dependencies
@@ -84,8 +76,8 @@
 * Add support for metadata descriptor type games (Victoria 3 support)
 * Add option to ignore update
 * Improve mod loading performance</description>
-			<pubDate>Sat, 10 Jun 2023 22:43:32 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.24.151/win-x64.zip" sparkle:version="1.24.151.3244" sparkle:shortVersionString="1.24.151" length="104843211" sparkle:os="windows" type="application/zip" sparkle:signature="78FaZnjhseMoOId8Jyw3IBwPwQVoYFmTzX+FKjec5za0AUpc9ubtlyJNboW1TEQM8vTvmwaJAz+tMXcFHdcyDg=="/>
+			<pubDate>Wed, 21 Jun 2023 22:18:18 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.24.155/win-x64.zip" sparkle:version="1.24.155.45564" sparkle:shortVersionString="1.24.155" length="104863720" sparkle:os="windows" type="application/zip" sparkle:signature="1KMZWAj5j+ifl/bteLmpBeeIxaL7NIoUhiwrPdxc/N862lao1Dmh+Xh2jz7ctW/w3wvq/+rMnQfRBzQG/w86Bw=="/>
 		</item>
 	</channel>
 </rss>
