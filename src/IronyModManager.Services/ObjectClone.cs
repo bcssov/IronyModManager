@@ -1,10 +1,11 @@
-﻿// ***********************************************************************
+﻿
+// ***********************************************************************
 // Assembly         : IronyModManager.Services
 // Author           : Mario
 // Created          : 05-14-2023
 //
 // Last Modified By : Mario
-// Last Modified On : 05-14-2023
+// Last Modified On : 06-21-2023
 // ***********************************************************************
 // <copyright file="ObjectClone.cs" company="Mario">
 //     Mario
@@ -20,6 +21,7 @@ using IronyModManager.Shared.Models;
 
 namespace IronyModManager.Services
 {
+
     /// <summary>
     /// Class ObjectClone.
     /// Implements the <see cref="IObjectClone" />
@@ -77,6 +79,7 @@ namespace IronyModManager.Services
             newDefinition.IsPlaceholder = definition.IsPlaceholder;
             newDefinition.LastModified = definition.LastModified;
             newDefinition.OriginalId = definition.OriginalId;
+            newDefinition.UseSimpleValidation = definition.UseSimpleValidation;
             return newDefinition;
         }
 

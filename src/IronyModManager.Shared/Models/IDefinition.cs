@@ -1,10 +1,11 @@
-﻿// ***********************************************************************
+﻿
+// ***********************************************************************
 // Assembly         : IronyModManager.Shared
 // Author           : Mario
 // Created          : 02-16-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 05-14-2023
+// Last Modified On : 06-21-2023
 // ***********************************************************************
 // <copyright file="IDefinition.cs" company="Mario">
 //     Mario
@@ -18,6 +19,7 @@ using Newtonsoft.Json;
 
 namespace IronyModManager.Shared.Models
 {
+
     /// <summary>
     /// Interface IDefinition
     /// Implements the <see cref="CodexMicroORM.Core.Collections.ICEFIndexedListItem" />
@@ -270,6 +272,13 @@ namespace IronyModManager.Shared.Models
         /// </summary>
         /// <value>The used parser.</value>
         string UsedParser { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether [use simple validation].
+        /// </summary>
+        /// <value><c>true</c> if [use simple validation]; otherwise, <c>false</c>.</value>
+        [JsonIgnore]
+        bool? UseSimpleValidation { get; set; }
 
         /// <summary>
         /// Gets or sets the type of the value.

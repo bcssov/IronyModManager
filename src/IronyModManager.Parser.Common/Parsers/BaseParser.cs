@@ -1,10 +1,11 @@
-﻿// ***********************************************************************
+﻿
+// ***********************************************************************
 // Assembly         : IronyModManager.Parser.Common.Parsers
 // Author           : Mario
 // Created          : 02-17-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 05-14-2023
+// Last Modified On : 06-21-2023
 // ***********************************************************************
 // <copyright file="BaseParser.cs" company="Mario">
 //     Mario
@@ -25,6 +26,7 @@ using ValueType = IronyModManager.Shared.Models.ValueType;
 
 namespace IronyModManager.Parser.Common.Parsers
 {
+
     /// <summary>
     /// Class BaseParser.
     /// Implements the <see cref="IronyModManager.Parser.Common.Parsers.IDefaultParser" />
@@ -343,6 +345,10 @@ namespace IronyModManager.Parser.Common.Parsers
                 result.AddRange(ParseComplexTypes(values.Values, args));
                 result.AddRange(ParseTypesForVariables(values.Values, args));
             }
+            foreach (var item in result)
+            {
+                item.UseSimpleValidation = values.UseSimpleValidation;
+            }
             return result;
         }
 
@@ -397,6 +403,10 @@ namespace IronyModManager.Parser.Common.Parsers
                         result.AddRange(ParseTypesForVariables(item.Values, args, parent: item.Key, isFirstLevel: false));
                     }
                 }
+            }
+            foreach (var item in result)
+            {
+                item.UseSimpleValidation = values.UseSimpleValidation;
             }
             return result;
         }

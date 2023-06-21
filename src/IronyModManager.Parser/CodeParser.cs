@@ -5,7 +5,7 @@
 // Created          : 02-22-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-10-2023
+// Last Modified On : 06-21-2023
 // ***********************************************************************
 // <copyright file="CodeParser.cs" company="Mario">
 //     Mario
@@ -58,7 +58,7 @@ namespace IronyModManager.Parser
         /// <summary>
         /// The quotes regex
         /// </summary>
-        protected static readonly Regex quotesRegex = new Regex(@"""(\\""|\\\\|[^""\\])*""", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+        protected static readonly Regex quotesRegex = new(@"""(\\""|\\\\|[^""\\])*""", RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
         /// <summary>
         /// The logger
@@ -741,6 +741,7 @@ namespace IronyModManager.Parser
             var result = DIResolver.Get<IParseResponse>();
             if (skipValidityCheck)
             {
+                result.UseSimpleValidation = null;
                 try
                 {
                     result.Values = ParseElements(file, lines);
@@ -755,6 +756,7 @@ namespace IronyModManager.Parser
             }
             else
             {
+                result.UseSimpleValidation = performSimpleCheck;
                 var error = PerformValidityCheck(lines, file, performSimpleCheck);
                 if (error != null)
                 {
