@@ -243,6 +243,21 @@ namespace IronyModManager.Parser.Tests
         }
 
         /// <summary>
+        /// Defines the test method CanParse_species_classes_should_be_true.
+        /// </summary>
+        [Fact]
+        public void CanParse_species_classes_should_be_true()
+        {
+            var args = new CanParseArgs()
+            {
+                File = "common\\species_classes\\test.txt",
+                GameType = "Stellaris"
+            };
+            var parser = new WholeTextParser(new CodeParser(new Logger()), null);
+            parser.CanParse(args).Should().BeTrue();
+        }
+
+        /// <summary>
         /// Defines the test method Parse_should_yield_results.
         /// </summary>
         [Fact]
