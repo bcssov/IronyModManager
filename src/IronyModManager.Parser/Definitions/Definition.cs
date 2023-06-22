@@ -5,7 +5,7 @@
 // Created          : 02-16-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-21-2023
+// Last Modified On : 06-22-2023
 // ***********************************************************************
 // <copyright file="Definition.cs" company="Mario">
 //     Mario
@@ -677,7 +677,8 @@ namespace IronyModManager.Parser.Definitions
         /// Gets or sets a value indicating whether [use simple validation].
         /// </summary>
         /// <value><c>true</c> if [use simple validation]; otherwise, <c>false</c>.</value>
-        public bool? UseSimpleValidation { get; set; }
+        [JsonIgnore]
+        public bool? UseSimpleValidation { get; set; } = false;
 
         /// <summary>
         /// Gets or sets the type of the value.

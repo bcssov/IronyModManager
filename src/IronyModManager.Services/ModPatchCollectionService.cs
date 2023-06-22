@@ -5,7 +5,7 @@
 // Created          : 05-26-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-21-2023
+// Last Modified On : 06-22-2023
 // ***********************************************************************
 // <copyright file="ModPatchCollectionService.cs" company="Mario">
 //     Mario
@@ -317,7 +317,7 @@ namespace IronyModManager.Services
             if (game != null && copy != null && !string.IsNullOrWhiteSpace(collectionName))
             {
                 var patch = Mapper.Map<IDefinition>(copy);
-                copy.UseSimpleValidation = true;
+                patch.UseSimpleValidation = false;
                 patch.ModName = GenerateCollectionPatchName(collectionName);
                 var state = await modPatchExporter.GetPatchStateAsync(new ModPatchExporterParameters()
                 {
