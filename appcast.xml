@@ -4,8 +4,11 @@
 		<title>Irony Mod Manager</title>
 		<language>en</language>
 		<item>
-			<title>1.24.155</title>
+			<title>1.24.156</title>
 			<description>## Current Release Notes
+* Fix issue with Irony reverting to simple parsing all the time
+
+## 1.24.155 Release Notes
 * Fix potential CTD while switching mod collections
 * Stellaris Conflict Solver now treats species_classes as file type overwrite
 * Stellaris Conflict Solver now respects "simple validation" declaration during manual code validation
@@ -19,12 +22,15 @@
 * Add support for metadata descriptor type games (Victoria 3 support)
 * Add option to ignore update
 * Improve mod loading performance</description>
-			<pubDate>Wed, 21 Jun 2023 22:18:06 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.24.155/linux-x64.zip" sparkle:version="1.24.155.45564" sparkle:shortVersionString="1.24.155" length="90109307" sparkle:os="linux" type="application/zip" sparkle:signature="waWnQiwdKmedADqMkTAcTOd1lMjZkoTUnC0zGfbkn5tIbykA66d3O939MQjtgCQ8AjX8kShmAiTqxnJYRaNdDQ=="/>
+			<pubDate>Thu, 22 Jun 2023 03:17:17 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.24.156/linux-x64.zip" sparkle:version="1.24.156.34586" sparkle:shortVersionString="1.24.156" length="90109330" sparkle:os="linux" type="application/zip" sparkle:signature="0XcDUh28l0ogeBcJIHZz7azPsDVJ+cxPqI8dGOrfm519+57oYvM6scLxUp0yU5Tw1ALSfqcAcgNZi4k0y162AA=="/>
 		</item>
 		<item>
-			<title>1.24.155</title>
+			<title>1.24.156</title>
 			<description>## Current Release Notes
+* Fix issue with Irony reverting to simple parsing all the time
+
+## 1.24.155 Release Notes
 * Fix potential CTD while switching mod collections
 * Stellaris Conflict Solver now treats species_classes as file type overwrite
 * Stellaris Conflict Solver now respects "simple validation" declaration during manual code validation
@@ -38,12 +44,15 @@
 * Add support for metadata descriptor type games (Victoria 3 support)
 * Add option to ignore update
 * Improve mod loading performance</description>
-			<pubDate>Wed, 21 Jun 2023 22:18:12 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.24.155/osx-x64.zip" sparkle:version="1.24.155.45564" sparkle:shortVersionString="1.24.155" length="93265281" sparkle:os="osx" type="application/zip" sparkle:signature="pB3Csp+Ss9vXfRqNJ34DXoPIzEvGt0ZiMaEOx00NA4v1OINJav3dTyoELARMNXu0Zs2fYuMJJ5JGyjpIfbWyAg=="/>
+			<pubDate>Thu, 22 Jun 2023 03:17:23 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.24.156/osx-x64.zip" sparkle:version="1.24.156.34586" sparkle:shortVersionString="1.24.156" length="93265281" sparkle:os="osx" type="application/zip" sparkle:signature="gti00glZ4j1r/rRTkIU9g93+j8jYTUB3r1Zxte3LJZHxM6uHhhoHGoeH1//uLAw1bx5HBjll+I9OgSo/HPWiDA=="/>
 		</item>
 		<item>
-			<title>1.24.155</title>
+			<title>1.24.156</title>
 			<description>## Current Release Notes
+* Fix issue with Irony reverting to simple parsing all the time
+
+## 1.24.155 Release Notes
 * Fix potential CTD while switching mod collections
 * Stellaris Conflict Solver now treats species_classes as file type overwrite
 * Stellaris Conflict Solver now respects "simple validation" declaration during manual code validation
@@ -57,12 +66,15 @@
 * Add support for metadata descriptor type games (Victoria 3 support)
 * Add option to ignore update
 * Improve mod loading performance</description>
-			<pubDate>Wed, 21 Jun 2023 22:18:17 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.24.155/win-x64-setup.zip" sparkle:version="1.24.155.45564" sparkle:shortVersionString="1.24.155" length="71396508" sparkle:os="windows" type="application/zip" sparkle:signature="iQTA4t7jCGojWY64G65OK84a7GtHXJE1AJ4Ha6rOKQLBNp/aBj9IUukWCVKofxyVV2xZQGkpK8iG7/BLRYnbAQ=="/>
+			<pubDate>Thu, 22 Jun 2023 03:17:30 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.24.156/win-x64-setup.zip" sparkle:version="1.24.156.34586" sparkle:shortVersionString="1.24.156" length="71395720" sparkle:os="windows" type="application/zip" sparkle:signature="6gdM04yVS5xSPvnqnIM6MNCriDciPyDKYPkgDQ0iMxm0TT3MvI5KIFmoxkW0sKhF0rDKzBvpvxJTpxV0wLcqDQ=="/>
 		</item>
 		<item>
-			<title>1.24.155</title>
+			<title>1.24.156</title>
 			<description>## Current Release Notes
+* Fix issue with Irony reverting to simple parsing all the time
+
+## 1.24.155 Release Notes
 * Fix potential CTD while switching mod collections
 * Stellaris Conflict Solver now treats species_classes as file type overwrite
 * Stellaris Conflict Solver now respects "simple validation" declaration during manual code validation
@@ -76,8 +88,8 @@
 * Add support for metadata descriptor type games (Victoria 3 support)
 * Add option to ignore update
 * Improve mod loading performance</description>
-			<pubDate>Wed, 21 Jun 2023 22:18:18 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.24.155/win-x64.zip" sparkle:version="1.24.155.45564" sparkle:shortVersionString="1.24.155" length="104863720" sparkle:os="windows" type="application/zip" sparkle:signature="1KMZWAj5j+ifl/bteLmpBeeIxaL7NIoUhiwrPdxc/N862lao1Dmh+Xh2jz7ctW/w3wvq/+rMnQfRBzQG/w86Bw=="/>
+			<pubDate>Thu, 22 Jun 2023 03:17:30 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.24.156/win-x64.zip" sparkle:version="1.24.156.34586" sparkle:shortVersionString="1.24.156" length="104863699" sparkle:os="windows" type="application/zip" sparkle:signature="NZi884zq1lz4Kv/NfWhMd41nQ3hT6hnAUK/qaMXN54zgHCwyFFFXUkT3f1aSizVC1NGp8JFV0cA7L8BMdNqdDg=="/>
 		</item>
 	</channel>
 </rss>
