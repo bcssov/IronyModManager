@@ -5,7 +5,7 @@
 // Created          : 03-18-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-10-2023
+// Last Modified On : 06-22-2023
 // ***********************************************************************
 // <copyright file="MainConflictSolverViewModel.cs" company="Mario">
 //     Mario
@@ -595,7 +595,17 @@ namespace IronyModManager.ViewModels
         protected virtual async Task EvaluateDefinitionValidity()
         {
             BackAllowed = false;
-            var patchDefinition = ModCompareSelector.VirtualDefinitions.FirstOrDefault(p => modPatchCollectionService.IsPatchMod(p.ModName));
+            var virtualDefinitions = ModCompareSelector.VirtualDefinitions;
+            var patchDefinition = virtualDefinitions.FirstOrDefault(p => modPatchCollectionService.IsPatchMod(p.ModName));
+            patchDefinition.UseSimpleValidation = false;
+            if (virtualDefinitions.Any(p => p.UseSimpleValidation == null))
+            {
+                patchDefinition.UseSimpleValidation = null;
+            }
+            else if (virtualDefinitions.Any(p => p.UseSimpleValidation.GetValueOrDefault()))
+            {
+                patchDefinition.UseSimpleValidation = true;
+            }
             var validationResult = modPatchCollectionService.Validate(patchDefinition);
             if (!validationResult.IsValid)
             {

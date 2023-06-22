@@ -1,10 +1,11 @@
-﻿// ***********************************************************************
+﻿
+// ***********************************************************************
 // Assembly         : IronyModManager.Parser
 // Author           : Mario
 // Created          : 01-29-2022
 //
 // Last Modified By : Mario
-// Last Modified On : 05-14-2023
+// Last Modified On : 06-21-2023
 // ***********************************************************************
 // <copyright file="KeyValuePairParser.cs" company="Mario">
 //     Mario
@@ -21,6 +22,7 @@ using IronyModManager.Shared.Models;
 
 namespace IronyModManager.Parser.Games.HOI4
 {
+
     /// <summary>
     /// Class KeyValuePairParser.
     /// Implements the <see cref="IronyModManager.Parser.Common.Parsers.BaseParser" />
@@ -109,6 +111,10 @@ namespace IronyModManager.Parser.Games.HOI4
                     }
                     result.Add(definition);
                 }
+            }
+            foreach (var item in result)
+            {
+                item.UseSimpleValidation = parseResult.UseSimpleValidation;
             }
             return result;
         }

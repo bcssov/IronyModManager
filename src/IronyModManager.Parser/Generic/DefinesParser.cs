@@ -1,10 +1,11 @@
-﻿// ***********************************************************************
+﻿
+// ***********************************************************************
 // Assembly         : IronyModManager.Parser
 // Author           : Mario
 // Created          : 02-21-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 01-30-2022
+// Last Modified On : 06-21-2023
 // ***********************************************************************
 // <copyright file="DefinesParser.cs" company="Mario">
 //     Mario
@@ -25,6 +26,7 @@ using ValueType = IronyModManager.Shared.Models.ValueType;
 
 namespace IronyModManager.Parser.Generic
 {
+
     /// <summary>
     /// Class DefinesParser.
     /// Implements the <see cref="IronyModManager.Parser.Common.Parsers.BaseParser" />
@@ -188,6 +190,7 @@ namespace IronyModManager.Parser.Generic
                                 }
                             }
                         }
+                        definition.UseSimpleValidation = data.UseSimpleValidation;
                         result.Add(definition);
                     }
                     else if (dataItem.Values != null)
@@ -219,6 +222,7 @@ namespace IronyModManager.Parser.Generic
                                             }
                                         }
                                     }
+                                    definition.UseSimpleValidation = data.UseSimpleValidation;
                                     result.Add(definition);
                                 }
                             }
@@ -249,6 +253,7 @@ namespace IronyModManager.Parser.Generic
                                         }
                                     }
                                 }
+                                definition.UseSimpleValidation = data.UseSimpleValidation;
                                 result.Add(definition);
                             }
                         }

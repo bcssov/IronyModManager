@@ -1,10 +1,11 @@
-﻿// ***********************************************************************
+﻿
+// ***********************************************************************
 // Assembly         : IronyModManager.Parser
 // Author           : Mario
 // Created          : 02-18-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-28-2023
+// Last Modified On : 06-21-2023
 // ***********************************************************************
 // <copyright file="LocalizationParser.cs" company="Mario">
 //     Mario
@@ -26,6 +27,7 @@ using ValueType = IronyModManager.Shared.Models.ValueType;
 
 namespace IronyModManager.Parser.Generic
 {
+
     /// <summary>
     /// Class LocalizationParser.
     /// Implements the <see cref="IronyModManager.Parser.Generic.BaseLineParser" />
@@ -133,14 +135,14 @@ namespace IronyModManager.Parser.Generic
                             var hasError = false;
                             if (index > 0)
                             {
-                                var firstSegment = code.Substring(0, index + 1);
+                                var firstSegment = code[..(index + 1)];
                                 var secondSegment = code[(index + 1)..];
                                 if (!string.IsNullOrWhiteSpace(secondSegment))
                                 {
                                     var quoteIndex = secondSegment.IndexOf("\"");
                                     if (quoteIndex != -1)
                                     {
-                                        var orderSegment = secondSegment.Substring(0, quoteIndex).Trim();
+                                        var orderSegment = secondSegment[..quoteIndex].Trim();
                                         if (int.TryParse(orderSegment, out var parsed))
                                         {
                                             order = parsed;
@@ -229,10 +231,7 @@ namespace IronyModManager.Parser.Generic
         protected virtual string GetLanguageIdFromFileName(string filename)
         {
             var locale = Common.Constants.Localization.Locales.FirstOrDefault(p => filename.EndsWith($"{p}.yml", StringComparison.OrdinalIgnoreCase));
-            if (locale == null)
-            {
-                locale = Common.Constants.Localization.LocaleFolders.FirstOrDefault(p => filename.Contains($"{Path.DirectorySeparatorChar}{p}{Path.DirectorySeparatorChar}", StringComparison.OrdinalIgnoreCase));
-            }
+            locale ??= Common.Constants.Localization.LocaleFolders.FirstOrDefault(p => filename.Contains($"{Path.DirectorySeparatorChar}{p}{Path.DirectorySeparatorChar}", StringComparison.OrdinalIgnoreCase));
             return locale;
         }
 

@@ -5,7 +5,7 @@
 // Created          : 05-26-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-10-2023
+// Last Modified On : 06-22-2023
 // ***********************************************************************
 // <copyright file="ModPatchCollectionService.cs" company="Mario">
 //     Mario
@@ -317,6 +317,7 @@ namespace IronyModManager.Services
             if (game != null && copy != null && !string.IsNullOrWhiteSpace(collectionName))
             {
                 var patch = Mapper.Map<IDefinition>(copy);
+                patch.UseSimpleValidation = false;
                 patch.ModName = GenerateCollectionPatchName(collectionName);
                 var state = await modPatchExporter.GetPatchStateAsync(new ModPatchExporterParameters()
                 {
@@ -1762,6 +1763,14 @@ namespace IronyModManager.Services
                     Lines = lines,
                     File = definition.File
                 };
+                if (definition.UseSimpleValidation.GetValueOrDefault())
+                {
+                    args.ValidationType = ValidationType.SimpleOnly;
+                }
+                else if (definition.UseSimpleValidation == null)
+                {
+                    args.ValidationType = ValidationType.SkipAll;
+                }
                 IEnumerable<IDefinition> validation = definition.ValueType != ValueType.Binary ? validateParser.Validate(args) : null;
                 if (validation != null && validation.Any())
                 {
@@ -2634,6 +2643,7 @@ namespace IronyModManager.Services
             copy.ResetType = definition.ResetType;
             copy.FileNameSuffix = definition.FileNameSuffix;
             copy.IsPlaceholder = definition.IsPlaceholder;
+            copy.UseSimpleValidation = definition.UseSimpleValidation;
             return copy;
         }
 

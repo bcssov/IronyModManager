@@ -1,10 +1,11 @@
-﻿// ***********************************************************************
+﻿
+// ***********************************************************************
 // Assembly         : IronyModManager.Parser.Common
 // Author           : Mario
 // Created          : 02-16-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 05-11-2023
+// Last Modified On : 06-21-2023
 // ***********************************************************************
 // <copyright file="Constants.cs" company="Mario">
 //     Mario
@@ -17,6 +18,7 @@ using System.IO;
 
 namespace IronyModManager.Parser.Common
 {
+
     /// <summary>
     /// Class Constants.
     /// </summary>
@@ -679,6 +681,10 @@ namespace IronyModManager.Parser.Common
             /// </summary>
             public static readonly string SpeciesArchetypes = MergePath(CommonPath, "species_archetypes");
 
+            /// <summary>
+            /// The species classes
+            /// </summary>
+            public static readonly string SpeciesClasses = MergePath(CommonPath, "species_classes");
             /// <summary>
             /// The species names
             /// </summary>

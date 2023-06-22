@@ -408,7 +408,7 @@
         "PreferredParser": "StellarisOverwrittenParser"
     }, {
         "DirectoryPath": "common\\species_classes",
-        "PreferredParser": "DefaultParser"
+        "PreferredParser": "StellarisWholeTextParser"
     }, {
         "DirectoryPath": "common\\species_names",
         "PreferredParser": "StellarisWholeTextParser"

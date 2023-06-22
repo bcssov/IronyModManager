@@ -1,10 +1,11 @@
-﻿// ***********************************************************************
+﻿
+// ***********************************************************************
 // Assembly         : IronyModManager.Parser.Definitions
 // Author           : Mario
 // Created          : 02-16-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 05-14-2023
+// Last Modified On : 06-22-2023
 // ***********************************************************************
 // <copyright file="Definition.cs" company="Mario">
 //     Mario
@@ -24,6 +25,7 @@ using ValueType = IronyModManager.Shared.Models.ValueType;
 
 namespace IronyModManager.Parser.Definitions
 {
+
     /// <summary>
     /// Class Definition.
     /// Implements the <see cref="IronyModManager.Shared.Models.IDefinition" />
@@ -672,6 +674,13 @@ namespace IronyModManager.Parser.Definitions
         public string UsedParser { get; set; }
 
         /// <summary>
+        /// Gets or sets a value indicating whether [use simple validation].
+        /// </summary>
+        /// <value><c>true</c> if [use simple validation]; otherwise, <c>false</c>.</value>
+        [JsonIgnore]
+        public bool? UseSimpleValidation { get; set; } = false;
+
+        /// <summary>
         /// Gets or sets the type of the value.
         /// </summary>
         /// <value>The type of the value.</value>
@@ -779,6 +788,7 @@ namespace IronyModManager.Parser.Definitions
                 nameof(IsPlaceholder) => IsPlaceholder,
                 nameof(LastModified) => LastModified,
                 nameof(OriginalId) => OriginalId,
+                nameof(UseSimpleValidation) => UseSimpleValidation,
                 _ => Id
             };
         }
