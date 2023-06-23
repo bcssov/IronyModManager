@@ -22,6 +22,7 @@ using IronyModManager.Shared.Models;
 using Xunit;
 using ValueType = IronyModManager.Shared.Models.ValueType;
 using System.Threading.Tasks;
+using System.IO;
 
 namespace IronyModManager.Parser.Tests
 {
@@ -864,6 +865,62 @@ namespace IronyModManager.Parser.Tests
             await service.InitMapAsync(defs);
             var results = await service.UpdateDefinitionsAsync(null);
             results.Should().BeFalse();
+        }
+
+        /// <summary>
+        /// Defines the test method Should_switch_to_store.
+        /// </summary>
+        [Fact]
+        public void Should_switch_to_store()
+        {
+            DISetup.SetupContainer();
+            var service = new IndexedDefinitions();
+            Exception ex = null;
+            try
+            {
+                service.UseDiskStore(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "dummy"));
+            }
+            catch (Exception e)
+            {
+                ex = e;                
+            }
+            ex.Should().BeNull();
+        }
+
+        /// <summary>
+        /// Defines the test method Should_not_switch_to_store.
+        /// </summary>
+        [Fact]
+        public async Task Should_not_switch_to_store()
+        {
+            DISetup.SetupContainer();
+            var defs = new List<IDefinition>();
+            for (int i = 0; i < 10; i++)
+            {
+                defs.Add(new Definition()
+                {
+                    Code = i.ToString(),
+                    ContentSHA = i.ToString(),
+                    Dependencies = new List<string> { i.ToString() },
+                    File = i.ToString(),
+                    Id = i.ToString(),
+                    ModName = i.ToString(),
+                    Type = i.ToString()
+                });
+            }
+            var service = new IndexedDefinitions();
+            await service.InitMapAsync(defs);
+            Exception ex = null;
+            try
+            {
+                service.UseDiskStore(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "dummy"));
+            }
+            catch (Exception e)
+            {
+                ex = e;
+            }
+            ex.Should().NotBeNull();
+            ex.GetType().Should().Be(typeof(InvalidOperationException));
         }
     }
 }

@@ -183,6 +183,12 @@ namespace IronyModManager.Shared.Models
         /// <returns>Task&lt;System.Boolean&gt;.</returns>
         Task<bool> UpdateDefinitionsAsync(IReadOnlyCollection<IDefinition> definitions);
 
+        /// <summary>
+        /// Uses the disk store.
+        /// </summary>
+        /// <param name="storePath">The store path.</param>
+        void UseDiskStore(string storePath);
+
         #endregion Methods
     }
 }

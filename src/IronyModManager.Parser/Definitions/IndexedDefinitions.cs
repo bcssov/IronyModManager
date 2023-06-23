@@ -19,6 +19,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using CodexMicroORM.Core.Collections;
 using IronyModManager.DI;
+using IronyModManager.Shared.KeyValueStore;
 using IronyModManager.Shared.Models;
 using IronyModManager.Shared.Trie;
 using ValueType = IronyModManager.Shared.Models.ValueType;
@@ -79,6 +80,11 @@ namespace IronyModManager.Parser.Definitions
         /// The reset definitions count
         /// </summary>
         private HashSet<string> resetDefinitions;
+
+        /// <summary>
+        /// The store
+        /// </summary>
+        private Store<List<IDefinition>> store;
 
         /// <summary>
         /// The trie
@@ -490,40 +496,17 @@ namespace IronyModManager.Parser.Definitions
         }
 
         /// <summary>
-        /// Constructs the key.
+        /// Uses the disk store.
         /// </summary>
-        /// <param name="keys">The keys.</param>
-        /// <returns>System.String.</returns>
-        private static string ConstructKey(params string[] keys)
+        /// <param name="storePath">The store path.</param>
+        /// <exception cref="System.InvalidOperationException">Unable to switch to disk store as there are items in the memory.</exception>
+        public void UseDiskStore(string storePath)
         {
-            return string.Join("-", keys);
-        }
-
-        /// <summary>
-        /// Maps the keys.
-        /// </summary>
-        /// <param name="map">The map.</param>
-        /// <param name="key">The key.</param>
-        private static void MapKeys(HashSet<string> map, string key)
-        {
-            if (!map.Contains(key))
+            if (definitions.Any())
             {
-                map.Add(key);
+                throw new InvalidOperationException("Unable to switch to disk store as there are items in the memory.");
             }
-        }
-
-        /// <summary>
-        /// Resolves the hierarchal parent directory.
-        /// </summary>
-        /// <param name="definition">The definition.</param>
-        /// <returns>System.String.</returns>
-        private static string ResolveHierarchalParentDirectory(IDefinition definition)
-        {
-            if (string.IsNullOrWhiteSpace(definition.VirtualParentDirectoryCI))
-            {
-                return definition.ParentDirectoryCI;
-            }
-            return definition.VirtualParentDirectoryCI;
+            store = new Store<List<IDefinition>>(storePath);
         }
 
         /// <summary>
@@ -544,6 +527,16 @@ namespace IronyModManager.Parser.Definitions
                     resetDefinitions.Remove(definition.TypeAndId);
                 }
             }
+        }
+
+        /// <summary>
+        /// Constructs the key.
+        /// </summary>
+        /// <param name="keys">The keys.</param>
+        /// <returns>System.String.</returns>
+        private string ConstructKey(params string[] keys)
+        {
+            return string.Join("-", keys);
         }
 
         /// <summary>
@@ -632,6 +625,33 @@ namespace IronyModManager.Parser.Definitions
             {
                 hierarchicalDefinition.Mods.Add(definition.ModName);
             }
+        }
+
+        /// <summary>
+        /// Maps the keys.
+        /// </summary>
+        /// <param name="map">The map.</param>
+        /// <param name="key">The key.</param>
+        private void MapKeys(HashSet<string> map, string key)
+        {
+            if (!map.Contains(key))
+            {
+                map.Add(key);
+            }
+        }
+
+        /// <summary>
+        /// Resolves the hierarchal parent directory.
+        /// </summary>
+        /// <param name="definition">The definition.</param>
+        /// <returns>System.String.</returns>
+        private string ResolveHierarchalParentDirectory(IDefinition definition)
+        {
+            if (string.IsNullOrWhiteSpace(definition.VirtualParentDirectoryCI))
+            {
+                return definition.ParentDirectoryCI;
+            }
+            return definition.VirtualParentDirectoryCI;
         }
 
         #endregion Methods

@@ -5,7 +5,7 @@
 // Created          : 02-16-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-22-2023
+// Last Modified On : 06-23-2023
 // ***********************************************************************
 // <copyright file="Definition.cs" company="Mario">
 //     Mario
@@ -20,6 +20,7 @@ using IronyModManager.DI;
 using IronyModManager.Parser.Common.Parsers;
 using IronyModManager.Shared;
 using IronyModManager.Shared.Models;
+using MessagePack;
 using Newtonsoft.Json;
 using ValueType = IronyModManager.Shared.Models.ValueType;
 
@@ -31,6 +32,7 @@ namespace IronyModManager.Parser.Definitions
     /// Implements the <see cref="IronyModManager.Shared.Models.IDefinition" />
     /// </summary>
     /// <seealso cref="IronyModManager.Shared.Models.IDefinition" />
+    [MessagePackObject]
     public class Definition : IDefinition
     {
         #region Fields
@@ -153,6 +155,7 @@ namespace IronyModManager.Parser.Definitions
         /// Gets or sets the additional file names.
         /// </summary>
         /// <value>The additional file names.</value>
+        [Key(0)]
         public IList<string> AdditionalFileNames
         {
             get
@@ -188,12 +191,14 @@ namespace IronyModManager.Parser.Definitions
         /// Gets or sets a value indicating whether [allow duplicate].
         /// </summary>
         /// <value><c>true</c> if [allow duplicate]; otherwise, <c>false</c>.</value>
+        [Key(1)]
         public bool AllowDuplicate { get; set; }
 
         /// <summary>
         /// Gets or sets the code.
         /// </summary>
         /// <value>The code.</value>
+        [Key(2)]
         public string Code
         {
             get
@@ -230,6 +235,7 @@ namespace IronyModManager.Parser.Definitions
         /// </summary>
         /// <value>The code separator.</value>
         [JsonIgnore]
+        [Key(3)]
         public string CodeSeparator
         {
             get
@@ -247,6 +253,7 @@ namespace IronyModManager.Parser.Definitions
         /// </summary>
         /// <value>The code tag.</value>
         [JsonIgnore]
+        [Key(4)]
         public string CodeTag
         {
             get
@@ -263,18 +270,21 @@ namespace IronyModManager.Parser.Definitions
         /// Gets or sets the content sha.
         /// </summary>
         /// <value>The content sha.</value>
+        [Key(5)]
         public string ContentSHA { get; set; }
 
         /// <summary>
         /// Gets or sets the custom priority order.
         /// </summary>
         /// <value>The custom priority order.</value>
+        [Key(6)]
         public int CustomPriorityOrder { get; set; }
 
         /// <summary>
         /// Gets the definition sha.
         /// </summary>
         /// <value>The definition sha.</value>
+        [Key(7)]
         public string DefinitionSHA
         {
             get
@@ -306,12 +316,14 @@ namespace IronyModManager.Parser.Definitions
         /// Gets or sets the dependencies.
         /// </summary>
         /// <value>The dependencies.</value>
+        [Key(8)]
         public IEnumerable<string> Dependencies { get; set; }
 
         /// <summary>
         /// Gets or sets the disk file.
         /// </summary>
         /// <value>The disk file.</value>
+        [Key(9)]
         public string DiskFile
         {
             get
@@ -330,36 +342,42 @@ namespace IronyModManager.Parser.Definitions
         /// Gets the disk file ci.
         /// </summary>
         /// <value>The disk file ci.</value>
+        [Key(10)]
         public string DiskFileCI { get; private set; } = string.Empty;
 
         /// <summary>
         /// Gets or sets the error column.
         /// </summary>
         /// <value>The error column.</value>
+        [Key(11)]
         public long? ErrorColumn { get; set; }
 
         /// <summary>
         /// Gets or sets the error line.
         /// </summary>
         /// <value>The error line.</value>
+        [Key(12)]
         public long? ErrorLine { get; set; }
 
         /// <summary>
         /// Gets or sets the error message.
         /// </summary>
         /// <value>The error message.</value>
+        [Key(13)]
         public string ErrorMessage { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether [exists in last file].
         /// </summary>
         /// <value><c>true</c> if [exists in last file]; otherwise, <c>false</c>.</value>
+        [Key(14)]
         public bool ExistsInLastFile { get; set; } = true;
 
         /// <summary>
         /// Gets or sets the file.
         /// </summary>
         /// <value>The file.</value>
+        [Key(15)]
         public string File
         {
             get
@@ -402,12 +420,14 @@ namespace IronyModManager.Parser.Definitions
         /// Gets the file ci.
         /// </summary>
         /// <value>The file ci.</value>
+        [Key(16)]
         public string FileCI { get; private set; } = string.Empty;
 
         /// <summary>
         /// Gets or sets the file name suffix.
         /// </summary>
         /// <value>The file name suffix.</value>
+        [Key(17)]
         public string FileNameSuffix { get; set; }
 
         /// <summary>
@@ -415,6 +435,7 @@ namespace IronyModManager.Parser.Definitions
         /// </summary>
         /// <value>The generated file names.</value>
         [JsonIgnore]
+        [Key(18)]
         public IList<string> GeneratedFileNames
         {
             get
@@ -450,6 +471,7 @@ namespace IronyModManager.Parser.Definitions
         /// Gets or sets the identifier.
         /// </summary>
         /// <value>The identifier.</value>
+        [Key(19)]
         public string Id
         {
             get
@@ -467,18 +489,21 @@ namespace IronyModManager.Parser.Definitions
         /// Gets or sets a value indicating whether this instance is custom patch.
         /// </summary>
         /// <value><c>true</c> if this instance is custom patch; otherwise, <c>false</c>.</value>
+        [Key(20)]
         public bool IsCustomPatch { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether this instance is from game.
         /// </summary>
         /// <value><c>true</c> if this instance is from game; otherwise, <c>false</c>.</value>
+        [Key(21)]
         public bool IsFromGame { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether this instance is placeholder.
         /// </summary>
         /// <value><c>true</c> if this instance is placeholder; otherwise, <c>false</c>.</value>
+        [Key(22)]
         public bool IsPlaceholder { get; set; }
 
         /// <summary>
@@ -486,12 +511,14 @@ namespace IronyModManager.Parser.Definitions
         /// </summary>
         /// <value>The last modified.</value>
         [JsonIgnore]
+        [Key(23)]
         public DateTime? LastModified { get; set; }
 
         /// <summary>
         /// Gets or sets the name of the mod.
         /// </summary>
         /// <value>The name of the mod.</value>
+        [Key(24)]
         public string ModName { get; set; }
 
         /// <summary>
@@ -499,12 +526,14 @@ namespace IronyModManager.Parser.Definitions
         /// </summary>
         /// <value>The mod path.</value>
         [JsonIgnore]
+        [Key(25)]
         public string ModPath { get; set; }
 
         /// <summary>
         /// Gets or sets the order.
         /// </summary>
         /// <value>The order.</value>
+        [Key(26)]
         public int Order { get; set; }
 
         /// <summary>
@@ -512,6 +541,7 @@ namespace IronyModManager.Parser.Definitions
         /// </summary>
         /// <value>The original code.</value>
         [JsonIgnore]
+        [Key(27)]
         public string OriginalCode
         {
             get
@@ -528,6 +558,7 @@ namespace IronyModManager.Parser.Definitions
         /// Gets or sets the name of the original file.
         /// </summary>
         /// <value>The name of the original file.</value>
+        [Key(28)]
         public string OriginalFileName
         {
             get
@@ -545,18 +576,21 @@ namespace IronyModManager.Parser.Definitions
         /// </summary>
         /// <value>The original identifier.</value>
         [JsonIgnore]
+        [Key(29)]
         public string OriginalId { get; set; }
 
         /// <summary>
         /// Gets or sets the name of the original mod.
         /// </summary>
         /// <value>The name of the original mod.</value>
+        [Key(30)]
         public string OriginalModName { get; set; }
 
         /// <summary>
         /// Gets or sets the overwritten file names.
         /// </summary>
         /// <value>The overwritten file names.</value>
+        [Key(31)]
         public IList<string> OverwrittenFileNames
         {
             get
@@ -592,6 +626,7 @@ namespace IronyModManager.Parser.Definitions
         /// Gets the parent directory.
         /// </summary>
         /// <value>The parent directory.</value>
+        [Key(32)]
         public string ParentDirectory
         {
             get
@@ -608,6 +643,7 @@ namespace IronyModManager.Parser.Definitions
         /// Gets the parent directory ci.
         /// </summary>
         /// <value>The parent directory ci.</value>
+        [Key(33)]
         public string ParentDirectoryCI
         {
             get
@@ -625,6 +661,7 @@ namespace IronyModManager.Parser.Definitions
         /// </summary>
         /// <value>The type of the reset.</value>
         [JsonIgnore]
+        [Key(34)]
         public ResetType ResetType { get; set; }
 
         /// <summary>
@@ -632,12 +669,14 @@ namespace IronyModManager.Parser.Definitions
         /// </summary>
         /// <value>The tags.</value>
         [JsonIgnore]
+        [Key(35)]
         public IList<string> Tags { get; set; } = new List<string>();
 
         /// <summary>
         /// Gets or sets the type.
         /// </summary>
         /// <value>The type.</value>
+        [Key(36)]
         public string Type
         {
             get
@@ -655,6 +694,7 @@ namespace IronyModManager.Parser.Definitions
         /// Gets the type and identifier.
         /// </summary>
         /// <value>The type and identifier.</value>
+        [Key(37)]
         public string TypeAndId
         {
             get
@@ -671,6 +711,7 @@ namespace IronyModManager.Parser.Definitions
         /// Gets or sets the used parser.
         /// </summary>
         /// <value>The used parser.</value>
+        [Key(38)]
         public string UsedParser { get; set; }
 
         /// <summary>
@@ -678,12 +719,14 @@ namespace IronyModManager.Parser.Definitions
         /// </summary>
         /// <value><c>true</c> if [use simple validation]; otherwise, <c>false</c>.</value>
         [JsonIgnore]
+        [Key(39)]
         public bool? UseSimpleValidation { get; set; } = false;
 
         /// <summary>
         /// Gets or sets the type of the value.
         /// </summary>
         /// <value>The type of the value.</value>
+        [Key(40)]
         public ValueType ValueType { get; set; }
 
         /// <summary>
@@ -691,6 +734,7 @@ namespace IronyModManager.Parser.Definitions
         /// </summary>
         /// <value>The variables.</value>
         [JsonIgnore]
+        [Key(41)]
         public IEnumerable<IDefinition> Variables { get; set; }
 
         /// <summary>
@@ -698,6 +742,7 @@ namespace IronyModManager.Parser.Definitions
         /// </summary>
         /// <value>The virtual localization path ci.</value>
         [JsonIgnore]
+        [Key(42)]
         public string VirtualParentDirectory { get; private set; } = string.Empty;
 
         /// <summary>
@@ -705,12 +750,14 @@ namespace IronyModManager.Parser.Definitions
         /// </summary>
         /// <value>The virtual parent directory ci.</value>
         [JsonIgnore]
+        [Key(43)]
         public string VirtualParentDirectoryCI { get; private set; } = string.Empty;
 
         /// <summary>
         /// Gets or sets the virtual localization path.
         /// </summary>
         /// <value>The virtual localization path.</value>
+        [Key(44)]
         public string VirtualPath
         {
             get
