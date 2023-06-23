@@ -5,7 +5,7 @@
 // Created          : 02-16-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-15-2023
+// Last Modified On : 06-23-2023
 // ***********************************************************************
 // <copyright file="IndexedDefinitions.cs" company="Mario">
 //     Mario
@@ -472,6 +472,21 @@ namespace IronyModManager.Parser.Definitions
                 return Task.FromResult<IEnumerable<IDefinition>>(trie.Get(searchTerm.ToLowerInvariant()));
             }
             return Task.FromResult<IEnumerable<IDefinition>>(null);
+        }
+
+        /// <summary>
+        /// Updates the definitions asynchronous.
+        /// </summary>
+        /// <param name="definitions">The definitions.</param>
+        /// <returns>Task&lt;System.Boolean&gt;.</returns>
+        public Task<bool> UpdateDefinitionsAsync(IReadOnlyCollection<IDefinition> definitions)
+        {
+            // No implementation for in memory variants
+            if (definitions == null || !definitions.Any())
+            {
+                return Task.FromResult(false);
+            }
+            return Task.FromResult(true);
         }
 
         /// <summary>

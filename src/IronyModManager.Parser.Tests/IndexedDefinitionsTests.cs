@@ -4,7 +4,7 @@
 // Created          : 02-17-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 01-31-2022
+// Last Modified On : 06-23-2023
 // ***********************************************************************
 // <copyright file="IndexedDefinitionsTests.cs" company="Mario">
 //     Mario
@@ -812,5 +812,58 @@ namespace IronyModManager.Parser.Tests
             results.Should().BeTrue();
         }
 
+        /// <summary>
+        /// Defines the test method Should_update_definitions.
+        /// </summary>
+        [Fact]
+        public async Task Should_update_definitions()
+        {
+            DISetup.SetupContainer();
+            var defs = new List<IDefinition>();
+            for (int i = 0; i < 10; i++)
+            {
+                defs.Add(new Definition()
+                {
+                    Code = i.ToString(),
+                    ContentSHA = i.ToString(),
+                    Dependencies = new List<string> { i.ToString() },
+                    File = i.ToString(),
+                    Id = i.ToString(),
+                    ModName = i.ToString(),
+                    Type = i.ToString()
+                });
+            }
+            var service = new IndexedDefinitions();
+            await service.InitMapAsync(defs);
+            var results = await service.UpdateDefinitionsAsync(defs);
+            results.Should().BeTrue();
+        }
+
+        /// <summary>
+        /// Defines the test method Should_not_update_definitions.
+        /// </summary>
+        [Fact]
+        public async Task Should_not_update_definitions()
+        {
+            DISetup.SetupContainer();
+            var defs = new List<IDefinition>();
+            for (int i = 0; i < 10; i++)
+            {
+                defs.Add(new Definition()
+                {
+                    Code = i.ToString(),
+                    ContentSHA = i.ToString(),
+                    Dependencies = new List<string> { i.ToString() },
+                    File = i.ToString(),
+                    Id = i.ToString(),
+                    ModName = i.ToString(),
+                    Type = i.ToString()
+                });
+            }
+            var service = new IndexedDefinitions();
+            await service.InitMapAsync(defs);
+            var results = await service.UpdateDefinitionsAsync(null);
+            results.Should().BeFalse();
+        }
     }
 }

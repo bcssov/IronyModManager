@@ -5,7 +5,7 @@
 // Created          : 02-16-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-15-2023
+// Last Modified On : 06-23-2023
 // ***********************************************************************
 // <copyright file="IIndexedDefinitions.cs" company="Mario">
 //     Mario
@@ -175,6 +175,13 @@ namespace IronyModManager.Shared.Models
         /// <param name="searchTerm">The search term.</param>
         /// <returns>Task&lt;IEnumerable&lt;IDefinition&gt;&gt;.</returns>
         Task<IEnumerable<IDefinition>> SearchDefinitionsAsync(string searchTerm);
+
+        /// <summary>
+        /// Updates the definitions asynchronous.
+        /// </summary>
+        /// <param name="definitions">The definitions.</param>
+        /// <returns>Task&lt;System.Boolean&gt;.</returns>
+        Task<bool> UpdateDefinitionsAsync(IReadOnlyCollection<IDefinition> definitions);
 
         #endregion Methods
     }
