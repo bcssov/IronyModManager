@@ -483,6 +483,7 @@ namespace IronyModManager.ViewModels
         /// Initializes the specified read only.
         /// </summary>
         /// <param name="readOnly">if set to <c>true</c> [read only].</param>
+        /// <returns>A Task representing the asynchronous operation.</returns>
         public async Task InitializeAsync(bool readOnly)
         {
             ReadOnly = readOnly;
@@ -801,6 +802,8 @@ namespace IronyModManager.ViewModels
                 ReactiveUI.MessageBus.Current.SendMessage(args);
                 BackAllowed = true;
                 await TriggerOverlayAsync(id, false);
+                GC.Collect(GC.MaxGeneration, GCCollectionMode.Aggressive, true, true);
+                GC.WaitForPendingFinalizers();
                 GC.Collect(GC.MaxGeneration, GCCollectionMode.Aggressive, true, true);
             }, backAllowed).DisposeWith(disposables);
 

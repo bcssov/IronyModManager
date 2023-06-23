@@ -1,10 +1,11 @@
-﻿// ***********************************************************************
+﻿
+// ***********************************************************************
 // Assembly         : IronyModManager
 // Author           : Mario
 // Created          : 01-10-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 11-21-2022
+// Last Modified On : 06-23-2023
 // ***********************************************************************
 // <copyright file="MainWindowViewModel.cs" company="Mario">
 //     Mario
@@ -28,6 +29,7 @@ using ReactiveUI;
 
 namespace IronyModManager.ViewModels
 {
+
     /// <summary>
     /// Class MainWindowViewModel.
     /// Implements the <see cref="IronyModManager.Common.ViewModels.BaseViewModel" />
@@ -229,7 +231,11 @@ namespace IronyModManager.ViewModels
         protected async Task FreeMemoryAsync()
         {
             GC.Collect(GC.MaxGeneration, GCCollectionMode.Aggressive, true, true);
+            GC.WaitForPendingFinalizers();
+            GC.Collect(GC.MaxGeneration, GCCollectionMode.Aggressive, true, true);
             await Task.Delay(1000);
+            GC.Collect(GC.MaxGeneration, GCCollectionMode.Aggressive, true, true);
+            GC.WaitForPendingFinalizers();
             GC.Collect(GC.MaxGeneration, GCCollectionMode.Aggressive, true, true);
         }
 
@@ -262,6 +268,7 @@ namespace IronyModManager.ViewModels
                     switch (s.State)
                     {
                         case NavigationState.ReadOnlyConflictSolver:
+
                         case NavigationState.ConflictSolver:
                             ConflictSolver.SelectedModCollection = s.SelectedCollection;
                             ConflictSolver.SelectedModsOrder = s.SelectedMods;

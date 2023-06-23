@@ -5,7 +5,7 @@
 // Created          : 05-26-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-22-2023
+// Last Modified On : 06-23-2023
 // ***********************************************************************
 // <copyright file="ModPatchCollectionService.cs" company="Mario">
 //     Mario
@@ -766,6 +766,9 @@ namespace IronyModManager.Services
                         messageBus.Publish(new ModDefinitionLoadEvent(perc));
                         previousProgress = perc;
                     }
+                    GC.Collect(GC.MaxGeneration, GCCollectionMode.Optimized);
+                    GC.WaitForPendingFinalizers();
+                    GC.Collect(GC.MaxGeneration, GCCollectionMode.Optimized);
                 }
             });
 
