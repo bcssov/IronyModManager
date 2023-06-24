@@ -5,7 +5,7 @@
 // Created          : 06-13-2023
 //
 // Last Modified By : Mario
-// Last Modified On : 06-13-2023
+// Last Modified On : 06-24-2023
 // ***********************************************************************
 // <copyright file="Store.cs" company="Mario">
 //     Mario
@@ -25,7 +25,7 @@ namespace IronyModManager.Shared.KeyValueStore
     /// Class Store.
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    public class Store<T> where T : class
+    public class Store<T> : IDisposable where T : class
     {
         #region Fields
 
@@ -39,6 +39,11 @@ namespace IronyModManager.Shared.KeyValueStore
         /// </summary>
         private readonly MixedStorageKVStore<string, T> storage;
 
+        /// <summary>
+        /// The disposed
+        /// </summary>
+        private bool disposed;
+
         #endregion Fields
 
         #region Constructors
@@ -47,12 +52,14 @@ namespace IronyModManager.Shared.KeyValueStore
         /// Initializes a new instance of the <see cref="Store{T}" /> class.
         /// </summary>
         /// <param name="cacheDirectory">The cache directory.</param>
-        public Store(string cacheDirectory)
+        /// <param name="loadType">Type of the load.</param>
+        public Store(string cacheDirectory, Func<string, Type> loadType)
         {
             options = new MixedStorageKVStoreOptions()
             {
                 DeleteLogOnClose = true,
                 LogDirectory = cacheDirectory,
+                MessagePackSerializerOptions = new StoreOptions(loadType)
             };
             storage = new MixedStorageKVStore<string, T>(options);
         }
@@ -70,6 +77,19 @@ namespace IronyModManager.Shared.KeyValueStore
         {
             var result = await storage.DeleteAsync(key);
             return result == FASTER.core.Status.OK;
+        }
+
+        /// <summary>
+        /// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
+        /// </summary>
+        public void Dispose()
+        {
+            if (!disposed)
+            {
+                Dispose(true);
+                GC.SuppressFinalize(this);
+                disposed = true;
+            }
         }
 
         /// <summary>
@@ -97,6 +117,18 @@ namespace IronyModManager.Shared.KeyValueStore
                 return result.Item2;
             }
             return default;
+        }
+
+        /// <summary>
+        /// Releases unmanaged and - optionally - managed resources.
+        /// </summary>
+        /// <param name="disposing"><c>true</c> to release both managed and unmanaged resources; <c>false</c> to release only unmanaged resources.</param>
+        protected virtual void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                storage?.Dispose();
+            }
         }
 
         #endregion Methods

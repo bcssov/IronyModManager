@@ -5,7 +5,7 @@
 // Created          : 02-16-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-23-2023
+// Last Modified On : 06-24-2023
 // ***********************************************************************
 // <copyright file="IIndexedDefinitions.cs" company="Mario">
 //     Mario
@@ -157,12 +157,6 @@ namespace IronyModManager.Shared.Models
         Task InitMapAsync(IEnumerable<IDefinition> definitions, bool mapHierarchicalDefinitions = false);
 
         /// <summary>
-        /// Initializes the search asynchronous.
-        /// </summary>
-        /// <returns>Task.</returns>
-        Task InitSearchAsync();
-
-        /// <summary>
         /// Removes the asynchronous.
         /// </summary>
         /// <param name="definition">The definition.</param>
@@ -188,6 +182,11 @@ namespace IronyModManager.Shared.Models
         /// </summary>
         /// <param name="storePath">The store path.</param>
         void UseDiskStore(string storePath);
+
+        /// <summary>
+        /// Uses the search.
+        /// </summary>
+        void UseSearch();
 
         #endregion Methods
     }

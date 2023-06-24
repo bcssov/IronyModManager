@@ -4,7 +4,7 @@
 // Created          : 02-17-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-23-2023
+// Last Modified On : 06-24-2023
 // ***********************************************************************
 // <copyright file="IndexedDefinitionsTests.cs" company="Mario">
 //     Mario
@@ -31,6 +31,15 @@ namespace IronyModManager.Parser.Tests
     /// </summary>
     public class IndexedDefinitionsTests
     {
+        /// <summary>
+        /// Gets the store path.
+        /// </summary>
+        /// <returns>System.String.</returns>
+        private string GetStorePath()
+        {
+            return Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "dummyPath");
+        }
+
         /// <summary>
         /// Defines the test method Returns_all_definitions.
         /// </summary>
@@ -60,6 +69,43 @@ namespace IronyModManager.Parser.Tests
             foreach (var item in defs)
             {
                 if (results.Contains(item))
+                {
+                    match++;
+                }
+            }
+            match.Should().Be(defs.Count);
+        }
+
+        /// <summary>
+        /// Defines the test method Returns_all_store_definitions.
+        /// </summary>
+        [Fact]
+        public async Task Returns_all_store_definitions()
+        {
+            DISetup.SetupContainer();
+            var defs = new List<IDefinition>();
+            for (int i = 0; i < 10; i++)
+            {
+                defs.Add(new Definition()
+                {
+                    Code = i.ToString(),
+                    ContentSHA = i.ToString(),
+                    Dependencies = new List<string> { i.ToString() },
+                    File = i.ToString(),
+                    Id = i.ToString(),
+                    ModName = i.ToString(),
+                    Type = i.ToString()
+                });
+            }
+            var service = new IndexedDefinitions();
+            service.UseDiskStore(GetStorePath());
+            await service.InitMapAsync(defs);
+            var results = await service.GetAllAsync();
+            results.Count().Should().Be(defs.Count);
+            int match = 0;
+            foreach (var item in defs)
+            {
+                if (results.Any(p => p.ModName == item.ModName && p.File == item.File && p.TypeAndId == item.TypeAndId))
                 {
                     match++;
                 }
@@ -779,8 +825,8 @@ namespace IronyModManager.Parser.Tests
                 });
             }
             var service = new IndexedDefinitions();
+            service.UseSearch();
             await service.InitMapAsync(defs);
-            await service.InitSearchAsync();
             var results = await service.SearchDefinitionsAsync("1");
             results.Count().Should().Be(1);
             results.First().Id.Should().Be("1");

@@ -5,7 +5,7 @@
 // Created          : 05-26-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-23-2023
+// Last Modified On : 06-24-2023
 // ***********************************************************************
 // <copyright file="ModPatchCollectionService.cs" company="Mario">
 //     Mario
@@ -119,17 +119,19 @@ namespace IronyModManager.Services
         private static readonly object serviceLock = new { };
 
         /// <summary>
-        /// The definition properties
-        /// </summary>
-        private static PropertyInfo[] definitionProperties;
-        /// <summary>
         /// The whitelisted definition properties full
         /// </summary>
-        private static string[] whitelistedDefinitionPropertiesFull = new string[] { "DiskFile", "File", "Id", "ModName", "Tags", "Type", "ValueType", "IsFromGame", "Order", "OriginalFileName", "ResetType", "FileNameSuffix", "IsPlaceholder", "UseSimpleValidation", "AdditionalFileNames" };
+        private static readonly string[] whitelistedDefinitionPropertiesFull = new string[] { "DiskFile", "File", "Id", "ModName", "Tags", "Type", "ValueType", "IsFromGame", "Order", "OriginalFileName", "ResetType", "FileNameSuffix", "IsPlaceholder", "UseSimpleValidation", "AdditionalFileNames" };
+
         /// <summary>
         /// The whitelisted definition properties partial
         /// </summary>
-        private static string[] whitelistedDefinitionPropertiesPartial = new string[] { "DiskFile", "File", "Id", "ModName", "Tags", "Type", "ValueType", "IsFromGame", "Order", "OriginalFileName", "ResetType", "FileNameSuffix", "IsPlaceholder", "UseSimpleValidation" };
+        private static readonly string[] whitelistedDefinitionPropertiesPartial = new string[] { "DiskFile", "File", "Id", "ModName", "Tags", "Type", "ValueType", "IsFromGame", "Order", "OriginalFileName", "ResetType", "FileNameSuffix", "IsPlaceholder", "UseSimpleValidation" };
+
+        /// <summary>
+        /// The definition properties
+        /// </summary>
+        private static PropertyInfo[] definitionProperties;
         /// <summary>
         /// The message bus
         /// </summary>
@@ -1019,6 +1021,7 @@ namespace IronyModManager.Services
             async Task<(IIndexedDefinitions, int)> partialCopyAllIndexedDefinitions(IConflictResult conflictResult, int total, int processed, int maxProgress)
             {
                 var copy = DIResolver.Get<IIndexedDefinitions>();
+                copy.UseSearch();
                 foreach (var item in await conflictResult.AllConflicts.GetAllAsync())
                 {
                     IDefinition defCopy;
@@ -1233,9 +1236,6 @@ namespace IronyModManager.Services
                     }
                     await messageBus.PublishAsync(new ModDefinitionPatchLoadEvent(100));
 
-                    // Initialize search here
-                    await conflicts.AllConflicts.InitSearchAsync();
-
                     return conflicts;
                 }
                 else
@@ -1326,9 +1326,6 @@ namespace IronyModManager.Services
                     processed = partialCopyResult.Item2;
 
                     await messageBus.PublishAsync(new ModDefinitionPatchLoadEvent(100));
-
-                    // Initialize search here
-                    await conflictResult.AllConflicts.InitSearchAsync();
 
                     return conflictResult;
                 }
