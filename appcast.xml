@@ -4,14 +4,9 @@
 		<title>Irony Mod Manager</title>
 		<language>en</language>
 		<item>
-			<title>1.24.156</title>
+			<title>1.24.157</title>
 			<description>## Current Release Notes
-* Fix issue with Irony reverting to simple parsing all the time
-
-## 1.24.155 Release Notes
-* Fix potential CTD while switching mod collections
-* Stellaris Conflict Solver now treats species_classes as file type overwrite
-* Stellaris Conflict Solver now respects "simple validation" declaration during manual code validation
+* Fix not being able to resolve binary conflicts
 
 ## Release Notes 1.24
 * Update dependencies
@@ -22,18 +17,13 @@
 * Add support for metadata descriptor type games (Victoria 3 support)
 * Add option to ignore update
 * Improve mod loading performance</description>
-			<pubDate>Thu, 22 Jun 2023 03:17:17 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.24.156/linux-x64.zip" sparkle:version="1.24.156.34586" sparkle:shortVersionString="1.24.156" length="90109330" sparkle:os="linux" type="application/zip" sparkle:signature="0XcDUh28l0ogeBcJIHZz7azPsDVJ+cxPqI8dGOrfm519+57oYvM6scLxUp0yU5Tw1ALSfqcAcgNZi4k0y162AA=="/>
+			<pubDate>Sat, 24 Jun 2023 16:40:21 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.24.157/linux-x64.zip" sparkle:version="1.24.157.32294" sparkle:shortVersionString="1.24.157" length="90109456" sparkle:os="linux" type="application/zip" sparkle:signature="renApJanQJD9Yz6HPq31UbUCK99xXhUBsESkAmA5libSaMYIoe67j23q50fJhsUbVb+1prH+SpepHUg6XVKKBw=="/>
 		</item>
 		<item>
-			<title>1.24.156</title>
+			<title>1.24.157</title>
 			<description>## Current Release Notes
-* Fix issue with Irony reverting to simple parsing all the time
-
-## 1.24.155 Release Notes
-* Fix potential CTD while switching mod collections
-* Stellaris Conflict Solver now treats species_classes as file type overwrite
-* Stellaris Conflict Solver now respects "simple validation" declaration during manual code validation
+* Fix not being able to resolve binary conflicts
 
 ## Release Notes 1.24
 * Update dependencies
@@ -44,18 +34,13 @@
 * Add support for metadata descriptor type games (Victoria 3 support)
 * Add option to ignore update
 * Improve mod loading performance</description>
-			<pubDate>Thu, 22 Jun 2023 03:17:23 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.24.156/osx-x64.zip" sparkle:version="1.24.156.34586" sparkle:shortVersionString="1.24.156" length="93265281" sparkle:os="osx" type="application/zip" sparkle:signature="gti00glZ4j1r/rRTkIU9g93+j8jYTUB3r1Zxte3LJZHxM6uHhhoHGoeH1//uLAw1bx5HBjll+I9OgSo/HPWiDA=="/>
+			<pubDate>Sat, 24 Jun 2023 16:40:28 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.24.157/osx-x64.zip" sparkle:version="1.24.157.32294" sparkle:shortVersionString="1.24.157" length="93265370" sparkle:os="osx" type="application/zip" sparkle:signature="658gwCdZOc6FZkqk9j8+K8aV+3DnCqnIhKZWTSLyV1nXi28h6FiN0PwVH+CIIAMzHJrk33PAE72EFOREFAZnBQ=="/>
 		</item>
 		<item>
-			<title>1.24.156</title>
+			<title>1.24.157</title>
 			<description>## Current Release Notes
-* Fix issue with Irony reverting to simple parsing all the time
-
-## 1.24.155 Release Notes
-* Fix potential CTD while switching mod collections
-* Stellaris Conflict Solver now treats species_classes as file type overwrite
-* Stellaris Conflict Solver now respects "simple validation" declaration during manual code validation
+* Fix not being able to resolve binary conflicts
 
 ## Release Notes 1.24
 * Update dependencies
@@ -66,18 +51,13 @@
 * Add support for metadata descriptor type games (Victoria 3 support)
 * Add option to ignore update
 * Improve mod loading performance</description>
-			<pubDate>Thu, 22 Jun 2023 03:17:30 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.24.156/win-x64-setup.zip" sparkle:version="1.24.156.34586" sparkle:shortVersionString="1.24.156" length="71395720" sparkle:os="windows" type="application/zip" sparkle:signature="6gdM04yVS5xSPvnqnIM6MNCriDciPyDKYPkgDQ0iMxm0TT3MvI5KIFmoxkW0sKhF0rDKzBvpvxJTpxV0wLcqDQ=="/>
+			<pubDate>Sat, 24 Jun 2023 16:40:34 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.24.157/win-x64-setup.zip" sparkle:version="1.24.157.32294" sparkle:shortVersionString="1.24.157" length="71407065" sparkle:os="windows" type="application/zip" sparkle:signature="pnvWd3x3d7Zn7SvUqJ9vnkImNChi5LCb74WOCqBOuuxpx3JeofKx8W4k9HZxbwseGvRgqn3pioJViFF7ncypBA=="/>
 		</item>
 		<item>
-			<title>1.24.156</title>
+			<title>1.24.157</title>
 			<description>## Current Release Notes
-* Fix issue with Irony reverting to simple parsing all the time
-
-## 1.24.155 Release Notes
-* Fix potential CTD while switching mod collections
-* Stellaris Conflict Solver now treats species_classes as file type overwrite
-* Stellaris Conflict Solver now respects "simple validation" declaration during manual code validation
+* Fix not being able to resolve binary conflicts
 
 ## Release Notes 1.24
 * Update dependencies
@@ -88,8 +68,8 @@
 * Add support for metadata descriptor type games (Victoria 3 support)
 * Add option to ignore update
 * Improve mod loading performance</description>
-			<pubDate>Thu, 22 Jun 2023 03:17:30 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.24.156/win-x64.zip" sparkle:version="1.24.156.34586" sparkle:shortVersionString="1.24.156" length="104863699" sparkle:os="windows" type="application/zip" sparkle:signature="NZi884zq1lz4Kv/NfWhMd41nQ3hT6hnAUK/qaMXN54zgHCwyFFFXUkT3f1aSizVC1NGp8JFV0cA7L8BMdNqdDg=="/>
+			<pubDate>Sat, 24 Jun 2023 16:40:34 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.24.157/win-x64.zip" sparkle:version="1.24.157.32294" sparkle:shortVersionString="1.24.157" length="104863835" sparkle:os="windows" type="application/zip" sparkle:signature="7N/msLDV4q9JDCQ7iOsXULvqF/Hg/PxZkAtKiKZsq+Je3qhbkhXeLSwpr5ucV5PnC7wx070q3eP7n0nFfUwyCA=="/>
 		</item>
 	</channel>
 </rss>
