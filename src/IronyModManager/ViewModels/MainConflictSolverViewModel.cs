@@ -114,6 +114,11 @@ namespace IronyModManager.ViewModels
         private bool filteringConflicts = false;
 
         /// <summary>
+        /// The invalids
+        /// </summary>
+        private IReadOnlyCollection<IDefinition> invalids = null;
+
+        /// <summary>
         /// The invalids checked
         /// </summary>
         private bool invalidsChecked;
@@ -609,7 +614,7 @@ namespace IronyModManager.ViewModels
                 {
                     patchDefinition.UseSimpleValidation = true;
                 }
-            }            
+            }
             var validationResult = modPatchCollectionService.Validate(patchDefinition);
             if (!validationResult.IsValid)
             {
@@ -696,14 +701,14 @@ namespace IronyModManager.ViewModels
                 if (!invalidsChecked)
                 {
                     invalidsChecked = true;
-                    var invalid = (await conflictResult.AllConflicts.GetByValueTypeAsync(ValueType.Invalid));
-                    if (invalid?.Count() > 0)
+                    invalids ??= (await conflictResult.AllConflicts.GetByValueTypeAsync(ValueType.Invalid)).ToList();
+                    if (invalids != null && invalids.Any())
                     {
                         var invalidDef = DIResolver.Get<IHierarchicalDefinitions>();
                         invalidDef.Name = Invalid;
                         invalidDef.Key = InvalidKey;
                         var children = new List<IHierarchicalDefinitions>();
-                        foreach (var item in invalid)
+                        foreach (var item in invalids)
                         {
                             var invalidChild = DIResolver.Get<IHierarchicalDefinitions>();
                             invalidChild.Name = item.File;
@@ -795,6 +800,7 @@ namespace IronyModManager.ViewModels
                 SelectedModCollection = null;
                 cachedInvalids = null;
                 invalidsChecked = false;
+                invalids = null;
                 var args = new NavigationEventArgs()
                 {
                     State = NavigationState.Main

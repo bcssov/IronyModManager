@@ -53,7 +53,7 @@ namespace IronyModManager.Shared.KeyValueStore
         /// </summary>
         /// <param name="cacheDirectory">The cache directory.</param>
         /// <param name="loadType">Type of the load.</param>
-        public Store(string cacheDirectory, Func<string, Type> loadType)
+        public Store(string cacheDirectory, Func<string, Type> loadType = null)
         {
             options = new MixedStorageKVStoreOptions()
             {

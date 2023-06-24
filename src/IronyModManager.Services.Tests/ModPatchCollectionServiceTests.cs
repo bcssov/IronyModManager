@@ -1253,6 +1253,10 @@ namespace IronyModManager.Services.Tests
             var gameService = new Mock<IGameService>();
             var mapper = new Mock<IMapper>();
             var modPatchExporter = new Mock<IModPatchExporter>();
+            storageProvider.Setup(s => s.GetRootStoragePath()).Returns(() =>
+            {
+                return Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "dummy");
+            });
             gameService.Setup(p => p.GetSelected()).Returns(new Game()
             {
                 Type = "Should_sync_patch_state",
@@ -1341,6 +1345,10 @@ namespace IronyModManager.Services.Tests
             var gameService = new Mock<IGameService>();
             var mapper = new Mock<IMapper>();
             var modPatchExporter = new Mock<IModPatchExporter>();
+            storageProvider.Setup(s => s.GetRootStoragePath()).Returns(() =>
+            {
+                return Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "dummy");
+            });
             gameService.Setup(p => p.GetSelected()).Returns(new Game()
             {
                 Type = "Should_sync_patch_state_and_remove_different",

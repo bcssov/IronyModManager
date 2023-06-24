@@ -1511,7 +1511,7 @@ namespace IronyModManager.Parser.Tests
             await service.InitMapAsync(defs);
             var results = await service.SearchDefinitionsAsync("1");
             results.Count().Should().Be(1);
-            results.First().Id.Should().Be("1");
+            results.First().Should().StartWith("1 -");
         }
 
         /// <summary>
@@ -1542,7 +1542,7 @@ namespace IronyModManager.Parser.Tests
             await service.InitMapAsync(defs);
             var results = await service.SearchDefinitionsAsync("1");
             results.Count().Should().Be(1);
-            results.First().Id.Should().Be("1");
+            results.First().Should().StartWith("1 -");
         }
 
         /// <summary>

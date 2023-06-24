@@ -5,7 +5,7 @@
 // Created          : 02-16-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-24-2023
+// Last Modified On : 06-25-2023
 // ***********************************************************************
 // <copyright file="IndexedDefinitions.cs" company="Mario">
 //     Mario
@@ -20,10 +20,10 @@ using System.Linq;
 using System.Threading.Tasks;
 using CodexMicroORM.Core.Collections;
 using IronyModManager.DI;
-using IronyModManager.Shared;
 using IronyModManager.Shared.KeyValueStore;
 using IronyModManager.Shared.Models;
 using IronyModManager.Shared.Trie;
+using Nito.AsyncEx;
 using ValueType = IronyModManager.Shared.Models.ValueType;
 
 namespace IronyModManager.Parser.Definitions
@@ -37,6 +37,16 @@ namespace IronyModManager.Parser.Definitions
     public class IndexedDefinitions : IIndexedDefinitions
     {
         #region Fields
+
+        /// <summary>
+        /// The storage sub folder
+        /// </summary>
+        private const string StorageSubFolder = "StoreCache";
+
+        /// <summary>
+        /// The op lock
+        /// </summary>
+        private readonly AsyncLock opLock = new();
 
         /// <summary>
         /// All file keys
@@ -81,7 +91,6 @@ namespace IronyModManager.Parser.Definitions
         /// The main hierarchal definitions
         /// </summary>
         private ConcurrentIndexedList<IHierarchicalDefinitions> mainHierarchalDefinitions;
-
         /// <summary>
         /// The reset definitions count
         /// </summary>
@@ -151,6 +160,7 @@ namespace IronyModManager.Parser.Definitions
         /// <returns>Task.</returns>
         public async Task AddToMapAsync(IDefinition definition, bool forceIgnoreHierarchical = false)
         {
+            using var mutex = await opLock.LockAsync();
             MapKeys(fileCIKeys, definition.FileCI, definition.TypeAndId);
             MapKeys(typeKeys, definition.Type, definition.TypeAndId);
             MapKeys(typeAndIdKeys, ConstructKey(definition.Type, definition.Id));
@@ -160,7 +170,7 @@ namespace IronyModManager.Parser.Definitions
             if (definition.Tags != null && definition.Tags.Any() && !definition.IsFromGame)
             {
                 // Not interested in stuff from the game
-                trie?.Add(definition.TypeAndId, definition.Tags);
+                trie?.Add($"{definition.Id} - {definition.File} - {definition.ModName}", definition.Tags);
             }
             if (!string.IsNullOrWhiteSpace(definition.DiskFileCI))
             {
@@ -191,6 +201,7 @@ namespace IronyModManager.Parser.Definitions
             {
                 definitions.Add(definition);
             }
+            mutex.Dispose();
         }
 
         /// <summary>
@@ -198,8 +209,9 @@ namespace IronyModManager.Parser.Definitions
         /// </summary>
         /// <param name="definition">The definition.</param>
         /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
-        public Task<bool> ChangeHierarchicalResetStateAsync(IDefinition definition)
+        public async Task<bool> ChangeHierarchicalResetStateAsync(IDefinition definition)
         {
+            using var mutex = await opLock.LockAsync();
             if (definition != null)
             {
                 var parentDirectoryCI = ResolveHierarchalParentDirectory(definition);
@@ -214,12 +226,14 @@ namespace IronyModManager.Parser.Definitions
                             child.ResetType = definition.ResetType;
                             AddOrRemoveFromResetDefinitions(definition, false);
                             hierarchicalDefinition.ResetType = children.Any(p => p.ResetType != ResetType.None) ? ResetType.Any : ResetType.None;
-                            return Task.FromResult(true);
+                            mutex.Dispose();
+                            return true;
                         }
                     }
                 }
             }
-            return Task.FromResult(false);
+            mutex.Dispose();
+            return false;
         }
 
         /// <summary>
@@ -494,6 +508,7 @@ namespace IronyModManager.Parser.Definitions
         /// <returns>Task.</returns>
         public async Task RemoveAsync(IDefinition definition)
         {
+            using var mutex = await opLock.LockAsync();
             if (definition.IsFromGame)
             {
                 gameDefinitionsCount--;
@@ -540,6 +555,7 @@ namespace IronyModManager.Parser.Definitions
                     }
                 }
             }
+            mutex.Dispose();
         }
 
         /// <summary>
@@ -547,33 +563,17 @@ namespace IronyModManager.Parser.Definitions
         /// </summary>
         /// <param name="searchTerm">The search term.</param>
         /// <returns>IEnumerable&lt;IDefinition&gt;.</returns>
-        public async Task<IEnumerable<IDefinition>> SearchDefinitionsAsync(string searchTerm)
+        public Task<IEnumerable<string>> SearchDefinitionsAsync(string searchTerm)
         {
             if (trie != null)
             {
                 var tags = trie.Get(searchTerm.ToLowerInvariant());
                 if (tags != null)
                 {
-                    if (store != null)
-                    {
-                        return await ReadDefinitionsFromStoreAsync(tags);
-                    }
-                    else
-                    {
-                        var tasks = tags.Select(p =>
-                        {
-                            return GetByTypeAndIdAsync(p);
-                        });
-                        await Task.WhenAll(tasks);
-                        return tasks.SelectMany(p => p.Result).ToList();
-                    }
-                }
-                else
-                {
-                    return null;
+                    return Task.FromResult<IEnumerable<string>>(tags);
                 }
             }
-            return null;
+            return Task.FromResult<IEnumerable<string>>(null);
         }
 
         /// <summary>
@@ -590,11 +590,13 @@ namespace IronyModManager.Parser.Definitions
             }
             if (store != null)
             {
+                using var mutex = await opLock.LockAsync();
                 var group = definitions.GroupBy(p => p.TypeAndId);
                 foreach (var item in group)
                 {
                     await store.InsertAsync(item.Key, item.ToList());
                 }
+                mutex.Dispose();
                 return true;
             }
             return true;
@@ -611,7 +613,7 @@ namespace IronyModManager.Parser.Definitions
             {
                 throw new InvalidOperationException("Unable to switch to disk store as there are items in the memory.");
             }
-            store = new Store<List<IDefinition>>(Path.Combine(storePath, Guid.NewGuid().ToString().GenerateValidFileName()), (type) =>
+            store = new Store<List<IDefinition>>(ResolveStoragePath(storePath), (type) =>
             {
                 if (type.Equals(nameof(IDefinition)))
                 {
@@ -627,6 +629,16 @@ namespace IronyModManager.Parser.Definitions
         public void UseSearch()
         {
             trie = new Trie<string>();
+        }
+
+        /// <summary>
+        /// Resolves the storage path.
+        /// </summary>
+        /// <param name="path">The path.</param>
+        /// <returns>System.String.</returns>
+        protected virtual string ResolveStoragePath(string path)
+        {
+            return Path.Combine(path, StorageSubFolder);
         }
 
         /// <summary>

@@ -43,7 +43,7 @@ namespace IronyModManager.Shared.KeyValueStore
         /// Initializes a new instance of the <see cref="StoreOptions" /> class.
         /// </summary>
         /// <param name="resolver">The resolver.</param>
-        protected internal StoreOptions(Func<string, Type> resolver) : base(Standard.WithResolver(TypelessObjectResolver.Instance).WithCompression(MessagePackCompression.Lz4BlockArray))
+        protected internal StoreOptions(Func<string, Type> resolver) : base(Standard.WithResolver(TypelessObjectResolver.Instance).WithCompression(MessagePackCompression.None))
         {
             this.resolver = resolver;
         }
@@ -59,10 +59,13 @@ namespace IronyModManager.Shared.KeyValueStore
         /// <returns>The loaded type or <c>null</c> if no matching type could be found.</returns>
         public override Type LoadType(string typeName)
         {
-            var result = resolver(typeName);
-            if (result != null)
+            if (resolver != null)
             {
-                return result;
+                var result = resolver(typeName);
+                if (result != null)
+                {
+                    return result;
+                }
             }
             return base.LoadType(typeName);
         }

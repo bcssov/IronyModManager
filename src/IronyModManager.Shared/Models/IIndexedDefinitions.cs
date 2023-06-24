@@ -168,7 +168,7 @@ namespace IronyModManager.Shared.Models
         /// </summary>
         /// <param name="searchTerm">The search term.</param>
         /// <returns>Task&lt;IEnumerable&lt;IDefinition&gt;&gt;.</returns>
-        Task<IEnumerable<IDefinition>> SearchDefinitionsAsync(string searchTerm);
+        Task<IEnumerable<string>> SearchDefinitionsAsync(string searchTerm);
 
         /// <summary>
         /// Updates the definitions asynchronous.

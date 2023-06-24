@@ -5,7 +5,7 @@
 // Created          : 06-14-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-15-2023
+// Last Modified On : 06-24-2023
 // ***********************************************************************
 // <copyright file="ConflictSolverDBSearchControlViewModel.cs" company="Mario">
 //     Mario
@@ -23,7 +23,6 @@ using IronyModManager.Common.ViewModels;
 using IronyModManager.Localization.Attributes;
 using IronyModManager.Models.Common;
 using IronyModManager.Shared;
-using IronyModManager.Shared.Models;
 using ReactiveUI;
 
 namespace IronyModManager.ViewModels.Controls
@@ -89,7 +88,7 @@ namespace IronyModManager.ViewModels.Controls
         /// Gets or sets the definitions.
         /// </summary>
         /// <value>The definitions.</value>
-        public virtual IEnumerable<IDefinition> Definitions { get; protected set; }
+        public virtual IEnumerable<string> Definitions { get; protected set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether this instance is open.
@@ -160,7 +159,7 @@ namespace IronyModManager.ViewModels.Controls
                     var result = await ConflictResult.AllConflicts.SearchDefinitionsAsync(s);
                     if (result != null)
                     {
-                        Definitions = result.OrderBy(p => p.TypeAndId, StringComparer.OrdinalIgnoreCase).ToObservableCollection();
+                        Definitions = result.OrderBy(p => p, StringComparer.OrdinalIgnoreCase).ToObservableCollection();
                     }
                     else
                     {

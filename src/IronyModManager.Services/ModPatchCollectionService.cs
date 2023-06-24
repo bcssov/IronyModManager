@@ -79,10 +79,14 @@ namespace IronyModManager.Services
         private const double MaxAllowedSource = 1e+10;
 
         /// <summary>
+        /// The maximum definitions to add
+        /// </summary>
+        private const int MaxDefinitionsToAdd = 8;
+
+        /// <summary>
         /// The maximum mod conflicts to check
         /// </summary>
         private const int MaxModConflictsToCheck = 4;
-
         /// <summary>
         /// The maximum mods to process in parallel
         /// </summary>
@@ -121,13 +125,20 @@ namespace IronyModManager.Services
         /// <summary>
         /// The whitelisted definition properties full
         /// </summary>
-        private static readonly string[] whitelistedDefinitionPropertiesFull = new string[] { "DiskFile", "File", "Id", "ModName", "Tags", "Type", "ValueType", "IsFromGame", "Order", "OriginalFileName", "ResetType", "FileNameSuffix", "IsPlaceholder", "UseSimpleValidation", "AdditionalFileNames" };
+        private static readonly string[] whitelistedDefinitionPropertiesFull = new string[]
+        {
+            nameof(IDefinition.DiskFile), nameof(IDefinition.File), nameof(IDefinition.Id), nameof(IDefinition.ModName), nameof(IDefinition.Tags), nameof(IDefinition.Type),
+            nameof(IDefinition.ValueType), nameof(IDefinition.IsFromGame), nameof(IDefinition.Order), nameof(IDefinition. OriginalFileName), nameof(IDefinition. ResetType), nameof(IDefinition.FileNameSuffix), nameof(IDefinition.IsPlaceholder), nameof(IDefinition.UseSimpleValidation), nameof(IDefinition.AdditionalFileNames)
+        };
 
         /// <summary>
         /// The whitelisted definition properties partial
         /// </summary>
-        private static readonly string[] whitelistedDefinitionPropertiesPartial = new string[] { "DiskFile", "File", "Id", "ModName", "Tags", "Type", "ValueType", "IsFromGame", "Order", "OriginalFileName", "ResetType", "FileNameSuffix", "IsPlaceholder", "UseSimpleValidation" };
-
+        private static readonly string[] whitelistedDefinitionPropertiesPartial = new string[]
+        {
+            nameof(IDefinition.DiskFile), nameof(IDefinition.File), nameof(IDefinition.Id), nameof(IDefinition.ModName), nameof(IDefinition.Tags), nameof(IDefinition.Type),
+            nameof(IDefinition.ValueType), nameof(IDefinition.IsFromGame), nameof(IDefinition.Order), nameof(IDefinition. OriginalFileName), nameof(IDefinition. ResetType), nameof(IDefinition.FileNameSuffix), nameof(IDefinition.IsPlaceholder), nameof(IDefinition.UseSimpleValidation)
+        };
         /// <summary>
         /// The definition properties
         /// </summary>
@@ -1022,46 +1033,57 @@ namespace IronyModManager.Services
             {
                 var copy = DIResolver.Get<IIndexedDefinitions>();
                 copy.UseSearch();
-                foreach (var item in await conflictResult.AllConflicts.GetAllAsync())
+                copy.UseDiskStore(StorageProvider.GetRootStoragePath());
+                var semaphore = new AsyncSemaphore(MaxDefinitionsToAdd);
+                var tasks = (await conflictResult.AllConflicts.GetAllAsync()).Select(async item =>
                 {
-                    IDefinition defCopy;
-                    if (conflictResult.Conflicts != null && (await conflictResult.Conflicts.GetByTypeAndIdAsync(item.TypeAndId)).Any())
+                    await semaphore.WaitAsync();
+                    try
                     {
-                        defCopy = PartialDefinitionCopy(item);
+                        IDefinition defCopy;
+                        if (conflictResult.Conflicts != null && (await conflictResult.Conflicts.GetByTypeAndIdAsync(item.TypeAndId)).Any())
+                        {
+                            defCopy = PartialDefinitionCopy(item);
+                        }
+                        else if (conflictResult.ResolvedConflicts != null && (await conflictResult.ResolvedConflicts.GetByTypeAndIdAsync(item.TypeAndId)).Any())
+                        {
+                            defCopy = PartialDefinitionCopy(item);
+                        }
+                        else if (conflictResult.IgnoredConflicts != null && (await conflictResult.IgnoredConflicts.GetByTypeAndIdAsync(item.TypeAndId)).Any())
+                        {
+                            defCopy = PartialDefinitionCopy(item);
+                        }
+                        else if (conflictResult.OverwrittenConflicts != null && (await conflictResult.OverwrittenConflicts.GetByTypeAndIdAsync(item.TypeAndId)).Any())
+                        {
+                            defCopy = PartialDefinitionCopy(item);
+                        }
+                        else if (conflictResult.RuleIgnoredConflicts != null && (await conflictResult.RuleIgnoredConflicts.GetByTypeAndIdAsync(item.TypeAndId)).Any())
+                        {
+                            defCopy = PartialDefinitionCopy(item);
+                        }
+                        else if (conflictResult.CustomConflicts != null && (await conflictResult.CustomConflicts.GetByTypeAndIdAsync(item.TypeAndId)).Any())
+                        {
+                            defCopy = PartialDefinitionCopy(item);
+                        }
+                        else
+                        {
+                            defCopy = cleanDefiniton(item);
+                        }
+                        await copy.AddToMapAsync(defCopy);
+                        processed++;
+                        var perc = GetProgressPercentage(total, processed, maxProgress);
+                        if (previousProgress != perc)
+                        {
+                            await messageBus.PublishAsync(new ModDefinitionPatchLoadEvent(perc));
+                            previousProgress = perc;
+                        }
                     }
-                    else if (conflictResult.ResolvedConflicts != null && (await conflictResult.ResolvedConflicts.GetByTypeAndIdAsync(item.TypeAndId)).Any())
+                    finally
                     {
-                        defCopy = PartialDefinitionCopy(item);
+                        semaphore.Release();
                     }
-                    else if (conflictResult.IgnoredConflicts != null && (await conflictResult.IgnoredConflicts.GetByTypeAndIdAsync(item.TypeAndId)).Any())
-                    {
-                        defCopy = PartialDefinitionCopy(item);
-                    }
-                    else if (conflictResult.OverwrittenConflicts != null && (await conflictResult.OverwrittenConflicts.GetByTypeAndIdAsync(item.TypeAndId)).Any())
-                    {
-                        defCopy = PartialDefinitionCopy(item);
-                    }
-                    else if (conflictResult.RuleIgnoredConflicts != null && (await conflictResult.RuleIgnoredConflicts.GetByTypeAndIdAsync(item.TypeAndId)).Any())
-                    {
-                        defCopy = PartialDefinitionCopy(item);
-                    }
-                    else if (conflictResult.CustomConflicts != null && (await conflictResult.CustomConflicts.GetByTypeAndIdAsync(item.TypeAndId)).Any())
-                    {
-                        defCopy = PartialDefinitionCopy(item);
-                    }
-                    else
-                    {
-                        defCopy = cleanDefiniton(item);
-                    }
-                    await copy.AddToMapAsync(defCopy);
-                    processed++;
-                    var perc = GetProgressPercentage(total, processed, maxProgress);
-                    if (previousProgress != perc)
-                    {
-                        await messageBus.PublishAsync(new ModDefinitionPatchLoadEvent(perc));
-                        previousProgress = perc;
-                    }
-                }
+                });
+                await Task.WhenAll(tasks);
                 return (copy, processed);
             }
 
