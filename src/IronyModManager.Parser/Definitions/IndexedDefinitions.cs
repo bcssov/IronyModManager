@@ -152,7 +152,7 @@ namespace IronyModManager.Parser.Definitions
         public async Task AddToMapAsync(IDefinition definition, bool forceIgnoreHierarchical = false)
         {
             MapKeys(fileCIKeys, definition.FileCI, definition.TypeAndId);
-            MapKeys(typeKeys, definition.Type, definition.Type);
+            MapKeys(typeKeys, definition.Type, definition.TypeAndId);
             MapKeys(typeAndIdKeys, ConstructKey(definition.Type, definition.Id));
             MapKeys(allFileKeys, definition.FileCI);
             MapKeys(directoryCIKeys, definition.ParentDirectoryCI, definition.TypeAndId);
@@ -796,7 +796,7 @@ namespace IronyModManager.Parser.Definitions
         {
             var tasks = keys.Distinct().Select(store.ReadAsync);
             await Task.WhenAll(tasks);
-            return tasks.SelectMany(r => r.Result).ToList();
+            return tasks.Where(p => p.IsCompleted && !p.IsFaulted && p.Result != null).SelectMany(r => r.Result).ToList();
         }
 
         /// <summary>
