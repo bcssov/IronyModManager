@@ -1,10 +1,11 @@
-﻿// ***********************************************************************
+﻿
+// ***********************************************************************
 // Assembly         : IronyModManager.DI
 // Author           : Mario
 // Created          : 06-10-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 07-11-2022
+// Last Modified On : 06-25-2023
 // ***********************************************************************
 // <copyright file="MessageBusRegistration.cs" company="Mario">
 //     Mario
@@ -17,13 +18,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using IronyModManager.Shared.MessageBus;
-using Microsoft.Extensions.Logging.Abstractions;
-using SlimMessageBus.Host.Config;
+using SlimMessageBus.Host;
 using SlimMessageBus.Host.Interceptor;
-using SlimMessageBus.Host.Memory;
 
 namespace IronyModManager.DI.MessageBus
 {
+
     /// <summary>
     /// Class MessageBusRegistration.
     /// </summary>
@@ -61,14 +61,10 @@ namespace IronyModManager.DI.MessageBus
                 return typeof(IEnumerable<>).MakeGenericType(type);
             }
 
-            var registeredTypes = new HashSet<Type>();
+            var registeredTypes = new Dictionary<Type, string>();
             var builder = MessageBusBuilder.Create()
-                .WithLoggerFacory(NullLoggerFactory.Instance) // Breaking change for some reason
-                .WithDependencyResolver(new MessageBusDependencyResolver())
-                .WithProviderMemory(new MemoryMessageBusSettings()
-                {
-                    EnableMessageSerialization = false
-                })
+                .WithDependencyResolver(new MessageBusDependencyResolver(new MessageTypeResolver(registeredTypes)))
+                .WithProvider(providerSettings => new MessageBusMemoryProvider(providerSettings))
                 .Do(builder =>
                 {
                     assemblies.ToList().ForEach(assembly =>
@@ -81,9 +77,9 @@ namespace IronyModManager.DI.MessageBus
                             .ForEach(find =>
                             {
                                 // Yeah, samples are really generic. I could not be more sarcastic about this.
-                                if (!registeredTypes.Contains(find.EventType))
+                                if (!registeredTypes.ContainsKey(find.EventType))
                                 {
-                                    registeredTypes.Add(find.EventType);
+                                    registeredTypes.Add(find.EventType, find.EventType.Name);
                                     builder.Produce(find.EventType, x => x.DefaultTopic(x.Settings.MessageType.Name));
                                     var producerType = resolveProducerInterceptor(find.EventType);
                                     var publishType = resolvePublishInterceptor(find.EventType);
@@ -92,12 +88,12 @@ namespace IronyModManager.DI.MessageBus
                                     DIContainer.Container.Register(resolveEnumerable(publishType), () => initCollectionObject(publishType));
                                     DIContainer.Container.Register(resolveEnumerable(consumerType), () => initCollectionObject(consumerType));
                                 }
-                                builder.Consume(find.EventType, x => x.Topic(x.MessageType.Name).WithConsumer(find.HandlerType));
+                                builder.Consume(find.EventType, x => x.Topic(x.ConsumerSettings.MessageType.Name).WithConsumer(find.HandlerType));
                                 DIContainer.Container.Register(find.HandlerType, find.HandlerType, SimpleInjector.Lifestyle.Singleton);
                             });
                     });
                 });
-            var mbus = new MessageBus(builder.Build(), registeredTypes);
+            var mbus = new MessageBus(builder.Build(), registeredTypes.Keys.ToHashSet());
             DIContainer.Container.RegisterInstance<IMessageBus>(mbus);
         }
 
