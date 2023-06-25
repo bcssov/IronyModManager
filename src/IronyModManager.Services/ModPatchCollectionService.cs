@@ -17,7 +17,6 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
@@ -38,6 +37,7 @@ using IronyModManager.Services.Common.Exceptions;
 using IronyModManager.Services.Common.MessageBus;
 using IronyModManager.Shared;
 using IronyModManager.Shared.Cache;
+using IronyModManager.Shared.Configuration;
 using IronyModManager.Shared.MessageBus;
 using IronyModManager.Shared.Models;
 using IronyModManager.Storage.Common;
@@ -122,29 +122,6 @@ namespace IronyModManager.Services
         /// </summary>
         private static readonly object serviceLock = new { };
 
-        /// <summary>
-        /// The whitelisted definition properties full
-        /// </summary>
-        private static readonly string[] whitelistedDefinitionPropertiesFull = new string[]
-        {
-            nameof(IDefinition.DiskFile), nameof(IDefinition.File), nameof(IDefinition.Id), nameof(IDefinition.ModName), nameof(IDefinition.Tags), nameof(IDefinition.Type),
-            nameof(IDefinition.ValueType), nameof(IDefinition.IsFromGame), nameof(IDefinition.Order), nameof(IDefinition. OriginalFileName), nameof(IDefinition. ResetType),
-            nameof(IDefinition.IsSpecialFolder), nameof(IDefinition.FileNameSuffix), nameof(IDefinition.IsPlaceholder), nameof(IDefinition.UseSimpleValidation), nameof(IDefinition.AdditionalFileNames)
-        };
-
-        /// <summary>
-        /// The whitelisted definition properties partial
-        /// </summary>
-        private static readonly string[] whitelistedDefinitionPropertiesPartial = new string[]
-        {
-            nameof(IDefinition.DiskFile), nameof(IDefinition.File), nameof(IDefinition.Id), nameof(IDefinition.ModName), nameof(IDefinition.Tags), nameof(IDefinition.Type),
-            nameof(IDefinition.ValueType), nameof(IDefinition.IsFromGame), nameof(IDefinition.Order), nameof(IDefinition. OriginalFileName), nameof(IDefinition. ResetType),
-            nameof(IDefinition.IsSpecialFolder), nameof(IDefinition.FileNameSuffix), nameof(IDefinition.IsPlaceholder), nameof(IDefinition.UseSimpleValidation)
-        };
-        /// <summary>
-        /// The definition properties
-        /// </summary>
-        private static PropertyInfo[] definitionProperties;
         /// <summary>
         /// The message bus
         /// </summary>
@@ -1004,38 +981,15 @@ namespace IronyModManager.Services
                 }
                 return processed;
             }
-            IDefinition cleanDefiniton(IDefinition definition, bool copyAditionalFilenames = true)
-            {
-                if (definition.ValueType == ValueType.Invalid || definition.AllowDuplicate)
-                {
-                    return definition;
-                }
-                var whitelisted = whitelistedDefinitionPropertiesPartial;
-                if (copyAditionalFilenames)
-                {
-                    whitelisted = whitelistedDefinitionPropertiesFull;
-                }
-
-                if (definitionProperties == null)
-                {
-                    var type = definition.GetType();
-                    definitionProperties = type.GetProperties();
-                }
-                for (int i = 0; i < definitionProperties.Length; ++i)
-                {
-                    var prop = definitionProperties[i];
-                    if (prop.CanWrite && !whitelisted.Contains(prop.Name))
-                    {
-                        prop.SetValue(definition, null);
-                    }
-                }
-                return definition;
-            }
             async Task<(IIndexedDefinitions, int)> partialCopyAllIndexedDefinitions(IConflictResult conflictResult, int total, int processed, int maxProgress)
             {
                 var copy = DIResolver.Get<IIndexedDefinitions>();
                 copy.UseSearch();
-                copy.UseDiskStore(StorageProvider.GetRootStoragePath());
+                var options = DIResolver.Get<IDomainConfiguration>().GetOptions();
+                if (options.ConflictSolver.UseHybridMemory)
+                {
+                    copy.UseDiskStore(StorageProvider.GetRootStoragePath());
+                }
                 copy.SetAllowedType(AddToMapAllowedType.InvalidAndSpecial);
                 var semaphore = new AsyncSemaphore(MaxDefinitionsToAdd);
                 var tasks = (await conflictResult.AllConflicts.GetAllAsync()).Select(async item =>
@@ -1043,34 +997,10 @@ namespace IronyModManager.Services
                     await semaphore.WaitAsync();
                     try
                     {
-                        IDefinition defCopy;
-                        if (conflictResult.Conflicts != null && (await conflictResult.Conflicts.GetByTypeAndIdAsync(item.TypeAndId)).Any())
+                        IDefinition defCopy = item;
+                        if (item.ValueType == ValueType.Invalid || item.IsSpecialFolder)
                         {
                             defCopy = PartialDefinitionCopy(item);
-                        }
-                        else if (conflictResult.ResolvedConflicts != null && (await conflictResult.ResolvedConflicts.GetByTypeAndIdAsync(item.TypeAndId)).Any())
-                        {
-                            defCopy = PartialDefinitionCopy(item);
-                        }
-                        else if (conflictResult.IgnoredConflicts != null && (await conflictResult.IgnoredConflicts.GetByTypeAndIdAsync(item.TypeAndId)).Any())
-                        {
-                            defCopy = PartialDefinitionCopy(item);
-                        }
-                        else if (conflictResult.OverwrittenConflicts != null && (await conflictResult.OverwrittenConflicts.GetByTypeAndIdAsync(item.TypeAndId)).Any())
-                        {
-                            defCopy = PartialDefinitionCopy(item);
-                        }
-                        else if (conflictResult.RuleIgnoredConflicts != null && (await conflictResult.RuleIgnoredConflicts.GetByTypeAndIdAsync(item.TypeAndId)).Any())
-                        {
-                            defCopy = PartialDefinitionCopy(item);
-                        }
-                        else if (conflictResult.CustomConflicts != null && (await conflictResult.CustomConflicts.GetByTypeAndIdAsync(item.TypeAndId)).Any())
-                        {
-                            defCopy = PartialDefinitionCopy(item);
-                        }
-                        else
-                        {
-                            defCopy = cleanDefiniton(item);
                         }
                         await copy.AddToMapAsync(defCopy);
                         processed++;
