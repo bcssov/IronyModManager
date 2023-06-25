@@ -37,6 +37,7 @@ using IronyModManager.Parser.Models;
 using IronyModManager.Services.Common;
 using IronyModManager.Shared;
 using IronyModManager.Shared.Cache;
+using IronyModManager.Shared.Configuration;
 using IronyModManager.Shared.MessageBus;
 using IronyModManager.Shared.Models;
 using IronyModManager.Storage.Common;
@@ -1243,8 +1244,7 @@ namespace IronyModManager.Services.Tests
         [Fact]
         public async Task Should_initialize_patch_state()
         {
-            DISetup.SetupContainer();
-
+            DISetup.SetupContainer();            
             var storageProvider = new Mock<IStorageProvider>();
             var modParser = new Mock<IModParser>();
             var parserManager = new Mock<IParserManager>();
@@ -1253,6 +1253,7 @@ namespace IronyModManager.Services.Tests
             var gameService = new Mock<IGameService>();
             var mapper = new Mock<IMapper>();
             var modPatchExporter = new Mock<IModPatchExporter>();
+            DISetup.Container.Register<IDomainConfiguration>(() => new DomainConfigDummy());
             storageProvider.Setup(s => s.GetRootStoragePath()).Returns(() =>
             {
                 return Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "dummy");
@@ -1345,6 +1346,7 @@ namespace IronyModManager.Services.Tests
             var gameService = new Mock<IGameService>();
             var mapper = new Mock<IMapper>();
             var modPatchExporter = new Mock<IModPatchExporter>();
+            DISetup.Container.Register<IDomainConfiguration>(() => new DomainConfigDummy());
             storageProvider.Setup(s => s.GetRootStoragePath()).Returns(() =>
             {
                 return Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "dummy");
@@ -5326,6 +5328,30 @@ namespace IronyModManager.Services.Tests
             var game = DISetup.Container.GetInstance<IGameService>().Get().First(s => s.Type == "Stellaris");
             var mods = await DISetup.Container.GetInstance<IModService>().GetInstalledModsAsync(game);
             var defs = await DISetup.Container.GetInstance<IModPatchCollectionService>().GetModObjectsAsync(game, mods, string.Empty, IronyModManager.Models.Common.PatchStateMode.Advanced);
+        }
+
+        private class DomainConfigDummy : Shared.Configuration.IDomainConfiguration
+        {
+            /// <summary>
+            /// The domain
+            /// </summary>
+            DomainConfigurationOptions domain = new DomainConfigurationOptions();
+            /// <summary>
+            /// Initializes a new instance of the <see cref="DomainConfigDummy" /> class.
+            /// </summary>
+            /// <param name="useLegacySteamLaunch">if set to <c>true</c> [use legacy steam launch].</param>
+            public DomainConfigDummy()
+            {
+            }
+
+            /// <summary>
+            /// Gets the options.
+            /// </summary>
+            /// <returns>DomainConfigurationOptions.</returns>
+            public DomainConfigurationOptions GetOptions()
+            {
+                return domain;
+            }
         }
     }
 }
