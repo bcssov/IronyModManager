@@ -44,8 +44,8 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="RepoDb" Version="1.13.0" />
-    <PackageReference Include="RepoDb.Sqlite.Microsoft" Version="1.13.0" />
+    <PackageReference Include="RepoDb" Version="1.13.1" />
+    <PackageReference Include="RepoDb.Sqlite.Microsoft" Version="1.13.1" />
     <PackageReference Include="Sajidur78.StrongNamer" Version="0.2.8" />
   </ItemGroup>
 
