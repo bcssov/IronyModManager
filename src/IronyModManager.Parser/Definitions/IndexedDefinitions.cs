@@ -54,6 +54,11 @@ namespace IronyModManager.Parser.Definitions
         private HashSet<string> allFileKeys;
 
         /// <summary>
+        /// The allowed type
+        /// </summary>
+        private AddToMapAllowedType allowedType = AddToMapAllowedType.All;
+
+        /// <summary>
         /// The hierarchical definitions
         /// </summary>
         private ConcurrentDictionary<string, ConcurrentIndexedList<IHierarchicalDefinitions>> childHierarchicalDefinitions;
@@ -82,6 +87,7 @@ namespace IronyModManager.Parser.Definitions
         /// The file ci keys
         /// </summary>
         private Dictionary<string, HashSet<string>> fileCIKeys;
+
         /// <summary>
         /// The game definitions count
         /// </summary>
@@ -160,6 +166,18 @@ namespace IronyModManager.Parser.Definitions
         /// <returns>Task.</returns>
         public async Task AddToMapAsync(IDefinition definition, bool forceIgnoreHierarchical = false)
         {
+            async Task addDefinition()
+            {
+                if (store != null)
+                {
+                    await UpdateStoreDefinitionAsync(definition);
+                }
+                else
+                {
+                    definitions.Add(definition);
+                }
+            }
+
             using var mutex = await opLock.LockAsync();
             MapKeys(fileCIKeys, definition.FileCI, definition.TypeAndId);
             MapKeys(typeKeys, definition.Type, definition.TypeAndId);
@@ -193,14 +211,19 @@ namespace IronyModManager.Parser.Definitions
                 gameDefinitionsCount++;
             }
 
-            if (store != null)
+            switch (allowedType)
             {
-                await UpdateStoreDefinitionAsync(definition);
+                case AddToMapAllowedType.InvalidAndSpecial:
+                    if (definition.ValueType == ValueType.Invalid || definition.IsSpecialFolder)
+                    {
+                        await addDefinition();
+                    }
+                    break;
+                default:
+                    await addDefinition();
+                    break;
             }
-            else
-            {
-                definitions.Add(definition);
-            }
+
             mutex.Dispose();
         }
 
@@ -290,6 +313,7 @@ namespace IronyModManager.Parser.Definitions
         /// <returns>IEnumerable&lt;IDefinition&gt;.</returns>
         public Task<IEnumerable<IDefinition>> GetAllAsync()
         {
+            EnsureAllowedAllIsRespected();
             if (store != null)
             {
                 return ReadDefinitionsFromStoreAsync(typeAndIdKeys);
@@ -340,6 +364,7 @@ namespace IronyModManager.Parser.Definitions
         /// <returns>IEnumerable&lt;IDefinition&gt;.</returns>
         public Task<IEnumerable<IDefinition>> GetByDiskFileAsync(string file)
         {
+            EnsureAllowedAllIsRespected();
             if (store != null)
             {
                 if (diskFileCIKeys.TryGetValue(file, out var value))
@@ -358,6 +383,7 @@ namespace IronyModManager.Parser.Definitions
         /// <returns>IEnumerable&lt;IDefinition&gt;.</returns>
         public Task<IEnumerable<IDefinition>> GetByFileAsync(string file)
         {
+            EnsureAllowedAllIsRespected();
             if (store != null)
             {
                 if (fileCIKeys.TryGetValue(file, out var value))
@@ -376,6 +402,7 @@ namespace IronyModManager.Parser.Definitions
         /// <returns>IEnumerable&lt;IDefinition&gt;.</returns>
         public Task<IEnumerable<IDefinition>> GetByParentDirectoryAsync(string directory)
         {
+            EnsureAllowedAllIsRespected(true);
             if (store != null)
             {
                 if (directoryCIKeys.TryGetValue(directory, out var value))
@@ -405,6 +432,7 @@ namespace IronyModManager.Parser.Definitions
         /// <returns>IEnumerable&lt;IDefinition&gt;.</returns>
         public async Task<IEnumerable<IDefinition>> GetByTypeAndIdAsync(string typeAndId)
         {
+            EnsureAllowedAllIsRespected(true);
             if (store != null)
             {
                 return await store.ReadAsync(typeAndId);
@@ -419,6 +447,7 @@ namespace IronyModManager.Parser.Definitions
         /// <returns>IEnumerable&lt;IDefinition&gt;.</returns>
         public Task<IEnumerable<IDefinition>> GetByTypeAsync(string type)
         {
+            EnsureAllowedAllIsRespected();
             if (store != null)
             {
                 if (typeKeys.TryGetValue(type, out var value))
@@ -435,8 +464,13 @@ namespace IronyModManager.Parser.Definitions
         /// </summary>
         /// <param name="type">The type.</param>
         /// <returns>IEnumerable&lt;IDefinition&gt;.</returns>
+        /// <exception cref="System.ArgumentException">Only invalid types can be queried.</exception>
         public Task<IEnumerable<IDefinition>> GetByValueTypeAsync(ValueType type)
         {
+            if (allowedType == AddToMapAllowedType.InvalidAndSpecial && type != ValueType.Invalid)
+            {
+                throw new ArgumentException("Only invalid types can be queried.");
+            }
             if (store != null)
             {
                 if (typeKeyValues.TryGetValue(type, out var value))
@@ -577,6 +611,20 @@ namespace IronyModManager.Parser.Definitions
         }
 
         /// <summary>
+        /// Sets the type of the allowed.
+        /// </summary>
+        /// <param name="allowedType">Type of the allowed.</param>
+        /// <exception cref="System.InvalidOperationException">Cannot set allowed type index definition is already initialized.</exception>
+        public void SetAllowedType(AddToMapAllowedType allowedType)
+        {
+            if (typeKeys.Any())
+            {
+                throw new InvalidOperationException("Cannot set allowed type index definition is already initialized.");
+            }
+            this.allowedType = allowedType;
+        }
+
+        /// <summary>
         /// Updates the definitions asynchronous.
         /// </summary>
         /// <param name="definitions">The definitions.</param>
@@ -692,6 +740,22 @@ namespace IronyModManager.Parser.Definitions
                 result.Add(copy);
             }
             return result;
+        }
+
+        /// <summary>
+        /// Ensures the allowed all is respected.
+        /// </summary>
+        /// <param name="allowInvalid">if set to <c>true</c> [allow invalid].</param>
+        /// <exception cref="System.ArgumentException">Collection is empty.</exception>
+        private void EnsureAllowedAllIsRespected(bool allowInvalid = false)
+        {
+            if (allowedType != AddToMapAllowedType.All)
+            {
+                if (!allowInvalid)
+                {
+                    throw new ArgumentException("Collection is empty.");
+                }                
+            }
         }
 
         /// <summary>

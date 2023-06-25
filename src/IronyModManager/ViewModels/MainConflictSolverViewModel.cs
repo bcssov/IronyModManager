@@ -5,7 +5,7 @@
 // Created          : 03-18-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-24-2023
+// Last Modified On : 06-25-2023
 // ***********************************************************************
 // <copyright file="MainConflictSolverViewModel.cs" company="Mario">
 //     Mario
@@ -112,11 +112,6 @@ namespace IronyModManager.ViewModels
         /// The filtering conflicts
         /// </summary>
         private bool filteringConflicts = false;
-
-        /// <summary>
-        /// The invalids
-        /// </summary>
-        private IReadOnlyCollection<IDefinition> invalids = null;
 
         /// <summary>
         /// The invalids checked
@@ -701,7 +696,7 @@ namespace IronyModManager.ViewModels
                 if (!invalidsChecked)
                 {
                     invalidsChecked = true;
-                    invalids ??= (await conflictResult.AllConflicts.GetByValueTypeAsync(ValueType.Invalid)).ToList();
+                    var invalids = (await conflictResult.AllConflicts.GetByValueTypeAsync(ValueType.Invalid)).ToList();
                     if (invalids != null && invalids.Any())
                     {
                         var invalidDef = DIResolver.Get<IHierarchicalDefinitions>();
@@ -800,7 +795,6 @@ namespace IronyModManager.ViewModels
                 SelectedModCollection = null;
                 cachedInvalids = null;
                 invalidsChecked = false;
-                invalids = null;
                 var args = new NavigationEventArgs()
                 {
                     State = NavigationState.Main

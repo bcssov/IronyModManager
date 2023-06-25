@@ -5,7 +5,7 @@
 // Created          : 05-26-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-24-2023
+// Last Modified On : 06-25-2023
 // ***********************************************************************
 // <copyright file="ModPatchCollectionService.cs" company="Mario">
 //     Mario
@@ -128,7 +128,8 @@ namespace IronyModManager.Services
         private static readonly string[] whitelistedDefinitionPropertiesFull = new string[]
         {
             nameof(IDefinition.DiskFile), nameof(IDefinition.File), nameof(IDefinition.Id), nameof(IDefinition.ModName), nameof(IDefinition.Tags), nameof(IDefinition.Type),
-            nameof(IDefinition.ValueType), nameof(IDefinition.IsFromGame), nameof(IDefinition.Order), nameof(IDefinition. OriginalFileName), nameof(IDefinition. ResetType), nameof(IDefinition.FileNameSuffix), nameof(IDefinition.IsPlaceholder), nameof(IDefinition.UseSimpleValidation), nameof(IDefinition.AdditionalFileNames)
+            nameof(IDefinition.ValueType), nameof(IDefinition.IsFromGame), nameof(IDefinition.Order), nameof(IDefinition. OriginalFileName), nameof(IDefinition. ResetType),
+            nameof(IDefinition.IsSpecialFolder), nameof(IDefinition.FileNameSuffix), nameof(IDefinition.IsPlaceholder), nameof(IDefinition.UseSimpleValidation), nameof(IDefinition.AdditionalFileNames)
         };
 
         /// <summary>
@@ -137,7 +138,8 @@ namespace IronyModManager.Services
         private static readonly string[] whitelistedDefinitionPropertiesPartial = new string[]
         {
             nameof(IDefinition.DiskFile), nameof(IDefinition.File), nameof(IDefinition.Id), nameof(IDefinition.ModName), nameof(IDefinition.Tags), nameof(IDefinition.Type),
-            nameof(IDefinition.ValueType), nameof(IDefinition.IsFromGame), nameof(IDefinition.Order), nameof(IDefinition. OriginalFileName), nameof(IDefinition. ResetType), nameof(IDefinition.FileNameSuffix), nameof(IDefinition.IsPlaceholder), nameof(IDefinition.UseSimpleValidation)
+            nameof(IDefinition.ValueType), nameof(IDefinition.IsFromGame), nameof(IDefinition.Order), nameof(IDefinition. OriginalFileName), nameof(IDefinition. ResetType),
+            nameof(IDefinition.IsSpecialFolder), nameof(IDefinition.FileNameSuffix), nameof(IDefinition.IsPlaceholder), nameof(IDefinition.UseSimpleValidation)
         };
         /// <summary>
         /// The definition properties
@@ -1034,6 +1036,7 @@ namespace IronyModManager.Services
                 var copy = DIResolver.Get<IIndexedDefinitions>();
                 copy.UseSearch();
                 copy.UseDiskStore(StorageProvider.GetRootStoragePath());
+                copy.SetAllowedType(AddToMapAllowedType.InvalidAndSpecial);
                 var semaphore = new AsyncSemaphore(MaxDefinitionsToAdd);
                 var tasks = (await conflictResult.AllConflicts.GetAllAsync()).Select(async item =>
                 {
@@ -2744,6 +2747,7 @@ namespace IronyModManager.Services
             copy.FileNameSuffix = definition.FileNameSuffix;
             copy.IsPlaceholder = definition.IsPlaceholder;
             copy.UseSimpleValidation = definition.UseSimpleValidation;
+            copy.IsSpecialFolder = definition.IsSpecialFolder;
             return copy;
         }
 

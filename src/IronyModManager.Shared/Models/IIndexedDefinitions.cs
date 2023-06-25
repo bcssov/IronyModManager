@@ -5,7 +5,7 @@
 // Created          : 02-16-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-24-2023
+// Last Modified On : 06-25-2023
 // ***********************************************************************
 // <copyright file="IIndexedDefinitions.cs" company="Mario">
 //     Mario
@@ -169,6 +169,12 @@ namespace IronyModManager.Shared.Models
         /// <param name="searchTerm">The search term.</param>
         /// <returns>Task&lt;IEnumerable&lt;IDefinition&gt;&gt;.</returns>
         Task<IEnumerable<string>> SearchDefinitionsAsync(string searchTerm);
+
+        /// <summary>
+        /// Sets the type of the allowed.
+        /// </summary>
+        /// <param name="allowedType">Type of the allowed.</param>
+        void SetAllowedType(AddToMapAllowedType allowedType);
 
         /// <summary>
         /// Updates the definitions asynchronous.

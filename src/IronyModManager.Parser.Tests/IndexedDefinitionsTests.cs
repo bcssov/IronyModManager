@@ -4,7 +4,7 @@
 // Created          : 02-17-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-24-2023
+// Last Modified On : 06-25-2023
 // ***********************************************************************
 // <copyright file="IndexedDefinitionsTests.cs" company="Mario">
 //     Mario
@@ -1757,6 +1757,62 @@ namespace IronyModManager.Parser.Tests
             try
             {
                 service.UseDiskStore(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "dummy"));
+            }
+            catch (Exception e)
+            {
+                ex = e;
+            }
+            ex.Should().NotBeNull();
+            ex.GetType().Should().Be(typeof(InvalidOperationException));
+        }
+
+        /// <summary>
+        /// Defines the test method Should_switch_to_allowed_type.
+        /// </summary>
+        [Fact]
+        public void Should_switch_to_allowed_type()
+        {
+            DISetup.SetupContainer();
+            var service = new IndexedDefinitions();
+            Exception ex = null;
+            try
+            {
+                service.SetAllowedType(AddToMapAllowedType.InvalidAndSpecial);
+            }
+            catch (Exception e)
+            {
+                ex = e;
+            }
+            ex.Should().BeNull();
+        }
+
+        /// <summary>
+        /// Defines the test method Should_not_switch_to_allowed_type.
+        /// </summary>
+        [Fact]
+        public async Task Should_not_switch_to_allowed_type()
+        {
+            DISetup.SetupContainer();
+            var defs = new List<IDefinition>();
+            for (int i = 0; i < 10; i++)
+            {
+                defs.Add(new Definition()
+                {
+                    Code = i.ToString(),
+                    ContentSHA = i.ToString(),
+                    Dependencies = new List<string> { i.ToString() },
+                    File = i.ToString(),
+                    Id = i.ToString(),
+                    ModName = i.ToString(),
+                    Type = i.ToString()
+                });
+            }
+            var service = new IndexedDefinitions();
+            await service.InitMapAsync(defs);
+            Exception ex = null;
+            try
+            {
+                service.SetAllowedType(AddToMapAllowedType.InvalidAndSpecial);
             }
             catch (Exception e)
             {

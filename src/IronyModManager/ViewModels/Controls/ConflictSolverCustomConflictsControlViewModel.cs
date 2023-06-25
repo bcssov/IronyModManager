@@ -1,10 +1,11 @@
-﻿// ***********************************************************************
+﻿
+// ***********************************************************************
 // Assembly         : IronyModManager
 // Author           : Mario
 // Created          : 07-28-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-14-2023
+// Last Modified On : 06-25-2023
 // ***********************************************************************
 // <copyright file="ConflictSolverCustomConflictsControlViewModel.cs" company="Mario">
 //     Mario
@@ -33,6 +34,7 @@ using ReactiveUI;
 
 namespace IronyModManager.ViewModels.Controls
 {
+
     /// <summary>
     /// Class ConflictSolverCustomConflictsControlViewModel.
     /// Implements the <see cref="IronyModManager.Common.ViewModels.BaseViewModel" />
@@ -372,7 +374,7 @@ namespace IronyModManager.ViewModels.Controls
                 }
                 if (await modPatchCollectionService.AddCustomModPatchAsync(ConflictResult, definition, CollectionName))
                 {
-                    if (!promptShown && (await ConflictResult.AllConflicts.GetByFileAsync(definition.FileCI)).Any())
+                    if (!promptShown && (await ConflictResult.AllConflicts.ExistsByFileAsync(definition.FileCI)))
                     {
                         promptShown = true;
                         var title = localizationManager.GetResource(LocalizationResources.Notifications.CustomPatchRerunConflictSolver.Title);

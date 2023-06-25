@@ -1,10 +1,11 @@
-﻿// ***********************************************************************
+﻿
+// ***********************************************************************
 // Assembly         : IronyModManager.Shared
 // Author           : Mario
 // Created          : 02-18-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-02-2022
+// Last Modified On : 06-25-2023
 // ***********************************************************************
 // <copyright file="Enums.cs" company="Mario">
 //     Mario
@@ -16,6 +17,22 @@ using System.Collections.Generic;
 
 namespace IronyModManager.Shared.Models
 {
+
+    /// <summary>
+    /// Enum AddToMapAllowedType
+    /// </summary>
+    public enum AddToMapAllowedType
+    {
+        /// <summary>
+        /// All
+        /// </summary>
+        All,
+        /// <summary>
+        /// The invalid and special
+        /// </summary>
+        InvalidAndSpecial
+    }
+
     /// <summary>
     /// Enum ResetType
     /// </summary>

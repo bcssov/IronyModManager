@@ -5,7 +5,7 @@
 // Created          : 02-16-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-24-2023
+// Last Modified On : 06-25-2023
 // ***********************************************************************
 // <copyright file="Definition.cs" company="Mario">
 //     Mario
@@ -231,7 +231,7 @@ namespace IronyModManager.Parser.Definitions
         /// Gets the code separator.
         /// </summary>
         /// <value>The code separator.</value>
-        [JsonIgnore]        
+        [JsonIgnore]
         public string CodeSeparator
         {
             get
@@ -248,7 +248,7 @@ namespace IronyModManager.Parser.Definitions
         /// Gets the code tag.
         /// </summary>
         /// <value>The code tag.</value>
-        [JsonIgnore]        
+        [JsonIgnore]
         public string CodeTag
         {
             get
@@ -416,7 +416,7 @@ namespace IronyModManager.Parser.Definitions
         /// Gets or sets the generated file names.
         /// </summary>
         /// <value>The generated file names.</value>
-        [JsonIgnore]        
+        [JsonIgnore]
         public IList<string> GeneratedFileNames
         {
             get
@@ -484,10 +484,16 @@ namespace IronyModManager.Parser.Definitions
         public bool IsPlaceholder { get; set; }
 
         /// <summary>
+        /// Gets or sets a value indicating whether this instance is special folder.
+        /// </summary>
+        /// <value><c>true</c> if this instance is special folder; otherwise, <c>false</c>.</value>
+        public bool IsSpecialFolder { get; set; }
+
+        /// <summary>
         /// Gets or sets the last modified.
         /// </summary>
         /// <value>The last modified.</value>
-        [JsonIgnore]        
+        [JsonIgnore]
         public DateTime? LastModified { get; set; }
 
         /// <summary>
@@ -500,7 +506,7 @@ namespace IronyModManager.Parser.Definitions
         /// Gets or sets the mod path.
         /// </summary>
         /// <value>The mod path.</value>
-        [JsonIgnore]        
+        [JsonIgnore]
         public string ModPath { get; set; }
 
         /// <summary>
@@ -513,7 +519,7 @@ namespace IronyModManager.Parser.Definitions
         /// Gets or sets the original code.
         /// </summary>
         /// <value>The original code.</value>
-        [JsonIgnore]        
+        [JsonIgnore]
         public string OriginalCode
         {
             get
@@ -546,7 +552,7 @@ namespace IronyModManager.Parser.Definitions
         /// Gets or sets the original identifier.
         /// </summary>
         /// <value>The original identifier.</value>
-        [JsonIgnore]       
+        [JsonIgnore]
         public string OriginalId { get; set; }
 
         /// <summary>
@@ -626,14 +632,14 @@ namespace IronyModManager.Parser.Definitions
         /// Gets or sets the type of the reset.
         /// </summary>
         /// <value>The type of the reset.</value>
-        [JsonIgnore]        
+        [JsonIgnore]
         public ResetType ResetType { get; set; }
 
         /// <summary>
         /// Gets or sets the tags.
         /// </summary>
         /// <value>The tags.</value>
-        [JsonIgnore]        
+        [JsonIgnore]
         public IList<string> Tags { get; set; } = new List<string>();
 
         /// <summary>
@@ -679,7 +685,7 @@ namespace IronyModManager.Parser.Definitions
         /// Gets or sets a value indicating whether [use simple validation].
         /// </summary>
         /// <value><c>true</c> if [use simple validation]; otherwise, <c>false</c>.</value>
-        [JsonIgnore]        
+        [JsonIgnore]
         public bool? UseSimpleValidation { get; set; } = false;
 
         /// <summary>
@@ -692,21 +698,21 @@ namespace IronyModManager.Parser.Definitions
         /// Gets or sets the variables.
         /// </summary>
         /// <value>The variables.</value>
-        [JsonIgnore]        
+        [JsonIgnore]
         public IEnumerable<IDefinition> Variables { get; set; }
 
         /// <summary>
         /// Gets the virtual localization path ci.
         /// </summary>
         /// <value>The virtual localization path ci.</value>
-        [JsonIgnore]        
+        [JsonIgnore]
         public string VirtualParentDirectory { get; private set; } = string.Empty;
 
         /// <summary>
         /// Gets the virtual parent directory ci.
         /// </summary>
         /// <value>The virtual parent directory ci.</value>
-        [JsonIgnore]        
+        [JsonIgnore]
         public string VirtualParentDirectoryCI { get; private set; } = string.Empty;
 
         /// <summary>
@@ -791,6 +797,7 @@ namespace IronyModManager.Parser.Definitions
                 nameof(LastModified) => LastModified,
                 nameof(OriginalId) => OriginalId,
                 nameof(UseSimpleValidation) => UseSimpleValidation,
+                nameof(IsSpecialFolder) => IsSpecialFolder,
                 _ => Id
             };
         }
