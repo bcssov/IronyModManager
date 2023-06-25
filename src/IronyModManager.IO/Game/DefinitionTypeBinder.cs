@@ -1,10 +1,11 @@
-﻿// ***********************************************************************
+﻿
+// ***********************************************************************
 // Assembly         : IronyModManager.IO
 // Author           : Mario
 // Created          : 08-12-2022
 //
 // Last Modified By : Mario
-// Last Modified On : 08-12-2022
+// Last Modified On : 06-25-2023
 // ***********************************************************************
 // <copyright file="DefinitionTypeBinder.cs" company="Mario">
 //     Mario
@@ -20,6 +21,7 @@ using LiteDB;
 
 namespace IronyModManager.IO.Game
 {
+
     /// <summary>
     /// Class DefinitionTypeBinder.
     /// Implements the <see cref="ITypeNameBinder" />
@@ -34,14 +36,14 @@ namespace IronyModManager.IO.Game
         /// </summary>
         /// <param name="type">The type.</param>
         /// <returns>System.String.</returns>
-        /// <exception cref="System.NotSupportedException">Not supported type</exception>
+        /// <exception cref="System.NotSupportedException">Not supported type.</exception>
         public string GetName(Type type)
         {
             if (typeof(IDefinition).IsAssignableFrom(type))
             {
                 return nameof(IDefinition);
             }
-            throw new NotSupportedException("Not supported type");
+            throw new NotSupportedException("Not supported type.");
         }
 
         /// <summary>
@@ -52,14 +54,11 @@ namespace IronyModManager.IO.Game
         /// <exception cref="System.NotSupportedException">Not supported type</exception>
         public Type GetType(string name)
         {
-            switch (name)
+            return name switch
             {
-                case nameof(IDefinition):
-                    return DIResolver.GetImplementationType(typeof(IDefinition));
-
-                default:
-                    throw new NotSupportedException("Not supported type");
-            }
+                nameof(IDefinition) => DIResolver.GetImplementationType(typeof(IDefinition)),
+                _ => throw new NotSupportedException("Not supported type."),
+            };
         }
 
         #endregion Methods
