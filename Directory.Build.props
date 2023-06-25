@@ -16,14 +16,14 @@
   </PropertyGroup>
   <PropertyGroup>
     <MicrosoftExtensionsDependencyModelVersion>[7.0.0]</MicrosoftExtensionsDependencyModelVersion>
-    <MicrosoftNETCorePlatformsVersion>[7.0.0]</MicrosoftNETCorePlatformsVersion>    
-    <MicrosoftExtensionsConfigurationBinder>[7.0.0]</MicrosoftExtensionsConfigurationBinder>
+    <MicrosoftNETCorePlatformsVersion>[7.0.3]</MicrosoftNETCorePlatformsVersion>    
+    <MicrosoftExtensionsConfigurationBinder>[7.0.4]</MicrosoftExtensionsConfigurationBinder>
     <MicrosoftExtensionsConfigurationJson>[7.0.0]</MicrosoftExtensionsConfigurationJson>
     <MaterialAvalonia>[2.5.1]</MaterialAvalonia>
     <MessageBoxAvalonia>[2.1.0]</MessageBoxAvalonia>
-    <Avalonia>[0.10.18]</Avalonia>
+    <Avalonia>[0.10.21]</Avalonia>
     <AvaloniaEdit>[0.10.12.2]</AvaloniaEdit>
-    <Jot>[2.1.13]</Jot>
+    <Jot>[2.1.16]</Jot>
     <!-- Recently 2.0 version was released and not all packages were updated  -->
     <SixLaborsImageSharp>[1.0.4]</SixLaborsImageSharp>
     <SixLaborsImageSharpDrawing>[1.0.0-beta13.15]</SixLaborsImageSharpDrawing>
