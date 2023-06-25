@@ -5,7 +5,7 @@
 // Created          : 02-16-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-25-2023
+// Last Modified On : 06-26-2023
 // ***********************************************************************
 // <copyright file="IndexedDefinitions.cs" company="Mario">
 //     Mario
@@ -20,9 +20,11 @@ using System.Linq;
 using System.Threading.Tasks;
 using CodexMicroORM.Core.Collections;
 using IronyModManager.DI;
+using IronyModManager.Shared;
 using IronyModManager.Shared.KeyValueStore;
 using IronyModManager.Shared.Models;
 using IronyModManager.Shared.Trie;
+using LiteDB;
 using Nito.AsyncEx;
 using ValueType = IronyModManager.Shared.Models.ValueType;
 
@@ -37,6 +39,16 @@ namespace IronyModManager.Parser.Definitions
     public class IndexedDefinitions : IIndexedDefinitions
     {
         #region Fields
+
+        /// <summary>
+        /// The search database
+        /// </summary>
+        private const string SearchDB = "irony.db";
+
+        /// <summary>
+        /// The search table name
+        /// </summary>
+        private const string SearchTableName = "search";
 
         /// <summary>
         /// The storage sub folder
@@ -62,6 +74,11 @@ namespace IronyModManager.Parser.Definitions
         /// The hierarchical definitions
         /// </summary>
         private ConcurrentDictionary<string, ConcurrentIndexedList<IHierarchicalDefinitions>> childHierarchicalDefinitions;
+
+        /// <summary>
+        /// The database path
+        /// </summary>
+        private string dbPath = string.Empty;
 
         /// <summary>
         /// The definitions
@@ -187,8 +204,20 @@ namespace IronyModManager.Parser.Definitions
             MapKeys(typeKeyValues, definition.ValueType, definition.TypeAndId);
             if (definition.Tags != null && definition.Tags.Any() && !definition.IsFromGame)
             {
-                // Not interested in stuff from the game
-                trie?.Add($"{definition.Id} - {definition.File} - {definition.ModName}", definition.Tags);
+                var displayName = $"{definition.Id} - {definition.File} - {definition.ModName}";
+                if (trie != null)
+                {
+                    // Not interested in stuff from the game
+                    trie.Add(displayName, definition.Tags);
+                }
+                else
+                {
+                    var db = GetDatabase(dbPath);
+                    var col = db.GetCollection<DefinitionSearch>(SearchTableName);
+                    col.EnsureIndex(x => x.Tags);
+                    col.Insert(new DefinitionSearch() { Tags = definition.Tags.ToArray(), DisplayName = displayName });
+                    db.Dispose();
+                }
             }
             if (!string.IsNullOrWhiteSpace(definition.DiskFileCI))
             {
@@ -295,6 +324,7 @@ namespace IronyModManager.Parser.Definitions
             typeKeyValues = null;
             store?.Dispose();
             store = null;
+            DeleteSearchDB();
         }
 
         /// <summary>
@@ -607,6 +637,17 @@ namespace IronyModManager.Parser.Definitions
                     return Task.FromResult<IEnumerable<string>>(tags);
                 }
             }
+            else if (!string.IsNullOrEmpty(dbPath))
+            {
+                return Task.Run(() =>
+                {
+                    var db = GetDatabase(dbPath);
+                    var col = db.GetCollection<DefinitionSearch>(SearchTableName);
+                    var result = col.Query().Where(x => x.Tags.Any(f => f.StartsWith(searchTerm, StringComparison.OrdinalIgnoreCase))).Select(p => p.DisplayName).ToList();
+                    db.Dispose();
+                    return Task.FromResult<IEnumerable<string>>(result);
+                });
+            }
             return Task.FromResult<IEnumerable<string>>(null);
         }
 
@@ -674,9 +715,22 @@ namespace IronyModManager.Parser.Definitions
         /// <summary>
         /// Uses the search.
         /// </summary>
-        public void UseSearch()
+        /// <param name="dbPath">The database path which is specified indicates that db provider is used.</param>
+        public void UseSearch(string dbPath = Shared.Constants.EmptyParam)
         {
-            trie = new Trie<string>();
+            if (!string.IsNullOrWhiteSpace(dbPath))
+            {
+                this.dbPath = Path.Combine(ResolveStoragePath(dbPath), $"{Guid.NewGuid().ToString().GenerateShortFileNameHashId(3)}.{SearchDB}");
+                DeleteSearchDB();
+                if (!Directory.Exists(Path.GetDirectoryName(this.dbPath)))
+                {
+                    Directory.CreateDirectory(Path.GetDirectoryName(this.dbPath));
+                }
+            }
+            else
+            {
+                trie = new Trie<string>();
+            }
         }
 
         /// <summary>
@@ -743,6 +797,27 @@ namespace IronyModManager.Parser.Definitions
         }
 
         /// <summary>
+        /// Deletes the search database.
+        /// </summary>
+        private void DeleteSearchDB()
+        {
+            try
+            {
+                if (!string.IsNullOrWhiteSpace(dbPath) && File.Exists(dbPath))
+                {
+                    var fileInfo = new FileInfo(dbPath)
+                    {
+                        Attributes = FileAttributes.Normal
+                    };
+                    fileInfo.Delete();
+                }
+            }
+            catch
+            {
+            }
+        }
+
+        /// <summary>
         /// Ensures the allowed all is respected.
         /// </summary>
         /// <param name="allowInvalid">if set to <c>true</c> [allow invalid].</param>
@@ -754,8 +829,18 @@ namespace IronyModManager.Parser.Definitions
                 if (!allowInvalid)
                 {
                     throw new ArgumentException("Collection is empty.");
-                }                
+                }
             }
+        }
+
+        /// <summary>
+        /// Gets the database.
+        /// </summary>
+        /// <param name="path">The path.</param>
+        /// <returns>LiteDatabase.</returns>
+        private LiteDatabase GetDatabase(string path)
+        {
+            return new LiteDatabase(path, new DefinitionSearchBsonMapper());
         }
 
         /// <summary>

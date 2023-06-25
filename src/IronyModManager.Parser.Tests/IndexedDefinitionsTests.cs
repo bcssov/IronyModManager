@@ -1546,6 +1546,37 @@ namespace IronyModManager.Parser.Tests
         }
 
         /// <summary>
+        /// Defines the test method Should_find_definition_from_search_store.
+        /// </summary>
+        [Fact]
+        public async Task Should_find_definition_from_search_store()
+        {
+            DISetup.SetupContainer();
+            var defs = new List<IDefinition>();
+            for (int i = 0; i < 10; i++)
+            {
+                defs.Add(new Definition()
+                {
+                    Code = i.ToString(),
+                    ContentSHA = i.ToString(),
+                    Dependencies = new List<string> { i.ToString() },
+                    File = i.ToString(),
+                    Id = i.ToString(),
+                    ModName = i.ToString(),
+                    Type = i.ToString(),
+                    Tags = new List<string>() { i.ToString() }
+                });
+            }
+            var service = new IndexedDefinitions();
+            service.UseDiskStore(GetStorePath());
+            service.UseSearch(GetStorePath());
+            await service.InitMapAsync(defs);
+            var results = await service.SearchDefinitionsAsync("1");
+            results.Count().Should().Be(1);
+            results.First().Should().StartWith("1 -");
+        }
+
+        /// <summary>
         /// Defines the test method Should_exist_by_file.
         /// </summary>
         [Fact]
