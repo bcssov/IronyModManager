@@ -5,7 +5,7 @@
 // Created          : 06-24-2023
 //
 // Last Modified By : Mario
-// Last Modified On : 06-24-2023
+// Last Modified On : 06-25-2023
 // ***********************************************************************
 // <copyright file="StoreOptions.cs" company="Mario">
 //     Mario
@@ -43,7 +43,7 @@ namespace IronyModManager.Shared.KeyValueStore
         /// Initializes a new instance of the <see cref="StoreOptions" /> class.
         /// </summary>
         /// <param name="resolver">The resolver.</param>
-        protected internal StoreOptions(Func<string, Type> resolver) : base(Standard.WithResolver(TypelessObjectResolver.Instance).WithCompression(MessagePackCompression.None))
+        protected internal StoreOptions(Func<string, Type> resolver) : base(Standard.WithResolver(TypelessObjectResolver.Instance).WithCompression(MessagePackCompression.Lz4BlockArray))
         {
             this.resolver = resolver;
         }
