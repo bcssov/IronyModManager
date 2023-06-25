@@ -28,6 +28,8 @@ using IronyModManager.Localization;
 using IronyModManager.Platform;
 using IronyModManager.Platform.Configuration;
 using IronyModManager.Shared;
+using NLog;
+using ILogger = IronyModManager.Shared.ILogger;
 
 namespace IronyModManager
 {
@@ -190,7 +192,7 @@ namespace IronyModManager
         /// </summary>
         private static void InitLogging()
         {
-            NLog.Config.ConfigurationItemFactory.Default.Targets.RegisterDefinition("IronyFile", typeof(Log.IronyFileTarget));
+            LogManager.Setup().SetupExtensions(s => s.RegisterTarget("IronyFile", typeof(Log.IronyFileTarget)));
         }
 
         /// <summary>
