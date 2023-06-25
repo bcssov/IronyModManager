@@ -5,7 +5,7 @@
 // Created          : 02-16-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-22-2023
+// Last Modified On : 06-25-2023
 // ***********************************************************************
 // <copyright file="Definition.cs" company="Mario">
 //     Mario
@@ -20,6 +20,7 @@ using IronyModManager.DI;
 using IronyModManager.Parser.Common.Parsers;
 using IronyModManager.Shared;
 using IronyModManager.Shared.Models;
+using MessagePack;
 using Newtonsoft.Json;
 using ValueType = IronyModManager.Shared.Models.ValueType;
 
@@ -31,6 +32,7 @@ namespace IronyModManager.Parser.Definitions
     /// Implements the <see cref="IronyModManager.Shared.Models.IDefinition" />
     /// </summary>
     /// <seealso cref="IronyModManager.Shared.Models.IDefinition" />
+    [MessagePackObject(true)]
     public class Definition : IDefinition
     {
         #region Fields
@@ -482,6 +484,12 @@ namespace IronyModManager.Parser.Definitions
         public bool IsPlaceholder { get; set; }
 
         /// <summary>
+        /// Gets or sets a value indicating whether this instance is special folder.
+        /// </summary>
+        /// <value><c>true</c> if this instance is special folder; otherwise, <c>false</c>.</value>
+        public bool IsSpecialFolder { get; set; }
+
+        /// <summary>
         /// Gets or sets the last modified.
         /// </summary>
         /// <value>The last modified.</value>
@@ -789,6 +797,7 @@ namespace IronyModManager.Parser.Definitions
                 nameof(LastModified) => LastModified,
                 nameof(OriginalId) => OriginalId,
                 nameof(UseSimpleValidation) => UseSimpleValidation,
+                nameof(IsSpecialFolder) => IsSpecialFolder,
                 _ => Id
             };
         }

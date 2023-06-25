@@ -1,10 +1,11 @@
-﻿// ***********************************************************************
+﻿
+// ***********************************************************************
 // Assembly         : IronyModManager
 // Author           : Mario
 // Created          : 06-14-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 12-07-2020
+// Last Modified On : 06-24-2023
 // ***********************************************************************
 // <copyright file="ConflictSolverDBSearchControlViewModel.cs" company="Mario">
 //     Mario
@@ -22,11 +23,11 @@ using IronyModManager.Common.ViewModels;
 using IronyModManager.Localization.Attributes;
 using IronyModManager.Models.Common;
 using IronyModManager.Shared;
-using IronyModManager.Shared.Models;
 using ReactiveUI;
 
 namespace IronyModManager.ViewModels.Controls
 {
+
     /// <summary>
     /// Class ConflictSolverDBSearchControlViewModel.
     /// Implements the <see cref="IronyModManager.Common.ViewModels.BaseViewModel" />
@@ -35,6 +36,7 @@ namespace IronyModManager.ViewModels.Controls
     [ExcludeFromCoverage("This should be tested via functional testing.")]
     public class ConflictSolverDBSearchControlViewModel : BaseViewModel
     {
+
         #region Properties
 
         /// <summary>
@@ -86,7 +88,7 @@ namespace IronyModManager.ViewModels.Controls
         /// Gets or sets the definitions.
         /// </summary>
         /// <value>The definitions.</value>
-        public virtual IEnumerable<IDefinition> Definitions { get; protected set; }
+        public virtual IEnumerable<string> Definitions { get; protected set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether this instance is open.
@@ -150,14 +152,14 @@ namespace IronyModManager.ViewModels.Controls
                 Definitions = null;
             }).DisposeWith(disposables);
 
-            this.WhenAnyValue(p => p.SearchTerm).Where(s => !string.IsNullOrWhiteSpace(s) && s.Length >= 2).Subscribe(s =>
+            this.WhenAnyValue(p => p.SearchTerm).Where(s => !string.IsNullOrWhiteSpace(s) && s.Length >= 2).Subscribe(async s =>
             {
                 if (ConflictResult != null && ConflictResult.AllConflicts != null)
                 {
-                    var result = ConflictResult.AllConflicts.SearchDefinitions(s);
+                    var result = await ConflictResult.AllConflicts.SearchDefinitionsAsync(s);
                     if (result != null)
                     {
-                        Definitions = result.OrderBy(p => p.TypeAndId, StringComparer.OrdinalIgnoreCase).ToObservableCollection();
+                        Definitions = result.OrderBy(p => p, StringComparer.OrdinalIgnoreCase).ToObservableCollection();
                     }
                     else
                     {

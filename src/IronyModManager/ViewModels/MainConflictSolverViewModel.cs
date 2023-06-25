@@ -5,7 +5,7 @@
 // Created          : 03-18-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-24-2023
+// Last Modified On : 06-25-2023
 // ***********************************************************************
 // <copyright file="MainConflictSolverViewModel.cs" company="Mario">
 //     Mario
@@ -483,7 +483,8 @@ namespace IronyModManager.ViewModels
         /// Initializes the specified read only.
         /// </summary>
         /// <param name="readOnly">if set to <c>true</c> [read only].</param>
-        public void Initialize(bool readOnly)
+        /// <returns>A Task representing the asynchronous operation.</returns>
+        public async Task InitializeAsync(bool readOnly)
         {
             ReadOnly = readOnly;
             ResetConflictsColumn = readOnly ? 0 : 1;
@@ -493,7 +494,7 @@ namespace IronyModManager.ViewModels
             ModCompareSelector.Reset();
             IgnoreEnabled = false;
             BackAllowed = true;
-            if (Conflicts.Conflicts.HasResetDefinitions())
+            if (await Conflicts.Conflicts.HasResetDefinitionsAsync())
             {
                 var sbResolved = new StringBuilder();
                 var sbIgnored = new StringBuilder();
@@ -608,7 +609,7 @@ namespace IronyModManager.ViewModels
                 {
                     patchDefinition.UseSimpleValidation = true;
                 }
-            }            
+            }
             var validationResult = modPatchCollectionService.Validate(patchDefinition);
             if (!validationResult.IsValid)
             {
@@ -695,14 +696,14 @@ namespace IronyModManager.ViewModels
                 if (!invalidsChecked)
                 {
                     invalidsChecked = true;
-                    var invalid = conflictResult.AllConflicts.GetByValueType(ValueType.Invalid);
-                    if (invalid?.Count() > 0)
+                    var invalids = (await conflictResult.AllConflicts.GetByValueTypeAsync(ValueType.Invalid)).ToList();
+                    if (invalids != null && invalids.Any())
                     {
                         var invalidDef = DIResolver.Get<IHierarchicalDefinitions>();
                         invalidDef.Name = Invalid;
                         invalidDef.Key = InvalidKey;
                         var children = new List<IHierarchicalDefinitions>();
-                        foreach (var item in invalid)
+                        foreach (var item in invalids)
                         {
                             var invalidChild = DIResolver.Get<IHierarchicalDefinitions>();
                             invalidChild.Name = item.File;
@@ -789,6 +790,7 @@ namespace IronyModManager.ViewModels
                 BackAllowed = false;
                 Conflicts?.Dispose();
                 Conflicts = null;
+                modPatchCollectionService.ResetPatchStateCache();
                 SelectedModsOrder = null;
                 SelectedModCollection = null;
                 cachedInvalids = null;
@@ -800,6 +802,9 @@ namespace IronyModManager.ViewModels
                 ReactiveUI.MessageBus.Current.SendMessage(args);
                 BackAllowed = true;
                 await TriggerOverlayAsync(id, false);
+                GC.Collect(GC.MaxGeneration, GCCollectionMode.Aggressive, true, true);
+                GC.WaitForPendingFinalizers();
+                GC.Collect(GC.MaxGeneration, GCCollectionMode.Aggressive, true, true);
             }, backAllowed).DisposeWith(disposables);
 
             ResolveCommand = ReactiveCommand.CreateFromTask(() =>
@@ -849,12 +854,12 @@ namespace IronyModManager.ViewModels
                 EvalViewerVisibility();
             }).DisposeWith(disposables);
 
-            this.WhenAnyValue(v => v.SelectedConflict).Subscribe(s =>
+            this.WhenAnyValue(v => v.SelectedConflict).Subscribe(async s =>
             {
                 if (Conflicts?.Conflicts != null && !string.IsNullOrWhiteSpace(s?.Key) && IsConflictSolverAvailable)
                 {
                     PreviousConflictIndex = SelectedParentConflict.Children.ToList().IndexOf(s);
-                    var conflicts = Conflicts.Conflicts.GetByTypeAndId(s.Key).ToObservableCollection();
+                    var conflicts = (await Conflicts.Conflicts.GetByTypeAndIdAsync(s.Key)).ToObservableCollection();
                     ModCompareSelector.SelectedModsOrder = SelectedModsOrder;
                     ModCompareSelector.CollectionName = SelectedModCollection.Name;
                     ModCompareSelector.IsBinaryConflict = IsBinaryConflict = conflicts?.FirstOrDefault()?.ValueType == ValueType.Binary;

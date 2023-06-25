@@ -7,7 +7,6 @@
              xmlns:controls="clr-namespace:IronyModManager.Controls;assembly=IronyModManager"
              x:Class="IronyModManager.Views.Controls.ConflictSolverDBSearchControlView">
     <UserControl.Resources>
-        <converter:DefinitionSearchTextConverter x:Key="DefinitionSearchTextConverter" />
         <converter:TextTypeFontFamilyConverter x:Key="TextTypeFontFamilyConverter" />
     </UserControl.Resources>
     <Panel>
@@ -30,7 +29,7 @@
                              ScrollViewer.HorizontalScrollBarVisibility="Disabled">
                         <ListBox.ItemTemplate>
                             <DataTemplate>
-                                <TextBlock Text="{Binding, Converter={StaticResource DefinitionSearchTextConverter}}" TextWrapping="Wrap"
+                                <TextBlock Text="{Binding}" TextWrapping="Wrap"
                                            FontFamily="{Binding $self.Text, Converter={StaticResource TextTypeFontFamilyConverter}}">
                                 </TextBlock>
                             </DataTemplate>

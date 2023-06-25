@@ -55,9 +55,9 @@ namespace IronyModManager.Parser.Tests
         /// Defines the test method Detect.
         /// </summary>
         /// <exception cref="ArgumentException">Fatal error. Check parsers.</exception>
-        public void HOI4DetectDuplicatesAndGenerateParserMap()
+        public async Task HOI4DetectDuplicatesAndGenerateParserMap()
         {
-            DetectDuplicatesAndGenerateParserMap();
+            await DetectDuplicatesAndGenerateParserMap();
         }
 
 #if !FUNCTIONAL_TEST

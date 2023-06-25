@@ -5,7 +5,7 @@
 // Created          : 02-16-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-21-2023
+// Last Modified On : 06-25-2023
 // ***********************************************************************
 // <copyright file="IDefinition.cs" company="Mario">
 //     Mario
@@ -171,6 +171,13 @@ namespace IronyModManager.Shared.Models
         /// </summary>
         /// <value><c>true</c> if this instance is placeholder; otherwise, <c>false</c>.</value>
         bool IsPlaceholder { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether this instance is special folder.
+        /// </summary>
+        /// <value><c>true</c> if this instance is special folder; otherwise, <c>false</c>.</value>
+        [JsonIgnore]
+        bool IsSpecialFolder { get; set; }
 
         /// <summary>
         /// Gets or sets the last modified.

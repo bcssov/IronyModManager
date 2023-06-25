@@ -5,7 +5,7 @@
 // Created          : 05-14-2023
 //
 // Last Modified By : Mario
-// Last Modified On : 06-21-2023
+// Last Modified On : 06-25-2023
 // ***********************************************************************
 // <copyright file="ObjectClone.cs" company="Mario">
 //     Mario
@@ -80,6 +80,7 @@ namespace IronyModManager.Services
             newDefinition.LastModified = definition.LastModified;
             newDefinition.OriginalId = definition.OriginalId;
             newDefinition.UseSimpleValidation = definition.UseSimpleValidation;
+            newDefinition.IsSpecialFolder = definition.IsSpecialFolder;
             return newDefinition;
         }
 

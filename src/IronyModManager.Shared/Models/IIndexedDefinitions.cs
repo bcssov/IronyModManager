@@ -1,10 +1,11 @@
-﻿// ***********************************************************************
+﻿
+// ***********************************************************************
 // Assembly         : IronyModManager.Shared
 // Author           : Mario
 // Created          : 02-16-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-02-2022
+// Last Modified On : 06-25-2023
 // ***********************************************************************
 // <copyright file="IIndexedDefinitions.cs" company="Mario">
 //     Mario
@@ -13,9 +14,11 @@
 // ***********************************************************************
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace IronyModManager.Shared.Models
 {
+
     /// <summary>
     /// Interface IIndexedDefinitions
     /// Implements the <see cref="System.IDisposable" />
@@ -26,90 +29,84 @@ namespace IronyModManager.Shared.Models
         #region Methods
 
         /// <summary>
-        /// Adds to map.
+        /// Adds to map asynchronous.
         /// </summary>
         /// <param name="definition">The definition.</param>
         /// <param name="forceIgnoreHierarchical">if set to <c>true</c> [force ignore hierarchical].</param>
-        void AddToMap(IDefinition definition, bool forceIgnoreHierarchical = false);
+        /// <returns>Task.</returns>
+        Task AddToMapAsync(IDefinition definition, bool forceIgnoreHierarchical = false);
 
         /// <summary>
         /// Changes the state of the hierarchical reset.
         /// </summary>
         /// <param name="definition">The definition.</param>
         /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
-        bool ChangeHierarchicalResetState(IDefinition definition);
+        Task<bool> ChangeHierarchicalResetStateAsync(IDefinition definition);
 
         /// <summary>
-        /// Existses the by file.
+        /// Existses the by file asynchronous.
         /// </summary>
         /// <param name="file">The file.</param>
-        /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
-        bool ExistsByFile(string file);
+        /// <returns>Task&lt;System.Boolean&gt;.</returns>
+        Task<bool> ExistsByFileAsync(string file);
 
         /// <summary>
-        /// Gets all.
+        /// Gets all asynchronous.
         /// </summary>
-        /// <returns>IEnumerable&lt;IDefinition&gt;.</returns>
-        IEnumerable<IDefinition> GetAll();
+        /// <returns>Task&lt;IEnumerable&lt;IDefinition&gt;&gt;.</returns>
+        Task<IEnumerable<IDefinition>> GetAllAsync();
 
         /// <summary>
         /// Gets all directory keys.
         /// </summary>
         /// <returns>IEnumerable&lt;System.String&gt;.</returns>
-        IEnumerable<string> GetAllDirectoryKeys();
+        Task<IEnumerable<string>> GetAllDirectoryKeysAsync();
 
         /// <summary>
         /// Gets all file keys.
         /// </summary>
         /// <returns>IEnumerable&lt;System.String&gt;.</returns>
-        IEnumerable<string> GetAllFileKeys();
+        Task<IEnumerable<string>> GetAllFileKeysAsync();
 
         /// <summary>
         /// Gets all type and identifier keys.
         /// </summary>
         /// <returns>IEnumerable&lt;System.String&gt;.</returns>
-        IEnumerable<string> GetAllTypeAndIdKeys();
+        Task<IEnumerable<string>> GetAllTypeAndIdKeysAsync();
 
         /// <summary>
         /// Gets all type keys.
         /// </summary>
         /// <returns>IEnumerable&lt;System.String&gt;.</returns>
-        IEnumerable<string> GetAllTypeKeys();
+        Task<IEnumerable<string>> GetAllTypeKeysAsync();
 
         /// <summary>
         /// Gets the by disk file.
         /// </summary>
         /// <param name="file">The file.</param>
         /// <returns>IEnumerable&lt;IDefinition&gt;.</returns>
-        IEnumerable<IDefinition> GetByDiskFile(string file);
+        Task<IEnumerable<IDefinition>> GetByDiskFileAsync(string file);
 
         /// <summary>
         /// Gets the by file.
         /// </summary>
         /// <param name="file">The file.</param>
         /// <returns>IEnumerable&lt;IDefinition&gt;.</returns>
-        IEnumerable<IDefinition> GetByFile(string file);
+        Task<IEnumerable<IDefinition>> GetByFileAsync(string file);
 
         /// <summary>
         /// Gets the by parent directory.
         /// </summary>
         /// <param name="directory">The directory.</param>
         /// <returns>IEnumerable&lt;IDefinition&gt;.</returns>
-        IEnumerable<IDefinition> GetByParentDirectory(string directory);
-
-        /// <summary>
-        /// Gets the type of the by.
-        /// </summary>
-        /// <param name="type">The type.</param>
-        /// <returns>IEnumerable&lt;IDefinition&gt;.</returns>
-        IEnumerable<IDefinition> GetByType(string type);
+        Task<IEnumerable<IDefinition>> GetByParentDirectoryAsync(string directory);
 
         /// <summary>
         /// Gets the by type andi d.
         /// </summary>
         /// <param name="typeAndId">The type and identifier.</param>
         /// <returns>IEnumerable&lt;IDefinition&gt;.</returns>
-        IEnumerable<IDefinition> GetByTypeAndId(string typeAndId);
+        Task<IEnumerable<IDefinition>> GetByTypeAndIdAsync(string typeAndId);
 
         /// <summary>
         /// Gets the by type and identifier.
@@ -117,14 +114,21 @@ namespace IronyModManager.Shared.Models
         /// <param name="type">The type.</param>
         /// <param name="id">The identifier.</param>
         /// <returns>IEnumerable&lt;IDefinition&gt;.</returns>
-        IEnumerable<IDefinition> GetByTypeAndId(string type, string id);
+        Task<IEnumerable<IDefinition>> GetByTypeAndIdAsync(string type, string id);
 
         /// <summary>
-        /// Gets the type of the by value.
+        /// Gets the type of the by.
         /// </summary>
         /// <param name="type">The type.</param>
         /// <returns>IEnumerable&lt;IDefinition&gt;.</returns>
-        IEnumerable<IDefinition> GetByValueType(ValueType type);
+        Task<IEnumerable<IDefinition>> GetByTypeAsync(string type);
+
+        /// <summary>
+        /// Gets the by value type asynchronous.
+        /// </summary>
+        /// <param name="type">The type.</param>
+        /// <returns>Task&lt;IEnumerable&lt;IDefinition&gt;&gt;.</returns>
+        Task<IEnumerable<IDefinition>> GetByValueTypeAsync(ValueType type);
 
         /// <summary>
         /// Gets the hierarchical definitions.
@@ -133,41 +137,62 @@ namespace IronyModManager.Shared.Models
         IEnumerable<IHierarchicalDefinitions> GetHierarchicalDefinitions();
 
         /// <summary>
-        /// Determines whether [has game definitions].
+        /// Determines whether [has game definitions asynchronous].
         /// </summary>
-        /// <returns><c>true</c> if [has game definitions]; otherwise, <c>false</c>.</returns>
-        bool HasGameDefinitions();
+        /// <returns>Task&lt;System.Boolean&gt;.</returns>
+        Task<bool> HasGameDefinitionsAsync();
 
         /// <summary>
-        /// Determines whether [has reset definitions].
+        /// Determines whether [has reset definitions asynchronous].
         /// </summary>
-        /// <returns><c>true</c> if [has reset definitions]; otherwise, <c>false</c>.</returns>
-        bool HasResetDefinitions();
+        /// <returns>Task&lt;System.Boolean&gt;.</returns>
+        Task<bool> HasResetDefinitionsAsync();
 
         /// <summary>
-        /// Initializes the map.
+        /// Initializes the map asynchronous.
         /// </summary>
         /// <param name="definitions">The definitions.</param>
         /// <param name="mapHierarchicalDefinitions">if set to <c>true</c> [map hierarchical definitions].</param>
-        void InitMap(IEnumerable<IDefinition> definitions, bool mapHierarchicalDefinitions = false);
+        /// <returns>Task.</returns>
+        Task InitMapAsync(IEnumerable<IDefinition> definitions, bool mapHierarchicalDefinitions = false);
 
         /// <summary>
-        /// Initializes the search.
-        /// </summary>
-        void InitSearch();
-
-        /// <summary>
-        /// Removes the specified definition.
+        /// Removes the asynchronous.
         /// </summary>
         /// <param name="definition">The definition.</param>
-        void Remove(IDefinition definition);
+        /// <returns>Task.</returns>
+        Task RemoveAsync(IDefinition definition);
 
         /// <summary>
-        /// Searches the definitions.
+        /// Searches the definitions asynchronous.
         /// </summary>
         /// <param name="searchTerm">The search term.</param>
-        /// <returns>IEnumerable&lt;IDefinition&gt;.</returns>
-        IEnumerable<IDefinition> SearchDefinitions(string searchTerm);
+        /// <returns>Task&lt;IEnumerable&lt;IDefinition&gt;&gt;.</returns>
+        Task<IEnumerable<string>> SearchDefinitionsAsync(string searchTerm);
+
+        /// <summary>
+        /// Sets the type of the allowed.
+        /// </summary>
+        /// <param name="allowedType">Type of the allowed.</param>
+        void SetAllowedType(AddToMapAllowedType allowedType);
+
+        /// <summary>
+        /// Updates the definitions asynchronous.
+        /// </summary>
+        /// <param name="definitions">The definitions.</param>
+        /// <returns>Task&lt;System.Boolean&gt;.</returns>
+        Task<bool> UpdateDefinitionsAsync(IReadOnlyCollection<IDefinition> definitions);
+
+        /// <summary>
+        /// Uses the disk store.
+        /// </summary>
+        /// <param name="storePath">The store path.</param>
+        void UseDiskStore(string storePath);
+
+        /// <summary>
+        /// Uses the search.
+        /// </summary>
+        void UseSearch();
 
         #endregion Methods
     }

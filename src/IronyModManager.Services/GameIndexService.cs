@@ -1,10 +1,11 @@
-﻿// ***********************************************************************
+﻿
+// ***********************************************************************
 // Assembly         : IronyModManager.Services
 // Author           : Mario
 // Created          : 05-27-2021
 //
 // Last Modified By : Mario
-// Last Modified On : 08-13-2022
+// Last Modified On : 06-23-2023
 // ***********************************************************************
 // <copyright file="GameIndexService.cs" company="Mario">
 //     Mario
@@ -37,6 +38,7 @@ using Nito.AsyncEx;
 
 namespace IronyModManager.Services
 {
+
     /// <summary>
     /// Class GameIndexService.
     /// Implements the <see cref="IronyModManager.Services.ModBaseService" />
@@ -123,11 +125,12 @@ namespace IronyModManager.Services
                 }
                 var gamePath = pathResolver.GetPath(game);
                 var files = Reader.GetFiles(gamePath);
+
                 // No clue how someone got reader to return 0 based on configuration alone but just in case to ignore this mess
                 if (files != null && files.Any())
                 {
                     files = files.Where(p => game.GameFolders.Any(x => p.StartsWith(x)));
-                    var indexedFolders = indexedDefinitions.GetAllDirectoryKeys().Select(p => p.ToLowerInvariant());
+                    var indexedFolders = (await indexedDefinitions.GetAllDirectoryKeysAsync()).Select(p => p.ToLowerInvariant());
                     var validFolders = files.Select(p => Path.GetDirectoryName(p)).GroupBy(p => p).Select(p => p.FirstOrDefault()).Where(p => indexedFolders.Any(a => a.ToLowerInvariant().Equals(p.ToLowerInvariant())));
                     var folders = new List<string>();
                     foreach (var item in validFolders)
@@ -164,6 +167,10 @@ namespace IronyModManager.Services
                                     await messageBus.PublishAsync(new GameIndexProgressEvent(perc));
                                     previousProgress = perc;
                                 }
+                                GC.Collect(GC.MaxGeneration, GCCollectionMode.Optimized);
+                                GC.WaitForPendingFinalizers();
+                                GC.Collect(GC.MaxGeneration, GCCollectionMode.Optimized);
+
                                 mutex.Dispose();
                             }
                             finally
@@ -192,7 +199,7 @@ namespace IronyModManager.Services
             if (game != null && versions != null && versions.Any() && await gameIndexer.GameVersionsSameAsync(GetStoragePath(), game, versions))
             {
                 var gameDefinitions = new ConcurrentBag<IDefinition>();
-                var directories = modDefinitions.GetAllDirectoryKeys();
+                var directories = await modDefinitions.GetAllDirectoryKeysAsync();
                 double processed = 0;
                 double total = directories.Count();
                 double previousProgress = 0;
@@ -237,9 +244,12 @@ namespace IronyModManager.Services
                         await messageBus.PublishAsync(new GameDefinitionLoadProgressEvent(perc));
                         previousProgress = perc;
                     }
+                    GC.Collect(GC.MaxGeneration, GCCollectionMode.Optimized);
+                    GC.WaitForPendingFinalizers();
+                    GC.Collect(GC.MaxGeneration, GCCollectionMode.Optimized);
                 }
                 var indexed = DIResolver.Get<IIndexedDefinitions>();
-                indexed.InitMap(modDefinitions.GetAll().Concat(gameDefinitions));
+                await indexed.InitMapAsync((await modDefinitions.GetAllAsync()).Concat(gameDefinitions));
                 return indexed;
             }
             return modDefinitions;

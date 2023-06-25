@@ -1,10 +1,11 @@
-﻿// ***********************************************************************
+﻿
+// ***********************************************************************
 // Assembly         : IronyModManager.Parser
 // Author           : Mario
 // Created          : 10-25-2021
 //
 // Last Modified By : Mario
-// Last Modified On : 11-27-2021
+// Last Modified On : 06-25-2023
 // ***********************************************************************
 // <copyright file="OverwrittenObjectSingleFileParser.cs" company="Mario">
 //     Mario
@@ -24,6 +25,7 @@ using ValueType = IronyModManager.Shared.Models.ValueType;
 
 namespace IronyModManager.Parser.Games.Stellaris
 {
+
     /// <summary>
     /// Class OverwrittenParser.
     /// Implements the <see cref="IronyModManager.Parser.Common.Parsers.BaseParser" />
@@ -105,6 +107,7 @@ namespace IronyModManager.Parser.Games.Stellaris
             {
                 foreach (var item in results)
                 {
+                    item.IsSpecialFolder = true;
                     if (item.ValueType == ValueType.Object)
                     {
                         item.ValueType = ValueType.OverwrittenObjectSingleFile;
