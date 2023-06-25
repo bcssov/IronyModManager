@@ -32,7 +32,7 @@ namespace IronyModManager.DI.MessageBus
         /// <summary>
         /// The registration map
         /// </summary>
-        private Dictionary<Type, string> registrationMap;
+        private readonly Dictionary<Type, string> registrationMap;
 
         /// <summary>
         /// The reverse registration map
@@ -77,10 +77,7 @@ namespace IronyModManager.DI.MessageBus
         /// <returns>Type.</returns>
         public Type ToType(string name)
         {
-            if (reverseRegistrationMap == null)
-            {
-                reverseRegistrationMap = registrationMap.ToDictionary(p => p.Value, p => p.Key);
-            }
+            reverseRegistrationMap ??= registrationMap.ToDictionary(p => p.Value, p => p.Key);
             if (reverseRegistrationMap.TryGetValue(name, out var type))
             {
                 return type;

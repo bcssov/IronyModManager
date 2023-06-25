@@ -1,10 +1,11 @@
-﻿// ***********************************************************************
+﻿
+// ***********************************************************************
 // Assembly         : IronyModManager
 // Author           : Mario
 // Created          : 01-10-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 11-28-2022
+// Last Modified On : 06-25-2023
 // ***********************************************************************
 // <copyright file="Program.cs" company="IronyModManager">
 //     Copyright (c) Mario. All rights reserved.
@@ -13,7 +14,6 @@
 // ***********************************************************************
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -31,6 +31,7 @@ using IronyModManager.Shared;
 
 namespace IronyModManager
 {
+
     /// <summary>
     /// Class Program.
     /// </summary>
@@ -206,11 +207,12 @@ namespace IronyModManager
                 var runFatalErrorProcess = StaticResources.CommandLineOptions == null || !StaticResources.CommandLineOptions.ShowFatalErrorNotification;
                 if (runFatalErrorProcess && !ExternalNotificationShown)
                 {
-                    var path = Process.GetCurrentProcess().MainModule.FileName;
+                    var path = Environment.ProcessPath;
                     var appAction = DIResolver.Get<IAppAction>();
                     await appAction.RunAsync(path, "--fatal-error").ConfigureAwait(false);
                     ExternalNotificationShown = true;
                 }
+
                 // Force exit as it seems that sometimes the app doesn't quit on such an error
                 Thread.Sleep(10000);
                 Environment.Exit(0);
