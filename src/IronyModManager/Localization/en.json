@@ -383,7 +383,8 @@
             "Title": "Database Search",
             "Watermark": "Enter search term",
             "Close": "Close",
-            "Clear": "X"
+            "Clear": "X",
+            "Searching": "Searching..."
         },
         "CustomPatch": {
             "Title": "Custom Patch",

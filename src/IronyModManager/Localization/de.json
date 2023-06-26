@@ -383,7 +383,8 @@
             "Title": "Datenbanksuche",
             "Watermark": "Suchbegriff eingeben",
             "Close": "Schließen",
-            "Clear": "X"
+            "Clear": "X",
+            "Searching": "Ich suche..."
         },
         "CustomPatch": {
             "Title": "Benutzerdefinierter Patch",

@@ -383,7 +383,8 @@
             "Title": "Поиск в базе данных",
             "Watermark": "Введите запрос для поиска",
             "Close": "Закрыть",
-            "Clear": "X"
+            "Clear": "X",
+            "Searching": "Поиск..."
         },
         "CustomPatch": {
             "Title": "Свой патч",

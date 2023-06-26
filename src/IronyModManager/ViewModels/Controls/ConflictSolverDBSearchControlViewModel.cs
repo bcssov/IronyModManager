@@ -108,6 +108,19 @@ namespace IronyModManager.ViewModels.Controls
         public virtual bool IsOpen { get; protected set; }
 
         /// <summary>
+        /// Gets or sets a value indicating whether this instance is searching.
+        /// </summary>
+        /// <value><c>true</c> if this instance is searching; otherwise, <c>false</c>.</value>
+        public virtual bool IsSearching { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets the search placeholder.
+        /// </summary>
+        /// <value>The search placeholder.</value>
+        [StaticLocalization(LocalizationResources.Conflict_Solver.DBSearch.Searching)]
+        public virtual string SearchPlaceholder { get; protected set; }
+
+        /// <summary>
         /// Gets or sets the search term.
         /// </summary>
         /// <value>The search term.</value>
@@ -139,6 +152,7 @@ namespace IronyModManager.ViewModels.Controls
         public void SetParameters(IConflictResult conflictResult)
         {
             ConflictResult = conflictResult;
+            SearchTerm = string.Empty;
         }
 
         /// <summary>
@@ -147,6 +161,7 @@ namespace IronyModManager.ViewModels.Controls
         /// <param name="disposables">The disposables.</param>
         protected override void OnActivated(CompositeDisposable disposables)
         {
+            IsSearching = false;
             CloseCommand = ReactiveCommand.Create(() =>
             {
                 ForceClosePopup();
@@ -165,18 +180,17 @@ namespace IronyModManager.ViewModels.Controls
 
             this.WhenAnyValue(p => p.SearchTerm).Subscribe(s =>
             {
+                IsSearching = true;
                 if (ConflictResult != null && ConflictResult.AllConflicts != null)
                 {
-                    if (cancellationTokenSource != null)
-                    {
-                        cancellationTokenSource.Cancel();
-                    }
+                    cancellationTokenSource?.Cancel();
                     cancellationTokenSource = new CancellationTokenSource();
                     PerformSearchAsync(s, cancellationTokenSource.Token).ConfigureAwait(false);
                 }
                 else
                 {
-                    Definitions = null;
+                    Definitions = Array.Empty<string>();
+                    IsSearching = false;
                 }
             }).DisposeWith(disposables);
 
@@ -193,7 +207,11 @@ namespace IronyModManager.ViewModels.Controls
         {
             if (string.IsNullOrWhiteSpace(searchTerm) || searchTerm.Trim().Length <= 2)
             {
-                await Dispatcher.UIThread.SafeInvokeAsync(() => Definitions = null);
+                await Dispatcher.UIThread.SafeInvokeAsync(() =>
+                {
+                    Definitions = Array.Empty<string>();
+                    IsSearching = false;
+                });
                 return;
             }
             await Task.Delay(100, token);
@@ -202,11 +220,25 @@ namespace IronyModManager.ViewModels.Controls
                 var result = await ConflictResult.AllConflicts.SearchDefinitionsAsync(searchTerm, token);
                 if (result != null)
                 {
-                    await Dispatcher.UIThread.SafeInvokeAsync(() => Definitions = result.OrderBy(p => p, StringComparer.OrdinalIgnoreCase).ToObservableCollection());
+                    if (!token.IsCancellationRequested)
+                    {
+                        await Dispatcher.UIThread.SafeInvokeAsync(() =>
+                        {
+                            Definitions = result.OrderBy(p => p, StringComparer.OrdinalIgnoreCase).ToObservableCollection();
+                            IsSearching = false;
+                        });
+                    }
                 }
                 else
                 {
-                    await Dispatcher.UIThread.SafeInvokeAsync(() => Definitions = null);
+                    if (!token.IsCancellationRequested)
+                    {
+                        await Dispatcher.UIThread.SafeInvokeAsync(() =>
+                        {
+                            Definitions = Array.Empty<string>();
+                            IsSearching = false;
+                        });
+                    }
                 }
             }
         }
