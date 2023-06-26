@@ -5,7 +5,7 @@
 // Created          : 06-10-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-25-2023
+// Last Modified On : 06-26-2023
 // ***********************************************************************
 // <copyright file="MessageBusRegistration.cs" company="Mario">
 //     Mario
@@ -62,8 +62,9 @@ namespace IronyModManager.DI.MessageBus
             }
 
             var registeredTypes = new Dictionary<Type, string>();
+            var registeredCollections = new Dictionary<Type, Func<object>>();
             var builder = MessageBusBuilder.Create()
-                .WithDependencyResolver(new MessageBusDependencyResolver(new MessageTypeResolver(registeredTypes)))
+                .WithDependencyResolver(new MessageBusDependencyResolver(registeredCollections, new MessageTypeResolver(registeredTypes)))
                 .WithProvider(providerSettings => new MessageBusMemoryProvider(providerSettings))
                 .Do(builder =>
                 {
@@ -84,9 +85,18 @@ namespace IronyModManager.DI.MessageBus
                                     var producerType = resolveProducerInterceptor(find.EventType);
                                     var publishType = resolvePublishInterceptor(find.EventType);
                                     var consumerType = resolveConsumerInterceptor(find.EventType);
-                                    DIContainer.Container.Register(resolveEnumerable(producerType), () => initCollectionObject(producerType));
-                                    DIContainer.Container.Register(resolveEnumerable(publishType), () => initCollectionObject(publishType));
-                                    DIContainer.Container.Register(resolveEnumerable(consumerType), () => initCollectionObject(consumerType));
+                                    var resolvedProducerType = resolveEnumerable(producerType);
+                                    Func<object> initResolvedProducerType = () => initCollectionObject(producerType);
+                                    var resolvedPublishType = resolveEnumerable(publishType);
+                                    Func<object> initResolvedPublishType = () => initCollectionObject(publishType);
+                                    var resolvedConsumerType = resolveEnumerable(consumerType);
+                                    Func<object> initResolvedConsumerType = () => initCollectionObject(consumerType);
+                                    DIContainer.Container.Register(resolvedProducerType, initResolvedProducerType);
+                                    registeredCollections.Add(resolvedProducerType, initResolvedProducerType);
+                                    DIContainer.Container.Register(resolvedPublishType, initResolvedPublishType);
+                                    registeredCollections.Add(resolvedPublishType, initResolvedPublishType);
+                                    DIContainer.Container.Register(resolvedConsumerType, initResolvedConsumerType);
+                                    registeredCollections.Add(resolvedConsumerType, initResolvedConsumerType);
                                 }
                                 builder.Consume(find.EventType, x => x.Topic(x.ConsumerSettings.MessageType.Name).WithConsumer(find.HandlerType));
                                 DIContainer.Container.Register(find.HandlerType, find.HandlerType, SimpleInjector.Lifestyle.Singleton);

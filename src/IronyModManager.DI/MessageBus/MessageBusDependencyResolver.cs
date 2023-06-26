@@ -5,7 +5,7 @@
 // Created          : 06-10-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-25-2023
+// Last Modified On : 06-26-2023
 // ***********************************************************************
 // <copyright file="MessageBusDependencyResolver.cs" company="Mario">
 //     Mario
@@ -34,6 +34,10 @@ namespace IronyModManager.DI.MessageBus
         /// The message type resolver
         /// </summary>
         private readonly MessageTypeResolver messageTypeResolver;
+        /// <summary>
+        /// The resolved collections
+        /// </summary>
+        private readonly Dictionary<Type, Func<object>> resolvedCollections;
 
         #endregion Fields
 
@@ -42,10 +46,12 @@ namespace IronyModManager.DI.MessageBus
         /// <summary>
         /// Initializes a new instance of the <see cref="MessageBusDependencyResolver" /> class.
         /// </summary>
+        /// <param name="resolvedCollections">The resolved collections.</param>
         /// <param name="messageTypeResolver">The message type resolver.</param>
-        public MessageBusDependencyResolver(MessageTypeResolver messageTypeResolver)
+        public MessageBusDependencyResolver(Dictionary<Type, Func<object>> resolvedCollections, MessageTypeResolver messageTypeResolver)
         {
             this.messageTypeResolver = messageTypeResolver;
+            this.resolvedCollections = resolvedCollections;
         }
 
         #endregion Constructors
@@ -69,8 +75,19 @@ namespace IronyModManager.DI.MessageBus
             {
                 return messageTypeResolver;
             }
-            var obj = DIResolver.Get(serviceType);
-            return obj;
+            if (DIContainer.Container.IsLocked)
+            {
+                var obj = DIResolver.Get(serviceType);
+                return obj;
+            }
+            else
+            {
+                if (resolvedCollections.TryGetValue(serviceType, out var instance))
+                {
+                    return instance();
+                }
+                return null;
+            }
         }
 
         #endregion Methods
