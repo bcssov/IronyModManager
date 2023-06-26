@@ -20,7 +20,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using CodexMicroORM.Core.Collections;
 using IronyModManager.DI;
-using IronyModManager.Shared;
 using IronyModManager.Shared.KeyValueStore;
 using IronyModManager.Shared.Models;
 using IronyModManager.Shared.Trie;
@@ -76,11 +75,6 @@ namespace IronyModManager.Parser.Definitions
         private ConcurrentDictionary<string, ConcurrentIndexedList<IHierarchicalDefinitions>> childHierarchicalDefinitions;
 
         /// <summary>
-        /// The database path
-        /// </summary>
-        private string dbPath = string.Empty;
-
-        /// <summary>
         /// The definitions
         /// </summary>
         private ConcurrentIndexedList<IDefinition> definitions;
@@ -114,11 +108,21 @@ namespace IronyModManager.Parser.Definitions
         /// The main hierarchal definitions
         /// </summary>
         private ConcurrentIndexedList<IHierarchicalDefinitions> mainHierarchalDefinitions;
+
         /// <summary>
         /// The reset definitions count
         /// </summary>
         private HashSet<string> resetDefinitions;
 
+        /// <summary>
+        /// The search database
+        /// </summary>
+        private LiteDatabase searchDb = null;
+
+        /// <summary>
+        /// The search database path
+        /// </summary>
+        private string searchDbPath = string.Empty;
         /// <summary>
         /// The store
         /// </summary>
@@ -203,20 +207,19 @@ namespace IronyModManager.Parser.Definitions
             MapKeys(directoryCIKeys, definition.ParentDirectoryCI, definition.TypeAndId);
             MapKeys(typeKeyValues, definition.ValueType, definition.TypeAndId);
             if (definition.Tags != null && definition.Tags.Any() && !definition.IsFromGame)
-            {
-                var displayName = $"{definition.Id} - {definition.File} - {definition.ModName}";
+            {    // Not interested in stuff from the game
                 if (trie != null)
                 {
-                    // Not interested in stuff from the game
+                    var displayName = $"{definition.Id} - {definition.File} - {definition.ModName}";
                     trie.Add(displayName, definition.Tags);
                 }
-                else
+                else if (!string.IsNullOrWhiteSpace(searchDbPath))
                 {
-                    var db = GetDatabase(dbPath);
-                    var col = db.GetCollection<DefinitionSearch>(SearchTableName);
+                    var displayName = $"{definition.Id} - {definition.File} - {definition.ModName}";
+                    searchDb ??= GetDatabase(searchDbPath);
+                    var col = searchDb.GetCollection<DefinitionSearch>(SearchTableName);
                     col.EnsureIndex(x => x.Tags);
                     col.Insert(new DefinitionSearch() { Tags = definition.Tags.ToArray(), DisplayName = displayName });
-                    db.Dispose();
                 }
             }
             if (!string.IsNullOrWhiteSpace(definition.DiskFileCI))
@@ -324,7 +327,7 @@ namespace IronyModManager.Parser.Definitions
             typeKeyValues = null;
             store?.Dispose();
             store = null;
-            DeleteSearchDB();
+            DisposeSearchDB();
         }
 
         /// <summary>
@@ -637,14 +640,13 @@ namespace IronyModManager.Parser.Definitions
                     return Task.FromResult<IEnumerable<string>>(tags);
                 }
             }
-            else if (!string.IsNullOrEmpty(dbPath))
+            else if (!string.IsNullOrEmpty(searchDbPath))
             {
                 return Task.Run(() =>
                 {
-                    var db = GetDatabase(dbPath);
-                    var col = db.GetCollection<DefinitionSearch>(SearchTableName);
+                    searchDb ??= GetDatabase(searchDbPath);
+                    var col = searchDb.GetCollection<DefinitionSearch>(SearchTableName);
                     var result = col.Query().Where(x => x.Tags.Any(f => f.StartsWith(searchTerm, StringComparison.OrdinalIgnoreCase))).Select(p => p.DisplayName).ToList();
-                    db.Dispose();
                     return Task.FromResult<IEnumerable<string>>(result);
                 });
             }
@@ -716,15 +718,16 @@ namespace IronyModManager.Parser.Definitions
         /// Uses the search.
         /// </summary>
         /// <param name="dbPath">The database path which is specified indicates that db provider is used.</param>
-        public void UseSearch(string dbPath = Shared.Constants.EmptyParam)
+        /// <param name="dbPathSuffix">The database path suffix. Not used if dbPath is not provided</param>
+        public void UseSearch(string dbPath = Shared.Constants.EmptyParam, string dbPathSuffix = Shared.Constants.EmptyParam)
         {
             if (!string.IsNullOrWhiteSpace(dbPath))
             {
-                this.dbPath = Path.Combine(ResolveStoragePath(dbPath), $"{Guid.NewGuid().ToString().GenerateShortFileNameHashId(3)}.{SearchDB}");
-                DeleteSearchDB();
-                if (!Directory.Exists(Path.GetDirectoryName(this.dbPath)))
+                searchDbPath = !string.IsNullOrWhiteSpace(dbPathSuffix) ? Path.Combine(ResolveStoragePath(dbPath), dbPathSuffix, SearchDB) : Path.Combine(ResolveStoragePath(dbPath), SearchDB);
+                DisposeSearchDB();
+                if (!Directory.Exists(Path.GetDirectoryName(searchDbPath)))
                 {
-                    Directory.CreateDirectory(Path.GetDirectoryName(this.dbPath));
+                    Directory.CreateDirectory(Path.GetDirectoryName(searchDbPath));
                 }
             }
             else
@@ -787,7 +790,7 @@ namespace IronyModManager.Parser.Definitions
                 copy.Name = item.Name;
                 copy.Mods = item.Mods;
                 copy.AdditionalData = item.AdditionalData;
-                item.FileNames.ToList().ForEach(f => copy.FileNames.Add(f));
+                item.FileNames.ToList().ForEach(copy.FileNames.Add);
                 copy.ResetType = item.ResetType;
                 copy.Key = item.Key;
                 copy.NonGameDefinitions = item.NonGameDefinitions;
@@ -797,19 +800,25 @@ namespace IronyModManager.Parser.Definitions
         }
 
         /// <summary>
-        /// Deletes the search database.
+        /// Disposes the search database.
         /// </summary>
-        private void DeleteSearchDB()
+        private void DisposeSearchDB()
         {
             try
             {
-                if (!string.IsNullOrWhiteSpace(dbPath) && File.Exists(dbPath))
+                searchDb?.Dispose();
+                if (!string.IsNullOrWhiteSpace(searchDbPath))
                 {
-                    var fileInfo = new FileInfo(dbPath)
+                    var dir = Path.GetDirectoryName(searchDbPath);
+                    if (Directory.Exists(dir))
                     {
-                        Attributes = FileAttributes.Normal
-                    };
-                    fileInfo.Delete();
+                        var dirInfo = new DirectoryInfo(dir) { Attributes = FileAttributes.Normal };
+                        foreach (var item in dirInfo.GetFileSystemInfos("*", SearchOption.TopDirectoryOnly))
+                        {
+                            item.Attributes = FileAttributes.Normal;
+                        }
+                        dirInfo.Delete(false);
+                    }
                 }
             }
             catch

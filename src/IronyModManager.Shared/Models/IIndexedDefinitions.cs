@@ -193,7 +193,8 @@ namespace IronyModManager.Shared.Models
         /// Uses the search.
         /// </summary>
         /// <param name="dbPath">The database path which is specified indicates that db provider is used.</param>
-        void UseSearch(string dbPath = Shared.Constants.EmptyParam);
+        /// <param name="dbPathSuffix">The database path suffix. Not used if dbPath is not provided</param>
+        void UseSearch(string dbPath = Shared.Constants.EmptyParam, string dbPathSuffix = Shared.Constants.EmptyParam);
 
         #endregion Methods
     }

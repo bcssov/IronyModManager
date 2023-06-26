@@ -5,7 +5,7 @@
 // Created          : 05-26-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-25-2023
+// Last Modified On : 06-26-2023
 // ***********************************************************************
 // <copyright file="ModPatchCollectionService.cs" company="Mario">
 //     Mario
@@ -984,8 +984,13 @@ namespace IronyModManager.Services
             async Task<(IIndexedDefinitions, int)> partialCopyAllIndexedDefinitions(IConflictResult conflictResult, int total, int processed, int maxProgress)
             {
                 var copy = DIResolver.Get<IIndexedDefinitions>();
-                copy.UseSearch();
                 var options = DIResolver.Get<IDomainConfiguration>().GetOptions();
+                string diskSearchPath = string.Empty;
+                if (options.ConflictSolver.UseDiskSearch)
+                {
+                    diskSearchPath = StorageProvider.GetRootStoragePath();
+                }
+                copy.UseSearch(diskSearchPath, nameof(conflictResult.AllConflicts));
                 if (options.ConflictSolver.UseHybridMemory)
                 {
                     copy.UseDiskStore(StorageProvider.GetRootStoragePath());

@@ -5,7 +5,7 @@
 // Created          : 07-24-2022
 //
 // Last Modified By : Mario
-// Last Modified On : 06-25-2023
+// Last Modified On : 06-26-2023
 // ***********************************************************************
 // <copyright file="DomainConfigurationOptions.cs" company="Mario">
 //     Mario
@@ -25,6 +25,12 @@ namespace IronyModManager.Shared.Configuration
     public class ConflictSolver
     {
         #region Properties
+
+        /// <summary>
+        /// Gets or sets a value indicating whether [use disk search].
+        /// </summary>
+        /// <value><c>true</c> if [use disk search]; otherwise, <c>false</c>.</value>
+        public bool UseDiskSearch { get; set; }
 
         /// <summary>
         /// Gets or sets the use sub menus.
