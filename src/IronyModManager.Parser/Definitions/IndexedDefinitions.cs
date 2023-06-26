@@ -58,6 +58,7 @@ namespace IronyModManager.Parser.Definitions
         /// The op lock
         /// </summary>
         private readonly AsyncLock opLock = new();
+
         /// <summary>
         /// The trie lock
         /// </summary>
@@ -662,27 +663,31 @@ namespace IronyModManager.Parser.Definitions
         /// </summary>
         /// <param name="searchTerm">The search term.</param>
         /// <returns>IEnumerable&lt;IDefinition&gt;.</returns>
-        public Task<IEnumerable<string>> SearchDefinitionsAsync(string searchTerm)
+        public async Task<IEnumerable<string>> SearchDefinitionsAsync(string searchTerm)
         {
             if (trie != null)
             {
                 var tags = trie.Get(searchTerm.ToLowerInvariant());
                 if (tags != null)
                 {
-                    return Task.FromResult(tags.Distinct());
+                    return tags.Distinct();
                 }
             }
             else if (!string.IsNullOrEmpty(searchDbPath))
             {
-                return Task.Run(() =>
+                searchDb ??= GetDatabase(searchDbPath);
+                var result = await Task.Run(() =>
                 {
-                    searchDb ??= GetDatabase(searchDbPath);
                     var col = searchDb.GetCollection<DefinitionSearch>(SearchTableName);
                     var result = col.Query().Where(x => x.Tags.Any(f => f.Contains(searchTerm, StringComparison.OrdinalIgnoreCase))).Select(p => p.DisplayName).ToList();
+                    GC.Collect(GC.MaxGeneration, GCCollectionMode.Optimized);
+                    GC.WaitForPendingFinalizers();
+                    GC.Collect(GC.MaxGeneration, GCCollectionMode.Optimized);
                     return Task.FromResult(result.Distinct());
                 });
+                return result;
             }
-            return Task.FromResult<IEnumerable<string>>(null);
+            return null;
         }
 
         /// <summary>
