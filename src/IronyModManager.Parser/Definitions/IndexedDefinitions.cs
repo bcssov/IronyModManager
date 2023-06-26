@@ -182,6 +182,15 @@ namespace IronyModManager.Parser.Definitions
 
         #endregion Constructors
 
+        #region Events
+
+        /// <summary>
+        /// Occurs when [processed search item].
+        /// </summary>
+        public event EventHandler<ProcessedArgs> ProcessedSearchItem;
+
+        #endregion Events
+
         #region Methods
 
         /// <summary>
@@ -548,15 +557,18 @@ namespace IronyModManager.Parser.Definitions
         {
             if (definitions != null && definitions.Any())
             {
-                var filtered = definitions.Where(p => p.Tags != null && p.Tags.Any() && !p.IsFromGame);
+                var total = definitions.Count;
+                var counter = 0;
                 if (trie != null)
                 {
-                    filtered.AsParallel().WithDegreeOfParallelism(MaxAllowedInsertTrieOperations).ForAll(definition =>
+                    definitions.AsParallel().WithDegreeOfParallelism(MaxAllowedInsertTrieOperations).ForAll(definition =>
                     {
                         lock (trieLock)
                         {
+                            counter++;
                             var displayName = $"{definition.Id} - {definition.File} - {definition.ModName}";
                             trie.Add(displayName, definition.Tags);
+                            OnProcessedSearchItem(counter, total);
                         }
                     });
                 }
@@ -566,11 +578,13 @@ namespace IronyModManager.Parser.Definitions
                     await Task.Run(() =>
                     {
                         var items = new List<DefinitionSearch>();
-                        foreach (var definition in filtered)
+                        foreach (var definition in definitions)
                         {
+                            counter++;
                             var displayName = $"{definition.Id} - {definition.File} - {definition.ModName}";
                             var item = new DefinitionSearch() { DisplayName = displayName, Tags = definition.Tags.ToArray() };
                             items.Add(item);
+                            OnProcessedSearchItem(counter, total);
                         }
                         var col = searchDb.GetCollection<DefinitionSearch>(SearchTableName);
                         col.EnsureIndex(x => x.Tags);
@@ -992,6 +1006,16 @@ namespace IronyModManager.Parser.Definitions
             {
                 map[key] = new HashSet<string>() { cacheValue };
             }
+        }
+
+        /// <summary>
+        /// Called when [processed search item].
+        /// </summary>
+        /// <param name="current">The current.</param>
+        /// <param name="total">The total.</param>
+        private void OnProcessedSearchItem(int current, int total)
+        {
+            ProcessedSearchItem?.Invoke(this, new ProcessedArgs() { Current = current, Total = total });
         }
 
         /// <summary>

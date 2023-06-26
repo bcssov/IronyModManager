@@ -56,6 +56,7 @@ namespace IronyModManager.Services
     /// <seealso cref="IronyModManager.Services.Common.IModPatchCollectionService" />
     public class ModPatchCollectionService : ModBaseService, IModPatchCollectionService
     {
+
         #region Fields
 
         /// <summary>
@@ -87,6 +88,7 @@ namespace IronyModManager.Services
         /// The maximum mod conflicts to check
         /// </summary>
         private const int MaxModConflictsToCheck = 4;
+
         /// <summary>
         /// The maximum mods to process in parallel
         /// </summary>
@@ -136,6 +138,11 @@ namespace IronyModManager.Services
         /// The parser manager
         /// </summary>
         private readonly IParserManager parserManager;
+
+        /// <summary>
+        /// The search initialize lock
+        /// </summary>
+        private readonly AsyncLock searchInitLock = new();
 
         /// <summary>
         /// The validate parser
@@ -981,8 +988,21 @@ namespace IronyModManager.Services
                 }
                 return processed;
             }
-            async Task<(IIndexedDefinitions, int)> partialCopyAllIndexedDefinitions(IConflictResult conflictResult, int total, int processed, int maxProgress)
+            async Task<(IIndexedDefinitions, int)> initAllIndexedDefinitions(IConflictResult conflictResult, int total, int processed, int maxProgress)
             {
+                async void processedSearchItemHandler(object sender, ProcessedArgs args)
+                {
+                    using var mutex = await searchInitLock.LockAsync();
+                    processed++;
+                    var perc = GetProgressPercentage(total, processed, maxProgress);
+                    if (previousProgress != perc)
+                    {
+                        await messageBus.PublishAsync(new ModDefinitionPatchLoadEvent(perc));
+                        previousProgress = perc;
+                    }
+                    mutex.Dispose();
+                }
+
                 var copy = DIResolver.Get<IIndexedDefinitions>();
                 var options = DIResolver.Get<IDomainConfiguration>().GetOptions();
                 string diskSearchPath = string.Empty;
@@ -997,7 +1017,7 @@ namespace IronyModManager.Services
                 }
                 copy.SetAllowedType(AddToMapAllowedType.InvalidAndSpecial);
                 var semaphore = new AsyncSemaphore(MaxDefinitionsToAdd);
-                var definitions = new List<IDefinition>();
+                var searchDefinitions = new List<IDefinition>();
                 var tasks = (await conflictResult.AllConflicts.GetAllAsync()).Select(async item =>
                 {
                     await semaphore.WaitAsync();
@@ -1009,7 +1029,10 @@ namespace IronyModManager.Services
                             defCopy = PartialDefinitionCopy(item);
                         }
                         await copy.AddToMapAsync(defCopy);
-                        definitions.Add(defCopy);
+                        if (defCopy.Tags != null && defCopy.Tags.Any() && !defCopy.IsFromGame)
+                        {
+                            searchDefinitions.Add(defCopy);
+                        }
                         processed++;
                         var perc = GetProgressPercentage(total, processed, maxProgress);
                         if (previousProgress != perc)
@@ -1024,7 +1047,9 @@ namespace IronyModManager.Services
                     }
                 });
                 await Task.WhenAll(tasks);
-                await copy.InitializeSearchAsync(definitions);
+                copy.ProcessedSearchItem += processedSearchItemHandler;
+                await copy.InitializeSearchAsync(searchDefinitions);
+                copy.ProcessedSearchItem -= processedSearchItemHandler;
                 return (copy, processed);
             }
 
@@ -1047,7 +1072,8 @@ namespace IronyModManager.Services
                 {
                     await cleanSingleMergeFiles(item.First().ParentDirectory, patchName);
                 }
-                var total = patchFiles.Count() + (await conflictResult.AllConflicts.GetAllAsync()).Count();
+                var all = await conflictResult.AllConflicts.GetAllAsync();
+                var total = patchFiles.Count() + all.Count() + all.Count(p => p.Tags != null && p.Tags.Any() && !p.IsFromGame); // Other all is the trie init counter
                 if (state != null)
                 {
                     var resolvedConflicts = new List<IDefinition>(state.ResolvedConflicts);
@@ -1172,10 +1198,10 @@ namespace IronyModManager.Services
                     conflicts.CustomConflicts = customConflicts;
                     conflicts.Mode = conflictResult.Mode;
 
-                    var partialCopyResult = await partialCopyAllIndexedDefinitions(conflictResult, total, processed, 100);
+                    var indexResult = await initAllIndexedDefinitions(conflictResult, total, processed, 100);
                     conflictResult.AllConflicts.Dispose();
-                    conflicts.AllConflicts = partialCopyResult.Item1;
-                    processed = partialCopyResult.Item2;
+                    conflicts.AllConflicts = indexResult.Item1;
+                    processed = indexResult.Item2;
 
                     await EvalModIgnoreDefinitionsAsync(conflicts);
                     processed = await syncPatchFiles(conflicts, patchFiles, patchName, total, processed, 100);
@@ -1283,10 +1309,10 @@ namespace IronyModManager.Services
                         });
                     }
 
-                    var partialCopyResult = await partialCopyAllIndexedDefinitions(conflictResult, total, processed, 100);
+                    var indexResult = await initAllIndexedDefinitions(conflictResult, total, processed, 100);
                     conflictResult.AllConflicts.Dispose();
-                    conflictResult.AllConflicts = partialCopyResult.Item1;
-                    processed = partialCopyResult.Item2;
+                    conflictResult.AllConflicts = indexResult.Item1;
+                    processed = indexResult.Item2;
 
                     await messageBus.PublishAsync(new ModDefinitionPatchLoadEvent(100));
 
@@ -3180,6 +3206,7 @@ namespace IronyModManager.Services
         /// </summary>
         private class DefinitionOrderSort
         {
+
             #region Properties
 
             /// <summary>
@@ -3201,6 +3228,7 @@ namespace IronyModManager.Services
             public string TypeAndId { get; set; }
 
             #endregion Properties
+
         }
 
         /// <summary>
@@ -3208,6 +3236,7 @@ namespace IronyModManager.Services
         /// </summary>
         private class EvalState
         {
+
             #region Properties
 
             /// <summary>
@@ -3235,6 +3264,7 @@ namespace IronyModManager.Services
             public string ModName { get; set; }
 
             #endregion Properties
+
         }
 
         /// <summary>
@@ -3242,6 +3272,7 @@ namespace IronyModManager.Services
         /// </summary>
         private class ModsExportedState
         {
+
             #region Properties
 
             /// <summary>
@@ -3251,6 +3282,7 @@ namespace IronyModManager.Services
             public bool? Exported { get; set; }
 
             #endregion Properties
+
         }
 
         /// <summary>
@@ -3258,6 +3290,7 @@ namespace IronyModManager.Services
         /// </summary>
         private class PatchCollectionState
         {
+
             #region Properties
 
             /// <summary>
@@ -3273,8 +3306,10 @@ namespace IronyModManager.Services
             public bool NeedsUpdate { get; set; }
 
             #endregion Properties
+
         }
 
         #endregion Classes
+
     }
 }

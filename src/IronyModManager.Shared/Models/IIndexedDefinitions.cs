@@ -26,6 +26,15 @@ namespace IronyModManager.Shared.Models
     /// <seealso cref="System.IDisposable" />
     public interface IIndexedDefinitions : IDisposable
     {
+        #region Events
+
+        /// <summary>
+        /// Occurs when [processed search item].
+        /// </summary>
+        public event EventHandler<ProcessedArgs> ProcessedSearchItem;
+
+        #endregion Events
+
         #region Methods
 
         /// <summary>
