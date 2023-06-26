@@ -5,7 +5,7 @@
 // Created          : 03-18-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-25-2023
+// Last Modified On : 06-26-2023
 // ***********************************************************************
 // <copyright file="MainConflictSolverViewModel.cs" company="Mario">
 //     Mario
@@ -696,7 +696,7 @@ namespace IronyModManager.ViewModels
                 if (!invalidsChecked)
                 {
                     invalidsChecked = true;
-                    var invalids = (await conflictResult.AllConflicts.GetByValueTypeAsync(ValueType.Invalid)).ToList();
+                    var invalids = await conflictResult.AllConflicts.GetByValueTypeAsync(ValueType.Invalid);
                     if (invalids != null && invalids.Any())
                     {
                         var invalidDef = DIResolver.Get<IHierarchicalDefinitions>();

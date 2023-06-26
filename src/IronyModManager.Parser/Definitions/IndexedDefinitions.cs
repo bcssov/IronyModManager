@@ -996,7 +996,7 @@ namespace IronyModManager.Parser.Definitions
         /// <param name="cacheValue">The cache value.</param>
         private void MapKeys<T>(Dictionary<T, HashSet<string>> map, T key, string cacheValue)
         {
-            if (key == null)
+            if (object.Equals(key, default(T)))
             {
                 return;
             }

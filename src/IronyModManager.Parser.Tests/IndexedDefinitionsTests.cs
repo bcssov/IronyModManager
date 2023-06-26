@@ -1126,6 +1126,7 @@ namespace IronyModManager.Parser.Tests
                 });
             }
             var service = new IndexedDefinitions();
+            service.UseDiskStore(GetStorePath());
             await service.InitMapAsync(defs, true);
             var results = service.GetHierarchicalDefinitions();
             results.Count().Should().Be(1);
