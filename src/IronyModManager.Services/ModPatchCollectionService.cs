@@ -997,6 +997,7 @@ namespace IronyModManager.Services
                 }
                 copy.SetAllowedType(AddToMapAllowedType.InvalidAndSpecial);
                 var semaphore = new AsyncSemaphore(MaxDefinitionsToAdd);
+                var definitions = new List<IDefinition>();
                 var tasks = (await conflictResult.AllConflicts.GetAllAsync()).Select(async item =>
                 {
                     await semaphore.WaitAsync();
@@ -1008,6 +1009,7 @@ namespace IronyModManager.Services
                             defCopy = PartialDefinitionCopy(item);
                         }
                         await copy.AddToMapAsync(defCopy);
+                        definitions.Add(defCopy);
                         processed++;
                         var perc = GetProgressPercentage(total, processed, maxProgress);
                         if (previousProgress != perc)
@@ -1022,6 +1024,7 @@ namespace IronyModManager.Services
                     }
                 });
                 await Task.WhenAll(tasks);
+                await copy.InitializeSearchAsync(definitions);
                 return (copy, processed);
             }
 

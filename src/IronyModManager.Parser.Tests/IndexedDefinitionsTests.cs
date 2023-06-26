@@ -1509,6 +1509,7 @@ namespace IronyModManager.Parser.Tests
             var service = new IndexedDefinitions();
             service.UseSearch();
             await service.InitMapAsync(defs);
+            await service.InitializeSearchAsync(defs);
             var results = await service.SearchDefinitionsAsync("1");
             results.Count().Should().Be(1);
             results.First().Should().StartWith("1 -");
@@ -1539,6 +1540,7 @@ namespace IronyModManager.Parser.Tests
             var service = new IndexedDefinitions();
             service.UseDiskStore(GetStorePath());
             service.UseSearch();
+            await service.InitializeSearchAsync(defs);
             await service.InitMapAsync(defs);
             var results = await service.SearchDefinitionsAsync("1");
             results.Count().Should().Be(1);
@@ -1570,6 +1572,7 @@ namespace IronyModManager.Parser.Tests
             var service = new IndexedDefinitions();
             service.UseDiskStore(GetStorePath());
             service.UseSearch(GetStorePath());
+            await service.InitializeSearchAsync(defs);
             await service.InitMapAsync(defs);
             var results = await service.SearchDefinitionsAsync("1");
             results.Count().Should().Be(1);

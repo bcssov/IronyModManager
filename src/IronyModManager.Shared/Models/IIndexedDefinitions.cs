@@ -5,7 +5,7 @@
 // Created          : 02-16-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-25-2023
+// Last Modified On : 06-26-2023
 // ***********************************************************************
 // <copyright file="IIndexedDefinitions.cs" company="Mario">
 //     Mario
@@ -147,6 +147,13 @@ namespace IronyModManager.Shared.Models
         /// </summary>
         /// <returns>Task&lt;System.Boolean&gt;.</returns>
         Task<bool> HasResetDefinitionsAsync();
+
+        /// <summary>
+        /// Initializes the search asynchronous.
+        /// </summary>
+        /// <param name="definitions">The definitions.</param>
+        /// <returns>Task.</returns>
+        Task InitializeSearchAsync(IReadOnlyCollection<IDefinition> definitions);
 
         /// <summary>
         /// Initializes the map asynchronous.

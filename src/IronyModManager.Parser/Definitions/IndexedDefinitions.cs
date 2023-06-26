@@ -50,11 +50,6 @@ namespace IronyModManager.Parser.Definitions
         private const string SearchTableName = "search";
 
         /// <summary>
-        /// The storage sub folder
-        /// </summary>
-        private const string StorageSubFolder = "StoreCache";
-
-        /// <summary>
         /// The op lock
         /// </summary>
         private readonly AsyncLock opLock = new();
@@ -206,22 +201,6 @@ namespace IronyModManager.Parser.Definitions
             MapKeys(allFileKeys, definition.FileCI);
             MapKeys(directoryCIKeys, definition.ParentDirectoryCI, definition.TypeAndId);
             MapKeys(typeKeyValues, definition.ValueType, definition.TypeAndId);
-            if (definition.Tags != null && definition.Tags.Any() && !definition.IsFromGame)
-            {    // Not interested in stuff from the game
-                if (trie != null)
-                {
-                    var displayName = $"{definition.Id} - {definition.File} - {definition.ModName}";
-                    trie.Add(displayName, definition.Tags);
-                }
-                else if (!string.IsNullOrWhiteSpace(searchDbPath))
-                {
-                    var displayName = $"{definition.Id} - {definition.File} - {definition.ModName}";
-                    searchDb ??= GetDatabase(searchDbPath);
-                    var col = searchDb.GetCollection<DefinitionSearch>(SearchTableName);
-                    col.EnsureIndex(x => x.Tags);
-                    col.Insert(new DefinitionSearch() { Tags = definition.Tags.ToArray(), DisplayName = displayName });
-                }
-            }
             if (!string.IsNullOrWhiteSpace(definition.DiskFileCI))
             {
                 MapKeys(diskFileCIKeys, definition.DiskFileCI, definition.TypeAndId);
@@ -551,6 +530,50 @@ namespace IronyModManager.Parser.Definitions
         }
 
         /// <summary>
+        /// Initializes the search asynchronous.
+        /// </summary>
+        /// <param name="definitions">The definitions.</param>
+        /// <returns>Task.</returns>
+        public async Task InitializeSearchAsync(IReadOnlyCollection<IDefinition> definitions)
+        {
+            if (definitions != null && definitions.Any())
+            {
+                var filtered = definitions.Where(p => p.Tags != null && p.Tags.Any() && !p.IsFromGame);
+                if (trie != null)
+                {
+                    await Task.Run(() =>
+                    {
+                        foreach (var definition in filtered)
+                        {
+                            var displayName = $"{definition.Id} - {definition.File} - {definition.ModName}";
+                            trie.Add(displayName, definition.Tags);
+                        }
+                    });
+                }
+                else if (!string.IsNullOrWhiteSpace(searchDbPath))
+                {
+                    searchDb ??= GetDatabase(searchDbPath);
+                    await Task.Run(() =>
+                    {
+                        var items = new List<DefinitionSearch>();
+                        foreach (var definition in filtered)
+                        {
+                            var displayName = $"{definition.Id} - {definition.File} - {definition.ModName}";
+                            var item = new DefinitionSearch() { DisplayName = displayName, Tags = definition.Tags.ToArray() };
+                            items.Add(item);
+                        }
+                        var col = searchDb.GetCollection<DefinitionSearch>(SearchTableName);
+                        col.EnsureIndex(x => x.Tags);
+                        col.InsertBulk(items);
+                    });
+                    GC.Collect(GC.MaxGeneration, GCCollectionMode.Optimized);
+                    GC.WaitForPendingFinalizers();
+                    GC.Collect(GC.MaxGeneration, GCCollectionMode.Optimized);
+                }
+            }
+        }
+
+        /// <summary>
         /// Initializes the map.
         /// </summary>
         /// <param name="definitions">The definitions.</param>
@@ -637,7 +660,7 @@ namespace IronyModManager.Parser.Definitions
                 var tags = trie.Get(searchTerm.ToLowerInvariant());
                 if (tags != null)
                 {
-                    return Task.FromResult<IEnumerable<string>>(tags);
+                    return Task.FromResult(tags.Distinct());
                 }
             }
             else if (!string.IsNullOrEmpty(searchDbPath))
@@ -646,8 +669,8 @@ namespace IronyModManager.Parser.Definitions
                 {
                     searchDb ??= GetDatabase(searchDbPath);
                     var col = searchDb.GetCollection<DefinitionSearch>(SearchTableName);
-                    var result = col.Query().Where(x => x.Tags.Any(f => f.StartsWith(searchTerm, StringComparison.OrdinalIgnoreCase))).Select(p => p.DisplayName).ToList();
-                    return Task.FromResult<IEnumerable<string>>(result);
+                    var result = col.Query().Where(x => x.Tags.Any(f => f.Contains(searchTerm, StringComparison.OrdinalIgnoreCase))).Select(p => p.DisplayName).ToList();
+                    return Task.FromResult(result.Distinct());
                 });
             }
             return Task.FromResult<IEnumerable<string>>(null);
@@ -743,7 +766,7 @@ namespace IronyModManager.Parser.Definitions
         /// <returns>System.String.</returns>
         protected virtual string ResolveStoragePath(string path)
         {
-            return Path.Combine(path, StorageSubFolder);
+            return Path.Combine(path, Parser.Common.Constants.StoreCacheRootRolder);
         }
 
         /// <summary>
@@ -817,7 +840,7 @@ namespace IronyModManager.Parser.Definitions
                         {
                             item.Attributes = FileAttributes.Normal;
                         }
-                        dirInfo.Delete(false);
+                        dirInfo.Delete(true);
                     }
                 }
             }

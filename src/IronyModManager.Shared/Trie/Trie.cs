@@ -1,10 +1,11 @@
-﻿// ***********************************************************************
+﻿
+// ***********************************************************************
 // Assembly         : IronyModManager.Shared
 // Author           : Mario
 // Created          : 06-14-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-20-2021
+// Last Modified On : 06-26-2023
 // ***********************************************************************
 // <copyright file="Trie.cs" company="Mario">
 //     Mario
@@ -14,131 +15,56 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using TrieNet.Ukkonen;
 
 namespace IronyModManager.Shared.Trie
 {
+
     /// <summary>
     /// Class Trie.
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    public class Trie<T>
+    public class Trie<T> : CharUkkonenTrie<T>
     {
-        #region Fields
-
-        /// <summary>
-        /// The node
-        /// </summary>
-        private readonly TrieNode<T> Node;
-
-        #endregion Fields
-
-        #region Constructors
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="Trie{T}" /> class.
-        /// </summary>
-        public Trie()
-        {
-            Node = new TrieNode<T>();
-        }
-
-        #endregion Constructors
-
         #region Methods
 
         /// <summary>
-        /// Adds the specified object.
+        /// Adds the specified key.
         /// </summary>
-        /// <param name="obj">The object.</param>
-        /// <param name="words">The words.</param>
+        /// <param name="obj">The value.</param>
+        /// <param name="words">The keys.</param>
         public void Add(T obj, IEnumerable<string> words)
         {
-            foreach (var word in words)
+            if (words != null && words.Any())
             {
-                Add(obj, Node, word);
+                foreach (var key in words)
+                {
+                    Add(obj, key);
+                }
             }
         }
 
         /// <summary>
-        /// Gets the specified text.
-        /// </summary>
-        /// <param name="text">The text.</param>
-        /// <returns>HashSet&lt;T&gt;.</returns>
-        public HashSet<T> Get(string text)
-        {
-            return Get(Node, text);
-        }
-
-        /// <summary>
-        /// Adds the specified object.
+        /// Adds the specified value.
         /// </summary>
         /// <param name="obj">The object.</param>
-        /// <param name="node">The node.</param>
-        /// <param name="text">The text.</param>
-        private void Add(T obj, TrieNode<T> node, string text)
+        /// <param name="word">The key.</param>
+        public void Add(T obj, string word)
         {
-            if (string.IsNullOrWhiteSpace(text))
-            {
-                return;
-            }
-            if (node.Children.TryGetValue(text.First(), out var child))
-            {
-                child.Objects.Add(obj);
-                if (text.Length > 0)
-                {
-                    Add(obj, child, text[1..]);
-                }
-            }
-            else
-            {
-                child = new TrieNode<T>()
-                {
-                    Character = text.First(),
-                };
-                child.Objects.Add(obj);
-                if (text.Length > 1)
-                {
-                    Add(obj, child, text[1..]);
-                }
-                node.Children.Add(text.First(), child);
-            }
+            Add(word, obj);
         }
 
         /// <summary>
-        /// Gets the specified node.
+        /// Gets the specified search query.
         /// </summary>
-        /// <param name="node">The node.</param>
-        /// <param name="text">The text.</param>
+        /// <param name="searchQuery">The search query.</param>
         /// <returns>HashSet&lt;T&gt;.</returns>
-        private HashSet<T> Get(TrieNode<T> node, string text)
+        public HashSet<T> Get(string searchQuery)
         {
-            if (text.Length == 0)
+            var result = RetrieveSubstrings(searchQuery);
+            if (result != null)
             {
-                return node.Objects;
-            }
-            else if (node.Children.TryGetValue(text.First(), out var child))
-            {
-                return Get(child, text[1..]);
-            }
-            else
-            {
-                // Try other children for a partial match
-                var results = new HashSet<T>();
-                foreach (var childNode in node.Children)
-                {
-                    var result = Get(childNode.Value, text);
-                    if (result?.Count > 0)
-                    {
-                        foreach (var item in result)
-                        {
-                            results.Add(item);
-                        }
-                    }
-                }
-                if (results.Count > 0)
-                {
-                    return results;
-                }
+                return result.Select(p => p.Value).ToHashSet();
             }
             return null;
         }
