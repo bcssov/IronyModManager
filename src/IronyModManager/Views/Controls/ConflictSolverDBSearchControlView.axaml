@@ -25,16 +25,19 @@
                                     HorizontalAlignment="Stretch" VerticalAlignment="Stretch" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"></Button>
                         </Grid>
                     </Panel>
-                    <ListBox Items="{Binding Definitions}" Height="400" Width="500" Grid.Row="1"
-                             ScrollViewer.HorizontalScrollBarVisibility="Disabled">
-                        <ListBox.ItemTemplate>
-                            <DataTemplate>
-                                <TextBlock Text="{Binding}" TextWrapping="Wrap"
-                                           FontFamily="{Binding $self.Text, Converter={StaticResource TextTypeFontFamilyConverter}}">
-                                </TextBlock>
-                            </DataTemplate>
-                        </ListBox.ItemTemplate>
-                    </ListBox>
+                    <Panel Height="400" Width="500" Grid.Row="1">
+                        <ListBox Items="{Binding Definitions}" Height="400" Width="500"
+                                 ScrollViewer.HorizontalScrollBarVisibility="Disabled" IsVisible="{Binding !IsSearching}">
+                            <ListBox.ItemTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding}" TextWrapping="Wrap"
+                                               FontFamily="{Binding $self.Text, Converter={StaticResource TextTypeFontFamilyConverter}}">
+                                    </TextBlock>
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
+                        </ListBox>
+                        <TextBlock IsVisible="{Binding IsSearching}" Text="{Binding SearchPlaceholder}" />
+                    </Panel>
                     <Panel Grid.Row="2" Margin="0,5">
                         <Button Content="{Binding Close}" Command="{Binding CloseCommand}" HorizontalAlignment="Right"></Button>
                     </Panel>

@@ -5,7 +5,7 @@
 // Created          : 02-16-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-25-2023
+// Last Modified On : 06-26-2023
 // ***********************************************************************
 // <copyright file="IIndexedDefinitions.cs" company="Mario">
 //     Mario
@@ -14,6 +14,7 @@
 // ***********************************************************************
 using System;
 using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace IronyModManager.Shared.Models
@@ -26,6 +27,15 @@ namespace IronyModManager.Shared.Models
     /// <seealso cref="System.IDisposable" />
     public interface IIndexedDefinitions : IDisposable
     {
+        #region Events
+
+        /// <summary>
+        /// Occurs when [processed search item].
+        /// </summary>
+        public event EventHandler<ProcessedArgs> ProcessedSearchItem;
+
+        #endregion Events
+
         #region Methods
 
         /// <summary>
@@ -149,6 +159,13 @@ namespace IronyModManager.Shared.Models
         Task<bool> HasResetDefinitionsAsync();
 
         /// <summary>
+        /// Initializes the search asynchronous.
+        /// </summary>
+        /// <param name="definitions">The definitions.</param>
+        /// <returns>Task.</returns>
+        Task InitializeSearchAsync(IReadOnlyCollection<IDefinition> definitions);
+
+        /// <summary>
         /// Initializes the map asynchronous.
         /// </summary>
         /// <param name="definitions">The definitions.</param>
@@ -167,8 +184,9 @@ namespace IronyModManager.Shared.Models
         /// Searches the definitions asynchronous.
         /// </summary>
         /// <param name="searchTerm">The search term.</param>
-        /// <returns>Task&lt;IEnumerable&lt;IDefinition&gt;&gt;.</returns>
-        Task<IEnumerable<string>> SearchDefinitionsAsync(string searchTerm);
+        /// <param name="token">The cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <returns>Task&lt;IEnumerable&lt;System.String&gt;&gt;.</returns>
+        Task<IEnumerable<string>> SearchDefinitionsAsync(string searchTerm, CancellationToken? token = null);
 
         /// <summary>
         /// Sets the type of the allowed.
@@ -192,7 +210,9 @@ namespace IronyModManager.Shared.Models
         /// <summary>
         /// Uses the search.
         /// </summary>
-        void UseSearch();
+        /// <param name="dbPath">The database path which is specified indicates that db provider is used.</param>
+        /// <param name="dbPathSuffix">The database path suffix. Not used if dbPath is not provided</param>
+        void UseSearch(string dbPath = Shared.Constants.EmptyParam, string dbPathSuffix = Shared.Constants.EmptyParam);
 
         #endregion Methods
     }

@@ -383,7 +383,8 @@
             "Title": "数据库搜索",
             "Watermark": "输入搜索关键词",
             "Close": "关闭",
-            "Clear": "×"
+            "Clear": "×",
+            "Searching": "搜索..."
         },
         "CustomPatch": {
             "Title": "自定义补丁",

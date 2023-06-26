@@ -383,7 +383,8 @@
             "Title": "Búsqueda en Base de Datos",
             "Watermark": "Introduce Término de Búsqueda",
             "Close": "Cerrar",
-            "Clear": "X"
+            "Clear": "X",
+            "Searching": "Buscando..."
         },
         "CustomPatch": {
             "Title": "Parche personalizado",

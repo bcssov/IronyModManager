@@ -57,4 +57,10 @@
     <ProjectReference Include="..\IronyModManager.Shared\IronyModManager.Shared.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Reference Include="LiteDB">
+      <HintPath>..\..\References\Direct\LiteDB.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
 </Project>

@@ -500,6 +500,7 @@ namespace IronyModManager.Shared
                 public const string Watermark = Prefix + "Watermark";
                 public const string Close = Prefix + "Close";
                 public const string Clear = Prefix + "Clear";
+                public const string Searching = Prefix + "Searching";
             }
             public static class CustomPatch
             {

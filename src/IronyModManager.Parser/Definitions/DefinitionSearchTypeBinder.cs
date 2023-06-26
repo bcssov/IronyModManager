@@ -1,13 +1,13 @@
 ﻿
 // ***********************************************************************
-// Assembly         : IronyModManager.IO
+// Assembly         : IronyModManager.Parser
 // Author           : Mario
-// Created          : 08-12-2022
+// Created          : 06-25-2023
 //
 // Last Modified By : Mario
 // Last Modified On : 06-25-2023
 // ***********************************************************************
-// <copyright file="DefinitionTypeBinder.cs" company="Mario">
+// <copyright file="DefinitionSearchTypeBinder.cs" company="Mario">
 //     Mario
 // </copyright>
 // <summary></summary>
@@ -15,19 +15,17 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using IronyModManager.DI;
-using IronyModManager.Shared.Models;
 using LiteDB;
 
-namespace IronyModManager.IO.Game
+namespace IronyModManager.Parser.Definitions
 {
 
     /// <summary>
-    /// Class DefinitionTypeBinder.
+    /// Class DefinitionSearchTypeBinder.
     /// Implements the <see cref="ITypeNameBinder" />
     /// </summary>
     /// <seealso cref="ITypeNameBinder" />
-    internal class DefinitionTypeBinder : ITypeNameBinder
+    internal class DefinitionSearchTypeBinder : ITypeNameBinder
     {
         #region Methods
 
@@ -39,9 +37,9 @@ namespace IronyModManager.IO.Game
         /// <exception cref="System.NotSupportedException">Not supported type.</exception>
         public string GetName(Type type)
         {
-            if (typeof(IDefinition).IsAssignableFrom(type))
+            if (type == typeof(DefinitionSearch))
             {
-                return nameof(IDefinition);
+                return nameof(DefinitionSearch);
             }
             throw new NotSupportedException("Not supported type.");
         }
@@ -51,14 +49,14 @@ namespace IronyModManager.IO.Game
         /// </summary>
         /// <param name="name">The name.</param>
         /// <returns>Type.</returns>
-        /// <exception cref="System.NotSupportedException">Not supported type</exception>
+        /// <exception cref="System.NotSupportedException">Not supported type.</exception>
         public Type GetType(string name)
         {
-            return name switch
+            if (name == typeof(DefinitionSearch).Name)
             {
-                nameof(IDefinition) => DIResolver.GetImplementationType(typeof(IDefinition)),
-                _ => throw new NotSupportedException("Not supported type."),
-            };
+                return typeof(DefinitionSearch);
+            }
+            throw new NotSupportedException("Not supported type.");
         }
 
         #endregion Methods

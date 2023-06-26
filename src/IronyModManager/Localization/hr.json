@@ -383,7 +383,8 @@
             "Title": "Pretraživanje baze podataka",
             "Watermark": "Unesi pojam",
             "Close": "Zatvori",
-            "Clear": "X"
+            "Clear": "X",
+            "Searching": "Tražim..."
         },
         "CustomPatch": {
             "Title": "Prilagođena zakrpa",

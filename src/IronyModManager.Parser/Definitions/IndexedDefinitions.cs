@@ -5,7 +5,7 @@
 // Created          : 02-16-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-25-2023
+// Last Modified On : 06-26-2023
 // ***********************************************************************
 // <copyright file="IndexedDefinitions.cs" company="Mario">
 //     Mario
@@ -17,12 +17,14 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using CodexMicroORM.Core.Collections;
 using IronyModManager.DI;
 using IronyModManager.Shared.KeyValueStore;
 using IronyModManager.Shared.Models;
 using IronyModManager.Shared.Trie;
+using LiteDB;
 using Nito.AsyncEx;
 using ValueType = IronyModManager.Shared.Models.ValueType;
 
@@ -39,14 +41,29 @@ namespace IronyModManager.Parser.Definitions
         #region Fields
 
         /// <summary>
-        /// The storage sub folder
+        /// The maximum allowed insert trie operations
         /// </summary>
-        private const string StorageSubFolder = "StoreCache";
+        private const int MaxAllowedInsertTrieOperations = 20;
+
+        /// <summary>
+        /// The search database
+        /// </summary>
+        private const string SearchDB = "irony.db";
+
+        /// <summary>
+        /// The search table name
+        /// </summary>
+        private const string SearchTableName = "search";
 
         /// <summary>
         /// The op lock
         /// </summary>
         private readonly AsyncLock opLock = new();
+
+        /// <summary>
+        /// The trie lock
+        /// </summary>
+        private readonly object trieLock = new { };
 
         /// <summary>
         /// All file keys
@@ -97,11 +114,21 @@ namespace IronyModManager.Parser.Definitions
         /// The main hierarchal definitions
         /// </summary>
         private ConcurrentIndexedList<IHierarchicalDefinitions> mainHierarchalDefinitions;
+
         /// <summary>
         /// The reset definitions count
         /// </summary>
         private HashSet<string> resetDefinitions;
 
+        /// <summary>
+        /// The search database
+        /// </summary>
+        private LiteDatabase searchDb = null;
+
+        /// <summary>
+        /// The search database path
+        /// </summary>
+        private string searchDbPath = string.Empty;
         /// <summary>
         /// The store
         /// </summary>
@@ -156,6 +183,15 @@ namespace IronyModManager.Parser.Definitions
 
         #endregion Constructors
 
+        #region Events
+
+        /// <summary>
+        /// Occurs when [processed search item].
+        /// </summary>
+        public event EventHandler<ProcessedArgs> ProcessedSearchItem;
+
+        #endregion Events
+
         #region Methods
 
         /// <summary>
@@ -185,11 +221,6 @@ namespace IronyModManager.Parser.Definitions
             MapKeys(allFileKeys, definition.FileCI);
             MapKeys(directoryCIKeys, definition.ParentDirectoryCI, definition.TypeAndId);
             MapKeys(typeKeyValues, definition.ValueType, definition.TypeAndId);
-            if (definition.Tags != null && definition.Tags.Any() && !definition.IsFromGame)
-            {
-                // Not interested in stuff from the game
-                trie?.Add($"{definition.Id} - {definition.File} - {definition.ModName}", definition.Tags);
-            }
             if (!string.IsNullOrWhiteSpace(definition.DiskFileCI))
             {
                 MapKeys(diskFileCIKeys, definition.DiskFileCI, definition.TypeAndId);
@@ -295,6 +326,7 @@ namespace IronyModManager.Parser.Definitions
             typeKeyValues = null;
             store?.Dispose();
             store = null;
+            DisposeSearchDB();
         }
 
         /// <summary>
@@ -518,6 +550,55 @@ namespace IronyModManager.Parser.Definitions
         }
 
         /// <summary>
+        /// Initializes the search asynchronous.
+        /// </summary>
+        /// <param name="definitions">The definitions.</param>
+        /// <returns>Task.</returns>
+        public async Task InitializeSearchAsync(IReadOnlyCollection<IDefinition> definitions)
+        {
+            if (definitions != null && definitions.Any())
+            {
+                var total = definitions.Count;
+                var counter = 0;
+                if (trie != null)
+                {
+                    definitions.AsParallel().WithDegreeOfParallelism(MaxAllowedInsertTrieOperations).ForAll(definition =>
+                    {
+                        lock (trieLock)
+                        {
+                            counter++;
+                            var displayName = $"{definition.Id} - {definition.File} - {definition.ModName}";
+                            trie.Add(displayName, definition.Tags);
+                            OnProcessedSearchItem(counter, total);
+                        }
+                    });
+                }
+                else if (!string.IsNullOrWhiteSpace(searchDbPath))
+                {
+                    searchDb ??= GetDatabase(searchDbPath);
+                    await Task.Run(() =>
+                    {
+                        var items = new List<DefinitionSearch>();
+                        foreach (var definition in definitions)
+                        {
+                            counter++;
+                            var displayName = $"{definition.Id} - {definition.File} - {definition.ModName}";
+                            var item = new DefinitionSearch() { DisplayName = displayName, Tags = definition.Tags.ToArray() };
+                            items.Add(item);
+                            OnProcessedSearchItem(counter, total);
+                        }
+                        var col = searchDb.GetCollection<DefinitionSearch>(SearchTableName);
+                        col.EnsureIndex(x => x.Tags);
+                        col.InsertBulk(items);
+                    });
+                    GC.Collect(GC.MaxGeneration, GCCollectionMode.Optimized);
+                    GC.WaitForPendingFinalizers();
+                    GC.Collect(GC.MaxGeneration, GCCollectionMode.Optimized);
+                }
+            }
+        }
+
+        /// <summary>
         /// Initializes the map.
         /// </summary>
         /// <param name="definitions">The definitions.</param>
@@ -596,18 +677,37 @@ namespace IronyModManager.Parser.Definitions
         /// Searches the definitions.
         /// </summary>
         /// <param name="searchTerm">The search term.</param>
+        /// <param name="token">The cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>IEnumerable&lt;IDefinition&gt;.</returns>
-        public Task<IEnumerable<string>> SearchDefinitionsAsync(string searchTerm)
+        public async Task<IEnumerable<string>> SearchDefinitionsAsync(string searchTerm, CancellationToken? token = null)
         {
+            if (token != null && token.GetValueOrDefault().IsCancellationRequested)
+            {
+                return null;
+            }
             if (trie != null)
             {
                 var tags = trie.Get(searchTerm.ToLowerInvariant());
                 if (tags != null)
                 {
-                    return Task.FromResult<IEnumerable<string>>(tags);
+                    return tags.Distinct();
                 }
             }
-            return Task.FromResult<IEnumerable<string>>(null);
+            else if (!string.IsNullOrEmpty(searchDbPath))
+            {
+                searchDb ??= GetDatabase(searchDbPath);
+                var result = await Task.Run(() =>
+                {
+                    var col = searchDb.GetCollection<DefinitionSearch>(SearchTableName);
+                    var result = col.Query().Where(x => x.Tags.Any(f => f.Contains(searchTerm, StringComparison.OrdinalIgnoreCase))).Select(p => p.DisplayName).ToList();
+                    GC.Collect(GC.MaxGeneration, GCCollectionMode.Optimized);
+                    GC.WaitForPendingFinalizers();
+                    GC.Collect(GC.MaxGeneration, GCCollectionMode.Optimized);
+                    return Task.FromResult(result.Distinct());
+                }, token ?? CancellationToken.None);
+                return result;
+            }
+            return null;
         }
 
         /// <summary>
@@ -674,9 +774,23 @@ namespace IronyModManager.Parser.Definitions
         /// <summary>
         /// Uses the search.
         /// </summary>
-        public void UseSearch()
+        /// <param name="dbPath">The database path which is specified indicates that db provider is used.</param>
+        /// <param name="dbPathSuffix">The database path suffix. Not used if dbPath is not provided</param>
+        public void UseSearch(string dbPath = Shared.Constants.EmptyParam, string dbPathSuffix = Shared.Constants.EmptyParam)
         {
-            trie = new Trie<string>();
+            if (!string.IsNullOrWhiteSpace(dbPath))
+            {
+                searchDbPath = !string.IsNullOrWhiteSpace(dbPathSuffix) ? Path.Combine(ResolveStoragePath(dbPath), dbPathSuffix, SearchDB) : Path.Combine(ResolveStoragePath(dbPath), SearchDB);
+                DisposeSearchDB();
+                if (!Directory.Exists(Path.GetDirectoryName(searchDbPath)))
+                {
+                    Directory.CreateDirectory(Path.GetDirectoryName(searchDbPath));
+                }
+            }
+            else
+            {
+                trie = new Trie<string>();
+            }
         }
 
         /// <summary>
@@ -686,7 +800,7 @@ namespace IronyModManager.Parser.Definitions
         /// <returns>System.String.</returns>
         protected virtual string ResolveStoragePath(string path)
         {
-            return Path.Combine(path, StorageSubFolder);
+            return Path.Combine(path, Parser.Common.Constants.StoreCacheRootRolder);
         }
 
         /// <summary>
@@ -733,13 +847,40 @@ namespace IronyModManager.Parser.Definitions
                 copy.Name = item.Name;
                 copy.Mods = item.Mods;
                 copy.AdditionalData = item.AdditionalData;
-                item.FileNames.ToList().ForEach(f => copy.FileNames.Add(f));
+                item.FileNames.ToList().ForEach(copy.FileNames.Add);
                 copy.ResetType = item.ResetType;
                 copy.Key = item.Key;
                 copy.NonGameDefinitions = item.NonGameDefinitions;
                 result.Add(copy);
             }
             return result;
+        }
+
+        /// <summary>
+        /// Disposes the search database.
+        /// </summary>
+        private void DisposeSearchDB()
+        {
+            try
+            {
+                searchDb?.Dispose();
+                if (!string.IsNullOrWhiteSpace(searchDbPath))
+                {
+                    var dir = Path.GetDirectoryName(searchDbPath);
+                    if (Directory.Exists(dir))
+                    {
+                        var dirInfo = new DirectoryInfo(dir) { Attributes = FileAttributes.Normal };
+                        foreach (var item in dirInfo.GetFileSystemInfos("*", SearchOption.TopDirectoryOnly))
+                        {
+                            item.Attributes = FileAttributes.Normal;
+                        }
+                        dirInfo.Delete(true);
+                    }
+                }
+            }
+            catch
+            {
+            }
         }
 
         /// <summary>
@@ -754,8 +895,18 @@ namespace IronyModManager.Parser.Definitions
                 if (!allowInvalid)
                 {
                     throw new ArgumentException("Collection is empty.");
-                }                
+                }
             }
+        }
+
+        /// <summary>
+        /// Gets the database.
+        /// </summary>
+        /// <param name="path">The path.</param>
+        /// <returns>LiteDatabase.</returns>
+        private LiteDatabase GetDatabase(string path)
+        {
+            return new LiteDatabase(path, new DefinitionSearchBsonMapper());
         }
 
         /// <summary>
@@ -861,6 +1012,16 @@ namespace IronyModManager.Parser.Definitions
             {
                 map[key] = new HashSet<string>() { cacheValue };
             }
+        }
+
+        /// <summary>
+        /// Called when [processed search item].
+        /// </summary>
+        /// <param name="current">The current.</param>
+        /// <param name="total">The total.</param>
+        private void OnProcessedSearchItem(int current, int total)
+        {
+            ProcessedSearchItem?.Invoke(this, new ProcessedArgs() { Current = current, Total = total });
         }
 
         /// <summary>
