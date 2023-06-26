@@ -17,6 +17,7 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using CodexMicroORM.Core.Collections;
 using IronyModManager.DI;
@@ -676,9 +677,14 @@ namespace IronyModManager.Parser.Definitions
         /// Searches the definitions.
         /// </summary>
         /// <param name="searchTerm">The search term.</param>
+        /// <param name="token">The cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>IEnumerable&lt;IDefinition&gt;.</returns>
-        public async Task<IEnumerable<string>> SearchDefinitionsAsync(string searchTerm)
+        public async Task<IEnumerable<string>> SearchDefinitionsAsync(string searchTerm, CancellationToken? token = null)
         {
+            if (token != null && token.GetValueOrDefault().IsCancellationRequested)
+            {
+                return null;
+            }
             if (trie != null)
             {
                 var tags = trie.Get(searchTerm.ToLowerInvariant());
@@ -698,7 +704,7 @@ namespace IronyModManager.Parser.Definitions
                     GC.WaitForPendingFinalizers();
                     GC.Collect(GC.MaxGeneration, GCCollectionMode.Optimized);
                     return Task.FromResult(result.Distinct());
-                });
+                }, token ?? CancellationToken.None);
                 return result;
             }
             return null;

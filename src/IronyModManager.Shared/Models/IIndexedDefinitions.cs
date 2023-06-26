@@ -14,6 +14,7 @@
 // ***********************************************************************
 using System;
 using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace IronyModManager.Shared.Models
@@ -183,8 +184,9 @@ namespace IronyModManager.Shared.Models
         /// Searches the definitions asynchronous.
         /// </summary>
         /// <param name="searchTerm">The search term.</param>
-        /// <returns>Task&lt;IEnumerable&lt;IDefinition&gt;&gt;.</returns>
-        Task<IEnumerable<string>> SearchDefinitionsAsync(string searchTerm);
+        /// <param name="token">The cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <returns>Task&lt;IEnumerable&lt;System.String&gt;&gt;.</returns>
+        Task<IEnumerable<string>> SearchDefinitionsAsync(string searchTerm, CancellationToken? token = null);
 
         /// <summary>
         /// Sets the type of the allowed.
