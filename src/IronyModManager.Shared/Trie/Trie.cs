@@ -24,8 +24,29 @@ namespace IronyModManager.Shared.Trie
     /// Class Trie.
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    public class Trie<T> : CharUkkonenTrie<T>
+    public class Trie<T>
     {
+        #region Fields
+
+        /// <summary>
+        /// The proxy
+        /// </summary>
+        private readonly CharUkkonenTrie<T> proxy;
+
+        #endregion Fields
+
+        #region Constructors
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Trie{T}" /> class.
+        /// </summary>
+        public Trie()
+        {
+            proxy = new CharUkkonenTrie<T>();
+        }
+
+        #endregion Constructors
+
         #region Methods
 
         /// <summary>
@@ -51,7 +72,7 @@ namespace IronyModManager.Shared.Trie
         /// <param name="word">The key.</param>
         public void Add(T obj, string word)
         {
-            Add(word, obj);
+            proxy.Add(word, obj);
         }
 
         /// <summary>
@@ -61,7 +82,7 @@ namespace IronyModManager.Shared.Trie
         /// <returns>HashSet&lt;T&gt;.</returns>
         public HashSet<T> Get(string searchQuery)
         {
-            var result = RetrieveSubstrings(searchQuery);
+            var result = proxy.RetrieveSubstrings(searchQuery);
             if (result != null)
             {
                 return result.Select(p => p.Value).ToHashSet();
