@@ -4,6 +4,54 @@
 		<title>Irony Mod Manager</title>
 		<language>en</language>
 		<item>
+			<title>1.25.102-alpha</title>
+			<description>## Note
+Despite small change log this is a significant update due to core changes in memory usage.
+
+## Release Notes 1.25
+* Optimize memory usage in Conflict Solver
+* Add option to use hybrid memory in Conflict Solver (appSettings)
+* Update dependencies</description>
+			<pubDate>Mon, 26 Jun 2023 21:56:38 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.25.102-alpha/linux-x64.zip" sparkle:version="1.25.102.29268" sparkle:shortVersionString="1.25.102" length="90588268" sparkle:os="linux" type="application/zip" sparkle:signature="5i23lrqDypkufsQOuuCs7QVG6TixozwCDzj3K3zJzp45bhtBbHRG7MWGf7lUmmHF04hdR6E0Q77TRt4a9eQ8Bw=="/>
+		</item>
+		<item>
+			<title>1.25.102-alpha</title>
+			<description>## Note
+Despite small change log this is a significant update due to core changes in memory usage.
+
+## Release Notes 1.25
+* Optimize memory usage in Conflict Solver
+* Add option to use hybrid memory in Conflict Solver (appSettings)
+* Update dependencies</description>
+			<pubDate>Mon, 26 Jun 2023 21:56:44 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.25.102-alpha/osx-x64.zip" sparkle:version="1.25.102.29268" sparkle:shortVersionString="1.25.102" length="93375613" sparkle:os="osx" type="application/zip" sparkle:signature="cygAanv4kLeQG2XUzd6Yc0JGcb+S9konGXqc1ljWH4Ht3jWmwZyXxaYbx3+tGO4NCclQYohmuuDzZpe/yqCHAw=="/>
+		</item>
+		<item>
+			<title>1.25.102-alpha</title>
+			<description>## Note
+Despite small change log this is a significant update due to core changes in memory usage.
+
+## Release Notes 1.25
+* Optimize memory usage in Conflict Solver
+* Add option to use hybrid memory in Conflict Solver (appSettings)
+* Update dependencies</description>
+			<pubDate>Mon, 26 Jun 2023 21:56:51 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.25.102-alpha/win-x64-setup.zip" sparkle:version="1.25.102.29268" sparkle:shortVersionString="1.25.102" length="71812756" sparkle:os="windows" type="application/zip" sparkle:signature="ZNwBpHin6NzgHhE496S4XY9FqpqvPrdPIzdZZSwKttk3c/20bmsLGKWprrT6u4sBOyhA7LBnZYk5ghYCLyvtCA=="/>
+		</item>
+		<item>
+			<title>1.25.102-alpha</title>
+			<description>## Note
+Despite small change log this is a significant update due to core changes in memory usage.
+
+## Release Notes 1.25
+* Optimize memory usage in Conflict Solver
+* Add option to use hybrid memory in Conflict Solver (appSettings)
+* Update dependencies</description>
+			<pubDate>Mon, 26 Jun 2023 21:56:51 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.25.102-alpha/win-x64.zip" sparkle:version="1.25.102.29268" sparkle:shortVersionString="1.25.102" length="105557749" sparkle:os="windows" type="application/zip" sparkle:signature="38RRkq886BaR5txvbULL4v5PtZI87M9by43X86xe+vtIyHKKdU98G8q7IgbAbDRxMAen94iPFGUnF+9LIcajBA=="/>
+		</item>
+		<item>
 			<title>1.24.157</title>
 			<description>## Current Release Notes
 * Fix not being able to resolve binary conflicts
