@@ -40,6 +40,11 @@ namespace IronyModManager.Parser.Definitions
         #region Fields
 
         /// <summary>
+        /// The maximum allowed insert trie operations
+        /// </summary>
+        private const int MaxAllowedInsertTrieOperations = 20;
+
+        /// <summary>
         /// The search database
         /// </summary>
         private const string SearchDB = "irony.db";
@@ -53,6 +58,10 @@ namespace IronyModManager.Parser.Definitions
         /// The op lock
         /// </summary>
         private readonly AsyncLock opLock = new();
+        /// <summary>
+        /// The trie lock
+        /// </summary>
+        private readonly object trieLock = new { };
 
         /// <summary>
         /// All file keys
@@ -541,9 +550,9 @@ namespace IronyModManager.Parser.Definitions
                 var filtered = definitions.Where(p => p.Tags != null && p.Tags.Any() && !p.IsFromGame);
                 if (trie != null)
                 {
-                    await Task.Run(() =>
+                    filtered.AsParallel().WithDegreeOfParallelism(MaxAllowedInsertTrieOperations).ForAll(definition =>
                     {
-                        foreach (var definition in filtered)
+                        lock (trieLock)
                         {
                             var displayName = $"{definition.Id} - {definition.File} - {definition.ModName}";
                             trie.Add(displayName, definition.Tags);
