@@ -4,7 +4,7 @@
 // Created          : 05-26-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 01-28-2022
+// Last Modified On : 06-28-2023
 // ***********************************************************************
 // <copyright file="ModPatchCollectionServiceTests.cs" company="Mario">
 //     Mario
@@ -1244,7 +1244,7 @@ namespace IronyModManager.Services.Tests
         [Fact]
         public async Task Should_initialize_patch_state()
         {
-            DISetup.SetupContainer();            
+            DISetup.SetupContainer();
             var storageProvider = new Mock<IStorageProvider>();
             var modParser = new Mock<IModParser>();
             var parserManager = new Mock<IParserManager>();
@@ -3532,8 +3532,31 @@ namespace IronyModManager.Services.Tests
             {
                 IgnoredPaths = "modName:a"
             };
-            service.AddModsToIgnoreList(c, new List<string>() { "a", "b" });
-            c.IgnoredPaths.Should().Be("modName:a" + Environment.NewLine + "modName:b");
+            service.AddModsToIgnoreList(c, new List<IModIgnoreConfiguration>() { new ModIgnoreConfiguration() { ModName = "a" }, new ModIgnoreConfiguration() { ModName = "b" } });
+            c.IgnoredPaths.Should().Be("modName:a--count:2" + Environment.NewLine + "modName:b--count:2");
+        }
+
+        /// <summary>
+        /// Defines the test method Should_add_mods_to_ignore_list_with_specified_count.
+        /// </summary>
+        [Fact]
+        public void Should_add_mods_to_ignore_list_with_specified_count()
+        {
+            var storageProvider = new Mock<IStorageProvider>();
+            var modParser = new Mock<IModParser>();
+            var parserManager = new Mock<IParserManager>();
+            var reader = new Mock<IReader>();
+            var modWriter = new Mock<IModWriter>();
+            var gameService = new Mock<IGameService>();
+            var mapper = new Mock<IMapper>();
+            var modPatchExporter = new Mock<IModPatchExporter>();
+            var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter);
+            var c = new ConflictResult()
+            {
+                IgnoredPaths = "modName:a"
+            };
+            service.AddModsToIgnoreList(c, new List<IModIgnoreConfiguration>() { new ModIgnoreConfiguration() { ModName = "a", Count = 3 }, new ModIgnoreConfiguration() { ModName = "b" } });
+            c.IgnoredPaths.Should().Be("modName:a--count:3" + Environment.NewLine + "modName:b--count:2");
         }
 
         /// <summary>
@@ -3556,8 +3579,36 @@ namespace IronyModManager.Services.Tests
                 IgnoredPaths = "modName:a" + Environment.NewLine + "modName:b"
             });
             result.Count.Should().Be(2);
-            result[0].Should().Be("a");
-            result[result.Count - 1].Should().Be("b");
+            result[0].ModName.Should().Be("a");
+            result[0].Count.Should().Be(2);
+            result[result.Count - 1].ModName.Should().Be("b");
+            result[result.Count - 1].Count.Should().Be(2);
+        }
+
+        /// <summary>
+        /// Defines the test method Should_get_ignored_mods_with_specified_count.
+        /// </summary>
+        [Fact]
+        public void Should_get_ignored_mods_with_specified_count()
+        {
+            var storageProvider = new Mock<IStorageProvider>();
+            var modParser = new Mock<IModParser>();
+            var parserManager = new Mock<IParserManager>();
+            var reader = new Mock<IReader>();
+            var modWriter = new Mock<IModWriter>();
+            var gameService = new Mock<IGameService>();
+            var mapper = new Mock<IMapper>();
+            var modPatchExporter = new Mock<IModPatchExporter>();
+            var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter);
+            var result = service.GetIgnoredMods(new ConflictResult()
+            {
+                IgnoredPaths = "modName:a--count:3" + Environment.NewLine + "modName:b"
+            });
+            result.Count.Should().Be(2);
+            result[0].ModName.Should().Be("a");
+            result[0].Count.Should().Be(3);
+            result[result.Count - 1].ModName.Should().Be("b");
+            result[result.Count - 1].Count.Should().Be(2);
         }
 
         /// <summary>
@@ -5330,16 +5381,20 @@ namespace IronyModManager.Services.Tests
             var defs = await DISetup.Container.GetInstance<IModPatchCollectionService>().GetModObjectsAsync(game, mods, string.Empty, IronyModManager.Models.Common.PatchStateMode.Advanced);
         }
 
+        /// <summary>
+        /// Class DomainConfigDummy.
+        /// Implements the <see cref="IDomainConfiguration" />
+        /// </summary>
+        /// <seealso cref="IDomainConfiguration" />
         private class DomainConfigDummy : Shared.Configuration.IDomainConfiguration
         {
             /// <summary>
             /// The domain
             /// </summary>
-            DomainConfigurationOptions domain = new DomainConfigurationOptions();
+            DomainConfigurationOptions domain = new();
             /// <summary>
             /// Initializes a new instance of the <see cref="DomainConfigDummy" /> class.
             /// </summary>
-            /// <param name="useLegacySteamLaunch">if set to <c>true</c> [use legacy steam launch].</param>
             public DomainConfigDummy()
             {
             }
