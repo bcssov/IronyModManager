@@ -5,7 +5,7 @@
 // Created          : 05-26-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-26-2023
+// Last Modified On : 06-28-2023
 // ***********************************************************************
 // <copyright file="ModPatchCollectionService.cs" company="Mario">
 //     Mario
@@ -75,6 +75,11 @@ namespace IronyModManager.Services
         private const string CacheRegion = "CollectionPatchState";
 
         /// <summary>
+        /// The ignore rules separator
+        /// </summary>
+        private const string IgnoreRulesSeparator = "--";
+
+        /// <summary>
         /// The maximum allowed source
         /// </summary>
         private const double MaxAllowedSource = 1e+10;
@@ -93,6 +98,11 @@ namespace IronyModManager.Services
         /// The maximum mods to process in parallel
         /// </summary>
         private const int MaxModsToProcessInParallel = 6;
+
+        /// <summary>
+        /// The mod name ignore counter identifier
+        /// </summary>
+        private const string ModNameIgnoreCounterId = "count:";
 
         /// <summary>
         /// The mod name ignore identifier
@@ -229,7 +239,7 @@ namespace IronyModManager.Services
         /// <param name="conflictResult">The conflict result.</param>
         /// <param name="mods">The mods.</param>
         /// <returns>IConflictResult.</returns>
-        public virtual void AddModsToIgnoreList(IConflictResult conflictResult, IEnumerable<string> mods)
+        public virtual void AddModsToIgnoreList(IConflictResult conflictResult, IEnumerable<IModIgnoreConfiguration> mods)
         {
             if (conflictResult != null)
             {
@@ -248,7 +258,7 @@ namespace IronyModManager.Services
                 {
                     foreach (var item in mods)
                     {
-                        sb.AppendLine($"{ModNameIgnoreId}{item}");
+                        sb.AppendLine($"{ModNameIgnoreId}{item.ModName}{IgnoreRulesSeparator}{ModNameIgnoreCounterId}{(item.Count > 1 ? item.Count : 2)}");
                     }
                 }
                 conflictResult.IgnoredPaths = sb.ToString().Trim(Environment.NewLine.ToCharArray());
@@ -687,20 +697,19 @@ namespace IronyModManager.Services
         /// </summary>
         /// <param name="conflictResult">The conflict result.</param>
         /// <returns>IReadOnlyList&lt;System.String&gt;.</returns>
-        public virtual IReadOnlyList<string> GetIgnoredMods(IConflictResult conflictResult)
+        public virtual IReadOnlyList<IModIgnoreConfiguration> GetIgnoredMods(IConflictResult conflictResult)
         {
-            var mods = new List<string>();
+            var mods = new List<IModIgnoreConfiguration>();
             if (conflictResult != null)
             {
                 var ignoredPaths = conflictResult.IgnoredPaths ?? string.Empty;
                 var lines = ignoredPaths.SplitOnNewLine().Where(p => !p.Trim().StartsWith("#"));
                 foreach (var line in lines)
                 {
-                    var parsed = line.StandardizeDirectorySeparator().Trim().TrimStart(Path.DirectorySeparatorChar);
-                    if (parsed.StartsWith(ModNameIgnoreId))
+                    var ignoreMod = ParseIgnoreModLine(line);
+                    if (ignoreMod != null)
                     {
-                        var ignoredModName = line.Replace(ModNameIgnoreId, string.Empty).Trim();
-                        mods.Add(ignoredModName);
+                        mods.Add(ignoreMod);
                     }
                 }
             }
@@ -2063,6 +2072,19 @@ namespace IronyModManager.Services
         /// <returns>A Task representing the asynchronous operation.</returns>
         protected virtual async Task EvalModIgnoreDefinitionsAsync(IConflictResult conflictResult)
         {
+            bool canAllowForbiddenMod(IHierarchicalDefinitions hierarchicalDefinition, IReadOnlyCollection<IModIgnoreConfiguration> ignoreConfigurations)
+            {
+                if (ignoreConfigurations.Any(i => hierarchicalDefinition.Mods.Any(m => i.ModName.Equals(m))))
+                {
+                    var item = ignoreConfigurations.FirstOrDefault(i => hierarchicalDefinition.Mods.Any(m => i.ModName.Equals(m)));
+                    if (item != null)
+                    {
+                        return hierarchicalDefinition.Mods.Count > item.Count;
+                    }
+                }
+                return true;
+            }
+
             var ruleIgnoredDefinitions = DIResolver.Get<IIndexedDefinitions>();
             await ruleIgnoredDefinitions.InitMapAsync(null, true);
             var showResetConflicts = false;
@@ -2072,16 +2094,18 @@ namespace IronyModManager.Services
             if (!string.IsNullOrEmpty(conflictResult.IgnoredPaths))
             {
                 var allowedMods = GetCollectionMods().Select(p => p.Name).ToList();
+                var forbiddenMods = new List<IModIgnoreConfiguration>();
                 var ignoreRules = new List<string>();
                 var includeRules = new List<string>();
                 var lines = conflictResult.IgnoredPaths.SplitOnNewLine().Where(p => !p.Trim().StartsWith("#"));
                 foreach (var line in lines)
                 {
                     var parsed = line.StandardizeDirectorySeparator().Trim().TrimStart(Path.DirectorySeparatorChar);
-                    if (parsed.StartsWith(ModNameIgnoreId))
+                    var ignoreMod = ParseIgnoreModLine(line);
+                    if (ignoreMod != null)
                     {
-                        var ignoredModName = line.Replace(ModNameIgnoreId, string.Empty).Trim();
-                        allowedMods.Remove(ignoredModName);
+                        allowedMods.Remove(ignoreMod.ModName);
+                        forbiddenMods.Add(ignoreMod);
                     }
                     else if (parsed.Equals(ShowGameModsId))
                     {
@@ -2115,11 +2139,11 @@ namespace IronyModManager.Services
                 {
                     foreach (var topConflict in conflictResult.Conflicts.GetHierarchicalDefinitions())
                     {
-                        if (topConflict.Mods.Any(x => allowedMods.Contains(x)))
+                        if (topConflict.Mods.Any(allowedMods.Contains))
                         {
                             foreach (var item in topConflict.Children)
                             {
-                                if (!item.Mods.Any(x => allowedMods.Contains(x)))
+                                if (!item.Mods.Any(allowedMods.Contains) || !canAllowForbiddenMod(item, forbiddenMods))
                                 {
                                     if (!alreadyIgnored.Contains(item.Key))
                                     {
@@ -2620,6 +2644,34 @@ namespace IronyModManager.Services
 
             copy.Code = sb.ToString();
             return copy;
+        }
+
+        /// <summary>
+        /// Parses the ignore mod line.
+        /// </summary>
+        /// <param name="line">The line.</param>
+        /// <returns>IModIgnoreConfiguration.</returns>
+        protected virtual IModIgnoreConfiguration ParseIgnoreModLine(string line)
+        {
+            var parsed = line.StandardizeDirectorySeparator().Trim().TrimStart(Path.DirectorySeparatorChar);
+            if (parsed.StartsWith(ModNameIgnoreId))
+            {
+                string[] statements = line.Split(IgnoreRulesSeparator);
+                var ignoredModName = statements[0].Replace(ModNameIgnoreId, string.Empty).Trim();
+                int counter = 2;
+                if (statements.Length > 1)
+                {
+                    if (int.TryParse(statements[1].Replace(ModNameIgnoreCounterId, string.Empty).Trim(), out var val))
+                    {
+                        counter = val;
+                    }
+                }
+                var model = GetModelInstance<IModIgnoreConfiguration>();
+                model.ModName = ignoredModName;
+                model.Count = counter;
+                return model;
+            }
+            return null;
         }
 
         /// <summary>
