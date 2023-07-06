@@ -4,72 +4,72 @@
 		<title>Irony Mod Manager</title>
 		<language>en</language>
 		<item>
-			<title>1.25.105-alpha</title>
+			<title>1.25.108-rc</title>
 			<description>## Note
 * Despite small change log this is a significant update due to core changes in memory usage.
 * Collections made with 1.25 are not backwards compatibile with older versions due to new mod filter behavior. You do not lose any resolution data, but you do lose mod filter settings.
 
 ## Current Release Notes
-* Mod filter changed to allow exclusion of mods from conflict list (provided only x number of mods cause a conflict)
+* Stellaris: Conflict Solver relics are not LIOS
 
 ## Release Notes 1.25
 * Optimize memory usage in Conflict Solver
 * Add option to use hybrid memory in Conflict Solver (appSettings)
 * Update dependencies
 * Mod filter changed to allow exclusion of mods from conflict list (provided only x number of mods cause a conflict)</description>
-			<pubDate>Wed, 28 Jun 2023 22:58:15 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.25.105-alpha/linux-x64.zip" sparkle:version="1.25.105.7241" sparkle:shortVersionString="1.25.105" length="90590364" sparkle:os="linux" type="application/zip" sparkle:signature="avhJrqAdVxZKKoThNEJuHk2zcGB8yiHN7eFhfom4Nr+OxbA2HBwqs4Xl3oAOOenuIWMZPX35pptCCopv8KAADA=="/>
+			<pubDate>Thu, 06 Jul 2023 16:30:45 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.25.108-rc/linux-x64.zip" sparkle:version="1.25.108.10664" sparkle:shortVersionString="1.25.108" length="90595812" sparkle:os="linux" type="application/zip" sparkle:signature="xkngi2iBJh6SfHBoIEekTfcmj0fos+JUkr8/Cwd37+YngLepNA+DH/FeLeKL/sU5yewf9Ny5r/SWcf1dwZ//Cw=="/>
 		</item>
 		<item>
-			<title>1.25.105-alpha</title>
+			<title>1.25.108-rc</title>
 			<description>## Note
 * Despite small change log this is a significant update due to core changes in memory usage.
 * Collections made with 1.25 are not backwards compatibile with older versions due to new mod filter behavior. You do not lose any resolution data, but you do lose mod filter settings.
 
 ## Current Release Notes
-* Mod filter changed to allow exclusion of mods from conflict list (provided only x number of mods cause a conflict)
+* Stellaris: Conflict Solver relics are not LIOS
 
 ## Release Notes 1.25
 * Optimize memory usage in Conflict Solver
 * Add option to use hybrid memory in Conflict Solver (appSettings)
 * Update dependencies
 * Mod filter changed to allow exclusion of mods from conflict list (provided only x number of mods cause a conflict)</description>
-			<pubDate>Wed, 28 Jun 2023 22:58:22 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.25.105-alpha/osx-x64.zip" sparkle:version="1.25.105.7241" sparkle:shortVersionString="1.25.105" length="93377756" sparkle:os="osx" type="application/zip" sparkle:signature="SGoYhTGKINiqYF9cxwgkLO0U9YHsAk8fYXP5qPqi1ZIBldk6Z3zkG0PAEo6oj1H6FXh4vezKSlLaALTKnOrzDQ=="/>
+			<pubDate>Thu, 06 Jul 2023 16:30:51 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.25.108-rc/osx-x64.zip" sparkle:version="1.25.108.10664" sparkle:shortVersionString="1.25.108" length="93383194" sparkle:os="osx" type="application/zip" sparkle:signature="OQmCgIA2lxKsvqw6zRwBJhKTEYzdg6Ev68jWvl/Y7XTB6fxfKJbhshBDd2KqUCkb1K/zyZxVwpjsTtJcU57lBg=="/>
 		</item>
 		<item>
-			<title>1.25.105-alpha</title>
+			<title>1.25.108-rc</title>
 			<description>## Note
 * Despite small change log this is a significant update due to core changes in memory usage.
 * Collections made with 1.25 are not backwards compatibile with older versions due to new mod filter behavior. You do not lose any resolution data, but you do lose mod filter settings.
 
 ## Current Release Notes
-* Mod filter changed to allow exclusion of mods from conflict list (provided only x number of mods cause a conflict)
+* Stellaris: Conflict Solver relics are not LIOS
 
 ## Release Notes 1.25
 * Optimize memory usage in Conflict Solver
 * Add option to use hybrid memory in Conflict Solver (appSettings)
 * Update dependencies
 * Mod filter changed to allow exclusion of mods from conflict list (provided only x number of mods cause a conflict)</description>
-			<pubDate>Wed, 28 Jun 2023 22:58:29 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.25.105-alpha/win-x64-setup.zip" sparkle:version="1.25.105.7241" sparkle:shortVersionString="1.25.105" length="71820390" sparkle:os="windows" type="application/zip" sparkle:signature="Ayjs4ZEXwMgxV8K39HFCxp8gguoZdoGoYRGa3NploNP/0ZAOyNOrdWquLFhiPfa4m0r3qI1WCjDq3qT9gpZlDQ=="/>
+			<pubDate>Thu, 06 Jul 2023 16:30:58 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.25.108-rc/win-x64-setup.zip" sparkle:version="1.25.108.10664" sparkle:shortVersionString="1.25.108" length="71798335" sparkle:os="windows" type="application/zip" sparkle:signature="IhvKh9IWU7VC5cHHR4NQ/e5e0uuAV1DwwuBjVslHEkApkSfg1y5CJFywb9buNNVJeU6Ohg6ek4JGnZ7WefIQCw=="/>
 		</item>
 		<item>
-			<title>1.25.105-alpha</title>
+			<title>1.25.108-rc</title>
 			<description>## Note
 * Despite small change log this is a significant update due to core changes in memory usage.
 * Collections made with 1.25 are not backwards compatibile with older versions due to new mod filter behavior. You do not lose any resolution data, but you do lose mod filter settings.
 
 ## Current Release Notes
-* Mod filter changed to allow exclusion of mods from conflict list (provided only x number of mods cause a conflict)
+* Stellaris: Conflict Solver relics are not LIOS
 
 ## Release Notes 1.25
 * Optimize memory usage in Conflict Solver
 * Add option to use hybrid memory in Conflict Solver (appSettings)
 * Update dependencies
 * Mod filter changed to allow exclusion of mods from conflict list (provided only x number of mods cause a conflict)</description>
-			<pubDate>Wed, 28 Jun 2023 22:58:29 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.25.105-alpha/win-x64.zip" sparkle:version="1.25.105.7241" sparkle:shortVersionString="1.25.105" length="105559884" sparkle:os="windows" type="application/zip" sparkle:signature="6E4mqaULIjVHc2BWW9kX6lEXWULfALMug/a7tbbE+6/e83trrkZv841PP0NxuLlOFQWQDke0GsoV2cfm+ACKCw=="/>
+			<pubDate>Thu, 06 Jul 2023 16:30:58 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.25.108-rc/win-x64.zip" sparkle:version="1.25.108.10664" sparkle:shortVersionString="1.25.108" length="105565345" sparkle:os="windows" type="application/zip" sparkle:signature="ZLK80SzoeV9gD9AYzDT5fFA3bxStoswUi5hIfD3JIgM1aYUpdOFKVQC1s9X+UH4Hmg0HG7drna1M+CyMiCzDBg=="/>
 		</item>
 		<item>
 			<title>1.24.157</title>
