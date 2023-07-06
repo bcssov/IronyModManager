@@ -148,7 +148,7 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="NetSparkleUpdater.SparkleUpdater" Version="2.2.3" />
-    <PackageReference Include="NLog" Version="5.2.0" />
+    <PackageReference Include="NLog" Version="5.2.2" />
     <PackageReference Include="ReactiveUI" Version="19.2.1" />
     <PackageReference Include="Sajidur78.StrongNamer" Version="0.2.8" />
     <PackageReference Include="SimpleInjector" Version="5.4.1" />
