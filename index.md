@@ -12,7 +12,7 @@ Check out the detailed overview on the [wiki](https://github.com/bcssov/IronyMod
 
 ### Download
 * Latest stable version: [v1.24.157](https://github.com/bcssov/IronyModManager/releases/tag/v1.24.157)
-* Latest alpha version: [v1.25.105-alpha](https://github.com/bcssov/IronyModManager/releases/tag/v1.25.105-alpha)
+* Latest RC version: [v1.25.108-rc](https://github.com/bcssov/IronyModManager/releases/tag/v1.25.108-rc)
 
 ### Discord
 [https://discord.gg/t9JmY8KFrV](https://discord.gg/t9JmY8KFrV)
