@@ -24,6 +24,8 @@
     <Avalonia>[0.10.21]</Avalonia>
     <AvaloniaEdit>[0.10.12.2]</AvaloniaEdit>
     <Jot>[2.1.16]</Jot>
+	<!-- 2.5.0 version breaks tests  -->
+	<XUnitRunnerVS>[2.4.5]</XUnitRunnerVS>
     <!-- Recently 2.0 version was released and not all packages were updated  -->
     <SixLaborsImageSharp>[1.0.4]</SixLaborsImageSharp>
     <SixLaborsImageSharpDrawing>[1.0.0-beta13.15]</SixLaborsImageSharpDrawing>
