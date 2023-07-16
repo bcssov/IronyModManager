@@ -4,140 +4,72 @@
 		<title>Irony Mod Manager</title>
 		<language>en</language>
 		<item>
-			<title>1.25.108-rc</title>
+			<title>1.25.113</title>
 			<description>## Note
 * Despite small change log this is a significant update due to core changes in memory usage.
 * Collections made with 1.25 are not backwards compatibile with older versions due to new mod filter behavior. You do not lose any resolution data, but you do lose mod filter settings.
 
 ## Current Release Notes
-* Stellaris: Conflict Solver relics are not LIOS
+* Fix CTD while importing invalid Paradox Launcher json schema
 
 ## Release Notes 1.25
 * Optimize memory usage in Conflict Solver
 * Add option to use hybrid memory in Conflict Solver (appSettings)
 * Update dependencies
 * Mod filter changed to allow exclusion of mods from conflict list (provided only x number of mods cause a conflict)</description>
-			<pubDate>Thu, 06 Jul 2023 16:30:45 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.25.108-rc/linux-x64.zip" sparkle:version="1.25.108.10664" sparkle:shortVersionString="1.25.108" length="90595812" sparkle:os="linux" type="application/zip" sparkle:signature="xkngi2iBJh6SfHBoIEekTfcmj0fos+JUkr8/Cwd37+YngLepNA+DH/FeLeKL/sU5yewf9Ny5r/SWcf1dwZ//Cw=="/>
+			<pubDate>Sun, 16 Jul 2023 03:47:23 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.25.113/linux-x64.zip" sparkle:version="1.25.113.17071" sparkle:shortVersionString="1.25.113" length="90601022" sparkle:os="linux" type="application/zip" sparkle:signature="0G+VMXYfdhYkB3Ae4OGoJ8KEFr2r6j8wMjVQ6rVDjw450GwDHAW5xcEZ2k90GTCkJ5PsxtGRNRCdE8KoykaKCA=="/>
 		</item>
 		<item>
-			<title>1.25.108-rc</title>
+			<title>1.25.113</title>
 			<description>## Note
 * Despite small change log this is a significant update due to core changes in memory usage.
 * Collections made with 1.25 are not backwards compatibile with older versions due to new mod filter behavior. You do not lose any resolution data, but you do lose mod filter settings.
 
 ## Current Release Notes
-* Stellaris: Conflict Solver relics are not LIOS
+* Fix CTD while importing invalid Paradox Launcher json schema
 
 ## Release Notes 1.25
 * Optimize memory usage in Conflict Solver
 * Add option to use hybrid memory in Conflict Solver (appSettings)
 * Update dependencies
 * Mod filter changed to allow exclusion of mods from conflict list (provided only x number of mods cause a conflict)</description>
-			<pubDate>Thu, 06 Jul 2023 16:30:51 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.25.108-rc/osx-x64.zip" sparkle:version="1.25.108.10664" sparkle:shortVersionString="1.25.108" length="93383194" sparkle:os="osx" type="application/zip" sparkle:signature="OQmCgIA2lxKsvqw6zRwBJhKTEYzdg6Ev68jWvl/Y7XTB6fxfKJbhshBDd2KqUCkb1K/zyZxVwpjsTtJcU57lBg=="/>
+			<pubDate>Sun, 16 Jul 2023 03:47:29 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.25.113/osx-x64.zip" sparkle:version="1.25.113.17071" sparkle:shortVersionString="1.25.113" length="93380491" sparkle:os="osx" type="application/zip" sparkle:signature="2OngDumQkczpGDWUh16fijBMocWT7N8tFsHrzdG+kqVR4Ched98EXlArWiBgYv+gAM46qPoYP01nQFUz5Q+tAg=="/>
 		</item>
 		<item>
-			<title>1.25.108-rc</title>
+			<title>1.25.113</title>
 			<description>## Note
 * Despite small change log this is a significant update due to core changes in memory usage.
 * Collections made with 1.25 are not backwards compatibile with older versions due to new mod filter behavior. You do not lose any resolution data, but you do lose mod filter settings.
 
 ## Current Release Notes
-* Stellaris: Conflict Solver relics are not LIOS
+* Fix CTD while importing invalid Paradox Launcher json schema
 
 ## Release Notes 1.25
 * Optimize memory usage in Conflict Solver
 * Add option to use hybrid memory in Conflict Solver (appSettings)
 * Update dependencies
 * Mod filter changed to allow exclusion of mods from conflict list (provided only x number of mods cause a conflict)</description>
-			<pubDate>Thu, 06 Jul 2023 16:30:58 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.25.108-rc/win-x64-setup.zip" sparkle:version="1.25.108.10664" sparkle:shortVersionString="1.25.108" length="71798335" sparkle:os="windows" type="application/zip" sparkle:signature="IhvKh9IWU7VC5cHHR4NQ/e5e0uuAV1DwwuBjVslHEkApkSfg1y5CJFywb9buNNVJeU6Ohg6ek4JGnZ7WefIQCw=="/>
+			<pubDate>Sun, 16 Jul 2023 03:47:34 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.25.113/win-x64-setup.zip" sparkle:version="1.25.113.17071" sparkle:shortVersionString="1.25.113" length="71783093" sparkle:os="windows" type="application/zip" sparkle:signature="9QFqHaCmPOwedZpiCc6T2GzzR2lkgiSnZoaabxUuUStmsCjH8jAtpOrHcBxzgTf9XEx8m/yrxh070r1Qfy4/AQ=="/>
 		</item>
 		<item>
-			<title>1.25.108-rc</title>
+			<title>1.25.113</title>
 			<description>## Note
 * Despite small change log this is a significant update due to core changes in memory usage.
 * Collections made with 1.25 are not backwards compatibile with older versions due to new mod filter behavior. You do not lose any resolution data, but you do lose mod filter settings.
 
 ## Current Release Notes
-* Stellaris: Conflict Solver relics are not LIOS
+* Fix CTD while importing invalid Paradox Launcher json schema
 
 ## Release Notes 1.25
 * Optimize memory usage in Conflict Solver
 * Add option to use hybrid memory in Conflict Solver (appSettings)
 * Update dependencies
 * Mod filter changed to allow exclusion of mods from conflict list (provided only x number of mods cause a conflict)</description>
-			<pubDate>Thu, 06 Jul 2023 16:30:58 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.25.108-rc/win-x64.zip" sparkle:version="1.25.108.10664" sparkle:shortVersionString="1.25.108" length="105565345" sparkle:os="windows" type="application/zip" sparkle:signature="ZLK80SzoeV9gD9AYzDT5fFA3bxStoswUi5hIfD3JIgM1aYUpdOFKVQC1s9X+UH4Hmg0HG7drna1M+CyMiCzDBg=="/>
-		</item>
-		<item>
-			<title>1.24.157</title>
-			<description>## Current Release Notes
-* Fix not being able to resolve binary conflicts
-
-## Release Notes 1.24
-* Update dependencies
-* Handle replace path in basic mod merge
-* Bypass steam thinking that Irony is a game host process (valve should seriously tweak logic of theirs)
-* Add conflict solver modes which skip localization
-* Write last known Irony location to %appdata% directory so other programs can find it
-* Add support for metadata descriptor type games (Victoria 3 support)
-* Add option to ignore update
-* Improve mod loading performance</description>
-			<pubDate>Sat, 24 Jun 2023 16:40:21 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.24.157/linux-x64.zip" sparkle:version="1.24.157.32294" sparkle:shortVersionString="1.24.157" length="90109456" sparkle:os="linux" type="application/zip" sparkle:signature="renApJanQJD9Yz6HPq31UbUCK99xXhUBsESkAmA5libSaMYIoe67j23q50fJhsUbVb+1prH+SpepHUg6XVKKBw=="/>
-		</item>
-		<item>
-			<title>1.24.157</title>
-			<description>## Current Release Notes
-* Fix not being able to resolve binary conflicts
-
-## Release Notes 1.24
-* Update dependencies
-* Handle replace path in basic mod merge
-* Bypass steam thinking that Irony is a game host process (valve should seriously tweak logic of theirs)
-* Add conflict solver modes which skip localization
-* Write last known Irony location to %appdata% directory so other programs can find it
-* Add support for metadata descriptor type games (Victoria 3 support)
-* Add option to ignore update
-* Improve mod loading performance</description>
-			<pubDate>Sat, 24 Jun 2023 16:40:28 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.24.157/osx-x64.zip" sparkle:version="1.24.157.32294" sparkle:shortVersionString="1.24.157" length="93265370" sparkle:os="osx" type="application/zip" sparkle:signature="658gwCdZOc6FZkqk9j8+K8aV+3DnCqnIhKZWTSLyV1nXi28h6FiN0PwVH+CIIAMzHJrk33PAE72EFOREFAZnBQ=="/>
-		</item>
-		<item>
-			<title>1.24.157</title>
-			<description>## Current Release Notes
-* Fix not being able to resolve binary conflicts
-
-## Release Notes 1.24
-* Update dependencies
-* Handle replace path in basic mod merge
-* Bypass steam thinking that Irony is a game host process (valve should seriously tweak logic of theirs)
-* Add conflict solver modes which skip localization
-* Write last known Irony location to %appdata% directory so other programs can find it
-* Add support for metadata descriptor type games (Victoria 3 support)
-* Add option to ignore update
-* Improve mod loading performance</description>
-			<pubDate>Sat, 24 Jun 2023 16:40:34 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.24.157/win-x64-setup.zip" sparkle:version="1.24.157.32294" sparkle:shortVersionString="1.24.157" length="71407065" sparkle:os="windows" type="application/zip" sparkle:signature="pnvWd3x3d7Zn7SvUqJ9vnkImNChi5LCb74WOCqBOuuxpx3JeofKx8W4k9HZxbwseGvRgqn3pioJViFF7ncypBA=="/>
-		</item>
-		<item>
-			<title>1.24.157</title>
-			<description>## Current Release Notes
-* Fix not being able to resolve binary conflicts
-
-## Release Notes 1.24
-* Update dependencies
-* Handle replace path in basic mod merge
-* Bypass steam thinking that Irony is a game host process (valve should seriously tweak logic of theirs)
-* Add conflict solver modes which skip localization
-* Write last known Irony location to %appdata% directory so other programs can find it
-* Add support for metadata descriptor type games (Victoria 3 support)
-* Add option to ignore update
-* Improve mod loading performance</description>
-			<pubDate>Sat, 24 Jun 2023 16:40:34 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.24.157/win-x64.zip" sparkle:version="1.24.157.32294" sparkle:shortVersionString="1.24.157" length="104863835" sparkle:os="windows" type="application/zip" sparkle:signature="7N/msLDV4q9JDCQ7iOsXULvqF/Hg/PxZkAtKiKZsq+Je3qhbkhXeLSwpr5ucV5PnC7wx070q3eP7n0nFfUwyCA=="/>
+			<pubDate>Sun, 16 Jul 2023 03:47:35 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.25.113/win-x64.zip" sparkle:version="1.25.113.17071" sparkle:shortVersionString="1.25.113" length="105568253" sparkle:os="windows" type="application/zip" sparkle:signature="r87dMvzX+v+mdMG9AIkeQ9+esEr1fxrpiflF75arYMqkNG45Ax35tW1vcgSNP68ByFtl3aTJDAIcs7IqeFj5Cg=="/>
 		</item>
 	</channel>
 </rss>
