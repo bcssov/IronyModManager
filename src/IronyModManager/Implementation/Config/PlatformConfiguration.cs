@@ -1,10 +1,11 @@
-﻿// ***********************************************************************
+﻿
+// ***********************************************************************
 // Assembly         : IronyModManager
 // Author           : Mario
 // Created          : 04-16-2021
 //
 // Last Modified By : Mario
-// Last Modified On : 05-12-2023
+// Last Modified On : 06-26-2023
 // ***********************************************************************
 // <copyright file="PlatformConfiguration.cs" company="Mario">
 //     Mario
@@ -22,6 +23,7 @@ using Microsoft.Extensions.Configuration;
 
 namespace IronyModManager.Implementation.Config
 {
+
     /// <summary>
     /// Class PlatformConfiguration.
     /// Implements the <see cref="IronyModManager.Platform.Configuration.IPlatformConfiguration" />
@@ -100,6 +102,8 @@ namespace IronyModManager.Implementation.Config
                     domainConfiguration.Steam.GameHandlerPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, domainConfiguration.Steam.GameHandlerPath);
                 }
                 domainConfiguration.Formatting.UseSystemCulture = configuration.GetSection("Formatting").GetSection("UseSystemCulture").Get<bool>();
+                domainConfiguration.ConflictSolver.UseHybridMemory = configuration.GetSection("ConflictSolver").GetSection("UseHybridMemory").Get<bool>();
+                domainConfiguration.ConflictSolver.UseDiskSearch = configuration.GetSection("ConflictSolver").GetSection("UseDiskSearch").Get<bool>();
             }
             return domainConfiguration;
         }

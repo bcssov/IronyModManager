@@ -5,7 +5,7 @@
 // Created          : 02-29-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-10-2023
+// Last Modified On : 06-23-2023
 // ***********************************************************************
 // <copyright file="ModHolderControlViewModel.cs" company="Mario">
 //     Mario
@@ -587,6 +587,8 @@ namespace IronyModManager.ViewModels.Controls
 
                 // To stop people from whining
                 GC.Collect(GC.MaxGeneration, GCCollectionMode.Aggressive, true, true);
+                GC.WaitForPendingFinalizers();
+                GC.Collect(GC.MaxGeneration, GCCollectionMode.Aggressive, true, true);
                 return result;
             }).ConfigureAwait(false);
             if (tooLargeMod)
@@ -600,7 +602,9 @@ namespace IronyModManager.ViewModels.Controls
                 gameDefinitionLoadHandler?.Dispose();
 
                 // I know, I know... but I wanna force a cleanup
-                GC.Collect();
+                GC.Collect(GC.MaxGeneration, GCCollectionMode.Aggressive, true, true);
+                GC.WaitForPendingFinalizers();
+                GC.Collect(GC.MaxGeneration, GCCollectionMode.Aggressive, true, true);
 
                 var largeMessageTitle = localizationManager.GetResource(LocalizationResources.Mod_Actions.ConflictSolver.TooLargePrompt.Title);
                 var largeMessageBody = localizationManager.GetResource(LocalizationResources.Mod_Actions.ConflictSolver.TooLargePrompt.Message);
@@ -615,6 +619,8 @@ namespace IronyModManager.ViewModels.Controls
 
                     // To stop people from whining
                     GC.Collect(GC.MaxGeneration, GCCollectionMode.Aggressive, true, true);
+                    GC.WaitForPendingFinalizers();
+                    GC.Collect(GC.MaxGeneration, GCCollectionMode.Aggressive, true, true);
                 });
                 definitions = await Task.Run(async () =>
                 {
@@ -622,15 +628,19 @@ namespace IronyModManager.ViewModels.Controls
 
                     // To stop people from whining
                     GC.Collect(GC.MaxGeneration, GCCollectionMode.Aggressive, true, true);
+                    GC.WaitForPendingFinalizers();
+                    GC.Collect(GC.MaxGeneration, GCCollectionMode.Aggressive, true, true);
                     return result;
                 }).ConfigureAwait(false);
             }
-            var conflicts = await Task.Run(() =>
+            var conflicts = await Task.Run(async () =>
             {
                 if (definitions != null)
                 {
                     // To stop people from whining
-                    var result = modPatchCollectionService.FindConflicts(definitions, CollectionMods.SelectedMods.Select(p => p.Name).ToList(), mode);
+                    var result = await modPatchCollectionService.FindConflictsAsync(definitions, CollectionMods.SelectedMods.Select(p => p.Name).ToList(), mode);
+                    GC.Collect(GC.MaxGeneration, GCCollectionMode.Aggressive, true, true);
+                    GC.WaitForPendingFinalizers();
                     GC.Collect(GC.MaxGeneration, GCCollectionMode.Aggressive, true, true);
                     return result;
                 }
@@ -641,6 +651,8 @@ namespace IronyModManager.ViewModels.Controls
                 var result = await modPatchCollectionService.InitializePatchStateAsync(conflicts, CollectionMods.SelectedModCollection.Name).ConfigureAwait(false);
 
                 // To stop people from whining
+                GC.Collect(GC.MaxGeneration, GCCollectionMode.Aggressive, true, true);
+                GC.WaitForPendingFinalizers();
                 GC.Collect(GC.MaxGeneration, GCCollectionMode.Aggressive, true, true);
                 return result;
             }).ConfigureAwait(false);
@@ -665,7 +677,9 @@ namespace IronyModManager.ViewModels.Controls
             gameDefinitionLoadHandler?.Dispose();
 
             // I know, I know... but I wanna force a cleanup
-            GC.Collect();
+            GC.Collect(GC.MaxGeneration, GCCollectionMode.Aggressive, true, true);
+            GC.WaitForPendingFinalizers();
+            GC.Collect(GC.MaxGeneration, GCCollectionMode.Aggressive, true, true);
         }
 
         /// <summary>

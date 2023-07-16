@@ -1,10 +1,11 @@
-﻿// ***********************************************************************
+﻿
+// ***********************************************************************
 // Assembly         : IronyModManager
 // Author           : Mario
 // Created          : 01-10-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 11-24-2022
+// Last Modified On : 06-25-2023
 // ***********************************************************************
 // <copyright file="MainWindow.xaml.cs" company="Mario">
 //     Mario
@@ -38,6 +39,7 @@ using ReactiveUI;
 
 namespace IronyModManager.Views
 {
+
     /// <summary>
     /// Class MainWindow.
     /// Implements the <see cref="IronyModManager.Common.Views.BaseWindow{IronyModManager.ViewModels.MainWindowViewModel}" />
@@ -91,6 +93,31 @@ namespace IronyModManager.Views
         #endregion Constructors
 
         #region Methods
+
+        /// <summary>
+        /// Handles the <see cref="E:Closing" /> event.
+        /// </summary>
+        /// <param name="e">The <see cref="CancelEventArgs" /> instance containing the event data.</param>
+        /// <remarks>A type that derives from <see cref="T:Avalonia.Controls.Window" />  may override <see cref="M:Avalonia.Controls.Window.OnClosing(System.ComponentModel.CancelEventArgs)" />. The
+        /// overridden method must call <see cref="M:Avalonia.Controls.Window.OnClosing(System.ComponentModel.CancelEventArgs)" /> on the base class if the
+        /// <see cref="E:Avalonia.Controls.Window.Closing" /> event needs to be raised.</remarks>
+        protected override void OnClosing(CancelEventArgs e)
+        {
+            if (preventShutdown)
+            {
+                e.Cancel = true;
+                shutdownRequested = true;
+                var locManager = DIResolver.Get<ILocalizationManager>();
+                var message = locManager.GetResource(LocalizationResources.App.BackgroundOperationMessage);
+                var id = DIResolver.Get<IIDGenerator>().GetNextId();
+                ViewModel.TriggerManualOverlay(id, true, message);
+            }
+            else
+            {
+                SaveWindowState();
+            }
+            base.OnClosing(e);
+        }
 
         /// <summary>
         /// Gets the enter key gestures.
@@ -191,6 +218,7 @@ namespace IronyModManager.Views
                         Width = state.Width.GetValueOrDefault();
                     }
                     WindowState = state.IsMaximized.GetValueOrDefault() ? WindowState.Maximized : WindowState.Normal;
+
                     // Silly setup code isn't it?
                     var pos = Position.WithX(state.LocationX.GetValueOrDefault());
                     pos = pos.WithY(state.LocationY.GetValueOrDefault());
@@ -243,10 +271,7 @@ namespace IronyModManager.Views
             MessageBus.Current.Listen<ShutdownStateEventArgs>()
                 .Subscribe(x =>
                 {
-                    if (shutDownState == null)
-                    {
-                        shutDownState = DIResolver.Get<IShutDownState>();
-                    }
+                    shutDownState ??= DIResolver.Get<IShutDownState>();
                     shutDownState.Toggle(!x.PreventShutdown);
                     preventShutdown = x.PreventShutdown;
                     if (shutdownRequested && !preventShutdown)
@@ -296,31 +321,6 @@ namespace IronyModManager.Views
             }).DisposeWith(disposables);
 
             base.OnActivated(disposables);
-        }
-
-        /// <summary>
-        /// Handles the <see cref="E:Closing" /> event.
-        /// </summary>
-        /// <param name="e">The <see cref="CancelEventArgs" /> instance containing the event data.</param>
-        /// <remarks>A type that derives from <see cref="T:Avalonia.Controls.Window" />  may override <see cref="M:Avalonia.Controls.Window.OnClosing(System.ComponentModel.CancelEventArgs)" />. The
-        /// overridden method must call <see cref="M:Avalonia.Controls.Window.OnClosing(System.ComponentModel.CancelEventArgs)" /> on the base class if the
-        /// <see cref="E:Avalonia.Controls.Window.Closing" /> event needs to be raised.</remarks>
-        protected override void OnClosing(CancelEventArgs e)
-        {
-            if (preventShutdown)
-            {
-                e.Cancel = true;
-                shutdownRequested = true;
-                var locManager = DIResolver.Get<ILocalizationManager>();
-                var message = locManager.GetResource(LocalizationResources.App.BackgroundOperationMessage);
-                var id = DIResolver.Get<IIDGenerator>().GetNextId();
-                ViewModel.TriggerManualOverlay(id, true, message);
-            }
-            else
-            {
-                SaveWindowState();
-            }
-            base.OnClosing(e);
         }
 
         /// <summary>

@@ -1,10 +1,11 @@
-﻿// ***********************************************************************
+﻿
+// ***********************************************************************
 // Assembly         : IronyModManager.IO
 // Author           : Mario
 // Created          : 04-02-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-28-2023
+// Last Modified On : 07-06-2023
 // ***********************************************************************
 // <copyright file="StellarisDefinitionInfoProvider.cs" company="Mario">
 //     Mario
@@ -20,6 +21,7 @@ using IronyModManager.Shared.Models;
 
 namespace IronyModManager.IO.Mods.InfoProviders
 {
+
     /// <summary>
     /// Class StellarisDefinitionInfoProvider.
     /// Implements the <see cref="IronyModManager.IO.Mods.InfoProviders.BaseDefinitionInfoProvider" />
@@ -47,9 +49,12 @@ namespace IronyModManager.IO.Mods.InfoProviders
         /// Gets the fios paths.
         /// </summary>
         /// <value>The fios paths.</value>
-        public override IReadOnlyCollection<string> FIOSPaths => new List<string> { "component_sets", "component_templates", "event_chains", "global_ship_designs",
+        public override IReadOnlyCollection<string> FIOSPaths => new List<string>
+        {
+            "component_sets", "component_templates", "event_chains", "global_ship_designs",
             "scripted_variables", "section_templates", "ship_behaviors", "special_projects", "static_modifiers", "strategic_resources", "events",
-            "solar_system_initializers", "relics", "traits", "start_screen_messages" };
+            "solar_system_initializers", "traits", "start_screen_messages"
+        };
 
         /// <summary>
         /// Gets a value indicating whether this instance is fully implemented.

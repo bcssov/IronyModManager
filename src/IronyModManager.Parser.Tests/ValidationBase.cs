@@ -17,6 +17,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 using IronyModManager.DI;
 using IronyModManager.Parser.Common;
 using IronyModManager.Parser.Common.Args;
@@ -97,7 +98,7 @@ namespace IronyModManager.Parser.Tests
         /// </summary>
         /// <exception cref="System.ArgumentException">Fatal error. Check parsers.</exception>
         /// <exception cref="System.ArgumentException">Fatal error. Check parsers.</exception>
-        protected void DetectDuplicatesAndGenerateParserMap()
+        protected async Task DetectDuplicatesAndGenerateParserMap()
         {
             var codeParser = new CodeParser(new Logger());
             var quotesRegex = new Regex("\".*?\"", RegexOptions.Compiled | RegexOptions.IgnoreCase);
@@ -227,17 +228,17 @@ namespace IronyModManager.Parser.Tests
 
             var invalid = new HashSet<string>();
             var indexed = new IndexedDefinitions();
-            indexed.InitMap(result);
-            var typesKeys = indexed.GetAllTypeKeys();
+            await indexed.InitMapAsync(result);
+            var typesKeys = await indexed.GetAllTypeKeysAsync();
             var objects = new List<string>();
             var singleObjects = new List<string>();
             var parserMap = new List<IParserMap>();
 
-            var dirs = indexed.GetAllDirectoryKeys();
+            var dirs = await indexed.GetAllDirectoryKeysAsync();
 
             foreach (var dir in dirs)
             {
-                var all = indexed.GetByParentDirectory(dir);
+                var all = await indexed.GetByParentDirectoryAsync(dir);
                 if (all.Count() <= 2 && !all.All(p => p.ValueType == ValueType.WholeTextFile))
                 {
                     if (!singleObjects.Contains(all.First().File))
@@ -249,7 +250,7 @@ namespace IronyModManager.Parser.Tests
 
             foreach (var item in typesKeys)
             {
-                var all = indexed.GetByType(item);
+                var all = await indexed.GetByTypeAsync(item);
                 var types = all.Where(p => p.ValueType != ValueType.Invalid).ToHashSet();
                 if (all.Any(p => p.ValueType == ValueType.Invalid))
                 {

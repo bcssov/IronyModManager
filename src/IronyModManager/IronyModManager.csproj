@@ -139,22 +139,22 @@
     <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="$(MicrosoftExtensionsConfigurationJson)" allowedVersions="$(MicrosoftExtensionsConfigurationJson)" />
     <PackageReference Include="Microsoft.Extensions.DependencyModel" Version="$(MicrosoftExtensionsDependencyModelVersion)" allowedVersions="$(MicrosoftExtensionsDependencyModelVersion)" />
     <PackageReference Include="Microsoft.NETCore.Platforms" Version="$(MicrosoftNETCorePlatformsVersion)" allowedVersions="$(MicrosoftNETCorePlatformsVersion)" />
-    <PackageReference Include="Microsoft.VisualStudio.SlowCheetah" Version="4.0.8">
+    <PackageReference Include="Microsoft.VisualStudio.SlowCheetah" Version="4.0.50">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="Nerdbank.GitVersioning" Version="3.5.119">
+    <PackageReference Include="Nerdbank.GitVersioning" Version="3.6.133">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="NetSparkleUpdater.SparkleUpdater" Version="2.2.1" />
-    <PackageReference Include="NLog" Version="5.0.5" />
-    <PackageReference Include="ReactiveUI" Version="18.4.1" />
+    <PackageReference Include="NetSparkleUpdater.SparkleUpdater" Version="2.2.3" />
+    <PackageReference Include="NLog" Version="5.2.2" />
+    <PackageReference Include="ReactiveUI" Version="19.4.1" />
     <PackageReference Include="Sajidur78.StrongNamer" Version="0.2.8" />
     <PackageReference Include="SimpleInjector" Version="5.4.1" />
     <PackageReference Include="SimpleInjector.Packaging" Version="5.0.0" />
-    <PackageReference Include="Splat.NLog" Version="14.5.1" />
-    <PackageReference Include="Splat.SimpleInjector" Version="14.5.1" />
+    <PackageReference Include="Splat.NLog" Version="14.6.37" />
+    <PackageReference Include="Splat.SimpleInjector" Version="14.6.37" />
     <PackageReference Include="Syroot.Windows.IO.KnownFolders" Version="1.3.0" />
   </ItemGroup>
   <ItemGroup>

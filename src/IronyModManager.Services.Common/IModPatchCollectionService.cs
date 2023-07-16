@@ -1,10 +1,11 @@
-﻿// ***********************************************************************
+﻿
+// ***********************************************************************
 // Assembly         : IronyModManager.Services.Common
 // Author           : Mario
 // Created          : 05-26-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 10-27-2022
+// Last Modified On : 06-28-2023
 // ***********************************************************************
 // <copyright file="IModPatchCollectionService.cs" company="Mario">
 //     Mario
@@ -20,6 +21,7 @@ using IronyModManager.Shared.Models;
 
 namespace IronyModManager.Services.Common
 {
+
     /// <summary>
     /// Interface IModPatchCollectionService
     /// Implements the <see cref="IronyModManager.Services.Common.IBaseService" />
@@ -43,7 +45,7 @@ namespace IronyModManager.Services.Common
         /// </summary>
         /// <param name="conflictResult">The conflict result.</param>
         /// <param name="mods">The mods.</param>
-        void AddModsToIgnoreList(IConflictResult conflictResult, IEnumerable<string> mods);
+        void AddModsToIgnoreList(IConflictResult conflictResult, IEnumerable<IModIgnoreConfiguration> mods);
 
         /// <summary>
         /// Applies the mod patch asynchronous.
@@ -85,13 +87,13 @@ namespace IronyModManager.Services.Common
         IPriorityDefinitionResult EvalDefinitionPriority(IEnumerable<IDefinition> definitions);
 
         /// <summary>
-        /// Finds the conflicts.
+        /// Finds the conflicts asynchronous.
         /// </summary>
         /// <param name="indexedDefinitions">The indexed definitions.</param>
         /// <param name="modOrder">The mod order.</param>
         /// <param name="patchStateMode">The patch state mode.</param>
-        /// <returns>IConflictResult.</returns>
-        IConflictResult FindConflicts(IIndexedDefinitions indexedDefinitions, IList<string> modOrder, PatchStateMode patchStateMode);
+        /// <returns>Task&lt;IConflictResult&gt;.</returns>
+        Task<IConflictResult> FindConflictsAsync(IIndexedDefinitions indexedDefinitions, IList<string> modOrder, PatchStateMode patchStateMode);
 
         /// <summary>
         /// Gets the bracket count.
@@ -106,7 +108,7 @@ namespace IronyModManager.Services.Common
         /// </summary>
         /// <param name="conflictResult">The conflict result.</param>
         /// <returns>IReadOnlyList&lt;System.String&gt;.</returns>
-        IReadOnlyList<string> GetIgnoredMods(IConflictResult conflictResult);
+        IReadOnlyList<IModIgnoreConfiguration> GetIgnoredMods(IConflictResult conflictResult);
 
         /// <summary>
         /// Gets the mod objects asynchronous.

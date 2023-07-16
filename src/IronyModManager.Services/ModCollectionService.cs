@@ -1,10 +1,11 @@
-﻿// ***********************************************************************
+﻿
+// ***********************************************************************
 // Assembly         : IronyModManager.Services
 // Author           : Mario
 // Created          : 03-04-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-28-2023
+// Last Modified On : 07-12-2023
 // ***********************************************************************
 // <copyright file="ModCollectionService.cs" company="Mario">
 //     Mario
@@ -17,6 +18,7 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
+using IronyModManager.DI;
 using IronyModManager.IO.Common.Models;
 using IronyModManager.IO.Common.Mods;
 using IronyModManager.IO.Common.Readers;
@@ -31,6 +33,7 @@ using IronyModManager.Storage.Common;
 
 namespace IronyModManager.Services
 {
+
     /// <summary>
     /// Class ModCollectionService.
     /// Implements the <see cref="IronyModManager.Services.ModBaseService" />
@@ -222,6 +225,7 @@ namespace IronyModManager.Services
                 collection.ModNames.ToList().ForEach(p => prefixModNames.Add(ModWriter.FormatPrefixModName(modNameOverride, p)));
                 collection.ModNames = prefixModNames;
             }
+
             // Privacy
             collection.ModPaths = null;
             return modCollectionExporter.ExportAsync(parameters);
@@ -593,7 +597,14 @@ namespace IronyModManager.Services
                         break;
 
                     case ImportType.ParadoxLauncherJson:
-                        result = await modCollectionExporter.ImportParadoxLauncherJsonAsync(parameters);
+                        try
+                        {
+                            result = await modCollectionExporter.ImportParadoxLauncherJsonAsync(parameters);
+                        }
+                        catch (Exception ex)
+                        {
+                            DIResolver.Get<ILogger>().Error(ex);
+                        }
                         break;
 
                     default:
@@ -648,6 +659,7 @@ namespace IronyModManager.Services
                     if (mods.Any())
                     {
                         var sort = importResult.ModIds.ToList();
+
                         // Filtering as local mods don't have priority in case of paradox launcher json import
                         var filteredMods = mods.GroupBy(p => p.RemoteId).Select(p => p.Any(o => o.Source != ModSource.Local) ? p.FirstOrDefault(o => o.Source != ModSource.Local) : p.FirstOrDefault());
                         var collectionMods = filteredMods.Where(p => importResult.ModIds.Any(x => (x.ParadoxId.HasValue && x.ParadoxId.GetValueOrDefault() == p.RemoteId.GetValueOrDefault()) || (x.SteamId.HasValue && x.SteamId.GetValueOrDefault() == p.RemoteId.GetValueOrDefault()))).

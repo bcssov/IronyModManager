@@ -5,7 +5,7 @@
 // Created          : 02-16-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-21-2023
+// Last Modified On : 06-26-2023
 // ***********************************************************************
 // <copyright file="Constants.cs" company="Mario">
 //     Mario
@@ -91,6 +91,10 @@ namespace IronyModManager.Parser.Common
         /// </summary>
         public const string ShaderExtension = ".shader";
 
+        /// <summary>
+        /// The store cache root rolder
+        /// </summary>
+        public const string StoreCacheRootRolder = "StoreCache";
         /// <summary>
         /// The text extension
         /// </summary>

@@ -1,10 +1,11 @@
-﻿// ***********************************************************************
+﻿
+// ***********************************************************************
 // Assembly         : IronyModManager.Models
 // Author           : Mario
 // Created          : 01-15-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 07-12-2022
+// Last Modified On : 06-28-2023
 // ***********************************************************************
 // <copyright file="DIPackage.cs" company="Mario">
 //     Mario
@@ -22,6 +23,7 @@ using SimpleInjector.Packaging;
 
 namespace IronyModManager.Models
 {
+
     /// <summary>
     /// Class DIPackage.
     /// Implements the <see cref="SimpleInjector.Packaging.IPackage" />
@@ -30,6 +32,7 @@ namespace IronyModManager.Models
     [ExcludeFromCoverage("Should not test external DI.")]
     public class DIPackage : IPackage
     {
+
         #region Methods
 
         /// <summary>
@@ -62,6 +65,7 @@ namespace IronyModManager.Models
             container.RegisterModel<IPromptNotifications, PromptNotifications>();
             container.RegisterModel<IValidateResult, ValidateResult>();
             container.Register<IModCollectionSourceInfo, ModCollectionSourceInfo>();
+            container.RegisterModel<IModIgnoreConfiguration, ModIgnoreConfiguration>();
         }
 
         #endregion Methods

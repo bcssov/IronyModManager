@@ -1,10 +1,11 @@
-﻿// ***********************************************************************
+﻿
+// ***********************************************************************
 // Assembly         : IronyModManager
 // Author           : Mario
 // Created          : 06-08-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-01-2022
+// Last Modified On : 06-28-2023
 // ***********************************************************************
 // <copyright file="ConflictSolverModFilterControlViewModel.cs" company="Mario">
 //     Mario
@@ -14,16 +15,20 @@
 
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Reactive;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
+using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
 using Avalonia.Collections;
 using Avalonia.Threading;
+using DynamicData;
 using IronyModManager.Common;
 using IronyModManager.Common.ViewModels;
+using IronyModManager.DI;
 using IronyModManager.Localization.Attributes;
 using IronyModManager.Models.Common;
 using IronyModManager.Services.Common;
@@ -32,6 +37,7 @@ using ReactiveUI;
 
 namespace IronyModManager.ViewModels.Controls
 {
+
     /// <summary>
     /// Class ConflictSolverModFilterControlViewModel.
     /// Implements the <see cref="IronyModManager.Common.ViewModels.BaseViewModel" />
@@ -51,6 +57,11 @@ namespace IronyModManager.ViewModels.Controls
         /// The collection name
         /// </summary>
         private string collectionName;
+
+        /// <summary>
+        /// The count changed
+        /// </summary>
+        private IDisposable countChanged;
 
         /// <summary>
         /// The ignored paths
@@ -254,8 +265,17 @@ namespace IronyModManager.ViewModels.Controls
                 settingValues = true;
                 Mods.Clear();
                 SelectedMods.Clear();
-                Mods.AddRange(activeMods.Select(p => new Mod() { Name = p }));
-                var ignoredMods = modPatchCollectionService.GetIgnoredMods(ConflictResult).Select(p => new Mod() { Name = p }).ToList();
+                Mods.AddRange(activeMods.Select(p => new Mod() { Name = p, Count = 2 }));
+                SubscribeToCount();
+                var ignoredMods = modPatchCollectionService.GetIgnoredMods(ConflictResult).Select(p => new Mod() { Name = p.ModName, Count = p.Count }).ToList();
+                ignoredMods.ForEach(p =>
+                {
+                    var idx = Mods.IndexOf(p);
+                    if (idx != -1)
+                    {
+                        Mods[idx].Count = p.Count;
+                    }
+                });
                 var selectedMods = Mods.ToList().Except(ignoredMods);
                 SelectedMods.AddRange(selectedMods);
                 shouldToggleGameMods = false;
@@ -285,7 +305,13 @@ namespace IronyModManager.ViewModels.Controls
                 await Dispatcher.UIThread.SafeInvokeAsync(async () =>
                 {
                     var mods = Mods.Except(SelectedMods).ToList();
-                    modPatchCollectionService.AddModsToIgnoreList(ConflictResult, mods.Select(p => p.Name).ToList());
+                    modPatchCollectionService.AddModsToIgnoreList(ConflictResult, mods.Select(p =>
+                    {
+                        var model = DIResolver.Get<IModIgnoreConfiguration>();
+                        model.Count = p.Count;
+                        model.ModName = p.Name;
+                        return model;
+                    }).ToList());
                     if (shouldToggleGameMods)
                     {
                         modPatchCollectionService.ToggleIgnoreGameMods(ConflictResult);
@@ -301,10 +327,7 @@ namespace IronyModManager.ViewModels.Controls
                         modPatchCollectionService.ToggleShowResetConflicts(ConflictResult);
                         shouldToggleShowResetConflicts = false;
                     }
-                    if (previousIgnoredPath == null)
-                    {
-                        previousIgnoredPath = string.Empty;
-                    }
+                    previousIgnoredPath ??= string.Empty;
                     if (previousIgnoredPath.Equals(ConflictResult.IgnoredPaths ?? string.Empty))
                     {
                         return;
@@ -326,30 +349,9 @@ namespace IronyModManager.ViewModels.Controls
         /// <param name="disposables">The disposables.</param>
         protected override void OnActivated(CompositeDisposable disposables)
         {
-            async Task saveState()
-            {
-                if (syncingToken != null)
-                {
-                    syncingToken.Cancel();
-                }
-                syncingToken = new CancellationTokenSource();
-                if (shouldToggleGameMods)
-                {
-                    previousIgnoreGameMods = IgnoreGameMods;
-                }
-                if (shouldToggleSelfConflicts)
-                {
-                    previousShowSelfConflicts = ShowSelfConflicts;
-                }
-                if (shouldToggleShowResetConflicts)
-                {
-                    previousShowResetConflicts = ShowResetConflicts;
-                }
-                await IgnoreModsAsync(syncingToken.Token).ConfigureAwait(false);
-            }
-
             Mods = new AvaloniaList<Mod>();
             SelectedMods = new AvaloniaList<Mod>();
+            SubscribeToCount();
 
             CloseCommand = ReactiveCommand.Create(() =>
             {
@@ -365,7 +367,7 @@ namespace IronyModManager.ViewModels.Controls
             {
                 if (!settingValues)
                 {
-                    saveState().ConfigureAwait(false);
+                    SaveStateAsync().ConfigureAwait(false);
                 }
             };
 
@@ -374,7 +376,7 @@ namespace IronyModManager.ViewModels.Controls
                 if (!settingValues && previousIgnoreGameMods != IgnoreGameMods)
                 {
                     shouldToggleGameMods = true;
-                    saveState().ConfigureAwait(false);
+                    SaveStateAsync().ConfigureAwait(false);
                 }
             }).DisposeWith(disposables);
 
@@ -383,7 +385,7 @@ namespace IronyModManager.ViewModels.Controls
                 if (!settingValues && previousShowSelfConflicts != ShowSelfConflicts)
                 {
                     shouldToggleSelfConflicts = true;
-                    saveState().ConfigureAwait(false);
+                    SaveStateAsync().ConfigureAwait(false);
                 }
             }).DisposeWith(disposables);
 
@@ -392,11 +394,52 @@ namespace IronyModManager.ViewModels.Controls
                 if (!settingValues && previousShowResetConflicts != ShowResetConflicts)
                 {
                     shouldToggleShowResetConflicts = true;
-                    saveState().ConfigureAwait(false);
+                    SaveStateAsync().ConfigureAwait(false);
                 }
             }).DisposeWith(disposables);
 
             base.OnActivated(disposables);
+        }
+
+        /// <summary>
+        /// Save state as an asynchronous operation.
+        /// </summary>
+        /// <returns>A Task representing the asynchronous operation.</returns>
+        protected async Task SaveStateAsync()
+        {
+            syncingToken?.Cancel();
+            syncingToken = new CancellationTokenSource();
+            if (shouldToggleGameMods)
+            {
+                previousIgnoreGameMods = IgnoreGameMods;
+            }
+            if (shouldToggleSelfConflicts)
+            {
+                previousShowSelfConflicts = ShowSelfConflicts;
+            }
+            if (shouldToggleShowResetConflicts)
+            {
+                previousShowResetConflicts = ShowResetConflicts;
+            }
+            await IgnoreModsAsync(syncingToken.Token).ConfigureAwait(false);
+        }
+
+        /// <summary>
+        /// Subscribes to count.
+        /// </summary>
+        protected virtual void SubscribeToCount()
+        {
+            countChanged?.Dispose();
+            countChanged = null;
+            var sourceList = Mods.ToSourceList();
+
+            countChanged = sourceList.Connect().WhenPropertyChanged(p => p.Count).Subscribe(s =>
+            {
+                if (!settingValues && !SelectedMods.Contains(s.Sender))
+                {
+                    SaveStateAsync().ConfigureAwait(false);
+                }
+            }).DisposeWith(Disposables);
         }
 
         #endregion Methods
@@ -406,15 +449,44 @@ namespace IronyModManager.ViewModels.Controls
         /// <summary>
         /// Class Mods.
         /// </summary>
-        public class Mod
+        public class Mod : INotifyPropertyChanged
         {
+            #region Fields
+
+            /// <summary>
+            /// The count
+            /// </summary>
+            private int count;
+
+            /// <summary>
+            /// The name
+            /// </summary>
+            private string name;
+
+            #endregion Fields
+
+            #region Events
+
+            /// <summary>
+            /// Occurs when a property value changes.
+            /// </summary>
+            public event PropertyChangedEventHandler PropertyChanged;
+
+            #endregion Events
+
             #region Properties
+
+            /// <summary>
+            /// Gets or sets the count.
+            /// </summary>
+            /// <value>The count.</value>
+            public int Count { get => count; set => SetValue(ref count, value, nameof(Count)); }
 
             /// <summary>
             /// Gets or sets the name.
             /// </summary>
             /// <value>The name.</value>
-            public string Name { get; set; }
+            public string Name { get => name; set => SetValue(ref name, value, nameof(Name)); }
 
             #endregion Properties
 
@@ -443,6 +515,23 @@ namespace IronyModManager.ViewModels.Controls
             public override int GetHashCode()
             {
                 return Name.GetHashCode();
+            }
+
+            /// <summary>
+            /// Sets the value.
+            /// </summary>
+            /// <typeparam name="T"></typeparam>
+            /// <param name="backingField">The backing field.</param>
+            /// <param name="value">The value.</param>
+            /// <param name="propName">Name of the property.</param>
+            private void SetValue<T>(ref T backingField, T value, [CallerMemberName] string propName = Shared.Constants.EmptyParam)
+            {
+                if (EqualityComparer<T>.Default.Equals(backingField, value))
+                {
+                    return;
+                }
+                backingField = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propName));
             }
 
             #endregion Methods

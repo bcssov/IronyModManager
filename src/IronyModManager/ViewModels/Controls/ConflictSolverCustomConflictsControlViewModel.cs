@@ -1,10 +1,11 @@
-﻿// ***********************************************************************
+﻿
+// ***********************************************************************
 // Assembly         : IronyModManager
 // Author           : Mario
 // Created          : 07-28-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 07-22-2022
+// Last Modified On : 06-25-2023
 // ***********************************************************************
 // <copyright file="ConflictSolverCustomConflictsControlViewModel.cs" company="Mario">
 //     Mario
@@ -17,6 +18,7 @@ using System.Linq;
 using System.Reactive;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
+using System.Threading.Tasks;
 using AvaloniaEdit.Document;
 using IronyModManager.Common.ViewModels;
 using IronyModManager.DI;
@@ -32,6 +34,7 @@ using ReactiveUI;
 
 namespace IronyModManager.ViewModels.Controls
 {
+
     /// <summary>
     /// Class ConflictSolverCustomConflictsControlViewModel.
     /// Implements the <see cref="IronyModManager.Common.ViewModels.BaseViewModel" />
@@ -306,13 +309,14 @@ namespace IronyModManager.ViewModels.Controls
         /// <summary>
         /// Evals the conditions.
         /// </summary>
-        protected virtual void EvalConditions()
+        /// <returns>A Task representing the asynchronous operation.</returns>
+        protected virtual async Task EvalConditionsAsync()
         {
             var code = CurrentEditText ?? string.Empty;
             var path = Path ?? string.Empty;
             var extension = System.IO.Path.GetExtension(path.StandardizeDirectorySeparator());
             AllowSave = !string.IsNullOrWhiteSpace(code) && !string.IsNullOrWhiteSpace(path) && !string.IsNullOrWhiteSpace(extension);
-            AllowLoad = ConflictResult.CustomConflicts.GetByFile(path.StandardizeDirectorySeparator()).Any();
+            AllowLoad = (await ConflictResult.CustomConflicts.GetByFileAsync(path.StandardizeDirectorySeparator())).Any();
             EditingYaml = path.StartsWith(Shared.Constants.LocalizationDirectory, StringComparison.OrdinalIgnoreCase);
         }
 
@@ -340,14 +344,14 @@ namespace IronyModManager.ViewModels.Controls
             var saveEnabled = this.WhenAnyValue(v => v.AllowSave, v => v == true);
             var loadEnabled = this.WhenAnyValue(v => v.AllowLoad, v => v == true);
 
-            this.WhenAnyValue(v => v.Path).Subscribe(s =>
+            this.WhenAnyValue(v => v.Path).Subscribe(async s =>
             {
-                EvalConditions();
+                await EvalConditionsAsync();
             }).DisposeWith(disposables);
 
-            this.WhenAnyValue(v => v.CurrentEditText).Subscribe(s =>
+            this.WhenAnyValue(v => v.CurrentEditText).Subscribe(async s =>
             {
-                EvalConditions();
+                await EvalConditionsAsync();
             }).DisposeWith(disposables);
 
             CloseCommand = ReactiveCommand.Create(() =>
@@ -364,13 +368,13 @@ namespace IronyModManager.ViewModels.Controls
             SaveCommand = ReactiveCommand.CreateFromTask(async () =>
             {
                 var definition = InitDefinition();
-                if (ConflictResult.CustomConflicts.GetByFile(Path.StandardizeDirectorySeparator()).Any())
+                if ((await ConflictResult.CustomConflicts.GetByFileAsync(Path.StandardizeDirectorySeparator())).Any())
                 {
                     await modPatchCollectionService.ResetCustomConflictAsync(ConflictResult, definition.TypeAndId, CollectionName);
                 }
                 if (await modPatchCollectionService.AddCustomModPatchAsync(ConflictResult, definition, CollectionName))
                 {
-                    if (!promptShown && ConflictResult.AllConflicts.GetByFile(definition.FileCI).Any())
+                    if (!promptShown && (await ConflictResult.AllConflicts.ExistsByFileAsync(definition.FileCI)))
                     {
                         promptShown = true;
                         var title = localizationManager.GetResource(LocalizationResources.Notifications.CustomPatchRerunConflictSolver.Title);
@@ -387,7 +391,7 @@ namespace IronyModManager.ViewModels.Controls
 
             LoadCommand = ReactiveCommand.CreateFromTask(async () =>
             {
-                var definition = ConflictResult.CustomConflicts.GetByFile(Path.StandardizeDirectorySeparator()).FirstOrDefault();
+                var definition = (await ConflictResult.CustomConflicts.GetByFileAsync(Path.StandardizeDirectorySeparator())).FirstOrDefault();
                 if (definition != null)
                 {
                     var code = await modPatchCollectionService.LoadDefinitionContentsAsync(definition, CollectionName);

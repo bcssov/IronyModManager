@@ -1,10 +1,11 @@
-﻿// ***********************************************************************
+﻿
+// ***********************************************************************
 // Assembly         : IronyModManager.Shared
 // Author           : Mario
 // Created          : 07-24-2022
 //
 // Last Modified By : Mario
-// Last Modified On : 10-28-2022
+// Last Modified On : 06-26-2023
 // ***********************************************************************
 // <copyright file="DomainConfigurationOptions.cs" company="Mario">
 //     Mario
@@ -17,12 +18,41 @@ using System.Linq;
 
 namespace IronyModManager.Shared.Configuration
 {
+
+    /// <summary>
+    /// Class ConflictSolver.
+    /// </summary>
+    public class ConflictSolver
+    {
+        #region Properties
+
+        /// <summary>
+        /// Gets or sets a value indicating whether [use disk search].
+        /// </summary>
+        /// <value><c>true</c> if [use disk search]; otherwise, <c>false</c>.</value>
+        public bool UseDiskSearch { get; set; }
+
+        /// <summary>
+        /// Gets or sets the use sub menus.
+        /// </summary>
+        /// <value>The use sub menus.</value>
+        public bool UseHybridMemory { get; set; }
+
+        #endregion Properties
+    }
+
     /// <summary>
     /// Class DomainConfigurationOptions.
     /// </summary>
     public class DomainConfigurationOptions
     {
         #region Properties
+
+        /// <summary>
+        /// Gets the conflict solver.
+        /// </summary>
+        /// <value>The conflict solver.</value>
+        public ConflictSolver ConflictSolver { get; } = new ConflictSolver();
 
         /// <summary>
         /// Gets the formatting.

@@ -1,10 +1,11 @@
-﻿// ***********************************************************************
+﻿
+// ***********************************************************************
 // Assembly         : IronyModManager
 // Author           : Mario
 // Created          : 01-10-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 11-21-2022
+// Last Modified On : 06-23-2023
 // ***********************************************************************
 // <copyright file="MainWindowViewModel.cs" company="Mario">
 //     Mario
@@ -28,6 +29,7 @@ using ReactiveUI;
 
 namespace IronyModManager.ViewModels
 {
+
     /// <summary>
     /// Class MainWindowViewModel.
     /// Implements the <see cref="IronyModManager.Common.ViewModels.BaseViewModel" />
@@ -229,7 +231,11 @@ namespace IronyModManager.ViewModels
         protected async Task FreeMemoryAsync()
         {
             GC.Collect(GC.MaxGeneration, GCCollectionMode.Aggressive, true, true);
+            GC.WaitForPendingFinalizers();
+            GC.Collect(GC.MaxGeneration, GCCollectionMode.Aggressive, true, true);
             await Task.Delay(1000);
+            GC.Collect(GC.MaxGeneration, GCCollectionMode.Aggressive, true, true);
+            GC.WaitForPendingFinalizers();
             GC.Collect(GC.MaxGeneration, GCCollectionMode.Aggressive, true, true);
         }
 
@@ -255,25 +261,26 @@ namespace IronyModManager.ViewModels
             BindOverlay();
 
             ReactiveUI.MessageBus.Current.Listen<NavigationEventArgs>()
-                .Subscribe(s =>
+                .Subscribe(async s =>
                 {
                     ReactiveUI.MessageBus.Current.SendMessage(new ForceClosePopulsEventArgs());
                     state = s.State;
                     switch (s.State)
                     {
                         case NavigationState.ReadOnlyConflictSolver:
+
                         case NavigationState.ConflictSolver:
                             ConflictSolver.SelectedModCollection = s.SelectedCollection;
                             ConflictSolver.SelectedModsOrder = s.SelectedMods;
                             ConflictSolver.Conflicts = s.Results;
-                            ConflictSolver.Initialize(s.State == NavigationState.ReadOnlyConflictSolver);
-                            AnimateTransitionAsync(false).ConfigureAwait(true);
+                            await ConflictSolver.InitializeAsync(s.State == NavigationState.ReadOnlyConflictSolver).ConfigureAwait(true);
+                            await AnimateTransitionAsync(false).ConfigureAwait(true);
                             break;
 
                         default:
-                            AnimateTransitionAsync(true).ConfigureAwait(true);
+                            await AnimateTransitionAsync(true).ConfigureAwait(true);
                             Main.Reset();
-                            FreeMemoryAsync().ConfigureAwait(true);
+                            await Task.Run(() => FreeMemoryAsync().ConfigureAwait(true));
                             break;
                     }
                 }).DisposeWith(disposables);

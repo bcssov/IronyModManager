@@ -142,10 +142,7 @@ namespace IronyModManager.IO.Mods.Models
         /// </summary>
         private void InitConflictHistoryIndex()
         {
-            if (indexedConflictHistory == null)
-            {
-                indexedConflictHistory = new Dictionary<string, IEnumerable<IDefinition>>();
-            }
+            indexedConflictHistory ??= new Dictionary<string, IEnumerable<IDefinition>>();
             if (conflictHistory != null && conflictHistory.Any())
             {
                 conflictHistory.ToList().ForEach(p =>

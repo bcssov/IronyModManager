@@ -1,10 +1,11 @@
-﻿// ***********************************************************************
+﻿
+// ***********************************************************************
 // Assembly         : IronyModManager.DI
 // Author           : Mario
 // Created          : 06-10-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-23-2021
+// Last Modified On : 06-25-2023
 // ***********************************************************************
 // <copyright file="MessageBus.cs" company="Mario">
 //     Mario
@@ -19,6 +20,7 @@ using IronyModManager.Shared.MessageBus;
 
 namespace IronyModManager.DI.MessageBus
 {
+
     /// <summary>
     /// Class MessageBus.
     /// Implements the <see cref="IronyModManager.Shared.MessageBus.IMessageBus" />
@@ -31,12 +33,12 @@ namespace IronyModManager.DI.MessageBus
         /// <summary>
         /// The message bus
         /// </summary>
-        private readonly SlimMessageBus.IMessageBus messageBus;
+        private SlimMessageBus.IMessageBus messageBus;
 
         /// <summary>
         /// The registered types
         /// </summary>
-        private readonly HashSet<Type> registeredTypes;
+        private HashSet<Type> registeredTypes;
 
         #endregion Fields
 
@@ -50,6 +52,7 @@ namespace IronyModManager.DI.MessageBus
         public MessageBus(SlimMessageBus.IMessageBus messageBus, HashSet<Type> registeredTypes)
         {
             this.messageBus = messageBus;
+
             // For crying out loud this is something that SlimMessageBus should handle internally
             this.registeredTypes = registeredTypes;
         }
@@ -63,7 +66,8 @@ namespace IronyModManager.DI.MessageBus
         /// </summary>
         public void Dispose()
         {
-            messageBus?.Dispose();
+            messageBus = null;
+            registeredTypes = null;
         }
 
         /// <summary>

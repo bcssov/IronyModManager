@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              xmlns:converter="clr-namespace:IronyModManager.Converters;assembly=IronyModManager"
+             xmlns:controls="clr-namespace:IronyModManager.Controls;assembly=IronyModManager"
              x:Class="IronyModManager.Views.Controls.ConflictSolverModFilterControlView">
     <UserControl.Resources>
         <converter:TextTypeFontFamilyConverter x:Key="TextTypeFontFamilyConverter" />
@@ -21,8 +22,12 @@
                              Height="400" Width="500" Grid.Row="0" x:Name="modList">
                         <ListBox.ItemTemplate>
                             <DataTemplate>
-                                <TextBlock Text="{Binding Name}" TextWrapping="Wrap"
-                                           FontFamily="{Binding Name, Converter={StaticResource TextTypeFontFamilyConverter}}"></TextBlock>
+                                <Grid ColumnDefinitions="*,60">
+                                    <TextBlock Text="{Binding Name}" TextWrapping="Wrap"
+                                               FontFamily="{Binding Name, Converter={StaticResource TextTypeFontFamilyConverter}}" Grid.Column="0"></TextBlock>
+                                    <controls:MinMaxNumericUpDown Value="{Binding Count}" ClipValueToMinMax="True" MinMaxShowButtonSpinner="False" ShowButtonSpinner="False"
+                                                                  Grid.Column="1" Minimum="2"></controls:MinMaxNumericUpDown>
+                                </Grid>
                             </DataTemplate>
                         </ListBox.ItemTemplate>
                     </ListBox>
