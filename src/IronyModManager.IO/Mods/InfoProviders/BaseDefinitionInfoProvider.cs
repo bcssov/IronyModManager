@@ -1,10 +1,11 @@
-﻿// ***********************************************************************
+﻿
+// ***********************************************************************
 // Assembly         : IronyModManager.IO
 // Author           : Mario
 // Created          : 04-04-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 11-14-2022
+// Last Modified On : 07-22-2023
 // ***********************************************************************
 // <copyright file="BaseDefinitionInfoProvider.cs" company="Mario">
 //     Mario
@@ -23,6 +24,7 @@ using ValueType = IronyModManager.Shared.Models.ValueType;
 
 namespace IronyModManager.IO.Mods.InfoProviders
 {
+
     /// <summary>
     /// Class BaseDefinitionInfoProvider.
     /// Implements the <see cref="IronyModManager.IO.Common.Mods.IDefinitionInfoProvider" />
@@ -160,7 +162,7 @@ namespace IronyModManager.IO.Mods.InfoProviders
             if (isFIOS)
             {
                 fileNames = fileNames.OrderBy(p => p, StringComparer.Ordinal).ToList();
-                var characterPrefix = Path.GetFileName(fileNames.FirstOrDefault()).First();
+                var characterPrefix = Path.GetFileName(fileNames.FirstOrDefault()).ToCharArray().OrderBy(p => (int)p).First();
                 string newFileName = proposedFilename;
                 while (definition.GeneratedFileNames.Any(f => f.Equals(fileNames.FirstOrDefault())))
                 {
@@ -178,7 +180,7 @@ namespace IronyModManager.IO.Mods.InfoProviders
             else
             {
                 fileNames = fileNames.OrderByDescending(p => p, StringComparer.Ordinal).ToList();
-                var characterPrefix = Path.GetFileName(fileNames.FirstOrDefault()).First();
+                var characterPrefix = Path.GetFileName(fileNames.FirstOrDefault()).ToCharArray().OrderByDescending(p => (int)p).First();
                 string newFileName = proposedFilename;
                 while (definition.GeneratedFileNames.Any(f => f.Equals(fileNames.FirstOrDefault())))
                 {
