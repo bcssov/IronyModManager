@@ -21,7 +21,7 @@
     <MicrosoftExtensionsConfigurationJson>[7.0.0]</MicrosoftExtensionsConfigurationJson>
     <MaterialAvalonia>[2.5.1]</MaterialAvalonia>
     <MessageBoxAvalonia>[2.1.0]</MessageBoxAvalonia>
-    <Avalonia>[0.10.21]</Avalonia>
+    <Avalonia>[0.10.22]</Avalonia>
     <AvaloniaEdit>[0.10.12.2]</AvaloniaEdit>
     <Jot>[2.1.16]</Jot>
 	<!-- 2.5.0 version breaks tests  -->
