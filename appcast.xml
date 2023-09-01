@@ -4,76 +4,76 @@
 		<title>Irony Mod Manager</title>
 		<language>en</language>
 		<item>
-			<title>1.25.115</title>
+			<title>1.25.117</title>
 			<description>## Note
 * Despite small change log this is a significant update due to core changes in memory usage.
-* Collections made with 1.25 are not backwards compatibile with older versions due to new mod filter behavior. You do not lose any resolution data, but you do lose mod filter settings.
+* Collections made with 1.25 are not backwards compatible  with older versions due to new mod filter behavior. You do not lose any resolution data, but you do lose mod filter settings.
 
 ## Current Release Notes
-* Increase LiteDB max key index length
-* Fix handling of some CJK characters with FIOS\LIOS name generation
+* Increase LiteDB max key index length (again)
+* Bump avalonia
 
 ## Release Notes 1.25
 * Optimize memory usage in Conflict Solver
 * Add option to use hybrid memory in Conflict Solver (appSettings)
 * Update dependencies
 * Mod filter changed to allow exclusion of mods from conflict list (provided only x number of mods cause a conflict)</description>
-			<pubDate>Mon, 24 Jul 2023 05:06:49 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.25.115/linux-x64.zip" sparkle:version="1.25.115.32169" sparkle:shortVersionString="1.25.115" length="90601148" sparkle:os="linux" type="application/zip" sparkle:signature="xzjbZmm5EdkHTx1QxO6i6/qw7C2aiahoSP4w01N7oF1Uk33Vpiu/zGyNt3oIrQWPWssfxSKJimhvkeUSIcbHBg=="/>
+			<pubDate>Fri, 01 Sep 2023 21:25:32 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.25.117/linux-x64.zip" sparkle:version="1.25.117.35825" sparkle:shortVersionString="1.25.117" length="90599909" sparkle:os="linux" type="application/zip" sparkle:signature="a8r/UAz9zzBRB9wajyjidj1vrgUaT46NPioO3w0MAdHw8KxT94U0/BSXQ8W2fRueRq+lnDo+Yt1MWxOgJbWMBg=="/>
 		</item>
 		<item>
-			<title>1.25.115</title>
+			<title>1.25.117</title>
 			<description>## Note
 * Despite small change log this is a significant update due to core changes in memory usage.
-* Collections made with 1.25 are not backwards compatibile with older versions due to new mod filter behavior. You do not lose any resolution data, but you do lose mod filter settings.
+* Collections made with 1.25 are not backwards compatible  with older versions due to new mod filter behavior. You do not lose any resolution data, but you do lose mod filter settings.
 
 ## Current Release Notes
-* Increase LiteDB max key index length
-* Fix handling of some CJK characters with FIOS\LIOS name generation
+* Increase LiteDB max key index length (again)
+* Bump avalonia
 
 ## Release Notes 1.25
 * Optimize memory usage in Conflict Solver
 * Add option to use hybrid memory in Conflict Solver (appSettings)
 * Update dependencies
 * Mod filter changed to allow exclusion of mods from conflict list (provided only x number of mods cause a conflict)</description>
-			<pubDate>Mon, 24 Jul 2023 05:06:57 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.25.115/osx-x64.zip" sparkle:version="1.25.115.32169" sparkle:shortVersionString="1.25.115" length="93380678" sparkle:os="osx" type="application/zip" sparkle:signature="GXDT8oyGbPqJy67yNfqVX+1tlok2eeybHmrPQPXgbDIeYsfYjNNE0h+eyCuHIY9W6P9Uf3NW57dW/dheu+1yDg=="/>
+			<pubDate>Fri, 01 Sep 2023 21:25:39 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.25.117/osx-x64.zip" sparkle:version="1.25.117.35825" sparkle:shortVersionString="1.25.117" length="93384756" sparkle:os="osx" type="application/zip" sparkle:signature="jUxZNVNVaqpc4EGlgIeMhaCc+VXGWkyVQT1Tnk9P5q0kN89OhUqTtTbYFBGdHhJBpZHA5BSqkM5HjUrEnIAACw=="/>
 		</item>
 		<item>
-			<title>1.25.115</title>
+			<title>1.25.117</title>
 			<description>## Note
 * Despite small change log this is a significant update due to core changes in memory usage.
-* Collections made with 1.25 are not backwards compatibile with older versions due to new mod filter behavior. You do not lose any resolution data, but you do lose mod filter settings.
+* Collections made with 1.25 are not backwards compatible  with older versions due to new mod filter behavior. You do not lose any resolution data, but you do lose mod filter settings.
 
 ## Current Release Notes
-* Increase LiteDB max key index length
-* Fix handling of some CJK characters with FIOS\LIOS name generation
+* Increase LiteDB max key index length (again)
+* Bump avalonia
 
 ## Release Notes 1.25
 * Optimize memory usage in Conflict Solver
 * Add option to use hybrid memory in Conflict Solver (appSettings)
 * Update dependencies
 * Mod filter changed to allow exclusion of mods from conflict list (provided only x number of mods cause a conflict)</description>
-			<pubDate>Mon, 24 Jul 2023 05:07:03 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.25.115/win-x64-setup.zip" sparkle:version="1.25.115.32169" sparkle:shortVersionString="1.25.115" length="71784004" sparkle:os="windows" type="application/zip" sparkle:signature="m+G+Gg1uy3TeFBC4fHoIX3pJyg7manyhK1xLwtqMFacH3+0CHJjMHp56S4CuxxlMxnq/OWMpP83y2eRGXETVBA=="/>
+			<pubDate>Fri, 01 Sep 2023 21:25:46 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.25.117/win-x64-setup.zip" sparkle:version="1.25.117.35825" sparkle:shortVersionString="1.25.117" length="71818867" sparkle:os="windows" type="application/zip" sparkle:signature="fSbG0ruCwHiTtXXcA7JhyF3Z3aAmBiuVvzITTh15C5nZZOXCfgHHClbDN32GvrU6/QAD5RGDsA6ZjcPx4jFKDQ=="/>
 		</item>
 		<item>
-			<title>1.25.115</title>
+			<title>1.25.117</title>
 			<description>## Note
 * Despite small change log this is a significant update due to core changes in memory usage.
-* Collections made with 1.25 are not backwards compatibile with older versions due to new mod filter behavior. You do not lose any resolution data, but you do lose mod filter settings.
+* Collections made with 1.25 are not backwards compatible  with older versions due to new mod filter behavior. You do not lose any resolution data, but you do lose mod filter settings.
 
 ## Current Release Notes
-* Increase LiteDB max key index length
-* Fix handling of some CJK characters with FIOS\LIOS name generation
+* Increase LiteDB max key index length (again)
+* Bump avalonia
 
 ## Release Notes 1.25
 * Optimize memory usage in Conflict Solver
 * Add option to use hybrid memory in Conflict Solver (appSettings)
 * Update dependencies
 * Mod filter changed to allow exclusion of mods from conflict list (provided only x number of mods cause a conflict)</description>
-			<pubDate>Mon, 24 Jul 2023 05:07:04 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.25.115/win-x64.zip" sparkle:version="1.25.115.32169" sparkle:shortVersionString="1.25.115" length="105568355" sparkle:os="windows" type="application/zip" sparkle:signature="gJLmndBWLs4Lm3/VHI36KcEs1zZM0RHLw06WlXJ/gQ76bmjAX4KpFJYriLCFvwIwJsmzgZ6dReRQGJxwjvKABA=="/>
+			<pubDate>Fri, 01 Sep 2023 21:25:46 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.25.117/win-x64.zip" sparkle:version="1.25.117.35825" sparkle:shortVersionString="1.25.117" length="105538813" sparkle:os="windows" type="application/zip" sparkle:signature="NxHf9ycu7zyV3+hfXrM4NfjiB+9BXZMn449zDXcw4i4WThv0cLetg6rlzpcWGIYOIzG3eKfkoD5v4p3LbozPCQ=="/>
 		</item>
 	</channel>
 </rss>
