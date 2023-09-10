@@ -4,76 +4,72 @@
 		<title>Irony Mod Manager</title>
 		<language>en</language>
 		<item>
-			<title>1.25.117</title>
+			<title>1.25.118</title>
 			<description>## Note
 * Despite small change log this is a significant update due to core changes in memory usage.
-* Collections made with 1.25 are not backwards compatible  with older versions due to new mod filter behavior. You do not lose any resolution data, but you do lose mod filter settings.
+* Collections made with 1.25 are not backwards compatibile with older versions due to new mod filter behavior. You do not lose any resolution data, but you do lose mod filter settings.
 
 ## Current Release Notes
-* Increase LiteDB max key index length (again)
-* Bump avalonia
+* Fix empty base path GOG detection CTD
 
 ## Release Notes 1.25
 * Optimize memory usage in Conflict Solver
 * Add option to use hybrid memory in Conflict Solver (appSettings)
 * Update dependencies
 * Mod filter changed to allow exclusion of mods from conflict list (provided only x number of mods cause a conflict)</description>
-			<pubDate>Fri, 01 Sep 2023 21:25:32 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.25.117/linux-x64.zip" sparkle:version="1.25.117.35825" sparkle:shortVersionString="1.25.117" length="90599909" sparkle:os="linux" type="application/zip" sparkle:signature="a8r/UAz9zzBRB9wajyjidj1vrgUaT46NPioO3w0MAdHw8KxT94U0/BSXQ8W2fRueRq+lnDo+Yt1MWxOgJbWMBg=="/>
+			<pubDate>Sun, 10 Sep 2023 20:42:56 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.25.118/linux-x64.zip" sparkle:version="1.25.118.34698" sparkle:shortVersionString="1.25.118" length="90599944" sparkle:os="linux" type="application/zip" sparkle:signature="GlG2LAk/qgsYvIGg3gV9Eh5MGSIILHJ4ERCWnVFKSrfgZvPG8fEp1hpTNXqovhzYGWQKtoB4V+WJVE/6YJBWBA=="/>
 		</item>
 		<item>
-			<title>1.25.117</title>
+			<title>1.25.118</title>
 			<description>## Note
 * Despite small change log this is a significant update due to core changes in memory usage.
-* Collections made with 1.25 are not backwards compatible  with older versions due to new mod filter behavior. You do not lose any resolution data, but you do lose mod filter settings.
+* Collections made with 1.25 are not backwards compatibile with older versions due to new mod filter behavior. You do not lose any resolution data, but you do lose mod filter settings.
 
 ## Current Release Notes
-* Increase LiteDB max key index length (again)
-* Bump avalonia
+* Fix empty base path GOG detection CTD
 
 ## Release Notes 1.25
 * Optimize memory usage in Conflict Solver
 * Add option to use hybrid memory in Conflict Solver (appSettings)
 * Update dependencies
 * Mod filter changed to allow exclusion of mods from conflict list (provided only x number of mods cause a conflict)</description>
-			<pubDate>Fri, 01 Sep 2023 21:25:39 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.25.117/osx-x64.zip" sparkle:version="1.25.117.35825" sparkle:shortVersionString="1.25.117" length="93384756" sparkle:os="osx" type="application/zip" sparkle:signature="jUxZNVNVaqpc4EGlgIeMhaCc+VXGWkyVQT1Tnk9P5q0kN89OhUqTtTbYFBGdHhJBpZHA5BSqkM5HjUrEnIAACw=="/>
+			<pubDate>Sun, 10 Sep 2023 20:43:02 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.25.118/osx-x64.zip" sparkle:version="1.25.118.34698" sparkle:shortVersionString="1.25.118" length="93384843" sparkle:os="osx" type="application/zip" sparkle:signature="Q0bfBn+F5lSbC9O+xj7/XTsdTrKTxGItKPtJtLLsvWi5y9bVKiNf6y7Wu/wWW18wbki1FKEWDJtzhrRP6nqDDA=="/>
 		</item>
 		<item>
-			<title>1.25.117</title>
+			<title>1.25.118</title>
 			<description>## Note
 * Despite small change log this is a significant update due to core changes in memory usage.
-* Collections made with 1.25 are not backwards compatible  with older versions due to new mod filter behavior. You do not lose any resolution data, but you do lose mod filter settings.
+* Collections made with 1.25 are not backwards compatibile with older versions due to new mod filter behavior. You do not lose any resolution data, but you do lose mod filter settings.
 
 ## Current Release Notes
-* Increase LiteDB max key index length (again)
-* Bump avalonia
+* Fix empty base path GOG detection CTD
 
 ## Release Notes 1.25
 * Optimize memory usage in Conflict Solver
 * Add option to use hybrid memory in Conflict Solver (appSettings)
 * Update dependencies
 * Mod filter changed to allow exclusion of mods from conflict list (provided only x number of mods cause a conflict)</description>
-			<pubDate>Fri, 01 Sep 2023 21:25:46 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.25.117/win-x64-setup.zip" sparkle:version="1.25.117.35825" sparkle:shortVersionString="1.25.117" length="71818867" sparkle:os="windows" type="application/zip" sparkle:signature="fSbG0ruCwHiTtXXcA7JhyF3Z3aAmBiuVvzITTh15C5nZZOXCfgHHClbDN32GvrU6/QAD5RGDsA6ZjcPx4jFKDQ=="/>
+			<pubDate>Sun, 10 Sep 2023 20:43:09 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.25.118/win-x64-setup.zip" sparkle:version="1.25.118.34698" sparkle:shortVersionString="1.25.118" length="71802394" sparkle:os="windows" type="application/zip" sparkle:signature="Cro9b0WP+a8dDXon+CJAGOnqOHneO3QIWoYXu67LtXO2qMYCcLk2Pgbo5j2tCTMjt4ViE+HsRx5+TU9HYdWDAA=="/>
 		</item>
 		<item>
-			<title>1.25.117</title>
+			<title>1.25.118</title>
 			<description>## Note
 * Despite small change log this is a significant update due to core changes in memory usage.
-* Collections made with 1.25 are not backwards compatible  with older versions due to new mod filter behavior. You do not lose any resolution data, but you do lose mod filter settings.
+* Collections made with 1.25 are not backwards compatibile with older versions due to new mod filter behavior. You do not lose any resolution data, but you do lose mod filter settings.
 
 ## Current Release Notes
-* Increase LiteDB max key index length (again)
-* Bump avalonia
+* Fix empty base path GOG detection CTD
 
 ## Release Notes 1.25
 * Optimize memory usage in Conflict Solver
 * Add option to use hybrid memory in Conflict Solver (appSettings)
 * Update dependencies
 * Mod filter changed to allow exclusion of mods from conflict list (provided only x number of mods cause a conflict)</description>
-			<pubDate>Fri, 01 Sep 2023 21:25:46 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.25.117/win-x64.zip" sparkle:version="1.25.117.35825" sparkle:shortVersionString="1.25.117" length="105538813" sparkle:os="windows" type="application/zip" sparkle:signature="NxHf9ycu7zyV3+hfXrM4NfjiB+9BXZMn449zDXcw4i4WThv0cLetg6rlzpcWGIYOIzG3eKfkoD5v4p3LbozPCQ=="/>
+			<pubDate>Sun, 10 Sep 2023 20:43:09 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.25.118/win-x64.zip" sparkle:version="1.25.118.34698" sparkle:shortVersionString="1.25.118" length="105538942" sparkle:os="windows" type="application/zip" sparkle:signature="CqQ1PZreqEEr+8FPJWnzYIKaYf6O+RfObfaN9+axF4qLcSl+OgpDS+XkV2CXKwD36GlDf30xKXRw94R0dC3QCw=="/>
 		</item>
 	</channel>
 </rss>
