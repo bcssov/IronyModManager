@@ -62,14 +62,15 @@ namespace IronyModManager.Parser
             });
             container.Collection.Register(typeof(IGenericParser), new List<Type>()
             {
-                 typeof(BinaryParser), typeof(DefinesParser), typeof(GraphicsParser),
+                 typeof(BinaryParser), typeof(Generic.DefinesParser), typeof(GraphicsParser),
                  typeof(Generic.KeyParser), typeof(LocalizationParser), typeof(Generic.WholeTextParser)
             });
             container.Collection.Register(typeof(IGameParser), new List<Type>
             {
                 typeof(FlagsParser), typeof(SolarSystemInitializersParser), typeof(Games.Stellaris.WholeTextParser),
                 typeof(OverwrittenParser), typeof(ScriptedVariablesParser), typeof(OverwrittenObjectSingleFileParser),
-                typeof(KeyValuePairParser), typeof(Games.HOI4.WholeTextParser), typeof(InnerLayerParser), typeof(Games.HOI4.KeyParser)
+                typeof(KeyValuePairParser), typeof(Games.HOI4.WholeTextParser), typeof(InnerLayerParser), typeof(Games.HOI4.KeyParser),
+                typeof(Games.Stellaris.DefinesParser)
             });
             container.Register<IParserManager, ParserManager>();
             container.Register<IModObject, ModObject>();

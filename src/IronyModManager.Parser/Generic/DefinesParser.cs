@@ -5,7 +5,7 @@
 // Created          : 02-21-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-21-2023
+// Last Modified On : 09-12-2023
 // ***********************************************************************
 // <copyright file="DefinesParser.cs" company="Mario">
 //     Mario
@@ -80,7 +80,7 @@ namespace IronyModManager.Parser.Generic
         /// Gets the priority.
         /// </summary>
         /// <value>The priority.</value>
-        public int Priority => 1;
+        public virtual int Priority => 1;
 
         #endregion Properties
 

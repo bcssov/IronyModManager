@@ -236,6 +236,9 @@
         "DirectoryPath": "common\\inline_scripts\\deposits",
         "PreferredParser": "StellarisWholeTextParser"
     }, {
+        "DirectoryPath": "common\\inline_scripts\\districts",
+        "PreferredParser": "StellarisWholeTextParser"
+    }, {
         "DirectoryPath": "common\\inline_scripts\\enclaves",
         "PreferredParser": "StellarisWholeTextParser"
     }, {
@@ -838,5 +841,8 @@
     }, {
         "DirectoryPath": "tweakergui_assets\\interface",
         "PreferredParser": "GenericGraphicsParser"
+    }, {
+        "DirectoryPath": "unchecked_defines",
+        "PreferredParser": "StellarisDefinesParser"
     }
 ]
