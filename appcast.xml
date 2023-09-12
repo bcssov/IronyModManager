@@ -4,72 +4,72 @@
 		<title>Irony Mod Manager</title>
 		<language>en</language>
 		<item>
-			<title>1.25.118</title>
+			<title>1.25.120</title>
 			<description>## Note
 * Despite small change log this is a significant update due to core changes in memory usage.
 * Collections made with 1.25 are not backwards compatibile with older versions due to new mod filter behavior. You do not lose any resolution data, but you do lose mod filter settings.
 
 ## Current Release Notes
-* Fix empty base path GOG detection CTD
+* Stellaris 3.9 support
 
 ## Release Notes 1.25
 * Optimize memory usage in Conflict Solver
 * Add option to use hybrid memory in Conflict Solver (appSettings)
 * Update dependencies
 * Mod filter changed to allow exclusion of mods from conflict list (provided only x number of mods cause a conflict)</description>
-			<pubDate>Sun, 10 Sep 2023 20:42:56 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.25.118/linux-x64.zip" sparkle:version="1.25.118.34698" sparkle:shortVersionString="1.25.118" length="90599944" sparkle:os="linux" type="application/zip" sparkle:signature="GlG2LAk/qgsYvIGg3gV9Eh5MGSIILHJ4ERCWnVFKSrfgZvPG8fEp1hpTNXqovhzYGWQKtoB4V+WJVE/6YJBWBA=="/>
+			<pubDate>Tue, 12 Sep 2023 18:42:55 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.25.120/linux-x64.zip" sparkle:version="1.25.120.61304" sparkle:shortVersionString="1.25.120" length="90600168" sparkle:os="linux" type="application/zip" sparkle:signature="MBnR+EsLy8wFNZJv/ZjYTLnPHNBWxvrMOzxjI7mGDjLRmYBSNKqwXGAr93gZaS34sLOzV06zdFxF6qG7Q4drBw=="/>
 		</item>
 		<item>
-			<title>1.25.118</title>
+			<title>1.25.120</title>
 			<description>## Note
 * Despite small change log this is a significant update due to core changes in memory usage.
 * Collections made with 1.25 are not backwards compatibile with older versions due to new mod filter behavior. You do not lose any resolution data, but you do lose mod filter settings.
 
 ## Current Release Notes
-* Fix empty base path GOG detection CTD
+* Stellaris 3.9 support
 
 ## Release Notes 1.25
 * Optimize memory usage in Conflict Solver
 * Add option to use hybrid memory in Conflict Solver (appSettings)
 * Update dependencies
 * Mod filter changed to allow exclusion of mods from conflict list (provided only x number of mods cause a conflict)</description>
-			<pubDate>Sun, 10 Sep 2023 20:43:02 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.25.118/osx-x64.zip" sparkle:version="1.25.118.34698" sparkle:shortVersionString="1.25.118" length="93384843" sparkle:os="osx" type="application/zip" sparkle:signature="Q0bfBn+F5lSbC9O+xj7/XTsdTrKTxGItKPtJtLLsvWi5y9bVKiNf6y7Wu/wWW18wbki1FKEWDJtzhrRP6nqDDA=="/>
+			<pubDate>Tue, 12 Sep 2023 18:43:01 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.25.120/osx-x64.zip" sparkle:version="1.25.120.61304" sparkle:shortVersionString="1.25.120" length="93385012" sparkle:os="osx" type="application/zip" sparkle:signature="CtVZf+iGv3sHkfb9eTuDLpTIbvZIBNhOUuVgBj8WiunmKU7MZIznEO/LFtTGGj2RSQfEYWy05+c8gvi0DuAyDA=="/>
 		</item>
 		<item>
-			<title>1.25.118</title>
+			<title>1.25.120</title>
 			<description>## Note
 * Despite small change log this is a significant update due to core changes in memory usage.
 * Collections made with 1.25 are not backwards compatibile with older versions due to new mod filter behavior. You do not lose any resolution data, but you do lose mod filter settings.
 
 ## Current Release Notes
-* Fix empty base path GOG detection CTD
+* Stellaris 3.9 support
 
 ## Release Notes 1.25
 * Optimize memory usage in Conflict Solver
 * Add option to use hybrid memory in Conflict Solver (appSettings)
 * Update dependencies
 * Mod filter changed to allow exclusion of mods from conflict list (provided only x number of mods cause a conflict)</description>
-			<pubDate>Sun, 10 Sep 2023 20:43:09 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.25.118/win-x64-setup.zip" sparkle:version="1.25.118.34698" sparkle:shortVersionString="1.25.118" length="71802394" sparkle:os="windows" type="application/zip" sparkle:signature="Cro9b0WP+a8dDXon+CJAGOnqOHneO3QIWoYXu67LtXO2qMYCcLk2Pgbo5j2tCTMjt4ViE+HsRx5+TU9HYdWDAA=="/>
+			<pubDate>Tue, 12 Sep 2023 18:43:06 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.25.120/win-x64-setup.zip" sparkle:version="1.25.120.61304" sparkle:shortVersionString="1.25.120" length="71801295" sparkle:os="windows" type="application/zip" sparkle:signature="qGWx4+rtB7K2TwWBBIzlpqrvh5gM/9iO2aQRe9FsK5HhkJzTooZvkUOJkz1kClMR+bvpaT4qxq9vv8Sj30tpBQ=="/>
 		</item>
 		<item>
-			<title>1.25.118</title>
+			<title>1.25.120</title>
 			<description>## Note
 * Despite small change log this is a significant update due to core changes in memory usage.
 * Collections made with 1.25 are not backwards compatibile with older versions due to new mod filter behavior. You do not lose any resolution data, but you do lose mod filter settings.
 
 ## Current Release Notes
-* Fix empty base path GOG detection CTD
+* Stellaris 3.9 support
 
 ## Release Notes 1.25
 * Optimize memory usage in Conflict Solver
 * Add option to use hybrid memory in Conflict Solver (appSettings)
 * Update dependencies
 * Mod filter changed to allow exclusion of mods from conflict list (provided only x number of mods cause a conflict)</description>
-			<pubDate>Sun, 10 Sep 2023 20:43:09 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.25.118/win-x64.zip" sparkle:version="1.25.118.34698" sparkle:shortVersionString="1.25.118" length="105538942" sparkle:os="windows" type="application/zip" sparkle:signature="CqQ1PZreqEEr+8FPJWnzYIKaYf6O+RfObfaN9+axF4qLcSl+OgpDS+XkV2CXKwD36GlDf30xKXRw94R0dC3QCw=="/>
+			<pubDate>Tue, 12 Sep 2023 18:43:07 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.25.120/win-x64.zip" sparkle:version="1.25.120.61304" sparkle:shortVersionString="1.25.120" length="105539081" sparkle:os="windows" type="application/zip" sparkle:signature="DlKckMwPxYc9nsxQuB8uYIsRGRlm2jbscWGuUBIrOgwsUkpkGe9tWgmV6hf7gY/NH9evHn7gBZJPVyBxNm7pCg=="/>
 		</item>
 	</channel>
 </rss>
