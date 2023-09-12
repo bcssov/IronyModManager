@@ -5,7 +5,7 @@
 // Created          : 07-15-2022
 //
 // Last Modified By : Mario
-// Last Modified On : 05-26-2023
+// Last Modified On : 09-10-2023
 // ***********************************************************************
 // <copyright file="GogDirectory.cs" company="Mario">
 //     Mario
@@ -64,7 +64,7 @@ namespace IronyModManager.Services.Registrations
                 var game = games.FirstOrDefault(p => p.Id == appId.GetValueOrDefault());
                 if (game != null)
                 {
-                    return game.Path;
+                    return game.Path ?? string.Empty;
                 }
             }
             return string.Empty;

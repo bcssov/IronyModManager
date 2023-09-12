@@ -5,7 +5,7 @@
 // Created          : 02-16-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-26-2023
+// Last Modified On : 09-12-2023
 // ***********************************************************************
 // <copyright file="Constants.cs" company="Mario">
 //     Mario
@@ -550,6 +550,10 @@ namespace IronyModManager.Parser.Common
             /// </summary>
             public const string Sound = "sound";
 
+            /// <summary>
+            /// The unchecked defines
+            /// </summary>
+            public const string UncheckedDefines = "unchecked_defines";
             /// <summary>
             /// The buildings
             /// </summary>

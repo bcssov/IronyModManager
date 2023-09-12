@@ -5,7 +5,7 @@
 // Created          : 02-12-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-25-2023
+// Last Modified On : 09-12-2023
 // ***********************************************************************
 // <copyright file="GameRegistration.cs" company="Mario">
 //     Mario
@@ -45,7 +45,7 @@ namespace IronyModManager.Services.Registrations
         /// <summary>
         /// The stellaris cache version
         /// </summary>
-        private const int StellarisCacheVersion = 17;
+        private const int StellarisCacheVersion = 18;
 
         /// <summary>
         /// The path resolver
@@ -143,7 +143,10 @@ namespace IronyModManager.Services.Registrations
             if (!File.Exists(path) && game.GogAppId.HasValue)
             {
                 basePath = GogDirectory.GetGameDirectory(game.GogAppId.GetValueOrDefault());
-                path = Path.Combine(basePath, game.LauncherSettingsFileName);
+                if (!string.IsNullOrWhiteSpace(basePath))
+                {
+                    path = Path.Combine(basePath, game.LauncherSettingsFileName);
+                }
             }
             if (File.Exists(path))
             {
