@@ -4,7 +4,7 @@
 // Created          : 01-17-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 11-03-2022
+// Last Modified On : 09-13-2023
 // ***********************************************************************
 // <copyright file="Constants.cs" company="Mario">
 //     Mario
@@ -22,6 +22,7 @@ namespace IronyModManager.Shared
     /// </summary>
     public class Constants
     {
+
         #region Fields
 
         /// <summary>
@@ -153,6 +154,7 @@ namespace IronyModManager.Shared
         /// </summary>
         public static class CodeSeparators
         {
+
             #region Classes
 
             /// <summary>
@@ -160,6 +162,7 @@ namespace IronyModManager.Shared
             /// </summary>
             public static class ClosingSeparators
             {
+
                 #region Fields
 
                 /// <summary>
@@ -173,6 +176,7 @@ namespace IronyModManager.Shared
                 public static readonly Dictionary<string, string> Map = new() { { CurlyBracket, "}" } };
 
                 #endregion Fields
+
             }
 
             /// <summary>
@@ -180,6 +184,7 @@ namespace IronyModManager.Shared
             /// </summary>
             public static class NonClosingSeparators
             {
+
                 #region Fields
 
                 /// <summary>
@@ -193,9 +198,11 @@ namespace IronyModManager.Shared
                 public static readonly string[] Map = new string[] { ColonSign };
 
                 #endregion Fields
+
             }
 
             #endregion Classes
+
         }
 
         /// <summary>
@@ -203,6 +210,7 @@ namespace IronyModManager.Shared
         /// </summary>
         public static class GamesTypes
         {
+
             #region Fields
 
             /// <summary>
@@ -229,6 +237,7 @@ namespace IronyModManager.Shared
             /// </summary>
             public static class CrusaderKings3
             {
+
                 #region Fields
 
                 /// <summary>
@@ -283,6 +292,7 @@ namespace IronyModManager.Shared
                 public static readonly string ParadoxGameId = "ck3";
 
                 #endregion Fields
+
             }
 
             /// <summary>
@@ -290,6 +300,7 @@ namespace IronyModManager.Shared
             /// </summary>
             public static class EuropaUniversalis4
             {
+
                 #region Fields
 
                 /// <summary>
@@ -329,6 +340,7 @@ namespace IronyModManager.Shared
                 public static readonly string ParadoxGameId = "eu4";
 
                 #endregion Fields
+
             }
 
             /// <summary>
@@ -336,6 +348,7 @@ namespace IronyModManager.Shared
             /// </summary>
             public static class HeartsOfIron4
             {
+
                 #region Fields
 
                 /// <summary>
@@ -375,6 +388,7 @@ namespace IronyModManager.Shared
                 public static readonly string ParadoxGameId = "hoi4";
 
                 #endregion Fields
+
             }
 
             /// <summary>
@@ -382,6 +396,7 @@ namespace IronyModManager.Shared
             /// </summary>
             public static class ImperatorRome
             {
+
                 #region Fields
 
                 /// <summary>
@@ -441,6 +456,7 @@ namespace IronyModManager.Shared
                 public static readonly string ParadoxGameId = "imperator_rome";
 
                 #endregion Fields
+
             }
 
             /// <summary>
@@ -448,6 +464,7 @@ namespace IronyModManager.Shared
             /// </summary>
             public static class Stellaris
             {
+
                 #region Fields
 
                 /// <summary>
@@ -483,9 +500,10 @@ namespace IronyModManager.Shared
                 /// <summary>
                 /// The game folders
                 /// </summary>
-                public static readonly string[] GameFolders = new string[] { "sound", "tweakergui_assets", "common", "crash_reporter", "dlc", "dlc_metadata",
-                    "events", "flags", "fonts", "gfx", "interface", "launcher-assets", "licenses", "locales", "localisation", "localisation_synced", "map",
-                    "music", "pdx_browser", "pdx_launcher", "pdx_online_assets", "prescripted_countries", "previewer_assets" };
+                public static readonly string[] GameFolders = new string[] { "pdx_launcher", "pdx_online_assets", "prescripted_countries", "previewer_assets", "sound", 
+                    "tools", "tweakergui_assets", "unchecked_defines", "common", "crash_reporter", "curated_save_games", "dlc", "dlc_metadata", 
+                    "events", "flags", "fonts", "gfx", "interface", "launcher-assets", "licenses", "locales", "localisation", "map", "music", "pdx_browser" 
+                };
 
                 /// <summary>
                 /// The paradox game identifier
@@ -493,6 +511,7 @@ namespace IronyModManager.Shared
                 public static readonly string ParadoxGameId = "stellaris";
 
                 #endregion Fields
+
             }
 
             /// <summary>
@@ -500,6 +519,7 @@ namespace IronyModManager.Shared
             /// </summary>
             public static class Victoria3
             {
+
                 #region Fields
 
                 /// <summary>
@@ -553,11 +573,14 @@ namespace IronyModManager.Shared
                 public static readonly string ParadoxGameId = "victoria3";
 
                 #endregion Fields
+
             }
 
             #endregion Classes
+
         }
 
         #endregion Classes
+
     }
 }
