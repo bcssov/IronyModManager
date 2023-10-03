@@ -921,5 +921,54 @@ namespace IronyModManager.Parser.Tests
             result.Any(p => p == "building_giga_megaworkshop_hub_acot_delta");
             result.Any(p => p == "building_giga_megaworkshop_hub_acot_2_delta");
         }
+
+        /// <summary>
+        /// Defines the test method GetScriptPath_should_yield_results.
+        /// </summary>
+        [Fact]
+        public void GetScriptPath_should_yield_results()
+        {
+            DISetup.SetupContainer();
+            
+            var sb = new System.Text.StringBuilder(257);
+            sb.AppendLine(@"inline_script = {");
+            sb.AppendLine(@"	script = ""buildings/building_giga_megaworkshop_acot""");
+            sb.AppendLine(@"	tier = ""delta""");
+            sb.AppendLine(@"");
+            sb.AppendLine(@"	allow = ""has_enigmatic_capital = yes""");
+            sb.AppendLine(@"	upgrade = ""building_giga_megaworkshop_acot_alpha""");
+            sb.AppendLine(@"");
+            sb.AppendLine(@"	resource1 = ""sr_dark_matter""");
+            sb.AppendLine(@"	resource2 = ""acot_sr_dark_energy""");
+            sb.AppendLine(@"}");
+
+            var parser = new ParametrizedParser(new CodeParser(new Logger()));
+            var result = parser.GetScriptPath(sb.ToString());
+            result.Should().Be("buildings\\building_giga_megaworkshop_acot");
+        }
+
+        /// <summary>
+        /// Defines the test method GetScriptPath_should_not_yield_results.
+        /// </summary>
+        [Fact]
+        public void GetScriptPath_should_not_yield_results()
+        {
+            DISetup.SetupContainer();
+
+            var sb = new System.Text.StringBuilder(257);
+            sb.AppendLine(@"inline_script = {");
+            sb.AppendLine(@"	tier = ""delta""");
+            sb.AppendLine(@"");
+            sb.AppendLine(@"	allow = ""has_enigmatic_capital = yes""");
+            sb.AppendLine(@"	upgrade = ""building_giga_megaworkshop_acot_alpha""");
+            sb.AppendLine(@"");
+            sb.AppendLine(@"	resource1 = ""sr_dark_matter""");
+            sb.AppendLine(@"	resource2 = ""acot_sr_dark_energy""");
+            sb.AppendLine(@"}");
+
+            var parser = new ParametrizedParser(new CodeParser(new Logger()));
+            var result = parser.GetScriptPath(sb.ToString());
+            result.Should().BeNullOrEmpty();
+        }
     }
 }

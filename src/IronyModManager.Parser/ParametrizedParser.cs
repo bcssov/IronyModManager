@@ -31,10 +31,19 @@ namespace IronyModManager.Parser
         #region Fields
 
         /// <summary>
+        /// The quotes
+        /// </summary>
+        private const string Quotes = "\"";
+
+        /// <summary>
+        /// The script
+        /// </summary>
+        private const string Script = "script";
+
+        /// <summary>
         /// The terminator
         /// </summary>
         private const char Terminator = '$'; // I'll be back
-
         /// <summary>
         /// The code parser
         /// </summary>
@@ -86,7 +95,14 @@ namespace IronyModManager.Parser
                                 idElements.Add(segments[0]);
                                 for (int i = 1; i < segments.Length; i++)
                                 {
-                                    idElements.Add(elParams.Values.FirstOrDefault().Values.FirstOrDefault(p => p.Key.Equals(segments[i], StringComparison.OrdinalIgnoreCase)).Value.Trim("\""));
+                                    if (elParams.Values.FirstOrDefault().Values.Any())
+                                    {
+                                        var match = elParams.Values.FirstOrDefault().Values.FirstOrDefault(p => p.Key.Equals(segments[i], StringComparison.OrdinalIgnoreCase));
+                                        if (match != null)
+                                        {
+                                            idElements.Add((match.Value ?? string.Empty).Trim(Quotes));
+                                        }
+                                    }
                                 }
                                 result.Add(string.Join(string.Empty, idElements));
                             }
@@ -101,6 +117,28 @@ namespace IronyModManager.Parser
                 }
             }
             return null;
+        }
+
+        /// <summary>
+        /// Gets the script path.
+        /// </summary>
+        /// <param name="parameters">The parameters.</param>
+        /// <returns>System.String.</returns>
+        public string GetScriptPath(string parameters)
+        {
+            var elParams = codeParser.ParseScriptWithoutValidation(parameters.SplitOnNewLine(), string.Empty);
+            if (elParams != null && elParams.Values != null && elParams.Error == null && elParams.Values.Count(p => p.Key.Equals(Common.Constants.Stellaris.InlineScriptId, StringComparison.OrdinalIgnoreCase)) == 1)
+            {
+                if (elParams.Values.FirstOrDefault().Values.Any())
+                {
+                    var match = elParams.Values.FirstOrDefault().Values.FirstOrDefault(p => p.Key.Equals(Script, StringComparison.OrdinalIgnoreCase));
+                    if (match != null)
+                    {
+                        return ((match.Value ?? string.Empty).Trim(Quotes)).StandardizeDirectorySeparator();
+                    }
+                }
+            }
+            return string.Empty;
         }
 
         #endregion Methods

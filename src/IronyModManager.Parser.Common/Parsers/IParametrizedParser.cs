@@ -34,6 +34,13 @@ namespace IronyModManager.Parser.Common.Parsers
         /// <returns>System.String.</returns>
         IReadOnlyCollection<string> GetObjectId(string code, string parameters);
 
+        /// <summary>
+        /// Gets the script path.
+        /// </summary>
+        /// <param name="parameters">The parameters.</param>
+        /// <returns>System.String.</returns>
+        string GetScriptPath(string parameters);
+
         #endregion Methods
     }
 }
