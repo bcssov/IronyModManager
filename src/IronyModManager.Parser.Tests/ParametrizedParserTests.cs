@@ -918,8 +918,8 @@ namespace IronyModManager.Parser.Tests
             var parser = new ParametrizedParser(new CodeParser(new Logger()));
             var result = parser.GetObjectId(sb.ToString(), sb2.ToString());
             result.Count.Should().Be(2);
-            result.Any(p => p == "building_giga_megaworkshop_hub_acot_delta");
-            result.Any(p => p == "building_giga_megaworkshop_hub_acot_2_delta");
+            result.Any(p => p == "building_giga_megaworkshop_hub_acot_delta").Should().BeTrue();
+            result.Any(p => p == "building_giga_megaworkshop_hub_acot_2_delta").Should().BeTrue();
         }
 
         /// <summary>
