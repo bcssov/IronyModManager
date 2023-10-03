@@ -1,10 +1,11 @@
-﻿// ***********************************************************************
+﻿
+// ***********************************************************************
 // Assembly         : IronyModManager.Parser
 // Author           : Mario
 // Created          : 02-16-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 01-29-2022
+// Last Modified On : 10-03-2023
 // ***********************************************************************
 // <copyright file="DIPackage.cs" company="Mario">
 //     Mario
@@ -37,6 +38,7 @@ using SimpleInjector.Packaging;
 
 namespace IronyModManager.Parser
 {
+
     /// <summary>
     /// Class DIPackage.
     /// Implements the <see cref="SimpleInjector.Packaging.IPackage" />
@@ -45,6 +47,7 @@ namespace IronyModManager.Parser
     [ExcludeFromCoverage("Should not test external DI.")]
     public class DIPackage : IPackage
     {
+
         #region Methods
 
         /// <summary>
@@ -62,8 +65,8 @@ namespace IronyModManager.Parser
             });
             container.Collection.Register(typeof(IGenericParser), new List<Type>()
             {
-                 typeof(BinaryParser), typeof(Generic.DefinesParser), typeof(GraphicsParser),
-                 typeof(Generic.KeyParser), typeof(LocalizationParser), typeof(Generic.WholeTextParser)
+                typeof(BinaryParser), typeof(Generic.DefinesParser), typeof(GraphicsParser),
+                typeof(Generic.KeyParser), typeof(LocalizationParser), typeof(Generic.WholeTextParser)
             });
             container.Collection.Register(typeof(IGameParser), new List<Type>
             {
@@ -92,6 +95,7 @@ namespace IronyModManager.Parser
                 typeof(BoolConverter), typeof(VersionConverter), typeof(SourceTypeConverter)
             });
             container.Register<IParser, Mod.Search.Parser>();
+            container.Register<IParametrizedParser, ParametrizedParser>();
         }
 
         #endregion Methods
