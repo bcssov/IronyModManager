@@ -5,7 +5,7 @@
 // Created          : 10-03-2023
 //
 // Last Modified By : Mario
-// Last Modified On : 10-03-2023
+// Last Modified On : 10-04-2023
 // ***********************************************************************
 // <copyright file="IParametrizedParser.cs" company="Mario">
 //     Mario
@@ -27,19 +27,19 @@ namespace IronyModManager.Parser.Common.Parsers
         #region Methods
 
         /// <summary>
-        /// Gets the object identifier.
-        /// </summary>
-        /// <param name="code">The code.</param>
-        /// <param name="parameters">The parameters.</param>
-        /// <returns>System.String.</returns>
-        IReadOnlyCollection<string> GetObjectId(string code, string parameters);
-
-        /// <summary>
         /// Gets the script path.
         /// </summary>
         /// <param name="parameters">The parameters.</param>
         /// <returns>System.String.</returns>
         string GetScriptPath(string parameters);
+
+        /// <summary>
+        /// Processes the specified code.
+        /// </summary>
+        /// <param name="code">The code.</param>
+        /// <param name="parameters">The parameters.</param>
+        /// <returns>System.String.</returns>
+        string Process(string code, string parameters);
 
         #endregion Methods
     }

@@ -5,7 +5,7 @@
 // Created          : 04-02-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 07-06-2023
+// Last Modified On : 10-03-2023
 // ***********************************************************************
 // <copyright file="StellarisDefinitionInfoProvider.cs" company="Mario">
 //     Mario
@@ -61,6 +61,12 @@ namespace IronyModManager.IO.Mods.InfoProviders
         /// </summary>
         /// <value><c>true</c> if this instance is fully implemented; otherwise, <c>false</c>.</value>
         public override bool IsFullyImplemented => true;
+
+        /// <summary>
+        /// Gets a value indicating whether [supports inline scripts].
+        /// </summary>
+        /// <value><c>true</c> if [supports inline scripts]; otherwise, <c>false</c>.</value>
+        public override bool SupportsInlineScripts => true;
 
         #endregion Properties
 

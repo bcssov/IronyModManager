@@ -1,10 +1,11 @@
-﻿// ***********************************************************************
+﻿
+// ***********************************************************************
 // Assembly         : IronyModManager.IO.Common
 // Author           : Mario
 // Created          : 04-02-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 07-18-2022
+// Last Modified On : 10-03-2023
 // ***********************************************************************
 // <copyright file="IDefinitionInfoProvider.cs" company="Mario">
 //     Mario
@@ -18,6 +19,7 @@ using IronyModManager.Shared.Models;
 
 namespace IronyModManager.IO.Common.Mods
 {
+
     /// <summary>
     /// Interface IDefinitionInfoProvider
     /// </summary>
@@ -36,6 +38,12 @@ namespace IronyModManager.IO.Common.Mods
         /// </summary>
         /// <value><c>true</c> if this instance is fully implemented; otherwise, <c>false</c>.</value>
         bool IsFullyImplemented { get; }
+
+        /// <summary>
+        /// Gets a value indicating whether [supports inline scripts].
+        /// </summary>
+        /// <value><c>true</c> if [supports inline scripts]; otherwise, <c>false</c>.</value>
+        bool SupportsInlineScripts { get; }
 
         #endregion Properties
 

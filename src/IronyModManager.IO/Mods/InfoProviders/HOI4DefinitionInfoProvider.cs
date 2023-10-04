@@ -1,10 +1,11 @@
-﻿// ***********************************************************************
+﻿
+// ***********************************************************************
 // Assembly         : IronyModManager.IO
 // Author           : Mario
 // Created          : 07-18-2022
 //
 // Last Modified By : Mario
-// Last Modified On : 07-18-2022
+// Last Modified On : 10-03-2023
 // ***********************************************************************
 // <copyright file="HOI4DefinitionInfoProvider.cs" company="Mario">
 //     Mario
@@ -17,6 +18,7 @@ using System.Linq;
 
 namespace IronyModManager.IO.Mods.InfoProviders
 {
+
     /// <summary>
     /// Class HOI4DefinitionInfoProvider.
     /// Implements the <see cref="IronyModManager.IO.Mods.InfoProviders.BaseDefinitionInfoProvider" />
@@ -38,6 +40,12 @@ namespace IronyModManager.IO.Mods.InfoProviders
         /// </summary>
         /// <value><c>true</c> if this instance is fully implemented; otherwise, <c>false</c>.</value>
         public override bool IsFullyImplemented => false;
+
+        /// <summary>
+        /// Gets a value indicating whether [supports inline scripts].
+        /// </summary>
+        /// <value><c>true</c> if [supports inline scripts]; otherwise, <c>false</c>.</value>
+        public override bool SupportsInlineScripts => false;
 
         #endregion Properties
 

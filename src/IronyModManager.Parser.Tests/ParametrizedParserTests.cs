@@ -17,7 +17,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using FluentAssertions;
+using IronyModManager.DI;
+using IronyModManager.Parser.Common;
 using IronyModManager.Parser.Common.Args;
+using IronyModManager.Shared;
 using IronyModManager.Tests.Common;
 using Xunit;
 
@@ -32,7 +35,7 @@ namespace IronyModManager.Parser.Tests
         /// Defines the test method GetObjectId_should_yield_results.
         /// </summary>
         [Fact]
-        public void GetObjectId_should_yield_results_using_parameters()
+        public void GetObjectId_should_yield_results()
         {
             DISetup.SetupContainer();
 
@@ -201,9 +204,18 @@ namespace IronyModManager.Parser.Tests
             sb2.AppendLine(@"}");
 
             var parser = new ParametrizedParser(new CodeParser(new Logger()));
-            var result = parser.GetObjectId(sb.ToString(), sb2.ToString());
-            result.Count.Should().Be(1);
-            result.FirstOrDefault().Should().Be("building_giga_megaworkshop_hub_acot_delta");
+            var result = parser.Process(sb.ToString(), sb2.ToString());
+            result.Should().NotBeNullOrEmpty();
+            var m = DIResolver.Get<IParserManager>();
+            var parserResult = m.Parse(new ParserManagerArgs()
+            {
+                File = "common\\buildings\\dummy.txt",
+                GameType = "Stellaris",
+                IsBinary = false,
+                Lines = result.SplitOnNewLine()
+            });
+            parserResult.Count().Should().Be(1);
+            parserResult.FirstOrDefault().Id.Should().Be("building_giga_megaworkshop_hub_acot_delta");
         }
 
         /// <summary>
@@ -379,16 +391,25 @@ namespace IronyModManager.Parser.Tests
             sb2.AppendLine(@"}");
 
             var parser = new ParametrizedParser(new CodeParser(new Logger()));
-            var result = parser.GetObjectId(sb.ToString(), sb2.ToString());
-            result.Count.Should().Be(1);
-            result.FirstOrDefault().Should().Be("building_giga_megaworkshop_hub_acot_no_parameters");
+            var result = parser.Process(sb.ToString(), sb2.ToString());
+            result.Should().NotBeNullOrEmpty();
+            var m = DIResolver.Get<IParserManager>();
+            var parserResult = m.Parse(new ParserManagerArgs()
+            {
+                File = "common\\buildings\\dummy.txt",
+                GameType = "Stellaris",
+                IsBinary = false,
+                Lines = result.SplitOnNewLine()
+            });
+            parserResult.Count().Should().Be(1);
+            parserResult.FirstOrDefault().Id.Should().Be("building_giga_megaworkshop_hub_acot_no_parameters");
         }
 
         /// <summary>
-        /// Defines the test method GetObjectId_should_not_yield_results_using_parameters.
+        /// Defines the test method GetObjectId_should_yield_results_using_parameters_with_extra_dolar_sign.
         /// </summary>
         [Fact]
-        public void GetObjectId_should_not_yield_results_using_parameters()
+        public void GetObjectId_should_yield_results_using_parameters_with_extra_dolar_sign()
         {
             DISetup.SetupContainer();
 
@@ -557,15 +578,26 @@ namespace IronyModManager.Parser.Tests
             sb2.AppendLine(@"}");
 
             var parser = new ParametrizedParser(new CodeParser(new Logger()));
-            var result = parser.GetObjectId(sb.ToString(), sb2.ToString());
-            result.Should().BeNullOrEmpty();
+            var result = parser.Process(sb.ToString(), sb2.ToString());
+
+            result.Should().NotBeNullOrEmpty();
+            var m = DIResolver.Get<IParserManager>();
+            var parserResult = m.Parse(new ParserManagerArgs()
+            {
+                File = "common\\buildings\\dummy.txt",
+                GameType = "Stellaris",
+                IsBinary = false,
+                Lines = result.SplitOnNewLine()
+            });
+            parserResult.Count().Should().Be(1);
+            parserResult.FirstOrDefault().Id.Should().Be("building_giga_megaworkshop_hub_acot_delta$");
         }
 
         /// <summary>
         /// Defines the test method GetObjectId_should_yield_results.
         /// </summary>
         [Fact]
-        public void GetObjectId_should_yield_results_using_parameters_while_filering_duplicates()
+        public void GetObjectId_should_yield_results_using_parameters_while_including_duplicates()
         {
             DISetup.SetupContainer();
 
@@ -736,9 +768,19 @@ namespace IronyModManager.Parser.Tests
             sb2.AppendLine(@"}");
 
             var parser = new ParametrizedParser(new CodeParser(new Logger()));
-            var result = parser.GetObjectId(sb.ToString(), sb2.ToString());
-            result.Count.Should().Be(1);
-            result.FirstOrDefault().Should().Be("building_giga_megaworkshop_hub_acot_delta");
+            var result = parser.Process(sb.ToString(), sb2.ToString());
+
+            result.Should().NotBeNullOrEmpty();
+            var m = DIResolver.Get<IParserManager>();
+            var parserResult = m.Parse(new ParserManagerArgs()
+            {
+                File = "common\\buildings\\dummy.txt",
+                GameType = "Stellaris",
+                IsBinary = false,
+                Lines = result.SplitOnNewLine()
+            });
+            parserResult.Count().Should().Be(2);
+            parserResult.All(p => p.Id == "building_giga_megaworkshop_hub_acot_delta").Should().BeTrue();
         }
 
         /// <summary>
@@ -916,10 +958,20 @@ namespace IronyModManager.Parser.Tests
             sb2.AppendLine(@"}");
 
             var parser = new ParametrizedParser(new CodeParser(new Logger()));
-            var result = parser.GetObjectId(sb.ToString(), sb2.ToString());
-            result.Count.Should().Be(2);
-            result.Any(p => p == "building_giga_megaworkshop_hub_acot_delta").Should().BeTrue();
-            result.Any(p => p == "building_giga_megaworkshop_hub_acot_2_delta").Should().BeTrue();
+            var result = parser.Process(sb.ToString(), sb2.ToString());
+
+            result.Should().NotBeNullOrEmpty();
+            var m = DIResolver.Get<IParserManager>();
+            var parserResult = m.Parse(new ParserManagerArgs()
+            {
+                File = "common\\buildings\\dummy.txt",
+                GameType = "Stellaris",
+                IsBinary = false,
+                Lines = result.SplitOnNewLine()
+            });
+            parserResult.Count().Should().Be(2);
+            parserResult.Any(p => p.Id == "building_giga_megaworkshop_hub_acot_delta").Should().BeTrue();
+            parserResult.Any(p => p.Id == "building_giga_megaworkshop_hub_acot_2_delta").Should().BeTrue();
         }
 
         /// <summary>
@@ -929,7 +981,7 @@ namespace IronyModManager.Parser.Tests
         public void GetScriptPath_should_yield_results()
         {
             DISetup.SetupContainer();
-            
+
             var sb = new System.Text.StringBuilder(257);
             sb.AppendLine(@"inline_script = {");
             sb.AppendLine(@"	script = ""buildings/building_giga_megaworkshop_acot""");

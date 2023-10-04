@@ -5,7 +5,7 @@
 // Created          : 05-26-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-28-2023
+// Last Modified On : 10-04-2023
 // ***********************************************************************
 // <copyright file="ModPatchCollectionService.cs" company="Mario">
 //     Mario
@@ -56,7 +56,6 @@ namespace IronyModManager.Services
     /// <seealso cref="IronyModManager.Services.Common.IModPatchCollectionService" />
     public class ModPatchCollectionService : ModBaseService, IModPatchCollectionService
     {
-
         #region Fields
 
         /// <summary>
@@ -145,6 +144,11 @@ namespace IronyModManager.Services
         private readonly IModPatchExporter modPatchExporter;
 
         /// <summary>
+        /// The parametrized parser
+        /// </summary>
+        private readonly IParametrizedParser parametrizedParser;
+
+        /// <summary>
         /// The parser manager
         /// </summary>
         private readonly IParserManager parserManager;
@@ -178,14 +182,16 @@ namespace IronyModManager.Services
         /// <param name="storageProvider">The storage provider.</param>
         /// <param name="mapper">The mapper.</param>
         /// <param name="validateParser">The validate parser.</param>
+        /// <param name="parametrizedParser">The parametrized parser.</param>
         public ModPatchCollectionService(ICache cache, IMessageBus messageBus, IParserManager parserManager, IEnumerable<IDefinitionInfoProvider> definitionInfoProviders,
             IModPatchExporter modPatchExporter, IReader reader, IModWriter modWriter, IModParser modParser, IGameService gameService,
-            IStorageProvider storageProvider, IMapper mapper, IValidateParser validateParser) : base(cache, definitionInfoProviders, reader, modWriter, modParser, gameService, storageProvider, mapper)
+            IStorageProvider storageProvider, IMapper mapper, IValidateParser validateParser, IParametrizedParser parametrizedParser) : base(cache, definitionInfoProviders, reader, modWriter, modParser, gameService, storageProvider, mapper)
         {
             this.messageBus = messageBus;
             this.parserManager = parserManager;
             this.modPatchExporter = modPatchExporter;
             this.validateParser = validateParser;
+            this.parametrizedParser = parametrizedParser;
         }
 
         #endregion Constructors
@@ -795,7 +801,9 @@ namespace IronyModManager.Services
 
             await messageBus.PublishAsync(new ModDefinitionInvalidReplaceEvent(0));
             processed = 0;
-            total = definitions.Count;
+
+            // Stellaris only (so far)
+            total = provider.SupportsInlineScripts ? definitions.Count * 2 : definitions.Count;
             previousProgress = 0;
             List<IDefinition> prunedDefinitions;
             var patchName = GenerateCollectionPatchName(collectionName);
@@ -804,12 +812,91 @@ namespace IronyModManager.Services
                 RootPath = GetModDirectoryRootPath(game),
                 PatchPath = EvaluatePatchNamePath(game, patchName)
             });
+
+            // Process so far Giga related stuff for now. Scared what else might be valid for inline_scripts.
+            List<IDefinition> prunedInlineDefinitions;
+            if (provider.SupportsInlineScripts)
+            {
+                var tempIndex = DIResolver.Get<IIndexedDefinitions>();
+                await tempIndex.InitMapAsync(definitions);
+                prunedInlineDefinitions = new List<IDefinition>();
+                var reportedInlineErrors = new HashSet<string>();
+                foreach (var item in definitions)
+                {
+                    var addDefault = false;
+                    if (item.Id.Equals(Parser.Common.Constants.Stellaris.InlineScriptId, StringComparison.OrdinalIgnoreCase))
+                    {
+                        var path = Path.Combine(Parser.Common.Constants.Stellaris.InlineScripts, parametrizedParser.GetScriptPath(item.Code));
+                        var pathCI = path.ToLowerInvariant();
+                        var files = (await tempIndex.GetByParentDirectoryAsync(Path.GetDirectoryName(path))).Where(p => Path.Combine(Path.GetDirectoryName(p.FileCI), Path.GetFileNameWithoutExtension(p.FileCI)).Equals(pathCI)).ToList();
+                        if (files.Any())
+                        {
+                            var modOrder = mods.Select(p => p.Name).ToList();
+                            var priorityDefinition = EvalDefinitionPriority(files.OrderBy(p => modOrder.IndexOf(p.ModName)).ToHashSet());
+                            if (priorityDefinition != null && priorityDefinition.Definition != null)
+                            {
+                                var parametrizedCode = parametrizedParser.Process(priorityDefinition.Definition.Code, item.Code);
+                                if (!string.IsNullOrWhiteSpace(parametrizedCode))
+                                {
+                                    addDefault = false;
+                                    var results = parserManager.Parse(new ParserManagerArgs()
+                                    {
+                                        ContentSHA = item.ContentSHA, // Want original file sha id
+                                        File = item.File, // To trigger right parser
+                                        GameType = game.Type,
+                                        Lines = parametrizedCode.SplitOnNewLine(),
+                                        FileLastModified = item.LastModified,
+                                        ModDependencies = item.Dependencies,
+                                        IsBinary = item.ValueType == ValueType.Binary,
+                                        ModName = item.ModName,
+                                        ValidationType = ValidationType.Full
+                                    });
+                                    prunedInlineDefinitions.AddRange(results);
+                                }
+                            }
+                        }
+                        else
+                        {
+                            if (!reportedInlineErrors.Contains(pathCI))
+                            {
+                                // Need to report missing inline script
+                                var copy = CopyDefinition(item);
+                                copy.ValueType = ValueType.Invalid;
+                                copy.ErrorMessage = $"Inline script {path} is not found in any mods.{Environment.NewLine}{Environment.NewLine}It is possible that the file is missing or due to a syntax error Irony cannot find it.";
+                                prunedInlineDefinitions.Add(copy);
+                                reportedInlineErrors.Add(pathCI);
+                            }
+                        }
+                    }
+                    if (addDefault)
+                    {
+                        prunedInlineDefinitions.Add(item);
+                    }
+                    processed++;
+                    var perc = GetProgressPercentage(total, processed, 100);
+                    if (perc != previousProgress)
+                    {
+                        await messageBus.PublishAsync(new ModDefinitionInvalidReplaceEvent(perc));
+                        previousProgress = perc;
+                    }
+                }
+                tempIndex.Dispose();
+                GC.Collect(GC.MaxGeneration, GCCollectionMode.Optimized);
+                GC.WaitForPendingFinalizers();
+                GC.Collect(GC.MaxGeneration, GCCollectionMode.Optimized);
+            }
+            else
+            {
+                prunedInlineDefinitions = definitions.ToList();
+            }
+            definitions.Clear();
+            definitions = null;
             if (state != null && state.CustomConflicts.Any())
             {
                 prunedDefinitions = new List<IDefinition>();
                 var customIndexed = DIResolver.Get<IIndexedDefinitions>();
                 await customIndexed.InitMapAsync(state.CustomConflicts);
-                foreach (var item in definitions)
+                foreach (var item in prunedInlineDefinitions)
                 {
                     bool addDefault = true;
                     if (item.ValueType == ValueType.Invalid)
@@ -864,10 +951,10 @@ namespace IronyModManager.Services
             }
             else
             {
-                prunedDefinitions = definitions.ToList();
+                prunedDefinitions = prunedInlineDefinitions.ToList();
             }
-            definitions.Clear();
-            definitions = null;
+            prunedInlineDefinitions.Clear();
+            prunedInlineDefinitions = null;
 
             await messageBus.PublishAsync(new ModDefinitionInvalidReplaceEvent(99.9));
             var indexed = DIResolver.Get<IIndexedDefinitions>();
@@ -3258,7 +3345,6 @@ namespace IronyModManager.Services
         /// </summary>
         private class DefinitionOrderSort
         {
-
             #region Properties
 
             /// <summary>
@@ -3280,7 +3366,6 @@ namespace IronyModManager.Services
             public string TypeAndId { get; set; }
 
             #endregion Properties
-
         }
 
         /// <summary>
@@ -3288,7 +3373,6 @@ namespace IronyModManager.Services
         /// </summary>
         private class EvalState
         {
-
             #region Properties
 
             /// <summary>
@@ -3316,7 +3400,6 @@ namespace IronyModManager.Services
             public string ModName { get; set; }
 
             #endregion Properties
-
         }
 
         /// <summary>
@@ -3324,7 +3407,6 @@ namespace IronyModManager.Services
         /// </summary>
         private class ModsExportedState
         {
-
             #region Properties
 
             /// <summary>
@@ -3334,7 +3416,6 @@ namespace IronyModManager.Services
             public bool? Exported { get; set; }
 
             #endregion Properties
-
         }
 
         /// <summary>
@@ -3342,7 +3423,6 @@ namespace IronyModManager.Services
         /// </summary>
         private class PatchCollectionState
         {
-
             #region Properties
 
             /// <summary>
@@ -3358,10 +3438,8 @@ namespace IronyModManager.Services
             public bool NeedsUpdate { get; set; }
 
             #endregion Properties
-
         }
 
         #endregion Classes
-
     }
 }

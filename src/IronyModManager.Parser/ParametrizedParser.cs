@@ -5,7 +5,7 @@
 // Created          : 10-03-2023
 //
 // Last Modified By : Mario
-// Last Modified On : 10-03-2023
+// Last Modified On : 10-04-2023
 // ***********************************************************************
 // <copyright file="ParametrizedParser.cs" company="Mario">
 //     Mario
@@ -67,59 +67,6 @@ namespace IronyModManager.Parser
         #region Methods
 
         /// <summary>
-        /// Gets the object identifier.
-        /// </summary>
-        /// <param name="code">The code.</param>
-        /// <param name="parameters">The parameters.</param>
-        /// <returns>System.String.</returns>
-        public IReadOnlyCollection<string> GetObjectId(string code, string parameters)
-        {
-            var elParams = codeParser.ParseScriptWithoutValidation(parameters.SplitOnNewLine(), string.Empty);
-            if (elParams != null && elParams.Values != null && elParams.Error == null && elParams.Values.Count(p => p.Key.Equals(Common.Constants.Stellaris.InlineScriptId, StringComparison.OrdinalIgnoreCase)) == 1)
-            {
-                var elCode = codeParser.ParseScriptWithoutValidation(code.SplitOnNewLine(), string.Empty);
-                if (elCode != null && elCode.Values != null && elCode.Error == null)
-                {
-                    var result = new List<string>();
-                    foreach (var el in elCode.Values)
-                    {
-                        var terminatorCount = el.Key.Count(c => c == Terminator);
-                        if (terminatorCount > 0)
-                        {
-                            var idElements = new List<string>();
-
-                            // Needs to have even number
-                            if (terminatorCount % 2 == 0)
-                            {
-                                var segments = el.Key.Split(Terminator, StringSplitOptions.RemoveEmptyEntries);
-                                idElements.Add(segments[0]);
-                                for (int i = 1; i < segments.Length; i++)
-                                {
-                                    if (elParams.Values.FirstOrDefault().Values.Any())
-                                    {
-                                        var match = elParams.Values.FirstOrDefault().Values.FirstOrDefault(p => p.Key.Equals(segments[i], StringComparison.OrdinalIgnoreCase));
-                                        if (match != null)
-                                        {
-                                            idElements.Add((match.Value ?? string.Empty).Trim(Quotes));
-                                        }
-                                    }
-                                }
-                                result.Add(string.Join(string.Empty, idElements));
-                            }
-                        }
-                        else
-                        {
-                            // Just take whatever we're given from the script key
-                            result.Add(el.Key);
-                        }
-                    }
-                    return result.Any() ? result.Distinct().ToList() : null;
-                }
-            }
-            return null;
-        }
-
-        /// <summary>
         /// Gets the script path.
         /// </summary>
         /// <param name="parameters">The parameters.</param>
@@ -137,6 +84,36 @@ namespace IronyModManager.Parser
                         return ((match.Value ?? string.Empty).Trim(Quotes)).StandardizeDirectorySeparator();
                     }
                 }
+            }
+            return string.Empty;
+        }
+
+        /// <summary>
+        /// Processes the specified code.
+        /// </summary>
+        /// <param name="code">The code.</param>
+        /// <param name="parameters">The parameters.</param>
+        /// <returns>System.String.</returns>
+        public string Process(string code, string parameters)
+        {
+            var elParams = codeParser.ParseScriptWithoutValidation(parameters.SplitOnNewLine(), string.Empty);
+            if (elParams != null && elParams.Values != null && elParams.Error == null && elParams.Values.Count(p => p.Key.Equals(Common.Constants.Stellaris.InlineScriptId, StringComparison.OrdinalIgnoreCase)) == 1)
+            {
+                var processed = code;
+                if (elParams.Values.FirstOrDefault().Values.Any())
+                {
+                    foreach (var value in elParams.Values.FirstOrDefault().Values)
+                    {
+                        var id = (value.Key ?? string.Empty).Trim(Quotes);
+                        var replacement = (value.Value ?? string.Empty).Trim(Quotes);
+                        if (!id.Equals(Script, StringComparison.OrdinalIgnoreCase))
+                        {
+                            var key = $"{Terminator}{id}{Terminator}";
+                            processed = processed.Replace(key, replacement, StringComparison.OrdinalIgnoreCase);
+                        }
+                    }
+                }
+                return processed;
             }
             return string.Empty;
         }
