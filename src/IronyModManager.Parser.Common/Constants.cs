@@ -5,7 +5,7 @@
 // Created          : 02-16-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 09-12-2023
+// Last Modified On : 10-03-2023
 // ***********************************************************************
 // <copyright file="Constants.cs" company="Mario">
 //     Mario
@@ -541,6 +541,11 @@ namespace IronyModManager.Parser.Common
             public const string Flags = "flags";
 
             /// <summary>
+            /// The inline script identifier
+            /// </summary>
+            public const string InlineScriptId = "inline_script";
+
+            /// <summary>
             /// The prescripted countries
             /// </summary>
             public const string PrescriptedCountries = "prescripted_countries";
@@ -554,6 +559,7 @@ namespace IronyModManager.Parser.Common
             /// The unchecked defines
             /// </summary>
             public const string UncheckedDefines = "unchecked_defines";
+
             /// <summary>
             /// The buildings
             /// </summary>

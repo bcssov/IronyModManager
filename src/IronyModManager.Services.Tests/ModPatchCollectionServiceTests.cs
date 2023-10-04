@@ -70,12 +70,12 @@ namespace IronyModManager.Services.Tests
         /// <returns>ModService.</returns>
         private static ModPatchCollectionService GetService(Mock<IStorageProvider> storageProvider, Mock<IModParser> modParser,
             Mock<IParserManager> parserManager, Mock<IReader> reader, Mock<IMapper> mapper, Mock<IModWriter> modWriter,
-            Mock<IGameService> gameService, Mock<IModPatchExporter> modPatchExporter, IEnumerable<IDefinitionInfoProvider> definitionInfoProviders = null, Mock<IValidateParser> validateParser = null)
+            Mock<IGameService> gameService, Mock<IModPatchExporter> modPatchExporter, IEnumerable<IDefinitionInfoProvider> definitionInfoProviders = null, Mock<IValidateParser> validateParser = null, Mock<IParametrizedParser> parametrizedParser = null)
         {
             var messageBus = new Mock<IMessageBus>();
             messageBus.Setup(p => p.PublishAsync(It.IsAny<IMessageBusEvent>()));
             messageBus.Setup(p => p.Publish(It.IsAny<IMessageBusEvent>()));
-            return new ModPatchCollectionService(new Cache(), messageBus.Object, parserManager.Object, definitionInfoProviders, modPatchExporter.Object, reader.Object, modWriter.Object, modParser.Object, gameService.Object, storageProvider.Object, mapper.Object, validateParser?.Object);
+            return new ModPatchCollectionService(new Cache(), messageBus.Object, parserManager.Object, definitionInfoProviders, modPatchExporter.Object, reader.Object, modWriter.Object, modParser.Object, gameService.Object, storageProvider.Object, mapper.Object, validateParser?.Object, parametrizedParser?.Object);
         }
 
         /// <summary>
