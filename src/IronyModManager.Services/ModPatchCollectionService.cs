@@ -851,21 +851,30 @@ namespace IronyModManager.Services
                                         ModName = item.ModName,
                                         ValidationType = ValidationType.Full
                                     });
-                                    prunedInlineDefinitions.AddRange(results);
+                                    if (results != null && results.Any())
+                                    {
+                                        prunedInlineDefinitions.AddRange(results);
+                                    }
+                                    else if (!reportedInlineErrors.Contains($"{item.ModName} - {pathCI}"))
+                                    {
+                                        // Could happen, will need mnually investigation though
+                                        var copy = CopyDefinition(item);
+                                        copy.ValueType = ValueType.Invalid;
+                                        copy.ErrorMessage = $"Inline script {path} failed to be processed. Please report to the author of Irony.";
+                                        prunedInlineDefinitions.Add(copy);
+                                        reportedInlineErrors.Add($"{item.ModName} - {pathCI}");
+                                    }
                                 }
                             }
                         }
-                        else
+                        else if (!reportedInlineErrors.Contains($"{item.ModName} - {pathCI}"))
                         {
-                            if (!reportedInlineErrors.Contains($"{item.ModName} - {pathCI}"))
-                            {
-                                // Need to report missing inline script
-                                var copy = CopyDefinition(item);
-                                copy.ValueType = ValueType.Invalid;
-                                copy.ErrorMessage = $"Inline script {path} is not found in any mods.{Environment.NewLine}{Environment.NewLine}It is possible that the file is missing or due to a syntax error Irony cannot find it.";
-                                prunedInlineDefinitions.Add(copy);
-                                reportedInlineErrors.Add($"{item.ModName} - {pathCI}");
-                            }
+                            // Need to report missing inline script
+                            var copy = CopyDefinition(item);
+                            copy.ValueType = ValueType.Invalid;
+                            copy.ErrorMessage = $"Inline script {path} is not found in any mods.{Environment.NewLine}{Environment.NewLine}It is possible that the file is missing or due to a syntax error Irony cannot find it.";
+                            prunedInlineDefinitions.Add(copy);
+                            reportedInlineErrors.Add($"{item.ModName} - {pathCI}");
                         }
                     }
                     if (addDefault)
