@@ -823,9 +823,10 @@ namespace IronyModManager.Services
                 var reportedInlineErrors = new HashSet<string>();
                 foreach (var item in definitions)
                 {
-                    var addDefault = false;
+                    var addDefault = true;
                     if (item.Id.Equals(Parser.Common.Constants.Stellaris.InlineScriptId, StringComparison.OrdinalIgnoreCase))
                     {
+                        addDefault = false;
                         var path = Path.Combine(Parser.Common.Constants.Stellaris.InlineScripts, parametrizedParser.GetScriptPath(item.Code));
                         var pathCI = path.ToLowerInvariant();
                         var files = (await tempIndex.GetByParentDirectoryAsync(Path.GetDirectoryName(path))).Where(p => Path.Combine(Path.GetDirectoryName(p.FileCI), Path.GetFileNameWithoutExtension(p.FileCI)).Equals(pathCI)).ToList();
@@ -838,7 +839,6 @@ namespace IronyModManager.Services
                                 var parametrizedCode = parametrizedParser.Process(priorityDefinition.Definition.Code, item.Code);
                                 if (!string.IsNullOrWhiteSpace(parametrizedCode))
                                 {
-                                    addDefault = false;
                                     var results = parserManager.Parse(new ParserManagerArgs()
                                     {
                                         ContentSHA = item.ContentSHA, // Want original file sha id
@@ -857,14 +857,14 @@ namespace IronyModManager.Services
                         }
                         else
                         {
-                            if (!reportedInlineErrors.Contains(pathCI))
+                            if (!reportedInlineErrors.Contains($"{item.ModName} - {pathCI}"))
                             {
                                 // Need to report missing inline script
                                 var copy = CopyDefinition(item);
                                 copy.ValueType = ValueType.Invalid;
                                 copy.ErrorMessage = $"Inline script {path} is not found in any mods.{Environment.NewLine}{Environment.NewLine}It is possible that the file is missing or due to a syntax error Irony cannot find it.";
                                 prunedInlineDefinitions.Add(copy);
-                                reportedInlineErrors.Add(pathCI);
+                                reportedInlineErrors.Add($"{item.ModName} - {pathCI}");
                             }
                         }
                     }
