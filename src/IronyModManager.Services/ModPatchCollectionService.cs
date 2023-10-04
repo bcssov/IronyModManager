@@ -527,7 +527,7 @@ namespace IronyModManager.Services
             {
                 if (!overwrittenSort.ContainsKey(item.FirstOrDefault().ParentDirectoryCI))
                 {
-                    var all = (await indexedDefinitions.GetByParentDirectoryAsync(item.FirstOrDefault().ParentDirectoryCI)).Where(p => IsValidDefinitionType(p));
+                    var all = (await indexedDefinitions.GetByParentDirectoryAsync(item.FirstOrDefault().ParentDirectoryCI)).Where(IsValidDefinitionType);
                     var ordered = all.GroupBy(p => p.TypeAndId).Select(p =>
                     {
                         var partialCopy = new List<IDefinition>();
@@ -1972,8 +1972,9 @@ namespace IronyModManager.Services
                 }
                 return result;
             }
+            bool anyWholeTextFile = definitions.Any(p => p.ValueType == ValueType.WholeTextFile);
             var validDefinitions = new HashSet<IDefinition>();
-            foreach (var item in definitions.Where(p => IsValidDefinitionType(p)))
+            foreach (var item in definitions.Where(p => IsValidDefinitionType(p) || (anyWholeTextFile && p.ValueType == ValueType.EmptyFile)))
             {
                 validDefinitions.Add(item);
             }
@@ -1984,7 +1985,7 @@ namespace IronyModManager.Services
                 {
                     continue;
                 }
-                var allConflicts = (await indexedDefinitions.GetByTypeAndIdAsync(def.Type, def.Id)).Where(p => IsValidDefinitionType(p));
+                var allConflicts = (await indexedDefinitions.GetByTypeAndIdAsync(def.Type, def.Id)).Where(p => IsValidDefinitionType(p) || (anyWholeTextFile && p.ValueType == ValueType.EmptyFile));
                 foreach (var conflict in allConflicts)
                 {
                     processed.Add(conflict);
@@ -2027,7 +2028,7 @@ namespace IronyModManager.Services
                             var filteredConflicts = validConflictsGroup.Select(p => EvalDefinitionPriority(p.OrderBy(m => modOrder.IndexOf(m.ModName))).Definition);
                             foreach (var item in filteredConflicts)
                             {
-                                if (!conflicts.Contains(item) && IsValidDefinitionType(item))
+                                if (!conflicts.Contains(item) && (IsValidDefinitionType(item) || (anyWholeTextFile && item.ValueType == ValueType.EmptyFile)))
                                 {
                                     if (!item.IsFromGame)
                                     {
@@ -2088,7 +2089,7 @@ namespace IronyModManager.Services
                         {
                             if (result)
                             {
-                                if (!conflicts.Contains(def) && IsValidDefinitionType(def))
+                                if (!conflicts.Contains(def) && (IsValidDefinitionType(def) || (anyWholeTextFile && def.ValueType == ValueType.EmptyFile)))
                                 {
                                     def.ExistsInLastFile = await existsInLastFile(def);
                                     if (!def.ExistsInLastFile)
@@ -2126,7 +2127,7 @@ namespace IronyModManager.Services
                                 else
                                 {
                                     fileConflictCache.TryAdd(def.FileCI, true);
-                                    if (!conflicts.Contains(def) && IsValidDefinitionType(def))
+                                    if (!conflicts.Contains(def) && (IsValidDefinitionType(def) || (anyWholeTextFile && def.ValueType == ValueType.EmptyFile)))
                                     {
                                         def.ExistsInLastFile = await existsInLastFile(def);
                                         if (!def.ExistsInLastFile)
@@ -2934,7 +2935,7 @@ namespace IronyModManager.Services
                 var modOrder = GetCollectionMods().Select(p => p.Name).ToList();
                 var game = GameService.GetSelected();
                 var export = new List<IDefinition>();
-                var all = (await conflictResult.AllConflicts.GetByParentDirectoryAsync(definitions.FirstOrDefault().ParentDirectoryCI)).Where(p => IsValidDefinitionType(p));
+                var all = (await conflictResult.AllConflicts.GetByParentDirectoryAsync(definitions.FirstOrDefault().ParentDirectoryCI)).Where(IsValidDefinitionType);
                 var ordered = all.GroupBy(p => p.TypeAndId).Select(p =>
                 {
                     if (p.Any(v => v.AllowDuplicate))
