@@ -4,72 +4,72 @@
 		<title>Irony Mod Manager</title>
 		<language>en</language>
 		<item>
-			<title>1.25.130</title>
+			<title>1.25.131</title>
 			<description>## Note
 * Despite small change log this is a significant update due to core changes in memory usage.
 * Collections made with 1.25 are not backwards compatibile with older versions due to new mod filter behavior. You do not lose any resolution data, but you do lose mod filter settings.
 
 ## Current Release Notes
-* Fix parsing top level inline scripts (thanks to Gigastructures devs for the report)
+* HOI4 Conflict Solver 1.13 compatibility
 
 ## Release Notes 1.25
 * Optimize memory usage in Conflict Solver
 * Add option to use hybrid memory in Conflict Solver (appSettings)
 * Update dependencies
 * Mod filter changed to allow exclusion of mods from conflict list (provided only x number of mods cause a conflict)</description>
-			<pubDate>Wed, 04 Oct 2023 16:24:53 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.25.130/linux-x64.zip" sparkle:version="1.25.130.8366" sparkle:shortVersionString="1.25.130" length="90618808" sparkle:os="linux" type="application/zip" sparkle:signature="6PrqoEF/Lt3y3IjXtZHnIoSbsaGP6OQ2WnfAg4hJNtxTMEDKVZR4Vs7lYEIgziaU4uLgxc8qAmYhmNyC8cmaBQ=="/>
+			<pubDate>Wed, 11 Oct 2023 20:25:13 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.25.131/linux-x64.zip" sparkle:version="1.25.131.46682" sparkle:shortVersionString="1.25.131" length="90618654" sparkle:os="linux" type="application/zip" sparkle:signature="klY8kE4AKTYfTETiLI3r3h/95sF42m0S9GoRz3Uenoz6UdPcQYF4anvTNkZ7zAQkCkydVmCxrguMbwzqkQuvCQ=="/>
 		</item>
 		<item>
-			<title>1.25.130</title>
+			<title>1.25.131</title>
 			<description>## Note
 * Despite small change log this is a significant update due to core changes in memory usage.
 * Collections made with 1.25 are not backwards compatibile with older versions due to new mod filter behavior. You do not lose any resolution data, but you do lose mod filter settings.
 
 ## Current Release Notes
-* Fix parsing top level inline scripts (thanks to Gigastructures devs for the report)
+* HOI4 Conflict Solver 1.13 compatibility
 
 ## Release Notes 1.25
 * Optimize memory usage in Conflict Solver
 * Add option to use hybrid memory in Conflict Solver (appSettings)
 * Update dependencies
 * Mod filter changed to allow exclusion of mods from conflict list (provided only x number of mods cause a conflict)</description>
-			<pubDate>Wed, 04 Oct 2023 16:25:00 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.25.130/osx-x64.zip" sparkle:version="1.25.130.8366" sparkle:shortVersionString="1.25.130" length="93398287" sparkle:os="osx" type="application/zip" sparkle:signature="Q+lm3UDMqcsti9AMPtkeiZGZK0bdc3kaRkgvd1wWi7hThvUrHVed1GQJzR/256nYxmUln5ADuCFfMN7Vz2eWBQ=="/>
+			<pubDate>Wed, 11 Oct 2023 20:25:20 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.25.131/osx-x64.zip" sparkle:version="1.25.131.46682" sparkle:shortVersionString="1.25.131" length="93392389" sparkle:os="osx" type="application/zip" sparkle:signature="dQcopJQJ8VIJpDvnOPDJpBPgj2h5od8Qvewtp4hwL1AAP4C3Epbg92twvz9h/LMx4Pxu4yDhjSB4q3yUrR/BAA=="/>
 		</item>
 		<item>
-			<title>1.25.130</title>
+			<title>1.25.131</title>
 			<description>## Note
 * Despite small change log this is a significant update due to core changes in memory usage.
 * Collections made with 1.25 are not backwards compatibile with older versions due to new mod filter behavior. You do not lose any resolution data, but you do lose mod filter settings.
 
 ## Current Release Notes
-* Fix parsing top level inline scripts (thanks to Gigastructures devs for the report)
+* HOI4 Conflict Solver 1.13 compatibility
 
 ## Release Notes 1.25
 * Optimize memory usage in Conflict Solver
 * Add option to use hybrid memory in Conflict Solver (appSettings)
 * Update dependencies
 * Mod filter changed to allow exclusion of mods from conflict list (provided only x number of mods cause a conflict)</description>
-			<pubDate>Wed, 04 Oct 2023 16:25:07 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.25.130/win-x64-setup.zip" sparkle:version="1.25.130.8366" sparkle:shortVersionString="1.25.130" length="71822401" sparkle:os="windows" type="application/zip" sparkle:signature="IseCf9k/xBa64n+3G/Nrw3P7ByX4iviZjfK6QLdf4ESd81Ax7jm+zrpGypRpuMX8YU7IBeqwSswCd9S5zKmmBQ=="/>
+			<pubDate>Wed, 11 Oct 2023 20:25:26 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.25.131/win-x64-setup.zip" sparkle:version="1.25.131.46682" sparkle:shortVersionString="1.25.131" length="71807248" sparkle:os="windows" type="application/zip" sparkle:signature="+/5h0UG8xAidHt3o+lPMPg9sSIToHhn1TWHGU6O5uonsDjGtl7jvgNigpDNhJtTigRP7hlMCXwmxk4X+emtLBA=="/>
 		</item>
 		<item>
-			<title>1.25.130</title>
+			<title>1.25.131</title>
 			<description>## Note
 * Despite small change log this is a significant update due to core changes in memory usage.
 * Collections made with 1.25 are not backwards compatibile with older versions due to new mod filter behavior. You do not lose any resolution data, but you do lose mod filter settings.
 
 ## Current Release Notes
-* Fix parsing top level inline scripts (thanks to Gigastructures devs for the report)
+* HOI4 Conflict Solver 1.13 compatibility
 
 ## Release Notes 1.25
 * Optimize memory usage in Conflict Solver
 * Add option to use hybrid memory in Conflict Solver (appSettings)
 * Update dependencies
 * Mod filter changed to allow exclusion of mods from conflict list (provided only x number of mods cause a conflict)</description>
-			<pubDate>Wed, 04 Oct 2023 16:25:07 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.25.130/win-x64.zip" sparkle:version="1.25.130.8366" sparkle:shortVersionString="1.25.130" length="105562720" sparkle:os="windows" type="application/zip" sparkle:signature="lhh25skAJOK2g9zrXqUDCUAdk170w/u0cThW4saztNPbO4LXSSv6FUWZafoPcgL4peSkNJMLYaA5B8qf3NeDDA=="/>
+			<pubDate>Wed, 11 Oct 2023 20:25:27 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.25.131/win-x64.zip" sparkle:version="1.25.131.46682" sparkle:shortVersionString="1.25.131" length="105556531" sparkle:os="windows" type="application/zip" sparkle:signature="IBuZqeP8DHycoFnoFYBcCNJiw9WZeHa0fYHy31LdIQe6x2rLCGD26DT63LlRLdpXtFF3kz8yQewp+l2WYa58Dw=="/>
 		</item>
 	</channel>
 </rss>
