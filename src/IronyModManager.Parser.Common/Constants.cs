@@ -5,7 +5,7 @@
 // Created          : 02-16-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 10-03-2023
+// Last Modified On : 10-11-2023
 // ***********************************************************************
 // <copyright file="Constants.cs" company="Mario">
 //     Mario
@@ -291,6 +291,11 @@ namespace IronyModManager.Parser.Common
             public static readonly string Medals = MergePath(CommonPath, "medals");
 
             /// <summary>
+            /// The mio
+            /// </summary>
+            public static readonly string MIO = MergePath(CommonPath, "military_industrial_organization");
+
+            /// <summary>
             /// The opinion modifiers
             /// </summary>
             public static readonly string OpinionModifiers = MergePath(CommonPath, "opinion_modifiers");
@@ -304,7 +309,6 @@ namespace IronyModManager.Parser.Common
             /// The profile backgrounds
             /// </summary>
             public static readonly string ProfileBackgrounds = MergePath(CommonPath, "profile_backgrounds");
-
             /// <summary>
             /// The profile pictures
             /// </summary>
