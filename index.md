@@ -5,6 +5,7 @@ Irony Mod Manager is a new advanced mod manager for Paradox Games, it started ou
 * Europa Universalis IV
 * Hearts of Iron IV
 * Imperator Rome
+* Star Trek: Infinite
 * Stellaris
 * Victoria 3
 
