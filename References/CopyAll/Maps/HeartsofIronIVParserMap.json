@@ -74,6 +74,9 @@
         "DirectoryPath": "common\\dynamic_modifiers",
         "PreferredParser": "DefaultParser"
     }, {
+        "DirectoryPath": "common\\equipment_groups",
+        "PreferredParser": "DefaultParser"
+    }, {
         "DirectoryPath": "common\\game_rules",
         "PreferredParser": "DefaultParser"
     }, {
@@ -97,6 +100,15 @@
     }, {
         "DirectoryPath": "common\\medals",
         "PreferredParser": "HOI4InnerLayerParser"
+    }, {
+        "DirectoryPath": "common\\military_industrial_organization\\ai_bonus_weights",
+        "PreferredParser": "HOI4WholeTextParser"
+    }, {
+        "DirectoryPath": "common\\military_industrial_organization\\organizations",
+        "PreferredParser": "HOI4WholeTextParser"
+    }, {
+        "DirectoryPath": "common\\military_industrial_organization\\policies",
+        "PreferredParser": "HOI4WholeTextParser"
     }, {
         "DirectoryPath": "common\\modifiers",
         "PreferredParser": "DefaultParser"

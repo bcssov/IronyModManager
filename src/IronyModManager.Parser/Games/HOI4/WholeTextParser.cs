@@ -49,7 +49,7 @@ namespace IronyModManager.Parser.Games.HOI4
             Common.Constants.HOI4.IntelligenceAgencies, Common.Constants.HOI4.ScriptedGui,
             Common.Constants.HOI4.Units, Common.Constants.HOI4.History, Common.Constants.HOI4.Generation,
             Common.Constants.HOI4.IdeaTags, Common.Constants.HOI4.Terrain, Common.Constants.HOI4.ProfilePictures,
-            Common.Constants.HOI4.PeaceConference, Common.Constants.HOI4.ProfileBackgrounds
+            Common.Constants.HOI4.PeaceConference, Common.Constants.HOI4.ProfileBackgrounds, Common.Constants.HOI4.MIO
         };
 
         #endregion Fields
