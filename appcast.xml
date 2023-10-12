@@ -4,12 +4,13 @@
 		<title>Irony Mod Manager</title>
 		<language>en</language>
 		<item>
-			<title>1.25.131</title>
+			<title>1.25.132</title>
 			<description>## Note
 * Despite small change log this is a significant update due to core changes in memory usage.
 * Collections made with 1.25 are not backwards compatibile with older versions due to new mod filter behavior. You do not lose any resolution data, but you do lose mod filter settings.
 
 ## Current Release Notes
+* Add basic Star Trek Infinite support (no conflict solver) 
 * HOI4 Conflict Solver 1.13 compatibility
 
 ## Release Notes 1.25
@@ -17,16 +18,17 @@
 * Add option to use hybrid memory in Conflict Solver (appSettings)
 * Update dependencies
 * Mod filter changed to allow exclusion of mods from conflict list (provided only x number of mods cause a conflict)</description>
-			<pubDate>Wed, 11 Oct 2023 20:25:13 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.25.131/linux-x64.zip" sparkle:version="1.25.131.46682" sparkle:shortVersionString="1.25.131" length="90618654" sparkle:os="linux" type="application/zip" sparkle:signature="klY8kE4AKTYfTETiLI3r3h/95sF42m0S9GoRz3Uenoz6UdPcQYF4anvTNkZ7zAQkCkydVmCxrguMbwzqkQuvCQ=="/>
+			<pubDate>Thu, 12 Oct 2023 21:24:18 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.25.132/linux-x64.zip" sparkle:version="1.25.132.17287" sparkle:shortVersionString="1.25.132" length="90619231" sparkle:os="linux" type="application/zip" sparkle:signature="XSPvNXFDmepvF5kGMGkdhn6yhe+xSMaHK2IjJe2wlabrGATktmZdnTANuiJ++BH0TssMMjnLfI9tk3ViI5r9Cw=="/>
 		</item>
 		<item>
-			<title>1.25.131</title>
+			<title>1.25.132</title>
 			<description>## Note
 * Despite small change log this is a significant update due to core changes in memory usage.
 * Collections made with 1.25 are not backwards compatibile with older versions due to new mod filter behavior. You do not lose any resolution data, but you do lose mod filter settings.
 
 ## Current Release Notes
+* Add basic Star Trek Infinite support (no conflict solver) 
 * HOI4 Conflict Solver 1.13 compatibility
 
 ## Release Notes 1.25
@@ -34,16 +36,17 @@
 * Add option to use hybrid memory in Conflict Solver (appSettings)
 * Update dependencies
 * Mod filter changed to allow exclusion of mods from conflict list (provided only x number of mods cause a conflict)</description>
-			<pubDate>Wed, 11 Oct 2023 20:25:20 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.25.131/osx-x64.zip" sparkle:version="1.25.131.46682" sparkle:shortVersionString="1.25.131" length="93392389" sparkle:os="osx" type="application/zip" sparkle:signature="dQcopJQJ8VIJpDvnOPDJpBPgj2h5od8Qvewtp4hwL1AAP4C3Epbg92twvz9h/LMx4Pxu4yDhjSB4q3yUrR/BAA=="/>
+			<pubDate>Thu, 12 Oct 2023 21:24:25 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.25.132/osx-x64.zip" sparkle:version="1.25.132.17287" sparkle:shortVersionString="1.25.132" length="93392990" sparkle:os="osx" type="application/zip" sparkle:signature="g7TkS646pBadcFw9C85zDAiBeXDIuZQ3bRxF9p5u1A/KfcCc1ftafTGBq7Kjjl998muMPnNcSW6hqjZPac8KBw=="/>
 		</item>
 		<item>
-			<title>1.25.131</title>
+			<title>1.25.132</title>
 			<description>## Note
 * Despite small change log this is a significant update due to core changes in memory usage.
 * Collections made with 1.25 are not backwards compatibile with older versions due to new mod filter behavior. You do not lose any resolution data, but you do lose mod filter settings.
 
 ## Current Release Notes
+* Add basic Star Trek Infinite support (no conflict solver) 
 * HOI4 Conflict Solver 1.13 compatibility
 
 ## Release Notes 1.25
@@ -51,16 +54,17 @@
 * Add option to use hybrid memory in Conflict Solver (appSettings)
 * Update dependencies
 * Mod filter changed to allow exclusion of mods from conflict list (provided only x number of mods cause a conflict)</description>
-			<pubDate>Wed, 11 Oct 2023 20:25:26 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.25.131/win-x64-setup.zip" sparkle:version="1.25.131.46682" sparkle:shortVersionString="1.25.131" length="71807248" sparkle:os="windows" type="application/zip" sparkle:signature="+/5h0UG8xAidHt3o+lPMPg9sSIToHhn1TWHGU6O5uonsDjGtl7jvgNigpDNhJtTigRP7hlMCXwmxk4X+emtLBA=="/>
+			<pubDate>Thu, 12 Oct 2023 21:24:31 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.25.132/win-x64-setup.zip" sparkle:version="1.25.132.17287" sparkle:shortVersionString="1.25.132" length="71824218" sparkle:os="windows" type="application/zip" sparkle:signature="1C1LSjs5L9DxlpKu1SWIcENteN9EmOpix0UabVUDt8MG2tgXjeZGCrmk5ij7oqN5UV5L3VJfAiCEv2uQiDiJDg=="/>
 		</item>
 		<item>
-			<title>1.25.131</title>
+			<title>1.25.132</title>
 			<description>## Note
 * Despite small change log this is a significant update due to core changes in memory usage.
 * Collections made with 1.25 are not backwards compatibile with older versions due to new mod filter behavior. You do not lose any resolution data, but you do lose mod filter settings.
 
 ## Current Release Notes
+* Add basic Star Trek Infinite support (no conflict solver) 
 * HOI4 Conflict Solver 1.13 compatibility
 
 ## Release Notes 1.25
@@ -68,8 +72,8 @@
 * Add option to use hybrid memory in Conflict Solver (appSettings)
 * Update dependencies
 * Mod filter changed to allow exclusion of mods from conflict list (provided only x number of mods cause a conflict)</description>
-			<pubDate>Wed, 11 Oct 2023 20:25:27 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.25.131/win-x64.zip" sparkle:version="1.25.131.46682" sparkle:shortVersionString="1.25.131" length="105556531" sparkle:os="windows" type="application/zip" sparkle:signature="IBuZqeP8DHycoFnoFYBcCNJiw9WZeHa0fYHy31LdIQe6x2rLCGD26DT63LlRLdpXtFF3kz8yQewp+l2WYa58Dw=="/>
+			<pubDate>Thu, 12 Oct 2023 21:24:32 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.25.132/win-x64.zip" sparkle:version="1.25.132.17287" sparkle:shortVersionString="1.25.132" length="105557184" sparkle:os="windows" type="application/zip" sparkle:signature="ESub8X3SXAFoi1B0Ht+Q7nO42MpgQqY70gEXX83EcGsss90F4fkrlfWM41XCCva+UqsYjqAv7FSDrziy0zRsBQ=="/>
 		</item>
 	</channel>
 </rss>
