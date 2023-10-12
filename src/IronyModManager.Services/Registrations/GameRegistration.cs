@@ -5,7 +5,7 @@
 // Created          : 02-12-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 10-03-2023
+// Last Modified On : 10-12-2023
 // ***********************************************************************
 // <copyright file="GameRegistration.cs" company="Mario">
 //     Mario
@@ -40,7 +40,7 @@ namespace IronyModManager.Services.Registrations
         /// <summary>
         /// The hoi4 cache version
         /// </summary>
-        private const int HOI4CacheVersion = 12;
+        private const int HOI4CacheVersion = 13;
 
         /// <summary>
         /// The stellaris cache version
@@ -70,6 +70,7 @@ namespace IronyModManager.Services.Registrations
             storage.RegisterGame(GetImperator(userDir));
             storage.RegisterGame(GetCK3(userDir));
             storage.RegisterGame(GetVicky3(userDir));
+            storage.RegisterGame(GetSTInfinite(userDir));
         }
 
         /// <summary>
@@ -261,6 +262,35 @@ namespace IronyModManager.Services.Registrations
             game.SupportedMergeTypes = IronyModManager.Models.Common.SupportedMergeTypes.Zip | IronyModManager.Models.Common.SupportedMergeTypes.Basic;
             game.ModDescriptorType = IronyModManager.Models.Common.ModDescriptorType.DescriptorMod;
             game.GameIndexCacheVersion = StellarisCacheVersion;
+            MapGameSettings(game, GetExecutableSettings(game));
+            return game;
+        }
+
+        /// <summary>
+        /// Gets the st infinite.
+        /// </summary>
+        /// <param name="baseUserDir">The base user dir.</param>
+        /// <returns>IGameType.</returns>
+        private IGameType GetSTInfinite(string baseUserDir)
+        {
+            var game = DIResolver.Get<IGameType>();
+            game.DLCContainer = Shared.Constants.GamesTypes.DLCContainer;
+            game.ChecksumFolders = Shared.Constants.GamesTypes.STInfinite.ChecksumFolders;
+            game.GameFolders = Shared.Constants.GamesTypes.STInfinite.GameFolders;
+            game.LogLocation = Path.Combine(Path.Combine(baseUserDir, Shared.Constants.GamesTypes.STInfinite.DocsPath), Shared.Constants.GamesTypes.LogLocation).StandardizeDirectorySeparator();
+            game.Name = Shared.Constants.GamesTypes.STInfinite.Id;
+            game.Abrv = Shared.Constants.GamesTypes.STInfinite.Abrv;
+            game.SteamAppId = Shared.Constants.GamesTypes.STInfinite.SteamAppId;
+            game.UserDirectory = Path.Combine(baseUserDir, Shared.Constants.GamesTypes.STInfinite.DocsPath).StandardizeDirectorySeparator();
+            game.WorkshopDirectory = SteamDirectory.GetWorkshopDirectory(Shared.Constants.GamesTypes.STInfinite.SteamAppId).Select(p => p.StandardizeDirectorySeparator()).ToList();
+            game.BaseSteamGameDirectory = SteamDirectory.GetGameDirectory(Shared.Constants.GamesTypes.STInfinite.SteamAppId).StandardizeDirectorySeparator();
+            game.LauncherSettingsFileName = Shared.Constants.GamesTypes.LauncherSettingsFileName;
+            game.RemoteSteamUserDirectory = SteamDirectory.GetUserDataFolders(game.SteamAppId).Select(p => p.StandardizeDirectorySeparator()).ToList();
+            game.AdvancedFeatures = IronyModManager.Models.Common.GameAdvancedFeatures.None;
+            game.ParadoxGameId = Shared.Constants.GamesTypes.STInfinite.ParadoxGameId;
+            game.SupportedMergeTypes = IronyModManager.Models.Common.SupportedMergeTypes.Zip | IronyModManager.Models.Common.SupportedMergeTypes.Basic;
+            game.ModDescriptorType = IronyModManager.Models.Common.ModDescriptorType.DescriptorMod;
+            game.GameIndexCacheVersion = 1;
             MapGameSettings(game, GetExecutableSettings(game));
             return game;
         }

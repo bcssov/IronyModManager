@@ -130,6 +130,7 @@ namespace IronyModManager.Shared
             public const string ImperatorRome = Prefix + "ImperatorRome";
             public const string CrusaderKings3 = Prefix + "CrusaderKings3";
             public const string Victoria3 = Prefix + "Victoria3";
+            public const string STInfinite = Prefix + "STInfinite";
         }
         public static class Installed_Mods
         {
