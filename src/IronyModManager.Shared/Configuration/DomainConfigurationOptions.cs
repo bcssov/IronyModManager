@@ -5,7 +5,7 @@
 // Created          : 07-24-2022
 //
 // Last Modified By : Mario
-// Last Modified On : 06-26-2023
+// Last Modified On : 10-17-2023
 // ***********************************************************************
 // <copyright file="DomainConfigurationOptions.cs" company="Mario">
 //     Mario
@@ -120,6 +120,11 @@ namespace IronyModManager.Shared.Configuration
         /// <value>The game handler path.</value>
         public string GameHandlerPath { get; set; }
 
+        /// <summary>
+        /// Gets or sets the install location override.
+        /// </summary>
+        /// <value>The install location override.</value>
+        public string InstallLocationOverride { get; set; }
         /// <summary>
         /// Gets or sets a value indicating whether [use game handler].
         /// </summary>
