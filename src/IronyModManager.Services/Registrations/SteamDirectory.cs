@@ -5,7 +5,7 @@
 // Created          : 02-24-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 05-26-2023
+// Last Modified On : 10-17-2023
 // ***********************************************************************
 // <copyright file="SteamDirectory.cs" company="Mario">
 //     Mario
@@ -23,6 +23,7 @@ using Gameloop.Vdf.Linq;
 using IronyModManager.DI;
 using IronyModManager.Services.Models;
 using IronyModManager.Shared;
+using IronyModManager.Shared.Configuration;
 using Microsoft.Win32;
 
 namespace IronyModManager.Services.Registrations
@@ -246,6 +247,12 @@ namespace IronyModManager.Services.Registrations
         /// <returns>System.String.</returns>
         private static string GetSteamRootPath()
         {
+            // We're going to use an override if set
+            var options = DIResolver.Get<IDomainConfiguration>().GetOptions();
+            if (!string.IsNullOrWhiteSpace(options.Steam.InstallLocationOverride) && Directory.Exists(options.Steam.InstallLocationOverride))
+            {
+                return options.Steam.InstallLocationOverride;
+            }
             if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
             {
                 return GetSteamOSXRootPath();
