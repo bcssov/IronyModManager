@@ -4,12 +4,15 @@
 		<title>Irony Mod Manager</title>
 		<language>en</language>
 		<item>
-			<title>1.25.133</title>
+			<title>1.25.136</title>
 			<description>## Note
 * Despite small change log this is a significant update due to core changes in memory usage.
 * Collections made with 1.25 are not backwards compatibile with older versions due to new mod filter behavior. You do not lose any resolution data, but you do lose mod filter settings.
 
 ## Current Release Notes
+* Upgrade some components due to a discovered vulnerability
+
+## v1.25.133
 * Add appSettings option to override steam install location detection
 
 ## Release Notes 1.25
@@ -17,16 +20,19 @@
 * Add option to use hybrid memory in Conflict Solver (appSettings)
 * Update dependencies
 * Mod filter changed to allow exclusion of mods from conflict list (provided only x number of mods cause a conflict)</description>
-			<pubDate>Tue, 17 Oct 2023 20:49:22 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.25.133/linux-x64.zip" sparkle:version="1.25.133.34144" sparkle:shortVersionString="1.25.133" length="90619594" sparkle:os="linux" type="application/zip" sparkle:signature="vPoy0gvT2HGRtOfLfoeCXcsNwX4zeMgMHB5HpJk20RE/pjdxuFEKa0BPQlULs/GimSKSoxu9HAmjQ3QF5FD0DQ=="/>
+			<pubDate>Thu, 19 Oct 2023 07:07:28 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.25.136/linux-x64.zip" sparkle:version="1.25.136.51630" sparkle:shortVersionString="1.25.136" length="90621360" sparkle:os="linux" type="application/zip" sparkle:signature="yP5Y6axbhzdy23GqpBY4aRocDHh6ah3f2jErDabUjKXy0M3J+o6Nk5wdZiRQJJA7HFG1rYDZ14SaEf+pEZ2JBw=="/>
 		</item>
 		<item>
-			<title>1.25.133</title>
+			<title>1.25.136</title>
 			<description>## Note
 * Despite small change log this is a significant update due to core changes in memory usage.
 * Collections made with 1.25 are not backwards compatibile with older versions due to new mod filter behavior. You do not lose any resolution data, but you do lose mod filter settings.
 
 ## Current Release Notes
+* Upgrade some components due to a discovered vulnerability
+
+## v1.25.133
 * Add appSettings option to override steam install location detection
 
 ## Release Notes 1.25
@@ -34,16 +40,19 @@
 * Add option to use hybrid memory in Conflict Solver (appSettings)
 * Update dependencies
 * Mod filter changed to allow exclusion of mods from conflict list (provided only x number of mods cause a conflict)</description>
-			<pubDate>Tue, 17 Oct 2023 20:49:28 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.25.133/osx-x64.zip" sparkle:version="1.25.133.34144" sparkle:shortVersionString="1.25.133" length="93393322" sparkle:os="osx" type="application/zip" sparkle:signature="b8KhpIxLo02iN7cEMrW3H9jeCZrkrE1zTRChfnTsAu2+exbXQU/oGr9dOruEzbEHtr90d+a6i9dec5MjGsGrDg=="/>
+			<pubDate>Thu, 19 Oct 2023 07:07:35 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.25.136/osx-x64.zip" sparkle:version="1.25.136.51630" sparkle:shortVersionString="1.25.136" length="93529527" sparkle:os="osx" type="application/zip" sparkle:signature="xuJYfJr3QRH+rFPrpgyWVwHCyumyb3/Epwa800uEdxxqvkbpo5E7C0n+niRa7dB2vYr4OZCANJg1vz50uQtiDQ=="/>
 		</item>
 		<item>
-			<title>1.25.133</title>
+			<title>1.25.136</title>
 			<description>## Note
 * Despite small change log this is a significant update due to core changes in memory usage.
 * Collections made with 1.25 are not backwards compatibile with older versions due to new mod filter behavior. You do not lose any resolution data, but you do lose mod filter settings.
 
 ## Current Release Notes
+* Upgrade some components due to a discovered vulnerability
+
+## v1.25.133
 * Add appSettings option to override steam install location detection
 
 ## Release Notes 1.25
@@ -51,16 +60,19 @@
 * Add option to use hybrid memory in Conflict Solver (appSettings)
 * Update dependencies
 * Mod filter changed to allow exclusion of mods from conflict list (provided only x number of mods cause a conflict)</description>
-			<pubDate>Tue, 17 Oct 2023 20:49:35 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.25.133/win-x64-setup.zip" sparkle:version="1.25.133.34144" sparkle:shortVersionString="1.25.133" length="71814319" sparkle:os="windows" type="application/zip" sparkle:signature="HJdwEocoFYCuk6IrMONFrCkC5RrKcTkzkcJbMfMkBw1C2STY0VyGVpX/rsYaNxqJI5TlPjInRJZa36kJRbMPCw=="/>
+			<pubDate>Thu, 19 Oct 2023 07:07:41 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.25.136/win-x64-setup.zip" sparkle:version="1.25.136.51630" sparkle:shortVersionString="1.25.136" length="71894369" sparkle:os="windows" type="application/zip" sparkle:signature="tx5jhg1FqbQypN+3UZFgCEIDAExElhx6qLhirNTyCKmrLc2s4d/bVjRLNkseRtgvY2wyiSfBVMcw4miVqNHEBQ=="/>
 		</item>
 		<item>
-			<title>1.25.133</title>
+			<title>1.25.136</title>
 			<description>## Note
 * Despite small change log this is a significant update due to core changes in memory usage.
 * Collections made with 1.25 are not backwards compatibile with older versions due to new mod filter behavior. You do not lose any resolution data, but you do lose mod filter settings.
 
 ## Current Release Notes
+* Upgrade some components due to a discovered vulnerability
+
+## v1.25.133
 * Add appSettings option to override steam install location detection
 
 ## Release Notes 1.25
@@ -68,8 +80,8 @@
 * Add option to use hybrid memory in Conflict Solver (appSettings)
 * Update dependencies
 * Mod filter changed to allow exclusion of mods from conflict list (provided only x number of mods cause a conflict)</description>
-			<pubDate>Tue, 17 Oct 2023 20:49:35 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.25.133/win-x64.zip" sparkle:version="1.25.133.34144" sparkle:shortVersionString="1.25.133" length="105557462" sparkle:os="windows" type="application/zip" sparkle:signature="ZrI+ZAoFPR2mCkiWXrP1+MAehj6niYmFZxZmyy3zm5wLseV7XDyPfmf7lVKQGoAnbOPlalYODnROgtDhhPZzCQ=="/>
+			<pubDate>Thu, 19 Oct 2023 07:07:42 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.25.136/win-x64.zip" sparkle:version="1.25.136.51630" sparkle:shortVersionString="1.25.136" length="105699095" sparkle:os="windows" type="application/zip" sparkle:signature="w1KmbC2YCBVWmexcbm6Exu0ZcIXWPUQyp8sZR/DaVmkCH3In5bIruj5XA2nx9hZo0zT203yEOzV6OctnaUSFAg=="/>
 		</item>
 	</channel>
 </rss>
