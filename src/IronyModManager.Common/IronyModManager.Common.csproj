@@ -52,6 +52,7 @@
     </PackageReference>
     <PackageReference Include="ReactiveUI" Version="19.4.1" />
     <PackageReference Include="Sajidur78.StrongNamer" Version="0.2.8" />
+    <PackageReference Include="SkiaSharp" Version="2.88.6" />
   </ItemGroup>
 
   <ItemGroup>
