@@ -1,10 +1,11 @@
-﻿// ***********************************************************************
+﻿
+// ***********************************************************************
 // Assembly         : IronyModManager
 // Author           : Mario
 // Created          : 01-10-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 11-29-2022
+// Last Modified On : 10-29-2023
 // ***********************************************************************
 // <copyright file="App.xaml.cs" company="Mario">
 //     Mario
@@ -13,6 +14,7 @@
 // ***********************************************************************
 using System;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Avalonia;
@@ -38,6 +40,7 @@ using ReactiveUI;
 
 namespace IronyModManager
 {
+
     /// <summary>
     /// Class App.
     /// Implements the <see cref="Avalonia.Application" />
@@ -181,10 +184,18 @@ namespace IronyModManager
         protected virtual void SetAppTitle(IClassicDesktopStyleApplicationLifetime desktop)
         {
             var appTitle = IronyFormatter.Format(DIResolver.Get<ILocalizationManager>().GetResource(LocalizationResources.App.Title),
-                new
+            new
+            {
+                AppVersion = FileVersionInfo.GetVersionInfo(GetType().Assembly.Location).ProductVersion.Split("+")[0]
+            });
+            if (File.Exists(Constants.TitleSuffixFilename))
+            {
+                var suffix = File.ReadAllLines(Constants.TitleSuffixFilename);
+                if (suffix.Any())
                 {
-                    AppVersion = FileVersionInfo.GetVersionInfo(GetType().Assembly.Location).ProductVersion.Split("+")[0]
-                });
+                    appTitle = $"{appTitle} ({suffix.FirstOrDefault()})";
+                }
+            }
             desktop.MainWindow.Title = appTitle;
         }
 
@@ -198,7 +209,7 @@ namespace IronyModManager
             await Task.Delay(5000);
             var permissionService = DIResolver.Get<IPermissionCheckService>();
             var permissions = permissionService.VerifyPermissions();
-            if (permissions.Count > 0 && permissions.Any(p => !p.Valid))
+            if (permissions.Any() && permissions.Any(p => !p.Valid))
             {
                 var notificationAction = DIResolver.Get<INotificationAction>();
                 var locManager = DIResolver.Get<ILocalizationManager>();

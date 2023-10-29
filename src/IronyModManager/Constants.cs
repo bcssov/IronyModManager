@@ -1,10 +1,11 @@
-﻿// ***********************************************************************
+﻿
+// ***********************************************************************
 // Assembly         : IronyModManager
 // Author           : Mario
 // Created          : 01-13-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 10-28-2022
+// Last Modified On : 10-29-2023
 // ***********************************************************************
 // <copyright file="Constants.cs" company="Mario">
 //     Mario
@@ -16,6 +17,7 @@ using System.Collections.Generic;
 
 namespace IronyModManager
 {
+
     /// <summary>
     /// Class Constants.
     /// </summary>
@@ -54,10 +56,14 @@ namespace IronyModManager
         public const string PublicUpdateKey = "Oc2c/G6WMYkKL9+owAZYNIwMAMu9YqURiKw+gkY4zEw=";
 
         /// <summary>
+        /// The title suffix filename
+        /// </summary>
+        public const string TitleSuffixFilename = "Title_Suffix.txt";
+
+        /// <summary>
         /// The update settings
         /// </summary>
         public const string UpdateSettings = "update-settings.json";
-
         /// <summary>
         /// The wiki URL
         /// </summary>
