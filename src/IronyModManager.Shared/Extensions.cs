@@ -1,10 +1,11 @@
-﻿// ***********************************************************************
+﻿
+// ***********************************************************************
 // Assembly         : IronyModManager.Shared
 // Author           : Mario
 // Created          : 02-16-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 08-13-2022
+// Last Modified On : 10-31-2023
 // ***********************************************************************
 // <copyright file="Extensions.cs" company="Mario">
 //     Mario
@@ -15,9 +16,11 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text.RegularExpressions;
 
 namespace IronyModManager.Shared
 {
+
     /// <summary>
     /// Class Extensions.
     /// </summary>
@@ -25,6 +28,11 @@ namespace IronyModManager.Shared
     public static partial class Extensions
     {
         #region Fields
+
+        /// <summary>
+        /// The emoji filter
+        /// </summary>
+        private const string EmojiFilter = @"\p{Cs}";
 
         /// <summary>
         /// The empty string characters
@@ -35,7 +43,6 @@ namespace IronyModManager.Shared
         /// The tab space
         /// </summary>
         private static readonly string tabSpace = new(' ', 4);
-
         /// <summary>
         /// The invalid file name characters
         /// </summary>
@@ -78,6 +85,9 @@ namespace IronyModManager.Shared
             }
             var fileName = GetInvalidFileNameChars().Aggregate(value, (current, character) => current.Replace(character.ToString(), string.Empty));
             fileName = emptyStringCharacters.Aggregate(fileName, (a, b) => a.Replace(b, "_"));
+
+            // Fireprince don't use emojis in mod names, thanks so much
+            fileName = Regex.Replace(fileName, EmojiFilter, string.Empty);
             return fileName;
         }
 
