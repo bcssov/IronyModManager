@@ -599,38 +599,68 @@ namespace IronyModManager.Services
         protected virtual async Task<IEnumerable<IHashReport>> ParseReportAsync(IGame game, string basePath, IEnumerable<string> files)
         {
             var reports = new List<IHashReport>();
+            var reports2 = new List<IHashFileReport[]>();
 
             var total = files.Where(p => game.GameFolders.Any(x => p.StartsWith(x))).Count();
             var progress = 0;
             double lastPercentage = 0;
+            int i = 0;
+            var tasks = new List<Task<Tuple<int, int, IHashFileReport>>>();
 
             foreach (var item in game.GameFolders)
             {
                 var report = GetModelInstance<IHashReport>();
                 report.Name = item;
                 report.ReportType = HashReportType.Game;
-                var hashReports = new List<IHashFileReport>();
+                int j = 0;
+
                 foreach (var file in files.Where(p => p.StartsWith(item)))
                 {
-                    var info = reader.GetFileInfo(basePath, file);
-                    if (info != null)
+                    string folderPath = basePath;
+                    string filePath = file;
+                    int folderIndex = i;
+                    int fileIndex = j;
+                    tasks.Add(Task.Run(() =>
                     {
-                        var fileReport = GetModelInstance<IHashFileReport>();
-                        fileReport.File = file;
-                        fileReport.Hash = info.ContentSHA;
-                        hashReports.Add(fileReport);
-                    }
-                    progress++;
-                    var percentage = GetProgressPercentage(total, progress);
-                    if (percentage != lastPercentage)
-                    {
-                        await messageBus.PublishAsync(new ModReportExportEvent(1, percentage));
-                    }
-                    lastPercentage = percentage;
+                        var info = reader.GetFileInfo(folderPath, filePath);
+                        if (info != null)
+                        {
+                            var fileReport = GetModelInstance<IHashFileReport>();
+                            fileReport.File = filePath;
+                            fileReport.Hash = info.ContentSHA;
+                            return new Tuple<int, int, IHashFileReport>(folderIndex, fileIndex, fileReport);
+                        }
+                        return null;
+                    }));
+                    j++;
                 }
-                report.Reports = hashReports;
                 reports.Add(report);
+                reports2.Add(new IHashFileReport[j]);
+                i++;
             }
+
+            while (tasks.Count > 0)
+            {
+                i = Task.WaitAny(tasks.ToArray());
+                Task<Tuple<int, int, IHashFileReport>> task = tasks[i];
+                tasks.RemoveAt(i);
+                if (task.Result != null)
+                {
+                    reports2[task.Result.Item1][task.Result.Item2] = task.Result.Item3;
+                }
+                progress++;
+                var percentage = GetProgressPercentage(total, progress);
+                if (percentage != lastPercentage)
+                {
+                    await messageBus.PublishAsync(new ModReportExportEvent(1, percentage));
+                }
+                lastPercentage = percentage;
+            }
+            for (i=0; i < reports.Count; i++)
+            {
+                reports[i].Reports = reports2[i].ToList();
+            }
+
             return reports;
         }
 

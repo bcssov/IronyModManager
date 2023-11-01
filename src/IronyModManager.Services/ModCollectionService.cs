@@ -712,37 +712,69 @@ namespace IronyModManager.Services
         protected virtual async Task<IEnumerable<IHashReport>> ParseReportAsync(IEnumerable<IMod> mods)
         {
             var game = GameService.GetSelected();
+
             var reports = new List<IHashReport>();
+            var reports2 = new List<IHashFileReport[]>();
+
             var total = mods.SelectMany(p => p.Files).Count(p => game.GameFolders.Any(a => p.StartsWith(a)));
             var progress = 0;
             double lastPercentage = 0;
+            int i = 0;
+            var tasks = new List<Task<Tuple<int,int,IHashFileReport>>>();
+
             foreach (var mod in mods)
             {
                 var report = GetModelInstance<IHashReport>();
                 report.Name = mod.Name;
                 report.ReportType = HashReportType.Collection;
-                var hashReports = new List<IHashFileReport>();
+                int j = 0;
+
                 foreach (var item in mod.Files.Where(p => game.GameFolders.Any(a => p.StartsWith(a))))
                 {
-                    var info = Reader.GetFileInfo(mod.FullPath, item);
-                    if (info != null)
+                    string modPath = mod.FullPath;
+                    string filePath = item;
+                    int modIndex = i;
+                    int fileIndex = j;
+                    tasks.Add(Task.Run(() =>
                     {
-                        var fileReport = GetModelInstance<IHashFileReport>();
-                        fileReport.File = item;
-                        fileReport.Hash = info.ContentSHA;
-                        hashReports.Add(fileReport);
-                    }
-                    progress++;
-                    var percentage = GetProgressPercentage(total, progress);
-                    if (percentage != lastPercentage)
-                    {
-                        await messageBus.PublishAsync(new ModReportExportEvent(1, percentage));
-                    }
-                    lastPercentage = percentage;
+                        var info = Reader.GetFileInfo(modPath, filePath);
+                        if (info != null)
+                        {
+                            var fileReport = GetModelInstance<IHashFileReport>();
+                            fileReport.File = filePath;
+                            fileReport.Hash = info.ContentSHA;
+                            return new Tuple<int, int, IHashFileReport>(modIndex, fileIndex, fileReport);
+                        }
+                        return null;
+                    }));
+                    j++;
                 }
-                report.Reports = hashReports;
                 reports.Add(report);
+                reports2.Add(new IHashFileReport[j]);
+                i++;
             }
+            while (tasks.Count > 0)
+            {
+                i = Task.WaitAny(tasks.ToArray());
+                Tuple<int, int, IHashFileReport> result = tasks[i].Result;
+                tasks.RemoveAt(i);
+                if (result != null)
+                {
+                    reports2[result.Item1][result.Item2] = result.Item3;
+                }
+                progress++;
+                var percentage = GetProgressPercentage(total, progress);
+                if (percentage != lastPercentage)
+                {
+                    await messageBus.PublishAsync(new ModReportExportEvent(1, percentage));
+                }
+                lastPercentage = percentage;
+            }
+            for (i = 0; i < reports.Count; i++)
+            {
+                reports[i].Reports = reports2[i].ToList();
+            }
+
             return reports;
         }
 
