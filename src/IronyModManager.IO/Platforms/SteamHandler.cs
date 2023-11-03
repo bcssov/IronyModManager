@@ -1,10 +1,11 @@
-﻿// ***********************************************************************
+﻿
+// ***********************************************************************
 // Assembly         : IronyModManager.IO
 // Author           : Mario
 // Created          : 07-11-2022
 //
 // Last Modified By : Mario
-// Last Modified On : 11-18-2022
+// Last Modified On : 11-03-2023
 // ***********************************************************************
 // <copyright file="SteamHandler.cs" company="Mario">
 //     Mario
@@ -24,6 +25,7 @@ using Steamworks;
 
 namespace IronyModManager.IO.Platforms
 {
+
     /// <summary>
     /// Class SteamHandler.
     /// Implements the <see cref="ISteam" />
@@ -152,6 +154,7 @@ namespace IronyModManager.IO.Platforms
             }
             var result = await InitializeAndValidateAsync();
             var initCheckAttempts = 0;
+
             // Will keep trying until steam starts
             while (!result)
             {
@@ -176,6 +179,21 @@ namespace IronyModManager.IO.Platforms
             CleanupAppId();
             return Task.FromResult(true);
         }
+
+#pragma warning disable SYSLIB1054 // Use 'LibraryImportAttribute' instead of 'DllImportAttribute' to generate P/Invoke marshalling code at compile time
+        /// <summary>
+        /// Setenvs the specified name.
+        /// </summary>
+        /// <param name="name">The name.</param>
+        /// <param name="value">The value.</param>
+        /// <param name="overwrite">if set to <c>true</c> [overwrite].</param>
+        /// <returns>System.Int32.</returns>
+        [DllImport("libc", CharSet = CharSet.Ansi, BestFitMapping = false, ThrowOnUnmappableChar = true)]
+
+        // No thanks, don't want to flag allow unsafe just yet
+        private static extern int setenv(string name, string value, bool overwrite);
+
+#pragma warning restore SYSLIB1054 // Use 'LibraryImportAttribute' instead of 'DllImportAttribute' to generate P/Invoke marshalling code at compile time
 
         /// <summary>
         /// Cleanups the application identifier.
@@ -248,10 +266,10 @@ namespace IronyModManager.IO.Platforms
         private async Task SetAppId(long appId)
         {
             var appIdValue = appId.ToString();
-            Environment.SetEnvironmentVariable("SteamAppId", appIdValue);
-            Environment.SetEnvironmentVariable("SteamOverlayGameId", appIdValue);
-            Environment.SetEnvironmentVariable("SteamGameId", appIdValue);
-            if (!RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+            SetEnvironmentVariable("SteamAppId", appIdValue);
+            SetEnvironmentVariable("SteamOverlayGameId", appIdValue);
+            SetEnvironmentVariable("SteamGameId", appIdValue);
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
             {
                 try
                 {
@@ -260,6 +278,24 @@ namespace IronyModManager.IO.Platforms
                 catch
                 {
                 }
+            }
+        }
+
+        /// <summary>
+        /// Sets the environment variable.
+        /// </summary>
+        /// <param name="name">The name.</param>
+        /// <param name="value">The value.</param>
+        private void SetEnvironmentVariable(string name, string value)
+        {
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
+            {
+                // Way to go Microsoft
+                _ = setenv(name, value, true);
+            }
+            else
+            {
+                Environment.SetEnvironmentVariable(name, value);
             }
         }
 
