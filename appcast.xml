@@ -4,13 +4,15 @@
 		<title>Irony Mod Manager</title>
 		<language>en</language>
 		<item>
-			<title>1.25.136</title>
+			<title>1.25.142</title>
 			<description>## Note
 * Despite small change log this is a significant update due to core changes in memory usage.
 * Collections made with 1.25 are not backwards compatibile with older versions due to new mod filter behavior. You do not lose any resolution data, but you do lose mod filter settings.
 
 ## Current Release Notes
-* Upgrade some components due to a discovered vulnerability
+* Filter out emojis as valid filename characters, while they may be valid filename characters pdx games don't like them
+* Made hash reports multi-threaded (contribution by kittycat2002)
+* Ensure that environment variables are passed to steam libraries (workaround for Linux)
 
 ## v1.25.133
 * Add appSettings option to override steam install location detection
@@ -20,17 +22,19 @@
 * Add option to use hybrid memory in Conflict Solver (appSettings)
 * Update dependencies
 * Mod filter changed to allow exclusion of mods from conflict list (provided only x number of mods cause a conflict)</description>
-			<pubDate>Thu, 19 Oct 2023 07:07:28 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.25.136/linux-x64.zip" sparkle:version="1.25.136.51630" sparkle:shortVersionString="1.25.136" length="90621360" sparkle:os="linux" type="application/zip" sparkle:signature="yP5Y6axbhzdy23GqpBY4aRocDHh6ah3f2jErDabUjKXy0M3J+o6Nk5wdZiRQJJA7HFG1rYDZ14SaEf+pEZ2JBw=="/>
+			<pubDate>Fri, 03 Nov 2023 21:07:22 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.25.142/linux-x64.zip" sparkle:version="1.25.142.5324" sparkle:shortVersionString="1.25.142" length="90618965" sparkle:os="linux" type="application/zip" sparkle:signature="B4dyfIf8moKNNKCiTOBQodq3BBFlWr07/6DXSk/Lk9BXpl+Nndt2yYklNohsI4TjjFt2fIkRK3NNBCFi+Bo9Aw=="/>
 		</item>
 		<item>
-			<title>1.25.136</title>
+			<title>1.25.142</title>
 			<description>## Note
 * Despite small change log this is a significant update due to core changes in memory usage.
 * Collections made with 1.25 are not backwards compatibile with older versions due to new mod filter behavior. You do not lose any resolution data, but you do lose mod filter settings.
 
 ## Current Release Notes
-* Upgrade some components due to a discovered vulnerability
+* Filter out emojis as valid filename characters, while they may be valid filename characters pdx games don't like them
+* Made hash reports multi-threaded (contribution by kittycat2002)
+* Ensure that environment variables are passed to steam libraries (workaround for Linux)
 
 ## v1.25.133
 * Add appSettings option to override steam install location detection
@@ -40,17 +44,19 @@
 * Add option to use hybrid memory in Conflict Solver (appSettings)
 * Update dependencies
 * Mod filter changed to allow exclusion of mods from conflict list (provided only x number of mods cause a conflict)</description>
-			<pubDate>Thu, 19 Oct 2023 07:07:35 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.25.136/osx-x64.zip" sparkle:version="1.25.136.51630" sparkle:shortVersionString="1.25.136" length="93529527" sparkle:os="osx" type="application/zip" sparkle:signature="xuJYfJr3QRH+rFPrpgyWVwHCyumyb3/Epwa800uEdxxqvkbpo5E7C0n+niRa7dB2vYr4OZCANJg1vz50uQtiDQ=="/>
+			<pubDate>Fri, 03 Nov 2023 21:07:28 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.25.142/osx-x64.zip" sparkle:version="1.25.142.5324" sparkle:shortVersionString="1.25.142" length="93533085" sparkle:os="osx" type="application/zip" sparkle:signature="RAm6mtRhe0OBbAIksFRx2IQFLB9kTC2s9lcDd0HMlH3eodpEfcSMh+9Lam7WF1MekleQyiCNqPoTffzOxQsTBg=="/>
 		</item>
 		<item>
-			<title>1.25.136</title>
+			<title>1.25.142</title>
 			<description>## Note
 * Despite small change log this is a significant update due to core changes in memory usage.
 * Collections made with 1.25 are not backwards compatibile with older versions due to new mod filter behavior. You do not lose any resolution data, but you do lose mod filter settings.
 
 ## Current Release Notes
-* Upgrade some components due to a discovered vulnerability
+* Filter out emojis as valid filename characters, while they may be valid filename characters pdx games don't like them
+* Made hash reports multi-threaded (contribution by kittycat2002)
+* Ensure that environment variables are passed to steam libraries (workaround for Linux)
 
 ## v1.25.133
 * Add appSettings option to override steam install location detection
@@ -60,17 +66,19 @@
 * Add option to use hybrid memory in Conflict Solver (appSettings)
 * Update dependencies
 * Mod filter changed to allow exclusion of mods from conflict list (provided only x number of mods cause a conflict)</description>
-			<pubDate>Thu, 19 Oct 2023 07:07:41 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.25.136/win-x64-setup.zip" sparkle:version="1.25.136.51630" sparkle:shortVersionString="1.25.136" length="71894369" sparkle:os="windows" type="application/zip" sparkle:signature="tx5jhg1FqbQypN+3UZFgCEIDAExElhx6qLhirNTyCKmrLc2s4d/bVjRLNkseRtgvY2wyiSfBVMcw4miVqNHEBQ=="/>
+			<pubDate>Fri, 03 Nov 2023 21:07:35 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.25.142/win-x64-setup.zip" sparkle:version="1.25.142.5324" sparkle:shortVersionString="1.25.142" length="71936909" sparkle:os="windows" type="application/zip" sparkle:signature="wj3tnLQPnRpnjwBFvMhT9sVHCaZHBWzGx8ZP75dwhLxzYhO7GvQxswIr4NDQrVyVEd5/NSj4QjJYR2Somqs2DA=="/>
 		</item>
 		<item>
-			<title>1.25.136</title>
+			<title>1.25.142</title>
 			<description>## Note
 * Despite small change log this is a significant update due to core changes in memory usage.
 * Collections made with 1.25 are not backwards compatibile with older versions due to new mod filter behavior. You do not lose any resolution data, but you do lose mod filter settings.
 
 ## Current Release Notes
-* Upgrade some components due to a discovered vulnerability
+* Filter out emojis as valid filename characters, while they may be valid filename characters pdx games don't like them
+* Made hash reports multi-threaded (contribution by kittycat2002)
+* Ensure that environment variables are passed to steam libraries (workaround for Linux)
 
 ## v1.25.133
 * Add appSettings option to override steam install location detection
@@ -80,8 +88,8 @@
 * Add option to use hybrid memory in Conflict Solver (appSettings)
 * Update dependencies
 * Mod filter changed to allow exclusion of mods from conflict list (provided only x number of mods cause a conflict)</description>
-			<pubDate>Thu, 19 Oct 2023 07:07:42 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.25.136/win-x64.zip" sparkle:version="1.25.136.51630" sparkle:shortVersionString="1.25.136" length="105699095" sparkle:os="windows" type="application/zip" sparkle:signature="w1KmbC2YCBVWmexcbm6Exu0ZcIXWPUQyp8sZR/DaVmkCH3In5bIruj5XA2nx9hZo0zT203yEOzV6OctnaUSFAg=="/>
+			<pubDate>Fri, 03 Nov 2023 21:07:35 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.25.142/win-x64.zip" sparkle:version="1.25.142.5324" sparkle:shortVersionString="1.25.142" length="105701982" sparkle:os="windows" type="application/zip" sparkle:signature="4ZlIhey0lVtjVxZ5SZO/YAXvmJ7tmAKkAqGOL6Z4JQ8El9uGOUhKU3xWET+IEBQSbktrTUpnJO5ChovVKFfcDQ=="/>
 		</item>
 	</channel>
 </rss>
