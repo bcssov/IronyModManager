@@ -15,6 +15,9 @@
     <SolutionDir Condition="'$(SolutionDir)'==''">$(MSBuildThisFileDirectory)</SolutionDir>
   </PropertyGroup>
   <PropertyGroup>
+    <PathMap>$(MSBuildProjectDirectory)=$(MSBuildProjectName)</PathMap>
+  </PropertyGroup>  
+  <PropertyGroup>
     <MicrosoftExtensionsDependencyModelVersion>[7.0.0]</MicrosoftExtensionsDependencyModelVersion>
     <MicrosoftNETCorePlatformsVersion>[7.0.3]</MicrosoftNETCorePlatformsVersion>    
     <MicrosoftExtensionsConfigurationBinder>[7.0.4]</MicrosoftExtensionsConfigurationBinder>
