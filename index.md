@@ -63,5 +63,8 @@ Made by LordOfLA:
 ##### Linux
 - Portable version: Extract the **linux.zip** file somewhere that you'd like to have Irony installed. Navigate to the folder where you extracted Irony and run the ```chmod +x IronyModManager``` command. That will allow you to execute the app. Finally you can run the app using the ```./IronyModManager``` command.
 
+### Win 7 Support
+Please see [here](https://github.com/bcssov/IronyModManager/discussions/469). 
+
 ### Privacy Policy
 Please see [here](https://github.com/bcssov/IronyModManager/wiki/Privacy-Policy).
