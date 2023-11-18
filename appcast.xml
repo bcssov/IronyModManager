@@ -4,15 +4,13 @@
 		<title>Irony Mod Manager</title>
 		<language>en</language>
 		<item>
-			<title>1.25.142</title>
+			<title>1.25.143</title>
 			<description>## Note
 * Despite small change log this is a significant update due to core changes in memory usage.
 * Collections made with 1.25 are not backwards compatibile with older versions due to new mod filter behavior. You do not lose any resolution data, but you do lose mod filter settings.
 
 ## Current Release Notes
-* Filter out emojis as valid filename characters, while they may be valid filename characters pdx games don't like them
-* Made hash reports multi-threaded (contribution by kittycat2002)
-* Ensure that environment variables are passed to steam libraries (workaround for Linux)
+* Stellaris 3.10 CS update
 
 ## v1.25.133
 * Add appSettings option to override steam install location detection
@@ -22,19 +20,17 @@
 * Add option to use hybrid memory in Conflict Solver (appSettings)
 * Update dependencies
 * Mod filter changed to allow exclusion of mods from conflict list (provided only x number of mods cause a conflict)</description>
-			<pubDate>Fri, 03 Nov 2023 21:07:22 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.25.142/linux-x64.zip" sparkle:version="1.25.142.5324" sparkle:shortVersionString="1.25.142" length="90618965" sparkle:os="linux" type="application/zip" sparkle:signature="B4dyfIf8moKNNKCiTOBQodq3BBFlWr07/6DXSk/Lk9BXpl+Nndt2yYklNohsI4TjjFt2fIkRK3NNBCFi+Bo9Aw=="/>
+			<pubDate>Sat, 18 Nov 2023 23:09:37 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.25.143/linux-x64.zip" sparkle:version="1.25.143.7261" sparkle:shortVersionString="1.25.143" length="90665087" sparkle:os="linux" type="application/zip" sparkle:signature="88T37Vgv1EV2/qRe1REijnoNJK2qGxyA8vxV+4LGT8YNVj9j4KzNCM5TTmPWNIL19+3r0k1N/uYi53WLBSSvBg=="/>
 		</item>
 		<item>
-			<title>1.25.142</title>
+			<title>1.25.143</title>
 			<description>## Note
 * Despite small change log this is a significant update due to core changes in memory usage.
 * Collections made with 1.25 are not backwards compatibile with older versions due to new mod filter behavior. You do not lose any resolution data, but you do lose mod filter settings.
 
 ## Current Release Notes
-* Filter out emojis as valid filename characters, while they may be valid filename characters pdx games don't like them
-* Made hash reports multi-threaded (contribution by kittycat2002)
-* Ensure that environment variables are passed to steam libraries (workaround for Linux)
+* Stellaris 3.10 CS update
 
 ## v1.25.133
 * Add appSettings option to override steam install location detection
@@ -44,19 +40,17 @@
 * Add option to use hybrid memory in Conflict Solver (appSettings)
 * Update dependencies
 * Mod filter changed to allow exclusion of mods from conflict list (provided only x number of mods cause a conflict)</description>
-			<pubDate>Fri, 03 Nov 2023 21:07:28 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.25.142/osx-x64.zip" sparkle:version="1.25.142.5324" sparkle:shortVersionString="1.25.142" length="93533085" sparkle:os="osx" type="application/zip" sparkle:signature="RAm6mtRhe0OBbAIksFRx2IQFLB9kTC2s9lcDd0HMlH3eodpEfcSMh+9Lam7WF1MekleQyiCNqPoTffzOxQsTBg=="/>
+			<pubDate>Sat, 18 Nov 2023 23:09:44 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.25.143/osx-x64.zip" sparkle:version="1.25.143.7261" sparkle:shortVersionString="1.25.143" length="93575848" sparkle:os="osx" type="application/zip" sparkle:signature="mjEjqPvFQGu8JGJicZLEpl8paxM6GSwMBb5F4W8bvaertD0RVz02Sey/Ed7uzTZbcxE7WiBtRm8V4uK2BOeBAA=="/>
 		</item>
 		<item>
-			<title>1.25.142</title>
+			<title>1.25.143</title>
 			<description>## Note
 * Despite small change log this is a significant update due to core changes in memory usage.
 * Collections made with 1.25 are not backwards compatibile with older versions due to new mod filter behavior. You do not lose any resolution data, but you do lose mod filter settings.
 
 ## Current Release Notes
-* Filter out emojis as valid filename characters, while they may be valid filename characters pdx games don't like them
-* Made hash reports multi-threaded (contribution by kittycat2002)
-* Ensure that environment variables are passed to steam libraries (workaround for Linux)
+* Stellaris 3.10 CS update
 
 ## v1.25.133
 * Add appSettings option to override steam install location detection
@@ -66,19 +60,17 @@
 * Add option to use hybrid memory in Conflict Solver (appSettings)
 * Update dependencies
 * Mod filter changed to allow exclusion of mods from conflict list (provided only x number of mods cause a conflict)</description>
-			<pubDate>Fri, 03 Nov 2023 21:07:35 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.25.142/win-x64-setup.zip" sparkle:version="1.25.142.5324" sparkle:shortVersionString="1.25.142" length="71936909" sparkle:os="windows" type="application/zip" sparkle:signature="wj3tnLQPnRpnjwBFvMhT9sVHCaZHBWzGx8ZP75dwhLxzYhO7GvQxswIr4NDQrVyVEd5/NSj4QjJYR2Somqs2DA=="/>
+			<pubDate>Sat, 18 Nov 2023 23:09:51 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.25.143/win-x64-setup.zip" sparkle:version="1.25.143.7261" sparkle:shortVersionString="1.25.143" length="71912985" sparkle:os="windows" type="application/zip" sparkle:signature="1TjqoLUgyuF5C4uFJZ6Hh6nBziHq5KfZsEsLAJCMULBE6sUpDIGtKzAR4xNstvHjYiCl3q+GWATeJkUtLW+nDQ=="/>
 		</item>
 		<item>
-			<title>1.25.142</title>
+			<title>1.25.143</title>
 			<description>## Note
 * Despite small change log this is a significant update due to core changes in memory usage.
 * Collections made with 1.25 are not backwards compatibile with older versions due to new mod filter behavior. You do not lose any resolution data, but you do lose mod filter settings.
 
 ## Current Release Notes
-* Filter out emojis as valid filename characters, while they may be valid filename characters pdx games don't like them
-* Made hash reports multi-threaded (contribution by kittycat2002)
-* Ensure that environment variables are passed to steam libraries (workaround for Linux)
+* Stellaris 3.10 CS update
 
 ## v1.25.133
 * Add appSettings option to override steam install location detection
@@ -88,8 +80,8 @@
 * Add option to use hybrid memory in Conflict Solver (appSettings)
 * Update dependencies
 * Mod filter changed to allow exclusion of mods from conflict list (provided only x number of mods cause a conflict)</description>
-			<pubDate>Fri, 03 Nov 2023 21:07:35 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.25.142/win-x64.zip" sparkle:version="1.25.142.5324" sparkle:shortVersionString="1.25.142" length="105701982" sparkle:os="windows" type="application/zip" sparkle:signature="4ZlIhey0lVtjVxZ5SZO/YAXvmJ7tmAKkAqGOL6Z4JQ8El9uGOUhKU3xWET+IEBQSbktrTUpnJO5ChovVKFfcDQ=="/>
+			<pubDate>Sat, 18 Nov 2023 23:09:51 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.25.143/win-x64.zip" sparkle:version="1.25.143.7261" sparkle:shortVersionString="1.25.143" length="105729311" sparkle:os="windows" type="application/zip" sparkle:signature="pEpXU0fSHM1rNdTzOazKoVYV4ri0stqiluJp2UAnTi6NgyIto/EqgPatZAxEac1BGZhAgWJ1NIDJrBCCInwBCg=="/>
 		</item>
 	</channel>
 </rss>
