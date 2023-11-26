@@ -5,7 +5,7 @@
 // Created          : 07-24-2022
 //
 // Last Modified By : Mario
-// Last Modified On : 10-17-2023
+// Last Modified On : 11-26-2023
 // ***********************************************************************
 // <copyright file="DomainConfigurationOptions.cs" company="Mario">
 //     Mario
@@ -25,6 +25,12 @@ namespace IronyModManager.Shared.Configuration
     public class ConflictSolver
     {
         #region Properties
+
+        /// <summary>
+        /// Gets or sets a value indicating whether [compress indexed definitions].
+        /// </summary>
+        /// <value><c>true</c> if [compress indexed definitions]; otherwise, <c>false</c>.</value>
+        public bool CompressIndexedDefinitions { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether [use disk search].

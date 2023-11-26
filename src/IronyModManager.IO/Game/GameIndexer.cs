@@ -1,10 +1,11 @@
-﻿// ***********************************************************************
+﻿
+// ***********************************************************************
 // Assembly         : IronyModManager.IO
 // Author           : Mario
 // Created          : 05-27-2021
 //
 // Last Modified By : Mario
-// Last Modified On : 08-13-2022
+// Last Modified On : 11-26-2023
 // ***********************************************************************
 // <copyright file="GameIndexer.cs" company="Mario">
 //     Mario
@@ -21,11 +22,13 @@ using IronyModManager.IO.Common;
 using IronyModManager.IO.Common.Game;
 using IronyModManager.Models.Common;
 using IronyModManager.Shared;
+using IronyModManager.Shared.Configuration;
 using IronyModManager.Shared.Models;
 using LiteDB;
 
 namespace IronyModManager.IO.Game
 {
+
     /// <summary>
     /// Class GameIndexer.
     /// Implements the <see cref="IronyModManager.IO.Common.Game.IGameIndexer" />
@@ -40,6 +43,11 @@ namespace IronyModManager.IO.Game
         /// The cache version file
         /// </summary>
         private const string CacheVersionFile = "cache-version.txt";
+
+        /// <summary>
+        /// The compressed mode
+        /// </summary>
+        private const string CompressedMode = "zip";
 
         /// <summary>
         /// The database extension
@@ -57,6 +65,10 @@ namespace IronyModManager.IO.Game
         private const string GameVersionFile = "game-version.txt";
 
         /// <summary>
+        /// The mode extension
+        /// </summary>
+        private const string ModeExtension = ".mode";
+        /// <summary>
         /// The storage sub folder
         /// </summary>
         private const string StorageSubFolder = "IndexCache";
@@ -66,7 +78,29 @@ namespace IronyModManager.IO.Game
         /// </summary>
         private const string TableName = "definitions";
 
+        /// <summary>
+        /// The uncompressed mode
+        /// </summary>
+        private const string UncompressedMode = "flat";
+        /// <summary>
+        /// The domain configuration
+        /// </summary>
+        private readonly IDomainConfiguration domainConfiguration;
+
         #endregion Fields
+
+        #region Constructors
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="GameIndexer" /> class.
+        /// </summary>
+        /// <param name="domainConfiguration">The domain configuration.</param>
+        public GameIndexer(IDomainConfiguration domainConfiguration)
+        {
+            this.domainConfiguration = domainConfiguration;
+        }
+
+        #endregion Constructors
 
         #region Methods
 
@@ -156,22 +190,46 @@ namespace IronyModManager.IO.Game
         /// <returns>Task&lt;IEnumerable&lt;IDefinition&gt;&gt;.</returns>
         public virtual async Task<IEnumerable<IDefinition>> GetDefinitionsAsync(string storagePath, IGame game, string path)
         {
+            bool isCompressed(string path)
+            {
+                var modePath = path + ModeExtension;
+                if (!File.Exists(modePath))
+                {
+                    // New so if no file means compressed
+                    return true;
+                }
+                var mode = File.ReadAllText(modePath);
+                return !string.IsNullOrWhiteSpace(mode) && mode.Equals(CompressedMode, StringComparison.OrdinalIgnoreCase);
+            }
+
             storagePath = ResolveStoragePath(storagePath);
             path = SanitizePath(path);
             var fullPath = Path.Combine(storagePath, game.Type, path);
             if (File.Exists(fullPath))
             {
-                var zip = ZipFile.Read(fullPath);
-                var entry = zip.Entries.FirstOrDefault(p => !p.IsDirectory);
-                var ms = new MemoryStream();
-                entry.Extract(ms);
-                var db = GetDatabase(ms);
+                Stream dbStream;
+                ZipFile zip = null;
+
+                // Test whether compressed
+                if (isCompressed(fullPath))
+                {
+                    zip = ZipFile.Read(fullPath);
+                    var entry = zip.Entries.FirstOrDefault(p => !p.IsDirectory);
+                    var ms = new MemoryStream();
+                    entry.Extract(ms);
+                    dbStream = ms;
+                }
+                else
+                {
+                    dbStream = File.OpenRead(fullPath);
+                }
+                var db = GetDatabase(dbStream);
                 var col = db.GetCollection<IDefinition>(TableName);
                 var result = col.FindAll().ToList() as IEnumerable<IDefinition>;
                 db.Dispose();
-                zip.Dispose();
-                ms.Close();
-                await ms.DisposeAsync();
+                zip?.Dispose();
+                dbStream.Close();
+                await dbStream.DisposeAsync();
                 return result;
             }
             return null;
@@ -199,6 +257,7 @@ namespace IronyModManager.IO.Game
             var path = SanitizePath(definitions.FirstOrDefault().ParentDirectory);
             var fullPath = Path.Combine(storagePath, game.Type, path);
             var dbPath = fullPath + DBExtension;
+            var modePath = fullPath + ModeExtension;
             if (File.Exists(fullPath))
             {
                 DiskOperations.DeleteFile(fullPath);
@@ -206,6 +265,10 @@ namespace IronyModManager.IO.Game
             if (File.Exists(dbPath))
             {
                 DiskOperations.DeleteFile(dbPath);
+            }
+            if (File.Exists(modePath))
+            {
+                DiskOperations.DeleteFile(modePath);
             }
             if (!Directory.Exists(Path.GetDirectoryName(fullPath)))
             {
@@ -215,14 +278,25 @@ namespace IronyModManager.IO.Game
             var col = db.GetCollection<IDefinition>(TableName);
             var inserted = col.InsertBulk(definitions);
             db.Dispose();
-            // Now compress the table to reduce space
-            var zip = new ZipFile();
-            zip.AddFile(dbPath, Shared.Constants.EmptyParam);
-            zip.Save(fullPath);
-            zip.Dispose();
-            if (File.Exists(dbPath))
+
+            var opts = domainConfiguration.GetOptions();
+            if (opts.ConflictSolver.CompressIndexedDefinitions)
             {
-                DiskOperations.DeleteFile(dbPath);
+                // Now compress the table to reduce space
+                var zip = new ZipFile();
+                zip.AddFile(dbPath, Shared.Constants.EmptyParam);
+                zip.Save(fullPath);
+                zip.Dispose();
+                if (File.Exists(dbPath))
+                {
+                    DiskOperations.DeleteFile(dbPath);
+                }
+                File.WriteAllText(modePath, CompressedMode);
+            }
+            else
+            {
+                File.Move(dbPath, fullPath, true);
+                File.WriteAllText(modePath, UncompressedMode);
             }
             return Task.FromResult(inserted > 0);
         }
