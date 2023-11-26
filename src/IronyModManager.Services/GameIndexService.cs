@@ -249,7 +249,8 @@ namespace IronyModManager.Services
                     GC.Collect(GC.MaxGeneration, GCCollectionMode.Optimized);
                 }
                 var indexed = DIResolver.Get<IIndexedDefinitions>();
-                await indexed.InitMapAsync((await modDefinitions.GetAllAsync()).Concat(gameDefinitions));
+                var defs = (await modDefinitions.GetAllAsync()).Concat(gameDefinitions);
+                await indexed.InitMapAsync(defs);
                 return indexed;
             }
             return modDefinitions;

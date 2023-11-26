@@ -190,7 +190,7 @@ namespace IronyModManager.IO.Game
         /// <returns>Task&lt;IEnumerable&lt;IDefinition&gt;&gt;.</returns>
         public virtual async Task<IEnumerable<IDefinition>> GetDefinitionsAsync(string storagePath, IGame game, string path)
         {
-            bool isCompressed(string path)
+            static bool isCompressed(string path)
             {
                 var modePath = path + ModeExtension;
                 if (!File.Exists(modePath))
