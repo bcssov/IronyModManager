@@ -447,7 +447,7 @@ namespace IronyModManager.Services
                     }
                 }
                 processed++;
-                var perc = GetProgressPercentage(total, processed, 99.9);
+                var perc = GetProgressPercentage(total, processed, 99.99);
                 if (perc != previousProgress)
                 {
                     messageBus.Publish(new ModDefinitionAnalyzeEvent(perc));
@@ -471,7 +471,7 @@ namespace IronyModManager.Services
                         await EvalDefinitionsAsync(indexedDefinitions, localConflicts, definitions.OrderBy(p => modOrder.IndexOf(p.ModName)), modOrder, actualMode, localFileConflictCache, modShaConflictCache);
                         var progressMutex = await opLock.LockAsync();
                         processed += definitions.Count();
-                        var perc = GetProgressPercentage(total, processed, 99.9);
+                        var perc = GetProgressPercentage(total, processed, 99.99);
                         if (perc != previousProgress)
                         {
                             messageBus.Publish(new ModDefinitionAnalyzeEvent(perc));
@@ -509,7 +509,7 @@ namespace IronyModManager.Services
                         await EvalDefinitionsAsync(indexedDefinitions, localConflicts, definitions.OrderBy(p => modOrder.IndexOf(p.ModName)), modOrder, actualMode, localFileConflictCache, modShaConflictCache);
                         var progressMutex = await opLock.LockAsync();
                         processed += definitions.Count();
-                        var perc = GetProgressPercentage(total, processed, 99.9);
+                        var perc = GetProgressPercentage(total, processed, 99.99);
                         if (perc != previousProgress)
                         {
                             messageBus.Publish(new ModDefinitionAnalyzeEvent(perc));
@@ -573,7 +573,7 @@ namespace IronyModManager.Services
                             await indexedDefinitions.AddToMapAsync(copy);
                             conflicts.Add(copy);
                             processed++;
-                            var perc = GetProgressPercentage(total, processed, 99.9);
+                            var perc = GetProgressPercentage(total, processed, 99.99);
                             if (perc != previousProgress)
                             {
                                 messageBus.Publish(new ModDefinitionAnalyzeEvent(perc));
@@ -585,7 +585,7 @@ namespace IronyModManager.Services
                         {
                             var mutex = await opLock.LockAsync();
                             processed++;
-                            var perc = GetProgressPercentage(total, processed, 99.9);
+                            var perc = GetProgressPercentage(total, processed, 99.99);
                             if (perc != previousProgress)
                             {
                                 messageBus.Publish(new ModDefinitionAnalyzeEvent(perc));
@@ -670,7 +670,7 @@ namespace IronyModManager.Services
                     overwrittenDefs.Add(definition.TypeAndId, Tuple.Create(newDefinition, definitions, definition));
                 }
                 processed++;
-                var perc = GetProgressPercentage(total, processed, 99.9);
+                var perc = GetProgressPercentage(total, processed, 99.99);
                 if (perc != previousProgress)
                 {
                     messageBus.Publish(new ModDefinitionAnalyzeEvent(perc));
@@ -712,7 +712,7 @@ namespace IronyModManager.Services
                         }
                         var mutex = await opLock.LockAsync();
                         processed++;
-                        var perc = GetProgressPercentage(total, processed, 99.9);
+                        var perc = GetProgressPercentage(total, processed, 99.99);
                         if (perc != previousProgress)
                         {
                             messageBus.Publish(new ModDefinitionAnalyzeEvent(perc));
@@ -727,7 +727,7 @@ namespace IronyModManager.Services
             Debug.WriteLine("FindConflictsAsync Overwritten Objects Sort Parse: " + stopWatch.Elapsed.FormatElapsed());
             stopWatch.Restart();
 
-            messageBus.Publish(new ModDefinitionAnalyzeEvent(99.9));
+            messageBus.Publish(new ModDefinitionAnalyzeEvent(99.99));
             var groupedConflicts = conflicts.GroupBy(p => p.TypeAndId);
             var filteredConclicts = new List<IDefinition>();
             foreach (var conflict in groupedConflicts.Where(p => p.Count() > 1))
