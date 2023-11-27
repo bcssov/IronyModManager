@@ -5,7 +5,7 @@
 // Created          : 04-16-2021
 //
 // Last Modified By : Mario
-// Last Modified On : 10-17-2023
+// Last Modified On : 11-26-2023
 // ***********************************************************************
 // <copyright file="PlatformConfiguration.cs" company="Mario">
 //     Mario
@@ -16,10 +16,10 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using Microsoft.Extensions.Configuration;
 using IronyModManager.Platform;
 using IronyModManager.Platform.Configuration;
 using IronyModManager.Shared.Configuration;
-using Microsoft.Extensions.Configuration;
 
 namespace IronyModManager.Implementation.Config
 {
@@ -105,6 +105,7 @@ namespace IronyModManager.Implementation.Config
                 domainConfiguration.Formatting.UseSystemCulture = configuration.GetSection("Formatting").GetSection("UseSystemCulture").Get<bool>();
                 domainConfiguration.ConflictSolver.UseHybridMemory = configuration.GetSection("ConflictSolver").GetSection("UseHybridMemory").Get<bool>();
                 domainConfiguration.ConflictSolver.UseDiskSearch = configuration.GetSection("ConflictSolver").GetSection("UseDiskSearch").Get<bool>();
+                domainConfiguration.ConflictSolver.CompressIndexedDefinitions = configuration.GetSection("ConflictSolver").GetSection("CompressIndexedDefinitions").Get<bool>();
             }
             return domainConfiguration;
         }

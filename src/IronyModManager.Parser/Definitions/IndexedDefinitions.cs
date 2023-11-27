@@ -5,7 +5,7 @@
 // Created          : 02-16-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-26-2023
+// Last Modified On : 11-26-2023
 // ***********************************************************************
 // <copyright file="IndexedDefinitions.cs" company="Mario">
 //     Mario
@@ -200,62 +200,9 @@ namespace IronyModManager.Parser.Definitions
         /// <param name="definition">The definition.</param>
         /// <param name="forceIgnoreHierarchical">if set to <c>true</c> [force ignore hierarchical].</param>
         /// <returns>Task.</returns>
-        public async Task AddToMapAsync(IDefinition definition, bool forceIgnoreHierarchical = false)
+        public Task AddToMapAsync(IDefinition definition, bool forceIgnoreHierarchical = false)
         {
-            async Task addDefinition()
-            {
-                if (store != null)
-                {
-                    await UpdateStoreDefinitionAsync(definition);
-                }
-                else
-                {
-                    definitions.Add(definition);
-                }
-            }
-
-            using var mutex = await opLock.LockAsync();
-            MapKeys(fileCIKeys, definition.FileCI, definition.TypeAndId);
-            MapKeys(typeKeys, definition.Type, definition.TypeAndId);
-            MapKeys(typeAndIdKeys, ConstructKey(definition.Type, definition.Id));
-            MapKeys(allFileKeys, definition.FileCI);
-            MapKeys(directoryCIKeys, definition.ParentDirectoryCI, definition.TypeAndId);
-            MapKeys(typeKeyValues, definition.ValueType, definition.TypeAndId);
-            if (!string.IsNullOrWhiteSpace(definition.DiskFileCI))
-            {
-                MapKeys(diskFileCIKeys, definition.DiskFileCI, definition.TypeAndId);
-                MapKeys(allFileKeys, definition.DiskFileCI);
-            }
-            if (definition.OverwrittenFileNames?.Count > 0)
-            {
-                foreach (var item in definition.OverwrittenFileNames)
-                {
-                    MapKeys(allFileKeys, item.ToLowerInvariant());
-                }
-            }
-            if (useHierarchalMap && !forceIgnoreHierarchical)
-            {
-                MapHierarchicalDefinition(definition);
-            }
-            if (definition.IsFromGame)
-            {
-                gameDefinitionsCount++;
-            }
-
-            switch (allowedType)
-            {
-                case AddToMapAllowedType.InvalidAndSpecial:
-                    if (definition.ValueType == ValueType.Invalid || definition.IsSpecialFolder)
-                    {
-                        await addDefinition();
-                    }
-                    break;
-                default:
-                    await addDefinition();
-                    break;
-            }
-
-            mutex.Dispose();
+            return AddToMapInternalAsync(definition, forceIgnoreHierarchical, true);
         }
 
         /// <summary>
@@ -611,7 +558,7 @@ namespace IronyModManager.Parser.Definitions
             {
                 foreach (var item in definitions)
                 {
-                    await AddToMapAsync(item);
+                    await AddToMapInternalAsync(item, useLock: false);
                 }
             }
         }
@@ -821,6 +768,75 @@ namespace IronyModManager.Parser.Definitions
                     resetDefinitions.Remove(definition.TypeAndId);
                 }
             }
+        }
+
+        /// <summary>
+        /// Add to map internal as an asynchronous operation.
+        /// </summary>
+        /// <param name="definition">The definition.</param>
+        /// <param name="forceIgnoreHierarchical">if set to <c>true</c> [force ignore hierarchical].</param>
+        /// <param name="useLock">if set to <c>true</c> [use lock].</param>
+        /// <returns>A Task representing the asynchronous operation.</returns>
+        private async Task AddToMapInternalAsync(IDefinition definition, bool forceIgnoreHierarchical = false, bool useLock = false)
+        {
+            async Task addDefinition()
+            {
+                if (store != null)
+                {
+                    await UpdateStoreDefinitionAsync(definition);
+                }
+                else
+                {
+                    definitions.Add(definition);
+                }
+            }
+
+            IDisposable mutex = null;
+            if (useLock)
+            {
+                mutex = await opLock.LockAsync();
+            }
+            MapKeys(fileCIKeys, definition.FileCI, definition.TypeAndId);
+            MapKeys(typeKeys, definition.Type, definition.TypeAndId);
+            MapKeys(typeAndIdKeys, ConstructKey(definition.Type, definition.Id));
+            MapKeys(allFileKeys, definition.FileCI);
+            MapKeys(directoryCIKeys, definition.ParentDirectoryCI, definition.TypeAndId);
+            MapKeys(typeKeyValues, definition.ValueType, definition.TypeAndId);
+            if (!string.IsNullOrWhiteSpace(definition.DiskFileCI))
+            {
+                MapKeys(diskFileCIKeys, definition.DiskFileCI, definition.TypeAndId);
+                MapKeys(allFileKeys, definition.DiskFileCI);
+            }
+            if (definition.OverwrittenFileNames?.Count > 0)
+            {
+                foreach (var item in definition.OverwrittenFileNames)
+                {
+                    MapKeys(allFileKeys, item.ToLowerInvariant());
+                }
+            }
+            if (useHierarchalMap && !forceIgnoreHierarchical)
+            {
+                MapHierarchicalDefinition(definition);
+            }
+            if (definition.IsFromGame)
+            {
+                gameDefinitionsCount++;
+            }
+
+            switch (allowedType)
+            {
+                case AddToMapAllowedType.InvalidAndSpecial:
+                    if (definition.ValueType == ValueType.Invalid || definition.IsSpecialFolder)
+                    {
+                        await addDefinition();
+                    }
+                    break;
+                default:
+                    await addDefinition();
+                    break;
+            }
+
+            mutex?.Dispose();
         }
 
         /// <summary>

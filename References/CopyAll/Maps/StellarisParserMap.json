@@ -53,6 +53,12 @@
         "DirectoryPath": "common\\asteroid_belts",
         "PreferredParser": "DefaultParser"
     }, {
+        "DirectoryPath": "common\\astral_actions",
+        "PreferredParser": "DefaultParser"
+    }, {
+        "DirectoryPath": "common\\astral_rifts",
+        "PreferredParser": "DefaultParser"
+    }, {
         "DirectoryPath": "common\\attitudes",
         "PreferredParser": "DefaultParser"
     }, {
@@ -230,6 +236,9 @@
         "DirectoryPath": "common\\inline_scripts",
         "PreferredParser": "StellarisWholeTextParser"
     }, {
+        "DirectoryPath": "common\\inline_scripts\\astral_rift",
+        "PreferredParser": "StellarisWholeTextParser"
+    }, {
         "DirectoryPath": "common\\inline_scripts\\buildings",
         "PreferredParser": "StellarisWholeTextParser"
     }, {
@@ -240,6 +249,9 @@
         "PreferredParser": "StellarisWholeTextParser"
     }, {
         "DirectoryPath": "common\\inline_scripts\\enclaves",
+        "PreferredParser": "StellarisWholeTextParser"
+    }, {
+        "DirectoryPath": "common\\inline_scripts\\ethics",
         "PreferredParser": "StellarisWholeTextParser"
     }, {
         "DirectoryPath": "common\\inline_scripts\\events",
@@ -257,7 +269,16 @@
         "DirectoryPath": "common\\inline_scripts\\pop_faction_types",
         "PreferredParser": "StellarisWholeTextParser"
     }, {
+        "DirectoryPath": "common\\inline_scripts\\relics",
+        "PreferredParser": "StellarisWholeTextParser"
+    }, {
+        "DirectoryPath": "common\\inline_scripts\\ship_components",
+        "PreferredParser": "StellarisWholeTextParser"
+    }, {
         "DirectoryPath": "common\\inline_scripts\\ship_components\\weights",
+        "PreferredParser": "StellarisWholeTextParser"
+    }, {
+        "DirectoryPath": "common\\inline_scripts\\technologies",
         "PreferredParser": "StellarisWholeTextParser"
     }, {
         "DirectoryPath": "common\\inline_scripts\\technology",
@@ -729,6 +750,12 @@
         "PreferredParser": "GenericWholeTextParser"
     }, {
         "DirectoryPath": "sound\\aquatics\\weapons",
+        "PreferredParser": "GenericWholeTextParser"
+    }, {
+        "DirectoryPath": "sound\\astral_planes",
+        "PreferredParser": "GenericWholeTextParser"
+    }, {
+        "DirectoryPath": "sound\\astral_planes\\rifts",
         "PreferredParser": "GenericWholeTextParser"
     }, {
         "DirectoryPath": "sound\\distant_stars",

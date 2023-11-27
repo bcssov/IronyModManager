@@ -5,7 +5,7 @@
 // Created          : 02-29-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-23-2023
+// Last Modified On : 11-27-2023
 // ***********************************************************************
 // <copyright file="ModHolderControlViewModel.cs" company="Mario">
 //     Mario
@@ -15,6 +15,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Reactive;
 using System.Reactive.Disposables;
@@ -573,6 +574,8 @@ namespace IronyModManager.ViewModels.Controls
 
             var tooLargeMod = false;
             var game = gameService.GetSelected();
+            var stopWatch = new Stopwatch();
+            stopWatch.Start();
             var definitions = await Task.Run(async () =>
             {
                 IIndexedDefinitions result = null;
@@ -591,6 +594,8 @@ namespace IronyModManager.ViewModels.Controls
                 GC.Collect(GC.MaxGeneration, GCCollectionMode.Aggressive, true, true);
                 return result;
             }).ConfigureAwait(false);
+
+            Debug.WriteLine("Conflict Solver Stage 1: " + stopWatch.Elapsed.FormatElapsed());
             if (tooLargeMod)
             {
                 await TriggerOverlayAsync(id, false);
@@ -613,6 +618,7 @@ namespace IronyModManager.ViewModels.Controls
             }
             if (versions != null && versions.Any())
             {
+                stopWatch.Restart();
                 await Task.Run(async () =>
                 {
                     await gameIndexService.IndexDefinitionsAsync(game, versions, definitions);
@@ -622,6 +628,9 @@ namespace IronyModManager.ViewModels.Controls
                     GC.WaitForPendingFinalizers();
                     GC.Collect(GC.MaxGeneration, GCCollectionMode.Aggressive, true, true);
                 });
+                Debug.WriteLine("Conflict Solver Stage 2: " + stopWatch.Elapsed.FormatElapsed());
+
+                stopWatch.Restart();
                 definitions = await Task.Run(async () =>
                 {
                     var result = await gameIndexService.LoadDefinitionsAsync(definitions, game, versions);
@@ -632,7 +641,9 @@ namespace IronyModManager.ViewModels.Controls
                     GC.Collect(GC.MaxGeneration, GCCollectionMode.Aggressive, true, true);
                     return result;
                 }).ConfigureAwait(false);
+                Debug.WriteLine("Conflict Solver Stage 3: " + stopWatch.Elapsed.FormatElapsed());
             }
+            stopWatch.Restart();
             var conflicts = await Task.Run(async () =>
             {
                 if (definitions != null)
@@ -646,6 +657,9 @@ namespace IronyModManager.ViewModels.Controls
                 }
                 return null;
             }).ConfigureAwait(false);
+            Debug.WriteLine("Conflict Solver Stage 4: " + stopWatch.Elapsed.FormatElapsed());
+
+            stopWatch.Restart();
             var syncedConflicts = await Task.Run(async () =>
             {
                 var result = await modPatchCollectionService.InitializePatchStateAsync(conflicts, CollectionMods.SelectedModCollection.Name).ConfigureAwait(false);
@@ -660,6 +674,8 @@ namespace IronyModManager.ViewModels.Controls
             {
                 conflicts = syncedConflicts;
             }
+
+            Debug.WriteLine("Conflict Solver Stage 5: " + stopWatch.Elapsed.FormatElapsed());
             var args = new NavigationEventArgs()
             {
                 SelectedCollection = CollectionMods.SelectedModCollection,
