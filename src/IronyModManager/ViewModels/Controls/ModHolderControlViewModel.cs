@@ -595,9 +595,7 @@ namespace IronyModManager.ViewModels.Controls
                 return result;
             }).ConfigureAwait(false);
 
-            TimeSpan ts = stopWatch.Elapsed;
-            string elapsedTime = string.Format("{0:00}:{1:00}:{2:00}.{3:00}", ts.Hours, ts.Minutes, ts.Seconds, ts.Milliseconds / 10);
-            Debug.WriteLine("Conflict Solver Stage 1: " + elapsedTime);
+            Debug.WriteLine("Conflict Solver Stage 1: " + stopWatch.Elapsed.FormatElapsed());
             if (tooLargeMod)
             {
                 await TriggerOverlayAsync(id, false);
@@ -630,9 +628,7 @@ namespace IronyModManager.ViewModels.Controls
                     GC.WaitForPendingFinalizers();
                     GC.Collect(GC.MaxGeneration, GCCollectionMode.Aggressive, true, true);
                 });
-                ts = stopWatch.Elapsed;
-                elapsedTime = string.Format("{0:00}:{1:00}:{2:00}.{3:00}", ts.Hours, ts.Minutes, ts.Seconds, ts.Milliseconds / 10);
-                Debug.WriteLine("Conflict Solver Stage 2: " + elapsedTime);
+                Debug.WriteLine("Conflict Solver Stage 2: " + stopWatch.Elapsed.FormatElapsed());
 
                 stopWatch.Restart();
                 definitions = await Task.Run(async () =>
@@ -645,9 +641,7 @@ namespace IronyModManager.ViewModels.Controls
                     GC.Collect(GC.MaxGeneration, GCCollectionMode.Aggressive, true, true);
                     return result;
                 }).ConfigureAwait(false);
-                ts = stopWatch.Elapsed;
-                elapsedTime = string.Format("{0:00}:{1:00}:{2:00}.{3:00}", ts.Hours, ts.Minutes, ts.Seconds, ts.Milliseconds / 10);
-                Debug.WriteLine("Conflict Solver Stage 3: " + elapsedTime);
+                Debug.WriteLine("Conflict Solver Stage 3: " + stopWatch.Elapsed.FormatElapsed());
             }
             stopWatch.Restart();
             var conflicts = await Task.Run(async () =>
@@ -663,9 +657,7 @@ namespace IronyModManager.ViewModels.Controls
                 }
                 return null;
             }).ConfigureAwait(false);
-            ts = stopWatch.Elapsed;
-            elapsedTime = string.Format("{0:00}:{1:00}:{2:00}.{3:00}", ts.Hours, ts.Minutes, ts.Seconds, ts.Milliseconds / 10);
-            Debug.WriteLine("Conflict Solver Stage 4: " + elapsedTime);
+            Debug.WriteLine("Conflict Solver Stage 4: " + stopWatch.Elapsed.FormatElapsed());
 
             stopWatch.Restart();
             var syncedConflicts = await Task.Run(async () =>
@@ -682,9 +674,8 @@ namespace IronyModManager.ViewModels.Controls
             {
                 conflicts = syncedConflicts;
             }
-            ts = stopWatch.Elapsed;
-            elapsedTime = string.Format("{0:00}:{1:00}:{2:00}.{3:00}", ts.Hours, ts.Minutes, ts.Seconds, ts.Milliseconds / 10);
-            Debug.WriteLine("Conflict Solver Stage 5: " + elapsedTime);
+
+            Debug.WriteLine("Conflict Solver Stage 5: " + stopWatch.Elapsed.FormatElapsed());
             var args = new NavigationEventArgs()
             {
                 SelectedCollection = CollectionMods.SelectedModCollection,

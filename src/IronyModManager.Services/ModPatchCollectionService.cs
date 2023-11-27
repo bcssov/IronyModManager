@@ -15,6 +15,7 @@
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -399,11 +400,15 @@ namespace IronyModManager.Services
             var typeAndIdKeys = await indexedDefinitions.GetAllTypeAndIdKeysAsync();
             var overwritten = (await indexedDefinitions.GetByValueTypeAsync(ValueType.OverwrittenObject)).Concat((await indexedDefinitions.GetByValueTypeAsync(ValueType.OverwrittenObjectSingleFile)));
             var empty = (await indexedDefinitions.GetByValueTypeAsync(ValueType.EmptyFile));
+            var allCount = (await indexedDefinitions.GetAllAsync()).Count();
 
-            double total = (typeAndIdKeys.Count() * 3) + overwritten.Count() + empty.Count(); //typeAndIdKeys eval definitions both times thus the magic number 3
+            double total = (allCount * 2) + typeAndIdKeys.Count() + (overwritten.GroupBy(p => p.TypeAndId).Count() * 2) + empty.Count();
             double processed = 0;
             double previousProgress = 0;
             messageBus.Publish(new ModDefinitionAnalyzeEvent(0));
+
+            var stopWatch = new Stopwatch();
+            stopWatch.Start();
 
             // Create virtual empty objects from an empty file
             foreach (var item in empty)
@@ -449,6 +454,8 @@ namespace IronyModManager.Services
                     previousProgress = perc;
                 }
             }
+            Debug.WriteLine("FindConflictsAsync Empty Files Parse: " + stopWatch.Elapsed.FormatElapsed());
+            stopWatch.Restart();
 
             var opLock = new AsyncLock();
             var tasks = fileKeys.GroupBy(Path.GetDirectoryName).Select(dir =>
@@ -486,6 +493,9 @@ namespace IronyModManager.Services
             });
             await Task.WhenAll(tasks);
 
+            Debug.WriteLine("FindConflictsAsync All Files Parse: " + stopWatch.Elapsed.FormatElapsed());
+            stopWatch.Restart();
+
             tasks = typeAndIdKeys.GroupBy(Path.GetDirectoryName).Select(type =>
             {
                 return Task.Run(async () =>
@@ -520,6 +530,9 @@ namespace IronyModManager.Services
                 });
             });
             await Task.WhenAll(tasks);
+
+            Debug.WriteLine("FindConflictsAsync All Definitions Parse: " + stopWatch.Elapsed.FormatElapsed());
+            stopWatch.Restart();
 
             var indexedConflicts = DIResolver.Get<IIndexedDefinitions>();
             await indexedConflicts.InitMapAsync(conflicts);
@@ -585,9 +598,13 @@ namespace IronyModManager.Services
             });
             await Task.WhenAll(tasks);
 
+            Debug.WriteLine("FindConflictsAsync All Definitions Exist in Last File Parse: " + stopWatch.Elapsed.FormatElapsed());
+            stopWatch.Restart();
+
             var overwrittenDefs = new Dictionary<string, Tuple<IDefinition, IEnumerable<IDefinition>, IDefinition>>();
             var overwrittenSort = new Dictionary<string, IEnumerable<DefinitionOrderSort>>();
             var overwrittenSortExport = new Dictionary<string, List<IDefinition>>();
+
             foreach (var item in overwritten.GroupBy(p => p.TypeAndId))
             {
                 if (!overwrittenSort.TryGetValue(item.FirstOrDefault().ParentDirectoryCI, out var value))
@@ -660,35 +677,55 @@ namespace IronyModManager.Services
                     previousProgress = perc;
                 }
             }
-            foreach (var sortExport in overwrittenSortExport)
+
+            Debug.WriteLine("FindConflictsAsync Overwritten Objects Parse: " + stopWatch.Elapsed.FormatElapsed());
+            stopWatch.Restart();
+
+            tasks = overwrittenSortExport.Select(sortExport =>
             {
-                var fullySortedExport = sortExport.Value.OrderBy(p => p.Order).ToList();
-                sortExport.Value.ForEach(newDefinition =>
+                return Task.Run(async () =>
                 {
-                    var definitions = overwrittenDefs[newDefinition.TypeAndId].Item2;
-                    var definition = overwrittenDefs[newDefinition.TypeAndId].Item3;
-                    newDefinition.Order = fullySortedExport.IndexOf(newDefinition) + 1;
-                    var provider = DefinitionInfoProviders.FirstOrDefault(p => p.CanProcess(GameService.GetSelected().Type) && p.IsFullyImplemented);
-                    var oldFileName = newDefinition.File;
-                    newDefinition.File = Path.Combine(definition.ParentDirectory, definition.Id.GenerateValidFileName() + Path.GetExtension(definition.File));
-                    var overwrittenFileNames = definition.OverwrittenFileNames;
-                    foreach (var file in definitions.SelectMany(p => p.OverwrittenFileNames))
+                    var fullySortedExport = sortExport.Value.OrderBy(p => p.Order).ToList();
+                    foreach (var newDefinition in sortExport.Value)
                     {
-                        overwrittenFileNames.Add(file);
-                    }
-                    newDefinition.OverwrittenFileNames = overwrittenFileNames.Distinct().ToList();
-                    newDefinition.DiskFile = provider.GetDiskFileName(newDefinition);
-                    var preserveOverwrittenFileName = oldFileName == newDefinition.File;
-                    newDefinition.File = provider.GetFileName(newDefinition);
-                    if (preserveOverwrittenFileName)
-                    {
-                        // What are the chances that generated filename will match
-                        var preservedOverwrittenFileName = newDefinition.OverwrittenFileNames;
-                        preservedOverwrittenFileName.Add(oldFileName);
-                        newDefinition.OverwrittenFileNames = preservedOverwrittenFileName;
+                        var definitions = overwrittenDefs[newDefinition.TypeAndId].Item2;
+                        var definition = overwrittenDefs[newDefinition.TypeAndId].Item3;
+                        newDefinition.Order = fullySortedExport.IndexOf(newDefinition) + 1;
+                        var provider = DefinitionInfoProviders.FirstOrDefault(p => p.CanProcess(GameService.GetSelected().Type) && p.IsFullyImplemented);
+                        var oldFileName = newDefinition.File;
+                        newDefinition.File = Path.Combine(definition.ParentDirectory, definition.Id.GenerateValidFileName() + Path.GetExtension(definition.File));
+                        var overwrittenFileNames = definition.OverwrittenFileNames;
+                        foreach (var file in definitions.SelectMany(p => p.OverwrittenFileNames))
+                        {
+                            overwrittenFileNames.Add(file);
+                        }
+                        newDefinition.OverwrittenFileNames = overwrittenFileNames.Distinct().ToList();
+                        newDefinition.DiskFile = provider.GetDiskFileName(newDefinition);
+                        var preserveOverwrittenFileName = oldFileName == newDefinition.File;
+                        newDefinition.File = provider.GetFileName(newDefinition);
+                        if (preserveOverwrittenFileName)
+                        {
+                            // What are the chances that generated filename will match
+                            var preservedOverwrittenFileName = newDefinition.OverwrittenFileNames;
+                            preservedOverwrittenFileName.Add(oldFileName);
+                            newDefinition.OverwrittenFileNames = preservedOverwrittenFileName;
+                        }
+                        var mutex = await opLock.LockAsync();
+                        processed++;
+                        var perc = GetProgressPercentage(total, processed, 99.9);
+                        if (perc != previousProgress)
+                        {
+                            messageBus.Publish(new ModDefinitionAnalyzeEvent(perc));
+                            previousProgress = perc;
+                        }
+                        mutex.Dispose();
                     }
                 });
-            }
+            });
+            await Task.WhenAll(tasks);
+
+            Debug.WriteLine("FindConflictsAsync Overwritten Objects Sort Parse: " + stopWatch.Elapsed.FormatElapsed());
+            stopWatch.Restart();
 
             messageBus.Publish(new ModDefinitionAnalyzeEvent(99.9));
             var groupedConflicts = conflicts.GroupBy(p => p.TypeAndId);
@@ -727,6 +764,10 @@ namespace IronyModManager.Services
                     filteredConclicts.AddRange(conflict);
                 }
             }
+
+            Debug.WriteLine("FindConflictsAsync Placeholder Valid Parse: " + stopWatch.Elapsed.FormatElapsed());
+            stopWatch.Restart();
+
             var result = GetModelInstance<IConflictResult>();
             result.Mode = patchStateMode;
             var conflictsIndexed = DIResolver.Get<IIndexedDefinitions>();
@@ -749,6 +790,9 @@ namespace IronyModManager.Services
             await customConflicts.InitMapAsync(null, true);
             result.CustomConflicts = customConflicts;
             messageBus.Publish(new ModDefinitionAnalyzeEvent(100));
+
+            stopWatch.Stop();
+            Debug.WriteLine("FindConflictsAsync Init Result: " + stopWatch.Elapsed.FormatElapsed());
 
             return result;
         }
