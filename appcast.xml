@@ -4,84 +4,80 @@
 		<title>Irony Mod Manager</title>
 		<language>en</language>
 		<item>
-			<title>1.25.143</title>
+			<title>1.25.148</title>
 			<description>## Note
 * Despite small change log this is a significant update due to core changes in memory usage.
 * Collections made with 1.25 are not backwards compatibile with older versions due to new mod filter behavior. You do not lose any resolution data, but you do lose mod filter settings.
+* Conflict Solver users should backup their mod patches before attempting to use conflict solver in a version greater than v1.25.143
 
 ## Current Release Notes
-* Stellaris 3.10 CS update
-
-## v1.25.133
-* Add appSettings option to override steam install location detection
+* Optimize memory usage further (indexed caches are 10 times bigger though sorry -- ask on github or discord how to change back via appSettings if you insist)
+* Slightly optimize conflict solver load speed (~10% improvement)
 
 ## Release Notes 1.25
 * Optimize memory usage in Conflict Solver
 * Add option to use hybrid memory in Conflict Solver (appSettings)
 * Update dependencies
 * Mod filter changed to allow exclusion of mods from conflict list (provided only x number of mods cause a conflict)</description>
-			<pubDate>Sat, 18 Nov 2023 23:09:37 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.25.143/linux-x64.zip" sparkle:version="1.25.143.7261" sparkle:shortVersionString="1.25.143" length="90665087" sparkle:os="linux" type="application/zip" sparkle:signature="88T37Vgv1EV2/qRe1REijnoNJK2qGxyA8vxV+4LGT8YNVj9j4KzNCM5TTmPWNIL19+3r0k1N/uYi53WLBSSvBg=="/>
+			<pubDate>Mon, 27 Nov 2023 11:15:14 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.25.148/linux-x64.zip" sparkle:version="1.25.148.8959" sparkle:shortVersionString="1.25.148" length="90669346" sparkle:os="linux" type="application/zip" sparkle:signature="qwaXwsjSVCq0UAWlBl8fcV2G516MmC97vdV6AzcS2hkya/cpXqp42bpvGdEARRnX4Gbr+LphORrAklBUJq0qAg=="/>
 		</item>
 		<item>
-			<title>1.25.143</title>
+			<title>1.25.148</title>
 			<description>## Note
 * Despite small change log this is a significant update due to core changes in memory usage.
 * Collections made with 1.25 are not backwards compatibile with older versions due to new mod filter behavior. You do not lose any resolution data, but you do lose mod filter settings.
+* Conflict Solver users should backup their mod patches before attempting to use conflict solver in a version greater than v1.25.143
 
 ## Current Release Notes
-* Stellaris 3.10 CS update
-
-## v1.25.133
-* Add appSettings option to override steam install location detection
+* Optimize memory usage further (indexed caches are 10 times bigger though sorry -- ask on github or discord how to change back via appSettings if you insist)
+* Slightly optimize conflict solver load speed (~10% improvement)
 
 ## Release Notes 1.25
 * Optimize memory usage in Conflict Solver
 * Add option to use hybrid memory in Conflict Solver (appSettings)
 * Update dependencies
 * Mod filter changed to allow exclusion of mods from conflict list (provided only x number of mods cause a conflict)</description>
-			<pubDate>Sat, 18 Nov 2023 23:09:44 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.25.143/osx-x64.zip" sparkle:version="1.25.143.7261" sparkle:shortVersionString="1.25.143" length="93575848" sparkle:os="osx" type="application/zip" sparkle:signature="mjEjqPvFQGu8JGJicZLEpl8paxM6GSwMBb5F4W8bvaertD0RVz02Sey/Ed7uzTZbcxE7WiBtRm8V4uK2BOeBAA=="/>
+			<pubDate>Mon, 27 Nov 2023 11:15:20 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.25.148/osx-x64.zip" sparkle:version="1.25.148.8959" sparkle:shortVersionString="1.25.148" length="93580068" sparkle:os="osx" type="application/zip" sparkle:signature="FmHYgX6J6wWzfhs8PXgOLwmhlh8FXxl53+vPStqFRVShCneEewnrU/MUwP2NfWLuuJFPwd4yFRKfzeJ2ijW4Dg=="/>
 		</item>
 		<item>
-			<title>1.25.143</title>
+			<title>1.25.148</title>
 			<description>## Note
 * Despite small change log this is a significant update due to core changes in memory usage.
 * Collections made with 1.25 are not backwards compatibile with older versions due to new mod filter behavior. You do not lose any resolution data, but you do lose mod filter settings.
+* Conflict Solver users should backup their mod patches before attempting to use conflict solver in a version greater than v1.25.143
 
 ## Current Release Notes
-* Stellaris 3.10 CS update
-
-## v1.25.133
-* Add appSettings option to override steam install location detection
+* Optimize memory usage further (indexed caches are 10 times bigger though sorry -- ask on github or discord how to change back via appSettings if you insist)
+* Slightly optimize conflict solver load speed (~10% improvement)
 
 ## Release Notes 1.25
 * Optimize memory usage in Conflict Solver
 * Add option to use hybrid memory in Conflict Solver (appSettings)
 * Update dependencies
 * Mod filter changed to allow exclusion of mods from conflict list (provided only x number of mods cause a conflict)</description>
-			<pubDate>Sat, 18 Nov 2023 23:09:51 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.25.143/win-x64-setup.zip" sparkle:version="1.25.143.7261" sparkle:shortVersionString="1.25.143" length="71912985" sparkle:os="windows" type="application/zip" sparkle:signature="1TjqoLUgyuF5C4uFJZ6Hh6nBziHq5KfZsEsLAJCMULBE6sUpDIGtKzAR4xNstvHjYiCl3q+GWATeJkUtLW+nDQ=="/>
+			<pubDate>Mon, 27 Nov 2023 11:15:25 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.25.148/win-x64-setup.zip" sparkle:version="1.25.148.8959" sparkle:shortVersionString="1.25.148" length="71923106" sparkle:os="windows" type="application/zip" sparkle:signature="2COJHlBmZGD6RvgYDXt2zsdHDtfRfJumBuC/ed3TVyUM0hB0ZHW1goBlie+H/JBWlWRB3t+t4v/v7U5aUJH/Cw=="/>
 		</item>
 		<item>
-			<title>1.25.143</title>
+			<title>1.25.148</title>
 			<description>## Note
 * Despite small change log this is a significant update due to core changes in memory usage.
 * Collections made with 1.25 are not backwards compatibile with older versions due to new mod filter behavior. You do not lose any resolution data, but you do lose mod filter settings.
+* Conflict Solver users should backup their mod patches before attempting to use conflict solver in a version greater than v1.25.143
 
 ## Current Release Notes
-* Stellaris 3.10 CS update
-
-## v1.25.133
-* Add appSettings option to override steam install location detection
+* Optimize memory usage further (indexed caches are 10 times bigger though sorry -- ask on github or discord how to change back via appSettings if you insist)
+* Slightly optimize conflict solver load speed (~10% improvement)
 
 ## Release Notes 1.25
 * Optimize memory usage in Conflict Solver
 * Add option to use hybrid memory in Conflict Solver (appSettings)
 * Update dependencies
 * Mod filter changed to allow exclusion of mods from conflict list (provided only x number of mods cause a conflict)</description>
-			<pubDate>Sat, 18 Nov 2023 23:09:51 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.25.143/win-x64.zip" sparkle:version="1.25.143.7261" sparkle:shortVersionString="1.25.143" length="105729311" sparkle:os="windows" type="application/zip" sparkle:signature="pEpXU0fSHM1rNdTzOazKoVYV4ri0stqiluJp2UAnTi6NgyIto/EqgPatZAxEac1BGZhAgWJ1NIDJrBCCInwBCg=="/>
+			<pubDate>Mon, 27 Nov 2023 11:15:25 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.25.148/win-x64.zip" sparkle:version="1.25.148.8959" sparkle:shortVersionString="1.25.148" length="105733600" sparkle:os="windows" type="application/zip" sparkle:signature="b6aL3daM9QWBwFyL50ttoXDod+XtptbIIjgnTQ4IaLYSZ5qIn1byuAKHAZn571A6GMFsPPXqW2823i2J8CXCDA=="/>
 		</item>
 	</channel>
 </rss>
