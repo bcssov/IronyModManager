@@ -5,7 +5,7 @@
 // Created          : 05-27-2021
 //
 // Last Modified By : Mario
-// Last Modified On : 06-23-2023
+// Last Modified On : 11-27-2023
 // ***********************************************************************
 // <copyright file="GameIndexService.cs" company="Mario">
 //     Mario
@@ -20,7 +20,6 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
-using IronyModManager.DI;
 using IronyModManager.IO.Common.Game;
 using IronyModManager.IO.Common.Mods;
 using IronyModManager.IO.Common.Readers;
@@ -248,10 +247,10 @@ namespace IronyModManager.Services
                     GC.WaitForPendingFinalizers();
                     GC.Collect(GC.MaxGeneration, GCCollectionMode.Optimized);
                 }
-                var indexed = DIResolver.Get<IIndexedDefinitions>();
-                var defs = (await modDefinitions.GetAllAsync()).Concat(gameDefinitions);
-                await indexed.InitMapAsync(defs);
-                return indexed;
+                foreach (var item in gameDefinitions)
+                {
+                    await modDefinitions.AddToMapAsync(item);
+                }
             }
             return modDefinitions;
         }
