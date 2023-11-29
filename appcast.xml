@@ -4,80 +4,76 @@
 		<title>Irony Mod Manager</title>
 		<language>en</language>
 		<item>
-			<title>1.25.148</title>
+			<title>1.25.149</title>
 			<description>## Note
 * Despite small change log this is a significant update due to core changes in memory usage.
 * Collections made with 1.25 are not backwards compatibile with older versions due to new mod filter behavior. You do not lose any resolution data, but you do lose mod filter settings.
 * Conflict Solver users should backup their mod patches before attempting to use conflict solver in a version greater than v1.25.143
 
 ## Current Release Notes
-* Optimize memory usage further (indexed caches are 10 times bigger though sorry -- ask on github or discord how to change back via appSettings if you insist)
-* Slightly optimize conflict solver load speed (~10% improvement)
+* Fix several inline_script issues and fix #474
 
 ## Release Notes 1.25
 * Optimize memory usage in Conflict Solver
 * Add option to use hybrid memory in Conflict Solver (appSettings)
 * Update dependencies
 * Mod filter changed to allow exclusion of mods from conflict list (provided only x number of mods cause a conflict)</description>
-			<pubDate>Mon, 27 Nov 2023 11:15:14 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.25.148/linux-x64.zip" sparkle:version="1.25.148.8959" sparkle:shortVersionString="1.25.148" length="90669346" sparkle:os="linux" type="application/zip" sparkle:signature="qwaXwsjSVCq0UAWlBl8fcV2G516MmC97vdV6AzcS2hkya/cpXqp42bpvGdEARRnX4Gbr+LphORrAklBUJq0qAg=="/>
+			<pubDate>Thu, 30 Nov 2023 00:43:10 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.25.149/linux-x64.zip" sparkle:version="1.25.149.16812" sparkle:shortVersionString="1.25.149" length="90674411" sparkle:os="linux" type="application/zip" sparkle:signature="kkecp3RjsdG7Xcm+W0HExNo+WPnRGrvjdIJ+arucEiizHVxzWsi8WNDBhHk/HvhaEONdNJlxPSpAcE8/mMR7Dw=="/>
 		</item>
 		<item>
-			<title>1.25.148</title>
+			<title>1.25.149</title>
 			<description>## Note
 * Despite small change log this is a significant update due to core changes in memory usage.
 * Collections made with 1.25 are not backwards compatibile with older versions due to new mod filter behavior. You do not lose any resolution data, but you do lose mod filter settings.
 * Conflict Solver users should backup their mod patches before attempting to use conflict solver in a version greater than v1.25.143
 
 ## Current Release Notes
-* Optimize memory usage further (indexed caches are 10 times bigger though sorry -- ask on github or discord how to change back via appSettings if you insist)
-* Slightly optimize conflict solver load speed (~10% improvement)
+* Fix several inline_script issues and fix #474
 
 ## Release Notes 1.25
 * Optimize memory usage in Conflict Solver
 * Add option to use hybrid memory in Conflict Solver (appSettings)
 * Update dependencies
 * Mod filter changed to allow exclusion of mods from conflict list (provided only x number of mods cause a conflict)</description>
-			<pubDate>Mon, 27 Nov 2023 11:15:20 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.25.148/osx-x64.zip" sparkle:version="1.25.148.8959" sparkle:shortVersionString="1.25.148" length="93580068" sparkle:os="osx" type="application/zip" sparkle:signature="FmHYgX6J6wWzfhs8PXgOLwmhlh8FXxl53+vPStqFRVShCneEewnrU/MUwP2NfWLuuJFPwd4yFRKfzeJ2ijW4Dg=="/>
+			<pubDate>Thu, 30 Nov 2023 00:43:16 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.25.149/osx-x64.zip" sparkle:version="1.25.149.16812" sparkle:shortVersionString="1.25.149" length="93585163" sparkle:os="osx" type="application/zip" sparkle:signature="O9fl+cAOum4lwHJoMhXoBmnQIIU39iG1Q+rfXvgwSbbMscboCIywHmgRySw1F2p5rKcgWBH4xTKwAeaV4qXBBg=="/>
 		</item>
 		<item>
-			<title>1.25.148</title>
+			<title>1.25.149</title>
 			<description>## Note
 * Despite small change log this is a significant update due to core changes in memory usage.
 * Collections made with 1.25 are not backwards compatibile with older versions due to new mod filter behavior. You do not lose any resolution data, but you do lose mod filter settings.
 * Conflict Solver users should backup their mod patches before attempting to use conflict solver in a version greater than v1.25.143
 
 ## Current Release Notes
-* Optimize memory usage further (indexed caches are 10 times bigger though sorry -- ask on github or discord how to change back via appSettings if you insist)
-* Slightly optimize conflict solver load speed (~10% improvement)
+* Fix several inline_script issues and fix #474
 
 ## Release Notes 1.25
 * Optimize memory usage in Conflict Solver
 * Add option to use hybrid memory in Conflict Solver (appSettings)
 * Update dependencies
 * Mod filter changed to allow exclusion of mods from conflict list (provided only x number of mods cause a conflict)</description>
-			<pubDate>Mon, 27 Nov 2023 11:15:25 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.25.148/win-x64-setup.zip" sparkle:version="1.25.148.8959" sparkle:shortVersionString="1.25.148" length="71923106" sparkle:os="windows" type="application/zip" sparkle:signature="2COJHlBmZGD6RvgYDXt2zsdHDtfRfJumBuC/ed3TVyUM0hB0ZHW1goBlie+H/JBWlWRB3t+t4v/v7U5aUJH/Cw=="/>
+			<pubDate>Thu, 30 Nov 2023 00:43:23 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.25.149/win-x64-setup.zip" sparkle:version="1.25.149.16812" sparkle:shortVersionString="1.25.149" length="71906136" sparkle:os="windows" type="application/zip" sparkle:signature="GsNt4wlf9OrHKpfU2FtbjayEjCKQjqCVam3kvRlcw/ori6NqxuDsbR5Ox20j4Kyi9Y5Dk427st1RT2XpEnpMAg=="/>
 		</item>
 		<item>
-			<title>1.25.148</title>
+			<title>1.25.149</title>
 			<description>## Note
 * Despite small change log this is a significant update due to core changes in memory usage.
 * Collections made with 1.25 are not backwards compatibile with older versions due to new mod filter behavior. You do not lose any resolution data, but you do lose mod filter settings.
 * Conflict Solver users should backup their mod patches before attempting to use conflict solver in a version greater than v1.25.143
 
 ## Current Release Notes
-* Optimize memory usage further (indexed caches are 10 times bigger though sorry -- ask on github or discord how to change back via appSettings if you insist)
-* Slightly optimize conflict solver load speed (~10% improvement)
+* Fix several inline_script issues and fix #474
 
 ## Release Notes 1.25
 * Optimize memory usage in Conflict Solver
 * Add option to use hybrid memory in Conflict Solver (appSettings)
 * Update dependencies
 * Mod filter changed to allow exclusion of mods from conflict list (provided only x number of mods cause a conflict)</description>
-			<pubDate>Mon, 27 Nov 2023 11:15:25 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.25.148/win-x64.zip" sparkle:version="1.25.148.8959" sparkle:shortVersionString="1.25.148" length="105733600" sparkle:os="windows" type="application/zip" sparkle:signature="b6aL3daM9QWBwFyL50ttoXDod+XtptbIIjgnTQ4IaLYSZ5qIn1byuAKHAZn571A6GMFsPPXqW2823i2J8CXCDA=="/>
+			<pubDate>Thu, 30 Nov 2023 00:43:23 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.25.149/win-x64.zip" sparkle:version="1.25.149.16812" sparkle:shortVersionString="1.25.149" length="105738584" sparkle:os="windows" type="application/zip" sparkle:signature="L1aUh0b2ofYKG59Gk46B+782oOs17t393ZiUBxTWX7PjsmPZOpWR/UIM4j6ICKdo4vXsUG68sjHdYFH+UYPvDw=="/>
 		</item>
 	</channel>
 </rss>
