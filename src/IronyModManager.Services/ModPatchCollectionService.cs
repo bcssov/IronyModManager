@@ -5,7 +5,7 @@
 // Created          : 05-26-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 11-27-2023
+// Last Modified On : 11-29-2023
 // ***********************************************************************
 // <copyright file="ModPatchCollectionService.cs" company="Mario">
 //     Mario
@@ -949,6 +949,15 @@ namespace IronyModManager.Services
                                 var parametrizedCode = parametrizedParser.Process(priorityDefinition.Definition.Code, item.Code);
                                 if (!string.IsNullOrWhiteSpace(parametrizedCode))
                                 {
+                                    ValidationType validationType = ValidationType.Full;
+                                    if (item.UseSimpleValidation.GetValueOrDefault() || item.UseSimpleValidation == null)
+                                    {
+                                        validationType = MapValidationType(item);
+                                    }
+                                    else if (priorityDefinition.Definition.UseSimpleValidation.GetValueOrDefault() || priorityDefinition.Definition.UseSimpleValidation == null)
+                                    {
+                                        validationType = MapValidationType(priorityDefinition.Definition);
+                                    }
                                     var results = parserManager.Parse(new ParserManagerArgs()
                                     {
                                         ContentSHA = item.ContentSHA, // Want original file sha id
@@ -959,8 +968,12 @@ namespace IronyModManager.Services
                                         ModDependencies = item.Dependencies,
                                         IsBinary = item.ValueType == ValueType.Binary,
                                         ModName = item.ModName,
-                                        ValidationType = ValidationType.Full
+                                        ValidationType = validationType // This is kinda difficult but try to guess which validation type we want to inherit
                                     });
+                                    if (item.Variables != null && item.Variables.Any())
+                                    {
+                                        MergeDefinitions(results.Concat(item.Variables));
+                                    }
                                     if (results != null && results.Any())
                                     {
                                         prunedInlineDefinitions.AddRange(results);
@@ -2036,16 +2049,9 @@ namespace IronyModManager.Services
                 var args = new ParserArgs
                 {
                     Lines = lines,
-                    File = definition.File
+                    File = definition.File,
+                    ValidationType = MapValidationType(definition)
                 };
-                if (definition.UseSimpleValidation.GetValueOrDefault())
-                {
-                    args.ValidationType = ValidationType.SimpleOnly;
-                }
-                else if (definition.UseSimpleValidation == null)
-                {
-                    args.ValidationType = ValidationType.SkipAll;
-                }
                 IEnumerable<IDefinition> validation = definition.ValueType != ValueType.Binary ? validateParser.Validate(args) : null;
                 if (validation != null && validation.Any())
                 {
@@ -2740,6 +2746,24 @@ namespace IronyModManager.Services
                 PatchStateMode.DefaultWithoutLocalization => IO.Common.PatchStateMode.DefaultWithoutLocalization,
                 _ => IO.Common.PatchStateMode.None,
             };
+        }
+
+        /// <summary>
+        /// Maps the type of the validation.
+        /// </summary>
+        /// <param name="definition">The definition.</param>
+        /// <returns>ValidationType.</returns>
+        protected virtual ValidationType MapValidationType(IDefinition definition)
+        {
+            if (definition.UseSimpleValidation.GetValueOrDefault())
+            {
+                return ValidationType.SimpleOnly;
+            }
+            else if (definition.UseSimpleValidation == null)
+            {
+                return ValidationType.SkipAll;
+            }
+            return ValidationType.Full;
         }
 
         /// <summary>

@@ -1,10 +1,11 @@
-﻿// ***********************************************************************
+﻿
+// ***********************************************************************
 // Assembly         : IronyModManager.Services
 // Author           : Mario
 // Created          : 04-07-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 05-14-2023
+// Last Modified On : 11-30-2023
 // ***********************************************************************
 // <copyright file="ModBaseService.cs" company="Mario">
 //     Mario
@@ -18,6 +19,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -36,6 +38,7 @@ using ValueType = IronyModManager.Shared.Models.ValueType;
 
 namespace IronyModManager.Services
 {
+
     /// <summary>
     /// Class ModBaseService. Implements the <see cref="IronyModManager.Services.BaseService" />
     /// </summary>
@@ -73,6 +76,11 @@ namespace IronyModManager.Services
         /// The path resolver
         /// </summary>
         protected readonly IGameRootPathResolver pathResolver;
+
+        /// <summary>
+        /// The clean variables pattern
+        /// </summary>
+        private const string CleanVariablesPattern = @"[^\w\s\@]";
 
         #endregion Fields
 
@@ -283,6 +291,7 @@ namespace IronyModManager.Services
                         if (validDefinitions.Count == 1)
                         {
                             result.Definition = validDefinitions.FirstOrDefault();
+
                             // If it's the only valid one assume load order is responsible
                             result.PriorityType = DefinitionPriorityType.ModOrder;
                             result.FileName = validDefinitions.FirstOrDefault().File;
@@ -298,7 +307,7 @@ namespace IronyModManager.Services
                             {
                                 var fileName = isFios ? item.AdditionalFileNames.OrderBy(p => Path.GetFileNameWithoutExtension(p), StringComparer.Ordinal).First() : item.AdditionalFileNames.OrderBy(p => Path.GetFileNameWithoutExtension(p), StringComparer.Ordinal).Last();
                                 var hasOverrides = validDefinitions.Any(p => !p.IsCustomPatch && p.Dependencies != null && p.Dependencies.Any(d => d.Equals(item.ModName)) &&
-                                                    (isFios ? p.AdditionalFileNames.OrderBy(p => Path.GetFileNameWithoutExtension(p), StringComparer.Ordinal).First().Equals(fileName) : p.AdditionalFileNames.OrderBy(p => Path.GetFileNameWithoutExtension(p), StringComparer.Ordinal).Last().Equals(fileName)));
+                                                   (isFios ? p.AdditionalFileNames.OrderBy(p => Path.GetFileNameWithoutExtension(p), StringComparer.Ordinal).First().Equals(fileName) : p.AdditionalFileNames.OrderBy(p => Path.GetFileNameWithoutExtension(p), StringComparer.Ordinal).Last().Equals(fileName)));
                                 if (hasOverrides)
                                 {
                                     overrideSkipped = true;
@@ -319,6 +328,7 @@ namespace IronyModManager.Services
                             {
                                 uniqueDefinitions = definitionEvals.GroupBy(p => p.Definition.ModName).Select(p => p.OrderBy(f => Path.GetFileNameWithoutExtension(f.FileName), StringComparer.Ordinal).Last()).ToList();
                             }
+
                             // Filter out game definitions which might have the same filename
                             var filteredGameDefinitions = false;
                             var gameDefinitions = uniqueDefinitions.GroupBy(p => p.FileNameCI).Where(p => p.Any(a => a.Definition.IsFromGame) && p.Count() > 1).SelectMany(p => p.Where(w => w.Definition.IsFromGame));
@@ -623,6 +633,7 @@ namespace IronyModManager.Services
                                 }
                             }
                         }
+
                         // Validate if path exists
                         mod.IsValid = File.Exists(mod.FullPath) || Directory.Exists(mod.FullPath);
                         mod.Game = game.Type;
@@ -765,6 +776,11 @@ namespace IronyModManager.Services
         /// <param name="definitions">The definitions.</param>
         protected virtual void MergeDefinitions(IEnumerable<IDefinition> definitions)
         {
+            static string cleanCodeForVarCheck(string code)
+            {
+                code = code.ReplaceTabs().ReplaceNewLine();
+                return Regex.Replace(code, CleanVariablesPattern, " ");
+            }
             static bool evalNamespace(string code, string id)
             {
                 var split = code.Split(Parser.Common.Constants.Scripts.EqualsOperator, StringSplitOptions.RemoveEmptyEntries);
@@ -823,7 +839,7 @@ namespace IronyModManager.Services
                 {
                     foreach (var definition in otherDefinitions)
                     {
-                        var originalCode = definition.OriginalCode.ReplaceTabs().ReplaceNewLine().Split(" ", StringSplitOptions.RemoveEmptyEntries);
+                        var originalCode = cleanCodeForVarCheck(definition.OriginalCode).Split(" ", StringSplitOptions.RemoveEmptyEntries);
                         var namespaces = variableDefinitions.Where(p => p.ValueType == ValueType.Namespace && evalNamespace(p.Code, definition.Id));
                         var variables = variableDefinitions.Where(p => originalCode.Contains(p.Id));
                         var allVars = namespaces.Concat(variables);
@@ -834,8 +850,8 @@ namespace IronyModManager.Services
                         if (string.IsNullOrWhiteSpace(definition.CodeTag))
                         {
                             StringBuilder sb = new StringBuilder();
-                            appendLine(sb, namespaces.Select(p => p.Code));
-                            appendLine(sb, variables.Select(p => p.Code));
+                            appendLine(sb, namespaces.GroupBy(p => p.Code).Select(p => p.FirstOrDefault().Code));
+                            appendLine(sb, variables.GroupBy(p => p.Code).Select(p => p.FirstOrDefault().Code));
                             appendLine(sb, new List<string> { definition.Code });
                             definition.Code = sb.ToString();
                         }
