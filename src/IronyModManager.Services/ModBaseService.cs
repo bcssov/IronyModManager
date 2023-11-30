@@ -80,7 +80,7 @@ namespace IronyModManager.Services
         /// <summary>
         /// The clean variables pattern
         /// </summary>
-        private const string CleanVariablesPattern = @"[^\w\s\@]";
+        private const string CleanVariablesPattern = @"[^\w\s\@=.,_]";
 
         #endregion Fields
 
