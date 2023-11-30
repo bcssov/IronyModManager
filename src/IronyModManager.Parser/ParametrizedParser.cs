@@ -5,7 +5,7 @@
 // Created          : 10-03-2023
 //
 // Last Modified By : Mario
-// Last Modified On : 10-04-2023
+// Last Modified On : 11-29-2023
 // ***********************************************************************
 // <copyright file="ParametrizedParser.cs" company="Mario">
 //     Mario
@@ -76,9 +76,10 @@ namespace IronyModManager.Parser
             var elParams = codeParser.ParseScriptWithoutValidation(parameters.SplitOnNewLine(), string.Empty);
             if (elParams != null && elParams.Values != null && elParams.Error == null && elParams.Values.Count(p => p.Key.Equals(Common.Constants.Stellaris.InlineScriptId, StringComparison.OrdinalIgnoreCase)) == 1)
             {
-                if (elParams.Values.FirstOrDefault().Values.Any())
+                var elObj = elParams.Values.FirstOrDefault(p => p.Values != null);
+                if (elObj != null)
                 {
-                    var match = elParams.Values.FirstOrDefault().Values.FirstOrDefault(p => p.Key.Equals(Script, StringComparison.OrdinalIgnoreCase));
+                    var match = elObj.Values.FirstOrDefault(p => p.Key.Equals(Script, StringComparison.OrdinalIgnoreCase));
                     if (match != null)
                     {
                         return ((match.Value ?? string.Empty).Trim(Quotes)).StandardizeDirectorySeparator();
@@ -100,9 +101,10 @@ namespace IronyModManager.Parser
             if (elParams != null && elParams.Values != null && elParams.Error == null && elParams.Values.Count(p => p.Key.Equals(Common.Constants.Stellaris.InlineScriptId, StringComparison.OrdinalIgnoreCase)) == 1)
             {
                 var processed = code;
-                if (elParams.Values.FirstOrDefault().Values.Any())
+                var elObj = elParams.Values.FirstOrDefault(p => p.Values != null);
+                if (elObj != null)
                 {
-                    foreach (var value in elParams.Values.FirstOrDefault().Values)
+                    foreach (var value in elObj.Values)
                     {
                         var id = (value.Key ?? string.Empty).Trim(Quotes);
                         var replacement = (value.Value ?? string.Empty).Trim(Quotes);
