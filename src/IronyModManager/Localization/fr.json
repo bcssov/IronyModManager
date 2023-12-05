@@ -135,6 +135,7 @@
         "Overlay_Rename_Message": "Veuillez patienter pendant l'opération de renommage...",
         "Overlay_Duplicate_Message": "Veuillez patienter pendant l'opération de duplication...",
         "ExportToClipboard": "Copier la liste dans le presse-papiers",
+        "ExportToClipboardFull": "Copier une collection dans le presse-papiers avec des métadonnées",
         "Undo": "annuler",
         "Redo": "Refaire",
         "DeleteMerge": {

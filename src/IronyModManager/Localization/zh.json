@@ -135,6 +135,7 @@
         "Overlay_Rename_Message": "正在重命名……",
         "Overlay_Duplicate_Message": "正在创建合集副本……",
         "ExportToClipboard": "导出合集至剪贴板",
+        "ExportToClipboardFull": "将收藏复制到带元数据的剪贴板",
         "Undo": "撤销",
         "Redo": "重做",
         "DeleteMerge": {

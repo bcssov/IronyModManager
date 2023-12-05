@@ -135,6 +135,7 @@
         "Overlay_Rename_Message": "Por favor espere mientras se renombra...",
         "Overlay_Duplicate_Message": "Por favor espere mientras se duplica...",
         "ExportToClipboard": "Copiar colección al portapapeles",
+        "ExportToClipboardFull": "Copiar colección al portapapeles con metadatos",
         "Undo": "Deshacer",
         "Redo": "Rehacer",
         "DeleteMerge": {
