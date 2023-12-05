@@ -135,6 +135,7 @@
         "Overlay_Rename_Message": "Переименовывается...",
         "Overlay_Duplicate_Message": "Дублируется...",
         "ExportToClipboard": "Копировать коллекцию в буфер обмена",
+        "ExportToClipboardFull": "Копирование коллекции в буфер обмена с метаданными",
         "Undo": "Отменить",
         "Redo": "Вернуть",
         "DeleteMerge": {

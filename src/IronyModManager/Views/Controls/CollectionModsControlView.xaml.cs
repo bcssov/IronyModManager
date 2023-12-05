@@ -1,10 +1,11 @@
-﻿// ***********************************************************************
+﻿
+// ***********************************************************************
 // Assembly         : IronyModManager
 // Author           : Mario
 // Created          : 03-03-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 11-12-2022
+// Last Modified On : 12-05-2023
 // ***********************************************************************
 // <copyright file="CollectionModsControlView.xaml.cs" company="Mario">
 //     Mario
@@ -33,6 +34,7 @@ using ReactiveUI;
 
 namespace IronyModManager.Views.Controls
 {
+
     /// <summary>
     /// Class CollectionModsControlView.
     /// Implements the <see cref="IronyModManager.Common.Views.BaseControl{IronyModManager.ViewModels.Controls.CollectionModsControlViewModel}" />
@@ -98,6 +100,7 @@ namespace IronyModManager.Views.Controls
                         }
                     }
                 }
+
                 // Because avalonia
                 if (scrollToSelected)
                 {
@@ -295,26 +298,31 @@ namespace IronyModManager.Views.Controls
         {
             var menuItems = new List<MenuItem>
             {
-                new MenuItem()
+                new()
                 {
                     Header = ViewModel.CollectionJumpOnPositionChangeLabel,
                     Command = ViewModel.CollectionJumpOnPositionChangeCommand
                 },
-                new MenuItem()
+                new()
                 {
                     Header = "-"
                 },
-                new MenuItem()
+                new()
                 {
                     Header = ViewModel.ExportCollectionToClipboard,
                     Command = ViewModel.ExportCollectionToClipboardCommand
                 },
-                new MenuItem()
+                new()
+                {
+                    Header = ViewModel.ExportCollectionToClipboardFull,
+                    Command = ViewModel.ExportCollectionToClipboardFullCommand
+                },
+                new()
                 {
                     Header = ViewModel.ImportCollectionFromClipboard,
                     Command = ViewModel.ImportCollectionFromClipboardCommand
                 },
-                new MenuItem()
+                new()
                 {
                     Header = "-"
                 }
@@ -440,21 +448,26 @@ namespace IronyModManager.Views.Controls
         {
             var menuItems = new List<MenuItem>
             {
-                new MenuItem()
+                new()
                 {
                     Header = ViewModel.CollectionJumpOnPositionChangeLabel,
                     Command = ViewModel.CollectionJumpOnPositionChangeCommand
                 },
-                new MenuItem()
+                new()
                 {
                     Header = "-"
                 },
-                new MenuItem()
+                new()
                 {
                     Header = ViewModel.ExportCollectionToClipboard,
                     Command = ViewModel.ExportCollectionToClipboardCommand
                 },
-                new MenuItem()
+                new()
+                {
+                    Header = ViewModel.ExportCollectionToClipboardFull,
+                    Command = ViewModel.ExportCollectionToClipboardFullCommand
+                },
+                new()
                 {
                     Header = ViewModel.ImportCollectionFromClipboard,
                     Command = ViewModel.ImportCollectionFromClipboardCommand

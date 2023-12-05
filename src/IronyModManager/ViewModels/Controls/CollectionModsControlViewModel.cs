@@ -5,7 +5,7 @@
 // Created          : 03-03-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-13-2023
+// Last Modified On : 12-05-2023
 // ***********************************************************************
 // <copyright file="CollectionModsControlViewModel.cs" company="Mario">
 //     Mario
@@ -41,9 +41,9 @@ using IronyModManager.Localization.Attributes;
 using IronyModManager.Models.Common;
 using IronyModManager.Services.Common;
 using IronyModManager.Shared;
+using static IronyModManager.ViewModels.Controls.ModifyCollectionControlViewModel;
 using Nito.AsyncEx;
 using ReactiveUI;
-using static IronyModManager.ViewModels.Controls.ModifyCollectionControlViewModel;
 
 namespace IronyModManager.ViewModels.Controls
 {
@@ -57,6 +57,11 @@ namespace IronyModManager.ViewModels.Controls
     public class CollectionModsControlViewModel : BaseViewModel
     {
         #region Fields
+
+        /// <summary>
+        /// The clipboard separator
+        /// </summary>
+        private const string ClipboardSeparator = " || ";
 
         /// <summary>
         /// The mod name key
@@ -523,6 +528,19 @@ namespace IronyModManager.ViewModels.Controls
         /// </summary>
         /// <value>The export collection to clipboard command.</value>
         public virtual ReactiveCommand<Unit, Unit> ExportCollectionToClipboardCommand { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets the export collection to clipboard full.
+        /// </summary>
+        /// <value>The export collection to clipboard full.</value>
+        [StaticLocalization(LocalizationResources.Collection_Mods.ExportToClipboardFull)]
+        public virtual string ExportCollectionToClipboardFull { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets the export collection to clipboard full command.
+        /// </summary>
+        /// <value>The export collection to clipboard full command.</value>
+        public virtual ReactiveCommand<Unit, Unit> ExportCollectionToClipboardFullCommand { get; protected set; }
 
         /// <summary>
         /// Gets or sets the export game report.
@@ -1809,23 +1827,20 @@ namespace IronyModManager.ViewModels.Controls
 
             ExportCollectionToClipboardCommand = ReactiveCommand.CreateFromTask(async () =>
             {
-                if (SelectedModCollection != null && SelectedMods.Count > 0)
-                {
-                    var sb = new StringBuilder();
-                    foreach (var item in SelectedMods)
-                    {
-                        sb.AppendLine(item.Name);
-                    }
-                    await appAction.CopyAsync(sb.ToString());
-                }
+                await ExportModsAsync();
             }).DisposeWith(disposables);
+
+            ExportCollectionToClipboardFullCommand = ReactiveCommand.CreateFromTask(async () =>
+            {
+                await ExportModsAsync(true);
+            });
 
             ImportCollectionFromClipboardCommand = ReactiveCommand.CreateFromTask(async () =>
             {
                 var text = await appAction.GetAsync();
                 if (!string.IsNullOrWhiteSpace(text))
                 {
-                    var modNames = text.SplitOnNewLine().Select(p => p.Trim());
+                    var modNames = text.SplitOnNewLine().Select(p => p.Trim().Split(ClipboardSeparator, StringSplitOptions.RemoveEmptyEntries)[0]);
                     if (modNames.Any(p => Mods.Any(m => m.Name.Equals(p, StringComparison.OrdinalIgnoreCase))))
                     {
                         var title = localizationManager.GetResource(LocalizationResources.Collection_Mods.ImportFromClipboard.PromptTitle);
@@ -2478,6 +2493,38 @@ namespace IronyModManager.ViewModels.Controls
                         ScheduleToReorderQueueAsync(s.Sender).ConfigureAwait(false);
                     }
                 }).DisposeWith(Disposables);
+            }
+        }
+
+        /// <summary>
+        /// Export mods as an asynchronous operation.
+        /// </summary>
+        /// <param name="fullMetadata">if set to <c>true</c> [full metadata].</param>
+        /// <returns>A Task representing the asynchronous operation.</returns>
+        private async Task ExportModsAsync(bool fullMetadata = false)
+        {
+            if (SelectedModCollection != null && SelectedMods.Any())
+            {
+                var sb = new StringBuilder();
+                foreach (var item in SelectedMods)
+                {
+                    var entries = new List<string>() { item.Name };
+                    if (fullMetadata)
+                    {
+                        var version = item.Version;
+                        if (!string.IsNullOrWhiteSpace(version))
+                        {
+                            entries.Add(version);
+                        }
+                        var url = modService.BuildModUrl(item);
+                        if (!string.IsNullOrWhiteSpace(url))
+                        {
+                            entries.Add(url);
+                        }
+                    }
+                    sb.AppendLine(string.Join(ClipboardSeparator, entries));
+                }
+                await appAction.CopyAsync(sb.ToString());
             }
         }
 
