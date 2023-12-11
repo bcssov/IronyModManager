@@ -1,10 +1,11 @@
-﻿// ***********************************************************************
+﻿
+// ***********************************************************************
 // Assembly         : IronyModManager.IO
 // Author           : Mario
 // Created          : 03-17-2021
 //
 // Last Modified By : Mario
-// Last Modified On : 07-13-2022
+// Last Modified On : 12-11-2023
 // ***********************************************************************
 // <copyright file="DriveInfoProvider.cs" company="Mario">
 //     Mario
@@ -21,6 +22,7 @@ using IronyModManager.Shared;
 
 namespace IronyModManager.IO
 {
+
     /// <summary>
     /// Class DriveInfoProvider.
     /// Implements the <see cref="IronyModManager.IO.Common.IDriveInfoProvider" />
@@ -34,7 +36,7 @@ namespace IronyModManager.IO
         /// <summary>
         /// The logger
         /// </summary>
-        private ILogger logger;
+        private readonly ILogger logger;
 
         #endregion Fields
 
@@ -63,6 +65,7 @@ namespace IronyModManager.IO
             try
             {
                 var shouldCleanup = false;
+
                 // Inconsistent behavior of the .net through various other platforms
                 if (!RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
                 {
@@ -72,6 +75,7 @@ namespace IronyModManager.IO
                         Directory.CreateDirectory(path);
                     }
                 }
+
                 // I remember this having problems in earlier versions of .NET or is my memory failing me...
                 var info = new DriveInfo(path);
                 var freeSpace = info.AvailableFreeSpace;

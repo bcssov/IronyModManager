@@ -1,10 +1,11 @@
-﻿// ***********************************************************************
+﻿
+// ***********************************************************************
 // Assembly         : IronyModManager.IO.Common
 // Author           : Mario
 // Created          : 04-30-2021
 //
 // Last Modified By : Mario
-// Last Modified On : 04-30-2021
+// Last Modified On : 12-11-2023
 // ***********************************************************************
 // <copyright file="DiskOperations.cs" company="Mario">
 //     Mario
@@ -18,12 +19,30 @@ using System.Linq;
 
 namespace IronyModManager.IO.Common
 {
+
     /// <summary>
     /// Class DiskOperations.
     /// </summary>
     public static class DiskOperations
     {
         #region Methods
+
+        /// <summary>
+        /// Copies the file.
+        /// </summary>
+        /// <param name="source">The source.</param>
+        /// <param name="destination">The destination.</param>
+        /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
+        public static bool CopyFile(string source, string destination)
+        {
+            if (File.Exists(source))
+            {
+                Directory.CreateDirectory(Path.GetDirectoryName(destination));
+                File.Copy(source, destination);
+                return true;
+            }
+            return false;
+        }
 
         /// <summary>
         /// Deletes the directory.
