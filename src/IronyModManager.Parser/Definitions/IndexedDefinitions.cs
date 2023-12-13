@@ -5,7 +5,7 @@
 // Created          : 02-16-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 11-26-2023
+// Last Modified On : 12-13-2023
 // ***********************************************************************
 // <copyright file="IndexedDefinitions.cs" company="Mario">
 //     Mario
@@ -216,12 +216,12 @@ namespace IronyModManager.Parser.Definitions
             if (definition != null)
             {
                 var parentDirectoryCI = ResolveHierarchalParentDirectory(definition);
-                var hierarchicalDefinition = mainHierarchalDefinitions.GetFirstByNameNoLock(nameof(IHierarchicalDefinitions.Name), parentDirectoryCI);
+                var hierarchicalDefinition = mainHierarchalDefinitions.GetFirstByName(nameof(IHierarchicalDefinitions.Name), parentDirectoryCI);
                 if (hierarchicalDefinition != null)
                 {
                     if (childHierarchicalDefinitions.TryGetValue(hierarchicalDefinition.Name, out var children))
                     {
-                        var child = children.GetFirstByNameNoLock(nameof(IHierarchicalDefinitions.Name), definition.Id);
+                        var child = children.GetFirstByName(nameof(IHierarchicalDefinitions.Name), definition.Id);
                         if (child != null)
                         {
                             child.ResetType = definition.ResetType;
@@ -352,7 +352,7 @@ namespace IronyModManager.Parser.Definitions
                 }
                 return Task.FromResult<IEnumerable<IDefinition>>(Array.Empty<IDefinition>());
             }
-            return Task.FromResult(definitions.GetAllByNameNoLock(nameof(IDefinition.DiskFileCI), file.ToLowerInvariant()));
+            return Task.FromResult(definitions.GetAllByName(nameof(IDefinition.DiskFileCI), file.ToLowerInvariant()));
         }
 
         /// <summary>
@@ -371,7 +371,7 @@ namespace IronyModManager.Parser.Definitions
                 }
                 return Task.FromResult<IEnumerable<IDefinition>>(Array.Empty<IDefinition>());
             }
-            return Task.FromResult(definitions.GetAllByNameNoLock(nameof(IDefinition.FileCI), file.ToLowerInvariant()));
+            return Task.FromResult(definitions.GetAllByName(nameof(IDefinition.FileCI), file.ToLowerInvariant()));
         }
 
         /// <summary>
@@ -390,7 +390,7 @@ namespace IronyModManager.Parser.Definitions
                 }
                 return Task.FromResult<IEnumerable<IDefinition>>(Array.Empty<IDefinition>());
             }
-            return Task.FromResult(definitions.GetAllByNameNoLock(nameof(IDefinition.ParentDirectoryCI), directory.ToLowerInvariant()));
+            return Task.FromResult(definitions.GetAllByName(nameof(IDefinition.ParentDirectoryCI), directory.ToLowerInvariant()));
         }
 
         /// <summary>
@@ -416,7 +416,7 @@ namespace IronyModManager.Parser.Definitions
             {
                 return await store.ReadAsync(typeAndId);
             }
-            return definitions.GetAllByNameNoLock(nameof(IDefinition.TypeAndId), typeAndId);
+            return definitions.GetAllByName(nameof(IDefinition.TypeAndId), typeAndId);
         }
 
         /// <summary>
@@ -435,7 +435,7 @@ namespace IronyModManager.Parser.Definitions
                 }
                 return Task.FromResult<IEnumerable<IDefinition>>(Array.Empty<IDefinition>());
             }
-            return Task.FromResult(definitions.GetAllByNameNoLock(nameof(IDefinition.Type), type));
+            return Task.FromResult(definitions.GetAllByName(nameof(IDefinition.Type), type));
         }
 
         /// <summary>
@@ -458,7 +458,7 @@ namespace IronyModManager.Parser.Definitions
                 }
                 return Task.FromResult<IEnumerable<IDefinition>>(Array.Empty<IDefinition>());
             }
-            return Task.FromResult(definitions.GetAllByNameNoLock(nameof(IDefinition.ValueType), type));
+            return Task.FromResult(definitions.GetAllByName(nameof(IDefinition.ValueType), type));
         }
 
         /// <summary>
@@ -594,12 +594,12 @@ namespace IronyModManager.Parser.Definitions
             {
                 definitions.Remove(definition);
             }
-            var hierarchicalDefinition = mainHierarchalDefinitions.GetFirstByNameNoLock(nameof(IHierarchicalDefinitions.Name), ResolveHierarchalParentDirectory(definition));
+            var hierarchicalDefinition = mainHierarchalDefinitions.GetFirstByName(nameof(IHierarchicalDefinitions.Name), ResolveHierarchalParentDirectory(definition));
             if (hierarchicalDefinition != null)
             {
                 if (childHierarchicalDefinitions.TryGetValue(hierarchicalDefinition.Name, out var children))
                 {
-                    var child = children.GetFirstByNameNoLock(nameof(IHierarchicalDefinitions.Name), definition.Id);
+                    var child = children.GetFirstByName(nameof(IHierarchicalDefinitions.Name), definition.Id);
                     if (child != null)
                     {
                         children.Remove(child);
@@ -933,7 +933,7 @@ namespace IronyModManager.Parser.Definitions
         {
             bool shouldAdd = false;
             var parentDirectoryCI = ResolveHierarchalParentDirectory(definition);
-            var hierarchicalDefinition = mainHierarchalDefinitions.GetFirstByNameNoLock(nameof(IHierarchicalDefinitions.Name), parentDirectoryCI);
+            var hierarchicalDefinition = mainHierarchalDefinitions.GetFirstByName(nameof(IHierarchicalDefinitions.Name), parentDirectoryCI);
             if (hierarchicalDefinition == null)
             {
                 hierarchicalDefinition = DIResolver.Get<IHierarchicalDefinitions>();
@@ -945,7 +945,7 @@ namespace IronyModManager.Parser.Definitions
             IHierarchicalDefinitions child = null;
             if (childHierarchicalDefinitions.TryGetValue(hierarchicalDefinition.Name, out var children))
             {
-                child = children.GetFirstByNameNoLock(nameof(IHierarchicalDefinitions.Name), definition.Id);
+                child = children.GetFirstByName(nameof(IHierarchicalDefinitions.Name), definition.Id);
                 exists = child != null;
             }
             if (!exists)
