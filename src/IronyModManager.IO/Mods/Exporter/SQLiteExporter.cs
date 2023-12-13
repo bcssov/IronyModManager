@@ -1,10 +1,11 @@
-﻿// ***********************************************************************
+﻿
+// ***********************************************************************
 // Assembly         : IronyModManager.IO
 // Author           : Mario
 // Created          : 08-11-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-23-2023
+// Last Modified On : 12-11-2023
 // ***********************************************************************
 // <copyright file="SQLiteExporter.cs" company="Mario">
 //     Mario
@@ -18,15 +19,16 @@ using System.Data;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.Data.Sqlite;
 using IronyModManager.IO.Common;
 using IronyModManager.IO.Common.Mods;
 using IronyModManager.Models.Common;
 using IronyModManager.Shared;
-using Microsoft.Data.Sqlite;
 using RepoDb;
 
 namespace IronyModManager.IO.Mods.Exporter
 {
+
     /// <summary>
     /// Class SQLiteExporter.
     /// Implements the <see cref="IronyModManager.IO.Mods.Exporter.BaseExporter" />
@@ -193,7 +195,7 @@ namespace IronyModManager.IO.Mods.Exporter
             var db = GetDbPath(parameters);
             if (!File.Exists(db))
             {
-                File.Copy(Constants.Empty_sql_db_path, db);
+                DiskOperations.CopyFile(Constants.Empty_sql_db_path, db);
             }
         }
 
@@ -607,6 +609,7 @@ namespace IronyModManager.IO.Mods.Exporter
             if (mods?.Count() > 0)
             {
                 var collectionMods = await con.QueryAsync<Models.Paradox.v2.PlaysetsMods>(p => p.PlaysetId == collection.Id, trace: trace);
+
                 // Because it's readable for me in hex
                 int pos = 4096;
                 if (recreateCollection || collectionMods == null || !collectionMods.Any())

@@ -5,7 +5,7 @@
 // Created          : 05-26-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 11-29-2023
+// Last Modified On : 12-05-2023
 // ***********************************************************************
 // <copyright file="ModPatchCollectionService.cs" company="Mario">
 //     Mario
@@ -970,7 +970,7 @@ namespace IronyModManager.Services
                                         ModName = item.ModName,
                                         ValidationType = validationType // This is kinda difficult but try to guess which validation type we want to inherit
                                     });
-                                    if (item.Variables != null && item.Variables.Any())
+                                    if (item.Variables != null && item.Variables.Any() && results != null)
                                     {
                                         MergeDefinitions(results.Concat(item.Variables));
                                     }
