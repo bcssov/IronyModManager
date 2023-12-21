@@ -101,6 +101,16 @@
     <Style Selector="Border.CreateHighlight">
         <Setter Property="BorderThickness" Value="2,2,2,2"/>
         <Setter Property="BorderBrush" Value="Red"/>
+        <Style.Animations>
+            <Animation Duration="0:0:5" IterationCount="Infinite" PlaybackDirection="Alternate">
+                <KeyFrame>
+                    <Setter Property="BorderBrush" Value="Red"/>
+                </KeyFrame>
+                <KeyFrame>
+                    <Setter Property="BorderBrush" Value="Green"/>
+                </KeyFrame>
+            </Animation>
+        </Style.Animations>
     </Style>
     <Style Selector="Border.ResolvedResetMod">
         <Setter Property="BorderThickness" Value="2,2,2,2"/>
