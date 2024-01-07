@@ -18,6 +18,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
+using System.Security.Principal;
 using System.Threading.Tasks;
 using AutoMapper;
 using IronyModManager.IO.Common;
@@ -136,25 +137,48 @@ namespace IronyModManager.IO.Mods
         public Task<bool> CanWriteToModDirectoryAsync(ModWriterParameters parameters)
         {
             var fullPath = Path.Combine(parameters.RootDirectory ?? string.Empty, parameters.Path ?? string.Empty);
+
             // If drive doesn't exist it should not return a value
             var size = driveInfoProvider.GetFreeSpace(fullPath);
             if (size.HasValue)
             {
                 if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
                 {
-                    try
+                    // Partially prepare handling for #478
+                    var parentFolder = parameters.RootDirectory ?? parameters.Path;
+                    var integrityCheck = Path.Combine(parentFolder, IntegrityCheck);
+                    if (!File.Exists(integrityCheck))
                     {
-                        // Partially prepare handling for #478
-                        var integrityCheck = Path.Combine(parameters.RootDirectory ?? parameters.Path, IntegrityCheck);
-                        if (!File.Exists(integrityCheck))
+                        if (!Directory.Exists(parentFolder))
                         {
-                            File.Create(integrityCheck);
+                            // If the base directory does not exist, bail out and fail
+                            var el = parentFolder.StandardizeDirectorySeparator().Split(Path.DirectorySeparatorChar);
+                            if (el.Length <= 1)
+                            {
+                                // Real genious you picked C, D or whatever drive
+                                return Task.FromResult(false);
+                            }
+                            var root = Path.Combine(el[0], el[1]);
+                            if (!Directory.Exists(root) && !IsAdmin())
+                            {
+                                return Task.FromResult(false);
+                            }
                         }
-                        return Task.FromResult(true);
-                    }
-                    catch (UnauthorizedAccessException)
-                    {
-                        return Task.FromResult(false);
+                        else
+                        {
+                            try
+                            {
+                                if (!File.Exists(integrityCheck))
+                                {
+                                    File.Create(integrityCheck);
+                                }
+                            }
+                            catch
+                            {
+                                return Task.FromResult(false);
+                            }
+                            return Task.FromResult(true);
+                        }
                     }
                 }
                 return Task.FromResult(true);
@@ -506,6 +530,27 @@ namespace IronyModManager.IO.Mods
             }
             await sw.FlushAsync();
             return true;
+        }
+
+        /// <summary>
+        /// Determines whether this instance is admin.
+        /// </summary>
+        /// <returns>bool.</returns>
+        private bool IsAdmin()
+        {
+            try
+            {
+                if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+                {
+                    using var identity = WindowsIdentity.GetCurrent();
+                    return new WindowsPrincipal(identity).IsInRole(WindowsBuiltInRole.Administrator);
+                }
+                return false;
+            }
+            catch
+            {
+                return false;
+            }
         }
 
         #endregion Methods
