@@ -1,10 +1,11 @@
-﻿// ***********************************************************************
+﻿
+// ***********************************************************************
 // Assembly         : IronyModManager.IO
 // Author           : Mario
 // Created          : 03-31-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 01-11-2023
+// Last Modified On : 01-07-2024
 // ***********************************************************************
 // <copyright file="ModWriter.cs" company="Mario">
 //     Mario
@@ -16,6 +17,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using AutoMapper;
 using IronyModManager.IO.Common;
@@ -28,6 +30,7 @@ using Nito.AsyncEx;
 
 namespace IronyModManager.IO.Mods
 {
+
     /// <summary>
     /// Class ModWriter.
     /// Implements the <see cref="IronyModManager.IO.Common.Mods.IModWriter" />
@@ -37,6 +40,11 @@ namespace IronyModManager.IO.Mods
     public class ModWriter : IModWriter
     {
         #region Fields
+
+        /// <summary>
+        /// The integrity check
+        /// </summary>
+        private const string IntegrityCheck = nameof(IronyModManager) + "_IntegrityCheck" + ".txt";
 
         /// <summary>
         /// The write lock
@@ -105,6 +113,7 @@ namespace IronyModManager.IO.Mods
                 throw new ArgumentException("Invalid descriptor type.");
             }
             Task<bool>[] tasks;
+
             using (var mutex = await writeLock.LockAsync())
             {
                 tasks = new Task<bool>[]
@@ -129,7 +138,28 @@ namespace IronyModManager.IO.Mods
             var fullPath = Path.Combine(parameters.RootDirectory ?? string.Empty, parameters.Path ?? string.Empty);
             // If drive doesn't exist it should not return a value
             var size = driveInfoProvider.GetFreeSpace(fullPath);
-            return Task.FromResult(size.HasValue);
+            if (size.HasValue)
+            {
+                if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+                {
+                    try
+                    {
+                        // Partially prepare handling for #478
+                        var integrityCheck = Path.Combine(parameters.RootDirectory ?? parameters.Path, IntegrityCheck);
+                        if (!File.Exists(integrityCheck))
+                        {
+                            File.Create(integrityCheck);
+                        }
+                        return Task.FromResult(true);
+                    }
+                    catch (UnauthorizedAccessException)
+                    {
+                        return Task.FromResult(false);
+                    }
+                }
+                return Task.FromResult(true);
+            }
+            return Task.FromResult(false);
         }
 
         /// <summary>
@@ -307,6 +337,7 @@ namespace IronyModManager.IO.Mods
                 // If needed I've got a much more complex serializer, it is written for Kerbal Space Program but the structure seems to be the same though this is much more simpler
                 var fullPath = Path.Combine(parameters.RootDirectory ?? string.Empty, parameters.Path ?? string.Empty);
                 await writeDescriptor(fullPath, false);
+
                 // Attempt to fix issues where the game decides to delete local zipped mod descriptors (I'm assuming this happens to all pdx games)
                 if (parameters.LockDescriptor)
                 {
