@@ -4,84 +4,88 @@
 		<title>Irony Mod Manager</title>
 		<language>en</language>
 		<item>
-			<title>1.25.155</title>
+			<title>1.25.161</title>
 			<description>## Note
 * Despite small change log this is a significant update due to core changes in memory usage.
 * Collections made with 1.25 are not backwards compatibile with older versions due to new mod filter behavior. You do not lose any resolution data, but you do lose mod filter settings.
 * Conflict Solver users should backup their mod patches before attempting to use conflict solver in a version greater than v1.25.143
 
 ## Current Release Notes
-* Add option to export additional metadata via clipboard export (mod url, supported version)
-* Fix clean install sqlite database copy error
-* Fix #475
+* No playset call to action more clear
+* Prevent Irony from crashing if data directory is set to a root drive on Windows (usually caused by user misconfiguration)
+* Ensure speed optimization thread safety (hopefully completely fixed now)
+* Try to make storage configuration more robust
 
 ## Release Notes 1.25
 * Optimize memory usage in Conflict Solver
 * Add option to use hybrid memory in Conflict Solver (appSettings)
 * Update dependencies
 * Mod filter changed to allow exclusion of mods from conflict list (provided only x number of mods cause a conflict)</description>
-			<pubDate>Wed, 13 Dec 2023 23:58:48 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.25.155/linux-x64.zip" sparkle:version="1.25.155.40498" sparkle:shortVersionString="1.25.155" length="90675243" sparkle:os="linux" type="application/zip" sparkle:signature="NIR8pNvIin3Kg1QSFFzUj0j4Gb1YNpKjIzUTp0qKZk+lnO0/68IUcNBlWnDpHLGxznXqVVfLz9NnCHxOsRPDDg=="/>
+			<pubDate>Tue, 23 Jan 2024 20:37:52 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.25.161/linux-x64.zip" sparkle:version="1.25.161.20628" sparkle:shortVersionString="1.25.161" length="90676167" sparkle:os="linux" type="application/zip" sparkle:signature="gubD0GdxN9VYkK97cUlv7VoWaVPLZmTCWjC5UXuQP2sRUNZXo/yyXMCdbX2cLxezeFlRktiZ7pkEQTX3CF27BA=="/>
 		</item>
 		<item>
-			<title>1.25.155</title>
+			<title>1.25.161</title>
 			<description>## Note
 * Despite small change log this is a significant update due to core changes in memory usage.
 * Collections made with 1.25 are not backwards compatibile with older versions due to new mod filter behavior. You do not lose any resolution data, but you do lose mod filter settings.
 * Conflict Solver users should backup their mod patches before attempting to use conflict solver in a version greater than v1.25.143
 
 ## Current Release Notes
-* Add option to export additional metadata via clipboard export (mod url, supported version)
-* Fix clean install sqlite database copy error
-* Fix #475
+* No playset call to action more clear
+* Prevent Irony from crashing if data directory is set to a root drive on Windows (usually caused by user misconfiguration)
+* Ensure speed optimization thread safety (hopefully completely fixed now)
+* Try to make storage configuration more robust
 
 ## Release Notes 1.25
 * Optimize memory usage in Conflict Solver
 * Add option to use hybrid memory in Conflict Solver (appSettings)
 * Update dependencies
 * Mod filter changed to allow exclusion of mods from conflict list (provided only x number of mods cause a conflict)</description>
-			<pubDate>Wed, 13 Dec 2023 23:58:55 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.25.155/osx-x64.zip" sparkle:version="1.25.155.40498" sparkle:shortVersionString="1.25.155" length="93585930" sparkle:os="osx" type="application/zip" sparkle:signature="rXtySpTeLIddVZamynB06rQysQcaGHHTYYM1Tezq6wT7aq1ZZw8WO6Yi0NoBUZcR3yHp28+vwaMSy6/pvyU6Cw=="/>
+			<pubDate>Tue, 23 Jan 2024 20:37:58 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.25.161/osx-x64.zip" sparkle:version="1.25.161.20628" sparkle:shortVersionString="1.25.161" length="93586822" sparkle:os="osx" type="application/zip" sparkle:signature="NTA+tVZ0+/W7LkWx54z3FDlPaGQ4glokOFRxeQ56C2Vurqgd12601+DIdM4lt6otvhCX/Lps3lMfcS7AmR62CQ=="/>
 		</item>
 		<item>
-			<title>1.25.155</title>
+			<title>1.25.161</title>
 			<description>## Note
 * Despite small change log this is a significant update due to core changes in memory usage.
 * Collections made with 1.25 are not backwards compatibile with older versions due to new mod filter behavior. You do not lose any resolution data, but you do lose mod filter settings.
 * Conflict Solver users should backup their mod patches before attempting to use conflict solver in a version greater than v1.25.143
 
 ## Current Release Notes
-* Add option to export additional metadata via clipboard export (mod url, supported version)
-* Fix clean install sqlite database copy error
-* Fix #475
+* No playset call to action more clear
+* Prevent Irony from crashing if data directory is set to a root drive on Windows (usually caused by user misconfiguration)
+* Ensure speed optimization thread safety (hopefully completely fixed now)
+* Try to make storage configuration more robust
 
 ## Release Notes 1.25
 * Optimize memory usage in Conflict Solver
 * Add option to use hybrid memory in Conflict Solver (appSettings)
 * Update dependencies
 * Mod filter changed to allow exclusion of mods from conflict list (provided only x number of mods cause a conflict)</description>
-			<pubDate>Wed, 13 Dec 2023 23:59:01 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.25.155/win-x64-setup.zip" sparkle:version="1.25.155.40498" sparkle:shortVersionString="1.25.155" length="71912985" sparkle:os="windows" type="application/zip" sparkle:signature="KTWWKg+hQRLO+s2VJoMBkyJK9a67DRrysGrUAx9nSbtDzlyjj1eujQVNAA4paLeU4rfYOVWc6zS5s7bGH6XWDQ=="/>
+			<pubDate>Tue, 23 Jan 2024 20:38:05 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.25.161/win-x64-setup.zip" sparkle:version="1.25.161.20628" sparkle:shortVersionString="1.25.161" length="71909194" sparkle:os="windows" type="application/zip" sparkle:signature="SeKeCQ51DpV8iOdm/iXjY7Cx7c++LxOPJpOfv+dKE2kReDBROkUZq2fmtmhnTBgShA0HTRwmSlU2ftSnULnyBA=="/>
 		</item>
 		<item>
-			<title>1.25.155</title>
+			<title>1.25.161</title>
 			<description>## Note
 * Despite small change log this is a significant update due to core changes in memory usage.
 * Collections made with 1.25 are not backwards compatibile with older versions due to new mod filter behavior. You do not lose any resolution data, but you do lose mod filter settings.
 * Conflict Solver users should backup their mod patches before attempting to use conflict solver in a version greater than v1.25.143
 
 ## Current Release Notes
-* Add option to export additional metadata via clipboard export (mod url, supported version)
-* Fix clean install sqlite database copy error
-* Fix #475
+* No playset call to action more clear
+* Prevent Irony from crashing if data directory is set to a root drive on Windows (usually caused by user misconfiguration)
+* Ensure speed optimization thread safety (hopefully completely fixed now)
+* Try to make storage configuration more robust
 
 ## Release Notes 1.25
 * Optimize memory usage in Conflict Solver
 * Add option to use hybrid memory in Conflict Solver (appSettings)
 * Update dependencies
 * Mod filter changed to allow exclusion of mods from conflict list (provided only x number of mods cause a conflict)</description>
-			<pubDate>Wed, 13 Dec 2023 23:59:02 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.25.155/win-x64.zip" sparkle:version="1.25.155.40498" sparkle:shortVersionString="1.25.155" length="105739399" sparkle:os="windows" type="application/zip" sparkle:signature="HEk6hDNRMoBlt1+yG+ygnT6EHXOWuLQnYG/8Bx+0nQvayC3uRZn5abh5HPTA2O533Isr+n4gVrP8ajmfPqW7CA=="/>
+			<pubDate>Tue, 23 Jan 2024 20:38:05 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.25.161/win-x64.zip" sparkle:version="1.25.161.20628" sparkle:shortVersionString="1.25.161" length="105740314" sparkle:os="windows" type="application/zip" sparkle:signature="0vrW8s+l2JL4vfbouF8H8oPztFYGKAQEJDZ84bqWBstJF0MBHaNRiICAoRVyyEKxijLIjX+ArP+Xo2EaonmiAQ=="/>
 		</item>
 	</channel>
 </rss>
