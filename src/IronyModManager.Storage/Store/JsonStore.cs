@@ -1,10 +1,11 @@
-﻿// ***********************************************************************
+﻿
+// ***********************************************************************
 // Assembly         : IronyModManager.Storage
 // Author           : Mario
 // Created          : 01-20-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 07-21-2022
+// Last Modified On : 01-23-2024
 // ***********************************************************************
 // <copyright file="JsonStore.cs" company="Mario">
 //     Mario
@@ -26,6 +27,7 @@ using Newtonsoft.Json;
 
 namespace IronyModManager.Storage
 {
+
     /// <summary>
     /// Class JsonStore.
     /// Implements the <see cref="Jot.Storage.IStore" />
@@ -174,7 +176,8 @@ namespace IronyModManager.Storage
             }
 
             File.WriteAllText(tempFilePath, serialized);
-            File.Move(tempFilePath, filePath, true);
+            File.Copy(tempFilePath, filePath, true);
+            File.Delete(tempFilePath);
         }
 
         /// <summary>
