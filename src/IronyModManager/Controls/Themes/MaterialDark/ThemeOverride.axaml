@@ -24,6 +24,7 @@
     <StyleInclude Source="avares://IronyModManager/Controls/Themes/MaterialDark/IronyResizeBorder.axaml"/>
     <StyleInclude Source="avares://IronyModManager/Controls/Themes/MaterialDark/IronyClientSideDecorations.axaml"/>
     <StyleInclude Source="avares://IronyModManager/Controls/Themes/MaterialDark/Window.axaml"/>
+    <StyleInclude Source="avares://IronyModManager/Controls/Themes/MaterialDark/ListBoxItem.axaml"/>
 
     <!--Individual styles-->
     <Style Selector="NotificationCard">

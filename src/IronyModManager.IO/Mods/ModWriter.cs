@@ -5,7 +5,7 @@
 // Created          : 03-31-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 01-07-2024
+// Last Modified On : 01-23-2024
 // ***********************************************************************
 // <copyright file="ModWriter.cs" company="Mario">
 //     Mario
@@ -170,7 +170,7 @@ namespace IronyModManager.IO.Mods
                             {
                                 if (!File.Exists(integrityCheck))
                                 {
-                                    File.Create(integrityCheck);
+                                    _ = File.Create(integrityCheck);
                                 }
                             }
                             catch

@@ -5,7 +5,7 @@
 // Created          : 05-26-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 12-05-2023
+// Last Modified On : 01-23-2024
 // ***********************************************************************
 // <copyright file="ModPatchCollectionService.cs" company="Mario">
 //     Mario
@@ -543,10 +543,14 @@ namespace IronyModManager.Services
                 {
                     foreach (var typeId in type)
                     {
+                        var typeLock = await opLock.LockAsync();
                         var items = await indexedConflicts.GetByTypeAndIdAsync(typeId);
+                        typeLock.Dispose();
                         if (items.Any() && items.All(p => !p.ExistsInLastFile))
                         {
+                            var fileLock = await opLock.LockAsync();
                             var fileDefs = await indexedDefinitions.GetByFileAsync(items.FirstOrDefault().FileCI);
+                            fileLock.Dispose();
                             var lastMod = fileDefs.GroupBy(p => p.ModName).Select(p => p.First()).OrderByDescending(p => modOrder.IndexOf(p.ModName)).FirstOrDefault();
                             var copy = CopyDefinition(items.FirstOrDefault());
                             copy.Dependencies = lastMod.Dependencies;
