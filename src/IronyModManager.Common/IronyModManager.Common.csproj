@@ -50,7 +50,7 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="ReactiveUI" Version="19.4.1" />
+    <PackageReference Include="ReactiveUI" Version="19.5.41" />
     <PackageReference Include="Sajidur78.StrongNamer" Version="0.2.8" />
     <PackageReference Include="SkiaSharp" Version="2.88.6" />
   </ItemGroup>
