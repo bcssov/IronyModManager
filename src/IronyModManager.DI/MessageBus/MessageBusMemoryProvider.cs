@@ -5,7 +5,7 @@
 // Created          : 06-25-2023
 //
 // Last Modified By : Mario
-// Last Modified On : 06-25-2023
+// Last Modified On : 02-09-2024
 // ***********************************************************************
 // <copyright file="MessageBusMemoryProvider.cs" company="Mario">
 //     Mario
@@ -18,6 +18,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using SlimMessageBus.Host;
 using SlimMessageBus.Host.Memory;
+using SlimMessageBus.Host.Services;
 
 namespace IronyModManager.DI.MessageBus
 {
@@ -32,7 +33,7 @@ namespace IronyModManager.DI.MessageBus
         #region Constructors
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="MessageBusMemoryProvider"/> class.
+        /// Initializes a new instance of the <see cref="MessageBusMemoryProvider" /> class.
         /// </summary>
         /// <param name="settings">The settings.</param>
         public MessageBusMemoryProvider(MessageBusSettings settings) : base(settings, new MemoryMessageBusSettings() { EnableMessageSerialization = false })
@@ -41,24 +42,15 @@ namespace IronyModManager.DI.MessageBus
 
         #endregion Constructors
 
-        #region Methods
+        #region Properties
 
         /// <summary>
-        /// Asserts the settings.
+        /// Gets the validation service.
         /// </summary>
-        protected override void AssertSettings()
-        {
-            // Sigh, let's fix the validation mess
-            foreach (var consumerSettings in Settings.Consumers)
-            {
-                if (consumerSettings.ConsumerMethodInfo != null && consumerSettings.ConsumerMethod == null)
-                {
-                    consumerSettings.ConsumerMethod = ReflectionUtils.GenerateMethodCallToFunc<Func<object, object, Task>>(consumerSettings.ConsumerMethodInfo, consumerSettings.ConsumerType, typeof(Task), consumerSettings.MessageType);
-                }
-            }
-            base.AssertSettings();
-        }
+        /// <value>The validation service.</value>
+        // Will you make up your mind where you want AssertSettings to be
+        protected override IMessageBusSettingsValidationService ValidationService => new MessageBusValidationService(Settings);
 
-        #endregion Methods
+        #endregion Properties
     }
 }
