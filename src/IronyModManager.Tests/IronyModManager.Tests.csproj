@@ -27,7 +27,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="DiffPlex" Version="1.7.1" />
+    <PackageReference Include="DiffPlex" Version="1.7.2" />
     <PackageReference Include="FluentAssertions" Version="6.11.0" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.6.3" />
     <PackageReference Include="Moq" Version="4.18.4" />
@@ -37,7 +37,7 @@
     </PackageReference>
     <PackageReference Include="Sajidur78.StrongNamer" Version="0.2.8" />
     <PackageReference Include="xunit" Version="2.5.0" />
-    <PackageReference Include="xunit.runner.visualstudio" Version="$(XUnitRunnerVS)" allowedVersions="$(XUnitRunnerVS)" >
+    <PackageReference Include="xunit.runner.visualstudio" Version="$(XUnitRunnerVS)" allowedVersions="$(XUnitRunnerVS)">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
