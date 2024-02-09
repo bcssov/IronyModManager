@@ -53,7 +53,7 @@
     </PackageReference>
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     <PackageReference Include="Sajidur78.StrongNamer" Version="0.2.8" />
-    <PackageReference Include="SimpleInjector" Version="5.4.1" />
+    <PackageReference Include="SimpleInjector" Version="5.4.4" />
     <PackageReference Include="SimpleInjector.Packaging" Version="5.0.0" />
   </ItemGroup>
 
