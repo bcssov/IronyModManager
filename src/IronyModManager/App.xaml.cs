@@ -128,7 +128,7 @@ namespace IronyModManager
         /// </summary>
         protected virtual void HandleCommandLine()
         {
-            static void setGame(bool raiseEvent = false)
+            static void setGame(bool raiseOnlyEvent = false)
             {
                 if (!string.IsNullOrWhiteSpace(StaticResources.CommandLineOptions.GameAbrv))
                 {
@@ -137,11 +137,14 @@ namespace IronyModManager
                     var game = games.FirstOrDefault(g => g.Abrv.Equals(StaticResources.CommandLineOptions.GameAbrv, StringComparison.OrdinalIgnoreCase));
                     if (game != null)
                     {
-                        gameService.SetSelected(games, game);
-                        if (raiseEvent)
+                        if (raiseOnlyEvent)
                         {
                             var mbus = DIResolver.Get<Shared.MessageBus.IMessageBus>();
                             mbus.Publish(new ActiveGameRequestEvent(game));
+                        }
+                        else
+                        {
+                            gameService.SetSelected(games, game);
                         }
                     }
                 }

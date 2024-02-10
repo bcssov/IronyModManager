@@ -17,6 +17,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
+using Avalonia.Threading;
+using IronyModManager.Common;
 using IronyModManager.Common.Events;
 using IronyModManager.Common.ViewModels;
 using IronyModManager.Implementation.MessageBus;
@@ -113,7 +115,10 @@ namespace IronyModManager.ViewModels.Controls
             {
                 if (m.Game != null)
                 {
-                    SelectedGame = Games.FirstOrDefault(p => p.Type.Equals(m.Game.Type, StringComparison.OrdinalIgnoreCase));
+                    Dispatcher.UIThread.SafeInvoke(() =>
+                    {
+                        SelectedGame = Games.FirstOrDefault(p => p.Type.Equals(m.Game.Type, StringComparison.OrdinalIgnoreCase));
+                    });
                 }
             }).DisposeWith(disposables);
 
