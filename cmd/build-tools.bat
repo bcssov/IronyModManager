@@ -5,6 +5,6 @@ dotnet build --configuration Release
 cd ..
 cd ..
 cd ..
-xcopy "Tools\LocalizationResourceGenerator\src\LocalizationResourceGenerator\bin\Release\net7.0\*.dll" "Tools\LocalizationResourceGenerator\" /Y /S /D
-xcopy "Tools\LocalizationResourceGenerator\src\LocalizationResourceGenerator\bin\Release\net7.0\*.exe" "Tools\LocalizationResourceGenerator\" /Y /S /D
-xcopy "Tools\LocalizationResourceGenerator\src\LocalizationResourceGenerator\bin\Release\net7.0\*.json" "Tools\LocalizationResourceGenerator\" /Y /S /D
+xcopy "Tools\LocalizationResourceGenerator\src\LocalizationResourceGenerator\bin\Release\net8.0\*.dll" "Tools\LocalizationResourceGenerator\" /Y /S /D
+xcopy "Tools\LocalizationResourceGenerator\src\LocalizationResourceGenerator\bin\Release\net8.0\*.exe" "Tools\LocalizationResourceGenerator\" /Y /S /D
+xcopy "Tools\LocalizationResourceGenerator\src\LocalizationResourceGenerator\bin\Release\net8.0\*.json" "Tools\LocalizationResourceGenerator\" /Y /S /D
