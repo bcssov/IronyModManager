@@ -93,10 +93,7 @@ namespace IronyModManager
         {
             get
             {
-                if (commandLineOptions == null)
-                {
-                    commandLineOptions = new CommandLineArgs();
-                }
+                commandLineOptions ??= new CommandLineArgs();
                 return commandLineOptions;
             }
             set

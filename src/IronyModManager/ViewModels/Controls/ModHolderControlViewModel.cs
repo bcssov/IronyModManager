@@ -739,7 +739,7 @@ namespace IronyModManager.ViewModels.Controls
                 var notificationType = NotificationType.Success;
                 try
                 {
-                    var result = await modService.ExportModsAsync(CollectionMods.SelectedMods.ToList(), InstalledMods.AllMods.ToList(), CollectionMods.SelectedModCollection);
+                    var result = await modService.ExportModsAsync([.. CollectionMods.SelectedMods], [.. InstalledMods.AllMods], CollectionMods.SelectedModCollection);
                     string title;
                     string message;
                     if (result)
