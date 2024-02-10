@@ -4,6 +4,42 @@
 		<title>Irony Mod Manager</title>
 		<language>en</language>
 		<item>
+			<title>1.26.64-alpha</title>
+			<description>## Release Notes 1.26
+* Update dependencies
+* Bump to net8 which should grant some performance improvements (win7 might not work going forward)
+* Remove ripple animation from Material themes (per #484)</description>
+			<pubDate>Sat, 10 Feb 2024 05:01:21 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.26.64-alpha/linux-x64.zip" sparkle:version="1.26.64.54333" sparkle:shortVersionString="1.26.64" length="90875951" sparkle:os="linux" type="application/zip" sparkle:signature="IunvyCthzX72HEsFu0grxJRpCxNwLuH9B8xL7nJRenVEMvC694/l7gLE9YsrtlWyW5dVZTJcMj81dBoD7pAUBA=="/>
+		</item>
+		<item>
+			<title>1.26.64-alpha</title>
+			<description>## Release Notes 1.26
+* Update dependencies
+* Bump to net8 which should grant some performance improvements (win7 might not work going forward)
+* Remove ripple animation from Material themes (per #484)</description>
+			<pubDate>Sat, 10 Feb 2024 05:01:27 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.26.64-alpha/osx-x64.zip" sparkle:version="1.26.64.54333" sparkle:shortVersionString="1.26.64" length="93813887" sparkle:os="osx" type="application/zip" sparkle:signature="lJ5H41CgFaI1XtQ6VcOTdXuZXNAcmNNPchIwZsDo5lIFxlkaXMnHiNrnJdyf9I8uMtgMrPGd74KgQSfwKNqfDw=="/>
+		</item>
+		<item>
+			<title>1.26.64-alpha</title>
+			<description>## Release Notes 1.26
+* Update dependencies
+* Bump to net8 which should grant some performance improvements (win7 might not work going forward)
+* Remove ripple animation from Material themes (per #484)</description>
+			<pubDate>Sat, 10 Feb 2024 05:01:33 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.26.64-alpha/win-x64-setup.zip" sparkle:version="1.26.64.54333" sparkle:shortVersionString="1.26.64" length="72402055" sparkle:os="windows" type="application/zip" sparkle:signature="xGiIVjTiIaARtMD3S8RjgtfBGpH8MvGkPEXJHB3OzVf+VjapH3JPBJvl7uMITo8mmYFjmIHzYTuaRsEcljOPDg=="/>
+		</item>
+		<item>
+			<title>1.26.64-alpha</title>
+			<description>## Release Notes 1.26
+* Update dependencies
+* Bump to net8 which should grant some performance improvements (win7 might not work going forward)
+* Remove ripple animation from Material themes (per #484)</description>
+			<pubDate>Sat, 10 Feb 2024 05:01:33 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.26.64-alpha/win-x64.zip" sparkle:version="1.26.64.54333" sparkle:shortVersionString="1.26.64" length="106358949" sparkle:os="windows" type="application/zip" sparkle:signature="EB+Px8v9R0a2GwVYUrPvZwDpLZRxZVilgmErBtd1gPUtp9y92GpXLcpGuJouJGDPAeEkjTL94eVMMzZhrKIoCw=="/>
+		</item>
+		<item>
 			<title>1.25.161</title>
 			<description>## Note
 * Despite small change log this is a significant update due to core changes in memory usage.
