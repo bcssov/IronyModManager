@@ -1,10 +1,11 @@
-﻿// ***********************************************************************
+﻿
+// ***********************************************************************
 // Assembly         : IronyModManager.Platform
 // Author           : Mario
 // Created          : 04-16-2021
 //
 // Last Modified By : Mario
-// Last Modified On : 05-12-2023
+// Last Modified On : 02-10-2024
 // ***********************************************************************
 // <copyright file="PlatformConfigurationOptions.cs" company="Mario">
 //     Mario
@@ -17,6 +18,23 @@ using System.Linq;
 
 namespace IronyModManager.Platform.Configuration
 {
+
+    /// <summary>
+    /// Class App.
+    /// </summary>
+    public class App
+    {
+        #region Properties
+
+        /// <summary>
+        /// Gets or sets a value indicating whether [single instance].
+        /// </summary>
+        /// <value><c>true</c> if [single instance]; otherwise, <c>false</c>.</value>
+        public bool SingleInstance { get; set; }
+
+        #endregion Properties
+    }
+
     /// <summary>
     /// Class ConflictSolver.
     /// </summary>
@@ -117,6 +135,12 @@ namespace IronyModManager.Platform.Configuration
     public class PlatformConfigurationOptions
     {
         #region Properties
+
+        /// <summary>
+        /// Gets the application.
+        /// </summary>
+        /// <value>The application.</value>
+        public App App { get; } = new App();
 
         /// <summary>
         /// Gets the conflict solver.
