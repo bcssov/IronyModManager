@@ -98,7 +98,7 @@ namespace IronyModManager
                     commandLineOptions = new CommandLineArgs();
                 }
                 return commandLineOptions;
-            };
+            }
             set
             {
                 commandLineOptions = value;

@@ -144,7 +144,7 @@ namespace IronyModManager.Implementation.SingleInstance
                 }
                 catch
                 {
-                    await Task.Delay(delay);
+                    await Task.Delay(Delay);
                 }
             }
         }
