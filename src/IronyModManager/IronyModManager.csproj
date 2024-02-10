@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
-    <TargetFramework>net7.0</TargetFramework>
+    <TargetFramework>net8.0</TargetFramework>
     <ApplicationIcon>Assets\logo.ico</ApplicationIcon>
     <StartupObject>IronyModManager.Program</StartupObject>
     <Authors>Mario</Authors>
@@ -134,7 +134,7 @@
     <PackageReference Include="Material.Avalonia" Version="$(MaterialAvalonia)" allowedVersions="$(MaterialAvalonia)" />
     <PackageReference Include="Material.Icons.Avalonia" Version="$(AvaloniaMaterialIcons)" allowedVersions="$(AvaloniaMaterialIcons)" />
     <PackageReference Include="MessageBox.Avalonia" Version="$(MessageBoxAvalonia)" allowedVersions="$(MessageBoxAvalonia)" />
-    <PackageReference Include="Microsoft.Bcl.AsyncInterfaces" Version="7.0.0" />
+    <PackageReference Include="Microsoft.Bcl.AsyncInterfaces" Version="8.0.0" />
     <PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="$(MicrosoftExtensionsConfigurationBinder)" allowedVersions="$(MicrosoftExtensionsConfigurationBinder)" />
     <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="$(MicrosoftExtensionsConfigurationJson)" allowedVersions="$(MicrosoftExtensionsConfigurationJson)" />
     <PackageReference Include="Microsoft.Extensions.DependencyModel" Version="$(MicrosoftExtensionsDependencyModelVersion)" allowedVersions="$(MicrosoftExtensionsDependencyModelVersion)" />
