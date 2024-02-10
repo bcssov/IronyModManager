@@ -87,7 +87,7 @@ namespace IronyModManager
         /// </summary>
         public override void Initialize()
         {
-            showFatalNotification = StaticResources.CommandLineOptions != null && StaticResources.CommandLineOptions.ShowFatalErrorNotification;
+            showFatalNotification = StaticResources.CommandLineOptions.ShowFatalErrorNotification;
             AvaloniaXamlLoader.Load(this);
             if (!Design.IsDesignMode)
             {
@@ -128,16 +128,29 @@ namespace IronyModManager
         /// </summary>
         protected virtual void HandleCommandLine()
         {
-            if (StaticResources.CommandLineOptions != null && !string.IsNullOrWhiteSpace(StaticResources.CommandLineOptions.GameAbrv))
+            static void setGame(bool raiseEvent = false)
             {
-                var gameService = DIResolver.Get<IGameService>();
-                var games = gameService.Get();
-                var game = games.FirstOrDefault(g => g.Abrv.Equals(StaticResources.CommandLineOptions.GameAbrv, StringComparison.OrdinalIgnoreCase));
-                if (game != null)
+                if (!string.IsNullOrWhiteSpace(StaticResources.CommandLineOptions.GameAbrv))
                 {
-                    gameService.SetSelected(games, game);
+                    var gameService = DIResolver.Get<IGameService>();
+                    var games = gameService.Get();
+                    var game = games.FirstOrDefault(g => g.Abrv.Equals(StaticResources.CommandLineOptions.GameAbrv, StringComparison.OrdinalIgnoreCase));
+                    if (game != null)
+                    {
+                        gameService.SetSelected(games, game);
+                        if (raiseEvent)
+                        {
+                            var mbus = DIResolver.Get<Shared.MessageBus.IMessageBus>();
+                            mbus.Publish(new ActiveGameRequestEvent(game));
+                        }
+                    }
                 }
             }
+            StaticResources.CommandLineArgsChanged += () =>
+            {
+                setGame(true);
+            };
+            setGame();
         }
 
         /// <summary>
@@ -201,7 +214,7 @@ namespace IronyModManager
             if (File.Exists(Constants.TitleSuffixFilename))
             {
                 var suffix = File.ReadAllLines(Constants.TitleSuffixFilename);
-                if (suffix.Any())
+                if (suffix.Length != 0)
                 {
                     appTitle = $"{appTitle} ({suffix.FirstOrDefault()})";
                 }
@@ -219,7 +232,7 @@ namespace IronyModManager
             await Task.Delay(5000);
             var permissionService = DIResolver.Get<IPermissionCheckService>();
             var permissions = permissionService.VerifyPermissions();
-            if (permissions.Any() && permissions.Any(p => !p.Valid))
+            if (permissions.Count != 0 && permissions.Any(p => !p.Valid))
             {
                 var notificationAction = DIResolver.Get<INotificationAction>();
                 var locManager = DIResolver.Get<ILocalizationManager>();

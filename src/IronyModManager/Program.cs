@@ -94,7 +94,7 @@ namespace IronyModManager
             try
             {
                 ParseArguments(args);
-                if (StaticResources.CommandLineOptions != null && !StaticResources.CommandLineOptions.ShowFatalErrorNotification)
+                if (!StaticResources.CommandLineOptions.ShowFatalErrorNotification)
                 {
                     InitSingleInstance();
                 }
@@ -235,7 +235,7 @@ namespace IronyModManager
                 var logger = DIResolver.Get<ILogger>();
                 logger.Fatal(e);
 
-                var runFatalErrorProcess = StaticResources.CommandLineOptions == null || !StaticResources.CommandLineOptions.ShowFatalErrorNotification;
+                var runFatalErrorProcess = !StaticResources.CommandLineOptions.ShowFatalErrorNotification;
                 if (runFatalErrorProcess && !ExternalNotificationShown)
                 {
                     var path = Environment.ProcessPath;

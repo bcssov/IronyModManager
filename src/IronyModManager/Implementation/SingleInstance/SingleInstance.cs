@@ -33,7 +33,7 @@ namespace IronyModManager.Implementation.SingleInstance
         /// <summary>
         /// The delay
         /// </summary>
-        private const int delay = 100;
+        private const int Delay = 100;
 
         /// <summary>
         /// The object lock

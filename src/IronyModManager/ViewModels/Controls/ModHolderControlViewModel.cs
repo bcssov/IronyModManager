@@ -5,7 +5,7 @@
 // Created          : 02-29-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 11-27-2023
+// Last Modified On : 02-10-2024
 // ***********************************************************************
 // <copyright file="ModHolderControlViewModel.cs" company="Mario">
 //     Mario
@@ -260,10 +260,18 @@ namespace IronyModManager.ViewModels.Controls
             InstalledMods = installedModsControlViewModel;
             CollectionMods = collectionModsControlViewModel;
             UseSimpleLayout = !DIResolver.Get<IPlatformConfiguration>().GetOptions().ConflictSolver.UseSubMenus;
-            if (StaticResources.CommandLineOptions != null && StaticResources.CommandLineOptions.EnableResumeGameButton)
+            if (StaticResources.CommandLineOptions.EnableResumeGameButton)
             {
                 forceEnableResumeButton = true;
             }
+            StaticResources.CommandLineArgsChanged += () =>
+            {
+                if (StaticResources.CommandLineOptions.EnableResumeGameButton)
+                {
+                    forceEnableResumeButton = true;
+                    EvalResumeAvailability();
+                }
+            };
         }
 
         #endregion Constructors

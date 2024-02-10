@@ -91,7 +91,14 @@ namespace IronyModManager
         /// <value>The command line options.</value>
         public static CommandLineArgs CommandLineOptions
         {
-            get => commandLineOptions;
+            get
+            {
+                if (commandLineOptions == null)
+                {
+                    commandLineOptions = new CommandLineArgs();
+                }
+                return commandLineOptions;
+            };
             set
             {
                 commandLineOptions = value;
