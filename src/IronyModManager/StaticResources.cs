@@ -1,10 +1,11 @@
-﻿// ***********************************************************************
+﻿
+// ***********************************************************************
 // Assembly         : IronyModManager
 // Author           : Mario
 // Created          : 05-07-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 10-28-2022
+// Last Modified On : 02-10-2024
 // ***********************************************************************
 // <copyright file="StaticResources.cs" company="Mario">
 //     Mario
@@ -23,6 +24,7 @@ using IronyModManager.Shared;
 
 namespace IronyModManager
 {
+
     /// <summary>
     /// Class StaticResources.
     /// </summary>
@@ -30,6 +32,11 @@ namespace IronyModManager
     public static class StaticResources
     {
         #region Fields
+
+        /// <summary>
+        /// The command line options
+        /// </summary>
+        private static CommandLineArgs commandLineOptions;
 
         /// <summary>
         /// The application icon
@@ -58,13 +65,39 @@ namespace IronyModManager
 
         #endregion Fields
 
+        #region Delegates
+
+        /// <summary>
+        /// Delegate CommandLineArgsChangedDelegate
+        /// </summary>
+        public delegate void CommandLineArgsChangedDelegate();
+
+        #endregion Delegates
+
+        #region Events
+
+        /// <summary>
+        /// Occurs when [command line arguments changed].
+        /// </summary>
+        public static event CommandLineArgsChangedDelegate CommandLineArgsChanged;
+
+        #endregion Events
+
         #region Properties
 
         /// <summary>
         /// Gets or sets the command line options.
         /// </summary>
         /// <value>The command line options.</value>
-        public static CommandLineArgs CommandLineOptions { get; set; }
+        public static CommandLineArgs CommandLineOptions
+        {
+            get => commandLineOptions;
+            set
+            {
+                commandLineOptions = value;
+                CommandLineArgsChanged?.Invoke();
+            }
+        }
 
         /// <summary>
         /// Gets or sets a value indicating whether this instance is verifying container.

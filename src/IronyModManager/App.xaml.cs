@@ -5,7 +5,7 @@
 // Created          : 01-10-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 10-29-2023
+// Last Modified On : 02-10-2024
 // ***********************************************************************
 // <copyright file="App.xaml.cs" company="Mario">
 //     Mario
@@ -69,6 +69,16 @@ namespace IronyModManager
         }
 
         #endregion Constructors
+
+        #region Properties
+
+        /// <summary>
+        /// Gets the main window.
+        /// </summary>
+        /// <value>The main window.</value>
+        public static MainWindow MainWindow { get; private set; }
+
+        #endregion Properties
 
         #region Methods
 
@@ -232,6 +242,7 @@ namespace IronyModManager
             mainWindow.DataContext = vm;
             mainWindow.EnsureTitlebarSpacing();
             desktop.MainWindow = mainWindow;
+            MainWindow = mainWindow;
         }
 
         /// <summary>
