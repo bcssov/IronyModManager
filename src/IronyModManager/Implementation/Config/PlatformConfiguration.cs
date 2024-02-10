@@ -5,7 +5,7 @@
 // Created          : 04-16-2021
 //
 // Last Modified By : Mario
-// Last Modified On : 11-26-2023
+// Last Modified On : 02-10-2024
 // ***********************************************************************
 // <copyright file="PlatformConfiguration.cs" company="Mario">
 //     Mario
@@ -13,13 +13,11 @@
 // <summary></summary>
 // ***********************************************************************
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using Microsoft.Extensions.Configuration;
 using IronyModManager.Platform;
 using IronyModManager.Platform.Configuration;
 using IronyModManager.Shared.Configuration;
+using Microsoft.Extensions.Configuration;
 
 namespace IronyModManager.Implementation.Config
 {
@@ -138,6 +136,7 @@ namespace IronyModManager.Implementation.Config
                 platformConfiguration.Updates.Disable = configuration.GetSection("Updates").GetSection("Disable").Get<bool>();
                 platformConfiguration.TitleBar.Native = configuration.GetSection("TitleBar").GetSection("Native").Get<bool>();
                 platformConfiguration.ConflictSolver.UseSubMenus = configuration.GetSection("ConflictSolver").GetSection("UseSubMenus").Get<bool>();
+                platformConfiguration.App.SingleInstance = configuration.GetSection("App").GetSection("SingleInstance").Get<bool>();
             }
             return platformConfiguration;
         }

@@ -1,10 +1,11 @@
-﻿// ***********************************************************************
+﻿
+// ***********************************************************************
 // Assembly         : IronyModManager
 // Author           : Mario
 // Created          : 02-12-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-23-2021
+// Last Modified On : 02-10-2024
 // ***********************************************************************
 // <copyright file="GameControlViewModel.cs" company="Mario">
 //     Mario
@@ -16,6 +17,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
+using Avalonia.Threading;
+using IronyModManager.Common;
 using IronyModManager.Common.Events;
 using IronyModManager.Common.ViewModels;
 using IronyModManager.Implementation.MessageBus;
@@ -27,25 +30,29 @@ using ReactiveUI;
 
 namespace IronyModManager.ViewModels.Controls
 {
+
     /// <summary>
     /// Class GameControlViewModel.
     /// Implements the <see cref="IronyModManager.Common.ViewModels.BaseViewModel" />
     /// </summary>
     /// <seealso cref="IronyModManager.Common.ViewModels.BaseViewModel" />
+    /// <param name="gameService">The game service.</param>
+    /// <param name="activeGameRequestHandler">The active game request handler.</param>
+    /// <remarks>Initializes a new instance of the <see cref="GameControlViewModel" /> class.</remarks>
     [ExcludeFromCoverage("This should be tested via functional testing.")]
-    public class GameControlViewModel : BaseViewModel
+    public class GameControlViewModel(IGameService gameService, ActiveGameRequestHandler activeGameRequestHandler) : BaseViewModel
     {
         #region Fields
 
         /// <summary>
         /// The active game request handler
         /// </summary>
-        private readonly ActiveGameRequestHandler activeGameRequestHandler;
+        private readonly ActiveGameRequestHandler activeGameRequestHandler = activeGameRequestHandler;
 
         /// <summary>
         /// The game service
         /// </summary>
-        private readonly IGameService gameService;
+        private readonly IGameService gameService = gameService;
 
         /// <summary>
         /// The previous game
@@ -53,21 +60,6 @@ namespace IronyModManager.ViewModels.Controls
         private IGame previousGame;
 
         #endregion Fields
-
-        #region Constructors
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="GameControlViewModel" /> class.
-        /// </summary>
-        /// <param name="gameService">The game service.</param>
-        /// <param name="activeGameRequestHandler">The active game request handler.</param>
-        public GameControlViewModel(IGameService gameService, ActiveGameRequestHandler activeGameRequestHandler)
-        {
-            this.gameService = gameService;
-            this.activeGameRequestHandler = activeGameRequestHandler;
-        }
-
-        #endregion Constructors
 
         #region Properties
 
@@ -123,7 +115,10 @@ namespace IronyModManager.ViewModels.Controls
             {
                 if (m.Game != null)
                 {
-                    SelectedGame = Games.FirstOrDefault(p => p.Type.Equals(m.Game.Type, StringComparison.OrdinalIgnoreCase));
+                    Dispatcher.UIThread.SafeInvoke(() =>
+                    {
+                        SelectedGame = Games.FirstOrDefault(p => p.Type.Equals(m.Game.Type, StringComparison.OrdinalIgnoreCase));
+                    });
                 }
             }).DisposeWith(disposables);
 

@@ -5,7 +5,7 @@
 // Created          : 01-10-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-25-2023
+// Last Modified On : 02-10-2024
 // ***********************************************************************
 // <copyright file="Program.cs" company="IronyModManager">
 //     Copyright (c) Mario. All rights reserved.
@@ -13,17 +13,18 @@
 // <summary></summary>
 // ***********************************************************************
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Threading;
 using CommandLine;
+using IronyModManager.Common;
 using IronyModManager.Controls.Dialogs;
 using IronyModManager.DI;
 using IronyModManager.Implementation.Actions;
 using IronyModManager.Implementation.AvaloniaEdit;
+using IronyModManager.Implementation.SingleInstance;
 using IronyModManager.Localization;
 using IronyModManager.Platform;
 using IronyModManager.Platform.Configuration;
@@ -93,6 +94,10 @@ namespace IronyModManager
             try
             {
                 ParseArguments(args);
+                if (!StaticResources.CommandLineOptions.ShowFatalErrorNotification)
+                {
+                    InitSingleInstance();
+                }
                 var app = BuildAvaloniaApp();
                 InitAvaloniaOptions(app);
                 Bootstrap.PostStartup();
@@ -196,6 +201,30 @@ namespace IronyModManager
         }
 
         /// <summary>
+        /// Initializes the single instance.
+        /// </summary>
+        private static void InitSingleInstance()
+        {
+            var configuration = DIResolver.Get<IPlatformConfiguration>().GetOptions().App;
+            if (configuration.SingleInstance)
+            {
+                SingleInstance.Initialize();
+                SingleInstance.InstanceLaunched += (args) =>
+                {
+                    ParseArguments(args.CommandLineArgs);
+                    Dispatcher.UIThread.SafeInvoke(() =>
+                    {
+                        App.MainWindow.Show();
+                        App.MainWindow.Activate();
+                        var previousState = App.MainWindow.WindowState;
+                        App.MainWindow.WindowState = WindowState.Minimized;
+                        App.MainWindow.WindowState = previousState;
+                    });
+                };
+            }
+        }
+
+        /// <summary>
         /// Logs the error.
         /// </summary>
         /// <param name="e">The e.</param>
@@ -206,7 +235,7 @@ namespace IronyModManager
                 var logger = DIResolver.Get<ILogger>();
                 logger.Fatal(e);
 
-                var runFatalErrorProcess = StaticResources.CommandLineOptions == null || !StaticResources.CommandLineOptions.ShowFatalErrorNotification;
+                var runFatalErrorProcess = !StaticResources.CommandLineOptions.ShowFatalErrorNotification;
                 if (runFatalErrorProcess && !ExternalNotificationShown)
                 {
                     var path = Environment.ProcessPath;
