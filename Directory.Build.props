@@ -27,7 +27,7 @@
     <Avalonia>[0.10.22]</Avalonia>
     <AvaloniaEdit>[0.10.12.2]</AvaloniaEdit>
 	<AvaloniaMaterialIcons>[1.1.10]</AvaloniaMaterialIcons>
-    <Jot>[2.1.16]</Jot>
+    <Jot>[2.1.17]</Jot>
 	<!-- 2.5.0 version breaks tests, 1.26 rev still broken. I really don't want to investigate  -->
 	<XUnitRunnerVS>[2.4.5]</XUnitRunnerVS>
     <!-- Recently 2.0 version was released and not all packages were updated  -->
