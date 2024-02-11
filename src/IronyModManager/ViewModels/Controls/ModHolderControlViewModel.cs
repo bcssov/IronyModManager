@@ -5,7 +5,7 @@
 // Created          : 02-29-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-10-2024
+// Last Modified On : 02-11-2024
 // ***********************************************************************
 // <copyright file="ModHolderControlViewModel.cs" company="Mario">
 //     Mario
@@ -21,6 +21,7 @@ using System.Reactive;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
+using Avalonia.Threading;
 using IronyModManager.Common;
 using IronyModManager.Common.Events;
 using IronyModManager.Common.ViewModels;
@@ -266,11 +267,11 @@ namespace IronyModManager.ViewModels.Controls
             }
             StaticResources.CommandLineArgsChanged += () =>
             {
-                if (StaticResources.CommandLineOptions.EnableResumeGameButton)
+                Dispatcher.UIThread.SafeInvoke(() =>
                 {
-                    forceEnableResumeButton = true;
+                    forceEnableResumeButton = StaticResources.CommandLineOptions.EnableResumeGameButton;
                     EvalResumeAvailability();
-                }
+                });
             };
         }
 
