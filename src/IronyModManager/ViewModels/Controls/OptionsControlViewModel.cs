@@ -1,10 +1,11 @@
-﻿// ***********************************************************************
+﻿
+// ***********************************************************************
 // Assembly         : IronyModManager
 // Author           : Mario
 // Created          : 05-30-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 11-08-2022
+// Last Modified On : 02-11-2024
 // ***********************************************************************
 // <copyright file="OptionsControlViewModel.cs" company="Mario">
 //     Mario
@@ -37,6 +38,7 @@ using ReactiveUI;
 
 namespace IronyModManager.ViewModels.Controls
 {
+
     /// <summary>
     /// Class OptionsControlViewModel.
     /// Implements the <see cref="IronyModManager.Common.ViewModels.BaseViewModel" />
@@ -210,6 +212,7 @@ namespace IronyModManager.ViewModels.Controls
             this.modService = modService;
             this.appAction = appAction;
             UpdatesAllowed = !platformConfiguration.GetOptions().Updates.Disable;
+            InstallingUpdatesAllowed = !platformConfiguration.GetOptions().Updates.DisableInstallOnly;
             LeftMargin = new Thickness(20, 0, 0, 0);
             LeftChildMargin = new Thickness(20, 10, 0, 0);
         }
@@ -364,6 +367,12 @@ namespace IronyModManager.ViewModels.Controls
         /// <value>The game options.</value>
         [StaticLocalization(LocalizationResources.Options.Game.Title)]
         public virtual string GameOptions { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether [installing updates allowed].
+        /// </summary>
+        /// <value><c>true</c> if [installing updates allowed]; otherwise, <c>false</c>.</value>
+        public virtual bool InstallingUpdatesAllowed { get; protected set; }
 
         /// <summary>
         /// Gets or sets the install updates.

@@ -109,7 +109,7 @@
                             <Button Margin="0,5" Content="{Binding SkipUpdate}"
                                     Command="{Binding SkipUpdateCommand}" Grid.Row="2" Grid.Column="0"
                                     HorizontalAlignment="Stretch" VerticalAlignment="Stretch" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" MaxHeight="30"></Button>
-                            <Button Margin="0,5" Content="{Binding InstallUpdates}"
+                            <Button Margin="0,5" Content="{Binding InstallUpdates}" IsVisible="{Binding InstallingUpdatesAllowed}"
                                     Command="{Binding InstallUpdatesCommand}" Grid.Row="2" Grid.Column="1"
                                     HorizontalAlignment="Stretch" VerticalAlignment="Stretch" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" MaxHeight="30"></Button>
                         </Grid>
