@@ -1,21 +1,16 @@
-﻿
-// ***********************************************************************
+﻿// ***********************************************************************
 // Assembly         : IronyModManager.Platform
 // Author           : Mario
 // Created          : 04-16-2021
 //
 // Last Modified By : Mario
-// Last Modified On : 02-10-2024
+// Last Modified On : 02-11-2024
 // ***********************************************************************
 // <copyright file="PlatformConfigurationOptions.cs" company="Mario">
 //     Mario
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
-using System;
-using System.Collections.Generic;
-using System.Linq;
-
 namespace IronyModManager.Platform.Configuration
 {
 
@@ -231,6 +226,12 @@ namespace IronyModManager.Platform.Configuration
         /// </summary>
         /// <value><c>true</c> if disable; otherwise, <c>false</c>.</value>
         public bool Disable { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether [disable install only].
+        /// </summary>
+        /// <value><c>true</c> if [disable install only]; otherwise, <c>false</c>.</value>
+        public bool DisableInstallOnly { get; set; }
 
         #endregion Properties
     }
