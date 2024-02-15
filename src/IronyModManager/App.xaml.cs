@@ -1,18 +1,19 @@
-﻿
-// ***********************************************************************
+﻿// ***********************************************************************
 // Assembly         : IronyModManager
 // Author           : Mario
 // Created          : 01-10-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-10-2024
+// Last Modified On : 02-15-2024
 // ***********************************************************************
 // <copyright file="App.xaml.cs" company="Mario">
 //     Mario
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
+
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -40,7 +41,6 @@ using ReactiveUI;
 
 namespace IronyModManager
 {
-
     /// <summary>
     /// Class App.
     /// Implements the <see cref="Avalonia.Application" />
@@ -54,7 +54,7 @@ namespace IronyModManager
         /// <summary>
         /// The show fatal notification
         /// </summary>
-        private bool showFatalNotification = false;
+        private bool showFatalNotification;
 
         #endregion Fields
 
@@ -69,16 +69,6 @@ namespace IronyModManager
         }
 
         #endregion Constructors
-
-        #region Properties
-
-        /// <summary>
-        /// Gets the main window.
-        /// </summary>
-        /// <value>The main window.</value>
-        public static MainWindow MainWindow { get; private set; }
-
-        #endregion Properties
 
         #region Methods
 
@@ -149,6 +139,7 @@ namespace IronyModManager
                     }
                 }
             }
+
             StaticResources.CommandLineArgsChanged += () =>
             {
                 setGame(true);
@@ -168,8 +159,10 @@ namespace IronyModManager
                 {
                     return minValue;
                 }
+
                 return value;
             }
+
             var stateService = DIResolver.Get<IWindowStateService>();
             desktop.MainWindow.Height = validateSize(desktop.MainWindow.MinHeight, desktop.MainWindow.Height) + desktop.MainWindow.ExtendClientAreaTitleBarHeightHint;
             desktop.MainWindow.Width = validateSize(desktop.MainWindow.MinWidth, desktop.MainWindow.Width);
@@ -188,7 +181,7 @@ namespace IronyModManager
         {
             SetAppTitle(desktop);
             var listener = MessageBus.Current.Listen<LocaleChangedEventArgs>();
-            listener.SubscribeObservable(x =>
+            listener.SubscribeObservable(_ =>
             {
                 SetAppTitle(desktop);
             });
@@ -210,10 +203,7 @@ namespace IronyModManager
         protected virtual void SetAppTitle(IClassicDesktopStyleApplicationLifetime desktop)
         {
             var appTitle = IronyFormatter.Format(DIResolver.Get<ILocalizationManager>().GetResource(LocalizationResources.App.Title),
-            new
-            {
-                AppVersion = FileVersionInfo.GetVersionInfo(GetType().Assembly.Location).ProductVersion.Split("+")[0]
-            });
+                new { AppVersion = FileVersionInfo.GetVersionInfo(GetType().Assembly.Location).ProductVersion!.Split("+")[0] });
             if (File.Exists(Constants.TitleSuffixFilename))
             {
                 var suffix = File.ReadAllLines(Constants.TitleSuffixFilename);
@@ -222,6 +212,7 @@ namespace IronyModManager
                     appTitle = $"{appTitle} ({suffix.FirstOrDefault()})";
                 }
             }
+
             desktop.MainWindow.Title = appTitle;
         }
 
@@ -240,7 +231,8 @@ namespace IronyModManager
                 var notificationAction = DIResolver.Get<INotificationAction>();
                 var locManager = DIResolver.Get<ILocalizationManager>();
                 var title = locManager.GetResource(LocalizationResources.UnableToWriteError.Title);
-                var message = IronyFormatter.Format(locManager.GetResource(LocalizationResources.UnableToWriteError.Message), new { Environment.NewLine, Paths = string.Join(Environment.NewLine, permissions.Where(p => !p.Valid).Select(p => p.Path).ToList()) });
+                var message = IronyFormatter.Format(locManager.GetResource(LocalizationResources.UnableToWriteError.Message),
+                    new { Environment.NewLine, Paths = string.Join(Environment.NewLine, permissions.Where(p => !p.Valid).Select(p => p.Path).ToList()) });
                 await notificationAction.ShowPromptAsync(title, title, message, NotificationType.Error, PromptType.OK);
             }
         }
@@ -258,7 +250,6 @@ namespace IronyModManager
             mainWindow.DataContext = vm;
             mainWindow.EnsureTitlebarSpacing();
             desktop.MainWindow = mainWindow;
-            MainWindow = mainWindow;
         }
 
         /// <summary>
@@ -276,11 +267,14 @@ namespace IronyModManager
                     await appAction.ExitAppAsync();
                 });
             }
+
             var logger = DIResolver.Get<ILogger>();
             var lastException = logger.GetLastFatalExceptionMessage();
             var locManager = DIResolver.Get<ILocalizationManager>();
             var title = locManager.GetResource(LocalizationResources.FatalError.Title);
-            var message = string.IsNullOrWhiteSpace(lastException) ? locManager.GetResource(LocalizationResources.FatalError.Message) : locManager.GetResource(LocalizationResources.FatalError.MessageWithLastError).FormatIronySmart(new { Environment.NewLine, Message = string.Join(Environment.NewLine, lastException.SplitOnNewLine()) });
+            var message = string.IsNullOrWhiteSpace(lastException)
+                ? locManager.GetResource(LocalizationResources.FatalError.Message)
+                : locManager.GetResource(LocalizationResources.FatalError.MessageWithLastError).FormatIronySmart(new { Environment.NewLine, Message = string.Join(Environment.NewLine, lastException.SplitOnNewLine()) });
             var header = locManager.GetResource(LocalizationResources.FatalError.Header);
             var messageBox = MessageBoxes.GetFatalErrorWindow(title, header, message);
 
@@ -292,6 +286,7 @@ namespace IronyModManager
             {
                 desktop.MainWindow.WindowStartupLocation = WindowStartupLocation.CenterScreen;
             }
+
             if (string.IsNullOrWhiteSpace(lastException))
             {
                 close().ConfigureAwait(false);
@@ -308,7 +303,7 @@ namespace IronyModManager
             themeManager.ApplyTheme(currentTheme.Type);
 
             var themeListener = MessageBus.Current.Listen<ThemeChangedEventArgs>();
-            themeListener.SubscribeObservable(x =>
+            themeListener.SubscribeObservable(_ =>
             {
                 OnThemeChanged().ConfigureAwait(true);
             });
@@ -318,7 +313,7 @@ namespace IronyModManager
             {
                 var window = (MainWindow)Helpers.GetMainWindow();
                 var id = idGenerator.GetNextId();
-                window.ViewModel.TriggerManualOverlay(id, true, string.Empty);
+                window.ViewModel!.TriggerManualOverlay(id, true, string.Empty);
                 SetFontFamily(window, x.Locale);
                 window.ViewModel.TriggerManualOverlay(id, false, string.Empty);
             });
@@ -363,8 +358,9 @@ namespace IronyModManager
             {
                 language = langService.Get().FirstOrDefault(p => p.Abrv.Equals(locale));
             }
+
             var fontResolver = DIResolver.Get<IFontFamilyManager>();
-            var font = fontResolver.ResolveFontFamily(language.Font);
+            var font = fontResolver.ResolveFontFamily(language!.Font);
             mainWindow.FontFamily = font.GetFontFamily();
         }
 

@@ -1,18 +1,20 @@
-﻿
-// ***********************************************************************
+﻿// ***********************************************************************
 // Assembly         : IronyModManager
 // Author           : Mario
 // Created          : 01-10-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-10-2024
+// Last Modified On : 02-15-2024
 // ***********************************************************************
 // <copyright file="Program.cs" company="IronyModManager">
 //     Copyright (c) Mario. All rights reserved.
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
+
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Avalonia;
@@ -34,7 +36,6 @@ using ILogger = IronyModManager.Shared.ILogger;
 
 namespace IronyModManager
 {
-
     /// <summary>
     /// Class Program.
     /// </summary>
@@ -46,7 +47,7 @@ namespace IronyModManager
         /// <summary>
         /// The external notification shown
         /// </summary>
-        private static bool ExternalNotificationShown = false;
+        private static bool ExternalNotificationShown;
 
         #endregion Fields
 
@@ -58,9 +59,10 @@ namespace IronyModManager
         /// </summary>
         /// <returns>AppBuilder.</returns>
         public static AppBuilder BuildAvaloniaApp()
-            => AppBuilder.Configure<App>()
+        {
+            return AppBuilder.Configure<App>()
                 .UseIronyPlatformDetect()
-                .UseIronyManagedDialogs().AfterSetup((s) =>
+                .UseIronyManagedDialogs().AfterSetup(_ =>
                 {
                     if (!Design.IsDesignMode)
                     {
@@ -73,6 +75,7 @@ namespace IronyModManager
                         DIContainer.Finish(true);
                     }
                 });
+        }
 
         // Initialization code. Don't use any Avalonia, third-party APIs or any
         // SynchronizationContext-reliant code before AppMain is called: things aren't initialized
@@ -98,6 +101,7 @@ namespace IronyModManager
                 {
                     InitSingleInstance();
                 }
+
                 var app = BuildAvaloniaApp();
                 InitAvaloniaOptions(app);
                 Bootstrap.PostStartup();
@@ -146,27 +150,33 @@ namespace IronyModManager
                 {
                     waylandOpts.AppId = configuration.WaylandAppId;
                 }
+
                 if (configuration.UseGPU.HasValue)
                 {
                     x11Opts.UseGpu = configuration.UseGPU.GetValueOrDefault();
                     waylandOpts.UseGpu = configuration.UseGPU.GetValueOrDefault();
                 }
+
                 if (configuration.UseEGL.HasValue)
                 {
                     x11Opts.UseEGL = configuration.UseEGL.GetValueOrDefault();
                 }
+
                 if (configuration.UseDBusMenu.HasValue)
                 {
                     x11Opts.UseDBusMenu = configuration.UseDBusMenu.GetValueOrDefault();
                 }
+
                 if (configuration.UseDeferredRendering.HasValue)
                 {
                     x11Opts.UseDeferredRendering = configuration.UseDeferredRendering.GetValueOrDefault();
                     waylandOpts.UseDeferredRendering = configuration.UseDeferredRendering.GetValueOrDefault();
                 }
+
                 app.With(x11Opts);
                 app.With(waylandOpts);
             }
+
             configureLinux();
         }
 
@@ -185,11 +195,7 @@ namespace IronyModManager
         private static void InitDI()
         {
             Bootstrap.Setup(
-                new DIOptions()
-                {
-                    Container = new SimpleInjector.Container(),
-                    PluginPathAndName = Shared.Constants.PluginsPathAndName
-                });
+                new DIOptions { Container = new SimpleInjector.Container(), PluginPathAndName = Shared.Constants.PluginsPathAndName });
         }
 
         /// <summary>
@@ -209,16 +215,17 @@ namespace IronyModManager
             if (configuration.SingleInstance)
             {
                 SingleInstance.Initialize();
-                SingleInstance.InstanceLaunched += (args) =>
+                SingleInstance.InstanceLaunched += args =>
                 {
                     ParseArguments(args.CommandLineArgs);
                     Dispatcher.UIThread.SafeInvoke(() =>
                     {
-                        App.MainWindow.Show();
-                        App.MainWindow.Activate();
-                        var previousState = App.MainWindow.WindowState;
-                        App.MainWindow.WindowState = WindowState.Minimized;
-                        App.MainWindow.WindowState = previousState;
+                        var mainWindow = Helpers.GetMainWindow();
+                        mainWindow.Show();
+                        mainWindow.Activate();
+                        var previousState = mainWindow.WindowState;
+                        mainWindow.WindowState = WindowState.Minimized;
+                        mainWindow.WindowState = previousState;
                     });
                 };
             }
