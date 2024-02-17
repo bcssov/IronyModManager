@@ -27,6 +27,12 @@ namespace IronyModManager.Shared
                 public const string DLC = Prefix + "DLC";
             }
         }
+        public static class JokeError
+        {
+            public const string Prefix = "JokeError.";
+            public const string Title = Prefix + "Title";
+            public const string Message = Prefix + "Message";
+        }
         public static class FatalError
         {
             public const string Prefix = "FatalError.";

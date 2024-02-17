@@ -4,15 +4,17 @@
 // Created          : 01-11-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-16-2021
+// Last Modified On : 02-17-2024
 // ***********************************************************************
 // <copyright file="Database.cs" company="Mario">
 //     Mario
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
+
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using IronyModManager.DI;
 using IronyModManager.Models.Common;
 using IronyModManager.Shared;
@@ -28,7 +30,7 @@ namespace IronyModManager.Storage
     /// </summary>
     /// <seealso cref="IronyModManager.Shared.PropertyChangedModelBase" />
     /// <seealso cref="IronyModManager.Storage.Common.IDatabase" />
-    public class Database : PropertyChangedModelBase, IDatabase
+    public sealed class Database : PropertyChangedModelBase, IDatabase
     {
         #region Constructors
 
@@ -37,11 +39,11 @@ namespace IronyModManager.Storage
         /// </summary>
         public Database()
         {
-            Themes = new List<IThemeType>();
-            Games = new List<IGameType>();
-            ModCollection = new List<IModCollection>();
-            GameSettings = new List<IGameSettings>();
-            NotificationPosition = new List<INotificationPositionType>();
+            Themes = [];
+            Games = [];
+            ModCollection = [];
+            GameSettings = [];
+            NotificationPosition = [];
         }
 
         #endregion Constructors
@@ -53,53 +55,53 @@ namespace IronyModManager.Storage
         /// </summary>
         /// <value>The state of the application.</value>
         [Trackable]
-        public virtual IAppState AppState { get; set; } = DIResolver.Get<IAppState>();
+        public IAppState AppState { get; set; } = DIResolver.Get<IAppState>();
 
         /// <summary>
         /// Gets or sets the games.
         /// </summary>
         /// <value>The games.</value>
-        public virtual IList<IGameType> Games { get; set; }
+        public IList<IGameType> Games { get; set; }
 
         /// <summary>
         /// Gets or sets the game settings.
         /// </summary>
         /// <value>The game settings.</value>
         [Trackable]
-        public virtual IEnumerable<IGameSettings> GameSettings { get; set; }
+        public IEnumerable<IGameSettings> GameSettings { get; set; }
 
         /// <summary>
         /// Gets or sets the mod collection.
         /// </summary>
         /// <value>The mod collection.</value>
         [Trackable]
-        public virtual IEnumerable<IModCollection> ModCollection { get; set; }
+        public IEnumerable<IModCollection> ModCollection { get; set; }
 
         /// <summary>
         /// Gets or sets the notification position.
         /// </summary>
         /// <value>The notification position.</value>
-        public virtual IList<INotificationPositionType> NotificationPosition { get; set; }
+        public IList<INotificationPositionType> NotificationPosition { get; set; }
 
         /// <summary>
         /// Gets or sets the preferences.
         /// </summary>
         /// <value>The preferences.</value>
         [Trackable]
-        public virtual IPreferences Preferences { get; set; } = DIResolver.Get<IPreferences>();
+        public IPreferences Preferences { get; set; } = DIResolver.Get<IPreferences>();
 
         /// <summary>
         /// Gets or sets the themes.
         /// </summary>
         /// <value>The themes.</value>
-        public virtual IList<IThemeType> Themes { get; set; }
+        public IList<IThemeType> Themes { get; set; }
 
         /// <summary>
         /// Gets or sets the state of the window.
         /// </summary>
         /// <value>The state of the window.</value>
         [Trackable]
-        public virtual IWindowState WindowState { get; set; } = DIResolver.Get<IWindowState>();
+        public IWindowState WindowState { get; set; } = DIResolver.Get<IWindowState>();
 
         #endregion Properties
     }

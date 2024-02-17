@@ -14,6 +14,10 @@
             "DLC": "DLC"
         }
     },
+    "JokeError": {
+        "Title": "未处理的彩蛋容器内存违规",
+        "Message": "按 \"确定\"，假装什么也没发生:)"
+    },
     "FatalError": {
         "Message": "发生了无法处理的异常，程序即将关闭",
         "MessageWithLastError": "发生了无法处理的异常，请以此信息提交错误报告：{NewLine}{NewLine}{Message}",

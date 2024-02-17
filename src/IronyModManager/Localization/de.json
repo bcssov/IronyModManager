@@ -14,6 +14,10 @@
             "DLC": "DLC"
         }
     },
+    "JokeError": {
+        "Title": "Unbehandelte Ei-Container-Speicherverletzung",
+        "Message": "Drücken Sie OK und tun Sie so, als wäre nichts passiert :)"
+    },
     "FatalError": {
         "Message": "Ein nicht behandelter Fehler ist aufgetreten. Anwendung wird automatisch geschlossen.",
         "MessageWithLastError": "Ein nicht behandelter Fehler ist aufgetreten. Bitte verwenden Sie diese Informationen, um einen Fehlerbericht einzulegen:{NewLine}{NewLine}{Message}",

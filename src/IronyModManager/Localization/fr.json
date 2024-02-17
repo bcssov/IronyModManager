@@ -14,6 +14,10 @@
             "DLC": "DLC"
         }
     },
+    "JokeError": {
+        "Title": "Violation de la mémoire d'un conteneur d'œufs non gérée",
+        "Message": "Appuyez sur OK pour faire comme si rien ne s'était passé :)"
+    },
     "FatalError": {
         "Message": "Une erreur non gérée s'est produite. L'application se fermera automatiquement.",
         "MessageWithLastError": "Une erreur non gérée s'est produite. Veuillez utiliser ces informations pour déposer un rapport de bogue:{NewLine}{NewLine}{Message}",

@@ -14,6 +14,10 @@
             "DLC": "DLC"
         }
     },
+    "JokeError": {
+        "Title": "Unhandled egg-container memory violation",
+        "Message": "Press OK to pretend like nothing happened :)"
+    },
     "FatalError": {
         "Message": "Unhandled error occurred. App will close automatically.",
         "MessageWithLastError": "Unhandled error occurred. Please use this information to file a bug report:{NewLine}{NewLine}{Message}",

@@ -14,6 +14,10 @@
             "DLC": "DLC"
         }
     },
+    "JokeError": {
+        "Title": "Violación de memoria del contenedor de huevos no controlada",
+        "Message": "Pulsa OK para fingir que no ha pasado nada :)"
+    },
     "FatalError": {
         "Message": "Ocurrió un error no manejado. La aplicación se cerrará automáticamente.",
         "MessageWithLastError": "Ocurrió un error no manejado. Por favor, utilice esta información para presentar un informe de errores:{NewLine}{NewLine}{Message}",

@@ -14,6 +14,10 @@
             "DLC": "DLC"
         }
     },
+    "JokeError": {
+        "Title": "Neobrađeno kršenje memorije spremnika jaja",
+        "Message": "Pritisnite OK da se pretvarate da se ništa nije dogodilo :)"
+    },
     "FatalError": {
         "Message": "Došlo je do greške. Aplikacija će se automatski zatvoriti.",
         "MessageWithLastError": "Došlo je do greške. Koristite ovu informaciju da biste podnijeli izvješće o greški:{NewLine}{NewLine}{Message}",

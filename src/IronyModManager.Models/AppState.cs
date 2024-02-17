@@ -4,15 +4,17 @@
 // Created          : 03-03-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-13-2021
+// Last Modified On : 02-17-2024
 // ***********************************************************************
 // <copyright file="AppState.cs" company="Mario">
 //     Mario
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
-using System.Collections.Generic;
+
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using IronyModManager.Models.Common;
 
 namespace IronyModManager.Models
@@ -69,6 +71,12 @@ namespace IronyModManager.Models
         /// </summary>
         /// <value>The installed mods sort mode.</value>
         public virtual int InstalledModsSortMode { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value representing the last prank check.<see cref="System.DateTime?" />
+        /// </summary>
+        /// <value>The last prank check.</value>
+        public DateTime? LastPrankCheck { get; set; }
 
         /// <summary>
         /// Gets or sets the last writable check.
