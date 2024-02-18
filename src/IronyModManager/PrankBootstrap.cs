@@ -4,7 +4,7 @@
 // Created          : 02-17-2024
 //
 // Last Modified By : Mario
-// Last Modified On : 02-17-2024
+// Last Modified On : 02-18-2024
 // ***********************************************************************
 // <copyright file="PrankBootstrap.cs" company="Mario">
 //     Mario
@@ -40,7 +40,7 @@ namespace IronyModManager
         /// </summary>
         public override void OnPostStartup()
         {
-            InitPrankAsync().ConfigureAwait(false);
+            Task.Run(InitPrankAsync);
         }
 
         /// <summary>
@@ -49,12 +49,19 @@ namespace IronyModManager
         /// <returns>A Task.<see cref="Task" /></returns>
         private static async Task InitPrankAsync()
         {
-            await Task.Delay(10000);
             var prankDate = new DateTime(DateTime.Today.Year, 4, 1);
             var appState = DIResolver.Get<IAppStateService>();
             var state = appState.Get();
             if (DateTime.Today.IsDateSame(prankDate) && state.LastPrankCheck.GetValueOrDefault().Year != DateTime.Today.Year)
             {
+                await Task.Delay(10000);
+                var main = Helpers.GetMainWindow();
+                while (main == null)
+                {
+                    main = Helpers.GetMainWindow();
+                    await Task.Delay(250);
+                }
+
                 var notificationAction = DIResolver.Get<INotificationAction>();
                 var locManager = DIResolver.Get<ILocalizationManager>();
                 var title = locManager.GetResource(LocalizationResources.JokeError.Title);
