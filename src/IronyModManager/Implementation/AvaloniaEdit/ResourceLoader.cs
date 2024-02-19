@@ -4,13 +4,14 @@
 // Created          : 06-14-2021
 //
 // Last Modified By : Mario
-// Last Modified On : 06-14-2021
+// Last Modified On : 02-19-2024
 // ***********************************************************************
 // <copyright file="ResourceLoader.cs" company="Mario">
 //     Mario
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
+
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -30,7 +31,12 @@ namespace IronyModManager.Implementation.AvaloniaEdit
     /// Implements the <see cref="IronyModManager.Implementation.AvaloniaEdit.IResourceLoader" />
     /// </summary>
     /// <seealso cref="IronyModManager.Implementation.AvaloniaEdit.IResourceLoader" />
-    public class ResourceLoader : IResourceLoader
+    /// <remarks>
+    /// Initializes a new instance of the <see cref="ResourceLoader" /> class.
+    /// </remarks>
+    /// <param name="themeService">The theme service.</param>
+    /// <param name="themeManager">The theme manager.</param>
+    public class ResourceLoader(IThemeService themeService, IThemeManager themeManager) : IResourceLoader
     {
         #region Fields
 
@@ -47,29 +53,14 @@ namespace IronyModManager.Implementation.AvaloniaEdit
         /// <summary>
         /// The theme manager
         /// </summary>
-        private readonly IThemeManager themeManager;
+        private readonly IThemeManager themeManager = themeManager;
 
         /// <summary>
         /// The theme service
         /// </summary>
-        private readonly IThemeService themeService;
+        private readonly IThemeService themeService = themeService;
 
         #endregion Fields
-
-        #region Constructors
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="ResourceLoader" /> class.
-        /// </summary>
-        /// <param name="themeService">The theme service.</param>
-        /// <param name="themeManager">The theme manager.</param>
-        public ResourceLoader(IThemeService themeService, IThemeManager themeManager)
-        {
-            this.themeManager = themeManager;
-            this.themeService = themeService;
-        }
-
-        #endregion Constructors
 
         #region Methods
 
@@ -82,9 +73,10 @@ namespace IronyModManager.Implementation.AvaloniaEdit
         {
             if (pdxScriptHighlightingDefinition == null)
             {
-                var resourcePath = themeManager.IsLightTheme(themeService.GetSelected().Type) ? Constants.Resources.PDXScriptLight : Constants.Resources.PDXScriptDark;
+                var resourcePath = themeManager.IsLightTheme(themeService.GetSelected().Type) ? IronyModManager.Constants.Resources.PDXScriptLight : IronyModManager.Constants.Resources.PDXScriptDark;
                 pdxScriptHighlightingDefinition = GetHighlightingDefinition(resourcePath);
             }
+
             return pdxScriptHighlightingDefinition;
         }
 
@@ -96,9 +88,10 @@ namespace IronyModManager.Implementation.AvaloniaEdit
         {
             if (yamlHighlightingDefinition == null)
             {
-                var resourcePath = themeManager.IsLightTheme(themeService.GetSelected().Type) ? Constants.Resources.YAMLLight : Constants.Resources.YAMLDark;
+                var resourcePath = themeManager.IsLightTheme(themeService.GetSelected().Type) ? IronyModManager.Constants.Resources.YAMLLight : IronyModManager.Constants.Resources.YAMLDark;
                 yamlHighlightingDefinition = GetHighlightingDefinition(resourcePath);
             }
+
             return yamlHighlightingDefinition;
         }
 
