@@ -440,6 +440,7 @@ namespace IronyModManager.Shared
                 public const string Editor = Prefix + "Editor";
                 public const string ReadonlyEditor = Prefix + "ReadonlyEditor";
                 public const string UseNewCompare = Prefix + "UseNewCompare";
+                public const string UseOldCompare = Prefix + "UseOldCompare";
             }
             public static class EditorContextMenu
             {

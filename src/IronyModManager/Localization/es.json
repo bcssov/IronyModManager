@@ -333,7 +333,8 @@
             "Redo": "Rehacer",
             "Editor": "Fusión Externa",
             "ReadonlyEditor": "Comparación externa",
-            "UseNewCompare": "Utilizar la nueva comparación de diferencias"
+            "UseNewCompare": "Utilizar la nueva comparación de diferencias",
+            "UseOldCompare": "Utilizar la antigua comparación de diferencias"
         },
         "EditorContextMenu": {
             "Copy": "Copiar",

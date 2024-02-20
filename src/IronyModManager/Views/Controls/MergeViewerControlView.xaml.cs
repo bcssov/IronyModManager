@@ -343,11 +343,7 @@ namespace IronyModManager.Views.Controls
         /// <param name="leftSide">if set to <c>true</c> [left side].</param>
         protected virtual void SetEditorOptions(TextEditor editor, bool leftSide)
         {
-            editor.Options = new TextEditorOptions
-            {
-                ConvertTabsToSpaces = true,
-                IndentationSize = 4
-            };
+            editor.Options = new TextEditorOptions { ConvertTabsToSpaces = true, IndentationSize = 4 };
 
             ViewModel.WhenAnyValue(p => p.EditingYaml).Subscribe(_ => { setEditMode(); }).DisposeWith(Disposables);
             setEditMode();
@@ -415,70 +411,26 @@ namespace IronyModManager.Views.Controls
             var menuItems = new List<MenuItem>();
             if (ViewModel!.EditorAvailable)
             {
-                menuItems.Add(new MenuItem
-                {
-                    Header = ViewModel.Editor,
-                    Command = ViewModel.EditorCommand,
-                    CommandParameter = !leftSide
-                });
-                menuItems.Add(new MenuItem
-                {
-                    Header = "-"
-                });
+                menuItems.Add(new MenuItem { Header = ViewModel.Editor, Command = ViewModel.EditorCommand, CommandParameter = !leftSide });
+                menuItems.Add(new MenuItem { Header = "-" });
             }
 
             var mainEditingItems = new List<MenuItem>
             {
-                new()
-                {
-                    Header = ViewModel.NextConflict,
-                    Command = ViewModel.NextConflictCommand,
-                    CommandParameter = leftSide
-                },
-                new()
-                {
-                    Header = ViewModel.PrevConflict,
-                    Command = ViewModel.PrevConflictCommand,
-                    CommandParameter = leftSide
-                },
-                new()
-                {
-                    Header = "-"
-                },
-                new()
-                {
-                    Header = ViewModel.CopyText,
-                    Command = ViewModel.CopyTextCommand,
-                    CommandParameter = leftSide
-                },
+                new() { Header = ViewModel.NextConflict, Command = ViewModel.NextConflictCommand, CommandParameter = leftSide },
+                new() { Header = ViewModel.PrevConflict, Command = ViewModel.PrevConflictCommand, CommandParameter = leftSide },
+                new() { Header = "-" },
+                new() { Header = ViewModel.CopyText, Command = ViewModel.CopyTextCommand, CommandParameter = leftSide },
                 new()
                 {
                     Header = "-" // Separator magic string, and it's documented... NOT really!!!
                 },
-                new()
-                {
-                    Header = ViewModel.CopyAll,
-                    Command = ViewModel.CopyAllCommand,
-                    CommandParameter = leftSide
-                },
-                new()
-                {
-                    Header = ViewModel.CopyThis,
-                    Command = ViewModel.CopyThisCommand,
-                    CommandParameter = leftSide
-                },
-                new()
-                {
-                    Header = ViewModel.CopyThisBeforeLine,
-                    Command = ViewModel.CopyThisBeforeLineCommand,
-                    CommandParameter = leftSide
-                },
-                new()
-                {
-                    Header = ViewModel.CopyThisAfterLine,
-                    Command = ViewModel.CopyThisAfterLineCommand,
-                    CommandParameter = leftSide
-                }
+                new() { Header = ViewModel.CopyAll, Command = ViewModel.CopyAllCommand, CommandParameter = leftSide },
+                new() { Header = ViewModel.CopyThis, Command = ViewModel.CopyThisCommand, CommandParameter = leftSide },
+                new() { Header = ViewModel.CopyThisBeforeLine, Command = ViewModel.CopyThisBeforeLineCommand, CommandParameter = leftSide },
+                new() { Header = ViewModel.CopyThisAfterLine, Command = ViewModel.CopyThisAfterLineCommand, CommandParameter = leftSide },
+                new() { Header = "-" },
+                new() { Header = ViewModel.UsingNewMergeType ? ViewModel.UseNewMergeTypeCaption : ViewModel.UseOldMergeTypeCaption, Command = ViewModel.ToggleMergeTypeCommand }
             };
             menuItems.AddRange(mainEditingItems);
 
@@ -495,70 +447,23 @@ namespace IronyModManager.Views.Controls
             var menuItems = new List<MenuItem>();
             if (ViewModel!.EditorAvailable)
             {
-                menuItems.Add(new MenuItem
-                {
-                    Header = ViewModel.Editor,
-                    Command = ViewModel.EditorCommand,
-                    CommandParameter = leftSide
-                });
-                menuItems.Add(new MenuItem
-                {
-                    Header = "-"
-                });
+                menuItems.Add(new MenuItem { Header = ViewModel.Editor, Command = ViewModel.EditorCommand, CommandParameter = leftSide });
+                menuItems.Add(new MenuItem { Header = "-" });
             }
 
             var mainEditingItems = new List<MenuItem>
             {
-                new()
-                {
-                    Header = ViewModel.NextConflict,
-                    Command = ViewModel.NextConflictCommand,
-                    CommandParameter = leftSide
-                },
-                new()
-                {
-                    Header = ViewModel.PrevConflict,
-                    Command = ViewModel.PrevConflictCommand,
-                    CommandParameter = leftSide
-                },
-                new()
-                {
-                    Header = "-"
-                },
-                new()
-                {
-                    Header = ViewModel.EditThis,
-                    Command = ViewModel.EditThisCommand,
-                    CommandParameter = leftSide
-                },
-                new()
-                {
-                    Header = ViewModel.CopyText,
-                    Command = ViewModel.CopyTextCommand,
-                    CommandParameter = leftSide
-                },
-                new()
-                {
-                    Header = "-"
-                },
-                new()
-                {
-                    Header = ViewModel.DeleteText,
-                    Command = ViewModel.DeleteTextCommand,
-                    CommandParameter = leftSide
-                },
-                new()
-                {
-                    Header = ViewModel.MoveUp,
-                    Command = ViewModel.MoveUpCommand,
-                    CommandParameter = leftSide
-                },
-                new()
-                {
-                    Header = ViewModel.MoveDown,
-                    Command = ViewModel.MoveDownCommand,
-                    CommandParameter = leftSide
-                }
+                new() { Header = ViewModel.NextConflict, Command = ViewModel.NextConflictCommand, CommandParameter = leftSide },
+                new() { Header = ViewModel.PrevConflict, Command = ViewModel.PrevConflictCommand, CommandParameter = leftSide },
+                new() { Header = "-" },
+                new() { Header = ViewModel.EditThis, Command = ViewModel.EditThisCommand, CommandParameter = leftSide },
+                new() { Header = ViewModel.CopyText, Command = ViewModel.CopyTextCommand, CommandParameter = leftSide },
+                new() { Header = "-" },
+                new() { Header = ViewModel.DeleteText, Command = ViewModel.DeleteTextCommand, CommandParameter = leftSide },
+                new() { Header = ViewModel.MoveUp, Command = ViewModel.MoveUpCommand, CommandParameter = leftSide },
+                new() { Header = ViewModel.MoveDown, Command = ViewModel.MoveDownCommand, CommandParameter = leftSide },
+                new() { Header = "-" },
+                new() { Header = ViewModel.UsingNewMergeType ? ViewModel.UseNewMergeTypeCaption : ViewModel.UseOldMergeTypeCaption, Command = ViewModel.ToggleMergeTypeCommand }
             };
             menuItems.AddRange(mainEditingItems);
 
@@ -566,28 +471,15 @@ namespace IronyModManager.Views.Controls
             var undoAvailable = ViewModel.IsUndoAvailable();
             if (redoAvailable || undoAvailable)
             {
-                menuItems.Add(new MenuItem
-                {
-                    Header = "-"
-                });
+                menuItems.Add(new MenuItem { Header = "-" });
                 if (undoAvailable)
                 {
-                    menuItems.Add(new MenuItem
-                    {
-                        Header = ViewModel.Undo,
-                        Command = ViewModel.UndoCommand,
-                        CommandParameter = leftSide
-                    });
+                    menuItems.Add(new MenuItem { Header = ViewModel.Undo, Command = ViewModel.UndoCommand, CommandParameter = leftSide });
                 }
 
                 if (redoAvailable)
                 {
-                    menuItems.Add(new MenuItem
-                    {
-                        Header = ViewModel.Redo,
-                        Command = ViewModel.RedoCommand,
-                        CommandParameter = leftSide
-                    });
+                    menuItems.Add(new MenuItem { Header = ViewModel.Redo, Command = ViewModel.RedoCommand, CommandParameter = leftSide });
                 }
             }
 
@@ -604,42 +496,16 @@ namespace IronyModManager.Views.Controls
             var menuItems = new List<MenuItem>();
             if (ViewModel!.EditorAvailable)
             {
-                menuItems.Add(new MenuItem
-                {
-                    Header = ViewModel.ReadOnlyEditor,
-                    Command = ViewModel.ReadOnlyEditorCommand,
-                    CommandParameter = leftSide
-                });
-                menuItems.Add(new MenuItem
-                {
-                    Header = "-"
-                });
+                menuItems.Add(new MenuItem { Header = ViewModel.ReadOnlyEditor, Command = ViewModel.ReadOnlyEditorCommand, CommandParameter = leftSide });
+                menuItems.Add(new MenuItem { Header = "-" });
             }
 
             var mainEditingItems = new List<MenuItem>
             {
-                new()
-                {
-                    Header = ViewModel.NextConflict,
-                    Command = ViewModel.NextConflictCommand,
-                    CommandParameter = leftSide
-                },
-                new()
-                {
-                    Header = ViewModel.PrevConflict,
-                    Command = ViewModel.PrevConflictCommand,
-                    CommandParameter = leftSide
-                },
-                new()
-                {
-                    Header = "-"
-                },
-                new()
-                {
-                    Header = ViewModel.CopyText,
-                    Command = ViewModel.CopyTextCommand,
-                    CommandParameter = leftSide
-                }
+                new() { Header = ViewModel.NextConflict, Command = ViewModel.NextConflictCommand, CommandParameter = leftSide },
+                new() { Header = ViewModel.PrevConflict, Command = ViewModel.PrevConflictCommand, CommandParameter = leftSide },
+                new() { Header = "-" },
+                new() { Header = ViewModel.CopyText, Command = ViewModel.CopyTextCommand, CommandParameter = leftSide }
             };
             menuItems.AddRange(mainEditingItems);
 
@@ -651,7 +517,7 @@ namespace IronyModManager.Views.Controls
         /// </summary>
         /// <param name="textEditor">The text editor.</param>
         /// <param name="searchPanel">The search panel.</param>
-        /// <param name="isReplaceMode">if set to <c>true</c> [is replace mode].</param>
+        /// <param name="isReplaceMode">if set to <c>true</c> [if replace mode].</param>
         private void HandleEditorFindOrReplace(IronyModManager.Controls.TextEditor textEditor, AvaloniaEdit.Search.SearchPanel searchPanel, bool isReplaceMode)
         {
             if (searchPanel == null || textEditor == null)
@@ -693,59 +559,17 @@ namespace IronyModManager.Views.Controls
             {
                 Items = new List<MenuItem>
                 {
-                    new()
-                    {
-                        Header = ViewModel!.EditorCopy,
-                        Command = ReactiveCommand.Create(() => textEditor.Copy()).DisposeWith(Disposables)
-                    },
-                    new()
-                    {
-                        Header = ViewModel.EditorCut,
-                        Command = ReactiveCommand.Create(() => textEditor.Cut()).DisposeWith(Disposables)
-                    },
-                    new()
-                    {
-                        Header = ViewModel.EditorPaste,
-                        Command = ReactiveCommand.Create(() => textEditor.Paste()).DisposeWith(Disposables)
-                    },
-                    new()
-                    {
-                        Header = ViewModel.EditorDelete,
-                        Command = ReactiveCommand.Create(() => textEditor.Delete()).DisposeWith(Disposables)
-                    },
-                    new()
-                    {
-                        Header = ViewModel.EditorSelectAll,
-                        Command = ReactiveCommand.Create(() => textEditor.SelectAll()).DisposeWith(Disposables)
-                    },
-                    new()
-                    {
-                        Header = "-"
-                    },
-                    new()
-                    {
-                        Header = ViewModel.EditorUndo,
-                        Command = ReactiveCommand.Create(() => textEditor.Undo()).DisposeWith(Disposables)
-                    },
-                    new()
-                    {
-                        Header = ViewModel.EditorRedo,
-                        Command = ReactiveCommand.Create(() => textEditor.Redo()).DisposeWith(Disposables)
-                    },
-                    new()
-                    {
-                        Header = "-"
-                    },
-                    new()
-                    {
-                        Header = ViewModel.EditorFind,
-                        Command = ReactiveCommand.Create(() => HandleEditorFindOrReplace(textEditor, searchPanel, false)).DisposeWith(Disposables)
-                    },
-                    new()
-                    {
-                        Header = ViewModel.EditorReplace,
-                        Command = ReactiveCommand.Create(() => HandleEditorFindOrReplace(textEditor, searchPanel, true)).DisposeWith(Disposables)
-                    }
+                    new() { Header = ViewModel!.EditorCopy, Command = ReactiveCommand.Create(textEditor.Copy).DisposeWith(Disposables) },
+                    new() { Header = ViewModel.EditorCut, Command = ReactiveCommand.Create(textEditor.Cut).DisposeWith(Disposables) },
+                    new() { Header = ViewModel.EditorPaste, Command = ReactiveCommand.Create(textEditor.Paste).DisposeWith(Disposables) },
+                    new() { Header = ViewModel.EditorDelete, Command = ReactiveCommand.Create(textEditor.Delete).DisposeWith(Disposables) },
+                    new() { Header = ViewModel.EditorSelectAll, Command = ReactiveCommand.Create(textEditor.SelectAll).DisposeWith(Disposables) },
+                    new() { Header = "-" },
+                    new() { Header = ViewModel.EditorUndo, Command = ReactiveCommand.Create(textEditor.Undo).DisposeWith(Disposables) },
+                    new() { Header = ViewModel.EditorRedo, Command = ReactiveCommand.Create(textEditor.Redo).DisposeWith(Disposables) },
+                    new() { Header = "-" },
+                    new() { Header = ViewModel.EditorFind, Command = ReactiveCommand.Create(() => HandleEditorFindOrReplace(textEditor, searchPanel, false)).DisposeWith(Disposables) },
+                    new() { Header = ViewModel.EditorReplace, Command = ReactiveCommand.Create(() => HandleEditorFindOrReplace(textEditor, searchPanel, true)).DisposeWith(Disposables) }
                 }
             };
             textEditor.ContextFlyout = ctx;

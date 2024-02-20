@@ -333,7 +333,8 @@
             "Redo": "重做",
             "Editor": "外部合并",
             "ReadonlyEditor": "外部比较",
-            "UseNewCompare": "使用新差异比较"
+            "UseNewCompare": "使用新差异比较",
+            "UseOldCompare": "使用旧 Diff 比较"
         },
         "EditorContextMenu": {
             "Copy": "复制",

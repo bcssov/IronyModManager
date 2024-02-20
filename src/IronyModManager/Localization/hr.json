@@ -333,7 +333,8 @@
             "Redo": "Ponovi",
             "Editor": "Vanjsko spajanje",
             "ReadonlyEditor": "Vanjska usporedba",
-            "UseNewCompare": "Koristite novu usporedbu"
+            "UseNewCompare": "Koristite novu usporedbu razlika",
+            "UseOldCompare": "Koristite staru usporedbu razlika"
         },
         "EditorContextMenu": {
             "Copy": "Kopiraj",

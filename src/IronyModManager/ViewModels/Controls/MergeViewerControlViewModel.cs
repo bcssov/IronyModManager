@@ -580,6 +580,24 @@ namespace IronyModManager.ViewModels.Controls
         public virtual ReactiveCommand<bool, Unit> UndoCommand { get; protected set; }
 
         /// <summary>
+        /// Gets or sets a value representing the use new merge type caption.
+        /// </summary>
+        /// <value>
+        /// The use new merge type caption.
+        /// </value>
+        [StaticLocalization(LocalizationResources.Conflict_Solver.ContextMenu.UseNewCompare)]
+        public virtual string UseNewMergeTypeCaption { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets a value representing the use old merge type caption.
+        /// </summary>
+        /// <value>
+        /// The use old merge type caption.
+        /// </value>
+        [StaticLocalization(LocalizationResources.Conflict_Solver.ContextMenu.UseOldCompare)]
+        public virtual string UseOldMergeTypeCaption { get; protected set; }
+
+        /// <summary>
         /// Gets or sets a value indicating whether the using new merge type.
         /// </summary>
         /// <value><c>true</c> if using new merge type; otherwise, <c>false</c>.</value>
