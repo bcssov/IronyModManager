@@ -82,10 +82,10 @@ namespace IronyModManager.Models.Common
         DateTime? LastWritableCheck { get; set; }
 
         /// <summary>
-        /// Gets or sets a value indicating whether the use advanced diff viewer.
+        /// Gets or sets a value indicating whether the use new diff viewer.
         /// </summary>
-        /// <value><c>true</c> if you use advanced diff viewer; otherwise, <c>false</c>.</value>
-        bool UseAdvancedDiffViewer { get; set; }
+        /// <value><c>true</c> if use new diff viewer; otherwise, <c>false</c>.</value>
+        bool UseNewDiffViewer { get; set; }
 
         #endregion Properties
     }

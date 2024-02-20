@@ -54,6 +54,7 @@ namespace IronyModManager.ViewModels.Controls
     /// <remarks>Initializes a new instance of the <see cref="MergeViewerControlViewModel" /> class.</remarks>
     [ExcludeFromCoverage("This should be tested via functional testing.")]
     public class MergeViewerControlViewModel(
+        IAppStateService appStateService,
         IScrollState scrollState,
         IModPatchCollectionService modPatchCollectionService,
         ConflictSolverViewHotkeyPressedHandler hotkeyPressedHandler,
@@ -68,6 +69,11 @@ namespace IronyModManager.ViewModels.Controls
         /// The URL action
         /// </summary>
         private readonly IAppAction appAction = appAction;
+
+        /// <summary>
+        /// A private readonly IAppStateService named appStateService.
+        /// </summary>
+        private readonly IAppStateService appStateService = appStateService;
 
         /// <summary>
         /// The external editor service
@@ -229,9 +235,9 @@ namespace IronyModManager.ViewModels.Controls
         public virtual string CopyThisAfterLine { get; protected set; }
 
         /// <summary>
-        /// Gets or sets the take other then this command.
+        /// Gets or sets the copy this after line command.
         /// </summary>
-        /// <value>The take other then this command.</value>
+        /// <value>The copy this after line command.</value>
         public virtual ReactiveCommand<bool, Unit> CopyThisAfterLineCommand { get; protected set; }
 
         /// <summary>
@@ -555,6 +561,12 @@ namespace IronyModManager.ViewModels.Controls
         public virtual IAvaloniaList<DiffPieceWithIndex> RightSideSelected { get; set; }
 
         /// <summary>
+        /// Gets or sets a value representing the toggle merge type command.<see cref="ReactiveUI.ReactiveCommand{System.Reactive.Unit, System.Reactive.Unit}" />
+        /// </summary>
+        /// <value>The toggle merge type command.</value>
+        public virtual ReactiveCommand<Unit, Unit> ToggleMergeTypeCommand { get; protected set; }
+
+        /// <summary>
         /// Gets or sets the undo.
         /// </summary>
         /// <value>The undo.</value>
@@ -566,6 +578,12 @@ namespace IronyModManager.ViewModels.Controls
         /// </summary>
         /// <value>The undo command.</value>
         public virtual ReactiveCommand<bool, Unit> UndoCommand { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether the using new merge type.
+        /// </summary>
+        /// <value><c>true</c> if using new merge type; otherwise, <c>false</c>.</value>
+        public virtual bool UsingNewMergeType { get; protected set; }
 
         #endregion Properties
 
@@ -593,6 +611,8 @@ namespace IronyModManager.ViewModels.Controls
             {
                 EditorAvailable = true;
             }
+
+            EvaluateMergeType();
         }
 
         /// <summary>
@@ -797,7 +817,6 @@ namespace IronyModManager.ViewModels.Controls
                             index = 0;
                             break;
                         }
-
                         else if (index > count)
                         {
                             index = count;
@@ -870,7 +889,6 @@ namespace IronyModManager.ViewModels.Controls
                             index = 0;
                             break;
                         }
-
                         else if (index > count)
                         {
                             index = count;
@@ -905,7 +923,7 @@ namespace IronyModManager.ViewModels.Controls
         /// <returns>System.Collections.Generic.List&lt;IronyModManager.ViewModels.Controls.MergeViewerControlViewModel.DiffPieceWithIndex&gt;.</returns>
         protected virtual List<DiffPieceWithIndex> CopyDiffPieceCollection(IEnumerable<DiffPieceWithIndex> col)
         {
-            return new List<DiffPieceWithIndex>(col);
+            return [.. col];
         }
 
         /// <summary>
@@ -946,6 +964,14 @@ namespace IronyModManager.ViewModels.Controls
 
                 ConflictFound?.Invoke(idx);
             }
+        }
+
+        /// <summary>
+        /// Evaluates a merge type.
+        /// </summary>
+        protected virtual void EvaluateMergeType()
+        {
+            UsingNewMergeType = appStateService.Get().UseNewDiffViewer;
         }
 
         /// <summary>
@@ -1281,9 +1307,17 @@ namespace IronyModManager.ViewModels.Controls
 
             RedoCommand = ReactiveCommand.Create((bool leftSide) => { PerformRedo(leftSide); }).DisposeWith(disposables);
 
-            EditorCommand = ReactiveCommand.CreateFromTask((bool leftSide) => { return LaunchExternalEditor(leftSide); }).DisposeWith(disposables);
+            EditorCommand = ReactiveCommand.CreateFromTask((bool leftSide) => LaunchExternalEditorAsync(leftSide)).DisposeWith(disposables);
 
-            ReadOnlyEditorCommand = ReactiveCommand.CreateFromTask((bool leftSide) => { return LaunchExternalEditor(leftSide, true); }).DisposeWith(disposables);
+            ReadOnlyEditorCommand = ReactiveCommand.CreateFromTask((bool leftSide) => LaunchExternalEditorAsync(leftSide, true)).DisposeWith(disposables);
+
+            ToggleMergeTypeCommand = ReactiveCommand.Create(() =>
+            {
+                var state = appStateService.Get();
+                state.UseNewDiffViewer = !state.UseNewDiffViewer;
+                appStateService.Save(state);
+                EvaluateMergeType();
+            }).DisposeWith(disposables);
 
             var previousEditTextState = false;
             this.WhenAnyValue(v => v.EditingText).Subscribe(s =>
@@ -1418,11 +1452,11 @@ namespace IronyModManager.ViewModels.Controls
                         case Enums.HotKeys.Ctrl_X:
                             if (LeftSidePatchMod || RightSidePatchMod)
                             {
-                                LaunchExternalEditor(LeftSidePatchMod).ConfigureAwait(true);
+                                LaunchExternalEditorAsync(LeftSidePatchMod).ConfigureAwait(true);
                             }
                             else
                             {
-                                LaunchExternalEditor(LeftSidePatchMod, true).ConfigureAwait(true);
+                                LaunchExternalEditorAsync(LeftSidePatchMod, true).ConfigureAwait(true);
                             }
 
                             break;
@@ -1564,7 +1598,8 @@ namespace IronyModManager.ViewModels.Controls
         /// </summary>
         /// <param name="leftSide">if set to <c>true</c> [left side].</param>
         /// <param name="noPatchModEdit">if set to <c>true</c> [no patch mod edit].</param>
-        private async Task LaunchExternalEditor(bool leftSide, bool noPatchModEdit = false)
+        /// <returns>A Task&lt;System.Threading.Tasks.Task&gt; representing the asynchronous operation.</returns>
+        private async Task LaunchExternalEditorAsync(bool leftSide, bool noPatchModEdit = false)
         {
             var opts = externalEditorService.Get();
             var left = leftDefinition;
@@ -1680,10 +1715,10 @@ namespace IronyModManager.ViewModels.Controls
             }
 
             /// <summary>
-            /// Equalses the specified other.
+            /// Equals.
             /// </summary>
             /// <param name="other">The other.</param>
-            /// <returns>bool.</returns>
+            /// <returns>A bool.</returns>
             public new bool Equals(DiffPiece other)
             {
                 var result = base.Equals(other);
