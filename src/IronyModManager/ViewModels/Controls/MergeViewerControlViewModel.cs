@@ -1563,14 +1563,7 @@ namespace IronyModManager.ViewModels.Controls
             EditingLeft = leftSide;
             EditingRight = !leftSide;
             EditingText = true;
-            if (leftSide)
-            {
-                CurrentEditText = LeftSide;
-            }
-            else
-            {
-                CurrentEditText = RightSide;
-            }
+            CurrentEditText = leftSide ? LeftSide : RightSide;
 
             LeftDocument = new TextDocument(LeftSide);
             RightDocument = new TextDocument(RightSide);

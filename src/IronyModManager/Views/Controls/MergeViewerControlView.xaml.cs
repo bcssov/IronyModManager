@@ -22,6 +22,7 @@ using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
 using Avalonia.Threading;
 using AvaloniaEdit;
+using AvaloniaEdit.Search;
 using DiffPlex.DiffBuilder.Model;
 using IronyModManager.Common;
 using IronyModManager.Common.Views;
@@ -61,6 +62,26 @@ namespace IronyModManager.Views.Controls
         private readonly IResourceLoader resourceLoader;
 
         /// <summary>
+        /// A private IronyModManager.Controls.TextEditor named diffLeft.
+        /// </summary>
+        private IronyModManager.Controls.TextEditor diffLeft;
+
+        /// <summary>
+        /// A private IronyModManager.Controls.TextEditor named diffRight.
+        /// </summary>
+        private IronyModManager.Controls.TextEditor diffRight;
+
+        /// <summary>
+        /// A private AvaloniaEdit.Search.SearchPanel named diffSearchPanelLeft.
+        /// </summary>
+        private SearchPanel diffSearchPanelLeft;
+
+        /// <summary>
+        /// A private AvaloniaEdit.Search.SearchPanel named diffSearchPanelRight.
+        /// </summary>
+        private SearchPanel diffSearchPanelRight;
+
+        /// <summary>
         /// The editor left
         /// </summary>
         private IronyModManager.Controls.TextEditor editorLeft;
@@ -73,12 +94,17 @@ namespace IronyModManager.Views.Controls
         /// <summary>
         /// The search panel left
         /// </summary>
-        private AvaloniaEdit.Search.SearchPanel searchPanelLeft;
+        private SearchPanel editorSearchPanelLeft;
 
         /// <summary>
         /// The search panel right
         /// </summary>
-        private AvaloniaEdit.Search.SearchPanel searchPanelRight;
+        private SearchPanel editorSearchPanelRight;
+
+        /// <summary>
+        /// A private bool named syncingDiffScroll.
+        /// </summary>
+        private bool syncingDiffScroll;
 
         /// <summary>
         /// The syncing scroll
@@ -114,6 +140,29 @@ namespace IronyModManager.Views.Controls
         {
             leftListBox.SelectedIndex = line;
             rightListBox.SelectedIndex = line;
+            diffLeft.ScrollToLine(line);
+            diffRight.ScrollToLine(line);
+        }
+
+        /// <summary>
+        /// Gets a text editor selected text range.
+        /// </summary>
+        /// <param name="editor">The editor.</param>
+        /// <returns>a Tuple with  int,int .<see cref="Tuple{int, int}" /></returns>
+        protected virtual Tuple<int, int> GetTextEditorSelectedTextRange(TextEditor editor)
+        {
+            var segments = editor.TextArea.Selection.Segments;
+            var doc = editor.TextArea.Document;
+            foreach (var segment in segments)
+            {
+                var start = doc.GetLineByOffset(segment.StartOffset).LineNumber;
+                var end = doc.GetLineByOffset(segment.EndOffset).LineNumber;
+                var min = Math.Min(start, end);
+                var max = Math.Max(start, end);
+                return Tuple.Create(min, max);
+            }
+
+            return Tuple.Create(-1, -1);
         }
 
         /// <summary>
@@ -145,6 +194,47 @@ namespace IronyModManager.Views.Controls
             }
 
             listBox.SetContextMenuItems(menuItems);
+        }
+
+        /// <summary>
+        /// Handles an editor context menu.
+        /// </summary>
+        /// <param name="editor">The editor.</param>
+        /// <param name="searchPanel">The search panel.</param>
+        /// <param name="leftSide">If true, left side.</param>
+        protected virtual void HandleEditorContextMenu(IronyModManager.Controls.TextEditor editor, SearchPanel searchPanel, bool leftSide)
+        {
+            if (editor == null || searchPanel == null)
+            {
+                return;
+            }
+
+            List<MenuItem> menuItems;
+            if ((!ViewModel!.RightSidePatchMod && !ViewModel.LeftSidePatchMod) || ViewModel.IsReadOnlyMode)
+            {
+                menuItems = GetNonEditableMenuItems(leftSide);
+            }
+            else
+            {
+                if (leftSide)
+                {
+                    menuItems = ViewModel.RightSidePatchMod ? GetActionsMenuItems(true) : GetEditableMenuItems(true);
+                }
+                else
+                {
+                    menuItems = ViewModel.LeftSidePatchMod ? GetActionsMenuItems(false) : GetEditableMenuItems(false);
+                }
+            }
+
+            menuItems.AddRange(
+            [
+                new MenuItem { Header = "-" },
+                new MenuItem { Header = ViewModel.EditorFind, Command = ReactiveCommand.Create(() => HandleEditorFindOrReplace(editor, searchPanel, false)).DisposeWith(Disposables) },
+                new MenuItem { Header = ViewModel.EditorReplace, Command = ReactiveCommand.Create(() => HandleEditorFindOrReplace(editor, searchPanel, true)).DisposeWith(Disposables) }
+            ]);
+
+            var ctx = new MenuFlyout { Items = menuItems };
+            editor.ContextFlyout = ctx;
         }
 
         /// <summary>
@@ -182,6 +272,29 @@ namespace IronyModManager.Views.Controls
         }
 
         /// <summary>
+        /// Handles a text editor property changed.
+        /// </summary>
+        /// <param name="thisTextEditor">This text editor.</param>
+        /// <param name="otherTextEditor">Other text editor.</param>
+        protected virtual void HandleTextEditorPropertyChanged(IronyModManager.Controls.TextEditor thisTextEditor, IronyModManager.Controls.TextEditor otherTextEditor)
+        {
+            thisTextEditor.ScrollViewer.ScrollChanged += (_, _) =>
+            {
+                if (syncingDiffScroll || (otherTextEditor.ScrollViewer.Offset.X.IsNearlyEqual(thisTextEditor.ScrollViewer.Offset.X) && otherTextEditor.ScrollViewer.Offset.Y.IsNearlyEqual(thisTextEditor.ScrollViewer.Offset.Y)))
+                {
+                    return;
+                }
+
+                syncingDiffScroll = true;
+                Dispatcher.UIThread.SafeInvoke(async () =>
+                {
+                    await SyncDiffScrollAsync(thisTextEditor, otherTextEditor);
+                    syncingDiffScroll = false;
+                });
+            };
+        }
+
+        /// <summary>
         /// Called when [activated].
         /// </summary>
         /// <param name="disposables">The disposables.</param>
@@ -189,33 +302,52 @@ namespace IronyModManager.Views.Controls
         {
             editorLeft = this.FindControl<IronyModManager.Controls.TextEditor>("editorLeft");
             editorRight = this.FindControl<IronyModManager.Controls.TextEditor>("editorRight");
-            SetEditorOptions(editorLeft, true);
-            SetEditorOptions(editorRight, false);
-            searchPanelLeft = AvaloniaEdit.Search.SearchPanel.Install(editorLeft);
-            searchPanelRight = AvaloniaEdit.Search.SearchPanel.Install(editorRight);
-            SetEditorContextMenu(editorLeft, searchPanelLeft);
-            SetEditorContextMenu(editorRight, searchPanelRight);
+            SetEditorOptions(editorLeft);
+            SetEditorOptions(editorRight);
+            editorSearchPanelLeft = SearchPanel.Install(editorLeft);
+            editorSearchPanelRight = SearchPanel.Install(editorRight);
+            SetEditorContextMenu(editorLeft, editorSearchPanelLeft);
+            SetEditorContextMenu(editorRight, editorSearchPanelRight);
+
+            diffLeft = this.FindControl<IronyModManager.Controls.TextEditor>("diffLeft");
+            diffRight = this.FindControl<IronyModManager.Controls.TextEditor>("diffRight");
+            SetDiffOptions(diffLeft, true);
+            SetDiffOptions(diffRight, false);
+            diffSearchPanelLeft = SearchPanel.Install(diffLeft);
+            diffSearchPanelRight = SearchPanel.Install(diffRight);
+            HandleEditorContextMenu(diffLeft, diffSearchPanelLeft, true);
+            HandleEditorContextMenu(diffRight, diffSearchPanelRight, false);
+            HandleTextEditorPropertyChanged(diffLeft, diffRight);
+            HandleTextEditorPropertyChanged(diffRight, diffLeft);
 
             var leftSide = this.FindControl<IronyModManager.Controls.ListBox>("leftSide");
             var rightSide = this.FindControl<IronyModManager.Controls.ListBox>("rightSide");
-
             leftSide.PropertyChanged += (_, args) => { HandleListBoxPropertyChanged(args, leftSide, rightSide); };
             rightSide.PropertyChanged += (_, args) => { HandleListBoxPropertyChanged(args, rightSide, leftSide); };
             leftSide.ContextMenuOpening += item => { HandleContextMenu(leftSide, item, true); };
             rightSide.ContextMenuOpening += item => { HandleContextMenu(rightSide, item, false); };
+
             ViewModel!.ConflictFound += line => { FocusConflict(line, leftSide, rightSide); };
             int? focusSideScrollItem = null;
             var previousCount = 0;
             var autoScroll = leftSide.AutoScrollToSelectedItem;
             ViewModel.PreFocusSide += left =>
             {
-                leftSide.AutoScrollToSelectedItem = rightSide.AutoScrollToSelectedItem = false;
-                var listBox = left ? leftSide : rightSide;
-                var visibleItems = listBox.ItemContainerGenerator.Containers.ToList();
-                if (visibleItems.Count != 0)
+                if (ViewModel.UsingNewMergeType)
                 {
-                    focusSideScrollItem = visibleItems.LastOrDefault()!.Index;
-                    previousCount = (left ? leftSide : rightSide).ItemCount;
+                    focusSideScrollItem = GetTextEditorSelectedTextRange(left ? diffLeft : diffRight).Item2;
+                    previousCount = left ? ViewModel.LeftDiff.Count : ViewModel.RightDiff.Count;
+                }
+                else
+                {
+                    leftSide.AutoScrollToSelectedItem = rightSide.AutoScrollToSelectedItem = false;
+                    var listBox = left ? leftSide : rightSide;
+                    var visibleItems = listBox.ItemContainerGenerator.Containers.ToList();
+                    if (visibleItems.Count != 0)
+                    {
+                        focusSideScrollItem = visibleItems.LastOrDefault()!.Index;
+                        previousCount = (left ? leftSide : rightSide).ItemCount;
+                    }
                 }
             };
             ViewModel.PostFocusSide += left =>
@@ -223,27 +355,55 @@ namespace IronyModManager.Views.Controls
                 async Task delay()
                 {
                     await Task.Delay(50);
-                    leftSide.AutoScrollToSelectedItem = rightSide.AutoScrollToSelectedItem = autoScroll;
-                    var listBox = left ? leftSide : rightSide;
-                    listBox.Focus();
-                    if (focusSideScrollItem.HasValue)
+                    if (ViewModel!.UsingNewMergeType)
                     {
-                        if (listBox.ItemCount != previousCount)
+                        var textbox = left ? diffLeft : diffRight;
+                        var diffList = left ? ViewModel.LeftDiff : ViewModel.RightDiff;
+                        textbox.Focus();
+                        if (focusSideScrollItem.HasValue)
                         {
-                            focusSideScrollItem -= Math.Abs(previousCount - listBox.ItemCount);
-                        }
+                            if (diffList.Count != previousCount)
+                            {
+                                focusSideScrollItem -= Math.Abs(previousCount - diffList.Count);
+                            }
 
-                        FocusConflict(-1, leftSide, rightSide);
-                        if (focusSideScrollItem.GetValueOrDefault() < 0)
-                        {
-                            focusSideScrollItem = 0;
-                        }
-                        else if (focusSideScrollItem.GetValueOrDefault() >= listBox.ItemCount)
-                        {
-                            focusSideScrollItem = listBox.ItemCount - 1;
-                        }
+                            FocusConflict(-1, leftSide, rightSide);
+                            if (focusSideScrollItem.GetValueOrDefault() < 0)
+                            {
+                                focusSideScrollItem = 0;
+                            }
+                            else if (focusSideScrollItem.GetValueOrDefault() >= diffList.Count)
+                            {
+                                focusSideScrollItem = diffList.Count - 1;
+                            }
 
-                        listBox.ScrollIntoView(focusSideScrollItem.GetValueOrDefault());
+                            textbox.ScrollToLine(focusSideScrollItem.GetValueOrDefault());
+                        }
+                    }
+                    else
+                    {
+                        leftSide.AutoScrollToSelectedItem = rightSide.AutoScrollToSelectedItem = autoScroll;
+                        var listBox = left ? leftSide : rightSide;
+                        listBox.Focus();
+                        if (focusSideScrollItem.HasValue)
+                        {
+                            if (listBox.ItemCount != previousCount)
+                            {
+                                focusSideScrollItem -= Math.Abs(previousCount - listBox.ItemCount);
+                            }
+
+                            FocusConflict(-1, leftSide, rightSide);
+                            if (focusSideScrollItem.GetValueOrDefault() < 0)
+                            {
+                                focusSideScrollItem = 0;
+                            }
+                            else if (focusSideScrollItem.GetValueOrDefault() >= listBox.ItemCount)
+                            {
+                                focusSideScrollItem = listBox.ItemCount - 1;
+                            }
+
+                            listBox.ScrollIntoView(focusSideScrollItem.GetValueOrDefault());
+                        }
                     }
 
                     focusSideScrollItem = null;
@@ -299,21 +459,23 @@ namespace IronyModManager.Views.Controls
                     // Yeah, it sucks that we can't access a property from a different thread
                     if (ViewModel!.CanPerformHotKeyActions)
                     {
-                        DiffPiece item = null;
-                        switch (hotkey.Hotkey)
+                        if (ViewModel.UsingNewMergeType)
                         {
-                            case Enums.HotKeys.Ctrl_Shift_Up:
-                                item = findItem(true);
-                                break;
-
-                            case Enums.HotKeys.Ctrl_Shift_Down:
-                                item = findItem(false);
-                                break;
+                            diffLeft.ScrollViewer.LineDown();
                         }
-
-                        if (item != null)
+                        else
                         {
-                            leftSide.ScrollIntoView(item);
+                            DiffPiece item = hotkey.Hotkey switch
+                            {
+                                Enums.HotKeys.Ctrl_Shift_Up => findItem(true),
+                                Enums.HotKeys.Ctrl_Shift_Down => findItem(false),
+                                _ => null
+                            };
+
+                            if (item != null)
+                            {
+                                leftSide.ScrollIntoView(item);
+                            }
                         }
                     }
                 }
@@ -331,17 +493,60 @@ namespace IronyModManager.Views.Controls
         /// <param name="oldLocale">The old locale.</param>
         protected override void OnLocaleChanged(string newLocale, string oldLocale)
         {
-            SetEditorContextMenu(editorLeft, searchPanelLeft);
-            SetEditorContextMenu(editorRight, searchPanelRight);
+            SetEditorContextMenu(editorLeft, editorSearchPanelLeft);
+            SetEditorContextMenu(editorRight, editorSearchPanelRight);
+            HandleEditorContextMenu(diffLeft, diffSearchPanelLeft, true);
+            HandleEditorContextMenu(diffRight, diffSearchPanelRight, false);
             base.OnLocaleChanged(newLocale, oldLocale);
         }
 
         /// <summary>
-        /// Sets the editor options.
+        /// Sets a diff options.
+        /// </summary>
+        /// <param name="diff">The diff.</param>
+        /// <param name="leftDiff">If true, left diff.</param>
+        protected virtual void SetDiffOptions(TextEditor diff, bool leftDiff)
+        {
+            diff.Options = new TextEditorOptions { ConvertTabsToSpaces = true, IndentationSize = 4 };
+            ViewModel.WhenAnyValue(p => p.EditingYaml).Subscribe(_ => { setEditMode(); }).DisposeWith(Disposables);
+            setEditMode();
+
+            void setEditMode()
+            {
+                diff.SyntaxHighlighting = ViewModel!.EditingYaml ? resourceLoader.GetYAMLDefinition() : resourceLoader.GetPDXScriptDefinition();
+            }
+
+            diff.TextChanged += (_, _) =>
+            {
+                var lines = diff.Text.SplitOnNewLine().ToList();
+                var text = string.Join(Environment.NewLine, lines);
+                if (leftDiff)
+                {
+                    ViewModel!.SetText(text, ViewModel.RightSide);
+                }
+                else
+                {
+                    ViewModel!.SetText(ViewModel.LeftSide, text);
+                }
+            };
+            diff.TextArea.SelectionChanged += (_, _) =>
+            {
+                var range = GetTextEditorSelectedTextRange(diff);
+                var col = leftDiff ? ViewModel!.LeftSideSelected : ViewModel!.RightSideSelected;
+                var sourceCol = leftDiff ? ViewModel.LeftDiff : ViewModel.RightDiff;
+                col.Clear();
+                for (var i = range.Item1; i < range.Item2 + 1; i++)
+                {
+                    col.Add(sourceCol[i]);
+                }
+            };
+        }
+
+        /// <summary>
+        /// Sets an editor options.
         /// </summary>
         /// <param name="editor">The editor.</param>
-        /// <param name="leftSide">if set to <c>true</c> [left side].</param>
-        protected virtual void SetEditorOptions(TextEditor editor, bool leftSide)
+        protected virtual void SetEditorOptions(TextEditor editor)
         {
             editor.Options = new TextEditorOptions { ConvertTabsToSpaces = true, IndentationSize = 4 };
 
@@ -359,6 +564,46 @@ namespace IronyModManager.Views.Controls
                 var text = string.Join(Environment.NewLine, lines);
                 ViewModel!.CurrentEditText = text;
             };
+        }
+
+        /// <summary>
+        /// Syncs a diff scroll async.
+        /// </summary>
+        /// <param name="thisTextEditor">This text editor.</param>
+        /// <param name="otherTextEditor">The other text editor.</param>
+        /// <returns>A Task.<see cref="Task" /></returns>
+        protected virtual Task SyncDiffScrollAsync(IronyModManager.Controls.TextEditor thisTextEditor, IronyModManager.Controls.TextEditor otherTextEditor)
+        {
+            var thisMaxX = Math.Abs(thisTextEditor.ScrollViewer.Extent.Width - thisTextEditor.ScrollViewer.Viewport.Width);
+            var thisMaxY = Math.Abs(thisTextEditor.ScrollViewer.Extent.Height - thisTextEditor.ScrollViewer.Viewport.Height);
+            var otherMaxX = Math.Abs(otherTextEditor.ScrollViewer.Extent.Width - otherTextEditor.ScrollViewer.Viewport.Width);
+            var otherMaxY = Math.Abs(otherTextEditor.ScrollViewer.Extent.Height - otherTextEditor.ScrollViewer.Viewport.Height);
+            var offset = thisTextEditor.ScrollViewer.Offset;
+            if (thisTextEditor.ScrollViewer.Offset.X > otherMaxX || thisTextEditor.ScrollViewer.Offset.X.IsNearlyEqual(thisMaxX))
+            {
+                offset = offset.WithX(otherMaxX);
+            }
+
+            if (thisTextEditor.ScrollViewer.Offset.Y > otherMaxY || thisTextEditor.ScrollViewer.Offset.Y.IsNearlyEqual(thisMaxY))
+            {
+                offset = offset.WithY(otherMaxY);
+            }
+
+            if (!otherTextEditor.ScrollViewer.Offset.X.IsNearlyEqual(offset.X) || otherTextEditor.ScrollViewer.Offset.Y.IsNearlyEqual(offset.Y))
+            {
+                try
+                {
+                    otherTextEditor.InvalidateArrange();
+                    thisTextEditor.InvalidateArrange();
+                    otherTextEditor.ScrollViewer.Offset = offset;
+                }
+                catch (Exception ex)
+                {
+                    logger.Error(ex);
+                }
+            }
+
+            return Task.CompletedTask;
         }
 
         /// <summary>
@@ -398,7 +643,7 @@ namespace IronyModManager.Views.Controls
                 }
             }
 
-            return Task.FromResult(true);
+            return Task.CompletedTask;
         }
 
         /// <summary>
@@ -518,7 +763,7 @@ namespace IronyModManager.Views.Controls
         /// <param name="textEditor">The text editor.</param>
         /// <param name="searchPanel">The search panel.</param>
         /// <param name="isReplaceMode">if set to <c>true</c> [if replace mode].</param>
-        private void HandleEditorFindOrReplace(IronyModManager.Controls.TextEditor textEditor, AvaloniaEdit.Search.SearchPanel searchPanel, bool isReplaceMode)
+        private void HandleEditorFindOrReplace(IronyModManager.Controls.TextEditor textEditor, SearchPanel searchPanel, bool isReplaceMode)
         {
             if (searchPanel == null || textEditor == null)
             {
@@ -548,7 +793,7 @@ namespace IronyModManager.Views.Controls
         /// </summary>
         /// <param name="textEditor">The text editor.</param>
         /// <param name="searchPanel">The search panel.</param>
-        private void SetEditorContextMenu(IronyModManager.Controls.TextEditor textEditor, AvaloniaEdit.Search.SearchPanel searchPanel)
+        private void SetEditorContextMenu(IronyModManager.Controls.TextEditor textEditor, SearchPanel searchPanel)
         {
             if (textEditor == null || searchPanel == null)
             {
