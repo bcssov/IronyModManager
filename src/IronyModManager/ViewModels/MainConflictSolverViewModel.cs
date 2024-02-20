@@ -1,17 +1,17 @@
-﻿
-// ***********************************************************************
+﻿// ***********************************************************************
 // Assembly         : IronyModManager
 // Author           : Mario
 // Created          : 03-18-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-26-2023
+// Last Modified On : 02-20-2024
 // ***********************************************************************
 // <copyright file="MainConflictSolverViewModel.cs" company="Mario">
 //     Mario
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
+
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -42,14 +42,46 @@ using ValueType = IronyModManager.Shared.Models.ValueType;
 
 namespace IronyModManager.ViewModels
 {
-
     /// <summary>
     /// Class MainConflictSolverControlViewModel.
     /// Implements the <see cref="IronyModManager.Common.ViewModels.BaseViewModel" />
     /// </summary>
     /// <seealso cref="IronyModManager.Common.ViewModels.BaseViewModel" />
+    /// <param name="externalProcessHandlerService">The external process handler service.</param>
+    /// <param name="hotkeyPressedHandler">The hotkey pressed handler.</param>
+    /// <param name="idGenerator">The identifier generator.</param>
+    /// <param name="modPatchCollectionService">The mod patch collection service.</param>
+    /// <param name="localizationManager">The localization manager.</param>
+    /// <param name="mergeViewer">The merge viewer.</param>
+    /// <param name="binaryMergeViewer">The binary merge viewer.</param>
+    /// <param name="modCompareSelector">The mod compare selector.</param>
+    /// <param name="ignoreConflictsRules">The ignore conflicts rules.</param>
+    /// <param name="modFilter">The mod filter.</param>
+    /// <param name="resetConflicts">The reset conflicts.</param>
+    /// <param name="dbSearch">The database search.</param>
+    /// <param name="customConflicts">The custom conflicts.</param>
+    /// <param name="logger">The logger.</param>
+    /// <param name="notificationAction">The notification action.</param>
+    /// <param name="appAction">The application action.</param>
+    /// <remarks>Initializes a new instance of the <see cref="MainConflictSolverControlViewModel" /> class.</remarks>
     [ExcludeFromCoverage("This should be tested via functional testing.")]
-    public class MainConflictSolverControlViewModel : BaseViewModel
+    public class MainConflictSolverControlViewModel(
+        IExternalProcessHandlerService externalProcessHandlerService,
+        ConflictSolverViewHotkeyPressedHandler hotkeyPressedHandler,
+        IIDGenerator idGenerator,
+        IModPatchCollectionService modPatchCollectionService,
+        ILocalizationManager localizationManager,
+        MergeViewerControlViewModel mergeViewer,
+        MergeViewerBinaryControlViewModel binaryMergeViewer,
+        ModCompareSelectorControlViewModel modCompareSelector,
+        ModConflictIgnoreControlViewModel ignoreConflictsRules,
+        ConflictSolverModFilterControlViewModel modFilter,
+        ConflictSolverResetConflictsControlViewModel resetConflicts,
+        ConflictSolverDBSearchControlViewModel dbSearch,
+        ConflictSolverCustomConflictsControlViewModel customConflicts,
+        ILogger logger,
+        INotificationAction notificationAction,
+        IAppAction appAction) : BaseViewModel
     {
         #region Fields
 
@@ -61,47 +93,47 @@ namespace IronyModManager.ViewModels
         /// <summary>
         /// The localization directory
         /// </summary>
-        private static readonly string LocalizationDirectory = $"{Shared.Constants.LocalizationDirectory}{Path.DirectorySeparatorChar}";
+        private static readonly string localizationDirectory = $"{Shared.Constants.LocalizationDirectory}{Path.DirectorySeparatorChar}";
 
         /// <summary>
         /// The application action
         /// </summary>
-        private readonly IAppAction appAction;
+        private readonly IAppAction appAction = appAction;
 
         /// <summary>
         /// The external process handler service
         /// </summary>
-        private readonly IExternalProcessHandlerService externalProcessHandlerService;
+        private readonly IExternalProcessHandlerService externalProcessHandlerService = externalProcessHandlerService;
 
         /// <summary>
         /// The hotkey pressed handler
         /// </summary>
-        private readonly ConflictSolverViewHotkeyPressedHandler hotkeyPressedHandler;
+        private readonly ConflictSolverViewHotkeyPressedHandler hotkeyPressedHandler = hotkeyPressedHandler;
 
         /// <summary>
         /// The identifier generator
         /// </summary>
-        private readonly IIDGenerator idGenerator;
+        private readonly IIDGenerator idGenerator = idGenerator;
 
         /// <summary>
         /// The localization manager
         /// </summary>
-        private readonly ILocalizationManager localizationManager;
+        private readonly ILocalizationManager localizationManager = localizationManager;
 
         /// <summary>
         /// The logger
         /// </summary>
-        private readonly ILogger logger;
+        private readonly ILogger logger = logger;
 
         /// <summary>
         /// The mod patch collection service
         /// </summary>
-        private readonly IModPatchCollectionService modPatchCollectionService;
+        private readonly IModPatchCollectionService modPatchCollectionService = modPatchCollectionService;
 
         /// <summary>
         /// The notification action
         /// </summary>
-        private readonly INotificationAction notificationAction;
+        private readonly INotificationAction notificationAction = notificationAction;
 
         /// <summary>
         /// The cached invalids
@@ -111,7 +143,7 @@ namespace IronyModManager.ViewModels
         /// <summary>
         /// The filtering conflicts
         /// </summary>
-        private bool filteringConflicts = false;
+        private bool filteringConflicts;
 
         /// <summary>
         /// The invalids checked
@@ -121,59 +153,9 @@ namespace IronyModManager.ViewModels
         /// <summary>
         /// The take left binary
         /// </summary>
-        private bool takeLeftBinary = false;
+        private bool takeLeftBinary;
 
         #endregion Fields
-
-        #region Constructors
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="MainConflictSolverControlViewModel" /> class.
-        /// </summary>
-        /// <param name="externalProcessHandlerService">The external process handler service.</param>
-        /// <param name="hotkeyPressedHandler">The hotkey pressed handler.</param>
-        /// <param name="idGenerator">The identifier generator.</param>
-        /// <param name="modPatchCollectionService">The mod patch collection service.</param>
-        /// <param name="localizationManager">The localization manager.</param>
-        /// <param name="mergeViewer">The merge viewer.</param>
-        /// <param name="binaryMergeViewer">The binary merge viewer.</param>
-        /// <param name="modCompareSelector">The mod compare selector.</param>
-        /// <param name="ignoreConflictsRules">The ignore conflicts rules.</param>
-        /// <param name="modFilter">The mod filter.</param>
-        /// <param name="resetConflicts">The reset conflicts.</param>
-        /// <param name="dbSearch">The database search.</param>
-        /// <param name="customConflicts">The custom conflicts.</param>
-        /// <param name="logger">The logger.</param>
-        /// <param name="notificationAction">The notification action.</param>
-        /// <param name="appAction">The application action.</param>
-        public MainConflictSolverControlViewModel(IExternalProcessHandlerService externalProcessHandlerService,
-            ConflictSolverViewHotkeyPressedHandler hotkeyPressedHandler, IIDGenerator idGenerator,
-            IModPatchCollectionService modPatchCollectionService, ILocalizationManager localizationManager,
-            MergeViewerControlViewModel mergeViewer, MergeViewerBinaryControlViewModel binaryMergeViewer,
-            ModCompareSelectorControlViewModel modCompareSelector, ModConflictIgnoreControlViewModel ignoreConflictsRules,
-            ConflictSolverModFilterControlViewModel modFilter, ConflictSolverResetConflictsControlViewModel resetConflicts,
-            ConflictSolverDBSearchControlViewModel dbSearch, ConflictSolverCustomConflictsControlViewModel customConflicts,
-            ILogger logger, INotificationAction notificationAction, IAppAction appAction)
-        {
-            this.idGenerator = idGenerator;
-            this.modPatchCollectionService = modPatchCollectionService;
-            this.localizationManager = localizationManager;
-            this.logger = logger;
-            this.notificationAction = notificationAction;
-            this.appAction = appAction;
-            this.hotkeyPressedHandler = hotkeyPressedHandler;
-            this.externalProcessHandlerService = externalProcessHandlerService;
-            MergeViewer = mergeViewer;
-            ModCompareSelector = modCompareSelector;
-            BinaryMergeViewer = binaryMergeViewer;
-            IgnoreConflictsRules = ignoreConflictsRules;
-            ModFilter = modFilter;
-            ResetConflicts = resetConflicts;
-            DatabaseSearch = dbSearch;
-            CustomConflicts = customConflicts;
-        }
-
-        #endregion Constructors
 
         #region Properties
 
@@ -195,11 +177,12 @@ namespace IronyModManager.ViewModels
         /// </summary>
         /// <value>The back command.</value>
         public virtual ReactiveCommand<Unit, Unit> BackCommand { get; set; }
+
         /// <summary>
         /// Gets or sets the binary merge viewer.
         /// </summary>
         /// <value>The binary merge viewer.</value>
-        public virtual MergeViewerBinaryControlViewModel BinaryMergeViewer { get; protected set; }
+        public virtual MergeViewerBinaryControlViewModel BinaryMergeViewer { get; protected set; } = binaryMergeViewer;
 
         /// <summary>
         /// Gets or sets the conflicted objects.
@@ -224,13 +207,13 @@ namespace IronyModManager.ViewModels
         /// Gets or sets the custom conflicts.
         /// </summary>
         /// <value>The custom conflicts.</value>
-        public virtual ConflictSolverCustomConflictsControlViewModel CustomConflicts { get; protected set; }
+        public virtual ConflictSolverCustomConflictsControlViewModel CustomConflicts { get; protected set; } = customConflicts;
 
         /// <summary>
         /// Gets or sets the database search.
         /// </summary>
         /// <value>The database search.</value>
-        public virtual ConflictSolverDBSearchControlViewModel DatabaseSearch { get; protected set; }
+        public virtual ConflictSolverDBSearchControlViewModel DatabaseSearch { get; protected set; } = dbSearch;
 
         /// <summary>
         /// Gets or sets a value indicating whether [editing ignore conflicts rules].
@@ -239,15 +222,15 @@ namespace IronyModManager.ViewModels
         public virtual bool EditingIgnoreConflictsRules { get; protected set; }
 
         /// <summary>
-        /// Gets or sets the hierarchal conflicts.
+        /// Gets or sets the hierarchical conflicts.
         /// </summary>
-        /// <value>The hierarchal conflicts.</value>
-        public virtual AvaloniaList<IHierarchicalDefinitions> HierarchalConflicts { get; protected set; }
+        /// <value>The hierarchical conflicts.</value>
+        public virtual AvaloniaList<IHierarchicalDefinitions> HierarchicalConflicts { get; protected set; }
 
         /// <summary>
-        /// Gets or sets the ignore.
+        /// Gets or sets ignore.
         /// </summary>
-        /// <value>The ignore.</value>
+        /// <value>ignore.</value>
         [StaticLocalization(LocalizationResources.Conflict_Solver.Ignore)]
         public virtual string Ignore { get; protected set; }
 
@@ -261,7 +244,7 @@ namespace IronyModManager.ViewModels
         /// Gets or sets the ignore conflicts rules.
         /// </summary>
         /// <value>The ignore conflicts rules.</value>
-        public virtual ModConflictIgnoreControlViewModel IgnoreConflictsRules { get; protected set; }
+        public virtual ModConflictIgnoreControlViewModel IgnoreConflictsRules { get; protected set; } = ignoreConflictsRules;
 
         /// <summary>
         /// Gets or sets a value indicating whether [ignore enabled].
@@ -369,19 +352,19 @@ namespace IronyModManager.ViewModels
         /// Gets or sets the merge viewer.
         /// </summary>
         /// <value>The merge viewer.</value>
-        public virtual MergeViewerControlViewModel MergeViewer { get; protected set; }
+        public virtual MergeViewerControlViewModel MergeViewer { get; protected set; } = mergeViewer;
 
         /// <summary>
         /// Gets or sets the mod compare selector.
         /// </summary>
         /// <value>The mod compare selector.</value>
-        public virtual ModCompareSelectorControlViewModel ModCompareSelector { get; protected set; }
+        public virtual ModCompareSelectorControlViewModel ModCompareSelector { get; protected set; } = modCompareSelector;
 
         /// <summary>
         /// Gets or sets the mod filter.
         /// </summary>
         /// <value>The mod filter.</value>
-        public virtual ConflictSolverModFilterControlViewModel ModFilter { get; protected set; }
+        public virtual ConflictSolverModFilterControlViewModel ModFilter { get; protected set; } = modFilter;
 
         /// <summary>
         /// Gets or sets the number of conflicts caption.
@@ -405,7 +388,7 @@ namespace IronyModManager.ViewModels
         /// Gets or sets the reset conflicts.
         /// </summary>
         /// <value>The reset conflicts.</value>
-        public virtual ConflictSolverResetConflictsControlViewModel ResetConflicts { get; protected set; }
+        public virtual ConflictSolverResetConflictsControlViewModel ResetConflicts { get; protected set; } = resetConflicts;
 
         /// <summary>
         /// Gets or sets the reset conflicts column.
@@ -513,13 +496,11 @@ namespace IronyModManager.ViewModels
                             case ResetType.Ignored:
                                 sbIgnored.AppendLine(IronyFormatter.Format(modListFormat, new { ParentDirectory = conflict.Name, child.Name }));
                                 break;
-
-                            default:
-                                break;
                         }
                     }
                 }
-                var msgFormat = string.Empty;
+
+                string msgFormat;
                 if (readOnly)
                 {
                     if (sbIgnored.Length > 0 && sbResolved.Length > 0)
@@ -550,12 +531,8 @@ namespace IronyModManager.ViewModels
                         msgFormat = localizationManager.GetResource(LocalizationResources.Conflict_Solver.ResetWarning.RegularModeIgnoredOnly);
                     }
                 }
-                var msg = IronyFormatter.Format(msgFormat, new
-                {
-                    Environment.NewLine,
-                    ListOfConflictsResolved = sbResolved.ToString(),
-                    ListOfConflictsIgnored = sbIgnored.ToString()
-                });
+
+                var msg = IronyFormatter.Format(msgFormat, new { Environment.NewLine, ListOfConflictsResolved = sbResolved.ToString(), ListOfConflictsIgnored = sbIgnored.ToString() });
                 var title = localizationManager.GetResource(LocalizationResources.Conflict_Solver.ResetWarning.Title);
                 Dispatcher.UIThread.SafeInvoke(() => notificationAction.ShowPromptAsync(title, title, msg, NotificationType.Warning, PromptType.OK));
             }
@@ -610,17 +587,22 @@ namespace IronyModManager.ViewModels
                     patchDefinition.UseSimpleValidation = true;
                 }
             }
+
             var validationResult = modPatchCollectionService.Validate(patchDefinition);
             if (!validationResult.IsValid)
             {
                 var title = localizationManager.GetResource(LocalizationResources.Conflict_Solver.ResolutionSaveError.Title);
-                var message = localizationManager.GetResource(validationResult.ErrorLine.HasValue ? LocalizationResources.Conflict_Solver.ResolutionSaveError.MessageLine : LocalizationResources.Conflict_Solver.ResolutionSaveError.MessageNoLine);
-                await Dispatcher.UIThread.SafeInvokeAsync(async () => await notificationAction.ShowPromptAsync(title, title, message.FormatIronySmart(new { Environment.NewLine, validationResult.ErrorMessage, Line = validationResult.ErrorLine, Column = validationResult.ErrorColumn }), NotificationType.Error, PromptType.OK));
+                var message = localizationManager.GetResource(validationResult.ErrorLine.HasValue
+                    ? LocalizationResources.Conflict_Solver.ResolutionSaveError.MessageLine
+                    : LocalizationResources.Conflict_Solver.ResolutionSaveError.MessageNoLine);
+                await Dispatcher.UIThread.SafeInvokeAsync(async () => await notificationAction.ShowPromptAsync(title, title,
+                    message.FormatIronySmart(new { Environment.NewLine, validationResult.ErrorMessage, Line = validationResult.ErrorLine, Column = validationResult.ErrorColumn }), NotificationType.Error, PromptType.OK));
             }
             else
             {
                 await Dispatcher.UIThread.SafeInvokeAsync(async () => await ResolveConflictAsync(true).ConfigureAwait(true));
             }
+
             BackAllowed = true;
         }
 
@@ -646,6 +628,7 @@ namespace IronyModManager.ViewModels
             {
                 await Task.Delay(25);
             }
+
             filteringConflicts = true;
             var index = PreviousConflictIndex;
             PreviousConflictIndex = null;
@@ -658,25 +641,29 @@ namespace IronyModManager.ViewModels
                 {
                     resolved.AddRange(conflictResult.ResolvedConflicts.GetHierarchicalDefinitions());
                 }
+
                 if (conflictResult.IgnoredConflicts != null)
                 {
                     resolved.AddRange(conflictResult.IgnoredConflicts.GetHierarchicalDefinitions());
                 }
+
                 if (conflictResult.RuleIgnoredConflicts != null)
                 {
                     resolved.AddRange(conflictResult.RuleIgnoredConflicts.GetHierarchicalDefinitions());
                 }
+
                 foreach (var topLevelResolvedConflicts in resolved)
                 {
                     IEnumerable<IHierarchicalDefinitions> topLevelConflicts;
-                    if (topLevelResolvedConflicts.Name.StartsWith(LocalizationDirectory, StringComparison.OrdinalIgnoreCase))
+                    if (topLevelResolvedConflicts.Name.StartsWith(localizationDirectory, StringComparison.OrdinalIgnoreCase))
                     {
-                        topLevelConflicts = conflicts.Where(p => p.Name.StartsWith(LocalizationDirectory, StringComparison.OrdinalIgnoreCase));
+                        topLevelConflicts = conflicts.Where(p => p.Name.StartsWith(localizationDirectory, StringComparison.OrdinalIgnoreCase));
                     }
                     else
                     {
                         topLevelConflicts = conflicts.Where(p => p.Name.Equals(topLevelResolvedConflicts.Name));
                     }
+
                     if (topLevelConflicts.Any())
                     {
                         foreach (var topLevelConflict in topLevelConflicts)
@@ -692,6 +679,7 @@ namespace IronyModManager.ViewModels
                         }
                     }
                 }
+
                 conflicts.RemoveAll(conflicts.Where(p => p.Children == null || p.Children.Count == 0).ToList());
                 if (!invalidsChecked)
                 {
@@ -707,9 +695,9 @@ namespace IronyModManager.ViewModels
                         {
                             var invalidChild = DIResolver.Get<IHierarchicalDefinitions>();
                             invalidChild.Name = item.File;
-                            var message = item.ErrorColumn.HasValue || item.ErrorLine.HasValue ?
-                                localizationManager.GetResource(LocalizationResources.Conflict_Solver.InvalidConflicts.Error) :
-                                localizationManager.GetResource(LocalizationResources.Conflict_Solver.InvalidConflicts.ErrorNoLine);
+                            var message = item.ErrorColumn.HasValue || item.ErrorLine.HasValue
+                                ? localizationManager.GetResource(LocalizationResources.Conflict_Solver.InvalidConflicts.Error)
+                                : localizationManager.GetResource(LocalizationResources.Conflict_Solver.InvalidConflicts.ErrorNoLine);
                             invalidChild.Key = IronyFormatter.Format(message, new
                             {
                                 item.ModName,
@@ -722,28 +710,33 @@ namespace IronyModManager.ViewModels
                             invalidChild.AdditionalData = item;
                             children.Add(invalidChild);
                         }
+
                         invalidDef.Children = children;
                         cachedInvalids = invalidDef;
                         conflicts.Add(invalidDef);
                     }
                 }
+
                 if (cachedInvalids != null && !conflicts.Any(p => p.Key == cachedInvalids.Key))
                 {
                     conflicts.Add(cachedInvalids);
                 }
+
                 var selectedParentConflict = SelectedParentConflict;
-                HierarchalConflicts = conflicts;
-                NumberOfConflictsCaption = IronyFormatter.Format(localizationManager.GetResource(LocalizationResources.Conflict_Solver.ConflictCount), new { Count = conflicts.Where(p => p.Key != InvalidKey).SelectMany(p => p.Children).Count() });
+                HierarchicalConflicts = conflicts;
+                NumberOfConflictsCaption = IronyFormatter.Format(localizationManager.GetResource(LocalizationResources.Conflict_Solver.ConflictCount),
+                    new { Count = conflicts.Where(p => p.Key != InvalidKey).SelectMany(p => p.Children).Count() });
                 int? previousConflictIndex = null;
-                if (HierarchalConflicts.Any() && selectedParentConflict == null)
+                if (HierarchicalConflicts.Count != 0 && selectedParentConflict == null)
                 {
-                    selectedParentConflict = HierarchalConflicts.FirstOrDefault();
+                    selectedParentConflict = HierarchicalConflicts.FirstOrDefault();
                 }
+
                 if (selectedParentConflict != null)
                 {
                     var conflictName = selectedParentConflict.Name;
                     selectedParentConflict = null;
-                    var newSelected = HierarchalConflicts.FirstOrDefault(p => p.Name.Equals(conflictName));
+                    var newSelected = HierarchicalConflicts.FirstOrDefault(p => p.Name.Equals(conflictName));
                     if (newSelected != null)
                     {
                         previousConflictIndex = index;
@@ -755,20 +748,24 @@ namespace IronyModManager.ViewModels
                                 previousConflictIndex = newSelected.Children.ToList().IndexOf(overrideMatch);
                             }
                         }
-                        if (previousConflictIndex.GetValueOrDefault() > (newSelected.Children.Count - 1))
+
+                        if (previousConflictIndex.GetValueOrDefault() > newSelected.Children.Count - 1)
                         {
                             previousConflictIndex = newSelected.Children.Count - 1;
                         }
+
                         selectedParentConflict = newSelected;
                     }
                 }
+
                 PreviousConflictIndex = previousConflictIndex;
                 SelectedParentConflict = selectedParentConflict;
             }
             else
             {
-                HierarchalConflicts = null;
+                HierarchicalConflicts = null;
             }
+
             filteringConflicts = false;
         }
 
@@ -779,7 +776,7 @@ namespace IronyModManager.ViewModels
         protected override void OnActivated(CompositeDisposable disposables)
         {
             var resolvingEnabled = this.WhenAnyValue(v => v.ResolvingConflict, v => !v);
-            var backAllowed = this.WhenAnyValue(v => v.BackAllowed, v => v == true);
+            var backAllowed = this.ObservableWhenAnyValue(v => v.BackAllowed, v => v);
 
             BackCommand = ReactiveCommand.CreateFromTask(async () =>
             {
@@ -795,10 +792,7 @@ namespace IronyModManager.ViewModels
                 SelectedModCollection = null;
                 cachedInvalids = null;
                 invalidsChecked = false;
-                var args = new NavigationEventArgs()
-                {
-                    State = NavigationState.Main
-                };
+                var args = new NavigationEventArgs { State = NavigationState.Main };
                 ReactiveUI.MessageBus.Current.SendMessage(args);
                 BackAllowed = true;
                 await TriggerOverlayAsync(id, false);
@@ -807,10 +801,7 @@ namespace IronyModManager.ViewModels
                 GC.Collect(GC.MaxGeneration, GCCollectionMode.Aggressive, true, true);
             }, backAllowed).DisposeWith(disposables);
 
-            ResolveCommand = ReactiveCommand.CreateFromTask(() =>
-            {
-                return EvaluateDefinitionValidity();
-            }, resolvingEnabled).DisposeWith(disposables);
+            ResolveCommand = ReactiveCommand.CreateFromTask(EvaluateDefinitionValidity, resolvingEnabled).DisposeWith(disposables);
 
             IgnoreCommand = ReactiveCommand.Create(() =>
             {
@@ -844,13 +835,13 @@ namespace IronyModManager.ViewModels
                 MergeViewer.InitParameters();
                 if (ModFilter.IsActivated)
                 {
-                    ModFilter.SetConflictResult(Conflicts, SelectedModsOrder.ToList(), SelectedModCollection.Name);
+                    ModFilter.SetConflictResult(Conflicts, [.. SelectedModsOrder], SelectedModCollection.Name);
                 }
             }).DisposeWith(disposables);
 
             this.WhenAnyValue(v => v.SelectedParentConflict).Subscribe(s =>
             {
-                IsConflictSolverAvailable = !(s?.Key == InvalidKey);
+                IsConflictSolverAvailable = s?.Key != InvalidKey;
                 EvalViewerVisibility();
             }).DisposeWith(disposables);
 
@@ -874,18 +865,19 @@ namespace IronyModManager.ViewModels
                 }
                 else
                 {
-                    if (HierarchalConflicts == null || !HierarchalConflicts.Any())
+                    if (HierarchicalConflicts == null || HierarchicalConflicts.Count == 0)
                     {
                         ModCompareSelector.Reset();
                         BinaryMergeViewer.Reset(false);
                         MergeViewer.SetText(string.Empty, string.Empty, true, lockScroll: true);
                     }
+
                     PreviousConflictIndex = null;
                     IgnoreEnabled = false;
                 }
             }).DisposeWith(disposables);
 
-            this.WhenAnyValue(v => v.ModCompareSelector.IsActivated).Where(p => p).Subscribe(s =>
+            this.WhenAnyValue(v => v.ModCompareSelector.IsActivated).Where(p => p).Subscribe(_ =>
             {
                 this.WhenAnyValue(v => v.ModCompareSelector.DefinitionSelection).Subscribe(s =>
                 {
@@ -899,17 +891,17 @@ namespace IronyModManager.ViewModels
                         if (!IsBinaryConflict)
                         {
                             BinaryMergeViewer.EnableSelection = ResolveEnabled = s.LeftSelectedDefinition != null &&
-                                s.RightSelectedDefinition != null &&
-                                s.LeftSelectedDefinition != s.RightSelectedDefinition &&
-                                (modPatchCollectionService.IsPatchMod(s.LeftSelectedDefinition.ModName) || modPatchCollectionService.IsPatchMod(s.RightSelectedDefinition.ModName));
+                                                                                 s.RightSelectedDefinition != null &&
+                                                                                 s.LeftSelectedDefinition != s.RightSelectedDefinition &&
+                                                                                 (modPatchCollectionService.IsPatchMod(s.LeftSelectedDefinition.ModName) || modPatchCollectionService.IsPatchMod(s.RightSelectedDefinition.ModName));
                         }
                         else
                         {
                             BinaryMergeViewer.Reset(false);
                             ResolveEnabled = false;
                             BinaryMergeViewer.EnableSelection = s.LeftSelectedDefinition != null &&
-                                s.RightSelectedDefinition != null &&
-                                s.LeftSelectedDefinition != s.RightSelectedDefinition;
+                                                                s.RightSelectedDefinition != null &&
+                                                                s.LeftSelectedDefinition != s.RightSelectedDefinition;
                             BinaryMergeViewer.SetLeft(s.LeftSelectedDefinition);
                             BinaryMergeViewer.SetRight(s.RightSelectedDefinition);
                         }
@@ -922,16 +914,16 @@ namespace IronyModManager.ViewModels
                 }).DisposeWith(disposables);
             }).DisposeWith(disposables);
 
-            this.WhenAnyValue(v => v.BinaryMergeViewer.IsActivated).Where(p => p).Subscribe(s =>
+            this.WhenAnyValue(v => v.BinaryMergeViewer.IsActivated).Where(p => p).Subscribe(_ =>
             {
-                Observable.Merge(BinaryMergeViewer.TakeLeftCommand.Select(s => true), BinaryMergeViewer.TakeRightCommand.Select(s => false)).Subscribe(s =>
+                BinaryMergeViewer.TakeLeftCommand.Select(_ => true).Merge(BinaryMergeViewer.TakeRightCommand.Select(_ => false)).Subscribe(s =>
                 {
                     takeLeftBinary = s;
                     ResolveEnabled = true;
                 }).DisposeWith(disposables);
             }).DisposeWith(disposables);
 
-            this.WhenAnyValue(p => p.MergeViewer.LeftSide).Where(p => !string.IsNullOrWhiteSpace(p)).Subscribe(s =>
+            this.WhenAnyValue(p => p.MergeViewer.LeftSide).Where(p => !string.IsNullOrWhiteSpace(p)).Subscribe(_ =>
             {
                 var virtualDefinitions = ModCompareSelector.VirtualDefinitions;
                 if (MergeViewer.LeftSidePatchMod && virtualDefinitions != null)
@@ -941,7 +933,7 @@ namespace IronyModManager.ViewModels
                 }
             }).DisposeWith(disposables);
 
-            this.WhenAnyValue(p => p.MergeViewer.RightSide).Where(p => !string.IsNullOrWhiteSpace(p)).Subscribe(s =>
+            this.WhenAnyValue(p => p.MergeViewer.RightSide).Where(p => !string.IsNullOrWhiteSpace(p)).Subscribe(_ =>
             {
                 var virtualDefinitions = ModCompareSelector.VirtualDefinitions;
                 if (MergeViewer.RightSidePatchMod && virtualDefinitions != null)
@@ -951,9 +943,9 @@ namespace IronyModManager.ViewModels
                 }
             }).DisposeWith(disposables);
 
-            this.WhenAnyValue(v => v.IgnoreConflictsRules.IsActivated).Where(p => p).Subscribe(s =>
+            this.WhenAnyValue(v => v.IgnoreConflictsRules.IsActivated).Where(p => p).Subscribe(_ =>
             {
-                Observable.Merge(IgnoreConflictsRules.SaveCommand, IgnoreConflictsRules.CancelCommand).Subscribe(result =>
+                IgnoreConflictsRules.SaveCommand.Merge(IgnoreConflictsRules.CancelCommand).Subscribe(result =>
                 {
                     switch (result.State)
                     {
@@ -964,9 +956,6 @@ namespace IronyModManager.ViewModels
 
                         case Implementation.CommandState.NotExecuted:
                             EditingIgnoreConflictsRules = false;
-                            break;
-
-                        default:
                             break;
                     }
                 }).DisposeWith(disposables);
@@ -985,16 +974,16 @@ namespace IronyModManager.ViewModels
                 }
             }).DisposeWith(disposables);
 
-            this.WhenAnyValue(p => p.ModFilter.IsActivated).Where(p => p).Subscribe(s =>
+            this.WhenAnyValue(p => p.ModFilter.IsActivated).Where(p => p).Subscribe(_ =>
             {
-                ModFilter.SetConflictResult(Conflicts, SelectedModsOrder.ToList(), SelectedModCollection.Name);
-                this.WhenAnyValue(p => p.ModFilter.HasSavedState).Where(p => p).Subscribe(s =>
+                ModFilter.SetConflictResult(Conflicts, [.. SelectedModsOrder], SelectedModCollection.Name);
+                this.WhenAnyValue(p => p.ModFilter.HasSavedState).Where(p => p).Subscribe(_ =>
                 {
                     FilterHierarchalConflictsAsync(Conflicts, SelectedConflict).ConfigureAwait(false);
                 }).DisposeWith(disposables);
             }).DisposeWith(disposables);
 
-            this.WhenAnyValue(p => p.ResetConflicts.IsActivated).Where(p => p).Subscribe(s =>
+            this.WhenAnyValue(p => p.ResetConflicts.IsActivated).Where(p => p).Subscribe(_ =>
             {
                 ResetConflicts.ResetCommand.Subscribe(s =>
                 {
@@ -1005,28 +994,19 @@ namespace IronyModManager.ViewModels
                 }).DisposeWith(disposables);
             }).DisposeWith(disposables);
 
-            this.WhenAnyValue(p => p.CustomConflicts.Saved).Where(p => p).Subscribe(s =>
+            this.WhenAnyValue(p => p.CustomConflicts.Saved).Where(p => p).Subscribe(_ =>
             {
                 ResetConflicts.Refresh();
-            }).DisposeWith(disposables);
-
-            var previousEditTextState = false;
-            this.WhenAnyValue(v => v.EditingIgnoreConflictsRules).Subscribe(s =>
-            {
-                if (s != previousEditTextState)
-                {
-                    previousEditTextState = s;
-                }
             }).DisposeWith(disposables);
 
             hotkeyPressedHandler.Subscribe(m =>
             {
                 async Task performModSelectionAction()
                 {
-                    if (!filteringConflicts && (SelectedParentConflict?.Children.Any()).GetValueOrDefault())
+                    if (!filteringConflicts && SelectedParentConflict?.Children.Count != 0)
                     {
                         int? newSelectedConflict = null;
-                        var col = SelectedParentConflict != null ? SelectedParentConflict.Children.ToList() : new List<IHierarchicalDefinitions>();
+                        var col = SelectedParentConflict != null ? [.. SelectedParentConflict.Children] : new List<IHierarchicalDefinitions>();
                         switch (m.Hotkey)
                         {
                             case Enums.HotKeys.Shift_Up:
@@ -1042,8 +1022,10 @@ namespace IronyModManager.ViewModels
                                     {
                                         index = 0;
                                     }
+
                                     newSelectedConflict = index;
                                 }
+
                                 break;
 
                             case Enums.HotKeys.Shift_Down:
@@ -1059,13 +1041,13 @@ namespace IronyModManager.ViewModels
                                     {
                                         index = col.Count - 1;
                                     }
+
                                     newSelectedConflict = index;
                                 }
-                                break;
 
-                            default:
                                 break;
                         }
+
                         if (newSelectedConflict != null)
                         {
                             await Dispatcher.UIThread.SafeInvokeAsync(() =>
@@ -1075,12 +1057,13 @@ namespace IronyModManager.ViewModels
                         }
                     }
                 }
+
                 async Task performModParentSelectionAction()
                 {
-                    if (!filteringConflicts && (HierarchalConflicts?.Any()).GetValueOrDefault())
+                    if (!filteringConflicts && HierarchicalConflicts?.Count != 0)
                     {
                         IHierarchicalDefinitions parent = null;
-                        var col = HierarchalConflicts.ToList();
+                        var col = HierarchicalConflicts!.ToList();
                         switch (m.Hotkey)
                         {
                             case Enums.HotKeys.Ctrl_Shift_P:
@@ -1096,8 +1079,10 @@ namespace IronyModManager.ViewModels
                                     {
                                         index = 0;
                                     }
+
                                     parent = col[index];
                                 }
+
                                 break;
 
                             case Enums.HotKeys.Ctrl_Shift_N:
@@ -1113,13 +1098,13 @@ namespace IronyModManager.ViewModels
                                     {
                                         index = col.Count - 1;
                                     }
+
                                     parent = col[index];
                                 }
-                                break;
 
-                            default:
                                 break;
                         }
+
                         if (parent != null)
                         {
                             await Dispatcher.UIThread.SafeInvokeAsync(() =>
@@ -1129,6 +1114,7 @@ namespace IronyModManager.ViewModels
                         }
                     }
                 }
+
                 if (m.Hotkey == Enums.HotKeys.Shift_Down || m.Hotkey == Enums.HotKeys.Shift_Up)
                 {
                     performModSelectionAction().ConfigureAwait(false);
@@ -1168,6 +1154,7 @@ namespace IronyModManager.ViewModels
             {
                 return;
             }
+
             if (await externalProcessHandlerService.IsParadoxLauncherRunningAsync())
             {
                 var title = localizationManager.GetResource(LocalizationResources.Notifications.ParadoxLauncherRunning.Title);
@@ -1175,13 +1162,14 @@ namespace IronyModManager.ViewModels
                 notificationAction.ShowNotification(title, message, NotificationType.Error, 30);
                 return;
             }
+
             ResolvingConflict = true;
             if (ModCompareSelector.VirtualDefinitions != null && ModCompareSelector.VirtualDefinitions.Any())
             {
                 IHierarchicalDefinitions conflictParent = null;
                 int? conflictParentIdx = null;
-                int parentIdx = HierarchalConflicts.ToList().IndexOf(SelectedParentConflict);
-                foreach (var item in HierarchalConflicts)
+                var parentIdx = HierarchicalConflicts.ToList().IndexOf(SelectedParentConflict);
+                foreach (var item in HierarchicalConflicts)
                 {
                     if (item.Children.Contains(SelectedConflict))
                     {
@@ -1191,9 +1179,10 @@ namespace IronyModManager.ViewModels
                         break;
                     }
                 }
+
                 var id = idGenerator.GetNextId();
                 await TriggerOverlayAsync(id, true, localizationManager.GetResource(LocalizationResources.Conflict_Solver.OverlayResolve));
-                IDefinition patchDefinition = null;
+                IDefinition patchDefinition;
                 if (!IsBinaryConflict)
                 {
                     patchDefinition = ModCompareSelector.VirtualDefinitions.FirstOrDefault(p => modPatchCollectionService.IsPatchMod(p.ModName));
@@ -1209,6 +1198,7 @@ namespace IronyModManager.ViewModels
                         patchDefinition = ModCompareSelector.Definitions.FirstOrDefault();
                     }
                 }
+
                 if (patchDefinition != null)
                 {
                     var generatedFileNames = patchDefinition.GeneratedFileNames;
@@ -1219,23 +1209,25 @@ namespace IronyModManager.ViewModels
                             generatedFileNames.Add(item);
                         }
                     }
+
                     patchDefinition.GeneratedFileNames = generatedFileNames;
                     SyncCode(patchDefinition);
                     try
                     {
-                        if (await Task.Run(async () => resolve ?
-                            await modPatchCollectionService.ApplyModPatchAsync(Conflicts, patchDefinition, SelectedModCollection.Name) :
-                            await modPatchCollectionService.IgnoreModPatchAsync(Conflicts, patchDefinition, SelectedModCollection.Name)))
+                        if (await Task.Run(async () =>
+                                resolve
+                                    ? await modPatchCollectionService.ApplyModPatchAsync(Conflicts, patchDefinition, SelectedModCollection.Name)
+                                    : await modPatchCollectionService.IgnoreModPatchAsync(Conflicts, patchDefinition, SelectedModCollection.Name)))
                         {
                             await FilterHierarchalConflictsAsync(Conflicts);
                             IHierarchicalDefinitions selectedConflict = null;
-                            if (conflictParentIdx.HasValue && HierarchalConflicts.Any())
+                            if (conflictParentIdx.HasValue && HierarchicalConflicts.Count != 0)
                             {
-                                foreach (var item in HierarchalConflicts)
+                                foreach (var item in HierarchicalConflicts)
                                 {
                                     if (item.Name.Equals(conflictParent.Name))
                                     {
-                                        if (conflictParentIdx.Value > (item.Children.Count - 1))
+                                        if (conflictParentIdx.Value > item.Children.Count - 1)
                                         {
                                             conflictParentIdx = item.Children.Count - 1;
                                         }
@@ -1243,11 +1235,13 @@ namespace IronyModManager.ViewModels
                                         {
                                             conflictParentIdx = 0;
                                         }
+
                                         selectedConflict = item.Children.Select(p => p).ToList()[conflictParentIdx.GetValueOrDefault()];
                                         break;
                                     }
                                 }
                             }
+
                             SelectedConflict = selectedConflict;
                             ResetConflicts.Refresh();
                         }
@@ -1260,25 +1254,29 @@ namespace IronyModManager.ViewModels
                         notificationAction.ShowNotification(title, message, NotificationType.Error, 30);
                     }
                 }
+
                 if (SelectedConflict == null)
                 {
-                    if (parentIdx > (HierarchalConflicts.Count - 1))
+                    if (parentIdx > HierarchicalConflicts.Count - 1)
                     {
-                        parentIdx = HierarchalConflicts.Count - 1;
+                        parentIdx = HierarchicalConflicts.Count - 1;
                     }
                     else if (parentIdx < 0)
                     {
                         parentIdx = 0;
                     }
-                    if (HierarchalConflicts.Any())
+
+                    if (HierarchicalConflicts.Count != 0)
                     {
                         // Force a refresh of the UI
                         SelectedParentConflict = null;
-                        SelectedParentConflict = HierarchalConflicts.ElementAt(parentIdx);
+                        SelectedParentConflict = HierarchicalConflicts.ElementAt(parentIdx);
                     }
                 }
+
                 await TriggerOverlayAsync(id, false);
             }
+
             ResolvingConflict = false;
             BackAllowed = true;
         }
