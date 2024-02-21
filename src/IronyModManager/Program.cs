@@ -4,7 +4,7 @@
 // Created          : 01-10-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-15-2024
+// Last Modified On : 02-21-2024
 // ***********************************************************************
 // <copyright file="Program.cs" company="IronyModManager">
 //     Copyright (c) Mario. All rights reserved.
@@ -217,6 +217,11 @@ namespace IronyModManager
                 SingleInstance.Initialize();
                 SingleInstance.InstanceLaunched += args =>
                 {
+                    if (!StaticResources.AllowCommandLineChange)
+                    {
+                        return;
+                    }
+
                     ParseArguments(args.CommandLineArgs);
                     Dispatcher.UIThread.SafeInvoke(() =>
                     {

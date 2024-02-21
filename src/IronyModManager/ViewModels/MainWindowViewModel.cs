@@ -1,11 +1,10 @@
-﻿
-// ***********************************************************************
+﻿// ***********************************************************************
 // Assembly         : IronyModManager
 // Author           : Mario
 // Created          : 01-10-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-23-2023
+// Last Modified On : 02-21-2024
 // ***********************************************************************
 // <copyright file="MainWindowViewModel.cs" company="Mario">
 //     Mario
@@ -15,6 +14,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Reactive;
 using System.Reactive.Disposables;
@@ -29,7 +29,6 @@ using ReactiveUI;
 
 namespace IronyModManager.ViewModels
 {
-
     /// <summary>
     /// Class MainWindowViewModel.
     /// Implements the <see cref="IronyModManager.Common.ViewModels.BaseViewModel" />
@@ -43,12 +42,12 @@ namespace IronyModManager.ViewModels
         /// <summary>
         /// The overlay stack
         /// </summary>
-        protected readonly List<OverlayQueue> overlayStack = new();
+        protected readonly List<OverlayQueue> OverlayStack = [];
 
         /// <summary>
         /// The loop running
         /// </summary>
-        protected bool loopRunning = false;
+        protected bool LoopRunning;
 
         /// <summary>
         /// The hotkey manager
@@ -78,7 +77,7 @@ namespace IronyModManager.ViewModels
         /// <summary>
         /// The last message identifier
         /// </summary>
-        private long lastMessageId = 0;
+        private long lastMessageId;
 
         /// <summary>
         /// The overlay disposable
@@ -177,12 +176,7 @@ namespace IronyModManager.ViewModels
         /// <param name="message">The message.</param>
         public void TriggerManualOverlay(long id, bool isVisible, string message)
         {
-            QueueOverlay(new OverlayProgressEvent()
-            {
-                Id = id,
-                IsVisible = isVisible,
-                Message = message
-            });
+            QueueOverlay(new OverlayProgressEvent { Id = id, IsVisible = isVisible, Message = message });
         }
 
         /// <summary>
@@ -202,6 +196,7 @@ namespace IronyModManager.ViewModels
                 {
                     opacity = 1;
                 }
+
                 MainOpacity = opacity;
                 await Task.Delay(5);
             }
@@ -214,10 +209,7 @@ namespace IronyModManager.ViewModels
         {
             InitOverlayLoop();
             overlayDisposable?.Dispose();
-            overlayDisposable = overlayProgressHandler.Subscribe(s =>
-            {
-                QueueOverlay(s);
-            });
+            overlayDisposable = overlayProgressHandler.Subscribe(QueueOverlay);
             if (Disposables != null)
             {
                 overlayDisposable.DisposeWith(Disposables);
@@ -244,9 +236,9 @@ namespace IronyModManager.ViewModels
         /// </summary>
         protected void InitOverlayLoop()
         {
-            if (!loopRunning)
+            if (!LoopRunning)
             {
-                loopRunning = true;
+                LoopRunning = true;
                 Task.Run(() => OverlayLoopAsync().ConfigureAwait(false));
             }
         }
@@ -313,41 +305,45 @@ namespace IronyModManager.ViewModels
                 {
                     OverlayVisible = e.IsVisible;
                 }
+
                 if (e.Message != OverlayMessage)
                 {
                     OverlayMessage = e.Message;
                 }
+
                 if (e.MessageProgress != OverlayMessageProgress)
                 {
                     OverlayMessageProgress = e.MessageProgress;
                     HasProgress = !string.IsNullOrWhiteSpace(e.MessageProgress);
                 }
             }
+
             while (true)
             {
                 await Task.Delay(2);
                 lock (queueLock)
                 {
                     var now = DateTime.Now;
-                    if (overlayStack.Any(p => now >= p.DateAdded) && currentMessageId.HasValue)
+                    if (OverlayStack.Any(p => now >= p.DateAdded) && currentMessageId.HasValue)
                     {
-                        var overlays = overlayStack.Where(p => now >= p.DateAdded && p.Event.Id == currentMessageId.GetValueOrDefault()).OrderBy(p => p.DateAdded).ToList();
+                        var overlays = OverlayStack.Where(p => now >= p.DateAdded && p.Event.Id == currentMessageId.GetValueOrDefault()).OrderBy(p => p.DateAdded).ToList();
                         if (overlays.Count > 0)
                         {
-                            OverlayQueue overlay = null;
+                            OverlayQueue overlay;
                             if (overlays.Any(p => p.Event.IsVisible != OverlayVisible))
                             {
                                 if (overlays.Any(p => p.Event.IsVisible == false))
                                 {
-                                    overlayStack.RemoveAll(p => p.Event.Id <= currentMessageId.GetValueOrDefault());
-                                    if (overlayStack.Count > 0)
+                                    OverlayStack.RemoveAll(p => p.Event.Id <= currentMessageId.GetValueOrDefault());
+                                    if (OverlayStack.Count > 0)
                                     {
-                                        currentMessageId = overlayStack.OrderByDescending(p => p.Event.Id).FirstOrDefault().Event.Id;
+                                        currentMessageId = OverlayStack.OrderByDescending(p => p.Event.Id)!.FirstOrDefault()!.Event.Id;
                                     }
                                     else
                                     {
                                         currentMessageId = null;
                                     }
+
                                     if (currentMessageId.HasValue)
                                     {
                                         lastMessageId = currentMessageId.GetValueOrDefault();
@@ -356,6 +352,7 @@ namespace IronyModManager.ViewModels
                                     {
                                         lastMessageId++;
                                     }
+
                                     overlay = overlays.FirstOrDefault(p => p.Event.IsVisible == false);
                                 }
                                 else
@@ -363,7 +360,7 @@ namespace IronyModManager.ViewModels
                                     overlay = overlays.FirstOrDefault(p => p.Event.IsVisible != OverlayVisible);
                                     if (overlay != null)
                                     {
-                                        overlayStack.Remove(overlay);
+                                        OverlayStack.Remove(overlay);
                                     }
                                 }
                             }
@@ -371,10 +368,12 @@ namespace IronyModManager.ViewModels
                             {
                                 foreach (var item in overlays)
                                 {
-                                    overlayStack.Remove(item);
+                                    OverlayStack.Remove(item);
                                 }
+
                                 overlay = overlays.LastOrDefault();
                             }
+
                             if (overlay != null)
                             {
                                 setOverlayProperties(overlay.Event);
@@ -393,18 +392,19 @@ namespace IronyModManager.ViewModels
         {
             lock (queueLock)
             {
-                if (!overlayStack.Any(p => p.Event == e))
+                if (OverlayStack.All(p => p.Event != e))
                 {
-                    if (!currentMessageId.HasValue && e.Id < lastMessageId)
+                    switch (currentMessageId)
                     {
-                        return;
+                        case null when e.Id < lastMessageId:
+                            return;
+                        case null when OverlayVisible != e.IsVisible && e.IsVisible:
+                            currentMessageId = e.Id;
+                            lastMessageId = e.Id;
+                            break;
                     }
-                    if (!currentMessageId.HasValue && OverlayVisible != e.IsVisible && e.IsVisible)
-                    {
-                        currentMessageId = e.Id;
-                        lastMessageId = e.Id;
-                    }
-                    overlayStack.Add(new OverlayQueue() { Event = e, DateAdded = DateTime.Now });
+
+                    OverlayStack.Add(new OverlayQueue { Event = e, DateAdded = DateTime.Now });
                 }
             }
         }

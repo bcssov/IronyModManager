@@ -1,11 +1,10 @@
-﻿
-// ***********************************************************************
+﻿// ***********************************************************************
 // Assembly         : IronyModManager
 // Author           : Mario
 // Created          : 05-07-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-10-2024
+// Last Modified On : 02-21-2024
 // ***********************************************************************
 // <copyright file="StaticResources.cs" company="Mario">
 //     Mario
@@ -24,7 +23,6 @@ using IronyModManager.Shared;
 
 namespace IronyModManager
 {
-
     /// <summary>
     /// Class StaticResources.
     /// </summary>
@@ -56,7 +54,7 @@ namespace IronyModManager
         /// <summary>
         /// The updater path
         /// </summary>
-        private static string[] updaterPath = null;
+        private static string[] updaterPath;
 
         /// <summary>
         /// The window icon
@@ -84,6 +82,12 @@ namespace IronyModManager
         #endregion Events
 
         #region Properties
+
+        /// <summary>
+        /// Gets or sets a value indicating whether the allow command line change.
+        /// </summary>
+        /// <value><c>true</c> if allow command line change; otherwise, <c>false</c>.</value>
+        public static bool AllowCommandLineChange { get; set; } = true;
 
         /// <summary>
         /// Gets or sets the command line options.
@@ -124,6 +128,7 @@ namespace IronyModManager
                 using var ms = GetAppIconStream();
                 windowIcon = new WindowIcon(ms);
             }
+
             return windowIcon;
         }
 
@@ -138,6 +143,7 @@ namespace IronyModManager
                 using var ms = GetAppIconStream();
                 iconBitmap = new Bitmap(ms);
             }
+
             return iconBitmap;
         }
 
@@ -151,20 +157,23 @@ namespace IronyModManager
             {
                 return lastKnownLocation;
             }
+
             var firstSegment = string.Empty;
             var secondSegment = string.Empty;
 
             var entryAssembly = Assembly.GetEntryAssembly();
-            var companyAttribute = (AssemblyCompanyAttribute)Attribute.GetCustomAttribute(entryAssembly, typeof(AssemblyCompanyAttribute));
-            if (!string.IsNullOrEmpty(companyAttribute.Company))
+            var companyAttribute = (AssemblyCompanyAttribute)Attribute.GetCustomAttribute(entryAssembly!, typeof(AssemblyCompanyAttribute));
+            if (!string.IsNullOrEmpty(companyAttribute!.Company))
             {
                 firstSegment = $"{companyAttribute.Company}{Path.DirectorySeparatorChar}";
             }
+
             var titleAttribute = (AssemblyTitleAttribute)Attribute.GetCustomAttribute(entryAssembly, typeof(AssemblyTitleAttribute));
-            if (!string.IsNullOrEmpty(titleAttribute.Title))
+            if (!string.IsNullOrEmpty(titleAttribute!.Title))
             {
                 secondSegment = $"{titleAttribute.Title}-Location{Path.DirectorySeparatorChar}";
             }
+
             lastKnownLocation = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), $@"{firstSegment}{secondSegment}");
             return lastKnownLocation;
         }
@@ -213,8 +222,8 @@ namespace IronyModManager
                 var secondSegment = string.Empty;
 
                 var entryAssembly = Assembly.GetEntryAssembly();
-                var companyAttribute = (AssemblyCompanyAttribute)Attribute.GetCustomAttribute(entryAssembly, typeof(AssemblyCompanyAttribute));
-                if (!string.IsNullOrEmpty(companyAttribute.Company))
+                var companyAttribute = (AssemblyCompanyAttribute)Attribute.GetCustomAttribute(entryAssembly!, typeof(AssemblyCompanyAttribute));
+                if (!string.IsNullOrEmpty(companyAttribute!.Company))
                 {
                     if (!useProperSeparator)
                     {
@@ -225,8 +234,9 @@ namespace IronyModManager
                         firstSegment = $"{companyAttribute.Company}{Path.DirectorySeparatorChar}";
                     }
                 }
+
                 var titleAttribute = (AssemblyTitleAttribute)Attribute.GetCustomAttribute(entryAssembly, typeof(AssemblyTitleAttribute));
-                if (!string.IsNullOrEmpty(titleAttribute.Title))
+                if (!string.IsNullOrEmpty(titleAttribute!.Title))
                 {
                     if (!useProperSeparator)
                     {
@@ -237,14 +247,16 @@ namespace IronyModManager
                         secondSegment = $"{titleAttribute.Title}-Updater{Path.DirectorySeparatorChar}";
                     }
                 }
+
                 return Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), $@"{firstSegment}{secondSegment}");
             }
 
             if (updaterPath == null)
             {
-                var col = new List<string>() { generatePath(true), generatePath(false) };
+                var col = new List<string> { generatePath(true), generatePath(false) };
                 updaterPath = col.Distinct().ToArray();
             }
+
             return updaterPath;
         }
 
