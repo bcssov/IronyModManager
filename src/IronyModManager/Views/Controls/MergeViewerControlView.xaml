@@ -89,16 +89,16 @@
                     </controls:ListBox.ItemTemplate>
                 </controls:ListBox>
             </Grid>
-            <Grid RowDefinitions="15,1*" ColumnDefinitions="5*,5*" Margin="0,0,10,0" IsSharedSizeScope="True" IsVisible="{Binding UsingNewMergeType}">
+            <Grid RowDefinitions="15,*" ColumnDefinitions="5*,5*" Margin="0,0,10,0" IsSharedSizeScope="True" IsVisible="{Binding UsingNewMergeType}">
                 <TextBlock Text="{Binding BracketMismatchText}" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Foreground="{DynamicResource IronyAccentBrush}" HorizontalAlignment="Center" VerticalAlignment="Center" />
                 <controls:TextEditor x:Name="diffLeft" Background="{DynamicResource IronyEditorBackgroundColor}"
                                      Foreground="{DynamicResource IronyForegroundBrush}"
                                      HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Visible"
-                                     TextBlock.FontSize="14" IsVisible="{Binding EditingLeft}" ShowLineNumbers="True" Grid.Row="1" Grid.Column="0" />
+                                     TextBlock.FontSize="14" ShowLineNumbers="False" Grid.Row="1" Grid.Column="0" />
                 <controls:TextEditor x:Name="diffRight" Background="{DynamicResource IronyEditorBackgroundColor}"
                                      Foreground="{DynamicResource IronyForegroundBrush}"
                                      HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Visible"
-                                     TextBlock.FontSize="14" IsVisible="{Binding EditingLeft}" ShowLineNumbers="True" Grid.Row="1" Grid.Column="1" />
+                                     TextBlock.FontSize="14" ShowLineNumbers="False" Grid.Row="1" Grid.Column="1" />
             </Grid>
         </Panel>
     </Panel>

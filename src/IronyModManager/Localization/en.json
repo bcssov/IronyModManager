@@ -333,8 +333,7 @@
             "Redo": "Redo",
             "Editor": "External Merge",
             "ReadonlyEditor": "External Compare",
-            "UseNewCompare": "Use New Diff Compare",
-            "UseOldCompare": "Use Old Diff Compare"
+            "ToggleCompare": "Toggle Diff Compare Mode"
         },
         "EditorContextMenu": {
             "Copy": "Copy",

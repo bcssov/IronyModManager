@@ -4,7 +4,7 @@
 // Created          : 03-20-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-20-2024
+// Last Modified On : 02-22-2024
 // ***********************************************************************
 // <copyright file="MergeViewerControlView.xaml.cs" company="Mario">
 //     Mario
@@ -280,7 +280,8 @@ namespace IronyModManager.Views.Controls
         {
             thisTextEditor.ScrollViewer.ScrollChanged += (_, _) =>
             {
-                if (syncingDiffScroll || (otherTextEditor.ScrollViewer.Offset.X.IsNearlyEqual(thisTextEditor.ScrollViewer.Offset.X) && otherTextEditor.ScrollViewer.Offset.Y.IsNearlyEqual(thisTextEditor.ScrollViewer.Offset.Y)))
+                if (syncingDiffScroll || thisTextEditor.ScrollViewer == null || otherTextEditor.ScrollViewer == null || (otherTextEditor.ScrollViewer.Offset.X.IsNearlyEqual(thisTextEditor.ScrollViewer.Offset.X) &&
+                                                                                                                         otherTextEditor.ScrollViewer.Offset.Y.IsNearlyEqual(thisTextEditor.ScrollViewer.Offset.Y)))
                 {
                     return;
                 }
@@ -317,8 +318,20 @@ namespace IronyModManager.Views.Controls
             diffSearchPanelRight = SearchPanel.Install(diffRight);
             HandleEditorContextMenu(diffLeft, diffSearchPanelLeft, true);
             HandleEditorContextMenu(diffRight, diffSearchPanelRight, false);
-            HandleTextEditorPropertyChanged(diffLeft, diffRight);
-            HandleTextEditorPropertyChanged(diffRight, diffLeft);
+            diffLeft.ScrollInitialized += (_, _) => HandleTextEditorPropertyChanged(diffLeft, diffRight);
+            diffRight.ScrollInitialized += (_, _) => HandleTextEditorPropertyChanged(diffRight, diffLeft);
+            var diffLeftMargin = new DiffMargin { Lines = ViewModel!.LeftDiff };
+            var diffRightMargin = new DiffMargin { Lines = ViewModel.RightDiff };
+            var diffLeftRenderer = new DiffBackgroundRenderer { Lines = ViewModel.LeftDiff };
+            var diffRightRenderer = new DiffBackgroundRenderer { Lines = ViewModel.RightDiff };
+            diffLeft.TextArea.LeftMargins.Add(diffLeftMargin);
+            diffLeft.TextArea.TextView.BackgroundRenderers.Add(diffLeftRenderer);
+            diffRight.TextArea.LeftMargins.Add(diffRightMargin);
+            diffRight.TextArea.TextView.BackgroundRenderers.Add(diffRightRenderer);
+            diffLeft.Text = string.Join(Environment.NewLine, ViewModel.LeftDiff);
+            diffRight.Text = string.Join(Environment.NewLine, ViewModel.RightDiff);
+            diffLeft.IsReadOnly = !ViewModel.LeftSidePatchMod;
+            diffRight.IsReadOnly = !ViewModel.RightSidePatchMod;
 
             var leftSide = this.FindControl<IronyModManager.Controls.ListBox>("leftSide");
             var rightSide = this.FindControl<IronyModManager.Controls.ListBox>("rightSide");
@@ -483,6 +496,42 @@ namespace IronyModManager.Views.Controls
                 Dispatcher.UIThread.SafeInvoke(evalKey);
             }).DisposeWith(disposables);
 
+            this.WhenAnyValue(v => v.ViewModel.LeftDiff).Subscribe(s =>
+            {
+                diffLeftMargin.Lines = ViewModel!.LeftDiff;
+                diffLeftRenderer.Lines = ViewModel.LeftDiff;
+                try
+                {
+                    diffLeft.Text = string.Join(Environment.NewLine, s.Select(p => p.Text));
+                }
+                catch (InvalidOperationException)
+                {
+                }
+            }).DisposeWith(disposables);
+
+            this.WhenAnyValue(v => v.ViewModel.RightDiff).Subscribe(s =>
+            {
+                diffRightMargin.Lines = ViewModel!.RightDiff;
+                diffRightRenderer.Lines = ViewModel.RightDiff;
+                try
+                {
+                    diffRight.Text = string.Join(Environment.NewLine, s.Select(p => p.Text));
+                }
+                catch (InvalidOperationException)
+                {
+                }
+            });
+
+            this.WhenAnyValue(v => v.ViewModel.LeftSidePatchMod).Subscribe(s =>
+            {
+                diffLeft.IsReadOnly = !s;
+            }).DisposeWith(disposables);
+
+            this.WhenAnyValue(v => v.ViewModel.RightSidePatchMod).Subscribe(s =>
+            {
+                diffRight.IsReadOnly = !s;
+            }).DisposeWith(disposables);
+
             base.OnActivated(disposables);
         }
 
@@ -520,6 +569,21 @@ namespace IronyModManager.Views.Controls
             {
                 var lines = diff.Text.SplitOnNewLine().ToList();
                 var text = string.Join(Environment.NewLine, lines);
+                text = text.Trim().Trim(Environment.NewLine);
+                if (leftDiff)
+                {
+                    if (text.Equals(ViewModel!.LeftSide.Trim().Trim(Environment.NewLine)))
+                    {
+                        return;
+                    }
+                }
+                else
+                {
+                    if (text.Equals(ViewModel!.RightSide.Trim().Trim(Environment.NewLine)))
+                    {
+                        return;
+                    }
+                }
                 if (leftDiff)
                 {
                     ViewModel!.SetText(text, ViewModel.RightSide);
@@ -532,6 +596,11 @@ namespace IronyModManager.Views.Controls
             diff.TextArea.SelectionChanged += (_, _) =>
             {
                 var range = GetTextEditorSelectedTextRange(diff);
+                if (range.Item1 == -1 || range.Item2 == -1)
+                {
+                    return;
+                }
+
                 var col = leftDiff ? ViewModel!.LeftSideSelected : ViewModel!.RightSideSelected;
                 var sourceCol = leftDiff ? ViewModel.LeftDiff : ViewModel.RightDiff;
                 col.Clear();
@@ -589,7 +658,7 @@ namespace IronyModManager.Views.Controls
                 offset = offset.WithY(otherMaxY);
             }
 
-            if (!otherTextEditor.ScrollViewer.Offset.X.IsNearlyEqual(offset.X) || otherTextEditor.ScrollViewer.Offset.Y.IsNearlyEqual(offset.Y))
+            if (!otherTextEditor.ScrollViewer.Offset.X.IsNearlyEqual(offset.X) || !otherTextEditor.ScrollViewer.Offset.Y.IsNearlyEqual(offset.Y))
             {
                 try
                 {
@@ -629,7 +698,7 @@ namespace IronyModManager.Views.Controls
                 offset = offset.WithY(otherMaxY);
             }
 
-            if (!otherListBox.Scroll.Offset.X.IsNearlyEqual(offset.X) || otherListBox.Scroll.Offset.Y.IsNearlyEqual(offset.Y))
+            if (!otherListBox.Scroll.Offset.X.IsNearlyEqual(offset.X) || !otherListBox.Scroll.Offset.Y.IsNearlyEqual(offset.Y))
             {
                 try
                 {
@@ -675,7 +744,7 @@ namespace IronyModManager.Views.Controls
                 new() { Header = ViewModel.CopyThisBeforeLine, Command = ViewModel.CopyThisBeforeLineCommand, CommandParameter = leftSide },
                 new() { Header = ViewModel.CopyThisAfterLine, Command = ViewModel.CopyThisAfterLineCommand, CommandParameter = leftSide },
                 new() { Header = "-" },
-                new() { Header = ViewModel.UsingNewMergeType ? ViewModel.UseNewMergeTypeCaption : ViewModel.UseOldMergeTypeCaption, Command = ViewModel.ToggleMergeTypeCommand }
+                new() { Header = ViewModel.ToggleMergeTypeCaption, Command = ViewModel.ToggleMergeTypeCommand }
             };
             menuItems.AddRange(mainEditingItems);
 
@@ -708,7 +777,7 @@ namespace IronyModManager.Views.Controls
                 new() { Header = ViewModel.MoveUp, Command = ViewModel.MoveUpCommand, CommandParameter = leftSide },
                 new() { Header = ViewModel.MoveDown, Command = ViewModel.MoveDownCommand, CommandParameter = leftSide },
                 new() { Header = "-" },
-                new() { Header = ViewModel.UsingNewMergeType ? ViewModel.UseNewMergeTypeCaption : ViewModel.UseOldMergeTypeCaption, Command = ViewModel.ToggleMergeTypeCommand }
+                new() { Header = ViewModel.ToggleMergeTypeCaption, Command = ViewModel.ToggleMergeTypeCommand }
             };
             menuItems.AddRange(mainEditingItems);
 

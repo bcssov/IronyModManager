@@ -4,7 +4,7 @@
 // Created          : 04-15-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-20-2024
+// Last Modified On : 02-22-2024
 // ***********************************************************************
 // <copyright file="TextEditor.cs" company="Mario">
 //     Mario
@@ -68,6 +68,15 @@ namespace IronyModManager.Controls
         }
 
         #endregion Constructors
+
+        #region Events
+
+        /// <summary>
+        /// Occurs when [scroll initialized].
+        /// </summary>
+        public event EventHandler ScrollInitialized;
+
+        #endregion Events
 
         #region Properties
 
@@ -203,6 +212,10 @@ namespace IronyModManager.Controls
 
             // Yes, only to expose scroll viewer
             ScrollViewer = (ScrollViewer)e.NameScope.Find("PART_ScrollViewer");
+            if (ScrollViewer != null)
+            {
+                ScrollInitialized?.Invoke(this, EventArgs.Empty);
+            }
         }
 
         #endregion Methods

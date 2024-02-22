@@ -4,7 +4,7 @@
 // Created          : 03-20-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-20-2024
+// Last Modified On : 02-22-2024
 // ***********************************************************************
 // <copyright file="MergeViewerControlViewModel.cs" company="Mario">
 //     Mario
@@ -561,6 +561,15 @@ namespace IronyModManager.ViewModels.Controls
         public virtual IAvaloniaList<DiffPieceWithIndex> RightSideSelected { get; set; }
 
         /// <summary>
+        /// Gets or sets a value representing the toggle merge type caption.
+        /// </summary>
+        /// <value>
+        /// The toggle merge type caption.
+        /// </value>
+        [StaticLocalization(LocalizationResources.Conflict_Solver.ContextMenu.ToggleCompare)]
+        public virtual string ToggleMergeTypeCaption { get; protected set; }
+
+        /// <summary>
         /// Gets or sets a value representing the toggle merge type command.<see cref="ReactiveUI.ReactiveCommand{System.Reactive.Unit, System.Reactive.Unit}" />
         /// </summary>
         /// <value>The toggle merge type command.</value>
@@ -578,24 +587,6 @@ namespace IronyModManager.ViewModels.Controls
         /// </summary>
         /// <value>The undo command.</value>
         public virtual ReactiveCommand<bool, Unit> UndoCommand { get; protected set; }
-
-        /// <summary>
-        /// Gets or sets a value representing the use new merge type caption.
-        /// </summary>
-        /// <value>
-        /// The use new merge type caption.
-        /// </value>
-        [StaticLocalization(LocalizationResources.Conflict_Solver.ContextMenu.UseNewCompare)]
-        public virtual string UseNewMergeTypeCaption { get; protected set; }
-
-        /// <summary>
-        /// Gets or sets a value representing the use old merge type caption.
-        /// </summary>
-        /// <value>
-        /// The use old merge type caption.
-        /// </value>
-        [StaticLocalization(LocalizationResources.Conflict_Solver.ContextMenu.UseOldCompare)]
-        public virtual string UseOldMergeTypeCaption { get; protected set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether the using new merge type.
@@ -711,8 +702,8 @@ namespace IronyModManager.ViewModels.Controls
             LeftDocument = new TextDocument(LeftSide);
             RightDocument = new TextDocument(RightSide);
             SetBracketText();
+            Compare(LeftSide, RightSide);
 
-            Compare();
             if (resetStack)
             {
                 undoStack.Clear();
@@ -734,12 +725,14 @@ namespace IronyModManager.ViewModels.Controls
         }
 
         /// <summary>
-        /// Compares this instance.
+        /// Compare.
         /// </summary>
-        protected virtual void Compare()
+        /// <param name="left">The left.</param>
+        /// <param name="right">The right.</param>
+        protected virtual void Compare(string left, string right)
         {
             var builder = new SideBySideDiffBuilder(new Differ());
-            var diff = builder.BuildDiffModel(LeftSide, RightSide, true);
+            var diff = builder.BuildDiffModel(left, right, true);
             LeftDiff = GetDiffPieceWithIndex(diff.OldText.Lines);
             RightDiff = GetDiffPieceWithIndex(diff.NewText.Lines);
         }
