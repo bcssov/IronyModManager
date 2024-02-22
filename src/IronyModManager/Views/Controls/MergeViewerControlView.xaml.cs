@@ -159,7 +159,7 @@ namespace IronyModManager.Views.Controls
                 var end = doc.GetLineByOffset(segment.EndOffset).LineNumber;
                 var min = Math.Min(start, end);
                 var max = Math.Max(start, end);
-                return Tuple.Create(min, max);
+                return Tuple.Create(min - 1, max - 1);
             }
 
             return Tuple.Create(-1, -1);
