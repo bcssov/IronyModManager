@@ -209,32 +209,39 @@ namespace IronyModManager.Views.Controls
                 return;
             }
 
-            List<MenuItem> menuItems;
-            if ((!ViewModel!.RightSidePatchMod && !ViewModel.LeftSidePatchMod) || ViewModel.IsReadOnlyMode)
+            var ctx = new MenuFlyout { Items = new List<MenuItem>() };
+
+            void setMenuItems()
             {
-                menuItems = GetNonEditableMenuItems(leftSide);
-            }
-            else
-            {
-                if (leftSide)
+                List<MenuItem> menuItems;
+                if ((!ViewModel!.RightSidePatchMod && !ViewModel.LeftSidePatchMod) || ViewModel.IsReadOnlyMode)
                 {
-                    menuItems = ViewModel.RightSidePatchMod ? GetActionsMenuItems(true) : GetEditableMenuItems(true);
+                    menuItems = GetNonEditableMenuItems(leftSide);
                 }
                 else
                 {
-                    menuItems = ViewModel.LeftSidePatchMod ? GetActionsMenuItems(false) : GetEditableMenuItems(false);
+                    if (leftSide)
+                    {
+                        menuItems = ViewModel.RightSidePatchMod ? GetActionsMenuItems(true) : GetEditableMenuItems(true);
+                    }
+                    else
+                    {
+                        menuItems = ViewModel.LeftSidePatchMod ? GetActionsMenuItems(false) : GetEditableMenuItems(false);
+                    }
                 }
+
+                menuItems.AddRange(
+                [
+                    new MenuItem { Header = "-" },
+                    new MenuItem { Header = ViewModel.EditorFind, Command = ReactiveCommand.Create(() => HandleEditorFindOrReplace(editor, searchPanel, false)).DisposeWith(Disposables) },
+                    new MenuItem { Header = ViewModel.EditorReplace, Command = ReactiveCommand.Create(() => HandleEditorFindOrReplace(editor, searchPanel, true)).DisposeWith(Disposables) }
+                ]);
+
+                ctx.Items = menuItems;
             }
 
-            menuItems.AddRange(
-            [
-                new MenuItem { Header = "-" },
-                new MenuItem { Header = ViewModel.EditorFind, Command = ReactiveCommand.Create(() => HandleEditorFindOrReplace(editor, searchPanel, false)).DisposeWith(Disposables) },
-                new MenuItem { Header = ViewModel.EditorReplace, Command = ReactiveCommand.Create(() => HandleEditorFindOrReplace(editor, searchPanel, true)).DisposeWith(Disposables) }
-            ]);
-
-            var ctx = new MenuFlyout { Items = menuItems };
             editor.ContextFlyout = ctx;
+            editor.ContextFlyout.Opening += (_, _) => setMenuItems();
         }
 
         /// <summary>
@@ -584,6 +591,7 @@ namespace IronyModManager.Views.Controls
                         return;
                     }
                 }
+
                 if (leftDiff)
                 {
                     ViewModel!.SetText(text, ViewModel.RightSide);
