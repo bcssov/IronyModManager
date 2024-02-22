@@ -505,28 +505,32 @@ namespace IronyModManager.Views.Controls
 
             this.WhenAnyValue(v => v.ViewModel.LeftDiff).Subscribe(s =>
             {
-                diffLeftMargin.Lines = ViewModel!.LeftDiff;
-                diffLeftRenderer.Lines = ViewModel.LeftDiff;
-                try
+                diffLeftMargin.Lines = s;
+                diffLeftRenderer.Lines = s;
+
+                var oldText = diffLeft.Text;
+                var newText = string.Join(Environment.NewLine, s.Select(p => p.Text));
+                if (oldText.Equals(newText))
                 {
-                    diffLeft.Text = string.Join(Environment.NewLine, s.Select(p => p.Text));
+                    return;
                 }
-                catch (InvalidOperationException)
-                {
-                }
+
+                diffLeft.Text = newText;
             }).DisposeWith(disposables);
 
             this.WhenAnyValue(v => v.ViewModel.RightDiff).Subscribe(s =>
             {
-                diffRightMargin.Lines = ViewModel!.RightDiff;
-                diffRightRenderer.Lines = ViewModel.RightDiff;
-                try
+                diffRightMargin.Lines = s;
+                diffRightRenderer.Lines = s;
+
+                var oldText = diffRight.Text;
+                var newText = string.Join(Environment.NewLine, s.Select(p => p.Text));
+                if (oldText.Equals(newText))
                 {
-                    diffRight.Text = string.Join(Environment.NewLine, s.Select(p => p.Text));
+                    return;
                 }
-                catch (InvalidOperationException)
-                {
-                }
+
+                diffRight.Text = string.Join(Environment.NewLine, s.Select(p => p.Text));
             });
 
             this.WhenAnyValue(v => v.ViewModel.LeftSidePatchMod).Subscribe(s =>
@@ -538,6 +542,7 @@ namespace IronyModManager.Views.Controls
             {
                 diffRight.IsReadOnly = !s;
             }).DisposeWith(disposables);
+
 
             base.OnActivated(disposables);
         }
@@ -611,6 +616,12 @@ namespace IronyModManager.Views.Controls
 
                 var col = leftDiff ? ViewModel!.LeftSideSelected : ViewModel!.RightSideSelected;
                 var sourceCol = leftDiff ? ViewModel.LeftDiff : ViewModel.RightDiff;
+
+                if (range.Item1 > sourceCol.Count - 1 || range.Item2 > sourceCol.Count)
+                {
+                    return;
+                }
+
                 col.Clear();
                 for (var i = range.Item1; i < range.Item2 + 1; i++)
                 {
