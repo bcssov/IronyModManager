@@ -97,6 +97,7 @@ namespace IronyModManager.Implementation.AvaloniaEdit
                     DiffPlex.DiffBuilder.Model.ChangeType.Deleted => IsLightTheme() ? Constants.LightDiffDeletedLine : Constants.DarkDiffDeletedLine,
                     DiffPlex.DiffBuilder.Model.ChangeType.Inserted => IsLightTheme() ? Constants.LightDiffInsertedLine : Constants.DarkDiffInsertedLine,
                     DiffPlex.DiffBuilder.Model.ChangeType.Imaginary => IsLightTheme() ? Constants.LightDiffImaginaryLine : Constants.DarkDiffImaginaryLine,
+                    DiffPlex.DiffBuilder.Model.ChangeType.Modified => IsLightTheme() ? Constants.LightDiffModifiedPieces : Constants.DarkDiffModifiedPieces,
                     _ => default
                 };
 
@@ -121,20 +122,21 @@ namespace IronyModManager.Implementation.AvaloniaEdit
                         DiffPlex.DiffBuilder.Model.ChangeType.Unchanged => IsLightTheme() ? Constants.LightDiffUnchangedPieces : Constants.DarkDiffUnchangedPieces,
                         _ => default(Brush)
                     };
+                    endOffset += piece.Text.Length;
                     if (subPieceBrush != default(Brush))
                     {
                         var builder = new BackgroundGeometryBuilder { AlignToWholePixels = true };
-                        endOffset += piece.Text.Length;
                         var diffSegment = new DiffSegment(line.StartOffset + offset, piece.Text.Length, line.StartOffset + endOffset);
-                        offset = piece.Text.Length;
                         builder.AddSegment(textView, diffSegment);
 
                         var geo = builder.CreateGeometry();
                         if (geo != null)
                         {
-                            drawingContext.DrawGeometry(brush, null, geo);
+                            drawingContext.DrawGeometry(subPieceBrush, null, geo);
                         }
                     }
+
+                    offset += piece.Text.Length;
                 }
             }
         }
