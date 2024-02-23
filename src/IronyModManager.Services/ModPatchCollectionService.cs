@@ -908,7 +908,7 @@ namespace IronyModManager.Services
             await messageBus.PublishAsync(new ModDefinitionLoadEvent(0));
 
             var gameFolders = game.GameFolders.ToList();
-            if (mode == PatchStateMode.DefaultWithoutLocalization || mode == PatchStateMode.AdvancedWithoutLocalization || mode == PatchStateMode.ReadOnlyWithoutLocalization)
+            if (mode is PatchStateMode.DefaultWithoutLocalization or PatchStateMode.AdvancedWithoutLocalization or PatchStateMode.ReadOnlyWithoutLocalization)
             {
                 gameFolders = gameFolders.Where(p => !p.StartsWith(Shared.Constants.LocalizationDirectory, StringComparison.OrdinalIgnoreCase)).ToList();
             }
@@ -1878,7 +1878,7 @@ namespace IronyModManager.Services
 
             if (definition.IsFromGame)
             {
-                return Path.Combine(pathResolver.GetPath(game), definition.File);
+                return Path.Combine(PathResolver.GetPath(game), definition.File);
             }
             else
             {
@@ -2147,109 +2147,145 @@ namespace IronyModManager.Services
                     processed.Add(conflict);
                 }
 
-                if (allConflicts.Count() > 1)
+                switch (allConflicts.Count())
                 {
-                    if (!allConflicts.All(p => p.DefinitionSHA.Equals(def.DefinitionSHA)))
+                    case > 1:
                     {
-                        var validConflicts = new HashSet<IDefinition>();
-                        foreach (var conflict in allConflicts)
+                        if (!allConflicts.All(p => p.DefinitionSHA.Equals(def.DefinitionSHA)))
                         {
-                            if (conflicts.Contains(conflict) || validConflicts.Contains(conflict))
+                            var validConflicts = new HashSet<IDefinition>();
+                            foreach (var conflict in allConflicts)
                             {
-                                continue;
-                            }
-
-                            var hasOverrides = allConflicts.Any(p => !p.IsCustomPatch && p.Dependencies != null && p.Dependencies.Any(p => p.Equals(conflict.ModName)));
-                            if (hasOverrides && (patchStateMode == PatchStateMode.Default || patchStateMode == PatchStateMode.DefaultWithoutLocalization))
-                            {
-                                var existing = allConflicts.Where(p => !p.IsCustomPatch && p.Dependencies != null && p.Dependencies.Any(p => p.Equals(conflict.ModName)));
-                                if (existing.Any())
+                                if (conflicts.Contains(conflict) || validConflicts.Contains(conflict))
                                 {
-                                    var fileNames = conflict.AdditionalFileNames;
-                                    foreach (var item in existing.Where(p => p != null))
-                                    {
-                                        foreach (var fileName in item.AdditionalFileNames)
-                                        {
-                                            fileNames.Add(fileName);
-                                        }
-                                    }
-
-                                    conflict.AdditionalFileNames = fileNames;
+                                    continue;
                                 }
 
-                                continue;
-                            }
-
-                            validConflicts.Add(conflict);
-                        }
-
-                        var validConflictsGroup = validConflicts.GroupBy(p => p.DefinitionSHA);
-                        if (validConflictsGroup.Count() > 1)
-                        {
-                            var filteredConflicts = validConflictsGroup.Select(p => EvalDefinitionPriority(p.OrderBy(m => modOrder.IndexOf(m.ModName))).Definition);
-                            foreach (var item in filteredConflicts)
-                            {
-                                if (!conflicts.Contains(item) && (IsValidDefinitionType(item) || (anyWholeTextFile && item.ValueType == ValueType.EmptyFile)))
+                                var hasOverrides = allConflicts.Any(p => !p.IsCustomPatch && p.Dependencies != null && p.Dependencies.Any(p => p.Equals(conflict.ModName)));
+                                if (hasOverrides && patchStateMode is PatchStateMode.Default or PatchStateMode.DefaultWithoutLocalization)
                                 {
-                                    if (!item.IsFromGame)
+                                    var existing = allConflicts.Where(p => !p.IsCustomPatch && p.Dependencies != null && p.Dependencies.Any(p => p.Equals(conflict.ModName)));
+                                    if (existing.Any())
                                     {
-                                        if (modShaConflictCache.TryGetValue(item.TypeAndId, out var value) && value.Contains(item.DefinitionSHA))
+                                        var fileNames = conflict.AdditionalFileNames;
+                                        foreach (var item in existing.Where(p => p != null))
                                         {
-                                            continue;
-                                        }
-                                    }
-
-                                    var shaMatches = validConflictsGroup.FirstOrDefault(p => p.Key == item.DefinitionSHA);
-                                    if (shaMatches.Count() > 1)
-                                    {
-                                        var fileNames = item.AdditionalFileNames;
-                                        foreach (var shaMatch in shaMatches.Where(p => p != item))
-                                        {
-                                            foreach (var fileName in shaMatch.AdditionalFileNames)
+                                            foreach (var fileName in item.AdditionalFileNames)
                                             {
                                                 fileNames.Add(fileName);
                                             }
                                         }
 
-                                        item.AdditionalFileNames = fileNames;
-                                        if (item.IsPlaceholder && shaMatches.Any(p => !p.IsPlaceholder))
-                                        {
-                                            // Uncheck placeholder mark as there's a duplicate which is not marked as placeholder
-                                            item.IsPlaceholder = false;
-                                        }
+                                        conflict.AdditionalFileNames = fileNames;
                                     }
 
-                                    item.ExistsInLastFile = await existsInLastFile(item);
-                                    conflicts.Add(item);
-                                    if (!item.IsFromGame)
+                                    continue;
+                                }
+
+                                validConflicts.Add(conflict);
+                            }
+
+                            var validConflictsGroup = validConflicts.GroupBy(p => p.DefinitionSHA);
+                            if (validConflictsGroup.Count() > 1)
+                            {
+                                var filteredConflicts = validConflictsGroup.Select(p => EvalDefinitionPriority(p.OrderBy(m => modOrder.IndexOf(m.ModName))).Definition);
+                                foreach (var item in filteredConflicts)
+                                {
+                                    if (!conflicts.Contains(item) && (IsValidDefinitionType(item) || (anyWholeTextFile && item.ValueType == ValueType.EmptyFile)))
                                     {
-                                        if (modShaConflictCache.TryGetValue(item.TypeAndId, out var value))
+                                        if (!item.IsFromGame)
                                         {
-                                            value.Add(item.DefinitionSHA);
+                                            if (modShaConflictCache.TryGetValue(item.TypeAndId, out var value) && value.Contains(item.DefinitionSHA))
+                                            {
+                                                continue;
+                                            }
                                         }
-                                        else
+
+                                        var shaMatches = validConflictsGroup.FirstOrDefault(p => p.Key == item.DefinitionSHA);
+                                        if (shaMatches.Count() > 1)
                                         {
-                                            var sha = new List<string> { item.DefinitionSHA };
-                                            modShaConflictCache[item.TypeAndId] = sha;
+                                            var fileNames = item.AdditionalFileNames;
+                                            foreach (var shaMatch in shaMatches.Where(p => p != item))
+                                            {
+                                                foreach (var fileName in shaMatch.AdditionalFileNames)
+                                                {
+                                                    fileNames.Add(fileName);
+                                                }
+                                            }
+
+                                            item.AdditionalFileNames = fileNames;
+                                            if (item.IsPlaceholder && shaMatches.Any(p => !p.IsPlaceholder))
+                                            {
+                                                // Uncheck placeholder mark as there's a duplicate which is not marked as placeholder
+                                                item.IsPlaceholder = false;
+                                            }
+                                        }
+
+                                        item.ExistsInLastFile = await existsInLastFile(item);
+                                        conflicts.Add(item);
+                                        if (!item.IsFromGame)
+                                        {
+                                            if (modShaConflictCache.TryGetValue(item.TypeAndId, out var value))
+                                            {
+                                                value.Add(item.DefinitionSHA);
+                                            }
+                                            else
+                                            {
+                                                var sha = new List<string> { item.DefinitionSHA };
+                                                modShaConflictCache[item.TypeAndId] = sha;
+                                            }
                                         }
                                     }
                                 }
                             }
                         }
+
+                        break;
                     }
-                }
-                else if (allConflicts.Count() == 1)
-                {
-                    if (allConflicts.FirstOrDefault().ValueType == ValueType.Binary)
-                    {
+                    case 1 when allConflicts.FirstOrDefault().ValueType == ValueType.Binary:
                         fileConflictCache.TryAdd(def.FileCI, false);
-                    }
-                    else
+                        break;
+                    case 1 when fileConflictCache.TryGetValue(def.FileCI, out var result):
                     {
-                        if (fileConflictCache.TryGetValue(def.FileCI, out var result))
+                        if (result)
                         {
-                            if (result)
+                            if (!conflicts.Contains(def) && (IsValidDefinitionType(def) || (anyWholeTextFile && def.ValueType == ValueType.EmptyFile)))
                             {
+                                def.ExistsInLastFile = await existsInLastFile(def);
+                                if (!def.ExistsInLastFile)
+                                {
+                                    conflicts.Add(def);
+                                    if (!def.IsFromGame)
+                                    {
+                                        if (modShaConflictCache.TryGetValue(def.TypeAndId, out var value))
+                                        {
+                                            value.Add(def.DefinitionSHA);
+                                        }
+                                        else
+                                        {
+                                            var sha = new List<string> { def.DefinitionSHA };
+                                            modShaConflictCache[def.TypeAndId] = sha;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+
+                        break;
+                    }
+                    case 1:
+                    {
+                        var fileDefs = await indexedDefinitions.GetByFileAsync(def.FileCI);
+                        if (fileDefs.GroupBy(p => p.ModName).Count() > 1)
+                        {
+                            var hasOverrides = !def.IsCustomPatch && def.Dependencies != null && def.Dependencies.Any(p => fileDefs.Any(s => s.ModName.Equals(p)));
+                            if (hasOverrides && patchStateMode is PatchStateMode.Default or PatchStateMode.DefaultWithoutLocalization)
+                            {
+                                fileConflictCache.TryAdd(def.FileCI, false);
+                            }
+                            else
+                            {
+                                fileConflictCache.TryAdd(def.FileCI, true);
                                 if (!conflicts.Contains(def) && (IsValidDefinitionType(def) || (anyWholeTextFile && def.ValueType == ValueType.EmptyFile)))
                                 {
                                     def.ExistsInLastFile = await existsInLastFile(def);
@@ -2274,44 +2310,10 @@ namespace IronyModManager.Services
                         }
                         else
                         {
-                            var fileDefs = await indexedDefinitions.GetByFileAsync(def.FileCI);
-                            if (fileDefs.GroupBy(p => p.ModName).Count() > 1)
-                            {
-                                var hasOverrides = !def.IsCustomPatch && def.Dependencies != null && def.Dependencies.Any(p => fileDefs.Any(s => s.ModName.Equals(p)));
-                                if (hasOverrides && (patchStateMode == PatchStateMode.Default || patchStateMode == PatchStateMode.DefaultWithoutLocalization))
-                                {
-                                    fileConflictCache.TryAdd(def.FileCI, false);
-                                }
-                                else
-                                {
-                                    fileConflictCache.TryAdd(def.FileCI, true);
-                                    if (!conflicts.Contains(def) && (IsValidDefinitionType(def) || (anyWholeTextFile && def.ValueType == ValueType.EmptyFile)))
-                                    {
-                                        def.ExistsInLastFile = await existsInLastFile(def);
-                                        if (!def.ExistsInLastFile)
-                                        {
-                                            conflicts.Add(def);
-                                            if (!def.IsFromGame)
-                                            {
-                                                if (modShaConflictCache.TryGetValue(def.TypeAndId, out var value))
-                                                {
-                                                    value.Add(def.DefinitionSHA);
-                                                }
-                                                else
-                                                {
-                                                    var sha = new List<string> { def.DefinitionSHA };
-                                                    modShaConflictCache[def.TypeAndId] = sha;
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                            else
-                            {
-                                fileConflictCache.TryAdd(def.FileCI, false);
-                            }
+                            fileConflictCache.TryAdd(def.FileCI, false);
                         }
+
+                        break;
                     }
                 }
             }
@@ -2969,25 +2971,23 @@ namespace IronyModManager.Services
                 if (fileDefs.Any())
                 {
                     // Validate and see whether we need to check encoding
-                    if (fileDefs.All(p => p.ValueType != ValueType.Invalid))
+                    if (fileDefs.All(p => p.ValueType != ValueType.Invalid && p.ValueType != ValueType.Binary) && definitionInfoProvider != null &&
+                        !definitionInfoProvider.IsValidEncoding(Path.GetDirectoryName(fileInfo.FileName), fileInfo.Encoding))
                     {
-                        if (fileDefs.All(p => p.ValueType != ValueType.Binary) && definitionInfoProvider != null && !definitionInfoProvider.IsValidEncoding(Path.GetDirectoryName(fileInfo.FileName), fileInfo.Encoding))
-                        {
-                            var definition = DIResolver.Get<IDefinition>();
-                            definition.ErrorMessage = "File has invalid encoding, please use UTF-8-BOM Encoding.";
-                            definition.Id = Path.GetFileName(fileInfo.FileName)!.ToLowerInvariant();
-                            definition.ValueType = ValueType.Invalid;
-                            definition.OriginalCode = definition.Code = string.Join(Environment.NewLine, fileInfo.Content ?? []);
-                            definition.ContentSHA = fileInfo.ContentSHA;
-                            definition.Dependencies = modObject.Dependencies;
-                            definition.ModName = modObject.Name;
-                            definition.OriginalModName = modObject.Name;
-                            definition.OriginalFileName = fileInfo.FileName;
-                            definition.File = fileInfo.FileName;
-                            definition.Type = fileInfo.FileName.FormatDefinitionType();
-                            definitions.Add(definition);
-                            continue;
-                        }
+                        var definition = DIResolver.Get<IDefinition>();
+                        definition.ErrorMessage = "File has invalid encoding, please use UTF-8-BOM Encoding.";
+                        definition.Id = Path.GetFileName(fileInfo.FileName)!.ToLowerInvariant();
+                        definition.ValueType = ValueType.Invalid;
+                        definition.OriginalCode = definition.Code = string.Join(Environment.NewLine, fileInfo.Content ?? []);
+                        definition.ContentSHA = fileInfo.ContentSHA;
+                        definition.Dependencies = modObject.Dependencies;
+                        definition.ModName = modObject.Name;
+                        definition.OriginalModName = modObject.Name;
+                        definition.OriginalFileName = fileInfo.FileName;
+                        definition.File = fileInfo.FileName;
+                        definition.Type = fileInfo.FileName.FormatDefinitionType();
+                        definitions.Add(definition);
+                        continue;
                     }
 
                     MergeDefinitions(fileDefs);

@@ -45,7 +45,32 @@ namespace IronyModManager.Services
     /// </summary>
     /// <seealso cref="IronyModManager.Services.ModBaseService" />
     /// <seealso cref="IronyModManager.Services.Common.IGameIndexService" />
-    public class GameIndexService : ModBaseService, IGameIndexService
+    /// <remarks>
+    /// Initializes a new instance of the <see cref="GameIndexService" /> class.
+    /// </remarks>
+    /// <param name="messageBus">The message bus.</param>
+    /// <param name="parserManager">The parser manager.</param>
+    /// <param name="gameIndexer">The game indexer.</param>
+    /// <param name="cache">The cache.</param>
+    /// <param name="definitionInfoProviders">The definition information providers.</param>
+    /// <param name="reader">The reader.</param>
+    /// <param name="modWriter">The mod writer.</param>
+    /// <param name="modParser">The mod parser.</param>
+    /// <param name="gameService">The game service.</param>
+    /// <param name="storageProvider">The storage provider.</param>
+    /// <param name="mapper">The mapper.</param>
+    public class GameIndexService(
+        IMessageBus messageBus,
+        IParserManager parserManager,
+        IGameIndexer gameIndexer,
+        ICache cache,
+        IEnumerable<IDefinitionInfoProvider> definitionInfoProviders,
+        IReader reader,
+        IModWriter modWriter,
+        IModParser modParser,
+        IGameService gameService,
+        IStorageProvider storageProvider,
+        IMapper mapper) : ModBaseService(cache, definitionInfoProviders, reader, modWriter, modParser, gameService, storageProvider, mapper), IGameIndexService
     {
         #region Fields
 
@@ -62,46 +87,19 @@ namespace IronyModManager.Services
         /// <summary>
         /// The game indexer
         /// </summary>
-        private readonly IGameIndexer gameIndexer;
+        private readonly IGameIndexer gameIndexer = gameIndexer;
 
         /// <summary>
         /// The message bus
         /// </summary>
-        private readonly IMessageBus messageBus;
+        private readonly IMessageBus messageBus = messageBus;
 
         /// <summary>
         /// The parser manager
         /// </summary>
-        private readonly IParserManager parserManager;
+        private readonly IParserManager parserManager = parserManager;
 
         #endregion Fields
-
-        #region Constructors
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="GameIndexService" /> class.
-        /// </summary>
-        /// <param name="messageBus">The message bus.</param>
-        /// <param name="parserManager">The parser manager.</param>
-        /// <param name="gameIndexer">The game indexer.</param>
-        /// <param name="cache">The cache.</param>
-        /// <param name="definitionInfoProviders">The definition information providers.</param>
-        /// <param name="reader">The reader.</param>
-        /// <param name="modWriter">The mod writer.</param>
-        /// <param name="modParser">The mod parser.</param>
-        /// <param name="gameService">The game service.</param>
-        /// <param name="storageProvider">The storage provider.</param>
-        /// <param name="mapper">The mapper.</param>
-        public GameIndexService(IMessageBus messageBus, IParserManager parserManager, IGameIndexer gameIndexer, ICache cache, IEnumerable<IDefinitionInfoProvider> definitionInfoProviders, IReader reader,
-            IModWriter modWriter, IModParser modParser, IGameService gameService, IStorageProvider storageProvider, IMapper mapper) :
-            base(cache, definitionInfoProviders, reader, modWriter, modParser, gameService, storageProvider, mapper)
-        {
-            this.gameIndexer = gameIndexer;
-            this.messageBus = messageBus;
-            this.parserManager = parserManager;
-        }
-
-        #endregion Constructors
 
         #region Methods
 
@@ -123,7 +121,7 @@ namespace IronyModManager.Services
                     await gameIndexer.WriteVersionAsync(GetStoragePath(), game, versions, game.GameIndexCacheVersion);
                 }
 
-                var gamePath = pathResolver.GetPath(game);
+                var gamePath = PathResolver.GetPath(game);
                 var files = Reader.GetFiles(gamePath);
 
                 // No clue how someone got reader to return 0 based on configuration alone but just in case to ignore this mess
@@ -141,7 +139,7 @@ namespace IronyModManager.Services
                         }
                     }
 
-                    if (folders.Any())
+                    if (folders.Count != 0)
                     {
                         double processed = 0;
                         double total = folders.Count;
@@ -231,7 +229,7 @@ namespace IronyModManager.Services
 
                     return null;
                 }).ToList();
-                while (tasks.Any())
+                while (tasks.Count != 0)
                 {
                     var result = await Task.WhenAny(tasks);
                     tasks.Remove(result);
