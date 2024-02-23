@@ -644,9 +644,24 @@ namespace IronyModManager.Views.Controls
                 {
                     var col = leftDiff ? ViewModel!.LeftSideSelected : ViewModel!.RightSideSelected;
                     var sourceCol = leftDiff ? ViewModel.LeftDiff : ViewModel.RightDiff;
+                    var idx = line.FirstDocumentLine.LineNumber - 1;
+                    if (idx >= sourceCol.Count)
+                    {
+                        return;
+                    }
+
                     if (col.Count == 0)
                     {
-                        col.Add(sourceCol[line.FirstDocumentLine.LineNumber - 1]);
+                        col.Add(sourceCol[idx]);
+                    }
+                    else
+                    {
+                        var item = sourceCol[idx];
+                        if (!col.Contains(item))
+                        {
+                            col.Clear();
+                            col.Add(sourceCol[idx]);
+                        }
                     }
                 }
             };

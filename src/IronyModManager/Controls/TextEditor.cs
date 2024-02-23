@@ -124,9 +124,14 @@ namespace IronyModManager.Controls
             if (ScrollViewer != null && document != null)
             {
                 if (line < 1)
+                {
                     line = 1;
+                }
+
                 if (line > document.LineCount)
+                {
                     line = document.LineCount;
+                }
 
                 ILogicalScrollable scrollInfo = textView;
                 if (!scrollInfo.CanHorizontallyScroll)
@@ -138,7 +143,10 @@ namespace IronyModManager.Controls
                     {
                         var prevLine = vl.FirstDocumentLine.PreviousLine;
                         if (prevLine == null)
+                        {
                             break;
+                        }
+
                         vl = textView.GetOrConstructVisualLine(prevLine);
                         remainingHeight -= vl.Height;
                     }
