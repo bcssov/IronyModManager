@@ -4,7 +4,7 @@
 // Created          : 02-20-2024
 //
 // Last Modified By : Mario
-// Last Modified On : 02-20-2024
+// Last Modified On : 02-23-2024
 // ***********************************************************************
 // <copyright file="Extensions.Double.cs" company="Mario">
 //     Mario
@@ -37,8 +37,8 @@ namespace IronyModManager.Shared
         /// <summary>
         /// Is nearly equal.
         /// </summary>
-        /// <param name="a">The a.</param>
-        /// <param name="b">The b.</param>
+        /// <param name="a">The A.</param>
+        /// <param name="b">The B.</param>
         /// <param name="tolerance">The tolerance.</param>
         /// <returns>A bool.</returns>
         public static bool IsNearlyEqual(this double a, double b, double tolerance)
@@ -49,12 +49,35 @@ namespace IronyModManager.Shared
         /// <summary>
         /// Is nearly equal.
         /// </summary>
-        /// <param name="a">The a.</param>
-        /// <param name="b">The b.</param>
+        /// <param name="a">The A.</param>
+        /// <param name="b">The B.</param>
         /// <returns>A bool.</returns>
         public static bool IsNearlyEqual(this double a, double b)
         {
             return IsNearlyEqual(a, b, defaultTolerance);
+        }
+
+        /// <summary>
+        /// Is not nearly equal.
+        /// </summary>
+        /// <param name="a">The A.</param>
+        /// <param name="b">The B.</param>
+        /// <returns>A bool.</returns>
+        public static bool IsNotNearlyEqual(this double a, double b)
+        {
+            return !IsNearlyEqual(a, b);
+        }
+
+        /// <summary>
+        /// Is not nearly equal.
+        /// </summary>
+        /// <param name="a">The A.</param>
+        /// <param name="b">The B.</param>
+        /// <param name="tolerance">The tolerance.</param>
+        /// <returns>A bool.</returns>
+        public static bool IsNotNearlyEqual(this double a, double b, double tolerance)
+        {
+            return !IsNearlyEqual(a, b, tolerance);
         }
 
         #endregion Methods
