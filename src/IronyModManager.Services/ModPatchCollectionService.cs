@@ -556,6 +556,7 @@ namespace IronyModManager.Services
             {
                 return Task.Run(async () =>
                 {
+                    var cache = new Dictionary<string, IDefinition>();
                     foreach (var typeId in type)
                     {
                         var typeLock = await opLock.LockAsync();
@@ -563,10 +564,20 @@ namespace IronyModManager.Services
                         typeLock.Dispose();
                         if (items.Any() && items.All(p => !p.ExistsInLastFile))
                         {
-                            var fileLock = await opLock.LockAsync();
-                            var fileDefs = await indexedDefinitions.GetByFileAsync(items.FirstOrDefault()!.FileCI);
-                            fileLock.Dispose();
-                            var lastMod = fileDefs.GroupBy(p => p.ModName).Select(p => p.First()).MaxBy(p => modOrder.IndexOf(p.ModName));
+                            IDefinition lastMod;
+                            if (cache.TryGetValue(items.FirstOrDefault()!.FileCI, out var value))
+                            {
+                                lastMod = value;
+                            }
+                            else
+                            {
+                                var fileLock = await opLock.LockAsync();
+                                var fileDefs = await indexedDefinitions.GetByFileAsync(items.FirstOrDefault()!.FileCI);
+                                fileLock.Dispose();
+                                lastMod = fileDefs.GroupBy(p => p.ModName).Select(p => p.First()).MaxBy(p => modOrder.IndexOf(p.ModName));
+                                cache[items.FirstOrDefault()!.FileCI] = lastMod;
+                            }
+
                             var copy = CopyDefinition(items.FirstOrDefault());
                             copy.Dependencies = lastMod!.Dependencies;
                             copy.ModName = lastMod.ModName;

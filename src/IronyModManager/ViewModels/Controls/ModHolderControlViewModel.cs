@@ -1,11 +1,10 @@
-﻿
-// ***********************************************************************
+﻿// ***********************************************************************
 // Assembly         : IronyModManager
 // Author           : Mario
 // Created          : 02-29-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-11-2024
+// Last Modified On : 02-23-2024
 // ***********************************************************************
 // <copyright file="ModHolderControlViewModel.cs" company="Mario">
 //     Mario
@@ -43,7 +42,6 @@ using ReactiveUI;
 
 namespace IronyModManager.ViewModels.Controls
 {
-
     /// <summary>
     /// Class ModHolderViewModel.
     /// Implements the <see cref="IronyModManager.Common.ViewModels.BaseViewModel" />
@@ -155,49 +153,49 @@ namespace IronyModManager.ViewModels.Controls
         private readonly IPromptNotificationsService promptNotificationsService;
 
         /// <summary>
-        /// The shut down state
+        /// The shut-down state
         /// </summary>
         private readonly IShutDownState shutDownState;
 
         /// <summary>
         /// The definition analyze load handler
         /// </summary>
-        private IDisposable definitionAnalyzeLoadHandler = null;
+        private IDisposable definitionAnalyzeLoadHandler;
 
         /// <summary>
         /// The definition load handler
         /// </summary>
-        private IDisposable definitionLoadHandler = null;
+        private IDisposable definitionLoadHandler;
 
         /// <summary>
         /// The definition synchronize handler
         /// </summary>
-        private IDisposable definitionSyncHandler = null;
+        private IDisposable definitionSyncHandler;
 
         /// <summary>
         /// The force enable resume button
         /// </summary>
-        private bool forceEnableResumeButton = false;
+        private bool forceEnableResumeButton;
 
         /// <summary>
         /// The game definition load handler
         /// </summary>
-        private IDisposable gameDefinitionLoadHandler = null;
+        private IDisposable gameDefinitionLoadHandler;
 
         /// <summary>
         /// The game index handler
         /// </summary>
-        private IDisposable gameIndexHandler = null;
+        private IDisposable gameIndexHandler;
 
         /// <summary>
         /// The mod invalid replace handler
         /// </summary>
-        private IDisposable modInvalidReplaceHandler = null;
+        private IDisposable modInvalidReplaceHandler;
 
         /// <summary>
         /// The showing invalid notification
         /// </summary>
-        private bool showingInvalidNotification = false;
+        private bool showingInvalidNotification;
 
         #endregion Fields
 
@@ -214,7 +212,7 @@ namespace IronyModManager.ViewModels.Controls
         /// <param name="modListInstallRefreshRequestHandler">The mod list install refresh request handler.</param>
         /// <param name="modDefinitionInvalidReplaceHandler">The mod definition invalid replace handler.</param>
         /// <param name="idGenerator">The identifier generator.</param>
-        /// <param name="shutDownState">State of the shut down.</param>
+        /// <param name="shutDownState">State of the shut-down.</param>
         /// <param name="modService">The mod service.</param>
         /// <param name="modPatchCollectionService">The mod patch collection service.</param>
         /// <param name="gameService">The game service.</param>
@@ -265,6 +263,7 @@ namespace IronyModManager.ViewModels.Controls
             {
                 forceEnableResumeButton = true;
             }
+
             StaticResources.CommandLineArgsChanged += () =>
             {
                 Dispatcher.UIThread.SafeInvoke(() =>
@@ -330,47 +329,47 @@ namespace IronyModManager.ViewModels.Controls
         public virtual bool AllowModSelection { get; protected set; }
 
         /// <summary>
-        /// Gets or sets the analyze.
+        /// Gets or sets the analysis.
         /// </summary>
-        /// <value>The analyze.</value>
+        /// <value>The analysis.</value>
         [StaticLocalization(LocalizationResources.Mod_Actions.ConflictSolver.Conflict)]
         public virtual string Analyze { get; protected set; }
 
         /// <summary>
-        /// Gets or sets the analyze class.
+        /// Gets or sets the analysis class.
         /// </summary>
-        /// <value>The analyze class.</value>
+        /// <value>The analysis class.</value>
         public virtual string AnalyzeClass { get; protected set; }
 
         /// <summary>
-        /// Gets or sets the analyze command.
+        /// Gets or sets the analysis command.
         /// </summary>
-        /// <value>The analyze command.</value>
+        /// <value>The analysis command.</value>
         public virtual ReactiveCommand<Unit, Unit> AnalyzeCommand { get; protected set; }
 
         /// <summary>
-        /// Gets or sets the analyze mode.
+        /// Gets or sets the analysis mode.
         /// </summary>
-        /// <value>The analyze mode.</value>
+        /// <value>The analysis mode.</value>
         [StaticLocalization(LocalizationResources.Conflict_Solver.Modes.Analyze)]
         public virtual string AnalyzeMode { get; protected set; }
 
         /// <summary>
-        /// Gets or sets the analyze mode command.
+        /// Gets or sets the analysis mode command.
         /// </summary>
-        /// <value>The analyze mode command.</value>
+        /// <value>The analysis mode command.</value>
         public virtual ReactiveCommand<Unit, Unit> AnalyzeModeCommand { get; protected set; }
 
         /// <summary>
-        /// Gets or sets the analyze mode without localization command.
+        /// Gets or sets the analysis mode without localization command.
         /// </summary>
-        /// <value>The analyze mode without localization command.</value>
+        /// <value>The analysis mode without localization command.</value>
         public virtual ReactiveCommand<Unit, Unit> AnalyzeModeWithoutLocalizationCommand { get; protected set; }
 
         /// <summary>
-        /// Gets or sets the analyze without localization mode.
+        /// Gets or sets the analysis without localization mode.
         /// </summary>
-        /// <value>The analyze without localization mode.</value>
+        /// <value>The analysis without localization mode.</value>
         [StaticLocalization(LocalizationResources.Conflict_Solver.Modes.AnalyzeWithoutLocalization)]
         public virtual string AnalyzeWithoutLocalizationMode { get; protected set; }
 
@@ -570,12 +569,8 @@ namespace IronyModManager.ViewModels.Controls
 
             SubscribeToProgressReport(id, Disposables, totalSteps);
 
-            var overlayProgress = IronyFormatter.Format(localizationManager.GetResource(LocalizationResources.Mod_Actions.ConflictSolver.Overlay_Conflict_Solver_Progress), new
-            {
-                PercentDone = 0.ToLocalizedPercentage(),
-                Count = 1,
-                TotalCount = totalSteps
-            });
+            var overlayProgress = IronyFormatter.Format(localizationManager.GetResource(LocalizationResources.Mod_Actions.ConflictSolver.Overlay_Conflict_Solver_Progress),
+                new { PercentDone = 0.ToLocalizedPercentage(), Count = 1, TotalCount = totalSteps });
             var message = localizationManager.GetResource(LocalizationResources.Mod_Actions.ConflictSolver.Overlay_Conflict_Solver_Loading_Definitions);
             await TriggerOverlayAsync(id, true, message, overlayProgress);
             modPatchCollectionService.InvalidatePatchModState(CollectionMods.SelectedModCollection.Name);
@@ -625,6 +620,7 @@ namespace IronyModManager.ViewModels.Controls
                 notificationAction.ShowNotification(largeMessageTitle, largeMessageBody, NotificationType.Error, 60);
                 return;
             }
+
             if (versions != null && versions.Any())
             {
                 stopWatch.Restart();
@@ -652,6 +648,7 @@ namespace IronyModManager.ViewModels.Controls
                 }).ConfigureAwait(false);
                 Debug.WriteLine("Conflict Solver Stage 3: " + stopWatch.Elapsed.FormatElapsed());
             }
+
             stopWatch.Restart();
             var conflicts = await Task.Run(async () =>
             {
@@ -664,6 +661,7 @@ namespace IronyModManager.ViewModels.Controls
                     GC.Collect(GC.MaxGeneration, GCCollectionMode.Aggressive, true, true);
                     return result;
                 }
+
                 return null;
             }).ConfigureAwait(false);
             Debug.WriteLine("Conflict Solver Stage 4: " + stopWatch.Elapsed.FormatElapsed());
@@ -685,7 +683,7 @@ namespace IronyModManager.ViewModels.Controls
             }
 
             Debug.WriteLine("Conflict Solver Stage 5: " + stopWatch.Elapsed.FormatElapsed());
-            var args = new NavigationEventArgs()
+            var args = new NavigationEventArgs
             {
                 SelectedCollection = CollectionMods.SelectedModCollection,
                 Results = conflicts,
@@ -720,6 +718,7 @@ namespace IronyModManager.ViewModels.Controls
             {
                 return;
             }
+
             if (validateParadoxLauncher)
             {
                 if (await externalProcessHandlerService.IsParadoxLauncherRunningAsync())
@@ -730,6 +729,7 @@ namespace IronyModManager.ViewModels.Controls
                     return;
                 }
             }
+
             ApplyingCollection = true;
             if (CollectionMods.SelectedModCollection != null)
             {
@@ -737,6 +737,7 @@ namespace IronyModManager.ViewModels.Controls
                 {
                     await TriggerOverlayAsync(id, true, localizationManager.GetResource(LocalizationResources.Mod_Actions.Overlay_Apply_Message));
                 }
+
                 var notificationType = NotificationType.Success;
                 try
                 {
@@ -754,6 +755,7 @@ namespace IronyModManager.ViewModels.Controls
                         message = IronyFormatter.Format(localizationManager.GetResource(LocalizationResources.Notifications.CollectionNotApplied.Message), new { CollectionName = CollectionMods.SelectedModCollection.Name });
                         notificationType = NotificationType.Error;
                     }
+
                     notificationAction.ShowNotification(title, message, notificationType, 5);
                 }
                 catch (Exception ex)
@@ -763,16 +765,18 @@ namespace IronyModManager.ViewModels.Controls
                     logger.Error(ex);
                     notificationAction.ShowNotification(title, message, NotificationType.Error, 30);
                 }
+
                 if (showOverlay)
                 {
                     await TriggerOverlayAsync(id, false);
                 }
             }
+
             ApplyingCollection = false;
         }
 
         /// <summary>
-        /// Evals the resume availability.
+        /// Evaluate the resume availability.
         /// </summary>
         /// <param name="game">The game.</param>
         protected virtual void EvalResumeAvailability(IGame game = null)
@@ -811,13 +815,14 @@ namespace IronyModManager.ViewModels.Controls
             var result = await modService.InstallModsAsync(InstalledMods.Mods);
             if (result != null)
             {
-                if (result.Any(p => p.Installed == true))
+                if (result.Any(p => p.Installed))
                 {
                     if (InstalledMods.IsActivated)
                     {
-                        await InstalledMods.RefreshModsAsync(skipOverlay: skipOverlay);
+                        await InstalledMods.RefreshModsAsync(skipOverlay);
                     }
                 }
+
                 if (result.Any(p => p.Invalid))
                 {
                     await ShowInvalidModsNotificationAsync(result.Where(p => p.Invalid).ToList());
@@ -846,6 +851,7 @@ namespace IronyModManager.ViewModels.Controls
                     var message = localizationManager.GetResource(LocalizationResources.Mod_Actions.ConflictSolver.GameExecutableNotSetPrompt.Message);
                     proceed = await notificationAction.ShowPromptAsync(title, title, message, NotificationType.Info, PromptType.YesNo);
                 }
+
                 if (proceed)
                 {
                     await AnalyzeModsAsync(id, mode, versions);
@@ -858,11 +864,11 @@ namespace IronyModManager.ViewModels.Controls
 
             Task.Run(() => EvalResumeAvailabilityLoopAsync().ConfigureAwait(false));
 
-            ShowAdvancedFeatures = (gameService.GetSelected()?.AdvancedFeatures) != GameAdvancedFeatures.None;
+            ShowAdvancedFeatures = gameService.GetSelected()?.AdvancedFeatures != GameAdvancedFeatures.None;
             AnalyzeClass = string.Empty;
 
             var allowModSelectionEnabled = this.WhenAnyValue(v => v.AllowModSelection);
-            var applyEnabled = Observable.Merge(this.WhenAnyValue(v => v.ApplyingCollection, v => !v), allowModSelectionEnabled);
+            var applyEnabled = this.WhenAnyValue(v => v.ApplyingCollection, v => !v).Merge(allowModSelectionEnabled);
 
             this.WhenAnyValue(v => v.CollectionMods.SelectedModCollection).Subscribe(s =>
             {
@@ -878,6 +884,7 @@ namespace IronyModManager.ViewModels.Controls
                     InstalledMods.AllowModSelection = false;
                     CollectionMods.AllowModSelection = false;
                 }
+
                 InstallModsAsync().ConfigureAwait(true);
             }).DisposeWith(disposables);
 
@@ -891,12 +898,12 @@ namespace IronyModManager.ViewModels.Controls
                 CollectionMods.HandleModRefresh(s, InstalledMods.Mods, InstalledMods.ActiveGame);
             }).DisposeWith(disposables);
 
-            this.WhenAnyValue(v => v.CollectionMods.NeedsModListRefresh).Where(x => x).Subscribe(async s =>
+            this.WhenAnyValue(v => v.CollectionMods.NeedsModListRefresh).Where(x => x).Subscribe(async _ =>
             {
                 await InstalledMods.RefreshModsAsync();
             }).DisposeWith(disposables);
 
-            this.WhenAnyValue(v => v.InstalledMods.GameChangedRefresh).Where(x => x).Subscribe(s =>
+            this.WhenAnyValue(v => v.InstalledMods.GameChangedRefresh).Where(x => x).Subscribe(_ =>
             {
                 CollectionMods.ReloadModCollection();
             }).DisposeWith(disposables);
@@ -925,6 +932,7 @@ namespace IronyModManager.ViewModels.Controls
                         messageState.ConflictSolverPromptShown = true;
                         promptNotificationsService.Save(messageState);
                     }
+
                     var id = idGenerator.GetNextId();
                     await TriggerOverlayAsync(id, true, localizationManager.GetResource(LocalizationResources.App.WaitBackgroundOperationMessage));
                     await shutDownState.WaitUntilFreeAsync();
@@ -932,7 +940,6 @@ namespace IronyModManager.ViewModels.Controls
                     if (game.AdvancedFeatures == GameAdvancedFeatures.Full)
                     {
                         var mode = await modPatchCollectionService.GetPatchStateModeAsync(CollectionMods.SelectedModCollection.Name);
-                        var versions = gameService.GetVersions(game);
                         switch (mode)
                         {
                             case PatchStateMode.Default:
@@ -978,6 +985,7 @@ namespace IronyModManager.ViewModels.Controls
                         AdvancedWithoutLocalizationModeVisible = false;
                         DefaultWithoutLocalizationModeVisible = false;
                     }
+
                     var height = (VerticalMenuSpacing + VerticalMenuItemHeight) * 2;
                     AdvancedParentVisible = AdvancedModeVisible || AdvancedWithoutLocalizationModeVisible;
                     DefaultParentVisible = DefaultModeVisible || DefaultWithoutLocalizationModeVisible;
@@ -985,10 +993,12 @@ namespace IronyModManager.ViewModels.Controls
                     {
                         height += VerticalMenuSpacing + VerticalMenuItemHeight;
                     }
+
                     if (DefaultParentVisible)
                     {
                         height += VerticalMenuSpacing + VerticalMenuItemHeight;
                     }
+
                     VerticalMenuHeight = height;
                     await TriggerOverlayAsync(id, false);
                     await Task.Delay(50);
@@ -996,13 +1006,12 @@ namespace IronyModManager.ViewModels.Controls
                 }
             }, allowModSelectionEnabled).DisposeWith(disposables);
 
-            async Task<bool> ensureSteamIsRunning(IGameSettings args)
+            async Task ensureSteamIsRunning(IGameSettings args)
             {
                 if (gameService.IsSteamGame(args))
                 {
-                    return await externalProcessHandlerService.LaunchSteamAsync(gameService.GetSelected());
+                    await externalProcessHandlerService.LaunchSteamAsync(gameService.GetSelected());
                 }
-                return true;
             }
 
             async Task launchGame(bool continueGame)
@@ -1017,6 +1026,7 @@ namespace IronyModManager.ViewModels.Controls
                         notificationAction.ShowNotification(title, message, NotificationType.Error, 30);
                         return;
                     }
+
                     var args = gameService.GetLaunchSettings(game, continueGame);
                     if (!string.IsNullOrWhiteSpace(args.ExecutableLocation))
                     {
@@ -1027,6 +1037,7 @@ namespace IronyModManager.ViewModels.Controls
                             await modService.DeleteDescriptorsAsync(InstalledMods.Mods);
                             await modService.InstallModsAsync(InstalledMods.Mods);
                         }
+
                         await ApplyCollectionAsync(id, false);
                         await MessageBus.PublishAsync(new LaunchingGameEvent(game.Type));
                         if (gameService.IsSteamLaunchPath(args))
@@ -1085,40 +1096,19 @@ namespace IronyModManager.ViewModels.Controls
                 await launchGame(true);
             }, allowModSelectionEnabled).DisposeWith(disposables);
 
-            AdvancedModeCommand = ReactiveCommand.CreateFromTask(() =>
-            {
-                return runAnalysis(PatchStateMode.Advanced);
-            }).DisposeWith(disposables);
+            AdvancedModeCommand = ReactiveCommand.CreateFromTask(() => runAnalysis(PatchStateMode.Advanced)).DisposeWith(disposables);
 
-            DefaultModeCommand = ReactiveCommand.CreateFromTask(() =>
-            {
-                return runAnalysis(PatchStateMode.Default);
-            }).DisposeWith(disposables);
+            DefaultModeCommand = ReactiveCommand.CreateFromTask(() => runAnalysis(PatchStateMode.Default)).DisposeWith(disposables);
 
-            AnalyzeModeCommand = ReactiveCommand.CreateFromTask(() =>
-            {
-                return runAnalysis(PatchStateMode.ReadOnly);
-            }).DisposeWith(disposables);
+            AnalyzeModeCommand = ReactiveCommand.CreateFromTask(() => runAnalysis(PatchStateMode.ReadOnly)).DisposeWith(disposables);
 
-            AnalyzeModeWithoutLocalizationCommand = ReactiveCommand.CreateFromTask(() =>
-            {
-                return runAnalysis(PatchStateMode.ReadOnlyWithoutLocalization);
-            }).DisposeWith(disposables);
+            AnalyzeModeWithoutLocalizationCommand = ReactiveCommand.CreateFromTask(() => runAnalysis(PatchStateMode.ReadOnlyWithoutLocalization)).DisposeWith(disposables);
 
-            DefaultWithoutLocalizationModeCommand = ReactiveCommand.CreateFromTask(() =>
-            {
-                return runAnalysis(PatchStateMode.DefaultWithoutLocalization);
-            }).DisposeWith(disposables);
+            DefaultWithoutLocalizationModeCommand = ReactiveCommand.CreateFromTask(() => runAnalysis(PatchStateMode.DefaultWithoutLocalization)).DisposeWith(disposables);
 
-            AdvancedWithoutLocalizationModeCommand = ReactiveCommand.CreateFromTask(() =>
-            {
-                return runAnalysis(PatchStateMode.AdvancedWithoutLocalization);
-            }).DisposeWith(disposables);
+            AdvancedWithoutLocalizationModeCommand = ReactiveCommand.CreateFromTask(() => runAnalysis(PatchStateMode.AdvancedWithoutLocalization)).DisposeWith(disposables);
 
-            CloseModeCommand = ReactiveCommand.Create(() =>
-            {
-                ForceClosePopups();
-            }).DisposeWith(disposables);
+            CloseModeCommand = ReactiveCommand.Create(ForceClosePopups).DisposeWith(disposables);
 
             var previousCollectionNotification = string.Empty;
             CollectionMods.ConflictSolverStateChanged += (collectionName, state) =>
@@ -1138,6 +1128,7 @@ namespace IronyModManager.ViewModels.Controls
                 {
                     CollectionMods.Reset(true);
                 }
+
                 await InstalledMods.RefreshModsAsync();
                 EvalResumeAvailability(s.Game);
             }).DisposeWith(disposables);
@@ -1158,7 +1149,7 @@ namespace IronyModManager.ViewModels.Controls
         {
             forceEnableResumeButton = false;
             EvalResumeAvailability(game);
-            ShowAdvancedFeatures = (game?.AdvancedFeatures) != GameAdvancedFeatures.None;
+            ShowAdvancedFeatures = game?.AdvancedFeatures != GameAdvancedFeatures.None;
             base.OnSelectedGameChanged(game);
         }
 
@@ -1192,12 +1183,8 @@ namespace IronyModManager.ViewModels.Controls
             definitionLoadHandler = modDefinitionLoadHandler.Subscribe(s =>
             {
                 var message = localizationManager.GetResource(LocalizationResources.Mod_Actions.ConflictSolver.Overlay_Conflict_Solver_Loading_Definitions);
-                var overlayProgress = IronyFormatter.Format(localizationManager.GetResource(LocalizationResources.Mod_Actions.ConflictSolver.Overlay_Conflict_Solver_Progress), new
-                {
-                    PercentDone = s.Percentage.ToLocalizedPercentage(),
-                    Count = 1,
-                    TotalCount = totalSteps
-                });
+                var overlayProgress = IronyFormatter.Format(localizationManager.GetResource(LocalizationResources.Mod_Actions.ConflictSolver.Overlay_Conflict_Solver_Progress),
+                    new { PercentDone = s.Percentage.ToLocalizedPercentage(), Count = 1, TotalCount = totalSteps });
                 TriggerOverlay(id, true, message, overlayProgress);
             }).DisposeWith(disposables);
 
@@ -1205,12 +1192,8 @@ namespace IronyModManager.ViewModels.Controls
             modInvalidReplaceHandler = modDefinitionInvalidReplaceHandler.Subscribe(s =>
             {
                 var message = localizationManager.GetResource(LocalizationResources.Mod_Actions.ConflictSolver.Overlay_Conflict_Solver_Replacing_Definitions);
-                var overlayProgress = IronyFormatter.Format(localizationManager.GetResource(LocalizationResources.Mod_Actions.ConflictSolver.Overlay_Conflict_Solver_Progress), new
-                {
-                    PercentDone = s.Percentage.ToLocalizedPercentage(),
-                    Count = 2,
-                    TotalCount = totalSteps
-                });
+                var overlayProgress = IronyFormatter.Format(localizationManager.GetResource(LocalizationResources.Mod_Actions.ConflictSolver.Overlay_Conflict_Solver_Progress),
+                    new { PercentDone = s.Percentage.ToLocalizedPercentage(), Count = 2, TotalCount = totalSteps });
                 TriggerOverlay(id, true, message, overlayProgress);
             }).DisposeWith(disposables);
 
@@ -1218,12 +1201,8 @@ namespace IronyModManager.ViewModels.Controls
             gameIndexHandler = gameIndexProgressHandler.Subscribe(s =>
             {
                 var message = localizationManager.GetResource(LocalizationResources.Mod_Actions.ConflictSolver.Overlay_Conflict_Solver_Indexing_Game);
-                var overlayProgress = IronyFormatter.Format(localizationManager.GetResource(LocalizationResources.Mod_Actions.ConflictSolver.Overlay_Conflict_Solver_Progress), new
-                {
-                    PercentDone = s.Percentage.ToLocalizedPercentage(),
-                    Count = 3,
-                    TotalCount = totalSteps
-                });
+                var overlayProgress = IronyFormatter.Format(localizationManager.GetResource(LocalizationResources.Mod_Actions.ConflictSolver.Overlay_Conflict_Solver_Progress),
+                    new { PercentDone = s.Percentage.ToLocalizedPercentage(), Count = 3, TotalCount = totalSteps });
                 TriggerOverlay(id, true, message, overlayProgress);
             }).DisposeWith(disposables);
 
@@ -1231,12 +1210,8 @@ namespace IronyModManager.ViewModels.Controls
             gameDefinitionLoadHandler = gameDefinitionLoadProgressHandler.Subscribe(s =>
             {
                 var message = localizationManager.GetResource(LocalizationResources.Mod_Actions.ConflictSolver.Overlay_Conflict_Solver_Loading_Game_Definitions);
-                var overlayProgress = IronyFormatter.Format(localizationManager.GetResource(LocalizationResources.Mod_Actions.ConflictSolver.Overlay_Conflict_Solver_Progress), new
-                {
-                    PercentDone = s.Percentage.ToLocalizedPercentage(),
-                    Count = 4,
-                    TotalCount = totalSteps
-                });
+                var overlayProgress = IronyFormatter.Format(localizationManager.GetResource(LocalizationResources.Mod_Actions.ConflictSolver.Overlay_Conflict_Solver_Progress),
+                    new { PercentDone = s.Percentage.ToLocalizedPercentage(), Count = 4, TotalCount = totalSteps });
                 TriggerOverlay(id, true, message, overlayProgress);
             }).DisposeWith(disposables);
 
@@ -1244,12 +1219,8 @@ namespace IronyModManager.ViewModels.Controls
             definitionAnalyzeLoadHandler = modDefinitionAnalyzeHandler.Subscribe(s =>
             {
                 var message = localizationManager.GetResource(LocalizationResources.Mod_Actions.ConflictSolver.Overlay_Conflict_Solver_Analyzing_Conflicts);
-                var overlayProgress = IronyFormatter.Format(localizationManager.GetResource(LocalizationResources.Mod_Actions.ConflictSolver.Overlay_Conflict_Solver_Progress), new
-                {
-                    PercentDone = s.Percentage.ToLocalizedPercentage(),
-                    Count = totalSteps == 6 ? 5 : 3,
-                    TotalCount = totalSteps
-                });
+                var overlayProgress = IronyFormatter.Format(localizationManager.GetResource(LocalizationResources.Mod_Actions.ConflictSolver.Overlay_Conflict_Solver_Progress),
+                    new { PercentDone = s.Percentage.ToLocalizedPercentage(), Count = totalSteps == 6 ? 5 : 3, TotalCount = totalSteps });
                 TriggerOverlay(id, true, message, overlayProgress);
             }).DisposeWith(disposables);
 
@@ -1257,12 +1228,8 @@ namespace IronyModManager.ViewModels.Controls
             definitionSyncHandler = modDefinitionPatchLoadHandler.Subscribe(s =>
             {
                 var message = localizationManager.GetResource(LocalizationResources.Mod_Actions.ConflictSolver.Overlay_Conflict_Solver_Analyzing_Resolved_Conflicts);
-                var overlayProgress = IronyFormatter.Format(localizationManager.GetResource(LocalizationResources.Mod_Actions.ConflictSolver.Overlay_Conflict_Solver_Progress), new
-                {
-                    PercentDone = s.Percentage.ToLocalizedPercentage(),
-                    Count = totalSteps == 6 ? 6 : 4,
-                    TotalCount = totalSteps
-                });
+                var overlayProgress = IronyFormatter.Format(localizationManager.GetResource(LocalizationResources.Mod_Actions.ConflictSolver.Overlay_Conflict_Solver_Progress),
+                    new { PercentDone = s.Percentage.ToLocalizedPercentage(), Count = totalSteps == 6 ? 6 : 4, TotalCount = totalSteps });
                 TriggerOverlay(id, true, message, overlayProgress);
             }).DisposeWith(disposables);
         }
