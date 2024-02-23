@@ -938,9 +938,7 @@ namespace IronyModManager.Services
                         previousProgress = perc;
                     }
 
-                    GC.Collect(GC.MaxGeneration, GCCollectionMode.Optimized);
-                    GC.WaitForPendingFinalizers();
-                    GC.Collect(GC.MaxGeneration, GCCollectionMode.Optimized);
+                    GCRunner.RunGC(GCCollectionMode.Optimized);
                 }
             });
 
@@ -1049,9 +1047,7 @@ namespace IronyModManager.Services
                 }
 
                 tempIndex.Dispose();
-                GC.Collect(GC.MaxGeneration, GCCollectionMode.Optimized);
-                GC.WaitForPendingFinalizers();
-                GC.Collect(GC.MaxGeneration, GCCollectionMode.Optimized);
+                GCRunner.RunGC(GCCollectionMode.Optimized);
             }
             else
             {
