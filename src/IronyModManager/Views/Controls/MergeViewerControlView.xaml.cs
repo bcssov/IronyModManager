@@ -4,7 +4,7 @@
 // Created          : 03-20-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-22-2024
+// Last Modified On : 02-23-2024
 // ***********************************************************************
 // <copyright file="MergeViewerControlView.xaml.cs" company="Mario">
 //     Mario
@@ -536,7 +536,7 @@ namespace IronyModManager.Views.Controls
                     return;
                 }
 
-                diffRight.Text = string.Join(Environment.NewLine, s.Select(p => p.Text));
+                diffRight.Text = newText;
             });
 
             this.WhenAnyValue(v => v.ViewModel.LeftSidePatchMod).Subscribe(s =>
