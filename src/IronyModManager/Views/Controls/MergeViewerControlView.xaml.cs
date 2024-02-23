@@ -23,6 +23,7 @@ using Avalonia.Markup.Xaml;
 using Avalonia.Threading;
 using AvaloniaEdit;
 using AvaloniaEdit.Search;
+using AvaloniaEdit.Utils;
 using DiffPlex.DiffBuilder.Model;
 using IronyModManager.Common;
 using IronyModManager.Common.Views;
@@ -632,6 +633,21 @@ namespace IronyModManager.Views.Controls
                 for (var i = range.Item1; i < range.Item2 + 1; i++)
                 {
                     col.Add(sourceCol[i]);
+                }
+            };
+            diff.PointerPressed += (_, args) =>
+            {
+                var pos = args.GetPosition(diff);
+                pos = new Point(0, pos.Y.CoerceValue(0, diff.Bounds.Height) + diff.VerticalOffset);
+                var line = diff.TextArea.TextView.GetVisualLineFromVisualTop(pos.Y);
+                if (line != null)
+                {
+                    var col = leftDiff ? ViewModel!.LeftSideSelected : ViewModel!.RightSideSelected;
+                    var sourceCol = leftDiff ? ViewModel.LeftDiff : ViewModel.RightDiff;
+                    if (col.Count == 0)
+                    {
+                        col.Add(sourceCol[line.FirstDocumentLine.LineNumber - 1]);
+                    }
                 }
             };
         }

@@ -237,7 +237,9 @@ namespace IronyModManager.Implementation.AvaloniaEdit
                     if (e.KeyModifiers.HasFlag(KeyModifiers.Shift))
                     {
                         if (TextArea.Selection is SimpleSelection simpleSelection)
+                        {
                             selectionStart = new AnchorSegment(Document, simpleSelection.SurroundingSegment);
+                        }
                     }
 
                     TextArea.Selection = Selection.Create(TextArea, selectionStart);
@@ -329,7 +331,10 @@ namespace IronyModManager.Implementation.AvaloniaEdit
             pos = new Point(0, pos.Y.CoerceValue(0, TextView.Bounds.Height) + TextView.VerticalOffset);
             var vl = TextView.GetVisualLineFromVisualTop(pos.Y);
             if (vl == null)
+            {
                 return SimpleSegment.Invalid;
+            }
+
             var tl = vl.GetTextLineByVisualYPosition(pos.Y);
             var visualStartColumn = vl.GetTextLineVisualStartColumn(tl);
             var visualEndColumn = visualStartColumn + tl.Length;
@@ -337,7 +342,10 @@ namespace IronyModManager.Implementation.AvaloniaEdit
             var startOffset = vl.GetRelativeOffset(visualStartColumn) + relStart;
             var endOffset = vl.GetRelativeOffset(visualEndColumn) + relStart;
             if (endOffset == vl.LastDocumentLine.Offset + vl.LastDocumentLine.Length)
+            {
                 endOffset += vl.LastDocumentLine.DelimiterLength;
+            }
+
             return new SimpleSegment(startOffset, endOffset - startOffset);
         }
 
