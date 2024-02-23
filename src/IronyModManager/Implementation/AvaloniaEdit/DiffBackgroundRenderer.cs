@@ -122,11 +122,12 @@ namespace IronyModManager.Implementation.AvaloniaEdit
                         DiffPlex.DiffBuilder.Model.ChangeType.Unchanged => IsLightTheme() ? Constants.LightDiffUnchangedPieces : Constants.DarkDiffUnchangedPieces,
                         _ => default(Brush)
                     };
-                    endOffset += piece.Text.Length;
+                    var text = piece.Text ?? string.Empty;
+                    endOffset += text.Length;
                     if (subPieceBrush != default(Brush))
                     {
                         var builder = new BackgroundGeometryBuilder { AlignToWholePixels = true };
-                        var diffSegment = new DiffSegment(line.StartOffset + offset, piece.Text.Length, line.StartOffset + endOffset);
+                        var diffSegment = new DiffSegment(line.StartOffset + offset, text.Length, line.StartOffset + endOffset);
                         builder.AddSegment(textView, diffSegment);
 
                         var geo = builder.CreateGeometry();
@@ -136,7 +137,7 @@ namespace IronyModManager.Implementation.AvaloniaEdit
                         }
                     }
 
-                    offset += piece.Text.Length;
+                    offset += text.Length;
                 }
             }
         }
