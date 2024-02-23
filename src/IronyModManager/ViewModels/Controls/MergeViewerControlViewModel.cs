@@ -1302,7 +1302,7 @@ namespace IronyModManager.ViewModels.Controls
                 ExitEditMode();
             }, okEnabled).DisposeWith(disposables);
 
-            CancelCommand = ReactiveCommand.Create(() => { ExitEditMode(); }).DisposeWith(disposables);
+            CancelCommand = ReactiveCommand.Create(ExitEditMode).DisposeWith(disposables);
 
             EditThisCommand = ReactiveCommand.Create((bool leftSide) => { SetEditThis(leftSide); }).DisposeWith(disposables);
 
