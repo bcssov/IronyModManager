@@ -194,10 +194,6 @@ namespace IronyModManager.Services
 
         #endregion Fields
 
-        #region Constructors
-
-        #endregion Constructors
-
         #region Enums
 
         /// <summary>
