@@ -54,7 +54,36 @@ namespace IronyModManager.Services
     /// </summary>
     /// <seealso cref="IronyModManager.Services.ModBaseService" />
     /// <seealso cref="IronyModManager.Services.Common.IModPatchCollectionService" />
-    public class ModPatchCollectionService : ModBaseService, IModPatchCollectionService
+    /// <remarks>
+    /// Initializes a new instance of the <see cref="ModPatchCollectionService" /> class.
+    /// </remarks>
+    /// <param name="cache">The cache.</param>
+    /// <param name="messageBus">The message bus.</param>
+    /// <param name="parserManager">The parser manager.</param>
+    /// <param name="definitionInfoProviders">The definition information providers.</param>
+    /// <param name="modPatchExporter">The mod patch exporter.</param>
+    /// <param name="reader">The reader.</param>
+    /// <param name="modWriter">The mod writer.</param>
+    /// <param name="modParser">The mod parser.</param>
+    /// <param name="gameService">The game service.</param>
+    /// <param name="storageProvider">The storage provider.</param>
+    /// <param name="mapper">The mapper.</param>
+    /// <param name="validateParser">The validate parser.</param>
+    /// <param name="parametrizedParser">The parametrized parser.</param>
+    public class ModPatchCollectionService(
+        ICache cache,
+        IMessageBus messageBus,
+        IParserManager parserManager,
+        IEnumerable<IDefinitionInfoProvider> definitionInfoProviders,
+        IModPatchExporter modPatchExporter,
+        IReader reader,
+        IModWriter modWriter,
+        IModParser modParser,
+        IGameService gameService,
+        IStorageProvider storageProvider,
+        IMapper mapper,
+        IValidateParser validateParser,
+        IParametrizedParser parametrizedParser) : ModBaseService(cache, definitionInfoProviders, reader, modWriter, modParser, gameService, storageProvider, mapper), IModPatchCollectionService
     {
         #region Fields
 
@@ -136,22 +165,22 @@ namespace IronyModManager.Services
         /// <summary>
         /// The message bus
         /// </summary>
-        private readonly IMessageBus messageBus;
+        private readonly IMessageBus messageBus = messageBus;
 
         /// <summary>
         /// The mod patch exporter
         /// </summary>
-        private readonly IModPatchExporter modPatchExporter;
+        private readonly IModPatchExporter modPatchExporter = modPatchExporter;
 
         /// <summary>
         /// The parametrized parser
         /// </summary>
-        private readonly IParametrizedParser parametrizedParser;
+        private readonly IParametrizedParser parametrizedParser = parametrizedParser;
 
         /// <summary>
         /// The parser manager
         /// </summary>
-        private readonly IParserManager parserManager;
+        private readonly IParserManager parserManager = parserManager;
 
         /// <summary>
         /// The search initialize lock
@@ -161,38 +190,11 @@ namespace IronyModManager.Services
         /// <summary>
         /// The validate parser
         /// </summary>
-        private readonly IValidateParser validateParser;
+        private readonly IValidateParser validateParser = validateParser;
 
         #endregion Fields
 
         #region Constructors
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="ModPatchCollectionService" /> class.
-        /// </summary>
-        /// <param name="cache">The cache.</param>
-        /// <param name="messageBus">The message bus.</param>
-        /// <param name="parserManager">The parser manager.</param>
-        /// <param name="definitionInfoProviders">The definition information providers.</param>
-        /// <param name="modPatchExporter">The mod patch exporter.</param>
-        /// <param name="reader">The reader.</param>
-        /// <param name="modWriter">The mod writer.</param>
-        /// <param name="modParser">The mod parser.</param>
-        /// <param name="gameService">The game service.</param>
-        /// <param name="storageProvider">The storage provider.</param>
-        /// <param name="mapper">The mapper.</param>
-        /// <param name="validateParser">The validate parser.</param>
-        /// <param name="parametrizedParser">The parametrized parser.</param>
-        public ModPatchCollectionService(ICache cache, IMessageBus messageBus, IParserManager parserManager, IEnumerable<IDefinitionInfoProvider> definitionInfoProviders,
-            IModPatchExporter modPatchExporter, IReader reader, IModWriter modWriter, IModParser modParser, IGameService gameService,
-            IStorageProvider storageProvider, IMapper mapper, IValidateParser validateParser, IParametrizedParser parametrizedParser) : base(cache, definitionInfoProviders, reader, modWriter, modParser, gameService, storageProvider, mapper)
-        {
-            this.messageBus = messageBus;
-            this.parserManager = parserManager;
-            this.modPatchExporter = modPatchExporter;
-            this.validateParser = validateParser;
-            this.parametrizedParser = parametrizedParser;
-        }
 
         #endregion Constructors
 
@@ -304,7 +306,7 @@ namespace IronyModManager.Services
             var mod = allMods.FirstOrDefault(p => p.Name.Equals(patchName));
             if (mod != null)
             {
-                await DeleteDescriptorsInternalAsync(new List<IMod> { mod });
+                await DeleteDescriptorsInternalAsync([mod]);
             }
 
             return await ModWriter.PurgeModDirectoryAsync(new ModWriterParameters { RootDirectory = GetPatchModDirectory(game, patchName) }, true);
@@ -837,7 +839,7 @@ namespace IronyModManager.Services
             if (conflictResult != null)
             {
                 var ignoredPaths = conflictResult.IgnoredPaths ?? string.Empty;
-                var lines = ignoredPaths.SplitOnNewLine().Where(p => !p.Trim().StartsWith("#"));
+                var lines = ignoredPaths.SplitOnNewLine().Where(p => !p.Trim().StartsWith('#'));
                 foreach (var line in lines)
                 {
                     var ignoreMod = ParseIgnoreModLine(line);
@@ -961,7 +963,7 @@ namespace IronyModManager.Services
                         if (files.Count != 0)
                         {
                             var modOrder = mods.Select(p => p.Name).ToList();
-                            var priorityDefinition = EvalDefinitionPriority(files.OrderBy(p => modOrder.IndexOf(p.ModName)).ToHashSet());
+                            var priorityDefinition = EvalDefinitionPriority([.. files.OrderBy(p => modOrder.IndexOf(p.ModName))]);
                             if (priorityDefinition is { Definition: not null })
                             {
                                 var parametrizedCode = parametrizedParser.Process(priorityDefinition.Definition.Code, item.Code);
@@ -1042,14 +1044,14 @@ namespace IronyModManager.Services
             }
             else
             {
-                prunedInlineDefinitions = definitions.ToList();
+                prunedInlineDefinitions = [.. definitions];
             }
 
             definitions.Clear();
             definitions = null;
             if (state != null && state.CustomConflicts.Any())
             {
-                prunedDefinitions = new List<IDefinition>();
+                prunedDefinitions = [];
                 var customIndexed = DIResolver.Get<IIndexedDefinitions>();
                 await customIndexed.InitMapAsync(state.CustomConflicts);
                 foreach (var item in prunedInlineDefinitions)
@@ -1081,7 +1083,7 @@ namespace IronyModManager.Services
                                 }
                             }
 
-                            if (fileDefs.Any())
+                            if (fileDefs.Count != 0)
                             {
                                 foreach (var def in fileDefs)
                                 {
@@ -1111,7 +1113,7 @@ namespace IronyModManager.Services
             }
             else
             {
-                prunedDefinitions = prunedInlineDefinitions.ToList();
+                prunedDefinitions = [.. prunedInlineDefinitions];
             }
 
             prunedInlineDefinitions.Clear();
@@ -1359,7 +1361,7 @@ namespace IronyModManager.Services
                         }
 
                         var matchedConflicts = await conflictResult.OverwrittenConflicts.GetByTypeAndIdAsync(item.First().TypeAndId);
-                        await SyncPatchStatesAsync(matchedConflicts, item, patchName, game, !allowCleanup, files.ToArray());
+                        await SyncPatchStatesAsync(matchedConflicts, item, patchName, game, !allowCleanup, [.. files]);
                         perc = GetProgressPercentage(total, processed);
                         if (previousProgress.IsNotNearlyEqual(perc))
                         {
@@ -1418,7 +1420,7 @@ namespace IronyModManager.Services
                             {
                                 await modPatchExporter.ExportDefinitionAsync(new ModPatchExporterParameters
                                 {
-                                    Game = game.Type, OverwrittenConflicts = new List<IDefinition> { definition }, RootPath = GetModDirectoryRootPath(game), PatchPath = EvaluatePatchNamePath(game, patchName)
+                                    Game = game.Type, OverwrittenConflicts = [definition], RootPath = GetModDirectoryRootPath(game), PatchPath = EvaluatePatchNamePath(game, patchName)
                                 });
                             }
 
@@ -1523,7 +1525,7 @@ namespace IronyModManager.Services
                             {
                                 if (await modPatchExporter.ExportDefinitionAsync(new ModPatchExporterParameters
                                     {
-                                        Game = game.Type, OverwrittenConflicts = new List<IDefinition> { definition }, RootPath = GetModDirectoryRootPath(game), PatchPath = EvaluatePatchNamePath(game, patchName)
+                                        Game = game.Type, OverwrittenConflicts = [definition], RootPath = GetModDirectoryRootPath(game), PatchPath = EvaluatePatchNamePath(game, patchName)
                                     }))
                                 {
                                     exportedConflicts = true;
@@ -1585,7 +1587,7 @@ namespace IronyModManager.Services
             if (game != null)
             {
                 var patchName = GenerateCollectionPatchName(collectionName);
-                Cache.Invalidate(new CacheInvalidateParameters { Region = CacheRegion, Prefix = game.Type, Keys = new List<string> { patchName } });
+                Cache.Invalidate(new CacheInvalidateParameters { Region = CacheRegion, Prefix = game.Type, Keys = [patchName] });
                 return true;
             }
 
@@ -1659,7 +1661,7 @@ namespace IronyModManager.Services
         /// <returns>Task&lt;System.Boolean&gt;.</returns>
         public virtual async Task<bool> PatchModNeedsUpdateAsync(string collectionName, IReadOnlyCollection<string> loadOrder)
         {
-            loadOrder ??= new List<string>();
+            loadOrder ??= [];
 
             List<EvalState> mapEvalState(IEnumerable<IDefinition> definitions)
             {
@@ -1734,7 +1736,7 @@ namespace IronyModManager.Services
                         semaphore.Release();
                     }
                 }).ToList();
-                while (tasks.Any())
+                while (tasks.Count != 0)
                 {
                     var task = await Task.WhenAny(tasks);
                     tasks.Remove(task);
@@ -1841,7 +1843,7 @@ namespace IronyModManager.Services
         /// <returns><c>true</c> if reset, <c>false</c> otherwise.</returns>
         public virtual bool ResetPatchStateCache()
         {
-            Cache.Invalidate(new CacheInvalidateParameters { Region = ModsExportedRegion, Keys = new List<string> { ModExportedKey } });
+            Cache.Invalidate(new CacheInvalidateParameters { Region = ModsExportedRegion, Keys = [ModExportedKey] });
             modPatchExporter.ResetCache();
             return true;
         }
@@ -2345,7 +2347,7 @@ namespace IronyModManager.Services
                 var forbiddenMods = new List<IModIgnoreConfiguration>();
                 var ignoreRules = new List<string>();
                 var includeRules = new List<string>();
-                var lines = conflictResult.IgnoredPaths.SplitOnNewLine().Where(p => !p.Trim().StartsWith("#"));
+                var lines = conflictResult.IgnoredPaths.SplitOnNewLine().Where(p => !p.Trim().StartsWith('#'));
                 foreach (var line in lines)
                 {
                     var parsed = line.StandardizeDirectorySeparator().Trim().TrimStart(Path.DirectorySeparatorChar);
@@ -2373,7 +2375,7 @@ namespace IronyModManager.Services
                     }
                     else
                     {
-                        if (!parsed.StartsWith("!"))
+                        if (!parsed.StartsWith('!'))
                         {
                             ignoreRules.Add(parsed);
                         }
@@ -2407,7 +2409,7 @@ namespace IronyModManager.Services
                                 name = $"{name}{Path.DirectorySeparatorChar}";
                             }
 
-                            var invalid = topConflict.Children.Where(p => ignoreRules.Any(r => EvalWildcard(r, p.FileNames.ToArray()))).Where(p => !includeRules.Any(r => EvalWildcard(r, p.FileNames.ToArray())));
+                            var invalid = topConflict.Children.Where(p => ignoreRules.Any(r => EvalWildcard(r, [.. p.FileNames]))).Where(p => !includeRules.Any(r => EvalWildcard(r, [.. p.FileNames])));
                             foreach (var item in invalid)
                             {
                                 if (alreadyIgnored.Add(item.Key))
@@ -2533,7 +2535,7 @@ namespace IronyModManager.Services
                         DescriptorType = MapDescriptorType(game.ModDescriptorType)
                     }, IsPatchMod(mod));
                     allMods.Add(mod);
-                    Cache.Invalidate(new CacheInvalidateParameters { Region = ModsCacheRegion, Prefix = game.Type, Keys = new List<string> { GetModsCacheKey(true), GetModsCacheKey(false) } });
+                    Cache.Invalidate(new CacheInvalidateParameters { Region = ModsCacheRegion, Prefix = game.Type, Keys = [GetModsCacheKey(true), GetModsCacheKey(false)] });
                 }
                 else
                 {
@@ -2569,7 +2571,7 @@ namespace IronyModManager.Services
                     {
                         await Task.Run(() =>
                         {
-                            ModWriter.ApplyModsAsync(new ModWriterParameters { AppendOnly = true, TopPriorityMods = new List<IMod> { mod }, RootDirectory = game.UserDirectory, DescriptorType = MapDescriptorType(game.ModDescriptorType) })
+                            ModWriter.ApplyModsAsync(new ModWriterParameters { AppendOnly = true, TopPriorityMods = [mod], RootDirectory = game.UserDirectory, DescriptorType = MapDescriptorType(game.ModDescriptorType) })
                                 .ConfigureAwait(false);
                         }).ConfigureAwait(false);
                         Cache.Set(new CacheAddParameters<ModsExportedState> { Region = ModsExportedRegion, Key = ModExportedKey, Value = new ModsExportedState { Exported = true } });
@@ -2580,7 +2582,7 @@ namespace IronyModManager.Services
                     await conflictResult.ResolvedConflicts.ChangeHierarchicalResetStateAsync(definition);
 
                     var exportResult = false;
-                    if (exportPatches.Any())
+                    if (exportPatches.Count != 0)
                     {
                         if (definition.ValueType == ValueType.OverwrittenObjectSingleFile)
                         {
@@ -2626,7 +2628,7 @@ namespace IronyModManager.Services
                         PatchPath = EvaluatePatchNamePath(game, patchName),
                         HasGameDefinitions = await conflictResult.AllConflicts.HasGameDefinitionsAsync()
                     });
-                    return exportPatches.Any() ? exportResult && stateResult : stateResult;
+                    return exportPatches.Count != 0 ? exportResult && stateResult : stateResult;
                 }
             }
 
@@ -2676,7 +2678,7 @@ namespace IronyModManager.Services
                 return defs.ToList();
             }
 
-            return new List<IDefinition>();
+            return [];
         }
 
         /// <summary>
@@ -2972,7 +2974,7 @@ namespace IronyModManager.Services
                             definition.ErrorMessage = "File has invalid encoding, please use UTF-8-BOM Encoding.";
                             definition.Id = Path.GetFileName(fileInfo.FileName)!.ToLowerInvariant();
                             definition.ValueType = ValueType.Invalid;
-                            definition.OriginalCode = definition.Code = string.Join(Environment.NewLine, fileInfo.Content ?? new List<string>());
+                            definition.OriginalCode = definition.Code = string.Join(Environment.NewLine, fileInfo.Content ?? []);
                             definition.ContentSHA = fileInfo.ContentSHA;
                             definition.Dependencies = modObject.Dependencies;
                             definition.ModName = modObject.Name;
@@ -3126,7 +3128,7 @@ namespace IronyModManager.Services
                         var partialCopy = new List<IDefinition>();
                         p.ToList().ForEach(x => partialCopy.Add(PartialDefinitionCopy(x, false)));
                         var priority = EvalDefinitionPriorityInternal(partialCopy.OrderBy(x => modOrder.IndexOf(x.ModName)), true);
-                        return new List<DefinitionOrderSort> { new() { TypeAndId = priority.Definition.TypeAndId, Order = priority.Definition.Order, File = Path.GetFileNameWithoutExtension(priority.FileName) } };
+                        return [new DefinitionOrderSort { TypeAndId = priority.Definition.TypeAndId, Order = priority.Definition.Order, File = Path.GetFileNameWithoutExtension(priority.FileName) }];
                     }
                 }).SelectMany(p => p).GroupBy(p => p.File).OrderBy(p => p.Key, StringComparer.Ordinal).SelectMany(p => p.OrderBy(x => x.Order)).ToList();
                 var fullyOrdered = ordered.Select(p => new DefinitionOrderSort { TypeAndId = p.TypeAndId, Order = ordered.IndexOf(p), File = p.File }).ToList();
@@ -3234,7 +3236,7 @@ namespace IronyModManager.Services
                     export.Clear();
                 }
 
-                if (export.Any())
+                if (export.Count != 0)
                 {
                     var namespaces = export.Where(p => p.ValueType == ValueType.Namespace).OrderBy(p => p.Id);
                     var variables = export.Where(p => p.ValueType == ValueType.Variable).OrderBy(p => p.Id);
@@ -3296,7 +3298,7 @@ namespace IronyModManager.Services
         protected virtual async Task SyncPatchStateAsync(IGame game, string patchName, List<IDefinition> resolvedConflicts, IGrouping<string, IDefinition> item, IList<string> files, IEnumerable<IDefinition> matchedConflicts,
             bool readOnlyMode)
         {
-            var synced = await SyncPatchStatesAsync(matchedConflicts, item, patchName, game, readOnlyMode, files.ToArray());
+            var synced = await SyncPatchStatesAsync(matchedConflicts, item, patchName, game, readOnlyMode, [.. files]);
             if (synced)
             {
                 matchedConflicts.ToList().ForEach(p =>
@@ -3448,7 +3450,7 @@ namespace IronyModManager.Services
                             DescriptorType = MapDescriptorType(game.ModDescriptorType)
                         }, IsPatchMod(mod));
                         allMods.Add(mod);
-                        Cache.Invalidate(new CacheInvalidateParameters { Region = ModsCacheRegion, Prefix = game.Type, Keys = new List<string> { GetModsCacheKey(true), GetModsCacheKey(false) } });
+                        Cache.Invalidate(new CacheInvalidateParameters { Region = ModsCacheRegion, Prefix = game.Type, Keys = [GetModsCacheKey(true), GetModsCacheKey(false)] });
                     }
                     else
                     {
@@ -3460,7 +3462,7 @@ namespace IronyModManager.Services
                     {
                         await Task.Run(() =>
                         {
-                            ModWriter.ApplyModsAsync(new ModWriterParameters { AppendOnly = true, TopPriorityMods = new List<IMod> { mod }, RootDirectory = game.UserDirectory, DescriptorType = MapDescriptorType(game.ModDescriptorType) })
+                            ModWriter.ApplyModsAsync(new ModWriterParameters { AppendOnly = true, TopPriorityMods = [mod], RootDirectory = game.UserDirectory, DescriptorType = MapDescriptorType(game.ModDescriptorType) })
                                 .ConfigureAwait(false);
                         }).ConfigureAwait(false);
                         Cache.Set(new CacheAddParameters<ModsExportedState> { Region = ModsExportedRegion, Key = ModExportedKey, Value = new ModsExportedState { Exported = true } });

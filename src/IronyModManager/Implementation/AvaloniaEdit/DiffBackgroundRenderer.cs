@@ -4,7 +4,7 @@
 // Created          : 02-19-2024
 //
 // Last Modified By : Mario
-// Last Modified On : 02-19-2024
+// Last Modified On : 02-23-2024
 // ***********************************************************************
 // <copyright file="DiffBackgroundRenderer.cs" company="Mario">
 //     Mario
@@ -19,6 +19,9 @@ using Avalonia;
 using Avalonia.Media;
 using AvaloniaEdit.Document;
 using AvaloniaEdit.Rendering;
+using IronyModManager.DI;
+using IronyModManager.Platform.Themes;
+using IronyModManager.Services.Common;
 using IronyModManager.ViewModels.Controls;
 
 namespace IronyModManager.Implementation.AvaloniaEdit
@@ -26,19 +29,38 @@ namespace IronyModManager.Implementation.AvaloniaEdit
     /// <summary>
     /// The diff background renderer.
     /// </summary>
-    /// <seealso cref="AvaloniaEdit.Rendering.IBackgroundRenderer" />
+    /// <seealso cref="IBackgroundRenderer" />
     public class DiffBackgroundRenderer : IBackgroundRenderer
     {
+        #region Fields
+
+        /// <summary>
+        /// A private bool? named isLightTheme.
+        /// </summary>
+        private bool? isLightTheme;
+
+        /// <summary>
+        /// A private IThemeManager named themeManager.
+        /// </summary>
+        private IThemeManager themeManager;
+
+        /// <summary>
+        /// A private IThemeService named themeService.
+        /// </summary>
+        private IThemeService themeService;
+
+        #endregion Fields
+
         #region Properties
 
         /// <summary>
-        /// Gets a value representing the layer.<see cref="AvaloniaEdit.Rendering.KnownLayer" />
+        /// Gets a value representing the layer.<see cref="KnownLayer" />
         /// </summary>
         /// <value>The layer.</value>
         public KnownLayer Layer => KnownLayer.Background;
 
         /// <summary>
-        /// Gets or sets a value representing the lines.<see cref="System.Collections.Generic.IList{IronyModManager.ViewModels.Controls.MergeViewerControlViewModel.DiffPieceWithIndex}" />
+        /// Gets or sets a value representing the lines.<see cref="MergeViewerControlViewModel.DiffPieceWithIndex" />
         /// </summary>
         /// <value>The lines.</value>
         public IList<MergeViewerControlViewModel.DiffPieceWithIndex> Lines { get; set; }
@@ -72,9 +94,9 @@ namespace IronyModManager.Implementation.AvaloniaEdit
 
                 Brush brush = diff.Type switch
                 {
-                    DiffPlex.DiffBuilder.Model.ChangeType.Deleted => Constants.DiffDeletedLine,
-                    DiffPlex.DiffBuilder.Model.ChangeType.Inserted => Constants.DiffInsertedLine,
-                    DiffPlex.DiffBuilder.Model.ChangeType.Imaginary => Constants.DiffImaginaryLine,
+                    DiffPlex.DiffBuilder.Model.ChangeType.Deleted => IsLightTheme() ? Constants.LightDiffDeletedLine : Constants.DarkDiffDeletedLine,
+                    DiffPlex.DiffBuilder.Model.ChangeType.Inserted => IsLightTheme() ? Constants.LightDiffInsertedLine : Constants.DarkDiffInsertedLine,
+                    DiffPlex.DiffBuilder.Model.ChangeType.Imaginary => IsLightTheme() ? Constants.LightDiffImaginaryLine : Constants.DarkDiffImaginaryLine,
                     _ => default
                 };
 
@@ -93,18 +115,15 @@ namespace IronyModManager.Implementation.AvaloniaEdit
                 {
                     var subPieceBrush = piece.Type switch
                     {
-                        DiffPlex.DiffBuilder.Model.ChangeType.Deleted => Constants.DiffDeletedPieces,
-                        DiffPlex.DiffBuilder.Model.ChangeType.Inserted => Constants.DiffInsertedPieces,
-                        DiffPlex.DiffBuilder.Model.ChangeType.Modified => Constants.DiffModifiedPieces,
-                        DiffPlex.DiffBuilder.Model.ChangeType.Unchanged => Constants.DiffUnchangedPieces,
+                        DiffPlex.DiffBuilder.Model.ChangeType.Deleted => IsLightTheme() ? Constants.LightDiffDeletedPieces : Constants.DarkDiffDeletedPieces,
+                        DiffPlex.DiffBuilder.Model.ChangeType.Inserted => IsLightTheme() ? Constants.LightDiffInsertedPieces : Constants.DarkDiffInsertedPieces,
+                        DiffPlex.DiffBuilder.Model.ChangeType.Modified => IsLightTheme() ? Constants.LightDiffModifiedPieces : Constants.DarkDiffModifiedPieces,
+                        DiffPlex.DiffBuilder.Model.ChangeType.Unchanged => IsLightTheme() ? Constants.LightDiffUnchangedPieces : Constants.DarkDiffUnchangedPieces,
                         _ => default(Brush)
                     };
                     if (subPieceBrush != default(Brush))
                     {
-                        var builder = new BackgroundGeometryBuilder
-                        {
-                            AlignToWholePixels = true
-                        };
+                        var builder = new BackgroundGeometryBuilder { AlignToWholePixels = true };
                         endOffset += piece.Text.Length;
                         var diffSegment = new DiffSegment(line.StartOffset + offset, piece.Text.Length, line.StartOffset + endOffset);
                         offset = piece.Text.Length;
@@ -120,6 +139,22 @@ namespace IronyModManager.Implementation.AvaloniaEdit
             }
         }
 
+        /// <summary>
+        /// Is light theme.
+        /// </summary>
+        /// <returns>A bool.</returns>
+        private bool IsLightTheme()
+        {
+            if (!isLightTheme.HasValue)
+            {
+                themeManager ??= DIResolver.Get<IThemeManager>();
+                themeService ??= DIResolver.Get<IThemeService>();
+                isLightTheme = themeManager.IsLightTheme(themeService.GetSelected().Type);
+            }
+
+            return isLightTheme.GetValueOrDefault();
+        }
+
         #endregion Methods
 
         #region Classes
@@ -127,13 +162,11 @@ namespace IronyModManager.Implementation.AvaloniaEdit
         /// <summary>
         /// The diff segment.
         /// </summary>
-        /// <seealso cref="AvaloniaEdit.Document.ISegment"/>
-        /// <remarks>
-        /// Initializes a new instance of the <see cref="DiffSegment"/> class.
-        /// </remarks>
+        /// <seealso cref="ISegment" />
         /// <param name="offset">The offset.</param>
         /// <param name="length">The length.</param>
         /// <param name="endOffset">The end offset.</param>
+        /// <remarks>Initializes a new instance of the <see cref="DiffSegment" /> class.</remarks>
         private class DiffSegment(int offset, int length, int endOffset) : ISegment
         {
             #region Properties
@@ -141,25 +174,19 @@ namespace IronyModManager.Implementation.AvaloniaEdit
             /// <summary>
             /// Gets a value representing the end offset.
             /// </summary>
-            /// <value>
-            /// The end offset.
-            /// </value>
+            /// <value>The end offset.</value>
             public int EndOffset { get; } = endOffset;
 
             /// <summary>
             /// Gets a value representing the length.
             /// </summary>
-            /// <value>
-            /// The length.
-            /// </value>
+            /// <value>The length.</value>
             public int Length { get; } = length;
 
             /// <summary>
             /// Gets a value representing the offset.
             /// </summary>
-            /// <value>
-            /// The offset.
-            /// </value>
+            /// <value>The offset.</value>
             public int Offset { get; } = offset;
 
             #endregion Properties

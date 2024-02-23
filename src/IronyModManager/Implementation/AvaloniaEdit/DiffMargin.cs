@@ -4,7 +4,7 @@
 // Created          : 02-19-2024
 //
 // Last Modified By : Mario
-// Last Modified On : 02-22-2024
+// Last Modified On : 02-23-2024
 // ***********************************************************************
 // <copyright file="DiffMargin.cs" company="Mario">
 //     Mario
@@ -25,6 +25,9 @@ using AvaloniaEdit.Document;
 using AvaloniaEdit.Editing;
 using AvaloniaEdit.Rendering;
 using AvaloniaEdit.Utils;
+using IronyModManager.DI;
+using IronyModManager.Platform.Themes;
+using IronyModManager.Services.Common;
 using IronyModManager.ViewModels.Controls;
 
 namespace IronyModManager.Implementation.AvaloniaEdit
@@ -36,11 +39,6 @@ namespace IronyModManager.Implementation.AvaloniaEdit
     public class DiffMargin : AbstractMargin
     {
         #region Fields
-
-        /// <summary>
-        /// The maximum line number length
-        /// </summary>
-        private int maxLineNumberLength = 1;
 
         /// <summary>
         /// A private const double named LineMargin.
@@ -58,6 +56,16 @@ namespace IronyModManager.Implementation.AvaloniaEdit
         private double fontSize;
 
         /// <summary>
+        /// A private bool? named isLightTheme.
+        /// </summary>
+        private bool? isLightTheme;
+
+        /// <summary>
+        /// The maximum line number length
+        /// </summary>
+        private int maxLineNumberLength = 1;
+
+        /// <summary>
         /// The selecting
         /// </summary>
         private bool selecting;
@@ -66,6 +74,16 @@ namespace IronyModManager.Implementation.AvaloniaEdit
         /// The selection start
         /// </summary>
         private AnchorSegment selectionStart;
+
+        /// <summary>
+        /// A private IThemeManager named themeManager.
+        /// </summary>
+        private IThemeManager themeManager;
+
+        /// <summary>
+        /// A private IThemeService named themeService.
+        /// </summary>
+        private IThemeService themeService;
 
         #endregion Fields
 
@@ -109,9 +127,9 @@ namespace IronyModManager.Implementation.AvaloniaEdit
 
                 Brush brush = diff.Type switch
                 {
-                    DiffPlex.DiffBuilder.Model.ChangeType.Deleted => Constants.DiffDeletedLine,
-                    DiffPlex.DiffBuilder.Model.ChangeType.Inserted => Constants.DiffInsertedLine,
-                    DiffPlex.DiffBuilder.Model.ChangeType.Imaginary => Constants.DiffImaginaryLine,
+                    DiffPlex.DiffBuilder.Model.ChangeType.Deleted => IsLightTheme() ? Constants.LightDiffDeletedLine : Constants.DarkDiffDeletedLine,
+                    DiffPlex.DiffBuilder.Model.ChangeType.Inserted => IsLightTheme() ? Constants.LightDiffInsertedLine : Constants.DarkDiffInsertedLine,
+                    DiffPlex.DiffBuilder.Model.ChangeType.Imaginary => IsLightTheme() ? Constants.LightDiffImaginaryLine : Constants.DarkDiffImaginaryLine,
                     _ => default
                 };
 
@@ -235,7 +253,7 @@ namespace IronyModManager.Implementation.AvaloniaEdit
         /// <summary>
         /// Handles the <see cref="E:PointerReleased" /> event.
         /// </summary>
-        /// <param name="e">The <see cref="PointerReleasedEventArgs"/> instance containing the event data.</param>
+        /// <param name="e">The <see cref="PointerReleasedEventArgs" /> instance containing the event data.</param>
         protected override void OnPointerReleased(PointerReleasedEventArgs e)
         {
             if (selecting)
@@ -302,7 +320,7 @@ namespace IronyModManager.Implementation.AvaloniaEdit
         /// <summary>
         /// Gets the text line segment.
         /// </summary>
-        /// <param name="e">The <see cref="PointerEventArgs"/> instance containing the event data.</param>
+        /// <param name="e">The <see cref="PointerEventArgs" /> instance containing the event data.</param>
         /// <returns>SimpleSegment.</returns>
         private SimpleSegment GetTextLineSegment(PointerEventArgs e)
         {
@@ -323,10 +341,26 @@ namespace IronyModManager.Implementation.AvaloniaEdit
         }
 
         /// <summary>
+        /// Is light theme.
+        /// </summary>
+        /// <returns>A bool.</returns>
+        private bool IsLightTheme()
+        {
+            if (!isLightTheme.HasValue)
+            {
+                themeManager ??= DIResolver.Get<IThemeManager>();
+                themeService ??= DIResolver.Get<IThemeService>();
+                isLightTheme = themeManager.IsLightTheme(themeService.GetSelected().Type);
+            }
+
+            return isLightTheme.GetValueOrDefault();
+        }
+
+        /// <summary>
         /// Handles the <see cref="E:DocumentLineCountChanged" /> event.
         /// </summary>
         /// <param name="sender">The sender.</param>
-        /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
+        /// <param name="e">The <see cref="EventArgs" /> instance containing the event data.</param>
         private void OnDocumentLineCountChanged(object sender, EventArgs e)
         {
             OnDocumentLineCountChanged();
@@ -356,7 +390,7 @@ namespace IronyModManager.Implementation.AvaloniaEdit
         /// Texts the view visual lines changed.
         /// </summary>
         /// <param name="sender">The sender.</param>
-        /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
+        /// <param name="e">The <see cref="EventArgs" /> instance containing the event data.</param>
         private void TextViewVisualLinesChanged(object sender, EventArgs e)
         {
             InvalidateMeasure();

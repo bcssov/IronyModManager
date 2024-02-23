@@ -28,7 +28,7 @@ namespace IronyModManager.Shared
         /// <summary>
         /// A private const double named defaultTolerance.
         /// </summary>
-        private const double defaultTolerance = 0.01;
+        private const double DefaultTolerance = 0.01;
 
         #endregion Fields
 
@@ -54,7 +54,7 @@ namespace IronyModManager.Shared
         /// <returns>A bool.</returns>
         public static bool IsNearlyEqual(this double a, double b)
         {
-            return IsNearlyEqual(a, b, defaultTolerance);
+            return IsNearlyEqual(a, b, DefaultTolerance);
         }
 
         /// <summary>
