@@ -790,15 +790,60 @@ namespace IronyModManager.Views.Controls
                 new() { Header = ViewModel.NextConflict, Command = ViewModel.NextConflictCommand, CommandParameter = leftSide },
                 new() { Header = ViewModel.PrevConflict, Command = ViewModel.PrevConflictCommand, CommandParameter = leftSide },
                 new() { Header = "-" },
-                new() { Header = ViewModel.CopyText, Command = ViewModel.CopyTextCommand, CommandParameter = leftSide },
+                new()
+                {
+                    Header = ViewModel.CopyText,
+                    Command = ReactiveCommand.Create(() =>
+                    {
+                        ViewModel.CopyTextCommand.Execute(leftSide).Subscribe();
+                        diffLeft.TextArea.TextView.Redraw();
+                        diffRight.TextArea.TextView.Redraw();
+                    })
+                },
                 new()
                 {
                     Header = "-" // Separator magic string, and it's documented... NOT really!!!
                 },
-                new() { Header = ViewModel.CopyAll, Command = ViewModel.CopyAllCommand, CommandParameter = leftSide },
-                new() { Header = ViewModel.CopyThis, Command = ViewModel.CopyThisCommand, CommandParameter = leftSide },
-                new() { Header = ViewModel.CopyThisBeforeLine, Command = ViewModel.CopyThisBeforeLineCommand, CommandParameter = leftSide },
-                new() { Header = ViewModel.CopyThisAfterLine, Command = ViewModel.CopyThisAfterLineCommand, CommandParameter = leftSide },
+                new()
+                {
+                    Header = ViewModel.CopyAll,
+                    Command = ReactiveCommand.Create(() =>
+                    {
+                        ViewModel.CopyAllCommand.Execute(leftSide).Subscribe();
+                        diffLeft.TextArea.TextView.Redraw();
+                        diffRight.TextArea.TextView.Redraw();
+                    })
+                },
+                new()
+                {
+                    Header = ViewModel.CopyThis,
+                    Command = ReactiveCommand.Create(() =>
+                    {
+                        ViewModel.CopyThisCommand.Execute(leftSide).Subscribe();
+                        diffLeft.TextArea.TextView.Redraw();
+                        diffRight.TextArea.TextView.Redraw();
+                    })
+                },
+                new()
+                {
+                    Header = ViewModel.CopyThisBeforeLine,
+                    Command = ReactiveCommand.Create(() =>
+                    {
+                        ViewModel.CopyThisBeforeLineCommand.Execute(leftSide).Subscribe();
+                        diffLeft.TextArea.TextView.Redraw();
+                        diffRight.TextArea.TextView.Redraw();
+                    })
+                },
+                new()
+                {
+                    Header = ViewModel.CopyThisAfterLine,
+                    Command = ReactiveCommand.Create(() =>
+                    {
+                        ViewModel.CopyThisAfterLineCommand.Execute(leftSide).Subscribe();
+                        diffLeft.TextArea.TextView.Redraw();
+                        diffRight.TextArea.TextView.Redraw();
+                    })
+                },
                 new() { Header = "-" },
                 new() { Header = ViewModel.ToggleMergeTypeCaption, Command = ViewModel.ToggleMergeTypeCommand }
             };
@@ -827,7 +872,16 @@ namespace IronyModManager.Views.Controls
                 new() { Header = ViewModel.PrevConflict, Command = ViewModel.PrevConflictCommand, CommandParameter = leftSide },
                 new() { Header = "-" },
                 new() { Header = ViewModel.EditThis, Command = ViewModel.EditThisCommand, CommandParameter = leftSide },
-                new() { Header = ViewModel.CopyText, Command = ViewModel.CopyTextCommand, CommandParameter = leftSide },
+                new()
+                {
+                    Header = ViewModel.CopyText,
+                    Command = ReactiveCommand.Create(() =>
+                    {
+                        ViewModel.CopyTextCommand.Execute(leftSide).Subscribe();
+                        diffLeft.TextArea.TextView.Redraw();
+                        diffRight.TextArea.TextView.Redraw();
+                    })
+                },
                 new() { Header = "-" },
                 new() { Header = ViewModel.DeleteText, Command = ViewModel.DeleteTextCommand, CommandParameter = leftSide },
                 new() { Header = ViewModel.MoveUp, Command = ViewModel.MoveUpCommand, CommandParameter = leftSide },
@@ -875,7 +929,16 @@ namespace IronyModManager.Views.Controls
                 new() { Header = ViewModel.NextConflict, Command = ViewModel.NextConflictCommand, CommandParameter = leftSide },
                 new() { Header = ViewModel.PrevConflict, Command = ViewModel.PrevConflictCommand, CommandParameter = leftSide },
                 new() { Header = "-" },
-                new() { Header = ViewModel.CopyText, Command = ViewModel.CopyTextCommand, CommandParameter = leftSide }
+                new()
+                {
+                    Header = ViewModel.CopyText,
+                    Command = ReactiveCommand.Create(() =>
+                    {
+                        ViewModel.CopyTextCommand.Execute(leftSide).Subscribe();
+                        diffLeft.TextArea.TextView.Redraw();
+                        diffRight.TextArea.TextView.Redraw();
+                    })
+                }
             };
             menuItems.AddRange(mainEditingItems);
 

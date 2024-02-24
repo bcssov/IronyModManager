@@ -4,7 +4,7 @@
 // Created          : 03-20-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-22-2024
+// Last Modified On : 02-24-2024
 // ***********************************************************************
 // <copyright file="MergeViewerControlViewModel.cs" company="Mario">
 //     Mario
@@ -563,9 +563,7 @@ namespace IronyModManager.ViewModels.Controls
         /// <summary>
         /// Gets or sets a value representing the toggle merge type caption.
         /// </summary>
-        /// <value>
-        /// The toggle merge type caption.
-        /// </value>
+        /// <value>The toggle merge type caption.</value>
         [StaticLocalization(LocalizationResources.Conflict_Solver.ContextMenu.ToggleCompare)]
         public virtual string ToggleMergeTypeCaption { get; protected set; }
 
