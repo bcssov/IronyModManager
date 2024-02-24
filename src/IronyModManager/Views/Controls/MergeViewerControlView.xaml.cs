@@ -1,5 +1,4 @@
-﻿
-// ***********************************************************************
+﻿// ***********************************************************************
 // Assembly         : IronyModManager
 // Author           : Mario
 // Created          : 03-20-2020
@@ -33,12 +32,11 @@ using IronyModManager.Implementation.AvaloniaEdit;
 using IronyModManager.Implementation.Hotkey;
 using IronyModManager.Shared;
 using IronyModManager.ViewModels.Controls;
-using static IronyModManager.ViewModels.Controls.MergeViewerControlViewModel;
 using ReactiveUI;
+using static IronyModManager.ViewModels.Controls.MergeViewerControlViewModel;
 
 namespace IronyModManager.Views.Controls
 {
-
     /// <summary>
     /// Class MergeViewerControlView.
     /// Implements the <see cref="IronyModManager.Common.Views.BaseControl{IronyModManager.ViewModels.Controls.MergeViewerControlViewModel}" />
@@ -783,6 +781,7 @@ namespace IronyModManager.Views.Controls
             if (ViewModel!.EditorAvailable)
             {
                 menuItems.Add(new MenuItem { Header = ViewModel.Editor, Command = ViewModel.EditorCommand, CommandParameter = !leftSide });
+                menuItems.Add(new MenuItem { Header = ViewModel.ToggleMergeTypeCaption, Command = ViewModel.ToggleMergeTypeCommand });
                 menuItems.Add(new MenuItem { Header = "-" });
             }
 
@@ -842,9 +841,7 @@ namespace IronyModManager.Views.Controls
                         ViewModel.CopyThisAfterLineCommand.Execute(leftSide).Subscribe();
                         RedrawEditorDiffs();
                     })
-                },
-                new() { Header = "-" },
-                new() { Header = ViewModel.ToggleMergeTypeCaption, Command = ViewModel.ToggleMergeTypeCommand }
+                }
             };
             menuItems.AddRange(mainEditingItems);
 
@@ -862,6 +859,7 @@ namespace IronyModManager.Views.Controls
             if (ViewModel!.EditorAvailable)
             {
                 menuItems.Add(new MenuItem { Header = ViewModel.Editor, Command = ViewModel.EditorCommand, CommandParameter = leftSide });
+                menuItems.Add(new MenuItem { Header = ViewModel.ToggleMergeTypeCaption, Command = ViewModel.ToggleMergeTypeCommand });
                 menuItems.Add(new MenuItem { Header = "-" });
             }
 
@@ -883,9 +881,7 @@ namespace IronyModManager.Views.Controls
                 new() { Header = "-" },
                 new() { Header = ViewModel.DeleteText, Command = ViewModel.DeleteTextCommand, CommandParameter = leftSide },
                 new() { Header = ViewModel.MoveUp, Command = ViewModel.MoveUpCommand, CommandParameter = leftSide },
-                new() { Header = ViewModel.MoveDown, Command = ViewModel.MoveDownCommand, CommandParameter = leftSide },
-                new() { Header = "-" },
-                new() { Header = ViewModel.ToggleMergeTypeCaption, Command = ViewModel.ToggleMergeTypeCommand }
+                new() { Header = ViewModel.MoveDown, Command = ViewModel.MoveDownCommand, CommandParameter = leftSide }
             };
             menuItems.AddRange(mainEditingItems);
 
