@@ -4,7 +4,7 @@
 // Created          : 04-15-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-22-2024
+// Last Modified On : 02-24-2024
 // ***********************************************************************
 // <copyright file="TextEditor.cs" company="Mario">
 //     Mario
@@ -97,6 +97,17 @@ namespace IronyModManager.Controls
         #region Methods
 
         /// <summary>
+        /// Gets a middle visible line.
+        /// </summary>
+        /// <returns>An int.</returns>
+        public int GetMiddleVisibleLine()
+        {
+            var firstLine = TextArea.TextView.GetDocumentLineByVisualTop(ScrollViewer.Offset.Y).LineNumber;
+            var lastLine = TextArea.TextView.GetDocumentLineByVisualTop(ScrollViewer.Offset.Y + ScrollViewer.Viewport.Height).LineNumber;
+            return firstLine + ((lastLine - firstLine) / 2);
+        }
+
+        /// <summary>
         /// Scroll to.
         /// </summary>
         /// <param name="line">The line.</param>
@@ -104,8 +115,7 @@ namespace IronyModManager.Controls
         public new void ScrollTo(int line, int column)
         {
             const double minimumScrollFraction = 0.3;
-            ScrollTo(line, column, VisualYPosition.LineMiddle,
-                null != ScrollViewer ? ScrollViewer.Viewport.Height / 2 : 0.0, minimumScrollFraction);
+            ScrollTo(line, column, VisualYPosition.LineMiddle, null != ScrollViewer ? ScrollViewer.Viewport.Height / 2 : 0.0, minimumScrollFraction);
         }
 
         /// <summary>
@@ -160,8 +170,7 @@ namespace IronyModManager.Controls
                 var targetY = ScrollViewer.Offset.Y;
 
                 var verticalPos = p.Y - referencedVerticalViewPortOffset;
-                if (Math.Abs(verticalPos - ScrollViewer.Offset.Y) >
-                    minimumScrollFraction * ScrollViewer.Viewport.Height)
+                if (Math.Abs(verticalPos - ScrollViewer.Offset.Y) > minimumScrollFraction * ScrollViewer.Viewport.Height)
                 {
                     targetY = Math.Max(0, verticalPos);
                 }
@@ -171,8 +180,7 @@ namespace IronyModManager.Controls
                     if (p.X > ScrollViewer.Viewport.Width - (MinimumDistanceToViewBorder * 2))
                     {
                         var horizontalPos = Math.Max(0, p.X - (ScrollViewer.Viewport.Width / 2));
-                        if (Math.Abs(horizontalPos - ScrollViewer.Offset.X) >
-                            minimumScrollFraction * ScrollViewer.Viewport.Width)
+                        if (Math.Abs(horizontalPos - ScrollViewer.Offset.X) > minimumScrollFraction * ScrollViewer.Viewport.Width)
                         {
                             targetX = 0;
                         }

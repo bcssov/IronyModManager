@@ -1,4 +1,5 @@
-﻿// ***********************************************************************
+﻿
+// ***********************************************************************
 // Assembly         : IronyModManager
 // Author           : Mario
 // Created          : 03-20-2020
@@ -32,11 +33,12 @@ using IronyModManager.Implementation.AvaloniaEdit;
 using IronyModManager.Implementation.Hotkey;
 using IronyModManager.Shared;
 using IronyModManager.ViewModels.Controls;
-using ReactiveUI;
 using static IronyModManager.ViewModels.Controls.MergeViewerControlViewModel;
+using ReactiveUI;
 
 namespace IronyModManager.Views.Controls
 {
+
     /// <summary>
     /// Class MergeViewerControlView.
     /// Implements the <see cref="IronyModManager.Common.Views.BaseControl{IronyModManager.ViewModels.Controls.MergeViewerControlViewModel}" />
@@ -550,7 +552,6 @@ namespace IronyModManager.Views.Controls
                 diffRight.IsReadOnly = !s;
             }).DisposeWith(disposables);
 
-
             base.OnActivated(disposables);
         }
 
@@ -796,8 +797,7 @@ namespace IronyModManager.Views.Controls
                     Command = ReactiveCommand.Create(() =>
                     {
                         ViewModel.CopyTextCommand.Execute(leftSide).Subscribe();
-                        diffLeft.TextArea.TextView.Redraw();
-                        diffRight.TextArea.TextView.Redraw();
+                        RedrawEditorDiffs();
                     })
                 },
                 new()
@@ -810,8 +810,7 @@ namespace IronyModManager.Views.Controls
                     Command = ReactiveCommand.Create(() =>
                     {
                         ViewModel.CopyAllCommand.Execute(leftSide).Subscribe();
-                        diffLeft.TextArea.TextView.Redraw();
-                        diffRight.TextArea.TextView.Redraw();
+                        RedrawEditorDiffs();
                     })
                 },
                 new()
@@ -820,8 +819,7 @@ namespace IronyModManager.Views.Controls
                     Command = ReactiveCommand.Create(() =>
                     {
                         ViewModel.CopyThisCommand.Execute(leftSide).Subscribe();
-                        diffLeft.TextArea.TextView.Redraw();
-                        diffRight.TextArea.TextView.Redraw();
+                        RedrawEditorDiffs();
                     })
                 },
                 new()
@@ -830,8 +828,7 @@ namespace IronyModManager.Views.Controls
                     Command = ReactiveCommand.Create(() =>
                     {
                         ViewModel.CopyThisBeforeLineCommand.Execute(leftSide).Subscribe();
-                        diffLeft.TextArea.TextView.Redraw();
-                        diffRight.TextArea.TextView.Redraw();
+                        RedrawEditorDiffs();
                     })
                 },
                 new()
@@ -840,8 +837,7 @@ namespace IronyModManager.Views.Controls
                     Command = ReactiveCommand.Create(() =>
                     {
                         ViewModel.CopyThisAfterLineCommand.Execute(leftSide).Subscribe();
-                        diffLeft.TextArea.TextView.Redraw();
-                        diffRight.TextArea.TextView.Redraw();
+                        RedrawEditorDiffs();
                     })
                 },
                 new() { Header = "-" },
@@ -878,8 +874,7 @@ namespace IronyModManager.Views.Controls
                     Command = ReactiveCommand.Create(() =>
                     {
                         ViewModel.CopyTextCommand.Execute(leftSide).Subscribe();
-                        diffLeft.TextArea.TextView.Redraw();
-                        diffRight.TextArea.TextView.Redraw();
+                        RedrawEditorDiffs();
                     })
                 },
                 new() { Header = "-" },
@@ -898,12 +893,34 @@ namespace IronyModManager.Views.Controls
                 menuItems.Add(new MenuItem { Header = "-" });
                 if (undoAvailable)
                 {
-                    menuItems.Add(new MenuItem { Header = ViewModel.Undo, Command = ViewModel.UndoCommand, CommandParameter = leftSide });
+                    menuItems.Add(new MenuItem
+                    {
+                        Header = ViewModel.Undo,
+                        Command = ReactiveCommand.Create(() =>
+                        {
+                            var visibleLine = diffLeft.GetMiddleVisibleLine();
+                            ViewModel.UndoCommand.Execute(leftSide).Subscribe();
+                            diffLeft.ScrollToLine(visibleLine);
+                            diffRight.ScrollToLine(visibleLine);
+                            RedrawEditorDiffs();
+                        })
+                    });
                 }
 
                 if (redoAvailable)
                 {
-                    menuItems.Add(new MenuItem { Header = ViewModel.Redo, Command = ViewModel.RedoCommand, CommandParameter = leftSide });
+                    menuItems.Add(new MenuItem
+                    {
+                        Header = ViewModel.Redo,
+                        Command = ReactiveCommand.Create(() =>
+                        {
+                            var visibleLine = diffLeft.GetMiddleVisibleLine();
+                            ViewModel.RedoCommand.Execute(leftSide).Subscribe();
+                            diffLeft.ScrollToLine(visibleLine);
+                            diffRight.ScrollToLine(visibleLine);
+                            RedrawEditorDiffs();
+                        })
+                    });
                 }
             }
 
@@ -935,8 +952,7 @@ namespace IronyModManager.Views.Controls
                     Command = ReactiveCommand.Create(() =>
                     {
                         ViewModel.CopyTextCommand.Execute(leftSide).Subscribe();
-                        diffLeft.TextArea.TextView.Redraw();
-                        diffRight.TextArea.TextView.Redraw();
+                        RedrawEditorDiffs();
                     })
                 }
             };
@@ -974,6 +990,16 @@ namespace IronyModManager.Views.Controls
         private void InitializeComponent()
         {
             AvaloniaXamlLoader.Load(this);
+        }
+
+        /// <summary>
+        /// Redraws an editor diffs.
+        /// </summary>
+        /// <returns></returns>
+        private void RedrawEditorDiffs()
+        {
+            diffLeft.TextArea.TextView.Redraw();
+            diffRight.TextArea.TextView.Redraw();
         }
 
         /// <summary>
