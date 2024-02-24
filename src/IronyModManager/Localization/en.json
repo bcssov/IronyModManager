@@ -332,7 +332,8 @@
             "Undo": "Undo",
             "Redo": "Redo",
             "Editor": "External Merge",
-            "ReadonlyEditor": "External Compare"
+            "ReadonlyEditor": "External Compare",
+            "ToggleCompare": "Toggle Diff Compare Mode"
         },
         "EditorContextMenu": {
             "Copy": "Copy",

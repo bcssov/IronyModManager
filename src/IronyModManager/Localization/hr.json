@@ -332,7 +332,8 @@
             "Undo": "Poništi",
             "Redo": "Ponovi",
             "Editor": "Vanjsko spajanje",
-            "ReadonlyEditor": "Vanjska usporedba"
+            "ReadonlyEditor": "Vanjska usporedba",
+            "ToggleCompare": "Promjeni način usporedbe razlika"
         },
         "EditorContextMenu": {
             "Copy": "Kopiraj",

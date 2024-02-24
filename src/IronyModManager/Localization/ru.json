@@ -332,7 +332,8 @@
             "Undo": "Отменить",
             "Redo": "Вернуть",
             "Editor": "Внешнее объединение",
-            "ReadonlyEditor": "Внешнее сравнение"
+            "ReadonlyEditor": "Внешнее сравнение",
+            "ToggleCompare": "Переключение режима сравнения диффов"
         },
         "EditorContextMenu": {
             "Copy": "Копировать",

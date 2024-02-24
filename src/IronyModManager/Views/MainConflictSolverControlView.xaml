@@ -30,7 +30,7 @@
                         <ContentControl Content="{Binding CustomConflicts}" Grid.Column="0" Grid.Row="1" IsVisible="{Binding !ReadOnly}"></ContentControl>
                         <ContentControl Content="{Binding ResetConflicts}" Grid.Column="{Binding ResetConflictsColumn}" Grid.Row="1"></ContentControl>
                     </Grid>
-                    <controls:ComboBox Items="{Binding HierarchalConflicts}" SelectedItem="{Binding SelectedParentConflict}"
+                    <controls:ComboBox Items="{Binding HierarchicalConflicts}" SelectedItem="{Binding SelectedParentConflict}"
                              HorizontalAlignment="Stretch" MinHeight="30">
                         <controls:ComboBox.ItemTemplate>
                             <DataTemplate>

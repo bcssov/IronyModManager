@@ -332,7 +332,8 @@
             "Undo": "annuler",
             "Redo": "Refaire",
             "Editor": "Fusion externe",
-            "ReadonlyEditor": "Comparaison externe"
+            "ReadonlyEditor": "Comparaison externe",
+            "ToggleCompare": "Basculer le mode de comparaison des différences"
         },
         "EditorContextMenu": {
             "Copy": "Copier",

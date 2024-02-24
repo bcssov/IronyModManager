@@ -4,20 +4,20 @@
 // Created          : 03-20-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-27-2023
+// Last Modified On : 02-24-2024
 // ***********************************************************************
 // <copyright file="MergeViewerControlViewModel.cs" company="Mario">
 //     Mario
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
+
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reactive;
 using System.Reactive.Disposables;
-using System.Reactive.Linq;
 using System.Threading.Tasks;
 using Avalonia.Collections;
 using Avalonia.Threading;
@@ -44,40 +44,61 @@ namespace IronyModManager.ViewModels.Controls
     /// Implements the <see cref="IronyModManager.Common.ViewModels.BaseViewModel" />
     /// </summary>
     /// <seealso cref="IronyModManager.Common.ViewModels.BaseViewModel" />
+    /// <param name="scrollState">State of the scroll.</param>
+    /// <param name="modPatchCollectionService">The mod patch collection service.</param>
+    /// <param name="hotkeyPressedHandler">The hotkey pressed handler.</param>
+    /// <param name="appAction">The application action.</param>
+    /// <param name="externalEditorService">The external editor service.</param>
+    /// <param name="notificationAction">The notification action.</param>
+    /// <param name="localizationManager">The localization manager.</param>
+    /// <remarks>Initializes a new instance of the <see cref="MergeViewerControlViewModel" /> class.</remarks>
     [ExcludeFromCoverage("This should be tested via functional testing.")]
-    public class MergeViewerControlViewModel : BaseViewModel
+    public class MergeViewerControlViewModel(
+        IAppStateService appStateService,
+        IScrollState scrollState,
+        IModPatchCollectionService modPatchCollectionService,
+        ConflictSolverViewHotkeyPressedHandler hotkeyPressedHandler,
+        IAppAction appAction,
+        IExternalEditorService externalEditorService,
+        INotificationAction notificationAction,
+        ILocalizationManager localizationManager) : BaseViewModel
     {
         #region Fields
 
         /// <summary>
         /// The URL action
         /// </summary>
-        private readonly IAppAction appAction;
+        private readonly IAppAction appAction = appAction;
+
+        /// <summary>
+        /// A private readonly IAppStateService named appStateService.
+        /// </summary>
+        private readonly IAppStateService appStateService = appStateService;
 
         /// <summary>
         /// The external editor service
         /// </summary>
-        private readonly IExternalEditorService externalEditorService;
+        private readonly IExternalEditorService externalEditorService = externalEditorService;
 
         /// <summary>
         /// The hotkey pressed handler
         /// </summary>
-        private readonly ConflictSolverViewHotkeyPressedHandler hotkeyPressedHandler;
+        private readonly ConflictSolverViewHotkeyPressedHandler hotkeyPressedHandler = hotkeyPressedHandler;
 
         /// <summary>
         /// The localization manager
         /// </summary>
-        private readonly ILocalizationManager localizationManager;
+        private readonly ILocalizationManager localizationManager = localizationManager;
 
         /// <summary>
         /// The mod patch collection service
         /// </summary>
-        private readonly IModPatchCollectionService modPatchCollectionService;
+        private readonly IModPatchCollectionService modPatchCollectionService = modPatchCollectionService;
 
         /// <summary>
         /// The notification action
         /// </summary>
-        private readonly INotificationAction notificationAction;
+        private readonly INotificationAction notificationAction = notificationAction;
 
         /// <summary>
         /// The redo stack
@@ -87,7 +108,7 @@ namespace IronyModManager.ViewModels.Controls
         /// <summary>
         /// The scroll state
         /// </summary>
-        private readonly IScrollState scrollState;
+        private readonly IScrollState scrollState = scrollState;
 
         /// <summary>
         /// The undo stack
@@ -107,37 +128,9 @@ namespace IronyModManager.ViewModels.Controls
         /// <summary>
         /// The syncing selection
         /// </summary>
-        private bool syncingSelection = false;
+        private bool syncingSelection;
 
         #endregion Fields
-
-        #region Constructors
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="MergeViewerControlViewModel" /> class.
-        /// </summary>
-        /// <param name="scrollState">State of the scroll.</param>
-        /// <param name="modPatchCollectionService">The mod patch collection service.</param>
-        /// <param name="hotkeyPressedHandler">The hotkey pressed handler.</param>
-        /// <param name="appAction">The application action.</param>
-        /// <param name="externalEditorService">The external editor service.</param>
-        /// <param name="notificationAction">The notification action.</param>
-        /// <param name="localizationManager">The localization manager.</param>
-        public MergeViewerControlViewModel(IScrollState scrollState,
-            IModPatchCollectionService modPatchCollectionService, ConflictSolverViewHotkeyPressedHandler hotkeyPressedHandler,
-            IAppAction appAction, IExternalEditorService externalEditorService,
-            INotificationAction notificationAction, ILocalizationManager localizationManager)
-        {
-            this.appAction = appAction;
-            this.externalEditorService = externalEditorService;
-            this.notificationAction = notificationAction;
-            this.localizationManager = localizationManager;
-            this.hotkeyPressedHandler = hotkeyPressedHandler;
-            this.modPatchCollectionService = modPatchCollectionService;
-            this.scrollState = scrollState;
-        }
-
-        #endregion Constructors
 
         #region Delegates
 
@@ -161,6 +154,16 @@ namespace IronyModManager.ViewModels.Controls
         /// Occurs when [conflict found].
         /// </summary>
         public event ConflictFoundDelegate ConflictFound;
+
+        /// <summary>
+        /// Occurs when [hotkey after perform].
+        /// </summary>
+        public event EventHandler HotkeyAfterPerform;
+
+        /// <summary>
+        /// Occurs when [hotkey copy before perform].
+        /// </summary>
+        public event EventHandler HotkeyBeforePerform;
 
         /// <summary>
         /// Occurs when [focus side].
@@ -242,9 +245,9 @@ namespace IronyModManager.ViewModels.Controls
         public virtual string CopyThisAfterLine { get; protected set; }
 
         /// <summary>
-        /// Gets or sets the take other then this command.
+        /// Gets or sets the copy this after line command.
         /// </summary>
-        /// <value>The take other then this command.</value>
+        /// <value>The copy this after line command.</value>
         public virtual ReactiveCommand<bool, Unit> CopyThisAfterLineCommand { get; protected set; }
 
         /// <summary>
@@ -284,6 +287,18 @@ namespace IronyModManager.ViewModels.Controls
         /// </summary>
         /// <value>The delete text command.</value>
         public virtual ReactiveCommand<bool, Unit> DeleteTextCommand { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets a value representing the diff editor bottom line.<see cref="int?" />
+        /// </summary>
+        /// <value>The diff editor bottom line.</value>
+        public virtual int? DiffEditorBottomLine { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value representing the diff editor top line.<see cref="int?" />
+        /// </summary>
+        /// <value>The diff editor top line.</value>
+        public virtual int? DiffEditorTopLine { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether [editing left].
@@ -568,6 +583,19 @@ namespace IronyModManager.ViewModels.Controls
         public virtual IAvaloniaList<DiffPieceWithIndex> RightSideSelected { get; set; }
 
         /// <summary>
+        /// Gets or sets a value representing the toggle merge type caption.
+        /// </summary>
+        /// <value>The toggle merge type caption.</value>
+        [StaticLocalization(LocalizationResources.Conflict_Solver.ContextMenu.ToggleCompare)]
+        public virtual string ToggleMergeTypeCaption { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets a value representing the toggle merge type command.<see cref="ReactiveUI.ReactiveCommand{System.Reactive.Unit, System.Reactive.Unit}" />
+        /// </summary>
+        /// <value>The toggle merge type command.</value>
+        public virtual ReactiveCommand<Unit, Unit> ToggleMergeTypeCommand { get; protected set; }
+
+        /// <summary>
         /// Gets or sets the undo.
         /// </summary>
         /// <value>The undo.</value>
@@ -579,6 +607,12 @@ namespace IronyModManager.ViewModels.Controls
         /// </summary>
         /// <value>The undo command.</value>
         public virtual ReactiveCommand<bool, Unit> UndoCommand { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether the using new merge type.
+        /// </summary>
+        /// <value><c>true</c> if using new merge type; otherwise, <c>false</c>.</value>
+        public virtual bool UsingNewMergeType { get; protected set; }
 
         #endregion Properties
 
@@ -606,6 +640,8 @@ namespace IronyModManager.ViewModels.Controls
             {
                 EditorAvailable = true;
             }
+
+            EvaluateMergeType();
         }
 
         /// <summary>
@@ -614,7 +650,7 @@ namespace IronyModManager.ViewModels.Controls
         /// <returns><c>true</c> if [is redo available]; otherwise, <c>false</c>.</returns>
         public virtual bool IsRedoAvailable()
         {
-            return redoStack.Any();
+            return redoStack.Count != 0;
         }
 
         /// <summary>
@@ -623,7 +659,7 @@ namespace IronyModManager.ViewModels.Controls
         /// <returns><c>true</c> if [is undo available]; otherwise, <c>false</c>.</returns>
         public virtual bool IsUndoAvailable()
         {
-            return undoStack.Any();
+            return undoStack.Count != 0;
         }
 
         /// <summary>
@@ -664,15 +700,12 @@ namespace IronyModManager.ViewModels.Controls
                 prevText ??= string.Empty;
                 if (undoStack.Count == 0 && string.IsNullOrWhiteSpace(prevText))
                 {
-                    return;
                 }
-                else if (undoStack.Count > 0 && undoStack.FirstOrDefault().Equals(prevText))
+                else if (undoStack.Count > 0 && undoStack.FirstOrDefault()!.Equals(prevText))
                 {
-                    return;
                 }
                 else if (prevText.Equals(text))
                 {
-                    return;
                 }
                 else
                 {
@@ -680,6 +713,7 @@ namespace IronyModManager.ViewModels.Controls
                     redoStack.Clear();
                 }
             }
+
             scrollState.SetState(!lockScroll);
             var prevLeftSide = LeftSide;
             var prevRightSide = RightSide;
@@ -688,8 +722,8 @@ namespace IronyModManager.ViewModels.Controls
             LeftDocument = new TextDocument(LeftSide);
             RightDocument = new TextDocument(RightSide);
             SetBracketText();
+            Compare(LeftSide, RightSide);
 
-            Compare();
             if (resetStack)
             {
                 undoStack.Clear();
@@ -706,16 +740,19 @@ namespace IronyModManager.ViewModels.Controls
                     evalStack(RightSide, prevRightSide);
                 }
             }
+
             scrollState.SetState(true);
         }
 
         /// <summary>
-        /// Compares this instance.
+        /// Compare.
         /// </summary>
-        protected virtual void Compare()
+        /// <param name="left">The left.</param>
+        /// <param name="right">The right.</param>
+        protected virtual void Compare(string left, string right)
         {
             var builder = new SideBySideDiffBuilder(new Differ());
-            var diff = builder.BuildDiffModel(LeftSide, RightSide, true);
+            var diff = builder.BuildDiffModel(left, right, true);
             LeftDiff = GetDiffPieceWithIndex(diff.OldText.Lines);
             RightDiff = GetDiffPieceWithIndex(diff.NewText.Lines);
         }
@@ -731,7 +768,7 @@ namespace IronyModManager.ViewModels.Controls
         {
             if (selected?.Count() > 0)
             {
-                int indx = 0;
+                var idx = 0;
                 selected = CopyDiffPieceCollection(selected);
                 source = CopyDiffPieceCollection(source);
                 destination = CopyDiffPieceCollection(destination);
@@ -740,8 +777,9 @@ namespace IronyModManager.ViewModels.Controls
                 {
                     destination.RemoveAt(item.Key);
                     destination.Insert(item.Key, item.Value);
-                    indx = item.Key;
+                    idx = item.Key;
                 }
+
                 if (leftSide)
                 {
                     SetText(LeftSide, string.Join(Environment.NewLine, destination.Where(p => p.Text != null).Select(p => p.Text)));
@@ -750,7 +788,8 @@ namespace IronyModManager.ViewModels.Controls
                 {
                     SetText(string.Join(Environment.NewLine, destination.Where(p => p.Text != null).Select(p => p.Text)), RightSide);
                 }
-                ConflictFound?.Invoke(indx);
+
+                ConflictFound?.Invoke(idx);
             }
         }
 
@@ -765,15 +804,12 @@ namespace IronyModManager.ViewModels.Controls
         {
             if (selected?.Count() > 0)
             {
-                int indx = 0;
+                var idx = 0;
                 selected = CopyDiffPieceCollection(selected);
                 source = CopyDiffPieceCollection(source);
                 destination = CopyDiffPieceCollection(destination);
                 var ordered = OrderSelected(selected, source);
-                var grouped = ordered.Select((x, id) =>
-                {
-                    return Tuple.Create(x.Key, x.Value, id == 0 ? 0 : x.Key - ordered.ElementAt(id - 1).Key, id);
-                }).ToList();
+                var grouped = ordered.Select((x, id) => Tuple.Create(x.Key, x.Value, id == 0 ? 0 : x.Key - ordered.ElementAt(id - 1).Key, id)).ToList();
                 Tuple<int, DiffPieceWithIndex, int, int> initial = null;
                 var appliedOffset = 0;
                 foreach (var item in grouped)
@@ -785,16 +821,15 @@ namespace IronyModManager.ViewModels.Controls
                         var groupCopy = grouped.Skip(item.Item4 + 1).TakeWhile(p => p.Item3 <= 1);
                         if (groupCopy.Any())
                         {
-                            if (groupCopy.Last() != initial)
+                            if (groupCopy.Last() != null)
                             {
                                 initial = groupCopy.Last();
                             }
                         }
-                        if (initial == null)
-                        {
-                            initial = item;
-                        }
+
+                        initial ??= item;
                     }
+
                     var index = initial.Item1 + item.Item4 + appliedOffset + 1;
                     var count = destination.Count - 1;
                     if (index < 0)
@@ -805,6 +840,7 @@ namespace IronyModManager.ViewModels.Controls
                     {
                         index = count;
                     }
+
                     while (destination[index].Type == ChangeType.Imaginary)
                     {
                         if (index < 0)
@@ -817,12 +853,15 @@ namespace IronyModManager.ViewModels.Controls
                             index = count;
                             break;
                         }
+
                         index++;
                         appliedOffset++;
                     }
+
                     destination.Insert(index, item.Item2);
-                    indx = index;
+                    idx = index;
                 }
+
                 if (leftSide)
                 {
                     SetText(LeftSide, string.Join(Environment.NewLine, destination.Where(p => p.Text != null).Select(p => p.Text)));
@@ -831,7 +870,8 @@ namespace IronyModManager.ViewModels.Controls
                 {
                     SetText(string.Join(Environment.NewLine, destination.Where(p => p.Text != null).Select(p => p.Text)), RightSide);
                 }
-                ConflictFound?.Invoke(indx);
+
+                ConflictFound?.Invoke(idx);
             }
         }
 
@@ -846,15 +886,12 @@ namespace IronyModManager.ViewModels.Controls
         {
             if (selected?.Count() > 0)
             {
-                int indx = 0;
+                var idx = 0;
                 selected = CopyDiffPieceCollection(selected);
                 source = CopyDiffPieceCollection(source);
                 destination = CopyDiffPieceCollection(destination);
                 var ordered = OrderSelected(selected, source);
-                var grouped = ordered.Select((x, id) =>
-                {
-                    return Tuple.Create(x.Key, x.Value, id == 0 ? 0 : x.Key - ordered.ElementAt(id - 1).Key, id);
-                }).ToList();
+                var grouped = ordered.Select((x, id) => { return Tuple.Create(x.Key, x.Value, id == 0 ? 0 : x.Key - ordered.ElementAt(id - 1).Key, id); }).ToList();
                 Tuple<int, DiffPieceWithIndex, int, int> initial = null;
                 var appliedOffset = 0;
                 foreach (var item in grouped)
@@ -864,6 +901,7 @@ namespace IronyModManager.ViewModels.Controls
                         appliedOffset = 0;
                         initial = item;
                     }
+
                     var index = initial.Item1 + item.Item4 + appliedOffset;
                     var count = destination.Count - 1;
                     if (index < 0)
@@ -874,6 +912,7 @@ namespace IronyModManager.ViewModels.Controls
                     {
                         index = count;
                     }
+
                     while (destination[index].Type == ChangeType.Imaginary)
                     {
                         if (index < 0)
@@ -886,12 +925,15 @@ namespace IronyModManager.ViewModels.Controls
                             index = count;
                             break;
                         }
+
                         index--;
                         appliedOffset--;
                     }
+
                     destination.Insert(index, item.Item2);
-                    indx = index;
+                    idx = index;
                 }
+
                 if (leftSide)
                 {
                     SetText(LeftSide, string.Join(Environment.NewLine, destination.Where(p => p.Text != null).Select(p => p.Text)));
@@ -900,7 +942,8 @@ namespace IronyModManager.ViewModels.Controls
                 {
                     SetText(string.Join(Environment.NewLine, destination.Where(p => p.Text != null).Select(p => p.Text)), RightSide);
                 }
-                ConflictFound?.Invoke(indx);
+
+                ConflictFound?.Invoke(idx);
             }
         }
 
@@ -911,7 +954,7 @@ namespace IronyModManager.ViewModels.Controls
         /// <returns>System.Collections.Generic.List&lt;IronyModManager.ViewModels.Controls.MergeViewerControlViewModel.DiffPieceWithIndex&gt;.</returns>
         protected virtual List<DiffPieceWithIndex> CopyDiffPieceCollection(IEnumerable<DiffPieceWithIndex> col)
         {
-            return new List<DiffPieceWithIndex>(col);
+            return [.. col];
         }
 
         /// <summary>
@@ -930,7 +973,7 @@ namespace IronyModManager.ViewModels.Controls
         /// <param name="leftSide">if set to <c>true</c> [left side].</param>
         protected virtual void DeleteLines(bool leftSide)
         {
-            int indx = 0;
+            var idx = 0;
             var selected = leftSide ? LeftSideSelected : RightSideSelected;
             var source = CopyDiffPieceCollection(leftSide ? LeftDiff : RightDiff);
             if (selected != null && source != null && selected.Count > 0 && selected.Count <= source.Count)
@@ -938,8 +981,9 @@ namespace IronyModManager.ViewModels.Controls
                 foreach (var item in selected)
                 {
                     source.Remove(item);
-                    indx = item.Index;
+                    idx = item.Index;
                 }
+
                 if (leftSide)
                 {
                     SetText(string.Join(Environment.NewLine, source.Where(p => p.Text != null).Select(p => p.Text)), RightSide);
@@ -948,8 +992,17 @@ namespace IronyModManager.ViewModels.Controls
                 {
                     SetText(LeftSide, string.Join(Environment.NewLine, source.Where(p => p.Text != null).Select(p => p.Text)));
                 }
-                ConflictFound?.Invoke(indx);
+
+                ConflictFound?.Invoke(idx);
             }
+        }
+
+        /// <summary>
+        /// Evaluates a merge type.
+        /// </summary>
+        protected virtual void EvaluateMergeType()
+        {
+            UsingNewMergeType = appStateService.Get().UseNewDiffViewer;
         }
 
         /// <summary>
@@ -973,11 +1026,12 @@ namespace IronyModManager.ViewModels.Controls
                         while (true)
                         {
                             idx++;
-                            if (idx > (source.Count - 1))
+                            if (idx > source.Count - 1)
                             {
                                 idx = source.Count - 1;
                                 break;
                             }
+
                             var prevIdx = idx - 1;
                             var type = source[prevIdx].Type;
                             if (source[idx].Type == ChangeType.Unchanged || (type == ChangeType.Unchanged && source[idx].Type != ChangeType.Unchanged))
@@ -985,6 +1039,7 @@ namespace IronyModManager.ViewModels.Controls
                                 break;
                             }
                         }
+
                         var line = source.Skip(idx).FirstOrDefault(p => p.SubPieces.Count > 0 || !(p.Type == ChangeType.Unchanged || (skipImaginary && p.Type == ChangeType.Imaginary)));
                         if (line != null)
                         {
@@ -993,6 +1048,7 @@ namespace IronyModManager.ViewModels.Controls
                             {
                                 index = 0;
                             }
+
                             line = source.Skip(index).TakeWhile(p => p.SubPieces.Count > 0 || !(p.Type == ChangeType.Unchanged || (skipImaginary && p.Type == ChangeType.Imaginary))).LastOrDefault();
                             if (line != null)
                             {
@@ -1007,22 +1063,25 @@ namespace IronyModManager.ViewModels.Controls
                         while (true)
                         {
                             reverseIdx++;
-                            if (reverseIdx > (reverseSrc.Count - 1))
+                            if (reverseIdx > reverseSrc.Count - 1)
                             {
                                 reverseIdx = reverseSrc.Count - 1;
                                 break;
                             }
+
                             var prevIdx = reverseIdx - 1;
                             if (prevIdx < 0)
                             {
                                 prevIdx = 0;
                             }
+
                             var type = reverseSrc[prevIdx].Type;
                             if (reverseSrc[reverseIdx].Type == ChangeType.Unchanged || (type == ChangeType.Unchanged && reverseSrc[reverseIdx].Type != ChangeType.Unchanged))
                             {
                                 break;
                             }
                         }
+
                         var line = reverseSrc.Skip(reverseIdx).FirstOrDefault(p => p.SubPieces.Count > 0 || !(p.Type == ChangeType.Unchanged || (skipImaginary && p.Type == ChangeType.Imaginary)));
                         if (line != null)
                         {
@@ -1031,6 +1090,7 @@ namespace IronyModManager.ViewModels.Controls
                             {
                                 index = 0;
                             }
+
                             line = reverseSrc.Skip(index).TakeWhile(p => p.SubPieces.Count > 0 || !(p.Type == ChangeType.Unchanged || (skipImaginary && p.Type == ChangeType.Imaginary))).LastOrDefault();
                             if (line != null)
                             {
@@ -1038,6 +1098,7 @@ namespace IronyModManager.ViewModels.Controls
                             }
                         }
                     }
+
                     if (matchIdx.HasValue)
                     {
                         ConflictFound?.Invoke(matchIdx.GetValueOrDefault());
@@ -1054,11 +1115,11 @@ namespace IronyModManager.ViewModels.Controls
         protected virtual List<DiffPieceWithIndex> GetDiffPieceWithIndex(List<DiffPiece> lines)
         {
             var col = new List<DiffPieceWithIndex>();
-            int counter = 0;
+            var counter = 0;
             foreach (var item in lines)
             {
                 counter++;
-                col.Add(new DiffPieceWithIndex()
+                col.Add(new DiffPieceWithIndex
                 {
                     Index = counter,
                     Position = item.Position,
@@ -1067,6 +1128,7 @@ namespace IronyModManager.ViewModels.Controls
                     Type = item.Type
                 });
             }
+
             return col;
         }
 
@@ -1081,7 +1143,7 @@ namespace IronyModManager.ViewModels.Controls
         {
             if (selected?.Count() > 0)
             {
-                int indx = 0;
+                var idx = 0;
                 selected = CopyDiffPieceCollection(selected);
                 source = CopyDiffPieceCollection(source);
                 var ordered = OrderSelected(selected, source);
@@ -1097,6 +1159,7 @@ namespace IronyModManager.ViewModels.Controls
                     {
                         index = count;
                     }
+
                     while (source[index].Type == ChangeType.Imaginary)
                     {
                         if (index < 0)
@@ -1109,6 +1172,7 @@ namespace IronyModManager.ViewModels.Controls
                             index = count;
                             break;
                         }
+
                         if (moveUp)
                         {
                             index--;
@@ -1118,10 +1182,12 @@ namespace IronyModManager.ViewModels.Controls
                             index++;
                         }
                     }
+
                     source.RemoveAt(item.Key);
                     source.Insert(index, item.Value);
-                    indx = index;
+                    idx = index;
                 }
+
                 if (leftSide)
                 {
                     SetText(string.Join(Environment.NewLine, source.Where(p => p.Text != null).Select(p => p.Text)), RightSide);
@@ -1130,7 +1196,8 @@ namespace IronyModManager.ViewModels.Controls
                 {
                     SetText(LeftSide, string.Join(Environment.NewLine, source.Where(p => p.Text != null).Select(p => p.Text)));
                 }
-                ConflictFound?.Invoke(indx);
+
+                ConflictFound?.Invoke(idx);
             }
         }
 
@@ -1143,22 +1210,24 @@ namespace IronyModManager.ViewModels.Controls
             LeftSideSelected = new AvaloniaList<DiffPieceWithIndex>();
             RightSideSelected = new AvaloniaList<DiffPieceWithIndex>();
 
-            LeftSideSelected.CollectionChanged += (sender, args) =>
+            LeftSideSelected.CollectionChanged += (_, _) =>
             {
                 if (syncingSelection)
                 {
                     return;
                 }
+
                 syncingSelection = true;
                 SyncSelectionsAsync(true).ConfigureAwait(true);
             };
 
-            RightSideSelected.CollectionChanged += (sender, args) =>
+            RightSideSelected.CollectionChanged += (_, _) =>
             {
                 if (syncingSelection)
                 {
                     return;
                 }
+
                 syncingSelection = true;
                 SyncSelectionsAsync(false).ConfigureAwait(true);
             };
@@ -1167,11 +1236,11 @@ namespace IronyModManager.ViewModels.Controls
             {
                 if (leftSide)
                 {
-                    Copy(LeftDiff, LeftDiff, RightDiff, leftSide);
+                    Copy(LeftDiff, LeftDiff, RightDiff, true);
                 }
                 else
                 {
-                    Copy(RightDiff, RightDiff, LeftDiff, leftSide);
+                    Copy(RightDiff, RightDiff, LeftDiff, false);
                 }
             }).DisposeWith(disposables);
 
@@ -1179,11 +1248,11 @@ namespace IronyModManager.ViewModels.Controls
             {
                 if (leftSide)
                 {
-                    Copy(LeftSideSelected, LeftDiff, RightDiff, leftSide);
+                    Copy(LeftSideSelected, LeftDiff, RightDiff, true);
                 }
                 else
                 {
-                    Copy(RightSideSelected, RightDiff, LeftDiff, leftSide);
+                    Copy(RightSideSelected, RightDiff, LeftDiff, false);
                 }
             }).DisposeWith(disposables);
 
@@ -1191,11 +1260,11 @@ namespace IronyModManager.ViewModels.Controls
             {
                 if (leftSide)
                 {
-                    CopyBeforeLines(LeftSideSelected, LeftDiff, RightDiff, leftSide);
+                    CopyBeforeLines(LeftSideSelected, LeftDiff, RightDiff, true);
                 }
                 else
                 {
-                    CopyBeforeLines(RightSideSelected, RightDiff, LeftDiff, leftSide);
+                    CopyBeforeLines(RightSideSelected, RightDiff, LeftDiff, false);
                 }
             }).DisposeWith(disposables);
 
@@ -1203,11 +1272,11 @@ namespace IronyModManager.ViewModels.Controls
             {
                 if (leftSide)
                 {
-                    CopyAfterLines(LeftSideSelected, LeftDiff, RightDiff, leftSide);
+                    CopyAfterLines(LeftSideSelected, LeftDiff, RightDiff, true);
                 }
                 else
                 {
-                    CopyAfterLines(RightSideSelected, LeftDiff, RightDiff, leftSide);
+                    CopyAfterLines(RightSideSelected, LeftDiff, RightDiff, false);
                 }
             }).DisposeWith(disposables);
 
@@ -1215,11 +1284,11 @@ namespace IronyModManager.ViewModels.Controls
             {
                 if (leftSide)
                 {
-                    Move(true, LeftSideSelected, LeftDiff, leftSide);
+                    Move(true, LeftSideSelected, LeftDiff, true);
                 }
                 else
                 {
-                    Move(true, RightSideSelected, RightDiff, leftSide);
+                    Move(true, RightSideSelected, RightDiff, false);
                 }
             }).DisposeWith(disposables);
 
@@ -1227,11 +1296,11 @@ namespace IronyModManager.ViewModels.Controls
             {
                 if (leftSide)
                 {
-                    Move(false, LeftSideSelected, LeftDiff, leftSide);
+                    Move(false, LeftSideSelected, LeftDiff, true);
                 }
                 else
                 {
-                    Move(false, RightSideSelected, RightDiff, leftSide);
+                    Move(false, RightSideSelected, RightDiff, false);
                 }
             }).DisposeWith(disposables);
 
@@ -1241,65 +1310,44 @@ namespace IronyModManager.ViewModels.Controls
             {
                 if (EditingLeft)
                 {
-                    string merged = string.Join(Environment.NewLine, LeftDocument.Text.SplitOnNewLine());
+                    var merged = string.Join(Environment.NewLine, LeftDocument.Text.SplitOnNewLine());
                     SetText(merged, RightSide);
                 }
                 else
                 {
-                    string merged = string.Join(Environment.NewLine, RightDocument.Text.SplitOnNewLine());
+                    var merged = string.Join(Environment.NewLine, RightDocument.Text.SplitOnNewLine());
                     SetText(LeftSide, merged);
                 }
+
                 ExitEditMode();
             }, okEnabled).DisposeWith(disposables);
 
-            CancelCommand = ReactiveCommand.Create(() =>
-            {
-                ExitEditMode();
-            }).DisposeWith(disposables);
+            CancelCommand = ReactiveCommand.Create(ExitEditMode).DisposeWith(disposables);
 
-            EditThisCommand = ReactiveCommand.Create((bool leftSide) =>
-            {
-                SetEditThis(leftSide);
-            }).DisposeWith(disposables);
+            EditThisCommand = ReactiveCommand.Create((bool leftSide) => { SetEditThis(leftSide); }).DisposeWith(disposables);
 
-            CopyTextCommand = ReactiveCommand.Create((bool leftSide) =>
-            {
-                CopyTextAsync(leftSide).ConfigureAwait(true);
-            }).DisposeWith(disposables);
+            CopyTextCommand = ReactiveCommand.Create((bool leftSide) => { CopyTextAsync(leftSide).ConfigureAwait(true); }).DisposeWith(disposables);
 
-            NextConflictCommand = ReactiveCommand.Create((bool leftSide) =>
-            {
-                FindConflict(leftSide, true, false);
-            }).DisposeWith(disposables);
+            NextConflictCommand = ReactiveCommand.Create((bool leftSide) => { FindConflict(leftSide, true, false); }).DisposeWith(disposables);
 
-            PrevConflictCommand = ReactiveCommand.Create((bool leftSide) =>
-            {
-                FindConflict(leftSide, false, false);
-            }).DisposeWith(disposables);
+            PrevConflictCommand = ReactiveCommand.Create((bool leftSide) => { FindConflict(leftSide, false, false); }).DisposeWith(disposables);
 
-            DeleteTextCommand = ReactiveCommand.Create((bool leftSide) =>
-            {
-                DeleteLines(leftSide);
-            }).DisposeWith(disposables);
+            DeleteTextCommand = ReactiveCommand.Create((bool leftSide) => { DeleteLines(leftSide); }).DisposeWith(disposables);
 
-            UndoCommand = ReactiveCommand.Create((bool leftSide) =>
-            {
-                PerformUndo(leftSide);
-            }).DisposeWith(disposables);
+            UndoCommand = ReactiveCommand.Create((bool leftSide) => { PerformUndo(leftSide); }).DisposeWith(disposables);
 
-            RedoCommand = ReactiveCommand.Create((bool leftSide) =>
-            {
-                PerformRedo(leftSide);
-            }).DisposeWith(disposables);
+            RedoCommand = ReactiveCommand.Create((bool leftSide) => { PerformRedo(leftSide); }).DisposeWith(disposables);
 
-            EditorCommand = ReactiveCommand.CreateFromTask((bool leftSide) =>
-            {
-                return LaunchExternalEditor(leftSide);
-            }).DisposeWith(disposables);
+            EditorCommand = ReactiveCommand.CreateFromTask((bool leftSide) => LaunchExternalEditorAsync(leftSide)).DisposeWith(disposables);
 
-            ReadOnlyEditorCommand = ReactiveCommand.CreateFromTask((bool leftSide) =>
+            ReadOnlyEditorCommand = ReactiveCommand.CreateFromTask((bool leftSide) => LaunchExternalEditorAsync(leftSide, true)).DisposeWith(disposables);
+
+            ToggleMergeTypeCommand = ReactiveCommand.Create(() =>
             {
-                return LaunchExternalEditor(leftSide, true);
+                var state = appStateService.Get();
+                state.UseNewDiffViewer = !state.UseNewDiffViewer;
+                appStateService.Save(state);
+                EvaluateMergeType();
             }).DisposeWith(disposables);
 
             var previousEditTextState = false;
@@ -1323,6 +1371,16 @@ namespace IronyModManager.ViewModels.Controls
                             {
                                 LeftSideSelected.Add(LeftDiff.FirstOrDefault());
                             }
+
+                            if (UsingNewMergeType)
+                            {
+                                if (DiffEditorTopLine.HasValue && DiffEditorTopLine.GetValueOrDefault() - 1 < LeftDiff.Count)
+                                {
+                                    LeftSideSelected.Clear();
+                                    LeftSideSelected.Add(LeftDiff[DiffEditorTopLine.GetValueOrDefault() - 1]);
+                                }
+                            }
+
                             FindConflict(true, false, false);
                             break;
 
@@ -1331,6 +1389,16 @@ namespace IronyModManager.ViewModels.Controls
                             {
                                 LeftSideSelected.Add(LeftDiff.FirstOrDefault());
                             }
+
+                            if (UsingNewMergeType)
+                            {
+                                if (DiffEditorBottomLine.HasValue && DiffEditorBottomLine.GetValueOrDefault() - 1 < LeftDiff.Count)
+                                {
+                                    LeftSideSelected.Clear();
+                                    LeftSideSelected.Add(LeftDiff[DiffEditorBottomLine.GetValueOrDefault() - 1]);
+                                }
+                            }
+
                             FindConflict(true, true, false);
                             break;
 
@@ -1339,6 +1407,16 @@ namespace IronyModManager.ViewModels.Controls
                             {
                                 LeftSideSelected.Add(LeftDiff.FirstOrDefault());
                             }
+
+                            if (UsingNewMergeType)
+                            {
+                                if (DiffEditorTopLine.HasValue && DiffEditorTopLine.GetValueOrDefault() - 1 < LeftDiff.Count)
+                                {
+                                    LeftSideSelected.Clear();
+                                    LeftSideSelected.Add(LeftDiff[DiffEditorTopLine.GetValueOrDefault() - 1]);
+                                }
+                            }
+
                             FindConflict(true, false, true);
                             break;
 
@@ -1347,6 +1425,16 @@ namespace IronyModManager.ViewModels.Controls
                             {
                                 LeftSideSelected.Add(LeftDiff.FirstOrDefault());
                             }
+
+                            if (UsingNewMergeType)
+                            {
+                                if (DiffEditorBottomLine.HasValue && DiffEditorBottomLine.GetValueOrDefault() - 1 < LeftDiff.Count)
+                                {
+                                    LeftSideSelected.Clear();
+                                    LeftSideSelected.Add(LeftDiff[DiffEditorBottomLine.GetValueOrDefault() - 1]);
+                                }
+                            }
+
                             FindConflict(true, true, true);
                             break;
 
@@ -1355,6 +1443,7 @@ namespace IronyModManager.ViewModels.Controls
                             {
                                 SetEditThis(LeftSidePatchMod);
                             }
+
                             break;
 
                         case Enums.HotKeys.Ctrl_Shift_T:
@@ -1368,34 +1457,49 @@ namespace IronyModManager.ViewModels.Controls
                         case Enums.HotKeys.Ctrl_C:
                             if (LeftSidePatchMod)
                             {
+                                HotkeyBeforePerform?.Invoke(this, EventArgs.Empty);
                                 Copy(RightSideSelected, RightDiff, LeftDiff, false);
+                                HotkeyAfterPerform?.Invoke(this, EventArgs.Empty);
                             }
                             else if (RightSidePatchMod)
                             {
+                                HotkeyBeforePerform?.Invoke(this, EventArgs.Empty);
                                 Copy(LeftSideSelected, LeftDiff, RightDiff, true);
+                                HotkeyAfterPerform?.Invoke(this, EventArgs.Empty);
                             }
+
                             break;
 
                         case Enums.HotKeys.Ctrl_V:
                             if (LeftSidePatchMod)
                             {
+                                HotkeyBeforePerform?.Invoke(this, EventArgs.Empty);
                                 CopyBeforeLines(RightSideSelected, RightDiff, LeftDiff, false);
+                                HotkeyAfterPerform?.Invoke(this, EventArgs.Empty);
                             }
                             else if (RightSidePatchMod)
                             {
+                                HotkeyBeforePerform?.Invoke(this, EventArgs.Empty);
                                 CopyBeforeLines(LeftSideSelected, LeftDiff, RightDiff, true);
+                                HotkeyAfterPerform?.Invoke(this, EventArgs.Empty);
                             }
+
                             break;
 
                         case Enums.HotKeys.Ctrl_B:
                             if (LeftSidePatchMod)
                             {
+                                HotkeyBeforePerform?.Invoke(this, EventArgs.Empty);
                                 CopyAfterLines(RightSideSelected, LeftDiff, RightDiff, false);
+                                HotkeyAfterPerform?.Invoke(this, EventArgs.Empty);
                             }
                             else if (RightSidePatchMod)
                             {
+                                HotkeyBeforePerform?.Invoke(this, EventArgs.Empty);
                                 CopyAfterLines(LeftSideSelected, LeftDiff, RightDiff, true);
+                                HotkeyAfterPerform?.Invoke(this, EventArgs.Empty);
                             }
+
                             break;
 
                         case Enums.HotKeys.Ctrl_Z:
@@ -1408,6 +1512,7 @@ namespace IronyModManager.ViewModels.Controls
                                     PostFocusSide?.Invoke(LeftSidePatchMod);
                                 }
                             }
+
                             break;
 
                         case Enums.HotKeys.Ctrl_Y:
@@ -1420,23 +1525,23 @@ namespace IronyModManager.ViewModels.Controls
                                     PostFocusSide?.Invoke(LeftSidePatchMod);
                                 }
                             }
+
                             break;
 
                         case Enums.HotKeys.Ctrl_X:
                             if (LeftSidePatchMod || RightSidePatchMod)
                             {
-                                LaunchExternalEditor(LeftSidePatchMod).ConfigureAwait(true);
+                                LaunchExternalEditorAsync(LeftSidePatchMod).ConfigureAwait(true);
                             }
                             else
                             {
-                                LaunchExternalEditor(LeftSidePatchMod, true).ConfigureAwait(true);
+                                LaunchExternalEditorAsync(LeftSidePatchMod, true).ConfigureAwait(true);
                             }
-                            break;
 
-                        default:
                             break;
                     }
                 }
+
                 if (CanPerformHotKeyActions)
                 {
                     Dispatcher.UIThread.SafeInvoke(performAction);
@@ -1460,6 +1565,7 @@ namespace IronyModManager.ViewModels.Controls
                 var idx = source.IndexOf(item);
                 orderedSelected.Add(idx, item);
             }
+
             return orderedSelected.OrderBy(p => p.Key).ToDictionary(p => p.Key, p => p.Value);
         }
 
@@ -1473,6 +1579,7 @@ namespace IronyModManager.ViewModels.Controls
             {
                 return;
             }
+
             if (leftSide)
             {
                 undoStack.Push(LeftSide);
@@ -1495,6 +1602,7 @@ namespace IronyModManager.ViewModels.Controls
             {
                 return;
             }
+
             if (leftSide)
             {
                 redoStack.Push(LeftSide);
@@ -1516,14 +1624,8 @@ namespace IronyModManager.ViewModels.Controls
             EditingLeft = leftSide;
             EditingRight = !leftSide;
             EditingText = true;
-            if (leftSide)
-            {
-                CurrentEditText = LeftSide;
-            }
-            else
-            {
-                CurrentEditText = RightSide;
-            }
+            CurrentEditText = leftSide ? LeftSide : RightSide;
+
             LeftDocument = new TextDocument(LeftSide);
             RightDocument = new TextDocument(RightSide);
         }
@@ -1540,7 +1642,7 @@ namespace IronyModManager.ViewModels.Controls
             var syncDiff = !leftSide ? LeftDiff : RightDiff;
             var sourceCol = leftSide ? LeftSideSelected : RightSideSelected;
             var syncCol = !leftSide ? LeftSideSelected : RightSideSelected;
-            bool clearCol = true;
+            var clearCol = true;
             if (sourceCol?.Count > 0)
             {
                 var filtered = sourceCol.Where(p => p != null); // Must be an underlying bug?
@@ -1554,10 +1656,12 @@ namespace IronyModManager.ViewModels.Controls
                     }
                 }
             }
+
             if (clearCol)
             {
                 syncCol.Clear();
             }
+
             syncingSelection = false;
         }
 
@@ -1566,7 +1670,8 @@ namespace IronyModManager.ViewModels.Controls
         /// </summary>
         /// <param name="leftSide">if set to <c>true</c> [left side].</param>
         /// <param name="noPatchModEdit">if set to <c>true</c> [no patch mod edit].</param>
-        private async Task LaunchExternalEditor(bool leftSide, bool noPatchModEdit = false)
+        /// <returns>A Task&lt;System.Threading.Tasks.Task&gt; representing the asynchronous operation.</returns>
+        private async Task LaunchExternalEditorAsync(bool leftSide, bool noPatchModEdit = false)
         {
             var opts = externalEditorService.Get();
             var left = leftDefinition;
@@ -1582,6 +1687,7 @@ namespace IronyModManager.ViewModels.Controls
                     // Override if analyze mode only
                     noPatchModEdit = true;
                 }
+
                 if (await appAction.RunAsync(opts.ExternalEditorLocation, arguments))
                 {
                     string title;
@@ -1596,6 +1702,7 @@ namespace IronyModManager.ViewModels.Controls
                         message = localizationManager.GetResource(LocalizationResources.Conflict_Solver.ReadonlyEditor.Message);
                         title = localizationManager.GetResource(LocalizationResources.Conflict_Solver.ReadonlyEditor.Title);
                     }
+
                     if (await notificationAction.ShowPromptAsync(title, title, message, NotificationType.Info, !noPatchModEdit ? PromptType.ConfirmCancel : PromptType.OK))
                     {
                         if (!noPatchModEdit)
@@ -1603,19 +1710,20 @@ namespace IronyModManager.ViewModels.Controls
                             if (leftSide)
                             {
                                 var text = files.LeftDiff.Text ?? string.Empty;
-                                string merged = string.Join(Environment.NewLine, text.ReplaceTabs());
+                                var merged = string.Join(Environment.NewLine, text.ReplaceTabs());
                                 SetText(merged, RightSide);
                             }
                             else
                             {
                                 var text = files.RightDiff.Text ?? string.Empty;
-                                string merged = string.Join(Environment.NewLine, text.ReplaceTabs());
+                                var merged = string.Join(Environment.NewLine, text.ReplaceTabs());
                                 SetText(LeftSide, merged);
                             }
                         }
                     }
                 }
-                files?.Dispose();
+
+                files.Dispose();
             }
         }
 
@@ -1679,10 +1787,10 @@ namespace IronyModManager.ViewModels.Controls
             }
 
             /// <summary>
-            /// Equalses the specified other.
+            /// Equals.
             /// </summary>
             /// <param name="other">The other.</param>
-            /// <returns>bool.</returns>
+            /// <returns>A bool.</returns>
             public new bool Equals(DiffPiece other)
             {
                 var result = base.Equals(other);
@@ -1690,6 +1798,7 @@ namespace IronyModManager.ViewModels.Controls
                 {
                     return Index.Equals(diffPieceWithIndex.Index);
                 }
+
                 return result;
             }
 
@@ -1710,6 +1819,7 @@ namespace IronyModManager.ViewModels.Controls
                 {
                     return false;
                 }
+
                 term ??= string.Empty;
                 return Text.Trim().StartsWith(term, StringComparison.OrdinalIgnoreCase);
             }

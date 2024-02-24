@@ -332,7 +332,8 @@
             "Undo": "Rückgängig Machen",
             "Redo": "Wiederholen",
             "Editor": "Externe Zusammenführung",
-            "ReadonlyEditor": "Externer Vergleich"
+            "ReadonlyEditor": "Externer Vergleich",
+            "ToggleCompare": "Umschalten des Diff-Vergleichsmodus"
         },
         "EditorContextMenu": {
             "Copy": "Kopieren",

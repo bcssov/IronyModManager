@@ -332,7 +332,8 @@
             "Undo": "撤销",
             "Redo": "重做",
             "Editor": "外部合并",
-            "ReadonlyEditor": "外部比较"
+            "ReadonlyEditor": "外部比较",
+            "ToggleCompare": "切换差值比较模式"
         },
         "EditorContextMenu": {
             "Copy": "复制",

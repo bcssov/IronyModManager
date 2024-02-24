@@ -4,7 +4,7 @@
 // Created          : 03-18-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-27-2022
+// Last Modified On : 02-20-2024
 // ***********************************************************************
 // <copyright file="MainConflictSolverControlView.xaml.cs" company="Mario">
 //     Mario
@@ -58,21 +58,21 @@ namespace IronyModManager.Views
         protected override void OnActivated(CompositeDisposable disposables)
         {
             var conflictList = this.FindControl<IronyModManager.Controls.ListBox>("conflictList");
-            conflictList.SelectionChanged += (sender, args) =>
+            conflictList.SelectionChanged += (_, _) =>
             {
                 Dispatcher.UIThread.SafeInvoke(() =>
                 {
-                    if (conflictList?.SelectedIndex > -1 && ViewModel.SelectedParentConflict != null)
+                    if (conflictList.SelectedIndex > -1 && ViewModel!.SelectedParentConflict != null)
                     {
                         ViewModel.SelectedConflict = ViewModel.SelectedParentConflict.Children.ElementAt(conflictList.SelectedIndex);
                     }
                     else
                     {
-                        ViewModel.SelectedConflict = null;
+                        ViewModel!.SelectedConflict = null;
                     }
                 });
             };
-            this.WhenAnyValue(p => p.IsActivated).Where(v => v).Subscribe(s =>
+            this.WhenAnyValue(p => p.IsActivated).Where(v => v).Subscribe(_ =>
             {
                 this.WhenAnyValue(v => v.ViewModel.SelectedParentConflict).Subscribe(s =>
                 {
@@ -80,7 +80,7 @@ namespace IronyModManager.Views
                     {
                         Dispatcher.UIThread.SafeInvoke(() =>
                         {
-                            if (ViewModel.PreviousConflictIndex.HasValue)
+                            if (ViewModel!.PreviousConflictIndex.HasValue)
                             {
                                 if (conflictList.ItemCount > 0)
                                 {
@@ -122,46 +122,33 @@ namespace IronyModManager.Views
                 }).DisposeWith(disposables);
             }).DisposeWith(disposables);
 
-            conflictList.ContextMenuOpening += (item) =>
+            conflictList.ContextMenuOpening += item =>
             {
                 List<MenuItem> menuItems = null;
                 if (item != null)
                 {
-                    ViewModel.SetParameters(item.Content as IHierarchicalDefinitions);
+                    ViewModel!.SetParameters(item.Content as IHierarchicalDefinitions);
                     if (!string.IsNullOrWhiteSpace(ViewModel.InvalidConflictPath))
                     {
-                        menuItems = new List<MenuItem>();
+                        menuItems = [];
                         if (!ViewModel.ReadOnly)
                         {
-                            menuItems = new List<MenuItem>()
-                            {
-                                new MenuItem()
-                                {
-                                    Header = ViewModel.InvalidCustomPatch,
-                                    Command = ViewModel.InvalidCustomPatchCommand
-                                },
-                                new MenuItem()
-                                {
-                                    Header = "-"
-                                }
-                            };
+                            menuItems =
+                            [
+                                new MenuItem { Header = ViewModel.InvalidCustomPatch, Command = ViewModel.InvalidCustomPatchCommand },
+                                new MenuItem { Header = "-" }
+                            ];
                         }
-                        menuItems.Add(new MenuItem()
-                        {
-                            Header = ViewModel.InvalidOpenFile,
-                            Command = ViewModel.InvalidOpenFileCommand
-                        });
+
+                        menuItems.Add(new MenuItem { Header = ViewModel.InvalidOpenFile, Command = ViewModel.InvalidOpenFileCommand });
                         if (!ViewModel.InvalidConflictPath.EndsWith(Shared.Constants.ZipExtension, StringComparison.OrdinalIgnoreCase) &&
                             !ViewModel.InvalidConflictPath.EndsWith(Shared.Constants.BinExtension, StringComparison.OrdinalIgnoreCase))
                         {
-                            menuItems.Add(new MenuItem()
-                            {
-                                Header = ViewModel.InvalidOpenDirectory,
-                                Command = ViewModel.InvalidOpenDirectoryCommand
-                            });
+                            menuItems.Add(new MenuItem { Header = ViewModel.InvalidOpenDirectory, Command = ViewModel.InvalidOpenDirectoryCommand });
                         }
                     }
                 }
+
                 conflictList.SetContextMenuItems(menuItems);
             };
 
