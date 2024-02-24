@@ -156,6 +156,16 @@ namespace IronyModManager.ViewModels.Controls
         public event ConflictFoundDelegate ConflictFound;
 
         /// <summary>
+        /// Occurs when [hotkey after perform].
+        /// </summary>
+        public event EventHandler HotkeyAfterPerform;
+
+        /// <summary>
+        /// Occurs when [hotkey copy before perform].
+        /// </summary>
+        public event EventHandler HotkeyBeforePerform;
+
+        /// <summary>
         /// Occurs when [focus side].
         /// </summary>
         public event FocusSideDelegate PostFocusSide;
@@ -277,6 +287,18 @@ namespace IronyModManager.ViewModels.Controls
         /// </summary>
         /// <value>The delete text command.</value>
         public virtual ReactiveCommand<bool, Unit> DeleteTextCommand { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets a value representing the diff editor bottom line.<see cref="int?" />
+        /// </summary>
+        /// <value>The diff editor bottom line.</value>
+        public virtual int? DiffEditorBottomLine { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value representing the diff editor top line.<see cref="int?" />
+        /// </summary>
+        /// <value>The diff editor top line.</value>
+        public virtual int? DiffEditorTopLine { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether [editing left].
@@ -1350,6 +1372,15 @@ namespace IronyModManager.ViewModels.Controls
                                 LeftSideSelected.Add(LeftDiff.FirstOrDefault());
                             }
 
+                            if (UsingNewMergeType)
+                            {
+                                if (DiffEditorTopLine.HasValue && DiffEditorTopLine.GetValueOrDefault() - 1 < LeftDiff.Count)
+                                {
+                                    LeftSideSelected.Clear();
+                                    LeftSideSelected.Add(LeftDiff[DiffEditorTopLine.GetValueOrDefault() - 1]);
+                                }
+                            }
+
                             FindConflict(true, false, false);
                             break;
 
@@ -1357,6 +1388,15 @@ namespace IronyModManager.ViewModels.Controls
                             if (LeftSideSelected.Count == 0)
                             {
                                 LeftSideSelected.Add(LeftDiff.FirstOrDefault());
+                            }
+
+                            if (UsingNewMergeType)
+                            {
+                                if (DiffEditorBottomLine.HasValue && DiffEditorBottomLine.GetValueOrDefault() - 1 < LeftDiff.Count)
+                                {
+                                    LeftSideSelected.Clear();
+                                    LeftSideSelected.Add(LeftDiff[DiffEditorBottomLine.GetValueOrDefault() - 1]);
+                                }
                             }
 
                             FindConflict(true, true, false);
@@ -1368,6 +1408,15 @@ namespace IronyModManager.ViewModels.Controls
                                 LeftSideSelected.Add(LeftDiff.FirstOrDefault());
                             }
 
+                            if (UsingNewMergeType)
+                            {
+                                if (DiffEditorTopLine.HasValue && DiffEditorTopLine.GetValueOrDefault() - 1 < LeftDiff.Count)
+                                {
+                                    LeftSideSelected.Clear();
+                                    LeftSideSelected.Add(LeftDiff[DiffEditorTopLine.GetValueOrDefault() - 1]);
+                                }
+                            }
+
                             FindConflict(true, false, true);
                             break;
 
@@ -1375,6 +1424,15 @@ namespace IronyModManager.ViewModels.Controls
                             if (LeftSideSelected.Count == 0)
                             {
                                 LeftSideSelected.Add(LeftDiff.FirstOrDefault());
+                            }
+
+                            if (UsingNewMergeType)
+                            {
+                                if (DiffEditorBottomLine.HasValue && DiffEditorBottomLine.GetValueOrDefault() - 1 < LeftDiff.Count)
+                                {
+                                    LeftSideSelected.Clear();
+                                    LeftSideSelected.Add(LeftDiff[DiffEditorBottomLine.GetValueOrDefault() - 1]);
+                                }
                             }
 
                             FindConflict(true, true, true);
@@ -1399,11 +1457,15 @@ namespace IronyModManager.ViewModels.Controls
                         case Enums.HotKeys.Ctrl_C:
                             if (LeftSidePatchMod)
                             {
+                                HotkeyBeforePerform?.Invoke(this, EventArgs.Empty);
                                 Copy(RightSideSelected, RightDiff, LeftDiff, false);
+                                HotkeyAfterPerform?.Invoke(this, EventArgs.Empty);
                             }
                             else if (RightSidePatchMod)
                             {
+                                HotkeyBeforePerform?.Invoke(this, EventArgs.Empty);
                                 Copy(LeftSideSelected, LeftDiff, RightDiff, true);
+                                HotkeyAfterPerform?.Invoke(this, EventArgs.Empty);
                             }
 
                             break;
@@ -1411,11 +1473,15 @@ namespace IronyModManager.ViewModels.Controls
                         case Enums.HotKeys.Ctrl_V:
                             if (LeftSidePatchMod)
                             {
+                                HotkeyBeforePerform?.Invoke(this, EventArgs.Empty);
                                 CopyBeforeLines(RightSideSelected, RightDiff, LeftDiff, false);
+                                HotkeyAfterPerform?.Invoke(this, EventArgs.Empty);
                             }
                             else if (RightSidePatchMod)
                             {
+                                HotkeyBeforePerform?.Invoke(this, EventArgs.Empty);
                                 CopyBeforeLines(LeftSideSelected, LeftDiff, RightDiff, true);
+                                HotkeyAfterPerform?.Invoke(this, EventArgs.Empty);
                             }
 
                             break;
@@ -1423,11 +1489,15 @@ namespace IronyModManager.ViewModels.Controls
                         case Enums.HotKeys.Ctrl_B:
                             if (LeftSidePatchMod)
                             {
+                                HotkeyBeforePerform?.Invoke(this, EventArgs.Empty);
                                 CopyAfterLines(RightSideSelected, LeftDiff, RightDiff, false);
+                                HotkeyAfterPerform?.Invoke(this, EventArgs.Empty);
                             }
                             else if (RightSidePatchMod)
                             {
+                                HotkeyBeforePerform?.Invoke(this, EventArgs.Empty);
                                 CopyAfterLines(LeftSideSelected, LeftDiff, RightDiff, true);
+                                HotkeyAfterPerform?.Invoke(this, EventArgs.Empty);
                             }
 
                             break;

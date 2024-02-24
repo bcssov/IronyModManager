@@ -4,7 +4,7 @@
 // Created          : 03-20-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-23-2024
+// Last Modified On : 02-24-2024
 // ***********************************************************************
 // <copyright file="MergeViewerControlView.xaml.cs" company="Mario">
 //     Mario
@@ -19,9 +19,11 @@ using System.Reactive.Disposables;
 using System.Threading.Tasks;
 using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Input;
 using Avalonia.Markup.Xaml;
 using Avalonia.Threading;
 using AvaloniaEdit;
+using AvaloniaEdit.Document;
 using AvaloniaEdit.Search;
 using AvaloniaEdit.Utils;
 using DiffPlex.DiffBuilder.Model;
@@ -143,6 +145,13 @@ namespace IronyModManager.Views.Controls
             rightListBox.SelectedIndex = line;
             diffLeft.ScrollToLine(line);
             diffRight.ScrollToLine(line);
+            ViewModel!.DiffEditorTopLine = diffLeft.GetTopVisibleLine();
+            ViewModel.DiffEditorBottomLine = diffLeft.GetBottomVisibleLine();
+            if (!(ViewModel.DiffEditorTopLine <= line && ViewModel.DiffEditorBottomLine >= line))
+            {
+                diffLeft.TextArea.Caret.Location = new TextLocation(line, 1);
+                diffRight.TextArea.Caret.Location = new TextLocation(line, 1);
+            }
         }
 
         /// <summary>
@@ -304,6 +313,8 @@ namespace IronyModManager.Views.Controls
                 Dispatcher.UIThread.SafeInvoke(async () =>
                 {
                     await SyncDiffScrollAsync(thisTextEditor, otherTextEditor);
+                    ViewModel!.DiffEditorTopLine = thisTextEditor.GetTopVisibleLine();
+                    ViewModel.DiffEditorBottomLine = thisTextEditor.GetBottomVisibleLine();
                     syncingDiffScroll = false;
                 });
             };
@@ -355,6 +366,9 @@ namespace IronyModManager.Views.Controls
             rightSide.ContextMenuOpening += item => { HandleContextMenu(rightSide, item, false); };
 
             ViewModel!.ConflictFound += line => { FocusConflict(line, leftSide, rightSide); };
+
+            var diffHotkeyActionLeft = -1;
+            var diffHotkeyActionRight = -1;
             int? focusSideScrollItem = null;
             var previousCount = 0;
             var autoScroll = leftSide.AutoScrollToSelectedItem;
@@ -362,8 +376,8 @@ namespace IronyModManager.Views.Controls
             {
                 if (ViewModel.UsingNewMergeType)
                 {
-                    focusSideScrollItem = GetTextEditorSelectedTextRange(left ? diffLeft : diffRight).Item2;
-                    previousCount = left ? ViewModel.LeftDiff.Count : ViewModel.RightDiff.Count;
+                    diffHotkeyActionLeft = diffLeft.GetMiddleVisibleLine();
+                    diffHotkeyActionRight = diffRight.GetMiddleVisibleLine();
                 }
                 else
                 {
@@ -384,28 +398,17 @@ namespace IronyModManager.Views.Controls
                     await Task.Delay(50);
                     if (ViewModel!.UsingNewMergeType)
                     {
-                        var textbox = left ? diffLeft : diffRight;
-                        var diffList = left ? ViewModel.LeftDiff : ViewModel.RightDiff;
-                        textbox.Focus();
-                        if (focusSideScrollItem.HasValue)
+                        diffLeft.ScrollToLine(diffHotkeyActionLeft);
+                        diffRight.ScrollToLine(diffHotkeyActionRight);
+                        ViewModel!.DiffEditorTopLine = diffLeft.GetTopVisibleLine();
+                        ViewModel.DiffEditorBottomLine = diffLeft.GetBottomVisibleLine();
+                        if (!(ViewModel.DiffEditorTopLine <= diffHotkeyActionLeft && ViewModel.DiffEditorBottomLine >= diffHotkeyActionLeft))
                         {
-                            if (diffList.Count != previousCount)
-                            {
-                                focusSideScrollItem -= Math.Abs(previousCount - diffList.Count);
-                            }
-
-                            FocusConflict(-1, leftSide, rightSide);
-                            if (focusSideScrollItem.GetValueOrDefault() < 0)
-                            {
-                                focusSideScrollItem = 0;
-                            }
-                            else if (focusSideScrollItem.GetValueOrDefault() >= diffList.Count)
-                            {
-                                focusSideScrollItem = diffList.Count - 1;
-                            }
-
-                            textbox.ScrollToLine(focusSideScrollItem.GetValueOrDefault());
+                            diffLeft.TextArea.Caret.Location = new TextLocation(diffHotkeyActionLeft, 1);
+                            diffRight.TextArea.Caret.Location = new TextLocation(diffHotkeyActionLeft, 1);
                         }
+
+                        RedrawEditorDiffs();
                     }
                     else
                     {
@@ -488,7 +491,15 @@ namespace IronyModManager.Views.Controls
                     {
                         if (ViewModel.UsingNewMergeType)
                         {
-                            diffLeft.ScrollViewer.LineDown();
+                            switch (hotkey.Hotkey)
+                            {
+                                case Enums.HotKeys.Ctrl_Shift_Up:
+                                    diffLeft.ScrollViewer.LineUp();
+                                    break;
+                                case Enums.HotKeys.Ctrl_Shift_Down:
+                                    diffLeft.ScrollViewer.LineDown();
+                                    break;
+                            }
                         }
                         else
                         {
@@ -550,6 +561,26 @@ namespace IronyModManager.Views.Controls
                 diffRight.IsReadOnly = !s;
             }).DisposeWith(disposables);
 
+            ViewModel!.HotkeyBeforePerform += (_, _) =>
+            {
+                diffHotkeyActionLeft = diffLeft.GetMiddleVisibleLine();
+                diffHotkeyActionRight = diffRight.GetMiddleVisibleLine();
+            };
+            ViewModel.HotkeyAfterPerform += (_, _) =>
+            {
+                diffLeft.ScrollToLine(diffHotkeyActionLeft);
+                diffRight.ScrollToLine(diffHotkeyActionRight);
+                ViewModel!.DiffEditorTopLine = diffLeft.GetTopVisibleLine();
+                ViewModel.DiffEditorBottomLine = diffLeft.GetBottomVisibleLine();
+                if (!(ViewModel.DiffEditorTopLine <= diffHotkeyActionLeft && ViewModel.DiffEditorBottomLine >= diffHotkeyActionLeft))
+                {
+                    diffLeft.TextArea.Caret.Location = new TextLocation(diffHotkeyActionLeft, 1);
+                    diffRight.TextArea.Caret.Location = new TextLocation(diffHotkeyActionLeft, 1);
+                }
+
+                RedrawEditorDiffs();
+            };
+
             base.OnActivated(disposables);
         }
 
@@ -606,10 +637,12 @@ namespace IronyModManager.Views.Controls
                 if (leftDiff)
                 {
                     ViewModel!.SetText(text, ViewModel.RightSide);
+                    diffRight.TextArea.TextView.Redraw();
                 }
                 else
                 {
                     ViewModel!.SetText(ViewModel.LeftSide, text);
+                    diffLeft.TextArea.TextView.Redraw();
                 }
             };
             diff.TextArea.SelectionChanged += (_, _) =>
@@ -634,7 +667,8 @@ namespace IronyModManager.Views.Controls
                     col.Add(sourceCol[i]);
                 }
             };
-            diff.PointerPressed += (_, args) =>
+
+            void handlePointerPressed(PointerPressedEventArgs args)
             {
                 var pos = args.GetPosition(diff);
                 pos = new Point(0, pos.Y.CoerceValue(0, diff.Bounds.Height) + diff.VerticalOffset);
@@ -663,6 +697,16 @@ namespace IronyModManager.Views.Controls
                         }
                     }
                 }
+            }
+
+            diff.PointerPressed += (_, args) =>
+            {
+                handlePointerPressed(args);
+            };
+
+            ((IronyModManager.Controls.TextArea)diff.TextArea).LeftPointerPressed += (_, eventArgs) =>
+            {
+                handlePointerPressed(eventArgs);
             };
         }
 
@@ -790,15 +834,7 @@ namespace IronyModManager.Views.Controls
                 new() { Header = ViewModel.NextConflict, Command = ViewModel.NextConflictCommand, CommandParameter = leftSide },
                 new() { Header = ViewModel.PrevConflict, Command = ViewModel.PrevConflictCommand, CommandParameter = leftSide },
                 new() { Header = "-" },
-                new()
-                {
-                    Header = ViewModel.CopyText,
-                    Command = ReactiveCommand.Create(() =>
-                    {
-                        ViewModel.CopyTextCommand.Execute(leftSide).Subscribe();
-                        RedrawEditorDiffs();
-                    })
-                },
+                new() { Header = ViewModel.CopyText, Command = ViewModel.CopyTextCommand, CommandParameter = leftSide },
                 new()
                 {
                     Header = "-" // Separator magic string, and it's documented... NOT really!!!
@@ -812,6 +848,14 @@ namespace IronyModManager.Views.Controls
                         ViewModel.CopyAllCommand.Execute(leftSide).Subscribe();
                         diffLeft.ScrollToLine(visibleLine);
                         diffRight.ScrollToLine(visibleLine);
+                        ViewModel!.DiffEditorTopLine = diffLeft.GetTopVisibleLine();
+                        ViewModel.DiffEditorBottomLine = diffLeft.GetBottomVisibleLine();
+                        if (!(ViewModel.DiffEditorTopLine <= visibleLine && ViewModel.DiffEditorBottomLine >= visibleLine))
+                        {
+                            diffLeft.TextArea.Caret.Location = new TextLocation(visibleLine, 1);
+                            diffRight.TextArea.Caret.Location = new TextLocation(visibleLine, 1);
+                        }
+
                         RedrawEditorDiffs();
                     })
                 },
@@ -869,15 +913,7 @@ namespace IronyModManager.Views.Controls
                 new() { Header = ViewModel.PrevConflict, Command = ViewModel.PrevConflictCommand, CommandParameter = leftSide },
                 new() { Header = "-" },
                 new() { Header = ViewModel.EditThis, Command = ViewModel.EditThisCommand, CommandParameter = leftSide },
-                new()
-                {
-                    Header = ViewModel.CopyText,
-                    Command = ReactiveCommand.Create(() =>
-                    {
-                        ViewModel.CopyTextCommand.Execute(leftSide).Subscribe();
-                        RedrawEditorDiffs();
-                    })
-                },
+                new() { Header = ViewModel.CopyText, Command = ViewModel.CopyTextCommand, CommandParameter = leftSide },
                 new() { Header = "-" },
                 new() { Header = ViewModel.DeleteText, Command = ViewModel.DeleteTextCommand, CommandParameter = leftSide },
                 new() { Header = ViewModel.MoveUp, Command = ViewModel.MoveUpCommand, CommandParameter = leftSide },
@@ -901,6 +937,14 @@ namespace IronyModManager.Views.Controls
                             ViewModel.UndoCommand.Execute(leftSide).Subscribe();
                             diffLeft.ScrollToLine(visibleLine);
                             diffRight.ScrollToLine(visibleLine);
+                            ViewModel!.DiffEditorTopLine = diffLeft.GetTopVisibleLine();
+                            ViewModel.DiffEditorBottomLine = diffLeft.GetBottomVisibleLine();
+                            if (!(ViewModel.DiffEditorTopLine <= visibleLine && ViewModel.DiffEditorBottomLine >= visibleLine))
+                            {
+                                diffLeft.TextArea.Caret.Location = new TextLocation(visibleLine, 1);
+                                diffRight.TextArea.Caret.Location = new TextLocation(visibleLine, 1);
+                            }
+
                             RedrawEditorDiffs();
                         })
                     });
@@ -917,6 +961,14 @@ namespace IronyModManager.Views.Controls
                             ViewModel.RedoCommand.Execute(leftSide).Subscribe();
                             diffLeft.ScrollToLine(visibleLine);
                             diffRight.ScrollToLine(visibleLine);
+                            ViewModel!.DiffEditorTopLine = diffLeft.GetTopVisibleLine();
+                            ViewModel.DiffEditorBottomLine = diffLeft.GetBottomVisibleLine();
+                            if (!(ViewModel.DiffEditorTopLine <= visibleLine && ViewModel.DiffEditorBottomLine >= visibleLine))
+                            {
+                                diffLeft.TextArea.Caret.Location = new TextLocation(visibleLine, 1);
+                                diffRight.TextArea.Caret.Location = new TextLocation(visibleLine, 1);
+                            }
+
                             RedrawEditorDiffs();
                         })
                     });
@@ -945,15 +997,7 @@ namespace IronyModManager.Views.Controls
                 new() { Header = ViewModel.NextConflict, Command = ViewModel.NextConflictCommand, CommandParameter = leftSide },
                 new() { Header = ViewModel.PrevConflict, Command = ViewModel.PrevConflictCommand, CommandParameter = leftSide },
                 new() { Header = "-" },
-                new()
-                {
-                    Header = ViewModel.CopyText,
-                    Command = ReactiveCommand.Create(() =>
-                    {
-                        ViewModel.CopyTextCommand.Execute(leftSide).Subscribe();
-                        RedrawEditorDiffs();
-                    })
-                }
+                new() { Header = ViewModel.CopyText, Command = ViewModel.CopyTextCommand, CommandParameter = leftSide }
             };
             menuItems.AddRange(mainEditingItems);
 
@@ -994,7 +1038,6 @@ namespace IronyModManager.Views.Controls
         /// <summary>
         /// Redraws an editor diffs.
         /// </summary>
-        /// <returns></returns>
         private void RedrawEditorDiffs()
         {
             diffLeft.TextArea.TextView.Redraw();

@@ -21,7 +21,6 @@ using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
 using Avalonia.Styling;
 using AvaloniaEdit;
-using AvaloniaEdit.Editing;
 using AvaloniaEdit.Rendering;
 using IronyModManager.DI;
 using IronyModManager.Implementation.Actions;
@@ -97,14 +96,34 @@ namespace IronyModManager.Controls
         #region Methods
 
         /// <summary>
+        /// Gets a bottom visible line.
+        /// </summary>
+        /// <returns>An int.</returns>
+        public int GetBottomVisibleLine()
+        {
+            var lastLine = TextArea.TextView.GetDocumentLineByVisualTop(ScrollViewer.Offset.Y + ScrollViewer.Viewport.Height).LineNumber;
+            return lastLine;
+        }
+
+        /// <summary>
         /// Gets a middle visible line.
         /// </summary>
         /// <returns>An int.</returns>
         public int GetMiddleVisibleLine()
         {
-            var firstLine = TextArea.TextView.GetDocumentLineByVisualTop(ScrollViewer.Offset.Y).LineNumber;
-            var lastLine = TextArea.TextView.GetDocumentLineByVisualTop(ScrollViewer.Offset.Y + ScrollViewer.Viewport.Height).LineNumber;
+            var firstLine = GetTopVisibleLine();
+            var lastLine = GetBottomVisibleLine();
             return firstLine + ((lastLine - firstLine) / 2);
+        }
+
+        /// <summary>
+        /// Gets a top visible line.
+        /// </summary>
+        /// <returns>An int.</returns>
+        public int GetTopVisibleLine()
+        {
+            var firstLine = TextArea.TextView.GetDocumentLineByVisualTop(ScrollViewer.Offset.Y).LineNumber;
+            return firstLine;
         }
 
         /// <summary>
