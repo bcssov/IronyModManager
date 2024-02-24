@@ -4,7 +4,7 @@
 // Created          : 03-03-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-20-2024
+// Last Modified On : 02-24-2024
 // ***********************************************************************
 // <copyright file="AppState.cs" company="Mario">
 //     Mario
@@ -88,7 +88,7 @@ namespace IronyModManager.Models
         /// Gets or sets a value indicating whether the use new diff viewer.
         /// </summary>
         /// <value><c>true</c> if use new diff viewer; otherwise, <c>false</c>.</value>
-        public bool UseNewDiffViewer { get; set; }
+        public bool UseNewDiffViewer { get; set; } = true;
 
         #endregion Properties
     }
