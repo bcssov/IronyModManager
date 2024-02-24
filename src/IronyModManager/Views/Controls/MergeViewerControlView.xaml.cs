@@ -809,7 +809,10 @@ namespace IronyModManager.Views.Controls
                     Header = ViewModel.CopyAll,
                     Command = ReactiveCommand.Create(() =>
                     {
+                        var visibleLine = diffLeft.GetMiddleVisibleLine();
                         ViewModel.CopyAllCommand.Execute(leftSide).Subscribe();
+                        diffLeft.ScrollToLine(visibleLine);
+                        diffRight.ScrollToLine(visibleLine);
                         RedrawEditorDiffs();
                     })
                 },
