@@ -52,7 +52,7 @@
     </PackageReference>
     <PackageReference Include="NLog" Version="5.2.8" />
     <PackageReference Include="Sajidur78.StrongNamer" Version="0.2.8" />
-    <PackageReference Include="xunit" Version="2.6.6" />
+    <PackageReference Include="xunit" Version="2.7.0" />
     <PackageReference Include="xunit.runner.visualstudio" Version="$(XUnitRunnerVS)" allowedVersions="$(XUnitRunnerVS)">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
