@@ -22,6 +22,7 @@ using System.Reactive.Linq;
 using System.Threading.Tasks;
 using Avalonia;
 using Avalonia.Collections;
+using DynamicData;
 using IronyModManager.Common;
 using IronyModManager.Common.Events;
 using IronyModManager.Common.ViewModels;
@@ -151,6 +152,11 @@ namespace IronyModManager.ViewModels.Controls
         /// The arguments changed
         /// </summary>
         private IDisposable gameArgsChanged;
+
+        /// <summary>
+        /// A private IDisposable named gameLanguagesChanged.
+        /// </summary>
+        private IDisposable gameLanguagesChanged;
 
         /// <summary>
         /// The is editor reloading
@@ -658,8 +664,17 @@ namespace IronyModManager.ViewModels.Controls
         {
             game ??= gameService.GetSelected();
             GameLanguages = gameLanguageService.Get().ToAvaloniaList();
+            var languages = GameLanguages;
             GameLanguagesVisible = game != null && game.AdvancedFeatures != GameAdvancedFeatures.None;
             LeftGameLanguagesMargin = new Thickness(GameLanguagesVisible ? 20 : 0, 15, 0, 15);
+            gameLanguagesChanged?.Dispose();
+            gameLanguagesChanged = null;
+
+            var sourceList = languages.ToSourceList();
+            gameLanguagesChanged = sourceList.Connect().WhenPropertyChanged(p => p.IsSelected, notifyOnInitialValue:false).Subscribe(s =>
+            {
+                gameLanguageService.Save(languages);
+            }).DisposeWith(Disposables);
         }
 
         /// <summary>
