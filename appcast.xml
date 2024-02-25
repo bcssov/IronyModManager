@@ -4,48 +4,60 @@
 		<title>Irony Mod Manager</title>
 		<language>en</language>
 		<item>
-			<title>1.26.77-alpha</title>
+			<title>1.26.129-alpha</title>
 			<description>## Release Notes 1.26
 * Update dependencies
 * Bump to net8 which should grant some performance improvements (win7 might not work going forward)
 * Remove ripple animation from Material themes (per #484)
 * Irony is now single instance app
-* Disable OSX update installation (online check only now)</description>
-			<pubDate>Wed, 14 Feb 2024 16:07:15 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.26.77-alpha/linux-x64.zip" sparkle:version="1.26.77.43406" sparkle:shortVersionString="1.26.77" length="90758434" sparkle:os="linux" type="application/zip" sparkle:signature="YSRvt0gtUjuyixHtYbLA+ElU9BBeoRcmu+HaMPXntuGkRwDLwNS+xEm+/vuXAdsxHnFz4XLXDxbHETRXwRGsCg=="/>
+* Disable OSX update installation (online check only now)
+* Added new diff viewer
+* Stellaris 3.11 beta compatibility
+* Added conflict solver option to skip parsing some languages</description>
+			<pubDate>Sun, 25 Feb 2024 23:24:04 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.26.129-alpha/linux-x64.zip" sparkle:version="1.26.129.9858" sparkle:shortVersionString="1.26.129" length="90831843" sparkle:os="linux" type="application/zip" sparkle:signature="HUI4ewF30QSccdbmoNLBJ2sTumNBq1otpQCP1s80iA59P/IoPz9EkQRtngZVbQGIJTlvbeJ6GhVHkjBNA9lUDQ=="/>
 		</item>
 		<item>
-			<title>1.26.77-alpha</title>
+			<title>1.26.129-alpha</title>
 			<description>## Release Notes 1.26
 * Update dependencies
 * Bump to net8 which should grant some performance improvements (win7 might not work going forward)
 * Remove ripple animation from Material themes (per #484)
 * Irony is now single instance app
-* Disable OSX update installation (online check only now)</description>
-			<pubDate>Wed, 14 Feb 2024 16:07:22 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.26.77-alpha/osx-x64.zip" sparkle:version="1.26.77.43406" sparkle:shortVersionString="1.26.77" length="93718992" sparkle:os="osx" type="application/zip" sparkle:signature="35mAvfNOU0S+tfM/CXyR+5tuo2UC0QeqRJW2UNIyLL8l43g2uEgHX8ESg4MYFrYzu5S7RBqdEXkLChsNkQSvDw=="/>
+* Disable OSX update installation (online check only now)
+* Added new diff viewer
+* Stellaris 3.11 beta compatibility
+* Added conflict solver option to skip parsing some languages</description>
+			<pubDate>Sun, 25 Feb 2024 23:24:09 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.26.129-alpha/osx-x64.zip" sparkle:version="1.26.129.9858" sparkle:shortVersionString="1.26.129" length="93792351" sparkle:os="osx" type="application/zip" sparkle:signature="A0q8az4UvNJbHJ2iY8v2Jk2/GeOeslXfhPxMSKR72gap7cCoiTQgn2lWsjp7+IGSlSdN+rp6cENp1kGpii8ZAw=="/>
 		</item>
 		<item>
-			<title>1.26.77-alpha</title>
+			<title>1.26.129-alpha</title>
 			<description>## Release Notes 1.26
 * Update dependencies
 * Bump to net8 which should grant some performance improvements (win7 might not work going forward)
 * Remove ripple animation from Material themes (per #484)
 * Irony is now single instance app
-* Disable OSX update installation (online check only now)</description>
-			<pubDate>Wed, 14 Feb 2024 16:07:29 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.26.77-alpha/win-x64-setup.zip" sparkle:version="1.26.77.43406" sparkle:shortVersionString="1.26.77" length="72379794" sparkle:os="windows" type="application/zip" sparkle:signature="A/PAlNv4DgrUU/yD8uQR2xyyDCy4WVBt7HdbakjuJwC2CK72oBAG5f331cNc17TwCoux/Yc0i95KzXCf19pZAw=="/>
+* Disable OSX update installation (online check only now)
+* Added new diff viewer
+* Stellaris 3.11 beta compatibility
+* Added conflict solver option to skip parsing some languages</description>
+			<pubDate>Sun, 25 Feb 2024 23:24:15 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.26.129-alpha/win-x64-setup.zip" sparkle:version="1.26.129.9858" sparkle:shortVersionString="1.26.129" length="72462015" sparkle:os="windows" type="application/zip" sparkle:signature="5l6auoLDY1WWk8dOym5A54SGl8bses4H7pX0oKzYLNOCa2vId/TGGnV9jyzEWlL8xUVq7SF61N/Y8zFtXI5LBg=="/>
 		</item>
 		<item>
-			<title>1.26.77-alpha</title>
+			<title>1.26.129-alpha</title>
 			<description>## Release Notes 1.26
 * Update dependencies
 * Bump to net8 which should grant some performance improvements (win7 might not work going forward)
 * Remove ripple animation from Material themes (per #484)
 * Irony is now single instance app
-* Disable OSX update installation (online check only now)</description>
-			<pubDate>Wed, 14 Feb 2024 16:07:29 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.26.77-alpha/win-x64.zip" sparkle:version="1.26.77.43406" sparkle:shortVersionString="1.26.77" length="106314407" sparkle:os="windows" type="application/zip" sparkle:signature="SCKhMEYIQ9HUlFZobm+2JOLRYpXu5mwrLzl3HDuJdW0zGlWgTv4LTfsG2LBDYr1+L4oRak4LpueZsYr2/AhVBA=="/>
+* Disable OSX update installation (online check only now)
+* Added new diff viewer
+* Stellaris 3.11 beta compatibility
+* Added conflict solver option to skip parsing some languages</description>
+			<pubDate>Sun, 25 Feb 2024 23:24:15 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.26.129-alpha/win-x64.zip" sparkle:version="1.26.129.9858" sparkle:shortVersionString="1.26.129" length="106444308" sparkle:os="windows" type="application/zip" sparkle:signature="8W2FqIjHb7LeI//0uJPEd20btlHMVP0Pqd7pV/8guLR8clHzYMrqhzV4hP31D22kCzcKZlKrHELykO/W7nEoAg=="/>
 		</item>
 		<item>
 			<title>1.25.161</title>
