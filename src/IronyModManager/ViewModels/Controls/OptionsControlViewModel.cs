@@ -4,7 +4,7 @@
 // Created          : 05-30-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-11-2024
+// Last Modified On : 02-25-2024
 // ***********************************************************************
 // <copyright file="OptionsControlViewModel.cs" company="Mario">
 //     Mario
@@ -42,7 +42,7 @@ namespace IronyModManager.ViewModels.Controls
     /// <summary>
     /// The options control view model.
     /// </summary>
-    /// <seealso cref="IronyModManager.Common.ViewModels.BaseViewModel"/>
+    /// <seealso cref="IronyModManager.Common.ViewModels.BaseViewModel" />
     [ExcludeFromCoverage("This should be tested via functional testing.")]
     public class OptionsControlViewModel(
         IGameLanguageService gameLanguageService,
@@ -199,9 +199,7 @@ namespace IronyModManager.ViewModels.Controls
         /// <summary>
         /// Gets or sets a value representing the allowed languages caption.
         /// </summary>
-        /// <value>
-        /// The allowed languages caption.
-        /// </value>
+        /// <value>The allowed languages caption.</value>
         [StaticLocalization(LocalizationResources.Options.ConflictSolver.AllowedLanguages)]
         public virtual string AllowedLanguagesCaption { get; protected set; }
 
@@ -287,9 +285,7 @@ namespace IronyModManager.ViewModels.Controls
         /// <summary>
         /// Gets or sets a value representing the conflict solver title.
         /// </summary>
-        /// <value>
-        /// The conflict solver title.
-        /// </value>
+        /// <value>The conflict solver title.</value>
         [StaticLocalization(LocalizationResources.Options.ConflictSolver.Title)]
         public virtual string ConflictSolverTitle { get; protected set; }
 
@@ -355,12 +351,16 @@ namespace IronyModManager.ViewModels.Controls
         public virtual string GameExecutable { get; protected set; }
 
         /// <summary>
-        /// Gets or sets a value representing the game languages.<see cref="Avalonia.Collections.AvaloniaList{IronyModManager.Models.Common.IGameLanguage}"/>
+        /// Gets or sets a value representing the game languages.<see cref="Avalonia.Collections.AvaloniaList{IronyModManager.Models.Common.IGameLanguage}" />
         /// </summary>
-        /// <value>
-        /// The game languages.
-        /// </value>
+        /// <value>The game languages.</value>
         public virtual AvaloniaList<IGameLanguage> GameLanguages { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether the game languages visible.
+        /// </summary>
+        /// <value><c>true</c> if game languages visible; otherwise, <c>false</c>.</value>
+        public virtual bool GameLanguagesVisible { get; protected set; }
 
         /// <summary>
         /// Gets or sets the game options.
@@ -395,16 +395,16 @@ namespace IronyModManager.ViewModels.Controls
         public virtual bool IsOpen { get; protected set; }
 
         /// <summary>
-        /// Gets or sets the left child margin.
+        /// Gets or sets a value representing the left game languages margin.<see cref="Avalonia.Thickness" />
         /// </summary>
-        /// <value>The left child margin.</value>
-        public virtual Thickness LeftChildMargin { get; protected set; } = new(20, 10, 0, 0);
+        /// <value>The left game languages margin.</value>
+        public virtual Thickness LeftGameLanguagesMargin { get; protected set; } = new(20, 0, 0, 0);
 
         /// <summary>
         /// Gets or sets the left margin.
         /// </summary>
         /// <value>The left margin.</value>
-        public virtual Thickness LeftMargin { get; protected set; } = new(20, 0, 0, 0);
+        public virtual Thickness LeftMargin { get; protected set; } = new(20, 15, 0, 15);
 
         /// <summary>
         /// Gets or sets the navigate.
@@ -651,6 +651,18 @@ namespace IronyModManager.ViewModels.Controls
         }
 
         /// <summary>
+        /// Binds game languages.
+        /// </summary>
+        /// <param name="game">The game.</param>
+        protected virtual void BindGameLanguages(IGame game = null)
+        {
+            game ??= gameService.GetSelected();
+            GameLanguages = gameLanguageService.Get().ToAvaloniaList();
+            GameLanguagesVisible = game != null && game.AdvancedFeatures != GameAdvancedFeatures.None;
+            LeftGameLanguagesMargin = new Thickness(GameLanguagesVisible ? 20 : 0, 15, 0, 15);
+        }
+
+        /// <summary>
         /// check for updates as an asynchronous operation.
         /// </summary>
         /// <param name="autoUpdateCheck">if set to <c>true</c> [automatic update check].</param>
@@ -698,7 +710,7 @@ namespace IronyModManager.ViewModels.Controls
         /// <param name="disposables">The disposables.</param>
         protected override void OnActivated(CompositeDisposable disposables)
         {
-            GameLanguages = gameLanguageService.Get().ToAvaloniaList();
+            BindGameLanguages();
             SetGame(gameService.GetSelected());
             SetEditor(externalEditorService.Get());
             SetNotificationPosition(positionSettingsService.Get());
@@ -1004,7 +1016,7 @@ namespace IronyModManager.ViewModels.Controls
         /// <param name="game">The game.</param>
         protected override void OnSelectedGameChanged(IGame game)
         {
-            GameLanguages = gameLanguageService.Get().ToAvaloniaList();
+            BindGameLanguages(game);
             SetGame(game);
             base.OnSelectedGameChanged(game);
         }
@@ -1115,7 +1127,6 @@ namespace IronyModManager.ViewModels.Controls
             }).DisposeWith(Disposables);
             ShowGameOptions = game != null;
             LeftMargin = new Thickness(ShowGameOptions ? 20 : 0, 0, 0, 0);
-            LeftChildMargin = new Thickness(ShowGameOptions ? 20 : 0, 10, 0, 0);
             isGameReloading = false;
         }
 
