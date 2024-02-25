@@ -138,7 +138,7 @@
                         </Grid>
                     </Panel>
                     <Panel Grid.Row="4" Grid.ColumnSpan="2" Margin="0,5">
-                        <Button Content="{Binding Close}" Command="{Binding CloseCommand}" HorizontalAlignment="Right" />
+                        <Button Content="{Binding Close}" Command="{Binding CloseCommand}" HorizontalAlignment="Right" Width="200" HorizontalContentAlignment="Center" />
                     </Panel>
                 </Grid>
             </Border>
