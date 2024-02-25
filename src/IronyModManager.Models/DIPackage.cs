@@ -1,19 +1,20 @@
-﻿
-// ***********************************************************************
+﻿// ***********************************************************************
 // Assembly         : IronyModManager.Models
 // Author           : Mario
 // Created          : 01-15-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-28-2023
+// Last Modified On : 02-25-2024
 // ***********************************************************************
 // <copyright file="DIPackage.cs" company="Mario">
 //     Mario
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
+
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using IronyModManager.DI.Extensions;
 using IronyModManager.Localization;
 using IronyModManager.Models.Common;
@@ -23,7 +24,6 @@ using SimpleInjector.Packaging;
 
 namespace IronyModManager.Models
 {
-
     /// <summary>
     /// Class DIPackage.
     /// Implements the <see cref="SimpleInjector.Packaging.IPackage" />
@@ -32,7 +32,6 @@ namespace IronyModManager.Models
     [ExcludeFromCoverage("Should not test external DI.")]
     public class DIPackage : IPackage
     {
-
         #region Methods
 
         /// <summary>
@@ -66,6 +65,7 @@ namespace IronyModManager.Models
             container.RegisterModel<IValidateResult, ValidateResult>();
             container.Register<IModCollectionSourceInfo, ModCollectionSourceInfo>();
             container.RegisterModel<IModIgnoreConfiguration, ModIgnoreConfiguration>();
+            container.RegisterModel<IGameLanguage, GameLanguage>();
         }
 
         #endregion Methods

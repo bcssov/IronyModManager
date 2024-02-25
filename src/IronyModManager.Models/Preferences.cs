@@ -4,7 +4,7 @@
 // Created          : 01-11-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 11-02-2022
+// Last Modified On : 02-25-2024
 // ***********************************************************************
 // <copyright file="Preferences.cs" company="Mario">
 //     Mario
@@ -14,6 +14,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using IronyModManager.Models.Common;
 
 /// <summary>
@@ -30,6 +31,19 @@ namespace IronyModManager.Models
     /// <seealso cref="IronyModManager.Models.Common.IPreferences" />
     public class Preferences : BaseModel, IPreferences
     {
+        #region Constructors
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Preferences" /> class.
+        /// </summary>
+        public Preferences()
+        {
+            // Magic string, ensures backwardds compatibility -- I hate it you hate it now move on
+            ConflictSolverLanguages = ["all"];
+        }
+
+        #endregion Constructors
+
         #region Properties
 
         /// <summary>
@@ -43,6 +57,12 @@ namespace IronyModManager.Models
         /// </summary>
         /// <value><c>true</c> if [check for prerelease]; otherwise, <c>false</c>.</value>
         public virtual bool CheckForPrerelease { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value representing the conflict solver languages.<see cref="System.Collections.Generic.List{string}" />
+        /// </summary>
+        /// <value>The conflict solver languages.</value>
+        public List<string> ConflictSolverLanguages { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether [conflict solver prompt shown].

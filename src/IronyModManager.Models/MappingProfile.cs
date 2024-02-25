@@ -1,11 +1,10 @@
-﻿
-// ***********************************************************************
+﻿// ***********************************************************************
 // Assembly         : IronyModManager.Models
 // Author           : Mario
 // Created          : 01-11-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-28-2023
+// Last Modified On : 02-25-2024
 // ***********************************************************************
 // <copyright file="MappingProfile.cs" company="Mario">
 //     Copyright (c) Mario. All rights reserved.
@@ -15,13 +14,13 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using IronyModManager.Models.Common;
 using IronyModManager.Shared;
 using IronyModManager.Shared.Models;
 
 namespace IronyModManager.Models
 {
-
     /// <summary>
     /// Class MappingProfile.
     /// Implements the <see cref="IronyModManager.Shared.BaseMappingProfile" />
@@ -63,6 +62,7 @@ namespace IronyModManager.Models
             CreateMap<IPromptNotifications, PromptNotifications>().ReverseMap();
             CreateMap<IModCollectionSourceInfo, ModCollectionSourceInfo>().ReverseMap();
             CreateMap<IModIgnoreConfiguration, ModIgnoreConfiguration>().ReverseMap();
+            CreateMap<IGameLanguage, GameLanguage>().ReverseMap();
         }
 
         #endregion Constructors
