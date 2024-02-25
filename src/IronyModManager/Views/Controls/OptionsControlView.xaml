@@ -23,19 +23,19 @@
                             <Button Content="{Binding AutoConfigure}" Command="{Binding AutoConfigureCommand}" Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="4"
                                     HorizontalAlignment="Stretch" VerticalAlignment="Stretch" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" MaxHeight="30" />
                             <TextBlock Text="{Binding GameExecutable}" Margin="0,5,0,0" Grid.Column="0" Grid.Row="1" VerticalAlignment="Center" HorizontalAlignment="Left" TextWrapping="Wrap" />
-                            <controls:TextBox IsReadOnly="True" Text="{Binding Game.ExecutableLocation}" Margin="0,5,0,0" MaxWidth="250" Grid.Column="1" Grid.Row="1" />
+                            <controls:TextBox IsReadOnly="True" Text="{Binding Game.ExecutableLocation}" Margin="0,5,0,0" MaxWidth="260" Grid.Column="1" Grid.Row="1" />
                             <Button Content="{Binding Navigate}" Command="{Binding NavigateExeCommand}" Margin="0,5,0,0" Grid.Column="2" Grid.Row="1" />
                             <Button Content="{Binding Reset}" Command="{Binding ResetExeCommand}" Margin="0,5,0,0" Grid.Column="3" Grid.Row="1" />
                             <TextBlock Margin="0,5" Text="{Binding GameArgs}" Grid.Column="0" Grid.Row="2" VerticalAlignment="Center" HorizontalAlignment="Left" TextWrapping="Wrap" />
-                            <controls:TextBox Margin="0,5" Text="{Binding Game.LaunchArguments}" MaxWidth="250" Grid.Column="1" Grid.Row="2" />
+                            <controls:TextBox Margin="0,5" Text="{Binding Game.LaunchArguments}" MaxWidth="260" Grid.Column="1" Grid.Row="2" />
                             <Button Margin="0,5" Content="{Binding Reset}" Command="{Binding ResetArgsCommand}" Grid.Column="2" Grid.Row="2" Grid.ColumnSpan="2"
                                     HorizontalAlignment="Stretch" VerticalAlignment="Stretch" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" />
                             <TextBlock Text="{Binding UserDirectory}" Grid.Column="0" Grid.Row="3" VerticalAlignment="Center" HorizontalAlignment="Left" TextWrapping="Wrap" />
-                            <controls:TextBox IsReadOnly="True" Text="{Binding Game.UserDirectory}" MaxWidth="250" Grid.Column="1" Grid.Row="3" />
+                            <controls:TextBox IsReadOnly="True" Text="{Binding Game.UserDirectory}" MaxWidth="260" Grid.Column="1" Grid.Row="3" />
                             <Button Content="{Binding Navigate}" Command="{Binding NavigateDirectoryCommand}" Grid.Column="2" Grid.Row="3" />
                             <Button Content="{Binding Reset}" Command="{Binding ResetDirectoryCommand}" Grid.Column="3" Grid.Row="3" />
                             <TextBlock Text="{Binding CustomModPath}" Grid.Column="0" Grid.Row="4" VerticalAlignment="Center" HorizontalAlignment="Left" TextWrapping="Wrap" />
-                            <controls:TextBox IsReadOnly="True" Text="{Binding Game.CustomModDirectory}" MaxWidth="250" Grid.Column="1" Grid.Row="4" />
+                            <controls:TextBox IsReadOnly="True" Text="{Binding Game.CustomModDirectory}" MaxWidth="260" Grid.Column="1" Grid.Row="4" />
                             <Button Content="{Binding Navigate}" Command="{Binding NavigateCustomDirectoryCommand}" Grid.Column="2" Grid.Row="4" />
                             <Button Content="{Binding Reset}" Command="{Binding ResetCustomDirectoryCommand}" Grid.Column="3" Grid.Row="4" />
                             <CheckBox Margin="0,5,0,0" Content="{Binding RefreshDescriptors}" IsChecked="{Binding Game.RefreshDescriptors}"
