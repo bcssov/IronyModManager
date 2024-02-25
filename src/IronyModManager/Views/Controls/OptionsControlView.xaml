@@ -114,7 +114,7 @@
                         <Grid>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="330" />
-                                <ColumnDefinition Width="330" />
+                                <ColumnDefinition Width="440" />
                             </Grid.ColumnDefinitions>
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="*" />
@@ -124,7 +124,7 @@
                             <Border BorderThickness="1,1,1,1" BorderBrush="{DynamicResource IronyButtonBorderBrush}" Grid.Row="0" Grid.ColumnSpan="2">
                                 <TextBlock Text="{Binding UpdateReleaseInfo}" FontSize="14" HorizontalAlignment="Center" TextWrapping="Wrap" />
                             </Border>
-                            <ScrollViewer Grid.Row="1" HorizontalScrollBarVisibility="Visible" MaxWidth="660" MaxHeight="300" Grid.ColumnSpan="2">
+                            <ScrollViewer Grid.Row="1" HorizontalScrollBarVisibility="Visible" MaxWidth="770" MaxHeight="300" Grid.ColumnSpan="2">
                                 <html:HtmlLabel Name="changelog" />
                             </ScrollViewer>
                             <Button Margin="0,5" Content="{Binding SkipUpdate}"
