@@ -138,6 +138,22 @@ namespace IronyModManager.Shared
             public const string Victoria3 = Prefix + "Victoria3";
             public const string STInfinite = Prefix + "STInfinite";
         }
+        public static class GameLanguages
+        {
+            public const string Prefix = "GameLanguages.";
+            public const string l_english = Prefix + "l_english";
+            public const string l_braz_por = Prefix + "l_braz_por";
+            public const string l_french = Prefix + "l_french";
+            public const string l_german = Prefix + "l_german";
+            public const string l_polish = Prefix + "l_polish";
+            public const string l_russian = Prefix + "l_russian";
+            public const string l_simp_chinese = Prefix + "l_simp_chinese";
+            public const string l_spanish = Prefix + "l_spanish";
+            public const string l_chinese = Prefix + "l_chinese";
+            public const string l_traditional_chinese = Prefix + "l_traditional_chinese";
+            public const string l_japanese = Prefix + "l_japanese";
+            public const string l_korean = Prefix + "l_korean";
+        }
         public static class Installed_Mods
         {
             public const string Prefix = "Installed_Mods.";

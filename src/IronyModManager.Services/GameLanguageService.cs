@@ -1,12 +1,12 @@
 ﻿// ***********************************************************************
-// Assembly         :
+// Assembly         : IronyModManager.Services
 // Author           : Mario
 // Created          : 02-25-2024
 //
 // Last Modified By : Mario
 // Last Modified On : 02-25-2024
 // ***********************************************************************
-// <copyright file="GameLanguageService.cs" company="">
+// <copyright file="GameLanguageService.cs" company="Mario">
 //     Copyright (c) . All rights reserved.
 // </copyright>
 // <summary></summary>
@@ -18,7 +18,6 @@ using System.Linq;
 using AutoMapper;
 using IronyModManager.Models.Common;
 using IronyModManager.Services.Common;
-using IronyModManager.Shared;
 using IronyModManager.Storage.Common;
 
 namespace IronyModManager.Services
@@ -103,7 +102,7 @@ namespace IronyModManager.Services
         {
             language.Type = type;
             language.IsSelected = selected.Contains(AllSelected) || selected.Contains(type);
-            language.DisplayName = type[2..].Replace("_", " ").CapitalizeEveryFirstLetter(); // first letters are "l_"
+            language.DisplayName = type;
         }
 
         #endregion Methods

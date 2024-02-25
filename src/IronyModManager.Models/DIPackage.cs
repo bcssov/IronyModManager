@@ -65,7 +65,7 @@ namespace IronyModManager.Models
             container.RegisterModel<IValidateResult, ValidateResult>();
             container.Register<IModCollectionSourceInfo, ModCollectionSourceInfo>();
             container.RegisterModel<IModIgnoreConfiguration, ModIgnoreConfiguration>();
-            container.RegisterModel<IGameLanguage, GameLanguage>();
+            container.RegisterLocalization<IGameLanguage, GameLanguage>();
         }
 
         #endregion Methods

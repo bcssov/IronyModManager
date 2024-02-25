@@ -1,12 +1,12 @@
 ﻿// ***********************************************************************
-// Assembly         :
+// Assembly         : IronyModManager.Models.Common
 // Author           : Mario
 // Created          : 02-25-2024
 //
 // Last Modified By : Mario
 // Last Modified On : 02-25-2024
 // ***********************************************************************
-// <copyright file="IGameLanguage.cs" company="">
+// <copyright file="IGameLanguage.cs" company="Mario">
 //     Copyright (c) . All rights reserved.
 // </copyright>
 // <summary></summary>
@@ -15,13 +15,14 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using IronyModManager.Localization;
 
 namespace IronyModManager.Models.Common
 {
     /// <summary>
     /// An game language interface.
     /// </summary>
-    public interface IGameLanguage : IModel
+    public interface IGameLanguage : IModel, ILocalizableModel
     {
         #region Properties
 

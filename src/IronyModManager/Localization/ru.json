@@ -99,6 +99,20 @@
         "Victoria3": "Victoria 3",
         "STInfinite": "Star Trek: Infinite"
     },
+    "GameLanguages": {
+        "l_english": "Английский",
+        "l_braz_por": "Португальский",
+        "l_french": "Французский",
+        "l_german": "Немецкий",
+        "l_polish": "Польский",
+        "l_russian": "Русский",
+        "l_simp_chinese": "Упрощенный китайский",
+        "l_spanish": "Испанский",
+        "l_chinese": "Китайский",
+        "l_traditional_chinese": "Традиционный китайский",
+        "l_japanese": "Японский",
+        "l_korean": "Корейский"
+    },
     "Installed_Mods": {
         "Name": "Установленные моды",
         "Filter": "Фильтр",

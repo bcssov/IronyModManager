@@ -85,14 +85,16 @@
                         </Border>
                         <Grid ColumnDefinitions="1*,1*" RowDefinitions="1*,1*" Margin="0,5">
                             <TextBlock Text="{Binding AllowedLanguagesCaption}" Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="2" VerticalAlignment="Center" HorizontalAlignment="Left" TextWrapping="Wrap" Margin="0,5,0,0" />
-                            <Panel Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="2" >
+                            <Panel Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="2">
                                 <ItemsRepeater Items="{Binding GameLanguages}" Width="440">
                                     <ItemsRepeater.Layout>
                                         <UniformGridLayout Orientation="Horizontal" MinColumnSpacing="10" ItemsStretch="None" MinItemWidth="140" />
                                     </ItemsRepeater.Layout>
                                     <ItemsRepeater.ItemTemplate>
                                         <DataTemplate>
-                                            <CheckBox IsChecked="{Binding IsSelected}" Content="{Binding DisplayName}" />
+                                            <CheckBox IsChecked="{Binding IsSelected}">
+                                                <TextBlock Text="{Binding DisplayName}" TextWrapping="WrapWithOverflow"></TextBlock>
+                                            </CheckBox>
                                         </DataTemplate>
                                     </ItemsRepeater.ItemTemplate>
                                 </ItemsRepeater>

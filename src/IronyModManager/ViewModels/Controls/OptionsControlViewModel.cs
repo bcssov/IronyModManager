@@ -360,6 +360,7 @@ namespace IronyModManager.ViewModels.Controls
         /// Gets or sets a value representing the game languages.<see cref="Avalonia.Collections.AvaloniaList{IronyModManager.Models.Common.IGameLanguage}" />
         /// </summary>
         /// <value>The game languages.</value>
+        [AutoRefreshLocalization]
         public virtual AvaloniaList<IGameLanguage> GameLanguages { get; protected set; }
 
         /// <summary>
@@ -671,7 +672,7 @@ namespace IronyModManager.ViewModels.Controls
             gameLanguagesChanged = null;
 
             var sourceList = languages.ToSourceList();
-            gameLanguagesChanged = sourceList.Connect().WhenPropertyChanged(p => p.IsSelected, notifyOnInitialValue:false).Subscribe(s =>
+            gameLanguagesChanged = sourceList.Connect().WhenPropertyChanged(p => p.IsSelected, false).Subscribe(_ =>
             {
                 gameLanguageService.Save(languages);
             }).DisposeWith(Disposables);
