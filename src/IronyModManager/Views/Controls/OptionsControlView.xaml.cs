@@ -4,13 +4,16 @@
 // Created          : 05-30-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 07-10-2022
+// Last Modified On : 02-25-2024
 // ***********************************************************************
 // <copyright file="OptionsControlView.xaml.cs" company="Mario">
 //     Mario
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
+
+using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
@@ -70,7 +73,7 @@ namespace IronyModManager.Views.Controls
             {
                 var html = new StringBuilder("<!DOCTYPE html><html><head><meta http-equiv='Content-Type' content='text/html;charset=UTF-8'/></head><body>");
                 var log = new StringBuilder();
-                log.AppendLine($"#{IronyFormatter.Format(ViewModel.VersionTitle, new { Version = ViewModel.VersionContent })}");
+                log.AppendLine($"#{IronyFormatter.Format(ViewModel!.VersionTitle, new { Version = ViewModel.VersionContent })}");
                 log.AppendLine(ViewModel.Changelog);
                 html.AppendLine(md.Transform(log.ToString()));
                 html.AppendLine("</body></html>");
@@ -89,12 +92,14 @@ namespace IronyModManager.Views.Controls
                 {
                     language = langService.Get().FirstOrDefault(p => p.Abrv.Equals(locale));
                 }
+
                 var themeManager = DIResolver.Get<IThemeManager>();
                 var fontResolver = DIResolver.Get<IFontFamilyManager>();
-                var font = fontResolver.ResolveFontFamily(language.Font);
+                var font = fontResolver.ResolveFontFamily(language!.Font);
                 changelog.BaseStylesheet = themeManager.GetHtmlBaseCSS($"width:660px; font-family:\"{font.Name}\";");
                 changelog.Text = getVersionHtml();
             }
+
             var listener = MessageBus.Current.Listen<LocaleChangedEventArgs>();
             listener.SubscribeObservable(x =>
             {
@@ -102,22 +107,22 @@ namespace IronyModManager.Views.Controls
             });
             setFont();
 
-            popup.Closed += (sender, args) =>
+            popup.Closed += (_, _) =>
             {
-                ViewModel.ForceClose();
+                ViewModel!.ForceClose();
             };
             MessageBus.Current.Listen<ForceClosePopulsEventArgs>()
-            .SubscribeObservable(x =>
-            {
-                Dispatcher.UIThread.InvokeAsync(() =>
+                .SubscribeObservable(_ =>
                 {
-                    ViewModel.ForceClose();
-                });
-            }).DisposeWith(disposables);
+                    Dispatcher.UIThread.InvokeAsync(() =>
+                    {
+                        ViewModel!.ForceClose();
+                    });
+                }).DisposeWith(disposables);
 
-            this.WhenAnyValue(p => p.ViewModel.IsActivated).Where(p => p).SubscribeObservable(s =>
+            this.WhenAnyValue(p => p.ViewModel.IsActivated).Where(p => p).SubscribeObservable(_ =>
             {
-                this.WhenAnyValue(p => p.ViewModel.UpdateInfoVisible).Where(p => p).SubscribeObservable(s =>
+                this.WhenAnyValue(p => p.ViewModel.UpdateInfoVisible).Where(p => p).SubscribeObservable(_ =>
                 {
                     changelog.Text = getVersionHtml();
                 }).DisposeWith(disposables);

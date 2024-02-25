@@ -1,5 +1,4 @@
-﻿
-// ***********************************************************************
+﻿// ***********************************************************************
 // Assembly         : IronyModManager
 // Author           : Mario
 // Created          : 05-30-2020
@@ -12,6 +11,7 @@
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
+
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -38,7 +38,6 @@ using ReactiveUI;
 
 namespace IronyModManager.ViewModels.Controls
 {
-
     /// <summary>
     /// Class OptionsControlViewModel.
     /// Implements the <see cref="IronyModManager.Common.ViewModels.BaseViewModel" />
@@ -137,22 +136,22 @@ namespace IronyModManager.ViewModels.Controls
         /// <summary>
         /// The is editor reloading
         /// </summary>
-        private bool isEditorReloading = false;
+        private bool isEditorReloading;
 
         /// <summary>
         /// The is game reloading
         /// </summary>
-        private bool isGameReloading = false;
+        private bool isGameReloading;
 
         /// <summary>
         /// The is notification position reloading
         /// </summary>
-        private bool isNotificationPositionReloading = false;
+        private bool isNotificationPositionReloading;
 
         /// <summary>
         /// The is update reloading
         /// </summary>
-        private bool isUpdateReloading = false;
+        private bool isUpdateReloading;
 
         /// <summary>
         /// The last skipped version changed
@@ -675,7 +674,7 @@ namespace IronyModManager.ViewModels.Controls
                 {
                     var title = localizationManager.GetResource(LocalizationResources.Options.Updates.UpdateNotification.Title);
                     var message = localizationManager.GetResource(LocalizationResources.Options.Updates.UpdateNotification.Message);
-                    notificationAction.ShowNotification(title, message, NotificationType.Info, 30, onClick: () => { IsOpen = true; });
+                    notificationAction.ShowNotification(title, message, NotificationType.Info, 30, () => { IsOpen = true; });
                 }
             }
             else
@@ -687,6 +686,7 @@ namespace IronyModManager.ViewModels.Controls
                     notificationAction.ShowNotification(title, message, NotificationType.Info);
                 }
             }
+
             CheckingForUpdates = false;
         }
 
@@ -720,6 +720,7 @@ namespace IronyModManager.ViewModels.Controls
                             SaveUpdateSettings();
                         }
                     }
+
                     showPrompt().ConfigureAwait(false);
                 }
                 else if (updateSettings.AutoUpdates.GetValueOrDefault())
@@ -727,6 +728,7 @@ namespace IronyModManager.ViewModels.Controls
                     CheckForUpdatesAsync(true).ConfigureAwait(false);
                 }
             }
+
             SetUpdateSettings(updateSettings);
 
             var updateCheckAllowed = this.WhenAnyValue(p => p.CheckingForUpdates, v => !v);
@@ -756,11 +758,13 @@ namespace IronyModManager.ViewModels.Controls
                         {
                             Game.LaunchArguments = defaultSettings.LaunchArguments;
                         }
+
                         if (string.IsNullOrWhiteSpace(Game.UserDirectory))
                         {
                             Game.UserDirectory = defaultSettings.UserDirectory;
                         }
                     }
+
                     SaveGame();
                 }
             }).DisposeWith(disposables);
@@ -793,6 +797,7 @@ namespace IronyModManager.ViewModels.Controls
                     {
                         result = result.TrimEnd(Path.DirectorySeparatorChar + Shared.Constants.JsonModDirectory);
                     }
+
                     Game.UserDirectory = result;
                     SaveGame();
                 }
@@ -806,10 +811,12 @@ namespace IronyModManager.ViewModels.Controls
                 {
                     Game.LaunchArguments = defaultSettings.LaunchArguments;
                 }
+
                 if (string.IsNullOrWhiteSpace(Game.UserDirectory))
                 {
                     Game.UserDirectory = defaultSettings.UserDirectory;
                 }
+
                 SaveGame();
             }).DisposeWith(disposables);
 
@@ -890,6 +897,7 @@ namespace IronyModManager.ViewModels.Controls
                 {
                     updater.SetSkippedVersion(version);
                 }
+
                 UpdateSettings.LastSkippedVersion = version;
             });
 
@@ -904,6 +912,7 @@ namespace IronyModManager.ViewModels.Controls
                     var message = localizationManager.GetResource(LocalizationResources.Options.Prompts.CustomModDirectory.Message);
                     save = await notificationAction.ShowPromptAsync(title, title, message, NotificationType.Warning);
                 }
+
                 IsOpen = true;
                 if (save)
                 {
@@ -921,6 +930,7 @@ namespace IronyModManager.ViewModels.Controls
                     var message = localizationManager.GetResource(LocalizationResources.Options.Prompts.CustomModDirectory.Message);
                     save = await notificationAction.ShowPromptAsync(title, title, message, NotificationType.Warning);
                 }
+
                 if (save)
                 {
                     var defaultSettings = gameService.GetDefaultGameSettings(Game);
@@ -961,6 +971,7 @@ namespace IronyModManager.ViewModels.Controls
                 {
                     return;
                 }
+
                 ITempFile createTempFile(string text)
                 {
                     var file = DIResolver.Get<ITempFile>();
@@ -968,6 +979,7 @@ namespace IronyModManager.ViewModels.Controls
                     file.Text = text;
                     return file;
                 }
+
                 var left = createTempFile(localizationManager.GetResource(LocalizationResources.Options.Editor.TestLeft));
                 var right = createTempFile(localizationManager.GetResource(LocalizationResources.Options.Editor.TestRight));
                 var arguments = externalEditorService.GetLaunchArguments(left.File, right.File);
@@ -975,6 +987,7 @@ namespace IronyModManager.ViewModels.Controls
                 {
                     await notificationAction.ShowPromptAsync(TestExternalEditorConfiguration, TestExternalEditorConfiguration, TestExternalEditorConfiguration, NotificationType.Info, PromptType.OK);
                 }
+
                 left.Dispose();
                 right.Dispose();
             }).DisposeWith(disposables);
@@ -1010,14 +1023,14 @@ namespace IronyModManager.ViewModels.Controls
         protected virtual void SaveGame()
         {
             var game = gameService.GetSelected();
-            bool exeChanged = game.ExecutableLocation != Game.ExecutableLocation;
+            var exeChanged = game.ExecutableLocation != Game.ExecutableLocation;
             game.ExecutableLocation = Game.ExecutableLocation;
             game.LaunchArguments = Game.LaunchArguments;
             game.RefreshDescriptors = Game.RefreshDescriptors;
             game.CloseAppAfterGameLaunch = Game.CloseAppAfterGameLaunch;
-            bool dirChanged = game.UserDirectory != Game.UserDirectory;
+            var dirChanged = game.UserDirectory != Game.UserDirectory;
             game.UserDirectory = Game.UserDirectory;
-            bool customDirectoryChanged = game.CustomModDirectory != Game.CustomModDirectory;
+            var customDirectoryChanged = game.CustomModDirectory != Game.CustomModDirectory;
             game.CustomModDirectory = Game.CustomModDirectory;
             if (gameService.Save(game))
             {
@@ -1025,11 +1038,13 @@ namespace IronyModManager.ViewModels.Controls
                 {
                     MessageBus.PublishAsync(new GameUserDirectoryChangedEvent(game, customDirectoryChanged));
                 }
+
                 if (exeChanged)
                 {
                     MessageBus.PublishAsync(new GameExeChangedEvent(game.ExecutableLocation));
                 }
             }
+
             SetGame(game);
         }
 
@@ -1064,7 +1079,7 @@ namespace IronyModManager.ViewModels.Controls
             isEditorReloading = true;
             Editor = externalEditor;
             editorArgsChanged?.Dispose();
-            editorArgsChanged = this.WhenAnyValue(p => p.Editor.ExternalEditorParameters).Where(p => !isEditorReloading).Subscribe(s =>
+            editorArgsChanged = this.WhenAnyValue(p => p.Editor.ExternalEditorParameters).Where(_ => !isEditorReloading).Subscribe(_ =>
             {
                 SaveEditor();
             }).DisposeWith(Disposables);
@@ -1082,15 +1097,15 @@ namespace IronyModManager.ViewModels.Controls
             refreshDescriptorsChanged?.Dispose();
             closeGameChanged?.Dispose();
             Game = game;
-            gameArgsChanged = this.WhenAnyValue(p => p.Game.LaunchArguments).Where(p => !isGameReloading).Subscribe(s =>
+            gameArgsChanged = this.WhenAnyValue(p => p.Game.LaunchArguments).Where(_ => !isGameReloading).Subscribe(_ =>
             {
                 SaveGame();
             }).DisposeWith(Disposables);
-            refreshDescriptorsChanged = this.WhenAnyValue(p => p.Game.RefreshDescriptors).Where(p => !isGameReloading).Subscribe(s =>
+            refreshDescriptorsChanged = this.WhenAnyValue(p => p.Game.RefreshDescriptors).Where(_ => !isGameReloading).Subscribe(_ =>
             {
                 SaveGame();
             }).DisposeWith(Disposables);
-            closeGameChanged = this.WhenAnyValue(p => p.Game.CloseAppAfterGameLaunch).Where(p => !isGameReloading).Subscribe(s =>
+            closeGameChanged = this.WhenAnyValue(p => p.Game.CloseAppAfterGameLaunch).Where(_ => !isGameReloading).Subscribe(_ =>
             {
                 SaveGame();
             }).DisposeWith(Disposables);
@@ -1112,19 +1127,22 @@ namespace IronyModManager.ViewModels.Controls
             {
                 NotificationPositions = notificationPositions.ToAvaloniaList();
             }
+
             notificationPositionChanged?.Dispose();
-            notificationPositionChanged = this.WhenAnyValue(p => p.NotificationPosition).Where(p => !isNotificationPositionReloading).Subscribe(s =>
+            notificationPositionChanged = this.WhenAnyValue(p => p.NotificationPosition).Where(_ => !isNotificationPositionReloading).Subscribe(s =>
             {
                 foreach (var item in NotificationPositions)
                 {
                     item.IsSelected = item == s;
                 }
+
                 SaveNotificationOption();
             }).DisposeWith(Disposables);
             if (!resubscribeOnly && notificationPositions != null)
             {
                 NotificationPosition = NotificationPositions.FirstOrDefault(p => p.IsSelected);
             }
+
             isNotificationPositionReloading = false;
         }
 
@@ -1139,16 +1157,16 @@ namespace IronyModManager.ViewModels.Controls
             checkForPrereleaseChanged?.Dispose();
             lastSkippedVersionChanged?.Dispose();
             UpdateSettings = updateSettings;
-            autoUpdateChanged = this.WhenAnyValue(p => p.UpdateSettings.AutoUpdates).Where(v => !isUpdateReloading).Subscribe(s =>
+            autoUpdateChanged = this.WhenAnyValue(p => p.UpdateSettings.AutoUpdates).Where(_ => !isUpdateReloading).Subscribe(_ =>
             {
                 SaveUpdateSettings();
             }).DisposeWith(Disposables);
-            checkForPrereleaseChanged = this.WhenAnyValue(p => p.UpdateSettings.CheckForPrerelease).Where(v => !isUpdateReloading).Subscribe(s =>
+            checkForPrereleaseChanged = this.WhenAnyValue(p => p.UpdateSettings.CheckForPrerelease).Where(_ => !isUpdateReloading).Subscribe(_ =>
             {
                 UpdateInfoVisible = false;
                 SaveUpdateSettings();
             }).DisposeWith(Disposables);
-            lastSkippedVersionChanged = this.WhenAnyValue(p => p.UpdateSettings.LastSkippedVersion).Where(v => !isUpdateReloading).Subscribe(s =>
+            lastSkippedVersionChanged = this.WhenAnyValue(p => p.UpdateSettings.LastSkippedVersion).Where(_ => !isUpdateReloading).Subscribe(_ =>
             {
                 UpdateInfoVisible = false;
                 SaveUpdateSettings();
