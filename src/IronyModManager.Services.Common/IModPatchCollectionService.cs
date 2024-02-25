@@ -1,19 +1,20 @@
-﻿
-// ***********************************************************************
+﻿// ***********************************************************************
 // Assembly         : IronyModManager.Services.Common
 // Author           : Mario
 // Created          : 05-26-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-28-2023
+// Last Modified On : 02-25-2024
 // ***********************************************************************
 // <copyright file="IModPatchCollectionService.cs" company="Mario">
 //     Mario
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
+
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using IronyModManager.Models.Common;
 using IronyModManager.Parser.Common.Parsers.Models;
@@ -21,7 +22,6 @@ using IronyModManager.Shared.Models;
 
 namespace IronyModManager.Services.Common
 {
-
     /// <summary>
     /// Interface IModPatchCollectionService
     /// Implements the <see cref="IronyModManager.Services.Common.IBaseService" />
@@ -92,8 +92,16 @@ namespace IronyModManager.Services.Common
         /// <param name="indexedDefinitions">The indexed definitions.</param>
         /// <param name="modOrder">The mod order.</param>
         /// <param name="patchStateMode">The patch state mode.</param>
+        /// <param name="allowedLanguages">The allowed languages.</param>
         /// <returns>Task&lt;IConflictResult&gt;.</returns>
-        Task<IConflictResult> FindConflictsAsync(IIndexedDefinitions indexedDefinitions, IList<string> modOrder, PatchStateMode patchStateMode);
+        Task<IConflictResult> FindConflictsAsync(IIndexedDefinitions indexedDefinitions, IList<string> modOrder, PatchStateMode patchStateMode, IReadOnlyCollection<IGameLanguage> allowedLanguages);
+
+        /// <summary>
+        /// Gets an allowed languages async.
+        /// </summary>
+        /// <param name="collectionName">The collection name.</param>
+        /// <returns>A Task containing IReadOnlyCollection of strings.<see cref="Task{IReadOnlyCollection{string}}" /></returns>
+        Task<IReadOnlyCollection<string>> GetAllowedLanguagesAsync(string collectionName);
 
         /// <summary>
         /// Gets the bracket count.
@@ -117,8 +125,9 @@ namespace IronyModManager.Services.Common
         /// <param name="mods">The mods.</param>
         /// <param name="collectionName">Name of the collection.</param>
         /// <param name="mode">The mode.</param>
+        /// <param name="allowedGameLanguages">The allowed game languages.</param>
         /// <returns>Task&lt;IIndexedDefinitions&gt;.</returns>
-        Task<IIndexedDefinitions> GetModObjectsAsync(IGame game, IEnumerable<IMod> mods, string collectionName, PatchStateMode mode);
+        Task<IIndexedDefinitions> GetModObjectsAsync(IGame game, IEnumerable<IMod> mods, string collectionName, PatchStateMode mode, IReadOnlyCollection<IGameLanguage> allowedGameLanguages);
 
         /// <summary>
         /// Gets the patch state mode asynchronous.

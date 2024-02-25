@@ -4,15 +4,17 @@
 // Created          : 04-02-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 11-01-2021
+// Last Modified On : 02-25-2024
 // ***********************************************************************
 // <copyright file="ModPatchExporterParameters.cs" company="Mario">
 //     Mario
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
+
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using IronyModManager.Shared;
 using IronyModManager.Shared.Models;
 
@@ -25,6 +27,14 @@ namespace IronyModManager.IO.Common.Mods
     public class ModPatchExporterParameters
     {
         #region Properties
+
+        /// <summary>
+        /// Gets or sets a value representing the allowed languages.<see cref="System.Collections.Generic.IEnumerable{string}"/>
+        /// </summary>
+        /// <value>
+        /// The allowed languages.
+        /// </value>
+        public IEnumerable<string> AllowedLanguages { get; set; }
 
         /// <summary>
         /// Gets or sets the conflicts.

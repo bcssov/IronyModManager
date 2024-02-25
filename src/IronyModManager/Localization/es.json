@@ -99,6 +99,20 @@
         "Victoria3": "Victoria 3",
         "STInfinite": "Star Trek: Infinite"
     },
+    "GameLanguages": {
+        "l_english": "English",
+        "l_braz_por": "Portugués",
+        "l_french": "Francés",
+        "l_german": "Alemán",
+        "l_polish": "Polaco",
+        "l_russian": "Ruso",
+        "l_simp_chinese": "Simp Chinese",
+        "l_spanish": "Español",
+        "l_chinese": "Chino",
+        "l_traditional_chinese": "Chino tradicional",
+        "l_japanese": "Japonés",
+        "l_korean": "Coreano"
+    },
     "Installed_Mods": {
         "Name": "Mods Instalados",
         "Filter": "Filtro de Mods",
@@ -462,6 +476,10 @@
             "CloseAfterLaunch": "Cerrar después de iniciar el juego",
             "AutoConfigure": "Configurar todo...",
             "CustomModPath": "Directorio de mod personalizado"
+        },
+        "ConflictSolver": {
+            "Title": "Solucionador de conflictos",
+            "AllowedLanguages": "Lenguas permitidas"
         },
         "Updates": {
             "Title": "Opciones de Actualización",

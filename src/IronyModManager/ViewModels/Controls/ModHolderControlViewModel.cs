@@ -4,7 +4,7 @@
 // Created          : 02-29-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-23-2024
+// Last Modified On : 02-25-2024
 // ***********************************************************************
 // <copyright file="ModHolderControlViewModel.cs" company="Mario">
 //     Mario
@@ -86,6 +86,11 @@ namespace IronyModManager.ViewModels.Controls
         /// The game index service
         /// </summary>
         private readonly IGameIndexService gameIndexService;
+
+        /// <summary>
+        /// The game language service
+        /// </summary>
+        private readonly IGameLanguageService gameLanguageService;
 
         /// <summary>
         /// The game service
@@ -204,6 +209,7 @@ namespace IronyModManager.ViewModels.Controls
         /// <summary>
         /// Initializes a new instance of the <see cref="ModHolderControlViewModel" /> class.
         /// </summary>
+        /// <param name="gameLanguageService">The game language service.</param>
         /// <param name="externalProcessHandlerService">The external process handler service.</param>
         /// <param name="gameDefinitionLoadProgressHandler">The game definition load progress handler.</param>
         /// <param name="gameIndexProgressHandler">The game index progress handler.</param>
@@ -226,7 +232,8 @@ namespace IronyModManager.ViewModels.Controls
         /// <param name="modDefinitionPatchLoadHandler">The mod definition patch load handler.</param>
         /// <param name="gameDirectoryChangedHandler">The game directory changed handler.</param>
         /// <param name="logger">The logger.</param>
-        public ModHolderControlViewModel(IExternalProcessHandlerService externalProcessHandlerService, GameDefinitionLoadProgressHandler gameDefinitionLoadProgressHandler, GameIndexProgressHandler gameIndexProgressHandler,
+        public ModHolderControlViewModel(IGameLanguageService gameLanguageService, IExternalProcessHandlerService externalProcessHandlerService, GameDefinitionLoadProgressHandler gameDefinitionLoadProgressHandler,
+            GameIndexProgressHandler gameIndexProgressHandler,
             IGameIndexService gameIndexService, IPromptNotificationsService promptNotificationsService,
             ModListInstallRefreshRequestHandler modListInstallRefreshRequestHandler, ModDefinitionInvalidReplaceHandler modDefinitionInvalidReplaceHandler,
             IIDGenerator idGenerator, IShutDownState shutDownState, IModService modService, IModPatchCollectionService modPatchCollectionService, IGameService gameService,
@@ -256,6 +263,7 @@ namespace IronyModManager.ViewModels.Controls
             this.gameIndexProgressHandler = gameIndexProgressHandler;
             this.gameDefinitionLoadProgressHandler = gameDefinitionLoadProgressHandler;
             this.externalProcessHandlerService = externalProcessHandlerService;
+            this.gameLanguageService = gameLanguageService;
             InstalledMods = installedModsControlViewModel;
             CollectionMods = collectionModsControlViewModel;
             UseSimpleLayout = !DIResolver.Get<IPlatformConfiguration>().GetOptions().ConflictSolver.UseSubMenus;
@@ -576,6 +584,17 @@ namespace IronyModManager.ViewModels.Controls
             modPatchCollectionService.InvalidatePatchModState(CollectionMods.SelectedModCollection.Name);
             modPatchCollectionService.ResetPatchStateCache();
 
+            IReadOnlyCollection<IGameLanguage> allowedLanguages;
+            var usedAllowedLanguages = await modPatchCollectionService.GetAllowedLanguagesAsync(CollectionMods.SelectedModCollection.Name);
+            if (usedAllowedLanguages != null)
+            {
+                allowedLanguages = gameLanguageService.GetByAbrv(usedAllowedLanguages);
+            }
+            else
+            {
+                allowedLanguages = gameLanguageService.GetSelected();
+            }
+
             var tooLargeMod = false;
             var game = gameService.GetSelected();
             var stopWatch = new Stopwatch();
@@ -585,7 +604,8 @@ namespace IronyModManager.ViewModels.Controls
                 IIndexedDefinitions result = null;
                 try
                 {
-                    result = await modPatchCollectionService.GetModObjectsAsync(gameService.GetSelected(), CollectionMods.SelectedMods, CollectionMods.SelectedModCollection.Name, mode).ConfigureAwait(false);
+                    result = await modPatchCollectionService
+                        .GetModObjectsAsync(gameService.GetSelected(), CollectionMods.SelectedMods, CollectionMods.SelectedModCollection.Name, mode, allowedLanguages).ConfigureAwait(false);
                 }
                 catch (ModTooLargeException)
                 {
@@ -628,7 +648,7 @@ namespace IronyModManager.ViewModels.Controls
                 stopWatch.Restart();
                 definitions = await Task.Run(async () =>
                 {
-                    var result = await gameIndexService.LoadDefinitionsAsync(definitions, game, versions);
+                    var result = await gameIndexService.LoadDefinitionsAsync(definitions, game, versions, allowedLanguages);
 
                     GCRunner.RunGC(GCCollectionMode.Aggressive, true);
                     return result;
@@ -641,7 +661,7 @@ namespace IronyModManager.ViewModels.Controls
             {
                 if (definitions != null)
                 {
-                    var result = await modPatchCollectionService.FindConflictsAsync(definitions, CollectionMods.SelectedMods.Select(p => p.Name).ToList(), mode);
+                    var result = await modPatchCollectionService.FindConflictsAsync(definitions, CollectionMods.SelectedMods.Select(p => p.Name).ToList(), mode, allowedLanguages);
                     GCRunner.RunGC(GCCollectionMode.Aggressive, true);
                     return result;
                 }
@@ -668,7 +688,7 @@ namespace IronyModManager.ViewModels.Controls
             {
                 SelectedCollection = CollectionMods.SelectedModCollection,
                 Results = conflicts,
-                State = mode == PatchStateMode.ReadOnly || mode == PatchStateMode.ReadOnlyWithoutLocalization ? NavigationState.ReadOnlyConflictSolver : NavigationState.ConflictSolver,
+                State = mode is PatchStateMode.ReadOnly or PatchStateMode.ReadOnlyWithoutLocalization ? NavigationState.ReadOnlyConflictSolver : NavigationState.ConflictSolver,
                 SelectedMods = CollectionMods.SelectedMods.Select(p => p.Name).ToList()
             };
             ReactiveUI.MessageBus.Current.SendMessage(args);

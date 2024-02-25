@@ -4,15 +4,17 @@
 // Created          : 03-18-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 11-01-2021
+// Last Modified On : 02-25-2024
 // ***********************************************************************
 // <copyright file="IConflictResult.cs" company="Mario">
 //     Mario
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
+
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using IronyModManager.Shared.Models;
 
 namespace IronyModManager.Models.Common
@@ -33,6 +35,14 @@ namespace IronyModManager.Models.Common
         /// </summary>
         /// <value>All conflicts.</value>
         IIndexedDefinitions AllConflicts { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value representing the allowed languages.<see cref="System.Collections.Generic.IEnumerable{string}"/>
+        /// </summary>
+        /// <value>
+        /// The allowed languages.
+        /// </value>
+        IEnumerable<string> AllowedLanguages { get; set; }
 
         /// <summary>
         /// Gets or sets the conflicts.

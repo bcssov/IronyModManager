@@ -4,13 +4,14 @@
 // Created          : 03-31-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 11-01-2021
+// Last Modified On : 02-25-2024
 // ***********************************************************************
 // <copyright file="PatchState.cs" company="Mario">
 //     Mario
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -32,6 +33,11 @@ namespace IronyModManager.IO.Mods.Models
         #region Fields
 
         /// <summary>
+        /// A private IEnumerable{string} named allowedLanguages.
+        /// </summary>
+        private IEnumerable<string> allowedLanguages;
+
+        /// <summary>
         /// The conflict history
         /// </summary>
         private IEnumerable<IDefinition> conflictHistory;
@@ -39,11 +45,23 @@ namespace IronyModManager.IO.Mods.Models
         /// <summary>
         /// The indexed conflict history
         /// </summary>
+#pragma warning disable CA1859 // Use concrete types when possible for improved performance
         private IDictionary<string, IEnumerable<IDefinition>> indexedConflictHistory;
+#pragma warning restore CA1859 // Use concrete types when possible for improved performance
 
         #endregion Fields
 
         #region Properties
+
+        /// <summary>
+        /// Gets or sets a value representing the allowed languages.<see cref="System.Collections.Generic.IEnumerable{string}" />
+        /// </summary>
+        /// <value>The allowed languages.</value>
+        public IEnumerable<string> AllowedLanguages
+        {
+            get => allowedLanguages;
+            set => allowedLanguages = value == null ? [] : [.. value];
+        }
 
         /// <summary>
         /// Gets or sets the conflict history.
@@ -105,6 +123,7 @@ namespace IronyModManager.IO.Mods.Models
                 {
                     InitConflictHistoryIndex();
                 }
+
                 return indexedConflictHistory;
             }
         }
@@ -147,15 +166,15 @@ namespace IronyModManager.IO.Mods.Models
             {
                 conflictHistory.ToList().ForEach(p =>
                 {
-                    if (indexedConflictHistory.ContainsKey(p.TypeAndId))
+                    if (indexedConflictHistory.TryGetValue(p.TypeAndId, out var value))
                     {
-                        var col = indexedConflictHistory[p.TypeAndId].ToList();
+                        var col = value.ToList();
                         col.Add(p);
                         indexedConflictHistory[p.Type] = col;
                     }
                     else
                     {
-                        indexedConflictHistory.Add(p.TypeAndId, new List<IDefinition>() { p });
+                        indexedConflictHistory.Add(p.TypeAndId, [p]);
                     }
                 });
             }

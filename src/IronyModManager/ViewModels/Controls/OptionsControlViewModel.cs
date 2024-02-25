@@ -1,17 +1,17 @@
-﻿
-// ***********************************************************************
+﻿// ***********************************************************************
 // Assembly         : IronyModManager
 // Author           : Mario
 // Created          : 05-30-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-11-2024
+// Last Modified On : 02-25-2024
 // ***********************************************************************
 // <copyright file="OptionsControlViewModel.cs" company="Mario">
 //     Mario
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
+
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -21,6 +21,8 @@ using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
 using Avalonia;
+using Avalonia.Collections;
+using DynamicData;
 using IronyModManager.Common;
 using IronyModManager.Common.Events;
 using IronyModManager.Common.ViewModels;
@@ -38,76 +40,93 @@ using ReactiveUI;
 
 namespace IronyModManager.ViewModels.Controls
 {
-
     /// <summary>
-    /// Class OptionsControlViewModel.
-    /// Implements the <see cref="IronyModManager.Common.ViewModels.BaseViewModel" />
+    /// The options control view model.
     /// </summary>
     /// <seealso cref="IronyModManager.Common.ViewModels.BaseViewModel" />
     [ExcludeFromCoverage("This should be tested via functional testing.")]
-    public class OptionsControlViewModel : BaseViewModel
+    public class OptionsControlViewModel(
+        IGameLanguageService gameLanguageService,
+        IAppAction appAction,
+        IPlatformConfiguration platformConfiguration,
+        IModService modService,
+        INotificationPositionSettingsService positionSettingsService,
+        IExternalEditorService externalEditorService,
+        IIDGenerator idGenerator,
+        ILogger logger,
+        INotificationAction notificationAction,
+        ILocalizationManager localizationManager,
+        IUpdater updater,
+        IUpdaterService updaterService,
+        IGameService gameService,
+        IFileDialogAction fileDialogAction) : BaseViewModel
     {
         #region Fields
 
         /// <summary>
         /// The application action
         /// </summary>
-        private readonly IAppAction appAction;
+        private readonly IAppAction appAction = appAction;
 
         /// <summary>
         /// The external editor service
         /// </summary>
-        private readonly IExternalEditorService externalEditorService;
+        private readonly IExternalEditorService externalEditorService = externalEditorService;
 
         /// <summary>
         /// The file dialog action
         /// </summary>
-        private readonly IFileDialogAction fileDialogAction;
+        private readonly IFileDialogAction fileDialogAction = fileDialogAction;
+
+        /// <summary>
+        /// A private readonly IGameLanguageService named gameLanguageService.
+        /// </summary>
+        private readonly IGameLanguageService gameLanguageService = gameLanguageService;
 
         /// <summary>
         /// The game service
         /// </summary>
-        private readonly IGameService gameService;
+        private readonly IGameService gameService = gameService;
 
         /// <summary>
         /// The identifier generator
         /// </summary>
-        private readonly IIDGenerator idGenerator;
+        private readonly IIDGenerator idGenerator = idGenerator;
 
         /// <summary>
         /// The localization manager
         /// </summary>
-        private readonly ILocalizationManager localizationManager;
+        private readonly ILocalizationManager localizationManager = localizationManager;
 
         /// <summary>
         /// The logger
         /// </summary>
-        private readonly ILogger logger;
+        private readonly ILogger logger = logger;
 
         /// <summary>
         /// The mod service
         /// </summary>
-        private readonly IModService modService;
+        private readonly IModService modService = modService;
 
         /// <summary>
         /// The notification action
         /// </summary>
-        private readonly INotificationAction notificationAction;
+        private readonly INotificationAction notificationAction = notificationAction;
 
         /// <summary>
         /// The position settings service
         /// </summary>
-        private readonly INotificationPositionSettingsService positionSettingsService;
+        private readonly INotificationPositionSettingsService positionSettingsService = positionSettingsService;
 
         /// <summary>
         /// The updater
         /// </summary>
-        private readonly IUpdater updater;
+        private readonly IUpdater updater = updater;
 
         /// <summary>
         /// The updater service
         /// </summary>
-        private readonly IUpdaterService updaterService;
+        private readonly IUpdaterService updaterService = updaterService;
 
         /// <summary>
         /// The automatic update changed
@@ -135,24 +154,29 @@ namespace IronyModManager.ViewModels.Controls
         private IDisposable gameArgsChanged;
 
         /// <summary>
+        /// A private IDisposable named gameLanguagesChanged.
+        /// </summary>
+        private IDisposable gameLanguagesChanged;
+
+        /// <summary>
         /// The is editor reloading
         /// </summary>
-        private bool isEditorReloading = false;
+        private bool isEditorReloading;
 
         /// <summary>
         /// The is game reloading
         /// </summary>
-        private bool isGameReloading = false;
+        private bool isGameReloading;
 
         /// <summary>
         /// The is notification position reloading
         /// </summary>
-        private bool isNotificationPositionReloading = false;
+        private bool isNotificationPositionReloading;
 
         /// <summary>
         /// The is update reloading
         /// </summary>
-        private bool isUpdateReloading = false;
+        private bool isUpdateReloading;
 
         /// <summary>
         /// The last skipped version changed
@@ -176,50 +200,14 @@ namespace IronyModManager.ViewModels.Controls
 
         #endregion Fields
 
-        #region Constructors
+        #region Properties
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="OptionsControlViewModel" /> class.
+        /// Gets or sets a value representing the allowed languages caption.
         /// </summary>
-        /// <param name="appAction">The application action.</param>
-        /// <param name="platformConfiguration">The platform configuration.</param>
-        /// <param name="modService">The mod service.</param>
-        /// <param name="positionSettingsService">The position settings service.</param>
-        /// <param name="externalEditorService">The external editor service.</param>
-        /// <param name="idGenerator">The identifier generator.</param>
-        /// <param name="logger">The logger.</param>
-        /// <param name="notificationAction">The notification action.</param>
-        /// <param name="localizationManager">The localization manager.</param>
-        /// <param name="updater">The updater.</param>
-        /// <param name="updaterService">The updater service.</param>
-        /// <param name="gameService">The game service.</param>
-        /// <param name="fileDialogAction">The file dialog action.</param>
-        public OptionsControlViewModel(IAppAction appAction, IPlatformConfiguration platformConfiguration, IModService modService, INotificationPositionSettingsService positionSettingsService,
-            IExternalEditorService externalEditorService, IIDGenerator idGenerator, ILogger logger,
-            INotificationAction notificationAction, ILocalizationManager localizationManager, IUpdater updater,
-            IUpdaterService updaterService, IGameService gameService, IFileDialogAction fileDialogAction)
-        {
-            this.positionSettingsService = positionSettingsService;
-            this.gameService = gameService;
-            this.fileDialogAction = fileDialogAction;
-            this.updaterService = updaterService;
-            this.updater = updater;
-            this.localizationManager = localizationManager;
-            this.notificationAction = notificationAction;
-            this.logger = logger;
-            this.idGenerator = idGenerator;
-            this.externalEditorService = externalEditorService;
-            this.modService = modService;
-            this.appAction = appAction;
-            UpdatesAllowed = !platformConfiguration.GetOptions().Updates.Disable;
-            InstallingUpdatesAllowed = !platformConfiguration.GetOptions().Updates.DisableInstallOnly;
-            LeftMargin = new Thickness(20, 0, 0, 0);
-            LeftChildMargin = new Thickness(20, 10, 0, 0);
-        }
-
-        #endregion Constructors
-
-        #region Properties
+        /// <value>The allowed languages caption.</value>
+        [StaticLocalization(LocalizationResources.Options.ConflictSolver.AllowedLanguages)]
+        public virtual string AllowedLanguagesCaption { get; protected set; }
 
         /// <summary>
         /// Gets or sets the application options title.
@@ -301,6 +289,13 @@ namespace IronyModManager.ViewModels.Controls
         public virtual ReactiveCommand<Unit, Unit> CloseCommand { get; protected set; }
 
         /// <summary>
+        /// Gets or sets a value representing the conflict solver title.
+        /// </summary>
+        /// <value>The conflict solver title.</value>
+        [StaticLocalization(LocalizationResources.Options.ConflictSolver.Title)]
+        public virtual string ConflictSolverTitle { get; protected set; }
+
+        /// <summary>
         /// Gets or sets the custom mod path.
         /// </summary>
         /// <value>The custom mod path.</value>
@@ -362,6 +357,19 @@ namespace IronyModManager.ViewModels.Controls
         public virtual string GameExecutable { get; protected set; }
 
         /// <summary>
+        /// Gets or sets a value representing the game languages.<see cref="Avalonia.Collections.AvaloniaList{IronyModManager.Models.Common.IGameLanguage}" />
+        /// </summary>
+        /// <value>The game languages.</value>
+        [AutoRefreshLocalization]
+        public virtual AvaloniaList<IGameLanguage> GameLanguages { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether the game languages visible.
+        /// </summary>
+        /// <value><c>true</c> if game languages visible; otherwise, <c>false</c>.</value>
+        public virtual bool GameLanguagesVisible { get; protected set; }
+
+        /// <summary>
         /// Gets or sets the game options.
         /// </summary>
         /// <value>The game options.</value>
@@ -372,7 +380,7 @@ namespace IronyModManager.ViewModels.Controls
         /// Gets or sets a value indicating whether [installing updates allowed].
         /// </summary>
         /// <value><c>true</c> if [installing updates allowed]; otherwise, <c>false</c>.</value>
-        public virtual bool InstallingUpdatesAllowed { get; protected set; }
+        public virtual bool InstallingUpdatesAllowed { get; protected set; } = !platformConfiguration.GetOptions().Updates.DisableInstallOnly;
 
         /// <summary>
         /// Gets or sets the install updates.
@@ -394,16 +402,16 @@ namespace IronyModManager.ViewModels.Controls
         public virtual bool IsOpen { get; protected set; }
 
         /// <summary>
-        /// Gets or sets the left child margin.
+        /// Gets or sets a value representing the left game languages margin.<see cref="Avalonia.Thickness" />
         /// </summary>
-        /// <value>The left child margin.</value>
-        public virtual Thickness LeftChildMargin { get; protected set; }
+        /// <value>The left game languages margin.</value>
+        public virtual Thickness LeftGameLanguagesMargin { get; protected set; } = new(20, 0, 0, 0);
 
         /// <summary>
         /// Gets or sets the left margin.
         /// </summary>
         /// <value>The left margin.</value>
-        public virtual Thickness LeftMargin { get; protected set; }
+        public virtual Thickness LeftMargin { get; protected set; } = new(20, 15, 0, 15);
 
         /// <summary>
         /// Gets or sets the navigate.
@@ -609,7 +617,7 @@ namespace IronyModManager.ViewModels.Controls
         /// Gets or sets a value indicating whether [updates allowed].
         /// </summary>
         /// <value><c>true</c> if [updates allowed]; otherwise, <c>false</c>.</value>
-        public virtual bool UpdatesAllowed { get; protected set; }
+        public virtual bool UpdatesAllowed { get; protected set; } = !platformConfiguration.GetOptions().Updates.Disable;
 
         /// <summary>
         /// Gets or sets the update settings.
@@ -650,6 +658,27 @@ namespace IronyModManager.ViewModels.Controls
         }
 
         /// <summary>
+        /// Binds game languages.
+        /// </summary>
+        /// <param name="game">The game.</param>
+        protected virtual void BindGameLanguages(IGame game = null)
+        {
+            game ??= gameService.GetSelected();
+            GameLanguages = gameLanguageService.Get().ToAvaloniaList();
+            var languages = GameLanguages;
+            GameLanguagesVisible = game != null && game.AdvancedFeatures != GameAdvancedFeatures.None;
+            LeftGameLanguagesMargin = new Thickness(GameLanguagesVisible ? 20 : 0, 15, 0, 15);
+            gameLanguagesChanged?.Dispose();
+            gameLanguagesChanged = null;
+
+            var sourceList = languages.ToSourceList();
+            gameLanguagesChanged = sourceList.Connect().WhenPropertyChanged(p => p.IsSelected, false).Subscribe(_ =>
+            {
+                gameLanguageService.Save(languages);
+            }).DisposeWith(Disposables);
+        }
+
+        /// <summary>
         /// check for updates as an asynchronous operation.
         /// </summary>
         /// <param name="autoUpdateCheck">if set to <c>true</c> [automatic update check].</param>
@@ -675,7 +704,7 @@ namespace IronyModManager.ViewModels.Controls
                 {
                     var title = localizationManager.GetResource(LocalizationResources.Options.Updates.UpdateNotification.Title);
                     var message = localizationManager.GetResource(LocalizationResources.Options.Updates.UpdateNotification.Message);
-                    notificationAction.ShowNotification(title, message, NotificationType.Info, 30, onClick: () => { IsOpen = true; });
+                    notificationAction.ShowNotification(title, message, NotificationType.Info, 30, () => { IsOpen = true; });
                 }
             }
             else
@@ -687,6 +716,7 @@ namespace IronyModManager.ViewModels.Controls
                     notificationAction.ShowNotification(title, message, NotificationType.Info);
                 }
             }
+
             CheckingForUpdates = false;
         }
 
@@ -696,6 +726,7 @@ namespace IronyModManager.ViewModels.Controls
         /// <param name="disposables">The disposables.</param>
         protected override void OnActivated(CompositeDisposable disposables)
         {
+            BindGameLanguages();
             SetGame(gameService.GetSelected());
             SetEditor(externalEditorService.Get());
             SetNotificationPosition(positionSettingsService.Get());
@@ -720,6 +751,7 @@ namespace IronyModManager.ViewModels.Controls
                             SaveUpdateSettings();
                         }
                     }
+
                     showPrompt().ConfigureAwait(false);
                 }
                 else if (updateSettings.AutoUpdates.GetValueOrDefault())
@@ -727,6 +759,7 @@ namespace IronyModManager.ViewModels.Controls
                     CheckForUpdatesAsync(true).ConfigureAwait(false);
                 }
             }
+
             SetUpdateSettings(updateSettings);
 
             var updateCheckAllowed = this.WhenAnyValue(p => p.CheckingForUpdates, v => !v);
@@ -756,11 +789,13 @@ namespace IronyModManager.ViewModels.Controls
                         {
                             Game.LaunchArguments = defaultSettings.LaunchArguments;
                         }
+
                         if (string.IsNullOrWhiteSpace(Game.UserDirectory))
                         {
                             Game.UserDirectory = defaultSettings.UserDirectory;
                         }
                     }
+
                     SaveGame();
                 }
             }).DisposeWith(disposables);
@@ -793,6 +828,7 @@ namespace IronyModManager.ViewModels.Controls
                     {
                         result = result.TrimEnd(Path.DirectorySeparatorChar + Shared.Constants.JsonModDirectory);
                     }
+
                     Game.UserDirectory = result;
                     SaveGame();
                 }
@@ -806,10 +842,12 @@ namespace IronyModManager.ViewModels.Controls
                 {
                     Game.LaunchArguments = defaultSettings.LaunchArguments;
                 }
+
                 if (string.IsNullOrWhiteSpace(Game.UserDirectory))
                 {
                     Game.UserDirectory = defaultSettings.UserDirectory;
                 }
+
                 SaveGame();
             }).DisposeWith(disposables);
 
@@ -890,6 +928,7 @@ namespace IronyModManager.ViewModels.Controls
                 {
                     updater.SetSkippedVersion(version);
                 }
+
                 UpdateSettings.LastSkippedVersion = version;
             });
 
@@ -904,6 +943,7 @@ namespace IronyModManager.ViewModels.Controls
                     var message = localizationManager.GetResource(LocalizationResources.Options.Prompts.CustomModDirectory.Message);
                     save = await notificationAction.ShowPromptAsync(title, title, message, NotificationType.Warning);
                 }
+
                 IsOpen = true;
                 if (save)
                 {
@@ -921,6 +961,7 @@ namespace IronyModManager.ViewModels.Controls
                     var message = localizationManager.GetResource(LocalizationResources.Options.Prompts.CustomModDirectory.Message);
                     save = await notificationAction.ShowPromptAsync(title, title, message, NotificationType.Warning);
                 }
+
                 if (save)
                 {
                     var defaultSettings = gameService.GetDefaultGameSettings(Game);
@@ -961,6 +1002,7 @@ namespace IronyModManager.ViewModels.Controls
                 {
                     return;
                 }
+
                 ITempFile createTempFile(string text)
                 {
                     var file = DIResolver.Get<ITempFile>();
@@ -968,6 +1010,7 @@ namespace IronyModManager.ViewModels.Controls
                     file.Text = text;
                     return file;
                 }
+
                 var left = createTempFile(localizationManager.GetResource(LocalizationResources.Options.Editor.TestLeft));
                 var right = createTempFile(localizationManager.GetResource(LocalizationResources.Options.Editor.TestRight));
                 var arguments = externalEditorService.GetLaunchArguments(left.File, right.File);
@@ -975,6 +1018,7 @@ namespace IronyModManager.ViewModels.Controls
                 {
                     await notificationAction.ShowPromptAsync(TestExternalEditorConfiguration, TestExternalEditorConfiguration, TestExternalEditorConfiguration, NotificationType.Info, PromptType.OK);
                 }
+
                 left.Dispose();
                 right.Dispose();
             }).DisposeWith(disposables);
@@ -988,6 +1032,7 @@ namespace IronyModManager.ViewModels.Controls
         /// <param name="game">The game.</param>
         protected override void OnSelectedGameChanged(IGame game)
         {
+            BindGameLanguages(game);
             SetGame(game);
             base.OnSelectedGameChanged(game);
         }
@@ -1010,14 +1055,14 @@ namespace IronyModManager.ViewModels.Controls
         protected virtual void SaveGame()
         {
             var game = gameService.GetSelected();
-            bool exeChanged = game.ExecutableLocation != Game.ExecutableLocation;
+            var exeChanged = game.ExecutableLocation != Game.ExecutableLocation;
             game.ExecutableLocation = Game.ExecutableLocation;
             game.LaunchArguments = Game.LaunchArguments;
             game.RefreshDescriptors = Game.RefreshDescriptors;
             game.CloseAppAfterGameLaunch = Game.CloseAppAfterGameLaunch;
-            bool dirChanged = game.UserDirectory != Game.UserDirectory;
+            var dirChanged = game.UserDirectory != Game.UserDirectory;
             game.UserDirectory = Game.UserDirectory;
-            bool customDirectoryChanged = game.CustomModDirectory != Game.CustomModDirectory;
+            var customDirectoryChanged = game.CustomModDirectory != Game.CustomModDirectory;
             game.CustomModDirectory = Game.CustomModDirectory;
             if (gameService.Save(game))
             {
@@ -1025,11 +1070,13 @@ namespace IronyModManager.ViewModels.Controls
                 {
                     MessageBus.PublishAsync(new GameUserDirectoryChangedEvent(game, customDirectoryChanged));
                 }
+
                 if (exeChanged)
                 {
                     MessageBus.PublishAsync(new GameExeChangedEvent(game.ExecutableLocation));
                 }
             }
+
             SetGame(game);
         }
 
@@ -1064,7 +1111,7 @@ namespace IronyModManager.ViewModels.Controls
             isEditorReloading = true;
             Editor = externalEditor;
             editorArgsChanged?.Dispose();
-            editorArgsChanged = this.WhenAnyValue(p => p.Editor.ExternalEditorParameters).Where(p => !isEditorReloading).Subscribe(s =>
+            editorArgsChanged = this.WhenAnyValue(p => p.Editor.ExternalEditorParameters).Where(_ => !isEditorReloading).Subscribe(_ =>
             {
                 SaveEditor();
             }).DisposeWith(Disposables);
@@ -1082,21 +1129,20 @@ namespace IronyModManager.ViewModels.Controls
             refreshDescriptorsChanged?.Dispose();
             closeGameChanged?.Dispose();
             Game = game;
-            gameArgsChanged = this.WhenAnyValue(p => p.Game.LaunchArguments).Where(p => !isGameReloading).Subscribe(s =>
+            gameArgsChanged = this.WhenAnyValue(p => p.Game.LaunchArguments).Where(_ => !isGameReloading).Subscribe(_ =>
             {
                 SaveGame();
             }).DisposeWith(Disposables);
-            refreshDescriptorsChanged = this.WhenAnyValue(p => p.Game.RefreshDescriptors).Where(p => !isGameReloading).Subscribe(s =>
+            refreshDescriptorsChanged = this.WhenAnyValue(p => p.Game.RefreshDescriptors).Where(_ => !isGameReloading).Subscribe(_ =>
             {
                 SaveGame();
             }).DisposeWith(Disposables);
-            closeGameChanged = this.WhenAnyValue(p => p.Game.CloseAppAfterGameLaunch).Where(p => !isGameReloading).Subscribe(s =>
+            closeGameChanged = this.WhenAnyValue(p => p.Game.CloseAppAfterGameLaunch).Where(_ => !isGameReloading).Subscribe(_ =>
             {
                 SaveGame();
             }).DisposeWith(Disposables);
             ShowGameOptions = game != null;
             LeftMargin = new Thickness(ShowGameOptions ? 20 : 0, 0, 0, 0);
-            LeftChildMargin = new Thickness(ShowGameOptions ? 20 : 0, 10, 0, 0);
             isGameReloading = false;
         }
 
@@ -1112,19 +1158,22 @@ namespace IronyModManager.ViewModels.Controls
             {
                 NotificationPositions = notificationPositions.ToAvaloniaList();
             }
+
             notificationPositionChanged?.Dispose();
-            notificationPositionChanged = this.WhenAnyValue(p => p.NotificationPosition).Where(p => !isNotificationPositionReloading).Subscribe(s =>
+            notificationPositionChanged = this.WhenAnyValue(p => p.NotificationPosition).Where(_ => !isNotificationPositionReloading).Subscribe(s =>
             {
                 foreach (var item in NotificationPositions)
                 {
                     item.IsSelected = item == s;
                 }
+
                 SaveNotificationOption();
             }).DisposeWith(Disposables);
             if (!resubscribeOnly && notificationPositions != null)
             {
                 NotificationPosition = NotificationPositions.FirstOrDefault(p => p.IsSelected);
             }
+
             isNotificationPositionReloading = false;
         }
 
@@ -1139,16 +1188,16 @@ namespace IronyModManager.ViewModels.Controls
             checkForPrereleaseChanged?.Dispose();
             lastSkippedVersionChanged?.Dispose();
             UpdateSettings = updateSettings;
-            autoUpdateChanged = this.WhenAnyValue(p => p.UpdateSettings.AutoUpdates).Where(v => !isUpdateReloading).Subscribe(s =>
+            autoUpdateChanged = this.WhenAnyValue(p => p.UpdateSettings.AutoUpdates).Where(_ => !isUpdateReloading).Subscribe(_ =>
             {
                 SaveUpdateSettings();
             }).DisposeWith(Disposables);
-            checkForPrereleaseChanged = this.WhenAnyValue(p => p.UpdateSettings.CheckForPrerelease).Where(v => !isUpdateReloading).Subscribe(s =>
+            checkForPrereleaseChanged = this.WhenAnyValue(p => p.UpdateSettings.CheckForPrerelease).Where(_ => !isUpdateReloading).Subscribe(_ =>
             {
                 UpdateInfoVisible = false;
                 SaveUpdateSettings();
             }).DisposeWith(Disposables);
-            lastSkippedVersionChanged = this.WhenAnyValue(p => p.UpdateSettings.LastSkippedVersion).Where(v => !isUpdateReloading).Subscribe(s =>
+            lastSkippedVersionChanged = this.WhenAnyValue(p => p.UpdateSettings.LastSkippedVersion).Where(_ => !isUpdateReloading).Subscribe(_ =>
             {
                 UpdateInfoVisible = false;
                 SaveUpdateSettings();

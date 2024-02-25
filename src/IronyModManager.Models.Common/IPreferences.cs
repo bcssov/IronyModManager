@@ -4,7 +4,7 @@
 // Created          : 01-11-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 11-02-2022
+// Last Modified On : 02-25-2024
 // ***********************************************************************
 // <copyright file="IPreferences.cs" company="Mario">
 //     Mario
@@ -15,6 +15,11 @@
 /// <summary>
 /// The Models namespace.
 /// </summary>
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
 namespace IronyModManager.Models.Common
 {
     /// <summary>
@@ -37,6 +42,12 @@ namespace IronyModManager.Models.Common
         /// </summary>
         /// <value><c>true</c> if [check for prerelease]; otherwise, <c>false</c>.</value>
         bool CheckForPrerelease { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value representing the conflict solver languages.<see cref="System.Collections.Generic.List{string}" />
+        /// </summary>
+        /// <value>The conflict solver languages.</value>
+        List<string> ConflictSolverLanguages { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether [conflict solver prompt shown].

@@ -4,7 +4,7 @@
 // Created          : 05-26-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-23-2024
+// Last Modified On : 02-25-2024
 // ***********************************************************************
 // <copyright file="ModPatchCollectionService.cs" company="Mario">
 //     Mario
@@ -48,28 +48,10 @@ using ValueType = IronyModManager.Shared.Models.ValueType;
 namespace IronyModManager.Services
 {
     /// <summary>
-    /// Class ModPatchCollectionService.
-    /// Implements the <see cref="IronyModManager.Services.ModBaseService" />
-    /// Implements the <see cref="IronyModManager.Services.Common.IModPatchCollectionService" />
+    /// The mod patch collection service.
     /// </summary>
-    /// <seealso cref="IronyModManager.Services.ModBaseService" />
-    /// <seealso cref="IronyModManager.Services.Common.IModPatchCollectionService" />
-    /// <remarks>
-    /// Initializes a new instance of the <see cref="ModPatchCollectionService" /> class.
-    /// </remarks>
-    /// <param name="cache">The cache.</param>
-    /// <param name="messageBus">The message bus.</param>
-    /// <param name="parserManager">The parser manager.</param>
-    /// <param name="definitionInfoProviders">The definition information providers.</param>
-    /// <param name="modPatchExporter">The mod patch exporter.</param>
-    /// <param name="reader">The reader.</param>
-    /// <param name="modWriter">The mod writer.</param>
-    /// <param name="modParser">The mod parser.</param>
-    /// <param name="gameService">The game service.</param>
-    /// <param name="storageProvider">The storage provider.</param>
-    /// <param name="mapper">The mapper.</param>
-    /// <param name="validateParser">The validate parser.</param>
-    /// <param name="parametrizedParser">The parametrized parser.</param>
+    /// <seealso cref="IronyModManager.Services.ModBaseService"/>
+    /// <seealso cref="IronyModManager.Services.Common.IModPatchCollectionService"/>
     public class ModPatchCollectionService(
         ICache cache,
         IMessageBus messageBus,
@@ -380,8 +362,9 @@ namespace IronyModManager.Services
         /// <param name="indexedDefinitions">The indexed definitions.</param>
         /// <param name="modOrder">The mod order.</param>
         /// <param name="patchStateMode">The patch state mode.</param>
+        /// <param name="allowedLanguages">The allowed languages.</param>
         /// <returns>IConflictResult.</returns>
-        public virtual async Task<IConflictResult> FindConflictsAsync(IIndexedDefinitions indexedDefinitions, IList<string> modOrder, PatchStateMode patchStateMode)
+        public virtual async Task<IConflictResult> FindConflictsAsync(IIndexedDefinitions indexedDefinitions, IList<string> modOrder, PatchStateMode patchStateMode, IReadOnlyCollection<IGameLanguage> allowedLanguages)
         {
             var actualMode = patchStateMode;
             if (patchStateMode == PatchStateMode.ReadOnly)
@@ -796,6 +779,7 @@ namespace IronyModManager.Services
             stopWatch.Restart();
 
             var result = GetModelInstance<IConflictResult>();
+            result.AllowedLanguages = allowedLanguages != null ? allowedLanguages.Select(l => l.Type).ToList() : [];
             result.Mode = patchStateMode;
             var conflictsIndexed = DIResolver.Get<IIndexedDefinitions>();
             await conflictsIndexed.InitMapAsync(filteredConflicts, true);
@@ -822,6 +806,36 @@ namespace IronyModManager.Services
             Debug.WriteLine("FindConflictsAsync Init Result: " + stopWatch.Elapsed.FormatElapsed());
 
             return result;
+        }
+
+        /// <summary>
+        /// Gets an allowed languages async.
+        /// </summary>
+        /// <param name="collectionName">The collection name.</param>
+        /// <returns>A Task containing IReadOnlyCollection of strings.<see cref="T:System.Threading.Tasks.Task`1" /></returns>
+        public async Task<IReadOnlyCollection<string>> GetAllowedLanguagesAsync(string collectionName)
+        {
+            var game = GameService.GetSelected();
+            if (game != null && !string.IsNullOrWhiteSpace(collectionName))
+            {
+                var patchName = GenerateCollectionPatchName(collectionName);
+                var @params = new ModPatchExporterParameters { RootPath = GetModDirectoryRootPath(game), PatchPath = EvaluatePatchNamePath(game, patchName) };
+                var languages = await modPatchExporter.GetAllowedLanguagesAsync(@params);
+                if (languages != null)
+                {
+                    return languages;
+                }
+                else
+                {
+                    var state = await modPatchExporter.GetPatchStateAsync(@params, false);
+                    if (state != null)
+                    {
+                        return state.AllowedLanguages != null ? [.. state.AllowedLanguages] : [];
+                    }
+                }
+            }
+
+            return null;
         }
 
         /// <summary>
@@ -867,10 +881,11 @@ namespace IronyModManager.Services
         /// <param name="mods">The mods.</param>
         /// <param name="collectionName">Name of the collection.</param>
         /// <param name="mode">The mode.</param>
+        /// <param name="allowedGameLanguages">The allowed game languages.</param>
         /// <returns>A Task&lt;IIndexedDefinitions&gt; representing the asynchronous operation.</returns>
         /// <exception cref="ModTooLargeException">Detected a mod which is potentially too large to parse.</exception>
         /// <exception cref="IronyModManager.Services.Common.Exceptions.ModTooLargeException">Detected a mod which is potentially too large to parse.</exception>
-        public virtual async Task<IIndexedDefinitions> GetModObjectsAsync(IGame game, IEnumerable<IMod> mods, string collectionName, PatchStateMode mode)
+        public virtual async Task<IIndexedDefinitions> GetModObjectsAsync(IGame game, IEnumerable<IMod> mods, string collectionName, PatchStateMode mode, IReadOnlyCollection<IGameLanguage> allowedGameLanguages)
         {
             if (game == null || mods == null || !mods.Any())
             {
@@ -907,15 +922,19 @@ namespace IronyModManager.Services
             var provider = DefinitionInfoProviders.FirstOrDefault(p => p.CanProcess(game.Type));
             await messageBus.PublishAsync(new ModDefinitionLoadEvent(0));
 
+            var allowedLanguages = allowedGameLanguages;
             var gameFolders = game.GameFolders.ToList();
             if (mode is PatchStateMode.DefaultWithoutLocalization or PatchStateMode.AdvancedWithoutLocalization or PatchStateMode.ReadOnlyWithoutLocalization)
             {
                 gameFolders = gameFolders.Where(p => !p.StartsWith(Shared.Constants.LocalizationDirectory, StringComparison.OrdinalIgnoreCase)).ToList();
+
+                // Mode override
+                allowedGameLanguages = null;
             }
 
             mods.AsParallel().WithDegreeOfParallelism(MaxModsToProcessInParallel).WithExecutionMode(ParallelExecutionMode.ForceParallelism).ForAll(m =>
             {
-                var result = ParseModFiles(game, Reader.Read(m.FullPath, gameFolders), m, provider);
+                var result = ParseModFiles(game, Reader.Read(m.FullPath, gameFolders), m, provider, allowedLanguages);
                 if (result?.Count() > 0)
                 {
                     foreach (var item in result)
@@ -1452,6 +1471,7 @@ namespace IronyModManager.Services
                     await customConflicts.InitMapAsync(state.CustomConflicts, true);
                     conflicts.CustomConflicts = customConflicts;
                     conflicts.Mode = conflictResult.Mode;
+                    conflicts.AllowedLanguages = conflictResult.AllowedLanguages;
 
                     var indexResult = await initAllIndexedDefinitions(conflictResult, total, processed, 100);
                     conflictResult.AllConflicts.Dispose();
@@ -1475,7 +1495,8 @@ namespace IronyModManager.Services
                             CustomConflicts = await GetDefinitionOrDefaultAsync(conflicts.CustomConflicts),
                             RootPath = GetModDirectoryRootPath(game),
                             PatchPath = EvaluatePatchNamePath(game, patchName),
-                            HasGameDefinitions = await conflicts.AllConflicts.HasGameDefinitionsAsync()
+                            HasGameDefinitions = await conflicts.AllConflicts.HasGameDefinitionsAsync(),
+                            AllowedLanguages = conflicts.AllowedLanguages
                         });
                     }
 
@@ -1561,7 +1582,8 @@ namespace IronyModManager.Services
                             CustomConflicts = await GetDefinitionOrDefaultAsync(conflictResult.CustomConflicts),
                             RootPath = GetModDirectoryRootPath(game),
                             PatchPath = EvaluatePatchNamePath(game, patchName),
-                            HasGameDefinitions = await conflictResult.AllConflicts.HasGameDefinitionsAsync()
+                            HasGameDefinitions = await conflictResult.AllConflicts.HasGameDefinitionsAsync(),
+                            AllowedLanguages = conflictResult.AllowedLanguages
                         });
                     }
 
@@ -1931,7 +1953,8 @@ namespace IronyModManager.Services
                     CustomConflicts = await GetDefinitionOrDefaultAsync(conflictResult.CustomConflicts),
                     RootPath = GetModDirectoryRootPath(game),
                     PatchPath = EvaluatePatchNamePath(game, patchName),
-                    HasGameDefinitions = await conflictResult.AllConflicts.HasGameDefinitionsAsync()
+                    HasGameDefinitions = await conflictResult.AllConflicts.HasGameDefinitionsAsync(),
+                    AllowedLanguages = conflictResult.AllowedLanguages
                 });
             }
 
@@ -2631,7 +2654,8 @@ namespace IronyModManager.Services
                         CustomConflicts = await GetDefinitionOrDefaultAsync(conflictResult.CustomConflicts),
                         RootPath = GetModDirectoryRootPath(game),
                         PatchPath = EvaluatePatchNamePath(game, patchName),
-                        HasGameDefinitions = await conflictResult.AllConflicts.HasGameDefinitionsAsync()
+                        HasGameDefinitions = await conflictResult.AllConflicts.HasGameDefinitionsAsync(),
+                        AllowedLanguages = conflictResult.AllowedLanguages
                     });
                     return exportPatches.Count != 0 ? exportResult && stateResult : stateResult;
                 }
@@ -2946,8 +2970,9 @@ namespace IronyModManager.Services
         /// <param name="fileInfos">The file infos.</param>
         /// <param name="modObject">The mod object.</param>
         /// <param name="definitionInfoProvider">The definition information provider.</param>
+        /// <param name="allowedGameLanguages">The allowed game languages.</param>
         /// <returns>IEnumerable&lt;IDefinition&gt;.</returns>
-        protected virtual IEnumerable<IDefinition> ParseModFiles(IGame game, IEnumerable<IFileInfo> fileInfos, IModObject modObject, IDefinitionInfoProvider definitionInfoProvider)
+        protected virtual IEnumerable<IDefinition> ParseModFiles(IGame game, IEnumerable<IFileInfo> fileInfos, IModObject modObject, IDefinitionInfoProvider definitionInfoProvider, IReadOnlyCollection<IGameLanguage> allowedGameLanguages)
         {
             if (fileInfos == null)
             {
@@ -2957,6 +2982,16 @@ namespace IronyModManager.Services
             var definitions = new List<IDefinition>();
             foreach (var fileInfo in fileInfos)
             {
+                // See if we should skip maybe
+                var onlyFilename = Path.GetFileNameWithoutExtension(fileInfo.FileName);
+                if (allowedGameLanguages != null && fileInfo.FileName!.StartsWith(Shared.Constants.LocalizationDirectory, StringComparison.OrdinalIgnoreCase))
+                {
+                    if (!allowedGameLanguages.Any(p => onlyFilename!.EndsWith(p.Type, StringComparison.OrdinalIgnoreCase)))
+                    {
+                        continue;
+                    }
+                }
+
                 var fileDefs = parserManager.Parse(new ParserManagerArgs
                 {
                     ContentSHA = fileInfo.ContentSHA,
@@ -3483,7 +3518,8 @@ namespace IronyModManager.Services
                         CustomConflicts = await GetDefinitionOrDefaultAsync(conflictResult.CustomConflicts),
                         RootPath = GetModDirectoryRootPath(game),
                         PatchPath = EvaluatePatchNamePath(game, patchName),
-                        HasGameDefinitions = await conflictResult.AllConflicts.HasGameDefinitionsAsync()
+                        HasGameDefinitions = await conflictResult.AllConflicts.HasGameDefinitionsAsync(),
+                        AllowedLanguages = conflictResult.AllowedLanguages
                     });
                     return true;
                 }

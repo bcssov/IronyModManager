@@ -1,17 +1,17 @@
-﻿
-// ***********************************************************************
+﻿// ***********************************************************************
 // Assembly         : IronyModManager.Models
 // Author           : Mario
 // Created          : 06-28-2023
 //
 // Last Modified By : Mario
-// Last Modified On : 06-28-2023
+// Last Modified On : 07-16-2023
 // ***********************************************************************
-// <copyright file="IModIgnoreConfiguration.cs" company="Mario">
+// <copyright file="ModIgnoreConfiguration.cs" company="Mario">
 //     Mario
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,7 +19,6 @@ using IronyModManager.Models.Common;
 
 namespace IronyModManager.Models
 {
-
     /// <summary>
     /// Class ModIgnoreConfiguration.
     /// Implements the <see cref="BaseModel" />
@@ -36,6 +35,7 @@ namespace IronyModManager.Models
         /// </summary>
         /// <value>The count.</value>
         public int Count { get; set; }
+
         /// <summary>
         /// Gets or sets the name of the mod.
         /// </summary>

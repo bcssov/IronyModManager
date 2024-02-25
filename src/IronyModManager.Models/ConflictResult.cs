@@ -4,15 +4,17 @@
 // Created          : 03-18-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 11-01-2021
+// Last Modified On : 02-25-2024
 // ***********************************************************************
 // <copyright file="ConflictResult.cs" company="Mario">
 //     Mario
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
+
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using IronyModManager.Models.Common;
 using IronyModManager.Shared.Models;
 
@@ -30,9 +32,14 @@ namespace IronyModManager.Models
         #region Fields
 
         /// <summary>
+        /// The allowed languages
+        /// </summary>
+        private List<string> allowedLanguages;
+
+        /// <summary>
         /// The disposed
         /// </summary>
-        private bool disposed = false;
+        private bool disposed;
 
         #endregion Fields
 
@@ -43,6 +50,16 @@ namespace IronyModManager.Models
         /// </summary>
         /// <value>All conflicts.</value>
         public IIndexedDefinitions AllConflicts { get; set; }
+
+        /// <summary>
+        /// Gets or sets the allowed languages.
+        /// </summary>
+        /// <value>The allowed languages.</value>
+        public IEnumerable<string> AllowedLanguages
+        {
+            get => allowedLanguages;
+            set => allowedLanguages = value == null ? [] : [.. value];
+        }
 
         /// <summary>
         /// Gets or sets the conflicts.
@@ -105,6 +122,7 @@ namespace IronyModManager.Models
             {
                 return;
             }
+
             GC.SuppressFinalize(this);
             disposed = true;
             AllConflicts?.Dispose();
@@ -121,6 +139,7 @@ namespace IronyModManager.Models
             RuleIgnoredConflicts = null;
             OverwrittenConflicts = null;
             CustomConflicts = null;
+            AllowedLanguages = null;
         }
 
         #endregion Methods

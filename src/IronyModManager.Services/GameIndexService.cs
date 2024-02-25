@@ -4,7 +4,7 @@
 // Created          : 05-27-2021
 //
 // Last Modified By : Mario
-// Last Modified On : 02-23-2024
+// Last Modified On : 02-25-2024
 // ***********************************************************************
 // <copyright file="GameIndexService.cs" company="Mario">
 //     Mario
@@ -41,24 +41,10 @@ namespace IronyModManager.Services
     /// <summary>
     /// Class GameIndexService.
     /// Implements the <see cref="IronyModManager.Services.ModBaseService" />
-    /// Implements the <see cref="IronyModManager.Services.Common.IGameIndexService" />
+    /// Implements the <see cref="IGameIndexService" />
     /// </summary>
     /// <seealso cref="IronyModManager.Services.ModBaseService" />
-    /// <seealso cref="IronyModManager.Services.Common.IGameIndexService" />
-    /// <remarks>
-    /// Initializes a new instance of the <see cref="GameIndexService" /> class.
-    /// </remarks>
-    /// <param name="messageBus">The message bus.</param>
-    /// <param name="parserManager">The parser manager.</param>
-    /// <param name="gameIndexer">The game indexer.</param>
-    /// <param name="cache">The cache.</param>
-    /// <param name="definitionInfoProviders">The definition information providers.</param>
-    /// <param name="reader">The reader.</param>
-    /// <param name="modWriter">The mod writer.</param>
-    /// <param name="modParser">The mod parser.</param>
-    /// <param name="gameService">The game service.</param>
-    /// <param name="storageProvider">The storage provider.</param>
-    /// <param name="mapper">The mapper.</param>
+    /// <seealso cref="IGameIndexService" />
     public class GameIndexService(
         IMessageBus messageBus,
         IParserManager parserManager,
@@ -194,13 +180,52 @@ namespace IronyModManager.Services
         /// <param name="modDefinitions">The mod definitions.</param>
         /// <param name="game">The game.</param>
         /// <param name="versions">The versions.</param>
+        /// <param name="gameLanguages">The game languages.</param>
         /// <returns>IIndexedDefinitions.</returns>
-        public virtual async Task<IIndexedDefinitions> LoadDefinitionsAsync(IIndexedDefinitions modDefinitions, IGame game, IEnumerable<string> versions)
+        public virtual async Task<IIndexedDefinitions> LoadDefinitionsAsync(IIndexedDefinitions modDefinitions, IGame game, IEnumerable<string> versions, IReadOnlyCollection<IGameLanguage> gameLanguages)
         {
             if (game != null && versions != null && versions.Any() && await gameIndexer.GameVersionsSameAsync(GetStoragePath(), game, versions))
             {
                 var gameDefinitions = new ConcurrentBag<IDefinition>();
                 var directories = await modDefinitions.GetAllDirectoryKeysAsync();
+                // Kinda need to force insert localisation directory itself
+                if (directories.Any(p => p.StartsWith(Shared.Constants.LocalizationDirectory, StringComparison.OrdinalIgnoreCase)) &&
+                    !directories.Any(p => p.Equals(Shared.Constants.LocalizationDirectory, StringComparison.OrdinalIgnoreCase)))
+                {
+                    var newDirs = new List<string>(directories) { Shared.Constants.LocalizationDirectory };
+                    directories = newDirs;
+                }
+
+                if (gameLanguages != null && gameLanguages.Count != 0)
+                {
+                    var folders = gameLanguages.Select(p => p.Type[2..]);
+                    var filtered = new List<string>();
+                    foreach (var dir in directories)
+                    {
+                        // So far games that support CS have structure localisation -> l_english -> files though language id part is stripped (l_ part)
+                        if (dir.StartsWith(Shared.Constants.LocalizationDirectory, StringComparison.OrdinalIgnoreCase))
+                        {
+                            if (dir.StandardizeDirectorySeparator().Any(p => p == Path.DirectorySeparatorChar))
+                            {
+                                if (folders.Any(p => dir!.EndsWith(p, StringComparison.OrdinalIgnoreCase)))
+                                {
+                                    filtered.Add(dir);
+                                }
+                            }
+                            else
+                            {
+                                filtered.Add(dir);
+                            }
+                        }
+                        else
+                        {
+                            filtered.Add(dir);
+                        }
+                    }
+
+                    directories = filtered;
+                }
+
                 double processed = 0;
                 double total = directories.Count();
                 double previousProgress = 0;

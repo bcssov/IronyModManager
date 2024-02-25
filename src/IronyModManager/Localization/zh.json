@@ -99,6 +99,20 @@
         "Victoria3": "维多利亚 Ⅲ",
         "STInfinite": "Star Trek: Infinite"
     },
+    "GameLanguages": {
+        "l_english": "英语",
+        "l_braz_por": "葡萄牙语",
+        "l_french": "法语",
+        "l_german": "德语",
+        "l_polish": "波兰语",
+        "l_russian": "俄语",
+        "l_simp_chinese": "简体中文",
+        "l_spanish": "西班牙语",
+        "l_chinese": "中文",
+        "l_traditional_chinese": "繁体中文",
+        "l_japanese": "日语",
+        "l_korean": "韩语"
+    },
     "Installed_Mods": {
         "Name": "已安装模组",
         "Filter": "过滤模组",
@@ -462,6 +476,10 @@
             "CloseAfterLaunch": "启动游戏后关闭",
             "AutoConfigure": "设置全部……",
             "CustomModPath": "自定义模组目录"
+        },
+        "ConflictSolver": {
+            "Title": "冲突处理器",
+            "AllowedLanguages": "允许使用的语言"
         },
         "Updates": {
             "Title": "更新选项",
