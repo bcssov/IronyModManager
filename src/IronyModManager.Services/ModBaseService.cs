@@ -49,7 +49,7 @@ namespace IronyModManager.Services
     /// <param name="gameService">The game service.</param>
     /// <param name="storageProvider">The storage provider.</param>
     /// <param name="mapper">The mapper.</param>
-    /// <remarks>Initializes a new instance of the <see cref="ModBaseService" /> class.</remarks>
+    /// <remarks>Initializes a new instance of the <see cref="ModBaseService" /> class.</remarks>    
     public abstract class ModBaseService(
         ICache cache,
         IEnumerable<IDefinitionInfoProvider> definitionInfoProviders,
@@ -334,7 +334,7 @@ namespace IronyModManager.Services
 
                                 switch (uniqueDefinitions.Count)
                                 {
-                                    case 1 when (overrideSkipped || filteredGameDefinitions):
+                                    case 1 when overrideSkipped || filteredGameDefinitions:
                                     {
                                         var definition = definitionEvals.FirstOrDefault(p => !p.Definition.IsFromGame);
                                         definition ??= definitionEvals.FirstOrDefault();
@@ -565,10 +565,7 @@ namespace IronyModManager.Services
         /// <exception cref="System.ArgumentNullException">game</exception>
         protected virtual IEnumerable<IMod> GetInstalledModsInternal(IGame game, bool ignorePatchMods)
         {
-            if (game == null)
-            {
-                throw new ArgumentNullException(nameof(game));
-            }
+            ArgumentNullException.ThrowIfNull(game);
 
             var mods = Cache.Get<IEnumerable<IMod>>(new CacheGetParameters { Region = ModsCacheRegion, Prefix = game.Type, Key = GetModsCacheKey(ignorePatchMods) });
             if (mods != null)

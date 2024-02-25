@@ -648,7 +648,7 @@ namespace IronyModManager.ViewModels.Controls
                 stopWatch.Restart();
                 definitions = await Task.Run(async () =>
                 {
-                    var result = await gameIndexService.LoadDefinitionsAsync(definitions, game, versions);
+                    var result = await gameIndexService.LoadDefinitionsAsync(definitions, game, versions, allowedLanguages);
 
                     GCRunner.RunGC(GCCollectionMode.Aggressive, true);
                     return result;
