@@ -605,6 +605,12 @@ namespace IronyModManager.Shared
                 public const string AutoConfigure = Prefix + "AutoConfigure";
                 public const string CustomModPath = Prefix + "CustomModPath";
             }
+            public static class ConflictSolver
+            {
+                public const string Prefix = "Options.ConflictSolver.";
+                public const string Title = Prefix + "Title";
+                public const string AllowedLanguages = Prefix + "AllowedLanguages";
+            }
             public static class Updates
             {
                 public const string Prefix = "Options.Updates.";

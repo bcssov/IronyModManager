@@ -463,6 +463,10 @@
             "AutoConfigure": "Configure All...",
             "CustomModPath": "Custom Mod Directory"
         },
+        "ConflictSolver": {
+            "Title": "Conflict Solver",
+            "AllowedLanguages": "Allowed Languages"
+        },
         "Updates": {
             "Title": "Update Options",
             "UpdateInfoTitle": "Update Release Information",

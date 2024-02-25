@@ -18,6 +18,7 @@ using System.Linq;
 using AutoMapper;
 using IronyModManager.Models.Common;
 using IronyModManager.Services.Common;
+using IronyModManager.Shared;
 using IronyModManager.Storage.Common;
 
 namespace IronyModManager.Services
@@ -102,6 +103,7 @@ namespace IronyModManager.Services
         {
             language.Type = type;
             language.IsSelected = selected.Contains(AllSelected) || selected.Contains(type);
+            language.DisplayName = type[2..].Replace("_", " ").CapitalizeEveryFirstLetter(); // first letters are "l_"
         }
 
         #endregion Methods

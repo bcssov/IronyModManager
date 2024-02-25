@@ -463,6 +463,10 @@
             "AutoConfigure": "Konfiguriraj sve...",
             "CustomModPath": "Prilagođeni direktorij modova"
         },
+        "ConflictSolver": {
+            "Title": "Rješavanje sukoba",
+            "AllowedLanguages": "Dopušteni jezici"
+        },
         "Updates": {
             "Title": "Mogućnosti ažuriranja",
             "UpdateInfoTitle": "Informacije o novoj verziji",

@@ -463,6 +463,10 @@
             "AutoConfigure": "Настроить все...",
             "CustomModPath": "Своя папка с модами"
         },
+        "ConflictSolver": {
+            "Title": "Разрешитель конфликтов",
+            "AllowedLanguages": "Разрешенные языки"
+        },
         "Updates": {
             "Title": "Обновления",
             "UpdateInfoTitle": "Инфо о релизе",

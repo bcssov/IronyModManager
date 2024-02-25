@@ -29,6 +29,12 @@ namespace IronyModManager.Models
         #region Properties
 
         /// <summary>
+        /// Gets or sets a value representing the display name.
+        /// </summary>
+        /// <value>The display name.</value>
+        public string DisplayName { get; set; }
+
+        /// <summary>
         /// Gets or sets a value indicating whether the is selected.
         /// </summary>
         /// <value><c>true</c> if is selected; otherwise, <c>false</c>.</value>

@@ -21,6 +21,7 @@ using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
 using Avalonia;
+using Avalonia.Collections;
 using IronyModManager.Common;
 using IronyModManager.Common.Events;
 using IronyModManager.Common.ViewModels;
@@ -39,74 +40,92 @@ using ReactiveUI;
 namespace IronyModManager.ViewModels.Controls
 {
     /// <summary>
-    /// Class OptionsControlViewModel.
-    /// Implements the <see cref="IronyModManager.Common.ViewModels.BaseViewModel" />
+    /// The options control view model.
     /// </summary>
-    /// <seealso cref="IronyModManager.Common.ViewModels.BaseViewModel" />
+    /// <seealso cref="IronyModManager.Common.ViewModels.BaseViewModel"/>
     [ExcludeFromCoverage("This should be tested via functional testing.")]
-    public class OptionsControlViewModel : BaseViewModel
+    public class OptionsControlViewModel(
+        IGameLanguageService gameLanguageService,
+        IAppAction appAction,
+        IPlatformConfiguration platformConfiguration,
+        IModService modService,
+        INotificationPositionSettingsService positionSettingsService,
+        IExternalEditorService externalEditorService,
+        IIDGenerator idGenerator,
+        ILogger logger,
+        INotificationAction notificationAction,
+        ILocalizationManager localizationManager,
+        IUpdater updater,
+        IUpdaterService updaterService,
+        IGameService gameService,
+        IFileDialogAction fileDialogAction) : BaseViewModel
     {
         #region Fields
 
         /// <summary>
         /// The application action
         /// </summary>
-        private readonly IAppAction appAction;
+        private readonly IAppAction appAction = appAction;
 
         /// <summary>
         /// The external editor service
         /// </summary>
-        private readonly IExternalEditorService externalEditorService;
+        private readonly IExternalEditorService externalEditorService = externalEditorService;
 
         /// <summary>
         /// The file dialog action
         /// </summary>
-        private readonly IFileDialogAction fileDialogAction;
+        private readonly IFileDialogAction fileDialogAction = fileDialogAction;
+
+        /// <summary>
+        /// A private readonly IGameLanguageService named gameLanguageService.
+        /// </summary>
+        private readonly IGameLanguageService gameLanguageService = gameLanguageService;
 
         /// <summary>
         /// The game service
         /// </summary>
-        private readonly IGameService gameService;
+        private readonly IGameService gameService = gameService;
 
         /// <summary>
         /// The identifier generator
         /// </summary>
-        private readonly IIDGenerator idGenerator;
+        private readonly IIDGenerator idGenerator = idGenerator;
 
         /// <summary>
         /// The localization manager
         /// </summary>
-        private readonly ILocalizationManager localizationManager;
+        private readonly ILocalizationManager localizationManager = localizationManager;
 
         /// <summary>
         /// The logger
         /// </summary>
-        private readonly ILogger logger;
+        private readonly ILogger logger = logger;
 
         /// <summary>
         /// The mod service
         /// </summary>
-        private readonly IModService modService;
+        private readonly IModService modService = modService;
 
         /// <summary>
         /// The notification action
         /// </summary>
-        private readonly INotificationAction notificationAction;
+        private readonly INotificationAction notificationAction = notificationAction;
 
         /// <summary>
         /// The position settings service
         /// </summary>
-        private readonly INotificationPositionSettingsService positionSettingsService;
+        private readonly INotificationPositionSettingsService positionSettingsService = positionSettingsService;
 
         /// <summary>
         /// The updater
         /// </summary>
-        private readonly IUpdater updater;
+        private readonly IUpdater updater = updater;
 
         /// <summary>
         /// The updater service
         /// </summary>
-        private readonly IUpdaterService updaterService;
+        private readonly IUpdaterService updaterService = updaterService;
 
         /// <summary>
         /// The automatic update changed
@@ -175,50 +194,16 @@ namespace IronyModManager.ViewModels.Controls
 
         #endregion Fields
 
-        #region Constructors
+        #region Properties
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="OptionsControlViewModel" /> class.
+        /// Gets or sets a value representing the allowed languages caption.
         /// </summary>
-        /// <param name="appAction">The application action.</param>
-        /// <param name="platformConfiguration">The platform configuration.</param>
-        /// <param name="modService">The mod service.</param>
-        /// <param name="positionSettingsService">The position settings service.</param>
-        /// <param name="externalEditorService">The external editor service.</param>
-        /// <param name="idGenerator">The identifier generator.</param>
-        /// <param name="logger">The logger.</param>
-        /// <param name="notificationAction">The notification action.</param>
-        /// <param name="localizationManager">The localization manager.</param>
-        /// <param name="updater">The updater.</param>
-        /// <param name="updaterService">The updater service.</param>
-        /// <param name="gameService">The game service.</param>
-        /// <param name="fileDialogAction">The file dialog action.</param>
-        public OptionsControlViewModel(IAppAction appAction, IPlatformConfiguration platformConfiguration, IModService modService, INotificationPositionSettingsService positionSettingsService,
-            IExternalEditorService externalEditorService, IIDGenerator idGenerator, ILogger logger,
-            INotificationAction notificationAction, ILocalizationManager localizationManager, IUpdater updater,
-            IUpdaterService updaterService, IGameService gameService, IFileDialogAction fileDialogAction)
-        {
-            this.positionSettingsService = positionSettingsService;
-            this.gameService = gameService;
-            this.fileDialogAction = fileDialogAction;
-            this.updaterService = updaterService;
-            this.updater = updater;
-            this.localizationManager = localizationManager;
-            this.notificationAction = notificationAction;
-            this.logger = logger;
-            this.idGenerator = idGenerator;
-            this.externalEditorService = externalEditorService;
-            this.modService = modService;
-            this.appAction = appAction;
-            UpdatesAllowed = !platformConfiguration.GetOptions().Updates.Disable;
-            InstallingUpdatesAllowed = !platformConfiguration.GetOptions().Updates.DisableInstallOnly;
-            LeftMargin = new Thickness(20, 0, 0, 0);
-            LeftChildMargin = new Thickness(20, 10, 0, 0);
-        }
-
-        #endregion Constructors
-
-        #region Properties
+        /// <value>
+        /// The allowed languages caption.
+        /// </value>
+        [StaticLocalization(LocalizationResources.Options.ConflictSolver.AllowedLanguages)]
+        public virtual string AllowedLanguagesCaption { get; protected set; }
 
         /// <summary>
         /// Gets or sets the application options title.
@@ -300,6 +285,15 @@ namespace IronyModManager.ViewModels.Controls
         public virtual ReactiveCommand<Unit, Unit> CloseCommand { get; protected set; }
 
         /// <summary>
+        /// Gets or sets a value representing the conflict solver title.
+        /// </summary>
+        /// <value>
+        /// The conflict solver title.
+        /// </value>
+        [StaticLocalization(LocalizationResources.Options.ConflictSolver.Title)]
+        public virtual string ConflictSolverTitle { get; protected set; }
+
+        /// <summary>
         /// Gets or sets the custom mod path.
         /// </summary>
         /// <value>The custom mod path.</value>
@@ -361,6 +355,14 @@ namespace IronyModManager.ViewModels.Controls
         public virtual string GameExecutable { get; protected set; }
 
         /// <summary>
+        /// Gets or sets a value representing the game languages.<see cref="Avalonia.Collections.AvaloniaList{IronyModManager.Models.Common.IGameLanguage}"/>
+        /// </summary>
+        /// <value>
+        /// The game languages.
+        /// </value>
+        public virtual AvaloniaList<IGameLanguage> GameLanguages { get; protected set; }
+
+        /// <summary>
         /// Gets or sets the game options.
         /// </summary>
         /// <value>The game options.</value>
@@ -371,7 +373,7 @@ namespace IronyModManager.ViewModels.Controls
         /// Gets or sets a value indicating whether [installing updates allowed].
         /// </summary>
         /// <value><c>true</c> if [installing updates allowed]; otherwise, <c>false</c>.</value>
-        public virtual bool InstallingUpdatesAllowed { get; protected set; }
+        public virtual bool InstallingUpdatesAllowed { get; protected set; } = !platformConfiguration.GetOptions().Updates.DisableInstallOnly;
 
         /// <summary>
         /// Gets or sets the install updates.
@@ -396,13 +398,13 @@ namespace IronyModManager.ViewModels.Controls
         /// Gets or sets the left child margin.
         /// </summary>
         /// <value>The left child margin.</value>
-        public virtual Thickness LeftChildMargin { get; protected set; }
+        public virtual Thickness LeftChildMargin { get; protected set; } = new(20, 10, 0, 0);
 
         /// <summary>
         /// Gets or sets the left margin.
         /// </summary>
         /// <value>The left margin.</value>
-        public virtual Thickness LeftMargin { get; protected set; }
+        public virtual Thickness LeftMargin { get; protected set; } = new(20, 0, 0, 0);
 
         /// <summary>
         /// Gets or sets the navigate.
@@ -608,7 +610,7 @@ namespace IronyModManager.ViewModels.Controls
         /// Gets or sets a value indicating whether [updates allowed].
         /// </summary>
         /// <value><c>true</c> if [updates allowed]; otherwise, <c>false</c>.</value>
-        public virtual bool UpdatesAllowed { get; protected set; }
+        public virtual bool UpdatesAllowed { get; protected set; } = !platformConfiguration.GetOptions().Updates.Disable;
 
         /// <summary>
         /// Gets or sets the update settings.
@@ -696,6 +698,7 @@ namespace IronyModManager.ViewModels.Controls
         /// <param name="disposables">The disposables.</param>
         protected override void OnActivated(CompositeDisposable disposables)
         {
+            GameLanguages = gameLanguageService.Get().ToAvaloniaList();
             SetGame(gameService.GetSelected());
             SetEditor(externalEditorService.Get());
             SetNotificationPosition(positionSettingsService.Get());
@@ -1001,6 +1004,7 @@ namespace IronyModManager.ViewModels.Controls
         /// <param name="game">The game.</param>
         protected override void OnSelectedGameChanged(IGame game)
         {
+            GameLanguages = gameLanguageService.Get().ToAvaloniaList();
             SetGame(game);
             base.OnSelectedGameChanged(game);
         }

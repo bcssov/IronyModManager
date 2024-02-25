@@ -83,15 +83,7 @@ namespace IronyModManager.Views.Controls
             void setFont(string locale = Shared.Constants.EmptyParam)
             {
                 var langService = DIResolver.Get<ILanguagesService>();
-                ILanguage language;
-                if (string.IsNullOrWhiteSpace(locale))
-                {
-                    language = langService.GetSelected();
-                }
-                else
-                {
-                    language = langService.Get().FirstOrDefault(p => p.Abrv.Equals(locale));
-                }
+                var language = string.IsNullOrWhiteSpace(locale) ? langService.GetSelected() : langService.Get().FirstOrDefault(p => p.Abrv.Equals(locale));
 
                 var themeManager = DIResolver.Get<IThemeManager>();
                 var fontResolver = DIResolver.Get<IFontFamilyManager>();

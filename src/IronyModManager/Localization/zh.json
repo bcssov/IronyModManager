@@ -463,6 +463,10 @@
             "AutoConfigure": "设置全部……",
             "CustomModPath": "自定义模组目录"
         },
+        "ConflictSolver": {
+            "Title": "冲突处理器",
+            "AllowedLanguages": "允许使用的语言"
+        },
         "Updates": {
             "Title": "更新选项",
             "UpdateInfoTitle": "更新发布信息",

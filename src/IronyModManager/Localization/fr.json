@@ -463,6 +463,10 @@
             "AutoConfigure": "Tout configurer...",
             "CustomModPath": "Répertoire de mod personnalisé"
         },
+        "ConflictSolver": {
+            "Title": "Résoudre les conflits",
+            "AllowedLanguages": "Langues autorisées"
+        },
         "Updates": {
             "Title": "Options de mise à jour",
             "UpdateInfoTitle": "Mettre à jour les informations de version",

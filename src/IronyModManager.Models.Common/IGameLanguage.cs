@@ -19,11 +19,17 @@ using System.Linq;
 namespace IronyModManager.Models.Common
 {
     /// <summary>
-    /// An i game language interface.
+    /// An game language interface.
     /// </summary>
     public interface IGameLanguage : IModel
     {
         #region Properties
+
+        /// <summary>
+        /// Gets or sets the display name.
+        /// </summary>
+        /// <value>The display name.</value>
+        public string DisplayName { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether the is selected.
