@@ -79,6 +79,15 @@ namespace IronyModManager.Services
         }
 
         /// <summary>
+        /// Get selected.
+        /// </summary>
+        /// <returns>A read only collection of IGameLanguages.<see cref="T:System.Collections.Generic.IReadOnlyCollection`1" /></returns>
+        public IReadOnlyCollection<IGameLanguage> GetSelected()
+        {
+            return Get().Where(p => p.IsSelected).ToList();
+        }
+
+        /// <summary>
         /// Save.
         /// </summary>
         /// <param name="languages">The languages.</param>

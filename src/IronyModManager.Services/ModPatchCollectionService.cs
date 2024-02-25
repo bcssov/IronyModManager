@@ -4,7 +4,7 @@
 // Created          : 05-26-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-23-2024
+// Last Modified On : 02-25-2024
 // ***********************************************************************
 // <copyright file="ModPatchCollectionService.cs" company="Mario">
 //     Mario
@@ -48,28 +48,10 @@ using ValueType = IronyModManager.Shared.Models.ValueType;
 namespace IronyModManager.Services
 {
     /// <summary>
-    /// Class ModPatchCollectionService.
-    /// Implements the <see cref="IronyModManager.Services.ModBaseService" />
-    /// Implements the <see cref="IronyModManager.Services.Common.IModPatchCollectionService" />
+    /// The mod patch collection service.
     /// </summary>
-    /// <seealso cref="IronyModManager.Services.ModBaseService" />
-    /// <seealso cref="IronyModManager.Services.Common.IModPatchCollectionService" />
-    /// <remarks>
-    /// Initializes a new instance of the <see cref="ModPatchCollectionService" /> class.
-    /// </remarks>
-    /// <param name="cache">The cache.</param>
-    /// <param name="messageBus">The message bus.</param>
-    /// <param name="parserManager">The parser manager.</param>
-    /// <param name="definitionInfoProviders">The definition information providers.</param>
-    /// <param name="modPatchExporter">The mod patch exporter.</param>
-    /// <param name="reader">The reader.</param>
-    /// <param name="modWriter">The mod writer.</param>
-    /// <param name="modParser">The mod parser.</param>
-    /// <param name="gameService">The game service.</param>
-    /// <param name="storageProvider">The storage provider.</param>
-    /// <param name="mapper">The mapper.</param>
-    /// <param name="validateParser">The validate parser.</param>
-    /// <param name="parametrizedParser">The parametrized parser.</param>
+    /// <seealso cref="IronyModManager.Services.ModBaseService"/>
+    /// <seealso cref="IronyModManager.Services.Common.IModPatchCollectionService"/>
     public class ModPatchCollectionService(
         ICache cache,
         IMessageBus messageBus,
@@ -867,10 +849,11 @@ namespace IronyModManager.Services
         /// <param name="mods">The mods.</param>
         /// <param name="collectionName">Name of the collection.</param>
         /// <param name="mode">The mode.</param>
+        /// <param name="allowedGameLanguages">The allowed game languages.</param>
         /// <returns>A Task&lt;IIndexedDefinitions&gt; representing the asynchronous operation.</returns>
         /// <exception cref="ModTooLargeException">Detected a mod which is potentially too large to parse.</exception>
         /// <exception cref="IronyModManager.Services.Common.Exceptions.ModTooLargeException">Detected a mod which is potentially too large to parse.</exception>
-        public virtual async Task<IIndexedDefinitions> GetModObjectsAsync(IGame game, IEnumerable<IMod> mods, string collectionName, PatchStateMode mode)
+        public virtual async Task<IIndexedDefinitions> GetModObjectsAsync(IGame game, IEnumerable<IMod> mods, string collectionName, PatchStateMode mode, IReadOnlyCollection<IGameLanguage> allowedGameLanguages)
         {
             if (game == null || mods == null || !mods.Any())
             {
@@ -907,15 +890,19 @@ namespace IronyModManager.Services
             var provider = DefinitionInfoProviders.FirstOrDefault(p => p.CanProcess(game.Type));
             await messageBus.PublishAsync(new ModDefinitionLoadEvent(0));
 
+            var allowedLanguages = allowedGameLanguages;
             var gameFolders = game.GameFolders.ToList();
             if (mode is PatchStateMode.DefaultWithoutLocalization or PatchStateMode.AdvancedWithoutLocalization or PatchStateMode.ReadOnlyWithoutLocalization)
             {
                 gameFolders = gameFolders.Where(p => !p.StartsWith(Shared.Constants.LocalizationDirectory, StringComparison.OrdinalIgnoreCase)).ToList();
+
+                // Mode override
+                allowedGameLanguages = null;
             }
 
             mods.AsParallel().WithDegreeOfParallelism(MaxModsToProcessInParallel).WithExecutionMode(ParallelExecutionMode.ForceParallelism).ForAll(m =>
             {
-                var result = ParseModFiles(game, Reader.Read(m.FullPath, gameFolders), m, provider);
+                var result = ParseModFiles(game, Reader.Read(m.FullPath, gameFolders), m, provider, allowedLanguages);
                 if (result?.Count() > 0)
                 {
                     foreach (var item in result)
@@ -2946,8 +2933,9 @@ namespace IronyModManager.Services
         /// <param name="fileInfos">The file infos.</param>
         /// <param name="modObject">The mod object.</param>
         /// <param name="definitionInfoProvider">The definition information provider.</param>
+        /// <param name="allowedGameLanguages">The allowed game languages.</param>
         /// <returns>IEnumerable&lt;IDefinition&gt;.</returns>
-        protected virtual IEnumerable<IDefinition> ParseModFiles(IGame game, IEnumerable<IFileInfo> fileInfos, IModObject modObject, IDefinitionInfoProvider definitionInfoProvider)
+        protected virtual IEnumerable<IDefinition> ParseModFiles(IGame game, IEnumerable<IFileInfo> fileInfos, IModObject modObject, IDefinitionInfoProvider definitionInfoProvider, IReadOnlyCollection<IGameLanguage> allowedGameLanguages)
         {
             if (fileInfos == null)
             {
@@ -2957,6 +2945,13 @@ namespace IronyModManager.Services
             var definitions = new List<IDefinition>();
             foreach (var fileInfo in fileInfos)
             {
+                // See if we should skip maybe
+                var onlyFilename = Path.GetFileNameWithoutExtension(fileInfo.FileName);
+                if (allowedGameLanguages != null && !allowedGameLanguages.Any(p => onlyFilename!.EndsWith(p.Type, StringComparison.OrdinalIgnoreCase)))
+                {
+                    continue;
+                }
+
                 var fileDefs = parserManager.Parse(new ParserManagerArgs
                 {
                     ContentSHA = fileInfo.ContentSHA,

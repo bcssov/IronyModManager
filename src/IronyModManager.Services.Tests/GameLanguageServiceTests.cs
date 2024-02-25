@@ -74,6 +74,20 @@ namespace IronyModManager.Services.Tests
         }
 
         /// <summary>
+        /// Defines the test method Should_return_only_selected.
+        /// </summary>
+        [Fact]
+        public void Should_return_only_selected()
+        {
+            var preferencesService = new Mock<IPreferencesService>();
+            SetupMocks(preferencesService, "l_english");
+            var service = new GameLanguageService(new Mock<IStorageProvider>().Object, null, preferencesService.Object);
+            var result = service.GetSelected();
+            result.Count().Should().Be(1);
+            result.FirstOrDefault(p => p.IsSelected)!.Type.Should().Be("l_english");
+        }
+
+        /// <summary>
         /// Shoulds a save selection.
         /// </summary>
         [Fact]
