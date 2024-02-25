@@ -1,4 +1,5 @@
-﻿// ***********************************************************************
+﻿
+// ***********************************************************************
 // Assembly         : IronyModManager.IO.Common
 // Author           : Mario
 // Created          : 04-06-2020
@@ -11,18 +12,29 @@
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
+
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using IronyModManager.Shared.Models;
 
 namespace IronyModManager.IO.Common.Mods.Models
 {
+
     /// <summary>
     /// Interface IPatchState
     /// </summary>
     public interface IPatchState
     {
         #region Properties
+
+        /// <summary>
+        /// Gets or sets a value representing the allowed languages.<see cref="System.Collections.Generic.IEnumerable{string}"/>
+        /// </summary>
+        /// <value>
+        /// The allowed languages.
+        /// </value>
+        IEnumerable<string> AllowedLanguages { get; set; }
 
         /// <summary>
         /// Gets or sets the conflict history.

@@ -41,7 +41,7 @@ namespace IronyModManager.Services.Tests
         {
             DISetup.SetupContainer();
             CurrentLocale.SetCurrent("en");
-            preferencesService.Setup(p => p.Get()).Returns(() => new Preferences { ConflictSolverLanguages = languages.ToList() });
+            preferencesService.Setup(p => p.Get()).Returns(() => new Preferences { ConflictSolverLanguages = [.. languages] });
             preferencesService.Setup(p => p.Save(It.IsAny<IPreferences>())).Returns(true);
         }
 
@@ -83,8 +83,23 @@ namespace IronyModManager.Services.Tests
             SetupMocks(preferencesService, "l_english");
             var service = new GameLanguageService(new Mock<IStorageProvider>().Object, null, preferencesService.Object);
             var result = service.GetSelected();
-            result.Count().Should().Be(1);
+            result.Count.Should().Be(1);
             result.FirstOrDefault(p => p.IsSelected)!.Type.Should().Be("l_english");
+        }
+
+        /// <summary>
+        /// Shoulds a return only requested.
+        /// </summary>
+        /// <returns></returns>
+        [Fact]
+        public void Should_return_only_requested()
+        {
+            var preferencesService = new Mock<IPreferencesService>();
+            SetupMocks(preferencesService, "l_english");
+            var service = new GameLanguageService(new Mock<IStorageProvider>().Object, null, preferencesService.Object);
+            var result = service.GetByAbrv(["l_german"]);
+            result.Count.Should().Be(1);
+            result.FirstOrDefault(p => p.IsSelected)!.Type.Should().Be("l_german");
         }
 
         /// <summary>

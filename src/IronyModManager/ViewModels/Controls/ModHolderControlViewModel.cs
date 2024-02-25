@@ -88,6 +88,11 @@ namespace IronyModManager.ViewModels.Controls
         private readonly IGameIndexService gameIndexService;
 
         /// <summary>
+        /// The game language service
+        /// </summary>
+        private readonly IGameLanguageService gameLanguageService;
+
+        /// <summary>
         /// The game service
         /// </summary>
         private readonly IGameService gameService;
@@ -186,11 +191,6 @@ namespace IronyModManager.ViewModels.Controls
         /// The game index handler
         /// </summary>
         private IDisposable gameIndexHandler;
-
-        /// <summary>
-        /// The game language service
-        /// </summary>
-        private readonly IGameLanguageService gameLanguageService;
 
         /// <summary>
         /// The mod invalid replace handler
@@ -584,7 +584,16 @@ namespace IronyModManager.ViewModels.Controls
             modPatchCollectionService.InvalidatePatchModState(CollectionMods.SelectedModCollection.Name);
             modPatchCollectionService.ResetPatchStateCache();
 
-            var allowedLanguages = gameLanguageService.GetSelected();
+            IReadOnlyCollection<IGameLanguage> allowedLanguages;
+            var usedAllowedLanguages = await modPatchCollectionService.GetAllowedLanguagesAsync(CollectionMods.SelectedModCollection.Name);
+            if (usedAllowedLanguages != null)
+            {
+                allowedLanguages = gameLanguageService.GetByAbrv(usedAllowedLanguages);
+            }
+            else
+            {
+                allowedLanguages = gameLanguageService.GetSelected();
+            }
 
             var tooLargeMod = false;
             var game = gameService.GetSelected();
@@ -652,7 +661,7 @@ namespace IronyModManager.ViewModels.Controls
             {
                 if (definitions != null)
                 {
-                    var result = await modPatchCollectionService.FindConflictsAsync(definitions, CollectionMods.SelectedMods.Select(p => p.Name).ToList(), mode);
+                    var result = await modPatchCollectionService.FindConflictsAsync(definitions, CollectionMods.SelectedMods.Select(p => p.Name).ToList(), mode, allowedLanguages);
                     GCRunner.RunGC(GCCollectionMode.Aggressive, true);
                     return result;
                 }
@@ -679,7 +688,7 @@ namespace IronyModManager.ViewModels.Controls
             {
                 SelectedCollection = CollectionMods.SelectedModCollection,
                 Results = conflicts,
-                State = mode == PatchStateMode.ReadOnly || mode == PatchStateMode.ReadOnlyWithoutLocalization ? NavigationState.ReadOnlyConflictSolver : NavigationState.ConflictSolver,
+                State = mode is PatchStateMode.ReadOnly or PatchStateMode.ReadOnlyWithoutLocalization ? NavigationState.ReadOnlyConflictSolver : NavigationState.ConflictSolver,
                 SelectedMods = CollectionMods.SelectedMods.Select(p => p.Name).ToList()
             };
             ReactiveUI.MessageBus.Current.SendMessage(args);

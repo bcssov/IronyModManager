@@ -33,9 +33,16 @@ namespace IronyModManager.Services.Common
         IEnumerable<IGameLanguage> Get();
 
         /// <summary>
+        /// Gets the by abrv.
+        /// </summary>
+        /// <param name="languages">The languages.</param>
+        /// <returns>IReadOnlyCollection&lt;IGameLanguage&gt;.</returns>
+        IReadOnlyCollection<IGameLanguage> GetByAbrv(IReadOnlyCollection<string> languages);
+
+        /// <summary>
         /// Get selected.
         /// </summary>
-        /// <returns>A read only collection of IGameLanguages.<see cref="IReadOnlyCollection{IGameLanguage}"/></returns>
+        /// <returns>A read only collection of IGameLanguages.<see cref="IReadOnlyCollection{IGameLanguage}" /></returns>
         IReadOnlyCollection<IGameLanguage> GetSelected();
 
         /// <summary>

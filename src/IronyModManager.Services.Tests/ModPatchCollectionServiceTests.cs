@@ -50,6 +50,7 @@ namespace IronyModManager.Services.Tests
     /// <summary>
     /// Class ModPatchCollectionServiceTests.
     /// </summary>
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0028:Simplify collection initialization", Justification = "It's a unit test")]
     public class ModPatchCollectionServiceTests
     {
         /// <summary>
@@ -130,13 +131,13 @@ namespace IronyModManager.Services.Tests
             var modPatchExporter = new Mock<IModPatchExporter>();
 
             var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter);
-            var result = await service.GetModObjectsAsync(null, new List<IMod>(), string.Empty, IronyModManager.Models.Common.PatchStateMode.Advanced, null);
+            var result = await service.GetModObjectsAsync(null, new List<IMod>(), string.Empty, PatchStateMode.Advanced, null);
             result.Should().BeNull();
 
-            result = await service.GetModObjectsAsync(new Game(), new List<IMod>(), string.Empty, IronyModManager.Models.Common.PatchStateMode.Advanced, null);
+            result = await service.GetModObjectsAsync(new Game(), new List<IMod>(), string.Empty, PatchStateMode.Advanced, null);
             result.Should().BeNull();
 
-            result = await service.GetModObjectsAsync(new Game(), null, string.Empty, IronyModManager.Models.Common.PatchStateMode.Advanced, null);
+            result = await service.GetModObjectsAsync(new Game(), null, string.Empty, PatchStateMode.Advanced, null);
             result.Should().BeNull();
         }
 
@@ -165,7 +166,7 @@ namespace IronyModManager.Services.Tests
 
             var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter, new List<IDefinitionInfoProvider> { infoProvider.Object });
             var result = await service.GetModObjectsAsync(new Game { UserDirectory = "c:\\fake", GameFolders = new List<string>() }, new List<IMod> { new Mod { FileName = Assembly.GetExecutingAssembly().Location, Name = "fake" } },
-                string.Empty, IronyModManager.Models.Common.PatchStateMode.Advanced, null);
+                string.Empty, PatchStateMode.Advanced, null);
             (await result.GetAllAsync()).Count().Should().Be(2);
             var ordered = (await result.GetAllAsync()).OrderBy(p => p.Id);
             ordered.First().Id.Should().Be("fake1.txt");
@@ -197,7 +198,7 @@ namespace IronyModManager.Services.Tests
 
             var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter, new List<IDefinitionInfoProvider> { infoProvider.Object });
             var result = await service.GetModObjectsAsync(new Game { UserDirectory = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), WorkshopDirectory = new List<string>(), GameFolders = new List<string> { "fake1" } },
-                new List<IMod> { new Mod { FileName = Path.GetFileName(Assembly.GetExecutingAssembly().Location), Name = "fake" } }, string.Empty, IronyModManager.Models.Common.PatchStateMode.Advanced, null);
+                new List<IMod> { new Mod { FileName = Path.GetFileName(Assembly.GetExecutingAssembly().Location), Name = "fake" } }, string.Empty, PatchStateMode.Advanced, null);
             (await result.GetAllAsync()).Count().Should().Be(2);
             var ordered = (await result.GetAllAsync()).OrderBy(p => p.Id);
             ordered.First().Id.Should().Be("fake1.txt");
@@ -229,7 +230,7 @@ namespace IronyModManager.Services.Tests
 
             var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter, new List<IDefinitionInfoProvider> { infoProvider.Object });
             var result = await service.GetModObjectsAsync(new Game { WorkshopDirectory = new List<string> { Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) }, UserDirectory = "fake1", GameFolders = new List<string>() },
-                new List<IMod> { new Mod { FileName = Path.GetFileName(Assembly.GetExecutingAssembly().Location), Name = "fake" } }, string.Empty, IronyModManager.Models.Common.PatchStateMode.Advanced, null);
+                new List<IMod> { new Mod { FileName = Path.GetFileName(Assembly.GetExecutingAssembly().Location), Name = "fake" } }, string.Empty, PatchStateMode.Advanced, null);
             (await result.GetAllAsync()).Count().Should().Be(2);
             var ordered = (await result.GetAllAsync()).OrderBy(p => p.Id);
             ordered.First().Id.Should().Be("fake1.txt");
@@ -280,7 +281,7 @@ namespace IronyModManager.Services.Tests
             };
             var indexed = new IndexedDefinitions();
             await indexed.InitMapAsync(definitions);
-            var result = await service.FindConflictsAsync(indexed, new List<string>(), IronyModManager.Models.Common.PatchStateMode.Default);
+            var result = await service.FindConflictsAsync(indexed, new List<string>(), PatchStateMode.Default, null);
             (await result.Conflicts.GetAllAsync()).Count().Should().Be(2);
             (await result.Conflicts.GetAllFileKeysAsync()).Count().Should().Be(1);
             (await result.Conflicts.GetAllAsync()).All(p => p.ModName == "test1" || p.ModName == "test2").Should().BeTrue();
@@ -338,7 +339,7 @@ namespace IronyModManager.Services.Tests
             };
             var indexed = new IndexedDefinitions();
             await indexed.InitMapAsync(definitions);
-            var result = await service.FindConflictsAsync(indexed, new List<string> { "test2", "test1" }, IronyModManager.Models.Common.PatchStateMode.Default);
+            var result = await service.FindConflictsAsync(indexed, new List<string> { "test2", "test1" }, PatchStateMode.Default, null);
             (await result.Conflicts.GetAllAsync()).Count().Should().Be(4);
             (await result.Conflicts.GetAllFileKeysAsync()).Count().Should().Be(1);
             (await result.Conflicts.GetAllAsync()).All(p => p.ModName == "test1" || p.ModName == "test2").Should().BeTrue();
@@ -398,7 +399,7 @@ namespace IronyModManager.Services.Tests
             };
             var indexed = new IndexedDefinitions();
             await indexed.InitMapAsync(definitions);
-            var result = await service.FindConflictsAsync(indexed, new List<string> { "test2", "test1" }, IronyModManager.Models.Common.PatchStateMode.Default);
+            var result = await service.FindConflictsAsync(indexed, new List<string> { "test2", "test1" }, PatchStateMode.Default, null);
             (await result.Conflicts.GetAllAsync()).Count().Should().Be(4);
             (await result.Conflicts.GetAllFileKeysAsync()).Count().Should().Be(1);
             (await result.Conflicts.GetAllAsync()).All(p => p.ModName == "test1" || p.ModName == "test2").Should().BeTrue();
@@ -448,7 +449,7 @@ namespace IronyModManager.Services.Tests
             };
             var indexed = new IndexedDefinitions();
             await indexed.InitMapAsync(definitions);
-            var result = await service.FindConflictsAsync(indexed, new List<string>(), IronyModManager.Models.Common.PatchStateMode.Default);
+            var result = await service.FindConflictsAsync(indexed, new List<string>(), PatchStateMode.Default, null);
             (await result.Conflicts.GetAllAsync()).Count().Should().Be(2);
             (await result.Conflicts.GetAllFileKeysAsync()).Count().Should().Be(2);
             (await result.Conflicts.GetAllAsync()).All(p => p.ModName == "test1" || p.ModName == "test2").Should().BeTrue();
@@ -507,7 +508,7 @@ namespace IronyModManager.Services.Tests
             };
             var indexed = new IndexedDefinitions();
             await indexed.InitMapAsync(definitions);
-            var result = await service.FindConflictsAsync(indexed, new List<string>(), IronyModManager.Models.Common.PatchStateMode.Default);
+            var result = await service.FindConflictsAsync(indexed, new List<string>(), PatchStateMode.Default, null);
             (await result.Conflicts.GetAllAsync()).Count().Should().Be(0);
             (await result.Conflicts.GetAllFileKeysAsync()).Count().Should().Be(0);
         }
@@ -565,7 +566,7 @@ namespace IronyModManager.Services.Tests
             };
             var indexed = new IndexedDefinitions();
             await indexed.InitMapAsync(definitions);
-            var result = await service.FindConflictsAsync(indexed, new List<string>(), IronyModManager.Models.Common.PatchStateMode.Default);
+            var result = await service.FindConflictsAsync(indexed, new List<string>(), PatchStateMode.Default, null);
             (await result.Conflicts.GetAllAsync()).Count().Should().Be(0);
             (await result.Conflicts.GetAllFileKeysAsync()).Count().Should().Be(0);
         }
@@ -623,7 +624,7 @@ namespace IronyModManager.Services.Tests
             };
             var indexed = new IndexedDefinitions();
             await indexed.InitMapAsync(definitions);
-            var result = await service.FindConflictsAsync(indexed, new List<string>(), IronyModManager.Models.Common.PatchStateMode.Default);
+            var result = await service.FindConflictsAsync(indexed, new List<string>(), PatchStateMode.Default, null);
             (await result.Conflicts.GetAllAsync()).Count().Should().Be(2);
             (await result.Conflicts.GetAllFileKeysAsync()).Count().Should().Be(1);
             (await result.Conflicts.GetAllAsync()).All(p => p.ModName == "test1" || p.ModName == "test3").Should().BeTrue();
@@ -691,7 +692,7 @@ namespace IronyModManager.Services.Tests
             };
             var indexed = new IndexedDefinitions();
             await indexed.InitMapAsync(definitions);
-            var result = await service.FindConflictsAsync(indexed, new List<string>(), IronyModManager.Models.Common.PatchStateMode.Default);
+            var result = await service.FindConflictsAsync(indexed, new List<string>(), PatchStateMode.Default, null);
             (await result.Conflicts.GetAllAsync()).Count().Should().Be(2);
             (await result.Conflicts.GetAllFileKeysAsync()).Count().Should().Be(1);
             (await result.Conflicts.GetAllAsync()).All(p => p.ModName == "test3" || p.ModName == "test4").Should().BeTrue();
@@ -758,7 +759,7 @@ namespace IronyModManager.Services.Tests
             };
             var indexed = new IndexedDefinitions();
             await indexed.InitMapAsync(definitions);
-            var result = await service.FindConflictsAsync(indexed, new List<string>(), IronyModManager.Models.Common.PatchStateMode.Default);
+            var result = await service.FindConflictsAsync(indexed, new List<string>(), PatchStateMode.Default, null);
             (await result.Conflicts.GetAllAsync()).Count().Should().Be(0);
             (await result.Conflicts.GetAllFileKeysAsync()).Count().Should().Be(0);
         }
@@ -806,7 +807,7 @@ namespace IronyModManager.Services.Tests
             };
             var indexed = new IndexedDefinitions();
             await indexed.InitMapAsync(definitions);
-            var result = await service.FindConflictsAsync(indexed, new List<string>(), IronyModManager.Models.Common.PatchStateMode.Default);
+            var result = await service.FindConflictsAsync(indexed, new List<string>(), PatchStateMode.Default, null);
             (await result.Conflicts.GetAllAsync()).Count().Should().Be(2);
         }
 
@@ -2628,7 +2629,7 @@ namespace IronyModManager.Services.Tests
             var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter, null);
 
             var indexed = new IndexedDefinitions();
-            var result = await service.SaveIgnoredPathsAsync(new ConflictResult { AllConflicts = indexed, Conflicts = indexed, Mode = IronyModManager.Models.Common.PatchStateMode.ReadOnly }, "test");
+            var result = await service.SaveIgnoredPathsAsync(new ConflictResult { AllConflicts = indexed, Conflicts = indexed, Mode = PatchStateMode.ReadOnly }, "test");
             result.Should().BeTrue();
         }
 
@@ -2829,7 +2830,7 @@ namespace IronyModManager.Services.Tests
 
             var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter);
             var result = await service.GetPatchStateModeAsync("fake");
-            result.Should().Be(IronyModManager.Models.Common.PatchStateMode.None);
+            result.Should().Be(PatchStateMode.None);
         }
 
         /// <summary>
@@ -2852,7 +2853,7 @@ namespace IronyModManager.Services.Tests
 
             var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter);
             var result = await service.GetPatchStateModeAsync(null);
-            result.Should().Be(IronyModManager.Models.Common.PatchStateMode.None);
+            result.Should().Be(PatchStateMode.None);
         }
 
         /// <summary>
@@ -2880,7 +2881,7 @@ namespace IronyModManager.Services.Tests
 
             var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter);
             var result = await service.GetPatchStateModeAsync("fake");
-            result.Should().Be(IronyModManager.Models.Common.PatchStateMode.Default);
+            result.Should().Be(PatchStateMode.Default);
         }
 
         /// <summary>
@@ -2907,7 +2908,7 @@ namespace IronyModManager.Services.Tests
 
             var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter);
             var result = await service.GetPatchStateModeAsync("fake");
-            result.Should().Be(IronyModManager.Models.Common.PatchStateMode.Default);
+            result.Should().Be(PatchStateMode.Default);
         }
 
         /// <summary>
@@ -3512,7 +3513,7 @@ namespace IronyModManager.Services.Tests
                 ResolvedConflicts = resolved,
                 CustomConflicts = custom,
                 OverwrittenConflicts = custom,
-                Mode = IronyModManager.Models.Common.PatchStateMode.ReadOnly
+                Mode = PatchStateMode.ReadOnly
             };
             var exceptionThrown = false;
             try
@@ -3579,7 +3580,7 @@ namespace IronyModManager.Services.Tests
             var custom = new IndexedDefinitions();
             await custom.InitMapAsync(new List<IDefinition> { new Definition { Type = "test", Id = "1", ModName = "test" } });
 
-            var c = new ConflictResult { AllConflicts = new IndexedDefinitions(), CustomConflicts = custom, Mode = IronyModManager.Models.Common.PatchStateMode.ReadOnly };
+            var c = new ConflictResult { AllConflicts = new IndexedDefinitions(), CustomConflicts = custom, Mode = PatchStateMode.ReadOnly };
             var exceptionThrown = false;
             try
             {
@@ -4686,6 +4687,116 @@ namespace IronyModManager.Services.Tests
             result.IsValid.Should().BeTrue();
         }
 
+
+        /// <summary>
+        /// Defines the test method Should_not_get_allowed_game_language_when_no_selected_game.
+        /// </summary>
+        [Fact]
+        public async Task Should_not_get_allowed_game_language_when_no_selected_game()
+        {
+            DISetup.SetupContainer();
+
+            var storageProvider = new Mock<IStorageProvider>();
+            var modParser = new Mock<IModParser>();
+            var parserManager = new Mock<IParserManager>();
+            var reader = new Mock<IReader>();
+            var modWriter = new Mock<IModWriter>();
+            var gameService = new Mock<IGameService>();
+            var mapper = new Mock<IMapper>();
+            var modPatchExporter = new Mock<IModPatchExporter>();
+            gameService.Setup(p => p.GetSelected()).Returns((IGame)null);
+
+            var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter);
+            var result = await service.GetAllowedLanguagesAsync("fake");
+            result.Should().BeNull();
+        }
+
+
+        /// <summary>
+        /// Defines the test method Should_not_get_allowed_game_language_when_no_collection.
+        /// </summary>
+        [Fact]
+        public async Task Should_not_get_allowed_game_language_when_no_collection()
+        {
+            DISetup.SetupContainer();
+
+            var storageProvider = new Mock<IStorageProvider>();
+            var modParser = new Mock<IModParser>();
+            var parserManager = new Mock<IParserManager>();
+            var reader = new Mock<IReader>();
+            var modWriter = new Mock<IModWriter>();
+            var gameService = new Mock<IGameService>();
+            var mapper = new Mock<IMapper>();
+            var modPatchExporter = new Mock<IModPatchExporter>();
+            gameService.Setup(p => p.GetSelected()).Returns((IGame)null);
+
+            var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter);
+            var result = await service.GetAllowedLanguagesAsync(null);
+            result.Should().BeNull();
+        }
+
+
+        /// <summary>
+        /// Defines the test method Should_get_allowed_game_language.
+        /// </summary>
+        [Fact]
+        public async Task Should_get_allowed_game_language()
+        {
+            DISetup.SetupContainer();
+
+            var storageProvider = new Mock<IStorageProvider>();
+            var modParser = new Mock<IModParser>();
+            var parserManager = new Mock<IParserManager>();
+            var reader = new Mock<IReader>();
+            var modWriter = new Mock<IModWriter>();
+            var gameService = new Mock<IGameService>();
+            var mapper = new Mock<IMapper>();
+            var modPatchExporter = new Mock<IModPatchExporter>();
+            modPatchExporter.Setup(p => p.GetPatchStateAsync(It.IsAny<ModPatchExporterParameters>(), It.IsAny<bool>())).ReturnsAsync((ModPatchExporterParameters p, bool load) =>
+            {
+                var res = new PatchState
+                {
+                    Conflicts = new List<IDefinition>(),
+                    ResolvedConflicts = new List<IDefinition>(),
+                    OverwrittenConflicts = new List<IDefinition>(),
+                    Mode = IO.Common.PatchStateMode.Default,
+                    AllowedLanguages = new List<string> { "test" }
+                };
+                return res;
+            });
+            gameService.Setup(p => p.GetSelected()).Returns(new Game { Type = "Should_get_allowed_game_language", UserDirectory = "C:\\Users\\Fake" });
+
+            var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter);
+            var result = await service.GetAllowedLanguagesAsync("fake");
+            result.Count.Should().Be(1);
+            result.FirstOrDefault().Should().Be("test");
+        }
+
+        /// <summary>
+        /// Defines the test method Should_get_allowed_game_language_from_mode_text.
+        /// </summary>
+        [Fact]
+        public async Task Should_get_allowed_game_language_from_mode_text()
+        {
+            DISetup.SetupContainer();
+
+            var storageProvider = new Mock<IStorageProvider>();
+            var modParser = new Mock<IModParser>();
+            var parserManager = new Mock<IParserManager>();
+            var reader = new Mock<IReader>();
+            var modWriter = new Mock<IModWriter>();
+            var gameService = new Mock<IGameService>();
+            var mapper = new Mock<IMapper>();
+            var modPatchExporter = new Mock<IModPatchExporter>();
+            modPatchExporter.Setup(p => p.GetAllowedLanguagesAsync(It.IsAny<ModPatchExporterParameters>())).ReturnsAsync((ModPatchExporterParameters p) => new List<string> { "test_file" });
+            gameService.Setup(p => p.GetSelected()).Returns(new Game { Type = "Should_get_patch_state", UserDirectory = "C:\\Users\\Fake" });
+
+            var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter);
+            var result = await service.GetAllowedLanguagesAsync("fake");
+            result.Count.Should().Be(1);
+            result.FirstOrDefault().Should().Be("test_file");
+        }
+
         /// <summary>
         /// Defines the test method Stellaris_Performance_profiling.
         /// </summary>
@@ -4703,7 +4814,7 @@ namespace IronyModManager.Services.Tests
             registration.OnPostStartup();
             var game = DISetup.Container.GetInstance<IGameService>().Get().First(s => s.Type == "Stellaris");
             var mods = await DISetup.Container.GetInstance<IModService>().GetInstalledModsAsync(game);
-            var defs = await DISetup.Container.GetInstance<IModPatchCollectionService>().GetModObjectsAsync(game, mods, string.Empty, IronyModManager.Models.Common.PatchStateMode.Advanced, null);
+            var defs = await DISetup.Container.GetInstance<IModPatchCollectionService>().GetModObjectsAsync(game, mods, string.Empty, PatchStateMode.Advanced, null);
         }
 
         /// <summary>

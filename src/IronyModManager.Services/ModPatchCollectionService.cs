@@ -362,8 +362,9 @@ namespace IronyModManager.Services
         /// <param name="indexedDefinitions">The indexed definitions.</param>
         /// <param name="modOrder">The mod order.</param>
         /// <param name="patchStateMode">The patch state mode.</param>
+        /// <param name="allowedLanguages">The allowed languages.</param>
         /// <returns>IConflictResult.</returns>
-        public virtual async Task<IConflictResult> FindConflictsAsync(IIndexedDefinitions indexedDefinitions, IList<string> modOrder, PatchStateMode patchStateMode)
+        public virtual async Task<IConflictResult> FindConflictsAsync(IIndexedDefinitions indexedDefinitions, IList<string> modOrder, PatchStateMode patchStateMode, IReadOnlyCollection<IGameLanguage> allowedLanguages)
         {
             var actualMode = patchStateMode;
             if (patchStateMode == PatchStateMode.ReadOnly)
@@ -778,6 +779,7 @@ namespace IronyModManager.Services
             stopWatch.Restart();
 
             var result = GetModelInstance<IConflictResult>();
+            result.AllowedLanguages = allowedLanguages != null ? allowedLanguages.Select(l => l.Type).ToList() : [];
             result.Mode = patchStateMode;
             var conflictsIndexed = DIResolver.Get<IIndexedDefinitions>();
             await conflictsIndexed.InitMapAsync(filteredConflicts, true);
@@ -804,6 +806,36 @@ namespace IronyModManager.Services
             Debug.WriteLine("FindConflictsAsync Init Result: " + stopWatch.Elapsed.FormatElapsed());
 
             return result;
+        }
+
+        /// <summary>
+        /// Gets an allowed languages async.
+        /// </summary>
+        /// <param name="collectionName">The collection name.</param>
+        /// <returns>A Task containing IReadOnlyCollection of strings.<see cref="T:System.Threading.Tasks.Task`1" /></returns>
+        public async Task<IReadOnlyCollection<string>> GetAllowedLanguagesAsync(string collectionName)
+        {
+            var game = GameService.GetSelected();
+            if (game != null && !string.IsNullOrWhiteSpace(collectionName))
+            {
+                var patchName = GenerateCollectionPatchName(collectionName);
+                var @params = new ModPatchExporterParameters { RootPath = GetModDirectoryRootPath(game), PatchPath = EvaluatePatchNamePath(game, patchName) };
+                var languages = await modPatchExporter.GetAllowedLanguagesAsync(@params);
+                if (languages != null)
+                {
+                    return languages;
+                }
+                else
+                {
+                    var state = await modPatchExporter.GetPatchStateAsync(@params, false);
+                    if (state != null)
+                    {
+                        return state.AllowedLanguages != null ? [.. state.AllowedLanguages] : [];
+                    }
+                }
+            }
+
+            return null;
         }
 
         /// <summary>
@@ -1439,6 +1471,7 @@ namespace IronyModManager.Services
                     await customConflicts.InitMapAsync(state.CustomConflicts, true);
                     conflicts.CustomConflicts = customConflicts;
                     conflicts.Mode = conflictResult.Mode;
+                    conflicts.AllowedLanguages = conflictResult.AllowedLanguages;
 
                     var indexResult = await initAllIndexedDefinitions(conflictResult, total, processed, 100);
                     conflictResult.AllConflicts.Dispose();
@@ -1462,7 +1495,8 @@ namespace IronyModManager.Services
                             CustomConflicts = await GetDefinitionOrDefaultAsync(conflicts.CustomConflicts),
                             RootPath = GetModDirectoryRootPath(game),
                             PatchPath = EvaluatePatchNamePath(game, patchName),
-                            HasGameDefinitions = await conflicts.AllConflicts.HasGameDefinitionsAsync()
+                            HasGameDefinitions = await conflicts.AllConflicts.HasGameDefinitionsAsync(),
+                            AllowedLanguages = conflicts.AllowedLanguages
                         });
                     }
 
@@ -1548,7 +1582,8 @@ namespace IronyModManager.Services
                             CustomConflicts = await GetDefinitionOrDefaultAsync(conflictResult.CustomConflicts),
                             RootPath = GetModDirectoryRootPath(game),
                             PatchPath = EvaluatePatchNamePath(game, patchName),
-                            HasGameDefinitions = await conflictResult.AllConflicts.HasGameDefinitionsAsync()
+                            HasGameDefinitions = await conflictResult.AllConflicts.HasGameDefinitionsAsync(),
+                            AllowedLanguages = conflictResult.AllowedLanguages
                         });
                     }
 
@@ -1918,7 +1953,8 @@ namespace IronyModManager.Services
                     CustomConflicts = await GetDefinitionOrDefaultAsync(conflictResult.CustomConflicts),
                     RootPath = GetModDirectoryRootPath(game),
                     PatchPath = EvaluatePatchNamePath(game, patchName),
-                    HasGameDefinitions = await conflictResult.AllConflicts.HasGameDefinitionsAsync()
+                    HasGameDefinitions = await conflictResult.AllConflicts.HasGameDefinitionsAsync(),
+                    AllowedLanguages = conflictResult.AllowedLanguages
                 });
             }
 
@@ -2618,7 +2654,8 @@ namespace IronyModManager.Services
                         CustomConflicts = await GetDefinitionOrDefaultAsync(conflictResult.CustomConflicts),
                         RootPath = GetModDirectoryRootPath(game),
                         PatchPath = EvaluatePatchNamePath(game, patchName),
-                        HasGameDefinitions = await conflictResult.AllConflicts.HasGameDefinitionsAsync()
+                        HasGameDefinitions = await conflictResult.AllConflicts.HasGameDefinitionsAsync(),
+                        AllowedLanguages = conflictResult.AllowedLanguages
                     });
                     return exportPatches.Count != 0 ? exportResult && stateResult : stateResult;
                 }
@@ -2947,9 +2984,12 @@ namespace IronyModManager.Services
             {
                 // See if we should skip maybe
                 var onlyFilename = Path.GetFileNameWithoutExtension(fileInfo.FileName);
-                if (allowedGameLanguages != null && !allowedGameLanguages.Any(p => onlyFilename!.EndsWith(p.Type, StringComparison.OrdinalIgnoreCase)))
+                if (allowedGameLanguages != null && fileInfo.FileName!.StartsWith(Shared.Constants.LocalizationDirectory, StringComparison.OrdinalIgnoreCase))
                 {
-                    continue;
+                    if (!allowedGameLanguages.Any(p => onlyFilename!.EndsWith(p.Type, StringComparison.OrdinalIgnoreCase)))
+                    {
+                        continue;
+                    }
                 }
 
                 var fileDefs = parserManager.Parse(new ParserManagerArgs
@@ -3478,7 +3518,8 @@ namespace IronyModManager.Services
                         CustomConflicts = await GetDefinitionOrDefaultAsync(conflictResult.CustomConflicts),
                         RootPath = GetModDirectoryRootPath(game),
                         PatchPath = EvaluatePatchNamePath(game, patchName),
-                        HasGameDefinitions = await conflictResult.AllConflicts.HasGameDefinitionsAsync()
+                        HasGameDefinitions = await conflictResult.AllConflicts.HasGameDefinitionsAsync(),
+                        AllowedLanguages = conflictResult.AllowedLanguages
                     });
                     return true;
                 }

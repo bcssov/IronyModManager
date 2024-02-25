@@ -79,6 +79,31 @@ namespace IronyModManager.Services
         }
 
         /// <summary>
+        /// Gets the by abrv.
+        /// </summary>
+        /// <param name="languages">The languages.</param>
+        /// <returns>IReadOnlyCollection&lt;IGameLanguage&gt;.</returns>
+        /// <exception cref="NotImplementedException"></exception>
+        public IReadOnlyCollection<IGameLanguage> GetByAbrv(IReadOnlyCollection<string> languages)
+        {
+            var models = Get();
+            var filtered = new List<IGameLanguage>();
+            if (languages != null)
+            {
+                foreach (var lang in models)
+                {
+                    if (languages.Any(p => p.Equals(lang.Type)))
+                    {
+                        lang.IsSelected = true;
+                        filtered.Add(lang);
+                    }
+                }
+            }
+
+            return filtered;
+        }
+
+        /// <summary>
         /// Get selected.
         /// </summary>
         /// <returns>A read only collection of IGameLanguages.<see cref="T:System.Collections.Generic.IReadOnlyCollection`1" /></returns>
