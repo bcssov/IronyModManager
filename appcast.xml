@@ -4,8 +4,11 @@
 		<title>Irony Mod Manager</title>
 		<language>en</language>
 		<item>
-			<title>1.26.129-alpha</title>
-			<description>## Release Notes 1.26
+			<title>1.26.131-alpha</title>
+			<description>## Current Version Notes
+* Fixed issue where game language selection was reset
+
+## Release Notes 1.26
 * Update dependencies
 * Bump to net8 which should grant some performance improvements (win7 might not work going forward)
 * Remove ripple animation from Material themes (per #484)
@@ -14,12 +17,15 @@
 * Added new diff viewer
 * Stellaris 3.11 beta compatibility
 * Added conflict solver option to skip parsing some languages</description>
-			<pubDate>Sun, 25 Feb 2024 23:24:04 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.26.129-alpha/linux-x64.zip" sparkle:version="1.26.129.9858" sparkle:shortVersionString="1.26.129" length="90831843" sparkle:os="linux" type="application/zip" sparkle:signature="HUI4ewF30QSccdbmoNLBJ2sTumNBq1otpQCP1s80iA59P/IoPz9EkQRtngZVbQGIJTlvbeJ6GhVHkjBNA9lUDQ=="/>
+			<pubDate>Mon, 26 Feb 2024 06:42:28 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.26.131-alpha/linux-x64.zip" sparkle:version="1.26.131.7582" sparkle:shortVersionString="1.26.131" length="90831833" sparkle:os="linux" type="application/zip" sparkle:signature="JE559GCoQGI7LKOmVnV0ukuurAH7fmG/mLvVN/ORAr6PPb/wjb0QsZM1Q3MTsYY4TYqny9faln1ps86JFbVFBw=="/>
 		</item>
 		<item>
-			<title>1.26.129-alpha</title>
-			<description>## Release Notes 1.26
+			<title>1.26.131-alpha</title>
+			<description>## Current Version Notes
+* Fixed issue where game language selection was reset
+
+## Release Notes 1.26
 * Update dependencies
 * Bump to net8 which should grant some performance improvements (win7 might not work going forward)
 * Remove ripple animation from Material themes (per #484)
@@ -28,12 +34,15 @@
 * Added new diff viewer
 * Stellaris 3.11 beta compatibility
 * Added conflict solver option to skip parsing some languages</description>
-			<pubDate>Sun, 25 Feb 2024 23:24:09 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.26.129-alpha/osx-x64.zip" sparkle:version="1.26.129.9858" sparkle:shortVersionString="1.26.129" length="93792351" sparkle:os="osx" type="application/zip" sparkle:signature="A0q8az4UvNJbHJ2iY8v2Jk2/GeOeslXfhPxMSKR72gap7cCoiTQgn2lWsjp7+IGSlSdN+rp6cENp1kGpii8ZAw=="/>
+			<pubDate>Mon, 26 Feb 2024 06:42:35 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.26.131-alpha/osx-x64.zip" sparkle:version="1.26.131.7582" sparkle:shortVersionString="1.26.131" length="93792326" sparkle:os="osx" type="application/zip" sparkle:signature="VgaWYR5Hr6LORGivtqq7DNE2txqt17+JzyRsLHY5vviyTTXAPZVUYL+apfwVIE7JNDF0n81vjoyiNUgxRO0GBw=="/>
 		</item>
 		<item>
-			<title>1.26.129-alpha</title>
-			<description>## Release Notes 1.26
+			<title>1.26.131-alpha</title>
+			<description>## Current Version Notes
+* Fixed issue where game language selection was reset
+
+## Release Notes 1.26
 * Update dependencies
 * Bump to net8 which should grant some performance improvements (win7 might not work going forward)
 * Remove ripple animation from Material themes (per #484)
@@ -42,12 +51,15 @@
 * Added new diff viewer
 * Stellaris 3.11 beta compatibility
 * Added conflict solver option to skip parsing some languages</description>
-			<pubDate>Sun, 25 Feb 2024 23:24:15 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.26.129-alpha/win-x64-setup.zip" sparkle:version="1.26.129.9858" sparkle:shortVersionString="1.26.129" length="72462015" sparkle:os="windows" type="application/zip" sparkle:signature="5l6auoLDY1WWk8dOym5A54SGl8bses4H7pX0oKzYLNOCa2vId/TGGnV9jyzEWlL8xUVq7SF61N/Y8zFtXI5LBg=="/>
+			<pubDate>Mon, 26 Feb 2024 06:42:41 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.26.131-alpha/win-x64-setup.zip" sparkle:version="1.26.131.7582" sparkle:shortVersionString="1.26.131" length="72475099" sparkle:os="windows" type="application/zip" sparkle:signature="iBSCuYnzsqH8DmyARiBGAP8nrmhVfnFDcGIClCjbKIc8/ekyIRO/4xXqBr9uufhTDtai3c0IoT9Y29P3tM5hCg=="/>
 		</item>
 		<item>
-			<title>1.26.129-alpha</title>
-			<description>## Release Notes 1.26
+			<title>1.26.131-alpha</title>
+			<description>## Current Version Notes
+* Fixed issue where game language selection was reset
+
+## Release Notes 1.26
 * Update dependencies
 * Bump to net8 which should grant some performance improvements (win7 might not work going forward)
 * Remove ripple animation from Material themes (per #484)
@@ -56,8 +68,8 @@
 * Added new diff viewer
 * Stellaris 3.11 beta compatibility
 * Added conflict solver option to skip parsing some languages</description>
-			<pubDate>Sun, 25 Feb 2024 23:24:15 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.26.129-alpha/win-x64.zip" sparkle:version="1.26.129.9858" sparkle:shortVersionString="1.26.129" length="106444308" sparkle:os="windows" type="application/zip" sparkle:signature="8W2FqIjHb7LeI//0uJPEd20btlHMVP0Pqd7pV/8guLR8clHzYMrqhzV4hP31D22kCzcKZlKrHELykO/W7nEoAg=="/>
+			<pubDate>Mon, 26 Feb 2024 06:42:41 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.26.131-alpha/win-x64.zip" sparkle:version="1.26.131.7582" sparkle:shortVersionString="1.26.131" length="106444303" sparkle:os="windows" type="application/zip" sparkle:signature="N5GOhhvwIK27Rbml5Zp5AWoo0myG1p/o3iQoF1/3bJA6uDUtqBwvrx+crfPGQvkMBE2AAJpDK+LOHVqWgh2RAw=="/>
 		</item>
 		<item>
 			<title>1.25.161</title>
@@ -142,6 +154,6 @@
 * Mod filter changed to allow exclusion of mods from conflict list (provided only x number of mods cause a conflict)</description>
 			<pubDate>Tue, 23 Jan 2024 20:38:05 +01:00</pubDate>
 			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.25.161/win-x64.zip" sparkle:version="1.25.161.20628" sparkle:shortVersionString="1.25.161" length="105740314" sparkle:os="windows" type="application/zip" sparkle:signature="0vrW8s+l2JL4vfbouF8H8oPztFYGKAQEJDZ84bqWBstJF0MBHaNRiICAoRVyyEKxijLIjX+ArP+Xo2EaonmiAQ=="/>
-		</item>
+		</item>		
 	</channel>
 </rss>
