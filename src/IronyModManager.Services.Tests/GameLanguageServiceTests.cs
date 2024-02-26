@@ -37,11 +37,11 @@ namespace IronyModManager.Services.Tests
         /// </summary>
         /// <param name="preferencesService">The preferences service.</param>
         /// <param name="languages">A list of strings</param>
-        private static void SetupMocks(Mock<IPreferencesService> preferencesService, params string[] languages)
+        private static void SetupMocks(Mock<IPreferencesService> preferencesService, bool csSet, params string[] languages)
         {
             DISetup.SetupContainer();
             CurrentLocale.SetCurrent("en");
-            preferencesService.Setup(p => p.Get()).Returns(() => new Preferences { ConflictSolverLanguages = [.. languages] });
+            preferencesService.Setup(p => p.Get()).Returns(() => new Preferences { ConflictSolverLanguages = [.. languages], ConflictSolverLanguagesSet = csSet});
             preferencesService.Setup(p => p.Save(It.IsAny<IPreferences>())).Returns(true);
         }
 
@@ -53,7 +53,7 @@ namespace IronyModManager.Services.Tests
         {
             // So we use a magic string -- because lazy ensure that tests cover it properly
             var preferencesService = new Mock<IPreferencesService>();
-            SetupMocks(preferencesService, "all");
+            SetupMocks(preferencesService, false, "l_english");
             var service = new GameLanguageService(new Mock<IStorageProvider>().Object, null, preferencesService.Object);
             var result = service.Get();
             result.All(p => p.IsSelected).Should().BeTrue();
@@ -66,7 +66,7 @@ namespace IronyModManager.Services.Tests
         public void Should_return_valid_selection()
         {
             var preferencesService = new Mock<IPreferencesService>();
-            SetupMocks(preferencesService, "l_english");
+            SetupMocks(preferencesService, true, "l_english");
             var service = new GameLanguageService(new Mock<IStorageProvider>().Object, null, preferencesService.Object);
             var result = service.Get();
             result.Count(p => p.IsSelected).Should().Be(1);
@@ -80,7 +80,7 @@ namespace IronyModManager.Services.Tests
         public void Should_return_only_selected()
         {
             var preferencesService = new Mock<IPreferencesService>();
-            SetupMocks(preferencesService, "l_english");
+            SetupMocks(preferencesService, true,"l_english");
             var service = new GameLanguageService(new Mock<IStorageProvider>().Object, null, preferencesService.Object);
             var result = service.GetSelected();
             result.Count.Should().Be(1);
@@ -95,7 +95,7 @@ namespace IronyModManager.Services.Tests
         public void Should_return_only_requested()
         {
             var preferencesService = new Mock<IPreferencesService>();
-            SetupMocks(preferencesService, "l_english");
+            SetupMocks(preferencesService, true, "l_english");
             var service = new GameLanguageService(new Mock<IStorageProvider>().Object, null, preferencesService.Object);
             var result = service.GetByAbrv(["l_german"]);
             result.Count.Should().Be(1);
@@ -109,7 +109,7 @@ namespace IronyModManager.Services.Tests
         public void Should_save_selection()
         {
             var preferencesService = new Mock<IPreferencesService>();
-            SetupMocks(preferencesService, "all");
+            SetupMocks(preferencesService, false,"l_german");
             IPreferences prefs = null;
             preferencesService.Setup(p => p.Save(It.IsAny<IPreferences>())).Returns((IPreferences saved) =>
             {
@@ -128,6 +128,7 @@ namespace IronyModManager.Services.Tests
             prefs.Should().NotBeNull();
             prefs.ConflictSolverLanguages.Count.Should().Be(1);
             prefs.ConflictSolverLanguages.FirstOrDefault().Should().Be("l_english");
+            prefs.ConflictSolverLanguagesSet.Should().BeTrue();
         }
     }
 }

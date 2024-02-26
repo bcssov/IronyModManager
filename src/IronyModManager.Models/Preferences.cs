@@ -4,7 +4,7 @@
 // Created          : 01-11-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-25-2024
+// Last Modified On : 02-26-2024
 // ***********************************************************************
 // <copyright file="Preferences.cs" company="Mario">
 //     Mario
@@ -31,19 +31,6 @@ namespace IronyModManager.Models
     /// <seealso cref="IronyModManager.Models.Common.IPreferences" />
     public class Preferences : BaseModel, IPreferences
     {
-        #region Constructors
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="Preferences" /> class.
-        /// </summary>
-        public Preferences()
-        {
-            // Magic string, ensures backwardds compatibility -- I hate it you hate it now move on
-            ConflictSolverLanguages = ["all"];
-        }
-
-        #endregion Constructors
-
         #region Properties
 
         /// <summary>
@@ -62,7 +49,13 @@ namespace IronyModManager.Models
         /// Gets or sets a value representing the conflict solver languages.<see cref="System.Collections.Generic.List{string}" />
         /// </summary>
         /// <value>The conflict solver languages.</value>
-        public List<string> ConflictSolverLanguages { get; set; }
+        public virtual List<string> ConflictSolverLanguages { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether [conflict solver languages set].
+        /// </summary>
+        /// <value><c>true</c> if [conflict solver languages set]; otherwise, <c>false</c>.</value>
+        public virtual bool ConflictSolverLanguagesSet { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether [conflict solver prompt shown].

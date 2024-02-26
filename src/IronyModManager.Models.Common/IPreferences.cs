@@ -4,7 +4,7 @@
 // Created          : 01-11-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-25-2024
+// Last Modified On : 02-26-2024
 // ***********************************************************************
 // <copyright file="IPreferences.cs" company="Mario">
 //     Mario
@@ -48,6 +48,12 @@ namespace IronyModManager.Models.Common
         /// </summary>
         /// <value>The conflict solver languages.</value>
         List<string> ConflictSolverLanguages { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether the conflict solver languages set.
+        /// </summary>
+        /// <value><c>true</c> if conflict solver languages set; otherwise, <c>false</c>.</value>
+        bool ConflictSolverLanguagesSet { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether [conflict solver prompt shown].

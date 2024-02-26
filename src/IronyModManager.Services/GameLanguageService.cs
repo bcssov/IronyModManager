@@ -4,7 +4,7 @@
 // Created          : 02-25-2024
 //
 // Last Modified By : Mario
-// Last Modified On : 02-25-2024
+// Last Modified On : 02-26-2024
 // ***********************************************************************
 // <copyright file="GameLanguageService.cs" company="Mario">
 //     Copyright (c) . All rights reserved.
@@ -36,11 +36,6 @@ namespace IronyModManager.Services
         #region Fields
 
         /// <summary>
-        /// All selected
-        /// </summary>
-        private const string AllSelected = "all";
-
-        /// <summary>
         /// A private string named defaultLanguage.
         /// </summary>
         private const string DefaultLanguage = "l_default";
@@ -66,12 +61,14 @@ namespace IronyModManager.Services
         public IEnumerable<IGameLanguage> Get()
         {
             var result = new List<IGameLanguage>();
+            var prefs = preferencesService.Get();
+            var allSelected = !prefs.ConflictSolverLanguagesSet;
             var selectedLanguages = preferencesService.Get().ConflictSolverLanguages;
             var locales = Parser.Common.Constants.Localization.Locales.Where(p => p != DefaultLanguage);
             foreach (var locale in locales)
             {
                 var model = GetModelInstance<IGameLanguage>();
-                InitModel(model, locale, selectedLanguages);
+                InitModel(model, locale, selectedLanguages, allSelected);
                 result.Add(model);
             }
 
@@ -121,6 +118,7 @@ namespace IronyModManager.Services
             lock (objLock)
             {
                 var preferences = preferencesService.Get();
+                preferences.ConflictSolverLanguagesSet = true;
                 preferences.ConflictSolverLanguages = languages.Where(p => p.IsSelected).Select(p => p.Type).ToList();
                 preferencesService.Save(preferences);
             }
@@ -132,10 +130,11 @@ namespace IronyModManager.Services
         /// <param name="language">The language.</param>
         /// <param name="type">The type.</param>
         /// <param name="selected">A list of strings</param>
-        private void InitModel(IGameLanguage language, string type, List<string> selected)
+        /// <param name="allSelected">if set to <c>true</c> [all selected].</param>
+        private void InitModel(IGameLanguage language, string type, List<string> selected, bool allSelected)
         {
             language.Type = type;
-            language.IsSelected = selected.Contains(AllSelected) || selected.Contains(type);
+            language.IsSelected = selected.Contains(type) || allSelected;
             language.DisplayName = type;
         }
 
