@@ -171,7 +171,8 @@ namespace IronyModManager.Parser.Tests
                 //{
                 //    continue;
                 //}
-                var lines = content.Contains("\r\n") ? content.Split("\r\n", StringSplitOptions.RemoveEmptyEntries) : content.Split("\n", StringSplitOptions.RemoveEmptyEntries);
+
+                var lines = content.SplitOnNewLine();
                 bool notEmpty = false;
                 foreach (var line in lines)
                 {
