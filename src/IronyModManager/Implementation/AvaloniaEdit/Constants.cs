@@ -4,7 +4,7 @@
 // Created          : 02-19-2024
 //
 // Last Modified By : Mario
-// Last Modified On : 02-23-2024
+// Last Modified On : 02-28-2024
 // ***********************************************************************
 // <copyright file="Constants.cs" company="Mario">
 //     Mario
@@ -52,6 +52,11 @@ namespace IronyModManager.Implementation.AvaloniaEdit
         public static readonly SolidColorBrush DarkDiffInsertedPieces = SolidColorBrush.Parse("#1B4F35");
 
         /// <summary>
+        /// A public static readonly SolidColorBrush named DarkDiffModifiedLine.
+        /// </summary>
+        public static readonly SolidColorBrush DarkDiffModifiedLine = SolidColorBrush.Parse("#C49400");
+
+        /// <summary>
         /// A public static readonly SolidColorBrush named DarkDiffModifiedPieces.
         /// </summary>
         public static readonly SolidColorBrush DarkDiffModifiedPieces = SolidColorBrush.Parse("#C49400");
@@ -85,6 +90,11 @@ namespace IronyModManager.Implementation.AvaloniaEdit
         /// A public static readonly SolidColorBrush named LightDiffInsertedPieces.
         /// </summary>
         public static readonly SolidColorBrush LightDiffInsertedPieces = SolidColorBrush.Parse("#66cc99");
+
+        /// <summary>
+        /// A public static readonly SolidColorBrush named LightDiffModifiedLine.
+        /// </summary>
+        public static readonly SolidColorBrush LightDiffModifiedLine = SolidColorBrush.Parse("#ffe28b");
 
         /// <summary>
         /// A public static readonly SolidColorBrush named LightDiffModifiedPieces.

@@ -4,7 +4,7 @@
 // Created          : 02-19-2024
 //
 // Last Modified By : Mario
-// Last Modified On : 02-23-2024
+// Last Modified On : 02-28-2024
 // ***********************************************************************
 // <copyright file="DiffBackgroundRenderer.cs" company="Mario">
 //     Mario
@@ -97,7 +97,7 @@ namespace IronyModManager.Implementation.AvaloniaEdit
                     DiffPlex.DiffBuilder.Model.ChangeType.Deleted => IsLightTheme() ? Constants.LightDiffDeletedLine : Constants.DarkDiffDeletedLine,
                     DiffPlex.DiffBuilder.Model.ChangeType.Inserted => IsLightTheme() ? Constants.LightDiffInsertedLine : Constants.DarkDiffInsertedLine,
                     DiffPlex.DiffBuilder.Model.ChangeType.Imaginary => IsLightTheme() ? Constants.LightDiffImaginaryLine : Constants.DarkDiffImaginaryLine,
-                    DiffPlex.DiffBuilder.Model.ChangeType.Modified => IsLightTheme() ? Constants.LightDiffModifiedPieces : Constants.DarkDiffModifiedPieces,
+                    DiffPlex.DiffBuilder.Model.ChangeType.Modified => IsLightTheme() ? Constants.LightDiffModifiedLine : Constants.DarkDiffModifiedLine,
                     _ => default
                 };
 
