@@ -4,9 +4,9 @@
 		<title>Irony Mod Manager</title>
 		<language>en</language>
 		<item>
-			<title>1.26.131-alpha</title>
+			<title>1.26.137-rc</title>
 			<description>## Current Version Notes
-* Fixed issue where game language selection was reset
+* Add natural sort for mod collections as requested in #490
 
 ## Release Notes 1.26
 * Update dependencies
@@ -17,13 +17,13 @@
 * Added new diff viewer
 * Stellaris 3.11 beta compatibility
 * Added conflict solver option to skip parsing some languages</description>
-			<pubDate>Mon, 26 Feb 2024 06:42:28 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.26.131-alpha/linux-x64.zip" sparkle:version="1.26.131.7582" sparkle:shortVersionString="1.26.131" length="90831833" sparkle:os="linux" type="application/zip" sparkle:signature="JE559GCoQGI7LKOmVnV0ukuurAH7fmG/mLvVN/ORAr6PPb/wjb0QsZM1Q3MTsYY4TYqny9faln1ps86JFbVFBw=="/>
+			<pubDate>Mon, 04 Mar 2024 21:33:15 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.26.137-rc/linux-x64.zip" sparkle:version="1.26.137.54449" sparkle:shortVersionString="1.26.137" length="90842664" sparkle:os="linux" type="application/zip" sparkle:signature="vOF2OG5OP8CU8BDoHODaYPzfE6Rnmque9PgipNcrhonxFWwy+j/dJ6u8pqX+YpGP4b0nWhIlwxr2P9lQBJuTCg=="/>
 		</item>
 		<item>
-			<title>1.26.131-alpha</title>
+			<title>1.26.137-rc</title>
 			<description>## Current Version Notes
-* Fixed issue where game language selection was reset
+* Add natural sort for mod collections as requested in #490
 
 ## Release Notes 1.26
 * Update dependencies
@@ -34,13 +34,13 @@
 * Added new diff viewer
 * Stellaris 3.11 beta compatibility
 * Added conflict solver option to skip parsing some languages</description>
-			<pubDate>Mon, 26 Feb 2024 06:42:35 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.26.131-alpha/osx-x64.zip" sparkle:version="1.26.131.7582" sparkle:shortVersionString="1.26.131" length="93792326" sparkle:os="osx" type="application/zip" sparkle:signature="VgaWYR5Hr6LORGivtqq7DNE2txqt17+JzyRsLHY5vviyTTXAPZVUYL+apfwVIE7JNDF0n81vjoyiNUgxRO0GBw=="/>
+			<pubDate>Mon, 04 Mar 2024 21:33:22 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.26.137-rc/osx-x64.zip" sparkle:version="1.26.137.54449" sparkle:shortVersionString="1.26.137" length="93803169" sparkle:os="osx" type="application/zip" sparkle:signature="yF3c7mA/+C08uCT0rsqnqavy6VzcDtjExfNFZzTL/YEdjvOW/sXPH+3u6Wn7j0jQ8ZerjYa+ZIZWprVI+NwtCA=="/>
 		</item>
 		<item>
-			<title>1.26.131-alpha</title>
+			<title>1.26.137-rc</title>
 			<description>## Current Version Notes
-* Fixed issue where game language selection was reset
+* Add natural sort for mod collections as requested in #490
 
 ## Release Notes 1.26
 * Update dependencies
@@ -51,13 +51,13 @@
 * Added new diff viewer
 * Stellaris 3.11 beta compatibility
 * Added conflict solver option to skip parsing some languages</description>
-			<pubDate>Mon, 26 Feb 2024 06:42:41 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.26.131-alpha/win-x64-setup.zip" sparkle:version="1.26.131.7582" sparkle:shortVersionString="1.26.131" length="72475099" sparkle:os="windows" type="application/zip" sparkle:signature="iBSCuYnzsqH8DmyARiBGAP8nrmhVfnFDcGIClCjbKIc8/ekyIRO/4xXqBr9uufhTDtai3c0IoT9Y29P3tM5hCg=="/>
+			<pubDate>Mon, 04 Mar 2024 21:33:28 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.26.137-rc/win-x64-setup.zip" sparkle:version="1.26.137.54449" sparkle:shortVersionString="1.26.137" length="72481692" sparkle:os="windows" type="application/zip" sparkle:signature="nXkEm3FEyjJCSdMoWBnoGoB84cyUtox11QxJq2iWWJhe5CpvPCec8lcd7JajZwcoWAAZYRWmPv2f5QLnwDcYDQ=="/>
 		</item>
 		<item>
-			<title>1.26.131-alpha</title>
+			<title>1.26.137-rc</title>
 			<description>## Current Version Notes
-* Fixed issue where game language selection was reset
+* Add natural sort for mod collections as requested in #490
 
 ## Release Notes 1.26
 * Update dependencies
@@ -68,8 +68,8 @@
 * Added new diff viewer
 * Stellaris 3.11 beta compatibility
 * Added conflict solver option to skip parsing some languages</description>
-			<pubDate>Mon, 26 Feb 2024 06:42:41 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.26.131-alpha/win-x64.zip" sparkle:version="1.26.131.7582" sparkle:shortVersionString="1.26.131" length="106444303" sparkle:os="windows" type="application/zip" sparkle:signature="N5GOhhvwIK27Rbml5Zp5AWoo0myG1p/o3iQoF1/3bJA6uDUtqBwvrx+crfPGQvkMBE2AAJpDK+LOHVqWgh2RAw=="/>
+			<pubDate>Mon, 04 Mar 2024 21:33:29 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.26.137-rc/win-x64.zip" sparkle:version="1.26.137.54449" sparkle:shortVersionString="1.26.137" length="106454996" sparkle:os="windows" type="application/zip" sparkle:signature="ae5+Z3XZ7MhWUiWFE+i1+yvkxo1VcKPml6lTYOiS/UBDsqCKxpH1V2W1aQM3iWXmHmBEgPgd/Co9X81RmXj3DQ=="/>
 		</item>
 		<item>
 			<title>1.25.161</title>
@@ -154,6 +154,6 @@
 * Mod filter changed to allow exclusion of mods from conflict list (provided only x number of mods cause a conflict)</description>
 			<pubDate>Tue, 23 Jan 2024 20:38:05 +01:00</pubDate>
 			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.25.161/win-x64.zip" sparkle:version="1.25.161.20628" sparkle:shortVersionString="1.25.161" length="105740314" sparkle:os="windows" type="application/zip" sparkle:signature="0vrW8s+l2JL4vfbouF8H8oPztFYGKAQEJDZ84bqWBstJF0MBHaNRiICAoRVyyEKxijLIjX+ArP+Xo2EaonmiAQ=="/>
-		</item>		
+		</item>				
 	</channel>
 </rss>
