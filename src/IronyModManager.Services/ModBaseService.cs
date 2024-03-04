@@ -4,7 +4,7 @@
 // Created          : 04-07-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-23-2024
+// Last Modified On : 03-04-2024
 // ***********************************************************************
 // <copyright file="ModBaseService.cs" company="Mario">
 //     Mario
@@ -33,23 +33,16 @@ using IronyModManager.Shared;
 using IronyModManager.Shared.Cache;
 using IronyModManager.Shared.Models;
 using IronyModManager.Storage.Common;
+using NaturalSort.Extension;
 using ValueType = IronyModManager.Shared.Models.ValueType;
 
 namespace IronyModManager.Services
 {
     /// <summary>
-    /// Class ModBaseService. Implements the <see cref="IronyModManager.Services.BaseService" />
+    /// Class ModBaseService.
+    /// Implements the <see cref="IronyModManager.Services.BaseService" />
     /// </summary>
     /// <seealso cref="IronyModManager.Services.BaseService" />
-    /// <param name="cache">The cache.</param>
-    /// <param name="definitionInfoProviders">The definition information providers.</param>
-    /// <param name="reader">The reader.</param>
-    /// <param name="modWriter">The mod writer.</param>
-    /// <param name="modParser">The mod parser.</param>
-    /// <param name="gameService">The game service.</param>
-    /// <param name="storageProvider">The storage provider.</param>
-    /// <param name="mapper">The mapper.</param>
-    /// <remarks>Initializes a new instance of the <see cref="ModBaseService" /> class.</remarks>    
     public abstract class ModBaseService(
         ICache cache,
         IEnumerable<IDefinitionInfoProvider> definitionInfoProviders,
@@ -351,6 +344,7 @@ namespace IronyModManager.Services
 
                                         break;
                                     }
+
                                     // Has same filenames?
                                     case > 1 when uniqueDefinitions.GroupBy(p => p.FileNameCI).Count() == 1:
                                     {
@@ -371,6 +365,7 @@ namespace IronyModManager.Services
 
                                         break;
                                     }
+
                                     // Using FIOS or LIOS?
                                     case > 1 when isFios:
                                     {
@@ -498,7 +493,7 @@ namespace IronyModManager.Services
             var collections = StorageProvider.GetModCollections().Where(s => s.Game.Equals(game.Type));
             if (collections.Any())
             {
-                return collections.OrderBy(p => p.Name);
+                return collections.OrderBy(p => p.Name, StringComparer.OrdinalIgnoreCase.WithNaturalSort());
             }
 
             return [];
@@ -907,7 +902,7 @@ namespace IronyModManager.Services
                             }
                             catch (Exception ex)
                             {
-                                localMod.Files = new List<string>();
+                                localMod.Files = [];
                                 logger.Error(ex);
                             }
                             finally

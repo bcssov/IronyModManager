@@ -49,6 +49,7 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
+    <PackageReference Include="NaturalSort.Extension" Version="4.2.0" />
     <PackageReference Include="Nerdbank.GitVersioning" Version="3.6.133">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -57,7 +58,7 @@
     <PackageReference Include="Nito.AsyncEx" Version="5.1.2" />
     <PackageReference Include="PommaLabs.MimeTypes" Version="2.9.1" />
     <PackageReference Include="Sajidur78.StrongNamer" Version="0.2.8" />
-    <PackageReference Include="SlimMessageBus.Host.Memory" Version="2.2.2" />
+    <PackageReference Include="SlimMessageBus.Host.Memory" Version="2.2.3" />
     <PackageReference Include="SmartFormat" Version="3.3.2" />
     <PackageReference Include="System.Data.HashFunction.MetroHash" Version="2.0.0" />
     <PackageReference Include="System.Reactive" Version="6.0.0" />

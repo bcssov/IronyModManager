@@ -1,17 +1,17 @@
-﻿
-// ***********************************************************************
+﻿// ***********************************************************************
 // Assembly         : IronyModManager.Services
 // Author           : Mario
 // Created          : 03-04-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 07-12-2023
+// Last Modified On : 03-04-2024
 // ***********************************************************************
 // <copyright file="ModCollectionService.cs" company="Mario">
 //     Mario
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
+
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -33,15 +33,23 @@ using IronyModManager.Storage.Common;
 
 namespace IronyModManager.Services
 {
-
     /// <summary>
-    /// Class ModCollectionService.
-    /// Implements the <see cref="IronyModManager.Services.ModBaseService" />
-    /// Implements the <see cref="IronyModManager.Services.Common.IModCollectionService" />
+    /// The mod collection service.
     /// </summary>
     /// <seealso cref="IronyModManager.Services.ModBaseService" />
     /// <seealso cref="IronyModManager.Services.Common.IModCollectionService" />
-    public class ModCollectionService : ModBaseService, IModCollectionService
+    public class ModCollectionService(
+        IMessageBus messageBus,
+        IReportExportService exportService,
+        ICache cache,
+        IEnumerable<IDefinitionInfoProvider> definitionInfoProviders,
+        IReader reader,
+        IModWriter modWriter,
+        IModParser modParser,
+        IGameService gameService,
+        IModCollectionExporter modCollectionExporter,
+        IStorageProvider storageProvider,
+        IMapper mapper) : ModBaseService(cache, definitionInfoProviders, reader, modWriter, modParser, gameService, storageProvider, mapper), IModCollectionService
     {
         #region Fields
 
@@ -53,47 +61,19 @@ namespace IronyModManager.Services
         /// <summary>
         /// The mod report exporter
         /// </summary>
-        private readonly IReportExportService exportService;
+        private readonly IReportExportService exportService = exportService;
 
         /// <summary>
         /// The message bus
         /// </summary>
-        private readonly IMessageBus messageBus;
+        private readonly IMessageBus messageBus = messageBus;
 
         /// <summary>
         /// The mod collection exporter
         /// </summary>
-        private readonly IModCollectionExporter modCollectionExporter;
+        private readonly IModCollectionExporter modCollectionExporter = modCollectionExporter;
 
         #endregion Fields
-
-        #region Constructors
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="ModCollectionService" /> class.
-        /// </summary>
-        /// <param name="messageBus">The message bus.</param>
-        /// <param name="exportService">The export service.</param>
-        /// <param name="cache">The cache.</param>
-        /// <param name="definitionInfoProviders">The definition information providers.</param>
-        /// <param name="reader">The reader.</param>
-        /// <param name="modWriter">The mod writer.</param>
-        /// <param name="modParser">The mod parser.</param>
-        /// <param name="gameService">The game service.</param>
-        /// <param name="modCollectionExporter">The mod collection exporter.</param>
-        /// <param name="storageProvider">The storage provider.</param>
-        /// <param name="mapper">The mapper.</param>
-        public ModCollectionService(IMessageBus messageBus, IReportExportService exportService, ICache cache,
-            IEnumerable<IDefinitionInfoProvider> definitionInfoProviders, IReader reader, IModWriter modWriter,
-            IModParser modParser, IGameService gameService, IModCollectionExporter modCollectionExporter,
-            IStorageProvider storageProvider, IMapper mapper) : base(cache, definitionInfoProviders, reader, modWriter, modParser, gameService, storageProvider, mapper)
-        {
-            this.messageBus = messageBus;
-            this.exportService = exportService;
-            this.modCollectionExporter = modCollectionExporter;
-        }
-
-        #endregion Constructors
 
         #region Enums
 
@@ -143,6 +123,7 @@ namespace IronyModManager.Services
             {
                 return null;
             }
+
             var instance = GetModelInstance<IModCollection>();
             instance.Game = game.Type;
             return instance;
@@ -160,6 +141,7 @@ namespace IronyModManager.Services
             {
                 return false;
             }
+
             lock (serviceLock)
             {
                 var collections = StorageProvider.GetModCollections().ToList();
@@ -173,6 +155,7 @@ namespace IronyModManager.Services
                     }
                 }
             }
+
             return false;
         }
 
@@ -202,14 +185,16 @@ namespace IronyModManager.Services
             {
                 return Task.FromResult(false);
             }
+
             var collection = Mapper.Map<IModCollection>(modCollection);
             if (string.IsNullOrWhiteSpace(collection.MergedFolderName) && exportMods)
             {
                 collection.MergedFolderName = collection.Name.GenerateValidFileName();
             }
+
             var path = GetPatchModDirectory(game, modCollection);
             var modNameOverride = $"({collection.Name}) ";
-            var parameters = new ModCollectionExporterParams()
+            var parameters = new ModCollectionExporterParams
             {
                 File = file,
                 Mod = collection,
@@ -243,28 +228,28 @@ namespace IronyModManager.Services
             {
                 var modExport = mods.ToList();
                 var collection = GetAllModCollectionsInternal().FirstOrDefault(p => p.IsSelected);
-                var patchModName = GenerateCollectionPatchName(collection.Name);
+                var patchModName = GenerateCollectionPatchName(collection!.Name);
                 var allMods = GetInstalledModsInternal(GameService.GetSelected(), false);
                 var patchMod = allMods.FirstOrDefault(p => p.Name.Equals(patchModName));
                 if (patchMod == null)
                 {
                     var game = GameService.GetSelected();
-                    if (await ModWriter.ModDirectoryExistsAsync(new ModWriterParameters()
-                    {
-                        RootDirectory = GetPatchModDirectory(game, patchModName)
-                    }))
+                    if (await ModWriter.ModDirectoryExistsAsync(new ModWriterParameters { RootDirectory = GetPatchModDirectory(game, patchModName) }))
                     {
                         patchMod = GeneratePatchModDescriptor(allMods, game, patchModName);
                     }
                 }
+
                 if (patchMod != null && collection.PatchModEnabled)
                 {
                     modExport.Add(patchMod);
                 }
+
                 await PopulateModFilesInternalAsync(modExport);
                 var reports = await ParseReportAsync(modExport);
                 return await exportService.ExportAsync(reports, path);
             }
+
             return false;
         }
 
@@ -281,8 +266,9 @@ namespace IronyModManager.Services
             {
                 return Task.FromResult(false);
             }
+
             var collection = Mapper.Map<IModCollection>(modCollection);
-            var parameters = new ModCollectionExporterParams()
+            var parameters = new ModCollectionExporterParams
             {
                 File = file,
                 Mod = collection,
@@ -306,8 +292,9 @@ namespace IronyModManager.Services
             {
                 return Task.FromResult(false);
             }
+
             var collection = Mapper.Map<IModCollection>(modCollection);
-            var parameters = new ModCollectionExporterParams()
+            var parameters = new ModCollectionExporterParams
             {
                 File = file,
                 Mod = collection,
@@ -330,12 +317,14 @@ namespace IronyModManager.Services
             {
                 return null;
             }
+
             var collections = StorageProvider.GetModCollections();
             if (collections?.Count() > 0)
             {
                 var collection = collections.FirstOrDefault(c => c.Name.Equals(name, StringComparison.OrdinalIgnoreCase) && c.Game.Equals(game.Type));
                 return collection;
             }
+
             return null;
         }
 
@@ -360,18 +349,15 @@ namespace IronyModManager.Services
             {
                 return null;
             }
+
             var instance = GetModelInstance<IModCollection>();
-            var result = await modCollectionExporter.ImportAsync(new ModCollectionExporterParams()
-            {
-                File = file,
-                Mod = instance,
-                DescriptorType = MapDescriptorType(game.ModDescriptorType)
-            });
+            var result = await modCollectionExporter.ImportAsync(new ModCollectionExporterParams { File = file, Mod = instance, DescriptorType = MapDescriptorType(game.ModDescriptorType) });
             if (result != null)
             {
                 MapImportResult(instance, result, false);
                 return instance;
             }
+
             return null;
         }
 
@@ -387,6 +373,7 @@ namespace IronyModManager.Services
             {
                 return null;
             }
+
             var instance = await GetImportedCollectionDetailsAsync(file);
             if (instance != null)
             {
@@ -395,21 +382,23 @@ namespace IronyModManager.Services
                 {
                     game = GameService.Get().FirstOrDefault(p => p.Type.Equals(instance.Game));
                 }
+
                 var path = GetPatchModDirectory(game, instance);
                 var exportPath = GetPatchModDirectory(game, !string.IsNullOrWhiteSpace(instance.MergedFolderName) ? instance.MergedFolderName : instance.Name);
-                var result = await modCollectionExporter.ImportModDirectoryAsync(new ModCollectionExporterParams()
+                var result = await modCollectionExporter.ImportModDirectoryAsync(new ModCollectionExporterParams
                 {
                     File = file,
                     ModDirectory = path,
                     Mod = instance,
                     ExportModDirectory = exportPath,
-                    DescriptorType = MapDescriptorType(game.ModDescriptorType)
+                    DescriptorType = MapDescriptorType(game!.ModDescriptorType)
                 });
                 if (result)
                 {
                     return instance;
                 }
             }
+
             return null;
         }
 
@@ -426,26 +415,26 @@ namespace IronyModManager.Services
             {
                 return null;
             }
+
             var modExport = mods.ToList();
             var collection = GetAllModCollectionsInternal().FirstOrDefault(p => p.IsSelected);
-            var patchModName = GenerateCollectionPatchName(collection.Name);
+            var patchModName = GenerateCollectionPatchName(collection!.Name);
             var allMods = GetInstalledModsInternal(GameService.GetSelected(), false);
             var patchMod = allMods.FirstOrDefault(p => p.Name.Equals(patchModName));
             if (patchMod == null)
             {
                 var game = GameService.GetSelected();
-                if (await ModWriter.ModDirectoryExistsAsync(new ModWriterParameters()
-                {
-                    RootDirectory = GetPatchModDirectory(game, patchModName)
-                }))
+                if (await ModWriter.ModDirectoryExistsAsync(new ModWriterParameters { RootDirectory = GetPatchModDirectory(game, patchModName) }))
                 {
                     patchMod = GeneratePatchModDescriptor(allMods, game, patchModName);
                 }
             }
+
             if (patchMod != null)
             {
                 modExport.Add(patchMod);
             }
+
             await PopulateModFilesInternalAsync(modExport);
             var currentReports = await ParseReportAsync(modExport);
             return exportService.CompareReports(currentReports.ToList(), importedReports.ToList());
@@ -503,6 +492,7 @@ namespace IronyModManager.Services
         /// </summary>
         /// <param name="collection">The collection.</param>
         /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
+        /// <exception cref="ArgumentNullException">nameof(collection)</exception>
         /// <exception cref="System.ArgumentNullException">collection</exception>
         public virtual bool Save(IModCollection collection)
         {
@@ -510,11 +500,13 @@ namespace IronyModManager.Services
             {
                 throw new ArgumentNullException(nameof(collection));
             }
+
             var game = GameService.GetSelected();
             if (game == null)
             {
                 return false;
             }
+
             lock (serviceLock)
             {
                 var collections = StorageProvider.GetModCollections().ToList();
@@ -525,6 +517,7 @@ namespace IronyModManager.Services
                     {
                         collections.Remove(existing);
                     }
+
                     if (collection.IsSelected)
                     {
                         foreach (var item in collections.Where(p => p.Game.Equals(collection.Game) && p.IsSelected))
@@ -533,6 +526,7 @@ namespace IronyModManager.Services
                         }
                     }
                 }
+
                 collections.Add(collection);
                 return StorageProvider.SetModCollections(collections);
             }
@@ -556,6 +550,7 @@ namespace IronyModManager.Services
             {
                 perc = maxPerc;
             }
+
             return perc;
         }
 
@@ -570,13 +565,7 @@ namespace IronyModManager.Services
             async Task<IModCollection> performImport(IGame game)
             {
                 var instance = Create();
-                var parameters = new ModCollectionExporterParams()
-                {
-                    ModDirectory = Path.Combine(game.UserDirectory, Shared.Constants.ModDirectory),
-                    File = file,
-                    Mod = instance,
-                    DescriptorType = MapDescriptorType(game.ModDescriptorType)
-                };
+                var parameters = new ModCollectionExporterParams { ModDirectory = Path.Combine(game.UserDirectory, Shared.Constants.ModDirectory), File = file, Mod = instance, DescriptorType = MapDescriptorType(game.ModDescriptorType) };
                 ICollectionImportResult result = null;
                 switch (importType)
                 {
@@ -605,17 +594,17 @@ namespace IronyModManager.Services
                         {
                             DIResolver.Get<ILogger>().Error(ex);
                         }
-                        break;
 
-                    default:
                         break;
                 }
+
                 if (result != null)
                 {
                     // Order of operations is very important here
                     MapImportResult(instance, result, true);
                     return instance;
                 }
+
                 return null;
             }
 
@@ -624,6 +613,7 @@ namespace IronyModManager.Services
             {
                 return null;
             }
+
             return await performImport(game);
         }
 
@@ -644,6 +634,7 @@ namespace IronyModManager.Services
                     modCollection.Game = collectionGame.Type;
                 }
             }
+
             modCollection.IsSelected = importResult.IsSelected;
             modCollection.MergedFolderName = importResult.MergedFolderName;
             modCollection.ModNames = importResult.ModNames;
@@ -662,8 +653,11 @@ namespace IronyModManager.Services
 
                         // Filtering as local mods don't have priority in case of paradox launcher json import
                         var filteredMods = mods.GroupBy(p => p.RemoteId).Select(p => p.Any(o => o.Source != ModSource.Local) ? p.FirstOrDefault(o => o.Source != ModSource.Local) : p.FirstOrDefault());
-                        var collectionMods = filteredMods.Where(p => importResult.ModIds.Any(x => (x.ParadoxId.HasValue && x.ParadoxId.GetValueOrDefault() == p.RemoteId.GetValueOrDefault()) || (x.SteamId.HasValue && x.SteamId.GetValueOrDefault() == p.RemoteId.GetValueOrDefault()))).
-                            OrderBy(p => sort.IndexOf(sort.FirstOrDefault(x => (x.ParadoxId.HasValue && x.ParadoxId.GetValueOrDefault() == p.RemoteId.GetValueOrDefault()) || (x.SteamId.HasValue && x.SteamId.GetValueOrDefault() == p.RemoteId.GetValueOrDefault())))).ToList();
+                        var collectionMods = filteredMods
+                            .Where(p => importResult.ModIds.Any(x =>
+                                (x.ParadoxId.HasValue && x.ParadoxId.GetValueOrDefault() == p!.RemoteId.GetValueOrDefault()) || (x.SteamId.HasValue && x.SteamId.GetValueOrDefault() == p!.RemoteId.GetValueOrDefault()))).OrderBy(p =>
+                                sort.IndexOf(sort.FirstOrDefault(x =>
+                                    (x.ParadoxId.HasValue && x.ParadoxId.GetValueOrDefault() == p.RemoteId.GetValueOrDefault()) || (x.SteamId.HasValue && x.SteamId.GetValueOrDefault() == p.RemoteId.GetValueOrDefault())))).ToList();
                         collectionMods = collectionMods.GroupBy(p => p.FullPath).Select(p => p.FirstOrDefault()).ToList();
                         modCollection.Mods = collectionMods.Select(p => p.DescriptorFile).ToList();
                         modCollection.ModNames = collectionMods.Select(p => p.Name).ToList();
@@ -676,8 +670,8 @@ namespace IronyModManager.Services
                     if (mods.Any())
                     {
                         var sort = importResult.FullPaths.ToList();
-                        var collectionMods = mods.Where(p => importResult.FullPaths.Any(x => x.StandardizeDirectorySeparator().Equals(p.FullPath.StandardizeDirectorySeparator(), StringComparison.OrdinalIgnoreCase))).
-                            OrderBy(p => sort.IndexOf(sort.FirstOrDefault(x => x.StandardizeDirectorySeparator().Equals(p.FullPath.StandardizeDirectorySeparator(), StringComparison.OrdinalIgnoreCase)))).ToList();
+                        var collectionMods = mods.Where(p => importResult.FullPaths.Any(x => x.StandardizeDirectorySeparator().Equals(p.FullPath.StandardizeDirectorySeparator(), StringComparison.OrdinalIgnoreCase))).OrderBy(p =>
+                            sort.IndexOf(sort.FirstOrDefault(x => x.StandardizeDirectorySeparator().Equals(p.FullPath.StandardizeDirectorySeparator(), StringComparison.OrdinalIgnoreCase)))).ToList();
                         collectionMods = collectionMods.GroupBy(p => p.FullPath).Select(p => p.FirstOrDefault()).ToList();
                         modCollection.Mods = collectionMods.Select(p => p.DescriptorFile).ToList();
                         modCollection.ModNames = collectionMods.Select(p => p.Name).ToList();
@@ -691,12 +685,13 @@ namespace IronyModManager.Services
                 if (mods.Any() && importResult.Descriptors != null && importResult.Descriptors.Any())
                 {
                     var sort = importResult.Descriptors.ToList();
-                    var collectionMods = mods.Where(p => importResult.Descriptors.Any(x => x.Equals(p.DescriptorFile, StringComparison.OrdinalIgnoreCase))).OrderBy(p => sort.IndexOf(sort.FirstOrDefault(x => x.Equals(p.DescriptorFile, StringComparison.OrdinalIgnoreCase)))).ToList();
+                    var collectionMods = mods.Where(p => importResult.Descriptors.Any(x => x.Equals(p.DescriptorFile, StringComparison.OrdinalIgnoreCase)))
+                        .OrderBy(p => sort.IndexOf(sort.FirstOrDefault(x => x.Equals(p.DescriptorFile, StringComparison.OrdinalIgnoreCase)))).ToList();
                     modCollection.ModPaths = collectionMods.Select(p => p.FullPath).ToList();
                     if (modCollection.ModPaths.Count() != modCollection.Mods.Count() && importResult.ModNames != null && importResult.ModNames.Any())
                     {
                         sort = importResult.ModNames.ToList();
-                        collectionMods = mods.Where(p => importResult.ModNames.Any(x => x.Equals(p.Name))).OrderBy(p => sort.IndexOf(sort.FirstOrDefault(x => x.Equals(p.Name)))).ToList();
+                        collectionMods = [.. mods.Where(p => importResult.ModNames.Any(x => x.Equals(p.Name))).OrderBy(p => sort.IndexOf(sort.FirstOrDefault(x => x.Equals(p.Name))))];
                         collectionMods = collectionMods.GroupBy(p => p.FullPath).Select(p => p.FirstOrDefault()).ToList();
                         modCollection.ModPaths = collectionMods.Select(p => p.FullPath).ToList();
                     }
@@ -719,22 +714,22 @@ namespace IronyModManager.Services
             var total = mods.SelectMany(p => p.Files).Count(p => game.GameFolders.Any(a => p.StartsWith(a)));
             var progress = 0;
             double lastPercentage = 0;
-            int i = 0;
-            var tasks = new List<Task<Tuple<int,int,IHashFileReport>>>();
+            var i = 0;
+            var tasks = new List<Task<Tuple<int, int, IHashFileReport>>>();
 
             foreach (var mod in mods)
             {
                 var report = GetModelInstance<IHashReport>();
                 report.Name = mod.Name;
                 report.ReportType = HashReportType.Collection;
-                int j = 0;
+                var j = 0;
 
-                foreach (var item in mod.Files.Where(p => game.GameFolders.Any(a => p.StartsWith(a))))
+                foreach (var item in mod.Files.Where(p => game.GameFolders.Any(p.StartsWith)))
                 {
-                    string modPath = mod.FullPath;
-                    string filePath = item;
-                    int modIndex = i;
-                    int fileIndex = j;
+                    var modPath = mod.FullPath;
+                    var filePath = item;
+                    var modIndex = i;
+                    var fileIndex = j;
                     tasks.Add(Task.Run(() =>
                     {
                         var info = Reader.GetFileInfo(modPath, filePath);
@@ -745,34 +740,40 @@ namespace IronyModManager.Services
                             fileReport.Hash = info.ContentSHA;
                             return new Tuple<int, int, IHashFileReport>(modIndex, fileIndex, fileReport);
                         }
+
                         return null;
                     }));
                     j++;
                 }
+
                 reports.Add(report);
                 reports2.Add(new IHashFileReport[j]);
                 i++;
             }
+
             while (tasks.Count > 0)
             {
                 i = Task.WaitAny(tasks.ToArray());
-                Tuple<int, int, IHashFileReport> result = tasks[i].Result;
+                var result = tasks[i].Result;
                 tasks.RemoveAt(i);
                 if (result != null)
                 {
                     reports2[result.Item1][result.Item2] = result.Item3;
                 }
+
                 progress++;
                 var percentage = GetProgressPercentage(total, progress);
-                if (percentage != lastPercentage)
+                if (percentage.IsNotNearlyEqual(lastPercentage))
                 {
                     await messageBus.PublishAsync(new ModReportExportEvent(1, percentage));
                 }
+
                 lastPercentage = percentage;
             }
+
             for (i = 0; i < reports.Count; i++)
             {
-                reports[i].Reports = reports2[i].ToList();
+                reports[i].Reports = [.. reports2[i]];
             }
 
             return reports;
