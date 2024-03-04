@@ -4,13 +4,14 @@
 // Created          : 08-12-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-23-2023
+// Last Modified On : 03-04-2024
 // ***********************************************************************
 // <copyright file="ParadoxLauncherImporter.cs" company="Mario">
 //     Mario
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
+
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -28,38 +29,24 @@ using RepoDb;
 namespace IronyModManager.IO.Mods.Importers
 {
     /// <summary>
-    /// Class ParadoxLauncherImporter.
+    /// The paradox launcher importer.
     /// </summary>
     [ExcludeFromCoverage("Skipping testing IO logic.")]
-    internal class ParadoxLauncherImporter
+    internal class ParadoxLauncherImporter(ILogger logger)
     {
         #region Fields
 
         /// <summary>
         /// The logger
         /// </summary>
-        private readonly ILogger logger;
+        private readonly ILogger logger = logger;
 
         /// <summary>
         /// The trace
         /// </summary>
-        private readonly SQLTraceLog trace;
+        private readonly SQLTraceLog trace = new(logger);
 
         #endregion Fields
-
-        #region Constructors
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="ParadoxLauncherImporter" /> class.
-        /// </summary>
-        /// <param name="logger">The logger.</param>
-        public ParadoxLauncherImporter(ILogger logger)
-        {
-            this.logger = logger;
-            trace = new SQLTraceLog(logger);
-        }
-
-        #endregion Constructors
 
         #region Enums
 
@@ -99,6 +86,7 @@ namespace IronyModManager.IO.Mods.Importers
             {
                 return null;
             }
+
             // Caching sucks in this ORM
             DbFieldCache.Flush();
             FieldCache.Flush();
@@ -140,13 +128,15 @@ namespace IronyModManager.IO.Mods.Importers
                     {
                         return (ex, null);
                     }
+
                     if (!string.IsNullOrWhiteSpace(model.Game) && !string.IsNullOrWhiteSpace(model.Name))
                     {
                         // Validate whether this really is v2 (execting length larger than 4 as a dumb best guess)
-                        if (model.Mods.Any(p => p.Position.Length >= 4))
+                        if (model.Mods.Any(p => p.Position.Length > 4))
                         {
                             var result = DIResolver.Get<ICollectionImportResult>();
                             result.Name = model.Name;
+
                             // Will need to lookup the game and mod ids in the mod service
                             result.Game = model.Game;
                             var mods = model.Mods.Where(p => p.Enabled).OrderBy(p => p.Position);
@@ -157,18 +147,22 @@ namespace IronyModManager.IO.Mods.Importers
                                 {
                                     result.ParadoxId = pdxid;
                                 }
+
                                 if (long.TryParse(p.SteamId, out var steamId))
                                 {
                                     result.SteamId = steamId;
                                 }
+
                                 return result;
                             }).ToList();
                             return (null, result);
                         }
                     }
                 }
+
                 return (null, null);
             }
+
             async Task<(Exception, ICollectionImportResult)> parseV3()
             {
                 var content = await File.ReadAllTextAsync(parameters.File);
@@ -183,10 +177,12 @@ namespace IronyModManager.IO.Mods.Importers
                     {
                         return (ex, null);
                     }
+
                     if (!string.IsNullOrWhiteSpace(model.Game) && !string.IsNullOrWhiteSpace(model.Name))
                     {
                         var result = DIResolver.Get<ICollectionImportResult>();
                         result.Name = model.Name;
+
                         // Will need to lookup the game and mod ids in the mod service
                         result.Game = model.Game;
                         var mods = model.Mods.Where(p => p.Enabled).OrderBy(p => p.Position);
@@ -197,15 +193,18 @@ namespace IronyModManager.IO.Mods.Importers
                             {
                                 result.ParadoxId = pdxid;
                             }
+
                             if (long.TryParse(p.SteamId, out var steamId))
                             {
                                 result.SteamId = steamId;
                             }
+
                             return result;
                         }).ToList();
                         return (null, result);
                     }
                 }
+
                 return (null, null);
             }
 
@@ -217,24 +216,29 @@ namespace IronyModManager.IO.Mods.Importers
                 {
                     return result.Item2;
                 }
+
                 if (result.Item1 != null)
                 {
                     exceptions.Add(result.Item1);
                 }
+
                 result = await parseV3();
                 if (result.Item2 != null)
                 {
                     return result.Item2;
                 }
+
                 if (result.Item1 != null)
                 {
                     exceptions.Add(result.Item1);
                 }
+
                 if (exceptions.Any())
                 {
                     throw new AggregateException(exceptions);
                 }
             }
+
             return null;
         }
 
@@ -251,7 +255,7 @@ namespace IronyModManager.IO.Mods.Importers
                 var activeCollection = (await con.QueryAsync<Models.Paradox.v2.Playsets>(p => p.IsActive == true, trace: trace)).FirstOrDefault();
                 if (activeCollection != null)
                 {
-                    var collectionMods = await con.QueryAsync<Models.Paradox.v2.PlaysetsMods>(p => p.PlaysetId == activeCollection.Id.ToString(), trace: trace);
+                    var collectionMods = await con.QueryAsync<Models.Paradox.v2.PlaysetsMods>(p => p.PlaysetId == activeCollection.Id, trace: trace);
                     if (collectionMods?.Count() > 0)
                     {
                         var mods = await con.QueryAllAsync<Models.Paradox.v2.Mods>(trace: trace);
@@ -269,6 +273,7 @@ namespace IronyModManager.IO.Mods.Importers
                             {
                                 result.FullPaths = validMods.Select(p => p.DirPath.StandardizeDirectorySeparator()).ToList();
                             }
+
                             result.ModNames = validMods.Select(p => p.DisplayName).ToList();
                             return result;
                         }
@@ -279,8 +284,8 @@ namespace IronyModManager.IO.Mods.Importers
             {
                 logger.Error(ex);
             }
+
             con.Close();
-            con.Dispose();
             return null;
         }
 
@@ -297,7 +302,7 @@ namespace IronyModManager.IO.Mods.Importers
                 var activeCollection = (await con.QueryAsync<Models.Paradox.v4.Playsets>(p => p.IsActive == true, trace: trace)).FirstOrDefault();
                 if (activeCollection != null)
                 {
-                    var collectionMods = await con.QueryAsync<Models.Paradox.v4.PlaysetsMods>(p => p.PlaysetId == activeCollection.Id.ToString(), trace: trace);
+                    var collectionMods = await con.QueryAsync<Models.Paradox.v4.PlaysetsMods>(p => p.PlaysetId == activeCollection.Id, trace: trace);
                     if (collectionMods?.Count() > 0)
                     {
                         var mods = await con.QueryAllAsync<Models.Paradox.v4.Mods>(trace: trace);
@@ -315,6 +320,7 @@ namespace IronyModManager.IO.Mods.Importers
                             {
                                 result.FullPaths = validMods.Select(p => p.DirPath.StandardizeDirectorySeparator()).ToList();
                             }
+
                             result.ModNames = validMods.Select(p => p.DisplayName).ToList();
                             return result;
                         }
@@ -325,8 +331,8 @@ namespace IronyModManager.IO.Mods.Importers
             {
                 logger.Error(ex);
             }
+
             con.Close();
-            con.Dispose();
             return null;
         }
 
@@ -343,7 +349,7 @@ namespace IronyModManager.IO.Mods.Importers
                 var activeCollection = (await con.QueryAsync<Models.Paradox.v4.Playsets>(p => p.IsActive == true, trace: trace)).FirstOrDefault();
                 if (activeCollection != null)
                 {
-                    var collectionMods = await con.QueryAsync<Models.Paradox.v4.PlaysetsMods>(p => p.PlaysetId == activeCollection.Id.ToString(), trace: trace);
+                    var collectionMods = await con.QueryAsync<Models.Paradox.v4.PlaysetsMods>(p => p.PlaysetId == activeCollection.Id, trace: trace);
                     if (collectionMods?.Count() > 0)
                     {
                         var mods = await con.QueryAllAsync<Models.Paradox.v5.Mods>(trace: trace);
@@ -361,6 +367,7 @@ namespace IronyModManager.IO.Mods.Importers
                             {
                                 result.FullPaths = validMods.Select(p => p.DirPath.StandardizeDirectorySeparator()).ToList();
                             }
+
                             result.ModNames = validMods.Select(p => p.DisplayName).ToList();
                             return result;
                         }
@@ -371,8 +378,8 @@ namespace IronyModManager.IO.Mods.Importers
             {
                 logger.Error(ex);
             }
+
             con.Close();
-            con.Dispose();
             return null;
         }
 
@@ -383,7 +390,7 @@ namespace IronyModManager.IO.Mods.Importers
         /// <returns>System.String.</returns>
         protected virtual string GetDbPath(ModCollectionExporterParams parameters)
         {
-            return Path.Combine(Path.GetDirectoryName(parameters.ModDirectory), Constants.Sql_db_path);
+            return Path.Combine(Path.GetDirectoryName(parameters.ModDirectory)!, Constants.Sql_db_path);
         }
 
         /// <summary>
@@ -413,6 +420,7 @@ namespace IronyModManager.IO.Mods.Importers
                     {
                         return Version.v5;
                     }
+
                     if (changes.Any(c => c.Name.Equals(Constants.SqlV4Id.Name, StringComparison.OrdinalIgnoreCase)))
                     {
                         return Version.v4;
@@ -422,8 +430,8 @@ namespace IronyModManager.IO.Mods.Importers
             catch
             {
             }
+
             con.Close();
-            con.Dispose();
             return Version.Default;
         }
 
