@@ -4,7 +4,7 @@
 // Created          : 03-20-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-24-2024
+// Last Modified On : 03-07-2024
 // ***********************************************************************
 // <copyright file="MergeViewerControlViewModel.cs" company="Mario">
 //     Mario
@@ -41,17 +41,9 @@ namespace IronyModManager.ViewModels.Controls
 {
     /// <summary>
     /// Class MergeViewerControlViewModel.
-    /// Implements the <see cref="IronyModManager.Common.ViewModels.BaseViewModel" />
+    /// Implements the <see cref="BaseViewModel" />
     /// </summary>
-    /// <seealso cref="IronyModManager.Common.ViewModels.BaseViewModel" />
-    /// <param name="scrollState">State of the scroll.</param>
-    /// <param name="modPatchCollectionService">The mod patch collection service.</param>
-    /// <param name="hotkeyPressedHandler">The hotkey pressed handler.</param>
-    /// <param name="appAction">The application action.</param>
-    /// <param name="externalEditorService">The external editor service.</param>
-    /// <param name="notificationAction">The notification action.</param>
-    /// <param name="localizationManager">The localization manager.</param>
-    /// <remarks>Initializes a new instance of the <see cref="MergeViewerControlViewModel" /> class.</remarks>
+    /// <seealso cref="BaseViewModel" />
     [ExcludeFromCoverage("This should be tested via functional testing.")]
     public class MergeViewerControlViewModel(
         IAppStateService appStateService,
@@ -527,6 +519,18 @@ namespace IronyModManager.ViewModels.Controls
         public virtual ReactiveCommand<bool, Unit> PrevConflictCommand { get; protected set; }
 
         /// <summary>
+        /// Gets or sets a value representing the previous left diff.<see cref="System.Collections.Generic.IList{IronyModManager.ViewModels.Controls.MergeViewerControlViewModel.DiffPieceWithIndex}" />
+        /// </summary>
+        /// <value>The previous left diff.</value>
+        public virtual IList<DiffPieceWithIndex> PreviousLeftDiff { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value representing the previous right diff.<see cref="System.Collections.Generic.IList{IronyModManager.ViewModels.Controls.MergeViewerControlViewModel.DiffPieceWithIndex}" />
+        /// </summary>
+        /// <value>The previous right diff.</value>
+        public IList<DiffPieceWithIndex> PreviousRightDiff { get; set; }
+
+        /// <summary>
         /// Gets or sets the read only editor.
         /// </summary>
         /// <value>The read only editor.</value>
@@ -753,6 +757,8 @@ namespace IronyModManager.ViewModels.Controls
         {
             var builder = new SideBySideDiffBuilder(new Differ());
             var diff = builder.BuildDiffModel(left, right, true);
+            PreviousLeftDiff = LeftDiff;
+            PreviousRightDiff = RightDiff;
             LeftDiff = GetDiffPieceWithIndex(diff.OldText.Lines);
             RightDiff = GetDiffPieceWithIndex(diff.NewText.Lines);
         }

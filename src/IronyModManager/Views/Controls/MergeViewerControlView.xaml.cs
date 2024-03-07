@@ -533,9 +533,26 @@ namespace IronyModManager.Views.Controls
                     return;
                 }
 
+                var lineDeleted = ViewModel!.PreviousLeftDiff != null && s != null && s.Count < ViewModel!.PreviousLeftDiff.Count && s.Count > 0 && ViewModel!.PreviousLeftDiff.Count > 0;
                 var locLine = diffLeft.TextArea.Caret.Location.Line;
+                if (lineDeleted)
+                {
+                    locLine--;
+                    if (locLine < 1)
+                    {
+                        locLine = 1;
+                    }
+                }
+
+                var locColumn = diffLeft.TextArea.Caret.Location.Column;
                 diffLeft.SafeSetText(newText);
-                diffLeft.TextArea.Caret.Location = new TextLocation(locLine, diffLeft.CaretOffset);
+
+                if (lineDeleted)
+                {
+                    locColumn = diffLeft.GetLastColumnByLine(locLine);
+                }
+
+                diffLeft.TextArea.Caret.Location = new TextLocation(locLine, locColumn);
             }).DisposeWith(disposables);
 
             this.WhenAnyValue(v => v.ViewModel.RightDiff).Subscribe(s =>
@@ -550,9 +567,26 @@ namespace IronyModManager.Views.Controls
                     return;
                 }
 
+                var lineDeleted = ViewModel!.PreviousRightDiff != null && s != null && s.Count < ViewModel!.PreviousRightDiff.Count && s.Count > 0 && ViewModel!.PreviousRightDiff.Count > 0;
                 var locLine = diffRight.TextArea.Caret.Location.Line;
+                if (lineDeleted)
+                {
+                    locLine--;
+                    if (locLine < 1)
+                    {
+                        locLine = 1;
+                    }
+                }
+
+                var locColumn = diffRight.TextArea.Caret.Location.Column;
                 diffRight.SafeSetText(newText);
-                diffRight.TextArea.Caret.Location = new TextLocation(locLine, diffRight.CaretOffset);
+
+                if (lineDeleted)
+                {
+                    locColumn = diffRight.GetLastColumnByLine(locLine);
+                }
+
+                diffRight.TextArea.Caret.Location = new TextLocation(locLine, locColumn);
             });
 
             this.WhenAnyValue(v => v.ViewModel.LeftSidePatchMod).Subscribe(s =>

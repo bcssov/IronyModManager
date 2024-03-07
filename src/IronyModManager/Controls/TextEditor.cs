@@ -107,6 +107,22 @@ namespace IronyModManager.Controls
         }
 
         /// <summary>
+        /// Gets a last column by line.
+        /// </summary>
+        /// <param name="line">The line.</param>
+        /// <returns>An int.</returns>
+        public int GetLastColumnByLine(int line)
+        {
+            var docLine = Document.GetLineByNumber(line);
+            if (docLine != null && docLine.Length != 0)
+            {
+                return docLine.Length + 1;
+            }
+
+            return 0;
+        }
+
+        /// <summary>
         /// Gets a middle visible line.
         /// </summary>
         /// <returns>An int.</returns>
