@@ -13,7 +13,7 @@ Check out the detailed overview on the [wiki](https://github.com/bcssov/IronyMod
 
 ### Download
 * Latest stable version: [v1.25.161](https://github.com/bcssov/IronyModManager/releases/tag/v1.25.161)
-* Latest prerelease version: [v1.26.137-rc](https://github.com/bcssov/IronyModManager/releases/tag/v1.26.137-rc)
+* Latest prerelease version: [v1.26.138-rc](https://github.com/bcssov/IronyModManager/releases/tag/v1.26.138-rc)
 
 
 ### Discord
