@@ -4,7 +4,7 @@
 // Created          : 03-20-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-24-2024
+// Last Modified On : 03-07-2024
 // ***********************************************************************
 // <copyright file="MergeViewerControlView.xaml.cs" company="Mario">
 //     Mario
@@ -353,8 +353,8 @@ namespace IronyModManager.Views.Controls
             diffLeft.TextArea.TextView.BackgroundRenderers.Add(diffLeftRenderer);
             diffRight.TextArea.LeftMargins.Add(diffRightMargin);
             diffRight.TextArea.TextView.BackgroundRenderers.Add(diffRightRenderer);
-            diffLeft.Text = string.Join(Environment.NewLine, ViewModel.LeftDiff);
-            diffRight.Text = string.Join(Environment.NewLine, ViewModel.RightDiff);
+            diffLeft.SafeSetText(string.Join(Environment.NewLine, ViewModel.LeftDiff));
+            diffRight.SafeSetText(string.Join(Environment.NewLine, ViewModel.RightDiff));
             diffLeft.IsReadOnly = !ViewModel.LeftSidePatchMod;
             diffRight.IsReadOnly = !ViewModel.RightSidePatchMod;
 
@@ -533,7 +533,9 @@ namespace IronyModManager.Views.Controls
                     return;
                 }
 
-                diffLeft.Text = newText;
+                var locLine = diffLeft.TextArea.Caret.Location.Line;
+                diffLeft.SafeSetText(newText);
+                diffLeft.TextArea.Caret.Location = new TextLocation(locLine, diffLeft.CaretOffset);
             }).DisposeWith(disposables);
 
             this.WhenAnyValue(v => v.ViewModel.RightDiff).Subscribe(s =>
@@ -548,7 +550,9 @@ namespace IronyModManager.Views.Controls
                     return;
                 }
 
-                diffRight.Text = newText;
+                var locLine = diffRight.TextArea.Caret.Location.Line;
+                diffRight.SafeSetText(newText);
+                diffRight.TextArea.Caret.Location = new TextLocation(locLine, diffRight.CaretOffset);
             });
 
             this.WhenAnyValue(v => v.ViewModel.LeftSidePatchMod).Subscribe(s =>

@@ -4,7 +4,7 @@
 // Created          : 04-15-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-24-2024
+// Last Modified On : 03-07-2024
 // ***********************************************************************
 // <copyright file="TextEditor.cs" company="Mario">
 //     Mario
@@ -21,6 +21,7 @@ using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
 using Avalonia.Styling;
 using AvaloniaEdit;
+using AvaloniaEdit.Document;
 using AvaloniaEdit.Rendering;
 using IronyModManager.DI;
 using IronyModManager.Implementation.Actions;
@@ -124,6 +125,17 @@ namespace IronyModManager.Controls
         {
             var firstLine = TextArea.TextView.GetDocumentLineByVisualTop(ScrollViewer.Offset.Y).LineNumber;
             return firstLine;
+        }
+
+        /// <summary>
+        /// Saves a set text.
+        /// </summary>
+        /// <param name="value">The value.</param>
+        public void SafeSetText(string value)
+        {
+            var document = GetDocument();
+            document.Text = value ?? string.Empty;
+            CaretOffset = 0;
         }
 
         /// <summary>
@@ -251,6 +263,17 @@ namespace IronyModManager.Controls
             {
                 ScrollInitialized?.Invoke(this, EventArgs.Empty);
             }
+        }
+
+        /// <summary>
+        /// Get document.
+        /// </summary>
+        /// <returns>A TextDocument.<see cref="TextDocument" /></returns>
+        /// <exception cref="System.NullReferenceException">No document</exception>
+        private TextDocument GetDocument()
+        {
+            var document = Document;
+            return document ?? throw new NullReferenceException("No document");
         }
 
         #endregion Methods
