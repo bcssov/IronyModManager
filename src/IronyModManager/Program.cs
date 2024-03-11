@@ -31,6 +31,7 @@ using IronyModManager.Localization;
 using IronyModManager.Platform;
 using IronyModManager.Platform.Configuration;
 using IronyModManager.Shared;
+using IronyModManager.Views;
 using NLog;
 using ILogger = IronyModManager.Shared.ILogger;
 
@@ -225,10 +226,10 @@ namespace IronyModManager
                     ParseArguments(args.CommandLineArgs);
                     Dispatcher.UIThread.SafeInvoke(() =>
                     {
-                        var mainWindow = Helpers.GetMainWindow();
+                        var mainWindow = (MainWindow)Helpers.GetMainWindow();
                         mainWindow.Show();
                         mainWindow.Activate();
-                        var previousState = mainWindow.WindowState;
+                        var previousState = mainWindow.ActualState;
                         mainWindow.WindowState = WindowState.Minimized;
                         mainWindow.WindowState = previousState;
                     });
