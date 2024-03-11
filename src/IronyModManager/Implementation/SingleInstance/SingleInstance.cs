@@ -1,5 +1,4 @@
-﻿
-// ***********************************************************************
+﻿// ***********************************************************************
 // Assembly         : IronyModManager
 // Author           : Mario
 // Created          : 02-10-2024
@@ -20,12 +19,10 @@ using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 using Newtonsoft.Json;
 
 namespace IronyModManager.Implementation.SingleInstance
 {
-
     /// <summary>
     /// Class SingleInstance.
     /// </summary>
@@ -52,6 +49,11 @@ namespace IronyModManager.Implementation.SingleInstance
         /// The mutex name
         /// </summary>
         private static string mutexName;
+
+        /// <summary>
+        /// The thread
+        /// </summary>
+        private static Thread thread;
 
         #endregion Fields
 
@@ -90,7 +92,8 @@ namespace IronyModManager.Implementation.SingleInstance
                     mutex = new Mutex(true, $"Global\\{GetMutexName()}", out initial);
                     if (initial)
                     {
-                        Task.Run(Monitor);
+                        thread = new Thread(Monitor) { Name = typeof(SingleInstance).FullName, IsBackground = true };
+                        thread.Start();
                     }
                     else
                     {
@@ -118,7 +121,7 @@ namespace IronyModManager.Implementation.SingleInstance
         /// <summary>
         /// Monitors this instance.
         /// </summary>
-        public static async Task Monitor()
+        public static void Monitor()
         {
             using var pipe = new NamedPipeServerStream(GetMutexName(), PipeDirection.In, 1, PipeTransmissionMode.Byte, PipeOptions.CurrentUserOnly | PipeOptions.WriteThrough);
             while (mutex != null)
@@ -127,7 +130,7 @@ namespace IronyModManager.Implementation.SingleInstance
                 {
                     if (!pipe.IsConnected)
                     {
-                        await pipe.WaitForConnectionAsync();
+                        pipe.WaitForConnection();
                     }
 
                     var buffer = new byte[1024];
@@ -152,7 +155,7 @@ namespace IronyModManager.Implementation.SingleInstance
                 }
                 catch
                 {
-                    await Task.Delay(Delay);
+                    Thread.Sleep(Delay);
                 }
             }
         }
