@@ -5,15 +5,18 @@
 // Created          : 02-10-2024
 //
 // Last Modified By : Mario
-// Last Modified On : 02-10-2024
+// Last Modified On : 03-11-2024
 // ***********************************************************************
 // <copyright file="SingleInstance.cs" company="Mario">
 //     Mario
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
+
 using System;
+using System.Collections.Generic;
 using System.IO.Pipes;
+using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading;
@@ -76,7 +79,8 @@ namespace IronyModManager.Implementation.SingleInstance
         /// <summary>
         /// Initializes this instance.
         /// </summary>
-        public static void Initialize()
+        /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
+        public static bool Initialize()
         {
             lock (objLock)
             {
@@ -90,10 +94,7 @@ namespace IronyModManager.Implementation.SingleInstance
                     }
                     else
                     {
-                        var data = new Args()
-                        {
-                            CommandLineArgs = Environment.GetCommandLineArgs()
-                        };
+                        var data = new Args { CommandLineArgs = Environment.GetCommandLineArgs() };
                         var bytes = Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(data));
                         using var pipe = new NamedPipeClientStream(".", GetMutexName(), PipeDirection.Out, PipeOptions.CurrentUserOnly | PipeOptions.WriteThrough);
                         pipe.Connect();
@@ -103,10 +104,14 @@ namespace IronyModManager.Implementation.SingleInstance
                 catch
                 {
                 }
+
                 if (!initial)
                 {
                     Environment.Exit(0);
+                    return false;
                 }
+
+                return true;
             }
         }
 
@@ -115,7 +120,7 @@ namespace IronyModManager.Implementation.SingleInstance
         /// </summary>
         public static async Task Monitor()
         {
-            using var pipe = new NamedPipeServerStream(GetMutexName(), PipeDirection.In, maxNumberOfServerInstances: 1, PipeTransmissionMode.Byte, PipeOptions.CurrentUserOnly | PipeOptions.WriteThrough);
+            using var pipe = new NamedPipeServerStream(GetMutexName(), PipeDirection.In, 1, PipeTransmissionMode.Byte, PipeOptions.CurrentUserOnly | PipeOptions.WriteThrough);
             while (mutex != null)
             {
                 try
@@ -124,6 +129,7 @@ namespace IronyModManager.Implementation.SingleInstance
                     {
                         await pipe.WaitForConnectionAsync();
                     }
+
                     var buffer = new byte[1024];
                     var sb = new StringBuilder();
                     while (true)
@@ -133,8 +139,10 @@ namespace IronyModManager.Implementation.SingleInstance
                         {
                             break;
                         }
+
                         sb.Append(Encoding.UTF8.GetString(buffer));
                     }
+
                     var args = JsonConvert.DeserializeObject<Args>(sb.ToString());
                     pipe.Disconnect();
                     if (args != null)
@@ -173,10 +181,13 @@ namespace IronyModManager.Implementation.SingleInstance
                         {
                             break;
                         }
+
                         sb.Append($"{item:X2}");
                     }
+
                     mutexName = sb.ToString();
                 }
+
                 return mutexName;
             }
         }
