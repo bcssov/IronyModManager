@@ -234,11 +234,17 @@ namespace IronyModManager
                     Dispatcher.UIThread.SafeInvoke(() =>
                     {
                         var mainWindow = (MainWindow)Helpers.GetMainWindow();
-                        mainWindow.Show();
-                        mainWindow.Activate();
                         var previousState = mainWindow.ActualState;
-                        mainWindow.WindowState = WindowState.Minimized;
+                        if (mainWindow.WindowState != WindowState.Minimized)
+                        {
+                            mainWindow.WindowState = WindowState.Minimized;
+                        }
+
                         mainWindow.WindowState = previousState;
+                        mainWindow.Show();
+                        mainWindow.BringIntoView();
+                        mainWindow.Activate();
+                        mainWindow.Focus();
                     });
                 };
                 return result;
