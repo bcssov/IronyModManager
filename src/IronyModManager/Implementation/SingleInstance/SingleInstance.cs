@@ -1,28 +1,28 @@
-﻿
-// ***********************************************************************
+﻿// ***********************************************************************
 // Assembly         : IronyModManager
 // Author           : Mario
 // Created          : 02-10-2024
 //
 // Last Modified By : Mario
-// Last Modified On : 02-10-2024
+// Last Modified On : 03-11-2024
 // ***********************************************************************
 // <copyright file="SingleInstance.cs" company="Mario">
 //     Mario
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
+
 using System;
+using System.Collections.Generic;
 using System.IO.Pipes;
+using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 using Newtonsoft.Json;
 
 namespace IronyModManager.Implementation.SingleInstance
 {
-
     /// <summary>
     /// Class SingleInstance.
     /// </summary>
@@ -50,6 +50,11 @@ namespace IronyModManager.Implementation.SingleInstance
         /// </summary>
         private static string mutexName;
 
+        /// <summary>
+        /// The thread
+        /// </summary>
+        private static Thread thread;
+
         #endregion Fields
 
         #region Delegates
@@ -76,7 +81,8 @@ namespace IronyModManager.Implementation.SingleInstance
         /// <summary>
         /// Initializes this instance.
         /// </summary>
-        public static void Initialize()
+        /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
+        public static bool Initialize()
         {
             lock (objLock)
             {
@@ -86,14 +92,12 @@ namespace IronyModManager.Implementation.SingleInstance
                     mutex = new Mutex(true, $"Global\\{GetMutexName()}", out initial);
                     if (initial)
                     {
-                        Task.Run(Monitor);
+                        thread = new Thread(Monitor) { Name = typeof(SingleInstance).FullName, IsBackground = true };
+                        thread.Start();
                     }
                     else
                     {
-                        var data = new Args()
-                        {
-                            CommandLineArgs = Environment.GetCommandLineArgs()
-                        };
+                        var data = new Args { CommandLineArgs = Environment.GetCommandLineArgs() };
                         var bytes = Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(data));
                         using var pipe = new NamedPipeClientStream(".", GetMutexName(), PipeDirection.Out, PipeOptions.CurrentUserOnly | PipeOptions.WriteThrough);
                         pipe.Connect();
@@ -103,27 +107,32 @@ namespace IronyModManager.Implementation.SingleInstance
                 catch
                 {
                 }
+
                 if (!initial)
                 {
                     Environment.Exit(0);
+                    return false;
                 }
+
+                return true;
             }
         }
 
         /// <summary>
         /// Monitors this instance.
         /// </summary>
-        public static async Task Monitor()
+        public static void Monitor()
         {
-            using var pipe = new NamedPipeServerStream(GetMutexName(), PipeDirection.In, maxNumberOfServerInstances: 1, PipeTransmissionMode.Byte, PipeOptions.CurrentUserOnly | PipeOptions.WriteThrough);
+            using var pipe = new NamedPipeServerStream(GetMutexName(), PipeDirection.In, 1, PipeTransmissionMode.Byte, PipeOptions.CurrentUserOnly | PipeOptions.WriteThrough);
             while (mutex != null)
             {
                 try
                 {
                     if (!pipe.IsConnected)
                     {
-                        await pipe.WaitForConnectionAsync();
+                        pipe.WaitForConnection();
                     }
+
                     var buffer = new byte[1024];
                     var sb = new StringBuilder();
                     while (true)
@@ -133,8 +142,10 @@ namespace IronyModManager.Implementation.SingleInstance
                         {
                             break;
                         }
+
                         sb.Append(Encoding.UTF8.GetString(buffer));
                     }
+
                     var args = JsonConvert.DeserializeObject<Args>(sb.ToString());
                     pipe.Disconnect();
                     if (args != null)
@@ -144,7 +155,7 @@ namespace IronyModManager.Implementation.SingleInstance
                 }
                 catch
                 {
-                    await Task.Delay(Delay);
+                    Thread.Sleep(Delay);
                 }
             }
         }
@@ -173,10 +184,13 @@ namespace IronyModManager.Implementation.SingleInstance
                         {
                             break;
                         }
+
                         sb.Append($"{item:X2}");
                     }
+
                     mutexName = sb.ToString();
                 }
+
                 return mutexName;
             }
         }

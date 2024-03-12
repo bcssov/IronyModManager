@@ -4,7 +4,7 @@
 // Created          : 01-10-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-15-2024
+// Last Modified On : 03-11-2024
 // ***********************************************************************
 // <copyright file="MainWindow.xaml.cs" company="Mario">
 //     Mario
@@ -89,6 +89,16 @@ namespace IronyModManager.Views
         }
 
         #endregion Constructors
+
+        #region Properties
+
+        /// <summary>
+        /// The actual state
+        /// </summary>
+        /// <value>The actual state.</value>
+        public WindowState ActualState { get; set; }
+
+        #endregion Properties
 
         #region Methods
 
@@ -272,17 +282,11 @@ namespace IronyModManager.Views
                     preventShutdown = x.PreventShutdown;
                     if (shutdownRequested && !preventShutdown)
                     {
-                        Dispatcher.UIThread.InvokeAsync(() =>
-                        {
-                            ((IClassicDesktopStyleApplicationLifetime)Application.Current!.ApplicationLifetime!).Shutdown();
-                        });
+                        Dispatcher.UIThread.InvokeAsync(() => { ((IClassicDesktopStyleApplicationLifetime)Application.Current!.ApplicationLifetime!).Shutdown(); });
                     }
                 }).DisposeWith(disposables);
 
-            this.WhenAnyValue(v => v.ViewModel.RegisterHotkeyCommand).Subscribe(_ =>
-            {
-                InitializeHotKeys();
-            }).DisposeWith(disposables);
+            this.WhenAnyValue(v => v.ViewModel.RegisterHotkeyCommand).Subscribe(_ => { InitializeHotKeys(); }).DisposeWith(disposables);
 
             var hotkeySuspendHandler = DIResolver.Get<SuspendHotkeysHandler>();
             hotkeySuspendHandler.Subscribe(s =>
@@ -320,6 +324,23 @@ namespace IronyModManager.Views
         }
 
         /// <summary>
+        /// Called when [property changed].
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="change">The change.</param>
+        protected override void OnPropertyChanged<T>(AvaloniaPropertyChangedEventArgs<T> change)
+        {
+            base.OnPropertyChanged(change);
+            if (change != null && change.Property == WindowStateProperty)
+            {
+                if (WindowState != WindowState.Minimized)
+                {
+                    ActualState = WindowState;
+                }
+            }
+        }
+
+        /// <summary>
         /// Initializes the component.
         /// </summary>
         private void InitializeComponent()
@@ -328,6 +349,15 @@ namespace IronyModManager.Views
             if (!Design.IsDesignMode)
             {
                 InitWindowSize();
+            }
+
+            if (WindowState != WindowState.Minimized)
+            {
+                ActualState = WindowState;
+            }
+            else
+            {
+                ActualState = WindowState.Normal;
             }
         }
 

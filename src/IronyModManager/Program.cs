@@ -4,7 +4,7 @@
 // Created          : 01-10-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-21-2024
+// Last Modified On : 03-11-2024
 // ***********************************************************************
 // <copyright file="Program.cs" company="IronyModManager">
 //     Copyright (c) Mario. All rights reserved.
@@ -31,6 +31,7 @@ using IronyModManager.Localization;
 using IronyModManager.Platform;
 using IronyModManager.Platform.Configuration;
 using IronyModManager.Shared;
+using IronyModManager.Views;
 using NLog;
 using ILogger = IronyModManager.Shared.ILogger;
 
@@ -97,9 +98,15 @@ namespace IronyModManager
             try
             {
                 ParseArguments(args);
+                var canInitialize = true;
                 if (!StaticResources.CommandLineOptions.ShowFatalErrorNotification)
                 {
-                    InitSingleInstance();
+                    canInitialize = InitSingleInstance();
+                }
+
+                if (!canInitialize)
+                {
+                    return;
                 }
 
                 var app = BuildAvaloniaApp();
@@ -209,12 +216,13 @@ namespace IronyModManager
         /// <summary>
         /// Initializes the single instance.
         /// </summary>
-        private static void InitSingleInstance()
+        /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
+        private static bool InitSingleInstance()
         {
             var configuration = DIResolver.Get<IPlatformConfiguration>().GetOptions().App;
             if (configuration.SingleInstance)
             {
-                SingleInstance.Initialize();
+                var result = SingleInstance.Initialize();
                 SingleInstance.InstanceLaunched += args =>
                 {
                     if (!StaticResources.AllowCommandLineChange)
@@ -225,15 +233,24 @@ namespace IronyModManager
                     ParseArguments(args.CommandLineArgs);
                     Dispatcher.UIThread.SafeInvoke(() =>
                     {
-                        var mainWindow = Helpers.GetMainWindow();
-                        mainWindow.Show();
-                        mainWindow.Activate();
-                        var previousState = mainWindow.WindowState;
-                        mainWindow.WindowState = WindowState.Minimized;
+                        var mainWindow = (MainWindow)Helpers.GetMainWindow();
+                        var previousState = mainWindow.ActualState;
+                        if (mainWindow.WindowState != WindowState.Minimized)
+                        {
+                            mainWindow.WindowState = WindowState.Minimized;
+                        }
+
                         mainWindow.WindowState = previousState;
+                        mainWindow.Show();
+                        mainWindow.BringIntoView();
+                        mainWindow.Activate();
+                        mainWindow.Focus();
                     });
                 };
+                return result;
             }
+
+            return true;
         }
 
         /// <summary>
