@@ -4,15 +4,17 @@
 // Created          : 03-03-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-13-2021
+// Last Modified On : 02-24-2024
 // ***********************************************************************
 // <copyright file="AppState.cs" company="Mario">
 //     Mario
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
-using System.Collections.Generic;
+
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using IronyModManager.Models.Common;
 
 namespace IronyModManager.Models
@@ -71,10 +73,22 @@ namespace IronyModManager.Models
         public virtual int InstalledModsSortMode { get; set; }
 
         /// <summary>
+        /// Gets or sets a value representing the last prank check.<see cref="System.DateTime?" />
+        /// </summary>
+        /// <value>The last prank check.</value>
+        public DateTime? LastPrankCheck { get; set; }
+
+        /// <summary>
         /// Gets or sets the last writable check.
         /// </summary>
         /// <value>The last writable check.</value>
         public virtual DateTime? LastWritableCheck { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether the use new diff viewer.
+        /// </summary>
+        /// <value><c>true</c> if use new diff viewer; otherwise, <c>false</c>.</value>
+        public bool UseNewDiffViewer { get; set; } = true;
 
         #endregion Properties
     }

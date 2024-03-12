@@ -4,13 +4,14 @@
 // Created          : 11-16-2021
 //
 // Last Modified By : Mario
-// Last Modified On : 11-16-2021
+// Last Modified On : 03-04-2024
 // ***********************************************************************
 // <copyright file="ParadoxLauncherImporterBeta.cs" company="Mario">
 //     Mario
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
+
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -27,21 +28,11 @@ namespace IronyModManager.IO.Mods.Importers
     /// Implements the <see cref="IronyModManager.IO.Mods.Importers.ParadoxLauncherImporter" />
     /// </summary>
     /// <seealso cref="IronyModManager.IO.Mods.Importers.ParadoxLauncherImporter" />
+    /// <param name="logger">The logger.</param>
+    /// <remarks>Initializes a new instance of the <see cref="ParadoxLauncherImporterBeta" /> class.</remarks>
     [ExcludeFromCoverage("Skipping testing IO logic.")]
-    internal class ParadoxLauncherImporterBeta : ParadoxLauncherImporter
+    internal class ParadoxLauncherImporterBeta(ILogger logger) : ParadoxLauncherImporter(logger)
     {
-        #region Constructors
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="ParadoxLauncherImporterBeta" /> class.
-        /// </summary>
-        /// <param name="logger">The logger.</param>
-        public ParadoxLauncherImporterBeta(ILogger logger) : base(logger)
-        {
-        }
-
-        #endregion Constructors
-
         #region Methods
 
         /// <summary>
@@ -62,7 +53,7 @@ namespace IronyModManager.IO.Mods.Importers
         /// <returns>System.String.</returns>
         protected override string GetDbPath(ModCollectionExporterParams parameters)
         {
-            return Path.Combine(Path.GetDirectoryName(parameters.ModDirectory), Constants.Sql_db_beta_path);
+            return Path.Combine(Path.GetDirectoryName(parameters.ModDirectory)!, Constants.Sql_db_beta_path);
         }
 
         #endregion Methods

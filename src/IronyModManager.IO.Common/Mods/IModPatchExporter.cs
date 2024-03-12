@@ -4,15 +4,17 @@
 // Created          : 03-31-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-06-2022
+// Last Modified On : 02-25-2024
 // ***********************************************************************
 // <copyright file="IModPatchExporter.cs" company="Mario">
 //     Mario
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
+
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using IronyModManager.IO.Common.Mods.Models;
 
@@ -38,6 +40,13 @@ namespace IronyModManager.IO.Common.Mods
         /// <param name="parameters">The parameters.</param>
         /// <returns>Task&lt;System.Boolean&gt;.</returns>
         Task<bool> ExportDefinitionAsync(ModPatchExporterParameters parameters);
+
+        /// <summary>
+        /// Gets an allowed languages async.
+        /// </summary>
+        /// <param name="parameters">The parameters.</param>
+        /// <returns>A Task containing IReadOnlyCollection of strings.<see cref="Task{IReadOnlyCollection{string}}"/></returns>
+        Task<IReadOnlyCollection<string>> GetAllowedLanguagesAsync(ModPatchExporterParameters parameters);
 
         /// <summary>
         /// Gets the patch files.

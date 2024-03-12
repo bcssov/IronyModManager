@@ -4,17 +4,19 @@
 // Created          : 01-14-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 11-29-2022
+// Last Modified On : 02-20-2024
 // ***********************************************************************
 // <copyright file="Extensions.cs" company="Mario">
 //     Mario
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
+
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Threading;
 using System.Threading.Tasks;
 using Avalonia;
@@ -25,6 +27,7 @@ using DynamicData;
 using IronyModManager.DI;
 using IronyModManager.Platform.Configuration;
 using IronyModManager.Shared;
+using ReactiveUI;
 
 namespace IronyModManager.Common
 {
@@ -52,7 +55,23 @@ namespace IronyModManager.Common
         }
 
         /// <summary>
-        /// Safes the invoke.
+        /// Observables WhenAnyValue.
+        /// </summary>
+        /// <typeparam name="TSender">The type of the TSender.</typeparam>
+        /// <typeparam name="TRet">The type of the TRet.</typeparam>
+        /// <typeparam name="T1">The type of the T1.</typeparam>
+        /// <param name="sender">The sender.</param>
+        /// <param name="property">The Property.</param>
+        /// <param name="selector">The selector.</param>
+        /// <returns>an IObservable with  TRets .<see cref="IObservable{TRet}" /></returns>
+        public static IObservable<TRet> ObservableWhenAnyValue<TSender, TRet, T1>(this TSender sender, Expression<Func<TSender, T1>> property, Func<T1, TRet> selector)
+        {
+            var innerSelector = selector;
+            return sender.WhenAny(property, c1 => innerSelector(c1.Value));
+        }
+
+        /// <summary>
+        /// Safe invoke.
         /// </summary>
         /// <param name="dispatcher">The dispatcher.</param>
         /// <param name="action">The action.</param>
@@ -64,12 +83,12 @@ namespace IronyModManager.Common
             }
             else
             {
-                dispatcher.InvokeAsync(() => action());
+                dispatcher.InvokeAsync(action);
             }
         }
 
         /// <summary>
-        /// Safes the invoke asynchronous.
+        /// Safes invoke asynchronous.
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="dispatcher">The dispatcher.</param>
@@ -83,12 +102,12 @@ namespace IronyModManager.Common
             }
             else
             {
-                return dispatcher.InvokeAsync(() => action());
+                return dispatcher.InvokeAsync(action);
             }
         }
 
         /// <summary>
-        /// Safes the invoke asynchronous.
+        /// Safes invoke asynchronous.
         /// </summary>
         /// <param name="dispatcher">The dispatcher.</param>
         /// <param name="action">The action.</param>
@@ -101,7 +120,7 @@ namespace IronyModManager.Common
             }
             else
             {
-                await dispatcher.InvokeAsync(() => action());
+                await dispatcher.InvokeAsync(action);
             }
         }
 
@@ -113,7 +132,7 @@ namespace IronyModManager.Common
         /// <returns>IDisposable.</returns>
         public static IDisposable SubscribeObservable<T>(this IObservable<T> source)
         {
-            return ObservableExtensions.Subscribe(source);
+            return source.Subscribe();
         }
 
         /// <summary>
@@ -125,7 +144,7 @@ namespace IronyModManager.Common
         /// <returns>IDisposable.</returns>
         public static IDisposable SubscribeObservable<T>(this IObservable<T> source, Action<T> onNext)
         {
-            return ObservableExtensions.Subscribe(source, onNext);
+            return source.Subscribe(onNext);
         }
 
         /// <summary>
@@ -139,7 +158,7 @@ namespace IronyModManager.Common
         public static IDisposable SubscribeObservable<T>(this IObservable<T> source, Action<T> onNext, Action<Exception> onError)
         {
             // Seriously annoyed with conflicting namespaces
-            return ObservableExtensions.Subscribe(source, onNext, onError);
+            return source.Subscribe(onNext, onError);
         }
 
         /// <summary>
@@ -153,7 +172,7 @@ namespace IronyModManager.Common
         public static IDisposable SubscribeObservable<T>(this IObservable<T> source, Action<T> onNext, Action onCompleted)
         {
             // Seriously annoyed with conflicting namespaces
-            return ObservableExtensions.Subscribe(source, onNext, onCompleted);
+            return source.Subscribe(onNext, onCompleted);
         }
 
         /// <summary>
@@ -167,7 +186,7 @@ namespace IronyModManager.Common
         /// <returns>IDisposable.</returns>
         public static IDisposable SubscribeObservable<T>(this IObservable<T> source, Action<T> onNext, Action<Exception> onError, Action onCompleted)
         {
-            return ObservableExtensions.Subscribe(source, onNext, onError, onCompleted);
+            return source.Subscribe(onNext, onError, onCompleted);
         }
 
         /// <summary>
@@ -179,7 +198,7 @@ namespace IronyModManager.Common
         /// <param name="token">The token.</param>
         public static void SubscribeObservable<T>(this IObservable<T> source, IObserver<T> observer, CancellationToken token)
         {
-            ObservableExtensions.Subscribe(source, observer, token);
+            source.Subscribe(observer, token);
         }
 
         /// <summary>
@@ -190,7 +209,7 @@ namespace IronyModManager.Common
         /// <param name="token">The token.</param>
         public static void SubscribeObservable<T>(this IObservable<T> source, CancellationToken token)
         {
-            ObservableExtensions.Subscribe(source, token);
+            source.Subscribe(token);
         }
 
         /// <summary>
@@ -202,7 +221,7 @@ namespace IronyModManager.Common
         /// <param name="token">The token.</param>
         public static void SubscribeObservable<T>(this IObservable<T> source, Action<T> onNext, CancellationToken token)
         {
-            ObservableExtensions.Subscribe(source, onNext, token);
+            source.Subscribe(onNext, token);
         }
 
         /// <summary>
@@ -215,7 +234,7 @@ namespace IronyModManager.Common
         /// <param name="token">The token.</param>
         public static void SubscribeObservable<T>(this IObservable<T> source, Action<T> onNext, Action<Exception> onError, CancellationToken token)
         {
-            ObservableExtensions.Subscribe(source, onNext, onError, token);
+            source.Subscribe(onNext, onError, token);
         }
 
         /// <summary>
@@ -228,7 +247,7 @@ namespace IronyModManager.Common
         /// <param name="token">The token.</param>
         public static void SubscribeObservable<T>(this IObservable<T> source, Action<T> onNext, Action onCompleted, CancellationToken token)
         {
-            ObservableExtensions.Subscribe(source, onNext, onCompleted, token);
+            source.Subscribe(onNext, onCompleted, token);
         }
 
         /// <summary>
@@ -242,7 +261,7 @@ namespace IronyModManager.Common
         /// <param name="token">The token.</param>
         public static void SubscribeObservable<T>(this IObservable<T> source, Action<T> onNext, Action<Exception> onError, Action onCompleted, CancellationToken token)
         {
-            ObservableExtensions.Subscribe(source, onNext, onError, onCompleted, token);
+            source.Subscribe(onNext, onError, onCompleted, token);
         }
 
         /// <summary>
@@ -254,11 +273,11 @@ namespace IronyModManager.Common
         /// <returns>IDisposable.</returns>
         public static IDisposable SubscribeObservableSafe<T>(this IObservable<T> source, IObserver<T> observer)
         {
-            return ObservableExtensions.SubscribeSafe(source, observer);
+            return source.SubscribeSafe(observer);
         }
 
         /// <summary>
-        /// Converts to avalonialist.
+        /// Converts to AvaloniaList.
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="col">The col.</param>
@@ -269,7 +288,7 @@ namespace IronyModManager.Common
         }
 
         /// <summary>
-        /// Converts to localizedpercentage.
+        /// Converts to LocalizedPercentage.
         /// </summary>
         /// <param name="number">The number.</param>
         /// <returns>System.String.</returns>
@@ -279,7 +298,7 @@ namespace IronyModManager.Common
         }
 
         /// <summary>
-        /// Converts to localizedpercentage.
+        /// Converts to LocalizedPercentage.
         /// </summary>
         /// <param name="number">The number.</param>
         /// <returns>System.String.</returns>
@@ -289,7 +308,7 @@ namespace IronyModManager.Common
         }
 
         /// <summary>
-        /// Converts to observablecollection.
+        /// Converts to ObservableCollection.
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="col">The col.</param>
@@ -300,7 +319,7 @@ namespace IronyModManager.Common
         }
 
         /// <summary>
-        /// Converts to sourcelist.
+        /// Converts to SourceList.
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="col">The col.</param>

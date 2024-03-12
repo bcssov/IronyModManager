@@ -14,6 +14,10 @@
             "DLC": "DLC"
         }
     },
+    "JokeError": {
+        "Title": "Необработанное нарушение памяти контейнера яйца",
+        "Message": "Нажмите OK, чтобы сделать вид, что ничего не произошло :)"
+    },
     "FatalError": {
         "Message": "Возникла неизвестная ошибка, приложение будет закрыто.",
         "MessageWithLastError": "Возникла неизвестная ошибка, приложение будет закрыто. Пожалуйста, используйте эту информацию, чтобы подать сообщение об ошибке:{NewLine}{NewLine}{Message}",
@@ -94,6 +98,20 @@
         "CrusaderKings3": "Crusader Kings III",
         "Victoria3": "Victoria 3",
         "STInfinite": "Star Trek: Infinite"
+    },
+    "GameLanguages": {
+        "l_english": "Английский",
+        "l_braz_por": "Португальский",
+        "l_french": "Французский",
+        "l_german": "Немецкий",
+        "l_polish": "Польский",
+        "l_russian": "Русский",
+        "l_simp_chinese": "Упрощенный китайский",
+        "l_spanish": "Испанский",
+        "l_chinese": "Китайский",
+        "l_traditional_chinese": "Традиционный китайский",
+        "l_japanese": "Японский",
+        "l_korean": "Корейский"
     },
     "Installed_Mods": {
         "Name": "Установленные моды",
@@ -328,7 +346,8 @@
             "Undo": "Отменить",
             "Redo": "Вернуть",
             "Editor": "Внешнее объединение",
-            "ReadonlyEditor": "Внешнее сравнение"
+            "ReadonlyEditor": "Внешнее сравнение",
+            "ToggleCompare": "Переключение режима сравнения диффов"
         },
         "EditorContextMenu": {
             "Copy": "Копировать",
@@ -457,6 +476,10 @@
             "CloseAfterLaunch": "Закрывать после запуска игры",
             "AutoConfigure": "Настроить все...",
             "CustomModPath": "Своя папка с модами"
+        },
+        "ConflictSolver": {
+            "Title": "Разрешитель конфликтов",
+            "AllowedLanguages": "Разрешенные языки"
         },
         "Updates": {
             "Title": "Обновления",

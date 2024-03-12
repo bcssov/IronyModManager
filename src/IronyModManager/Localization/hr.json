@@ -14,6 +14,10 @@
             "DLC": "DLC"
         }
     },
+    "JokeError": {
+        "Title": "Neobrađeno kršenje memorije spremnika jaja",
+        "Message": "Pritisnite OK da se pretvarate da se ništa nije dogodilo :)"
+    },
     "FatalError": {
         "Message": "Došlo je do greške. Aplikacija će se automatski zatvoriti.",
         "MessageWithLastError": "Došlo je do greške. Koristite ovu informaciju da biste podnijeli izvješće o greški:{NewLine}{NewLine}{Message}",
@@ -94,6 +98,20 @@
         "CrusaderKings3": "Crusader Kings III",
         "Victoria3": "Victoria 3",
         "STInfinite": "Star Trek: Infinite"
+    },
+    "GameLanguages": {
+        "l_english": "Engleski",
+        "l_braz_por": "Portugalski",
+        "l_french": "Francuski",
+        "l_german": "Njemački",
+        "l_polish": "Poljski",
+        "l_russian": "Ruski",
+        "l_simp_chinese": "Jednostavan kineski",
+        "l_spanish": "Španjolski",
+        "l_chinese": "Kineski",
+        "l_traditional_chinese": "Tradicionalni kineski",
+        "l_japanese": "Japanski",
+        "l_korean": "Korejski"
     },
     "Installed_Mods": {
         "Name": "Instalirani modovi",
@@ -328,7 +346,8 @@
             "Undo": "Poništi",
             "Redo": "Ponovi",
             "Editor": "Vanjsko spajanje",
-            "ReadonlyEditor": "Vanjska usporedba"
+            "ReadonlyEditor": "Vanjska usporedba",
+            "ToggleCompare": "Promjeni način usporedbe razlika"
         },
         "EditorContextMenu": {
             "Copy": "Kopiraj",
@@ -457,6 +476,10 @@
             "CloseAfterLaunch": "Zatvori nakon pokretanja igre",
             "AutoConfigure": "Konfiguriraj sve...",
             "CustomModPath": "Prilagođeni direktorij modova"
+        },
+        "ConflictSolver": {
+            "Title": "Rješavanje sukoba",
+            "AllowedLanguages": "Dopušteni jezici"
         },
         "Updates": {
             "Title": "Mogućnosti ažuriranja",

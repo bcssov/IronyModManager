@@ -1,17 +1,17 @@
-﻿
-// ***********************************************************************
+﻿// ***********************************************************************
 // Assembly         : IronyModManager.Services
 // Author           : Mario
 // Created          : 05-27-2021
 //
 // Last Modified By : Mario
-// Last Modified On : 11-27-2023
+// Last Modified On : 02-25-2024
 // ***********************************************************************
 // <copyright file="GameIndexService.cs" company="Mario">
 //     Mario
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
+
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
@@ -29,6 +29,7 @@ using IronyModManager.Parser.Common.Args;
 using IronyModManager.Parser.Common.Mod;
 using IronyModManager.Services.Common;
 using IronyModManager.Services.Common.MessageBus;
+using IronyModManager.Shared;
 using IronyModManager.Shared.Cache;
 using IronyModManager.Shared.MessageBus;
 using IronyModManager.Shared.Models;
@@ -37,15 +38,25 @@ using Nito.AsyncEx;
 
 namespace IronyModManager.Services
 {
-
     /// <summary>
     /// Class GameIndexService.
     /// Implements the <see cref="IronyModManager.Services.ModBaseService" />
-    /// Implements the <see cref="IronyModManager.Services.Common.IGameIndexService" />
+    /// Implements the <see cref="IGameIndexService" />
     /// </summary>
     /// <seealso cref="IronyModManager.Services.ModBaseService" />
-    /// <seealso cref="IronyModManager.Services.Common.IGameIndexService" />
-    public class GameIndexService : ModBaseService, IGameIndexService
+    /// <seealso cref="IGameIndexService" />
+    public class GameIndexService(
+        IMessageBus messageBus,
+        IParserManager parserManager,
+        IGameIndexer gameIndexer,
+        ICache cache,
+        IEnumerable<IDefinitionInfoProvider> definitionInfoProviders,
+        IReader reader,
+        IModWriter modWriter,
+        IModParser modParser,
+        IGameService gameService,
+        IStorageProvider storageProvider,
+        IMapper mapper) : ModBaseService(cache, definitionInfoProviders, reader, modWriter, modParser, gameService, storageProvider, mapper), IGameIndexService
     {
         #region Fields
 
@@ -62,46 +73,19 @@ namespace IronyModManager.Services
         /// <summary>
         /// The game indexer
         /// </summary>
-        private readonly IGameIndexer gameIndexer;
+        private readonly IGameIndexer gameIndexer = gameIndexer;
 
         /// <summary>
         /// The message bus
         /// </summary>
-        private readonly IMessageBus messageBus;
+        private readonly IMessageBus messageBus = messageBus;
 
         /// <summary>
         /// The parser manager
         /// </summary>
-        private readonly IParserManager parserManager;
+        private readonly IParserManager parserManager = parserManager;
 
         #endregion Fields
-
-        #region Constructors
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="GameIndexService" /> class.
-        /// </summary>
-        /// <param name="messageBus">The message bus.</param>
-        /// <param name="parserManager">The parser manager.</param>
-        /// <param name="gameIndexer">The game indexer.</param>
-        /// <param name="cache">The cache.</param>
-        /// <param name="definitionInfoProviders">The definition information providers.</param>
-        /// <param name="reader">The reader.</param>
-        /// <param name="modWriter">The mod writer.</param>
-        /// <param name="modParser">The mod parser.</param>
-        /// <param name="gameService">The game service.</param>
-        /// <param name="storageProvider">The storage provider.</param>
-        /// <param name="mapper">The mapper.</param>
-        public GameIndexService(IMessageBus messageBus, IParserManager parserManager, IGameIndexer gameIndexer, ICache cache, IEnumerable<IDefinitionInfoProvider> definitionInfoProviders, IReader reader,
-            IModWriter modWriter, IModParser modParser, IGameService gameService, IStorageProvider storageProvider, IMapper mapper) :
-            base(cache, definitionInfoProviders, reader, modWriter, modParser, gameService, storageProvider, mapper)
-        {
-            this.gameIndexer = gameIndexer;
-            this.messageBus = messageBus;
-            this.parserManager = parserManager;
-        }
-
-        #endregion Constructors
 
         #region Methods
 
@@ -111,7 +95,7 @@ namespace IronyModManager.Services
         /// <param name="game">The game.</param>
         /// <param name="versions">The versions.</param>
         /// <param name="indexedDefinitions">The indexed definitions.</param>
-        /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
+        /// <returns><c>true</c> if indexed, <c>false</c> otherwise.</returns>
         public virtual async Task<bool> IndexDefinitionsAsync(IGame game, IEnumerable<string> versions, IIndexedDefinitions indexedDefinitions)
         {
             if (game != null && versions != null && versions.Any())
@@ -122,15 +106,16 @@ namespace IronyModManager.Services
                     await gameIndexer.ClearDefinitionAsync(GetStoragePath(), game);
                     await gameIndexer.WriteVersionAsync(GetStoragePath(), game, versions, game.GameIndexCacheVersion);
                 }
-                var gamePath = pathResolver.GetPath(game);
+
+                var gamePath = PathResolver.GetPath(game);
                 var files = Reader.GetFiles(gamePath);
 
                 // No clue how someone got reader to return 0 based on configuration alone but just in case to ignore this mess
                 if (files != null && files.Any())
                 {
-                    files = files.Where(p => game.GameFolders.Any(x => p.StartsWith(x)));
+                    files = files.Where(p => game.GameFolders.Any(p.StartsWith));
                     var indexedFolders = (await indexedDefinitions.GetAllDirectoryKeysAsync()).Select(p => p.ToLowerInvariant());
-                    var validFolders = files.Select(p => Path.GetDirectoryName(p)).GroupBy(p => p).Select(p => p.FirstOrDefault()).Where(p => indexedFolders.Any(a => a.ToLowerInvariant().Equals(p.ToLowerInvariant())));
+                    var validFolders = files.Select(Path.GetDirectoryName).GroupBy(p => p).Select(p => p.FirstOrDefault()).Where(p => indexedFolders.Any(a => a.ToLowerInvariant().Equals(p!.ToLowerInvariant())));
                     var folders = new List<string>();
                     foreach (var item in validFolders)
                     {
@@ -139,7 +124,8 @@ namespace IronyModManager.Services
                             folders.Add(item);
                         }
                     }
-                    if (folders.Any())
+
+                    if (folders.Count != 0)
                     {
                         double processed = 0;
                         double total = folders.Count;
@@ -161,14 +147,13 @@ namespace IronyModManager.Services
                                 using var mutex = await asyncServiceLock.LockAsync();
                                 processed++;
                                 var perc = GetProgressPercentage(total, processed, 100);
-                                if (perc != previousProgress)
+                                if (perc.IsNotNearlyEqual(previousProgress))
                                 {
                                     await messageBus.PublishAsync(new GameIndexProgressEvent(perc));
                                     previousProgress = perc;
                                 }
-                                GC.Collect(GC.MaxGeneration, GCCollectionMode.Optimized);
-                                GC.WaitForPendingFinalizers();
-                                GC.Collect(GC.MaxGeneration, GCCollectionMode.Optimized);
+
+                                GCRunner.RunGC(GCCollectionMode.Optimized);
 
                                 mutex.Dispose();
                             }
@@ -179,10 +164,13 @@ namespace IronyModManager.Services
                         });
                         await Task.WhenAll(tasks);
                     }
+
                     return true;
                 }
+
                 return false;
             }
+
             return false;
         }
 
@@ -192,13 +180,52 @@ namespace IronyModManager.Services
         /// <param name="modDefinitions">The mod definitions.</param>
         /// <param name="game">The game.</param>
         /// <param name="versions">The versions.</param>
+        /// <param name="gameLanguages">The game languages.</param>
         /// <returns>IIndexedDefinitions.</returns>
-        public virtual async Task<IIndexedDefinitions> LoadDefinitionsAsync(IIndexedDefinitions modDefinitions, IGame game, IEnumerable<string> versions)
+        public virtual async Task<IIndexedDefinitions> LoadDefinitionsAsync(IIndexedDefinitions modDefinitions, IGame game, IEnumerable<string> versions, IReadOnlyCollection<IGameLanguage> gameLanguages)
         {
             if (game != null && versions != null && versions.Any() && await gameIndexer.GameVersionsSameAsync(GetStoragePath(), game, versions))
             {
                 var gameDefinitions = new ConcurrentBag<IDefinition>();
                 var directories = await modDefinitions.GetAllDirectoryKeysAsync();
+                // Kinda need to force insert localisation directory itself
+                if (directories.Any(p => p.StartsWith(Shared.Constants.LocalizationDirectory, StringComparison.OrdinalIgnoreCase)) &&
+                    !directories.Any(p => p.Equals(Shared.Constants.LocalizationDirectory, StringComparison.OrdinalIgnoreCase)))
+                {
+                    var newDirs = new List<string>(directories) { Shared.Constants.LocalizationDirectory };
+                    directories = newDirs;
+                }
+
+                if (gameLanguages != null && gameLanguages.Count != 0)
+                {
+                    var folders = gameLanguages.Select(p => p.Type[2..]);
+                    var filtered = new List<string>();
+                    foreach (var dir in directories)
+                    {
+                        // So far games that support CS have structure localisation -> l_english -> files though language id part is stripped (l_ part)
+                        if (dir.StartsWith(Shared.Constants.LocalizationDirectory, StringComparison.OrdinalIgnoreCase))
+                        {
+                            if (dir.StandardizeDirectorySeparator().Any(p => p == Path.DirectorySeparatorChar))
+                            {
+                                if (folders.Any(p => dir!.EndsWith(p, StringComparison.OrdinalIgnoreCase)))
+                                {
+                                    filtered.Add(dir);
+                                }
+                            }
+                            else
+                            {
+                                filtered.Add(dir);
+                            }
+                        }
+                        else
+                        {
+                            filtered.Add(dir);
+                        }
+                    }
+
+                    directories = filtered;
+                }
+
                 double processed = 0;
                 double total = directories.Count();
                 double previousProgress = 0;
@@ -211,11 +238,12 @@ namespace IronyModManager.Services
                         var definitions = await Task.Run(async () => await gameIndexer.GetDefinitionsAsync(GetStoragePath(), game, directory));
                         if ((definitions?.Any()).GetValueOrDefault())
                         {
-                            foreach (var def in definitions)
+                            foreach (var def in definitions!)
                             {
                                 def.ModName = game.Name;
                                 def.IsFromGame = true;
                             }
+
                             return definitions;
                         }
                     }
@@ -223,9 +251,10 @@ namespace IronyModManager.Services
                     {
                         semaphore.Release();
                     }
+
                     return null;
                 }).ToList();
-                while (tasks.Any())
+                while (tasks.Count != 0)
                 {
                     var result = await Task.WhenAny(tasks);
                     tasks.Remove(result);
@@ -236,22 +265,24 @@ namespace IronyModManager.Services
                             gameDefinitions.Add(item);
                         }
                     }
+
                     processed++;
                     var perc = GetProgressPercentage(total, processed, 100);
-                    if (perc != previousProgress)
+                    if (perc.IsNotNearlyEqual(previousProgress))
                     {
                         await messageBus.PublishAsync(new GameDefinitionLoadProgressEvent(perc));
                         previousProgress = perc;
                     }
-                    GC.Collect(GC.MaxGeneration, GCCollectionMode.Optimized);
-                    GC.WaitForPendingFinalizers();
-                    GC.Collect(GC.MaxGeneration, GCCollectionMode.Optimized);
+
+                    GCRunner.RunGC(GCCollectionMode.Optimized);
                 }
+
                 foreach (var item in gameDefinitions)
                 {
                     await modDefinitions.AddToMapAsync(item);
                 }
             }
+
             return modDefinitions;
         }
 
@@ -273,6 +304,7 @@ namespace IronyModManager.Services
             {
                 perc = maxPerc;
             }
+
             return perc;
         }
 
@@ -298,10 +330,11 @@ namespace IronyModManager.Services
             {
                 return null;
             }
+
             var definitions = new List<IDefinition>();
             foreach (var fileInfo in fileInfos)
             {
-                var fileDefs = parserManager.Parse(new ParserManagerArgs()
+                var fileDefs = parserManager.Parse(new ParserManagerArgs
                 {
                     ContentSHA = fileInfo.ContentSHA,
                     File = Path.Combine(folder, fileInfo.FileName),
@@ -313,6 +346,7 @@ namespace IronyModManager.Services
                 MergeDefinitions(fileDefs);
                 definitions.AddRange(fileDefs);
             }
+
             return definitions;
         }
 

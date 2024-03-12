@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net7.0</TargetFramework>
+    <TargetFramework>net8.0</TargetFramework>
     <Authors>Mario</Authors>
     <Company>Mario</Company>
     <Description>Irony Mod Manager Storage Component</Description>
@@ -47,8 +47,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="AutoMapper" Version="12.0.1" />
-    <PackageReference Include="CompareNETObjects" Version="4.79.0" />
+    <PackageReference Include="AutoMapper" Version="13.0.1" />
+    <PackageReference Include="CompareNETObjects" Version="4.83.0" />
     <PackageReference Include="Jot" Version="$(Jot)" allowedVersions="$(Jot)" />
     <PackageReference Include="Microsoft.Extensions.DependencyModel" Version="$(MicrosoftExtensionsDependencyModelVersion)" allowedVersions="$(MicrosoftExtensionsDependencyModelVersion)" />
     <PackageReference Include="Nerdbank.GitVersioning" Version="3.6.133">

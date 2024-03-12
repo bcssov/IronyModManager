@@ -14,6 +14,10 @@
             "DLC": "DLC"
         }
     },
+    "JokeError": {
+        "Title": "未处理的彩蛋容器内存违规",
+        "Message": "按 \"确定\"，假装什么也没发生:)"
+    },
     "FatalError": {
         "Message": "发生了无法处理的异常，程序即将关闭",
         "MessageWithLastError": "发生了无法处理的异常，请以此信息提交错误报告：{NewLine}{NewLine}{Message}",
@@ -94,6 +98,20 @@
         "CrusaderKings3": "十字军之王 Ⅲ",
         "Victoria3": "维多利亚 Ⅲ",
         "STInfinite": "Star Trek: Infinite"
+    },
+    "GameLanguages": {
+        "l_english": "英语",
+        "l_braz_por": "葡萄牙语",
+        "l_french": "法语",
+        "l_german": "德语",
+        "l_polish": "波兰语",
+        "l_russian": "俄语",
+        "l_simp_chinese": "简体中文",
+        "l_spanish": "西班牙语",
+        "l_chinese": "中文",
+        "l_traditional_chinese": "繁体中文",
+        "l_japanese": "日语",
+        "l_korean": "韩语"
     },
     "Installed_Mods": {
         "Name": "已安装模组",
@@ -328,7 +346,8 @@
             "Undo": "撤销",
             "Redo": "重做",
             "Editor": "外部合并",
-            "ReadonlyEditor": "外部比较"
+            "ReadonlyEditor": "外部比较",
+            "ToggleCompare": "切换差值比较模式"
         },
         "EditorContextMenu": {
             "Copy": "复制",
@@ -457,6 +476,10 @@
             "CloseAfterLaunch": "启动游戏后关闭",
             "AutoConfigure": "设置全部……",
             "CustomModPath": "自定义模组目录"
+        },
+        "ConflictSolver": {
+            "Title": "冲突处理器",
+            "AllowedLanguages": "允许使用的语言"
         },
         "Updates": {
             "Title": "更新选项",

@@ -4,7 +4,7 @@
 // Created          : 01-11-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 11-02-2022
+// Last Modified On : 02-26-2024
 // ***********************************************************************
 // <copyright file="Preferences.cs" company="Mario">
 //     Mario
@@ -14,6 +14,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using IronyModManager.Models.Common;
 
 /// <summary>
@@ -43,6 +44,18 @@ namespace IronyModManager.Models
         /// </summary>
         /// <value><c>true</c> if [check for prerelease]; otherwise, <c>false</c>.</value>
         public virtual bool CheckForPrerelease { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value representing the conflict solver languages.<see cref="System.Collections.Generic.List{string}" />
+        /// </summary>
+        /// <value>The conflict solver languages.</value>
+        public virtual List<string> ConflictSolverLanguages { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether [conflict solver languages set].
+        /// </summary>
+        /// <value><c>true</c> if [conflict solver languages set]; otherwise, <c>false</c>.</value>
+        public virtual bool ConflictSolverLanguagesSet { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether [conflict solver prompt shown].

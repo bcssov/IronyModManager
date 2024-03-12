@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <TargetFramework>net7.0</TargetFramework>
+    <TargetFramework>net8.0</TargetFramework>
 	<ApplicationIcon>../IronyModManager/Assets/logo.ico</ApplicationIcon>
     <Description>IronyModManager Game Launcher Component</Description>	
 	<PackageLicenseFile>LICENSE</PackageLicenseFile>
@@ -47,7 +47,7 @@
 
   <ItemGroup>
 	<PackageReference Include="CommandLineParser" Version="2.9.1" />
-	<PackageReference Include="NLog" Version="5.2.2" />
+	<PackageReference Include="NLog" Version="5.2.8" />
 	<PackageReference Include="Sajidur78.StrongNamer" Version="0.2.8" />
 	<PackageReference Include="Steamworks.NET" Version="20.1.0" />
 	<PackageReference Update="Nerdbank.GitVersioning" Version="3.6.133" />

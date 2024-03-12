@@ -1,26 +1,26 @@
-﻿
-// ***********************************************************************
+﻿// ***********************************************************************
 // Assembly         : IronyModManager.Shared
 // Author           : Mario
 // Created          : 02-16-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 10-31-2023
+// Last Modified On : 02-25-2024
 // ***********************************************************************
 // <copyright file="Extensions.cs" company="Mario">
 //     Mario
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
+
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text;
 using System.Text.RegularExpressions;
 
 namespace IronyModManager.Shared
 {
-
     /// <summary>
     /// Class Extensions.
     /// </summary>
@@ -37,20 +37,43 @@ namespace IronyModManager.Shared
         /// <summary>
         /// The empty string characters
         /// </summary>
-        private static readonly string[] emptyStringCharacters = new string[] { " " };
+        private static readonly string[] emptyStringCharacters = [" "];
 
         /// <summary>
         /// The tab space
         /// </summary>
         private static readonly string tabSpace = new(' ', 4);
+
         /// <summary>
         /// The invalid file name characters
         /// </summary>
-        private static IEnumerable<char> invalidFileNameCharacters = null;
+        private static IEnumerable<char> invalidFileNameCharacters;
 
         #endregion Fields
 
         #region Methods
+
+        /// <summary>
+        /// Capitalizes an every first letter.
+        /// </summary>
+        /// <param name="value">The value.</param>
+        /// <returns>A string.</returns>
+        public static string CapitalizeEveryFirstLetter(this string value)
+        {
+            if (!string.IsNullOrWhiteSpace(value))
+            {
+                var sb = new StringBuilder();
+                var split = value.Split(' ');
+                foreach (var s in split)
+                {
+                    sb.Append($" {char.ToUpperInvariant(s.FirstOrDefault())}{s[1..]}");
+                }
+
+                return sb.ToString().Trim();
+            }
+
+            return value;
+        }
 
         /// <summary>
         /// Generates the short file name hash identifier.
@@ -64,11 +87,13 @@ namespace IronyModManager.Shared
             {
                 return string.Empty;
             }
+
             var hash = value.CalculateSHA().GenerateValidFileName();
             if (hash.Length > maxLength)
             {
                 return hash[..maxLength];
             }
+
             return hash;
         }
 
@@ -83,6 +108,7 @@ namespace IronyModManager.Shared
             {
                 return value;
             }
+
             var fileName = GetInvalidFileNameChars().Aggregate(value, (current, character) => current.Replace(character.ToString(), string.Empty));
             fileName = emptyStringCharacters.Aggregate(fileName, (a, b) => a.Replace(b, "_"));
 
@@ -112,6 +138,7 @@ namespace IronyModManager.Shared
             {
                 return value;
             }
+
             return value.Replace("\t", tabSpace);
         }
 
@@ -137,6 +164,7 @@ namespace IronyModManager.Shared
             {
                 return string.Empty;
             }
+
             return value.Replace('\\', Path.DirectorySeparatorChar).Replace('/', Path.DirectorySeparatorChar);
         }
 
@@ -185,7 +213,7 @@ namespace IronyModManager.Shared
             {
                 while (!string.IsNullOrEmpty(input) && input.StartsWith(value, type))
                 {
-                    input = input[(value.Length)..];
+                    input = input[value.Length..];
                 }
             }
 

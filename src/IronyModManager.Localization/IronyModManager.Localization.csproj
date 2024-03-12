@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net7.0</TargetFramework>
+    <TargetFramework>net8.0</TargetFramework>
     <Description>Irony Mod Manager Localization Component</Description>
     <Product>Irony Mod Manager</Product>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
@@ -49,7 +49,7 @@
     </PackageReference>
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     <PackageReference Include="Sajidur78.StrongNamer" Version="0.2.8" />
-    <PackageReference Include="SimpleInjector" Version="5.4.1" />
+    <PackageReference Include="SimpleInjector" Version="5.4.4" />
     <PackageReference Include="SimpleInjector.Packaging" Version="5.0.0" />
   </ItemGroup>
 

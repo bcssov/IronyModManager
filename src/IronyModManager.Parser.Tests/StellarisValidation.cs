@@ -66,7 +66,7 @@ namespace IronyModManager.Parser.Tests
         /// <summary>
         /// Defines the test method StellarisExtensions.
         /// </summary>
-        public void StellarisExtensions()
+        public async Task StellarisExtensions()
         {
             Extensions();
         }

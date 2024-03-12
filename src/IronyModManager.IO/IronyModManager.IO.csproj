@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net7.0</TargetFramework>
+    <TargetFramework>net8.0</TargetFramework>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>../../keys/Irony-Main.snk</AssemblyOriginatorKeyFile>
     <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
@@ -43,7 +43,7 @@
   <ItemGroup>
     <PackageReference Include="BCnEncoder.Net" Version="2.1.0" />
     <PackageReference Include="DotNetZip" Version="1.16.0" />    
-    <PackageReference Include="Magick.NET-Q8-x64" Version="13.3.0" />
+    <PackageReference Include="Magick.NET-Q8-x64" Version="13.6.0" />
     <PackageReference Include="Microsoft.Extensions.DependencyModel" Version="$(MicrosoftExtensionsDependencyModelVersion)" allowedVersions="$(MicrosoftExtensionsDependencyModelVersion)" />
     <PackageReference Include="Microsoft.NETCore.Platforms" Version="$(MicrosoftNETCorePlatformsVersion)" allowedVersions="$(MicrosoftNETCorePlatformsVersion)" />
     <PackageReference Include="Nerdbank.GitVersioning" Version="3.6.133">
@@ -53,7 +53,7 @@
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     <PackageReference Include="Pfim" Version="0.11.2" />
     <PackageReference Include="Sajidur78.StrongNamer" Version="0.2.8" />
-    <PackageReference Include="SharpCompress" Version="0.33.0" />
+    <PackageReference Include="SharpCompress" Version="0.36.0" />
     <PackageReference Include="SimpleInjector.Packaging" Version="5.0.0" />
     <PackageReference Include="SixLabors.ImageSharp" Version="$(SixLaborsImageSharp)" allowedVersions="$(SixLaborsImageSharp)" />
     <PackageReference Include="SixLabors.ImageSharp.Drawing" Version="$(SixLaborsImageSharpDrawing)" allowedVersions="$(SixLaborsImageSharpDrawing)" />

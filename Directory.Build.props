@@ -18,18 +18,21 @@
     <PathMap>$(MSBuildProjectDirectory)=$(MSBuildProjectName)</PathMap>
   </PropertyGroup>  
   <PropertyGroup>
-    <MicrosoftExtensionsDependencyModelVersion>[7.0.0]</MicrosoftExtensionsDependencyModelVersion>
-    <MicrosoftNETCorePlatformsVersion>[7.0.3]</MicrosoftNETCorePlatformsVersion>    
-    <MicrosoftExtensionsConfigurationBinder>[7.0.4]</MicrosoftExtensionsConfigurationBinder>
-    <MicrosoftExtensionsConfigurationJson>[7.0.0]</MicrosoftExtensionsConfigurationJson>
+    <MicrosoftExtensionsDependencyModelVersion>[8.0.0]</MicrosoftExtensionsDependencyModelVersion>
+    <MicrosoftNETCorePlatformsVersion>[8.0.0-preview.7.23375.6]</MicrosoftNETCorePlatformsVersion>    
+    <MicrosoftExtensionsConfigurationBinder>[8.0.1]</MicrosoftExtensionsConfigurationBinder>
+    <MicrosoftExtensionsConfigurationJson>[8.0.0]</MicrosoftExtensionsConfigurationJson>
+	<Jot>[2.1.17]</Jot>
+	<!-- Non upgradeable stuff below  -->
+	<!-- Avalonia is not easily upgradeable too  -->
     <MaterialAvalonia>[2.5.1]</MaterialAvalonia>
     <MessageBoxAvalonia>[2.1.0]</MessageBoxAvalonia>
     <Avalonia>[0.10.22]</Avalonia>
     <AvaloniaEdit>[0.10.12.2]</AvaloniaEdit>
-    <Jot>[2.1.16]</Jot>
-	<!-- 2.5.0 version breaks tests  -->
+	<AvaloniaMaterialIcons>[1.1.10]</AvaloniaMaterialIcons>
+	<!-- 2.5.0 version breaks tests, 1.26 rev still broken. I really don't want to investigate  -->
 	<XUnitRunnerVS>[2.4.5]</XUnitRunnerVS>
-    <!-- Recently 2.0 version was released and not all packages were updated  -->
+    <!-- SixLabors should be removed at some point  -->
     <SixLaborsImageSharp>[1.0.4]</SixLaborsImageSharp>
     <SixLaborsImageSharpDrawing>[1.0.0-beta13.15]</SixLaborsImageSharpDrawing>
     <SixLaborsImageSharpTextures>[0.0.0-alpha.0.132]</SixLaborsImageSharpTextures>
@@ -40,4 +43,8 @@
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
   </ItemGroup>
+  <ItemGroup>
+    <!-- Probably not needed but I've got so many dependencies -->
+    <RuntimeHostConfigurationOption Include="System.Runtime.Loader.UseRidGraph" Value="true" />
+  </ItemGroup>    
 </Project>

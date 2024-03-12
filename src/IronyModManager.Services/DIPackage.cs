@@ -4,15 +4,17 @@
 // Created          : 01-11-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 05-14-2023
+// Last Modified On : 02-25-2024
 // ***********************************************************************
 // <copyright file="DIPackage.cs" company="IronyModManager.Services">
 //     Mario
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
+
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using IronyModManager.DI.Extensions;
 using IronyModManager.Services.Common;
 using IronyModManager.Shared;
@@ -58,6 +60,7 @@ namespace IronyModManager.Services
             container.Register<IGameIndexService, GameIndexService>();
             container.Register<IExternalProcessHandlerService, ExternalProcessHandlerService>();
             container.Register<IObjectClone, ObjectClone>();
+            container.Register<IGameLanguageService, GameLanguageService>();
         }
 
         #endregion Methods

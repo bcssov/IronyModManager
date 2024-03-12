@@ -1,17 +1,17 @@
-﻿
-// ***********************************************************************
+﻿// ***********************************************************************
 // Assembly         : IronyModManager.Storage
 // Author           : Mario
 // Created          : 01-20-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 01-23-2024
+// Last Modified On : 02-25-2024
 // ***********************************************************************
 // <copyright file="JsonStore.cs" company="Mario">
 //     Mario
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
+
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -27,7 +27,6 @@ using Newtonsoft.Json;
 
 namespace IronyModManager.Storage
 {
-
     /// <summary>
     /// Class JsonStore.
     /// Implements the <see cref="Jot.Storage.IStore" />
@@ -41,12 +40,12 @@ namespace IronyModManager.Storage
         /// <summary>
         /// The converters
         /// </summary>
-        private static readonly JsonConverter[] converters = new JsonConverter[] { new StoreConverter(), new DIConverter() };
+        private static readonly JsonConverter[] converters = [new StoreConverter(), new DIConverter()];
 
         /// <summary>
         /// The root paths
         /// </summary>
-        private static string[] rootPaths = null;
+        private static string[] rootPaths;
 
         /// <summary>
         /// The storage item
@@ -67,9 +66,10 @@ namespace IronyModManager.Storage
             {
                 if (rootPaths == null)
                 {
-                    var col = new List<string>() { InitPath(true), InitPath(false) };
+                    var col = new List<string> { InitPath(true), InitPath(false) };
                     rootPaths = col.Distinct().ToArray();
                 }
+
                 return rootPaths;
             }
         }
@@ -81,6 +81,7 @@ namespace IronyModManager.Storage
         /// <summary>
         /// Clears all.
         /// </summary>
+        /// <exception cref="NotSupportedException"></exception>
         /// <exception cref="System.NotSupportedException"></exception>
         public void ClearAll()
         {
@@ -91,6 +92,7 @@ namespace IronyModManager.Storage
         /// Clears the data.
         /// </summary>
         /// <param name="id">The identifier.</param>
+        /// <exception cref="NotSupportedException"></exception>
         /// <exception cref="System.NotSupportedException"></exception>
         public void ClearData(string id)
         {
@@ -117,12 +119,9 @@ namespace IronyModManager.Storage
                     catch { }
                 }
 
-                if (items == null)
-                {
-                    items = new List<StoreItem>();
-                }
-                return items;
+                return items ??= [];
             }
+
             List<StoreItem> storeItems;
 
             var filePath = GetFilePath(id, true);
@@ -134,14 +133,7 @@ namespace IronyModManager.Storage
             var tempDiskDateItem = tempDiskItems.FirstOrDefault(p => p.Type == Store.Constants.StoreDateId);
             var diskDate = diskDateItem != null ? (DateTime)diskDateItem.Value : DateTime.MinValue;
             var tempDiskDate = tempDiskDateItem != null ? (DateTime)tempDiskDateItem.Value : DateTime.MinValue;
-            if (tempDiskDate > diskDate)
-            {
-                storeItems = tempDiskItems.Where(p => p != tempDiskDateItem).ToList();
-            }
-            else
-            {
-                storeItems = diskItems.Where(p => p != diskDateItem).ToList();
-            }
+            storeItems = tempDiskDate > diskDate ? tempDiskItems.Where(p => p != tempDiskDateItem).ToList() : diskItems.Where(p => p != diskDateItem).ToList();
 
             return storeItems.ToDictionary(item => item.Name, item => item.Value);
         }
@@ -150,6 +142,7 @@ namespace IronyModManager.Storage
         /// Lists the ids.
         /// </summary>
         /// <returns>IEnumerable&lt;System.String&gt;.</returns>
+        /// <exception cref="NotSupportedException"></exception>
         /// <exception cref="System.NotSupportedException"></exception>
         public IEnumerable<string> ListIds()
         {
@@ -165,14 +158,14 @@ namespace IronyModManager.Storage
         {
             var filePath = GetFilePath(id);
             var tempFilePath = GetTempPath(filePath);
-            var list = values.Select(kvp => new StoreItem() { Name = kvp.Key, Value = kvp.Value, Type = FormatTypeName(kvp.Value) }).ToList();
-            list.Add(new StoreItem() { Name = Store.Constants.StoreDateId, Type = Store.Constants.StoreDateId, Value = DateTime.UtcNow });
-            var serialized = JsonConvert.SerializeObject(list, new JsonSerializerSettings() { Formatting = Formatting.None, TypeNameHandling = TypeNameHandling.None });
+            var list = values.Select(kvp => new StoreItem { Name = kvp.Key, Value = kvp.Value, Type = FormatTypeName(kvp.Value) }).ToList();
+            list.Add(new StoreItem { Name = Store.Constants.StoreDateId, Type = Store.Constants.StoreDateId, Value = DateTime.UtcNow });
+            var serialized = JsonConvert.SerializeObject(list, new JsonSerializerSettings { Formatting = Formatting.None, TypeNameHandling = TypeNameHandling.None });
 
-            string directory = Path.GetDirectoryName(filePath);
+            var directory = Path.GetDirectoryName(filePath);
             if (!Directory.Exists(directory))
             {
-                Directory.CreateDirectory(directory);
+                Directory.CreateDirectory(directory!);
             }
 
             File.WriteAllText(tempFilePath, serialized);
@@ -196,18 +189,22 @@ namespace IronyModManager.Storage
             {
                 type = instance.GetType();
             }
+
             if (typeof(IPropertyChangedModel).IsAssignableFrom(type))
             {
                 var name = type.FullName;
-                var names = name.Split(Store.Constants.Dot, StringSplitOptions.RemoveEmptyEntries);
+                var names = name!.Split(Store.Constants.Dot, StringSplitOptions.RemoveEmptyEntries);
                 return string.Join(Store.Constants.Dot, names);
             }
             else if (typeof(IEnumerable<IPropertyChangedModel>).IsAssignableFrom(type))
             {
-                var name = type.GetGenericArguments().SingleOrDefault().FullName;
-                var names = name.Split(Store.Constants.Dot, StringSplitOptions.RemoveEmptyEntries);
+                // Sure why not make a breaking change
+                var name = !type.IsArray ? type.GetGenericArguments().SingleOrDefault()!.FullName : type.GetElementType()!.FullName;
+
+                var names = name!.Split(Store.Constants.Dot, StringSplitOptions.RemoveEmptyEntries);
                 return $"{nameof(IEnumerable)}{Store.Constants.EnumerableOpenTag}{string.Join(Store.Constants.Dot, names)}{Store.Constants.EnumerableCloseTag}";
             }
+
             return type.FullName;
         }
 
@@ -232,8 +229,8 @@ namespace IronyModManager.Storage
             var secondSegment = string.Empty;
 
             var entryAssembly = Assembly.GetEntryAssembly();
-            var companyAttribute = (AssemblyCompanyAttribute)Attribute.GetCustomAttribute(entryAssembly, typeof(AssemblyCompanyAttribute));
-            if (!string.IsNullOrEmpty(companyAttribute.Company))
+            var companyAttribute = (AssemblyCompanyAttribute)Attribute.GetCustomAttribute(entryAssembly!, typeof(AssemblyCompanyAttribute));
+            if (!string.IsNullOrEmpty(companyAttribute!.Company))
             {
                 if (!useProperSeparator)
                 {
@@ -244,8 +241,9 @@ namespace IronyModManager.Storage
                     fistSegment = $"{companyAttribute.Company}{Path.DirectorySeparatorChar}";
                 }
             }
+
             var titleAttribute = (AssemblyTitleAttribute)Attribute.GetCustomAttribute(entryAssembly, typeof(AssemblyTitleAttribute));
-            if (!string.IsNullOrEmpty(titleAttribute.Title))
+            if (!string.IsNullOrEmpty(titleAttribute!.Title))
             {
                 if (!useProperSeparator)
                 {
@@ -268,7 +266,7 @@ namespace IronyModManager.Storage
         /// <returns>System.String.</returns>
         private string GetFilePath(string id, bool lookForOlderVersion = false)
         {
-            string mainPath = string.Empty;
+            var mainPath = string.Empty;
             foreach (var root in RootPaths)
             {
                 var version = FileVersionInfo.GetVersionInfo(GetType().Assembly.Location);
@@ -277,10 +275,12 @@ namespace IronyModManager.Storage
                 {
                     mainPath = path;
                 }
+
                 if (File.Exists(path))
                 {
                     return path;
                 }
+
                 if (lookForOlderVersion)
                 {
                     if (storageItem == null && Directory.Exists(root))
@@ -293,38 +293,29 @@ namespace IronyModManager.Storage
                                 var versionData = item.Split("_", StringSplitOptions.RemoveEmptyEntries)[1].Replace(Shared.Constants.JsonExtension, string.Empty).Trim();
                                 if (System.Version.TryParse(versionData, out var parsedVersion))
                                 {
-                                    dbs.Add(new StorageItem()
-                                    {
-                                        FileName = item,
-                                        Version = parsedVersion
-                                    });
+                                    dbs.Add(new StorageItem { FileName = item, Version = parsedVersion });
                                 }
                                 else
                                 {
-                                    dbs.Add(new StorageItem()
-                                    {
-                                        FileName = item,
-                                        Version = new System.Version(0, 0, 0, 0)
-                                    });
+                                    dbs.Add(new StorageItem { FileName = item, Version = new System.Version(0, 0, 0, 0) });
                                 }
                             }
                             else
                             {
-                                dbs.Add(new StorageItem()
-                                {
-                                    FileName = item,
-                                    Version = new System.Version(0, 0, 0, 0)
-                                });
+                                dbs.Add(new StorageItem { FileName = item, Version = new System.Version(0, 0, 0, 0) });
                             }
                         }
+
                         storageItem = dbs.OrderByDescending(p => p.Version).FirstOrDefault();
                     }
+
                     if (storageItem != null)
                     {
                         return storageItem.FileName;
                     }
                 }
             }
+
             return mainPath;
         }
 

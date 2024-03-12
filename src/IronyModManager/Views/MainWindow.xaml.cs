@@ -1,11 +1,10 @@
-﻿
-// ***********************************************************************
+﻿// ***********************************************************************
 // Assembly         : IronyModManager
 // Author           : Mario
 // Created          : 01-10-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-25-2023
+// Last Modified On : 03-11-2024
 // ***********************************************************************
 // <copyright file="MainWindow.xaml.cs" company="Mario">
 //     Mario
@@ -39,7 +38,6 @@ using ReactiveUI;
 
 namespace IronyModManager.Views
 {
-
     /// <summary>
     /// Class MainWindow.
     /// Implements the <see cref="IronyModManager.Common.Views.BaseWindow{IronyModManager.ViewModels.MainWindowViewModel}" />
@@ -61,17 +59,17 @@ namespace IronyModManager.Views
         private Dictionary<string, KeyGesture> hotkeyGestures;
 
         /// <summary>
-        /// The prevent shutdown
+        /// The prevention shutdown flag
         /// </summary>
-        private bool preventShutdown = false;
+        private bool preventShutdown;
 
         /// <summary>
         /// The shutdown requested
         /// </summary>
-        private bool shutdownRequested = false;
+        private bool shutdownRequested;
 
         /// <summary>
-        /// The shut down state
+        /// The shut-down state
         /// </summary>
         private IShutDownState shutDownState;
 
@@ -92,6 +90,16 @@ namespace IronyModManager.Views
 
         #endregion Constructors
 
+        #region Properties
+
+        /// <summary>
+        /// The actual state
+        /// </summary>
+        /// <value>The actual state.</value>
+        public WindowState ActualState { get; set; }
+
+        #endregion Properties
+
         #region Methods
 
         /// <summary>
@@ -110,12 +118,13 @@ namespace IronyModManager.Views
                 var locManager = DIResolver.Get<ILocalizationManager>();
                 var message = locManager.GetResource(LocalizationResources.App.BackgroundOperationMessage);
                 var id = DIResolver.Get<IIDGenerator>().GetNextId();
-                ViewModel.TriggerManualOverlay(id, true, message);
+                ViewModel!.TriggerManualOverlay(id, true, message);
             }
             else
             {
                 SaveWindowState();
             }
+
             base.OnClosing(e);
         }
 
@@ -134,6 +143,7 @@ namespace IronyModManager.Views
                     enterKeyGestures.Add(item, KeyGesture.Parse(item));
                 }
             }
+
             return enterKeyGestures;
         }
 
@@ -152,6 +162,7 @@ namespace IronyModManager.Views
                     hotkeyGestures.Add(item, KeyGesture.Parse(item));
                 }
             }
+
             return hotkeyGestures;
         }
 
@@ -164,12 +175,7 @@ namespace IronyModManager.Views
             foreach (var item in GetEnterKeyGestures())
             {
                 var vm = ViewModel;
-                KeyBindings.Add(new KeyBinding()
-                {
-                    Command = vm.RegisterHotkeyCommand,
-                    CommandParameter = item.Key,
-                    Gesture = item.Value
-                });
+                KeyBindings.Add(new KeyBinding { Command = vm!.RegisterHotkeyCommand, CommandParameter = item.Key, Gesture = item.Value });
             }
         }
 
@@ -182,12 +188,7 @@ namespace IronyModManager.Views
             foreach (var item in GetHotKeyGestures())
             {
                 var vm = ViewModel;
-                KeyBindings.Add(new KeyBinding()
-                {
-                    Command = vm.RegisterHotkeyCommand,
-                    CommandParameter = item.Key,
-                    Gesture = item.Value
-                });
+                KeyBindings.Add(new KeyBinding { Command = vm!.RegisterHotkeyCommand, CommandParameter = item.Key, Gesture = item.Value });
             }
         }
 
@@ -202,10 +203,12 @@ namespace IronyModManager.Views
                 var oldPos = Position;
                 var oldHeight = Height;
                 var oldWidth = Width;
+
                 static bool isValid(int value)
                 {
                     return value > 0 && !double.IsInfinity(value) && !double.IsNaN(value);
                 }
+
                 try
                 {
                     var state = service.Get();
@@ -213,10 +216,12 @@ namespace IronyModManager.Views
                     {
                         Height = state.Height.GetValueOrDefault();
                     }
+
                     if (isValid(state.Width.GetValueOrDefault()))
                     {
                         Width = state.Width.GetValueOrDefault();
                     }
+
                     WindowState = state.IsMaximized.GetValueOrDefault() ? WindowState.Maximized : WindowState.Normal;
 
                     // Silly setup code isn't it?
@@ -225,7 +230,9 @@ namespace IronyModManager.Views
                     var activeScreen = Screens.ScreenFromPoint(pos);
                     var totalScreenX = Screens.All.Sum(p => p.WorkingArea.Width);
                     var locX = state.LocationX.GetValueOrDefault() + state.Width.GetValueOrDefault() > totalScreenX ? totalScreenX - state.Width.GetValueOrDefault() : state.LocationX.GetValueOrDefault();
-                    var locY = state.LocationY.GetValueOrDefault() + state.Height.GetValueOrDefault() > activeScreen.WorkingArea.Height ? activeScreen.WorkingArea.Height - state.Height.GetValueOrDefault() : state.LocationY.GetValueOrDefault();
+                    var locY = state.LocationY.GetValueOrDefault() + state.Height.GetValueOrDefault() > activeScreen!.WorkingArea.Height
+                        ? activeScreen.WorkingArea.Height - state.Height.GetValueOrDefault()
+                        : state.LocationY.GetValueOrDefault();
                     if (isValid(locX) && isValid(locY))
                     {
                         pos = Position.WithX(locX);
@@ -254,7 +261,6 @@ namespace IronyModManager.Views
         /// <param name="hotkeys">The hotkeys.</param>
         protected virtual void KillHotkeys(Dictionary<string, KeyGesture> hotkeys)
         {
-            var enterHotKeys = GetEnterKeyGestures();
             var enterBindings = KeyBindings.Where(p => hotkeys.ContainsValue(p.Gesture)).ToList();
             foreach (var item in enterBindings)
             {
@@ -276,17 +282,11 @@ namespace IronyModManager.Views
                     preventShutdown = x.PreventShutdown;
                     if (shutdownRequested && !preventShutdown)
                     {
-                        Dispatcher.UIThread.InvokeAsync(() =>
-                        {
-                            ((IClassicDesktopStyleApplicationLifetime)Application.Current.ApplicationLifetime).Shutdown();
-                        });
+                        Dispatcher.UIThread.InvokeAsync(() => { ((IClassicDesktopStyleApplicationLifetime)Application.Current!.ApplicationLifetime!).Shutdown(); });
                     }
                 }).DisposeWith(disposables);
 
-            this.WhenAnyValue(v => v.ViewModel.RegisterHotkeyCommand).Subscribe(s =>
-            {
-                InitializeHotKeys();
-            }).DisposeWith(disposables);
+            this.WhenAnyValue(v => v.ViewModel.RegisterHotkeyCommand).Subscribe(_ => { InitializeHotKeys(); }).DisposeWith(disposables);
 
             var hotkeySuspendHandler = DIResolver.Get<SuspendHotkeysHandler>();
             hotkeySuspendHandler.Subscribe(s =>
@@ -324,6 +324,23 @@ namespace IronyModManager.Views
         }
 
         /// <summary>
+        /// Called when [property changed].
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="change">The change.</param>
+        protected override void OnPropertyChanged<T>(AvaloniaPropertyChangedEventArgs<T> change)
+        {
+            base.OnPropertyChanged(change);
+            if (change != null && change.Property == WindowStateProperty)
+            {
+                if (WindowState != WindowState.Minimized)
+                {
+                    ActualState = WindowState;
+                }
+            }
+        }
+
+        /// <summary>
         /// Initializes the component.
         /// </summary>
         private void InitializeComponent()
@@ -332,6 +349,15 @@ namespace IronyModManager.Views
             if (!Design.IsDesignMode)
             {
                 InitWindowSize();
+            }
+
+            if (WindowState != WindowState.Minimized)
+            {
+                ActualState = WindowState;
+            }
+            else
+            {
+                ActualState = WindowState.Normal;
             }
         }
 
@@ -356,16 +382,19 @@ namespace IronyModManager.Views
                 {
                     locX = 0;
                 }
+
                 if (locY < 0.0)
                 {
                     locY = 0;
                 }
+
                 state.Height = Convert.ToInt32(ClientSize.Height) - Convert.ToInt32(ExtendClientAreaTitleBarHeightHint);
                 state.Width = Convert.ToInt32(ClientSize.Width);
                 state.IsMaximized = false;
                 state.LocationX = Convert.ToInt32(locX);
                 state.LocationY = Convert.ToInt32(locY);
             }
+
             service.Save(state);
         }
 

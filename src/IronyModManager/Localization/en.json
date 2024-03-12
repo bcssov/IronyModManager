@@ -14,6 +14,10 @@
             "DLC": "DLC"
         }
     },
+    "JokeError": {
+        "Title": "Unhandled egg-container memory violation",
+        "Message": "Press OK to pretend like nothing happened :)"
+    },
     "FatalError": {
         "Message": "Unhandled error occurred. App will close automatically.",
         "MessageWithLastError": "Unhandled error occurred. Please use this information to file a bug report:{NewLine}{NewLine}{Message}",
@@ -94,6 +98,20 @@
         "CrusaderKings3": "Crusader Kings III",
         "Victoria3": "Victoria 3",
         "STInfinite": "Star Trek: Infinite"
+    },
+    "GameLanguages": {
+        "l_english": "English",
+        "l_braz_por": "Portugese",
+        "l_french": "French",
+        "l_german": "German",
+        "l_polish": "Polish",
+        "l_russian": "Russian",
+        "l_simp_chinese": "Simp Chinese",
+        "l_spanish": "Spanish",
+        "l_chinese": "Chinese",
+        "l_traditional_chinese": "Traditional Chinese",
+        "l_japanese": "Japanese",
+        "l_korean": "Korean"
     },
     "Installed_Mods": {
         "Name": "Installed Mods",
@@ -328,7 +346,8 @@
             "Undo": "Undo",
             "Redo": "Redo",
             "Editor": "External Merge",
-            "ReadonlyEditor": "External Compare"
+            "ReadonlyEditor": "External Compare",
+            "ToggleCompare": "Toggle Diff Compare Mode"
         },
         "EditorContextMenu": {
             "Copy": "Copy",
@@ -457,6 +476,10 @@
             "CloseAfterLaunch": "Close After Launching Game",
             "AutoConfigure": "Configure All...",
             "CustomModPath": "Custom Mod Directory"
+        },
+        "ConflictSolver": {
+            "Title": "Conflict Solver",
+            "AllowedLanguages": "Allowed Languages"
         },
         "Updates": {
             "Title": "Update Options",

@@ -1,17 +1,17 @@
-﻿
-// ***********************************************************************
+﻿// ***********************************************************************
 // Assembly         : IronyModManager
 // Author           : Mario
 // Created          : 01-10-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-25-2023
+// Last Modified On : 03-11-2024
 // ***********************************************************************
 // <copyright file="Program.cs" company="IronyModManager">
 //     Copyright (c) Mario. All rights reserved.
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,21 +19,24 @@ using System.Threading;
 using System.Threading.Tasks;
 using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Threading;
 using CommandLine;
+using IronyModManager.Common;
 using IronyModManager.Controls.Dialogs;
 using IronyModManager.DI;
 using IronyModManager.Implementation.Actions;
 using IronyModManager.Implementation.AvaloniaEdit;
+using IronyModManager.Implementation.SingleInstance;
 using IronyModManager.Localization;
 using IronyModManager.Platform;
 using IronyModManager.Platform.Configuration;
 using IronyModManager.Shared;
+using IronyModManager.Views;
 using NLog;
 using ILogger = IronyModManager.Shared.ILogger;
 
 namespace IronyModManager
 {
-
     /// <summary>
     /// Class Program.
     /// </summary>
@@ -45,7 +48,7 @@ namespace IronyModManager
         /// <summary>
         /// The external notification shown
         /// </summary>
-        private static bool ExternalNotificationShown = false;
+        private static bool ExternalNotificationShown;
 
         #endregion Fields
 
@@ -57,9 +60,10 @@ namespace IronyModManager
         /// </summary>
         /// <returns>AppBuilder.</returns>
         public static AppBuilder BuildAvaloniaApp()
-            => AppBuilder.Configure<App>()
+        {
+            return AppBuilder.Configure<App>()
                 .UseIronyPlatformDetect()
-                .UseIronyManagedDialogs().AfterSetup((s) =>
+                .UseIronyManagedDialogs().AfterSetup(_ =>
                 {
                     if (!Design.IsDesignMode)
                     {
@@ -72,6 +76,7 @@ namespace IronyModManager
                         DIContainer.Finish(true);
                     }
                 });
+        }
 
         // Initialization code. Don't use any Avalonia, third-party APIs or any
         // SynchronizationContext-reliant code before AppMain is called: things aren't initialized
@@ -93,6 +98,17 @@ namespace IronyModManager
             try
             {
                 ParseArguments(args);
+                var canInitialize = true;
+                if (!StaticResources.CommandLineOptions.ShowFatalErrorNotification)
+                {
+                    canInitialize = InitSingleInstance();
+                }
+
+                if (!canInitialize)
+                {
+                    return;
+                }
+
                 var app = BuildAvaloniaApp();
                 InitAvaloniaOptions(app);
                 Bootstrap.PostStartup();
@@ -141,27 +157,33 @@ namespace IronyModManager
                 {
                     waylandOpts.AppId = configuration.WaylandAppId;
                 }
+
                 if (configuration.UseGPU.HasValue)
                 {
                     x11Opts.UseGpu = configuration.UseGPU.GetValueOrDefault();
                     waylandOpts.UseGpu = configuration.UseGPU.GetValueOrDefault();
                 }
+
                 if (configuration.UseEGL.HasValue)
                 {
                     x11Opts.UseEGL = configuration.UseEGL.GetValueOrDefault();
                 }
+
                 if (configuration.UseDBusMenu.HasValue)
                 {
                     x11Opts.UseDBusMenu = configuration.UseDBusMenu.GetValueOrDefault();
                 }
+
                 if (configuration.UseDeferredRendering.HasValue)
                 {
                     x11Opts.UseDeferredRendering = configuration.UseDeferredRendering.GetValueOrDefault();
                     waylandOpts.UseDeferredRendering = configuration.UseDeferredRendering.GetValueOrDefault();
                 }
+
                 app.With(x11Opts);
                 app.With(waylandOpts);
             }
+
             configureLinux();
         }
 
@@ -180,11 +202,7 @@ namespace IronyModManager
         private static void InitDI()
         {
             Bootstrap.Setup(
-                new DIOptions()
-                {
-                    Container = new SimpleInjector.Container(),
-                    PluginPathAndName = Shared.Constants.PluginsPathAndName
-                });
+                new DIOptions { Container = new SimpleInjector.Container(), PluginPathAndName = Shared.Constants.PluginsPathAndName });
         }
 
         /// <summary>
@@ -193,6 +211,46 @@ namespace IronyModManager
         private static void InitLogging()
         {
             LogManager.Setup().SetupExtensions(s => s.RegisterTarget("IronyFile", typeof(Log.IronyFileTarget)));
+        }
+
+        /// <summary>
+        /// Initializes the single instance.
+        /// </summary>
+        /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
+        private static bool InitSingleInstance()
+        {
+            var configuration = DIResolver.Get<IPlatformConfiguration>().GetOptions().App;
+            if (configuration.SingleInstance)
+            {
+                var result = SingleInstance.Initialize();
+                SingleInstance.InstanceLaunched += args =>
+                {
+                    if (!StaticResources.AllowCommandLineChange)
+                    {
+                        return;
+                    }
+
+                    ParseArguments(args.CommandLineArgs);
+                    Dispatcher.UIThread.SafeInvoke(() =>
+                    {
+                        var mainWindow = (MainWindow)Helpers.GetMainWindow();
+                        var previousState = mainWindow.ActualState;
+                        if (mainWindow.WindowState != WindowState.Minimized)
+                        {
+                            mainWindow.WindowState = WindowState.Minimized;
+                        }
+
+                        mainWindow.WindowState = previousState;
+                        mainWindow.Show();
+                        mainWindow.BringIntoView();
+                        mainWindow.Activate();
+                        mainWindow.Focus();
+                    });
+                };
+                return result;
+            }
+
+            return true;
         }
 
         /// <summary>
@@ -206,7 +264,7 @@ namespace IronyModManager
                 var logger = DIResolver.Get<ILogger>();
                 logger.Fatal(e);
 
-                var runFatalErrorProcess = StaticResources.CommandLineOptions == null || !StaticResources.CommandLineOptions.ShowFatalErrorNotification;
+                var runFatalErrorProcess = !StaticResources.CommandLineOptions.ShowFatalErrorNotification;
                 if (runFatalErrorProcess && !ExternalNotificationShown)
                 {
                     var path = Environment.ProcessPath;

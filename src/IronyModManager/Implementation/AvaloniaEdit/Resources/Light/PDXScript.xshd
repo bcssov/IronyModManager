@@ -2,8 +2,8 @@
 <SyntaxDefinition name="PDXScript" extensions=".txt" xmlns="http://icsharpcode.net/sharpdevelop/syntaxdefinition/2008">
   <Color name="Comment" foreground="SlateGray" />
   <Color name="String" foreground="PaleGreen" />
-  <Color name="Number" foreground="Orange" />
-  <Color name="Keywords" foreground="LightBlue" />
+  <Color name="Number" foreground="#C000C0" />
+  <Color name="Keywords" foreground="Blue" />
   <Color name="Assignment" foreground="Red" />
   <RuleSet ignoreCase="true">
     <Span color="String" stopateol="false" escapecharacter="\">

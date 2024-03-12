@@ -4,19 +4,32 @@
 // Created          : 04-16-2021
 //
 // Last Modified By : Mario
-// Last Modified On : 05-12-2023
+// Last Modified On : 02-11-2024
 // ***********************************************************************
 // <copyright file="PlatformConfigurationOptions.cs" company="Mario">
 //     Mario
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
-using System;
-using System.Collections.Generic;
-using System.Linq;
-
 namespace IronyModManager.Platform.Configuration
 {
+
+    /// <summary>
+    /// Class App.
+    /// </summary>
+    public class App
+    {
+        #region Properties
+
+        /// <summary>
+        /// Gets or sets a value indicating whether [single instance].
+        /// </summary>
+        /// <value><c>true</c> if [single instance]; otherwise, <c>false</c>.</value>
+        public bool SingleInstance { get; set; }
+
+        #endregion Properties
+    }
+
     /// <summary>
     /// Class ConflictSolver.
     /// </summary>
@@ -119,6 +132,12 @@ namespace IronyModManager.Platform.Configuration
         #region Properties
 
         /// <summary>
+        /// Gets the application.
+        /// </summary>
+        /// <value>The application.</value>
+        public App App { get; } = new App();
+
+        /// <summary>
         /// Gets the conflict solver.
         /// </summary>
         /// <value>The conflict solver.</value>
@@ -207,6 +226,12 @@ namespace IronyModManager.Platform.Configuration
         /// </summary>
         /// <value><c>true</c> if disable; otherwise, <c>false</c>.</value>
         public bool Disable { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether [disable install only].
+        /// </summary>
+        /// <value><c>true</c> if [disable install only]; otherwise, <c>false</c>.</value>
+        public bool DisableInstallOnly { get; set; }
 
         #endregion Properties
     }
