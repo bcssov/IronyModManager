@@ -4,8 +4,11 @@
 		<title>Irony Mod Manager</title>
 		<language>en</language>
 		<item>
-			<title>1.26.145</title>
-			<description>## Release Notes 1.26
+			<title>1.26.146</title>
+			<description>## Current Release Notes
+* Fix CTD in CS while using ctrl a + c
+
+## Release Notes 1.26
 * Update dependencies
 * Bump to net8 which should grant some performance improvements (win7 might not work going forward)
 * Remove ripple animation from Material themes (per #484)
@@ -14,12 +17,15 @@
 * Added new diff viewer
 * Stellaris 3.11 beta compatibility
 * Added conflict solver option to skip parsing some languages</description>
-			<pubDate>Tue, 12 Mar 2024 21:37:47 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.26.145/linux-x64.zip" sparkle:version="1.26.145.53749" sparkle:shortVersionString="1.26.145" length="90843904" sparkle:os="linux" type="application/zip" sparkle:signature="gXFTjA5LgKLq9Jy0FhVIz+t4CYYeBA8i1FJU3FZpWM1Jh0g75b5kn7+WNw0rjW5+lkvpjE8oJ/YCUvvpsrA7DQ=="/>
+			<pubDate>Thu, 14 Mar 2024 00:51:02 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.26.146/linux-x64.zip" sparkle:version="1.26.146.34509" sparkle:shortVersionString="1.26.146" length="90843853" sparkle:os="linux" type="application/zip" sparkle:signature="m95FbYbg+8wAqw77LLnty2QC2WMXdNKzOH17THanva2qjIzP3v72hIJ4Vk5o4gwbLQ0y9Wy8IoMzga5XLxkcAw=="/>
 		</item>
 		<item>
-			<title>1.26.145</title>
-			<description>## Release Notes 1.26
+			<title>1.26.146</title>
+			<description>## Current Release Notes
+* Fix CTD in CS while using ctrl a + c
+
+## Release Notes 1.26
 * Update dependencies
 * Bump to net8 which should grant some performance improvements (win7 might not work going forward)
 * Remove ripple animation from Material themes (per #484)
@@ -28,12 +34,15 @@
 * Added new diff viewer
 * Stellaris 3.11 beta compatibility
 * Added conflict solver option to skip parsing some languages</description>
-			<pubDate>Tue, 12 Mar 2024 21:37:52 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.26.145/osx-x64.zip" sparkle:version="1.26.145.53749" sparkle:shortVersionString="1.26.145" length="93809176" sparkle:os="osx" type="application/zip" sparkle:signature="gi2pPYJmoCoCHZSEHht6K2/x9ib5vqgxnR9sCh2B1tYxREluy5vid6AA/yyXvJjXcNQLB0oUePUljI4yacpTDw=="/>
+			<pubDate>Thu, 14 Mar 2024 00:51:07 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.26.146/osx-x64.zip" sparkle:version="1.26.146.34509" sparkle:shortVersionString="1.26.146" length="93809137" sparkle:os="osx" type="application/zip" sparkle:signature="ZbfA59y66bV17Qd16WrZ+qM08WZNb9IwVRlYBrmtxbhtSVMkU0H5o8narLZSu2dxWqv5eV1XSx2aVkvr+OigDw=="/>
 		</item>
 		<item>
-			<title>1.26.145</title>
-			<description>## Release Notes 1.26
+			<title>1.26.146</title>
+			<description>## Current Release Notes
+* Fix CTD in CS while using ctrl a + c
+
+## Release Notes 1.26
 * Update dependencies
 * Bump to net8 which should grant some performance improvements (win7 might not work going forward)
 * Remove ripple animation from Material themes (per #484)
@@ -42,12 +51,15 @@
 * Added new diff viewer
 * Stellaris 3.11 beta compatibility
 * Added conflict solver option to skip parsing some languages</description>
-			<pubDate>Tue, 12 Mar 2024 21:37:58 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.26.145/win-x64-setup.zip" sparkle:version="1.26.145.53749" sparkle:shortVersionString="1.26.145" length="72458898" sparkle:os="windows" type="application/zip" sparkle:signature="h5+x8oIFJX6+RK0WdKaSYr0giJZQQCFkjjvfTICE5gmqDbhV4JIhdWCVK+ccuN490BfoG8pJclIKQKsd3ed4CA=="/>
+			<pubDate>Thu, 14 Mar 2024 00:51:13 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.26.146/win-x64-setup.zip" sparkle:version="1.26.146.34509" sparkle:shortVersionString="1.26.146" length="72445982" sparkle:os="windows" type="application/zip" sparkle:signature="/w8ZMz8ODAqZwS07OSeOMswOOIOrEmK7ZTWhtg87LMPCjrCHD/YtOlrRL3bTqRGQz9dkorayJ6uCuMfmAxdnAA=="/>
 		</item>
 		<item>
-			<title>1.26.145</title>
-			<description>## Release Notes 1.26
+			<title>1.26.146</title>
+			<description>## Current Release Notes
+* Fix CTD in CS while using ctrl a + c
+
+## Release Notes 1.26
 * Update dependencies
 * Bump to net8 which should grant some performance improvements (win7 might not work going forward)
 * Remove ripple animation from Material themes (per #484)
@@ -56,8 +68,8 @@
 * Added new diff viewer
 * Stellaris 3.11 beta compatibility
 * Added conflict solver option to skip parsing some languages</description>
-			<pubDate>Tue, 12 Mar 2024 21:37:59 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.26.145/win-x64.zip" sparkle:version="1.26.145.53749" sparkle:shortVersionString="1.26.145" length="106439664" sparkle:os="windows" type="application/zip" sparkle:signature="fMayAHiqVrSUPaVK6XDoaSi/vC3E9+vDhh+B57AKgtf0HVRjfGq3bWZXifXlZnsHyy36OnSXwrxbzk9Z5nOmAw=="/>
+			<pubDate>Thu, 14 Mar 2024 00:51:13 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.26.146/win-x64.zip" sparkle:version="1.26.146.34509" sparkle:shortVersionString="1.26.146" length="106439576" sparkle:os="windows" type="application/zip" sparkle:signature="z/s7sQjGsLjid7JSRbsU2zCObrh0teLM2f/0dEiR2SrZKIgO9Quosu+ad25/uSsYzFt2q5zPLaR81Wbqt2kDBA=="/>
 		</item>
 	</channel>
 </rss>
