@@ -45,8 +45,6 @@ namespace IronyModManager.Parser.Tests
 #else
 
 
-        #region Methods
-
         [Fact(Timeout = 300000)]
 #endif
         /// <summary>
@@ -74,6 +72,5 @@ namespace IronyModManager.Parser.Tests
             return Task.CompletedTask;
         }
 
-        #endregion Methods
     }
 }

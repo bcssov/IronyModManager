@@ -19,6 +19,16 @@
     <NoWarn>1701;1702;NU1603</NoWarn>		
   </PropertyGroup>
   
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='osx-x64|x64'">
+    <Optimize>True</Optimize>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='win-x64|x64'">
+    <Optimize>True</Optimize>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='linux-x64|x64'">
+    <Optimize>True</Optimize>
+  </PropertyGroup>
+  
   <ItemGroup>
     <Compile Include="..\..\GlobalSuppressions.cs" Link="GlobalSuppressions.cs" />
     <Compile Include="..\IronyModManager.IO.Common\Platforms\ISteam.cs" Link="IO\ISteam.cs" />
@@ -47,10 +57,14 @@
 
   <ItemGroup>
 	<PackageReference Include="CommandLineParser" Version="2.9.1" />
+	<PackageReference Include="Nerdbank.GitVersioning" />
 	<PackageReference Include="NLog" Version="5.2.8" />
 	<PackageReference Include="Sajidur78.StrongNamer" Version="0.2.8" />
 	<PackageReference Include="Steamworks.NET" Version="20.1.0" />
-	<PackageReference Update="Nerdbank.GitVersioning" Version="3.6.133" />
+	<PackageReference Update="Nerdbank.GitVersioning" Version="3.6.133">
+	  <PrivateAssets>all</PrivateAssets>
+	  <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+	</PackageReference>
   </ItemGroup>  
 
   <ItemGroup>
