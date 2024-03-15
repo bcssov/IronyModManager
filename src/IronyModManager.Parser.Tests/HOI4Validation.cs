@@ -4,18 +4,17 @@
 // Created          : 01-28-2022
 //
 // Last Modified By : Mario
-// Last Modified On : 01-28-2022
+// Last Modified On : 03-15-2024
 // ***********************************************************************
 // <copyright file="HOI4Validation.cs" company="Mario">
 //     Mario
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading;
 using System.Threading.Tasks;
 using Xunit;
 using Xunit.Abstractions;
@@ -41,13 +40,12 @@ namespace IronyModManager.Parser.Tests
 
         #endregion Constructors
 
-        #region Methods
-
 #if !FUNCTIONAL_TEST
-
-
         [Fact(Skip = "Test is for detection of parser issues.", Timeout = 300000)]
 #else
+
+
+        #region Methods
 
         [Fact(Timeout = 300000)]
 #endif
@@ -61,18 +59,19 @@ namespace IronyModManager.Parser.Tests
         }
 
 #if !FUNCTIONAL_TEST
-
         [Fact(Skip = "Test is for detection of parser issues.", Timeout = 300000)]
 #else
 
         [Fact(Timeout = 300000)]
 #endif
         /// <summary>
-        /// Defines the test method StellarisExtensions.
+        /// Defines the test method HOI4Extensions.
         /// </summary>
-        public void HOI4Extensions()
+        /// <returns>Task.</returns>
+        public Task HOI4Extensions()
         {
             Extensions();
+            return Task.CompletedTask;
         }
 
         #endregion Methods
