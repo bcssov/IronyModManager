@@ -4,7 +4,7 @@
 // Created          : 03-20-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-07-2024
+// Last Modified On : 03-17-2024
 // ***********************************************************************
 // <copyright file="MergeViewerControlView.xaml.cs" company="Mario">
 //     Mario
@@ -675,12 +675,12 @@ namespace IronyModManager.Views.Controls
                 if (leftDiff)
                 {
                     ViewModel!.SetText(text, ViewModel.RightSide);
-                    diffRight.TextArea.TextView.Redraw();
+                    RedrawEditorDiffs();
                 }
                 else
                 {
                     ViewModel!.SetText(ViewModel.LeftSide, text);
-                    diffLeft.TextArea.TextView.Redraw();
+                    RedrawEditorDiffs();
                 }
             };
             diff.TextArea.SelectionChanged += (_, _) =>
