@@ -4,7 +4,7 @@
 // Created          : 04-15-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-07-2024
+// Last Modified On : 03-14-2024
 // ***********************************************************************
 // <copyright file="TextEditor.cs" company="Mario">
 //     Mario
@@ -113,6 +113,11 @@ namespace IronyModManager.Controls
         /// <returns>An int.</returns>
         public int GetLastColumnByLine(int line)
         {
+            if (line >= Document.Lines.Count)
+            {
+                line = Document.Lines.Count;
+            }
+
             var docLine = Document.GetLineByNumber(line);
             if (docLine != null && docLine.Length != 0)
             {

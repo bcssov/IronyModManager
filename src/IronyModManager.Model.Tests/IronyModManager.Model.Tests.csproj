@@ -16,7 +16,17 @@
     <WarningsAsErrors />    
 	<NoWarn>1701;1702;NU1603;xUnit1004</NoWarn>	
   </PropertyGroup>
-  
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='osx-x64|x64'">
+    <Optimize>True</Optimize>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='win-x64|x64'">
+    <Optimize>True</Optimize>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='linux-x64|x64'">
+    <Optimize>True</Optimize>
+  </PropertyGroup>
+    
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Functional_Test|x64'">
     <DefineConstants>TRACE;FUNCTIONAL_TEST</DefineConstants>
   </PropertyGroup>
