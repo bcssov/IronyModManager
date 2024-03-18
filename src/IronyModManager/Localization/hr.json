@@ -479,7 +479,12 @@
         },
         "ConflictSolver": {
             "Title": "Rješavanje sukoba",
-            "AllowedLanguages": "Dopušteni jezici"
+            "AllowedLanguages": "Dopušteni jezici",
+            "Colors": "Nove boje preglednika razlika",
+            "ConflictSolverDeletedLineColor": "Izbrisana linija",
+            "ConflictSolverImaginaryLineColor": "Imaginarna linija",
+            "ConflictSolverInsertedLineColor": "Umetnuti redak",
+            "ConflictSolverModifiedLineColor": "Modificirana linija"
         },
         "Updates": {
             "Title": "Mogućnosti ažuriranja",

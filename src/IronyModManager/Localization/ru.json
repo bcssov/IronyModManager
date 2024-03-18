@@ -479,7 +479,12 @@
         },
         "ConflictSolver": {
             "Title": "Разрешитель конфликтов",
-            "AllowedLanguages": "Разрешенные языки"
+            "AllowedLanguages": "Разрешенные языки",
+            "Colors": "Новые цвета Diff Viewer",
+            "ConflictSolverDeletedLineColor": "Удаленная строка",
+            "ConflictSolverImaginaryLineColor": "Воображаемая линия",
+            "ConflictSolverInsertedLineColor": "Вставленная линия",
+            "ConflictSolverModifiedLineColor": "Измененная линия"
         },
         "Updates": {
             "Title": "Обновления",

@@ -479,7 +479,12 @@
         },
         "ConflictSolver": {
             "Title": "冲突处理器",
-            "AllowedLanguages": "允许使用的语言"
+            "AllowedLanguages": "允许使用的语言",
+            "Colors": "新的差分查看器颜色",
+            "ConflictSolverDeletedLineColor": "已删除行",
+            "ConflictSolverImaginaryLineColor": "虚线",
+            "ConflictSolverInsertedLineColor": "插入行",
+            "ConflictSolverModifiedLineColor": "修改线"
         },
         "Updates": {
             "Title": "更新选项",

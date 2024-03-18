@@ -34,25 +34,25 @@ namespace IronyModManager.Models
         /// Gets or sets the color of the conflict solver deleted line.
         /// </summary>
         /// <value>The color of the conflict solver deleted line.</value>
-        public string ConflictSolverDeletedLineColor { get; set; }
+        public virtual string ConflictSolverDeletedLineColor { get; set; }
 
         /// <summary>
         /// Gets or sets the color of the conflict solver imaginary line.
         /// </summary>
         /// <value>The color of the conflict solver imaginary line.</value>
-        public string ConflictSolverImaginaryLineColor { get; set; }
+        public virtual string ConflictSolverImaginaryLineColor { get; set; }
 
         /// <summary>
         /// Gets or sets a value representing the conflict solver inserted line color.
         /// </summary>
         /// <value>The conflict solver inserted line color.</value>
-        public string ConflictSolverInsertedLineColor { get; set; }
+        public virtual string ConflictSolverInsertedLineColor { get; set; }
 
         /// <summary>
         /// Gets or sets the color of the conflict solver modified line.
         /// </summary>
         /// <value>The color of the conflict solver modified line.</value>
-        public string ConflictSolverModifiedLineColor { get; set; }
+        public virtual string ConflictSolverModifiedLineColor { get; set; }
 
         #endregion Properties
     }
