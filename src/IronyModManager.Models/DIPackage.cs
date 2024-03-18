@@ -4,7 +4,7 @@
 // Created          : 01-15-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-25-2024
+// Last Modified On : 03-18-2024
 // ***********************************************************************
 // <copyright file="DIPackage.cs" company="Mario">
 //     Mario
@@ -66,6 +66,7 @@ namespace IronyModManager.Models
             container.Register<IModCollectionSourceInfo, ModCollectionSourceInfo>();
             container.RegisterModel<IModIgnoreConfiguration, ModIgnoreConfiguration>();
             container.RegisterLocalization<IGameLanguage, GameLanguage>();
+            container.RegisterModel<IConflictSolverColors, ConflictSolverColors>();
         }
 
         #endregion Methods

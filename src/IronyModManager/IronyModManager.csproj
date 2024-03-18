@@ -139,8 +139,6 @@
     <PackageReference Include="Avalonia.ReactiveUI" Version="$(Avalonia)" allowedVersions="$(Avalonia)" />
     <PackageReference Include="CommandLineParser" Version="2.9.1" />
     <PackageReference Include="DiffPlex" Version="1.7.2" />
-    <PackageReference Include="Egorozh.ColorPicker.Avalonia" Version="$(AvaloniaColorPicker)" allowedVersions="$(AvaloniaColorPicker)" />
-    <PackageReference Include="Egorozh.ColorPicker.Avalonia.Dialog" Version="$(AvaloniaColorPicker)" allowedVersions="$(AvaloniaColorPicker)" />
     <PackageReference Include="info.lundin.math.dll" Version="1.2.7" />
     <PackageReference Include="Material.Avalonia" Version="$(MaterialAvalonia)" allowedVersions="$(MaterialAvalonia)" />
     <PackageReference Include="Material.Icons.Avalonia" Version="$(AvaloniaMaterialIcons)" allowedVersions="$(AvaloniaMaterialIcons)" />
@@ -168,6 +166,7 @@
     <PackageReference Include="Splat.NLog" Version="14.8.12" />
     <PackageReference Include="Splat.SimpleInjector" Version="14.8.12" />
     <PackageReference Include="Syroot.Windows.IO.KnownFolders" Version="1.3.0" />
+    <PackageReference Include="ThemeEditor.Controls.ColorPicker" Version="$(AvaloniaColorPicker)" allowedVersions="$(AvaloniaColorPicker)" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\IronyModManager.Common\IronyModManager.Common.csproj" />
