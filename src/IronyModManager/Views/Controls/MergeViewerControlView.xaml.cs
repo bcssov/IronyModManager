@@ -4,7 +4,7 @@
 // Created          : 03-20-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-17-2024
+// Last Modified On : 03-19-2024
 // ***********************************************************************
 // <copyright file="MergeViewerControlView.xaml.cs" company="Mario">
 //     Mario
@@ -345,10 +345,10 @@ namespace IronyModManager.Views.Controls
             HandleEditorContextMenu(diffRight, diffSearchPanelRight, false);
             diffLeft.ScrollInitialized += (_, _) => HandleTextEditorPropertyChanged(diffLeft, diffRight);
             diffRight.ScrollInitialized += (_, _) => HandleTextEditorPropertyChanged(diffRight, diffLeft);
-            var diffLeftMargin = new DiffMargin { Lines = ViewModel!.LeftDiff };
-            var diffRightMargin = new DiffMargin { Lines = ViewModel.RightDiff };
-            var diffLeftRenderer = new DiffBackgroundRenderer { Lines = ViewModel.LeftDiff };
-            var diffRightRenderer = new DiffBackgroundRenderer { Lines = ViewModel.RightDiff };
+            var diffLeftMargin = new DiffMargin { Lines = ViewModel!.LeftDiff, ColorConverter = ViewModel.ColorConverter };
+            var diffRightMargin = new DiffMargin { Lines = ViewModel.RightDiff, ColorConverter = ViewModel.ColorConverter };
+            var diffLeftRenderer = new DiffBackgroundRenderer { Lines = ViewModel.LeftDiff, ColorConverter = ViewModel.ColorConverter };
+            var diffRightRenderer = new DiffBackgroundRenderer { Lines = ViewModel.RightDiff, ColorConverter = ViewModel.ColorConverter };
             diffLeft.TextArea.LeftMargins.Add(diffLeftMargin);
             diffLeft.TextArea.TextView.BackgroundRenderers.Add(diffLeftRenderer);
             diffRight.TextArea.LeftMargins.Add(diffRightMargin);
@@ -618,6 +618,14 @@ namespace IronyModManager.Views.Controls
 
                 RedrawEditorDiffs();
             };
+            this.WhenAnyValue(v => v.ViewModel.ColorConverter).Subscribe(s =>
+            {
+                diffLeftMargin.ColorConverter = s;
+                diffRightMargin.ColorConverter = s;
+                diffLeftRenderer.ColorConverter = s;
+                diffRightRenderer.ColorConverter = s;
+                Dispatcher.UIThread.SafeInvoke(RedrawEditorDiffs);
+            });
 
             base.OnActivated(disposables);
         }

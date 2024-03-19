@@ -27,7 +27,7 @@ namespace IronyModManager.Implementation.AvaloniaEdit
     /// <summary>
     /// Class EditorColorConverter.
     /// </summary>
-    internal class EditorColorConverter(IConflictSolverColors color)
+    public class EditorColorConverter(IConflictSolverColors color)
     {
         #region Fields
 
