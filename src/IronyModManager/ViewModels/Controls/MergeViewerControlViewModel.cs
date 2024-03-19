@@ -4,7 +4,7 @@
 // Created          : 03-20-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-07-2024
+// Last Modified On : 03-19-2024
 // ***********************************************************************
 // <copyright file="MergeViewerControlViewModel.cs" company="Mario">
 //     Mario
@@ -27,8 +27,10 @@ using DiffPlex.DiffBuilder;
 using DiffPlex.DiffBuilder.Model;
 using IronyModManager.Common;
 using IronyModManager.Common.ViewModels;
+using IronyModManager.DI;
 using IronyModManager.Implementation.Actions;
 using IronyModManager.Implementation.AppState;
+using IronyModManager.Implementation.AvaloniaEdit;
 using IronyModManager.Implementation.Hotkey;
 using IronyModManager.Localization;
 using IronyModManager.Localization.Attributes;
@@ -195,6 +197,14 @@ namespace IronyModManager.ViewModels.Controls
         /// </summary>
         /// <value><c>true</c> if this instance can perform hot key actions; otherwise, <c>false</c>.</value>
         public virtual bool CanPerformHotKeyActions { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value representing the color converter.<see cref="IronyModManager.Implementation.AvaloniaEdit.EditorColorConverter"/>
+        /// </summary>
+        /// <value>
+        /// The color converter.
+        /// </value>
+        public virtual EditorColorConverter ColorConverter { get; protected set; }
 
         /// <summary>
         /// Gets or sets the copy all.
@@ -645,6 +655,7 @@ namespace IronyModManager.ViewModels.Controls
                 EditorAvailable = true;
             }
 
+            ColorConverter = new EditorColorConverter(DIResolver.Get<IConflictSolverColorsService>().Get());
             EvaluateMergeType();
         }
 

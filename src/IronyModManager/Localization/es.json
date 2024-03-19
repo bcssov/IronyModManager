@@ -479,7 +479,12 @@
         },
         "ConflictSolver": {
             "Title": "Solucionador de conflictos",
-            "AllowedLanguages": "Lenguas permitidas"
+            "AllowedLanguages": "Lenguas permitidas",
+            "Colors": "Nuevos colores del visor de diferencias",
+            "ConflictSolverDeletedLineColor": "Línea suprimida",
+            "ConflictSolverImaginaryLineColor": "Línea imaginaria",
+            "ConflictSolverInsertedLineColor": "Línea insertada",
+            "ConflictSolverModifiedLineColor": "Línea modificada"
         },
         "Updates": {
             "Title": "Opciones de Actualización",

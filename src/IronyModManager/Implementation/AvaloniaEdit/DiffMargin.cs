@@ -4,7 +4,7 @@
 // Created          : 02-19-2024
 //
 // Last Modified By : Mario
-// Last Modified On : 02-23-2024
+// Last Modified On : 03-19-2024
 // ***********************************************************************
 // <copyright file="DiffMargin.cs" company="Mario">
 //     Mario
@@ -25,9 +25,6 @@ using AvaloniaEdit.Document;
 using AvaloniaEdit.Editing;
 using AvaloniaEdit.Rendering;
 using AvaloniaEdit.Utils;
-using IronyModManager.DI;
-using IronyModManager.Platform.Themes;
-using IronyModManager.Services.Common;
 using IronyModManager.ViewModels.Controls;
 
 namespace IronyModManager.Implementation.AvaloniaEdit
@@ -56,11 +53,6 @@ namespace IronyModManager.Implementation.AvaloniaEdit
         private double fontSize;
 
         /// <summary>
-        /// A private bool? named isLightTheme.
-        /// </summary>
-        private bool? isLightTheme;
-
-        /// <summary>
         /// The maximum line number length
         /// </summary>
         private int maxLineNumberLength = 1;
@@ -75,19 +67,15 @@ namespace IronyModManager.Implementation.AvaloniaEdit
         /// </summary>
         private AnchorSegment selectionStart;
 
-        /// <summary>
-        /// A private IThemeManager named themeManager.
-        /// </summary>
-        private IThemeManager themeManager;
-
-        /// <summary>
-        /// A private IThemeService named themeService.
-        /// </summary>
-        private IThemeService themeService;
-
         #endregion Fields
 
         #region Properties
+
+        /// <summary>
+        /// Gets or sets the color converter.
+        /// </summary>
+        /// <value>The color converter.</value>
+        public EditorColorConverter ColorConverter { get; set; }
 
         /// <summary>
         /// Gets or sets a value representing the lines.<see cref="System.Collections.Generic.IList{IronyModManager.ViewModels.Controls.MergeViewerControlViewModel.DiffPieceWithIndex}" />
@@ -124,13 +112,14 @@ namespace IronyModManager.Implementation.AvaloniaEdit
                 }
 
                 var diff = Lines[ln];
+                ColorConverter ??= new EditorColorConverter(null);
 
                 Brush brush = diff.Type switch
                 {
-                    DiffPlex.DiffBuilder.Model.ChangeType.Deleted => IsLightTheme() ? Constants.LightDiffDeletedLine : Constants.DarkDiffDeletedLine,
-                    DiffPlex.DiffBuilder.Model.ChangeType.Inserted => IsLightTheme() ? Constants.LightDiffInsertedLine : Constants.DarkDiffInsertedLine,
-                    DiffPlex.DiffBuilder.Model.ChangeType.Imaginary => IsLightTheme() ? Constants.LightDiffImaginaryLine : Constants.DarkDiffImaginaryLine,
-                    DiffPlex.DiffBuilder.Model.ChangeType.Modified => IsLightTheme() ? Constants.LightDiffModifiedPieces : Constants.DarkDiffModifiedPieces,
+                    DiffPlex.DiffBuilder.Model.ChangeType.Deleted => ColorConverter.GetDeletedLineBrush(),
+                    DiffPlex.DiffBuilder.Model.ChangeType.Inserted => ColorConverter.GetInsertedLineBrush(),
+                    DiffPlex.DiffBuilder.Model.ChangeType.Imaginary => ColorConverter.GetImaginaryLineBrush(),
+                    DiffPlex.DiffBuilder.Model.ChangeType.Modified => ColorConverter.GetEditedLineBrush(),
                     _ => default
                 };
 
@@ -347,22 +336,6 @@ namespace IronyModManager.Implementation.AvaloniaEdit
             }
 
             return new SimpleSegment(startOffset, endOffset - startOffset);
-        }
-
-        /// <summary>
-        /// Is light theme.
-        /// </summary>
-        /// <returns>A bool.</returns>
-        private bool IsLightTheme()
-        {
-            if (!isLightTheme.HasValue)
-            {
-                themeManager ??= DIResolver.Get<IThemeManager>();
-                themeService ??= DIResolver.Get<IThemeService>();
-                isLightTheme = themeManager.IsLightTheme(themeService.GetSelected().Type);
-            }
-
-            return isLightTheme.GetValueOrDefault();
         }
 
         /// <summary>

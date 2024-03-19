@@ -479,7 +479,12 @@
         },
         "ConflictSolver": {
             "Title": "Conflict Solver",
-            "AllowedLanguages": "Allowed Languages"
+            "AllowedLanguages": "Allowed Languages",
+            "Colors": "New Diff Viewer Colors",
+            "ConflictSolverDeletedLineColor": "Deleted Line",
+            "ConflictSolverImaginaryLineColor": "Imaginary Line",
+            "ConflictSolverInsertedLineColor": "Inserted Line",
+            "ConflictSolverModifiedLineColor": "Modified Line"
         },
         "Updates": {
             "Title": "Update Options",
