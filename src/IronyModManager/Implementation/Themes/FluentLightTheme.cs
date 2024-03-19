@@ -4,13 +4,14 @@
 // Created          : 03-14-2021
 //
 // Last Modified By : Mario
-// Last Modified On : 11-04-2021
+// Last Modified On : 03-19-2024
 // ***********************************************************************
 // <copyright file="FluentLightTheme.cs" company="Mario">
 //     Mario
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -49,7 +50,13 @@ namespace IronyModManager.Implementation.Themes
         /// Gets the styles.
         /// </summary>
         /// <value>The styles.</value>
-        public override IReadOnlyCollection<string> Styles => new List<string>() { "avares://Avalonia.Themes.Fluent/FluentLight.xaml", "avares://Avalonia.Themes.Fluent/DensityStyles/Compact.xaml", "avares://IronyModManager/Controls/Themes/FluentLight/ThemeOverride.axaml" };
+        public override IReadOnlyCollection<string> Styles => new List<string>
+        {
+            "avares://ThemeEditor.Controls.ColorPicker/ColorPicker.axaml",
+            "avares://Avalonia.Themes.Fluent/FluentLight.xaml",
+            "avares://Avalonia.Themes.Fluent/DensityStyles/Compact.xaml",
+            "avares://IronyModManager/Controls/Themes/FluentLight/ThemeOverride.axaml"
+        };
 
         /// <summary>
         /// Gets the name of the theme.
