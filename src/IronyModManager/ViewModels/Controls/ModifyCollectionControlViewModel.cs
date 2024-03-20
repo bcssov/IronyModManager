@@ -407,6 +407,11 @@ namespace IronyModManager.ViewModels.Controls
         {
             var prefix = localizationManager.GetResource(LocalizationResources.Collection_Mods.MergeCollection.MergedCollectionPrefix);
             var requestedName = $"{prefix} {ActiveCollection.Name}";
+            var template = modMergeService.GetMergeCollectionNameTemplate();
+            if (!string.IsNullOrWhiteSpace(template))
+            {
+                requestedName = IronyFormatter.Format(template, new { ActiveCollection.Name, Merged = prefix });
+            }
             var exists = modCollectionService.GetAll().Any(p => p.Name.Equals(requestedName, StringComparison.OrdinalIgnoreCase));
             var skipNameCheck = false;
             if (exists)

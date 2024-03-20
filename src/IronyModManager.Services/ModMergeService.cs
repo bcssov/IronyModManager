@@ -4,7 +4,7 @@
 // Created          : 06-19-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-19-2024
+// Last Modified On : 03-20-2024
 // ***********************************************************************
 // <copyright file="ModMergeService.cs" company="Mario">
 //     Mario
@@ -326,21 +326,26 @@ namespace IronyModManager.Services
                 return null;
             }
 
+            var modTemplate = GetMergeCollectionModNameTemplate();
+
             IMod cloneMod(IMod mod, string fileName, int order)
             {
                 var modDirPath = GetPatchModDirectory(game, fileName);
                 var newMod = DIResolver.Get<IMod>();
-                if (game.ModDescriptorType == ModDescriptorType.DescriptorMod)
+                newMod.DescriptorFile = game.ModDescriptorType == ModDescriptorType.DescriptorMod
+                    ? $"{Shared.Constants.ModDirectory}/{Path.GetFileNameWithoutExtension(fileName)}{Shared.Constants.ModExtension}"
+                    : $"{Shared.Constants.JsonModDirectory}/{Path.GetFileNameWithoutExtension(fileName)}{Shared.Constants.JsonExtension}";
+
+                newMod.FileName = modDirPath.Replace("\\", "/");
+                if (!string.IsNullOrWhiteSpace(modTemplate))
                 {
-                    newMod.DescriptorFile = $"{Shared.Constants.ModDirectory}/{Path.GetFileNameWithoutExtension(fileName)}{Shared.Constants.ModExtension}";
+                    newMod.Name = IronyFormatter.Format(modTemplate, new { mod.Name, Merged = copiedNamePrefix });
                 }
                 else
                 {
-                    newMod.DescriptorFile = $"{Shared.Constants.JsonModDirectory}/{Path.GetFileNameWithoutExtension(fileName)}{Shared.Constants.JsonExtension}";
+                    newMod.Name = !string.IsNullOrWhiteSpace(copiedNamePrefix) ? $"{copiedNamePrefix} {mod.Name}" : mod.Name;
                 }
 
-                newMod.FileName = modDirPath.Replace("\\", "/");
-                newMod.Name = !string.IsNullOrWhiteSpace(copiedNamePrefix) ? $"{copiedNamePrefix} {mod.Name}" : mod.Name;
                 newMod.Source = ModSource.Local;
                 newMod.Version = mod.Version;
                 newMod.FullPath = modDirPath;
@@ -356,7 +361,7 @@ namespace IronyModManager.Services
                     var newDependencies = new List<string>();
                     foreach (var item in dependencies)
                     {
-                        newDependencies.Add($"{copiedNamePrefix} {item}");
+                        newDependencies.Add(!string.IsNullOrWhiteSpace(modTemplate) ? IronyFormatter.Format(modTemplate, new { Name = item, Merged = copiedNamePrefix }) : $"{copiedNamePrefix} {item}");
                     }
 
                     newMod.Dependencies = newDependencies;
@@ -462,22 +467,31 @@ namespace IronyModManager.Services
                         innerProgressLock.Dispose();
                     }
 
+                    string path;
+                    if (!string.IsNullOrWhiteSpace(modTemplate))
+                    {
+                        path = $"{IronyFormatter.Format(modTemplate, new { Name = collectionMod.Name.GenerateValidFileName(), Merged = copiedNamePrefix })}{Shared.Constants.ZipExtension}".GenerateValidFileName();
+                    }
+                    else
+                    {
+                        path = !string.IsNullOrWhiteSpace(copiedNamePrefix)
+                            ? $"{copiedNamePrefix} {collectionMod.Name.GenerateValidFileName()}{Shared.Constants.ZipExtension}".GenerateValidFileName()
+                            : $"{collectionMod.Name.GenerateValidFileName()}{Shared.Constants.ZipExtension}".GenerateValidFileName();
+                    }
+
                     var newMod = cloneMod(collectionMod,
-                        Path.Combine(mergeCollectionPath,
-                            !string.IsNullOrWhiteSpace(copiedNamePrefix)
-                                ? $"{copiedNamePrefix} {collectionMod.Name.GenerateValidFileName()}{Shared.Constants.ZipExtension}".GenerateValidFileName()
-                                : $"{collectionMod.Name.GenerateValidFileName()}{Shared.Constants.ZipExtension}".GenerateValidFileName()),
+                        Path.Combine(mergeCollectionPath, path),
                         collectionMods.IndexOf(collectionMod));
                     var ms = new MemoryStream();
                     await ModWriter.WriteDescriptorToStreamAsync(new ModWriterParameters { Mod = newMod, DescriptorType = MapDescriptorType(game.ModDescriptorType) }, ms, true);
                     ms.Seek(0, SeekOrigin.Begin);
-                    if (game.ModDescriptorType == ModDescriptorType.DescriptorMod)
+                    if (game.ModDescriptorType != ModDescriptorType.DescriptorMod)
                     {
-                        modMergeCompressExporter.AddFile(new ModMergeCompressExporterParameters { FileName = Shared.Constants.DescriptorFile, QueueId = queueId, Stream = ms });
+                        modMergeCompressExporter.AddFile(new ModMergeCompressExporterParameters { FileName = Shared.Constants.DescriptorJsonMetadata, QueueId = queueId, Stream = ms });
                     }
                     else
                     {
-                        modMergeCompressExporter.AddFile(new ModMergeCompressExporterParameters { FileName = Shared.Constants.DescriptorJsonMetadata, QueueId = queueId, Stream = ms });
+                        modMergeCompressExporter.AddFile(new ModMergeCompressExporterParameters { FileName = Shared.Constants.DescriptorFile, QueueId = queueId, Stream = ms });
                     }
 
                     streams.Add(ms);
@@ -493,10 +507,7 @@ namespace IronyModManager.Services
                     outerProgressLock.Dispose();
 
                     modMergeCompressExporter.Finalize(queueId,
-                        Path.Combine(modDirRootPath, mergeCollectionPath,
-                            !string.IsNullOrWhiteSpace(copiedNamePrefix)
-                                ? $"{copiedNamePrefix} {collectionMod.Name.GenerateValidFileName()}{Shared.Constants.ZipExtension}".GenerateValidFileName()
-                                : $"{collectionMod.Name.GenerateValidFileName()}{Shared.Constants.ZipExtension}".GenerateValidFileName()));
+                        Path.Combine(modDirRootPath, mergeCollectionPath, path));
                     renamePairs.Add(new KeyValuePair<string, string>(collectionMod.Name, newMod.Name));
                     renamePairs.Add(new KeyValuePair<string, string>(collectionMod.DescriptorFile, newMod.DescriptorFile));
                     using var exportModLock = await zipLock.LockAsync();
