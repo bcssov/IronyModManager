@@ -525,6 +525,11 @@
                 "Title": "No vacío",
                 "Message": "El directorio MOD personalizado no está vacío si lo cambia ahora, puede perder algunos mods. ¿Estás seguro de que quieres cambiarlo?"
             }
+        },
+        "ModMerge": {
+            "Title": "Opciones de Mod Merge",
+            "ModMergeTemplate": "Plantilla Mod",
+            "CollectionMergeTemplate": "Plantilla de colección"
         }
     },
     "Notifications": {

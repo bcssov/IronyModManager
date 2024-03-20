@@ -525,6 +525,11 @@
                 "Title": "Not Empty",
                 "Message": "Custom mod directory is not empty if you change it now you may lose some mods. Are you sure you want to change it?"
             }
+        },
+        "ModMerge": {
+            "Title": "Mod Merge Options",
+            "ModMergeTemplate": "Mod Template",
+            "CollectionMergeTemplate": "Collection Template"
         }
     },
     "Notifications": {

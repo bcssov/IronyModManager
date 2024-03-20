@@ -688,6 +688,13 @@ namespace IronyModManager.Shared
                     public const string Message = Prefix + "Message";
                 }
             }
+            public static class ModMerge
+            {
+                public const string Prefix = "Options.ModMerge.";
+                public const string Title = Prefix + "Title";
+                public const string ModMergeTemplate = Prefix + "ModMergeTemplate";
+                public const string CollectionMergeTemplate = Prefix + "CollectionMergeTemplate";
+            }
         }
         public static class Notifications
         {

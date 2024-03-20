@@ -66,9 +66,10 @@ namespace IronyModManager.Parser.Tests
         /// <summary>
         /// Defines the test method StellarisExtensions.
         /// </summary>
-        public async Task StellarisExtensions()
+        public Task StellarisExtensions()
         {
             Extensions();
+            return Task.CompletedTask;
         }
 
         #endregion Methods

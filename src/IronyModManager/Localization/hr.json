@@ -525,6 +525,11 @@
                 "Title": "Nije prazno",
                 "Message": "Prilagođeni direktorij modova nije prazan ako ga promijenite sada možete izgubiti neke modove. Jeste li sigurni da ga želite promijeniti?"
             }
+        },
+        "ModMerge": {
+            "Title": "Mod spajanja opcija",
+            "ModMergeTemplate": "Mod predložak",
+            "CollectionMergeTemplate": "Predložak zbirke"
         }
     },
     "Notifications": {
