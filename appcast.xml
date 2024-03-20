@@ -4,9 +4,11 @@
 		<title>Irony Mod Manager</title>
 		<language>en</language>
 		<item>
-			<title>1.26.146</title>
+			<title>1.26.167</title>
 			<description>## Current Release Notes
-* Fix CTD in CS while using ctrl a + c
+* Add conflict solver configuration to customize colors for new diff viewer
+* Add templateable merge mod naming
+* Fix named pipe CTD on OSX
 
 ## Release Notes 1.26
 * Update dependencies
@@ -16,14 +18,18 @@
 * Disable OSX update installation (online check only now)
 * Added new diff viewer
 * Stellaris 3.11 beta compatibility
-* Added conflict solver option to skip parsing some languages</description>
-			<pubDate>Thu, 14 Mar 2024 00:51:02 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.26.146/linux-x64.zip" sparkle:version="1.26.146.34509" sparkle:shortVersionString="1.26.146" length="90843853" sparkle:os="linux" type="application/zip" sparkle:signature="m95FbYbg+8wAqw77LLnty2QC2WMXdNKzOH17THanva2qjIzP3v72hIJ4Vk5o4gwbLQ0y9Wy8IoMzga5XLxkcAw=="/>
+* Added conflict solver option to skip parsing some languages
+* Add conflict solver configuration to customize colors for new diff viewer
+* Add templateable merge mod naming</description>
+			<pubDate>Wed, 20 Mar 2024 22:33:06 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.26.167/linux-x64.zip" sparkle:version="1.26.167.20297" sparkle:shortVersionString="1.26.167" length="90895202" sparkle:os="linux" type="application/zip" sparkle:signature="PzKQW9gWoztAymn2JyT8B0Ops/rVhlwZjFPJQ7FGokX0AGSV7yLH3aA1k0VxFf8bFf3e7fMTRNa5+2gkvnihDw=="/>
 		</item>
 		<item>
-			<title>1.26.146</title>
+			<title>1.26.167</title>
 			<description>## Current Release Notes
-* Fix CTD in CS while using ctrl a + c
+* Add conflict solver configuration to customize colors for new diff viewer
+* Add templateable merge mod naming
+* Fix named pipe CTD on OSX
 
 ## Release Notes 1.26
 * Update dependencies
@@ -33,14 +39,18 @@
 * Disable OSX update installation (online check only now)
 * Added new diff viewer
 * Stellaris 3.11 beta compatibility
-* Added conflict solver option to skip parsing some languages</description>
-			<pubDate>Thu, 14 Mar 2024 00:51:07 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.26.146/osx-x64.zip" sparkle:version="1.26.146.34509" sparkle:shortVersionString="1.26.146" length="93809137" sparkle:os="osx" type="application/zip" sparkle:signature="ZbfA59y66bV17Qd16WrZ+qM08WZNb9IwVRlYBrmtxbhtSVMkU0H5o8narLZSu2dxWqv5eV1XSx2aVkvr+OigDw=="/>
+* Added conflict solver option to skip parsing some languages
+* Add conflict solver configuration to customize colors for new diff viewer
+* Add templateable merge mod naming</description>
+			<pubDate>Wed, 20 Mar 2024 22:33:13 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.26.167/osx-x64.zip" sparkle:version="1.26.167.20297" sparkle:shortVersionString="1.26.167" length="93860550" sparkle:os="osx" type="application/zip" sparkle:signature="UPpGFMsIDBxZP6hZ7/rLLYKe/SKpYMxostDPYMw7ftz0g1q0K9BXE/a4OaOyP/ifCcuLREkuHJ07o821IKlUBA=="/>
 		</item>
 		<item>
-			<title>1.26.146</title>
+			<title>1.26.167</title>
 			<description>## Current Release Notes
-* Fix CTD in CS while using ctrl a + c
+* Add conflict solver configuration to customize colors for new diff viewer
+* Add templateable merge mod naming
+* Fix named pipe CTD on OSX
 
 ## Release Notes 1.26
 * Update dependencies
@@ -50,14 +60,18 @@
 * Disable OSX update installation (online check only now)
 * Added new diff viewer
 * Stellaris 3.11 beta compatibility
-* Added conflict solver option to skip parsing some languages</description>
-			<pubDate>Thu, 14 Mar 2024 00:51:13 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.26.146/win-x64-setup.zip" sparkle:version="1.26.146.34509" sparkle:shortVersionString="1.26.146" length="72445982" sparkle:os="windows" type="application/zip" sparkle:signature="/w8ZMz8ODAqZwS07OSeOMswOOIOrEmK7ZTWhtg87LMPCjrCHD/YtOlrRL3bTqRGQz9dkorayJ6uCuMfmAxdnAA=="/>
+* Added conflict solver option to skip parsing some languages
+* Add conflict solver configuration to customize colors for new diff viewer
+* Add templateable merge mod naming</description>
+			<pubDate>Wed, 20 Mar 2024 22:33:20 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.26.167/win-x64-setup.zip" sparkle:version="1.26.167.20297" sparkle:shortVersionString="1.26.167" length="72492610" sparkle:os="windows" type="application/zip" sparkle:signature="P6D0MCR6Pid8HdwESQe2uChAigDc2SK7AZMbptM7c9iUp2JtqIE+T8cd1boQkJJCFauTb9d9wQBExA+97TXYAg=="/>
 		</item>
 		<item>
-			<title>1.26.146</title>
+			<title>1.26.167</title>
 			<description>## Current Release Notes
-* Fix CTD in CS while using ctrl a + c
+* Add conflict solver configuration to customize colors for new diff viewer
+* Add templateable merge mod naming
+* Fix named pipe CTD on OSX
 
 ## Release Notes 1.26
 * Update dependencies
@@ -67,9 +81,11 @@
 * Disable OSX update installation (online check only now)
 * Added new diff viewer
 * Stellaris 3.11 beta compatibility
-* Added conflict solver option to skip parsing some languages</description>
-			<pubDate>Thu, 14 Mar 2024 00:51:13 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.26.146/win-x64.zip" sparkle:version="1.26.146.34509" sparkle:shortVersionString="1.26.146" length="106439576" sparkle:os="windows" type="application/zip" sparkle:signature="z/s7sQjGsLjid7JSRbsU2zCObrh0teLM2f/0dEiR2SrZKIgO9Quosu+ad25/uSsYzFt2q5zPLaR81Wbqt2kDBA=="/>
+* Added conflict solver option to skip parsing some languages
+* Add conflict solver configuration to customize colors for new diff viewer
+* Add templateable merge mod naming</description>
+			<pubDate>Wed, 20 Mar 2024 22:33:20 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.26.167/win-x64.zip" sparkle:version="1.26.167.20297" sparkle:shortVersionString="1.26.167" length="106490974" sparkle:os="windows" type="application/zip" sparkle:signature="FWIUfH1aeGuo8wDp51eVDJ81Z/QoV8zN6onNIjzo9ICg5mG/3eDkvLlisCfTFpzSp6AabfWOUOHYdIHorhvfAQ=="/>
 		</item>
 	</channel>
 </rss>
