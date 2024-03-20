@@ -4,7 +4,7 @@
 // Created          : 05-30-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-19-2024
+// Last Modified On : 03-20-2024
 // ***********************************************************************
 // <copyright file="OptionsControlViewModel.cs" company="Mario">
 //     Mario
@@ -50,6 +50,7 @@ namespace IronyModManager.ViewModels.Controls
     /// <seealso cref="IronyModManager.Common.ViewModels.BaseViewModel" />
     [ExcludeFromCoverage("This should be tested via functional testing.")]
     public class OptionsControlViewModel(
+        IModMergeService modMergeService,
         IConflictSolverColorsService conflictSolverColorsService,
         IGameLanguageService gameLanguageService,
         IAppAction appAction,
@@ -67,6 +68,11 @@ namespace IronyModManager.ViewModels.Controls
         IFileDialogAction fileDialogAction) : BaseViewModel
     {
         #region Fields
+
+        /// <summary>
+        /// The invalid entry class
+        /// </summary>
+        private const string InvalidEntryClass = "InvalidOptionsEntry";
 
         /// <summary>
         /// The application action
@@ -112,6 +118,11 @@ namespace IronyModManager.ViewModels.Controls
         /// The logger
         /// </summary>
         private readonly ILogger logger = logger;
+
+        /// <summary>
+        /// A private readonly IModMergeService named modMergeService.
+        /// </summary>
+        private readonly IModMergeService modMergeService = modMergeService;
 
         /// <summary>
         /// The mod service
@@ -184,6 +195,11 @@ namespace IronyModManager.ViewModels.Controls
         private bool isGameReloading;
 
         /// <summary>
+        /// A private bool named isMergeReloading.
+        /// </summary>
+        private bool isMergeReloading;
+
+        /// <summary>
         /// The is notification position reloading
         /// </summary>
         private bool isNotificationPositionReloading;
@@ -197,6 +213,16 @@ namespace IronyModManager.ViewModels.Controls
         /// The last skipped version changed
         /// </summary>
         private IDisposable lastSkippedVersionChanged;
+
+        /// <summary>
+        /// A private IDisposable named modCollectionTemplateChanged.
+        /// </summary>
+        private IDisposable modCollectionTemplateChanged;
+
+        /// <summary>
+        /// A private IDisposable named modMergeTemplateChanged.
+        /// </summary>
+        private IDisposable modMergeTemplateChanged;
 
         /// <summary>
         /// The notification position changed
@@ -468,6 +494,71 @@ namespace IronyModManager.ViewModels.Controls
         /// </summary>
         /// <value>The left margin.</value>
         public virtual Thickness LeftMargin { get; protected set; } = new(20, 15, 0, 15);
+
+        /// <summary>
+        /// Gets or sets a value representing the mod collection invalid class.
+        /// </summary>
+        /// <value>
+        /// The mod collection invalid class.
+        /// </value>
+        public virtual string ModCollectionInvalidClass { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets a value representing the mod collection template.
+        /// </summary>
+        /// <value>The mod collection template.</value>
+        public virtual string ModCollectionTemplate { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets a value representing the mod collection template reset command.<see cref="ReactiveUI.ReactiveCommand{System.Reactive.Unit, System.Reactive.Unit}" />
+        /// </summary>
+        /// <value>The mod collection template reset command.</value>
+        public virtual ReactiveCommand<Unit, Unit> ModCollectionTemplateResetCommand { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets a value representing the mod collection template title.
+        /// </summary>
+        /// <value>The mod collection template title.</value>
+        [StaticLocalization(LocalizationResources.Options.ModMerge.CollectionMergeTemplate)]
+        public virtual string ModCollectionTemplateTitle { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets a value representing the mode merge template.
+        /// </summary>
+        /// <value>The mode merge template.</value>
+        public virtual string ModeMergeTemplate { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets a value representing the mode merge title.
+        /// </summary>
+        /// <value>The mode merge title.</value>
+        [StaticLocalization(LocalizationResources.Options.ModMerge.Title)]
+        public virtual string ModeMergeTitle { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets a value representing the mode merge watermark.
+        /// </summary>
+        /// <value>The mode merge watermark.</value>
+        public virtual string ModeMergeWatermark { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets a value representing the mod merge invalid class.
+        /// </summary>
+        /// <value>The mod merge invalid class.</value>
+        public virtual string ModMergeInvalidClass { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets a value representing the mod merge template reset command.<see cref="ReactiveUI.ReactiveCommand{System.Reactive.Unit, System.Reactive.Unit}" />
+        /// </summary>
+        /// <value>The mod merge template reset command.</value>
+        public virtual ReactiveCommand<Unit, Unit> ModMergeTemplateResetCommand { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets a value representing the mod merge template title.
+        /// </summary>
+        /// <value>The mod merge template title.</value>
+        [StaticLocalization(LocalizationResources.Options.ModMerge.ModMergeTemplate)]
+        public virtual string ModMergeTemplateTitle { get; protected set; }
 
         /// <summary>
         /// Gets or sets the navigate.
@@ -811,6 +902,9 @@ namespace IronyModManager.ViewModels.Controls
             SetEditor(externalEditorService.Get());
             SetNotificationPosition(positionSettingsService.Get());
             BindColors();
+            SetModMerge();
+            SetModMergeWatermark();
+
             var updateSettings = updaterService.Get();
             if (UpdatesAllowed)
             {
@@ -1104,6 +1198,16 @@ namespace IronyModManager.ViewModels.Controls
                 right.Dispose();
             }).DisposeWith(disposables);
 
+            ModCollectionTemplateResetCommand = ReactiveCommand.Create(() =>
+            {
+                ModCollectionTemplate = string.Empty;
+            }).DisposeWith(disposables);
+
+            ModMergeTemplateResetCommand = ReactiveCommand.Create(() =>
+            {
+                ModeMergeTemplate = String.Empty;
+            }).DisposeWith(disposables);
+
             base.OnActivated(disposables);
         }
 
@@ -1225,6 +1329,53 @@ namespace IronyModManager.ViewModels.Controls
             ShowGameOptions = game != null;
             LeftMargin = new Thickness(ShowGameOptions ? 20 : 0, 0, 0, 0);
             isGameReloading = false;
+        }
+
+        /// <summary>
+        /// Sets a mod merge.
+        /// </summary>
+        protected virtual void SetModMerge()
+        {
+            isMergeReloading = true;
+            modMergeTemplateChanged?.Dispose();
+            modCollectionTemplateChanged?.Dispose();
+
+            ModeMergeTemplate = modMergeService.GetMergeCollectionModNameTemplate();
+            ModCollectionTemplate = modMergeService.GetMergeCollectionNameTemplate();
+
+            modMergeTemplateChanged = this.WhenAnyValue(p => p.ModeMergeTemplate).Where(_ => !isMergeReloading).Subscribe(s =>
+            {
+                if (string.IsNullOrWhiteSpace(s))
+                {
+                    ModMergeInvalidClass = string.Empty;
+                }
+                else
+                {
+                    ModMergeInvalidClass = modMergeService.SaveMergeCollectionModNameTeplate(s) ? string.Empty : InvalidEntryClass;
+                }
+            }).DisposeWith(Disposables);
+
+            modCollectionTemplateChanged = this.WhenAnyValue(p => p.ModCollectionTemplate).Where(_ => !isMergeReloading).Subscribe(s =>
+            {
+                if (string.IsNullOrWhiteSpace(s))
+                {
+                    ModCollectionInvalidClass = string.Empty;
+                }
+                else
+                {
+                    ModCollectionInvalidClass = modMergeService.SaveMergedCollectionNameTemplate(s) ? string.Empty : InvalidEntryClass;
+                }
+            }).DisposeWith(Disposables);
+
+            isMergeReloading = false;
+        }
+
+        /// <summary>
+        /// Sets a mod merge watermark.
+        /// </summary>
+        protected virtual void SetModMergeWatermark()
+        {
+            ModeMergeWatermark = $"{Services.Common.Constants.MergeTemplateFormat} {Services.Common.Constants.MergeModTemplateFormat}";
         }
 
         /// <summary>

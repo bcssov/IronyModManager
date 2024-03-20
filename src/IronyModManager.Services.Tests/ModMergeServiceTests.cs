@@ -693,11 +693,11 @@ namespace IronyModManager.Services.Tests
         {
             var preferencesService = new Mock<IPreferencesService>();
             preferencesService.Setup(p => p.Get()).Returns(() =>
-                new Preferences { MergeCollectionModNameTemplate = "{Name} test" });
+                new Preferences { MergeCollectionModNameTemplate = "{Name} test {Merged}" });
 
             var service = new ModMergeService(preferencesService.Object, null, null, null, null, null, null, null, null, null, null, null, null, null);
             var result = service.GetMergeCollectionNameTemplate();
-            result.Should().Be("{Name} test");
+            result.Should().Be("{Name} test {Merged}");
         }
 
         /// <summary>
@@ -723,11 +723,11 @@ namespace IronyModManager.Services.Tests
         {
             var preferencesService = new Mock<IPreferencesService>();
             preferencesService.Setup(p => p.Get()).Returns(() =>
-                new Preferences { MergedCollectionNameTemplate = "{Name} test" });
+                new Preferences { MergedCollectionNameTemplate = "{Name} test {Merged}" });
 
             var service = new ModMergeService(preferencesService.Object, null, null, null, null, null, null, null, null, null, null, null, null, null);
             var result = service.GetMergeCollectionModNameTemplate();
-            result.Should().Be("{Name} test");
+            result.Should().Be("{Name} test {Merged}");
         }
 
         /// <summary>
@@ -754,11 +754,11 @@ namespace IronyModManager.Services.Tests
         {
             var preferencesService = new Mock<IPreferencesService>();
             preferencesService.Setup(p => p.Get()).Returns(() =>
-                new Preferences { MergedCollectionNameTemplate = "{Name} test" });
+                new Preferences { MergedCollectionNameTemplate = "{Name} test {Merged}" });
             preferencesService.Setup(p => p.Save(It.IsAny<IPreferences>())).Returns((IPreferences saved) => true);
 
             var service = new ModMergeService(preferencesService.Object, null, null, null, null, null, null, null, null, null, null, null, null, null);
-            var result = service.SaveMergedCollectionNameTemplate("{Name} test");
+            var result = service.SaveMergedCollectionNameTemplate("{Name} test {Merged}");
             result.Should().BeTrue();
         }
 
@@ -791,7 +791,7 @@ namespace IronyModManager.Services.Tests
             preferencesService.Setup(p => p.Save(It.IsAny<IPreferences>())).Returns((IPreferences saved) => true);
 
             var service = new ModMergeService(preferencesService.Object, null, null, null, null, null, null, null, null, null, null, null, null, null);
-            var result = service.SaveMergeCollectionModNameTeplate("{Name} test");
+            var result = service.SaveMergeCollectionModNameTeplate("{Name} test {Merged}");
             result.Should().BeTrue();
         }
 

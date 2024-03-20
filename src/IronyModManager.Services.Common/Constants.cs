@@ -4,7 +4,7 @@
 // Created          : 03-14-2021
 //
 // Last Modified By : Mario
-// Last Modified On : 03-19-2024
+// Last Modified On : 03-20-2024
 // ***********************************************************************
 // <copyright file="Constants.cs" company="Mario">
 //     Mario
@@ -26,9 +26,14 @@ namespace IronyModManager.Services.Common
         #region Fields
 
         /// <summary>
-        /// A public const string named ModMergeTemplateFormat.
+        /// A public const string named MergeModTemplateFormat.
         /// </summary>
-        public const string ModMergeTemplateFormat = "{Name}";
+        public const string MergeModTemplateFormat = "{Name}";
+
+        /// <summary>
+        /// A public const string named MergeTemplateFormat.
+        /// </summary>
+        public const string MergeTemplateFormat = "{Merged}";
 
         #endregion Fields
 

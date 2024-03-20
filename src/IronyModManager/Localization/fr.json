@@ -525,6 +525,11 @@
                 "Title": "Pas vide",
                 "Message": "Le répertoire des mods personnalisés n'est pas vide si vous le modifiez maintenant, vous risquez de perdre certains mods. Êtes-vous sûr de vouloir le changer?"
             }
+        },
+        "ModMerge": {
+            "Title": "Options de fusion de modules",
+            "ModMergeTemplate": "Modèles",
+            "CollectionMergeTemplate": "Modèle de collection"
         }
     },
     "Notifications": {

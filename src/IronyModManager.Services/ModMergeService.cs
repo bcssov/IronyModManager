@@ -137,7 +137,7 @@ namespace IronyModManager.Services
         public string GetMergeCollectionModNameTemplate()
         {
             var result = preferencesService.Get().MergedCollectionNameTemplate;
-            if (!string.IsNullOrWhiteSpace(result) && result.Contains(Common.Constants.ModMergeTemplateFormat))
+            if (!string.IsNullOrWhiteSpace(result) && result.Contains(Common.Constants.MergeModTemplateFormat) && result.Contains(Common.Constants.MergeTemplateFormat))
             {
                 return result;
             }
@@ -152,7 +152,7 @@ namespace IronyModManager.Services
         public string GetMergeCollectionNameTemplate()
         {
             var result = preferencesService.Get().MergeCollectionModNameTemplate;
-            if (!string.IsNullOrWhiteSpace(result) && result.Contains(Common.Constants.ModMergeTemplateFormat))
+            if (!string.IsNullOrWhiteSpace(result) && result.Contains(Common.Constants.MergeModTemplateFormat) && result.Contains(Common.Constants.MergeTemplateFormat))
             {
                 return result;
             }
@@ -537,7 +537,7 @@ namespace IronyModManager.Services
         /// <returns>A string.</returns>
         public bool SaveMergeCollectionModNameTeplate(string template)
         {
-            if (!string.IsNullOrWhiteSpace(template) && template.Contains(Common.Constants.ModMergeTemplateFormat))
+            if ((!string.IsNullOrWhiteSpace(template) && template.Contains(Common.Constants.MergeModTemplateFormat) && template.Contains(Common.Constants.MergeTemplateFormat)) || string.IsNullOrWhiteSpace(template))
             {
                 var preferences = preferencesService.Get();
                 preferences.MergeCollectionModNameTemplate = template;
@@ -554,7 +554,7 @@ namespace IronyModManager.Services
         /// <returns>A string.</returns>
         public bool SaveMergedCollectionNameTemplate(string template)
         {
-            if (!string.IsNullOrWhiteSpace(template) && template.Contains(Common.Constants.ModMergeTemplateFormat))
+            if ((!string.IsNullOrWhiteSpace(template) && template.Contains(Common.Constants.MergeModTemplateFormat) && template.Contains(Common.Constants.MergeTemplateFormat)) || string.IsNullOrWhiteSpace(template))
             {
                 var preferences = preferencesService.Get();
                 preferences.MergedCollectionNameTemplate = template;

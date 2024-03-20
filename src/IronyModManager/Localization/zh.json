@@ -525,6 +525,11 @@
                 "Title": "目录非空",
                 "Message": "自定义模组目录非空，若现在更改，则可能会丢失一些模组。是否确定更改？"
             }
+        },
+        "ModMerge": {
+            "Title": "模式合并选项",
+            "ModMergeTemplate": "修改模板",
+            "CollectionMergeTemplate": "收藏模板"
         }
     },
     "Notifications": {
