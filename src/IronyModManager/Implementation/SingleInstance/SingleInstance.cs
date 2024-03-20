@@ -199,7 +199,7 @@ namespace IronyModManager.Implementation.SingleInstance
                         {
                             path = Path.Combine(tempFile, $"CoreFXPipe_{sb}");
                             sb.Remove(sb.Length - 1, 1);
-                            if (sb.Length < 0)
+                            if (sb.Length <= 0)
                             {
                                 throw new ArgumentException("Temp Path is too long. Cannot generate SingleInstance.");
                             }

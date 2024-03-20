@@ -355,7 +355,6 @@ namespace IronyModManager.ViewModels.Controls
             {
                 var collections = modCollectionService.GetAll();
                 var count = collections.Count(p => p.Name.Equals(requestedName, StringComparison.OrdinalIgnoreCase));
-                name = string.Empty;
                 name = count == 0 ? requestedName : $"{requestedName} ({count})";
                 while (collections.Any(p => p.Name.Equals(name, StringComparison.OrdinalIgnoreCase)))
                 {
