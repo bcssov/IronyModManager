@@ -4,7 +4,7 @@
 // Created          : 05-30-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-25-2024
+// Last Modified On : 03-20-2024
 // ***********************************************************************
 // <copyright file="OptionsControlViewModel.cs" company="Mario">
 //     Mario
@@ -14,20 +14,24 @@
 
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Reactive;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
+using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using Avalonia;
 using Avalonia.Collections;
+using Avalonia.Media;
 using DynamicData;
 using IronyModManager.Common;
 using IronyModManager.Common.Events;
 using IronyModManager.Common.ViewModels;
 using IronyModManager.DI;
 using IronyModManager.Implementation.Actions;
+using IronyModManager.Implementation.AvaloniaEdit;
 using IronyModManager.Implementation.Overlay;
 using IronyModManager.Implementation.Updater;
 using IronyModManager.Localization;
@@ -46,6 +50,8 @@ namespace IronyModManager.ViewModels.Controls
     /// <seealso cref="IronyModManager.Common.ViewModels.BaseViewModel" />
     [ExcludeFromCoverage("This should be tested via functional testing.")]
     public class OptionsControlViewModel(
+        IModMergeService modMergeService,
+        IConflictSolverColorsService conflictSolverColorsService,
         IGameLanguageService gameLanguageService,
         IAppAction appAction,
         IPlatformConfiguration platformConfiguration,
@@ -64,9 +70,19 @@ namespace IronyModManager.ViewModels.Controls
         #region Fields
 
         /// <summary>
+        /// The invalid entry class
+        /// </summary>
+        private const string InvalidEntryClass = "InvalidOptionsEntry";
+
+        /// <summary>
         /// The application action
         /// </summary>
         private readonly IAppAction appAction = appAction;
+
+        /// <summary>
+        /// A private readonly IConflictSolverColorsService named conflictSolverColorsService.
+        /// </summary>
+        private readonly IConflictSolverColorsService conflictSolverColorsService = conflictSolverColorsService;
 
         /// <summary>
         /// The external editor service
@@ -102,6 +118,11 @@ namespace IronyModManager.ViewModels.Controls
         /// The logger
         /// </summary>
         private readonly ILogger logger = logger;
+
+        /// <summary>
+        /// A private readonly IModMergeService named modMergeService.
+        /// </summary>
+        private readonly IModMergeService modMergeService = modMergeService;
 
         /// <summary>
         /// The mod service
@@ -144,6 +165,11 @@ namespace IronyModManager.ViewModels.Controls
         private IDisposable closeGameChanged;
 
         /// <summary>
+        /// The colors changed
+        /// </summary>
+        private IDisposable colorsChanged;
+
+        /// <summary>
         /// The editor arguments changed
         /// </summary>
         private IDisposable editorArgsChanged;
@@ -169,6 +195,11 @@ namespace IronyModManager.ViewModels.Controls
         private bool isGameReloading;
 
         /// <summary>
+        /// A private bool named isMergeReloading.
+        /// </summary>
+        private bool isMergeReloading;
+
+        /// <summary>
         /// The is notification position reloading
         /// </summary>
         private bool isNotificationPositionReloading;
@@ -182,6 +213,16 @@ namespace IronyModManager.ViewModels.Controls
         /// The last skipped version changed
         /// </summary>
         private IDisposable lastSkippedVersionChanged;
+
+        /// <summary>
+        /// A private IDisposable named modCollectionTemplateChanged.
+        /// </summary>
+        private IDisposable modCollectionTemplateChanged;
+
+        /// <summary>
+        /// A private IDisposable named modMergeTemplateChanged.
+        /// </summary>
+        private IDisposable modMergeTemplateChanged;
 
         /// <summary>
         /// The notification position changed
@@ -287,6 +328,47 @@ namespace IronyModManager.ViewModels.Controls
         /// </summary>
         /// <value>The close command.</value>
         public virtual ReactiveCommand<Unit, Unit> CloseCommand { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets the color.
+        /// </summary>
+        /// <value>The color.</value>
+        public virtual ConflictSolverColors Color { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets the conflict solver colors title.
+        /// </summary>
+        /// <value>The conflict solver colors title.</value>
+        [StaticLocalization(LocalizationResources.Options.ConflictSolver.Colors)]
+        public virtual string ConflictSolverColorsTitle { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets the conflict solver deleted line color text.
+        /// </summary>
+        /// <value>The conflict solver deleted line color text.</value>
+        [StaticLocalization(LocalizationResources.Options.ConflictSolver.ConflictSolverDeletedLineColor)]
+        public virtual string ConflictSolverDeletedLineColorText { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets the conflict solver imaginary line color text.
+        /// </summary>
+        /// <value>The conflict solver imaginary line color text.</value>
+        [StaticLocalization(LocalizationResources.Options.ConflictSolver.ConflictSolverImaginaryLineColor)]
+        public virtual string ConflictSolverImaginaryLineColorText { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets the conflict solver inserted line color text.
+        /// </summary>
+        /// <value>The conflict solver inserted line color text.</value>
+        [StaticLocalization(LocalizationResources.Options.ConflictSolver.ConflictSolverInsertedLineColor)]
+        public virtual string ConflictSolverInsertedLineColorText { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets the conflict solver modified line color text.
+        /// </summary>
+        /// <value>The conflict solver modified line color text.</value>
+        [StaticLocalization(LocalizationResources.Options.ConflictSolver.ConflictSolverModifiedLineColor)]
+        public virtual string ConflictSolverModifiedLineColorText { get; protected set; }
 
         /// <summary>
         /// Gets or sets a value representing the conflict solver title.
@@ -412,6 +494,71 @@ namespace IronyModManager.ViewModels.Controls
         /// </summary>
         /// <value>The left margin.</value>
         public virtual Thickness LeftMargin { get; protected set; } = new(20, 15, 0, 15);
+
+        /// <summary>
+        /// Gets or sets a value representing the mod collection invalid class.
+        /// </summary>
+        /// <value>
+        /// The mod collection invalid class.
+        /// </value>
+        public virtual string ModCollectionInvalidClass { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets a value representing the mod collection template.
+        /// </summary>
+        /// <value>The mod collection template.</value>
+        public virtual string ModCollectionTemplate { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets a value representing the mod collection template reset command.<see cref="ReactiveUI.ReactiveCommand{System.Reactive.Unit, System.Reactive.Unit}" />
+        /// </summary>
+        /// <value>The mod collection template reset command.</value>
+        public virtual ReactiveCommand<Unit, Unit> ModCollectionTemplateResetCommand { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets a value representing the mod collection template title.
+        /// </summary>
+        /// <value>The mod collection template title.</value>
+        [StaticLocalization(LocalizationResources.Options.ModMerge.CollectionMergeTemplate)]
+        public virtual string ModCollectionTemplateTitle { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets a value representing the mode merge template.
+        /// </summary>
+        /// <value>The mode merge template.</value>
+        public virtual string ModeMergeTemplate { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets a value representing the mode merge title.
+        /// </summary>
+        /// <value>The mode merge title.</value>
+        [StaticLocalization(LocalizationResources.Options.ModMerge.Title)]
+        public virtual string ModeMergeTitle { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets a value representing the mode merge watermark.
+        /// </summary>
+        /// <value>The mode merge watermark.</value>
+        public virtual string ModeMergeWatermark { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets a value representing the mod merge invalid class.
+        /// </summary>
+        /// <value>The mod merge invalid class.</value>
+        public virtual string ModMergeInvalidClass { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets a value representing the mod merge template reset command.<see cref="ReactiveUI.ReactiveCommand{System.Reactive.Unit, System.Reactive.Unit}" />
+        /// </summary>
+        /// <value>The mod merge template reset command.</value>
+        public virtual ReactiveCommand<Unit, Unit> ModMergeTemplateResetCommand { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets a value representing the mod merge template title.
+        /// </summary>
+        /// <value>The mod merge template title.</value>
+        [StaticLocalization(LocalizationResources.Options.ModMerge.ModMergeTemplate)]
+        public virtual string ModMergeTemplateTitle { get; protected set; }
 
         /// <summary>
         /// Gets or sets the navigate.
@@ -658,6 +805,30 @@ namespace IronyModManager.ViewModels.Controls
         }
 
         /// <summary>
+        /// Binds the colors.
+        /// </summary>
+        protected virtual void BindColors()
+        {
+            var savedColors = conflictSolverColorsService.Get();
+            Color?.Dispose();
+            Color = new ConflictSolverColors(savedColors);
+            colorsChanged?.Dispose();
+            colorsChanged = null;
+
+            var col = new SourceList<ConflictSolverColors>();
+            col.Add(Color);
+            colorsChanged = col.Connect().WhenAnyPropertyChanged().Throttle(TimeSpan.FromMilliseconds(50)).Subscribe(s =>
+            {
+                var entity = conflictSolverColorsService.Get();
+                entity.ConflictSolverDeletedLineColor = s.ConflictSolverDeletedLineColor.ToString();
+                entity.ConflictSolverModifiedLineColor = s.ConflictSolverModifiedLineColor.ToString();
+                entity.ConflictSolverImaginaryLineColor = s.ConflictSolverImaginaryLineColor.ToString();
+                entity.ConflictSolverInsertedLineColor = s.ConflictSolverInsertedLineColor.ToString();
+                conflictSolverColorsService.Save(entity);
+            }).DisposeWith(Disposables);
+        }
+
+        /// <summary>
         /// Binds game languages.
         /// </summary>
         /// <param name="game">The game.</param>
@@ -730,6 +901,10 @@ namespace IronyModManager.ViewModels.Controls
             SetGame(gameService.GetSelected());
             SetEditor(externalEditorService.Get());
             SetNotificationPosition(positionSettingsService.Get());
+            BindColors();
+            SetModMerge();
+            SetModMergeWatermark();
+
             var updateSettings = updaterService.Get();
             if (UpdatesAllowed)
             {
@@ -1023,6 +1198,16 @@ namespace IronyModManager.ViewModels.Controls
                 right.Dispose();
             }).DisposeWith(disposables);
 
+            ModCollectionTemplateResetCommand = ReactiveCommand.Create(() =>
+            {
+                ModCollectionTemplate = string.Empty;
+            }).DisposeWith(disposables);
+
+            ModMergeTemplateResetCommand = ReactiveCommand.Create(() =>
+            {
+                ModeMergeTemplate = String.Empty;
+            }).DisposeWith(disposables);
+
             base.OnActivated(disposables);
         }
 
@@ -1147,6 +1332,53 @@ namespace IronyModManager.ViewModels.Controls
         }
 
         /// <summary>
+        /// Sets a mod merge.
+        /// </summary>
+        protected virtual void SetModMerge()
+        {
+            isMergeReloading = true;
+            modMergeTemplateChanged?.Dispose();
+            modCollectionTemplateChanged?.Dispose();
+
+            ModeMergeTemplate = modMergeService.GetMergeCollectionModNameTemplate();
+            ModCollectionTemplate = modMergeService.GetMergeCollectionNameTemplate();
+
+            modMergeTemplateChanged = this.WhenAnyValue(p => p.ModeMergeTemplate).Where(_ => !isMergeReloading).Subscribe(s =>
+            {
+                if (string.IsNullOrWhiteSpace(s))
+                {
+                    ModMergeInvalidClass = string.Empty;
+                }
+                else
+                {
+                    ModMergeInvalidClass = modMergeService.SaveMergeCollectionModNameTeplate(s) ? string.Empty : InvalidEntryClass;
+                }
+            }).DisposeWith(Disposables);
+
+            modCollectionTemplateChanged = this.WhenAnyValue(p => p.ModCollectionTemplate).Where(_ => !isMergeReloading).Subscribe(s =>
+            {
+                if (string.IsNullOrWhiteSpace(s))
+                {
+                    ModCollectionInvalidClass = string.Empty;
+                }
+                else
+                {
+                    ModCollectionInvalidClass = modMergeService.SaveMergedCollectionNameTemplate(s) ? string.Empty : InvalidEntryClass;
+                }
+            }).DisposeWith(Disposables);
+
+            isMergeReloading = false;
+        }
+
+        /// <summary>
+        /// Sets a mod merge watermark.
+        /// </summary>
+        protected virtual void SetModMergeWatermark()
+        {
+            ModeMergeWatermark = $"{Services.Common.Constants.MergeTemplateFormat} {Services.Common.Constants.MergeModTemplateFormat}";
+        }
+
+        /// <summary>
         /// Sets the notification position.
         /// </summary>
         /// <param name="notificationPositions">The notification positions.</param>
@@ -1206,5 +1438,329 @@ namespace IronyModManager.ViewModels.Controls
         }
 
         #endregion Methods
+
+        #region Classes
+
+        /// <summary>
+        /// Class ConflictSolverColors.
+        /// Implements the <see cref="INotifyPropertyChanged" />
+        /// </summary>
+        /// <seealso cref="INotifyPropertyChanged" />
+        public class ConflictSolverColors : INotifyPropertyChanged, IDisposable
+        {
+            #region Fields
+
+            /// <summary>
+            /// The conflict solver deleted line brush
+            /// </summary>
+            private SolidColorBrush conflictSolverDeletedLineBrush;
+
+            /// <summary>
+            /// The conflict solver deleted line color
+            /// </summary>
+            private Color conflictSolverDeletedLineColor;
+
+            /// <summary>
+            /// A private SolidColorBrush named conflictSolverImaginaryLineBrush.
+            /// </summary>
+            private SolidColorBrush conflictSolverImaginaryLineBrush;
+
+            /// <summary>
+            /// The conflict solver imaginary line color
+            /// </summary>
+            private Color conflictSolverImaginaryLineColor;
+
+            /// <summary>
+            /// The conflict solver inserted line brush
+            /// </summary>
+            private SolidColorBrush conflictSolverInsertedLineBrush;
+
+            /// <summary>
+            /// The conflict solver inserted line color
+            /// </summary>
+            private Color conflictSolverInsertedLineColor;
+
+            /// <summary>
+            /// The conflict solver modified line brush
+            /// </summary>
+            private SolidColorBrush conflictSolverModifiedLineBrush;
+
+            /// <summary>
+            /// The conflict solver modified line color
+            /// </summary>
+            private Color conflictSolverModifiedLineColor;
+
+            #endregion Fields
+
+            #region Constructors
+
+            /// <summary>
+            /// Initializes a new instance of the <see cref="ConflictSolverColors" /> class.
+            /// </summary>
+            /// <param name="colors">The colors.</param>
+            public ConflictSolverColors(IConflictSolverColors colors)
+            {
+                var converter = new EditorColorConverter(colors);
+                ConflictSolverDeletedLineColor = converter.GetDeletedLineColor();
+                ConflictSolverDeletedLineBrush = converter.GetDeletedLineBrush();
+
+                ConflictSolverImaginaryLineColor = converter.GetImaginaryLineColor();
+                ConflictSolverImaginaryLineBrush = converter.GetImaginaryLineBrush();
+
+                ConflictSolverModifiedLineColor = converter.GetEditedLineColor();
+                ConflictSolverModifiedLineBrush = converter.GetEditedLineBrush();
+
+                ConflictSolverInsertedLineColor = converter.GetInsertedLineColor();
+                ConflictSolverInsertedLineBrush = converter.GetInsertedLineBrush();
+
+                ResetDeletedLineCommand = ReactiveCommand.Create(() =>
+                {
+                    SetNewDeletedColor(converter.GetDefaultDeletedLineColor());
+                });
+
+                ResetImaginaryLineCommand = ReactiveCommand.Create(() =>
+                {
+                    SetNewImaginaryColor(converter.GetDefaultImaginaryLineColor());
+                });
+
+                ResetInsertedLineCommand = ReactiveCommand.Create(() =>
+                {
+                    SetNewInsertedColor(converter.GetDefaultInsertedLineColor());
+                });
+
+                ResetModifiedLineCommand = ReactiveCommand.Create(() =>
+                {
+                    SetNewEditedColor(converter.GetDefaultEditedLineColor());
+                });
+            }
+
+            #endregion Constructors
+
+            #region Events
+
+            /// <summary>
+            /// Occurs when a property value changes.
+            /// </summary>
+            public event PropertyChangedEventHandler PropertyChanged;
+
+            #endregion Events
+
+            #region Properties
+
+            /// <summary>
+            /// Gets or sets the conflict solver deleted line brush.
+            /// </summary>
+            /// <value>The conflict solver deleted line brush.</value>
+            public virtual SolidColorBrush ConflictSolverDeletedLineBrush
+            {
+                get => conflictSolverDeletedLineBrush;
+                set => SetField(ref conflictSolverDeletedLineBrush, value);
+            }
+
+            /// <summary>
+            /// Gets or sets the color of the conflict solver deleted line.
+            /// </summary>
+            /// <value>The color of the conflict solver deleted line.</value>
+            public virtual Color ConflictSolverDeletedLineColor
+            {
+                get => conflictSolverDeletedLineColor;
+                protected set => SetNewDeletedColor(value);
+            }
+
+            /// <summary>
+            /// Gets or sets the conflict solver imaginary line brush.
+            /// </summary>
+            /// <value>The conflict solver imaginary line brush.</value>
+            public virtual SolidColorBrush ConflictSolverImaginaryLineBrush
+            {
+                get => conflictSolverImaginaryLineBrush;
+                set => SetField(ref conflictSolverImaginaryLineBrush, value);
+            }
+
+            /// <summary>
+            /// Gets or sets the color of the conflict solver imaginary line.
+            /// </summary>
+            /// <value>The color of the conflict solver imaginary line.</value>
+            public virtual Color ConflictSolverImaginaryLineColor
+            {
+                get => conflictSolverImaginaryLineColor;
+                protected set => SetNewImaginaryColor(value);
+            }
+
+            /// <summary>
+            /// Gets or sets the conflict solver inserted line brush.
+            /// </summary>
+            /// <value>The conflict solver inserted line brush.</value>
+            public virtual SolidColorBrush ConflictSolverInsertedLineBrush
+            {
+                get => conflictSolverInsertedLineBrush;
+                set => SetField(ref conflictSolverInsertedLineBrush, value);
+            }
+
+            /// <summary>
+            /// Gets or sets the color of the conflict solver inserted line.
+            /// </summary>
+            /// <value>The color of the conflict solver inserted line.</value>
+            public virtual Color ConflictSolverInsertedLineColor
+            {
+                get => conflictSolverInsertedLineColor;
+                protected set => SetNewInsertedColor(value);
+            }
+
+            /// <summary>
+            /// Gets or sets the conflict solver modified line brush.
+            /// </summary>
+            /// <value>The conflict solver modified line brush.</value>
+            public virtual SolidColorBrush ConflictSolverModifiedLineBrush
+            {
+                get => conflictSolverModifiedLineBrush;
+                set => SetField(ref conflictSolverModifiedLineBrush, value);
+            }
+
+            /// <summary>
+            /// Gets or sets the color of the conflict solver modified line.
+            /// </summary>
+            /// <value>The color of the conflict solver modified line.</value>
+            public virtual Color ConflictSolverModifiedLineColor
+            {
+                get => conflictSolverModifiedLineColor;
+                protected set => SetNewEditedColor(value);
+            }
+
+            /// <summary>
+            /// Gets or sets the reset deleted line command.
+            /// </summary>
+            /// <value>The reset deleted line command.</value>
+            public ReactiveCommand<Unit, Unit> ResetDeletedLineCommand { get; protected set; }
+
+            /// <summary>
+            /// Gets or sets the reset imaginary line command.
+            /// </summary>
+            /// <value>The reset imaginary line command.</value>
+            public ReactiveCommand<Unit, Unit> ResetImaginaryLineCommand { get; protected set; }
+
+            /// <summary>
+            /// Gets or sets the reset inserted line command.
+            /// </summary>
+            /// <value>The reset inserted line command.</value>
+            public ReactiveCommand<Unit, Unit> ResetInsertedLineCommand { get; protected set; }
+
+            /// <summary>
+            /// Gets or sets the reset modified line command.
+            /// </summary>
+            /// <value>The reset modified line command.</value>
+            public ReactiveCommand<Unit, Unit> ResetModifiedLineCommand { get; protected set; }
+
+            #endregion Properties
+
+            #region Methods
+
+            /// <summary>
+            /// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
+            /// </summary>
+            public void Dispose()
+            {
+                Dispose(true);
+                GC.SuppressFinalize(this);
+            }
+
+            /// <summary>
+            /// Releases unmanaged and - optionally - managed resources.
+            /// </summary>
+            /// <param name="disposing"><c>true</c> to release both managed and unmanaged resources; <c>false</c> to release only unmanaged resources.</param>
+            protected virtual void Dispose(bool disposing)
+            {
+                if (!disposing)
+                {
+                    return;
+                }
+
+                ResetInsertedLineCommand?.Dispose();
+                ResetInsertedLineCommand = null;
+                ResetModifiedLineCommand?.Dispose();
+                ResetModifiedLineCommand = null;
+                ResetDeletedLineCommand?.Dispose();
+                ResetDeletedLineCommand = null;
+                ResetImaginaryLineCommand?.Dispose();
+                ResetImaginaryLineCommand = null;
+            }
+
+            /// <summary>
+            /// Called when [property changed].
+            /// </summary>
+            /// <param name="propertyName">Name of the property.</param>
+            protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+            {
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+            }
+
+            /// <summary>
+            /// Sets the field.
+            /// </summary>
+            /// <typeparam name="T"></typeparam>
+            /// <param name="field">The field.</param>
+            /// <param name="value">The value.</param>
+            /// <param name="propertyName">Name of the property.</param>
+            /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
+            protected bool SetField<T>(ref T field, T value, [CallerMemberName] string propertyName = null)
+            {
+                if (EqualityComparer<T>.Default.Equals(field, value)) return false;
+                field = value;
+                OnPropertyChanged(propertyName);
+                return true;
+            }
+
+            /// <summary>
+            /// Sets a new deleted color.
+            /// </summary>
+            /// <param name="value">The value.</param>
+            protected void SetNewDeletedColor(Color value)
+            {
+                if (SetField(ref conflictSolverDeletedLineColor, value, nameof(ConflictSolverDeletedLineColor)))
+                {
+                    ConflictSolverDeletedLineBrush = new SolidColorBrush(ConflictSolverDeletedLineColor);
+                }
+            }
+
+            /// <summary>
+            /// Sets a new edited color.
+            /// </summary>
+            /// <param name="value">The value.</param>
+            protected void SetNewEditedColor(Color value)
+            {
+                if (SetField(ref conflictSolverModifiedLineColor, value, nameof(ConflictSolverModifiedLineColor)))
+                {
+                    ConflictSolverModifiedLineBrush = new SolidColorBrush(ConflictSolverModifiedLineColor);
+                }
+            }
+
+            /// <summary>
+            /// Sets a new imaginary color.
+            /// </summary>
+            /// <param name="value">The value.</param>
+            protected void SetNewImaginaryColor(Color value)
+            {
+                if (SetField(ref conflictSolverImaginaryLineColor, value, nameof(ConflictSolverImaginaryLineColor)))
+                {
+                    ConflictSolverImaginaryLineBrush = new SolidColorBrush(ConflictSolverImaginaryLineColor);
+                }
+            }
+
+            /// <summary>
+            /// Sets a new inserted color.
+            /// </summary>
+            /// <param name="value">The value.</param>
+            protected void SetNewInsertedColor(Color value)
+            {
+                if (SetField(ref conflictSolverInsertedLineColor, value, nameof(ConflictSolverInsertedLineColor)))
+                {
+                    ConflictSolverInsertedLineBrush = new SolidColorBrush(ConflictSolverInsertedLineColor);
+                }
+            }
+
+            #endregion Methods
+        }
+
+        #endregion Classes
     }
 }

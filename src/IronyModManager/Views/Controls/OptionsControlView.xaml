@@ -5,6 +5,7 @@
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              xmlns:controls="clr-namespace:IronyModManager.Controls;assembly=IronyModManager"
              xmlns:html="clr-namespace:Avalonia.Controls.Html;assembly=Avalonia.HtmlRenderer"
+             xmlns:colorPicker="clr-namespace:ThemeEditor.Controls.ColorPicker;assembly=ThemeEditor.Controls.ColorPicker"
              x:Class="IronyModManager.Views.Controls.OptionsControlView">
     <Panel>
         <Button Content="{Binding Options}" Command="{Binding OptionsCommand}"
@@ -14,7 +15,7 @@
                Topmost="True" ObeyScreenEdges="True" StaysOpen="False" x:Name="popup"
                PlacementTarget="{Binding #openPopupButton}">
             <Border BorderThickness="1,1,1,1" BorderBrush="{DynamicResource IronyButtonBorderBrush}">
-                <Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto" ColumnDefinitions="1*,1*" Background="{DynamicResource IronyBackgroundPopupBrush}">
+                <Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto" ColumnDefinitions="1*,1*" Background="{DynamicResource IronyBackgroundPopupBrush}">
                     <StackPanel Orientation="Vertical" Grid.Row="0" Grid.Column="1" Grid.RowSpan="2" IsVisible="{Binding ShowGameOptions}" Margin="{Binding LeftMargin}">
                         <Border BorderThickness="1,1,1,1" BorderBrush="{DynamicResource IronyButtonBorderBrush}">
                             <TextBlock Text="{Binding GameOptions}" FontSize="14" HorizontalAlignment="Center" />
@@ -78,12 +79,30 @@
                                     HorizontalAlignment="Stretch" VerticalAlignment="Stretch" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" MaxHeight="30" />
                         </Grid>
                     </StackPanel>
+                    <StackPanel Grid.Column="0" Grid.Row="2" Orientation="Vertical">
+                        <Border BorderThickness="1,1,1,1" BorderBrush="{DynamicResource IronyButtonBorderBrush}">
+                            <TextBlock Text="{Binding ModeMergeTitle}" FontSize="14" HorizontalAlignment="Center" TextWrapping="Wrap" />
+                        </Border>
+                        <Grid Grid.ColumnDefinitions="1*,1*,30" Grid.RowDefinitions="1*,1*">
+                            <TextBlock Grid.Column="0" Grid.Row="0" Text="{Binding ModMergeTemplateTitle}" TextWrapping="WrapWithOverflow" Margin="0,5,0,0" ></TextBlock>
+                            <controls:BoundClassBorder BoundClasses="{Binding ModMergeInvalidClass}" Grid.Row="0" Grid.Column="1">
+                                <controls:TextBox Text="{Binding ModeMergeTemplate}" MaxWidth="260" Watermark="{Binding ModeMergeWatermark}" />
+                            </controls:BoundClassBorder>
+                            <Button Content="{Binding Reset}" Command="{Binding ModMergeTemplateResetCommand}" Grid.Column="2" Grid.Row="0" />
+
+                            <TextBlock Grid.Column="0" Grid.Row="1" Text="{Binding ModCollectionTemplateTitle}" TextWrapping="WrapWithOverflow" Margin="0,5,0,0" ></TextBlock>
+                            <controls:BoundClassBorder BoundClasses="{Binding ModCollectionInvalidClass}" Grid.Row="1" Grid.Column="1">
+                                <controls:TextBox Text="{Binding ModCollectionTemplate}" MaxWidth="260" Watermark="{Binding ModeMergeWatermark}" />
+                            </controls:BoundClassBorder>
+                            <Button Content="{Binding Reset}" Command="{Binding ModCollectionTemplateResetCommand}" Grid.Column="2" Grid.Row="1" />
+                        </Grid>
+                    </StackPanel>
                     <!-- Must give it absolute height otherwise dumb and dumber can't calculate height properly on first popup opening -->
-                    <StackPanel Orientation="Vertical" Grid.Row="2" Grid.Column="1" Margin="{Binding LeftGameLanguagesMargin}" Height="160" IsVisible="{Binding GameLanguagesVisible}">
+                    <StackPanel Orientation="Vertical" Grid.Row="2" Grid.RowSpan="2" Grid.Column="1" Margin="{Binding LeftGameLanguagesMargin}" MinHeight="160" IsVisible="{Binding GameLanguagesVisible}">
                         <Border BorderThickness="1,1,1,1" BorderBrush="{DynamicResource IronyButtonBorderBrush}">
                             <TextBlock Text="{Binding ConflictSolverTitle}" FontSize="14" HorizontalAlignment="Center" TextWrapping="Wrap" />
                         </Border>
-                        <Grid ColumnDefinitions="1*,1*" RowDefinitions="1*,1*" Margin="0,5">
+                        <Grid ColumnDefinitions="1*,1*" RowDefinitions="1*,1*,1*,1*" Margin="0,5">
                             <TextBlock Text="{Binding AllowedLanguagesCaption}" Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="2" VerticalAlignment="Center" HorizontalAlignment="Left" TextWrapping="Wrap" Margin="0,5,0,0" />
                             <Panel Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="2">
                                 <ItemsRepeater Items="{Binding GameLanguages}" Width="440">
@@ -99,9 +118,112 @@
                                     </ItemsRepeater.ItemTemplate>
                                 </ItemsRepeater>
                             </Panel>
+                            <TextBlock Text="{Binding ConflictSolverColorsTitle}" Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="2" VerticalAlignment="Center" HorizontalAlignment="Left" TextWrapping="Wrap" Margin="0,10,0,0" />
+                            <Grid Grid.Column="0" Grid.Row="3" Grid.ColumnSpan="2" Grid.RowDefinitions="1*,1*" Grid.ColumnDefinitions="1*,1*" Margin="0,10,0,0">
+                                <Grid Grid.Column="0" Grid.Row="0" Grid.ColumnDefinitions="1*,1*,30">
+                                    <TextBlock Grid.Column="0" Text="{Binding ConflictSolverDeletedLineColorText}" TextWrapping="WrapWithOverflow" Margin="0, 5, 0, 0"></TextBlock>
+                                    <StackPanel Grid.Column="1">
+                                        <ToggleButton Name="PopupButtonDeleted" Background="Transparent" Width="100" Height="30" DockPanel.Dock="Right" Margin="0, 0, 5, 0">
+                                            <Grid>
+                                                <Rectangle Width="100" Height="{Binding #PopupButtonDeleted.Bounds.Height}">
+                                                    <Rectangle.Fill>
+                                                        <VisualBrush TileMode="Tile" SourceRect="0, 0, 16, 16" DestinationRect="0, 0, 16, 16">
+                                                            <VisualBrush.Visual>
+                                                                <Path Data="M 0,0 L 0,8 L 8,8 L 8,0 Z M 8,8 L 8,16 L 16,16 L 16,8 Z" Fill="Gray"></Path>
+                                                            </VisualBrush.Visual>
+                                                        </VisualBrush>
+                                                    </Rectangle.Fill>
+                                                </Rectangle>
+                                                <Rectangle Fill="{Binding Color.ConflictSolverDeletedLineBrush}" Width="200" Height="200"></Rectangle>
+                                            </Grid>
+                                        </ToggleButton>
+                                        <Popup IsOpen="{Binding #PopupButtonDeleted.IsChecked, Mode=TwoWay}" StaysOpen="False" PlacementTarget="{Binding #PopupButtonDeleted}">
+                                            <Border Background="{DynamicResource IronyBackgroundPopupBrush}" Padding="5" CornerRadius="3" >
+                                                <colorPicker:ColorPicker Color="{Binding Color.ConflictSolverDeletedLineColor, Mode=TwoWay}"></colorPicker:ColorPicker>
+                                            </Border>
+                                        </Popup>
+                                    </StackPanel>
+                                    <Button Content="{Binding Reset}" Command="{Binding Color.ResetDeletedLineCommand}" Grid.Column="2" Grid.Row="0" />
+                                </Grid>
+                                <Grid Grid.Column="1" Grid.Row="0" Grid.ColumnDefinitions="1*,1*,30">
+                                    <TextBlock Grid.Column="0" Text="{Binding ConflictSolverImaginaryLineColorText}" TextWrapping="WrapWithOverflow" Margin="0, 5, 0, 0"></TextBlock>
+                                    <StackPanel Grid.Column="1">
+                                        <ToggleButton Name="PopupButtonImaginary" Background="Transparent" Width="100" Height="30" DockPanel.Dock="Right" Margin="0, 0, 5, 0">
+                                            <Grid>
+                                                <Rectangle Width="100" Height="{Binding #PopupButtonImaginary.Bounds.Height}">
+                                                    <Rectangle.Fill>
+                                                        <VisualBrush TileMode="Tile" SourceRect="0, 0, 16, 16" DestinationRect="0, 0, 16, 16">
+                                                            <VisualBrush.Visual>
+                                                                <Path Data="M 0,0 L 0,8 L 8,8 L 8,0 Z M 8,8 L 8,16 L 16,16 L 16,8 Z" Fill="Gray"></Path>
+                                                            </VisualBrush.Visual>
+                                                        </VisualBrush>
+                                                    </Rectangle.Fill>
+                                                </Rectangle>
+                                                <Rectangle Fill="{Binding Color.ConflictSolverImaginaryLineBrush}" Width="200" Height="200"></Rectangle>
+                                            </Grid>
+                                        </ToggleButton>
+                                        <Popup IsOpen="{Binding #PopupButtonImaginary.IsChecked, Mode=TwoWay}" StaysOpen="False" PlacementTarget="{Binding #PopupButtonImaginary}">
+                                            <Border Background="{DynamicResource IronyBackgroundPopupBrush}" Padding="5" CornerRadius="3" >
+                                                <colorPicker:ColorPicker Color="{Binding Color.ConflictSolverImaginaryLineColor, Mode=TwoWay}"></colorPicker:ColorPicker>
+                                            </Border>
+                                        </Popup>
+                                    </StackPanel>
+                                    <Button Content="{Binding Reset}" Command="{Binding Color.ResetImaginaryLineCommand}" Grid.Column="2" Grid.Row="0" />
+                                </Grid>
+                                <Grid Grid.Column="0" Grid.Row="1" Grid.ColumnDefinitions="1*,1*,30">
+                                    <TextBlock Grid.Column="0" Text="{Binding ConflictSolverInsertedLineColorText}" TextWrapping="WrapWithOverflow" Margin="0, 5, 0, 0"></TextBlock>
+                                    <StackPanel Grid.Column="1">
+                                        <ToggleButton Name="PopupButtonInserted" Background="Transparent" Width="100" Height="30" DockPanel.Dock="Right" Margin="0, 0, 5, 0">
+                                            <Grid>
+                                                <Rectangle Width="100" Height="{Binding #PopupButtonInserted.Bounds.Height}">
+                                                    <Rectangle.Fill>
+                                                        <VisualBrush TileMode="Tile" SourceRect="0, 0, 16, 16" DestinationRect="0, 0, 16, 16">
+                                                            <VisualBrush.Visual>
+                                                                <Path Data="M 0,0 L 0,8 L 8,8 L 8,0 Z M 8,8 L 8,16 L 16,16 L 16,8 Z" Fill="Gray"></Path>
+                                                            </VisualBrush.Visual>
+                                                        </VisualBrush>
+                                                    </Rectangle.Fill>
+                                                </Rectangle>
+                                                <Rectangle Fill="{Binding Color.ConflictSolverInsertedLineBrush}" Width="200" Height="200"></Rectangle>
+                                            </Grid>
+                                        </ToggleButton>
+                                        <Popup IsOpen="{Binding #PopupButtonInserted.IsChecked, Mode=TwoWay}" StaysOpen="False" PlacementTarget="{Binding #PopupButtonInserted}">
+                                            <Border Background="{DynamicResource IronyBackgroundPopupBrush}" Padding="5" CornerRadius="3" >
+                                                <colorPicker:ColorPicker Color="{Binding Color.ConflictSolverInsertedLineColor, Mode=TwoWay}"></colorPicker:ColorPicker>
+                                            </Border>
+                                        </Popup>
+                                    </StackPanel>
+                                    <Button Content="{Binding Reset}" Command="{Binding Color.ResetInsertedLineCommand}" Grid.Column="2" Grid.Row="0" />
+                                </Grid>
+                                <Grid Grid.Column="1" Grid.Row="1" Grid.ColumnDefinitions="1*,1*,30">
+                                    <TextBlock Grid.Column="0" Text="{Binding ConflictSolverModifiedLineColorText}" TextWrapping="WrapWithOverflow" Margin="0, 5, 0, 0"></TextBlock>
+                                    <StackPanel Grid.Column="1">
+                                        <ToggleButton Name="PopupButtonModified" Background="Transparent" Width="100" Height="30" DockPanel.Dock="Right" Margin="0, 0, 5, 0">
+                                            <Grid>
+                                                <Rectangle Width="100" Height="{Binding #PopupButtonModified.Bounds.Height}">
+                                                    <Rectangle.Fill>
+                                                        <VisualBrush TileMode="Tile" SourceRect="0, 0, 16, 16" DestinationRect="0, 0, 16, 16">
+                                                            <VisualBrush.Visual>
+                                                                <Path Data="M 0,0 L 0,8 L 8,8 L 8,0 Z M 8,8 L 8,16 L 16,16 L 16,8 Z" Fill="Gray"></Path>
+                                                            </VisualBrush.Visual>
+                                                        </VisualBrush>
+                                                    </Rectangle.Fill>
+                                                </Rectangle>
+                                                <Rectangle Fill="{Binding Color.ConflictSolverModifiedLineBrush}" Width="200" Height="200"></Rectangle>
+                                            </Grid>
+                                        </ToggleButton>
+                                        <Popup IsOpen="{Binding #PopupButtonModified.IsChecked, Mode=TwoWay}" StaysOpen="False" PlacementTarget="{Binding #PopupButtonModified}">
+                                            <Border Background="{DynamicResource IronyBackgroundPopupBrush}" Padding="5" CornerRadius="3" >
+                                                <colorPicker:ColorPicker Color="{Binding Color.ConflictSolverModifiedLineColor, Mode=TwoWay}"></colorPicker:ColorPicker>
+                                            </Border>
+                                        </Popup>
+                                    </StackPanel>
+                                    <Button Content="{Binding Reset}" Command="{Binding Color.ResetModifiedLineCommand}" Grid.Column="2" Grid.Row="0" />
+                                </Grid>
+                            </Grid>
                         </Grid>
                     </StackPanel>
-                    <StackPanel Orientation="Vertical" Grid.Row="2" Grid.Column="0" IsVisible="{Binding UpdatesAllowed}" Margin="0,15">
+                    <StackPanel Orientation="Vertical" Grid.Row="3" Grid.Column="0" IsVisible="{Binding UpdatesAllowed}" Margin="0,15">
                         <Border BorderThickness="1,1,1,1" BorderBrush="{DynamicResource IronyButtonBorderBrush}">
                             <TextBlock Text="{Binding UpdateOptions}" FontSize="14" HorizontalAlignment="Center" TextWrapping="Wrap" />
                         </Border>
@@ -112,7 +234,7 @@
                                     HorizontalAlignment="Stretch" VerticalAlignment="Stretch" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" MaxHeight="30" />
                         </Grid>
                     </StackPanel>
-                    <Panel Grid.Row="3" Grid.ColumnSpan="2" IsVisible="{Binding UpdateInfoVisible}">
+                    <Panel Grid.Row="4" Grid.ColumnSpan="2" IsVisible="{Binding UpdateInfoVisible}">
                         <Grid>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="330" />
@@ -137,7 +259,7 @@
                                     HorizontalAlignment="Stretch" VerticalAlignment="Stretch" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" MaxHeight="30" />
                         </Grid>
                     </Panel>
-                    <Panel Grid.Row="4" Grid.ColumnSpan="2" Margin="0,5">
+                    <Panel Grid.Row="5" Grid.ColumnSpan="2" Margin="0,5">
                         <Button Content="{Binding Close}" Command="{Binding CloseCommand}" HorizontalAlignment="Right" Width="200" HorizontalContentAlignment="Center" />
                     </Panel>
                 </Grid>

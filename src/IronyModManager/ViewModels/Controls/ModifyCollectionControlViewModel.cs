@@ -4,7 +4,7 @@
 // Created          : 05-09-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 12-01-2022
+// Last Modified On : 03-20-2024
 // ***********************************************************************
 // <copyright file="ModifyCollectionControlViewModel.cs" company="Mario">
 //     Mario
@@ -107,17 +107,17 @@ namespace IronyModManager.ViewModels.Controls
         /// <summary>
         /// The file merge progress handler
         /// </summary>
-        private IDisposable fileMergeProgressHandler = null;
+        private IDisposable fileMergeProgressHandler;
 
         /// <summary>
         /// The free space check handler
         /// </summary>
-        private IDisposable freeSpaceCheckHandler = null;
+        private IDisposable freeSpaceCheckHandler;
 
         /// <summary>
         /// The mod compress progress handler
         /// </summary>
-        private IDisposable modCompressProgressHandler = null;
+        private IDisposable modCompressProgressHandler;
 
         #endregion Fields
 
@@ -347,28 +347,27 @@ namespace IronyModManager.ViewModels.Controls
         /// <param name="requestedName">Name of the requested.</param>
         /// <param name="skipNameCheck">if set to <c>true</c> [skip name check].</param>
         /// <returns>IModCollection.</returns>
-        protected virtual IModCollection CopyCollection(string requestedName, bool skipNameCheck = false)
+        protected virtual IModCollection CopyCollection(string requestedName, out int? counter, bool skipNameCheck = false)
         {
-            string name = requestedName;
+            var name = requestedName;
+            counter = null;
             if (!skipNameCheck)
             {
                 var collections = modCollectionService.GetAll();
-                var count = collections.Where(p => p.Name.Equals(requestedName, StringComparison.OrdinalIgnoreCase)).Count();
-                name = string.Empty;
-                if (count == 0)
-                {
-                    name = requestedName;
-                }
-                else
-                {
-                    name = $"{requestedName} ({count})";
-                }
+                var count = collections.Count(p => p.Name.Equals(requestedName, StringComparison.OrdinalIgnoreCase));
+                name = count == 0 ? requestedName : $"{requestedName} ({count})";
                 while (collections.Any(p => p.Name.Equals(name, StringComparison.OrdinalIgnoreCase)))
                 {
                     count++;
                     name = $"{requestedName} ({count})";
                 }
+
+                if (count != 0)
+                {
+                    counter = count;
+                }
             }
+
             var copied = modCollectionService.Create();
             copied.IsSelected = true;
             copied.Mods = ActiveCollection.Mods;
@@ -403,21 +402,28 @@ namespace IronyModManager.ViewModels.Controls
         /// get merged collection as an asynchronous operation.
         /// </summary>
         /// <returns>IModCollection.</returns>
-        protected virtual async Task<IModCollection> GetMergedCollectionAsync()
+        protected virtual async Task<Tuple<string, IModCollection>> GetMergedCollectionAsync()
         {
-            string prefix = localizationManager.GetResource(LocalizationResources.Collection_Mods.MergeCollection.MergedCollectionPrefix);
+            var prefix = localizationManager.GetResource(LocalizationResources.Collection_Mods.MergeCollection.MergedCollectionPrefix);
             var requestedName = $"{prefix} {ActiveCollection.Name}";
+            var template = modMergeService.GetMergeCollectionNameTemplate();
+            if (!string.IsNullOrWhiteSpace(template))
+            {
+                requestedName = IronyFormatter.Format(template, new { ActiveCollection.Name, Merged = prefix });
+            }
+
             var exists = modCollectionService.GetAll().Any(p => p.Name.Equals(requestedName, StringComparison.OrdinalIgnoreCase));
-            bool skipNameCheck = false;
+            var skipNameCheck = false;
             if (exists)
             {
                 var title = localizationManager.GetResource(LocalizationResources.Collection_Mods.MergeCollection.OverwritePrompt.Title);
                 var message = localizationManager.GetResource(LocalizationResources.Collection_Mods.MergeCollection.OverwritePrompt.Message);
                 skipNameCheck = await notificationAction.ShowPromptAsync(title, title, message, NotificationType.Info);
             }
-            var copy = CopyCollection(requestedName, skipNameCheck);
+
+            var copy = CopyCollection(requestedName, out var counter, skipNameCheck);
             copy.MergedFolderName = copy.Name.GenerateValidFileName();
-            return copy;
+            return new Tuple<string, IModCollection>($"{ActiveCollection.Name}{(counter.HasValue ? " " + counter : string.Empty)}", copy);
         }
 
         /// <summary>
@@ -429,16 +435,13 @@ namespace IronyModManager.ViewModels.Controls
             EvalGameSpecificVisibility();
             var allowModSelectionEnabled = this.WhenAnyValue(v => v.AllowModSelection);
 
-            RenameCommand = ReactiveCommand.Create(() =>
-            {
-                return new CommandResult<ModifyAction>(ModifyAction.Rename, CommandState.Success);
-            }, allowModSelectionEnabled).DisposeWith(disposables);
+            RenameCommand = ReactiveCommand.Create(() => new CommandResult<ModifyAction>(ModifyAction.Rename, CommandState.Success), allowModSelectionEnabled).DisposeWith(disposables);
 
             DuplicateCommand = ReactiveCommand.CreateFromTask(async () =>
             {
                 if (ActiveCollection != null)
                 {
-                    var copy = CopyCollection(ActiveCollection.Name);
+                    var copy = CopyCollection(ActiveCollection.Name, out var _);
                     if (modCollectionService.Save(copy))
                     {
                         var id = idGenerator.GetNextId();
@@ -455,6 +458,7 @@ namespace IronyModManager.ViewModels.Controls
                         return new CommandResult<ModifyAction>(ModifyAction.Duplicate, CommandState.Failed);
                     }
                 }
+
                 return new CommandResult<ModifyAction>(ModifyAction.Duplicate, CommandState.NotExecuted);
             }, allowModSelectionEnabled).DisposeWith(disposables);
 
@@ -472,7 +476,7 @@ namespace IronyModManager.ViewModels.Controls
             {
                 if (ActiveCollection != null && ActiveCollection.Mods?.Count() > 0)
                 {
-                    var copy = await GetMergedCollectionAsync();
+                    var (_, copy) = await GetMergedCollectionAsync();
                     var id = idGenerator.GetNextId();
 
                     await TriggerOverlayAsync(id, true, localizationManager.GetResource(LocalizationResources.App.WaitBackgroundOperationMessage));
@@ -487,12 +491,8 @@ namespace IronyModManager.ViewModels.Controls
 
                     SubscribeToProgressReports(id, disposables, MergeType.Basic);
 
-                    var overlayProgress = IronyFormatter.Format(localizationManager.GetResource(LocalizationResources.Collection_Mods.MergeCollection.Overlay_Progress), new
-                    {
-                        PercentDone = 0.ToLocalizedPercentage(),
-                        Count = 1,
-                        TotalCount = 3
-                    });
+                    var overlayProgress = IronyFormatter.Format(localizationManager.GetResource(LocalizationResources.Collection_Mods.MergeCollection.Overlay_Progress),
+                        new { PercentDone = 0.ToLocalizedPercentage(), Count = 1, TotalCount = 3 });
                     var message = localizationManager.GetResource(LocalizationResources.Collection_Mods.MergeCollection.DiskInfoOverlay);
                     await TriggerOverlayAsync(id, true, message, overlayProgress);
 
@@ -519,12 +519,9 @@ namespace IronyModManager.ViewModels.Controls
 
                     await modPatchCollectionService.CleanPatchCollectionAsync(copy.Name);
 
-                    var mergeMod = await Task.Run(async () =>
-                    {
-                        return await modMergeService.MergeCollectionByFilesAsync(copy.Name);
-                    }).ConfigureAwait(false);
-                    copy.Mods = new List<string>() { mergeMod.DescriptorFile };
-                    copy.ModPaths = new List<string>() { mergeMod.FullPath };
+                    var mergeMod = await Task.Run(async () => await modMergeService.MergeCollectionByFilesAsync(copy.Name)).ConfigureAwait(false);
+                    copy.Mods = new List<string> { mergeMod.DescriptorFile };
+                    copy.ModPaths = new List<string> { mergeMod.FullPath };
 
                     await TriggerOverlayAsync(id, false);
                     freeSpaceCheckHandler?.Dispose();
@@ -541,6 +538,7 @@ namespace IronyModManager.ViewModels.Controls
                         return new CommandResult<ModifyAction>(ModifyAction.Merge, CommandState.Failed);
                     }
                 }
+
                 return new CommandResult<ModifyAction>(ModifyAction.Merge, CommandState.NotExecuted);
             }, allowModSelectionEnabled).DisposeWith(disposables);
 
@@ -548,7 +546,7 @@ namespace IronyModManager.ViewModels.Controls
             {
                 if (ActiveCollection != null && ActiveCollection.Mods?.Count() > 0)
                 {
-                    var copy = await GetMergedCollectionAsync();
+                    var (name, copy) = await GetMergedCollectionAsync();
                     var id = idGenerator.GetNextId();
 
                     await TriggerOverlayAsync(id, true, localizationManager.GetResource(LocalizationResources.App.WaitBackgroundOperationMessage));
@@ -563,12 +561,8 @@ namespace IronyModManager.ViewModels.Controls
 
                     SubscribeToProgressReports(id, disposables, MergeType.Compress);
 
-                    var overlayProgress = IronyFormatter.Format(localizationManager.GetResource(LocalizationResources.Collection_Mods.MergeCollection.Overlay_Progress), new
-                    {
-                        PercentDone = 0.ToLocalizedPercentage(),
-                        Count = 1,
-                        TotalCount = 3
-                    });
+                    var overlayProgress = IronyFormatter.Format(localizationManager.GetResource(LocalizationResources.Collection_Mods.MergeCollection.Overlay_Progress),
+                        new { PercentDone = 0.ToLocalizedPercentage(), Count = 1, TotalCount = 3 });
                     var message = localizationManager.GetResource(LocalizationResources.Collection_Mods.MergeCollection.DiskInfoOverlay);
                     await TriggerOverlayAsync(id, true, message, overlayProgress);
 
@@ -595,19 +589,15 @@ namespace IronyModManager.ViewModels.Controls
 
                     await modPatchCollectionService.CleanPatchCollectionAsync(copy.Name);
 
-                    var mergeMods = await Task.Run(async () =>
-                    {
-                        return await modMergeService.MergeCompressCollectionAsync(copy.Name, IronyFormatter.Format(localizationManager.GetResource(LocalizationResources.Collection_Mods.MergeCollection.MergeCompressModPrefix), new
-                        {
-                            Name = copy.Name.Replace($"{localizationManager.GetResource(LocalizationResources.Collection_Mods.MergeCollection.MergedCollectionPrefix)} ", string.Empty)
-                        }));
-                    }).ConfigureAwait(false);
+                    var mergeMods = await Task.Run(async () => await modMergeService.MergeCompressCollectionAsync(copy.Name,
+                        IronyFormatter.Format(localizationManager.GetResource(LocalizationResources.Collection_Mods.MergeCollection.MergeCompressModPrefix),
+                            new { Name = name }))).ConfigureAwait(false);
                     copy.Mods = mergeMods.Select(p => p.DescriptorFile).ToList();
                     copy.ModPaths = mergeMods.Select(p => p.FullPath).ToList();
                     copy.PatchModEnabled = ActiveCollection.PatchModEnabled;
 
                     // I know bad
-                    GC.Collect();
+                    GCRunner.RunGC(GCCollectionMode.Default);
                     await TriggerOverlayAsync(id, false);
                     freeSpaceCheckHandler?.Dispose();
                     fileMergeProgressHandler?.Dispose();
@@ -624,6 +614,7 @@ namespace IronyModManager.ViewModels.Controls
                         return new CommandResult<ModifyAction>(ModifyAction.Merge, CommandState.Failed);
                     }
                 }
+
                 return new CommandResult<ModifyAction>(ModifyAction.Merge, CommandState.NotExecuted);
             }, allowModSelectionEnabled).DisposeWith(disposables);
 
@@ -655,12 +646,8 @@ namespace IronyModManager.ViewModels.Controls
             freeSpaceCheckHandler = modMergeFreeSpaceCheckHandler.Subscribe(s =>
             {
                 var message = localizationManager.GetResource(LocalizationResources.Collection_Mods.MergeCollection.DiskInfoOverlay);
-                var overlayProgress = IronyFormatter.Format(localizationManager.GetResource(LocalizationResources.Collection_Mods.MergeCollection.Overlay_Progress), new
-                {
-                    PercentDone = s.Percentage.ToLocalizedPercentage(),
-                    Count = 1,
-                    TotalCount = 3
-                });
+                var overlayProgress = IronyFormatter.Format(localizationManager.GetResource(LocalizationResources.Collection_Mods.MergeCollection.Overlay_Progress),
+                    new { PercentDone = s.Percentage.ToLocalizedPercentage(), Count = 1, TotalCount = 3 });
                 TriggerOverlay(id, true, message, overlayProgress);
             }).DisposeWith(disposables);
 
@@ -668,21 +655,11 @@ namespace IronyModManager.ViewModels.Controls
             {
                 fileMergeProgressHandler = modFileMergeProgressHandler.Subscribe(s =>
                 {
-                    string message;
-                    if (s.Step == 1)
-                    {
-                        message = localizationManager.GetResource(LocalizationResources.Collection_Mods.MergeCollection.Basic.Overlay_Gathering_Mod_Info);
-                    }
-                    else
-                    {
-                        message = localizationManager.GetResource(LocalizationResources.Collection_Mods.MergeCollection.Basic.Overlay_Writing_Files);
-                    }
-                    var overlayProgress = IronyFormatter.Format(localizationManager.GetResource(LocalizationResources.Collection_Mods.MergeCollection.Overlay_Progress), new
-                    {
-                        PercentDone = s.Percentage.ToLocalizedPercentage(),
-                        Count = s.Step + 1,
-                        TotalCount = 3
-                    });
+                    var message = localizationManager.GetResource(s.Step == 1
+                        ? LocalizationResources.Collection_Mods.MergeCollection.Basic.Overlay_Gathering_Mod_Info
+                        : LocalizationResources.Collection_Mods.MergeCollection.Basic.Overlay_Writing_Files);
+                    var overlayProgress = IronyFormatter.Format(localizationManager.GetResource(LocalizationResources.Collection_Mods.MergeCollection.Overlay_Progress),
+                        new { PercentDone = s.Percentage.ToLocalizedPercentage(), Count = s.Step + 1, TotalCount = 3 });
                     TriggerOverlay(id, true, message, overlayProgress);
                 }).DisposeWith(disposables);
             }
@@ -690,21 +667,11 @@ namespace IronyModManager.ViewModels.Controls
             {
                 modCompressProgressHandler = modCompressMergeProgressHandler.Subscribe(s =>
                 {
-                    string message;
-                    if (s.Step == 1)
-                    {
-                        message = localizationManager.GetResource(LocalizationResources.Collection_Mods.MergeCollection.Compress.Overlay_Gathering_Mod_Info);
-                    }
-                    else
-                    {
-                        message = localizationManager.GetResource(LocalizationResources.Collection_Mods.MergeCollection.Compress.Overlay_Compressing_Files);
-                    }
-                    var overlayProgress = IronyFormatter.Format(localizationManager.GetResource(LocalizationResources.Collection_Mods.MergeCollection.Overlay_Progress), new
-                    {
-                        PercentDone = s.Percentage.ToLocalizedPercentage(),
-                        Count = s.Step + 1,
-                        TotalCount = 3
-                    });
+                    var message = localizationManager.GetResource(s.Step == 1
+                        ? LocalizationResources.Collection_Mods.MergeCollection.Compress.Overlay_Gathering_Mod_Info
+                        : LocalizationResources.Collection_Mods.MergeCollection.Compress.Overlay_Compressing_Files);
+                    var overlayProgress = IronyFormatter.Format(localizationManager.GetResource(LocalizationResources.Collection_Mods.MergeCollection.Overlay_Progress),
+                        new { PercentDone = s.Percentage.ToLocalizedPercentage(), Count = s.Step + 1, TotalCount = 3 });
                     TriggerOverlay(id, true, message, overlayProgress);
                 }).DisposeWith(disposables);
             }

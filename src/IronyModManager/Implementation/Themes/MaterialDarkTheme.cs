@@ -4,13 +4,14 @@
 // Created          : 03-14-2021
 //
 // Last Modified By : Mario
-// Last Modified On : 11-04-2021
+// Last Modified On : 03-19-2024
 // ***********************************************************************
 // <copyright file="MaterialDarkTheme.cs" company="Mario">
 //     Mario
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -52,7 +53,13 @@ namespace IronyModManager.Implementation.Themes
         /// Gets the styles.
         /// </summary>
         /// <value>The styles.</value>
-        public override IReadOnlyCollection<string> Styles => new List<string>() { "avares://IronyModManager/Controls/Themes/MaterialDark/Theme.axaml", "avares://Material.Icons.Avalonia/App.xaml", "avares://IronyModManager/Controls/Themes/MaterialDark/ThemeOverride.axaml" };
+        public override IReadOnlyCollection<string> Styles => new List<string>
+        {
+            "avares://ThemeEditor.Controls.ColorPicker/ColorPicker.axaml",
+            "avares://IronyModManager/Controls/Themes/MaterialDark/Theme.axaml",
+            "avares://Material.Icons.Avalonia/App.xaml",
+            "avares://IronyModManager/Controls/Themes/MaterialDark/ThemeOverride.axaml"
+        };
 
         /// <summary>
         /// Gets the name of the theme.

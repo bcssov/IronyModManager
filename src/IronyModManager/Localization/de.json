@@ -479,7 +479,12 @@
         },
         "ConflictSolver": {
             "Title": "Konfliktlöser",
-            "AllowedLanguages": "Erlaubte Sprachen"
+            "AllowedLanguages": "Erlaubte Sprachen",
+            "Colors": "Neue Farben des Diff Viewers",
+            "ConflictSolverDeletedLineColor": "Gelöschte Linie",
+            "ConflictSolverImaginaryLineColor": "Imaginäre Linie",
+            "ConflictSolverInsertedLineColor": "Eingefügte Linie",
+            "ConflictSolverModifiedLineColor": "Geänderte Linie"
         },
         "Updates": {
             "Title": "Aktualisierungsoptionen",
@@ -520,6 +525,11 @@
                 "Title": "Nicht leer",
                 "Message": "Benutzerdefiniertes Mod-Verzeichnis ist nicht leer, wenn Sie es jetzt ändern, verlieren Sie möglicherweise einige Mods. Sind Sie sicher, dass Sie es ändern wollen?"
             }
+        },
+        "ModMerge": {
+            "Title": "Mod Merge Optionen",
+            "ModMergeTemplate": "Mod-Vorlage",
+            "CollectionMergeTemplate": "Kollektion Vorlage"
         }
     },
     "Notifications": {

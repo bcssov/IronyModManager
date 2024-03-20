@@ -4,7 +4,7 @@
 // Created          : 01-11-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 11-02-2022
+// Last Modified On : 03-18-2024
 // ***********************************************************************
 // <copyright file="MappingProfile.cs" company="Mario">
 //     Copyright (c) Mario. All rights reserved.
@@ -14,6 +14,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using IronyModManager.Models.Common;
 using IronyModManager.Shared;
 using IronyModManager.Shared.Models;
@@ -60,6 +61,9 @@ namespace IronyModManager.Services
                 .ForMember(m => m.ConflictSolverPromptShown, o => o.MapFrom(s => s.ConflictSolverPromptShown))
                 .ReverseMap()
                 .IgnoreAllUnmappedMembers();
+            CreateMap<IPreferences, IConflictSolverColors>().ForMember(m => m.ConflictSolverDeletedLineColor, o => o.MapFrom(s => s.ConflictSolverDeletedLineColor))
+                .ForMember(m => m.ConflictSolverImaginaryLineColor, o => o.MapFrom(s => s.ConflictSolverImaginaryLineColor)).ForMember(m => m.ConflictSolverInsertedLineColor, o => o.MapFrom(s => s.ConflictSolverInsertedLineColor))
+                .ForMember(m => m.ConflictSolverModifiedLineColor, o => o.MapFrom(s => s.ConflictSolverModifiedLineColor)).ReverseMap().IgnoreAllUnmappedMembers();
         }
 
         #endregion Constructors

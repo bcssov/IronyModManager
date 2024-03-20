@@ -4,7 +4,7 @@
 // Created          : 02-19-2024
 //
 // Last Modified By : Mario
-// Last Modified On : 02-28-2024
+// Last Modified On : 03-19-2024
 // ***********************************************************************
 // <copyright file="DiffBackgroundRenderer.cs" company="Mario">
 //     Mario
@@ -19,9 +19,6 @@ using Avalonia;
 using Avalonia.Media;
 using AvaloniaEdit.Document;
 using AvaloniaEdit.Rendering;
-using IronyModManager.DI;
-using IronyModManager.Platform.Themes;
-using IronyModManager.Services.Common;
 using IronyModManager.ViewModels.Controls;
 
 namespace IronyModManager.Implementation.AvaloniaEdit
@@ -32,26 +29,13 @@ namespace IronyModManager.Implementation.AvaloniaEdit
     /// <seealso cref="IBackgroundRenderer" />
     public class DiffBackgroundRenderer : IBackgroundRenderer
     {
-        #region Fields
-
-        /// <summary>
-        /// A private bool? named isLightTheme.
-        /// </summary>
-        private bool? isLightTheme;
-
-        /// <summary>
-        /// A private IThemeManager named themeManager.
-        /// </summary>
-        private IThemeManager themeManager;
-
-        /// <summary>
-        /// A private IThemeService named themeService.
-        /// </summary>
-        private IThemeService themeService;
-
-        #endregion Fields
-
         #region Properties
+
+        /// <summary>
+        /// Gets or sets a value representing the color converter.<see cref="IronyModManager.Implementation.AvaloniaEdit.EditorColorConverter" />
+        /// </summary>
+        /// <value>The color converter.</value>
+        public EditorColorConverter ColorConverter { get; set; }
 
         /// <summary>
         /// Gets a value representing the layer.<see cref="KnownLayer" />
@@ -91,13 +75,14 @@ namespace IronyModManager.Implementation.AvaloniaEdit
                 }
 
                 var diff = Lines[num];
+                ColorConverter ??= new EditorColorConverter(null);
 
                 Brush brush = diff.Type switch
                 {
-                    DiffPlex.DiffBuilder.Model.ChangeType.Deleted => IsLightTheme() ? Constants.LightDiffDeletedLine : Constants.DarkDiffDeletedLine,
-                    DiffPlex.DiffBuilder.Model.ChangeType.Inserted => IsLightTheme() ? Constants.LightDiffInsertedLine : Constants.DarkDiffInsertedLine,
-                    DiffPlex.DiffBuilder.Model.ChangeType.Imaginary => IsLightTheme() ? Constants.LightDiffImaginaryLine : Constants.DarkDiffImaginaryLine,
-                    DiffPlex.DiffBuilder.Model.ChangeType.Modified => IsLightTheme() ? Constants.LightDiffModifiedLine : Constants.DarkDiffModifiedLine,
+                    DiffPlex.DiffBuilder.Model.ChangeType.Deleted => ColorConverter.GetDeletedLineBrush(),
+                    DiffPlex.DiffBuilder.Model.ChangeType.Inserted => ColorConverter.GetInsertedLineBrush(),
+                    DiffPlex.DiffBuilder.Model.ChangeType.Imaginary => ColorConverter.GetImaginaryLineBrush(),
+                    DiffPlex.DiffBuilder.Model.ChangeType.Modified => ColorConverter.GetEditedLineBrush(),
                     _ => default
                 };
 
@@ -116,10 +101,10 @@ namespace IronyModManager.Implementation.AvaloniaEdit
                 {
                     var subPieceBrush = piece.Type switch
                     {
-                        DiffPlex.DiffBuilder.Model.ChangeType.Deleted => IsLightTheme() ? Constants.LightDiffDeletedPieces : Constants.DarkDiffDeletedPieces,
-                        DiffPlex.DiffBuilder.Model.ChangeType.Inserted => IsLightTheme() ? Constants.LightDiffInsertedPieces : Constants.DarkDiffInsertedPieces,
-                        DiffPlex.DiffBuilder.Model.ChangeType.Modified => IsLightTheme() ? Constants.LightDiffModifiedPieces : Constants.DarkDiffModifiedPieces,
-                        DiffPlex.DiffBuilder.Model.ChangeType.Unchanged => IsLightTheme() ? Constants.LightDiffUnchangedPieces : Constants.DarkDiffUnchangedPieces,
+                        DiffPlex.DiffBuilder.Model.ChangeType.Deleted => ColorConverter.GetDeletedLineBrush(),
+                        DiffPlex.DiffBuilder.Model.ChangeType.Inserted => ColorConverter.GetInsertedLineBrush(),
+                        DiffPlex.DiffBuilder.Model.ChangeType.Modified => ColorConverter.GetEditedLineBrush(),
+                        DiffPlex.DiffBuilder.Model.ChangeType.Unchanged => ColorConverter.GetEditedLineBrush(),
                         _ => default(Brush)
                     };
                     var text = piece.Text ?? string.Empty;
@@ -140,22 +125,6 @@ namespace IronyModManager.Implementation.AvaloniaEdit
                     offset += text.Length;
                 }
             }
-        }
-
-        /// <summary>
-        /// Is light theme.
-        /// </summary>
-        /// <returns>A bool.</returns>
-        private bool IsLightTheme()
-        {
-            if (!isLightTheme.HasValue)
-            {
-                themeManager ??= DIResolver.Get<IThemeManager>();
-                themeService ??= DIResolver.Get<IThemeService>();
-                isLightTheme = themeManager.IsLightTheme(themeService.GetSelected().Type);
-            }
-
-            return isLightTheme.GetValueOrDefault();
         }
 
         #endregion Methods

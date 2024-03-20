@@ -4,13 +4,14 @@
 // Created          : 03-14-2021
 //
 // Last Modified By : Mario
-// Last Modified On : 03-14-2021
+// Last Modified On : 03-20-2024
 // ***********************************************************************
 // <copyright file="Constants.cs" company="Mario">
 //     Mario
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,6 +23,20 @@ namespace IronyModManager.Services.Common
     /// </summary>
     public static class Constants
     {
+        #region Fields
+
+        /// <summary>
+        /// A public const string named MergeModTemplateFormat.
+        /// </summary>
+        public const string MergeModTemplateFormat = "{Name}";
+
+        /// <summary>
+        /// A public const string named MergeTemplateFormat.
+        /// </summary>
+        public const string MergeTemplateFormat = "{Merged}";
+
+        #endregion Fields
+
         #region Classes
 
         /// <summary>

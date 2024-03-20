@@ -4,7 +4,7 @@
 // Created          : 02-10-2024
 //
 // Last Modified By : Mario
-// Last Modified On : 03-11-2024
+// Last Modified On : 03-20-2024
 // ***********************************************************************
 // <copyright file="SingleInstance.cs" company="Mario">
 //     Mario
@@ -14,8 +14,10 @@
 
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.IO.Pipes;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading;
@@ -186,6 +188,22 @@ namespace IronyModManager.Implementation.SingleInstance
                         }
 
                         sb.Append($"{item:X2}");
+                    }
+
+                    if (!RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+                    {
+                        // Trim if not windows, so limit of 104 or 108 characters? net will create a file with the following Path.GetTempPath() + "CoreFXPipe_" prefix. Check length and trim if necessary
+                        var tempFile = Path.GetTempPath();
+                        var path = Path.Combine(tempFile, $"CoreFXPipe_{sb}");
+                        while (path.Length > 100)
+                        {
+                            path = Path.Combine(tempFile, $"CoreFXPipe_{sb}");
+                            sb.Remove(sb.Length - 1, 1);
+                            if (sb.Length <= 0)
+                            {
+                                throw new ArgumentException("Temp Path is too long. Cannot generate SingleInstance.");
+                            }
+                        }
                     }
 
                     mutexName = sb.ToString();

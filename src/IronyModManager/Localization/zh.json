@@ -479,7 +479,12 @@
         },
         "ConflictSolver": {
             "Title": "冲突处理器",
-            "AllowedLanguages": "允许使用的语言"
+            "AllowedLanguages": "允许使用的语言",
+            "Colors": "新的差分查看器颜色",
+            "ConflictSolverDeletedLineColor": "已删除行",
+            "ConflictSolverImaginaryLineColor": "虚线",
+            "ConflictSolverInsertedLineColor": "插入行",
+            "ConflictSolverModifiedLineColor": "修改线"
         },
         "Updates": {
             "Title": "更新选项",
@@ -520,6 +525,11 @@
                 "Title": "目录非空",
                 "Message": "自定义模组目录非空，若现在更改，则可能会丢失一些模组。是否确定更改？"
             }
+        },
+        "ModMerge": {
+            "Title": "模式合并选项",
+            "ModMergeTemplate": "修改模板",
+            "CollectionMergeTemplate": "收藏模板"
         }
     },
     "Notifications": {

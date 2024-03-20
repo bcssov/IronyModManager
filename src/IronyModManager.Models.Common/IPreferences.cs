@@ -4,7 +4,7 @@
 // Created          : 01-11-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-26-2024
+// Last Modified On : 03-19-2024
 // ***********************************************************************
 // <copyright file="IPreferences.cs" company="Mario">
 //     Mario
@@ -44,6 +44,24 @@ namespace IronyModManager.Models.Common
         bool CheckForPrerelease { get; set; }
 
         /// <summary>
+        /// Gets or sets the color of the conflict solver deleted line.
+        /// </summary>
+        /// <value>The color of the conflict solver deleted line.</value>
+        string ConflictSolverDeletedLineColor { get; set; }
+
+        /// <summary>
+        /// Gets or sets the color of the conflict solver imaginary line.
+        /// </summary>
+        /// <value>The color of the conflict solver imaginary line.</value>
+        string ConflictSolverImaginaryLineColor { get; set; }
+
+        /// <summary>
+        /// Gets or sets the color of the conflict solver inserted line.
+        /// </summary>
+        /// <value>The color of the conflict solver inserted line.</value>
+        string ConflictSolverInsertedLineColor { get; set; }
+
+        /// <summary>
         /// Gets or sets a value representing the conflict solver languages.<see cref="System.Collections.Generic.List{string}" />
         /// </summary>
         /// <value>The conflict solver languages.</value>
@@ -54,6 +72,12 @@ namespace IronyModManager.Models.Common
         /// </summary>
         /// <value><c>true</c> if conflict solver languages set; otherwise, <c>false</c>.</value>
         bool ConflictSolverLanguagesSet { get; set; }
+
+        /// <summary>
+        /// Gets or sets the color of the conflict solver modified line.
+        /// </summary>
+        /// <value>The color of the conflict solver modified line.</value>
+        string ConflictSolverModifiedLineColor { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether [conflict solver prompt shown].
@@ -90,6 +114,20 @@ namespace IronyModManager.Models.Common
         /// </summary>
         /// <value>The locale.</value>
         string Locale { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value representing the merge collection mod name template.
+        /// </summary>
+        /// <value>
+        /// The merge collection mod name template.
+        /// </value>
+        string MergeCollectionModNameTemplate { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value representing the merged collection name template.
+        /// </summary>
+        /// <value>The merged collection name template.</value>
+        string MergedCollectionNameTemplate { get; set; }
 
         /// <summary>
         /// Gets or sets the notification position.

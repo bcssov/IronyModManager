@@ -4,7 +4,7 @@
 // Created          : 01-11-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-26-2024
+// Last Modified On : 03-19-2024
 // ***********************************************************************
 // <copyright file="Preferences.cs" company="Mario">
 //     Mario
@@ -46,6 +46,24 @@ namespace IronyModManager.Models
         public virtual bool CheckForPrerelease { get; set; }
 
         /// <summary>
+        /// Gets or sets the color of the conflict solver deleted line.
+        /// </summary>
+        /// <value>The color of the conflict solver deleted line.</value>
+        public virtual string ConflictSolverDeletedLineColor { get; set; }
+
+        /// <summary>
+        /// Gets or sets the color of the conflict solver imaginary line.
+        /// </summary>
+        /// <value>The color of the conflict solver imaginary line.</value>
+        public virtual string ConflictSolverImaginaryLineColor { get; set; }
+
+        /// <summary>
+        /// Gets or sets the color of the conflict solver inserted line.
+        /// </summary>
+        /// <value>The color of the conflict solver inserted line.</value>
+        public virtual string ConflictSolverInsertedLineColor { get; set; }
+
+        /// <summary>
         /// Gets or sets a value representing the conflict solver languages.<see cref="System.Collections.Generic.List{string}" />
         /// </summary>
         /// <value>The conflict solver languages.</value>
@@ -56,6 +74,12 @@ namespace IronyModManager.Models
         /// </summary>
         /// <value><c>true</c> if [conflict solver languages set]; otherwise, <c>false</c>.</value>
         public virtual bool ConflictSolverLanguagesSet { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value representing the conflict solver modified line color.
+        /// </summary>
+        /// <value>The conflict solver modified line color.</value>
+        public virtual string ConflictSolverModifiedLineColor { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether [conflict solver prompt shown].
@@ -92,6 +116,18 @@ namespace IronyModManager.Models
         /// </summary>
         /// <value>The locale.</value>
         public virtual string Locale { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value representing the merge collection mod name template.
+        /// </summary>
+        /// <value>The merge collection mod name template.</value>
+        public virtual string MergeCollectionModNameTemplate { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value representing the merged collection name template.
+        /// </summary>
+        /// <value>The merged collection name template.</value>
+        public virtual string MergedCollectionNameTemplate { get; set; }
 
         /// <summary>
         /// Gets or sets the notification position.
