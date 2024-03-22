@@ -257,7 +257,7 @@ namespace IronyModManager.Services
 
             if (appendContinueGame)
             {
-                model.LaunchArguments = $"{ContinueGameArgs} {model.LaunchArguments.Trim()}";
+                model.LaunchArguments = $"{ContinueGameArgs} {model.LaunchArguments.Trim()}".Trim();
             }
 
             model.UserDirectory = game.UserDirectory;
