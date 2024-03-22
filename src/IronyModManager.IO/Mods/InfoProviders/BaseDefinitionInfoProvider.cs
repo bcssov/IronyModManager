@@ -1,17 +1,17 @@
-﻿
-// ***********************************************************************
+﻿// ***********************************************************************
 // Assembly         : IronyModManager.IO
 // Author           : Mario
 // Created          : 04-04-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 10-03-2023
+// Last Modified On : 03-22-2024
 // ***********************************************************************
 // <copyright file="BaseDefinitionInfoProvider.cs" company="Mario">
 //     Mario
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
+
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -24,7 +24,6 @@ using ValueType = IronyModManager.Shared.Models.ValueType;
 
 namespace IronyModManager.IO.Mods.InfoProviders
 {
-
     /// <summary>
     /// Class BaseDefinitionInfoProvider.
     /// Implements the <see cref="IronyModManager.IO.Common.Mods.IDefinitionInfoProvider" />
@@ -52,12 +51,12 @@ namespace IronyModManager.IO.Mods.InfoProviders
         /// <summary>
         /// The UTF8
         /// </summary>
-        private static Encoding utf8 = null;
+        private static Encoding utf8;
 
         /// <summary>
         /// The UTF8 bom
         /// </summary>
-        private static Encoding utf8Bom = null;
+        private static Encoding utf8Bom;
 
         #endregion Fields
 
@@ -124,6 +123,7 @@ namespace IronyModManager.IO.Mods.InfoProviders
             {
                 return GetUTF8Encoding();
             }
+
             return GetUTF8BomEncoding();
         }
 
@@ -150,6 +150,7 @@ namespace IronyModManager.IO.Mods.InfoProviders
             {
                 return HasValidUTF8BOMEncoding(encoding);
             }
+
             return true;
         }
 
@@ -162,14 +163,14 @@ namespace IronyModManager.IO.Mods.InfoProviders
         /// <returns>System.String.</returns>
         protected virtual string EnsureRuleEnforced(IDefinition definition, string proposedFilename, bool isFIOS)
         {
-            var fileNames = new List<string>() { proposedFilename };
+            var fileNames = new List<string> { proposedFilename };
             fileNames.AddRange(definition.GeneratedFileNames);
-            int counter = 0;
+            var counter = 0;
             if (isFIOS)
             {
                 fileNames = fileNames.OrderBy(p => p, StringComparer.Ordinal).ToList();
-                var characterPrefix = Path.GetFileName(fileNames.FirstOrDefault()).ToCharArray().OrderBy(p => (int)p).First();
-                string newFileName = proposedFilename;
+                var characterPrefix = Path.GetFileName(fileNames.FirstOrDefault())!.ToCharArray().MinBy(p => (int)p);
+                var newFileName = proposedFilename;
                 while (definition.GeneratedFileNames.Any(f => f.Equals(fileNames.FirstOrDefault())))
                 {
                     var fileName = Path.GetFileName(newFileName);
@@ -186,8 +187,8 @@ namespace IronyModManager.IO.Mods.InfoProviders
             else
             {
                 fileNames = fileNames.OrderByDescending(p => p, StringComparer.Ordinal).ToList();
-                var characterPrefix = Path.GetFileName(fileNames.FirstOrDefault()).ToCharArray().OrderByDescending(p => (int)p).First();
-                string newFileName = proposedFilename;
+                var characterPrefix = Path.GetFileName(fileNames.FirstOrDefault())!.ToCharArray().MaxBy(p => (int)p);
+                var newFileName = proposedFilename;
                 while (definition.GeneratedFileNames.Any(f => f.Equals(fileNames.FirstOrDefault())))
                 {
                     var fileName = Path.GetFileName(newFileName);
@@ -209,6 +210,7 @@ namespace IronyModManager.IO.Mods.InfoProviders
         /// Ensures the type of all same.
         /// </summary>
         /// <param name="definition">The definition.</param>
+        /// <exception cref="ArgumentException">Invalid type.</exception>
         /// <exception cref="System.ArgumentException">Invalid type.</exception>
         protected virtual void EnsureValidType(IDefinition definition)
         {
@@ -240,6 +242,7 @@ namespace IronyModManager.IO.Mods.InfoProviders
             {
                 return GenerateLocalizationFileName(definition, fileName);
             }
+
             return GenerateLIOSFileName(definition, requestDiskFileName, fileName);
         }
 
@@ -282,6 +285,7 @@ namespace IronyModManager.IO.Mods.InfoProviders
             {
                 file = $"{Path.GetFileNameWithoutExtension(fileName)}_{definition.FileNameSuffix}{Path.GetExtension(fileName)}";
             }
+
             if (definition.ParentDirectory.Contains(Shared.Constants.LocalizationReplaceDirectory, StringComparison.OrdinalIgnoreCase))
             {
                 var proposedFileName = Path.Combine(definition.ParentDirectory, $"{LIOSName}{file.GenerateValidFileName()}");
@@ -319,8 +323,10 @@ namespace IronyModManager.IO.Mods.InfoProviders
                 {
                     return Path.Combine(definition.ParentDirectory, $"{FIOSName}{fileName.GenerateValidFileName()}");
                 }
+
                 return Path.Combine(definition.ParentDirectory, $"{FIOSName}{definition.Order:D8}{fileName.GenerateValidFileName()}");
             }
+
             return Path.Combine(definition.ParentDirectory, $"{FIOSName}{fileName.GenerateValidFileName()}");
         }
 
@@ -339,8 +345,10 @@ namespace IronyModManager.IO.Mods.InfoProviders
                 {
                     return Path.Combine(definition.ParentDirectory, $"{LIOSName}{fileName.GenerateValidFileName()}");
                 }
+
                 return Path.Combine(definition.ParentDirectory, $"{LIOSName}{definition.Order:D8}{fileName.GenerateValidFileName()}");
             }
+
             return Path.Combine(definition.ParentDirectory, $"{LIOSName}{fileName.GenerateValidFileName()}");
         }
 
@@ -355,6 +363,7 @@ namespace IronyModManager.IO.Mods.InfoProviders
             {
                 return encodingInfo.Encoding.Equals(UTF8BodyName, StringComparison.OrdinalIgnoreCase) && encodingInfo.HasBOM;
             }
+
             return false;
         }
 

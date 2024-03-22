@@ -1,27 +1,27 @@
-﻿
-// ***********************************************************************
+﻿// ***********************************************************************
 // Assembly         : IronyModManager.IO
 // Author           : Mario
 // Created          : 04-02-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 10-03-2023
+// Last Modified On : 03-22-2024
 // ***********************************************************************
 // <copyright file="StellarisDefinitionInfoProvider.cs" company="Mario">
 //     Mario
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
+
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Text;
 using IronyModManager.Shared;
 using IronyModManager.Shared.Models;
 
 namespace IronyModManager.IO.Mods.InfoProviders
 {
-
     /// <summary>
     /// Class StellarisDefinitionInfoProvider.
     /// Implements the <see cref="IronyModManager.IO.Mods.InfoProviders.BaseDefinitionInfoProvider" />
@@ -49,12 +49,12 @@ namespace IronyModManager.IO.Mods.InfoProviders
         /// Gets the fios paths.
         /// </summary>
         /// <value>The fios paths.</value>
-        public override IReadOnlyCollection<string> FIOSPaths => new List<string>
-        {
+        public override IReadOnlyCollection<string> FIOSPaths =>
+        [
             "component_sets", "component_templates", "event_chains", "global_ship_designs",
             "scripted_variables", "section_templates", "ship_behaviors", "special_projects", "static_modifiers", "strategic_resources", "events",
             "solar_system_initializers", "traits", "start_screen_messages"
-        };
+        ];
 
         /// <summary>
         /// Gets a value indicating whether this instance is fully implemented.
@@ -90,11 +90,7 @@ namespace IronyModManager.IO.Mods.InfoProviders
         public override Encoding GetEncoding(IDefinition definition)
         {
             EnsureValidType(definition);
-            if (definition.ParentDirectory.EndsWith(NameLists, StringComparison.OrdinalIgnoreCase))
-            {
-                return new UTF8Encoding(true);
-            }
-            return base.GetEncoding(definition);
+            return definition.ParentDirectory.EndsWith(NameLists, StringComparison.OrdinalIgnoreCase) ? new UTF8Encoding(true) : base.GetEncoding(definition);
         }
 
         /// <summary>
@@ -106,11 +102,7 @@ namespace IronyModManager.IO.Mods.InfoProviders
         public override bool IsValidEncoding(string path, Shared.EncodingInfo encoding)
         {
             var sanitizedPath = path ?? string.Empty;
-            if (sanitizedPath.EndsWith(NameLists, StringComparison.OrdinalIgnoreCase))
-            {
-                return HasValidUTF8BOMEncoding(encoding);
-            }
-            return base.IsValidEncoding(path, encoding);
+            return sanitizedPath.EndsWith(NameLists, StringComparison.OrdinalIgnoreCase) ? HasValidUTF8BOMEncoding(encoding) : base.IsValidEncoding(path, encoding);
         }
 
         /// <summary>
@@ -126,6 +118,7 @@ namespace IronyModManager.IO.Mods.InfoProviders
                 var proposedFileName = Path.Combine(definition.ParentDirectory, $"{LIOSName}{fileName.GenerateValidFileName()}");
                 return EnsureRuleEnforced(definition, proposedFileName, false);
             }
+
             return base.GenerateLocalizationFileName(definition, fileName);
         }
 

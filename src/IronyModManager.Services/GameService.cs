@@ -4,13 +4,14 @@
 // Created          : 02-12-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 11-18-2022
+// Last Modified On : 03-22-2024
 // ***********************************************************************
 // <copyright file="GameService.cs" company="Mario">
 //     Mario
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
+
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -126,6 +127,7 @@ namespace IronyModManager.Services
             {
                 return false;
             }
+
             if (!string.IsNullOrWhiteSpace(game.ExecutableLocation))
             {
                 var basePath = Path.GetDirectoryName(Path.Combine(gamePathResolver.GetPath(game), gamePathResolver.ResolveDLCDirectory(game.DLCContainer, GameRootPathResolver.DLCFolder)));
@@ -139,6 +141,7 @@ namespace IronyModManager.Services
                     }
                 }
             }
+
             return false;
         }
 
@@ -172,7 +175,7 @@ namespace IronyModManager.Services
         {
             var model = GetModelInstance<IGameSettings>();
             var settings = StorageProvider.GetGames().FirstOrDefault(p => p.Name.Equals(game.Type));
-            if (!string.IsNullOrWhiteSpace(settings.ExecutablePath))
+            if (!string.IsNullOrWhiteSpace(settings!.ExecutablePath))
             {
                 model.ExecutableLocation = settings.ExecutablePath;
                 model.LaunchArguments = settings.ExecutableArgs;
@@ -192,10 +195,12 @@ namespace IronyModManager.Services
                     model.UserDirectory = jsonData.UserDirectory;
                 }
             }
+
             if (string.IsNullOrWhiteSpace(model.UserDirectory))
             {
                 model.UserDirectory = game.UserDirectory;
             }
+
             model.CustomModDirectory = string.Empty;
             return model;
         }
@@ -219,6 +224,7 @@ namespace IronyModManager.Services
                 model.CustomModDirectory = string.Empty;
                 return model;
             }
+
             return null;
         }
 
@@ -232,18 +238,12 @@ namespace IronyModManager.Services
         {
             var model = GetModelInstance<IGameSettings>();
             var exeLoc = game.ExecutableLocation ?? string.Empty;
+            model.LaunchArguments = string.Empty;
             if (!string.IsNullOrWhiteSpace(exeLoc))
             {
                 if (exeLoc.StartsWith(SteamLaunchArgs, StringComparison.OrdinalIgnoreCase))
                 {
-                    if (!string.IsNullOrWhiteSpace(game.LaunchArguments))
-                    {
-                        model.ExecutableLocation = $"{exeLoc.Trim('/')}//{game.LaunchArguments}";
-                    }
-                    else
-                    {
-                        model.ExecutableLocation = $"{exeLoc.Trim('/')}";
-                    }
+                    model.ExecutableLocation = !string.IsNullOrWhiteSpace(game.LaunchArguments) ? $"{exeLoc.Trim('/')}//{game.LaunchArguments}" : $"{exeLoc.Trim('/')}";
                 }
                 else
                 {
@@ -254,10 +254,12 @@ namespace IronyModManager.Services
                     }
                 }
             }
+
             if (appendContinueGame)
             {
-                model.LaunchArguments = $"{ContinueGameArgs} {model.LaunchArguments.Trim()}";
+                model.LaunchArguments = $"{ContinueGameArgs} {model.LaunchArguments.Trim()}".Trim();
             }
+
             model.UserDirectory = game.UserDirectory;
             model.RefreshDescriptors = game.RefreshDescriptors;
             model.CloseAppAfterGameLaunch = game.CloseAppAfterGameLaunch;
@@ -286,6 +288,7 @@ namespace IronyModManager.Services
             {
                 var path = Path.GetDirectoryName(game.ExecutableLocation);
                 var settingsObject = GetGameLauncherSettings(game, path);
+
                 // Some games use version field (inconsistency again)
                 if (settingsObject != null)
                 {
@@ -293,12 +296,14 @@ namespace IronyModManager.Services
                     {
                         return settingsObject.RawVersion;
                     }
+
                     if (!string.IsNullOrWhiteSpace(settingsObject.Version) && Shared.Version.TryParse(settingsObject.Version, out _))
                     {
                         return settingsObject.Version;
                     }
                 }
             }
+
             return string.Empty;
         }
 
@@ -320,13 +325,16 @@ namespace IronyModManager.Services
                     {
                         result.Add(settingsObject.RawVersion);
                     }
+
                     if (!string.IsNullOrWhiteSpace(settingsObject.Version))
                     {
                         result.Add(settingsObject.Version);
                     }
+
                     return result;
                 }
             }
+
             return new List<string>();
         }
 
@@ -343,6 +351,7 @@ namespace IronyModManager.Services
             {
                 return null;
             }
+
             if (!string.IsNullOrWhiteSpace(game.ExecutableLocation))
             {
                 var basePath = Path.GetDirectoryName(Path.Combine(gamePathResolver.GetPath(game), gamePathResolver.ResolveDLCDirectory(game.DLCContainer, GameRootPathResolver.DLCFolder)));
@@ -353,6 +362,7 @@ namespace IronyModManager.Services
                     return reportExportService.CompareReports(currentReports.ToList(), importedReports.ToList());
                 }
             }
+
             return null;
         }
 
@@ -370,19 +380,16 @@ namespace IronyModManager.Services
                 var parsed = reader.Read(continueGameFile);
                 if (parsed?.Count() == 1)
                 {
-                    var data = JsonConvert.DeserializeObject<Models.ContinueGame>(string.Join(Environment.NewLine, parsed.FirstOrDefault().Content));
+                    var data = JsonConvert.DeserializeObject<Models.ContinueGame>(string.Join(Environment.NewLine, parsed.FirstOrDefault()!.Content));
                     var path = string.IsNullOrWhiteSpace(data.Filename) ? data.Title : data.Filename;
                     var fileWithoutExtension = Path.GetFileNameWithoutExtension(path);
                     var fileWithExtension = Path.GetFileName(path);
-                    var saveDir = Path.GetDirectoryName(path).Replace(saveGames, string.Empty).StandardizeDirectorySeparator();
+                    var saveDir = Path.GetDirectoryName(path)!.Replace(saveGames, string.Empty).StandardizeDirectorySeparator();
                     var files = new List<string>();
                     if (!string.IsNullOrWhiteSpace(saveDir))
                     {
-                        var saves = new List<string>() { Path.Combine(game.UserDirectory, saveGames, saveDir.Trim(Path.DirectorySeparatorChar)) };
-                        foreach (var item in game.RemoteSteamUserDirectory)
-                        {
-                            saves.Add(Path.Combine(item, saveGames, saveDir.Trim(Path.DirectorySeparatorChar)));
-                        }
+                        var saves = new List<string> { Path.Combine(game.UserDirectory, saveGames, saveDir.Trim(Path.DirectorySeparatorChar)) };
+                        saves.AddRange(game.RemoteSteamUserDirectory.Select(item => Path.Combine(item, saveGames, saveDir.Trim(Path.DirectorySeparatorChar))));
                         foreach (var item in saves)
                         {
                             if (Directory.Exists(item))
@@ -393,11 +400,12 @@ namespace IronyModManager.Services
                     }
                     else
                     {
-                        var saves = new List<string>() { Path.Combine(game.UserDirectory, saveGames) };
+                        var saves = new List<string> { Path.Combine(game.UserDirectory, saveGames) };
                         foreach (var item in game.RemoteSteamUserDirectory)
                         {
                             saves.Add(Path.Combine(item, saveGames));
                         }
+
                         foreach (var item in saves)
                         {
                             if (Directory.Exists(item))
@@ -406,13 +414,16 @@ namespace IronyModManager.Services
                             }
                         }
                     }
-                    return files.Any(p => Path.GetFileNameWithoutExtension(p).Equals(fileWithoutExtension, StringComparison.OrdinalIgnoreCase) || Path.GetFileNameWithoutExtension(p).Equals(fileWithExtension, StringComparison.OrdinalIgnoreCase));
+
+                    return files.Any(p => Path.GetFileNameWithoutExtension(p).Equals(fileWithoutExtension, StringComparison.OrdinalIgnoreCase) ||
+                                          Path.GetFileNameWithoutExtension(p).Equals(fileWithExtension, StringComparison.OrdinalIgnoreCase));
                 }
             }
             catch
             {
                 return false;
             }
+
             return false;
         }
 
@@ -424,7 +435,7 @@ namespace IronyModManager.Services
         public virtual bool IsSteamGame(IGameSettings settings)
         {
             var game = StorageProvider.GetGames().FirstOrDefault(p => p.Name.Equals(settings.Type));
-            var baseGameDirectory = (game.BaseSteamGameDirectory ?? string.Empty).StandardizeDirectorySeparator();
+            var baseGameDirectory = (game!.BaseSteamGameDirectory ?? string.Empty).StandardizeDirectorySeparator();
             var settingsExe = (settings.ExecutableLocation ?? string.Empty).StandardizeDirectorySeparator();
             return !string.IsNullOrWhiteSpace(baseGameDirectory) && !string.IsNullOrWhiteSpace(settingsExe) && settingsExe.StartsWith(baseGameDirectory, StringComparison.OrdinalIgnoreCase);
         }
@@ -451,6 +462,7 @@ namespace IronyModManager.Services
             {
                 throw new InvalidOperationException("Game not selected");
             }
+
             var prefs = preferencesService.Get();
 
             SaveGameSettings(game);
@@ -484,9 +496,10 @@ namespace IronyModManager.Services
             {
                 item.IsSelected = item.Type == selectedGame.Type;
             }
+
             selectedGame.IsSelected = true;
             var storedSelectedGame = Get().FirstOrDefault(p => p.Type.Equals(selectedGame.Type));
-            storedSelectedGame.IsSelected = true;
+            storedSelectedGame!.IsSelected = true;
             return Save(storedSelectedGame);
         }
 
@@ -508,6 +521,7 @@ namespace IronyModManager.Services
             {
                 perc = maxPerc;
             }
+
             return perc;
         }
 
@@ -554,21 +568,25 @@ namespace IronyModManager.Services
                 {
                     game.LaunchArguments = gameSettings.LaunchArguments;
                 }
+
                 if (!string.IsNullOrWhiteSpace(gameSettings.ExecutableLocation))
                 {
                     setExeLocation = false;
                     game.ExecutableLocation = gameSettings.ExecutableLocation;
                 }
+
                 if (!string.IsNullOrWhiteSpace(gameSettings.UserDirectory))
                 {
                     setUserDirLocation = false;
                     game.UserDirectory = gameSettings.UserDirectory;
                 }
+
                 if (!string.IsNullOrWhiteSpace(gameSettings.CustomModDirectory))
                 {
                     game.CustomModDirectory = gameSettings.CustomModDirectory;
                 }
             }
+
             if (setExeLocation || setUserDirLocation)
             {
                 var settings = GetDefaultGameSettings(game);
@@ -577,15 +595,18 @@ namespace IronyModManager.Services
                     game.ExecutableLocation = settings.ExecutableLocation ?? string.Empty;
                     game.LaunchArguments = settings.LaunchArguments ?? string.Empty;
                 }
+
                 if (setUserDirLocation)
                 {
                     game.UserDirectory = settings.UserDirectory;
                 }
             }
+
             if (string.IsNullOrWhiteSpace(game.UserDirectory))
             {
                 game.UserDirectory = gameType.UserDirectory;
             }
+
             return game;
         }
 
@@ -601,10 +622,10 @@ namespace IronyModManager.Services
             var reports = new List<IHashReport>();
             var reports2 = new List<IHashFileReport[]>();
 
-            var total = files.Where(p => game.GameFolders.Any(x => p.StartsWith(x))).Count();
+            var total = files.Count(p => game.GameFolders.Any(x => p.StartsWith(x)));
             var progress = 0;
             double lastPercentage = 0;
-            int i = 0;
+            var i = 0;
             var tasks = new List<Task<Tuple<int, int, IHashFileReport>>>();
 
             foreach (var item in game.GameFolders)
@@ -612,14 +633,14 @@ namespace IronyModManager.Services
                 var report = GetModelInstance<IHashReport>();
                 report.Name = item;
                 report.ReportType = HashReportType.Game;
-                int j = 0;
+                var j = 0;
 
                 foreach (var file in files.Where(p => p.StartsWith(item)))
                 {
-                    string folderPath = basePath;
-                    string filePath = file;
-                    int folderIndex = i;
-                    int fileIndex = j;
+                    var folderPath = basePath;
+                    var filePath = file;
+                    var folderIndex = i;
+                    var fileIndex = j;
                     tasks.Add(Task.Run(() =>
                     {
                         var info = reader.GetFileInfo(folderPath, filePath);
@@ -630,10 +651,12 @@ namespace IronyModManager.Services
                             fileReport.Hash = info.ContentSHA;
                             return new Tuple<int, int, IHashFileReport>(folderIndex, fileIndex, fileReport);
                         }
+
                         return null;
                     }));
                     j++;
                 }
+
                 reports.Add(report);
                 reports2.Add(new IHashFileReport[j]);
                 i++;
@@ -642,21 +665,24 @@ namespace IronyModManager.Services
             while (tasks.Count > 0)
             {
                 i = Task.WaitAny(tasks.ToArray());
-                Task<Tuple<int, int, IHashFileReport>> task = tasks[i];
+                var task = tasks[i];
                 tasks.RemoveAt(i);
                 if (task.Result != null)
                 {
                     reports2[task.Result.Item1][task.Result.Item2] = task.Result.Item3;
                 }
+
                 progress++;
                 var percentage = GetProgressPercentage(total, progress);
-                if (percentage != lastPercentage)
+                if (percentage.IsNotNearlyEqual(lastPercentage))
                 {
                     await messageBus.PublishAsync(new ModReportExportEvent(1, percentage));
                 }
+
                 lastPercentage = percentage;
             }
-            for (i=0; i < reports.Count; i++)
+
+            for (i = 0; i < reports.Count; i++)
             {
                 reports[i].Reports = reports2[i].ToList();
             }
@@ -678,6 +704,7 @@ namespace IronyModManager.Services
                 settings.Type = game.Type;
                 gameSettings.Add(settings);
             }
+
             settings.ExecutableLocation = game.ExecutableLocation;
             settings.LaunchArguments = game.LaunchArguments;
             settings.CloseAppAfterGameLaunch = game.CloseAppAfterGameLaunch;
@@ -704,6 +731,7 @@ namespace IronyModManager.Services
             {
                 settingsFile = game.LauncherSettingsPrefix + game.LauncherSettingsFileName;
             }
+
             var infoPath = PathOperations.ResolveRelativePath(path, settingsFile);
             var info = reader.Read(infoPath);
             if (info == null)
@@ -718,16 +746,18 @@ namespace IronyModManager.Services
                     {
                         break;
                     }
+
                     gamePath = Path.GetDirectoryName(gamePath);
                 }
+
                 path = gamePath;
             }
+
             if (info != null && info.Any())
             {
-                var text = string.Join(Environment.NewLine, info.FirstOrDefault().Content);
+                var text = string.Join(Environment.NewLine, info.FirstOrDefault()!.Content);
                 try
                 {
-                    var model = GetModelInstance<IGameSettings>();
                     var settingsObject = JsonConvert.DeserializeObject<Models.LauncherSettings>(text);
                     settingsObject.BasePath = path;
                     return settingsObject;
@@ -736,6 +766,7 @@ namespace IronyModManager.Services
                 {
                 }
             }
+
             return null;
         }
 

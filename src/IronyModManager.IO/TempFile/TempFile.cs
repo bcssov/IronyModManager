@@ -4,13 +4,14 @@
 // Created          : 12-07-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-30-2021
+// Last Modified On : 03-22-2024
 // ***********************************************************************
 // <copyright file="TempFile.cs" company="Mario">
 //     Mario
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
+
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -21,11 +22,10 @@ using IronyModManager.Shared;
 namespace IronyModManager.IO.TempFile
 {
     /// <summary>
-    /// Class TempFile.
-    /// Implements the <see cref="IronyModManager.Shared.ITempFile" />
+    /// The temp file.
     /// </summary>
     /// <seealso cref="IronyModManager.Shared.ITempFile" />
-    public class TempFile : ITempFile
+    public class TempFile(ILogger logger) : ITempFile
     {
         #region Fields
 
@@ -37,17 +37,12 @@ namespace IronyModManager.IO.TempFile
         /// <summary>
         /// The logger
         /// </summary>
-        private readonly ILogger logger;
+        private readonly ILogger logger = logger;
 
         /// <summary>
         /// The disposed
         /// </summary>
-        private bool disposed = false;
-
-        /// <summary>
-        /// The path
-        /// </summary>
-        private string path = string.Empty;
+        private bool disposed;
 
         /// <summary>
         /// The temporary directory
@@ -55,19 +50,6 @@ namespace IronyModManager.IO.TempFile
         private string tempDirectory = string.Empty;
 
         #endregion Fields
-
-        #region Constructors
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="TempFile" /> class.
-        /// </summary>
-        /// <param name="logger">The logger.</param>
-        public TempFile(ILogger logger)
-        {
-            this.logger = logger;
-        }
-
-        #endregion Constructors
 
         #region Destructors
 
@@ -87,7 +69,7 @@ namespace IronyModManager.IO.TempFile
         /// Gets the file.
         /// </summary>
         /// <value>The file.</value>
-        public string File => path;
+        public string File { get; private set; } = string.Empty;
 
         /// <summary>
         /// Gets or sets the temporary directory.
@@ -97,11 +79,7 @@ namespace IronyModManager.IO.TempFile
         {
             get
             {
-                if (string.IsNullOrWhiteSpace(tempDirectory))
-                {
-                    return Path.GetTempPath();
-                }
-                return tempDirectory;
+                return string.IsNullOrWhiteSpace(tempDirectory) ? Path.GetTempPath() : tempDirectory;
             }
             set
             {
@@ -117,11 +95,7 @@ namespace IronyModManager.IO.TempFile
         {
             get
             {
-                if (System.IO.File.Exists(File))
-                {
-                    return System.IO.File.ReadAllText(File);
-                }
-                return string.Empty;
+                return System.IO.File.Exists(File) ? System.IO.File.ReadAllText(File) : string.Empty;
             }
             set
             {
@@ -143,13 +117,14 @@ namespace IronyModManager.IO.TempFile
         /// <returns>System.String.</returns>
         public string Create(string fileName = Shared.Constants.EmptyParam)
         {
-            if (string.IsNullOrWhiteSpace(path))
+            if (string.IsNullOrWhiteSpace(File))
             {
-                path = Path.Combine(TempDirectory, string.IsNullOrWhiteSpace(fileName) ? Path.ChangeExtension(Path.GetRandomFileName(), TempExtension) : fileName);
-                var fs = System.IO.File.Create(path);
+                File = Path.Combine(TempDirectory, string.IsNullOrWhiteSpace(fileName) ? Path.ChangeExtension(Path.GetRandomFileName(), TempExtension) : fileName);
+                var fs = System.IO.File.Create(File);
                 fs.Dispose();
             }
-            return path;
+
+            return File;
         }
 
         /// <summary>
@@ -160,19 +135,17 @@ namespace IronyModManager.IO.TempFile
         {
             try
             {
-                if (System.IO.File.Exists(path))
+                if (System.IO.File.Exists(File))
                 {
-                    DiskOperations.DeleteFile(path);
+                    DiskOperations.DeleteFile(File);
                     return true;
                 }
             }
             catch (Exception ex)
             {
-                if (logger != null)
-                {
-                    logger.Error(ex);
-                }
+                logger?.Error(ex);
             }
+
             return false;
         }
 
@@ -196,7 +169,7 @@ namespace IronyModManager.IO.TempFile
         /// <returns>System.String.</returns>
         public string GetTempFileName(string desiredFilename)
         {
-            return $"{desiredFilename}.{TempExtension}".GenerateValidFileName();
+            return $"{desiredFilename}.{TempExtension}".GenerateValidFileName(false);
         }
 
         #endregion Methods

@@ -4,7 +4,7 @@
 // Created          : 03-09-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 10-29-2022
+// Last Modified On : 03-22-2024
 // ***********************************************************************
 // <copyright file="ModCollectionExporter.cs" company="Mario">
 //     Mario
@@ -140,8 +140,10 @@ namespace IronyModManager.IO.Mods
             {
                 throw new ArgumentException("Invalid descriptor type");
             }
+
             double processed = 0;
             double previousProgress = 0;
+
             void saveProgress(object sender, SaveProgressEventArgs e)
             {
                 switch (e.EventType)
@@ -149,22 +151,22 @@ namespace IronyModManager.IO.Mods
                     case ZipProgressEventType.Saving_AfterWriteEntry:
                         processed++;
                         var perc = GetProgressPercentage(e.EntriesTotal, processed, 100);
-                        if (perc != previousProgress)
+                        if (perc.IsNotNearlyEqual(previousProgress))
                         {
                             messageBus.Publish(new ModExportProgressEvent(perc));
                             previousProgress = perc;
                         }
-                        if (e.CurrentEntry != null && e.CurrentEntry.InputStream != null)
+
+                        if (e.CurrentEntry is { InputStream: not null })
                         {
                             e.CurrentEntry.InputStream.Close();
                             e.CurrentEntry.InputStream.Dispose();
                         }
-                        break;
 
-                    default:
                         break;
                 }
             }
+
             IMod cloneMod(IMod mod)
             {
                 var newMod = DIResolver.Get<IMod>();
@@ -188,8 +190,10 @@ namespace IronyModManager.IO.Mods
                     {
                         newDependencies.Add(modWriter.FormatPrefixModName(parameters.ModNameOverride, item));
                     }
+
                     newMod.Dependencies = newDependencies;
                 }
+
                 return newMod;
             }
 
@@ -197,7 +201,7 @@ namespace IronyModManager.IO.Mods
             var content = JsonConvert.SerializeObject(parameters.Mod, Newtonsoft.Json.Formatting.None);
             using var dataStream = new MemoryStream(Encoding.UTF8.GetBytes(content));
 
-            var streams = new List<Stream>() { dataStream };
+            var streams = new List<Stream> { dataStream };
             using var zip = new ZipFile();
             zip.UseZip64WhenSaving = Zip64Option.AsNecessary;
             zip.AddEntry(Common.Constants.ExportedModContentId, dataStream);
@@ -235,6 +239,7 @@ namespace IronyModManager.IO.Mods
                     }
                 }
             }
+
             if ((parameters.ExportMods?.Any()).GetValueOrDefault())
             {
                 if (parameters.DescriptorType == DescriptorType.DescriptorMod)
@@ -244,7 +249,7 @@ namespace IronyModManager.IO.Mods
                     zip.AddEntry(Path.Combine(Common.Constants.ModExportPath, Shared.Constants.ModNamePrefixOverride), prefixDataStream);
                 }
 
-                foreach (var mod in parameters.ExportMods)
+                foreach (var mod in parameters.ExportMods!)
                 {
                     if (Directory.Exists(mod.FullPath))
                     {
@@ -253,15 +258,12 @@ namespace IronyModManager.IO.Mods
                         {
                             foreach (var item in files)
                             {
-                                var file = Path.Combine(Common.Constants.ModExportPath, parameters.Mod.Name.GenerateShortFileNameHashId(4).GenerateValidFileName() + "_" + mod.Name.GenerateValidFileName().GenerateShortFileNameHashId(8), item.Replace(mod.FullPath, string.Empty).Trim('\\').Trim('/'));
+                                var file = Path.Combine(Common.Constants.ModExportPath, parameters.Mod.Name.GenerateShortFileNameHashId(4).GenerateValidFileName() + "_" + mod.Name.GenerateValidFileName().GenerateShortFileNameHashId(8),
+                                    item.Replace(mod.FullPath, string.Empty).Trim('\\').Trim('/'));
                                 if (item.EndsWith(Shared.Constants.DescriptorJsonMetadata) && parameters.DescriptorType == DescriptorType.JsonMetadata)
                                 {
                                     var ms = new MemoryStream();
-                                    await modWriter.WriteDescriptorToStreamAsync(new ModWriterParameters()
-                                    {
-                                        Mod = cloneMod(mod),
-                                        DescriptorType = parameters.DescriptorType
-                                    }, ms, true);
+                                    await modWriter.WriteDescriptorToStreamAsync(new ModWriterParameters { Mod = cloneMod(mod), DescriptorType = parameters.DescriptorType }, ms, true);
                                     ms.Seek(0, SeekOrigin.Begin);
                                     var entry = zip.AddEntry(file, ms);
                                     entry.AlternateEncoding = Encoding.UTF8;
@@ -286,15 +288,12 @@ namespace IronyModManager.IO.Mods
                         {
                             foreach (var item in files)
                             {
-                                var file = Path.Combine(Common.Constants.ModExportPath, parameters.Mod.Name.GenerateShortFileNameHashId(4).GenerateValidFileName() + "_" + mod.Name.GenerateValidFileName().GenerateShortFileNameHashId(8), item.Replace(mod.FullPath, string.Empty).Trim('\\').Trim('/'));
+                                var file = Path.Combine(Common.Constants.ModExportPath, parameters.Mod.Name.GenerateShortFileNameHashId(4).GenerateValidFileName() + "_" + mod.Name.GenerateValidFileName().GenerateShortFileNameHashId(8),
+                                    item.Replace(mod.FullPath, string.Empty).Trim('\\').Trim('/'));
                                 if (item.EndsWith(Shared.Constants.DescriptorJsonMetadata) && parameters.DescriptorType == DescriptorType.JsonMetadata)
                                 {
                                     var ms = new MemoryStream();
-                                    await modWriter.WriteDescriptorToStreamAsync(new ModWriterParameters()
-                                    {
-                                        Mod = cloneMod(mod),
-                                        DescriptorType = parameters.DescriptorType
-                                    }, ms, true);
+                                    await modWriter.WriteDescriptorToStreamAsync(new ModWriterParameters { Mod = cloneMod(mod), DescriptorType = parameters.DescriptorType }, ms, true);
                                     ms.Seek(0, SeekOrigin.Begin);
                                     var entry = zip.AddEntry(file, ms);
                                     entry.AlternateEncoding = Encoding.UTF8;
@@ -319,7 +318,8 @@ namespace IronyModManager.IO.Mods
                             var fs = new OnDemandFileStream(mod.FullPath, FileMode.Open, FileAccess.Read, FileShare.Read);
                             var ms = new MemoryStream();
                             await fs.CopyToAsync(ms);
-                            var file = Path.Combine(Common.Constants.ModExportPath, parameters.Mod.Name.GenerateShortFileNameHashId(4).GenerateValidFileName() + "_" + Path.GetFileNameWithoutExtension(mod.FullPath).GenerateShortFileNameHashId(8) + Path.GetExtension(mod.FullPath));
+                            var file = Path.Combine(Common.Constants.ModExportPath,
+                                parameters.Mod.Name.GenerateShortFileNameHashId(4).GenerateValidFileName() + "_" + Path.GetFileNameWithoutExtension(mod.FullPath).GenerateShortFileNameHashId(8) + Path.GetExtension(mod.FullPath));
                             var entry = zip.AddEntry(file, ms);
                             entry.AlternateEncoding = Encoding.UTF8;
                             entry.AlternateEncodingUsage = ZipOption.AsNecessary;
@@ -330,7 +330,8 @@ namespace IronyModManager.IO.Mods
                         else
                         {
                             var fs = new OnDemandFileStream(mod.FullPath, FileMode.Open, FileAccess.Read, FileShare.Read);
-                            var file = Path.Combine(Common.Constants.ModExportPath, parameters.Mod.Name.GenerateShortFileNameHashId(4).GenerateValidFileName() + "_" + Path.GetFileNameWithoutExtension(mod.FullPath).GenerateShortFileNameHashId(8) + Path.GetExtension(mod.FullPath));
+                            var file = Path.Combine(Common.Constants.ModExportPath,
+                                parameters.Mod.Name.GenerateShortFileNameHashId(4).GenerateValidFileName() + "_" + Path.GetFileNameWithoutExtension(mod.FullPath).GenerateShortFileNameHashId(8) + Path.GetExtension(mod.FullPath));
                             var entry = zip.AddEntry(file, fs);
                             entry.AlternateEncoding = Encoding.UTF8;
                             entry.AlternateEncodingUsage = ZipOption.AsNecessary;
@@ -343,8 +344,7 @@ namespace IronyModManager.IO.Mods
             zip.SaveProgress += saveProgress;
             zip.Save(parameters.File);
             zip.SaveProgress -= saveProgress;
-            zip.Dispose();
-            if (streams.Any())
+            if (streams.Count != 0)
             {
                 var task = streams.Select(async p =>
                 {
@@ -353,6 +353,7 @@ namespace IronyModManager.IO.Mods
                 });
                 await Task.WhenAll(task);
             }
+
             return true;
         }
 
@@ -388,6 +389,7 @@ namespace IronyModManager.IO.Mods
             {
                 return Task.FromResult(result);
             }
+
             return Task.FromResult((ICollectionImportResult)null);
         }
 
@@ -414,6 +416,7 @@ namespace IronyModManager.IO.Mods
             {
                 throw new ArgumentException("Invalid descriptor type.");
             }
+
             return paradoxImporter.ImportAsync(parameters);
         }
 
@@ -475,6 +478,7 @@ namespace IronyModManager.IO.Mods
             {
                 perc = maxPerc;
             }
+
             return perc;
         }
 
@@ -492,6 +496,7 @@ namespace IronyModManager.IO.Mods
             {
                 importResult = DIResolver.Get<ICollectionImportResult>();
             }
+
             if (!importInstance)
             {
                 if (Directory.Exists(parameters.ModDirectory))
@@ -514,8 +519,8 @@ namespace IronyModManager.IO.Mods
                         count++;
                     }
                 }
+
                 fileStream.Close();
-                fileStream.Dispose();
                 return count;
             }
 
@@ -542,10 +547,9 @@ namespace IronyModManager.IO.Mods
                                 using var streamReader = new StreamReader(memoryStream, true);
                                 var text = streamReader.ReadToEnd();
                                 streamReader.Close();
-                                streamReader.Dispose();
                                 var model = JsonDISerializer.Deserialize<IModCollection>(text);
                                 mapper.Map(model, importResult);
-                                importResult.ModNames = model.ModNames;
+                                importResult!.ModNames = model.ModNames;
                                 importResult.Descriptors = model.Mods;
                                 importResult.ModIds = model.ModIds;
                                 result = true;
@@ -556,17 +560,20 @@ namespace IronyModManager.IO.Mods
                         {
                             if (!importInstance)
                             {
-                                var exportFileName = Path.Combine(relativePath.StartsWith(Common.Constants.ModExportPath + Path.DirectorySeparatorChar) ? parameters.ExportModDirectory : parameters.ModDirectory, relativePath.Replace(Common.Constants.ModExportPath + Path.DirectorySeparatorChar, string.Empty));
+                                var exportFileName = Path.Combine(relativePath.StartsWith(Common.Constants.ModExportPath + Path.DirectorySeparatorChar) ? parameters.ExportModDirectory : parameters.ModDirectory,
+                                    relativePath.Replace(Common.Constants.ModExportPath + Path.DirectorySeparatorChar, string.Empty));
                                 if (!Directory.Exists(Path.GetDirectoryName(exportFileName)))
                                 {
-                                    Directory.CreateDirectory(Path.GetDirectoryName(exportFileName));
+                                    Directory.CreateDirectory(Path.GetDirectoryName(exportFileName)!);
                                 }
+
                                 reader.WriteEntryToFile(exportFileName, ZipExtractionOpts.GetExtractionOptions());
                             }
                         }
+
                         processed++;
                         var perc = GetProgressPercentage(total, processed, 100);
-                        if (perc != previousProgress)
+                        if (perc.IsNotNearlyEqual(previousProgress))
                         {
                             messageBus.Publish(new ModExportProgressEvent(perc));
                             previousProgress = perc;
@@ -597,10 +604,9 @@ namespace IronyModManager.IO.Mods
                             using var streamReader = new StreamReader(memoryStream, true);
                             var text = streamReader.ReadToEnd();
                             streamReader.Close();
-                            streamReader.Dispose();
                             var model = JsonDISerializer.Deserialize<IModCollection>(text);
                             mapper.Map(model, importResult);
-                            importResult.ModNames = model.ModNames;
+                            importResult!.ModNames = model.ModNames;
                             importResult.Descriptors = model.Mods;
                             importResult.ModIds = model.ModIds;
                             result = true;
@@ -611,23 +617,27 @@ namespace IronyModManager.IO.Mods
                     {
                         if (!importInstance)
                         {
-                            var exportFileName = Path.Combine(relativePath.StartsWith(Common.Constants.ModExportPath + Path.DirectorySeparatorChar) ? parameters.ExportModDirectory : parameters.ModDirectory, relativePath.Replace(Common.Constants.ModExportPath + Path.DirectorySeparatorChar, string.Empty));
+                            var exportFileName = Path.Combine(relativePath.StartsWith(Common.Constants.ModExportPath + Path.DirectorySeparatorChar) ? parameters.ExportModDirectory : parameters.ModDirectory,
+                                relativePath.Replace(Common.Constants.ModExportPath + Path.DirectorySeparatorChar, string.Empty));
                             if (!Directory.Exists(Path.GetDirectoryName(exportFileName)))
                             {
-                                Directory.CreateDirectory(Path.GetDirectoryName(exportFileName));
+                                Directory.CreateDirectory(Path.GetDirectoryName(exportFileName)!);
                             }
+
                             entry.WriteToFile(exportFileName, ZipExtractionOpts.GetExtractionOptions());
                         }
                     }
+
                     processed++;
                     var perc = GetProgressPercentage(total, processed, 100);
-                    if (perc != previousProgress)
+                    if (perc.IsNotNearlyEqual(previousProgress))
                     {
                         messageBus.Publish(new ModExportProgressEvent(perc));
                         previousProgress = perc;
                     }
                 }
             }
+
             try
             {
                 parseUsingArchiveFactory();
@@ -638,6 +648,7 @@ namespace IronyModManager.IO.Mods
                 result = false;
                 parseUsingReaderFactory();
             }
+
             collectionImportResult = importResult;
             return !importInstance || result;
         }

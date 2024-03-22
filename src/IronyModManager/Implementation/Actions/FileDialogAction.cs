@@ -4,13 +4,14 @@
 // Created          : 03-09-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 11-29-2022
+// Last Modified On : 03-22-2024
 // ***********************************************************************
 // <copyright file="FileDialogAction.cs" company="Mario">
 //     Mario
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
+
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -51,23 +52,19 @@ namespace IronyModManager.Implementation.Actions
         public async Task<string> OpenDialogAsync(string title, string initialFileName = Shared.Constants.EmptyParam, params string[] extensions)
         {
             ReactiveUI.MessageBus.Current.SendMessage(new ForceClosePopulsEventArgs());
-            var dialog = new OpenFileDialog
-            {
-                Title = title,
-                Filters = GetFilters(extensions),
-                Directory = GetInitialDirectory(),
-                AllowMultiple = false
-            };
+            var dialog = new OpenFileDialog { Title = title, Filters = GetFilters(extensions), Directory = GetInitialDirectory(), AllowMultiple = false };
             if (!string.IsNullOrWhiteSpace(initialFileName))
             {
                 dialog.InitialFileName = initialFileName;
             }
+
             var result = await dialog.ShowAsync(Helpers.GetMainWindow());
             var file = result?.FirstOrDefault();
             if (File.Exists(file))
             {
                 return file;
             }
+
             return file;
         }
 
@@ -79,16 +76,13 @@ namespace IronyModManager.Implementation.Actions
         public async Task<string> OpenFolderDialogAsync(string title)
         {
             ReactiveUI.MessageBus.Current.SendMessage(new ForceClosePopulsEventArgs());
-            var dialog = new OpenFolderDialog()
-            {
-                Title = title,
-                Directory = GetInitialDirectory()
-            };
+            var dialog = new OpenFolderDialog { Title = title, Directory = GetInitialDirectory() };
             var result = await dialog.ShowAsync(Helpers.GetMainWindow());
             if (Directory.Exists(result))
             {
                 return result;
             }
+
             return string.Empty;
         }
 
@@ -102,16 +96,12 @@ namespace IronyModManager.Implementation.Actions
         public async Task<string> SaveDialogAsync(string title, string initialFileName = Shared.Constants.EmptyParam, params string[] extensions)
         {
             ReactiveUI.MessageBus.Current.SendMessage(new ForceClosePopulsEventArgs());
-            var dialog = new SaveFileDialog
-            {
-                Title = title,
-                Filters = GetFilters(extensions),
-                Directory = GetInitialDirectory()
-            };
+            var dialog = new SaveFileDialog { Title = title, Filters = GetFilters(extensions), Directory = GetInitialDirectory() };
             if (!string.IsNullOrWhiteSpace(initialFileName))
             {
-                dialog.InitialFileName = initialFileName.GenerateValidFileName();
+                dialog.InitialFileName = initialFileName.GenerateValidFileName(false);
             }
+
             var result = await dialog.ShowAsync(Helpers.GetMainWindow());
             return result;
         }
@@ -126,12 +116,12 @@ namespace IronyModManager.Implementation.Actions
             var filter = new List<FileDialogFilter>();
             foreach (var item in extensions)
             {
-                filter.Add(new FileDialogFilter()
+                filter.Add(new FileDialogFilter
                 {
-                    Name = item,
-                    Extensions = item.Split(ExtensionSeparator, StringSplitOptions.RemoveEmptyEntries).Select(p => p.Trim()).ToList() // magic string
+                    Name = item, Extensions = item.Split(ExtensionSeparator, StringSplitOptions.RemoveEmptyEntries).Select(p => p.Trim()).ToList() // magic string
                 });
             }
+
             return filter;
         }
 
@@ -146,14 +136,17 @@ namespace IronyModManager.Implementation.Actions
             {
                 path = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
             }
+
             if (string.IsNullOrWhiteSpace(path))
             {
                 path = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
             }
+
             if (string.IsNullOrWhiteSpace(path))
             {
                 path = AppDomain.CurrentDomain.BaseDirectory;
             }
+
             return path;
         }
 

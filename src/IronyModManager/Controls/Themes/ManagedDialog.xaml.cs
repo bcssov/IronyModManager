@@ -4,7 +4,7 @@
 // Created          : 05-07-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-20-2021
+// Last Modified On : 03-22-2024
 // ***********************************************************************
 // <copyright file="ManagedDialog.xaml.cs" company="Avalonia">
 //     Avalonia
@@ -16,6 +16,7 @@
 // ***********************************************************************
 
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Avalonia;
@@ -81,23 +82,27 @@ namespace IronyModManager.Controls.Themes
             fileName.Watermark = locManager.GetResource(LocalizationResources.FileDialog.FileName);
             filter = this.FindControl<ComboBox>("filter");
             var correctingInput = false;
-            fileName.PropertyChanged += (sender, args) =>
+            fileName.PropertyChanged += (_, args) =>
             {
                 if (args.Property != Avalonia.Controls.TextBox.TextProperty)
                 {
                     return;
                 }
+
                 if (correctingInput)
                 {
                     return;
                 }
+
                 correctingInput = true;
+
                 async Task updateText()
                 {
                     await Task.Delay(1);
-                    Model.FileName = Model.FileName.GenerateValidFileName();
+                    Model.FileName = Model.FileName.GenerateValidFileName(false);
                     correctingInput = false;
                 }
+
                 updateText().ConfigureAwait(false);
             };
             var showHiddenFiles = this.FindControl<TextBlock>("showHiddenFiles");
@@ -138,7 +143,7 @@ namespace IronyModManager.Controls.Themes
         {
             base.OnDataContextChanged(e);
 
-            var model = (DataContext as ManagedDialogViewModel);
+            var model = DataContext as ManagedDialogViewModel;
 
             if (model == null)
             {
@@ -187,21 +192,25 @@ namespace IronyModManager.Controls.Themes
                         {
                             Model.FileName = string.Empty;
                         }
+
                         Model.SelectedItems.Clear();
                     }
                 }
             }
+
             if ((e.Source as StyledElement)?.DataContext is not ManagedDialogItemViewModel model)
             {
                 Dispatcher.UIThread.InvokeAsync(() => deselectItems());
                 return;
             }
+
             // Right click now de selects stuff
             if (e.GetCurrentPoint(null).Properties.PointerUpdateKind == PointerUpdateKind.RightButtonPressed)
             {
                 Dispatcher.UIThread.InvokeAsync(() => deselectItems());
                 return;
             }
+
             var isQuickLink = quickLinksRoot.IsLogicalAncestorOf(e.Source as Control);
 #pragma warning disable CS0618 // Type or member is obsolete
             // Yes, use doubletapped event... if only it would work properly.
