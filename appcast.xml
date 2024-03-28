@@ -4,11 +4,12 @@
 		<title>Irony Mod Manager</title>
 		<language>en</language>
 		<item>
-			<title>1.26.167</title>
+			<title>1.26.173</title>
 			<description>## Current Release Notes
-* Add conflict solver configuration to customize colors for new diff viewer
-* Add templateable merge mod naming
-* Fix named pipe CTD on OSX
+* Fix ctd when launch args are null
+* Resolve #500
+* Fix "rare" new CS diff viewer redraw bug
+* Add edit here button in CS context menu
 
 ## Release Notes 1.26
 * Update dependencies
@@ -21,15 +22,16 @@
 * Added conflict solver option to skip parsing some languages
 * Add conflict solver configuration to customize colors for new diff viewer
 * Add templateable merge mod naming</description>
-			<pubDate>Wed, 20 Mar 2024 22:33:06 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.26.167/linux-x64.zip" sparkle:version="1.26.167.20297" sparkle:shortVersionString="1.26.167" length="90895202" sparkle:os="linux" type="application/zip" sparkle:signature="PzKQW9gWoztAymn2JyT8B0Ops/rVhlwZjFPJQ7FGokX0AGSV7yLH3aA1k0VxFf8bFf3e7fMTRNa5+2gkvnihDw=="/>
+			<pubDate>Thu, 28 Mar 2024 21:47:40 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.26.173/linux-x64.zip" sparkle:version="1.26.173.40196" sparkle:shortVersionString="1.26.173" length="90897780" sparkle:os="linux" type="application/zip" sparkle:signature="AlIE9lHFxAll/dTyWeml4EAiui36rEPWEdrN8dIgBwqvYth0A6sargRjyWJOv6k6/GbH1Tbe72eItlLodtMuBA=="/>
 		</item>
 		<item>
-			<title>1.26.167</title>
+			<title>1.26.173</title>
 			<description>## Current Release Notes
-* Add conflict solver configuration to customize colors for new diff viewer
-* Add templateable merge mod naming
-* Fix named pipe CTD on OSX
+* Fix ctd when launch args are null
+* Resolve #500
+* Fix "rare" new CS diff viewer redraw bug
+* Add edit here button in CS context menu
 
 ## Release Notes 1.26
 * Update dependencies
@@ -42,15 +44,16 @@
 * Added conflict solver option to skip parsing some languages
 * Add conflict solver configuration to customize colors for new diff viewer
 * Add templateable merge mod naming</description>
-			<pubDate>Wed, 20 Mar 2024 22:33:13 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.26.167/osx-x64.zip" sparkle:version="1.26.167.20297" sparkle:shortVersionString="1.26.167" length="93860550" sparkle:os="osx" type="application/zip" sparkle:signature="UPpGFMsIDBxZP6hZ7/rLLYKe/SKpYMxostDPYMw7ftz0g1q0K9BXE/a4OaOyP/ifCcuLREkuHJ07o821IKlUBA=="/>
+			<pubDate>Thu, 28 Mar 2024 21:47:47 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.26.173/osx-x64.zip" sparkle:version="1.26.173.40196" sparkle:shortVersionString="1.26.173" length="93863142" sparkle:os="osx" type="application/zip" sparkle:signature="wK9HSQmKUOfeDutjXXdt0h7bvX5QEEZoN/GvbDuGkSD30dZO2RgQpE6xNPgXZ/0v5CzTk4zBXYYbHkCGyOHgCA=="/>
 		</item>
 		<item>
-			<title>1.26.167</title>
+			<title>1.26.173</title>
 			<description>## Current Release Notes
-* Add conflict solver configuration to customize colors for new diff viewer
-* Add templateable merge mod naming
-* Fix named pipe CTD on OSX
+* Fix ctd when launch args are null
+* Resolve #500
+* Fix "rare" new CS diff viewer redraw bug
+* Add edit here button in CS context menu
 
 ## Release Notes 1.26
 * Update dependencies
@@ -63,15 +66,16 @@
 * Added conflict solver option to skip parsing some languages
 * Add conflict solver configuration to customize colors for new diff viewer
 * Add templateable merge mod naming</description>
-			<pubDate>Wed, 20 Mar 2024 22:33:20 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.26.167/win-x64-setup.zip" sparkle:version="1.26.167.20297" sparkle:shortVersionString="1.26.167" length="72492610" sparkle:os="windows" type="application/zip" sparkle:signature="P6D0MCR6Pid8HdwESQe2uChAigDc2SK7AZMbptM7c9iUp2JtqIE+T8cd1boQkJJCFauTb9d9wQBExA+97TXYAg=="/>
+			<pubDate>Thu, 28 Mar 2024 21:47:55 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.26.173/win-x64-setup.zip" sparkle:version="1.26.173.40196" sparkle:shortVersionString="1.26.173" length="72489310" sparkle:os="windows" type="application/zip" sparkle:signature="kHvWsMPb5BibjOp6thp2SLUWgCnvHegpDYEiCiSkPdx+wsdH9c0Hzuip4o6ebf95NnTm9qa/r87lg0TsqnLMDQ=="/>
 		</item>
 		<item>
-			<title>1.26.167</title>
+			<title>1.26.173</title>
 			<description>## Current Release Notes
-* Add conflict solver configuration to customize colors for new diff viewer
-* Add templateable merge mod naming
-* Fix named pipe CTD on OSX
+* Fix ctd when launch args are null
+* Resolve #500
+* Fix "rare" new CS diff viewer redraw bug
+* Add edit here button in CS context menu
 
 ## Release Notes 1.26
 * Update dependencies
@@ -84,8 +88,8 @@
 * Added conflict solver option to skip parsing some languages
 * Add conflict solver configuration to customize colors for new diff viewer
 * Add templateable merge mod naming</description>
-			<pubDate>Wed, 20 Mar 2024 22:33:20 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.26.167/win-x64.zip" sparkle:version="1.26.167.20297" sparkle:shortVersionString="1.26.167" length="106490974" sparkle:os="windows" type="application/zip" sparkle:signature="FWIUfH1aeGuo8wDp51eVDJ81Z/QoV8zN6onNIjzo9ICg5mG/3eDkvLlisCfTFpzSp6AabfWOUOHYdIHorhvfAQ=="/>
+			<pubDate>Thu, 28 Mar 2024 21:47:55 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.26.173/win-x64.zip" sparkle:version="1.26.173.40196" sparkle:shortVersionString="1.26.173" length="106493543" sparkle:os="windows" type="application/zip" sparkle:signature="UQiNQ41oCYD7h7JhuqOcTLm8NGCbeSIO0Lx5I+bIDZCE/qfL734lKonRzVRYiovyEJF8bGspcVG3Hgxr7bQ5Cg=="/>
 		</item>
 	</channel>
 </rss>
