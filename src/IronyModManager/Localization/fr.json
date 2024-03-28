@@ -341,6 +341,7 @@
             "MoveUp": "Monter",
             "MoveDown": "Descendre",
             "Edit": "Éditer",
+            "EditHere": "Editer ici",
             "CopyText": "Copier le texte",
             "Delete": "Supprimer",
             "Undo": "annuler",

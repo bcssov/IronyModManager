@@ -4,7 +4,7 @@
 // Created          : 03-20-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-19-2024
+// Last Modified On : 03-28-2024
 // ***********************************************************************
 // <copyright file="MergeViewerControlView.xaml.cs" company="Mario">
 //     Mario
@@ -16,6 +16,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reactive.Disposables;
+using System.Reactive.Linq;
 using System.Threading.Tasks;
 using Avalonia;
 using Avalonia.Controls;
@@ -27,6 +28,7 @@ using AvaloniaEdit.Document;
 using AvaloniaEdit.Search;
 using AvaloniaEdit.Utils;
 using DiffPlex.DiffBuilder.Model;
+using DynamicData;
 using IronyModManager.Common;
 using IronyModManager.Common.Views;
 using IronyModManager.DI;
@@ -36,6 +38,7 @@ using IronyModManager.Shared;
 using IronyModManager.ViewModels.Controls;
 using ReactiveUI;
 using static IronyModManager.ViewModels.Controls.MergeViewerControlViewModel;
+using ChangeType = DiffPlex.DiffBuilder.Model.ChangeType;
 
 namespace IronyModManager.Views.Controls
 {
@@ -103,6 +106,11 @@ namespace IronyModManager.Views.Controls
         /// The search panel right
         /// </summary>
         private SearchPanel editorSearchPanelRight;
+
+        /// <summary>
+        /// A private int named lineClicked.
+        /// </summary>
+        private int lineClicked;
 
         /// <summary>
         /// A private bool named syncingDiffScroll.
@@ -523,6 +531,7 @@ namespace IronyModManager.Views.Controls
 
             this.WhenAnyValue(v => v.ViewModel.LeftDiff).Subscribe(s =>
             {
+                RedrawEditorDiffs();
                 diffLeftMargin.Lines = s;
                 diffLeftRenderer.Lines = s;
 
@@ -557,6 +566,7 @@ namespace IronyModManager.Views.Controls
 
             this.WhenAnyValue(v => v.ViewModel.RightDiff).Subscribe(s =>
             {
+                RedrawEditorDiffs();
                 diffRightMargin.Lines = s;
                 diffRightRenderer.Lines = s;
 
@@ -625,7 +635,43 @@ namespace IronyModManager.Views.Controls
                 diffLeftRenderer.ColorConverter = s;
                 diffRightRenderer.ColorConverter = s;
                 Dispatcher.UIThread.SafeInvoke(RedrawEditorDiffs);
-            });
+            }).DisposeWith(disposables);
+
+            this.WhenAnyValue(v => v.ViewModel.FocusSelectedLine).Where(_ => ViewModel.EditingText).Subscribe(s =>
+            {
+                async Task scroll(int line, IronyModManager.Controls.TextEditor text)
+                {
+                    // Allow for things to settle
+                    await Task.Delay(50);
+                    await Dispatcher.UIThread.SafeInvokeAsync(() =>
+                    {
+                        text.Focus();
+                        text.TextArea.Caret.Location = new TextLocation(line, 1);
+                        text.ScrollToLine(line);
+                    });
+                }
+
+                if (!s)
+                {
+                    return;
+                }
+
+                var originalCol = ViewModel.EditingLeft ? ViewModel.LeftDiff : ViewModel.RightDiff;
+                var col = ViewModel.EditingLeft ? ViewModel.LeftSideSelected : ViewModel.RightSideSelected;
+                var text = ViewModel.EditingLeft ? editorLeft : editorRight;
+                if (col != null && col.Count != 0)
+                {
+                    var item = col.FirstOrDefault()!;
+                    if (item.Type != ChangeType.Imaginary)
+                    {
+                        var line = originalCol.Where(p => p.Type != ChangeType.Imaginary).IndexOf(item) + 1;
+                        if (line > 0)
+                        {
+                            scroll(line, text).ConfigureAwait(false);
+                        }
+                    }
+                }
+            }).DisposeWith(disposables);
 
             base.OnActivated(disposables);
         }
@@ -702,7 +748,7 @@ namespace IronyModManager.Views.Controls
                 var col = leftDiff ? ViewModel!.LeftSideSelected : ViewModel!.RightSideSelected;
                 var sourceCol = leftDiff ? ViewModel.LeftDiff : ViewModel.RightDiff;
 
-                if (range.Item1 > sourceCol.Count - 1 || range.Item2 > sourceCol.Count)
+                if (range.Item1 > sourceCol.Count - 1 || range.Item2 > sourceCol.Count - 1)
                 {
                     return;
                 }
@@ -714,7 +760,7 @@ namespace IronyModManager.Views.Controls
                 }
             };
 
-            void handlePointerPressed(PointerPressedEventArgs args)
+            void handlePointerPressed(PointerPressedEventArgs args, bool toggleLine = true)
             {
                 var pos = args.GetPosition(diff);
                 pos = new Point(0, pos.Y.CoerceValue(0, diff.Bounds.Height) + diff.VerticalOffset);
@@ -727,6 +773,11 @@ namespace IronyModManager.Views.Controls
                     if (idx >= sourceCol.Count)
                     {
                         return;
+                    }
+
+                    if (toggleLine)
+                    {
+                        lineClicked = idx + 1;
                     }
 
                     if (col.Count == 0)
@@ -752,7 +803,7 @@ namespace IronyModManager.Views.Controls
 
             ((IronyModManager.Controls.TextArea)diff.TextArea).LeftPointerPressed += (_, eventArgs) =>
             {
-                handlePointerPressed(eventArgs);
+                handlePointerPressed(eventArgs, false);
             };
         }
 
@@ -959,6 +1010,25 @@ namespace IronyModManager.Views.Controls
                 new() { Header = ViewModel.PrevConflict, Command = ViewModel.PrevConflictCommand, CommandParameter = leftSide },
                 new() { Header = "-" },
                 new() { Header = ViewModel.EditThis, Command = ViewModel.EditThisCommand, CommandParameter = leftSide },
+                new()
+                {
+                    Header = ViewModel.EditThisHere,
+                    Command = ReactiveCommand.Create(() =>
+                    {
+                        var col = leftSide ? ViewModel!.LeftSideSelected : ViewModel!.RightSideSelected;
+                        var ln = lineClicked - 1;
+                        var sourceCol = leftSide ? ViewModel.LeftDiff : ViewModel.RightDiff;
+                        if (ln > sourceCol.Count - 1)
+                        {
+                            return;
+                        }
+
+                        col.Clear();
+                        col.Add(sourceCol[ln]);
+
+                        ViewModel.EditThisHereCommand.Execute(leftSide).Subscribe();
+                    })
+                },
                 new() { Header = ViewModel.CopyText, Command = ViewModel.CopyTextCommand, CommandParameter = leftSide },
                 new() { Header = "-" },
                 new() { Header = ViewModel.DeleteText, Command = ViewModel.DeleteTextCommand, CommandParameter = leftSide },

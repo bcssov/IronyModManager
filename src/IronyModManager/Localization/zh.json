@@ -341,6 +341,7 @@
             "MoveUp": "上移",
             "MoveDown": "下移",
             "Edit": "编辑",
+            "EditHere": "在此编辑",
             "CopyText": "复制全部文本",
             "Delete": "删除",
             "Undo": "撤销",

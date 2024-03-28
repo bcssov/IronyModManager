@@ -449,6 +449,7 @@ namespace IronyModManager.Shared
                 public const string MoveUp = Prefix + "MoveUp";
                 public const string MoveDown = Prefix + "MoveDown";
                 public const string Edit = Prefix + "Edit";
+                public const string EditHere = Prefix + "EditHere";
                 public const string CopyText = Prefix + "CopyText";
                 public const string Delete = Prefix + "Delete";
                 public const string Undo = Prefix + "Undo";

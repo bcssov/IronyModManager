@@ -428,6 +428,31 @@ namespace IronyModManager.ViewModels.Controls
         public virtual ReactiveCommand<bool, Unit> EditThisCommand { get; protected set; }
 
         /// <summary>
+        /// Gets or sets a value representing the edit this here.
+        /// </summary>
+        /// <value>
+        /// The edit this here.
+        /// </value>
+        [StaticLocalization(LocalizationResources.Conflict_Solver.ContextMenu.EditHere)]
+        public virtual string EditThisHere { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets a value representing the edit this here command.<see cref="ReactiveUI.ReactiveCommand{bool, System.Reactive.Unit}"/>
+        /// </summary>
+        /// <value>
+        /// The edit this here command.
+        /// </value>
+        public virtual ReactiveCommand<bool, Unit> EditThisHereCommand { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether the focus selected line.
+        /// </summary>
+        /// <value>
+        /// <c>true</c> if focus selected line; otherwise, <c>false</c>.
+        /// </value>
+        public virtual bool FocusSelectedLine { get; protected set; }
+
+        /// <summary>
         /// Gets or sets a value indicating whether this instance is read only mode.
         /// </summary>
         /// <value><c>true</c> if this instance is read only mode; otherwise, <c>false</c>.</value>
@@ -1343,6 +1368,8 @@ namespace IronyModManager.ViewModels.Controls
 
             EditThisCommand = ReactiveCommand.Create((bool leftSide) => { SetEditThis(leftSide); }).DisposeWith(disposables);
 
+            EditThisHereCommand = ReactiveCommand.Create((bool leftSide) => { SetEditThis(leftSide, true); }).DisposeWith(disposables);
+
             CopyTextCommand = ReactiveCommand.Create((bool leftSide) => { CopyTextAsync(leftSide).ConfigureAwait(true); }).DisposeWith(disposables);
 
             NextConflictCommand = ReactiveCommand.Create((bool leftSide) => { FindConflict(leftSide, true, false); }).DisposeWith(disposables);
@@ -1636,7 +1663,8 @@ namespace IronyModManager.ViewModels.Controls
         /// Sets the edit this.
         /// </summary>
         /// <param name="leftSide">if set to <c>true</c> [left side].</param>
-        protected virtual void SetEditThis(bool leftSide)
+        /// <param name="focusLine">The focus line.</param>
+        protected virtual void SetEditThis(bool leftSide, bool focusLine = false)
         {
             EditingLeft = leftSide;
             EditingRight = !leftSide;
@@ -1645,6 +1673,13 @@ namespace IronyModManager.ViewModels.Controls
 
             LeftDocument = new TextDocument(LeftSide);
             RightDocument = new TextDocument(RightSide);
+
+            if (focusLine)
+            {
+                FocusSelectedLine = false;
+            }
+
+            FocusSelectedLine = focusLine;
         }
 
         /// <summary>
