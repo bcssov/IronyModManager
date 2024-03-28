@@ -4,7 +4,7 @@
 // Created          : 03-20-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-19-2024
+// Last Modified On : 03-28-2024
 // ***********************************************************************
 // <copyright file="MergeViewerControlView.xaml.cs" company="Mario">
 //     Mario
@@ -523,6 +523,7 @@ namespace IronyModManager.Views.Controls
 
             this.WhenAnyValue(v => v.ViewModel.LeftDiff).Subscribe(s =>
             {
+                RedrawEditorDiffs();
                 diffLeftMargin.Lines = s;
                 diffLeftRenderer.Lines = s;
 
@@ -557,6 +558,7 @@ namespace IronyModManager.Views.Controls
 
             this.WhenAnyValue(v => v.ViewModel.RightDiff).Subscribe(s =>
             {
+                RedrawEditorDiffs();
                 diffRightMargin.Lines = s;
                 diffRightRenderer.Lines = s;
 
