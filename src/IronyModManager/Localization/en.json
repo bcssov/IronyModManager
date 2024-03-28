@@ -341,6 +341,7 @@
             "MoveUp": "Move Up",
             "MoveDown": "Move Down",
             "Edit": "Edit",
+            "EditHere": "Edit Here",
             "CopyText": "Copy Text",
             "Delete": "Delete",
             "Undo": "Undo",
