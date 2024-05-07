@@ -131,6 +131,9 @@
         "DirectoryPath": "common\\crisis_objectives",
         "PreferredParser": "DefaultParser"
     }, {
+        "DirectoryPath": "common\\crisis_paths",
+        "PreferredParser": "DefaultParser"
+    }, {
         "DirectoryPath": "common\\decisions",
         "PreferredParser": "DefaultParser"
     }, {
@@ -154,6 +157,9 @@
     }, {
         "DirectoryPath": "common\\districts",
         "PreferredParser": "StellarisOverwrittenParser"
+    }, {
+        "DirectoryPath": "common\\dust_clouds",
+        "PreferredParser": "DefaultParser"
     }, {
         "DirectoryPath": "common\\economic_categories",
         "PreferredParser": "DefaultParser"
@@ -240,6 +246,9 @@
         "PreferredParser": "StellarisWholeTextParser"
     }, {
         "DirectoryPath": "common\\inline_scripts\\buildings",
+        "PreferredParser": "StellarisWholeTextParser"
+    }, {
+        "DirectoryPath": "common\\inline_scripts\\colony_types",
         "PreferredParser": "StellarisWholeTextParser"
     }, {
         "DirectoryPath": "common\\inline_scripts\\deposits",
@@ -358,6 +367,12 @@
     }, {
         "DirectoryPath": "common\\pop_jobs",
         "PreferredParser": "StellarisOverwrittenParser"
+    }, {
+        "DirectoryPath": "common\\portrait_categories",
+        "PreferredParser": "DefaultParser"
+    }, {
+        "DirectoryPath": "common\\portrait_sets",
+        "PreferredParser": "DefaultParser"
     }, {
         "DirectoryPath": "common\\precursor_civilizations",
         "PreferredParser": "DefaultParser"
@@ -611,6 +626,9 @@
         "DirectoryPath": "gfx\\portraits\\portraits",
         "PreferredParser": "StellarisWholeTextParser"
     }, {
+        "DirectoryPath": "gfx\\portraits\\sprite_configurations",
+        "PreferredParser": "DefaultParser"
+    }, {
         "DirectoryPath": "gfx\\projectiles",
         "PreferredParser": "GenericKeyParser"
     }, {
@@ -789,6 +807,60 @@
         "PreferredParser": "GenericWholeTextParser"
     }, {
         "DirectoryPath": "sound\\lithoids\\portraits",
+        "PreferredParser": "GenericWholeTextParser"
+    }, {
+        "DirectoryPath": "sound\\machineage\\portraits",
+        "PreferredParser": "GenericWholeTextParser"
+    }, {
+        "DirectoryPath": "sound\\machineage\\ships",
+        "PreferredParser": "GenericWholeTextParser"
+    }, {
+        "DirectoryPath": "sound\\machineage\\superstructures",
+        "PreferredParser": "GenericWholeTextParser"
+    }, {
+        "DirectoryPath": "sound\\machineage\\synthqueen\\00_act01_first_two_speeches",
+        "PreferredParser": "GenericWholeTextParser"
+    }, {
+        "DirectoryPath": "sound\\machineage\\synthqueen\\01_act02_first_demand",
+        "PreferredParser": "GenericWholeTextParser"
+    }, {
+        "DirectoryPath": "sound\\machineage\\synthqueen\\02_act02_random_demands",
+        "PreferredParser": "GenericWholeTextParser"
+    }, {
+        "DirectoryPath": "sound\\machineage\\synthqueen\\03_act02_zarqlan_head_demand",
+        "PreferredParser": "GenericWholeTextParser"
+    }, {
+        "DirectoryPath": "sound\\machineage\\synthqueen\\04_act02_player_initiated_conversation",
+        "PreferredParser": "GenericWholeTextParser"
+    }, {
+        "DirectoryPath": "sound\\machineage\\synthqueen\\05_act02_retributions",
+        "PreferredParser": "GenericWholeTextParser"
+    }, {
+        "DirectoryPath": "sound\\machineage\\synthqueen\\06.5_act02_player_is_accidentaly_in_war",
+        "PreferredParser": "GenericWholeTextParser"
+    }, {
+        "DirectoryPath": "sound\\machineage\\synthqueen\\06_act02_cetanas_gift",
+        "PreferredParser": "GenericWholeTextParser"
+    }, {
+        "DirectoryPath": "sound\\machineage\\synthqueen\\07_act02_raids_on_cetana",
+        "PreferredParser": "GenericWholeTextParser"
+    }, {
+        "DirectoryPath": "sound\\machineage\\synthqueen\\08_act02_storm_chain_ends",
+        "PreferredParser": "GenericWholeTextParser"
+    }, {
+        "DirectoryPath": "sound\\machineage\\synthqueen\\10_act03_cetana_goes_towar",
+        "PreferredParser": "GenericWholeTextParser"
+    }, {
+        "DirectoryPath": "sound\\machineage\\synthqueen\\11_act03_player_during_wartime",
+        "PreferredParser": "GenericWholeTextParser"
+    }, {
+        "DirectoryPath": "sound\\machineage\\synthqueen\\12_act03_cetana_wins",
+        "PreferredParser": "GenericWholeTextParser"
+    }, {
+        "DirectoryPath": "sound\\machineage\\synthqueen\\13_act03_player_wins",
+        "PreferredParser": "GenericWholeTextParser"
+    }, {
+        "DirectoryPath": "sound\\machineage\\synthqueen\\14_act03_player_wins_psi",
         "PreferredParser": "GenericWholeTextParser"
     }, {
         "DirectoryPath": "sound\\megacorp",

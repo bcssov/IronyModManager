@@ -11,6 +11,7 @@
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
+
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -26,11 +27,9 @@ namespace IronyModManager.Parser.Generic
     /// <summary>
     /// Class GraphicsParser.
     /// Implements the <see cref="IronyModManager.Parser.Generic.KeyParser" />
-    /// Implements the <see cref="IGenericParser" />
     /// </summary>
     /// <seealso cref="IronyModManager.Parser.Generic.KeyParser" />
-    /// <seealso cref="IGenericParser" />
-    public class GraphicsParser : KeyParser, IGenericParser
+    public class GraphicsParser : KeyParser
     {
         #region Fields
 
@@ -42,32 +41,32 @@ namespace IronyModManager.Parser.Generic
         /// <summary>
         /// The asset ids
         /// </summary>
-        protected static readonly string[] assetIds = new string[] { "animation={", "category={", "entity={", "falloff={", "font={", "light={", "master_compressor={", "particle={", "music={", "sound={", "soundeffect={", "soundgroup={" };
+        protected static readonly string[] AssetIds = ["animation={", "category={", "entity={", "falloff={", "font={", "light={", "master_compressor={", "particle={", "music={", "sound={", "soundeffect={", "soundgroup={"];
 
         /// <summary>
         /// The expected graphics folders
         /// </summary>
-        protected static readonly string[] expectedGraphicsFolders = new string[] { "gui", "gfx", "interface", "fonts", "dlc", "sound", "music", "pdx_launcher" };
+        protected static readonly string[] ExpectedGraphicsFolders = ["gui", "gfx", "interface", "fonts", "dlc", "sound", "music", "pdx_launcher", "integrated_dlc"];
 
         /// <summary>
         /// The expected graphics ids
         /// </summary>
-        protected static readonly string[] expectedGraphicsIds = new string[] { GuiTypesId, "spriteTypes={", "objectTypes={", "bitmapfonts={" };
+        protected static readonly string[] ExpectedGraphicsIds = [GuiTypesId, "spriteTypes={", "objectTypes={", "bitmapfonts={"];
 
         /// <summary>
         /// The valid extensions
         /// </summary>
-        protected static readonly string[] validExtensions = new string[] { Common.Constants.GuiExtension, Common.Constants.GfxExtension, Common.Constants.AssetExtension };
+        protected static readonly string[] ValidExtensions = [Common.Constants.GuiExtension, Common.Constants.GfxExtension, Common.Constants.AssetExtension];
 
         /// <summary>
         /// The object clone
         /// </summary>
-        protected readonly IObjectClone objectClone;
+        protected readonly IObjectClone ObjectClone;
 
         /// <summary>
         /// The is generic key type
         /// </summary>
-        protected bool isGenericKeyType = false;
+        protected bool IsGenericKeyType;
 
         #endregion Fields
 
@@ -81,7 +80,7 @@ namespace IronyModManager.Parser.Generic
         /// <param name="logger">The logger.</param>
         public GraphicsParser(IObjectClone objectClone, ICodeParser codeParser, ILogger logger) : base(codeParser, logger)
         {
-            this.objectClone = objectClone;
+            ObjectClone = objectClone;
         }
 
         #endregion Constructors
@@ -111,7 +110,7 @@ namespace IronyModManager.Parser.Generic
         /// <returns><c>true</c> if this instance can parse the specified arguments; otherwise, <c>false</c>.</returns>
         public override bool CanParse(CanParseArgs args)
         {
-            return validExtensions.Any(a => args.File.EndsWith(a, StringComparison.OrdinalIgnoreCase)) || IsContentGraphics(args, false, out var _, out var _);
+            return ValidExtensions.Any(a => args.File.EndsWith(a, StringComparison.OrdinalIgnoreCase)) || IsContentGraphics(args, false, out var _, out var _);
         }
 
         /// <summary>
@@ -121,58 +120,50 @@ namespace IronyModManager.Parser.Generic
         /// <returns>IEnumerable&lt;IDefinition&gt;.</returns>
         public override IEnumerable<IDefinition> Parse(ParserArgs args)
         {
-            var canParseArgs = new CanParseArgs()
-            {
-                File = args.File,
-                GameType = args.GameType,
-                IsBinary = args.IsBinary,
-                Lines = args.Lines
-            };
+            var canParseArgs = new CanParseArgs { File = args.File, GameType = args.GameType, IsBinary = args.IsBinary, Lines = args.Lines };
             IEnumerable<IDefinition> result;
             IsContentGraphics(canParseArgs, true, out var isAsset, out var type);
             if (isAsset)
             {
-                isGenericKeyType = IsKeyType(canParseArgs);
+                IsGenericKeyType = IsKeyType(canParseArgs);
                 result = base.ParseRoot(args);
             }
             else
             {
                 result = ParseSecondLevel(args);
             }
+
             if (result.Any(p => p.ValueType == Shared.Models.ValueType.Invalid))
             {
                 return result;
-            }            
-            var parsedResult = new List<IDefinition>();            
+            }
+
+            var parsedResult = new List<IDefinition>();
             var replaceFolder = Path.DirectorySeparatorChar + "replace";
             var parent = args.File.StandardizeDirectorySeparator().Split(Path.DirectorySeparatorChar)[0];
-            bool hasReplaceFolder = Path.GetDirectoryName(args.File).EndsWith(replaceFolder, StringComparison.OrdinalIgnoreCase);
+            var hasReplaceFolder = Path.GetDirectoryName(args.File)!.EndsWith(replaceFolder, StringComparison.OrdinalIgnoreCase);
             foreach (var definition in result.Where(p => p.ValueType != Shared.Models.ValueType.Namespace && p.ValueType != Shared.Models.ValueType.Variable))
             {
-                if (hasReplaceFolder)
-                {
-                    definition.VirtualPath = Path.Combine(parent.Replace(replaceFolder, string.Empty), definition.OriginalId, Path.GetFileName(args.File));
-                }
-                else
-                {
-                    definition.VirtualPath = Path.Combine(parent, definition.OriginalId, Path.GetFileName(args.File));
-                }
+                definition.VirtualPath = hasReplaceFolder
+                    ? Path.Combine(parent.Replace(replaceFolder, string.Empty), definition.OriginalId, Path.GetFileName(args.File)!)
+                    : Path.Combine(parent, definition.OriginalId, Path.GetFileName(args.File)!);
                 definition.Type = definition.VirtualPath.FormatDefinitionType(type);
                 parsedResult.Add(definition);
-                if (result.Any(p => p.ValueType == Shared.Models.ValueType.Variable || p.ValueType == Shared.Models.ValueType.Namespace))
+                if (result.Any(p => p.ValueType is Shared.Models.ValueType.Variable or Shared.Models.ValueType.Namespace))
                 {
-                    foreach (var item in result.Where(p => p.ValueType == Shared.Models.ValueType.Variable || p.ValueType == Shared.Models.ValueType.Namespace))
+                    foreach (var item in result.Where(p => p.ValueType is Shared.Models.ValueType.Variable or Shared.Models.ValueType.Namespace))
                     {
-                        var copy = objectClone.CloneDefinition(item, true);
+                        var copy = ObjectClone.CloneDefinition(item, true);
                         copy.VirtualPath = definition.VirtualPath;
                         copy.Type = definition.Type;
-                        if (!parsedResult.Any(p => p.TypeAndId == copy.TypeAndId))
+                        if (parsedResult.All(p => p.TypeAndId != copy.TypeAndId))
                         {
                             parsedResult.Add(copy);
                         }
                     }
                 }
             }
+
             return parsedResult;
         }
 
@@ -183,7 +174,7 @@ namespace IronyModManager.Parser.Generic
         /// <returns>System.String.</returns>
         protected override string EvalElementForId(IScriptElement value)
         {
-            if (isGenericKeyType)
+            if (IsGenericKeyType)
             {
                 return base.EvalElementForId(value);
             }
@@ -193,6 +184,7 @@ namespace IronyModManager.Parser.Generic
                 {
                     return value.Value;
                 }
+
                 return base.EvalElementForId(value);
             }
         }
@@ -216,26 +208,19 @@ namespace IronyModManager.Parser.Generic
                 {
                     var lines = codeParser.CleanCode(args.File, args.Lines);
                     var parent = args.File.StandardizeDirectorySeparator().Split(Path.DirectorySeparatorChar)[0];
-                    if (!string.IsNullOrWhiteSpace(parent) && expectedGraphicsFolders.Any(a => parent.Equals(a, StringComparison.OrdinalIgnoreCase)))
+                    if (!string.IsNullOrWhiteSpace(parent) && ExpectedGraphicsFolders.Any(a => parent.Equals(a, StringComparison.OrdinalIgnoreCase)))
                     {
                         // Means a wise guy used .bak extension
                         var merged = string.Join(string.Empty, lines).ReplaceTabs().Replace(" ", string.Empty);
                         if (merged.Contains(Common.Constants.Scripts.OpenObject))
                         {
                             merged = merged[..(merged.IndexOf(Common.Constants.Scripts.OpenObject) + 1)];
-                            if (expectedGraphicsIds.Any(a => merged.Contains(a, StringComparison.OrdinalIgnoreCase)))
+                            if (ExpectedGraphicsIds.Any(a => merged.Contains(a, StringComparison.OrdinalIgnoreCase)))
                             {
-                                if (merged.Contains(GuiTypesId, StringComparison.OrdinalIgnoreCase))
-                                {
-                                    type = Path.GetExtension(Common.Constants.GuiExtension).Trim('.');
-                                }
-                                else
-                                {
-                                    type = Path.GetExtension(Common.Constants.GfxExtension).Trim('.');
-                                }
+                                type = merged.Contains(GuiTypesId, StringComparison.OrdinalIgnoreCase) ? Path.GetExtension(Common.Constants.GuiExtension).Trim('.') : Path.GetExtension(Common.Constants.GfxExtension).Trim('.');
                                 return true;
                             }
-                            else if (assetIds.Any(a => merged.Contains(a, StringComparison.OrdinalIgnoreCase)))
+                            else if (AssetIds.Any(a => merged.Contains(a, StringComparison.OrdinalIgnoreCase)))
                             {
                                 type = Path.GetExtension(Common.Constants.AssetExtension).Trim('.');
                                 isAsset = true;
@@ -245,6 +230,7 @@ namespace IronyModManager.Parser.Generic
                     }
                 }
             }
+
             return false;
         }
 
