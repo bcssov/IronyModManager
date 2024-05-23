@@ -4,7 +4,7 @@
 // Created          : 04-04-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-22-2024
+// Last Modified On : 05-23-2024
 // ***********************************************************************
 // <copyright file="BaseDefinitionInfoProvider.cs" company="Mario">
 //     Mario
@@ -232,7 +232,7 @@ namespace IronyModManager.IO.Mods.InfoProviders
             var fileName = definition.ValueType == ValueType.WholeTextFile ? Path.GetFileName(definition.File) : $"{definition.Id}{Path.GetExtension(definition.File)}";
             if (definition.ValueType == ValueType.WholeTextFile)
             {
-                GenerateWholeTextFileName(definition);
+                return GenerateWholeTextFileName(definition);
             }
             else if (FIOSPaths.Any(p => definition.ParentDirectory.EndsWith(p, StringComparison.OrdinalIgnoreCase)))
             {
