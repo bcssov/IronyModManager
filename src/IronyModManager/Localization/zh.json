@@ -627,6 +627,7 @@
         "OpenInSteam": "在 Steam 中打开",
         "Open": "打开模组链接",
         "Copy": "复制模组链接",
+        "CopyPath": "复制模块路径",
         "OpenInAssociatedApp": "打开模组目录或文件"
     },
     "Descriptor_Actions": {

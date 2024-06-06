@@ -4,7 +4,7 @@
 // Created          : 02-29-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 01-11-2023
+// Last Modified On : 06-06-2024
 // ***********************************************************************
 // <copyright file="InstalledModsControlViewModel.cs" company="Mario">
 //     Mario
@@ -117,7 +117,7 @@ namespace IronyModManager.ViewModels.Controls
         /// <summary>
         /// The checking state
         /// </summary>
-        private bool checkingState = false;
+        private bool checkingState;
 
         /// <summary>
         /// The eval mod token
@@ -132,12 +132,12 @@ namespace IronyModManager.ViewModels.Controls
         /// <summary>
         /// The showing invalid notification
         /// </summary>
-        private bool showingInvalidNotification = false;
+        private bool showingInvalidNotification;
 
         /// <summary>
         /// The showing prompt
         /// </summary>
-        private bool showingPrompt = false;
+        private bool showingPrompt;
 
         /// <summary>
         /// The sort orders
@@ -236,6 +236,19 @@ namespace IronyModManager.ViewModels.Controls
         /// </summary>
         /// <value>The context menu mod.</value>
         public virtual IMod ContextMenuMod { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value representing the copy mod path.
+        /// </summary>
+        /// <value>The copy mod path.</value>
+        [StaticLocalization(LocalizationResources.Mod_App_Actions.CopyPath)]
+        public virtual string CopyModPath { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets a value representing the copy mod path command.<see cref="ReactiveUI.ReactiveCommand{System.Reactive.Unit, System.Reactive.Unit}" />
+        /// </summary>
+        /// <value>The copy mod path command.</value>
+        public virtual ReactiveCommand<Unit, Unit> CopyModPathCommand { get; protected set; }
 
         /// <summary>
         /// Gets or sets the copy URL.
@@ -511,6 +524,7 @@ namespace IronyModManager.ViewModels.Controls
                 var url = modService.BuildSteamUrl(ContextMenuMod);
                 return url;
             }
+
             return string.Empty;
         }
 
@@ -525,6 +539,7 @@ namespace IronyModManager.ViewModels.Controls
                 var url = modService.BuildModUrl(ContextMenuMod);
                 return url;
             }
+
             return string.Empty;
         }
 
@@ -564,6 +579,7 @@ namespace IronyModManager.ViewModels.Controls
                     }
                 }
             }
+
             RefreshingMods = false;
         }
 
@@ -596,9 +612,6 @@ namespace IronyModManager.ViewModels.Controls
                 case ModVersionKey:
                     SortFunction(x => x.VersionData, sortModel.Key);
                     break;
-
-                default:
-                    break;
             }
         }
 
@@ -627,6 +640,7 @@ namespace IronyModManager.ViewModels.Controls
             {
                 await TriggerOverlayAsync(id, true, localizationManager.GetResource(LocalizationResources.Installed_Mods.LoadingMods));
             }
+
             game ??= gameService.GetSelected();
             ActiveGame = game;
             if (game != null)
@@ -635,6 +649,7 @@ namespace IronyModManager.ViewModels.Controls
                 {
                     GameChangedRefresh = true;
                 }
+
                 var mods = await Task.Run(async () => await modService.GetInstalledModsAsync(game));
                 await Task.Delay(100);
                 Mods = mods.ToObservableCollection();
@@ -647,11 +662,13 @@ namespace IronyModManager.ViewModels.Controls
                         await RemoveInvalidModsPromptAsync(invalidMods).ConfigureAwait(false);
                     });
                 }
+
                 var searchString = FilterMods.Text ?? string.Empty;
                 if (Mods != null && Mods.Any(p => p.AchievementStatus == AchievementStatus.NotEvaluated) && modService.QueryContainsAchievements(searchString))
                 {
                     await MessageBus.PublishAsync(new EvalModAchievementsCompatibilityEvent(Mods, skipOverlay, true));
                 }
+
                 FilteredMods = modService.FilterMods(Mods, searchString).ToObservableCollection();
                 AllModsEnabled = FilteredMods.Where(p => p.IsValid).Any() && FilteredMods.Where(p => p.IsValid).All(p => p.IsSelected);
 
@@ -659,7 +676,7 @@ namespace IronyModManager.ViewModels.Controls
                 {
                     modChanged?.Dispose();
                     modChanged = null;
-                    modChanged = Mods.ToSourceList().Connect().WhenPropertyChanged(s => s.IsSelected).Subscribe(s =>
+                    modChanged = Mods.ToSourceList().Connect().WhenPropertyChanged(s => s.IsSelected).Subscribe(_ =>
                     {
                         if (!checkingState)
                         {
@@ -675,13 +692,10 @@ namespace IronyModManager.ViewModels.Controls
             }
             else
             {
-                if (raiseGameChanged)
-                {
-                    GameChangedRefresh = true;
-                }
                 Mods = FilteredMods = new System.Collections.ObjectModel.ObservableCollection<IMod>();
                 AllMods = Mods.ToHashSet();
             }
+
             if (!skipOverlay)
             {
                 await TriggerOverlayAsync(id, false);
@@ -707,12 +721,13 @@ namespace IronyModManager.ViewModels.Controls
         protected virtual async Task CheckNewModsAsync()
         {
             var id = idGenerator.GetNextId();
-            await TriggerOverlayAsync(id, true, message: localizationManager.GetResource(LocalizationResources.Installed_Mods.RefreshingModList));
+            await TriggerOverlayAsync(id, true, localizationManager.GetResource(LocalizationResources.Installed_Mods.RefreshingModList));
             var result = await modService.InstallModsAsync(Mods);
             if (result != null && result.Any(p => p.Invalid))
             {
                 await ShowInvalidModsNotificationAsync(result.Where(p => p.Invalid).ToList());
             }
+
             await RefreshModsAsync();
             var title = localizationManager.GetResource(LocalizationResources.Notifications.NewDescriptorsChecked.Title);
             var message = localizationManager.GetResource(LocalizationResources.Notifications.NewDescriptorsChecked.Message);
@@ -730,13 +745,14 @@ namespace IronyModManager.ViewModels.Controls
             if (mods?.Count() > 0)
             {
                 var id = idGenerator.GetNextId();
-                await TriggerOverlayAsync(id, true, message: localizationManager.GetResource(LocalizationResources.Installed_Mods.RefreshingModList));
+                await TriggerOverlayAsync(id, true, localizationManager.GetResource(LocalizationResources.Installed_Mods.RefreshingModList));
                 await modService.DeleteDescriptorsAsync(mods);
                 var result = await modService.InstallModsAsync(Mods);
                 if (result != null && result.Any(p => p.Invalid))
                 {
                     await ShowInvalidModsNotificationAsync(result.Where(p => p.Invalid).ToList());
                 }
+
                 await RefreshModsAsync();
                 var title = localizationManager.GetResource(LocalizationResources.Notifications.DescriptorsRefreshed.Title);
                 var message = localizationManager.GetResource(LocalizationResources.Notifications.DescriptorsRefreshed.Message);
@@ -759,6 +775,7 @@ namespace IronyModManager.ViewModels.Controls
                 {
                     await Task.Delay(100, token);
                 }
+
                 if (!token.IsCancellationRequested || hasPriority)
                 {
                     if (evalModsQueue.Any())
@@ -770,6 +787,7 @@ namespace IronyModManager.ViewModels.Controls
                     }
                 }
             }
+
             evalModToken?.Cancel();
             evalModToken = new CancellationTokenSource();
             if (mods.Any())
@@ -779,6 +797,7 @@ namespace IronyModManager.ViewModels.Controls
                 {
                     mutex = await evalLock.LockAsync();
                 }
+
                 mods.ToList().ForEach(m => evalModsQueue.Add(m));
                 try
                 {
@@ -787,6 +806,7 @@ namespace IronyModManager.ViewModels.Controls
                 catch (OperationCanceledException)
                 {
                 }
+
                 mutex?.Dispose();
             }
         }
@@ -817,6 +837,7 @@ namespace IronyModManager.ViewModels.Controls
             {
                 vm.SortOrder = defaultOrder;
             }
+
             vm.Text = text;
             sortOrders[dictKey] = vm;
         }
@@ -865,15 +886,15 @@ namespace IronyModManager.ViewModels.Controls
             Bind();
 
             this.WhenAnyValue(v => v.ModNameSortOrder.IsActivated, v => v.ModVersionSortOrder.IsActivated, v => v.ModSelectedSortOrder.IsActivated).Where(s => s.Item1 && s.Item2 && s.Item3)
-            .Subscribe(s =>
-             {
-                 Observable.Merge(ModNameSortOrder.SortCommand.Select(_ => ModNameKey),
-                     ModVersionSortOrder.SortCommand.Select(_ => ModVersionKey),
-                     ModSelectedSortOrder.SortCommand.Select(_ => ModSelectedKey)).Subscribe(s =>
-                 {
-                     ApplySort(s);
-                 }).DisposeWith(disposables);
-             }).DisposeWith(disposables);
+                .Subscribe(_ =>
+                {
+                    Observable.Merge(ModNameSortOrder.SortCommand.Select(_ => ModNameKey),
+                        ModVersionSortOrder.SortCommand.Select(_ => ModVersionKey),
+                        ModSelectedSortOrder.SortCommand.Select(_ => ModSelectedKey)).Subscribe(s =>
+                    {
+                        ApplySort(s);
+                    }).DisposeWith(disposables);
+                }).DisposeWith(disposables);
 
             OpenUrlCommand = ReactiveCommand.CreateFromTask(async () =>
             {
@@ -910,13 +931,22 @@ namespace IronyModManager.ViewModels.Controls
                 }
             }).DisposeWith(disposables);
 
-            this.WhenAnyValue(s => s.FilterMods.Text).Subscribe(async s =>
+            CopyModPathCommand = ReactiveCommand.Create(() =>
+            {
+                if (!string.IsNullOrWhiteSpace(ContextMenuMod?.FullPath))
+                {
+                    appAction.CopyAsync(ContextMenuMod.FullPath).ConfigureAwait(true);
+                }
+            }).DisposeWith(disposables);
+
+            this.WhenAnyValue(s => s.FilterMods.Text).Subscribe(async _ =>
             {
                 var searchString = FilterMods.Text ?? string.Empty;
                 if (Mods != null && Mods.Any(p => p.AchievementStatus == AchievementStatus.NotEvaluated) && modService.QueryContainsAchievements(searchString))
                 {
                     await MessageBus.PublishAsync(new EvalModAchievementsCompatibilityEvent(Mods, true, true));
                 }
+
                 FilteredMods = modService.FilterMods(Mods, searchString);
                 AllModsEnabled = FilteredMods != null && FilteredMods.Where(p => p.IsValid).Any() && FilteredMods.Where(p => p.IsValid).All(p => p.IsSelected);
                 ApplyDefaultSort();
@@ -928,11 +958,12 @@ namespace IronyModManager.ViewModels.Controls
                 if (FilteredMods?.Count() > 0)
                 {
                     PerformingEnableAll = true;
-                    bool enabled = FilteredMods.Where(p => p.IsValid).All(p => p.IsSelected);
+                    var enabled = FilteredMods.Where(p => p.IsValid).All(p => p.IsSelected);
                     foreach (var item in FilteredMods)
                     {
                         item.IsSelected = !enabled;
                     }
+
                     AllModsEnabled = FilteredMods.Where(p => p.IsValid).Any() && FilteredMods.Where(p => p.IsValid).All(p => p.IsSelected);
                     PerformingEnableAll = false;
                 }
@@ -942,7 +973,7 @@ namespace IronyModManager.ViewModels.Controls
             {
                 if (ContextMenuMod != null)
                 {
-                    await DeleteDescriptorAsync(new List<IMod>() { ContextMenuMod }).ConfigureAwait(true);
+                    await DeleteDescriptorAsync(new List<IMod> { ContextMenuMod }).ConfigureAwait(true);
                 }
             }).DisposeWith(disposables);
 
@@ -958,7 +989,7 @@ namespace IronyModManager.ViewModels.Controls
             {
                 if (ContextMenuMod != null)
                 {
-                    await LockDescriptorAsync(new List<IMod>() { ContextMenuMod }, true).ConfigureAwait(true);
+                    await LockDescriptorAsync(new List<IMod> { ContextMenuMod }, true).ConfigureAwait(true);
                 }
             }).DisposeWith(disposables);
 
@@ -974,7 +1005,7 @@ namespace IronyModManager.ViewModels.Controls
             {
                 if (ContextMenuMod != null)
                 {
-                    await LockDescriptorAsync(new List<IMod>() { ContextMenuMod }, false).ConfigureAwait(true);
+                    await LockDescriptorAsync(new List<IMod> { ContextMenuMod }, false).ConfigureAwait(true);
                 }
             }).DisposeWith(disposables);
 
@@ -998,6 +1029,7 @@ namespace IronyModManager.ViewModels.Controls
                 {
                     await TriggerOverlayAsync(id, true, localizationManager.GetResource(LocalizationResources.Installed_Mods.LoadingMods));
                 }
+
                 await EvalModAchievementAsync(s.Mods, s.HasPriority).ConfigureAwait(false);
                 if (s.ShowOverlay)
                 {
@@ -1030,22 +1062,21 @@ namespace IronyModManager.ViewModels.Controls
             {
                 return;
             }
+
             showingPrompt = true;
             var messages = new List<string>();
             foreach (var item in mods)
             {
                 messages.Add($"{item.Name} ({item.DescriptorFile})");
             }
+
             var title = localizationManager.GetResource(LocalizationResources.Installed_Mods.InvalidMods.Title);
-            var message = IronyFormatter.Format(localizationManager.GetResource(LocalizationResources.Installed_Mods.InvalidMods.Message), new
-            {
-                Mods = string.Join(Environment.NewLine, messages),
-                Environment.NewLine
-            });
+            var message = IronyFormatter.Format(localizationManager.GetResource(LocalizationResources.Installed_Mods.InvalidMods.Message), new { Mods = string.Join(Environment.NewLine, messages), Environment.NewLine });
             if (await notificationAction.ShowPromptAsync(title, title, message, NotificationType.Warning))
             {
                 await DeleteDescriptorAsync(mods);
             }
+
             showingPrompt = false;
         }
 
@@ -1061,6 +1092,7 @@ namespace IronyModManager.ViewModels.Controls
             {
                 return (IComparer<T>)StringComparer.OrdinalIgnoreCase;
             }
+
             return null;
         }
 
@@ -1106,7 +1138,7 @@ namespace IronyModManager.ViewModels.Controls
             if (FilteredMods != null)
             {
                 var sortOrder = sortOrders[dictKey];
-                IComparer<T> comparer = ResolveComparer<T>(dictKey);
+                var comparer = ResolveComparer<T>(dictKey);
                 switch (sortOrder.SortOrder)
                 {
                     case Implementation.SortOrder.Asc:
@@ -1120,6 +1152,7 @@ namespace IronyModManager.ViewModels.Controls
                             FilteredMods = FilteredMods.OrderBy(sortProp).ToObservableCollection();
                             AllMods = AllMods.OrderBy(sortProp).ToHashSet();
                         }
+
                         SelectedMod = null;
                         break;
 
@@ -1134,16 +1167,16 @@ namespace IronyModManager.ViewModels.Controls
                             FilteredMods = FilteredMods.OrderByDescending(sortProp).ToObservableCollection();
                             AllMods = AllMods.OrderByDescending(sortProp).ToHashSet();
                         }
+
                         SelectedMod = null;
                         break;
-
-                    default:
-                        break;
                 }
+
                 foreach (var sort in sortOrders.Where(p => p.Value != sortOrder))
                 {
                     sort.Value.SetSortOrder(Implementation.SortOrder.None);
                 }
+
                 SaveState();
             }
         }

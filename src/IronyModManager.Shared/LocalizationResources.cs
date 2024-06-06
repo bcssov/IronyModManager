@@ -839,6 +839,7 @@ namespace IronyModManager.Shared
             public const string OpenInSteam = Prefix + "OpenInSteam";
             public const string Open = Prefix + "Open";
             public const string Copy = Prefix + "Copy";
+            public const string CopyPath = Prefix + "CopyPath";
             public const string OpenInAssociatedApp = Prefix + "OpenInAssociatedApp";
         }
         public static class Descriptor_Actions

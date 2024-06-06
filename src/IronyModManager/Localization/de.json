@@ -627,6 +627,7 @@
         "OpenInSteam": "In Steam Öffnen",
         "Open": "Mod-URL Öffnen",
         "Copy": "Mod-URL Kopieren",
+        "CopyPath": "Mod-Pfad kopieren",
         "OpenInAssociatedApp": "Mod-Ordner/Mod-Datei Öffnen"
     },
     "Descriptor_Actions": {

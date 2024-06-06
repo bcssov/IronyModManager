@@ -627,6 +627,7 @@
         "OpenInSteam": "Открыть в Steam",
         "Open": "Открыть ссылку на мод",
         "Copy": "Копировать ссылку на мод",
+        "CopyPath": "Копирование пути к модулю",
         "OpenInAssociatedApp": "Открыть папку/файл мода"
     },
     "Descriptor_Actions": {
