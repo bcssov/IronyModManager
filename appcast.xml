@@ -4,9 +4,9 @@
 		<title>Irony Mod Manager</title>
 		<language>en</language>
 		<item>
-			<title>1.26.176</title>
+			<title>1.26.177</title>
 			<description>## Current Release Notes
-* Fix #504
+* Add option to copy mod path
 
 ## Release Notes 1.26
 * Update dependencies
@@ -19,13 +19,13 @@
 * Added conflict solver option to skip parsing some languages
 * Add conflict solver configuration to customize colors for new diff viewer
 * Add templateable merge mod naming</description>
-			<pubDate>Thu, 23 May 2024 10:24:31 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.26.176/linux-x64.zip" sparkle:version="1.26.176.6690" sparkle:shortVersionString="1.26.176" length="90901497" sparkle:os="linux" type="application/zip" sparkle:signature="hKUePPBFBb8mevEZeOQaCdnirp225gzI3hEoNUQX2xQ2OoA2NH9UoT1eJstYaXoujG8NHoC0oy41GkZ1alZfAA=="/>
+			<pubDate>Thu, 06 Jun 2024 20:54:25 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.26.177/linux-x64.zip" sparkle:version="1.26.177.308" sparkle:shortVersionString="1.26.177" length="90902259" sparkle:os="linux" type="application/zip" sparkle:signature="LEaMBYfbLZZvvpiGB0XG5rfJAVZl8/UaPQCmr+DkX5UZ6L4ioly5wgtm1i1gOFvz8oTtk3VJNiExAgCCOO6UCg=="/>
 		</item>
 		<item>
-			<title>1.26.176</title>
+			<title>1.26.177</title>
 			<description>## Current Release Notes
-* Fix #504
+* Add option to copy mod path
 
 ## Release Notes 1.26
 * Update dependencies
@@ -38,13 +38,13 @@
 * Added conflict solver option to skip parsing some languages
 * Add conflict solver configuration to customize colors for new diff viewer
 * Add templateable merge mod naming</description>
-			<pubDate>Thu, 23 May 2024 10:24:35 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.26.176/osx-x64.zip" sparkle:version="1.26.176.6690" sparkle:shortVersionString="1.26.176" length="93864744" sparkle:os="osx" type="application/zip" sparkle:signature="qYj0GpIXpFsTrjkVQf9XjYd2uhClp7bjTpi0unV8cMfDvquJWC9XOCSVjWuaexVdcRjeW7orA+Cq04c4zBksAw=="/>
+			<pubDate>Thu, 06 Jun 2024 20:54:29 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.26.177/osx-x64.zip" sparkle:version="1.26.177.308" sparkle:shortVersionString="1.26.177" length="93865570" sparkle:os="osx" type="application/zip" sparkle:signature="Dy/63NnDdesZ8EILL96W8pZq49ARJ1vPutFMKBs7/qcodJWZYrizBIrbDrHgk+YDfaYZARSv9V3wqeD1stklBw=="/>
 		</item>
 		<item>
-			<title>1.26.176</title>
+			<title>1.26.177</title>
 			<description>## Current Release Notes
-* Fix #504
+* Add option to copy mod path
 
 ## Release Notes 1.26
 * Update dependencies
@@ -57,13 +57,13 @@
 * Added conflict solver option to skip parsing some languages
 * Add conflict solver configuration to customize colors for new diff viewer
 * Add templateable merge mod naming</description>
-			<pubDate>Thu, 23 May 2024 10:24:39 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.26.176/win-x64-setup.zip" sparkle:version="1.26.176.6690" sparkle:shortVersionString="1.26.176" length="72570385" sparkle:os="windows" type="application/zip" sparkle:signature="jlpu4QAmFe2lY9zCm21+gMcNKzzTvzok1vf2GCMB4g0RoJS46slZChFpAJNd9iol/huVlkXt+JbCVW4RSSeJBA=="/>
+			<pubDate>Thu, 06 Jun 2024 20:54:33 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.26.177/win-x64-setup.zip" sparkle:version="1.26.177.308" sparkle:shortVersionString="1.26.177" length="72565171" sparkle:os="windows" type="application/zip" sparkle:signature="MsT725GD3Gu1TkPf91z4Q4HKXPtsq6i6P6Kr+g236Cd+Gw2x+tD6uUFQhuog+CDY17qYPiCRCoAclIZ2gnDMBw=="/>
 		</item>
 		<item>
-			<title>1.26.176</title>
+			<title>1.26.177</title>
 			<description>## Current Release Notes
-* Fix #504
+* Add option to copy mod path
 
 ## Release Notes 1.26
 * Update dependencies
@@ -76,8 +76,8 @@
 * Added conflict solver option to skip parsing some languages
 * Add conflict solver configuration to customize colors for new diff viewer
 * Add templateable merge mod naming</description>
-			<pubDate>Thu, 23 May 2024 10:24:39 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.26.176/win-x64.zip" sparkle:version="1.26.176.6690" sparkle:shortVersionString="1.26.176" length="106573570" sparkle:os="windows" type="application/zip" sparkle:signature="Q2crD5izifkbzFvVkWRY7jky7BJ6k4iwR/65pVVZvXpWaYNKk6i4lfrhnyRjqp3HB4CHF9WAvG02b4pFVCGxDQ=="/>
+			<pubDate>Thu, 06 Jun 2024 20:54:33 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.26.177/win-x64.zip" sparkle:version="1.26.177.308" sparkle:shortVersionString="1.26.177" length="106574352" sparkle:os="windows" type="application/zip" sparkle:signature="21GqV4ZDtVutA84EeAcW2U/wCnsfF4OXCu7luST0hYUc9jAXahH18clFlEjZI/zHUrF6E/77alD7mfbGwgThAQ=="/>
 		</item>
 	</channel>
 </rss>
