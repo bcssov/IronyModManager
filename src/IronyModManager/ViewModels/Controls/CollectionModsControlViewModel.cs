@@ -1,5 +1,4 @@
-﻿
-// ***********************************************************************
+﻿// ***********************************************************************
 // Assembly         : IronyModManager
 // Author           : Mario
 // Created          : 03-03-2020
@@ -12,6 +11,7 @@
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
+
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
@@ -47,7 +47,6 @@ using static IronyModManager.ViewModels.Controls.ModifyCollectionControlViewMode
 
 namespace IronyModManager.ViewModels.Controls
 {
-
     /// <summary>
     /// Class CollectionModsControlViewModel.
     /// Implements the <see cref="IronyModManager.Common.ViewModels.BaseViewModel" />
@@ -176,7 +175,7 @@ namespace IronyModManager.ViewModels.Controls
         /// <summary>
         /// The enable all toggled state
         /// </summary>
-        private bool enableAllToggledState = false;
+        private bool enableAllToggledState;
 
         /// <summary>
         /// The mod export progress
@@ -196,7 +195,7 @@ namespace IronyModManager.ViewModels.Controls
         /// <summary>
         /// The refresh in progress
         /// </summary>
-        private bool refreshInProgress = false;
+        private bool refreshInProgress;
 
         /// <summary>
         /// The reorder token
@@ -211,17 +210,17 @@ namespace IronyModManager.ViewModels.Controls
         /// <summary>
         /// The skip mod collection save
         /// </summary>
-        private bool skipModCollectionSave = false;
+        private bool skipModCollectionSave;
 
         /// <summary>
         /// The skip mod selection save
         /// </summary>
-        private bool skipModSelectionSave = false;
+        private bool skipModSelectionSave;
 
         /// <summary>
         /// The skip reorder
         /// </summary>
-        private bool skipReorder = false;
+        private bool skipReorder;
 
         #endregion Fields
 
@@ -452,6 +451,23 @@ namespace IronyModManager.ViewModels.Controls
         /// </summary>
         /// <value>The context menu mod.</value>
         public virtual IMod ContextMenuMod { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value representing the copy mod path.
+        /// </summary>
+        /// <value>
+        /// The copy mod path.
+        /// </value>
+        [StaticLocalization(LocalizationResources.Mod_App_Actions.CopyPath)]
+        public virtual string CopyModPath { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets a value representing the copy mod path command.<see cref="ReactiveUI.ReactiveCommand{System.Reactive.Unit, System.Reactive.Unit}"/>
+        /// </summary>
+        /// <value>
+        /// The copy mod path command.
+        /// </value>
+        public virtual ReactiveCommand<Unit, Unit> CopyModPathCommand { get; protected set; }
 
         /// <summary>
         /// Gets or sets the copy URL.
@@ -845,6 +861,7 @@ namespace IronyModManager.ViewModels.Controls
                 var url = modService.BuildSteamUrl(ContextMenuMod);
                 return url;
             }
+
             return string.Empty;
         }
 
@@ -859,6 +876,7 @@ namespace IronyModManager.ViewModels.Controls
                 var url = modService.BuildModUrl(ContextMenuMod);
                 return url;
             }
+
             return string.Empty;
         }
 
@@ -874,6 +892,7 @@ namespace IronyModManager.ViewModels.Controls
             {
                 skipModCollectionSave = true;
             }
+
             if (!toggledState && enableAllToggledState)
             {
                 skipModCollectionSave = false;
@@ -905,6 +924,7 @@ namespace IronyModManager.ViewModels.Controls
                 SaveSelectedCollection();
                 RecognizeSortOrder(SelectedModCollection);
             }
+
             enableAllToggledState = toggledState;
         }
 
@@ -920,6 +940,7 @@ namespace IronyModManager.ViewModels.Controls
             {
                 refreshInProgress = true;
             }
+
             if (!isRefreshing && mods?.Count() > 0)
             {
                 SetMods(mods, activeGame);
@@ -943,8 +964,10 @@ namespace IronyModManager.ViewModels.Controls
                 {
                     reorderQueue.Add(mod);
                 }
+
                 await PerformModReorderAsync(true, reorderToken.Token);
             }
+
             reorder().ConfigureAwait(false);
         }
 
@@ -997,6 +1020,7 @@ namespace IronyModManager.ViewModels.Controls
             {
                 previousValidatedMods.Clear();
             }
+
             PatchMod.SetParameters(SelectedModCollection);
             HandleCollectionPatchStateAsync(SelectedModCollection?.Name).ConfigureAwait(false);
         }
@@ -1035,9 +1059,6 @@ namespace IronyModManager.ViewModels.Controls
                     SelectedMod = null;
                     SetSelectedModsState(SelectedMods.OrderByDescending(x => x.Name, StringComparer.OrdinalIgnoreCase).ToObservableCollection());
                     break;
-
-                default:
-                    break;
             }
         }
 
@@ -1060,10 +1081,8 @@ namespace IronyModManager.ViewModels.Controls
                     case ModSource.Paradox:
                         result.ParadoxId = p.RemoteId;
                         break;
-
-                    default:
-                        break;
                 }
+
                 return result;
             }).ToList();
         }
@@ -1075,7 +1094,7 @@ namespace IronyModManager.ViewModels.Controls
         protected virtual void EvalGameSpecificVisibility(IGame game = null)
         {
             game ??= gameService.GetSelected();
-            ShowAdvancedFeatures = (game?.AdvancedFeatures) == GameAdvancedFeatures.Full;
+            ShowAdvancedFeatures = game?.AdvancedFeatures == GameAdvancedFeatures.Full;
             SearchModsColSpan = ShowAdvancedFeatures ? 1 : 2;
         }
 
@@ -1096,10 +1115,7 @@ namespace IronyModManager.ViewModels.Controls
         protected virtual async Task ExportCollectionAsync(string path, ImportProviderType providerType)
         {
             var id = idGenerator.GetNextId();
-            var overlayProgress = IronyFormatter.Format(localizationManager.GetResource(LocalizationResources.Collection_Mods.Overlay_Import_Export_Progress), new
-            {
-                PercentDone = 0.ToLocalizedPercentage()
-            });
+            var overlayProgress = IronyFormatter.Format(localizationManager.GetResource(LocalizationResources.Collection_Mods.Overlay_Import_Export_Progress), new { PercentDone = 0.ToLocalizedPercentage() });
             await TriggerOverlayAsync(id, true, localizationManager.GetResource(LocalizationResources.Collection_Mods.Overlay_Exporting_Message), overlayProgress);
             var collection = modCollectionService.Get(SelectedModCollection.Name);
             if (providerType == ImportProviderType.ParadoxLauncherJson)
@@ -1115,15 +1131,14 @@ namespace IronyModManager.ViewModels.Controls
                 modExportProgress?.Dispose();
                 modExportProgress = modExportProgressHandler.Subscribe(s =>
                 {
-                    var overlayProgress = IronyFormatter.Format(localizationManager.GetResource(LocalizationResources.Collection_Mods.Overlay_Import_Export_Progress), new
-                    {
-                        PercentDone = s.Progress.ToLocalizedPercentage()
-                    });
+                    var overlayProgress = IronyFormatter.Format(localizationManager.GetResource(LocalizationResources.Collection_Mods.Overlay_Import_Export_Progress), new { PercentDone = s.Progress.ToLocalizedPercentage() });
                     TriggerOverlay(id, true, localizationManager.GetResource(LocalizationResources.Collection_Mods.Overlay_Exporting_Message), overlayProgress);
                 }).DisposeWith(Disposables);
-                await Task.Run(async () => await modCollectionService.ExportAsync(path, collection, providerType == ImportProviderType.DefaultOrderOnly, providerType == ImportProviderType.DefaultWithAllMods).ConfigureAwait(false)).ConfigureAwait(false);
+                await Task.Run(async () => await modCollectionService.ExportAsync(path, collection, providerType == ImportProviderType.DefaultOrderOnly, providerType == ImportProviderType.DefaultWithAllMods).ConfigureAwait(false))
+                    .ConfigureAwait(false);
                 modExportProgress?.Dispose();
             }
+
             var title = localizationManager.GetResource(LocalizationResources.Notifications.CollectionExported.Title);
             var message = IronyFormatter.Format(localizationManager.GetResource(LocalizationResources.Notifications.CollectionExported.Message), new { CollectionName = collection.Name });
             notificationAction.ShowNotification(title, message, NotificationType.Success);
@@ -1141,7 +1156,7 @@ namespace IronyModManager.ViewModels.Controls
             if (activeGame != null && SelectedMods?.Count > 0)
             {
                 ConflictSolverStateChanged?.Invoke(collection, true);
-                if (!string.IsNullOrWhiteSpace(collection) && currentCollection.Equals(collection, StringComparison.OrdinalIgnoreCase) && SelectedModCollection.Game.Equals(activeGame.Type))
+                if (!string.IsNullOrWhiteSpace(collection) && currentCollection.Equals(collection, StringComparison.OrdinalIgnoreCase) && SelectedModCollection!.Game.Equals(activeGame.Type))
                 {
                     var result = await Task.Run(async () => await modPatchCollectionService.PatchModNeedsUpdateAsync(collection, SelectedMods.Select(p => p.DescriptorFile).ToList()));
                     ConflictSolverStateChanged?.Invoke(collection, !result);
@@ -1171,8 +1186,10 @@ namespace IronyModManager.ViewModels.Controls
                         SelectedModCollection = restored;
                     }
                 }
+
                 restoreCollectionSelection = string.Empty;
             }
+
             skipModCollectionSave = true;
             skipModSelectionSave = true;
             ExportCollection.CollectionName = SelectedModCollection?.Name;
@@ -1184,6 +1201,7 @@ namespace IronyModManager.ViewModels.Controls
                     item.IsSelected = false;
                 }
             }
+
             var existingCollection = modCollectionService.Get(SelectedModCollection?.Name ?? string.Empty);
             var selectedMods = new ObservableCollection<IMod>();
             if (existingCollection?.Mods?.Count() > 0 && localMods != null)
@@ -1193,7 +1211,7 @@ namespace IronyModManager.ViewModels.Controls
                 var mods = existingCollection.Mods.ToList();
                 var modPaths = existingCollection.ModPaths != null ? existingCollection.ModPaths.ToList() : [];
                 var modNames = hasModNames ? existingCollection.ModNames.ToList() : [];
-                for (int i = 0; i < mods.Count; i++)
+                for (var i = 0; i < mods.Count; i++)
                 {
                     var item = mods[i];
                     var mod = localMods.FirstOrDefault(p => p.DescriptorFile.Equals(item, StringComparison.InvariantCultureIgnoreCase));
@@ -1202,6 +1220,7 @@ namespace IronyModManager.ViewModels.Controls
                         item = modPaths[i];
                         mod = localMods.FirstOrDefault(p => p.FullPath.Equals(item, StringComparison.OrdinalIgnoreCase));
                     }
+
                     if (mod != null)
                     {
                         mod.IsSelected = true;
@@ -1219,6 +1238,7 @@ namespace IronyModManager.ViewModels.Controls
                         }
                     }
                 }
+
                 if (missingMods.Count != 0 && activeGame != null && existingCollection.Game.Equals(activeGame.Type))
                 {
                     var title = localizationManager.GetResource(LocalizationResources.Collection_Mods.Prompts.ModsMissingTitle);
@@ -1226,11 +1246,13 @@ namespace IronyModManager.ViewModels.Controls
                     Dispatcher.UIThread.SafeInvoke(() => notificationAction.ShowPromptAsync(title, title, message, NotificationType.Warning, PromptType.OK));
                 }
             }
+
             if (resetStack)
             {
                 undoStack.Clear();
                 redoStack.Clear();
             }
+
             SetSelectedModsState(selectedMods, ignoreStack: true);
             AllModsEnabled = SelectedMods?.Count > 0 && SelectedMods.All(p => p.IsSelected);
             var state = appStateService.Get();
@@ -1250,15 +1272,13 @@ namespace IronyModManager.ViewModels.Controls
         protected virtual async Task ImportCollectionAsync(string path, ImportProviderType type)
         {
             List<string> modNames = null;
+
             async Task<IModCollection> importDefault(long messageId)
             {
                 modExportProgress?.Dispose();
                 modExportProgress = modExportProgressHandler.Subscribe(s =>
                 {
-                    var overlayProgress = IronyFormatter.Format(localizationManager.GetResource(LocalizationResources.Collection_Mods.Overlay_Import_Export_Progress), new
-                    {
-                        PercentDone = s.Progress.ToLocalizedPercentage()
-                    });
+                    var overlayProgress = IronyFormatter.Format(localizationManager.GetResource(LocalizationResources.Collection_Mods.Overlay_Import_Export_Progress), new { PercentDone = s.Progress.ToLocalizedPercentage() });
                     TriggerOverlay(messageId, true, localizationManager.GetResource(LocalizationResources.Collection_Mods.Overlay_Importing_Message), overlayProgress);
                 }).DisposeWith(Disposables);
                 var collection = await Task.Run(async () => await modCollectionService.ImportAsync(path));
@@ -1272,6 +1292,7 @@ namespace IronyModManager.ViewModels.Controls
                         return collection;
                     }
                 }
+
                 return null;
             }
 
@@ -1286,14 +1307,12 @@ namespace IronyModManager.ViewModels.Controls
                         return Task.FromResult(importData);
                     }
                 }
+
                 return Task.FromResult((IModCollection)null);
             }
 
             var id = idGenerator.GetNextId();
-            var overlayProgress = IronyFormatter.Format(localizationManager.GetResource(LocalizationResources.Collection_Mods.Overlay_Import_Export_Progress), new
-            {
-                PercentDone = 0.ToLocalizedPercentage()
-            });
+            var overlayProgress = IronyFormatter.Format(localizationManager.GetResource(LocalizationResources.Collection_Mods.Overlay_Import_Export_Progress), new { PercentDone = 0.ToLocalizedPercentage() });
             await TriggerOverlayAsync(id, true, localizationManager.GetResource(LocalizationResources.Collection_Mods.Overlay_Importing_Message), overlayProgress);
             var importData = type switch
             {
@@ -1302,13 +1321,14 @@ namespace IronyModManager.ViewModels.Controls
                 ImportProviderType.ParadoxLauncher => await modCollectionService.ImportParadoxLauncherAsync(),
                 ImportProviderType.ParadoxLauncherBeta => await modCollectionService.ImportParadoxLauncherBetaAsync(),
                 ImportProviderType.ParadoxLauncherJson => await modCollectionService.ImportParadoxLauncherJsonAsync(path),
-                _ => await modCollectionService.GetImportedCollectionDetailsAsync(path),
+                _ => await modCollectionService.GetImportedCollectionDetailsAsync(path)
             };
             if (importData == null)
             {
                 await TriggerOverlayAsync(id, false);
                 return;
             }
+
             bool proceed;
             if (modCollectionService.Exists(importData.Name))
             {
@@ -1320,13 +1340,14 @@ namespace IronyModManager.ViewModels.Controls
             {
                 proceed = true;
             }
+
             var endOverlay = true;
             if (proceed)
             {
                 var result = type switch
                 {
                     ImportProviderType.Default => await importDefault(id),
-                    _ => await importInstance(importData),
+                    _ => await importInstance(importData)
                 };
                 if (result != null)
                 {
@@ -1340,11 +1361,11 @@ namespace IronyModManager.ViewModels.Controls
                         var importedMods = new List<string>();
                         var descriptors = result.Mods.ToList();
                         var paths = result.ModPaths != null ? result.ModPaths.ToList() : [];
-                        for (int i = 0; i < descriptors.Count; i++)
+                        for (var i = 0; i < descriptors.Count; i++)
                         {
                             var descriptor = descriptors[i];
                             var name = modNames[i];
-                            var mod = mods.FirstOrDefault(p => p.Name.Equals(name) && System.IO.Path.GetDirectoryName(p.FullPath).EndsWith(System.IO.Path.DirectorySeparatorChar + result.MergedFolderName));
+                            var mod = mods.FirstOrDefault(p => p.Name.Equals(name) && System.IO.Path.GetDirectoryName(p.FullPath)!.EndsWith(System.IO.Path.DirectorySeparatorChar + result.MergedFolderName));
                             if (mod != null)
                             {
                                 importedMods.Add(mod.DescriptorFile);
@@ -1363,9 +1384,11 @@ namespace IronyModManager.ViewModels.Controls
                                 }
                             }
                         }
+
                         result.Mods = importedMods;
                         modCollectionService.Save(result);
                     }
+
                     var modDescriptorPaths = result.Mods != null ? result.Mods.ToList() : [];
                     var modPaths = result.ModPaths != null ? result.ModPaths.ToList() : [];
                     restoreCollectionSelection = result.Name;
@@ -1392,6 +1415,7 @@ namespace IronyModManager.ViewModels.Controls
                                         isInvalid = false;
                                     }
                                 }
+
                                 if (isInvalid)
                                 {
                                     if (hasModNames)
@@ -1404,10 +1428,12 @@ namespace IronyModManager.ViewModels.Controls
                                     }
                                 }
                             }
+
                             if (nonExistingModNames.Count != 0)
                             {
                                 var notExistingModTitle = localizationManager.GetResource(LocalizationResources.Collection_Mods.ImportNonExistingMods.Title);
-                                var nonExistingModMessage = IronyFormatter.Format(localizationManager.GetResource(LocalizationResources.Collection_Mods.ImportNonExistingMods.Message), new { Environment.NewLine, Mods = string.Join(Environment.NewLine, nonExistingModNames) });
+                                var nonExistingModMessage = IronyFormatter.Format(localizationManager.GetResource(LocalizationResources.Collection_Mods.ImportNonExistingMods.Message),
+                                    new { Environment.NewLine, Mods = string.Join(Environment.NewLine, nonExistingModNames) });
                                 endOverlay = false;
                                 showImportNotification = false;
                                 var title = localizationManager.GetResource(LocalizationResources.Notifications.CollectionImported.Title);
@@ -1418,6 +1444,7 @@ namespace IronyModManager.ViewModels.Controls
                             }
                         }
                     }
+
                     if (showImportNotification)
                     {
                         var title = localizationManager.GetResource(LocalizationResources.Notifications.CollectionImported.Title);
@@ -1426,6 +1453,7 @@ namespace IronyModManager.ViewModels.Controls
                     }
                 }
             }
+
             if (endOverlay)
             {
                 await TriggerOverlayAsync(id, false);
@@ -1443,14 +1471,16 @@ namespace IronyModManager.ViewModels.Controls
             {
                 skipModSelectionSave = true;
             }
+
             CollectionJumpOnPositionChange = state.CollectionJumpOnPositionChange;
             SearchMods.WatermarkText = SearchModsWatermark;
-            SearchMods.Text = state?.CollectionModsSearchTerm;
+            SearchMods.Text = state.CollectionModsSearchTerm;
             ModNameSortOrder.Text = ModName;
             if (!string.IsNullOrWhiteSpace(state.CollectionModsSelectedMod) && SelectedMods != null)
             {
                 SelectedMod = SelectedMods.FirstOrDefault(p => p.DescriptorFile.Equals(state.CollectionModsSelectedMod, StringComparison.OrdinalIgnoreCase));
             }
+
             RecognizeSortOrder(SelectedModCollection);
             if (setFlag)
             {
@@ -1522,14 +1552,12 @@ namespace IronyModManager.ViewModels.Controls
                 HandleModCollectionChange(true);
             }).DisposeWith(disposables);
 
-            this.WhenAnyValue(v => v.AddNewCollection.IsActivated).Where(p => p == true).Subscribe(activated =>
+            // ReSharper disable once RedundantBoolCompare
+            this.WhenAnyValue(v => v.AddNewCollection.IsActivated).Where(p => p == true).Subscribe(_ =>
             {
-                Observable.Merge(AddNewCollection.CreateCommand, AddNewCollection.CancelCommand.Select(_ => new CommandResult<string>(string.Empty, CommandState.NotExecuted))).Subscribe(result =>
+                AddNewCollection.CreateCommand.Merge(AddNewCollection.CancelCommand.Select(_ => new CommandResult<string>(string.Empty, CommandState.NotExecuted))).Subscribe(result =>
                 {
-                    var notification = new
-                    {
-                        CollectionName = result.Result
-                    };
+                    var notification = new { CollectionName = result.Result };
                     switch (result.State)
                     {
                         case CommandState.Success:
@@ -1543,6 +1571,7 @@ namespace IronyModManager.ViewModels.Controls
                                     mod.IsSelected = false;
                                 }
                             }
+
                             SetSelectedModsState(Mods != null ? Mods.Where(p => p.IsSelected).ToObservableCollection() : []);
                             AllModsEnabled = SelectedMods?.Count > 0 && SelectedMods.All(p => p.IsSelected);
                             LoadModCollections();
@@ -1565,6 +1594,7 @@ namespace IronyModManager.ViewModels.Controls
                                     notificationAction.ShowNotification(successTitle, successMessage, NotificationType.Success);
                                     PatchMod.SetParameters(SelectedModCollection);
                                 }
+
                                 handleRenamePatchCollection().ConfigureAwait(true);
                             }
                             else
@@ -1574,6 +1604,7 @@ namespace IronyModManager.ViewModels.Controls
                                 successMessage = IronyFormatter.Format(localizationManager.GetResource(LocalizationResources.Notifications.CollectionCreated.Message), notification);
                                 notificationAction.ShowNotification(successTitle, successMessage, NotificationType.Success);
                             }
+
                             break;
 
                         case CommandState.Exists:
@@ -1586,43 +1617,40 @@ namespace IronyModManager.ViewModels.Controls
                             MessageBus.Publish(new AllowEnterHotKeysEvent(false));
                             EnteringNewCollection = false;
                             break;
-
-                        default:
-                            break;
                     }
                 }).DisposeWith(disposables);
             }).DisposeWith(disposables);
 
-            this.WhenAnyValue(v => v.ExportCollection.IsActivated).Where(p => p).Subscribe(activated =>
+            this.WhenAnyValue(v => v.ExportCollection.IsActivated).Where(p => p).Subscribe(_ =>
             {
                 Observable.Merge(ExportCollection.ExportCommand.Select(p => Tuple.Create(ImportActionType.Export, p, ImportProviderType.Default)),
-                    ExportCollection.ExportOrderOnlyCommand.Select(p => Tuple.Create(ImportActionType.Export, p, ImportProviderType.DefaultOrderOnly)),
-                    ExportCollection.ExportWholeCollectionCommand.Select(p => Tuple.Create(ImportActionType.Export, p, ImportProviderType.DefaultWithAllMods)),
-                    ExportCollection.ImportCommand.Select(p => Tuple.Create(ImportActionType.Import, p, ImportProviderType.Default)),
-                    ExportCollection.ImportOtherParadoxosCommand.Select(p => Tuple.Create(ImportActionType.Import, p, ImportProviderType.Paradoxos)),
-                    ExportCollection.ImportOtherParadoxCommand.Select(p => Tuple.Create(ImportActionType.Import, p, ImportProviderType.Paradox)),
-                    ExportCollection.ImportOtherParadoxLauncherCommand.Select(p => Tuple.Create(ImportActionType.Import, p, ImportProviderType.ParadoxLauncher)),
-                    ExportCollection.ImportOtherParadoxLauncherBetaCommand.Select(p => Tuple.Create(ImportActionType.Import, p, ImportProviderType.ParadoxLauncherBeta)),
-                    ExportCollection.ImportOtherParadoxLauncherJsonCommand.Select(p => Tuple.Create(ImportActionType.Import, p, ImportProviderType.ParadoxLauncherJson)),
-                    ExportCollection.ExportParadoxLauncherJsonCommand.Select(p => Tuple.Create(ImportActionType.Export, p, ImportProviderType.ParadoxLauncherJson)),
-                    ExportCollection.ExportParadoxLauncherJson202110Command.Select(p => Tuple.Create(ImportActionType.Export, p, ImportProviderType.ParadoxLauncherJson202110)))
-                .Subscribe(s =>
-                {
-                    if (s.Item2.State == CommandState.Success)
+                        ExportCollection.ExportOrderOnlyCommand.Select(p => Tuple.Create(ImportActionType.Export, p, ImportProviderType.DefaultOrderOnly)),
+                        ExportCollection.ExportWholeCollectionCommand.Select(p => Tuple.Create(ImportActionType.Export, p, ImportProviderType.DefaultWithAllMods)),
+                        ExportCollection.ImportCommand.Select(p => Tuple.Create(ImportActionType.Import, p, ImportProviderType.Default)),
+                        ExportCollection.ImportOtherParadoxosCommand.Select(p => Tuple.Create(ImportActionType.Import, p, ImportProviderType.Paradoxos)),
+                        ExportCollection.ImportOtherParadoxCommand.Select(p => Tuple.Create(ImportActionType.Import, p, ImportProviderType.Paradox)),
+                        ExportCollection.ImportOtherParadoxLauncherCommand.Select(p => Tuple.Create(ImportActionType.Import, p, ImportProviderType.ParadoxLauncher)),
+                        ExportCollection.ImportOtherParadoxLauncherBetaCommand.Select(p => Tuple.Create(ImportActionType.Import, p, ImportProviderType.ParadoxLauncherBeta)),
+                        ExportCollection.ImportOtherParadoxLauncherJsonCommand.Select(p => Tuple.Create(ImportActionType.Import, p, ImportProviderType.ParadoxLauncherJson)),
+                        ExportCollection.ExportParadoxLauncherJsonCommand.Select(p => Tuple.Create(ImportActionType.Export, p, ImportProviderType.ParadoxLauncherJson)),
+                        ExportCollection.ExportParadoxLauncherJson202110Command.Select(p => Tuple.Create(ImportActionType.Export, p, ImportProviderType.ParadoxLauncherJson202110)))
+                    .Subscribe(s =>
                     {
-                        if (s.Item1 == ImportActionType.Export)
+                        if (s.Item2.State == CommandState.Success)
                         {
-                            ExportCollectionAsync(s.Item2.Result, s.Item3).ConfigureAwait(true);
+                            if (s.Item1 == ImportActionType.Export)
+                            {
+                                ExportCollectionAsync(s.Item2.Result, s.Item3).ConfigureAwait(true);
+                            }
+                            else
+                            {
+                                ImportCollectionAsync(s.Item2.Result, s.Item3).ConfigureAwait(true);
+                            }
                         }
-                        else
-                        {
-                            ImportCollectionAsync(s.Item2.Result, s.Item3).ConfigureAwait(true);
-                        }
-                    }
-                }).DisposeWith(disposables);
+                    }).DisposeWith(disposables);
             }).DisposeWith(disposables);
 
-            this.WhenAnyValue(v => v.ModifyCollection.IsActivated).Where(p => p).Subscribe(activated =>
+            this.WhenAnyValue(v => v.ModifyCollection.IsActivated).Where(p => p).Subscribe(_ =>
             {
                 Observable.Merge(ModifyCollection.RenameCommand, ModifyCollection.DuplicateCommand, ModifyCollection.MergeBasicCommand, ModifyCollection.MergeCompressCommand).Subscribe(s =>
                 {
@@ -1630,6 +1658,7 @@ namespace IronyModManager.ViewModels.Controls
                     {
                         return;
                     }
+
                     if (s.Result == ModifyAction.Rename)
                     {
                         EnteringNewCollection = true;
@@ -1643,7 +1672,7 @@ namespace IronyModManager.ViewModels.Controls
                         {
                             ModCollections = modCollectionService.GetAll();
                             var selected = ModCollections?.FirstOrDefault(p => p.IsSelected);
-                            restoreCollectionSelection = selected.Name;
+                            restoreCollectionSelection = selected!.Name;
                             NeedsModListRefresh = true;
                             var existsTitle = localizationManager.GetResource(LocalizationResources.Notifications.CollectionMerged.Title);
                             var existsMessage = localizationManager.GetResource(LocalizationResources.Notifications.CollectionMerged.Message);
@@ -1663,6 +1692,7 @@ namespace IronyModManager.ViewModels.Controls
                                     mod.IsSelected = false;
                                 }
                             }
+
                             SetSelectedModsState(Mods != null ? Mods.Where(p => p.IsSelected).ToObservableCollection() : []);
                             AllModsEnabled = SelectedMods?.Count > 0 && SelectedMods.All(p => p.IsSelected);
                             LoadModCollections();
@@ -1677,7 +1707,7 @@ namespace IronyModManager.ViewModels.Controls
                 }).DisposeWith(disposables);
             }).DisposeWith(disposables);
 
-            this.WhenAnyValue(s => s.SearchMods.IsActivated).Where(p => p).Subscribe(s =>
+            this.WhenAnyValue(s => s.SearchMods.IsActivated).Where(p => p).Subscribe(_ =>
             {
                 this.WhenAnyValue(s => s.SearchMods.Text).Subscribe(async s =>
                 {
@@ -1688,8 +1718,10 @@ namespace IronyModManager.ViewModels.Controls
                         {
                             await MessageBus.PublishAsync(new EvalModAchievementsCompatibilityEvent(Mods, true, true));
                         }
+
                         SelectedMod = modService.FindMod(SelectedMods, s, false, null);
                     }
+
                     var modCount = SelectedModCollection?.Mods.Count();
                     var selectedModsCount = SelectedMods?.Count;
 
@@ -1700,23 +1732,27 @@ namespace IronyModManager.ViewModels.Controls
                         {
                             SelectedMod = null;
                         }
+
                         SaveState();
                     }
+
                     skipModSelectionSave = false;
                 }).DisposeWith(disposables);
 
-                Observable.Merge(SearchMods.DownArrowCommand, SearchMods.UpArrowCommand).Subscribe(async s =>
+                SearchMods.DownArrowCommand.Merge(SearchMods.UpArrowCommand).Subscribe(async s =>
                 {
                     if (SelectedMods == null)
                     {
                         return;
                     }
+
                     skipModSelectionSave = true;
                     var index = -1;
                     if (SelectedMod != null)
                     {
                         index = SelectedMods.IndexOf(SelectedMod);
                     }
+
                     var searchString = SearchMods.Text ?? string.Empty;
                     if (!s.Result)
                     {
@@ -1724,6 +1760,7 @@ namespace IronyModManager.ViewModels.Controls
                         {
                             await MessageBus.PublishAsync(new EvalModAchievementsCompatibilityEvent(Mods, true, true));
                         }
+
                         var mod = modService.FindMod(SelectedMods, searchString, false, index + 1);
                         if (mod != null && mod != SelectedMod)
                         {
@@ -1737,20 +1774,23 @@ namespace IronyModManager.ViewModels.Controls
                         {
                             await MessageBus.PublishAsync(new EvalModAchievementsCompatibilityEvent(Mods, true, true));
                         }
+
                         var mod = modService.FindMod(SelectedMods, searchString, true, reverseIndex);
                         if (mod != null && mod != SelectedMod)
                         {
                             SelectedMod = mod;
                         }
                     }
+
                     skipModSelectionSave = false;
                     SaveState();
                 }).DisposeWith(disposables);
             }).DisposeWith(disposables);
 
-            this.WhenAnyValue(s => s.ModNameSortOrder.IsActivated).Where(p => p == true).Subscribe(s =>
+            // ReSharper disable once RedundantBoolCompare
+            this.WhenAnyValue(s => s.ModNameSortOrder.IsActivated).Where(p => p == true).Subscribe(_ =>
             {
-                ModNameSortOrder.SortCommand.Subscribe(s =>
+                ModNameSortOrder.SortCommand.Subscribe(_ =>
                 {
                     ApplySort();
                     SaveState();
@@ -1767,9 +1807,11 @@ namespace IronyModManager.ViewModels.Controls
                     {
                         item.IsSelected = false;
                     }
+
                     SetSelectedModsState([]);
                     SaveSelectedCollection();
                 }
+
                 skipModCollectionSave = false;
             }).DisposeWith(disposables);
 
@@ -1808,13 +1850,21 @@ namespace IronyModManager.ViewModels.Controls
                 }
             }).DisposeWith(disposables);
 
+            CopyModPathCommand = ReactiveCommand.Create(() =>
+            {
+                if (!string.IsNullOrWhiteSpace(ContextMenuMod?.FullPath))
+                {
+                    appAction.CopyAsync(ContextMenuMod.FullPath).ConfigureAwait(true);
+                }
+            }).DisposeWith(disposables);
+
             this.WhenAnyValue(p => p.AllowModSelection).Subscribe(s =>
             {
                 ExportCollection.AllowModSelection = s;
                 ModifyCollection.AllowModSelection = s;
             }).DisposeWith(disposables);
 
-            this.WhenAnyValue(p => p.CollectionJumpOnPositionChange).Subscribe(s =>
+            this.WhenAnyValue(p => p.CollectionJumpOnPositionChange).Subscribe(_ =>
             {
                 SetAutoFocusLabel();
             }).DisposeWith(disposables);
@@ -1859,6 +1909,7 @@ namespace IronyModManager.ViewModels.Controls
                                     mods.Add(item);
                                 }
                             }
+
                             SetSelectedModsState(mods.OrderBy(p => modNames.IndexOf(p.Name)).ToObservableCollection());
                             AllModsEnabled = SelectedMods?.Count > 0 && SelectedMods.All(p => p.IsSelected);
                             var state = appStateService.Get();
@@ -1871,7 +1922,8 @@ namespace IronyModManager.ViewModels.Controls
                             if (nonExistingMods.Any())
                             {
                                 var notExistingModTitle = localizationManager.GetResource(LocalizationResources.Collection_Mods.ImportNonExistingMods.Title);
-                                var nonExistingModMessage = IronyFormatter.Format(localizationManager.GetResource(LocalizationResources.Collection_Mods.ImportNonExistingMods.Message), new { Environment.NewLine, Mods = string.Join(Environment.NewLine, nonExistingMods) });
+                                var nonExistingModMessage = IronyFormatter.Format(localizationManager.GetResource(LocalizationResources.Collection_Mods.ImportNonExistingMods.Message),
+                                    new { Environment.NewLine, Mods = string.Join(Environment.NewLine, nonExistingMods) });
                                 await notificationAction.ShowPromptAsync(notExistingModTitle, notExistingModTitle, nonExistingModMessage, NotificationType.Warning, PromptType.OK);
                             }
                         }
@@ -1888,12 +1940,12 @@ namespace IronyModManager.ViewModels.Controls
                     if (useImportOverlay)
                     {
                         TriggerOverlay(id, true, localizationManager.GetResource(LocalizationResources.Collection_Mods.FileHash.ImportOverlay),
-                        IronyFormatter.Format(localizationManager.GetResource(LocalizationResources.Collection_Mods.FileHash.ProgressImport), new { Progress = s.Percentage.ToLocalizedPercentage(), Count = s.Step, TotalCount = 2 }));
+                            IronyFormatter.Format(localizationManager.GetResource(LocalizationResources.Collection_Mods.FileHash.ProgressImport), new { Progress = s.Percentage.ToLocalizedPercentage(), Count = s.Step, TotalCount = 2 }));
                     }
                     else
                     {
                         TriggerOverlay(id, true, localizationManager.GetResource(LocalizationResources.Collection_Mods.FileHash.ExportOverlay),
-                        IronyFormatter.Format(localizationManager.GetResource(LocalizationResources.Collection_Mods.FileHash.ProgressExport), new { Progress = s.Percentage.ToLocalizedPercentage() }));
+                            IronyFormatter.Format(localizationManager.GetResource(LocalizationResources.Collection_Mods.FileHash.ProgressExport), new { Progress = s.Percentage.ToLocalizedPercentage() }));
                     }
                 }).DisposeWith(disposables);
             }
@@ -1914,11 +1966,13 @@ namespace IronyModManager.ViewModels.Controls
                     {
                         reports.AddRange(collectionReports);
                     }
+
                     var gameReports = await Task.Run(() => gameService.ImportHashReportAsync(activeGame, rawReports.ToList()));
                     if (gameReports != null && gameReports.Any())
                     {
                         reports.AddRange(gameReports);
                     }
+
                     if (reports.Count != 0)
                     {
                         await TriggerOverlayAsync(id, false);
@@ -1930,6 +1984,7 @@ namespace IronyModManager.ViewModels.Controls
                         notificationAction.ShowNotification(localizationManager.GetResource(LocalizationResources.Notifications.ReportValid.Title),
                             localizationManager.GetResource(LocalizationResources.Notifications.ReportValid.Message), NotificationType.Success);
                     }
+
                     reportDisposable?.Dispose();
                 }
             }).DisposeWith(disposables);
@@ -1948,6 +2003,7 @@ namespace IronyModManager.ViewModels.Controls
                         notificationAction.ShowNotification(localizationManager.GetResource(LocalizationResources.Notifications.ReportExported.Title),
                             localizationManager.GetResource(LocalizationResources.Notifications.ReportExported.Message), NotificationType.Success);
                     }
+
                     await TriggerOverlayAsync(id, false);
                     reportDisposable?.Dispose();
                 }
@@ -1967,22 +2023,17 @@ namespace IronyModManager.ViewModels.Controls
                         notificationAction.ShowNotification(localizationManager.GetResource(LocalizationResources.Notifications.ReportExported.Title),
                             localizationManager.GetResource(LocalizationResources.Notifications.ReportExported.Message), NotificationType.Success);
                     }
+
                     await TriggerOverlayAsync(id, false);
                     reportDisposable?.Dispose();
                 }
             }).DisposeWith(disposables);
 
-            UndoCommand = ReactiveCommand.Create(() =>
-            {
-                PerformUndo();
-            }).DisposeWith(disposables);
+            UndoCommand = ReactiveCommand.Create(PerformUndo).DisposeWith(disposables);
 
-            RedoCommand = ReactiveCommand.Create(() =>
-            {
-                PerformRedo();
-            }).DisposeWith(disposables);
+            RedoCommand = ReactiveCommand.Create(PerformRedo).DisposeWith(disposables);
 
-            this.WhenAnyValue(p => p.SelectedMod).Where(p => !skipModSelectionSave).Subscribe(s =>
+            this.WhenAnyValue(p => p.SelectedMod).Where(_ => !skipModSelectionSave).Subscribe(_ =>
             {
                 var modCount = SelectedModCollection?.Mods.Count();
                 var selectedModsCount = SelectedMods?.Count;
@@ -2024,16 +2075,14 @@ namespace IronyModManager.ViewModels.Controls
                             break;
 
                         case Enums.HotKeys.Ctrl_Z:
-                            Dispatcher.UIThread.SafeInvoke(() => PerformUndo());
+                            await Dispatcher.UIThread.SafeInvokeAsync(PerformUndo);
                             break;
 
                         case Enums.HotKeys.Ctrl_Y:
-                            Dispatcher.UIThread.SafeInvoke(() => PerformRedo());
-                            break;
-
-                        default:
+                            await Dispatcher.UIThread.SafeInvokeAsync(PerformRedo);
                             break;
                     }
+
                     if (!(order < 1 || order > MaxOrder) && order != mod.Order)
                     {
                         // Check access because it's probably coming from a background thread
@@ -2042,9 +2091,11 @@ namespace IronyModManager.ViewModels.Controls
                 }
             }).DisposeWith(disposables);
 
-            this.WhenAnyValue(p => p.PatchMod.IsActivated).Where(p => p == true).Subscribe(state =>
+            // ReSharper disable once RedundantBoolCompare
+            this.WhenAnyValue(p => p.PatchMod.IsActivated).Where(p => p == true).Subscribe(_ =>
             {
-                this.WhenAnyValue(p => p.PatchMod.PatchDeleted).Where(p => p == true).Subscribe(state =>
+                // ReSharper disable once RedundantBoolCompare
+                this.WhenAnyValue(p => p.PatchMod.PatchDeleted).Where(p => p == true).Subscribe(_ =>
                 {
                     modPatchCollectionService.InvalidatePatchModState(PatchMod.CollectionName);
                     modPatchCollectionService.ResetPatchStateCache();
@@ -2077,6 +2128,7 @@ namespace IronyModManager.ViewModels.Controls
             {
                 await Task.Delay(450, cancellationToken);
             }
+
             if (!cancellationToken.IsCancellationRequested)
             {
                 if (SelectedMods != null)
@@ -2097,24 +2149,27 @@ namespace IronyModManager.ViewModels.Controls
                                 mods.Remove(modItem);
                                 mods.Insert(index, modItem);
                                 index = mods.IndexOf(swapItem);
-                                for (int i = 0; i <= index; i++)
+                                for (var i = 0; i <= index; i++)
                                 {
-                                    if (!reorderQueue.Any(m => m == mods[i].Mod))
+                                    if (reorderQueue.All(m => m != mods[i].Mod))
                                     {
                                         mods[i].Order = i + 1;
                                     }
                                 }
                             }
                         }
+
                         SetSelectedModsState(mods.Select(p => p.Mod).ToList());
                         if (CollectionJumpOnPositionChange)
                         {
                             SelectedMod = reorderQueue.Last();
                         }
+
                         if (!string.IsNullOrWhiteSpace(SelectedModCollection?.Name))
                         {
                             SaveSelectedCollection();
                         }
+
                         SaveState();
                         RecognizeSortOrder(SelectedModCollection);
                         ModReordered?.Invoke(reorderQueue.Last(), instant);
@@ -2122,7 +2177,6 @@ namespace IronyModManager.ViewModels.Controls
                         reorderQueue.Clear();
                         scrollState.SetState(true);
                     }
-                    mutex.Dispose();
                 }
             }
         }
@@ -2136,6 +2190,7 @@ namespace IronyModManager.ViewModels.Controls
             {
                 return;
             }
+
             undoStack.Push(SelectedMods.Select(p => p.DescriptorFile).ToList());
             PerformRedoUndoOrdering(redoStack.Pop());
         }
@@ -2157,6 +2212,7 @@ namespace IronyModManager.ViewModels.Controls
                 {
                     item.IsSelected = false;
                 }
+
                 var mods = new List<IMod>();
                 foreach (var item in descriptors)
                 {
@@ -2167,11 +2223,13 @@ namespace IronyModManager.ViewModels.Controls
                         mods.Add(mod);
                     }
                 }
+
                 SetSelectedModsState(mods, ignoreStack: true);
                 if (!string.IsNullOrWhiteSpace(SelectedModCollection?.Name))
                 {
                     SaveSelectedCollection();
                 }
+
                 SaveState();
                 RecognizeSortOrder(SelectedModCollection);
                 AllModsEnabled = SelectedMods?.Count > 0 && SelectedMods.All(p => p.IsSelected);
@@ -2190,6 +2248,7 @@ namespace IronyModManager.ViewModels.Controls
             {
                 return;
             }
+
             redoStack.Push(SelectedMods.Select(p => p.DescriptorFile).ToList());
             PerformRedoUndoOrdering(undoStack.Pop());
         }
@@ -2206,7 +2265,7 @@ namespace IronyModManager.ViewModels.Controls
                 var mods = new List<IMod>();
                 var colMods = modCollection.Mods.ToList();
                 var colPaths = modCollection.ModPaths != null ? modCollection.ModPaths.ToList() : [];
-                for (int i = 0; i < colMods.Count; i++)
+                for (var i = 0; i < colMods.Count; i++)
                 {
                     var item = colMods[i];
                     var mod = Mods.FirstOrDefault(p => p.DescriptorFile.Equals(item, StringComparison.OrdinalIgnoreCase));
@@ -2215,11 +2274,13 @@ namespace IronyModManager.ViewModels.Controls
                         item = colPaths[i];
                         mod = Mods.FirstOrDefault(p => p.FullPath.Equals(item, StringComparison.OrdinalIgnoreCase));
                     }
+
                     if (mod != null)
                     {
                         mods.Add(mod);
                     }
                 }
+
                 if (mods.Count != 0)
                 {
                     var ascending = mods.OrderBy(p => p.Name, StringComparer.OrdinalIgnoreCase).Select(p => p.DescriptorFile);
@@ -2263,6 +2324,7 @@ namespace IronyModManager.ViewModels.Controls
                         localizationManager.GetResource(LocalizationResources.Collection_Mods.DeleteMerge.DeleteHeader),
                         localizationManager.GetResource(LocalizationResources.Collection_Mods.DeleteMerge.DeleteMessage), NotificationType.Info);
                 }
+
                 if (modCollectionService.Delete(collectionName))
                 {
                     modPatchCollectionService.InvalidatePatchModState(collectionName);
@@ -2271,7 +2333,7 @@ namespace IronyModManager.ViewModels.Controls
                         await modPatchCollectionService.CleanPatchCollectionAsync(collectionName).ConfigureAwait(false);
                         if (deleteMergedMod)
                         {
-                            await modService.PurgeModDirectoryAsync(collection.MergedFolderName).ConfigureAwait(false);
+                            await modService.PurgeModDirectoryAsync(collection!.MergedFolderName).ConfigureAwait(false);
                         }
                     }).ConfigureAwait(false);
                     LoadModCollections();
@@ -2290,6 +2352,7 @@ namespace IronyModManager.ViewModels.Controls
                         notificationAction.ShowNotification(notificationTitle, notificationMessage, NotificationType.Success);
                     }
                 }
+
                 await TriggerOverlayAsync(id, false);
             }
         }
@@ -2309,6 +2372,7 @@ namespace IronyModManager.ViewModels.Controls
                 {
                     return;
                 }
+
                 collection.Game = game;
                 collection.Name = SelectedModCollection.Name;
                 var selectedMods = SelectedMods != null ? SelectedMods.Where(p => p.IsSelected) : [];
@@ -2353,6 +2417,7 @@ namespace IronyModManager.ViewModels.Controls
             {
                 reorderQueue.Add(mod);
             }
+
             reorderToken?.Cancel();
             reorderToken = new CancellationTokenSource();
             await PerformModReorderAsync(false, reorderToken.Token);
@@ -2381,7 +2446,8 @@ namespace IronyModManager.ViewModels.Controls
             {
                 skipReorder = true;
             }
-            int counter = 0;
+
+            var counter = 0;
             if (selectedMods != null)
             {
                 foreach (var item in selectedMods)
@@ -2390,6 +2456,7 @@ namespace IronyModManager.ViewModels.Controls
                     item.Order = counter;
                 }
             }
+
             SelectedMods = selectedMods;
             if (SelectedModCollection != null)
             {
@@ -2398,20 +2465,23 @@ namespace IronyModManager.ViewModels.Controls
                 {
                     oldMods.AddRange(SelectedMods);
                 }
+
                 previousValidatedMods.TryGetValue(SelectedModCollection.Name, out var prevMods);
                 if (SelectedMods?.Count > 0 && (prevMods == null ||
-                    !(prevMods.Count() == SelectedMods.Count && !prevMods.Select(p => p.DescriptorFile).Except(SelectedMods.Select(p => p.DescriptorFile)).Any())
-                    || !prevMods.Select(p => p.DescriptorFile).SequenceEqual(SelectedMods.Select(p => p.DescriptorFile))))
+                                                !(prevMods.Count() == SelectedMods.Count && !prevMods.Select(p => p.DescriptorFile).Except(SelectedMods.Select(p => p.DescriptorFile)).Any())
+                                                || !prevMods.Select(p => p.DescriptorFile).SequenceEqual(SelectedMods.Select(p => p.DescriptorFile))))
                 {
                     modPatchCollectionService.InvalidatePatchModState(SelectedModCollection.Name);
                 }
-                previousValidatedMods.AddOrUpdate(SelectedModCollection.Name, oldMods, (k, v) => oldMods);
+
+                previousValidatedMods.AddOrUpdate(SelectedModCollection.Name, oldMods, (_, _) => oldMods);
                 if (!ignoreStack && !prevMods.ListsSame(selectedMods))
                 {
                     undoStack.Push((prevMods ?? []).Select(p => p.DescriptorFile).ToList());
                     redoStack.Clear();
                 }
             }
+
             ModifyCollection.SelectedMods = selectedMods;
             HandleCollectionPatchStateAsync(SelectedModCollection?.Name).ConfigureAwait(false);
             var order = 1;
@@ -2419,6 +2489,7 @@ namespace IronyModManager.ViewModels.Controls
             {
                 order = SelectedMods.Count;
             }
+
             MaxOrder = order;
             if (canShutdownReorder)
             {
@@ -2457,6 +2528,7 @@ namespace IronyModManager.ViewModels.Controls
                                 {
                                     SaveState();
                                 }
+
                                 needsSave = true;
                             }
                         }
@@ -2468,10 +2540,12 @@ namespace IronyModManager.ViewModels.Controls
                                 needsSave = true;
                             }
                         }
+
                         if (!string.IsNullOrWhiteSpace(SelectedModCollection?.Name) && needsSave)
                         {
                             SaveSelectedCollection();
                         }
+
                         Dispatcher.UIThread.SafeInvoke(() =>
                         {
                             SetSelectedModsState(selectedMods, false);
@@ -2479,9 +2553,11 @@ namespace IronyModManager.ViewModels.Controls
                             {
                                 InstantReorderSelectedItems(s.Sender, s.Sender.Order);
                             }
+
                             RecognizeSortOrder(SelectedModCollection);
                         });
                     }
+
                     AllModsEnabled = SelectedMods?.Count > 0 && SelectedMods.All(p => p.IsSelected);
                     skipReorder = false;
                 }).DisposeWith(Disposables);
@@ -2508,7 +2584,7 @@ namespace IronyModManager.ViewModels.Controls
                 var sb = new StringBuilder();
                 foreach (var item in SelectedMods)
                 {
-                    var entries = new List<string>() { item.Name };
+                    var entries = new List<string> { item.Name };
                     if (fullMetadata)
                     {
                         var version = item.Version;
@@ -2516,14 +2592,17 @@ namespace IronyModManager.ViewModels.Controls
                         {
                             entries.Add(version);
                         }
+
                         var url = modService.BuildModUrl(item);
                         if (!string.IsNullOrWhiteSpace(url))
                         {
                             entries.Add(url);
                         }
                     }
+
                     sb.AppendLine(string.Join(ClipboardSeparator, entries));
                 }
+
                 await appAction.CopyAsync(sb.ToString());
             }
         }

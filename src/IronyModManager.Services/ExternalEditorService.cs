@@ -4,13 +4,14 @@
 // Created          : 12-07-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 07-10-2022
+// Last Modified On : 06-09-2024
 // ***********************************************************************
 // <copyright file="ExternalEditorService.cs" company="Mario">
 //     Mario
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -54,7 +55,7 @@ namespace IronyModManager.Services
         /// Gets the preferences service.
         /// </summary>
         /// <value>The preferences service.</value>
-        protected IPreferencesService PreferencesService { get; private set; }
+        protected IPreferencesService PreferencesService { get; }
 
         #endregion Properties
 
@@ -84,10 +85,17 @@ namespace IronyModManager.Services
             }
 
             var model = GetModelInstance<IExternalEditorFiles>();
+            var leftName = getFilename(left);
             model.LeftDiff = DIResolver.Get<ITempFile>();
-            model.LeftDiff.Create(model.LeftDiff.GetTempFileName(getFilename(left)));
+            model.LeftDiff.Create(model.LeftDiff.GetTempFileName(leftName));
             model.RightDiff = DIResolver.Get<ITempFile>();
-            model.RightDiff.Create(model.RightDiff.GetTempFileName(getFilename(right)));
+            var rightName = getFilename(right);
+            if (leftName.Equals(rightName, StringComparison.OrdinalIgnoreCase))
+            {
+                rightName = $"{rightName}_2";
+            }
+
+            model.RightDiff.Create(model.RightDiff.GetTempFileName(rightName));
             return model;
         }
 
@@ -105,6 +113,7 @@ namespace IronyModManager.Services
                 var launchArgs = IronyFormatter.Format($"{opts.ExternalEditorParameters}", new { Left = $"\"{leftLocation}\"", Right = $"\"{rightLocation}\"" });
                 return launchArgs;
             }
+
             return string.Empty;
         }
 

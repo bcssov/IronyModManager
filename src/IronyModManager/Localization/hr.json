@@ -627,6 +627,7 @@
         "OpenInSteam": "Otvori u steamu",
         "Open": "Otvori adresu moda",
         "Copy": "Kopiraj adresu moda",
+        "CopyPath": "Kopiraj putanju moda",
         "OpenInAssociatedApp": "Otvorite Mod mapu/datoteku"
     },
     "Descriptor_Actions": {

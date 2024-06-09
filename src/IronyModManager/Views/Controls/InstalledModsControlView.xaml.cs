@@ -11,6 +11,7 @@
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -68,6 +69,7 @@ namespace IronyModManager.Views.Controls
                 {
                     await Task.Delay(25);
                 }
+
                 performingLayoutUpdate = true;
                 await Dispatcher.UIThread.SafeInvokeAsync(() =>
                 {
@@ -77,7 +79,7 @@ namespace IronyModManager.Views.Controls
                         var grid = item.GetLogicalChildren().OfType<Grid>().FirstOrDefault();
                         if (grid != null)
                         {
-                            for (int i = 0; i < grid.ColumnDefinitions.Count; i++)
+                            for (var i = 0; i < grid.ColumnDefinitions.Count; i++)
                             {
                                 var col = grid.ColumnDefinitions[i];
                                 var width = header.ColumnDefinitions[i].ActualWidth;
@@ -94,19 +96,20 @@ namespace IronyModManager.Views.Controls
 
             if (modList != null && header != null)
             {
-                modList.ContextMenuOpening += (item) =>
+                modList.ContextMenuOpening += item =>
                 {
                     List<MenuItem> menuItems = null;
                     if (item != null)
                     {
-                        ViewModel.ContextMenuMod = item.Content as IMod;
+                        ViewModel!.ContextMenuMod = item.Content as IMod;
                         menuItems = !string.IsNullOrEmpty(ViewModel.GetContextMenuModModUrl()) || !string.IsNullOrEmpty(ViewModel.GetContextMenuModModSteamUrl()) ? GetAllMenuItems() : GetActionMenuItems();
                     }
+
                     menuItems ??= GetStaticMenuItems();
                     modList.SetContextMenuItems(menuItems);
                 };
                 var mbus = DIResolver.Get<Shared.MessageBus.IMessageBus>();
-                modList.LayoutUpdated += (sender, args) =>
+                modList.LayoutUpdated += (_, _) =>
                 {
                     var visibleItems = modList.ItemContainerGenerator.Containers.ToList();
                     if (visibleItems.Any())
@@ -121,9 +124,11 @@ namespace IronyModManager.Views.Controls
                             }
                         }
                     }
+
                     updateLayout().ConfigureAwait(false);
                 };
             }
+
             base.OnActivated(disposables);
         }
 
@@ -133,62 +138,25 @@ namespace IronyModManager.Views.Controls
         /// <returns>List&lt;MenuItem&gt;.</returns>
         private List<MenuItem> GetActionMenuItems()
         {
-            var menuItems = new List<MenuItem>()
+            var menuItems = new List<MenuItem>
             {
-                new MenuItem()
-                {
-                    Header = ViewModel.CheckNewMods,
-                    Command = ViewModel.CheckNewModsCommand
-                },
-                new MenuItem()
-                {
-                    Header = ViewModel.DeleteDescriptor,
-                    Command = ViewModel.DeleteDescriptorCommand
-                },
-                new MenuItem()
-                {
-                    Header = ViewModel.DeleteAllDescriptors,
-                    Command = ViewModel.DeleteAllDescriptorsCommand
-                },
-                new MenuItem()
-                {
-                    Header = "-"
-                },
-                new MenuItem()
-                {
-                    Header = ViewModel.LockDescriptor,
-                    Command = ViewModel.LockDescriptorCommand
-                },
-                new MenuItem()
-                {
-                    Header = ViewModel.LockAllDescriptors,
-                    Command = ViewModel.LockAllDescriptorsCommand
-                },
-                new MenuItem()
-                {
-                    Header = ViewModel.UnlockDescriptor,
-                    Command = ViewModel.UnlockDescriptorCommand
-                },
-                new MenuItem()
-                {
-                    Header = ViewModel.UnlockAllDescriptors,
-                    Command = ViewModel.UnlockAllDescriptorsCommand
-                }
+                new() { Header = ViewModel!.CheckNewMods, Command = ViewModel.CheckNewModsCommand },
+                new() { Header = ViewModel.DeleteDescriptor, Command = ViewModel.DeleteDescriptorCommand },
+                new() { Header = ViewModel.DeleteAllDescriptors, Command = ViewModel.DeleteAllDescriptorsCommand },
+                new() { Header = "-" },
+                new() { Header = ViewModel.LockDescriptor, Command = ViewModel.LockDescriptorCommand },
+                new() { Header = ViewModel.LockAllDescriptors, Command = ViewModel.LockAllDescriptorsCommand },
+                new() { Header = ViewModel.UnlockDescriptor, Command = ViewModel.UnlockDescriptorCommand },
+                new() { Header = ViewModel.UnlockAllDescriptors, Command = ViewModel.UnlockAllDescriptorsCommand }
             };
             if (!string.IsNullOrWhiteSpace(ViewModel.ContextMenuMod?.FullPath))
             {
-                var menuItem = new MenuItem()
-                {
-                    Header = ViewModel.OpenInAssociatedApp,
-                    Command = ViewModel.OpenInAssociatedAppCommand
-                };
+                var menuItem = new MenuItem { Header = ViewModel.OpenInAssociatedApp, Command = ViewModel.OpenInAssociatedAppCommand };
 
                 menuItems.Insert(0, menuItem);
-                menuItems.Insert(1, new MenuItem()
-                {
-                    Header = "-"
-                });
+                menuItems.Insert(1, new MenuItem { Header = "-" });
             }
+
             return menuItems;
         }
 
@@ -199,26 +167,15 @@ namespace IronyModManager.Views.Controls
         private List<MenuItem> GetAllMenuItems()
         {
             var menuItems = new List<MenuItem>();
-            if (!string.IsNullOrEmpty(ViewModel.GetContextMenuModModUrl()))
+            if (!string.IsNullOrEmpty(ViewModel!.GetContextMenuModModUrl()))
             {
-                menuItems.Add(new MenuItem()
-                {
-                    Header = ViewModel.OpenUrl,
-                    Command = ViewModel.OpenUrlCommand
-                });
-                menuItems.Add(new MenuItem()
-                {
-                    Header = ViewModel.CopyUrl,
-                    Command = ViewModel.CopyUrlCommand
-                });
+                menuItems.Add(new MenuItem { Header = ViewModel.OpenUrl, Command = ViewModel.OpenUrlCommand });
+                menuItems.Add(new MenuItem { Header = ViewModel.CopyUrl, Command = ViewModel.CopyUrlCommand });
             }
+
             if (!string.IsNullOrEmpty(ViewModel.GetContextMenuModModSteamUrl()))
             {
-                var menuItem = new MenuItem()
-                {
-                    Header = ViewModel.OpenInSteam,
-                    Command = ViewModel.OpenInSteamCommand
-                };
+                var menuItem = new MenuItem { Header = ViewModel.OpenInSteam, Command = ViewModel.OpenInSteamCommand };
                 if (menuItems.Count == 0)
                 {
                     menuItems.Add(menuItem);
@@ -227,14 +184,14 @@ namespace IronyModManager.Views.Controls
                 {
                     menuItems.Insert(1, menuItem);
                 }
+
+                menuItem = new MenuItem { Header = ViewModel.CopyModPath, Command = ViewModel.CopyModPathCommand };
+                menuItems.Add(menuItem);
             }
+
             if (!string.IsNullOrWhiteSpace(ViewModel.ContextMenuMod?.FullPath))
             {
-                var menuItem = new MenuItem()
-                {
-                    Header = ViewModel.OpenInAssociatedApp,
-                    Command = ViewModel.OpenInAssociatedAppCommand
-                };
+                var menuItem = new MenuItem { Header = ViewModel.OpenInAssociatedApp, Command = ViewModel.OpenInAssociatedAppCommand };
                 if (menuItems.Count == 0)
                 {
                     menuItems.Add(menuItem);
@@ -244,51 +201,18 @@ namespace IronyModManager.Views.Controls
                     menuItems.Insert(0, menuItem);
                 }
             }
-            menuItems.AddRange(new List<MenuItem>()
+
+            menuItems.AddRange(new List<MenuItem>
             {
-                new MenuItem()
-                {
-                    Header = "-"
-                },
-                new MenuItem()
-                {
-                    Header = ViewModel.CheckNewMods,
-                    Command = ViewModel.CheckNewModsCommand
-                },
-                new MenuItem()
-                {
-                    Header = ViewModel.DeleteDescriptor,
-                    Command = ViewModel.DeleteDescriptorCommand
-                },
-                new MenuItem()
-                {
-                    Header = ViewModel.DeleteAllDescriptors,
-                    Command = ViewModel.DeleteAllDescriptorsCommand
-                },
-                new MenuItem()
-                {
-                    Header = "-"
-                },
-                new MenuItem()
-                {
-                    Header = ViewModel.LockDescriptor,
-                    Command = ViewModel.LockDescriptorCommand
-                },
-                new MenuItem()
-                {
-                    Header = ViewModel.LockAllDescriptors,
-                    Command = ViewModel.LockAllDescriptorsCommand
-                },
-                new MenuItem()
-                {
-                    Header = ViewModel.UnlockDescriptor,
-                    Command = ViewModel.UnlockDescriptorCommand
-                },
-                new MenuItem()
-                {
-                    Header = ViewModel.UnlockAllDescriptors,
-                    Command = ViewModel.UnlockAllDescriptorsCommand
-                }
+                new() { Header = "-" },
+                new() { Header = ViewModel.CheckNewMods, Command = ViewModel.CheckNewModsCommand },
+                new() { Header = ViewModel.DeleteDescriptor, Command = ViewModel.DeleteDescriptorCommand },
+                new() { Header = ViewModel.DeleteAllDescriptors, Command = ViewModel.DeleteAllDescriptorsCommand },
+                new() { Header = "-" },
+                new() { Header = ViewModel.LockDescriptor, Command = ViewModel.LockDescriptorCommand },
+                new() { Header = ViewModel.LockAllDescriptors, Command = ViewModel.LockAllDescriptorsCommand },
+                new() { Header = ViewModel.UnlockDescriptor, Command = ViewModel.UnlockDescriptorCommand },
+                new() { Header = ViewModel.UnlockAllDescriptors, Command = ViewModel.UnlockAllDescriptorsCommand }
             });
             return menuItems;
         }
@@ -299,19 +223,7 @@ namespace IronyModManager.Views.Controls
         /// <returns>System.Collections.Generic.List&lt;Avalonia.Controls.MenuItem&gt;.</returns>
         private List<MenuItem> GetStaticMenuItems()
         {
-            var menuItems = new List<MenuItem>()
-            {
-                new MenuItem()
-                {
-                    Header = ViewModel.CheckNewMods,
-                    Command = ViewModel.CheckNewModsCommand
-                },
-                new MenuItem()
-                {
-                    Header = ViewModel.DeleteAllDescriptors,
-                    Command = ViewModel.DeleteAllDescriptorsCommand
-                }
-            };
+            var menuItems = new List<MenuItem> { new() { Header = ViewModel!.CheckNewMods, Command = ViewModel.CheckNewModsCommand }, new() { Header = ViewModel.DeleteAllDescriptors, Command = ViewModel.DeleteAllDescriptorsCommand } };
             return menuItems;
         }
 

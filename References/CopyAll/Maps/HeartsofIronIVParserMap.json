@@ -1,4 +1,7 @@
 [{
+        "DirectoryPath": "assets",
+        "PreferredParser": "DefaultParser"
+    }, {
         "DirectoryPath": "common",
         "PreferredParser": "GenericWholeTextParser"
     }, {
@@ -325,6 +328,39 @@
     }, {
         "DirectoryPath": "interface",
         "PreferredParser": "GenericGraphicsParser"
+    }, {
+        "DirectoryPath": "integrated_dlc\\dlc018_together_for_victory\\gfx\\entities",
+        "PreferredParser": "GenericGraphicsParser"
+    }, {
+        "DirectoryPath": "integrated_dlc\\dlc018_together_for_victory\\gfx\\models\\units",
+        "PreferredParser": "GenericGraphicsParser"
+    }, {
+        "DirectoryPath": "integrated_dlc\\dlc018_together_for_victory\\interface",
+        "PreferredParser": "GenericGraphicsParser"
+    }, {
+        "DirectoryPath": "integrated_dlc\\dlc018_together_for_victory\\music",
+        "PreferredParser": "GenericGraphicsParser"
+    }, {
+        "DirectoryPath": "integrated_dlc\\dlc018_together_for_victory\\music",
+        "PreferredParser": "DefaultParser"
+    }, {
+        "DirectoryPath": "integrated_dlc\\dlc018_together_for_victory\\sound",
+        "PreferredParser": "GenericGraphicsParser"
+    }, {
+        "DirectoryPath": "integrated_dlc\\dlc020_death_or_dishonor\\music",
+        "PreferredParser": "DefaultParser"
+    }, {
+        "DirectoryPath": "integrated_dlc\\dlc022_waking_the_tiger\\music",
+        "PreferredParser": "DefaultParser"
+    }, {
+        "DirectoryPath": "integrated_dlc\\dlc022_waking_the_tiger\\portraits",
+        "PreferredParser": "GenericKeyParser"
+    }, {
+        "DirectoryPath": "integrated_dlc\\dlc022_waking_the_tiger\\sound\\combat_ambient",
+        "PreferredParser": "GenericGraphicsParser"
+    }, {
+        "DirectoryPath": "integrated_dlc\\dlc022_waking_the_tiger\\sound\\combat_sounds",
+        "PreferredParser": "DefaultParser"
     }, {
         "DirectoryPath": "interface",
         "PreferredParser": "DefaultParser"
