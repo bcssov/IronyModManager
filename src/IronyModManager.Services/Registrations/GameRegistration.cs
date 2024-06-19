@@ -1,17 +1,17 @@
-﻿
-// ***********************************************************************
+﻿// ***********************************************************************
 // Assembly         : IronyModManager.Services
 // Author           : Mario
 // Created          : 02-12-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 11-26-2023
+// Last Modified On : 06-19-2024
 // ***********************************************************************
 // <copyright file="GameRegistration.cs" company="Mario">
 //     Mario
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
+
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -26,7 +26,6 @@ using Newtonsoft.Json;
 
 namespace IronyModManager.Services.Registrations
 {
-
     /// <summary>
     /// Class GameRegistration.
     /// Implements the <see cref="IronyModManager.Shared.PostStartup" />
@@ -78,6 +77,7 @@ namespace IronyModManager.Services.Registrations
         /// </summary>
         /// <param name="baseUserDir">The base user dir.</param>
         /// <returns>IGameType.</returns>
+        // ReSharper disable once InconsistentNaming
         private IGameType GetCK3(string baseUserDir)
         {
             var game = DIResolver.Get<IGameType>();
@@ -96,7 +96,7 @@ namespace IronyModManager.Services.Registrations
             game.RemoteSteamUserDirectory = SteamDirectory.GetUserDataFolders(game.SteamAppId).Select(p => p.StandardizeDirectorySeparator()).ToList();
             game.AdvancedFeatures = IronyModManager.Models.Common.GameAdvancedFeatures.None;
             game.ParadoxGameId = Shared.Constants.GamesTypes.CrusaderKings3.ParadoxGameId;
-            game.SupportedMergeTypes = IronyModManager.Models.Common.SupportedMergeTypes.Zip | IronyModManager.Models.Common.SupportedMergeTypes.Basic;
+            game.SupportedMergeTypes = IronyModManager.Models.Common.SupportedMergeTypes.Basic;
             game.ModDescriptorType = IronyModManager.Models.Common.ModDescriptorType.DescriptorMod;
             game.GameIndexCacheVersion = 1;
             MapGameSettings(game, GetExecutableSettings(game));
@@ -149,6 +149,7 @@ namespace IronyModManager.Services.Registrations
                     path = Path.Combine(basePath, game.LauncherSettingsFileName);
                 }
             }
+
             if (File.Exists(path))
             {
                 var text = File.ReadAllText(path);
@@ -160,12 +161,7 @@ namespace IronyModManager.Services.Registrations
                         var exePath = PathOperations.ResolveRelativePath(basePath, settings.ExePath).StandardizeDirectorySeparator();
                         if (File.Exists(exePath))
                         {
-                            return new GameSettings()
-                            {
-                                ExecutableArgs = string.Join(" ", settings.ExeArgs),
-                                ExecutablePath = exePath,
-                                UserDir = pathResolver.Parse(settings.GameDataPath)
-                            };
+                            return new GameSettings { ExecutableArgs = string.Join(" ", settings.ExeArgs), ExecutablePath = exePath, UserDir = pathResolver.Parse(settings.GameDataPath) };
                         }
                     }
                     catch
@@ -173,6 +169,7 @@ namespace IronyModManager.Services.Registrations
                     }
                 }
             }
+
             return null;
         }
 
