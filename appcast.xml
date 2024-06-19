@@ -4,9 +4,11 @@
 		<title>Irony Mod Manager</title>
 		<language>en</language>
 		<item>
-			<title>1.26.177</title>
+			<title>1.26.181</title>
 			<description>## Current Release Notes
-* Add option to copy mod path
+* Fix self-conflict generating same filename for tmp files via external editor
+* Disable zip merge for CK3 (game doesn't support it)
+* Fix basic merge for CK3 (whitelisted new game folder data_binding)
 
 ## Release Notes 1.26
 * Update dependencies
@@ -19,13 +21,15 @@
 * Added conflict solver option to skip parsing some languages
 * Add conflict solver configuration to customize colors for new diff viewer
 * Add templateable merge mod naming</description>
-			<pubDate>Thu, 06 Jun 2024 20:54:25 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.26.177/linux-x64.zip" sparkle:version="1.26.177.308" sparkle:shortVersionString="1.26.177" length="90902259" sparkle:os="linux" type="application/zip" sparkle:signature="LEaMBYfbLZZvvpiGB0XG5rfJAVZl8/UaPQCmr+DkX5UZ6L4ioly5wgtm1i1gOFvz8oTtk3VJNiExAgCCOO6UCg=="/>
+			<pubDate>Wed, 19 Jun 2024 20:35:04 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.26.181/linux-x64.zip" sparkle:version="1.26.181.32778" sparkle:shortVersionString="1.26.181" length="90902241" sparkle:os="linux" type="application/zip" sparkle:signature="JT32N08c8rAoOQUYQ6A8nVIiSeFBQLlEEJRnTzRmzWS9c3QW/OPsmq9+U5NeIEpaQvB0zIKtn2uYRyb5uuHiAg=="/>
 		</item>
 		<item>
-			<title>1.26.177</title>
+			<title>1.26.181</title>
 			<description>## Current Release Notes
-* Add option to copy mod path
+* Fix self-conflict generating same filename for tmp files via external editor
+* Disable zip merge for CK3 (game doesn't support it)
+* Fix basic merge for CK3 (whitelisted new game folder data_binding)
 
 ## Release Notes 1.26
 * Update dependencies
@@ -38,13 +42,15 @@
 * Added conflict solver option to skip parsing some languages
 * Add conflict solver configuration to customize colors for new diff viewer
 * Add templateable merge mod naming</description>
-			<pubDate>Thu, 06 Jun 2024 20:54:29 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.26.177/osx-x64.zip" sparkle:version="1.26.177.308" sparkle:shortVersionString="1.26.177" length="93865570" sparkle:os="osx" type="application/zip" sparkle:signature="Dy/63NnDdesZ8EILL96W8pZq49ARJ1vPutFMKBs7/qcodJWZYrizBIrbDrHgk+YDfaYZARSv9V3wqeD1stklBw=="/>
+			<pubDate>Wed, 19 Jun 2024 20:35:08 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.26.181/osx-x64.zip" sparkle:version="1.26.181.32778" sparkle:shortVersionString="1.26.181" length="93865595" sparkle:os="osx" type="application/zip" sparkle:signature="QyGZ2VNU+jW55w2gjAlf3CoCtzzQXZTBtZmNGOWgHuHCifcRBvH4EyJQxxIuqXXATf+3QscXqCcglmyRIGTpBg=="/>
 		</item>
 		<item>
-			<title>1.26.177</title>
+			<title>1.26.181</title>
 			<description>## Current Release Notes
-* Add option to copy mod path
+* Fix self-conflict generating same filename for tmp files via external editor
+* Disable zip merge for CK3 (game doesn't support it)
+* Fix basic merge for CK3 (whitelisted new game folder data_binding)
 
 ## Release Notes 1.26
 * Update dependencies
@@ -57,13 +63,15 @@
 * Added conflict solver option to skip parsing some languages
 * Add conflict solver configuration to customize colors for new diff viewer
 * Add templateable merge mod naming</description>
-			<pubDate>Thu, 06 Jun 2024 20:54:33 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.26.177/win-x64-setup.zip" sparkle:version="1.26.177.308" sparkle:shortVersionString="1.26.177" length="72565171" sparkle:os="windows" type="application/zip" sparkle:signature="MsT725GD3Gu1TkPf91z4Q4HKXPtsq6i6P6Kr+g236Cd+Gw2x+tD6uUFQhuog+CDY17qYPiCRCoAclIZ2gnDMBw=="/>
+			<pubDate>Wed, 19 Jun 2024 20:35:11 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.26.181/win-x64-setup.zip" sparkle:version="1.26.181.32778" sparkle:shortVersionString="1.26.181" length="72567696" sparkle:os="windows" type="application/zip" sparkle:signature="hSEY4+niTfH6QG3E3pGOG8hZ6eWiFDmVsA8o0SxoKmNjjHoPe7z64gceiWIUwfZFq29KrXp5PuDE/SCy61ZZBg=="/>
 		</item>
 		<item>
-			<title>1.26.177</title>
+			<title>1.26.181</title>
 			<description>## Current Release Notes
-* Add option to copy mod path
+* Fix self-conflict generating same filename for tmp files via external editor
+* Disable zip merge for CK3 (game doesn't support it)
+* Fix basic merge for CK3 (whitelisted new game folder data_binding)
 
 ## Release Notes 1.26
 * Update dependencies
@@ -76,8 +84,8 @@
 * Added conflict solver option to skip parsing some languages
 * Add conflict solver configuration to customize colors for new diff viewer
 * Add templateable merge mod naming</description>
-			<pubDate>Thu, 06 Jun 2024 20:54:33 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.26.177/win-x64.zip" sparkle:version="1.26.177.308" sparkle:shortVersionString="1.26.177" length="106574352" sparkle:os="windows" type="application/zip" sparkle:signature="21GqV4ZDtVutA84EeAcW2U/wCnsfF4OXCu7luST0hYUc9jAXahH18clFlEjZI/zHUrF6E/77alD7mfbGwgThAQ=="/>
+			<pubDate>Wed, 19 Jun 2024 20:35:12 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.26.181/win-x64.zip" sparkle:version="1.26.181.32778" sparkle:shortVersionString="1.26.181" length="106574382" sparkle:os="windows" type="application/zip" sparkle:signature="7IQkbxxjEBT3eZdmTyuX0rQzwGskgRy8FspW21v/Yn3H+l9+jzlDkzXA1h+eIfMwV0d21eZi9BH2V4MZf8vcDg=="/>
 		</item>
 	</channel>
 </rss>
