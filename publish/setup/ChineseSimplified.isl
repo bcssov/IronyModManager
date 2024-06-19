@@ -23,16 +23,14 @@ LanguageName=简体中文
 ; About LanguageID, to reference link:
 ; https://docs.microsoft.com/en-us/openspecs/windows_protocols/ms-lcid/a9eac961-e77d-41a6-90a5-ce1a8b0cdb9c
 LanguageID=$0804
-; About CodePage, to reference link:
-; https://docs.microsoft.com/en-us/windows/win32/intl/code-page-identifiers
 LanguageCodePage=936
 ; If the language you are translating to requires special font faces or
 ; sizes, uncomment any of the following entries and change them accordingly.
-;DialogFontName=
+DialogFontName=Microsoft YaHei UI
 ;DialogFontSize=8
-;WelcomeFontName=Verdana
+WelcomeFontName=Microsoft YaHei UI
 ;WelcomeFontSize=12
-;TitleFontName=Arial
+TitleFontName=Microsoft YaHei UI
 ;TitleFontSize=29
 ;CopyrightFontName=Arial
 ;CopyrightFontSize=8
@@ -52,28 +50,28 @@ ErrorTitle=错误
 
 ; *** SetupLdr messages
 SetupLdrStartupMessage=现在将安装 %1。您想要继续吗？
-LdrCannotCreateTemp=无法创建临时文件。安装程序已中止
-LdrCannotExecTemp=无法执行临时目录中的文件。安装程序已中止
+LdrCannotCreateTemp=不能创建临时文件。安装中断。
+LdrCannotExecTemp=不能执行临时目录中的文件。安装中断。
 HelpTextNote=
 
 ; *** 启动错误消息
-LastErrorMessage=%1。%n%n错误 %2: %3
-SetupFileMissing=安装目录中缺少文件 %1。请修正这个问题或者获取程序的新副本。
+LastErrorMessage=%1.%n%n错误 %2: %3
+SetupFileMissing=安装目录中的文件 %1 丢失。请修正这个问题或者获取程序的新副本。
 SetupFileCorrupt=安装文件已损坏。请获取程序的新副本。
 SetupFileCorruptOrWrongVer=安装文件已损坏，或是与这个安装程序的版本不兼容。请修正这个问题或获取新的程序副本。
 InvalidParameter=无效的命令行参数：%n%n%1
 SetupAlreadyRunning=安装程序正在运行。
-WindowsVersionNotSupported=这个程序不支持当前计算机运行的Windows版本。
+WindowsVersionNotSupported=这个程序不支持当前计算机运行的 Windows 版本。
 WindowsServicePackRequired=这个程序需要 %1 服务包 %2 或更高。
 NotOnThisPlatform=这个程序将不能运行于 %1。
 OnlyOnThisPlatform=这个程序必须运行于 %1。
-OnlyOnTheseArchitectures=这个程序只能在为下列处理器结构设计的Windows版本中进行安装：%n%n%1
+OnlyOnTheseArchitectures=这个程序只能在为下列处理器架构的 Windows 版本中进行安装：%n%n%1
 WinVersionTooLowError=这个程序需要 %1 版本 %2 或更高。
 WinVersionTooHighError=这个程序不能安装于 %1 版本 %2 或更高。
 AdminPrivilegesRequired=在安装这个程序时您必须以管理员身份登录。
 PowerUserPrivilegesRequired=在安装这个程序时您必须以管理员身份或有权限的用户组身份登录。
-SetupAppRunningError=安装程序发现 %1 当前正在运行。%n%n请先关闭正在运行的程序，然后点击“确定”继续，或点击“取消”退出。
-UninstallAppRunningError=卸载程序发现 %1 当前正在运行。%n%n请先关闭正在运行的程序，然后点击“确定”继续，或点击“取消”退出。
+SetupAppRunningError=安装程序发现 %1 当前正在运行。%n%n请先关闭所有运行的窗口，然后点击“确定”继续，或按“取消”退出。
+UninstallAppRunningError=卸载程序发现 %1 当前正在运行。%n%n请先关闭所有运行的窗口，然后点击“确定”继续，或按“取消”退出。
 
 ; *** 启动问题
 PrivilegesRequiredOverrideTitle=选择安装程序模式
@@ -82,21 +80,21 @@ PrivilegesRequiredOverrideText1=%1 可以为所有用户安装(需要管理员�
 PrivilegesRequiredOverrideText2=%1 只能为您安装，或为所有用户安装(需要管理员权限)。
 PrivilegesRequiredOverrideAllUsers=为所有用户安装(&A)
 PrivilegesRequiredOverrideAllUsersRecommended=为所有用户安装(&A) (建议选项)
-PrivilegesRequiredOverrideCurrentUser=只为我安装(&M)
-PrivilegesRequiredOverrideCurrentUserRecommended=只为我安装(&M) (建议选项)
+PrivilegesRequiredOverrideCurrentUser=仅为我安装(&M)
+PrivilegesRequiredOverrideCurrentUserRecommended=仅为我安装(&M) (建议选项)
 
 ; *** 其它错误
 ErrorCreatingDir=安装程序不能创建目录“%1”。
-ErrorTooManyFilesInDir=无法在目录“%1”中创建文件，因为里面包含太多文件
+ErrorTooManyFilesInDir=不能在目录“%1”中创建文件，因为里面的文件太多
 
 ; *** 安装程序公共消息
 ExitSetupTitle=退出安装程序
-ExitSetupMessage=安装程序还未完成安装。如果您现在退出，程序将不能安装。%n%n您可以以后再运行安装程序完成安装。%n%n现在退出安装程序吗？
+ExitSetupMessage=安装程序尚未完成安装。如果您现在退出，程序将不能安装。%n%n您可以以后再运行安装程序完成安装。%n%n现在退出安装程序吗？
 AboutSetupMenuItem=关于安装程序(&A)...
 AboutSetupTitle=关于安装程序
 AboutSetupMessage=%1 版本 %2%n%3%n%n%1 主页：%n%4
 AboutSetupNote=
-TranslatorNote=
+TranslatorNote=Translated by Zhenghan Yang.
 
 ; *** 按钮
 ButtonBack=< 上一步(&B)
@@ -121,34 +119,34 @@ SelectLanguageLabel=选择安装时要使用的语言。
 ClickNext=点击“下一步”继续，或点击“取消”退出安装程序。
 BeveledLabel=
 BrowseDialogTitle=浏览文件夹
-BrowseDialogLabel=在下面的列表中选择一个文件夹，然后点击“确定”。
+BrowseDialogLabel=在下列列表中选择一个文件夹，然后点击“确定”。
 NewFolderName=新建文件夹
 
 ; *** “欢迎”向导页
 WelcomeLabel1=欢迎使用 [name] 安装向导
-WelcomeLabel2=现在将安装 [name/ver] 到您的电脑中。%n%n建议您在继续安装前关闭所有其它应用程序。
+WelcomeLabel2=现在将安装 [name/ver] 到您的电脑中。%n%n推荐您在继续安装前关闭所有其它应用程序。
 
 ; *** “密码”向导页
 WizardPassword=密码
 PasswordLabel1=这个安装程序有密码保护。
 PasswordLabel3=请输入密码，然后点击“下一步”继续。密码区分大小写。
 PasswordEditLabel=密码(&P)：
-IncorrectPassword=您所输入的密码不正确，请重新输入。
+IncorrectPassword=您所输入的密码不正确，请重试。
 
 ; *** “许可协议”向导页
 WizardLicense=许可协议
-LicenseLabel=请在继续安装前阅读以下重要信息。
-LicenseLabel3=请仔细阅读下列许可协议。在继续安装前您必须同意这些协议条款。
+LicenseLabel=继续安装前请阅读下列重要信息。
+LicenseLabel3=请仔细阅读下列许可协议。您在继续安装前必须同意这些协议条款。
 LicenseAccepted=我同意此协议(&A)
-LicenseNotAccepted=我不同意此协议(&D)
+LicenseNotAccepted=我拒绝此协议(&D)
 
 ; *** “信息”向导页
 WizardInfoBefore=信息
-InfoBeforeLabel=请在继续安装前阅读以下重要信息。
-InfoBeforeClickLabel=准备好继续安装后，点击“下一步”。
+InfoBeforeLabel=请在继续安装前阅读下列重要信息。
+InfoBeforeClickLabel=如果您想继续安装，点击“下一步”。
 WizardInfoAfter=信息
-InfoAfterLabel=请在继续安装前阅读以下重要信息。
-InfoAfterClickLabel=准备好继续安装后，点击“下一步”。
+InfoAfterLabel=请在继续安装前阅读下列重要信息。
+InfoAfterClickLabel=如果您想继续安装，点击“下一步”。
 
 ; *** “用户信息”向导页
 WizardUserInfo=用户信息
@@ -168,8 +166,8 @@ DiskSpaceMBLabel=至少需要有 [mb] MB 的可用磁盘空间。
 CannotInstallToNetworkDrive=安装程序无法安装到一个网络驱动器。
 CannotInstallToUNCPath=安装程序无法安装到一个UNC路径。
 InvalidPath=您必须输入一个带驱动器卷标的完整路径，例如：%n%nC:\APP%n%n或下列形式的UNC路径：%n%n\\server\share
-InvalidDrive=您选定的驱动器或 UNC 共享不存在或不能访问。请选择其它位置。
-DiskSpaceWarningTitle=磁盘空间不足
+InvalidDrive=您选定的驱动器或 UNC 共享不存在或不能访问。请选选择其它位置。
+DiskSpaceWarningTitle=没有足够的磁盘空间
 DiskSpaceWarning=安装程序至少需要 %1 KB 的可用空间才能安装，但选定驱动器只有 %2 KB 的可用空间。%n%n您一定要继续吗？
 DirNameTooLong=文件夹名称或路径太长。
 InvalidDirName=文件夹名称无效。
@@ -206,7 +204,7 @@ SelectStartMenuFolderLabel3=安装程序现在将在下列开始菜单文件夹�
 SelectStartMenuFolderBrowseLabel=点击“下一步”继续。如果您想选择其它文件夹，点击“浏览”。
 MustEnterGroupName=您必须输入一个文件夹名。
 GroupNameTooLong=文件夹名或路径太长。
-InvalidGroupName=无效的文件夹名字。
+InvalidGroupName=文件夹名无效。
 BadGroupName=文件夹名不能包含下列任何字符：%n%n%1
 NoProgramGroupCheck2=不创建开始菜单文件夹(&D)
 
@@ -230,20 +228,20 @@ ErrorDownloadAborted=下载已中止
 ErrorDownloadFailed=下载失败：%1 %2
 ErrorDownloadSizeFailed=获取下载大小失败：%1 %2
 ErrorFileHash1=校验文件哈希失败：%1
-ErrorFileHash2=无效的文件哈希：预期 %1，实际 %2
+ErrorFileHash2=无效的文件哈希：预期为 %1，实际为 %2
 ErrorProgress=无效的进度：%1，总共%2
-ErrorFileSize=文件大小错误：预期 %1，实际 %2
+ErrorFileSize=文件大小错误：预期为 %1，实际为 %2
 
 ; *** “正在准备安装”向导页
 WizardPreparing=正在准备安装
 PreparingDesc=安装程序正在准备安装 [name] 到您的电脑中。
 PreviousInstallNotCompleted=先前程序的安装/卸载未完成。您需要重新启动您的电脑才能完成安装。%n%n在重新启动电脑后，再运行安装完成 [name] 的安装。
 CannotContinue=安装程序不能继续。请点击“取消”退出。
-ApplicationsFound=以下应用程序正在使用需要由安装程序更新的文件。建议您允许安装程序自动关闭这些应用程序。
-ApplicationsFound2=以下应用程序正在使用需要由安装程序更新的文件。建议您允许安装程序自动关闭这些应用程序。安装完成后，安装程序将尝试重新启动应用程序。
+ApplicationsFound=下列应用程序正在使用的文件需要更新设置。它是建议您允许安装程序自动关闭这些应用程序。
+ApplicationsFound2=下列应用程序正在使用的文件需要更新设置。它是建议您允许安装程序自动关闭这些应用程序。安装完成后，安装程序将尝试重新启动应用程序。
 CloseApplications=自动关闭该应用程序(&A)
 DontCloseApplications=不要关闭该应用程序(&D)
-ErrorCloseApplications=安装程序无法自动关闭所有应用程序。建议您在继续之前关闭所有使用需要由安装程序更新的文件的应用程序。
+ErrorCloseApplications=安装程序无法自动关闭所有应用程序。在继续之前，我们建议您关闭所有使用需要更新的安装程序文件。
 PrepareToInstallNeedsRestart=安装程序必须重新启动计算机。重新启动计算机后，请再次运行安装程序以完成 [name] 的安装。%n%n是否立即重新启动？
 
 ; *** “正在安装”向导页
