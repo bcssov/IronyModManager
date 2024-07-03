@@ -4,11 +4,9 @@
 		<title>Irony Mod Manager</title>
 		<language>en</language>
 		<item>
-			<title>1.26.181</title>
+			<title>1.26.182</title>
 			<description>## Current Release Notes
-* Fix self-conflict generating same filename for tmp files via external editor
-* Disable zip merge for CK3 (game doesn't support it)
-* Fix basic merge for CK3 (whitelisted new game folder data_binding)
+* Made Irony understand how supported_version works. Paradox broke how supported_version works, it now works by having v prefix
 
 ## Release Notes 1.26
 * Update dependencies
@@ -21,15 +19,13 @@
 * Added conflict solver option to skip parsing some languages
 * Add conflict solver configuration to customize colors for new diff viewer
 * Add templateable merge mod naming</description>
-			<pubDate>Wed, 19 Jun 2024 20:35:04 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.26.181/linux-x64.zip" sparkle:version="1.26.181.32778" sparkle:shortVersionString="1.26.181" length="90902241" sparkle:os="linux" type="application/zip" sparkle:signature="JT32N08c8rAoOQUYQ6A8nVIiSeFBQLlEEJRnTzRmzWS9c3QW/OPsmq9+U5NeIEpaQvB0zIKtn2uYRyb5uuHiAg=="/>
+			<pubDate>Wed, 03 Jul 2024 08:29:06 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.26.182/linux-x64.zip" sparkle:version="1.26.182.63130" sparkle:shortVersionString="1.26.182" length="90902656" sparkle:os="linux" type="application/zip" sparkle:signature="PylU/JUTgYBnFQTyagrYSBCnFKW4BDFpdsQ6lZbIrirSxgVjUenVYm7YwiQnmq3NNGQioPkAET+ffsAryrgpDA=="/>
 		</item>
 		<item>
-			<title>1.26.181</title>
+			<title>1.26.182</title>
 			<description>## Current Release Notes
-* Fix self-conflict generating same filename for tmp files via external editor
-* Disable zip merge for CK3 (game doesn't support it)
-* Fix basic merge for CK3 (whitelisted new game folder data_binding)
+* Made Irony understand how supported_version works. Paradox broke how supported_version works, it now works by having v prefix
 
 ## Release Notes 1.26
 * Update dependencies
@@ -42,15 +38,13 @@
 * Added conflict solver option to skip parsing some languages
 * Add conflict solver configuration to customize colors for new diff viewer
 * Add templateable merge mod naming</description>
-			<pubDate>Wed, 19 Jun 2024 20:35:08 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.26.181/osx-x64.zip" sparkle:version="1.26.181.32778" sparkle:shortVersionString="1.26.181" length="93865595" sparkle:os="osx" type="application/zip" sparkle:signature="QyGZ2VNU+jW55w2gjAlf3CoCtzzQXZTBtZmNGOWgHuHCifcRBvH4EyJQxxIuqXXATf+3QscXqCcglmyRIGTpBg=="/>
+			<pubDate>Wed, 03 Jul 2024 08:29:10 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.26.182/osx-x64.zip" sparkle:version="1.26.182.63130" sparkle:shortVersionString="1.26.182" length="93866008" sparkle:os="osx" type="application/zip" sparkle:signature="yBwbaPKk52A+uY5kn4nkwWtW5N/832McA6pZL180tV5TbFuotkqaCW6l1DzrNdCs/VwwLsYj5MhvE9gLRkpeCA=="/>
 		</item>
 		<item>
-			<title>1.26.181</title>
+			<title>1.26.182</title>
 			<description>## Current Release Notes
-* Fix self-conflict generating same filename for tmp files via external editor
-* Disable zip merge for CK3 (game doesn't support it)
-* Fix basic merge for CK3 (whitelisted new game folder data_binding)
+* Made Irony understand how supported_version works. Paradox broke how supported_version works, it now works by having v prefix
 
 ## Release Notes 1.26
 * Update dependencies
@@ -63,15 +57,13 @@
 * Added conflict solver option to skip parsing some languages
 * Add conflict solver configuration to customize colors for new diff viewer
 * Add templateable merge mod naming</description>
-			<pubDate>Wed, 19 Jun 2024 20:35:11 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.26.181/win-x64-setup.zip" sparkle:version="1.26.181.32778" sparkle:shortVersionString="1.26.181" length="72567696" sparkle:os="windows" type="application/zip" sparkle:signature="hSEY4+niTfH6QG3E3pGOG8hZ6eWiFDmVsA8o0SxoKmNjjHoPe7z64gceiWIUwfZFq29KrXp5PuDE/SCy61ZZBg=="/>
+			<pubDate>Wed, 03 Jul 2024 08:29:14 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.26.182/win-x64-setup.zip" sparkle:version="1.26.182.63130" sparkle:shortVersionString="1.26.182" length="72569044" sparkle:os="windows" type="application/zip" sparkle:signature="31j4/dm5c/0uUombMx+FVi0KUhd46ezYjqTMw2v68LFwXjnQtn+t+XaIh9ebU+Gg6H0V1zf44T65BHjoEI6PCA=="/>
 		</item>
 		<item>
-			<title>1.26.181</title>
+			<title>1.26.182</title>
 			<description>## Current Release Notes
-* Fix self-conflict generating same filename for tmp files via external editor
-* Disable zip merge for CK3 (game doesn't support it)
-* Fix basic merge for CK3 (whitelisted new game folder data_binding)
+* Made Irony understand how supported_version works. Paradox broke how supported_version works, it now works by having v prefix
 
 ## Release Notes 1.26
 * Update dependencies
@@ -84,8 +76,8 @@
 * Added conflict solver option to skip parsing some languages
 * Add conflict solver configuration to customize colors for new diff viewer
 * Add templateable merge mod naming</description>
-			<pubDate>Wed, 19 Jun 2024 20:35:12 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.26.181/win-x64.zip" sparkle:version="1.26.181.32778" sparkle:shortVersionString="1.26.181" length="106574382" sparkle:os="windows" type="application/zip" sparkle:signature="7IQkbxxjEBT3eZdmTyuX0rQzwGskgRy8FspW21v/Yn3H+l9+jzlDkzXA1h+eIfMwV0d21eZi9BH2V4MZf8vcDg=="/>
+			<pubDate>Wed, 03 Jul 2024 08:29:15 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.26.182/win-x64.zip" sparkle:version="1.26.182.63130" sparkle:shortVersionString="1.26.182" length="106574786" sparkle:os="windows" type="application/zip" sparkle:signature="L3DATFmyINxU/cSIPIrRevfMgBarvIqALNJGFKmaYQG+KShjh57bgBUlO4m2Rfmwigo/LkFgnKP9GKWpxbMzCQ=="/>
 		</item>
 	</channel>
 </rss>
