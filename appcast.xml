@@ -4,9 +4,9 @@
 		<title>Irony Mod Manager</title>
 		<language>en</language>
 		<item>
-			<title>1.26.182</title>
+			<title>1.26.183</title>
 			<description>## Current Release Notes
-* Made Irony understand how supported_version works. Paradox broke how supported_version works, it now works by having v prefix
+* Fix Irony not being able to recognize new json format properly to auto determine game paths
 
 ## Release Notes 1.26
 * Update dependencies
@@ -19,13 +19,13 @@
 * Added conflict solver option to skip parsing some languages
 * Add conflict solver configuration to customize colors for new diff viewer
 * Add templateable merge mod naming</description>
-			<pubDate>Wed, 03 Jul 2024 08:29:06 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.26.182/linux-x64.zip" sparkle:version="1.26.182.63130" sparkle:shortVersionString="1.26.182" length="90902656" sparkle:os="linux" type="application/zip" sparkle:signature="PylU/JUTgYBnFQTyagrYSBCnFKW4BDFpdsQ6lZbIrirSxgVjUenVYm7YwiQnmq3NNGQioPkAET+ffsAryrgpDA=="/>
+			<pubDate>Fri, 05 Jul 2024 21:21:19 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.26.183/linux-x64.zip" sparkle:version="1.26.183.63358" sparkle:shortVersionString="1.26.183" length="90902707" sparkle:os="linux" type="application/zip" sparkle:signature="MJxLj1j5yJhYtipuYYcPFnnAZjhIx7bRvVXR9ryLwWyc+Q4f0/JLFY5weKPhozCw+mQoPdW0o/+SR9pmzgRTBg=="/>
 		</item>
 		<item>
-			<title>1.26.182</title>
+			<title>1.26.183</title>
 			<description>## Current Release Notes
-* Made Irony understand how supported_version works. Paradox broke how supported_version works, it now works by having v prefix
+* Fix Irony not being able to recognize new json format properly to auto determine game paths
 
 ## Release Notes 1.26
 * Update dependencies
@@ -38,13 +38,13 @@
 * Added conflict solver option to skip parsing some languages
 * Add conflict solver configuration to customize colors for new diff viewer
 * Add templateable merge mod naming</description>
-			<pubDate>Wed, 03 Jul 2024 08:29:10 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.26.182/osx-x64.zip" sparkle:version="1.26.182.63130" sparkle:shortVersionString="1.26.182" length="93866008" sparkle:os="osx" type="application/zip" sparkle:signature="yBwbaPKk52A+uY5kn4nkwWtW5N/832McA6pZL180tV5TbFuotkqaCW6l1DzrNdCs/VwwLsYj5MhvE9gLRkpeCA=="/>
+			<pubDate>Fri, 05 Jul 2024 21:21:23 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.26.183/osx-x64.zip" sparkle:version="1.26.183.63358" sparkle:shortVersionString="1.26.183" length="93865926" sparkle:os="osx" type="application/zip" sparkle:signature="sGQaMKBA+Cjmnxnq0KJacRO+tGzJMuJMkmZaZr0rcT5/pNLab0eiuWWHjZa4Sr8LxvZdq2/eljFMKKm4vR3QDg=="/>
 		</item>
 		<item>
-			<title>1.26.182</title>
+			<title>1.26.183</title>
 			<description>## Current Release Notes
-* Made Irony understand how supported_version works. Paradox broke how supported_version works, it now works by having v prefix
+* Fix Irony not being able to recognize new json format properly to auto determine game paths
 
 ## Release Notes 1.26
 * Update dependencies
@@ -57,13 +57,13 @@
 * Added conflict solver option to skip parsing some languages
 * Add conflict solver configuration to customize colors for new diff viewer
 * Add templateable merge mod naming</description>
-			<pubDate>Wed, 03 Jul 2024 08:29:14 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.26.182/win-x64-setup.zip" sparkle:version="1.26.182.63130" sparkle:shortVersionString="1.26.182" length="72569044" sparkle:os="windows" type="application/zip" sparkle:signature="31j4/dm5c/0uUombMx+FVi0KUhd46ezYjqTMw2v68LFwXjnQtn+t+XaIh9ebU+Gg6H0V1zf44T65BHjoEI6PCA=="/>
+			<pubDate>Fri, 05 Jul 2024 21:21:27 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.26.183/win-x64-setup.zip" sparkle:version="1.26.183.63358" sparkle:shortVersionString="1.26.183" length="72572621" sparkle:os="windows" type="application/zip" sparkle:signature="sL3XSYj/4LRdJQVC2fIqjfWOzQH6PDo2FTelEXcppBmkqrUaiDqxBV3HF9s5/lPNa5BrMb3WVt40W6nDZ+8UBw=="/>
 		</item>
 		<item>
-			<title>1.26.182</title>
+			<title>1.26.183</title>
 			<description>## Current Release Notes
-* Made Irony understand how supported_version works. Paradox broke how supported_version works, it now works by having v prefix
+* Fix Irony not being able to recognize new json format properly to auto determine game paths
 
 ## Release Notes 1.26
 * Update dependencies
@@ -76,8 +76,8 @@
 * Added conflict solver option to skip parsing some languages
 * Add conflict solver configuration to customize colors for new diff viewer
 * Add templateable merge mod naming</description>
-			<pubDate>Wed, 03 Jul 2024 08:29:15 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.26.182/win-x64.zip" sparkle:version="1.26.182.63130" sparkle:shortVersionString="1.26.182" length="106574786" sparkle:os="windows" type="application/zip" sparkle:signature="L3DATFmyINxU/cSIPIrRevfMgBarvIqALNJGFKmaYQG+KShjh57bgBUlO4m2Rfmwigo/LkFgnKP9GKWpxbMzCQ=="/>
+			<pubDate>Fri, 05 Jul 2024 21:21:27 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.26.183/win-x64.zip" sparkle:version="1.26.183.63358" sparkle:shortVersionString="1.26.183" length="106574764" sparkle:os="windows" type="application/zip" sparkle:signature="TixvEY4vDulOdZ26SR6mtWAWV+Ac4WT8CnykmfnVmDTWR1gcG7Me+bCUU37bGI3Dqx4Jmh5MHTiZh7qe+meFBQ=="/>
 		</item>
 	</channel>
 </rss>
