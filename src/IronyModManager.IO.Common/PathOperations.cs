@@ -4,13 +4,14 @@
 // Created          : 09-12-2021
 //
 // Last Modified By : Mario
-// Last Modified On : 09-12-2021
+// Last Modified On : 07-05-2024
 // ***********************************************************************
 // <copyright file="PathOperations.cs" company="Mario">
 //     Mario
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
+
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -35,11 +36,12 @@ namespace IronyModManager.IO.Common
         public static string ResolveRelativePath(string basePath, string path)
         {
             var result = ResolveRelativePath(basePath, path, false);
-            if ((!File.Exists(result) || !Directory.Exists(result)) && PathContainsRelativeSegments(path))
+            if (!File.Exists(result) && !Directory.Exists(result) && PathContainsRelativeSegments(path))
             {
                 // Fallback
                 result = ResolveRelativePath(basePath, path, true);
             }
+
             return result;
         }
 
@@ -69,15 +71,17 @@ namespace IronyModManager.IO.Common
             {
                 basePath = Path.Combine(basePath, "dummy");
             }
+
             string result;
             if (string.IsNullOrWhiteSpace(basePath) || !Path.IsPathFullyQualified(basePath))
             {
-                result = Path.Combine(basePath, path);
+                result = Path.Combine(basePath!, path);
             }
             else
             {
                 result = Path.GetFullPath(path, basePath);
             }
+
             return result;
         }
 
