@@ -4,7 +4,7 @@
 // Created          : 01-17-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-19-2024
+// Last Modified On : 07-19-2024
 // ***********************************************************************
 // <copyright file="Constants.cs" company="Mario">
 //     Mario
@@ -584,7 +584,7 @@ namespace IronyModManager.Shared
                 /// <summary>
                 /// The checksum folders
                 /// </summary>
-                public static readonly string[] ChecksumFolders = { "common", "events", "map_data", "gui", "localization" };
+                public static readonly string[] ChecksumFolders = ["common", "events", "map_data", "gui", "localization"];
 
                 /// <summary>
                 /// The DLC container
@@ -595,9 +595,10 @@ namespace IronyModManager.Shared
                 /// The game folders
                 /// </summary>
                 public static readonly string[] GameFolders =
-                {
-                    "localization", "map_data", "music", "notifications", "sound", "soundtrack", "tools", "common", "content_source", "dlc", "events", "fonts", "gfx", "gui", "interface", "licenses"
-                };
+                [
+                    "common", "content_source", "data_binding", "dlc", "dlc_metadata", "events", "fonts", "gfx", "gui", "input_profile", "interface", "licenses", "localization", "map_data", "music", "notifications", "sound", "soundtrack",
+                    "tools"
+                ];
 
                 /// <summary>
                 /// The launcher settings file name
