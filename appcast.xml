@@ -4,9 +4,9 @@
 		<title>Irony Mod Manager</title>
 		<language>en</language>
 		<item>
-			<title>1.26.183</title>
+			<title>1.26.184</title>
 			<description>## Current Release Notes
-* Fix Irony not being able to recognize new json format properly to auto determine game paths
+* Maybe fix #511
 
 ## Release Notes 1.26
 * Update dependencies
@@ -19,13 +19,13 @@
 * Added conflict solver option to skip parsing some languages
 * Add conflict solver configuration to customize colors for new diff viewer
 * Add templateable merge mod naming</description>
-			<pubDate>Fri, 05 Jul 2024 21:21:19 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.26.183/linux-x64.zip" sparkle:version="1.26.183.63358" sparkle:shortVersionString="1.26.183" length="90902707" sparkle:os="linux" type="application/zip" sparkle:signature="MJxLj1j5yJhYtipuYYcPFnnAZjhIx7bRvVXR9ryLwWyc+Q4f0/JLFY5weKPhozCw+mQoPdW0o/+SR9pmzgRTBg=="/>
+			<pubDate>Sat, 20 Jul 2024 20:03:26 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.26.184/linux-x64.zip" sparkle:version="1.26.184.56162" sparkle:shortVersionString="1.26.184" length="90902928" sparkle:os="linux" type="application/zip" sparkle:signature="dek+APoSn8Y+265nymlIA0W9o0EJLMRkEG9Ey9JH3KipoUJfWAbvRvlTbCQK9uZCKTAkMuWbxWYLMDP3FYr6Dw=="/>
 		</item>
 		<item>
-			<title>1.26.183</title>
+			<title>1.26.184</title>
 			<description>## Current Release Notes
-* Fix Irony not being able to recognize new json format properly to auto determine game paths
+* Maybe fix #511
 
 ## Release Notes 1.26
 * Update dependencies
@@ -38,13 +38,13 @@
 * Added conflict solver option to skip parsing some languages
 * Add conflict solver configuration to customize colors for new diff viewer
 * Add templateable merge mod naming</description>
-			<pubDate>Fri, 05 Jul 2024 21:21:23 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.26.183/osx-x64.zip" sparkle:version="1.26.183.63358" sparkle:shortVersionString="1.26.183" length="93865926" sparkle:os="osx" type="application/zip" sparkle:signature="sGQaMKBA+Cjmnxnq0KJacRO+tGzJMuJMkmZaZr0rcT5/pNLab0eiuWWHjZa4Sr8LxvZdq2/eljFMKKm4vR3QDg=="/>
+			<pubDate>Sat, 20 Jul 2024 20:03:30 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.26.184/osx-x64.zip" sparkle:version="1.26.184.56162" sparkle:shortVersionString="1.26.184" length="93866268" sparkle:os="osx" type="application/zip" sparkle:signature="C+d2YwJLZEMR3z0IR+kFgMm4l5uoXmy2lzvSNPVQWQiTnP6vP28Wjg45dnHga71mYUtsIuecjoTUmnHesPHWBQ=="/>
 		</item>
 		<item>
-			<title>1.26.183</title>
+			<title>1.26.184</title>
 			<description>## Current Release Notes
-* Fix Irony not being able to recognize new json format properly to auto determine game paths
+* Maybe fix #511
 
 ## Release Notes 1.26
 * Update dependencies
@@ -57,13 +57,13 @@
 * Added conflict solver option to skip parsing some languages
 * Add conflict solver configuration to customize colors for new diff viewer
 * Add templateable merge mod naming</description>
-			<pubDate>Fri, 05 Jul 2024 21:21:27 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.26.183/win-x64-setup.zip" sparkle:version="1.26.183.63358" sparkle:shortVersionString="1.26.183" length="72572621" sparkle:os="windows" type="application/zip" sparkle:signature="sL3XSYj/4LRdJQVC2fIqjfWOzQH6PDo2FTelEXcppBmkqrUaiDqxBV3HF9s5/lPNa5BrMb3WVt40W6nDZ+8UBw=="/>
+			<pubDate>Sat, 20 Jul 2024 20:03:34 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.26.184/win-x64-setup.zip" sparkle:version="1.26.184.56162" sparkle:shortVersionString="1.26.184" length="72713645" sparkle:os="windows" type="application/zip" sparkle:signature="/FvVy3ueRg0l54ZEFeuqB7FnWQfQc/ixHYeaAg8HUKkwJMbCpsfFCze3QfdGsUpts7F3icxMXH4PQfljkTNSAQ=="/>
 		</item>
 		<item>
-			<title>1.26.183</title>
+			<title>1.26.184</title>
 			<description>## Current Release Notes
-* Fix Irony not being able to recognize new json format properly to auto determine game paths
+* Maybe fix #511
 
 ## Release Notes 1.26
 * Update dependencies
@@ -76,8 +76,8 @@
 * Added conflict solver option to skip parsing some languages
 * Add conflict solver configuration to customize colors for new diff viewer
 * Add templateable merge mod naming</description>
-			<pubDate>Fri, 05 Jul 2024 21:21:27 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.26.183/win-x64.zip" sparkle:version="1.26.183.63358" sparkle:shortVersionString="1.26.183" length="106574764" sparkle:os="windows" type="application/zip" sparkle:signature="TixvEY4vDulOdZ26SR6mtWAWV+Ac4WT8CnykmfnVmDTWR1gcG7Me+bCUU37bGI3Dqx4Jmh5MHTiZh7qe+meFBQ=="/>
+			<pubDate>Sat, 20 Jul 2024 20:03:34 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.26.184/win-x64.zip" sparkle:version="1.26.184.56162" sparkle:shortVersionString="1.26.184" length="106575025" sparkle:os="windows" type="application/zip" sparkle:signature="PSARUfRV/uoWEJrH7FKNeB1ymxhbibPMUMt5+IGDj74Ddcj4dDVeHfq3jYTbzvvWsceAm0tU48f8RvS+YPFcAQ=="/>
 		</item>
 	</channel>
 </rss>
