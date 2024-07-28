@@ -1,17 +1,17 @@
-﻿
-// ***********************************************************************
+﻿// ***********************************************************************
 // Assembly         : IronyModManager.Parser
 // Author           : Mario
 // Created          : 02-18-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-21-2023
+// Last Modified On : 07-28-2024
 // ***********************************************************************
 // <copyright file="LocalizationParser.cs" company="Mario">
 //     Mario
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
+
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -27,7 +27,6 @@ using ValueType = IronyModManager.Shared.Models.ValueType;
 
 namespace IronyModManager.Parser.Generic
 {
-
     /// <summary>
     /// Class LocalizationParser.
     /// Implements the <see cref="IronyModManager.Parser.Generic.BaseLineParser" />
@@ -42,7 +41,12 @@ namespace IronyModManager.Parser.Generic
         /// <summary>
         /// The key regex
         /// </summary>
-        protected static readonly Regex keyRegex = new(@"^[\w'_.-]*$", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+        protected static readonly Regex KeyRegex = new(@"^[\w'_.-]*$", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+
+        /// <summary>
+        /// The languages yml
+        /// </summary>
+        private const string LanguagesYml = "languages.yml";
 
         #endregion Fields
 
@@ -96,19 +100,21 @@ namespace IronyModManager.Parser.Generic
         {
             var result = new List<IDefinition>();
             var errors = new List<string>();
-            string selectedLanguage = string.Empty;
-            string prevId = string.Empty;
+            var selectedLanguage = string.Empty;
+            var prevId = string.Empty;
             foreach (var line in args.Lines)
             {
                 if (string.IsNullOrWhiteSpace(line))
                 {
                     continue;
                 }
+
                 var cleaned = line.Trim().Trim('\t');
                 if (cleaned.Trim().StartsWith(Common.Constants.Scripts.ScriptCommentId))
                 {
                     continue;
                 }
+
                 var lang = GetLanguageId(cleaned);
                 if (!string.IsNullOrWhiteSpace(lang))
                 {
@@ -120,6 +126,7 @@ namespace IronyModManager.Parser.Generic
                         selectedLanguage = fileLanguage;
                     }
                 }
+
                 if (!string.IsNullOrWhiteSpace(selectedLanguage))
                 {
                     if (string.IsNullOrWhiteSpace(lang))
@@ -129,9 +136,9 @@ namespace IronyModManager.Parser.Generic
                         {
                             var def = GetDefinitionInstance();
                             MapDefinitionFromArgs(ConstructArgs(args, def, typeOverride: $"{selectedLanguage}-{Common.Constants.YmlType}"));
-                            string code = cleaned;
-                            var index = cleaned.IndexOf(Common.Constants.Localization.YmlSeparator.ToString());
-                            int order = 0;
+                            var code = cleaned;
+                            var index = cleaned.IndexOf(Common.Constants.Localization.YmlSeparator.ToString(), StringComparison.Ordinal);
+                            var order = 0;
                             var hasError = false;
                             if (index > 0)
                             {
@@ -139,7 +146,7 @@ namespace IronyModManager.Parser.Generic
                                 var secondSegment = code[(index + 1)..];
                                 if (!string.IsNullOrWhiteSpace(secondSegment))
                                 {
-                                    var quoteIndex = secondSegment.IndexOf("\"");
+                                    var quoteIndex = secondSegment.IndexOf("\"", StringComparison.Ordinal);
                                     if (quoteIndex != -1)
                                     {
                                         var orderSegment = secondSegment[..quoteIndex].Trim();
@@ -147,6 +154,7 @@ namespace IronyModManager.Parser.Generic
                                         {
                                             order = parsed;
                                         }
+
                                         secondSegment = secondSegment[quoteIndex..];
                                     }
                                     else
@@ -155,11 +163,13 @@ namespace IronyModManager.Parser.Generic
                                         hasError = true;
                                     }
                                 }
+
                                 if (!string.IsNullOrWhiteSpace(firstSegment) && !string.IsNullOrWhiteSpace(secondSegment))
                                 {
                                     code = $"{firstSegment}1000 {secondSegment}";
                                 }
                             }
+
                             if (!hasError)
                             {
                                 var langFolder = GetFolderNameFromLanguageId(selectedLanguage);
@@ -171,6 +181,7 @@ namespace IronyModManager.Parser.Generic
                                 {
                                     def.VirtualPath = Path.Combine(args.File.Split(Path.DirectorySeparatorChar)[0], Path.GetFileName(args.File));
                                 }
+
                                 def.Type = def.VirtualPath.FormatDefinitionType($"{selectedLanguage}-{Common.Constants.YmlType}");
                                 def.CustomPriorityOrder = order;
                                 def.Code = $"{selectedLanguage}:{Environment.NewLine} {code}";
@@ -192,12 +203,27 @@ namespace IronyModManager.Parser.Generic
                     }
                 }
             }
+
             if (errors.Count > 0)
             {
                 var error = DIResolver.Get<IScriptError>();
                 error.Message = string.Join(Environment.NewLine, errors);
-                return new List<IDefinition>() { TranslateScriptError(error, args, $"{selectedLanguage}-{Common.Constants.YmlType}") };
+                return new List<IDefinition> { TranslateScriptError(error, args, $"{selectedLanguage}-{Common.Constants.YmlType}") };
             }
+
+            // Langs.yml validation
+            if (args.File.EndsWith(LanguagesYml, StringComparison.OrdinalIgnoreCase))
+            {
+                var def = GetDefinitionInstance();
+                MapDefinitionFromArgs(ConstructArgs(args, def));
+                def.Type = args.File.FormatDefinitionType(LanguagesYml.Replace(".", "-"));
+                def.Id = Path.GetFileName(args.File)!.ToLowerInvariant();
+                def.OriginalCode = def.Code = string.Join(Environment.NewLine, args.Lines);
+                def.Tags.Add(def.Id.ToLowerInvariant());
+                def.ValueType = ValueType.WholeTextFile;
+                return new List<IDefinition> { def };
+            }
+
             return result;
         }
 
@@ -252,16 +278,18 @@ namespace IronyModManager.Parser.Generic
             {
                 var values = cleaned.Split(Common.Constants.Localization.YmlSeparator, 2);
                 var key = values[0].Trim();
-                if (!keyRegex.IsMatch(key))
+                if (!KeyRegex.IsMatch(key))
                 {
                     return $"Line contains invalid characters in key: {key}.";
                 }
+
                 var value = values[1];
                 if (string.IsNullOrWhiteSpace(value.Trim()))
                 {
                     return $"Key must contain a value: {key}.";
                 }
             }
+
             return string.Empty;
         }
 
