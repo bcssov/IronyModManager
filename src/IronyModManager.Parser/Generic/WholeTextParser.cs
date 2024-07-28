@@ -4,13 +4,14 @@
 // Created          : 03-28-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 01-29-2022
+// Last Modified On : 07-28-2024
 // ***********************************************************************
 // <copyright file="WholeTextParser.cs" company="Mario">
 //     Mario
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
+
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -39,18 +40,12 @@ namespace IronyModManager.Parser.Generic
         /// <summary>
         /// The skip validation for types
         /// </summary>
-        private static readonly string[] skipValidationForTypes = new string[]
-        {
-            Common.Constants.ShaderExtension, Common.Constants.FxhExtension, Common.Constants.CsvExtension
-        };
+        private static readonly string[] skipValidationForTypes = { Common.Constants.ShaderExtension, Common.Constants.FxhExtension, Common.Constants.CsvExtension };
 
         /// <summary>
         /// The starts with checks
         /// </summary>
-        private static readonly string[] startsWithChecks = new string[]
-        {
-            Common.Constants.OnActionsPath
-        };
+        private static readonly string[] startsWithChecks = { Common.Constants.OnActionsPath };
 
         #endregion Fields
 
@@ -103,6 +98,7 @@ namespace IronyModManager.Parser.Generic
         public override IEnumerable<IDefinition> Parse(ParserArgs args)
         {
             var fileNameTag = IsFileNameTag(args);
+
             // Doesn't seem to like fxh and or shader file extensions
             if (!fileNameTag)
             {
@@ -115,7 +111,7 @@ namespace IronyModManager.Parser.Generic
 
             var def = GetDefinitionInstance();
             MapDefinitionFromArgs(ConstructArgs(args, def));
-            def.Id = Path.GetFileName(args.File).ToLowerInvariant();
+            def.Id = Path.GetFileName(args.File)!.ToLowerInvariant();
             if (fileNameTag)
             {
                 def.OriginalCode = def.Code = GetFileTagCode(args.File, args.Lines);
@@ -142,6 +138,7 @@ namespace IronyModManager.Parser.Generic
                     }
                 }
             }
+
             def.ValueType = ValueType.WholeTextFile;
             return new List<IDefinition> { def };
         }
@@ -163,7 +160,7 @@ namespace IronyModManager.Parser.Generic
         /// <returns><c>true</c> if this instance [can parse root common file] the specified arguments; otherwise, <c>false</c>.</returns>
         protected virtual bool CanParseRootCommonFile(CanParseArgs args)
         {
-            return Path.GetDirectoryName(args.File).Equals(Common.Constants.CommonPath);
+            return Path.GetDirectoryName(args.File)!.Equals(Common.Constants.CommonPath);
         }
 
         /// <summary>
@@ -209,6 +206,7 @@ namespace IronyModManager.Parser.Generic
             {
                 sb.AppendLine(FormatCode(result));
             }
+
             return sb.ToString();
         }
 

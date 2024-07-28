@@ -41,7 +41,7 @@ namespace IronyModManager.Parser.Tests
                 File = "common\\gamerules\\test.txt",
                 GameType = "Stellaris"
             };
-            var parser = new  LocalizationParser(new CodeParser(new Logger()), null);
+            var parser = new LocalizationParser(new CodeParser(new Logger()), null);
             parser.CanParse(args).Should().BeFalse();
             args.File = "loc\\loc.yml";
             parser.CanParse(args).Should().BeTrue();
@@ -63,14 +63,14 @@ namespace IronyModManager.Parser.Tests
 
             var sb2 = new StringBuilder();
             sb2.AppendLine(@"l_english:");
-            sb2.AppendLine(@" NEW_ACHIEVEMENT_2_0_NAME:1000 ""Brave New World""");                        
+            sb2.AppendLine(@" NEW_ACHIEVEMENT_2_0_NAME:1000 ""Brave New World""");
 
             var sb3 = new StringBuilder();
-            sb3.AppendLine(@"l_english:");            
-            sb3.AppendLine(@" NEW_ACHIEVEMENT_2_0_DESC:1000 ""Colonize a planet""");            
+            sb3.AppendLine(@"l_english:");
+            sb3.AppendLine(@" NEW_ACHIEVEMENT_2_0_DESC:1000 ""Colonize a planet""");
 
             var sb4 = new StringBuilder();
-            sb4.AppendLine(@"l_english:");            
+            sb4.AppendLine(@"l_english:");
             sb4.AppendLine(@" NEW_ACHIEVEMENT_2_1_NAME:1000 ""Digging Deep""");
 
             var args = new ParserArgs()
@@ -104,7 +104,7 @@ namespace IronyModManager.Parser.Tests
                         break;
                     case 2:
                         result[i].Code.Trim().Should().Be(sb4.ToString().Trim());
-                        result[i].Id.Should().Be("NEW_ACHIEVEMENT_2_1_NAME");                        
+                        result[i].Id.Should().Be("NEW_ACHIEVEMENT_2_1_NAME");
                         result[i].ValueType.Should().Be(ValueType.SpecialVariable);
                         break;
                     default:
@@ -181,6 +181,39 @@ namespace IronyModManager.Parser.Tests
                 result[i].ModName.Should().Be("fake");
                 result[i].Type.Should().Be("loc\\english\\l_english-yml");
             }
+        }
+
+        /// <summary>
+        /// Parses a no whitespace at end should yield results.
+        /// </summary>
+        /// <returns></returns>
+        [Fact]
+        public void Parse_languages_yml_should_field_whole_text_file()
+        {
+            DISetup.SetupContainer();
+
+            var sb = new StringBuilder();
+            sb.AppendLine(@"l_english:");
+            sb.AppendLine(@"NEW_ACHIEVEMENT_2_0_NAME:0 ""Brave New World""");
+            sb.AppendLine(@"NEW_ACHIEVEMENT_2_0_DESC:0 ""Colonize a planet""");
+            sb.AppendLine(@"NEW_ACHIEVEMENT_2_1_NAME:0 ""Digging Deep""");
+
+            var args = new ParserArgs()
+            {
+                ContentSHA = "sha",
+                ModDependencies = new List<string> { "1" },
+                File = "loc\\languages.yml",
+                Lines = sb.ToString().Split(Environment.NewLine.ToCharArray(), StringSplitOptions.RemoveEmptyEntries),
+                ModName = "fake"
+            };
+            var parser = new LocalizationParser(new CodeParser(new Logger()), null);
+            var result = parser.Parse(args).ToList();
+            result.Should().NotBeNullOrEmpty();
+            result.Count.Should().Be(1);
+            result.FirstOrDefault()!.ValueType.Should().Be(ValueType.WholeTextFile);
+            result.FirstOrDefault()!.Code.Trim().Should().Be(sb.ToString().Trim());
+            result.FirstOrDefault()!.ModName.Should().Be("fake");
+            result.FirstOrDefault()!.Type.Should().Be("loc\\languages-yml");
         }
     }
 }
