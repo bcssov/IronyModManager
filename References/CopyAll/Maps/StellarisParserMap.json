@@ -1,4 +1,7 @@
 [{
+        "DirectoryPath": "assets",
+        "PreferredParser": "DefaultParser"
+    }, {
         "DirectoryPath": "common",
         "PreferredParser": "GenericWholeTextParser"
     }, {
@@ -519,7 +522,7 @@
         "PreferredParser": "DefaultParser"
     }, {
         "DirectoryPath": "common\\terraform",
-        "PreferredParser": "StellarisOverwrittenParser"
+        "PreferredParser": "StellarisWholeTextParser"
     }, {
         "DirectoryPath": "common\\tradable_actions",
         "PreferredParser": "DefaultParser"

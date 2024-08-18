@@ -371,6 +371,33 @@
         "DirectoryPath": "localisation",
         "PreferredParser": "GenericLocalizationParser"
     }, {
+        "DirectoryPath": "localisation\\braz_por",
+        "PreferredParser": "GenericLocalizationParser"
+    }, {
+        "DirectoryPath": "localisation\\english",
+        "PreferredParser": "GenericLocalizationParser"
+    }, {
+        "DirectoryPath": "localisation\\french",
+        "PreferredParser": "GenericLocalizationParser"
+    }, {
+        "DirectoryPath": "localisation\\german",
+        "PreferredParser": "GenericLocalizationParser"
+    }, {
+        "DirectoryPath": "localisation\\japanese",
+        "PreferredParser": "GenericLocalizationParser"
+    }, {
+        "DirectoryPath": "localisation\\polish",
+        "PreferredParser": "GenericLocalizationParser"
+    }, {
+        "DirectoryPath": "localisation\\russian",
+        "PreferredParser": "GenericLocalizationParser"
+    }, {
+        "DirectoryPath": "localisation\\simp_chinese",
+        "PreferredParser": "GenericLocalizationParser"
+    }, {
+        "DirectoryPath": "localisation\\spanish",
+        "PreferredParser": "GenericLocalizationParser"
+    }, {
         "DirectoryPath": "map",
         "PreferredParser": "GenericWholeTextParser"
     }, {

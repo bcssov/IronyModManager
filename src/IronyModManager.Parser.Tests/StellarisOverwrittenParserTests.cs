@@ -197,20 +197,6 @@ namespace IronyModManager.Parser.Tests
             parser.CanParse(args).Should().BeTrue();
         }
 
-        /// <summary>
-        /// Defines the test method CanParse_terraform_should_be_true.
-        /// </summary>
-        [Fact]
-        public void CanParse_terraform_should_be_true()
-        {
-            var args = new CanParseArgs()
-            {
-                File = "common\\terraform\\test.txt",
-                GameType = "Stellaris"
-            };
-            var parser = new OverwrittenParser(new CodeParser(new Logger()), null);
-            parser.CanParse(args).Should().BeTrue();
-        }
 
         /// <summary>
         /// Defines the test method CanParse_relics_should_be_true.
@@ -381,58 +367,6 @@ namespace IronyModManager.Parser.Tests
                 }
                 result[i].ModName.Should().Be("fake");
                 result[i].Type.Should().Be("common\\fake\\txt");
-            }
-        }
-
-        /// <summary>
-        /// Defines the test method Parse_should_parse_terraform_links.
-        /// </summary>
-        [Fact]
-        public void Parse_should_parse_terraform_links()
-        {
-            DISetup.SetupContainer();
-            var sb = new StringBuilder();
-            sb.AppendLine(@"terraform_link = {");
-            sb.AppendLine(@"	from = ""pc_frozen""");
-            sb.AppendLine(@"	to = ""pc_arctic""");
-            sb.AppendLine(@"	");
-            sb.AppendLine(@"	energy = 30000");
-            sb.AppendLine(@"	duration = 7200");
-            sb.AppendLine(@"	");
-            sb.AppendLine(@"	condition = {");
-            sb.AppendLine(@"		has_technology = ""test""");
-            sb.AppendLine(@"	}");
-            sb.AppendLine(@"}");
-
-            var args = new ParserArgs()
-            {
-                ContentSHA = "sha",
-                ModDependencies = new List<string> { "1" },
-                File = "common\\terraform\\fake.txt",
-                Lines = sb.ToString().Split(Environment.NewLine.ToCharArray(), StringSplitOptions.RemoveEmptyEntries),
-                ModName = "fake"
-            };
-            var parser = new OverwrittenParser(new CodeParser(new Logger()), null);
-            var result = parser.Parse(args).ToList();
-            result.Should().NotBeNullOrEmpty();
-            result.Count.Should().Be(1);
-            for (int i = 0; i < 1; i++)
-            {
-                result[i].ContentSHA.Should().Be("sha");
-                result[i].Dependencies.First().Should().Be("1");
-                result[i].File.Should().Be("common\\terraform\\fake.txt");
-                switch (i)
-                {
-                    case 0:
-                        result[i].Id.Should().Be("pc_frozen-pc_arctic");
-                        result[i].ValueType.Should().Be(ValueType.OverwrittenObject);
-                        break;
-
-                    default:
-                        break;
-                }
-                result[i].ModName.Should().Be("fake");
-                result[i].Type.Should().Be("common\\terraform\\txt");
             }
         }
 
