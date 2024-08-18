@@ -1,17 +1,17 @@
-﻿
-// ***********************************************************************
+﻿// ***********************************************************************
 // Assembly         : IronyModManager.Parser
 // Author           : Mario
 // Created          : 02-18-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-21-2023
+// Last Modified On : 08-18-2024
 // ***********************************************************************
 // <copyright file="WholeTextParser.cs" company="Mario">
 //     Mario
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,7 +21,6 @@ using IronyModManager.Shared;
 
 namespace IronyModManager.Parser.Games.Stellaris
 {
-
     /// <summary>
     /// Class WholeTextParser.
     /// Implements the <see cref="IronyModManager.Parser.Generic.WholeTextParser" />
@@ -36,14 +35,12 @@ namespace IronyModManager.Parser.Games.Stellaris
         /// <summary>
         /// The starts with checks
         /// </summary>
-        private static readonly string[] startsWithChecks = new string[]
+        private static readonly string[] startsWithChecks =
         {
-            Common.Constants.Stellaris.DiploPhrases, Common.Constants.Stellaris.MapGalaxy, Common.Constants.Stellaris.NameLists,
-            Common.Constants.Stellaris.SpeciesNames, Common.Constants.Stellaris.Portraits,
-            Common.Constants.Stellaris.ComponentTags, Common.Constants.Stellaris.RandomNamesBase, Common.Constants.Stellaris.RandomNames,
-            Common.Constants.Stellaris.StartScreenMessages, Common.Constants.Stellaris.MapSetupScenarios, Common.Constants.Stellaris.CountryContainer,
-            Common.Constants.Stellaris.DiplomacyEconomy, Common.Constants.Stellaris.InlineScripts, Common.Constants.Stellaris.EconomicPlans,
-            Common.Constants.Stellaris.SpeciesClasses
+            Common.Constants.Stellaris.DiploPhrases, Common.Constants.Stellaris.MapGalaxy, Common.Constants.Stellaris.NameLists, Common.Constants.Stellaris.SpeciesNames, Common.Constants.Stellaris.Portraits,
+            Common.Constants.Stellaris.ComponentTags, Common.Constants.Stellaris.RandomNamesBase, Common.Constants.Stellaris.RandomNames, Common.Constants.Stellaris.StartScreenMessages, Common.Constants.Stellaris.MapSetupScenarios,
+            Common.Constants.Stellaris.CountryContainer, Common.Constants.Stellaris.DiplomacyEconomy, Common.Constants.Stellaris.InlineScripts, Common.Constants.Stellaris.EconomicPlans, Common.Constants.Stellaris.SpeciesClasses,
+            Common.Constants.Stellaris.Terraform
         };
 
         #endregion Fields

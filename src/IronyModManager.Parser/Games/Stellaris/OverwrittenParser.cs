@@ -4,13 +4,14 @@
 // Created          : 05-25-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 10-14-2022
+// Last Modified On : 08-18-2024
 // ***********************************************************************
 // <copyright file="OverwrittenParser.cs" company="Mario">
 //     Mario
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -37,35 +38,22 @@ namespace IronyModManager.Parser.Games.Stellaris
         /// <summary>
         /// The starts with checks
         /// </summary>
-        private static readonly string[] directoryNames = new string[]
-        {
-            Common.Constants.Stellaris.PopJobs, Common.Constants.Stellaris.Traits,
-            Common.Constants.Stellaris.Districts, Common.Constants.Stellaris.PlanetClasses,
-            Common.Constants.Stellaris.PrescriptedCountries, Common.Constants.Stellaris.SpeciesArchetypes,
-            Common.Constants.Stellaris.Buildings, Common.Constants.Stellaris.DiplomaticActions,
-            Common.Constants.Stellaris.Technology,
-            Common.Constants.Stellaris.CountryTypes, Common.Constants.Stellaris.Terraform,
-            Common.Constants.Stellaris.Relics, Common.Constants.Stellaris.OpinionModifiers,
-            Common.Constants.Stellaris.SectionTemplates
-        };
+        private static readonly string[] directoryNames =
+        [
+            Common.Constants.Stellaris.PopJobs, Common.Constants.Stellaris.Traits, Common.Constants.Stellaris.Districts, Common.Constants.Stellaris.PlanetClasses, Common.Constants.Stellaris.PrescriptedCountries,
+            Common.Constants.Stellaris.SpeciesArchetypes, Common.Constants.Stellaris.Buildings, Common.Constants.Stellaris.DiplomaticActions, Common.Constants.Stellaris.Technology, Common.Constants.Stellaris.CountryTypes,
+            Common.Constants.Stellaris.Relics, Common.Constants.Stellaris.OpinionModifiers, Common.Constants.Stellaris.SectionTemplates
+        ];
 
         /// <summary>
         /// The partial directory names
         /// </summary>
-        private static readonly string[] partialDirectoryNames = new string[]
-        {
-            Common.Constants.Stellaris.SpeciesRights
-        };
+        private static readonly string[] partialDirectoryNames = [Common.Constants.Stellaris.SpeciesRights];
 
         /// <summary>
         /// The key type
         /// </summary>
-        private bool keyType = false;
-
-        /// <summary>
-        /// The terraform type
-        /// </summary>
-        private bool terraformType = false;
+        private bool keyType;
 
         #endregion Fields
 
@@ -117,15 +105,8 @@ namespace IronyModManager.Parser.Games.Stellaris
         /// <returns>IEnumerable&lt;IDefinition&gt;.</returns>
         public override IEnumerable<IDefinition> Parse(ParserArgs args)
         {
-            keyType = false;
-            if (args.File.StartsWith(Common.Constants.Stellaris.PlanetClasses) || args.File.StartsWith(Common.Constants.Stellaris.SectionTemplates))
-            {
-                keyType = true;
-            }
-            else if (args.File.StartsWith(Common.Constants.Stellaris.Terraform))
-            {
-                terraformType = true;
-            }
+            keyType = args.File.StartsWith(Common.Constants.Stellaris.PlanetClasses) || args.File.StartsWith(Common.Constants.Stellaris.SectionTemplates);
+
             var results = ParseRoot(args);
             if (results?.Count() > 0)
             {
@@ -137,6 +118,7 @@ namespace IronyModManager.Parser.Games.Stellaris
                     }
                 }
             }
+
             return results;
         }
 
@@ -148,50 +130,7 @@ namespace IronyModManager.Parser.Games.Stellaris
         protected virtual bool CanParseStartsWith(CanParseArgs args)
         {
             var directoryName = System.IO.Path.GetDirectoryName(args.File);
-            return directoryNames.Any(s => directoryName.Equals(s, StringComparison.OrdinalIgnoreCase)) || partialDirectoryNames.Any(s => directoryName.StartsWith(s, StringComparison.OrdinalIgnoreCase));
-        }
-
-        /// <summary>
-        /// Evals the definition identifier.
-        /// </summary>
-        /// <param name="values">The values.</param>
-        /// <param name="defaultId">The default identifier.</param>
-        /// <returns>System.String.</returns>
-        protected override string EvalDefinitionId(IEnumerable<IScriptElement> values, string defaultId)
-        {
-            if (terraformType)
-            {
-                if (values?.Count() > 0)
-                {
-                    string from = string.Empty;
-                    string to = string.Empty;
-                    foreach (var item in values)
-                    {
-                        if (item.Key.Equals("from", StringComparison.OrdinalIgnoreCase))
-                        {
-                            from = item.Value;
-                        }
-                        else if (item.Key.Equals("to", StringComparison.OrdinalIgnoreCase))
-                        {
-                            to = item.Value;
-                        }
-                    }
-                    if (!string.IsNullOrWhiteSpace(from) && !string.IsNullOrWhiteSpace(to))
-                    {
-                        return $"{from}-{to}";
-                    }
-                    else if (!string.IsNullOrWhiteSpace(from))
-                    {
-                        return from;
-                    }
-                    else if (!string.IsNullOrWhiteSpace(to))
-                    {
-                        return to;
-                    }
-                }
-                return defaultId;
-            }
-            return base.EvalDefinitionId(values, defaultId);
+            return directoryNames.Any(s => directoryName!.Equals(s, StringComparison.OrdinalIgnoreCase)) || partialDirectoryNames.Any(s => directoryName!.StartsWith(s, StringComparison.OrdinalIgnoreCase));
         }
 
         /// <summary>
@@ -208,6 +147,7 @@ namespace IronyModManager.Parser.Games.Stellaris
                     return value.Value;
                 }
             }
+
             return base.EvalElementForId(value);
         }
 
