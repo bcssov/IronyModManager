@@ -254,6 +254,9 @@
         "DirectoryPath": "common\\inline_scripts\\colony_types",
         "PreferredParser": "StellarisWholeTextParser"
     }, {
+        "DirectoryPath": "common\\inline_scripts\\cosmic_storms",
+        "PreferredParser": "StellarisWholeTextParser"
+    }, {
         "DirectoryPath": "common\\inline_scripts\\deposits",
         "PreferredParser": "StellarisWholeTextParser"
     }, {
@@ -331,6 +334,9 @@
     }, {
         "DirectoryPath": "common\\message_types",
         "PreferredParser": "GenericKeyParser"
+    }, {
+        "DirectoryPath": "common\\missions",
+        "PreferredParser": "DefaultParser"
     }, {
         "DirectoryPath": "common\\named_colors",
         "PreferredParser": "DefaultParser"
@@ -444,7 +450,7 @@
         "PreferredParser": "DefaultParser"
     }, {
         "DirectoryPath": "common\\special_projects",
-        "PreferredParser": "GenericKeyParser"
+        "PreferredParser": "StellarisKeyParser"
     }, {
         "DirectoryPath": "common\\species_archetypes",
         "PreferredParser": "StellarisOverwrittenParser"
@@ -498,6 +504,9 @@
         "PreferredParser": "GenericKeyParser"
     }, {
         "DirectoryPath": "common\\static_modifiers",
+        "PreferredParser": "DefaultParser"
+    }, {
+        "DirectoryPath": "common\\storm_types",
         "PreferredParser": "DefaultParser"
     }, {
         "DirectoryPath": "common\\strategic_resources",
@@ -777,6 +786,9 @@
         "PreferredParser": "GenericWholeTextParser"
     }, {
         "DirectoryPath": "sound\\astral_planes\\rifts",
+        "PreferredParser": "GenericWholeTextParser"
+    }, {
+        "DirectoryPath": "sound\\cosmic_storms",
         "PreferredParser": "GenericWholeTextParser"
     }, {
         "DirectoryPath": "sound\\distant_stars",

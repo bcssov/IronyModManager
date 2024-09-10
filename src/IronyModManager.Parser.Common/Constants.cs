@@ -1,24 +1,24 @@
-﻿
-// ***********************************************************************
+﻿// ***********************************************************************
 // Assembly         : IronyModManager.Parser.Common
 // Author           : Mario
 // Created          : 02-16-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 10-11-2023
+// Last Modified On : 09-10-2024
 // ***********************************************************************
 // <copyright file="Constants.cs" company="Mario">
 //     Mario
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
+
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 
 namespace IronyModManager.Parser.Common
 {
-
     /// <summary>
     /// Class Constants.
     /// </summary>
@@ -95,6 +95,7 @@ namespace IronyModManager.Parser.Common
         /// The store cache root rolder
         /// </summary>
         public const string StoreCacheRootRolder = "StoreCache";
+
         /// <summary>
         /// The text extension
         /// </summary>
@@ -309,6 +310,7 @@ namespace IronyModManager.Parser.Common
             /// The profile backgrounds
             /// </summary>
             public static readonly string ProfileBackgrounds = MergePath(CommonPath, "profile_backgrounds");
+
             /// <summary>
             /// The profile pictures
             /// </summary>
@@ -387,12 +389,15 @@ namespace IronyModManager.Parser.Common
             /// <summary>
             /// The locale folders
             /// </summary>
-            public static readonly string[] LocaleFolders = new string[] { "default", "english", "braz_por", "french", "german", "polish", "russian", "simp_chinese", "spanish", "chinese", "traditional_chinese", "japanese", "korean" };
+            public static readonly string[] LocaleFolders = { "default", "english", "braz_por", "french", "german", "polish", "russian", "simp_chinese", "spanish", "chinese", "traditional_chinese", "japanese", "korean" };
 
             /// <summary>
             /// The locales
             /// </summary>
-            public static readonly string[] Locales = new string[] { "l_default", "l_english", "l_braz_por", "l_french", "l_german", "l_polish", "l_russian", "l_simp_chinese", "l_spanish", "l_chinese", "l_traditional_chinese", "l_japanese", "l_korean" };
+            public static readonly string[] Locales =
+            {
+                "l_default", "l_english", "l_braz_por", "l_french", "l_german", "l_polish", "l_russian", "l_simp_chinese", "l_spanish", "l_chinese", "l_traditional_chinese", "l_japanese", "l_korean"
+            };
 
             #endregion Fields
         }
@@ -502,32 +507,32 @@ namespace IronyModManager.Parser.Common
             /// <summary>
             /// The terminators
             /// </summary>
-            public static readonly char[] CodeTerminators = new char[] { OpenObject, CloseObject };
+            public static readonly char[] CodeTerminators = { OpenObject, CloseObject };
 
             /// <summary>
             /// The generic key ids
             /// </summary>
-            public static readonly string[] GenericKeyIds = new string[] { "id=", "name=", "key=", "format=", "world=", "localization=" };
+            public static readonly string[] GenericKeyIds = { "id=", "name=", "key=", "format=", "world=", "localization=" };
 
             /// <summary>
             /// The generic keys
             /// </summary>
-            public static readonly string[] GenericKeys = new string[] { "id", "name", "key", "format", "world", "localization" };
+            public static readonly string[] GenericKeys = { "id", "name", "key", "format", "world", "localization" };
 
             /// <summary>
             /// The inline operators
             /// </summary>
-            public static readonly string[] InlineOperators = new string[] { "hsv", "rgb" };
+            public static readonly string[] InlineOperators = { "hsv", "rgb" };
 
             /// <summary>
             /// The namespace
             /// </summary>
-            public static readonly string[] Namespaces = new string[] { "namespace", "add_namespace" };
+            public static readonly string[] Namespaces = { "namespace", "add_namespace" };
 
             /// <summary>
             /// The operators
             /// </summary>
-            public static readonly char[] Operators = new char[] { EqualsOperator, GreaterThanOperator, LowerThanOperator, NotEqualOperator };
+            public static readonly char[] Operators = { EqualsOperator, GreaterThanOperator, LowerThanOperator, NotEqualOperator };
 
             #endregion Fields
         }
@@ -695,6 +700,11 @@ namespace IronyModManager.Parser.Common
             public static readonly string SolarSystemInitializers = MergePath(CommonPath, "solar_system_initializers");
 
             /// <summary>
+            /// The special projects
+            /// </summary>
+            public static readonly string SpecialProjects = MergePath(CommonPath, "special_projects");
+
+            /// <summary>
             /// The species archetypes
             /// </summary>
             public static readonly string SpeciesArchetypes = MergePath(CommonPath, "species_archetypes");
@@ -703,6 +713,7 @@ namespace IronyModManager.Parser.Common
             /// The species classes
             /// </summary>
             public static readonly string SpeciesClasses = MergePath(CommonPath, "species_classes");
+
             /// <summary>
             /// The species names
             /// </summary>

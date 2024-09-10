@@ -4,7 +4,7 @@
 // Created          : 02-16-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-22-2024
+// Last Modified On : 09-10-2024
 // ***********************************************************************
 // <copyright file="Extensions.cs" company="Mario">
 //     Mario
@@ -27,8 +27,6 @@ namespace IronyModManager.Shared
     [ExcludeFromCoverage("Extensions are excluded.")]
     public static partial class Extensions
     {
-        #region Fields
-
         /// <summary>
         /// The emoji filter
         /// </summary>
@@ -135,10 +133,6 @@ namespace IronyModManager.Shared
         /// </summary>
         private static IEnumerable<char> invalidFileNameCharacters;
 
-        #endregion Fields
-
-        #region Methods
-
         /// <summary>
         /// Capitalizes an every first letter.
         /// </summary>
@@ -159,6 +153,17 @@ namespace IronyModManager.Shared
             }
 
             return value;
+        }
+
+
+        /// <summary>
+        /// Counts the letters.
+        /// </summary>
+        /// <param name="input">The input.</param>
+        /// <returns>System.Int32.</returns>
+        public static int CountLetters(this string input)
+        {
+            return input.Where(char.IsLetter).Count();
         }
 
         /// <summary>
@@ -324,7 +329,5 @@ namespace IronyModManager.Shared
 
             return input;
         }
-
-        #endregion Methods
     }
 }
