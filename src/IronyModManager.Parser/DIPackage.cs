@@ -1,19 +1,20 @@
-﻿
-// ***********************************************************************
+﻿// ***********************************************************************
 // Assembly         : IronyModManager.Parser
 // Author           : Mario
 // Created          : 02-16-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 10-04-2023
+// Last Modified On : 09-10-2024
 // ***********************************************************************
 // <copyright file="DIPackage.cs" company="Mario">
 //     Mario
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
+
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using IronyModManager.DI.Extensions;
 using IronyModManager.Parser.Common;
 using IronyModManager.Parser.Common.DLC;
@@ -38,7 +39,6 @@ using SimpleInjector.Packaging;
 
 namespace IronyModManager.Parser
 {
-
     /// <summary>
     /// Class DIPackage.
     /// Implements the <see cref="SimpleInjector.Packaging.IPackage" />
@@ -47,7 +47,6 @@ namespace IronyModManager.Parser
     [ExcludeFromCoverage("Should not test external DI.")]
     public class DIPackage : IPackage
     {
-
         #region Methods
 
         /// <summary>
@@ -59,21 +58,30 @@ namespace IronyModManager.Parser
             container.Register<IDefinition, Definition>();
             container.Register<IIndexedDefinitions, IndexedDefinitions>();
             container.RemoveTransientWarning<IIndexedDefinitions>();
-            container.Collection.Register(typeof(IDefaultParser), new List<Type>()
+            container.Collection.Register(typeof(IDefaultParser), new List<Type> { typeof(Default.DefaultParser) });
+            container.Collection.Register(typeof(IGenericParser), new List<Type>
             {
-                typeof(Default.DefaultParser)
-            });
-            container.Collection.Register(typeof(IGenericParser), new List<Type>()
-            {
-                typeof(BinaryParser), typeof(Generic.DefinesParser), typeof(GraphicsParser),
-                typeof(Generic.KeyParser), typeof(LocalizationParser), typeof(Generic.WholeTextParser)
+                typeof(BinaryParser),
+                typeof(Generic.DefinesParser),
+                typeof(GraphicsParser),
+                typeof(Generic.KeyParser),
+                typeof(LocalizationParser),
+                typeof(Generic.WholeTextParser)
             });
             container.Collection.Register(typeof(IGameParser), new List<Type>
             {
-                typeof(FlagsParser), typeof(SolarSystemInitializersParser), typeof(Games.Stellaris.WholeTextParser),
-                typeof(OverwrittenParser), typeof(ScriptedVariablesParser), typeof(OverwrittenObjectSingleFileParser),
-                typeof(KeyValuePairParser), typeof(Games.HOI4.WholeTextParser), typeof(InnerLayerParser), typeof(Games.HOI4.KeyParser),
-                typeof(Games.Stellaris.DefinesParser)
+                typeof(FlagsParser),
+                typeof(SolarSystemInitializersParser),
+                typeof(Games.Stellaris.WholeTextParser),
+                typeof(OverwrittenParser),
+                typeof(ScriptedVariablesParser),
+                typeof(OverwrittenObjectSingleFileParser),
+                typeof(KeyValuePairParser),
+                typeof(Games.HOI4.WholeTextParser),
+                typeof(InnerLayerParser),
+                typeof(Games.HOI4.KeyParser),
+                typeof(Games.Stellaris.DefinesParser),
+                typeof(Games.Stellaris.KeyParser)
             });
             container.Register<IParserManager, ParserManager>();
             container.Register<IModObject, ModObject>();
@@ -90,10 +98,7 @@ namespace IronyModManager.Parser
             container.Register<IBracketValidateResult, BracketValidateResult>();
             container.Register<ISearchParserResult, SearchParserResult>();
             container.Register<ILocalizationRegistry, LocalizationRegistry>(Lifestyle.Singleton);
-            container.Collection.Register(typeof(ITypeConverter<>), new List<Type>
-            {
-                typeof(BoolConverter), typeof(VersionConverter), typeof(SourceTypeConverter)
-            });
+            container.Collection.Register(typeof(ITypeConverter<>), new List<Type> { typeof(BoolConverter), typeof(VersionConverter), typeof(SourceTypeConverter) });
             container.Register<IParser, Mod.Search.Parser>();
             container.Register<IParametrizedParser, ParametrizedParser>();
         }
