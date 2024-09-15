@@ -4,9 +4,10 @@
 		<title>Irony Mod Manager</title>
 		<language>en</language>
 		<item>
-			<title>1.26.188</title>
+			<title>1.26.189</title>
 			<description>## Current Release Notes
-* Stellaris 3.13 CS support
+* Handle replace_paths differently due to oddities in CK3 mods
+* Improve basic merge for by using topological sort for mod load order
 
 ## Release Notes 1.26
 * Update dependencies
@@ -19,13 +20,14 @@
 * Added conflict solver option to skip parsing some languages
 * Add conflict solver configuration to customize colors for new diff viewer
 * Add templateable merge mod naming</description>
-			<pubDate>Tue, 10 Sep 2024 20:12:42 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.26.188/linux-x64.zip" sparkle:version="1.26.188.25673" sparkle:shortVersionString="1.26.188" length="90919005" sparkle:os="linux" type="application/zip" sparkle:signature="14KYFdHbmlP+ZWb4JeS9FGB85+ifNS2NOyMEdKG2h8763fU6ah7MCDaHp/w/oRzxHMaI4fjBSD3YTeYDQaiTDQ=="/>
+			<pubDate>Sun, 15 Sep 2024 20:11:57 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.26.189/linux-x64.zip" sparkle:version="1.26.189.49022" sparkle:shortVersionString="1.26.189" length="90912127" sparkle:os="linux" type="application/zip" sparkle:signature="LpqxHRhyf5ELb7RieAKRNSutvcnN8KpnBIk4UX1gjALhM5NogSB5HPBoGmPyMtu5hjDUzfOeS/hGKPmjE7AeAg=="/>
 		</item>
 		<item>
-			<title>1.26.188</title>
+			<title>1.26.189</title>
 			<description>## Current Release Notes
-* Stellaris 3.13 CS support
+* Handle replace_paths differently due to oddities in CK3 mods
+* Improve basic merge for by using topological sort for mod load order
 
 ## Release Notes 1.26
 * Update dependencies
@@ -38,13 +40,14 @@
 * Added conflict solver option to skip parsing some languages
 * Add conflict solver configuration to customize colors for new diff viewer
 * Add templateable merge mod naming</description>
-			<pubDate>Tue, 10 Sep 2024 20:12:46 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.26.188/osx-x64.zip" sparkle:version="1.26.188.25673" sparkle:shortVersionString="1.26.188" length="93870829" sparkle:os="osx" type="application/zip" sparkle:signature="1AkGDpmOb2+B1E/kvVX223iQaosBpyFnbRsN4PfhKEe5OQVU0uEgA78ZiepboGhrxhJkvuW33TV+HB6O7qz/Dg=="/>
+			<pubDate>Sun, 15 Sep 2024 20:12:01 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.26.189/osx-x64.zip" sparkle:version="1.26.189.49022" sparkle:shortVersionString="1.26.189" length="93877434" sparkle:os="osx" type="application/zip" sparkle:signature="ZKBkpz0k7240KRVwAmToDTU9j7cB4HOAAHrwzjoe4zYtfaIXWZ+JzUmmhOe5w4HVK5+HT3rJfkPW1Ao//KqwCg=="/>
 		</item>
 		<item>
-			<title>1.26.188</title>
+			<title>1.26.189</title>
 			<description>## Current Release Notes
-* Stellaris 3.13 CS support
+* Handle replace_paths differently due to oddities in CK3 mods
+* Improve basic merge for by using topological sort for mod load order
 
 ## Release Notes 1.26
 * Update dependencies
@@ -57,13 +60,14 @@
 * Added conflict solver option to skip parsing some languages
 * Add conflict solver configuration to customize colors for new diff viewer
 * Add templateable merge mod naming</description>
-			<pubDate>Tue, 10 Sep 2024 20:12:50 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.26.188/win-x64-setup.zip" sparkle:version="1.26.188.25673" sparkle:shortVersionString="1.26.188" length="72793741" sparkle:os="windows" type="application/zip" sparkle:signature="e3J47nkuHeUZvv1spAQKDtovqoEmFH6Nj4Hv7Rx05bxvr91bVEPpMnqnWmORRutxbRGNm9llPMggwfnnGgQdCg=="/>
+			<pubDate>Sun, 15 Sep 2024 20:12:04 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.26.189/win-x64-setup.zip" sparkle:version="1.26.189.49022" sparkle:shortVersionString="1.26.189" length="72837067" sparkle:os="windows" type="application/zip" sparkle:signature="4l+ceQiXqgWMSCS9fKbz+vjjNNG5CzXh4jq3umYv+uH+nb9yJEp1VwDe3Qlaza42vnCi0otLEaZZjyb6HYqkDw=="/>
 		</item>
 		<item>
-			<title>1.26.188</title>
+			<title>1.26.189</title>
 			<description>## Current Release Notes
-* Stellaris 3.13 CS support
+* Handle replace_paths differently due to oddities in CK3 mods
+* Improve basic merge for by using topological sort for mod load order
 
 ## Release Notes 1.26
 * Update dependencies
@@ -76,8 +80,8 @@
 * Added conflict solver option to skip parsing some languages
 * Add conflict solver configuration to customize colors for new diff viewer
 * Add templateable merge mod naming</description>
-			<pubDate>Tue, 10 Sep 2024 20:12:51 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.26.188/win-x64.zip" sparkle:version="1.26.188.25673" sparkle:shortVersionString="1.26.188" length="106701222" sparkle:os="windows" type="application/zip" sparkle:signature="AT0acwsFXuqXODjZcfqaysncIBTlHWL4vQ4YjzR4lQ4vQCKbXqbKLl6g32rtJQ/dk4TjzM3fEAT4EQHUqwzvAg=="/>
+			<pubDate>Sun, 15 Sep 2024 20:12:05 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.26.189/win-x64.zip" sparkle:version="1.26.189.49022" sparkle:shortVersionString="1.26.189" length="106706553" sparkle:os="windows" type="application/zip" sparkle:signature="L7ILw300/fcfILdD8p7PopaGc3aBftiVuITcLej8Wg67ve1QfN3xZcbNc7yBfMN6yGw99LpnrqRlYKovPWRxCQ=="/>
 		</item>
 	</channel>
 </rss>
