@@ -4,7 +4,7 @@
 // Created          : 06-19-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-20-2024
+// Last Modified On : 09-15-2024
 // ***********************************************************************
 // <copyright file="ModMergeService.cs" company="Mario">
 //     Mario
@@ -220,6 +220,9 @@ namespace IronyModManager.Services
                 return null;
             }
 
+            // Apply topological sort
+            collectionMods = SortDependencies(collectionMods);
+
             var mergeCollectionPath = collectionName.GenerateValidFileName();
             var modDirPath = GetPatchModDirectory(game, mergeCollectionPath);
             await ModWriter.PurgeModDirectoryAsync(new ModWriterParameters { Path = modDirPath }, true);
@@ -297,8 +300,27 @@ namespace IronyModManager.Services
             {
                 foreach (var file in collectionMod.Files.Where(p => game.GameFolders.Any(s => p.StartsWith(s, StringComparison.OrdinalIgnoreCase))))
                 {
+                    // Can we copy this file?
+                    var allowCopy = true;
+                    if (mod.ReplacePath.Any(p => file.StartsWith(p, StringComparison.OrdinalIgnoreCase)))
+                    {
+                        // So this path is mentioned in replace paths, now we need to verify whether this thing can be copied... Believe that handling of replace_path in the game is so any mod before does not copy its output *only* the ones following with replace path will be copied.
+                        var replacePath = mod.ReplacePath.LastOrDefault(p => file.StartsWith(p, StringComparison.OrdinalIgnoreCase));
+                        var lastMod = collectionMods.LastOrDefault(m => m.ReplacePath.Contains(replacePath, StringComparer.OrdinalIgnoreCase));
+                        var modIdx = collectionMods.IndexOf(collectionMod);
+                        var lastModIdx = collectionMods.IndexOf(lastMod);
+                        if (modIdx < lastModIdx)
+                        {
+                            allowCopy = false;
+                        }
+                    }
+
                     processed++;
-                    await modMergeExporter.ExportFilesAsync(new ModMergeFileExporterParameters { RootModPath = collectionMod.FullPath, ExportFile = file, ExportPath = mod.FullPath });
+                    if (allowCopy)
+                    {
+                        await modMergeExporter.ExportFilesAsync(new ModMergeFileExporterParameters { RootModPath = collectionMod.FullPath, ExportFile = file, ExportPath = mod.FullPath });
+                    }
+
                     var percentage = GetProgressPercentage(totalFiles, processed, 100);
                     if (lastPercentage.IsNotNearlyEqual(percentage))
                     {
@@ -413,7 +435,6 @@ namespace IronyModManager.Services
                 }
 
                 lastPercentage = percentage;
-                mutex.Dispose();
             }
 
             modMergeCompressExporter.ProcessedFile += ModMergeCompressExporterProcessedFile;
@@ -464,7 +485,6 @@ namespace IronyModManager.Services
                         }
 
                         lastPercentage = innerPercentage;
-                        innerProgressLock.Dispose();
                     }
 
                     string path;
@@ -504,7 +524,6 @@ namespace IronyModManager.Services
                     }
 
                     lastPercentage = outerPercentage;
-                    outerProgressLock.Dispose();
 
                     modMergeCompressExporter.Finalize(queueId,
                         Path.Combine(modDirRootPath, mergeCollectionPath, path));
@@ -518,7 +537,6 @@ namespace IronyModManager.Services
                         await p.DisposeAsync();
                     });
                     await Task.WhenAll(streamTasks);
-                    exportModLock.Dispose();
                 }
                 finally
                 {
@@ -595,6 +613,41 @@ namespace IronyModManager.Services
             }
 
             return perc;
+        }
+
+        /// <summary>
+        /// Sorts the dependencies.
+        /// </summary>
+        /// <param name="infos">The infos.</param>
+        /// <returns>System.Collections.Generic.List&lt;IronyModManager.Models.Common.IMod&gt;.</returns>
+        protected virtual List<IMod> SortDependencies(List<IMod> infos)
+        {
+            var sorted = new List<IMod>();
+            var processed = new HashSet<IMod>();
+
+            void process(IMod item)
+            {
+                if (processed.Add(item))
+                {
+                    foreach (var dependency in item.Dependencies)
+                    {
+                        var dependentItem = infos.FirstOrDefault(p => p.Name.Equals(dependency));
+                        if (dependentItem != null)
+                        {
+                            process(dependentItem);
+                        }
+                    }
+
+                    sorted.Add(item);
+                }
+            }
+
+            foreach (var item in infos)
+            {
+                process(item);
+            }
+
+            return sorted;
         }
 
         #endregion Methods
