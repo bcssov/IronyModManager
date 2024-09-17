@@ -302,7 +302,7 @@ namespace IronyModManager.Services
                 {
                     // Can we copy this file?
                     var allowCopy = true;
-                    if (mod.ReplacePath.Any(p => file.StartsWith(p, StringComparison.OrdinalIgnoreCase)))
+                    if (mod.ReplacePath != null && mod.ReplacePath.Any(p => file.StartsWith(p, StringComparison.OrdinalIgnoreCase)))
                     {
                         // So this path is mentioned in replace paths, now we need to verify whether this thing can be copied... Believe that handling of replace_path in the game is so any mod before does not copy its output *only* the ones following with replace path will be copied.
                         var replacePath = mod.ReplacePath.LastOrDefault(p => file.StartsWith(p, StringComparison.OrdinalIgnoreCase));
