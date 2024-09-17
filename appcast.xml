@@ -4,10 +4,13 @@
 		<title>Irony Mod Manager</title>
 		<language>en</language>
 		<item>
-			<title>1.26.189</title>
+			<title>1.26.190</title>
 			<description>## Current Release Notes
+* Fix NRE caused by recent basic merge changes
+
+## 1.26.189
 * Handle replace_paths differently due to oddities in CK3 mods
-* Improve basic merge for by using topological sort for mod load order
+* Improve basic merge by using topological sort for mod load order
 
 ## Release Notes 1.26
 * Update dependencies
@@ -20,14 +23,17 @@
 * Added conflict solver option to skip parsing some languages
 * Add conflict solver configuration to customize colors for new diff viewer
 * Add templateable merge mod naming</description>
-			<pubDate>Sun, 15 Sep 2024 20:11:57 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.26.189/linux-x64.zip" sparkle:version="1.26.189.49022" sparkle:shortVersionString="1.26.189" length="90912127" sparkle:os="linux" type="application/zip" sparkle:signature="LpqxHRhyf5ELb7RieAKRNSutvcnN8KpnBIk4UX1gjALhM5NogSB5HPBoGmPyMtu5hjDUzfOeS/hGKPmjE7AeAg=="/>
+			<pubDate>Tue, 17 Sep 2024 16:44:08 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.26.190/linux-x64.zip" sparkle:version="1.26.190.52104" sparkle:shortVersionString="1.26.190" length="90912334" sparkle:os="linux" type="application/zip" sparkle:signature="Jo5FjtDdeF2djdToiMGemEpeaTKQarkszZ81oaYZtOmqQ8NQHqrLzDdIVS6kA5xSuFz7sqB6EHjr3mOIuC3pBg=="/>
 		</item>
 		<item>
-			<title>1.26.189</title>
+			<title>1.26.190</title>
 			<description>## Current Release Notes
+* Fix NRE caused by recent basic merge changes
+
+## 1.26.189
 * Handle replace_paths differently due to oddities in CK3 mods
-* Improve basic merge for by using topological sort for mod load order
+* Improve basic merge by using topological sort for mod load order
 
 ## Release Notes 1.26
 * Update dependencies
@@ -40,14 +46,17 @@
 * Added conflict solver option to skip parsing some languages
 * Add conflict solver configuration to customize colors for new diff viewer
 * Add templateable merge mod naming</description>
-			<pubDate>Sun, 15 Sep 2024 20:12:01 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.26.189/osx-x64.zip" sparkle:version="1.26.189.49022" sparkle:shortVersionString="1.26.189" length="93877434" sparkle:os="osx" type="application/zip" sparkle:signature="ZKBkpz0k7240KRVwAmToDTU9j7cB4HOAAHrwzjoe4zYtfaIXWZ+JzUmmhOe5w4HVK5+HT3rJfkPW1Ao//KqwCg=="/>
+			<pubDate>Tue, 17 Sep 2024 16:44:12 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.26.190/osx-x64.zip" sparkle:version="1.26.190.52104" sparkle:shortVersionString="1.26.190" length="93877522" sparkle:os="osx" type="application/zip" sparkle:signature="aN6RKVpFcuVCkC/Zwv+DEz9FODCMgxEFg/dRrdL1CRj3P2hJXkpR7dOKTjUIxQpPJO6Qkt1fr5XzPQs+PqqxBA=="/>
 		</item>
 		<item>
-			<title>1.26.189</title>
+			<title>1.26.190</title>
 			<description>## Current Release Notes
+* Fix NRE caused by recent basic merge changes
+
+## 1.26.189
 * Handle replace_paths differently due to oddities in CK3 mods
-* Improve basic merge for by using topological sort for mod load order
+* Improve basic merge by using topological sort for mod load order
 
 ## Release Notes 1.26
 * Update dependencies
@@ -60,14 +69,17 @@
 * Added conflict solver option to skip parsing some languages
 * Add conflict solver configuration to customize colors for new diff viewer
 * Add templateable merge mod naming</description>
-			<pubDate>Sun, 15 Sep 2024 20:12:04 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.26.189/win-x64-setup.zip" sparkle:version="1.26.189.49022" sparkle:shortVersionString="1.26.189" length="72837067" sparkle:os="windows" type="application/zip" sparkle:signature="4l+ceQiXqgWMSCS9fKbz+vjjNNG5CzXh4jq3umYv+uH+nb9yJEp1VwDe3Qlaza42vnCi0otLEaZZjyb6HYqkDw=="/>
+			<pubDate>Tue, 17 Sep 2024 16:44:16 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.26.190/win-x64-setup.zip" sparkle:version="1.26.190.52104" sparkle:shortVersionString="1.26.190" length="72854917" sparkle:os="windows" type="application/zip" sparkle:signature="bXmeB70csBn1Q8sGW9gjmlvF/TkBcGNX4RreUGX+6kqwOQNjGQH1tApaDn/HoCmr/07hc10WDkIDw7oFHm0GDA=="/>
 		</item>
 		<item>
-			<title>1.26.189</title>
+			<title>1.26.190</title>
 			<description>## Current Release Notes
+* Fix NRE caused by recent basic merge changes
+
+## 1.26.189
 * Handle replace_paths differently due to oddities in CK3 mods
-* Improve basic merge for by using topological sort for mod load order
+* Improve basic merge by using topological sort for mod load order
 
 ## Release Notes 1.26
 * Update dependencies
@@ -80,8 +92,8 @@
 * Added conflict solver option to skip parsing some languages
 * Add conflict solver configuration to customize colors for new diff viewer
 * Add templateable merge mod naming</description>
-			<pubDate>Sun, 15 Sep 2024 20:12:05 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.26.189/win-x64.zip" sparkle:version="1.26.189.49022" sparkle:shortVersionString="1.26.189" length="106706553" sparkle:os="windows" type="application/zip" sparkle:signature="L7ILw300/fcfILdD8p7PopaGc3aBftiVuITcLej8Wg67ve1QfN3xZcbNc7yBfMN6yGw99LpnrqRlYKovPWRxCQ=="/>
+			<pubDate>Tue, 17 Sep 2024 16:44:16 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.26.190/win-x64.zip" sparkle:version="1.26.190.52104" sparkle:shortVersionString="1.26.190" length="106706786" sparkle:os="windows" type="application/zip" sparkle:signature="KWUzDTpIaP6X8PB54N0rGbifInhaenSmdIw81nqgG0DcR4JALILnPOg1uedgW/g4JGrBE10c4ianupdVsR6bDQ=="/>
 		</item>
 	</channel>
 </rss>
