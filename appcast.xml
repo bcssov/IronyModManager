@@ -4,8 +4,11 @@
 		<title>Irony Mod Manager</title>
 		<language>en</language>
 		<item>
-			<title>1.26.190</title>
+			<title>1.26.191</title>
 			<description>## Current Release Notes
+* Fixed mess caused by resharper which wrecked compress merge
+
+## 1.26.190
 * Fix NRE caused by recent basic merge changes
 
 ## 1.26.189
@@ -23,12 +26,15 @@
 * Added conflict solver option to skip parsing some languages
 * Add conflict solver configuration to customize colors for new diff viewer
 * Add templateable merge mod naming</description>
-			<pubDate>Tue, 17 Sep 2024 16:44:08 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.26.190/linux-x64.zip" sparkle:version="1.26.190.52104" sparkle:shortVersionString="1.26.190" length="90912334" sparkle:os="linux" type="application/zip" sparkle:signature="Jo5FjtDdeF2djdToiMGemEpeaTKQarkszZ81oaYZtOmqQ8NQHqrLzDdIVS6kA5xSuFz7sqB6EHjr3mOIuC3pBg=="/>
+			<pubDate>Thu, 19 Sep 2024 23:20:36 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.26.191/linux-x64.zip" sparkle:version="1.26.191.7008" sparkle:shortVersionString="1.26.191" length="90912212" sparkle:os="linux" type="application/zip" sparkle:signature="+abXNa9gLHa4J0lrBPkIQCtExQTYdYQSt3EOFEjWzbRh5yHVoAtit4OwRCTJpJlktgzrTI1Iu5vgRXfIaanzAA=="/>
 		</item>
 		<item>
-			<title>1.26.190</title>
+			<title>1.26.191</title>
 			<description>## Current Release Notes
+* Fixed mess caused by resharper which wrecked compress merge
+
+## 1.26.190
 * Fix NRE caused by recent basic merge changes
 
 ## 1.26.189
@@ -46,12 +52,15 @@
 * Added conflict solver option to skip parsing some languages
 * Add conflict solver configuration to customize colors for new diff viewer
 * Add templateable merge mod naming</description>
-			<pubDate>Tue, 17 Sep 2024 16:44:12 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.26.190/osx-x64.zip" sparkle:version="1.26.190.52104" sparkle:shortVersionString="1.26.190" length="93877522" sparkle:os="osx" type="application/zip" sparkle:signature="aN6RKVpFcuVCkC/Zwv+DEz9FODCMgxEFg/dRrdL1CRj3P2hJXkpR7dOKTjUIxQpPJO6Qkt1fr5XzPQs+PqqxBA=="/>
+			<pubDate>Thu, 19 Sep 2024 23:20:41 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.26.191/osx-x64.zip" sparkle:version="1.26.191.7008" sparkle:shortVersionString="1.26.191" length="93877520" sparkle:os="osx" type="application/zip" sparkle:signature="M0JU5ZKw7JaGVYLb/sT5hvbvpf/xODcz0yOwV9e20WQbZtbsPf5+MhSPAUCCLATlbLnHY/bvzkiHpoWIRdNkBA=="/>
 		</item>
 		<item>
-			<title>1.26.190</title>
+			<title>1.26.191</title>
 			<description>## Current Release Notes
+* Fixed mess caused by resharper which wrecked compress merge
+
+## 1.26.190
 * Fix NRE caused by recent basic merge changes
 
 ## 1.26.189
@@ -69,12 +78,15 @@
 * Added conflict solver option to skip parsing some languages
 * Add conflict solver configuration to customize colors for new diff viewer
 * Add templateable merge mod naming</description>
-			<pubDate>Tue, 17 Sep 2024 16:44:16 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.26.190/win-x64-setup.zip" sparkle:version="1.26.190.52104" sparkle:shortVersionString="1.26.190" length="72854917" sparkle:os="windows" type="application/zip" sparkle:signature="bXmeB70csBn1Q8sGW9gjmlvF/TkBcGNX4RreUGX+6kqwOQNjGQH1tApaDn/HoCmr/07hc10WDkIDw7oFHm0GDA=="/>
+			<pubDate>Thu, 19 Sep 2024 23:20:45 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.26.191/win-x64-setup.zip" sparkle:version="1.26.191.7008" sparkle:shortVersionString="1.26.191" length="72827610" sparkle:os="windows" type="application/zip" sparkle:signature="U1dgwCJc+rhNQsSYsT+FU3tVyTYg54kFzQLUnZLN06HIReCPt1sT6kSsO0r3G3Y0cmOPQcwLu0XO3HWiRNW6BA=="/>
 		</item>
 		<item>
-			<title>1.26.190</title>
+			<title>1.26.191</title>
 			<description>## Current Release Notes
+* Fixed mess caused by resharper which wrecked compress merge
+
+## 1.26.190
 * Fix NRE caused by recent basic merge changes
 
 ## 1.26.189
@@ -92,8 +104,8 @@
 * Added conflict solver option to skip parsing some languages
 * Add conflict solver configuration to customize colors for new diff viewer
 * Add templateable merge mod naming</description>
-			<pubDate>Tue, 17 Sep 2024 16:44:16 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.26.190/win-x64.zip" sparkle:version="1.26.190.52104" sparkle:shortVersionString="1.26.190" length="106706786" sparkle:os="windows" type="application/zip" sparkle:signature="KWUzDTpIaP6X8PB54N0rGbifInhaenSmdIw81nqgG0DcR4JALILnPOg1uedgW/g4JGrBE10c4ianupdVsR6bDQ=="/>
+			<pubDate>Thu, 19 Sep 2024 23:20:45 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.26.191/win-x64.zip" sparkle:version="1.26.191.7008" sparkle:shortVersionString="1.26.191" length="106706582" sparkle:os="windows" type="application/zip" sparkle:signature="qvjYjQZ8GuOKLMuoAcJa5BXCbmCawcG7LRMn/IYm3ClQQi/AQZLcClEecHWgGqjqz39jRSoyjp7V6Q/JrihADQ=="/>
 		</item>
 	</channel>
 </rss>
