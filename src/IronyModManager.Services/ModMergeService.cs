@@ -435,6 +435,9 @@ namespace IronyModManager.Services
                 }
 
                 lastPercentage = percentage;
+
+                // ReSharper disable once DisposeOnUsingVariable - sod off
+                mutex.Dispose();
             }
 
             modMergeCompressExporter.ProcessedFile += ModMergeCompressExporterProcessedFile;
@@ -485,6 +488,9 @@ namespace IronyModManager.Services
                         }
 
                         lastPercentage = innerPercentage;
+
+                        // ReSharper disable once DisposeOnUsingVariable - sod off
+                        innerProgressLock.Dispose();
                     }
 
                     string path;
@@ -525,6 +531,9 @@ namespace IronyModManager.Services
 
                     lastPercentage = outerPercentage;
 
+                    // ReSharper disable once DisposeOnUsingVariable - sod off
+                    outerProgressLock.Dispose();
+
                     modMergeCompressExporter.Finalize(queueId,
                         Path.Combine(modDirRootPath, mergeCollectionPath, path));
                     renamePairs.Add(new KeyValuePair<string, string>(collectionMod.Name, newMod.Name));
@@ -537,6 +546,9 @@ namespace IronyModManager.Services
                         await p.DisposeAsync();
                     });
                     await Task.WhenAll(streamTasks);
+
+                    // ReSharper disable once DisposeOnUsingVariable - sod off
+                    exportModLock.Dispose();
                 }
                 finally
                 {
