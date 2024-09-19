@@ -302,7 +302,7 @@ namespace IronyModManager.Services
                 {
                     // Can we copy this file?
                     var allowCopy = true;
-                    if (mod.ReplacePath.Any(p => file.StartsWith(p, StringComparison.OrdinalIgnoreCase)))
+                    if (mod.ReplacePath != null && mod.ReplacePath.Any(p => file.StartsWith(p, StringComparison.OrdinalIgnoreCase)))
                     {
                         // So this path is mentioned in replace paths, now we need to verify whether this thing can be copied... Believe that handling of replace_path in the game is so any mod before does not copy its output *only* the ones following with replace path will be copied.
                         var replacePath = mod.ReplacePath.LastOrDefault(p => file.StartsWith(p, StringComparison.OrdinalIgnoreCase));
@@ -435,6 +435,9 @@ namespace IronyModManager.Services
                 }
 
                 lastPercentage = percentage;
+
+                // ReSharper disable once DisposeOnUsingVariable - sod off
+                mutex.Dispose();
             }
 
             modMergeCompressExporter.ProcessedFile += ModMergeCompressExporterProcessedFile;
@@ -485,6 +488,9 @@ namespace IronyModManager.Services
                         }
 
                         lastPercentage = innerPercentage;
+
+                        // ReSharper disable once DisposeOnUsingVariable - sod off
+                        innerProgressLock.Dispose();
                     }
 
                     string path;
@@ -525,6 +531,9 @@ namespace IronyModManager.Services
 
                     lastPercentage = outerPercentage;
 
+                    // ReSharper disable once DisposeOnUsingVariable - sod off
+                    outerProgressLock.Dispose();
+
                     modMergeCompressExporter.Finalize(queueId,
                         Path.Combine(modDirRootPath, mergeCollectionPath, path));
                     renamePairs.Add(new KeyValuePair<string, string>(collectionMod.Name, newMod.Name));
@@ -537,6 +546,9 @@ namespace IronyModManager.Services
                         await p.DisposeAsync();
                     });
                     await Task.WhenAll(streamTasks);
+
+                    // ReSharper disable once DisposeOnUsingVariable - sod off
+                    exportModLock.Dispose();
                 }
                 finally
                 {
