@@ -16,7 +16,7 @@
     },
     "JokeError": {
         "Title": "未处理的彩蛋容器内存违规",
-        "Message": "按 \"确定\"，假装什么也没发生:)"
+        "Message": "点击确定以假装什么也没发生 :)"
     },
     "FatalError": {
         "Message": "发生了无法处理的异常，程序即将关闭",
@@ -97,7 +97,7 @@
         "ImperatorRome": "帝皇：罗马",
         "CrusaderKings3": "十字军之王 Ⅲ",
         "Victoria3": "维多利亚 Ⅲ",
-        "STInfinite": "Star Trek: Infinite"
+        "STInfinite": "星际迷航：无限"
     },
     "GameLanguages": {
         "l_english": "英语",
@@ -153,7 +153,7 @@
         "Overlay_Rename_Message": "正在重命名……",
         "Overlay_Duplicate_Message": "正在创建合集副本……",
         "ExportToClipboard": "导出合集至剪贴板",
-        "ExportToClipboardFull": "将收藏复制到带元数据的剪贴板",
+        "ExportToClipboardFull": "将合集（含元数据）复制到剪贴板",
         "Undo": "撤销",
         "Redo": "重做",
         "DeleteMerge": {
@@ -254,7 +254,6 @@
             "ModsMissingTitle": "模组已移除",
             "ModsMissingMessage": "一些模组缺失，已自动从合集中移除：{NewLine}{NewLine}{Mods}"
         }
-
     },
     "Mod_Actions": {
         "Apply": "加载合集",
@@ -270,15 +269,15 @@
             "Overlay_Conflict_Solver_Progress": "步骤 {Count}/{TotalCount}: {PercentDone}",
             "FirstUsePrompt": {
                 "Title": "注意！",
-                "Message": "冲突处理器并不适合一般人。它需要修补代码的知识和经验。使用小型模组合集的用户应当直接忽略它；使用大型合集的用户应当考虑精简其合集或学习修补代码。如果继续，恕不提供支持。"
+                "Message": "冲突处理器并不适合一般人，它需要编写补丁代码的知识和经验。使用小型模组合集的用户应当直接忽略它；使用大型合集的用户应当考虑精简其合集或学习编写补丁代码。如果继续，恕不提供支持。"
             },
             "GameExecutableNotSetPrompt": {
                 "Title": "游戏可执行文件未设置",
                 "Message": "尚未在选项中设置游戏可执行文件。因该模组合集此前在冲突分析中包含了原版游戏文件，冲突处理器现将无法分析游戏文件，且某些已解决的冲突可能会重置。是否继续？"
             },
             "TooLargePrompt": {
-                "Title": "太大",
-                "Message": "检测到一个具有大型源代码的MOD，这有可能会导致Irony的内存不足而崩溃。游戏也有可能无法处理如此大的源代码文件。"
+                "Title": "模组过大",
+                "Message": "检测到一个具有大型源代码文件的模组，这有可能会导致软件内存不足而崩溃。游戏也有可能无法处理如此大的源代码文件。"
             }
         },
         "LaunchGame": {
@@ -348,7 +347,7 @@
             "Redo": "重做",
             "Editor": "外部合并",
             "ReadonlyEditor": "外部比较",
-            "ToggleCompare": "切换差值比较模式"
+            "ToggleCompare": "切换 Diff 比较模式"
         },
         "EditorContextMenu": {
             "Copy": "复制",
@@ -406,7 +405,7 @@
             "Watermark": "输入搜索关键词",
             "Close": "关闭",
             "Clear": "×",
-            "Searching": "搜索..."
+            "Searching": "正在搜索……"
         },
         "CustomPatch": {
             "Title": "自定义补丁",
@@ -421,7 +420,7 @@
         },
         "ReadonlyEditor": {
             "Title": "外部比较",
-            "Message": "比较完毕后按 \"确定\"。"
+            "Message": "外部比较完成后，请点击确认"
         },
         "ResolutionSaveError": {
             "Title": "虚拟定义验证失败",
@@ -481,11 +480,11 @@
         "ConflictSolver": {
             "Title": "冲突处理器",
             "AllowedLanguages": "允许使用的语言",
-            "Colors": "新的差分查看器颜色",
-            "ConflictSolverDeletedLineColor": "已删除行",
-            "ConflictSolverImaginaryLineColor": "虚线",
+            "Colors": "新版 Diff 查看器颜色",
+            "ConflictSolverDeletedLineColor": "删除行",
+            "ConflictSolverImaginaryLineColor": "虚拟行",
             "ConflictSolverInsertedLineColor": "插入行",
-            "ConflictSolverModifiedLineColor": "修改线"
+            "ConflictSolverModifiedLineColor": "更改行"
         },
         "Updates": {
             "Title": "更新选项",
@@ -528,9 +527,9 @@
             }
         },
         "ModMerge": {
-            "Title": "模式合并选项",
-            "ModMergeTemplate": "修改模板",
-            "CollectionMergeTemplate": "收藏模板"
+            "Title": "模组合并选项",
+            "ModMergeTemplate": "模组模板",
+            "CollectionMergeTemplate": "合集模板"
         }
     },
     "Notifications": {
@@ -627,7 +626,7 @@
         "OpenInSteam": "在 Steam 中打开",
         "Open": "打开模组链接",
         "Copy": "复制模组链接",
-        "CopyPath": "复制模块路径",
+        "CopyPath": "复制模组路径",
         "OpenInAssociatedApp": "打开模组目录或文件"
     },
     "Descriptor_Actions": {
