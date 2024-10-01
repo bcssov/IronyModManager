@@ -4,7 +4,7 @@
 // Created          : 01-17-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 07-19-2024
+// Last Modified On : 10-01-2024
 // ***********************************************************************
 // <copyright file="Constants.cs" company="Mario">
 //     Mario
@@ -272,7 +272,7 @@ namespace IronyModManager.Shared
                 public static readonly string[] GameFolders =
                 [
                     "common", "content_source", "data_binding", "dlc", "dlc_metadata", "events", "fonts", "gfx", "gui", "history", "licenses", "localization", "map_data", "music", "notifications", "sound", "tests", "tools",
-                    "tweakergui_assets"
+                    "tweakergui_assets", "reader_export"
                 ];
 
                 /// <summary>
