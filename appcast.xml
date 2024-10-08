@@ -4,16 +4,11 @@
 		<title>Irony Mod Manager</title>
 		<language>en</language>
 		<item>
-			<title>1.26.191</title>
+			<title>1.26.195</title>
 			<description>## Current Release Notes
-* Fixed mess caused by resharper which wrecked compress merge
-
-## 1.26.190
-* Fix NRE caused by recent basic merge changes
-
-## 1.26.189
-* Handle replace_paths differently due to oddities in CK3 mods
-* Improve basic merge by using topological sort for mod load order
+* Update Chinese translation (thanks to Clazex)
+* Add reader_export folder to whitelist merge folders for CK3
+* Stellaris CS is now respecting authority merging (when did that become a thing in the first place?)
 
 ## Release Notes 1.26
 * Update dependencies
@@ -26,20 +21,15 @@
 * Added conflict solver option to skip parsing some languages
 * Add conflict solver configuration to customize colors for new diff viewer
 * Add templateable merge mod naming</description>
-			<pubDate>Thu, 19 Sep 2024 23:20:36 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.26.191/linux-x64.zip" sparkle:version="1.26.191.7008" sparkle:shortVersionString="1.26.191" length="90912212" sparkle:os="linux" type="application/zip" sparkle:signature="+abXNa9gLHa4J0lrBPkIQCtExQTYdYQSt3EOFEjWzbRh5yHVoAtit4OwRCTJpJlktgzrTI1Iu5vgRXfIaanzAA=="/>
+			<pubDate>Tue, 08 Oct 2024 09:22:45 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.26.195/linux-x64.zip" sparkle:version="1.26.195.29533" sparkle:shortVersionString="1.26.195" length="90912882" sparkle:os="linux" type="application/zip" sparkle:signature="qoCUANGfV+xQrEDgbRdIM63WNg2q0zqoNcy4r3uE8kM1Qu/OVBVSt30z9BbDjSHQWQBpeudOHsjdHiunRwqSCQ=="/>
 		</item>
 		<item>
-			<title>1.26.191</title>
+			<title>1.26.195</title>
 			<description>## Current Release Notes
-* Fixed mess caused by resharper which wrecked compress merge
-
-## 1.26.190
-* Fix NRE caused by recent basic merge changes
-
-## 1.26.189
-* Handle replace_paths differently due to oddities in CK3 mods
-* Improve basic merge by using topological sort for mod load order
+* Update Chinese translation (thanks to Clazex)
+* Add reader_export folder to whitelist merge folders for CK3
+* Stellaris CS is now respecting authority merging (when did that become a thing in the first place?)
 
 ## Release Notes 1.26
 * Update dependencies
@@ -52,20 +42,15 @@
 * Added conflict solver option to skip parsing some languages
 * Add conflict solver configuration to customize colors for new diff viewer
 * Add templateable merge mod naming</description>
-			<pubDate>Thu, 19 Sep 2024 23:20:41 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.26.191/osx-x64.zip" sparkle:version="1.26.191.7008" sparkle:shortVersionString="1.26.191" length="93877520" sparkle:os="osx" type="application/zip" sparkle:signature="M0JU5ZKw7JaGVYLb/sT5hvbvpf/xODcz0yOwV9e20WQbZtbsPf5+MhSPAUCCLATlbLnHY/bvzkiHpoWIRdNkBA=="/>
+			<pubDate>Tue, 08 Oct 2024 09:22:50 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.26.195/osx-x64.zip" sparkle:version="1.26.195.29533" sparkle:shortVersionString="1.26.195" length="93878224" sparkle:os="osx" type="application/zip" sparkle:signature="MZG1V3oFZtS4Td9fU+B5FZtuDxPEVjlg1wOTqNtr8RoeP4s3P44TGaNqw/O3l4N2CRn5RNyt8HsoBJpLm8SjCQ=="/>
 		</item>
 		<item>
-			<title>1.26.191</title>
+			<title>1.26.195</title>
 			<description>## Current Release Notes
-* Fixed mess caused by resharper which wrecked compress merge
-
-## 1.26.190
-* Fix NRE caused by recent basic merge changes
-
-## 1.26.189
-* Handle replace_paths differently due to oddities in CK3 mods
-* Improve basic merge by using topological sort for mod load order
+* Update Chinese translation (thanks to Clazex)
+* Add reader_export folder to whitelist merge folders for CK3
+* Stellaris CS is now respecting authority merging (when did that become a thing in the first place?)
 
 ## Release Notes 1.26
 * Update dependencies
@@ -78,20 +63,15 @@
 * Added conflict solver option to skip parsing some languages
 * Add conflict solver configuration to customize colors for new diff viewer
 * Add templateable merge mod naming</description>
-			<pubDate>Thu, 19 Sep 2024 23:20:45 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.26.191/win-x64-setup.zip" sparkle:version="1.26.191.7008" sparkle:shortVersionString="1.26.191" length="72827610" sparkle:os="windows" type="application/zip" sparkle:signature="U1dgwCJc+rhNQsSYsT+FU3tVyTYg54kFzQLUnZLN06HIReCPt1sT6kSsO0r3G3Y0cmOPQcwLu0XO3HWiRNW6BA=="/>
+			<pubDate>Tue, 08 Oct 2024 09:22:54 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.26.195/win-x64-setup.zip" sparkle:version="1.26.195.29533" sparkle:shortVersionString="1.26.195" length="72845133" sparkle:os="windows" type="application/zip" sparkle:signature="bIXlQ/Dw/noAN/uf7NWJhxSsKns/rVBpWGKMkvJoQV1Jh+z/OmoIn6jFKsZTiMhW0rqsgWWO5l06Rp6zfh11CQ=="/>
 		</item>
 		<item>
-			<title>1.26.191</title>
+			<title>1.26.195</title>
 			<description>## Current Release Notes
-* Fixed mess caused by resharper which wrecked compress merge
-
-## 1.26.190
-* Fix NRE caused by recent basic merge changes
-
-## 1.26.189
-* Handle replace_paths differently due to oddities in CK3 mods
-* Improve basic merge by using topological sort for mod load order
+* Update Chinese translation (thanks to Clazex)
+* Add reader_export folder to whitelist merge folders for CK3
+* Stellaris CS is now respecting authority merging (when did that become a thing in the first place?)
 
 ## Release Notes 1.26
 * Update dependencies
@@ -104,8 +84,8 @@
 * Added conflict solver option to skip parsing some languages
 * Add conflict solver configuration to customize colors for new diff viewer
 * Add templateable merge mod naming</description>
-			<pubDate>Thu, 19 Sep 2024 23:20:45 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.26.191/win-x64.zip" sparkle:version="1.26.191.7008" sparkle:shortVersionString="1.26.191" length="106706582" sparkle:os="windows" type="application/zip" sparkle:signature="qvjYjQZ8GuOKLMuoAcJa5BXCbmCawcG7LRMn/IYm3ClQQi/AQZLcClEecHWgGqjqz39jRSoyjp7V6Q/JrihADQ=="/>
+			<pubDate>Tue, 08 Oct 2024 09:22:54 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.26.195/win-x64.zip" sparkle:version="1.26.195.29533" sparkle:shortVersionString="1.26.195" length="106707300" sparkle:os="windows" type="application/zip" sparkle:signature="bFlC/E/Np8SwLaUtXLmCOntxccmTJ2VLnPC47Jy23u13kJ2XLoqfUCS6mBFl/a6EMAz5OdyS4V7RqYV5dwZxDQ=="/>
 		</item>
 	</channel>
 </rss>
