@@ -1,11 +1,10 @@
-﻿
-// ***********************************************************************
+﻿// ***********************************************************************
 // Assembly         : IronyModManager.Parser
 // Author           : Mario
 // Created          : 10-25-2021
 //
 // Last Modified By : Mario
-// Last Modified On : 06-25-2023
+// Last Modified On : 10-08-2024
 // ***********************************************************************
 // <copyright file="OverwrittenObjectSingleFileParser.cs" company="Mario">
 //     Mario
@@ -25,7 +24,6 @@ using ValueType = IronyModManager.Shared.Models.ValueType;
 
 namespace IronyModManager.Parser.Games.Stellaris
 {
-
     /// <summary>
     /// Class OverwrittenParser.
     /// Implements the <see cref="IronyModManager.Parser.Common.Parsers.BaseParser" />
@@ -38,18 +36,21 @@ namespace IronyModManager.Parser.Games.Stellaris
         #region Fields
 
         /// <summary>
+        /// The allow duplicate code block
+        /// </summary>
+        private static readonly Dictionary<string, string[]> allowDuplicateCodeBlock = new() { { Common.Constants.Stellaris.GovernmentAuthorities.ToLowerInvariant(), ["advanced_authority_swap"] } };
+
+        /// <summary>
         /// The merge type ids
         /// </summary>
-        private static readonly Dictionary<string, string[]> allowDuplicateIds = new() { { Common.Constants.Stellaris.Ethics.ToLowerInvariant(), new string[] { "ethic_categories" } } };
+        private static readonly Dictionary<string, string[]> allowDuplicateIds = new() { { Common.Constants.Stellaris.Ethics.ToLowerInvariant(), ["ethic_categories"] } };
 
         /// <summary>
         /// The starts with checks
         /// </summary>
-        private static readonly string[] directoryNames = new string[]
+        private static readonly string[] directoryNames =
         {
-            Common.Constants.Stellaris.Ethics,  Common.Constants.Stellaris.StarbaseModules,
-            Common.Constants.Stellaris.ShipSizes, Common.Constants.Stellaris.StrategicResources,
-            Common.Constants.Stellaris.GovernmentAuthorities
+            Common.Constants.Stellaris.Ethics, Common.Constants.Stellaris.StarbaseModules, Common.Constants.Stellaris.ShipSizes, Common.Constants.Stellaris.StrategicResources, Common.Constants.Stellaris.GovernmentAuthorities
         };
 
         #endregion Fields
@@ -111,17 +112,29 @@ namespace IronyModManager.Parser.Games.Stellaris
                     if (item.ValueType == ValueType.Object)
                     {
                         item.ValueType = ValueType.OverwrittenObjectSingleFile;
-                        if (allowDuplicateIds.ContainsKey(Path.GetDirectoryName(args.File)))
+                        if (allowDuplicateIds.ContainsKey(Path.GetDirectoryName(args.File)!))
                         {
-                            var items = allowDuplicateIds[Path.GetDirectoryName(args.File)];
+                            var items = allowDuplicateIds[Path.GetDirectoryName(args.File)!];
                             if (items.Any(p => p.Equals(item.Id, StringComparison.OrdinalIgnoreCase)))
                             {
                                 item.AllowDuplicate = true;
                             }
                         }
+                        else if (allowDuplicateCodeBlock.ContainsKey(Path.GetDirectoryName(args.File)!))
+                        {
+                            var items = allowDuplicateCodeBlock[Path.GetDirectoryName(args.File)!];
+                            foreach (var block in items)
+                            {
+                                if (item.Code.Contains(block, StringComparison.OrdinalIgnoreCase))
+                                {
+                                    item.AllowDuplicate = true;
+                                }
+                            }
+                        }
                     }
                 }
             }
+
             return results;
         }
 
@@ -132,8 +145,8 @@ namespace IronyModManager.Parser.Games.Stellaris
         /// <returns><c>true</c> if this instance [can parse starts with] the specified arguments; otherwise, <c>false</c>.</returns>
         protected virtual bool CanParseStartsWith(CanParseArgs args)
         {
-            var directoryName = System.IO.Path.GetDirectoryName(args.File);
-            return directoryNames.Any(s => directoryName.Equals(s, StringComparison.OrdinalIgnoreCase));
+            var directoryName = Path.GetDirectoryName(args.File);
+            return directoryNames.Any(s => directoryName != null && directoryName.Equals(s, StringComparison.OrdinalIgnoreCase));
         }
 
         #endregion Methods

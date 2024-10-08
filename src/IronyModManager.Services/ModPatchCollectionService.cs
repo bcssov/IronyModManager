@@ -1144,6 +1144,20 @@ namespace IronyModManager.Services
             await messageBus.PublishAsync(new ModDefinitionInvalidReplaceEvent(99.9));
             var indexed = DIResolver.Get<IIndexedDefinitions>();
             await indexed.InitMapAsync(prunedDefinitions);
+
+            // Mark all labeled duplicate defs with same id as allowed duplicates
+            if (prunedDefinitions.Count > 0)
+            {
+                foreach (var item in prunedDefinitions.Where(p => p.AllowDuplicate))
+                {
+                    var duplicateDefs = await indexed.GetByTypeAndIdAsync(item.TypeAndId);
+                    foreach (var def in duplicateDefs)
+                    {
+                        def.AllowDuplicate = true;
+                    }
+                }
+            }
+
             await messageBus.PublishAsync(new ModDefinitionInvalidReplaceEvent(100));
             return indexed;
         }
@@ -1275,6 +1289,7 @@ namespace IronyModManager.Services
                         previousProgress = perc;
                     }
 
+                    // ReSharper disable once DisposeOnUsingVariable
                     mutex.Dispose();
                 }
 
