@@ -4,25 +4,25 @@
 // Created          : 02-17-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-25-2023
+// Last Modified On : 10-21-2024
 // ***********************************************************************
 // <copyright file="IndexedDefinitionsTests.cs" company="Mario">
 //     Mario
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
+
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
-using System.Text;
+using System.Threading.Tasks;
 using FluentAssertions;
 using IronyModManager.Parser.Definitions;
-using IronyModManager.Tests.Common;
 using IronyModManager.Shared.Models;
+using IronyModManager.Tests.Common;
 using Xunit;
 using ValueType = IronyModManager.Shared.Models.ValueType;
-using System.Threading.Tasks;
-using System.IO;
 
 namespace IronyModManager.Parser.Tests
 {
@@ -48,9 +48,9 @@ namespace IronyModManager.Parser.Tests
         {
             DISetup.SetupContainer();
             var defs = new List<IDefinition>();
-            for (int i = 0; i < 10; i++)
+            for (var i = 0; i < 10; i++)
             {
-                defs.Add(new Definition()
+                defs.Add(new Definition
                 {
                     Code = i.ToString(),
                     ContentSHA = i.ToString(),
@@ -61,11 +61,12 @@ namespace IronyModManager.Parser.Tests
                     Type = i.ToString()
                 });
             }
+
             var service = new IndexedDefinitions();
             await service.InitMapAsync(defs);
             var results = await service.GetAllAsync();
             results.Count().Should().Be(defs.Count);
-            int match = 0;
+            var match = 0;
             foreach (var item in defs)
             {
                 if (results.Contains(item))
@@ -73,6 +74,7 @@ namespace IronyModManager.Parser.Tests
                     match++;
                 }
             }
+
             match.Should().Be(defs.Count);
         }
 
@@ -84,9 +86,9 @@ namespace IronyModManager.Parser.Tests
         {
             DISetup.SetupContainer();
             var defs = new List<IDefinition>();
-            for (int i = 0; i < 10; i++)
+            for (var i = 0; i < 10; i++)
             {
-                defs.Add(new Definition()
+                defs.Add(new Definition
                 {
                     Code = i.ToString(),
                     ContentSHA = i.ToString(),
@@ -97,12 +99,13 @@ namespace IronyModManager.Parser.Tests
                     Type = i.ToString()
                 });
             }
+
             var service = new IndexedDefinitions();
             service.UseDiskStore(GetStorePath());
             await service.InitMapAsync(defs);
             var results = await service.GetAllAsync();
             results.Count().Should().Be(defs.Count);
-            int match = 0;
+            var match = 0;
             foreach (var item in defs)
             {
                 if (results.Any(p => p.ModName == item.ModName && p.File == item.File && p.TypeAndId == item.TypeAndId))
@@ -110,6 +113,7 @@ namespace IronyModManager.Parser.Tests
                     match++;
                 }
             }
+
             match.Should().Be(defs.Count);
         }
 
@@ -121,9 +125,9 @@ namespace IronyModManager.Parser.Tests
         {
             DISetup.SetupContainer();
             var defs = new List<IDefinition>();
-            for (int i = 0; i < 10; i++)
+            for (var i = 0; i < 10; i++)
             {
-                defs.Add(new Definition()
+                defs.Add(new Definition
                 {
                     Code = i.ToString(),
                     ContentSHA = i.ToString(),
@@ -134,14 +138,10 @@ namespace IronyModManager.Parser.Tests
                     Type = i.ToString()
                 });
             }
+
             var service = new IndexedDefinitions();
             await service.InitMapAsync(defs);
-            await service.AddToMapAsync(new Definition()
-            {
-                Code = "a",
-                Id = "14",
-                Type = "14"
-            });
+            await service.AddToMapAsync(new Definition { Code = "a", Id = "14", Type = "14" });
             var results = await service.GetAllAsync();
             results.Count().Should().Be(defs.Count + 1);
         }
@@ -154,9 +154,9 @@ namespace IronyModManager.Parser.Tests
         {
             DISetup.SetupContainer();
             var defs = new List<IDefinition>();
-            for (int i = 0; i < 10; i++)
+            for (var i = 0; i < 10; i++)
             {
-                defs.Add(new Definition()
+                defs.Add(new Definition
                 {
                     Code = i.ToString(),
                     ContentSHA = i.ToString(),
@@ -167,15 +167,11 @@ namespace IronyModManager.Parser.Tests
                     Type = i.ToString()
                 });
             }
+
             var service = new IndexedDefinitions();
             service.UseDiskStore(GetStorePath());
             await service.InitMapAsync(defs);
-            await service.AddToMapAsync(new Definition()
-            {
-                Code = "a",
-                Id = "14",
-                Type = "14"
-            });
+            await service.AddToMapAsync(new Definition { Code = "a", Id = "14", Type = "14" });
             var results = await service.GetAllAsync();
             results.Count().Should().Be(defs.Count + 1);
         }
@@ -188,9 +184,9 @@ namespace IronyModManager.Parser.Tests
         {
             DISetup.SetupContainer();
             var defs = new List<IDefinition>();
-            for (int i = 0; i < 10; i++)
+            for (var i = 0; i < 10; i++)
             {
-                defs.Add(new Definition()
+                defs.Add(new Definition
                 {
                     Code = i.ToString(),
                     ContentSHA = i.ToString(),
@@ -201,11 +197,12 @@ namespace IronyModManager.Parser.Tests
                     Type = i.ToString()
                 });
             }
+
             var service = new IndexedDefinitions();
             await service.InitMapAsync(defs);
             var results = await service.GetByFileAsync("file");
             results.Count().Should().Be(defs.Where(s => s.File == "file").Count());
-            int match = 0;
+            var match = 0;
             foreach (var item in defs.Where(s => s.File == "file"))
             {
                 if (results.Contains(item))
@@ -213,6 +210,7 @@ namespace IronyModManager.Parser.Tests
                     match++;
                 }
             }
+
             match.Should().Be(defs.Where(s => s.File == "file").Count());
         }
 
@@ -224,9 +222,9 @@ namespace IronyModManager.Parser.Tests
         {
             DISetup.SetupContainer();
             var defs = new List<IDefinition>();
-            for (int i = 0; i < 10; i++)
+            for (var i = 0; i < 10; i++)
             {
-                defs.Add(new Definition()
+                defs.Add(new Definition
                 {
                     Code = i.ToString(),
                     ContentSHA = i.ToString(),
@@ -237,12 +235,13 @@ namespace IronyModManager.Parser.Tests
                     Type = i.ToString()
                 });
             }
+
             var service = new IndexedDefinitions();
             service.UseDiskStore(GetStorePath());
             await service.InitMapAsync(defs);
             var results = await service.GetByFileAsync("file");
             results.Count().Should().Be(defs.Where(s => s.File == "file").Count());
-            int match = 0;
+            var match = 0;
             foreach (var item in defs.Where(s => s.File == "file"))
             {
                 if (results.Any(p => p.ModName == item.ModName && p.File == item.File && p.TypeAndId == item.TypeAndId))
@@ -250,6 +249,7 @@ namespace IronyModManager.Parser.Tests
                     match++;
                 }
             }
+
             match.Should().Be(defs.Where(s => s.File == "file").Count());
         }
 
@@ -261,9 +261,9 @@ namespace IronyModManager.Parser.Tests
         {
             DISetup.SetupContainer();
             var defs = new List<IDefinition>();
-            for (int i = 0; i < 10; i++)
+            for (var i = 0; i < 10; i++)
             {
-                defs.Add(new Definition()
+                defs.Add(new Definition
                 {
                     Code = i.ToString(),
                     ContentSHA = i.ToString(),
@@ -275,11 +275,12 @@ namespace IronyModManager.Parser.Tests
                     Type = i.ToString()
                 });
             }
+
             var service = new IndexedDefinitions();
             await service.InitMapAsync(defs);
             var results = await service.GetByDiskFileAsync("diskfile");
             results.Count().Should().Be(defs.Where(s => s.DiskFile == "diskfile").Count());
-            int match = 0;
+            var match = 0;
             foreach (var item in defs.Where(s => s.DiskFile == "diskfile"))
             {
                 if (results.Contains(item))
@@ -287,6 +288,7 @@ namespace IronyModManager.Parser.Tests
                     match++;
                 }
             }
+
             match.Should().Be(defs.Where(s => s.DiskFile == "diskfile").Count());
         }
 
@@ -298,9 +300,9 @@ namespace IronyModManager.Parser.Tests
         {
             DISetup.SetupContainer();
             var defs = new List<IDefinition>();
-            for (int i = 0; i < 10; i++)
+            for (var i = 0; i < 10; i++)
             {
-                defs.Add(new Definition()
+                defs.Add(new Definition
                 {
                     Code = i.ToString(),
                     ContentSHA = i.ToString(),
@@ -312,12 +314,13 @@ namespace IronyModManager.Parser.Tests
                     Type = i.ToString()
                 });
             }
+
             var service = new IndexedDefinitions();
             service.UseDiskStore(GetStorePath());
             await service.InitMapAsync(defs);
             var results = await service.GetByDiskFileAsync("diskfile");
             results.Count().Should().Be(defs.Where(s => s.DiskFile == "diskfile").Count());
-            int match = 0;
+            var match = 0;
             foreach (var item in defs.Where(s => s.DiskFile == "diskfile"))
             {
                 if (results.Any(p => p.ModName == item.ModName && p.File == item.File && p.TypeAndId == item.TypeAndId))
@@ -325,6 +328,7 @@ namespace IronyModManager.Parser.Tests
                     match++;
                 }
             }
+
             match.Should().Be(defs.Where(s => s.DiskFile == "diskfile").Count());
         }
 
@@ -336,9 +340,9 @@ namespace IronyModManager.Parser.Tests
         {
             DISetup.SetupContainer();
             var defs = new List<IDefinition>();
-            for (int i = 0; i < 10; i++)
+            for (var i = 0; i < 10; i++)
             {
-                defs.Add(new Definition()
+                defs.Add(new Definition
                 {
                     Code = i.ToString(),
                     ContentSHA = i.ToString(),
@@ -350,9 +354,10 @@ namespace IronyModManager.Parser.Tests
                     ValueType = ValueType.Object
                 });
             }
+
             var service = new IndexedDefinitions();
             await service.InitMapAsync(defs);
-            var results = (await service.GetByValueTypeAsync(ValueType.Object));
+            var results = await service.GetByValueTypeAsync(ValueType.Object);
             results.Count().Should().Be(10);
         }
 
@@ -364,9 +369,9 @@ namespace IronyModManager.Parser.Tests
         {
             DISetup.SetupContainer();
             var defs = new List<IDefinition>();
-            for (int i = 0; i < 10; i++)
+            for (var i = 0; i < 10; i++)
             {
-                defs.Add(new Definition()
+                defs.Add(new Definition
                 {
                     Code = i.ToString(),
                     ContentSHA = i.ToString(),
@@ -378,11 +383,82 @@ namespace IronyModManager.Parser.Tests
                     ValueType = ValueType.Object
                 });
             }
+
             var service = new IndexedDefinitions();
             service.UseDiskStore(GetStorePath());
             await service.InitMapAsync(defs);
-            var results = (await service.GetByValueTypeAsync(ValueType.Object));
+            var results = await service.GetByValueTypeAsync(ValueType.Object);
             results.Count().Should().Be(10);
+        }
+
+        /// <summary>
+        /// Defines the test method Returns_by_merge_type.
+        /// </summary>
+        [Fact]
+        public async Task Returns_by_merge_type()
+        {
+            DISetup.SetupContainer();
+            var defs = new List<IDefinition>();
+            for (var i = 0; i < 10; i++)
+            {
+                defs.Add(new Definition
+                {
+                    Code = i.ToString(),
+                    ContentSHA = i.ToString(),
+                    Dependencies = new List<string> { i.ToString() },
+                    File = i < 5 ? "file" : i.ToString(),
+                    Id = i.ToString(),
+                    ModName = i.ToString(),
+                    Type = i.ToString(),
+                    ValueType = ValueType.Object,
+                    MergeType = MergeType.FlatMerge
+                });
+            }
+
+            var service = new IndexedDefinitions();
+            await service.InitMapAsync(defs);
+            var results = await service.GetByMergeTypeAsync(MergeType.FlatMerge);
+            results.Count().Should().Be(10);
+        }
+
+        /// <summary>
+        /// Defines the test method Does_not_return_by_merge_type_using_store.
+        /// </summary>
+        [Fact]
+        public async Task Does_not_return_by_merge_type_using_store()
+        {
+            DISetup.SetupContainer();
+            var defs = new List<IDefinition>();
+            for (var i = 0; i < 10; i++)
+            {
+                defs.Add(new Definition
+                {
+                    Code = i.ToString(),
+                    ContentSHA = i.ToString(),
+                    Dependencies = new List<string> { i.ToString() },
+                    File = i < 5 ? "file" : i.ToString(),
+                    Id = i.ToString(),
+                    ModName = i.ToString(),
+                    Type = i.ToString(),
+                    ValueType = ValueType.Object,
+                    MergeType = MergeType.FlatMerge
+                });
+            }
+
+            var service = new IndexedDefinitions();
+            service.UseDiskStore(GetStorePath());
+            await service.InitMapAsync(defs);
+            Exception ex = null;
+            try
+            {
+                var results = await service.GetByMergeTypeAsync(MergeType.FlatMerge);
+            }
+            catch (Exception e)
+            {
+                ex = e;
+            }
+
+            ex!.GetType().Should().Be(typeof(NotSupportedException));
         }
 
         /// <summary>
@@ -393,19 +469,20 @@ namespace IronyModManager.Parser.Tests
         {
             DISetup.SetupContainer();
             var defs = new List<IDefinition>();
-            for (int i = 0; i < 3; i++)
+            for (var i = 0; i < 3; i++)
             {
-                defs.Add(new Definition()
+                defs.Add(new Definition
                 {
                     Code = i.ToString(),
                     ContentSHA = i.ToString(),
                     Dependencies = new List<string> { i.ToString() },
-                    File = "events\\" + i.ToString() + ".txt",
+                    File = "events\\" + i + ".txt",
                     Id = i.ToString(),
                     ModName = i.ToString(),
                     Type = i.ToString()
                 });
             }
+
             var service = new IndexedDefinitions();
             await service.InitMapAsync(defs);
             var results = await service.GetByParentDirectoryAsync("events");
@@ -420,19 +497,20 @@ namespace IronyModManager.Parser.Tests
         {
             DISetup.SetupContainer();
             var defs = new List<IDefinition>();
-            for (int i = 0; i < 3; i++)
+            for (var i = 0; i < 3; i++)
             {
-                defs.Add(new Definition()
+                defs.Add(new Definition
                 {
                     Code = i.ToString(),
                     ContentSHA = i.ToString(),
                     Dependencies = new List<string> { i.ToString() },
-                    File = "events\\" + i.ToString() + ".txt",
+                    File = "events\\" + i + ".txt",
                     Id = i.ToString(),
                     ModName = i.ToString(),
                     Type = i.ToString()
                 });
             }
+
             var service = new IndexedDefinitions();
             service.UseDiskStore(GetStorePath());
             await service.InitMapAsync(defs);
@@ -448,9 +526,9 @@ namespace IronyModManager.Parser.Tests
         {
             DISetup.SetupContainer();
             var defs = new List<IDefinition>();
-            for (int i = 0; i < 10; i++)
+            for (var i = 0; i < 10; i++)
             {
-                defs.Add(new Definition()
+                defs.Add(new Definition
                 {
                     Code = i.ToString(),
                     ContentSHA = i.ToString(),
@@ -461,6 +539,7 @@ namespace IronyModManager.Parser.Tests
                     Type = i.ToString()
                 });
             }
+
             var service = new IndexedDefinitions();
             await service.InitMapAsync(defs);
             var results = await service.GetAllFileKeysAsync();
@@ -475,9 +554,9 @@ namespace IronyModManager.Parser.Tests
         {
             DISetup.SetupContainer();
             var defs = new List<IDefinition>();
-            for (int i = 0; i < 10; i++)
+            for (var i = 0; i < 10; i++)
             {
-                defs.Add(new Definition()
+                defs.Add(new Definition
                 {
                     Code = i.ToString(),
                     ContentSHA = i.ToString(),
@@ -488,6 +567,7 @@ namespace IronyModManager.Parser.Tests
                     Type = i.ToString()
                 });
             }
+
             var service = new IndexedDefinitions();
             service.UseDiskStore(GetStorePath());
             await service.InitMapAsync(defs);
@@ -503,19 +583,20 @@ namespace IronyModManager.Parser.Tests
         {
             DISetup.SetupContainer();
             var defs = new List<IDefinition>();
-            for (int i = 0; i < 10; i++)
+            for (var i = 0; i < 10; i++)
             {
-                defs.Add(new Definition()
+                defs.Add(new Definition
                 {
                     Code = i.ToString(),
                     ContentSHA = i.ToString(),
                     Dependencies = new List<string> { i.ToString() },
-                    File = "test\\" + i.ToString(),
+                    File = "test\\" + i,
                     Id = i.ToString(),
                     ModName = i.ToString(),
                     Type = i.ToString()
                 });
             }
+
             var service = new IndexedDefinitions();
             await service.InitMapAsync(defs);
             var results = await service.GetAllDirectoryKeysAsync();
@@ -530,19 +611,20 @@ namespace IronyModManager.Parser.Tests
         {
             DISetup.SetupContainer();
             var defs = new List<IDefinition>();
-            for (int i = 0; i < 10; i++)
+            for (var i = 0; i < 10; i++)
             {
-                defs.Add(new Definition()
+                defs.Add(new Definition
                 {
                     Code = i.ToString(),
                     ContentSHA = i.ToString(),
                     Dependencies = new List<string> { i.ToString() },
-                    File = "test\\" + i.ToString(),
+                    File = "test\\" + i,
                     Id = i.ToString(),
                     ModName = i.ToString(),
                     Type = i.ToString()
                 });
             }
+
             var service = new IndexedDefinitions();
             service.UseDiskStore(GetStorePath());
             await service.InitMapAsync(defs);
@@ -558,19 +640,20 @@ namespace IronyModManager.Parser.Tests
         {
             DISetup.SetupContainer();
             var defs = new List<IDefinition>();
-            for (int i = 0; i < 10; i++)
+            for (var i = 0; i < 10; i++)
             {
-                defs.Add(new Definition()
+                defs.Add(new Definition
                 {
                     Code = i.ToString(),
                     ContentSHA = i.ToString(),
                     Dependencies = new List<string> { i.ToString() },
-                    File = "test\\" + i.ToString(),
+                    File = "test\\" + i,
                     Id = i.ToString(),
                     ModName = i.ToString(),
-                    Type = i.ToString(),
+                    Type = i.ToString()
                 });
             }
+
             var service = new IndexedDefinitions();
             await service.InitMapAsync(defs);
             var results = await service.HasGameDefinitionsAsync();
@@ -585,19 +668,20 @@ namespace IronyModManager.Parser.Tests
         {
             DISetup.SetupContainer();
             var defs = new List<IDefinition>();
-            for (int i = 0; i < 10; i++)
+            for (var i = 0; i < 10; i++)
             {
-                defs.Add(new Definition()
+                defs.Add(new Definition
                 {
                     Code = i.ToString(),
                     ContentSHA = i.ToString(),
                     Dependencies = new List<string> { i.ToString() },
-                    File = "test\\" + i.ToString(),
+                    File = "test\\" + i,
                     Id = i.ToString(),
                     ModName = i.ToString(),
-                    Type = i.ToString(),
+                    Type = i.ToString()
                 });
             }
+
             var service = new IndexedDefinitions();
             service.UseDiskStore(GetStorePath());
             await service.InitMapAsync(defs);
@@ -613,20 +697,21 @@ namespace IronyModManager.Parser.Tests
         {
             DISetup.SetupContainer();
             var defs = new List<IDefinition>();
-            for (int i = 0; i < 10; i++)
+            for (var i = 0; i < 10; i++)
             {
-                defs.Add(new Definition()
+                defs.Add(new Definition
                 {
                     Code = i.ToString(),
                     ContentSHA = i.ToString(),
                     Dependencies = new List<string> { i.ToString() },
-                    File = "test\\" + i.ToString(),
+                    File = "test\\" + i,
                     Id = i.ToString(),
                     ModName = i.ToString(),
                     Type = i.ToString(),
                     IsFromGame = true
                 });
             }
+
             var service = new IndexedDefinitions();
             await service.InitMapAsync(defs);
             var results = await service.HasGameDefinitionsAsync();
@@ -641,20 +726,21 @@ namespace IronyModManager.Parser.Tests
         {
             DISetup.SetupContainer();
             var defs = new List<IDefinition>();
-            for (int i = 0; i < 10; i++)
+            for (var i = 0; i < 10; i++)
             {
-                defs.Add(new Definition()
+                defs.Add(new Definition
                 {
                     Code = i.ToString(),
                     ContentSHA = i.ToString(),
                     Dependencies = new List<string> { i.ToString() },
-                    File = "test\\" + i.ToString(),
+                    File = "test\\" + i,
                     Id = i.ToString(),
                     ModName = i.ToString(),
                     Type = i.ToString(),
                     IsFromGame = true
                 });
             }
+
             var service = new IndexedDefinitions();
             service.UseDiskStore(GetStorePath());
             await service.InitMapAsync(defs);
@@ -670,19 +756,20 @@ namespace IronyModManager.Parser.Tests
         {
             DISetup.SetupContainer();
             var defs = new List<IDefinition>();
-            for (int i = 0; i < 10; i++)
+            for (var i = 0; i < 10; i++)
             {
-                defs.Add(new Definition()
+                defs.Add(new Definition
                 {
                     Code = i.ToString(),
                     ContentSHA = i.ToString(),
                     Dependencies = new List<string> { i.ToString() },
-                    File = "test\\" + i.ToString(),
+                    File = "test\\" + i,
                     Id = i.ToString(),
                     ModName = i.ToString(),
-                    Type = i.ToString(),
+                    Type = i.ToString()
                 });
             }
+
             var service = new IndexedDefinitions();
             await service.InitMapAsync(defs);
             var results = await service.HasResetDefinitionsAsync();
@@ -697,19 +784,20 @@ namespace IronyModManager.Parser.Tests
         {
             DISetup.SetupContainer();
             var defs = new List<IDefinition>();
-            for (int i = 0; i < 10; i++)
+            for (var i = 0; i < 10; i++)
             {
-                defs.Add(new Definition()
+                defs.Add(new Definition
                 {
                     Code = i.ToString(),
                     ContentSHA = i.ToString(),
                     Dependencies = new List<string> { i.ToString() },
-                    File = "test\\" + i.ToString(),
+                    File = "test\\" + i,
                     Id = i.ToString(),
                     ModName = i.ToString(),
-                    Type = i.ToString(),
+                    Type = i.ToString()
                 });
             }
+
             var service = new IndexedDefinitions();
             service.UseDiskStore(GetStorePath());
             await service.InitMapAsync(defs);
@@ -726,20 +814,21 @@ namespace IronyModManager.Parser.Tests
         {
             DISetup.SetupContainer();
             var defs = new List<IDefinition>();
-            for (int i = 0; i < 10; i++)
+            for (var i = 0; i < 10; i++)
             {
-                defs.Add(new Definition()
+                defs.Add(new Definition
                 {
                     Code = i.ToString(),
                     ContentSHA = i.ToString(),
                     Dependencies = new List<string> { i.ToString() },
-                    File = "test\\" + i.ToString(),
+                    File = "test\\" + i,
                     Id = i.ToString(),
                     ModName = i.ToString(),
                     Type = i.ToString(),
                     ResetType = ResetType.Resolved
                 });
             }
+
             var service = new IndexedDefinitions();
             await service.InitMapAsync(defs);
             var results = await service.HasResetDefinitionsAsync();
@@ -754,20 +843,21 @@ namespace IronyModManager.Parser.Tests
         {
             DISetup.SetupContainer();
             var defs = new List<IDefinition>();
-            for (int i = 0; i < 10; i++)
+            for (var i = 0; i < 10; i++)
             {
-                defs.Add(new Definition()
+                defs.Add(new Definition
                 {
                     Code = i.ToString(),
                     ContentSHA = i.ToString(),
                     Dependencies = new List<string> { i.ToString() },
-                    File = "test\\" + i.ToString(),
+                    File = "test\\" + i,
                     Id = i.ToString(),
                     ModName = i.ToString(),
                     Type = i.ToString(),
                     ResetType = ResetType.Resolved
                 });
             }
+
             var service = new IndexedDefinitions();
             service.UseDiskStore(GetStorePath());
             await service.InitMapAsync(defs);
@@ -783,20 +873,21 @@ namespace IronyModManager.Parser.Tests
         {
             DISetup.SetupContainer();
             var defs = new List<IDefinition>();
-            for (int i = 0; i < 10; i++)
+            for (var i = 0; i < 10; i++)
             {
-                defs.Add(new Definition()
+                defs.Add(new Definition
                 {
                     Code = i.ToString(),
                     ContentSHA = i.ToString(),
                     Dependencies = new List<string> { i.ToString() },
-                    File = "test\\" + i.ToString(),
+                    File = "test\\" + i,
                     Id = i.ToString(),
                     ModName = i.ToString(),
                     Type = i.ToString(),
                     ResetType = ResetType.Resolved
                 });
             }
+
             var service = new IndexedDefinitions();
             await service.InitMapAsync(defs, true);
             var results = await service.HasResetDefinitionsAsync();
@@ -811,20 +902,21 @@ namespace IronyModManager.Parser.Tests
         {
             DISetup.SetupContainer();
             var defs = new List<IDefinition>();
-            for (int i = 0; i < 10; i++)
+            for (var i = 0; i < 10; i++)
             {
-                defs.Add(new Definition()
+                defs.Add(new Definition
                 {
                     Code = i.ToString(),
                     ContentSHA = i.ToString(),
                     Dependencies = new List<string> { i.ToString() },
-                    File = "test\\" + i.ToString(),
+                    File = "test\\" + i,
                     Id = i.ToString(),
                     ModName = i.ToString(),
                     Type = i.ToString(),
                     ResetType = ResetType.Resolved
                 });
             }
+
             var service = new IndexedDefinitions();
             service.UseDiskStore(GetStorePath());
             await service.InitMapAsync(defs, true);
@@ -840,23 +932,24 @@ namespace IronyModManager.Parser.Tests
         {
             DISetup.SetupContainer();
             var defs = new List<IDefinition>();
-            for (int i = 0; i < 10; i++)
+            for (var i = 0; i < 10; i++)
             {
-                defs.Add(new Definition()
+                defs.Add(new Definition
                 {
                     Code = i.ToString(),
                     ContentSHA = i.ToString(),
                     Dependencies = new List<string> { i.ToString() },
-                    File = "test\\" + i.ToString(),
+                    File = "test\\" + i,
                     Id = i.ToString(),
                     ModName = i.ToString(),
                     Type = i.ToString(),
                     ResetType = ResetType.Resolved
                 });
             }
+
             var service = new IndexedDefinitions();
             await service.InitMapAsync(defs, false);
-            var results = await service.ChangeHierarchicalResetStateAsync(new Definition() { ResetType = ResetType.Resolved, Id = "1", Type = "1", File = "test\\1" });
+            var results = await service.ChangeHierarchicalResetStateAsync(new Definition { ResetType = ResetType.Resolved, Id = "1", Type = "1", File = "test\\1" });
             results.Should().BeFalse();
         }
 
@@ -868,24 +961,25 @@ namespace IronyModManager.Parser.Tests
         {
             DISetup.SetupContainer();
             var defs = new List<IDefinition>();
-            for (int i = 0; i < 10; i++)
+            for (var i = 0; i < 10; i++)
             {
-                defs.Add(new Definition()
+                defs.Add(new Definition
                 {
                     Code = i.ToString(),
                     ContentSHA = i.ToString(),
                     Dependencies = new List<string> { i.ToString() },
-                    File = "test\\" + i.ToString(),
+                    File = "test\\" + i,
                     Id = i.ToString(),
                     ModName = i.ToString(),
                     Type = i.ToString(),
                     ResetType = ResetType.Resolved
                 });
             }
+
             var service = new IndexedDefinitions();
             service.UseDiskStore(GetStorePath());
             await service.InitMapAsync(defs, false);
-            var results = await service.ChangeHierarchicalResetStateAsync(new Definition() { ResetType = ResetType.Resolved, Id = "1", Type = "1", File = "test\\1" });
+            var results = await service.ChangeHierarchicalResetStateAsync(new Definition { ResetType = ResetType.Resolved, Id = "1", Type = "1", File = "test\\1" });
             results.Should().BeFalse();
         }
 
@@ -897,20 +991,21 @@ namespace IronyModManager.Parser.Tests
         {
             DISetup.SetupContainer();
             var defs = new List<IDefinition>();
-            for (int i = 0; i < 10; i++)
+            for (var i = 0; i < 10; i++)
             {
-                defs.Add(new Definition()
+                defs.Add(new Definition
                 {
                     Code = i.ToString(),
                     ContentSHA = i.ToString(),
                     Dependencies = new List<string> { i.ToString() },
-                    File = "test\\" + i.ToString(),
+                    File = "test\\" + i,
                     Id = i.ToString(),
                     ModName = i.ToString(),
                     Type = i.ToString(),
                     ResetType = ResetType.Resolved
                 });
             }
+
             var service = new IndexedDefinitions();
             await service.InitMapAsync(defs, true);
             var results = await service.ChangeHierarchicalResetStateAsync(null);
@@ -925,20 +1020,21 @@ namespace IronyModManager.Parser.Tests
         {
             DISetup.SetupContainer();
             var defs = new List<IDefinition>();
-            for (int i = 0; i < 10; i++)
+            for (var i = 0; i < 10; i++)
             {
-                defs.Add(new Definition()
+                defs.Add(new Definition
                 {
                     Code = i.ToString(),
                     ContentSHA = i.ToString(),
                     Dependencies = new List<string> { i.ToString() },
-                    File = "test\\" + i.ToString(),
+                    File = "test\\" + i,
                     Id = i.ToString(),
                     ModName = i.ToString(),
                     Type = i.ToString(),
                     ResetType = ResetType.Resolved
                 });
             }
+
             var service = new IndexedDefinitions();
             service.UseDiskStore(GetStorePath());
             await service.InitMapAsync(defs, true);
@@ -954,23 +1050,24 @@ namespace IronyModManager.Parser.Tests
         {
             DISetup.SetupContainer();
             var defs = new List<IDefinition>();
-            for (int i = 0; i < 10; i++)
+            for (var i = 0; i < 10; i++)
             {
-                defs.Add(new Definition()
+                defs.Add(new Definition
                 {
                     Code = i.ToString(),
                     ContentSHA = i.ToString(),
                     Dependencies = new List<string> { i.ToString() },
-                    File = "test\\" + i.ToString(),
+                    File = "test\\" + i,
                     Id = i.ToString(),
                     ModName = i.ToString(),
                     Type = i.ToString(),
                     ResetType = ResetType.Resolved
                 });
             }
+
             var service = new IndexedDefinitions();
             await service.InitMapAsync(defs, true);
-            var results = await service.ChangeHierarchicalResetStateAsync(new Definition() { ResetType = ResetType.None, Id = "1", Type = "1", File = "test\\1" });
+            var results = await service.ChangeHierarchicalResetStateAsync(new Definition { ResetType = ResetType.None, Id = "1", Type = "1", File = "test\\1" });
             results.Should().BeTrue();
         }
 
@@ -982,24 +1079,25 @@ namespace IronyModManager.Parser.Tests
         {
             DISetup.SetupContainer();
             var defs = new List<IDefinition>();
-            for (int i = 0; i < 10; i++)
+            for (var i = 0; i < 10; i++)
             {
-                defs.Add(new Definition()
+                defs.Add(new Definition
                 {
                     Code = i.ToString(),
                     ContentSHA = i.ToString(),
                     Dependencies = new List<string> { i.ToString() },
-                    File = "test\\" + i.ToString(),
+                    File = "test\\" + i,
                     Id = i.ToString(),
                     ModName = i.ToString(),
                     Type = i.ToString(),
                     ResetType = ResetType.Resolved
                 });
             }
+
             var service = new IndexedDefinitions();
             service.UseDiskStore(GetStorePath());
             await service.InitMapAsync(defs, true);
-            var results = await service.ChangeHierarchicalResetStateAsync(new Definition() { ResetType = ResetType.None, Id = "1", Type = "1", File = "test\\1" });
+            var results = await service.ChangeHierarchicalResetStateAsync(new Definition { ResetType = ResetType.None, Id = "1", Type = "1", File = "test\\1" });
             results.Should().BeTrue();
         }
 
@@ -1011,9 +1109,9 @@ namespace IronyModManager.Parser.Tests
         {
             DISetup.SetupContainer();
             var defs = new List<IDefinition>();
-            for (int i = 0; i < 10; i++)
+            for (var i = 0; i < 10; i++)
             {
-                defs.Add(new Definition()
+                defs.Add(new Definition
                 {
                     Code = i.ToString(),
                     ContentSHA = i.ToString(),
@@ -1024,11 +1122,12 @@ namespace IronyModManager.Parser.Tests
                     Type = i > 3 && i < 6 ? "type" : i.ToString()
                 });
             }
+
             var service = new IndexedDefinitions();
             await service.InitMapAsync(defs);
             var results = await service.GetByTypeAsync("type");
             results.Count().Should().Be(defs.Where(s => s.Type == "type").Count());
-            int match = 0;
+            var match = 0;
             foreach (var item in defs.Where(s => s.Type == "type"))
             {
                 if (results.Contains(item))
@@ -1036,6 +1135,7 @@ namespace IronyModManager.Parser.Tests
                     match++;
                 }
             }
+
             match.Should().Be(defs.Where(s => s.Type == "type").Count());
         }
 
@@ -1047,9 +1147,9 @@ namespace IronyModManager.Parser.Tests
         {
             DISetup.SetupContainer();
             var defs = new List<IDefinition>();
-            for (int i = 0; i < 10; i++)
+            for (var i = 0; i < 10; i++)
             {
-                defs.Add(new Definition()
+                defs.Add(new Definition
                 {
                     Code = i.ToString(),
                     ContentSHA = i.ToString(),
@@ -1060,12 +1160,13 @@ namespace IronyModManager.Parser.Tests
                     Type = i > 3 && i < 6 ? "type" : i.ToString()
                 });
             }
+
             var service = new IndexedDefinitions();
             service.UseDiskStore(GetStorePath());
             await service.InitMapAsync(defs);
             var results = await service.GetByTypeAsync("type");
             results.Count().Should().Be(defs.Where(s => s.Type == "type").Count());
-            int match = 0;
+            var match = 0;
             foreach (var item in defs.Where(s => s.Type == "type"))
             {
                 if (results.Any(p => p.ModName == item.ModName && p.File == item.File && p.TypeAndId == item.TypeAndId))
@@ -1073,6 +1174,7 @@ namespace IronyModManager.Parser.Tests
                     match++;
                 }
             }
+
             match.Should().Be(defs.Where(s => s.Type == "type").Count());
         }
 
@@ -1084,9 +1186,9 @@ namespace IronyModManager.Parser.Tests
         {
             DISetup.SetupContainer();
             var defs = new List<IDefinition>();
-            for (int i = 0; i < 10; i++)
+            for (var i = 0; i < 10; i++)
             {
-                defs.Add(new Definition()
+                defs.Add(new Definition
                 {
                     Code = i.ToString(),
                     ContentSHA = i.ToString(),
@@ -1097,6 +1199,7 @@ namespace IronyModManager.Parser.Tests
                     Type = i > 3 && i < 6 ? "type" : i.ToString()
                 });
             }
+
             var service = new IndexedDefinitions();
             await service.InitMapAsync(defs, true);
             var results = service.GetHierarchicalDefinitions();
@@ -1112,9 +1215,9 @@ namespace IronyModManager.Parser.Tests
         {
             DISetup.SetupContainer();
             var defs = new List<IDefinition>();
-            for (int i = 0; i < 10; i++)
+            for (var i = 0; i < 10; i++)
             {
-                defs.Add(new Definition()
+                defs.Add(new Definition
                 {
                     Code = i.ToString(),
                     ContentSHA = i.ToString(),
@@ -1125,6 +1228,7 @@ namespace IronyModManager.Parser.Tests
                     Type = i > 3 && i < 6 ? "type" : i.ToString()
                 });
             }
+
             var service = new IndexedDefinitions();
             service.UseDiskStore(GetStorePath());
             await service.InitMapAsync(defs, true);
@@ -1141,9 +1245,9 @@ namespace IronyModManager.Parser.Tests
         {
             DISetup.SetupContainer();
             var defs = new List<IDefinition>();
-            for (int i = 0; i < 10; i++)
+            for (var i = 0; i < 10; i++)
             {
-                defs.Add(new Definition()
+                defs.Add(new Definition
                 {
                     Code = i.ToString(),
                     ContentSHA = i.ToString(),
@@ -1154,6 +1258,7 @@ namespace IronyModManager.Parser.Tests
                     Type = i.ToString()
                 });
             }
+
             var service = new IndexedDefinitions();
             service.UseDiskStore(GetStorePath());
             await service.InitMapAsync(defs);
@@ -1169,9 +1274,9 @@ namespace IronyModManager.Parser.Tests
         {
             DISetup.SetupContainer();
             var defs = new List<IDefinition>();
-            for (int i = 0; i < 10; i++)
+            for (var i = 0; i < 10; i++)
             {
-                defs.Add(new Definition()
+                defs.Add(new Definition
                 {
                     Code = i.ToString(),
                     ContentSHA = i.ToString(),
@@ -1182,11 +1287,12 @@ namespace IronyModManager.Parser.Tests
                     Type = i > 3 && i < 6 ? "type" : i.ToString()
                 });
             }
+
             var service = new IndexedDefinitions();
             await service.InitMapAsync(defs);
             var results = await service.GetByTypeAndIdAsync("type", "id");
             results.Count().Should().Be(defs.Where(s => s.Type == "type" && s.Id == "id").Count());
-            int match = 0;
+            var match = 0;
             foreach (var item in defs.Where(s => s.Type == "type" && s.Id == "id"))
             {
                 if (results.Contains(item))
@@ -1194,6 +1300,7 @@ namespace IronyModManager.Parser.Tests
                     match++;
                 }
             }
+
             match.Should().Be(defs.Where(s => s.Type == "type" && s.Id == "id").Count());
         }
 
@@ -1205,9 +1312,9 @@ namespace IronyModManager.Parser.Tests
         {
             DISetup.SetupContainer();
             var defs = new List<IDefinition>();
-            for (int i = 0; i < 10; i++)
+            for (var i = 0; i < 10; i++)
             {
-                defs.Add(new Definition()
+                defs.Add(new Definition
                 {
                     Code = i.ToString(),
                     ContentSHA = i.ToString(),
@@ -1218,12 +1325,13 @@ namespace IronyModManager.Parser.Tests
                     Type = i > 3 && i < 6 ? "type" : i.ToString()
                 });
             }
+
             var service = new IndexedDefinitions();
             service.UseDiskStore(GetStorePath());
             await service.InitMapAsync(defs);
             var results = await service.GetByTypeAndIdAsync("type", "id");
             results.Count().Should().Be(defs.Where(s => s.Type == "type" && s.Id == "id").Count());
-            int match = 0;
+            var match = 0;
             foreach (var item in defs.Where(s => s.Type == "type" && s.Id == "id"))
             {
                 if (results.Any(p => p.ModName == item.ModName && p.File == item.File && p.TypeAndId == item.TypeAndId))
@@ -1231,6 +1339,7 @@ namespace IronyModManager.Parser.Tests
                     match++;
                 }
             }
+
             match.Should().Be(defs.Where(s => s.Type == "type" && s.Id == "id").Count());
         }
 
@@ -1242,9 +1351,9 @@ namespace IronyModManager.Parser.Tests
         {
             DISetup.SetupContainer();
             var defs = new List<IDefinition>();
-            for (int i = 0; i < 10; i++)
+            for (var i = 0; i < 10; i++)
             {
-                defs.Add(new Definition()
+                defs.Add(new Definition
                 {
                     Code = i.ToString(),
                     ContentSHA = i.ToString(),
@@ -1255,11 +1364,12 @@ namespace IronyModManager.Parser.Tests
                     Type = i > 3 && i < 6 ? "type" : i.ToString()
                 });
             }
+
             var service = new IndexedDefinitions();
             await service.InitMapAsync(defs);
             var results = await service.GetByTypeAndIdAsync("type-id");
             results.Count().Should().Be(defs.Where(s => s.Type == "type" && s.Id == "id").Count());
-            int match = 0;
+            var match = 0;
             foreach (var item in defs.Where(s => s.Type == "type" && s.Id == "id"))
             {
                 if (results.Contains(item))
@@ -1267,6 +1377,7 @@ namespace IronyModManager.Parser.Tests
                     match++;
                 }
             }
+
             match.Should().Be(defs.Where(s => s.Type == "type" && s.Id == "id").Count());
         }
 
@@ -1278,9 +1389,9 @@ namespace IronyModManager.Parser.Tests
         {
             DISetup.SetupContainer();
             var defs = new List<IDefinition>();
-            for (int i = 0; i < 10; i++)
+            for (var i = 0; i < 10; i++)
             {
-                defs.Add(new Definition()
+                defs.Add(new Definition
                 {
                     Code = i.ToString(),
                     ContentSHA = i.ToString(),
@@ -1291,12 +1402,13 @@ namespace IronyModManager.Parser.Tests
                     Type = i > 3 && i < 6 ? "type" : i.ToString()
                 });
             }
+
             var service = new IndexedDefinitions();
             service.UseDiskStore(GetStorePath());
             await service.InitMapAsync(defs);
             var results = await service.GetByTypeAndIdAsync("type-id");
             results.Count().Should().Be(defs.Where(s => s.Type == "type" && s.Id == "id").Count());
-            int match = 0;
+            var match = 0;
             foreach (var item in defs.Where(s => s.Type == "type" && s.Id == "id"))
             {
                 if (results.Any(p => p.ModName == item.ModName && p.File == item.File && p.TypeAndId == item.TypeAndId))
@@ -1304,6 +1416,7 @@ namespace IronyModManager.Parser.Tests
                     match++;
                 }
             }
+
             match.Should().Be(defs.Where(s => s.Type == "type" && s.Id == "id").Count());
         }
 
@@ -1315,9 +1428,9 @@ namespace IronyModManager.Parser.Tests
         {
             DISetup.SetupContainer();
             var defs = new List<IDefinition>();
-            for (int i = 0; i < 10; i++)
+            for (var i = 0; i < 10; i++)
             {
-                defs.Add(new Definition()
+                defs.Add(new Definition
                 {
                     Code = i.ToString(),
                     ContentSHA = i.ToString(),
@@ -1328,6 +1441,7 @@ namespace IronyModManager.Parser.Tests
                     Type = i.ToString()
                 });
             }
+
             var service = new IndexedDefinitions();
             await service.InitMapAsync(defs);
             var results = await service.GetAllTypeAndIdKeysAsync();
@@ -1342,9 +1456,9 @@ namespace IronyModManager.Parser.Tests
         {
             DISetup.SetupContainer();
             var defs = new List<IDefinition>();
-            for (int i = 0; i < 10; i++)
+            for (var i = 0; i < 10; i++)
             {
-                defs.Add(new Definition()
+                defs.Add(new Definition
                 {
                     Code = i.ToString(),
                     ContentSHA = i.ToString(),
@@ -1355,6 +1469,7 @@ namespace IronyModManager.Parser.Tests
                     Type = i.ToString()
                 });
             }
+
             var service = new IndexedDefinitions();
             service.UseDiskStore(GetStorePath());
             await service.InitMapAsync(defs);
@@ -1370,9 +1485,9 @@ namespace IronyModManager.Parser.Tests
         {
             DISetup.SetupContainer();
             var defs = new List<IDefinition>();
-            for (int i = 0; i < 10; i++)
+            for (var i = 0; i < 10; i++)
             {
-                defs.Add(new Definition()
+                defs.Add(new Definition
                 {
                     Code = i.ToString(),
                     ContentSHA = i.ToString(),
@@ -1383,6 +1498,7 @@ namespace IronyModManager.Parser.Tests
                     Type = i.ToString()
                 });
             }
+
             var service = new IndexedDefinitions();
             await service.InitMapAsync(defs, true);
             await service.RemoveAsync(defs.First());
@@ -1391,7 +1507,7 @@ namespace IronyModManager.Parser.Tests
             result.FirstOrDefault(p => p.Id == "0").Should().BeNull();
             var hierarchalResult = service.GetHierarchicalDefinitions();
             hierarchalResult.First().Children.Count.Should().Be(defs.Count - 1);
-            hierarchalResult.First().Children.FirstOrDefault(p => p.Key.StartsWith("0")).Should().BeNull();            
+            hierarchalResult.First().Children.FirstOrDefault(p => p.Key.StartsWith("0")).Should().BeNull();
             (await service.GetByTypeAndIdAsync(defs.First().TypeAndId)).Count().Should().Be(0);
         }
 
@@ -1403,9 +1519,9 @@ namespace IronyModManager.Parser.Tests
         {
             DISetup.SetupContainer();
             var defs = new List<IDefinition>();
-            for (int i = 0; i < 10; i++)
+            for (var i = 0; i < 10; i++)
             {
-                defs.Add(new Definition()
+                defs.Add(new Definition
                 {
                     Code = i.ToString(),
                     ContentSHA = i.ToString(),
@@ -1416,6 +1532,7 @@ namespace IronyModManager.Parser.Tests
                     Type = i.ToString()
                 });
             }
+
             var service = new IndexedDefinitions();
             service.UseDiskStore(GetStorePath());
             await service.InitMapAsync(defs, true);
@@ -1437,9 +1554,9 @@ namespace IronyModManager.Parser.Tests
         {
             DISetup.SetupContainer();
             var defs = new List<IDefinition>();
-            for (int i = 0; i < 10; i++)
+            for (var i = 0; i < 10; i++)
             {
-                defs.Add(new Definition()
+                defs.Add(new Definition
                 {
                     Code = i.ToString(),
                     ContentSHA = i.ToString(),
@@ -1450,6 +1567,7 @@ namespace IronyModManager.Parser.Tests
                     Type = i.ToString()
                 });
             }
+
             var service = new IndexedDefinitions();
             await service.InitMapAsync(defs);
             var results = await service.SearchDefinitionsAsync("1");
@@ -1464,9 +1582,9 @@ namespace IronyModManager.Parser.Tests
         {
             DISetup.SetupContainer();
             var defs = new List<IDefinition>();
-            for (int i = 0; i < 10; i++)
+            for (var i = 0; i < 10; i++)
             {
-                defs.Add(new Definition()
+                defs.Add(new Definition
                 {
                     Code = i.ToString(),
                     ContentSHA = i.ToString(),
@@ -1477,6 +1595,7 @@ namespace IronyModManager.Parser.Tests
                     Type = i.ToString()
                 });
             }
+
             var service = new IndexedDefinitions();
             service.UseDiskStore(GetStorePath());
             await service.InitMapAsync(defs);
@@ -1493,9 +1612,9 @@ namespace IronyModManager.Parser.Tests
         {
             DISetup.SetupContainer();
             var defs = new List<IDefinition>();
-            for (int i = 0; i < 10; i++)
+            for (var i = 0; i < 10; i++)
             {
-                defs.Add(new Definition()
+                defs.Add(new Definition
                 {
                     Code = i.ToString(),
                     ContentSHA = i.ToString(),
@@ -1504,9 +1623,10 @@ namespace IronyModManager.Parser.Tests
                     Id = i.ToString(),
                     ModName = i.ToString(),
                     Type = i.ToString(),
-                    Tags = new List<string>() { i.ToString() }
+                    Tags = new List<string> { i.ToString() }
                 });
             }
+
             var service = new IndexedDefinitions();
             service.UseSearch();
             await service.InitMapAsync(defs);
@@ -1524,9 +1644,9 @@ namespace IronyModManager.Parser.Tests
         {
             DISetup.SetupContainer();
             var defs = new List<IDefinition>();
-            for (int i = 0; i < 10; i++)
+            for (var i = 0; i < 10; i++)
             {
-                defs.Add(new Definition()
+                defs.Add(new Definition
                 {
                     Code = i.ToString(),
                     ContentSHA = i.ToString(),
@@ -1535,9 +1655,10 @@ namespace IronyModManager.Parser.Tests
                     Id = i.ToString(),
                     ModName = i.ToString(),
                     Type = i.ToString(),
-                    Tags = new List<string>() { i.ToString() }
+                    Tags = new List<string> { i.ToString() }
                 });
             }
+
             var service = new IndexedDefinitions();
             service.UseDiskStore(GetStorePath());
             service.UseSearch();
@@ -1556,9 +1677,9 @@ namespace IronyModManager.Parser.Tests
         {
             DISetup.SetupContainer();
             var defs = new List<IDefinition>();
-            for (int i = 0; i < 10; i++)
+            for (var i = 0; i < 10; i++)
             {
-                defs.Add(new Definition()
+                defs.Add(new Definition
                 {
                     Code = i.ToString(),
                     ContentSHA = i.ToString(),
@@ -1567,9 +1688,10 @@ namespace IronyModManager.Parser.Tests
                     Id = i.ToString(),
                     ModName = i.ToString(),
                     Type = i.ToString(),
-                    Tags = new List<string>() { i.ToString() }
+                    Tags = new List<string> { i.ToString() }
                 });
             }
+
             var service = new IndexedDefinitions();
             service.UseDiskStore(GetStorePath());
             service.UseSearch(GetStorePath());
@@ -1588,9 +1710,9 @@ namespace IronyModManager.Parser.Tests
         {
             DISetup.SetupContainer();
             var defs = new List<IDefinition>();
-            for (int i = 0; i < 10; i++)
+            for (var i = 0; i < 10; i++)
             {
-                defs.Add(new Definition()
+                defs.Add(new Definition
                 {
                     Code = i.ToString(),
                     ContentSHA = i.ToString(),
@@ -1601,6 +1723,7 @@ namespace IronyModManager.Parser.Tests
                     Type = i.ToString()
                 });
             }
+
             var service = new IndexedDefinitions();
             await service.InitMapAsync(defs);
             var results = await service.ExistsByFileAsync("1");
@@ -1615,9 +1738,9 @@ namespace IronyModManager.Parser.Tests
         {
             DISetup.SetupContainer();
             var defs = new List<IDefinition>();
-            for (int i = 0; i < 10; i++)
+            for (var i = 0; i < 10; i++)
             {
-                defs.Add(new Definition()
+                defs.Add(new Definition
                 {
                     Code = i.ToString(),
                     ContentSHA = i.ToString(),
@@ -1628,6 +1751,7 @@ namespace IronyModManager.Parser.Tests
                     Type = i.ToString()
                 });
             }
+
             var service = new IndexedDefinitions();
             service.UseDiskStore(GetStorePath());
             await service.InitMapAsync(defs);
@@ -1643,9 +1767,9 @@ namespace IronyModManager.Parser.Tests
         {
             DISetup.SetupContainer();
             var defs = new List<IDefinition>();
-            for (int i = 0; i < 10; i++)
+            for (var i = 0; i < 10; i++)
             {
-                defs.Add(new Definition()
+                defs.Add(new Definition
                 {
                     Code = i.ToString(),
                     ContentSHA = i.ToString(),
@@ -1656,6 +1780,7 @@ namespace IronyModManager.Parser.Tests
                     Type = i.ToString()
                 });
             }
+
             var service = new IndexedDefinitions();
             await service.InitMapAsync(defs);
             var results = await service.UpdateDefinitionsAsync(defs);
@@ -1670,9 +1795,9 @@ namespace IronyModManager.Parser.Tests
         {
             DISetup.SetupContainer();
             var defs = new List<IDefinition>();
-            for (int i = 0; i < 10; i++)
+            for (var i = 0; i < 10; i++)
             {
-                defs.Add(new Definition()
+                defs.Add(new Definition
                 {
                     Code = i.ToString(),
                     ContentSHA = i.ToString(),
@@ -1683,6 +1808,7 @@ namespace IronyModManager.Parser.Tests
                     Type = i.ToString()
                 });
             }
+
             var service = new IndexedDefinitions();
             service.UseDiskStore(GetStorePath());
             await service.InitMapAsync(defs);
@@ -1698,9 +1824,9 @@ namespace IronyModManager.Parser.Tests
         {
             DISetup.SetupContainer();
             var defs = new List<IDefinition>();
-            for (int i = 0; i < 10; i++)
+            for (var i = 0; i < 10; i++)
             {
-                defs.Add(new Definition()
+                defs.Add(new Definition
                 {
                     Code = i.ToString(),
                     ContentSHA = i.ToString(),
@@ -1711,6 +1837,7 @@ namespace IronyModManager.Parser.Tests
                     Type = i.ToString()
                 });
             }
+
             var service = new IndexedDefinitions();
             await service.InitMapAsync(defs);
             var results = await service.UpdateDefinitionsAsync(null);
@@ -1725,9 +1852,9 @@ namespace IronyModManager.Parser.Tests
         {
             DISetup.SetupContainer();
             var defs = new List<IDefinition>();
-            for (int i = 0; i < 10; i++)
+            for (var i = 0; i < 10; i++)
             {
-                defs.Add(new Definition()
+                defs.Add(new Definition
                 {
                     Code = i.ToString(),
                     ContentSHA = i.ToString(),
@@ -1738,6 +1865,7 @@ namespace IronyModManager.Parser.Tests
                     Type = i.ToString()
                 });
             }
+
             var service = new IndexedDefinitions();
             service.UseDiskStore(GetStorePath());
             await service.InitMapAsync(defs);
@@ -1760,8 +1888,9 @@ namespace IronyModManager.Parser.Tests
             }
             catch (Exception e)
             {
-                ex = e;                
+                ex = e;
             }
+
             ex.Should().BeNull();
         }
 
@@ -1773,9 +1902,9 @@ namespace IronyModManager.Parser.Tests
         {
             DISetup.SetupContainer();
             var defs = new List<IDefinition>();
-            for (int i = 0; i < 10; i++)
+            for (var i = 0; i < 10; i++)
             {
-                defs.Add(new Definition()
+                defs.Add(new Definition
                 {
                     Code = i.ToString(),
                     ContentSHA = i.ToString(),
@@ -1786,6 +1915,7 @@ namespace IronyModManager.Parser.Tests
                     Type = i.ToString()
                 });
             }
+
             var service = new IndexedDefinitions();
             await service.InitMapAsync(defs);
             Exception ex = null;
@@ -1797,6 +1927,7 @@ namespace IronyModManager.Parser.Tests
             {
                 ex = e;
             }
+
             ex.Should().NotBeNull();
             ex.GetType().Should().Be(typeof(InvalidOperationException));
         }
@@ -1818,6 +1949,7 @@ namespace IronyModManager.Parser.Tests
             {
                 ex = e;
             }
+
             ex.Should().BeNull();
         }
 
@@ -1829,9 +1961,9 @@ namespace IronyModManager.Parser.Tests
         {
             DISetup.SetupContainer();
             var defs = new List<IDefinition>();
-            for (int i = 0; i < 10; i++)
+            for (var i = 0; i < 10; i++)
             {
-                defs.Add(new Definition()
+                defs.Add(new Definition
                 {
                     Code = i.ToString(),
                     ContentSHA = i.ToString(),
@@ -1842,6 +1974,7 @@ namespace IronyModManager.Parser.Tests
                     Type = i.ToString()
                 });
             }
+
             var service = new IndexedDefinitions();
             await service.InitMapAsync(defs);
             Exception ex = null;
@@ -1853,6 +1986,7 @@ namespace IronyModManager.Parser.Tests
             {
                 ex = e;
             }
+
             ex.Should().NotBeNull();
             ex.GetType().Should().Be(typeof(InvalidOperationException));
         }

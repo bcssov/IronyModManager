@@ -1,25 +1,25 @@
-﻿
-// ***********************************************************************
+﻿// ***********************************************************************
 // Assembly         : IronyModManager.Shared
 // Author           : Mario
 // Created          : 02-16-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-26-2023
+// Last Modified On : 10-21-2024
 // ***********************************************************************
 // <copyright file="IIndexedDefinitions.cs" company="Mario">
 //     Mario
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
+
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
 namespace IronyModManager.Shared.Models
 {
-
     /// <summary>
     /// Interface IIndexedDefinitions
     /// Implements the <see cref="System.IDisposable" />
@@ -50,11 +50,11 @@ namespace IronyModManager.Shared.Models
         /// Changes the state of the hierarchical reset.
         /// </summary>
         /// <param name="definition">The definition.</param>
-        /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
+        /// <returns><c>true</c> if changed, <c>false</c> otherwise.</returns>
         Task<bool> ChangeHierarchicalResetStateAsync(IDefinition definition);
 
         /// <summary>
-        /// Existses the by file asynchronous.
+        /// Exists the by file asynchronous.
         /// </summary>
         /// <param name="file">The file.</param>
         /// <returns>Task&lt;System.Boolean&gt;.</returns>
@@ -103,6 +103,13 @@ namespace IronyModManager.Shared.Models
         /// <param name="file">The file.</param>
         /// <returns>IEnumerable&lt;IDefinition&gt;.</returns>
         Task<IEnumerable<IDefinition>> GetByFileAsync(string file);
+
+        /// <summary>
+        /// Gets the type of the by merge.
+        /// </summary>
+        /// <param name="type">The type.</param>
+        /// <returns>Task&lt;IEnumerable&lt;IDefinition&gt;&gt;.</returns>
+        Task<IEnumerable<IDefinition>> GetByMergeTypeAsync(MergeType type);
 
         /// <summary>
         /// Gets the by parent directory.
@@ -212,7 +219,7 @@ namespace IronyModManager.Shared.Models
         /// </summary>
         /// <param name="dbPath">The database path which is specified indicates that db provider is used.</param>
         /// <param name="dbPathSuffix">The database path suffix. Not used if dbPath is not provided</param>
-        void UseSearch(string dbPath = Shared.Constants.EmptyParam, string dbPathSuffix = Shared.Constants.EmptyParam);
+        void UseSearch(string dbPath = Constants.EmptyParam, string dbPathSuffix = Constants.EmptyParam);
 
         #endregion Methods
     }

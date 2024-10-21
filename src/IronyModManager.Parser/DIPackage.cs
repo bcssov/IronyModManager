@@ -4,7 +4,7 @@
 // Created          : 02-16-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 09-10-2024
+// Last Modified On : 10-18-2024
 // ***********************************************************************
 // <copyright file="DIPackage.cs" company="Mario">
 //     Mario
@@ -101,6 +101,7 @@ namespace IronyModManager.Parser
             container.Collection.Register(typeof(ITypeConverter<>), new List<Type> { typeof(BoolConverter), typeof(VersionConverter), typeof(SourceTypeConverter) });
             container.Register<IParser, Mod.Search.Parser>();
             container.Register<IParametrizedParser, ParametrizedParser>();
+            container.Register<IParserMerger, ParserMerger>();
         }
 
         #endregion Methods

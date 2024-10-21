@@ -4,7 +4,7 @@
 // Created          : 03-28-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 07-28-2024
+// Last Modified On : 10-17-2024
 // ***********************************************************************
 // <copyright file="WholeTextParser.cs" company="Mario">
 //     Mario
@@ -40,12 +40,12 @@ namespace IronyModManager.Parser.Generic
         /// <summary>
         /// The skip validation for types
         /// </summary>
-        private static readonly string[] skipValidationForTypes = { Common.Constants.ShaderExtension, Common.Constants.FxhExtension, Common.Constants.CsvExtension };
+        private static readonly string[] skipValidationForTypes = [Common.Constants.ShaderExtension, Common.Constants.FxhExtension, Common.Constants.CsvExtension];
 
         /// <summary>
         /// The starts with checks
         /// </summary>
-        private static readonly string[] startsWithChecks = { Common.Constants.OnActionsPath };
+        private static readonly string[] startsWithChecks = [Common.Constants.OnActionsPath];
 
         #endregion Fields
 
@@ -119,7 +119,7 @@ namespace IronyModManager.Parser.Generic
             }
             else
             {
-                var code = codeParser.ParseScriptWithoutValidation(args.Lines, args.File);
+                var code = CodeParser.ParseScriptWithoutValidation(args.Lines, args.File);
                 def.OriginalCode = def.Code = GetNonFileTagCode(code);
 
                 var definitions = new List<IDefinition>();

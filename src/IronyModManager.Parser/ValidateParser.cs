@@ -4,13 +4,14 @@
 // Created          : 09-02-2021
 //
 // Last Modified By : Mario
-// Last Modified On : 01-28-2022
+// Last Modified On : 10-17-2024
 // ***********************************************************************
 // <copyright file="ValidateParser.cs" company="Mario">
 //     Mario
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -37,10 +38,7 @@ namespace IronyModManager.Parser
         /// <summary>
         /// The skip validation for types
         /// </summary>
-        private static readonly string[] skipValidationForTypes = new string[]
-        {
-            Common.Constants.ShaderExtension, Common.Constants.FxhExtension
-        };
+        private static readonly string[] skipValidationForTypes = { Common.Constants.ShaderExtension, Common.Constants.FxhExtension };
 
         #endregion Fields
 
@@ -131,6 +129,7 @@ namespace IronyModManager.Parser
             {
                 return EvalForErrorsOnly(args);
             }
+
             return null;
         }
 
@@ -142,7 +141,7 @@ namespace IronyModManager.Parser
         /// <returns>System.String.</returns>
         private string CleanCode(string file, string text)
         {
-            return string.Join(Environment.NewLine, codeParser.CleanCode(file, text.SplitOnNewLine()));
+            return string.Join(Environment.NewLine, CodeParser.CleanCode(file, text.SplitOnNewLine()));
         }
 
         #endregion Methods

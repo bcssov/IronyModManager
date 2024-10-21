@@ -4,13 +4,14 @@
 // Created          : 02-18-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-15-2023
+// Last Modified On : 10-17-2024
 // ***********************************************************************
 // <copyright file="WholeTextParser.cs" company="Mario">
 //     Mario
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -32,25 +33,19 @@ namespace IronyModManager.Parser.Games.HOI4
         #region Fields
 
         /// <summary>
-        /// The equals checks
+        /// The equals check
         /// </summary>
-        private static readonly string[] equalsChecks = new string[]
-        {
-            Common.Constants.HOI4.GraphicalCultureType
-        };
+        private static readonly string[] equalsChecks = [Common.Constants.HOI4.GraphicalCultureType];
 
         /// <summary>
         /// The starts with checks
         /// </summary>
-        private static readonly string[] startsWithChecks = new string[]
-        {
-            Common.Constants.HOI4.Countries, Common.Constants.HOI4.Ideas,
-            Common.Constants.HOI4.AIStrategyPlanes, Common.Constants.HOI4.AIStrategy,
-            Common.Constants.HOI4.IntelligenceAgencies, Common.Constants.HOI4.ScriptedGui,
-            Common.Constants.HOI4.Units, Common.Constants.HOI4.History, Common.Constants.HOI4.Generation,
-            Common.Constants.HOI4.IdeaTags, Common.Constants.HOI4.Terrain, Common.Constants.HOI4.ProfilePictures,
+        private static readonly string[] startsWithChecks =
+        [
+            Common.Constants.HOI4.Countries, Common.Constants.HOI4.Ideas, Common.Constants.HOI4.AIStrategyPlanes, Common.Constants.HOI4.AIStrategy, Common.Constants.HOI4.IntelligenceAgencies, Common.Constants.HOI4.ScriptedGui,
+            Common.Constants.HOI4.Units, Common.Constants.HOI4.History, Common.Constants.HOI4.Generation, Common.Constants.HOI4.IdeaTags, Common.Constants.HOI4.Terrain, Common.Constants.HOI4.ProfilePictures,
             Common.Constants.HOI4.PeaceConference, Common.Constants.HOI4.ProfileBackgrounds, Common.Constants.HOI4.MIO
-        };
+        ];
 
         #endregion Fields
 
@@ -127,7 +122,7 @@ namespace IronyModManager.Parser.Games.HOI4
         /// <returns>System.String.</returns>
         protected override string GetFileTagCode(string file, IEnumerable<string> lines)
         {
-            var cleaned = codeParser.CleanCode(file, lines);
+            var cleaned = CodeParser.CleanCode(file, lines);
             return base.GetFileTagCode(file, cleaned);
         }
 
@@ -150,9 +145,9 @@ namespace IronyModManager.Parser.Games.HOI4
         protected override bool IsFileNameTag(ParserArgs args)
         {
             return args.File.Equals(Common.Constants.HOI4.GraphicalCultureType, StringComparison.OrdinalIgnoreCase) ||
-                CanParseMapCsvFile(args.File) ||
-                args.File.StartsWith(Common.Constants.HOI4.Countries) ||
-                args.File.EndsWith(Common.Constants.LuaExtension, StringComparison.OrdinalIgnoreCase);
+                   CanParseMapCsvFile(args.File) ||
+                   args.File.StartsWith(Common.Constants.HOI4.Countries) ||
+                   args.File.EndsWith(Common.Constants.LuaExtension, StringComparison.OrdinalIgnoreCase);
         }
 
         /// <summary>
@@ -174,9 +169,9 @@ namespace IronyModManager.Parser.Games.HOI4
         protected override bool IsValidType(CanParseArgs args)
         {
             return CanParseEquals(args) || CanParseMapCsvFile(args.File) ||
-                CanParseStartsWith(args) ||
-                IsTxtFile(args.File, Common.Constants.HOI4.GFX) || IsTxtFile(args.File, Common.Constants.HOI4.Music) ||
-                IsAnyTxtFile(args.File, Common.Constants.HOI4.Script) || IsAnyTxtFile(args.File, Common.Constants.HOI4.Tests) || IsAnyTxtFile(args.File, Common.Constants.HOI4.Tutorial);
+                   CanParseStartsWith(args) ||
+                   IsTxtFile(args.File, Common.Constants.HOI4.GFX) || IsTxtFile(args.File, Common.Constants.HOI4.Music) ||
+                   IsAnyTxtFile(args.File, Common.Constants.HOI4.Script) || IsAnyTxtFile(args.File, Common.Constants.HOI4.Tests) || IsAnyTxtFile(args.File, Common.Constants.HOI4.Tutorial);
         }
 
         #endregion Methods

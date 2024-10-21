@@ -1,23 +1,23 @@
-﻿
-// ***********************************************************************
+﻿// ***********************************************************************
 // Assembly         : IronyModManager.Shared
 // Author           : Mario
 // Created          : 02-18-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-25-2023
+// Last Modified On : 10-17-2024
 // ***********************************************************************
 // <copyright file="Enums.cs" company="Mario">
 //     Mario
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
+
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace IronyModManager.Shared.Models
 {
-
     /// <summary>
     /// Enum AddToMapAllowedType
     /// </summary>
@@ -27,10 +27,27 @@ namespace IronyModManager.Shared.Models
         /// All
         /// </summary>
         All,
+
         /// <summary>
         /// The invalid and special
         /// </summary>
         InvalidAndSpecial
+    }
+
+    /// <summary>
+    /// Enum MergeType
+    /// </summary>
+    public enum MergeType
+    {
+        /// <summary>
+        /// The none
+        /// </summary>
+        None,
+
+        /// <summary>
+        /// The flat merge
+        /// </summary>
+        FlatMerge
     }
 
     /// <summary>

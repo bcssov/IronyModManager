@@ -1,25 +1,25 @@
-﻿
-// ***********************************************************************
+﻿// ***********************************************************************
 // Assembly         : IronyModManager.IO.Common
 // Author           : Mario
 // Created          : 04-02-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 10-03-2023
+// Last Modified On : 10-21-2024
 // ***********************************************************************
 // <copyright file="IDefinitionInfoProvider.cs" company="Mario">
 //     Mario
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
+
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using IronyModManager.Shared.Models;
 
 namespace IronyModManager.IO.Common.Mods
 {
-
     /// <summary>
     /// Interface IDefinitionInfoProvider
     /// </summary>
@@ -40,10 +40,22 @@ namespace IronyModManager.IO.Common.Mods
         bool IsFullyImplemented { get; }
 
         /// <summary>
+        /// Gets the merge types.
+        /// </summary>
+        /// <value>The merge types.</value>
+        IDictionary<MergeType, List<string>> MergeTypes { get; }
+
+        /// <summary>
         /// Gets a value indicating whether [supports inline scripts].
         /// </summary>
         /// <value><c>true</c> if [supports inline scripts]; otherwise, <c>false</c>.</value>
         bool SupportsInlineScripts { get; }
+
+        /// <summary>
+        /// Gets a value indicating whether [supports script merge].
+        /// </summary>
+        /// <value><c>true</c> if [supports script merge]; otherwise, <c>false</c>.</value>
+        bool SupportsScriptMerge { get; }
 
         #endregion Properties
 

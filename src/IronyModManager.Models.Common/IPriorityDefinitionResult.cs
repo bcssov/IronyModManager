@@ -4,15 +4,17 @@
 // Created          : 04-27-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 01-05-2022
+// Last Modified On : 10-17-2024
 // ***********************************************************************
 // <copyright file="IPriorityDefinitionResult.cs" company="Mario">
 //     Mario
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
+
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using IronyModManager.Shared.Models;
 
 namespace IronyModManager.Models.Common
@@ -31,6 +33,12 @@ namespace IronyModManager.Models.Common
         /// </summary>
         /// <value>The definition.</value>
         IDefinition Definition { get; set; }
+
+        /// <summary>
+        /// Gets or sets the definition order.
+        /// </summary>
+        /// <value>The definition order.</value>
+        IEnumerable<IDefinition> DefinitionOrder { get; set; }
 
         /// <summary>
         /// Gets or sets the name of the file.

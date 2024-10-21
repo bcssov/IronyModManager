@@ -109,6 +109,8 @@ namespace IronyModManager.Services.Tests
         [Fact]
         public async Task Should_create_file_merge_mod()
         {
+            DISetup.SetupContainer();
+
             var messageBus = new Mock<IMessageBus>();
             messageBus.Setup(p => p.PublishAsync(It.IsAny<IMessageBusEvent>()));
             messageBus.Setup(p => p.Publish(It.IsAny<IMessageBusEvent>()));

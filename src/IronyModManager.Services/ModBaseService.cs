@@ -247,6 +247,7 @@ namespace IronyModManager.Services
                             case 1:
                             {
                                 var definition = uniqueDefinitions.FirstOrDefault(p => !p.IsFromGame);
+                                result.DefinitionOrder = definition != null ? uniqueDefinitions.Where(p => !p.IsFromGame).Union(uniqueDefinitions.Where(p => p.IsFromGame)).ToList() : uniqueDefinitions.ToList();
                                 definition ??= uniqueDefinitions.FirstOrDefault();
                                 result.Definition = definition;
                                 result.FileName = definition!.File;
@@ -260,9 +261,13 @@ namespace IronyModManager.Services
                                     definitions = uniqueDefinitions;
                                 }
 
-                                var definition = modDefinitions.OrderBy(p => Path.GetFileNameWithoutExtension(p.File), StringComparer.Ordinal).Last();
+                                var order = modDefinitions.OrderBy(p => Path.GetFileNameWithoutExtension(p.File), StringComparer.Ordinal);
+                                var definition = order.Last();
                                 result.Definition = definition;
                                 result.FileName = definition.File;
+                                var reverse = new List<IDefinition>(order.ToList());
+                                reverse.Reverse();
+                                result.DefinitionOrder = reverse;
                                 break;
                             }
                         }
@@ -279,6 +284,7 @@ namespace IronyModManager.Services
                         {
                             case 1:
                                 result.Definition = validDefinitions.FirstOrDefault();
+                                result.DefinitionOrder = validDefinitions.ToList();
 
                                 // If it's the only valid one assume load order is responsible
                                 result.PriorityType = DefinitionPriorityType.ModOrder;
@@ -330,6 +336,9 @@ namespace IronyModManager.Services
                                     case 1 when overrideSkipped || filteredGameDefinitions:
                                     {
                                         var definition = definitionEvals.FirstOrDefault(p => !p.Definition.IsFromGame);
+                                        result.DefinitionOrder = definition != null
+                                            ? definitionEvals.Where(p => !p.Definition.IsFromGame).Union(uniqueDefinitions.Where(p => p.Definition.IsFromGame)).Select(p => p.Definition).ToList()
+                                            : definitionEvals.Select(p => p.Definition).ToList();
                                         definition ??= definitionEvals.FirstOrDefault();
                                         result.Definition = definition!.Definition;
                                         result.FileName = definition.FileName;
@@ -353,15 +362,19 @@ namespace IronyModManager.Services
                                             var definition = uniqueDefinitions.FirstOrDefault(p => p.Definition.IsCustomPatch);
                                             result.Definition = definition!.Definition;
                                             result.FileName = definition.FileName;
-                                            result.PriorityType = DefinitionPriorityType.ModOrder;
+                                            result.DefinitionOrder = uniqueDefinitions.Where(p => !p.Definition.IsCustomPatch).Union(uniqueDefinitions.Where(p => p.Definition.IsCustomPatch)).Select(p => p.Definition).ToList();
                                         }
                                         else
                                         {
                                             var definition = uniqueDefinitions.Last();
                                             result.Definition = definition.Definition;
                                             result.FileName = definition.FileName;
-                                            result.PriorityType = DefinitionPriorityType.ModOrder;
+                                            var reverse = new List<DefinitionEval>(uniqueDefinitions);
+                                            reverse.Reverse();
+                                            result.DefinitionOrder = reverse.Select(p => p.Definition).ToList();
                                         }
+
+                                        result.PriorityType = DefinitionPriorityType.ModOrder;
 
                                         break;
                                     }
@@ -369,18 +382,22 @@ namespace IronyModManager.Services
                                     // Using FIOS or LIOS?
                                     case > 1 when isFios:
                                     {
-                                        var definition = uniqueDefinitions.OrderBy(p => Path.GetFileNameWithoutExtension(p.FileName), StringComparer.Ordinal).First();
+                                        var ordered = uniqueDefinitions.OrderBy(p => Path.GetFileNameWithoutExtension(p.FileName), StringComparer.Ordinal);
+                                        var definition = ordered.First();
                                         result.Definition = definition.Definition;
                                         result.FileName = definition.FileName;
                                         result.PriorityType = DefinitionPriorityType.FIOS;
+                                        result.DefinitionOrder = ordered.Select(p => p.Definition).ToList();
                                         break;
                                     }
                                     case > 1:
                                     {
-                                        var definition = uniqueDefinitions.OrderBy(p => Path.GetFileNameWithoutExtension(p.FileName), StringComparer.Ordinal).Last();
+                                        var ordered = uniqueDefinitions.OrderBy(p => Path.GetFileNameWithoutExtension(p.FileName), StringComparer.Ordinal);
+                                        var definition = ordered.Last();
                                         result.Definition = definition.Definition;
                                         result.FileName = definition.FileName;
                                         result.PriorityType = DefinitionPriorityType.LIOS;
+                                        result.DefinitionOrder = ordered.Select(p => p.Definition).ToList();
                                         break;
                                     }
                                 }
@@ -394,14 +411,22 @@ namespace IronyModManager.Services
 
             if (result.Definition == null)
             {
+                IEnumerable<IDefinition> ordered = null;
+                if (definitions != null)
+                {
+                    ordered = definitions.Where(p => !p.IsFromGame).Union(definitions.Where(p => p.IsFromGame));
+                }
+
                 var definition = definitions?.FirstOrDefault(p => !p.IsFromGame);
                 if (definition == null && (definitions?.Any()).GetValueOrDefault())
                 {
                     definition = definitions!.FirstOrDefault();
+                    ordered = definitions.ToList();
                 }
 
                 result.Definition = definition;
                 result.FileName = definition?.File;
+                result.DefinitionOrder = ordered;
                 if (noProvider)
                 {
                     result.PriorityType = DefinitionPriorityType.NoProvider;

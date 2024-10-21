@@ -65,7 +65,8 @@ namespace IronyModManager.Services
         IStorageProvider storageProvider,
         IMapper mapper,
         IValidateParser validateParser,
-        IParametrizedParser parametrizedParser) : ModBaseService(cache, definitionInfoProviders, reader, modWriter, modParser, gameService, storageProvider, mapper), IModPatchCollectionService
+        IParametrizedParser parametrizedParser,
+        IParserMerger parserMerger) : ModBaseService(cache, definitionInfoProviders, reader, modWriter, modParser, gameService, storageProvider, mapper), IModPatchCollectionService
     {
         #region Fields
 
@@ -163,6 +164,11 @@ namespace IronyModManager.Services
         /// The parser manager
         /// </summary>
         private readonly IParserManager parserManager = parserManager;
+
+        /// <summary>
+        /// The parser merger
+        /// </summary>
+        private readonly IParserMerger parserMerger = parserMerger;
 
         /// <summary>
         /// The search initialize lock
@@ -366,15 +372,19 @@ namespace IronyModManager.Services
         /// <returns>IConflictResult.</returns>
         public virtual async Task<IConflictResult> FindConflictsAsync(IIndexedDefinitions indexedDefinitions, IList<string> modOrder, PatchStateMode patchStateMode, IReadOnlyCollection<IGameLanguage> allowedLanguages)
         {
-            var actualMode = patchStateMode;
-            if (patchStateMode == PatchStateMode.ReadOnly)
+            var actualMode = patchStateMode switch
             {
-                actualMode = PatchStateMode.Advanced;
-            }
-            else if (patchStateMode == PatchStateMode.ReadOnlyWithoutLocalization)
-            {
-                actualMode = PatchStateMode.AdvancedWithoutLocalization;
-            }
+                PatchStateMode.ReadOnly => PatchStateMode.Advanced,
+                PatchStateMode.ReadOnlyWithoutLocalization => PatchStateMode.AdvancedWithoutLocalization,
+                _ => patchStateMode
+            };
+
+            // We need to filter out merge types
+            var allIndexed = DIResolver.Get<IIndexedDefinitions>();
+            var allDefs = (await indexedDefinitions.GetAllAsync()).ToList();
+            await allIndexed.InitMapAsync(allDefs);
+            indexedDefinitions = DIResolver.Get<IIndexedDefinitions>();
+            await indexedDefinitions.InitMapAsync(allDefs.Where(p => p.MergeType == MergeType.None));
 
             var conflicts = new HashSet<IDefinition>();
             var fileConflictCache = new Dictionary<string, bool>();
@@ -388,6 +398,56 @@ namespace IronyModManager.Services
             double processed = 0;
             double previousProgress = 0;
             await messageBus.PublishAsync(new ModDefinitionAnalyzeEvent(0));
+
+            // Cheers to the guys at paradox for doing a great job at implementing such a thing
+            var provider = DefinitionInfoProviders.FirstOrDefault(p => p.CanProcess(GameService.GetSelected().Type));
+            if (provider!.SupportsScriptMerge && allCount > 0)
+            {
+                var merges = provider.MergeTypes;
+                foreach (var merge in merges)
+                {
+                    // Later put into a method... if we ever expand on merge types
+                    var indexed = await allIndexed.GetByMergeTypeAsync(merge.Key);
+                    var flatMerge = indexed.Where(p => p.MergeType == merge.Key).GroupBy(p => p.TypeAndId).ToList();
+                    foreach (var item in flatMerge)
+                    {
+                        var types = await allIndexed.GetByTypeAndIdAsync(item.FirstOrDefault().TypeAndId);
+                        var ordered = EvalDefinitionPriority(types.OrderBy(x => modOrder.IndexOf(x.ModName))).DefinitionOrder.ToList();
+                        foreach (var definition in types.Where(p => p.MergeType == MergeType.None))
+                        {
+                            var id = ordered.IndexOf(definition);
+                            var before = ordered.Take(id).Where(p => p.MergeType == merge.Key).Reverse();
+                            var after = ordered.Skip(id + 1).Where(p => p.MergeType == merge.Key);
+                            foreach (var val in merge.Value)
+                            {
+                                if (before.Any())
+                                {
+                                    foreach (var def in before)
+                                    {
+                                        definition.Code = definition.OriginalCode = parserMerger.MergeTopLevel(definition.Code.SplitOnNewLine(), definition.File, val, def.Code.SplitOnNewLine(), false);
+                                    }
+                                }
+
+                                if (after.Any())
+                                {
+                                    foreach (var def in after)
+                                    {
+                                        definition.Code = definition.OriginalCode = parserMerger.MergeTopLevel(definition.Code.SplitOnNewLine(), definition.File, val, def.Code.SplitOnNewLine(), true);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            // Yes, run a cleanup here
+            allIndexed.Dispose();
+            allIndexed = null;
+            allDefs.Clear();
+            allDefs = null;
+            GCRunner.RunGC(GCCollectionMode.Optimized, false);
+
 
             var stopWatch = new Stopwatch();
             stopWatch.Start();
@@ -662,6 +722,8 @@ namespace IronyModManager.Services
                 if (!overwrittenDefs.ContainsKey(definition.TypeAndId))
                 {
                     var newDefinition = CopyDefinition(definition);
+
+                    // ReSharper disable once InlineTemporaryVariable
                     var ordered = value;
                     newDefinition.Order = ordered.FirstOrDefault(p => p.TypeAndId == newDefinition.TypeAndId)!.Order;
                     if (!overwrittenSortExport.TryGetValue(newDefinition.ParentDirectoryCI, out var valueInner))
@@ -1144,19 +1206,6 @@ namespace IronyModManager.Services
             await messageBus.PublishAsync(new ModDefinitionInvalidReplaceEvent(99.9));
             var indexed = DIResolver.Get<IIndexedDefinitions>();
             await indexed.InitMapAsync(prunedDefinitions);
-
-            // Mark all labeled duplicate defs with same id as allowed duplicates
-            if (prunedDefinitions.Count > 0)
-            {
-                foreach (var item in prunedDefinitions.Where(p => p.AllowDuplicate))
-                {
-                    var duplicateDefs = await indexed.GetByTypeAndIdAsync(item.TypeAndId);
-                    foreach (var def in duplicateDefs)
-                    {
-                        def.AllowDuplicate = true;
-                    }
-                }
-            }
 
             await messageBus.PublishAsync(new ModDefinitionInvalidReplaceEvent(100));
             return indexed;

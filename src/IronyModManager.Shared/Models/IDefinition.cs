@@ -1,25 +1,25 @@
-﻿
-// ***********************************************************************
+﻿// ***********************************************************************
 // Assembly         : IronyModManager.Shared
 // Author           : Mario
 // Created          : 02-16-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-25-2023
+// Last Modified On : 10-17-2024
 // ***********************************************************************
 // <copyright file="IDefinition.cs" company="Mario">
 //     Mario
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
+
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using CodexMicroORM.Core.Collections;
 using Newtonsoft.Json;
 
 namespace IronyModManager.Shared.Models
 {
-
     /// <summary>
     /// Interface IDefinition
     /// Implements the <see cref="CodexMicroORM.Core.Collections.ICEFIndexedListItem" />
@@ -185,6 +185,12 @@ namespace IronyModManager.Shared.Models
         /// <value>The last modified.</value>
         [JsonIgnore]
         DateTime? LastModified { get; set; }
+
+        /// <summary>
+        /// Gets or sets the type of the merge.
+        /// </summary>
+        /// <value>The type of the merge.</value>
+        MergeType MergeType { get; set; }
 
         /// <summary>
         /// Gets or sets the name of the mod.

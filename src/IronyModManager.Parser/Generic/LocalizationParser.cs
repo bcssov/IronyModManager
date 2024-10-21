@@ -4,7 +4,7 @@
 // Created          : 02-18-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 07-28-2024
+// Last Modified On : 10-17-2024
 // ***********************************************************************
 // <copyright file="LocalizationParser.cs" company="Mario">
 //     Mario
@@ -269,7 +269,7 @@ namespace IronyModManager.Parser.Generic
         /// <returns>System.String.</returns>
         protected virtual string ValidateKey(string line, string previousKey)
         {
-            var cleaned = codeParser.CleanWhitespace(line);
+            var cleaned = CodeParser.CleanWhitespace(line);
             if (!cleaned.Contains(Common.Constants.Localization.YmlSeparator.ToString(), StringComparison.OrdinalIgnoreCase))
             {
                 return $"Missing separator near key: {previousKey}.";

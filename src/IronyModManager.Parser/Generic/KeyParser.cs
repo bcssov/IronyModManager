@@ -4,13 +4,14 @@
 // Created          : 02-16-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 05-11-2023
+// Last Modified On : 10-17-2024
 // ***********************************************************************
 // <copyright file="KeyParser.cs" company="Mario">
 //     Mario
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -94,6 +95,7 @@ namespace IronyModManager.Parser.Generic
             {
                 return value.Value;
             }
+
             return base.EvalElementForId(value);
         }
 
@@ -105,10 +107,10 @@ namespace IronyModManager.Parser.Generic
         protected virtual bool IsKeyType(CanParseArgs args)
         {
             int? openBrackets = null;
-            int closeBrackets = 0;
+            var closeBrackets = 0;
             foreach (var line in args.Lines)
             {
-                var cleaned = codeParser.CleanWhitespace(line);
+                var cleaned = CodeParser.CleanWhitespace(line);
                 if (!openBrackets.HasValue)
                 {
                     if (cleaned.Contains(Constants.Scripts.DefinitionSeparatorId) || cleaned.EndsWith(Constants.Scripts.EqualsOperator))
@@ -117,7 +119,7 @@ namespace IronyModManager.Parser.Generic
                         closeBrackets = line.Count(s => s == Constants.Scripts.CloseObject);
                         if (openBrackets - closeBrackets <= 1 && Constants.Scripts.GenericKeyIds.Any(s => !string.IsNullOrWhiteSpace(GetValue(line, s))))
                         {
-                            int idLoc = -1;
+                            var idLoc = -1;
                             foreach (var item in Constants.Scripts.GenericKeyIds)
                             {
                                 idLoc = cleaned.IndexOf(item, StringComparison.OrdinalIgnoreCase);
@@ -126,11 +128,13 @@ namespace IronyModManager.Parser.Generic
                                     break;
                                 }
                             }
+
                             if (cleaned[..idLoc].Count(s => s == Constants.Scripts.OpenObject) == 1)
                             {
                                 return true;
                             }
                         }
+
                         if (openBrackets.GetValueOrDefault() > 0 && openBrackets == closeBrackets)
                         {
                             openBrackets = null;
@@ -145,7 +149,7 @@ namespace IronyModManager.Parser.Generic
                     if (openBrackets - closeBrackets <= 1 && Constants.Scripts.GenericKeyIds.Any(s => !string.IsNullOrWhiteSpace(GetValue(line, s))))
                     {
                         var bracketLocation = cleaned.IndexOf(Constants.Scripts.OpenObject.ToString());
-                        int idLoc = -1;
+                        var idLoc = -1;
                         foreach (var item in Constants.Scripts.GenericKeyIds)
                         {
                             idLoc = cleaned.IndexOf(item, StringComparison.OrdinalIgnoreCase);
@@ -154,11 +158,13 @@ namespace IronyModManager.Parser.Generic
                                 break;
                             }
                         }
+
                         if (idLoc < bracketLocation || bracketLocation == -1)
                         {
                             return true;
                         }
                     }
+
                     if (openBrackets.GetValueOrDefault() > 0 && openBrackets == closeBrackets)
                     {
                         openBrackets = null;
@@ -166,6 +172,7 @@ namespace IronyModManager.Parser.Generic
                     }
                 }
             }
+
             return false;
         }
 

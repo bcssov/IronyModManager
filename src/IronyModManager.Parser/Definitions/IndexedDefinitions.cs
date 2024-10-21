@@ -4,7 +4,7 @@
 // Created          : 02-16-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-23-2024
+// Last Modified On : 10-21-2024
 // ***********************************************************************
 // <copyright file="IndexedDefinitions.cs" company="Mario">
 //     Mario
@@ -170,7 +170,7 @@ namespace IronyModManager.Parser.Definitions
         public IndexedDefinitions()
         {
             definitions = new ConcurrentIndexedList<IDefinition>(nameof(IDefinition.FileCI), nameof(IDefinition.Type),
-                nameof(IDefinition.TypeAndId), nameof(IDefinition.ParentDirectoryCI), nameof(IDefinition.ValueType), nameof(IDefinition.DiskFileCI));
+                nameof(IDefinition.TypeAndId), nameof(IDefinition.ParentDirectoryCI), nameof(IDefinition.ValueType), nameof(IDefinition.DiskFileCI), nameof(IDefinition.MergeType));
             fileCIKeys = [];
             diskFileCIKeys = [];
             typeAndIdKeys = [];
@@ -229,6 +229,8 @@ namespace IronyModManager.Parser.Definitions
                             child.ResetType = definition.ResetType;
                             AddOrRemoveFromResetDefinitions(definition, false);
                             hierarchicalDefinition.ResetType = children.Any(p => p.ResetType != ResetType.None) ? ResetType.Any : ResetType.None;
+
+                            // ReSharper disable once DisposeOnUsingVariable
                             mutex.Dispose();
                             return true;
                         }
@@ -236,6 +238,7 @@ namespace IronyModManager.Parser.Definitions
                 }
             }
 
+            // ReSharper disable once DisposeOnUsingVariable
             mutex.Dispose();
             return false;
         }
@@ -378,6 +381,17 @@ namespace IronyModManager.Parser.Definitions
             return Task.FromResult(definitions.GetAllByName(nameof(IDefinition.FileCI), file.ToLowerInvariant()));
         }
 
+        /// <inheritdoc/>
+        public Task<IEnumerable<IDefinition>> GetByMergeTypeAsync(MergeType type)
+        {
+            if (store != null)
+            {
+                throw new NotSupportedException("Not supported.");
+            }
+
+            return Task.FromResult(definitions.GetAllByName(nameof(IDefinition.MergeType), type));
+        }
+
         /// <summary>
         /// Gets the by parent directory.
         /// </summary>
@@ -463,12 +477,7 @@ namespace IronyModManager.Parser.Definitions
 
             if (store != null)
             {
-                if (typeKeyValues.TryGetValue(type, out var value))
-                {
-                    return ReadDefinitionsFromStoreAsync(value);
-                }
-
-                return Task.FromResult<IEnumerable<IDefinition>>([]);
+                return typeKeyValues.TryGetValue(type, out var value) ? ReadDefinitionsFromStoreAsync(value) : Task.FromResult<IEnumerable<IDefinition>>([]);
             }
 
             return Task.FromResult(definitions.GetAllByName(nameof(IDefinition.ValueType), type));
@@ -637,6 +646,7 @@ namespace IronyModManager.Parser.Definitions
                 }
             }
 
+            // ReSharper disable once DisposeOnUsingVariable
             mutex.Dispose();
         }
 
@@ -715,6 +725,7 @@ namespace IronyModManager.Parser.Definitions
                     await store.InsertAsync(item.Key, [.. item]);
                 }
 
+                // ReSharper disable once DisposeOnUsingVariable
                 mutex.Dispose();
                 return true;
             }

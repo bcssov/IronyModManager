@@ -1,17 +1,17 @@
-﻿
-// ***********************************************************************
+﻿// ***********************************************************************
 // Assembly         : IronyModManager.Parser.Definitions
 // Author           : Mario
 // Created          : 02-16-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-25-2023
+// Last Modified On : 10-17-2024
 // ***********************************************************************
 // <copyright file="Definition.cs" company="Mario">
 //     Mario
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
+
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -26,7 +26,6 @@ using ValueType = IronyModManager.Shared.Models.ValueType;
 
 namespace IronyModManager.Parser.Definitions
 {
-
     /// <summary>
     /// Class Definition.
     /// Implements the <see cref="IronyModManager.Shared.Models.IDefinition" />
@@ -166,19 +165,13 @@ namespace IronyModManager.Parser.Definitions
                         additionalFileNames.Add(File);
                     }
                 }
+
                 return additionalFileNames.Distinct().ToList();
             }
             set
             {
-                IList<string> val;
-                if (value == null)
-                {
-                    val = new List<string>();
-                }
-                else
-                {
-                    val = value;
-                }
+                var val = value ?? new List<string>();
+
                 lock (additionalFilesLock)
                 {
                     additionalFileNames = val;
@@ -200,11 +193,7 @@ namespace IronyModManager.Parser.Definitions
         {
             get
             {
-                if (string.IsNullOrWhiteSpace(code))
-                {
-                    return string.Empty;
-                }
-                return code;
+                return string.IsNullOrWhiteSpace(code) ? string.Empty : code;
             }
             set
             {
@@ -212,11 +201,8 @@ namespace IronyModManager.Parser.Definitions
                 if (!string.IsNullOrWhiteSpace(value))
                 {
                     var lines = value.ReplaceTabs().SplitOnNewLine();
-                    var singleLine = new List<string>();
-                    foreach (var line in lines)
-                    {
-                        singleLine.Add(line.Trim());
-                    }
+                    var singleLine = lines.Select(line => line.Trim()).ToList();
+
                     singleLineCode = string.Join(' ', singleLine.Where(s => !string.IsNullOrWhiteSpace(s)));
                     code = string.Join(Environment.NewLine, lines.Where(s => !string.IsNullOrWhiteSpace(s)));
                 }
@@ -285,6 +271,7 @@ namespace IronyModManager.Parser.Definitions
                 {
                     return ContentSHA;
                 }
+
                 if (!string.IsNullOrEmpty(externalDefinitionSHA))
                 {
                     return externalDefinitionSHA;
@@ -295,6 +282,7 @@ namespace IronyModManager.Parser.Definitions
                     {
                         definitionSHA = DIResolver.Get<ICodeParser>().CleanWhitespace(singleLineCode).CalculateSHA();
                     }
+
                     return definitionSHA;
                 }
             }
@@ -383,6 +371,7 @@ namespace IronyModManager.Parser.Definitions
                         generatedFileNames.Remove(old);
                     }
                 }
+
                 if (overwrittenFileNames.Contains(old))
                 {
                     lock (overwrittenFilesLock)
@@ -390,6 +379,7 @@ namespace IronyModManager.Parser.Definitions
                         overwrittenFileNames.Remove(old);
                     }
                 }
+
                 if (additionalFileNames.Contains(old))
                 {
                     lock (additionalFilesLock)
@@ -428,19 +418,13 @@ namespace IronyModManager.Parser.Definitions
                         generatedFileNames.Add(File);
                     }
                 }
+
                 return generatedFileNames.Distinct().ToList();
             }
             set
             {
-                IList<string> val;
-                if (value == null)
-                {
-                    val = new List<string>();
-                }
-                else
-                {
-                    val = value;
-                }
+                var val = value ?? new List<string>();
+
                 lock (generatedFilesLock)
                 {
                     generatedFileNames = val;
@@ -495,6 +479,12 @@ namespace IronyModManager.Parser.Definitions
         /// <value>The last modified.</value>
         [JsonIgnore]
         public DateTime? LastModified { get; set; }
+
+        /// <summary>
+        /// Gets or sets the type of the merge.
+        /// </summary>
+        /// <value>The type of the merge.</value>
+        public MergeType MergeType { get; set; }
 
         /// <summary>
         /// Gets or sets the name of the mod.
@@ -576,19 +566,13 @@ namespace IronyModManager.Parser.Definitions
                         overwrittenFileNames.Add(File);
                     }
                 }
+
                 return overwrittenFileNames.Distinct().ToList();
             }
             set
             {
-                IList<string> val;
-                if (value == null)
-                {
-                    val = new List<string>();
-                }
-                else
-                {
-                    val = value;
-                }
+                var val = value ?? new List<string>();
+
                 lock (overwrittenFilesLock)
                 {
                     overwrittenFileNames = val;
@@ -608,6 +592,7 @@ namespace IronyModManager.Parser.Definitions
                 {
                     parentDirectory = Path.GetDirectoryName(File);
                 }
+
                 return parentDirectory;
             }
         }
@@ -624,6 +609,7 @@ namespace IronyModManager.Parser.Definitions
                 {
                     parentDirectoryCI = Path.GetDirectoryName(FileCI);
                 }
+
                 return parentDirectoryCI;
             }
         }
@@ -671,6 +657,7 @@ namespace IronyModManager.Parser.Definitions
                 {
                     typeAndId = $"{Type}-{Id}";
                 }
+
                 return typeAndId;
             }
         }
@@ -731,7 +718,7 @@ namespace IronyModManager.Parser.Definitions
                 if (!string.IsNullOrWhiteSpace(virtualPath))
                 {
                     VirtualParentDirectory = Path.GetDirectoryName(virtualPath);
-                    VirtualParentDirectoryCI = VirtualParentDirectory.ToLowerInvariant();
+                    VirtualParentDirectoryCI = VirtualParentDirectory?.ToLowerInvariant();
                 }
                 else
                 {
@@ -798,6 +785,7 @@ namespace IronyModManager.Parser.Definitions
                 nameof(OriginalId) => OriginalId,
                 nameof(UseSimpleValidation) => UseSimpleValidation,
                 nameof(IsSpecialFolder) => IsSpecialFolder,
+                nameof(MergeType) => MergeType,
                 _ => Id
             };
         }
@@ -809,7 +797,7 @@ namespace IronyModManager.Parser.Definitions
         /// <returns><c>true</c> if the specified term is match; otherwise, <c>false</c>.</returns>
         public bool IsMatch(string term)
         {
-            string searchTerm = string.Empty;
+            var searchTerm = string.Empty;
             if (!string.IsNullOrWhiteSpace(ModName) && !string.IsNullOrWhiteSpace(Id))
             {
                 searchTerm = $"{ModName} - {Id}";
@@ -822,10 +810,12 @@ namespace IronyModManager.Parser.Definitions
             {
                 searchTerm = Id;
             }
+
             if (string.IsNullOrWhiteSpace(searchTerm))
             {
                 return false;
             }
+
             term ??= string.Empty;
             return searchTerm.StartsWith(term, StringComparison.OrdinalIgnoreCase);
         }
