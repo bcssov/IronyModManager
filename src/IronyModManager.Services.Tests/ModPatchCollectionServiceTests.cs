@@ -4,7 +4,7 @@
 // Created          : 05-26-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-25-2024
+// Last Modified On : 10-21-2024
 // ***********************************************************************
 // <copyright file="ModPatchCollectionServiceTests.cs" company="Mario">
 //     Mario
@@ -67,17 +67,18 @@ namespace IronyModManager.Services.Tests
         /// <param name="definitionInfoProviders">The definition information providers.</param>
         /// <param name="validateParser">The validate parser.</param>
         /// <param name="parametrizedParser">The parametrized parser.</param>
+        /// <param name="parserMerger">The parser merger.</param>
         /// <returns>ModService.</returns>
         private static ModPatchCollectionService GetService(Mock<IStorageProvider> storageProvider, Mock<IModParser> modParser,
             Mock<IParserManager> parserManager, Mock<IReader> reader, Mock<IMapper> mapper, Mock<IModWriter> modWriter,
             Mock<IGameService> gameService, Mock<IModPatchExporter> modPatchExporter, IEnumerable<IDefinitionInfoProvider> definitionInfoProviders = null, Mock<IValidateParser> validateParser = null,
-            Mock<IParametrizedParser> parametrizedParser = null)
+            Mock<IParametrizedParser> parametrizedParser = null, Mock<IParserMerger> parserMerger = null)
         {
             var messageBus = new Mock<IMessageBus>();
             messageBus.Setup(p => p.PublishAsync(It.IsAny<IMessageBusEvent>()));
             messageBus.Setup(p => p.Publish(It.IsAny<IMessageBusEvent>()));
             return new ModPatchCollectionService(new Cache(), messageBus.Object, parserManager.Object, definitionInfoProviders, modPatchExporter.Object, reader.Object, modWriter.Object, modParser.Object, gameService.Object,
-                storageProvider.Object, mapper.Object, validateParser?.Object, parametrizedParser?.Object);
+                storageProvider.Object, mapper.Object, validateParser?.Object, parametrizedParser?.Object, parserMerger?.Object);
         }
 
         /// <summary>
@@ -252,12 +253,24 @@ namespace IronyModManager.Services.Tests
             var reader = new Mock<IReader>();
             var modWriter = new Mock<IModWriter>();
             var gameService = new Mock<IGameService>();
+            gameService.Setup(p => p.GetSelected()).Returns(new Game
+            {
+                Type = "Should_find_filename_conflicts",
+                UserDirectory = "C:\\Users\\Fake",
+                WorkshopDirectory = new List<string> { "C:\\fake" },
+                CustomModDirectory = string.Empty
+            });
             var mapper = new Mock<IMapper>();
             var modPatchExporter = new Mock<IModPatchExporter>();
+            var infoProvider = new Mock<IDefinitionInfoProvider>();
+            infoProvider.Setup(p => p.DefinitionUsesFIOSRules(It.IsAny<IDefinition>())).Returns(true);
+            infoProvider.Setup(p => p.CanProcess(It.IsAny<string>())).Returns(true);
+            infoProvider.Setup(p => p.IsFullyImplemented).Returns(false);
+            var providers = new List<IDefinitionInfoProvider> { infoProvider.Object };
 
             SetupMockCase(reader, parserManager, modParser);
 
-            var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter);
+            var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter, definitionInfoProviders:providers);
             var definitions = new List<IDefinition>
             {
                 new Definition
@@ -301,12 +314,24 @@ namespace IronyModManager.Services.Tests
             var reader = new Mock<IReader>();
             var modWriter = new Mock<IModWriter>();
             var gameService = new Mock<IGameService>();
+            gameService.Setup(p => p.GetSelected()).Returns(new Game
+            {
+                Type = "Should_find_orphan_filename_conflicts",
+                UserDirectory = "C:\\Users\\Fake",
+                WorkshopDirectory = new List<string> { "C:\\fake" },
+                CustomModDirectory = string.Empty
+            });
             var mapper = new Mock<IMapper>();
             var modPatchExporter = new Mock<IModPatchExporter>();
+            var infoProvider = new Mock<IDefinitionInfoProvider>();
+            infoProvider.Setup(p => p.DefinitionUsesFIOSRules(It.IsAny<IDefinition>())).Returns(true);
+            infoProvider.Setup(p => p.CanProcess(It.IsAny<string>())).Returns(true);
+            infoProvider.Setup(p => p.IsFullyImplemented).Returns(false);
+            var providers = new List<IDefinitionInfoProvider> { infoProvider.Object };
 
             SetupMockCase(reader, parserManager, modParser);
 
-            var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter);
+            var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter, definitionInfoProviders:providers);
             var definitions = new List<IDefinition>
             {
                 new Definition
@@ -361,12 +386,24 @@ namespace IronyModManager.Services.Tests
             var reader = new Mock<IReader>();
             var modWriter = new Mock<IModWriter>();
             var gameService = new Mock<IGameService>();
+            gameService.Setup(p => p.GetSelected()).Returns(new Game
+            {
+                Type = "Should_not_ignore_orphan_localisation_filename_conflicts",
+                UserDirectory = "C:\\Users\\Fake",
+                WorkshopDirectory = new List<string> { "C:\\fake" },
+                CustomModDirectory = string.Empty
+            });
             var mapper = new Mock<IMapper>();
             var modPatchExporter = new Mock<IModPatchExporter>();
+            var infoProvider = new Mock<IDefinitionInfoProvider>();
+            infoProvider.Setup(p => p.DefinitionUsesFIOSRules(It.IsAny<IDefinition>())).Returns(true);
+            infoProvider.Setup(p => p.CanProcess(It.IsAny<string>())).Returns(true);
+            infoProvider.Setup(p => p.IsFullyImplemented).Returns(false);
+            var providers = new List<IDefinitionInfoProvider> { infoProvider.Object };
 
             SetupMockCase(reader, parserManager, modParser);
 
-            var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter);
+            var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter, definitionInfoProviders:providers);
             var definitions = new List<IDefinition>
             {
                 new Definition
@@ -420,12 +457,24 @@ namespace IronyModManager.Services.Tests
             var reader = new Mock<IReader>();
             var modWriter = new Mock<IModWriter>();
             var gameService = new Mock<IGameService>();
+            gameService.Setup(p => p.GetSelected()).Returns(new Game
+            {
+                Type = "Should_find_definition_conflicts",
+                UserDirectory = "C:\\Users\\Fake",
+                WorkshopDirectory = new List<string> { "C:\\fake" },
+                CustomModDirectory = string.Empty
+            });
             var mapper = new Mock<IMapper>();
             var modPatchExporter = new Mock<IModPatchExporter>();
+            var infoProvider = new Mock<IDefinitionInfoProvider>();
+            infoProvider.Setup(p => p.DefinitionUsesFIOSRules(It.IsAny<IDefinition>())).Returns(true);
+            infoProvider.Setup(p => p.CanProcess(It.IsAny<string>())).Returns(true);
+            infoProvider.Setup(p => p.IsFullyImplemented).Returns(false);
+            var providers = new List<IDefinitionInfoProvider> { infoProvider.Object };
 
             SetupMockCase(reader, parserManager, modParser);
 
-            var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter);
+            var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter, definitionInfoProviders:providers);
             var definitions = new List<IDefinition>
             {
                 new Definition
@@ -469,12 +518,24 @@ namespace IronyModManager.Services.Tests
             var reader = new Mock<IReader>();
             var modWriter = new Mock<IModWriter>();
             var gameService = new Mock<IGameService>();
+            gameService.Setup(p => p.GetSelected()).Returns(new Game
+            {
+                Type = "Should_not_find_override_conflicts",
+                UserDirectory = "C:\\Users\\Fake",
+                WorkshopDirectory = new List<string> { "C:\\fake" },
+                CustomModDirectory = string.Empty
+            });
             var mapper = new Mock<IMapper>();
             var modPatchExporter = new Mock<IModPatchExporter>();
+            var infoProvider = new Mock<IDefinitionInfoProvider>();
+            infoProvider.Setup(p => p.DefinitionUsesFIOSRules(It.IsAny<IDefinition>())).Returns(true);
+            infoProvider.Setup(p => p.CanProcess(It.IsAny<string>())).Returns(true);
+            infoProvider.Setup(p => p.IsFullyImplemented).Returns(false);
+            var providers = new List<IDefinitionInfoProvider> { infoProvider.Object };
 
             SetupMockCase(reader, parserManager, modParser);
 
-            var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter);
+            var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter, definitionInfoProviders:providers);
             var definitions = new List<IDefinition>
             {
                 new Definition
@@ -527,12 +588,24 @@ namespace IronyModManager.Services.Tests
             var reader = new Mock<IReader>();
             var modWriter = new Mock<IModWriter>();
             var gameService = new Mock<IGameService>();
+            gameService.Setup(p => p.GetSelected()).Returns(new Game
+            {
+                Type = "Should_not_find_dependency_conflicts",
+                UserDirectory = "C:\\Users\\Fake",
+                WorkshopDirectory = new List<string> { "C:\\fake" },
+                CustomModDirectory = string.Empty
+            });
             var mapper = new Mock<IMapper>();
             var modPatchExporter = new Mock<IModPatchExporter>();
+            var infoProvider = new Mock<IDefinitionInfoProvider>();
+            infoProvider.Setup(p => p.DefinitionUsesFIOSRules(It.IsAny<IDefinition>())).Returns(true);
+            infoProvider.Setup(p => p.CanProcess(It.IsAny<string>())).Returns(true);
+            infoProvider.Setup(p => p.IsFullyImplemented).Returns(false);
+            var providers = new List<IDefinitionInfoProvider> { infoProvider.Object };
 
             SetupMockCase(reader, parserManager, modParser);
 
-            var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter);
+            var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter, definitionInfoProviders:providers);
             var definitions = new List<IDefinition>
             {
                 new Definition
@@ -585,12 +658,24 @@ namespace IronyModManager.Services.Tests
             var reader = new Mock<IReader>();
             var modWriter = new Mock<IModWriter>();
             var gameService = new Mock<IGameService>();
+            gameService.Setup(p => p.GetSelected()).Returns(new Game
+            {
+                Type = "Should_find_dependency_conflicts",
+                UserDirectory = "C:\\Users\\Fake",
+                WorkshopDirectory = new List<string> { "C:\\fake" },
+                CustomModDirectory = string.Empty
+            });
             var mapper = new Mock<IMapper>();
             var modPatchExporter = new Mock<IModPatchExporter>();
+            var infoProvider = new Mock<IDefinitionInfoProvider>();
+            infoProvider.Setup(p => p.DefinitionUsesFIOSRules(It.IsAny<IDefinition>())).Returns(true);
+            infoProvider.Setup(p => p.CanProcess(It.IsAny<string>())).Returns(true);
+            infoProvider.Setup(p => p.IsFullyImplemented).Returns(false);
+            var providers = new List<IDefinitionInfoProvider> { infoProvider.Object };
 
             SetupMockCase(reader, parserManager, modParser);
 
-            var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter);
+            var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter, definitionInfoProviders:providers);
             var definitions = new List<IDefinition>
             {
                 new Definition
@@ -644,12 +729,24 @@ namespace IronyModManager.Services.Tests
             var reader = new Mock<IReader>();
             var modWriter = new Mock<IModWriter>();
             var gameService = new Mock<IGameService>();
+            gameService.Setup(p => p.GetSelected()).Returns(new Game
+            {
+                Type = "Should_find_multiple_dependency_conflicts",
+                UserDirectory = "C:\\Users\\Fake",
+                WorkshopDirectory = new List<string> { "C:\\fake" },
+                CustomModDirectory = string.Empty
+            });
             var mapper = new Mock<IMapper>();
             var modPatchExporter = new Mock<IModPatchExporter>();
+            var infoProvider = new Mock<IDefinitionInfoProvider>();
+            infoProvider.Setup(p => p.DefinitionUsesFIOSRules(It.IsAny<IDefinition>())).Returns(true);
+            infoProvider.Setup(p => p.CanProcess(It.IsAny<string>())).Returns(true);
+            infoProvider.Setup(p => p.IsFullyImplemented).Returns(false);
+            var providers = new List<IDefinitionInfoProvider> { infoProvider.Object };
 
             SetupMockCase(reader, parserManager, modParser);
 
-            var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter);
+            var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter, definitionInfoProviders:providers);
             var definitions = new List<IDefinition>
             {
                 new Definition
@@ -712,12 +809,24 @@ namespace IronyModManager.Services.Tests
             var reader = new Mock<IReader>();
             var modWriter = new Mock<IModWriter>();
             var gameService = new Mock<IGameService>();
+            gameService.Setup(p => p.GetSelected()).Returns(new Game
+            {
+                Type = "Should_not_include_variable_conflicts",
+                UserDirectory = "C:\\Users\\Fake",
+                WorkshopDirectory = new List<string> { "C:\\fake" },
+                CustomModDirectory = string.Empty
+            });
             var mapper = new Mock<IMapper>();
             var modPatchExporter = new Mock<IModPatchExporter>();
+            var infoProvider = new Mock<IDefinitionInfoProvider>();
+            infoProvider.Setup(p => p.DefinitionUsesFIOSRules(It.IsAny<IDefinition>())).Returns(true);
+            infoProvider.Setup(p => p.CanProcess(It.IsAny<string>())).Returns(true);
+            infoProvider.Setup(p => p.IsFullyImplemented).Returns(false);
+            var providers = new List<IDefinitionInfoProvider> { infoProvider.Object };
 
             SetupMockCase(reader, parserManager, modParser);
 
-            var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter);
+            var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter, definitionInfoProviders:providers);
             var definitions = new List<IDefinition>
             {
                 new Definition
@@ -778,12 +887,24 @@ namespace IronyModManager.Services.Tests
             var reader = new Mock<IReader>();
             var modWriter = new Mock<IModWriter>();
             var gameService = new Mock<IGameService>();
+            gameService.Setup(p => p.GetSelected()).Returns(new Game
+            {
+                Type = "Should_return_all_conflicts",
+                UserDirectory = "C:\\Users\\Fake",
+                WorkshopDirectory = new List<string> { "C:\\fake" },
+                CustomModDirectory = string.Empty
+            });
             var mapper = new Mock<IMapper>();
             var modPatchExporter = new Mock<IModPatchExporter>();
+            var infoProvider = new Mock<IDefinitionInfoProvider>();
+            infoProvider.Setup(p => p.DefinitionUsesFIOSRules(It.IsAny<IDefinition>())).Returns(true);
+            infoProvider.Setup(p => p.CanProcess(It.IsAny<string>())).Returns(true);
+            infoProvider.Setup(p => p.IsFullyImplemented).Returns(false);
+            var providers = new List<IDefinitionInfoProvider> { infoProvider.Object };
 
             SetupMockCase(reader, parserManager, modParser);
 
-            var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter);
+            var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter, definitionInfoProviders:providers);
             var definitions = new List<IDefinition>
             {
                 new Definition

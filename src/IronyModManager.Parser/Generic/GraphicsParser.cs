@@ -4,7 +4,7 @@
 // Created          : 02-18-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 05-14-2023
+// Last Modified On : 10-17-2024
 // ***********************************************************************
 // <copyright file="GraphicsParser.cs" company="Mario">
 //     Mario
@@ -206,7 +206,7 @@ namespace IronyModManager.Parser.Generic
                 var isValidExistingTextFile = Constants.TextExtensions.Any(s => args.File.EndsWith(s, StringComparison.OrdinalIgnoreCase));
                 if (!isValidExistingTextFile || skipExtensionValidation)
                 {
-                    var lines = codeParser.CleanCode(args.File, args.Lines);
+                    var lines = CodeParser.CleanCode(args.File, args.Lines);
                     var parent = args.File.StandardizeDirectorySeparator().Split(Path.DirectorySeparatorChar)[0];
                     if (!string.IsNullOrWhiteSpace(parent) && ExpectedGraphicsFolders.Any(a => parent.Equals(a, StringComparison.OrdinalIgnoreCase)))
                     {

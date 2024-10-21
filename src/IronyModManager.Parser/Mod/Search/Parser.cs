@@ -4,13 +4,14 @@
 // Created          : 10-26-2021
 //
 // Last Modified By : Mario
-// Last Modified On : 04-27-2023
+// Last Modified On : 10-18-2024
 // ***********************************************************************
 // <copyright file="Parser.cs" company="Mario">
 //     Mario
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
+
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -21,6 +22,7 @@ using IronyModManager.Parser.Common.Mod.Search;
 using IronyModManager.Parser.Common.Mod.Search.Converter;
 using IronyModManager.Shared;
 using IronyModManager.Shared.Cache;
+using DescriptorPropertyAttribute = IronyModManager.Parser.Common.Mod.Search.DescriptorPropertyAttribute;
 
 namespace IronyModManager.Parser.Mod.Search
 {
@@ -110,7 +112,7 @@ namespace IronyModManager.Parser.Mod.Search
         public ISearchParserResult Parse(string locale, string text)
         {
             var cacheKey = GetCacheKey(text);
-            var cacheEntry = cache.Get<CacheEntry>(new CacheGetParameters() { Region = CacheRegion, Key = cacheKey });
+            var cacheEntry = cache.Get<CacheEntry>(new CacheGetParameters { Region = CacheRegion, Key = cacheKey });
             if (cacheEntry != null)
             {
                 return cacheEntry.SearchResult;
@@ -141,6 +143,7 @@ namespace IronyModManager.Parser.Mod.Search
                         list.Add(new NameFilterResult(text.Trim().TrimStart(negateOperator).Trim()) { Negate = negate });
                     }
                 }
+
                 return list;
             }
 
@@ -148,16 +151,17 @@ namespace IronyModManager.Parser.Mod.Search
             {
                 var result = DIResolver.Get<ISearchParserResult>();
                 result.Name = parseOrStatements((text ?? string.Empty).ToLowerInvariant().Trim());
-                cache.Set(new CacheAddParameters<CacheEntry>() { MaxItems = MaxRecordsToCache, Region = CacheRegion, Key = cacheKey, Value = new CacheEntry(result) });
+                cache.Set(new CacheAddParameters<CacheEntry> { MaxItems = MaxRecordsToCache, Region = CacheRegion, Key = cacheKey, Value = new CacheEntry(result) });
                 return result;
             }
+
             try
             {
                 var tokens = new Dictionary<string, string>();
                 foreach (var item in text.ToLowerInvariant().Split(statementSeparator))
                 {
-                    string key = string.Empty;
-                    string value = string.Empty;
+                    var key = string.Empty;
+                    var value = string.Empty;
                     var split = item.Split(valueSeparator);
                     if (split.Length == 2)
                     {
@@ -169,35 +173,34 @@ namespace IronyModManager.Parser.Mod.Search
                         key = NameProperty;
                         value = item.Trim();
                     }
-                    if (!tokens.ContainsKey(key))
-                    {
-                        tokens.Add(key, value);
-                    }
+
+                    tokens.TryAdd(key, value);
                 }
+
                 var nothingSet = true;
-                if (tokens.Any())
+                if (tokens.Count != 0)
                 {
                     var result = DIResolver.Get<ISearchParserResult>();
                     foreach (var item in tokens)
                     {
-                        string field = item.Key;
+                        var field = item.Key;
                         var converter = converters.FirstOrDefault(x =>
                         {
                             var result = x.CanConvert(locale, item.Key);
-                            if (result != null && result.Result)
+                            if (result is { Result: true })
                             {
                                 field = result.MappedStaticField;
                                 return true;
                             }
+
                             return false;
                         });
                         if (converter != null)
                         {
-                            var property = GetProperties().FirstOrDefault(p => p.CanRead && ((Common.Mod.Search.DescriptorPropertyAttribute)Attribute.GetCustomAttribute(p, typeof(Common.Mod.Search.DescriptorPropertyAttribute), true)).PropertyName == field);
+                            var property = GetProperties().FirstOrDefault(p => p.CanRead && ((DescriptorPropertyAttribute)Attribute.GetCustomAttribute(p, typeof(DescriptorPropertyAttribute), true))?.PropertyName == field);
                             if (property != null && property.CanWrite)
                             {
-                                var attribute = property.GetCustomAttribute(typeof(Common.Mod.Search.DescriptorPropertyAttribute), true) as Common.Mod.Search.DescriptorPropertyAttribute;
-                                if (attribute.IsList)
+                                if (property.GetCustomAttribute(typeof(DescriptorPropertyAttribute), true) is DescriptorPropertyAttribute { IsList: true })
                                 {
                                     var values = parseOrStatements(item.Value);
                                     var col = property.GetValue(result, null) as IList;
@@ -205,7 +208,7 @@ namespace IronyModManager.Parser.Mod.Search
                                     {
                                         var value = converter.Convert(locale, val.Text);
                                         ((BaseFilterResult)value).Negate = val.Negate;
-                                        col.Add(value);
+                                        col?.Add(value);
                                     }
                                 }
                                 else
@@ -216,6 +219,7 @@ namespace IronyModManager.Parser.Mod.Search
                                     ((BaseFilterResult)value).Negate = negate;
                                     property.SetValue(result, value);
                                 }
+
                                 nothingSet = false;
                             }
                         }
@@ -224,9 +228,10 @@ namespace IronyModManager.Parser.Mod.Search
                             result.Name = parseOrStatements(item.Value);
                         }
                     }
+
                     if (!nothingSet)
                     {
-                        cache.Set(new CacheAddParameters<CacheEntry>() { MaxItems = MaxRecordsToCache, Region = CacheRegion, Key = cacheKey, Value = new CacheEntry(result) });
+                        cache.Set(new CacheAddParameters<CacheEntry> { MaxItems = MaxRecordsToCache, Region = CacheRegion, Key = cacheKey, Value = new CacheEntry(result) });
                         return result;
                     }
                 }
@@ -235,9 +240,10 @@ namespace IronyModManager.Parser.Mod.Search
             {
                 logger.Error(ex);
             }
+
             var emptyResult = DIResolver.Get<ISearchParserResult>();
             emptyResult.Name = parseOrStatements(text.ToLowerInvariant().Trim());
-            cache.Set(new CacheAddParameters<CacheEntry>() { MaxItems = MaxRecordsToCache, Region = CacheRegion, Key = cacheKey, Value = new CacheEntry(emptyResult) });
+            cache.Set(new CacheAddParameters<CacheEntry> { MaxItems = MaxRecordsToCache, Region = CacheRegion, Key = cacheKey, Value = new CacheEntry(emptyResult) });
             return emptyResult;
         }
 
@@ -247,7 +253,7 @@ namespace IronyModManager.Parser.Mod.Search
         /// <returns>IEnumerable&lt;PropertyInfo&gt;.</returns>
         private static IEnumerable<PropertyInfo> GetProperties()
         {
-            searchParserProperties ??= typeof(ISearchParserResult).GetProperties().Where(p => Attribute.IsDefined(p, typeof(Common.Mod.Search.DescriptorPropertyAttribute)));
+            searchParserProperties ??= typeof(ISearchParserResult).GetProperties().Where(p => Attribute.IsDefined(p, typeof(DescriptorPropertyAttribute)));
             return searchParserProperties;
         }
 
@@ -290,7 +296,7 @@ namespace IronyModManager.Parser.Mod.Search
             /// Gets or sets the search result.
             /// </summary>
             /// <value>The search result.</value>
-            public ISearchParserResult SearchResult { get; set; }
+            public ISearchParserResult SearchResult { get; }
 
             #endregion Properties
         }

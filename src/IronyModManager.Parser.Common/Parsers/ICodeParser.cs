@@ -61,6 +61,7 @@ namespace IronyModManager.Parser.Common.Parsers
         /// <param name="file">The file.</param>
         /// <param name="performSimpleCheck">if set to <c>true</c> [perform simple check].</param>
         /// <returns>IParseResponse.</returns>
+
         IParseResponse ParseScript(IEnumerable<string> lines, string file, bool performSimpleCheck = false);
 
         /// <summary>

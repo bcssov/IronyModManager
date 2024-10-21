@@ -4,7 +4,7 @@
 // Created          : 04-02-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-22-2024
+// Last Modified On : 10-21-2024
 // ***********************************************************************
 // <copyright file="StellarisDefinitionInfoProvider.cs" company="Mario">
 //     Mario
@@ -63,10 +63,22 @@ namespace IronyModManager.IO.Mods.InfoProviders
         public override bool IsFullyImplemented => true;
 
         /// <summary>
+        /// Gets the merge types.
+        /// </summary>
+        /// <value>The merge types.</value>
+        public override IDictionary<MergeType, List<string>> MergeTypes => new Dictionary<MergeType, List<string>> { { MergeType.FlatMerge, ["advanced_authority_swap"] } };
+
+        /// <summary>
         /// Gets a value indicating whether [supports inline scripts].
         /// </summary>
         /// <value><c>true</c> if [supports inline scripts]; otherwise, <c>false</c>.</value>
         public override bool SupportsInlineScripts => true;
+
+        /// <summary>
+        /// Gets a value indicating whether [supports script merge].
+        /// </summary>
+        /// <value><c>true</c> if [supports script merge]; otherwise, <c>false</c>.</value>
+        public override bool SupportsScriptMerge => true;
 
         #endregion Properties
 

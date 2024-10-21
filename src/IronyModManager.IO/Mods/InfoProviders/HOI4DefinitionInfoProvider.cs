@@ -1,24 +1,24 @@
-﻿
-// ***********************************************************************
+﻿// ***********************************************************************
 // Assembly         : IronyModManager.IO
 // Author           : Mario
 // Created          : 07-18-2022
 //
 // Last Modified By : Mario
-// Last Modified On : 10-03-2023
+// Last Modified On : 10-21-2024
 // ***********************************************************************
 // <copyright file="HOI4DefinitionInfoProvider.cs" company="Mario">
 //     Mario
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using IronyModManager.Shared.Models;
 
 namespace IronyModManager.IO.Mods.InfoProviders
 {
-
     /// <summary>
     /// Class HOI4DefinitionInfoProvider.
     /// Implements the <see cref="IronyModManager.IO.Mods.InfoProviders.BaseDefinitionInfoProvider" />
@@ -42,10 +42,22 @@ namespace IronyModManager.IO.Mods.InfoProviders
         public override bool IsFullyImplemented => false;
 
         /// <summary>
+        /// Gets the merge types.
+        /// </summary>
+        /// <value>The merge types.</value>
+        public override IDictionary<MergeType, List<string>> MergeTypes => null;
+
+        /// <summary>
         /// Gets a value indicating whether [supports inline scripts].
         /// </summary>
         /// <value><c>true</c> if [supports inline scripts]; otherwise, <c>false</c>.</value>
         public override bool SupportsInlineScripts => false;
+
+        /// <summary>
+        /// Gets a value indicating whether [supports script merge].
+        /// </summary>
+        /// <value><c>true</c> if [supports script merge]; otherwise, <c>false</c>.</value>
+        public override bool SupportsScriptMerge => false;
 
         #endregion Properties
 

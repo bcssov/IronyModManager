@@ -4,13 +4,14 @@
 // Created          : 02-19-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 07-20-2022
+// Last Modified On : 10-18-2024
 // ***********************************************************************
 // <copyright file="ParserManager.cs" company="Mario">
 //     Mario
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
+
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
@@ -33,11 +34,6 @@ namespace IronyModManager.Parser
     public class ParserManager : IParserManager
     {
         #region Fields
-
-        /// <summary>
-        /// All parsers
-        /// </summary>
-        private readonly List<IDefaultParser> allParsers;
 
         /// <summary>
         /// The default parsers
@@ -75,9 +71,6 @@ namespace IronyModManager.Parser
             this.gameParsers = gameParsers.OrderBy(p => p.Priority);
             this.genericParsers = genericParsers.OrderBy(p => p.Priority);
             this.defaultParsers = defaultParsers;
-            allParsers = new List<IDefaultParser>(this.defaultParsers);
-            allParsers.AddRange(this.gameParsers);
-            allParsers.AddRange(this.genericParsers);
             ValidateParserNames(gameParsers);
             ValidateParserNames(genericParsers);
         }
@@ -95,9 +88,10 @@ namespace IronyModManager.Parser
         {
             static bool isValidLine(string line, string commentId)
             {
-                string text = line ?? string.Empty;
+                var text = line ?? string.Empty;
                 return !string.IsNullOrWhiteSpace(text) && !text.Trim().StartsWith(commentId);
             }
+
             // Check if empty text file
             var commentId = args.File.EndsWith(Constants.LuaExtension, StringComparison.OrdinalIgnoreCase) ? Constants.Scripts.LuaScriptCommentId : Constants.Scripts.ScriptCommentId.ToString();
             if (!args.IsBinary && (args.Lines == null || !args.Lines.Any() || !args.Lines.Any(p => isValidLine(p, commentId))))
@@ -116,8 +110,9 @@ namespace IronyModManager.Parser
                 definition.UsedParser = string.Empty;
                 definition.ValueType = ValueType.EmptyFile;
                 definition.LastModified = args.FileLastModified;
-                return new List<IDefinition>() { definition };
+                return new List<IDefinition> { definition };
             }
+
             return InvokeParsers(args);
         }
 
@@ -131,7 +126,7 @@ namespace IronyModManager.Parser
         {
             if (definitions?.Count() > 0)
             {
-                int order = 0;
+                var order = 0;
                 foreach (var item in definitions)
                 {
                     if (item.ValueType != ValueType.Variable && item.ValueType != ValueType.Namespace)
@@ -139,6 +134,7 @@ namespace IronyModManager.Parser
                         order++;
                         item.Order = order;
                     }
+
                     item.UsedParser = parserName;
                     item.LastModified = lastModified;
                 }
@@ -179,8 +175,8 @@ namespace IronyModManager.Parser
                 else if (lines.Any(p => !string.IsNullOrEmpty(p) && p.Contains(Constants.Scripts.PlaceholderObjectsComment, StringComparison.OrdinalIgnoreCase)))
                 {
                     var placeholderLine = lines.FirstOrDefault(p => p.Contains(Constants.Scripts.PlaceholderObjectsComment, StringComparison.OrdinalIgnoreCase));
-                    var values = placeholderLine.Split(':');
-                    if (values.Length == 2)
+                    var values = placeholderLine?.Split(':');
+                    if (values is { Length: 2 })
                     {
                         var ids = values[1].Split(',');
                         var cleanedIds = new List<string>();
@@ -234,10 +230,12 @@ namespace IronyModManager.Parser
                                 parser = item.Select(p => p.PreferredParser);
                             }
                         }
+
                         parserMaps.TryAdd(game, newMaps);
                     }
                 }
             }
+
             return parser;
         }
 
@@ -248,14 +246,8 @@ namespace IronyModManager.Parser
         /// <returns>IEnumerable&lt;IDefinition&gt;.</returns>
         private IEnumerable<IDefinition> InvokeParsers(ParserManagerArgs args)
         {
-            var canParseArgs = new CanParseArgs()
-            {
-                File = args.File,
-                GameType = args.GameType,
-                Lines = args.Lines ?? new List<string>(),
-                IsBinary = args.IsBinary,
-            };
-            var parseArgs = new ParserArgs()
+            var canParseArgs = new CanParseArgs { File = args.File, GameType = args.GameType, Lines = args.Lines ?? new List<string>(), IsBinary = args.IsBinary };
+            var parseArgs = new ParserArgs
             {
                 ContentSHA = args.ContentSHA,
                 ModDependencies = args.ModDependencies,
@@ -271,28 +263,31 @@ namespace IronyModManager.Parser
             if (preferredParserNames?.Count() > 0)
             {
                 var gameParser = gameParsers.Where(p => preferredParserNames.Any(s => s.Equals(p.ParserName)));
-                if (gameParsers.Any())
+                if (gameParser.Any())
                 {
-                    preferredParser = gameParsers.FirstOrDefault(p => p.CanParse(canParseArgs));
+                    preferredParser = gameParser.FirstOrDefault(p => p.CanParse(canParseArgs));
                 }
+
                 var genericParser = genericParsers.Where(p => preferredParserNames.Any(s => s.Equals(p.ParserName)));
                 if (preferredParser == null && genericParser.Any())
                 {
-                    preferredParser = genericParsers.FirstOrDefault(p => p.CanParse(canParseArgs));
+                    preferredParser = genericParser.FirstOrDefault(p => p.CanParse(canParseArgs));
                 }
+
                 var defaultParser = defaultParsers.Where(p => preferredParserNames.Any(s => s.Equals(p.ParserName)));
                 if (preferredParser == null && defaultParsers.Any())
                 {
                     preferredParser = defaultParser.FirstOrDefault(p => p.CanParse(canParseArgs));
                 }
             }
+
             IEnumerable<IDefinition> result = null;
+
             // This will be auto generated when a game is scanned for the first time. It was rushed and is now generated via unit test and is no where near as completed.
             if (preferredParser != null)
             {
                 result = preferredParser.Parse(parseArgs);
                 SetAdditionalData(result, preferredParser.ParserName, args.FileLastModified);
-                EvaluateForPlaceholders(result, args.Lines);
             }
             else
             {
@@ -301,7 +296,6 @@ namespace IronyModManager.Parser
                 {
                     result = gameParser.Parse(parseArgs);
                     SetAdditionalData(result, gameParser.ParserName, args.FileLastModified);
-                    EvaluateForPlaceholders(result, args.Lines);
                 }
                 else
                 {
@@ -310,17 +304,17 @@ namespace IronyModManager.Parser
                     {
                         result = genericParser.Parse(parseArgs);
                         SetAdditionalData(result, genericParser.ParserName, args.FileLastModified);
-                        EvaluateForPlaceholders(result, args.Lines);
                     }
                     else
                     {
                         var parser = defaultParsers.FirstOrDefault(p => p.CanParse(canParseArgs));
-                        result = parser.Parse(parseArgs);
-                        SetAdditionalData(result, parser.ParserName, args.FileLastModified);
-                        EvaluateForPlaceholders(result, args.Lines);
+                        result = parser?.Parse(parseArgs);
+                        SetAdditionalData(result, parser?.ParserName, args.FileLastModified);
                     }
                 }
             }
+
+            EvaluateForPlaceholders(result, args.Lines);
             return result;
         }
 

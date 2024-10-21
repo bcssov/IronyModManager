@@ -4,7 +4,7 @@
 // Created          : 10-25-2021
 //
 // Last Modified By : Mario
-// Last Modified On : 10-08-2024
+// Last Modified On : 10-21-2024
 // ***********************************************************************
 // <copyright file="OverwrittenObjectSingleFileParser.cs" company="Mario">
 //     Mario
@@ -36,11 +36,6 @@ namespace IronyModManager.Parser.Games.Stellaris
         #region Fields
 
         /// <summary>
-        /// The allow duplicate code block
-        /// </summary>
-        private static readonly Dictionary<string, string[]> allowDuplicateCodeBlock = new() { { Common.Constants.Stellaris.GovernmentAuthorities.ToLowerInvariant(), ["advanced_authority_swap"] } };
-
-        /// <summary>
         /// The merge type ids
         /// </summary>
         private static readonly Dictionary<string, string[]> allowDuplicateIds = new() { { Common.Constants.Stellaris.Ethics.ToLowerInvariant(), ["ethic_categories"] } };
@@ -49,9 +44,12 @@ namespace IronyModManager.Parser.Games.Stellaris
         /// The starts with checks
         /// </summary>
         private static readonly string[] directoryNames =
-        {
-            Common.Constants.Stellaris.Ethics, Common.Constants.Stellaris.StarbaseModules, Common.Constants.Stellaris.ShipSizes, Common.Constants.Stellaris.StrategicResources, Common.Constants.Stellaris.GovernmentAuthorities
-        };
+            [Common.Constants.Stellaris.Ethics, Common.Constants.Stellaris.StarbaseModules, Common.Constants.Stellaris.ShipSizes, Common.Constants.Stellaris.StrategicResources, Common.Constants.Stellaris.GovernmentAuthorities];
+
+        /// <summary>
+        /// The merge ids
+        /// </summary>
+        private static readonly Dictionary<string, string[]> mergeIds = new() { { Common.Constants.Stellaris.GovernmentAuthorities.ToLowerInvariant(), ["advanced_authority_swap"] } };
 
         #endregion Fields
 
@@ -120,14 +118,19 @@ namespace IronyModManager.Parser.Games.Stellaris
                                 item.AllowDuplicate = true;
                             }
                         }
-                        else if (allowDuplicateCodeBlock.ContainsKey(Path.GetDirectoryName(args.File)!))
+                        else if (mergeIds.ContainsKey(Path.GetDirectoryName(args.File)!))
                         {
-                            var items = allowDuplicateCodeBlock[Path.GetDirectoryName(args.File)!];
-                            foreach (var block in items)
+                            // One has to ask themselves what the actual fuck?!? Who thought this was a good idea over at paradox to implement in such a manner?!?
+                            var items = mergeIds[Path.GetDirectoryName(args.File)!];
+                            var mergeSegments = TryParse(new ParserArgs(args) { Lines = item.Code.SplitOnNewLine() });
+                            if (mergeSegments != null && mergeSegments.Values.Count() == 1)
                             {
-                                if (item.Code.Contains(block, StringComparison.OrdinalIgnoreCase))
+                                foreach (var block in items)
                                 {
-                                    item.AllowDuplicate = true;
+                                    if (mergeSegments.Values.FirstOrDefault()!.Values.All(p => (p.Key ?? string.Empty).Equals(block, StringComparison.OrdinalIgnoreCase)))
+                                    {
+                                        item.MergeType = MergeType.FlatMerge;
+                                    }
                                 }
                             }
                         }

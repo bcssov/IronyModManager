@@ -1,17 +1,17 @@
-﻿
-// ***********************************************************************
+﻿// ***********************************************************************
 // Assembly         : IronyModManager.Parser
 // Author           : Mario
 // Created          : 02-21-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 09-12-2023
+// Last Modified On : 10-17-2024
 // ***********************************************************************
 // <copyright file="DefinesParser.cs" company="Mario">
 //     Mario
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -26,7 +26,6 @@ using ValueType = IronyModManager.Shared.Models.ValueType;
 
 namespace IronyModManager.Parser.Generic
 {
-
     /// <summary>
     /// Class DefinesParser.
     /// Implements the <see cref="IronyModManager.Parser.Common.Parsers.BaseParser" />
@@ -104,8 +103,8 @@ namespace IronyModManager.Parser.Generic
         public override IEnumerable<IDefinition> Parse(ParserArgs args)
         {
             var isLua = false;
-            IEnumerable<string> lines = args.Lines;
-            if (codeParser.IsLua(args.File) && lines != null && lines.Any())
+            var lines = args.Lines;
+            if (CodeParser.IsLua(args.File) && lines != null && lines.Any())
             {
                 isLua = true;
                 var isComplex = false;
@@ -116,7 +115,8 @@ namespace IronyModManager.Parser.Generic
                     lines = text[..(text.LastIndexOf("}") + 1)].SplitOnNewLine(false);
                     isComplex = true;
                 }
-                lines = codeParser.CleanCode(args.File, lines);
+
+                lines = CodeParser.CleanCode(args.File, lines);
                 text = string.Join(Environment.NewLine, lines);
                 text = cleanCommaBeforeBrace.Replace(text, "$1");
                 text = cleanDotNotation.Replace(text, "$2");
@@ -143,25 +143,27 @@ namespace IronyModManager.Parser.Generic
                                 line = line[..line.LastIndexOf(";")];
                             }
                         }
+
                         newLines.Add(line);
                     }
+
                     lines = newLines;
                 }
             }
-            var localArgs = new ParserArgs(args)
-            {
-                Lines = lines
-            };
+
+            var localArgs = new ParserArgs(args) { Lines = lines };
             if (isLua && localArgs.ValidationType == Common.ValidationType.Full)
             {
                 // Switching to simple since we butchered the formatting
                 localArgs.ValidationType = Common.ValidationType.SimpleOnly;
             }
+
             var data = TryParse(localArgs);
             if (data.Error != null)
             {
-                return new List<IDefinition>() { TranslateScriptError(data.Error, localArgs) };
+                return new List<IDefinition> { TranslateScriptError(data.Error, localArgs) };
             }
+
             var result = new List<IDefinition>();
             if (data.Values?.Count() > 0)
             {
@@ -178,7 +180,7 @@ namespace IronyModManager.Parser.Generic
                         definition.ValueType = ValueType.SpecialVariable;
                         definition.Code = FormatCode(dataItem);
                         definition.OriginalCode = FormatCode(dataItem, skipVariables: true);
-                        var tags = ParseScriptTags(new List<IScriptElement>() { dataItem }, id);
+                        var tags = ParseScriptTags(new List<IScriptElement> { dataItem }, id);
                         if (tags.Any())
                         {
                             foreach (var tag in tags)
@@ -190,6 +192,7 @@ namespace IronyModManager.Parser.Generic
                                 }
                             }
                         }
+
                         definition.UseSimpleValidation = data.UseSimpleValidation;
                         result.Add(definition);
                     }
@@ -222,6 +225,7 @@ namespace IronyModManager.Parser.Generic
                                             }
                                         }
                                     }
+
                                     definition.UseSimpleValidation = data.UseSimpleValidation;
                                     result.Add(definition);
                                 }
@@ -232,7 +236,7 @@ namespace IronyModManager.Parser.Generic
                             foreach (var item in dataItem.Values)
                             {
                                 var definition = GetDefinitionInstance();
-                                string id = EvalDefinitionId(item.Values, item.Key);
+                                var id = EvalDefinitionId(item.Values, item.Key);
                                 MapDefinitionFromArgs(ConstructArgs(localArgs, definition, typeOverride: $"{dataItem.Key}-{Common.Constants.TxtType}"));
                                 definition.Id = TrimId(id);
                                 definition.OriginalId = TrimId(item.Key);
@@ -253,6 +257,7 @@ namespace IronyModManager.Parser.Generic
                                         }
                                     }
                                 }
+
                                 definition.UseSimpleValidation = data.UseSimpleValidation;
                                 result.Add(definition);
                             }
@@ -265,11 +270,12 @@ namespace IronyModManager.Parser.Generic
                         {
                             var definesError = DIResolver.Get<IScriptError>();
                             definesError.Message = $"There appears to be a syntax error detected in: {localArgs.File}";
-                            return new List<IDefinition>() { TranslateScriptError(definesError, localArgs) };
+                            return new List<IDefinition> { TranslateScriptError(definesError, localArgs) };
                         }
                     }
                 }
             }
+
             return result;
         }
 

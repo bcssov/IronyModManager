@@ -4,7 +4,7 @@
 // Created          : 04-04-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 05-23-2024
+// Last Modified On : 10-21-2024
 // ***********************************************************************
 // <copyright file="BaseDefinitionInfoProvider.cs" company="Mario">
 //     Mario
@@ -75,10 +75,22 @@ namespace IronyModManager.IO.Mods.InfoProviders
         public abstract bool IsFullyImplemented { get; }
 
         /// <summary>
+        /// Gets the merge types.
+        /// </summary>
+        /// <value>The merge types.</value>
+        public abstract IDictionary<MergeType, List<string>> MergeTypes { get; }
+
+        /// <summary>
         /// Gets a value indicating whether [supports inline scripts].
         /// </summary>
         /// <value><c>true</c> if [supports inline scripts]; otherwise, <c>false</c>.</value>
         public abstract bool SupportsInlineScripts { get; }
+
+        /// <summary>
+        /// Gets a value indicating whether [supports script merge].
+        /// </summary>
+        /// <value><c>true</c> if [supports script merge]; otherwise, <c>false</c>.</value>
+        public abstract bool SupportsScriptMerge { get; }
 
         #endregion Properties
 

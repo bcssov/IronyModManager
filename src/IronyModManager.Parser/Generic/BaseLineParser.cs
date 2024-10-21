@@ -4,13 +4,14 @@
 // Created          : 08-31-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 01-29-2022
+// Last Modified On : 10-17-2024
 // ***********************************************************************
 // <copyright file="BaseLineParser.cs" company="Mario">
 //     Mario
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -33,7 +34,7 @@ namespace IronyModManager.Parser.Generic
         /// <summary>
         /// The quotes regex
         /// </summary>
-        protected static readonly Regex quotesRegex = new("\".*?\"", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+        protected static readonly Regex QuotesRegex = new("\".*?\"", RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
         #endregion Fields
 
@@ -73,6 +74,7 @@ namespace IronyModManager.Parser.Generic
                     break;
                 }
             }
+
             return sb.ToString();
         }
 
@@ -84,7 +86,7 @@ namespace IronyModManager.Parser.Generic
         /// <returns>System.String.</returns>
         protected virtual string GetKey(string line, string key)
         {
-            var cleaned = codeParser.CleanWhitespace(line);
+            var cleaned = CodeParser.CleanWhitespace(line);
             if (cleaned.Contains(key, StringComparison.OrdinalIgnoreCase))
             {
                 var prev = cleaned.IndexOf(key, StringComparison.OrdinalIgnoreCase);
@@ -95,7 +97,7 @@ namespace IronyModManager.Parser.Generic
                     {
                         if (parsed.First().StartsWith("\""))
                         {
-                            return quotesRegex.Match(parsed.First().Trim()).Value.Replace("\"", string.Empty);
+                            return QuotesRegex.Match(parsed.First().Trim()).Value.Replace("\"", string.Empty);
                         }
                         else
                         {
@@ -104,6 +106,7 @@ namespace IronyModManager.Parser.Generic
                     }
                 }
             }
+
             return string.Empty;
         }
 
@@ -115,7 +118,7 @@ namespace IronyModManager.Parser.Generic
         /// <returns>System.String.</returns>
         protected virtual string GetValue(string line, string key)
         {
-            var cleaned = codeParser.CleanWhitespace(line);
+            var cleaned = CodeParser.CleanWhitespace(line);
             if (cleaned.Contains(key, StringComparison.OrdinalIgnoreCase))
             {
                 var prev = cleaned.IndexOf(key, StringComparison.OrdinalIgnoreCase);
@@ -127,7 +130,7 @@ namespace IronyModManager.Parser.Generic
                     {
                         if (parsed.First().StartsWith("\""))
                         {
-                            return quotesRegex.Match(parsed.First().Trim()).Value.Replace("\"", string.Empty);
+                            return QuotesRegex.Match(parsed.First().Trim()).Value.Replace("\"", string.Empty);
                         }
                         else
                         {
@@ -136,6 +139,7 @@ namespace IronyModManager.Parser.Generic
                     }
                 }
             }
+
             return string.Empty;
         }
 

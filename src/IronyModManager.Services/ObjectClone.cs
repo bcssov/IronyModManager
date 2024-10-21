@@ -1,17 +1,17 @@
-﻿
-// ***********************************************************************
+﻿// ***********************************************************************
 // Assembly         : IronyModManager.Services
 // Author           : Mario
 // Created          : 05-14-2023
 //
 // Last Modified By : Mario
-// Last Modified On : 06-25-2023
+// Last Modified On : 10-17-2024
 // ***********************************************************************
 // <copyright file="ObjectClone.cs" company="Mario">
 //     Mario
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,7 +21,6 @@ using IronyModManager.Shared.Models;
 
 namespace IronyModManager.Services
 {
-
     /// <summary>
     /// Class ObjectClone.
     /// Implements the <see cref="IObjectClone" />
@@ -44,6 +43,7 @@ namespace IronyModManager.Services
             {
                 newDefinition.Code = definition.Code;
             }
+
             newDefinition.ContentSHA = definition.ContentSHA;
             newDefinition.DefinitionSHA = definition.DefinitionSHA;
             newDefinition.Dependencies = definition.Dependencies;
@@ -81,6 +81,7 @@ namespace IronyModManager.Services
             newDefinition.OriginalId = definition.OriginalId;
             newDefinition.UseSimpleValidation = definition.UseSimpleValidation;
             newDefinition.IsSpecialFolder = definition.IsSpecialFolder;
+            newDefinition.MergeType = definition.MergeType;
             return newDefinition;
         }
 

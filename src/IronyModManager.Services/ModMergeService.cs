@@ -4,7 +4,7 @@
 // Created          : 06-19-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 09-15-2024
+// Last Modified On : 10-19-2024
 // ***********************************************************************
 // <copyright file="ModMergeService.cs" company="Mario">
 //     Mario
@@ -639,7 +639,7 @@ namespace IronyModManager.Services
 
             void process(IMod item)
             {
-                if (processed.Add(item))
+                if (processed.Add(item) && item.Dependencies != null)
                 {
                     foreach (var dependency in item.Dependencies)
                     {

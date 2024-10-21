@@ -1,17 +1,17 @@
-﻿
-// ***********************************************************************
+﻿// ***********************************************************************
 // Assembly         : IronyModManager.Parser.Common.Parsers
 // Author           : Mario
 // Created          : 02-17-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-21-2023
+// Last Modified On : 10-17-2024
 // ***********************************************************************
 // <copyright file="BaseParser.cs" company="Mario">
 //     Mario
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
+
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -26,7 +26,6 @@ using ValueType = IronyModManager.Shared.Models.ValueType;
 
 namespace IronyModManager.Parser.Common.Parsers
 {
-
     /// <summary>
     /// Class BaseParser.
     /// Implements the <see cref="IronyModManager.Parser.Common.Parsers.IDefaultParser" />
@@ -44,12 +43,12 @@ namespace IronyModManager.Parser.Common.Parsers
         /// <summary>
         /// The code parser
         /// </summary>
-        protected readonly ICodeParser codeParser;
+        protected readonly ICodeParser CodeParser;
 
         /// <summary>
         /// The logger
         /// </summary>
-        protected readonly ILogger logger;
+        protected readonly ILogger Logger;
 
         #endregion Fields
 
@@ -62,8 +61,8 @@ namespace IronyModManager.Parser.Common.Parsers
         /// <param name="logger">The logger.</param>
         public BaseParser(ICodeParser codeParser, ILogger logger)
         {
-            this.codeParser = codeParser;
-            this.logger = logger;
+            CodeParser = codeParser;
+            Logger = logger;
         }
 
         #endregion Constructors
@@ -120,7 +119,7 @@ namespace IronyModManager.Parser.Common.Parsers
             int? openBrackets = null, int? closeBrackets = null, string line = Shared.Constants.EmptyParam, bool? inline = null,
             string typeOverride = Shared.Constants.EmptyParam, bool isFirstLevel = true)
         {
-            return new ParsingArgs()
+            return new ParsingArgs
             {
                 Args = args,
                 ClosingBracket = closeBrackets.GetValueOrDefault(),
@@ -146,13 +145,14 @@ namespace IronyModManager.Parser.Common.Parsers
             {
                 foreach (var item in values)
                 {
-                    string id = EvalElementForId(item);
+                    var id = EvalElementForId(item);
                     if (!string.IsNullOrWhiteSpace(id))
                     {
                         return id;
                     }
                 }
             }
+
             return defaultId;
         }
 
@@ -177,23 +177,25 @@ namespace IronyModManager.Parser.Common.Parsers
             {
                 return null;
             }
+
             try
             {
-                var error = codeParser.PerformValidityCheck(args.Lines, args.File, ShouldSwitchToBasicChecking(args.Lines) || args.ValidationType == ValidationType.SimpleOnly);
+                var error = CodeParser.PerformValidityCheck(args.Lines, args.File, ShouldSwitchToBasicChecking(args.Lines) || args.ValidationType == ValidationType.SimpleOnly);
                 if (error != null)
                 {
-                    return new List<IDefinition>() { TranslateScriptError(error, args) };
+                    return new List<IDefinition> { TranslateScriptError(error, args) };
                 }
             }
             catch (Exception ex)
             {
-                logger.Error(ex, $"CWTools has encountered an error, switching to simple parser. ModName: {args.ModName} File: {args.File}");
-                var error = codeParser.PerformValidityCheck(args.Lines, args.File, true);
+                Logger.Error(ex, $"CWTools has encountered an error, switching to simple parser. ModName: {args.ModName} File: {args.File}");
+                var error = CodeParser.PerformValidityCheck(args.Lines, args.File, true);
                 if (error != null)
                 {
-                    return new List<IDefinition>() { TranslateScriptError(error, args) };
+                    return new List<IDefinition> { TranslateScriptError(error, args) };
                 }
             }
+
             return null;
         }
 
@@ -224,18 +226,19 @@ namespace IronyModManager.Parser.Common.Parsers
 
             if (string.IsNullOrWhiteSpace(parent))
             {
-                var code = codeParser.FormatCode(element, 0);
+                var code = CodeParser.FormatCode(element, 0);
                 var lines = code.SplitOnNewLine();
                 var sb = new StringBuilder();
                 foreach (var item in lines)
                 {
                     performVariableCheck(sb, item);
                 }
+
                 return sb.ToString();
             }
             else
             {
-                var code = codeParser.FormatCode(element, 1);
+                var code = CodeParser.FormatCode(element, 1);
                 var lines = code.SplitOnNewLine();
                 var sb = new StringBuilder();
                 sb.AppendLine($"{parent} = {{");
@@ -243,6 +246,7 @@ namespace IronyModManager.Parser.Common.Parsers
                 {
                     performVariableCheck(sb, item);
                 }
+
                 sb.Append('}');
                 return sb.ToString();
             }
@@ -272,7 +276,8 @@ namespace IronyModManager.Parser.Common.Parsers
         /// <param name="typeOverride">The type override.</param>
         /// <param name="isFirstLevel">if set to <c>true</c> [is first level].</param>
         /// <returns>IEnumerable&lt;IDefinition&gt;.</returns>
-        protected virtual IEnumerable<IDefinition> ParseComplexTypes(IEnumerable<IScriptElement> values, ParserArgs args, string parent = Shared.Constants.EmptyParam, string typeOverride = Shared.Constants.EmptyParam, bool isFirstLevel = true)
+        protected virtual IEnumerable<IDefinition> ParseComplexTypes(IEnumerable<IScriptElement> values, ParserArgs args, string parent = Shared.Constants.EmptyParam, string typeOverride = Shared.Constants.EmptyParam,
+            bool isFirstLevel = true)
         {
             var result = new List<IDefinition>();
             if (values?.Count() > 0)
@@ -284,7 +289,7 @@ namespace IronyModManager.Parser.Common.Parsers
                     if (item.Values != null && item.Values.Any(s => s.Key.Equals(Constants.Scripts.LanguagesId, StringComparison.OrdinalIgnoreCase)))
                     {
                         var langNode = item.Values.FirstOrDefault(p => p.Key.Equals(Constants.Scripts.LanguagesId, StringComparison.OrdinalIgnoreCase));
-                        if (langNode.Values?.Count() > 0)
+                        if (langNode?.Values?.Count() > 0)
                         {
                             foreach (var value in langNode.Values.OrderBy(p => p.Key))
                             {
@@ -292,11 +297,13 @@ namespace IronyModManager.Parser.Common.Parsers
                             }
                         }
                     }
-                    string id = EvalDefinitionId(item.Values, item.Key);
+
+                    var id = EvalDefinitionId(item.Values, item.Key);
                     if (sbLangs.Length > 0)
                     {
                         id = $"{sbLangs}{id}";
                     }
+
                     MapDefinitionFromArgs(ConstructArgs(args, definition, typeOverride: typeOverride, isFirstLevel: isFirstLevel));
                     definition.Id = TrimId(id);
                     definition.OriginalId = isFirstLevel ? TrimId(item.Key) : TrimId(parent);
@@ -308,6 +315,7 @@ namespace IronyModManager.Parser.Common.Parsers
                         definition.CodeTag = parent;
                         definition.CodeSeparator = Shared.Constants.CodeSeparators.ClosingSeparators.CurlyBracket;
                     }
+
                     var tags = ParseScriptTags(item.Values, item.Key);
                     if (tags.Any())
                     {
@@ -320,9 +328,11 @@ namespace IronyModManager.Parser.Common.Parsers
                             }
                         }
                     }
+
                     result.Add(definition);
                 }
             }
+
             return result;
         }
 
@@ -345,10 +355,12 @@ namespace IronyModManager.Parser.Common.Parsers
                 result.AddRange(ParseComplexTypes(values.Values, args));
                 result.AddRange(ParseTypesForVariables(values.Values, args));
             }
+
             foreach (var item in result)
             {
                 item.UseSimpleValidation = values.UseSimpleValidation;
             }
+
             return result;
         }
 
@@ -360,21 +372,20 @@ namespace IronyModManager.Parser.Common.Parsers
         /// <returns>IEnumerable&lt;System.String&gt;.</returns>
         protected virtual IEnumerable<string> ParseScriptTags(IEnumerable<IScriptElement> values, string defaultId)
         {
-            var tags = new List<string>
-            {
-                TrimId(defaultId)
-            };
+            var tags = new List<string> { TrimId(defaultId) };
             if (values?.Count() > 0)
             {
+                // ReSharper disable once LoopCanBeConvertedToQuery
                 foreach (var item in values)
                 {
-                    string id = EvalElementForId(item);
+                    var id = EvalElementForId(item);
                     if (!string.IsNullOrWhiteSpace(id))
                     {
                         tags.Add(TrimId(id));
                     }
                 }
             }
+
             return tags;
         }
 
@@ -398,16 +409,18 @@ namespace IronyModManager.Parser.Common.Parsers
                 {
                     foreach (var item in values.Values.Where(p => !p.IsSimpleType))
                     {
-                        result.AddRange(ParseSimpleTypes(item.Values, args, parent: item.Key, isFirstLevel: false));
-                        result.AddRange(ParseComplexTypes(item.Values, args, parent: item.Key, isFirstLevel: false));
-                        result.AddRange(ParseTypesForVariables(item.Values, args, parent: item.Key, isFirstLevel: false));
+                        result.AddRange(ParseSimpleTypes(item.Values, args, item.Key, isFirstLevel: false));
+                        result.AddRange(ParseComplexTypes(item.Values, args, item.Key, isFirstLevel: false));
+                        result.AddRange(ParseTypesForVariables(item.Values, args, item.Key, isFirstLevel: false));
                     }
                 }
             }
+
             foreach (var item in result)
             {
                 item.UseSimpleValidation = values.UseSimpleValidation;
             }
+
             return result;
         }
 
@@ -420,7 +433,8 @@ namespace IronyModManager.Parser.Common.Parsers
         /// <param name="typeOverride">The type override.</param>
         /// <param name="isFirstLevel">if set to <c>true</c> [is first level].</param>
         /// <returns>IEnumerable&lt;IDefinition&gt;.</returns>
-        protected virtual IEnumerable<IDefinition> ParseSimpleTypes(IEnumerable<IScriptElement> values, ParserArgs args, string parent = Shared.Constants.EmptyParam, string typeOverride = Shared.Constants.EmptyParam, bool isFirstLevel = true)
+        protected virtual IEnumerable<IDefinition> ParseSimpleTypes(IEnumerable<IScriptElement> values, ParserArgs args, string parent = Shared.Constants.EmptyParam, string typeOverride = Shared.Constants.EmptyParam,
+            bool isFirstLevel = true)
         {
             var result = new List<IDefinition>();
             if (values?.Count() > 0)
@@ -436,7 +450,8 @@ namespace IronyModManager.Parser.Common.Parsers
                         definition.CodeTag = parent;
                         definition.CodeSeparator = Shared.Constants.CodeSeparators.ClosingSeparators.CurlyBracket;
                     }
-                    bool typeAssigned = false;
+
+                    var typeAssigned = false;
                     var op = item.Operator ?? string.Empty;
                     if (op.Equals(Constants.Scripts.EqualsOperator.ToString()))
                     {
@@ -453,12 +468,14 @@ namespace IronyModManager.Parser.Common.Parsers
                             definition.ValueType = ValueType.Variable;
                         }
                     }
+
                     if (typeAssigned)
                     {
                         result.Add(definition);
                     }
                 }
             }
+
             return result;
         }
 
@@ -471,7 +488,8 @@ namespace IronyModManager.Parser.Common.Parsers
         /// <param name="typeOverride">The type override.</param>
         /// <param name="isFirstLevel">if set to <c>true</c> [is first level].</param>
         /// <returns>IEnumerable&lt;IDefinition&gt;.</returns>
-        protected virtual IEnumerable<IDefinition> ParseTypesForVariables(IEnumerable<IScriptElement> values, ParserArgs args, string parent = Shared.Constants.EmptyParam, string typeOverride = Shared.Constants.EmptyParam, bool isFirstLevel = true)
+        protected virtual IEnumerable<IDefinition> ParseTypesForVariables(IEnumerable<IScriptElement> values, ParserArgs args, string parent = Shared.Constants.EmptyParam, string typeOverride = Shared.Constants.EmptyParam,
+            bool isFirstLevel = true)
         {
             var result = new List<IDefinition>();
             if (values?.Count() > 0)
@@ -485,6 +503,7 @@ namespace IronyModManager.Parser.Common.Parsers
                         {
                             result.AddRange(variables);
                         }
+
                         variables = ParseTypesForVariables(item.Values, args, parent, typeOverride, isFirstLevel);
                         if (variables.Any())
                         {
@@ -493,20 +512,22 @@ namespace IronyModManager.Parser.Common.Parsers
                     }
                 }
             }
+
             return result;
         }
 
         /// <summary>
-        /// Shoulds the switch to basic checking.
+        /// Should switch to basic checking.
         /// </summary>
         /// <param name="lines">The lines.</param>
-        /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
+        /// <returns><c>true</c> if true, <c>false</c> otherwise.</returns>
         protected virtual bool ShouldSwitchToBasicChecking(IEnumerable<string> lines)
         {
             if (lines != null)
             {
                 return lines.Count() > SimpleErrorCheckLinesThreshold || lines.Any(p => !string.IsNullOrEmpty(p) && p.Contains(Constants.Scripts.FallbackToSimpleParserComment, StringComparison.OrdinalIgnoreCase));
             }
+
             return false;
         }
 
@@ -523,7 +544,7 @@ namespace IronyModManager.Parser.Common.Parsers
             definition.ErrorColumn = error.Column;
             definition.ErrorLine = error.Line;
             definition.ErrorMessage = error.Message;
-            definition.Id = Path.GetFileName(args.File).ToLowerInvariant();
+            definition.Id = Path.GetFileName(args.File)?.ToLowerInvariant();
             definition.ValueType = ValueType.Invalid;
             definition.OriginalCode = definition.Code = string.Join(Environment.NewLine, args.Lines);
             MapDefinitionFromArgs(ConstructArgs(args, definition));
@@ -549,8 +570,9 @@ namespace IronyModManager.Parser.Common.Parsers
         {
             if (args.ValidationType == ValidationType.SkipAll)
             {
-                return codeParser.ParseScriptWithoutValidation(args.Lines, args.File);
+                return CodeParser.ParseScriptWithoutValidation(args.Lines, args.File);
             }
+
             try
             {
                 var simpleChecks = args.ValidationType == ValidationType.SimpleOnly;
@@ -558,12 +580,13 @@ namespace IronyModManager.Parser.Common.Parsers
                 {
                     simpleChecks = ShouldSwitchToBasicChecking(args.Lines);
                 }
-                return codeParser.ParseScript(args.Lines, args.File, simpleChecks);
+
+                return CodeParser.ParseScript(args.Lines, args.File, simpleChecks);
             }
             catch (Exception ex)
             {
-                logger.Error(ex, $"CWTools has encountered an error, switching to simple parser. ModName: {args.ModName} File: {args.File}");
-                return codeParser.ParseScript(args.Lines, args.File, true);
+                Logger.Error(ex, $"CWTools has encountered an error, switching to simple parser. ModName: {args.ModName} File: {args.File}");
+                return CodeParser.ParseScript(args.Lines, args.File, true);
             }
         }
 

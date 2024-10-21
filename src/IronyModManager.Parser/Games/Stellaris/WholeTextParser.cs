@@ -4,7 +4,7 @@
 // Created          : 02-18-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 08-18-2024
+// Last Modified On : 10-17-2024
 // ***********************************************************************
 // <copyright file="WholeTextParser.cs" company="Mario">
 //     Mario
@@ -98,7 +98,7 @@ namespace IronyModManager.Parser.Games.Stellaris
         /// <returns>System.String.</returns>
         protected override string GetFileTagCode(string file, IEnumerable<string> lines)
         {
-            var cleaned = codeParser.CleanCode(file, lines);
+            var cleaned = CodeParser.CleanCode(file, lines);
             return base.GetFileTagCode(file, cleaned);
         }
 
