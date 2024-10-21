@@ -4,11 +4,9 @@
 		<title>Irony Mod Manager</title>
 		<language>en</language>
 		<item>
-			<title>1.26.195</title>
+			<title>1.26.196</title>
 			<description>## Current Release Notes
-* Update Chinese translation (thanks to Clazex)
-* Add reader_export folder to whitelist merge folders for CK3
-* Stellaris CS is now respecting authority merging (when did that become a thing in the first place?)
+* Ensure that auth swap in Stellaris CS is completely handled
 
 ## Release Notes 1.26
 * Update dependencies
@@ -21,15 +19,13 @@
 * Added conflict solver option to skip parsing some languages
 * Add conflict solver configuration to customize colors for new diff viewer
 * Add templateable merge mod naming</description>
-			<pubDate>Tue, 08 Oct 2024 09:22:45 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.26.195/linux-x64.zip" sparkle:version="1.26.195.29533" sparkle:shortVersionString="1.26.195" length="90912882" sparkle:os="linux" type="application/zip" sparkle:signature="qoCUANGfV+xQrEDgbRdIM63WNg2q0zqoNcy4r3uE8kM1Qu/OVBVSt30z9BbDjSHQWQBpeudOHsjdHiunRwqSCQ=="/>
+			<pubDate>Mon, 21 Oct 2024 21:17:38 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.26.196/linux-x64.zip" sparkle:version="1.26.196.7439" sparkle:shortVersionString="1.26.196" length="90929859" sparkle:os="linux" type="application/zip" sparkle:signature="+QVr7RPIqIsdyh8w1Rm5k82WcP3+RznCBxsOSstKQwtHOPpTELFS8GwhhtXOaln6t6HYoReOIr9ubmbG5+yXAQ=="/>
 		</item>
 		<item>
-			<title>1.26.195</title>
+			<title>1.26.196</title>
 			<description>## Current Release Notes
-* Update Chinese translation (thanks to Clazex)
-* Add reader_export folder to whitelist merge folders for CK3
-* Stellaris CS is now respecting authority merging (when did that become a thing in the first place?)
+* Ensure that auth swap in Stellaris CS is completely handled
 
 ## Release Notes 1.26
 * Update dependencies
@@ -42,15 +38,13 @@
 * Added conflict solver option to skip parsing some languages
 * Add conflict solver configuration to customize colors for new diff viewer
 * Add templateable merge mod naming</description>
-			<pubDate>Tue, 08 Oct 2024 09:22:50 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.26.195/osx-x64.zip" sparkle:version="1.26.195.29533" sparkle:shortVersionString="1.26.195" length="93878224" sparkle:os="osx" type="application/zip" sparkle:signature="MZG1V3oFZtS4Td9fU+B5FZtuDxPEVjlg1wOTqNtr8RoeP4s3P44TGaNqw/O3l4N2CRn5RNyt8HsoBJpLm8SjCQ=="/>
+			<pubDate>Mon, 21 Oct 2024 21:17:42 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.26.196/osx-x64.zip" sparkle:version="1.26.196.7439" sparkle:shortVersionString="1.26.196" length="93887689" sparkle:os="osx" type="application/zip" sparkle:signature="/0KYYQZV7qYUPDHFyd9Lfz2rsWEIxT4IFIy2ATyoF2eDx8EQgyPibCJ7Gq6CTZXp3ob1b/d05e5nRRgJ7v/rAw=="/>
 		</item>
 		<item>
-			<title>1.26.195</title>
+			<title>1.26.196</title>
 			<description>## Current Release Notes
-* Update Chinese translation (thanks to Clazex)
-* Add reader_export folder to whitelist merge folders for CK3
-* Stellaris CS is now respecting authority merging (when did that become a thing in the first place?)
+* Ensure that auth swap in Stellaris CS is completely handled
 
 ## Release Notes 1.26
 * Update dependencies
@@ -63,15 +57,13 @@
 * Added conflict solver option to skip parsing some languages
 * Add conflict solver configuration to customize colors for new diff viewer
 * Add templateable merge mod naming</description>
-			<pubDate>Tue, 08 Oct 2024 09:22:54 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.26.195/win-x64-setup.zip" sparkle:version="1.26.195.29533" sparkle:shortVersionString="1.26.195" length="72845133" sparkle:os="windows" type="application/zip" sparkle:signature="bIXlQ/Dw/noAN/uf7NWJhxSsKns/rVBpWGKMkvJoQV1Jh+z/OmoIn6jFKsZTiMhW0rqsgWWO5l06Rp6zfh11CQ=="/>
+			<pubDate>Mon, 21 Oct 2024 21:17:47 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.26.196/win-x64-setup.zip" sparkle:version="1.26.196.7439" sparkle:shortVersionString="1.26.196" length="72870252" sparkle:os="windows" type="application/zip" sparkle:signature="R+WpSgZcYRmuZQdMIz7bJvpEAQ86kgg5HYf5VxD90+8WNgo8byG6nJm98e5qTmCom52u8Fcrqk2E+Fu8dtp5Aw=="/>
 		</item>
 		<item>
-			<title>1.26.195</title>
+			<title>1.26.196</title>
 			<description>## Current Release Notes
-* Update Chinese translation (thanks to Clazex)
-* Add reader_export folder to whitelist merge folders for CK3
-* Stellaris CS is now respecting authority merging (when did that become a thing in the first place?)
+* Ensure that auth swap in Stellaris CS is completely handled
 
 ## Release Notes 1.26
 * Update dependencies
@@ -84,8 +76,8 @@
 * Added conflict solver option to skip parsing some languages
 * Add conflict solver configuration to customize colors for new diff viewer
 * Add templateable merge mod naming</description>
-			<pubDate>Tue, 08 Oct 2024 09:22:54 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.26.195/win-x64.zip" sparkle:version="1.26.195.29533" sparkle:shortVersionString="1.26.195" length="106707300" sparkle:os="windows" type="application/zip" sparkle:signature="bFlC/E/Np8SwLaUtXLmCOntxccmTJ2VLnPC47Jy23u13kJ2XLoqfUCS6mBFl/a6EMAz5OdyS4V7RqYV5dwZxDQ=="/>
+			<pubDate>Mon, 21 Oct 2024 21:17:47 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.26.196/win-x64.zip" sparkle:version="1.26.196.7439" sparkle:shortVersionString="1.26.196" length="106718348" sparkle:os="windows" type="application/zip" sparkle:signature="oPCEKiuxffPQ2XBKqKGjnZGTDhpZ/7J08LH5Aq5C3/viqHUZ09fTM+Ut+V8VKKuxJ9OaDGjYtBde0t0Axs8ZDA=="/>
 		</item>
 	</channel>
 </rss>
