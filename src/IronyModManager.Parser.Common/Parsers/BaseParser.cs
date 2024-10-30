@@ -4,7 +4,7 @@
 // Created          : 02-17-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 10-29-2024
+// Last Modified On : 10-30-2024
 // ***********************************************************************
 // <copyright file="BaseParser.cs" company="Mario">
 //     Mario
@@ -475,6 +475,11 @@ namespace IronyModManager.Parser.Common.Parsers
                             typeAssigned = true;
                             definition.Id = TrimId(item.Key);
                             definition.ValueType = ValueType.Variable;
+                        }
+                        else if (item.Key.StartsWith(Constants.Stellaris.InlineScriptId, StringComparison.OrdinalIgnoreCase))
+                        {
+                            // Yay, paradox
+                            definition.ContainsInlineIdentifier = true;
                         }
                     }
 

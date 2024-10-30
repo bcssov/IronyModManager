@@ -1013,6 +1013,79 @@ namespace IronyModManager.Parser.Tests
             parserResult.Any(p => p.Id.Equals("BIO_PROPULSION_5_BATTLESHIP")).Should().BeTrue();
         }
 
+        /// <summary>
+        /// Defines the test method GetObjectId_on_first_level_should_yield_results_with_simple_inline.
+        /// </summary>
+        [Fact]
+        public void GetObjectId_on_first_level_should_yield_results_with_simple_inline()
+        {
+            DISetup.SetupContainer();
+
+            var sb = new System.Text.StringBuilder(328);
+            sb.AppendLine(@"# ship class placeholder");
+            sb.AppendLine(@"entity = corvette_entity");
+            sb.AppendLine(@"resources = { category = starbase_stations }");
+            sb.AppendLine(@"potential_construction = { always = no }");
+            sb.AppendLine(@"possible_construction = { always = no }");
+            sb.AppendLine(@"is_designable = no");
+            sb.AppendLine(@"enable_default_design = yes");
+            sb.AppendLine(@"prerequisites = { }");
+            sb.AppendLine(@"class = shipclass_starbase");
+            sb.AppendLine(@"icon_frame = 1");
+            sb.AppendLine(@"icon = ship_size_military_station");
+
+            var sb2 = new StringBuilder(77);
+            sb2.AppendLine(@"rs_heavy_dreadnought = {");
+            sb2.AppendLine(@"    inline_script = giga_placeholders/ship_sizes");
+            sb2.AppendLine(@"}");
+
+            var parser = new ParametrizedParser(new CodeParser(new Logger()));
+            var result = parser.Process(sb.ToString(), sb2.ToString());
+            result.Should().NotBeNullOrEmpty();
+            var m = DIResolver.Get<IParserManager>();
+            var parserResult = m.Parse(new ParserManagerArgs { File = "common\\ship_sizes\\dummy.txt", GameType = "Stellaris", IsBinary = false, Lines = result.SplitOnNewLine() });
+            parserResult.Count().Should().Be(1);
+            parserResult.Any(p => p.Id.Equals("rs_heavy_dreadnought")).Should().BeTrue();
+        }
+
+        /// <summary>
+        /// Defines the test method GetObjectId_should_yield_results_with_simple_inline.
+        /// </summary>
+        [Fact]
+        public void GetObjectId_should_yield_results_with_simple_inline()
+        {
+            DISetup.SetupContainer();
+
+            var sb = new System.Text.StringBuilder();
+            sb.AppendLine(@"rs_heavy_dreadnought = {");
+            sb.AppendLine(@"# ship class placeholder");
+            sb.AppendLine(@"entity = corvette_entity");
+            sb.AppendLine(@"resources = { category = starbase_stations }");
+            sb.AppendLine(@"potential_construction = { always = no }");
+            sb.AppendLine(@"possible_construction = { always = no }");
+            sb.AppendLine(@"is_designable = no");
+            sb.AppendLine(@"enable_default_design = yes");
+            sb.AppendLine(@"prerequisites = { }");
+            sb.AppendLine(@"class = shipclass_starbase");
+            sb.AppendLine(@"icon_frame = 1");
+            sb.AppendLine(@"icon = ship_size_military_station");
+            sb.AppendLine(@"}");
+
+
+            var sb2 = new StringBuilder(77);
+            sb2.AppendLine(@"");
+            sb2.AppendLine(@"inline_script = giga_placeholders/ship_sizes");
+            sb2.AppendLine(@"");
+
+            var parser = new ParametrizedParser(new CodeParser(new Logger()));
+            var result = parser.Process(sb.ToString(), sb2.ToString());
+            result.Should().NotBeNullOrEmpty();
+            var m = DIResolver.Get<IParserManager>();
+            var parserResult = m.Parse(new ParserManagerArgs { File = "common\\ship_sizes\\dummy.txt", GameType = "Stellaris", IsBinary = false, Lines = result.SplitOnNewLine() });
+            parserResult.Count().Should().Be(1);
+            parserResult.Any(p => p.Id.Equals("rs_heavy_dreadnought")).Should().BeTrue();
+        }
+
 
         /// <summary>
         /// Defines the test method GetScriptPath_should_yield_results.
@@ -1089,6 +1162,39 @@ namespace IronyModManager.Parser.Tests
             var parser = new ParametrizedParser(new CodeParser(new Logger()));
             var result = parser.GetScriptPath(sb.ToString());
             result.Should().Be("grand_archive\\mutations\\core_components\\component_thrusters_bio");
+        }
+
+        /// <summary>
+        /// Defines the test method GetScriptPath_as_sub_element_should_handle_simple_inline_scripts.
+        /// </summary>
+        [Fact]
+        public void GetScriptPath_as_sub_element_should_handle_simple_inline_scripts()
+        {
+            DISetup.SetupContainer();
+
+            var sb = new StringBuilder(77);
+            sb.AppendLine(@"rs_heavy_dreadnought = {");
+            sb.AppendLine(@"    inline_script = giga_placeholders/ship_sizes");
+            sb.AppendLine(@"}");
+
+            var parser = new ParametrizedParser(new CodeParser(new Logger()));
+            var result = parser.GetScriptPath(sb.ToString());
+            result.Should().Be("giga_placeholders\\ship_sizes");
+        }
+
+        [Fact]
+        public void GetScriptPath_as_should_handle_simple_inline_scripts()
+        {
+            DISetup.SetupContainer();
+
+            var sb = new StringBuilder(77);
+            sb.AppendLine(@"");
+            sb.AppendLine(@"inline_script = giga_placeholders/ship_sizes");
+            sb.AppendLine(@"");
+
+            var parser = new ParametrizedParser(new CodeParser(new Logger()));
+            var result = parser.GetScriptPath(sb.ToString());
+            result.Should().Be("giga_placeholders\\ship_sizes");
         }
     }
 }
