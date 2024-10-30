@@ -4,9 +4,10 @@
 		<title>Irony Mod Manager</title>
 		<language>en</language>
 		<item>
-			<title>1.26.197</title>
+			<title>1.26.199</title>
 			<description>## Current Release Notes
 * Stellaris CS 3.14 update
+* Fix #528
 
 ## Release Notes 1.26
 * Update dependencies
@@ -19,13 +20,14 @@
 * Added conflict solver option to skip parsing some languages
 * Add conflict solver configuration to customize colors for new diff viewer
 * Add templateable merge mod naming</description>
-			<pubDate>Wed, 30 Oct 2024 09:34:57 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.26.197/linux-x64.zip" sparkle:version="1.26.197.30306" sparkle:shortVersionString="1.26.197" length="90935713" sparkle:os="linux" type="application/zip" sparkle:signature="bAaOB/OCPa+LMUSdugP/TAbrZAGCSGKVLil3R5iciFXqX+fsUb+okshiBrn0bZKsdDGqUvP1346E+pmWjBaAAA=="/>
+			<pubDate>Wed, 30 Oct 2024 23:22:03 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.26.199/linux-x64.zip" sparkle:version="1.26.199.41356" sparkle:shortVersionString="1.26.199" length="90936476" sparkle:os="linux" type="application/zip" sparkle:signature="PTVQ49beR6rPeUf4GLg3ohj7LaXh7dcJiBguVCwtdyhuc6RUKTck3jWMgi1FXLKZKOoCONquJKyEVhSNumP7BQ=="/>
 		</item>
 		<item>
-			<title>1.26.197</title>
+			<title>1.26.199</title>
 			<description>## Current Release Notes
 * Stellaris CS 3.14 update
+* Fix #528
 
 ## Release Notes 1.26
 * Update dependencies
@@ -38,13 +40,14 @@
 * Added conflict solver option to skip parsing some languages
 * Add conflict solver configuration to customize colors for new diff viewer
 * Add templateable merge mod naming</description>
-			<pubDate>Wed, 30 Oct 2024 09:35:02 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.26.197/osx-x64.zip" sparkle:version="1.26.197.30306" sparkle:shortVersionString="1.26.197" length="93893589" sparkle:os="osx" type="application/zip" sparkle:signature="v4soh8MgGl8izj7bWXA8QV41ozR33188KP1wCDqR+6UIJTRj6Lm63o+dbMouZLPBL40k4Eygmog0VWZnhJ0ODQ=="/>
+			<pubDate>Wed, 30 Oct 2024 23:22:07 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.26.199/osx-x64.zip" sparkle:version="1.26.199.41356" sparkle:shortVersionString="1.26.199" length="93894281" sparkle:os="osx" type="application/zip" sparkle:signature="mFTvdv8eHlJ2SQ9xNdIpE3ClsiFg1p6SW2QMwSLGZNV8c4OxXfY/mrx9bQz24X40g4st6wnlTnEd+Rb2MMkJCQ=="/>
 		</item>
 		<item>
-			<title>1.26.197</title>
+			<title>1.26.199</title>
 			<description>## Current Release Notes
 * Stellaris CS 3.14 update
+* Fix #528
 
 ## Release Notes 1.26
 * Update dependencies
@@ -57,13 +60,14 @@
 * Added conflict solver option to skip parsing some languages
 * Add conflict solver configuration to customize colors for new diff viewer
 * Add templateable merge mod naming</description>
-			<pubDate>Wed, 30 Oct 2024 09:35:06 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.26.197/win-x64-setup.zip" sparkle:version="1.26.197.30306" sparkle:shortVersionString="1.26.197" length="72853558" sparkle:os="windows" type="application/zip" sparkle:signature="VSADGAy49/Eb++NIBljCkeXTBmTnCC+Lg1EhACwSwUrMEEHtLTorOrzGL5/HUfWqNFB+X2ZNNKBLCO03Ugm2CQ=="/>
+			<pubDate>Wed, 30 Oct 2024 23:22:11 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.26.199/win-x64-setup.zip" sparkle:version="1.26.199.41356" sparkle:shortVersionString="1.26.199" length="72858407" sparkle:os="windows" type="application/zip" sparkle:signature="KdKxfwnuGSLQTwBssf8MLycOpQ+IzBbXKdv28fSr0bAn9VNXy9cdeDd/nN3TszdlyunX7vWr58Zg787u6hSqDQ=="/>
 		</item>
 		<item>
-			<title>1.26.197</title>
+			<title>1.26.199</title>
 			<description>## Current Release Notes
 * Stellaris CS 3.14 update
+* Fix #528
 
 ## Release Notes 1.26
 * Update dependencies
@@ -76,8 +80,8 @@
 * Added conflict solver option to skip parsing some languages
 * Add conflict solver configuration to customize colors for new diff viewer
 * Add templateable merge mod naming</description>
-			<pubDate>Wed, 30 Oct 2024 09:35:06 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.26.197/win-x64.zip" sparkle:version="1.26.197.30306" sparkle:shortVersionString="1.26.197" length="106724311" sparkle:os="windows" type="application/zip" sparkle:signature="zP3BkG3ZOCoDC4N9/8SVBNZXJhjqvdLlj0PhcDuQxXzFWTQzZJNDnbC2mGdN3rqwqtdV0NoaGT0Gveww1C+eCA=="/>
+			<pubDate>Wed, 30 Oct 2024 23:22:11 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.26.199/win-x64.zip" sparkle:version="1.26.199.41356" sparkle:shortVersionString="1.26.199" length="106725020" sparkle:os="windows" type="application/zip" sparkle:signature="+9Cvfrh2d7GeElaO3hbWwArJWpciPrtS5BgQPo61ENMfOmzHguLssOsU44Z4ouRF6USvlU5B5wTOlcdevHh9BA=="/>
 		</item>
 	</channel>
 </rss>
