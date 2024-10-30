@@ -4,7 +4,7 @@
 // Created          : 07-18-2022
 //
 // Last Modified By : Mario
-// Last Modified On : 10-21-2024
+// Last Modified On : 10-30-2024
 // ***********************************************************************
 // <copyright file="HOI4DefinitionInfoProvider.cs" company="Mario">
 //     Mario
@@ -34,6 +34,12 @@ namespace IronyModManager.IO.Mods.InfoProviders
         /// <value>The fios paths.</value>
         /// <exception cref="System.NotImplementedException"></exception>
         public override IReadOnlyCollection<string> FIOSPaths => throw new NotImplementedException();
+
+        /// <summary>
+        /// Gets the inline scripts path.
+        /// </summary>
+        /// <value>The inline scripts path.</value>
+        public override string InlineScriptsPath => string.Empty;
 
         /// <summary>
         /// Gets a value indicating whether this instance is fully implemented.
