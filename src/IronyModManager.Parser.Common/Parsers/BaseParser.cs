@@ -4,7 +4,7 @@
 // Created          : 02-17-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 10-17-2024
+// Last Modified On : 10-29-2024
 // ***********************************************************************
 // <copyright file="BaseParser.cs" company="Mario">
 //     Mario
@@ -309,6 +309,15 @@ namespace IronyModManager.Parser.Common.Parsers
                     definition.OriginalId = isFirstLevel ? TrimId(item.Key) : TrimId(parent);
                     definition.ValueType = ValueType.Object;
                     definition.OriginalCode = definition.Code = FormatCode(item, parent);
+                    if (item.Values != null && item.Values.Count() == 1)
+                    {
+                        if (item.Values.FirstOrDefault()!.Key.Equals(Constants.Stellaris.InlineScriptId, StringComparison.OrdinalIgnoreCase))
+                        {
+                            // Yay, paradox
+                            definition.ContainsInlineIdentifier = true;
+                        }
+                    }
+
                     if (!isFirstLevel)
                     {
                         definition.OriginalCode = FormatCode(item, skipVariables: true);

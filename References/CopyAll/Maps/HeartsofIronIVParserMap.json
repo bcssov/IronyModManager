@@ -326,9 +326,6 @@
         "DirectoryPath": "history\\units",
         "PreferredParser": "HOI4WholeTextParser"
     }, {
-        "DirectoryPath": "interface",
-        "PreferredParser": "GenericGraphicsParser"
-    }, {
         "DirectoryPath": "integrated_dlc\\dlc018_together_for_victory\\gfx\\entities",
         "PreferredParser": "GenericGraphicsParser"
     }, {
@@ -363,9 +360,9 @@
         "PreferredParser": "DefaultParser"
     }, {
         "DirectoryPath": "interface",
-        "PreferredParser": "DefaultParser"
+        "PreferredParser": "GenericGraphicsParser"
     }, {
-        "DirectoryPath": "launcher-assets",
+        "DirectoryPath": "interface",
         "PreferredParser": "DefaultParser"
     }, {
         "DirectoryPath": "localisation",

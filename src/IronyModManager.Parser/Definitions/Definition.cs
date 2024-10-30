@@ -4,7 +4,7 @@
 // Created          : 02-16-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 10-17-2024
+// Last Modified On : 10-29-2024
 // ***********************************************************************
 // <copyright file="Definition.cs" company="Mario">
 //     Mario
@@ -246,6 +246,12 @@ namespace IronyModManager.Parser.Definitions
                 codeTag = value;
             }
         }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether [contains inline identifier].
+        /// </summary>
+        /// <value><c>true</c> if [contains inline identifier]; otherwise, <c>false</c>.</value>
+        public bool ContainsInlineIdentifier { get; set; }
 
         /// <summary>
         /// Gets or sets the content sha.
@@ -786,6 +792,7 @@ namespace IronyModManager.Parser.Definitions
                 nameof(UseSimpleValidation) => UseSimpleValidation,
                 nameof(IsSpecialFolder) => IsSpecialFolder,
                 nameof(MergeType) => MergeType,
+                nameof(ContainsInlineIdentifier) => ContainsInlineIdentifier,
                 _ => Id
             };
         }

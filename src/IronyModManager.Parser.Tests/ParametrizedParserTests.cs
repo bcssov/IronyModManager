@@ -4,18 +4,18 @@
 // Created          : 10-03-2023
 //
 // Last Modified By : Mario
-// Last Modified On : 10-03-2023
+// Last Modified On : 10-30-2024
 // ***********************************************************************
 // <copyright file="ParametrizedParserTests.cs" company="Mario">
 //     Mario
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using FluentAssertions;
 using IronyModManager.DI;
 using IronyModManager.Parser.Common;
@@ -39,7 +39,7 @@ namespace IronyModManager.Parser.Tests
         {
             DISetup.SetupContainer();
 
-            var sb = new System.Text.StringBuilder(3175);
+            var sb = new StringBuilder(3175);
             sb.AppendLine(@"building_giga_megaworkshop_hub_acot_$tier$ = {");
             sb.AppendLine(@"	base_buildtime = @giga_amb_hub_time_$tier$");
             sb.AppendLine(@"	category = manufacturing");
@@ -191,7 +191,7 @@ namespace IronyModManager.Parser.Tests
             sb.AppendLine(@"}");
 
 
-            var sb2 = new System.Text.StringBuilder(257);
+            var sb2 = new StringBuilder(257);
             sb2.AppendLine(@"inline_script = {");
             sb2.AppendLine(@"	script = ""buildings/building_giga_megaworkshop_acot""");
             sb2.AppendLine(@"	tier = ""delta""");
@@ -207,13 +207,7 @@ namespace IronyModManager.Parser.Tests
             var result = parser.Process(sb.ToString(), sb2.ToString());
             result.Should().NotBeNullOrEmpty();
             var m = DIResolver.Get<IParserManager>();
-            var parserResult = m.Parse(new ParserManagerArgs()
-            {
-                File = "common\\buildings\\dummy.txt",
-                GameType = "Stellaris",
-                IsBinary = false,
-                Lines = result.SplitOnNewLine()
-            });
+            var parserResult = m.Parse(new ParserManagerArgs { File = "common\\buildings\\dummy.txt", GameType = "Stellaris", IsBinary = false, Lines = result.SplitOnNewLine() });
             parserResult.Count().Should().Be(1);
             parserResult.FirstOrDefault().Id.Should().Be("building_giga_megaworkshop_hub_acot_delta");
         }
@@ -226,7 +220,7 @@ namespace IronyModManager.Parser.Tests
         {
             DISetup.SetupContainer();
 
-            var sb = new System.Text.StringBuilder(3175);
+            var sb = new StringBuilder(3175);
             sb.AppendLine(@"building_giga_megaworkshop_hub_acot_no_parameters = {");
             sb.AppendLine(@"	base_buildtime = @giga_amb_hub_time_$tier$");
             sb.AppendLine(@"	category = manufacturing");
@@ -378,7 +372,7 @@ namespace IronyModManager.Parser.Tests
             sb.AppendLine(@"}");
 
 
-            var sb2 = new System.Text.StringBuilder(257);
+            var sb2 = new StringBuilder(257);
             sb2.AppendLine(@"inline_script = {");
             sb2.AppendLine(@"	script = ""buildings/building_giga_megaworkshop_acot""");
             sb2.AppendLine(@"	tier = ""delta""");
@@ -394,13 +388,7 @@ namespace IronyModManager.Parser.Tests
             var result = parser.Process(sb.ToString(), sb2.ToString());
             result.Should().NotBeNullOrEmpty();
             var m = DIResolver.Get<IParserManager>();
-            var parserResult = m.Parse(new ParserManagerArgs()
-            {
-                File = "common\\buildings\\dummy.txt",
-                GameType = "Stellaris",
-                IsBinary = false,
-                Lines = result.SplitOnNewLine()
-            });
+            var parserResult = m.Parse(new ParserManagerArgs { File = "common\\buildings\\dummy.txt", GameType = "Stellaris", IsBinary = false, Lines = result.SplitOnNewLine() });
             parserResult.Count().Should().Be(1);
             parserResult.FirstOrDefault().Id.Should().Be("building_giga_megaworkshop_hub_acot_no_parameters");
         }
@@ -413,7 +401,7 @@ namespace IronyModManager.Parser.Tests
         {
             DISetup.SetupContainer();
 
-            var sb = new System.Text.StringBuilder(3175);
+            var sb = new StringBuilder(3175);
             sb.AppendLine(@"building_giga_megaworkshop_hub_acot_$tier$$ = {");
             sb.AppendLine(@"	base_buildtime = @giga_amb_hub_time_$tier$");
             sb.AppendLine(@"	category = manufacturing");
@@ -565,7 +553,7 @@ namespace IronyModManager.Parser.Tests
             sb.AppendLine(@"}");
 
 
-            var sb2 = new System.Text.StringBuilder(257);
+            var sb2 = new StringBuilder(257);
             sb2.AppendLine(@"inline_script = {");
             sb2.AppendLine(@"	script = ""buildings/building_giga_megaworkshop_acot""");
             sb2.AppendLine(@"	tier = ""delta""");
@@ -582,13 +570,7 @@ namespace IronyModManager.Parser.Tests
 
             result.Should().NotBeNullOrEmpty();
             var m = DIResolver.Get<IParserManager>();
-            var parserResult = m.Parse(new ParserManagerArgs()
-            {
-                File = "common\\buildings\\dummy.txt",
-                GameType = "Stellaris",
-                IsBinary = false,
-                Lines = result.SplitOnNewLine()
-            });
+            var parserResult = m.Parse(new ParserManagerArgs { File = "common\\buildings\\dummy.txt", GameType = "Stellaris", IsBinary = false, Lines = result.SplitOnNewLine() });
             parserResult.Count().Should().Be(1);
             parserResult.FirstOrDefault().Id.Should().Be("building_giga_megaworkshop_hub_acot_delta$");
         }
@@ -601,7 +583,7 @@ namespace IronyModManager.Parser.Tests
         {
             DISetup.SetupContainer();
 
-            var sb = new System.Text.StringBuilder(3175);
+            var sb = new StringBuilder(3175);
             sb.AppendLine(@"building_giga_megaworkshop_hub_acot_$tier$ = {");
             sb.AppendLine(@"	base_buildtime = @giga_amb_hub_time_$tier$");
             sb.AppendLine(@"	category = manufacturing");
@@ -755,7 +737,7 @@ namespace IronyModManager.Parser.Tests
             sb.AppendLine(@"}");
 
 
-            var sb2 = new System.Text.StringBuilder(257);
+            var sb2 = new StringBuilder(257);
             sb2.AppendLine(@"inline_script = {");
             sb2.AppendLine(@"	script = ""buildings/building_giga_megaworkshop_acot""");
             sb2.AppendLine(@"	tier = ""delta""");
@@ -772,13 +754,7 @@ namespace IronyModManager.Parser.Tests
 
             result.Should().NotBeNullOrEmpty();
             var m = DIResolver.Get<IParserManager>();
-            var parserResult = m.Parse(new ParserManagerArgs()
-            {
-                File = "common\\buildings\\dummy.txt",
-                GameType = "Stellaris",
-                IsBinary = false,
-                Lines = result.SplitOnNewLine()
-            });
+            var parserResult = m.Parse(new ParserManagerArgs { File = "common\\buildings\\dummy.txt", GameType = "Stellaris", IsBinary = false, Lines = result.SplitOnNewLine() });
             parserResult.Count().Should().Be(2);
             parserResult.All(p => p.Id == "building_giga_megaworkshop_hub_acot_delta").Should().BeTrue();
         }
@@ -791,7 +767,7 @@ namespace IronyModManager.Parser.Tests
         {
             DISetup.SetupContainer();
 
-            var sb = new System.Text.StringBuilder(3175);
+            var sb = new StringBuilder(3175);
             sb.AppendLine(@"building_giga_megaworkshop_hub_acot_$tier$ = {");
             sb.AppendLine(@"	base_buildtime = @giga_amb_hub_time_$tier$");
             sb.AppendLine(@"	category = manufacturing");
@@ -945,7 +921,7 @@ namespace IronyModManager.Parser.Tests
             sb.AppendLine(@"}");
 
 
-            var sb2 = new System.Text.StringBuilder(257);
+            var sb2 = new StringBuilder(257);
             sb2.AppendLine(@"inline_script = {");
             sb2.AppendLine(@"	script = ""buildings/building_giga_megaworkshop_acot""");
             sb2.AppendLine(@"	tier = ""delta""");
@@ -962,17 +938,81 @@ namespace IronyModManager.Parser.Tests
 
             result.Should().NotBeNullOrEmpty();
             var m = DIResolver.Get<IParserManager>();
-            var parserResult = m.Parse(new ParserManagerArgs()
-            {
-                File = "common\\buildings\\dummy.txt",
-                GameType = "Stellaris",
-                IsBinary = false,
-                Lines = result.SplitOnNewLine()
-            });
+            var parserResult = m.Parse(new ParserManagerArgs { File = "common\\buildings\\dummy.txt", GameType = "Stellaris", IsBinary = false, Lines = result.SplitOnNewLine() });
             parserResult.Count().Should().Be(2);
             parserResult.Any(p => p.Id == "building_giga_megaworkshop_hub_acot_delta").Should().BeTrue();
             parserResult.Any(p => p.Id == "building_giga_megaworkshop_hub_acot_2_delta").Should().BeTrue();
         }
+
+        /// <summary>
+        /// Defines the test method GetObjectId_on_first_levelshould_yield_results.
+        /// </summary>
+        [Fact]
+        public void GetObjectId_on_first_level_should_yield_results()
+        {
+            DISetup.SetupContainer();
+
+            var sb = new StringBuilder(700);
+            sb.AppendLine(@"key = ""BIO_PROPULSION_$LEVEL$_$CORRESPONDING_SIZE$""");
+            sb.AppendLine(@"size = small");
+            sb.AppendLine(@"icon = ""GFX_ship_part_bio_thruster_$LEVEL$""");
+            sb.AppendLine(@"icon_frame = 1");
+            sb.AppendLine(@"power = 0");
+            sb.AppendLine(@"");
+            sb.AppendLine(@"resources = {");
+            sb.AppendLine(@"	category = ship_components");
+            sb.AppendLine(@"	inline_script = {");
+            sb.AppendLine(@"		script = ""grand_archive/mutations/component_dynamic_cost""");
+            sb.AppendLine(@"		COST = $COST$");
+            sb.AppendLine(@"	}");
+            sb.AppendLine(@"	cost = {");
+            sb.AppendLine(@"		sr_dark_matter	= $DARK_MATTER$");
+            sb.AppendLine(@"	}");
+            sb.AppendLine(@"}");
+            sb.AppendLine(@"");
+            sb.AppendLine(@"modifier = {");
+            sb.AppendLine(@"	ship_base_speed_mult = $SPEED$");
+            sb.AppendLine(@"	ship_evasion_add = $EVASION$");
+            sb.AppendLine(@"}");
+            sb.AppendLine(@"");
+            sb.AppendLine(@"prerequisites = { $PREREQUISITE$ }");
+            sb.AppendLine(@"component_set = ""thruster_components_bio""");
+            sb.AppendLine(@"inline_script = {");
+            sb.AppendLine(@"	script = grand_archive/mutations/core_components/upgrade_thrusters_bio_$LEVEL$");
+            sb.AppendLine(@"	CORRESPONDING_SIZE = $CORRESPONDING_SIZE$");
+            sb.AppendLine(@"}");
+            sb.AppendLine(@"");
+            sb.AppendLine(@"size_restriction = { $SIZE_RESTRICTION$ }");
+            sb.AppendLine(@"");
+            sb.AppendLine(@"ai_weight = {");
+            sb.AppendLine(@"	weight = $LEVEL$");
+            sb.AppendLine(@"}");
+
+
+            var sb2 = new StringBuilder(374);
+            sb2.AppendLine(@"utility_component_template = {");
+            sb2.AppendLine(@"	inline_script = {");
+            sb2.AppendLine(@"		script = grand_archive/mutations/core_components/component_thrusters_bio");
+            sb2.AppendLine(@"		LEVEL = 5");
+            sb2.AppendLine(@"		CORRESPONDING_SIZE = BATTLESHIP");
+            sb2.AppendLine(@"		PREREQUISITE = ""tech_dark_matter_propulsion tech_thrusters_bio_integration""");
+            sb2.AppendLine(@"		COST = 384");
+            sb2.AppendLine(@"		DARK_MATTER = 4");
+            sb2.AppendLine(@"		SPEED = 1");
+            sb2.AppendLine(@"		EVASION = 8");
+            sb2.AppendLine(@"		SIZE_RESTRICTION = ""space_whale_5 voidworms_large cutholoids""");
+            sb2.AppendLine(@"	}");
+            sb2.AppendLine(@"}");
+
+            var parser = new ParametrizedParser(new CodeParser(new Logger()));
+            var result = parser.Process(sb.ToString(), sb2.ToString());
+            result.Should().NotBeNullOrEmpty();
+            var m = DIResolver.Get<IParserManager>();
+            var parserResult = m.Parse(new ParserManagerArgs { File = "common\\component_templates\\dummy.txt", GameType = "Stellaris", IsBinary = false, Lines = result.SplitOnNewLine() });
+            parserResult.Count().Should().Be(1);
+            parserResult.Any(p => p.Id.Equals("BIO_PROPULSION_5_BATTLESHIP")).Should().BeTrue();
+        }
+
 
         /// <summary>
         /// Defines the test method GetScriptPath_should_yield_results.
@@ -982,7 +1022,7 @@ namespace IronyModManager.Parser.Tests
         {
             DISetup.SetupContainer();
 
-            var sb = new System.Text.StringBuilder(257);
+            var sb = new StringBuilder(257);
             sb.AppendLine(@"inline_script = {");
             sb.AppendLine(@"	script = ""buildings/building_giga_megaworkshop_acot""");
             sb.AppendLine(@"	tier = ""delta""");
@@ -1007,7 +1047,7 @@ namespace IronyModManager.Parser.Tests
         {
             DISetup.SetupContainer();
 
-            var sb = new System.Text.StringBuilder(257);
+            var sb = new StringBuilder(257);
             sb.AppendLine(@"inline_script = {");
             sb.AppendLine(@"	tier = ""delta""");
             sb.AppendLine(@"");
@@ -1021,6 +1061,34 @@ namespace IronyModManager.Parser.Tests
             var parser = new ParametrizedParser(new CodeParser(new Logger()));
             var result = parser.GetScriptPath(sb.ToString());
             result.Should().BeNullOrEmpty();
+        }
+
+        /// <summary>
+        /// Defines the test method GetScriptPath_as_sub_element_should_yield_results.
+        /// </summary>
+        [Fact]
+        public void GetScriptPath_as_sub_element_should_yield_results()
+        {
+            DISetup.SetupContainer();
+
+            var sb = new StringBuilder(374);
+            sb.AppendLine(@"utility_component_template = {");
+            sb.AppendLine(@"	inline_script = {");
+            sb.AppendLine(@"		script = grand_archive/mutations/core_components/component_thrusters_bio");
+            sb.AppendLine(@"		LEVEL = 5");
+            sb.AppendLine(@"		CORRESPONDING_SIZE = BATTLESHIP");
+            sb.AppendLine(@"		PREREQUISITE = ""tech_dark_matter_propulsion tech_thrusters_bio_integration""");
+            sb.AppendLine(@"		COST = 384");
+            sb.AppendLine(@"		DARK_MATTER = 4");
+            sb.AppendLine(@"		SPEED = 1");
+            sb.AppendLine(@"		EVASION = 8");
+            sb.AppendLine(@"		SIZE_RESTRICTION = ""space_whale_5 voidworms_large cutholoids""");
+            sb.AppendLine(@"	}");
+            sb.AppendLine(@"}");
+
+            var parser = new ParametrizedParser(new CodeParser(new Logger()));
+            var result = parser.GetScriptPath(sb.ToString());
+            result.Should().Be("grand_archive\\mutations\\core_components\\component_thrusters_bio");
         }
     }
 }

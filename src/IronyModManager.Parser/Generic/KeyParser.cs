@@ -4,7 +4,7 @@
 // Created          : 02-16-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 10-17-2024
+// Last Modified On : 10-29-2024
 // ***********************************************************************
 // <copyright file="KeyParser.cs" company="Mario">
 //     Mario
@@ -148,7 +148,7 @@ namespace IronyModManager.Parser.Generic
                     closeBrackets += line.Count(s => s == Constants.Scripts.CloseObject);
                     if (openBrackets - closeBrackets <= 1 && Constants.Scripts.GenericKeyIds.Any(s => !string.IsNullOrWhiteSpace(GetValue(line, s))))
                     {
-                        var bracketLocation = cleaned.IndexOf(Constants.Scripts.OpenObject.ToString());
+                        var bracketLocation = cleaned.IndexOf(Constants.Scripts.OpenObject.ToString(), StringComparison.OrdinalIgnoreCase);
                         var idLoc = -1;
                         foreach (var item in Constants.Scripts.GenericKeyIds)
                         {

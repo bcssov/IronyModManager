@@ -4,7 +4,7 @@
 // Created          : 05-14-2023
 //
 // Last Modified By : Mario
-// Last Modified On : 10-17-2024
+// Last Modified On : 10-30-2024
 // ***********************************************************************
 // <copyright file="ObjectClone.cs" company="Mario">
 //     Mario
@@ -82,7 +82,42 @@ namespace IronyModManager.Services
             newDefinition.UseSimpleValidation = definition.UseSimpleValidation;
             newDefinition.IsSpecialFolder = definition.IsSpecialFolder;
             newDefinition.MergeType = definition.MergeType;
+            newDefinition.ContainsInlineIdentifier = definition.ContainsInlineIdentifier;
             return newDefinition;
+        }
+
+        /// <summary>
+        /// Partials the clone definition.
+        /// </summary>
+        /// <param name="definition">The definition.</param>
+        /// <param name="copyAdditionalFilenames">if set to <c>true</c> [copy additional filenames].</param>
+        /// <returns>IDefinition.</returns>
+        public IDefinition PartialCloneDefinition(IDefinition definition, bool copyAdditionalFilenames = true)
+        {
+            var copy = DIResolver.Get<IDefinition>();
+            if (copyAdditionalFilenames)
+            {
+                copy.AdditionalFileNames = definition.AdditionalFileNames;
+            }
+
+            copy.DiskFile = definition.DiskFile;
+            copy.File = definition.File;
+            copy.Id = definition.Id;
+            copy.ModName = definition.ModName;
+            copy.Tags = definition.Tags;
+            copy.Type = definition.Type;
+            copy.ValueType = definition.ValueType;
+            copy.IsFromGame = definition.IsFromGame;
+            copy.Order = definition.Order;
+            copy.OriginalFileName = definition.OriginalFileName;
+            copy.ResetType = definition.ResetType;
+            copy.FileNameSuffix = definition.FileNameSuffix;
+            copy.IsPlaceholder = definition.IsPlaceholder;
+            copy.UseSimpleValidation = definition.UseSimpleValidation;
+            copy.IsSpecialFolder = definition.IsSpecialFolder;
+            copy.MergeType = definition.MergeType;
+            copy.ContainsInlineIdentifier = definition.ContainsInlineIdentifier;
+            return copy;
         }
 
         #endregion Methods
