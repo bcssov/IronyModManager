@@ -466,7 +466,7 @@ namespace IronyModManager.Services
                 foreach (var item in allDefs)
                 {
                     var addDefault = true;
-                    if (item.Id.Equals(Parser.Common.Constants.Stellaris.InlineScriptId, StringComparison.OrdinalIgnoreCase) || item.ContainsInlineIdentifier)
+                    if ((item.Id.Equals(Parser.Common.Constants.Stellaris.InlineScriptId, StringComparison.OrdinalIgnoreCase) || item.ContainsInlineIdentifier) && item.File.StartsWith(provider.InlineScriptsPath))
                     {
                         addDefault = false;
                         var path = Path.Combine(Parser.Common.Constants.Stellaris.InlineScripts, parametrizedParser.GetScriptPath(item.Code));
@@ -568,6 +568,11 @@ namespace IronyModManager.Services
             prunedInlineDefinitions = null;
             GCRunner.RunGC(GCCollectionMode.Optimized, false);
 
+            // Redeclare stuff
+            fileKeys = await indexedDefinitions.GetAllFileKeysAsync();
+            typeAndIdKeys = await indexedDefinitions.GetAllTypeAndIdKeysAsync();
+            overwritten = (await indexedDefinitions.GetByValueTypeAsync(ValueType.OverwrittenObject)).Concat(await indexedDefinitions.GetByValueTypeAsync(ValueType.OverwrittenObjectSingleFile));
+            empty = await indexedDefinitions.GetByValueTypeAsync(ValueType.EmptyFile);
 
             var stopWatch = new Stopwatch();
             stopWatch.Start();
@@ -3074,6 +3079,16 @@ namespace IronyModManager.Services
                     }
                 }
 
+                var validationType = ValidationType.Full;
+                if (definitionInfoProvider.SupportsInlineScripts)
+                {
+                    if (fileInfo.FileName != null && fileInfo.FileName.StartsWith(definitionInfoProvider.InlineScriptsPath))
+                    {
+                        // Skip inline validation
+                        validationType = ValidationType.SkipAll;
+                    }
+                }
+
                 var fileDefs = parserManager.Parse(new ParserManagerArgs
                 {
                     ContentSHA = fileInfo.ContentSHA,
@@ -3083,7 +3098,8 @@ namespace IronyModManager.Services
                     ModDependencies = modObject.Dependencies,
                     ModName = modObject.Name,
                     FileLastModified = fileInfo.LastModified,
-                    IsBinary = fileInfo.IsBinary
+                    IsBinary = fileInfo.IsBinary,
+                    ValidationType = validationType
                 });
                 if (fileDefs.Any())
                 {
@@ -3285,7 +3301,7 @@ namespace IronyModManager.Services
                     var others = parsed.Where(p => p.ValueType != ValueType.Variable && p.ValueType != ValueType.Namespace);
                     foreach (var other in others)
                     {
-                        var variables = parsed.Where(p => p.ValueType == ValueType.Variable || p.ValueType == ValueType.Namespace);
+                        var variables = parsed.Where(p => p.ValueType is ValueType.Variable or ValueType.Namespace);
                         other.Variables = variables;
                         var exportCopy = CopyDefinition(other);
                         var allType = (await conflictResult.AllConflicts.GetByTypeAndIdAsync(definition!.TypeAndId)).ToList();

@@ -78,6 +78,11 @@ namespace IronyModManager.Parser
             {
                 if (elParams.Values.Count(p => p.Key.Equals(Common.Constants.Stellaris.InlineScriptId, StringComparison.OrdinalIgnoreCase)) == 1)
                 {
+                    var simpleResult = elParams.Values.FirstOrDefault(p => !string.IsNullOrWhiteSpace(p.Value));
+                    if (simpleResult != null)
+                    {
+                        return simpleResult.Value.StandardizeDirectorySeparator();
+                    }
                     var elObj = elParams.Values.FirstOrDefault(p => p.Values != null);
                     var match = elObj?.Values.FirstOrDefault(p => p.Key.Equals(Script, StringComparison.OrdinalIgnoreCase));
                     if (match != null)
@@ -88,10 +93,18 @@ namespace IronyModManager.Parser
                 else if (elParams.Values.Count() == 1 && elParams.Values.FirstOrDefault()!.Values.Count(p => p.Key.Equals(Common.Constants.Stellaris.InlineScriptId, StringComparison.OrdinalIgnoreCase)) == 1)
                 {
                     var elObj = elParams.Values.FirstOrDefault(p => p.Values != null)?.Values.FirstOrDefault();
-                    var match = elObj?.Values.FirstOrDefault(p => p.Key.Equals(Script, StringComparison.OrdinalIgnoreCase));
-                    if (match != null)
+                    if (elObj != null)
                     {
-                        return (match.Value ?? string.Empty).Trim(Quotes).StandardizeDirectorySeparator();
+                        if (!string.IsNullOrWhiteSpace(elObj.Value))
+                        {
+                            return elObj.Value.StandardizeDirectorySeparator();
+                        }
+
+                        var match = elObj.Values.FirstOrDefault(p => p.Key.Equals(Script, StringComparison.OrdinalIgnoreCase));
+                        if (match != null)
+                        {
+                            return (match.Value ?? string.Empty).Trim(Quotes).StandardizeDirectorySeparator();
+                        }
                     }
                 }
             }
@@ -133,8 +146,8 @@ namespace IronyModManager.Parser
                 else if (elParams.Values.Count() == 1 && elParams.Values.FirstOrDefault()!.Values.Count(p => p.Key.Equals(Common.Constants.Stellaris.InlineScriptId, StringComparison.OrdinalIgnoreCase)) == 1)
                 {
                     var processed = code;
-                    var elObj = elParams.Values.FirstOrDefault(p => p.Values != null)?.Values.FirstOrDefault();
-                    if (elObj != null)
+                    var elObj = elParams.Values.FirstOrDefault(p => p.Values != null)?.Values?.FirstOrDefault();
+                    if (elObj is { Values: not null })
                     {
                         foreach (var value in elObj.Values)
                         {
@@ -147,6 +160,20 @@ namespace IronyModManager.Parser
                             }
                         }
 
+                        var replacementCode = codeParser.ParseScriptWithoutValidation(processed.SplitOnNewLine(), string.Empty);
+                        if (replacementCode is { Values: not null, Error: null })
+                        {
+                            var newCode = elParams.Values.FirstOrDefault(p => p.Values != null);
+                            if (newCode != null)
+                            {
+                                newCode.Values = replacementCode.Values;
+                                processed = codeParser.FormatCode(newCode);
+                                return processed;
+                            }
+                        }
+                    }
+                    else if (!string.IsNullOrWhiteSpace(elObj?.Value))
+                    {
                         var replacementCode = codeParser.ParseScriptWithoutValidation(processed.SplitOnNewLine(), string.Empty);
                         if (replacementCode is { Values: not null, Error: null })
                         {
