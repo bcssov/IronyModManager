@@ -117,54 +117,5 @@ namespace IronyModManager.Parser.Tests
                 result[i].Type.Should().Be("common\\special_projects\\txt");
             }
         }
-
-        /// <summary>
-        /// Defines the test method Parse_should_yield_results_with_inline.
-        /// </summary>
-        [Fact]
-        public void Parse_should_yield_results_with_inline()
-        {
-            DISetup.SetupContainer();
-
-            var sb = new System.Text.StringBuilder();
-            sb.AppendLine(@"special_project = {");
-            sb.AppendLine(@"	inline_script = {");
-            sb.AppendLine(@"		script = cosmic_storms/EyeOfTheStormSpecialProjects");
-            sb.AppendLine(@"		TYPE = nexus_storm");
-            sb.AppendLine(@"	}");
-            sb.AppendLine(@"}");
-
-
-
-            var args = new ParserArgs()
-            {
-                ContentSHA = "sha",
-                ModDependencies = new List<string> { "1" },
-                File = "common\\special_projects\\fake.txt",
-                Lines = sb.ToString().Split(Environment.NewLine.ToCharArray(), StringSplitOptions.RemoveEmptyEntries),
-                ModName = "fake"
-            };
-            var parser = new Games.Stellaris.KeyParser(new CodeParser(new Logger()), null);
-            var result = parser.Parse(args).ToList();
-            result.Should().NotBeNullOrEmpty();
-            result.Count.Should().Be(1);
-            for (int i = 0; i < 1; i++)
-            {
-                result[i].ContentSHA.Should().Be("sha");
-                result[i].Dependencies.First().Should().Be("1");
-                result[i].File.Should().Be("common\\special_projects\\fake.txt");
-                switch (i)
-                {
-                    case 0:
-                        result[i].Id.Should().Be("nexus_storm");
-                        result[i].ValueType.Should().Be(ValueType.Object);
-                        break;
-                    default:
-                        break;
-                }
-                result[i].ModName.Should().Be("fake");
-                result[i].Type.Should().Be("common\\special_projects\\txt");
-            }
-        }
     }
 }

@@ -272,6 +272,24 @@
         "DirectoryPath": "common\\inline_scripts\\events",
         "PreferredParser": "StellarisWholeTextParser"
     }, {
+        "DirectoryPath": "common\\inline_scripts\\grand_archive",
+        "PreferredParser": "StellarisWholeTextParser"
+    }, {
+        "DirectoryPath": "common\\inline_scripts\\grand_archive\\collection",
+        "PreferredParser": "StellarisWholeTextParser"
+    }, {
+        "DirectoryPath": "common\\inline_scripts\\grand_archive\\mutations",
+        "PreferredParser": "StellarisWholeTextParser"
+    }, {
+        "DirectoryPath": "common\\inline_scripts\\grand_archive\\mutations\\camouflage",
+        "PreferredParser": "StellarisWholeTextParser"
+    }, {
+        "DirectoryPath": "common\\inline_scripts\\grand_archive\\mutations\\core_components",
+        "PreferredParser": "StellarisWholeTextParser"
+    }, {
+        "DirectoryPath": "common\\inline_scripts\\grand_archive\\specimen_upkeeps",
+        "PreferredParser": "StellarisWholeTextParser"
+    }, {
         "DirectoryPath": "common\\inline_scripts\\jobs",
         "PreferredParser": "StellarisWholeTextParser"
     }, {
@@ -291,6 +309,9 @@
         "PreferredParser": "StellarisWholeTextParser"
     }, {
         "DirectoryPath": "common\\inline_scripts\\ship_components\\weights",
+        "PreferredParser": "StellarisWholeTextParser"
+    }, {
+        "DirectoryPath": "common\\inline_scripts\\starbase_modules",
         "PreferredParser": "StellarisWholeTextParser"
     }, {
         "DirectoryPath": "common\\inline_scripts\\technologies",
@@ -336,6 +357,9 @@
         "PreferredParser": "GenericKeyParser"
     }, {
         "DirectoryPath": "common\\missions",
+        "PreferredParser": "DefaultParser"
+    }, {
+        "DirectoryPath": "common\\mutations",
         "PreferredParser": "DefaultParser"
     }, {
         "DirectoryPath": "common\\named_colors",
@@ -434,6 +458,9 @@
         "DirectoryPath": "common\\ship_behaviors",
         "PreferredParser": "GenericKeyParser"
     }, {
+        "DirectoryPath": "common\\ship_categories",
+        "PreferredParser": "DefaultParser"
+    }, {
         "DirectoryPath": "common\\ship_sizes",
         "PreferredParser": "StellarisOverwrittenObjectSingleFileParser"
     }, {
@@ -484,6 +511,9 @@
     }, {
         "DirectoryPath": "common\\species_rights\\slavery_types",
         "PreferredParser": "StellarisOverwrittenParser"
+    }, {
+        "DirectoryPath": "common\\specimens",
+        "PreferredParser": "DefaultParser"
     }, {
         "DirectoryPath": "common\\starbase_buildings",
         "PreferredParser": "DefaultParser"
@@ -650,6 +680,9 @@
         "DirectoryPath": "gfx\\shipview",
         "PreferredParser": "DefaultParser"
     }, {
+        "DirectoryPath": "gfx\\vivariumview",
+        "PreferredParser": "DefaultParser"
+    }, {
         "DirectoryPath": "gfx\\worldgfx",
         "PreferredParser": "GenericKeyParser"
     }, {
@@ -807,6 +840,21 @@
         "PreferredParser": "GenericWholeTextParser"
     }, {
         "DirectoryPath": "sound\\firstcontact\\ui",
+        "PreferredParser": "GenericWholeTextParser"
+    }, {
+        "DirectoryPath": "sound\\grand_archive\\events",
+        "PreferredParser": "GenericWholeTextParser"
+    }, {
+        "DirectoryPath": "sound\\grand_archive\\relics",
+        "PreferredParser": "GenericWholeTextParser"
+    }, {
+        "DirectoryPath": "sound\\grand_archive\\ships",
+        "PreferredParser": "GenericWholeTextParser"
+    }, {
+        "DirectoryPath": "sound\\grand_archive\\ui",
+        "PreferredParser": "GenericWholeTextParser"
+    }, {
+        "DirectoryPath": "sound\\grand_archive\\weapons",
         "PreferredParser": "GenericWholeTextParser"
     }, {
         "DirectoryPath": "sound\\guardians",

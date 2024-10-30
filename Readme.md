@@ -5,8 +5,7 @@ Check the [Wiki](https://github.com/bcssov/IronyModManager/wiki)
 All instructions are for Windows.
 1. Install Visual Studio 2022 (required for .NET6)
 1. Clone the repo to your local machine
-1. Open the LocalizationResourceGenerator solution file located in \Tools\LocalizationResourceGenerator\src
-    * Build the solution and copy the binaries to the Tools\LocalizationResourceGenerator folder
+1. Run cmd\build-tools.bat to build the LocalizationResourceGenerator
 1. If you don't already have one, create a folder for local NuGet packages and unzip the [CWTools.Irony-Private.0.4.0-alpha8](https://github.com/bcssov/IronyModManager/files/7798143/CWTools.Irony-Private.0.4.0-alpha8.zip) package to it
     * This is just an up to date version of CWTools, the one on the public NuGet is older
     * Example path: C:\Users\username\code\LocalNuGet

@@ -1,5 +1,4 @@
-﻿
-// ***********************************************************************
+﻿// ***********************************************************************
 // Assembly         : IronyModManager.Parser
 // Author           : Mario
 // Created          : 10-03-2023
@@ -12,6 +11,7 @@
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,7 +20,6 @@ using IronyModManager.Shared;
 
 namespace IronyModManager.Parser
 {
-
     /// <summary>
     /// Class ParametrizedParser.
     /// Implements the <see cref="IParametrizedParser" />
@@ -44,6 +43,7 @@ namespace IronyModManager.Parser
         /// The terminator
         /// </summary>
         private const char Terminator = '$'; // I'll be back
+
         /// <summary>
         /// The code parser
         /// </summary>
@@ -74,18 +74,28 @@ namespace IronyModManager.Parser
         public string GetScriptPath(string parameters)
         {
             var elParams = codeParser.ParseScriptWithoutValidation(parameters.SplitOnNewLine(), string.Empty);
-            if (elParams != null && elParams.Values != null && elParams.Error == null && elParams.Values.Count(p => p.Key.Equals(Common.Constants.Stellaris.InlineScriptId, StringComparison.OrdinalIgnoreCase)) == 1)
+            if (elParams is { Values: not null, Error: null })
             {
-                var elObj = elParams.Values.FirstOrDefault(p => p.Values != null);
-                if (elObj != null)
+                if (elParams.Values.Count(p => p.Key.Equals(Common.Constants.Stellaris.InlineScriptId, StringComparison.OrdinalIgnoreCase)) == 1)
                 {
-                    var match = elObj.Values.FirstOrDefault(p => p.Key.Equals(Script, StringComparison.OrdinalIgnoreCase));
+                    var elObj = elParams.Values.FirstOrDefault(p => p.Values != null);
+                    var match = elObj?.Values.FirstOrDefault(p => p.Key.Equals(Script, StringComparison.OrdinalIgnoreCase));
                     if (match != null)
                     {
-                        return ((match.Value ?? string.Empty).Trim(Quotes)).StandardizeDirectorySeparator();
+                        return (match.Value ?? string.Empty).Trim(Quotes).StandardizeDirectorySeparator();
+                    }
+                }
+                else if (elParams.Values.Count() == 1 && elParams.Values.FirstOrDefault()!.Values.Count(p => p.Key.Equals(Common.Constants.Stellaris.InlineScriptId, StringComparison.OrdinalIgnoreCase)) == 1)
+                {
+                    var elObj = elParams.Values.FirstOrDefault(p => p.Values != null)?.Values.FirstOrDefault();
+                    var match = elObj?.Values.FirstOrDefault(p => p.Key.Equals(Script, StringComparison.OrdinalIgnoreCase));
+                    if (match != null)
+                    {
+                        return (match.Value ?? string.Empty).Trim(Quotes).StandardizeDirectorySeparator();
                     }
                 }
             }
+
             return string.Empty;
         }
 
@@ -98,25 +108,60 @@ namespace IronyModManager.Parser
         public string Process(string code, string parameters)
         {
             var elParams = codeParser.ParseScriptWithoutValidation(parameters.SplitOnNewLine(), string.Empty);
-            if (elParams != null && elParams.Values != null && elParams.Error == null && elParams.Values.Count(p => p.Key.Equals(Common.Constants.Stellaris.InlineScriptId, StringComparison.OrdinalIgnoreCase)) == 1)
+            if (elParams is { Values: not null, Error: null })
             {
-                var processed = code;
-                var elObj = elParams.Values.FirstOrDefault(p => p.Values != null);
-                if (elObj != null)
+                if (elParams.Values.Count(p => p.Key.Equals(Common.Constants.Stellaris.InlineScriptId, StringComparison.OrdinalIgnoreCase)) == 1)
                 {
-                    foreach (var value in elObj.Values)
+                    var processed = code;
+                    var elObj = elParams.Values.FirstOrDefault(p => p.Values != null);
+                    if (elObj != null)
                     {
-                        var id = (value.Key ?? string.Empty).Trim(Quotes);
-                        var replacement = (value.Value ?? string.Empty).Trim(Quotes);
-                        if (!id.Equals(Script, StringComparison.OrdinalIgnoreCase))
+                        foreach (var value in elObj.Values)
                         {
-                            var key = $"{Terminator}{id}{Terminator}";
-                            processed = processed.Replace(key, replacement, StringComparison.OrdinalIgnoreCase);
+                            var id = (value.Key ?? string.Empty).Trim(Quotes);
+                            var replacement = (value.Value ?? string.Empty).Trim(Quotes);
+                            if (!id.Equals(Script, StringComparison.OrdinalIgnoreCase))
+                            {
+                                var key = $"{Terminator}{id}{Terminator}";
+                                processed = processed.Replace(key, replacement, StringComparison.OrdinalIgnoreCase);
+                            }
+                        }
+                    }
+
+                    return processed;
+                }
+                else if (elParams.Values.Count() == 1 && elParams.Values.FirstOrDefault()!.Values.Count(p => p.Key.Equals(Common.Constants.Stellaris.InlineScriptId, StringComparison.OrdinalIgnoreCase)) == 1)
+                {
+                    var processed = code;
+                    var elObj = elParams.Values.FirstOrDefault(p => p.Values != null)?.Values.FirstOrDefault();
+                    if (elObj != null)
+                    {
+                        foreach (var value in elObj.Values)
+                        {
+                            var id = (value.Key ?? string.Empty).Trim(Quotes);
+                            var replacement = (value.Value ?? string.Empty).Trim(Quotes);
+                            if (!id.Equals(Script, StringComparison.OrdinalIgnoreCase))
+                            {
+                                var key = $"{Terminator}{id}{Terminator}";
+                                processed = processed.Replace(key, replacement, StringComparison.OrdinalIgnoreCase);
+                            }
+                        }
+
+                        var replacementCode = codeParser.ParseScriptWithoutValidation(processed.SplitOnNewLine(), string.Empty);
+                        if (replacementCode is { Values: not null, Error: null })
+                        {
+                            var newCode = elParams.Values.FirstOrDefault(p => p.Values != null);
+                            if (newCode != null)
+                            {
+                                newCode.Values = replacementCode.Values;
+                                processed = codeParser.FormatCode(newCode);
+                                return processed;
+                            }
                         }
                     }
                 }
-                return processed;
             }
+
             return string.Empty;
         }
 

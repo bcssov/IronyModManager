@@ -4,7 +4,7 @@
 // Created          : 02-16-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 10-17-2024
+// Last Modified On : 10-29-2024
 // ***********************************************************************
 // <copyright file="IDefinition.cs" company="Mario">
 //     Mario
@@ -62,6 +62,12 @@ namespace IronyModManager.Shared.Models
         /// <value>The code tag.</value>
         [JsonIgnore]
         string CodeTag { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether [contains inline identifier].
+        /// </summary>
+        /// <value><c>true</c> if [contains inline identifier]; otherwise, <c>false</c>.</value>
+        bool ContainsInlineIdentifier { get; set; }
 
         /// <summary>
         /// Gets or sets the content sha.

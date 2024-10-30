@@ -4,7 +4,7 @@
 // Created          : 05-27-2021
 //
 // Last Modified By : Mario
-// Last Modified On : 05-27-2021
+// Last Modified On : 10-30-2024
 // ***********************************************************************
 // <copyright file="GameIndexServiceTests.cs" company="Mario">
 //     Mario
@@ -28,6 +28,7 @@ using IronyModManager.Models.Common;
 using IronyModManager.Parser.Common;
 using IronyModManager.Parser.Common.Args;
 using IronyModManager.Parser.Common.Mod;
+using IronyModManager.Parser.Common.Parsers;
 using IronyModManager.Parser.Definitions;
 using IronyModManager.Services.Common;
 using IronyModManager.Shared.Cache;
@@ -61,12 +62,15 @@ namespace IronyModManager.Services.Tests
         /// <returns>GameIndexService.</returns>
         private static GameIndexService GetService(Mock<IGameIndexer> gameIndexer, Mock<IStorageProvider> storageProvider, Mock<IModParser> modParser,
             Mock<IParserManager> parserManager, Mock<IReader> reader, Mock<IMapper> mapper, Mock<IModWriter> modWriter,
-            Mock<IGameService> gameService, IEnumerable<IDefinitionInfoProvider> definitionInfoProviders = null)
+            Mock<IGameService> gameService)
         {
+            var providers = new Mock<IDefinitionInfoProvider>();
+            providers.Setup(p => p.CanProcess(It.IsAny<string>())).Returns(true);
+
             var messageBus = new Mock<IMessageBus>();
             messageBus.Setup(p => p.PublishAsync(It.IsAny<IMessageBusEvent>()));
             messageBus.Setup(p => p.Publish(It.IsAny<IMessageBusEvent>()));
-            return new GameIndexService(messageBus.Object, parserManager.Object, gameIndexer.Object, new Cache(), definitionInfoProviders, reader.Object, modWriter.Object, modParser.Object, gameService.Object, storageProvider.Object,
+            return new GameIndexService(null, messageBus.Object, parserManager.Object, gameIndexer.Object, new Cache(), new List<IDefinitionInfoProvider>() { providers.Object }, reader.Object, modWriter.Object, modParser.Object, gameService.Object, storageProvider.Object,
                 mapper.Object);
         }
 

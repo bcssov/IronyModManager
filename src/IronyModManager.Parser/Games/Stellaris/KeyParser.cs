@@ -4,7 +4,7 @@
 // Created          : 09-10-2024
 //
 // Last Modified By : Mario
-// Last Modified On : 09-10-2024
+// Last Modified On : 10-29-2024
 // ***********************************************************************
 // <copyright file="KeyParser.cs" company="Mario">
 //     Mario
@@ -66,26 +66,7 @@ namespace IronyModManager.Parser.Games.Stellaris
         /// <returns>System.String.</returns>
         protected override string EvalElementForId(IScriptElement value)
         {
-            if (value.Key.Equals("key", StringComparison.OrdinalIgnoreCase))
-            {
-                return value.Value;
-            }
-            else if (value.Key.Equals("inline_script"))
-            {
-                foreach (var val in value.Values)
-                {
-                    if (!string.IsNullOrWhiteSpace(val.Key) && !val.Key.Equals("script", StringComparison.OrdinalIgnoreCase))
-                    {
-                        // TODO: Fix in later versions for now use best guess
-                        if (val.Value.CountLetters() >= 3)
-                        {
-                            return val.Value;
-                        }
-                    }
-                }
-            }
-
-            return base.EvalElementForId(value);
+            return value.Key.Equals("key", StringComparison.OrdinalIgnoreCase) ? value.Value : base.EvalElementForId(value);
         }
 
         #endregion Methods

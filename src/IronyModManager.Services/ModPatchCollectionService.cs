@@ -4,7 +4,7 @@
 // Created          : 05-26-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-25-2024
+// Last Modified On : 10-30-2024
 // ***********************************************************************
 // <copyright file="ModPatchCollectionService.cs" company="Mario">
 //     Mario
@@ -50,8 +50,8 @@ namespace IronyModManager.Services
     /// <summary>
     /// The mod patch collection service.
     /// </summary>
-    /// <seealso cref="IronyModManager.Services.ModBaseService"/>
-    /// <seealso cref="IronyModManager.Services.Common.IModPatchCollectionService"/>
+    /// <seealso cref="IronyModManager.Services.ModBaseService" />
+    /// <seealso cref="IronyModManager.Services.Common.IModPatchCollectionService" />
     public class ModPatchCollectionService(
         ICache cache,
         IMessageBus messageBus,
@@ -383,6 +383,7 @@ namespace IronyModManager.Services
             var allIndexed = DIResolver.Get<IIndexedDefinitions>();
             var allDefs = (await indexedDefinitions.GetAllAsync()).ToList();
             await allIndexed.InitMapAsync(allDefs);
+            indexedDefinitions.Dispose();
             indexedDefinitions = DIResolver.Get<IIndexedDefinitions>();
             await indexedDefinitions.InitMapAsync(allDefs.Where(p => p.MergeType == MergeType.None));
 
@@ -393,6 +394,7 @@ namespace IronyModManager.Services
             var overwritten = (await indexedDefinitions.GetByValueTypeAsync(ValueType.OverwrittenObject)).Concat(await indexedDefinitions.GetByValueTypeAsync(ValueType.OverwrittenObjectSingleFile));
             var empty = await indexedDefinitions.GetByValueTypeAsync(ValueType.EmptyFile);
             var allCount = (await indexedDefinitions.GetAllAsync()).Count();
+            var game = GameService.GetSelected();
 
             double total = (allCount * 2) + typeAndIdKeys.Count() + (overwritten.GroupBy(p => p.TypeAndId).Count() * 2) + empty.Count();
             double processed = 0;
@@ -400,7 +402,7 @@ namespace IronyModManager.Services
             await messageBus.PublishAsync(new ModDefinitionAnalyzeEvent(0));
 
             // Cheers to the guys at paradox for doing a great job at implementing such a thing
-            var provider = DefinitionInfoProviders.FirstOrDefault(p => p.CanProcess(GameService.GetSelected().Type));
+            var provider = DefinitionInfoProviders.FirstOrDefault(p => p.CanProcess(game.Type));
             if (provider!.SupportsScriptMerge && allCount > 0)
             {
                 var merges = provider.MergeTypes;
@@ -446,6 +448,124 @@ namespace IronyModManager.Services
             allIndexed = null;
             allDefs.Clear();
             allDefs = null;
+            GCRunner.RunGC(GCCollectionMode.Optimized, false);
+
+            // Handling inlines here now as game now uses these a lot -- Thanks pdx again
+            allDefs = (await indexedDefinitions.GetAllAsync()).ToList();
+
+            // Stellaris only (so far)
+            total += provider!.SupportsInlineScripts ? allDefs.Count : 0;
+            previousProgress = 0;
+            List<IDefinition> prunedInlineDefinitions;
+            if (provider.SupportsInlineScripts)
+            {
+                var tempIndex = DIResolver.Get<IIndexedDefinitions>();
+                await tempIndex.InitMapAsync(allDefs);
+                prunedInlineDefinitions = [];
+                var reportedInlineErrors = new HashSet<string>();
+                foreach (var item in allDefs)
+                {
+                    var addDefault = true;
+                    if (item.Id.Equals(Parser.Common.Constants.Stellaris.InlineScriptId, StringComparison.OrdinalIgnoreCase) || item.ContainsInlineIdentifier)
+                    {
+                        addDefault = false;
+                        var path = Path.Combine(Parser.Common.Constants.Stellaris.InlineScripts, parametrizedParser.GetScriptPath(item.Code));
+                        var pathCI = path.ToLowerInvariant();
+                        var files = (await tempIndex.GetByParentDirectoryAsync(Path.GetDirectoryName(path))).Where(p => Path.Combine(Path.GetDirectoryName(p.FileCI)!, Path.GetFileNameWithoutExtension(p.FileCI)!).Equals(pathCI)).ToList();
+                        if (files.Count != 0)
+                        {
+                            var priorityDefinition = EvalDefinitionPriority([.. files.OrderBy(p => modOrder.IndexOf(p.ModName))]);
+                            if (priorityDefinition is { Definition: not null })
+                            {
+                                var parametrizedCode = parametrizedParser.Process(priorityDefinition.Definition.Code, item.Code);
+                                if (!string.IsNullOrWhiteSpace(parametrizedCode))
+                                {
+                                    var validationType = ValidationType.Full;
+                                    if (item.UseSimpleValidation.GetValueOrDefault() || item.UseSimpleValidation == null)
+                                    {
+                                        validationType = MapValidationType(item);
+                                    }
+                                    else if (priorityDefinition.Definition.UseSimpleValidation.GetValueOrDefault() || priorityDefinition.Definition.UseSimpleValidation == null)
+                                    {
+                                        validationType = MapValidationType(priorityDefinition.Definition);
+                                    }
+
+                                    var results = parserManager.Parse(new ParserManagerArgs
+                                    {
+                                        ContentSHA = item.ContentSHA, // Want original file sha id
+                                        File = item.File, // To trigger right parser
+                                        GameType = game.Type,
+                                        Lines = parametrizedCode.SplitOnNewLine(),
+                                        FileLastModified = item.LastModified,
+                                        ModDependencies = item.Dependencies,
+                                        IsBinary = item.ValueType == ValueType.Binary,
+                                        ModName = item.ModName,
+                                        ValidationType = validationType // This is kinda difficult but try to guess which validation type we want to inherit
+                                    });
+                                    if (item.Variables != null && item.Variables.Any() && results != null)
+                                    {
+                                        MergeDefinitions(results.Concat(item.Variables));
+                                    }
+
+                                    if (results != null && results.Any())
+                                    {
+                                        prunedInlineDefinitions.AddRange(results);
+                                    }
+                                    else if (!reportedInlineErrors.Contains($"{item.ModName} - {pathCI}"))
+                                    {
+                                        // Could happen, will need manually investigation though
+                                        var copy = CopyDefinition(item);
+                                        copy.ValueType = ValueType.Invalid;
+                                        copy.ErrorMessage = $"Inline script {path} failed to be processed. Please report to the author of Irony.";
+                                        prunedInlineDefinitions.Add(copy);
+                                        reportedInlineErrors.Add($"{item.ModName} - {pathCI}");
+                                    }
+                                }
+                            }
+                        }
+                        else if (!reportedInlineErrors.Contains($"{item.ModName} - {pathCI}"))
+                        {
+                            // Need to report missing inline script
+                            var copy = CopyDefinition(item);
+                            copy.ValueType = ValueType.Invalid;
+                            copy.ErrorMessage = $"Inline script {path} is not found in any mods.{Environment.NewLine}{Environment.NewLine}It is possible that the file is missing or due to a syntax error Irony cannot find it.";
+                            prunedInlineDefinitions.Add(copy);
+                            reportedInlineErrors.Add($"{item.ModName} - {pathCI}");
+                        }
+                    }
+
+                    if (addDefault)
+                    {
+                        prunedInlineDefinitions.Add(item);
+                    }
+
+                    processed++;
+                    var perc = GetProgressPercentage(total, processed, 100);
+                    if (perc.IsNotNearlyEqual(previousProgress))
+                    {
+                        await messageBus.PublishAsync(new ModDefinitionAnalyzeEvent(perc));
+                        previousProgress = perc;
+                    }
+                }
+
+                tempIndex.Dispose();
+            }
+            else
+            {
+                prunedInlineDefinitions = [.. allDefs];
+            }
+
+            // Run another cleanup
+            indexedDefinitions.Dispose();
+            indexedDefinitions = null;
+            allDefs.Clear();
+            allDefs = null;
+
+            indexedDefinitions = DIResolver.Get<IIndexedDefinitions>();
+            await indexedDefinitions.InitMapAsync(prunedInlineDefinitions);
+
+            prunedInlineDefinitions.Clear();
+            prunedInlineDefinitions = null;
             GCRunner.RunGC(GCCollectionMode.Optimized, false);
 
 
@@ -1021,115 +1141,13 @@ namespace IronyModManager.Services
 
             await messageBus.PublishAsync(new ModDefinitionInvalidReplaceEvent(0));
             processed = 0;
-
-            // Stellaris only (so far)
-            total = provider!.SupportsInlineScripts ? definitions.Count * 2 : definitions.Count;
+            total = definitions.Count;
             previousProgress = 0;
+
             List<IDefinition> prunedDefinitions;
+            List<IDefinition> definitionsCopy = [.. definitions];
             var patchName = GenerateCollectionPatchName(collectionName);
             var state = await modPatchExporter.GetPatchStateAsync(new ModPatchExporterParameters { RootPath = GetModDirectoryRootPath(game), PatchPath = EvaluatePatchNamePath(game, patchName) });
-
-            // Process so far Giga related stuff for now. Scared what else might be valid for inline_scripts.
-            List<IDefinition> prunedInlineDefinitions;
-            if (provider.SupportsInlineScripts)
-            {
-                var tempIndex = DIResolver.Get<IIndexedDefinitions>();
-                await tempIndex.InitMapAsync(definitions);
-                prunedInlineDefinitions = [];
-                var reportedInlineErrors = new HashSet<string>();
-                foreach (var item in definitions)
-                {
-                    var addDefault = true;
-                    if (item.Id.Equals(Parser.Common.Constants.Stellaris.InlineScriptId, StringComparison.OrdinalIgnoreCase))
-                    {
-                        addDefault = false;
-                        var path = Path.Combine(Parser.Common.Constants.Stellaris.InlineScripts, parametrizedParser.GetScriptPath(item.Code));
-                        var pathCI = path.ToLowerInvariant();
-                        var files = (await tempIndex.GetByParentDirectoryAsync(Path.GetDirectoryName(path))).Where(p => Path.Combine(Path.GetDirectoryName(p.FileCI)!, Path.GetFileNameWithoutExtension(p.FileCI)!).Equals(pathCI)).ToList();
-                        if (files.Count != 0)
-                        {
-                            var modOrder = mods.Select(p => p.Name).ToList();
-                            var priorityDefinition = EvalDefinitionPriority([.. files.OrderBy(p => modOrder.IndexOf(p.ModName))]);
-                            if (priorityDefinition is { Definition: not null })
-                            {
-                                var parametrizedCode = parametrizedParser.Process(priorityDefinition.Definition.Code, item.Code);
-                                if (!string.IsNullOrWhiteSpace(parametrizedCode))
-                                {
-                                    var validationType = ValidationType.Full;
-                                    if (item.UseSimpleValidation.GetValueOrDefault() || item.UseSimpleValidation == null)
-                                    {
-                                        validationType = MapValidationType(item);
-                                    }
-                                    else if (priorityDefinition.Definition.UseSimpleValidation.GetValueOrDefault() || priorityDefinition.Definition.UseSimpleValidation == null)
-                                    {
-                                        validationType = MapValidationType(priorityDefinition.Definition);
-                                    }
-
-                                    var results = parserManager.Parse(new ParserManagerArgs
-                                    {
-                                        ContentSHA = item.ContentSHA, // Want original file sha id
-                                        File = item.File, // To trigger right parser
-                                        GameType = game.Type,
-                                        Lines = parametrizedCode.SplitOnNewLine(),
-                                        FileLastModified = item.LastModified,
-                                        ModDependencies = item.Dependencies,
-                                        IsBinary = item.ValueType == ValueType.Binary,
-                                        ModName = item.ModName,
-                                        ValidationType = validationType // This is kinda difficult but try to guess which validation type we want to inherit
-                                    });
-                                    if (item.Variables != null && item.Variables.Any() && results != null)
-                                    {
-                                        MergeDefinitions(results.Concat(item.Variables));
-                                    }
-
-                                    if (results != null && results.Any())
-                                    {
-                                        prunedInlineDefinitions.AddRange(results);
-                                    }
-                                    else if (!reportedInlineErrors.Contains($"{item.ModName} - {pathCI}"))
-                                    {
-                                        // Could happen, will need manually investigation though
-                                        var copy = CopyDefinition(item);
-                                        copy.ValueType = ValueType.Invalid;
-                                        copy.ErrorMessage = $"Inline script {path} failed to be processed. Please report to the author of Irony.";
-                                        prunedInlineDefinitions.Add(copy);
-                                        reportedInlineErrors.Add($"{item.ModName} - {pathCI}");
-                                    }
-                                }
-                            }
-                        }
-                        else if (!reportedInlineErrors.Contains($"{item.ModName} - {pathCI}"))
-                        {
-                            // Need to report missing inline script
-                            var copy = CopyDefinition(item);
-                            copy.ValueType = ValueType.Invalid;
-                            copy.ErrorMessage = $"Inline script {path} is not found in any mods.{Environment.NewLine}{Environment.NewLine}It is possible that the file is missing or due to a syntax error Irony cannot find it.";
-                            prunedInlineDefinitions.Add(copy);
-                            reportedInlineErrors.Add($"{item.ModName} - {pathCI}");
-                        }
-                    }
-
-                    if (addDefault)
-                    {
-                        prunedInlineDefinitions.Add(item);
-                    }
-
-                    processed++;
-                    var perc = GetProgressPercentage(total, processed, 100);
-                    if (perc.IsNotNearlyEqual(previousProgress))
-                    {
-                        await messageBus.PublishAsync(new ModDefinitionInvalidReplaceEvent(perc));
-                        previousProgress = perc;
-                    }
-                }
-
-                tempIndex.Dispose();
-                GCRunner.RunGC(GCCollectionMode.Optimized);
-            }
-            else
-            {
-                prunedInlineDefinitions = [.. definitions];
-            }
 
             definitions.Clear();
             definitions = null;
@@ -1138,7 +1156,7 @@ namespace IronyModManager.Services
                 prunedDefinitions = [];
                 var customIndexed = DIResolver.Get<IIndexedDefinitions>();
                 await customIndexed.InitMapAsync(state.CustomConflicts);
-                foreach (var item in prunedInlineDefinitions)
+                foreach (var item in definitionsCopy)
                 {
                     var addDefault = true;
                     if (item.ValueType == ValueType.Invalid)
@@ -1197,11 +1215,11 @@ namespace IronyModManager.Services
             }
             else
             {
-                prunedDefinitions = [.. prunedInlineDefinitions];
+                prunedDefinitions = [.. definitionsCopy];
             }
 
-            prunedInlineDefinitions.Clear();
-            prunedInlineDefinitions = null;
+            definitionsCopy.Clear();
+            definitionsCopy = null;
 
             await messageBus.PublishAsync(new ModDefinitionInvalidReplaceEvent(99.9));
             var indexed = DIResolver.Get<IIndexedDefinitions>();
@@ -3110,28 +3128,8 @@ namespace IronyModManager.Services
                 return CopyDefinition(definition);
             }
 
-            var copy = DIResolver.Get<IDefinition>();
-            if (copyAdditionalFilenames)
-            {
-                copy.AdditionalFileNames = definition.AdditionalFileNames;
-            }
-
-            copy.DiskFile = definition.DiskFile;
-            copy.File = definition.File;
-            copy.Id = definition.Id;
-            copy.ModName = definition.ModName;
-            copy.Tags = definition.Tags;
-            copy.Type = definition.Type;
-            copy.ValueType = definition.ValueType;
-            copy.IsFromGame = definition.IsFromGame;
-            copy.Order = definition.Order;
-            copy.OriginalFileName = definition.OriginalFileName;
-            copy.ResetType = definition.ResetType;
-            copy.FileNameSuffix = definition.FileNameSuffix;
-            copy.IsPlaceholder = definition.IsPlaceholder;
-            copy.UseSimpleValidation = definition.UseSimpleValidation;
-            copy.IsSpecialFolder = definition.IsSpecialFolder;
-            return copy;
+            var clone = DIResolver.Get<IObjectClone>();
+            return clone.PartialCloneDefinition(definition, copyAdditionalFilenames);
         }
 
         /// <summary>
