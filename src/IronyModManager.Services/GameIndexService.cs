@@ -94,11 +94,6 @@ namespace IronyModManager.Services
         /// </summary>
         private readonly IParametrizedParser parametrizedParser = parametrizedParser;
 
-        /// <summary>
-        /// The inline scripts folder
-        /// </summary>
-        private readonly string inlineScriptsFolder = "common\\inline_scripts".StandardizeDirectorySeparator();
-
         #endregion Fields
 
         #region Methods
@@ -129,8 +124,13 @@ namespace IronyModManager.Services
                 {
                     var provider = DefinitionInfoProviders.FirstOrDefault(p => p.CanProcess(game.Type));
                     files = files.Where(p => game.GameFolders.Any(p.StartsWith));
-                    var gameInlineScriptFiles = files.Where(p => p.StartsWith(inlineScriptsFolder, StringComparison.OrdinalIgnoreCase));
-                    var gameInlineFolders = gameInlineScriptFiles.Select(Path.GetDirectoryName).GroupBy(p => p).Select(p => p.FirstOrDefault()).ToList();
+                    var gameInlineFolders = new List<string>();
+                    if (provider!.SupportsInlineScripts)
+                    {
+                        var gameInlineScriptFiles = files.Where(p => p.StartsWith(provider.InlineScriptsPath, StringComparison.OrdinalIgnoreCase));
+                        gameInlineFolders = gameInlineScriptFiles.Select(Path.GetDirectoryName).GroupBy(p => p).Select(p => p.FirstOrDefault()).ToList();
+                    }
+
                     var indexedFolders = (await indexedDefinitions.GetAllDirectoryKeysAsync()).Select(p => p.ToLowerInvariant());
                     var validFolders = files.Select(Path.GetDirectoryName).GroupBy(p => p).Select(p => p.FirstOrDefault()).Where(p => indexedFolders.Any(a => a.ToLowerInvariant().Equals(p!.ToLowerInvariant())));
                     var folders = new List<string>();
@@ -142,7 +142,7 @@ namespace IronyModManager.Services
                         }
                     }
 
-                    if (provider is { SupportsInlineScripts: true })
+                    if (provider.SupportsInlineScripts)
                     {
                         // Inline scripts folders must always be indexed
                         foreach (var folder in gameInlineFolders)
@@ -166,10 +166,10 @@ namespace IronyModManager.Services
                         var inlineDefinitions = DIResolver.Get<IIndexedDefinitions>();
 
                         // First index inline scripts folder
-                        if (provider is { SupportsInlineScripts: true })
+                        if (provider.SupportsInlineScripts)
                         {
                             total += gameInlineFolders.Count;
-                            var inlineFolders = folders.Where(p => p.StartsWith(inlineScriptsFolder, StringComparison.OrdinalIgnoreCase)).ToList();
+                            var inlineFolders = folders.Where(p => p.StartsWith(provider.InlineScriptsPath, StringComparison.OrdinalIgnoreCase)).ToList();
                             var inlineTasks = inlineFolders.AsParallel().Select(async folder =>
                             {
                                 await semaphore.WaitAsync();
@@ -204,7 +204,7 @@ namespace IronyModManager.Services
                             });
                             await Task.WhenAll(inlineTasks);
 
-                            folders = folders.Where(p => !p.StartsWith(inlineScriptsFolder, StringComparison.OrdinalIgnoreCase)).ToList();
+                            folders = folders.Where(p => !p.StartsWith(provider.InlineScriptsPath, StringComparison.OrdinalIgnoreCase)).ToList();
 
                             var loadTasks = gameInlineFolders.Select(async directory =>
                             {
@@ -326,13 +326,17 @@ namespace IronyModManager.Services
                 // No directory override this means we want to ensure inline directories are loaded even if not requested
                 if (string.IsNullOrWhiteSpace(directoryOverride))
                 {
-                    var gamePath = PathResolver.GetPath(game);
-                    var files = Reader.GetFiles(gamePath);
-                    files = files.Where(p => game.GameFolders.Any(p.StartsWith));
-                    var gameInlineScriptFiles = files.Where(p => p.StartsWith(inlineScriptsFolder, StringComparison.OrdinalIgnoreCase));
-                    var gameInlineFolders = gameInlineScriptFiles.Select(Path.GetDirectoryName).GroupBy(p => p).Select(p => p.FirstOrDefault()).ToList();
-                    directories.AddRange(gameInlineFolders);
-                    directories = directories.Distinct().ToList();
+                    var provider = DefinitionInfoProviders.FirstOrDefault(p => p.CanProcess(game.Type));
+                    if (provider!.SupportsInlineScripts)
+                    {
+                        var gamePath = PathResolver.GetPath(game);
+                        var files = Reader.GetFiles(gamePath);
+                        files = files.Where(p => game.GameFolders.Any(p.StartsWith));
+                        var gameInlineScriptFiles = files.Where(p => p.StartsWith(provider!.InlineScriptsPath, StringComparison.OrdinalIgnoreCase));
+                        var gameInlineFolders = gameInlineScriptFiles.Select(Path.GetDirectoryName).GroupBy(p => p).Select(p => p.FirstOrDefault()).ToList();
+                        directories.AddRange(gameInlineFolders);
+                        directories = directories.Distinct().ToList();
+                    }
                 }
 
                 if (gameLanguages != null && gameLanguages.Count != 0)
@@ -489,7 +493,7 @@ namespace IronyModManager.Services
             }
 
             List<IDefinition> prunedInlineDefinitions = null;
-            if (provider!.SupportsInlineScripts && !folder.StandardizeDirectorySeparator().StartsWith(inlineScriptsFolder, StringComparison.OrdinalIgnoreCase))
+            if (provider!.SupportsInlineScripts && !folder.StandardizeDirectorySeparator().StartsWith(provider.InlineScriptsPath, StringComparison.OrdinalIgnoreCase))
             {
                 inlineDefinitions ??= DIResolver.Get<IIndexedDefinitions>();
                 prunedInlineDefinitions = [];

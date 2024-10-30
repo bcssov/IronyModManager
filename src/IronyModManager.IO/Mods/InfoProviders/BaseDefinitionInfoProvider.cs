@@ -4,7 +4,7 @@
 // Created          : 04-04-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 10-21-2024
+// Last Modified On : 10-30-2024
 // ***********************************************************************
 // <copyright file="BaseDefinitionInfoProvider.cs" company="Mario">
 //     Mario
@@ -67,6 +67,12 @@ namespace IronyModManager.IO.Mods.InfoProviders
         /// </summary>
         /// <value>The fios paths.</value>
         public abstract IReadOnlyCollection<string> FIOSPaths { get; }
+
+        /// <summary>
+        /// Gets the inline scripts path.
+        /// </summary>
+        /// <value>The inline scripts path.</value>
+        public abstract string InlineScriptsPath { get; }
 
         /// <summary>
         /// Gets a value indicating whether this instance is fully implemented.
