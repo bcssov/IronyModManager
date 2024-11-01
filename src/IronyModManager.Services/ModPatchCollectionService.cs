@@ -4,7 +4,7 @@
 // Created          : 05-26-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 10-30-2024
+// Last Modified On : 11-01-2024
 // ***********************************************************************
 // <copyright file="ModPatchCollectionService.cs" company="Mario">
 //     Mario
@@ -466,7 +466,7 @@ namespace IronyModManager.Services
                 foreach (var item in allDefs)
                 {
                     var addDefault = true;
-                    if ((item.Id.Equals(Parser.Common.Constants.Stellaris.InlineScriptId, StringComparison.OrdinalIgnoreCase) || item.ContainsInlineIdentifier) && item.File.StartsWith(provider.InlineScriptsPath))
+                    if ((item.Id.Equals(Parser.Common.Constants.Stellaris.InlineScriptId, StringComparison.OrdinalIgnoreCase) || item.ContainsInlineIdentifier) && !item.File.StartsWith(provider.InlineScriptsPath))
                     {
                         addDefault = false;
                         var path = Path.Combine(Parser.Common.Constants.Stellaris.InlineScripts, parametrizedParser.GetScriptPath(item.Code));
