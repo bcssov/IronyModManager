@@ -51,8 +51,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="BCnEncoder.Net" Version="2.1.0" />
-    <PackageReference Include="DotNetZip" Version="1.16.0" />    
+    <PackageReference Include="BCnEncoder.Net" Version="2.1.0" />    
     <PackageReference Include="Magick.NET-Q8-x64" Version="13.6.0" />
     <PackageReference Include="Microsoft.Extensions.DependencyModel" Version="$(MicrosoftExtensionsDependencyModelVersion)" allowedVersions="$(MicrosoftExtensionsDependencyModelVersion)" />
     <PackageReference Include="Microsoft.NETCore.Platforms" Version="$(MicrosoftNETCorePlatformsVersion)" allowedVersions="$(MicrosoftNETCorePlatformsVersion)" />
@@ -69,6 +68,8 @@
     <PackageReference Include="SixLabors.ImageSharp.Drawing" Version="$(SixLaborsImageSharpDrawing)" allowedVersions="$(SixLaborsImageSharpDrawing)" />
     <PackageReference Include="SixLabors.ImageSharp.Textures" Version="$(SixLaborsImageSharpTextures)" allowedVersions="$(SixLaborsImageSharpTextures)" />
     <PackageReference Include="Steamworks.NET" Version="20.1.0" />
+    <PackageReference Include="System.Security.Permissions" Version="8.0.0" />
+    <PackageReference Include="System.Text.Encoding.CodePages" Version="8.0.0" />
     <PackageReference Include="UTF.Unknown" Version="2.5.1" />
   </ItemGroup>
 
@@ -82,6 +83,9 @@
   <ItemGroup>
     <Reference Include="LiteDB">
       <HintPath>..\..\References\Direct\LiteDB.dll</HintPath>
+    </Reference>
+    <Reference Include="ProDotNetZip">
+      <HintPath>..\..\References\Direct\ProDotNetZip.dll</HintPath>
     </Reference>
   </ItemGroup>
 

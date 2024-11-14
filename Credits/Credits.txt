@@ -149,11 +149,11 @@ licenseUrl:https://licenses.nuget.org/Apache-2.0
 license Type:Apache-2.0
 
 #########################
-Package:DotNetZip
-Version:1.16.0
-project URL:https://github.com/haf/DotNetZip.Semverd
-Description:A fork of the DotNetZip project without signing with a solution that compiles cleanly. This project aims to follow semver to avoid versioning conflicts. DotNetZip is a FAST, FREE class library and toolset for manipulating zip files. Use VB, C# or any .NET language to easily create, extract, or update zip files.
-licenseUrl:https://raw.githubusercontent.com/haf/DotNetZip.Semverd/master/LICENSE
+Package:ProDotNetZip
+Version:1.18.0
+project URL:https://github.com/mihula/ProDotNetZip
+Description:A fork of the DotNetZip project without signing with a solution that compiles cleanly. This project aims to use only up-to-date references. DotNetZip is a FAST, FREE class library and toolset for manipulating zip files. Use VB, C# or any .NET language to easily create, extract, or update zip files.
+licenseUrl:https://www.nuget.org/packages/ProDotNetZip/1.18.0/License
 license Type:BSD, Apache, zlib and MIT
 
 #########################
