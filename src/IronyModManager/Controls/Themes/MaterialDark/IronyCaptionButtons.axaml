@@ -19,19 +19,11 @@
         <Setter Property="Template">
             <ControlTemplate>
                 <ContentPresenter Name="PART_ContentPresenter"
-                                  Background="Transparent"
+                                  Background="{TemplateBinding Background}"
+                                  BorderBrush="{TemplateBinding BorderBrush}"
                                   Content="{TemplateBinding Content}"/>
             </ControlTemplate>
         </Setter>
-    </Style>
-
-
-    <Style Selector="controls|ThemeCaptionButton:pointerover /template/ ContentPresenter">
-        <Setter Property="Background" Value="{TemplateBinding Background}" />
-    </Style>
-
-    <Style Selector="controls|ThemeCaptionButton:pressed /template/ ContentPresenter">
-        <Setter Property="Background" Value="{TemplateBinding BorderBrush}" />
     </Style>
 
     <Style Selector="controls|IronyCaptionButtons">
@@ -39,8 +31,9 @@
         <Setter Property="Template">
             <ControlTemplate>
                 <StackPanel Spacing="2" VerticalAlignment="Stretch" TextBlock.FontSize="10" Orientation="Horizontal">
+                    <!-- ReSharper disable InconsistentNaming knock it off -->
                     <controls:ThemeCaptionButton x:Name="PART_FullScreenButton"
-                            IsVisible="False">
+                                                 IsVisible="False">
                         <Viewbox Width="11" Margin="2">
                             <Path Name="FullScreenButtonPath"
                                   Stretch="UniformToFill"
@@ -75,21 +68,40 @@
                                   Data="M1169 1024l879 -879l-145 -145l-879 879l-879 -879l-145 145l879 879l-879 879l145 145l879 -879l879 879l145 -145z" />
                         </Viewbox>
                     </controls:ThemeCaptionButton>
+                    <!-- ReSharper restore InconsistentNaming -->
                 </StackPanel>
             </ControlTemplate>
         </Setter>
     </Style>
-    <Style Selector="controls|IronyCaptionButtons:maximized /template/ Path#RestoreButtonPath">
+
+    <!-- Moved to code-behind, why? Best to avalonia devs while I'm still stuck on 0.10. -->
+    <!--<Style Selector="controls|IronyCaptionButtons:maximized /template/ Path#RestoreButtonPath">
         <Setter Property="Data" Value="M2048 410h-410v-410h-1638v1638h410v410h1638v-1638zM1434 1434h-1229v-1229h1229v1229zM1843 1843h-1229v-205h1024v-1024h205v1229z" />
     </Style>
     <Style Selector="controls|IronyCaptionButtons:fullscreen /template/ Path#FullScreenButtonPath">
         <Setter Property="IsVisible" Value="True" />
         <Setter Property="Data" Value="M205 1024h819v-819h-205v469l-674 -674l-145 145l674 674h-469v205zM1374 1229h469v-205h-819v819h205v-469l674 674l145 -145z" />
-    </Style>
-    <Style Selector="controls|IronyCaptionButtons:fullscreen /template/ Button#PART_RestoreButton">
+    </Style>-->
+    <Style Selector="controls|IronyCaptionButtons:fullscreen /template/ controls|ThemeCaptionButton#PART_RestoreButton">
         <Setter Property="IsVisible" Value="False" />
     </Style>
-    <Style Selector="controls|IronyCaptionButtons:fullscreen /template/ Button#PART_MinimiseButton">
+    <Style Selector="controls|IronyCaptionButtons:fullscreen /template/ controls|ThemeCaptionButton#PART_MinimiseButton">
         <Setter Property="IsVisible" Value="False" />
+    </Style>
+
+    <Style Selector="controls|ThemeCaptionButton:pointerover /template/ ContentPresenter">
+        <Setter Property="Background" Value="#7F7f7f7f" />
+    </Style>
+
+    <Style Selector="controls|ThemeCaptionButton:pressed /template/ ContentPresenter">
+        <Setter Property="Background" Value="#716F6D80" />
+    </Style>
+
+    <Style Selector="controls|IronyCaptionButtons /template/ controls|ThemeCaptionButton#PART_CloseButton:pointerover /template/ ContentPresenter">
+        <Setter Property="Background" Value="#7FFF0000" />
+    </Style>
+
+    <Style Selector="controls|IronyCaptionButtons /template/ controls|ThemeCaptionButton#PART_CloseButton:pressed /template/ ContentPresenter">
+        <Setter Property="Background" Value="#fff1707a" />
     </Style>
 </Styles>
