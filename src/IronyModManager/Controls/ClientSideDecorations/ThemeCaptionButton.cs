@@ -4,16 +4,18 @@
 // Created          : 11-23-2022
 //
 // Last Modified By : Mario
-// Last Modified On : 11-23-2022
+// Last Modified On : 11-20-2024
 // ***********************************************************************
 // <copyright file="ThemeCaptionButton.cs" company="Mario">
 //     Mario
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Avalonia.Media;
 using Avalonia.Styling;
 
 namespace IronyModManager.Controls.ClientSideDecorations
@@ -27,6 +29,15 @@ namespace IronyModManager.Controls.ClientSideDecorations
     /// <seealso cref="IStyleable" />
     public class ThemeCaptionButton : Avalonia.Controls.Button, IStyleable
     {
+        #region Constructors
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ThemeCaptionButton"/> class.
+        /// </summary>
+        public ThemeCaptionButton() => Background = Brushes.Transparent;
+
+        #endregion Constructors
+
         #region Properties
 
         /// <summary>
