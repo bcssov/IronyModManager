@@ -4,15 +4,17 @@
 // Created          : 02-22-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 11-03-2022
+// Last Modified On : 12-23-2024
 // ***********************************************************************
 // <copyright file="IModObject.cs" company="Mario">
 //     Mario
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
+
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace IronyModManager.Shared.Models
 {
@@ -42,6 +44,12 @@ namespace IronyModManager.Shared.Models
         string FileName { get; set; }
 
         /// <summary>
+        /// Gets or sets the json identifier.
+        /// </summary>
+        /// <value>The json identifier.</value>
+        public string JsonId { get; set; }
+
+        /// <summary>
         /// Gets or sets the name.
         /// </summary>
         /// <value>The name.</value>
@@ -54,15 +62,21 @@ namespace IronyModManager.Shared.Models
         string Picture { get; set; }
 
         /// <summary>
+        /// Gets or sets the relationship data.
+        /// </summary>
+        /// <value>The relationship data.</value>
+        IEnumerable<IDictionary<string, object>> RelationshipData { get; set; }
+
+        /// <summary>
         /// Gets or sets the remote identifier.
         /// </summary>
         /// <value>The remote identifier.</value>
         long? RemoteId { get; set; }
 
         /// <summary>
-        /// Gets or sets the replace path.
+        /// Gets or sets the replacement path.
         /// </summary>
-        /// <value>The replace path.</value>
+        /// <value>The replacement path.</value>
         IEnumerable<string> ReplacePath { get; set; }
 
         /// <summary>

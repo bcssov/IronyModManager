@@ -263,6 +263,12 @@ namespace IronyModManager.Services
                 mod.AdditionalData = collectionMods.Where(p => p.AdditionalData != null).SelectMany(p => p.AdditionalData).ToLookup(p => p.Key, p => p.Value).ToDictionary(p => p.Key, p => p.First());
             }
 
+            // Copy relationships although it should be redundant?
+            if (collectionMods.Any(p => p.RelationshipData != null))
+            {
+                mod.RelationshipData = collectionMods.Where(p => p.RelationshipData != null).GroupBy(p => p.RelationshipData).SelectMany(p => p.FirstOrDefault()?.RelationshipData).ToList();
+            }
+
             await ModWriter.WriteDescriptorAsync(new ModWriterParameters
             {
                 Mod = mod,

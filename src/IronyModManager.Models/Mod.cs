@@ -4,16 +4,18 @@
 // Created          : 02-29-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 11-30-2022
+// Last Modified On : 12-23-2024
 // ***********************************************************************
 // <copyright file="Mod.cs" company="Mario">
 //     Mario
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
+
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using IronyModManager.Models.Common;
 using IronyModManager.Shared;
 
@@ -113,6 +115,12 @@ namespace IronyModManager.Models
         public virtual bool IsValid { get; set; }
 
         /// <summary>
+        /// Gets or sets the identifier.
+        /// </summary>
+        /// <value>The identifier.</value>
+        public virtual string JsonId { get; set; }
+
+        /// <summary>
         /// Gets or sets the name.
         /// </summary>
         /// <value>The name.</value>
@@ -137,10 +145,12 @@ namespace IronyModManager.Models
                 {
                     return FullPath;
                 }
+
                 if (!string.IsNullOrWhiteSpace(Path.GetExtension(FullPath)))
                 {
                     return Path.GetDirectoryName(FullPath);
                 }
+
                 return FullPath;
             }
         }
@@ -153,6 +163,12 @@ namespace IronyModManager.Models
         public virtual string Picture { get; set; }
 
         /// <summary>
+        /// Gets or sets the relationship data.
+        /// </summary>
+        /// <value>The relationship data.</value>
+        public virtual IEnumerable<IDictionary<string, object>> RelationshipData { get; set; }
+
+        /// <summary>
         /// Gets or sets the remote identifier.
         /// </summary>
         /// <value>The remote identifier.</value>
@@ -160,9 +176,9 @@ namespace IronyModManager.Models
         public virtual long? RemoteId { get; set; }
 
         /// <summary>
-        /// Gets or sets the replace path.
+        /// Gets or sets the replacement path.
         /// </summary>
-        /// <value>The replace path.</value>
+        /// <value>The replacement path.</value>
         [DescriptorProperty("replace_path", true)]
         public virtual IEnumerable<string> ReplacePath { get; set; }
 
@@ -228,6 +244,7 @@ namespace IronyModManager.Models
                 {
                     versionData = new Shared.Version();
                 }
+
                 return versionData;
             }
         }
@@ -247,6 +264,7 @@ namespace IronyModManager.Models
             {
                 return false;
             }
+
             term ??= string.Empty;
             return Name.StartsWith(term, StringComparison.OrdinalIgnoreCase);
         }
