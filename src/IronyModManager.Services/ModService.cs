@@ -4,7 +4,7 @@
 // Created          : 02-24-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-27-2023
+// Last Modified On : 12-23-2024
 // ***********************************************************************
 // <copyright file="ModService.cs" company="Mario">
 //     Mario
@@ -106,6 +106,7 @@ namespace IronyModManager.Services
             {
                 return string.Empty;
             }
+
             if (mod.Source == ModSource.Paradox)
             {
                 return string.Format(Constants.Paradox_Url, mod.RemoteId);
@@ -127,6 +128,7 @@ namespace IronyModManager.Services
             {
                 return string.Format(Constants.Steam_protocol_uri, BuildModUrl(mod));
             }
+
             return string.Empty;
         }
 
@@ -142,15 +144,14 @@ namespace IronyModManager.Services
             {
                 return true;
             }
+
             if (string.IsNullOrWhiteSpace(game.CustomModDirectory))
             {
                 return true;
             }
+
             var path = GetModDirectoryRootPath(game);
-            var result = await ModWriter.ModDirectoryExistsAsync(new ModWriterParameters()
-            {
-                RootDirectory = path
-            });
+            var result = await ModWriter.ModDirectoryExistsAsync(new ModWriterParameters { RootDirectory = path });
             return !result;
         }
 
@@ -168,7 +169,7 @@ namespace IronyModManager.Services
         /// Evals the achievement compatibility.
         /// </summary>
         /// <param name="mods">The mods.</param>
-        /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
+        /// <returns><c>true</c> if achievement compatible, <c>false</c> otherwise.</returns>
         public virtual bool EvalAchievementCompatibility(IEnumerable<IMod> mods)
         {
             if (mods?.Count() > 0)
@@ -181,6 +182,7 @@ namespace IronyModManager.Services
                     {
                         return false;
                     }
+
                     foreach (var item in filtered)
                     {
                         if (item.Files.Any())
@@ -193,9 +195,11 @@ namespace IronyModManager.Services
                             item.AchievementStatus = AchievementStatus.AttemptedEvaluation;
                         }
                     }
+
                     return true;
                 }
             }
+
             return false;
         }
 
@@ -213,33 +217,31 @@ namespace IronyModManager.Services
             {
                 return false;
             }
+
             var allMods = GetInstalledModsInternal(game, false);
             var mod = GeneratePatchModDescriptor(allMods, game, GenerateCollectionPatchName(modCollection.Name));
-            var applyModParams = new ModWriterParameters()
+            var applyModParams = new ModWriterParameters
             {
                 OtherMods = regularMods.Where(p => !enabledMods.Any(m => m.DescriptorFile.Equals(p.DescriptorFile))).ToList(),
                 EnabledMods = enabledMods,
                 RootDirectory = game.UserDirectory,
                 DescriptorType = MapDescriptorType(game.ModDescriptorType)
             };
-            if (await ModWriter.ModDirectoryExistsAsync(new ModWriterParameters()
-            {
-                RootDirectory = mod.FullPath
-            }))
+            if (await ModWriter.ModDirectoryExistsAsync(new ModWriterParameters { RootDirectory = mod.FullPath }))
             {
                 if (modCollection.PatchModEnabled && enabledMods.Any())
                 {
-                    if (await ModWriter.WriteDescriptorAsync(new ModWriterParameters()
+                    if (await ModWriter.WriteDescriptorAsync(new ModWriterParameters
+                        {
+                            Mod = mod,
+                            RootDirectory = game.UserDirectory,
+                            Path = mod.DescriptorFile,
+                            LockDescriptor = CheckIfModShouldBeLocked(game, mod),
+                            DescriptorType = MapDescriptorType(game.ModDescriptorType)
+                        }, IsPatchModInternal(mod)))
                     {
-                        Mod = mod,
-                        RootDirectory = game.UserDirectory,
-                        Path = mod.DescriptorFile,
-                        LockDescriptor = CheckIfModShouldBeLocked(game, mod),
-                        DescriptorType = MapDescriptorType(game.ModDescriptorType)
-                    }, IsPatchModInternal(mod)))
-                    {
-                        applyModParams.TopPriorityMods = new List<IMod>() { mod };
-                        Cache.Invalidate(new CacheInvalidateParameters() { Region = ModsCacheRegion, Prefix = game.Type, Keys = new List<string> { GetModsCacheKey(true), GetModsCacheKey(false) } });
+                        applyModParams.TopPriorityMods = new List<IMod> { mod };
+                        Cache.Invalidate(new CacheInvalidateParameters { Region = ModsCacheRegion, Prefix = game.Type, Keys = new List<string> { GetModsCacheKey(true), GetModsCacheKey(false) } });
                     }
                 }
             }
@@ -248,9 +250,10 @@ namespace IronyModManager.Services
                 // Remove left over descriptor
                 if (allMods.Any(p => p.Name.Equals(mod.Name)))
                 {
-                    await DeleteDescriptorsInternalAsync(new List<IMod>() { mod });
+                    await DeleteDescriptorsInternalAsync(new List<IMod> { mod });
                 }
             }
+
             return await ModWriter.ApplyModsAsync(applyModParams);
         }
 
@@ -264,30 +267,35 @@ namespace IronyModManager.Services
         {
             if (collection == null)
             {
-                return collection;
+                return null;
             }
+
             var parameters = CleanSearchResult(searchParser.Parse(languageService.GetSelected().Abrv, text));
             var nameNegateCol = parameters.Name.Any() ? parameters.Name.Where(p => p.Negate).ToList() : new List<NameFilterResult>();
             var sourceNegateCol = parameters.Source.Any() ? parameters.Source.Where(p => p.Negate).ToList() : new List<SourceTypeResult>();
             var versionNegateCol = parameters.Version.Any() ? parameters.Version.Where(p => p.Negate).ToList() : new List<VersionTypeResult>();
-            var result = collection.ConditionalFilter(parameters.Name.Any(), q => q.Where(p => parameters.Name.Any(x => !x.Negate ? p.Name.Contains(x.Text, StringComparison.OrdinalIgnoreCase) : !nameNegateCol.Any(a => p.Name.Contains(a.Text, StringComparison.OrdinalIgnoreCase)))))
-                    .ConditionalFilter(parameters.RemoteIds.Any(), q => q.Where(p => p.RemoteId.HasValue && parameters.RemoteIds.Any(x => !x.Negate ? p.RemoteId.GetValueOrDefault().ToString().Contains(x.Text, StringComparison.OrdinalIgnoreCase)
+            var result = collection.ConditionalFilter(parameters.Name.Any(),
+                    q => q.Where(p => parameters.Name.Any(x => !x.Negate ? p.Name.Contains(x.Text, StringComparison.OrdinalIgnoreCase) : !nameNegateCol.Any(a => p.Name.Contains(a.Text, StringComparison.OrdinalIgnoreCase)))))
+                .ConditionalFilter(parameters.RemoteIds.Any(), q => q.Where(p => p.RemoteId.HasValue && parameters.RemoteIds.Any(x => !x.Negate
+                    ? p.RemoteId.GetValueOrDefault().ToString().Contains(x.Text, StringComparison.OrdinalIgnoreCase)
                     : !p.RemoteId.GetValueOrDefault().ToString().Contains(x.Text, StringComparison.OrdinalIgnoreCase))))
-                    .ConditionalFilter(parameters.AchievementCompatible.Result.HasValue, q => q.Where(p =>
+                .ConditionalFilter(parameters.AchievementCompatible.Result.HasValue, q => q.Where(p =>
+                {
+                    var result = p.AchievementStatus == (parameters.AchievementCompatible.Result.GetValueOrDefault() ? AchievementStatus.Compatible : AchievementStatus.NotCompatible);
+                    return !parameters.AchievementCompatible.Negate ? result : !result;
+                }))
+                .ConditionalFilter(parameters.IsSelected.Result.HasValue, q =>
+                {
+                    if (parameters.IsSelected.Negate)
                     {
-                        var result = p.AchievementStatus == (parameters.AchievementCompatible.Result.GetValueOrDefault() ? AchievementStatus.Compatible : AchievementStatus.NotCompatible);
-                        return !parameters.AchievementCompatible.Negate ? result : !result;
-                    }))
-                    .ConditionalFilter(parameters.IsSelected.Result.HasValue, q =>
-                    {
-                        if (parameters.IsSelected.Negate)
-                        {
-                            return q.Where(p => p.IsSelected != parameters.IsSelected.Result.GetValueOrDefault());
-                        }
-                        return q.Where(p => p.IsSelected == parameters.IsSelected.Result.GetValueOrDefault());
-                    })
-                    .ConditionalFilter(parameters.Source.Any(), q => q.Where(p => parameters.Source.Any(s => !s.Negate ? p.Source == SourceTypeToModSource(s.Result) : !sourceNegateCol.Any(a => p.Source == SourceTypeToModSource(a.Result)))))
-                    .ConditionalFilter(parameters.Version.Any(), q => q.Where(p => parameters.Version.Any(s => !s.Negate ? IsValidVersion(p.VersionData, s.Version) : !versionNegateCol.Any(a => IsValidVersion(p.VersionData, a.Version)))));
+                        return q.Where(p => p.IsSelected != parameters.IsSelected.Result.GetValueOrDefault());
+                    }
+
+                    return q.Where(p => p.IsSelected == parameters.IsSelected.Result.GetValueOrDefault());
+                })
+                // ReSharper disable once SimplifyLinqExpressionUseAll
+                .ConditionalFilter(parameters.Source.Any(), q => q.Where(p => parameters.Source.Any(s => !s.Negate ? p.Source == SourceTypeToModSource(s.Result) : !sourceNegateCol.Any(a => p.Source == SourceTypeToModSource(a.Result)))))
+                .ConditionalFilter(parameters.Version.Any(), q => q.Where(p => parameters.Version.Any(s => !s.Negate ? IsValidVersion(p.VersionData, s.Version) : !versionNegateCol.Any(a => IsValidVersion(p.VersionData, a.Version)))));
             return result.ToList();
         }
 
@@ -305,29 +313,34 @@ namespace IronyModManager.Services
             {
                 return null;
             }
+
             var parameters = CleanSearchResult(searchParser.Parse(languageService.GetSelected().Abrv, text));
             var nameNegateCol = parameters.Name.Any() ? parameters.Name.Where(p => p.Negate).ToList() : new List<NameFilterResult>();
             var sourceNegateCol = parameters.Source.Any() ? parameters.Source.Where(p => p.Negate).ToList() : new List<SourceTypeResult>();
             var versionNegateCol = parameters.Version.Any() ? parameters.Version.Where(p => p.Negate).ToList() : new List<VersionTypeResult>();
             var result = !reverse ? collection.Skip(skipIndex.GetValueOrDefault()) : collection.Reverse().Skip(skipIndex.GetValueOrDefault());
-            result = result.ConditionalFilter(parameters.Name.Any(), q => q.Where(p => parameters.Name.Any(x => !x.Negate ? p.Name.Contains(x.Text, StringComparison.OrdinalIgnoreCase) : !nameNegateCol.Any(a => p.Name.Contains(a.Text, StringComparison.OrdinalIgnoreCase)))))
-                    .ConditionalFilter(parameters.RemoteIds.Any(), q => q.Where(p => p.RemoteId.HasValue && parameters.RemoteIds.Any(x => !x.Negate ? p.RemoteId.GetValueOrDefault().ToString().Contains(x.Text, StringComparison.OrdinalIgnoreCase)
+            result = result.ConditionalFilter(parameters.Name.Any(),
+                    q => q.Where(p => parameters.Name.Any(x => !x.Negate ? p.Name.Contains(x.Text, StringComparison.OrdinalIgnoreCase) : !nameNegateCol.Any(a => p.Name.Contains(a.Text, StringComparison.OrdinalIgnoreCase)))))
+                .ConditionalFilter(parameters.RemoteIds.Any(), q => q.Where(p => p.RemoteId.HasValue && parameters.RemoteIds.Any(x => !x.Negate
+                    ? p.RemoteId.GetValueOrDefault().ToString().Contains(x.Text, StringComparison.OrdinalIgnoreCase)
                     : !p.RemoteId.GetValueOrDefault().ToString().Contains(x.Text, StringComparison.OrdinalIgnoreCase))))
-                    .ConditionalFilter(parameters.AchievementCompatible.Result.HasValue, q => q.Where(p =>
+                .ConditionalFilter(parameters.AchievementCompatible.Result.HasValue, q => q.Where(p =>
+                {
+                    var result = p.AchievementStatus == (parameters.AchievementCompatible.Result.GetValueOrDefault() ? AchievementStatus.Compatible : AchievementStatus.NotCompatible);
+                    return !parameters.AchievementCompatible.Negate ? result : !result;
+                }))
+                .ConditionalFilter(parameters.IsSelected.Result.HasValue, q =>
+                {
+                    if (parameters.IsSelected.Negate)
                     {
-                        var result = p.AchievementStatus == (parameters.AchievementCompatible.Result.GetValueOrDefault() ? AchievementStatus.Compatible : AchievementStatus.NotCompatible);
-                        return !parameters.AchievementCompatible.Negate ? result : !result;
-                    }))
-                    .ConditionalFilter(parameters.IsSelected.Result.HasValue, q =>
-                    {
-                        if (parameters.IsSelected.Negate)
-                        {
-                            return q.Where(p => p.IsSelected != parameters.IsSelected.Result.GetValueOrDefault());
-                        }
-                        return q.Where(p => p.IsSelected == parameters.IsSelected.Result.GetValueOrDefault());
-                    })
-                    .ConditionalFilter(parameters.Source.Any(), q => q.Where(p => parameters.Source.Any(s => !s.Negate ? p.Source == SourceTypeToModSource(s.Result) : !sourceNegateCol.Any(a => p.Source == SourceTypeToModSource(a.Result)))))
-                    .ConditionalFilter(parameters.Version.Any(), q => q.Where(p => parameters.Version.Any(s => !s.Negate ? IsValidVersion(p.VersionData, s.Version) : !versionNegateCol.Any(a => IsValidVersion(p.VersionData, a.Version)))));
+                        return q.Where(p => p.IsSelected != parameters.IsSelected.Result.GetValueOrDefault());
+                    }
+
+                    return q.Where(p => p.IsSelected == parameters.IsSelected.Result.GetValueOrDefault());
+                })
+                // ReSharper disable once SimplifyLinqExpressionUseAll
+                .ConditionalFilter(parameters.Source.Any(), q => q.Where(p => parameters.Source.Any(s => !s.Negate ? p.Source == SourceTypeToModSource(s.Result) : !sourceNegateCol.Any(a => p.Source == SourceTypeToModSource(a.Result)))))
+                .ConditionalFilter(parameters.Version.Any(), q => q.Where(p => parameters.Version.Any(s => !s.Negate ? IsValidVersion(p.VersionData, s.Version) : !versionNegateCol.Any(a => IsValidVersion(p.VersionData, a.Version)))));
             return result.FirstOrDefault();
         }
 
@@ -340,6 +353,8 @@ namespace IronyModManager.Services
         {
             using var mutex = await modReadLock.LockAsync();
             var result = GetInstalledModsInternal(game, true);
+
+            // ReSharper disable once DisposeOnUsingVariable
             mutex.Dispose();
             return result;
         }
@@ -358,6 +373,7 @@ namespace IronyModManager.Services
             {
                 return Task.FromResult((MemoryStream)null);
             }
+
             var mods = GetInstalledModsInternal(game, false);
             return GetImageStreamAsync(mods.FirstOrDefault(p => p.Name.Equals(modName)), path, isFromGame);
         }
@@ -382,6 +398,7 @@ namespace IronyModManager.Services
             {
                 return Reader.GetImageStreamAsync(Path.GetDirectoryName(GameService.GetSelected().ExecutableLocation), path);
             }
+
             return Task.FromResult((MemoryStream)null);
         }
 
@@ -395,9 +412,12 @@ namespace IronyModManager.Services
             using var mutex = await modReadLock.LockAsync();
             if (game != null)
             {
-                Cache.Invalidate(new CacheInvalidateParameters() { Region = ModsCacheRegion, Prefix = game.Type, Keys = new List<string> { GetModsCacheKey(true), GetModsCacheKey(false) } });
+                Cache.Invalidate(new CacheInvalidateParameters { Region = ModsCacheRegion, Prefix = game.Type, Keys = new List<string> { GetModsCacheKey(true), GetModsCacheKey(false) } });
             }
+
             var result = GetInstalledModsInternal(game, true);
+
+            // ReSharper disable once DisposeOnUsingVariable
             mutex.Dispose();
             return result;
         }
@@ -411,24 +431,20 @@ namespace IronyModManager.Services
         {
             using var mutex = await modReadLock.LockAsync();
             var game = GameService.GetSelected();
-            if (game == null || !await ModWriter.CanWriteToModDirectoryAsync(new ModWriterParameters()
+            if (game == null || !await ModWriter.CanWriteToModDirectoryAsync(new ModWriterParameters { RootDirectory = game.UserDirectory, Path = Shared.Constants.ModDirectory }))
             {
-                RootDirectory = game.UserDirectory,
-                Path = Shared.Constants.ModDirectory
-            }))
-            {
+                // ReSharper disable once DisposeOnUsingVariable
                 mutex.Dispose();
                 return null;
             }
-            if (game.ModDescriptorType == ModDescriptorType.JsonMetadata && !await ModWriter.CanWriteToModDirectoryAsync(new ModWriterParameters()
+
+            if (game.ModDescriptorType == ModDescriptorType.JsonMetadata && !await ModWriter.CanWriteToModDirectoryAsync(new ModWriterParameters { RootDirectory = game.UserDirectory, Path = Shared.Constants.JsonModDirectory }))
             {
-                RootDirectory = game.UserDirectory,
-                Path = Shared.Constants.JsonModDirectory
-            }))
-            {
+                // ReSharper disable once DisposeOnUsingVariable
                 mutex.Dispose();
                 return null;
             }
+
             var mods = GetInstalledModsInternal(game, false);
             var descriptors = new List<IModInstallationResult>();
             var userDirectoryMods = GetAllModDescriptors(Path.Combine(game.UserDirectory, Shared.Constants.ModDirectory), ModSource.Local, game.ModDescriptorType);
@@ -436,6 +452,7 @@ namespace IronyModManager.Services
             {
                 descriptors.AddRange(userDirectoryMods);
             }
+
             if (!string.IsNullOrWhiteSpace(game.CustomModDirectory))
             {
                 var customMods = GetAllModDescriptors(GetModDirectoryRootPath(game), ModSource.Local, game.ModDescriptorType);
@@ -444,60 +461,52 @@ namespace IronyModManager.Services
                     descriptors.AddRange(customMods);
                 }
             }
+
             var workshopDirectoryMods = game.WorkshopDirectory.SelectMany(p => GetAllModDescriptors(p, ModSource.Steam, game.ModDescriptorType));
             if (workshopDirectoryMods.Any())
             {
                 descriptors.AddRange(workshopDirectoryMods);
             }
+
             var filteredDescriptors = new List<IModInstallationResult>();
             var grouped = descriptors.GroupBy(p => p.ParentDirectory);
             foreach (var item in grouped)
             {
                 if (item.Any())
                 {
-                    if (item.All(p => p.IsFile))
-                    {
-                        filteredDescriptors.AddRange(item);
-                    }
-                    else
-                    {
-                        filteredDescriptors.AddRange(item.Where(p => !p.IsFile));
-                    }
+                    filteredDescriptors.AddRange(item.All(p => p.IsFile) ? item : item.Where(p => !p.IsFile));
                 }
             }
+
             var diffs = filteredDescriptors.Where(p => p.Mod != null && !mods.Any(m => AreModsSame(m, p.Mod))).ToList();
             if (diffs.Count > 0)
             {
                 var result = new List<IModInstallationResult>();
-                await ModWriter.CreateModDirectoryAsync(new ModWriterParameters()
-                {
-                    RootDirectory = game.UserDirectory,
-                    Path = Shared.Constants.ModDirectory
-                });
+                await ModWriter.CreateModDirectoryAsync(new ModWriterParameters { RootDirectory = game.UserDirectory, Path = Shared.Constants.ModDirectory });
                 if (game.ModDescriptorType == ModDescriptorType.JsonMetadata)
                 {
-                    await ModWriter.CreateModDirectoryAsync(new ModWriterParameters()
-                    {
-                        RootDirectory = game.UserDirectory,
-                        Path = Shared.Constants.JsonModDirectory
-                    });
+                    await ModWriter.CreateModDirectoryAsync(new ModWriterParameters { RootDirectory = game.UserDirectory, Path = Shared.Constants.JsonModDirectory });
                 }
+
                 var tasks = new List<Task>();
                 foreach (var diff in diffs.GroupBy(p => p.Mod.DescriptorFile))
                 {
-                    IModInstallationResult installResult = diff.FirstOrDefault();
-                    if (game.WorkshopDirectory.Any() && diff.Any(p => p.Path.StartsWith(game.WorkshopDirectory.FirstOrDefault())))
+                    var installResult = diff.FirstOrDefault();
+                    if (game.WorkshopDirectory.Any() && diff.Any(p => p.Path.StartsWith(game.WorkshopDirectory.FirstOrDefault() ?? string.Empty)))
                     {
-                        installResult = diff.FirstOrDefault(p => p.Path.StartsWith(game.WorkshopDirectory.FirstOrDefault()));
+                        installResult = diff.FirstOrDefault(p => p.Path.StartsWith(game.WorkshopDirectory.FirstOrDefault() ?? string.Empty));
                     }
+
+                    // ReSharper disable once PossibleNullReferenceException
                     var localDiff = installResult.Mod;
                     if (IsPatchModInternal(localDiff))
                     {
                         continue;
                     }
+
                     tasks.Add(Task.Run(async () =>
                     {
-                        bool shouldLock = CheckIfModShouldBeLocked(game, localDiff);
+                        var shouldLock = CheckIfModShouldBeLocked(game, localDiff);
                         if (statusToRetain != null && !shouldLock)
                         {
                             var mod = statusToRetain.FirstOrDefault(p => p.DescriptorFile.Equals(localDiff.DescriptorFile, StringComparison.OrdinalIgnoreCase));
@@ -506,7 +515,8 @@ namespace IronyModManager.Services
                                 shouldLock = mod.IsLocked;
                             }
                         }
-                        await ModWriter.WriteDescriptorAsync(new ModWriterParameters()
+
+                        await ModWriter.WriteDescriptorAsync(new ModWriterParameters
                         {
                             Mod = localDiff,
                             RootDirectory = game.UserDirectory,
@@ -518,23 +528,31 @@ namespace IronyModManager.Services
                     installResult.Installed = true;
                     result.Add(installResult);
                 }
+
                 if (tasks.Count > 0)
                 {
                     await Task.WhenAll(tasks);
-                    Cache.Invalidate(new CacheInvalidateParameters() { Region = ModsCacheRegion, Prefix = game.Type, Keys = new List<string> { GetModsCacheKey(true), GetModsCacheKey(false) } });
+                    Cache.Invalidate(new CacheInvalidateParameters { Region = ModsCacheRegion, Prefix = game.Type, Keys = new List<string> { GetModsCacheKey(true), GetModsCacheKey(false) } });
                 }
+
                 if (filteredDescriptors.Any(p => p.Invalid))
                 {
                     result.AddRange(filteredDescriptors.Where(p => p.Invalid));
                 }
+
+                // ReSharper disable once DisposeOnUsingVariable
                 mutex.Dispose();
                 return result;
             }
+
             if (filteredDescriptors.Any(p => p.Invalid))
             {
+                // ReSharper disable once DisposeOnUsingVariable
                 mutex.Dispose();
                 return filteredDescriptors.Where(p => p.Invalid).ToList();
             }
+
+            // ReSharper disable once DisposeOnUsingVariable
             mutex.Dispose();
             return null;
         }
@@ -556,18 +574,16 @@ namespace IronyModManager.Services
                     // Cannot lock\unlock mandatory local zipped mods
                     if (!CheckIfModShouldBeLocked(game, item))
                     {
-                        var task = ModWriter.SetDescriptorLockAsync(new ModWriterParameters()
-                        {
-                            Mod = item,
-                            RootDirectory = game.UserDirectory
-                        }, isLocked);
+                        var task = ModWriter.SetDescriptorLockAsync(new ModWriterParameters { Mod = item, RootDirectory = game.UserDirectory }, isLocked);
                         item.IsLocked = isLocked;
                         tasks.Add(task);
                     }
                 }
+
                 await Task.WhenAll(tasks);
                 return true;
             }
+
             return false;
         }
 
@@ -583,19 +599,13 @@ namespace IronyModManager.Services
             {
                 return false;
             }
-            var result = await ModWriter.ModDirectoryExistsAsync(new ModWriterParameters()
-            {
-                RootDirectory = game.UserDirectory,
-                Path = Path.Combine(Shared.Constants.ModDirectory, folder)
-            });
+
+            var result = await ModWriter.ModDirectoryExistsAsync(new ModWriterParameters { RootDirectory = game.UserDirectory, Path = Path.Combine(Shared.Constants.ModDirectory, folder) });
             if (!result && !string.IsNullOrEmpty(game.CustomModDirectory))
             {
-                result = await ModWriter.ModDirectoryExistsAsync(new ModWriterParameters()
-                {
-                    RootDirectory = GetModDirectoryRootPath(game),
-                    Path = folder
-                });
+                result = await ModWriter.ModDirectoryExistsAsync(new ModWriterParameters { RootDirectory = GetModDirectoryRootPath(game), Path = folder });
             }
+
             return result;
         }
 
@@ -631,19 +641,15 @@ namespace IronyModManager.Services
             {
                 return false;
             }
+
             var fullPath = Path.Combine(game.UserDirectory, Shared.Constants.ModDirectory, folder);
-            var exists = await ModWriter.ModDirectoryExistsAsync(new ModWriterParameters()
-            {
-                RootDirectory = fullPath
-            });
+            var exists = await ModWriter.ModDirectoryExistsAsync(new ModWriterParameters { RootDirectory = fullPath });
             if (!exists)
             {
                 fullPath = Path.Combine(GetModDirectoryRootPath(game), folder);
             }
-            var result = await ModWriter.PurgeModDirectoryAsync(new ModWriterParameters()
-            {
-                RootDirectory = fullPath
-            }, true);
+
+            var result = await ModWriter.PurgeModDirectoryAsync(new ModWriterParameters { RootDirectory = fullPath }, true);
             var mods = GetInstalledModsInternal(game, false);
             if (mods.Any(p => !string.IsNullOrWhiteSpace(p.FullPath) && p.FullPath.Contains(fullPath)))
             {
@@ -653,6 +659,7 @@ namespace IronyModManager.Services
                     await DeleteDescriptorsInternalAsync(mod);
                 }
             }
+
             return result;
         }
 
@@ -670,11 +677,11 @@ namespace IronyModManager.Services
         /// Queries the contains achievements.
         /// </summary>
         /// <param name="query">The query.</param>
-        /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
+        /// <returns><c>true</c> if query contains achievements <c>false</c> otherwise.</returns>
         public virtual bool QueryContainsAchievements(string query)
         {
             var result = searchParser.Parse(languageService.GetSelected().Abrv, query);
-            return result != null && result.AchievementCompatible != null && result.AchievementCompatible.Result.HasValue;
+            return result is { AchievementCompatible.Result: not null };
         }
 
         /// <summary>
@@ -682,16 +689,17 @@ namespace IronyModManager.Services
         /// </summary>
         /// <param name="mod">The mod.</param>
         /// <param name="otherMod">The other mod.</param>
-        /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
+        /// <returns><c>true</c> if mods are the same, <c>false</c> otherwise.</returns>
         protected virtual bool AreModsSame(IMod mod, IMod otherMod)
         {
             if (mod == null || otherMod == null)
             {
                 return false;
             }
+
             return mod.DescriptorFile.Equals(otherMod.DescriptorFile, StringComparison.OrdinalIgnoreCase) && mod.Version.Equals(otherMod.Version) &&
-                mod.Name.Equals(otherMod.Name) && mod.Dependencies.ListsSame(otherMod.Dependencies) && mod.RemoteId.GetValueOrDefault().Equals(otherMod.RemoteId.GetValueOrDefault()) &&
-                mod.ReplacePath.ListsSame(otherMod.ReplacePath) && mod.UserDir.ListsSame(otherMod.UserDir);
+                   mod.Name.Equals(otherMod.Name) && mod.Dependencies.ListsSame(otherMod.Dependencies) && mod.RemoteId.GetValueOrDefault().Equals(otherMod.RemoteId.GetValueOrDefault()) &&
+                   mod.ReplacePath.ListsSame(otherMod.ReplacePath) && mod.UserDir.ListsSame(otherMod.UserDir) && (mod.JsonId ?? string.Empty).Equals(otherMod.JsonId ?? string.Empty, StringComparison.OrdinalIgnoreCase);
         }
 
         /// <summary>
@@ -702,7 +710,7 @@ namespace IronyModManager.Services
         protected virtual ParsedSearchResult CleanSearchResult(ISearchParserResult parserResult)
         {
             var names = parserResult.Name.Where(p => !string.IsNullOrWhiteSpace(p.Text)).ToList();
-            var remoteIds = names.Where(p => long.TryParse(p.Text, out var _)).ToList();
+            var remoteIds = names.Where(p => long.TryParse(p.Text, out _)).ToList();
             remoteIds.ForEach(p => names.Remove(p));
             var result = new ParsedSearchResult
             {
@@ -726,7 +734,9 @@ namespace IronyModManager.Services
         protected virtual IEnumerable<IModInstallationResult> GetAllModDescriptors(string path, ModSource modSource, ModDescriptorType modDescriptorType)
         {
             // Json metadata doesn't support zips to ignore them
-            var files = Directory.Exists(path) && modDescriptorType == ModDescriptorType.DescriptorMod ? Directory.EnumerateFiles(path, $"*{Shared.Constants.ZipExtension}").Union(Directory.EnumerateFiles(path, $"*{Shared.Constants.BinExtension}")) : Array.Empty<string>();
+            var files = Directory.Exists(path) && modDescriptorType == ModDescriptorType.DescriptorMod
+                ? Directory.EnumerateFiles(path, $"*{Shared.Constants.ZipExtension}").Union(Directory.EnumerateFiles(path, $"*{Shared.Constants.BinExtension}"))
+                : Array.Empty<string>();
             var directories = Directory.Exists(path) ? Directory.EnumerateDirectories(path) : Array.Empty<string>();
             var mods = new ConcurrentBag<IModInstallationResult>();
 
@@ -755,12 +765,9 @@ namespace IronyModManager.Services
                 if (modDescriptorType == ModDescriptorType.DescriptorMod)
                 {
                     var fileInfo = Reader.GetFileInfo(path, Shared.Constants.ModNamePrefixOverride);
-                    if (fileInfo == null)
-                    {
-                        return string.Empty;
-                    }
-                    return fileInfo.Content.FirstOrDefault();
+                    return fileInfo == null ? string.Empty : fileInfo.Content.FirstOrDefault();
                 }
+
                 return string.Empty;
             }
 
@@ -790,6 +797,7 @@ namespace IronyModManager.Services
                             }
                         }
                     }
+
                     var mod = Mapper.Map<IMod>(ModParser.Parse(fileInfo.Content, MapDescriptorModType(modDescriptorType)));
                     mod.Name = ModWriter.FormatPrefixModName(modNamePrefix, mod.Name);
                     if (!string.IsNullOrWhiteSpace(modNamePrefix) && mod.Dependencies != null && mod.Dependencies.Any())
@@ -799,6 +807,7 @@ namespace IronyModManager.Services
                         dependencies.ToList().ForEach(p => newDependencies.Add(ModWriter.FormatPrefixModName(modNamePrefix, p)));
                         mod.Dependencies = newDependencies;
                     }
+
                     mod.FileName = path.Replace("\\", "/");
                     mod.FullPath = path.StandardizeDirectorySeparator();
                     mod.IsLocked = fileInfo.IsReadOnly;
@@ -806,18 +815,13 @@ namespace IronyModManager.Services
                     var cleanedPath = path;
                     if (!isDirectory)
                     {
-                        cleanedPath = Path.Combine(Path.GetDirectoryName(path), Path.GetFileNameWithoutExtension(path));
+                        cleanedPath = Path.Combine(Path.GetDirectoryName(path) ?? string.Empty, Path.GetFileNameWithoutExtension(path));
                     }
 
-                    string localPath;
-                    if (modDescriptorType == ModDescriptorType.DescriptorMod)
-                    {
-                        localPath = $"{Shared.Constants.ModDirectory}/{cleanedPath.Split(Path.DirectorySeparatorChar, StringSplitOptions.RemoveEmptyEntries).LastOrDefault()}{Shared.Constants.ModExtension}";
-                    }
-                    else
-                    {
-                        localPath = $"{Shared.Constants.JsonModDirectory}/{cleanedPath.Split(Path.DirectorySeparatorChar, StringSplitOptions.RemoveEmptyEntries).LastOrDefault()}{Shared.Constants.JsonExtension}";
-                    }
+                    var localPath = modDescriptorType == ModDescriptorType.DescriptorMod
+                        ? $"{Shared.Constants.ModDirectory}/{cleanedPath.Split(Path.DirectorySeparatorChar, StringSplitOptions.RemoveEmptyEntries).LastOrDefault()}{Shared.Constants.ModExtension}"
+                        : $"{Shared.Constants.JsonModDirectory}/{cleanedPath.Split(Path.DirectorySeparatorChar, StringSplitOptions.RemoveEmptyEntries).LastOrDefault()}{Shared.Constants.JsonExtension}";
+
                     switch (mod.Source)
                     {
                         case ModSource.Local:
@@ -834,15 +838,11 @@ namespace IronyModManager.Services
                             {
                                 mod.RemoteId = GetSteamModId(path);
                             }
-                            string steamPath;
-                            if (modDescriptorType == ModDescriptorType.DescriptorMod)
-                            {
-                                steamPath = $"{Shared.Constants.ModDirectory}/{Constants.Steam_mod_id}{mod.RemoteId}{Shared.Constants.ModExtension}";
-                            }
-                            else
-                            {
-                                steamPath = $"{Shared.Constants.JsonModDirectory}/{Constants.Steam_mod_id}{mod.RemoteId}{Shared.Constants.JsonExtension}";
-                            }
+
+                            var steamPath = modDescriptorType == ModDescriptorType.DescriptorMod
+                                ? $"{Shared.Constants.ModDirectory}/{Constants.Steam_mod_id}{mod.RemoteId}{Shared.Constants.ModExtension}"
+                                : $"{Shared.Constants.JsonModDirectory}/{Constants.Steam_mod_id}{mod.RemoteId}{Shared.Constants.JsonExtension}";
+
                             setDescriptorPath(mod, steamPath, localPath);
                             break;
 
@@ -856,21 +856,15 @@ namespace IronyModManager.Services
                             {
                                 mod.RemoteId = GetPdxModId(path);
                             }
-                            string pdxPath;
-                            if (modDescriptorType == ModDescriptorType.DescriptorMod)
-                            {
-                                pdxPath = $"{Shared.Constants.ModDirectory}/{Constants.Paradox_mod_id}{mod.RemoteId}{Shared.Constants.ModExtension}";
-                            }
-                            else
-                            {
-                                pdxPath = $"{Shared.Constants.JsonModDirectory}/{Constants.Paradox_mod_id}{mod.RemoteId}{Shared.Constants.JsonExtension}";
-                            }
+
+                            var pdxPath = modDescriptorType == ModDescriptorType.DescriptorMod
+                                ? $"{Shared.Constants.ModDirectory}/{Constants.Paradox_mod_id}{mod.RemoteId}{Shared.Constants.ModExtension}"
+                                : $"{Shared.Constants.JsonModDirectory}/{Constants.Paradox_mod_id}{mod.RemoteId}{Shared.Constants.JsonExtension}";
+
                             setDescriptorPath(mod, pdxPath, localPath);
                             break;
-
-                        default:
-                            break;
                     }
+
                     result.Mod = mod;
                 }
                 catch (Exception ex)
@@ -878,16 +872,11 @@ namespace IronyModManager.Services
                     logger.Error(ex);
                     result.Invalid = true;
                 }
+
                 result.Path = path;
                 result.IsFile = File.Exists(path);
-                if (result.IsFile)
-                {
-                    result.ParentDirectory = Path.GetDirectoryName(path);
-                }
-                else
-                {
-                    result.ParentDirectory = path;
-                }
+                result.ParentDirectory = result.IsFile ? Path.GetDirectoryName(path) : path;
+
                 mods.Add(result);
             }
 
@@ -898,12 +887,15 @@ namespace IronyModManager.Services
                     parseModFiles(file, modSource, false, string.Empty);
                 });
             }
+
             if (directories.Any())
             {
                 directories.AsParallel().WithDegreeOfParallelism(MaxModsToProcess).ForAll(directory =>
                 {
-                    var modSourceOverride = directory.Split(Path.DirectorySeparatorChar, StringSplitOptions.RemoveEmptyEntries).
-                            LastOrDefault().Contains(Constants.Paradox_mod_id, StringComparison.OrdinalIgnoreCase) ? ModSource.Paradox : modSource;
+                    // ReSharper disable once PossibleNullReferenceException
+                    var modSourceOverride = directory.Split(Path.DirectorySeparatorChar, StringSplitOptions.RemoveEmptyEntries).LastOrDefault().Contains(Constants.Paradox_mod_id, StringComparison.OrdinalIgnoreCase)
+                        ? ModSource.Paradox
+                        : modSource;
 
                     var modNamePrefix = readModPrefix(directory);
                     parseModFiles(directory, modSourceOverride, true, modNamePrefix);
@@ -922,13 +914,16 @@ namespace IronyModManager.Services
                     {
                         foreach (var subdirectory in subdirectories)
                         {
-                            var subDirectoryModSourceOverride = subdirectory.Split(Path.DirectorySeparatorChar, StringSplitOptions.RemoveEmptyEntries).
-                                LastOrDefault().Contains(Constants.Paradox_mod_id, StringComparison.OrdinalIgnoreCase) ? ModSource.Paradox : modSource;
+                            // ReSharper disable once PossibleNullReferenceException
+                            var subDirectoryModSourceOverride = subdirectory.Split(Path.DirectorySeparatorChar, StringSplitOptions.RemoveEmptyEntries).LastOrDefault().Contains(Constants.Paradox_mod_id, StringComparison.OrdinalIgnoreCase)
+                                ? ModSource.Paradox
+                                : modSource;
                             parseModFiles(subdirectory, subDirectoryModSourceOverride, true, modNamePrefix);
                         }
                     }
                 });
             }
+
             return mods.ToList();
         }
 
@@ -967,6 +962,7 @@ namespace IronyModManager.Services
                     return false;
                 }
             }
+
             if (validateValues(currentVersion.Minor, requestedVersion.Minor))
             {
                 var result = currentVersion.Minor.CompareTo(requestedVersion.Minor);
@@ -975,6 +971,7 @@ namespace IronyModManager.Services
                     return false;
                 }
             }
+
             if (validateValues(currentVersion.Build, requestedVersion.Build))
             {
                 var result = currentVersion.Build.CompareTo(requestedVersion.Build);
@@ -983,6 +980,7 @@ namespace IronyModManager.Services
                     return false;
                 }
             }
+
             if (validateValues(currentVersion.Revision, requestedVersion.Revision))
             {
                 var result = currentVersion.Revision.CompareTo(requestedVersion.Revision);
@@ -991,6 +989,7 @@ namespace IronyModManager.Services
                     return false;
                 }
             }
+
             return true;
         }
 
@@ -1005,7 +1004,7 @@ namespace IronyModManager.Services
             {
                 SourceType.Paradox => ModSource.Paradox,
                 SourceType.Steam => ModSource.Steam,
-                _ => ModSource.Local,
+                _ => ModSource.Local
             };
         }
 

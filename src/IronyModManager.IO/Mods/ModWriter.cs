@@ -1,11 +1,10 @@
-﻿
-// ***********************************************************************
+﻿// ***********************************************************************
 // Assembly         : IronyModManager.IO
 // Author           : Mario
 // Created          : 03-31-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 01-23-2024
+// Last Modified On : 12-23-2024
 // ***********************************************************************
 // <copyright file="ModWriter.cs" company="Mario">
 //     Mario
@@ -31,7 +30,6 @@ using Nito.AsyncEx;
 
 namespace IronyModManager.IO.Mods
 {
-
     /// <summary>
     /// Class ModWriter.
     /// Implements the <see cref="IronyModManager.IO.Common.Mods.IModWriter" />
@@ -113,16 +111,17 @@ namespace IronyModManager.IO.Mods
             {
                 throw new ArgumentException("Invalid descriptor type.");
             }
+
             Task<bool>[] tasks;
 
-            using (var mutex = await writeLock.LockAsync())
+            using (await writeLock.LockAsync())
             {
-                tasks = new Task<bool>[]
-                {
-                    Task.Run(async() => await sqliteExporter.ExportAsync(parameters)),
-                    Task.Run(async() => await sqliteExporterBeta.ExportAsync(parameters)),
-                    Task.Run(async() => await jsonExporter.ExportModsAsync(parameters))
-                };
+                tasks =
+                [
+                    Task.Run(async () => await sqliteExporter.ExportAsync(parameters)),
+                    Task.Run(async () => await sqliteExporterBeta.ExportAsync(parameters)),
+                    Task.Run(async () => await jsonExporter.ExportModsAsync(parameters))
+                ];
                 await Task.WhenAll(tasks);
             }
 
@@ -158,6 +157,7 @@ namespace IronyModManager.IO.Mods
                                 // Real genious you picked C, D or whatever drive
                                 return Task.FromResult(false);
                             }
+
                             var root = Path.Combine(el[0], el[1]);
                             if (!Directory.Exists(root) && !IsAdmin())
                             {
@@ -177,12 +177,15 @@ namespace IronyModManager.IO.Mods
                             {
                                 return Task.FromResult(false);
                             }
+
                             return Task.FromResult(true);
                         }
                     }
                 }
+
                 return Task.FromResult(true);
             }
+
             return Task.FromResult(false);
         }
 
@@ -199,6 +202,7 @@ namespace IronyModManager.IO.Mods
                 Directory.CreateDirectory(fullPath);
                 return Task.FromResult(true);
             }
+
             return Task.FromResult(false);
         }
 
@@ -217,8 +221,10 @@ namespace IronyModManager.IO.Mods
                     DiskOperations.DeleteFile(fullPath);
                     return Task.FromResult(true);
                 }
+
                 return Task.FromResult(false);
             }
+
             var retry = new RetryStrategy();
             return retry.RetryActionAsync(() => delete());
         }
@@ -235,6 +241,7 @@ namespace IronyModManager.IO.Mods
             {
                 return Task.FromResult(true);
             }
+
             return Task.FromResult(false);
         }
 
@@ -250,6 +257,7 @@ namespace IronyModManager.IO.Mods
             {
                 return $"{prefix}{name}";
             }
+
             return name;
         }
 
@@ -265,6 +273,7 @@ namespace IronyModManager.IO.Mods
             {
                 return false;
             }
+
             return Directory.EnumerateFiles(fullPath, "*", SearchOption.AllDirectories).Any();
         }
 
@@ -303,21 +312,25 @@ namespace IronyModManager.IO.Mods
                     {
                         DiskOperations.DeleteDirectory(fullPath, true);
                     }
+
                     return Task.FromResult(true);
                 }
                 else if (File.Exists(fullPath))
                 {
                     DiskOperations.DeleteFile(fullPath);
                     var directory = Path.GetDirectoryName(fullPath);
-                    var files = Directory.EnumerateFiles(directory, "*", SearchOption.AllDirectories);
+                    var files = Directory.EnumerateFiles(directory!, "*", SearchOption.AllDirectories);
                     if (!files.Any())
                     {
                         DiskOperations.DeleteDirectory(directory, true);
                     }
+
                     return Task.FromResult(true);
                 }
+
                 return Task.FromResult(false);
             }
+
             var retry = new RetryStrategy();
             return retry.RetryActionAsync(() => purge());
         }
@@ -333,12 +346,10 @@ namespace IronyModManager.IO.Mods
             var fullPath = Path.Combine(parameters.RootDirectory ?? string.Empty, parameters.Mod.DescriptorFile ?? string.Empty);
             if (File.Exists(fullPath))
             {
-                _ = new System.IO.FileInfo(fullPath)
-                {
-                    IsReadOnly = isLocked
-                };
+                _ = new System.IO.FileInfo(fullPath) { IsReadOnly = isLocked };
                 return Task.FromResult(true);
             }
+
             return Task.FromResult(false);
         }
 
@@ -356,6 +367,7 @@ namespace IronyModManager.IO.Mods
             {
                 throw new ArgumentException("Invalid descriptor type.");
             }
+
             async Task<bool> writeDescriptors()
             {
                 // If needed I've got a much more complex serializer, it is written for Kerbal Space Program but the structure seems to be the same though this is much more simpler
@@ -367,12 +379,10 @@ namespace IronyModManager.IO.Mods
                 {
                     if (File.Exists(fullPath))
                     {
-                        _ = new System.IO.FileInfo(fullPath)
-                        {
-                            IsReadOnly = true
-                        };
+                        _ = new System.IO.FileInfo(fullPath) { IsReadOnly = true };
                     }
                 }
+
                 if (writeDescriptorInModDirectory)
                 {
                     var modPath = Path.Combine(parameters.Mod.FileName ?? string.Empty, parameters.DescriptorType == DescriptorType.DescriptorMod ? Shared.Constants.DescriptorFile : Shared.Constants.DescriptorJsonMetadata);
@@ -381,13 +391,17 @@ namespace IronyModManager.IO.Mods
                         var dir = Path.GetDirectoryName(modPath);
                         if (!Directory.Exists(dir))
                         {
-                            Directory.CreateDirectory(dir);
+                            Directory.CreateDirectory(dir!);
                         }
                     }
+
                     await writeDescriptor(modPath, true);
                 }
+
                 return true;
             }
+
+            // ReSharper disable once UnusedLocalFunctionReturnValue
             async Task<bool> writeDescriptor(string fullPath, bool truncatePath)
             {
                 bool? state = null;
@@ -397,15 +411,14 @@ namespace IronyModManager.IO.Mods
                     state = fileInfo.IsReadOnly;
                     fileInfo.IsReadOnly = false;
                 }
-                using var fs = new FileStream(fullPath, FileMode.Create, FileAccess.Write, FileShare.Read);
+
+                await using var fs = new FileStream(fullPath!, FileMode.Create, FileAccess.Write, FileShare.Read);
                 var result = await WriteDescriptorToStreamAsync(parameters, fs, truncatePath);
                 if (state.HasValue)
                 {
-                    var fileInfo = new System.IO.FileInfo(fullPath)
-                    {
-                        IsReadOnly = state.GetValueOrDefault()
-                    };
+                    _ = new System.IO.FileInfo(fullPath) { IsReadOnly = state.GetValueOrDefault() };
                 }
+
                 return result;
             }
 
@@ -428,6 +441,7 @@ namespace IronyModManager.IO.Mods
             {
                 throw new ArgumentException("Invalid descriptor type.");
             }
+
             return WriteDescriptorToStreamInternalAsync(parameters.Mod, stream, parameters.DescriptorType, truncatePath);
         }
 
@@ -452,7 +466,7 @@ namespace IronyModManager.IO.Mods
                     {
                         if (col.Any())
                         {
-                            if (attr.KeyedArray)
+                            if (attr!.KeyedArray)
                             {
                                 foreach (var item in col)
                                 {
@@ -466,6 +480,7 @@ namespace IronyModManager.IO.Mods
                                 {
                                     await sw.WriteLineAsync($"\t\"{item.Replace("\"", "\\\"")}\"");
                                 }
+
                                 await sw.WriteLineAsync("}");
                             }
                         }
@@ -474,18 +489,19 @@ namespace IronyModManager.IO.Mods
                     {
                         if (!string.IsNullOrWhiteSpace(val != null ? val.ToString() : string.Empty))
                         {
-                            if (attr.AlternateNameEndsWithCondition?.Count() > 0 && attr.AlternateNameEndsWithCondition.Any(p => val.ToString().EndsWith(p, StringComparison.OrdinalIgnoreCase)))
+                            if (attr!.AlternateNameEndsWithCondition?.Count() > 0 && attr.AlternateNameEndsWithCondition.Any(p => val!.ToString()!.EndsWith(p, StringComparison.OrdinalIgnoreCase)))
                             {
-                                await sw.WriteLineAsync($"{attr.AlternatePropertyName}=\"{val.ToString().Replace("\"", "\\\"")}\"");
+                                await sw.WriteLineAsync($"{attr.AlternatePropertyName}=\"{val?.ToString()?.Replace("\"", "\\\"")}\"");
                             }
                             else
                             {
-                                await sw.WriteLineAsync($"{attr.PropertyName}=\"{val.ToString().Replace("\"", "\\\"")}\"");
+                                await sw.WriteLineAsync($"{attr.PropertyName}=\"{val?.ToString()?.Replace("\"", "\\\"")}\"");
                             }
                         }
                     }
                 }
             }
+
             static async Task serializeJsonDescriptorMod(IMod content, StreamWriter sw)
             {
                 var customData = content.AdditionalData != null ? new Dictionary<string, object>(content.AdditionalData) : new Dictionary<string, object>();
@@ -493,17 +509,24 @@ namespace IronyModManager.IO.Mods
                 {
                     customData[Shared.Constants.JsonMetadataReplacePaths] = content.ReplacePath;
                 }
+
                 if (content.UserDir != null && content.UserDir.Any())
                 {
                     customData[Shared.Constants.DescriptorUserDir] = content.UserDir;
                 }
 
-                var metaData = new JsonMetadata()
+                var relationshipData = new List<Dictionary<string, object>>();
+                if (content.RelationshipData != null)
                 {
-                    Id = content.RemoteId.HasValue ? content.RemoteId.ToString() : string.Empty,
+                    relationshipData.AddRange(content.RelationshipData.Select(relData => new Dictionary<string, object>(relData)));
+                }
+
+                var metaData = new JsonMetadata
+                {
+                    Id = !string.IsNullOrWhiteSpace(content.JsonId) ? content.JsonId : content.RemoteId.HasValue ? content.RemoteId.ToString() : string.Empty,
                     Name = content.Name,
                     Path = content.FileName,
-                    Relationships = content.Dependencies != null ? content.Dependencies.ToList() : new List<string>(),
+                    Relationships = relationshipData,
                     SupportedGameVersion = content.Version,
                     Tags = content.Tags != null ? content.Tags.ToList() : new List<string>(),
                     ShortDescription = string.Empty,
@@ -519,7 +542,8 @@ namespace IronyModManager.IO.Mods
                 mod = mapper.Map<IMod>(mod);
                 mod.FileName = descriptorType == DescriptorType.JsonMetadata ? null : string.Empty;
             }
-            using var sw = new StreamWriter(stream, leaveOpen: true);
+
+            await using var sw = new StreamWriter(stream, leaveOpen: true);
             if (descriptorType == DescriptorType.DescriptorMod)
             {
                 await serializeDescriptorMod(mod, sw);
@@ -528,6 +552,7 @@ namespace IronyModManager.IO.Mods
             {
                 await serializeJsonDescriptorMod(mod, sw);
             }
+
             await sw.FlushAsync();
             return true;
         }
@@ -545,6 +570,7 @@ namespace IronyModManager.IO.Mods
                     using var identity = WindowsIdentity.GetCurrent();
                     return new WindowsPrincipal(identity).IsInRole(WindowsBuiltInRole.Administrator);
                 }
+
                 return false;
             }
             catch
@@ -597,7 +623,7 @@ namespace IronyModManager.IO.Mods
             /// </summary>
             /// <value>The relationships.</value>
             [JsonProperty("relationships", NullValueHandling = NullValueHandling.Include)]
-            public List<string> Relationships { get; set; }
+            public List<Dictionary<string, object>> Relationships { get; set; }
 
             /// <summary>
             /// Gets or sets the short description.
