@@ -4,9 +4,9 @@
 		<title>Irony Mod Manager</title>
 		<language>en</language>
 		<item>
-			<title>1.26.201</title>
+			<title>1.26.203</title>
 			<description>## Current Release Notes
-* Upgrade DotNetZip to mitigate Directory Traversal vulnerability
+* Fix #531
 
 ## Release Notes 1.26
 * Update dependencies
@@ -19,13 +19,13 @@
 * Added conflict solver option to skip parsing some languages
 * Add conflict solver configuration to customize colors for new diff viewer
 * Add templateable merge mod naming</description>
-			<pubDate>Thu, 14 Nov 2024 23:59:52 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.26.201/linux-x64.zip" sparkle:version="1.26.201.57663" sparkle:shortVersionString="1.26.201" length="91012611" sparkle:os="linux" type="application/zip" sparkle:signature="x01kzZusa8dTTMQRRXf35HOPvo3pL2LLa7jBvlrO/ulM1mwCQc8Yx1L/9DmBBQH1aSxnEUJ9vltZoV5Tw5s9Cg=="/>
+			<pubDate>Mon, 23 Dec 2024 20:41:31 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.26.203/linux-x64.zip" sparkle:version="1.26.203.56188" sparkle:shortVersionString="1.26.203" length="91015529" sparkle:os="linux" type="application/zip" sparkle:signature="gR6E6cslRhk+GD3usF7I0Xu+t98nkF70OznPsatHRjuSuh0r0yhb5F5y8JwHmXYj+gq4FqDtSQoVwl2i5eq4Bw=="/>
 		</item>
 		<item>
-			<title>1.26.201</title>
+			<title>1.26.203</title>
 			<description>## Current Release Notes
-* Upgrade DotNetZip to mitigate Directory Traversal vulnerability
+* Fix #531
 
 ## Release Notes 1.26
 * Update dependencies
@@ -38,13 +38,13 @@
 * Added conflict solver option to skip parsing some languages
 * Add conflict solver configuration to customize colors for new diff viewer
 * Add templateable merge mod naming</description>
-			<pubDate>Thu, 14 Nov 2024 23:59:58 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.26.201/osx-x64.zip" sparkle:version="1.26.201.57663" sparkle:shortVersionString="1.26.201" length="93968309" sparkle:os="osx" type="application/zip" sparkle:signature="nck2pcYpbUAcyxrjiLqLSe1tRif9Pitg5oCMnfxmTeJVe2LxZi60DtgmqCDShdHknpPeL3F/EHOhkjYgQhhoBQ=="/>
+			<pubDate>Mon, 23 Dec 2024 20:41:35 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.26.203/osx-x64.zip" sparkle:version="1.26.203.56188" sparkle:shortVersionString="1.26.203" length="93971304" sparkle:os="osx" type="application/zip" sparkle:signature="cOtl2ze8pow51iE528wSnAC3v0ZxaCCD3MonNxLr2GQ1HRxqifcWETdVVCE0Nh9dwCoWNKD80Fsk03qY6HmqDQ=="/>
 		</item>
 		<item>
-			<title>1.26.201</title>
+			<title>1.26.203</title>
 			<description>## Current Release Notes
-* Upgrade DotNetZip to mitigate Directory Traversal vulnerability
+* Fix #531
 
 ## Release Notes 1.26
 * Update dependencies
@@ -57,13 +57,13 @@
 * Added conflict solver option to skip parsing some languages
 * Add conflict solver configuration to customize colors for new diff viewer
 * Add templateable merge mod naming</description>
-			<pubDate>Fri, 15 Nov 2024 00:00:02 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.26.201/win-x64-setup.zip" sparkle:version="1.26.201.57663" sparkle:shortVersionString="1.26.201" length="72916458" sparkle:os="windows" type="application/zip" sparkle:signature="v2mLYsUFOlfmXVAsRu+ht6MZD1ZJ6HK8tYBvAzdmWPox/XOypd235aWyt1M++Jr7kMDZLUT2AcoYVEZHBS6YAA=="/>
+			<pubDate>Mon, 23 Dec 2024 20:41:39 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.26.203/win-x64-setup.zip" sparkle:version="1.26.203.56188" sparkle:shortVersionString="1.26.203" length="72922490" sparkle:os="windows" type="application/zip" sparkle:signature="JDeIH/aeeolfqLhenlRTVqqFc3y5/gvo10eA/2tZbJ3BoRfMjGigR9C4vvb+VKZ2bvzlfEsc74ygvHLflOzmBg=="/>
 		</item>
 		<item>
-			<title>1.26.201</title>
+			<title>1.26.203</title>
 			<description>## Current Release Notes
-* Upgrade DotNetZip to mitigate Directory Traversal vulnerability
+* Fix #531
 
 ## Release Notes 1.26
 * Update dependencies
@@ -76,8 +76,8 @@
 * Added conflict solver option to skip parsing some languages
 * Add conflict solver configuration to customize colors for new diff viewer
 * Add templateable merge mod naming</description>
-			<pubDate>Fri, 15 Nov 2024 00:00:02 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.26.201/win-x64.zip" sparkle:version="1.26.201.57663" sparkle:shortVersionString="1.26.201" length="106804404" sparkle:os="windows" type="application/zip" sparkle:signature="AG1MPO8/ZtECsIRAvEPkNs4I3vlwxcWUz5htRMVjePW0xUDrrkC8z91ST5ETbFPuYDwqi8fhruOIHGy4S28VDw=="/>
+			<pubDate>Mon, 23 Dec 2024 20:41:40 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.26.203/win-x64.zip" sparkle:version="1.26.203.56188" sparkle:shortVersionString="1.26.203" length="106807432" sparkle:os="windows" type="application/zip" sparkle:signature="DOjttsb5lHEzC7cfuANW11hzwhv6y2CW2WBDYBcjcVjr7SI3+FKmtD7aROwB3wGJXtpTg7fXgrup3wJQXx9GBw=="/>
 		</item>
 	</channel>
 </rss>
