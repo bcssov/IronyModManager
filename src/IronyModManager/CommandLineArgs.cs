@@ -4,13 +4,14 @@
 // Created          : 02-21-2021
 //
 // Last Modified By : Mario
-// Last Modified On : 10-30-2022
+// Last Modified On : 01-08-2025
 // ***********************************************************************
 // <copyright file="CommandLineArgs.cs" company="Mario">
 //     Mario
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -38,6 +39,13 @@ namespace IronyModManager
         /// <value>The game abrv.</value>
         [Option('g', "game", Required = false, HelpText = "Game:CK3,EU4,HOI4,IR,Stellaris,Vic3")]
         public string GameAbrv { get; set; }
+
+        /// <summary>
+        /// Gets or sets the name of the mod collection.
+        /// </summary>
+        /// <value>The name of the mod collection.</value>
+        [Option('c', "collection", Required = false, HelpText = "Mod collection name to preselect")]
+        public string ModCollectionName { get; set; }
 
         /// <summary>
         /// Gets or sets the show fatal error notification.

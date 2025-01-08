@@ -4,7 +4,7 @@
 // Created          : 03-03-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-10-2024
+// Last Modified On : 01-08-2025
 // ***********************************************************************
 // <copyright file="CollectionModsControlViewModel.cs" company="Mario">
 //     Mario
@@ -178,6 +178,11 @@ namespace IronyModManager.ViewModels.Controls
         private bool enableAllToggledState;
 
         /// <summary>
+        /// The mod collection change request handler
+        /// </summary>
+        private readonly ModCollectionChangeRequestHandler modCollectionChangeRequestHandler;
+
+        /// <summary>
         /// The mod export progress
         /// </summary>
         private IDisposable modExportProgress;
@@ -229,6 +234,7 @@ namespace IronyModManager.ViewModels.Controls
         /// <summary>
         /// Initializes a new instance of the <see cref="CollectionModsControlViewModel" /> class.
         /// </summary>
+        /// <param name="modCollectionChangeRequestHandler">The mod collection change request handler.</param>
         /// <param name="scrollState">State of the scroll.</param>
         /// <param name="modExportProgressHandler">The mod export progress handler.</param>
         /// <param name="reportExportService">The report export service.</param>
@@ -251,7 +257,7 @@ namespace IronyModManager.ViewModels.Controls
         /// <param name="localizationManager">The localization manager.</param>
         /// <param name="notificationAction">The notification action.</param>
         /// <param name="appAction">The application action.</param>
-        public CollectionModsControlViewModel(IScrollState scrollState, ModExportProgressHandler modExportProgressHandler, IReportExportService reportExportService,
+        public CollectionModsControlViewModel(ModCollectionChangeRequestHandler modCollectionChangeRequestHandler, IScrollState scrollState, ModExportProgressHandler modExportProgressHandler, IReportExportService reportExportService,
             MainViewHotkeyPressedHandler hotkeyPressedHandler, PatchModControlViewModel patchMod,
             IIDGenerator idGenerator, HashReportControlViewModel hashReportView, ModReportExportHandler modReportExportHandler,
             IFileDialogAction fileDialogAction, IModCollectionService modCollectionService,
@@ -281,6 +287,7 @@ namespace IronyModManager.ViewModels.Controls
             this.modReportExportHandler = modReportExportHandler;
             this.hotkeyPressedHandler = hotkeyPressedHandler;
             this.modExportProgressHandler = modExportProgressHandler;
+            this.modCollectionChangeRequestHandler = modCollectionChangeRequestHandler;
             HashReportView = hashReportView;
             SearchMods.ShowArrows = true;
             reorderQueue = [];
@@ -455,18 +462,14 @@ namespace IronyModManager.ViewModels.Controls
         /// <summary>
         /// Gets or sets a value representing the copy mod path.
         /// </summary>
-        /// <value>
-        /// The copy mod path.
-        /// </value>
+        /// <value>The copy mod path.</value>
         [StaticLocalization(LocalizationResources.Mod_App_Actions.CopyPath)]
         public virtual string CopyModPath { get; protected set; }
 
         /// <summary>
-        /// Gets or sets a value representing the copy mod path command.<see cref="ReactiveUI.ReactiveCommand{System.Reactive.Unit, System.Reactive.Unit}"/>
+        /// Gets or sets a value representing the copy mod path command.<see cref="ReactiveUI.ReactiveCommand{System.Reactive.Unit, System.Reactive.Unit}" />
         /// </summary>
-        /// <value>
-        /// The copy mod path command.
-        /// </value>
+        /// <value>The copy mod path command.</value>
         public virtual ReactiveCommand<Unit, Unit> CopyModPathCommand { get; protected set; }
 
         /// <summary>
@@ -881,48 +884,50 @@ namespace IronyModManager.ViewModels.Controls
         }
 
         /// <summary>
-        /// Handles the enable all toggled.
+        /// Handles enable all toggled.
         /// </summary>
         /// <param name="toggledState">if set to <c>true</c> [toggled state].</param>
         /// <param name="enabled">if set to <c>true</c> [enabled].</param>
         /// <param name="enabledMods">The enabled mods.</param>
         public virtual void HandleEnableAllToggled(bool toggledState, bool enabled, IEnumerable<IMod> enabledMods)
         {
-            if (toggledState)
+            switch (toggledState)
             {
-                skipModCollectionSave = true;
-            }
-
-            if (!toggledState && enableAllToggledState)
-            {
-                skipModCollectionSave = false;
-
-                var mods = new List<IMod>(SelectedMods);
-                if (enabledMods != null)
+                case true:
+                    skipModCollectionSave = true;
+                    break;
+                case false when enableAllToggledState:
                 {
-                    foreach (var item in enabledMods)
+                    skipModCollectionSave = false;
+
+                    var mods = new List<IMod>(SelectedMods);
+                    if (enabledMods != null)
                     {
-                        if (enabled)
+                        foreach (var item in enabledMods)
                         {
-                            if (!mods.Contains(item))
+                            if (enabled)
                             {
-                                mods.Add(item);
+                                if (!mods.Contains(item))
+                                {
+                                    mods.Add(item);
+                                }
+                            }
+                            else
+                            {
+                                mods.Remove(item);
                             }
                         }
-                        else
-                        {
-                            mods.Remove(item);
-                        }
                     }
+
+                    SetSelectedModsState(mods.ToObservableCollection());
+
+                    AllModsEnabled = SelectedMods?.Count > 0 && SelectedMods.All(p => p.IsSelected);
+                    var state = appStateService.Get();
+                    InitSortersAndFilters(state);
+                    SaveSelectedCollection();
+                    RecognizeSortOrder(SelectedModCollection);
+                    break;
                 }
-
-                SetSelectedModsState(mods.ToObservableCollection());
-
-                AllModsEnabled = SelectedMods?.Count > 0 && SelectedMods.All(p => p.IsSelected);
-                var state = appStateService.Get();
-                InitSortersAndFilters(state);
-                SaveSelectedCollection();
-                RecognizeSortOrder(SelectedModCollection);
             }
 
             enableAllToggledState = toggledState;
@@ -936,15 +941,15 @@ namespace IronyModManager.ViewModels.Controls
         /// <param name="activeGame">The active game.</param>
         public virtual void HandleModRefresh(bool isRefreshing, IEnumerable<IMod> mods, IGame activeGame)
         {
-            if (isRefreshing)
+            switch (isRefreshing)
             {
-                refreshInProgress = true;
-            }
-
-            if (!isRefreshing && mods?.Count() > 0)
-            {
-                SetMods(mods, activeGame);
-                refreshInProgress = false;
+                case true:
+                    refreshInProgress = true;
+                    break;
+                case false when mods?.Count() > 0:
+                    SetMods(mods, activeGame);
+                    refreshInProgress = false;
+                    break;
             }
         }
 
@@ -957,7 +962,7 @@ namespace IronyModManager.ViewModels.Controls
         {
             async Task reorder()
             {
-                reorderToken?.Cancel();
+                await reorderToken?.CancelAsync()!;
                 reorderToken = new CancellationTokenSource();
                 mod.Order = newOrder;
                 if (!reorderQueue.Contains(mod))
@@ -1228,14 +1233,7 @@ namespace IronyModManager.ViewModels.Controls
                     }
                     else
                     {
-                        if (hasModNames)
-                        {
-                            missingMods.Add($"{modNames[i]} ({item})");
-                        }
-                        else
-                        {
-                            missingMods.Add(item);
-                        }
+                        missingMods.Add(hasModNames ? $"{modNames[i]} ({item})" : item);
                     }
                 }
 
@@ -1418,14 +1416,7 @@ namespace IronyModManager.ViewModels.Controls
 
                                 if (isInvalid)
                                 {
-                                    if (hasModNames)
-                                    {
-                                        nonExistingModNames.Add($"{modNames[index]} ({item})");
-                                    }
-                                    else
-                                    {
-                                        nonExistingModNames.Add(item);
-                                    }
+                                    nonExistingModNames.Add(hasModNames ? $"{modNames[index]} ({item})" : item);
                                 }
                             }
 
@@ -2103,6 +2094,21 @@ namespace IronyModManager.ViewModels.Controls
                 }).DisposeWith(disposables);
             }).DisposeWith(disposables);
 
+            modCollectionChangeRequestHandler.Subscribe(s =>
+            {
+                if (s is { ModCollection: not null } && ModCollections != null && ModCollections.Any())
+                {
+                    if (SelectedModCollection != null && !SelectedModCollection.Name.Equals(s.ModCollection.Name, StringComparison.OrdinalIgnoreCase))
+                    {
+                        var mod = ModCollections.FirstOrDefault(p => p.Name.Equals(s.ModCollection.Name, StringComparison.OrdinalIgnoreCase));
+                        if (mod != null)
+                        {
+                            SelectedModCollection = mod;
+                        }
+                    }
+                }
+            }).DisposeWith(disposables);
+
             base.OnActivated(disposables);
         }
 
@@ -2260,7 +2266,7 @@ namespace IronyModManager.ViewModels.Controls
         protected virtual void RecognizeSortOrder(IModCollection modCollection)
         {
             // modCollection sort order
-            if (modCollection?.Mods.Count() > 0 && Mods?.Count() > 0)
+            if (modCollection?.Mods?.Count() > 0 && Mods?.Count() > 0)
             {
                 var mods = new List<IMod>();
                 var colMods = modCollection.Mods.ToList();
@@ -2418,7 +2424,7 @@ namespace IronyModManager.ViewModels.Controls
                 reorderQueue.Add(mod);
             }
 
-            reorderToken?.Cancel();
+            await reorderToken?.CancelAsync()!;
             reorderToken = new CancellationTokenSource();
             await PerformModReorderAsync(false, reorderToken.Token);
         }
@@ -2622,7 +2628,7 @@ namespace IronyModManager.ViewModels.Controls
             /// Gets or sets the mod.
             /// </summary>
             /// <value>The mod.</value>
-            public IMod Mod { get; set; }
+            public IMod Mod { get; init; }
 
             /// <summary>
             /// Gets or sets the order.
