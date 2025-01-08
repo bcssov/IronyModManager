@@ -4,7 +4,7 @@
 // Created          : 01-10-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-15-2024
+// Last Modified On : 01-08-2025
 // ***********************************************************************
 // <copyright file="App.xaml.cs" company="Mario">
 //     Mario
@@ -135,6 +135,25 @@ namespace IronyModManager
                         else
                         {
                             gameService.SetSelected(games, game);
+                        }
+                    }
+                }
+
+                if (!string.IsNullOrWhiteSpace(StaticResources.CommandLineOptions.ModCollectionName))
+                {
+                    var collectionService = DIResolver.Get<IModCollectionService>();
+                    var col = collectionService.Get(StaticResources.CommandLineOptions.ModCollectionName);
+                    if (col != null)
+                    {
+                        if (raiseOnlyEvent)
+                        {
+                            var mbus = DIResolver.Get<Shared.MessageBus.IMessageBus>();
+                            mbus.Publish(new ModCollectionChangeRequestEvent(col));
+                        }
+                        else
+                        {
+                            col.IsSelected = true;
+                            collectionService.Save(col);
                         }
                     }
                 }
