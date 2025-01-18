@@ -4,7 +4,7 @@
 // Created          : 03-03-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 01-08-2025
+// Last Modified On : 01-18-2025
 // ***********************************************************************
 // <copyright file="CollectionModsControlViewModel.cs" company="Mario">
 //     Mario
@@ -103,6 +103,11 @@ namespace IronyModManager.ViewModels.Controls
         private readonly ILocalizationManager localizationManager;
 
         /// <summary>
+        /// The mod collection change request handler
+        /// </summary>
+        private readonly ModCollectionChangeRequestHandler modCollectionChangeRequestHandler;
+
+        /// <summary>
         /// The mod collection service
         /// </summary>
         private readonly IModCollectionService modCollectionService;
@@ -176,11 +181,6 @@ namespace IronyModManager.ViewModels.Controls
         /// The enable all toggled state
         /// </summary>
         private bool enableAllToggledState;
-
-        /// <summary>
-        /// The mod collection change request handler
-        /// </summary>
-        private readonly ModCollectionChangeRequestHandler modCollectionChangeRequestHandler;
 
         /// <summary>
         /// The mod export progress
@@ -962,7 +962,11 @@ namespace IronyModManager.ViewModels.Controls
         {
             async Task reorder()
             {
-                await reorderToken?.CancelAsync()!;
+                if (reorderToken != null)
+                {
+                    await reorderToken.CancelAsync();
+                }
+
                 reorderToken = new CancellationTokenSource();
                 mod.Order = newOrder;
                 if (!reorderQueue.Contains(mod))
@@ -2424,7 +2428,11 @@ namespace IronyModManager.ViewModels.Controls
                 reorderQueue.Add(mod);
             }
 
-            await reorderToken?.CancelAsync()!;
+            if (reorderToken != null)
+            {
+                await reorderToken.CancelAsync();
+            }
+
             reorderToken = new CancellationTokenSource();
             await PerformModReorderAsync(false, reorderToken.Token);
         }
