@@ -4,7 +4,7 @@
 // Created          : 04-07-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-04-2024
+// Last Modified On : 01-20-2025
 // ***********************************************************************
 // <copyright file="ModBaseService.cs" company="Mario">
 //     Mario
@@ -382,7 +382,7 @@ namespace IronyModManager.Services
                                     // Using FIOS or LIOS?
                                     case > 1 when isFios:
                                     {
-                                        var ordered = uniqueDefinitions.OrderBy(p => Path.GetFileNameWithoutExtension(p.FileName), StringComparer.Ordinal);
+                                        var ordered = uniqueDefinitions.GroupBy(p => p.FileName).Select(p => p.LastOrDefault()).OrderBy(p => Path.GetFileNameWithoutExtension(p?.FileName), StringComparer.Ordinal);
                                         var definition = ordered.First();
                                         result.Definition = definition.Definition;
                                         result.FileName = definition.FileName;
@@ -392,7 +392,7 @@ namespace IronyModManager.Services
                                     }
                                     case > 1:
                                     {
-                                        var ordered = uniqueDefinitions.OrderBy(p => Path.GetFileNameWithoutExtension(p.FileName), StringComparer.Ordinal);
+                                        var ordered = uniqueDefinitions.GroupBy(p => p.FileName).Select(p => p.LastOrDefault()).OrderBy(p => Path.GetFileNameWithoutExtension(p?.FileName), StringComparer.Ordinal);
                                         var definition = ordered.Last();
                                         result.Definition = definition.Definition;
                                         result.FileName = definition.FileName;
@@ -581,8 +581,7 @@ namespace IronyModManager.Services
         /// <param name="game">The game.</param>
         /// <param name="ignorePatchMods">if set to <c>true</c> [ignore patch mods].</param>
         /// <returns>IEnumerable&lt;IMod&gt;.</returns>
-        /// <exception cref="ArgumentNullException">nameof(game)</exception>
-        /// <exception cref="System.ArgumentNullException">game</exception>
+        /// <exception cref="System.ArgumentNullException"></exception>
         protected virtual IEnumerable<IMod> GetInstalledModsInternal(IGame game, bool ignorePatchMods)
         {
             ArgumentNullException.ThrowIfNull(game);
