@@ -4,7 +4,7 @@
 // Created          : 10-03-2023
 //
 // Last Modified By : Mario
-// Last Modified On : 10-30-2024
+// Last Modified On : 02-06-2025
 // ***********************************************************************
 // <copyright file="ParametrizedParserTests.cs" company="Mario">
 //     Mario
@@ -18,6 +18,7 @@ using System.Linq;
 using System.Text;
 using FluentAssertions;
 using IronyModManager.DI;
+using IronyModManager.Localization;
 using IronyModManager.Parser.Common;
 using IronyModManager.Parser.Common.Args;
 using IronyModManager.Shared;
@@ -1021,7 +1022,7 @@ namespace IronyModManager.Parser.Tests
         {
             DISetup.SetupContainer();
 
-            var sb = new System.Text.StringBuilder(328);
+            var sb = new StringBuilder(328);
             sb.AppendLine(@"# ship class placeholder");
             sb.AppendLine(@"entity = corvette_entity");
             sb.AppendLine(@"resources = { category = starbase_stations }");
@@ -1056,7 +1057,7 @@ namespace IronyModManager.Parser.Tests
         {
             DISetup.SetupContainer();
 
-            var sb = new System.Text.StringBuilder();
+            var sb = new StringBuilder();
             sb.AppendLine(@"rs_heavy_dreadnought = {");
             sb.AppendLine(@"# ship class placeholder");
             sb.AppendLine(@"entity = corvette_entity");
@@ -1086,6 +1087,40 @@ namespace IronyModManager.Parser.Tests
             parserResult.Any(p => p.Id.Equals("rs_heavy_dreadnought")).Should().BeTrue();
         }
 
+
+        /// <summary>
+        /// Defines the test method GetObjectId_should_understand_math_expressions.
+        /// </summary>
+        [Fact]
+        public void GetObjectId_should_understand_math_expressions()
+        {
+            DISetup.SetupContainer();
+            CurrentLocale.SetCurrent("en");
+
+            var sb = new StringBuilder();
+            sb.AppendLine(@"inline_script = {");
+            sb.AppendLine(@"	script = merger_of_rules/parts/switch");
+            sb.AppendLine(@"	file = merger_of_rules/parts/toggled_code_case_");
+            sb.AppendLine(@"	");
+            sb.AppendLine(@"	value = @[ (-1 * ((-1 * (($toggle$*$toggle$) / (($toggle$*$toggle$)+1))) - ((((-1 * (($toggle$*$toggle$) / (($toggle$*$toggle$)+1))) % 1) + 1) % 1))) ]");
+            sb.AppendLine(@"");
+            sb.AppendLine(@"	params = ""code = \""$code$\"""" ");
+            sb.AppendLine(@"}");
+
+            var sb2 = new StringBuilder(77);
+            sb2.AppendLine(@"	inline_script = {");
+            sb2.AppendLine(@"		script = merger_of_rules/toggled_code");
+            sb2.AppendLine(@"		toggle = 1");
+            sb2.AppendLine(@"	}");
+
+            var parser = new ParametrizedParser(new CodeParser(new Logger()));
+            var result = parser.Process(sb.ToString(), sb2.ToString());
+            result.Should().NotBeNullOrEmpty();
+            var m = DIResolver.Get<IParserManager>();
+            var parserResult = m.Parse(new ParserManagerArgs { File = "common\\ship_sizes\\dummy.txt", GameType = "Stellaris", IsBinary = false, Lines = result.SplitOnNewLine() });
+            parserResult.Count().Should().Be(1);
+            parserResult.FirstOrDefault()!.Code.Should().Be("inline_script = {\r\n    script = merger_of_rules/parts/switch\r\n    file = merger_of_rules/parts/toggled_code_case_\r\n    value = 1\r\n    params = code = \\\"$code$\\\r\n}");
+        }
 
         /// <summary>
         /// Defines the test method GetScriptPath_should_yield_results.
@@ -1182,6 +1217,9 @@ namespace IronyModManager.Parser.Tests
             result.Should().Be("giga_placeholders\\ship_sizes");
         }
 
+        /// <summary>
+        /// Defines the test method GetScriptPath_as_should_handle_simple_inline_scripts.
+        /// </summary>
         [Fact]
         public void GetScriptPath_as_should_handle_simple_inline_scripts()
         {

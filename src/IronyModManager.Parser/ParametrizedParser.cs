@@ -4,7 +4,7 @@
 // Created          : 10-03-2023
 //
 // Last Modified By : Mario
-// Last Modified On : 11-29-2023
+// Last Modified On : 02-06-2025
 // ***********************************************************************
 // <copyright file="ParametrizedParser.cs" company="Mario">
 //     Mario
@@ -15,8 +15,12 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
+using System.Text.RegularExpressions;
+using IronyModManager.DI;
 using IronyModManager.Parser.Common.Parsers;
 using IronyModManager.Shared;
+using IronyModManager.Shared.Expressions;
 
 namespace IronyModManager.Parser
 {
@@ -45,6 +49,11 @@ namespace IronyModManager.Parser
         private const char Terminator = '$'; // I'll be back
 
         /// <summary>
+        /// The math regex
+        /// </summary>
+        private static readonly Regex mathRegex = new(@"@\[\s*([-+*/%()\d\s\w$]+)\s*\]", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+
+        /// <summary>
         /// The code parser
         /// </summary>
         private readonly ICodeParser codeParser;
@@ -57,10 +66,7 @@ namespace IronyModManager.Parser
         /// Initializes a new instance of the <see cref="ParametrizedParser" /> class.
         /// </summary>
         /// <param name="codeParser">The code parser.</param>
-        public ParametrizedParser(ICodeParser codeParser)
-        {
-            this.codeParser = codeParser;
-        }
+        public ParametrizedParser(ICodeParser codeParser) => this.codeParser = codeParser;
 
         #endregion Constructors
 
@@ -83,6 +89,7 @@ namespace IronyModManager.Parser
                     {
                         return simpleResult.Value.StandardizeDirectorySeparator();
                     }
+
                     var elObj = elParams.Values.FirstOrDefault(p => p.Values != null);
                     var match = elObj?.Values.FirstOrDefault(p => p.Key.Equals(Script, StringComparison.OrdinalIgnoreCase));
                     if (match != null)
@@ -139,6 +146,8 @@ namespace IronyModManager.Parser
                                 processed = processed.Replace(key, replacement, StringComparison.OrdinalIgnoreCase);
                             }
                         }
+
+                        processed = EvaluateMathExpression(processed);
                     }
 
                     return processed;
@@ -159,6 +168,8 @@ namespace IronyModManager.Parser
                                 processed = processed.Replace(key, replacement, StringComparison.OrdinalIgnoreCase);
                             }
                         }
+
+                        processed = EvaluateMathExpression(processed);
 
                         var replacementCode = codeParser.ParseScriptWithoutValidation(processed.SplitOnNewLine(), string.Empty);
                         if (replacementCode is { Values: not null, Error: null })
@@ -190,6 +201,90 @@ namespace IronyModManager.Parser
             }
 
             return string.Empty;
+        }
+
+        /// <summary>
+        /// Evaluates the math expression.
+        /// </summary>
+        /// <param name="code">The code.</param>
+        /// <returns>string.</returns>
+        private string EvaluateMathExpression(string code)
+        {
+            string replaceMathExpression(string code)
+            {
+                var matches = mathRegex.Matches(code);
+                if (matches.Count != 0)
+                {
+                    foreach (Match m in matches)
+                    {
+                        var expression = m.Groups[1].Value;
+                        var locale = MathExpression.Culture;
+                        var parser = MathExpression.GetParser();
+                        try
+                        {
+                            var result = parser.Parse(expression.Replace(".", locale.NumberFormat.NumberDecimalSeparator));
+                            var output = result % 1 == 0 ? ((long)result).ToString() : result.ToString(locale);
+                            code = code.Replace(m.Value, output);
+                        }
+                        catch (Exception e)
+                        {
+                            var log = DIResolver.Get<ILogger>();
+                            log.Error(e);
+                        }
+                    }
+                }
+
+                return code;
+            }
+
+            var elCode = codeParser.ParseScriptWithoutValidation(code.SplitOnNewLine(), string.Empty);
+            if (elCode is { Values: not null, Error: null })
+            {
+                if (elCode.Values.Count(p => p.Key.Equals(Common.Constants.Stellaris.InlineScriptId, StringComparison.OrdinalIgnoreCase)) == 1)
+                {
+                    var elObj = elCode.Values.FirstOrDefault(p => p.Values != null);
+                    if (elObj != null)
+                    {
+                        foreach (var value in elObj.Values)
+                        {
+                            value.Value = replaceMathExpression((value.Value ?? string.Empty).Trim(Quotes));
+                        }
+
+                        var sb = new StringBuilder();
+                        var indent = 0;
+                        foreach (var node in elCode.Values)
+                        {
+                            sb.AppendLine(codeParser.FormatCode(node, indent));
+                            indent++;
+                        }
+
+                        return sb.ToString();
+                    }
+                }
+                else if (elCode.Values.Count() == 1 && elCode.Values.FirstOrDefault()!.Values.Count(p => p.Key.Equals(Common.Constants.Stellaris.InlineScriptId, StringComparison.OrdinalIgnoreCase)) == 1)
+                {
+                    var elObj = elCode.Values.FirstOrDefault(p => p.Values != null)?.Values?.FirstOrDefault();
+                    if (elObj is { Values: not null })
+                    {
+                        foreach (var value in elObj.Values)
+                        {
+                            value.Value = replaceMathExpression((value.Value ?? string.Empty).Trim(Quotes));
+                        }
+
+                        var sb = new StringBuilder();
+                        var indent = 0;
+                        foreach (var node in elCode.Values)
+                        {
+                            sb.AppendLine(codeParser.FormatCode(node, indent));
+                            indent++;
+                        }
+
+                        return sb.ToString();
+                    }
+                }
+            }
+
+            return code;
         }
 
         #endregion Methods

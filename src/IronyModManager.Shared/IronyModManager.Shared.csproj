@@ -53,6 +53,7 @@
     <PackageReference Include="AutoMapper" Version="13.0.1" />
     <PackageReference Include="Castle.Core" Version="5.1.1" />
     <PackageReference Include="CodexMicroORM.Core" Version="1.1.0" />
+    <PackageReference Include="info.lundin.math.dll" Version="1.2.7" />
     <PackageReference Include="Jering.KeyValueStore" Version="1.1.0" />
     <PackageReference Include="Microsoft.Extensions.DependencyModel" Version="$(MicrosoftExtensionsDependencyModelVersion)" allowedVersions="$(MicrosoftExtensionsDependencyModelVersion)" />
     <PackageReference Include="MimeTypes" Version="2.4.1">
