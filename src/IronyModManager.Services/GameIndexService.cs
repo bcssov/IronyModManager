@@ -4,7 +4,7 @@
 // Created          : 05-27-2021
 //
 // Last Modified By : Mario
-// Last Modified On : 10-30-2024
+// Last Modified On : 02-07-2025
 // ***********************************************************************
 // <copyright file="GameIndexService.cs" company="Mario">
 //     Mario
@@ -124,11 +124,13 @@ namespace IronyModManager.Services
                 {
                     var provider = DefinitionInfoProviders.FirstOrDefault(p => p.CanProcess(game.Type));
                     files = files.Where(p => game.GameFolders.Any(p.StartsWith));
-                    var gameInlineFolders = new List<string>();
+
+                    // Inline stuff
+                    var gameInlineAndVarFolders = new List<string>();
                     if (provider!.SupportsInlineScripts)
                     {
-                        var gameInlineScriptFiles = files.Where(p => p.StartsWith(provider.InlineScriptsPath, StringComparison.OrdinalIgnoreCase));
-                        gameInlineFolders = gameInlineScriptFiles.Select(Path.GetDirectoryName).GroupBy(p => p).Select(p => p.FirstOrDefault()).ToList();
+                        var gameInlineScriptFiles = files.Where(p => p.StartsWith(provider.InlineScriptsPath, StringComparison.OrdinalIgnoreCase) || p.StartsWith(provider.GlobalVariablesPath, StringComparison.OrdinalIgnoreCase));
+                        gameInlineAndVarFolders = gameInlineScriptFiles.Select(Path.GetDirectoryName).GroupBy(p => p).Select(p => p.FirstOrDefault()).ToList();
                     }
 
                     var indexedFolders = (await indexedDefinitions.GetAllDirectoryKeysAsync()).Select(p => p.ToLowerInvariant());
@@ -145,7 +147,7 @@ namespace IronyModManager.Services
                     if (provider.SupportsInlineScripts)
                     {
                         // Inline scripts folders must always be indexed
-                        foreach (var folder in gameInlineFolders)
+                        foreach (var folder in gameInlineAndVarFolders)
                         {
                             if (!await gameIndexer.FolderCachedAsync(GetStoragePath(), game, folder))
                             {
@@ -164,20 +166,22 @@ namespace IronyModManager.Services
 
                         using var semaphore = new SemaphoreSlim(MaxFoldersToProcess);
                         var inlineDefinitions = DIResolver.Get<IIndexedDefinitions>();
+                        var scriptedVars = DIResolver.Get<IIndexedDefinitions>();
 
-                        // First index inline scripts folder
+                        // First index inline scripts folder and vars folders
                         if (provider.SupportsInlineScripts)
                         {
-                            total += gameInlineFolders.Count;
-                            var inlineFolders = folders.Where(p => p.StartsWith(provider.InlineScriptsPath, StringComparison.OrdinalIgnoreCase)).ToList();
-                            var inlineTasks = inlineFolders.AsParallel().Select(async folder =>
+                            total += gameInlineAndVarFolders.Count;
+                            var inlineAndVarsFolders = folders.Where(p => p.StartsWith(provider.InlineScriptsPath, StringComparison.OrdinalIgnoreCase) || p.StartsWith(provider.GlobalVariablesPath, StringComparison.OrdinalIgnoreCase))
+                                .ToList();
+                            var inlineAndVarTasks = inlineAndVarsFolders.AsParallel().Select(async folder =>
                             {
                                 await semaphore.WaitAsync();
                                 try
                                 {
                                     await Task.Run(async () =>
                                     {
-                                        var result = await ParseGameFiles(game, Reader.Read(Path.Combine(gamePath, folder), searchSubFolders: false), folder, null);
+                                        var result = await ParseGameFiles(game, Reader.Read(Path.Combine(gamePath, folder), searchSubFolders: false), folder, null, null);
                                         if ((result?.Any()).GetValueOrDefault())
                                         {
                                             await gameIndexer.SaveDefinitionsAsync(GetStoragePath(), game, result);
@@ -202,16 +206,24 @@ namespace IronyModManager.Services
                                     semaphore.Release();
                                 }
                             });
-                            await Task.WhenAll(inlineTasks);
+                            await Task.WhenAll(inlineAndVarTasks);
 
-                            folders = folders.Where(p => !p.StartsWith(provider.InlineScriptsPath, StringComparison.OrdinalIgnoreCase)).ToList();
+                            folders = folders.Where(p => !p.StartsWith(provider.InlineScriptsPath, StringComparison.OrdinalIgnoreCase) && !p.StartsWith(provider.GlobalVariablesPath, StringComparison.OrdinalIgnoreCase)).ToList();
 
-                            var loadTasks = gameInlineFolders.Select(async directory =>
+                            var loadTasks = gameInlineAndVarFolders.Select(async directory =>
                             {
                                 await semaphore.WaitAsync();
                                 try
                                 {
-                                    inlineDefinitions = await LoadDefinitionsInternalAsync(inlineDefinitions, game, versions, null, directory);
+                                    if (directory.StartsWith(provider.InlineScriptsPath, StringComparison.OrdinalIgnoreCase))
+                                    {
+                                        inlineDefinitions = await LoadDefinitionsInternalAsync(inlineDefinitions, game, versions, null, directory);
+                                    }
+                                    else
+                                    {
+                                        scriptedVars = await LoadDefinitionsInternalAsync(scriptedVars, game, versions, null, directory);
+                                    }
+
                                     using var mutex = await asyncServiceLock.LockAsync();
                                     processed++;
                                     var perc = GetProgressPercentage(total, processed, 100);
@@ -241,7 +253,7 @@ namespace IronyModManager.Services
                             {
                                 await Task.Run(async () =>
                                 {
-                                    var result = await ParseGameFiles(game, Reader.Read(Path.Combine(gamePath, folder), searchSubFolders: false), folder, inlineDefinitions);
+                                    var result = await ParseGameFiles(game, Reader.Read(Path.Combine(gamePath, folder), searchSubFolders: false), folder, inlineDefinitions, scriptedVars);
                                     if ((result?.Any()).GetValueOrDefault())
                                     {
                                         await gameIndexer.SaveDefinitionsAsync(GetStoragePath(), game, result);
@@ -270,6 +282,8 @@ namespace IronyModManager.Services
                         await Task.WhenAll(tasks);
                         inlineDefinitions.Dispose();
                         inlineDefinitions = null;
+                        scriptedVars.Dispose();
+                        scriptedVars = null;
                     }
 
                     return true;
@@ -466,8 +480,10 @@ namespace IronyModManager.Services
         /// <param name="game">The game.</param>
         /// <param name="fileInfos">The file infos.</param>
         /// <param name="folder">The folder.</param>
+        /// <param name="inlineDefinitions">The inline definitions.</param>
+        /// <param name="scriptedVariables">The scripted variables.</param>
         /// <returns>IEnumerable&lt;IDefinition&gt;.</returns>
-        protected virtual async Task<IEnumerable<IDefinition>> ParseGameFiles(IGame game, IEnumerable<IFileInfo> fileInfos, string folder, IIndexedDefinitions inlineDefinitions)
+        protected virtual async Task<IEnumerable<IDefinition>> ParseGameFiles(IGame game, IEnumerable<IFileInfo> fileInfos, string folder, IIndexedDefinitions inlineDefinitions, IIndexedDefinitions scriptedVariables)
         {
             if (fileInfos == null)
             {
@@ -495,15 +511,18 @@ namespace IronyModManager.Services
             List<IDefinition> prunedInlineDefinitions = null;
             if (provider!.SupportsInlineScripts && !folder.StandardizeDirectorySeparator().StartsWith(provider.InlineScriptsPath, StringComparison.OrdinalIgnoreCase))
             {
+                scriptedVariables ??= DIResolver.Get<IIndexedDefinitions>();
+                var scriptedVarsBucket = await scriptedVariables.GetAllAsync();
                 inlineDefinitions ??= DIResolver.Get<IIndexedDefinitions>();
                 prunedInlineDefinitions = [];
                 foreach (var item in definitions)
                 {
+                    var def = item;
                     var addDefault = true;
-                    if (item.Id.Equals(Parser.Common.Constants.Stellaris.InlineScriptId, StringComparison.OrdinalIgnoreCase) || item.ContainsInlineIdentifier)
+                    while (def.Id.Equals(Parser.Common.Constants.Stellaris.InlineScriptId, StringComparison.OrdinalIgnoreCase) || def.ContainsInlineIdentifier)
                     {
                         addDefault = false;
-                        var path = Path.Combine(Parser.Common.Constants.Stellaris.InlineScripts, parametrizedParser.GetScriptPath(item.Code));
+                        var path = Path.Combine(Parser.Common.Constants.Stellaris.InlineScripts, parametrizedParser.GetScriptPath(def.Code));
                         var pathCI = path.ToLowerInvariant();
                         var files = (await inlineDefinitions.GetByParentDirectoryAsync(Path.GetDirectoryName(path))).Where(p => Path.Combine(Path.GetDirectoryName(p.FileCI)!, Path.GetFileNameWithoutExtension(p.FileCI)!).Equals(pathCI))
                             .ToList();
@@ -512,7 +531,18 @@ namespace IronyModManager.Services
                             var priorityDefinition = EvalDefinitionPriorityInternal([.. files.OrderBy(p => p.FileCI, StringComparer.Ordinal)]);
                             if (priorityDefinition is { Definition: not null })
                             {
-                                var parametrizedCode = parametrizedParser.Process(priorityDefinition.Definition.Code, item.Code);
+                                var vars = new List<IDefinition>();
+                                if (item.Variables != null)
+                                {
+                                    vars.AddRange(item.Variables);
+                                }
+
+                                if (scriptedVarsBucket != null)
+                                {
+                                    vars.AddRange(scriptedVarsBucket);
+                                }
+
+                                var parametrizedCode = parametrizedParser.Process(priorityDefinition.Definition.Code, ProcessInlineConstants(def.Code, vars));
                                 if (!string.IsNullOrWhiteSpace(parametrizedCode))
                                 {
                                     var results = parserManager.Parse(new ParserManagerArgs
@@ -534,7 +564,16 @@ namespace IronyModManager.Services
 
                                     if (results != null && results.Any())
                                     {
-                                        prunedInlineDefinitions.AddRange(results);
+                                        var inline = results.FirstOrDefault(p => p.Id.Equals(Parser.Common.Constants.Stellaris.InlineScriptId, StringComparison.OrdinalIgnoreCase) || p.ContainsInlineIdentifier);
+                                        if (inline == null)
+                                        {
+                                            prunedInlineDefinitions.AddRange(results);
+                                            break;
+                                        }
+                                        else
+                                        {
+                                            def = inline;
+                                        }
                                     }
                                 }
                             }

@@ -4,7 +4,7 @@
 // Created          : 04-07-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 01-20-2025
+// Last Modified On : 02-07-2025
 // ***********************************************************************
 // <copyright file="ModBaseService.cs" company="Mario">
 //     Mario
@@ -61,6 +61,11 @@ namespace IronyModManager.Services
         protected const string AllModsCacheKey = "AllMods";
 
         /// <summary>
+        /// The clean variables pattern
+        /// </summary>
+        protected const string CleanVariablesPattern = @"[^\w\s\@=.,_]";
+
+        /// <summary>
         /// The maximum mods to process
         /// </summary>
         protected const int MaxModsToProcess = 4;
@@ -86,9 +91,9 @@ namespace IronyModManager.Services
         protected readonly IGameRootPathResolver PathResolver = new GameRootPathResolver();
 
         /// <summary>
-        /// The clean variables pattern
+        /// The variable match regex
         /// </summary>
-        private const string CleanVariablesPattern = @"[^\w\s\@=.,_]";
+        private static readonly Regex varMatchRegex = new(@"@\S+", RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
         #endregion Fields
 
@@ -987,6 +992,59 @@ namespace IronyModManager.Services
             }
 
             return definitions;
+        }
+
+        /// <summary>
+        /// Processes the inline constants.
+        /// </summary>
+        /// <param name="code">The code.</param>
+        /// <param name="variables">The variables.</param>
+        /// <returns>System.String.</returns>
+        protected virtual string ProcessInlineConstants(string code, IEnumerable<IDefinition> variables)
+        {
+            if (string.IsNullOrWhiteSpace(code))
+            {
+                return string.Empty;
+            }
+
+            var sb = new StringBuilder();
+            foreach (var line in code.SplitOnNewLine(false))
+            {
+                if (string.IsNullOrWhiteSpace(line))
+                {
+                    sb.AppendLine(line);
+                    continue;
+                }
+
+                var text = line;
+                if (line.TrimStart().StartsWith(Parser.Common.Constants.Scripts.VariableId))
+                {
+                    sb.AppendLine(line);
+                }
+                else
+                {
+                    var matches = varMatchRegex.Matches(line);
+                    if (matches.Count > 0)
+                    {
+                        foreach (Match match in matches)
+                        {
+                            if (variables.Any(p => p.Id.Equals(match.Value, StringComparison.OrdinalIgnoreCase)))
+                            {
+                                var variable = variables.FirstOrDefault(p => p.Id.Equals(match.Value));
+                                var values = variable!.Code.Split(Parser.Common.Constants.Scripts.EqualsOperator, StringSplitOptions.RemoveEmptyEntries);
+                                if (values.Length == 2)
+                                {
+                                    text = text.Replace(variable.Id, values[1].Trim(), StringComparison.OrdinalIgnoreCase);
+                                }
+                            }
+                        }
+                    }
+
+                    sb.AppendLine(text);
+                }
+            }
+
+            return sb.ToString();
         }
 
         #endregion Methods
