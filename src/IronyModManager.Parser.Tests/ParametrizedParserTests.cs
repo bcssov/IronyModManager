@@ -1119,7 +1119,7 @@ namespace IronyModManager.Parser.Tests
             var m = DIResolver.Get<IParserManager>();
             var parserResult = m.Parse(new ParserManagerArgs { File = "common\\ship_sizes\\dummy.txt", GameType = "Stellaris", IsBinary = false, Lines = result.SplitOnNewLine() });
             parserResult.Count().Should().Be(1);
-            parserResult.FirstOrDefault()!.Code.Should().Be("inline_script = {\r\n    script = merger_of_rules/parts/switch\r\n    file = merger_of_rules/parts/toggled_code_case_\r\n    value = 1\r\n    params = code = \\\"$code$\\\r\n}");
+            parserResult.FirstOrDefault()!.Code.Should().Be("inline_script = {\r\n    script = merger_of_rules/parts/switch\r\n    file = merger_of_rules/parts/toggled_code_case_\r\n    value = 1\r\n    params = \"code = \\\"$code$\\\"\"\r\n}");
         }
 
         /// <summary>

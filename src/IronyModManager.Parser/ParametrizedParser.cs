@@ -4,7 +4,7 @@
 // Created          : 10-03-2023
 //
 // Last Modified By : Mario
-// Last Modified On : 02-06-2025
+// Last Modified On : 02-08-2025
 // ***********************************************************************
 // <copyright file="ParametrizedParser.cs" company="Mario">
 //     Mario
@@ -32,6 +32,16 @@ namespace IronyModManager.Parser
     public class ParametrizedParser : IParametrizedParser
     {
         #region Fields
+
+        /// <summary>
+        /// The escaped quote
+        /// </summary>
+        private const string EscapedQuote = "\\\"";
+
+        /// <summary>
+        /// The quote character
+        /// </summary>
+        private const char QuoteChar = '"';
 
         /// <summary>
         /// The quotes
@@ -139,7 +149,22 @@ namespace IronyModManager.Parser
                         foreach (var value in elObj.Values)
                         {
                             var id = (value.Key ?? string.Empty).Trim(Quotes);
-                            var replacement = (value.Value ?? string.Empty).Trim(Quotes);
+                            var replaceValue = value.Value ?? string.Empty;
+                            var replacement = TrimQuotes(replaceValue);
+
+                            // If it ends with escaped quotes it means we've got an expression so we need to fix quotes
+                            if (replacement.EndsWith(EscapedQuote) && !replacement.StartsWith(EscapedQuote))
+                            {
+                                var first = replacement.IndexOf(EscapedQuote, StringComparison.OrdinalIgnoreCase);
+                                var last = replacement.LastIndexOf(EscapedQuote, StringComparison.OrdinalIgnoreCase);
+                                if (first > 0 && last > 0)
+                                {
+                                    var left = replacement.Substring(0, first);
+                                    var right = replacement.Substring(first + EscapedQuote.Length, last - left.Length - EscapedQuote.Length);
+                                    replacement = $"{left} \"{right}\"";
+                                }
+                            }
+
                             if (!id.Equals(Script, StringComparison.OrdinalIgnoreCase))
                             {
                                 var key = $"{Terminator}{id}{Terminator}";
@@ -161,7 +186,22 @@ namespace IronyModManager.Parser
                         foreach (var value in elObj.Values)
                         {
                             var id = (value.Key ?? string.Empty).Trim(Quotes);
-                            var replacement = (value.Value ?? string.Empty).Trim(Quotes);
+                            var replaceValue = value.Value ?? string.Empty;
+                            var replacement = TrimQuotes(replaceValue);
+
+                            // If it ends with escaped quotes it means we've got an expression so we need to fix quotes
+                            if (replacement.EndsWith(EscapedQuote) && !replacement.StartsWith(EscapedQuote))
+                            {
+                                var first = replacement.IndexOf(EscapedQuote, StringComparison.OrdinalIgnoreCase);
+                                var last = replacement.LastIndexOf(EscapedQuote, StringComparison.OrdinalIgnoreCase);
+                                if (first > 0 && last > 0)
+                                {
+                                    var left = replacement.Substring(0, first);
+                                    var right = replacement.Substring(first + EscapedQuote.Length, last - left.Length - EscapedQuote.Length);
+                                    replacement = $"{left} \"{right}\"";
+                                }
+                            }
+
                             if (!id.Equals(Script, StringComparison.OrdinalIgnoreCase))
                             {
                                 var key = $"{Terminator}{id}{Terminator}";
@@ -247,7 +287,7 @@ namespace IronyModManager.Parser
                     {
                         foreach (var value in elObj.Values)
                         {
-                            value.Value = replaceMathExpression((value.Value ?? string.Empty).Trim(Quotes));
+                            value.Value = replaceMathExpression(value.Value ?? string.Empty);
                         }
 
                         var sb = new StringBuilder();
@@ -268,7 +308,7 @@ namespace IronyModManager.Parser
                     {
                         foreach (var value in elObj.Values)
                         {
-                            value.Value = replaceMathExpression((value.Value ?? string.Empty).Trim(Quotes));
+                            value.Value = replaceMathExpression(value.Value ?? string.Empty);
                         }
 
                         var sb = new StringBuilder();
@@ -285,6 +325,21 @@ namespace IronyModManager.Parser
             }
 
             return code;
+        }
+
+        /// <summary>
+        /// Trims the quotes.
+        /// </summary>
+        /// <param name="input">The input.</param>
+        /// <returns>string.</returns>
+        private string TrimQuotes(string input)
+        {
+            if (!string.IsNullOrWhiteSpace(input) && input[0] == QuoteChar && input[^1] == QuoteChar)
+            {
+                return input.Substring(1, input.Length - 2);
+            }
+
+            return input;
         }
 
         #endregion Methods
