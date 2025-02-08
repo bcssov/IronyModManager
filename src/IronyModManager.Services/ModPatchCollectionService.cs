@@ -4,7 +4,7 @@
 // Created          : 05-26-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-07-2025
+// Last Modified On : 02-08-2025
 // ***********************************************************************
 // <copyright file="ModPatchCollectionService.cs" company="Mario">
 //     Mario
@@ -486,7 +486,7 @@ namespace IronyModManager.Services
 
                                 if (scriptedVars != null)
                                 {
-                                    vars.AddRange(scriptedVars);
+                                    vars.AddRange(scriptedVars.GroupBy(p => p.Id).Select(p => EvalDefinitionPriority(p.OrderBy(f => modOrder.IndexOf(f.ModName))).Definition));
                                 }
 
                                 var parametrizedCode = parametrizedParser.Process(priorityDefinition.Definition.Code, ProcessInlineConstants(def.Code, vars));
