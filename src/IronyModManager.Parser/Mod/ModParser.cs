@@ -4,7 +4,7 @@
 // Created          : 02-22-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 12-23-2024
+// Last Modified On : 02-06-2025
 // ***********************************************************************
 // <copyright file="ModParser.cs" company="Mario">
 //     Mario
@@ -140,13 +140,16 @@ namespace IronyModManager.Parser.Mod
                     ex.Add(e);
                 }
 
-                try
+                if (ex.Count > 0)
                 {
-                    result = JsonConvert.DeserializeObject<JsonMetadataV2>(json, GetJsonSerializerSettings());
-                }
-                catch (Exception e)
-                {
-                    ex.Add(e);
+                    try
+                    {
+                        result = JsonConvert.DeserializeObject<JsonMetadataV2>(json, GetJsonSerializerSettings());
+                    }
+                    catch (Exception e)
+                    {
+                        ex.Add(e);
+                    }
                 }
 
                 if (ex.Count >= 2)

@@ -4,7 +4,7 @@
 // Created          : 06-11-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-09-2022
+// Last Modified On : 02-09-2025
 // ***********************************************************************
 // <copyright file="ConflictSolverResetConflictsControlViewModel.cs" company="Mario">
 //     Mario
@@ -275,6 +275,7 @@ namespace IronyModManager.ViewModels.Controls
                 {
                     selectedParent = SelectedParentHierarchicalDefinition;
                 }
+
                 HierarchicalDefinitions = hierarchicalDefinitions.ToObservableCollection();
                 if (HierarchicalDefinitions.Any() && SelectedHierarchicalDefinitions.Count == 0)
                 {
@@ -287,6 +288,7 @@ namespace IronyModManager.ViewModels.Controls
                         SelectedParentHierarchicalDefinition = HierarchicalDefinitions.FirstOrDefault();
                     }
                 }
+
                 if (SelectedParentHierarchicalDefinition != null)
                 {
                     var conflictName = SelectedParentHierarchicalDefinition.Name;
@@ -326,6 +328,7 @@ namespace IronyModManager.ViewModels.Controls
                     return Conflicts.CustomConflicts.GetHierarchicalDefinitions();
                 }
             }
+
             return null;
         }
 
@@ -337,30 +340,13 @@ namespace IronyModManager.ViewModels.Controls
         {
             if (refreshOnly)
             {
-                Modes.FirstOrDefault(p => p.Value == ResolvedValue).Name = Resolved;
-                Modes.FirstOrDefault(p => p.Value == IgnoredValue).Name = Ignored;
-                Modes.FirstOrDefault(p => p.Value == CustomValue).Name = Custom;
+                Modes.FirstOrDefault(p => p.Value == ResolvedValue)!.Name = Resolved;
+                Modes.FirstOrDefault(p => p.Value == IgnoredValue)!.Name = Ignored;
+                Modes.FirstOrDefault(p => p.Value == CustomValue)!.Name = Custom;
             }
             else
             {
-                Modes = new List<Mode>()
-                {
-                    new Mode()
-                    {
-                        Name = Resolved,
-                        Value = ResolvedValue
-                    },
-                    new Mode()
-                    {
-                        Name = Ignored,
-                        Value = IgnoredValue
-                    },
-                    new Mode()
-                    {
-                        Name = Custom,
-                        Value = CustomValue
-                    }
-                };
+                Modes = new List<Mode> { new() { Name = Resolved, Value = ResolvedValue }, new() { Name = Ignored, Value = IgnoredValue }, new() { Name = Custom, Value = CustomValue } };
             }
         }
 
@@ -372,10 +358,7 @@ namespace IronyModManager.ViewModels.Controls
         {
             SelectedMode = Modes.FirstOrDefault();
 
-            CloseCommand = ReactiveCommand.Create(() =>
-            {
-                ForceClosePopup();
-            }).DisposeWith(disposables);
+            CloseCommand = ReactiveCommand.Create(ForceClosePopup).DisposeWith(disposables);
 
             ResetConflictsCommand = ReactiveCommand.Create(() =>
             {
@@ -401,8 +384,9 @@ namespace IronyModManager.ViewModels.Controls
                         {
                             results.Add(await Task.Run(async () => await modPatchCollectionService.ResetIgnoredConflictAsync(Conflicts, item.Key, CollectionName)));
                         }
+
                         await TriggerOverlayAsync(id, false);
-                        if (results.Any())
+                        if (results.Count > 0)
                         {
                             Bind(GetHierarchicalDefinitions(SelectedMode));
                             return new CommandResult<bool>(true, CommandState.Success);
@@ -417,8 +401,9 @@ namespace IronyModManager.ViewModels.Controls
                         {
                             results.Add(await Task.Run(async () => await modPatchCollectionService.ResetResolvedConflictAsync(Conflicts, item.Key, CollectionName)));
                         }
+
                         await TriggerOverlayAsync(id, false);
-                        if (results.Any())
+                        if (results.Count > 0)
                         {
                             Bind(GetHierarchicalDefinitions(SelectedMode));
                             return new CommandResult<bool>(true, CommandState.Success);
@@ -433,14 +418,16 @@ namespace IronyModManager.ViewModels.Controls
                         {
                             results.Add(await Task.Run(async () => await modPatchCollectionService.ResetCustomConflictAsync(Conflicts, item.Key, CollectionName)));
                         }
+
                         await TriggerOverlayAsync(id, false);
-                        if (results.Any())
+                        if (results.Count > 0)
                         {
                             Bind(GetHierarchicalDefinitions(SelectedMode));
                             return new CommandResult<bool>(true, CommandState.Success);
                         }
                     }
                 }
+
                 return new CommandResult<bool>(false, CommandState.NotExecuted);
             }).DisposeWith(disposables);
 
@@ -487,6 +474,7 @@ namespace IronyModManager.ViewModels.Controls
                 {
                     return false;
                 }
+
                 term ??= string.Empty;
                 return Name.StartsWith(term, StringComparison.OrdinalIgnoreCase);
             }

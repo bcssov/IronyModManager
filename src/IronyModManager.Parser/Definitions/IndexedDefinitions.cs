@@ -4,7 +4,7 @@
 // Created          : 02-16-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 10-21-2024
+// Last Modified On : 02-09-2025
 // ***********************************************************************
 // <copyright file="IndexedDefinitions.cs" company="Mario">
 //     Mario
@@ -74,6 +74,11 @@ namespace IronyModManager.Parser.Definitions
         /// The allowed type
         /// </summary>
         private AddToMapAllowedType allowedType = AddToMapAllowedType.All;
+
+        /// <summary>
+        /// The applied global vars
+        /// </summary>
+        private HashSet<string> appliedGlobalVars;
 
         /// <summary>
         /// The hierarchical definitions
@@ -179,6 +184,7 @@ namespace IronyModManager.Parser.Definitions
             directoryCIKeys = [];
             resetDefinitions = [];
             typeKeyValues = [];
+            appliedGlobalVars = [];
             childHierarchicalDefinitions = new ConcurrentDictionary<string, ConcurrentIndexedList<IHierarchicalDefinitions>>();
             mainHierarchicalDefinitions = new ConcurrentIndexedList<IHierarchicalDefinitions>(nameof(IHierarchicalDefinitions.Name));
         }
@@ -269,6 +275,8 @@ namespace IronyModManager.Parser.Definitions
             typeKeys = null;
             allFileKeys.Clear();
             allFileKeys = null;
+            appliedGlobalVars.Clear();
+            appliedGlobalVars = null;
             childHierarchicalDefinitions.Clear();
             childHierarchicalDefinitions = null;
             mainHierarchicalDefinitions.Clear();
@@ -300,12 +308,7 @@ namespace IronyModManager.Parser.Definitions
         public Task<IEnumerable<IDefinition>> GetAllAsync()
         {
             EnsureAllowedAllIsRespected();
-            if (store != null)
-            {
-                return ReadDefinitionsFromStoreAsync(typeAndIdKeys);
-            }
-
-            return Task.FromResult<IEnumerable<IDefinition>>(new HashSet<IDefinition>(definitions));
+            return store != null ? ReadDefinitionsFromStoreAsync(typeAndIdKeys) : Task.FromResult<IEnumerable<IDefinition>>(new HashSet<IDefinition>(definitions));
         }
 
         /// <summary>
@@ -354,12 +357,7 @@ namespace IronyModManager.Parser.Definitions
             EnsureAllowedAllIsRespected();
             if (store != null)
             {
-                if (diskFileCIKeys.TryGetValue(file, out var value))
-                {
-                    return ReadDefinitionsFromStoreAsync(value);
-                }
-
-                return Task.FromResult<IEnumerable<IDefinition>>([]);
+                return diskFileCIKeys.TryGetValue(file, out var value) ? ReadDefinitionsFromStoreAsync(value) : Task.FromResult<IEnumerable<IDefinition>>([]);
             }
 
             return Task.FromResult(definitions.GetAllByName(nameof(IDefinition.DiskFileCI), file.ToLowerInvariant()));
@@ -402,12 +400,7 @@ namespace IronyModManager.Parser.Definitions
             EnsureAllowedAllIsRespected(true);
             if (store != null)
             {
-                if (directoryCIKeys.TryGetValue(directory, out var value))
-                {
-                    return ReadDefinitionsFromStoreAsync(value);
-                }
-
-                return Task.FromResult<IEnumerable<IDefinition>>([]);
+                return directoryCIKeys.TryGetValue(directory, out var value) ? ReadDefinitionsFromStoreAsync(value) : Task.FromResult<IEnumerable<IDefinition>>([]);
             }
 
             return Task.FromResult(definitions.GetAllByName(nameof(IDefinition.ParentDirectoryCI), directory.ToLowerInvariant()));
@@ -450,12 +443,7 @@ namespace IronyModManager.Parser.Definitions
             EnsureAllowedAllIsRespected();
             if (store != null)
             {
-                if (typeKeys.TryGetValue(type, out var value))
-                {
-                    return ReadDefinitionsFromStoreAsync(value);
-                }
-
-                return Task.FromResult<IEnumerable<IDefinition>>([]);
+                return typeKeys.TryGetValue(type, out var value) ? ReadDefinitionsFromStoreAsync(value) : Task.FromResult<IEnumerable<IDefinition>>([]);
             }
 
             return Task.FromResult(definitions.GetAllByName(nameof(IDefinition.Type), type));
@@ -466,7 +454,6 @@ namespace IronyModManager.Parser.Definitions
         /// </summary>
         /// <param name="type">The type.</param>
         /// <returns>IEnumerable&lt;IDefinition&gt;.</returns>
-        /// <exception cref="ArgumentException">Only invalid types can be queried.</exception>
         /// <exception cref="System.ArgumentException">Only invalid types can be queried.</exception>
         public Task<IEnumerable<IDefinition>> GetByValueTypeAsync(ValueType type)
         {
@@ -587,6 +574,16 @@ namespace IronyModManager.Parser.Definitions
         }
 
         /// <summary>
+        /// Determines whether [is global variable applied] [the specified identifier].
+        /// </summary>
+        /// <param name="id">The identifier.</param>
+        /// <returns><c>true</c> if [is global variable applied] [the specified identifier]; otherwise, <c>false</c>.</returns>
+        public bool IsGlobalVariableApplied(string id)
+        {
+            return appliedGlobalVars != null && appliedGlobalVars.Contains(id);
+        }
+
+        /// <summary>
         /// Removes the specified definition.
         /// </summary>
         /// <param name="definition">The definition.</param>
@@ -691,7 +688,6 @@ namespace IronyModManager.Parser.Definitions
         /// Sets the type of the allowed.
         /// </summary>
         /// <param name="allowedType">Type of the allowed.</param>
-        /// <exception cref="InvalidOperationException">Cannot set allowed type index definition is already initialized.</exception>
         /// <exception cref="System.InvalidOperationException">Cannot set allowed type index definition is already initialized.</exception>
         public void SetAllowedType(AddToMapAllowedType allowedType)
         {
@@ -737,7 +733,6 @@ namespace IronyModManager.Parser.Definitions
         /// Uses the disk store.
         /// </summary>
         /// <param name="storePath">The store path.</param>
-        /// <exception cref="InvalidOperationException">Unable to switch to disk store as there are items in the memory.</exception>
         /// <exception cref="System.InvalidOperationException">Unable to switch to disk store as there are items in the memory.</exception>
         public void UseDiskStore(string storePath)
         {
@@ -872,6 +867,14 @@ namespace IronyModManager.Parser.Definitions
                     break;
             }
 
+            if (definition.AppliedGlobalVariables != null)
+            {
+                foreach (var vars in definition.AppliedGlobalVariables)
+                {
+                    appliedGlobalVars.Add(vars.TypeAndId);
+                }
+            }
+
             mutex?.Dispose();
         }
 
@@ -941,7 +944,6 @@ namespace IronyModManager.Parser.Definitions
         /// Ensures the allowed all is respected.
         /// </summary>
         /// <param name="allowInvalid">if set to <c>true</c> [allow invalid].</param>
-        /// <exception cref="ArgumentException">Collection is empty.</exception>
         /// <exception cref="System.ArgumentException">Collection is empty.</exception>
         private void EnsureAllowedAllIsRespected(bool allowInvalid = false)
         {

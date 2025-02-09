@@ -4,7 +4,7 @@
 // Created          : 07-18-2022
 //
 // Last Modified By : Mario
-// Last Modified On : 10-30-2024
+// Last Modified On : 02-07-2025
 // ***********************************************************************
 // <copyright file="HOI4DefinitionInfoProvider.cs" company="Mario">
 //     Mario
@@ -34,6 +34,12 @@ namespace IronyModManager.IO.Mods.InfoProviders
         /// <value>The fios paths.</value>
         /// <exception cref="System.NotImplementedException"></exception>
         public override IReadOnlyCollection<string> FIOSPaths => throw new NotImplementedException();
+
+        /// <summary>
+        /// Gets the global variables path.
+        /// </summary>
+        /// <value>The global variables path.</value>
+        public override string GlobalVariablesPath => string.Empty;
 
         /// <summary>
         /// Gets the inline scripts path.

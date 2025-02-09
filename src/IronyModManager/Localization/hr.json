@@ -1,679 +1,683 @@
 {
-    "App": {
-        "FontFamily": "Noto Sans",
-        "SupportedNameBlock": "",
-        "Title": "Irony Mod Manager: v{AppVersion}",
-        "BackgroundOperationMessage": "Molimo pričekajte dok se pozadinska operacija ne izvrši. Aplikacija će se ugasiti nakon što se završi.",
-        "WaitBackgroundOperationMessage": "Molimo pričekajte dok se pozadinska operacija ne izvrši.",
-        "Actions": {
-            "Name": "Akcije",
-            "Wiki": "Wiki",
-            "Logs": "Logovi",
-            "ErrorLog": "Error.log",
-            "Close": "Zatvori",
-            "DLC": "DLC"
-        }
-    },
-    "JokeError": {
-        "Title": "Neobrađeno kršenje memorije spremnika jaja",
-        "Message": "Pritisnite OK da se pretvarate da se ništa nije dogodilo :)"
-    },
-    "FatalError": {
-        "Message": "Došlo je do greške. Aplikacija će se automatski zatvoriti.",
-        "MessageWithLastError": "Došlo je do greške. Koristite ovu informaciju da biste podnijeli izvješće o greški:{NewLine}{NewLine}{Message}",
-        "Title": "Greška",
-        "Header": "Fatalna pogreška"
-    },
-    "SavingError": {
-        "Title": "Greška prilikom snimanja",
-        "Message": "Čini se da nešto blokira mogućnost Ironyja da piše u mod datoteke. Prijavite ovo na GitHub tracker i pošaljite izvješće o greškama."
-    },
-    "UnableToWriteError": {
-        "Title": "Aplikacija blokirana",
-        "Message": "Čini se da je program blokiran antivirusom ili dopuštenjima i ne može pisati u direktorij korisničkih dokumenata:{NewLine}{Paths}"
-    },
-    "InvalidModsDetected": {
-        "Title": "Otkriveni su nevaljani modovi",
-        "Message": "Sljedeće lokacije modova nisu mogle biti raščlanjene zbog nevaljanih arhiva ili zaključanih datoteka:{NewLine}{Mods}"
-    },
-    "Prompt": {
-        "OK": "U redu",
-        "Yes": "Da",
-        "No": "Ne",
-        "Confirm": "Potvrdi",
-        "Cancel": "Otkaži"
-    },
-    "FileDialog": {
-        "FileName": "Naziv datoteke",
-        "ShowHiddenFiles": "Pokaži skrivene datoteke",
-        "Volume": "{Size} Volumen",
-        "OK": "U redu",
-        "Cancel": "Otkaži",
-        "Name": "Ime",
-        "DateModified": "Datum izmjene",
-        "Type": "Tip",
-        "Size": "Veličina",
-        "Folders": {
-            "Downloads": "Preuzimanja",
-            "Desktop": "Desktop",
-            "Documents": "Dokumenti",
-            "Music": "Glazba",
-            "Videos": "Video",
-            "Pictures": "Slike"
-        }
-    },
-    "TextBox": {
-        "Copy": "Kopiraj",
-        "Cut": "Izreži",
-        "Paste": "Zalijepi",
-        "SelectAll": "Odaberi sve"
-    },
-    "Languages": {
-        "Name": "Jezik"
-    },
-    "Themes": {
-        "Name": "Tema",
-        "Light": "Svjetlo",
-        "Dark": "Tamno",
-        "FluentLight": "Fluidna Svjetla",
-        "FluentDark": "Fluidna Tamna",
-        "MaterialDark": "Material Tamna",
-        "MaterialLight": "Material Svjetla",
-        "Restart_Title": "Potrebno je ponovno pokretanje",
-        "Restart_Header": "Aplikaciju je potrebno ponovno pokrenuti",
-        "Restart_Message": "Aplikaciju treba ponovo pokrenuti kako bi se nova tema pravilno primijenila. Želite li ponovno pokrenuti aplikaciju?"
-    },
-    "NotificationPosition": {
-        "BottomRight": "Dolje desno",
-        "BottomLeft": "Dolje lijevo",
-        "TopRight": "Gore desno",
-        "TopLeft": "Gore lijevo"
-    },
-    "Games": {
-        "Name": "Igra",
-        "Stellaris": "Stellaris",
-        "EuropaUniversalisIV": "Europa Universalis IV",
-        "HeartsofIronIV": "Hearts of Iron IV",
-        "ImperatorRome": "Imperator Rome",
-        "CrusaderKings3": "Crusader Kings III",
-        "Victoria3": "Victoria 3",
-        "STInfinite": "Star Trek: Infinite"
-    },
-    "GameLanguages": {
-        "l_english": "Engleski",
-        "l_braz_por": "Portugalski",
-        "l_french": "Francuski",
-        "l_german": "Njemački",
-        "l_polish": "Poljski",
-        "l_russian": "Ruski",
-        "l_simp_chinese": "Jednostavan kineski",
-        "l_spanish": "Španjolski",
-        "l_chinese": "Kineski",
-        "l_traditional_chinese": "Tradicionalni kineski",
-        "l_japanese": "Japanski",
-        "l_korean": "Korejski"
-    },
-    "Installed_Mods": {
-        "Name": "Instalirani modovi",
-        "Filter": "Filtriraj modove",
-        "Selected": "Odabrano",
-        "Mod_Name": "Ime moda",
-        "Supported_Version": "Podržana verzija",
-        "LoadingMods": "Pričekajte dok se učitavaju mod podaci...",
-        "RefreshingModList": "Pričekajte dok se popis modova osvježava...",
-        "InvalidMods": {
-            "Title": "Otkriveni su nevažeći modovi",
-            "Message": "Nedostaju sljedeći modovi:{NewLine}{Mods}.{NewLine}{NewLine}Želite li izbrisati deskriptore?"
-        }
-    },
-    "Collection_Mods": {
-        "Name": "Kolekcija modova",
-        "Remove": "-",
-        "Create": "+",
-        "OK": "U redu",
-        "Cancel": "Otkaži",
-        "Watermark": "Unesi ime nove kolekcije",
-        "Delete_Title": "Obrisati kolekciju?",
-        "Delete_Header": "Potvrdi birsanje kolekcije",
-        "Delete_Message": "Da li si siguran da želiš obrisati {CollectionName} kolekciju?",
-        "Deleting_Message": "Molim pričekajte dok brišem kolekciju...",
-        "Export": "Izvoz",
-        "Import": "Uvoz",
-        "Export_Dialog_Title": "Izvoz kolekcije",
-        "Import_Dialog_Title": "Uvezi kolekciju",
-        "Overlay_Exporting_Message": "Molim pričekajte dok izvozimo kolekciju...",
-        "Overlay_Importing_Message": "Molim pričekajte dok uvozimo kolekciju...",
-        "Overlay_Import_Export_Progress": "{PercentDone}",
-        "Filter": "Traži modove",
-        "Selected": "Odabrano",
-        "Mod_Name": "Ime moda",
-        "Order": "Redoslijed",
-        "Rename": "Preimenuj",
-        "Duplicate": "Dupliciraj",
-        "Overlay_Rename_Message": "Pričekajte dok se izvrši preimenovanje...",
-        "Overlay_Duplicate_Message": "Pričekajte dok se izvrši dupliciranje...",
-        "ExportToClipboard": "Kopiraj kolekciju u međuspremnik",
-        "ExportToClipboardFull": "Kopiraj kolekciju u međuspremnik s metapodacima",
-        "Undo": "Poništi",
-        "Redo": "Ponovi",
-        "DeleteMerge": {
-            "DeleteTitle": "Želiš li izbrisati spojeni mod?",
-            "DeleteHeader": "Potvrdi brisanje spojenog moda",
-            "DeleteMessage": "Otkriveno je postojanje spojenog moda, želite li ga također obrisati?"
-        },
-        "ImportFromClipboard": {
-            "Title": "Uvezi mod redoslijed iz međuspremnika",
-            "PromptTitle": "Prebriši redoslijed modova?",
-            "PromptMessage": "Ovo će prebrisati redoslijed i odabir modova. Nastaviti?"
-        },
-        "FileHash": {
-            "ExportCollection": "Izvoz hashova kolekcije",
-            "ExportGame": "Izvoz hasheva igre",
-            "Import": "Provjeri hashove",
-            "DialogTitleExport": "Odaberite mjesto za izvoz izvješća",
-            "DialogTitleImport": "Odaberite json izvješće za uvoz",
-            "ExportOverlay": "Pričekajte dok se izvozi...",
-            "ImportOverlay": "Pričekajte dok se verificira...",
-            "ProgressExport": "{Progress}",
-            "ProgressImport": "Korak {Count}/{TotalCount}: {Progress}",
-            "Export": "Izvoz",
-            "Close": "Zatvori"
-        },
-        "JumpOnDragAndDrop": {
-            "Title": "Auto fokus: {State}",
-            "On": "Uključen",
-            "Off": "Isključen"
-        },
-        "ImportPrompt": {
-            "Title": "Kolekcija postoji",
-            "Message": "Kolekcija postoji i bit će prebrisana, želite li nastaviti?"
-        },
-        "ImportNonExistingMods": {
-            "Title": "Nepostojeći modovi",
-            "Message": "Sljedeće modove nije moguće uvesti jer se čini da nedostaju::{NewLine}{Mods}"
-        },
-        "ImportOther": {
-            "Title": "...",
-            "Paradoxos": "Uvezi iz Paradoxos",
-            "Paradox": "Uvezi iz igre",
-            "ParadoxLauncher": "Uvezi iz Paradox Launcher",
-            "ParadoxLauncherBeta": "Uvezi iz Paradox Launcher Bete",
-            "ParadoxLauncherJson": "Uvezi iz Paradox Launcher Json",
-            "Close": "Zatvori"
-        },
-        "ExportOther": {
-            "Title": "...",
-            "OrderOnly": "Izvezi redoslijed",
-            "WholeCollection": "Izvoz cijelu zbirku",
-            "ParadoxLauncherJson": "Izvezi u Paradox Launcher Json (<2021.10)",
-            "ParadoxLauncherJson202110": "Izvezi u Paradox Launcher Json (>=2021.10)",
-            "Close": "Zatvori"
-        },
-        "MergeCollection": {
-            "Name": "Spoji",
-            "MergedCollectionPrefix": "(Spojeno)",
-            "MergeCompressModPrefix": "(Spojeno {Name})",
-            "Overlay_Progress": "Korak {Count}/{TotalCount}: {PercentDone}",
-            "DiskInfoOverlay": "Provjera dostupnog prostora na disku...",
-            "Options": {
-                "Title": "Odaberi način",
-                "Basic": "Osnovno",
-                "Compress": "Kompresiraj",
-                "Close": "Zatvori"
-            },
-            "Basic": {
-                "Overlay_Gathering_Mod_Info": "Pričekaj dok se skupljaju mod informacije...",
-                "Overlay_Writing_Files": "Pričekaj dok se spaja kolekcija..."
-            },
-            "Compress": {
-                "Overlay_Gathering_Mod_Info": "Pričekaj dok se skupljaju mod informacije...",
-                "Overlay_Compressing_Files": "Pričekaj dok se spaja kolekcija..."
-            },
-            "OverwritePrompt": {
-                "Title": "Prebriši postojeću kolekciju?",
-                "Message": "Spojena kolekcija već postoji. Želite li je prebrisati?"
-            }
-        },
-        "PatchMod": {
-            "Title": "Patch Mod: {Status}",
-            "Enabled": "Omogućeno",
-            "Disabled": "Onemogućeno",
-            "NotAvailable": "Nije dostupno",
-            "DeletePrompt": {
-                "Title": "Potvrdi brisanje",
-                "Message": "Jeste li sigurni da želite izbrisati mod zakrpe?"
-            },
-            "Actions": {
-                "Enable": "Omogući",
-                "Disable": "Onemogući",
-                "Delete": "Obriši",
-                "Close": "Zatvori"
-            }
-        },
-        "Prompts": {
-            "ModsMissingTitle": "Modovi uklonjeni",
-            "ModsMissingMessage": "Neki modovi nedostaju i automatski su uklonjeni iz kolekcije:{NewLine}{NewLine}{Mods}"
-        }
-
-    },
-    "Mod_Actions": {
-        "Apply": "Primjeni",
-        "Overlay_Apply_Message": "Pričekajte dok se primjenjuje kolekcija...",
-        "ConflictSolver": {
-            "Conflict": "Rješavanje sukoba",
-            "Overlay_Conflict_Solver_Indexing_Game": "Pričekaj dok se indexiraju definicije igre...",
-            "Overlay_Conflict_Solver_Loading_Game_Definitions": "Pričekaj dok se učitavaju definicije igre...",
-            "Overlay_Conflict_Solver_Loading_Definitions": "Pričekaj dok se učitavaju definicije modova...",
-            "Overlay_Conflict_Solver_Analyzing_Conflicts": "Pričekaj dok se analiziraju definicije za sukobe...",
-            "Overlay_Conflict_Solver_Analyzing_Resolved_Conflicts": "Pričekaj dok se analiziraju riješene definicije...",
-            "Overlay_Conflict_Solver_Replacing_Definitions": "Pričekaj dok se zamjenjuju definicije...",
-            "Overlay_Conflict_Solver_Progress": "Korak {Count}/{TotalCount}: {PercentDone}",
-            "FirstUsePrompt": {
-                "Title": "Pažnja",
-                "Message": "Rješavač sukoba nije za osobe slabog srca. Ono zahtijeva znanje i iskustvo s krpanjem koda. Korisnici manjih kolekcija ga slobodno trebaju ugnorirati, korisnici većih kolekcija trebaju ili smanjiti broj modifikacija ili istražiti krpanje koda. Ne može se pružiti podrška ako nastaviš."
-            },
-            "GameExecutableNotSetPrompt": {
-                "Title": "Izvršna datoteka igre nije postavljena",
-                "Message": "Izvršna datoteka igre nije postavljena u opcijama. Ova kolekcija modova prethodno je u svoju analizu uključivala datoteke igre. Rješivač sukoba neće moći analizirati datoteke igre i neke će se rezolucije možda resetirati. Želite li nastaviti?"
-            },
-            "TooLargePrompt": {
-                "Title": "Prevelik",
-                "Message": "Otkriven je mod s velikim izvornim kodom koji će potencijalno uzrokovati pad memorije u Ironyju. Također je malo vjerojatno da će igra moći rukovati tako velikim izvornim datotekama."
-            }
-        },
-        "LaunchGame": {
-            "Launch": "Pokreni igru",
-            "Resume": "Nastavi igru",
-            "Overlay": "Pokretanje igre, pričekajte...",
-            "LaunchError": {
-                "Title": "Nije moguće pokrenuti igru",
-                "Message": "Pokretanje igre nije uspjelo."
-            },
-            "NotSet": {
-                "Title": "Igra nije postavljena",
-                "Message": "Igra nije automatski otkrivena, koristite prozor opcija da bi ručno postavili izvršnu datoteku igre."
-            }
-        }
-    },
-    "Conflict_Solver": {
-        "Back": "Nazad",
-        "ConflictedObjects": "Sukobi",
-        "LeftSide": "Lijeva strana",
-        "RightSide": "Desna strana",
-        "BinaryFile": "Binarni sadržaj",
-        "ImageInfo": "Širina: {Width} Visina: {Height}",
-        "TakeLeft": "Uzmi lijevo",
-        "TakeRight": "Uzmi desno",
-        "OK": "U redu",
-        "Cancel": "Otkaži",
-        "Resolve": "Riješi",
-        "Ignore": "Ignoriraj",
-        "IgnoreRules": "Pravila ignoriranja",
-        "OverlayResolve": "Pričekajte dok se riješavaju sukobi...",
-        "NextConflict": "Slijedeći sukob",
-        "PrevConflict": "Prijašnji sukob",
-        "ConflictCount": "Broj sukoba: {Count}",
-        "PriorityReason": {
-            "FIOS": "(FIOS)",
-            "LIOS": "(LIOS)",
-            "Order": "(Redoslijed učitavanja)",
-            "Override": "(Nadjačavanje)"
-        },
-        "InvalidConflicts": {
-            "Name": "Nevažeći",
-            "Error": "Pogreška u retku: {Line} stupac: {Column} datoteka: {File}.{NewLine}Prijavite ovu pogrešku autoru mod-a: {ModName}.{NewLine}{NewLine}Poruka o pogrešci kaže:{NewLine}{NewLine}{Message}",
-            "ErrorNoLine": "Pogreška u datoteci: {Line} stupac: {Column} datoteka: {File}.{NewLine}Prijavite ovu pogrešku autoru mod-a: {ModName}.{NewLine}{NewLine}Poruka o pogrešci kaže:{NewLine}{NewLine}{Message}",
-            "ContextMenu": {
-                "OpenFile": "Otvori datoteku",
-                "OpenDirectory": "Otvori direktorij",
-                "CustomPatch": "Kopiraj u prilagođenu zakrpu"
-            }
-        },
-        "CompareSelectorContextMenu": {
-            "OpenFile": "Otvori datoteku",
-            "OpenDirectory": "Otvori direktorij"
-        },
-        "ContextMenu": {
-            "CopyAll": "Kopiraj sve",
-            "CopyThis": "Kopiraj odabrano",
-            "CopyThisAfterLine": "Kopiraj odabrano poslije linije",
-            "CopyThisBeforeLine": "Kopiraj odabrano prije linije",
-            "MoveUp": "Pomakni gore",
-            "MoveDown": "Pomakni dolje",
-            "Edit": "Uredi",
-            "EditHere": "Uredi ovdje",
-            "CopyText": "Kopiraj Tekst",
-            "Delete": "Obriši",
-            "Undo": "Poništi",
-            "Redo": "Ponovi",
-            "Editor": "Vanjsko spajanje",
-            "ReadonlyEditor": "Vanjska usporedba",
-            "ToggleCompare": "Promjeni način usporedbe razlika"
-        },
-        "EditorContextMenu": {
-            "Copy": "Kopiraj",
-            "Cut": "Izreži",
-            "Delete": "Obriši",
-            "Paste": "Zalijepi",
-            "Undo": "Poništi",
-            "Redo": "Ponovi",
-            "SelectAll": "Odaberi sve",
-            "Find": "Pronađi",
-            "Replace": "Zamijeni"
-        },
-        "EditorResources": {
-            "ReplaceLabel": "Zamijeni...",
-            "SearchErrorText": "Greška: ",
-            "SearchFindNextText": "Traži sljedeće (F3)",
-            "SearchFindPreviousText": "Traži prethodno (Shift+F3)",
-            "SearchLabel": "Traži...",
-            "SearchMatchCaseText": "Slučaj podudaranja",
-            "SearchMatchWholeWordsText": "Podudaranje cijele riječi",
-            "SearchNoMatchesFoundText": "Nema rezultata!",
-            "SearchReplaceAll": "Zamijeni sve (Alt+A)",
-            "SearchReplaceNext": "Zamijeni slijedeće (Alt+R)",
-            "SearchToggleReplace": "Prebacivanje između načina pronalaska i zamjene",
-            "SearchUseRegexText": "Koristi regularni izraz"
-        },
-        "Modes": {
-            "Title": "Odaberi način rada",
-            "Default": "Zadano",
-            "Advanced": "Napredno",
-            "Analyze": "Samo analiziraj",
-            "AnalyzeWithoutLocalization": "Analiziraj samo bez lokalizacije",
-            "DefaultWithoutLocalization": "Zadano bez lokalizacije",
-            "AdvancedWithoutLocalization": "Napredno bez lokalizacije",
-            "Close": "Zatvori"
-        },
-        "ModFilter": {
-            "Title": "Mod Filter",
-            "IgnoreGameConflicts": "Zanemari sukobe igre",
-            "ShowSelfConflicts": "Pokaži sukobe sa samim sobom",
-            "ShowResetConflicts": "Pokaži samo resetirane sukobe",
-            "Close": "Zatvori"
-        },
-        "ResetConflicts": {
-            "Title": "Poništi sukobe",
-            "Resolved": "Riješeni",
-            "Ignored": "Zanemareni",
-            "Custom": "Prilagođen",
-            "Close": "Zatvori",
-            "Reset": "Poništi",
-            "Overlay": "Pričekajte dok se poništavaju sukobi..."
-        },
-        "DBSearch": {
-            "Title": "Pretraživanje baze podataka",
-            "Watermark": "Unesi pojam",
-            "Close": "Zatvori",
-            "Clear": "X",
-            "Searching": "Tražim..."
-        },
-        "CustomPatch": {
-            "Title": "Prilagođena zakrpa",
-            "Load": "Učitaj",
-            "Path": "Direktorij",
-            "Save": "Snimi",
-            "Close": "Zatvori"
-        },
-        "Editor": {
-            "Title": "Vanjsko spajanje",
-            "Message": "Pritisnite potvrdi nakon što ste zadovoljni s vanjskim spajanjem."
-        },
-        "ReadonlyEditor": {
-            "Title": "Vanjska usporedba",
-            "Message": "Pritisnite U redu nakon što završite s usporedbom."
-        },
-        "ResolutionSaveError": {
-            "Title": "Provjera valjanosti virtualne definicije nije uspjela",
-            "MessageLine": "Virtualna definicija nije se mogla koristiti za rješavanje sukoba. Virtualna definicija nije uspjela provjeriti validaciju.{NewLine}{NewLine}{ErrorMessage}{NewLine}Pogreška u retku: {Line} stupac: {Column}",
-            "MessageNoLine": "Virtualna definicija nije se mogla koristiti za rješavanje sukoba. Virtualna definicija nije uspjela provjeriti validaciju.{NewLine}{NewLine}{ErrorMessage}"
-        },
-        "BracketMismatchError": {
-            "Message": "Nepodudaranje broja zagrada! Otvorena zagrada: {OpenBracketCount} Zatvori zagrada: {CloseBracketCount}"
-        },
-        "ResetWarning": {
-            "Title": "Sukobi Resetirani",
-            "AnalyzeModeAll": "Neki sukobi će se resetirati ako se rješavač sukoba pokrene zbog promjena u modu. Ovo su riješeni sukobi koji će se resetirati:{NewLine}{NewLine}{ListOfConflictsResolved}{NewLine}Ovo su zanemareni sukobi koji će se resetirati:{NewLine}{NewLine}{ListOfConflictsIgnored}",
-            "AnalyzeModeResolvedOnly": "Neki sukobi će se resetirati ako se rješavač sukoba pokrene zbog promjena u modu. Ovo su riješeni sukobi koji će se resetirati:{NewLine}{NewLine}{ListOfConflictsResolved}",
-            "AnalyzeModeIgnoredOnly": "Neki sukobi će se resetirati ako se rješavač sukoba pokrene zbog promjena u modu. Ovo su zanemareni sukobi koji će se resetirati:{NewLine}{NewLine}{ListOfConflictsIgnored}",
-            "RegularModeAll": "Neki sukobi su resetirali zbog promjena u modu. Ovo su resetirani riješeni sukobi:{NewLine}{NewLine}{ListOfConflictsResolved}{NewLine}Ovo su resetirani zanemareni sukobi:{NewLine}{NewLine}{ListOfConflictsIgnored}",
-            "RegularModeResolvedOnly": "Neki sukobi su resetirali zbog promjena u modu. Ovo su resetirani riješeni sukobi:{NewLine}{NewLine}{ListOfConflictsResolved}",
-            "RegularModeIgnoredOnly": "Neki sukobi su resetirali zbog promjena u modu. Ovo su resetirani zanemareni sukobi:{NewLine}{NewLine}{ListOfConflictsIgnored}",
-            "ListOfConflictsFormat": "{ParentDirectory}: {Name}"
-        },
-        "Tooltips": {
-            "DefinitionInfo": "Datoteka:{File} modificirano:{DateTime}"
-        }
-    },
-    "ConflictIgnore": {
-        "Save": "Spremi",
-        "Cancel": "Otkaži",
-        "Watermark": "Koristite # za komentare. Novi redak je novo pravilo."
-    },
-    "Options": {
-        "Name": "Opcije",
-        "Close": "Zatvori",
-        "NavigateTo": "...",
-        "Reset": "X",
-        "AppOptions": {
-            "Title": "Mogućnosti aplikacije",
-            "NotificationPosition": "Pozicija obavijesti"
-        },
-        "Editor": {
-            "Title": "Opcije vanjskog uređivača",
-            "EditorExecutable": "Izvršna datoteka",
-            "EditorArgs": "Argumenti",
-            "EditorArgsPlaceholder": "Primjer: leftFile:{Left} rightFile:{Right}",
-            "Test": "Ispitivanje konfiguracije",
-            "TestLeft": "faucibus purus in massa tempor, nec feugiat nisl pretium fusce",
-            "TestRight": "faucibus purus in massa tempor nec feugiat nisl pretium fusce"
-        },
-        "Game": {
-            "Title": "Mogućnosti igre",
-            "GameExecutable": "Izvršna datoteka",
-            "UserDirectory": "Katalog podataka",
-            "GameArgs": "Argumenti",
-            "RefreshMods": "Osvježite deskriptore prije startanja igre",
-            "CloseAfterLaunch": "Zatvori nakon pokretanja igre",
-            "AutoConfigure": "Konfiguriraj sve...",
-            "CustomModPath": "Prilagođeni direktorij modova"
-        },
-        "ConflictSolver": {
-            "Title": "Rješavanje sukoba",
-            "AllowedLanguages": "Dopušteni jezici",
-            "Colors": "Nove boje preglednika razlika",
-            "ConflictSolverDeletedLineColor": "Izbrisana linija",
-            "ConflictSolverImaginaryLineColor": "Imaginarna linija",
-            "ConflictSolverInsertedLineColor": "Umetnuti redak",
-            "ConflictSolverModifiedLineColor": "Modificirana linija"
-        },
-        "Updates": {
-            "Title": "Mogućnosti ažuriranja",
-            "UpdateInfoTitle": "Informacije o novoj verziji",
-            "AutoUpdates": "Provjeri ima li ažuriranja pri pokretanju",
-            "CheckPrerelease": "Uključi alpha\\beta\\rc azužiranja",
-            "CheckForUpdates": "Provjeri ima li ažuriranja",
-            "Install": "Instaliraj ažuriranja",
-            "Version": "Verzija: {Version}",
-            "Skip": "Zanemari ažuriranje",
-            "Overlay": {
-                "UpdateDownloading": "Preuzimanje ažuriranja...",
-                "UpdateDownloadProgress": "{Progress}",
-                "UpdateInstalling": "Raspakiravanje ažuriranja i priprema za pokretanje instalacijskog programa..."
-            },
-            "Errors": {
-                "DownloadErrorTitle": "Pogreška pri ažuriranju",
-                "DownloadErrorMessage": "Došlo je do pogreške prilikom preuzimanja ažuriranja, pogledajte detalje u zapisniku pogrešaka."
-            },
-            "AutoUpdatePrompts": {
-                "Title": "Automatski provjeri ažuriranja",
-                "Message": "Irony želi vaše dopuštenje da provjeri ima li ažuriranja prilikom pokretanja. Želite li da vas Irony automatski obavještava o novostima?"
-            },
-            "UpdateNotification": {
-                "Title": "UAžuriranje otkriveno",
-                "Message": "Pogledajte detalje o ažuriranju na zaslonu opcija ili kliknite ovu poruku."
-            }
-        },
-        "Dialog": {
-            "ExeTitle": "Nađi izvršnu datoteku igre",
-            "GameRootTitle": "Pronađite osnovni direktorij igre",
-            "UserDirTitle": "Pronađite direktorij podataka o igri",
-            "EditorTitle": "Nađi izvršnu dateoteku editora",
-            "CustomModPathTitle": "Pronađite prilagođeni mod direktorij"
-        },
-        "Prompts": {
-            "CustomModDirectory": {
-                "Title": "Nije prazno",
-                "Message": "Prilagođeni direktorij modova nije prazan ako ga promijenite sada možete izgubiti neke modove. Jeste li sigurni da ga želite promijeniti?"
-            }
-        },
-        "ModMerge": {
-            "Title": "Mod spajanja opcija",
-            "ModMergeTemplate": "Mod predložak",
-            "CollectionMergeTemplate": "Predložak zbirke"
-        }
-    },
-    "Notifications": {
-        "CollectionCreated": {
-            "Title": "Kolekcija kreirana",
-            "Message": "{CollectionName} je kreirana."
-        },
-        "CollectionDeleted": {
-            "Title": "Kolekcija obrisana",
-            "Message": "{CollectionName} je obrisana."
-        },
-        "CollectionAndModDeleted": {
-            "Title": "Kolekcija i spojeni modovi obrisani",
-            "Message": "{CollectionName} i spojeni modovi su obrisani."
-        },
-        "CollectionExists": {
-            "Title": "Kolekcija postoji",
-            "Message": "{CollectionName} več postoji."
-        },
-        "CollectionExported": {
-            "Title": "Kolekcija izvezena",
-            "Message": "{CollectionName} je izvezena."
-        },
-        "CollectionImported": {
-            "Title": "Collection uvezena",
-            "Message": "{CollectionName} je uvezena."
-        },
-        "CollectionApplied": {
-            "Title": "Kolekcija primjenjena",
-            "Message": "{CollectionName} je primjenjena."
-        },
-        "CollectionNotApplied": {
-            "Title": "Kolekcija nije primjenjena",
-            "Message": "{CollectionName} nije primjenjena."
-        },
-        "DescriptorsRefreshed": {
-            "Title": "Deskriptori osvježeni",
-            "Message": "Deskriptori su osvježeni."
-        },
-        "DescriptorsLocked": {
-            "Title": "Deskriptori zaključani",
-            "Message": "Deskriptori su zaključani."
-        },
-        "DescriptorsUnlocked": {
-            "Title": "Deskriptori otključani",
-            "Message": "Deskriptori su otključani."
-        },
-        "NewDescriptorsChecked": {
-            "Title": "Provjereni su novi modovi",
-            "Message": "Provjera novih modova je dovršena."
-        },
-        "CollectionRenamed": {
-            "Title": "Kolekcija preimenovana",
-            "Message": "Kolekcija je preimenovana."
-        },
-        "CollectionDuplicated": {
-            "Title": "Kolekcija duplicirana",
-            "Message": "Kolekcija je duplicirana."
-        },
-        "CollectionMerged": {
-            "Title": "Kolekcija spojena",
-            "Message": "Kolekcija je spojena."
-        },
-        "ConflictSolverUpdate": {
-            "Title": "Ažuriranja za rješavanje konflikata",
-            "Message": "Redoslijed učitavanja ili neki modovi su ažurirani. U slučaju da nema sukoba, samo se vrati natrag. Primjenjuju se neki automatski popravci."
-        },
-        "NoUpdatesAvailable": {
-            "Title": "Nema ažuriranja",
-            "Message": "Čini se da nema dostupnih ažuriranja."
-        },
-        "ReportExported": {
-            "Title": "Izvješće izvezeno",
-            "Message": "Izvješće je izvezeno."
-        },
-        "ReportValid": {
-            "Title": "Hashevi dateoteka se podudaraju",
-            "Message": "Svi hashevi se podudaraju."
-        },
-        "CustomPatchRerunConflictSolver": {
-            "Title": "Osvježi rješenje za rješavanje sukoba",
-            "Message": "Rješavač sukoba treba osvježiti kako bi se uzele u obzir nove prilagođene zakrpe. Ponovite postupak rješavanja sukoba."
-        },
-        "CollectionMergeNotEnoughSpace": {
-            "Title": "Nema dovoljno slobodnog prostora",
-            "Message": "Nema dovoljno slobodnog prostora za spajanje kolekcije."
-        },
-        "ParadoxLauncherRunning": {
-            "Title": "Paradox Launcher Aktivan",
-            "Message": "Paradox Launcher je pokrenut molimo zatvorite ga prije nego pokušate ovu akciju."
-        }
-    },
-    "Mod_App_Actions": {
-        "OpenInSteam": "Otvori u steamu",
-        "Open": "Otvori adresu moda",
-        "Copy": "Kopiraj adresu moda",
-        "CopyPath": "Kopiraj putanju moda",
-        "OpenInAssociatedApp": "Otvorite Mod mapu/datoteku"
-    },
-    "Descriptor_Actions": {
-        "CheckNew": "Provjerite nove modove",
-        "Delete": "Obriši i ponovno učitaj",
-        "Delete_All": "Izbriši sve i ponovno učitaj",
-        "Lock": "Zaključaj",
-        "Lock_All": "Zaključaj sve",
-        "Unlock": "Otključaj",
-        "Unlock_All": "Otključaj sve"
-    },
-    "Achievements": {
-        "AchievementCompatible": "Mod je kompatibilan s achievementima.",
-        "NotAchievementCompatible": "Mod nije kompatibilan s achievementima."
-    },
-    "ModSource": {
-        "Paradox": "Paradox Interactive Mod",
-        "Steam": "Steam Mod",
-        "Local": "Lokalni Mod"
-    },
-    "Sorting": {
-        "Sort_A_Z": "↑",
-        "Sort_Z_A": "↓"
-    },
-    "Filter": {
-        "Clear": "X",
-        "UpArrow": "▲",
-        "DownArrow": "▼"
-    },
-    "FilterCommands": {
-        "Achievements": "postignuća",
-        "Source": "izvor",
-        "Version": "verzija",
-        "Selected": "odabran",
-        "Yes": "da",
-        "No": "ne",
-        "True": "točno",
-        "False": "netočno",
-        "Steam": "steam",
-        "Paradox": "paradox",
-        "Local": "lokalno"
-    },
-    "FilterOperators": {
-        "ValueSeparator": ":",
-        "StatementSeparator": "&&",
-        "OrStatementSeparator": "||",
-        "Negate": "--"
+  "App": {
+    "FontFamily": "Noto Sans",
+    "SupportedNameBlock": "",
+    "Title": "Irony Mod Manager: v{AppVersion}",
+    "BackgroundOperationMessage": "Molimo pričekajte dok se pozadinska operacija ne izvrši. Aplikacija će se ugasiti nakon što se završi.",
+    "WaitBackgroundOperationMessage": "Molimo pričekajte dok se pozadinska operacija ne izvrši.",
+    "Actions": {
+      "Name": "Akcije",
+      "Wiki": "Wiki",
+      "Logs": "Logovi",
+      "ErrorLog": "Error.log",
+      "Close": "Zatvori",
+      "DLC": "DLC"
     }
+  },
+  "JokeError": {
+    "Title": "Neobrađeno kršenje memorije spremnika jaja",
+    "Message": "Pritisnite OK da se pretvarate da se ništa nije dogodilo :)"
+  },
+  "FatalError": {
+    "Message": "Došlo je do greške. Aplikacija će se automatski zatvoriti.",
+    "MessageWithLastError": "Došlo je do greške. Koristite ovu informaciju da biste podnijeli izvješće o greški:{NewLine}{NewLine}{Message}",
+    "Title": "Greška",
+    "Header": "Fatalna pogreška"
+  },
+  "SavingError": {
+    "Title": "Greška prilikom snimanja",
+    "Message": "Čini se da nešto blokira mogućnost Ironyja da piše u mod datoteke. Prijavite ovo na GitHub tracker i pošaljite izvješće o greškama."
+  },
+  "UnableToWriteError": {
+    "Title": "Aplikacija blokirana",
+    "Message": "Čini se da je program blokiran antivirusom ili dopuštenjima i ne može pisati u direktorij korisničkih dokumenata:{NewLine}{Paths}"
+  },
+  "InvalidModsDetected": {
+    "Title": "Otkriveni su nevaljani modovi",
+    "Message": "Sljedeće lokacije modova nisu mogle biti raščlanjene zbog nevaljanih arhiva ili zaključanih datoteka:{NewLine}{Mods}"
+  },
+  "Prompt": {
+    "OK": "U redu",
+    "Yes": "Da",
+    "No": "Ne",
+    "Confirm": "Potvrdi",
+    "Cancel": "Otkaži"
+  },
+  "FileDialog": {
+    "FileName": "Naziv datoteke",
+    "ShowHiddenFiles": "Pokaži skrivene datoteke",
+    "Volume": "{Size} Volumen",
+    "OK": "U redu",
+    "Cancel": "Otkaži",
+    "Name": "Ime",
+    "DateModified": "Datum izmjene",
+    "Type": "Tip",
+    "Size": "Veličina",
+    "Folders": {
+      "Downloads": "Preuzimanja",
+      "Desktop": "Desktop",
+      "Documents": "Dokumenti",
+      "Music": "Glazba",
+      "Videos": "Video",
+      "Pictures": "Slike"
+    }
+  },
+  "TextBox": {
+    "Copy": "Kopiraj",
+    "Cut": "Izreži",
+    "Paste": "Zalijepi",
+    "SelectAll": "Odaberi sve"
+  },
+  "Languages": {
+    "Name": "Jezik"
+  },
+  "Themes": {
+    "Name": "Tema",
+    "Light": "Svjetlo",
+    "Dark": "Tamno",
+    "FluentLight": "Fluidna Svjetla",
+    "FluentDark": "Fluidna Tamna",
+    "MaterialDark": "Material Tamna",
+    "MaterialLight": "Material Svjetla",
+    "Restart_Title": "Potrebno je ponovno pokretanje",
+    "Restart_Header": "Aplikaciju je potrebno ponovno pokrenuti",
+    "Restart_Message": "Aplikaciju treba ponovo pokrenuti kako bi se nova tema pravilno primijenila. Želite li ponovno pokrenuti aplikaciju?"
+  },
+  "NotificationPosition": {
+    "BottomRight": "Dolje desno",
+    "BottomLeft": "Dolje lijevo",
+    "TopRight": "Gore desno",
+    "TopLeft": "Gore lijevo"
+  },
+  "Games": {
+    "Name": "Igra",
+    "Stellaris": "Stellaris",
+    "EuropaUniversalisIV": "Europa Universalis IV",
+    "HeartsofIronIV": "Hearts of Iron IV",
+    "ImperatorRome": "Imperator Rome",
+    "CrusaderKings3": "Crusader Kings III",
+    "Victoria3": "Victoria 3",
+    "STInfinite": "Star Trek: Infinite"
+  },
+  "GameLanguages": {
+    "l_english": "Engleski",
+    "l_braz_por": "Portugalski",
+    "l_french": "Francuski",
+    "l_german": "Njemački",
+    "l_polish": "Poljski",
+    "l_russian": "Ruski",
+    "l_simp_chinese": "Jednostavan kineski",
+    "l_spanish": "Španjolski",
+    "l_chinese": "Kineski",
+    "l_traditional_chinese": "Tradicionalni kineski",
+    "l_japanese": "Japanski",
+    "l_korean": "Korejski"
+  },
+  "Installed_Mods": {
+    "Name": "Instalirani modovi",
+    "Filter": "Filtriraj modove",
+    "Selected": "Odabrano",
+    "Mod_Name": "Ime moda",
+    "Supported_Version": "Podržana verzija",
+    "LoadingMods": "Pričekajte dok se učitavaju mod podaci...",
+    "RefreshingModList": "Pričekajte dok se popis modova osvježava...",
+    "InvalidMods": {
+      "Title": "Otkriveni su nevažeći modovi",
+      "Message": "Nedostaju sljedeći modovi:{NewLine}{Mods}.{NewLine}{NewLine}Želite li izbrisati deskriptore?"
+    }
+  },
+  "Collection_Mods": {
+    "Name": "Kolekcija modova",
+    "Remove": "-",
+    "Create": "+",
+    "OK": "U redu",
+    "Cancel": "Otkaži",
+    "Watermark": "Unesi ime nove kolekcije",
+    "Delete_Title": "Obrisati kolekciju?",
+    "Delete_Header": "Potvrdi birsanje kolekcije",
+    "Delete_Message": "Da li si siguran da želiš obrisati {CollectionName} kolekciju?",
+    "Deleting_Message": "Molim pričekajte dok brišem kolekciju...",
+    "Export": "Izvoz",
+    "Import": "Uvoz",
+    "Export_Dialog_Title": "Izvoz kolekcije",
+    "Import_Dialog_Title": "Uvezi kolekciju",
+    "Overlay_Exporting_Message": "Molim pričekajte dok izvozimo kolekciju...",
+    "Overlay_Importing_Message": "Molim pričekajte dok uvozimo kolekciju...",
+    "Overlay_Import_Export_Progress": "{PercentDone}",
+    "Filter": "Traži modove",
+    "Selected": "Odabrano",
+    "Mod_Name": "Ime moda",
+    "Order": "Redoslijed",
+    "Rename": "Preimenuj",
+    "Duplicate": "Dupliciraj",
+    "Overlay_Rename_Message": "Pričekajte dok se izvrši preimenovanje...",
+    "Overlay_Duplicate_Message": "Pričekajte dok se izvrši dupliciranje...",
+    "ExportToClipboard": "Kopiraj kolekciju u međuspremnik",
+    "ExportToClipboardFull": "Kopiraj kolekciju u međuspremnik s metapodacima",
+    "Undo": "Poništi",
+    "Redo": "Ponovi",
+    "DeleteMerge": {
+      "DeleteTitle": "Želiš li izbrisati spojeni mod?",
+      "DeleteHeader": "Potvrdi brisanje spojenog moda",
+      "DeleteMessage": "Otkriveno je postojanje spojenog moda, želite li ga također obrisati?"
+    },
+    "ImportFromClipboard": {
+      "Title": "Uvezi mod redoslijed iz međuspremnika",
+      "PromptTitle": "Prebriši redoslijed modova?",
+      "PromptMessage": "Ovo će prebrisati redoslijed i odabir modova. Nastaviti?"
+    },
+    "FileHash": {
+      "ExportCollection": "Izvoz hashova kolekcije",
+      "ExportGame": "Izvoz hasheva igre",
+      "Import": "Provjeri hashove",
+      "DialogTitleExport": "Odaberite mjesto za izvoz izvješća",
+      "DialogTitleImport": "Odaberite json izvješće za uvoz",
+      "ExportOverlay": "Pričekajte dok se izvozi...",
+      "ImportOverlay": "Pričekajte dok se verificira...",
+      "ProgressExport": "{Progress}",
+      "ProgressImport": "Korak {Count}/{TotalCount}: {Progress}",
+      "Export": "Izvoz",
+      "Close": "Zatvori"
+    },
+    "JumpOnDragAndDrop": {
+      "Title": "Auto fokus: {State}",
+      "On": "Uključen",
+      "Off": "Isključen"
+    },
+    "ImportPrompt": {
+      "Title": "Kolekcija postoji",
+      "Message": "Kolekcija postoji i bit će prebrisana, želite li nastaviti?"
+    },
+    "ImportNonExistingMods": {
+      "Title": "Nepostojeći modovi",
+      "Message": "Sljedeće modove nije moguće uvesti jer se čini da nedostaju::{NewLine}{Mods}"
+    },
+    "ImportOther": {
+      "Title": "...",
+      "Paradoxos": "Uvezi iz Paradoxos",
+      "Paradox": "Uvezi iz igre",
+      "ParadoxLauncher": "Uvezi iz Paradox Launcher",
+      "ParadoxLauncherBeta": "Uvezi iz Paradox Launcher Bete",
+      "ParadoxLauncherJson": "Uvezi iz Paradox Launcher Json",
+      "Close": "Zatvori"
+    },
+    "ExportOther": {
+      "Title": "...",
+      "OrderOnly": "Izvezi redoslijed",
+      "WholeCollection": "Izvoz cijelu zbirku",
+      "ParadoxLauncherJson": "Izvezi u Paradox Launcher Json (<2021.10)",
+      "ParadoxLauncherJson202110": "Izvezi u Paradox Launcher Json (>=2021.10)",
+      "Close": "Zatvori"
+    },
+    "MergeCollection": {
+      "Name": "Spoji",
+      "MergedCollectionPrefix": "(Spojeno)",
+      "MergeCompressModPrefix": "(Spojeno {Name})",
+      "Overlay_Progress": "Korak {Count}/{TotalCount}: {PercentDone}",
+      "DiskInfoOverlay": "Provjera dostupnog prostora na disku...",
+      "Options": {
+        "Title": "Odaberi način",
+        "Basic": "Osnovno",
+        "Compress": "Kompresiraj",
+        "Close": "Zatvori"
+      },
+      "Basic": {
+        "Overlay_Gathering_Mod_Info": "Pričekaj dok se skupljaju mod informacije...",
+        "Overlay_Writing_Files": "Pričekaj dok se spaja kolekcija..."
+      },
+      "Compress": {
+        "Overlay_Gathering_Mod_Info": "Pričekaj dok se skupljaju mod informacije...",
+        "Overlay_Compressing_Files": "Pričekaj dok se spaja kolekcija..."
+      },
+      "OverwritePrompt": {
+        "Title": "Prebriši postojeću kolekciju?",
+        "Message": "Spojena kolekcija već postoji. Želite li je prebrisati?"
+      }
+    },
+    "PatchMod": {
+      "Title": "Patch Mod: {Status}",
+      "Enabled": "Omogućeno",
+      "Disabled": "Onemogućeno",
+      "NotAvailable": "Nije dostupno",
+      "DeletePrompt": {
+        "Title": "Potvrdi brisanje",
+        "Message": "Jeste li sigurni da želite izbrisati mod zakrpe?"
+      },
+      "Actions": {
+        "Enable": "Omogući",
+        "Disable": "Onemogući",
+        "Delete": "Obriši",
+        "Close": "Zatvori"
+      }
+    },
+    "Prompts": {
+      "ModsMissingTitle": "Modovi uklonjeni",
+      "ModsMissingMessage": "Neki modovi nedostaju i automatski su uklonjeni iz kolekcije:{NewLine}{NewLine}{Mods}"
+    }
+
+  },
+  "Mod_Actions": {
+    "Apply": "Primjeni",
+    "Overlay_Apply_Message": "Pričekajte dok se primjenjuje kolekcija...",
+    "ConflictSolver": {
+      "Conflict": "Rješavanje sukoba",
+      "Overlay_Conflict_Solver_Indexing_Game": "Pričekaj dok se indexiraju definicije igre...",
+      "Overlay_Conflict_Solver_Loading_Game_Definitions": "Pričekaj dok se učitavaju definicije igre...",
+      "Overlay_Conflict_Solver_Loading_Definitions": "Pričekaj dok se učitavaju definicije modova...",
+      "Overlay_Conflict_Solver_Analyzing_Conflicts": "Pričekaj dok se analiziraju definicije za sukobe...",
+      "Overlay_Conflict_Solver_Analyzing_Resolved_Conflicts": "Pričekaj dok se analiziraju riješene definicije...",
+      "Overlay_Conflict_Solver_Replacing_Definitions": "Pričekaj dok se zamjenjuju definicije...",
+      "Overlay_Conflict_Solver_Progress": "Korak {Count}/{TotalCount}: {PercentDone}",
+      "FirstUsePrompt": {
+        "Title": "Pažnja",
+        "Message": "Rješavač sukoba nije za osobe slabog srca. Ono zahtijeva znanje i iskustvo s krpanjem koda. Korisnici manjih kolekcija ga slobodno trebaju ugnorirati, korisnici većih kolekcija trebaju ili smanjiti broj modifikacija ili istražiti krpanje koda. Ne može se pružiti podrška ako nastaviš."
+      },
+      "GameExecutableNotSetPrompt": {
+        "Title": "Izvršna datoteka igre nije postavljena",
+        "Message": "Izvršna datoteka igre nije postavljena u opcijama. Ova kolekcija modova prethodno je u svoju analizu uključivala datoteke igre. Rješivač sukoba neće moći analizirati datoteke igre i neke će se rezolucije možda resetirati. Želite li nastaviti?"
+      },
+      "TooLargePrompt": {
+        "Title": "Prevelik",
+        "Message": "Otkriven je mod s velikim izvornim kodom koji će potencijalno uzrokovati pad memorije u Ironyju. Također je malo vjerojatno da će igra moći rukovati tako velikim izvornim datotekama."
+      }
+    },
+    "LaunchGame": {
+      "Launch": "Pokreni igru",
+      "Resume": "Nastavi igru",
+      "Overlay": "Pokretanje igre, pričekajte...",
+      "LaunchError": {
+        "Title": "Nije moguće pokrenuti igru",
+        "Message": "Pokretanje igre nije uspjelo."
+      },
+      "NotSet": {
+        "Title": "Igra nije postavljena",
+        "Message": "Igra nije automatski otkrivena, koristite prozor opcija da bi ručno postavili izvršnu datoteku igre."
+      }
+    }
+  },
+  "Conflict_Solver": {
+    "Back": "Nazad",
+    "ConflictedObjects": "Sukobi",
+    "LeftSide": "Lijeva strana",
+    "RightSide": "Desna strana",
+    "BinaryFile": "Binarni sadržaj",
+    "ImageInfo": "Širina: {Width} Visina: {Height}",
+    "TakeLeft": "Uzmi lijevo",
+    "TakeRight": "Uzmi desno",
+    "OK": "U redu",
+    "Cancel": "Otkaži",
+    "Resolve": "Riješi",
+    "Ignore": "Ignoriraj",
+    "IgnoreRules": "Pravila ignoriranja",
+    "OverlayResolve": "Pričekajte dok se riješavaju sukobi...",
+    "NextConflict": "Slijedeći sukob",
+    "PrevConflict": "Prijašnji sukob",
+    "ConflictCount": "Broj sukoba: {Count}",
+    "PriorityReason": {
+      "FIOS": "(FIOS)",
+      "LIOS": "(LIOS)",
+      "Order": "(Redoslijed učitavanja)",
+      "Override": "(Nadjačavanje)"
+    },
+    "InvalidConflicts": {
+      "Name": "Nevažeći",
+      "Error": "Pogreška u retku: {Line} stupac: {Column} datoteka: {File}.{NewLine}Prijavite ovu pogrešku autoru mod-a: {ModName}.{NewLine}{NewLine}Poruka o pogrešci kaže:{NewLine}{NewLine}{Message}",
+      "ErrorNoLine": "Pogreška u datoteci: {Line} stupac: {Column} datoteka: {File}.{NewLine}Prijavite ovu pogrešku autoru mod-a: {ModName}.{NewLine}{NewLine}Poruka o pogrešci kaže:{NewLine}{NewLine}{Message}",
+      "ContextMenu": {
+        "OpenFile": "Otvori datoteku",
+        "OpenDirectory": "Otvori direktorij",
+        "CustomPatch": "Kopiraj u prilagođenu zakrpu"
+      }
+    },
+    "CompareSelectorContextMenu": {
+      "OpenFile": "Otvori datoteku",
+      "OpenDirectory": "Otvori direktorij"
+    },
+    "ContextMenu": {
+      "CopyAll": "Kopiraj sve",
+      "CopyThis": "Kopiraj odabrano",
+      "CopyThisAfterLine": "Kopiraj odabrano poslije linije",
+      "CopyThisBeforeLine": "Kopiraj odabrano prije linije",
+      "MoveUp": "Pomakni gore",
+      "MoveDown": "Pomakni dolje",
+      "Edit": "Uredi",
+      "EditHere": "Uredi ovdje",
+      "CopyText": "Kopiraj Tekst",
+      "Delete": "Obriši",
+      "Undo": "Poništi",
+      "Redo": "Ponovi",
+      "Editor": "Vanjsko spajanje",
+      "ReadonlyEditor": "Vanjska usporedba",
+      "ToggleCompare": "Promjeni način usporedbe razlika"
+    },
+    "EditorContextMenu": {
+      "Copy": "Kopiraj",
+      "Cut": "Izreži",
+      "Delete": "Obriši",
+      "Paste": "Zalijepi",
+      "Undo": "Poništi",
+      "Redo": "Ponovi",
+      "SelectAll": "Odaberi sve",
+      "Find": "Pronađi",
+      "Replace": "Zamijeni"
+    },
+    "EditorResources": {
+      "ReplaceLabel": "Zamijeni...",
+      "SearchErrorText": "Greška: ",
+      "SearchFindNextText": "Traži sljedeće (F3)",
+      "SearchFindPreviousText": "Traži prethodno (Shift+F3)",
+      "SearchLabel": "Traži...",
+      "SearchMatchCaseText": "Slučaj podudaranja",
+      "SearchMatchWholeWordsText": "Podudaranje cijele riječi",
+      "SearchNoMatchesFoundText": "Nema rezultata!",
+      "SearchReplaceAll": "Zamijeni sve (Alt+A)",
+      "SearchReplaceNext": "Zamijeni slijedeće (Alt+R)",
+      "SearchToggleReplace": "Prebacivanje između načina pronalaska i zamjene",
+      "SearchUseRegexText": "Koristi regularni izraz"
+    },
+    "Modes": {
+      "Title": "Odaberi način rada",
+      "Default": "Zadano",
+      "Advanced": "Napredno",
+      "Analyze": "Samo analiziraj",
+      "AnalyzeWithoutLocalization": "Analiziraj samo bez lokalizacije",
+      "DefaultWithoutLocalization": "Zadano bez lokalizacije",
+      "AdvancedWithoutLocalization": "Napredno bez lokalizacije",
+      "Close": "Zatvori"
+    },
+    "ModFilter": {
+      "Title": "Mod Filter",
+      "IgnoreGameConflicts": "Zanemari sukobe igre",
+      "ShowSelfConflicts": "Pokaži sukobe sa samim sobom",
+      "ShowResetConflicts": "Pokaži samo resetirane sukobe",
+      "Close": "Zatvori"
+    },
+    "ResetConflicts": {
+      "Title": "Poništi sukobe",
+      "Resolved": "Riješeni",
+      "Ignored": "Zanemareni",
+      "Custom": "Prilagođen",
+      "Close": "Zatvori",
+      "Reset": "Poništi",
+      "Overlay": "Pričekajte dok se poništavaju sukobi..."
+    },
+    "DBSearch": {
+      "Title": "Pretraživanje baze podataka",
+      "Watermark": "Unesi pojam",
+      "Close": "Zatvori",
+      "Clear": "X",
+      "Searching": "Tražim..."
+    },
+    "CustomPatch": {
+      "Title": "Prilagođena zakrpa",
+      "Load": "Učitaj",
+      "Path": "Direktorij",
+      "Save": "Snimi",
+      "Close": "Zatvori"
+    },
+    "Editor": {
+      "Title": "Vanjsko spajanje",
+      "Message": "Pritisnite potvrdi nakon što ste zadovoljni s vanjskim spajanjem."
+    },
+    "ReadonlyEditor": {
+      "Title": "Vanjska usporedba",
+      "Message": "Pritisnite U redu nakon što završite s usporedbom."
+    },
+    "ResolutionSaveError": {
+      "Title": "Provjera valjanosti virtualne definicije nije uspjela",
+      "MessageLine": "Virtualna definicija nije se mogla koristiti za rješavanje sukoba. Virtualna definicija nije uspjela provjeriti validaciju.{NewLine}{NewLine}{ErrorMessage}{NewLine}Pogreška u retku: {Line} stupac: {Column}",
+      "MessageNoLine": "Virtualna definicija nije se mogla koristiti za rješavanje sukoba. Virtualna definicija nije uspjela provjeriti validaciju.{NewLine}{NewLine}{ErrorMessage}"
+    },
+    "BracketMismatchError": {
+      "Message": "Nepodudaranje broja zagrada! Otvorena zagrada: {OpenBracketCount} Zatvori zagrada: {CloseBracketCount}"
+    },
+    "ResetWarning": {
+      "Title": "Sukobi Resetirani",
+      "AnalyzeModeAll": "Neki sukobi će se resetirati ako se rješavač sukoba pokrene zbog promjena u modu. Ovo su riješeni sukobi koji će se resetirati:{NewLine}{NewLine}{ListOfConflictsResolved}{NewLine}Ovo su zanemareni sukobi koji će se resetirati:{NewLine}{NewLine}{ListOfConflictsIgnored}",
+      "AnalyzeModeResolvedOnly": "Neki sukobi će se resetirati ako se rješavač sukoba pokrene zbog promjena u modu. Ovo su riješeni sukobi koji će se resetirati:{NewLine}{NewLine}{ListOfConflictsResolved}",
+      "AnalyzeModeIgnoredOnly": "Neki sukobi će se resetirati ako se rješavač sukoba pokrene zbog promjena u modu. Ovo su zanemareni sukobi koji će se resetirati:{NewLine}{NewLine}{ListOfConflictsIgnored}",
+      "RegularModeAll": "Neki sukobi su resetirali zbog promjena u modu. Ovo su resetirani riješeni sukobi:{NewLine}{NewLine}{ListOfConflictsResolved}{NewLine}Ovo su resetirani zanemareni sukobi:{NewLine}{NewLine}{ListOfConflictsIgnored}",
+      "RegularModeResolvedOnly": "Neki sukobi su resetirali zbog promjena u modu. Ovo su resetirani riješeni sukobi:{NewLine}{NewLine}{ListOfConflictsResolved}",
+      "RegularModeIgnoredOnly": "Neki sukobi su resetirali zbog promjena u modu. Ovo su resetirani zanemareni sukobi:{NewLine}{NewLine}{ListOfConflictsIgnored}",
+      "ListOfConflictsFormat": "{ParentDirectory}: {Name}"
+    },
+    "Tooltips": {
+      "DefinitionInfo": "Datoteka:{File} modificirano:{DateTime}"
+    }
+  },
+  "ConflictIgnore": {
+    "Save": "Spremi",
+    "Cancel": "Otkaži",
+    "Watermark": "Koristite # za komentare. Novi redak je novo pravilo."
+  },
+  "Options": {
+    "Name": "Opcije",
+    "Close": "Zatvori",
+    "NavigateTo": "...",
+    "Reset": "X",
+    "AppOptions": {
+      "Title": "Mogućnosti aplikacije",
+      "NotificationPosition": "Pozicija obavijesti"
+    },
+    "Editor": {
+      "Title": "Opcije vanjskog uređivača",
+      "EditorExecutable": "Izvršna datoteka",
+      "EditorArgs": "Argumenti",
+      "EditorArgsPlaceholder": "Primjer: leftFile:{Left} rightFile:{Right}",
+      "Test": "Ispitivanje konfiguracije",
+      "TestLeft": "faucibus purus in massa tempor, nec feugiat nisl pretium fusce",
+      "TestRight": "faucibus purus in massa tempor nec feugiat nisl pretium fusce"
+    },
+    "Game": {
+      "Title": "Mogućnosti igre",
+      "GameExecutable": "Izvršna datoteka",
+      "UserDirectory": "Katalog podataka",
+      "GameArgs": "Argumenti",
+      "RefreshMods": "Osvježite deskriptore prije startanja igre",
+      "CloseAfterLaunch": "Zatvori nakon pokretanja igre",
+      "AutoConfigure": "Konfiguriraj sve...",
+      "CustomModPath": "Prilagođeni direktorij modova"
+    },
+    "ConflictSolver": {
+      "Title": "Rješavanje sukoba",
+      "AllowedLanguages": "Dopušteni jezici",
+      "Colors": "Nove boje preglednika razlika",
+      "ConflictSolverDeletedLineColor": "Izbrisana linija",
+      "ConflictSolverImaginaryLineColor": "Imaginarna linija",
+      "ConflictSolverInsertedLineColor": "Umetnuti redak",
+      "ConflictSolverModifiedLineColor": "Modificirana linija"
+    },
+    "Updates": {
+      "Title": "Mogućnosti ažuriranja",
+      "UpdateInfoTitle": "Informacije o novoj verziji",
+      "AutoUpdates": "Provjeri ima li ažuriranja pri pokretanju",
+      "CheckPrerelease": "Uključi alpha\\beta\\rc azužiranja",
+      "CheckForUpdates": "Provjeri ima li ažuriranja",
+      "Install": "Instaliraj ažuriranja",
+      "Version": "Verzija: {Version}",
+      "Skip": "Zanemari ažuriranje",
+      "Overlay": {
+        "UpdateDownloading": "Preuzimanje ažuriranja...",
+        "UpdateDownloadProgress": "{Progress}",
+        "UpdateInstalling": "Raspakiravanje ažuriranja i priprema za pokretanje instalacijskog programa..."
+      },
+      "Errors": {
+        "DownloadErrorTitle": "Pogreška pri ažuriranju",
+        "DownloadErrorMessage": "Došlo je do pogreške prilikom preuzimanja ažuriranja, pogledajte detalje u zapisniku pogrešaka."
+      },
+      "AutoUpdatePrompts": {
+        "Title": "Automatski provjeri ažuriranja",
+        "Message": "Irony želi vaše dopuštenje da provjeri ima li ažuriranja prilikom pokretanja. Želite li da vas Irony automatski obavještava o novostima?"
+      },
+      "UpdateNotification": {
+        "Title": "UAžuriranje otkriveno",
+        "Message": "Pogledajte detalje o ažuriranju na zaslonu opcija ili kliknite ovu poruku."
+      }
+    },
+    "Dialog": {
+      "ExeTitle": "Nađi izvršnu datoteku igre",
+      "GameRootTitle": "Pronađite osnovni direktorij igre",
+      "UserDirTitle": "Pronađite direktorij podataka o igri",
+      "EditorTitle": "Nađi izvršnu dateoteku editora",
+      "CustomModPathTitle": "Pronađite prilagođeni mod direktorij"
+    },
+    "Prompts": {
+      "CustomModDirectory": {
+        "Title": "Nije prazno",
+        "Message": "Prilagođeni direktorij modova nije prazan ako ga promijenite sada možete izgubiti neke modove. Jeste li sigurni da ga želite promijeniti?"
+      }
+    },
+    "ModMerge": {
+      "Title": "Mod spajanja opcija",
+      "ModMergeTemplate": "Mod predložak",
+      "CollectionMergeTemplate": "Predložak zbirke"
+    }
+  },
+  "Notifications": {
+    "CollectionCreated": {
+      "Title": "Kolekcija kreirana",
+      "Message": "{CollectionName} je kreirana."
+    },
+    "CollectionDeleted": {
+      "Title": "Kolekcija obrisana",
+      "Message": "{CollectionName} je obrisana."
+    },
+    "CollectionAndModDeleted": {
+      "Title": "Kolekcija i spojeni modovi obrisani",
+      "Message": "{CollectionName} i spojeni modovi su obrisani."
+    },
+    "CollectionExists": {
+      "Title": "Kolekcija postoji",
+      "Message": "{CollectionName} več postoji."
+    },
+    "CollectionExported": {
+      "Title": "Kolekcija izvezena",
+      "Message": "{CollectionName} je izvezena."
+    },
+    "CollectionImported": {
+      "Title": "Collection uvezena",
+      "Message": "{CollectionName} je uvezena."
+    },
+    "CollectionApplied": {
+      "Title": "Kolekcija primjenjena",
+      "Message": "{CollectionName} je primjenjena."
+    },
+    "CollectionNotApplied": {
+      "Title": "Kolekcija nije primjenjena",
+      "Message": "{CollectionName} nije primjenjena."
+    },
+    "DescriptorsRefreshed": {
+      "Title": "Deskriptori osvježeni",
+      "Message": "Deskriptori su osvježeni."
+    },
+    "DescriptorsLocked": {
+      "Title": "Deskriptori zaključani",
+      "Message": "Deskriptori su zaključani."
+    },
+    "DescriptorsUnlocked": {
+      "Title": "Deskriptori otključani",
+      "Message": "Deskriptori su otključani."
+    },
+    "NewDescriptorsChecked": {
+      "Title": "Provjereni su novi modovi",
+      "Message": "Provjera novih modova je dovršena."
+    },
+    "CollectionRenamed": {
+      "Title": "Kolekcija preimenovana",
+      "Message": "Kolekcija je preimenovana."
+    },
+    "CollectionDuplicated": {
+      "Title": "Kolekcija duplicirana",
+      "Message": "Kolekcija je duplicirana."
+    },
+    "CollectionMerged": {
+      "Title": "Kolekcija spojena",
+      "Message": "Kolekcija je spojena."
+    },
+    "ConflictSolverUpdate": {
+      "Title": "Ažuriranja za rješavanje konflikata",
+      "Message": "Redoslijed učitavanja ili neki modovi su ažurirani. U slučaju da nema sukoba, samo se vrati natrag. Primjenjuju se neki automatski popravci."
+    },
+    "NoUpdatesAvailable": {
+      "Title": "Nema ažuriranja",
+      "Message": "Čini se da nema dostupnih ažuriranja."
+    },
+    "ReportExported": {
+      "Title": "Izvješće izvezeno",
+      "Message": "Izvješće je izvezeno."
+    },
+    "ReportValid": {
+      "Title": "Hashevi dateoteka se podudaraju",
+      "Message": "Svi hashevi se podudaraju."
+    },
+    "CustomPatchRerunConflictSolver": {
+      "Title": "Osvježi rješenje za rješavanje sukoba",
+      "Message": "Rješavač sukoba treba osvježiti kako bi se uzele u obzir nove prilagođene zakrpe. Ponovite postupak rješavanja sukoba."
+    },
+    "CollectionMergeNotEnoughSpace": {
+      "Title": "Nema dovoljno slobodnog prostora",
+      "Message": "Nema dovoljno slobodnog prostora za spajanje kolekcije."
+    },
+    "ParadoxLauncherRunning": {
+      "Title": "Paradox Launcher Aktivan",
+      "Message": "Paradox Launcher je pokrenut molimo zatvorite ga prije nego pokušate ovu akciju."
+    },
+    "ConflictSolverRerunGlobalVars": {
+      "Title": "Osvježi rješenje za rješavanje sukoba",
+      "Message": "Rješavač sukoba treba osvježiti kako bi se uzele u obzir nove prilagođene globalne zakrpe. Ponovite postupak rješavanja sukoba."
+    }
+  },
+  "Mod_App_Actions": {
+    "OpenInSteam": "Otvori u steamu",
+    "Open": "Otvori adresu moda",
+    "Copy": "Kopiraj adresu moda",
+    "CopyPath": "Kopiraj putanju moda",
+    "OpenInAssociatedApp": "Otvorite Mod mapu/datoteku"
+  },
+  "Descriptor_Actions": {
+    "CheckNew": "Provjerite nove modove",
+    "Delete": "Obriši i ponovno učitaj",
+    "Delete_All": "Izbriši sve i ponovno učitaj",
+    "Lock": "Zaključaj",
+    "Lock_All": "Zaključaj sve",
+    "Unlock": "Otključaj",
+    "Unlock_All": "Otključaj sve"
+  },
+  "Achievements": {
+    "AchievementCompatible": "Mod je kompatibilan s achievementima.",
+    "NotAchievementCompatible": "Mod nije kompatibilan s achievementima."
+  },
+  "ModSource": {
+    "Paradox": "Paradox Interactive Mod",
+    "Steam": "Steam Mod",
+    "Local": "Lokalni Mod"
+  },
+  "Sorting": {
+    "Sort_A_Z": "↑",
+    "Sort_Z_A": "↓"
+  },
+  "Filter": {
+    "Clear": "X",
+    "UpArrow": "▲",
+    "DownArrow": "▼"
+  },
+  "FilterCommands": {
+    "Achievements": "postignuća",
+    "Source": "izvor",
+    "Version": "verzija",
+    "Selected": "odabran",
+    "Yes": "da",
+    "No": "ne",
+    "True": "točno",
+    "False": "netočno",
+    "Steam": "steam",
+    "Paradox": "paradox",
+    "Local": "lokalno"
+  },
+  "FilterOperators": {
+    "ValueSeparator": ":",
+    "StatementSeparator": "&&",
+    "OrStatementSeparator": "||",
+    "Negate": "--"
+  }
 }

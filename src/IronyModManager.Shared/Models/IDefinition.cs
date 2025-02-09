@@ -4,7 +4,7 @@
 // Created          : 02-16-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 10-29-2024
+// Last Modified On : 02-09-2025
 // ***********************************************************************
 // <copyright file="IDefinition.cs" company="Mario">
 //     Mario
@@ -42,6 +42,13 @@ namespace IronyModManager.Shared.Models
         /// </summary>
         /// <value><c>true</c> if [allow duplicate]; otherwise, <c>false</c>.</value>
         bool AllowDuplicate { get; set; }
+
+        /// <summary>
+        /// Gets or sets the applied global variables.
+        /// </summary>
+        /// <value>The applied global variables.</value>
+        [JsonIgnore]
+        IEnumerable<IDefinition> AppliedGlobalVariables { get; set; }
 
         /// <summary>
         /// Gets or sets the code.

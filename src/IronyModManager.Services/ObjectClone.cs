@@ -4,7 +4,7 @@
 // Created          : 05-14-2023
 //
 // Last Modified By : Mario
-// Last Modified On : 10-30-2024
+// Last Modified On : 02-09-2025
 // ***********************************************************************
 // <copyright file="ObjectClone.cs" company="Mario">
 //     Mario
@@ -83,6 +83,7 @@ namespace IronyModManager.Services
             newDefinition.IsSpecialFolder = definition.IsSpecialFolder;
             newDefinition.MergeType = definition.MergeType;
             newDefinition.ContainsInlineIdentifier = definition.ContainsInlineIdentifier;
+            newDefinition.AppliedGlobalVariables = definition.AppliedGlobalVariables;
             return newDefinition;
         }
 
@@ -117,6 +118,7 @@ namespace IronyModManager.Services
             copy.IsSpecialFolder = definition.IsSpecialFolder;
             copy.MergeType = definition.MergeType;
             copy.ContainsInlineIdentifier = definition.ContainsInlineIdentifier;
+            copy.AppliedGlobalVariables = definition.AppliedGlobalVariables;
             return copy;
         }
 

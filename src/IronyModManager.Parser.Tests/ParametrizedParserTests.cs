@@ -4,7 +4,7 @@
 // Created          : 10-03-2023
 //
 // Last Modified By : Mario
-// Last Modified On : 10-30-2024
+// Last Modified On : 02-06-2025
 // ***********************************************************************
 // <copyright file="ParametrizedParserTests.cs" company="Mario">
 //     Mario
@@ -18,6 +18,7 @@ using System.Linq;
 using System.Text;
 using FluentAssertions;
 using IronyModManager.DI;
+using IronyModManager.Localization;
 using IronyModManager.Parser.Common;
 using IronyModManager.Parser.Common.Args;
 using IronyModManager.Shared;
@@ -1021,7 +1022,7 @@ namespace IronyModManager.Parser.Tests
         {
             DISetup.SetupContainer();
 
-            var sb = new System.Text.StringBuilder(328);
+            var sb = new StringBuilder(328);
             sb.AppendLine(@"# ship class placeholder");
             sb.AppendLine(@"entity = corvette_entity");
             sb.AppendLine(@"resources = { category = starbase_stations }");
@@ -1056,7 +1057,7 @@ namespace IronyModManager.Parser.Tests
         {
             DISetup.SetupContainer();
 
-            var sb = new System.Text.StringBuilder();
+            var sb = new StringBuilder();
             sb.AppendLine(@"rs_heavy_dreadnought = {");
             sb.AppendLine(@"# ship class placeholder");
             sb.AppendLine(@"entity = corvette_entity");
@@ -1086,6 +1087,167 @@ namespace IronyModManager.Parser.Tests
             parserResult.Any(p => p.Id.Equals("rs_heavy_dreadnought")).Should().BeTrue();
         }
 
+
+        /// <summary>
+        /// Defines the test method GetObjectId_should_understand_math_expressions.
+        /// </summary>
+        [Fact]
+        public void GetObjectId_should_understand_math_expressions()
+        {
+            DISetup.SetupContainer();
+            CurrentLocale.SetCurrent("en");
+
+            var sb = new StringBuilder();
+            sb.AppendLine(@"inline_script = {");
+            sb.AppendLine(@"	script = merger_of_rules/parts/switch");
+            sb.AppendLine(@"	file = merger_of_rules/parts/toggled_code_case_");
+            sb.AppendLine(@"	");
+            sb.AppendLine(@"	value = @[ (-1 * ((-1 * (($toggle$*$toggle$) / (($toggle$*$toggle$)+1))) - ((((-1 * (($toggle$*$toggle$) / (($toggle$*$toggle$)+1))) % 1) + 1) % 1))) ]");
+            sb.AppendLine(@"");
+            sb.AppendLine(@"	params = ""code = \""$code$\"""" ");
+            sb.AppendLine(@"}");
+
+            var sb2 = new StringBuilder(77);
+            sb2.AppendLine(@"	inline_script = {");
+            sb2.AppendLine(@"		script = merger_of_rules/toggled_code");
+            sb2.AppendLine(@"		toggle = 1");
+            sb2.AppendLine(@"	}");
+
+            var parser = new ParametrizedParser(new CodeParser(new Logger()));
+            var result = parser.Process(sb.ToString(), sb2.ToString());
+            result.Should().NotBeNullOrEmpty();
+            var m = DIResolver.Get<IParserManager>();
+            var parserResult = m.Parse(new ParserManagerArgs { File = "common\\ship_sizes\\dummy.txt", GameType = "Stellaris", IsBinary = false, Lines = result.SplitOnNewLine() });
+            parserResult.Count().Should().Be(1);
+            parserResult.FirstOrDefault()!.Code.Should().Be("inline_script = {\r\n    script = merger_of_rules/parts/switch\r\n    file = merger_of_rules/parts/toggled_code_case_\r\n    value = 1\r\n    params = \"code = \\\"$code$\\\"\"\r\n}");
+        }
+
+        /// <summary>
+        /// Defines the test method GetObjectId_should_understand_conditional_switch_pre_parse.
+        /// </summary>
+        [Fact]
+        public void GetObjectId_should_understand_conditional_switch_pre_parse()
+        {
+            DISetup.SetupContainer();
+            CurrentLocale.SetCurrent("en");
+
+            var sb = new System.Text.StringBuilder(307);
+            sb.AppendLine(@"inline_script = {");
+            sb.AppendLine(@"    script = merger_of_rules/parts/switch");
+            sb.AppendLine(@"    file = merger_of_rules/parts/toggled_code_case_");
+            sb.AppendLine(@"    value = @[ (-1 * ((-1 * (($toggle$*$toggle$) / (($toggle$*$toggle$)+1))) - ((((-1 * (($toggle$*$toggle$) / (($toggle$*$toggle$)+1))) % 1) + 1) % 1))) ]");
+            sb.AppendLine(@"    params = ""code = \""$code$\""""");
+            sb.AppendLine(@"}");
+
+
+            var param =
+                "can_destroy_planet_with_ACOT_EMISSARY_BEAM = {\r\n    inline_script = {\r\n        script = merger_of_rules/toggled_code\r\n        code = \"\r\ncustom_tooltip = {\r\ntext = acot_emissary_on_cooldown\r\nFROM = { NOT = { has_fleet_flag = acot_emissary_beam_delay } }\r\n}\r\ncustom_tooltip = {\r\nfail_text = is_shielded\r\nNOR = {\r\nis_planet_class = pc_shielded\r\nis_planet_class = pc_ringworld_shielded\r\nis_planet_class = pc_habitat_shielded\r\n}\r\n}\r\nOR = {\r\ncustom_tooltip = {\r\ntext = acot_is_valid_for_emissary_beam\r\nOR = {\r\nNOT = { exists = space_owner }\r\nAND = {\r\nexists = space_owner\r\nspace_owner = { is_same_value = from.owner }\r\n}\r\n}\r\nis_a_planet = yes\r\nis_asteroid = no\r\nis_star = no\r\nis_artificial = no\r\nmerg_is_gas_giant = no\r\nmerg_is_habitat = no\r\nmerg_is_hab_ringworld = no\r\n}\r\n}\r\n\"\r\n        toggle = 1\r\n    }\r\n}\r\n";
+
+
+            var parser = new ParametrizedParser(new CodeParser(new Logger()));
+            var result = parser.Process(sb.ToString(), param);
+            result.Should().NotBeNullOrEmpty();
+            var m = DIResolver.Get<IParserManager>();
+            var parserResult = m.Parse(new ParserManagerArgs { File = "common\\ship_sizes\\dummy.txt", GameType = "Stellaris", IsBinary = false, Lines = result.SplitOnNewLine() });
+            parserResult.Count().Should().Be(1);
+            parserResult.FirstOrDefault()!.Code.Should().Be("can_destroy_planet_with_ACOT_EMISSARY_BEAM = {\r\n    inline_script = {\r\n        script = merger_of_rules/parts/switch\r\n        file = merger_of_rules/parts/toggled_code_case_\r\n        value = 1\r\n        params = \"code = \\\"\r\ncustom_tooltip = {\r\ntext = acot_emissary_on_cooldown\r\nFROM = { NOT = { has_fleet_flag = acot_emissary_beam_delay } }\r\n}\r\ncustom_tooltip = {\r\nfail_text = is_shielded\r\nNOR = {\r\nis_planet_class = pc_shielded\r\nis_planet_class = pc_ringworld_shielded\r\nis_planet_class = pc_habitat_shielded\r\n}\r\n}\r\nOR = {\r\ncustom_tooltip = {\r\ntext = acot_is_valid_for_emissary_beam\r\nOR = {\r\nNOT = { exists = space_owner }\r\nAND = {\r\nexists = space_owner\r\nspace_owner = { is_same_value = from.owner }\r\n}\r\n}\r\nis_a_planet = yes\r\nis_asteroid = no\r\nis_star = no\r\nis_artificial = no\r\nmerg_is_gas_giant = no\r\nmerg_is_habitat = no\r\nmerg_is_hab_ringworld = no\r\n}\r\n}\r\n\\\"\"\r\n    }\r\n}");
+        }
+
+        /// <summary>
+        /// Defines the test method GetObjectId_should_understand_conditional_switch_parse.
+        /// </summary>
+        [Fact]
+        public void GetObjectId_should_understand_conditional_switch_parse()
+        {
+            DISetup.SetupContainer();
+            CurrentLocale.SetCurrent("en");
+
+            var sb = new System.Text.StringBuilder(62);
+            sb.AppendLine(@"inline_script = {");
+            sb.AppendLine(@"    script = $file$$value$");
+            sb.AppendLine(@"    $params$");
+            sb.AppendLine(@"}");
+
+            var param =
+                "can_destroy_planet_with_ACOT_EMISSARY_BEAM = {\r\n    inline_script = {\r\n        script = merger_of_rules/parts/switch\r\n        file = merger_of_rules/parts/toggled_code_case_\r\n        value = 1\r\n        params = \"code = \\\"\r\ncustom_tooltip = {\r\ntext = acot_emissary_on_cooldown\r\nFROM = { NOT = { has_fleet_flag = acot_emissary_beam_delay } }\r\n}\r\ncustom_tooltip = {\r\nfail_text = is_shielded\r\nNOR = {\r\nis_planet_class = pc_shielded\r\nis_planet_class = pc_ringworld_shielded\r\nis_planet_class = pc_habitat_shielded\r\n}\r\n}\r\nOR = {\r\ncustom_tooltip = {\r\ntext = acot_is_valid_for_emissary_beam\r\nOR = {\r\nNOT = { exists = space_owner }\r\nAND = {\r\nexists = space_owner\r\nspace_owner = { is_same_value = from.owner }\r\n}\r\n}\r\nis_a_planet = yes\r\nis_asteroid = no\r\nis_star = no\r\nis_artificial = no\r\nmerg_is_gas_giant = no\r\nmerg_is_habitat = no\r\nmerg_is_hab_ringworld = no\r\n}\r\n}\r\n\\\"\"\r\n    }\r\n}\r\n";
+
+
+            var parser = new ParametrizedParser(new CodeParser(new Logger()));
+            var result = parser.Process(sb.ToString(), param);
+            result.Should().NotBeNullOrEmpty();
+            var m = DIResolver.Get<IParserManager>();
+            var parserResult = m.Parse(new ParserManagerArgs { File = "common\\ship_sizes\\dummy.txt", GameType = "Stellaris", IsBinary = false, Lines = result.SplitOnNewLine() });
+            parserResult.Count().Should().Be(1);
+            parserResult.FirstOrDefault()!.Code.Should().Be("can_destroy_planet_with_ACOT_EMISSARY_BEAM = {\r\n    inline_script = {\r\n        script = merger_of_rules/parts/toggled_code_case_1\r\n        code = \"\r\ncustom_tooltip = {\r\ntext = acot_emissary_on_cooldown\r\nFROM = { NOT = { has_fleet_flag = acot_emissary_beam_delay } }\r\n}\r\ncustom_tooltip = {\r\nfail_text = is_shielded\r\nNOR = {\r\nis_planet_class = pc_shielded\r\nis_planet_class = pc_ringworld_shielded\r\nis_planet_class = pc_habitat_shielded\r\n}\r\n}\r\nOR = {\r\ncustom_tooltip = {\r\ntext = acot_is_valid_for_emissary_beam\r\nOR = {\r\nNOT = { exists = space_owner }\r\nAND = {\r\nexists = space_owner\r\nspace_owner = { is_same_value = from.owner }\r\n}\r\n}\r\nis_a_planet = yes\r\nis_asteroid = no\r\nis_star = no\r\nis_artificial = no\r\nmerg_is_gas_giant = no\r\nmerg_is_habitat = no\r\nmerg_is_hab_ringworld = no\r\n}\r\n}\r\n\"\r\n    }\r\n}");
+        }
+
+        /// <summary>
+        /// Defines the test method GetObjectId_should_understand_conditional_switch_final_phase.
+        /// </summary>
+        [Fact]
+        public void GetObjectId_should_understand_conditional_switch_final_phase()
+        {
+            DISetup.SetupContainer();
+            CurrentLocale.SetCurrent("en");
+
+            var param1 = "$code$";
+
+            var param =
+                "can_destroy_planet_with_ACOT_EMISSARY_BEAM = {\r\n    inline_script = {\r\n        script = merger_of_rules/parts/toggled_code_case_1\r\n        code = \"\r\ncustom_tooltip = {\r\ntext = acot_emissary_on_cooldown\r\nFROM = { NOT = { has_fleet_flag = acot_emissary_beam_delay } }\r\n}\r\ncustom_tooltip = {\r\nfail_text = is_shielded\r\nNOR = {\r\nis_planet_class = pc_shielded\r\nis_planet_class = pc_ringworld_shielded\r\nis_planet_class = pc_habitat_shielded\r\n}\r\n}\r\nOR = {\r\ncustom_tooltip = {\r\ntext = acot_is_valid_for_emissary_beam\r\nOR = {\r\nNOT = { exists = space_owner }\r\nAND = {\r\nexists = space_owner\r\nspace_owner = { is_same_value = from.owner }\r\n}\r\n}\r\nis_a_planet = yes\r\nis_asteroid = no\r\nis_star = no\r\nis_artificial = no\r\nmerg_is_gas_giant = no\r\nmerg_is_habitat = no\r\nmerg_is_hab_ringworld = no\r\n}\r\n}\r\n\"\r\n    }\r\n}\r\n";
+
+
+            var parser = new ParametrizedParser(new CodeParser(new Logger()));
+            var result = parser.Process(param1, param);
+            result.Should().NotBeNullOrEmpty();
+            var m = DIResolver.Get<IParserManager>();
+            var parserResult = m.Parse(new ParserManagerArgs { File = "common\\ship_sizes\\dummy.txt", GameType = "Stellaris", IsBinary = false, Lines = result.SplitOnNewLine() });
+            parserResult.Count().Should().Be(1);
+
+            var sb = new System.Text.StringBuilder(1143);
+            sb.AppendLine(@"can_destroy_planet_with_ACOT_EMISSARY_BEAM = {");
+            sb.AppendLine(@"    custom_tooltip = {");
+            sb.AppendLine(@"        text = acot_emissary_on_cooldown");
+            sb.AppendLine(@"        FROM = {");
+            sb.AppendLine(@"            NOT = {");
+            sb.AppendLine(@"                has_fleet_flag = acot_emissary_beam_delay");
+            sb.AppendLine(@"            }");
+            sb.AppendLine(@"        }");
+            sb.AppendLine(@"    }");
+            sb.AppendLine(@"    custom_tooltip = {");
+            sb.AppendLine(@"        fail_text = is_shielded");
+            sb.AppendLine(@"        NOR = {");
+            sb.AppendLine(@"            is_planet_class = pc_shielded");
+            sb.AppendLine(@"            is_planet_class = pc_ringworld_shielded");
+            sb.AppendLine(@"            is_planet_class = pc_habitat_shielded");
+            sb.AppendLine(@"        }");
+            sb.AppendLine(@"    }");
+            sb.AppendLine(@"    OR = {");
+            sb.AppendLine(@"        custom_tooltip = {");
+            sb.AppendLine(@"            text = acot_is_valid_for_emissary_beam");
+            sb.AppendLine(@"            OR = {");
+            sb.AppendLine(@"                NOT = {");
+            sb.AppendLine(@"                    exists = space_owner");
+            sb.AppendLine(@"                }");
+            sb.AppendLine(@"                AND = {");
+            sb.AppendLine(@"                    exists = space_owner");
+            sb.AppendLine(@"                    space_owner = {");
+            sb.AppendLine(@"                        is_same_value = from.owner");
+            sb.AppendLine(@"                    }");
+            sb.AppendLine(@"                }");
+            sb.AppendLine(@"            }");
+            sb.AppendLine(@"            is_a_planet = yes");
+            sb.AppendLine(@"            is_asteroid = no");
+            sb.AppendLine(@"            is_star = no");
+            sb.AppendLine(@"            is_artificial = no");
+            sb.AppendLine(@"            merg_is_gas_giant = no");
+            sb.AppendLine(@"            merg_is_habitat = no");
+            sb.AppendLine(@"            merg_is_hab_ringworld = no");
+            sb.AppendLine(@"        }");
+            sb.AppendLine(@"    }");
+            sb.AppendLine(@"}");
+
+            parserResult.FirstOrDefault()!.Code.Trim().Should().Be(sb.ToString().Trim());
+        }
 
         /// <summary>
         /// Defines the test method GetScriptPath_should_yield_results.
@@ -1182,6 +1344,9 @@ namespace IronyModManager.Parser.Tests
             result.Should().Be("giga_placeholders\\ship_sizes");
         }
 
+        /// <summary>
+        /// Defines the test method GetScriptPath_as_should_handle_simple_inline_scripts.
+        /// </summary>
         [Fact]
         public void GetScriptPath_as_should_handle_simple_inline_scripts()
         {

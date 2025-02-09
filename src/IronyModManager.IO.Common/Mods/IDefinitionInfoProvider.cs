@@ -4,7 +4,7 @@
 // Created          : 04-02-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 10-30-2024
+// Last Modified On : 02-07-2025
 // ***********************************************************************
 // <copyright file="IDefinitionInfoProvider.cs" company="Mario">
 //     Mario
@@ -32,6 +32,12 @@ namespace IronyModManager.IO.Common.Mods
         /// </summary>
         /// <value>The fios paths.</value>
         IReadOnlyCollection<string> FIOSPaths { get; }
+
+        /// <summary>
+        /// Gets the global variables path.
+        /// </summary>
+        /// <value>The global variables path.</value>
+        string GlobalVariablesPath { get; }
 
         /// <summary>
         /// Gets the inline scripts path.

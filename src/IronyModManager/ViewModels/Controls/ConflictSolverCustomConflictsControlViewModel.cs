@@ -1,23 +1,22 @@
-﻿
-// ***********************************************************************
+﻿// ***********************************************************************
 // Assembly         : IronyModManager
 // Author           : Mario
 // Created          : 07-28-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-25-2023
+// Last Modified On : 02-09-2025
 // ***********************************************************************
 // <copyright file="ConflictSolverCustomConflictsControlViewModel.cs" company="Mario">
 //     Mario
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reactive;
 using System.Reactive.Disposables;
-using System.Reactive.Linq;
 using System.Threading.Tasks;
 using AvaloniaEdit.Document;
 using IronyModManager.Common.ViewModels;
@@ -34,7 +33,6 @@ using ReactiveUI;
 
 namespace IronyModManager.ViewModels.Controls
 {
-
     /// <summary>
     /// Class ConflictSolverCustomConflictsControlViewModel.
     /// Implements the <see cref="IronyModManager.Common.ViewModels.BaseViewModel" />
@@ -63,7 +61,7 @@ namespace IronyModManager.ViewModels.Controls
         /// <summary>
         /// The prompt shown
         /// </summary>
-        private bool promptShown = false;
+        private bool promptShown;
 
         #endregion Fields
 
@@ -341,15 +339,18 @@ namespace IronyModManager.ViewModels.Controls
         /// <param name="disposables">The disposables.</param>
         protected override void OnActivated(CompositeDisposable disposables)
         {
+            // ReSharper disable once RedundantBoolCompare
             var saveEnabled = this.WhenAnyValue(v => v.AllowSave, v => v == true);
+
+            // ReSharper disable once RedundantBoolCompare
             var loadEnabled = this.WhenAnyValue(v => v.AllowLoad, v => v == true);
 
-            this.WhenAnyValue(v => v.Path).Subscribe(async s =>
+            this.WhenAnyValue(v => v.Path).Subscribe(async _ =>
             {
                 await EvalConditionsAsync();
             }).DisposeWith(disposables);
 
-            this.WhenAnyValue(v => v.CurrentEditText).Subscribe(async s =>
+            this.WhenAnyValue(v => v.CurrentEditText).Subscribe(async _ =>
             {
                 await EvalConditionsAsync();
             }).DisposeWith(disposables);
@@ -372,15 +373,17 @@ namespace IronyModManager.ViewModels.Controls
                 {
                     await modPatchCollectionService.ResetCustomConflictAsync(ConflictResult, definition.TypeAndId, CollectionName);
                 }
+
                 if (await modPatchCollectionService.AddCustomModPatchAsync(ConflictResult, definition, CollectionName))
                 {
-                    if (!promptShown && (await ConflictResult.AllConflicts.ExistsByFileAsync(definition.FileCI)))
+                    if (!promptShown && await ConflictResult.AllConflicts.ExistsByFileAsync(definition.FileCI))
                     {
                         promptShown = true;
                         var title = localizationManager.GetResource(LocalizationResources.Notifications.CustomPatchRerunConflictSolver.Title);
                         var message = localizationManager.GetResource(LocalizationResources.Notifications.CustomPatchRerunConflictSolver.Message);
                         notificationAction.ShowNotification(title, message, NotificationType.Warning, 10);
                     }
+
                     Saved = true;
                     Saved = false;
                     Path = string.Empty;
