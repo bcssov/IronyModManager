@@ -4,7 +4,7 @@
 // Created          : 05-26-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 11-01-2024
+// Last Modified On : 02-09-2025
 // ***********************************************************************
 // <copyright file="ModPatchCollectionService.cs" company="Mario">
 //     Mario
@@ -388,7 +388,6 @@ namespace IronyModManager.Services
             await indexedDefinitions.InitMapAsync(allDefs.Where(p => p.MergeType == MergeType.None));
 
             var conflicts = new HashSet<IDefinition>();
-            var fileConflictCache = new Dictionary<string, bool>();
             var fileKeys = await indexedDefinitions.GetAllFileKeysAsync();
             var typeAndIdKeys = await indexedDefinitions.GetAllTypeAndIdKeysAsync();
             var overwritten = (await indexedDefinitions.GetByValueTypeAsync(ValueType.OverwrittenObject)).Concat(await indexedDefinitions.GetByValueTypeAsync(ValueType.OverwrittenObjectSingleFile));
@@ -461,15 +460,17 @@ namespace IronyModManager.Services
             {
                 var tempIndex = DIResolver.Get<IIndexedDefinitions>();
                 await tempIndex.InitMapAsync(allDefs);
+                var scriptedVars = await tempIndex.GetByParentDirectoryAsync(provider.GlobalVariablesPath);
                 prunedInlineDefinitions = [];
                 var reportedInlineErrors = new HashSet<string>();
                 foreach (var item in allDefs)
                 {
+                    var def = item;
                     var addDefault = true;
-                    if ((item.Id.Equals(Parser.Common.Constants.Stellaris.InlineScriptId, StringComparison.OrdinalIgnoreCase) || item.ContainsInlineIdentifier) && !item.File.StartsWith(provider.InlineScriptsPath))
+                    while ((def.Id.Equals(Parser.Common.Constants.Stellaris.InlineScriptId, StringComparison.OrdinalIgnoreCase) || def.ContainsInlineIdentifier) && !def.File.StartsWith(provider.InlineScriptsPath))
                     {
                         addDefault = false;
-                        var path = Path.Combine(Parser.Common.Constants.Stellaris.InlineScripts, parametrizedParser.GetScriptPath(item.Code));
+                        var path = Path.Combine(Parser.Common.Constants.Stellaris.InlineScripts, parametrizedParser.GetScriptPath(def.Code));
                         var pathCI = path.ToLowerInvariant();
                         var files = (await tempIndex.GetByParentDirectoryAsync(Path.GetDirectoryName(path))).Where(p => Path.Combine(Path.GetDirectoryName(p.FileCI)!, Path.GetFileNameWithoutExtension(p.FileCI)!).Equals(pathCI)).ToList();
                         if (files.Count != 0)
@@ -477,7 +478,15 @@ namespace IronyModManager.Services
                             var priorityDefinition = EvalDefinitionPriority([.. files.OrderBy(p => modOrder.IndexOf(p.ModName))]);
                             if (priorityDefinition is { Definition: not null })
                             {
-                                var parametrizedCode = parametrizedParser.Process(priorityDefinition.Definition.Code, item.Code);
+                                var vars = new List<IDefinition>();
+                                if (item.Variables != null)
+                                {
+                                    vars.AddRange(item.Variables);
+                                }
+
+                                scriptedVars = scriptedVars?.GroupBy(p => p.Id).Select(p => EvalDefinitionPriority(p.OrderBy(f => modOrder.IndexOf(f.ModName))).Definition);
+
+                                var parametrizedCode = parametrizedParser.Process(priorityDefinition.Definition.Code, ProcessInlineConstants(def.Code, vars, scriptedVars, out var ids));
                                 if (!string.IsNullOrWhiteSpace(parametrizedCode))
                                 {
                                     var validationType = ValidationType.Full;
@@ -500,7 +509,7 @@ namespace IronyModManager.Services
                                         ModDependencies = item.Dependencies,
                                         IsBinary = item.ValueType == ValueType.Binary,
                                         ModName = item.ModName,
-                                        ValidationType = validationType // This is kinda difficult but try to guess which validation type we want to inherit
+                                        ValidationType = ValidationType.SkipAll // First skip all validation types due to nth level
                                     });
                                     if (item.Variables != null && item.Variables.Any() && results != null)
                                     {
@@ -509,7 +518,58 @@ namespace IronyModManager.Services
 
                                     if (results != null && results.Any())
                                     {
-                                        prunedInlineDefinitions.AddRange(results);
+                                        var inline = results.FirstOrDefault(p => p.Id.Equals(Parser.Common.Constants.Stellaris.InlineScriptId, StringComparison.OrdinalIgnoreCase) || p.ContainsInlineIdentifier);
+
+                                        var globalVars = new List<IDefinition>();
+                                        if (def is { AppliedGlobalVariables: not null } && def.AppliedGlobalVariables.Any())
+                                        {
+                                            globalVars.AddRange(def.AppliedGlobalVariables);
+                                        }
+
+                                        if (ids != null && ids.Any())
+                                        {
+                                            globalVars.AddRange(ids);
+                                        }
+
+                                        globalVars = globalVars.GroupBy(p => p.TypeAndId).Select(p => p.FirstOrDefault()).ToList();
+
+                                        if (inline == null)
+                                        {
+                                            results = parserManager.Parse(new ParserManagerArgs
+                                            {
+                                                ContentSHA = item.ContentSHA, // Want original file sha id
+                                                File = item.File, // To trigger right parser
+                                                GameType = game.Type,
+                                                Lines = parametrizedCode.SplitOnNewLine(),
+                                                FileLastModified = item.LastModified,
+                                                ModDependencies = item.Dependencies,
+                                                IsBinary = item.ValueType == ValueType.Binary,
+                                                ModName = item.ModName,
+                                                ValidationType =
+                                                    validationType // This is kinda difficult but try to guess which validation type we want to inherit. This was previously done outside, but now we need to re-run and re-validate.
+                                            });
+                                            if (item.Variables != null && item.Variables.Any() && results != null)
+                                            {
+                                                MergeDefinitions(results.Concat(item.Variables));
+                                            }
+
+                                            if (results != null && results.Any())
+                                            {
+                                                foreach (var definition in results)
+                                                {
+                                                    definition.AppliedGlobalVariables = globalVars;
+                                                }
+
+                                                prunedInlineDefinitions.AddRange(results);
+                                            }
+
+                                            break;
+                                        }
+                                        else
+                                        {
+                                            def = inline;
+                                            def.AppliedGlobalVariables = globalVars;
+                                        }
                                     }
                                     else if (!reportedInlineErrors.Contains($"{item.ModName} - {pathCI}"))
                                     {
@@ -658,11 +718,6 @@ namespace IronyModManager.Services
                         conflicts.Add(item);
                     }
 
-                    foreach (var item in localFileConflictCache)
-                    {
-                        fileConflictCache.TryAdd(item.Key, item.Value);
-                    }
-
                     syncMutex.Dispose();
                 });
             });
@@ -698,11 +753,6 @@ namespace IronyModManager.Services
                     foreach (var item in localConflicts)
                     {
                         conflicts.Add(item);
-                    }
-
-                    foreach (var item in localFileConflictCache)
-                    {
-                        fileConflictCache.TryAdd(item.Key, item.Value);
                     }
 
                     syncMutex.Dispose();
@@ -1350,6 +1400,7 @@ namespace IronyModManager.Services
 
             async Task<(IIndexedDefinitions, int)> initAllIndexedDefinitions(IConflictResult conflictResult, int total, int processed, int maxProgress)
             {
+                // ReSharper disable once AsyncVoidMethod -- Great shitty analysis
                 async void processedSearchItemHandler(object sender, ProcessedArgs args)
                 {
                     using var mutex = await searchInitLock.LockAsync();
@@ -1742,6 +1793,38 @@ namespace IronyModManager.Services
 
             var patchName = GenerateCollectionPatchName(collectionName);
             return modPatchExporter.LoadDefinitionContentsAsync(new ModPatchExporterParameters { RootPath = GetModDirectoryRootPath(game), PatchPath = EvaluatePatchNamePath(game, patchName) }, definition.File);
+        }
+
+        /// <summary>
+        /// Determines if conflict result needs reload.
+        /// </summary>
+        /// <param name="conflictResult">The conflict result.</param>
+        /// <param name="definition">The definition.</param>
+        /// <returns><c>true</c> if conflict result needs reload, <c>false</c> otherwise.</returns>
+        public virtual bool NeedsReload(IConflictResult conflictResult, IDefinition definition)
+        {
+            if (conflictResult != null && definition != null)
+            {
+                if (conflictResult.IgnoredConflicts != null)
+                {
+                    var result = conflictResult.IgnoredConflicts.IsGlobalVariableApplied(definition.TypeAndId);
+                    if (result)
+                    {
+                        return true;
+                    }
+                }
+
+                if (conflictResult.ResolvedConflicts != null)
+                {
+                    var result = conflictResult.ResolvedConflicts.IsGlobalVariableApplied(definition.TypeAndId);
+                    if (result)
+                    {
+                        return true;
+                    }
+                }
+            }
+
+            return false;
         }
 
         /// <summary>

@@ -4,7 +4,7 @@
 // Created          : 04-04-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 10-30-2024
+// Last Modified On : 02-07-2025
 // ***********************************************************************
 // <copyright file="BaseDefinitionInfoProvider.cs" company="Mario">
 //     Mario
@@ -67,6 +67,12 @@ namespace IronyModManager.IO.Mods.InfoProviders
         /// </summary>
         /// <value>The fios paths.</value>
         public abstract IReadOnlyCollection<string> FIOSPaths { get; }
+
+        /// <summary>
+        /// Gets the global variables path.
+        /// </summary>
+        /// <value>The global variables path.</value>
+        public abstract string GlobalVariablesPath { get; }
 
         /// <summary>
         /// Gets the inline scripts path.
@@ -228,7 +234,6 @@ namespace IronyModManager.IO.Mods.InfoProviders
         /// Ensures the type of all same.
         /// </summary>
         /// <param name="definition">The definition.</param>
-        /// <exception cref="ArgumentException">Invalid type.</exception>
         /// <exception cref="System.ArgumentException">Invalid type.</exception>
         protected virtual void EnsureValidType(IDefinition definition)
         {

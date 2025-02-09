@@ -832,6 +832,12 @@ namespace IronyModManager.Shared
                 public const string Title = Prefix + "Title";
                 public const string Message = Prefix + "Message";
             }
+            public static class ConflictSolverRerunGlobalVars
+            {
+                public const string Prefix = "Notifications.ConflictSolverRerunGlobalVars.";
+                public const string Title = Prefix + "Title";
+                public const string Message = Prefix + "Message";
+            }
         }
         public static class Mod_App_Actions
         {

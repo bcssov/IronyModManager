@@ -1,17 +1,17 @@
-﻿
-// ***********************************************************************
+﻿// ***********************************************************************
 // Assembly         : IronyModManager.Parser
 // Author           : Mario
 // Created          : 02-22-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-21-2023
+// Last Modified On : 02-06-2025
 // ***********************************************************************
 // <copyright file="CodeParser.cs" company="Mario">
 //     Mario
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
+
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -26,7 +26,6 @@ using IronyModManager.Shared;
 
 namespace IronyModManager.Parser
 {
-
     /// <summary>
     /// Class TextParser.
     /// Implements the <see cref="IronyModManager.Parser.Common.Parsers.ICodeParser" />
@@ -45,20 +44,21 @@ namespace IronyModManager.Parser
         /// <summary>
         /// The cleaner conversion map
         /// </summary>
-        protected static readonly Dictionary<string, string> cleanerConversionMap = new()
+        protected static readonly Dictionary<string, string> CleanerConversionMap = new()
         {
             { $" {Common.Constants.Scripts.EqualsOperator}", Common.Constants.Scripts.EqualsOperator.ToString() },
             { $"{Common.Constants.Scripts.EqualsOperator} ", Common.Constants.Scripts.EqualsOperator.ToString() },
             { $" {Common.Constants.Scripts.OpenObject}", Common.Constants.Scripts.OpenObject.ToString() },
             { $"{Common.Constants.Scripts.OpenObject} ", Common.Constants.Scripts.OpenObject.ToString() },
             { $" {Common.Constants.Scripts.CloseObject}", Common.Constants.Scripts.CloseObject.ToString() },
-            { $"{Common.Constants.Scripts.CloseObject} ", Common.Constants.Scripts.CloseObject.ToString() },
+            { $"{Common.Constants.Scripts.CloseObject} ", Common.Constants.Scripts.CloseObject.ToString() }
         };
 
         /// <summary>
         /// The quotes regex
         /// </summary>
-        protected static readonly Regex quotesRegex = new(@"""(\\""|\\\\|[^""\\])*""", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+        // ReSharper disable once UseRawString
+        protected static readonly Regex QuotesRegex = new(@"""(\\""|\\\\|[^""\\])*""", RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
         /// <summary>
         /// The logger
@@ -106,11 +106,13 @@ namespace IronyModManager.Parser
             {
                 return string.Empty;
             }
+
             var cleaned = string.Join(' ', line.Trim().Replace("\t", " ").Split(' ', StringSplitOptions.RemoveEmptyEntries));
-            foreach (var item in cleanerConversionMap)
+            foreach (var item in CleanerConversionMap)
             {
                 cleaned = cleaned.Replace(item.Key, item.Value);
             }
+
             return cleaned;
         }
 
@@ -156,6 +158,7 @@ namespace IronyModManager.Parser
                         {
                             sb.Append($"{new string(' ', indent * 4)}{element.Key} ");
                         }
+
                         if (element.Values.Any())
                         {
                             foreach (var value in element.Values)
@@ -188,6 +191,7 @@ namespace IronyModManager.Parser
                                 sb.AppendLine($"{new string(' ', indent * 4)}{element.Key} {Common.Constants.Scripts.OpenObject}");
                             }
                         }
+
                         if (element.Values?.Count() > 0)
                         {
                             foreach (var value in element.Values)
@@ -195,15 +199,19 @@ namespace IronyModManager.Parser
                                 sb.AppendLine(format(value, indent + 1));
                             }
                         }
+
                         sb.Append($"{new string(' ', indent * 4)}{Common.Constants.Scripts.CloseObject}");
                     }
                 }
+
                 return sb.ToString();
             }
+
             if (element != null)
             {
                 return format(element, indentLevel);
             }
+
             return string.Empty;
         }
 
@@ -271,6 +279,7 @@ namespace IronyModManager.Parser
                     return error;
                 }
             }
+
             return null;
         }
 
@@ -285,17 +294,19 @@ namespace IronyModManager.Parser
             {
                 return string.Empty;
             }
-            var regexHits = quotesRegex.Matches(line);
+
+            var regexHits = QuotesRegex.Matches(line);
             var cleaned = string.Join(" ", line.Trim().Replace("\t", " ").Split(" ".ToCharArray(), StringSplitOptions.RemoveEmptyEntries));
             if (regexHits.Count > 0)
             {
-                var cleanedRegexHits = quotesRegex.Matches(cleaned);
-                for (int i = 0; i < regexHits.Count; i++)
+                var cleanedRegexHits = QuotesRegex.Matches(cleaned);
+                for (var i = 0; i < regexHits.Count; i++)
                 {
                     var insert = line.Substring(regexHits[i].Index, regexHits[i].Length);
                     cleaned = cleaned.Remove(cleanedRegexHits[i].Index, cleanedRegexHits[i].Length).Insert(cleanedRegexHits[i].Index, insert);
                 }
             }
+
             return cleaned.Trim();
         }
 
@@ -308,7 +319,7 @@ namespace IronyModManager.Parser
         {
             var sb = new StringBuilder();
             var quoteOpened = false;
-            for (int i = 0; i < code.Length; i++)
+            for (var i = 0; i < code.Length; i++)
             {
                 var c = code[i];
                 if (c == Common.Constants.Scripts.Quote)
@@ -322,6 +333,7 @@ namespace IronyModManager.Parser
                             canCloseQuote = false;
                         }
                     }
+
                     if (quoteOpened && canCloseQuote)
                     {
                         quoteOpened = false;
@@ -331,6 +343,7 @@ namespace IronyModManager.Parser
                         quoteOpened = true;
                     }
                 }
+
                 var addLine = true;
                 if (c == Common.Constants.Scripts.OpenObject || c == Common.Constants.Scripts.CloseObject)
                 {
@@ -340,11 +353,13 @@ namespace IronyModManager.Parser
                         addLine = false;
                     }
                 }
+
                 if (addLine)
                 {
                     sb.Append(c);
                 }
             }
+
             return sb.ToString();
         }
 
@@ -373,6 +388,7 @@ namespace IronyModManager.Parser
                 IgnoreElementWhiteSpace(code, ref index);
                 elOperator = GetElementCharacter(code, index);
             }
+
             if (!Common.Constants.Scripts.Operators.Any(p => p == elOperator))
             {
                 if (Common.Constants.Scripts.InlineOperators.Any(p => p.Equals(elKey.Value, StringComparison.OrdinalIgnoreCase)))
@@ -415,6 +431,7 @@ namespace IronyModManager.Parser
                     return null;
                 }
             }
+
             IgnoreElementWhiteSpace(code, ref index);
             var elValue = GetElementValue(code, ref index);
             if (elValue.Terminator.HasValue)
@@ -423,6 +440,7 @@ namespace IronyModManager.Parser
                 {
                     return null;
                 }
+
                 index++;
                 var values = GetElements(code, ref index);
                 var scriptElement = DIResolver.Get<IScriptElement>();
@@ -445,7 +463,7 @@ namespace IronyModManager.Parser
                     var childElement = DIResolver.Get<IScriptElement>();
                     childElement.Key = elValue.Value;
                     childElement.Values = values;
-                    parentElement.Values = new List<IScriptElement>() { childElement };
+                    parentElement.Values = new List<IScriptElement> { childElement };
                     return parentElement;
                 }
                 else
@@ -477,6 +495,7 @@ namespace IronyModManager.Parser
             {
                 character = code[index];
             }
+
             return character;
         }
 
@@ -491,7 +510,7 @@ namespace IronyModManager.Parser
         {
             var counter = 0;
             var values = new List<IScriptElement>();
-            for (int i = index; i < code.Count; i++)
+            for (var i = index; i < code.Count; i++)
             {
                 var prevIndex = index;
                 var character = GetElementCharacter(code, i);
@@ -500,6 +519,7 @@ namespace IronyModManager.Parser
                     index = i + 1;
                     break;
                 }
+
                 var el = GetElement(code, ref i);
                 if (el != null)
                 {
@@ -526,14 +546,17 @@ namespace IronyModManager.Parser
                             {
                                 break;
                             }
+
                             dumpIndex--;
                         }
+
                         var end = dumpIndex + 200 > code.Count ? code.Count : dumpIndex + 200;
                         var sb = new StringBuilder();
-                        for (int dump = dumpIndex; dump < end; dump++)
+                        for (var dump = dumpIndex; dump < end; dump++)
                         {
                             sb.Append(code[dump]);
                         }
+
                         throw new ArgumentException($"Unknown script syntax error near code:{sb}");
                     }
                 }
@@ -542,6 +565,7 @@ namespace IronyModManager.Parser
                     counter = 0;
                 }
             }
+
             return values;
         }
 
@@ -561,7 +585,7 @@ namespace IronyModManager.Parser
             var operatorOpened = false;
             var squareBracketOpen = false;
             int? escapeIndex = null;
-            for (int i = index; i < code.Count; i++)
+            for (var i = index; i < code.Count; i++)
             {
                 var character = GetElementCharacter(code, i);
                 if (character == null)
@@ -569,6 +593,7 @@ namespace IronyModManager.Parser
                     index = i;
                     break;
                 }
+
                 if (character == Common.Constants.Scripts.EscapeCharacter)
                 {
                     escapeIndex = i;
@@ -588,12 +613,14 @@ namespace IronyModManager.Parser
                                 operatorOpened = false;
                             }
                         }
+
                         if (openQuote)
                         {
                             sbValue.Append(character.GetValueOrDefault());
                             index = i + 1;
                             break;
                         }
+
                         openQuote = true;
                     }
                     else
@@ -662,6 +689,7 @@ namespace IronyModManager.Parser
                         }
                     }
                 }
+
                 if (!operatorOpened)
                 {
                     sbValue.Append(character.GetValueOrDefault());
@@ -670,18 +698,15 @@ namespace IronyModManager.Parser
                 {
                     sbOperator.Append(character.GetValueOrDefault());
                 }
+
                 index = i;
                 if (escapeIndex.HasValue && index - escapeIndex.GetValueOrDefault() >= 1)
                 {
                     escapeIndex = null;
                 }
             }
-            return new ElementValue()
-            {
-                Value = sbValue.ToString(),
-                Operator = sbOperator.ToString().Trim(),
-                Terminator = terminator
-            };
+
+            return new ElementValue { Value = sbValue.ToString(), Operator = sbOperator.ToString().Trim(), Terminator = terminator };
         }
 
         /// <summary>
@@ -691,12 +716,12 @@ namespace IronyModManager.Parser
         /// <param name="index">The index.</param>
         protected void IgnoreElementWhiteSpace(List<char> code, ref int index)
         {
-            for (int i = index; i < code.Count; i++)
+            for (var i = index; i < code.Count; i++)
             {
                 var character = GetElementCharacter(code, i);
                 if (character == null || char.IsWhiteSpace(character.GetValueOrDefault()))
                 {
-                    continue;
+                    // Nothing
                 }
                 else
                 {
@@ -717,7 +742,7 @@ namespace IronyModManager.Parser
             var result = new List<IScriptElement>();
             var validCodeLines = CleanCode(file, lines);
             var code = string.Join(Environment.NewLine, validCodeLines).ToList();
-            for (int i = 0; i < code.Count; i++)
+            for (var i = 0; i < code.Count; i++)
             {
                 var element = GetElement(code, ref i);
                 if (element != null)
@@ -725,6 +750,7 @@ namespace IronyModManager.Parser
                     result.Add(element);
                 }
             }
+
             return result;
         }
 
@@ -777,6 +803,7 @@ namespace IronyModManager.Parser
                     }
                 }
             }
+
             return result;
         }
 
@@ -798,6 +825,7 @@ namespace IronyModManager.Parser
                 error.Message = "Number of open and close curly brackets does not match. This indicates a syntax error somewhere in the file.";
                 return error;
             }
+
             return null;
         }
 
@@ -809,7 +837,7 @@ namespace IronyModManager.Parser
         /// <returns>System.String.</returns>
         protected string RemoveInlineComments(string commentId, string line)
         {
-            if (line.IndexOf(commentId) > 0)
+            if (line.IndexOf(commentId, StringComparison.Ordinal) > 0)
             {
                 var sb = new StringBuilder();
                 var split = line.Split(commentId);
@@ -839,8 +867,10 @@ namespace IronyModManager.Parser
                         }
                     }
                 }
+
                 return sb.ToString().Trim(commentId);
             }
+
             return line;
         }
 
@@ -890,19 +920,15 @@ namespace IronyModManager.Parser
                 {
                     var val = value ?? string.Empty;
                     var containsComma = false;
+#pragma warning disable CA1866
                     if (val.EndsWith(","))
+#pragma warning restore CA1866
                     {
                         val = val.Trim(",");
                         containsComma = true;
                     }
-                    if (decimal.TryParse(val, NumberStyles.Number, CultureInfo.InvariantCulture, out var result))
-                    {
-                        this.value = result.ToString("G0", CultureInfo.InvariantCulture);
-                    }
-                    else
-                    {
-                        this.value = val;
-                    }
+
+                    this.value = decimal.TryParse(val, NumberStyles.Number, CultureInfo.InvariantCulture, out var result) ? result.ToString("G0", CultureInfo.InvariantCulture) : val;
                     if (containsComma)
                     {
                         this.value += ",";

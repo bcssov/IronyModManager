@@ -4,13 +4,14 @@
 // Created          : 01-20-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 08-24-2021
+// Last Modified On : 02-06-2025
 // ***********************************************************************
 // <copyright file="LanguagesService.cs" company="Mario">
 //     Mario
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
+
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
@@ -103,7 +104,7 @@ namespace IronyModManager.Services
         /// <summary>
         /// Applies the selected.
         /// </summary>
-        /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
+        /// <returns><c>true</c> if applied, <c>false</c> otherwise.</returns>
         public virtual bool ApplySelected()
         {
             var language = GetSelected();
@@ -142,7 +143,7 @@ namespace IronyModManager.Services
             var all = Get();
             var selectedLanguage = all.FirstOrDefault(p => p.IsSelected);
             var languages = all.Where(p => !string.IsNullOrWhiteSpace(p.SupportedNameBlock) && p != selectedLanguage);
-            var cached = cache.Get<string>(new CacheGetParameters() { Region = ConstructFontRegionCacheKey(selectedLanguage), Key = text });
+            var cached = cache.Get<string>(new CacheGetParameters { Region = ConstructFontRegionCacheKey(selectedLanguage), Key = text });
             if (!string.IsNullOrWhiteSpace(cached))
             {
                 return all.FirstOrDefault(p => p.Abrv.Equals(cached));
@@ -151,7 +152,7 @@ namespace IronyModManager.Services
             {
                 foreach (var item in languages)
                 {
-                    cached = cache.Get<string>(new CacheGetParameters() { Region = ConstructFontRegionCacheKey(item), Key = text });
+                    cached = cache.Get<string>(new CacheGetParameters { Region = ConstructFontRegionCacheKey(item), Key = text });
                     if (string.IsNullOrWhiteSpace(cached))
                     {
                         if (!charRegex.TryGetValue(item.Abrv, out var regex))
@@ -159,9 +160,10 @@ namespace IronyModManager.Services
                             regex = new Regex($"\\p{{{item.SupportedNameBlock}}}", RegexOptions.Compiled | RegexOptions.IgnoreCase);
                             charRegex.TryAdd(item.Abrv, regex);
                         }
+
                         if (text.Any(c => regex.IsMatch(c.ToString())))
                         {
-                            cache.Set(new CacheAddParameters<string>() { Region = ConstructFontRegionCacheKey(item), Key = text, Value = item.Abrv, MaxItems = MaxCachedFontRecords });
+                            cache.Set(new CacheAddParameters<string> { Region = ConstructFontRegionCacheKey(item), Key = text, Value = item.Abrv, MaxItems = MaxCachedFontRecords });
                             return item;
                         }
                     }
@@ -171,7 +173,8 @@ namespace IronyModManager.Services
                     }
                 }
             }
-            cache.Set(new CacheAddParameters<string>() { Region = ConstructFontRegionCacheKey(selectedLanguage), Key = text, Value = selectedLanguage.Abrv, MaxItems = MaxCachedFontRecords });
+
+            cache.Set(new CacheAddParameters<string> { Region = ConstructFontRegionCacheKey(selectedLanguage), Key = text, Value = selectedLanguage?.Abrv, MaxItems = MaxCachedFontRecords });
             return selectedLanguage;
         }
 
@@ -189,13 +192,14 @@ namespace IronyModManager.Services
         /// </summary>
         /// <param name="language">The language.</param>
         /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
-        /// <exception cref="InvalidOperationException">Language not selected.</exception>
+        /// <exception cref="System.InvalidOperationException">Language not selected.</exception>
         public virtual bool Save(ILanguage language)
         {
             if (!language.IsSelected)
             {
                 throw new InvalidOperationException("Language not selected.");
             }
+
             var preference = preferencesService.Get();
 
             var result = preferencesService.Save(Mapper.Map(language, preference));
@@ -211,7 +215,7 @@ namespace IronyModManager.Services
         /// <param name="languages">The languages.</param>
         /// <param name="selectedLanguage">The selected language.</param>
         /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
-        /// <exception cref="ArgumentNullException"></exception>
+        /// <exception cref="System.ArgumentNullException"></exception>
         public virtual bool SetSelected(IEnumerable<ILanguage> languages, ILanguage selectedLanguage)
         {
             if (languages == null || !languages.Any() || selectedLanguage == null)
@@ -254,7 +258,7 @@ namespace IronyModManager.Services
         {
             if (!languages.Any(p => p.IsSelected))
             {
-                languages.FirstOrDefault(p => p.Abrv.Equals(Shared.Constants.DefaultAppCulture)).IsSelected = true;
+                languages.FirstOrDefault(p => p.Abrv.Equals(Shared.Constants.DefaultAppCulture))!.IsSelected = true;
             }
         }
 

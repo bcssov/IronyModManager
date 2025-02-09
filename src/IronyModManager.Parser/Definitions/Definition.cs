@@ -4,7 +4,7 @@
 // Created          : 02-16-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 10-29-2024
+// Last Modified On : 02-09-2025
 // ***********************************************************************
 // <copyright file="Definition.cs" company="Mario">
 //     Mario
@@ -184,6 +184,13 @@ namespace IronyModManager.Parser.Definitions
         /// </summary>
         /// <value><c>true</c> if [allow duplicate]; otherwise, <c>false</c>.</value>
         public bool AllowDuplicate { get; set; }
+
+        /// <summary>
+        /// Gets or sets the applied global variables.
+        /// </summary>
+        /// <value>The applied global variables.</value>
+        [JsonIgnore]
+        public IEnumerable<IDefinition> AppliedGlobalVariables { get; set; }
 
         /// <summary>
         /// Gets or sets the code.
@@ -793,6 +800,7 @@ namespace IronyModManager.Parser.Definitions
                 nameof(IsSpecialFolder) => IsSpecialFolder,
                 nameof(MergeType) => MergeType,
                 nameof(ContainsInlineIdentifier) => ContainsInlineIdentifier,
+                nameof(AppliedGlobalVariables) => AppliedGlobalVariables,
                 _ => Id
             };
         }

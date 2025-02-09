@@ -4,18 +4,21 @@
 // Created          : 01-18-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 07-12-2022
+// Last Modified On : 02-06-2025
 // ***********************************************************************
 // <copyright file="CurrentLocale.cs" company="Mario">
 //     Mario
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
+
 using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
 using System.Threading;
 using IronyModManager.Shared;
+using IronyModManager.Shared.Expressions;
 
 namespace IronyModManager.Localization
 {
@@ -28,7 +31,7 @@ namespace IronyModManager.Localization
         #region Constructors
 
         /// <summary>
-        /// Initializes static members of the <see cref="CurrentLocale"/> class.
+        /// Initializes static members of the <see cref="CurrentLocale" /> class.
         /// </summary>
         static CurrentLocale()
         {
@@ -69,6 +72,8 @@ namespace IronyModManager.Localization
         {
             var culture = new CultureInfo(cultureName);
             CurrentCulture = culture;
+
+            MathExpression.Culture = CurrentCulture;
 
             SetThreadCulture();
         }

@@ -120,6 +120,8 @@ namespace IronyModManager.Services.Tests
         [Fact]
         public async Task Should_index_definitions_when_definition_signature_not_same()
         {
+            DISetup.SetupContainer();
+            
             var storageProvider = new Mock<IStorageProvider>();
             var modParser = new Mock<IModParser>();
             var parserManager = new Mock<IParserManager>();
@@ -178,6 +180,8 @@ namespace IronyModManager.Services.Tests
         [Fact]
         public async Task Should_index_definitions_when_game_version_signature_not_same()
         {
+            DISetup.SetupContainer();
+
             var storageProvider = new Mock<IStorageProvider>();
             var modParser = new Mock<IModParser>();
             var parserManager = new Mock<IParserManager>();
@@ -236,6 +240,8 @@ namespace IronyModManager.Services.Tests
         [Fact]
         public async Task Should_index_definitions_which_are_not_indexed()
         {
+            DISetup.SetupContainer();
+
             var storageProvider = new Mock<IStorageProvider>();
             var modParser = new Mock<IModParser>();
             var parserManager = new Mock<IParserManager>();

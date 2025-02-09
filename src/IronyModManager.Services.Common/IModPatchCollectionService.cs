@@ -4,7 +4,7 @@
 // Created          : 05-26-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-25-2024
+// Last Modified On : 02-09-2025
 // ***********************************************************************
 // <copyright file="IModPatchCollectionService.cs" company="Mario">
 //     Mario
@@ -157,7 +157,7 @@ namespace IronyModManager.Services.Common
         /// Invalidates the state of the patch mod.
         /// </summary>
         /// <param name="collectionName">Name of the collection.</param>
-        /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
+        /// <returns><c>true</c> if invalidated, <c>false</c> otherwise.</returns>
         bool InvalidatePatchModState(string collectionName);
 
         /// <summary>
@@ -181,6 +181,14 @@ namespace IronyModManager.Services.Common
         /// <param name="collectionName">Name of the collection.</param>
         /// <returns>Task&lt;System.String&gt;.</returns>
         Task<string> LoadDefinitionContentsAsync(IDefinition definition, string collectionName);
+
+        /// <summary>
+        /// Determines if conflict result needs reload.
+        /// </summary>
+        /// <param name="conflictResult">The conflict result.</param>
+        /// <param name="definition">The definition.</param>
+        /// <returns><c>true</c> if conflict result needs reload, <c>false</c> otherwise.</returns>
+        bool NeedsReload(IConflictResult conflictResult, IDefinition definition);
 
         /// <summary>
         /// Patches the has game definitions asynchronous.
@@ -254,45 +262,45 @@ namespace IronyModManager.Services.Common
         Task<bool> SaveIgnoredPathsAsync(IConflictResult conflictResult, string collectionName);
 
         /// <summary>
-        /// Shoulds the ignore game mods.
+        /// Should it ignore game mods.
         /// </summary>
         /// <param name="conflictResult">The conflict result.</param>
-        /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
+        /// <returns><c>true</c> if ignored, <c>false</c> otherwise.</returns>
         bool? ShouldIgnoreGameMods(IConflictResult conflictResult);
 
         /// <summary>
-        /// Shoulds the show reset conflicts.
+        /// Should it show reset conflicts.
         /// </summary>
         /// <param name="conflictResult">The conflict result.</param>
-        /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
+        /// <returns><c>true</c> if it should show, <c>false</c> otherwise.</returns>
         bool? ShouldShowResetConflicts(IConflictResult conflictResult);
 
         /// <summary>
-        /// Shoulds the hide self conflicts.
+        /// Should it hide self conflicts.
         /// </summary>
         /// <param name="conflictResult">The conflict result.</param>
-        /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
+        /// <returns><c>true</c>if it should show, <c>false</c> otherwise.</returns>
         bool? ShouldShowSelfConflicts(IConflictResult conflictResult);
 
         /// <summary>
         /// Toggles the ignore game mods.
         /// </summary>
         /// <param name="conflictResult">The conflict result.</param>
-        /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
+        /// <returns><c>true</c> if it is toggled, <c>false</c> otherwise.</returns>
         bool? ToggleIgnoreGameMods(IConflictResult conflictResult);
 
         /// <summary>
         /// Toggles the self mod conflicts.
         /// </summary>
         /// <param name="conflictResult">The conflict result.</param>
-        /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
+        /// <returns><c>true</c> if it is toggled, <c>false</c> otherwise.</returns>
         bool? ToggleSelfModConflicts(IConflictResult conflictResult);
 
         /// <summary>
         /// Toggles the show reset conflicts.
         /// </summary>
         /// <param name="conflictResult">The conflict result.</param>
-        /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
+        /// <returns><c>true</c> if it toggled, <c>false</c> otherwise.</returns>
         bool? ToggleShowResetConflicts(IConflictResult conflictResult);
 
         /// <summary>
