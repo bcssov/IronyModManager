@@ -1,679 +1,683 @@
 {
-    "App": {
-        "FontFamily": "Noto Sans",
-        "SupportedNameBlock": "",
-        "Title": "Irony Mod Manager: v{AppVersion}",
-        "BackgroundOperationMessage": "Por favor espere, se está realizando una operación en segundo plano. La aplicación se cerrará una vez que se complete ...",
-        "WaitBackgroundOperationMessage": "Por favor espere, se está realizando una operación en segundo plano.",
-        "Actions": {
-            "Name": "Comportamiento",
-            "Wiki": "Wiki",
-            "Logs": "Logs",
-            "ErrorLog": "Error.log",
-            "Close": "Cerrar",
-            "DLC": "DLC"
-        }
-    },
-    "JokeError": {
-        "Title": "Violación de memoria del contenedor de huevos no controlada",
-        "Message": "Pulsa OK para fingir que no ha pasado nada :)"
-    },
-    "FatalError": {
-        "Message": "Ocurrió un error no manejado. La aplicación se cerrará automáticamente.",
-        "MessageWithLastError": "Ocurrió un error no manejado. Por favor, utilice esta información para presentar un informe de errores:{NewLine}{NewLine}{Message}",
-        "Title": "Error",
-        "Header": "Error Fatal"
-    },
-    "SavingError": {
-        "Title": "Guardar Error",
-        "Message": "Algo parece estar bloqueando la capacidad de Irony para escribir en archivos mod. Reporta esto en el rastreador de problemas de GitHub y publique el registro de errores."
-    },
-    "UnableToWriteError": {
-        "Title": "Aplicación bloqueada",
-        "Message": "La aplicación parece estar bloqueada por Antivirus o permisos y no puede escribir en el directorio de documentos del usuario:{NewLine}{Paths}"
-    },
-    "InvalidModsDetected": {
-        "Title": "Mods no válidos detectados",
-        "Message": "No se pudieron analizar las siguientes ubicaciones del mod debido a archivos no válidos o archivos bloqueados:{NewLine}{Mods}"
-    },
-    "Prompt": {
-        "OK": "OK",
-        "Yes": "Si",
-        "No": "No",
-        "Confirm": "Confirmar",
-        "Cancel": "Cancelar"
-    },
-    "FileDialog": {
-        "FileName": "Nombre del Archovo",
-        "ShowHiddenFiles": "Mostrar Archivos Ocultos",
-        "Volume": "{Size} Tamaño",
-        "OK": "OK",
-        "Cancel": "Cancelar",
-        "Name": "Nombre",
-        "DateModified": "Fecha Modificada",
-        "Type": "Tipo",
-        "Size": "Tamaño",
-        "Folders": {
-            "Downloads": "Descargas",
-            "Desktop": "Escritorio",
-            "Documents": "Documentos",
-            "Music": "Música",
-            "Videos": "Videos",
-            "Pictures": "Imagenes"
-        }
-    },
-    "TextBox": {
-        "Copy": "Copiar",
-        "Cut": "Cortar",
-        "Paste": "Pegar",
-        "SelectAll": "Seleccionar Todo"
-    },
-    "Languages": {
-        "Name": "Idioma"
-    },
-    "Themes": {
-        "Name": "Tema",
-        "Light": "Claro",
-        "Dark": "Oscuro",
-        "FluentLight": "Luz Fluida",
-        "FluentDark": "Oscuro Fluido",
-        "MaterialDark": "Material Oscuro",
-        "MaterialLight": "Material Ligero",
-        "Restart_Title": "Necesita Reinicio",
-        "Restart_Header": "Aplicación Necesita Reinicio",
-        "Restart_Message": "La aplicación debe reiniciarse para que el nuevo tema se aplique correctamente. ¿Quieres reiniciar la aplicación?"
-    },
-    "NotificationPosition": {
-        "BottomRight": "Abajo a la derecha",
-        "BottomLeft": "Abajo a la izquierda",
-        "TopRight": "Parte superior derecha",
-        "TopLeft": "Arriba a la izquierda"
-    },
-    "Games": {
-        "Name": "Juego",
-        "Stellaris": "Stellaris",
-        "EuropaUniversalisIV": "Europa Universalis IV",
-        "HeartsofIronIV": "Hearts of Iron IV",
-        "ImperatorRome": "Imperator Rome",
-        "CrusaderKings3": "Crusader Kings III",
-        "Victoria3": "Victoria 3",
-        "STInfinite": "Star Trek: Infinite"
-    },
-    "GameLanguages": {
-        "l_english": "English",
-        "l_braz_por": "Portugués",
-        "l_french": "Francés",
-        "l_german": "Alemán",
-        "l_polish": "Polaco",
-        "l_russian": "Ruso",
-        "l_simp_chinese": "Simp Chinese",
-        "l_spanish": "Español",
-        "l_chinese": "Chino",
-        "l_traditional_chinese": "Chino tradicional",
-        "l_japanese": "Japonés",
-        "l_korean": "Coreano"
-    },
-    "Installed_Mods": {
-        "Name": "Mods Instalados",
-        "Filter": "Filtro de Mods",
-        "Selected": "Seleccionado",
-        "Mod_Name": "Nombre Mod",
-        "Supported_Version": "Versión Soportada",
-        "LoadingMods": "Espere mientras carga los datos del mod...",
-        "RefreshingModList": "Espere mientras se actualiza la lista de mods...",
-        "InvalidMods": {
-            "Title": "Mods no válidos detectados",
-            "Message": "Faltan las siguientes modificaciones:{NewLine}{Mods}.{NewLine}{NewLine}¿Desea eliminar los descriptores?"
-        }
-    },
-    "Collection_Mods": {
-        "Name": "Colección de Mods",
-        "Remove": "-",
-        "Create": "+",
-        "OK": "OK",
-        "Cancel": "Cancelar",
-        "Watermark": "Ingresa Nombre de la nueva Colección",
-        "Delete_Title": "Eliminar Colección?",
-        "Delete_Header": "Confirmar Eliminación Colección",
-        "Delete_Message": "¿Está seguro de que desea eliminar la colección {CollectionName}?",
-        "Deleting_Message": "Por favor, espere mientras elimine la colección de mod...",
-        "Export": "Exportar",
-        "Import": "Importar",
-        "Export_Dialog_Title": "Exportar Colección",
-        "Import_Dialog_Title": "Importar Colección",
-        "Overlay_Exporting_Message": "Por favor espere mientras se exporta una colección de mods...",
-        "Overlay_Importing_Message": "Por favor espere mientras se importa una colección de mods...",
-        "Overlay_Import_Export_Progress": "{PercentDone}",
-        "Filter": "Buscar Mods",
-        "Selected": "Seleccionados",
-        "Mod_Name": "Nombre Mod",
-        "Order": "Orden",
-        "Rename": "Renombrar",
-        "Duplicate": "Duplicar",
-        "Overlay_Rename_Message": "Por favor espere mientras se renombra...",
-        "Overlay_Duplicate_Message": "Por favor espere mientras se duplica...",
-        "ExportToClipboard": "Copiar colección al portapapeles",
-        "ExportToClipboardFull": "Copiar colección al portapapeles con metadatos",
-        "Undo": "Deshacer",
-        "Redo": "Rehacer",
-        "DeleteMerge": {
-            "DeleteTitle": "Eliminar mod combinado?",
-            "DeleteHeader": "Confirmar Eliminación de mod combinado",
-            "DeleteMessage": "Se ha detectado la existencia de un mod combinado, ¿quieres eliminarlo también?"
-        },
-        "ImportFromClipboard": {
-            "Title": "Importar Orden del Mod desde portapapeles",
-            "PromptTitle": "¿Sobrescribir orden del mod?",
-            "PromptMessage": "Esto sobrescribirá tu colección de mods orden de mods y la selección de mod. ¿Continuar?"
-        },
-        "FileHash": {
-            "ExportCollection": "Exportar Colección de Hashes",
-            "ExportGame": "Export a la exportación haeshes",
-            "Import": "Verificar hashes",
-            "DialogTitleExport": "Seleccione dónde exportar el informe",
-            "DialogTitleImport": "Seleccione el informe json para importar",
-            "ExportOverlay": "Espere mientras exporta...",
-            "ImportOverlay": "Espere mientras verifica...",
-            "ProgressExport": "{Progress}",
-            "ProgressImport": "Step {Count}/{TotalCount}: {Progress}",
-            "Export": "Exportar",
-            "Close": "Cerrar"
-        },
-        "JumpOnDragAndDrop": {
-            "Title": "Auto Focus: {State}",
-            "On": "On",
-            "Off": "Off"
-        },
-        "ImportPrompt": {
-            "Title": "Colección existente",
-            "Message": "La colección ya existe y se sobrescribirá, ¿desea continuar?"
-        },
-        "ImportNonExistingMods": {
-            "Title": "Mods inexistentes",
-            "Message": "Los siguientes mods no se pudieron importar porque parecen faltar:{NewLine}{Mods}"
-        },
-        "ImportOther": {
-            "Title": "...",
-            "Paradoxos": "Importar desde Paradoxos",
-            "Paradox": "Importar desde Juego",
-            "ParadoxLauncher": "Importar desde Paradox Launcher",
-            "ParadoxLauncherBeta": "Importación de Paradox Launcher Beta",
-            "ParadoxLauncherJson": "Importar desde Paradox Launcher Json",
-            "Close": "Cerrar"
-        },
-        "ExportOther": {
-            "Title": "...",
-            "OrderOnly": "Exportar Orden Solamente",
-            "WholeCollection": "Exportar toda la colección",
-            "ParadoxLauncherJson": "Exportar a Paradox Launcher Json (<2021.10)",
-            "ParadoxLauncherJson202110": "Exportar a Paradox Launcher Json (>=2021.10)",
-            "Close": "Cerrar"
-        },
-        "MergeCollection": {
-            "Name": "Unir",
-            "MergedCollectionPrefix": "(Merged)",
-            "MergeCompressModPrefix": "(Merged {Name})",
-            "Overlay_Progress": "Step {Count}/{TotalCount}: {PercentDone}",
-            "DiskInfoOverlay": "Comprobando el espacio disponible en disco...",
-            "Options": {
-                "Title": "Seleccionar Modo",
-                "Basic": "Basico",
-                "Compress": "Comprimido",
-                "Close": "Cerrar"
-            },
-            "Basic": {
-                "Overlay_Gathering_Mod_Info": "Espere mientras se recopila la información del mod...",
-                "Overlay_Writing_Files": "Espere mientras se fusiona la colección de mods..."
-            },
-            "Compress": {
-                "Overlay_Gathering_Mod_Info": "Espere mientras se recopila la información del mod...",
-                "Overlay_Compressing_Files": "Espere mientras se fusiona la colección de mods..."
-            },
-            "OverwritePrompt": {
-                "Title": "¿Sobrescribir la colección existente?",
-                "Message": "Ya existe una colección combinada con el nombre especificado. ¿Le gustaría sobrescribirlo?"
-            }
-        },
-        "PatchMod": {
-            "Title": "Modificación de parche: {Status}",
-            "Enabled": "Activado",
-            "Disabled": "Discapacitado",
-            "NotAvailable": "No disponible",
-            "DeletePrompt": {
-                "Title": "Confirmar eliminación",
-                "Message": "¿Estás seguro de que quieres eliminar el mod de parche?"
-            },
-            "Actions": {
-                "Enable": "Habilitar",
-                "Disable": "Desactivar",
-                "Delete": "Borrar",
-                "Close": "Cerrar"
-            }
-        },
-        "Prompts": {
-            "ModsMissingTitle": "Mods eliminados",
-            "ModsMissingMessage": "Faltan algunos mods y se han eliminado de la colección automáticamente:{NewLine}{NewLine}{Mods}"
-        }
-
-    },
-    "Mod_Actions": {
-        "Apply": "Aplicar",
-        "Overlay_Apply_Message": "Espere mientras aplica la colección de mods...",
-        "ConflictSolver": {
-            "Conflict": "Solucionador de conflictos",
-            "Overlay_Conflict_Solver_Indexing_Game": "Por favor, espere mientras se indexan las definiciones de juegos...",
-            "Overlay_Conflict_Solver_Loading_Game_Definitions": "Por favor, espere mientras cargando definiciones de juego...",
-            "Overlay_Conflict_Solver_Loading_Definitions": "Espere mientras se cargan las definiciones de mod...",
-            "Overlay_Conflict_Solver_Analyzing_Conflicts": "Espere mientras se analizan las definiciones en busca de conflictos...",
-            "Overlay_Conflict_Solver_Analyzing_Resolved_Conflicts": "Espere mientras se analizan las definiciones resueltas...",
-            "Overlay_Conflict_Solver_Replacing_Definitions": "Espere mientras se reemplazan las definiciones...",
-            "Overlay_Conflict_Solver_Progress": "Step {Count}/{TotalCount}: {PercentDone}",
-            "FirstUsePrompt": {
-                "Title": "Atención",
-                "Message": "El solucionador de conflictos no es para los débiles de corazón. Requiere conocimiento y experiencia con el código de parches. Los usuarios de pequeñas colecciones de MOD deben ignorarlo, los usuarios de colecciones MOD más grandes deben considerar recortar sus colecciones de mod y investigar parches de códigos. No se puede proporcionar apoyo en caso de que proceda."
-            },
-            "GameExecutableNotSetPrompt": {
-                "Title": "Ejecutable del juego no establecido",
-                "Message": "El ejecutable del juego no se ha configurado en las opciones. Esta colección de mods incluía previamente archivos de juegos en su análisis. El solucionador de conflictos no podrá analizar los archivos del juego y es posible que se restablezcan algunas resoluciones. ¿Desea continuar?"
-            },
-            "TooLargePrompt": {
-                "Title": "Demasiado grande",
-                "Message": "Se ha detectado un mod con un código fuente de gran tamaño que puede provocar un fallo de memoria en Irony. Además, es poco probable que el juego sea capaz de manejar archivos fuente tan grandes."
-            }
-        },
-        "LaunchGame": {
-            "Launch": "Inciar Juego",
-            "Resume": "Reanudar Juego",
-            "Overlay": "Inciando Juego, espere...",
-            "LaunchError": {
-                "Title": "No se pudo iniciar el juego.",
-                "Message": "No se pudo iniciar el juego."
-            },
-            "NotSet": {
-                "Title": "Juego no configurado",
-                "Message": "El juego no se detectó automáticamente, utilice la ventana de opciones para configurar manualmente la ruta del ejecutable."
-            }
-        }
-    },
-    "Conflict_Solver": {
-        "Back": "Atrás",
-        "ConflictedObjects": "Objetos en Conflicto",
-        "LeftSide": "Lado Izquierdo",
-        "RightSide": "Lado Derecho",
-        "BinaryFile": "Contenido Binario",
-        "ImageInfo": "Anchura: {Width} Altura: {Height}",
-        "TakeLeft": "Gire a la Izquierda",
-        "TakeRight": "Gire a la Derecha",
-        "OK": "OK",
-        "Cancel": "Cancelar",
-        "Resolve": "Resolver",
-        "Ignore": "Ignorar",
-        "IgnoreRules": "Ignorar Reglas",
-        "OverlayResolve": "Espere mientras se resuelve el conflicto...",
-        "NextConflict": "Conflicto Siguiente ",
-        "PrevConflict": "Conflicto Previo",
-        "ConflictCount": "Conteo de Conflictos: {Count}",
-        "PriorityReason": {
-            "FIOS": "(FIOS)",
-            "LIOS": "(LIOS)",
-            "Order": "(Orden de Carga)",
-            "Override": "(Anular)"
-        },
-        "InvalidConflicts": {
-            "Name": "Invalido",
-            "Error": "Error en la línea: {Line} Columna: {Column} Archivo: {File}.{NewLine}Informe este error al autor del mod: {ModName}.{NewLine}{NewLine} El mensaje de error dice:{NewLine}{NewLine}{Message} ",
-            "ErrorNoLine": "Error en el archivo: {File}.{NewLine}Informe este error al autor del mod: {ModName}.{NewLine}{NewLine} El mensaje de error dice:{NewLine}{NewLine}{Message}",
-            "ContextMenu": {
-                "OpenFile": "Abrir Archivo",
-                "OpenDirectory": "Abrir Directorio",
-                "CustomPatch": "Copiar a Parche Personalizado"
-            }
-        },
-        "CompareSelectorContextMenu": {
-            "OpenFile": "Abrir Archivo",
-            "OpenDirectory": "Abrir Directorio"
-        },
-        "ContextMenu": {
-            "CopyAll": "Copiar Todo",
-            "CopyThis": "Copia este",
-            "CopyThisAfterLine": "Copiar esto después de la línea",
-            "CopyThisBeforeLine": "Copia esto antes de la línea",
-            "MoveUp": "Mover Arriba",
-            "MoveDown": "Mover Abajo",
-            "Edit": "Editar",
-            "EditHere": "Editar aquí",
-            "CopyText": "Copiar Texto",
-            "Delete": "Eliminar",
-            "Undo": "Deshacer",
-            "Redo": "Rehacer",
-            "Editor": "Fusión Externa",
-            "ReadonlyEditor": "Comparación externa",
-            "ToggleCompare": "Conmutar el modo de comparación de diferencias"
-        },
-        "EditorContextMenu": {
-            "Copy": "Copiar",
-            "Cut": "Cortar",
-            "Delete": "Eliminar",
-            "Paste": "Pegar",
-            "Undo": "Deshacer",
-            "Redo": "Rehacer",
-            "SelectAll": "Seleccionar Todo",
-            "Find": "Encuentre",
-            "Replace": "Sustituir"
-        },
-        "EditorResources": {
-            "ReplaceLabel": "Reemplazar...",
-            "SearchErrorText": "Error: ",
-            "SearchFindNextText": "Buscar siguiente (F3)",
-            "SearchFindPreviousText": "Buscar anterior (Shift+F3)",
-            "SearchLabel": "Encuentra...",
-            "SearchMatchCaseText": "Caso de partido",
-            "SearchMatchWholeWordsText": "Emparejar palabras enteras",
-            "SearchNoMatchesFoundText": "No se han encontrado resultados.",
-            "SearchReplaceAll": "Reemplazar todo (Alt+A)",
-            "SearchReplaceNext": "Reemplazar siguiente (Alt+R)",
-            "SearchToggleReplace": "Alternar entre los modos de búsqueda y sustitución",
-            "SearchUseRegexText": "Utilizar expresiones regulares"
-        },
-        "Modes": {
-            "Title": "Seleccionar Modo",
-            "Default": "Defecto",
-            "Advanced": "Avanzado",
-            "Analyze": "Analizar solo",
-            "AnalyzeWithoutLocalization": "Analizar sólo sin localización",
-            "DefaultWithoutLocalization": "Por defecto sin localización",
-            "AdvancedWithoutLocalization": "Avanzado sin localización",
-            "Close": "Cerrar"
-        },
-        "ModFilter": {
-            "Title": "Filtro de Mods",
-            "IgnoreGameConflicts": "Ignorar los conflictos del juego",
-            "ShowSelfConflicts": "Mostrar autoconflictos",
-            "ShowResetConflicts": "Mostrar solo restablecer conflictos",
-            "Close": "Cerrar"
-        },
-        "ResetConflicts": {
-            "Title": "Reiniciar Conflictos",
-            "Resolved": "Resuelto",
-            "Ignored": "Ignorado",
-            "Custom": "Personalizado",
-            "Close": "Cerrar",
-            "Reset": "Reiniciar",
-            "Overlay": "Espere mientras deshace los conflictos..."
-        },
-        "DBSearch": {
-            "Title": "Búsqueda en Base de Datos",
-            "Watermark": "Introduce Término de Búsqueda",
-            "Close": "Cerrar",
-            "Clear": "X",
-            "Searching": "Buscando..."
-        },
-        "CustomPatch": {
-            "Title": "Parche personalizado",
-            "Load": "Cargar",
-            "Path": "Ruta",
-            "Save": "Guardar",
-            "Close": "Cerrar"
-        },
-        "Editor": {
-            "Title": "Fusión Externa",
-            "Message": "Presione confirmar una vez que esté satisfecho con la Fusión Externa."
-        },
-        "ReadonlyEditor": {
-            "Title": "Comparación externa",
-            "Message": "Pulse OK cuando haya terminado de comparar."
-        },
-        "ResolutionSaveError": {
-            "Title": "Error de validación de definición virtual",
-            "MessageLine": "La definición virtual no se pudo utilizar para resolver el conflicto. La definición virtual falló la validación.{NewLine}{NewLine}{ErrorMessage}{NewLine}Error en la línea: {Line} Columna: {Column}",
-            "MessageNoLine": "La definición virtual no se pudo utilizar para resolver el conflicto. La definición virtual falló la validación.{NewLine}{NewLine}{ErrorMessage}"
-        },
-        "BracketMismatchError": {
-            "Message": "¡Discrepancia en el recuento de soportes! Abrir corchete: {OpenBracketCount} Cerrar corchete: {CloseBracketCount}"
-        },
-        "ResetWarning": {
-            "Title": "Los conflictos se reinician",
-            "AnalyzeModeAll": "Algunos conflictos se restablecerán si se ejecuta un solucionador de conflicto debido a cambios de mod. Estos se resuelven conflictos que se restablecerán:{NewLine}{NewLine}{ListOfConflictsResolved}{NewLine}Se ignoran los conflictos que se restablecerán:{NewLine}{NewLine}{ListOfConflictsIgnored}",
-            "AnalyzeModeResolvedOnly": "Algunos conflictos se restablecerán si se ejecuta un solucionador de conflicto debido a cambios de mod. Estos se resuelven conflictos que se restablecerán:{NewLine}{NewLine}{ListOfConflictsResolved}",
-            "AnalyzeModeIgnoredOnly": "Algunos conflictos se restablecerán si se ejecuta un solucionador de conflicto debido a cambios de mod. Se ignoran los conflictos que se restablecerán:{NewLine}{NewLine}{ListOfConflictsIgnored}",
-            "RegularModeAll": "Algunos conflictos se restablecieron debido a cambios de mod. Estos se restablecieron en conflictos resueltos:{NewLine}{NewLine}{ListOfConflictsResolved}{NewLine}Se restablecieron los conflictos ignorados:{NewLine}{NewLine}{ListOfConflictsIgnored}",
-            "RegularModeResolvedOnly": "Algunos conflictos se restablecieron debido a cambios de mod. Estos se restablecieron en conflictos resueltos:{NewLine}{NewLine}{ListOfConflictsResolved}",
-            "RegularModeIgnoredOnly": "Algunos conflictos se restablecieron debido a cambios de mod. Se restablecieron los conflictos ignorados:{NewLine}{NewLine}{ListOfConflictsIgnored}",
-            "ListOfConflictsFormat": "{ParentDirectory}: {Name}"
-        },
-        "Tooltips": {
-            "DefinitionInfo": "Archivo:{File} modificado:{DateTime}"
-        }
-    },
-    "ConflictIgnore": {
-        "Save": "Guardar",
-        "Cancel": "Cancelar",
-        "Watermark": "Usa # para comentarios. La nueva línea es una nueva regla."
-    },
-    "Options": {
-        "Name": "Opciones",
-        "Close": "Cerrar",
-        "NavigateTo": "...",
-        "Reset": "X",
-        "AppOptions": {
-            "Title": "Opciones de aplicación",
-            "NotificationPosition": "Posición de notificación"
-        },
-        "Editor": {
-            "Title": "Opciones del Editor externo",
-            "EditorExecutable": "Editor Ejecutable",
-            "EditorArgs": "Editor Args",
-            "EditorArgsPlaceholder": "Ejemplo: leftFile:{Left} rightFile:{Right}",
-            "Test": "Configuración de prueba",
-            "TestLeft": "faucibus purus in massa tempor, nec feugiat nisl pretium fusce",
-            "TestRight": "faucibus purus in massa tempor nec feugiat nisl pretium fusce"
-        },
-        "Game": {
-            "Title": "Opciones de Juego",
-            "GameExecutable": "Ejecutable del Juego",
-            "UserDirectory": "Directorio de Datos",
-            "GameArgs": "Game Args",
-            "RefreshMods": "Refrescar Descriptors antes de jugar",
-            "CloseAfterLaunch": "Cerrar después de iniciar el juego",
-            "AutoConfigure": "Configurar todo...",
-            "CustomModPath": "Directorio de mod personalizado"
-        },
-        "ConflictSolver": {
-            "Title": "Solucionador de conflictos",
-            "AllowedLanguages": "Lenguas permitidas",
-            "Colors": "Nuevos colores del visor de diferencias",
-            "ConflictSolverDeletedLineColor": "Línea suprimida",
-            "ConflictSolverImaginaryLineColor": "Línea imaginaria",
-            "ConflictSolverInsertedLineColor": "Línea insertada",
-            "ConflictSolverModifiedLineColor": "Línea modificada"
-        },
-        "Updates": {
-            "Title": "Opciones de Actualización",
-            "UpdateInfoTitle": "Actualizar Información de la versión",
-            "AutoUpdates": "Buscar Actualizaciones al iniciar",
-            "CheckPrerelease": "Actualizar a versiones preliminares",
-            "CheckForUpdates": "Buscar Actualizaciones",
-            "Install": "Instalar Actualizaciones",
-            "Version": "Version: {Version}",
-            "Skip": "Ignorar la actualización",
-            "Overlay": {
-                "UpdateDownloading": "Descargando Actualizaciones...",
-                "UpdateDownloadProgress": "{Progress}",
-                "UpdateInstalling": "Desempaqueta actualizaciones y preparando para ejecutar el instalador..."
-            },
-            "Errors": {
-                "DownloadErrorTitle": "Error de Actualizacion",
-                "DownloadErrorMessage": "Se produjo un error al descargar las actualizaciones; consulte el registro de errores para obtener más detalles."
-            },
-            "AutoUpdatePrompts": {
-                "Title": "Buscar Actualizaciones Automáticamente",
-                "Message": "Irony quiere su permiso para buscar actualizaciones al inicio. ¿Le gustaría que Irony le notificara las actualizaciones automáticamente?"
-            },
-            "UpdateNotification": {
-                "Title": "Actualización Detectada",
-                "Message": "Consulte la pantalla de opciones para ver los detalles de la actualización o haga clic en este mensaje."
-            }
-        },
-        "Dialog": {
-            "ExeTitle": "Encuentra el ejecutable del juego",
-            "GameRootTitle": "Encuentra el directorio raíz del juego",
-            "UserDirTitle": "Encuentra el directorio de datos del juego",
-            "EditorTitle": "Buscar editor ejecutable",
-            "CustomModPathTitle": "Encuentra un directorio de mod personalizado"
-        },
-        "Prompts": {
-            "CustomModDirectory": {
-                "Title": "No vacío",
-                "Message": "El directorio MOD personalizado no está vacío si lo cambia ahora, puede perder algunos mods. ¿Estás seguro de que quieres cambiarlo?"
-            }
-        },
-        "ModMerge": {
-            "Title": "Opciones de Mod Merge",
-            "ModMergeTemplate": "Plantilla Mod",
-            "CollectionMergeTemplate": "Plantilla de colección"
-        }
-    },
-    "Notifications": {
-        "CollectionCreated": {
-            "Title": "Colección Creada",
-            "Message": "{CollectionName} ha sido creada."
-        },
-        "CollectionDeleted": {
-            "Title": "Colección Eliminada",
-            "Message": "{CollectionName} ha sido eliminada."
-        },
-        "CollectionAndModDeleted": {
-            "Title": "Colecciónes y mods fusionados eliminados",
-            "Message": "{CollectionName} y las modificaciones fusionadas se han eliminado."
-        },
-        "CollectionExists": {
-            "Title": "Colección Existente",
-            "Message": "{CollectionName} ya existe."
-        },
-        "CollectionExported": {
-            "Title": "Colección Exportada",
-            "Message": "{CollectionName} ha sido exportada."
-        },
-        "CollectionImported": {
-            "Title": "Colección Importada",
-            "Message": "{CollectionName} ha sido importada."
-        },
-        "CollectionApplied": {
-            "Title": "Colección Aplicada",
-            "Message": "{CollectionName} ha sido aplicada."
-        },
-        "CollectionNotApplied": {
-            "Title": "Colección no aplicada",
-            "Message": "{CollectionName} no se ha aplicado."
-        },
-        "DescriptorsRefreshed": {
-            "Title": "Descriptors Refrescados",
-            "Message": "Descriptors han sido refrescados."
-        },
-        "DescriptorsLocked": {
-            "Title": "Descriptors Bloqueados",
-            "Message": "Descriptors han sido bloqueados."
-        },
-        "DescriptorsUnlocked": {
-            "Title": "Descriptors Desbloqueados",
-            "Message": "Descriptors han sido desbloqueados."
-        },
-        "NewDescriptorsChecked": {
-            "Title": "Nuevos Mods comprobados",
-            "Message": "Verificación de nuevos mods completa."
-        },
-        "CollectionRenamed": {
-            "Title": "Colección Renombrada",
-            "Message": "La Colección ha sido renombrada."
-        },
-        "CollectionDuplicated": {
-            "Title": "Colección Duplicada",
-            "Message": "La Colección ha sido duplicada."
-        },
-        "CollectionMerged": {
-            "Title": "Colección Unida",
-            "Message": "La Colección ha sido fusionada."
-        },
-        "ConflictSolverUpdate": {
-            "Title": "Actualizaciones del Solucionador de conflictos",
-            "Message": "Se ha actualizado el orden de carga o algunas modificaciones. En caso de que no haya conflictos, simplemente navegue hacia atrás. Se aplican algunas correcciones automáticas."
-        },
-        "NoUpdatesAvailable": {
-            "Title": "Sin Actualizaciones",
-            "Message": "Parece que no hay actualizaciones disponibles."
-        },
-        "ReportExported": {
-            "Title": "Informe Exportado",
-            "Message": "El Informe ha sido Exportado"
-        },
-        "ReportValid": {
-            "Title": "Coincidencia Archivo Hash",
-            "Message": "Todos los archivo hash parecen coincidir."
-        },
-        "CustomPatchRerunConflictSolver": {
-            "Title": "Actualización del Solucionador de conflictos",
-            "Message": "El Solucionador de conflictos debe actualizarse para tener en cuenta los nuevos parches personalizados añadidos. Vuelva a ejecutar el solucionador de conflictos."
-        },
-        "CollectionMergeNotEnoughSpace": {
-            "Title": "No hay suficiente espacio libre",
-            "Message": "No hay suficiente espacio libre para realizar una operación de combinación."
-        },
-        "ParadoxLauncherRunning": {
-            "Title": "Paradox Launcher activo",
-            "Message": "Paradox Launcher se está ejecutando, cierre antes de intentar esta acción."
-        }
-    },
-    "Mod_App_Actions": {
-        "OpenInSteam": "Abrir en Steam",
-        "Open": "Abrir Mod Url",
-        "Copy": "Copiar Mod Url",
-        "CopyPath": "Copiar Ruta Mod",
-        "OpenInAssociatedApp": "Abrir Mod Folder/Archivo"
-    },
-    "Descriptor_Actions": {
-        "CheckNew": "Ver nuevas modificaciones",
-        "Delete": "Eliminar y Recargar",
-        "Delete_All": "Eliminar Todo y volver a cargar",
-        "Lock": "Bloqueado",
-        "Lock_All": "Bloquear Todo",
-        "Unlock": "Desbloquear",
-        "Unlock_All": "Desbloquear Todo"
-    },
-    "Achievements": {
-        "AchievementCompatible": "Mod es compatible con logros.",
-        "NotAchievementCompatible": "Mod NO es compatible con logros."
-    },
-    "ModSource": {
-        "Paradox": "La fuente de mod es de Paradox Interactive",
-        "Steam": "La fuente mod es de Steam",
-        "Local": "La fuente de mod es local"
-    },
-    "Sorting": {
-        "Sort_A_Z": "↑",
-        "Sort_Z_A": "↓"
-    },
-    "Filter": {
-        "Clear": "X",
-        "UpArrow": "▲",
-        "DownArrow": "▼"
-    },
-    "FilterCommands": {
-        "Achievements": "logros",
-        "Source": "fuente",
-        "Version": "versión",
-        "Selected": "seleccionado",
-        "Yes": "sí",
-        "No": "no",
-        "True": "verdadero",
-        "False": "falso",
-        "Steam": "steam",
-        "Paradox": "paradox",
-        "Local": "local"
-    },
-    "FilterOperators": {
-        "ValueSeparator": ":",
-        "StatementSeparator": "&&",
-        "OrStatementSeparator": "||",
-        "Negate": "--"
+  "App": {
+    "FontFamily": "Noto Sans",
+    "SupportedNameBlock": "",
+    "Title": "Irony Mod Manager: v{AppVersion}",
+    "BackgroundOperationMessage": "Por favor espere, se está realizando una operación en segundo plano. La aplicación se cerrará una vez que se complete ...",
+    "WaitBackgroundOperationMessage": "Por favor espere, se está realizando una operación en segundo plano.",
+    "Actions": {
+      "Name": "Comportamiento",
+      "Wiki": "Wiki",
+      "Logs": "Logs",
+      "ErrorLog": "Error.log",
+      "Close": "Cerrar",
+      "DLC": "DLC"
     }
+  },
+  "JokeError": {
+    "Title": "Violación de memoria del contenedor de huevos no controlada",
+    "Message": "Pulsa OK para fingir que no ha pasado nada :)"
+  },
+  "FatalError": {
+    "Message": "Ocurrió un error no manejado. La aplicación se cerrará automáticamente.",
+    "MessageWithLastError": "Ocurrió un error no manejado. Por favor, utilice esta información para presentar un informe de errores:{NewLine}{NewLine}{Message}",
+    "Title": "Error",
+    "Header": "Error Fatal"
+  },
+  "SavingError": {
+    "Title": "Guardar Error",
+    "Message": "Algo parece estar bloqueando la capacidad de Irony para escribir en archivos mod. Reporta esto en el rastreador de problemas de GitHub y publique el registro de errores."
+  },
+  "UnableToWriteError": {
+    "Title": "Aplicación bloqueada",
+    "Message": "La aplicación parece estar bloqueada por Antivirus o permisos y no puede escribir en el directorio de documentos del usuario:{NewLine}{Paths}"
+  },
+  "InvalidModsDetected": {
+    "Title": "Mods no válidos detectados",
+    "Message": "No se pudieron analizar las siguientes ubicaciones del mod debido a archivos no válidos o archivos bloqueados:{NewLine}{Mods}"
+  },
+  "Prompt": {
+    "OK": "OK",
+    "Yes": "Si",
+    "No": "No",
+    "Confirm": "Confirmar",
+    "Cancel": "Cancelar"
+  },
+  "FileDialog": {
+    "FileName": "Nombre del Archovo",
+    "ShowHiddenFiles": "Mostrar Archivos Ocultos",
+    "Volume": "{Size} Tamaño",
+    "OK": "OK",
+    "Cancel": "Cancelar",
+    "Name": "Nombre",
+    "DateModified": "Fecha Modificada",
+    "Type": "Tipo",
+    "Size": "Tamaño",
+    "Folders": {
+      "Downloads": "Descargas",
+      "Desktop": "Escritorio",
+      "Documents": "Documentos",
+      "Music": "Música",
+      "Videos": "Videos",
+      "Pictures": "Imagenes"
+    }
+  },
+  "TextBox": {
+    "Copy": "Copiar",
+    "Cut": "Cortar",
+    "Paste": "Pegar",
+    "SelectAll": "Seleccionar Todo"
+  },
+  "Languages": {
+    "Name": "Idioma"
+  },
+  "Themes": {
+    "Name": "Tema",
+    "Light": "Claro",
+    "Dark": "Oscuro",
+    "FluentLight": "Luz Fluida",
+    "FluentDark": "Oscuro Fluido",
+    "MaterialDark": "Material Oscuro",
+    "MaterialLight": "Material Ligero",
+    "Restart_Title": "Necesita Reinicio",
+    "Restart_Header": "Aplicación Necesita Reinicio",
+    "Restart_Message": "La aplicación debe reiniciarse para que el nuevo tema se aplique correctamente. ¿Quieres reiniciar la aplicación?"
+  },
+  "NotificationPosition": {
+    "BottomRight": "Abajo a la derecha",
+    "BottomLeft": "Abajo a la izquierda",
+    "TopRight": "Parte superior derecha",
+    "TopLeft": "Arriba a la izquierda"
+  },
+  "Games": {
+    "Name": "Juego",
+    "Stellaris": "Stellaris",
+    "EuropaUniversalisIV": "Europa Universalis IV",
+    "HeartsofIronIV": "Hearts of Iron IV",
+    "ImperatorRome": "Imperator Rome",
+    "CrusaderKings3": "Crusader Kings III",
+    "Victoria3": "Victoria 3",
+    "STInfinite": "Star Trek: Infinite"
+  },
+  "GameLanguages": {
+    "l_english": "English",
+    "l_braz_por": "Portugués",
+    "l_french": "Francés",
+    "l_german": "Alemán",
+    "l_polish": "Polaco",
+    "l_russian": "Ruso",
+    "l_simp_chinese": "Simp Chinese",
+    "l_spanish": "Español",
+    "l_chinese": "Chino",
+    "l_traditional_chinese": "Chino tradicional",
+    "l_japanese": "Japonés",
+    "l_korean": "Coreano"
+  },
+  "Installed_Mods": {
+    "Name": "Mods Instalados",
+    "Filter": "Filtro de Mods",
+    "Selected": "Seleccionado",
+    "Mod_Name": "Nombre Mod",
+    "Supported_Version": "Versión Soportada",
+    "LoadingMods": "Espere mientras carga los datos del mod...",
+    "RefreshingModList": "Espere mientras se actualiza la lista de mods...",
+    "InvalidMods": {
+      "Title": "Mods no válidos detectados",
+      "Message": "Faltan las siguientes modificaciones:{NewLine}{Mods}.{NewLine}{NewLine}¿Desea eliminar los descriptores?"
+    }
+  },
+  "Collection_Mods": {
+    "Name": "Colección de Mods",
+    "Remove": "-",
+    "Create": "+",
+    "OK": "OK",
+    "Cancel": "Cancelar",
+    "Watermark": "Ingresa Nombre de la nueva Colección",
+    "Delete_Title": "Eliminar Colección?",
+    "Delete_Header": "Confirmar Eliminación Colección",
+    "Delete_Message": "¿Está seguro de que desea eliminar la colección {CollectionName}?",
+    "Deleting_Message": "Por favor, espere mientras elimine la colección de mod...",
+    "Export": "Exportar",
+    "Import": "Importar",
+    "Export_Dialog_Title": "Exportar Colección",
+    "Import_Dialog_Title": "Importar Colección",
+    "Overlay_Exporting_Message": "Por favor espere mientras se exporta una colección de mods...",
+    "Overlay_Importing_Message": "Por favor espere mientras se importa una colección de mods...",
+    "Overlay_Import_Export_Progress": "{PercentDone}",
+    "Filter": "Buscar Mods",
+    "Selected": "Seleccionados",
+    "Mod_Name": "Nombre Mod",
+    "Order": "Orden",
+    "Rename": "Renombrar",
+    "Duplicate": "Duplicar",
+    "Overlay_Rename_Message": "Por favor espere mientras se renombra...",
+    "Overlay_Duplicate_Message": "Por favor espere mientras se duplica...",
+    "ExportToClipboard": "Copiar colección al portapapeles",
+    "ExportToClipboardFull": "Copiar colección al portapapeles con metadatos",
+    "Undo": "Deshacer",
+    "Redo": "Rehacer",
+    "DeleteMerge": {
+      "DeleteTitle": "Eliminar mod combinado?",
+      "DeleteHeader": "Confirmar Eliminación de mod combinado",
+      "DeleteMessage": "Se ha detectado la existencia de un mod combinado, ¿quieres eliminarlo también?"
+    },
+    "ImportFromClipboard": {
+      "Title": "Importar Orden del Mod desde portapapeles",
+      "PromptTitle": "¿Sobrescribir orden del mod?",
+      "PromptMessage": "Esto sobrescribirá tu colección de mods orden de mods y la selección de mod. ¿Continuar?"
+    },
+    "FileHash": {
+      "ExportCollection": "Exportar Colección de Hashes",
+      "ExportGame": "Export a la exportación haeshes",
+      "Import": "Verificar hashes",
+      "DialogTitleExport": "Seleccione dónde exportar el informe",
+      "DialogTitleImport": "Seleccione el informe json para importar",
+      "ExportOverlay": "Espere mientras exporta...",
+      "ImportOverlay": "Espere mientras verifica...",
+      "ProgressExport": "{Progress}",
+      "ProgressImport": "Step {Count}/{TotalCount}: {Progress}",
+      "Export": "Exportar",
+      "Close": "Cerrar"
+    },
+    "JumpOnDragAndDrop": {
+      "Title": "Auto Focus: {State}",
+      "On": "On",
+      "Off": "Off"
+    },
+    "ImportPrompt": {
+      "Title": "Colección existente",
+      "Message": "La colección ya existe y se sobrescribirá, ¿desea continuar?"
+    },
+    "ImportNonExistingMods": {
+      "Title": "Mods inexistentes",
+      "Message": "Los siguientes mods no se pudieron importar porque parecen faltar:{NewLine}{Mods}"
+    },
+    "ImportOther": {
+      "Title": "...",
+      "Paradoxos": "Importar desde Paradoxos",
+      "Paradox": "Importar desde Juego",
+      "ParadoxLauncher": "Importar desde Paradox Launcher",
+      "ParadoxLauncherBeta": "Importación de Paradox Launcher Beta",
+      "ParadoxLauncherJson": "Importar desde Paradox Launcher Json",
+      "Close": "Cerrar"
+    },
+    "ExportOther": {
+      "Title": "...",
+      "OrderOnly": "Exportar Orden Solamente",
+      "WholeCollection": "Exportar toda la colección",
+      "ParadoxLauncherJson": "Exportar a Paradox Launcher Json (<2021.10)",
+      "ParadoxLauncherJson202110": "Exportar a Paradox Launcher Json (>=2021.10)",
+      "Close": "Cerrar"
+    },
+    "MergeCollection": {
+      "Name": "Unir",
+      "MergedCollectionPrefix": "(Merged)",
+      "MergeCompressModPrefix": "(Merged {Name})",
+      "Overlay_Progress": "Step {Count}/{TotalCount}: {PercentDone}",
+      "DiskInfoOverlay": "Comprobando el espacio disponible en disco...",
+      "Options": {
+        "Title": "Seleccionar Modo",
+        "Basic": "Basico",
+        "Compress": "Comprimido",
+        "Close": "Cerrar"
+      },
+      "Basic": {
+        "Overlay_Gathering_Mod_Info": "Espere mientras se recopila la información del mod...",
+        "Overlay_Writing_Files": "Espere mientras se fusiona la colección de mods..."
+      },
+      "Compress": {
+        "Overlay_Gathering_Mod_Info": "Espere mientras se recopila la información del mod...",
+        "Overlay_Compressing_Files": "Espere mientras se fusiona la colección de mods..."
+      },
+      "OverwritePrompt": {
+        "Title": "¿Sobrescribir la colección existente?",
+        "Message": "Ya existe una colección combinada con el nombre especificado. ¿Le gustaría sobrescribirlo?"
+      }
+    },
+    "PatchMod": {
+      "Title": "Modificación de parche: {Status}",
+      "Enabled": "Activado",
+      "Disabled": "Discapacitado",
+      "NotAvailable": "No disponible",
+      "DeletePrompt": {
+        "Title": "Confirmar eliminación",
+        "Message": "¿Estás seguro de que quieres eliminar el mod de parche?"
+      },
+      "Actions": {
+        "Enable": "Habilitar",
+        "Disable": "Desactivar",
+        "Delete": "Borrar",
+        "Close": "Cerrar"
+      }
+    },
+    "Prompts": {
+      "ModsMissingTitle": "Mods eliminados",
+      "ModsMissingMessage": "Faltan algunos mods y se han eliminado de la colección automáticamente:{NewLine}{NewLine}{Mods}"
+    }
+
+  },
+  "Mod_Actions": {
+    "Apply": "Aplicar",
+    "Overlay_Apply_Message": "Espere mientras aplica la colección de mods...",
+    "ConflictSolver": {
+      "Conflict": "Solucionador de conflictos",
+      "Overlay_Conflict_Solver_Indexing_Game": "Por favor, espere mientras se indexan las definiciones de juegos...",
+      "Overlay_Conflict_Solver_Loading_Game_Definitions": "Por favor, espere mientras cargando definiciones de juego...",
+      "Overlay_Conflict_Solver_Loading_Definitions": "Espere mientras se cargan las definiciones de mod...",
+      "Overlay_Conflict_Solver_Analyzing_Conflicts": "Espere mientras se analizan las definiciones en busca de conflictos...",
+      "Overlay_Conflict_Solver_Analyzing_Resolved_Conflicts": "Espere mientras se analizan las definiciones resueltas...",
+      "Overlay_Conflict_Solver_Replacing_Definitions": "Espere mientras se reemplazan las definiciones...",
+      "Overlay_Conflict_Solver_Progress": "Step {Count}/{TotalCount}: {PercentDone}",
+      "FirstUsePrompt": {
+        "Title": "Atención",
+        "Message": "El solucionador de conflictos no es para los débiles de corazón. Requiere conocimiento y experiencia con el código de parches. Los usuarios de pequeñas colecciones de MOD deben ignorarlo, los usuarios de colecciones MOD más grandes deben considerar recortar sus colecciones de mod y investigar parches de códigos. No se puede proporcionar apoyo en caso de que proceda."
+      },
+      "GameExecutableNotSetPrompt": {
+        "Title": "Ejecutable del juego no establecido",
+        "Message": "El ejecutable del juego no se ha configurado en las opciones. Esta colección de mods incluía previamente archivos de juegos en su análisis. El solucionador de conflictos no podrá analizar los archivos del juego y es posible que se restablezcan algunas resoluciones. ¿Desea continuar?"
+      },
+      "TooLargePrompt": {
+        "Title": "Demasiado grande",
+        "Message": "Se ha detectado un mod con un código fuente de gran tamaño que puede provocar un fallo de memoria en Irony. Además, es poco probable que el juego sea capaz de manejar archivos fuente tan grandes."
+      }
+    },
+    "LaunchGame": {
+      "Launch": "Inciar Juego",
+      "Resume": "Reanudar Juego",
+      "Overlay": "Inciando Juego, espere...",
+      "LaunchError": {
+        "Title": "No se pudo iniciar el juego.",
+        "Message": "No se pudo iniciar el juego."
+      },
+      "NotSet": {
+        "Title": "Juego no configurado",
+        "Message": "El juego no se detectó automáticamente, utilice la ventana de opciones para configurar manualmente la ruta del ejecutable."
+      }
+    }
+  },
+  "Conflict_Solver": {
+    "Back": "Atrás",
+    "ConflictedObjects": "Objetos en Conflicto",
+    "LeftSide": "Lado Izquierdo",
+    "RightSide": "Lado Derecho",
+    "BinaryFile": "Contenido Binario",
+    "ImageInfo": "Anchura: {Width} Altura: {Height}",
+    "TakeLeft": "Gire a la Izquierda",
+    "TakeRight": "Gire a la Derecha",
+    "OK": "OK",
+    "Cancel": "Cancelar",
+    "Resolve": "Resolver",
+    "Ignore": "Ignorar",
+    "IgnoreRules": "Ignorar Reglas",
+    "OverlayResolve": "Espere mientras se resuelve el conflicto...",
+    "NextConflict": "Conflicto Siguiente ",
+    "PrevConflict": "Conflicto Previo",
+    "ConflictCount": "Conteo de Conflictos: {Count}",
+    "PriorityReason": {
+      "FIOS": "(FIOS)",
+      "LIOS": "(LIOS)",
+      "Order": "(Orden de Carga)",
+      "Override": "(Anular)"
+    },
+    "InvalidConflicts": {
+      "Name": "Invalido",
+      "Error": "Error en la línea: {Line} Columna: {Column} Archivo: {File}.{NewLine}Informe este error al autor del mod: {ModName}.{NewLine}{NewLine} El mensaje de error dice:{NewLine}{NewLine}{Message} ",
+      "ErrorNoLine": "Error en el archivo: {File}.{NewLine}Informe este error al autor del mod: {ModName}.{NewLine}{NewLine} El mensaje de error dice:{NewLine}{NewLine}{Message}",
+      "ContextMenu": {
+        "OpenFile": "Abrir Archivo",
+        "OpenDirectory": "Abrir Directorio",
+        "CustomPatch": "Copiar a Parche Personalizado"
+      }
+    },
+    "CompareSelectorContextMenu": {
+      "OpenFile": "Abrir Archivo",
+      "OpenDirectory": "Abrir Directorio"
+    },
+    "ContextMenu": {
+      "CopyAll": "Copiar Todo",
+      "CopyThis": "Copia este",
+      "CopyThisAfterLine": "Copiar esto después de la línea",
+      "CopyThisBeforeLine": "Copia esto antes de la línea",
+      "MoveUp": "Mover Arriba",
+      "MoveDown": "Mover Abajo",
+      "Edit": "Editar",
+      "EditHere": "Editar aquí",
+      "CopyText": "Copiar Texto",
+      "Delete": "Eliminar",
+      "Undo": "Deshacer",
+      "Redo": "Rehacer",
+      "Editor": "Fusión Externa",
+      "ReadonlyEditor": "Comparación externa",
+      "ToggleCompare": "Conmutar el modo de comparación de diferencias"
+    },
+    "EditorContextMenu": {
+      "Copy": "Copiar",
+      "Cut": "Cortar",
+      "Delete": "Eliminar",
+      "Paste": "Pegar",
+      "Undo": "Deshacer",
+      "Redo": "Rehacer",
+      "SelectAll": "Seleccionar Todo",
+      "Find": "Encuentre",
+      "Replace": "Sustituir"
+    },
+    "EditorResources": {
+      "ReplaceLabel": "Reemplazar...",
+      "SearchErrorText": "Error: ",
+      "SearchFindNextText": "Buscar siguiente (F3)",
+      "SearchFindPreviousText": "Buscar anterior (Shift+F3)",
+      "SearchLabel": "Encuentra...",
+      "SearchMatchCaseText": "Caso de partido",
+      "SearchMatchWholeWordsText": "Emparejar palabras enteras",
+      "SearchNoMatchesFoundText": "No se han encontrado resultados.",
+      "SearchReplaceAll": "Reemplazar todo (Alt+A)",
+      "SearchReplaceNext": "Reemplazar siguiente (Alt+R)",
+      "SearchToggleReplace": "Alternar entre los modos de búsqueda y sustitución",
+      "SearchUseRegexText": "Utilizar expresiones regulares"
+    },
+    "Modes": {
+      "Title": "Seleccionar Modo",
+      "Default": "Defecto",
+      "Advanced": "Avanzado",
+      "Analyze": "Analizar solo",
+      "AnalyzeWithoutLocalization": "Analizar sólo sin localización",
+      "DefaultWithoutLocalization": "Por defecto sin localización",
+      "AdvancedWithoutLocalization": "Avanzado sin localización",
+      "Close": "Cerrar"
+    },
+    "ModFilter": {
+      "Title": "Filtro de Mods",
+      "IgnoreGameConflicts": "Ignorar los conflictos del juego",
+      "ShowSelfConflicts": "Mostrar autoconflictos",
+      "ShowResetConflicts": "Mostrar solo restablecer conflictos",
+      "Close": "Cerrar"
+    },
+    "ResetConflicts": {
+      "Title": "Reiniciar Conflictos",
+      "Resolved": "Resuelto",
+      "Ignored": "Ignorado",
+      "Custom": "Personalizado",
+      "Close": "Cerrar",
+      "Reset": "Reiniciar",
+      "Overlay": "Espere mientras deshace los conflictos..."
+    },
+    "DBSearch": {
+      "Title": "Búsqueda en Base de Datos",
+      "Watermark": "Introduce Término de Búsqueda",
+      "Close": "Cerrar",
+      "Clear": "X",
+      "Searching": "Buscando..."
+    },
+    "CustomPatch": {
+      "Title": "Parche personalizado",
+      "Load": "Cargar",
+      "Path": "Ruta",
+      "Save": "Guardar",
+      "Close": "Cerrar"
+    },
+    "Editor": {
+      "Title": "Fusión Externa",
+      "Message": "Presione confirmar una vez que esté satisfecho con la Fusión Externa."
+    },
+    "ReadonlyEditor": {
+      "Title": "Comparación externa",
+      "Message": "Pulse OK cuando haya terminado de comparar."
+    },
+    "ResolutionSaveError": {
+      "Title": "Error de validación de definición virtual",
+      "MessageLine": "La definición virtual no se pudo utilizar para resolver el conflicto. La definición virtual falló la validación.{NewLine}{NewLine}{ErrorMessage}{NewLine}Error en la línea: {Line} Columna: {Column}",
+      "MessageNoLine": "La definición virtual no se pudo utilizar para resolver el conflicto. La definición virtual falló la validación.{NewLine}{NewLine}{ErrorMessage}"
+    },
+    "BracketMismatchError": {
+      "Message": "¡Discrepancia en el recuento de soportes! Abrir corchete: {OpenBracketCount} Cerrar corchete: {CloseBracketCount}"
+    },
+    "ResetWarning": {
+      "Title": "Los conflictos se reinician",
+      "AnalyzeModeAll": "Algunos conflictos se restablecerán si se ejecuta un solucionador de conflicto debido a cambios de mod. Estos se resuelven conflictos que se restablecerán:{NewLine}{NewLine}{ListOfConflictsResolved}{NewLine}Se ignoran los conflictos que se restablecerán:{NewLine}{NewLine}{ListOfConflictsIgnored}",
+      "AnalyzeModeResolvedOnly": "Algunos conflictos se restablecerán si se ejecuta un solucionador de conflicto debido a cambios de mod. Estos se resuelven conflictos que se restablecerán:{NewLine}{NewLine}{ListOfConflictsResolved}",
+      "AnalyzeModeIgnoredOnly": "Algunos conflictos se restablecerán si se ejecuta un solucionador de conflicto debido a cambios de mod. Se ignoran los conflictos que se restablecerán:{NewLine}{NewLine}{ListOfConflictsIgnored}",
+      "RegularModeAll": "Algunos conflictos se restablecieron debido a cambios de mod. Estos se restablecieron en conflictos resueltos:{NewLine}{NewLine}{ListOfConflictsResolved}{NewLine}Se restablecieron los conflictos ignorados:{NewLine}{NewLine}{ListOfConflictsIgnored}",
+      "RegularModeResolvedOnly": "Algunos conflictos se restablecieron debido a cambios de mod. Estos se restablecieron en conflictos resueltos:{NewLine}{NewLine}{ListOfConflictsResolved}",
+      "RegularModeIgnoredOnly": "Algunos conflictos se restablecieron debido a cambios de mod. Se restablecieron los conflictos ignorados:{NewLine}{NewLine}{ListOfConflictsIgnored}",
+      "ListOfConflictsFormat": "{ParentDirectory}: {Name}"
+    },
+    "Tooltips": {
+      "DefinitionInfo": "Archivo:{File} modificado:{DateTime}"
+    }
+  },
+  "ConflictIgnore": {
+    "Save": "Guardar",
+    "Cancel": "Cancelar",
+    "Watermark": "Usa # para comentarios. La nueva línea es una nueva regla."
+  },
+  "Options": {
+    "Name": "Opciones",
+    "Close": "Cerrar",
+    "NavigateTo": "...",
+    "Reset": "X",
+    "AppOptions": {
+      "Title": "Opciones de aplicación",
+      "NotificationPosition": "Posición de notificación"
+    },
+    "Editor": {
+      "Title": "Opciones del Editor externo",
+      "EditorExecutable": "Editor Ejecutable",
+      "EditorArgs": "Editor Args",
+      "EditorArgsPlaceholder": "Ejemplo: leftFile:{Left} rightFile:{Right}",
+      "Test": "Configuración de prueba",
+      "TestLeft": "faucibus purus in massa tempor, nec feugiat nisl pretium fusce",
+      "TestRight": "faucibus purus in massa tempor nec feugiat nisl pretium fusce"
+    },
+    "Game": {
+      "Title": "Opciones de Juego",
+      "GameExecutable": "Ejecutable del Juego",
+      "UserDirectory": "Directorio de Datos",
+      "GameArgs": "Game Args",
+      "RefreshMods": "Refrescar Descriptors antes de jugar",
+      "CloseAfterLaunch": "Cerrar después de iniciar el juego",
+      "AutoConfigure": "Configurar todo...",
+      "CustomModPath": "Directorio de mod personalizado"
+    },
+    "ConflictSolver": {
+      "Title": "Solucionador de conflictos",
+      "AllowedLanguages": "Lenguas permitidas",
+      "Colors": "Nuevos colores del visor de diferencias",
+      "ConflictSolverDeletedLineColor": "Línea suprimida",
+      "ConflictSolverImaginaryLineColor": "Línea imaginaria",
+      "ConflictSolverInsertedLineColor": "Línea insertada",
+      "ConflictSolverModifiedLineColor": "Línea modificada"
+    },
+    "Updates": {
+      "Title": "Opciones de Actualización",
+      "UpdateInfoTitle": "Actualizar Información de la versión",
+      "AutoUpdates": "Buscar Actualizaciones al iniciar",
+      "CheckPrerelease": "Actualizar a versiones preliminares",
+      "CheckForUpdates": "Buscar Actualizaciones",
+      "Install": "Instalar Actualizaciones",
+      "Version": "Version: {Version}",
+      "Skip": "Ignorar la actualización",
+      "Overlay": {
+        "UpdateDownloading": "Descargando Actualizaciones...",
+        "UpdateDownloadProgress": "{Progress}",
+        "UpdateInstalling": "Desempaqueta actualizaciones y preparando para ejecutar el instalador..."
+      },
+      "Errors": {
+        "DownloadErrorTitle": "Error de Actualizacion",
+        "DownloadErrorMessage": "Se produjo un error al descargar las actualizaciones; consulte el registro de errores para obtener más detalles."
+      },
+      "AutoUpdatePrompts": {
+        "Title": "Buscar Actualizaciones Automáticamente",
+        "Message": "Irony quiere su permiso para buscar actualizaciones al inicio. ¿Le gustaría que Irony le notificara las actualizaciones automáticamente?"
+      },
+      "UpdateNotification": {
+        "Title": "Actualización Detectada",
+        "Message": "Consulte la pantalla de opciones para ver los detalles de la actualización o haga clic en este mensaje."
+      }
+    },
+    "Dialog": {
+      "ExeTitle": "Encuentra el ejecutable del juego",
+      "GameRootTitle": "Encuentra el directorio raíz del juego",
+      "UserDirTitle": "Encuentra el directorio de datos del juego",
+      "EditorTitle": "Buscar editor ejecutable",
+      "CustomModPathTitle": "Encuentra un directorio de mod personalizado"
+    },
+    "Prompts": {
+      "CustomModDirectory": {
+        "Title": "No vacío",
+        "Message": "El directorio MOD personalizado no está vacío si lo cambia ahora, puede perder algunos mods. ¿Estás seguro de que quieres cambiarlo?"
+      }
+    },
+    "ModMerge": {
+      "Title": "Opciones de Mod Merge",
+      "ModMergeTemplate": "Plantilla Mod",
+      "CollectionMergeTemplate": "Plantilla de colección"
+    }
+  },
+  "Notifications": {
+    "CollectionCreated": {
+      "Title": "Colección Creada",
+      "Message": "{CollectionName} ha sido creada."
+    },
+    "CollectionDeleted": {
+      "Title": "Colección Eliminada",
+      "Message": "{CollectionName} ha sido eliminada."
+    },
+    "CollectionAndModDeleted": {
+      "Title": "Colecciónes y mods fusionados eliminados",
+      "Message": "{CollectionName} y las modificaciones fusionadas se han eliminado."
+    },
+    "CollectionExists": {
+      "Title": "Colección Existente",
+      "Message": "{CollectionName} ya existe."
+    },
+    "CollectionExported": {
+      "Title": "Colección Exportada",
+      "Message": "{CollectionName} ha sido exportada."
+    },
+    "CollectionImported": {
+      "Title": "Colección Importada",
+      "Message": "{CollectionName} ha sido importada."
+    },
+    "CollectionApplied": {
+      "Title": "Colección Aplicada",
+      "Message": "{CollectionName} ha sido aplicada."
+    },
+    "CollectionNotApplied": {
+      "Title": "Colección no aplicada",
+      "Message": "{CollectionName} no se ha aplicado."
+    },
+    "DescriptorsRefreshed": {
+      "Title": "Descriptors Refrescados",
+      "Message": "Descriptors han sido refrescados."
+    },
+    "DescriptorsLocked": {
+      "Title": "Descriptors Bloqueados",
+      "Message": "Descriptors han sido bloqueados."
+    },
+    "DescriptorsUnlocked": {
+      "Title": "Descriptors Desbloqueados",
+      "Message": "Descriptors han sido desbloqueados."
+    },
+    "NewDescriptorsChecked": {
+      "Title": "Nuevos Mods comprobados",
+      "Message": "Verificación de nuevos mods completa."
+    },
+    "CollectionRenamed": {
+      "Title": "Colección Renombrada",
+      "Message": "La Colección ha sido renombrada."
+    },
+    "CollectionDuplicated": {
+      "Title": "Colección Duplicada",
+      "Message": "La Colección ha sido duplicada."
+    },
+    "CollectionMerged": {
+      "Title": "Colección Unida",
+      "Message": "La Colección ha sido fusionada."
+    },
+    "ConflictSolverUpdate": {
+      "Title": "Actualizaciones del Solucionador de conflictos",
+      "Message": "Se ha actualizado el orden de carga o algunas modificaciones. En caso de que no haya conflictos, simplemente navegue hacia atrás. Se aplican algunas correcciones automáticas."
+    },
+    "NoUpdatesAvailable": {
+      "Title": "Sin Actualizaciones",
+      "Message": "Parece que no hay actualizaciones disponibles."
+    },
+    "ReportExported": {
+      "Title": "Informe Exportado",
+      "Message": "El Informe ha sido Exportado"
+    },
+    "ReportValid": {
+      "Title": "Coincidencia Archivo Hash",
+      "Message": "Todos los archivo hash parecen coincidir."
+    },
+    "CustomPatchRerunConflictSolver": {
+      "Title": "Actualización del Solucionador de conflictos",
+      "Message": "El Solucionador de conflictos debe actualizarse para tener en cuenta los nuevos parches personalizados añadidos. Vuelva a ejecutar el solucionador de conflictos."
+    },
+    "CollectionMergeNotEnoughSpace": {
+      "Title": "No hay suficiente espacio libre",
+      "Message": "No hay suficiente espacio libre para realizar una operación de combinación."
+    },
+    "ParadoxLauncherRunning": {
+      "Title": "Paradox Launcher activo",
+      "Message": "Paradox Launcher se está ejecutando, cierre antes de intentar esta acción."
+    },
+    "ConflictSolverRerunGlobalVars": {
+      "Title": "Actualización del Solucionador de conflictos",
+      "Message": "Es necesario actualizar el solucionador de conflictos para tener en cuenta los nuevos parches de variables globales añadidos. Vuelva a ejecutar el solucionador de conflictos."
+    }
+  },
+  "Mod_App_Actions": {
+    "OpenInSteam": "Abrir en Steam",
+    "Open": "Abrir Mod Url",
+    "Copy": "Copiar Mod Url",
+    "CopyPath": "Copiar Ruta Mod",
+    "OpenInAssociatedApp": "Abrir Mod Folder/Archivo"
+  },
+  "Descriptor_Actions": {
+    "CheckNew": "Ver nuevas modificaciones",
+    "Delete": "Eliminar y Recargar",
+    "Delete_All": "Eliminar Todo y volver a cargar",
+    "Lock": "Bloqueado",
+    "Lock_All": "Bloquear Todo",
+    "Unlock": "Desbloquear",
+    "Unlock_All": "Desbloquear Todo"
+  },
+  "Achievements": {
+    "AchievementCompatible": "Mod es compatible con logros.",
+    "NotAchievementCompatible": "Mod NO es compatible con logros."
+  },
+  "ModSource": {
+    "Paradox": "La fuente de mod es de Paradox Interactive",
+    "Steam": "La fuente mod es de Steam",
+    "Local": "La fuente de mod es local"
+  },
+  "Sorting": {
+    "Sort_A_Z": "↑",
+    "Sort_Z_A": "↓"
+  },
+  "Filter": {
+    "Clear": "X",
+    "UpArrow": "▲",
+    "DownArrow": "▼"
+  },
+  "FilterCommands": {
+    "Achievements": "logros",
+    "Source": "fuente",
+    "Version": "versión",
+    "Selected": "seleccionado",
+    "Yes": "sí",
+    "No": "no",
+    "True": "verdadero",
+    "False": "falso",
+    "Steam": "steam",
+    "Paradox": "paradox",
+    "Local": "local"
+  },
+  "FilterOperators": {
+    "ValueSeparator": ":",
+    "StatementSeparator": "&&",
+    "OrStatementSeparator": "||",
+    "Negate": "--"
+  }
 }

@@ -1803,7 +1803,7 @@ namespace IronyModManager.Services
         /// <returns><c>true</c> if conflict result needs reload, <c>false</c> otherwise.</returns>
         public virtual bool NeedsReload(IConflictResult conflictResult, IDefinition definition)
         {
-            if (conflictResult != null && definition is { AppliedGlobalVariables: not null } && definition.AppliedGlobalVariables.Any())
+            if (conflictResult != null && definition != null)
             {
                 if (conflictResult.IgnoredConflicts != null)
                 {
