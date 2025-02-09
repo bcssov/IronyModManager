@@ -5000,7 +5000,7 @@ namespace IronyModManager.Services.Tests
             c.IgnoredConflicts = new IndexedDefinitions();
             c.ResolvedConflicts = new IndexedDefinitions();
             await c.ResolvedConflicts.AddToMapAsync(new Definition() { AppliedGlobalVariables = new List<IDefinition>() { new Definition() { Id = "test", Type = "test" } } });
-            var result = service.NeedsReload(c, new Definition() { AppliedGlobalVariables = new List<IDefinition>() { new Definition() { Id = "test", Type = "test" } } });
+            var result = service.NeedsReload(c, new Definition() { Id = "test", Type = "test" });
             result.Should().BeTrue();
         }
 

@@ -1400,6 +1400,7 @@ namespace IronyModManager.Services
 
             async Task<(IIndexedDefinitions, int)> initAllIndexedDefinitions(IConflictResult conflictResult, int total, int processed, int maxProgress)
             {
+                // ReSharper disable once AsyncVoidMethod -- Great shitty analysis
                 async void processedSearchItemHandler(object sender, ProcessedArgs args)
                 {
                     using var mutex = await searchInitLock.LockAsync();
@@ -1806,27 +1807,19 @@ namespace IronyModManager.Services
             {
                 if (conflictResult.IgnoredConflicts != null)
                 {
-                    // ReSharper disable once LoopCanBeConvertedToQuery
-                    foreach (var variable in definition.AppliedGlobalVariables)
+                    var result = conflictResult.IgnoredConflicts.IsGlobalVariableApplied(definition.TypeAndId);
+                    if (result)
                     {
-                        var result = conflictResult.IgnoredConflicts.IsGlobalVariableApplied(variable.TypeAndId);
-                        if (result)
-                        {
-                            return true;
-                        }
+                        return true;
                     }
                 }
 
                 if (conflictResult.ResolvedConflicts != null)
                 {
-                    // ReSharper disable once LoopCanBeConvertedToQuery
-                    foreach (var variable in definition.AppliedGlobalVariables)
+                    var result = conflictResult.ResolvedConflicts.IsGlobalVariableApplied(definition.TypeAndId);
+                    if (result)
                     {
-                        var result = conflictResult.ResolvedConflicts.IsGlobalVariableApplied(variable.TypeAndId);
-                        if (result)
-                        {
-                            return true;
-                        }
+                        return true;
                     }
                 }
             }
