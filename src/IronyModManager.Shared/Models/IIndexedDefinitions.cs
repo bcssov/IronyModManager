@@ -4,7 +4,7 @@
 // Created          : 02-16-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 10-21-2024
+// Last Modified On : 02-09-2025
 // ***********************************************************************
 // <copyright file="IIndexedDefinitions.cs" company="Mario">
 //     Mario
@@ -179,6 +179,13 @@ namespace IronyModManager.Shared.Models
         /// <param name="mapHierarchicalDefinitions">if set to <c>true</c> [map hierarchical definitions].</param>
         /// <returns>Task.</returns>
         Task InitMapAsync(IEnumerable<IDefinition> definitions, bool mapHierarchicalDefinitions = false);
+
+        /// <summary>
+        /// Determines whether [is global variable applied] [the specified identifier].
+        /// </summary>
+        /// <param name="id">The identifier.</param>
+        /// <returns><c>true</c> if [is global variable applied] [the specified identifier]; otherwise, <c>false</c>.</returns>
+        bool IsGlobalVariableApplied(string id);
 
         /// <summary>
         /// Removes the asynchronous.

@@ -4,7 +4,7 @@
 // Created          : 02-17-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 10-21-2024
+// Last Modified On : 02-09-2025
 // ***********************************************************************
 // <copyright file="IndexedDefinitionsTests.cs" company="Mario">
 //     Mario
@@ -1842,6 +1842,36 @@ namespace IronyModManager.Parser.Tests
             await service.InitMapAsync(defs);
             var results = await service.UpdateDefinitionsAsync(null);
             results.Should().BeFalse();
+        }
+
+        /// <summary>
+        /// Defines the test method Should_have_global_var.
+        /// </summary>
+        [Fact]
+        public async Task Should_have_global_var()
+        {
+            DISetup.SetupContainer();
+            var defs = new List<IDefinition>();
+            for (var i = 0; i < 10; i++)
+            {
+                defs.Add(new Definition
+                {
+                    Code = i.ToString(),
+                    ContentSHA = i.ToString(),
+                    Dependencies = new List<string> { i.ToString() },
+                    File = i.ToString(),
+                    Id = i.ToString(),
+                    ModName = i.ToString(),
+                    Type = i.ToString()
+                });
+            }
+
+            defs[0].AppliedGlobalVariables = new List<IDefinition> { new Definition { Id = "@test", Type = "scripted_variables" } };
+
+            var service = new IndexedDefinitions();
+            await service.InitMapAsync(defs);
+            var results = service.IsGlobalVariableApplied("scripted_variables-@test");
+            results.Should().BeTrue();
         }
 
         /// <summary>
