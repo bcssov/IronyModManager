@@ -4919,6 +4919,92 @@ namespace IronyModManager.Services.Tests
         }
 
         /// <summary>
+        /// Defines the test method Should_not_need_a_reload_due_to_params_being_null.
+        /// </summary>
+        [Fact]
+        public void Should_not_need_a_reload_due_to_params_being_null()
+        {
+            DISetup.SetupContainer();
+
+            var storageProvider = new Mock<IStorageProvider>();
+            var modParser = new Mock<IModParser>();
+            var parserManager = new Mock<IParserManager>();
+            var reader = new Mock<IReader>();
+            var modWriter = new Mock<IModWriter>();
+            var gameService = new Mock<IGameService>();
+            var mapper = new Mock<IMapper>();
+            var modPatchExporter = new Mock<IModPatchExporter>();
+            gameService.Setup(p => p.GetSelected()).Returns((IGame)null);
+
+            var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter);
+
+            var c = new ConflictResult();
+            var result = service.NeedsReload(null, null);
+            result.Should().BeFalse();
+
+            result = service.NeedsReload(c, null);
+            result.Should().BeFalse();
+
+            result = service.NeedsReload(null, new Definition());
+            result.Should().BeFalse();
+        }
+
+        /// <summary>
+        /// Defines the test method Should_not_need_a_reload.
+        /// </summary>
+        [Fact]
+        public void Should_not_need_a_reload()
+        {
+            DISetup.SetupContainer();
+
+            var storageProvider = new Mock<IStorageProvider>();
+            var modParser = new Mock<IModParser>();
+            var parserManager = new Mock<IParserManager>();
+            var reader = new Mock<IReader>();
+            var modWriter = new Mock<IModWriter>();
+            var gameService = new Mock<IGameService>();
+            var mapper = new Mock<IMapper>();
+            var modPatchExporter = new Mock<IModPatchExporter>();
+            gameService.Setup(p => p.GetSelected()).Returns((IGame)null);
+
+            var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter);
+
+            var c = new ConflictResult();
+            c.IgnoredConflicts = new IndexedDefinitions();
+            c.ResolvedConflicts = new IndexedDefinitions();
+            var result = service.NeedsReload(c, new Definition() { AppliedGlobalVariables = new List<IDefinition>() { new Definition() { Id = "test", Type = "test"} }});
+            result.Should().BeFalse();
+        }
+
+        /// <summary>
+        /// Defines the test method Should_need_a_reload.
+        /// </summary>
+        [Fact]
+        public async Task Should_need_a_reload()
+        {
+            DISetup.SetupContainer();
+
+            var storageProvider = new Mock<IStorageProvider>();
+            var modParser = new Mock<IModParser>();
+            var parserManager = new Mock<IParserManager>();
+            var reader = new Mock<IReader>();
+            var modWriter = new Mock<IModWriter>();
+            var gameService = new Mock<IGameService>();
+            var mapper = new Mock<IMapper>();
+            var modPatchExporter = new Mock<IModPatchExporter>();
+            gameService.Setup(p => p.GetSelected()).Returns((IGame)null);
+
+            var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter);
+
+            var c = new ConflictResult();
+            c.IgnoredConflicts = new IndexedDefinitions();
+            c.ResolvedConflicts = new IndexedDefinitions();
+            await c.ResolvedConflicts.AddToMapAsync(new Definition() { AppliedGlobalVariables = new List<IDefinition>() { new Definition() { Id = "test", Type = "test" } } });
+            var result = service.NeedsReload(c, new Definition() { AppliedGlobalVariables = new List<IDefinition>() { new Definition() { Id = "test", Type = "test" } } });
+            result.Should().BeTrue();
+        }
+
+        /// <summary>
         /// Defines the test method Stellaris_Performance_profiling.
         /// </summary>
 

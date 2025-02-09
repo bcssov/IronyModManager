@@ -4,7 +4,7 @@
 // Created          : 03-18-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-20-2024
+// Last Modified On : 02-09-2025
 // ***********************************************************************
 // <copyright file="MainConflictSolverViewModel.cs" company="Mario">
 //     Mario
@@ -481,9 +481,9 @@ namespace IronyModManager.ViewModels
             {
                 var sbResolved = new StringBuilder();
                 var sbIgnored = new StringBuilder();
-                var allHierarchalDefinitions = Conflicts.Conflicts.GetHierarchicalDefinitions();
+                var allHierarchicalDefinitions = Conflicts.Conflicts.GetHierarchicalDefinitions();
                 var modListFormat = localizationManager.GetResource(LocalizationResources.Conflict_Solver.ResetWarning.ListOfConflictsFormat);
-                foreach (var conflict in allHierarchalDefinitions.Where(p => p.ResetType != ResetType.None))
+                foreach (var conflict in allHierarchicalDefinitions.Where(p => p.ResetType != ResetType.None))
                 {
                     foreach (var child in conflict.Children.Where(p => p.ResetType != ResetType.None))
                     {

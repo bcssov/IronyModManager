@@ -1795,6 +1795,46 @@ namespace IronyModManager.Services
         }
 
         /// <summary>
+        /// Determines if conflict result needs reload.
+        /// </summary>
+        /// <param name="conflictResult">The conflict result.</param>
+        /// <param name="definition">The definition.</param>
+        /// <returns><c>true</c> if conflict result needs reload, <c>false</c> otherwise.</returns>
+        public virtual bool NeedsReload(IConflictResult conflictResult, IDefinition definition)
+        {
+            if (conflictResult != null && definition is { AppliedGlobalVariables: not null } && definition.AppliedGlobalVariables.Any())
+            {
+                if (conflictResult.IgnoredConflicts != null)
+                {
+                    // ReSharper disable once LoopCanBeConvertedToQuery
+                    foreach (var variable in definition.AppliedGlobalVariables)
+                    {
+                        var result = conflictResult.IgnoredConflicts.IsGlobalVariableApplied(variable.TypeAndId);
+                        if (result)
+                        {
+                            return true;
+                        }
+                    }
+                }
+
+                if (conflictResult.ResolvedConflicts != null)
+                {
+                    // ReSharper disable once LoopCanBeConvertedToQuery
+                    foreach (var variable in definition.AppliedGlobalVariables)
+                    {
+                        var result = conflictResult.ResolvedConflicts.IsGlobalVariableApplied(variable.TypeAndId);
+                        if (result)
+                        {
+                            return true;
+                        }
+                    }
+                }
+            }
+
+            return false;
+        }
+
+        /// <summary>
         /// patch has game definitions as an asynchronous operation.
         /// </summary>
         /// <param name="collectionName">Name of the collection.</param>
