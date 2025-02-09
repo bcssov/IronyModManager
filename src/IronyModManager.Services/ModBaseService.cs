@@ -4,7 +4,7 @@
 // Created          : 04-07-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-07-2025
+// Last Modified On : 02-09-2025
 // ***********************************************************************
 // <copyright file="ModBaseService.cs" company="Mario">
 //     Mario
@@ -270,7 +270,7 @@ namespace IronyModManager.Services
                                 var definition = order.Last();
                                 result.Definition = definition;
                                 result.FileName = definition.File;
-                                var reverse = new List<IDefinition>(order.ToList());
+                                var reverse = new List<IDefinition>([.. order]);
                                 reverse.Reverse();
                                 result.DefinitionOrder = reverse;
                                 break;
@@ -289,7 +289,7 @@ namespace IronyModManager.Services
                         {
                             case 1:
                                 result.Definition = validDefinitions.FirstOrDefault();
-                                result.DefinitionOrder = validDefinitions.ToList();
+                                result.DefinitionOrder = [.. validDefinitions];
 
                                 // If it's the only valid one assume load order is responsible
                                 result.PriorityType = DefinitionPriorityType.ModOrder;
@@ -736,9 +736,11 @@ namespace IronyModManager.Services
         protected virtual long GetPdxModId(string path)
         {
             var name = Path.GetFileNameWithoutExtension(path);
-#pragma warning disable CA1806 // Do not ignore method results
+#pragma warning disable IDE0079 // Remove unnecessary suppression -- Resharper yah
+#pragma warning disable CA1806
             long.TryParse(name.Replace(Constants.Paradox_mod_id, string.Empty), out var id);
-#pragma warning restore CA1806 // Do not ignore method results
+#pragma warning restore IDE0079 // Remove unnecessary suppression
+#pragma warning restore CA1806
             return id;
         }
 
@@ -999,12 +1001,27 @@ namespace IronyModManager.Services
         /// </summary>
         /// <param name="code">The code.</param>
         /// <param name="variables">The variables.</param>
+        /// <param name="globalVariables">The global variables.</param>
+        /// <param name="appliedGlobalIds">The applied global ids.</param>
         /// <returns>System.String.</returns>
-        protected virtual string ProcessInlineConstants(string code, IEnumerable<IDefinition> variables)
+        protected virtual string ProcessInlineConstants(string code, IEnumerable<IDefinition> variables, IEnumerable<IDefinition> globalVariables, out IEnumerable<IDefinition> appliedGlobalIds)
         {
             if (string.IsNullOrWhiteSpace(code))
             {
+                appliedGlobalIds = null;
                 return string.Empty;
+            }
+
+            var appliedIds = new List<IDefinition>();
+            var allVars = new List<IDefinition>();
+            if (variables != null)
+            {
+                allVars.AddRange(variables);
+            }
+
+            if (globalVariables != null)
+            {
+                allVars.AddRange(globalVariables);
             }
 
             var sb = new StringBuilder();
@@ -1028,13 +1045,17 @@ namespace IronyModManager.Services
                     {
                         foreach (Match match in matches)
                         {
-                            if (variables.Any(p => p.Id.Equals(match.Value, StringComparison.OrdinalIgnoreCase)))
+                            if (allVars.Any(p => p.Id.Equals(match.Value, StringComparison.OrdinalIgnoreCase)))
                             {
-                                var variable = variables.FirstOrDefault(p => p.Id.Equals(match.Value));
+                                var variable = allVars.FirstOrDefault(p => p.Id.Equals(match.Value));
                                 var values = variable!.Code.Split(Parser.Common.Constants.Scripts.EqualsOperator, StringSplitOptions.RemoveEmptyEntries);
                                 if (values.Length == 2)
                                 {
                                     text = text.Replace(variable.Id, values[1].Trim(), StringComparison.OrdinalIgnoreCase);
+                                    if (globalVariables != null && globalVariables.Contains(variable))
+                                    {
+                                        appliedIds.Add(variable);
+                                    }
                                 }
                             }
                         }
@@ -1044,6 +1065,7 @@ namespace IronyModManager.Services
                 }
             }
 
+            appliedGlobalIds = appliedIds;
             return sb.ToString();
         }
 

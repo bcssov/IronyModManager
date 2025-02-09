@@ -4,7 +4,7 @@
 // Created          : 05-26-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-08-2025
+// Last Modified On : 02-09-2025
 // ***********************************************************************
 // <copyright file="ModPatchCollectionService.cs" company="Mario">
 //     Mario
@@ -486,10 +486,10 @@ namespace IronyModManager.Services
 
                                 if (scriptedVars != null)
                                 {
-                                    vars.AddRange(scriptedVars.GroupBy(p => p.Id).Select(p => EvalDefinitionPriority(p.OrderBy(f => modOrder.IndexOf(f.ModName))).Definition));
+                                    scriptedVars = scriptedVars.GroupBy(p => p.Id).Select(p => EvalDefinitionPriority(p.OrderBy(f => modOrder.IndexOf(f.ModName))).Definition);
                                 }
 
-                                var parametrizedCode = parametrizedParser.Process(priorityDefinition.Definition.Code, ProcessInlineConstants(def.Code, vars));
+                                var parametrizedCode = parametrizedParser.Process(priorityDefinition.Definition.Code, ProcessInlineConstants(def.Code, vars, scriptedVars, out var ids));
                                 if (!string.IsNullOrWhiteSpace(parametrizedCode))
                                 {
                                     var validationType = ValidationType.Full;
@@ -512,7 +512,7 @@ namespace IronyModManager.Services
                                         ModDependencies = item.Dependencies,
                                         IsBinary = item.ValueType == ValueType.Binary,
                                         ModName = item.ModName,
-                                        ValidationType = ValidationType.SkipAll // First skip all validation types due to nth level 
+                                        ValidationType = ValidationType.SkipAll // First skip all validation types due to nth level
                                     });
                                     if (item.Variables != null && item.Variables.Any() && results != null)
                                     {

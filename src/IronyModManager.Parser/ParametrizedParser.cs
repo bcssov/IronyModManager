@@ -4,7 +4,7 @@
 // Created          : 10-03-2023
 //
 // Last Modified By : Mario
-// Last Modified On : 02-08-2025
+// Last Modified On : 02-09-2025
 // ***********************************************************************
 // <copyright file="ParametrizedParser.cs" company="Mario">
 //     Mario
@@ -29,7 +29,8 @@ namespace IronyModManager.Parser
     /// Implements the <see cref="IParametrizedParser" />
     /// </summary>
     /// <seealso cref="IParametrizedParser" />
-    public class ParametrizedParser : IParametrizedParser
+    /// <remarks>Initializes a new instance of the <see cref="ParametrizedParser" /> class.</remarks>
+    public class ParametrizedParser(ICodeParser codeParser) : IParametrizedParser
     {
         #region Fields
 
@@ -66,19 +67,9 @@ namespace IronyModManager.Parser
         /// <summary>
         /// The code parser
         /// </summary>
-        private readonly ICodeParser codeParser;
+        private readonly ICodeParser codeParser = codeParser;
 
         #endregion Fields
-
-        #region Constructors
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="ParametrizedParser" /> class.
-        /// </summary>
-        /// <param name="codeParser">The code parser.</param>
-        public ParametrizedParser(ICodeParser codeParser) => this.codeParser = codeParser;
-
-        #endregion Constructors
 
         #region Methods
 
@@ -159,7 +150,7 @@ namespace IronyModManager.Parser
                                 var last = replacement.LastIndexOf(EscapedQuote, StringComparison.OrdinalIgnoreCase);
                                 if (first > 0 && last > 0)
                                 {
-                                    var left = replacement.Substring(0, first);
+                                    var left = replacement[..first];
                                     var right = replacement.Substring(first + EscapedQuote.Length, last - left.Length - EscapedQuote.Length);
                                     replacement = $"{left} \"{right}\"";
                                 }
@@ -196,7 +187,7 @@ namespace IronyModManager.Parser
                                 var last = replacement.LastIndexOf(EscapedQuote, StringComparison.OrdinalIgnoreCase);
                                 if (first > 0 && last > 0)
                                 {
-                                    var left = replacement.Substring(0, first);
+                                    var left = replacement[..first];
                                     var right = replacement.Substring(first + EscapedQuote.Length, last - left.Length - EscapedQuote.Length);
                                     replacement = $"{left} \"{right}\"";
                                 }
@@ -250,7 +241,7 @@ namespace IronyModManager.Parser
         /// <returns>string.</returns>
         private string EvaluateMathExpression(string code)
         {
-            string replaceMathExpression(string code)
+            static string replaceMathExpression(string code)
             {
                 var matches = mathRegex.Matches(code);
                 if (matches.Count != 0)
@@ -336,7 +327,7 @@ namespace IronyModManager.Parser
         {
             if (!string.IsNullOrWhiteSpace(input) && input[0] == QuoteChar && input[^1] == QuoteChar)
             {
-                return input.Substring(1, input.Length - 2);
+                return input[1..^1];
             }
 
             return input;

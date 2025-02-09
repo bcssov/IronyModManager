@@ -4,7 +4,7 @@
 // Created          : 05-27-2021
 //
 // Last Modified By : Mario
-// Last Modified On : 02-08-2025
+// Last Modified On : 02-09-2025
 // ***********************************************************************
 // <copyright file="GameIndexService.cs" company="Mario">
 //     Mario
@@ -540,10 +540,10 @@ namespace IronyModManager.Services
                                 if (scriptedVarsBucket != null)
                                 {
                                     var varFiles = scriptedVarsBucket.GroupBy(p => p.File).Select(p => p.FirstOrDefault()).OrderBy(p => p!.FileCI, StringComparer.Ordinal).Select(p => p.FileCI).ToList();
-                                    vars.AddRange(scriptedVarsBucket.GroupBy(p => p.Id).Select(p => EvalDefinitionPriorityInternal(p.OrderBy(f => varFiles.IndexOf(f.FileCI))).Definition));
+                                    scriptedVarsBucket = scriptedVarsBucket.GroupBy(p => p.Id).Select(p => EvalDefinitionPriorityInternal(p.OrderBy(f => varFiles.IndexOf(f.FileCI))).Definition);
                                 }
 
-                                var parametrizedCode = parametrizedParser.Process(priorityDefinition.Definition.Code, ProcessInlineConstants(def.Code, vars));
+                                var parametrizedCode = parametrizedParser.Process(priorityDefinition.Definition.Code, ProcessInlineConstants(def.Code, vars, scriptedVarsBucket, out _));
                                 if (!string.IsNullOrWhiteSpace(parametrizedCode))
                                 {
                                     var results = parserManager.Parse(new ParserManagerArgs
