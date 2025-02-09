@@ -484,10 +484,7 @@ namespace IronyModManager.Services
                                     vars.AddRange(item.Variables);
                                 }
 
-                                if (scriptedVars != null)
-                                {
-                                    scriptedVars = scriptedVars.GroupBy(p => p.Id).Select(p => EvalDefinitionPriority(p.OrderBy(f => modOrder.IndexOf(f.ModName))).Definition);
-                                }
+                                scriptedVars = scriptedVars?.GroupBy(p => p.Id).Select(p => EvalDefinitionPriority(p.OrderBy(f => modOrder.IndexOf(f.ModName))).Definition);
 
                                 var parametrizedCode = parametrizedParser.Process(priorityDefinition.Definition.Code, ProcessInlineConstants(def.Code, vars, scriptedVars, out var ids));
                                 if (!string.IsNullOrWhiteSpace(parametrizedCode))
@@ -522,6 +519,20 @@ namespace IronyModManager.Services
                                     if (results != null && results.Any())
                                     {
                                         var inline = results.FirstOrDefault(p => p.Id.Equals(Parser.Common.Constants.Stellaris.InlineScriptId, StringComparison.OrdinalIgnoreCase) || p.ContainsInlineIdentifier);
+
+                                        var globalVars = new List<IDefinition>();
+                                        if (def is { AppliedGlobalVariables: not null } && def.AppliedGlobalVariables.Any())
+                                        {
+                                            globalVars.AddRange(def.AppliedGlobalVariables);
+                                        }
+
+                                        if (ids != null && ids.Any())
+                                        {
+                                            globalVars.AddRange(ids);
+                                        }
+
+                                        globalVars = globalVars.GroupBy(p => p.TypeAndId).Select(p => p.FirstOrDefault()).ToList();
+
                                         if (inline == null)
                                         {
                                             results = parserManager.Parse(new ParserManagerArgs
@@ -544,6 +555,11 @@ namespace IronyModManager.Services
 
                                             if (results != null && results.Any())
                                             {
+                                                foreach (var definition in results)
+                                                {
+                                                    definition.AppliedGlobalVariables = globalVars;
+                                                }
+
                                                 prunedInlineDefinitions.AddRange(results);
                                             }
 
@@ -552,6 +568,7 @@ namespace IronyModManager.Services
                                         else
                                         {
                                             def = inline;
+                                            def.AppliedGlobalVariables = globalVars;
                                         }
                                     }
                                     else if (!reportedInlineErrors.Contains($"{item.ModName} - {pathCI}"))
