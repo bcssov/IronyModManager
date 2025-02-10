@@ -516,7 +516,7 @@ namespace IronyModManager.Services
                 if (scriptedVarsBucket != null)
                 {
                     var varFiles = scriptedVarsBucket.GroupBy(p => p.File).Select(p => p.FirstOrDefault()).OrderBy(p => p!.FileCI, StringComparer.Ordinal).Select(p => p.FileCI).ToList();
-                    scriptedVarsBucket = scriptedVarsBucket.GroupBy(p => p.Id).Select(p => EvalDefinitionPriorityInternal(p.OrderBy(f => varFiles.IndexOf(f.FileCI))).Definition);
+                    scriptedVarsBucket = scriptedVarsBucket.GroupBy(p => p.Id).Select(p => EvalDefinitionPriorityInternal(p.OrderBy(f => varFiles.IndexOf(f.FileCI))).Definition).ToList();
                 }
 
                 inlineDefinitions ??= DIResolver.Get<IIndexedDefinitions>();
