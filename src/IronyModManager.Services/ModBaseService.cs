@@ -4,7 +4,7 @@
 // Created          : 04-07-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-10-2025
+// Last Modified On : 02-11-2025
 // ***********************************************************************
 // <copyright file="ModBaseService.cs" company="Mario">
 //     Mario
@@ -101,14 +101,14 @@ namespace IronyModManager.Services
         protected static readonly Regex MathRegex = new(@"@\[\s*([\s\S]+?)\s*\]", RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
         /// <summary>
+        /// The variable match regex
+        /// </summary>
+        protected static readonly Regex VarMatchRegex = new(@"@\S+", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+
+        /// <summary>
         /// The path resolver
         /// </summary>
         protected readonly IGameRootPathResolver PathResolver = new GameRootPathResolver();
-
-        /// <summary>
-        /// The variable match regex
-        /// </summary>
-        private static readonly Regex varMatchRegex = new(@"@\S +", RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
         #endregion Fields
 
@@ -1063,7 +1063,7 @@ namespace IronyModManager.Services
                 allVars.AddRange(globalVariables);
             }
 
-            var matchedVars = varMatchRegex.Matches(code);
+            var matchedVars = VarMatchRegex.Matches(code);
             var ids = new Dictionary<string, string>();
             foreach (Match matchedVar in matchedVars)
             {
@@ -1108,6 +1108,7 @@ namespace IronyModManager.Services
                                 if (values.Length == 2)
                                 {
                                     var replacement = text.Replace(variable.Id, values[1].Trim(), StringComparison.OrdinalIgnoreCase);
+
                                     // Test for math operator
                                     var openMath = text.IndexOf(MathExpressionOpen, StringComparison.OrdinalIgnoreCase);
                                     var mathClose = text.LastIndexOf(MathExpressionClose, StringComparison.OrdinalIgnoreCase);

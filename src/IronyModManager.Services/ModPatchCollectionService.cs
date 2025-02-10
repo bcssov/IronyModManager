@@ -4,7 +4,7 @@
 // Created          : 05-26-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-10-2025
+// Last Modified On : 02-11-2025
 // ***********************************************************************
 // <copyright file="ModPatchCollectionService.cs" company="Mario">
 //     Mario
@@ -583,6 +583,7 @@ namespace IronyModManager.Services
                                         copy.ErrorMessage = $"Inline script {path} failed to be processed. Please report to the author of Irony.";
                                         prunedInlineDefinitions.Add(copy);
                                         reportedInlineErrors.Add($"{item.ModName} - {pathCI}");
+                                        break;
                                     }
                                 }
                             }
@@ -595,6 +596,11 @@ namespace IronyModManager.Services
                             copy.ErrorMessage = $"Inline script {path} is not found in any mods.{Environment.NewLine}{Environment.NewLine}It is possible that the file is missing or due to a syntax error Irony cannot find it.";
                             prunedInlineDefinitions.Add(copy);
                             reportedInlineErrors.Add($"{item.ModName} - {pathCI}");
+                            break;
+                        }
+                        else
+                        {
+                            break;
                         }
                     }
 
