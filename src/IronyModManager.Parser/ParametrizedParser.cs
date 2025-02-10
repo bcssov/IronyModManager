@@ -4,7 +4,7 @@
 // Created          : 10-03-2023
 //
 // Last Modified By : Mario
-// Last Modified On : 02-09-2025
+// Last Modified On : 02-10-2025
 // ***********************************************************************
 // <copyright file="ParametrizedParser.cs" company="Mario">
 //     Mario
@@ -17,7 +17,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
-using IronyModManager.DI;
 using IronyModManager.Parser.Common.Parsers;
 using IronyModManager.Shared;
 using IronyModManager.Shared.Expressions;
@@ -62,7 +61,7 @@ namespace IronyModManager.Parser
         /// <summary>
         /// The math regex
         /// </summary>
-        private static readonly Regex mathRegex = new(@"@\[\s*([-+*/%()\d\s\w$]+)\s*\]", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+        private static readonly Regex mathRegex = new(@"@\[\s*([\s\S]+?)\s*\]", RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
         /// <summary>
         /// The code parser
@@ -125,8 +124,9 @@ namespace IronyModManager.Parser
         /// </summary>
         /// <param name="code">The code.</param>
         /// <param name="parameters">The parameters.</param>
+        /// <param name="forceProcessPath">if set to <c>true</c> [force process path].</param>
         /// <returns>System.String.</returns>
-        public string Process(string code, string parameters)
+        public string Process(string code, string parameters, bool forceProcessPath = false)
         {
             var elParams = codeParser.ParseScriptWithoutValidation(parameters.SplitOnNewLine(), string.Empty);
             if (elParams is { Values: not null, Error: null })
@@ -141,7 +141,7 @@ namespace IronyModManager.Parser
                         {
                             var id = (value.Key ?? string.Empty).Trim(Quotes);
                             var replaceValue = value.Value ?? string.Empty;
-                            var replacement = TrimQuotes(replaceValue);
+                            var replacement = ReplaceMathExpression(TrimQuotes(replaceValue));
 
                             // If it ends with escaped quotes it means we've got an expression so we need to fix quotes
                             if (replacement.EndsWith(EscapedQuote) && !replacement.StartsWith(EscapedQuote))
@@ -156,7 +156,7 @@ namespace IronyModManager.Parser
                                 }
                             }
 
-                            if (!id.Equals(Script, StringComparison.OrdinalIgnoreCase))
+                            if (!id.Equals(Script, StringComparison.OrdinalIgnoreCase) || forceProcessPath)
                             {
                                 var key = $"{Terminator}{id}{Terminator}";
                                 processed = processed.Replace(key, replacement, StringComparison.OrdinalIgnoreCase);
@@ -178,7 +178,7 @@ namespace IronyModManager.Parser
                         {
                             var id = (value.Key ?? string.Empty).Trim(Quotes);
                             var replaceValue = value.Value ?? string.Empty;
-                            var replacement = TrimQuotes(replaceValue);
+                            var replacement = ReplaceMathExpression(TrimQuotes(replaceValue));
 
                             // If it ends with escaped quotes it means we've got an expression so we need to fix quotes
                             if (replacement.EndsWith(EscapedQuote) && !replacement.StartsWith(EscapedQuote))
@@ -193,7 +193,7 @@ namespace IronyModManager.Parser
                                 }
                             }
 
-                            if (!id.Equals(Script, StringComparison.OrdinalIgnoreCase))
+                            if (!id.Equals(Script, StringComparison.OrdinalIgnoreCase) || forceProcessPath)
                             {
                                 var key = $"{Terminator}{id}{Terminator}";
                                 processed = processed.Replace(key, replacement, StringComparison.OrdinalIgnoreCase);
@@ -241,33 +241,6 @@ namespace IronyModManager.Parser
         /// <returns>string.</returns>
         private string EvaluateMathExpression(string code)
         {
-            static string replaceMathExpression(string code)
-            {
-                var matches = mathRegex.Matches(code);
-                if (matches.Count != 0)
-                {
-                    foreach (Match m in matches)
-                    {
-                        var expression = m.Groups[1].Value;
-                        var locale = MathExpression.Culture;
-                        var parser = MathExpression.GetParser();
-                        try
-                        {
-                            var result = parser.Parse(expression.Replace(".", locale.NumberFormat.NumberDecimalSeparator));
-                            var output = result % 1 == 0 ? ((long)result).ToString() : result.ToString(locale);
-                            code = code.Replace(m.Value, output);
-                        }
-                        catch (Exception e)
-                        {
-                            var log = DIResolver.Get<ILogger>();
-                            log.Error(e);
-                        }
-                    }
-                }
-
-                return code;
-            }
-
             var elCode = codeParser.ParseScriptWithoutValidation(code.SplitOnNewLine(), string.Empty);
             if (elCode is { Values: not null, Error: null })
             {
@@ -278,7 +251,7 @@ namespace IronyModManager.Parser
                     {
                         foreach (var value in elObj.Values)
                         {
-                            value.Value = replaceMathExpression(value.Value ?? string.Empty);
+                            value.Value = ReplaceMathExpression(value.Value ?? string.Empty);
                         }
 
                         var sb = new StringBuilder();
@@ -299,7 +272,7 @@ namespace IronyModManager.Parser
                     {
                         foreach (var value in elObj.Values)
                         {
-                            value.Value = replaceMathExpression(value.Value ?? string.Empty);
+                            value.Value = ReplaceMathExpression(value.Value ?? string.Empty);
                         }
 
                         var sb = new StringBuilder();
@@ -311,6 +284,36 @@ namespace IronyModManager.Parser
                         }
 
                         return sb.ToString();
+                    }
+                }
+            }
+
+            return code;
+        }
+
+        /// <summary>
+        /// Replaces the math expression.
+        /// </summary>
+        /// <param name="code">The code.</param>
+        /// <returns>string.</returns>
+        private string ReplaceMathExpression(string code)
+        {
+            var matches = mathRegex.Matches(code);
+            if (matches.Count != 0)
+            {
+                foreach (Match m in matches)
+                {
+                    var expression = m.Groups[1].Value;
+                    var locale = MathExpression.Culture;
+                    var parser = MathExpression.GetParser();
+                    try
+                    {
+                        var result = parser.Parse(expression.Replace(".", locale.NumberFormat.NumberDecimalSeparator));
+                        var output = result % 1 == 0 ? ((long)result).ToString() : result.ToString(locale);
+                        code = code.Replace(m.Value, output);
+                    }
+                    catch
+                    {
                     }
                 }
             }

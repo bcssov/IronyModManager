@@ -463,7 +463,7 @@ namespace IronyModManager.Services
                 var scriptedVars = await tempIndex.GetByParentDirectoryAsync(provider.GlobalVariablesPath);
                 if (scriptedVars != null && scriptedVars.Any())
                 {
-                    scriptedVars = scriptedVars?.GroupBy(p => p.Id).Select(p => EvalDefinitionPriority(p.OrderBy(f => modOrder.IndexOf(f.ModName))).Definition);
+                    scriptedVars = scriptedVars?.GroupBy(p => p.Id).Select(p => EvalDefinitionPriority(p.OrderBy(f => modOrder.IndexOf(f.ModName))).Definition).ToList();
                 }
 
                 prunedInlineDefinitions = [];
@@ -489,7 +489,8 @@ namespace IronyModManager.Services
                                     vars.AddRange(item.Variables);
                                 }
 
-                                var parametrizedCode = parametrizedParser.Process(priorityDefinition.Definition.Code, ProcessInlineConstants(def.Code, vars, scriptedVars, out var ids));
+                                var processedInline = ProcessInlineConstants(def.Code, vars, scriptedVars, out var ids);
+                                var parametrizedCode = parametrizedParser.Process(priorityDefinition.Definition.Code, processedInline);
                                 if (!string.IsNullOrWhiteSpace(parametrizedCode))
                                 {
                                     var validationType = ValidationType.Full;

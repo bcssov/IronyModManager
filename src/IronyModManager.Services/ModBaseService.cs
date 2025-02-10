@@ -4,7 +4,7 @@
 // Created          : 04-07-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-09-2025
+// Last Modified On : 02-10-2025
 // ***********************************************************************
 // <copyright file="ModBaseService.cs" company="Mario">
 //     Mario
@@ -66,6 +66,16 @@ namespace IronyModManager.Services
         protected const string CleanVariablesPattern = @"[^\w\s\@=.,_]";
 
         /// <summary>
+        /// The math expression close
+        /// </summary>
+        protected const string MathExpressionClose = "]";
+
+        /// <summary>
+        /// The math expression open
+        /// </summary>
+        protected const string MathExpressionOpen = "@[";
+
+        /// <summary>
         /// The maximum mods to process
         /// </summary>
         protected const int MaxModsToProcess = 4;
@@ -86,6 +96,11 @@ namespace IronyModManager.Services
         protected const string RegularModsCacheKey = "RegularMods";
 
         /// <summary>
+        /// The math regex
+        /// </summary>
+        protected static readonly Regex MathRegex = new(@"@\[\s*([\s\S]+?)\s*\]", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+
+        /// <summary>
         /// The path resolver
         /// </summary>
         protected readonly IGameRootPathResolver PathResolver = new GameRootPathResolver();
@@ -93,7 +108,7 @@ namespace IronyModManager.Services
         /// <summary>
         /// The variable match regex
         /// </summary>
-        private static readonly Regex varMatchRegex = new(@"@\S+", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+        private static readonly Regex varMatchRegex = new(@"@\S +", RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
         #endregion Fields
 
@@ -1006,6 +1021,30 @@ namespace IronyModManager.Services
         /// <returns>System.String.</returns>
         protected virtual string ProcessInlineConstants(string code, IEnumerable<IDefinition> variables, IEnumerable<IDefinition> globalVariables, out IEnumerable<IDefinition> appliedGlobalIds)
         {
+            static List<string> extractTextBetweenAtBrackets(string text)
+            {
+                var result = new List<string>();
+                var matches = MathRegex.Matches(text);
+
+                foreach (Match match in matches)
+                {
+                    var insideBrackets = match.Groups[1].Value;
+                    var vars = extractVariable(insideBrackets);
+                    if (vars != null && vars.Count != 0)
+                    {
+                        result.AddRange(vars);
+                    }
+                }
+
+                return result;
+            }
+
+            static List<string> extractVariable(string text)
+            {
+                // All math operators or newline constants, whitespace and such
+                return text.Split([' ', '\t', '\n', '\r', '+', '/', '*', '%', '-', ')', '('], StringSplitOptions.RemoveEmptyEntries).Where(token => token.Any(char.IsLetter)).ToList();
+            }
+
             if (string.IsNullOrWhiteSpace(code))
             {
                 appliedGlobalIds = null;
@@ -1024,6 +1063,24 @@ namespace IronyModManager.Services
                 allVars.AddRange(globalVariables);
             }
 
+            var matchedVars = varMatchRegex.Matches(code);
+            var ids = new Dictionary<string, string>();
+            foreach (Match matchedVar in matchedVars)
+            {
+                ids[$"{Parser.Common.Constants.Scripts.VariableId}{matchedVar.Value.Trim(Parser.Common.Constants.Scripts.VariableId)}"] = matchedVar.Value.Trim(Parser.Common.Constants.Scripts.VariableId);
+            }
+
+            // Giga has a scenario where global var maybe in a math block? ex toggle = @[ 1 - has_bug_branch ]
+            var mathIds = extractTextBetweenAtBrackets(code);
+            if (mathIds != null && mathIds.Count != 0)
+            {
+                foreach (var mathId in mathIds)
+                {
+                    var id = mathId.Trim(Parser.Common.Constants.Scripts.VariableId);
+                    ids[$"{Parser.Common.Constants.Scripts.VariableId}{id}"] = id;
+                }
+            }
+
             var sb = new StringBuilder();
             foreach (var line in code.SplitOnNewLine(false))
             {
@@ -1033,27 +1090,36 @@ namespace IronyModManager.Services
                     continue;
                 }
 
-                var text = line;
                 if (line.TrimStart().StartsWith(Parser.Common.Constants.Scripts.VariableId))
                 {
                     sb.AppendLine(line);
                 }
                 else
                 {
-                    var matches = varMatchRegex.Matches(line);
-                    if (matches.Count > 0)
+                    var text = line;
+                    if (ids.Any(p => text.Contains(p.Value, StringComparison.OrdinalIgnoreCase)))
                     {
-                        foreach (Match match in matches)
+                        foreach (var id in ids)
                         {
-                            if (allVars.Any(p => p.Id.Equals(match.Value, StringComparison.OrdinalIgnoreCase)))
+                            if (allVars.Any(p => p.Id.Equals(id.Key, StringComparison.OrdinalIgnoreCase)))
                             {
-                                var variable = allVars.FirstOrDefault(p => p.Id.Equals(match.Value));
+                                var variable = allVars.FirstOrDefault(p => p.Id.Equals(id.Key));
                                 var values = variable!.Code.Split(Parser.Common.Constants.Scripts.EqualsOperator, StringSplitOptions.RemoveEmptyEntries);
                                 if (values.Length == 2)
                                 {
-                                    text = text.Replace(variable.Id, values[1].Trim(), StringComparison.OrdinalIgnoreCase);
-                                    if (globalVariables != null && globalVariables.Contains(variable))
+                                    var replacement = text.Replace(variable.Id, values[1].Trim(), StringComparison.OrdinalIgnoreCase);
+                                    // Test for math operator
+                                    var openMath = text.IndexOf(MathExpressionOpen, StringComparison.OrdinalIgnoreCase);
+                                    var mathClose = text.LastIndexOf(MathExpressionClose, StringComparison.OrdinalIgnoreCase);
+                                    var expression = text.IndexOf(id.Value, StringComparison.OrdinalIgnoreCase);
+                                    if (openMath < expression && expression < mathClose)
                                     {
+                                        replacement = replacement.Replace(id.Value, values[1].Trim(), StringComparison.OrdinalIgnoreCase);
+                                    }
+
+                                    if (globalVariables != null && globalVariables.Contains(variable) && text != replacement)
+                                    {
+                                        text = replacement;
                                         appliedIds.Add(variable);
                                     }
                                 }
