@@ -1072,7 +1072,7 @@ namespace IronyModManager.Services
 
             // Giga has a scenario where global var maybe in a math block? ex toggle = @[ 1 - has_bug_branch ]
             var mathIds = extractTextBetweenAtBrackets(code);
-            if (mathIds != null && mathIds.Count != 0)
+            if (mathIds.Count != 0)
             {
                 foreach (var mathId in mathIds)
                 {
