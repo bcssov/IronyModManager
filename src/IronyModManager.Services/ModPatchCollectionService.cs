@@ -4,7 +4,7 @@
 // Created          : 05-26-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-09-2025
+// Last Modified On : 02-10-2025
 // ***********************************************************************
 // <copyright file="ModPatchCollectionService.cs" company="Mario">
 //     Mario
@@ -461,6 +461,11 @@ namespace IronyModManager.Services
                 var tempIndex = DIResolver.Get<IIndexedDefinitions>();
                 await tempIndex.InitMapAsync(allDefs);
                 var scriptedVars = await tempIndex.GetByParentDirectoryAsync(provider.GlobalVariablesPath);
+                if (scriptedVars != null && scriptedVars.Any())
+                {
+                    scriptedVars = scriptedVars?.GroupBy(p => p.Id).Select(p => EvalDefinitionPriority(p.OrderBy(f => modOrder.IndexOf(f.ModName))).Definition);
+                }
+
                 prunedInlineDefinitions = [];
                 var reportedInlineErrors = new HashSet<string>();
                 foreach (var item in allDefs)
@@ -483,8 +488,6 @@ namespace IronyModManager.Services
                                 {
                                     vars.AddRange(item.Variables);
                                 }
-
-                                scriptedVars = scriptedVars?.GroupBy(p => p.Id).Select(p => EvalDefinitionPriority(p.OrderBy(f => modOrder.IndexOf(f.ModName))).Definition);
 
                                 var parametrizedCode = parametrizedParser.Process(priorityDefinition.Definition.Code, ProcessInlineConstants(def.Code, vars, scriptedVars, out var ids));
                                 if (!string.IsNullOrWhiteSpace(parametrizedCode))

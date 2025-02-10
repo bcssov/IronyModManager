@@ -4,7 +4,7 @@
 // Created          : 05-27-2021
 //
 // Last Modified By : Mario
-// Last Modified On : 02-09-2025
+// Last Modified On : 02-10-2025
 // ***********************************************************************
 // <copyright file="GameIndexService.cs" company="Mario">
 //     Mario
@@ -513,8 +513,15 @@ namespace IronyModManager.Services
             {
                 scriptedVariables ??= DIResolver.Get<IIndexedDefinitions>();
                 var scriptedVarsBucket = await scriptedVariables.GetAllAsync();
+                if (scriptedVarsBucket != null)
+                {
+                    var varFiles = scriptedVarsBucket.GroupBy(p => p.File).Select(p => p.FirstOrDefault()).OrderBy(p => p!.FileCI, StringComparer.Ordinal).Select(p => p.FileCI).ToList();
+                    scriptedVarsBucket = scriptedVarsBucket.GroupBy(p => p.Id).Select(p => EvalDefinitionPriorityInternal(p.OrderBy(f => varFiles.IndexOf(f.FileCI))).Definition);
+                }
+
                 inlineDefinitions ??= DIResolver.Get<IIndexedDefinitions>();
                 prunedInlineDefinitions = [];
+
                 foreach (var item in definitions)
                 {
                     var def = item;
@@ -535,12 +542,6 @@ namespace IronyModManager.Services
                                 if (item.Variables != null)
                                 {
                                     vars.AddRange(item.Variables);
-                                }
-
-                                if (scriptedVarsBucket != null)
-                                {
-                                    var varFiles = scriptedVarsBucket.GroupBy(p => p.File).Select(p => p.FirstOrDefault()).OrderBy(p => p!.FileCI, StringComparer.Ordinal).Select(p => p.FileCI).ToList();
-                                    scriptedVarsBucket = scriptedVarsBucket.GroupBy(p => p.Id).Select(p => EvalDefinitionPriorityInternal(p.OrderBy(f => varFiles.IndexOf(f.FileCI))).Definition);
                                 }
 
                                 var parametrizedCode = parametrizedParser.Process(priorityDefinition.Definition.Code, ProcessInlineConstants(def.Code, vars, scriptedVarsBucket, out _));
