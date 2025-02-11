@@ -370,6 +370,7 @@ namespace IronyModManager.Services
         /// <param name="patchStateMode">The patch state mode.</param>
         /// <param name="allowedLanguages">The allowed languages.</param>
         /// <returns>IConflictResult.</returns>
+        /// <exception cref="ArgumentException">$"Inline code-block from file {item.File} could not be parsed {item.ModName}, e</exception>
         public virtual async Task<IConflictResult> FindConflictsAsync(IIndexedDefinitions indexedDefinitions, IList<string> modOrder, PatchStateMode patchStateMode, IReadOnlyCollection<IGameLanguage> allowedLanguages)
         {
             var actualMode = patchStateMode switch
@@ -489,8 +490,18 @@ namespace IronyModManager.Services
                                     vars.AddRange(item.Variables);
                                 }
 
-                                var processedInline = ProcessInlineConstants(def.Code, vars, scriptedVars, out var ids);
-                                var parametrizedCode = parametrizedParser.Process(priorityDefinition.Definition.Code, processedInline);
+                                var parametrizedCode = string.Empty;
+                                IEnumerable<IDefinition> ids = null;
+                                try
+                                {
+                                    var processedInline = ProcessInlineConstants(def.Code, vars, scriptedVars, out ids);
+                                    parametrizedCode = parametrizedParser.Process(priorityDefinition.Definition.Code, processedInline);
+                                }
+                                catch (Exception e)
+                                {
+                                    throw new ArgumentException($"Inline code-block from file: {item.File} could not be parsed from mod: {item.ModName}.", e);
+                                }
+
                                 if (!string.IsNullOrWhiteSpace(parametrizedCode))
                                 {
                                     var validationType = ValidationType.Full;

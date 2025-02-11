@@ -4,7 +4,7 @@
 // Created          : 10-03-2023
 //
 // Last Modified By : Mario
-// Last Modified On : 02-10-2025
+// Last Modified On : 02-11-2025
 // ***********************************************************************
 // <copyright file="ParametrizedParser.cs" company="Mario">
 //     Mario
@@ -168,7 +168,8 @@ namespace IronyModManager.Parser
 
                     return processed;
                 }
-                else if (elParams.Values.Count() == 1 && elParams.Values.FirstOrDefault()!.Values.Count(p => p.Key.Equals(Common.Constants.Stellaris.InlineScriptId, StringComparison.OrdinalIgnoreCase)) == 1)
+                else if (elParams.Values.Count() == 1 && elParams.Values.FirstOrDefault() != null && elParams.Values.FirstOrDefault()!.Values != null &&
+                         elParams.Values.FirstOrDefault()!.Values.Count(p => p.Key.Equals(Common.Constants.Stellaris.InlineScriptId, StringComparison.OrdinalIgnoreCase)) == 1)
                 {
                     var processed = code;
                     var elObj = elParams.Values.FirstOrDefault(p => p.Values != null)?.Values?.FirstOrDefault();
@@ -265,25 +266,36 @@ namespace IronyModManager.Parser
                         return sb.ToString();
                     }
                 }
-                else if (elCode.Values.Count() == 1 && elCode.Values.FirstOrDefault()!.Values.Count(p => p.Key.Equals(Common.Constants.Stellaris.InlineScriptId, StringComparison.OrdinalIgnoreCase)) == 1)
+                else if (elCode.Values.Count() == 1)
                 {
-                    var elObj = elCode.Values.FirstOrDefault(p => p.Values != null)?.Values?.FirstOrDefault();
-                    if (elObj is { Values: not null })
+                    var item = elCode.Values.FirstOrDefault();
+                    if (item != null)
                     {
-                        foreach (var value in elObj.Values)
+                        if (item.IsSimpleType)
                         {
-                            value.Value = ReplaceMathExpression(value.Value ?? string.Empty);
+                            item.Value = ReplaceMathExpression(item.Value ?? string.Empty);
                         }
-
-                        var sb = new StringBuilder();
-                        var indent = 0;
-                        foreach (var node in elCode.Values)
+                        else if (item.Values != null && item.Values.Count(p => p.Key.Equals(Common.Constants.Stellaris.InlineScriptId, StringComparison.OrdinalIgnoreCase)) == 1)
                         {
-                            sb.AppendLine(codeParser.FormatCode(node, indent));
-                            indent++;
-                        }
+                            var elObj = elCode.Values.FirstOrDefault(p => p.Values != null)?.Values?.FirstOrDefault();
+                            if (elObj is { Values: not null })
+                            {
+                                foreach (var value in elObj.Values)
+                                {
+                                    value.Value = ReplaceMathExpression(value.Value ?? string.Empty);
+                                }
 
-                        return sb.ToString();
+                                var sb = new StringBuilder();
+                                var indent = 0;
+                                foreach (var node in elCode.Values)
+                                {
+                                    sb.AppendLine(codeParser.FormatCode(node, indent));
+                                    indent++;
+                                }
+
+                                return sb.ToString();
+                            }
+                        }
                     }
                 }
             }
