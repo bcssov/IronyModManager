@@ -70,6 +70,11 @@ namespace IronyModManager.Services
         private const int MaxFoldersToProcess = 4;
 
         /// <summary>
+        /// The maximum depth
+        /// </summary>
+        private const int MaxDepth = 100;
+
+        /// <summary>
         /// The service lock
         /// </summary>
         private static readonly AsyncLock asyncServiceLock = new();
@@ -483,6 +488,7 @@ namespace IronyModManager.Services
         /// <param name="inlineDefinitions">The inline definitions.</param>
         /// <param name="scriptedVariables">The scripted variables.</param>
         /// <returns>IEnumerable&lt;IDefinition&gt;.</returns>
+        /// <exception cref="Exception">$"Max depth reacted while attempting to parse file: {item.File} from the game.</exception>
         /// <exception cref="ArgumentException">$"Inline code-block from file: {item.File} could not be parsed from the game., e</exception>
         protected virtual async Task<IEnumerable<IDefinition>> ParseGameFiles(IGame game, IEnumerable<IFileInfo> fileInfos, string folder, IIndexedDefinitions inlineDefinitions, IIndexedDefinitions scriptedVariables)
         {
@@ -527,8 +533,15 @@ namespace IronyModManager.Services
                 {
                     var def = item;
                     var addDefault = true;
+                    var depth = 0;
                     while (def.Id.Equals(Parser.Common.Constants.Stellaris.InlineScriptId, StringComparison.OrdinalIgnoreCase) || def.ContainsInlineIdentifier)
                     {
+                        depth++;
+                        if (depth > MaxDepth)
+                        {
+                            throw new Exception($"Max depth reacted while attempting to parse file: {item.File} from the game.");
+                        }
+
                         addDefault = false;
                         var path = Path.Combine(Parser.Common.Constants.Stellaris.InlineScripts, parametrizedParser.GetScriptPath(def.Code));
                         var pathCI = path.ToLowerInvariant();
@@ -546,7 +559,6 @@ namespace IronyModManager.Services
                                 }
 
                                 var parametrizedCode = string.Empty;
-                                IEnumerable<IDefinition> ids = null;
                                 try
                                 {
                                     var processedInline = ProcessInlineConstants(def.Code, vars, scriptedVarsBucket, out _);

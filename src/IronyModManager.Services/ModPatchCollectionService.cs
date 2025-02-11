@@ -101,6 +101,11 @@ namespace IronyModManager.Services
         private const int MaxDefinitionsToAdd = 8;
 
         /// <summary>
+        /// The maximum depth
+        /// </summary>
+        private const int MaxDepth = 100;
+
+        /// <summary>
         /// The maximum mod conflicts to check
         /// </summary>
         private const int MaxModConflictsToCheck = 4;
@@ -370,7 +375,8 @@ namespace IronyModManager.Services
         /// <param name="patchStateMode">The patch state mode.</param>
         /// <param name="allowedLanguages">The allowed languages.</param>
         /// <returns>IConflictResult.</returns>
-        /// <exception cref="ArgumentException">$"Inline code-block from file {item.File} could not be parsed {item.ModName}, e</exception>
+        /// <exception cref="Exception">$"Max depth reacted while attempting to parse file: {item.File} from the game.</exception>
+        /// <exception cref="ArgumentException">$"Inline code-block from file: {item.File} could not be parsed from mod: {item.ModName}., e</exception>
         public virtual async Task<IConflictResult> FindConflictsAsync(IIndexedDefinitions indexedDefinitions, IList<string> modOrder, PatchStateMode patchStateMode, IReadOnlyCollection<IGameLanguage> allowedLanguages)
         {
             var actualMode = patchStateMode switch
@@ -473,8 +479,15 @@ namespace IronyModManager.Services
                 {
                     var def = item;
                     var addDefault = true;
+                    var depth = 0;
                     while ((def.Id.Equals(Parser.Common.Constants.Stellaris.InlineScriptId, StringComparison.OrdinalIgnoreCase) || def.ContainsInlineIdentifier) && !def.File.StartsWith(provider.InlineScriptsPath))
                     {
+                        depth++;
+                        if (depth > MaxDepth)
+                        {
+                            throw new Exception($"Max depth reacted while attempting to parse file: {item.File} from the game.");
+                        }
+
                         addDefault = false;
                         var path = Path.Combine(Parser.Common.Constants.Stellaris.InlineScripts, parametrizedParser.GetScriptPath(def.Code));
                         var pathCI = path.ToLowerInvariant();
