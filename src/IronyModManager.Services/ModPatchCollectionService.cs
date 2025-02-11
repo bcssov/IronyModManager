@@ -485,7 +485,7 @@ namespace IronyModManager.Services
                         depth++;
                         if (depth > MaxDepth)
                         {
-                            throw new Exception($"Max depth reacted while attempting to parse file: {item.File} from the game.");
+                            throw new Exception($"Max depth reacted while attempting to parse file: {item.File} from the mod {item.ModName}.");
                         }
 
                         addDefault = false;
