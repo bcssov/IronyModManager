@@ -483,7 +483,7 @@ namespace IronyModManager.Services
         /// <param name="inlineDefinitions">The inline definitions.</param>
         /// <param name="scriptedVariables">The scripted variables.</param>
         /// <returns>IEnumerable&lt;IDefinition&gt;.</returns>
-        /// <exception cref="ArgumentException">$"Inline code-block from file: {item.File} could not be parsed from mod: {item.ModName}., e</exception>
+        /// <exception cref="ArgumentException">$"Inline code-block from file: {item.File} could not be parsed from the game., e</exception>
         protected virtual async Task<IEnumerable<IDefinition>> ParseGameFiles(IGame game, IEnumerable<IFileInfo> fileInfos, string folder, IIndexedDefinitions inlineDefinitions, IIndexedDefinitions scriptedVariables)
         {
             if (fileInfos == null)
@@ -554,7 +554,7 @@ namespace IronyModManager.Services
                                 }
                                 catch (Exception e)
                                 {
-                                    throw new ArgumentException($"Inline code-block from file: {item.File} could not be parsed from mod: {item.ModName}.", e);
+                                    throw new ArgumentException($"Inline code-block from file: {item.File} could not be parsed from the game.", e);
                                 }
 
                                 if (!string.IsNullOrWhiteSpace(parametrizedCode))
