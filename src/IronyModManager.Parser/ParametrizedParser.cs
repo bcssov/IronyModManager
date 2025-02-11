@@ -87,7 +87,7 @@ namespace IronyModManager.Parser
                     var simpleResult = elParams.Values.FirstOrDefault(p => !string.IsNullOrWhiteSpace(p.Value));
                     if (simpleResult != null)
                     {
-                        return simpleResult.Value.StandardizeDirectorySeparator();
+                        return simpleResult.Value.Trim(Quotes).StandardizeDirectorySeparator();
                     }
 
                     var elObj = elParams.Values.FirstOrDefault(p => p.Values != null);
