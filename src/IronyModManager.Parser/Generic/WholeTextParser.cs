@@ -4,7 +4,7 @@
 // Created          : 03-28-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 10-17-2024
+// Last Modified On : 02-12-2025
 // ***********************************************************************
 // <copyright file="WholeTextParser.cs" company="Mario">
 //     Mario
@@ -33,7 +33,9 @@ namespace IronyModManager.Parser.Generic
     /// </summary>
     /// <seealso cref="IronyModManager.Parser.Common.Parsers.BaseParser" />
     /// <seealso cref="IronyModManager.Parser.Common.Parsers.IGenericParser" />
-    public class WholeTextParser : BaseParser, IGenericParser
+    /// <seealso cref="T:IronyModManager.Parser.Common.Parsers.IDefaultParser" />
+    /// <remarks>Initializes a new instance of the <see cref="WholeTextParser" /> class.</remarks>
+    public class WholeTextParser(ICodeParser codeParser, ILogger logger) : BaseParser(codeParser, logger), IGenericParser
     {
         #region Fields
 
@@ -48,19 +50,6 @@ namespace IronyModManager.Parser.Generic
         private static readonly string[] startsWithChecks = [Common.Constants.OnActionsPath];
 
         #endregion Fields
-
-        #region Constructors
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="WholeTextParser" /> class.
-        /// </summary>
-        /// <param name="codeParser">The code parser.</param>
-        /// <param name="logger">The logger.</param>
-        public WholeTextParser(ICodeParser codeParser, ILogger logger) : base(codeParser, logger)
-        {
-        }
-
-        #endregion Constructors
 
         #region Properties
 
@@ -123,7 +112,7 @@ namespace IronyModManager.Parser.Generic
                 def.OriginalCode = def.Code = GetNonFileTagCode(code);
 
                 var definitions = new List<IDefinition>();
-                definitions.AddRange(ParseSimpleTypes(code.Values, args));
+                definitions.AddRange(ParseSimpleTypes(code.Values, args, allowInlineAssignment: true));
                 definitions.AddRange(ParseComplexTypes(code.Values, args));
                 definitions.AddRange(ParseTypesForVariables(code.Values, args));
                 foreach (var item in definitions)
@@ -140,7 +129,7 @@ namespace IronyModManager.Parser.Generic
             }
 
             def.ValueType = ValueType.WholeTextFile;
-            return new List<IDefinition> { def };
+            return [def];
         }
 
         /// <summary>

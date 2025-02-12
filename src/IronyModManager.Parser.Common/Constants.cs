@@ -4,7 +4,7 @@
 // Created          : 02-16-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 09-10-2024
+// Last Modified On : 02-12-2025
 // ***********************************************************************
 // <copyright file="Constants.cs" company="Mario">
 //     Mario
@@ -252,6 +252,11 @@ namespace IronyModManager.Parser.Common
             public static readonly string DifficultySettings = MergePath(CommonPath, "difficulty_settings");
 
             /// <summary>
+            /// The focus inlay windows
+            /// </summary>
+            public static readonly string FocusInlayWindows = MergePath(CommonPath, "focus_inlay_windows");
+
+            /// <summary>
             /// The generation
             /// </summary>
             public static readonly string Generation = MergePath(CommonPath, "generation");
@@ -259,6 +264,7 @@ namespace IronyModManager.Parser.Common
             /// <summary>
             /// The graphical culture type
             /// </summary>
+            // ReSharper disable once StringLiteralTypo -- Please tell me resharper how should I rename a filename that is not under my control
             public static readonly string GraphicalCultureType = MergePath(CommonPath, "graphicalculturetype.txt");
 
             /// <summary>
@@ -307,6 +313,11 @@ namespace IronyModManager.Parser.Common
             public static readonly string PeaceConference = MergePath(CommonPath, "peace_conference");
 
             /// <summary>
+            /// The portraits
+            /// </summary>
+            public static readonly string Portraits = MergePath("portraits");
+
+            /// <summary>
             /// The profile backgrounds
             /// </summary>
             public static readonly string ProfileBackgrounds = MergePath(CommonPath, "profile_backgrounds");
@@ -315,6 +326,11 @@ namespace IronyModManager.Parser.Common
             /// The profile pictures
             /// </summary>
             public static readonly string ProfilePictures = MergePath(CommonPath, "profile_pictures");
+
+            /// <summary>
+            /// The raid categories
+            /// </summary>
+            public static readonly string Raids = MergePath(CommonPath, "raids");
 
             /// <summary>
             /// The resources
@@ -335,6 +351,11 @@ namespace IronyModManager.Parser.Common
             /// The scripted GUI
             /// </summary>
             public static readonly string ScriptedGui = MergePath(CommonPath, "scripted_guis");
+
+            /// <summary>
+            /// The special projects
+            /// </summary>
+            public static readonly string SpecialProjects = MergePath(CommonPath, "special_projects");
 
             /// <summary>
             /// The state categories

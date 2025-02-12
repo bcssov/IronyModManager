@@ -80,6 +80,9 @@
         "DirectoryPath": "common\\equipment_groups",
         "PreferredParser": "DefaultParser"
     }, {
+        "DirectoryPath": "common\\focus_inlay_windows",
+        "PreferredParser": "HOI4WholeTextParser"
+    }, {
         "DirectoryPath": "common\\game_rules",
         "PreferredParser": "DefaultParser"
     }, {
@@ -158,6 +161,12 @@
         "DirectoryPath": "common\\profile_pictures",
         "PreferredParser": "HOI4WholeTextParser"
     }, {
+        "DirectoryPath": "common\\raids",
+        "PreferredParser": "HOI4WholeTextParser"
+    }, {
+        "DirectoryPath": "common\\raids\\categories",
+        "PreferredParser": "HOI4WholeTextParser"
+    }, {
         "DirectoryPath": "common\\resistance_activity",
         "PreferredParser": "DefaultParser"
     }, {
@@ -169,6 +178,9 @@
     }, {
         "DirectoryPath": "common\\ribbons",
         "PreferredParser": "HOI4InnerLayerParser"
+    }, {
+        "DirectoryPath": "common\\scientist_traits",
+        "PreferredParser": "DefaultParser"
     }, {
         "DirectoryPath": "common\\scorers\\country",
         "PreferredParser": "DefaultParser"
@@ -184,6 +196,21 @@
     }, {
         "DirectoryPath": "common\\scripted_triggers",
         "PreferredParser": "DefaultParser"
+    }, {
+        "DirectoryPath": "common\\script_constants",
+        "PreferredParser": "DefaultParser"
+    }, {
+        "DirectoryPath": "common\\special_projects\\projects",
+        "PreferredParser": "HOI4WholeTextParser"
+    }, {
+        "DirectoryPath": "common\\special_projects\\project_tags",
+        "PreferredParser": "HOI4WholeTextParser"
+    }, {
+        "DirectoryPath": "common\\special_projects\\prototype_rewards",
+        "PreferredParser": "HOI4WholeTextParser"
+    }, {
+        "DirectoryPath": "common\\special_projects\\specialization",
+        "PreferredParser": "HOI4WholeTextParser"
     }, {
         "DirectoryPath": "common\\state_category",
         "PreferredParser": "HOI4InnerLayerParser"
@@ -263,6 +290,9 @@
         "DirectoryPath": "dlc\\dlc002_polish_content_pack\\gfx\\models\\units\\pol_dlc",
         "PreferredParser": "GenericGraphicsParser"
     }, {
+        "DirectoryPath": "dlc\\dlc002_polish_content_pack\\interface",
+        "PreferredParser": "GenericGraphicsParser"
+    }, {
         "DirectoryPath": "dlc\\dlc021_anniversary_pack\\portraits",
         "PreferredParser": "GenericKeyParser"
     }, {
@@ -306,10 +336,10 @@
         "PreferredParser": "GenericWholeTextParser"
     }, {
         "DirectoryPath": "gfx\\particles",
-        "PreferredParser": "HOI4WholeTextParser"
+        "PreferredParser": "GenericGraphicsParser"
     }, {
         "DirectoryPath": "gfx\\particles",
-        "PreferredParser": "GenericGraphicsParser"
+        "PreferredParser": "HOI4WholeTextParser"
     }, {
         "DirectoryPath": "gfx\\train_gfx_database",
         "PreferredParser": "HOI4WholeTextParser"
@@ -441,7 +471,7 @@
         "PreferredParser": "GenericGraphicsParser"
     }, {
         "DirectoryPath": "portraits",
-        "PreferredParser": "GenericKeyParser"
+        "PreferredParser": "HOI4WholeTextParser"
     }, {
         "DirectoryPath": "previewer_assets\\assetviewer_interface",
         "PreferredParser": "GenericGraphicsParser"
@@ -456,6 +486,9 @@
         "PreferredParser": "GenericWholeTextParser"
     }, {
         "DirectoryPath": "sound\\gui",
+        "PreferredParser": "GenericWholeTextParser"
+    }, {
+        "DirectoryPath": "sound\\gui\\gtd",
         "PreferredParser": "GenericWholeTextParser"
     }, {
         "DirectoryPath": "tests",
