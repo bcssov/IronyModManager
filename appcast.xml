@@ -4,8 +4,13 @@
 		<title>Irony Mod Manager</title>
 		<language>en</language>
 		<item>
-			<title>1.26.231</title>
+			<title>1.26.235</title>
 			<description>## Current Release Notes
+* Fix broken parsing on some simple types (whops)
+* Fix #535
+* Update CS HOI4 analyze compatibility
+
+## 1.26.231 Release Notes
 * Finally taught the Irony to understand the new 'black magic' inline conditionals—because apparently, mind reading wasn’t working (who knew?)
 
 ## Release Notes 1.26
@@ -19,12 +24,17 @@
 * Added conflict solver option to skip parsing some languages
 * Add conflict solver configuration to customize colors for new diff viewer
 * Add templateable merge mod naming</description>
-			<pubDate>Wed, 12 Feb 2025 08:51:39 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.26.231/linux-x64.zip" sparkle:version="1.26.231.37159" sparkle:shortVersionString="1.26.231" length="91026971" sparkle:os="linux" type="application/zip" sparkle:signature="h9fQy8BDY72utclWE+PLVgwKnZKMyIacbggjVIqckLzKAdWtyvo0WPy2mxTdaCBH2XWhpbySsY/Wb8ptiPv5DA=="/>
+			<pubDate>Wed, 12 Feb 2025 22:59:28 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.26.235/linux-x64.zip" sparkle:version="1.26.235.21982" sparkle:shortVersionString="1.26.235" length="91030230" sparkle:os="linux" type="application/zip" sparkle:signature="tLvgsbPl6OITc1IKaBADSuXuKcs928oW2aAWFZIvxghBwdw3SnHU7HvvGcEC5GnILYm4crqfdXWEbJmNmO3/BA=="/>
 		</item>
 		<item>
-			<title>1.26.231</title>
+			<title>1.26.235</title>
 			<description>## Current Release Notes
+* Fix broken parsing on some simple types (whops)
+* Fix #535
+* Update CS HOI4 analyze compatibility
+
+## 1.26.231 Release Notes
 * Finally taught the Irony to understand the new 'black magic' inline conditionals—because apparently, mind reading wasn’t working (who knew?)
 
 ## Release Notes 1.26
@@ -38,12 +48,17 @@
 * Added conflict solver option to skip parsing some languages
 * Add conflict solver configuration to customize colors for new diff viewer
 * Add templateable merge mod naming</description>
-			<pubDate>Wed, 12 Feb 2025 08:51:43 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.26.231/osx-x64.zip" sparkle:version="1.26.231.37159" sparkle:shortVersionString="1.26.231" length="93895378" sparkle:os="osx" type="application/zip" sparkle:signature="hyZhJF0FdN5RTUqtiR/xSMuFrFQZHWJy91GZBAQDQSNKTgxyKuazKITLrRE4f7lfA9rnZt+O2+jLmhm/JCI/CQ=="/>
+			<pubDate>Wed, 12 Feb 2025 22:59:31 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.26.235/osx-x64.zip" sparkle:version="1.26.235.21982" sparkle:shortVersionString="1.26.235" length="93898693" sparkle:os="osx" type="application/zip" sparkle:signature="uWZCxLHuuQbVNlhtNfcFWBXtohoisCHU7azz76Vpho2s/ekpYt7NC0SO+YtcvOwiCU+r1rHFD7TDbT9Vzs8PAQ=="/>
 		</item>
 		<item>
-			<title>1.26.231</title>
+			<title>1.26.235</title>
 			<description>## Current Release Notes
+* Fix broken parsing on some simple types (whops)
+* Fix #535
+* Update CS HOI4 analyze compatibility
+
+## 1.26.231 Release Notes
 * Finally taught the Irony to understand the new 'black magic' inline conditionals—because apparently, mind reading wasn’t working (who knew?)
 
 ## Release Notes 1.26
@@ -57,12 +72,17 @@
 * Added conflict solver option to skip parsing some languages
 * Add conflict solver configuration to customize colors for new diff viewer
 * Add templateable merge mod naming</description>
-			<pubDate>Wed, 12 Feb 2025 08:51:47 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.26.231/win-x64-setup.zip" sparkle:version="1.26.231.37159" sparkle:shortVersionString="1.26.231" length="72762389" sparkle:os="windows" type="application/zip" sparkle:signature="b1ZV+Z2B3tNnI7eRBRU1OhC4YFMcVe33Et+0MlsYzIbvZx2FPqev1OMrBB5iOYKWh/HVmB8qH5lhpZipSQOaDA=="/>
+			<pubDate>Wed, 12 Feb 2025 22:59:35 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.26.235/win-x64-setup.zip" sparkle:version="1.26.235.21982" sparkle:shortVersionString="1.26.235" length="72749258" sparkle:os="windows" type="application/zip" sparkle:signature="Xo7u1i5JElgAm0EExi2d6fs4Baht1dMn7O5P2/MoWp14+ugduHmlka2czuHNTPkY5eyr+y6hJIQ+leszb7ZGAw=="/>
 		</item>
 		<item>
-			<title>1.26.231</title>
+			<title>1.26.235</title>
 			<description>## Current Release Notes
+* Fix broken parsing on some simple types (whops)
+* Fix #535
+* Update CS HOI4 analyze compatibility
+
+## 1.26.231 Release Notes
 * Finally taught the Irony to understand the new 'black magic' inline conditionals—because apparently, mind reading wasn’t working (who knew?)
 
 ## Release Notes 1.26
@@ -76,8 +96,8 @@
 * Added conflict solver option to skip parsing some languages
 * Add conflict solver configuration to customize colors for new diff viewer
 * Add templateable merge mod naming</description>
-			<pubDate>Wed, 12 Feb 2025 08:51:47 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.26.231/win-x64.zip" sparkle:version="1.26.231.37159" sparkle:shortVersionString="1.26.231" length="106769913" sparkle:os="windows" type="application/zip" sparkle:signature="IRDag7JLWbvbeNa9Qw5D2r4MhtuiJQl2xIFmR75g+IdrSuttrKz2Gxx3msCCrmmGSzd6GWgO76s3HK5sSZYKCg=="/>
+			<pubDate>Wed, 12 Feb 2025 22:59:35 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.26.235/win-x64.zip" sparkle:version="1.26.235.21982" sparkle:shortVersionString="1.26.235" length="106773156" sparkle:os="windows" type="application/zip" sparkle:signature="wRM+NK8KhS2a1yT4tpdMAB5IIXhrhIMz5xY+7wmjHCA0gUZQf/B9B93ySkKeVqaF++aa4U5FUdPDmPnewBGXAw=="/>
 		</item>
 	</channel>
 </rss>
