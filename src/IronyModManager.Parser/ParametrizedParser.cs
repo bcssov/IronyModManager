@@ -4,7 +4,7 @@
 // Created          : 10-03-2023
 //
 // Last Modified By : Mario
-// Last Modified On : 02-11-2025
+// Last Modified On : 02-12-2025
 // ***********************************************************************
 // <copyright file="ParametrizedParser.cs" company="Mario">
 //     Mario
@@ -87,14 +87,14 @@ namespace IronyModManager.Parser
                     var simpleResult = elParams.Values.FirstOrDefault(p => !string.IsNullOrWhiteSpace(p.Value));
                     if (simpleResult != null)
                     {
-                        return simpleResult.Value.Trim(Quotes).StandardizeDirectorySeparator();
+                        return CleanPath(simpleResult.Value);
                     }
 
                     var elObj = elParams.Values.FirstOrDefault(p => p.Values != null);
                     var match = elObj?.Values.FirstOrDefault(p => p.Key.Equals(Script, StringComparison.OrdinalIgnoreCase));
                     if (match != null)
                     {
-                        return (match.Value ?? string.Empty).Trim(Quotes).StandardizeDirectorySeparator();
+                        return CleanPath(match.Value ?? string.Empty);
                     }
                 }
                 else if (elParams.Values.Count() == 1 && elParams.Values.FirstOrDefault()!.Values.Count(p => p.Key.Equals(Common.Constants.Stellaris.InlineScriptId, StringComparison.OrdinalIgnoreCase)) == 1)
@@ -110,7 +110,7 @@ namespace IronyModManager.Parser
                         var match = elObj.Values.FirstOrDefault(p => p.Key.Equals(Script, StringComparison.OrdinalIgnoreCase));
                         if (match != null)
                         {
-                            return (match.Value ?? string.Empty).Trim(Quotes).StandardizeDirectorySeparator();
+                            return CleanPath(match.Value ?? string.Empty);
                         }
                     }
                 }
@@ -233,6 +233,16 @@ namespace IronyModManager.Parser
             }
 
             return string.Empty;
+        }
+
+        /// <summary>
+        /// Cleans the path.
+        /// </summary>
+        /// <param name="path">The path.</param>
+        /// <returns>string.</returns>
+        private string CleanPath(string path)
+        {
+            return string.IsNullOrWhiteSpace(path) ? string.Empty : path.Trim(Quotes).StandardizeDirectorySeparator();
         }
 
         /// <summary>
