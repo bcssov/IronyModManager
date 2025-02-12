@@ -4,10 +4,9 @@
 		<title>Irony Mod Manager</title>
 		<language>en</language>
 		<item>
-			<title>1.26.206</title>
+			<title>1.26.231</title>
 			<description>## Current Release Notes
-* Add command line option to force select a specified mod collection
-* Evaluating multiple FIOS results could end up in wrong FIOS being assumed being loaded
+* Finally taught the Irony to understand the new 'black magic' inline conditionals—because apparently, mind reading wasn’t working (who knew?)
 
 ## Release Notes 1.26
 * Update dependencies
@@ -20,14 +19,13 @@
 * Added conflict solver option to skip parsing some languages
 * Add conflict solver configuration to customize colors for new diff viewer
 * Add templateable merge mod naming</description>
-			<pubDate>Mon, 20 Jan 2025 04:13:08 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.26.206/linux-x64.zip" sparkle:version="1.26.206.1120" sparkle:shortVersionString="1.26.206" length="91017796" sparkle:os="linux" type="application/zip" sparkle:signature="4kYP6lcbcHaViHoJTWMiMRs/CzGtmCeLis8YjbY9SSMDHO1T9WumoAo4Oves3pzaPDa7h0q/oWeRc5ly45UaBA=="/>
+			<pubDate>Wed, 12 Feb 2025 08:51:39 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.26.231/linux-x64.zip" sparkle:version="1.26.231.37159" sparkle:shortVersionString="1.26.231" length="91026971" sparkle:os="linux" type="application/zip" sparkle:signature="h9fQy8BDY72utclWE+PLVgwKnZKMyIacbggjVIqckLzKAdWtyvo0WPy2mxTdaCBH2XWhpbySsY/Wb8ptiPv5DA=="/>
 		</item>
 		<item>
-			<title>1.26.206</title>
+			<title>1.26.231</title>
 			<description>## Current Release Notes
-* Add command line option to force select a specified mod collection
-* Evaluating multiple FIOS results could end up in wrong FIOS being assumed being loaded
+* Finally taught the Irony to understand the new 'black magic' inline conditionals—because apparently, mind reading wasn’t working (who knew?)
 
 ## Release Notes 1.26
 * Update dependencies
@@ -40,14 +38,13 @@
 * Added conflict solver option to skip parsing some languages
 * Add conflict solver configuration to customize colors for new diff viewer
 * Add templateable merge mod naming</description>
-			<pubDate>Mon, 20 Jan 2025 04:13:12 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.26.206/osx-x64.zip" sparkle:version="1.26.206.1120" sparkle:shortVersionString="1.26.206" length="93885683" sparkle:os="osx" type="application/zip" sparkle:signature="/K8zwuA0MUV6NCKOoCyAvu0LvJ7W96J4UrcStj32D0nLBoZsyZd7KHqol6Z4iNrZS4Wil5NJX0RO4AAc0R6qAw=="/>
+			<pubDate>Wed, 12 Feb 2025 08:51:43 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.26.231/osx-x64.zip" sparkle:version="1.26.231.37159" sparkle:shortVersionString="1.26.231" length="93895378" sparkle:os="osx" type="application/zip" sparkle:signature="hyZhJF0FdN5RTUqtiR/xSMuFrFQZHWJy91GZBAQDQSNKTgxyKuazKITLrRE4f7lfA9rnZt+O2+jLmhm/JCI/CQ=="/>
 		</item>
 		<item>
-			<title>1.26.206</title>
+			<title>1.26.231</title>
 			<description>## Current Release Notes
-* Add command line option to force select a specified mod collection
-* Evaluating multiple FIOS results could end up in wrong FIOS being assumed being loaded
+* Finally taught the Irony to understand the new 'black magic' inline conditionals—because apparently, mind reading wasn’t working (who knew?)
 
 ## Release Notes 1.26
 * Update dependencies
@@ -60,14 +57,13 @@
 * Added conflict solver option to skip parsing some languages
 * Add conflict solver configuration to customize colors for new diff viewer
 * Add templateable merge mod naming</description>
-			<pubDate>Mon, 20 Jan 2025 04:13:16 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.26.206/win-x64-setup.zip" sparkle:version="1.26.206.1120" sparkle:shortVersionString="1.26.206" length="72755277" sparkle:os="windows" type="application/zip" sparkle:signature="2d9cqivr9J7rJO0xyfFcC2qFm/PzsrRAhMaRhoWatfhIgmPMveNElRSimKez3E5+5pi2CGvb3l51hoBxZ1IdBg=="/>
+			<pubDate>Wed, 12 Feb 2025 08:51:47 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.26.231/win-x64-setup.zip" sparkle:version="1.26.231.37159" sparkle:shortVersionString="1.26.231" length="72762389" sparkle:os="windows" type="application/zip" sparkle:signature="b1ZV+Z2B3tNnI7eRBRU1OhC4YFMcVe33Et+0MlsYzIbvZx2FPqev1OMrBB5iOYKWh/HVmB8qH5lhpZipSQOaDA=="/>
 		</item>
 		<item>
-			<title>1.26.206</title>
+			<title>1.26.231</title>
 			<description>## Current Release Notes
-* Add command line option to force select a specified mod collection
-* Evaluating multiple FIOS results could end up in wrong FIOS being assumed being loaded
+* Finally taught the Irony to understand the new 'black magic' inline conditionals—because apparently, mind reading wasn’t working (who knew?)
 
 ## Release Notes 1.26
 * Update dependencies
@@ -80,8 +76,8 @@
 * Added conflict solver option to skip parsing some languages
 * Add conflict solver configuration to customize colors for new diff viewer
 * Add templateable merge mod naming</description>
-			<pubDate>Mon, 20 Jan 2025 04:13:16 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.26.206/win-x64.zip" sparkle:version="1.26.206.1120" sparkle:shortVersionString="1.26.206" length="106782396" sparkle:os="windows" type="application/zip" sparkle:signature="e6CykeZXIGXsqDLyrJGBkjX5Rxd2PSi1k4wyF4lr/fMRpqQpNl6j/4adtE7nhX1o2G0WRqgDOipUIPUtUMHKAg=="/>
+			<pubDate>Wed, 12 Feb 2025 08:51:47 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.26.231/win-x64.zip" sparkle:version="1.26.231.37159" sparkle:shortVersionString="1.26.231" length="106769913" sparkle:os="windows" type="application/zip" sparkle:signature="IRDag7JLWbvbeNa9Qw5D2r4MhtuiJQl2xIFmR75g+IdrSuttrKz2Gxx3msCCrmmGSzd6GWgO76s3HK5sSZYKCg=="/>
 		</item>
 	</channel>
 </rss>
