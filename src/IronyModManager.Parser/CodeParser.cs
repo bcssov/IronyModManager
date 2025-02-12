@@ -4,7 +4,7 @@
 // Created          : 02-22-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-06-2025
+// Last Modified On : 02-12-2025
 // ***********************************************************************
 // <copyright file="CodeParser.cs" company="Mario">
 //     Mario
@@ -35,6 +35,11 @@ namespace IronyModManager.Parser
     public class CodeParser : ICodeParser
     {
         #region Fields
+
+        /// <summary>
+        /// The maximum lines
+        /// </summary>
+        protected const int MaxLines = 100000;
 
         /// <summary>
         /// The trace back tolerance
@@ -284,6 +289,23 @@ namespace IronyModManager.Parser
         }
 
         /// <summary>
+        /// Verifies the length of the allowed.
+        /// </summary>
+        /// <param name="lines">The lines.</param>
+        /// <returns>IScriptError.</returns>
+        public IScriptError VerifyAllowedLength(IEnumerable<string> lines)
+        {
+            if (lines.Count() > MaxLines)
+            {
+                var error = DIResolver.Get<IScriptError>();
+                error.Message = "File exceeded allowed number of lines.";
+                return error;
+            }
+
+            return null;
+        }
+
+        /// <summary>
         /// Formats the code terminators.
         /// </summary>
         /// <param name="line">The line.</param>
@@ -389,7 +411,7 @@ namespace IronyModManager.Parser
                 elOperator = GetElementCharacter(code, index);
             }
 
-            if (!Common.Constants.Scripts.Operators.Any(p => p == elOperator))
+            if (Common.Constants.Scripts.Operators.All(p => p != elOperator))
             {
                 if (Common.Constants.Scripts.InlineOperators.Any(p => p.Equals(elKey.Value, StringComparison.OrdinalIgnoreCase)))
                 {
@@ -737,11 +759,20 @@ namespace IronyModManager.Parser
         /// <param name="file">The file.</param>
         /// <param name="lines">The lines.</param>
         /// <returns>IEnumerable&lt;IScriptElement&gt;.</returns>
+        /// <exception cref="System.ArgumentException"></exception>
         protected IEnumerable<IScriptElement> ParseElements(string file, IEnumerable<string> lines)
         {
+            var error = VerifyAllowedLength(lines);
+            if (error != null)
+            {
+                throw new ArgumentException(error.Message);
+            }
+
             var result = new List<IScriptElement>();
             var validCodeLines = CleanCode(file, lines);
             var code = string.Join(Environment.NewLine, validCodeLines).ToList();
+
+            // ReSharper disable once LoopCanBeConvertedToQuery
             for (var i = 0; i < code.Count; i++)
             {
                 var element = GetElement(code, ref i);

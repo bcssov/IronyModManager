@@ -159,6 +159,12 @@ namespace IronyModManager.Parser.Common.Parsers
         /// <returns>IEnumerable&lt;IDefinition&gt;.</returns>
         protected virtual IEnumerable<IDefinition> EvalForErrorsOnly(ParserArgs args)
         {
+            var maxLengthValidation = CodeParser.VerifyAllowedLength(args.Lines);
+            if (maxLengthValidation != null)
+            {
+                return [TranslateScriptError(maxLengthValidation, args)];
+            }
+
             if (args.ValidationType == ValidationType.SkipAll)
             {
                 return null;

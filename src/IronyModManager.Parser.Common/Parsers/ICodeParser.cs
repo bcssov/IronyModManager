@@ -4,15 +4,17 @@
 // Created          : 02-22-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 01-29-2022
+// Last Modified On : 02-12-2025
 // ***********************************************************************
 // <copyright file="ICodeParser.cs" company="Mario">
 //     Mario
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
+
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using IronyModManager.Parser.Common.Parsers.Models;
 
 namespace IronyModManager.Parser.Common.Parsers
@@ -61,7 +63,6 @@ namespace IronyModManager.Parser.Common.Parsers
         /// <param name="file">The file.</param>
         /// <param name="performSimpleCheck">if set to <c>true</c> [perform simple check].</param>
         /// <returns>IParseResponse.</returns>
-
         IParseResponse ParseScript(IEnumerable<string> lines, string file, bool performSimpleCheck = false);
 
         /// <summary>
@@ -80,6 +81,13 @@ namespace IronyModManager.Parser.Common.Parsers
         /// <param name="performSimpleCheck">if set to <c>true</c> [perform simple check].</param>
         /// <returns>IScriptError.</returns>
         IScriptError PerformValidityCheck(IEnumerable<string> lines, string file, bool performSimpleCheck = false);
+
+        /// <summary>
+        /// Verifies the length of the allowed.
+        /// </summary>
+        /// <param name="lines">The lines.</param>
+        /// <returns>IScriptError.</returns>
+        IScriptError VerifyAllowedLength(IEnumerable<string> lines);
 
         #endregion Methods
     }
