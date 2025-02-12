@@ -4,13 +4,14 @@
 // Created          : 01-29-2022
 //
 // Last Modified By : Mario
-// Last Modified On : 01-30-2022
+// Last Modified On : 02-12-2025
 // ***********************************************************************
 // <copyright file="KeyParser.cs" company="Mario">
 //     Mario
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -36,7 +37,7 @@ namespace IronyModManager.Parser.Games.HOI4
         /// <summary>
         /// The parsing bookmark
         /// </summary>
-        private bool parsingBookmark = false;
+        private bool parsingBookmark;
 
         #endregion Fields
 
@@ -107,6 +108,7 @@ namespace IronyModManager.Parser.Games.HOI4
             {
                 return value.Value;
             }
+
             return base.EvalElementForId(value);
         }
 
@@ -114,11 +116,11 @@ namespace IronyModManager.Parser.Games.HOI4
         /// Evals the starts with.
         /// </summary>
         /// <param name="args">The arguments.</param>
-        /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
+        /// <returns><c>true</c> if it can evaluate, <c>false</c> otherwise.</returns>
         protected virtual bool EvalStartsWith(CanParseArgs args)
         {
             return args.File.StartsWith(Common.Constants.HOI4.Bookmark, StringComparison.OrdinalIgnoreCase)
-                || args.File.StartsWith(Common.Constants.HOI4.DifficultySettings, StringComparison.OrdinalIgnoreCase);
+                   || args.File.StartsWith(Common.Constants.HOI4.DifficultySettings, StringComparison.OrdinalIgnoreCase);
         }
 
         #endregion Methods

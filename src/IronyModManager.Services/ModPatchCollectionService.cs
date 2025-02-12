@@ -4,7 +4,7 @@
 // Created          : 05-26-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-11-2025
+// Last Modified On : 02-12-2025
 // ***********************************************************************
 // <copyright file="ModPatchCollectionService.cs" company="Mario">
 //     Mario
@@ -375,7 +375,7 @@ namespace IronyModManager.Services
         /// <param name="patchStateMode">The patch state mode.</param>
         /// <param name="allowedLanguages">The allowed languages.</param>
         /// <returns>IConflictResult.</returns>
-        /// <exception cref="Exception">$"Max depth reacted while attempting to parse file: {item.File} from the game.</exception>
+        /// <exception cref="Exception">$"Max depth reacted while attempting to parse file: {item.File} from the mod {item.ModName}.</exception>
         /// <exception cref="ArgumentException">$"Inline code-block from file: {item.File} could not be parsed from mod: {item.ModName}., e</exception>
         public virtual async Task<IConflictResult> FindConflictsAsync(IIndexedDefinitions indexedDefinitions, IList<string> modOrder, PatchStateMode patchStateMode, IReadOnlyCollection<IGameLanguage> allowedLanguages)
         {
@@ -457,7 +457,7 @@ namespace IronyModManager.Services
             GCRunner.RunGC(GCCollectionMode.Optimized, false);
 
             // Handling inlines here now as game now uses these a lot -- Thanks pdx again
-            allDefs = (await indexedDefinitions.GetAllAsync()).ToList();
+            allDefs = [.. await indexedDefinitions.GetAllAsync()];
 
             // Stellaris only (so far)
             total += provider!.SupportsInlineScripts ? allDefs.Count : 0;
@@ -559,7 +559,7 @@ namespace IronyModManager.Services
                                             globalVars.AddRange(ids);
                                         }
 
-                                        globalVars = globalVars.GroupBy(p => p.TypeAndId).Select(p => p.FirstOrDefault()).ToList();
+                                        globalVars = [.. globalVars.GroupBy(p => p.TypeAndId).Select(p => p.FirstOrDefault())];
 
                                         if (inline == null)
                                         {
@@ -978,7 +978,7 @@ namespace IronyModManager.Services
                             overwrittenFileNames.Add(file);
                         }
 
-                        newDefinition.OverwrittenFileNames = overwrittenFileNames.Distinct().ToList();
+                        newDefinition.OverwrittenFileNames = [.. overwrittenFileNames.Distinct()];
                         newDefinition.DiskFile = provider!.GetDiskFileName(newDefinition);
                         var preserveOverwrittenFileName = oldFileName == newDefinition.File;
                         newDefinition.File = provider.GetFileName(newDefinition);
@@ -1197,7 +1197,7 @@ namespace IronyModManager.Services
             var gameFolders = game.GameFolders.ToList();
             if (mode is PatchStateMode.DefaultWithoutLocalization or PatchStateMode.AdvancedWithoutLocalization or PatchStateMode.ReadOnlyWithoutLocalization)
             {
-                gameFolders = gameFolders.Where(p => !p.StartsWith(Shared.Constants.LocalizationDirectory, StringComparison.OrdinalIgnoreCase)).ToList();
+                gameFolders = [.. gameFolders.Where(p => !p.StartsWith(Shared.Constants.LocalizationDirectory, StringComparison.OrdinalIgnoreCase))];
 
                 // Mode override
                 allowedGameLanguages = null;
@@ -2908,7 +2908,7 @@ namespace IronyModManager.Services
             if (definitions != null)
             {
                 var defs = await definitions.GetAllAsync();
-                return defs.ToList();
+                return [.. defs];
             }
 
             return [];
@@ -3479,12 +3479,12 @@ namespace IronyModManager.Services
                     {
                         merged.Id = SingleFileMerged;
                         merged.File = overwrittenFileNames.FirstOrDefault();
-                        merged.GeneratedFileNames = overwrittenFileNames.Distinct().ToList();
+                        merged.GeneratedFileNames = [.. overwrittenFileNames.Distinct()];
                         merged.File = infoProvider!.GetFileName(merged);
                         merged.DiskFile = infoProvider.GetDiskFileName(merged);
                         merged.ValueType = ValueType.OverwrittenObjectSingleFile;
                         merged.ModName = patchName;
-                        merged.OverwrittenFileNames = overwrittenFileNames.Distinct().ToList();
+                        merged.OverwrittenFileNames = [.. overwrittenFileNames.Distinct()];
                         return merged;
                     }
                 }
