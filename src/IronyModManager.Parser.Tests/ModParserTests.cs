@@ -4,13 +4,14 @@
 // Created          : 02-22-2020
 //
 // Last Modified By : Nick Butcher
-// Last Modified On : 12-12-2021
+// Last Modified On : 02-19-2025
 // ***********************************************************************
 // <copyright file="ModParserTests.cs" company="Mario">
 //     Mario
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -196,7 +197,7 @@ namespace IronyModManager.Parser.Tests
         {
             DISetup.SetupContainer();
 
-            var sb = new System.Text.StringBuilder();
+            var sb = new StringBuilder();
             sb.AppendLine(@"{");
             sb.AppendLine(@"  ""name"" : ""Test"",");
             sb.AppendLine(@"  ""id"" : ""test"",");
@@ -233,5 +234,59 @@ namespace IronyModManager.Parser.Tests
             result.ReplacePath.Count().Should().Be(1);
             result.ReplacePath.FirstOrDefault().Should().Be("gfx/FX");
         }
+
+        /// <summary>
+        /// Defines the test method Should_parse_json_metadata_mod_file_v2.
+        /// </summary>
+        [Fact]
+        public void Should_parse_json_metadata_mod_file_v2()
+        {
+            DISetup.SetupContainer();
+
+            var sb = new StringBuilder();
+            sb.AppendLine(@"{");
+            sb.AppendLine(@"  ""name"" : ""Test"",");
+            sb.AppendLine(@"  ""id"" : ""test"",");
+            sb.AppendLine(@"  ""version"" : """",");
+            sb.AppendLine(@"  ""supported_game_version"" : ""1.0.3"",");
+            sb.AppendLine(@"  ""short_description"" : """",");
+            sb.AppendLine(@"  ""tags"" : [""test"", ""test2"",],");
+            sb.AppendLine(@"    ""relationships"": [{");
+            sb.AppendLine(@"            ""rel_type"": ""dependency"",");
+            sb.AppendLine(@"            ""id"": ""com.github.Victoria-3-Modding-Co-op.Community-Mod-Framework"",");
+            sb.AppendLine(@"            ""display_name"": ""Community Mod Framework"",");
+            sb.AppendLine(@"            ""resource_type"": ""mod"",");
+            sb.AppendLine(@"            ""version"": ""1.*""");
+            sb.AppendLine(@"        }");
+            sb.AppendLine(@"    ],");
+            sb.AppendLine(@"  ""game_custom_data"" : {    ");
+            sb.AppendLine(@"  ""user_dir"": [");
+            sb.AppendLine(@"	1");
+            sb.AppendLine(@"   ],   ");
+            sb.AppendLine(@"  ""replace_paths"" : [");
+            sb.AppendLine(@"    ""gfx/FX""");
+            sb.AppendLine(@"  ]");
+            sb.AppendLine(@"  }");
+            sb.AppendLine(@"}");
+
+
+            var parser = new ModParser(new Logger(), new CodeParser(new Logger()));
+            var result = parser.Parse(sb.ToString().Split(Environment.NewLine, StringSplitOptions.RemoveEmptyEntries), Common.DescriptorModType.JsonMetadata);
+            result.Dependencies.Count().Should().Be(1);
+            result.Dependencies.First().Should().Be("Community Mod Framework");
+            result.FileName.Should().BeNullOrEmpty();
+            result.Name.Should().Be("Test");
+            result.Picture.Should().BeNullOrEmpty();
+            result.RemoteId.Should().BeNull();
+            result.Tags.Count().Should().Be(2);
+            result.Tags.First().Should().Be("test");
+            result.Tags.Last().Should().Be("test2");
+            result.Version.Should().Be("1.0.3");
+            result.UserDir.Count().Should().Be(1);
+            result.UserDir.FirstOrDefault().Should().Be("1");
+            result.ReplacePath.Count().Should().Be(1);
+            result.ReplacePath.FirstOrDefault().Should().Be("gfx/FX");
+        }
     }
 }
+

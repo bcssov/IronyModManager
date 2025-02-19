@@ -4,7 +4,7 @@
 // Created          : 02-22-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-06-2025
+// Last Modified On : 02-19-2025
 // ***********************************************************************
 // <copyright file="ModParser.cs" company="Mario">
 //     Mario
@@ -88,7 +88,10 @@ namespace IronyModManager.Parser.Mod
         /// <returns>JsonSerializerSettings.</returns>
         private JsonSerializerSettings GetJsonSerializerSettings()
         {
-            jsonSerializerSettings ??= new JsonSerializerSettings { Error = (_, error) => error.ErrorContext.Handled = true, NullValueHandling = NullValueHandling.Ignore };
+            jsonSerializerSettings ??= new JsonSerializerSettings
+            {
+                Error = (_, error) => error.ErrorContext.Handled = true, NullValueHandling = NullValueHandling.Ignore, Converters = new List<JsonConverter> { new JsonMetaDataConverter() }
+            };
             return jsonSerializerSettings;
         }
 
@@ -129,33 +132,7 @@ namespace IronyModManager.Parser.Mod
             try
             {
                 var json = string.Join(Environment.NewLine, lines);
-                JsonMetadataBase result = null;
-                var ex = new List<Exception>();
-                try
-                {
-                    result = JsonConvert.DeserializeObject<JsonMetadata>(json, GetJsonSerializerSettings());
-                }
-                catch (Exception e)
-                {
-                    ex.Add(e);
-                }
-
-                if (ex.Count > 0)
-                {
-                    try
-                    {
-                        result = JsonConvert.DeserializeObject<JsonMetadataV2>(json, GetJsonSerializerSettings());
-                    }
-                    catch (Exception e)
-                    {
-                        ex.Add(e);
-                    }
-                }
-
-                if (ex.Count >= 2)
-                {
-                    throw new AggregateException(ex);
-                }
+                var result = JsonConvert.DeserializeObject<JsonMetadataBase>(json, GetJsonSerializerSettings());
 
                 if (result!.GameCustomData != null)
                 {
@@ -325,6 +302,73 @@ namespace IronyModManager.Parser.Mod
             public string Version { get; set; }
 
             #endregion Properties
+        }
+
+        /// <summary>
+        /// Class JsonMetaDataConverter.
+        /// Implements the <see cref="Newtonsoft.Json.JsonConverter{IronyModManager.Parser.Mod.ModParser.JsonMetadataBase}" />
+        /// </summary>
+        /// <seealso cref="Newtonsoft.Json.JsonConverter{IronyModManager.Parser.Mod.ModParser.JsonMetadataBase}" />
+        private class JsonMetaDataConverter : JsonConverter<JsonMetadataBase>
+        {
+            #region Methods
+
+            /// <summary>
+            /// Reads the JSON representation of the object.
+            /// </summary>
+            /// <param name="reader">The <see cref="T:Newtonsoft.Json.JsonReader" /> to read from.</param>
+            /// <param name="objectType">Type of the object.</param>
+            /// <param name="existingValue">The existing value of object being read. If there is no existing value then <c>null</c> will be used.</param>
+            /// <param name="hasExistingValue">The existing value has a value.</param>
+            /// <param name="serializer">The calling serializer.</param>
+            /// <returns>The object value.</returns>
+            public override JsonMetadataBase ReadJson(JsonReader reader, Type objectType, JsonMetadataBase existingValue, bool hasExistingValue, JsonSerializer serializer)
+            {
+                var obj = JObject.Load(reader);
+                var relationshipToken = obj["relationships"];
+                JsonMetadataBase result = null;
+                if (relationshipToken != null)
+                {
+                    result = relationshipToken.Type switch
+                    {
+                        JTokenType.Array => CheckArrayType(relationshipToken as JArray),
+                        _ => new JsonMetadataV2()
+                    };
+                }
+
+                result ??= new JsonMetadataV2();
+                serializer.Populate(obj.CreateReader(), result);
+                return result;
+            }
+
+            /// <summary>
+            /// Writes the JSON representation of the object.
+            /// </summary>
+            /// <param name="writer">The <see cref="T:Newtonsoft.Json.JsonWriter" /> to write to.</param>
+            /// <param name="value">The value.</param>
+            /// <param name="serializer">The calling serializer.</param>
+            /// <exception cref="System.NotSupportedException"></exception>
+            public override void WriteJson(JsonWriter writer, JsonMetadataBase value, JsonSerializer serializer)
+            {
+                throw new NotSupportedException();
+            }
+
+            /// <summary>
+            /// Checks the type of the array.
+            /// </summary>
+            /// <param name="token">The token.</param>
+            /// <returns>JsonMetadataBase.</returns>
+            private JsonMetadataBase CheckArrayType(JToken token)
+            {
+                if (token.All(p => p.Type == JTokenType.String))
+                {
+                    return new JsonMetadata();
+                }
+
+                return new JsonMetadataV2();
+            }
+
+            #endregion Methods
         }
 
         /// <summary>
