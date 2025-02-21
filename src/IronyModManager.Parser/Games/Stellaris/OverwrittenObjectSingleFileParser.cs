@@ -4,7 +4,7 @@
 // Created          : 10-25-2021
 //
 // Last Modified By : Mario
-// Last Modified On : 10-21-2024
+// Last Modified On : 02-21-2025
 // ***********************************************************************
 // <copyright file="OverwrittenObjectSingleFileParser.cs" company="Mario">
 //     Mario
@@ -60,6 +60,8 @@ namespace IronyModManager.Parser.Games.Stellaris
         /// </summary>
         /// <param name="codeParser">The code parser.</param>
         /// <param name="logger">The logger.</param>
+        /// <seealso cref="T:IronyModManager.Parser.Common.Parsers.IDefaultParser" />
+        /// <remarks>Initializes a new instance of the <see cref="T:IronyModManager.Parser.Common.Parsers.BaseParser" /> class.</remarks>
         public OverwrittenObjectSingleFileParser(ICodeParser codeParser, ILogger logger) : base(codeParser, logger)
         {
         }
@@ -127,7 +129,8 @@ namespace IronyModManager.Parser.Games.Stellaris
                             {
                                 foreach (var block in items)
                                 {
-                                    if (mergeSegments.Values.FirstOrDefault()!.Values.All(p => (p.Key ?? string.Empty).Equals(block, StringComparison.OrdinalIgnoreCase)))
+                                    if (mergeSegments.Values.FirstOrDefault() != null && mergeSegments.Values.FirstOrDefault()!.Values != null &&
+                                        mergeSegments.Values.FirstOrDefault()!.Values.All(p => (p.Key ?? string.Empty).Equals(block, StringComparison.OrdinalIgnoreCase)))
                                     {
                                         item.MergeType = MergeType.FlatMerge;
                                     }
