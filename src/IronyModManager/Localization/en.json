@@ -533,6 +533,9 @@
       "CollectionMergeTemplate": "Collection Template"
     }
   },
+  "DLC": {
+    "Toggle": "Toggle DLC"
+  },
   "Notifications": {
     "CollectionCreated": {
       "Title": "Collection Created",

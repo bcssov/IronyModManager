@@ -533,6 +533,9 @@
       "CollectionMergeTemplate": "Шаблон коллекции"
     }
   },
+  "DLC": {
+    "Toggle": "Переключить DLC"
+  },
   "Notifications": {
     "CollectionCreated": {
       "Title": "Коллекция создана",

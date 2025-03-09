@@ -532,6 +532,9 @@
       "CollectionMergeTemplate": "合集模板"
     }
   },
+  "DLC": {
+    "Toggle": "切换 DLC"
+  },
   "Notifications": {
     "CollectionCreated": {
       "Title": "已创建合集",

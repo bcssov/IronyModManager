@@ -533,6 +533,9 @@
       "CollectionMergeTemplate": "Modèle de collection"
     }
   },
+  "DLC": {
+    "Toggle": "Basculer le DLC"
+  },
   "Notifications": {
     "CollectionCreated": {
       "Title": "Liste créée",
