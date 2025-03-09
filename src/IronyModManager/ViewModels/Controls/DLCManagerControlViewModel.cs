@@ -4,13 +4,14 @@
 // Created          : 02-15-2021
 //
 // Last Modified By : Mario
-// Last Modified On : 02-22-2021
+// Last Modified On : 03-09-2025
 // ***********************************************************************
 // <copyright file="DLCManagerControlViewModel.cs" company="Mario">
 //     Mario
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -95,6 +96,19 @@ namespace IronyModManager.ViewModels.Controls
         /// <value><c>true</c> if this instance is open; otherwise, <c>false</c>.</value>
         public virtual bool IsOpen { get; protected set; }
 
+        /// <summary>
+        /// Gets or sets the toggle DLC.
+        /// </summary>
+        /// <value>The toggle DLC.</value>
+        [StaticLocalization(LocalizationResources.DLC.Toggle)]
+        public virtual string ToggleDLC { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets the toggle DLC command.
+        /// </summary>
+        /// <value>The toggle DLC command.</value>
+        public virtual ReactiveCommand<Unit, Unit> ToggleDLCCommand { get; protected set; }
+
         #endregion Properties
 
         #region Methods
@@ -119,19 +133,13 @@ namespace IronyModManager.ViewModels.Controls
         /// refresh DLC as an asynchronous operation.
         /// </summary>
         /// <param name="game">The game.</param>
+        /// <returns>A Task representing the asynchronous operation.</returns>
         public virtual async Task RefreshDLCAsync(IGame game)
         {
             selectedGame = game;
             var dlc = await dlcService.GetAsync(selectedGame);
             await dlcService.SyncStateAsync(selectedGame, dlc);
-            if (dlc != null)
-            {
-                DLC = dlc.OrderBy(p => p.Name).ToList();
-            }
-            else
-            {
-                DLC = dlc;
-            }
+            DLC = dlc?.OrderBy(p => p.Name).ToList();
         }
 
         /// <summary>
@@ -146,6 +154,20 @@ namespace IronyModManager.ViewModels.Controls
                 ForceClose();
             }).DisposeWith(disposables);
 
+            ToggleDLCCommand = ReactiveCommand.CreateFromTask(async () =>
+            {
+                if (DLC != null && DLC.Count() != 0)
+                {
+                    var isEnabled = !DLC.All(p => p.IsEnabled);
+                    foreach (var dlc in DLC)
+                    {
+                        dlc.IsEnabled = isEnabled;
+                    }
+
+                    await SaveDLCAsync(gameService.GetSelected(), selectedGame);
+                }
+            }).DisposeWith(disposables);
+
             base.OnActivated(disposables);
         }
 
@@ -154,6 +176,7 @@ namespace IronyModManager.ViewModels.Controls
         /// </summary>
         /// <param name="game">The game.</param>
         /// <param name="selectedGame">The selected game.</param>
+        /// <returns>A Task representing the asynchronous operation.</returns>
         protected virtual async Task SaveDLCAsync(IGame game, IGame selectedGame)
         {
             if (game != null && selectedGame != null && game.Type.Equals(selectedGame.Type))

@@ -697,6 +697,11 @@ namespace IronyModManager.Shared
                 public const string CollectionMergeTemplate = Prefix + "CollectionMergeTemplate";
             }
         }
+        public static class DLC
+        {
+            public const string Prefix = "DLC.";
+            public const string Toggle = Prefix + "Toggle";
+        }
         public static class Notifications
         {
             public const string Prefix = "Notifications.";

@@ -533,6 +533,9 @@
       "CollectionMergeTemplate": "Predložak zbirke"
     }
   },
+  "DLC": {
+    "Toggle": "Uključi/isključi DLC"
+  },
   "Notifications": {
     "CollectionCreated": {
       "Title": "Kolekcija kreirana",

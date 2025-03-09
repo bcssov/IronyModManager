@@ -533,6 +533,9 @@
       "CollectionMergeTemplate": "Plantilla de colección"
     }
   },
+  "DLC": {
+    "Toggle": "Alternar DLC"
+  },
   "Notifications": {
     "CollectionCreated": {
       "Title": "Colección Creada",

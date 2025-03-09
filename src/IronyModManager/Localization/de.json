@@ -533,6 +533,9 @@
       "CollectionMergeTemplate": "Kollektion Vorlage"
     }
   },
+  "DLC": {
+    "Toggle": "DLC umschalten"
+  },
   "Notifications": {
     "CollectionCreated": {
       "Title": "Kollektion erstellt",

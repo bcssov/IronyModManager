@@ -8,10 +8,12 @@
         <Popup PlacementMode="AnchorAndGravity" PlacementAnchor="TopLeft" PlacementGravity="None" PlacementConstraintAdjustment="None" IsOpen="{Binding IsOpen}"
                Topmost="False" ObeyScreenEdges="True" StaysOpen="True" x:Name="popup">
             <Border BorderThickness="1,1,1,1" BorderBrush="{DynamicResource IronyButtonBorderBrush}">
-                <Grid RowDefinitions="1*,1*" Background="{DynamicResource IronyBackgroundPopupBrush}">
+                <Grid RowDefinitions="1*,1*,1*" Background="{DynamicResource IronyBackgroundPopupBrush}">
+                    <Button Content="{Binding ToggleDLC}" Command="{Binding ToggleDLCCommand}" Grid.Row="0" Grid.Column="0" MaxHeight="30"
+                            HorizontalAlignment="Stretch" VerticalAlignment="Stretch" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"></Button>
                     <ListBox Items="{Binding DLC}"
-                       ScrollViewer.HorizontalScrollBarVisibility="Disabled"
-                       SelectionMode="Single" Width="600" Height="400" Grid.Row="0" Grid.Column="0">
+                             ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                             SelectionMode="Single" Width="600" Height="400" Grid.Row="1" Grid.Column="0">
                         <ListBox.ItemTemplate>
                             <DataTemplate>
                                 <Grid Background="Transparent">
@@ -25,7 +27,7 @@
                             </DataTemplate>
                         </ListBox.ItemTemplate>
                     </ListBox>
-                    <Button Content="{Binding Close}" Command="{Binding CloseCommand}" Grid.Row="1" Grid.Column="0" MaxHeight="30"
+                    <Button Content="{Binding Close}" Command="{Binding CloseCommand}" Grid.Row="2" Grid.Column="0" MaxHeight="30"
                             HorizontalAlignment="Stretch" VerticalAlignment="Stretch" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"></Button>
                 </Grid>
             </Border>
