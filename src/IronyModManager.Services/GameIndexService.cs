@@ -4,7 +4,7 @@
 // Created          : 05-27-2021
 //
 // Last Modified By : Mario
-// Last Modified On : 02-11-2025
+// Last Modified On : 03-09-2025
 // ***********************************************************************
 // <copyright file="GameIndexService.cs" company="Mario">
 //     Mario
@@ -80,6 +80,11 @@ namespace IronyModManager.Services
         private static readonly AsyncLock asyncServiceLock = new();
 
         /// <summary>
+        /// The read directories lock
+        /// </summary>
+        private static readonly AsyncLock readDirectoriesLock = new();
+
+        /// <summary>
         /// The game indexer
         /// </summary>
         private readonly IGameIndexer gameIndexer = gameIndexer;
@@ -135,7 +140,7 @@ namespace IronyModManager.Services
                     if (provider!.SupportsInlineScripts)
                     {
                         var gameInlineScriptFiles = files.Where(p => p.StartsWith(provider.InlineScriptsPath, StringComparison.OrdinalIgnoreCase) || p.StartsWith(provider.GlobalVariablesPath, StringComparison.OrdinalIgnoreCase));
-                        gameInlineAndVarFolders = gameInlineScriptFiles.Select(Path.GetDirectoryName).GroupBy(p => p).Select(p => p.FirstOrDefault()).ToList();
+                        gameInlineAndVarFolders = [.. gameInlineScriptFiles.Select(Path.GetDirectoryName).GroupBy(p => p).Select(p => p.FirstOrDefault())];
                     }
 
                     var indexedFolders = (await indexedDefinitions.GetAllDirectoryKeysAsync()).Select(p => p.ToLowerInvariant());
@@ -161,7 +166,7 @@ namespace IronyModManager.Services
                         }
                     }
 
-                    folders = folders.Distinct().ToList();
+                    folders = [.. folders.Distinct()];
 
                     if (folders.Count != 0)
                     {
@@ -213,7 +218,7 @@ namespace IronyModManager.Services
                             });
                             await Task.WhenAll(inlineAndVarTasks);
 
-                            folders = folders.Where(p => !p.StartsWith(provider.InlineScriptsPath, StringComparison.OrdinalIgnoreCase) && !p.StartsWith(provider.GlobalVariablesPath, StringComparison.OrdinalIgnoreCase)).ToList();
+                            folders = [.. folders.Where(p => !p.StartsWith(provider.InlineScriptsPath, StringComparison.OrdinalIgnoreCase) && !p.StartsWith(provider.GlobalVariablesPath, StringComparison.OrdinalIgnoreCase))];
 
                             var loadTasks = gameInlineAndVarFolders.Select(async directory =>
                             {
@@ -328,7 +333,11 @@ namespace IronyModManager.Services
             if (game != null && versions != null && versions.Any() && await gameIndexer.GameVersionsSameAsync(GetStoragePath(), game, versions))
             {
                 var gameDefinitions = new ConcurrentBag<IDefinition>();
+                using var mutex = await readDirectoriesLock.LockAsync();
                 var directories = (await modDefinitions.GetAllDirectoryKeysAsync()).ToList();
+
+                // ReSharper disable once DisposeOnUsingVariable
+                mutex.Dispose();
                 if (!string.IsNullOrWhiteSpace(directoryOverride))
                 {
                     directories = [directoryOverride];
@@ -354,7 +363,7 @@ namespace IronyModManager.Services
                         var gameInlineScriptFiles = files.Where(p => p.StartsWith(provider!.InlineScriptsPath, StringComparison.OrdinalIgnoreCase));
                         var gameInlineFolders = gameInlineScriptFiles.Select(Path.GetDirectoryName).GroupBy(p => p).Select(p => p.FirstOrDefault()).ToList();
                         directories.AddRange(gameInlineFolders);
-                        directories = directories.Distinct().ToList();
+                        directories = [.. directories.Distinct()];
                     }
                 }
 
@@ -523,7 +532,7 @@ namespace IronyModManager.Services
                 if (scriptedVarsBucket != null)
                 {
                     var varFiles = scriptedVarsBucket.GroupBy(p => p.File).Select(p => p.FirstOrDefault()).OrderBy(p => p!.FileCI, StringComparer.Ordinal).Select(p => p.FileCI).ToList();
-                    scriptedVarsBucket = scriptedVarsBucket.GroupBy(p => p.Id).Select(p => EvalDefinitionPriorityInternal(p.OrderBy(f => varFiles.IndexOf(f.FileCI))).Definition).ToList();
+                    scriptedVarsBucket = [.. scriptedVarsBucket.GroupBy(p => p.Id).Select(p => EvalDefinitionPriorityInternal(p.OrderBy(f => varFiles.IndexOf(f.FileCI))).Definition)];
                 }
 
                 inlineDefinitions ??= DIResolver.Get<IIndexedDefinitions>();
