@@ -4,9 +4,10 @@
 		<title>Irony Mod Manager</title>
 		<language>en</language>
 		<item>
-			<title>1.26.237</title>
+			<title>1.26.239</title>
 			<description>## Current Release Notes
-* Fix #537
+* Add toggle DLC button (enable or disable all)
+* Fix rare CTD on game indexing
 
 ## Release Notes 1.26
 * Update dependencies
@@ -19,13 +20,14 @@
 * Added conflict solver option to skip parsing some languages
 * Add conflict solver configuration to customize colors for new diff viewer
 * Add templateable merge mod naming</description>
-			<pubDate>Fri, 21 Feb 2025 22:44:33 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.26.237/linux-x64.zip" sparkle:version="1.26.237.5737" sparkle:shortVersionString="1.26.237" length="91030801" sparkle:os="linux" type="application/zip" sparkle:signature="rujH8B0xNu1sjUCU4CW+j5foL+MPeadJhxnMQwiHwHokS7lDd21hrpcR6Y2zpUb1UUfhqWR2ni+2GKePa7xIBQ=="/>
+			<pubDate>Sun, 09 Mar 2025 20:53:04 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.26.239/linux-x64.zip" sparkle:version="1.26.239.2209" sparkle:shortVersionString="1.26.239" length="91031853" sparkle:os="linux" type="application/zip" sparkle:signature="JkXdj3je1nIzi8Md8kKzRYQO2t1SdCYraQw6P7KOPcOXfUVJI2Kx4tvZkLy2/4VGRRfdHx7AmYgkn0TnIpvlBA=="/>
 		</item>
 		<item>
-			<title>1.26.237</title>
+			<title>1.26.239</title>
 			<description>## Current Release Notes
-* Fix #537
+* Add toggle DLC button (enable or disable all)
+* Fix rare CTD on game indexing
 
 ## Release Notes 1.26
 * Update dependencies
@@ -38,13 +40,14 @@
 * Added conflict solver option to skip parsing some languages
 * Add conflict solver configuration to customize colors for new diff viewer
 * Add templateable merge mod naming</description>
-			<pubDate>Fri, 21 Feb 2025 22:44:37 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.26.237/osx-x64.zip" sparkle:version="1.26.237.5737" sparkle:shortVersionString="1.26.237" length="93899213" sparkle:os="osx" type="application/zip" sparkle:signature="FNuDWr8RCVDLuHEa+BanCz/QGJv53p48gMdH9D/tr6RMCQqTA+TulnC6rJwVzarS0RhI2XS161zRcCD7zYA7Bw=="/>
+			<pubDate>Sun, 09 Mar 2025 20:53:07 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.26.239/osx-x64.zip" sparkle:version="1.26.239.2209" sparkle:shortVersionString="1.26.239" length="93900315" sparkle:os="osx" type="application/zip" sparkle:signature="L2DEa01HeR7p9NOqS9iWTD/v10JvW0MZ+2CPDQueQuY93B14kx2+JWKxsTNf2y7qLYbcKdqvuP08jueV8qAsAg=="/>
 		</item>
 		<item>
-			<title>1.26.237</title>
+			<title>1.26.239</title>
 			<description>## Current Release Notes
-* Fix #537
+* Add toggle DLC button (enable or disable all)
+* Fix rare CTD on game indexing
 
 ## Release Notes 1.26
 * Update dependencies
@@ -57,13 +60,14 @@
 * Added conflict solver option to skip parsing some languages
 * Add conflict solver configuration to customize colors for new diff viewer
 * Add templateable merge mod naming</description>
-			<pubDate>Fri, 21 Feb 2025 22:44:41 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.26.237/win-x64-setup.zip" sparkle:version="1.26.237.5737" sparkle:shortVersionString="1.26.237" length="72764082" sparkle:os="windows" type="application/zip" sparkle:signature="pSFrcPn65JfzHIRCa83j2dvNkFffY1jvgzOFhFxBQoEODKKIDffcySYMOVMrPZ8VyzSu7DxrPi9YIUvh/VFDCg=="/>
+			<pubDate>Sun, 09 Mar 2025 20:53:11 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.26.239/win-x64-setup.zip" sparkle:version="1.26.239.2209" sparkle:shortVersionString="1.26.239" length="72757700" sparkle:os="windows" type="application/zip" sparkle:signature="eAPZeiqDtKSiF0+Y2i0B6QCFlcXKdGb505EBgREzuo2651yl6sdUVyDH5o6d3wcIL47p+I1UGEbO4yYohgoYBQ=="/>
 		</item>
 		<item>
-			<title>1.26.237</title>
+			<title>1.26.239</title>
 			<description>## Current Release Notes
-* Fix #537
+* Add toggle DLC button (enable or disable all)
+* Fix rare CTD on game indexing
 
 ## Release Notes 1.26
 * Update dependencies
@@ -76,8 +80,8 @@
 * Added conflict solver option to skip parsing some languages
 * Add conflict solver configuration to customize colors for new diff viewer
 * Add templateable merge mod naming</description>
-			<pubDate>Fri, 21 Feb 2025 22:44:41 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.26.237/win-x64.zip" sparkle:version="1.26.237.5737" sparkle:shortVersionString="1.26.237" length="106773671" sparkle:os="windows" type="application/zip" sparkle:signature="Bj8WgRPZPkiQwFrdXkE+qHmlnOpCkvKduC6H+5DOw1uDNXThAjvqHp6hbGMjGCsZdtJdZXyLUBCX3swiSXTmDQ=="/>
+			<pubDate>Sun, 09 Mar 2025 20:53:11 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.26.239/win-x64.zip" sparkle:version="1.26.239.2209" sparkle:shortVersionString="1.26.239" length="106774775" sparkle:os="windows" type="application/zip" sparkle:signature="zsvn51kPM6d+8jUiFjKlJTNma3dLjq6wNQ68Z4AhNBXAXQlB01CXA7a4QVaS6k8S8GSj0SN+hOS6IQ4t2DWHCg=="/>
 		</item>
 	</channel>
 </rss>
