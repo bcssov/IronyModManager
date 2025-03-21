@@ -4,7 +4,7 @@
 // Created          : 02-18-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 10-17-2024
+// Last Modified On : 03-21-2025
 // ***********************************************************************
 // <copyright file="WholeTextParser.cs" company="Mario">
 //     Mario
@@ -40,7 +40,7 @@ namespace IronyModManager.Parser.Games.Stellaris
             Common.Constants.Stellaris.DiploPhrases, Common.Constants.Stellaris.MapGalaxy, Common.Constants.Stellaris.NameLists, Common.Constants.Stellaris.SpeciesNames, Common.Constants.Stellaris.Portraits,
             Common.Constants.Stellaris.ComponentTags, Common.Constants.Stellaris.RandomNamesBase, Common.Constants.Stellaris.RandomNames, Common.Constants.Stellaris.StartScreenMessages, Common.Constants.Stellaris.MapSetupScenarios,
             Common.Constants.Stellaris.CountryContainer, Common.Constants.Stellaris.DiplomacyEconomy, Common.Constants.Stellaris.InlineScripts, Common.Constants.Stellaris.EconomicPlans, Common.Constants.Stellaris.SpeciesClasses,
-            Common.Constants.Stellaris.Terraform
+            Common.Constants.Stellaris.Terraform, Common.Constants.Stellaris.GamesetupSettings
         };
 
         #endregion Fields
@@ -52,6 +52,8 @@ namespace IronyModManager.Parser.Games.Stellaris
         /// </summary>
         /// <param name="codeParser">The code parser.</param>
         /// <param name="logger">The logger.</param>
+        /// <seealso cref="T:IronyModManager.Parser.Common.Parsers.IDefaultParser" />
+        /// <remarks>Initializes a new instance of the <see cref="T:IronyModManager.Parser.Common.Parsers.BaseParser" /> class.</remarks>
         public WholeTextParser(ICodeParser codeParser, ILogger logger) : base(codeParser, logger)
         {
         }

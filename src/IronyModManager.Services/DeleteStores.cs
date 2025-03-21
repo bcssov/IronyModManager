@@ -1,17 +1,17 @@
-﻿
-// ***********************************************************************
+﻿// ***********************************************************************
 // Assembly         : IronyModManager.Services
 // Author           : Mario
 // Created          : 06-26-2023
 //
 // Last Modified By : Mario
-// Last Modified On : 06-26-2023
+// Last Modified On : 03-21-2025
 // ***********************************************************************
 // <copyright file="DeleteStores.cs" company="Mario">
 //     Mario
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
+
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -24,7 +24,6 @@ using IronyModManager.Storage.Common;
 
 namespace IronyModManager.Services
 {
-
     /// <summary>
     /// Class DeleteStores.
     /// Implements the <see cref="PostStartup" />
@@ -51,7 +50,7 @@ namespace IronyModManager.Services
             try
             {
                 var store = DIResolver.Get<IStorageProvider>();
-                var path = Path.Combine(store.GetRootStoragePath(), Parser.Common.Constants.StoreCacheRootRolder);
+                var path = Path.Combine(store.GetRootStoragePath(), Parser.Common.Constants.StoreCacheRootFolder);
                 if (Directory.Exists(path))
                 {
                     DiskOperations.DeleteDirectory(path, true);
@@ -60,6 +59,7 @@ namespace IronyModManager.Services
             catch
             {
             }
+
             return Task.CompletedTask;
         }
 

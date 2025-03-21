@@ -4,7 +4,7 @@
 // Created          : 02-16-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-12-2025
+// Last Modified On : 03-21-2025
 // ***********************************************************************
 // <copyright file="Constants.cs" company="Mario">
 //     Mario
@@ -92,9 +92,9 @@ namespace IronyModManager.Parser.Common
         public const string ShaderExtension = ".shader";
 
         /// <summary>
-        /// The store cache root rolder
+        /// The store cache root folder
         /// </summary>
-        public const string StoreCacheRootRolder = "StoreCache";
+        public const string StoreCacheRootFolder = "StoreCache";
 
         /// <summary>
         /// The text extension
@@ -202,12 +202,12 @@ namespace IronyModManager.Parser.Common
             public static readonly string AIAreas = MergePath(CommonPath, "ai_areas");
 
             /// <summary>
-            /// The ai strategy
+            /// The AI strategy
             /// </summary>
             public static readonly string AIStrategy = MergePath(CommonPath, "ai_strategy");
 
             /// <summary>
-            /// The ai strategy planes
+            /// The AI strategy planes
             /// </summary>
             public static readonly string AIStrategyPlanes = MergePath(CommonPath, "ai_strategy_plans");
 
@@ -639,6 +639,11 @@ namespace IronyModManager.Parser.Common
             /// The ethics
             /// </summary>
             public static readonly string Ethics = MergePath(CommonPath, "ethics");
+
+            /// <summary>
+            /// The gamesetup settings
+            /// </summary>
+            public static readonly string GamesetupSettings = MergePath(CommonPath, "gamesetup_settings");
 
             /// <summary>
             /// The government authorities
