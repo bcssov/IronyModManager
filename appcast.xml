@@ -4,10 +4,9 @@
 		<title>Irony Mod Manager</title>
 		<language>en</language>
 		<item>
-			<title>1.26.239</title>
+			<title>1.26.240</title>
 			<description>## Current Release Notes
-* Add toggle DLC button (enable or disable all)
-* Fix rare CTD on game indexing
+* Stellaris 3.99 beta CS support
 
 ## Release Notes 1.26
 * Update dependencies
@@ -20,14 +19,13 @@
 * Added conflict solver option to skip parsing some languages
 * Add conflict solver configuration to customize colors for new diff viewer
 * Add templateable merge mod naming</description>
-			<pubDate>Sun, 09 Mar 2025 20:53:04 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.26.239/linux-x64.zip" sparkle:version="1.26.239.2209" sparkle:shortVersionString="1.26.239" length="91031853" sparkle:os="linux" type="application/zip" sparkle:signature="JkXdj3je1nIzi8Md8kKzRYQO2t1SdCYraQw6P7KOPcOXfUVJI2Kx4tvZkLy2/4VGRRfdHx7AmYgkn0TnIpvlBA=="/>
+			<pubDate>Fri, 21 Mar 2025 20:33:42 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.26.240/linux-x64.zip" sparkle:version="1.26.240.48269" sparkle:shortVersionString="1.26.240" length="91034034" sparkle:os="linux" type="application/zip" sparkle:signature="ACHMoPBSO7W/C+6xoYw1BTzsCmF4ZbFhGKbZclMjnBVWiTiN0zQGD8J550dXAz5tqf99PpX88H4OARzRMJTPAA=="/>
 		</item>
 		<item>
-			<title>1.26.239</title>
+			<title>1.26.240</title>
 			<description>## Current Release Notes
-* Add toggle DLC button (enable or disable all)
-* Fix rare CTD on game indexing
+* Stellaris 3.99 beta CS support
 
 ## Release Notes 1.26
 * Update dependencies
@@ -40,14 +38,13 @@
 * Added conflict solver option to skip parsing some languages
 * Add conflict solver configuration to customize colors for new diff viewer
 * Add templateable merge mod naming</description>
-			<pubDate>Sun, 09 Mar 2025 20:53:07 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.26.239/osx-x64.zip" sparkle:version="1.26.239.2209" sparkle:shortVersionString="1.26.239" length="93900315" sparkle:os="osx" type="application/zip" sparkle:signature="L2DEa01HeR7p9NOqS9iWTD/v10JvW0MZ+2CPDQueQuY93B14kx2+JWKxsTNf2y7qLYbcKdqvuP08jueV8qAsAg=="/>
+			<pubDate>Fri, 21 Mar 2025 20:33:45 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.26.240/osx-x64.zip" sparkle:version="1.26.240.48269" sparkle:shortVersionString="1.26.240" length="93901587" sparkle:os="osx" type="application/zip" sparkle:signature="XACxgYAwwZ1Vi/sqGnI5Thagj8D/WJMd/km3TtrDGSQB4PeTfTswo60mmix3cr2no6tDVYiDYe7hoJHpJrZgBA=="/>
 		</item>
 		<item>
-			<title>1.26.239</title>
+			<title>1.26.240</title>
 			<description>## Current Release Notes
-* Add toggle DLC button (enable or disable all)
-* Fix rare CTD on game indexing
+* Stellaris 3.99 beta CS support
 
 ## Release Notes 1.26
 * Update dependencies
@@ -60,14 +57,13 @@
 * Added conflict solver option to skip parsing some languages
 * Add conflict solver configuration to customize colors for new diff viewer
 * Add templateable merge mod naming</description>
-			<pubDate>Sun, 09 Mar 2025 20:53:11 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.26.239/win-x64-setup.zip" sparkle:version="1.26.239.2209" sparkle:shortVersionString="1.26.239" length="72757700" sparkle:os="windows" type="application/zip" sparkle:signature="eAPZeiqDtKSiF0+Y2i0B6QCFlcXKdGb505EBgREzuo2651yl6sdUVyDH5o6d3wcIL47p+I1UGEbO4yYohgoYBQ=="/>
+			<pubDate>Fri, 21 Mar 2025 20:33:49 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.26.240/win-x64-setup.zip" sparkle:version="1.26.240.48269" sparkle:shortVersionString="1.26.240" length="72804364" sparkle:os="windows" type="application/zip" sparkle:signature="lt5/Ld6t1W+iqUN5fFjJ2jBQ3lo/T1WxrS+T1VH4Ihmpz3GH2rgR4p5zmvx1ZNJfjV9+IhpArCrRVt/NOd0GAA=="/>
 		</item>
 		<item>
-			<title>1.26.239</title>
+			<title>1.26.240</title>
 			<description>## Current Release Notes
-* Add toggle DLC button (enable or disable all)
-* Fix rare CTD on game indexing
+* Stellaris 3.99 beta CS support
 
 ## Release Notes 1.26
 * Update dependencies
@@ -80,8 +76,8 @@
 * Added conflict solver option to skip parsing some languages
 * Add conflict solver configuration to customize colors for new diff viewer
 * Add templateable merge mod naming</description>
-			<pubDate>Sun, 09 Mar 2025 20:53:11 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.26.239/win-x64.zip" sparkle:version="1.26.239.2209" sparkle:shortVersionString="1.26.239" length="106774775" sparkle:os="windows" type="application/zip" sparkle:signature="zsvn51kPM6d+8jUiFjKlJTNma3dLjq6wNQ68Z4AhNBXAXQlB01CXA7a4QVaS6k8S8GSj0SN+hOS6IQ4t2DWHCg=="/>
+			<pubDate>Fri, 21 Mar 2025 20:33:49 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.26.240/win-x64.zip" sparkle:version="1.26.240.48269" sparkle:shortVersionString="1.26.240" length="106777085" sparkle:os="windows" type="application/zip" sparkle:signature="J9JSDHQ2fh4aAMBjObqbyox4J9/CNxpZfVwHH2nPR/sKBr5HWZsDf+bmWrRcsTlopHHErvWbLTILMU1xIgBBDg=="/>
 		</item>
 	</channel>
 </rss>
