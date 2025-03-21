@@ -119,6 +119,15 @@
         "DirectoryPath": "common\\country_customization",
         "PreferredParser": "DefaultParser"
     }, {
+        "DirectoryPath": "common\\country_focus\\card_categories",
+        "PreferredParser": "DefaultParser"
+    }, {
+        "DirectoryPath": "common\\country_focus\\focus_cards",
+        "PreferredParser": "DefaultParser"
+    }, {
+        "DirectoryPath": "common\\country_focus\\focus_rewards",
+        "PreferredParser": "DefaultParser"
+    }, {
         "DirectoryPath": "common\\country_limits\\ownership_limits",
         "PreferredParser": "DefaultParser"
     }, {
@@ -215,7 +224,13 @@
         "DirectoryPath": "common\\galactic_focuses",
         "PreferredParser": "DefaultParser"
     }, {
+        "DirectoryPath": "common\\gamesetup_settings",
+        "PreferredParser": "StellarisWholeTextParser"
+    }, {
         "DirectoryPath": "common\\game_concepts",
+        "PreferredParser": "DefaultParser"
+    }, {
+        "DirectoryPath": "common\\game_concept_categories",
         "PreferredParser": "DefaultParser"
     }, {
         "DirectoryPath": "common\\game_rules",
@@ -293,6 +308,9 @@
         "DirectoryPath": "common\\inline_scripts\\jobs",
         "PreferredParser": "StellarisWholeTextParser"
     }, {
+        "DirectoryPath": "common\\inline_scripts\\output",
+        "PreferredParser": "StellarisWholeTextParser"
+    }, {
         "DirectoryPath": "common\\inline_scripts\\paragon",
         "PreferredParser": "StellarisWholeTextParser"
     }, {
@@ -302,6 +320,9 @@
         "DirectoryPath": "common\\inline_scripts\\pop_faction_types",
         "PreferredParser": "StellarisWholeTextParser"
     }, {
+        "DirectoryPath": "common\\inline_scripts\\pop_resources",
+        "PreferredParser": "StellarisWholeTextParser"
+    }, {
         "DirectoryPath": "common\\inline_scripts\\relics",
         "PreferredParser": "StellarisWholeTextParser"
     }, {
@@ -309,6 +330,9 @@
         "PreferredParser": "StellarisWholeTextParser"
     }, {
         "DirectoryPath": "common\\inline_scripts\\ship_components\\weights",
+        "PreferredParser": "StellarisWholeTextParser"
+    }, {
+        "DirectoryPath": "common\\inline_scripts\\solar_system_initializers",
         "PreferredParser": "StellarisWholeTextParser"
     }, {
         "DirectoryPath": "common\\inline_scripts\\starbase_modules",
@@ -330,6 +354,9 @@
         "PreferredParser": "StellarisWholeTextParser"
     }, {
         "DirectoryPath": "common\\inline_scripts\\trait\\subtitle",
+        "PreferredParser": "StellarisWholeTextParser"
+    }, {
+        "DirectoryPath": "common\\inline_scripts\\zones",
         "PreferredParser": "StellarisWholeTextParser"
     }, {
         "DirectoryPath": "common\\intel_categories",
@@ -512,6 +539,9 @@
         "DirectoryPath": "common\\species_rights\\slavery_types",
         "PreferredParser": "StellarisOverwrittenParser"
     }, {
+        "DirectoryPath": "common\\species_rights\\subspecies_integration_types",
+        "PreferredParser": "StellarisOverwrittenParser"
+    }, {
         "DirectoryPath": "common\\specimens",
         "PreferredParser": "DefaultParser"
     }, {
@@ -563,6 +593,9 @@
         "DirectoryPath": "common\\terraform",
         "PreferredParser": "StellarisWholeTextParser"
     }, {
+        "DirectoryPath": "common\\timeline_events",
+        "PreferredParser": "DefaultParser"
+    }, {
         "DirectoryPath": "common\\tradable_actions",
         "PreferredParser": "DefaultParser"
     }, {
@@ -579,6 +612,12 @@
         "PreferredParser": "StellarisOverwrittenParser"
     }, {
         "DirectoryPath": "common\\war_goals",
+        "PreferredParser": "DefaultParser"
+    }, {
+        "DirectoryPath": "common\\zones",
+        "PreferredParser": "DefaultParser"
+    }, {
+        "DirectoryPath": "common\\zone_slots",
         "PreferredParser": "DefaultParser"
     }, {
         "DirectoryPath": "dlc_metadata",
@@ -993,6 +1032,9 @@
         "PreferredParser": "GenericWholeTextParser"
     }, {
         "DirectoryPath": "sound\\utopia",
+        "PreferredParser": "GenericWholeTextParser"
+    }, {
+        "DirectoryPath": "sound\\vo\\chinese",
         "PreferredParser": "GenericWholeTextParser"
     }, {
         "DirectoryPath": "tools",

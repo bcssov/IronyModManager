@@ -4,7 +4,7 @@
 // Created          : 02-16-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-09-2025
+// Last Modified On : 03-21-2025
 // ***********************************************************************
 // <copyright file="IndexedDefinitions.cs" company="Mario">
 //     Mario
@@ -773,7 +773,7 @@ namespace IronyModManager.Parser.Definitions
         /// <returns>System.String.</returns>
         protected virtual string ResolveStoragePath(string path)
         {
-            return Path.Combine(path, Common.Constants.StoreCacheRootRolder);
+            return Path.Combine(path, Common.Constants.StoreCacheRootFolder);
         }
 
         /// <summary>
