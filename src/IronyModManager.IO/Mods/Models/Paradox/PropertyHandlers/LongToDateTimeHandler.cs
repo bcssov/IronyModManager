@@ -4,7 +4,7 @@
 // Created          : 11-16-2021
 //
 // Last Modified By : Mario
-// Last Modified On : 11-04-2022
+// Last Modified On : 03-28-2025
 // ***********************************************************************
 // <copyright file="LongToDateTimeHandler.cs" company="Mario">
 //     Mario
@@ -15,6 +15,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using IronyModManager.DI;
+using IronyModManager.Shared;
 using RepoDb.Interfaces;
 using RepoDb.Options;
 
@@ -37,7 +39,18 @@ namespace IronyModManager.IO.Mods.Models.Paradox.PropertyHandlers
         /// <returns>DateTime.</returns>
         public DateTime Get(long input, PropertyHandlerGetOptions options)
         {
-            return DateTimeOffset.FromUnixTimeMilliseconds(input).DateTime;
+            try
+            {
+                return DateTimeOffset.FromUnixTimeMilliseconds(input).DateTime;
+            }
+            catch (Exception e)
+            {
+                var logger = DIResolver.Get<ILogger>();
+                logger.Error(new ArgumentOutOfRangeException($"Invalid timestamp {input} detected, logging for posterity. Defaulting to disco era value.", e));
+
+                // If junk data, send it back to the disco era (1970)
+                return new DateTime(1970, 1, 1); // Unix epoch date
+            }
         }
 
         /// <summary>

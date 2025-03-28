@@ -71,6 +71,9 @@
         "DirectoryPath": "common\\buildings",
         "PreferredParser": "StellarisOverwrittenParser"
     }, {
+        "DirectoryPath": "common\\button_effects",
+        "PreferredParser": "DefaultParser"
+    }, {
         "DirectoryPath": "common\\bypass",
         "PreferredParser": "DefaultParser"
     }, {
@@ -287,6 +290,9 @@
         "DirectoryPath": "common\\inline_scripts\\events",
         "PreferredParser": "StellarisWholeTextParser"
     }, {
+        "DirectoryPath": "common\\inline_scripts\\game_start",
+        "PreferredParser": "StellarisWholeTextParser"
+    }, {
         "DirectoryPath": "common\\inline_scripts\\grand_archive",
         "PreferredParser": "StellarisWholeTextParser"
     }, {
@@ -344,6 +350,12 @@
         "DirectoryPath": "common\\inline_scripts\\technology",
         "PreferredParser": "StellarisWholeTextParser"
     }, {
+        "DirectoryPath": "common\\inline_scripts\\terraform",
+        "PreferredParser": "StellarisWholeTextParser"
+    }, {
+        "DirectoryPath": "common\\inline_scripts\\traditions",
+        "PreferredParser": "StellarisWholeTextParser"
+    }, {
         "DirectoryPath": "common\\inline_scripts\\trait",
         "PreferredParser": "StellarisWholeTextParser"
     }, {
@@ -363,6 +375,12 @@
         "PreferredParser": "DefaultParser"
     }, {
         "DirectoryPath": "common\\intel_levels",
+        "PreferredParser": "DefaultParser"
+    }, {
+        "DirectoryPath": "common\\job_tags",
+        "PreferredParser": "StellarisWholeTextParser"
+    }, {
+        "DirectoryPath": "common\\leader_classes",
         "PreferredParser": "DefaultParser"
     }, {
         "DirectoryPath": "common\\leader_classes",
@@ -488,6 +506,9 @@
         "DirectoryPath": "common\\ship_categories",
         "PreferredParser": "DefaultParser"
     }, {
+        "DirectoryPath": "common\\ship_sets",
+        "PreferredParser": "DefaultParser"
+    }, {
         "DirectoryPath": "common\\ship_sizes",
         "PreferredParser": "StellarisOverwrittenObjectSingleFileParser"
     }, {
@@ -578,6 +599,9 @@
         "DirectoryPath": "common\\system_types",
         "PreferredParser": "DefaultParser"
     }, {
+        "DirectoryPath": "common\\target_types",
+        "PreferredParser": "DefaultParser"
+    }, {
         "DirectoryPath": "common\\technology",
         "PreferredParser": "StellarisOverwrittenParser"
     }, {
@@ -610,6 +634,9 @@
     }, {
         "DirectoryPath": "common\\traits",
         "PreferredParser": "StellarisOverwrittenParser"
+    }, {
+        "DirectoryPath": "common\\trait_tags",
+        "PreferredParser": "StellarisWholeTextParser"
     }, {
         "DirectoryPath": "common\\war_goals",
         "PreferredParser": "DefaultParser"
@@ -860,6 +887,18 @@
         "DirectoryPath": "sound\\astral_planes\\rifts",
         "PreferredParser": "GenericWholeTextParser"
     }, {
+        "DirectoryPath": "sound\\biogenesis",
+        "PreferredParser": "GenericWholeTextParser"
+    }, {
+        "DirectoryPath": "sound\\biogenesis\\ships",
+        "PreferredParser": "GenericWholeTextParser"
+    }, {
+        "DirectoryPath": "sound\\biogenesis\\ui",
+        "PreferredParser": "GenericWholeTextParser"
+    }, {
+        "DirectoryPath": "sound\\biogenesis\\weapons",
+        "PreferredParser": "GenericWholeTextParser"
+    }, {
         "DirectoryPath": "sound\\cosmic_storms",
         "PreferredParser": "GenericWholeTextParser"
     }, {
@@ -965,6 +1004,9 @@
         "DirectoryPath": "sound\\machineage\\synthqueen\\14_act03_player_wins_psi",
         "PreferredParser": "GenericWholeTextParser"
     }, {
+        "DirectoryPath": "sound\\mammalian_portrait_pack",
+        "PreferredParser": "GenericWholeTextParser"
+    }, {
         "DirectoryPath": "sound\\megacorp",
         "PreferredParser": "GenericWholeTextParser"
     }, {
@@ -1008,6 +1050,9 @@
         "PreferredParser": "GenericWholeTextParser"
     }, {
         "DirectoryPath": "sound\\reanimated",
+        "PreferredParser": "GenericWholeTextParser"
+    }, {
+        "DirectoryPath": "sound\\strange_worlds",
         "PreferredParser": "GenericWholeTextParser"
     }, {
         "DirectoryPath": "sound\\synthetic_dawn",

@@ -4,7 +4,7 @@
 // Created          : 02-16-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-21-2025
+// Last Modified On : 05-05-2025
 // ***********************************************************************
 // <copyright file="Constants.cs" company="Mario">
 //     Mario
@@ -154,6 +154,7 @@ namespace IronyModManager.Parser.Common
             /// <summary>
             /// The GFX
             /// </summary>
+            // ReSharper disable once InconsistentNaming
             public const string GFX = "gfx";
 
             /// <summary>
@@ -410,15 +411,15 @@ namespace IronyModManager.Parser.Common
             /// <summary>
             /// The locale folders
             /// </summary>
-            public static readonly string[] LocaleFolders = { "default", "english", "braz_por", "french", "german", "polish", "russian", "simp_chinese", "spanish", "chinese", "traditional_chinese", "japanese", "korean" };
+            public static readonly string[] LocaleFolders = ["default", "english", "braz_por", "french", "german", "polish", "russian", "simp_chinese", "spanish", "chinese", "traditional_chinese", "japanese", "korean"];
 
             /// <summary>
             /// The locales
             /// </summary>
             public static readonly string[] Locales =
-            {
+            [
                 "l_default", "l_english", "l_braz_por", "l_french", "l_german", "l_polish", "l_russian", "l_simp_chinese", "l_spanish", "l_chinese", "l_traditional_chinese", "l_japanese", "l_korean"
-            };
+            ];
 
             #endregion Fields
         }
@@ -565,6 +566,17 @@ namespace IronyModManager.Parser.Common
         {
             #region Fields
 
+            // ReSharper disable once IdentifierTypo,CommentTypo -- shut up
+            /// <summary>
+            /// The animsm extension
+            /// </summary>
+            public const string AnimsmExtension = ".animsm";
+
+            /// <summary>
+            /// The editor data extension
+            /// </summary>
+            public const string EditorDataExtension = ".editordata";
+
             /// <summary>
             /// The flags
             /// </summary>
@@ -654,6 +666,11 @@ namespace IronyModManager.Parser.Common
             /// The inline scripts
             /// </summary>
             public static readonly string InlineScripts = MergePath(CommonPath, "inline_scripts");
+
+            /// <summary>
+            /// The job tags
+            /// </summary>
+            public static readonly string JobTags = MergePath(CommonPath, "job_tags");
 
             /// <summary>
             /// The map galaxy
@@ -779,6 +796,11 @@ namespace IronyModManager.Parser.Common
             /// The traits
             /// </summary>
             public static readonly string Traits = MergePath(CommonPath, "traits");
+
+            /// <summary>
+            /// The trait tags
+            /// </summary>
+            public static readonly string TraitTags = MergePath(CommonPath, "trait_tags");
 
             #endregion Fields
         }
