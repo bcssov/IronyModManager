@@ -4,7 +4,7 @@
 // Created          : 10-03-2023
 //
 // Last Modified By : Mario
-// Last Modified On : 02-12-2025
+// Last Modified On : 05-23-2025
 // ***********************************************************************
 // <copyright file="ParametrizedParser.cs" company="Mario">
 //     Mario
@@ -172,7 +172,7 @@ namespace IronyModManager.Parser
                          elParams.Values.FirstOrDefault()!.Values.Count(p => p.Key.Equals(Common.Constants.Stellaris.InlineScriptId, StringComparison.OrdinalIgnoreCase)) == 1)
                 {
                     var processed = code;
-                    var elObj = elParams.Values.FirstOrDefault(p => p.Values != null)?.Values?.FirstOrDefault();
+                    var elObj = elParams.Values.FirstOrDefault(p => p.Values != null)?.Values?.FirstOrDefault(p => p.Key.Equals(Common.Constants.Stellaris.InlineScriptId, StringComparison.OrdinalIgnoreCase));
                     if (elObj is { Values: not null })
                     {
                         foreach (var value in elObj.Values)
@@ -209,7 +209,9 @@ namespace IronyModManager.Parser
                             var newCode = elParams.Values.FirstOrDefault(p => p.Values != null);
                             if (newCode != null)
                             {
-                                newCode.Values = replacementCode.Values;
+                                var newValues = newCode.Values.Where(value => !value.Key.Equals(Common.Constants.Stellaris.InlineScriptId, StringComparison.OrdinalIgnoreCase)).ToList();
+                                newValues.AddRange(replacementCode.Values);
+                                newCode.Values = newValues;
                                 processed = codeParser.FormatCode(newCode);
                                 return processed;
                             }

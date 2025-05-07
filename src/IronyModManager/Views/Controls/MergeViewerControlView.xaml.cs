@@ -4,7 +4,7 @@
 // Created          : 03-20-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-28-2024
+// Last Modified On : 05-07-2025
 // ***********************************************************************
 // <copyright file="MergeViewerControlView.xaml.cs" company="Mario">
 //     Mario
@@ -499,6 +499,7 @@ namespace IronyModManager.Views.Controls
                     {
                         if (ViewModel.UsingNewMergeType)
                         {
+                            // ReSharper disable once SwitchStatementMissingSomeEnumCasesNoDefault
                             switch (hotkey.Hotkey)
                             {
                                 case Enums.HotKeys.Ctrl_Shift_Up:

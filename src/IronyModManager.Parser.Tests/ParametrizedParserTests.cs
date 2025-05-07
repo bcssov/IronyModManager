@@ -1015,6 +1015,76 @@ namespace IronyModManager.Parser.Tests
         }
 
         /// <summary>
+        /// Defines the test method GetObjectId_on_first_level_with_children_should_yield_results.
+        /// </summary>
+        [Fact]
+        public void GetObjectId_on_first_level_with_children_should_yield_results()
+        {
+            DISetup.SetupContainer();
+
+            ; var sb = new StringBuilder(700);
+            sb.AppendLine(@"key = ""BIO_PROPULSION_$LEVEL$_$CORRESPONDING_SIZE$""");
+            sb.AppendLine(@"size = small");
+            sb.AppendLine(@"icon = ""GFX_ship_part_bio_thruster_$LEVEL$""");
+            sb.AppendLine(@"icon_frame = 1");
+            sb.AppendLine(@"power = 0");
+            sb.AppendLine(@"");
+            sb.AppendLine(@"resources = {");
+            sb.AppendLine(@"	category = ship_components");
+            sb.AppendLine(@"	inline_script = {");
+            sb.AppendLine(@"		script = ""grand_archive/mutations/component_dynamic_cost""");
+            sb.AppendLine(@"		COST = $COST$");
+            sb.AppendLine(@"	}");
+            sb.AppendLine(@"	cost = {");
+            sb.AppendLine(@"		sr_dark_matter	= $DARK_MATTER$");
+            sb.AppendLine(@"	}");
+            sb.AppendLine(@"}");
+            sb.AppendLine(@"");
+            sb.AppendLine(@"modifier = {");
+            sb.AppendLine(@"	ship_base_speed_mult = $SPEED$");
+            sb.AppendLine(@"	ship_evasion_add = $EVASION$");
+            sb.AppendLine(@"}");
+            sb.AppendLine(@"");
+            sb.AppendLine(@"prerequisites = { $PREREQUISITE$ }");
+            sb.AppendLine(@"component_set = ""thruster_components_bio""");
+            sb.AppendLine(@"inline_script = {");
+            sb.AppendLine(@"	script = grand_archive/mutations/core_components/upgrade_thrusters_bio_$LEVEL$");
+            sb.AppendLine(@"	CORRESPONDING_SIZE = $CORRESPONDING_SIZE$");
+            sb.AppendLine(@"}");
+            sb.AppendLine(@"");
+            sb.AppendLine(@"size_restriction = { $SIZE_RESTRICTION$ }");
+            sb.AppendLine(@"");
+            sb.AppendLine(@"ai_weight = {");
+            sb.AppendLine(@"	weight = $LEVEL$");
+            sb.AppendLine(@"}");
+
+
+            var sb2 = new System.Text.StringBuilder(492);
+            sb2.AppendLine(@"utility_component_template = {");
+            sb2.AppendLine(@"    inline_script = {");
+            sb2.AppendLine(@"        script = grand_archive/mutations/core_components/component_thrusters_bio");
+            sb2.AppendLine(@"        LEVEL = 4");
+            sb2.AppendLine(@"        CORRESPONDING_SIZE = BATTLESHIP");
+            sb2.AppendLine(@"        PREREQUISITE = ""tech_thrusters_4 tech_thrusters_bio_integration""");
+            sb2.AppendLine(@"        COST = 384");
+            sb2.AppendLine(@"        DARK_MATTER = 0");
+            sb2.AppendLine(@"        SPEED = 0.6");
+            sb2.AppendLine(@"        EVASION = 6");
+            sb2.AppendLine(@"        POTENTIAL = ""ship_uses_space_fauna_battleship_thrusters = yes""");
+            sb2.AppendLine(@"    }");
+            sb2.AppendLine(@"    upgrades_to = BATTLESHIP_ESC_BIOSHIP_THRUSTERS_5");
+            sb2.AppendLine(@"}");
+
+            var parser = new ParametrizedParser(new CodeParser(new Logger()));
+            var result = parser.Process(sb.ToString(), sb2.ToString());
+            result.Should().NotBeNullOrEmpty();
+            var m = DIResolver.Get<IParserManager>();
+            var parserResult = m.Parse(new ParserManagerArgs { File = "common\\component_templates\\dummy.txt", GameType = "Stellaris", IsBinary = false, Lines = result.SplitOnNewLine() });
+            parserResult.Count().Should().Be(1);
+            parserResult.Any(p => p.Id.Equals("BIO_PROPULSION_4_BATTLESHIP")).Should().BeTrue();
+        }
+
+        /// <summary>
         /// Defines the test method GetObjectId_on_first_level_should_yield_results_with_simple_inline.
         /// </summary>
         [Fact]
