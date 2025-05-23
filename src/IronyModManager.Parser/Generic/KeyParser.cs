@@ -4,7 +4,7 @@
 // Created          : 02-16-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 10-29-2024
+// Last Modified On : 05-23-2025
 // ***********************************************************************
 // <copyright file="KeyParser.cs" company="Mario">
 //     Mario
@@ -91,12 +91,23 @@ namespace IronyModManager.Parser.Generic
         /// <returns>System.String.</returns>
         protected override string EvalElementForId(IScriptElement value)
         {
-            if (Constants.Scripts.GenericKeys.Any(s => s.Equals(value.Key, StringComparison.OrdinalIgnoreCase)))
+            return Constants.Scripts.GenericKeys.Any(s => s.Equals(value.Key, StringComparison.OrdinalIgnoreCase)) ? value.Value : base.EvalElementForId(value);
+        }
+
+        /// <summary>
+        /// Evals for inlines.
+        /// </summary>
+        /// <param name="defaultId">The default identifier.</param>
+        /// <param name="id">The identifier.</param>
+        /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
+        protected override bool EvalForInlines(string defaultId, string id)
+        {
+            if (!string.IsNullOrWhiteSpace(defaultId) && !string.IsNullOrWhiteSpace(id))
             {
-                return value.Value;
+                return defaultId.Equals(id, StringComparison.OrdinalIgnoreCase);
             }
 
-            return base.EvalElementForId(value);
+            return base.EvalForInlines(defaultId, id);
         }
 
         /// <summary>

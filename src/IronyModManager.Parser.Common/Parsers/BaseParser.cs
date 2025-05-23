@@ -4,7 +4,7 @@
 // Created          : 02-17-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-12-2025
+// Last Modified On : 05-23-2025
 // ***********************************************************************
 // <copyright file="BaseParser.cs" company="Mario">
 //     Mario
@@ -192,6 +192,17 @@ namespace IronyModManager.Parser.Common.Parsers
         }
 
         /// <summary>
+        /// Evals for inlines.
+        /// </summary>
+        /// <param name="defaultId">The default identifier.</param>
+        /// <param name="id">The identifier.</param>
+        /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
+        protected virtual bool EvalForInlines(string defaultId, string id)
+        {
+            return false;
+        }
+
+        /// <summary>
         /// Formats the code.
         /// </summary>
         /// <param name="element">The element.</param>
@@ -308,6 +319,11 @@ namespace IronyModManager.Parser.Common.Parsers
                             // Yay, paradox
                             definition.ContainsInlineIdentifier = true;
                         }
+                    }
+
+                    if (!definition.ContainsInlineIdentifier)
+                    {
+                        definition.ContainsInlineIdentifier = EvalForInlines(item.Key, id);
                     }
 
                     if (!isFirstLevel)
