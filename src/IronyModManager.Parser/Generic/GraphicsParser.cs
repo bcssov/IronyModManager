@@ -4,7 +4,7 @@
 // Created          : 02-18-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 10-17-2024
+// Last Modified On : 05-23-2025
 // ***********************************************************************
 // <copyright file="GraphicsParser.cs" company="Mario">
 //     Mario
@@ -110,7 +110,7 @@ namespace IronyModManager.Parser.Generic
         /// <returns><c>true</c> if this instance can parse the specified arguments; otherwise, <c>false</c>.</returns>
         public override bool CanParse(CanParseArgs args)
         {
-            return ValidExtensions.Any(a => args.File.EndsWith(a, StringComparison.OrdinalIgnoreCase)) || IsContentGraphics(args, false, out var _, out var _);
+            return ValidExtensions.Any(a => args.File.EndsWith(a, StringComparison.OrdinalIgnoreCase)) || IsContentGraphics(args, false, out _, out _);
         }
 
         /// <summary>
@@ -180,13 +180,20 @@ namespace IronyModManager.Parser.Generic
             }
             else
             {
-                if (Common.Constants.Scripts.GraphicsTypeName.Equals(value.Key, StringComparison.OrdinalIgnoreCase))
-                {
-                    return value.Value;
-                }
-
-                return base.EvalElementForId(value);
+                return Common.Constants.Scripts.GraphicsTypeName.Equals(value.Key, StringComparison.OrdinalIgnoreCase) ? value.Value : base.EvalElementForId(value);
             }
+        }
+
+        /// <summary>
+        /// Evals for inlines.
+        /// </summary>
+        /// <param name="defaultId">The default identifier.</param>
+        /// <param name="id">The identifier.</param>
+        /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
+        protected override bool EvalForInlines(string defaultId, string id)
+        {
+            // No inlines here
+            return false;
         }
 
         /// <summary>
