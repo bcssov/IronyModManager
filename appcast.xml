@@ -4,10 +4,9 @@
 		<title>Irony Mod Manager</title>
 		<language>en</language>
 		<item>
-			<title>1.26.245</title>
+			<title>1.26.246</title>
 			<description>## Current Release Notes
-* Probably fixed #549
-* Handle inline keyed objects #550
+* Fix NRE due to invalid inline syntax
 
 ## Release Notes 1.26
 * Update dependencies
@@ -20,14 +19,13 @@
 * Added conflict solver option to skip parsing some languages
 * Add conflict solver configuration to customize colors for new diff viewer
 * Add templateable merge mod naming</description>
-			<pubDate>Fri, 23 May 2025 22:06:47 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.26.245/linux-x64.zip" sparkle:version="1.26.245.38334" sparkle:shortVersionString="1.26.245" length="91036429" sparkle:os="linux" type="application/zip" sparkle:signature="Xl/CHaMyO+FqCQRuStwAXWzRpNaTLUwa/atwA0K/OofujonwGm3nIZOZmL4OYPTkY0ffWeq6ODgSYisYGCpJCw=="/>
+			<pubDate>Sun, 25 May 2025 05:27:33 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.26.246/linux-x64.zip" sparkle:version="1.26.246.59433" sparkle:shortVersionString="1.26.246" length="91036369" sparkle:os="linux" type="application/zip" sparkle:signature="VP/MNELXsK2dl5EQNu0orFLwdpgN6Qa8JPMk8Q3oX5S7oxo3dwn2RwODti6jrSU0t7wLOcSK7KMwAq1mCT5sDA=="/>
 		</item>
 		<item>
-			<title>1.26.245</title>
+			<title>1.26.246</title>
 			<description>## Current Release Notes
-* Probably fixed #549
-* Handle inline keyed objects #550
+* Fix NRE due to invalid inline syntax
 
 ## Release Notes 1.26
 * Update dependencies
@@ -40,14 +38,13 @@
 * Added conflict solver option to skip parsing some languages
 * Add conflict solver configuration to customize colors for new diff viewer
 * Add templateable merge mod naming</description>
-			<pubDate>Fri, 23 May 2025 22:06:51 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.26.245/osx-x64.zip" sparkle:version="1.26.245.38334" sparkle:shortVersionString="1.26.245" length="93903357" sparkle:os="osx" type="application/zip" sparkle:signature="jQcDFf/EKmkyhMTsv50rWKAtk/csLlB4kbC+fNdNzxcHfffKmMfrt7oo3XHqROrdlH+up+mivOgoQW0qClmHBQ=="/>
+			<pubDate>Sun, 25 May 2025 05:27:37 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.26.246/osx-x64.zip" sparkle:version="1.26.246.59433" sparkle:shortVersionString="1.26.246" length="93903282" sparkle:os="osx" type="application/zip" sparkle:signature="G2eqAScqANP5c2U9oVIVRViNDOylS4mtGMrY4qTO2u6QMNcfJjzB2lHztTfA6v0Owwt+zf9PNvLUiFyqh0B8Cg=="/>
 		</item>
 		<item>
-			<title>1.26.245</title>
+			<title>1.26.246</title>
 			<description>## Current Release Notes
-* Probably fixed #549
-* Handle inline keyed objects #550
+* Fix NRE due to invalid inline syntax
 
 ## Release Notes 1.26
 * Update dependencies
@@ -60,14 +57,13 @@
 * Added conflict solver option to skip parsing some languages
 * Add conflict solver configuration to customize colors for new diff viewer
 * Add templateable merge mod naming</description>
-			<pubDate>Fri, 23 May 2025 22:06:55 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.26.245/win-x64-setup.zip" sparkle:version="1.26.245.38334" sparkle:shortVersionString="1.26.245" length="72810802" sparkle:os="windows" type="application/zip" sparkle:signature="9mHqpchksdP+LA/1cdKXxje+4V5yT9BsboDu8vm+A8KheeM1ewje7CxNG/tKqlRstzihgNzFMRnvYQEUsnDDDg=="/>
+			<pubDate>Sun, 25 May 2025 05:27:40 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.26.246/win-x64-setup.zip" sparkle:version="1.26.246.59433" sparkle:shortVersionString="1.26.246" length="72820665" sparkle:os="windows" type="application/zip" sparkle:signature="88NU+dri9DXAYQtnB7GO/PnRZsySIjocqVNUqY10u32qaZRgfPePrjusm5LDPw4K89glY+Oej9KjskEwSqWRBQ=="/>
 		</item>
 		<item>
-			<title>1.26.245</title>
+			<title>1.26.246</title>
 			<description>## Current Release Notes
-* Probably fixed #549
-* Handle inline keyed objects #550
+* Fix NRE due to invalid inline syntax
 
 ## Release Notes 1.26
 * Update dependencies
@@ -80,8 +76,8 @@
 * Added conflict solver option to skip parsing some languages
 * Add conflict solver configuration to customize colors for new diff viewer
 * Add templateable merge mod naming</description>
-			<pubDate>Fri, 23 May 2025 22:06:55 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.26.245/win-x64.zip" sparkle:version="1.26.245.38334" sparkle:shortVersionString="1.26.245" length="106775090" sparkle:os="windows" type="application/zip" sparkle:signature="Gm+a78Qs67c7uygSempwTUa2Vjpzb7bIrxXyr0Atr1kN4GyqAwbR2UZC/CHMNkuzZe9uqRBD0V/j3iBRwCxKCw=="/>
+			<pubDate>Sun, 25 May 2025 05:27:41 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.26.246/win-x64.zip" sparkle:version="1.26.246.59433" sparkle:shortVersionString="1.26.246" length="106774953" sparkle:os="windows" type="application/zip" sparkle:signature="V84NOeyIBr1pm/Mmh5Bocufi/UaqDXYQpY+Za/AmxDPJ6undqpNHgmtt/V7t/haf9PE0D5kvx8pmFcaixwyJAg=="/>
 		</item>
 	</channel>
 </rss>
