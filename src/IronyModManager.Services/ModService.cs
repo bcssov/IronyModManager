@@ -4,7 +4,7 @@
 // Created          : 02-24-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 12-23-2024
+// Last Modified On : 06-18-2025
 // ***********************************************************************
 // <copyright file="ModService.cs" company="Mario">
 //     Mario
@@ -107,14 +107,9 @@ namespace IronyModManager.Services
                 return string.Empty;
             }
 
-            if (mod.Source == ModSource.Paradox)
-            {
-                return string.Format(Constants.Paradox_Url, mod.RemoteId);
-            }
-            else
-            {
-                return string.Format(Constants.Steam_Url, mod.RemoteId);
-            }
+            return mod.Source == ModSource.Paradox
+                ? string.Format(Constants.Paradox_Url, mod.RemoteId)
+                : string.Format(Constants.Steam_Url, mod.RemoteId);
         }
 
         /// <summary>
@@ -286,13 +281,11 @@ namespace IronyModManager.Services
                 }))
                 .ConditionalFilter(parameters.IsSelected.Result.HasValue, q =>
                 {
-                    if (parameters.IsSelected.Negate)
-                    {
-                        return q.Where(p => p.IsSelected != parameters.IsSelected.Result.GetValueOrDefault());
-                    }
-
-                    return q.Where(p => p.IsSelected == parameters.IsSelected.Result.GetValueOrDefault());
+                    return parameters.IsSelected.Negate
+                        ? q.Where(p => p.IsSelected != parameters.IsSelected.Result.GetValueOrDefault())
+                        : q.Where(p => p.IsSelected == parameters.IsSelected.Result.GetValueOrDefault());
                 })
+
                 // ReSharper disable once SimplifyLinqExpressionUseAll
                 .ConditionalFilter(parameters.Source.Any(), q => q.Where(p => parameters.Source.Any(s => !s.Negate ? p.Source == SourceTypeToModSource(s.Result) : !sourceNegateCol.Any(a => p.Source == SourceTypeToModSource(a.Result)))))
                 .ConditionalFilter(parameters.Version.Any(), q => q.Where(p => parameters.Version.Any(s => !s.Negate ? IsValidVersion(p.VersionData, s.Version) : !versionNegateCol.Any(a => IsValidVersion(p.VersionData, a.Version)))));
@@ -331,13 +324,11 @@ namespace IronyModManager.Services
                 }))
                 .ConditionalFilter(parameters.IsSelected.Result.HasValue, q =>
                 {
-                    if (parameters.IsSelected.Negate)
-                    {
-                        return q.Where(p => p.IsSelected != parameters.IsSelected.Result.GetValueOrDefault());
-                    }
-
-                    return q.Where(p => p.IsSelected == parameters.IsSelected.Result.GetValueOrDefault());
+                    return parameters.IsSelected.Negate
+                        ? q.Where(p => p.IsSelected != parameters.IsSelected.Result.GetValueOrDefault())
+                        : q.Where(p => p.IsSelected == parameters.IsSelected.Result.GetValueOrDefault());
                 })
+
                 // ReSharper disable once SimplifyLinqExpressionUseAll
                 .ConditionalFilter(parameters.Source.Any(), q => q.Where(p => parameters.Source.Any(s => !s.Negate ? p.Source == SourceTypeToModSource(s.Result) : !sourceNegateCol.Any(a => p.Source == SourceTypeToModSource(a.Result)))))
                 .ConditionalFilter(parameters.Version.Any(), q => q.Where(p => parameters.Version.Any(s => !s.Negate ? IsValidVersion(p.VersionData, s.Version) : !versionNegateCol.Any(a => IsValidVersion(p.VersionData, a.Version)))));
@@ -736,7 +727,7 @@ namespace IronyModManager.Services
             // Json metadata doesn't support zips to ignore them
             var files = Directory.Exists(path) && modDescriptorType == ModDescriptorType.DescriptorMod
                 ? Directory.EnumerateFiles(path, $"*{Shared.Constants.ZipExtension}").Union(Directory.EnumerateFiles(path, $"*{Shared.Constants.BinExtension}"))
-                : Array.Empty<string>();
+                : [];
             var directories = Directory.Exists(path) ? Directory.EnumerateDirectories(path) : Array.Empty<string>();
             var mods = new ConcurrentBag<IModInstallationResult>();
 
@@ -910,7 +901,7 @@ namespace IronyModManager.Services
                     }
 
                     var subdirectories = Directory.GetDirectories(directory);
-                    if (subdirectories.Any())
+                    if (subdirectories.Length != 0)
                     {
                         foreach (var subdirectory in subdirectories)
                         {

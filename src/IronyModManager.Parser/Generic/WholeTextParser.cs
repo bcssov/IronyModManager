@@ -4,7 +4,7 @@
 // Created          : 03-28-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-12-2025
+// Last Modified On : 05-25-2025
 // ***********************************************************************
 // <copyright file="WholeTextParser.cs" company="Mario">
 //     Mario
@@ -109,22 +109,31 @@ namespace IronyModManager.Parser.Generic
             else
             {
                 var code = CodeParser.ParseScriptWithoutValidation(args.Lines, args.File);
-                def.OriginalCode = def.Code = GetNonFileTagCode(code);
 
-                var definitions = new List<IDefinition>();
-                definitions.AddRange(ParseSimpleTypes(code.Values, args, allowInlineAssignment: true));
-                definitions.AddRange(ParseComplexTypes(code.Values, args));
-                definitions.AddRange(ParseTypesForVariables(code.Values, args));
-                foreach (var item in definitions)
+                // Somebody decided to be a smart ass for some reason in inlines
+                if (code.Error == null)
                 {
-                    foreach (var tag in item.Tags)
+                    def.OriginalCode = def.Code = GetNonFileTagCode(code);
+                    var definitions = new List<IDefinition>();
+                    definitions.AddRange(ParseSimpleTypes(code.Values, args, allowInlineAssignment: true));
+                    definitions.AddRange(ParseComplexTypes(code.Values, args));
+                    definitions.AddRange(ParseTypesForVariables(code.Values, args));
+                    foreach (var item in definitions)
                     {
-                        var lower = tag.ToLowerInvariant();
-                        if (!def.Tags.Contains(lower))
+                        foreach (var tag in item.Tags)
                         {
-                            def.Tags.Add(lower);
+                            var lower = tag.ToLowerInvariant();
+                            if (!def.Tags.Contains(lower))
+                            {
+                                def.Tags.Add(lower);
+                            }
                         }
                     }
+                }
+                else
+                {
+                    def.OriginalCode = def.Code = GetFileTagCode(args.File, args.Lines);
+                    def.Tags.Add(def.Id.ToLowerInvariant());
                 }
             }
 

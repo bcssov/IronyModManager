@@ -4,7 +4,7 @@
 // Created          : 10-26-2021
 //
 // Last Modified By : Mario
-// Last Modified On : 10-18-2024
+// Last Modified On : 06-18-2025
 // ***********************************************************************
 // <copyright file="Parser.cs" company="Mario">
 //     Mario
@@ -265,7 +265,7 @@ namespace IronyModManager.Parser.Mod.Search
         private string GetCacheKey(string text)
         {
             text ??= string.Empty;
-            return $"{CachePrefix}{text.Replace(" ", string.Empty)}";
+            return $"{CachePrefix}{text}";
         }
 
         #endregion Methods
