@@ -4,7 +4,7 @@
 // Created          : 02-29-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-06-2024
+// Last Modified On : 06-18-2025
 // ***********************************************************************
 // <copyright file="InstalledModsControlViewModel.cs" company="Mario">
 //     Mario
@@ -948,7 +948,7 @@ namespace IronyModManager.ViewModels.Controls
                 }
 
                 FilteredMods = modService.FilterMods(Mods, searchString);
-                AllModsEnabled = FilteredMods != null && FilteredMods.Where(p => p.IsValid).Any() && FilteredMods.Where(p => p.IsValid).All(p => p.IsSelected);
+                AllModsEnabled = FilteredMods != null && FilteredMods.Any(p => p.IsValid) && FilteredMods.Where(p => p.IsValid).All(p => p.IsSelected);
                 ApplyDefaultSort();
                 SaveState();
             }).DisposeWith(disposables);
@@ -964,7 +964,7 @@ namespace IronyModManager.ViewModels.Controls
                         item.IsSelected = !enabled;
                     }
 
-                    AllModsEnabled = FilteredMods.Where(p => p.IsValid).Any() && FilteredMods.Where(p => p.IsValid).All(p => p.IsSelected);
+                    AllModsEnabled = FilteredMods.Any(p => p.IsValid) && FilteredMods.Where(p => p.IsValid).All(p => p.IsSelected);
                     PerformingEnableAll = false;
                 }
             }).DisposeWith(disposables);
