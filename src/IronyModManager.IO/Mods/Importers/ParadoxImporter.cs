@@ -4,13 +4,14 @@
 // Created          : 06-22-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 10-29-2022
+// Last Modified On : 06-26-2025
 // ***********************************************************************
 // <copyright file="ParadoxImporter.cs" company="Mario">
 //     Mario
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
+
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -69,7 +70,7 @@ namespace IronyModManager.IO.Mods.Importers
         {
             if (parameters.DescriptorType == Common.DescriptorType.DescriptorMod)
             {
-                var path = Path.Combine(Path.GetDirectoryName(parameters.ModDirectory), Constants.DLC_load_path);
+                var path = Path.Combine(Path.GetDirectoryName(parameters.ModDirectory) ?? string.Empty, Constants.DLC_load_path);
                 if (File.Exists(path))
                 {
                     var result = DIResolver.Get<ICollectionImportResult>();
@@ -95,7 +96,7 @@ namespace IronyModManager.IO.Mods.Importers
             }
             else
             {
-                var path = Path.Combine(Path.GetDirectoryName(parameters.ModDirectory), Constants.Content_load_path);
+                var path = Path.Combine(Path.GetDirectoryName(parameters.ModDirectory) ?? string.Empty, Constants.Content_load_path);
                 if (File.Exists(path))
                 {
                     var result = DIResolver.Get<ICollectionImportResult>();
@@ -119,6 +120,7 @@ namespace IronyModManager.IO.Mods.Importers
                     }
                 }
             }
+
             return null;
         }
 

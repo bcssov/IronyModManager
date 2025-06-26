@@ -4,7 +4,7 @@
 // Created          : 09-12-2021
 //
 // Last Modified By : Mario
-// Last Modified On : 07-05-2024
+// Last Modified On : 06-26-2025
 // ***********************************************************************
 // <copyright file="PathOperations.cs" company="Mario">
 //     Mario
@@ -28,6 +28,23 @@ namespace IronyModManager.IO.Common
         #region Methods
 
         /// <summary>
+        /// Gets the actual path casing.
+        /// </summary>
+        /// <param name="path">The path.</param>
+        /// <returns>System.String.</returns>
+        public static string GetActualPathCasing(string path)
+        {
+            if (!File.Exists(path) && !Directory.Exists(path))
+            {
+                return path;
+            }
+
+            var di = new DirectoryInfo(path);
+
+            return di.Parent != null ? Path.Combine(GetActualPathCasing(di.Parent.FullName), di.Parent.GetFileSystemInfos(di.Name)[0].Name) : di.Name.ToUpperInvariant();
+        }
+
+        /// <summary>
         /// Resolves the relative path.
         /// </summary>
         /// <param name="basePath">The base path.</param>
@@ -46,10 +63,10 @@ namespace IronyModManager.IO.Common
         }
 
         /// <summary>
-        /// Pathes the contains relative segments.
+        /// Determines if path the contains relative segments.
         /// </summary>
         /// <param name="path">The path.</param>
-        /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
+        /// <returns><c>true</c> if contains relative segment, <c>false</c> otherwise.</returns>
         private static bool PathContainsRelativeSegments(string path)
         {
             return path.StandardizeDirectorySeparator().Split(Path.DirectorySeparatorChar).Any(p => string.IsNullOrWhiteSpace(p.Replace(".", string.Empty)));

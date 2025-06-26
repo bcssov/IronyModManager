@@ -4,21 +4,25 @@
 // Created          : 08-11-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-23-2023
+// Last Modified On : 06-26-2025
 // ***********************************************************************
 // <copyright file="Constants.cs" company="Mario">
 //     Mario
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
+
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 
 namespace IronyModManager.IO.Mods
 {
     /// <summary>
     /// Class Constants.
     /// </summary>
+    [SuppressMessage("ReSharper", "InconsistentNaming")]
     internal class Constants
     {
         #region Fields

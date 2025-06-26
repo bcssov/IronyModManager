@@ -4,19 +4,22 @@
 // Created          : 08-11-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 12-01-2022
+// Last Modified On : 06-26-2025
 // ***********************************************************************
 // <copyright file="JsonExporter.cs" company="Mario">
 //     Mario
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
+
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using IronyModManager.DI;
+using IronyModManager.IO.Common;
 using IronyModManager.IO.Common.DLC;
 using IronyModManager.IO.Common.Mods;
 using IronyModManager.IO.Mods.Models.Paradox.Common;
@@ -57,22 +60,23 @@ namespace IronyModManager.IO.Mods.Exporter
         {
             using var mutex = await writeLock.LockAsync();
 
-            bool result = false;
-            if (parameters.DescriptorType == Common.DescriptorType.DescriptorMod)
+            var result = false;
+            if (parameters.DescriptorType == DescriptorType.DescriptorMod)
             {
                 var dlcPath = Path.Combine(parameters.RootPath, Constants.DLC_load_path);
-                var dLCLoad = await LoadPdxModelAsync<DLCLoad>(dlcPath) ?? new DLCLoad();
-                dLCLoad.DisabledDlcs = parameters.DLC.Select(p => p.Path).ToList();
-                result = await WritePdxModelAsync(dLCLoad, dlcPath);
+                var dlcLoad = await LoadPdxModelAsync<DLCLoad>(dlcPath) ?? new DLCLoad();
+                dlcLoad.DisabledDlcs = parameters.DLC.Select(p => p.Path).ToList();
+                result = await WritePdxModelAsync(dlcLoad, dlcPath);
             }
             else
             {
                 var contentPath = Path.Combine(parameters.RootPath, Constants.Content_load_path);
-                var contentLoad = await LoadPdxModelAsync<ContentLoad>(contentPath) ?? new ContentLoad();
-                contentLoad.DisabledDLC = parameters.DLC.Select(p => new DisabledDLC() { ParadoxAppId = p.AppId }).ToList();
+                var contentLoad = await LoadContentLoadModelAsync(contentPath);
+                contentLoad.DisabledDLC = parameters.DLC.Select(p => new DisabledDLC { ParadoxAppId = p.AppId }).ToList();
                 result = await WritePdxModelAsync(contentLoad, contentPath);
             }
 
+            // ReSharper disable once DisposeOnUsingVariable
             mutex.Dispose();
 
             return result;
@@ -86,15 +90,19 @@ namespace IronyModManager.IO.Mods.Exporter
         public async Task<bool> ExportModsAsync(ModWriterParameters parameters)
         {
             using var mutex = await writeLock.LockAsync();
-            if (parameters.DescriptorType == Common.DescriptorType.JsonMetadata)
+            if (parameters.DescriptorType == DescriptorType.JsonMetadata)
             {
                 var result = await ExportContentLoadModsAsync(parameters);
+
+                // ReSharper disable once DisposeOnUsingVariable
                 mutex.Dispose();
                 return result;
             }
             else
             {
                 var result = await ExportDLCLoadModsAsync(parameters);
+
+                // ReSharper disable once DisposeOnUsingVariable
                 mutex.Dispose();
                 return result;
             }
@@ -107,13 +115,13 @@ namespace IronyModManager.IO.Mods.Exporter
         /// <returns>IReadOnlyCollection&lt;IDLCObject&gt;.</returns>
         public async Task<IReadOnlyCollection<IDLCObject>> GetDisabledDLCAsync(DLCParameters parameters)
         {
-            if (parameters.DescriptorType == Common.DescriptorType.DescriptorMod)
+            if (parameters.DescriptorType == DescriptorType.DescriptorMod)
             {
                 var dlcPath = Path.Combine(parameters.RootPath, Constants.DLC_load_path);
-                var dLCLoad = await LoadPdxModelAsync<DLCLoad>(dlcPath) ?? new DLCLoad();
-                if ((dLCLoad.DisabledDlcs?.Any()).GetValueOrDefault())
+                var dlcLoad = await LoadPdxModelAsync<DLCLoad>(dlcPath) ?? new DLCLoad();
+                if (dlcLoad.DisabledDlcs?.Count > 0)
                 {
-                    var result = dLCLoad.DisabledDlcs.Select(p =>
+                    var result = dlcLoad.DisabledDlcs.Select(p =>
                     {
                         var model = DIResolver.Get<IDLCObject>();
                         model.Path = p;
@@ -126,7 +134,7 @@ namespace IronyModManager.IO.Mods.Exporter
             {
                 var contentPath = Path.Combine(parameters.RootPath, Constants.Content_load_path);
                 var contentLoad = await LoadPdxModelAsync<ContentLoad>(contentPath) ?? new ContentLoad();
-                if ((contentLoad.DisabledDLC?.Any()).GetValueOrDefault())
+                if (contentLoad.DisabledDLC?.Count > 0)
                 {
                     var result = contentLoad.DisabledDLC.Select(p =>
                     {
@@ -137,7 +145,25 @@ namespace IronyModManager.IO.Mods.Exporter
                     return result;
                 }
             }
+
             return null;
+        }
+
+        /// <summary>
+        /// Deserializes the PDX model asynchronous.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="content">The content.</param>
+        /// <returns>Task&lt;T&gt;.</returns>
+        private static Task<T> DeserializePdxModelAsync<T>(string content) where T : IPdxFormat
+        {
+            if (!string.IsNullOrWhiteSpace(content))
+            {
+                var result = JsonConvert.DeserializeObject<T>(content);
+                return Task.FromResult(result);
+            }
+
+            return Task.FromResult<T>(default);
         }
 
         /// <summary>
@@ -157,6 +183,7 @@ namespace IronyModManager.IO.Mods.Exporter
                     return result;
                 }
             }
+
             return default;
         }
 
@@ -168,7 +195,7 @@ namespace IronyModManager.IO.Mods.Exporter
         private async Task<bool> ExportContentLoadModsAsync(ModWriterParameters parameters)
         {
             var contentPath = Path.Combine(parameters.RootDirectory, Constants.Content_load_path);
-            var contentLoad = await LoadPdxModelAsync<ContentLoad>(contentPath) ?? new ContentLoad();
+            var contentLoad = await LoadContentLoadModelAsync(contentPath);
 
             if (!parameters.AppendOnly)
             {
@@ -176,19 +203,13 @@ namespace IronyModManager.IO.Mods.Exporter
             }
 
             parameters.EnabledMods?.ToList().ForEach(p =>
-                {
-                    contentLoad.EnabledMods.Add(new EnabledMod()
-                    {
-                        Path = p.FullPath
-                    });
-                });
+            {
+                contentLoad.EnabledMods.Add(new EnabledMod { Path = ResolveContentLoadPath(p.FullPath) });
+            });
             parameters.TopPriorityMods?.ToList().ForEach(p =>
-                {
-                    contentLoad.EnabledMods.Add(new EnabledMod()
-                    {
-                        Path = p.FullPath
-                    });
-                });
+            {
+                contentLoad.EnabledMods.Add(new EnabledMod { Path = ResolveContentLoadPath(p.FullPath) });
+            });
             return await WritePdxModelAsync(contentLoad, contentPath);
         }
 
@@ -202,14 +223,14 @@ namespace IronyModManager.IO.Mods.Exporter
             var dlcPath = Path.Combine(parameters.RootDirectory, Constants.DLC_load_path);
             var gameDataPath = Path.Combine(parameters.RootDirectory, Constants.Game_data_path);
             var modRegistryPath = Path.Combine(parameters.RootDirectory, Constants.Mod_registry_path);
-            var dLCLoad = await LoadPdxModelAsync<DLCLoad>(dlcPath) ?? new DLCLoad();
+            var dlcLoad = await LoadPdxModelAsync<DLCLoad>(dlcPath) ?? new DLCLoad();
             var gameData = await LoadPdxModelAsync<GameData>(gameDataPath) ?? new GameData();
             var modRegistry = await LoadPdxModelAsync<ModRegistryCollection>(modRegistryPath) ?? new ModRegistryCollection();
 
             if (!parameters.AppendOnly)
             {
                 gameData.ModsOrder.Clear();
-                dLCLoad.EnabledMods.Clear();
+                dlcLoad.EnabledMods.Clear();
             }
 
             // Remove invalid mods
@@ -221,6 +242,7 @@ namespace IronyModManager.IO.Mods.Exporter
                     toRemove.Add(pdxMod.Key);
                 }
             }
+
             foreach (var item in toRemove)
             {
                 modRegistry.Remove(item);
@@ -230,7 +252,7 @@ namespace IronyModManager.IO.Mods.Exporter
             {
                 foreach (var mod in parameters.EnabledMods)
                 {
-                    SyncData(dLCLoad, gameData, modRegistry, mod, true);
+                    SyncData(dlcLoad, gameData, modRegistry, mod, true);
                 }
             }
 
@@ -238,7 +260,7 @@ namespace IronyModManager.IO.Mods.Exporter
             {
                 foreach (var mod in parameters.OtherMods)
                 {
-                    SyncData(dLCLoad, gameData, modRegistry, mod, false);
+                    SyncData(dlcLoad, gameData, modRegistry, mod, false);
                 }
             }
 
@@ -251,60 +273,98 @@ namespace IronyModManager.IO.Mods.Exporter
                     {
                         gameData.ModsOrder.Remove(existingEntry.Id);
                     }
-                    var existingEnabledMod = dLCLoad.EnabledMods.FirstOrDefault(p => p.Equals(mod.DescriptorFile, StringComparison.OrdinalIgnoreCase));
+
+                    var existingEnabledMod = dlcLoad.EnabledMods.FirstOrDefault(p => p.Equals(mod.DescriptorFile, StringComparison.OrdinalIgnoreCase));
                     if (!string.IsNullOrWhiteSpace(existingEnabledMod))
                     {
-                        dLCLoad.EnabledMods.Remove(existingEnabledMod);
+                        dlcLoad.EnabledMods.Remove(existingEnabledMod);
                     }
-                    SyncData(dLCLoad, gameData, modRegistry, mod, true);
+
+                    SyncData(dlcLoad, gameData, modRegistry, mod, true);
                 }
             }
 
-            var tasks = new Task<bool>[]
-            {
-                WritePdxModelAsync(dLCLoad, dlcPath),
-                WritePdxModelAsync(gameData, gameDataPath),
-                WritePdxModelAsync(modRegistry, modRegistryPath),
-            };
+            var tasks = new[] { WritePdxModelAsync(dlcLoad, dlcPath), WritePdxModelAsync(gameData, gameDataPath), WritePdxModelAsync(modRegistry, modRegistryPath) };
             await Task.WhenAll(tasks);
 
             return tasks.All(p => p.Result);
         }
 
         /// <summary>
+        /// Load content load model as an asynchronous operation.
+        /// </summary>
+        /// <param name="path">The path.</param>
+        /// <returns>A Task&lt;ContentLoad&gt; representing the asynchronous operation.</returns>
+        private async Task<ContentLoad> LoadContentLoadModelAsync(string path)
+        {
+            ContentLoad contentLoad = new ContentLoadV2();
+            if (File.Exists(path))
+            {
+                var content = await File.ReadAllTextAsync(path);
+                if (string.IsNullOrWhiteSpace(content))
+                {
+                    content = string.Empty;
+                }
+
+                if (content.Contains("enabledUGC", StringComparison.OrdinalIgnoreCase))
+                {
+                    contentLoad = await DeserializePdxModelAsync<ContentLoadV2>(content);
+                }
+                else
+                {
+                    contentLoad = await DeserializePdxModelAsync<ContentLoad>(content);
+                }
+            }
+
+            return contentLoad;
+        }
+
+        /// <summary>
+        /// Resolves the content load path.
+        /// </summary>
+        /// <param name="path">The path.</param>
+        /// <returns>System.String.</returns>
+        private string ResolveContentLoadPath(string path)
+        {
+            // Why? Because Paradox went full paradox!
+            // If the first mod path in the JSON array has casing Paradox doesn't like, the entire mod list fails...
+            // ...even if every single other entry is correct...
+            return RuntimeInformation.IsOSPlatform(OSPlatform.Windows) ? PathOperations.GetActualPathCasing(path) : path;
+        }
+
+        /// <summary>
         /// Synchronizes the data.
         /// </summary>
-        /// <param name="dLCLoad">The d lc load.</param>
+        /// <param name="dlcLoad">The d lc load.</param>
         /// <param name="gameData">The game data.</param>
         /// <param name="modRegistry">The mod registry.</param>
         /// <param name="mod">The mod.</param>
         /// <param name="isEnabled">if set to <c>true</c> [is enabled].</param>
-        private void SyncData(DLCLoad dLCLoad, GameData gameData, ModRegistryCollection modRegistry, IMod mod, bool isEnabled)
+        private void SyncData(DLCLoad dlcLoad, GameData gameData, ModRegistryCollection modRegistry, IMod mod, bool isEnabled)
         {
             ModRegistry pdxMod;
+
             // Populate registry
             if (!modRegistry.Values.Any(p => p.GameRegistryId.Equals(mod.DescriptorFile, StringComparison.OrdinalIgnoreCase)))
             {
-                pdxMod = new ModRegistry()
-                {
-                    Id = Guid.NewGuid().ToString()
-                };
+                pdxMod = new ModRegistry { Id = Guid.NewGuid().ToString() };
                 modRegistry.Add(pdxMod.Id, pdxMod);
             }
             else
             {
                 pdxMod = modRegistry.Values.FirstOrDefault(p => p.GameRegistryId.Equals(mod.DescriptorFile, StringComparison.OrdinalIgnoreCase));
             }
+
             MapModData(pdxMod, mod);
 
             // Populate game data
             var entry = modRegistry.Values.FirstOrDefault(p => p.GameRegistryId.Equals(mod.DescriptorFile, StringComparison.OrdinalIgnoreCase));
-            gameData.ModsOrder.Add(entry.Id);
+            gameData.ModsOrder.Add(entry!.Id);
 
             // Populate dlc
             if (isEnabled)
             {
-                dLCLoad.EnabledMods.Add(mod.DescriptorFile);
+                dlcLoad.EnabledMods.Add(mod.DescriptorFile);
             }
         }
 
@@ -322,20 +382,15 @@ namespace IronyModManager.IO.Mods.Exporter
                 var dirPath = Path.GetDirectoryName(path);
                 if (!Directory.Exists(dirPath))
                 {
-                    Directory.CreateDirectory(dirPath);
+                    Directory.CreateDirectory(dirPath!);
                 }
 
                 if (File.Exists(path))
                 {
-                    _ = new System.IO.FileInfo(path)
-                    {
-                        IsReadOnly = false
-                    };
+                    _ = new System.IO.FileInfo(path) { IsReadOnly = false };
                 }
-                await File.WriteAllTextAsync(path, JsonConvert.SerializeObject(model, Formatting.None, new JsonSerializerSettings()
-                {
-                    NullValueHandling = NullValueHandling.Ignore
-                }));
+
+                await File.WriteAllTextAsync(path!, JsonConvert.SerializeObject(model, Formatting.None, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore }));
                 return true;
             }
 

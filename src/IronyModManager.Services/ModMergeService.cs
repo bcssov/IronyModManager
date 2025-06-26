@@ -4,7 +4,7 @@
 // Created          : 06-19-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 10-19-2024
+// Last Modified On : 06-26-2025
 // ***********************************************************************
 // <copyright file="ModMergeService.cs" company="Mario">
 //     Mario
@@ -430,6 +430,7 @@ namespace IronyModManager.Services
             double lastPercentage = 0;
             var processed = 0;
 
+            // ReSharper disable once AsyncVoidMethod
             async void ModMergeCompressExporterProcessedFile(object sender, EventArgs e)
             {
                 using var mutex = await zipLock.LockAsync();
@@ -578,7 +579,7 @@ namespace IronyModManager.Services
         }
 
         /// <summary>
-        /// Saves a merge collection mod name teplate.
+        /// Saves a merge collection mod name template.
         /// </summary>
         /// <param name="template">The template.</param>
         /// <returns>A string.</returns>
