@@ -4,13 +4,14 @@
 // Created          : 10-29-2022
 //
 // Last Modified By : Mario
-// Last Modified On : 10-29-2022
+// Last Modified On : 06-26-2025
 // ***********************************************************************
 // <copyright file="ContentLoad.cs" company="Mario">
 //     Mario
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -26,12 +27,12 @@ namespace IronyModManager.IO.Mods.Models.Paradox.Common
         #region Constructors
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="ContentLoad"/> class.
+        /// Initializes a new instance of the <see cref="ContentLoad" /> class.
         /// </summary>
         public ContentLoad()
         {
-            DisabledDLC = new List<DisabledDLC>();
-            EnabledMods = new List<EnabledMod>();
+            DisabledDLC = [];
+            EnabledMods = [];
         }
 
         #endregion Constructors
@@ -51,6 +52,25 @@ namespace IronyModManager.IO.Mods.Models.Paradox.Common
         /// <value>The enabled mods.</value>
         [JsonProperty("enabledMods")]
         public List<EnabledMod> EnabledMods { get; set; }
+
+        #endregion Properties
+    }
+
+    /// <summary>
+    /// Class ContentLoadV2.
+    /// Implements the <see cref="IronyModManager.IO.Mods.Models.Paradox.Common.ContentLoad" />
+    /// </summary>
+    /// <seealso cref="IronyModManager.IO.Mods.Models.Paradox.Common.ContentLoad" />
+    public class ContentLoadV2 : ContentLoad
+    {
+        #region Properties
+
+        /// <summary>
+        /// Gets or sets the enabled ugc.
+        /// </summary>
+        /// <value>The enabled ugc.</value>
+        [JsonProperty("enabledUGC")]
+        public List<object> EnabledUGC { get; set; } = [];
 
         #endregion Properties
     }
