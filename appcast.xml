@@ -4,9 +4,9 @@
 		<title>Irony Mod Manager</title>
 		<language>en</language>
 		<item>
-			<title>1.26.248</title>
+			<title>1.26.249</title>
 			<description>## Current Release Notes
-* Added a workaround for Paradox’s brilliant new "Case Sensitivity on a Case-Insensitive Filesystem" feature. Turns out the game picks one mod path (seemingly at random, but probably the first with the lowest casing), then does strict case-sensitive string comparison against it… on Windows… where paths aren’t case-sensitive. Because who needs consistency, right? Irony now force-normalizes paths to avoid this latest episode of Paradox QA Theater.
+* Bump magick.net due to a reported security vulnerability
 
 ## Release Notes 1.26
 * Update dependencies
@@ -19,13 +19,13 @@
 * Added conflict solver option to skip parsing some languages
 * Add conflict solver configuration to customize colors for new diff viewer
 * Add templateable merge mod naming</description>
-			<pubDate>Thu, 26 Jun 2025 21:11:29 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.26.248/linux-x64.zip" sparkle:version="1.26.248.35817" sparkle:shortVersionString="1.26.248" length="91038276" sparkle:os="linux" type="application/zip" sparkle:signature="tEqGnr1nZIgg2/6JzftxGMVwDvYCon3PeQzaEaqIp3MsjHiClMI2c0MOTmp1cuUuY12C1Srh2GdR5c/PWvarDA=="/>
+			<pubDate>Wed, 23 Jul 2025 22:28:03 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.26.249/linux-x64.zip" sparkle:version="1.26.249.39660" sparkle:shortVersionString="1.26.249" length="91145444" sparkle:os="linux" type="application/zip" sparkle:signature="bXfojuENqjjE68MRQYwkJkLfLc3rKBUve7paP5+BDfXBnsg/uM3OXQx9UnAYKJjaNybObvGIy09/FBkx9sLuCQ=="/>
 		</item>
 		<item>
-			<title>1.26.248</title>
+			<title>1.26.249</title>
 			<description>## Current Release Notes
-* Added a workaround for Paradox’s brilliant new "Case Sensitivity on a Case-Insensitive Filesystem" feature. Turns out the game picks one mod path (seemingly at random, but probably the first with the lowest casing), then does strict case-sensitive string comparison against it… on Windows… where paths aren’t case-sensitive. Because who needs consistency, right? Irony now force-normalizes paths to avoid this latest episode of Paradox QA Theater.
+* Bump magick.net due to a reported security vulnerability
 
 ## Release Notes 1.26
 * Update dependencies
@@ -38,13 +38,13 @@
 * Added conflict solver option to skip parsing some languages
 * Add conflict solver configuration to customize colors for new diff viewer
 * Add templateable merge mod naming</description>
-			<pubDate>Thu, 26 Jun 2025 21:11:33 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.26.248/osx-x64.zip" sparkle:version="1.26.248.35817" sparkle:shortVersionString="1.26.248" length="93905960" sparkle:os="osx" type="application/zip" sparkle:signature="YVZuZr5WW+xkt3T/DqijppH0Phm//K+N8xgLfaovvz5X/Gm42um0Kz2KVGVnGgwOX0dK3cKO2mBwpkqXYayFDQ=="/>
+			<pubDate>Wed, 23 Jul 2025 22:28:07 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.26.249/osx-x64.zip" sparkle:version="1.26.249.39660" sparkle:shortVersionString="1.26.249" length="94014115" sparkle:os="osx" type="application/zip" sparkle:signature="ExKoEKKSw0xwvpKkS1mMJP+CZI/00yq88kmpnUVk0V3CGVb0MYFHjwr3rPaZn3OKsSkZBD2+2GiIX4j2GTFzCw=="/>
 		</item>
 		<item>
-			<title>1.26.248</title>
+			<title>1.26.249</title>
 			<description>## Current Release Notes
-* Added a workaround for Paradox’s brilliant new "Case Sensitivity on a Case-Insensitive Filesystem" feature. Turns out the game picks one mod path (seemingly at random, but probably the first with the lowest casing), then does strict case-sensitive string comparison against it… on Windows… where paths aren’t case-sensitive. Because who needs consistency, right? Irony now force-normalizes paths to avoid this latest episode of Paradox QA Theater.
+* Bump magick.net due to a reported security vulnerability
 
 ## Release Notes 1.26
 * Update dependencies
@@ -57,13 +57,13 @@
 * Added conflict solver option to skip parsing some languages
 * Add conflict solver configuration to customize colors for new diff viewer
 * Add templateable merge mod naming</description>
-			<pubDate>Thu, 26 Jun 2025 21:11:37 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.26.248/win-x64-setup.zip" sparkle:version="1.26.248.35817" sparkle:shortVersionString="1.26.248" length="72831971" sparkle:os="windows" type="application/zip" sparkle:signature="0dLFFzzEr/6ebqCQqBA7Jiec0YFjAmdtPS4EfJFuRsRNofBQ6IMASmrxYuvH1WlU+AaQvCSD/ldbAP/5lHuwCQ=="/>
+			<pubDate>Wed, 23 Jul 2025 22:28:10 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.26.249/win-x64-setup.zip" sparkle:version="1.26.249.39660" sparkle:shortVersionString="1.26.249" length="73004071" sparkle:os="windows" type="application/zip" sparkle:signature="V7pw5vDNdX8i+UBmD6QzEnCYGaaWLO2AtwUgE4sLzQu0uy8N66HIWZML2Z24BenjPQ6A3Fklt77gRGRijT/aAg=="/>
 		</item>
 		<item>
-			<title>1.26.248</title>
+			<title>1.26.249</title>
 			<description>## Current Release Notes
-* Added a workaround for Paradox’s brilliant new "Case Sensitivity on a Case-Insensitive Filesystem" feature. Turns out the game picks one mod path (seemingly at random, but probably the first with the lowest casing), then does strict case-sensitive string comparison against it… on Windows… where paths aren’t case-sensitive. Because who needs consistency, right? Irony now force-normalizes paths to avoid this latest episode of Paradox QA Theater.
+* Bump magick.net due to a reported security vulnerability
 
 ## Release Notes 1.26
 * Update dependencies
@@ -76,8 +76,8 @@
 * Added conflict solver option to skip parsing some languages
 * Add conflict solver configuration to customize colors for new diff viewer
 * Add templateable merge mod naming</description>
-			<pubDate>Thu, 26 Jun 2025 21:11:37 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.26.248/win-x64.zip" sparkle:version="1.26.248.35817" sparkle:shortVersionString="1.26.248" length="106785432" sparkle:os="windows" type="application/zip" sparkle:signature="of7WXvflgMhA9A68qJBYkT0d4lEzi6/qvNgiLABue2eVJnYuIT9QPXIEjfsK2fKB94GeusaPRe64wEJOw9CPBw=="/>
+			<pubDate>Wed, 23 Jul 2025 22:28:10 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.26.249/win-x64.zip" sparkle:version="1.26.249.39660" sparkle:shortVersionString="1.26.249" length="106984726" sparkle:os="windows" type="application/zip" sparkle:signature="SufY2VOWEb0RYo24sMSNsufKDSThpgGFzxgPPaq3mN7rtHzyrAdNIkmZrqOkoE/s5NPITyK9k3sJoi/uVLGfDg=="/>
 		</item>
 	</channel>
 </rss>
