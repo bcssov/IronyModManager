@@ -4,7 +4,7 @@
 // Created          : 02-16-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-09-2025
+// Last Modified On : 08-21-2025
 // ***********************************************************************
 // <copyright file="Definition.cs" company="Mario">
 //     Mario
@@ -158,15 +158,14 @@ namespace IronyModManager.Parser.Definitions
         {
             get
             {
-                if (!additionalFileNames.Contains(File))
+                lock (additionalFilesLock)
                 {
-                    lock (additionalFilesLock)
+                    if (!additionalFileNames.Contains(File))
                     {
                         additionalFileNames.Add(File);
                     }
+                    return additionalFileNames.Distinct().ToList();
                 }
-
-                return additionalFileNames.Distinct().ToList();
             }
             set
             {
@@ -377,28 +376,19 @@ namespace IronyModManager.Parser.Definitions
                 FileCI = val.ToLowerInvariant();
                 parentDirectory = string.Empty;
                 parentDirectoryCI = string.Empty;
-                if (generatedFileNames.Contains(old))
+                lock (generatedFilesLock)
                 {
-                    lock (generatedFilesLock)
-                    {
-                        generatedFileNames.Remove(old);
-                    }
+                    generatedFileNames.Remove(old);
                 }
 
-                if (overwrittenFileNames.Contains(old))
+                lock (overwrittenFilesLock)
                 {
-                    lock (overwrittenFilesLock)
-                    {
-                        overwrittenFileNames.Remove(old);
-                    }
+                    overwrittenFileNames.Remove(old);
                 }
 
-                if (additionalFileNames.Contains(old))
+                lock (additionalFilesLock)
                 {
-                    lock (additionalFilesLock)
-                    {
-                        additionalFileNames.Remove(old);
-                    }
+                    additionalFileNames.Remove(old);
                 }
             }
         }
@@ -424,15 +414,15 @@ namespace IronyModManager.Parser.Definitions
         {
             get
             {
-                if (!generatedFileNames.Contains(File))
+                lock (generatedFilesLock)
                 {
-                    lock (generatedFilesLock)
+                    if (!generatedFileNames.Contains(File))
                     {
                         generatedFileNames.Add(File);
                     }
+                    return generatedFileNames.Distinct().ToList();
                 }
 
-                return generatedFileNames.Distinct().ToList();
             }
             set
             {
@@ -572,15 +562,15 @@ namespace IronyModManager.Parser.Definitions
         {
             get
             {
-                if (!overwrittenFileNames.Contains(File))
+                lock (overwrittenFilesLock)
                 {
-                    lock (overwrittenFilesLock)
+                    if (!overwrittenFileNames.Contains(File))
                     {
                         overwrittenFileNames.Add(File);
                     }
+                    return overwrittenFileNames.Distinct().ToList();
                 }
 
-                return overwrittenFileNames.Distinct().ToList();
             }
             set
             {
