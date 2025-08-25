@@ -4,9 +4,10 @@
 		<title>Irony Mod Manager</title>
 		<language>en</language>
 		<item>
-			<title>1.26.249</title>
+			<title>1.26.251</title>
 			<description>## Current Release Notes
-* Bump magick.net due to a reported security vulnerability
+* Fix conflict solver race condition CTD
+* Security: bumped Magick.NET again to patch newly disclosed vulnerability in ImageMagick
 
 ## Release Notes 1.26
 * Update dependencies
@@ -19,13 +20,14 @@
 * Added conflict solver option to skip parsing some languages
 * Add conflict solver configuration to customize colors for new diff viewer
 * Add templateable merge mod naming</description>
-			<pubDate>Wed, 23 Jul 2025 22:28:03 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.26.249/linux-x64.zip" sparkle:version="1.26.249.39660" sparkle:shortVersionString="1.26.249" length="91145444" sparkle:os="linux" type="application/zip" sparkle:signature="bXfojuENqjjE68MRQYwkJkLfLc3rKBUve7paP5+BDfXBnsg/uM3OXQx9UnAYKJjaNybObvGIy09/FBkx9sLuCQ=="/>
+			<pubDate>Mon, 25 Aug 2025 21:06:03 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.26.251/linux-x64.zip" sparkle:version="1.26.251.9259" sparkle:shortVersionString="1.26.251" length="91143366" sparkle:os="linux" type="application/zip" sparkle:signature="4jPZe63mJYKmbaOWfazkJOBFt74BwiY3xubVu25KradGsdQVdpoz1OEzhWZ61gf3B9UI+xO7mTY6XrzaA4aJBQ=="/>
 		</item>
 		<item>
-			<title>1.26.249</title>
+			<title>1.26.251</title>
 			<description>## Current Release Notes
-* Bump magick.net due to a reported security vulnerability
+* Fix conflict solver race condition CTD
+* Security: bumped Magick.NET again to patch newly disclosed vulnerability in ImageMagick
 
 ## Release Notes 1.26
 * Update dependencies
@@ -38,13 +40,14 @@
 * Added conflict solver option to skip parsing some languages
 * Add conflict solver configuration to customize colors for new diff viewer
 * Add templateable merge mod naming</description>
-			<pubDate>Wed, 23 Jul 2025 22:28:07 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.26.249/osx-x64.zip" sparkle:version="1.26.249.39660" sparkle:shortVersionString="1.26.249" length="94014115" sparkle:os="osx" type="application/zip" sparkle:signature="ExKoEKKSw0xwvpKkS1mMJP+CZI/00yq88kmpnUVk0V3CGVb0MYFHjwr3rPaZn3OKsSkZBD2+2GiIX4j2GTFzCw=="/>
+			<pubDate>Mon, 25 Aug 2025 21:06:07 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.26.251/osx-x64.zip" sparkle:version="1.26.251.9259" sparkle:shortVersionString="1.26.251" length="94016335" sparkle:os="osx" type="application/zip" sparkle:signature="QD0MV+bWBSojiPTYLypO3RMquc4hI3mthJUUeOsGzfPEbBOTemwbAxJOJ8hdK7s6qOWcGy88QqIvfRZDyw6zCw=="/>
 		</item>
 		<item>
-			<title>1.26.249</title>
+			<title>1.26.251</title>
 			<description>## Current Release Notes
-* Bump magick.net due to a reported security vulnerability
+* Fix conflict solver race condition CTD
+* Security: bumped Magick.NET again to patch newly disclosed vulnerability in ImageMagick
 
 ## Release Notes 1.26
 * Update dependencies
@@ -57,13 +60,14 @@
 * Added conflict solver option to skip parsing some languages
 * Add conflict solver configuration to customize colors for new diff viewer
 * Add templateable merge mod naming</description>
-			<pubDate>Wed, 23 Jul 2025 22:28:10 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.26.249/win-x64-setup.zip" sparkle:version="1.26.249.39660" sparkle:shortVersionString="1.26.249" length="73004071" sparkle:os="windows" type="application/zip" sparkle:signature="V7pw5vDNdX8i+UBmD6QzEnCYGaaWLO2AtwUgE4sLzQu0uy8N66HIWZML2Z24BenjPQ6A3Fklt77gRGRijT/aAg=="/>
+			<pubDate>Mon, 25 Aug 2025 21:06:11 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.26.251/win-x64-setup.zip" sparkle:version="1.26.251.9259" sparkle:shortVersionString="1.26.251" length="73058595" sparkle:os="windows" type="application/zip" sparkle:signature="UBwEgp+s4ls4QXU62yQg21wbbR1vvj32C41m8K+VncFHqXAO3g4BhowQanu+ouFXrlli4+/9SXdm+QwMo+YqAQ=="/>
 		</item>
 		<item>
-			<title>1.26.249</title>
+			<title>1.26.251</title>
 			<description>## Current Release Notes
-* Bump magick.net due to a reported security vulnerability
+* Fix conflict solver race condition CTD
+* Security: bumped Magick.NET again to patch newly disclosed vulnerability in ImageMagick
 
 ## Release Notes 1.26
 * Update dependencies
@@ -76,8 +80,8 @@
 * Added conflict solver option to skip parsing some languages
 * Add conflict solver configuration to customize colors for new diff viewer
 * Add templateable merge mod naming</description>
-			<pubDate>Wed, 23 Jul 2025 22:28:10 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.26.249/win-x64.zip" sparkle:version="1.26.249.39660" sparkle:shortVersionString="1.26.249" length="106984726" sparkle:os="windows" type="application/zip" sparkle:signature="SufY2VOWEb0RYo24sMSNsufKDSThpgGFzxgPPaq3mN7rtHzyrAdNIkmZrqOkoE/s5NPITyK9k3sJoi/uVLGfDg=="/>
+			<pubDate>Mon, 25 Aug 2025 21:06:11 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.26.251/win-x64.zip" sparkle:version="1.26.251.9259" sparkle:shortVersionString="1.26.251" length="107010492" sparkle:os="windows" type="application/zip" sparkle:signature="xUTA2yS1YxLuczegmjQ3nLHJbMbbDDWwotG6K3spSC92IpwPWblg8F7nJPNGJ8slqEANv/ySQUR/xkPCP+f6Dw=="/>
 		</item>
 	</channel>
 </rss>
