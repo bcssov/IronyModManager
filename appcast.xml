@@ -4,8 +4,11 @@
 		<title>Irony Mod Manager</title>
 		<language>en</language>
 		<item>
-			<title>1.26.251</title>
+			<title>1.26.252</title>
 			<description>## Current Release Notes
+* Irony is fine - emergency bump of Magick.NET (third-party) to patch latest security vulnerability
+
+## 1.26.251 Release Notes
 * Fix conflict solver race condition CTD
 * Security: bumped Magick.NET again to patch newly disclosed vulnerability in ImageMagick
 
@@ -20,12 +23,15 @@
 * Added conflict solver option to skip parsing some languages
 * Add conflict solver configuration to customize colors for new diff viewer
 * Add templateable merge mod naming</description>
-			<pubDate>Mon, 25 Aug 2025 21:06:03 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.26.251/linux-x64.zip" sparkle:version="1.26.251.9259" sparkle:shortVersionString="1.26.251" length="91143366" sparkle:os="linux" type="application/zip" sparkle:signature="4jPZe63mJYKmbaOWfazkJOBFt74BwiY3xubVu25KradGsdQVdpoz1OEzhWZ61gf3B9UI+xO7mTY6XrzaA4aJBQ=="/>
+			<pubDate>Tue, 26 Aug 2025 20:00:00 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.26.252/linux-x64.zip" sparkle:version="1.26.252.37143" sparkle:shortVersionString="1.26.252" length="91143566" sparkle:os="linux" type="application/zip" sparkle:signature="kKrifUIuNuZStObQiwJJz8/cA2/J9uU32fMqfEH2mXV4Vkyi5PDcOhjYboHFwvUW1O6Qnlc7FNm7ra2jO38hDw=="/>
 		</item>
 		<item>
-			<title>1.26.251</title>
+			<title>1.26.252</title>
 			<description>## Current Release Notes
+* Irony is fine - emergency bump of Magick.NET (third-party) to patch latest security vulnerability
+
+## 1.26.251 Release Notes
 * Fix conflict solver race condition CTD
 * Security: bumped Magick.NET again to patch newly disclosed vulnerability in ImageMagick
 
@@ -40,12 +46,15 @@
 * Added conflict solver option to skip parsing some languages
 * Add conflict solver configuration to customize colors for new diff viewer
 * Add templateable merge mod naming</description>
-			<pubDate>Mon, 25 Aug 2025 21:06:07 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.26.251/osx-x64.zip" sparkle:version="1.26.251.9259" sparkle:shortVersionString="1.26.251" length="94016335" sparkle:os="osx" type="application/zip" sparkle:signature="QD0MV+bWBSojiPTYLypO3RMquc4hI3mthJUUeOsGzfPEbBOTemwbAxJOJ8hdK7s6qOWcGy88QqIvfRZDyw6zCw=="/>
+			<pubDate>Tue, 26 Aug 2025 20:00:03 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.26.252/osx-x64.zip" sparkle:version="1.26.252.37143" sparkle:shortVersionString="1.26.252" length="94016572" sparkle:os="osx" type="application/zip" sparkle:signature="RsA9cOSNt0CoRLWq16hUWzxKDG87CJDdvnT9CCCsXP7IL7/VEdON/GRr65c1sDcQRbAnYBRMcXYTe4WXXW08Bg=="/>
 		</item>
 		<item>
-			<title>1.26.251</title>
+			<title>1.26.252</title>
 			<description>## Current Release Notes
+* Irony is fine - emergency bump of Magick.NET (third-party) to patch latest security vulnerability
+
+## 1.26.251 Release Notes
 * Fix conflict solver race condition CTD
 * Security: bumped Magick.NET again to patch newly disclosed vulnerability in ImageMagick
 
@@ -60,12 +69,15 @@
 * Added conflict solver option to skip parsing some languages
 * Add conflict solver configuration to customize colors for new diff viewer
 * Add templateable merge mod naming</description>
-			<pubDate>Mon, 25 Aug 2025 21:06:11 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.26.251/win-x64-setup.zip" sparkle:version="1.26.251.9259" sparkle:shortVersionString="1.26.251" length="73058595" sparkle:os="windows" type="application/zip" sparkle:signature="UBwEgp+s4ls4QXU62yQg21wbbR1vvj32C41m8K+VncFHqXAO3g4BhowQanu+ouFXrlli4+/9SXdm+QwMo+YqAQ=="/>
+			<pubDate>Tue, 26 Aug 2025 20:00:07 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.26.252/win-x64-setup.zip" sparkle:version="1.26.252.37143" sparkle:shortVersionString="1.26.252" length="73100356" sparkle:os="windows" type="application/zip" sparkle:signature="scehdNRcOzZvWUyTVYm9n835550efltaEI4j+VSjuy1DYJ2THdu9OmMR1fdxaKpysA6THt5sM8B6+gfnRfgLAQ=="/>
 		</item>
 		<item>
-			<title>1.26.251</title>
+			<title>1.26.252</title>
 			<description>## Current Release Notes
+* Irony is fine - emergency bump of Magick.NET (third-party) to patch latest security vulnerability
+
+## 1.26.251 Release Notes
 * Fix conflict solver race condition CTD
 * Security: bumped Magick.NET again to patch newly disclosed vulnerability in ImageMagick
 
@@ -80,8 +92,8 @@
 * Added conflict solver option to skip parsing some languages
 * Add conflict solver configuration to customize colors for new diff viewer
 * Add templateable merge mod naming</description>
-			<pubDate>Mon, 25 Aug 2025 21:06:11 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.26.251/win-x64.zip" sparkle:version="1.26.251.9259" sparkle:shortVersionString="1.26.251" length="107010492" sparkle:os="windows" type="application/zip" sparkle:signature="xUTA2yS1YxLuczegmjQ3nLHJbMbbDDWwotG6K3spSC92IpwPWblg8F7nJPNGJ8slqEANv/ySQUR/xkPCP+f6Dw=="/>
+			<pubDate>Tue, 26 Aug 2025 20:00:07 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.26.252/win-x64.zip" sparkle:version="1.26.252.37143" sparkle:shortVersionString="1.26.252" length="107080204" sparkle:os="windows" type="application/zip" sparkle:signature="Iv2l/839nNBZtsk0bDemYz7JFgKG5Kn4PajLFxs98uQ1dvqfHcyyfmFWfMdmhm1Ev7mfCXNC79Xc9JmGyLBPCw=="/>
 		</item>
 	</channel>
 </rss>
