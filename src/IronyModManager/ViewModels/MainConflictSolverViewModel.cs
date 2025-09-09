@@ -4,7 +4,7 @@
 // Created          : 03-18-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-09-2025
+// Last Modified On : 09-09-2025
 // ***********************************************************************
 // <copyright file="MainConflictSolverViewModel.cs" company="Mario">
 //     Mario
@@ -577,7 +577,7 @@ namespace IronyModManager.ViewModels
         {
             BackAllowed = false;
             var virtualDefinitions = ModCompareSelector.VirtualDefinitions;
-            var patchDefinition = virtualDefinitions.FirstOrDefault(p => modPatchCollectionService.IsPatchMod(p.ModName));
+            var patchDefinition = virtualDefinitions?.FirstOrDefault(p => modPatchCollectionService.IsPatchMod(p.ModName));
             if (patchDefinition != null)
             {
                 patchDefinition.UseSimpleValidation = false;
