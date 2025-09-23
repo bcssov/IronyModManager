@@ -263,6 +263,9 @@
         "DirectoryPath": "common\\inline_scripts",
         "PreferredParser": "StellarisWholeTextParser"
     }, {
+        "DirectoryPath": "common\\inline_scripts\\ai",
+        "PreferredParser": "StellarisWholeTextParser"
+    }, {
         "DirectoryPath": "common\\inline_scripts\\astral_rift",
         "PreferredParser": "StellarisWholeTextParser"
     }, {
@@ -288,6 +291,9 @@
         "PreferredParser": "StellarisWholeTextParser"
     }, {
         "DirectoryPath": "common\\inline_scripts\\events",
+        "PreferredParser": "StellarisWholeTextParser"
+    }, {
+        "DirectoryPath": "common\\inline_scripts\\extreme_frontiers",
         "PreferredParser": "StellarisWholeTextParser"
     }, {
         "DirectoryPath": "common\\inline_scripts\\game_start",
@@ -336,6 +342,18 @@
         "PreferredParser": "StellarisWholeTextParser"
     }, {
         "DirectoryPath": "common\\inline_scripts\\ship_components\\weights",
+        "PreferredParser": "StellarisWholeTextParser"
+    }, {
+        "DirectoryPath": "common\\inline_scripts\\shroud",
+        "PreferredParser": "StellarisWholeTextParser"
+    }, {
+        "DirectoryPath": "common\\inline_scripts\\shroud\\buildings",
+        "PreferredParser": "StellarisWholeTextParser"
+    }, {
+        "DirectoryPath": "common\\inline_scripts\\shroud\\jobs",
+        "PreferredParser": "StellarisWholeTextParser"
+    }, {
+        "DirectoryPath": "common\\inline_scripts\\shroud\\objectives",
         "PreferredParser": "StellarisWholeTextParser"
     }, {
         "DirectoryPath": "common\\inline_scripts\\solar_system_initializers",
@@ -425,6 +443,18 @@
         "DirectoryPath": "common\\opinion_modifiers",
         "PreferredParser": "StellarisOverwrittenParser"
     }, {
+        "DirectoryPath": "common\\patrons",
+        "PreferredParser": "DefaultParser"
+    }, {
+        "DirectoryPath": "common\\patrons\\callings",
+        "PreferredParser": "DefaultParser"
+    }, {
+        "DirectoryPath": "common\\patrons\\deeds",
+        "PreferredParser": "DefaultParser"
+    }, {
+        "DirectoryPath": "common\\patrons\\psionic_auras",
+        "PreferredParser": "DefaultParser"
+    }, {
         "DirectoryPath": "common\\personalities",
         "PreferredParser": "DefaultParser"
     }, {
@@ -453,6 +483,9 @@
         "PreferredParser": "DefaultParser"
     }, {
         "DirectoryPath": "common\\precursor_civilizations",
+        "PreferredParser": "DefaultParser"
+    }, {
+        "DirectoryPath": "common\\prescripted_flags",
         "PreferredParser": "DefaultParser"
     }, {
         "DirectoryPath": "common\\random_names",
@@ -905,6 +938,9 @@
         "DirectoryPath": "sound\\distant_stars",
         "PreferredParser": "GenericWholeTextParser"
     }, {
+        "DirectoryPath": "sound\\extreme_frontiers",
+        "PreferredParser": "GenericWholeTextParser"
+    }, {
         "DirectoryPath": "sound\\federations",
         "PreferredParser": "GenericWholeTextParser"
     }, {
@@ -1050,6 +1086,15 @@
         "PreferredParser": "GenericWholeTextParser"
     }, {
         "DirectoryPath": "sound\\reanimated",
+        "PreferredParser": "GenericWholeTextParser"
+    }, {
+        "DirectoryPath": "sound\\shroud\\portraits",
+        "PreferredParser": "GenericWholeTextParser"
+    }, {
+        "DirectoryPath": "sound\\shroud\\ships",
+        "PreferredParser": "GenericWholeTextParser"
+    }, {
+        "DirectoryPath": "sound\\shroud\\ui",
         "PreferredParser": "GenericWholeTextParser"
     }, {
         "DirectoryPath": "sound\\strange_worlds",
