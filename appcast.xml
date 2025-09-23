@@ -4,9 +4,10 @@
 		<title>Irony Mod Manager</title>
 		<language>en</language>
 		<item>
-			<title>1.26.254</title>
+			<title>1.26.256</title>
 			<description>## Current Release Notes
-* Bump Magick.NET (again). Dependabot clearly has a sense of humor and/or a personal vendetta.  
+* Stellaris 4.1 CS support
+* Fix #563
 
 ## Release Notes 1.26
 * Update dependencies
@@ -19,13 +20,14 @@
 * Added conflict solver option to skip parsing some languages
 * Add conflict solver configuration to customize colors for new diff viewer
 * Add templateable merge mod naming</description>
-			<pubDate>Fri, 05 Sep 2025 23:31:22 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.26.254/linux-x64.zip" sparkle:version="1.26.254.8781" sparkle:shortVersionString="1.26.254" length="91143825" sparkle:os="linux" type="application/zip" sparkle:signature="l6CubG/YylJXC/MK8Uxg1VrEM0G/1FKHdCM9TaK8Q3mSMxN5vnp1JMIf9+JFk7TftQaJA3yaWY43lfnM59nIDA=="/>
+			<pubDate>Tue, 23 Sep 2025 20:40:05 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.26.256/linux-x64.zip" sparkle:version="1.26.256.62617" sparkle:shortVersionString="1.26.256" length="91143958" sparkle:os="linux" type="application/zip" sparkle:signature="4RO+/fOAqifewbk49W9nXzEmioazpk7ppGVIjbyGXjwbZDIQ6KGuIO/2hYARzYvkAYA1SZOj6v1CVCW02zguDQ=="/>
 		</item>
 		<item>
-			<title>1.26.254</title>
+			<title>1.26.256</title>
 			<description>## Current Release Notes
-* Bump Magick.NET (again). Dependabot clearly has a sense of humor and/or a personal vendetta.  
+* Stellaris 4.1 CS support
+* Fix #563
 
 ## Release Notes 1.26
 * Update dependencies
@@ -38,13 +40,14 @@
 * Added conflict solver option to skip parsing some languages
 * Add conflict solver configuration to customize colors for new diff viewer
 * Add templateable merge mod naming</description>
-			<pubDate>Fri, 05 Sep 2025 23:31:26 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.26.254/osx-x64.zip" sparkle:version="1.26.254.8781" sparkle:shortVersionString="1.26.254" length="94016784" sparkle:os="osx" type="application/zip" sparkle:signature="5BkJOet8zosX44hcI3CPFbLD9b5HK1VG3JBM09SYnKQ5QK6kg2svLEv6Hb5pILQiUOzPJ8WPcaxt2ZNR1jjUAw=="/>
+			<pubDate>Tue, 23 Sep 2025 20:40:09 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.26.256/osx-x64.zip" sparkle:version="1.26.256.62617" sparkle:shortVersionString="1.26.256" length="94017597" sparkle:os="osx" type="application/zip" sparkle:signature="EbhVE29EFu/fPFpoCtCTC42DMdKhU3PFo4+TbtiUykIN/yk+ixppJf1IQdsLrqQkv3gUyACE67oGkNw60uyWCg=="/>
 		</item>
 		<item>
-			<title>1.26.254</title>
+			<title>1.26.256</title>
 			<description>## Current Release Notes
-* Bump Magick.NET (again). Dependabot clearly has a sense of humor and/or a personal vendetta.  
+* Stellaris 4.1 CS support
+* Fix #563
 
 ## Release Notes 1.26
 * Update dependencies
@@ -57,13 +60,14 @@
 * Added conflict solver option to skip parsing some languages
 * Add conflict solver configuration to customize colors for new diff viewer
 * Add templateable merge mod naming</description>
-			<pubDate>Fri, 05 Sep 2025 23:31:30 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.26.254/win-x64-setup.zip" sparkle:version="1.26.254.8781" sparkle:shortVersionString="1.26.254" length="73107697" sparkle:os="windows" type="application/zip" sparkle:signature="ikxnxXd7PuPHogf0g8//0DylbCS14xv2tEovnSRg/IoUZE06Cm6o+VjC9DZQZJSVmR8MNStbJNI9MheSR7RdDw=="/>
+			<pubDate>Tue, 23 Sep 2025 20:40:13 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.26.256/win-x64-setup.zip" sparkle:version="1.26.256.62617" sparkle:shortVersionString="1.26.256" length="73148806" sparkle:os="windows" type="application/zip" sparkle:signature="iKsm5u0Bqa8fgu1kpVoMBevvwvMwks6LK75i58I7K0wkqvAiI6kzmxcWlMbOI5KCO73GXhx5YYCxcmXLAZw+DA=="/>
 		</item>
 		<item>
-			<title>1.26.254</title>
+			<title>1.26.256</title>
 			<description>## Current Release Notes
-* Bump Magick.NET (again). Dependabot clearly has a sense of humor and/or a personal vendetta.  
+* Stellaris 4.1 CS support
+* Fix #563
 
 ## Release Notes 1.26
 * Update dependencies
@@ -76,8 +80,8 @@
 * Added conflict solver option to skip parsing some languages
 * Add conflict solver configuration to customize colors for new diff viewer
 * Add templateable merge mod naming</description>
-			<pubDate>Fri, 05 Sep 2025 23:31:30 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.26.254/win-x64.zip" sparkle:version="1.26.254.8781" sparkle:shortVersionString="1.26.254" length="107079459" sparkle:os="windows" type="application/zip" sparkle:signature="RYNMFhs6KQj1CZx3rpCCP2nwDA3cD46N0EupN7S/lM9D9IDqqeGDTu5JFRlP6f3AXS9I+XDm4hmj1psNYlVIBA=="/>
+			<pubDate>Tue, 23 Sep 2025 20:40:13 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.26.256/win-x64.zip" sparkle:version="1.26.256.62617" sparkle:shortVersionString="1.26.256" length="107087912" sparkle:os="windows" type="application/zip" sparkle:signature="rcQniVDiIf10nYS6P4x/ePt/zgPziqKx6wGwCn1kfdGgBv7nuvP/Q04hmTECFvQZE2jX5aLQfYEskBwID1zrCQ=="/>
 		</item>
 	</channel>
 </rss>
