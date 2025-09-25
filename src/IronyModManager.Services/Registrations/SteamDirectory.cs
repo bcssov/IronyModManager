@@ -5,18 +5,20 @@
 // Created          : 02-24-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 10-17-2023
+// Last Modified On : 09-25-2025
 // ***********************************************************************
 // <copyright file="SteamDirectory.cs" company="Mario">
 //     Mario
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
+
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
+using Microsoft.Win32;
 using Gameloop.Vdf;
 using Gameloop.Vdf.JsonConverter;
 using Gameloop.Vdf.Linq;
@@ -24,7 +26,6 @@ using IronyModManager.DI;
 using IronyModManager.Services.Models;
 using IronyModManager.Shared;
 using IronyModManager.Shared.Configuration;
-using Microsoft.Win32;
 
 namespace IronyModManager.Services.Registrations
 {
@@ -70,37 +71,37 @@ namespace IronyModManager.Services.Registrations
         /// <summary>
         /// The library folder VDF
         /// </summary>
-        private static readonly string LibraryFolderVDF = PathHelper.MergePaths("config", "libraryfolders.vdf");
+        private static readonly string libraryFolderVDF = PathHelper.MergePaths("config", "libraryfolders.vdf");
 
         /// <summary>
         /// The steam apps library folder VDF
         /// </summary>
-        private static readonly string SteamAppsLibraryFolderVDF = PathHelper.MergePaths(SteamAppsDirectory, "libraryfolders.vdf");
+        private static readonly string steamAppsLibraryFolderVDF = PathHelper.MergePaths(SteamAppsDirectory, "libraryfolders.vdf");
 
         /// <summary>
         /// The steam common directory
         /// </summary>
-        private static readonly string SteamCommonDirectory = PathHelper.MergePaths(SteamAppsDirectory, "common");
+        private static readonly string steamCommonDirectory = PathHelper.MergePaths(SteamAppsDirectory, "common");
 
         /// <summary>
         /// The steam configuration VDF
         /// </summary>
-        private static readonly string SteamConfigVDF = PathHelper.MergePaths("config", "config.vdf");
+        private static readonly string steamConfigVDF = PathHelper.MergePaths("config", "config.vdf");
 
         /// <summary>
         /// The steam user data directory
         /// </summary>
-        private static readonly string SteamUserDataDirectory = "userdata";
+        private static readonly string steamUserDataDirectory = "userdata";
 
         /// <summary>
         /// The steam workshop directory
         /// </summary>
-        private static readonly string SteamWorkshopDirectory = PathHelper.MergePaths(SteamAppsDirectory, "workshop", "content");
+        private static readonly string steamWorkshopDirectory = PathHelper.MergePaths(SteamAppsDirectory, "workshop", "content");
 
         /// <summary>
         /// The VDF serializer settings
         /// </summary>
-        private static readonly VdfSerializerSettings VdfSerializerSettings = new() { MaximumTokenSize = 16384, UsesEscapeSequences = true, UsesConditionals = true };
+        private static readonly VdfSerializerSettings vdfSerializerSettings = new() { MaximumTokenSize = 8192 * 8, UsesEscapeSequences = true, UsesConditionals = true };
 
         #endregion Fields
 
@@ -128,8 +129,10 @@ namespace IronyModManager.Services.Registrations
                 catch
                 {
                 }
+
                 return string.Empty;
             }
+
             var steamInstallDirectory = GetSteamRootPath();
             if (Directory.Exists(steamInstallDirectory))
             {
@@ -137,35 +140,39 @@ namespace IronyModManager.Services.Registrations
                 if (File.Exists(Path.Combine(steamInstallDirectory, SteamAppsDirectory, acfFile)))
                 {
                     var path = findInstallDirectory(Path.Combine(steamInstallDirectory, SteamAppsDirectory, acfFile));
-                    if (!string.IsNullOrWhiteSpace(path) && Directory.Exists(Path.Combine(steamInstallDirectory, SteamCommonDirectory, path)))
+                    if (!string.IsNullOrWhiteSpace(path) && Directory.Exists(Path.Combine(steamInstallDirectory, steamCommonDirectory, path)))
                     {
                         if (rootPathOnly)
                         {
                             return Path.Combine(steamInstallDirectory, SteamAppsDirectory);
                         }
-                        return Path.Combine(steamInstallDirectory, SteamCommonDirectory, path);
+
+                        return Path.Combine(steamInstallDirectory, steamCommonDirectory, path);
                     }
                 }
-                var vdfPath = Path.Combine(steamInstallDirectory, SteamConfigVDF);
-                var libraryFolderVDF = Path.Combine(steamInstallDirectory, LibraryFolderVDF);
-                var steamAppsLibraryFolderVDF = Path.Combine(steamInstallDirectory, SteamAppsLibraryFolderVDF);
+
+                var vdfPath = Path.Combine(steamInstallDirectory, steamConfigVDF);
+                var libraryFolderVDF = Path.Combine(steamInstallDirectory, SteamDirectory.libraryFolderVDF);
+                var steamAppsLibraryFolderVDF = Path.Combine(steamInstallDirectory, SteamDirectory.steamAppsLibraryFolderVDF);
                 var paths = GetVdf(vdfPath, libraryFolderVDF, steamAppsLibraryFolderVDF);
                 foreach (var path in paths)
                 {
                     if (File.Exists(Path.Combine(path, SteamAppsDirectory, acfFile)))
                     {
                         var installDir = findInstallDirectory(Path.Combine(path, SteamAppsDirectory, acfFile));
-                        if (!string.IsNullOrWhiteSpace(installDir) && Directory.Exists(Path.Combine(path, SteamCommonDirectory, installDir)))
+                        if (!string.IsNullOrWhiteSpace(installDir) && Directory.Exists(Path.Combine(path, steamCommonDirectory, installDir)))
                         {
                             if (rootPathOnly)
                             {
                                 return Path.Combine(path, SteamAppsDirectory);
                             }
-                            return Path.Combine(path, SteamCommonDirectory, installDir);
+
+                            return Path.Combine(path, steamCommonDirectory, installDir);
                         }
                     }
                 }
             }
+
             return string.Empty;
         }
 
@@ -180,7 +187,7 @@ namespace IronyModManager.Services.Registrations
             var steamInstallDirectory = GetSteamRootPath();
 
             // I always thought that steam would create this folder during installation
-            var path = Path.Combine(steamInstallDirectory, SteamUserDataDirectory);
+            var path = Path.Combine(steamInstallDirectory, steamUserDataDirectory);
             if (Directory.Exists(path))
             {
                 var folders = Directory.EnumerateDirectories(path).Where(p => Directory.Exists(Path.Combine(p, appId.ToString(), "remote"))).Select(p => Path.Combine(p, appId.ToString(), "remote"));
@@ -189,6 +196,7 @@ namespace IronyModManager.Services.Registrations
                     userDataFolders.AddRange(folders);
                 }
             }
+
             return userDataFolders;
         }
 
@@ -204,23 +212,25 @@ namespace IronyModManager.Services.Registrations
             var result = new List<WorkshopDirectoryContainer>();
             if (Directory.Exists(steamInstallDirectory))
             {
-                if (Directory.Exists(Path.Combine(steamInstallDirectory, SteamWorkshopDirectory, appId.ToString())))
+                if (Directory.Exists(Path.Combine(steamInstallDirectory, steamWorkshopDirectory, appId.ToString())))
                 {
-                    result.Add(new WorkshopDirectoryContainer(Path.Combine(steamInstallDirectory, SteamWorkshopDirectory, appId.ToString()).StandardizeDirectorySeparator()));
+                    result.Add(new WorkshopDirectoryContainer(Path.Combine(steamInstallDirectory, steamWorkshopDirectory, appId.ToString()).StandardizeDirectorySeparator()));
                 }
-                var vdfPath = Path.Combine(steamInstallDirectory, SteamConfigVDF);
-                var libraryFolderVDF = Path.Combine(steamInstallDirectory, LibraryFolderVDF);
-                var steamAppsLibraryFolderVDF = Path.Combine(steamInstallDirectory, SteamAppsLibraryFolderVDF);
+
+                var vdfPath = Path.Combine(steamInstallDirectory, steamConfigVDF);
+                var libraryFolderVDF = Path.Combine(steamInstallDirectory, SteamDirectory.libraryFolderVDF);
+                var steamAppsLibraryFolderVDF = Path.Combine(steamInstallDirectory, SteamDirectory.steamAppsLibraryFolderVDF);
                 var paths = GetVdf(vdfPath, libraryFolderVDF, steamAppsLibraryFolderVDF);
                 foreach (var path in paths)
                 {
-                    if (Directory.Exists(Path.Combine(path, SteamWorkshopDirectory, appId.ToString())))
+                    if (Directory.Exists(Path.Combine(path, steamWorkshopDirectory, appId.ToString())))
                     {
-                        result.Add(new(Path.Combine(path, SteamWorkshopDirectory, appId.ToString()).StandardizeDirectorySeparator()));
+                        result.Add(new WorkshopDirectoryContainer(Path.Combine(path, steamWorkshopDirectory, appId.ToString()).StandardizeDirectorySeparator()));
                     }
                 }
             }
-            return result.GroupBy(p => p.PathCI).Select(p => p.FirstOrDefault()).OrderBy(p => p.PathCI.StartsWith(gameDirectory) ? 0 : 1).Select(p => p.Path).ToList();
+
+            return result.GroupBy(p => p.PathCI).Select(p => p.FirstOrDefault()).OrderBy(p => p!.PathCI.StartsWith(gameDirectory) ? 0 : 1).Select(p => p.Path).ToList();
         }
 
         /// <summary>
@@ -253,6 +263,7 @@ namespace IronyModManager.Services.Registrations
             {
                 return options.Steam.InstallLocationOverride;
             }
+
             if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
             {
                 return GetSteamOSXRootPath();
@@ -265,6 +276,7 @@ namespace IronyModManager.Services.Registrations
             {
                 return GetSteamWindowsRootPath();
             }
+
             return string.Empty;
         }
 
@@ -307,6 +319,7 @@ namespace IronyModManager.Services.Registrations
                 catch
                 {
                 }
+
                 return string.Empty;
             }
 
@@ -316,24 +329,21 @@ namespace IronyModManager.Services.Registrations
                 {
                     var paths = new List<string>();
                     var model = LoadVDF(vdfPath);
-                    if (model != null && model.Value != null)
+                    if (model is { Value: not null })
                     {
                         var softwareKeyKey = model.Value.OfType<VProperty>().FirstOrDefault(p => p.Key == "Software");
-                        if (softwareKeyKey != null)
+                        var valveKey = softwareKeyKey?.Value.OfType<VProperty>().FirstOrDefault(p => p.Key == "Valve");
+                        var steamKey = valveKey?.Value.OfType<VProperty>().FirstOrDefault(p => p.Key == "Steam");
+                        if (steamKey != null)
                         {
-                            var valveKey = softwareKeyKey.Value.OfType<VProperty>().FirstOrDefault(p => p.Key == "Valve");
-                            if (valveKey != null)
-                            {
-                                var steamKey = valveKey.Value.OfType<VProperty>().FirstOrDefault(p => p.Key == "Steam");
-                                if (steamKey != null)
-                                {
-                                    paths.AddRange(steamKey.Value.OfType<VProperty>().Where(p => p.Key.StartsWith(SteamVDFBaseInstallFolderId) && p.Value.Type == VTokenType.Value).Select(p => (p.Value as VValue).Value<string>()).Where(p => !string.IsNullOrWhiteSpace(p)));
-                                }
-                            }
+                            paths.AddRange(steamKey.Value.OfType<VProperty>().Where(p => p.Key.StartsWith(SteamVDFBaseInstallFolderId) && p.Value.Type == VTokenType.Value).Select(p => (p.Value as VValue)!.Value<string>())
+                                .Where(p => !string.IsNullOrWhiteSpace(p)));
                         }
                     }
+
                     cachedPaths.Add(vdfPath, paths);
                 }
+
                 var loadAppsLibraryFolder = true;
                 if (File.Exists(libraryFolderPath))
                 {
@@ -341,41 +351,51 @@ namespace IronyModManager.Services.Registrations
                     loadAppsLibraryFolder = false;
                     var paths = new List<string>();
                     var model = LoadVDF(libraryFolderPath);
-                    if (model != null && model.Value != null && model.Value.Children().Any())
+                    if (model is { Value: not null } && model.Value.Children().Any())
                     {
-                        paths.AddRange(model.Value.Children().OfType<VProperty>().Where(p => p.Value.Type == VTokenType.Object && (p.Value is VObject) && (p.Value as VObject).Properties().Any(k => k.Key.Equals("path"))).Select(p => ParseLibraryFolderData(p.Value as VObject)).Where(p => !string.IsNullOrWhiteSpace(p)));
+                        paths.AddRange(model.Value.Children().OfType<VProperty>().Where(p => p.Value.Type == VTokenType.Object && p.Value is VObject vObject && vObject.Properties().Any(k => k.Key.Equals("path")))
+                            .Select(p => ParseLibraryFolderData(p.Value as VObject)).Where(p => !string.IsNullOrWhiteSpace(p)));
                     }
+
                     cachedPaths.Add(libraryFolderPath, paths);
                 }
+
                 if (File.Exists(steamAppsLibraryFolderPath) && loadAppsLibraryFolder)
                 {
                     var paths = new List<string>();
                     var model = LoadVDF(steamAppsLibraryFolderPath);
-                    if (model != null && model.Value != null && model.Value.Children().Any())
+                    if (model is { Value: not null } && model.Value.Children().Any())
                     {
-                        paths.AddRange(model.Value.Children().OfType<VProperty>().Where(p => p.Value.Type == VTokenType.Value && p is VProperty && int.TryParse(p.Key, out var _)).Select(p => (p.Value as VValue).Value<string>()).Where(p => !string.IsNullOrWhiteSpace(p)));
+                        paths.AddRange(model.Value.Children().OfType<VProperty>().Where(p => p.Value.Type == VTokenType.Value && p is not null && int.TryParse(p.Key, out _)).Select(p => (p.Value as VValue)!.Value<string>())
+                            .Where(p => !string.IsNullOrWhiteSpace(p)));
                     }
+
                     cachedPaths.Add(steamAppsLibraryFolderPath, paths);
                 }
             }
+
             if (cachedPaths.ContainsKey(vdfPath) || cachedPaths.ContainsKey(libraryFolderPath) || cachedPaths.ContainsKey(steamAppsLibraryFolderPath))
             {
                 var result = new List<string>();
-                if (cachedPaths.ContainsKey(vdfPath))
+                if (cachedPaths.TryGetValue(vdfPath, out var cachedPath))
                 {
-                    result.AddRange(cachedPaths[vdfPath]);
+                    result.AddRange(cachedPath);
                 }
-                if (cachedPaths.ContainsKey(libraryFolderPath))
+
+                if (cachedPaths.TryGetValue(libraryFolderPath, out var cachedLibPath))
                 {
-                    result.AddRange(cachedPaths[libraryFolderPath]);
+                    result.AddRange(cachedLibPath);
                 }
-                if (cachedPaths.ContainsKey(steamAppsLibraryFolderPath))
+
+                if (cachedPaths.TryGetValue(steamAppsLibraryFolderPath, out var cachedFolderPath))
                 {
-                    result.AddRange(cachedPaths[steamAppsLibraryFolderPath]);
+                    result.AddRange(cachedFolderPath);
                 }
+
                 return result.Distinct().ToList();
             }
-            return new List<string>();
+
+            return [];
         }
 
         /// <summary>
@@ -390,14 +410,15 @@ namespace IronyModManager.Services.Registrations
             {
                 try
                 {
-                    return VdfConvert.Deserialize(content, VdfSerializerSettings);
+                    return VdfConvert.Deserialize(content, vdfSerializerSettings);
                 }
                 catch (Exception ex)
                 {
                     var logger = DIResolver.Get<ILogger>();
-                    logger.Error(ex);
+                    logger.Error(new Exception($"Failed parsing {path}", ex));
                 }
             }
+
             return null;
         }
 
@@ -410,12 +431,9 @@ namespace IronyModManager.Services.Registrations
         {
 #pragma warning disable CA1416 // Validate platform compatibility
             using var key = registryHive.GetRegistryKey(SteamRegistryPath);
-            if (key != null)
-            {
-                var value = key.GetValue(SteamRegistrySubKey);
-                if (value != null)
-                    return value.ToString();
-            }
+            var value = key?.GetValue(SteamRegistrySubKey);
+            if (value != null)
+                return value.ToString();
 #pragma warning restore CA1416 // Validate platform compatibility
             return string.Empty;
         }
