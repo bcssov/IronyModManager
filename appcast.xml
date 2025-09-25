@@ -4,10 +4,13 @@
 		<title>Irony Mod Manager</title>
 		<language>en</language>
 		<item>
-			<title>1.26.258</title>
+			<title>1.26.259</title>
 			<description>## Current Release Notes
+* Increase steam vdf parser buffer size
+
+## 1.26.258
 * Regenerated Wayland protocol bindings
-* Workaround for KDE Plasma/Wayland compositor regression (xdg_surface: attached a buffer before configure event)
+* Workaround for KDE Plasma/Wayland compositor regression (xdg_surface: attached a buffer before configure event) 
 
 ## 1.26.256
 * Stellaris 4.1 CS support
@@ -24,14 +27,17 @@
 * Added conflict solver option to skip parsing some languages
 * Add conflict solver configuration to customize colors for new diff viewer
 * Add templateable merge mod naming</description>
-			<pubDate>Thu, 25 Sep 2025 04:25:10 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.26.258/linux-x64.zip" sparkle:version="1.26.258.47292" sparkle:shortVersionString="1.26.258" length="91143812" sparkle:os="linux" type="application/zip" sparkle:signature="axwn2w9yNkh461mJl5xNeQUxq4nIYK6mPHakaUtYJVNJzC+ikYxE6zcPDFs5DjScP0Rz7s2nyq5yNgIRQ6KICw=="/>
+			<pubDate>Thu, 25 Sep 2025 21:02:18 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.26.259/linux-x64.zip" sparkle:version="1.26.259.56000" sparkle:shortVersionString="1.26.259" length="91143949" sparkle:os="linux" type="application/zip" sparkle:signature="vbiXBb0YQVuLKNnbNif3zUeNXZQk9xzpA+scCtJpCRDuRFNKmyuGHbdRW8DffkfbFIXizHdX/z5jxsUJj8kJDA=="/>
 		</item>
 		<item>
-			<title>1.26.258</title>
+			<title>1.26.259</title>
 			<description>## Current Release Notes
+* Increase steam vdf parser buffer size
+
+## 1.26.258
 * Regenerated Wayland protocol bindings
-* Workaround for KDE Plasma/Wayland compositor regression (xdg_surface: attached a buffer before configure event)
+* Workaround for KDE Plasma/Wayland compositor regression (xdg_surface: attached a buffer before configure event) 
 
 ## 1.26.256
 * Stellaris 4.1 CS support
@@ -48,14 +54,17 @@
 * Added conflict solver option to skip parsing some languages
 * Add conflict solver configuration to customize colors for new diff viewer
 * Add templateable merge mod naming</description>
-			<pubDate>Thu, 25 Sep 2025 04:25:13 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.26.258/osx-x64.zip" sparkle:version="1.26.258.47292" sparkle:shortVersionString="1.26.258" length="94017447" sparkle:os="osx" type="application/zip" sparkle:signature="Vj+Ks+I70RQmoAiGykcv/By0AU2Sr5MO+wHdBRVTUs8cJl50N7K592/eXMbJplfBMX0UHJKcRN0YWUKrNLlMDw=="/>
+			<pubDate>Thu, 25 Sep 2025 21:02:22 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.26.259/osx-x64.zip" sparkle:version="1.26.259.56000" sparkle:shortVersionString="1.26.259" length="94017598" sparkle:os="osx" type="application/zip" sparkle:signature="V5CWqjG0WYg3HpIk18UXreeG+InCPz/5DkLqay47kIrqy05ODWNWRrogrC0Haa9cucQlgCRmPaCqAKQxh/gpAw=="/>
 		</item>
 		<item>
-			<title>1.26.258</title>
+			<title>1.26.259</title>
 			<description>## Current Release Notes
+* Increase steam vdf parser buffer size
+
+## 1.26.258
 * Regenerated Wayland protocol bindings
-* Workaround for KDE Plasma/Wayland compositor regression (xdg_surface: attached a buffer before configure event)
+* Workaround for KDE Plasma/Wayland compositor regression (xdg_surface: attached a buffer before configure event) 
 
 ## 1.26.256
 * Stellaris 4.1 CS support
@@ -72,14 +81,17 @@
 * Added conflict solver option to skip parsing some languages
 * Add conflict solver configuration to customize colors for new diff viewer
 * Add templateable merge mod naming</description>
-			<pubDate>Thu, 25 Sep 2025 04:25:17 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.26.258/win-x64-setup.zip" sparkle:version="1.26.258.47292" sparkle:shortVersionString="1.26.258" length="73149535" sparkle:os="windows" type="application/zip" sparkle:signature="Ok1EX4dkYBULule9/wq9BAVWIqc4jtsAwMy1XFY2P7O2rrDmGwznaITHvaS9B6itZgkCF07TJp+6qTQx0MedAw=="/>
+			<pubDate>Thu, 25 Sep 2025 21:02:26 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.26.259/win-x64-setup.zip" sparkle:version="1.26.259.56000" sparkle:shortVersionString="1.26.259" length="73149141" sparkle:os="windows" type="application/zip" sparkle:signature="SIprwqlzFa3UOQoMCqVY3me42wr6Vq2FQ2RvP+koaY7jhVCGfcwS6xv/NO8OfqM1eeuwV0nTUZYOD2yRKsmFDg=="/>
 		</item>
 		<item>
-			<title>1.26.258</title>
+			<title>1.26.259</title>
 			<description>## Current Release Notes
+* Increase steam vdf parser buffer size
+
+## 1.26.258
 * Regenerated Wayland protocol bindings
-* Workaround for KDE Plasma/Wayland compositor regression (xdg_surface: attached a buffer before configure event)
+* Workaround for KDE Plasma/Wayland compositor regression (xdg_surface: attached a buffer before configure event) 
 
 ## 1.26.256
 * Stellaris 4.1 CS support
@@ -96,8 +108,8 @@
 * Added conflict solver option to skip parsing some languages
 * Add conflict solver configuration to customize colors for new diff viewer
 * Add templateable merge mod naming</description>
-			<pubDate>Thu, 25 Sep 2025 04:25:17 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.26.258/win-x64.zip" sparkle:version="1.26.258.47292" sparkle:shortVersionString="1.26.258" length="107087769" sparkle:os="windows" type="application/zip" sparkle:signature="9Db9KbhBSNHRbytnKw6T+22NDrFzOYgzyNR5uP2iD7CjJM/4aj6iYQwsoQpauFqelzJ0KzYrPcUqYJ7rMEK2AA=="/>
+			<pubDate>Thu, 25 Sep 2025 21:02:26 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.26.259/win-x64.zip" sparkle:version="1.26.259.56000" sparkle:shortVersionString="1.26.259" length="107087944" sparkle:os="windows" type="application/zip" sparkle:signature="teI9g4lWUZP58Xu0d5aRc1g4+PuX4L5/mj9kljRGfI7MurZbgwY6fnfngLXRFbvkK9tsOgKenrGydWi+fY4GAg=="/>
 		</item>
 	</channel>
 </rss>
