@@ -4,7 +4,7 @@
 // Created          : 03-20-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 05-07-2025
+// Last Modified On : 10-05-2025
 // ***********************************************************************
 // <copyright file="MergeViewerControlViewModel.cs" company="Mario">
 //     Mario
@@ -123,6 +123,11 @@ namespace IronyModManager.ViewModels.Controls
         /// The right definition
         /// </summary>
         private IDefinition rightDefinition;
+
+        /// <summary>
+        /// The setting diffs indicator
+        /// </summary>
+        private bool settingDiffs;
 
         /// <summary>
         /// The syncing selection
@@ -788,12 +793,14 @@ namespace IronyModManager.ViewModels.Controls
         /// <param name="right">The right.</param>
         protected virtual void Compare(string left, string right)
         {
+            settingDiffs = true;
             var builder = new SideBySideDiffBuilder(new Differ());
             var diff = builder.BuildDiffModel(left, right, true);
             PreviousLeftDiff = LeftDiff;
             PreviousRightDiff = RightDiff;
             LeftDiff = GetDiffPieceWithIndex(diff.OldText.Lines);
             RightDiff = GetDiffPieceWithIndex(diff.NewText.Lines);
+            settingDiffs = false;
         }
 
         /// <summary>
@@ -805,7 +812,7 @@ namespace IronyModManager.ViewModels.Controls
         /// <param name="leftSide">if set to <c>true</c> [left side].</param>
         protected virtual void Copy(IEnumerable<DiffPieceWithIndex> selected, IList<DiffPieceWithIndex> source, IList<DiffPieceWithIndex> destination, bool leftSide)
         {
-            if (selected?.Count() > 0)
+            if (selected?.Count() > 0 && !settingDiffs)
             {
                 var idx = 0;
                 selected = CopyDiffPieceCollection(selected);
@@ -841,7 +848,7 @@ namespace IronyModManager.ViewModels.Controls
         /// <param name="leftSide">if set to <c>true</c> [left side].</param>
         protected virtual void CopyAfterLines(IEnumerable<DiffPieceWithIndex> selected, IList<DiffPieceWithIndex> source, IList<DiffPieceWithIndex> destination, bool leftSide)
         {
-            if (selected?.Count() > 0)
+            if (selected?.Count() > 0 && !settingDiffs)
             {
                 var idx = 0;
                 selected = CopyDiffPieceCollection(selected);
@@ -923,7 +930,7 @@ namespace IronyModManager.ViewModels.Controls
         /// <param name="leftSide">if set to <c>true</c> [left side].</param>
         protected virtual void CopyBeforeLines(IEnumerable<DiffPieceWithIndex> selected, IList<DiffPieceWithIndex> source, IList<DiffPieceWithIndex> destination, bool leftSide)
         {
-            if (selected?.Count() > 0)
+            if (selected?.Count() > 0 && !settingDiffs)
             {
                 var idx = 0;
                 selected = CopyDiffPieceCollection(selected);
@@ -1180,7 +1187,7 @@ namespace IronyModManager.ViewModels.Controls
         /// <param name="leftSide">if set to <c>true</c> [left side].</param>
         protected virtual void Move(bool moveUp, IEnumerable<DiffPieceWithIndex> selected, IList<DiffPieceWithIndex> source, bool leftSide)
         {
-            if (selected?.Count() > 0)
+            if (selected?.Count() > 0 && !settingDiffs)
             {
                 var idx = 0;
                 selected = CopyDiffPieceCollection(selected);
