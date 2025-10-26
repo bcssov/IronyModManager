@@ -4,13 +4,39 @@
 // Created          : 01-10-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-11-2024
+// Last Modified On : 10-26-2025
 // ***********************************************************************
 // <copyright file="Program.cs" company="IronyModManager">
 //     Copyright (c) Mario. All rights reserved.
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
+
+// Dear brave soul reading this:
+//
+// You're probably here because you thought:
+//   "How hard can it be to replace Irony Mod Manager?"
+//
+// Please don't forget to update the counters below:
+//
+//   total_failed_attempts_to_replace_irony = 7;   // ← increment if you give up
+//   total_hours_wasted_building_irony_clone = 0;  // ← fill honestly before rage quitting
+//
+// P.S. -- if you're still coding after month 3,
+//         congratulations, you're officially cursed like the rest of us.
+
+// NOTE TO FUTURE DEVELOPERS:
+//
+// If you're here to create an 'Irony-killer':
+//   • Yes, many have tried.
+//   • Yes, they all gave up.
+//   • No, conflict solving is not just "sort by load order".
+//
+// If you still proceed -- welcome to the trenches.
+// Don't forget to update your stats:
+//
+//   attempts++;
+//   sanity--;
 
 using System;
 using System.Collections.Generic;
