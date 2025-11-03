@@ -4,7 +4,7 @@
 // Created          : 02-24-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-18-2025
+// Last Modified On : 11-04-2025
 // ***********************************************************************
 // <copyright file="ModService.cs" company="Mario">
 //     Mario
@@ -265,15 +265,38 @@ namespace IronyModManager.Services
                 return null;
             }
 
+            static bool matches(string value, IReadOnlyList<string> pos, IReadOnlyList<string> neg)
+            {
+                var posOk = pos.Count == 0
+                            || (value != null && pos.Any(t => value.Contains(t, StringComparison.OrdinalIgnoreCase)));
+                var negOk = neg.Count == 0
+                            || value == null
+                            || neg.All(t => !value.Contains(t, StringComparison.OrdinalIgnoreCase));
+                return posOk && negOk;
+            }
+
             var parameters = CleanSearchResult(searchParser.Parse(languageService.GetSelected().Abrv, text));
-            var nameNegateCol = parameters.Name.Any() ? parameters.Name.Where(p => p.Negate).ToList() : new List<NameFilterResult>();
-            var sourceNegateCol = parameters.Source.Any() ? parameters.Source.Where(p => p.Negate).ToList() : new List<SourceTypeResult>();
-            var versionNegateCol = parameters.Version.Any() ? parameters.Version.Where(p => p.Negate).ToList() : new List<VersionTypeResult>();
-            var result = collection.ConditionalFilter(parameters.Name.Any(),
-                    q => q.Where(p => parameters.Name.Any(x => !x.Negate ? p.Name.Contains(x.Text, StringComparison.OrdinalIgnoreCase) : !nameNegateCol.Any(a => p.Name.Contains(a.Text, StringComparison.OrdinalIgnoreCase)))))
-                .ConditionalFilter(parameters.RemoteIds.Any(), q => q.Where(p => p.RemoteId.HasValue && parameters.RemoteIds.Any(x => !x.Negate
-                    ? p.RemoteId.GetValueOrDefault().ToString().Contains(x.Text, StringComparison.OrdinalIgnoreCase)
-                    : !p.RemoteId.GetValueOrDefault().ToString().Contains(x.Text, StringComparison.OrdinalIgnoreCase))))
+
+            var hasName = parameters.Name.Any();
+            var namePos = parameters.Name.Where(t => !t.Negate).Select(t => t.Text).ToList();
+            var nameNeg = parameters.Name.Where(t => t.Negate).Select(t => t.Text).ToList();
+
+            var hasId = parameters.RemoteIds.Any();
+            var idPos = parameters.RemoteIds.Where(t => !t.Negate).Select(t => t.Text).ToList();
+            var idNeg = parameters.RemoteIds.Where(t => t.Negate).Select(t => t.Text).ToList();
+            var hasAnyFilter = hasName || hasId;
+
+            var sourceNegateCol = parameters.Source.Any() ? parameters.Source.Where(p => p.Negate).ToList() : [];
+            var versionNegateCol = parameters.Version.Any() ? parameters.Version.Where(p => p.Negate).ToList() : [];
+            var result = (hasAnyFilter
+                    ? collection.Where(p =>
+                    {
+                        var nameMatch = hasName && matches(p.Name, namePos, nameNeg);
+                        var idStr = p.RemoteId?.ToString();
+                        var idMatch = hasId && matches(idStr, idPos, idNeg);
+                        return nameMatch || idMatch;
+                    })
+                    : collection)
                 .ConditionalFilter(parameters.AchievementCompatible.Result.HasValue, q => q.Where(p =>
                 {
                     var result = p.AchievementStatus == (parameters.AchievementCompatible.Result.GetValueOrDefault() ? AchievementStatus.Compatible : AchievementStatus.NotCompatible);
@@ -285,9 +308,7 @@ namespace IronyModManager.Services
                         ? q.Where(p => p.IsSelected != parameters.IsSelected.Result.GetValueOrDefault())
                         : q.Where(p => p.IsSelected == parameters.IsSelected.Result.GetValueOrDefault());
                 })
-
-                // ReSharper disable once SimplifyLinqExpressionUseAll
-                .ConditionalFilter(parameters.Source.Any(), q => q.Where(p => parameters.Source.Any(s => !s.Negate ? p.Source == SourceTypeToModSource(s.Result) : !sourceNegateCol.Any(a => p.Source == SourceTypeToModSource(a.Result)))))
+                .ConditionalFilter(parameters.Source.Any(), q => q.Where(p => parameters.Source.Any(s => !s.Negate ? p.Source == SourceTypeToModSource(s.Result) : sourceNegateCol.All(a => p.Source != SourceTypeToModSource(a.Result)))))
                 .ConditionalFilter(parameters.Version.Any(), q => q.Where(p => parameters.Version.Any(s => !s.Negate ? IsValidVersion(p.VersionData, s.Version) : !versionNegateCol.Any(a => IsValidVersion(p.VersionData, a.Version)))));
             return result.ToList();
         }
@@ -307,16 +328,40 @@ namespace IronyModManager.Services
                 return null;
             }
 
+            static bool matches(string value, IReadOnlyList<string> pos, IReadOnlyList<string> neg)
+            {
+                var posOk = pos.Count == 0
+                            || (value != null && pos.Any(t => value.Contains(t, StringComparison.OrdinalIgnoreCase)));
+                var negOk = neg.Count == 0
+                            || value == null
+                            || neg.All(t => !value.Contains(t, StringComparison.OrdinalIgnoreCase));
+                return posOk && negOk;
+            }
+
             var parameters = CleanSearchResult(searchParser.Parse(languageService.GetSelected().Abrv, text));
-            var nameNegateCol = parameters.Name.Any() ? parameters.Name.Where(p => p.Negate).ToList() : new List<NameFilterResult>();
-            var sourceNegateCol = parameters.Source.Any() ? parameters.Source.Where(p => p.Negate).ToList() : new List<SourceTypeResult>();
-            var versionNegateCol = parameters.Version.Any() ? parameters.Version.Where(p => p.Negate).ToList() : new List<VersionTypeResult>();
+
+            var hasName = parameters.Name.Any();
+            var namePos = parameters.Name.Where(t => !t.Negate).Select(t => t.Text).ToList();
+            var nameNeg = parameters.Name.Where(t => t.Negate).Select(t => t.Text).ToList();
+
+            var hasId = parameters.RemoteIds.Any();
+            var idPos = parameters.RemoteIds.Where(t => !t.Negate).Select(t => t.Text).ToList();
+            var idNeg = parameters.RemoteIds.Where(t => t.Negate).Select(t => t.Text).ToList();
+            var hasAnyFilter = hasName || hasId;
+
+            var sourceNegateCol = parameters.Source.Any() ? parameters.Source.Where(p => p.Negate).ToList() : [];
+            var versionNegateCol = parameters.Version.Any() ? parameters.Version.Where(p => p.Negate).ToList() : [];
+
             var result = !reverse ? collection.Skip(skipIndex.GetValueOrDefault()) : collection.Reverse().Skip(skipIndex.GetValueOrDefault());
-            result = result.ConditionalFilter(parameters.Name.Any(),
-                    q => q.Where(p => parameters.Name.Any(x => !x.Negate ? p.Name.Contains(x.Text, StringComparison.OrdinalIgnoreCase) : !nameNegateCol.Any(a => p.Name.Contains(a.Text, StringComparison.OrdinalIgnoreCase)))))
-                .ConditionalFilter(parameters.RemoteIds.Any(), q => q.Where(p => p.RemoteId.HasValue && parameters.RemoteIds.Any(x => !x.Negate
-                    ? p.RemoteId.GetValueOrDefault().ToString().Contains(x.Text, StringComparison.OrdinalIgnoreCase)
-                    : !p.RemoteId.GetValueOrDefault().ToString().Contains(x.Text, StringComparison.OrdinalIgnoreCase))))
+            result = (hasAnyFilter
+                    ? collection.Where(p =>
+                    {
+                        var nameMatch = hasName && matches(p.Name, namePos, nameNeg);
+                        var idStr = p.RemoteId?.ToString();
+                        var idMatch = hasId && matches(idStr, idPos, idNeg);
+                        return nameMatch || idMatch;
+                    })
+                    : collection)
                 .ConditionalFilter(parameters.AchievementCompatible.Result.HasValue, q => q.Where(p =>
                 {
                     var result = p.AchievementStatus == (parameters.AchievementCompatible.Result.GetValueOrDefault() ? AchievementStatus.Compatible : AchievementStatus.NotCompatible);
@@ -328,8 +373,6 @@ namespace IronyModManager.Services
                         ? q.Where(p => p.IsSelected != parameters.IsSelected.Result.GetValueOrDefault())
                         : q.Where(p => p.IsSelected == parameters.IsSelected.Result.GetValueOrDefault());
                 })
-
-                // ReSharper disable once SimplifyLinqExpressionUseAll
                 .ConditionalFilter(parameters.Source.Any(), q => q.Where(p => parameters.Source.Any(s => !s.Negate ? p.Source == SourceTypeToModSource(s.Result) : !sourceNegateCol.Any(a => p.Source == SourceTypeToModSource(a.Result)))))
                 .ConditionalFilter(parameters.Version.Any(), q => q.Where(p => parameters.Version.Any(s => !s.Negate ? IsValidVersion(p.VersionData, s.Version) : !versionNegateCol.Any(a => IsValidVersion(p.VersionData, a.Version)))));
             return result.FirstOrDefault();
@@ -702,7 +745,8 @@ namespace IronyModManager.Services
         {
             var names = parserResult.Name.Where(p => !string.IsNullOrWhiteSpace(p.Text)).ToList();
             var remoteIds = names.Where(p => long.TryParse(p.Text, out _)).ToList();
-            remoteIds.ForEach(p => names.Remove(p));
+
+            //remoteIds.ForEach(p => names.Remove(p)); Was actually a feature #569
             var result = new ParsedSearchResult
             {
                 AchievementCompatible = parserResult.AchievementCompatible,
@@ -728,7 +772,7 @@ namespace IronyModManager.Services
             var files = Directory.Exists(path) && modDescriptorType == ModDescriptorType.DescriptorMod
                 ? Directory.EnumerateFiles(path, $"*{Shared.Constants.ZipExtension}").Union(Directory.EnumerateFiles(path, $"*{Shared.Constants.BinExtension}"))
                 : [];
-            var directories = Directory.Exists(path) ? Directory.EnumerateDirectories(path) : Array.Empty<string>();
+            var directories = Directory.Exists(path) ? Directory.EnumerateDirectories(path) : [];
             var mods = new ConcurrentBag<IModInstallationResult>();
 
             static void setDescriptorPath(IMod mod, string desiredPath, string localPath)
