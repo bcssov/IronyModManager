@@ -4,13 +4,14 @@
 // Created          : 02-16-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 01-27-2022
+// Last Modified On : 11-04-2025
 // ***********************************************************************
 // <copyright file="Extensions.Collections.cs" company="Mario">
 //     Mario
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -38,7 +39,7 @@ namespace IronyModManager.Shared
         }
 
         /// <summary>
-        /// Listses the same.
+        /// Determines if lists are the same.
         /// </summary>
         /// <typeparam name="TSource">The type of the t source.</typeparam>
         /// <param name="first">The first.</param>
@@ -50,6 +51,7 @@ namespace IronyModManager.Shared
             {
                 return false;
             }
+
             return first.SequenceEqual(second);
         }
 

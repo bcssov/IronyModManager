@@ -4,7 +4,7 @@
 // Created          : 02-29-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-18-2025
+// Last Modified On : 11-04-2025
 // ***********************************************************************
 // <copyright file="InstalledModsControlViewModel.cs" company="Mario">
 //     Mario
@@ -670,7 +670,7 @@ namespace IronyModManager.ViewModels.Controls
                 }
 
                 FilteredMods = modService.FilterMods(Mods, searchString).ToObservableCollection();
-                AllModsEnabled = FilteredMods.Where(p => p.IsValid).Any() && FilteredMods.Where(p => p.IsValid).All(p => p.IsSelected);
+                AllModsEnabled = FilteredMods.Any(p => p.IsValid) && FilteredMods.Where(p => p.IsValid).All(p => p.IsSelected);
 
                 if (Disposables != null)
                 {
