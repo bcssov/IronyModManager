@@ -4,17 +4,13 @@
 		<title>Irony Mod Manager</title>
 		<language>en</language>
 		<item>
-			<title>1.26.259</title>
+			<title>1.26.267</title>
 			<description>## Current Release Notes
-* Increase steam vdf parser buffer size
-
-## 1.26.258
-* Regenerated Wayland protocol bindings
-* Workaround for KDE Plasma/Wayland compositor regression (xdg_surface: attached a buffer before configure event) 
-
-## 1.26.256
-* Stellaris 4.1 CS support
-* Fix #563
+* Fix #567
+* Resolve #568
+* Bump magick.net
+* Implement #569
+* Add fx folder to CK3 whitelist
 
 ## Release Notes 1.26
 * Update dependencies
@@ -27,21 +23,17 @@
 * Added conflict solver option to skip parsing some languages
 * Add conflict solver configuration to customize colors for new diff viewer
 * Add templateable merge mod naming</description>
-			<pubDate>Thu, 25 Sep 2025 21:02:18 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.26.259/linux-x64.zip" sparkle:version="1.26.259.56000" sparkle:shortVersionString="1.26.259" length="91143949" sparkle:os="linux" type="application/zip" sparkle:signature="vbiXBb0YQVuLKNnbNif3zUeNXZQk9xzpA+scCtJpCRDuRFNKmyuGHbdRW8DffkfbFIXizHdX/z5jxsUJj8kJDA=="/>
+			<pubDate>Tue, 11 Nov 2025 22:52:33 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.26.267/linux-x64.zip" sparkle:version="1.26.267.21346" sparkle:shortVersionString="1.26.267" length="91146616" sparkle:os="linux" type="application/zip" sparkle:signature="gcBflrB99/PnGfrmWzIvTY3cp5BGmCnJnLZFzq85EXVnVG823hpTR3u0S9HF1MxH64aLk38dOTAFEz1Lr4yMCw=="/>
 		</item>
 		<item>
-			<title>1.26.259</title>
+			<title>1.26.267</title>
 			<description>## Current Release Notes
-* Increase steam vdf parser buffer size
-
-## 1.26.258
-* Regenerated Wayland protocol bindings
-* Workaround for KDE Plasma/Wayland compositor regression (xdg_surface: attached a buffer before configure event) 
-
-## 1.26.256
-* Stellaris 4.1 CS support
-* Fix #563
+* Fix #567
+* Resolve #568
+* Bump magick.net
+* Implement #569
+* Add fx folder to CK3 whitelist
 
 ## Release Notes 1.26
 * Update dependencies
@@ -54,21 +46,17 @@
 * Added conflict solver option to skip parsing some languages
 * Add conflict solver configuration to customize colors for new diff viewer
 * Add templateable merge mod naming</description>
-			<pubDate>Thu, 25 Sep 2025 21:02:22 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.26.259/osx-x64.zip" sparkle:version="1.26.259.56000" sparkle:shortVersionString="1.26.259" length="94017598" sparkle:os="osx" type="application/zip" sparkle:signature="V5CWqjG0WYg3HpIk18UXreeG+InCPz/5DkLqay47kIrqy05ODWNWRrogrC0Haa9cucQlgCRmPaCqAKQxh/gpAw=="/>
+			<pubDate>Tue, 11 Nov 2025 22:52:37 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.26.267/osx-x64.zip" sparkle:version="1.26.267.21346" sparkle:shortVersionString="1.26.267" length="94016578" sparkle:os="osx" type="application/zip" sparkle:signature="ds/JoQg9DYZGdDrgfZgwWr05XdkbnOpWvSqwFAvzQRcc5F1LbgMV9/zmKs4Kp3fE317vxjkrLVGxBw+YK17+BQ=="/>
 		</item>
 		<item>
-			<title>1.26.259</title>
+			<title>1.26.267</title>
 			<description>## Current Release Notes
-* Increase steam vdf parser buffer size
-
-## 1.26.258
-* Regenerated Wayland protocol bindings
-* Workaround for KDE Plasma/Wayland compositor regression (xdg_surface: attached a buffer before configure event) 
-
-## 1.26.256
-* Stellaris 4.1 CS support
-* Fix #563
+* Fix #567
+* Resolve #568
+* Bump magick.net
+* Implement #569
+* Add fx folder to CK3 whitelist
 
 ## Release Notes 1.26
 * Update dependencies
@@ -81,21 +69,17 @@
 * Added conflict solver option to skip parsing some languages
 * Add conflict solver configuration to customize colors for new diff viewer
 * Add templateable merge mod naming</description>
-			<pubDate>Thu, 25 Sep 2025 21:02:26 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.26.259/win-x64-setup.zip" sparkle:version="1.26.259.56000" sparkle:shortVersionString="1.26.259" length="73149141" sparkle:os="windows" type="application/zip" sparkle:signature="SIprwqlzFa3UOQoMCqVY3me42wr6Vq2FQ2RvP+koaY7jhVCGfcwS6xv/NO8OfqM1eeuwV0nTUZYOD2yRKsmFDg=="/>
+			<pubDate>Tue, 11 Nov 2025 22:52:40 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.26.267/win-x64-setup.zip" sparkle:version="1.26.267.21346" sparkle:shortVersionString="1.26.267" length="73158595" sparkle:os="windows" type="application/zip" sparkle:signature="/gbSBJ1BmNDasvV2RyzG++Jaj760Hhbgxw2fhvD+Y72Dj53nhu5oWCqC83PNKs577mpAxPGFzi2eTASuvFALAA=="/>
 		</item>
 		<item>
-			<title>1.26.259</title>
+			<title>1.26.267</title>
 			<description>## Current Release Notes
-* Increase steam vdf parser buffer size
-
-## 1.26.258
-* Regenerated Wayland protocol bindings
-* Workaround for KDE Plasma/Wayland compositor regression (xdg_surface: attached a buffer before configure event) 
-
-## 1.26.256
-* Stellaris 4.1 CS support
-* Fix #563
+* Fix #567
+* Resolve #568
+* Bump magick.net
+* Implement #569
+* Add fx folder to CK3 whitelist
 
 ## Release Notes 1.26
 * Update dependencies
@@ -108,8 +92,8 @@
 * Added conflict solver option to skip parsing some languages
 * Add conflict solver configuration to customize colors for new diff viewer
 * Add templateable merge mod naming</description>
-			<pubDate>Thu, 25 Sep 2025 21:02:26 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.26.259/win-x64.zip" sparkle:version="1.26.259.56000" sparkle:shortVersionString="1.26.259" length="107087944" sparkle:os="windows" type="application/zip" sparkle:signature="teI9g4lWUZP58Xu0d5aRc1g4+PuX4L5/mj9kljRGfI7MurZbgwY6fnfngLXRFbvkK9tsOgKenrGydWi+fY4GAg=="/>
+			<pubDate>Tue, 11 Nov 2025 22:52:40 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.26.267/win-x64.zip" sparkle:version="1.26.267.21346" sparkle:shortVersionString="1.26.267" length="107125767" sparkle:os="windows" type="application/zip" sparkle:signature="dyMqyxtjn3luuWZEp559w3CJclJJHDlLqs7nqOkQ6S3YIsQKlMXfT7sThvlLsUH6Ks+mg+te+WrEuXaigkP4Bw=="/>
 		</item>
 	</channel>
 </rss>
