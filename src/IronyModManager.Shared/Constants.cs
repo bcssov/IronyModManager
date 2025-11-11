@@ -4,7 +4,7 @@
 // Created          : 01-17-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 10-01-2024
+// Last Modified On : 11-11-2025
 // ***********************************************************************
 // <copyright file="Constants.cs" company="Mario">
 //     Mario
@@ -70,7 +70,7 @@ namespace IronyModManager.Shared
         public const string JsonExtensionWithoutDot = "json";
 
         /// <summary>
-        /// The replace paths
+        /// The replacement paths constant.
         /// </summary>
         public const string JsonMetadataReplacePaths = "replace_paths";
 
@@ -259,7 +259,7 @@ namespace IronyModManager.Shared
                 /// <summary>
                 /// The checksum folders
                 /// </summary>
-                public static readonly string[] ChecksumFolders = { "common", "events", "history", "map_data", "gui", "localization", "data_binding" };
+                public static readonly string[] ChecksumFolders = ["common", "events", "history", "map_data", "gui", "localization", "data_binding"];
 
                 /// <summary>
                 /// The DLC container
@@ -271,7 +271,7 @@ namespace IronyModManager.Shared
                 /// </summary>
                 public static readonly string[] GameFolders =
                 [
-                    "common", "content_source", "data_binding", "dlc", "dlc_metadata", "events", "fonts", "gfx", "gui", "history", "licenses", "localization", "map_data", "music", "notifications", "sound", "tests", "tools",
+                    "common", "content_source", "data_binding", "dlc", "dlc_metadata", "events", "fonts", "fx", "gfx", "gui", "history", "licenses", "localization", "map_data", "music", "notifications", "sound", "tests", "tools",
                     "tweakergui_assets", "reader_export"
                 ];
 
@@ -323,15 +323,15 @@ namespace IronyModManager.Shared
                 /// <summary>
                 /// The checksum folders
                 /// </summary>
-                public static readonly string[] ChecksumFolders = { "common", "events", "missions", "decisions", "history", "map" };
+                public static readonly string[] ChecksumFolders = ["common", "events", "missions", "decisions", "history", "map"];
 
                 /// <summary>
                 /// The game folders
                 /// </summary>
                 public static readonly string[] GameFolders =
-                {
+                [
                     "common", "customizable_localization", "decisions", "events", "gfx", "hints", "history", "interface", "localisation", "map", "missions", "music", "sound", "tutorial", "tweakergui_assets"
-                };
+                ];
 
                 /// <summary>
                 /// The paradox game identifier
@@ -371,12 +371,12 @@ namespace IronyModManager.Shared
                 /// <summary>
                 /// The checksum folders
                 /// </summary>
-                public static readonly string[] ChecksumFolders = { "common", "events", "history", "map" };
+                public static readonly string[] ChecksumFolders = ["common", "events", "history", "map"];
 
                 /// <summary>
                 /// The game folders
                 /// </summary>
-                public static readonly string[] GameFolders = { "common", "events", "gfx", "history", "interface", "localisation", "map", "music", "portraits", "previewer_assets", "script", "sound", "tutorial", "tweakergui_assets" };
+                public static readonly string[] GameFolders = ["common", "events", "gfx", "history", "interface", "localisation", "map", "music", "portraits", "previewer_assets", "script", "sound", "tutorial", "tweakergui_assets"];
 
                 /// <summary>
                 /// The paradox game identifier
@@ -421,7 +421,7 @@ namespace IronyModManager.Shared
                 /// <summary>
                 /// The checksum folders
                 /// </summary>
-                public static readonly string[] ChecksumFolders = { "common", "events", "decisions", "gui", "localization", "map_data", "setup" };
+                public static readonly string[] ChecksumFolders = ["common", "events", "decisions", "gui", "localization", "map_data", "setup"];
 
                 /// <summary>
                 /// The DLC container
@@ -431,7 +431,7 @@ namespace IronyModManager.Shared
                 /// <summary>
                 /// The game folders
                 /// </summary>
-                public static readonly string[] GameFolders = { "common", "content_source", "decisions", "events", "fonts", "gfx", "gui", "localization", "map_data", "music", "setup", "sound", "tutorial", "tweakergui_assets" };
+                public static readonly string[] GameFolders = ["common", "content_source", "decisions", "events", "fonts", "gfx", "gui", "localization", "map_data", "music", "setup", "sound", "tutorial", "tweakergui_assets"];
 
                 /// <summary>
                 /// The launcher settings file name
@@ -486,16 +486,16 @@ namespace IronyModManager.Shared
                 /// <summary>
                 /// The checksum folders
                 /// </summary>
-                public static readonly string[] ChecksumFolders = { "common", "events", "map", "localisation_synced" };
+                public static readonly string[] ChecksumFolders = ["common", "events", "map", "localisation_synced"];
 
                 /// <summary>
                 /// The game folders
                 /// </summary>
                 public static readonly string[] GameFolders =
-                {
+                [
                     "pdx_launcher", "pdx_online_assets", "prescripted_countries", "previewer_assets", "sound", "tools", "tweakergui_assets", "unchecked_defines", "common", "crash_reporter", "curated_save_games", "dlc", "dlc_metadata",
                     "events", "flags", "fonts", "gfx", "interface", "launcher-assets", "licenses", "locales", "localisation", "map", "music", "pdx_browser"
-                };
+                ];
 
                 /// <summary>
                 /// The paradox game identifier
@@ -535,16 +535,16 @@ namespace IronyModManager.Shared
                 /// <summary>
                 /// The checksum folders
                 /// </summary>
-                public static readonly string[] ChecksumFolders = { "common", "events", "map", "localisation_synced" };
+                public static readonly string[] ChecksumFolders = ["common", "events", "map", "localisation_synced"];
 
                 /// <summary>
                 /// The game folders
                 /// </summary>
                 public static readonly string[] GameFolders =
-                {
+                [
                     "common", "crash_reporter", "dlc", "dlc_metadata", "events", "flags", "fonts", "gfx", "interface", "launcher-assets", "licenses", "locales", "localisation", "localisation_synced", "map", "music", "pdx_launcher",
                     "pdx_online_assets", "prescripted_countries", "previewer_assets", "sound", "tools", "tweakergui_assets"
-                };
+                ];
 
                 /// <summary>
                 /// The paradox game identifier
