@@ -4,7 +4,7 @@
 // Created          : 02-12-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-22-2024
+// Last Modified On : 11-21-2025
 // ***********************************************************************
 // <copyright file="GameService.cs" company="Mario">
 //     Mario
@@ -257,7 +257,7 @@ namespace IronyModManager.Services
 
             if (appendContinueGame)
             {
-                model.LaunchArguments = $"{ContinueGameArgs} {model.LaunchArguments.Trim()}".Trim();
+                model.LaunchArguments = $"{model.LaunchArguments.Trim()} {ContinueGameArgs}".Trim();
             }
 
             model.UserDirectory = game.UserDirectory;
