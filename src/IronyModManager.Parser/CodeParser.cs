@@ -4,7 +4,7 @@
 // Created          : 02-22-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-12-2025
+// Last Modified On : 12-01-2025
 // ***********************************************************************
 // <copyright file="CodeParser.cs" company="Mario">
 //     Mario
@@ -959,7 +959,7 @@ namespace IronyModManager.Parser
                         containsComma = true;
                     }
 
-                    this.value = decimal.TryParse(val, NumberStyles.Number, CultureInfo.InvariantCulture, out var result) ? result.ToString("G0", CultureInfo.InvariantCulture) : val;
+                    this.value = TryConvertDecimal(val);
                     if (containsComma)
                     {
                         this.value += ",";
@@ -968,6 +968,32 @@ namespace IronyModManager.Parser
             }
 
             #endregion Properties
+
+            #region Methods
+
+            /// <summary>
+            /// Tries the convert decimal.
+            /// </summary>
+            /// <param name="value">The value.</param>
+            /// <returns>System.String.</returns>
+            private string TryConvertDecimal(string value)
+            {
+                if (string.IsNullOrWhiteSpace(value))
+                {
+                    return value;
+                }
+
+                // Ensure anti scientific output is in place
+                if (decimal.TryParse(value, NumberStyles.Number, CultureInfo.InvariantCulture, out var result))
+                {
+                    var format = result == decimal.Truncate(result) ? "0" : "0.############################";
+                    return result.ToString(format, CultureInfo.InvariantCulture);
+                }
+
+                return value;
+            }
+
+            #endregion Methods
         }
 
         #endregion Classes
