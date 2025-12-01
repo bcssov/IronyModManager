@@ -4,13 +4,10 @@
 		<title>Irony Mod Manager</title>
 		<language>en</language>
 		<item>
-			<title>1.26.267</title>
+			<title>1.26.271</title>
 			<description>## Current Release Notes
-* Fix #567
-* Resolve #568
-* Bump magick.net
-* Implement #569
-* Add fx folder to CK3 whitelist
+* Resolve #572
+* Ensure parser output does not use scientific notation in numbers
 
 ## Release Notes 1.26
 * Update dependencies
@@ -23,17 +20,14 @@
 * Added conflict solver option to skip parsing some languages
 * Add conflict solver configuration to customize colors for new diff viewer
 * Add templateable merge mod naming</description>
-			<pubDate>Tue, 11 Nov 2025 22:52:33 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.26.267/linux-x64.zip" sparkle:version="1.26.267.21346" sparkle:shortVersionString="1.26.267" length="91146616" sparkle:os="linux" type="application/zip" sparkle:signature="gcBflrB99/PnGfrmWzIvTY3cp5BGmCnJnLZFzq85EXVnVG823hpTR3u0S9HF1MxH64aLk38dOTAFEz1Lr4yMCw=="/>
+			<pubDate>Mon, 01 Dec 2025 21:56:08 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.26.271/linux-x64.zip" sparkle:version="1.26.271.55411" sparkle:shortVersionString="1.26.271" length="90936194" sparkle:os="linux" type="application/zip" sparkle:signature="24Fc++slLa+PwyLMToB8hVGWyi/Bk7zVnF1za/QkkaEpW3X7znIISvns0pXfmYXAcYkpSeSCq0rbYvckFxUfAw=="/>
 		</item>
 		<item>
-			<title>1.26.267</title>
+			<title>1.26.271</title>
 			<description>## Current Release Notes
-* Fix #567
-* Resolve #568
-* Bump magick.net
-* Implement #569
-* Add fx folder to CK3 whitelist
+* Resolve #572
+* Ensure parser output does not use scientific notation in numbers
 
 ## Release Notes 1.26
 * Update dependencies
@@ -46,17 +40,14 @@
 * Added conflict solver option to skip parsing some languages
 * Add conflict solver configuration to customize colors for new diff viewer
 * Add templateable merge mod naming</description>
-			<pubDate>Tue, 11 Nov 2025 22:52:37 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.26.267/osx-x64.zip" sparkle:version="1.26.267.21346" sparkle:shortVersionString="1.26.267" length="94016578" sparkle:os="osx" type="application/zip" sparkle:signature="ds/JoQg9DYZGdDrgfZgwWr05XdkbnOpWvSqwFAvzQRcc5F1LbgMV9/zmKs4Kp3fE317vxjkrLVGxBw+YK17+BQ=="/>
+			<pubDate>Mon, 01 Dec 2025 21:56:12 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.26.271/osx-x64.zip" sparkle:version="1.26.271.55411" sparkle:shortVersionString="1.26.271" length="93808905" sparkle:os="osx" type="application/zip" sparkle:signature="U/+yzWxFFtVgUEDjlFx4TEko0MWu0e3WGE8NxTux+eSfy6NNeKuhD0YgOp2EsQ3EteO523yHN4MHlF5sZrZzCg=="/>
 		</item>
 		<item>
-			<title>1.26.267</title>
+			<title>1.26.271</title>
 			<description>## Current Release Notes
-* Fix #567
-* Resolve #568
-* Bump magick.net
-* Implement #569
-* Add fx folder to CK3 whitelist
+* Resolve #572
+* Ensure parser output does not use scientific notation in numbers
 
 ## Release Notes 1.26
 * Update dependencies
@@ -69,17 +60,14 @@
 * Added conflict solver option to skip parsing some languages
 * Add conflict solver configuration to customize colors for new diff viewer
 * Add templateable merge mod naming</description>
-			<pubDate>Tue, 11 Nov 2025 22:52:40 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.26.267/win-x64-setup.zip" sparkle:version="1.26.267.21346" sparkle:shortVersionString="1.26.267" length="73158595" sparkle:os="windows" type="application/zip" sparkle:signature="/gbSBJ1BmNDasvV2RyzG++Jaj760Hhbgxw2fhvD+Y72Dj53nhu5oWCqC83PNKs577mpAxPGFzi2eTASuvFALAA=="/>
+			<pubDate>Mon, 01 Dec 2025 21:56:16 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.26.271/win-x64-setup.zip" sparkle:version="1.26.271.55411" sparkle:shortVersionString="1.26.271" length="73390453" sparkle:os="windows" type="application/zip" sparkle:signature="XZirKivxe0tWfT+UPhMlw39PgYYgYdaytjfhcsLXbCyewYcSrhHOgtikpuIjkLX9TPTEInpmFjOUliy9+6JAAQ=="/>
 		</item>
 		<item>
-			<title>1.26.267</title>
+			<title>1.26.271</title>
 			<description>## Current Release Notes
-* Fix #567
-* Resolve #568
-* Bump magick.net
-* Implement #569
-* Add fx folder to CK3 whitelist
+* Resolve #572
+* Ensure parser output does not use scientific notation in numbers
 
 ## Release Notes 1.26
 * Update dependencies
@@ -92,8 +80,8 @@
 * Added conflict solver option to skip parsing some languages
 * Add conflict solver configuration to customize colors for new diff viewer
 * Add templateable merge mod naming</description>
-			<pubDate>Tue, 11 Nov 2025 22:52:40 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.26.267/win-x64.zip" sparkle:version="1.26.267.21346" sparkle:shortVersionString="1.26.267" length="107125767" sparkle:os="windows" type="application/zip" sparkle:signature="dyMqyxtjn3luuWZEp559w3CJclJJHDlLqs7nqOkQ6S3YIsQKlMXfT7sThvlLsUH6Ks+mg+te+WrEuXaigkP4Bw=="/>
+			<pubDate>Mon, 01 Dec 2025 21:56:16 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.26.271/win-x64.zip" sparkle:version="1.26.271.55411" sparkle:shortVersionString="1.26.271" length="106917167" sparkle:os="windows" type="application/zip" sparkle:signature="iSXlD7IPDhFsWQoC823l2yACoQ5s+oxPCkxsjPjp3DfVolNgcQIVvjXpSGR3Mk9Tk3EZY6zoK69mnUdgDFi4DQ=="/>
 		</item>
 	</channel>
 </rss>
