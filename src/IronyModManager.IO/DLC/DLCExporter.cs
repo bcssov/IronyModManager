@@ -4,15 +4,17 @@
 // Created          : 02-14-2021
 //
 // Last Modified By : Mario
-// Last Modified On : 10-29-2022
+// Last Modified On : 12-02-2025
 // ***********************************************************************
 // <copyright file="DLCExporter.cs" company="Mario">
 //     Mario
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
+
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using IronyModManager.IO.Common.DLC;
 using IronyModManager.IO.Mods.Exporter;
@@ -60,11 +62,7 @@ namespace IronyModManager.IO.DLC
         /// <exception cref="System.ArgumentException">Invalid descriptor type.</exception>
         public Task<bool> ExportDLCAsync(DLCParameters parameters)
         {
-            if (parameters.DescriptorType == Common.DescriptorType.None)
-            {
-                throw new ArgumentException("Invalid descriptor type.");
-            }
-            return jsonExporter.ExportDLCAsync(parameters);
+            return parameters.DescriptorType == Common.DescriptorType.None ? throw new ArgumentException("Invalid descriptor type.") : jsonExporter.ExportDLCAsync(parameters);
         }
 
         /// <summary>
@@ -75,11 +73,7 @@ namespace IronyModManager.IO.DLC
         /// <exception cref="System.ArgumentException">Invalid descriptor type.</exception>
         public Task<IReadOnlyCollection<IDLCObject>> GetDisabledDLCAsync(DLCParameters parameters)
         {
-            if (parameters.DescriptorType == Common.DescriptorType.None)
-            {
-                throw new ArgumentException("Invalid descriptor type.");
-            }
-            return jsonExporter.GetDisabledDLCAsync(parameters);
+            return parameters.DescriptorType == Common.DescriptorType.None ? throw new ArgumentException("Invalid descriptor type.") : jsonExporter.GetDisabledDLCAsync(parameters);
         }
 
         #endregion Methods

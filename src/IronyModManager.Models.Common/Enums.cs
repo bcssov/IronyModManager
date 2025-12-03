@@ -4,15 +4,17 @@
 // Created          : 03-01-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 11-05-2022
+// Last Modified On : 12-03-2025
 // ***********************************************************************
 // <copyright file="Enums.cs" company="Mario">
 //     Mario
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
+
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace IronyModManager.Models.Common
 {
@@ -128,7 +130,12 @@ namespace IronyModManager.Models.Common
         /// <summary>
         /// The json metadata
         /// </summary>
-        JsonMetadata
+        JsonMetadata,
+
+        /// <summary>
+        /// The json metadata v2
+        /// </summary>
+        JsonMetadataV2
     }
 
     /// <summary>
@@ -234,5 +241,27 @@ namespace IronyModManager.Models.Common
         /// The zip
         /// </summary>
         Zip = 2
+    }
+
+    /// <summary>
+    /// Enum SupportedOperatingSystems
+    /// </summary>
+    [Flags]
+    public enum SupportedOperatingSystems
+    {
+        /// <summary>
+        /// The windows
+        /// </summary>
+        Windows,
+
+        /// <summary>
+        /// The osx
+        /// </summary>
+        OSX,
+
+        /// <summary>
+        /// The linux
+        /// </summary>
+        Linux
     }
 }

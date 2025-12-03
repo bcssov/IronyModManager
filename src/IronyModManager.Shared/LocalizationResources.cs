@@ -132,6 +132,7 @@ namespace IronyModManager.Shared
             public const string Name = Prefix + "Name";
             public const string Stellaris = Prefix + "Stellaris";
             public const string EuropaUniversalisIV = Prefix + "EuropaUniversalisIV";
+            public const string EuropaUniversalisV = Prefix + "EuropaUniversalisV";
             public const string HeartsofIronIV = Prefix + "HeartsofIronIV";
             public const string ImperatorRome = Prefix + "ImperatorRome";
             public const string CrusaderKings3 = Prefix + "CrusaderKings3";

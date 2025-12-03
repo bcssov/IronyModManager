@@ -4,13 +4,14 @@
 // Created          : 01-28-2022
 //
 // Last Modified By : Mario
-// Last Modified On : 10-28-2022
+// Last Modified On : 12-02-2025
 // ***********************************************************************
 // <copyright file="Enums.cs" company="Mario">
 //     Mario
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -30,7 +31,12 @@ namespace IronyModManager.Parser.Common
         /// <summary>
         /// The json metadata
         /// </summary>
-        JsonMetadata
+        JsonMetadata,
+
+        /// <summary>
+        /// The json metadata v2
+        /// </summary>
+        JsonMetadataV2
     }
 
     /// <summary>

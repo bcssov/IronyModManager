@@ -4,13 +4,14 @@
 // Created          : 10-29-2022
 //
 // Last Modified By : Mario
-// Last Modified On : 10-29-2022
+// Last Modified On : 12-03-2025
 // ***********************************************************************
 // <copyright file="JsonModFileReader.cs" company="Mario">
 //     Mario
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
+
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -33,7 +34,7 @@ namespace IronyModManager.IO.Readers
         /// Gets the search extension.
         /// </summary>
         /// <value>The search extension.</value>
-        public override string SearchExtension => Common.Constants.JsonModDirectoy;
+        public override string SearchExtension => Common.Constants.JsonModDirectory;
 
         /// <summary>
         /// Gets the search option.

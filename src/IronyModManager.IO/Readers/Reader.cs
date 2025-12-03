@@ -1,17 +1,17 @@
-﻿
-// ***********************************************************************
+﻿// ***********************************************************************
 // Assembly         : IronyModManager.IO
 // Author           : Mario
 // Created          : 02-23-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-10-2023
+// Last Modified On : 12-03-2025
 // ***********************************************************************
 // <copyright file="Reader.cs" company="Mario">
 //     Mario
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
+
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -24,7 +24,6 @@ using IronyModManager.Shared;
 
 namespace IronyModManager.IO.Readers
 {
-
     /// <summary>
     /// Class Reader.
     /// Implements the <see cref="IronyModManager.IO.Common.Readers.IReader" />
@@ -86,6 +85,8 @@ namespace IronyModManager.IO.Readers
                     using var streamReader = new StreamReader(stream, true);
                     var text = streamReader.ReadToEnd();
                     streamReader.Close();
+
+                    // ReSharper disable once DisposeOnUsingVariable
                     streamReader.Dispose();
                     info.IsBinary = false;
                     info.Content = text.SplitOnNewLine(false);
@@ -96,8 +97,10 @@ namespace IronyModManager.IO.Readers
                     info.IsBinary = true;
                     info.ContentSHA = stream.CalculateSHA();
                 }
+
                 return info;
             }
+
             return null;
         }
 
@@ -110,11 +113,7 @@ namespace IronyModManager.IO.Readers
         {
             path ??= string.Empty;
             var reader = readers.FirstOrDefault(p => p.CanRead(path) && p.CanListFiles(path));
-            if (reader != null)
-            {
-                return reader.GetFiles(path);
-            }
-            return null;
+            return reader?.GetFiles(path);
         }
 
         /// <summary>
@@ -130,7 +129,8 @@ namespace IronyModManager.IO.Readers
                 var stream = GetStream(rootPath, file);
                 return imageReader.Parse(stream, file);
             }
-            return Task.FromResult((MemoryStream)null);
+
+            return Task.FromResult<MemoryStream>(null);
         }
 
         /// <summary>
@@ -158,6 +158,7 @@ namespace IronyModManager.IO.Readers
             {
                 return reader.GetTotalSize(path, extensions);
             }
+
             return 0;
         }
 
@@ -172,11 +173,7 @@ namespace IronyModManager.IO.Readers
         {
             path ??= string.Empty;
             var reader = readers.FirstOrDefault(r => r.CanRead(path, searchSubFolders));
-            if (reader != null)
-            {
-                return reader.Read(path, allowedPaths, searchSubFolders);
-            }
-            return null;
+            return reader?.Read(path, allowedPaths, searchSubFolders);
         }
 
         /// <summary>
@@ -193,6 +190,7 @@ namespace IronyModManager.IO.Readers
             {
                 return reader.GetStream(rootPath, file);
             }
+
             return (null, false, null, null);
         }
 

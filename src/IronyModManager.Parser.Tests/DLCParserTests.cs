@@ -4,7 +4,7 @@
 // Created          : 02-13-2021
 //
 // Last Modified By : Mario
-// Last Modified On : 10-29-2022
+// Last Modified On : 12-02-2025
 // ***********************************************************************
 // <copyright file="DLCParserTests.cs" company="Mario">
 //     Mario
@@ -55,6 +55,7 @@ namespace IronyModManager.Parser.Tests
             result.Name.Should().Be("Horizon Signal");
             result.Path.Should().Be("dlc/dlc01.dlc");
             result.AppId.Should().BeNullOrEmpty();
+            result.IsVisible.Should().BeTrue();
         }
 
         /// <summary>
@@ -94,6 +95,48 @@ namespace IronyModManager.Parser.Tests
             result.Name.Should().Be("American Buildings Pack");
             result.Path.Should().Be("dlc/dlc01.dlc");
             result.AppId.Should().Be("dlc002_american_buildings");
+            result.IsVisible.Should().BeTrue();
+        }
+
+        /// <summary>
+        /// Defines the test method Should_parse_json_dlc_v2_file.
+        /// </summary>
+        [Fact]
+        public void Should_parse_json_dlc_v2_file()
+        {
+            DISetup.SetupContainer();
+
+            var sb = new StringBuilder();
+            sb.AppendLine(@"{");
+            sb.AppendLine(@"	""name"":	""Sacred Sites"",");
+            sb.AppendLine(@"	""localizable_name"":	""D017_sacred_sites_pack"",");
+            sb.AppendLine(@"	""path"":	""dlc/D017_sacred_sites_pack"",");
+            sb.AppendLine(@"	""picture"":	""thumbnail.dds"",");
+            sb.AppendLine(@"	""checksum"":	""e355e9e3f07e885d5c02159859aec9c4"",");
+            sb.AppendLine(@"	""description"":	"""",");
+            sb.AppendLine(@"	""supported_version"":	"""",");
+            sb.AppendLine(@"	""dependencies"":	[],");
+            sb.AppendLine(@"	""replace_path"":	[],");
+            sb.AppendLine(@"	""tags"":	[],");
+            sb.AppendLine(@"	""pops_id"":	""D017_sacred_sites_pack"",");
+            sb.AppendLine(@"	""msgr_id"":	"""",");
+            sb.AppendLine(@"	""steam_id"":	3865300,");
+            sb.AppendLine(@"	""review_steam_id"":	4091680,");
+            sb.AppendLine(@"	""affects_save_compatibility"":	false,");
+            sb.AppendLine(@"	""mp_synced"":	false,");
+            sb.AppendLine(@"	""third_party_content"":	false,");
+            sb.AppendLine(@"	""enabled"":	true,");
+            sb.AppendLine(@"	""hidden"":	true,");
+            sb.AppendLine(@"	""verify"":	true");
+            sb.AppendLine(@"}");
+
+
+            var parser = new DLCParser(new CodeParser(new Logger()));
+            var result = parser.Parse("dlc\\dlc01.dlc", sb.ToString().Split(Environment.NewLine, StringSplitOptions.RemoveEmptyEntries), Common.DescriptorModType.JsonMetadataV2);
+            result.Name.Should().Be("Sacred Sites");
+            result.Path.Should().Be("dlc/dlc01.dlc");
+            result.AppId.Should().Be("Sacred Sites");
+            result.IsVisible.Should().BeFalse();
         }
     }
 }

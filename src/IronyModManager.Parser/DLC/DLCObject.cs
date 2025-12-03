@@ -4,13 +4,14 @@
 // Created          : 02-13-2021
 //
 // Last Modified By : Mario
-// Last Modified On : 10-29-2022
+// Last Modified On : 12-02-2025
 // ***********************************************************************
 // <copyright file="DLCObject.cs" company="Mario">
 //     Mario
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -32,6 +33,12 @@ namespace IronyModManager.Parser.DLC
         /// </summary>
         /// <value>The application identifier.</value>
         public virtual string AppId { get; set; }
+
+        /// <summary>
+        /// Determines if DLC is visible.
+        /// </summary>
+        /// <value>Is Visible flag.</value>
+        public bool IsVisible { get; set; }
 
         /// <summary>
         /// Gets or sets the name.

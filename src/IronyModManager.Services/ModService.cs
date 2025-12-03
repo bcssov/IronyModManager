@@ -4,7 +4,7 @@
 // Created          : 02-24-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 11-04-2025
+// Last Modified On : 12-02-2025
 // ***********************************************************************
 // <copyright file="ModService.cs" company="Mario">
 //     Mario
@@ -352,16 +352,16 @@ namespace IronyModManager.Services
             var sourceNegateCol = parameters.Source.Any() ? parameters.Source.Where(p => p.Negate).ToList() : [];
             var versionNegateCol = parameters.Version.Any() ? parameters.Version.Where(p => p.Negate).ToList() : [];
 
-            var result = !reverse ? collection.Skip(skipIndex.GetValueOrDefault()) : collection.Reverse().Skip(skipIndex.GetValueOrDefault());
+            var result = !reverse ? collection.Skip(skipIndex.GetValueOrDefault()) : collection.Reverse().Skip(skipIndex.GetValueOrDefault()).ToList();
             result = (hasAnyFilter
-                    ? collection.Where(p =>
+                    ? result.Where(p =>
                     {
                         var nameMatch = hasName && matches(p.Name, namePos, nameNeg);
                         var idStr = p.RemoteId?.ToString();
                         var idMatch = hasId && matches(idStr, idPos, idNeg);
                         return nameMatch || idMatch;
                     })
-                    : collection)
+                    : result)
                 .ConditionalFilter(parameters.AchievementCompatible.Result.HasValue, q => q.Where(p =>
                 {
                     var result = p.AchievementStatus == (parameters.AchievementCompatible.Result.GetValueOrDefault() ? AchievementStatus.Compatible : AchievementStatus.NotCompatible);
@@ -373,7 +373,7 @@ namespace IronyModManager.Services
                         ? q.Where(p => p.IsSelected != parameters.IsSelected.Result.GetValueOrDefault())
                         : q.Where(p => p.IsSelected == parameters.IsSelected.Result.GetValueOrDefault());
                 })
-                .ConditionalFilter(parameters.Source.Any(), q => q.Where(p => parameters.Source.Any(s => !s.Negate ? p.Source == SourceTypeToModSource(s.Result) : !sourceNegateCol.Any(a => p.Source == SourceTypeToModSource(a.Result)))))
+                .ConditionalFilter(parameters.Source.Any(), q => q.Where(p => parameters.Source.Any(s => !s.Negate ? p.Source == SourceTypeToModSource(s.Result) : sourceNegateCol.All(a => p.Source != SourceTypeToModSource(a.Result)))))
                 .ConditionalFilter(parameters.Version.Any(), q => q.Where(p => parameters.Version.Any(s => !s.Negate ? IsValidVersion(p.VersionData, s.Version) : !versionNegateCol.Any(a => IsValidVersion(p.VersionData, a.Version)))));
             return result.FirstOrDefault();
         }
@@ -465,14 +465,9 @@ namespace IronyModManager.Services
         {
             using var mutex = await modReadLock.LockAsync();
             var game = GameService.GetSelected();
-            if (game == null || !await ModWriter.CanWriteToModDirectoryAsync(new ModWriterParameters { RootDirectory = game.UserDirectory, Path = Shared.Constants.ModDirectory }))
-            {
-                // ReSharper disable once DisposeOnUsingVariable
-                mutex.Dispose();
-                return null;
-            }
-
-            if (game.ModDescriptorType == ModDescriptorType.JsonMetadata && !await ModWriter.CanWriteToModDirectoryAsync(new ModWriterParameters { RootDirectory = game.UserDirectory, Path = Shared.Constants.JsonModDirectory }))
+            if (game == null || !await ModWriter.CanWriteToModDirectoryAsync(new ModWriterParameters { RootDirectory = game.UserDirectory, Path = Shared.Constants.ModDirectory }) ||
+                (game.ModDescriptorType is ModDescriptorType.JsonMetadata or ModDescriptorType.JsonMetadataV2 &&
+                 !await ModWriter.CanWriteToModDirectoryAsync(new ModWriterParameters { RootDirectory = game.UserDirectory, Path = Shared.Constants.JsonModDirectory })))
             {
                 // ReSharper disable once DisposeOnUsingVariable
                 mutex.Dispose();
@@ -517,7 +512,7 @@ namespace IronyModManager.Services
             {
                 var result = new List<IModInstallationResult>();
                 await ModWriter.CreateModDirectoryAsync(new ModWriterParameters { RootDirectory = game.UserDirectory, Path = Shared.Constants.ModDirectory });
-                if (game.ModDescriptorType == ModDescriptorType.JsonMetadata)
+                if (game.ModDescriptorType is ModDescriptorType.JsonMetadata or ModDescriptorType.JsonMetadataV2)
                 {
                     await ModWriter.CreateModDirectoryAsync(new ModWriterParameters { RootDirectory = game.UserDirectory, Path = Shared.Constants.JsonModDirectory });
                 }
@@ -812,7 +807,7 @@ namespace IronyModManager.Services
                 try
                 {
                     IFileInfo fileInfo;
-                    if (modDescriptorType == ModDescriptorType.JsonMetadata)
+                    if (modDescriptorType is ModDescriptorType.JsonMetadata or ModDescriptorType.JsonMetadataV2)
                     {
                         fileInfo = Reader.GetFileInfo(path, Shared.Constants.DescriptorJsonMetadata);
                         if (fileInfo == null)

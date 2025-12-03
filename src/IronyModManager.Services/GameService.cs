@@ -4,7 +4,7 @@
 // Created          : 02-12-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 11-21-2025
+// Last Modified On : 12-03-2025
 // ***********************************************************************
 // <copyright file="GameService.cs" company="Mario">
 //     Mario
@@ -16,6 +16,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using AutoMapper;
 using IronyModManager.IO.Common;
@@ -23,11 +24,14 @@ using IronyModManager.IO.Common.Readers;
 using IronyModManager.Models.Common;
 using IronyModManager.Services.Common;
 using IronyModManager.Services.Common.MessageBus;
+using IronyModManager.Services.Models;
 using IronyModManager.Services.Resolver;
 using IronyModManager.Shared;
 using IronyModManager.Shared.MessageBus;
 using IronyModManager.Storage.Common;
 using Newtonsoft.Json;
+
+#pragma warning disable CA2208
 
 namespace IronyModManager.Services
 {
@@ -38,7 +42,14 @@ namespace IronyModManager.Services
     /// </summary>
     /// <seealso cref="IronyModManager.Services.BaseService" />
     /// <seealso cref="IronyModManager.Services.Common.IGameService" />
-    public class GameService : BaseService, IGameService
+    /// <remarks>Initializes a new instance of the <see cref="GameService" /> class.</remarks>
+    public class GameService(
+        IMessageBus messageBus,
+        IReportExportService reportExportService,
+        IReader reader,
+        IStorageProvider storageProvider,
+        IPreferencesService preferencesService,
+        IMapper mapper) : BaseService(storageProvider, mapper), IGameService
     {
         #region Fields
 
@@ -58,60 +69,41 @@ namespace IronyModManager.Services
         private const string SteamLaunchArgs = "steam://run/";
 
         /// <summary>
+        /// The version signature regex
+        /// </summary>
+        private static readonly Regex versionSignatureRegex = new(@"(\d+\.\d+\.\d+(?:\.\d+)?)$", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+
+        /// <summary>
         /// The game path resolver
         /// </summary>
-        private readonly GameRootPathResolver gamePathResolver;
+        private readonly GameRootPathResolver gamePathResolver = new();
 
         /// <summary>
         /// The message bus
         /// </summary>
-        private readonly IMessageBus messageBus;
+        private readonly IMessageBus messageBus = messageBus;
 
         /// <summary>
         /// The path resolver
         /// </summary>
-        private readonly PathResolver pathResolver;
+        private readonly PathResolver pathResolver = new();
 
         /// <summary>
         /// The preferences service
         /// </summary>
-        private readonly IPreferencesService preferencesService;
+        private readonly IPreferencesService preferencesService = preferencesService;
 
         /// <summary>
         /// The reader
         /// </summary>
-        private readonly IReader reader;
+        private readonly IReader reader = reader;
 
         /// <summary>
         /// The report export service
         /// </summary>
-        private readonly IReportExportService reportExportService;
+        private readonly IReportExportService reportExportService = reportExportService;
 
         #endregion Fields
-
-        #region Constructors
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="GameService" /> class.
-        /// </summary>
-        /// <param name="messageBus">The message bus.</param>
-        /// <param name="reportExportService">The report export service.</param>
-        /// <param name="reader">The reader.</param>
-        /// <param name="storageProvider">The storage provider.</param>
-        /// <param name="preferencesService">The preferences service.</param>
-        /// <param name="mapper">The mapper.</param>
-        public GameService(IMessageBus messageBus, IReportExportService reportExportService, IReader reader, IStorageProvider storageProvider,
-            IPreferencesService preferencesService, IMapper mapper) : base(storageProvider, mapper)
-        {
-            this.messageBus = messageBus;
-            this.reportExportService = reportExportService;
-            this.preferencesService = preferencesService;
-            this.reader = reader;
-            pathResolver = new PathResolver();
-            gamePathResolver = new GameRootPathResolver();
-        }
-
-        #endregion Constructors
 
         #region Methods
 
@@ -218,7 +210,11 @@ namespace IronyModManager.Services
             {
                 path = settingsObject.BasePath;
                 var model = GetModelInstance<IGameSettings>();
-                model.LaunchArguments = string.Join(" ", settingsObject.ExeArgs);
+                if (settingsObject.ExeArgs != null)
+                {
+                    model.LaunchArguments = string.Join(" ", settingsObject.ExeArgs);
+                }
+
                 model.UserDirectory = pathResolver.Parse(settingsObject.GameDataPath);
                 model.ExecutableLocation = PathOperations.ResolveRelativePath(path, settingsObject.ExePath).StandardizeDirectorySeparator();
                 model.CustomModDirectory = string.Empty;
@@ -335,7 +331,7 @@ namespace IronyModManager.Services
                 }
             }
 
-            return new List<string>();
+            return [];
         }
 
         /// <summary>
@@ -359,7 +355,7 @@ namespace IronyModManager.Services
                 {
                     var files = reader.GetFiles(basePath);
                     var currentReports = await ParseReportAsync(game, basePath, files);
-                    return reportExportService.CompareReports(currentReports.ToList(), importedReports.ToList());
+                    return reportExportService.CompareReports([.. currentReports], [.. importedReports]);
                 }
             }
 
@@ -367,10 +363,10 @@ namespace IronyModManager.Services
         }
 
         /// <summary>
-        /// Determines whether [is continue game allowed] [the specified game].
+        /// Determines whether continue game is allowed.
         /// </summary>
         /// <param name="game">The game.</param>
-        /// <returns><c>true</c> if [is continue game allowed] [the specified game]; otherwise, <c>false</c>.</returns>
+        /// <returns><c>true</c>, if you can continue game; otherwise, <c>false</c>.</returns>
         public virtual bool IsContinueGameAllowed(IGame game)
         {
             const string saveGames = "save games";
@@ -380,7 +376,7 @@ namespace IronyModManager.Services
                 var parsed = reader.Read(continueGameFile);
                 if (parsed?.Count() == 1)
                 {
-                    var data = JsonConvert.DeserializeObject<Models.ContinueGame>(string.Join(Environment.NewLine, parsed.FirstOrDefault()!.Content));
+                    var data = JsonConvert.DeserializeObject<ContinueGame>(string.Join(Environment.NewLine, parsed.FirstOrDefault()!.Content));
                     var path = string.IsNullOrWhiteSpace(data.Filename) ? data.Title : data.Filename;
                     var fileWithoutExtension = Path.GetFileNameWithoutExtension(path);
                     var fileWithExtension = Path.GetFileName(path);
@@ -481,9 +477,7 @@ namespace IronyModManager.Services
         {
             if (games == null || !games.Any() || selectedGame == null)
             {
-#pragma warning disable CA2208 // Instantiate argument exceptions correctly
                 throw new ArgumentNullException($"{nameof(games)} or {nameof(selectedGame)}.");
-#pragma warning restore CA2208 // Instantiate argument exceptions correctly
             }
 
             var currentSelection = GetSelected();
@@ -544,7 +538,7 @@ namespace IronyModManager.Services
             game.LogLocation = gameType.LogLocation;
             game.ChecksumFolders = gameType.ChecksumFolders;
             game.DLCContainer = gameType.DLCContainer;
-            game.GameFolders = gameType.GameFolders ?? new List<string>();
+            game.GameFolders = gameType.GameFolders ?? [];
             game.BaseSteamGameDirectory = gameType.BaseSteamGameDirectory;
             game.AdvancedFeatures = gameType.AdvancedFeatures;
             game.SupportedMergeTypes = gameType.SupportedMergeTypes;
@@ -664,7 +658,7 @@ namespace IronyModManager.Services
 
             while (tasks.Count > 0)
             {
-                i = Task.WaitAny(tasks.ToArray());
+                i = Task.WaitAny([.. tasks]);
                 var task = tasks[i];
                 tasks.RemoveAt(i);
                 if (task.Result != null)
@@ -684,7 +678,7 @@ namespace IronyModManager.Services
 
             for (i = 0; i < reports.Count; i++)
             {
-                reports[i].Reports = reports2[i].ToList();
+                reports[i].Reports = [.. reports2[i]];
             }
 
             return reports;
@@ -720,50 +714,116 @@ namespace IronyModManager.Services
         /// <param name="game">The game.</param>
         /// <param name="path">The path.</param>
         /// <returns>Models.LauncherSettings.</returns>
-        private Models.LauncherSettings GetGameLauncherSettings(IGame game, string path)
+        private LauncherSettings GetGameLauncherSettings(IGame game, string path)
         {
-            string settingsFile;
-            if (string.IsNullOrWhiteSpace(game.LauncherSettingsPrefix))
+            (string, IEnumerable<IFileInfo>) resolvePath(string path, string file)
             {
-                settingsFile = game.LauncherSettingsFileName;
+                var infoPath = PathOperations.ResolveRelativePath(path, file);
+                var info = reader.Read(infoPath);
+                if (info == null)
+                {
+                    // Try to traverse down
+                    var gamePath = Path.GetDirectoryName(path);
+                    while (!string.IsNullOrWhiteSpace(gamePath))
+                    {
+                        infoPath = PathOperations.ResolveRelativePath(gamePath, file);
+                        info = reader.Read(infoPath);
+                        if (info != null)
+                        {
+                            break;
+                        }
+
+                        gamePath = Path.GetDirectoryName(gamePath);
+                    }
+
+                    return (gamePath, info);
+                }
+
+                return (path, info);
+            }
+
+            static string getSignatureVersion(string path)
+            {
+                var text = File.ReadAllText(path);
+                if (!string.IsNullOrWhiteSpace(text))
+                {
+                    var result = versionSignatureRegex.Match(text);
+                    if (result.Success)
+                    {
+                        return result.Groups[0].Value;
+                    }
+                }
+
+                return string.Empty;
+            }
+
+            if (string.IsNullOrWhiteSpace(game.LauncherSettingsFileName))
+            {
+                // They killed pdx launcher here so fake it. I or whoever maintains Irony in the future will regret this, probably.
+                var storedData = StorageProvider.GetGames().FirstOrDefault(p => p.Name.Equals(game.Type));
+                LauncherSettings result = null;
+
+                if (storedData is { SignatureFiles: not null })
+                {
+                    // ReSharper disable once LoopCanBeConvertedToQuery
+                    foreach (var file in storedData!.SignatureFiles)
+                    {
+                        var info = resolvePath(path, file);
+
+                        if (info.Item2 != null)
+                        {
+                            if (result == null)
+                            {
+                                var exePath = storedData.ExecutablePath;
+                                if (string.IsNullOrWhiteSpace(exePath))
+                                {
+                                    exePath = storedData.DefaultGameBinaryPath;
+                                }
+
+                                result = new LauncherSettings
+                                {
+                                    BasePath = info.Item1,
+                                    ExeArgs = [],
+                                    GameDataPath = storedData.UserDirectory,
+                                    ExePath = exePath,
+                                    RawVersion = getSignatureVersion(Path.Combine(info.Item1, file))
+                                };
+                            }
+                            else
+                            {
+                                result.Version = getSignatureVersion(Path.Combine(info.Item1, file));
+                            }
+                        }
+                    }
+                }
+
+                return result;
             }
             else
             {
-                settingsFile = game.LauncherSettingsPrefix + game.LauncherSettingsFileName;
-            }
-
-            var infoPath = PathOperations.ResolveRelativePath(path, settingsFile);
-            var info = reader.Read(infoPath);
-            if (info == null)
-            {
-                // Try to traverse down
-                var gamePath = Path.GetDirectoryName(path);
-                while (!string.IsNullOrWhiteSpace(gamePath))
+                string settingsFile;
+                if (string.IsNullOrWhiteSpace(game.LauncherSettingsPrefix))
                 {
-                    infoPath = PathOperations.ResolveRelativePath(gamePath, settingsFile);
-                    info = reader.Read(infoPath);
-                    if (info != null)
+                    settingsFile = game.LauncherSettingsFileName;
+                }
+                else
+                {
+                    settingsFile = game.LauncherSettingsPrefix + game.LauncherSettingsFileName;
+                }
+
+                var info = resolvePath(path, settingsFile);
+                if (info.Item2 != null && info.Item2.Any())
+                {
+                    var text = string.Join(Environment.NewLine, info.Item2.FirstOrDefault()!.Content);
+                    try
                     {
-                        break;
+                        var settingsObject = JsonConvert.DeserializeObject<LauncherSettings>(text);
+                        settingsObject.BasePath = info.Item1;
+                        return settingsObject;
                     }
-
-                    gamePath = Path.GetDirectoryName(gamePath);
-                }
-
-                path = gamePath;
-            }
-
-            if (info != null && info.Any())
-            {
-                var text = string.Join(Environment.NewLine, info.FirstOrDefault()!.Content);
-                try
-                {
-                    var settingsObject = JsonConvert.DeserializeObject<Models.LauncherSettings>(text);
-                    settingsObject.BasePath = path;
-                    return settingsObject;
-                }
-                catch
-                {
+                    catch
+                    {
+                    }
                 }
             }
 

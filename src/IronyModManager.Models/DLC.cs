@@ -4,13 +4,14 @@
 // Created          : 02-14-2021
 //
 // Last Modified By : Mario
-// Last Modified On : 10-29-2022
+// Last Modified On : 12-02-2025
 // ***********************************************************************
 // <copyright file="DLC.cs" company="Mario">
 //     Mario
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -40,6 +41,12 @@ namespace IronyModManager.Models
         /// </summary>
         /// <value><c>true</c> if this instance is enabled; otherwise, <c>false</c>.</value>
         public virtual bool IsEnabled { get; set; }
+
+        /// <summary>
+        /// Determines if DLC is visible.
+        /// </summary>
+        /// <value>Is Visible flag.</value>
+        public virtual bool IsVisible { get; set; }
 
         /// <summary>
         /// Gets or sets the name.

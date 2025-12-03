@@ -347,6 +347,9 @@
         "DirectoryPath": "common\\inline_scripts\\shroud",
         "PreferredParser": "StellarisWholeTextParser"
     }, {
+        "DirectoryPath": "common\\inline_scripts\\shroud\\auto_districts",
+        "PreferredParser": "StellarisWholeTextParser"
+    }, {
         "DirectoryPath": "common\\inline_scripts\\shroud\\buildings",
         "PreferredParser": "StellarisWholeTextParser"
     }, {
@@ -410,7 +413,16 @@
         "DirectoryPath": "common\\map_modes",
         "PreferredParser": "DefaultParser"
     }, {
+        "DirectoryPath": "common\\leader_tiers",
+        "PreferredParser": "DefaultParser"
+    }, {
+        "DirectoryPath": "common\\map_modes",
+        "PreferredParser": "DefaultParser"
+    }, {
         "DirectoryPath": "common\\megastructures",
+        "PreferredParser": "DefaultParser"
+    }, {
+        "DirectoryPath": "common\\megastructure_overclock_types",
         "PreferredParser": "DefaultParser"
     }, {
         "DirectoryPath": "common\\menace_perks",
@@ -978,6 +990,9 @@
         "PreferredParser": "GenericWholeTextParser"
     }, {
         "DirectoryPath": "sound\\humanoids",
+        "PreferredParser": "GenericWholeTextParser"
+    }, {
+        "DirectoryPath": "sound\\infernal\\portraits",
         "PreferredParser": "GenericWholeTextParser"
     }, {
         "DirectoryPath": "sound\\lithoids",

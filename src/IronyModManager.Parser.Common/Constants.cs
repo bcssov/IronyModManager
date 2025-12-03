@@ -4,7 +4,7 @@
 // Created          : 02-16-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 05-05-2025
+// Last Modified On : 12-02-2025
 // ***********************************************************************
 // <copyright file="Constants.cs" company="Mario">
 //     Mario
@@ -203,6 +203,11 @@ namespace IronyModManager.Parser.Common
             public static readonly string AIAreas = MergePath(CommonPath, "ai_areas");
 
             /// <summary>
+            /// The AI faction theaters
+            /// </summary>
+            public static readonly string AIFactionTheaters = MergePath(CommonPath, "ai_faction_theaters");
+
+            /// <summary>
             /// The AI strategy
             /// </summary>
             public static readonly string AIStrategy = MergePath(CommonPath, "ai_strategy");
@@ -228,6 +233,11 @@ namespace IronyModManager.Parser.Common
             public static readonly string Characters = MergePath(CommonPath, "characters");
 
             /// <summary>
+            /// The collections
+            /// </summary>
+            public static readonly string Collections = MergePath(CommonPath, "collections");
+
+            /// <summary>
             /// The countries
             /// </summary>
             public static readonly string Countries = MergePath(CommonPath, "countries");
@@ -251,6 +261,16 @@ namespace IronyModManager.Parser.Common
             /// The difficulty settings
             /// </summary>
             public static readonly string DifficultySettings = MergePath(CommonPath, "difficulty_settings");
+
+            /// <summary>
+            /// The doctrines
+            /// </summary>
+            public static readonly string Doctrines = MergePath(CommonPath, "doctrines");
+
+            /// <summary>
+            /// The faction
+            /// </summary>
+            public static readonly string Faction = MergePath(CommonPath, "factions");
 
             /// <summary>
             /// The focus inlay windows

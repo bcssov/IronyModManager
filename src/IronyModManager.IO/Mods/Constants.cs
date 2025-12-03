@@ -4,7 +4,7 @@
 // Created          : 08-11-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-26-2025
+// Last Modified On : 12-02-2025
 // ***********************************************************************
 // <copyright file="Constants.cs" company="Mario">
 //     Mario
@@ -46,6 +46,11 @@ namespace IronyModManager.IO.Mods
         /// The mod registry path
         /// </summary>
         public const string Mod_registry_path = "mods_registry.json";
+
+        /// <summary>
+        /// The playsets path
+        /// </summary>
+        public const string Playsets_path = "playsets.json";
 
         /// <summary>
         /// The ready to play

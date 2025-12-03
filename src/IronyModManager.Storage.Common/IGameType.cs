@@ -4,15 +4,17 @@
 // Created          : 02-12-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 10-29-2022
+// Last Modified On : 12-03-2025
 // ***********************************************************************
 // <copyright file="IGameType.cs" company="Mario">
 //     Mario
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
+
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using IronyModManager.Models.Common;
 
 namespace IronyModManager.Storage.Common
@@ -47,6 +49,12 @@ namespace IronyModManager.Storage.Common
         /// </summary>
         /// <value>The checksum folders.</value>
         IEnumerable<string> ChecksumFolders { get; set; }
+
+        /// <summary>
+        /// Gets or sets the default game binary path.
+        /// </summary>
+        /// <value>The default game binary path.</value>
+        string DefaultGameBinaryPath { get; set; }
 
         /// <summary>
         /// Gets or sets the DLC container.
@@ -127,6 +135,12 @@ namespace IronyModManager.Storage.Common
         IEnumerable<string> RemoteSteamUserDirectory { get; set; }
 
         /// <summary>
+        /// Gets or sets the signature files.
+        /// </summary>
+        /// <value>The signature files.</value>
+        IEnumerable<string> SignatureFiles { get; set; }
+
+        /// <summary>
         /// Gets or sets the steam application identifier.
         /// </summary>
         /// <value>The steam application identifier.</value>
@@ -137,6 +151,12 @@ namespace IronyModManager.Storage.Common
         /// </summary>
         /// <value>The supported merge types.</value>
         SupportedMergeTypes SupportedMergeTypes { get; set; }
+
+        /// <summary>
+        /// Gets or sets the supported operating systems.
+        /// </summary>
+        /// <value>The supported operating systems.</value>
+        SupportedOperatingSystems SupportedOperatingSystems { get; set; }
 
         /// <summary>
         /// Gets or sets the user directory.

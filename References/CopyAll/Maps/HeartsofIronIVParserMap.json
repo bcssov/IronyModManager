@@ -17,10 +17,22 @@
         "DirectoryPath": "common\\ai_equipment",
         "PreferredParser": "DefaultParser"
     }, {
+        "DirectoryPath": "common\\ai_faction_theaters",
+        "PreferredParser": "HOI4WholeTextParser"
+    }, {
         "DirectoryPath": "common\\ai_focuses",
         "PreferredParser": "DefaultParser"
     }, {
         "DirectoryPath": "common\\ai_peace",
+        "PreferredParser": "DefaultParser"
+    }, 
+        "DirectoryPath": "common\\ai_navy\\fleet",
+        "PreferredParser": "DefaultParser"
+    }, {
+        "DirectoryPath": "common\\ai_navy\\goals",
+        "PreferredParser": "DefaultParser"
+    }, {
+        "DirectoryPath": "common\\ai_navy\\taskforce",
         "PreferredParser": "DefaultParser"
     }, {
         "DirectoryPath": "common\\ai_strategy",
@@ -46,6 +58,9 @@
     }, {
         "DirectoryPath": "common\\characters",
         "PreferredParser": "HOI4InnerLayerParser"
+    }, {
+        "DirectoryPath": "common\\collections",
+        "PreferredParser": "HOI4WholeTextParser"
     }, {
         "DirectoryPath": "common\\continuous_focus",
         "PreferredParser": "DefaultParser"
@@ -74,11 +89,50 @@
         "DirectoryPath": "common\\difficulty_settings",
         "PreferredParser": "HOI4KeyParser"
     }, {
+        "DirectoryPath": "common\\doctrines\\folders",
+        "PreferredParser": "HOI4WholeTextParser"
+    }, {
+        "DirectoryPath": "common\\doctrines\\grand_doctrines",
+        "PreferredParser": "HOI4WholeTextParser"
+    }, {
+        "DirectoryPath": "common\\doctrines\\subdoctrines\\air",
+        "PreferredParser": "HOI4WholeTextParser"
+    }, {
+        "DirectoryPath": "common\\doctrines\\subdoctrines\\land",
+        "PreferredParser": "HOI4WholeTextParser"
+    }, {
+        "DirectoryPath": "common\\doctrines\\subdoctrines\\sea",
+        "PreferredParser": "HOI4WholeTextParser"
+    }, {
+        "DirectoryPath": "common\\doctrines\\tracks",
+        "PreferredParser": "HOI4WholeTextParser"
+    }, {
         "DirectoryPath": "common\\dynamic_modifiers",
         "PreferredParser": "DefaultParser"
     }, {
         "DirectoryPath": "common\\equipment_groups",
         "PreferredParser": "DefaultParser"
+    }, {
+        "DirectoryPath": "common\\factions\\goals",
+        "PreferredParser": "HOI4WholeTextParser"
+    }, {
+        "DirectoryPath": "common\\factions\\icons",
+        "PreferredParser": "HOI4WholeTextParser"
+    }, {
+        "DirectoryPath": "common\\factions\\member_upgrades",
+        "PreferredParser": "HOI4WholeTextParser"
+    }, {
+        "DirectoryPath": "common\\factions\\member_upgrades\\member_groups",
+        "PreferredParser": "HOI4WholeTextParser"
+    }, {
+        "DirectoryPath": "common\\factions\\rules",
+        "PreferredParser": "HOI4WholeTextParser"
+    }, {
+        "DirectoryPath": "common\\factions\\rules\\groups",
+        "PreferredParser": "HOI4WholeTextParser"
+    }, {
+        "DirectoryPath": "common\\factions\\templates",
+        "PreferredParser": "HOI4WholeTextParser"
     }, {
         "DirectoryPath": "common\\focus_inlay_windows",
         "PreferredParser": "HOI4WholeTextParser"
@@ -215,6 +269,9 @@
         "DirectoryPath": "common\\state_category",
         "PreferredParser": "HOI4InnerLayerParser"
     }, {
+        "DirectoryPath": "common\\strategic_locations",
+        "PreferredParser": "DefaultParser"
+    }, {
         "DirectoryPath": "common\\technologies",
         "PreferredParser": "HOI4InnerLayerParser"
     }, {
@@ -320,6 +377,9 @@
         "DirectoryPath": "gfx\\entities",
         "PreferredParser": "GenericGraphicsParser"
     }, {
+        "DirectoryPath": "gfx\\fonts\\korean",
+        "PreferredParser": "HOI4WholeTextParser"
+    }, {
         "DirectoryPath": "gfx\\FX",
         "PreferredParser": "GenericWholeTextParser"
     }, {
@@ -389,6 +449,21 @@
         "DirectoryPath": "integrated_dlc\\dlc022_waking_the_tiger\\sound\\combat_sounds",
         "PreferredParser": "DefaultParser"
     }, {
+        "DirectoryPath": "integrated_dlc\\dlc023_man_the_guns\\gfx\\interface\\equipmentdesigner\\graphic_db",
+        "PreferredParser": "DefaultParser"
+    }, {
+        "DirectoryPath": "integrated_dlc\\dlc023_man_the_guns\\gfx\\particles\\vehicles",
+        "PreferredParser": "GenericGraphicsParser"
+    }, {
+        "DirectoryPath": "integrated_dlc\\dlc023_man_the_guns\\interface",
+        "PreferredParser": "GenericGraphicsParser"
+    }, {
+        "DirectoryPath": "integrated_dlc\\dlc023_man_the_guns\\music",
+        "PreferredParser": "DefaultParser"
+    }, {
+        "DirectoryPath": "integrated_dlc\\dlc023_man_the_guns\\portraits",
+        "PreferredParser": "GenericKeyParser"
+    }, {
         "DirectoryPath": "interface",
         "PreferredParser": "GenericGraphicsParser"
     }, {
@@ -411,6 +486,9 @@
         "PreferredParser": "GenericLocalizationParser"
     }, {
         "DirectoryPath": "localisation\\japanese",
+        "PreferredParser": "GenericLocalizationParser"
+    }, {
+        "DirectoryPath": "localisation\\korean",
         "PreferredParser": "GenericLocalizationParser"
     }, {
         "DirectoryPath": "localisation\\polish",
@@ -489,6 +567,9 @@
         "PreferredParser": "GenericWholeTextParser"
     }, {
         "DirectoryPath": "sound\\gui\\gtd",
+        "PreferredParser": "GenericWholeTextParser"
+    }, {
+        "DirectoryPath": "sound\\gui\\sea",
         "PreferredParser": "GenericWholeTextParser"
     }, {
         "DirectoryPath": "tests",

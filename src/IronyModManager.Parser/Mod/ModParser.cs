@@ -4,7 +4,7 @@
 // Created          : 02-22-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-19-2025
+// Last Modified On : 12-02-2025
 // ***********************************************************************
 // <copyright file="ModParser.cs" company="Mario">
 //     Mario
@@ -78,6 +78,7 @@ namespace IronyModManager.Parser.Mod
             return descriptorModType switch
             {
                 DescriptorModType.JsonMetadata => ParseJsonMetadata(lines),
+                DescriptorModType.JsonMetadataV2 => ParseJsonMetadata(lines), // Has not changed but they dropped pdx launcher in EU5
                 _ => ParseDescriptorMod(lines)
             };
         }
@@ -88,10 +89,7 @@ namespace IronyModManager.Parser.Mod
         /// <returns>JsonSerializerSettings.</returns>
         private JsonSerializerSettings GetJsonSerializerSettings()
         {
-            jsonSerializerSettings ??= new JsonSerializerSettings
-            {
-                Error = (_, error) => error.ErrorContext.Handled = true, NullValueHandling = NullValueHandling.Ignore, Converters = new List<JsonConverter> { new JsonMetaDataConverter() }
-            };
+            jsonSerializerSettings ??= new JsonSerializerSettings { Error = (_, error) => error.ErrorContext.Handled = true, NullValueHandling = NullValueHandling.Ignore, Converters = [new JsonMetaDataConverter()] };
             return jsonSerializerSettings;
         }
 
