@@ -4,7 +4,7 @@
 // Created          : 03-31-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 12-23-2024
+// Last Modified On : 12-03-2025
 // ***********************************************************************
 // <copyright file="ModWriter.cs" company="Mario">
 //     Mario
@@ -116,12 +116,23 @@ namespace IronyModManager.IO.Mods
 
             using (await writeLock.LockAsync())
             {
-                tasks =
-                [
-                    Task.Run(async () => await sqliteExporter.ExportAsync(parameters)),
-                    Task.Run(async () => await sqliteExporterBeta.ExportAsync(parameters)),
-                    Task.Run(async () => await jsonExporter.ExportModsAsync(parameters))
-                ];
+                if (parameters.DescriptorType == DescriptorType.JsonMetadataV2)
+                {
+                    tasks =
+                    [
+                        Task.Run(async () => await jsonExporter.ExportModsAsync(parameters))
+                    ];
+                }
+                else
+                {
+                    tasks =
+                    [
+                        Task.Run(async () => await sqliteExporter.ExportAsync(parameters)),
+                        Task.Run(async () => await sqliteExporterBeta.ExportAsync(parameters)),
+                        Task.Run(async () => await jsonExporter.ExportModsAsync(parameters))
+                    ];
+                }
+
                 await Task.WhenAll(tasks);
             }
 
@@ -154,7 +165,7 @@ namespace IronyModManager.IO.Mods
                             var el = parentFolder.StandardizeDirectorySeparator().Split(Path.DirectorySeparatorChar);
                             if (el.Length <= 1)
                             {
-                                // Real genious you picked C, D or whatever drive
+                                // Real genius you picked C, D or whatever drive
                                 return Task.FromResult(false);
                             }
 
@@ -386,7 +397,7 @@ namespace IronyModManager.IO.Mods
                 if (writeDescriptorInModDirectory)
                 {
                     var modPath = Path.Combine(parameters.Mod.FileName ?? string.Empty, parameters.DescriptorType == DescriptorType.DescriptorMod ? Shared.Constants.DescriptorFile : Shared.Constants.DescriptorJsonMetadata);
-                    if (parameters.DescriptorType == DescriptorType.JsonMetadata)
+                    if (parameters.DescriptorType is DescriptorType.JsonMetadata or DescriptorType.JsonMetadataV2)
                     {
                         var dir = Path.GetDirectoryName(modPath);
                         if (!Directory.Exists(dir))
@@ -528,7 +539,7 @@ namespace IronyModManager.IO.Mods
                     Path = content.FileName,
                     Relationships = relationshipData,
                     SupportedGameVersion = content.Version,
-                    Tags = content.Tags != null ? content.Tags.ToList() : new List<string>(),
+                    Tags = content.Tags != null ? content.Tags.ToList() : [],
                     ShortDescription = string.Empty,
                     Version = string.Empty,
                     GameCustomData = customData
@@ -540,7 +551,7 @@ namespace IronyModManager.IO.Mods
             if (truncatePath)
             {
                 mod = mapper.Map<IMod>(mod);
-                mod.FileName = descriptorType == DescriptorType.JsonMetadata ? null : string.Empty;
+                mod.FileName = descriptorType is DescriptorType.JsonMetadata or DescriptorType.JsonMetadataV2 ? null : string.Empty;
             }
 
             await using var sw = new StreamWriter(stream, leaveOpen: true);

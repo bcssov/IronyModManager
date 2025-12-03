@@ -4,15 +4,17 @@
 // Created          : 03-09-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 10-29-2022
+// Last Modified On : 12-02-2025
 // ***********************************************************************
 // <copyright file="ExportModCollectionControlViewModel.cs" company="Mario">
 //     Mario
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
+
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reactive;
 using System.Reactive.Disposables;
 using IronyModManager.Common.ViewModels;
@@ -305,6 +307,12 @@ namespace IronyModManager.ViewModels.Controls
         public virtual bool LegacyExportVisible { get; protected set; }
 
         /// <summary>
+        /// Gets or sets a value indicating whether [paradox launcher visible].
+        /// </summary>
+        /// <value><c>true</c> if [paradox launcher visible]; otherwise, <c>false</c>.</value>
+        public virtual bool ParadoxLauncherVisible { get; protected set; }
+
+        /// <summary>
         /// Gets or sets a value indicating whether [show advanced features].
         /// </summary>
         /// <value><c>true</c> if [show advanced features]; otherwise, <c>false</c>.</value>
@@ -330,8 +338,9 @@ namespace IronyModManager.ViewModels.Controls
         protected virtual void EvalGameSpecificVisibility(IGame game = null)
         {
             game ??= gameService.GetSelected();
-            ShowAdvancedFeatures = (game?.AdvancedFeatures) == GameAdvancedFeatures.Full;
-            LegacyExportVisible = game != null && game.ModDescriptorType == ModDescriptorType.DescriptorMod;
+            ShowAdvancedFeatures = game?.AdvancedFeatures == GameAdvancedFeatures.Full;
+            LegacyExportVisible = game is { ModDescriptorType: ModDescriptorType.DescriptorMod };
+            ParadoxLauncherVisible = game is not { ModDescriptorType: ModDescriptorType.JsonMetadataV2 };
         }
 
         /// <summary>
@@ -363,20 +372,11 @@ namespace IronyModManager.ViewModels.Controls
                 return new CommandResult<string>(result, !string.IsNullOrWhiteSpace(result) ? CommandState.Success : CommandState.Failed);
             }).DisposeWith(disposables);
 
-            ImportOtherParadoxCommand = ReactiveCommand.Create(() =>
-            {
-                return new CommandResult<string>(string.Empty, CommandState.Success);
-            }).DisposeWith(disposables);
+            ImportOtherParadoxCommand = ReactiveCommand.Create(() => new CommandResult<string>(string.Empty, CommandState.Success)).DisposeWith(disposables);
 
-            ImportOtherParadoxLauncherCommand = ReactiveCommand.Create(() =>
-            {
-                return new CommandResult<string>(string.Empty, CommandState.Success);
-            }).DisposeWith(disposables);
+            ImportOtherParadoxLauncherCommand = ReactiveCommand.Create(() => new CommandResult<string>(string.Empty, CommandState.Success)).DisposeWith(disposables);
 
-            ImportOtherParadoxLauncherBetaCommand = ReactiveCommand.Create(() =>
-            {
-                return new CommandResult<string>(string.Empty, CommandState.Success);
-            }).DisposeWith(disposables);
+            ImportOtherParadoxLauncherBetaCommand = ReactiveCommand.Create(() => new CommandResult<string>(string.Empty, CommandState.Success)).DisposeWith(disposables);
 
             ImportOtherParadoxLauncherJsonCommand = ReactiveCommand.CreateFromTask(async () =>
             {

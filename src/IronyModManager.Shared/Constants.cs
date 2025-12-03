@@ -4,7 +4,7 @@
 // Created          : 01-17-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 11-11-2025
+// Last Modified On : 12-03-2025
 // ***********************************************************************
 // <copyright file="Constants.cs" company="Mario">
 //     Mario
@@ -142,14 +142,28 @@ namespace IronyModManager.Shared
         /// <summary>
         /// The image extensions
         /// </summary>
-        public static readonly string[] ImageExtensions = { ".gif", ".jpg", ".jpeg", ".png", ".dds", ".tga", ".bmp", ".tiff", ".tif" };
+        public static readonly string[] ImageExtensions = [".gif", ".jpg", ".jpeg", ".png", ".dds", ".tga", ".bmp", ".tiff", ".tif"];
 
         /// <summary>
         /// The text extensions
         /// </summary>
-        public static readonly string[] TextExtensions = { ".lua", ".txt", ".asset", ".gui", ".gfx", ".yml", ".csv", ".shader", ".fxh", ".mod", ".sfx", ".json" };
+        public static readonly string[] TextExtensions = [".lua", ".txt", ".asset", ".gui", ".gfx", ".yml", ".csv", ".shader", ".fxh", ".mod", ".sfx", ".json"];
 
         #endregion Fields
+
+        #region Methods
+
+        /// <summary>
+        /// Merges the path.
+        /// </summary>
+        /// <param name="paths">The paths.</param>
+        /// <returns>System.String.</returns>
+        private static string MergePath(params string[] paths)
+        {
+            return string.Join(Path.DirectorySeparatorChar, paths);
+        }
+
+        #endregion Methods
 
         #region Classes
 
@@ -211,6 +225,11 @@ namespace IronyModManager.Shared
             #region Fields
 
             /// <summary>
+            /// The default game binary path
+            /// </summary>
+            public static readonly string DefaultGameBinaryPath = string.Empty;
+
+            /// <summary>
             /// The DLC container
             /// </summary>
             public static readonly string DLCContainer = string.Empty;
@@ -224,6 +243,11 @@ namespace IronyModManager.Shared
             /// The log location
             /// </summary>
             public static readonly string LogLocation = "logs" + Path.DirectorySeparatorChar + "error.log";
+
+            /// <summary>
+            /// The signature files
+            /// </summary>
+            public static readonly string[] SignatureFiles = [];
 
             #endregion Fields
 
@@ -337,6 +361,84 @@ namespace IronyModManager.Shared
                 /// The paradox game identifier
                 /// </summary>
                 public static readonly string ParadoxGameId = "eu4";
+
+                #endregion Fields
+            }
+
+            /// <summary>
+            /// Class EuropaUniversalis5.
+            /// </summary>
+            public static class EuropaUniversalis5
+            {
+                #region Fields
+
+                /// <summary>
+                /// The abrv
+                /// </summary>
+                public const string Abrv = "EU5";
+
+                /// <summary>
+                /// The docs path
+                /// </summary>
+                public const string DocsPath = "Europa Universalis V";
+
+                /// <summary>
+                /// The identifier
+                /// </summary>
+                public const string Id = "EuropaUniversalisV";
+
+                /// <summary>
+                /// The steam application identifier
+                /// </summary>
+                public const int SteamAppId = 3450310;
+
+                /// <summary>
+                /// The checksum folders
+                /// </summary>
+                public static readonly string[] ChecksumFolders =
+                [
+                    MergePath("in_game", "common"), MergePath("in_game", "events"),
+                    MergePath("in_game", "map_data"), MergePath("in_game", "setup"),
+                    MergePath("in_game", "gui"), MergePath("main_menu", "localization")
+                ];
+
+                /// <summary>
+                /// The default Windows game binary path
+                /// </summary>
+                public static readonly string DefaultWindowsGameBinaryPath = MergePath("binaries", "eu5.exe");
+
+                /// <summary>
+                /// The DLC container
+                /// </summary>
+                public static readonly string DLCContainer = "game";
+
+                /// <summary>
+                /// The game folders
+                /// </summary>
+                public static readonly string[] GameFolders =
+                [
+                    "mod", "in_game", "loading_screen", "main_menu"
+                ];
+
+                /// <summary>
+                /// The launcher settings file name
+                /// </summary>
+                public static readonly string LauncherSettingsFileName = string.Empty;
+
+                /// <summary>
+                /// The launcher settings prefix
+                /// </summary>
+                public static readonly string LauncherSettingsPrefix = string.Empty;
+
+                /// <summary>
+                /// The paradox game identifier
+                /// </summary>
+                public static readonly string ParadoxGameId = string.Empty;
+
+                /// <summary>
+                /// The signature files
+                /// </summary>
+                public static readonly string[] SignatureFiles = ["caesar_branch.txt", "clausewitz_branch.txt"];
 
                 #endregion Fields
             }

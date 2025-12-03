@@ -4,16 +4,18 @@
 // Created          : 02-23-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 10-29-2022
+// Last Modified On : 12-03-2025
 // ***********************************************************************
 // <copyright file="Constants.cs" company="Mario">
 //     Mario
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
+
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using IronyModManager.Shared;
 
 namespace IronyModManager.IO.Common
@@ -32,12 +34,17 @@ namespace IronyModManager.IO.Common
         public const string ExportedModContentId = "exported.json";
 
         /// <summary>
+        /// The json v2 playset name
+        /// </summary>
+        public const string JsonV2PlaysetName = nameof(IronyModManager);
+
+        /// <summary>
         /// The mod export path
         /// </summary>
         public const string ModExportPath = "irony_exported_mods";
 
         /// <summary>
-        /// The built in DLC directory
+        /// The built-in DLC directory
         /// </summary>
         public static readonly string BuiltInDLCDirectory = Path.DirectorySeparatorChar + "builtin_dlc";
 
@@ -47,9 +54,9 @@ namespace IronyModManager.IO.Common
         public static readonly string DLCDirectory = Path.DirectorySeparatorChar + "dlc";
 
         /// <summary>
-        /// The json mod directoy
+        /// The json mod directory
         /// </summary>
-        public static readonly string JsonModDirectoy = Path.DirectorySeparatorChar + "irony-mod";
+        public static readonly string JsonModDirectory = Path.DirectorySeparatorChar + "irony-mod";
 
         /// <summary>
         /// The mod directory

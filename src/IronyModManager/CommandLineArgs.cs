@@ -4,7 +4,7 @@
 // Created          : 02-21-2021
 //
 // Last Modified By : Mario
-// Last Modified On : 01-08-2025
+// Last Modified On : 12-02-2025
 // ***********************************************************************
 // <copyright file="CommandLineArgs.cs" company="Mario">
 //     Mario
@@ -37,7 +37,7 @@ namespace IronyModManager
         /// Gets or sets the game abrv.
         /// </summary>
         /// <value>The game abrv.</value>
-        [Option('g', "game", Required = false, HelpText = "Game:CK3,EU4,HOI4,IR,Stellaris,Vic3")]
+        [Option('g', "game", Required = false, HelpText = "Game:CK3,EU4,HOI4,IR,Stellaris,Vic3,EU5")]
         public string GameAbrv { get; set; }
 
         /// <summary>

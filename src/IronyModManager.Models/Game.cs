@@ -4,15 +4,17 @@
 // Created          : 02-12-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 10-29-2022
+// Last Modified On : 12-03-2025
 // ***********************************************************************
 // <copyright file="Game.cs" company="Mario">
 //     Mario
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
+
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using IronyModManager.Localization.Attributes;
 using IronyModManager.Models.Common;
 using IronyModManager.Shared;
@@ -202,6 +204,7 @@ namespace IronyModManager.Models
             {
                 return false;
             }
+
             term ??= string.Empty;
             return Name.StartsWith(term, StringComparison.OrdinalIgnoreCase);
         }

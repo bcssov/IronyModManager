@@ -4,7 +4,7 @@
 // Created          : 08-12-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-04-2024
+// Last Modified On : 12-03-2025
 // ***********************************************************************
 // <copyright file="ParadoxLauncherImporter.cs" company="Mario">
 //     Mario
@@ -19,6 +19,7 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using IronyModManager.DI;
+using IronyModManager.IO.Common;
 using IronyModManager.IO.Common.Models;
 using IronyModManager.IO.Common.Mods;
 using IronyModManager.Models.Common;
@@ -80,8 +81,14 @@ namespace IronyModManager.IO.Mods.Importers
         /// </summary>
         /// <param name="parameters">The parameters.</param>
         /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
+        /// <exception cref="System.NotSupportedException">JsonMetadataV2 is not supported.</exception>
         public async Task<ICollectionImportResult> DatabaseImportAsync(ModCollectionExporterParams parameters)
         {
+            if (parameters.DescriptorType == DescriptorType.JsonMetadataV2)
+            {
+                throw new NotSupportedException("JsonMetadataV2 is not supported.");
+            }
+
             if (!File.Exists(GetDbPath(parameters)))
             {
                 return null;
@@ -93,17 +100,12 @@ namespace IronyModManager.IO.Mods.Importers
             IdentityCache.Flush();
             PrimaryCache.Flush();
             var version = await GetVersionAsync(parameters);
-            switch (version)
+            return version switch
             {
-                case Version.v4:
-                    return await DatabaseImportv3Async(parameters);
-
-                case Version.v5:
-                    return await DatabaseImportv4Async(parameters);
-
-                default:
-                    return await DatabaseImportv2Async(parameters);
-            }
+                Version.v4 => await DatabaseImportV3Async(parameters),
+                Version.v5 => await DatabaseImportV4Async(parameters),
+                _ => await DatabaseImportV2Async(parameters)
+            };
         }
 
         /// <summary>
@@ -111,6 +113,7 @@ namespace IronyModManager.IO.Mods.Importers
         /// </summary>
         /// <param name="parameters">The parameters.</param>
         /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
+        /// <exception cref="System.NotSupportedException">JsonMetadataV2 is not supported.</exception>
         /// <exception cref="System.AggregateException"></exception>
         public virtual async Task<ICollectionImportResult> JsonImportAsync(ModCollectionExporterParams parameters)
         {
@@ -131,7 +134,7 @@ namespace IronyModManager.IO.Mods.Importers
 
                     if (!string.IsNullOrWhiteSpace(model.Game) && !string.IsNullOrWhiteSpace(model.Name))
                     {
-                        // Validate whether this really is v2 (execting length larger than 4 as a dumb best guess)
+                        // Validate whether this really is v2 (expecting length larger than 4 as a dumb best guess)
                         if (model.Mods.Any(p => p.Position.Length > 4))
                         {
                             var result = DIResolver.Get<ICollectionImportResult>();
@@ -140,21 +143,24 @@ namespace IronyModManager.IO.Mods.Importers
                             // Will need to lookup the game and mod ids in the mod service
                             result.Game = model.Game;
                             var mods = model.Mods.Where(p => p.Enabled).OrderBy(p => p.Position);
-                            result.ModIds = mods.Select(p =>
-                            {
-                                var result = DIResolver.Get<IModCollectionSourceInfo>();
-                                if (long.TryParse(p.PdxId, out var pdxid))
+                            result.ModIds =
+                            [
+                                .. mods.Select(p =>
                                 {
-                                    result.ParadoxId = pdxid;
-                                }
+                                    var result = DIResolver.Get<IModCollectionSourceInfo>();
+                                    if (long.TryParse(p.PdxId, out var pdxId))
+                                    {
+                                        result.ParadoxId = pdxId;
+                                    }
 
-                                if (long.TryParse(p.SteamId, out var steamId))
-                                {
-                                    result.SteamId = steamId;
-                                }
+                                    if (long.TryParse(p.SteamId, out var steamId))
+                                    {
+                                        result.SteamId = steamId;
+                                    }
 
-                                return result;
-                            }).ToList();
+                                    return result;
+                                })
+                            ];
                             return (null, result);
                         }
                     }
@@ -186,26 +192,34 @@ namespace IronyModManager.IO.Mods.Importers
                         // Will need to lookup the game and mod ids in the mod service
                         result.Game = model.Game;
                         var mods = model.Mods.Where(p => p.Enabled).OrderBy(p => p.Position);
-                        result.ModIds = mods.Select(p =>
-                        {
-                            var result = DIResolver.Get<IModCollectionSourceInfo>();
-                            if (long.TryParse(p.PdxId, out var pdxid))
+                        result.ModIds =
+                        [
+                            .. mods.Select(p =>
                             {
-                                result.ParadoxId = pdxid;
-                            }
+                                var result = DIResolver.Get<IModCollectionSourceInfo>();
+                                if (long.TryParse(p.PdxId, out var pdxId))
+                                {
+                                    result.ParadoxId = pdxId;
+                                }
 
-                            if (long.TryParse(p.SteamId, out var steamId))
-                            {
-                                result.SteamId = steamId;
-                            }
+                                if (long.TryParse(p.SteamId, out var steamId))
+                                {
+                                    result.SteamId = steamId;
+                                }
 
-                            return result;
-                        }).ToList();
+                                return result;
+                            })
+                        ];
                         return (null, result);
                     }
                 }
 
                 return (null, null);
+            }
+
+            if (parameters.DescriptorType == DescriptorType.JsonMetadataV2)
+            {
+                throw new NotSupportedException("JsonMetadataV2 is not supported.");
             }
 
             if (File.Exists(parameters.File))
@@ -233,7 +247,7 @@ namespace IronyModManager.IO.Mods.Importers
                     exceptions.Add(result.Item1);
                 }
 
-                if (exceptions.Any())
+                if (exceptions.Count != 0)
                 {
                     throw new AggregateException(exceptions);
                 }
@@ -247,7 +261,7 @@ namespace IronyModManager.IO.Mods.Importers
         /// </summary>
         /// <param name="parameters">The parameters.</param>
         /// <returns>A Task&lt;ICollectionImportResult&gt; representing the asynchronous operation.</returns>
-        protected virtual async Task<ICollectionImportResult> DatabaseImportv2Async(ModCollectionExporterParams parameters)
+        protected virtual async Task<ICollectionImportResult> DatabaseImportV2Async(ModCollectionExporterParams parameters)
         {
             using var con = GetConnection(parameters);
             try
@@ -265,16 +279,16 @@ namespace IronyModManager.IO.Mods.Importers
                         {
                             var result = DIResolver.Get<ICollectionImportResult>();
                             result.Name = activeCollection.Name;
-                            if (parameters.DescriptorType == Common.DescriptorType.DescriptorMod)
+                            if (parameters.DescriptorType == DescriptorType.DescriptorMod)
                             {
-                                result.Descriptors = validMods.Select(p => p.GameRegistryId).ToList();
+                                result.Descriptors = [.. validMods.Select(p => p.GameRegistryId)];
                             }
                             else
                             {
-                                result.FullPaths = validMods.Select(p => p.DirPath.StandardizeDirectorySeparator()).ToList();
+                                result.FullPaths = [.. validMods.Select(p => p.DirPath.StandardizeDirectorySeparator())];
                             }
 
-                            result.ModNames = validMods.Select(p => p.DisplayName).ToList();
+                            result.ModNames = [.. validMods.Select(p => p.DisplayName)];
                             return result;
                         }
                     }
@@ -294,7 +308,7 @@ namespace IronyModManager.IO.Mods.Importers
         /// </summary>
         /// <param name="parameters">The parameters.</param>
         /// <returns>A Task&lt;ICollectionImportResult&gt; representing the asynchronous operation.</returns>
-        protected virtual async Task<ICollectionImportResult> DatabaseImportv3Async(ModCollectionExporterParams parameters)
+        protected virtual async Task<ICollectionImportResult> DatabaseImportV3Async(ModCollectionExporterParams parameters)
         {
             using var con = GetConnection(parameters);
             try
@@ -312,16 +326,16 @@ namespace IronyModManager.IO.Mods.Importers
                         {
                             var result = DIResolver.Get<ICollectionImportResult>();
                             result.Name = activeCollection.Name;
-                            if (parameters.DescriptorType == Common.DescriptorType.DescriptorMod)
+                            if (parameters.DescriptorType == DescriptorType.DescriptorMod)
                             {
-                                result.Descriptors = validMods.Select(p => p.GameRegistryId).ToList();
+                                result.Descriptors = [.. validMods.Select(p => p.GameRegistryId)];
                             }
                             else
                             {
-                                result.FullPaths = validMods.Select(p => p.DirPath.StandardizeDirectorySeparator()).ToList();
+                                result.FullPaths = [.. validMods.Select(p => p.DirPath.StandardizeDirectorySeparator())];
                             }
 
-                            result.ModNames = validMods.Select(p => p.DisplayName).ToList();
+                            result.ModNames = [.. validMods.Select(p => p.DisplayName)];
                             return result;
                         }
                     }
@@ -341,7 +355,7 @@ namespace IronyModManager.IO.Mods.Importers
         /// </summary>
         /// <param name="parameters">The parameters.</param>
         /// <returns>A Task&lt;ICollectionImportResult&gt; representing the asynchronous operation.</returns>
-        protected virtual async Task<ICollectionImportResult> DatabaseImportv4Async(ModCollectionExporterParams parameters)
+        protected virtual async Task<ICollectionImportResult> DatabaseImportV4Async(ModCollectionExporterParams parameters)
         {
             using var con = GetConnection(parameters);
             try
@@ -359,16 +373,16 @@ namespace IronyModManager.IO.Mods.Importers
                         {
                             var result = DIResolver.Get<ICollectionImportResult>();
                             result.Name = activeCollection.Name;
-                            if (parameters.DescriptorType == Common.DescriptorType.DescriptorMod)
+                            if (parameters.DescriptorType == DescriptorType.DescriptorMod)
                             {
-                                result.Descriptors = validMods.Select(p => p.GameRegistryId).ToList();
+                                result.Descriptors = [.. validMods.Select(p => p.GameRegistryId)];
                             }
                             else
                             {
-                                result.FullPaths = validMods.Select(p => p.DirPath.StandardizeDirectorySeparator()).ToList();
+                                result.FullPaths = [.. validMods.Select(p => p.DirPath.StandardizeDirectorySeparator())];
                             }
 
-                            result.ModNames = validMods.Select(p => p.DisplayName).ToList();
+                            result.ModNames = [.. validMods.Select(p => p.DisplayName)];
                             return result;
                         }
                     }

@@ -4,7 +4,7 @@
 // Created          : 06-19-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-26-2025
+// Last Modified On : 12-02-2025
 // ***********************************************************************
 // <copyright file="ModMergeService.cs" company="Mario">
 //     Mario
@@ -228,20 +228,15 @@ namespace IronyModManager.Services
             await ModWriter.PurgeModDirectoryAsync(new ModWriterParameters { Path = modDirPath }, true);
             await ModWriter.CreateModDirectoryAsync(new ModWriterParameters { RootDirectory = game.UserDirectory, Path = Shared.Constants.ModDirectory });
             await ModWriter.CreateModDirectoryAsync(new ModWriterParameters { RootDirectory = modDirPath });
-            if (game.ModDescriptorType == ModDescriptorType.JsonMetadata)
+            if (game.ModDescriptorType is ModDescriptorType.JsonMetadata or ModDescriptorType.JsonMetadataV2)
             {
                 await ModWriter.CreateModDirectoryAsync(new ModWriterParameters { RootDirectory = game.UserDirectory, Path = Shared.Constants.JsonModDirectory });
             }
 
             var mod = DIResolver.Get<IMod>();
-            if (game.ModDescriptorType == ModDescriptorType.DescriptorMod)
-            {
-                mod.DescriptorFile = $"{Shared.Constants.ModDirectory}/{mergeCollectionPath}{Shared.Constants.ModExtension}";
-            }
-            else
-            {
-                mod.DescriptorFile = $"{Shared.Constants.JsonModDirectory}/{mergeCollectionPath}{Shared.Constants.JsonExtension}";
-            }
+            mod.DescriptorFile = game.ModDescriptorType == ModDescriptorType.DescriptorMod
+                ? $"{Shared.Constants.ModDirectory}/{mergeCollectionPath}{Shared.Constants.ModExtension}"
+                : $"{Shared.Constants.JsonModDirectory}/{mergeCollectionPath}{Shared.Constants.JsonExtension}";
 
             mod.FileName = modDirPath.Replace("\\", "/");
             mod.Name = collectionName;
@@ -411,7 +406,7 @@ namespace IronyModManager.Services
             await ModWriter.PurgeModDirectoryAsync(new ModWriterParameters { Path = modDirPath }, true);
             await ModWriter.CreateModDirectoryAsync(new ModWriterParameters { RootDirectory = game.UserDirectory, Path = Shared.Constants.ModDirectory });
             await ModWriter.CreateModDirectoryAsync(new ModWriterParameters { Path = modDirPath });
-            if (game.ModDescriptorType == ModDescriptorType.JsonMetadata)
+            if (game.ModDescriptorType is ModDescriptorType.JsonMetadata or ModDescriptorType.JsonMetadataV2)
             {
                 await ModWriter.CreateModDirectoryAsync(new ModWriterParameters { RootDirectory = game.UserDirectory, Path = Shared.Constants.JsonModDirectory });
             }
@@ -431,6 +426,7 @@ namespace IronyModManager.Services
             var processed = 0;
 
             // ReSharper disable once AsyncVoidMethod
+            // ReSharper disable once AsyncVoidEventHandlerMethod
             async void ModMergeCompressExporterProcessedFile(object sender, EventArgs e)
             {
                 using var mutex = await zipLock.LockAsync();
@@ -518,14 +514,9 @@ namespace IronyModManager.Services
                     var ms = new MemoryStream();
                     await ModWriter.WriteDescriptorToStreamAsync(new ModWriterParameters { Mod = newMod, DescriptorType = MapDescriptorType(game.ModDescriptorType) }, ms, true);
                     ms.Seek(0, SeekOrigin.Begin);
-                    if (game.ModDescriptorType != ModDescriptorType.DescriptorMod)
-                    {
-                        modMergeCompressExporter.AddFile(new ModMergeCompressExporterParameters { FileName = Shared.Constants.DescriptorJsonMetadata, QueueId = queueId, Stream = ms });
-                    }
-                    else
-                    {
-                        modMergeCompressExporter.AddFile(new ModMergeCompressExporterParameters { FileName = Shared.Constants.DescriptorFile, QueueId = queueId, Stream = ms });
-                    }
+                    modMergeCompressExporter.AddFile(game.ModDescriptorType != ModDescriptorType.DescriptorMod
+                        ? new ModMergeCompressExporterParameters { FileName = Shared.Constants.DescriptorJsonMetadata, QueueId = queueId, Stream = ms }
+                        : new ModMergeCompressExporterParameters { FileName = Shared.Constants.DescriptorFile, QueueId = queueId, Stream = ms });
 
                     streams.Add(ms);
 

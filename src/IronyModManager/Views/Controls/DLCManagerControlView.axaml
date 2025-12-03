@@ -5,12 +5,14 @@
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="IronyModManager.Views.Controls.DLCManagerControlView">
     <Panel>
+        <!-- ReSharper disable ObsoleteElement -->
         <Popup PlacementMode="AnchorAndGravity" PlacementAnchor="TopLeft" PlacementGravity="None" PlacementConstraintAdjustment="None" IsOpen="{Binding IsOpen}"
                Topmost="False" ObeyScreenEdges="True" StaysOpen="True" x:Name="popup">
+            <!-- ReSharper restore ObsoleteElement -->
             <Border BorderThickness="1,1,1,1" BorderBrush="{DynamicResource IronyButtonBorderBrush}">
                 <Grid RowDefinitions="1*,1*,1*" Background="{DynamicResource IronyBackgroundPopupBrush}">
                     <Button Content="{Binding ToggleDLC}" Command="{Binding ToggleDLCCommand}" Grid.Row="0" Grid.Column="0" MaxHeight="30"
-                            HorizontalAlignment="Stretch" VerticalAlignment="Stretch" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"></Button>
+                            HorizontalAlignment="Stretch" VerticalAlignment="Stretch" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" />
                     <ListBox Items="{Binding DLC}"
                              ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                              SelectionMode="Single" Width="600" Height="400" Grid.Row="1" Grid.Column="0">
@@ -21,14 +23,14 @@
                                         <ColumnDefinition MaxWidth="50" Width="1*" />
                                         <ColumnDefinition Width="5*" />
                                     </Grid.ColumnDefinitions>
-                                    <CheckBox IsChecked="{Binding IsEnabled}" Grid.Column="0"></CheckBox>
-                                    <TextBlock Text="{Binding Name}" TextWrapping="Wrap" Grid.Column="1" VerticalAlignment="Center"></TextBlock>
+                                    <CheckBox IsChecked="{Binding IsEnabled}" Grid.Column="0" />
+                                    <TextBlock Text="{Binding Name}" TextWrapping="Wrap" Grid.Column="1" VerticalAlignment="Center" />
                                 </Grid>
                             </DataTemplate>
                         </ListBox.ItemTemplate>
                     </ListBox>
                     <Button Content="{Binding Close}" Command="{Binding CloseCommand}" Grid.Row="2" Grid.Column="0" MaxHeight="30"
-                            HorizontalAlignment="Stretch" VerticalAlignment="Stretch" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"></Button>
+                            HorizontalAlignment="Stretch" VerticalAlignment="Stretch" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" />
                 </Grid>
             </Border>
         </Popup>

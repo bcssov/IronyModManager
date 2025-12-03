@@ -4,13 +4,14 @@
 // Created          : 02-13-2021
 //
 // Last Modified By : Mario
-// Last Modified On : 10-29-2022
+// Last Modified On : 12-02-2025
 // ***********************************************************************
 // <copyright file="DLCParser.cs" company="Mario">
 //     Mario
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -30,20 +31,9 @@ namespace IronyModManager.Parser.DLC
     /// </summary>
     /// <seealso cref="IronyModManager.Parser.BaseGenericObjectParser" />
     /// <seealso cref="IronyModManager.Parser.Common.DLC.IDLCParser" />
-    public class DLCParser : BaseGenericObjectParser, IDLCParser
+    /// <remarks>Initializes a new instance of the <see cref="DLCParser" /> class.</remarks>
+    public class DLCParser(ICodeParser codeParser) : BaseGenericObjectParser(codeParser), IDLCParser
     {
-        #region Constructors
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="DLCParser" /> class.
-        /// </summary>
-        /// <param name="codeParser">The code parser.</param>
-        public DLCParser(ICodeParser codeParser) : base(codeParser)
-        {
-        }
-
-        #endregion Constructors
-
         #region Methods
 
         /// <summary>
@@ -56,41 +46,88 @@ namespace IronyModManager.Parser.DLC
         public IDLCObject Parse(string path, IEnumerable<string> lines, DescriptorModType descriptorModType)
         {
             var obj = DIResolver.Get<IDLCObject>();
-            if (descriptorModType == DescriptorModType.DescriptorMod)
+            obj.IsVisible = true;
+
+            // ReSharper disable once SwitchStatementHandlesSomeKnownEnumValuesWithDefault
+            switch (descriptorModType)
             {
-                var data = ParseCode(lines);
-                if (string.IsNullOrWhiteSpace(path))
+                case DescriptorModType.DescriptorMod:
                 {
-                    path = string.Empty;
+                    var data = ParseCode(lines);
+                    if (string.IsNullOrWhiteSpace(path))
+                    {
+                        path = string.Empty;
+                    }
+
+                    if (data != null)
+                    {
+                        obj.Name = GetValue<string>(data.Values, "name") ?? string.Empty;
+                        obj.Path = path.Replace("\\", "/");
+                    }
+
+                    break;
                 }
-                if (data != null)
+                case DescriptorModType.JsonMetadata:
                 {
-                    obj.Name = GetValue<string>(data.Values, "name") ?? string.Empty;
+                    var json = string.Join(Environment.NewLine, lines);
+                    var result = JsonConvert.DeserializeObject<DLCObject>(json, new JsonSerializerSettings { Error = (_, error) => error.ErrorContext.Handled = true, NullValueHandling = NullValueHandling.Ignore });
+                    if (string.IsNullOrWhiteSpace(path))
+                    {
+                        path = string.Empty;
+                    }
+
                     obj.Path = path.Replace("\\", "/");
+                    obj.AppId = result.Id != null ? result.Id.Paradox : string.Empty;
+                    obj.Name = result.DisplayName != null ? result.DisplayName.En : string.Empty;
+                    break;
+                }
+                default:
+                {
+                    var json = string.Join(Environment.NewLine, lines);
+                    var result = JsonConvert.DeserializeObject<DLCObjectV2>(json, new JsonSerializerSettings { Error = (_, error) => error.ErrorContext.Handled = true, NullValueHandling = NullValueHandling.Ignore });
+                    if (string.IsNullOrWhiteSpace(path))
+                    {
+                        path = string.Empty;
+                    }
+
+                    obj.Path = path.Replace("\\", "/");
+                    obj.AppId = !string.IsNullOrWhiteSpace(result.Name) ? result.Name : string.Empty;
+                    obj.Name = !string.IsNullOrWhiteSpace(result.Name) ? result.Name : string.Empty;
+                    obj.IsVisible = !result.Hidden;
+                    break;
                 }
             }
-            else
-            {
-                var json = string.Join(Environment.NewLine, lines);
-                var result = JsonConvert.DeserializeObject<DLCObject>(json, new JsonSerializerSettings()
-                {
-                    Error = (sender, error) => error.ErrorContext.Handled = true,
-                    NullValueHandling = NullValueHandling.Ignore
-                });
-                if (string.IsNullOrWhiteSpace(path))
-                {
-                    path = string.Empty;
-                }
-                obj.Path = path.Replace("\\", "/");
-                obj.AppId = result.Id != null ? result.Id.Paradox : string.Empty;
-                obj.Name = result.DisplayName != null ? result.DisplayName.En : string.Empty;
-            }
+
             return obj;
         }
 
         #endregion Methods
 
         #region Classes
+
+        /// <summary>
+        /// Class DLCObjectV2.
+        /// </summary>
+        public class DLCObjectV2
+        {
+            #region Properties
+
+            /// <summary>
+            /// Gets or sets a value indicating whether this <see cref="DLCObjectV2" /> is hidden.
+            /// </summary>
+            /// <value><c>true</c> if hidden; otherwise, <c>false</c>.</value>
+            [JsonProperty("hidden")]
+            public bool Hidden { get; set; }
+
+            /// <summary>
+            /// Gets or sets the name.
+            /// </summary>
+            /// <value>The name.</value>
+            [JsonProperty("name")]
+            public string Name { get; set; }
+
+            #endregion Properties
+        }
 
         /// <summary>
         /// Class DisplayName.
@@ -134,7 +171,7 @@ namespace IronyModManager.Parser.DLC
         }
 
         /// <summary>
-        /// Class Id.
+        /// Class ID.
         /// </summary>
         private class Id
         {

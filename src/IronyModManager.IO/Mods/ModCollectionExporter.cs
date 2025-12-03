@@ -4,7 +4,7 @@
 // Created          : 03-09-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-22-2024
+// Last Modified On : 12-03-2025
 // ***********************************************************************
 // <copyright file="ModCollectionExporter.cs" company="Mario">
 //     Mario
@@ -186,6 +186,8 @@ namespace IronyModManager.IO.Mods
                 if (dependencies != null && dependencies.Any())
                 {
                     var newDependencies = new List<string>();
+
+                    // ReSharper disable once LoopCanBeConvertedToQuery
                     foreach (var item in dependencies)
                     {
                         newDependencies.Add(modWriter.FormatPrefixModName(parameters.ModNameOverride, item));
@@ -260,7 +262,7 @@ namespace IronyModManager.IO.Mods
                             {
                                 var file = Path.Combine(Common.Constants.ModExportPath, parameters.Mod.Name.GenerateShortFileNameHashId(4).GenerateValidFileName() + "_" + mod.Name.GenerateValidFileName().GenerateShortFileNameHashId(8),
                                     item.Replace(mod.FullPath, string.Empty).Trim('\\').Trim('/'));
-                                if (item.EndsWith(Shared.Constants.DescriptorJsonMetadata) && parameters.DescriptorType == DescriptorType.JsonMetadata)
+                                if (item.EndsWith(Shared.Constants.DescriptorJsonMetadata) && parameters.DescriptorType is DescriptorType.JsonMetadata or DescriptorType.JsonMetadataV2)
                                 {
                                     var ms = new MemoryStream();
                                     await modWriter.WriteDescriptorToStreamAsync(new ModWriterParameters { Mod = cloneMod(mod), DescriptorType = parameters.DescriptorType }, ms, true);
@@ -290,7 +292,7 @@ namespace IronyModManager.IO.Mods
                             {
                                 var file = Path.Combine(Common.Constants.ModExportPath, parameters.Mod.Name.GenerateShortFileNameHashId(4).GenerateValidFileName() + "_" + mod.Name.GenerateValidFileName().GenerateShortFileNameHashId(8),
                                     item.Replace(mod.FullPath, string.Empty).Trim('\\').Trim('/'));
-                                if (item.EndsWith(Shared.Constants.DescriptorJsonMetadata) && parameters.DescriptorType == DescriptorType.JsonMetadata)
+                                if (item.EndsWith(Shared.Constants.DescriptorJsonMetadata) && parameters.DescriptorType is DescriptorType.JsonMetadata or DescriptorType.JsonMetadataV2)
                                 {
                                     var ms = new MemoryStream();
                                     await modWriter.WriteDescriptorToStreamAsync(new ModWriterParameters { Mod = cloneMod(mod), DescriptorType = parameters.DescriptorType }, ms, true);

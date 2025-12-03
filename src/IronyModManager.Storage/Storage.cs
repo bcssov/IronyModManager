@@ -4,7 +4,7 @@
 // Created          : 01-11-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 10-28-2022
+// Last Modified On : 12-03-2025
 // ***********************************************************************
 // <copyright file="Storage.cs" company="Mario">
 //     Mario
@@ -15,6 +15,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices;
 using AutoMapper;
 using IronyModManager.DI;
 using IronyModManager.Models.Common;
@@ -65,13 +66,13 @@ namespace IronyModManager.Storage
         /// Gets the database.
         /// </summary>
         /// <value>The database.</value>
-        protected IDatabase Database { get; private set; }
+        protected IDatabase Database { get; }
 
         /// <summary>
         /// Gets the mapper.
         /// </summary>
         /// <value>The mapper.</value>
-        protected IMapper Mapper { get; private set; }
+        protected IMapper Mapper { get; }
 
         #endregion Properties
 
@@ -204,6 +205,16 @@ namespace IronyModManager.Storage
                 {
                     throw new InvalidOperationException($"{gameType?.Name} game is already registered or invalid registration.");
                 }
+
+                var canAdd = (RuntimeInformation.IsOSPlatform(OSPlatform.Windows) && gameType.SupportedOperatingSystems.HasFlag(SupportedOperatingSystems.Windows)) ||
+                             (RuntimeInformation.IsOSPlatform(OSPlatform.Linux) && gameType.SupportedOperatingSystems.HasFlag(SupportedOperatingSystems.Linux)) ||
+                             (RuntimeInformation.IsOSPlatform(OSPlatform.OSX) && gameType.SupportedOperatingSystems.HasFlag(SupportedOperatingSystems.OSX));
+
+                if (!canAdd)
+                {
+                    return false;
+                }
+
                 var game = DIResolver.Get<IGameType>();
                 game.Name = gameType.Name;
                 game.UserDirectory = gameType.UserDirectory ?? string.Empty;
@@ -226,6 +237,9 @@ namespace IronyModManager.Storage
                 game.GogAppId = gameType.GogAppId;
                 game.SupportedMergeTypes = gameType.SupportedMergeTypes;
                 game.ModDescriptorType = gameType.ModDescriptorType;
+                game.DefaultGameBinaryPath = gameType.DefaultGameBinaryPath;
+                game.SignatureFiles = gameType.SignatureFiles;
+                game.SupportedOperatingSystems = gameType.SupportedOperatingSystems;
                 Database.Games.Add(game);
                 return true;
             }
@@ -245,6 +259,7 @@ namespace IronyModManager.Storage
                 {
                     throw new InvalidOperationException("Notification position is null or already registered.");
                 }
+
                 var model = DIResolver.Get<INotificationPositionType>();
                 model.IsDefault = notificationPosition.IsDefault;
                 model.Position = notificationPosition.Position;
@@ -269,10 +284,12 @@ namespace IronyModManager.Storage
                 {
                     throw new InvalidOperationException("There is already a default theme registered.");
                 }
+
                 if (Database.Themes.Any(s => s.Name.Equals(name, StringComparison.OrdinalIgnoreCase)))
                 {
                     throw new InvalidOperationException($"{name} theme is already registered.");
                 }
+
                 var themeType = DIResolver.Get<IThemeType>();
                 themeType.IsDefault = isDefault;
                 themeType.Name = name;
@@ -295,6 +312,7 @@ namespace IronyModManager.Storage
                 {
                     Database.AppState = data;
                 }
+
                 return true;
             }
         }
@@ -313,6 +331,7 @@ namespace IronyModManager.Storage
                 {
                     Database.GameSettings = data;
                 }
+
                 return true;
             }
         }
@@ -331,6 +350,7 @@ namespace IronyModManager.Storage
                 {
                     Database.ModCollection = data;
                 }
+
                 return true;
             }
         }
@@ -349,6 +369,7 @@ namespace IronyModManager.Storage
                 {
                     Database.Preferences = data;
                 }
+
                 return true;
             }
         }
@@ -367,6 +388,7 @@ namespace IronyModManager.Storage
                 {
                     Database.WindowState = data;
                 }
+
                 return true;
             }
         }
@@ -397,6 +419,7 @@ namespace IronyModManager.Storage
                 compareLogic.Config.IgnoreConcreteTypes = true;
                 compareLogic.Config.IgnoreObjectTypes = true;
             }
+
             return compareLogic;
         }
 

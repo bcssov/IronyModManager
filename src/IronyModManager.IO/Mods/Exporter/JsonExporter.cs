@@ -4,7 +4,7 @@
 // Created          : 08-11-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-26-2025
+// Last Modified On : 12-03-2025
 // ***********************************************************************
 // <copyright file="JsonExporter.cs" company="Mario">
 //     Mario
@@ -29,6 +29,7 @@ using IronyModManager.Shared;
 using IronyModManager.Shared.Models;
 using Newtonsoft.Json;
 using Nito.AsyncEx;
+using static IronyModManager.IO.Mods.Models.Paradox.Common.Playsets;
 
 namespace IronyModManager.IO.Mods.Exporter
 {
@@ -41,6 +42,11 @@ namespace IronyModManager.IO.Mods.Exporter
     internal class JsonExporter : BaseExporter
     {
         #region Fields
+
+        /// <summary>
+        /// The playset name
+        /// </summary>
+        private const string PlaysetName = Common.Constants.JsonV2PlaysetName;
 
         /// <summary>
         /// The write lock
@@ -65,15 +71,40 @@ namespace IronyModManager.IO.Mods.Exporter
             {
                 var dlcPath = Path.Combine(parameters.RootPath, Constants.DLC_load_path);
                 var dlcLoad = await LoadPdxModelAsync<DLCLoad>(dlcPath) ?? new DLCLoad();
-                dlcLoad.DisabledDlcs = parameters.DLC.Select(p => p.Path).ToList();
+                dlcLoad.DisabledDLCs = [.. parameters.DLC.Select(p => p.Path)];
                 result = await WritePdxModelAsync(dlcLoad, dlcPath);
             }
-            else
+            else if (parameters.DescriptorType == DescriptorType.DescriptorMod)
             {
                 var contentPath = Path.Combine(parameters.RootPath, Constants.Content_load_path);
                 var contentLoad = await LoadContentLoadModelAsync(contentPath);
-                contentLoad.DisabledDLC = parameters.DLC.Select(p => new DisabledDLC { ParadoxAppId = p.AppId }).ToList();
+                contentLoad.DisabledDLC = [.. parameters.DLC.Select(p => new DisabledDLC { ParadoxAppId = p.AppId })];
                 result = await WritePdxModelAsync(contentLoad, contentPath);
+            }
+            else
+            {
+                var playsetsPath = Path.Combine(parameters.RootPath, Constants.Playsets_path);
+                var playsets = await LoadPlaysetsModelAsync(playsetsPath);
+                var ironyPlaySet = playsets.PlaysetsCollection.FirstOrDefault(p => p.Name.Equals(PlaysetName, StringComparison.OrdinalIgnoreCase));
+
+                // Irony service layer sends only disabled dlc
+                foreach (var dlcObject in parameters.DLC)
+                {
+                    var dlc = ironyPlaySet!.DLCCollection.FirstOrDefault(p => p.ParadoxAppId == dlcObject.AppId);
+                    if (dlc == null)
+                    {
+                        // Append disabled DLC data
+                        dlc = new Playsets.DLC { ParadoxAppId = dlcObject.AppId, IsEnabled = false };
+                        ironyPlaySet.DLCCollection.Add(dlc);
+                    }
+                    else
+                    {
+                        // Flag as deleted only
+                        dlc.IsEnabled = false;
+                    }
+                }
+
+                result = await WritePdxModelAsync(playsets, playsetsPath);
             }
 
             // ReSharper disable once DisposeOnUsingVariable
@@ -90,21 +121,32 @@ namespace IronyModManager.IO.Mods.Exporter
         public async Task<bool> ExportModsAsync(ModWriterParameters parameters)
         {
             using var mutex = await writeLock.LockAsync();
-            if (parameters.DescriptorType == DescriptorType.JsonMetadata)
+            switch (parameters.DescriptorType)
             {
-                var result = await ExportContentLoadModsAsync(parameters);
+                case DescriptorType.JsonMetadata:
+                {
+                    var result = await ExportContentLoadModsAsync(parameters);
 
-                // ReSharper disable once DisposeOnUsingVariable
-                mutex.Dispose();
-                return result;
-            }
-            else
-            {
-                var result = await ExportDLCLoadModsAsync(parameters);
+                    // ReSharper disable once DisposeOnUsingVariable
+                    mutex.Dispose();
+                    return result;
+                }
+                case DescriptorType.JsonMetadataV2:
+                {
+                    var result = await ExportPlaysetsAsync(parameters);
 
-                // ReSharper disable once DisposeOnUsingVariable
-                mutex.Dispose();
-                return result;
+                    // ReSharper disable once DisposeOnUsingVariable
+                    mutex.Dispose();
+                    return result;
+                }
+                default:
+                {
+                    var result = await ExportDLCLoadModsAsync(parameters);
+
+                    // ReSharper disable once DisposeOnUsingVariable
+                    mutex.Dispose();
+                    return result;
+                }
             }
         }
 
@@ -115,34 +157,59 @@ namespace IronyModManager.IO.Mods.Exporter
         /// <returns>IReadOnlyCollection&lt;IDLCObject&gt;.</returns>
         public async Task<IReadOnlyCollection<IDLCObject>> GetDisabledDLCAsync(DLCParameters parameters)
         {
-            if (parameters.DescriptorType == DescriptorType.DescriptorMod)
+            switch (parameters.DescriptorType)
             {
-                var dlcPath = Path.Combine(parameters.RootPath, Constants.DLC_load_path);
-                var dlcLoad = await LoadPdxModelAsync<DLCLoad>(dlcPath) ?? new DLCLoad();
-                if (dlcLoad.DisabledDlcs?.Count > 0)
+                case DescriptorType.DescriptorMod:
                 {
-                    var result = dlcLoad.DisabledDlcs.Select(p =>
+                    var dlcPath = Path.Combine(parameters.RootPath, Constants.DLC_load_path);
+                    var dlcLoad = await LoadPdxModelAsync<DLCLoad>(dlcPath) ?? new DLCLoad();
+                    if (dlcLoad.DisabledDLCs?.Count > 0)
                     {
-                        var model = DIResolver.Get<IDLCObject>();
-                        model.Path = p;
-                        return model;
-                    }).ToList();
-                    return result;
+                        var result = dlcLoad.DisabledDLCs.Select(p =>
+                        {
+                            var model = DIResolver.Get<IDLCObject>();
+                            model.Path = p;
+                            return model;
+                        }).ToList();
+                        return result;
+                    }
+
+                    break;
                 }
-            }
-            else
-            {
-                var contentPath = Path.Combine(parameters.RootPath, Constants.Content_load_path);
-                var contentLoad = await LoadPdxModelAsync<ContentLoad>(contentPath) ?? new ContentLoad();
-                if (contentLoad.DisabledDLC?.Count > 0)
+                case DescriptorType.JsonMetadata:
                 {
-                    var result = contentLoad.DisabledDLC.Select(p =>
+                    var contentPath = Path.Combine(parameters.RootPath, Constants.Content_load_path);
+                    var contentLoad = await LoadPdxModelAsync<ContentLoad>(contentPath) ?? new ContentLoad();
+                    if (contentLoad.DisabledDLC?.Count > 0)
                     {
-                        var model = DIResolver.Get<IDLCObject>();
-                        model.AppId = p.ParadoxAppId;
-                        return model;
-                    }).ToList();
-                    return result;
+                        var result = contentLoad.DisabledDLC.Select(p =>
+                        {
+                            var model = DIResolver.Get<IDLCObject>();
+                            model.AppId = p.ParadoxAppId;
+                            return model;
+                        }).ToList();
+                        return result;
+                    }
+
+                    break;
+                }
+                default:
+                {
+                    var playsetsPath = Path.Combine(parameters.RootPath, Constants.Playsets_path);
+                    var playsets = await LoadPlaysetsModelAsync(playsetsPath);
+                    var ironyPlaySet = playsets.PlaysetsCollection.FirstOrDefault(p => p.Name.Equals(PlaysetName, StringComparison.OrdinalIgnoreCase));
+                    if (ironyPlaySet!.DLCCollection.Count > 0)
+                    {
+                        var result = ironyPlaySet.DLCCollection.Where(p => !p.IsEnabled).Select(d =>
+                        {
+                            var model = DIResolver.Get<IDLCObject>();
+                            model.AppId = d.ParadoxAppId;
+                            return model;
+                        }).ToList();
+                        return result;
+                    }
+
+                    break;
                 }
             }
 
@@ -225,7 +292,7 @@ namespace IronyModManager.IO.Mods.Exporter
             var modRegistryPath = Path.Combine(parameters.RootDirectory, Constants.Mod_registry_path);
             var dlcLoad = await LoadPdxModelAsync<DLCLoad>(dlcPath) ?? new DLCLoad();
             var gameData = await LoadPdxModelAsync<GameData>(gameDataPath) ?? new GameData();
-            var modRegistry = await LoadPdxModelAsync<ModRegistryCollection>(modRegistryPath) ?? new ModRegistryCollection();
+            var modRegistry = await LoadPdxModelAsync<ModRegistryCollection>(modRegistryPath) ?? [];
 
             if (!parameters.AppendOnly)
             {
@@ -291,6 +358,34 @@ namespace IronyModManager.IO.Mods.Exporter
         }
 
         /// <summary>
+        /// Export playsets as an asynchronous operation.
+        /// </summary>
+        /// <param name="parameters">The parameters.</param>
+        /// <returns>A Task&lt;System.Boolean&gt; representing the asynchronous operation.</returns>
+        private async Task<bool> ExportPlaysetsAsync(ModWriterParameters parameters)
+        {
+            var playsetsPath = Path.Combine(parameters.RootDirectory, Constants.Playsets_path);
+            var playsets = await LoadPlaysetsModelAsync(playsetsPath);
+            var ironyPlaySet = playsets.PlaysetsCollection.FirstOrDefault(p => p.Name.Equals(PlaysetName, StringComparison.OrdinalIgnoreCase));
+
+            if (!parameters.AppendOnly)
+            {
+                ironyPlaySet!.OrderedListMods.Clear();
+            }
+
+            parameters.EnabledMods?.ToList().ForEach(p =>
+            {
+                ironyPlaySet!.OrderedListMods.Add(new OrderedListMod { Path = ResolveContentLoadPath(p.FullPath, true, true), IsEnabled = true });
+            });
+            parameters.TopPriorityMods?.ToList().ForEach(p =>
+            {
+                ironyPlaySet!.OrderedListMods.Add(new OrderedListMod { Path = ResolveContentLoadPath(p.FullPath, true, true), IsEnabled = true });
+            });
+
+            return await WritePdxModelAsync(playsets, playsetsPath);
+        }
+
+        /// <summary>
         /// Load content load model as an asynchronous operation.
         /// </summary>
         /// <param name="path">The path.</param>
@@ -320,16 +415,86 @@ namespace IronyModManager.IO.Mods.Exporter
         }
 
         /// <summary>
+        /// Load playsets model as an asynchronous operation.
+        /// </summary>
+        /// <param name="path">The path.</param>
+        /// <returns>A Task&lt;IronyModManager.IO.Mods.Models.Paradox.Common.Playsets&gt; representing the asynchronous operation.</returns>
+        private async Task<Playsets> LoadPlaysetsModelAsync(string path)
+        {
+            var playsets = new Playsets();
+            if (File.Exists(path))
+            {
+                var content = await File.ReadAllTextAsync(path);
+                if (string.IsNullOrWhiteSpace(content))
+                {
+                    content = string.Empty;
+                }
+
+                playsets = await DeserializePdxModelAsync<Playsets>(content) ?? new Playsets
+                {
+                    FileVersion = "1.0.0",
+                    PlaysetsCollection =
+                    [
+                        new Playset
+                        {
+                            Name = PlaysetName,
+                            DLCCollection = [],
+                            IsAutomaticallySorted = false,
+                            OrderedListMods = [],
+                            IsActive = true
+                        }
+                    ]
+                };
+                playsets.PlaysetsCollection ??= [];
+                if (playsets.PlaysetsCollection.FirstOrDefault(p => p.Name.Equals(PlaysetName, StringComparison.OrdinalIgnoreCase)) == null)
+                {
+                    playsets.PlaysetsCollection.Add(new Playset
+                    {
+                        Name = PlaysetName,
+                        IsAutomaticallySorted = false,
+                        IsActive = true,
+                        DLCCollection = [],
+                        OrderedListMods = []
+                    });
+                }
+
+                var ironyPlayset = playsets.PlaysetsCollection.FirstOrDefault(p => p.Name.Equals(PlaysetName, StringComparison.OrdinalIgnoreCase));
+                ironyPlayset!.DLCCollection ??= []; // Not null we search ensure to add it
+                ironyPlayset.OrderedListMods ??= [];
+                ironyPlayset.IsActive = true;
+                ironyPlayset.IsAutomaticallySorted = false;
+            }
+
+            return playsets;
+        }
+
+        /// <summary>
         /// Resolves the content load path.
         /// </summary>
         /// <param name="path">The path.</param>
+        /// <param name="replaceForwardSlash">if set to <c>true</c> [replace forward slash].</param>
+        /// <param name="appendFinalSlash">if set to <c>true</c> [append final slash].</param>
         /// <returns>System.String.</returns>
-        private string ResolveContentLoadPath(string path)
+        private string ResolveContentLoadPath(string path, bool replaceForwardSlash = false, bool appendFinalSlash = false)
         {
             // Why? Because Paradox went full paradox!
             // If the first mod path in the JSON array has casing Paradox doesn't like, the entire mod list fails...
             // ...even if every single other entry is correct...
-            return RuntimeInformation.IsOSPlatform(OSPlatform.Windows) ? PathOperations.GetActualPathCasing(path) : path;
+            var contentPath = RuntimeInformation.IsOSPlatform(OSPlatform.Windows) ? PathOperations.GetActualPathCasing(path) : path;
+            var separator = Path.DirectorySeparatorChar;
+            if (replaceForwardSlash)
+            {
+                contentPath = contentPath.Replace("\\", "/");
+                separator = '/';
+            }
+
+            if (appendFinalSlash)
+            {
+                contentPath = contentPath.TrimEnd(separator);
+                contentPath += separator;
+            }
+
+            return contentPath;
         }
 
         /// <summary>

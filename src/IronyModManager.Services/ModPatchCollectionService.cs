@@ -4,7 +4,7 @@
 // Created          : 05-26-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-12-2025
+// Last Modified On : 12-02-2025
 // ***********************************************************************
 // <copyright file="ModPatchCollectionService.cs" company="Mario">
 //     Mario
@@ -2753,7 +2753,7 @@ namespace IronyModManager.Services
                     mod = GeneratePatchModDescriptor(allMods, game, patchName);
                     await ModWriter.CreateModDirectoryAsync(new ModWriterParameters { RootDirectory = game.UserDirectory, Path = Shared.Constants.ModDirectory });
                     await ModWriter.CreateModDirectoryAsync(new ModWriterParameters { RootDirectory = GetPatchModDirectory(game, patchName) });
-                    if (game.ModDescriptorType == ModDescriptorType.JsonMetadata)
+                    if (game.ModDescriptorType is ModDescriptorType.JsonMetadata or ModDescriptorType.JsonMetadataV2)
                     {
                         await ModWriter.CreateModDirectoryAsync(new ModWriterParameters { RootDirectory = game.UserDirectory, Path = Shared.Constants.JsonModDirectory });
                     }
@@ -2799,7 +2799,7 @@ namespace IronyModManager.Services
                     }
 
                     var state = Cache.Get<ModsExportedState>(new CacheGetParameters { Region = ModsExportedRegion, Key = ModExportedKey });
-                    if (state == null || state.Exported.GetValueOrDefault() == false)
+                    if (state == null || !state.Exported.GetValueOrDefault())
                     {
                         await Task.Run(() =>
                         {
@@ -3669,7 +3669,7 @@ namespace IronyModManager.Services
                         mod = GeneratePatchModDescriptor(allMods, game, patchName);
                         await ModWriter.CreateModDirectoryAsync(new ModWriterParameters { RootDirectory = game.UserDirectory, Path = Shared.Constants.ModDirectory });
                         await ModWriter.CreateModDirectoryAsync(new ModWriterParameters { RootDirectory = GetPatchModDirectory(game, patchName) });
-                        if (game.ModDescriptorType == ModDescriptorType.JsonMetadata)
+                        if (game.ModDescriptorType is ModDescriptorType.JsonMetadata or ModDescriptorType.JsonMetadataV2)
                         {
                             await ModWriter.CreateModDirectoryAsync(new ModWriterParameters { RootDirectory = game.UserDirectory, Path = Shared.Constants.JsonModDirectory });
                         }
@@ -3691,7 +3691,7 @@ namespace IronyModManager.Services
                     }
 
                     var state = Cache.Get<ModsExportedState>(new CacheGetParameters { Region = ModsExportedRegion, Key = ModExportedKey });
-                    if (state == null || state.Exported.GetValueOrDefault() == false)
+                    if (state == null || !state.Exported.GetValueOrDefault())
                     {
                         await Task.Run(() =>
                         {

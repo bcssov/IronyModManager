@@ -4,15 +4,17 @@
 // Created          : 06-06-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 10-29-2022
+// Last Modified On : 12-02-2025
 // ***********************************************************************
 // <copyright file="Enums.cs" company="Mario">
 //     Mario
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
+
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace IronyModManager.IO.Common
 {
@@ -34,7 +36,12 @@ namespace IronyModManager.IO.Common
         /// <summary>
         /// The json metadata
         /// </summary>
-        JsonMetadata
+        JsonMetadata,
+
+        /// <summary>
+        /// The json metadata v2
+        /// </summary>
+        JsonMetadataV2
     }
 
     /// <summary>
@@ -65,6 +72,6 @@ namespace IronyModManager.IO.Common
         /// <summary>
         /// The advanced without localization
         /// </summary>
-        AdvancedWithoutLocalization,
+        AdvancedWithoutLocalization
     }
 }

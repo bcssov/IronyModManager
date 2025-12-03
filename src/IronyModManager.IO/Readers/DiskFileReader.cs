@@ -1,17 +1,17 @@
-﻿
-// ***********************************************************************
+﻿// ***********************************************************************
 // Assembly         : IronyModManager.IO
 // Author           : Mario
 // Created          : 02-23-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-10-2023
+// Last Modified On : 12-03-2025
 // ***********************************************************************
 // <copyright file="DiskFileReader.cs" company="Mario">
 //     Mario
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
+
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -23,7 +23,6 @@ using IronyModManager.Shared;
 
 namespace IronyModManager.IO.Readers
 {
-
     /// <summary>
     /// Class DiskFileReader.
     /// Implements the <see cref="IronyModManager.IO.Common.Readers.IFileReader" />
@@ -32,16 +31,12 @@ namespace IronyModManager.IO.Readers
     [ExcludeFromCoverage("Skipping testing IO logic.")]
     public class DiskFileReader : IFileReader
     {
-
         #region Fields
 
         /// <summary>
         /// The disallowed paths
         /// </summary>
-        private static readonly string[] disallowedPaths = new string[]
-        {
-            Common.Constants.ModDirectory, Common.Constants.DLCDirectory, Common.Constants.BuiltInDLCDirectory, Common.Constants.JsonModDirectoy
-        };
+        private static readonly string[] disallowedPaths = [Common.Constants.ModDirectory, Common.Constants.DLCDirectory, Common.Constants.BuiltInDLCDirectory, Common.Constants.JsonModDirectory];
 
         #endregion Fields
 
@@ -69,6 +64,7 @@ namespace IronyModManager.IO.Readers
             {
                 return Directory.Exists(path);
             }
+
             return Directory.Exists(path) && !disallowedPaths.Any(p => path.EndsWith(p, StringComparison.OrdinalIgnoreCase));
         }
 
@@ -95,6 +91,7 @@ namespace IronyModManager.IO.Readers
                 var relativePath = item.Replace(path, string.Empty).Trim(Path.DirectorySeparatorChar);
                 files.Add(relativePath);
             }
+
             return files;
         }
 
@@ -135,6 +132,7 @@ namespace IronyModManager.IO.Readers
                     return (readStream(fullPath), isreadOnly, modified, fInfo.GetEncodingInfo());
                 }
             }
+
             return (null, false, null, null);
         }
 
@@ -146,7 +144,7 @@ namespace IronyModManager.IO.Readers
         /// <returns>System.Int64.</returns>
         public virtual long GetTotalSize(string path, string[] extensions = null)
         {
-            DirectoryInfo info = new DirectoryInfo(path);
+            var info = new DirectoryInfo(path);
             if (info.Exists)
             {
                 if (extensions != null && extensions.Any())
@@ -160,6 +158,7 @@ namespace IronyModManager.IO.Readers
                     return total;
                 }
             }
+
             return 0;
         }
 
@@ -173,7 +172,7 @@ namespace IronyModManager.IO.Readers
         public virtual IReadOnlyCollection<IFileInfo> Read(string path, IEnumerable<string> allowedPaths, bool searchSubFolders = true)
         {
             var files = Directory.GetFiles(path, "*", searchSubFolders ? SearchOption.AllDirectories : SearchOption.TopDirectoryOnly);
-            if (files?.Length > 0)
+            if (files.Length > 0)
             {
                 var result = new List<IFileInfo>();
                 foreach (var file in files)
@@ -188,6 +187,7 @@ namespace IronyModManager.IO.Readers
                             continue;
                         }
                     }
+
                     var info = DIResolver.Get<IFileInfo>();
                     var fileInfo = new System.IO.FileInfo(file);
                     info.IsReadOnly = fileInfo.IsReadOnly;
@@ -201,6 +201,8 @@ namespace IronyModManager.IO.Readers
                         using var streamReader = new StreamReader(stream, true);
                         var text = streamReader.ReadToEnd();
                         streamReader.Close();
+
+                        // ReSharper disable once DisposeOnUsingVariable
                         streamReader.Dispose();
                         info.IsBinary = false;
                         info.Content = text.SplitOnNewLine(false);
@@ -212,10 +214,13 @@ namespace IronyModManager.IO.Readers
                         using var fs = new FileStream(file, FileMode.Open, FileAccess.Read, FileShare.Read);
                         info.ContentSHA = fs.CalculateSHA();
                     }
+
                     result.Add(info);
                 }
+
                 return result;
             }
+
             return null;
         }
 
