@@ -4,7 +4,7 @@
 // Created          : 03-01-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 07-11-2022
+// Last Modified On : 12-04-2025
 // ***********************************************************************
 // <copyright file="AppAction.cs" company="Mario">
 //     Mario
@@ -14,6 +14,8 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
@@ -61,7 +63,7 @@ namespace IronyModManager.Implementation.Actions
         /// <returns>Task&lt;System.Boolean&gt;.</returns>
         public async Task<bool> CopyAsync(string text)
         {
-            await Application.Current.Clipboard.SetTextAsync(text);
+            await Application.Current!.Clipboard!.SetTextAsync(text);
             return true;
         }
 
@@ -74,7 +76,7 @@ namespace IronyModManager.Implementation.Actions
             await Task.Delay(50);
             await Dispatcher.UIThread.InvokeAsync(() =>
             {
-                ((IClassicDesktopStyleApplicationLifetime)Application.Current.ApplicationLifetime).Shutdown();
+                ((IClassicDesktopStyleApplicationLifetime)Application.Current!.ApplicationLifetime)!.Shutdown();
             });
         }
 
@@ -84,7 +86,7 @@ namespace IronyModManager.Implementation.Actions
         /// <returns>Task&lt;System.String&gt;.</returns>
         public Task<string> GetAsync()
         {
-            return Application.Current.Clipboard.GetTextAsync();
+            return Application.Current!.Clipboard!.GetTextAsync();
         }
 
         // Borrowed logic from here: https://github.com/AvaloniaUI/Avalonia/blob/master/src/Avalonia.Dialogs/AboutAvaloniaDialog.xaml.cs
@@ -119,6 +121,37 @@ namespace IronyModManager.Implementation.Actions
             {
                 ProcessRunner.RunExternalProcess(path, args);
                 return Task.FromResult(true);
+            }
+            catch (Exception ex)
+            {
+                logger.Error(ex);
+                return Task.FromResult(false);
+            }
+        }
+
+        /// <summary>
+        /// Runs the game asynchronous.
+        /// </summary>
+        /// <param name="path">The path.</param>
+        /// <param name="steamRoot">The steam root.</param>
+        /// <param name="steamProtonVersion">The steam proton version.</param>
+        /// <param name="appId">The appid.</param>
+        /// <param name="args">The arguments.</param>
+        /// <returns>Task&lt;System.Boolean&gt;.</returns>
+        public Task<bool> RunGameAsync(string path, string steamRoot, string steamProtonVersion, int appId, string args = Shared.Constants.EmptyParam)
+        {
+            try
+            {
+                // Proton test
+                if (path.EndsWith(".exe", StringComparison.OrdinalIgnoreCase) && RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
+                {
+                    ProcessRunner.RunProtonProcess(path, steamRoot, steamProtonVersion, appId, args);
+                    return Task.FromResult(true);
+                }
+                else
+                {
+                    return RunAsync(path, args);
+                }
             }
             catch (Exception ex)
             {

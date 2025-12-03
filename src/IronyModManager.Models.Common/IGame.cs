@@ -124,6 +124,12 @@ namespace IronyModManager.Models.Common
         string LauncherSettingsPrefix { get; set; }
 
         /// <summary>
+        /// Gets or sets the linux proton version.
+        /// </summary>
+        /// <value>The linux proton version.</value>
+        string LinuxProtonVersion { get; set; }
+
+        /// <summary>
         /// Gets or sets the log location.
         /// </summary>
         /// <value>The log location.</value>
@@ -164,6 +170,12 @@ namespace IronyModManager.Models.Common
         /// </summary>
         /// <value>The steam application identifier.</value>
         int SteamAppId { get; set; }
+
+        /// <summary>
+        /// Gets or sets the steam root.
+        /// </summary>
+        /// <value>The steam root.</value>
+        string SteamRoot { get; set; }
 
         /// <summary>
         /// Gets or sets the supported merge types.

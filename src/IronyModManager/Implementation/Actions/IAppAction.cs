@@ -4,7 +4,7 @@
 // Created          : 03-01-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 09-22-2020
+// Last Modified On : 12-04-2025
 // ***********************************************************************
 // <copyright file="IAppAction.cs" company="Mario">
 //     Mario
@@ -12,8 +12,9 @@
 // <summary></summary>
 // ***********************************************************************
 
-using System.Collections.Generic;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace IronyModManager.Implementation.Actions
@@ -58,6 +59,17 @@ namespace IronyModManager.Implementation.Actions
         /// <param name="args">The arguments.</param>
         /// <returns>Task&lt;System.Boolean&gt;.</returns>
         Task<bool> RunAsync(string path, string args = Shared.Constants.EmptyParam);
+
+        /// <summary>
+        /// Runs the game asynchronous.
+        /// </summary>
+        /// <param name="path">The path.</param>
+        /// <param name="steamRoot">The steam root.</param>
+        /// <param name="steamProtonVersion">The steam proton version.</param>
+        /// <param name="appId">The application identifier.</param>
+        /// <param name="args">The arguments.</param>
+        /// <returns>Task&lt;System.Boolean&gt;.</returns>
+        Task<bool> RunGameAsync(string path, string steamRoot, string steamProtonVersion, int appId, string args = Shared.Constants.EmptyParam);
 
         #endregion Methods
     }

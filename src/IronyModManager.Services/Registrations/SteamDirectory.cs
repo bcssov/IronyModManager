@@ -1,11 +1,10 @@
-﻿
-// ***********************************************************************
+﻿// ***********************************************************************
 // Assembly         : IronyModManager.Services
 // Author           : Mario
 // Created          : 02-24-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 09-25-2025
+// Last Modified On : 12-04-2025
 // ***********************************************************************
 // <copyright file="SteamDirectory.cs" company="Mario">
 //     Mario
@@ -18,7 +17,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
-using Microsoft.Win32;
 using Gameloop.Vdf;
 using Gameloop.Vdf.JsonConverter;
 using Gameloop.Vdf.Linq;
@@ -26,10 +24,10 @@ using IronyModManager.DI;
 using IronyModManager.Services.Models;
 using IronyModManager.Shared;
 using IronyModManager.Shared.Configuration;
+using Microsoft.Win32;
 
 namespace IronyModManager.Services.Registrations
 {
-
     /// <summary>
     /// Class SteamDirectory.
     /// </summary>
@@ -44,6 +42,11 @@ namespace IronyModManager.Services.Registrations
         private const string ACFFormat = "appmanifest_{0}.acf";
 
         /// <summary>
+        /// The compat tool mapping
+        /// </summary>
+        private const string CompatToolMapping = "CompatToolMapping";
+
+        /// <summary>
         /// The steam apps directory
         /// </summary>
         private const string SteamAppsDirectory = "steamapps";
@@ -51,12 +54,17 @@ namespace IronyModManager.Services.Registrations
         /// <summary>
         /// The steam registry path
         /// </summary>
-        private const string SteamRegistryPath = "Software\\Valve\\Steam";
+        private const string SteamRegistryPath = @"Software\Valve\Steam";
 
         /// <summary>
         /// The steam registry sub key
         /// </summary>
         private const string SteamRegistrySubKey = "SteamPath";
+
+        /// <summary>
+        /// The steam user data directory
+        /// </summary>
+        private const string SteamUserDataDirectory = "userdata";
 
         /// <summary>
         /// The steam VDF base install folder identifier
@@ -74,6 +82,11 @@ namespace IronyModManager.Services.Registrations
         private static readonly string libraryFolderVDF = PathHelper.MergePaths("config", "libraryfolders.vdf");
 
         /// <summary>
+        /// The proton cache
+        /// </summary>
+        private static readonly Dictionary<long, string> protonCache = new();
+
+        /// <summary>
         /// The steam apps library folder VDF
         /// </summary>
         private static readonly string steamAppsLibraryFolderVDF = PathHelper.MergePaths(SteamAppsDirectory, "libraryfolders.vdf");
@@ -87,11 +100,6 @@ namespace IronyModManager.Services.Registrations
         /// The steam configuration VDF
         /// </summary>
         private static readonly string steamConfigVDF = PathHelper.MergePaths("config", "config.vdf");
-
-        /// <summary>
-        /// The steam user data directory
-        /// </summary>
-        private static readonly string steamUserDataDirectory = "userdata";
 
         /// <summary>
         /// The steam workshop directory
@@ -142,35 +150,74 @@ namespace IronyModManager.Services.Registrations
                     var path = findInstallDirectory(Path.Combine(steamInstallDirectory, SteamAppsDirectory, acfFile));
                     if (!string.IsNullOrWhiteSpace(path) && Directory.Exists(Path.Combine(steamInstallDirectory, steamCommonDirectory, path)))
                     {
-                        if (rootPathOnly)
-                        {
-                            return Path.Combine(steamInstallDirectory, SteamAppsDirectory);
-                        }
-
-                        return Path.Combine(steamInstallDirectory, steamCommonDirectory, path);
+                        return rootPathOnly ? Path.Combine(steamInstallDirectory, SteamAppsDirectory) : Path.Combine(steamInstallDirectory, steamCommonDirectory, path);
                     }
                 }
 
                 var vdfPath = Path.Combine(steamInstallDirectory, steamConfigVDF);
                 var libraryFolderVDF = Path.Combine(steamInstallDirectory, SteamDirectory.libraryFolderVDF);
                 var steamAppsLibraryFolderVDF = Path.Combine(steamInstallDirectory, SteamDirectory.steamAppsLibraryFolderVDF);
-                var paths = GetVdf(vdfPath, libraryFolderVDF, steamAppsLibraryFolderVDF);
-                foreach (var path in paths)
+                var vdfData = GetVdfData(vdfPath, libraryFolderVDF, steamAppsLibraryFolderVDF);
+                foreach (var path in vdfData.Item1)
                 {
                     if (File.Exists(Path.Combine(path, SteamAppsDirectory, acfFile)))
                     {
                         var installDir = findInstallDirectory(Path.Combine(path, SteamAppsDirectory, acfFile));
                         if (!string.IsNullOrWhiteSpace(installDir) && Directory.Exists(Path.Combine(path, steamCommonDirectory, installDir)))
                         {
-                            if (rootPathOnly)
-                            {
-                                return Path.Combine(path, SteamAppsDirectory);
-                            }
-
-                            return Path.Combine(path, steamCommonDirectory, installDir);
+                            return rootPathOnly ? Path.Combine(path, SteamAppsDirectory) : Path.Combine(path, steamCommonDirectory, installDir);
                         }
                     }
                 }
+            }
+
+            return string.Empty;
+        }
+
+        /// <summary>
+        /// Gets the proton version.
+        /// </summary>
+        /// <param name="appId">The application identifier.</param>
+        /// <returns>string.</returns>
+        public static string GetProtonVersion(int appId)
+        {
+            var steamInstallDirectory = GetSteamRootPath();
+            var vdfPath = Path.Combine(steamInstallDirectory, steamConfigVDF);
+            var libraryFolderVDF = Path.Combine(steamInstallDirectory, SteamDirectory.libraryFolderVDF);
+            var steamAppsLibraryFolderVDF = Path.Combine(steamInstallDirectory, SteamDirectory.steamAppsLibraryFolderVDF);
+            var vdfData = GetVdfData(vdfPath, libraryFolderVDF, steamAppsLibraryFolderVDF);
+            if (vdfData.Item2 != null && vdfData.Item2.TryGetValue(appId, out var result))
+            {
+                return result;
+            }
+
+            return string.Empty;
+        }
+
+        /// <summary>
+        /// Gets the steam root path.
+        /// </summary>
+        /// <returns>System.String.</returns>
+        public static string GetSteamRootPath()
+        {
+            // We're going to use an override if set
+            var options = DIResolver.Get<IDomainConfiguration>().GetOptions();
+            if (!string.IsNullOrWhiteSpace(options.Steam.InstallLocationOverride) && Directory.Exists(options.Steam.InstallLocationOverride))
+            {
+                return options.Steam.InstallLocationOverride;
+            }
+
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
+            {
+                return GetSteamOSXRootPath();
+            }
+            else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
+            {
+                return GetSteamLinuxRootPath();
+            }
+            else if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+            {
+                return GetSteamWindowsRootPath();
             }
 
             return string.Empty;
@@ -187,7 +234,7 @@ namespace IronyModManager.Services.Registrations
             var steamInstallDirectory = GetSteamRootPath();
 
             // I always thought that steam would create this folder during installation
-            var path = Path.Combine(steamInstallDirectory, steamUserDataDirectory);
+            var path = Path.Combine(steamInstallDirectory, SteamUserDataDirectory);
             if (Directory.Exists(path))
             {
                 var folders = Directory.EnumerateDirectories(path).Where(p => Directory.Exists(Path.Combine(p, appId.ToString(), "remote"))).Select(p => Path.Combine(p, appId.ToString(), "remote"));
@@ -220,8 +267,10 @@ namespace IronyModManager.Services.Registrations
                 var vdfPath = Path.Combine(steamInstallDirectory, steamConfigVDF);
                 var libraryFolderVDF = Path.Combine(steamInstallDirectory, SteamDirectory.libraryFolderVDF);
                 var steamAppsLibraryFolderVDF = Path.Combine(steamInstallDirectory, SteamDirectory.steamAppsLibraryFolderVDF);
-                var paths = GetVdf(vdfPath, libraryFolderVDF, steamAppsLibraryFolderVDF);
-                foreach (var path in paths)
+                var vdfData = GetVdfData(vdfPath, libraryFolderVDF, steamAppsLibraryFolderVDF);
+
+                // ReSharper disable once ForeachCanBeConvertedToQueryUsingAnotherGetEnumerator
+                foreach (var path in vdfData.Item1)
                 {
                     if (Directory.Exists(Path.Combine(path, steamWorkshopDirectory, appId.ToString())))
                     {
@@ -252,35 +301,6 @@ namespace IronyModManager.Services.Registrations
         }
 
         /// <summary>
-        /// Gets the steam root path.
-        /// </summary>
-        /// <returns>System.String.</returns>
-        private static string GetSteamRootPath()
-        {
-            // We're going to use an override if set
-            var options = DIResolver.Get<IDomainConfiguration>().GetOptions();
-            if (!string.IsNullOrWhiteSpace(options.Steam.InstallLocationOverride) && Directory.Exists(options.Steam.InstallLocationOverride))
-            {
-                return options.Steam.InstallLocationOverride;
-            }
-
-            if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
-            {
-                return GetSteamOSXRootPath();
-            }
-            else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
-            {
-                return GetSteamLinuxRootPath();
-            }
-            else if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
-            {
-                return GetSteamWindowsRootPath();
-            }
-
-            return string.Empty;
-        }
-
-        /// <summary>
         /// Gets the steam windows root path.
         /// </summary>
         /// <returns>System.String.</returns>
@@ -298,13 +318,13 @@ namespace IronyModManager.Services.Registrations
         }
 
         /// <summary>
-        /// Gets the VDF.
+        /// Gets the VDF data.
         /// </summary>
         /// <param name="vdfPath">The VDF path.</param>
         /// <param name="libraryFolderPath">The library folder path.</param>
         /// <param name="steamAppsLibraryFolderPath">The steam apps library folder path.</param>
-        /// <returns>System.Collections.Generic.List&lt;string&gt;.</returns>
-        private static List<string> GetVdf(string vdfPath, string libraryFolderPath, string steamAppsLibraryFolderPath)
+        /// <returns>(System.Collections.Generic.List&lt;string&gt;, System.Collections.Generic.Dictionary&lt;long, string&gt;).</returns>
+        private static (List<string>, Dictionary<long, string>) GetVdfData(string vdfPath, string libraryFolderPath, string steamAppsLibraryFolderPath)
         {
             static string ParseLibraryFolderData(VObject item)
             {
@@ -329,7 +349,7 @@ namespace IronyModManager.Services.Registrations
                 {
                     var paths = new List<string>();
                     var model = LoadVDF(vdfPath);
-                    if (model is { Value: not null })
+                    if (model is not null)
                     {
                         var softwareKeyKey = model.Value.OfType<VProperty>().FirstOrDefault(p => p.Key == "Software");
                         var valveKey = softwareKeyKey?.Value.OfType<VProperty>().FirstOrDefault(p => p.Key == "Valve");
@@ -338,6 +358,23 @@ namespace IronyModManager.Services.Registrations
                         {
                             paths.AddRange(steamKey.Value.OfType<VProperty>().Where(p => p.Key.StartsWith(SteamVDFBaseInstallFolderId) && p.Value.Type == VTokenType.Value).Select(p => (p.Value as VValue)!.Value<string>())
                                 .Where(p => !string.IsNullOrWhiteSpace(p)));
+                            var compatMapping = steamKey.Value.OfType<VProperty>().FirstOrDefault(p => p.Key.Equals(CompatToolMapping));
+                            if (compatMapping != null)
+                            {
+                                var values = compatMapping.Value.ToList();
+                                foreach (var value in values)
+                                {
+                                    if (value is VProperty vProp)
+                                    {
+                                        var key = vProp.Key;
+                                        if (long.TryParse(key, out var intKey))
+                                        {
+                                            var name = (vProp.Value["name"] as VValue)!.Value<string>();
+                                            protonCache[intKey] = name;
+                                        }
+                                    }
+                                }
+                            }
                         }
                     }
 
@@ -392,10 +429,10 @@ namespace IronyModManager.Services.Registrations
                     result.AddRange(cachedFolderPath);
                 }
 
-                return result.Distinct().ToList();
+                return (result.Distinct().ToList(), new Dictionary<long, string>(protonCache));
             }
 
-            return [];
+            return ([], new Dictionary<long, string>(protonCache));
         }
 
         /// <summary>
@@ -423,7 +460,7 @@ namespace IronyModManager.Services.Registrations
         }
 
         /// <summary>
-        /// Reads the steam windows registry key.
+        /// Reads the steam Windows registry key.
         /// </summary>
         /// <param name="registryHive">The registry hive.</param>
         /// <returns>System.String.</returns>
@@ -432,10 +469,8 @@ namespace IronyModManager.Services.Registrations
 #pragma warning disable CA1416 // Validate platform compatibility
             using var key = registryHive.GetRegistryKey(SteamRegistryPath);
             var value = key?.GetValue(SteamRegistrySubKey);
-            if (value != null)
-                return value.ToString();
+            return value != null ? value.ToString() : string.Empty;
 #pragma warning restore CA1416 // Validate platform compatibility
-            return string.Empty;
         }
 
         #endregion Methods

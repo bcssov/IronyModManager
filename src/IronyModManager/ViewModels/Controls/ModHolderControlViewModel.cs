@@ -4,7 +4,7 @@
 // Created          : 02-29-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-25-2024
+// Last Modified On : 12-04-2025
 // ***********************************************************************
 // <copyright file="ModHolderControlViewModel.cs" company="Mario">
 //     Mario
@@ -1057,7 +1057,7 @@ namespace IronyModManager.ViewModels.Controls
                         else
                         {
                             await ensureSteamIsRunning(args);
-                            if (await appAction.RunAsync(args.ExecutableLocation, args.LaunchArguments))
+                            if (await appAction.RunGameAsync(args.ExecutableLocation, game.SteamRoot, game.LinuxProtonVersion, game.SteamAppId, args.LaunchArguments))
                             {
                                 if (game.CloseAppAfterGameLaunch)
                                 {

@@ -4,7 +4,7 @@
 // Created          : 02-12-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 12-03-2025
+// Last Modified On : 12-04-2025
 // ***********************************************************************
 // <copyright file="GameService.cs" company="Mario">
 //     Mario
@@ -451,7 +451,7 @@ namespace IronyModManager.Services
         /// </summary>
         /// <param name="game">The game.</param>
         /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
-        /// <exception cref="System.InvalidOperationException">Game not selected</exception>
+        /// <exception cref="InvalidOperationException">Game not selected</exception>
         public virtual bool Save(IGame game)
         {
             if (!game.IsSelected)
@@ -472,7 +472,7 @@ namespace IronyModManager.Services
         /// <param name="games">The games.</param>
         /// <param name="selectedGame">The selected game.</param>
         /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
-        /// <exception cref="System.ArgumentNullException"></exception>
+        /// <exception cref="ArgumentNullException">$"{nameof(games)} or {nameof(selectedGame)}.</exception>
         public virtual bool SetSelected(IEnumerable<IGame> games, IGame selectedGame)
         {
             if (games == null || !games.Any() || selectedGame == null)
@@ -552,6 +552,8 @@ namespace IronyModManager.Services
             game.CloseAppAfterGameLaunch = true;
             game.CustomModDirectory = string.Empty;
             game.GogAppId = gameType.GogAppId;
+            game.SteamRoot = gameType.SteamRoot;
+            game.LinuxProtonVersion = gameType.LinuxProtonVersion;
             var setExeLocation = true;
             var setUserDirLocation = true;
             if (gameSettings != null)

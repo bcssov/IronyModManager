@@ -4,7 +4,7 @@
 // Created          : 02-12-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 12-03-2025
+// Last Modified On : 12-04-2025
 // ***********************************************************************
 // <copyright file="GameRegistration.cs" company="Mario">
 //     Mario
@@ -105,6 +105,7 @@ namespace IronyModManager.Services.Registrations
             game.SignatureFiles = Shared.Constants.GamesTypes.SignatureFiles;
             game.DefaultGameBinaryPath = Shared.Constants.GamesTypes.DefaultGameBinaryPath;
             game.SupportedOperatingSystems = SupportedOperatingSystems.Linux | SupportedOperatingSystems.OSX | SupportedOperatingSystems.Windows;
+            game.SteamRoot = SteamDirectory.GetSteamRootPath();
             MapGameSettings(game, GetExecutableSettings(game));
             return game;
         }
@@ -138,6 +139,7 @@ namespace IronyModManager.Services.Registrations
             game.SignatureFiles = Shared.Constants.GamesTypes.SignatureFiles;
             game.DefaultGameBinaryPath = Shared.Constants.GamesTypes.DefaultGameBinaryPath;
             game.SupportedOperatingSystems = SupportedOperatingSystems.Linux | SupportedOperatingSystems.OSX | SupportedOperatingSystems.Windows;
+            game.SteamRoot = SteamDirectory.GetSteamRootPath();
             MapGameSettings(game, GetExecutableSettings(game));
             return game;
         }
@@ -177,8 +179,13 @@ namespace IronyModManager.Services.Registrations
             {
                 game.DefaultGameBinaryPath = Shared.Constants.GamesTypes.EuropaUniversalis5.DefaultWindowsGameBinaryPath;
             }
+            else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
+            {
+                game.DefaultGameBinaryPath = Shared.Constants.GamesTypes.EuropaUniversalis5.DefaultWindowsGameBinaryPath;
+            }
 
-            game.SupportedOperatingSystems = SupportedOperatingSystems.Windows;
+            game.SupportedOperatingSystems = SupportedOperatingSystems.Windows | SupportedOperatingSystems.Linux;
+            game.SteamRoot = SteamDirectory.GetSteamRootPath();
             MapGameSettings(game, GetExecutableSettings(game));
             return game;
         }
@@ -271,6 +278,7 @@ namespace IronyModManager.Services.Registrations
             game.SignatureFiles = Shared.Constants.GamesTypes.SignatureFiles;
             game.DefaultGameBinaryPath = Shared.Constants.GamesTypes.DefaultGameBinaryPath;
             game.SupportedOperatingSystems = SupportedOperatingSystems.Linux | SupportedOperatingSystems.OSX | SupportedOperatingSystems.Windows;
+            game.SteamRoot = SteamDirectory.GetSteamRootPath();
             MapGameSettings(game, GetExecutableSettings(game));
             return game;
         }
@@ -305,6 +313,7 @@ namespace IronyModManager.Services.Registrations
             game.SignatureFiles = Shared.Constants.GamesTypes.SignatureFiles;
             game.DefaultGameBinaryPath = Shared.Constants.GamesTypes.DefaultGameBinaryPath;
             game.SupportedOperatingSystems = SupportedOperatingSystems.Linux | SupportedOperatingSystems.OSX | SupportedOperatingSystems.Windows;
+            game.SteamRoot = SteamDirectory.GetSteamRootPath();
             MapGameSettings(game, GetExecutableSettings(game));
             return game;
         }
@@ -338,6 +347,7 @@ namespace IronyModManager.Services.Registrations
             game.SignatureFiles = Shared.Constants.GamesTypes.SignatureFiles;
             game.DefaultGameBinaryPath = Shared.Constants.GamesTypes.DefaultGameBinaryPath;
             game.SupportedOperatingSystems = SupportedOperatingSystems.Linux | SupportedOperatingSystems.OSX | SupportedOperatingSystems.Windows;
+            game.SteamRoot = SteamDirectory.GetSteamRootPath();
             MapGameSettings(game, GetExecutableSettings(game));
             return game;
         }
@@ -371,6 +381,7 @@ namespace IronyModManager.Services.Registrations
             game.SignatureFiles = Shared.Constants.GamesTypes.SignatureFiles;
             game.DefaultGameBinaryPath = Shared.Constants.GamesTypes.DefaultGameBinaryPath;
             game.SupportedOperatingSystems = SupportedOperatingSystems.Linux | SupportedOperatingSystems.OSX | SupportedOperatingSystems.Windows;
+            game.SteamRoot = SteamDirectory.GetSteamRootPath();
             MapGameSettings(game, GetExecutableSettings(game));
             return game;
         }
@@ -404,6 +415,7 @@ namespace IronyModManager.Services.Registrations
             game.SignatureFiles = Shared.Constants.GamesTypes.SignatureFiles;
             game.DefaultGameBinaryPath = Shared.Constants.GamesTypes.DefaultGameBinaryPath;
             game.SupportedOperatingSystems = SupportedOperatingSystems.Linux | SupportedOperatingSystems.OSX | SupportedOperatingSystems.Windows;
+            game.SteamRoot = SteamDirectory.GetSteamRootPath();
             MapGameSettings(game, GetExecutableSettings(game));
             return game;
         }
@@ -415,6 +427,7 @@ namespace IronyModManager.Services.Registrations
         /// <param name="settings">The settings.</param>
         private void MapGameSettings(IGameType gameType, GameSettings settings)
         {
+            gameType.LinuxProtonVersion = SteamDirectory.GetProtonVersion(gameType.SteamAppId);
             if (settings != null && gameType != null)
             {
                 gameType.ExecutablePath = settings.ExecutablePath;
