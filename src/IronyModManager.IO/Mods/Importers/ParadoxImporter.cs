@@ -83,7 +83,7 @@ namespace IronyModManager.IO.Mods.Importers
                     }
                 }
             }
-            else if (parameters.DescriptorType == DescriptorType.DescriptorMod)
+            else if (parameters.DescriptorType == DescriptorType.JsonMetadata)
             {
                 var path = Path.Combine(Path.GetDirectoryName(parameters.ModDirectory) ?? string.Empty, Constants.Content_load_path);
                 if (File.Exists(path))

@@ -252,16 +252,16 @@ namespace IronyModManager.Models.Common
         /// <summary>
         /// The windows
         /// </summary>
-        Windows,
+        Windows = 1,
 
         /// <summary>
         /// The osx
         /// </summary>
-        OSX,
+        OSX = 2,
 
         /// <summary>
         /// The linux
         /// </summary>
-        Linux
+        Linux = 4
     }
 }

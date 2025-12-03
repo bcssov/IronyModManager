@@ -74,7 +74,7 @@ namespace IronyModManager.IO.Mods.Exporter
                 dlcLoad.DisabledDLCs = [.. parameters.DLC.Select(p => p.Path)];
                 result = await WritePdxModelAsync(dlcLoad, dlcPath);
             }
-            else if (parameters.DescriptorType == DescriptorType.DescriptorMod)
+            else if (parameters.DescriptorType == DescriptorType.JsonMetadata)
             {
                 var contentPath = Path.Combine(parameters.RootPath, Constants.Content_load_path);
                 var contentLoad = await LoadContentLoadModelAsync(contentPath);
@@ -99,7 +99,7 @@ namespace IronyModManager.IO.Mods.Exporter
                     }
                     else
                     {
-                        // Flag as deleted only
+                        // Flag as disabled only
                         dlc.IsEnabled = false;
                     }
                 }
@@ -382,6 +382,15 @@ namespace IronyModManager.IO.Mods.Exporter
                 ironyPlaySet!.OrderedListMods.Add(new OrderedListMod { Path = ResolveContentLoadPath(p.FullPath, true, true), IsEnabled = true });
             });
 
+            // Set all to false
+            foreach (var playset in playsets.PlaysetsCollection)
+            {
+                playset.IsActive = false;
+            }
+
+            // Set Irony only one active
+            ironyPlaySet!.IsActive = true;
+
             return await WritePdxModelAsync(playsets, playsetsPath);
         }
 
@@ -421,7 +430,19 @@ namespace IronyModManager.IO.Mods.Exporter
         /// <returns>A Task&lt;IronyModManager.IO.Mods.Models.Paradox.Common.Playsets&gt; representing the asynchronous operation.</returns>
         private async Task<Playsets> LoadPlaysetsModelAsync(string path)
         {
-            var playsets = new Playsets();
+            static Playset getIronyPlayset()
+            {
+                return new Playset
+                {
+                    Name = PlaysetName,
+                    DLCCollection = [],
+                    IsAutomaticallySorted = false,
+                    OrderedListMods = [],
+                    IsActive = false
+                };
+            }
+
+            Playsets playsets = null;
             if (File.Exists(path))
             {
                 var content = await File.ReadAllTextAsync(path);
@@ -435,34 +456,31 @@ namespace IronyModManager.IO.Mods.Exporter
                     FileVersion = "1.0.0",
                     PlaysetsCollection =
                     [
-                        new Playset
-                        {
-                            Name = PlaysetName,
-                            DLCCollection = [],
-                            IsAutomaticallySorted = false,
-                            OrderedListMods = [],
-                            IsActive = true
-                        }
+                        getIronyPlayset()
                     ]
                 };
                 playsets.PlaysetsCollection ??= [];
-                if (playsets.PlaysetsCollection.FirstOrDefault(p => p.Name.Equals(PlaysetName, StringComparison.OrdinalIgnoreCase)) == null)
+                if (!playsets.PlaysetsCollection.Any(p => p.Name.Equals(PlaysetName, StringComparison.OrdinalIgnoreCase)))
                 {
-                    playsets.PlaysetsCollection.Add(new Playset
-                    {
-                        Name = PlaysetName,
-                        IsAutomaticallySorted = false,
-                        IsActive = true,
-                        DLCCollection = [],
-                        OrderedListMods = []
-                    });
+                    playsets.PlaysetsCollection.Add(getIronyPlayset());
                 }
 
                 var ironyPlayset = playsets.PlaysetsCollection.FirstOrDefault(p => p.Name.Equals(PlaysetName, StringComparison.OrdinalIgnoreCase));
-                ironyPlayset!.DLCCollection ??= []; // Not null we search ensure to add it
+                ironyPlayset!.DLCCollection ??= []; // Not null we ensured to add it beforehand
                 ironyPlayset.OrderedListMods ??= [];
-                ironyPlayset.IsActive = true;
+                ironyPlayset.IsActive = false;
                 ironyPlayset.IsAutomaticallySorted = false;
+            }
+            else
+            {
+                playsets = new Playsets
+                {
+                    FileVersion = "1.0.0",
+                    PlaysetsCollection =
+                    [
+                        getIronyPlayset()
+                    ]
+                };
             }
 
             return playsets;
