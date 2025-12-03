@@ -4,16 +4,18 @@
 // Created          : 02-17-2021
 //
 // Last Modified By : Mario
-// Last Modified On : 06-04-2022
+// Last Modified On : 12-03-2025
 // ***********************************************************************
 // <copyright file="ImageReader.cs" company="Mario">
 //     Mario
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
+
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 using BCnEncoder.Shared.ImageFiles;
 using ImageMagick;
@@ -89,6 +91,7 @@ namespace IronyModManager.IO.Images
                         attemptedAsPng = true;
                         ms = await ParseOther(stream);
                     }
+
                     if (ms == null)
                     {
                         if (!attemptedAsDds)
@@ -100,10 +103,12 @@ namespace IronyModManager.IO.Images
                             ms = await ParseOther(stream);
                         }
                     }
+
                     if (ms != null && ms.CanSeek)
                     {
                         ms.Seek(0, SeekOrigin.Begin);
                     }
+
                     return ms;
                 }
                 catch (Exception ex)
@@ -121,6 +126,7 @@ namespace IronyModManager.IO.Images
                     await stream.DisposeAsync();
                 }
             }
+
             return null;
         }
 
@@ -136,19 +142,18 @@ namespace IronyModManager.IO.Images
             {
                 stream.Seek(0, SeekOrigin.Begin);
             }
+
             var exceptions = new List<Exception>();
             MemoryStream ms = null;
-            // At some point I should probably remove some providers (due to unstable nature of cross platform libraries I'll leave this be)
+
+            // At some point I should probably remove some providers (due to unstable nature of cross-platform libraries I'll leave this be)
             // Default provider magick.net
+            MagickImage magickImage = null;
             try
             {
-                var image = new MagickImage(stream)
-                {
-                    Format = MagickFormat.Png
-                };
+                magickImage = new MagickImage(stream) { Format = MagickFormat.Png };
                 ms = new MemoryStream();
-                await image.WriteAsync(ms);
-                image.Dispose();
+                await magickImage.WriteAsync(ms);
             }
             catch (Exception ex)
             {
@@ -157,22 +162,29 @@ namespace IronyModManager.IO.Images
                     ms.Close();
                     await ms.DisposeAsync();
                 }
+
                 ms = null;
                 exceptions.Add(ex);
             }
+            finally
+            {
+                magickImage?.Dispose();
+            }
+
             // Fallback #1 (SixLabors.Textures)
             if (ms == null)
             {
+                Image sixLaborsImage = null;
                 if (stream.CanSeek)
                 {
                     stream.Seek(0, SeekOrigin.Begin);
                 }
+
                 try
                 {
-                    var image = await ddsDecoder.DecodeStreamToImageAsync(stream);
+                    sixLaborsImage = await ddsDecoder.DecodeStreamToImageAsync(stream);
                     ms = new MemoryStream();
-                    await image.SaveAsPngAsync(ms);
-                    image.Dispose();
+                    await sixLaborsImage.SaveAsPngAsync(ms);
                 }
                 catch (Exception ex)
                 {
@@ -181,24 +193,31 @@ namespace IronyModManager.IO.Images
                         ms.Close();
                         await ms.DisposeAsync();
                     }
+
                     ms = null;
                     exceptions.Add(ex);
                 }
+                finally
+                {
+                    sixLaborsImage?.Dispose();
+                }
             }
+
             // fallback #2 (BCnEncoder.NET)
             if (ms == null)
             {
+                Image ddsImage = null;
                 if (stream.CanSeek)
                 {
                     stream.Seek(0, SeekOrigin.Begin);
                 }
+
                 try
                 {
                     var file = DdsFile.Load(stream);
-                    var image = await ddsDecoder.DecodeToImageAsync(file);
+                    ddsImage = await ddsDecoder.DecodeToImageAsync(file);
                     ms = new MemoryStream();
-                    await image.SaveAsPngAsync(ms);
-                    image.Dispose();
+                    await ddsImage.SaveAsPngAsync(ms);
                 }
                 catch (Exception ex)
                 {
@@ -207,10 +226,16 @@ namespace IronyModManager.IO.Images
                         ms.Close();
                         await ms.DisposeAsync();
                     }
+
                     ms = null;
                     exceptions.Add(ex);
                 }
+                finally
+                {
+                    ddsImage?.Dispose();
+                }
             }
+
             // fallback #3 (pfim)
             if (ms == null)
             {
@@ -218,6 +243,7 @@ namespace IronyModManager.IO.Images
                 {
                     stream.Seek(0, SeekOrigin.Begin);
                 }
+
                 try
                 {
                     using var pfimImage = Dds.Create(stream, new PfimConfig());
@@ -225,19 +251,29 @@ namespace IronyModManager.IO.Images
                     {
                         pfimImage.Decompress();
                     }
-                    if (pfimImage.Format == ImageFormat.Rgba32)
+
+                    switch (pfimImage.Format)
                     {
-                        ms = new MemoryStream();
-                        using var image = Image.LoadPixelData<Bgra32>(ddsDecoder.TightData(pfimImage), pfimImage.Width, pfimImage.Height);
-                        await image.SaveAsPngAsync(ms);
-                        image.Dispose();
-                    }
-                    else if (pfimImage.Format == ImageFormat.Rgb24)
-                    {
-                        ms = new MemoryStream();
-                        using var image = Image.LoadPixelData<Bgr24>(ddsDecoder.TightData(pfimImage), pfimImage.Width, pfimImage.Height);
-                        await image.SaveAsPngAsync(ms);
-                        image.Dispose();
+                        case ImageFormat.Rgba32:
+                        {
+                            ms = new MemoryStream();
+                            using var image = Image.LoadPixelData<Bgra32>(ddsDecoder.TightData(pfimImage), pfimImage.Width, pfimImage.Height);
+                            await image.SaveAsPngAsync(ms);
+
+                            // ReSharper disable once DisposeOnUsingVariable
+                            image.Dispose();
+                            break;
+                        }
+                        case ImageFormat.Rgb24:
+                        {
+                            ms = new MemoryStream();
+                            using var image = Image.LoadPixelData<Bgr24>(ddsDecoder.TightData(pfimImage), pfimImage.Width, pfimImage.Height);
+                            await image.SaveAsPngAsync(ms);
+
+                            // ReSharper disable once DisposeOnUsingVariable
+                            image.Dispose();
+                            break;
+                        }
                     }
                 }
                 catch (Exception ex)
@@ -247,15 +283,18 @@ namespace IronyModManager.IO.Images
                         ms.Close();
                         await ms.DisposeAsync();
                     }
+
                     ms = null;
                     exceptions.Add(ex);
                 }
             }
+
             // Fallback can result in memory stream being empty so throw aggregate exception only if all attempts failed
             if (ms == null && exceptions.Count == 4)
             {
                 throw new AggregateException(exceptions);
             }
+
             return ms;
         }
 
@@ -271,18 +310,17 @@ namespace IronyModManager.IO.Images
             {
                 stream.Seek(0, SeekOrigin.Begin);
             }
+
             var exceptions = new List<Exception>();
             MemoryStream ms = null;
+
             // Default provider magick.net
+            MagickImage magickImage = null;
             try
             {
-                var image = new MagickImage(stream)
-                {
-                    Format = MagickFormat.Png
-                };
+                magickImage = new MagickImage(stream) { Format = MagickFormat.Png };
                 ms = new MemoryStream();
-                await image.WriteAsync(ms);
-                image.Dispose();
+                await magickImage.WriteAsync(ms);
             }
             catch (Exception ex)
             {
@@ -291,22 +329,29 @@ namespace IronyModManager.IO.Images
                     ms.Close();
                     await ms.DisposeAsync();
                 }
+
                 ms = null;
                 exceptions.Add(ex);
             }
+            finally
+            {
+                magickImage?.Dispose();
+            }
+
             // Fallback provider (SixLabours)
             if (ms == null)
             {
+                Image sixLaborsImage = null;
                 if (stream.CanSeek)
                 {
                     stream.Seek(0, SeekOrigin.Begin);
                 }
+
                 try
                 {
-                    using var image = await Image.LoadAsync(stream);
+                    sixLaborsImage = await Image.LoadAsync(stream);
                     ms = new MemoryStream();
-                    await image.SaveAsPngAsync(ms);
-                    image.Dispose();
+                    await sixLaborsImage.SaveAsPngAsync(ms);
                     return ms;
                 }
                 catch (Exception ex)
@@ -316,15 +361,22 @@ namespace IronyModManager.IO.Images
                         ms.Close();
                         await ms.DisposeAsync();
                     }
+
                     ms = null;
                     exceptions.Add(ex);
                 }
+                finally
+                {
+                    sixLaborsImage?.Dispose();
+                }
             }
+
             // Fallback can result in memory stream being empty so throw aggregate exception only if all attempts failed
             if (ms == null && exceptions.Count == 2)
             {
                 throw new AggregateException(exceptions);
             }
+
             return ms;
         }
 
@@ -348,8 +400,10 @@ namespace IronyModManager.IO.Images
                     ms.Close();
                     await ms.DisposeAsync();
                 }
+
                 ms = null;
             }
+
             return ms;
         }
 
@@ -373,8 +427,10 @@ namespace IronyModManager.IO.Images
                     ms.Close();
                     await ms.DisposeAsync();
                 }
+
                 ms = null;
             }
+
             return ms;
         }
 

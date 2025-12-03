@@ -23,6 +23,7 @@ namespace IronyModManager.IO.Mods
     /// Class Constants.
     /// </summary>
     [SuppressMessage("ReSharper", "InconsistentNaming")]
+    [SuppressMessage("CodeQuality", "IDE0079:Remove unnecessary suppression", Justification = "Resharper")]
     internal class Constants
     {
         #region Fields

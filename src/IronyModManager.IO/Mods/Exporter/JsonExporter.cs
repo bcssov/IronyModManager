@@ -74,7 +74,7 @@ namespace IronyModManager.IO.Mods.Exporter
                 dlcLoad.DisabledDLCs = [.. parameters.DLC.Select(p => p.Path)];
                 result = await WritePdxModelAsync(dlcLoad, dlcPath);
             }
-            else if (parameters.DescriptorType == DescriptorType.DescriptorMod)
+            else if (parameters.DescriptorType == DescriptorType.JsonMetadata)
             {
                 var contentPath = Path.Combine(parameters.RootPath, Constants.Content_load_path);
                 var contentLoad = await LoadContentLoadModelAsync(contentPath);

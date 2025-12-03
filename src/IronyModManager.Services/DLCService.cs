@@ -4,7 +4,7 @@
 // Created          : 02-14-2021
 //
 // Last Modified By : Mario
-// Last Modified On : 12-02-2025
+// Last Modified On : 12-03-2025
 // ***********************************************************************
 // <copyright file="DLCService.cs" company="Mario">
 //     Mario
@@ -36,7 +36,8 @@ namespace IronyModManager.Services
     /// </summary>
     /// <seealso cref="IronyModManager.Services.BaseService" />
     /// <seealso cref="IronyModManager.Services.Common.IDLCService" />
-    public class DLCService : BaseService, IDLCService
+    /// <remarks>Initializes a new instance of the <see cref="DLCService" /> class.</remarks>
+    public class DLCService(IDLCExporter dlcExporter, ICache cache, IReader reader, IDLCParser dlcParser, IStorageProvider storage, IMapper mapper) : BaseService(storage, mapper), IDLCService
     {
         #region Fields
 
@@ -48,7 +49,7 @@ namespace IronyModManager.Services
         /// <summary>
         /// The cache
         /// </summary>
-        private readonly ICache cache;
+        private readonly ICache cache = cache;
 
         /// <summary>
         /// The DLC directories
@@ -58,46 +59,24 @@ namespace IronyModManager.Services
         /// <summary>
         /// The DLC exporter
         /// </summary>
-        private readonly IDLCExporter dlcExporter;
+        private readonly IDLCExporter dlcExporter = dlcExporter;
 
         /// <summary>
         /// The DLC parser
         /// </summary>
-        private readonly IDLCParser dlcParser;
+        private readonly IDLCParser dlcParser = dlcParser;
 
         /// <summary>
         /// The path resolver
         /// </summary>
-        private readonly GameRootPathResolver pathResolver;
+        private readonly GameRootPathResolver pathResolver = new();
 
         /// <summary>
         /// The reader
         /// </summary>
-        private readonly IReader reader;
+        private readonly IReader reader = reader;
 
         #endregion Fields
-
-        #region Constructors
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="DLCService" /> class.
-        /// </summary>
-        /// <param name="dlcExporter">The DLC exporter.</param>
-        /// <param name="cache">The cache.</param>
-        /// <param name="reader">The reader.</param>
-        /// <param name="dlcParser">The DLC parser.</param>
-        /// <param name="storage">The storage.</param>
-        /// <param name="mapper">The mapper.</param>
-        public DLCService(IDLCExporter dlcExporter, ICache cache, IReader reader, IDLCParser dlcParser, IStorageProvider storage, IMapper mapper) : base(storage, mapper)
-        {
-            this.dlcExporter = dlcExporter;
-            this.reader = reader;
-            this.dlcParser = dlcParser;
-            this.cache = cache;
-            pathResolver = new GameRootPathResolver();
-        }
-
-        #endregion Constructors
 
         #region Methods
 
@@ -160,7 +139,7 @@ namespace IronyModManager.Services
                 return Task.FromResult<IReadOnlyCollection<IDLC>>(result);
             }
 
-            return Task.FromResult<IReadOnlyCollection<IDLC>>(new List<IDLC>());
+            return Task.FromResult<IReadOnlyCollection<IDLC>>((List<IDLC>)[]);
         }
 
         /// <summary>
@@ -209,36 +188,22 @@ namespace IronyModManager.Services
         /// <summary>
         /// Class DLCCacheHolder.
         /// </summary>
-        public class DLCCacheHolder
+        /// <remarks>Initializes a new instance of the <see cref="DLCCacheHolder" /> class.</remarks>
+        public class DLCCacheHolder(List<IDLC> dlc, string gameExe)
         {
-            #region Constructors
-
-            /// <summary>
-            /// Initializes a new instance of the <see cref="DLCCacheHolder" /> class.
-            /// </summary>
-            /// <param name="dlc">The DLC.</param>
-            /// <param name="gameExe">The game executable.</param>
-            public DLCCacheHolder(List<IDLC> dlc, string gameExe)
-            {
-                DLC = dlc;
-                GameExe = gameExe ?? string.Empty;
-            }
-
-            #endregion Constructors
-
             #region Properties
 
             /// <summary>
             /// Gets or sets the DLC.
             /// </summary>
             /// <value>The DLC.</value>
-            public List<IDLC> DLC { get; set; }
+            public List<IDLC> DLC { get; set; } = dlc;
 
             /// <summary>
             /// Gets or sets the game executable.
             /// </summary>
             /// <value>The game executable.</value>
-            public string GameExe { get; set; }
+            public string GameExe { get; set; } = gameExe ?? string.Empty;
 
             #endregion Properties
         }
