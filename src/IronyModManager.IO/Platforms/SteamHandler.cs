@@ -1,17 +1,17 @@
-﻿
-// ***********************************************************************
+﻿// ***********************************************************************
 // Assembly         : IronyModManager.IO
 // Author           : Mario
 // Created          : 07-11-2022
 //
 // Last Modified By : Mario
-// Last Modified On : 11-03-2023
+// Last Modified On : 12-04-2025
 // ***********************************************************************
 // <copyright file="SteamHandler.cs" company="Mario">
 //     Mario
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
+
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -25,14 +25,14 @@ using Steamworks;
 
 namespace IronyModManager.IO.Platforms
 {
-
     /// <summary>
     /// Class SteamHandler.
     /// Implements the <see cref="ISteam" />
     /// </summary>
     /// <seealso cref="ISteam" />
+    /// <remarks>Initializes a new instance of the <see cref="SteamHandler" /> class.</remarks>
     [ExcludeFromCoverage("Skipping testing IO logic.")]
-    public class SteamHandler : ISteam
+    public class SteamHandler(ILogger logger) : ISteam
     {
         #region Fields
 
@@ -75,22 +75,9 @@ namespace IronyModManager.IO.Platforms
         /// <summary>
         /// The logger
         /// </summary>
-        private readonly ILogger logger;
+        private readonly ILogger logger = logger;
 
         #endregion Fields
-
-        #region Constructors
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="SteamHandler" /> class.
-        /// </summary>
-        /// <param name="logger">The logger.</param>
-        public SteamHandler(ILogger logger)
-        {
-            this.logger = logger;
-        }
-
-        #endregion Constructors
 
         #region Methods
 
@@ -111,12 +98,15 @@ namespace IronyModManager.IO.Platforms
                     {
                         break;
                     }
+
                     await Task.Delay(AlternateDelay);
                     processes = Process.GetProcesses();
                     attempts++;
                 }
+
                 return result;
             }
+
             return true;
         }
 
@@ -136,6 +126,7 @@ namespace IronyModManager.IO.Platforms
                 {
                     return false;
                 }
+
                 var runCheckAttempts = 0;
                 while (!SteamAPI.IsSteamRunning())
                 {
@@ -144,14 +135,17 @@ namespace IronyModManager.IO.Platforms
                         canProceed = false;
                         break;
                     }
+
                     await Task.Delay(Delay);
                     runCheckAttempts++;
                 }
             }
+
             if (!canProceed)
             {
                 return false;
             }
+
             var result = await InitializeAndValidateAsync();
             var initCheckAttempts = 0;
 
@@ -162,10 +156,12 @@ namespace IronyModManager.IO.Platforms
                 {
                     break;
                 }
+
                 result = await InitializeAndValidateAsync();
                 await Task.Delay(Delay);
                 initCheckAttempts++;
             }
+
             return result;
         }
 
@@ -180,20 +176,15 @@ namespace IronyModManager.IO.Platforms
             return Task.FromResult(true);
         }
 
-#pragma warning disable SYSLIB1054 // Use 'LibraryImportAttribute' instead of 'DllImportAttribute' to generate P/Invoke marshalling code at compile time
         /// <summary>
-        /// Setenvs the specified name.
+        /// SetEnvironment variable native Linux call.
         /// </summary>
         /// <param name="name">The name.</param>
         /// <param name="value">The value.</param>
         /// <param name="overwrite">if set to <c>true</c> [overwrite].</param>
         /// <returns>System.Int32.</returns>
         [DllImport("libc", CharSet = CharSet.Ansi, BestFitMapping = false, ThrowOnUnmappableChar = true)]
-
-        // No thanks, don't want to flag allow unsafe just yet
         private static extern int setenv(string name, string value, bool overwrite);
-
-#pragma warning restore SYSLIB1054 // Use 'LibraryImportAttribute' instead of 'DllImportAttribute' to generate P/Invoke marshalling code at compile time
 
         /// <summary>
         /// Cleanups the application identifier.
@@ -204,10 +195,8 @@ namespace IronyModManager.IO.Platforms
             {
                 if (File.Exists(SteamAppIdFile))
                 {
-                    var fileInfo = new System.IO.FileInfo(SteamAppIdFile)
-                    {
-                        Attributes = FileAttributes.Normal
-                    };
+                    // ReSharper disable once RedundantNameQualifier
+                    var fileInfo = new System.IO.FileInfo(SteamAppIdFile) { Attributes = FileAttributes.Normal };
                     fileInfo.Delete();
                 }
             }
@@ -224,13 +213,7 @@ namespace IronyModManager.IO.Platforms
         {
             var result = SteamAPI.Init();
 
-            if (!Packsize.Test())
-            {
-                await ShutdownAPIAsync();
-                return false;
-            }
-
-            if (!DllCheck.Test())
+            if (!Packsize.Test() || !DllCheck.Test())
             {
                 await ShutdownAPIAsync();
                 return false;

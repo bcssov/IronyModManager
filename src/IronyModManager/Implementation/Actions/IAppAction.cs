@@ -63,13 +63,14 @@ namespace IronyModManager.Implementation.Actions
         /// <summary>
         /// Runs the game asynchronous.
         /// </summary>
+        /// <param name="createSteamFile">if set to <c>true</c> [create steam file].</param>
         /// <param name="path">The path.</param>
         /// <param name="steamRoot">The steam root.</param>
         /// <param name="steamProtonVersion">The steam proton version.</param>
         /// <param name="appId">The application identifier.</param>
         /// <param name="args">The arguments.</param>
         /// <returns>Task&lt;System.Boolean&gt;.</returns>
-        Task<bool> RunGameAsync(string path, string steamRoot, string steamProtonVersion, int appId, string args = Shared.Constants.EmptyParam);
+        Task<bool> RunGameAsync(bool createSteamFile, string path, string steamRoot, string steamProtonVersion, int appId, string args = Shared.Constants.EmptyParam);
 
         #endregion Methods
     }

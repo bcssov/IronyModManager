@@ -14,6 +14,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
@@ -29,30 +30,18 @@ namespace IronyModManager.Implementation.Actions
     /// Implements the <see cref="IronyModManager.Implementation.Actions.IAppAction" />
     /// </summary>
     /// <seealso cref="IronyModManager.Implementation.Actions.IAppAction" />
+    /// <remarks>Initializes a new instance of the <see cref="AppAction" /> class.</remarks>
     [ExcludeFromCoverage("UI Actions are tested via functional testing.")]
-    public class AppAction : IAppAction
+    public class AppAction(ILogger logger) : IAppAction
     {
         #region Fields
 
         /// <summary>
         /// The logger
         /// </summary>
-        private readonly ILogger logger;
+        private readonly ILogger logger = logger;
 
         #endregion Fields
-
-        #region Constructors
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="AppAction" /> class.
-        /// </summary>
-        /// <param name="logger">The logger.</param>
-        public AppAction(ILogger logger)
-        {
-            this.logger = logger;
-        }
-
-        #endregion Constructors
 
         #region Methods
 
@@ -132,16 +121,19 @@ namespace IronyModManager.Implementation.Actions
         /// <summary>
         /// Runs the game asynchronous.
         /// </summary>
+        /// <param name="createSteamFile">if set to <c>true</c> [create steam file].</param>
         /// <param name="path">The path.</param>
         /// <param name="steamRoot">The steam root.</param>
         /// <param name="steamProtonVersion">The steam proton version.</param>
         /// <param name="appId">The appid.</param>
         /// <param name="args">The arguments.</param>
         /// <returns>Task&lt;System.Boolean&gt;.</returns>
-        public Task<bool> RunGameAsync(string path, string steamRoot, string steamProtonVersion, int appId, string args = Shared.Constants.EmptyParam)
+        public Task<bool> RunGameAsync(bool createSteamFile, string path, string steamRoot, string steamProtonVersion, int appId, string args = Shared.Constants.EmptyParam)
         {
             try
             {
+                TryCreateSteamAppIdFile(path, appId);
+
                 // Proton test
                 if (path.EndsWith(".exe", StringComparison.OrdinalIgnoreCase) && RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
                 {
@@ -157,6 +149,30 @@ namespace IronyModManager.Implementation.Actions
             {
                 logger.Error(ex);
                 return Task.FromResult(false);
+            }
+        }
+
+        /// <summary>
+        /// Tries to create steam application identifier file.
+        /// </summary>
+        /// <param name="gameBinary">The game binary.</param>
+        /// <param name="appId">The application identifier.</param>
+        private void TryCreateSteamAppIdFile(string gameBinary, long appId)
+        {
+            try
+            {
+                var path = Path.Combine(Path.GetDirectoryName(gameBinary)!, "steam_appid.txt");
+
+                if (File.Exists(path))
+                {
+                    return;
+                }
+
+                var contents = appId + Environment.NewLine;
+                File.WriteAllText(path, contents);
+            }
+            catch
+            {
             }
         }
 

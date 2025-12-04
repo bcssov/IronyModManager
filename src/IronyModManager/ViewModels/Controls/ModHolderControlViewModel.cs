@@ -36,6 +36,7 @@ using IronyModManager.Platform.Configuration;
 using IronyModManager.Services.Common;
 using IronyModManager.Services.Common.Exceptions;
 using IronyModManager.Shared;
+using IronyModManager.Shared.Configuration;
 using IronyModManager.Shared.MessageBus.Events;
 using IronyModManager.Shared.Models;
 using ReactiveUI;
@@ -61,6 +62,11 @@ namespace IronyModManager.ViewModels.Controls
         /// The application action
         /// </summary>
         private readonly IAppAction appAction;
+
+        /// <summary>
+        /// The creation steam application identifier file flag
+        /// </summary>
+        private readonly bool createSteamAppIdFile;
 
         /// <summary>
         /// The external process handler service
@@ -267,6 +273,7 @@ namespace IronyModManager.ViewModels.Controls
             InstalledMods = installedModsControlViewModel;
             CollectionMods = collectionModsControlViewModel;
             UseSimpleLayout = !DIResolver.Get<IPlatformConfiguration>().GetOptions().ConflictSolver.UseSubMenus;
+            createSteamAppIdFile = DIResolver.Get<IDomainConfiguration>().GetOptions().Steam.GenerateSteamAppIdFile;
             if (StaticResources.CommandLineOptions.EnableResumeGameButton)
             {
                 forceEnableResumeButton = true;
@@ -661,7 +668,7 @@ namespace IronyModManager.ViewModels.Controls
             {
                 if (definitions != null)
                 {
-                    var result = await modPatchCollectionService.FindConflictsAsync(definitions, CollectionMods.SelectedMods.Select(p => p.Name).ToList(), mode, allowedLanguages);
+                    var result = await modPatchCollectionService.FindConflictsAsync(definitions, [.. CollectionMods.SelectedMods.Select(p => p.Name)], mode, allowedLanguages);
                     GCRunner.RunGC(GCCollectionMode.Aggressive, true);
                     return result;
                 }
@@ -689,7 +696,7 @@ namespace IronyModManager.ViewModels.Controls
                 SelectedCollection = CollectionMods.SelectedModCollection,
                 Results = conflicts,
                 State = mode is PatchStateMode.ReadOnly or PatchStateMode.ReadOnlyWithoutLocalization ? NavigationState.ReadOnlyConflictSolver : NavigationState.ConflictSolver,
-                SelectedMods = CollectionMods.SelectedMods.Select(p => p.Name).ToList()
+                SelectedMods = [.. CollectionMods.SelectedMods.Select(p => p.Name)]
             };
             ReactiveUI.MessageBus.Current.SendMessage(args);
             await TriggerOverlayAsync(id, false);
@@ -823,7 +830,7 @@ namespace IronyModManager.ViewModels.Controls
 
                 if (result.Any(p => p.Invalid))
                 {
-                    await ShowInvalidModsNotificationAsync(result.Where(p => p.Invalid).ToList());
+                    await ShowInvalidModsNotificationAsync([.. result.Where(p => p.Invalid)]);
                 }
             }
         }
@@ -1057,7 +1064,8 @@ namespace IronyModManager.ViewModels.Controls
                         else
                         {
                             await ensureSteamIsRunning(args);
-                            if (await appAction.RunGameAsync(args.ExecutableLocation, game.SteamRoot, game.LinuxProtonVersion, game.SteamAppId, args.LaunchArguments))
+                            var generateAppIdFile = gameService.IsSteamGame(args) && createSteamAppIdFile;
+                            if (await appAction.RunGameAsync(generateAppIdFile, args.ExecutableLocation, game.SteamRoot, game.LinuxProtonVersion, game.SteamAppId, args.LaunchArguments))
                             {
                                 if (game.CloseAppAfterGameLaunch)
                                 {
