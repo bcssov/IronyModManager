@@ -36,6 +36,7 @@
     <Compile Include="..\IronyModManager.Shared\Constants.cs" Link="Shared\Constants.cs" />
     <Compile Include="..\IronyModManager.Shared\ExcludeFromCoverageAttribute.cs" Link="Shared\ExcludeFromCoverageAttribute.cs" />
     <Compile Include="..\IronyModManager.Shared\ILogger.cs" Link="Shared\ILogger.cs" />
+    <Compile Include="..\IronyModManager.Shared\LinuxProtonResolver.cs" Link="Shared\LinuxProtonResolver.cs" />
     <Compile Include="..\IronyModManager.Shared\ProcessRunner.cs" Link="Shared\ProcessRunner.cs" />
   </ItemGroup>  
   

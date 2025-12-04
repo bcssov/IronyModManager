@@ -1,19 +1,21 @@
-﻿
-// ***********************************************************************
+﻿// ***********************************************************************
 // Assembly         : IronyModManager
 // Author           : Mario
 // Created          : 04-16-2021
 //
 // Last Modified By : Mario
-// Last Modified On : 02-11-2024
+// Last Modified On : 12-04-2025
 // ***********************************************************************
 // <copyright file="PlatformConfiguration.cs" company="Mario">
 //     Mario
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
+
 using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using IronyModManager.Platform;
 using IronyModManager.Platform.Configuration;
 using IronyModManager.Shared.Configuration;
@@ -21,45 +23,32 @@ using Microsoft.Extensions.Configuration;
 
 namespace IronyModManager.Implementation.Config
 {
-
     /// <summary>
     /// Class PlatformConfiguration.
     /// Implements the <see cref="IronyModManager.Platform.Configuration.IPlatformConfiguration" />
     /// </summary>
     /// <seealso cref="IronyModManager.Platform.Configuration.IPlatformConfiguration" />
-    public class PlatformConfiguration : IPlatformConfiguration, IDomainConfiguration
+    /// <remarks>Initializes a new instance of the <see cref="PlatformConfiguration" /> class.</remarks>
+    public class PlatformConfiguration(IConfigurationRoot configuration) : IPlatformConfiguration, IDomainConfiguration
     {
         #region Fields
 
         /// <summary>
         /// The configuration
         /// </summary>
-        private readonly IConfigurationRoot configuration;
+        private readonly IConfigurationRoot configuration = configuration;
 
         /// <summary>
         /// The domain configuration
         /// </summary>
-        private DomainConfigurationOptions domainConfiguration = null;
+        private DomainConfigurationOptions domainConfiguration;
 
         /// <summary>
         /// The platform configuration
         /// </summary>
-        private PlatformConfigurationOptions platformConfiguration = null;
+        private PlatformConfigurationOptions platformConfiguration;
 
         #endregion Fields
-
-        #region Constructors
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="PlatformConfiguration" /> class.
-        /// </summary>
-        /// <param name="configuration">The configuration.</param>
-        public PlatformConfiguration(IConfigurationRoot configuration)
-        {
-            this.configuration = configuration;
-        }
-
-        #endregion Constructors
 
         #region Methods
 
@@ -90,21 +79,29 @@ namespace IronyModManager.Implementation.Config
             if (domainConfiguration == null)
             {
                 var steamSection = configuration.GetSection("Steam");
-                domainConfiguration = new DomainConfigurationOptions();
-                domainConfiguration.OSXOptions.UseFileStreams = configuration.GetSection("OSXOptions").GetSection("UseFileStreams").Get<bool>();
-                domainConfiguration.Steam.UseLegacyLaunchMethod = steamSection.GetSection("UseLegacyLaunchMethod").Get<bool>();
-                domainConfiguration.Steam.UseGameHandler = steamSection.GetSection("UseGameHandler").Get<bool>();
-                domainConfiguration.Steam.GameHandlerPath = steamSection.GetSection("GameHandlerPath").Get<string>();
+                domainConfiguration = new DomainConfigurationOptions
+                {
+                    OSXOptions = { UseFileStreams = configuration.GetSection("OSXOptions").GetSection("UseFileStreams").Get<bool>() },
+                    Steam =
+                    {
+                        UseLegacyLaunchMethod = steamSection.GetSection("UseLegacyLaunchMethod").Get<bool>(),
+                        UseGameHandler = steamSection.GetSection("UseGameHandler").Get<bool>(),
+                        GameHandlerPath = steamSection.GetSection("GameHandlerPath").Get<string>(),
+                        GenerateSteamAppIdFile = steamSection.GetSection("GenerateSteamAppIdFile").Get<bool>()
+                    }
+                };
                 if (!Path.IsPathFullyQualified(domainConfiguration.Steam.GameHandlerPath))
                 {
                     domainConfiguration.Steam.GameHandlerPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, domainConfiguration.Steam.GameHandlerPath);
                 }
+
                 domainConfiguration.Steam.InstallLocationOverride = steamSection.GetSection("InstallLocationOverride").Get<string>();
                 domainConfiguration.Formatting.UseSystemCulture = configuration.GetSection("Formatting").GetSection("UseSystemCulture").Get<bool>();
                 domainConfiguration.ConflictSolver.UseHybridMemory = configuration.GetSection("ConflictSolver").GetSection("UseHybridMemory").Get<bool>();
                 domainConfiguration.ConflictSolver.UseDiskSearch = configuration.GetSection("ConflictSolver").GetSection("UseDiskSearch").Get<bool>();
                 domainConfiguration.ConflictSolver.CompressIndexedDefinitions = configuration.GetSection("ConflictSolver").GetSection("CompressIndexedDefinitions").Get<bool>();
             }
+
             return domainConfiguration;
         }
 
@@ -117,15 +114,16 @@ namespace IronyModManager.Implementation.Config
         {
             if (platformConfiguration == null)
             {
-                platformConfiguration = new PlatformConfigurationOptions();
-                platformConfiguration.Logging.EnableAvaloniaLogger = configuration.GetSection("Logging").GetSection("EnableAvaloniaLogger").Get<bool?>().GetValueOrDefault();
+                platformConfiguration = new PlatformConfigurationOptions { Logging = { EnableAvaloniaLogger = configuration.GetSection("Logging").GetSection("EnableAvaloniaLogger").Get<bool?>().GetValueOrDefault() } };
                 var linuxSection = configuration.GetSection("LinuxOptions");
                 platformConfiguration.LinuxOptions.DisplayServer = linuxSection.GetSection("DisplayServer").Get<string>();
-                var displayServerState = LinuxDisplayServer.IsWayland(platformConfiguration.LinuxOptions.DisplayServer) || LinuxDisplayServer.IsX11(platformConfiguration.LinuxOptions.DisplayServer) || LinuxDisplayServer.IsAuto(platformConfiguration.LinuxOptions.DisplayServer);
+                var displayServerState = LinuxDisplayServer.IsWayland(platformConfiguration.LinuxOptions.DisplayServer) || LinuxDisplayServer.IsX11(platformConfiguration.LinuxOptions.DisplayServer) ||
+                                         LinuxDisplayServer.IsAuto(platformConfiguration.LinuxOptions.DisplayServer);
                 if (!displayServerState)
                 {
                     throw new ArgumentException("Invalid display server type. Valida values are: x11, wayland or auto");
                 }
+
                 platformConfiguration.LinuxOptions.WaylandAppId = linuxSection.GetSection("WaylandAppId").Get<string>();
                 platformConfiguration.LinuxOptions.UseGPU = linuxSection.GetSection("UseGPU").Get<bool?>();
                 platformConfiguration.LinuxOptions.UseEGL = linuxSection.GetSection("UseEGL").Get<bool?>();
@@ -139,6 +137,7 @@ namespace IronyModManager.Implementation.Config
                 platformConfiguration.ConflictSolver.UseSubMenus = configuration.GetSection("ConflictSolver").GetSection("UseSubMenus").Get<bool>();
                 platformConfiguration.App.SingleInstance = configuration.GetSection("App").GetSection("SingleInstance").Get<bool>();
             }
+
             return platformConfiguration;
         }
 

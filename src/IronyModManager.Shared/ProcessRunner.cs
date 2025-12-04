@@ -4,13 +4,14 @@
 // Created          : 07-11-2022
 //
 // Last Modified By : Mario
-// Last Modified On : 11-18-2022
+// Last Modified On : 12-03-2025
 // ***********************************************************************
 // <copyright file="ProcessRunner.cs" company="Mario">
 //     Mario
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
+
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -38,6 +39,7 @@ namespace IronyModManager.Shared
             {
                 return;
             }
+
             var wrappedPath = WrapPath(path);
             if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux) || RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
             {
@@ -93,19 +95,15 @@ namespace IronyModManager.Shared
             {
                 return;
             }
+
             if (string.IsNullOrWhiteSpace(args))
             {
-                var process = Process.Start(new ProcessStartInfo()
-                {
-                    FileName = path,
-                    WorkingDirectory = Path.GetDirectoryName(path),
-                    UseShellExecute = RuntimeInformation.IsOSPlatform(OSPlatform.Windows)
-                });
+                var process = Process.Start(new ProcessStartInfo { FileName = path, WorkingDirectory = Path.GetDirectoryName(path)!, UseShellExecute = RuntimeInformation.IsOSPlatform(OSPlatform.Windows) });
                 if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
                 {
                     if (waitForExit)
                     {
-                        process.WaitForExit(120 * 1000);
+                        process!.WaitForExit(120 * 1000);
                     }
                 }
                 else
@@ -113,7 +111,7 @@ namespace IronyModManager.Shared
                     if (waitForExit)
                     {
                         var now = DateTime.UtcNow;
-                        while (!process.HasExited)
+                        while (!process!.HasExited)
                         {
                             if (DateTime.UtcNow.Subtract(now).TotalSeconds > 120)
                             {
@@ -126,18 +124,12 @@ namespace IronyModManager.Shared
             }
             else
             {
-                var process = Process.Start(new ProcessStartInfo()
-                {
-                    FileName = path,
-                    Arguments = args,
-                    WorkingDirectory = Path.GetDirectoryName(path),
-                    UseShellExecute = RuntimeInformation.IsOSPlatform(OSPlatform.Windows)
-                });
+                var process = Process.Start(new ProcessStartInfo { FileName = path, Arguments = args, WorkingDirectory = Path.GetDirectoryName(path)!, UseShellExecute = RuntimeInformation.IsOSPlatform(OSPlatform.Windows) });
                 if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
                 {
                     if (waitForExit)
                     {
-                        process.WaitForExit(120 * 1000);
+                        process!.WaitForExit(120 * 1000);
                     }
                 }
                 else
@@ -145,7 +137,7 @@ namespace IronyModManager.Shared
                     if (waitForExit)
                     {
                         var now = DateTime.UtcNow;
-                        while (!process.HasExited)
+                        while (!process!.HasExited)
                         {
                             if (DateTime.UtcNow.Subtract(now).TotalSeconds > 120)
                             {
@@ -159,7 +151,47 @@ namespace IronyModManager.Shared
         }
 
         /// <summary>
-        /// Shells the execute.
+        /// Runs the proton process.
+        /// </summary>
+        /// <param name="path">The path.</param>
+        /// <param name="baseSteamPath">The base steam path.</param>
+        /// <param name="protonVersion">The proton version.</param>
+        /// <param name="appId">The application identifier.</param>
+        /// <param name="args">The arguments.</param>
+        public static void RunProtonProcess(string path, string baseSteamPath, string protonVersion, long appId, string args = Constants.EmptyParam)
+        {
+            if (!File.Exists(path))
+            {
+                return;
+            }
+
+            var protonPath = LinuxProtonResolver.ResolveProtonPath(baseSteamPath, protonVersion);
+
+            // ReSharper disable StringLiteralTypo -- shut the hell up
+            var compatDataPath = Path.Combine(baseSteamPath, "steamapps", "compatdata", appId.ToString());
+
+            // ReSharper restore StringLiteralTypo
+
+            var psi = new ProcessStartInfo { FileName = protonPath, WorkingDirectory = Path.GetDirectoryName(path)!, UseShellExecute = false };
+            psi.ArgumentList.Add("run");
+            psi.ArgumentList.Add(path);
+
+            if (!string.IsNullOrEmpty(args))
+            {
+                foreach (var part in args.Split(' ', StringSplitOptions.RemoveEmptyEntries))
+                {
+                    psi.ArgumentList.Add(part);
+                }
+            }
+
+            psi.Environment["STEAM_COMPAT_DATA_PATH"] = compatDataPath;
+            psi.Environment["STEAM_COMPAT_CLIENT_INSTALL_PATH"] = baseSteamPath;
+
+            Process.Start(psi);
+        }
+
+        /// <summary>
+        /// Shells execute command.
         /// </summary>
         /// <param name="cmd">The command.</param>
         private static void ShellExec(string cmd)

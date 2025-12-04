@@ -285,7 +285,9 @@ namespace IronyModManager.Storage.Tests
                 SupportedMergeTypes = SupportedMergeTypes.Zip,
                 DefaultGameBinaryPath = "",
                 SignatureFiles = ["test1.txt"],
-                SupportedOperatingSystems = SupportedOperatingSystems.Windows
+                SupportedOperatingSystems = SupportedOperatingSystems.Windows,
+                SteamRoot = "root",
+                LinuxProtonVersion = "proton_10"
             };
             storage.RegisterGame(game);
             dbMock.Games.Count.Should().Be(2);
@@ -314,6 +316,8 @@ namespace IronyModManager.Storage.Tests
             dbMock.Games.FirstOrDefault(p => p.Name == key).DefaultGameBinaryPath.Should().Be(string.Empty);
             dbMock.Games.FirstOrDefault(p => p.Name == key).SignatureFiles.FirstOrDefault().Should().Be("test1.txt");
             dbMock.Games.FirstOrDefault(p => p.Name == key).SupportedOperatingSystems.HasFlag(SupportedOperatingSystems.Windows).Should().BeTrue();
+            dbMock.Games.FirstOrDefault(p => p.Name == key).SteamRoot.Should().Be("root");
+            dbMock.Games.FirstOrDefault(p => p.Name == key).LinuxProtonVersion.Should().Be("proton_10");
         }
 
         /// <summary>
@@ -495,7 +499,9 @@ namespace IronyModManager.Storage.Tests
                 SupportedMergeTypes = SupportedMergeTypes.Basic,
                 DefaultGameBinaryPath = "",
                 SignatureFiles = ["test1.txt"],
-                SupportedOperatingSystems = SupportedOperatingSystems.Windows
+                SupportedOperatingSystems = SupportedOperatingSystems.Windows,
+                SteamRoot = "root",
+                LinuxProtonVersion = "proton_10"
             };
             storage.RegisterGame(game);
             var result = storage.GetGames();
@@ -525,6 +531,8 @@ namespace IronyModManager.Storage.Tests
             result.FirstOrDefault(p => p.Name == key).DefaultGameBinaryPath.Should().Be(string.Empty);
             result.FirstOrDefault(p => p.Name == key).SignatureFiles.FirstOrDefault().Should().Be("test1.txt");
             result.FirstOrDefault(p => p.Name == key).SupportedOperatingSystems.HasFlag(SupportedOperatingSystems.Windows).Should().BeTrue();
+            result.FirstOrDefault(p => p.Name == key).SteamRoot.Should().Be("root");
+            result.FirstOrDefault(p => p.Name == key).LinuxProtonVersion.Should().Be("proton_10");
         }
 
         /// <summary>

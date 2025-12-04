@@ -4,7 +4,7 @@
 // Created          : 01-17-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 12-03-2025
+// Last Modified On : 12-04-2025
 // ***********************************************************************
 // <copyright file="Constants.cs" company="Mario">
 //     Mario
@@ -209,7 +209,7 @@ namespace IronyModManager.Shared
                 /// <summary>
                 /// The map
                 /// </summary>
-                public static readonly string[] Map = { ColonSign };
+                public static readonly string[] Map = [ColonSign];
 
                 #endregion Fields
             }

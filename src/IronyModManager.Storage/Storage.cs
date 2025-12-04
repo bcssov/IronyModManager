@@ -4,7 +4,7 @@
 // Created          : 01-11-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 12-03-2025
+// Last Modified On : 12-04-2025
 // ***********************************************************************
 // <copyright file="Storage.cs" company="Mario">
 //     Mario
@@ -240,6 +240,8 @@ namespace IronyModManager.Storage
                 game.DefaultGameBinaryPath = gameType.DefaultGameBinaryPath;
                 game.SignatureFiles = gameType.SignatureFiles;
                 game.SupportedOperatingSystems = gameType.SupportedOperatingSystems;
+                game.SteamRoot = gameType.SteamRoot;
+                game.LinuxProtonVersion = gameType.LinuxProtonVersion;
                 Database.Games.Add(game);
                 return true;
             }
