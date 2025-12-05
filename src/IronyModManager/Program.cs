@@ -4,7 +4,7 @@
 // Created          : 01-10-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 10-26-2025
+// Last Modified On : 12-05-2025
 // ***********************************************************************
 // <copyright file="Program.cs" company="IronyModManager">
 //     Copyright (c) Mario. All rights reserved.
@@ -74,7 +74,7 @@ namespace IronyModManager
         /// <summary>
         /// The external notification shown
         /// </summary>
-        private static bool ExternalNotificationShown;
+        private static bool externalNotificationShown;
 
         #endregion Fields
 
@@ -237,6 +237,9 @@ namespace IronyModManager
         private static void InitLogging()
         {
             LogManager.Setup().SetupExtensions(s => s.RegisterTarget("IronyFile", typeof(Log.IronyFileTarget)));
+            var logConfig = LogManager.Configuration;
+            logConfig.Variables["storageRoot"] = IO.Common.DiskOperations.ResolveStoragePath();
+            LogManager.ReconfigExistingLoggers();
         }
 
         /// <summary>
@@ -291,12 +294,12 @@ namespace IronyModManager
                 logger.Fatal(e);
 
                 var runFatalErrorProcess = !StaticResources.CommandLineOptions.ShowFatalErrorNotification;
-                if (runFatalErrorProcess && !ExternalNotificationShown)
+                if (runFatalErrorProcess && !externalNotificationShown)
                 {
                     var path = Environment.ProcessPath;
                     var appAction = DIResolver.Get<IAppAction>();
                     await appAction.RunAsync(path, "--fatal-error").ConfigureAwait(false);
-                    ExternalNotificationShown = true;
+                    externalNotificationShown = true;
                 }
 
                 // Force exit as it seems that sometimes the app doesn't quit on such an error

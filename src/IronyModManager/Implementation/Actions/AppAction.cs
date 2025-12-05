@@ -4,7 +4,7 @@
 // Created          : 03-01-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 12-04-2025
+// Last Modified On : 12-05-2025
 // ***********************************************************************
 // <copyright file="AppAction.cs" company="Mario">
 //     Mario
@@ -171,8 +171,9 @@ namespace IronyModManager.Implementation.Actions
                 var contents = appId + Environment.NewLine;
                 File.WriteAllText(path, contents);
             }
-            catch
+            catch (Exception ex)
             {
+                logger.Error(ex, "Failed to create steam_appid.txt in game directory");
             }
         }
 

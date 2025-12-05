@@ -1,25 +1,27 @@
-﻿
-// ***********************************************************************
+﻿// ***********************************************************************
 // Assembly         : IronyModManager.IO.Common
 // Author           : Mario
 // Created          : 04-30-2021
 //
 // Last Modified By : Mario
-// Last Modified On : 12-11-2023
+// Last Modified On : 12-05-2025
 // ***********************************************************************
 // <copyright file="DiskOperations.cs" company="Mario">
 //     Mario
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
+
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using IronyModManager.DI;
+using IronyModManager.Shared;
+using IronyModManager.Shared.Configuration;
 
 namespace IronyModManager.IO.Common
 {
-
     /// <summary>
     /// Class DiskOperations.
     /// </summary>
@@ -37,10 +39,11 @@ namespace IronyModManager.IO.Common
         {
             if (File.Exists(source))
             {
-                Directory.CreateDirectory(Path.GetDirectoryName(destination));
+                Directory.CreateDirectory(Path.GetDirectoryName(destination)!);
                 File.Copy(source, destination);
                 return true;
             }
+
             return false;
         }
 
@@ -56,6 +59,7 @@ namespace IronyModManager.IO.Common
             {
                 item.Attributes = FileAttributes.Normal;
             }
+
             dirInfo.Delete(recursive);
         }
 
@@ -65,11 +69,20 @@ namespace IronyModManager.IO.Common
         /// <param name="file">The file.</param>
         public static void DeleteFile(string file)
         {
-            var fileInfo = new FileInfo(file)
-            {
-                Attributes = FileAttributes.Normal
-            };
+            var fileInfo = new FileInfo(file) { Attributes = FileAttributes.Normal };
             fileInfo.Delete();
+        }
+
+        /// <summary>
+        /// Resolves the storage path.
+        /// </summary>
+        /// <returns>System.String.</returns>
+        public static string ResolveStoragePath()
+        {
+            var path = DIResolver.Get<IDomainConfiguration>().GetOptions().App.StoragePath;
+            var expanded = Environment.ExpandEnvironmentVariables(path);
+            var resolved = Path.GetFullPath(expanded, AppDomain.CurrentDomain.BaseDirectory).StandardizeDirectorySeparator();
+            return resolved;
         }
 
         #endregion Methods

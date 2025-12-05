@@ -4,7 +4,7 @@
 // Created          : 05-07-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-21-2024
+// Last Modified On : 12-05-2025
 // ***********************************************************************
 // <copyright file="StaticResources.cs" company="Mario">
 //     Mario
@@ -19,6 +19,7 @@ using System.Linq;
 using System.Reflection;
 using Avalonia.Controls;
 using Avalonia.Media.Imaging;
+using IronyModManager.IO.Common;
 using IronyModManager.Shared;
 
 namespace IronyModManager
@@ -54,7 +55,7 @@ namespace IronyModManager
         /// <summary>
         /// The updater path
         /// </summary>
-        private static string[] updaterPath;
+        private static string updaterPath = string.Empty;
 
         /// <summary>
         /// The window icon
@@ -158,23 +159,19 @@ namespace IronyModManager
                 return lastKnownLocation;
             }
 
-            var firstSegment = string.Empty;
-            var secondSegment = string.Empty;
+            var segment = string.Empty;
 
             var entryAssembly = Assembly.GetEntryAssembly();
-            var companyAttribute = (AssemblyCompanyAttribute)Attribute.GetCustomAttribute(entryAssembly!, typeof(AssemblyCompanyAttribute));
-            if (!string.IsNullOrEmpty(companyAttribute!.Company))
-            {
-                firstSegment = $"{companyAttribute.Company}{Path.DirectorySeparatorChar}";
-            }
-
-            var titleAttribute = (AssemblyTitleAttribute)Attribute.GetCustomAttribute(entryAssembly, typeof(AssemblyTitleAttribute));
+            var titleAttribute = (AssemblyTitleAttribute)Attribute.GetCustomAttribute(entryAssembly!, typeof(AssemblyTitleAttribute));
             if (!string.IsNullOrEmpty(titleAttribute!.Title))
             {
-                secondSegment = $"{titleAttribute.Title}-Location{Path.DirectorySeparatorChar}";
+                segment = $"{titleAttribute.Title}-Location{Path.DirectorySeparatorChar}";
             }
 
-            lastKnownLocation = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), $@"{firstSegment}{secondSegment}");
+            var storagePath = DiskOperations.ResolveStoragePath();
+
+            lastKnownLocation = Path.Combine(storagePath, segment).StandardizeDirectorySeparator();
+
             return lastKnownLocation;
         }
 
@@ -188,25 +185,20 @@ namespace IronyModManager
             {
                 return logLocation;
             }
-#if DEBUG
-            logLocation = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "logs");
-#else
-            var firstSegment = string.Empty;
-            var secondSegment = string.Empty;
+
+            var segment = string.Empty;
 
             var entryAssembly = Assembly.GetEntryAssembly();
-            var companyAttribute = (AssemblyCompanyAttribute)Attribute.GetCustomAttribute(entryAssembly, typeof(AssemblyCompanyAttribute));
-            if (!string.IsNullOrEmpty(companyAttribute.Company))
+            var titleAttribute = (AssemblyTitleAttribute)Attribute.GetCustomAttribute(entryAssembly!, typeof(AssemblyTitleAttribute));
+            if (!string.IsNullOrEmpty(titleAttribute!.Title))
             {
-                firstSegment = $"{companyAttribute.Company}{Path.DirectorySeparatorChar}";
+                segment = $"{titleAttribute.Title}-Logs{Path.DirectorySeparatorChar}";
             }
-            var titleAttribute = (AssemblyTitleAttribute)Attribute.GetCustomAttribute(entryAssembly, typeof(AssemblyTitleAttribute));
-            if (!string.IsNullOrEmpty(titleAttribute.Title))
-            {
-                secondSegment = $"{titleAttribute.Title}-Logs{Path.DirectorySeparatorChar}";
-            }
-            logLocation = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), $@"{firstSegment}{secondSegment}");
-#endif
+
+            var storagePath = DiskOperations.ResolveStoragePath();
+
+            logLocation = Path.Combine(storagePath, segment).StandardizeDirectorySeparator();
+
             return logLocation;
         }
 
@@ -214,47 +206,27 @@ namespace IronyModManager
         /// Gets the path.
         /// </summary>
         /// <returns>System.String.</returns>
-        public static string[] GetUpdaterPath()
+        public static string GetUpdaterPath()
         {
-            static string generatePath(bool useProperSeparator)
+            static string generatePath()
             {
-                var firstSegment = string.Empty;
-                var secondSegment = string.Empty;
+                var segment = string.Empty;
 
                 var entryAssembly = Assembly.GetEntryAssembly();
-                var companyAttribute = (AssemblyCompanyAttribute)Attribute.GetCustomAttribute(entryAssembly!, typeof(AssemblyCompanyAttribute));
-                if (!string.IsNullOrEmpty(companyAttribute!.Company))
-                {
-                    if (!useProperSeparator)
-                    {
-                        firstSegment = $"{companyAttribute.Company}\\";
-                    }
-                    else
-                    {
-                        firstSegment = $"{companyAttribute.Company}{Path.DirectorySeparatorChar}";
-                    }
-                }
-
-                var titleAttribute = (AssemblyTitleAttribute)Attribute.GetCustomAttribute(entryAssembly, typeof(AssemblyTitleAttribute));
+                var titleAttribute = (AssemblyTitleAttribute)Attribute.GetCustomAttribute(entryAssembly!, typeof(AssemblyTitleAttribute));
                 if (!string.IsNullOrEmpty(titleAttribute!.Title))
                 {
-                    if (!useProperSeparator)
-                    {
-                        secondSegment = $"{titleAttribute.Title}-Updater\\";
-                    }
-                    else
-                    {
-                        secondSegment = $"{titleAttribute.Title}-Updater{Path.DirectorySeparatorChar}";
-                    }
+                    segment = $"{titleAttribute.Title}-Updater\\";
                 }
 
-                return Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), $@"{firstSegment}{secondSegment}");
+                var storagePath = DiskOperations.ResolveStoragePath();
+
+                return Path.Combine(storagePath, segment).StandardizeDirectorySeparator();
             }
 
-            if (updaterPath == null)
+            if (string.IsNullOrWhiteSpace(updaterPath))
             {
-                var col = new List<string> { generatePath(true), generatePath(false) };
-                updaterPath = col.Distinct().ToArray();
+                updaterPath = generatePath();
             }
 
             return updaterPath;

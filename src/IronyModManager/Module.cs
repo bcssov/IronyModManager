@@ -4,15 +4,17 @@
 // Created          : 01-17-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-13-2021
+// Last Modified On : 12-05-2025
 // ***********************************************************************
 // <copyright file="Module.cs" company="Mario">
 //     Mario
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
+
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using IronyModManager.Shared;
 
 namespace IronyModManager
@@ -31,10 +33,17 @@ namespace IronyModManager
         /// Gets the dependencies.
         /// </summary>
         /// <value>The dependencies.</value>
-        public IEnumerable<string> Dependencies => new List<string> { typeof(Common.Module).Name,
-            typeof(DI.Module).Name, typeof(Models.Common.Module).Name,
-            typeof(Services.Common.Module).Name, typeof(Localization.Module).Name,
-            typeof(Shared.Module).Name, typeof(Platform.Module).Name };
+        public IEnumerable<string> Dependencies => new List<string>
+        {
+            nameof(Common.Module),
+            nameof(DI.Module),
+            nameof(Models.Common.Module),
+            nameof(Services.Common.Module),
+            nameof(Localization.Module),
+            nameof(Shared.Module),
+            nameof(Platform.Module),
+            nameof(IO.Common.Module)
+        };
 
         /// <summary>
         /// Gets the name.

@@ -4,16 +4,20 @@
 // Created          : 04-16-2021
 //
 // Last Modified By : Mario
-// Last Modified On : 02-11-2024
+// Last Modified On : 12-05-2025
 // ***********************************************************************
 // <copyright file="PlatformConfigurationOptions.cs" company="Mario">
 //     Mario
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
 namespace IronyModManager.Platform.Configuration
 {
-
     /// <summary>
     /// Class App.
     /// </summary>
@@ -91,6 +95,7 @@ namespace IronyModManager.Platform.Configuration
         /// Gets or sets a value indicating whether [use egl].
         /// </summary>
         /// <value><c>null</c> if [use egl] contains no value, <c>true</c> if [use egl]; otherwise, <c>false</c>.</value>
+        // ReSharper disable once InconsistentNaming
         public bool? UseEGL { get; set; }
 
         /// <summary>
@@ -135,49 +140,49 @@ namespace IronyModManager.Platform.Configuration
         /// Gets the application.
         /// </summary>
         /// <value>The application.</value>
-        public App App { get; } = new App();
+        public App App { get; } = new();
 
         /// <summary>
         /// Gets the conflict solver.
         /// </summary>
         /// <value>The conflict solver.</value>
-        public ConflictSolver ConflictSolver { get; } = new ConflictSolver();
+        public ConflictSolver ConflictSolver { get; } = new();
 
         /// <summary>
         /// Gets the fonts.
         /// </summary>
         /// <value>The fonts.</value>
-        public Fonts Fonts { get; } = new Fonts();
+        public Fonts Fonts { get; } = new();
 
         /// <summary>
         /// Gets the linux options.
         /// </summary>
         /// <value>The linux options.</value>
-        public LinuxOptions LinuxOptions { get; } = new LinuxOptions();
+        public LinuxOptions LinuxOptions { get; } = new();
 
         /// <summary>
         /// Gets the logging.
         /// </summary>
         /// <value>The logging.</value>
-        public Logging Logging { get; } = new Logging();
+        public Logging Logging { get; } = new();
 
         /// <summary>
         /// Gets the title bar.
         /// </summary>
         /// <value>The title bar.</value>
-        public TitleBar TitleBar { get; } = new TitleBar();
+        public TitleBar TitleBar { get; } = new();
 
         /// <summary>
         /// Gets the tooltips.
         /// </summary>
         /// <value>The tooltips.</value>
-        public Tooltips Tooltips { get; } = new Tooltips();
+        public Tooltips Tooltips { get; } = new();
 
         /// <summary>
         /// Gets the updates.
         /// </summary>
         /// <value>The updates.</value>
-        public Updates Updates { get; } = new Updates();
+        public Updates Updates { get; } = new();
 
         #endregion Properties
     }

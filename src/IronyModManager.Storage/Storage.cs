@@ -4,7 +4,7 @@
 // Created          : 01-11-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 12-04-2025
+// Last Modified On : 12-05-2025
 // ***********************************************************************
 // <copyright file="Storage.cs" company="Mario">
 //     Mario
@@ -29,7 +29,8 @@ namespace IronyModManager.Storage
     /// Implements the <see cref="IronyModManager.Storage.Common.IStorageProvider" />
     /// </summary>
     /// <seealso cref="IronyModManager.Storage.Common.IStorageProvider" />
-    public class Storage : IStorageProvider
+    /// <remarks>Initializes a new instance of the <see cref="Storage" /> class.</remarks>
+    public class Storage(IDatabase database, IMapper mapper) : IStorageProvider
     {
         #region Fields
 
@@ -45,34 +46,19 @@ namespace IronyModManager.Storage
 
         #endregion Fields
 
-        #region Constructors
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="Storage" /> class.
-        /// </summary>
-        /// <param name="database">The database.</param>
-        /// <param name="mapper">The mapper.</param>
-        public Storage(IDatabase database, IMapper mapper)
-        {
-            Database = database;
-            Mapper = mapper;
-        }
-
-        #endregion Constructors
-
         #region Properties
 
         /// <summary>
         /// Gets the database.
         /// </summary>
         /// <value>The database.</value>
-        protected IDatabase Database { get; }
+        protected IDatabase Database { get; } = database;
 
         /// <summary>
         /// Gets the mapper.
         /// </summary>
         /// <value>The mapper.</value>
-        protected IMapper Mapper { get; }
+        protected IMapper Mapper { get; } = mapper;
 
         #endregion Properties
 
@@ -162,7 +148,7 @@ namespace IronyModManager.Storage
         /// <returns>System.String.</returns>
         public virtual string GetRootStoragePath()
         {
-            return JsonStore.RootPaths.FirstOrDefault();
+            return JsonStore.RootPath;
         }
 
         /// <summary>
@@ -219,10 +205,10 @@ namespace IronyModManager.Storage
                 game.Name = gameType.Name;
                 game.UserDirectory = gameType.UserDirectory ?? string.Empty;
                 game.SteamAppId = gameType.SteamAppId;
-                game.WorkshopDirectory = gameType.WorkshopDirectory ?? new List<string>();
+                game.WorkshopDirectory = gameType.WorkshopDirectory ?? [];
                 game.LogLocation = gameType.LogLocation;
-                game.ChecksumFolders = gameType.ChecksumFolders ?? new List<string>();
-                game.GameFolders = gameType.GameFolders ?? new List<string>();
+                game.ChecksumFolders = gameType.ChecksumFolders ?? [];
+                game.GameFolders = gameType.GameFolders ?? [];
                 game.BaseSteamGameDirectory = gameType.BaseSteamGameDirectory ?? string.Empty;
                 game.ExecutablePath = gameType.ExecutablePath ?? string.Empty;
                 game.ExecutableArgs = gameType.ExecutableArgs ?? string.Empty;
@@ -231,7 +217,7 @@ namespace IronyModManager.Storage
                 game.AdvancedFeatures = gameType.AdvancedFeatures;
                 game.GameIndexCacheVersion = gameType.GameIndexCacheVersion;
                 game.ParadoxGameId = gameType.ParadoxGameId;
-                game.RemoteSteamUserDirectory = gameType.RemoteSteamUserDirectory ?? new List<string>();
+                game.RemoteSteamUserDirectory = gameType.RemoteSteamUserDirectory ?? [];
                 game.Abrv = gameType.Abrv ?? string.Empty;
                 game.DLCContainer = gameType.DLCContainer ?? string.Empty;
                 game.GogAppId = gameType.GogAppId;
@@ -415,12 +401,7 @@ namespace IronyModManager.Storage
         /// <returns>CompareLogic.</returns>
         private static CompareLogic GetComparer()
         {
-            if (compareLogic == null)
-            {
-                compareLogic = new CompareLogic();
-                compareLogic.Config.IgnoreConcreteTypes = true;
-                compareLogic.Config.IgnoreObjectTypes = true;
-            }
+            compareLogic ??= new CompareLogic { Config = { IgnoreConcreteTypes = true, IgnoreObjectTypes = true } };
 
             return compareLogic;
         }
