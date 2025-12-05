@@ -4,7 +4,7 @@
 // Created          : 07-24-2022
 //
 // Last Modified By : Mario
-// Last Modified On : 12-04-2025
+// Last Modified On : 12-05-2025
 // ***********************************************************************
 // <copyright file="DomainConfigurationOptions.cs" company="Mario">
 //     Mario
@@ -18,6 +18,22 @@ using System.Linq;
 
 namespace IronyModManager.Shared.Configuration
 {
+    /// <summary>
+    /// Class App.
+    /// </summary>
+    public class App
+    {
+        #region Properties
+
+        /// <summary>
+        /// Gets or sets the root storage path.
+        /// </summary>
+        /// <value>The storage path.</value>
+        public string StoragePath { get; set; }
+
+        #endregion Properties
+    }
+
     /// <summary>
     /// Class ConflictSolver.
     /// </summary>
@@ -52,6 +68,12 @@ namespace IronyModManager.Shared.Configuration
     public class DomainConfigurationOptions
     {
         #region Properties
+
+        /// <summary>
+        /// Gets the application.
+        /// </summary>
+        /// <value>The application.</value>
+        public App App { get; } = new();
 
         /// <summary>
         /// Gets the conflict solver.

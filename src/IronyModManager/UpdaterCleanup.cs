@@ -4,16 +4,18 @@
 // Created          : 09-16-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-30-2021
+// Last Modified On : 12-05-2025
 // ***********************************************************************
 // <copyright file="UpdaterCleanup.cs" company="Mario">
 //     Mario
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
+
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 using IronyModManager.DI;
 using IronyModManager.Implementation.Updater;
@@ -43,34 +45,35 @@ namespace IronyModManager
         /// <summary>
         /// cleanup updater as an asynchronous operation.
         /// </summary>
+        /// <returns>A Task representing the asynchronous operation.</returns>
         private static async Task CleanupUpdaterAsync()
         {
-            foreach (var path in StaticResources.GetUpdaterPath())
+            var path = StaticResources.GetUpdaterPath();
+            if (Directory.Exists(path))
             {
-                if (Directory.Exists(path))
+                bool cleanup = true;
+                var settingsFileName = Path.Combine(path, Constants.UpdateSettings);
+                if (File.Exists(settingsFileName))
                 {
-                    bool cleanup = true;
-                    var settingsFileName = Path.Combine(path, Constants.UpdateSettings);
-                    if (File.Exists(settingsFileName))
+                    var fileInfo = new FileInfo(settingsFileName);
+                    var text = await File.ReadAllTextAsync(settingsFileName);
+                    var settings = JsonConvert.DeserializeObject<UpdateSettings>(text);
+
+                    // At least 72 since last update to clean up
+                    cleanup = (settings.Updated || settings.IsInstaller) && fileInfo.LastWriteTime <= DateTime.Now.AddHours(-72);
+                }
+
+                if (cleanup)
+                {
+                    await Task.Delay(5000);
+                    try
                     {
-                        var fileInfo = new FileInfo(settingsFileName);
-                        var text = await File.ReadAllTextAsync(settingsFileName);
-                        var settings = JsonConvert.DeserializeObject<UpdateSettings>(text);
-                        // At least 72 since last update to cleanup
-                        cleanup = (settings.Updated || settings.IsInstaller) && fileInfo.LastWriteTime <= DateTime.Now.AddHours(-72);
+                        DiskOperations.DeleteDirectory(path, true);
                     }
-                    if (cleanup)
+                    catch (Exception ex)
                     {
-                        await Task.Delay(5000);
-                        try
-                        {
-                            DiskOperations.DeleteDirectory(path, true);
-                        }
-                        catch (Exception ex)
-                        {
-                            var logger = DIResolver.Get<ILogger>();
-                            logger.Error(ex);
-                        }
+                        var logger = DIResolver.Get<ILogger>();
+                        logger.Error(ex);
                     }
                 }
             }

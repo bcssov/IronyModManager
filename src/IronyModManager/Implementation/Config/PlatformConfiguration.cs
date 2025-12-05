@@ -4,7 +4,7 @@
 // Created          : 04-16-2021
 //
 // Last Modified By : Mario
-// Last Modified On : 12-04-2025
+// Last Modified On : 12-05-2025
 // ***********************************************************************
 // <copyright file="PlatformConfiguration.cs" company="Mario">
 //     Mario
@@ -100,6 +100,8 @@ namespace IronyModManager.Implementation.Config
                 domainConfiguration.ConflictSolver.UseHybridMemory = configuration.GetSection("ConflictSolver").GetSection("UseHybridMemory").Get<bool>();
                 domainConfiguration.ConflictSolver.UseDiskSearch = configuration.GetSection("ConflictSolver").GetSection("UseDiskSearch").Get<bool>();
                 domainConfiguration.ConflictSolver.CompressIndexedDefinitions = configuration.GetSection("ConflictSolver").GetSection("CompressIndexedDefinitions").Get<bool>();
+                var appSection = configuration.GetSection("App");
+                domainConfiguration.App.StoragePath = appSection.GetSection("StoragePath").Get<string>();
             }
 
             return domainConfiguration;
@@ -135,7 +137,8 @@ namespace IronyModManager.Implementation.Config
                 platformConfiguration.Updates.DisableInstallOnly = configuration.GetSection("Updates").GetSection("DisableInstallOnly").Get<bool>();
                 platformConfiguration.TitleBar.Native = configuration.GetSection("TitleBar").GetSection("Native").Get<bool>();
                 platformConfiguration.ConflictSolver.UseSubMenus = configuration.GetSection("ConflictSolver").GetSection("UseSubMenus").Get<bool>();
-                platformConfiguration.App.SingleInstance = configuration.GetSection("App").GetSection("SingleInstance").Get<bool>();
+                var appSection = configuration.GetSection("App");
+                platformConfiguration.App.SingleInstance = appSection.GetSection("SingleInstance").Get<bool>();
             }
 
             return platformConfiguration;

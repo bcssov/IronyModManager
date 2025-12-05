@@ -4,18 +4,18 @@
 // Created          : 09-16-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 11-02-2022
+// Last Modified On : 12-05-2025
 // ***********************************************************************
 // <copyright file="Updater.cs" company="Mario">
 //     Mario
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
+
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using System.Threading.Tasks;
 using IronyModManager.Implementation.Actions;
@@ -53,7 +53,7 @@ namespace IronyModManager.Implementation.Updater
         private readonly Subject<int> progress;
 
         /// <summary>
-        /// The shut down state
+        /// The shut-down state
         /// </summary>
         private readonly IShutDownState shutDownState;
 
@@ -126,13 +126,13 @@ namespace IronyModManager.Implementation.Updater
                 SecurityProtocolType = System.Net.SecurityProtocolType.Tls12,
                 AppCastHandler = new IronyAppCast(isInstallerVersion, updaterService),
                 Configuration = updaterConfiguration,
-                TmpDownloadFilePath = StaticResources.GetUpdaterPath().FirstOrDefault()
+                TmpDownloadFilePath = StaticResources.GetUpdaterPath()
             };
-            updater.DownloadStarted += (sender, path) =>
+            updater.DownloadStarted += (_, _) =>
             {
                 progress.OnNext(0);
             };
-            updater.DownloadHadError += (sender, path, exception) =>
+            updater.DownloadHadError += (_, _, exception) =>
             {
                 if (exception.Message != lastException?.Message)
                 {
@@ -140,11 +140,11 @@ namespace IronyModManager.Implementation.Updater
                     lastException = exception;
                 }
             };
-            updater.DownloadMadeProgress += (sender, item, progress) =>
+            updater.DownloadMadeProgress += (_, _, progress) =>
             {
                 this.progress.OnNext(progress.ProgressPercentage);
             };
-            updater.DownloadFinished += (sender, path) =>
+            updater.DownloadFinished += (_, path) =>
             {
                 updatePath = path;
                 progress.OnNext(100);
@@ -190,6 +190,7 @@ namespace IronyModManager.Implementation.Updater
                 updateInfo = await updater.CheckForUpdatesQuietly();
                 allowPrerelease = settings.CheckForPrerelease;
             }
+
             if (updateInfo == null)
             {
                 return false;
@@ -210,6 +211,7 @@ namespace IronyModManager.Implementation.Updater
             {
                 return false;
             }
+
             busy = true;
             if (updateInfo != null && updateInfo.Updates.Count > 0)
             {
@@ -221,17 +223,15 @@ namespace IronyModManager.Implementation.Updater
                     // Sigh
                     await Task.Delay(25);
                 }
+
                 // Slight safety delay
                 await Task.Delay(250);
                 busy = false;
-                var updateSettings = new UpdateSettings()
-                {
-                    IsInstaller = isInstallerVersion,
-                    Path = AppDomain.CurrentDomain.BaseDirectory
-                };
-                await File.WriteAllTextAsync(Path.Combine(StaticResources.GetUpdaterPath().FirstOrDefault(), Constants.UpdateSettings), JsonConvert.SerializeObject(updateSettings));
+                var updateSettings = new UpdateSettings { IsInstaller = isInstallerVersion, Path = AppDomain.CurrentDomain.BaseDirectory };
+                await File.WriteAllTextAsync(Path.Combine(StaticResources.GetUpdaterPath(), Constants.UpdateSettings), JsonConvert.SerializeObject(updateSettings));
                 return !string.IsNullOrWhiteSpace(updatePath) || lastException == null; // In case file is already downloaded
             }
+
             busy = false;
             return false;
         }
@@ -244,8 +244,9 @@ namespace IronyModManager.Implementation.Updater
         {
             if (updateInfo != null && updateInfo.Updates.Count > 0)
             {
-                return string.Join(Environment.NewLine, updateInfo.Updates.FirstOrDefault().Description.SplitOnNewLine(false).Select(p => p.Trim()));
+                return string.Join(Environment.NewLine, updateInfo.Updates.FirstOrDefault()!.Description.SplitOnNewLine(false).Select(p => p.Trim()));
             }
+
             return string.Empty;
         }
 
@@ -255,10 +256,11 @@ namespace IronyModManager.Implementation.Updater
         /// <returns>System.String.</returns>
         public string GetTitle()
         {
-            if (updateInfo != null && updateInfo.Updates.Any())
+            if (updateInfo != null && updateInfo.Updates.Count != 0)
             {
-                return updateInfo.Updates.FirstOrDefault().Title;
+                return updateInfo.Updates.FirstOrDefault()!.Title;
             }
+
             return string.Empty;
         }
 
@@ -268,10 +270,11 @@ namespace IronyModManager.Implementation.Updater
         /// <returns>System.String.</returns>
         public string GetVersion()
         {
-            if (updateInfo != null && updateInfo.Updates.Any())
+            if (updateInfo != null && updateInfo.Updates.Count != 0)
             {
-                return updateInfo.Updates.FirstOrDefault().Version;
+                return updateInfo.Updates.FirstOrDefault()!.Version;
             }
+
             return string.Empty;
         }
 
@@ -285,6 +288,7 @@ namespace IronyModManager.Implementation.Updater
             {
                 return false;
             }
+
             busy = true;
             await shutDownState.WaitUntilFreeAsync();
             updater.InstallUpdate(updateInfo.Updates.FirstOrDefault(), updatePath);
@@ -292,6 +296,7 @@ namespace IronyModManager.Implementation.Updater
             {
                 await Task.Delay(25);
             }
+
             busy = false;
             return true;
         }

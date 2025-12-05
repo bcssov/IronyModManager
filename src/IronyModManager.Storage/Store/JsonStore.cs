@@ -4,7 +4,7 @@
 // Created          : 01-20-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-25-2024
+// Last Modified On : 12-05-2025
 // ***********************************************************************
 // <copyright file="JsonStore.cs" company="Mario">
 //     Mario
@@ -20,12 +20,15 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using Castle.DynamicProxy;
+using IronyModManager.IO.Common;
 using IronyModManager.Shared;
 using IronyModManager.Storage.Store;
 using Jot.Storage;
 using Newtonsoft.Json;
 
+#pragma warning disable IDE0130
 namespace IronyModManager.Storage
+#pragma warning restore IDE0130
 {
     /// <summary>
     /// Class JsonStore.
@@ -45,7 +48,7 @@ namespace IronyModManager.Storage
         /// <summary>
         /// The root paths
         /// </summary>
-        private static string[] rootPaths;
+        private static string rootPath;
 
         /// <summary>
         /// The storage item
@@ -60,17 +63,13 @@ namespace IronyModManager.Storage
         /// Gets the root path.
         /// </summary>
         /// <value>The root path.</value>
-        protected internal static string[] RootPaths
+        protected internal static string RootPath
         {
             get
             {
-                if (rootPaths == null)
-                {
-                    var col = new List<string> { InitPath(true), InitPath(false) };
-                    rootPaths = col.Distinct().ToArray();
-                }
+                rootPath ??= InitPath();
 
-                return rootPaths;
+                return rootPath;
             }
         }
 
@@ -81,7 +80,6 @@ namespace IronyModManager.Storage
         /// <summary>
         /// Clears all.
         /// </summary>
-        /// <exception cref="NotSupportedException"></exception>
         /// <exception cref="System.NotSupportedException"></exception>
         public void ClearAll()
         {
@@ -92,7 +90,6 @@ namespace IronyModManager.Storage
         /// Clears the data.
         /// </summary>
         /// <param name="id">The identifier.</param>
-        /// <exception cref="NotSupportedException"></exception>
         /// <exception cref="System.NotSupportedException"></exception>
         public void ClearData(string id)
         {
@@ -122,8 +119,6 @@ namespace IronyModManager.Storage
                 return items ??= [];
             }
 
-            List<StoreItem> storeItems;
-
             var filePath = GetFilePath(id, true);
             var tempFilePath = GetTempPath(filePath);
             var diskItems = readItems(filePath);
@@ -133,7 +128,7 @@ namespace IronyModManager.Storage
             var tempDiskDateItem = tempDiskItems.FirstOrDefault(p => p.Type == Store.Constants.StoreDateId);
             var diskDate = diskDateItem != null ? (DateTime)diskDateItem.Value : DateTime.MinValue;
             var tempDiskDate = tempDiskDateItem != null ? (DateTime)tempDiskDateItem.Value : DateTime.MinValue;
-            storeItems = tempDiskDate > diskDate ? tempDiskItems.Where(p => p != tempDiskDateItem).ToList() : diskItems.Where(p => p != diskDateItem).ToList();
+            var storeItems = tempDiskDate > diskDate ? [.. tempDiskItems.Where(p => p != tempDiskDateItem)] : diskItems.Where(p => p != diskDateItem).ToList();
 
             return storeItems.ToDictionary(item => item.Name, item => item.Value);
         }
@@ -142,7 +137,6 @@ namespace IronyModManager.Storage
         /// Lists the ids.
         /// </summary>
         /// <returns>IEnumerable&lt;System.String&gt;.</returns>
-        /// <exception cref="NotSupportedException"></exception>
         /// <exception cref="System.NotSupportedException"></exception>
         public IEnumerable<string> ListIds()
         {
@@ -221,41 +215,21 @@ namespace IronyModManager.Storage
         /// <summary>
         /// Initializes the path.
         /// </summary>
-        /// <param name="useProperSeparator">if set to <c>true</c> [use proper separator].</param>
         /// <returns>System.String.</returns>
-        private static string InitPath(bool useProperSeparator = true)
+        private static string InitPath()
         {
-            var fistSegment = string.Empty;
-            var secondSegment = string.Empty;
+            var segment = string.Empty;
 
             var entryAssembly = Assembly.GetEntryAssembly();
-            var companyAttribute = (AssemblyCompanyAttribute)Attribute.GetCustomAttribute(entryAssembly!, typeof(AssemblyCompanyAttribute));
-            if (!string.IsNullOrEmpty(companyAttribute!.Company))
-            {
-                if (!useProperSeparator)
-                {
-                    fistSegment = $"{companyAttribute.Company}\\";
-                }
-                else
-                {
-                    fistSegment = $"{companyAttribute.Company}{Path.DirectorySeparatorChar}";
-                }
-            }
-
-            var titleAttribute = (AssemblyTitleAttribute)Attribute.GetCustomAttribute(entryAssembly, typeof(AssemblyTitleAttribute));
+            var titleAttribute = (AssemblyTitleAttribute)Attribute.GetCustomAttribute(entryAssembly!, typeof(AssemblyTitleAttribute));
             if (!string.IsNullOrEmpty(titleAttribute!.Title))
             {
-                if (!useProperSeparator)
-                {
-                    secondSegment = $"{titleAttribute.Title}\\";
-                }
-                else
-                {
-                    secondSegment = $"{titleAttribute.Title}{Path.DirectorySeparatorChar}";
-                }
+                segment = $"{titleAttribute.Title}\\";
             }
 
-            return Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), $@"{fistSegment}{secondSegment}");
+            var storagePath = DiskOperations.ResolveStoragePath();
+
+            return Path.Combine(storagePath, segment).StandardizeDirectorySeparator();
         }
 
         /// <summary>
@@ -267,52 +241,51 @@ namespace IronyModManager.Storage
         private string GetFilePath(string id, bool lookForOlderVersion = false)
         {
             var mainPath = string.Empty;
-            foreach (var root in RootPaths)
+
+            var root = RootPath;
+            var version = FileVersionInfo.GetVersionInfo(GetType().Assembly.Location);
+            var path = Path.Combine(root, $"{id}_{version.FileMajorPart}.{version.FileMinorPart}{Shared.Constants.JsonExtension}");
+            if (string.IsNullOrWhiteSpace(mainPath))
             {
-                var version = FileVersionInfo.GetVersionInfo(GetType().Assembly.Location);
-                var path = Path.Combine(root, $"{id}_{version.FileMajorPart}.{version.FileMinorPart}{Shared.Constants.JsonExtension}");
-                if (string.IsNullOrWhiteSpace(mainPath))
-                {
-                    mainPath = path;
-                }
+                mainPath = path;
+            }
 
-                if (File.Exists(path))
-                {
-                    return path;
-                }
+            if (File.Exists(path))
+            {
+                return path;
+            }
 
-                if (lookForOlderVersion)
+            if (lookForOlderVersion)
+            {
+                if (storageItem == null && Directory.Exists(root))
                 {
-                    if (storageItem == null && Directory.Exists(root))
+                    var dbs = new List<StorageItem>();
+                    foreach (var item in Directory.EnumerateFiles(root, $"*{Shared.Constants.JsonExtension}"))
                     {
-                        var dbs = new List<StorageItem>();
-                        foreach (var item in Directory.EnumerateFiles(root, $"*{Shared.Constants.JsonExtension}"))
+                        if (item.Contains('_', StringComparison.OrdinalIgnoreCase))
                         {
-                            if (item.Contains('_', StringComparison.OrdinalIgnoreCase))
+                            var versionData = item.Split("_", StringSplitOptions.RemoveEmptyEntries)[1].Replace(Shared.Constants.JsonExtension, string.Empty).Trim();
+                            if (System.Version.TryParse(versionData, out var parsedVersion))
                             {
-                                var versionData = item.Split("_", StringSplitOptions.RemoveEmptyEntries)[1].Replace(Shared.Constants.JsonExtension, string.Empty).Trim();
-                                if (System.Version.TryParse(versionData, out var parsedVersion))
-                                {
-                                    dbs.Add(new StorageItem { FileName = item, Version = parsedVersion });
-                                }
-                                else
-                                {
-                                    dbs.Add(new StorageItem { FileName = item, Version = new System.Version(0, 0, 0, 0) });
-                                }
+                                dbs.Add(new StorageItem { FileName = item, Version = parsedVersion });
                             }
                             else
                             {
                                 dbs.Add(new StorageItem { FileName = item, Version = new System.Version(0, 0, 0, 0) });
                             }
                         }
-
-                        storageItem = dbs.OrderByDescending(p => p.Version).FirstOrDefault();
+                        else
+                        {
+                            dbs.Add(new StorageItem { FileName = item, Version = new System.Version(0, 0, 0, 0) });
+                        }
                     }
 
-                    if (storageItem != null)
-                    {
-                        return storageItem.FileName;
-                    }
+                    storageItem = dbs.OrderByDescending(p => p.Version).FirstOrDefault();
+                }
+
+                if (storageItem != null)
+                {
+                    return storageItem.FileName;
                 }
             }
 
@@ -334,13 +307,13 @@ namespace IronyModManager.Storage
             /// Gets or sets the name of the file.
             /// </summary>
             /// <value>The name of the file.</value>
-            public string FileName { get; set; }
+            public string FileName { get; init; }
 
             /// <summary>
             /// Gets or sets the version.
             /// </summary>
             /// <value>The version.</value>
-            public System.Version Version { get; set; }
+            public System.Version Version { get; init; }
 
             #endregion Properties
         }
