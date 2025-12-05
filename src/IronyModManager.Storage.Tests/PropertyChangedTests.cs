@@ -17,10 +17,13 @@ using System.Linq;
 using System.Text;
 using FluentAssertions;
 using IronyModManager.DI;
+using IronyModManager.Localization;
 using IronyModManager.Models;
 using IronyModManager.Shared;
+using IronyModManager.Shared.Configuration;
 using IronyModManager.Storage.Common;
 using IronyModManager.Tests.Common;
+using Moq;
 using SimpleInjector;
 using Xunit;
 
@@ -31,6 +34,16 @@ namespace IronyModManager.Storage.Tests
     /// </summary>
     public class PropertyChangedTests
     {
+        private class DummyConfig : IDomainConfiguration
+        {
+            public DomainConfigurationOptions GetOptions()
+            {
+                var opts =  new DomainConfigurationOptions();
+                opts.App.StoragePath = ".";
+                return opts;
+            }
+        }
+
         /// <summary>
         /// Defines the test method Database_should_trigger_single_changed_event.
         /// </summary>
@@ -38,6 +51,9 @@ namespace IronyModManager.Storage.Tests
         public void Database_should_trigger_single_changed_event()
         {
             DISetup.SetupContainer();
+            var config = new Mock<IDomainConfiguration>();
+            config.Setup(s => s.GetOptions()).Returns(new DummyConfig().GetOptions);
+            DISetup.Container.RegisterInstance(config.Object);
             var events = new List<string>();
             var db = DIResolver.Get<IDatabase>();
             db.PropertyChanged += (s, e) =>
@@ -58,6 +74,9 @@ namespace IronyModManager.Storage.Tests
         public void Database_should_trigger_single_changing_event()
         {
             DISetup.SetupContainer();
+            var config = new Mock<IDomainConfiguration>();
+            config.Setup(s => s.GetOptions()).Returns(new DummyConfig().GetOptions);
+            DISetup.Container.RegisterInstance(config.Object);
             var events = new List<string>();
             var db = DIResolver.Get<IDatabase>();
             db.PropertyChanging += (s, e) =>
@@ -77,6 +96,9 @@ namespace IronyModManager.Storage.Tests
         public void Database_should_trigger_double_changed_event()
         {
             DISetup.SetupContainer();
+            var config = new Mock<IDomainConfiguration>();
+            config.Setup(s => s.GetOptions()).Returns(new DummyConfig().GetOptions);
+            DISetup.Container.RegisterInstance(config.Object);
             var events = new List<string>();
             var db = DIResolver.Get<IDatabase>();
             db.PropertyChanged += (s, e) =>
@@ -97,6 +119,9 @@ namespace IronyModManager.Storage.Tests
         public void Database_should_trigger_double_changing_event()
         {
             DISetup.SetupContainer();
+            var config = new Mock<IDomainConfiguration>();
+            config.Setup(s => s.GetOptions()).Returns(new DummyConfig().GetOptions);
+            DISetup.Container.RegisterInstance(config.Object);
             var events = new List<string>();
             var db = DIResolver.Get<IDatabase>();
             db.PropertyChanging += (s, e) =>
