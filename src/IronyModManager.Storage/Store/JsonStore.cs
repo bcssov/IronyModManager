@@ -240,15 +240,10 @@ namespace IronyModManager.Storage
         /// <returns>System.String.</returns>
         private string GetFilePath(string id, bool lookForOlderVersion = false)
         {
-            var mainPath = string.Empty;
+            var mainPath = RootPath;
 
-            var root = RootPath;
             var version = FileVersionInfo.GetVersionInfo(GetType().Assembly.Location);
-            var path = Path.Combine(root, $"{id}_{version.FileMajorPart}.{version.FileMinorPart}{Shared.Constants.JsonExtension}");
-            if (string.IsNullOrWhiteSpace(mainPath))
-            {
-                mainPath = path;
-            }
+            var path = Path.Combine(mainPath, $"{id}_{version.FileMajorPart}.{version.FileMinorPart}{Shared.Constants.JsonExtension}");
 
             if (File.Exists(path))
             {
@@ -257,10 +252,10 @@ namespace IronyModManager.Storage
 
             if (lookForOlderVersion)
             {
-                if (storageItem == null && Directory.Exists(root))
+                if (storageItem == null && Directory.Exists(mainPath))
                 {
                     var dbs = new List<StorageItem>();
-                    foreach (var item in Directory.EnumerateFiles(root, $"*{Shared.Constants.JsonExtension}"))
+                    foreach (var item in Directory.EnumerateFiles(mainPath, $"*{Shared.Constants.JsonExtension}"))
                     {
                         if (item.Contains('_', StringComparison.OrdinalIgnoreCase))
                         {
