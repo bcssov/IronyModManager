@@ -4,7 +4,7 @@
 // Created          : 02-29-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 12-04-2025
+// Last Modified On : 12-06-2025
 // ***********************************************************************
 // <copyright file="ModHolderControlViewModel.cs" company="Mario">
 //     Mario
@@ -1015,7 +1015,7 @@ namespace IronyModManager.ViewModels.Controls
             {
                 if (gameService.IsSteamGame(args))
                 {
-                    await externalProcessHandlerService.LaunchSteamAsync(gameService.GetSelected());
+                    await externalProcessHandlerService.LaunchSteamAsync(gameService.GetSelected(), gameService.IsFlatpakSteamGame(args));
                 }
             }
 
@@ -1047,14 +1047,32 @@ namespace IronyModManager.ViewModels.Controls
                         await MessageBus.PublishAsync(new LaunchingGameEvent(game.Type));
                         if (gameService.IsSteamLaunchPath(args))
                         {
-                            if (await appAction.OpenAsync(args.ExecutableLocation))
+                            var launched = false;
+                            if (gameService.IsFlatpakSteamGame(args))
                             {
-                                if (game.CloseAppAfterGameLaunch)
+                                // ReSharper disable once StringLiteralTypo
+                                if (await appAction.OpenFlatpakAsync("com.valvesoftware.Steam", args.ExecutableLocation))
                                 {
-                                    await appAction.ExitAppAsync();
+                                    launched = true;
+                                    if (game.CloseAppAfterGameLaunch)
+                                    {
+                                        await appAction.ExitAppAsync();
+                                    }
                                 }
                             }
                             else
+                            {
+                                if (await appAction.OpenAsync(args.ExecutableLocation))
+                                {
+                                    launched = true;
+                                    if (game.CloseAppAfterGameLaunch)
+                                    {
+                                        await appAction.ExitAppAsync();
+                                    }
+                                }
+                            }
+
+                            if (!launched)
                             {
                                 notificationAction.ShowNotification(localizationManager.GetResource(LocalizationResources.Mod_Actions.LaunchGame.LaunchError.Title),
                                     localizationManager.GetResource(LocalizationResources.Mod_Actions.LaunchGame.LaunchError.Message), NotificationType.Error, 10);

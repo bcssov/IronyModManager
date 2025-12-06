@@ -4,13 +4,14 @@
 // Created          : 09-22-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 09-12-2021
+// Last Modified On : 12-06-2025
 // ***********************************************************************
 // <copyright file="PathResolver.cs" company="Mario">
 //     Mario
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
+
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -29,11 +30,7 @@ namespace IronyModManager.Services.Resolver
         /// <summary>
         /// The map
         /// </summary>
-        private static readonly Dictionary<string, Environment.SpecialFolder> map = new()
-        {
-            { "%USER_DOCUMENTS%", Environment.SpecialFolder.MyDocuments },
-            { "$LINUX_DATA_HOME", Environment.SpecialFolder.LocalApplicationData }
-        };
+        private static readonly Dictionary<string, Environment.SpecialFolder> map = new() { { "%USER_DOCUMENTS%", Environment.SpecialFolder.MyDocuments }, { "$LINUX_DATA_HOME", Environment.SpecialFolder.LocalApplicationData } };
 
         #endregion Fields
 
@@ -50,6 +47,7 @@ namespace IronyModManager.Services.Resolver
             {
                 return path;
             }
+
             var segments = path.StandardizeDirectorySeparator().Split(Path.DirectorySeparatorChar, StringSplitOptions.RemoveEmptyEntries);
             var newPath = new List<string>();
             foreach (var item in segments)
@@ -64,6 +62,7 @@ namespace IronyModManager.Services.Resolver
                     newPath.Add(ResolveEnvironmentVariable(item));
                 }
             }
+
             return Path.Combine(newPath.ToArray());
         }
 
@@ -74,7 +73,7 @@ namespace IronyModManager.Services.Resolver
         /// <returns>System.String.</returns>
         private string ResolveEnvironmentVariable(string variable)
         {
-            if (variable.Contains("$") || variable.Contains("%"))
+            if (variable.Contains('$') || variable.Contains('%'))
             {
                 var path = Environment.ExpandEnvironmentVariables(variable);
                 return path;

@@ -4,7 +4,7 @@
 // Created          : 03-01-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 12-04-2025
+// Last Modified On : 12-06-2025
 // ***********************************************************************
 // <copyright file="IAppAction.cs" company="Mario">
 //     Mario
@@ -51,6 +51,13 @@ namespace IronyModManager.Implementation.Actions
         /// <param name="command">The command.</param>
         /// <returns>Task&lt;System.Boolean&gt;.</returns>
         Task<bool> OpenAsync(string command);
+
+        /// <summary>
+        /// Executes flatpak command.
+        /// </summary>
+        /// <param name="commands">The commands.</param>
+        /// <returns>Task&lt;System.Boolean&gt;.</returns>
+        Task<bool> OpenFlatpakAsync(params string[] commands);
 
         /// <summary>
         /// Runs the asynchronous.

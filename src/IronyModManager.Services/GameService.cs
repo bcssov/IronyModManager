@@ -4,7 +4,7 @@
 // Created          : 02-12-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 12-04-2025
+// Last Modified On : 12-06-2025
 // ***********************************************************************
 // <copyright file="GameService.cs" company="Mario">
 //     Mario
@@ -16,6 +16,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -77,6 +78,11 @@ namespace IronyModManager.Services
         /// The game path resolver
         /// </summary>
         private readonly GameRootPathResolver gamePathResolver = new();
+
+        /// <summary>
+        /// The linux flat pak resolver
+        /// </summary>
+        private readonly LinuxFlatPakResolver linuxFlatPakResolver = new();
 
         /// <summary>
         /// The message bus
@@ -418,6 +424,22 @@ namespace IronyModManager.Services
             catch
             {
                 return false;
+            }
+
+            return false;
+        }
+
+        /// <summary>
+        /// Determines whether game is a flatpak steam installation.
+        /// </summary>
+        /// <param name="settings">The settings.</param>
+        /// <returns><c>true</c> if flatpak steam installation; otherwise, <c>false</c>.</returns>
+        public virtual bool IsFlatpakSteamGame(IGameSettings settings)
+        {
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
+            {
+                var settingsExe = (settings.ExecutableLocation ?? string.Empty).StandardizeDirectorySeparator();
+                return linuxFlatPakResolver.IsFlatpakSteamInstall(settingsExe);
             }
 
             return false;

@@ -4,17 +4,17 @@
 // Created          : 07-11-2022
 //
 // Last Modified By : Mario
-// Last Modified On : 10-26-2022
+// Last Modified On : 12-06-2025
 // ***********************************************************************
 // <copyright file="ExternalProcessHandlerServiceTests.cs" company="Mario">
 //     Mario
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using AutoMapper;
 using FluentAssertions;
@@ -25,6 +25,8 @@ using IronyModManager.Storage.Common;
 using IronyModManager.Tests.Common;
 using Moq;
 using Xunit;
+
+// ReSharper disable UnusedParameter.Local
 
 namespace IronyModManager.Services.Tests
 {
@@ -113,6 +115,24 @@ namespace IronyModManager.Services.Tests
         }
 
         /// <summary>
+        /// Defines the test method Should_launch_steam_alternate_via_override.
+        /// </summary>
+        [Fact]
+        public async Task Should_launch_steam_alternate_via_override()
+        {
+            var steam = new Mock<ISteam>();
+            steam.Setup(p => p.InitAlternateAsync()).Returns(Task.FromResult(true));
+
+            DISetup.SetupContainer();
+            DISetup.Container.Register<IDomainConfiguration>(() => new DomainConfigDummy(true));
+
+            var service = GetService(steam: steam);
+            var result = await service.LaunchSteamAsync(new Game(), true);
+            result.Should().BeTrue();
+        }
+
+
+        /// <summary>
         /// Defines the test method Should_launch_steam.
         /// </summary>
         [Fact]
@@ -158,7 +178,7 @@ namespace IronyModManager.Services.Tests
             DISetup.Container.Register<IDomainConfiguration>(() => new DomainConfigDummyExternal());
 
             var service = GetService(steam: steam);
-            var result = await service.LaunchSteamAsync(new Game());            
+            await service.LaunchSteamAsync(new Game());
             isValid.Should().BeTrue();
         }
 
@@ -171,7 +191,7 @@ namespace IronyModManager.Services.Tests
             var launcher = new Mock<IParadoxLauncher>();
             launcher.Setup(p => p.IsRunningAsync()).Returns(Task.FromResult(false));
 
-            var service = GetService(launcher: launcher);
+            var service = GetService(launcher);
             var result = await service.IsParadoxLauncherRunningAsync();
             result.Should().BeFalse();
         }
@@ -185,7 +205,7 @@ namespace IronyModManager.Services.Tests
             var launcher = new Mock<IParadoxLauncher>();
             launcher.Setup(p => p.IsRunningAsync()).Returns(Task.FromResult(true));
 
-            var service = GetService(launcher: launcher);
+            var service = GetService(launcher);
             var result = await service.IsParadoxLauncherRunningAsync();
             result.Should().BeTrue();
         }
@@ -195,12 +215,13 @@ namespace IronyModManager.Services.Tests
         /// Implements the <see cref="IDomainConfiguration" />
         /// </summary>
         /// <seealso cref="IDomainConfiguration" />
-        private class DomainConfigDummy : Shared.Configuration.IDomainConfiguration
+        private class DomainConfigDummy : IDomainConfiguration
         {
             /// <summary>
             /// The domain
             /// </summary>
-            DomainConfigurationOptions domain = new DomainConfigurationOptions();
+            private readonly DomainConfigurationOptions domain = new();
+
             /// <summary>
             /// Initializes a new instance of the <see cref="DomainConfigDummy" /> class.
             /// </summary>
@@ -225,19 +246,20 @@ namespace IronyModManager.Services.Tests
         /// Implements the <see cref="IDomainConfiguration" />
         /// </summary>
         /// <seealso cref="IDomainConfiguration" />
-        private class DomainConfigDummyExternal : Shared.Configuration.IDomainConfiguration
+        private class DomainConfigDummyExternal : IDomainConfiguration
         {
             /// <summary>
             /// The domain
             /// </summary>
-            DomainConfigurationOptions domain = new DomainConfigurationOptions();
+            private readonly DomainConfigurationOptions domain = new();
+
             /// <summary>
             /// Initializes a new instance of the <see cref="DomainConfigDummy" /> class.
             /// </summary>
             public DomainConfigDummyExternal()
             {
                 domain.Steam.UseLegacyLaunchMethod = false;
-                domain.Steam.UseGameHandler = true;                
+                domain.Steam.UseGameHandler = true;
             }
 
             /// <summary>
