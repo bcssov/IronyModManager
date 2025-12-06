@@ -4,13 +4,14 @@
 // Created          : 07-11-2022
 //
 // Last Modified By : Mario
-// Last Modified On : 10-28-2022
+// Last Modified On : 12-06-2025
 // ***********************************************************************
 // <copyright file="ExternalProcessHandlerService.cs" company="Mario">
 //     Mario
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -69,7 +70,7 @@ namespace IronyModManager.Services
         #region Methods
 
         /// <summary>
-        /// Determines whether [is paradox launcher running asynchronous].
+        /// Determines whether Paradox Launcher is running.
         /// </summary>
         /// <returns>Task&lt;System.Boolean&gt;.</returns>
         public Task<bool> IsParadoxLauncherRunningAsync()
@@ -81,18 +82,20 @@ namespace IronyModManager.Services
         /// Launches the steam asynchronous.
         /// </summary>
         /// <param name="game">The game.</param>
+        /// <param name="forceLegacyMode">if set to <c>true</c> forces legacy mode typically for flatpak binaries.</param>
         /// <returns>Task&lt;System.Boolean&gt;.</returns>
         /// <exception cref="System.NotImplementedException"></exception>
-        public async Task<bool> LaunchSteamAsync(IGame game)
+        public async Task<bool> LaunchSteamAsync(IGame game, bool forceLegacyMode = false)
         {
             if (game is null)
             {
                 return false;
             }
+
             var options = DIResolver.Get<IDomainConfiguration>().GetOptions();
             if (!options.Steam.UseGameHandler)
             {
-                var useLegacyMethod = options.Steam.UseLegacyLaunchMethod;
+                var useLegacyMethod = options.Steam.UseLegacyLaunchMethod || forceLegacyMode;
                 if (useLegacyMethod)
                 {
                     return await steam.InitAlternateAsync();
@@ -107,7 +110,7 @@ namespace IronyModManager.Services
             else
             {
                 ProcessRunner.EnsurePermissions(options.Steam.GameHandlerPath);
-                ProcessRunner.RunExternalProcess(options.Steam.GameHandlerPath, options.Steam.UseLegacyLaunchMethod ? $"-a -i {game.SteamAppId}" : $"-i {game.SteamAppId}", true);
+                ProcessRunner.RunExternalProcess(options.Steam.GameHandlerPath, options.Steam.UseLegacyLaunchMethod || forceLegacyMode ? $"-a -i {game.SteamAppId}" : $"-i {game.SteamAppId}", true);
                 return true;
             }
         }

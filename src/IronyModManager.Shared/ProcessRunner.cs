@@ -4,7 +4,7 @@
 // Created          : 07-11-2022
 //
 // Last Modified By : Mario
-// Last Modified On : 12-03-2025
+// Last Modified On : 12-06-2025
 // ***********************************************************************
 // <copyright file="ProcessRunner.cs" company="Mario">
 //     Mario
@@ -81,6 +81,23 @@ namespace IronyModManager.Shared
                     UseShellExecute = RuntimeInformation.IsOSPlatform(OSPlatform.Windows)
                 });
             }
+        }
+
+        /// <summary>
+        /// Launches the flatpak command.
+        /// </summary>
+        /// <param name="commands">The commands.</param>
+        public static void LaunchFlatpakCommand(params string[] commands)
+        {
+            var psi = new ProcessStartInfo { FileName = "flatpak", UseShellExecute = false };
+
+            psi.ArgumentList.Add("run");
+            foreach (var command in commands)
+            {
+                psi.ArgumentList.Add(command);
+            }
+
+            Process.Start(psi);
         }
 
         /// <summary>

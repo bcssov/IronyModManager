@@ -4,15 +4,17 @@
 // Created          : 02-12-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 09-05-2021
+// Last Modified On : 12-06-2025
 // ***********************************************************************
 // <copyright file="IGameService.cs" company="Mario">
 //     Mario
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
+
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using IronyModManager.Models.Common;
 
@@ -93,11 +95,18 @@ namespace IronyModManager.Services.Common
         Task<IEnumerable<IHashReport>> ImportHashReportAsync(IGame game, IReadOnlyCollection<IHashReport> hashReports);
 
         /// <summary>
-        /// Determines whether [is continue game allowed] [the specified game].
+        /// Determines whether game has an active save and game continue logic can be executed.
         /// </summary>
         /// <param name="game">The game.</param>
-        /// <returns><c>true</c> if [is continue game allowed] [the specified game]; otherwise, <c>false</c>.</returns>
+        /// <returns><c>true</c> if game has an active save; otherwise, <c>false</c>.</returns>
         bool IsContinueGameAllowed(IGame game);
+
+        /// <summary>
+        /// Determines whether game is a flatpak steam installation.
+        /// </summary>
+        /// <param name="settings">The settings.</param>
+        /// <returns><c>true</c> if flatpak steam installation; otherwise, <c>false</c>.</returns>
+        bool IsFlatpakSteamGame(IGameSettings settings);
 
         /// <summary>
         /// Determines whether [is steam game] [the specified settings].

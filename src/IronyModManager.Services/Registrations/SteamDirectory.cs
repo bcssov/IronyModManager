@@ -4,7 +4,7 @@
 // Created          : 02-24-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 12-04-2025
+// Last Modified On : 12-06-2025
 // ***********************************************************************
 // <copyright file="SteamDirectory.cs" company="Mario">
 //     Mario
@@ -22,6 +22,7 @@ using Gameloop.Vdf.JsonConverter;
 using Gameloop.Vdf.Linq;
 using IronyModManager.DI;
 using IronyModManager.Services.Models;
+using IronyModManager.Services.Resolver;
 using IronyModManager.Shared;
 using IronyModManager.Shared.Configuration;
 using Microsoft.Win32;
@@ -77,6 +78,11 @@ namespace IronyModManager.Services.Registrations
         private static readonly Dictionary<string, List<string>> cachedPaths = new();
 
         /// <summary>
+        /// The flat pak resolver
+        /// </summary>
+        private static readonly LinuxFlatPakResolver flatPakResolver = new();
+
+        /// <summary>
         /// The library folder VDF
         /// </summary>
         private static readonly string libraryFolderVDF = PathHelper.MergePaths("config", "libraryfolders.vdf");
@@ -111,6 +117,11 @@ namespace IronyModManager.Services.Registrations
         /// </summary>
         private static readonly VdfSerializerSettings vdfSerializerSettings = new() { MaximumTokenSize = 8192 * 8, UsesEscapeSequences = true, UsesConditionals = true };
 
+        /// <summary>
+        /// The base steam location
+        /// </summary>
+        private static string baseSteamLocation = string.Empty;
+
         #endregion Fields
 
         #region Methods
@@ -141,7 +152,7 @@ namespace IronyModManager.Services.Registrations
                 return string.Empty;
             }
 
-            var steamInstallDirectory = GetSteamRootPath();
+            var steamInstallDirectory = GetSteamRootPath().StandardizeDirectorySeparator();
             if (Directory.Exists(steamInstallDirectory))
             {
                 var acfFile = string.Format(ACFFormat, appId);
@@ -181,7 +192,7 @@ namespace IronyModManager.Services.Registrations
         /// <returns>string.</returns>
         public static string GetProtonVersion(int appId)
         {
-            var steamInstallDirectory = GetSteamRootPath();
+            var steamInstallDirectory = GetSteamRootPath().StandardizeDirectorySeparator();
             var vdfPath = Path.Combine(steamInstallDirectory, steamConfigVDF);
             var libraryFolderVDF = Path.Combine(steamInstallDirectory, SteamDirectory.libraryFolderVDF);
             var steamAppsLibraryFolderVDF = Path.Combine(steamInstallDirectory, SteamDirectory.steamAppsLibraryFolderVDF);
@@ -200,27 +211,30 @@ namespace IronyModManager.Services.Registrations
         /// <returns>System.String.</returns>
         public static string GetSteamRootPath()
         {
-            // We're going to use an override if set
-            var options = DIResolver.Get<IDomainConfiguration>().GetOptions();
-            if (!string.IsNullOrWhiteSpace(options.Steam.InstallLocationOverride) && Directory.Exists(options.Steam.InstallLocationOverride))
+            if (string.IsNullOrWhiteSpace(baseSteamLocation))
             {
-                return options.Steam.InstallLocationOverride;
+                // We're going to use an override if set
+                var options = DIResolver.Get<IDomainConfiguration>().GetOptions();
+                if (!string.IsNullOrWhiteSpace(options.Steam.InstallLocationOverride) && Directory.Exists(options.Steam.InstallLocationOverride))
+                {
+                    baseSteamLocation = options.Steam.InstallLocationOverride;
+                }
+
+                if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
+                {
+                    baseSteamLocation = GetSteamOSXRootPath();
+                }
+                else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
+                {
+                    baseSteamLocation = GetSteamLinuxRootPath();
+                }
+                else if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+                {
+                    return GetSteamWindowsRootPath();
+                }
             }
 
-            if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
-            {
-                return GetSteamOSXRootPath();
-            }
-            else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
-            {
-                return GetSteamLinuxRootPath();
-            }
-            else if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
-            {
-                return GetSteamWindowsRootPath();
-            }
-
-            return string.Empty;
+            return baseSteamLocation;
         }
 
         /// <summary>
@@ -231,7 +245,7 @@ namespace IronyModManager.Services.Registrations
         public static IEnumerable<string> GetUserDataFolders(int appId)
         {
             var userDataFolders = new List<string>();
-            var steamInstallDirectory = GetSteamRootPath();
+            var steamInstallDirectory = GetSteamRootPath().StandardizeDirectorySeparator();
 
             // I always thought that steam would create this folder during installation
             var path = Path.Combine(steamInstallDirectory, SteamUserDataDirectory);
@@ -288,7 +302,18 @@ namespace IronyModManager.Services.Registrations
         /// <returns>System.String.</returns>
         private static string GetSteamLinuxRootPath()
         {
-            return Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "Steam");
+            var nativeRootPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "Steam");
+            if (Directory.Exists(nativeRootPath) && File.Exists(Path.Combine(nativeRootPath, "steam")))
+            {
+                return nativeRootPath;
+            }
+
+            if (flatPakResolver.HasFlatpak() && flatPakResolver.IsSteamInstalled())
+            {
+                return flatPakResolver.GetFlatpakSteamPath();
+            }
+
+            return nativeRootPath; // yes fallback to root regardless for backwards compatibility
         }
 
         /// <summary>

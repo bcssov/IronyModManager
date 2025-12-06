@@ -4,13 +4,14 @@
 // Created          : 07-11-2022
 //
 // Last Modified By : Mario
-// Last Modified On : 07-24-2022
+// Last Modified On : 12-06-2025
 // ***********************************************************************
 // <copyright file="IExternalProcessHandlerService.cs" company="Mario">
 //     Mario
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -29,17 +30,18 @@ namespace IronyModManager.Services.Common
         #region Methods
 
         /// <summary>
-        /// Determines whether [is paradox launcher running asynchronous].
+        /// Determines whether Paradox Launcher is running.
         /// </summary>
         /// <returns>Task&lt;System.Boolean&gt;.</returns>
         Task<bool> IsParadoxLauncherRunningAsync();
 
         /// <summary>
-        /// Launches the steam asynchronous.
+        /// Launches the steam process either via Irony or game launcher process and tries to execute a handshake.
         /// </summary>
         /// <param name="game">The game.</param>
+        /// <param name="forceLegacyMode">if set to <c>true</c> forces legacy mode typically for flatpak binaries.</param>
         /// <returns>Task&lt;System.Boolean&gt;.</returns>
-        Task<bool> LaunchSteamAsync(IGame game);
+        Task<bool> LaunchSteamAsync(IGame game, bool forceLegacyMode = false);
 
         #endregion Methods
     }

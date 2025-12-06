@@ -4,7 +4,7 @@
 // Created          : 02-14-2021
 //
 // Last Modified By : Mario
-// Last Modified On : 12-03-2025
+// Last Modified On : 12-06-2025
 // ***********************************************************************
 // <copyright file="DLCService.cs" company="Mario">
 //     Mario
@@ -69,7 +69,9 @@ namespace IronyModManager.Services
         /// <summary>
         /// The path resolver
         /// </summary>
-        private readonly GameRootPathResolver pathResolver = new();
+#pragma warning disable CA1859
+        private readonly IGameRootPathResolver pathResolver = new GameRootPathResolver();
+#pragma warning restore CA1859
 
         /// <summary>
         /// The reader
