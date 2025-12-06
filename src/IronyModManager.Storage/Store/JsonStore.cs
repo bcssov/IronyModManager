@@ -4,7 +4,7 @@
 // Created          : 01-20-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 12-05-2025
+// Last Modified On : 12-06-2025
 // ***********************************************************************
 // <copyright file="JsonStore.cs" company="Mario">
 //     Mario
@@ -240,14 +240,12 @@ namespace IronyModManager.Storage
         /// <returns>System.String.</returns>
         private string GetFilePath(string id, bool lookForOlderVersion = false)
         {
-            var mainPath = RootPath;
-
             var version = FileVersionInfo.GetVersionInfo(GetType().Assembly.Location);
-            var path = Path.Combine(mainPath, $"{id}_{version.FileMajorPart}.{version.FileMinorPart}{Shared.Constants.JsonExtension}");
+            var mainPath = Path.Combine(RootPath, $"{id}_{version.FileMajorPart}.{version.FileMinorPart}{Shared.Constants.JsonExtension}");
 
-            if (File.Exists(path))
+            if (File.Exists(mainPath))
             {
-                return path;
+                return mainPath;
             }
 
             if (lookForOlderVersion)
