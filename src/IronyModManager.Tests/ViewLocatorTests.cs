@@ -15,7 +15,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using Avalonia.Controls;
-using FluentAssertions;
+using AwesomeAssertions;
 using IronyModManager.Common;
 using IronyModManager.Common.ViewModels;
 using IronyModManager.Common.Views;

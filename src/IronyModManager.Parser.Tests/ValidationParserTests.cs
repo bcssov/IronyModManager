@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using FluentAssertions;
+using AwesomeAssertions;
 using IronyModManager.Parser.Common.Args;
 using IronyModManager.Tests.Common;
 using Xunit;
