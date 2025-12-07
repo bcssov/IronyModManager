@@ -30,4 +30,5 @@ del "src\IronyModManager\bin\x64\win-x64\net8.0\publish\win-x64\IronyModManager.
 del "src\IronyModManager\bin\x64\win-x64\net8.0\publish\win-x64\steam_api64.dll" /S /Q
 xcopy "References\CopyAll\*.*" "src\IronyModManager\bin\x64\win-x64\net8.0\publish\win-x64\" /Y /S /D
 xcopy "References\Conditional\Steamworks\Windows-x64\*.*" "src\IronyModManager\bin\x64\win-x64\net8.0\publish\win-x64\" /Y /S /D
+xcopy "References\Conditional\Steamworks\.Net\Windows\*.*" "src\IronyModManager\bin\x64\win-x64\net8.0\publish\win-x64\" /Y /S /D
 cd publish

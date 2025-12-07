@@ -60,7 +60,6 @@
 	<PackageReference Include="CommandLineParser" Version="2.9.1" />
 	<PackageReference Include="Nerdbank.GitVersioning" />
 	<PackageReference Include="NLog" Version="5.2.8" />
-	<PackageReference Include="Steamworks.NET" Version="20.1.0" />
 	<PackageReference Update="Nerdbank.GitVersioning" Version="3.6.133">
 	  <PrivateAssets>all</PrivateAssets>
 	  <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -70,6 +69,12 @@
   <ItemGroup>
     <Folder Include="IO\" />
     <Folder Include="Shared\" />
+  </ItemGroup>  
+
+  <ItemGroup>
+    <Reference Include="Steamworks.NET">
+      <HintPath>..\..\References\Conditional\Steamworks\.Net\Windows\Steamworks.NET.dll</HintPath>
+    </Reference>
   </ItemGroup>
 
 </Project>
