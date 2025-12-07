@@ -57,7 +57,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="CompareNETObjects" Version="4.83.0" />
+    <PackageReference Include="CompareNETObjects" Version="4.84.0" />
     <PackageReference Include="Jot" Version="$(Jot)" allowedVersions="$(Jot)" />
     <PackageReference Include="MagicMapper" Version="14.0.0" />
     <PackageReference Include="Microsoft.Extensions.DependencyModel" Version="$(MicrosoftExtensionsDependencyModelVersion)" allowedVersions="$(MicrosoftExtensionsDependencyModelVersion)" />
