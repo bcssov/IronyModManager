@@ -16,7 +16,7 @@
 	<PlatformTarget>x64</PlatformTarget>	
 	<Platforms>x64</Platforms>
     <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
-    <NoWarn>1701;1702;NU1603</NoWarn>	
+    <NoWarn>1701;1702;NU1603;CS8002</NoWarn>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='osx-x64|x64'">
@@ -52,7 +52,6 @@
   <ItemGroup>
     <PackageReference Include="Nerdbank.GitVersioning" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
-    <PackageReference Include="Sajidur78.StrongNamer" Version="0.2.8" />
   </ItemGroup>
 
   <ItemGroup>
