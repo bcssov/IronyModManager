@@ -4,7 +4,7 @@
 // Created          : 09-22-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 12-06-2025
+// Last Modified On : 12-07-2025
 // ***********************************************************************
 // <copyright file="PathResolver.cs" company="Mario">
 //     Mario
@@ -73,15 +73,26 @@ namespace IronyModManager.Services.Resolver
         /// <returns>System.String.</returns>
         private string ResolveEnvironmentVariable(string variable)
         {
-            if (variable.Contains('$') || variable.Contains('%'))
-            {
-                var path = Environment.ExpandEnvironmentVariables(variable);
-                return path;
-            }
-            else
+            if (string.IsNullOrEmpty(variable))
             {
                 return variable;
             }
+
+            if (variable.StartsWith('$'))
+            {
+                var name = variable.TrimStart('$');
+                var value = Environment.GetEnvironmentVariable(name);
+                return value ?? variable;
+            }
+
+            if (variable.StartsWith('%') && variable.EndsWith('%'))
+            {
+                var name = variable.Substring(1, variable.Length - 2);
+                var value = Environment.GetEnvironmentVariable(name);
+                return value ?? variable;
+            }
+
+            return variable;
         }
 
         #endregion Methods
