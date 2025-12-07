@@ -1,51 +1,55 @@
 <Project>
-  <PropertyGroup>
-    <Authors>Mario</Authors>
-    <Company>Mario</Company>
-    <Product>Irony Mod Manager</Product>
-    <Copyright>Mario</Copyright>
-    <PackageLicenseFile>LICENSE</PackageLicenseFile>
-    <PackageProjectUrl>https://github.com/bcssov/IronyModManager</PackageProjectUrl>
-    <RepositoryUrl>https://github.com/bcssov/IronyModManager</RepositoryUrl>
-    <RepositoryType>GIT</RepositoryType>
-    <ProduceReferenceAssembly>false</ProduceReferenceAssembly>
-    <ErrorOnDuplicatePublishOutputFiles>false</ErrorOnDuplicatePublishOutputFiles>
-  </PropertyGroup>
-  <PropertyGroup Label="BasePath">
-    <SolutionDir Condition="'$(SolutionDir)'==''">$(MSBuildThisFileDirectory)</SolutionDir>
-  </PropertyGroup>
-  <PropertyGroup>
-    <PathMap>$(MSBuildProjectDirectory)=$(MSBuildProjectName)</PathMap>
-  </PropertyGroup>  
-  <PropertyGroup>
-    <MicrosoftExtensionsDependencyModelVersion>[8.0.0]</MicrosoftExtensionsDependencyModelVersion>
-    <MicrosoftNETCorePlatformsVersion>[8.0.0-preview.7.23375.6]</MicrosoftNETCorePlatformsVersion>    
-    <MicrosoftExtensionsConfigurationBinder>[8.0.1]</MicrosoftExtensionsConfigurationBinder>
-    <MicrosoftExtensionsConfigurationJson>[8.0.0]</MicrosoftExtensionsConfigurationJson>
-	<Jot>[2.1.17]</Jot>
-	<!-- Non upgradeable stuff below  -->
-	<!-- Avalonia is not easily upgradeable too  -->
-    <MaterialAvalonia>[2.5.1]</MaterialAvalonia>
-    <MessageBoxAvalonia>[2.1.0]</MessageBoxAvalonia>
-    <Avalonia>[0.10.22]</Avalonia>
-    <AvaloniaEdit>[0.10.12.2]</AvaloniaEdit>
-	<AvaloniaMaterialIcons>[1.1.10]</AvaloniaMaterialIcons>
-	<AvaloniaColorPicker>[0.10.17]</AvaloniaColorPicker>
-	<!-- 2.5.0 version breaks tests, 1.26 rev still broken. I really don't want to investigate  -->
-	<XUnitRunnerVS>[2.4.5]</XUnitRunnerVS>
-    <!-- SixLabors should be removed at some point  -->
-    <SixLaborsImageSharp>[1.0.4]</SixLaborsImageSharp>
-    <SixLaborsImageSharpDrawing>[1.0.0-beta13.15]</SixLaborsImageSharpDrawing>
-    <SixLaborsImageSharpTextures>[0.0.0-alpha.0.132]</SixLaborsImageSharpTextures>
-  </PropertyGroup>
-  <ItemGroup>
-    <PackageReference Update="Nerdbank.GitVersioning" Condition="!Exists('packages.config')">
-      <Version>3.6.133</Version>
-      <PrivateAssets>all</PrivateAssets>
-    </PackageReference>
-  </ItemGroup>
-  <ItemGroup>
-    <!-- Probably not needed but I've got so many dependencies -->
-    <RuntimeHostConfigurationOption Include="System.Runtime.Loader.UseRidGraph" Value="true" />
-  </ItemGroup>    
+    <PropertyGroup>
+        <Authors>Mario</Authors>
+        <Company>Mario</Company>
+        <Product>Irony Mod Manager</Product>
+        <Copyright>Mario</Copyright>
+        <PackageLicenseFile>LICENSE</PackageLicenseFile>
+        <PackageProjectUrl>https://github.com/bcssov/IronyModManager</PackageProjectUrl>
+        <RepositoryUrl>https://github.com/bcssov/IronyModManager</RepositoryUrl>
+        <RepositoryType>GIT</RepositoryType>
+        <ProduceReferenceAssembly>false</ProduceReferenceAssembly>
+        <ErrorOnDuplicatePublishOutputFiles>false</ErrorOnDuplicatePublishOutputFiles>
+    </PropertyGroup>
+    <PropertyGroup Label="BasePath">
+        <SolutionDir Condition="'$(SolutionDir)'==''">$(MSBuildThisFileDirectory)</SolutionDir>
+    </PropertyGroup>
+    <PropertyGroup>
+        <PathMap>$(MSBuildProjectDirectory)=$(MSBuildProjectName)</PathMap>
+    </PropertyGroup>
+    <PropertyGroup>
+        <MicrosoftExtensionsDependencyModelVersion>[8.0.2]</MicrosoftExtensionsDependencyModelVersion>
+        <MicrosoftNETCorePlatformsVersion>[8.0.0-preview.7.23375.6]</MicrosoftNETCorePlatformsVersion>
+        <MicrosoftExtensionsConfigurationBinder>[8.0.2]</MicrosoftExtensionsConfigurationBinder>
+        <MicrosoftExtensionsConfigurationJson>[8.0.1]</MicrosoftExtensionsConfigurationJson>
+        <MicrosoftBclAsyncInterfaces>[8.0.0]</MicrosoftBclAsyncInterfaces>
+        <SystemSecurityPermissions>[8.0.0]</SystemSecurityPermissions>
+        <SystemTextEncodingCodePages>[8.0.0]</SystemTextEncodingCodePages>
+        <Jot>[2.1.17]</Jot>
+        <!-- Non upgradeable stuff below  -->
+        <!-- Avalonia is not easily upgradeable too  -->
+        <MaterialAvalonia>[2.5.1]</MaterialAvalonia>
+        <MessageBoxAvalonia>[2.1.0]</MessageBoxAvalonia>
+        <Avalonia>[0.10.22]</Avalonia>
+        <AvaloniaEdit>[0.10.12.2]</AvaloniaEdit>
+        <AvaloniaMaterialIcons>[1.1.10]</AvaloniaMaterialIcons>
+        <AvaloniaColorPicker>[0.10.17]</AvaloniaColorPicker>
+        <!-- 2.5.0–3.1.x early versions broke tests badly (parallelization/config behavior changed).
+     3.1.5 finally works again. Version pinned on purpose. Do not auto-upgrade blindly. -->
+        <XUnitRunnerVS>[3.1.5]</XUnitRunnerVS>
+        <!-- SixLabors should be removed at some point  -->
+        <SixLaborsImageSharp>[1.0.4]</SixLaborsImageSharp>
+        <SixLaborsImageSharpDrawing>[1.0.0-beta13.15]</SixLaborsImageSharpDrawing>
+        <SixLaborsImageSharpTextures>[0.0.0-alpha.0.132]</SixLaborsImageSharpTextures>
+    </PropertyGroup>
+    <ItemGroup>
+        <PackageReference Update="Nerdbank.GitVersioning" Condition="!Exists('packages.config')">
+            <Version>3.6.133</Version>
+            <PrivateAssets>all</PrivateAssets>
+        </PackageReference>
+    </ItemGroup>
+    <ItemGroup>
+        <!-- Probably not needed but I've got so many dependencies -->
+        <RuntimeHostConfigurationOption Include="System.Runtime.Loader.UseRidGraph" Value="true" />
+    </ItemGroup>
 </Project>

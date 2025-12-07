@@ -68,8 +68,8 @@
     <PackageReference Include="SixLabors.ImageSharp.Drawing" Version="$(SixLaborsImageSharpDrawing)" allowedVersions="$(SixLaborsImageSharpDrawing)" />
     <PackageReference Include="SixLabors.ImageSharp.Textures" Version="$(SixLaborsImageSharpTextures)" allowedVersions="$(SixLaborsImageSharpTextures)" />
     <PackageReference Include="Steamworks.NET" Version="20.1.0" />
-    <PackageReference Include="System.Security.Permissions" Version="8.0.0" />
-    <PackageReference Include="System.Text.Encoding.CodePages" Version="8.0.0" />
+    <PackageReference Include="System.Security.Permissions" Version="$(SystemSecurityPermissions)" allowedVersions="$(SystemSecurityPermissions)" />
+    <PackageReference Include="System.Text.Encoding.CodePages" Version="$(SystemTextEncodingCodePages)" allowedVersions="$(SystemTextEncodingCodePages)" />
     <PackageReference Include="UTF.Unknown" Version="2.5.1" />
   </ItemGroup>
 
