@@ -28,7 +28,7 @@ YouTube link:
 A no-commentary demonstration showing how to use the conflict solver in combination with VS Code for inspecting conflicts.
 
 Vimeo link:  
-[https://vimeo.com/443078952](https://vimeo.com/443078952](https://vimeo.com/443078952](https://vimeo.com/443078952)
+[https://vimeo.com/443078952](https://vimeo.com/443078952)
 
 ---
 
