@@ -21,7 +21,7 @@
 	<Platforms>x64</Platforms>
     <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
     <WarningsAsErrors />
-	<NoWarn>1701;1702;NU1603</NoWarn>	
+	<NoWarn>1701;1702;NU1603;CS8002</NoWarn>	
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='osx-x64|x64'">
@@ -62,8 +62,7 @@
     <PackageReference Include="Nerdbank.GitVersioning" Version="3.6.133">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-    </PackageReference>    
-    <PackageReference Include="Sajidur78.StrongNamer" Version="0.2.8" />
+    </PackageReference>
     <PackageReference Include="SimpleInjector.Packaging" Version="5.0.0" />
     <PackageReference Include="System.Linq.Async" Version="6.0.1" />
   </ItemGroup>

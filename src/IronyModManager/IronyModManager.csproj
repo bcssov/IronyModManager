@@ -25,7 +25,7 @@
     <Configurations>Debug;Release;osx-x64;linux-x64;win-x64</Configurations>
 	<PlatformTarget>x64</PlatformTarget>
 	<Platforms>x64</Platforms>
-    <NoWarn>1701;1702;NU1603</NoWarn>	
+    <NoWarn>1701;1702;NU1603;CS8002</NoWarn>	
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='osx-x64|x64'">
     <Optimize>True</Optimize>
@@ -155,10 +155,9 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="NetSparkleUpdater.SparkleUpdater"  Version="$(NetSparkleUpdaterSparkleUpdater)" allowedVersions="$(NetSparkleUpdaterSparkleUpdater)" />
+    <PackageReference Include="NetSparkleUpdater.SparkleUpdater" Version="$(NetSparkleUpdaterSparkleUpdater)" allowedVersions="$(NetSparkleUpdaterSparkleUpdater)" />
     <PackageReference Include="NLog" Version="5.2.8" />
     <PackageReference Include="ReactiveUI" Version="19.5.41" />
-    <PackageReference Include="Sajidur78.StrongNamer" Version="0.2.8" />
     <PackageReference Include="SimpleInjector" Version="5.4.4" />
     <PackageReference Include="SimpleInjector.Packaging" Version="5.0.0" />
     <PackageReference Include="SkiaSharp" Version="2.88.7" />

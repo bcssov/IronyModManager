@@ -15,7 +15,7 @@
 	<Platforms>x64</Platforms>
     <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
     <WarningsAsErrors />
-    <NoWarn>1701;1702;NU1603</NoWarn>	
+    <NoWarn>1701;1702;NU1603;CS8002</NoWarn>	
   </PropertyGroup>
 
 
@@ -74,7 +74,6 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="Sajidur78.StrongNamer" Version="0.2.8" />
     <PackageReference Include="SkiaSharp" Version="2.88.7" />
 	<PackageReference Include="Wanhjor.ObjectInspector" Version="0.4.0" />
    </ItemGroup>

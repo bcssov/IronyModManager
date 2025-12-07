@@ -16,7 +16,7 @@
 	<PlatformTarget>x64</PlatformTarget>	
 	<Platforms>x64</Platforms>
     <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
-    <NoWarn>1701;1702;NU1603</NoWarn>		
+    <NoWarn>1701;1702;NU1603;CS8002</NoWarn>	
   </PropertyGroup>
   
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='osx-x64|x64'">
@@ -60,7 +60,6 @@
 	<PackageReference Include="CommandLineParser" Version="2.9.1" />
 	<PackageReference Include="Nerdbank.GitVersioning" />
 	<PackageReference Include="NLog" Version="5.2.8" />
-	<PackageReference Include="Sajidur78.StrongNamer" Version="0.2.8" />
 	<PackageReference Include="Steamworks.NET" Version="20.1.0" />
 	<PackageReference Update="Nerdbank.GitVersioning" Version="3.6.133">
 	  <PrivateAssets>all</PrivateAssets>

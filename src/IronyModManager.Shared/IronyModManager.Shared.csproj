@@ -16,7 +16,7 @@
 	<Platforms>x64</Platforms>
     <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
     <WarningsAsErrors />
-	<NoWarn>1701;1702;NU1603</NoWarn>	
+	<NoWarn>1701;1702;NU1603;CS8002</NoWarn>	
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='osx-x64|x64'">
@@ -56,7 +56,7 @@
     <PackageReference Include="Jering.KeyValueStore" Version="1.1.0" />
     <PackageReference Include="MagicMapper" Version="14.0.0" />
     <PackageReference Include="Microsoft.Extensions.DependencyModel" Version="$(MicrosoftExtensionsDependencyModelVersion)" allowedVersions="$(MicrosoftExtensionsDependencyModelVersion)" />
-    <PackageReference Include="MimeTypes" Version="2.4.1">
+    <PackageReference Include="MimeTypes" Version="2.5.2">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
@@ -67,8 +67,7 @@
     </PackageReference>
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     <PackageReference Include="Nito.AsyncEx" Version="5.1.2" />
-    <PackageReference Include="PommaLabs.MimeTypes" Version="2.9.1" />
-    <PackageReference Include="Sajidur78.StrongNamer" Version="0.2.8" />
+    <PackageReference Include="PommaLabs.MimeTypes" Version="3.1.0" />
     <PackageReference Include="SlimMessageBus.Host.Memory" Version="2.2.3" />
     <PackageReference Include="SmartFormat" Version="3.3.2" />
     <PackageReference Include="System.Data.HashFunction.MetroHash" Version="2.0.0" />
