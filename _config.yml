@@ -2,5 +2,9 @@ theme: jekyll-theme-slate
 title: Irony Mod Manager
 description: Advanced Mod Manager for Paradox Games
 show_downloads: false
+
+url: https://bcssov.github.io/IronyModManager
+lang: en
+author: Mario
 github:
   is_project_page: true

@@ -1,0 +1,32 @@
+{%- comment -%}
+Extra SEO / social tags for Irony Mod Manager.
+This file is automatically included by jekyll-theme-slate in <head>.
+{%- endcomment -%}
+
+{%- assign page_title = page.title | default: site.title -%}
+{%- assign page_description = page.description | default: site.description -%}
+{%- assign canonical_url = site.url | append: page.url -%}
+
+<!-- Basic SEO -->
+<meta name="description" content="{{ page_description | escape }}">
+<meta name="author" content="{{ site.author | escape }}">
+<link rel="canonical" href="{{ canonical_url }}">
+
+<!-- Open Graph -->
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="{{ site.title | escape }}">
+<meta property="og:title" content="{{ page_title | escape }}">
+<meta property="og:description" content="{{ page_description | escape }}">
+<meta property="og:url" content="{{ canonical_url }}">
+
+<!-- Twitter Cards -->
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="{{ page_title | escape }}">
+<meta name="twitter:description" content="{{ page_description | escape }}">
+
+<!-- Optional: if you ever add a social preview image, set `page.og_image` or `site.og_image` -->
+{%- if page.og_image or site.og_image -%}
+  {%- assign og_image = page.og_image | default: site.og_image -%}
+  <meta property="og:image" content="{{ og_image | relative_url }}">
+  <meta name="twitter:image" content="{{ og_image | relative_url }}">
+{%- endif -%}
