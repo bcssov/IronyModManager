@@ -15,7 +15,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using DiffPlex.DiffBuilder.Model;
-using FluentAssertions;
+using AwesomeAssertions;
 using IronyModManager.Converters;
 using Xunit;
 namespace IronyModManager.Tests

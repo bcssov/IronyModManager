@@ -19,7 +19,7 @@ using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
 using AutoMapper;
-using FluentAssertions;
+using AwesomeAssertions;
 using IronyModManager.IO.Common.Readers;
 using IronyModManager.Models;
 using IronyModManager.Models.Common;

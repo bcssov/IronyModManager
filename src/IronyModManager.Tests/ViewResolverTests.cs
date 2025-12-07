@@ -14,7 +14,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-using FluentAssertions;
+using AwesomeAssertions;
 using IronyModManager.Localization;
 using IronyModManager.Tests.Common;
 using IronyModManager.Tests.Views;

@@ -16,7 +16,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using FluentAssertions;
+using AwesomeAssertions;
 using IronyModManager.Parser.DLC;
 using IronyModManager.Tests.Common;
 using Xunit;

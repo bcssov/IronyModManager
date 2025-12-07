@@ -15,7 +15,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Text;
-using FluentAssertions;
+using AwesomeAssertions;
 using IronyModManager.DI;
 using IronyModManager.Localization.Attributes;
 using IronyModManager.Localization.Attributes.Handlers;
