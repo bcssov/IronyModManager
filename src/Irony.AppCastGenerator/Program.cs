@@ -4,13 +4,14 @@
 // Created          : 09-14-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 01-28-2022
+// Last Modified On : 12-07-2025
 // ***********************************************************************
 // <copyright file="Program.cs" company="NetSparkle">
 //     NetSparkle
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
+
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -35,7 +36,7 @@ namespace Irony.AppCastGenerator
         /// <summary>
         /// The signature manager
         /// </summary>
-        private static readonly SignatureManager _signatureManager = new();
+        private static readonly SignatureManager signatureManager = new();
 
         #endregion Fields
 
@@ -59,7 +60,7 @@ namespace Irony.AppCastGenerator
         /// <returns>System.String.</returns>
         private static string GetTitleVersionFromAssembly(FileInfo fileInfo)
         {
-            return FileVersionInfo.GetVersionInfo(fileInfo.FullName).ProductVersion.Split("+", StringSplitOptions.RemoveEmptyEntries)[0];
+            return FileVersionInfo.GetVersionInfo(fileInfo.FullName).ProductVersion!.Split("+", StringSplitOptions.RemoveEmptyEntries)[0];
         }
 
         /// <summary>
@@ -87,41 +88,44 @@ namespace Irony.AppCastGenerator
         /// <param name="opts">The opts.</param>
         private static void Run(Options opts)
         {
-            // Really really lacks documentation
-            _signatureManager.SetStorageDirectory(opts.KeyLocation);
+            // Really, really lacks documentation
+            signatureManager.SetStorageDirectory(opts.KeyLocation);
 
             Environment.CurrentDirectory = AppDomain.CurrentDomain.BaseDirectory;
 
             if (opts.Export)
             {
                 Console.WriteLine("Private Key:");
-                Console.WriteLine(Convert.ToBase64String(_signatureManager.GetPrivateKey()));
+                Console.WriteLine(Convert.ToBase64String(signatureManager.GetPrivateKey()));
                 Console.WriteLine("Public Key:");
-                Console.WriteLine(Convert.ToBase64String(_signatureManager.GetPublicKey()));
+                Console.WriteLine(Convert.ToBase64String(signatureManager.GetPublicKey()));
                 return;
             }
 
             if (opts.GenerateKeys)
             {
-                var didSucceed = _signatureManager.Generate(opts.ForceRegeneration);
+                var didSucceed = signatureManager.Generate(opts.ForceRegeneration);
                 if (didSucceed)
                 {
 #pragma warning disable CA2241 // Provide correct arguments to formatting methods
+                    // ReSharper disable once FormatStringProblem
                     Console.WriteLine("Keys successfully generated", Color.Green);
 #pragma warning restore CA2241 // Provide correct arguments to formatting methods
                 }
                 else
                 {
 #pragma warning disable CA2241 // Provide correct arguments to formatting methods
+                    // ReSharper disable once FormatStringProblem
                     Console.WriteLine("Keys failed to generate", Color.Red);
 #pragma warning restore CA2241 // Provide correct arguments to formatting methods
                 }
+
                 return;
             }
 
             if (opts.BinaryToSign != null)
             {
-                var signature = _signatureManager.GetSignatureForFile(new FileInfo(opts.BinaryToSign));
+                var signature = signatureManager.GetSignatureForFile(new FileInfo(opts.BinaryToSign));
 
                 Console.WriteLine($"Signature: {signature}", Color.Green);
 
@@ -130,22 +134,24 @@ namespace Irony.AppCastGenerator
 
             if (opts.BinaryToVerify != null)
             {
-                var result = _signatureManager.VerifySignature(new FileInfo(opts.BinaryToVerify), opts.Signature);
+                var result = signatureManager.VerifySignature(new FileInfo(opts.BinaryToVerify), opts.Signature);
 
 #pragma warning disable CA2241 // Provide correct arguments to formatting methods
                 if (result)
                 {
-                    Console.WriteLine($"Signature valid", Color.Green);
+                    // ReSharper disable once FormatStringProblem
+                    Console.WriteLine("Signature valid", Color.Green);
                 }
                 else
                 {
-                    Console.WriteLine($"Signature invalid", Color.Red);
+                    // ReSharper disable once FormatStringProblem
+                    Console.WriteLine("Signature invalid", Color.Red);
                 }
 #pragma warning restore CA2241 // Provide correct arguments to formatting methods
                 return;
             }
 
-            List<string> binaries = new List<string>();
+            List<string> binaries = [];
             foreach (var item in opts.Extension.Split(",", StringSplitOptions.RemoveEmptyEntries))
             {
                 var search = $"*.{item}";
@@ -162,6 +168,7 @@ namespace Irony.AppCastGenerator
                     Console.WriteLine($"No files founds matching {search} in {opts.SourceBinaryDirectory}", Color.Yellow);
                     Environment.Exit(1);
                 }
+
                 binaries.AddRange(files);
             }
 
@@ -200,8 +207,9 @@ namespace Irony.AppCastGenerator
                     {
                         os = "osx";
                     }
+
                     //
-                    var item = new AppCastItem()
+                    var item = new AppCastItem
                     {
                         Title = titleVersionInfo,
                         DownloadLink = remoteUpdateFile,
@@ -210,7 +218,7 @@ namespace Irony.AppCastGenerator
                         PublicationDate = fileInfo.CreationTime,
                         UpdateSize = fileInfo.Length,
                         Description = "",
-                        DownloadSignature = _signatureManager.KeysExist() ? _signatureManager.GetSignatureForFile(fileInfo) : null,
+                        DownloadSignature = signatureManager.KeysExist() ? signatureManager.GetSignatureForFile(fileInfo) : null,
                         OperatingSystemString = os,
                         MIMEType = MimeTypes.GetMimeType(fileInfo.Name)
                     };
@@ -224,7 +232,6 @@ namespace Irony.AppCastGenerator
                 }
 
                 var appcastXmlDocument = XMLAppCast.GenerateAppCastXml(items, "Irony Mod Manager");
-
                 var appcastFileName = Path.Combine(outputDirectory, opts.AppCastFileName);
 
                 var dirName = Path.GetDirectoryName(appcastFileName);
@@ -232,7 +239,7 @@ namespace Irony.AppCastGenerator
                 if (!Directory.Exists(dirName))
                 {
                     Console.WriteLine("Creating {0}", dirName);
-                    Directory.CreateDirectory(dirName);
+                    Directory.CreateDirectory(dirName!);
                 }
 
                 Console.WriteLine("Writing appcast to {0}", appcastFileName);

@@ -26,8 +26,8 @@
         <SystemSecurityPermissions>[8.0.0]</SystemSecurityPermissions>
         <SystemTextEncodingCodePages>[8.0.0]</SystemTextEncodingCodePages>
         <Jot>[2.1.17]</Jot>
-        <!-- Non upgradeable stuff below  -->
-        <!-- Avalonia is not easily upgradeable too  -->
+        <!-- Non-upgradeable stuff below  -->
+        <!-- Avalonia is not easily upgradeable too -->
         <MaterialAvalonia>[2.5.1]</MaterialAvalonia>
         <MessageBoxAvalonia>[2.1.0]</MessageBoxAvalonia>
         <Avalonia>[0.10.22]</Avalonia>
@@ -35,12 +35,14 @@
         <AvaloniaMaterialIcons>[1.1.10]</AvaloniaMaterialIcons>
         <AvaloniaColorPicker>[0.10.17]</AvaloniaColorPicker>
         <!-- 2.5.0–3.1.x early versions broke tests badly (parallelization/config behavior changed).
-     3.1.5 finally works again. Version pinned on purpose. Do not auto-upgrade blindly. -->
+            3.1.5 finally works again. Version pinned on purpose. Do not auto-upgrade blindly. -->
         <XUnitRunnerVS>[3.1.5]</XUnitRunnerVS>
         <!-- SixLabors should be removed at some point  -->
         <SixLaborsImageSharp>[1.0.4]</SixLaborsImageSharp>
         <SixLaborsImageSharpDrawing>[1.0.0-beta13.15]</SixLaborsImageSharpDrawing>
         <SixLaborsImageSharpTextures>[0.0.0-alpha.0.132]</SixLaborsImageSharpTextures>
+        <!-- Updater has too many breaking changes and our logic diverged from it, we handle lots of stuff on our own anyway -->
+        <NetSparkleUpdaterSparkleUpdater >[2.3.0]</NetSparkleUpdaterSparkleUpdater>
     </PropertyGroup>
     <ItemGroup>
         <PackageReference Update="Nerdbank.GitVersioning" Condition="!Exists('packages.config')">

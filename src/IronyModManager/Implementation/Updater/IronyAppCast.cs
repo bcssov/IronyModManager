@@ -4,13 +4,14 @@
 // Created          : 09-16-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 09-20-2020
+// Last Modified On : 12-07-2025
 // ***********************************************************************
 // <copyright file="IronyAppCast.cs" company="Mario">
 //     Mario
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -37,7 +38,7 @@ namespace IronyModManager.Implementation.Updater
         /// <summary>
         /// The prerelease version tags
         /// </summary>
-        private static readonly string[] prereleaseVersionTags = new string[] { "alpha", "beta", "preview", "rc" };
+        private static readonly string[] prereleaseVersionTags = ["alpha", "beta", "preview", "rc"];
 
         /// <summary>
         /// The application cast
@@ -68,7 +69,7 @@ namespace IronyModManager.Implementation.Updater
         /// </summary>
         /// <param name="isInstallerVersion">if set to <c>true</c> [is installer version].</param>
         /// <param name="updaterService">The updater service.</param>
-        public IronyAppCast(bool isInstallerVersion, IUpdaterService updaterService) : base()
+        public IronyAppCast(bool isInstallerVersion, IUpdaterService updaterService)
         {
             appCast = new XMLAppCast();
             IsInstallerVersion = isInstallerVersion;
@@ -83,16 +84,16 @@ namespace IronyModManager.Implementation.Updater
         /// Gets a value indicating whether this instance is installer version.
         /// </summary>
         /// <value><c>true</c> if this instance is installer version; otherwise, <c>false</c>.</value>
-        public bool IsInstallerVersion { get; private set; }
+        public bool IsInstallerVersion { get; }
 
         #endregion Properties
 
         #region Methods
 
         /// <summary>
-        /// Downloads the and parse.
+        /// Downloads and parse cast file.
         /// </summary>
-        /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
+        /// <returns><c>true</c> if downloaded and parsed, <c>false</c> otherwise.</returns>
         public bool DownloadAndParse()
         {
             return appCast.DownloadAndParse();
@@ -104,17 +105,18 @@ namespace IronyModManager.Implementation.Updater
         /// <returns>List&lt;AppCastItem&gt;.</returns>
         public List<AppCastItem> GetAvailableUpdates()
         {
-            Version installed = new Version(config.InstalledVersion);
+            var installed = new Version(config.InstalledVersion);
             var signatureNeeded = Utilities.IsSignatureNeeded(signatureVerifier.SecurityMode, signatureVerifier.HasValidKeyInformation(), false);
             var allowAlphaVersions = updaterService.Get().CheckForPrerelease;
 
-            var results = appCast.Items.Where((item) =>
+            var results = appCast.Items.Where(item =>
             {
                 // Filter out prerelease tags if specified as such
                 if (!allowAlphaVersions && prereleaseVersionTags.Any(p => item.Title.Contains(p, StringComparison.OrdinalIgnoreCase)))
                 {
                     return false;
                 }
+
                 // Filter out by os
                 if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
                 {
@@ -124,14 +126,13 @@ namespace IronyModManager.Implementation.Updater
                     {
                         return false;
                     }
-                    else if (IsInstallerVersion && !fileName.Contains("setup", StringComparison.OrdinalIgnoreCase))
-                    {
-                        return false;
-                    }
-                    else if (!IsInstallerVersion && fileName.Contains("setup", StringComparison.OrdinalIgnoreCase))
-                    {
-                        return false;
-                    }
+                    else
+                        switch (IsInstallerVersion)
+                        {
+                            case true when !fileName!.Contains("setup", StringComparison.OrdinalIgnoreCase):
+                            case false when fileName!.Contains("setup", StringComparison.OrdinalIgnoreCase):
+                                return false;
+                        }
                 }
                 else if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX) && !item.IsMacOSUpdate)
                 {
@@ -141,16 +142,14 @@ namespace IronyModManager.Implementation.Updater
                 {
                     return false;
                 }
+
                 // Base validation stuff
                 if (new Version(item.Version).CompareTo(installed) <= 0)
                 {
                     return false;
                 }
-                if (signatureNeeded && string.IsNullOrEmpty(item.DownloadSignature) && !string.IsNullOrEmpty(item.DownloadLink))
-                {
-                    return false;
-                }
-                return true;
+
+                return !signatureNeeded || !string.IsNullOrEmpty(item.DownloadSignature) || string.IsNullOrEmpty(item.DownloadLink);
             }).ToList();
             return results;
         }
