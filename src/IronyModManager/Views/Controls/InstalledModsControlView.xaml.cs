@@ -4,7 +4,7 @@
 // Created          : 02-29-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 11-12-2022
+// Last Modified On : 12-07-2025
 // ***********************************************************************
 // <copyright file="InstalledModsControlView.xaml.cs" company="Mario">
 //     Mario
@@ -102,7 +102,7 @@ namespace IronyModManager.Views.Controls
                     if (item != null)
                     {
                         ViewModel!.ContextMenuMod = item.Content as IMod;
-                        menuItems = !string.IsNullOrEmpty(ViewModel.GetContextMenuModModUrl()) || !string.IsNullOrEmpty(ViewModel.GetContextMenuModModSteamUrl()) ? GetAllMenuItems() : GetActionMenuItems();
+                        menuItems = !string.IsNullOrEmpty(ViewModel.GetContextMenuModUrl()) || !string.IsNullOrEmpty(ViewModel.GetContextMenuModSteamUrl()) ? GetAllMenuItems() : GetActionMenuItems();
                     }
 
                     menuItems ??= GetStaticMenuItems();
@@ -167,13 +167,13 @@ namespace IronyModManager.Views.Controls
         private List<MenuItem> GetAllMenuItems()
         {
             var menuItems = new List<MenuItem>();
-            if (!string.IsNullOrEmpty(ViewModel!.GetContextMenuModModUrl()))
+            if (!string.IsNullOrEmpty(ViewModel!.GetContextMenuModUrl()))
             {
                 menuItems.Add(new MenuItem { Header = ViewModel.OpenUrl, Command = ViewModel.OpenUrlCommand });
                 menuItems.Add(new MenuItem { Header = ViewModel.CopyUrl, Command = ViewModel.CopyUrlCommand });
             }
 
-            if (!string.IsNullOrEmpty(ViewModel.GetContextMenuModModSteamUrl()))
+            if (!string.IsNullOrEmpty(ViewModel.GetContextMenuModSteamUrl()))
             {
                 var menuItem = new MenuItem { Header = ViewModel.OpenInSteam, Command = ViewModel.OpenInSteamCommand };
                 if (menuItems.Count == 0)
