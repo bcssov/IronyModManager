@@ -7,10 +7,6 @@
 
 ---
 
-Below is the improved, collapsible FAQ using **<details>** sections for cleaner navigation and reduced scrolling.
-
----
-
 <details>
 <summary><strong>What load order does Irony use?</strong></summary>
 
