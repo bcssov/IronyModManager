@@ -55,4 +55,4 @@ Irony can create merged mods or auto-generate merge output for compatible format
 ---
 
 For more technical details, visit the **Irony Wiki**:  
-https://github.com/bcssov/IronyModManager/wiki
+[https://github.com/bcssov/IronyModManager/wiki](https://github.com/bcssov/IronyModManager/wiki)

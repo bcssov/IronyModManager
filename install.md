@@ -66,7 +66,7 @@ If you're unsure which file to download, follow the guide below.
 # Windows 7 Support
 Windows 7 is no longer officially supported.  
 For community findings and workarounds, see:  
-https://github.com/bcssov/IronyModManager/discussions/469
+[https://github.com/bcssov/IronyModManager/discussions/469](https://github.com/bcssov/IronyModManager/discussions/469)  
 
 ---
 

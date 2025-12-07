@@ -52,8 +52,8 @@ See more details on the **[Supported Games](games.md)** page.
 
 Join the community discussions:
 
-- Official Irony Discord: https://discord.gg/t9JmY8KFrV  
-- Stellaris Modding Den: https://discord.gg/ezzCnwP7fj  
+- Official Irony Discord: [https://discord.gg/t9JmY8KFrV](https://discord.gg/t9JmY8KFrV)  
+- Stellaris Modding Den: [https://discord.gg/ezzCnwP7fj](https://discord.gg/ezzCnwP7fj)  
   *(See the #irony-mod-manager channel under Hosted Tools.)*
 
 ---
@@ -62,16 +62,16 @@ Join the community discussions:
 
 Full documentation is available on the project Wiki:
 
-👉 **https://github.com/bcssov/IronyModManager/wiki**
+👉 **[https://github.com/bcssov/IronyModManager/wiki](https://github.com/bcssov/IronyModManager/wiki)**
 
-PDF documentation and translations are linked on the **Documentation** page.
+PDF documentation and translations are linked on the **[Documentation](docs.md)** page.
 
 ---
 
 ## Issues & Bug Reports
 
 Report issues here:  
-👉 **https://github.com/bcssov/IronyModManager/issues**
+👉 **[https://github.com/bcssov/IronyModManager/issues](https://github.com/bcssov/IronyModManager/issues)**
 
 When submitting a report:
 
@@ -86,12 +86,12 @@ When submitting a report:
 - Basic introduction by OldEnt (YouTube)  
 - Conflict Solver + VS Code workflow by LordOfLA (Vimeo)
 
-See the full list on the **Tutorials** page.
+See the full list on the **[Tutorials](tutorials.md)** page.
 
 ---
 
 ## Privacy Policy
 
-https://github.com/bcssov/IronyModManager/wiki/Privacy-Policy
+You can read the Privacy Policy here:
 
----
+👉 **[Privacy Policy](https://github.com/bcssov/IronyModManager/wiki/Privacy-Policy)**

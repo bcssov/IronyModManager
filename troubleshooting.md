@@ -30,7 +30,7 @@ Each run of Irony produces a timestamped log. You usually only need the latest o
 
 Report problems on the official issue tracker:
 
-https://github.com/bcssov/IronyModManager/issues
+[https://github.com/bcssov/IronyModManager/issues](https://github.com/bcssov/IronyModManager/issues)
 
 When opening an issue, please include:
 
@@ -110,4 +110,4 @@ If you are not sure whether something is a bug or expected behaviour:
 - Ask in the community Discord  
 
 Official Irony Discord:  
-https://discord.gg/t9JmY8KFrV
+[https://discord.gg/t9JmY8KFrV](https://discord.gg/t9JmY8KFrV)

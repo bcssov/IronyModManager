@@ -19,7 +19,7 @@ These videos cover basic usage, collections, and conflict solver workflows.
 A beginner-friendly introduction covering the basic UI and workflow.
 
 YouTube link:  
-https://www.youtube.com/watch?v=98dKbDxtqQw
+[https://www.youtube.com/watch?v=98dKbDxtqQw](https://www.youtube.com/watch?v=98dKbDxtqQw)
 
 ---
 
@@ -28,7 +28,7 @@ https://www.youtube.com/watch?v=98dKbDxtqQw
 A no-commentary demonstration showing how to use the conflict solver in combination with VS Code for inspecting conflicts.
 
 Vimeo link:  
-https://vimeo.com/443078952
+[https://vimeo.com/443078952](https://vimeo.com/443078952](https://vimeo.com/443078952](https://vimeo.com/443078952)
 
 ---
 
@@ -36,7 +36,7 @@ https://vimeo.com/443078952
 
 For more detailed technical information:
 
-- Check the Wiki: https://github.com/bcssov/IronyModManager/wiki  
+- Check the Wiki: [https://github.com/bcssov/IronyModManager/wiki](https://github.com/bcssov/IronyModManager/wiki)
 - Look at the Documentation Hub: [docs.md](docs.md)  
 - Explore the FAQ for common questions: [faq.md](faq.md)  
 - Or visit the Troubleshooting section: [troubleshooting.md](troubleshooting.md)

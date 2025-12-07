@@ -22,7 +22,7 @@ Changes you make in Irony are applied directly to the game’s mod registry in a
 
 Not yet. Multi-select drag-and-drop is planned.  
 Track the feature request here:  
-https://github.com/bcssov/IronyModManager/issues/12
+[https://github.com/bcssov/IronyModManager/issues/12](https://github.com/bcssov/IronyModManager/issues/12)
 
 </details>
 
@@ -157,7 +157,7 @@ Ensure `xwayland` is installed if using X11 fallback.
 <summary><strong>Irony fails to launch on macOS Catalina.</strong></summary>
 
 See:  
-https://github.com/bcssov/IronyModManager/issues/119
+[https://github.com/bcssov/IronyModManager/issues/19](https://github.com/bcssov/IronyModManager/issues/19)
 
 This is caused by Apple’s notarization and quarantine system.
 
@@ -202,8 +202,8 @@ Digitally signed binaries would prevent false positives but are expensive.
 
 Install Microsoft Visual C++ 2017 Redistributable:
 
-- x86: https://aka.ms/vs/16/release/vc_redist.x86.exe  
-- x64: https://aka.ms/vs/16/release/vc_redist.x64.exe
+- x86: [https://aka.ms/vs/16/release/vc_redist.x86.exe](https://aka.ms/vs/16/release/vc_redist.x86.exe)
+- x64: [https://aka.ms/vs/16/release/vc_redist.x64.exe](https://aka.ms/vs/16/release/vc_redist.x64.exe)
 
 </details>
 
