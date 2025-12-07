@@ -18,10 +18,10 @@
     <PathMap>$(MSBuildProjectDirectory)=$(MSBuildProjectName)</PathMap>
   </PropertyGroup>  
   <PropertyGroup>
-    <MicrosoftExtensionsDependencyModelVersion>[8.0.0]</MicrosoftExtensionsDependencyModelVersion>
+    <MicrosoftExtensionsDependencyModelVersion>[8.0.2]</MicrosoftExtensionsDependencyModelVersion>
     <MicrosoftNETCorePlatformsVersion>[8.0.0-preview.7.23375.6]</MicrosoftNETCorePlatformsVersion>    
-    <MicrosoftExtensionsConfigurationBinder>[8.0.1]</MicrosoftExtensionsConfigurationBinder>
-    <MicrosoftExtensionsConfigurationJson>[8.0.0]</MicrosoftExtensionsConfigurationJson>
+    <MicrosoftExtensionsConfigurationBinder>[8.0.2]</MicrosoftExtensionsConfigurationBinder>
+    <MicrosoftExtensionsConfigurationJson>[8.0.1]</MicrosoftExtensionsConfigurationJson>
 	<Jot>[2.1.17]</Jot>
 	<!-- Non upgradeable stuff below  -->
 	<!-- Avalonia is not easily upgradeable too  -->
