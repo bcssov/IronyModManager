@@ -1,71 +1,97 @@
-Irony Mod Manager is a new advanced mod manager for Paradox Games, it started out as a Stellaris oriented Mod Manager at first with plans to add additional games later. Not all of the advanced Stellaris equivalent features might be available for most supported games but that might change depending on community support in these games. In order to have a fully operational conflict solver Irony needs to understand the game structure and whether certain game folders utilize FIOS\LIOS rules.
+<p align="center">
+  <img src="img/logo.png" alt="Irony Mod Manager Logo" width="220">
+</p>
 
-### Supported Games
-* Crusader Kings III
-* Europa Universalis IV
-* Hearts of Iron IV
-* Imperator Rome
-* Star Trek: Infinite
-* Stellaris
-* Victoria 3
+<p align="center">
+  <strong>Advanced Mod Manager for Paradox Games</strong>
+</p>
 
-Check out the detailed overview on the [wiki](https://github.com/bcssov/IronyModManager/wiki).
+---
 
-### Download
-* Latest stable version: [v1.26.271](https://github.com/bcssov/IronyModManager/releases/tag/v1.26.271)
+## Navigation
+[Home](index.md) • [Install](install.md) • [Supported Games](games.md) • [Documentation](docs.md) • [FAQ](faq.md) • [Troubleshooting](troubleshooting.md) • [Tutorials](tutorials.md)
 
+---
 
-### Discord
-[https://discord.gg/t9JmY8KFrV](https://discord.gg/t9JmY8KFrV)
+# Irony Mod Manager
 
-Or until recently what used to be primary discord over at Stellaris Modding Den: [https://discord.gg/ezzCnwP7fj](https://discord.gg/ezzCnwP7fj) where under hosted tools you can find #irony-mod-manager channel.
+Irony Mod Manager is a powerful, high-performance and fully moddable alternative to the official Paradox launchers.  
+Originally built for Stellaris, it now supports multiple Clausewitz and Jomini engine games with deep integration and mod conflict awareness.
 
-### Translations
-Translation wrong? Want to help? See [here](https://github.com/bcssov/IronyModManager/discussions/231).
+Irony understands game structures, FIOS/LIOS rules, and provides deterministic load order management — enabling a professional modding workflow for both new and advanced users.
 
-### New users
-Check this [checklist](https://github.com/bcssov/IronyModManager/wiki/New-User-Checklist) if you are a first time user of Irony.
+---
 
-### Documentation
-Documentation is hosted on the [wiki](https://github.com/bcssov/IronyModManager/wiki). If you're looking for PDF Documentation see [here](https://github.com/bcssov/IronyModManager/discussions/210).
+## 🔽 Download
 
-### Issues\Bugs
-Reports issues and bugs [here](https://github.com/bcssov/IronyModManager/issues). 
-* Be sure to include as much detailed information as you can.
-* Be sure to include steps to reproduce the issue.
-* Be sure to provide logs if you report crashes. Logs can be found in the %AppData%\Mario\IronyModManager-Logs directory.
+Always download the latest version here:
 
-### Video Tutorials
-Made by OldEnt:
-* Basic intro tutorial: [Watch on Youtube](https://www.youtube.com/watch?v=98dKbDxtqQw)
+👉 **[Latest Release](https://github.com/bcssov/IronyModManager/releases/latest)**
 
-Made by LordOfLA:
-* Video without any captions showing off how to use Conflict Solver in combination with VS Code: [Watch on Vimeo](https://vimeo.com/443078952) 
+If you're unsure which file to choose, see the **Install** page for a breakdown of each platform.
 
-### Which file should I download?
-##### Windows
-- Portable version: **win-x64.zip**
-- Installer version: **win-x64-setup.zip**
+---
 
-##### Mac
-- Portable version: **osx-x64.zip**
+## Supported Games
 
-##### Linux
-- Portable version: **linux-x64.zip**
+Irony currently supports:
 
-### Run Instructions
-##### Windows
-- Portable version: Download and unpack somewhere **win-x64.zip**, locate in the folder **IronyModManager.exe** and double click it.
-- Installer version: Unpack **win-x64-setup.zip** and double click **win-x64-setup.exe** and follow on screen instructions.
+- Crusader Kings III  
+- Europa Universalis IV  
+- Hearts of Iron IV  
+- Imperator: Rome  
+- Star Trek: Infinite  
+- Stellaris  
+- Victoria 3  
 
-##### Mac
-- Portable version: Extract the **osx.zip** file to a location you want Irony installed to. Open Terminal.app and cd to the directory you installed to. Run ```chmod +x IronyModManager```. That will allow you to execute the app. Then you can either start the app in Terminal.app with the command ```./IronyModManger``` (the ./ are important!) or double-click the file in Finder.
+See more details on the **[Supported Games](games.md)** page.
 
-##### Linux
-- Portable version: Extract the **linux.zip** file somewhere that you'd like to have Irony installed. Navigate to the folder where you extracted Irony and run the ```chmod +x IronyModManager``` command. That will allow you to execute the app. Finally you can run the app using the ```./IronyModManager``` command.
+---
 
-### Win 7 Support
-Please see [here](https://github.com/bcssov/IronyModManager/discussions/469). 
+## Discord
 
-### Privacy Policy
-Please see [here](https://github.com/bcssov/IronyModManager/wiki/Privacy-Policy).
+Join the community discussions:
+
+- Official Irony Discord: https://discord.gg/t9JmY8KFrV  
+- Stellaris Modding Den: https://discord.gg/ezzCnwP7fj  
+  *(See the #irony-mod-manager channel under Hosted Tools.)*
+
+---
+
+## Documentation
+
+Full documentation is available on the project Wiki:
+
+👉 **https://github.com/bcssov/IronyModManager/wiki**
+
+PDF documentation and translations are linked on the **Documentation** page.
+
+---
+
+## Issues & Bug Reports
+
+Report issues here:  
+👉 **https://github.com/bcssov/IronyModManager/issues**
+
+When submitting a report:
+
+- Include detailed steps to reproduce  
+- Attach logs (located in `%AppData%\Mario\IronyModManager-Logs`)  
+- List your OS, game version, mod configuration if relevant  
+
+---
+
+## Tutorials
+
+- Basic introduction by OldEnt (YouTube)  
+- Conflict Solver + VS Code workflow by LordOfLA (Vimeo)
+
+See the full list on the **Tutorials** page.
+
+---
+
+## Privacy Policy
+
+https://github.com/bcssov/IronyModManager/wiki/Privacy-Policy
+
+---
