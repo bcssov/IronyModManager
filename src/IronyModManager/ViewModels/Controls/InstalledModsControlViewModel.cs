@@ -4,7 +4,7 @@
 // Created          : 02-29-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 11-04-2025
+// Last Modified On : 12-07-2025
 // ***********************************************************************
 // <copyright file="InstalledModsControlViewModel.cs" company="Mario">
 //     Mario
@@ -514,10 +514,10 @@ namespace IronyModManager.ViewModels.Controls
         #region Methods
 
         /// <summary>
-        /// Gets the context menu mod mod steam URL.
+        /// Gets the context menu mod steam URL.
         /// </summary>
         /// <returns>System.String.</returns>
-        public virtual string GetContextMenuModModSteamUrl()
+        public virtual string GetContextMenuModSteamUrl()
         {
             if (ContextMenuMod != null)
             {
@@ -529,10 +529,10 @@ namespace IronyModManager.ViewModels.Controls
         }
 
         /// <summary>
-        /// Gets the context menu mod mod URL.
+        /// Gets the context menu mod URL.
         /// </summary>
         /// <returns>System.String.</returns>
-        public virtual string GetContextMenuModModUrl()
+        public virtual string GetContextMenuModUrl()
         {
             if (ContextMenuMod != null)
             {
@@ -890,15 +890,12 @@ namespace IronyModManager.ViewModels.Controls
                 {
                     Observable.Merge(ModNameSortOrder.SortCommand.Select(_ => ModNameKey),
                         ModVersionSortOrder.SortCommand.Select(_ => ModVersionKey),
-                        ModSelectedSortOrder.SortCommand.Select(_ => ModSelectedKey)).Subscribe(s =>
-                    {
-                        ApplySort(s);
-                    }).DisposeWith(disposables);
+                        ModSelectedSortOrder.SortCommand.Select(_ => ModSelectedKey)).Subscribe(ApplySort).DisposeWith(disposables);
                 }).DisposeWith(disposables);
 
             OpenUrlCommand = ReactiveCommand.CreateFromTask(async () =>
             {
-                var url = GetContextMenuModModUrl();
+                var url = GetContextMenuModUrl();
                 if (!string.IsNullOrWhiteSpace(url))
                 {
                     await appAction.OpenAsync(url).ConfigureAwait(true);
@@ -907,7 +904,7 @@ namespace IronyModManager.ViewModels.Controls
 
             CopyUrlCommand = ReactiveCommand.CreateFromTask(async () =>
             {
-                var url = GetContextMenuModModUrl();
+                var url = GetContextMenuModUrl();
                 if (!string.IsNullOrWhiteSpace(url))
                 {
                     await appAction.CopyAsync(url).ConfigureAwait(true);
@@ -916,10 +913,24 @@ namespace IronyModManager.ViewModels.Controls
 
             OpenInSteamCommand = ReactiveCommand.CreateFromTask(async () =>
             {
-                var url = GetContextMenuModModSteamUrl();
+                var url = GetContextMenuModSteamUrl();
                 if (!string.IsNullOrWhiteSpace(url))
                 {
-                    await appAction.OpenAsync(url).ConfigureAwait(true);
+                    var args = gameService.GetLaunchSettings(ActiveGame);
+                    var launchDefault = true;
+                    if (gameService.IsFlatpakSteamGame(args))
+                    {
+                        // ReSharper disable once StringLiteralTypo
+                        if (await appAction.OpenFlatpakAsync("com.valvesoftware.Steam", args.ExecutableLocation))
+                        {
+                            launchDefault = false;
+                        }
+                    }
+
+                    if (launchDefault)
+                    {
+                        await appAction.OpenAsync(url).ConfigureAwait(true);
+                    }
                 }
             }).DisposeWith(disposables);
 

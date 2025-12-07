@@ -4,7 +4,7 @@
 // Created          : 03-03-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 01-18-2025
+// Last Modified On : 12-07-2025
 // ***********************************************************************
 // <copyright file="CollectionModsControlViewModel.cs" company="Mario">
 //     Mario
@@ -178,7 +178,8 @@ namespace IronyModManager.ViewModels.Controls
         private IGame activeGame;
 
         /// <summary>
-        /// The enable all toggled state
+        // ReSharper disable once GrammarMistakeInComment
+        /// The enable all toggled state flag
         /// </summary>
         private bool enableAllToggledState;
 
@@ -1828,12 +1829,26 @@ namespace IronyModManager.ViewModels.Controls
                 }
             }).DisposeWith(disposables);
 
-            OpenInSteamCommand = ReactiveCommand.Create(() =>
+            OpenInSteamCommand = ReactiveCommand.CreateFromTask(async () =>
             {
                 var url = GetContextMenuModSteamUrl();
                 if (!string.IsNullOrWhiteSpace(url))
                 {
-                    appAction.OpenAsync(url).ConfigureAwait(true);
+                    var args = gameService.GetLaunchSettings(activeGame);
+                    var launchDefault = true;
+                    if (gameService.IsFlatpakSteamGame(args))
+                    {
+                        // ReSharper disable once StringLiteralTypo
+                        if (await appAction.OpenFlatpakAsync("com.valvesoftware.Steam", args.ExecutableLocation))
+                        {
+                            launchDefault = false;
+                        }
+                    }
+
+                    if (launchDefault)
+                    {
+                        await appAction.OpenAsync(url).ConfigureAwait(true);
+                    }
                 }
             }).DisposeWith(disposables);
 
