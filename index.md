@@ -37,7 +37,8 @@ If you're unsure which file to choose, see the **Install** page for a breakdown 
 Irony currently supports:
 
 - Crusader Kings III  
-- Europa Universalis IV  
+- Europa Universalis IV
+- Europa Universalis V
 - Hearts of Iron IV  
 - Imperator: Rome  
 - Star Trek: Infinite  

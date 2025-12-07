@@ -20,6 +20,7 @@ Below is the **accurate and authoritative support matrix** for Irony.
 |--------------------|----------------|----------------------|-------------|
 | Crusader Kings III | Yes            | No                   | Yes         |
 | Europa Universalis IV | Yes        | No                   | Yes         |
+| Europa Universalis V | Yes        | No                   | Yes         |
 | Hearts of Iron IV  | Yes            | Analysis Only        | Yes         |
 | Imperator: Rome    | Yes            | No                   | Yes         |
 | Star Trek: Infinite | Yes           | No                   | Yes         |
