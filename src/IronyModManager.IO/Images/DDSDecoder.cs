@@ -4,13 +4,14 @@
 // Created          : 02-17-2021
 //
 // Last Modified By : Mario
-// Last Modified On : 06-03-2022
+// Last Modified On : 12-07-2025
 // ***********************************************************************
 // <copyright file="DDSDecoder.cs" company="Mario">
 //     Mario
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
+
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -20,7 +21,7 @@ using BCnEncoder.Decoder;
 using BCnEncoder.Decoder.Options;
 using BCnEncoder.Shared;
 using BCnEncoder.Shared.ImageFiles;
-using Microsoft.Toolkit.HighPerformance;
+using CommunityToolkit.HighPerformance;
 using Pfim;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
@@ -46,29 +47,34 @@ namespace IronyModManager.IO.Images
         {
             var ddsDecoder = new SixLabors.ImageSharp.Textures.Formats.Dds.DdsDecoder();
             var texture = ddsDecoder.DecodeTexture(SixLabors.ImageSharp.Textures.Configuration.Default, stream);
-            if (texture is CubemapTexture cubemapTexture)
+            switch (texture)
             {
-                var right = cubemapTexture.PositiveX.MipMaps.FirstOrDefault().GetImage();
-                var left = cubemapTexture.NegativeX.MipMaps.FirstOrDefault().GetImage();
-                var top = cubemapTexture.PositiveY.MipMaps.FirstOrDefault().GetImage();
-                var bottom = cubemapTexture.NegativeY.MipMaps.FirstOrDefault().GetImage();
-                var front = cubemapTexture.PositiveZ.MipMaps.FirstOrDefault().GetImage();
-                var back = cubemapTexture.NegativeZ.MipMaps.FirstOrDefault().GetImage();
-                var image = GetCubeMap(right, left, top, bottom, front, back);
-                return Task.FromResult(image);
-            }
-            else if (texture is FlatTexture flatTexture)
-            {
-                // Dxt5 implementation has problems in this library (also the struct is internal)
-                var mipMap = flatTexture.MipMaps.FirstOrDefault();
-                if (!mipMap.GetType().FullName.Contains("SixLabors.ImageSharp.Textures.TextureFormats.Decoding.Dxt5"))
+                case CubemapTexture cubemapTexture:
                 {
-                    var image = mipMap.GetImage();
+                    var right = cubemapTexture.PositiveX.MipMaps.FirstOrDefault()!.GetImage();
+                    var left = cubemapTexture.NegativeX.MipMaps.FirstOrDefault()!.GetImage();
+                    var top = cubemapTexture.PositiveY.MipMaps.FirstOrDefault()!.GetImage();
+                    var bottom = cubemapTexture.NegativeY.MipMaps.FirstOrDefault()!.GetImage();
+                    var front = cubemapTexture.PositiveZ.MipMaps.FirstOrDefault()!.GetImage();
+                    var back = cubemapTexture.NegativeZ.MipMaps.FirstOrDefault()!.GetImage();
+                    var image = GetCubeMap(right, left, top, bottom, front, back);
                     return Task.FromResult(image);
+                }
+                case FlatTexture flatTexture:
+                {
+                    // Dxt5 implementation has problems in this library (also the struct is internal)
+                    var mipMap = flatTexture.MipMaps.FirstOrDefault();
+                    if (mipMap != null && !mipMap.GetType().FullName!.Contains("SixLabors.ImageSharp.Textures.TextureFormats.Decoding.Dxt5"))
+                    {
+                        var image = mipMap.GetImage();
+                        return Task.FromResult(image);
+                    }
+
+                    break;
                 }
             }
 
-            return Task.FromResult((Image)null);
+            return Task.FromResult<Image>(null);
         }
 
         /// <summary>
@@ -123,6 +129,7 @@ namespace IronyModManager.IO.Images
                 var bcnImage = await decoder.Decode2DAsync(file);
                 image = ColorMemoryToImage(bcnImage);
             }
+
             return image;
         }
 
@@ -140,8 +147,8 @@ namespace IronyModManager.IO.Images
                 return image.Data;
             }
 
-            byte[] newData = new byte[image.Height * tightStride];
-            for (int i = 0; i < image.Height; i++)
+            var newData = new byte[image.Height * tightStride];
+            for (var i = 0; i < image.Height; i++)
             {
                 Buffer.BlockCopy(image.Data, i * image.Stride, newData, i * tightStride, tightStride);
             }
@@ -166,6 +173,7 @@ namespace IronyModManager.IO.Images
                 var c = decodedPixels[i];
                 pixels[i] = new Rgba32(c.r, c.g, c.b, c.a);
             }
+
             return output;
         }
 
@@ -181,6 +189,7 @@ namespace IronyModManager.IO.Images
             // Copied from BCnEncoder due to protection level
             var format = file.header.ddsPixelFormat.IsDxt10Format ? file.dx10Header.dxgiFormat : file.header.ddsPixelFormat.DxgiFormat;
 
+            // ReSharper disable once SwitchStatementHandlesSomeKnownEnumValuesWithDefault
             switch (format)
             {
                 case DxgiFormat.DxgiFormatR8Unorm:
@@ -198,40 +207,47 @@ namespace IronyModManager.IO.Images
                     return CompressionFormat.Bgra;
 
                 case DxgiFormat.DxgiFormatBc1Unorm:
+
                 case DxgiFormat.DxgiFormatBc1UnormSrgb:
+
                 case DxgiFormat.DxgiFormatBc1Typeless:
-                    if (file.header.ddsPixelFormat.dwFlags.HasFlag(PixelFormatFlags.DdpfAlphaPixels))
+                    if (file.header.ddsPixelFormat.dwFlags.HasFlag(PixelFormatFlags.DdpfAlphaPixels) || decoderInputOptions.DdsBc1ExpectAlpha)
                     {
                         return CompressionFormat.Bc1WithAlpha;
                     }
 
-                    if (decoderInputOptions.DdsBc1ExpectAlpha)
-                    {
-                        return CompressionFormat.Bc1WithAlpha;
-                    }
                     return CompressionFormat.Bc1;
 
                 case DxgiFormat.DxgiFormatBc2Unorm:
+
                 case DxgiFormat.DxgiFormatBc2UnormSrgb:
+
                 case DxgiFormat.DxgiFormatBc2Typeless:
                     return CompressionFormat.Bc2;
 
                 case DxgiFormat.DxgiFormatBc3Unorm:
+
                 case DxgiFormat.DxgiFormatBc3UnormSrgb:
+
                 case DxgiFormat.DxgiFormatBc3Typeless:
                     return CompressionFormat.Bc3;
 
                 case DxgiFormat.DxgiFormatBc4Unorm:
+
                 case DxgiFormat.DxgiFormatBc4Snorm:
+
                 case DxgiFormat.DxgiFormatBc4Typeless:
                     return CompressionFormat.Bc4;
 
                 case DxgiFormat.DxgiFormatBc5Unorm:
+
                 case DxgiFormat.DxgiFormatBc5Snorm:
+
                 case DxgiFormat.DxgiFormatBc5Typeless:
                     return CompressionFormat.Bc5;
 
                 case DxgiFormat.DxgiFormatBc6HTypeless:
+
                 case DxgiFormat.DxgiFormatBc6HUf16:
                     return CompressionFormat.Bc6U;
 
@@ -239,7 +255,9 @@ namespace IronyModManager.IO.Images
                     return CompressionFormat.Bc6S;
 
                 case DxgiFormat.DxgiFormatBc7Unorm:
+
                 case DxgiFormat.DxgiFormatBc7UnormSrgb:
+
                 case DxgiFormat.DxgiFormatBc7Typeless:
                     return CompressionFormat.Bc7;
 
