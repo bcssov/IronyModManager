@@ -4,7 +4,7 @@
 // Created          : 04-30-2021
 //
 // Last Modified By : Mario
-// Last Modified On : 12-05-2025
+// Last Modified On : 12-07-2025
 // ***********************************************************************
 // <copyright file="DiskOperations.cs" company="Mario">
 //     Mario
@@ -80,9 +80,39 @@ namespace IronyModManager.IO.Common
         public static string ResolveStoragePath()
         {
             var path = DIResolver.Get<IDomainConfiguration>().GetOptions().App.StoragePath;
-            var expanded = Environment.ExpandEnvironmentVariables(path);
+            var segments = path.StandardizeDirectorySeparator().Split(Path.DirectorySeparatorChar, StringSplitOptions.RemoveEmptyEntries);
+            var expanded = Path.Combine(segments.Select(ResolveEnvironmentVariable).ToArray());
             var resolved = Path.GetFullPath(expanded, AppDomain.CurrentDomain.BaseDirectory).StandardizeDirectorySeparator();
             return resolved;
+        }
+
+        /// <summary>
+        /// Resolves the environment variable.
+        /// </summary>
+        /// <param name="variable">The variable.</param>
+        /// <returns>System.String.</returns>
+        private static string ResolveEnvironmentVariable(string variable)
+        {
+            if (string.IsNullOrEmpty(variable))
+            {
+                return variable;
+            }
+
+            if (variable.StartsWith('$'))
+            {
+                var name = variable.TrimStart('$');
+                var value = Environment.GetEnvironmentVariable(name);
+                return value ?? variable;
+            }
+
+            if (variable.StartsWith('%') && variable.EndsWith('%'))
+            {
+                var name = variable.Substring(1, variable.Length - 2);
+                var value = Environment.GetEnvironmentVariable(name);
+                return value ?? variable;
+            }
+
+            return variable;
         }
 
         #endregion Methods
