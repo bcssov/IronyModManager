@@ -4,7 +4,7 @@
 // Created          : 01-10-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 12-05-2025
+// Last Modified On : 12-08-2025
 // ***********************************************************************
 // <copyright file="Program.cs" company="IronyModManager">
 //     Copyright (c) Mario. All rights reserved.
@@ -238,7 +238,7 @@ namespace IronyModManager
         {
             LogManager.Setup().SetupExtensions(s => s.RegisterTarget("IronyFile", typeof(Log.IronyFileTarget)));
             var logConfig = LogManager.Configuration;
-            logConfig.Variables["storageRoot"] = IO.Common.DiskOperations.ResolveStoragePath();
+            logConfig!.Variables["storageRoot"] = IO.Common.DiskOperations.ResolveStoragePath();
             LogManager.ReconfigExistingLoggers();
         }
 

@@ -59,7 +59,7 @@
   <ItemGroup>
 	<PackageReference Include="CommandLineParser" Version="2.9.1" />
 	<PackageReference Include="Nerdbank.GitVersioning" />
-	<PackageReference Include="NLog" Version="5.2.8" />
+	<PackageReference Include="NLog" Version="6.0.6" />
 	<PackageReference Update="Nerdbank.GitVersioning" Version="3.6.133">
 	  <PrivateAssets>all</PrivateAssets>
 	  <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
