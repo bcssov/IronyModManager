@@ -26,7 +26,9 @@ Irony understands game structures, FIOS/LIOS rules, and provides deterministic l
 
 Always download the latest version here:
 
-👉 **[Latest Release](https://github.com/bcssov/IronyModManager/releases/latest)**
+👉 **[Stable Release (recommended)](https://github.com/bcssov/IronyModManager/releases/latest)**
+
+👉 **[Pre-Release / Alpha Builds](https://github.com/bcssov/IronyModManager/releases/tag/v1.27.141-alpha)**
 
 If you're unsure which file to choose, see the **Install** page for a breakdown of each platform.
 
