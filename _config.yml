@@ -6,5 +6,12 @@ show_downloads: false
 url: https://bcssov.github.io/IronyModManager
 lang: en
 author: Mario
+
 github:
   is_project_page: true
+
+markdown: CommonMarkGhPages
+
+commonmark:
+  options: ["UNSAFE", "SMART", "FOOTNOTES"]
+  extensions: ["strikethrough", "autolink", "table"]
