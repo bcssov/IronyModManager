@@ -25,7 +25,7 @@
     }, {
         "DirectoryPath": "common\\ai_peace",
         "PreferredParser": "DefaultParser"
-    }, 
+    }, {
         "DirectoryPath": "common\\ai_navy\\fleet",
         "PreferredParser": "DefaultParser"
     }, {
