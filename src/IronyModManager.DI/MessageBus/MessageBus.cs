@@ -1,11 +1,10 @@
-﻿
-// ***********************************************************************
+﻿// ***********************************************************************
 // Assembly         : IronyModManager.DI
 // Author           : Mario
 // Created          : 06-10-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-25-2023
+// Last Modified On : 12-08-2025
 // ***********************************************************************
 // <copyright file="MessageBus.cs" company="Mario">
 //     Mario
@@ -15,12 +14,12 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using IronyModManager.Shared.MessageBus;
 
 namespace IronyModManager.DI.MessageBus
 {
-
     /// <summary>
     /// Class MessageBus.
     /// Implements the <see cref="IronyModManager.Shared.MessageBus.IMessageBus" />
@@ -92,6 +91,7 @@ namespace IronyModManager.DI.MessageBus
             {
                 return Task.CompletedTask;
             }
+
             return messageBus.Publish(message);
         }
 
