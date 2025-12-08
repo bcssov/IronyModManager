@@ -65,7 +65,7 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.4" />
     <PackageReference Include="Nito.AsyncEx" Version="5.1.2" />
     <PackageReference Include="PommaLabs.MimeTypes" Version="3.1.0" />
     <PackageReference Include="SlimMessageBus.Host.Memory" Version="$(SlimMessageBusHost)" allowedVersions="$(SlimMessageBusHost)" />
