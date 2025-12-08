@@ -61,6 +61,7 @@
     </PackageReference>
     <PackageReference Include="Newtonsoft.Json" Version="13.0.4" />
     <PackageReference Include="Pfim" Version="0.11.4" />
+    <PackageReference Include="ProDotNetZip" Version="1.20.0" />
     <PackageReference Include="SharpCompress" Version="0.42.0" />
     <PackageReference Include="SimpleInjector.Packaging" Version="5.5.0" />
     <PackageReference Include="SixLabors.ImageSharp" Version="$(SixLaborsImageSharp)" allowedVersions="$(SixLaborsImageSharp)" />
@@ -81,9 +82,6 @@
   <ItemGroup>
     <Reference Include="LiteDB">
       <HintPath>..\..\References\Direct\LiteDB.dll</HintPath>
-    </Reference>
-    <Reference Include="ProDotNetZip">
-      <HintPath>..\..\References\Direct\ProDotNetZip.dll</HintPath>
     </Reference>
     <Reference Include="Steamworks.NET">
       <HintPath>..\..\References\Conditional\Steamworks\.Net\Windows\Steamworks.NET.dll</HintPath>
