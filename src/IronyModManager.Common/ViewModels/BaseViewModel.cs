@@ -4,15 +4,17 @@
 // Created          : 01-10-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 11-19-2020
+// Last Modified On : 12-08-2025
 // ***********************************************************************
 // <copyright file="BaseViewModel.cs" company="Mario">
 //     Mario
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
+
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reactive.Disposables;
 using System.Threading.Tasks;
 using IronyModManager.Common.Events;
@@ -54,7 +56,7 @@ namespace IronyModManager.Common.ViewModels
         {
             Activator = DIResolver.Get<ViewModelActivator>();
             MessageBus = DIResolver.Get<Shared.MessageBus.IMessageBus>();
-            this.WhenActivated((CompositeDisposable disposables) =>
+            this.WhenActivated(disposables =>
             {
                 Disposables = disposables;
                 OnActivated(disposables);
@@ -119,7 +121,7 @@ namespace IronyModManager.Common.ViewModels
         /// <param name="methodName">Name of the method.</param>
         public void OnPropertyChanged(string methodName)
         {
-            IReactiveObjectExtensions.RaisePropertyChanged(this, methodName);
+            this.RaisePropertyChanged(methodName);
         }
 
         /// <summary>
@@ -128,7 +130,7 @@ namespace IronyModManager.Common.ViewModels
         /// <param name="methodName">Name of the method.</param>
         public void OnPropertyChanging(string methodName)
         {
-            IReactiveObjectExtensions.RaisePropertyChanging(this, methodName);
+            this.RaisePropertyChanging(methodName);
         }
 
         /// <summary>
@@ -179,13 +181,7 @@ namespace IronyModManager.Common.ViewModels
         /// <returns>Task.</returns>
         protected virtual async Task TriggerOverlayAsync(long id, bool isVisible, string message = Constants.EmptyParam, string progress = Constants.EmptyParam)
         {
-            var args = new OverlayProgressEvent()
-            {
-                Id = id,
-                IsVisible = isVisible,
-                Message = message,
-                MessageProgress = progress
-            };
+            var args = new OverlayProgressEvent { Id = id, IsVisible = isVisible, Message = message, MessageProgress = progress };
             await MessageBus.PublishAsync(args).ConfigureAwait(false);
             await Task.Run(() =>
             {
@@ -195,17 +191,14 @@ namespace IronyModManager.Common.ViewModels
         }
 
         /// <summary>
-        /// Triggers the prevent shutdown.
+        /// Sends a message which prevents shutdown.
         /// </summary>
-        /// <param name="cannotShutdown">if set to <c>true</c> [cannot shutdown].</param>
+        /// <param name="cannotShutdown">if set to <c>true</c> prevents program shutdown.</param>
         protected virtual void TriggerPreventShutdown(bool cannotShutdown)
         {
             Task.Run(() =>
             {
-                var args = new ShutdownStateEventArgs()
-                {
-                    PreventShutdown = cannotShutdown
-                };
+                var args = new ShutdownStateEventArgs { PreventShutdown = cannotShutdown };
                 ReactiveUI.MessageBus.Current.SendMessage(args);
             }).ConfigureAwait(false);
         }
