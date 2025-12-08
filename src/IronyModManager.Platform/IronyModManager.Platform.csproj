@@ -74,8 +74,8 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="SkiaSharp" Version="2.88.7" />
-	<PackageReference Include="Wanhjor.ObjectInspector" Version="0.4.0" />
+    <PackageReference Include="SkiaSharp" Version="$(SkiaSharp)" allowedVersions="$(SkiaSharp)" />
+    <PackageReference Include="Wanhjor.ObjectInspector" Version="0.4.0" />
    </ItemGroup>
   
    <ItemGroup>

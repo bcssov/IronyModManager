@@ -60,7 +60,7 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="ReactiveUI" Version="22.3.1" />
-    <PackageReference Include="SkiaSharp" Version="2.88.7" />
+    <PackageReference Include="SkiaSharp" Version="$(SkiaSharp)" allowedVersions="$(SkiaSharp)" />
   </ItemGroup>
 
   <ItemGroup>

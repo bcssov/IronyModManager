@@ -45,6 +45,9 @@
         <NetSparkleUpdaterSparkleUpdater>[2.3.0]</NetSparkleUpdaterSparkleUpdater>
         <!-- Minor version updates keep breaking the API; sticking to 2.2.3 -->
         <SlimMessageBusHost>[2.2.3]</SlimMessageBusHost>
+        <!-- SkiaSharp stays on 2.88.x because Avalonia 0.10.x depends on that API surface.
+            Safe patch bump within same minor version. -->
+        <SkiaSharp>[2.88.9]</SkiaSharp>
     </PropertyGroup>
     <ItemGroup>
         <PackageReference Update="Nerdbank.GitVersioning" Condition="!Exists('packages.config')">
