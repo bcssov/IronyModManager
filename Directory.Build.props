@@ -42,9 +42,9 @@
         <SixLaborsImageSharpDrawing>[1.0.0-beta13.15]</SixLaborsImageSharpDrawing>
         <SixLaborsImageSharpTextures>[0.0.0-alpha.0.132]</SixLaborsImageSharpTextures>
         <!-- Updater has too many breaking changes and our logic diverged from it, we handle lots of stuff on our own anyway -->
-        <NetSparkleUpdaterSparkleUpdater >[2.3.0]</NetSparkleUpdaterSparkleUpdater>
+        <NetSparkleUpdaterSparkleUpdater>[2.3.0]</NetSparkleUpdaterSparkleUpdater>
         <!-- Minor version updates keep breaking the API; sticking to 2.2.3 -->
-        <SlimMessageBusHost >[2.2.3]</SlimMessageBusHost>
+        <SlimMessageBusHost>[2.2.3]</SlimMessageBusHost>
     </PropertyGroup>
     <ItemGroup>
         <PackageReference Update="Nerdbank.GitVersioning" Condition="!Exists('packages.config')">
