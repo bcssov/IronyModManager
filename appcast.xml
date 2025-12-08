@@ -83,5 +83,61 @@
 			<pubDate>Mon, 01 Dec 2025 21:56:16 +01:00</pubDate>
 			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.26.271/win-x64.zip" sparkle:version="1.26.271.55411" sparkle:shortVersionString="1.26.271" length="106917167" sparkle:os="windows" type="application/zip" sparkle:signature="iSXlD7IPDhFsWQoC823l2yACoQ5s+oxPCkxsjPjp3DfVolNgcQIVvjXpSGR3Mk9Tk3EZY6zoK69mnUdgDFi4DQ=="/>
 		</item>
+		<item>
+			<title>1.27.141-alpha</title>
+			<description>## Release Notes 1.27
+* Update dependencies
+* HOI4 1.17 CS support
+* Stellaris 4.2 CS support
+* EU5 mod management support
+* Proton game launching on Linux
+* Optional GenerateSteamAppId flag to create steam_appid.txt when missing (used for enabling Steam activity tracking when launching games directly; off by default)
+* Added StoragePath setting to customize where Irony stores and reads its data
+* Irony is now Flatpak-aware (detects and supports Steam Flatpak installations)</description>
+			<pubDate>Mon, 08 Dec 2025 07:34:42 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.27.141-alpha/linux-x64.zip" sparkle:version="1.27.141.65193" sparkle:shortVersionString="1.27.141" length="89204446" sparkle:os="linux" type="application/zip" sparkle:signature="5P7jYNO3s7D0/nWI22y0rroKYBKh5VxE8UNUl52727hmd0NYcCotC2DjSCMQBxu5hXFXIVXxxDEMSOc8fcPdDA=="/>
+		</item>
+		<item>
+			<title>1.27.141-alpha</title>
+			<description>## Release Notes 1.27
+* Update dependencies
+* HOI4 1.17 CS support
+* Stellaris 4.2 CS support
+* EU5 mod management support
+* Proton game launching on Linux
+* Optional GenerateSteamAppId flag to create steam_appid.txt when missing (used for enabling Steam activity tracking when launching games directly; off by default)
+* Added StoragePath setting to customize where Irony stores and reads its data
+* Irony is now Flatpak-aware (detects and supports Steam Flatpak installations)</description>
+			<pubDate>Mon, 08 Dec 2025 07:34:49 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.27.141-alpha/osx-x64.zip" sparkle:version="1.27.141.65193" sparkle:shortVersionString="1.27.141" length="91947273" sparkle:os="osx" type="application/zip" sparkle:signature="nDKoH9SsDMGahEqNo7rERtyw1ENSAZ4VaBhfp/t4gYAuXxQLdV59jKBtgVmjaQEZueNYZ/WZkwS5J6bUwKdTDA=="/>
+		</item>
+		<item>
+			<title>1.27.141-alpha</title>
+			<description>## Release Notes 1.27
+* Update dependencies
+* HOI4 1.17 CS support
+* Stellaris 4.2 CS support
+* EU5 mod management support
+* Proton game launching on Linux
+* Optional GenerateSteamAppId flag to create steam_appid.txt when missing (used for enabling Steam activity tracking when launching games directly; off by default)
+* Added StoragePath setting to customize where Irony stores and reads its data
+* Irony is now Flatpak-aware (detects and supports Steam Flatpak installations)</description>
+			<pubDate>Mon, 08 Dec 2025 07:34:56 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.27.141-alpha/win-x64-setup.zip" sparkle:version="1.27.141.65193" sparkle:shortVersionString="1.27.141" length="74525673" sparkle:os="windows" type="application/zip" sparkle:signature="peY2Ema84HFjguY3QjI/bMX5BDtBxgUW/5CtKfbwi4XR4ESelI3Q/X58CWy07DaVJMPMlx34fCnsceLhFPWbBQ=="/>
+		</item>
+		<item>
+			<title>1.27.141-alpha</title>
+			<description>## Release Notes 1.27
+* Update dependencies
+* HOI4 1.17 CS support
+* Stellaris 4.2 CS support
+* EU5 mod management support
+* Proton game launching on Linux
+* Optional GenerateSteamAppId flag to create steam_appid.txt when missing (used for enabling Steam activity tracking when launching games directly; off by default)
+* Added StoragePath setting to customize where Irony stores and reads its data
+* Irony is now Flatpak-aware (detects and supports Steam Flatpak installations)</description>
+			<pubDate>Mon, 08 Dec 2025 07:35:08 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.27.141-alpha/win-x64.zip" sparkle:version="1.27.141.65193" sparkle:shortVersionString="1.27.141" length="104767258" sparkle:os="windows" type="application/zip" sparkle:signature="gzrSEjvNyXJnTGmNQfc0w+Me/IzizsdIL6p9VOoWHDV9MiDpqL8kApZ+iJmSOxpDJUzMuvShBHMgU9niS945Cg=="/>
+		</item>
 	</channel>
 </rss>
