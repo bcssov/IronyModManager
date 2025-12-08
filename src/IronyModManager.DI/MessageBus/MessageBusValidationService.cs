@@ -1,28 +1,26 @@
-﻿
-// ***********************************************************************
+﻿// ***********************************************************************
 // Assembly         : IronyModManager.DI
 // Author           : Mario
 // Created          : 02-09-2024
 //
 // Last Modified By : Mario
-// Last Modified On : 02-09-2024
+// Last Modified On : 12-08-2025
 // ***********************************************************************
 // <copyright file="MessageBusValidationService.cs" company="Mario">
 //     Mario
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using SlimMessageBus.Host;
 using SlimMessageBus.Host.Services;
 
 namespace IronyModManager.DI.MessageBus
 {
-
     /// <summary>
     /// Class MessageBusValidationService.
     /// Implements the <see cref="DefaultMessageBusSettingsValidationService" />
@@ -57,6 +55,7 @@ namespace IronyModManager.DI.MessageBus
                     consumerSettings.ConsumerMethod = ReflectionUtils.GenerateMethodCallToFunc<Func<object, object, Task>>(consumerSettings.ConsumerMethodInfo, consumerSettings.ConsumerType, typeof(Task), consumerSettings.MessageType);
                 }
             }
+
             base.AssertSettings();
         }
 

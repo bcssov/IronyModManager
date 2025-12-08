@@ -4,16 +4,18 @@
 // Created          : 06-10-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 11-14-2022
+// Last Modified On : 12-08-2025
 // ***********************************************************************
 // <copyright file="BaseMessageBusConsumer.cs" company="Mario">
 //     Mario
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
+
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace IronyModManager.Shared.MessageBus
@@ -70,6 +72,7 @@ namespace IronyModManager.Shared.MessageBus
                     await Task.Delay(25);
                     taskCache.TryGetValue(awaitableEvent, out tasksCompleted);
                 }
+
                 taskCache.Remove(awaitableEvent, out _);
             }
         }
@@ -132,10 +135,7 @@ namespace IronyModManager.Shared.MessageBus
         /// <param name="awaitableEvent">The awaitable event.</param>
         protected virtual void IncrementTaskCounter(BaseAwaitableEvent awaitableEvent)
         {
-            taskCache.AddOrUpdate(awaitableEvent, 1, (key, oldValue) =>
-            {
-                return oldValue + 1;
-            });
+            taskCache.AddOrUpdate(awaitableEvent, 1, (_, oldValue) => oldValue + 1);
         }
 
         #endregion Methods
