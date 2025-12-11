@@ -156,7 +156,7 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="NetSparkleUpdater.SparkleUpdater" Version="$(NetSparkleUpdaterSparkleUpdater)" allowedVersions="$(NetSparkleUpdaterSparkleUpdater)" />
-    <PackageReference Include="NLog" Version="6.0.6" />
+    <PackageReference Include="NLog" Version="6.0.7" />
     <PackageReference Include="ReactiveUI" Version="22.3.1" />
     <PackageReference Include="SimpleInjector" Version="5.5.0" />
     <PackageReference Include="SimpleInjector.Packaging" Version="5.5.0" />
