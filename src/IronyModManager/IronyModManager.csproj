@@ -161,8 +161,8 @@
     <PackageReference Include="SimpleInjector" Version="5.5.0" />
     <PackageReference Include="SimpleInjector.Packaging" Version="5.5.0" />
     <PackageReference Include="SkiaSharp" Version="$(SkiaSharp)" allowedVersions="$(SkiaSharp)" />
-    <PackageReference Include="Splat.NLog" Version="17.1.1" />
-    <PackageReference Include="Splat.SimpleInjector" Version="17.1.1" />
+    <PackageReference Include="Splat.NLog" Version="$(Splat)" allowedVersions="$(Splat)" />
+    <PackageReference Include="Splat.SimpleInjector" Version="$(Splat)" allowedVersions="$(Splat)" />
     <PackageReference Include="Syroot.Windows.IO.KnownFolders" Version="1.3.0" />
     <PackageReference Include="ThemeEditor.Controls.ColorPicker" Version="$(AvaloniaColorPicker)" allowedVersions="$(AvaloniaColorPicker)" />
   </ItemGroup>
