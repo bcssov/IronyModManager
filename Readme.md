@@ -10,6 +10,9 @@ Always download the latest version here:
 
 👉 **[Latest Irony Mod Manager Release](https://github.com/bcssov/IronyModManager/releases/latest)**
 
+Official Irony Mod Manager binaries are published on GitHub Releases.  
+Package managers such as winget and AUR source their downloads from there.
+
 ---
 
 ## Documentation
