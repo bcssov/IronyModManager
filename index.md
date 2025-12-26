@@ -30,6 +30,9 @@ Always download the latest version here:
 
 👉 **[Pre-Release / Alpha Builds](https://github.com/bcssov/IronyModManager/releases/tag/v1.27.141-alpha)**
 
+Official Irony Mod Manager binaries are published on GitHub Releases.  
+Package managers such as winget and AUR source their downloads from there.
+
 If you're unsure which file to choose, see the **Install** page for a breakdown of each platform.
 
 ---
