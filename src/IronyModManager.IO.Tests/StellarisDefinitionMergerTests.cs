@@ -15,7 +15,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using FluentAssertions;
+using AwesomeAssertions;
 using IronyModManager.IO.Mods.InfoProviders;
 using IronyModManager.Shared.Models;
 using IronyModManager.Parser.Definitions;

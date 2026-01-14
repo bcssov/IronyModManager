@@ -4,16 +4,18 @@
 // Created          : 09-14-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 09-17-2020
+// Last Modified On : 12-07-2025
 // ***********************************************************************
 // <copyright file="SignatureManager.cs" company="NetSparkle">
 //     NetSparkle
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
+
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using Org.BouncyCastle.Crypto;
 using Org.BouncyCastle.Crypto.Generators;
 using Org.BouncyCastle.Crypto.Parameters;
@@ -42,17 +44,17 @@ namespace Irony.AppCastGenerator
         /// <summary>
         /// The private key file path
         /// </summary>
-        private string _privateKeyFilePath;
+        private string privateKeyFilePath;
 
         /// <summary>
         /// The public key file path
         /// </summary>
-        private string _publicKeyFilePath;
+        private string publicKeyFilePath;
 
         /// <summary>
         /// The storage path
         /// </summary>
-        private string _storagePath;
+        private string storagePath;
 
         #endregion Fields
 
@@ -95,13 +97,13 @@ namespace Irony.AppCastGenerator
             Ed25519PrivateKeyParameters privateKey = (Ed25519PrivateKeyParameters)kp.Private;
             Ed25519PublicKeyParameters publicKey = (Ed25519PublicKeyParameters)kp.Public;
 
-            var privKeyBase64 = Convert.ToBase64String(privateKey.GetEncoded());
+            var privateKeyBase64 = Convert.ToBase64String(privateKey.GetEncoded());
             var pubKeyBase64 = Convert.ToBase64String(publicKey.GetEncoded());
 
-            File.WriteAllText(_privateKeyFilePath, privKeyBase64);
-            File.WriteAllText(_publicKeyFilePath, pubKeyBase64);
+            File.WriteAllText(privateKeyFilePath, privateKeyBase64);
+            File.WriteAllText(publicKeyFilePath, pubKeyBase64);
 
-            Console.WriteLine("Storing public/private keys to " + _storagePath);
+            Console.WriteLine("Storing public/private keys to " + storagePath);
             return true;
         }
 
@@ -111,7 +113,7 @@ namespace Irony.AppCastGenerator
         /// <returns>System.Byte[].</returns>
         public byte[] GetPrivateKey()
         {
-            return ResolveKeyLocation(PrivateKeyEnvironmentVariable, _privateKeyFilePath);
+            return ResolveKeyLocation(PrivateKeyEnvironmentVariable, privateKeyFilePath);
         }
 
         /// <summary>
@@ -120,7 +122,7 @@ namespace Irony.AppCastGenerator
         /// <returns>System.Byte[].</returns>
         public byte[] GetPublicKey()
         {
-            return ResolveKeyLocation(PublicKeyEnvironmentVariable, _publicKeyFilePath);
+            return ResolveKeyLocation(PublicKeyEnvironmentVariable, publicKeyFilePath);
         }
 
         /// <summary>
@@ -163,9 +165,9 @@ namespace Irony.AppCastGenerator
         }
 
         /// <summary>
-        /// Keyses the exist.
+        /// Checks if key exists.
         /// </summary>
-        /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
+        /// <returns><c>true</c> if key exists, <c>false</c> otherwise.</returns>
         public bool KeysExist()
         {
             if (GetPublicKey() != null && GetPrivateKey() != null)
@@ -182,15 +184,16 @@ namespace Irony.AppCastGenerator
         /// <param name="path">The path.</param>
         public void SetStorageDirectory(string path)
         {
-            _storagePath = path;
+            storagePath = path;
 
-            if (!Directory.Exists(_storagePath))
+            if (!Directory.Exists(storagePath))
             {
-                Directory.CreateDirectory(_storagePath);
+                Directory.CreateDirectory(storagePath!);
             }
 
-            _privateKeyFilePath = Path.Combine(_storagePath, "NetSparkle_Ed25519.priv");
-            _publicKeyFilePath = Path.Combine(_storagePath, "NetSparkle_Ed25519.pub");
+            // ReSharper disable once StringLiteralTypo
+            privateKeyFilePath = Path.Combine(storagePath, "NetSparkle_Ed25519.priv");
+            publicKeyFilePath = Path.Combine(storagePath, "NetSparkle_Ed25519.pub");
         }
 
         /// <summary>
@@ -217,6 +220,7 @@ namespace Irony.AppCastGenerator
                 Console.WriteLine("Keys do not exist");
                 return false;
             }
+
             if (signature == null)
             {
                 Console.WriteLine("Signature at path {0} is null", file.FullName);

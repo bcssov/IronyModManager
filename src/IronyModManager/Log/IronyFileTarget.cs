@@ -4,13 +4,14 @@
 // Created          : 10-29-2021
 //
 // Last Modified By : Mario
-// Last Modified On : 07-10-2022
+// Last Modified On : 12-08-2025
 // ***********************************************************************
 // <copyright file="IronyFileTarget.cs" company="Mario">
 //     Mario
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
+
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -59,6 +60,7 @@ namespace IronyModManager.Log
                 DiskOperations.DeleteFile(fileName);
                 return data;
             }
+
             return string.Empty;
         }
 
@@ -81,10 +83,10 @@ namespace IronyModManager.Log
         {
             if (string.IsNullOrWhiteSpace(outputDirectory))
             {
-                var layout = new FilePathLayout(FileName, CleanupFileName, FileNameKind);
-                var logFileName = layout.Render(logEvent);
-                outputDirectory = Path.GetDirectoryName(logFileName);
+                var fileName = FileName.Render(logEvent);
+                outputDirectory = Path.GetDirectoryName(fileName);
             }
+
             return outputDirectory;
         }
 
@@ -114,6 +116,7 @@ namespace IronyModManager.Log
         /// parameter.
         /// </summary>
         /// <param name="logEvent">The logging event.</param>
+        /// <inheritdoc />
         protected override void Write(LogEventInfo logEvent)
         {
             base.Write(logEvent);

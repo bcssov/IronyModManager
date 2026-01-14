@@ -4,7 +4,7 @@
 // Created          : 05-26-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 12-02-2025
+// Last Modified On : 12-08-2025
 // ***********************************************************************
 // <copyright file="ModPatchCollectionService.cs" company="Mario">
 //     Mario
@@ -3651,7 +3651,7 @@ namespace IronyModManager.Services
                                         {
                                             Game = game.Type,
                                             OverwrittenConflicts =
-                                                PopulateModPath(await overwritten.ToAsyncEnumerable().WhereAwait(async p => !(await conflictResult.ResolvedConflicts.GetByTypeAndIdAsync(p.TypeAndId)).Any()).ToListAsync(),
+                                                PopulateModPath(await overwritten.ToAsyncEnumerable().Where(async (p, _) => !(await conflictResult.ResolvedConflicts.GetByTypeAndIdAsync(p.TypeAndId)).Any()).ToListAsync(),
                                                     collectionMods),
                                             RootPath = GetModDirectoryRootPath(game),
                                             PatchPath = EvaluatePatchNamePath(game, patchName)

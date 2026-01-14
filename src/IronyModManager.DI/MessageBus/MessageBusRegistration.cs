@@ -1,11 +1,10 @@
-﻿
-// ***********************************************************************
+﻿// ***********************************************************************
 // Assembly         : IronyModManager.DI
 // Author           : Mario
 // Created          : 06-10-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-26-2023
+// Last Modified On : 12-08-2025
 // ***********************************************************************
 // <copyright file="MessageBusRegistration.cs" company="Mario">
 //     Mario
@@ -23,7 +22,6 @@ using SlimMessageBus.Host.Interceptor;
 
 namespace IronyModManager.DI.MessageBus
 {
-
     /// <summary>
     /// Class MessageBusRegistration.
     /// </summary>
@@ -44,18 +42,22 @@ namespace IronyModManager.DI.MessageBus
                 var instance = Activator.CreateInstance(genericListType);
                 return instance;
             }
+
             static Type resolveProducerInterceptor(Type type)
             {
                 return typeof(IProducerInterceptor<>).MakeGenericType(type);
             }
+
             static Type resolvePublishInterceptor(Type type)
             {
                 return typeof(IPublishInterceptor<>).MakeGenericType(type);
             }
+
             static Type resolveConsumerInterceptor(Type type)
             {
                 return typeof(IConsumerInterceptor<>).MakeGenericType(type);
             }
+
             static Type resolveEnumerable(Type type)
             {
                 return typeof(IEnumerable<>).MakeGenericType(type);
@@ -98,6 +100,7 @@ namespace IronyModManager.DI.MessageBus
                                     DIContainer.Container.Register(resolvedConsumerType, initResolvedConsumerType);
                                     registeredCollections.Add(resolvedConsumerType, initResolvedConsumerType);
                                 }
+
                                 builder.Consume(find.EventType, x => x.Topic(x.ConsumerSettings.MessageType.Name).WithConsumer(find.HandlerType));
                                 DIContainer.Container.Register(find.HandlerType, find.HandlerType, SimpleInjector.Lifestyle.Singleton);
                             });

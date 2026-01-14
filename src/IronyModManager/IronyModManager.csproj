@@ -25,7 +25,7 @@
     <Configurations>Debug;Release;osx-x64;linux-x64;win-x64</Configurations>
 	<PlatformTarget>x64</PlatformTarget>
 	<Platforms>x64</Platforms>
-    <NoWarn>1701;1702;NU1603</NoWarn>	
+    <NoWarn>1701;1702;NU1603;CS8002</NoWarn>	
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='osx-x64|x64'">
     <Optimize>True</Optimize>
@@ -138,11 +138,11 @@
     <PackageReference Include="Avalonia.Diagnostics" Version="$(Avalonia)" allowedVersions="$(Avalonia)" />
     <PackageReference Include="Avalonia.ReactiveUI" Version="$(Avalonia)" allowedVersions="$(Avalonia)" />
     <PackageReference Include="CommandLineParser" Version="2.9.1" />
-    <PackageReference Include="DiffPlex" Version="1.7.2" />
+    <PackageReference Include="DiffPlex" Version="1.9.0" />
     <PackageReference Include="Material.Avalonia" Version="$(MaterialAvalonia)" allowedVersions="$(MaterialAvalonia)" />
     <PackageReference Include="Material.Icons.Avalonia" Version="$(AvaloniaMaterialIcons)" allowedVersions="$(AvaloniaMaterialIcons)" />
     <PackageReference Include="MessageBox.Avalonia" Version="$(MessageBoxAvalonia)" allowedVersions="$(MessageBoxAvalonia)" />
-    <PackageReference Include="Microsoft.Bcl.AsyncInterfaces" Version="8.0.0" />
+    <PackageReference Include="Microsoft.Bcl.AsyncInterfaces" Version="$(MicrosoftBclAsyncInterfaces)" allowedVersions="$(MicrosoftBclAsyncInterfaces)" />
     <PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="$(MicrosoftExtensionsConfigurationBinder)" allowedVersions="$(MicrosoftExtensionsConfigurationBinder)" />
     <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="$(MicrosoftExtensionsConfigurationJson)" allowedVersions="$(MicrosoftExtensionsConfigurationJson)" />
     <PackageReference Include="Microsoft.Extensions.DependencyModel" Version="$(MicrosoftExtensionsDependencyModelVersion)" allowedVersions="$(MicrosoftExtensionsDependencyModelVersion)" />
@@ -151,19 +151,18 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="Nerdbank.GitVersioning" Version="3.6.133">
+    <PackageReference Include="Nerdbank.GitVersioning" Version="3.9.50">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="NetSparkleUpdater.SparkleUpdater" Version="2.3.0" />
-    <PackageReference Include="NLog" Version="5.2.8" />
-    <PackageReference Include="ReactiveUI" Version="19.5.41" />
-    <PackageReference Include="Sajidur78.StrongNamer" Version="0.2.8" />
-    <PackageReference Include="SimpleInjector" Version="5.4.4" />
-    <PackageReference Include="SimpleInjector.Packaging" Version="5.0.0" />
-    <PackageReference Include="SkiaSharp" Version="2.88.7" />
-    <PackageReference Include="Splat.NLog" Version="14.8.12" />
-    <PackageReference Include="Splat.SimpleInjector" Version="14.8.12" />
+    <PackageReference Include="NetSparkleUpdater.SparkleUpdater" Version="$(NetSparkleUpdaterSparkleUpdater)" allowedVersions="$(NetSparkleUpdaterSparkleUpdater)" />
+    <PackageReference Include="NLog" Version="6.0.7" />
+    <PackageReference Include="ReactiveUI" Version="22.3.1" />
+    <PackageReference Include="SimpleInjector" Version="5.5.0" />
+    <PackageReference Include="SimpleInjector.Packaging" Version="5.5.0" />
+    <PackageReference Include="SkiaSharp" Version="$(SkiaSharp)" allowedVersions="$(SkiaSharp)" />
+    <PackageReference Include="Splat.NLog" Version="$(Splat)" allowedVersions="$(Splat)" />
+    <PackageReference Include="Splat.SimpleInjector" Version="$(Splat)" allowedVersions="$(Splat)" />
     <PackageReference Include="Syroot.Windows.IO.KnownFolders" Version="1.3.0" />
     <PackageReference Include="ThemeEditor.Controls.ColorPicker" Version="$(AvaloniaColorPicker)" allowedVersions="$(AvaloniaColorPicker)" />
   </ItemGroup>

@@ -18,7 +18,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
-using FluentAssertions;
+using AwesomeAssertions;
 using IronyModManager.IO;
 using IronyModManager.IO.Common.Game;
 using IronyModManager.IO.Common.Mods;

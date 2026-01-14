@@ -16,7 +16,7 @@
 	<PlatformTarget>x64</PlatformTarget>	
 	<Platforms>x64</Platforms>
     <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
-    <NoWarn>1701;1702;NU1603</NoWarn>		
+    <NoWarn>1701;1702;NU1603;CS8002</NoWarn>	
   </PropertyGroup>
   
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='osx-x64|x64'">
@@ -59,10 +59,8 @@
   <ItemGroup>
 	<PackageReference Include="CommandLineParser" Version="2.9.1" />
 	<PackageReference Include="Nerdbank.GitVersioning" />
-	<PackageReference Include="NLog" Version="5.2.8" />
-	<PackageReference Include="Sajidur78.StrongNamer" Version="0.2.8" />
-	<PackageReference Include="Steamworks.NET" Version="20.1.0" />
-	<PackageReference Update="Nerdbank.GitVersioning" Version="3.6.133">
+	<PackageReference Include="NLog" Version="6.0.7" />
+	<PackageReference Update="Nerdbank.GitVersioning" Version="3.9.50">
 	  <PrivateAssets>all</PrivateAssets>
 	  <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 	</PackageReference>
@@ -71,6 +69,12 @@
   <ItemGroup>
     <Folder Include="IO\" />
     <Folder Include="Shared\" />
+  </ItemGroup>  
+
+  <ItemGroup>
+    <Reference Include="Steamworks.NET">
+      <HintPath>..\..\References\Conditional\Steamworks\.Net\Windows\Steamworks.NET.dll</HintPath>
+    </Reference>
   </ItemGroup>
 
 </Project>
