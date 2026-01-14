@@ -4,88 +4,11 @@
 		<title>Irony Mod Manager</title>
 		<language>en</language>
 		<item>
-			<title>1.26.271</title>
+			<title>1.27.149</title>
 			<description>## Current Release Notes
-* Resolve #572
-* Ensure parser output does not use scientific notation in numbers
+* Bump SharpCompress
 
-## Release Notes 1.26
-* Update dependencies
-* Bump to net8 which should grant some performance improvements (win7 might not work going forward)
-* Remove ripple animation from Material themes (per #484)
-* Irony is now single instance app
-* Disable OSX update installation (online check only now)
-* Added new diff viewer
-* Stellaris 3.11 beta compatibility
-* Added conflict solver option to skip parsing some languages
-* Add conflict solver configuration to customize colors for new diff viewer
-* Add templateable merge mod naming</description>
-			<pubDate>Mon, 01 Dec 2025 21:56:08 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.26.271/linux-x64.zip" sparkle:version="1.26.271.55411" sparkle:shortVersionString="1.26.271" length="90936194" sparkle:os="linux" type="application/zip" sparkle:signature="24Fc++slLa+PwyLMToB8hVGWyi/Bk7zVnF1za/QkkaEpW3X7znIISvns0pXfmYXAcYkpSeSCq0rbYvckFxUfAw=="/>
-		</item>
-		<item>
-			<title>1.26.271</title>
-			<description>## Current Release Notes
-* Resolve #572
-* Ensure parser output does not use scientific notation in numbers
-
-## Release Notes 1.26
-* Update dependencies
-* Bump to net8 which should grant some performance improvements (win7 might not work going forward)
-* Remove ripple animation from Material themes (per #484)
-* Irony is now single instance app
-* Disable OSX update installation (online check only now)
-* Added new diff viewer
-* Stellaris 3.11 beta compatibility
-* Added conflict solver option to skip parsing some languages
-* Add conflict solver configuration to customize colors for new diff viewer
-* Add templateable merge mod naming</description>
-			<pubDate>Mon, 01 Dec 2025 21:56:12 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.26.271/osx-x64.zip" sparkle:version="1.26.271.55411" sparkle:shortVersionString="1.26.271" length="93808905" sparkle:os="osx" type="application/zip" sparkle:signature="U/+yzWxFFtVgUEDjlFx4TEko0MWu0e3WGE8NxTux+eSfy6NNeKuhD0YgOp2EsQ3EteO523yHN4MHlF5sZrZzCg=="/>
-		</item>
-		<item>
-			<title>1.26.271</title>
-			<description>## Current Release Notes
-* Resolve #572
-* Ensure parser output does not use scientific notation in numbers
-
-## Release Notes 1.26
-* Update dependencies
-* Bump to net8 which should grant some performance improvements (win7 might not work going forward)
-* Remove ripple animation from Material themes (per #484)
-* Irony is now single instance app
-* Disable OSX update installation (online check only now)
-* Added new diff viewer
-* Stellaris 3.11 beta compatibility
-* Added conflict solver option to skip parsing some languages
-* Add conflict solver configuration to customize colors for new diff viewer
-* Add templateable merge mod naming</description>
-			<pubDate>Mon, 01 Dec 2025 21:56:16 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.26.271/win-x64-setup.zip" sparkle:version="1.26.271.55411" sparkle:shortVersionString="1.26.271" length="73390453" sparkle:os="windows" type="application/zip" sparkle:signature="XZirKivxe0tWfT+UPhMlw39PgYYgYdaytjfhcsLXbCyewYcSrhHOgtikpuIjkLX9TPTEInpmFjOUliy9+6JAAQ=="/>
-		</item>
-		<item>
-			<title>1.26.271</title>
-			<description>## Current Release Notes
-* Resolve #572
-* Ensure parser output does not use scientific notation in numbers
-
-## Release Notes 1.26
-* Update dependencies
-* Bump to net8 which should grant some performance improvements (win7 might not work going forward)
-* Remove ripple animation from Material themes (per #484)
-* Irony is now single instance app
-* Disable OSX update installation (online check only now)
-* Added new diff viewer
-* Stellaris 3.11 beta compatibility
-* Added conflict solver option to skip parsing some languages
-* Add conflict solver configuration to customize colors for new diff viewer
-* Add templateable merge mod naming</description>
-			<pubDate>Mon, 01 Dec 2025 21:56:16 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.26.271/win-x64.zip" sparkle:version="1.26.271.55411" sparkle:shortVersionString="1.26.271" length="106917167" sparkle:os="windows" type="application/zip" sparkle:signature="iSXlD7IPDhFsWQoC823l2yACoQ5s+oxPCkxsjPjp3DfVolNgcQIVvjXpSGR3Mk9Tk3EZY6zoK69mnUdgDFi4DQ=="/>
-		</item>
-		<item>
-			<title>1.27.141-alpha</title>
-			<description>## Release Notes 1.27
+## Release Notes 1.27
 * Update dependencies
 * HOI4 1.17 CS support
 * Stellaris 4.2 CS support
@@ -94,12 +17,15 @@
 * Optional GenerateSteamAppId flag to create steam_appid.txt when missing (used for enabling Steam activity tracking when launching games directly; off by default)
 * Added StoragePath setting to customize where Irony stores and reads its data
 * Irony is now Flatpak-aware (detects and supports Steam Flatpak installations)</description>
-			<pubDate>Mon, 08 Dec 2025 07:34:42 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.27.141-alpha/linux-x64.zip" sparkle:version="1.27.141.65193" sparkle:shortVersionString="1.27.141" length="89204446" sparkle:os="linux" type="application/zip" sparkle:signature="5P7jYNO3s7D0/nWI22y0rroKYBKh5VxE8UNUl52727hmd0NYcCotC2DjSCMQBxu5hXFXIVXxxDEMSOc8fcPdDA=="/>
+			<pubDate>Wed, 14 Jan 2026 23:50:48 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.27.149/linux-x64.zip" sparkle:version="1.27.149.14460" sparkle:shortVersionString="1.27.149" length="89282489" sparkle:os="linux" type="application/zip" sparkle:signature="c0XNjhQBmPWk8/vc/rlfKzngHQNIDxDT578RoXkL2sV5sfuZe2g+2hrRK6bDr6/9oziEmt2nLT+xcg56A0iHAQ=="/>
 		</item>
 		<item>
-			<title>1.27.141-alpha</title>
-			<description>## Release Notes 1.27
+			<title>1.27.149</title>
+			<description>## Current Release Notes
+* Bump SharpCompress
+
+## Release Notes 1.27
 * Update dependencies
 * HOI4 1.17 CS support
 * Stellaris 4.2 CS support
@@ -108,12 +34,15 @@
 * Optional GenerateSteamAppId flag to create steam_appid.txt when missing (used for enabling Steam activity tracking when launching games directly; off by default)
 * Added StoragePath setting to customize where Irony stores and reads its data
 * Irony is now Flatpak-aware (detects and supports Steam Flatpak installations)</description>
-			<pubDate>Mon, 08 Dec 2025 07:34:49 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.27.141-alpha/osx-x64.zip" sparkle:version="1.27.141.65193" sparkle:shortVersionString="1.27.141" length="91947273" sparkle:os="osx" type="application/zip" sparkle:signature="nDKoH9SsDMGahEqNo7rERtyw1ENSAZ4VaBhfp/t4gYAuXxQLdV59jKBtgVmjaQEZueNYZ/WZkwS5J6bUwKdTDA=="/>
+			<pubDate>Wed, 14 Jan 2026 23:50:55 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.27.149/osx-x64.zip" sparkle:version="1.27.149.14460" sparkle:shortVersionString="1.27.149" length="92025682" sparkle:os="osx" type="application/zip" sparkle:signature="qmi7k2ghTm7AjJSWGNpK1+siR9f8IzvDvrJv2XRR+DJbXBzDXVadgKZXGljndny5Fmgu7T1DfumavxtkiSU1Bw=="/>
 		</item>
 		<item>
-			<title>1.27.141-alpha</title>
-			<description>## Release Notes 1.27
+			<title>1.27.149</title>
+			<description>## Current Release Notes
+* Bump SharpCompress
+
+## Release Notes 1.27
 * Update dependencies
 * HOI4 1.17 CS support
 * Stellaris 4.2 CS support
@@ -122,12 +51,15 @@
 * Optional GenerateSteamAppId flag to create steam_appid.txt when missing (used for enabling Steam activity tracking when launching games directly; off by default)
 * Added StoragePath setting to customize where Irony stores and reads its data
 * Irony is now Flatpak-aware (detects and supports Steam Flatpak installations)</description>
-			<pubDate>Mon, 08 Dec 2025 07:34:56 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.27.141-alpha/win-x64-setup.zip" sparkle:version="1.27.141.65193" sparkle:shortVersionString="1.27.141" length="74525673" sparkle:os="windows" type="application/zip" sparkle:signature="peY2Ema84HFjguY3QjI/bMX5BDtBxgUW/5CtKfbwi4XR4ESelI3Q/X58CWy07DaVJMPMlx34fCnsceLhFPWbBQ=="/>
+			<pubDate>Wed, 14 Jan 2026 23:51:01 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.27.149/win-x64-setup.zip" sparkle:version="1.27.149.14460" sparkle:shortVersionString="1.27.149" length="74807149" sparkle:os="windows" type="application/zip" sparkle:signature="9NGWzBV9KEX4UEoHEee+XiYh2UL76VAeh/qVGAgVLOafov5n3M9xxPQs0Cq2wNucAvqio0WVLcKOu5Gr7wBsCA=="/>
 		</item>
 		<item>
-			<title>1.27.141-alpha</title>
-			<description>## Release Notes 1.27
+			<title>1.27.149</title>
+			<description>## Current Release Notes
+* Bump SharpCompress
+
+## Release Notes 1.27
 * Update dependencies
 * HOI4 1.17 CS support
 * Stellaris 4.2 CS support
@@ -136,8 +68,8 @@
 * Optional GenerateSteamAppId flag to create steam_appid.txt when missing (used for enabling Steam activity tracking when launching games directly; off by default)
 * Added StoragePath setting to customize where Irony stores and reads its data
 * Irony is now Flatpak-aware (detects and supports Steam Flatpak installations)</description>
-			<pubDate>Mon, 08 Dec 2025 07:35:08 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.27.141-alpha/win-x64.zip" sparkle:version="1.27.141.65193" sparkle:shortVersionString="1.27.141" length="104767258" sparkle:os="windows" type="application/zip" sparkle:signature="gzrSEjvNyXJnTGmNQfc0w+Me/IzizsdIL6p9VOoWHDV9MiDpqL8kApZ+iJmSOxpDJUzMuvShBHMgU9niS945Cg=="/>
+			<pubDate>Wed, 14 Jan 2026 23:51:13 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.27.149/win-x64.zip" sparkle:version="1.27.149.14460" sparkle:shortVersionString="1.27.149" length="104884424" sparkle:os="windows" type="application/zip" sparkle:signature="8379sLJH96/illMRlGjMKe6XiT4k664eVl93TBQwGZdlxXRpyEfuKD2iDll74+gD2x6F++OmQwSTlhrNKXAQCg=="/>
 		</item>
 	</channel>
 </rss>
