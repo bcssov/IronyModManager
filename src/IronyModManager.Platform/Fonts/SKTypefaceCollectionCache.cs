@@ -4,16 +4,18 @@
 // Created          : 03-13-2021
 //
 // Last Modified By : Mario
-// Last Modified On : 07-10-2022
+// Last Modified On : 01-24-2026
 // ***********************************************************************
 // <copyright file="SKTypefaceCollectionCache.cs" company="Avalonia">
 //     Avalonia
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
+
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using Avalonia;
 using Avalonia.Media;
@@ -27,6 +29,7 @@ namespace IronyModManager.Platform.Fonts
     /// <summary>
     /// Class SKTypefaceCollectionCache.
     /// </summary>
+    [SuppressMessage("ReSharper", "InconsistentNaming")]
     internal static class SKTypefaceCollectionCache
     {
         #region Fields
@@ -59,7 +62,7 @@ namespace IronyModManager.Platform.Fonts
         /// <returns>SKTypefaceCollection.</returns>
         public static SKTypefaceCollection GetOrAddTypefaceCollection(FontFamily fontFamily)
         {
-            return cachedCollections.GetOrAdd(fontFamily, x => CreateCustomFontCollection(fontFamily));
+            return cachedCollections.GetOrAdd(fontFamily, _ => CreateCustomFontCollection(fontFamily));
         }
 
         /// <summary>
@@ -68,7 +71,6 @@ namespace IronyModManager.Platform.Fonts
         /// <param name="fontFamily">The font family.</param>
         /// <returns>SKTypefaceCollection.</returns>
         /// <exception cref="System.InvalidOperationException">Asset could not be loaded.</exception>
-
         private static SKTypefaceCollection CreateCustomFontCollection(FontFamily fontFamily)
         {
             var fontAssets = FontFamilyLoader.LoadFontAssets(fontFamily.Key);
