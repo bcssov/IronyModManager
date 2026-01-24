@@ -4,13 +4,14 @@
 // Created          : 03-13-2021
 //
 // Last Modified By : Mario
-// Last Modified On : 10-27-2021
+// Last Modified On : 01-24-2026
 // ***********************************************************************
 // <copyright file="FontManager.cs" company="Mario">
 //     Mario
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
+
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -51,7 +52,7 @@ namespace IronyModManager.Platform.Fonts
         /// <summary>
         /// All fonts
         /// </summary>
-        private List<string> allFonts = null;
+        private List<string> allFonts;
 
         /// <summary>
         /// The typefaces
@@ -90,6 +91,7 @@ namespace IronyModManager.Platform.Fonts
                 {
                     typeface = new Typeface(fontFamilyManager.ResolveFontFamily(typeface.FontFamily.Name).GetFontFamily(), typeface.Style, typeface.Weight);
                 }
+
                 var fontCollection = SKTypefaceCollectionCache.GetOrAddTypefaceCollection(typeface.FontFamily);
                 if (fontCollection == null)
                 {
@@ -97,11 +99,13 @@ namespace IronyModManager.Platform.Fonts
                     typeface = new Typeface(fontFamilyManager.GetDefaultFontFamily().GetFontFamily(), typeface.Style, typeface.Weight);
                     fontCollection = SKTypefaceCollectionCache.GetOrAddTypefaceCollection(typeface.FontFamily);
                 }
+
                 var skTypeface = fontCollection.Get(typeface);
                 if (skTypeface == null)
                 {
                     return fontManager.CreateGlyphTypeface(typeface);
                 }
+
                 var isFakeBold = (int)typeface.Weight >= 600 && !skTypeface.IsBold;
                 var isFakeItalic = typeface.Style == FontStyle.Italic && !skTypeface.IsItalic;
                 return new GlyphTypefaceImpl(skTypeface, isFakeBold, isFakeItalic);
@@ -115,10 +119,12 @@ namespace IronyModManager.Platform.Fonts
                 {
                     return fontManager.CreateGlyphTypeface(typeface);
                 }
+
                 var isFakeBold = (int)typeface.Weight >= 600 && !skTypeface.IsBold;
                 var isFakeItalic = typeface.Style == FontStyle.Italic && !skTypeface.IsItalic;
                 return new GlyphTypefaceImpl(skTypeface, isFakeBold, isFakeItalic);
             }
+
             return fontManager.CreateGlyphTypeface(typeface);
         }
 
@@ -149,8 +155,10 @@ namespace IronyModManager.Platform.Fonts
                 {
                     fonts.AddRange(fontManager.GetInstalledFontFamilyNames(checkForUpdates));
                 }
+
                 allFonts = fonts.Distinct().ToList();
             }
+
             return allFonts;
         }
 
@@ -168,28 +176,46 @@ namespace IronyModManager.Platform.Fonts
         {
             if (typefaces == null)
             {
-                typefaces = new List<Typeface>();
+                typefaces = [];
                 foreach (var item in fontFamilyManager.GetAllFontNames())
                 {
                     typefaces.Add(new Typeface(fontFamilyManager.ResolveFontFamily(item).GetFontFamily()));
                 }
             }
+
             foreach (var item in typefaces)
             {
                 if (item.GlyphTypeface.GetGlyph((uint)codepoint) == 0)
                 {
                     continue;
                 }
+
                 typeface = new Typeface(item.FontFamily.Name, fontStyle, fontWeight);
                 return true;
             }
 
             if (GetPlatformConfiguration().GetOptions().Fonts.UseInbuiltFontsOnly)
             {
-                var fallback = SKFontManager.Default.MatchCharacter(fontFamily?.Name, (SKFontStyleWeight)fontWeight, SKFontStyleWidth.Normal, (SKFontStyleSlant)fontStyle, new string[] { culture.ThreeLetterISOLanguageName, culture.TwoLetterISOLanguageName }, codepoint);
+                SKTypeface fallback = null;
+                if (SKFontManager.Default != null)
+                {
+                    // Some OS / Skia builds can throw or return null from SKFontManager.Default.MatchCharacter.
+                    // Guard and fallback to Irony's bundled default font to avoid UI crashes.
+                    try
+                    {
+                        fallback = SKFontManager.Default.MatchCharacter(fontFamily?.Name, (SKFontStyleWeight)fontWeight, SKFontStyleWidth.Normal, (SKFontStyleSlant)fontStyle, [
+                            culture.ThreeLetterISOLanguageName, culture.TwoLetterISOLanguageName
+                        ], codepoint);
+                    }
+                    catch
+                    {
+                    }
+                }
+
                 typeface = new Typeface(fallback?.FamilyName ?? fontFamilyManager.GetDefaultFontFamily().GetFontFamily(), fontStyle, fontWeight);
                 return true;
             }
+
             return fontManager.TryMatchCharacter(codepoint, fontStyle, fontWeight, fontFamily, culture, out typeface);
         }
 
@@ -199,10 +225,8 @@ namespace IronyModManager.Platform.Fonts
         /// <returns>IFontFamilyManager.</returns>
         private IFontFamilyManager GetFontFamilyManager()
         {
-            if (fontFamilyManager == null)
-            {
-                fontFamilyManager = DIResolver.Get<IFontFamilyManager>();
-            }
+            fontFamilyManager ??= DIResolver.Get<IFontFamilyManager>();
+
             return fontFamilyManager;
         }
 
@@ -212,10 +236,8 @@ namespace IronyModManager.Platform.Fonts
         /// <returns>IPlatformConfiguration.</returns>
         private IPlatformConfiguration GetPlatformConfiguration()
         {
-            if (platformConfiguration == null)
-            {
-                platformConfiguration = DIResolver.Get<IPlatformConfiguration>();
-            }
+            platformConfiguration ??= DIResolver.Get<IPlatformConfiguration>();
+
             return platformConfiguration;
         }
 
