@@ -4,12 +4,9 @@
 		<title>Irony Mod Manager</title>
 		<language>en</language>
 		<item>
-			<title>1.27.156</title>
+			<title>1.27.158</title>
 			<description>## Current Release Notes
 * Bump Magick.net
-* Bump steamworks.net
-* Bump sharpcompress
-* Bump nlog
 
 ## Release Notes 1.27
 * Update dependencies
@@ -20,16 +17,13 @@
 * Optional GenerateSteamAppId flag to create steam_appid.txt when missing (used for enabling Steam activity tracking when launching games directly; off by default)
 * Added StoragePath setting to customize where Irony stores and reads its data
 * Irony is now Flatpak-aware (detects and supports Steam Flatpak installations)</description>
-			<pubDate>Thu, 05 Mar 2026 21:54:19 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.27.156/linux-x64.zip" sparkle:version="1.27.156.11858" sparkle:shortVersionString="1.27.156" length="89284111" sparkle:os="linux" type="application/zip" sparkle:signature="bFFyovBXUGY3U4gVZUZfy1+lN4xeoIwHvj6xl8sZvGyuSykkQuB7hq3uNp+TDurGnylbu+fT0ixcn4NorT6NBA=="/>
+			<pubDate>Tue, 10 Mar 2026 22:57:03 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.27.158/linux-x64.zip" sparkle:version="1.27.158.9727" sparkle:shortVersionString="1.27.158" length="89285598" sparkle:os="linux" type="application/zip" sparkle:signature="2aQhmjVRyNCtfEZdwj8tFsBNYaTKXBE/nqbdyq1usrvnRREzlU4WUZaW2uMbdsgxC2mAWdMuBFTk0+Tv+jhVBw=="/>
 		</item>
 		<item>
-			<title>1.27.156</title>
+			<title>1.27.158</title>
 			<description>## Current Release Notes
 * Bump Magick.net
-* Bump steamworks.net
-* Bump sharpcompress
-* Bump nlog
 
 ## Release Notes 1.27
 * Update dependencies
@@ -40,16 +34,13 @@
 * Optional GenerateSteamAppId flag to create steam_appid.txt when missing (used for enabling Steam activity tracking when launching games directly; off by default)
 * Added StoragePath setting to customize where Irony stores and reads its data
 * Irony is now Flatpak-aware (detects and supports Steam Flatpak installations)</description>
-			<pubDate>Thu, 05 Mar 2026 21:54:26 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.27.156/osx-x64.zip" sparkle:version="1.27.156.11858" sparkle:shortVersionString="1.27.156" length="92018660" sparkle:os="osx" type="application/zip" sparkle:signature="j3hsTDBD+3QbALa0/s3xMBApW2rDsUKEdsAhrxOqepd4n7a9eKoVLibDc0UYLSM3hl0HjgFQTcjuYonr245gCA=="/>
+			<pubDate>Tue, 10 Mar 2026 22:57:10 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.27.158/osx-x64.zip" sparkle:version="1.27.158.9727" sparkle:shortVersionString="1.27.158" length="92020561" sparkle:os="osx" type="application/zip" sparkle:signature="Biq03MomD4fz7FQ4I0CcdJq6VA3GG90jyhOj9hxiTl3gM2QhyMc1uZl4F3rnb0kug7fjELJzD2frUd2dusLqCw=="/>
 		</item>
 		<item>
-			<title>1.27.156</title>
+			<title>1.27.158</title>
 			<description>## Current Release Notes
 * Bump Magick.net
-* Bump steamworks.net
-* Bump sharpcompress
-* Bump nlog
 
 ## Release Notes 1.27
 * Update dependencies
@@ -60,16 +51,13 @@
 * Optional GenerateSteamAppId flag to create steam_appid.txt when missing (used for enabling Steam activity tracking when launching games directly; off by default)
 * Added StoragePath setting to customize where Irony stores and reads its data
 * Irony is now Flatpak-aware (detects and supports Steam Flatpak installations)</description>
-			<pubDate>Thu, 05 Mar 2026 21:54:32 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.27.156/win-x64-setup.zip" sparkle:version="1.27.156.11858" sparkle:shortVersionString="1.27.156" length="73770013" sparkle:os="windows" type="application/zip" sparkle:signature="wtcoj0vgPoTfV6JcQu12vWfzoHrxSZnoH2I+bJzDbZpFnLcpG+lsejwkrgUMsL0/nhMwLrj/Toz0zxkYSNn5Cg=="/>
+			<pubDate>Tue, 10 Mar 2026 22:57:16 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.27.158/win-x64-setup.zip" sparkle:version="1.27.158.9727" sparkle:shortVersionString="1.27.158" length="73764062" sparkle:os="windows" type="application/zip" sparkle:signature="Uac3duHRFkJf9samsO1V/Dt0NjAf+WpFikxiEvjE7a/P5Peqh1Gk/ZQYjX+WPwWarMKwuMX7Xf54IeFcJf73Bw=="/>
 		</item>
 		<item>
-			<title>1.27.156</title>
+			<title>1.27.158</title>
 			<description>## Current Release Notes
 * Bump Magick.net
-* Bump steamworks.net
-* Bump sharpcompress
-* Bump nlog
 
 ## Release Notes 1.27
 * Update dependencies
@@ -80,8 +68,8 @@
 * Optional GenerateSteamAppId flag to create steam_appid.txt when missing (used for enabling Steam activity tracking when launching games directly; off by default)
 * Added StoragePath setting to customize where Irony stores and reads its data
 * Irony is now Flatpak-aware (detects and supports Steam Flatpak installations)</description>
-			<pubDate>Thu, 05 Mar 2026 21:54:44 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.27.156/win-x64.zip" sparkle:version="1.27.156.11858" sparkle:shortVersionString="1.27.156" length="103399620" sparkle:os="windows" type="application/zip" sparkle:signature="t9Nt2wb6v/dYwlN9VnCOq3T0aD3izguqlK4snkzCP5AClFAFqx/aMNHiHmidhx2SdeiopsnOFKN8BOEIqKzwBQ=="/>
+			<pubDate>Tue, 10 Mar 2026 22:57:28 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.27.158/win-x64.zip" sparkle:version="1.27.158.9727" sparkle:shortVersionString="1.27.158" length="103400483" sparkle:os="windows" type="application/zip" sparkle:signature="BLCm/pI8Jh+i82JZifdgxuv3WMYX2Ko6vDcEOBODlewNfFpMNqcfDCH1FE49caqIVvDjqyxjMUO+9ptWlbRsDw=="/>
 		</item>
 	</channel>
 </rss>
