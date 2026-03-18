@@ -137,6 +137,9 @@
         "DirectoryPath": "common\\focus_inlay_windows",
         "PreferredParser": "HOI4WholeTextParser"
     }, {
+        "DirectoryPath": "common\\frontend\\backgrounds",
+        "PreferredParser": "DefaultParser"
+    }, {
         "DirectoryPath": "common\\game_rules",
         "PreferredParser": "DefaultParser"
     }, {
