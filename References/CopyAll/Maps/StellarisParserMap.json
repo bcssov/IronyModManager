@@ -1,12 +1,12 @@
 [{
         "DirectoryPath": "assets",
-        "PreferredParser": "DefaultParser"
+        "PreferredParser": "StellarisWholeTextParser"
     }, {
         "DirectoryPath": "common",
         "PreferredParser": "GenericWholeTextParser"
     }, {
         "DirectoryPath": "common\\achievements",
-        "PreferredParser": "DefaultParser"
+        "PreferredParser": "StellarisWholeTextParser"
     }, {
         "DirectoryPath": "common\\agendas",
         "PreferredParser": "DefaultParser"
@@ -1143,7 +1143,7 @@
         "PreferredParser": "GenericWholeTextParser"
     }, {
         "DirectoryPath": "tools",
-        "PreferredParser": "DefaultParser"
+        "PreferredParser": "StellarisWholeTextParser"
     }, {
         "DirectoryPath": "tweakergui_assets\\gfx\\FX",
         "PreferredParser": "GenericWholeTextParser"
