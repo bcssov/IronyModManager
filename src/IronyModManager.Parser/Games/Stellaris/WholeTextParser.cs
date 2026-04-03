@@ -4,7 +4,7 @@
 // Created          : 02-18-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 05-05-2025
+// Last Modified On : 04-03-2026
 // ***********************************************************************
 // <copyright file="WholeTextParser.cs" company="Mario">
 //     Mario
@@ -35,7 +35,7 @@ namespace IronyModManager.Parser.Games.Stellaris
         /// <summary>
         /// The extension checks
         /// </summary>
-        private static readonly string[] extensionChecks = [Common.Constants.Stellaris.AnimsmExtension, Common.Constants.Stellaris.EditorDataExtension];
+        private static readonly string[] extensionChecks = [Common.Constants.Stellaris.AnimsmExtension, Common.Constants.Stellaris.EditorDataExtension, Common.Constants.JsonExtension];
 
         /// <summary>
         /// The starts with checks
@@ -136,7 +136,6 @@ namespace IronyModManager.Parser.Games.Stellaris
         /// <returns><c>true</c> if this instance [can parse extension] the specified arguments; otherwise, <c>false</c>.</returns>
         private bool CanParseExtension(CanParseArgs args)
         {
-            // I'm guessing these are filename conflict based... I can't find any references in code?
             return extensionChecks.Any(p => args.File.EndsWith(p, StringComparison.OrdinalIgnoreCase));
         }
 

@@ -4,7 +4,7 @@
 // Created          : 02-16-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 12-02-2025
+// Last Modified On : 04-03-2026
 // ***********************************************************************
 // <copyright file="Constants.cs" company="Mario">
 //     Mario
@@ -75,6 +75,11 @@ namespace IronyModManager.Parser.Common
         /// The GUI extension
         /// </summary>
         public const string GuiExtension = ".gui";
+
+        /// <summary>
+        /// The json extension
+        /// </summary>
+        public const string JsonExtension = ".json";
 
         /// <summary>
         /// The localization extension
@@ -549,32 +554,32 @@ namespace IronyModManager.Parser.Common
             /// <summary>
             /// The terminators
             /// </summary>
-            public static readonly char[] CodeTerminators = { OpenObject, CloseObject };
+            public static readonly char[] CodeTerminators = [OpenObject, CloseObject];
 
             /// <summary>
             /// The generic key ids
             /// </summary>
-            public static readonly string[] GenericKeyIds = { "id=", "name=", "key=", "format=", "world=", "localization=" };
+            public static readonly string[] GenericKeyIds = ["id=", "name=", "key=", "format=", "world=", "localization="];
 
             /// <summary>
             /// The generic keys
             /// </summary>
-            public static readonly string[] GenericKeys = { "id", "name", "key", "format", "world", "localization" };
+            public static readonly string[] GenericKeys = ["id", "name", "key", "format", "world", "localization"];
 
             /// <summary>
             /// The inline operators
             /// </summary>
-            public static readonly string[] InlineOperators = { "hsv", "rgb" };
+            public static readonly string[] InlineOperators = ["hsv", "rgb"];
 
             /// <summary>
             /// The namespace
             /// </summary>
-            public static readonly string[] Namespaces = { "namespace", "add_namespace" };
+            public static readonly string[] Namespaces = ["namespace", "add_namespace"];
 
             /// <summary>
             /// The operators
             /// </summary>
-            public static readonly char[] Operators = { EqualsOperator, GreaterThanOperator, LowerThanOperator, NotEqualOperator };
+            public static readonly char[] Operators = [EqualsOperator, GreaterThanOperator, LowerThanOperator, NotEqualOperator];
 
             #endregion Fields
         }

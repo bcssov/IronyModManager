@@ -4,7 +4,7 @@
 // Created          : 02-18-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 12-02-2025
+// Last Modified On : 04-03-2026
 // ***********************************************************************
 // <copyright file="WholeTextParser.cs" company="Mario">
 //     Mario
@@ -36,6 +36,11 @@ namespace IronyModManager.Parser.Games.HOI4
         /// The equals check
         /// </summary>
         private static readonly string[] equalsChecks = [Common.Constants.HOI4.GraphicalCultureType];
+
+        /// <summary>
+        /// The extension checks
+        /// </summary>
+        private static readonly string[] extensionChecks = [Common.Constants.JsonExtension];
 
         /// <summary>
         /// The starts with checks
@@ -175,7 +180,18 @@ namespace IronyModManager.Parser.Games.HOI4
             return CanParseEquals(args) || CanParseMapCsvFile(args.File) ||
                    CanParseStartsWith(args) ||
                    IsTxtFile(args.File, Common.Constants.HOI4.GFX) || IsTxtFile(args.File, Common.Constants.HOI4.Music) ||
-                   IsAnyTxtFile(args.File, Common.Constants.HOI4.Script) || IsAnyTxtFile(args.File, Common.Constants.HOI4.Tests) || IsAnyTxtFile(args.File, Common.Constants.HOI4.Tutorial);
+                   IsAnyTxtFile(args.File, Common.Constants.HOI4.Script) ||
+                   IsAnyTxtFile(args.File, Common.Constants.HOI4.Tests) || IsAnyTxtFile(args.File, Common.Constants.HOI4.Tutorial) || CanParseExtension(args);
+        }
+
+        /// <summary>
+        /// Determines whether this instance [can parse extension] the specified arguments.
+        /// </summary>
+        /// <param name="args">The arguments.</param>
+        /// <returns><c>true</c> if this instance [can parse extension] the specified arguments; otherwise, <c>false</c>.</returns>
+        private bool CanParseExtension(CanParseArgs args)
+        {
+            return extensionChecks.Any(p => args.File.EndsWith(p, StringComparison.OrdinalIgnoreCase));
         }
 
         #endregion Methods

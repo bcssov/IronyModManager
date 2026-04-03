@@ -1,9 +1,12 @@
 [{
         "DirectoryPath": "assets",
-        "PreferredParser": "DefaultParser"
+        "PreferredParser": "HOI4WholeTextParser"
     }, {
         "DirectoryPath": "common",
         "PreferredParser": "GenericWholeTextParser"
+    }, {
+        "DirectoryPath": "common",
+        "PreferredParser": "HOI4WholeTextParser"
     }, {
         "DirectoryPath": "common\\abilities",
         "PreferredParser": "HOI4InnerLayerParser"
@@ -579,7 +582,7 @@
         "PreferredParser": "HOI4WholeTextParser"
     }, {
         "DirectoryPath": "tools",
-        "PreferredParser": "DefaultParser"
+        "PreferredParser": "HOI4WholeTextParser"
     }, {
         "DirectoryPath": "tutorial",
         "PreferredParser": "HOI4WholeTextParser"
