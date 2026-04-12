@@ -747,6 +747,11 @@ namespace IronyModManager.Services
         /// <returns>IEnumerable&lt;IModInstallationResult&gt;.</returns>
         protected virtual IEnumerable<IModInstallationResult> GetAllModDescriptors(string path, ModSource modSource, ModDescriptorType modDescriptorType)
         {
+            bool IsSubPath(string path, string potentialParent)
+            {
+                return path.StartsWith(potentialParent.TrimEnd('\\') + "\\", StringComparison.OrdinalIgnoreCase);
+            }
+
             // Json metadata doesn't support zips to ignore them
             var files = Directory.Exists(path) && modDescriptorType == ModDescriptorType.DescriptorMod
                 ? Directory.EnumerateFiles(path, $"*{Shared.Constants.ZipExtension}").Union(Directory.EnumerateFiles(path, $"*{Shared.Constants.BinExtension}"))
@@ -756,21 +761,14 @@ namespace IronyModManager.Services
 
             static void setDescriptorPath(IMod mod, string desiredPath, string localPath)
             {
-                if (desiredPath.Equals(localPath, StringComparison.OrdinalIgnoreCase))
+                if (desiredPath.Equals(localPath, StringComparison.OrdinalIgnoreCase) || mod.RemoteId.GetValueOrDefault() > 0)
                 {
                     mod.DescriptorFile = desiredPath;
                 }
                 else
                 {
-                    if (mod.RemoteId.GetValueOrDefault() > 0)
-                    {
-                        mod.DescriptorFile = desiredPath;
-                    }
-                    else
-                    {
-                        mod.Source = ModSource.Local;
-                        mod.DescriptorFile = localPath;
-                    }
+                    mod.Source = ModSource.Local;
+                    mod.DescriptorFile = localPath;
                 }
             }
 
@@ -836,6 +834,7 @@ namespace IronyModManager.Services
                         ? $"{Shared.Constants.ModDirectory}/{cleanedPath.Split(Path.DirectorySeparatorChar, StringSplitOptions.RemoveEmptyEntries).LastOrDefault()}{Shared.Constants.ModExtension}"
                         : $"{Shared.Constants.JsonModDirectory}/{cleanedPath.Split(Path.DirectorySeparatorChar, StringSplitOptions.RemoveEmptyEntries).LastOrDefault()}{Shared.Constants.JsonExtension}";
 
+                    // ReSharper disable once SwitchStatementHandlesSomeKnownEnumValuesWithDefault
                     switch (mod.Source)
                     {
                         case ModSource.Local:
@@ -924,7 +923,7 @@ namespace IronyModManager.Services
                     }
 
                     var subdirectories = Directory.GetDirectories(directory);
-                    if (subdirectories.Length != 0 && modSourceOverride != ModSource.Steam)
+                    if (subdirectories.Length != 0)
                     {
                         foreach (var subdirectory in subdirectories)
                         {
@@ -938,7 +937,11 @@ namespace IronyModManager.Services
                 });
             }
 
-            return [.. mods];
+            var filtered = mods
+                .Where(x => !mods.Any(y => x != y && IsSubPath(x.Path, y.Path)))
+                .ToList();
+
+            return [.. filtered];
         }
 
         /// <summary>
