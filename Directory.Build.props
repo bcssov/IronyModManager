@@ -18,9 +18,6 @@
 		<PathMap>$(MSBuildProjectDirectory)=$(MSBuildProjectName)</PathMap>
 	</PropertyGroup>
 	<PropertyGroup>
-		<!-- When Avalonia goes apeshit enable this -->
-		<!-- <DebugSymbols>False</DebugSymbols>
-		<DebugType>None</DebugType> -->
 		<MicrosoftExtensionsDependencyModelVersion>[8.0.2]</MicrosoftExtensionsDependencyModelVersion>
 		<MicrosoftNETCorePlatformsVersion>[8.0.0-preview.7.23375.6]</MicrosoftNETCorePlatformsVersion>
 		<MicrosoftExtensionsConfigurationBinder>[8.0.2]</MicrosoftExtensionsConfigurationBinder>
