@@ -4,7 +4,7 @@
 // Created          : 02-24-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 12-02-2025
+// Last Modified On : 04-12-2026
 // ***********************************************************************
 // <copyright file="ModService.cs" company="Mario">
 //     Mario
@@ -39,7 +39,19 @@ namespace IronyModManager.Services
     /// </summary>
     /// <seealso cref="IronyModManager.Services.ModBaseService" />
     /// <seealso cref="IronyModManager.Services.Common.IModService" />
-    public class ModService : ModBaseService, IModService
+    /// <remarks>Initializes a new instance of the <see cref="ModService" /> class.</remarks>
+    public class ModService(
+        ILanguagesService languageService,
+        IParser searchParser,
+        ILogger logger,
+        ICache cache,
+        IEnumerable<IDefinitionInfoProvider> definitionInfoProviders,
+        IReader reader,
+        IModParser modParser,
+        IModWriter modWriter,
+        IGameService gameService,
+        IStorageProvider storageProvider,
+        IMapper mapper) : ModBaseService(cache, definitionInfoProviders, reader, modWriter, modParser, gameService, storageProvider, mapper), IModService
     {
         #region Fields
 
@@ -51,47 +63,19 @@ namespace IronyModManager.Services
         /// <summary>
         /// The language service
         /// </summary>
-        private readonly ILanguagesService languageService;
+        private readonly ILanguagesService languageService = languageService;
 
         /// <summary>
         /// The logger
         /// </summary>
-        private readonly ILogger logger;
+        private readonly ILogger logger = logger;
 
         /// <summary>
         /// The search parser
         /// </summary>
-        private readonly IParser searchParser;
+        private readonly IParser searchParser = searchParser;
 
         #endregion Fields
-
-        #region Constructors
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="ModService" /> class.
-        /// </summary>
-        /// <param name="languageService">The language service.</param>
-        /// <param name="searchParser">The search parser.</param>
-        /// <param name="logger">The logger.</param>
-        /// <param name="cache">The cache.</param>
-        /// <param name="definitionInfoProviders">The definition information providers.</param>
-        /// <param name="reader">The reader.</param>
-        /// <param name="modParser">The mod parser.</param>
-        /// <param name="modWriter">The mod writer.</param>
-        /// <param name="gameService">The game service.</param>
-        /// <param name="storageProvider">The storage provider.</param>
-        /// <param name="mapper">The mapper.</param>
-        public ModService(ILanguagesService languageService, IParser searchParser, ILogger logger, ICache cache, IEnumerable<IDefinitionInfoProvider> definitionInfoProviders,
-            IReader reader, IModParser modParser,
-            IModWriter modWriter, IGameService gameService,
-            IStorageProvider storageProvider, IMapper mapper) : base(cache, definitionInfoProviders, reader, modWriter, modParser, gameService, storageProvider, mapper)
-        {
-            this.logger = logger;
-            this.searchParser = searchParser;
-            this.languageService = languageService;
-        }
-
-        #endregion Constructors
 
         #region Methods
 
@@ -217,14 +201,14 @@ namespace IronyModManager.Services
             var mod = GeneratePatchModDescriptor(allMods, game, GenerateCollectionPatchName(modCollection.Name));
             var applyModParams = new ModWriterParameters
             {
-                OtherMods = regularMods.Where(p => !enabledMods.Any(m => m.DescriptorFile.Equals(p.DescriptorFile))).ToList(),
+                OtherMods = [.. regularMods.Where(p => !enabledMods.Any(m => m.DescriptorFile.Equals(p.DescriptorFile)))],
                 EnabledMods = enabledMods,
                 RootDirectory = game.UserDirectory,
                 DescriptorType = MapDescriptorType(game.ModDescriptorType)
             };
             if (await ModWriter.ModDirectoryExistsAsync(new ModWriterParameters { RootDirectory = mod.FullPath }))
             {
-                if (modCollection.PatchModEnabled && enabledMods.Any())
+                if (modCollection.PatchModEnabled && enabledMods.Count != 0)
                 {
                     if (await ModWriter.WriteDescriptorAsync(new ModWriterParameters
                         {
@@ -235,8 +219,8 @@ namespace IronyModManager.Services
                             DescriptorType = MapDescriptorType(game.ModDescriptorType)
                         }, IsPatchModInternal(mod)))
                     {
-                        applyModParams.TopPriorityMods = new List<IMod> { mod };
-                        Cache.Invalidate(new CacheInvalidateParameters { Region = ModsCacheRegion, Prefix = game.Type, Keys = new List<string> { GetModsCacheKey(true), GetModsCacheKey(false) } });
+                        applyModParams.TopPriorityMods = [mod];
+                        Cache.Invalidate(new CacheInvalidateParameters { Region = ModsCacheRegion, Prefix = game.Type, Keys = [GetModsCacheKey(true), GetModsCacheKey(false)] });
                     }
                 }
             }
@@ -245,7 +229,7 @@ namespace IronyModManager.Services
                 // Remove left over descriptor
                 if (allMods.Any(p => p.Name.Equals(mod.Name)))
                 {
-                    await DeleteDescriptorsInternalAsync(new List<IMod> { mod });
+                    await DeleteDescriptorsInternalAsync([mod]);
                 }
             }
 
@@ -310,7 +294,7 @@ namespace IronyModManager.Services
                 })
                 .ConditionalFilter(parameters.Source.Any(), q => q.Where(p => parameters.Source.Any(s => !s.Negate ? p.Source == SourceTypeToModSource(s.Result) : sourceNegateCol.All(a => p.Source != SourceTypeToModSource(a.Result)))))
                 .ConditionalFilter(parameters.Version.Any(), q => q.Where(p => parameters.Version.Any(s => !s.Negate ? IsValidVersion(p.VersionData, s.Version) : !versionNegateCol.Any(a => IsValidVersion(p.VersionData, a.Version)))));
-            return result.ToList();
+            return [.. result];
         }
 
         /// <summary>
@@ -352,7 +336,7 @@ namespace IronyModManager.Services
             var sourceNegateCol = parameters.Source.Any() ? parameters.Source.Where(p => p.Negate).ToList() : [];
             var versionNegateCol = parameters.Version.Any() ? parameters.Version.Where(p => p.Negate).ToList() : [];
 
-            var result = !reverse ? collection.Skip(skipIndex.GetValueOrDefault()) : collection.Reverse().Skip(skipIndex.GetValueOrDefault()).ToList();
+            var result = !reverse ? collection.Skip(skipIndex.GetValueOrDefault()) : [.. collection.Reverse().Skip(skipIndex.GetValueOrDefault())];
             result = (hasAnyFilter
                     ? result.Where(p =>
                     {
@@ -446,7 +430,7 @@ namespace IronyModManager.Services
             using var mutex = await modReadLock.LockAsync();
             if (game != null)
             {
-                Cache.Invalidate(new CacheInvalidateParameters { Region = ModsCacheRegion, Prefix = game.Type, Keys = new List<string> { GetModsCacheKey(true), GetModsCacheKey(false) } });
+                Cache.Invalidate(new CacheInvalidateParameters { Region = ModsCacheRegion, Prefix = game.Type, Keys = [GetModsCacheKey(true), GetModsCacheKey(false)] });
             }
 
             var result = GetInstalledModsInternal(game, true);
@@ -561,7 +545,7 @@ namespace IronyModManager.Services
                 if (tasks.Count > 0)
                 {
                     await Task.WhenAll(tasks);
-                    Cache.Invalidate(new CacheInvalidateParameters { Region = ModsCacheRegion, Prefix = game.Type, Keys = new List<string> { GetModsCacheKey(true), GetModsCacheKey(false) } });
+                    Cache.Invalidate(new CacheInvalidateParameters { Region = ModsCacheRegion, Prefix = game.Type, Keys = [GetModsCacheKey(true), GetModsCacheKey(false)] });
                 }
 
                 if (filteredDescriptors.Any(p => p.Invalid))
@@ -578,7 +562,7 @@ namespace IronyModManager.Services
             {
                 // ReSharper disable once DisposeOnUsingVariable
                 mutex.Dispose();
-                return filteredDescriptors.Where(p => p.Invalid).ToList();
+                return [.. filteredDescriptors.Where(p => p.Invalid)];
             }
 
             // ReSharper disable once DisposeOnUsingVariable
@@ -745,8 +729,8 @@ namespace IronyModManager.Services
             var result = new ParsedSearchResult
             {
                 AchievementCompatible = parserResult.AchievementCompatible,
-                Source = parserResult.Source.Where(p => p.Result != SourceType.None).ToList(),
-                Version = parserResult.Version.Where(p => p.Version != null).ToList(),
+                Source = [.. parserResult.Source.Where(p => p.Result != SourceType.None)],
+                Version = [.. parserResult.Version.Where(p => p.Version != null)],
                 IsSelected = parserResult.IsSelected,
                 Name = names,
                 RemoteIds = remoteIds
@@ -940,7 +924,7 @@ namespace IronyModManager.Services
                     }
 
                     var subdirectories = Directory.GetDirectories(directory);
-                    if (subdirectories.Length != 0)
+                    if (subdirectories.Length != 0 && modSourceOverride != ModSource.Steam)
                     {
                         foreach (var subdirectory in subdirectories)
                         {
@@ -954,7 +938,7 @@ namespace IronyModManager.Services
                 });
             }
 
-            return mods.ToList();
+            return [.. mods];
         }
 
         /// <summary>
