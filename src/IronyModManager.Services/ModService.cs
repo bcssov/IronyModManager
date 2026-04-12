@@ -747,9 +747,9 @@ namespace IronyModManager.Services
         /// <returns>IEnumerable&lt;IModInstallationResult&gt;.</returns>
         protected virtual IEnumerable<IModInstallationResult> GetAllModDescriptors(string path, ModSource modSource, ModDescriptorType modDescriptorType)
         {
-            bool IsSubPath(string path, string potentialParent)
+            static bool IsSubPath(string path, string potentialParent)
             {
-                return path.StartsWith(potentialParent.TrimEnd('\\') + "\\", StringComparison.OrdinalIgnoreCase);
+                return path.StartsWith(potentialParent.TrimEnd(Path.DirectorySeparatorChar) + Path.DirectorySeparatorChar, StringComparison.OrdinalIgnoreCase);
             }
 
             // Json metadata doesn't support zips to ignore them
