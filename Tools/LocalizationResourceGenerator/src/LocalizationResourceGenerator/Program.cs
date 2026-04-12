@@ -3,8 +3,8 @@
 // Author           : Mario
 // Created          : 02-03-2020
 //
-// Last Modified By : Mario
-// Last Modified On : 03-07-2020
+// Last Modified By : mortenmunk
+// Last Modified On : 04-11-2026
 // ***********************************************************************
 // <copyright file="Program.cs" company="Mario">
 //     Mario
@@ -30,12 +30,12 @@ namespace LocalizationResourceGenerator
         /// <summary>
         /// The resource path
         /// </summary>
-        private const string LocalizationResourceOutPath = "..\\..\\..\\..\\..\\..\\..\\src\\IronyModManager.Shared\\LocalizationResources.cs";
+        private const string LocalizationResourceOutPath = "../../../../../../../src/IronyModManager.Shared/LocalizationResources.cs";
 
         /// <summary>
         /// The localization resource path
         /// </summary>
-        private const string LocalizationResourcePath = "..\\..\\..\\..\\..\\..\\..\\src\\IronyModManager\\Localization\\en.json";
+        private const string LocalizationResourcePath = "../../../../../../../src/IronyModManager/Localization/en.json";
 
 #else
 
@@ -44,12 +44,12 @@ namespace LocalizationResourceGenerator
         /// <summary>
         /// The localization resource out path
         /// </summary>
-        private const string LocalizationResourceOutPath = "..\\..\\src\\IronyModManager.Shared\\LocalizationResources.cs";
+        private const string LocalizationResourceOutPath = "../../src/IronyModManager.Shared/LocalizationResources.cs";
 
         /// <summary>
         /// The localization resource path
         /// </summary>
-        private const string LocalizationResourcePath = "..\\..\\src\\IronyModManager\\Localization\\en.json";
+        private const string LocalizationResourcePath = "../../src/IronyModManager/Localization/en.json";
 
         #endregion Fields
 
