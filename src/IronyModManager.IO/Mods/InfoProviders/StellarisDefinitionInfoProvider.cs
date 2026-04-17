@@ -4,7 +4,7 @@
 // Created          : 04-02-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-07-2025
+// Last Modified On : 04-17-2026
 // ***********************************************************************
 // <copyright file="StellarisDefinitionInfoProvider.cs" company="Mario">
 //     Mario
@@ -53,13 +53,13 @@ namespace IronyModManager.IO.Mods.InfoProviders
         [
             "component_sets", "component_templates", "event_chains", "global_ship_designs",
             "scripted_variables", "section_templates", "ship_behaviors", "special_projects", "static_modifiers", "strategic_resources", "events",
-            "solar_system_initializers", "traits", "start_screen_messages"
+            "solar_system_initializers", "traits", "start_screen_messages", "governments\\authorities".StandardizeDirectorySeparator()
         ];
 
         /// <summary>
         /// Gets the global variables path.
         /// </summary>
-        /// <value>The global variables path.</value>
+        /// <value>The global variables' path.</value>
         public override string GlobalVariablesPath => "common\\scripted_variables".StandardizeDirectorySeparator();
 
         /// <summary>

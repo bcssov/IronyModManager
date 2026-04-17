@@ -4,7 +4,7 @@
 // Created          : 04-04-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-07-2025
+// Last Modified On : 04-17-2026
 // ***********************************************************************
 // <copyright file="BaseDefinitionInfoProvider.cs" company="Mario">
 //     Mario
@@ -71,7 +71,7 @@ namespace IronyModManager.IO.Mods.InfoProviders
         /// <summary>
         /// Gets the global variables path.
         /// </summary>
-        /// <value>The global variables path.</value>
+        /// <value>The global variables' path.</value>
         public abstract string GlobalVariablesPath { get; }
 
         /// <summary>
