@@ -4,9 +4,10 @@
 		<title>Irony Mod Manager</title>
 		<language>en</language>
 		<item>
-			<title>1.27.169</title>
+			<title>1.27.172</title>
 			<description>## Current Release Notes
-* A more generic duplicate steam entries fix
+* Bump magick.net
+* Stellaris governments\\authorities treated properly now in CS
 
 ## Release Notes 1.27
 * Update dependencies
@@ -17,13 +18,14 @@
 * Optional GenerateSteamAppId flag to create steam_appid.txt when missing (used for enabling Steam activity tracking when launching games directly; off by default)
 * Added StoragePath setting to customize where Irony stores and reads its data
 * Irony is now Flatpak-aware (detects and supports Steam Flatpak installations)</description>
-			<pubDate>Sun, 12 Apr 2026 08:59:52 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.27.169/linux-x64.zip" sparkle:version="1.27.169.19768" sparkle:shortVersionString="1.27.169" length="89287110" sparkle:os="linux" type="application/zip" sparkle:signature="05JjjDJreU+ukxqc6tllI4pQv/TT0tSQaGTxTYYXOGE5cvSkNywo/u8BSfwgjqAQzJS3IxRxsefySiTM1msXDA=="/>
+			<pubDate>Fri, 17 Apr 2026 23:15:18 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.27.172/linux-x64.zip" sparkle:version="1.27.172.11" sparkle:shortVersionString="1.27.172" length="89288050" sparkle:os="linux" type="application/zip" sparkle:signature="Vfgb6P+pU2mBk5Z1g9coG+4UulrZTOh3L3EJW1D6Js2uPNtQ8Uz+1S+Wtzz3UdwFHEZvRq968JjFH8OXX2W8BQ=="/>
 		</item>
 		<item>
-			<title>1.27.169</title>
+			<title>1.27.172</title>
 			<description>## Current Release Notes
-* A more generic duplicate steam entries fix
+* Bump magick.net
+* Stellaris governments\\authorities treated properly now in CS
 
 ## Release Notes 1.27
 * Update dependencies
@@ -34,13 +36,14 @@
 * Optional GenerateSteamAppId flag to create steam_appid.txt when missing (used for enabling Steam activity tracking when launching games directly; off by default)
 * Added StoragePath setting to customize where Irony stores and reads its data
 * Irony is now Flatpak-aware (detects and supports Steam Flatpak installations)</description>
-			<pubDate>Sun, 12 Apr 2026 08:59:58 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.27.169/osx-x64.zip" sparkle:version="1.27.169.19768" sparkle:shortVersionString="1.27.169" length="92021999" sparkle:os="osx" type="application/zip" sparkle:signature="2HtbfHb+mKdyg+HjoQkg5vUaWOECkZxGGmqVjC8fUuU+5dqRgtWPhluF9T8LcnAdR3rj4WeZHjU+uVKAbRreCg=="/>
+			<pubDate>Fri, 17 Apr 2026 23:15:24 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.27.172/osx-x64.zip" sparkle:version="1.27.172.11" sparkle:shortVersionString="1.27.172" length="92022380" sparkle:os="osx" type="application/zip" sparkle:signature="bTR4Gi1XFaCrg+hceqpfmH3bqAdfF9nJFPVaCN0/Bz0zak9GnPn0a30V+/bXOnt0UGY06EoclZN3Wm2wmugbAQ=="/>
 		</item>
 		<item>
-			<title>1.27.169</title>
+			<title>1.27.172</title>
 			<description>## Current Release Notes
-* A more generic duplicate steam entries fix
+* Bump magick.net
+* Stellaris governments\\authorities treated properly now in CS
 
 ## Release Notes 1.27
 * Update dependencies
@@ -51,13 +54,14 @@
 * Optional GenerateSteamAppId flag to create steam_appid.txt when missing (used for enabling Steam activity tracking when launching games directly; off by default)
 * Added StoragePath setting to customize where Irony stores and reads its data
 * Irony is now Flatpak-aware (detects and supports Steam Flatpak installations)</description>
-			<pubDate>Sun, 12 Apr 2026 09:00:05 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.27.169/win-x64-setup.zip" sparkle:version="1.27.169.19768" sparkle:shortVersionString="1.27.169" length="73763226" sparkle:os="windows" type="application/zip" sparkle:signature="4XtmhTuo7g90A7kK75POOJbTqSWkeVwzMAapu3or/D2+zQ9UkDefXsdltlXzoT5eiXQDm6geEv9HvaQ+6w5WCA=="/>
+			<pubDate>Fri, 17 Apr 2026 23:15:31 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.27.172/win-x64-setup.zip" sparkle:version="1.27.172.11" sparkle:shortVersionString="1.27.172" length="73789788" sparkle:os="windows" type="application/zip" sparkle:signature="ODQR4HzwCBFgHgEYPoeLScw5d+q/2e0T4FCoFRM8UAIL0l9k5nPZxJ0+JqOWA8KB2REnFfEVtpy1+1TgeGYlCw=="/>
 		</item>
 		<item>
-			<title>1.27.169</title>
+			<title>1.27.172</title>
 			<description>## Current Release Notes
-* A more generic duplicate steam entries fix
+* Bump magick.net
+* Stellaris governments\\authorities treated properly now in CS
 
 ## Release Notes 1.27
 * Update dependencies
@@ -68,8 +72,8 @@
 * Optional GenerateSteamAppId flag to create steam_appid.txt when missing (used for enabling Steam activity tracking when launching games directly; off by default)
 * Added StoragePath setting to customize where Irony stores and reads its data
 * Irony is now Flatpak-aware (detects and supports Steam Flatpak installations)</description>
-			<pubDate>Sun, 12 Apr 2026 09:00:17 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.27.169/win-x64.zip" sparkle:version="1.27.169.19768" sparkle:shortVersionString="1.27.169" length="103406362" sparkle:os="windows" type="application/zip" sparkle:signature="3EEVVel9o8Afhk6w/miGUhPLJ8q2SsloN/sl+9Cfo/TXj6GQu/CT5Rjp8taSk/EBOj71HsQh3VyV0kRG7WnyBQ=="/>
+			<pubDate>Fri, 17 Apr 2026 23:15:43 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.27.172/win-x64.zip" sparkle:version="1.27.172.11" sparkle:shortVersionString="1.27.172" length="103433004" sparkle:os="windows" type="application/zip" sparkle:signature="Hrzq5CAeuw9Gl8Rwidza9VEWPmFAaAl53821ArfY6yp+gkkbobD50DgbukQE6ngye/OJc4TYLWjT+5r+VPxKDg=="/>
 		</item>
 	</channel>
 </rss>
