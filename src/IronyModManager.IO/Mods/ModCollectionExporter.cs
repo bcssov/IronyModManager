@@ -4,7 +4,7 @@
 // Created          : 03-09-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 12-03-2025
+// Last Modified On : 05-12-2026
 // ***********************************************************************
 // <copyright file="ModCollectionExporter.cs" company="Mario">
 //     Mario
@@ -133,6 +133,7 @@ namespace IronyModManager.IO.Mods
         /// </summary>
         /// <param name="parameters">The parameters.</param>
         /// <returns>Task&lt;System.Boolean&gt;.</returns>
+        /// <exception cref="ArgumentException">Invalid descriptor type</exception>
         /// <exception cref="System.ArgumentException">Invalid descriptor type</exception>
         public async Task<bool> ExportAsync(ModCollectionExporterParams parameters)
         {
@@ -411,6 +412,7 @@ namespace IronyModManager.IO.Mods
         /// </summary>
         /// <param name="parameters">The parameters.</param>
         /// <returns>Task&lt;System.Boolean&gt;.</returns>
+        /// <exception cref="ArgumentException">Invalid descriptor type.</exception>
         /// <exception cref="System.ArgumentException">Invalid descriptor type.</exception>
         public Task<ICollectionImportResult> ImportParadoxAsync(ModCollectionExporterParams parameters)
         {
@@ -537,8 +539,9 @@ namespace IronyModManager.IO.Mods
                 {
                     if (!reader.Entry.IsDirectory)
                     {
-                        var relativePath = reader.Entry.Key.StandardizeDirectorySeparator().Trim(Path.DirectorySeparatorChar);
-                        if (reader.Entry.Key.Equals(Common.Constants.ExportedModContentId, StringComparison.OrdinalIgnoreCase))
+                        var entryKey = ZipExtractionOpts.SanitizeArchivePath(reader.Entry.Key);
+                        var relativePath = entryKey.StandardizeDirectorySeparator().Trim(Path.DirectorySeparatorChar);
+                        if (entryKey.Equals(Common.Constants.ExportedModContentId, StringComparison.OrdinalIgnoreCase))
                         {
                             if (importInstance)
                             {
@@ -594,8 +597,9 @@ namespace IronyModManager.IO.Mods
                 double previousProgress = 0;
                 foreach (var entry in entries)
                 {
-                    var relativePath = entry.Key.StandardizeDirectorySeparator().Trim(Path.DirectorySeparatorChar);
-                    if (entry.Key.Equals(Common.Constants.ExportedModContentId, StringComparison.OrdinalIgnoreCase))
+                    var entryKey = ZipExtractionOpts.SanitizeArchivePath(entry.Key);
+                    var relativePath = entryKey.StandardizeDirectorySeparator().Trim(Path.DirectorySeparatorChar);
+                    if (entryKey.Equals(Common.Constants.ExportedModContentId, StringComparison.OrdinalIgnoreCase))
                     {
                         if (importInstance)
                         {

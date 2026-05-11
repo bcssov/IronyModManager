@@ -4,13 +4,14 @@
 // Created          : 09-17-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 09-19-2021
+// Last Modified On : 05-12-2026
 // ***********************************************************************
 // <copyright file="Unpacker.cs" company="Mario">
 //     Mario
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
+
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -68,15 +69,18 @@ namespace IronyModManager.IO.Updater
             {
                 return string.Empty;
             }
-            var extractPath = Path.Combine(Path.GetDirectoryName(path), Path.GetFileNameWithoutExtension(path));
+
+            var extractPath = Path.Combine(Path.GetDirectoryName(path)!, Path.GetFileNameWithoutExtension(path));
+
             // Cleanup path were extracting to
             if (Directory.Exists(extractPath))
             {
                 DiskOperations.DeleteDirectory(extractPath, true);
             }
+
             // Throwing exception because of this? While previously it would automatically be created
             Directory.CreateDirectory(extractPath);
-            using var fileStream = File.OpenRead(path);
+            await using var fileStream = File.OpenRead(path);
             using var reader = ArchiveFactory.Open(fileStream);
             var all = reader.Entries.Where(entry => !entry.IsDirectory);
             double total = all.Count();
@@ -84,15 +88,28 @@ namespace IronyModManager.IO.Updater
             var lastPercentage = 0;
             foreach (var entry in all)
             {
-                entry.WriteToDirectory(extractPath, ZipExtractionOpts.GetExtractionOptions());
+                var relativePath = ZipExtractionOpts.SanitizeArchivePath(entry.Key);
+                var destinationFile = Path.Combine(extractPath, relativePath);
+
+                var parentDirectory = Path.GetDirectoryName(destinationFile);
+                if (!string.IsNullOrWhiteSpace(parentDirectory))
+                {
+                    Directory.CreateDirectory(parentDirectory);
+                }
+
+                await entry.WriteToFileAsync(destinationFile, ZipExtractionOpts.GetExtractionOptions());
+
                 processed++;
+
                 var progress = GetProgressPercentage(total, processed);
                 if (progress != lastPercentage)
                 {
                     await messageBus.PublishAsync(new UpdateUnpackProgressEvent(progress));
                 }
+
                 lastPercentage = progress;
             }
+
             return extractPath;
         }
 
@@ -114,6 +131,7 @@ namespace IronyModManager.IO.Updater
             {
                 perc = maxPerc;
             }
+
             return perc;
         }
 
