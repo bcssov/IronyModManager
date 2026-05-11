@@ -4,10 +4,10 @@
 		<title>Irony Mod Manager</title>
 		<language>en</language>
 		<item>
-			<title>1.27.172</title>
+			<title>1.27.174</title>
 			<description>## Current Release Notes
-* Bump magick.net
-* Stellaris governments\\authorities treated properly now in CS
+* DLC view uses fixed height for buttons
+* Linux Proton game hopefully fixed (if it's in a library)
 
 ## Release Notes 1.27
 * Update dependencies
@@ -18,14 +18,14 @@
 * Optional GenerateSteamAppId flag to create steam_appid.txt when missing (used for enabling Steam activity tracking when launching games directly; off by default)
 * Added StoragePath setting to customize where Irony stores and reads its data
 * Irony is now Flatpak-aware (detects and supports Steam Flatpak installations)</description>
-			<pubDate>Fri, 17 Apr 2026 23:15:18 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.27.172/linux-x64.zip" sparkle:version="1.27.172.11" sparkle:shortVersionString="1.27.172" length="89288050" sparkle:os="linux" type="application/zip" sparkle:signature="Vfgb6P+pU2mBk5Z1g9coG+4UulrZTOh3L3EJW1D6Js2uPNtQ8Uz+1S+Wtzz3UdwFHEZvRq968JjFH8OXX2W8BQ=="/>
+			<pubDate>Mon, 11 May 2026 23:51:11 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.27.174/linux-x64.zip" sparkle:version="1.27.174.27913" sparkle:shortVersionString="1.27.174" length="89288371" sparkle:os="linux" type="application/zip" sparkle:signature="pSZtD/Q+FAVH4LYVA04WAZYPlT5K70VVkrbICTtPTrvQaLdA3HP/WkNYWOZX2V0jinzXgfRSR/qLfPUCyP1kCw=="/>
 		</item>
 		<item>
-			<title>1.27.172</title>
+			<title>1.27.174</title>
 			<description>## Current Release Notes
-* Bump magick.net
-* Stellaris governments\\authorities treated properly now in CS
+* DLC view uses fixed height for buttons
+* Linux Proton game hopefully fixed (if it's in a library)
 
 ## Release Notes 1.27
 * Update dependencies
@@ -36,14 +36,14 @@
 * Optional GenerateSteamAppId flag to create steam_appid.txt when missing (used for enabling Steam activity tracking when launching games directly; off by default)
 * Added StoragePath setting to customize where Irony stores and reads its data
 * Irony is now Flatpak-aware (detects and supports Steam Flatpak installations)</description>
-			<pubDate>Fri, 17 Apr 2026 23:15:24 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.27.172/osx-x64.zip" sparkle:version="1.27.172.11" sparkle:shortVersionString="1.27.172" length="92022380" sparkle:os="osx" type="application/zip" sparkle:signature="bTR4Gi1XFaCrg+hceqpfmH3bqAdfF9nJFPVaCN0/Bz0zak9GnPn0a30V+/bXOnt0UGY06EoclZN3Wm2wmugbAQ=="/>
+			<pubDate>Mon, 11 May 2026 23:51:17 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.27.174/osx-x64.zip" sparkle:version="1.27.174.27913" sparkle:shortVersionString="1.27.174" length="92022879" sparkle:os="osx" type="application/zip" sparkle:signature="WXrauxQhf3UjrKQwehlcN19DkpEvl2u4MAfTQmsurJZgeypgxpqZkI9+x9W8Xp9sglptIwM8nOisxzQbt8rCAA=="/>
 		</item>
 		<item>
-			<title>1.27.172</title>
+			<title>1.27.174</title>
 			<description>## Current Release Notes
-* Bump magick.net
-* Stellaris governments\\authorities treated properly now in CS
+* DLC view uses fixed height for buttons
+* Linux Proton game hopefully fixed (if it's in a library)
 
 ## Release Notes 1.27
 * Update dependencies
@@ -54,14 +54,14 @@
 * Optional GenerateSteamAppId flag to create steam_appid.txt when missing (used for enabling Steam activity tracking when launching games directly; off by default)
 * Added StoragePath setting to customize where Irony stores and reads its data
 * Irony is now Flatpak-aware (detects and supports Steam Flatpak installations)</description>
-			<pubDate>Fri, 17 Apr 2026 23:15:31 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.27.172/win-x64-setup.zip" sparkle:version="1.27.172.11" sparkle:shortVersionString="1.27.172" length="73789788" sparkle:os="windows" type="application/zip" sparkle:signature="ODQR4HzwCBFgHgEYPoeLScw5d+q/2e0T4FCoFRM8UAIL0l9k5nPZxJ0+JqOWA8KB2REnFfEVtpy1+1TgeGYlCw=="/>
+			<pubDate>Mon, 11 May 2026 23:51:24 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.27.174/win-x64-setup.zip" sparkle:version="1.27.174.27913" sparkle:shortVersionString="1.27.174" length="73795556" sparkle:os="windows" type="application/zip" sparkle:signature="rdcZN8evjdraILyDzMk2enBr8KgtzVESibidtwBlB46h9kaJIu2lJ9d7+aMyWfSGSW6vWXe0ZTGzA9FkFa5DCw=="/>
 		</item>
 		<item>
-			<title>1.27.172</title>
+			<title>1.27.174</title>
 			<description>## Current Release Notes
-* Bump magick.net
-* Stellaris governments\\authorities treated properly now in CS
+* DLC view uses fixed height for buttons
+* Linux Proton game hopefully fixed (if it's in a library)
 
 ## Release Notes 1.27
 * Update dependencies
@@ -72,8 +72,8 @@
 * Optional GenerateSteamAppId flag to create steam_appid.txt when missing (used for enabling Steam activity tracking when launching games directly; off by default)
 * Added StoragePath setting to customize where Irony stores and reads its data
 * Irony is now Flatpak-aware (detects and supports Steam Flatpak installations)</description>
-			<pubDate>Fri, 17 Apr 2026 23:15:43 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.27.172/win-x64.zip" sparkle:version="1.27.172.11" sparkle:shortVersionString="1.27.172" length="103433004" sparkle:os="windows" type="application/zip" sparkle:signature="Hrzq5CAeuw9Gl8Rwidza9VEWPmFAaAl53821ArfY6yp+gkkbobD50DgbukQE6ngye/OJc4TYLWjT+5r+VPxKDg=="/>
+			<pubDate>Mon, 11 May 2026 23:51:36 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.27.174/win-x64.zip" sparkle:version="1.27.174.27913" sparkle:shortVersionString="1.27.174" length="103433529" sparkle:os="windows" type="application/zip" sparkle:signature="Q+Dus7uxsOFzTGhsNu96hJ5A61A5DZal89VuJ8ARV597IJPu+G81VvwE0TXBQ+cAR0kSXp2V+kQixjuTGKySCA=="/>
 		</item>
 	</channel>
 </rss>
