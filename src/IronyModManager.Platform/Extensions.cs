@@ -4,15 +4,17 @@
 // Created          : 10-29-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 05-12-2023
+// Last Modified On : 05-16-2026
 // ***********************************************************************
 // <copyright file="Extensions.cs" company="Mario">
 //     Mario
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
+
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Platform;
@@ -23,6 +25,7 @@ using IronyModManager.DI;
 using IronyModManager.Platform.Assets;
 using IronyModManager.Platform.Clipboard;
 using IronyModManager.Platform.Configuration;
+using IronyModManager.Platform.Dbus;
 using IronyModManager.Platform.Drives;
 using IronyModManager.Platform.Fonts;
 using IronyModManager.Shared;
@@ -63,7 +66,7 @@ namespace IronyModManager.Platform
             }
             else if (LinuxDisplayServer.IsX11(options.DisplayServer))
             {
-                // Standard check if x11 it will fallback to x11 itself
+                // Standard check if x11 it will fall back to x11 itself
                 builder.UsePlatformDetect();
             }
             else if (LinuxDisplayServer.IsWayland(options.DisplayServer))
@@ -79,25 +82,32 @@ namespace IronyModManager.Platform
                     builder.UsePlatformDetect();
                 }
             }
-            builder.AfterSetup(s =>
+
+            builder.AfterSetup(_ =>
             {
                 // Use already registered manager as a proxy -- doing it like this because the implementation is hidden away as internal
                 var fontManager = AvaloniaLocator.Current.GetService<IFontManagerImpl>();
                 AvaloniaLocator.CurrentMutable.Bind<IFontManagerImpl>().ToConstant(new FontManager(fontManager));
+
                 // Too many variations to take into consideration so escape the hacky way of getting clipboard implementation
                 var clipboard = AvaloniaLocator.Current.GetService<IClipboard>();
                 AvaloniaLocator.CurrentMutable.Bind<IClipboard>().ToConstant(new IronyClipboard(clipboard));
+
                 // Asset loader
                 AssetLoader.RegisterResUriParsers();
                 AvaloniaLocator.CurrentMutable.Bind<IAssetLoader>().ToConstant(new AssetLoader());
+
                 // Input manager
                 var inputManager = AvaloniaLocator.Current.GetService<IInputManager>();
                 AvaloniaLocator.CurrentMutable.Bind<IInputManager>().ToConstant(new InputManager.InputManager(inputManager));
+
                 // Windows only
                 if (os == OperatingSystemType.WinNT)
                 {
                     AvaloniaLocator.CurrentMutable.Bind<IMountedVolumeInfoProvider>().ToConstant(new WindowsMountedVolumeInfoProvider());
                 }
+
+                SafeX11InputMethod.TryInstall();
             });
             return builder;
         }
