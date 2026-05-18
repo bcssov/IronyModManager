@@ -4,7 +4,7 @@
 // Created          : 06-19-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-19-2024
+// Last Modified On : 05-18-2026
 // ***********************************************************************
 // <copyright file="ModMergeServiceTests.cs" company="Mario">
 //     Mario
@@ -36,6 +36,8 @@ using IronyModManager.Storage.Common;
 using IronyModManager.Tests.Common;
 using Moq;
 using Xunit;
+
+// ReSharper disable All
 
 namespace IronyModManager.Services.Tests
 {
@@ -133,7 +135,7 @@ namespace IronyModManager.Services.Tests
             });
             var fileInfos = new List<IFileInfo> { new FileInfo { Content = new List<string> { "a" }, FileName = "fakemod.mod", IsBinary = false } };
             reader.Setup(s => s.Read(It.IsAny<string>(), It.IsAny<IEnumerable<string>>(), It.IsAny<bool>())).Returns(fileInfos);
-            modParser.Setup(s => s.Parse(It.IsAny<IEnumerable<string>>(), It.IsAny<DescriptorModType>())).Returns((IEnumerable<string> values, DescriptorModType t) =>
+            modParser.Setup(s => s.Parse(It.IsAny<IEnumerable<string>>(), It.IsAny<DescriptorModType>(), It.IsAny<ModParserArgs>())).Returns((IEnumerable<string> values, DescriptorModType t, ModParserArgs a) =>
             {
                 return new ModObject { FileName = values.First(), Name = values.First() };
             });
@@ -256,7 +258,7 @@ namespace IronyModManager.Services.Tests
             });
             var fileInfos = new List<IFileInfo> { new FileInfo { Content = new List<string> { "a" }, FileName = "fakemod.mod", IsBinary = false } };
             reader.Setup(s => s.Read(It.IsAny<string>(), It.IsAny<IEnumerable<string>>(), It.IsAny<bool>())).Returns(fileInfos);
-            modParser.Setup(s => s.Parse(It.IsAny<IEnumerable<string>>(), It.IsAny<DescriptorModType>())).Returns((IEnumerable<string> values, DescriptorModType t) =>
+            modParser.Setup(s => s.Parse(It.IsAny<IEnumerable<string>>(), It.IsAny<DescriptorModType>(), It.IsAny<ModParserArgs>())).Returns((IEnumerable<string> values, DescriptorModType t, ModParserArgs a) =>
             {
                 return new ModObject { FileName = values.First(), Name = values.First() };
             });
@@ -285,7 +287,7 @@ namespace IronyModManager.Services.Tests
         /// <summary>
         /// Shoulds a create merge compress mods with template.
         /// </summary>
-        /// <returns>A Task.<see cref="Task"/></returns>
+        /// <returns>A Task.<see cref="Task" /></returns>
         [Fact]
         public async Task Should_create_merge_compress_mods_with_template()
         {
@@ -326,7 +328,7 @@ namespace IronyModManager.Services.Tests
             });
             var fileInfos = new List<IFileInfo> { new FileInfo { Content = new List<string> { "a" }, FileName = "fakemod.mod", IsBinary = false } };
             reader.Setup(s => s.Read(It.IsAny<string>(), It.IsAny<IEnumerable<string>>(), It.IsAny<bool>())).Returns(fileInfos);
-            modParser.Setup(s => s.Parse(It.IsAny<IEnumerable<string>>(), It.IsAny<DescriptorModType>())).Returns((IEnumerable<string> values, DescriptorModType t) =>
+            modParser.Setup(s => s.Parse(It.IsAny<IEnumerable<string>>(), It.IsAny<DescriptorModType>(), It.IsAny<ModParserArgs>())).Returns((IEnumerable<string> values, DescriptorModType t, ModParserArgs a) =>
             {
                 return new ModObject { FileName = values.First(), Name = values.First() };
             });
@@ -401,10 +403,7 @@ namespace IronyModManager.Services.Tests
             var infoProvider = new Mock<IDefinitionInfoProvider>();
             gameService.Setup(p => p.GetSelected()).Returns(new Game
             {
-                Type = "Should_not_have_free_space_due_to_no_collection_name",
-                UserDirectory = "C:\\Users\\Fake",
-                WorkshopDirectory = new List<string> { "C:\\fake" },
-                CustomModDirectory = string.Empty
+                Type = "Should_not_have_free_space_due_to_no_collection_name", UserDirectory = "C:\\Users\\Fake", WorkshopDirectory = new List<string> { "C:\\fake" }, CustomModDirectory = string.Empty
             });
 
             var service = new ModMergeService(null, null, null, new Cache(), messageBus.Object, modPatchExporter.Object, modMergeExporter.Object,
@@ -436,10 +435,7 @@ namespace IronyModManager.Services.Tests
             var infoProvider = new Mock<IDefinitionInfoProvider>();
             gameService.Setup(p => p.GetSelected()).Returns(new Game
             {
-                Type = "Should_not_have_free_space_due_to_no_mods",
-                UserDirectory = "C:\\Users\\Fake",
-                WorkshopDirectory = new List<string> { "C:\\fake" },
-                CustomModDirectory = string.Empty
+                Type = "Should_not_have_free_space_due_to_no_mods", UserDirectory = "C:\\Users\\Fake", WorkshopDirectory = new List<string> { "C:\\fake" }, CustomModDirectory = string.Empty
             });
 
             var service = new ModMergeService(null, null, null, new Cache(), messageBus.Object, modPatchExporter.Object, modMergeExporter.Object,
@@ -476,10 +472,7 @@ namespace IronyModManager.Services.Tests
             modMergeExporter.Setup(p => p.ExportFilesAsync(It.IsAny<ModMergeFileExporterParameters>())).Returns(Task.FromResult(true));
             gameService.Setup(p => p.GetSelected()).Returns(new Game
             {
-                Type = "Should_have_free_space_to_create_merge_mod",
-                UserDirectory = "C:\\Users\\Fake",
-                WorkshopDirectory = new List<string> { "C:\\fake" },
-                CustomModDirectory = string.Empty
+                Type = "Should_have_free_space_to_create_merge_mod", UserDirectory = "C:\\Users\\Fake", WorkshopDirectory = new List<string> { "C:\\fake" }, CustomModDirectory = string.Empty
             });
             var collections = new List<IModCollection> { new ModCollection { IsSelected = true, Mods = new List<string> { "mod/fakemod.mod" }, Name = "test", Game = "Should_have_free_space_to_create_merge_mod" } };
             storageProvider.Setup(s => s.GetModCollections()).Returns(() =>
@@ -488,7 +481,7 @@ namespace IronyModManager.Services.Tests
             });
             var fileInfos = new List<IFileInfo> { new FileInfo { Content = new List<string> { "a" }, FileName = "fakemod.mod", IsBinary = false } };
             reader.Setup(s => s.Read(It.IsAny<string>(), It.IsAny<IEnumerable<string>>(), It.IsAny<bool>())).Returns(fileInfos);
-            modParser.Setup(s => s.Parse(It.IsAny<IEnumerable<string>>(), It.IsAny<DescriptorModType>())).Returns((IEnumerable<string> values, DescriptorModType t) =>
+            modParser.Setup(s => s.Parse(It.IsAny<IEnumerable<string>>(), It.IsAny<DescriptorModType>(), It.IsAny<ModParserArgs>())).Returns((IEnumerable<string> values, DescriptorModType t, ModParserArgs a) =>
             {
                 return new ModObject { FileName = values.First(), Name = values.First() };
             });
@@ -536,10 +529,7 @@ namespace IronyModManager.Services.Tests
             modMergeExporter.Setup(p => p.ExportFilesAsync(It.IsAny<ModMergeFileExporterParameters>())).Returns(Task.FromResult(true));
             gameService.Setup(p => p.GetSelected()).Returns(new Game
             {
-                Type = "Should_not_have_free_space_to_create_merge_mod",
-                UserDirectory = "C:\\Users\\Fake",
-                WorkshopDirectory = new List<string> { "C:\\fake" },
-                CustomModDirectory = string.Empty
+                Type = "Should_not_have_free_space_to_create_merge_mod", UserDirectory = "C:\\Users\\Fake", WorkshopDirectory = new List<string> { "C:\\fake" }, CustomModDirectory = string.Empty
             });
             var collections = new List<IModCollection> { new ModCollection { IsSelected = true, Mods = new List<string> { "mod/fakemod.mod" }, Name = "test", Game = "Should_not_have_free_space_to_create_merge_mod" } };
             storageProvider.Setup(s => s.GetModCollections()).Returns(() =>
@@ -548,7 +538,7 @@ namespace IronyModManager.Services.Tests
             });
             var fileInfos = new List<IFileInfo> { new FileInfo { Content = new List<string> { "a" }, FileName = "fakemod.mod", IsBinary = false } };
             reader.Setup(s => s.Read(It.IsAny<string>(), It.IsAny<IEnumerable<string>>(), It.IsAny<bool>())).Returns(fileInfos);
-            modParser.Setup(s => s.Parse(It.IsAny<IEnumerable<string>>(), It.IsAny<DescriptorModType>())).Returns((IEnumerable<string> values, DescriptorModType t) =>
+            modParser.Setup(s => s.Parse(It.IsAny<IEnumerable<string>>(), It.IsAny<DescriptorModType>(), It.IsAny<ModParserArgs>())).Returns((IEnumerable<string> values, DescriptorModType t, ModParserArgs a) =>
             {
                 return new ModObject { FileName = values.First(), Name = values.First() };
             });
@@ -620,10 +610,7 @@ namespace IronyModManager.Services.Tests
             var infoProvider = new Mock<IDefinitionInfoProvider>();
             gameService.Setup(p => p.GetSelected()).Returns(new Game
             {
-                Type = "Should_not_allow_merge_when_no_collection_name",
-                UserDirectory = "C:\\Users\\Fake",
-                WorkshopDirectory = new List<string> { "C:\\fake" },
-                CustomModDirectory = string.Empty
+                Type = "Should_not_allow_merge_when_no_collection_name", UserDirectory = "C:\\Users\\Fake", WorkshopDirectory = new List<string> { "C:\\fake" }, CustomModDirectory = string.Empty
             });
 
             var service = new ModMergeService(null, null, null, new Cache(), messageBus.Object, modPatchExporter.Object, modMergeExporter.Object,
@@ -655,10 +642,7 @@ namespace IronyModManager.Services.Tests
             var infoProvider = new Mock<IDefinitionInfoProvider>();
             gameService.Setup(p => p.GetSelected()).Returns(new Game
             {
-                Type = "Should_not_allow_merge_when_no_collection_mods",
-                UserDirectory = "C:\\Users\\Fake",
-                WorkshopDirectory = new List<string> { "C:\\fake" },
-                CustomModDirectory = string.Empty
+                Type = "Should_not_allow_merge_when_no_collection_mods", UserDirectory = "C:\\Users\\Fake", WorkshopDirectory = new List<string> { "C:\\fake" }, CustomModDirectory = string.Empty
             });
 
             var service = new ModMergeService(null, null, null, new Cache(), messageBus.Object, modPatchExporter.Object, modMergeExporter.Object,
@@ -701,7 +685,7 @@ namespace IronyModManager.Services.Tests
             });
             var fileInfos = new List<IFileInfo> { new FileInfo { Content = new List<string> { "a" }, FileName = "fakemod.mod", IsBinary = false } };
             reader.Setup(s => s.Read(It.IsAny<string>(), It.IsAny<IEnumerable<string>>(), It.IsAny<bool>())).Returns(fileInfos);
-            modParser.Setup(s => s.Parse(It.IsAny<IEnumerable<string>>(), It.IsAny<DescriptorModType>())).Returns((IEnumerable<string> values, DescriptorModType t) =>
+            modParser.Setup(s => s.Parse(It.IsAny<IEnumerable<string>>(), It.IsAny<DescriptorModType>(), It.IsAny<ModParserArgs>())).Returns((IEnumerable<string> values, DescriptorModType t, ModParserArgs a) =>
             {
                 return new ModObject { FileName = values.First(), Name = values.First() };
             });
@@ -755,7 +739,7 @@ namespace IronyModManager.Services.Tests
             });
             var fileInfos = new List<IFileInfo> { new FileInfo { Content = new List<string> { "a" }, FileName = "fakemod.mod", IsBinary = false } };
             reader.Setup(s => s.Read(It.IsAny<string>(), It.IsAny<IEnumerable<string>>(), It.IsAny<bool>())).Returns(fileInfos);
-            modParser.Setup(s => s.Parse(It.IsAny<IEnumerable<string>>(), It.IsAny<DescriptorModType>())).Returns((IEnumerable<string> values, DescriptorModType t) =>
+            modParser.Setup(s => s.Parse(It.IsAny<IEnumerable<string>>(), It.IsAny<DescriptorModType>(), It.IsAny<ModParserArgs>())).Returns((IEnumerable<string> values, DescriptorModType t, ModParserArgs a) =>
             {
                 return new ModObject { FileName = values.First(), Name = values.First() };
             });

@@ -4,7 +4,7 @@
 // Created          : 02-22-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 12-23-2024
+// Last Modified On : 05-18-2026
 // ***********************************************************************
 // <copyright file="ModObject.cs" company="Mario">
 //     Mario
@@ -46,7 +46,7 @@ namespace IronyModManager.Parser.Mod
         /// Gets or sets the name of the file.
         /// </summary>
         /// <value>The name of the file.</value>
-        [DescriptorProperty("path", "archive", ".zip", ".bin")]
+        [DescriptorProperty("path", "archive", true, ".zip", ".bin")]
         public string FileName { get; set; }
 
         /// <summary>

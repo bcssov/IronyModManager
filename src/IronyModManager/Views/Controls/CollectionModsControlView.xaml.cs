@@ -4,7 +4,7 @@
 // Created          : 03-03-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-06-2024
+// Last Modified On : 05-18-2026
 // ***********************************************************************
 // <copyright file="CollectionModsControlView.xaml.cs" company="Mario">
 //     Mario
@@ -200,7 +200,7 @@ namespace IronyModManager.Views.Controls
                             {
                                 var col = grid.ColumnDefinitions[i];
                                 var width = header.ColumnDefinitions[i].ActualWidth;
-                                if (width >= 0 && !double.IsInfinity(width) && !double.IsNaN(width) && width != col.Width.Value)
+                                if (width >= 0 && !double.IsInfinity(width) && !double.IsNaN(width) && width.IsNotNearlyEqual(col.Width.Value))
                                 {
                                     col.Width = new GridLength(width);
                                 }
@@ -234,13 +234,13 @@ namespace IronyModManager.Views.Controls
             modList.LayoutUpdated += (_, _) =>
             {
                 var visibleItems = modList.ItemContainerGenerator.Containers.ToList();
-                if (visibleItems.Any())
+                if (visibleItems.Count != 0)
                 {
                     var mods = visibleItems.Select(p => p.Item).OfType<IMod>().ToList();
-                    if (mods.Any())
+                    if (mods.Count != 0)
                     {
                         mods = mods.Where(p => p.Files == null || !p.Files.Any() || p.AchievementStatus == AchievementStatus.NotEvaluated).ToList();
-                        if (mods.Any())
+                        if (mods.Count != 0)
                         {
                             Task.Run(() => mbus.Publish(new EvalModAchievementsCompatibilityEvent(mods)));
                         }
@@ -259,7 +259,7 @@ namespace IronyModManager.Views.Controls
                 modList.AutoScrollToSelectedItem = false;
                 previousModListIndex = modList.SelectedIndex;
                 var visibleItems = modList.ItemContainerGenerator.Containers.ToList();
-                if (visibleItems.Any())
+                if (visibleItems.Count != 0)
                 {
                     modListFocusSideScrollItem = visibleItems.FirstOrDefault()!.Index;
                     previousModListCount = modList.ItemCount;

@@ -4,7 +4,7 @@
 // Created          : 02-29-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 12-07-2025
+// Last Modified On : 05-18-2026
 // ***********************************************************************
 // <copyright file="InstalledModsControlViewModel.cs" company="Mario">
 //     Mario
@@ -180,7 +180,7 @@ namespace IronyModManager.ViewModels.Controls
             ModSelectedSortOrder = modSelectedSortOrder;
             FilterMods = filterMods;
             this.evalModAchievementsCompatibilityHandler = evalModAchievementsCompatibilityHandler;
-            evalModsQueue = new ConcurrentBag<IMod>();
+            evalModsQueue = [];
         }
 
         #endregion Constructors

@@ -4,30 +4,27 @@
 // Created          : 03-04-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 12-02-2022
+// Last Modified On : 05-18-2026
 // ***********************************************************************
 // <copyright file="ModCollectionServiceTests.cs" company="Mario">
 //     Mario
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using AutoMapper;
 using AwesomeAssertions;
 using IronyModManager.IO;
-using IronyModManager.IO.Common;
 using IronyModManager.IO.Common.Models;
 using IronyModManager.IO.Common.Mods;
 using IronyModManager.IO.Common.Readers;
 using IronyModManager.IO.Models;
-using IronyModManager.IO.Readers;
 using IronyModManager.Models;
 using IronyModManager.Models.Common;
-using IronyModManager.Parser;
 using IronyModManager.Parser.Common;
 using IronyModManager.Parser.Common.Mod;
 using IronyModManager.Parser.Mod;
@@ -40,11 +37,15 @@ using IronyModManager.Tests.Common;
 using Moq;
 using Xunit;
 
+// ReSharper disable All
+
 namespace IronyModManager.Services.Tests
 {
     /// <summary>
     /// Class ModCollectionServiceTests.
     /// </summary>
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0028:Simplify collection initialization", Justification = "It's a unit test")]
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0017:Simplify object initialization", Justification = "It's a unit test")]
     public class ModCollectionServiceTests
     {
         /// <summary>
@@ -54,26 +55,11 @@ namespace IronyModManager.Services.Tests
         /// <param name="gameService">The game service.</param>
         private static void SetupMockCase(Mock<IStorageProvider> storageProvider, Mock<IGameService> gameService)
         {
-            var collections = new List<IModCollection>()
+            var collections = new List<IModCollection>
             {
-                new ModCollection()
-                {
-                    Mods = new List<string>() { "1", "2"},
-                    Name = "test",
-                    Game = "test"
-                },
-                new ModCollection()
-                {
-                    Mods = new List<string>() { "2"},
-                    Name = "test2",
-                    Game = "test"
-                },
-                new ModCollection()
-                {
-                    Mods = new List<string>() { "3"},
-                    Name = "test",
-                    Game = "test2"
-                }
+                new ModCollection { Mods = new List<string> { "1", "2" }, Name = "test", Game = "test" },
+                new ModCollection { Mods = new List<string> { "2" }, Name = "test2", Game = "test" },
+                new ModCollection { Mods = new List<string> { "3" }, Name = "test", Game = "test2" }
             };
             storageProvider.Setup(s => s.GetModCollections()).Returns(() =>
             {
@@ -84,10 +70,7 @@ namespace IronyModManager.Services.Tests
                 collections = col.ToList();
                 return true;
             });
-            gameService.Setup(s => s.GetSelected()).Returns(new Game()
-            {
-                Type = "test"
-            });
+            gameService.Setup(s => s.GetSelected()).Returns(new Game { Type = "test" });
         }
 
         /// <summary>
@@ -198,10 +181,7 @@ namespace IronyModManager.Services.Tests
             var modExport = new Mock<IModCollectionExporter>();
             SetupMockCase(storageProvider, gameService);
             storageProvider.Setup(s => s.GetModCollections()).Returns(new List<IModCollection>());
-            gameService.Setup(s => s.GetSelected()).Returns(new Game()
-            {
-                Type = "no-items"
-            });
+            gameService.Setup(s => s.GetSelected()).Returns(new Game { Type = "no-items" });
 
             var service = new ModCollectionService(null, null, new Cache(), null, null, null, null, gameService.Object, modExport.Object, storageProvider.Object, mapper.Object);
             var result = service.Delete("test");
@@ -293,10 +273,7 @@ namespace IronyModManager.Services.Tests
             var modExport = new Mock<IModCollectionExporter>();
             SetupMockCase(storageProvider, gameService);
             storageProvider.Setup(s => s.GetModCollections()).Returns(new List<IModCollection>());
-            gameService.Setup(s => s.GetSelected()).Returns(new Game()
-            {
-                Type = "no-items"
-            });
+            gameService.Setup(s => s.GetSelected()).Returns(new Game { Type = "no-items" });
 
             var service = new ModCollectionService(null, null, new Cache(), null, null, null, null, gameService.Object, modExport.Object, storageProvider.Object, mapper.Object);
             var result = service.Get("test2");
@@ -324,6 +301,7 @@ namespace IronyModManager.Services.Tests
             {
                 exception = ex;
             }
+
             exception.GetType().Should().Be(typeof(ArgumentNullException));
         }
 
@@ -348,6 +326,7 @@ namespace IronyModManager.Services.Tests
             {
                 exception = ex;
             }
+
             exception.GetType().Should().Be(typeof(ArgumentNullException));
         }
 
@@ -364,11 +343,7 @@ namespace IronyModManager.Services.Tests
             SetupMockCase(storageProvider, gameService);
 
             var service = new ModCollectionService(null, null, new Cache(), null, null, null, null, gameService.Object, modExport.Object, storageProvider.Object, mapper.Object);
-            var result = service.Save(new ModCollection()
-            {
-                Name = "fake",
-                Game = "test"
-            });
+            var result = service.Save(new ModCollection { Name = "fake", Game = "test" });
             result.Should().BeTrue();
             service.GetAll().Count().Should().Be(3);
         }
@@ -386,11 +361,7 @@ namespace IronyModManager.Services.Tests
             SetupMockCase(storageProvider, gameService);
 
             var service = new ModCollectionService(null, null, new Cache(), null, null, null, null, gameService.Object, modExport.Object, storageProvider.Object, mapper.Object);
-            var result = service.Save(new ModCollection()
-            {
-                Name = "test",
-                Game = "test"
-            });
+            var result = service.Save(new ModCollection { Name = "test", Game = "test" });
             result.Should().BeTrue();
             service.GetAll().Count().Should().Be(2);
         }
@@ -456,10 +427,7 @@ namespace IronyModManager.Services.Tests
             var gameService = new Mock<IGameService>();
             var modExport = new Mock<IModCollectionExporter>();
             SetupMockCase(storageProvider, gameService);
-            gameService.Setup(s => s.GetSelected()).Returns(new Game()
-            {
-                Type = "no-items"
-            });
+            gameService.Setup(s => s.GetSelected()).Returns(new Game { Type = "no-items" });
 
 
             var service = new ModCollectionService(null, null, new Cache(), null, null, null, null, gameService.Object, modExport.Object, storageProvider.Object, mapper.Object);
@@ -477,11 +445,7 @@ namespace IronyModManager.Services.Tests
             var gameService = new Mock<IGameService>();
             var modExport = new Mock<IModCollectionExporter>();
             var isValid = false;
-            gameService.Setup(s => s.GetSelected()).Returns(new Game()
-            {
-                Type = "no-items",
-                UserDirectory = "C:\\fake"
-            });
+            gameService.Setup(s => s.GetSelected()).Returns(new Game { Type = "no-items", UserDirectory = "C:\\fake" });
             modExport.Setup(p => p.ExportAsync(It.IsAny<ModCollectionExporterParams>())).Callback((ModCollectionExporterParams p) =>
             {
                 if (p.File.Equals("file") && p.Mod.Name.Equals("fake"))
@@ -500,10 +464,7 @@ namespace IronyModManager.Services.Tests
             });
 
             var service = new ModCollectionService(null, null, new Cache(), null, null, modWriter.Object, null, gameService.Object, modExport.Object, storageProvider.Object, mapper.Object);
-            await service.ExportAsync("file", new ModCollection()
-            {
-                Name = "fake"
-            });
+            await service.ExportAsync("file", new ModCollection { Name = "fake" });
             isValid.Should().BeTrue();
         }
 
@@ -518,11 +479,7 @@ namespace IronyModManager.Services.Tests
             var gameService = new Mock<IGameService>();
             var modExport = new Mock<IModCollectionExporter>();
             var isValid = false;
-            gameService.Setup(s => s.GetSelected()).Returns(new Game()
-            {
-                Type = "no-items",
-                UserDirectory = "C:\\fake"
-            });
+            gameService.Setup(s => s.GetSelected()).Returns(new Game { Type = "no-items", UserDirectory = "C:\\fake" });
             modExport.Setup(p => p.ExportAsync(It.IsAny<ModCollectionExporterParams>())).Callback((ModCollectionExporterParams p) =>
             {
                 if (p.File.Equals("file") && p.Mod.Name.Equals("fake") && p.ExportModOrderOnly)
@@ -541,10 +498,7 @@ namespace IronyModManager.Services.Tests
             });
 
             var service = new ModCollectionService(null, null, new Cache(), null, null, modWriter.Object, null, gameService.Object, modExport.Object, storageProvider.Object, mapper.Object);
-            await service.ExportAsync("file", new ModCollection()
-            {
-                Name = "fake"
-            }, true);
+            await service.ExportAsync("file", new ModCollection { Name = "fake" }, true);
             isValid.Should().BeTrue();
         }
 
@@ -561,13 +515,7 @@ namespace IronyModManager.Services.Tests
             var reader = new Mock<IReader>();
             var modParser = new Mock<IModParser>();
             var isValid = false;
-            gameService.Setup(s => s.GetSelected()).Returns(new Game()
-            {
-                Type = "no-items",
-                UserDirectory = "C:\\fake",
-                WorkshopDirectory = new List<string>() { "C:\\fake" },
-                CustomModDirectory = string.Empty
-            });
+            gameService.Setup(s => s.GetSelected()).Returns(new Game { Type = "no-items", UserDirectory = "C:\\fake", WorkshopDirectory = new List<string> { "C:\\fake" }, CustomModDirectory = string.Empty });
             modExport.Setup(p => p.ExportAsync(It.IsAny<ModCollectionExporterParams>())).Callback((ModCollectionExporterParams p) =>
             {
                 if (p.File.Equals("file") && p.Mod.Name.Equals("fake") && p.ExportMods.Any())
@@ -580,45 +528,20 @@ namespace IronyModManager.Services.Tests
             {
                 return false;
             });
-            var collections = new List<IModCollection>()
-            {
-                new ModCollection()
-                {
-                    IsSelected = true,
-                    Mods = new List<string>() { "mod/fakemod.mod"},
-                    Name = "fake",
-                    Game = "no-items",
-                }
-            };
+            var collections = new List<IModCollection> { new ModCollection { IsSelected = true, Mods = new List<string> { "mod/fakemod.mod" }, Name = "fake", Game = "no-items" } };
             storageProvider.Setup(s => s.GetModCollections()).Returns(() =>
             {
                 return collections;
             });
-            var fileInfos = new List<IFileInfo>()
-            {
-                new FileInfo()
-                {
-                    Content = new List<string>() { "a" },
-                    FileName = "fakemod.mod",
-                    IsBinary = false
-                }
-            };
+            var fileInfos = new List<IFileInfo> { new FileInfo { Content = new List<string> { "a" }, FileName = "fakemod.mod", IsBinary = false } };
             reader.Setup(s => s.Read(It.IsAny<string>(), It.IsAny<IEnumerable<string>>(), It.IsAny<bool>())).Returns(fileInfos);
-            modParser.Setup(s => s.Parse(It.IsAny<IEnumerable<string>>(), It.IsAny<DescriptorModType>())).Returns((IEnumerable<string> values, DescriptorModType t) =>
+            modParser.Setup(s => s.Parse(It.IsAny<IEnumerable<string>>(), It.IsAny<DescriptorModType>(), It.IsAny<ModParserArgs>())).Returns((IEnumerable<string> values, DescriptorModType t, ModParserArgs a) =>
             {
-                return new ModObject()
-                {
-                    FileName = values.First(),
-                    Name = values.First()
-                };
+                return new ModObject { FileName = values.First(), Name = values.First() };
             });
             mapper.Setup(s => s.Map<IMod>(It.IsAny<IModObject>())).Returns((IModObject o) =>
             {
-                return new Mod()
-                {
-                    FileName = o.FileName,
-                    Name = o.Name
-                };
+                return new Mod { FileName = o.FileName, Name = o.Name };
             });
             mapper.Setup(s => s.Map<IModCollection>(It.IsAny<IModCollection>())).Returns((IModCollection o) =>
             {
@@ -626,11 +549,7 @@ namespace IronyModManager.Services.Tests
             });
 
             var service = new ModCollectionService(null, null, new Cache(), null, reader.Object, modWriter.Object, modParser.Object, gameService.Object, modExport.Object, storageProvider.Object, mapper.Object);
-            await service.ExportAsync("file", new ModCollection()
-            {
-                Name = "fake",
-                Mods = new List<string>() { "mod/fakemod.mod" }
-            }, false, true);
+            await service.ExportAsync("file", new ModCollection { Name = "fake", Mods = new List<string> { "mod/fakemod.mod" } }, false, true);
             isValid.Should().BeTrue();
         }
 
@@ -647,13 +566,7 @@ namespace IronyModManager.Services.Tests
             var reader = new Mock<IReader>();
             var modParser = new Mock<IModParser>();
             var isValid = false;
-            gameService.Setup(s => s.GetSelected()).Returns(new Game()
-            {
-                Type = "no-items",
-                UserDirectory = "C:\\fake",
-                WorkshopDirectory = new List<string>() { "C:\\fake" },
-                CustomModDirectory = string.Empty
-            });
+            gameService.Setup(s => s.GetSelected()).Returns(new Game { Type = "no-items", UserDirectory = "C:\\fake", WorkshopDirectory = new List<string> { "C:\\fake" }, CustomModDirectory = string.Empty });
             modExport.Setup(p => p.ExportParadoxLauncherJsonAsync(It.IsAny<ModCollectionExporterParams>())).Callback((ModCollectionExporterParams p) =>
             {
                 if (p.File.Equals("file") && p.Mod.Name.Equals("fake") && p.ExportMods.Any() && p.Game != null)
@@ -666,45 +579,20 @@ namespace IronyModManager.Services.Tests
             {
                 return false;
             });
-            var collections = new List<IModCollection>()
-            {
-                new ModCollection()
-                {
-                    IsSelected = true,
-                    Mods = new List<string>() { "mod/fakemod.mod"},
-                    Name = "fake",
-                    Game = "no-items",
-                }
-            };
+            var collections = new List<IModCollection> { new ModCollection { IsSelected = true, Mods = new List<string> { "mod/fakemod.mod" }, Name = "fake", Game = "no-items" } };
             storageProvider.Setup(s => s.GetModCollections()).Returns(() =>
             {
                 return collections;
             });
-            var fileInfos = new List<IFileInfo>()
-            {
-                new FileInfo()
-                {
-                    Content = new List<string>() { "a" },
-                    FileName = "fakemod.mod",
-                    IsBinary = false
-                }
-            };
+            var fileInfos = new List<IFileInfo> { new FileInfo { Content = new List<string> { "a" }, FileName = "fakemod.mod", IsBinary = false } };
             reader.Setup(s => s.Read(It.IsAny<string>(), It.IsAny<IEnumerable<string>>(), It.IsAny<bool>())).Returns(fileInfos);
-            modParser.Setup(s => s.Parse(It.IsAny<IEnumerable<string>>(), It.IsAny<DescriptorModType>())).Returns((IEnumerable<string> values, DescriptorModType t) =>
+            modParser.Setup(s => s.Parse(It.IsAny<IEnumerable<string>>(), It.IsAny<DescriptorModType>(), It.IsAny<ModParserArgs>())).Returns((IEnumerable<string> values, DescriptorModType t, ModParserArgs a) =>
             {
-                return new ModObject()
-                {
-                    FileName = values.First(),
-                    Name = values.First()
-                };
+                return new ModObject { FileName = values.First(), Name = values.First() };
             });
             mapper.Setup(s => s.Map<IMod>(It.IsAny<IModObject>())).Returns((IModObject o) =>
             {
-                return new Mod()
-                {
-                    FileName = o.FileName,
-                    Name = o.Name
-                };
+                return new Mod { FileName = o.FileName, Name = o.Name };
             });
             mapper.Setup(s => s.Map<IModCollection>(It.IsAny<IModCollection>())).Returns((IModCollection o) =>
             {
@@ -712,11 +600,7 @@ namespace IronyModManager.Services.Tests
             });
 
             var service = new ModCollectionService(null, null, new Cache(), null, reader.Object, modWriter.Object, modParser.Object, gameService.Object, modExport.Object, storageProvider.Object, mapper.Object);
-            await service.ExportParadoxLauncherJsonAsync("file", new ModCollection()
-            {
-                Name = "fake",
-                Mods = new List<string>() { "mod/fakemod.mod" }
-            });
+            await service.ExportParadoxLauncherJsonAsync("file", new ModCollection { Name = "fake", Mods = new List<string> { "mod/fakemod.mod" } });
             isValid.Should().BeTrue();
         }
 
@@ -733,13 +617,7 @@ namespace IronyModManager.Services.Tests
             var reader = new Mock<IReader>();
             var modParser = new Mock<IModParser>();
             var isValid = false;
-            gameService.Setup(s => s.GetSelected()).Returns(new Game()
-            {
-                Type = "no-items",
-                UserDirectory = "C:\\fake",
-                WorkshopDirectory = new List<string>() { "C:\\fake" },
-                CustomModDirectory = string.Empty
-            });
+            gameService.Setup(s => s.GetSelected()).Returns(new Game { Type = "no-items", UserDirectory = "C:\\fake", WorkshopDirectory = new List<string> { "C:\\fake" }, CustomModDirectory = string.Empty });
             modExport.Setup(p => p.ExportParadoxLauncherJson202110Async(It.IsAny<ModCollectionExporterParams>())).Callback((ModCollectionExporterParams p) =>
             {
                 if (p.File.Equals("file") && p.Mod.Name.Equals("fake") && p.ExportMods.Any() && p.Game != null)
@@ -752,45 +630,20 @@ namespace IronyModManager.Services.Tests
             {
                 return false;
             });
-            var collections = new List<IModCollection>()
-            {
-                new ModCollection()
-                {
-                    IsSelected = true,
-                    Mods = new List<string>() { "mod/fakemod.mod"},
-                    Name = "fake",
-                    Game = "no-items",
-                }
-            };
+            var collections = new List<IModCollection> { new ModCollection { IsSelected = true, Mods = new List<string> { "mod/fakemod.mod" }, Name = "fake", Game = "no-items" } };
             storageProvider.Setup(s => s.GetModCollections()).Returns(() =>
             {
                 return collections;
             });
-            var fileInfos = new List<IFileInfo>()
-            {
-                new FileInfo()
-                {
-                    Content = new List<string>() { "a" },
-                    FileName = "fakemod.mod",
-                    IsBinary = false
-                }
-            };
+            var fileInfos = new List<IFileInfo> { new FileInfo { Content = new List<string> { "a" }, FileName = "fakemod.mod", IsBinary = false } };
             reader.Setup(s => s.Read(It.IsAny<string>(), It.IsAny<IEnumerable<string>>(), It.IsAny<bool>())).Returns(fileInfos);
-            modParser.Setup(s => s.Parse(It.IsAny<IEnumerable<string>>(), It.IsAny<DescriptorModType>())).Returns((IEnumerable<string> values, DescriptorModType t) =>
+            modParser.Setup(s => s.Parse(It.IsAny<IEnumerable<string>>(), It.IsAny<DescriptorModType>(), It.IsAny<ModParserArgs>())).Returns((IEnumerable<string> values, DescriptorModType t, ModParserArgs a) =>
             {
-                return new ModObject()
-                {
-                    FileName = values.First(),
-                    Name = values.First()
-                };
+                return new ModObject { FileName = values.First(), Name = values.First() };
             });
             mapper.Setup(s => s.Map<IMod>(It.IsAny<IModObject>())).Returns((IModObject o) =>
             {
-                return new Mod()
-                {
-                    FileName = o.FileName,
-                    Name = o.Name
-                };
+                return new Mod { FileName = o.FileName, Name = o.Name };
             });
             mapper.Setup(s => s.Map<IModCollection>(It.IsAny<IModCollection>())).Returns((IModCollection o) =>
             {
@@ -798,11 +651,7 @@ namespace IronyModManager.Services.Tests
             });
 
             var service = new ModCollectionService(null, null, new Cache(), null, reader.Object, modWriter.Object, modParser.Object, gameService.Object, modExport.Object, storageProvider.Object, mapper.Object);
-            await service.ExportParadoxLauncher202110JsonAsync("file", new ModCollection()
-            {
-                Name = "fake",
-                Mods = new List<string>() { "mod/fakemod.mod" }
-            });
+            await service.ExportParadoxLauncher202110JsonAsync("file", new ModCollection { Name = "fake", Mods = new List<string> { "mod/fakemod.mod" } });
             isValid.Should().BeTrue();
         }
 
@@ -819,31 +668,11 @@ namespace IronyModManager.Services.Tests
             var reader = new Mock<IReader>();
             var modParser = new Mock<IModParser>();
             DISetup.SetupContainer();
-            gameService.Setup(s => s.GetSelected()).Returns(new Game()
-            {
-                Type = "no-items",
-                WorkshopDirectory = new List<string>() { "C:\\fake" },
-                UserDirectory = "C:\\fake",
-                CustomModDirectory = string.Empty
-            });
-            gameService.Setup(s => s.Get()).Returns(new List<IGame>()
-            {
-                new Game()
-                {
-                    Type = "no-items",
-                    UserDirectory = "C:\\fake",
-                    WorkshopDirectory = new List<string>() { "C:\\fake" },
-                    CustomModDirectory = string.Empty
-                }
-            });
+            gameService.Setup(s => s.GetSelected()).Returns(new Game { Type = "no-items", WorkshopDirectory = new List<string> { "C:\\fake" }, UserDirectory = "C:\\fake", CustomModDirectory = string.Empty });
+            gameService.Setup(s => s.Get()).Returns(new List<IGame> { new Game { Type = "no-items", UserDirectory = "C:\\fake", WorkshopDirectory = new List<string> { "C:\\fake" }, CustomModDirectory = string.Empty } });
             modExport.Setup(p => p.ImportAsync(It.IsAny<ModCollectionExporterParams>())).Returns((ModCollectionExporterParams p) =>
             {
-                ICollectionImportResult result = new CollectionImportResult
-                {
-                    Name = "fake",
-                    Game = "no-items",
-                    Descriptors = new List<string>() { "desc1" }
-                };
+                ICollectionImportResult result = new CollectionImportResult { Name = "fake", Game = "no-items", Descriptors = new List<string> { "desc1" } };
                 return Task.FromResult(result);
             });
             modExport.Setup(p => p.ImportModDirectoryAsync(It.IsAny<ModCollectionExporterParams>())).Returns((ModCollectionExporterParams p) =>
@@ -855,45 +684,20 @@ namespace IronyModManager.Services.Tests
             {
                 return false;
             });
-            var collections = new List<IModCollection>()
-            {
-                new ModCollection()
-                {
-                    IsSelected = true,
-                    Mods = new List<string>() { "mod/fakemod.mod"},
-                    Name = "fake",
-                    Game = "no-items",
-                }
-            };
+            var collections = new List<IModCollection> { new ModCollection { IsSelected = true, Mods = new List<string> { "mod/fakemod.mod" }, Name = "fake", Game = "no-items" } };
             storageProvider.Setup(s => s.GetModCollections()).Returns(() =>
             {
                 return collections;
             });
-            var fileInfos = new List<IFileInfo>()
-            {
-                new FileInfo()
-                {
-                    Content = new List<string>() { "a" },
-                    FileName = "fakemod.mod",
-                    IsBinary = false
-                }
-            };
+            var fileInfos = new List<IFileInfo> { new FileInfo { Content = new List<string> { "a" }, FileName = "fakemod.mod", IsBinary = false } };
             reader.Setup(s => s.Read(It.IsAny<string>(), It.IsAny<IEnumerable<string>>(), It.IsAny<bool>())).Returns(fileInfos);
-            modParser.Setup(s => s.Parse(It.IsAny<IEnumerable<string>>(), It.IsAny<DescriptorModType>())).Returns((IEnumerable<string> values, DescriptorModType t) =>
+            modParser.Setup(s => s.Parse(It.IsAny<IEnumerable<string>>(), It.IsAny<DescriptorModType>(), It.IsAny<ModParserArgs>())).Returns((IEnumerable<string> values, DescriptorModType t, ModParserArgs a) =>
             {
-                return new ModObject()
-                {
-                    FileName = values.First(),
-                    Name = values.First()
-                };
+                return new ModObject { FileName = values.First(), Name = values.First() };
             });
             mapper.Setup(s => s.Map<IMod>(It.IsAny<IModObject>())).Returns((IModObject o) =>
             {
-                return new Mod()
-                {
-                    FileName = o.FileName,
-                    Name = o.Name
-                };
+                return new Mod { FileName = o.FileName, Name = o.Name };
             });
             mapper.Setup(s => s.Map<IModCollection>(It.IsAny<IModCollection>())).Returns((IModCollection o) =>
             {
@@ -918,30 +722,11 @@ namespace IronyModManager.Services.Tests
             var reader = new Mock<IReader>();
             var modParser = new Mock<IModParser>();
             DISetup.SetupContainer();
-            gameService.Setup(s => s.GetSelected()).Returns(new Game()
-            {
-                Type = "no-items",
-                UserDirectory = "C:\\fake",
-                WorkshopDirectory = new List<string>() { "C:\\fake" },
-                CustomModDirectory = string.Empty
-            });
-            gameService.Setup(s => s.Get()).Returns(new List<IGame>()
-            {
-                new Game()
-                {
-                    Type = "no-items",
-                    UserDirectory = "C:\\fake",
-                    WorkshopDirectory = new List<string>() { "C:\\fake" },
-                    CustomModDirectory = string.Empty
-                }
-            });
+            gameService.Setup(s => s.GetSelected()).Returns(new Game { Type = "no-items", UserDirectory = "C:\\fake", WorkshopDirectory = new List<string> { "C:\\fake" }, CustomModDirectory = string.Empty });
+            gameService.Setup(s => s.Get()).Returns(new List<IGame> { new Game { Type = "no-items", UserDirectory = "C:\\fake", WorkshopDirectory = new List<string> { "C:\\fake" }, CustomModDirectory = string.Empty } });
             modExport.Setup(p => p.ImportAsync(It.IsAny<ModCollectionExporterParams>())).Returns((ModCollectionExporterParams p) =>
             {
-                ICollectionImportResult result = new CollectionImportResult
-                {
-                    Name = "fake",
-                    Game = "no-items"
-                };
+                ICollectionImportResult result = new CollectionImportResult { Name = "fake", Game = "no-items" };
                 return Task.FromResult(result);
             });
             modExport.Setup(p => p.ImportModDirectoryAsync(It.IsAny<ModCollectionExporterParams>())).Returns((ModCollectionExporterParams p) =>
@@ -953,45 +738,20 @@ namespace IronyModManager.Services.Tests
             {
                 return false;
             });
-            var collections = new List<IModCollection>()
-            {
-                new ModCollection()
-                {
-                    IsSelected = true,
-                    Mods = new List<string>() { "mod/fakemod.mod"},
-                    Name = "fake",
-                    Game = "no-items",
-                }
-            };
+            var collections = new List<IModCollection> { new ModCollection { IsSelected = true, Mods = new List<string> { "mod/fakemod.mod" }, Name = "fake", Game = "no-items" } };
             storageProvider.Setup(s => s.GetModCollections()).Returns(() =>
             {
                 return collections;
             });
-            var fileInfos = new List<IFileInfo>()
-            {
-                new FileInfo()
-                {
-                    Content = new List<string>() { "a" },
-                    FileName = "fakemod.mod",
-                    IsBinary = false
-                }
-            };
+            var fileInfos = new List<IFileInfo> { new FileInfo { Content = new List<string> { "a" }, FileName = "fakemod.mod", IsBinary = false } };
             reader.Setup(s => s.Read(It.IsAny<string>(), It.IsAny<IEnumerable<string>>(), It.IsAny<bool>())).Returns(fileInfos);
-            modParser.Setup(s => s.Parse(It.IsAny<IEnumerable<string>>(), It.IsAny<DescriptorModType>())).Returns((IEnumerable<string> values, DescriptorModType t) =>
+            modParser.Setup(s => s.Parse(It.IsAny<IEnumerable<string>>(), It.IsAny<DescriptorModType>(), It.IsAny<ModParserArgs>())).Returns((IEnumerable<string> values, DescriptorModType t, ModParserArgs a) =>
             {
-                return new ModObject()
-                {
-                    FileName = values.First(),
-                    Name = values.First()
-                };
+                return new ModObject { FileName = values.First(), Name = values.First() };
             });
             mapper.Setup(s => s.Map<IMod>(It.IsAny<IModObject>())).Returns((IModObject o) =>
             {
-                return new Mod()
-                {
-                    FileName = o.FileName,
-                    Name = o.Name
-                };
+                return new Mod { FileName = o.FileName, Name = o.Name };
             });
             mapper.Setup(s => s.Map<IModCollection>(It.IsAny<IModCollection>())).Returns((IModCollection o) =>
             {
@@ -1014,11 +774,7 @@ namespace IronyModManager.Services.Tests
             var gameService = new Mock<IGameService>();
             var modExport = new Mock<IModCollectionExporter>();
             DISetup.SetupContainer();
-            gameService.Setup(s => s.GetSelected()).Returns(new Game()
-            {
-                Type = "no-items",
-                UserDirectory = "C:\\fake"
-            });
+            gameService.Setup(s => s.GetSelected()).Returns(new Game { Type = "no-items", UserDirectory = "C:\\fake" });
             modExport.Setup(p => p.ImportAsync(It.IsAny<ModCollectionExporterParams>())).Returns((ModCollectionExporterParams p) =>
             {
                 return Task.FromResult((ICollectionImportResult)null);
@@ -1042,31 +798,11 @@ namespace IronyModManager.Services.Tests
             var reader = new Mock<IReader>();
             var modParser = new Mock<IModParser>();
             DISetup.SetupContainer();
-            gameService.Setup(s => s.GetSelected()).Returns(new Game()
-            {
-                Type = "no-items",
-                UserDirectory = "C:\\fake",
-                WorkshopDirectory = new List<string>() { "C:\\fake" },
-                CustomModDirectory = string.Empty
-            });
-            gameService.Setup(s => s.Get()).Returns(new List<IGame>()
-            {
-                new Game()
-                {
-                    Type = "no-items",
-                    UserDirectory = "C:\\fake",
-                    WorkshopDirectory = new List<string>() { "C:\\fake" },
-                    CustomModDirectory = string.Empty
-                }
-            });
+            gameService.Setup(s => s.GetSelected()).Returns(new Game { Type = "no-items", UserDirectory = "C:\\fake", WorkshopDirectory = new List<string> { "C:\\fake" }, CustomModDirectory = string.Empty });
+            gameService.Setup(s => s.Get()).Returns(new List<IGame> { new Game { Type = "no-items", UserDirectory = "C:\\fake", WorkshopDirectory = new List<string> { "C:\\fake" }, CustomModDirectory = string.Empty } });
             modExport.Setup(p => p.ImportAsync(It.IsAny<ModCollectionExporterParams>())).Returns((ModCollectionExporterParams p) =>
             {
-                ICollectionImportResult result = new CollectionImportResult
-                {
-                    Name = "fake",
-                    Game = "no-items",
-                    Descriptors = new List<string>() { "desc1" }
-                };
+                ICollectionImportResult result = new CollectionImportResult { Name = "fake", Game = "no-items", Descriptors = new List<string> { "desc1" } };
                 return Task.FromResult(result);
             });
 
@@ -1075,45 +811,20 @@ namespace IronyModManager.Services.Tests
             {
                 return false;
             });
-            var collections = new List<IModCollection>()
-            {
-                new ModCollection()
-                {
-                    IsSelected = true,
-                    Mods = new List<string>() { "mod/fakemod.mod"},
-                    Name = "fake",
-                    Game = "no-items",
-                }
-            };
+            var collections = new List<IModCollection> { new ModCollection { IsSelected = true, Mods = new List<string> { "mod/fakemod.mod" }, Name = "fake", Game = "no-items" } };
             storageProvider.Setup(s => s.GetModCollections()).Returns(() =>
             {
                 return collections;
             });
-            var fileInfos = new List<IFileInfo>()
-            {
-                new FileInfo()
-                {
-                    Content = new List<string>() { "a" },
-                    FileName = "fakemod.mod",
-                    IsBinary = false
-                }
-            };
+            var fileInfos = new List<IFileInfo> { new FileInfo { Content = new List<string> { "a" }, FileName = "fakemod.mod", IsBinary = false } };
             reader.Setup(s => s.Read(It.IsAny<string>(), It.IsAny<IEnumerable<string>>(), It.IsAny<bool>())).Returns(fileInfos);
-            modParser.Setup(s => s.Parse(It.IsAny<IEnumerable<string>>(), It.IsAny<DescriptorModType>())).Returns((IEnumerable<string> values, DescriptorModType t) =>
+            modParser.Setup(s => s.Parse(It.IsAny<IEnumerable<string>>(), It.IsAny<DescriptorModType>(), It.IsAny<ModParserArgs>())).Returns((IEnumerable<string> values, DescriptorModType t, ModParserArgs a) =>
             {
-                return new ModObject()
-                {
-                    FileName = values.First(),
-                    Name = values.First()
-                };
+                return new ModObject { FileName = values.First(), Name = values.First() };
             });
             mapper.Setup(s => s.Map<IMod>(It.IsAny<IModObject>())).Returns((IModObject o) =>
             {
-                return new Mod()
-                {
-                    FileName = o.FileName,
-                    Name = o.Name
-                };
+                return new Mod { FileName = o.FileName, Name = o.Name };
             });
             mapper.Setup(s => s.Map<IModCollection>(It.IsAny<IModCollection>())).Returns((IModCollection o) =>
             {
@@ -1170,17 +881,10 @@ namespace IronyModManager.Services.Tests
             var gameService = new Mock<IGameService>();
             var modExport = new Mock<IModCollectionExporter>();
             DISetup.SetupContainer();
-            gameService.Setup(s => s.GetSelected()).Returns(new Game()
-            {
-                Type = "no-items",
-                UserDirectory = "C:\\fake"
-            });
+            gameService.Setup(s => s.GetSelected()).Returns(new Game { Type = "no-items", UserDirectory = "C:\\fake" });
             modExport.Setup(p => p.ImportParadoxosAsync(It.IsAny<ModCollectionExporterParams>())).Returns((ModCollectionExporterParams p) =>
             {
-                ICollectionImportResult result = new CollectionImportResult
-                {
-                    Name = "fake"
-                };
+                ICollectionImportResult result = new CollectionImportResult { Name = "fake" };
                 return Task.FromResult(result);
             });
 
@@ -1200,11 +904,7 @@ namespace IronyModManager.Services.Tests
             var gameService = new Mock<IGameService>();
             var modExport = new Mock<IModCollectionExporter>();
             DISetup.SetupContainer();
-            gameService.Setup(s => s.GetSelected()).Returns(new Game()
-            {
-                Type = "no-items",
-                UserDirectory = "C:\\fake"
-            });
+            gameService.Setup(s => s.GetSelected()).Returns(new Game { Type = "no-items", UserDirectory = "C:\\fake" });
             modExport.Setup(p => p.ImportParadoxosAsync(It.IsAny<ModCollectionExporterParams>())).Returns((ModCollectionExporterParams p) =>
             {
                 return Task.FromResult((ICollectionImportResult)null);
@@ -1226,17 +926,10 @@ namespace IronyModManager.Services.Tests
             var gameService = new Mock<IGameService>();
             var modExport = new Mock<IModCollectionExporter>();
             DISetup.SetupContainer();
-            gameService.Setup(s => s.GetSelected()).Returns(new Game()
-            {
-                Type = "no-items",
-                UserDirectory = "C:\\fake"
-            });
+            gameService.Setup(s => s.GetSelected()).Returns(new Game { Type = "no-items", UserDirectory = "C:\\fake" });
             modExport.Setup(p => p.ImportParadoxAsync(It.IsAny<ModCollectionExporterParams>())).Returns((ModCollectionExporterParams p) =>
             {
-                ICollectionImportResult result = new CollectionImportResult
-                {
-                    Name = "fake"
-                };
+                ICollectionImportResult result = new CollectionImportResult { Name = "fake" };
                 return Task.FromResult(result);
             });
 
@@ -1256,11 +949,7 @@ namespace IronyModManager.Services.Tests
             var gameService = new Mock<IGameService>();
             var modExport = new Mock<IModCollectionExporter>();
             DISetup.SetupContainer();
-            gameService.Setup(s => s.GetSelected()).Returns(new Game()
-            {
-                Type = "no-items",
-                UserDirectory = "C:\\fake"
-            });
+            gameService.Setup(s => s.GetSelected()).Returns(new Game { Type = "no-items", UserDirectory = "C:\\fake" });
             modExport.Setup(p => p.ImportParadoxosAsync(It.IsAny<ModCollectionExporterParams>())).Returns((ModCollectionExporterParams p) =>
             {
                 p.Mod.Name = "fake";
@@ -1283,17 +972,10 @@ namespace IronyModManager.Services.Tests
             var gameService = new Mock<IGameService>();
             var modExport = new Mock<IModCollectionExporter>();
             DISetup.SetupContainer();
-            gameService.Setup(s => s.GetSelected()).Returns(new Game()
-            {
-                Type = "no-items",
-                UserDirectory = "C:\\fake"
-            });
+            gameService.Setup(s => s.GetSelected()).Returns(new Game { Type = "no-items", UserDirectory = "C:\\fake" });
             modExport.Setup(p => p.ImportParadoxLauncherAsync(It.IsAny<ModCollectionExporterParams>())).Returns((ModCollectionExporterParams p) =>
             {
-                ICollectionImportResult result = new CollectionImportResult
-                {
-                    Name = "fake"
-                };
+                ICollectionImportResult result = new CollectionImportResult { Name = "fake" };
                 return Task.FromResult(result);
             });
 
@@ -1313,11 +995,7 @@ namespace IronyModManager.Services.Tests
             var gameService = new Mock<IGameService>();
             var modExport = new Mock<IModCollectionExporter>();
             DISetup.SetupContainer();
-            gameService.Setup(s => s.GetSelected()).Returns(new Game()
-            {
-                Type = "no-items",
-                UserDirectory = "C:\\fake"
-            });
+            gameService.Setup(s => s.GetSelected()).Returns(new Game { Type = "no-items", UserDirectory = "C:\\fake" });
             modExport.Setup(p => p.ImportParadoxLauncherAsync(It.IsAny<ModCollectionExporterParams>())).Returns((ModCollectionExporterParams p) =>
             {
                 return Task.FromResult((ICollectionImportResult)null);
@@ -1339,17 +1017,10 @@ namespace IronyModManager.Services.Tests
             var gameService = new Mock<IGameService>();
             var modExport = new Mock<IModCollectionExporter>();
             DISetup.SetupContainer();
-            gameService.Setup(s => s.GetSelected()).Returns(new Game()
-            {
-                Type = "no-items",
-                UserDirectory = "C:\\fake"
-            });
+            gameService.Setup(s => s.GetSelected()).Returns(new Game { Type = "no-items", UserDirectory = "C:\\fake" });
             modExport.Setup(p => p.ImportParadoxLauncherBetaAsync(It.IsAny<ModCollectionExporterParams>())).Returns((ModCollectionExporterParams p) =>
             {
-                ICollectionImportResult result = new CollectionImportResult
-                {
-                    Name = "fake"
-                };
+                ICollectionImportResult result = new CollectionImportResult { Name = "fake" };
                 return Task.FromResult(result);
             });
 
@@ -1369,11 +1040,7 @@ namespace IronyModManager.Services.Tests
             var gameService = new Mock<IGameService>();
             var modExport = new Mock<IModCollectionExporter>();
             DISetup.SetupContainer();
-            gameService.Setup(s => s.GetSelected()).Returns(new Game()
-            {
-                Type = "no-items",
-                UserDirectory = "C:\\fake"
-            });
+            gameService.Setup(s => s.GetSelected()).Returns(new Game { Type = "no-items", UserDirectory = "C:\\fake" });
             modExport.Setup(p => p.ImportParadoxLauncherBetaAsync(It.IsAny<ModCollectionExporterParams>())).Returns((ModCollectionExporterParams p) =>
             {
                 return Task.FromResult((ICollectionImportResult)null);
@@ -1395,31 +1062,42 @@ namespace IronyModManager.Services.Tests
             var gameService = new Mock<IGameService>();
             var modExport = new Mock<IModCollectionExporter>();
             DISetup.SetupContainer();
-            gameService.Setup(s => s.GetSelected()).Returns(new Game()
-            {
-                Type = "no-items",
-                UserDirectory = "C:\\fake"
-            });
-            gameService.Setup(s => s.Get()).Returns(new List<IGame>() {new Game()
-            {
-                Type = "no-items",
-                UserDirectory = "C:\\fake",
-                ParadoxGameId = "fake"
-            } });
+            gameService.Setup(s => s.GetSelected()).Returns(new Game { Type = "no-items", UserDirectory = "C:\\fake" });
+            gameService.Setup(s => s.Get()).Returns(new List<IGame> { new Game { Type = "no-items", UserDirectory = "C:\\fake", ParadoxGameId = "fake" } });
             modExport.Setup(p => p.ImportParadoxLauncherJsonAsync(It.IsAny<ModCollectionExporterParams>())).Returns((ModCollectionExporterParams p) =>
             {
                 ICollectionImportResult result = new CollectionImportResult
                 {
-                    Name = "fake",
-                    ModIds = new List<IModCollectionSourceInfo>() { new ModCollectionSourceInfo() { SteamId = 1 }, new ModCollectionSourceInfo() { SteamId = 2 } },
-                    Game = "fake"
+                    Name = "fake", ModIds = new List<IModCollectionSourceInfo> { new ModCollectionSourceInfo { SteamId = 1 }, new ModCollectionSourceInfo { SteamId = 2 } }, Game = "fake"
                 };
                 return Task.FromResult(result);
             });
             var cache = new Cache();
             // Fake mods in cache (less mocking)
-            cache.Set(new CacheAddParameters<IEnumerable<IMod>>() { Region = "Mods", Prefix = "no-items", Key = "RegularMods", Value = new List<IMod>() { new Mod() { Name = "fake1", DescriptorFile = "f1", RemoteId = 1, FullPath = "c:\\fake\\t1" }, new Mod() { Name = "fake2", DescriptorFile = "f2", RemoteId = 2 }, new Mod() { Name = "fake3", DescriptorFile = "f3", RemoteId = 3, FullPath = "c\\fake\\t2" } } });
-            cache.Set(new CacheAddParameters<IEnumerable<IMod>>() { Region = "Mods", Prefix = "no-items", Key = "AllMods", Value = new List<IMod>() { new Mod() { Name = "fake1", DescriptorFile = "f1", RemoteId = 1, FullPath = "c:\\fake\\t1" }, new Mod() { Name = "fake2", DescriptorFile = "f2", RemoteId = 2 }, new Mod() { Name = "fake3", DescriptorFile = "f3", RemoteId = 3, FullPath = "c:\\fake\\t2" } } });
+            cache.Set(new CacheAddParameters<IEnumerable<IMod>>
+            {
+                Region = "Mods",
+                Prefix = "no-items",
+                Key = "RegularMods",
+                Value = new List<IMod>
+                {
+                    new Mod { Name = "fake1", DescriptorFile = "f1", RemoteId = 1, FullPath = "c:\\fake\\t1" },
+                    new Mod { Name = "fake2", DescriptorFile = "f2", RemoteId = 2 },
+                    new Mod { Name = "fake3", DescriptorFile = "f3", RemoteId = 3, FullPath = "c\\fake\\t2" }
+                }
+            });
+            cache.Set(new CacheAddParameters<IEnumerable<IMod>>
+            {
+                Region = "Mods",
+                Prefix = "no-items",
+                Key = "AllMods",
+                Value = new List<IMod>
+                {
+                    new Mod { Name = "fake1", DescriptorFile = "f1", RemoteId = 1, FullPath = "c:\\fake\\t1" },
+                    new Mod { Name = "fake2", DescriptorFile = "f2", RemoteId = 2 },
+                    new Mod { Name = "fake3", DescriptorFile = "f3", RemoteId = 3, FullPath = "c:\\fake\\t2" }
+                }
+            });
 
             var service = new ModCollectionService(null, null, cache, null, null, null, null, gameService.Object, modExport.Object, storageProvider.Object, mapper.Object);
             var result = await service.ImportParadoxLauncherJsonAsync("fake");
@@ -1441,11 +1119,7 @@ namespace IronyModManager.Services.Tests
             var gameService = new Mock<IGameService>();
             var modExport = new Mock<IModCollectionExporter>();
             DISetup.SetupContainer();
-            gameService.Setup(s => s.GetSelected()).Returns(new Game()
-            {
-                Type = "no-items",
-                UserDirectory = "C:\\fake"
-            });
+            gameService.Setup(s => s.GetSelected()).Returns(new Game { Type = "no-items", UserDirectory = "C:\\fake" });
             modExport.Setup(p => p.ImportParadoxLauncherJsonAsync(It.IsAny<ModCollectionExporterParams>())).Returns((ModCollectionExporterParams p) =>
             {
                 return Task.FromResult((ICollectionImportResult)null);
@@ -1489,22 +1163,8 @@ namespace IronyModManager.Services.Tests
             var storageProvider = new Mock<IStorageProvider>();
             var mapper = new Mock<IMapper>();
             var gameService = new Mock<IGameService>();
-            gameService.Setup(s => s.GetSelected()).Returns(new Game()
-            {
-                Type = "no-items",
-                UserDirectory = "C:\\fake",
-                GameFolders = new List<string>() { "test" }
-            });
-            var collections = new List<IModCollection>()
-            {
-                new ModCollection()
-                {
-                    IsSelected = true,
-                    Mods = new List<string>() { "mod/fakemod.mod"},
-                    Name = "test",
-                    Game = "no-items"
-                }
-            };
+            gameService.Setup(s => s.GetSelected()).Returns(new Game { Type = "no-items", UserDirectory = "C:\\fake", GameFolders = new List<string> { "test" } });
+            var collections = new List<IModCollection> { new ModCollection { IsSelected = true, Mods = new List<string> { "mod/fakemod.mod" }, Name = "test", Game = "no-items" } };
             storageProvider.Setup(s => s.GetModCollections()).Returns(() =>
             {
                 return collections;
@@ -1517,16 +1177,14 @@ namespace IronyModManager.Services.Tests
                 {
                     return true;
                 }
+
                 return false;
             });
             var messageBus = new Mock<IMessageBus>();
             messageBus.Setup(p => p.PublishAsync(It.IsAny<IMessageBusEvent>()));
             messageBus.Setup(p => p.Publish(It.IsAny<IMessageBusEvent>()));
             var reader = new Mock<IReader>();
-            reader.Setup(p => p.GetFileInfo(It.IsAny<string>(), It.IsAny<string>())).Returns(new FileInfo()
-            {
-                ContentSHA = "2"
-            });
+            reader.Setup(p => p.GetFileInfo(It.IsAny<string>(), It.IsAny<string>())).Returns(new FileInfo { ContentSHA = "2" });
             var modWriter = new Mock<IModWriter>();
             modWriter.Setup(p => p.ModDirectoryExistsAsync(It.IsAny<ModWriterParameters>())).Returns((ModWriterParameters p) =>
             {
@@ -1535,13 +1193,7 @@ namespace IronyModManager.Services.Tests
             DISetup.SetupContainer();
 
             var service = new ModCollectionService(messageBus.Object, hashExport.Object, new Cache(), null, reader.Object, modWriter.Object, null, gameService.Object, modExport.Object, storageProvider.Object, mapper.Object);
-            var result = await service.ExportHashReportAsync(new List<IMod>() {
-                new Mod()
-                {
-                    Name = "test",
-                    Files = new List<string>() {"test\\test"},
-                    IsValid = true
-                } }, "test");
+            var result = await service.ExportHashReportAsync(new List<IMod> { new Mod { Name = "test", Files = new List<string> { "test\\test" }, IsValid = true } }, "test");
             result.Should().BeTrue();
         }
 
@@ -1554,22 +1206,8 @@ namespace IronyModManager.Services.Tests
             var storageProvider = new Mock<IStorageProvider>();
             var mapper = new Mock<IMapper>();
             var gameService = new Mock<IGameService>();
-            gameService.Setup(s => s.GetSelected()).Returns(new Game()
-            {
-                Type = "no-items",
-                UserDirectory = "C:\\fake",
-                GameFolders = new List<string>() { "test" }
-            });
-            var collections = new List<IModCollection>()
-            {
-                new ModCollection()
-                {
-                    IsSelected = true,
-                    Mods = new List<string>() { "mod/fakemod.mod"},
-                    Name = "test",
-                    Game = "no-items"
-                }
-            };
+            gameService.Setup(s => s.GetSelected()).Returns(new Game { Type = "no-items", UserDirectory = "C:\\fake", GameFolders = new List<string> { "test" } });
+            var collections = new List<IModCollection> { new ModCollection { IsSelected = true, Mods = new List<string> { "mod/fakemod.mod" }, Name = "test", Game = "no-items" } };
             storageProvider.Setup(s => s.GetModCollections()).Returns(() =>
             {
                 return collections;
@@ -1582,6 +1220,7 @@ namespace IronyModManager.Services.Tests
                 {
                     return hashReports.Where(p => p.ReportType == HashReportType.Collection).ToList();
                 }
+
                 return null;
             });
             hashExport.Setup(p => p.CompareReports(It.IsAny<IReadOnlyCollection<IHashReport>>(), It.IsAny<IReadOnlyCollection<IHashReport>>())).Returns((IReadOnlyCollection<IHashReport> first, IReadOnlyCollection<IHashReport> second) =>
@@ -1600,12 +1239,7 @@ namespace IronyModManager.Services.Tests
             DISetup.SetupContainer();
 
             var service = new ModCollectionService(messageBus.Object, hashExport.Object, new Cache(), null, reader.Object, modWriter.Object, null, gameService.Object, modExport.Object, storageProvider.Object, mapper.Object);
-            var result = await service.ImportHashReportAsync(new List<IMod>() {
-                new Mod()
-                {
-                    Name = "test",
-                    Files = new List<string>() {"test\\test"}
-                } }, null);
+            var result = await service.ImportHashReportAsync(new List<IMod> { new Mod { Name = "test", Files = new List<string> { "test\\test" } } }, null);
             result.Should().BeNull();
         }
 
@@ -1619,29 +1253,15 @@ namespace IronyModManager.Services.Tests
             var storageProvider = new Mock<IStorageProvider>();
             var mapper = new Mock<IMapper>();
             var gameService = new Mock<IGameService>();
-            gameService.Setup(s => s.GetSelected()).Returns(new Game()
-            {
-                Type = "no-items",
-                UserDirectory = "C:\\fake",
-                GameFolders = new List<string>() { "test" }
-            });
-            var collections = new List<IModCollection>()
-            {
-                new ModCollection()
-                {
-                    IsSelected = true,
-                    Mods = new List<string>() { "mod/fakemod.mod"},
-                    Name = "test",
-                    Game = "no-items"
-                }
-            };
+            gameService.Setup(s => s.GetSelected()).Returns(new Game { Type = "no-items", UserDirectory = "C:\\fake", GameFolders = new List<string> { "test" } });
+            var collections = new List<IModCollection> { new ModCollection { IsSelected = true, Mods = new List<string> { "mod/fakemod.mod" }, Name = "test", Game = "no-items" } };
             storageProvider.Setup(s => s.GetModCollections()).Returns(() =>
             {
                 return collections;
             });
             var modExport = new Mock<IModCollectionExporter>();
-            var innerReports = new List<IHashFileReport>() { new HashFileReport() { File = "test\\1", Hash = "2" } };
-            var outerReports = new List<IHashReport>() { new HashReport() { Name = "testreport", Reports = innerReports } };
+            var innerReports = new List<IHashFileReport> { new HashFileReport { File = "test\\1", Hash = "2" } };
+            var outerReports = new List<IHashReport> { new HashReport { Name = "testreport", Reports = innerReports } };
             var hashExport = new Mock<IReportExportService>();
             hashExport.Setup(p => p.GetCollectionReports(It.IsAny<IReadOnlyCollection<IHashReport>>())).Returns((IReadOnlyCollection<IHashReport> hashReports) =>
             {
@@ -1649,6 +1269,7 @@ namespace IronyModManager.Services.Tests
                 {
                     return hashReports.Where(p => p.ReportType == HashReportType.Collection).ToList();
                 }
+
                 return null;
             });
             hashExport.Setup(p => p.CompareReports(It.IsAny<IReadOnlyCollection<IHashReport>>(), It.IsAny<IReadOnlyCollection<IHashReport>>())).Returns((IReadOnlyCollection<IHashReport> first, IReadOnlyCollection<IHashReport> second) =>
@@ -1659,11 +1280,7 @@ namespace IronyModManager.Services.Tests
             messageBus.Setup(p => p.PublishAsync(It.IsAny<IMessageBusEvent>()));
             messageBus.Setup(p => p.Publish(It.IsAny<IMessageBusEvent>()));
             var reader = new Mock<IReader>();
-            reader.Setup(p => p.GetFileInfo(It.IsAny<string>(), It.IsAny<string>())).Returns(new FileInfo()
-            {
-                FileName = "2",
-                ContentSHA = "3"
-            });
+            reader.Setup(p => p.GetFileInfo(It.IsAny<string>(), It.IsAny<string>())).Returns(new FileInfo { FileName = "2", ContentSHA = "3" });
             var modWriter = new Mock<IModWriter>();
             modWriter.Setup(p => p.ModDirectoryExistsAsync(It.IsAny<ModWriterParameters>())).Returns((ModWriterParameters p) =>
             {
@@ -1672,12 +1289,7 @@ namespace IronyModManager.Services.Tests
             DISetup.SetupContainer();
 
             var service = new ModCollectionService(messageBus.Object, hashExport.Object, new Cache(), null, reader.Object, modWriter.Object, null, gameService.Object, modExport.Object, storageProvider.Object, mapper.Object);
-            var result = await service.ImportHashReportAsync(new List<IMod>() {
-                new Mod()
-                {
-                    Name = "testreport",
-                    Files = new List<string>() {"test\\test"}
-                } }, outerReports);
+            var result = await service.ImportHashReportAsync(new List<IMod> { new Mod { Name = "testreport", Files = new List<string> { "test\\test" } } }, outerReports);
             result.Should().NotBeNull();
             result.Count().Should().Be(1);
             result.FirstOrDefault().Reports.Count.Should().Be(1);

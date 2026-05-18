@@ -4,7 +4,7 @@
 // Created          : 04-07-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-11-2025
+// Last Modified On : 05-18-2026
 // ***********************************************************************
 // <copyright file="ModBaseService.cs" company="Mario">
 //     Mario
@@ -22,6 +22,7 @@ using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
+using CWTools.Common;
 using IronyModManager.DI;
 using IronyModManager.IO.Common.Mods;
 using IronyModManager.IO.Common.Readers;
@@ -240,7 +241,7 @@ namespace IronyModManager.Services
                             var replaceDefinitions = definitions.Where(p => p.FileCI.Contains(Shared.Constants.LocalizationReplaceDirectory, StringComparison.OrdinalIgnoreCase));
                             if (replaceDefinitions.GroupBy(p => p.CustomPriorityOrder).Count() == 1)
                             {
-                                filtered = replaceDefinitions.ToList();
+                                filtered = [.. replaceDefinitions];
                             }
                             else
                             {
@@ -252,7 +253,7 @@ namespace IronyModManager.Services
                         {
                             if (definitions.GroupBy(p => p.CustomPriorityOrder).Count() == 1)
                             {
-                                filtered = definitions.ToList();
+                                filtered = [.. definitions];
                             }
                             else
                             {
@@ -267,7 +268,7 @@ namespace IronyModManager.Services
                             case 1:
                             {
                                 var definition = uniqueDefinitions.FirstOrDefault(p => !p.IsFromGame);
-                                result.DefinitionOrder = definition != null ? uniqueDefinitions.Where(p => !p.IsFromGame).Union(uniqueDefinitions.Where(p => p.IsFromGame)).ToList() : uniqueDefinitions.ToList();
+                                result.DefinitionOrder = definition != null ? [.. uniqueDefinitions.Where(p => !p.IsFromGame).Union(uniqueDefinitions.Where(p => p.IsFromGame))] : uniqueDefinitions.ToList();
                                 definition ??= uniqueDefinitions.FirstOrDefault();
                                 result.Definition = definition;
                                 result.FileName = definition!.File;
@@ -297,7 +298,7 @@ namespace IronyModManager.Services
                         var validDefinitions = definitions.Where(p => p.ExistsInLastFile).ToList();
                         if (validDefinitions.Any(d => !string.IsNullOrWhiteSpace(d.VirtualPath)))
                         {
-                            validDefinitions = definitions.Where(d => !string.IsNullOrWhiteSpace(d.VirtualPath)).ToList();
+                            validDefinitions = [.. definitions.Where(d => !string.IsNullOrWhiteSpace(d.VirtualPath))];
                         }
 
                         switch (validDefinitions.Count)
@@ -336,7 +337,7 @@ namespace IronyModManager.Services
                                 }
 
                                 var uniqueDefinitions = isFios
-                                    ? definitionEvals.GroupBy(p => p.Definition.ModName).Select(p => p.OrderBy(f => Path.GetFileNameWithoutExtension(f.FileName), StringComparer.Ordinal).First()).ToList()
+                                    ? [.. definitionEvals.GroupBy(p => p.Definition.ModName).Select(p => p.OrderBy(f => Path.GetFileNameWithoutExtension(f.FileName), StringComparer.Ordinal).First())]
                                     : definitionEvals.GroupBy(p => p.Definition.ModName).Select(p => p.OrderBy(f => Path.GetFileNameWithoutExtension(f.FileName), StringComparer.Ordinal).Last()).ToList();
 
                                 // Filter out game definitions which might have the same filename
@@ -358,7 +359,7 @@ namespace IronyModManager.Services
                                         var definition = definitionEvals.FirstOrDefault(p => !p.Definition.IsFromGame);
                                         result.DefinitionOrder = definition != null
                                             ? definitionEvals.Where(p => !p.Definition.IsFromGame).Union(uniqueDefinitions.Where(p => p.Definition.IsFromGame)).Select(p => p.Definition).ToList()
-                                            : definitionEvals.Select(p => p.Definition).ToList();
+                                            : [.. definitionEvals.Select(p => p.Definition)];
                                         definition ??= definitionEvals.FirstOrDefault();
                                         result.Definition = definition!.Definition;
                                         result.FileName = definition.FileName;
@@ -382,7 +383,7 @@ namespace IronyModManager.Services
                                             var definition = uniqueDefinitions.FirstOrDefault(p => p.Definition.IsCustomPatch);
                                             result.Definition = definition!.Definition;
                                             result.FileName = definition.FileName;
-                                            result.DefinitionOrder = uniqueDefinitions.Where(p => !p.Definition.IsCustomPatch).Union(uniqueDefinitions.Where(p => p.Definition.IsCustomPatch)).Select(p => p.Definition).ToList();
+                                            result.DefinitionOrder = [.. uniqueDefinitions.Where(p => !p.Definition.IsCustomPatch).Union(uniqueDefinitions.Where(p => p.Definition.IsCustomPatch)).Select(p => p.Definition)];
                                         }
                                         else
                                         {
@@ -391,7 +392,7 @@ namespace IronyModManager.Services
                                             result.FileName = definition.FileName;
                                             var reverse = new List<DefinitionEval>(uniqueDefinitions);
                                             reverse.Reverse();
-                                            result.DefinitionOrder = reverse.Select(p => p.Definition).ToList();
+                                            result.DefinitionOrder = [.. reverse.Select(p => p.Definition)];
                                         }
 
                                         result.PriorityType = DefinitionPriorityType.ModOrder;
@@ -407,7 +408,7 @@ namespace IronyModManager.Services
                                         result.Definition = definition.Definition;
                                         result.FileName = definition.FileName;
                                         result.PriorityType = DefinitionPriorityType.FIOS;
-                                        result.DefinitionOrder = ordered.Select(p => p.Definition).ToList();
+                                        result.DefinitionOrder = [.. ordered.Select(p => p.Definition)];
                                         break;
                                     }
                                     case > 1:
@@ -417,7 +418,7 @@ namespace IronyModManager.Services
                                         result.Definition = definition.Definition;
                                         result.FileName = definition.FileName;
                                         result.PriorityType = DefinitionPriorityType.LIOS;
-                                        result.DefinitionOrder = ordered.Select(p => p.Definition).ToList();
+                                        result.DefinitionOrder = [.. ordered.Select(p => p.Definition)];
                                         break;
                                     }
                                 }
@@ -441,7 +442,7 @@ namespace IronyModManager.Services
                 if (definition == null && (definitions?.Any()).GetValueOrDefault())
                 {
                     definition = definitions!.FirstOrDefault();
-                    ordered = definitions.ToList();
+                    ordered = [.. definitions];
                 }
 
                 result.Definition = definition;
@@ -520,6 +521,7 @@ namespace IronyModManager.Services
             mod.Tags = ["Fixes"];
             mod.IsValid = true;
             mod.FullPath = mod.FileName.StandardizeDirectorySeparator();
+            mod.Game = game.Type;
             return mod;
         }
 
@@ -617,9 +619,10 @@ namespace IronyModManager.Services
                 var installedMods = Reader.Read(Path.Combine(game.UserDirectory, game.ModDescriptorType == ModDescriptorType.DescriptorMod ? Shared.Constants.ModDirectory : Shared.Constants.JsonModDirectory));
                 if (installedMods?.Count() > 0)
                 {
+                    var args = new ModParserArgs { BaseSteamDirectory = game.BaseSteamGameDirectory, IsProton = !string.IsNullOrWhiteSpace(game.LinuxProtonVersion), SteamAppId = game.SteamAppId};
                     installedMods.Where(p => p.Content.Any()).AsParallel().WithDegreeOfParallelism(MaxModsToProcess).ForAll(installedMod =>
                     {
-                        var mod = Mapper.Map<IMod>(ModParser.Parse(installedMod.Content, MapDescriptorModType(game.ModDescriptorType)));
+                        var mod = Mapper.Map<IMod>(ModParser.Parse(installedMod.Content, MapDescriptorModType(game.ModDescriptorType), args));
                         if (ignorePatchMods && IsPatchModInternal(mod))
                         {
                             return;
@@ -882,7 +885,7 @@ namespace IronyModManager.Services
                         var allVars = namespaces.Concat(variables);
                         if (allVars.Any())
                         {
-                            definition.Variables = allVars.ToList();
+                            definition.Variables = [.. allVars];
                         }
 
                         if (string.IsNullOrWhiteSpace(definition.CodeTag))
@@ -1042,7 +1045,7 @@ namespace IronyModManager.Services
             static List<string> extractVariable(string text)
             {
                 // All math operators or newline constants, whitespace and such
-                return text.Split([' ', '\t', '\n', '\r', '+', '/', '*', '%', '-', ')', '('], StringSplitOptions.RemoveEmptyEntries).Where(token => token.Any(char.IsLetter)).ToList();
+                return [.. text.Split([' ', '\t', '\n', '\r', '+', '/', '*', '%', '-', ')', '('], StringSplitOptions.RemoveEmptyEntries).Where(token => token.Any(char.IsLetter))];
             }
 
             if (string.IsNullOrWhiteSpace(code))

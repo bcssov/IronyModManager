@@ -4,7 +4,7 @@
 // Created          : 06-19-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 12-02-2025
+// Last Modified On : 05-18-2026
 // ***********************************************************************
 // <copyright file="ModMergeService.cs" company="Mario">
 //     Mario
@@ -264,6 +264,8 @@ namespace IronyModManager.Services
                 mod.RelationshipData = collectionMods.Where(p => p.RelationshipData != null).GroupBy(p => p.RelationshipData).SelectMany(p => p.FirstOrDefault()?.RelationshipData).ToList();
             }
 
+            mod.Game = game.Type;
+
             await ModWriter.WriteDescriptorAsync(new ModWriterParameters
             {
                 Mod = mod,
@@ -382,6 +384,7 @@ namespace IronyModManager.Services
                 if (dependencies != null && dependencies.Any())
                 {
                     var newDependencies = new List<string>();
+                    // ReSharper disable once LoopCanBeConvertedToQuery
                     foreach (var item in dependencies)
                     {
                         newDependencies.Add(!string.IsNullOrWhiteSpace(modTemplate) ? IronyFormatter.Format(modTemplate, new { Name = item, Merged = copiedNamePrefix }) : $"{copiedNamePrefix} {item}");
@@ -389,6 +392,8 @@ namespace IronyModManager.Services
 
                     newMod.Dependencies = newDependencies;
                 }
+
+                newMod.Game = mod.Game;
 
                 return newMod;
             }

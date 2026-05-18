@@ -4,7 +4,7 @@
 // Created          : 03-09-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 05-12-2026
+// Last Modified On : 05-18-2026
 // ***********************************************************************
 // <copyright file="ModCollectionExporter.cs" company="Mario">
 //     Mario
@@ -44,87 +44,63 @@ namespace IronyModManager.IO.Mods
     /// Implements the <see cref="IronyModManager.IO.Common.Mods.IModCollectionExporter" />
     /// </summary>
     /// <seealso cref="IronyModManager.IO.Common.Mods.IModCollectionExporter" />
+    /// <remarks>Initializes a new instance of the <see cref="ModCollectionExporter" /> class.</remarks>
     [ExcludeFromCoverage("Skipping testing IO logic.")]
-    public class ModCollectionExporter : IModCollectionExporter
+    public class ModCollectionExporter(IModWriter modWriter, ILogger logger, IMessageBus messageBus, IMapper mapper) : IModCollectionExporter
     {
         #region Fields
 
         /// <summary>
         /// The logger
         /// </summary>
-        private readonly ILogger logger;
+        private readonly ILogger logger = logger;
 
         /// <summary>
         /// The mapper
         /// </summary>
-        private readonly IMapper mapper;
+        private readonly IMapper mapper = mapper;
 
         /// <summary>
         /// The message bus
         /// </summary>
-        private readonly IMessageBus messageBus;
+        private readonly IMessageBus messageBus = messageBus;
 
         /// <summary>
         /// The mod writer
         /// </summary>
-        private readonly IModWriter modWriter;
+        private readonly IModWriter modWriter = modWriter;
 
         /// <summary>
         /// The paradox importer
         /// </summary>
-        private readonly ParadoxImporter paradoxImporter;
+        private readonly ParadoxImporter paradoxImporter = new(logger);
 
         /// <summary>
         /// The paradox launcher exporter
         /// </summary>
-        private readonly ParadoxLauncherExporter paradoxLauncherExporter;
+        private readonly ParadoxLauncherExporter paradoxLauncherExporter = new();
 
         /// <summary>
         /// The paradox launcher exporter202010
         /// </summary>
-        private readonly ParadoxLauncherExporter202110 paradoxLauncherExporter202110;
+        private readonly ParadoxLauncherExporter202110 paradoxLauncherExporter202110 = new();
 
         /// <summary>
         /// The paradox launcher importer
         /// </summary>
-        private readonly ParadoxLauncherImporter paradoxLauncherImporter;
+        private readonly ParadoxLauncherImporter paradoxLauncherImporter = new(logger);
 
         /// <summary>
         /// The paradox launcher importer beta
         /// </summary>
-        private readonly ParadoxLauncherImporterBeta paradoxLauncherImporterBeta;
+        private readonly ParadoxLauncherImporterBeta paradoxLauncherImporterBeta = new(logger);
 
         /// <summary>
         /// The paradoxos importer
         /// </summary>
-        private readonly ParadoxosImporter paradoxosImporter;
+        private readonly ParadoxosImporter paradoxosImporter = new(logger);
 
         #endregion Fields
-
-        #region Constructors
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="ModCollectionExporter" /> class.
-        /// </summary>
-        /// <param name="modWriter">The mod writer.</param>
-        /// <param name="logger">The logger.</param>
-        /// <param name="messageBus">The message bus.</param>
-        /// <param name="mapper">The mapper.</param>
-        public ModCollectionExporter(IModWriter modWriter, ILogger logger, IMessageBus messageBus, IMapper mapper)
-        {
-            paradoxosImporter = new ParadoxosImporter(logger);
-            paradoxImporter = new ParadoxImporter(logger);
-            paradoxLauncherImporter = new ParadoxLauncherImporter(logger);
-            paradoxLauncherExporter = new ParadoxLauncherExporter();
-            paradoxLauncherImporterBeta = new ParadoxLauncherImporterBeta(logger);
-            paradoxLauncherExporter202110 = new ParadoxLauncherExporter202110();
-            this.logger = logger;
-            this.messageBus = messageBus;
-            this.mapper = mapper;
-            this.modWriter = modWriter;
-        }
-
-        #endregion Constructors
 
         #region Methods
 
@@ -183,6 +159,7 @@ namespace IronyModManager.IO.Mods
                 newMod.Tags = mod.Tags;
                 newMod.UserDir = mod.UserDir;
                 newMod.Order = mod.Order;
+                newMod.Game = mod.Game;
                 var dependencies = mod.Dependencies;
                 if (dependencies != null && dependencies.Any())
                 {
