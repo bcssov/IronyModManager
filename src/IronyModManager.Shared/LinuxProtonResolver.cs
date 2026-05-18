@@ -4,7 +4,7 @@
 // Created          : 12-03-2025
 //
 // Last Modified By : Mario
-// Last Modified On : 12-03-2025
+// Last Modified On : 05-18-2026
 // ***********************************************************************
 // <copyright file="LinuxProtonResolver.cs" company="Mario">
 //     Mario
@@ -31,6 +31,11 @@ namespace IronyModManager.Shared
         /// The common
         /// </summary>
         private const string Common = "common";
+
+        /// <summary>
+        /// The dos devices
+        /// </summary>
+        private const string DosDevices = "dosdevices";
 
         /// <summary>
         /// The proton binary
@@ -70,6 +75,76 @@ namespace IronyModManager.Shared
         #endregion Fields
 
         #region Methods
+
+        /// <summary>
+        /// From proton path to native path.
+        /// </summary>
+        /// <param name="protonPath">The proton path.</param>
+        /// <param name="protonPrefixPath">The proton prefix path.</param>
+        /// <returns>System.String.</returns>
+        public static string FromProtonPath(string protonPath, string protonPrefixPath)
+        {
+            if (!IsProtonDrivePath(protonPath) || !IsProtonPrefix(protonPrefixPath))
+            {
+                return protonPath;
+            }
+
+            var normalized = protonPath.Replace('\\', '/');
+
+            var drive = char.ToLowerInvariant(normalized[0]) + ":";
+            var rest = normalized[2..].TrimStart('/');
+
+            var dosDevice = Path.Combine(protonPrefixPath, DosDevices, drive);
+
+            FileSystemInfo info = Directory.Exists(dosDevice) ? new DirectoryInfo(dosDevice) : new FileInfo(dosDevice);
+
+            if (!info.Exists)
+            {
+                return protonPath;
+            }
+
+            var driveTarget = info.ResolveLinkTarget(true);
+
+            return driveTarget != null ? Path.GetFullPath(Path.Combine(driveTarget.FullName, rest)) : protonPath;
+        }
+
+        /// <summary>
+        /// Gets the proton prefix.
+        /// </summary>
+        /// <param name="gamePath">The game path.</param>
+        /// <param name="appId">The application identifier.</param>
+        /// <returns>System.String.</returns>
+        public static string GetProtonPrefix(string gamePath, long appId)
+        {
+            // ReSharper disable StringLiteralTypo
+            var libraryPath = GetSteamLibraryRootFromGamePath(gamePath);
+            return string.IsNullOrWhiteSpace(libraryPath) ? string.Empty : Path.Combine(libraryPath, "steamapps", "compatdata", appId.ToString(), "pfx");
+
+            // ReSharper restore StringLiteralTypo
+        }
+
+        /// <summary>
+        /// Gets the steam library root from game path.
+        /// </summary>
+        /// <param name="path">The path.</param>
+        /// <returns>System.String.</returns>
+        public static string GetSteamLibraryRootFromGamePath(string path)
+        {
+            var fullPath = Path.GetFullPath(path);
+
+            var index = fullPath.IndexOf(Path.DirectorySeparatorChar + SteamApps + Path.DirectorySeparatorChar, StringComparison.OrdinalIgnoreCase);
+            return index < 0 ? null : fullPath[..index].TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar);
+        }
+
+        /// <summary>
+        /// Determines whether [is proton drive path] [the specified path].
+        /// </summary>
+        /// <param name="path">The path.</param>
+        /// <returns><c>true</c> if [is proton drive path] [the specified path]; otherwise, <c>false</c>.</returns>
+        public static bool IsProtonDrivePath(string path)
+        {
+            return !string.IsNullOrWhiteSpace(path) && path.Length >= 3 && char.IsLetter(path[0]) && path[1] == ':' && (path[2] == '/' || path[2] == '\\');
+        }
 
         /// <summary>
         /// Resolves the proton path.
@@ -139,6 +214,36 @@ namespace IronyModManager.Shared
         }
 
         /// <summary>
+        /// Converts the native path to proton path.
+        /// </summary>
+        /// <param name="nativePath">The native path.</param>
+        /// <param name="protonPrefixPath">The proton prefix path.</param>
+        /// <returns>System.String.</returns>
+        public static string ToProtonPath(string nativePath, string protonPrefixPath)
+        {
+            if (string.IsNullOrWhiteSpace(nativePath) || !IsProtonPrefix(protonPrefixPath))
+            {
+                return nativePath;
+            }
+
+            var mappings = GetDriveMappings(protonPrefixPath);
+
+            var normalizedNative = NormalizeNativePath(nativePath);
+
+            foreach (var mapping in mappings)
+            {
+                if (normalizedNative.Equals(mapping.Target, StringComparison.Ordinal) || normalizedNative.StartsWith(mapping.Target + "/", StringComparison.Ordinal))
+                {
+                    var rest = normalizedNative.Length == mapping.Target.Length ? string.Empty : normalizedNative[mapping.Target.Length..].TrimStart('/');
+
+                    return string.IsNullOrEmpty(rest) ? mapping.Drive + "/" : mapping.Drive + "/" + rest.Replace('\\', '/');
+                }
+            }
+
+            return nativePath;
+        }
+
+        /// <summary>
         /// Finds the installed protons.
         /// </summary>
         /// <param name="steamRoot">The steam root.</param>
@@ -159,8 +264,8 @@ namespace IronyModManager.Shared
 
                 var name = Path.GetFileName(dir);
 
-                bool isExperimental = name.Contains(ProtonExperimental, StringComparison.OrdinalIgnoreCase);
-                bool isHotfix = name.Contains(ProtonHotfix, StringComparison.OrdinalIgnoreCase);
+                var isExperimental = name.Contains(ProtonExperimental, StringComparison.OrdinalIgnoreCase);
+                var isHotfix = name.Contains(ProtonHotfix, StringComparison.OrdinalIgnoreCase);
 
                 int? major = null;
                 int? minor = null;
@@ -185,6 +290,77 @@ namespace IronyModManager.Shared
 
             return result;
         }
+
+        /// <summary>
+        /// Gets the drive mappings.
+        /// </summary>
+        /// <param name="protonPrefixPath">The proton prefix path.</param>
+        /// <returns>IReadOnlyList{DriveMapping}.</returns>
+        private static IReadOnlyList<DriveMapping> GetDriveMappings(string protonPrefixPath)
+        {
+            var dosDevices = Path.Combine(protonPrefixPath, DosDevices);
+
+            return Directory.EnumerateFileSystemEntries(dosDevices)
+                .Select(entry =>
+                {
+                    var name = Path.GetFileName(entry);
+
+                    if (name.Length != 2 || name[1] != ':' || !char.IsLetter(name[0]))
+                    {
+                        return null;
+                    }
+
+                    FileSystemInfo info = Directory.Exists(entry) ? new DirectoryInfo(entry) : new FileInfo(entry);
+
+                    if (!info.Exists)
+                    {
+                        return null;
+                    }
+
+                    var target = info.ResolveLinkTarget(true);
+                    if (target == null)
+                    {
+                        return null;
+                    }
+
+                    return new DriveMapping(char.ToUpperInvariant(name[0]) + ":", NormalizeNativePath(target.FullName));
+                })
+                .Where(x => x != null)
+                .OrderByDescending(x => x!.Target.Length)
+                .ToList()!;
+        }
+
+        /// <summary>
+        /// Determines whether [is proton prefix] [the specified proton prefix path].
+        /// </summary>
+        /// <param name="protonPrefixPath">The proton prefix path.</param>
+        /// <returns><c>true</c> if [is proton prefix] [the specified proton prefix path]; otherwise, <c>false</c>.</returns>
+        private static bool IsProtonPrefix(string protonPrefixPath)
+        {
+            if (string.IsNullOrWhiteSpace(protonPrefixPath))
+            {
+                return false;
+            }
+
+            var dosDevices = Path.Combine(protonPrefixPath, DosDevices);
+
+            return Directory.Exists(dosDevices);
+        }
+
+        /// <summary>
+        /// Normalizes the native path.
+        /// </summary>
+        /// <param name="path">The path.</param>
+        /// <returns>System.String.</returns>
+        private static string NormalizeNativePath(string path)
+        {
+            return Path.GetFullPath(path).Replace('\\', '/').TrimEnd('/');
+        }
+
+        /// <summary>
+        /// Class DriveMapping. This class cannot be inherited.
+        /// </summary>
+        private sealed record DriveMapping(string Drive, string Target);
 
         /// <summary>
         /// Parses the name of the proton version from tool.
@@ -215,36 +391,34 @@ namespace IronyModManager.Shared
             {
                 case 1:
                 {
-                    int major = digits[0] - '0';
+                    var major = digits[0] - '0';
                     return (major, 0);
                 }
                 case 2 when digits[0] == '1':
                 {
-                    int major = 10 + (digits[1] - '0');
+                    var major = 10 + (digits[1] - '0');
                     return (major, 0);
                 }
                 case 2:
                 {
-                    int majorSimple = digits[0] - '0';
-                    int minorSimple = digits[1] - '0';
+                    var majorSimple = digits[0] - '0';
+                    var minorSimple = digits[1] - '0';
                     return (majorSimple, minorSimple);
                 }
                 case 3:
                 {
-                    if (digits.StartsWith("10", StringComparison.Ordinal) ||
-                        digits.StartsWith("11", StringComparison.Ordinal))
+                    if (digits.StartsWith("10", StringComparison.Ordinal) || digits.StartsWith("11", StringComparison.Ordinal))
                     {
-                        var majorPart = digits.Substring(0, 2);
-                        var minorPart = digits.Substring(2);
+                        var majorPart = digits[..2];
+                        var minorPart = digits[2..];
 
-                        if (int.TryParse(majorPart, out var maj) &&
-                            int.TryParse(minorPart, out var min))
+                        if (int.TryParse(majorPart, out var maj) && int.TryParse(minorPart, out var min))
                         {
                             return (maj, min);
                         }
                     }
 
-                    int major = digits[0] - '0';
+                    var major = digits[0] - '0';
                     if (int.TryParse(digits.AsSpan(1), out var minor))
                     {
                         return (major, minor);
@@ -254,11 +428,10 @@ namespace IronyModManager.Shared
                 }
             }
 
-            var majorStr = digits.Substring(0, digits.Length - 2);
-            var minorStr = digits.Substring(digits.Length - 2);
+            var majorStr = digits[..^2];
+            var minorStr = digits[^2..];
 
-            if (int.TryParse(majorStr, out var majorN) &&
-                int.TryParse(minorStr, out var minorN))
+            if (int.TryParse(majorStr, out var majorN) && int.TryParse(minorStr, out var minorN))
             {
                 return (majorN, minorN);
             }
@@ -273,12 +446,7 @@ namespace IronyModManager.Shared
         /// <summary>
         /// Class ProtonInfo.
         /// </summary>
-        private class ProtonInfo(
-            string protonScriptPath,
-            int? major,
-            int? minor,
-            bool isExperimental,
-            bool isHotfix)
+        private class ProtonInfo(string protonScriptPath, int? major, int? minor, bool isExperimental, bool isHotfix)
         {
             #region Properties
 

@@ -4,7 +4,7 @@
 // Created          : 03-31-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 12-03-2025
+// Last Modified On : 05-18-2026
 // ***********************************************************************
 // <copyright file="ModWriter.cs" company="Mario">
 //     Mario
@@ -21,10 +21,12 @@ using System.Security.Principal;
 using System.Threading.Tasks;
 using AutoMapper;
 using IronyModManager.IO.Common;
+using IronyModManager.IO.Common.MessageBus;
 using IronyModManager.IO.Common.Mods;
 using IronyModManager.IO.Mods.Exporter;
 using IronyModManager.Models.Common;
 using IronyModManager.Shared;
+using IronyModManager.Shared.MessageBus;
 using Newtonsoft.Json;
 using Nito.AsyncEx;
 
@@ -66,6 +68,11 @@ namespace IronyModManager.IO.Mods
         private readonly IMapper mapper;
 
         /// <summary>
+        /// The mbus
+        /// </summary>
+        private readonly IMessageBus mbus;
+
+        /// <summary>
         /// The sqlite exporter
         /// </summary>
         private readonly SQLiteExporter sqliteExporter;
@@ -85,13 +92,15 @@ namespace IronyModManager.IO.Mods
         /// <param name="logger">The logger.</param>
         /// <param name="mapper">The mapper.</param>
         /// <param name="driveInfoProvider">The drive information provider.</param>
-        public ModWriter(ILogger logger, IMapper mapper, IDriveInfoProvider driveInfoProvider)
+        /// <param name="mbus">The mbus.</param>
+        public ModWriter(ILogger logger, IMapper mapper, IDriveInfoProvider driveInfoProvider, IMessageBus mbus)
         {
             jsonExporter = new JsonExporter();
             sqliteExporter = new SQLiteExporter(logger, false);
             sqliteExporterBeta = new SQLiteExporter(logger, true);
             this.mapper = mapper;
             this.driveInfoProvider = driveInfoProvider;
+            this.mbus = mbus;
         }
 
         #endregion Constructors
@@ -103,7 +112,6 @@ namespace IronyModManager.IO.Mods
         /// </summary>
         /// <param name="parameters">The parameters.</param>
         /// <returns>A Task&lt;System.Boolean&gt; representing the asynchronous operation.</returns>
-        /// <exception cref="ArgumentException">Invalid descriptor type.</exception>
         /// <exception cref="System.ArgumentException">Invalid descriptor type.</exception>
         public async Task<bool> ApplyModsAsync(ModWriterParameters parameters)
         {
@@ -188,8 +196,6 @@ namespace IronyModManager.IO.Mods
                             {
                                 return Task.FromResult(false);
                             }
-
-                            return Task.FromResult(true);
                         }
                     }
                 }
@@ -248,12 +254,7 @@ namespace IronyModManager.IO.Mods
         public Task<bool> DescriptorExistsAsync(ModWriterParameters parameters)
         {
             var fullPath = Path.Combine(parameters.RootDirectory ?? string.Empty, parameters.Mod.DescriptorFile ?? string.Empty);
-            if (File.Exists(fullPath))
-            {
-                return Task.FromResult(true);
-            }
-
-            return Task.FromResult(false);
+            return Task.FromResult(File.Exists(fullPath));
         }
 
         /// <summary>
@@ -264,12 +265,7 @@ namespace IronyModManager.IO.Mods
         /// <returns>System.String.</returns>
         public string FormatPrefixModName(string prefix, string name)
         {
-            if (!string.IsNullOrWhiteSpace(prefix))
-            {
-                return $"{prefix}{name}";
-            }
-
-            return name;
+            return !string.IsNullOrWhiteSpace(prefix) ? $"{prefix}{name}" : name;
         }
 
         /// <summary>
@@ -280,12 +276,7 @@ namespace IronyModManager.IO.Mods
         public virtual bool ModDirectoryExists(ModWriterParameters parameters)
         {
             var fullPath = Path.Combine(parameters.RootDirectory ?? string.Empty, parameters.Path ?? string.Empty);
-            if (!Directory.Exists(fullPath))
-            {
-                return false;
-            }
-
-            return Directory.EnumerateFiles(fullPath, "*", SearchOption.AllDirectories).Any();
+            return Directory.Exists(fullPath) && Directory.EnumerateFiles(fullPath, "*", SearchOption.AllDirectories).Any();
         }
 
         /// <summary>
@@ -343,7 +334,7 @@ namespace IronyModManager.IO.Mods
             }
 
             var retry = new RetryStrategy();
-            return retry.RetryActionAsync(() => purge());
+            return retry.RetryActionAsync(purge);
         }
 
         /// <summary>
@@ -370,7 +361,6 @@ namespace IronyModManager.IO.Mods
         /// <param name="parameters">The parameters.</param>
         /// <param name="writeDescriptorInModDirectory">if set to <c>true</c> [write descriptor in mod directory].</param>
         /// <returns>A Task&lt;System.Boolean&gt; representing the asynchronous operation.</returns>
-        /// <exception cref="ArgumentException">Invalid descriptor type.</exception>
         /// <exception cref="System.ArgumentException">Invalid descriptor type.</exception>
         public async Task<bool> WriteDescriptorAsync(ModWriterParameters parameters, bool writeDescriptorInModDirectory)
         {
@@ -381,17 +371,15 @@ namespace IronyModManager.IO.Mods
 
             async Task<bool> writeDescriptors()
             {
-                // If needed I've got a much more complex serializer, it is written for Kerbal Space Program but the structure seems to be the same though this is much more simpler
+                // ReSharper disable once CommentTypo
+                // If needed I've got a much more complex serializer, it is written for Kerbal Space Program but the structure seems to be the same though this is much simpler
                 var fullPath = Path.Combine(parameters.RootDirectory ?? string.Empty, parameters.Path ?? string.Empty);
                 await writeDescriptor(fullPath, false);
 
                 // Attempt to fix issues where the game decides to delete local zipped mod descriptors (I'm assuming this happens to all pdx games)
-                if (parameters.LockDescriptor)
+                if (parameters.LockDescriptor && File.Exists(fullPath))
                 {
-                    if (File.Exists(fullPath))
-                    {
-                        _ = new System.IO.FileInfo(fullPath) { IsReadOnly = true };
-                    }
+                    _ = new System.IO.FileInfo(fullPath) { IsReadOnly = true };
                 }
 
                 if (writeDescriptorInModDirectory)
@@ -444,16 +432,10 @@ namespace IronyModManager.IO.Mods
         /// <param name="stream">The stream.</param>
         /// <param name="truncatePath">if set to <c>true</c> [truncate path].</param>
         /// <returns>Task&lt;System.Boolean&gt;.</returns>
-        /// <exception cref="ArgumentException">Invalid descriptor type.</exception>
         /// <exception cref="System.ArgumentException">Invalid descriptor type.</exception>
         public Task<bool> WriteDescriptorToStreamAsync(ModWriterParameters parameters, Stream stream, bool truncatePath = false)
         {
-            if (parameters.DescriptorType == DescriptorType.None)
-            {
-                throw new ArgumentException("Invalid descriptor type.");
-            }
-
-            return WriteDescriptorToStreamInternalAsync(parameters.Mod, stream, parameters.DescriptorType, truncatePath);
+            return parameters.DescriptorType == DescriptorType.None ? throw new ArgumentException("Invalid descriptor type.") : WriteDescriptorToStreamInternalAsync(parameters.Mod, stream, parameters.DescriptorType, truncatePath);
         }
 
         /// <summary>
@@ -466,7 +448,11 @@ namespace IronyModManager.IO.Mods
         /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
         protected async Task<bool> WriteDescriptorToStreamInternalAsync(IMod mod, Stream stream, DescriptorType descriptorType, bool truncatePath = false)
         {
-            static async Task serializeDescriptorMod(IMod content, StreamWriter sw)
+            var request = new GameInfoRequestEvent(mod.Game);
+            await mbus.PublishAsync(request);
+            var protonPrefix = LinuxProtonResolver.GetProtonPrefix(request.BaseSteamDir, request.SteamAppId);
+
+            async Task serializeDescriptorMod(IMod content, StreamWriter sw)
             {
                 var props = content.GetType().GetProperties().Where(p => Attribute.IsDefined(p, typeof(DescriptorPropertyAttribute)));
                 foreach (var prop in props)
@@ -481,7 +467,13 @@ namespace IronyModManager.IO.Mods
                             {
                                 foreach (var item in col)
                                 {
-                                    await sw.WriteLineAsync($"{attr.PropertyName}=\"{item.Replace("\"", "\\\"")}\"");
+                                    var inner = item;
+                                    if (attr.TranslateProtonPath && request.IsProton && !string.IsNullOrWhiteSpace(protonPrefix))
+                                    {
+                                        inner = LinuxProtonResolver.ToProtonPath(inner, protonPrefix);
+                                    }
+
+                                    await sw.WriteLineAsync($"{attr.PropertyName}=\"{inner.Replace("\"", "\\\"")}\"");
                                 }
                             }
                             else
@@ -489,7 +481,13 @@ namespace IronyModManager.IO.Mods
                                 await sw.WriteLineAsync($"{attr.PropertyName}={{");
                                 foreach (var item in col)
                                 {
-                                    await sw.WriteLineAsync($"\t\"{item.Replace("\"", "\\\"")}\"");
+                                    var inner = item;
+                                    if (attr.TranslateProtonPath && request.IsProton && !string.IsNullOrWhiteSpace(protonPrefix))
+                                    {
+                                        inner = LinuxProtonResolver.ToProtonPath(inner, protonPrefix);
+                                    }
+
+                                    await sw.WriteLineAsync($"\t\"{inner.Replace("\"", "\\\"")}\"");
                                 }
 
                                 await sw.WriteLineAsync("}");
@@ -498,22 +496,28 @@ namespace IronyModManager.IO.Mods
                     }
                     else
                     {
-                        if (!string.IsNullOrWhiteSpace(val != null ? val.ToString() : string.Empty))
+                        var inner = val != null ? val.ToString() : string.Empty;
+                        if (!string.IsNullOrWhiteSpace(inner))
                         {
+                            if (attr!.TranslateProtonPath && request.IsProton && !string.IsNullOrWhiteSpace(protonPrefix))
+                            {
+                                inner = LinuxProtonResolver.ToProtonPath(inner, protonPrefix);
+                            }
+
                             if (attr!.AlternateNameEndsWithCondition?.Count() > 0 && attr.AlternateNameEndsWithCondition.Any(p => val!.ToString()!.EndsWith(p, StringComparison.OrdinalIgnoreCase)))
                             {
-                                await sw.WriteLineAsync($"{attr.AlternatePropertyName}=\"{val?.ToString()?.Replace("\"", "\\\"")}\"");
+                                await sw.WriteLineAsync($"{attr.AlternatePropertyName}=\"{inner.Replace("\"", "\\\"")}\"");
                             }
                             else
                             {
-                                await sw.WriteLineAsync($"{attr.PropertyName}=\"{val?.ToString()?.Replace("\"", "\\\"")}\"");
+                                await sw.WriteLineAsync($"{attr.PropertyName}=\"{inner.Replace("\"", "\\\"")}\"");
                             }
                         }
                     }
                 }
             }
 
-            static async Task serializeJsonDescriptorMod(IMod content, StreamWriter sw)
+            async Task serializeJsonDescriptorMod(IMod content, StreamWriter sw)
             {
                 var customData = content.AdditionalData != null ? new Dictionary<string, object>(content.AdditionalData) : new Dictionary<string, object>();
                 if (content.ReplacePath != null && content.ReplacePath.Any())
@@ -532,11 +536,17 @@ namespace IronyModManager.IO.Mods
                     relationshipData.AddRange(content.RelationshipData.Select(relData => new Dictionary<string, object>(relData)));
                 }
 
+                var filename = content.FileName;
+                if (request.IsProton && !string.IsNullOrWhiteSpace(protonPrefix))
+                {
+                    filename = LinuxProtonResolver.ToProtonPath(filename, protonPrefix);
+                }
+
                 var metaData = new JsonMetadata
                 {
                     Id = !string.IsNullOrWhiteSpace(content.JsonId) ? content.JsonId : content.RemoteId.HasValue ? content.RemoteId.ToString() : string.Empty,
                     Name = content.Name,
-                    Path = content.FileName,
+                    Path = filename,
                     Relationships = relationshipData,
                     SupportedGameVersion = content.Version,
                     Tags = content.Tags != null ? content.Tags.ToList() : [],

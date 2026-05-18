@@ -4,7 +4,7 @@
 // Created          : 07-11-2022
 //
 // Last Modified By : Mario
-// Last Modified On : 05-11-2026
+// Last Modified On : 05-18-2026
 // ***********************************************************************
 // <copyright file="ProcessRunner.cs" company="Mario">
 //     Mario
@@ -177,25 +177,12 @@ namespace IronyModManager.Shared
         /// <param name="args">The arguments.</param>
         public static void RunProtonProcess(string path, string baseSteamPath, string protonVersion, long appId, string args = Constants.EmptyParam)
         {
-            static string GetSteamLibraryRootFromGamePath(string path)
-            {
-                var fullPath = Path.GetFullPath(path);
-
-                var index = fullPath.IndexOf(Path.DirectorySeparatorChar + "steamapps" + Path.DirectorySeparatorChar, StringComparison.OrdinalIgnoreCase);
-                if (index < 0)
-                {
-                    return null;
-                }
-
-                return fullPath[..index].TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar);
-            }
-
             if (!File.Exists(path))
             {
                 return;
             }
 
-            var libraryPath = GetSteamLibraryRootFromGamePath(path) ?? baseSteamPath;
+            var libraryPath = LinuxProtonResolver.GetSteamLibraryRootFromGamePath(path) ?? baseSteamPath;
 
             var protonPath = LinuxProtonResolver.ResolveProtonPath(baseSteamPath, protonVersion);
 

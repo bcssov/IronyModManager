@@ -4,7 +4,7 @@
 // Created          : 05-26-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 10-21-2024
+// Last Modified On : 05-18-2026
 // ***********************************************************************
 // <copyright file="ModPatchCollectionServiceTests.cs" company="Mario">
 //     Mario
@@ -44,6 +44,7 @@ using Moq;
 using Xunit;
 using FileInfo = IronyModManager.IO.FileInfo;
 using ValueType = IronyModManager.Shared.Models.ValueType;
+// ReSharper disable All
 
 namespace IronyModManager.Services.Tests
 {
@@ -51,6 +52,7 @@ namespace IronyModManager.Services.Tests
     /// Class ModPatchCollectionServiceTests.
     /// </summary>
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0028:Simplify collection initialization", Justification = "It's a unit test")]
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0017:Simplify object initialization", Justification = "It's a unit test")]
     public class ModPatchCollectionServiceTests
     {
         /// <summary>
@@ -95,7 +97,7 @@ namespace IronyModManager.Services.Tests
             };
             reader.Setup(s => s.Read(It.IsAny<string>(), It.IsAny<IEnumerable<string>>(), It.IsAny<bool>())).Returns(fileInfos);
 
-            modParser.Setup(s => s.Parse(It.IsAny<IEnumerable<string>>(), It.IsAny<DescriptorModType>())).Returns((IEnumerable<string> values, DescriptorModType t) =>
+            modParser.Setup(s => s.Parse(It.IsAny<IEnumerable<string>>(), It.IsAny<DescriptorModType>(), It.IsAny<ModParserArgs>())).Returns((IEnumerable<string> values, DescriptorModType t, ModParserArgs a) =>
             {
                 return new ModObject { FileName = values.First(), Name = values.First() };
             });
@@ -253,13 +255,7 @@ namespace IronyModManager.Services.Tests
             var reader = new Mock<IReader>();
             var modWriter = new Mock<IModWriter>();
             var gameService = new Mock<IGameService>();
-            gameService.Setup(p => p.GetSelected()).Returns(new Game
-            {
-                Type = "Should_find_filename_conflicts",
-                UserDirectory = "C:\\Users\\Fake",
-                WorkshopDirectory = new List<string> { "C:\\fake" },
-                CustomModDirectory = string.Empty
-            });
+            gameService.Setup(p => p.GetSelected()).Returns(new Game { Type = "Should_find_filename_conflicts", UserDirectory = "C:\\Users\\Fake", WorkshopDirectory = new List<string> { "C:\\fake" }, CustomModDirectory = string.Empty });
             var mapper = new Mock<IMapper>();
             var modPatchExporter = new Mock<IModPatchExporter>();
             var infoProvider = new Mock<IDefinitionInfoProvider>();
@@ -270,7 +266,7 @@ namespace IronyModManager.Services.Tests
 
             SetupMockCase(reader, parserManager, modParser);
 
-            var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter, definitionInfoProviders:providers);
+            var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter, providers);
             var definitions = new List<IDefinition>
             {
                 new Definition
@@ -316,10 +312,7 @@ namespace IronyModManager.Services.Tests
             var gameService = new Mock<IGameService>();
             gameService.Setup(p => p.GetSelected()).Returns(new Game
             {
-                Type = "Should_find_orphan_filename_conflicts",
-                UserDirectory = "C:\\Users\\Fake",
-                WorkshopDirectory = new List<string> { "C:\\fake" },
-                CustomModDirectory = string.Empty
+                Type = "Should_find_orphan_filename_conflicts", UserDirectory = "C:\\Users\\Fake", WorkshopDirectory = new List<string> { "C:\\fake" }, CustomModDirectory = string.Empty
             });
             var mapper = new Mock<IMapper>();
             var modPatchExporter = new Mock<IModPatchExporter>();
@@ -331,7 +324,7 @@ namespace IronyModManager.Services.Tests
 
             SetupMockCase(reader, parserManager, modParser);
 
-            var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter, definitionInfoProviders:providers);
+            var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter, providers);
             var definitions = new List<IDefinition>
             {
                 new Definition
@@ -388,10 +381,7 @@ namespace IronyModManager.Services.Tests
             var gameService = new Mock<IGameService>();
             gameService.Setup(p => p.GetSelected()).Returns(new Game
             {
-                Type = "Should_not_ignore_orphan_localisation_filename_conflicts",
-                UserDirectory = "C:\\Users\\Fake",
-                WorkshopDirectory = new List<string> { "C:\\fake" },
-                CustomModDirectory = string.Empty
+                Type = "Should_not_ignore_orphan_localisation_filename_conflicts", UserDirectory = "C:\\Users\\Fake", WorkshopDirectory = new List<string> { "C:\\fake" }, CustomModDirectory = string.Empty
             });
             var mapper = new Mock<IMapper>();
             var modPatchExporter = new Mock<IModPatchExporter>();
@@ -403,7 +393,7 @@ namespace IronyModManager.Services.Tests
 
             SetupMockCase(reader, parserManager, modParser);
 
-            var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter, definitionInfoProviders:providers);
+            var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter, providers);
             var definitions = new List<IDefinition>
             {
                 new Definition
@@ -457,13 +447,7 @@ namespace IronyModManager.Services.Tests
             var reader = new Mock<IReader>();
             var modWriter = new Mock<IModWriter>();
             var gameService = new Mock<IGameService>();
-            gameService.Setup(p => p.GetSelected()).Returns(new Game
-            {
-                Type = "Should_find_definition_conflicts",
-                UserDirectory = "C:\\Users\\Fake",
-                WorkshopDirectory = new List<string> { "C:\\fake" },
-                CustomModDirectory = string.Empty
-            });
+            gameService.Setup(p => p.GetSelected()).Returns(new Game { Type = "Should_find_definition_conflicts", UserDirectory = "C:\\Users\\Fake", WorkshopDirectory = new List<string> { "C:\\fake" }, CustomModDirectory = string.Empty });
             var mapper = new Mock<IMapper>();
             var modPatchExporter = new Mock<IModPatchExporter>();
             var infoProvider = new Mock<IDefinitionInfoProvider>();
@@ -474,7 +458,7 @@ namespace IronyModManager.Services.Tests
 
             SetupMockCase(reader, parserManager, modParser);
 
-            var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter, definitionInfoProviders:providers);
+            var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter, providers);
             var definitions = new List<IDefinition>
             {
                 new Definition
@@ -520,10 +504,7 @@ namespace IronyModManager.Services.Tests
             var gameService = new Mock<IGameService>();
             gameService.Setup(p => p.GetSelected()).Returns(new Game
             {
-                Type = "Should_not_find_override_conflicts",
-                UserDirectory = "C:\\Users\\Fake",
-                WorkshopDirectory = new List<string> { "C:\\fake" },
-                CustomModDirectory = string.Empty
+                Type = "Should_not_find_override_conflicts", UserDirectory = "C:\\Users\\Fake", WorkshopDirectory = new List<string> { "C:\\fake" }, CustomModDirectory = string.Empty
             });
             var mapper = new Mock<IMapper>();
             var modPatchExporter = new Mock<IModPatchExporter>();
@@ -535,7 +516,7 @@ namespace IronyModManager.Services.Tests
 
             SetupMockCase(reader, parserManager, modParser);
 
-            var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter, definitionInfoProviders:providers);
+            var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter, providers);
             var definitions = new List<IDefinition>
             {
                 new Definition
@@ -590,10 +571,7 @@ namespace IronyModManager.Services.Tests
             var gameService = new Mock<IGameService>();
             gameService.Setup(p => p.GetSelected()).Returns(new Game
             {
-                Type = "Should_not_find_dependency_conflicts",
-                UserDirectory = "C:\\Users\\Fake",
-                WorkshopDirectory = new List<string> { "C:\\fake" },
-                CustomModDirectory = string.Empty
+                Type = "Should_not_find_dependency_conflicts", UserDirectory = "C:\\Users\\Fake", WorkshopDirectory = new List<string> { "C:\\fake" }, CustomModDirectory = string.Empty
             });
             var mapper = new Mock<IMapper>();
             var modPatchExporter = new Mock<IModPatchExporter>();
@@ -605,7 +583,7 @@ namespace IronyModManager.Services.Tests
 
             SetupMockCase(reader, parserManager, modParser);
 
-            var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter, definitionInfoProviders:providers);
+            var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter, providers);
             var definitions = new List<IDefinition>
             {
                 new Definition
@@ -658,13 +636,7 @@ namespace IronyModManager.Services.Tests
             var reader = new Mock<IReader>();
             var modWriter = new Mock<IModWriter>();
             var gameService = new Mock<IGameService>();
-            gameService.Setup(p => p.GetSelected()).Returns(new Game
-            {
-                Type = "Should_find_dependency_conflicts",
-                UserDirectory = "C:\\Users\\Fake",
-                WorkshopDirectory = new List<string> { "C:\\fake" },
-                CustomModDirectory = string.Empty
-            });
+            gameService.Setup(p => p.GetSelected()).Returns(new Game { Type = "Should_find_dependency_conflicts", UserDirectory = "C:\\Users\\Fake", WorkshopDirectory = new List<string> { "C:\\fake" }, CustomModDirectory = string.Empty });
             var mapper = new Mock<IMapper>();
             var modPatchExporter = new Mock<IModPatchExporter>();
             var infoProvider = new Mock<IDefinitionInfoProvider>();
@@ -675,7 +647,7 @@ namespace IronyModManager.Services.Tests
 
             SetupMockCase(reader, parserManager, modParser);
 
-            var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter, definitionInfoProviders:providers);
+            var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter, providers);
             var definitions = new List<IDefinition>
             {
                 new Definition
@@ -731,10 +703,7 @@ namespace IronyModManager.Services.Tests
             var gameService = new Mock<IGameService>();
             gameService.Setup(p => p.GetSelected()).Returns(new Game
             {
-                Type = "Should_find_multiple_dependency_conflicts",
-                UserDirectory = "C:\\Users\\Fake",
-                WorkshopDirectory = new List<string> { "C:\\fake" },
-                CustomModDirectory = string.Empty
+                Type = "Should_find_multiple_dependency_conflicts", UserDirectory = "C:\\Users\\Fake", WorkshopDirectory = new List<string> { "C:\\fake" }, CustomModDirectory = string.Empty
             });
             var mapper = new Mock<IMapper>();
             var modPatchExporter = new Mock<IModPatchExporter>();
@@ -746,7 +715,7 @@ namespace IronyModManager.Services.Tests
 
             SetupMockCase(reader, parserManager, modParser);
 
-            var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter, definitionInfoProviders:providers);
+            var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter, providers);
             var definitions = new List<IDefinition>
             {
                 new Definition
@@ -811,10 +780,7 @@ namespace IronyModManager.Services.Tests
             var gameService = new Mock<IGameService>();
             gameService.Setup(p => p.GetSelected()).Returns(new Game
             {
-                Type = "Should_not_include_variable_conflicts",
-                UserDirectory = "C:\\Users\\Fake",
-                WorkshopDirectory = new List<string> { "C:\\fake" },
-                CustomModDirectory = string.Empty
+                Type = "Should_not_include_variable_conflicts", UserDirectory = "C:\\Users\\Fake", WorkshopDirectory = new List<string> { "C:\\fake" }, CustomModDirectory = string.Empty
             });
             var mapper = new Mock<IMapper>();
             var modPatchExporter = new Mock<IModPatchExporter>();
@@ -826,7 +792,7 @@ namespace IronyModManager.Services.Tests
 
             SetupMockCase(reader, parserManager, modParser);
 
-            var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter, definitionInfoProviders:providers);
+            var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter, providers);
             var definitions = new List<IDefinition>
             {
                 new Definition
@@ -887,13 +853,7 @@ namespace IronyModManager.Services.Tests
             var reader = new Mock<IReader>();
             var modWriter = new Mock<IModWriter>();
             var gameService = new Mock<IGameService>();
-            gameService.Setup(p => p.GetSelected()).Returns(new Game
-            {
-                Type = "Should_return_all_conflicts",
-                UserDirectory = "C:\\Users\\Fake",
-                WorkshopDirectory = new List<string> { "C:\\fake" },
-                CustomModDirectory = string.Empty
-            });
+            gameService.Setup(p => p.GetSelected()).Returns(new Game { Type = "Should_return_all_conflicts", UserDirectory = "C:\\Users\\Fake", WorkshopDirectory = new List<string> { "C:\\fake" }, CustomModDirectory = string.Empty });
             var mapper = new Mock<IMapper>();
             var modPatchExporter = new Mock<IModPatchExporter>();
             var infoProvider = new Mock<IDefinitionInfoProvider>();
@@ -904,7 +864,7 @@ namespace IronyModManager.Services.Tests
 
             SetupMockCase(reader, parserManager, modParser);
 
-            var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter, definitionInfoProviders:providers);
+            var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter, providers);
             var definitions = new List<IDefinition>
             {
                 new Definition
@@ -3122,7 +3082,7 @@ namespace IronyModManager.Services.Tests
             });
             var fileInfos = new List<IFileInfo> { new FileInfo { Content = new List<string> { "1" }, FileName = "fakemod.mod", IsBinary = false } };
             reader.Setup(s => s.Read(It.IsAny<string>(), It.IsAny<IEnumerable<string>>(), It.IsAny<bool>())).Returns(fileInfos);
-            modParser.Setup(s => s.Parse(It.IsAny<IEnumerable<string>>(), It.IsAny<DescriptorModType>())).Returns((IEnumerable<string> values, DescriptorModType t) =>
+            modParser.Setup(s => s.Parse(It.IsAny<IEnumerable<string>>(), It.IsAny<DescriptorModType>(), It.IsAny<ModParserArgs>())).Returns((IEnumerable<string> values, DescriptorModType t, ModParserArgs a) =>
             {
                 return new ModObject { FileName = "fakemod", Name = "1" };
             });
@@ -3171,7 +3131,7 @@ namespace IronyModManager.Services.Tests
             });
             var fileInfos = new List<IFileInfo> { new FileInfo { Content = new List<string> { "1" }, FileName = "fakemod.mod", IsBinary = false } };
             reader.Setup(s => s.Read(It.IsAny<string>(), It.IsAny<IEnumerable<string>>(), It.IsAny<bool>())).Returns(fileInfos);
-            modParser.Setup(s => s.Parse(It.IsAny<IEnumerable<string>>(), It.IsAny<DescriptorModType>())).Returns((IEnumerable<string> values, DescriptorModType t) =>
+            modParser.Setup(s => s.Parse(It.IsAny<IEnumerable<string>>(), It.IsAny<DescriptorModType>(), It.IsAny<ModParserArgs>())).Returns((IEnumerable<string> values, DescriptorModType t, ModParserArgs a) =>
             {
                 return new ModObject { FileName = "fakemod.zip", Name = "1" };
             });
@@ -4972,7 +4932,7 @@ namespace IronyModManager.Services.Tests
             var c = new ConflictResult();
             c.IgnoredConflicts = new IndexedDefinitions();
             c.ResolvedConflicts = new IndexedDefinitions();
-            var result = service.NeedsReload(c, new Definition() { AppliedGlobalVariables = new List<IDefinition>() { new Definition() { Id = "test", Type = "test"} }});
+            var result = service.NeedsReload(c, new Definition { AppliedGlobalVariables = new List<IDefinition> { new Definition { Id = "test", Type = "test" } } });
             result.Should().BeFalse();
         }
 
@@ -4999,8 +4959,8 @@ namespace IronyModManager.Services.Tests
             var c = new ConflictResult();
             c.IgnoredConflicts = new IndexedDefinitions();
             c.ResolvedConflicts = new IndexedDefinitions();
-            await c.ResolvedConflicts.AddToMapAsync(new Definition() { AppliedGlobalVariables = new List<IDefinition>() { new Definition() { Id = "test", Type = "test" } } });
-            var result = service.NeedsReload(c, new Definition() { Id = "test", Type = "test" });
+            await c.ResolvedConflicts.AddToMapAsync(new Definition { AppliedGlobalVariables = new List<IDefinition> { new Definition { Id = "test", Type = "test" } } });
+            var result = service.NeedsReload(c, new Definition { Id = "test", Type = "test" });
             result.Should().BeTrue();
         }
 

@@ -4,7 +4,7 @@
 // Created          : 02-29-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 12-23-2024
+// Last Modified On : 05-18-2026
 // ***********************************************************************
 // <copyright file="Mod.cs" company="Mario">
 //     Mario
@@ -75,7 +75,7 @@ namespace IronyModManager.Models
         /// Gets or sets the name of the file.
         /// </summary>
         /// <value>The name of the file.</value>
-        [DescriptorProperty("path", "archive", ".zip", ".bin")]
+        [DescriptorProperty("path", "archive", true, ".zip", ".bin")]
         public virtual string FileName { get; set; }
 
         /// <summary>
@@ -146,12 +146,7 @@ namespace IronyModManager.Models
                     return FullPath;
                 }
 
-                if (!string.IsNullOrWhiteSpace(Path.GetExtension(FullPath)))
-                {
-                    return Path.GetDirectoryName(FullPath);
-                }
-
-                return FullPath;
+                return !string.IsNullOrWhiteSpace(Path.GetExtension(FullPath)) ? Path.GetDirectoryName(FullPath) : FullPath;
             }
         }
 
@@ -231,14 +226,7 @@ namespace IronyModManager.Models
                 if (!string.IsNullOrWhiteSpace(Version))
                 {
                     var convertedVersion = Version.ToVersion();
-                    if (convertedVersion != null)
-                    {
-                        versionData = convertedVersion;
-                    }
-                    else
-                    {
-                        versionData = new Shared.Version();
-                    }
+                    versionData = convertedVersion ?? new Shared.Version();
                 }
                 else
                 {

@@ -4,7 +4,7 @@
 // Created          : 02-12-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 12-06-2025
+// Last Modified On : 05-18-2026
 // ***********************************************************************
 // <copyright file="GameService.cs" company="Mario">
 //     Mario
@@ -155,6 +155,7 @@ namespace IronyModManager.Services
             var gameSettings = StorageProvider.GetGameSettings();
             var games = new List<IGame>();
 
+            // ReSharper disable once LoopCanBeConvertedToQuery
             foreach (var item in registeredGames)
             {
                 var game = InitModel(item, gameSettings.FirstOrDefault(p => p.Type.Equals(item.Name)), prefs.Game);
@@ -221,7 +222,7 @@ namespace IronyModManager.Services
                     model.LaunchArguments = string.Join(" ", settingsObject.ExeArgs);
                 }
 
-                model.UserDirectory = pathResolver.Parse(settingsObject.GameDataPath);
+                model.UserDirectory = pathResolver.GetUserDirectory(game.LinuxProtonVersion, settingsObject.GameDataPath, game.BaseSteamGameDirectory, game.SteamAppId);
                 model.ExecutableLocation = PathOperations.ResolveRelativePath(path, settingsObject.ExePath).StandardizeDirectorySeparator();
                 model.CustomModDirectory = string.Empty;
                 return model;

@@ -4,7 +4,7 @@
 // Created          : 02-24-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-12-2026
+// Last Modified On : 05-18-2026
 // ***********************************************************************
 // <copyright file="ModService.cs" company="Mario">
 //     Mario
@@ -458,9 +458,10 @@ namespace IronyModManager.Services
                 return null;
             }
 
+            var args = new ModParserArgs { BaseSteamDirectory = game.BaseSteamGameDirectory, IsProton = !string.IsNullOrWhiteSpace(game.LinuxProtonVersion), SteamAppId = game.SteamAppId };
             var mods = GetInstalledModsInternal(game, false);
             var descriptors = new List<IModInstallationResult>();
-            var userDirectoryMods = GetAllModDescriptors(Path.Combine(game.UserDirectory, Shared.Constants.ModDirectory), ModSource.Local, game.ModDescriptorType);
+            var userDirectoryMods = GetAllModDescriptors(Path.Combine(game.UserDirectory, Shared.Constants.ModDirectory), ModSource.Local, game.ModDescriptorType, game.Type, args);
             if (userDirectoryMods?.Count() > 0)
             {
                 descriptors.AddRange(userDirectoryMods);
@@ -468,14 +469,14 @@ namespace IronyModManager.Services
 
             if (!string.IsNullOrWhiteSpace(game.CustomModDirectory))
             {
-                var customMods = GetAllModDescriptors(GetModDirectoryRootPath(game), ModSource.Local, game.ModDescriptorType);
+                var customMods = GetAllModDescriptors(GetModDirectoryRootPath(game), ModSource.Local, game.ModDescriptorType, game.Type, args);
                 if (customMods != null && customMods.Any())
                 {
                     descriptors.AddRange(customMods);
                 }
             }
 
-            var workshopDirectoryMods = game.WorkshopDirectory.SelectMany(p => GetAllModDescriptors(p, ModSource.Steam, game.ModDescriptorType));
+            var workshopDirectoryMods = game.WorkshopDirectory.SelectMany(p => GetAllModDescriptors(p, ModSource.Steam, game.ModDescriptorType, game.Type, args));
             if (workshopDirectoryMods.Any())
             {
                 descriptors.AddRange(workshopDirectoryMods);
@@ -744,8 +745,10 @@ namespace IronyModManager.Services
         /// <param name="path">The path.</param>
         /// <param name="modSource">The mod source.</param>
         /// <param name="modDescriptorType">Type of the mod descriptor.</param>
+        /// <param name="gameType">Type of the game.</param>
+        /// <param name="args">The arguments.</param>
         /// <returns>IEnumerable&lt;IModInstallationResult&gt;.</returns>
-        protected virtual IEnumerable<IModInstallationResult> GetAllModDescriptors(string path, ModSource modSource, ModDescriptorType modDescriptorType)
+        protected virtual IEnumerable<IModInstallationResult> GetAllModDescriptors(string path, ModSource modSource, ModDescriptorType modDescriptorType, string gameType, ModParserArgs args)
         {
             static bool IsSubPath(string path, string potentialParent)
             {
@@ -810,7 +813,7 @@ namespace IronyModManager.Services
                         }
                     }
 
-                    var mod = Mapper.Map<IMod>(ModParser.Parse(fileInfo.Content, MapDescriptorModType(modDescriptorType)));
+                    var mod = Mapper.Map<IMod>(ModParser.Parse(fileInfo.Content, MapDescriptorModType(modDescriptorType), args));
                     mod.Name = ModWriter.FormatPrefixModName(modNamePrefix, mod.Name);
                     if (!string.IsNullOrWhiteSpace(modNamePrefix) && mod.Dependencies != null && mod.Dependencies.Any())
                     {
@@ -824,6 +827,7 @@ namespace IronyModManager.Services
                     mod.FullPath = path.StandardizeDirectorySeparator();
                     mod.IsLocked = fileInfo.IsReadOnly;
                     mod.Source = source;
+                    mod.Game = gameType;
                     var cleanedPath = path;
                     if (!isDirectory)
                     {
