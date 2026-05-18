@@ -22,7 +22,6 @@ using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
-using CWTools.Common;
 using IronyModManager.DI;
 using IronyModManager.IO.Common.Mods;
 using IronyModManager.IO.Common.Readers;
@@ -619,7 +618,7 @@ namespace IronyModManager.Services
                 var installedMods = Reader.Read(Path.Combine(game.UserDirectory, game.ModDescriptorType == ModDescriptorType.DescriptorMod ? Shared.Constants.ModDirectory : Shared.Constants.JsonModDirectory));
                 if (installedMods?.Count() > 0)
                 {
-                    var args = new ModParserArgs { BaseSteamDirectory = game.BaseSteamGameDirectory, IsProton = !string.IsNullOrWhiteSpace(game.LinuxProtonVersion), SteamAppId = game.SteamAppId};
+                    var args = new ModParserArgs { BaseSteamDirectory = game.BaseSteamGameDirectory, IsProton = !string.IsNullOrWhiteSpace(game.LinuxProtonVersion), SteamAppId = game.SteamAppId };
                     installedMods.Where(p => p.Content.Any()).AsParallel().WithDegreeOfParallelism(MaxModsToProcess).ForAll(installedMod =>
                     {
                         var mod = Mapper.Map<IMod>(ModParser.Parse(installedMod.Content, MapDescriptorModType(game.ModDescriptorType), args));
