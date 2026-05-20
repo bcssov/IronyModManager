@@ -4,8 +4,11 @@
 		<title>Irony Mod Manager</title>
 		<language>en</language>
 		<item>
-			<title>1.27.180</title>
+			<title>1.27.181</title>
 			<description>## Current Release Notes
+* Fix CTD on windows while querying steam library path
+
+## Release Notes 1.27.180
 * Hopefully resolve #604
 * Added full Proton mod path awareness for Linux installs
 * Irony now correctly resolves and serializes Proton mod paths (C:/, S:/, custom Proton drive mappings)
@@ -21,12 +24,15 @@
 * Optional GenerateSteamAppId flag to create steam_appid.txt when missing (used for enabling Steam activity tracking when launching games directly; off by default)
 * Added StoragePath setting to customize where Irony stores and reads its data
 * Irony is now Flatpak-aware (detects and supports Steam Flatpak installations)</description>
-			<pubDate>Wed, 20 May 2026 00:13:49 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.27.180/linux-x64.zip" sparkle:version="1.27.180.22644" sparkle:shortVersionString="1.27.180" length="89246533" sparkle:os="linux" type="application/zip" sparkle:signature="ElnXBBeFeP5pGpYIHBeB+liicWlL5IXFPBTbSKIKfMGTUAegLNHypXjs17CkDbD8Hy/YmjmUDeIznMWauVPvAw=="/>
+			<pubDate>Wed, 20 May 2026 07:55:27 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.27.181/linux-x64.zip" sparkle:version="1.27.181.3197" sparkle:shortVersionString="1.27.181" length="89246597" sparkle:os="linux" type="application/zip" sparkle:signature="o+ZsLdFOR6TaafxgjFchBimEpUnxwNpvux2jjrYIbdB2cvv6wtV+5/g3v5f4YGLJ1RHesntYVjkFom3Xn7nnCw=="/>
 		</item>
 		<item>
-			<title>1.27.180</title>
+			<title>1.27.181</title>
 			<description>## Current Release Notes
+* Fix CTD on windows while querying steam library path
+
+## Release Notes 1.27.180
 * Hopefully resolve #604
 * Added full Proton mod path awareness for Linux installs
 * Irony now correctly resolves and serializes Proton mod paths (C:/, S:/, custom Proton drive mappings)
@@ -42,12 +48,15 @@
 * Optional GenerateSteamAppId flag to create steam_appid.txt when missing (used for enabling Steam activity tracking when launching games directly; off by default)
 * Added StoragePath setting to customize where Irony stores and reads its data
 * Irony is now Flatpak-aware (detects and supports Steam Flatpak installations)</description>
-			<pubDate>Wed, 20 May 2026 00:13:55 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.27.180/osx-x64.zip" sparkle:version="1.27.180.22644" sparkle:shortVersionString="1.27.180" length="91980886" sparkle:os="osx" type="application/zip" sparkle:signature="GsADZJoHyv+WGK/jMao5FVb3EVyci0ANlpmghq2PSecz/30L0CbPp0gT2Yi8Z50JrrCPrhoysXHyl3NDp8FZAQ=="/>
+			<pubDate>Wed, 20 May 2026 07:55:33 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.27.181/osx-x64.zip" sparkle:version="1.27.181.3197" sparkle:shortVersionString="1.27.181" length="91981040" sparkle:os="osx" type="application/zip" sparkle:signature="jaZjitwsQTnXjNTvQSpNNRPUafWkKa+OHQszhy7KtPgXuY3bNlmD10aT+FGhtirnxzaL2w4PzezwAXArQHjQBQ=="/>
 		</item>
 		<item>
-			<title>1.27.180</title>
+			<title>1.27.181</title>
 			<description>## Current Release Notes
+* Fix CTD on windows while querying steam library path
+
+## Release Notes 1.27.180
 * Hopefully resolve #604
 * Added full Proton mod path awareness for Linux installs
 * Irony now correctly resolves and serializes Proton mod paths (C:/, S:/, custom Proton drive mappings)
@@ -63,12 +72,15 @@
 * Optional GenerateSteamAppId flag to create steam_appid.txt when missing (used for enabling Steam activity tracking when launching games directly; off by default)
 * Added StoragePath setting to customize where Irony stores and reads its data
 * Irony is now Flatpak-aware (detects and supports Steam Flatpak installations)</description>
-			<pubDate>Wed, 20 May 2026 00:14:01 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.27.180/win-x64-setup.zip" sparkle:version="1.27.180.22644" sparkle:shortVersionString="1.27.180" length="73811162" sparkle:os="windows" type="application/zip" sparkle:signature="bteFnXEGd3IYLQSFqUElpy/UzCX+dSHdOSii/KAschGwu5+3rytq/ekinRAQ8k7/fkO4tQC5aPp1zznRe09nDg=="/>
+			<pubDate>Wed, 20 May 2026 07:55:40 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.27.181/win-x64-setup.zip" sparkle:version="1.27.181.3197" sparkle:shortVersionString="1.27.181" length="73813594" sparkle:os="windows" type="application/zip" sparkle:signature="zxrMjZ4/YXp9aUU3u9w9dXg47vpz7pR+AGxH/vliiA7QWTMnx8AkNbgoGrymRkGBggohTNByXlbZQPa5kJBiAQ=="/>
 		</item>
 		<item>
-			<title>1.27.180</title>
+			<title>1.27.181</title>
 			<description>## Current Release Notes
+* Fix CTD on windows while querying steam library path
+
+## Release Notes 1.27.180
 * Hopefully resolve #604
 * Added full Proton mod path awareness for Linux installs
 * Irony now correctly resolves and serializes Proton mod paths (C:/, S:/, custom Proton drive mappings)
@@ -84,8 +96,8 @@
 * Optional GenerateSteamAppId flag to create steam_appid.txt when missing (used for enabling Steam activity tracking when launching games directly; off by default)
 * Added StoragePath setting to customize where Irony stores and reads its data
 * Irony is now Flatpak-aware (detects and supports Steam Flatpak installations)</description>
-			<pubDate>Wed, 20 May 2026 00:14:13 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.27.180/win-x64.zip" sparkle:version="1.27.180.22644" sparkle:shortVersionString="1.27.180" length="103427432" sparkle:os="windows" type="application/zip" sparkle:signature="AQa2aXbXB8LpJhE/Qt3iZpN7XMl4JtBmR1028QXVHLp3uEP7KdEFbrToFwlNVY+LPo/VQMjRL4ccpKHY7fpBDQ=="/>
+			<pubDate>Wed, 20 May 2026 07:55:52 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.27.181/win-x64.zip" sparkle:version="1.27.181.3197" sparkle:shortVersionString="1.27.181" length="103427585" sparkle:os="windows" type="application/zip" sparkle:signature="Tl61ul5y08AXAsOZs5gHi/C7aUjmdlH4qj8KwCBawC7lFITC5p89Z49GBxjrRJBEnb2kAZNmpKQ9BG0JRyZKCA=="/>
 		</item>
 	</channel>
 </rss>
