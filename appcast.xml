@@ -4,8 +4,11 @@
 		<title>Irony Mod Manager</title>
 		<language>en</language>
 		<item>
-			<title>1.27.181</title>
+			<title>1.27.182</title>
 			<description>## Current Release Notes
+* Fixed window state restoration. Small change, Murphy's Law, two bugfix releases followed - you know how it goes.
+
+## Release Notes 1.27.181
 * Fix CTD on windows while querying steam library path
 
 ## Release Notes 1.27.180
@@ -24,12 +27,15 @@
 * Optional GenerateSteamAppId flag to create steam_appid.txt when missing (used for enabling Steam activity tracking when launching games directly; off by default)
 * Added StoragePath setting to customize where Irony stores and reads its data
 * Irony is now Flatpak-aware (detects and supports Steam Flatpak installations)</description>
-			<pubDate>Wed, 20 May 2026 07:55:27 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.27.181/linux-x64.zip" sparkle:version="1.27.181.3197" sparkle:shortVersionString="1.27.181" length="89246597" sparkle:os="linux" type="application/zip" sparkle:signature="o+ZsLdFOR6TaafxgjFchBimEpUnxwNpvux2jjrYIbdB2cvv6wtV+5/g3v5f4YGLJ1RHesntYVjkFom3Xn7nnCw=="/>
+			<pubDate>Wed, 20 May 2026 23:41:46 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.27.182/linux-x64.zip" sparkle:version="1.27.182.46742" sparkle:shortVersionString="1.27.182" length="89246738" sparkle:os="linux" type="application/zip" sparkle:signature="bQVuTcg4wsHRG5bU401KG4mLFo/wKGpJh2SQqWf/CJcaIqWtx490qD3MWZePD6zsXjZs9xn8BDU0awtUlTlnCA=="/>
 		</item>
 		<item>
-			<title>1.27.181</title>
+			<title>1.27.182</title>
 			<description>## Current Release Notes
+* Fixed window state restoration. Small change, Murphy's Law, two bugfix releases followed - you know how it goes.
+
+## Release Notes 1.27.181
 * Fix CTD on windows while querying steam library path
 
 ## Release Notes 1.27.180
@@ -48,12 +54,15 @@
 * Optional GenerateSteamAppId flag to create steam_appid.txt when missing (used for enabling Steam activity tracking when launching games directly; off by default)
 * Added StoragePath setting to customize where Irony stores and reads its data
 * Irony is now Flatpak-aware (detects and supports Steam Flatpak installations)</description>
-			<pubDate>Wed, 20 May 2026 07:55:33 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.27.181/osx-x64.zip" sparkle:version="1.27.181.3197" sparkle:shortVersionString="1.27.181" length="91981040" sparkle:os="osx" type="application/zip" sparkle:signature="jaZjitwsQTnXjNTvQSpNNRPUafWkKa+OHQszhy7KtPgXuY3bNlmD10aT+FGhtirnxzaL2w4PzezwAXArQHjQBQ=="/>
+			<pubDate>Wed, 20 May 2026 23:41:52 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.27.182/osx-x64.zip" sparkle:version="1.27.182.46742" sparkle:shortVersionString="1.27.182" length="91981233" sparkle:os="osx" type="application/zip" sparkle:signature="gF9n4vrqCrZnuD67pPuOl4ZgKZ73luVtZVxzQGLjNul03Wk97GMVqAgLDtK3dT8TUe6fHoM2TzyhciMvKlF9AQ=="/>
 		</item>
 		<item>
-			<title>1.27.181</title>
+			<title>1.27.182</title>
 			<description>## Current Release Notes
+* Fixed window state restoration. Small change, Murphy's Law, two bugfix releases followed - you know how it goes.
+
+## Release Notes 1.27.181
 * Fix CTD on windows while querying steam library path
 
 ## Release Notes 1.27.180
@@ -72,12 +81,15 @@
 * Optional GenerateSteamAppId flag to create steam_appid.txt when missing (used for enabling Steam activity tracking when launching games directly; off by default)
 * Added StoragePath setting to customize where Irony stores and reads its data
 * Irony is now Flatpak-aware (detects and supports Steam Flatpak installations)</description>
-			<pubDate>Wed, 20 May 2026 07:55:40 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.27.181/win-x64-setup.zip" sparkle:version="1.27.181.3197" sparkle:shortVersionString="1.27.181" length="73813594" sparkle:os="windows" type="application/zip" sparkle:signature="zxrMjZ4/YXp9aUU3u9w9dXg47vpz7pR+AGxH/vliiA7QWTMnx8AkNbgoGrymRkGBggohTNByXlbZQPa5kJBiAQ=="/>
+			<pubDate>Wed, 20 May 2026 23:41:59 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.27.182/win-x64-setup.zip" sparkle:version="1.27.182.46742" sparkle:shortVersionString="1.27.182" length="73812407" sparkle:os="windows" type="application/zip" sparkle:signature="IHxCr4keNqBEl8IiHN0bcXpbwPZT0h9qflWa8dSAL0feXFp4Ua6yXAechswbNkMMyk/6EpRDp6Nf+OT62SuQDg=="/>
 		</item>
 		<item>
-			<title>1.27.181</title>
+			<title>1.27.182</title>
 			<description>## Current Release Notes
+* Fixed window state restoration. Small change, Murphy's Law, two bugfix releases followed - you know how it goes.
+
+## Release Notes 1.27.181
 * Fix CTD on windows while querying steam library path
 
 ## Release Notes 1.27.180
@@ -96,8 +108,8 @@
 * Optional GenerateSteamAppId flag to create steam_appid.txt when missing (used for enabling Steam activity tracking when launching games directly; off by default)
 * Added StoragePath setting to customize where Irony stores and reads its data
 * Irony is now Flatpak-aware (detects and supports Steam Flatpak installations)</description>
-			<pubDate>Wed, 20 May 2026 07:55:52 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.27.181/win-x64.zip" sparkle:version="1.27.181.3197" sparkle:shortVersionString="1.27.181" length="103427585" sparkle:os="windows" type="application/zip" sparkle:signature="Tl61ul5y08AXAsOZs5gHi/C7aUjmdlH4qj8KwCBawC7lFITC5p89Z49GBxjrRJBEnb2kAZNmpKQ9BG0JRyZKCA=="/>
+			<pubDate>Wed, 20 May 2026 23:42:10 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.27.182/win-x64.zip" sparkle:version="1.27.182.46742" sparkle:shortVersionString="1.27.182" length="103427798" sparkle:os="windows" type="application/zip" sparkle:signature="h0M4xNWEvPMkZysnn/3qO7wSBJ8gEfYGc4K30GgmFX8wH9RtsFz3epAeBu3oJoNFg9lf+gYkVlx4f/9/yYoQCQ=="/>
 		</item>
 	</channel>
 </rss>
