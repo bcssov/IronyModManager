@@ -4,7 +4,7 @@
 // Created          : 01-10-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 05-18-2026
+// Last Modified On : 05-20-2026
 // ***********************************************************************
 // <copyright file="MainWindow.xaml.cs" company="Mario">
 //     Mario
@@ -57,6 +57,21 @@ namespace IronyModManager.Views
         /// The hotkey gestures
         /// </summary>
         private Dictionary<string, KeyGesture> hotkeyGestures;
+
+        /// <summary>
+        /// The old height
+        /// </summary>
+        private double? oldHeight;
+
+        /// <summary>
+        /// The old position
+        /// </summary>
+        private PixelPoint? oldPosition;
+
+        /// <summary>
+        /// The old width
+        /// </summary>
+        private double? oldWidth;
 
         /// <summary>
         /// The prevention shutdown flag
@@ -169,14 +184,34 @@ namespace IronyModManager.Views
         /// <summary>
         /// Initializes the size of the window.
         /// </summary>
-        protected virtual void InitWindowSize()
+        /// <param name="initialLoad">if set to <c>true</c> [initial load].</param>
+        protected virtual void InitWindowSize(bool initialLoad = true)
         {
             var service = DIResolver.Get<IWindowStateService>();
             if (service.IsDefined() || service.IsMaximized())
             {
-                var oldPos = Position;
-                var oldHeight = Height;
-                var oldWidth = Width;
+                oldPosition ??= Position;
+                oldHeight ??= Height;
+                oldWidth ??= Width;
+
+                if (initialLoad)
+                {
+                    WindowState = WindowState.Normal;
+                    if (oldPosition.HasValue)
+                    {
+                        Position = oldPosition.GetValueOrDefault();
+                    }
+
+                    if (oldHeight.HasValue)
+                    {
+                        Height = oldHeight.GetValueOrDefault();
+                    }
+
+                    if (oldWidth.HasValue)
+                    {
+                        Width = oldWidth.GetValueOrDefault();
+                    }
+                }
 
                 static bool isValid(int value)
                 {
@@ -196,9 +231,7 @@ namespace IronyModManager.Views
                         Width = state.Width.GetValueOrDefault();
                     }
 
-                    WindowState = state.IsMaximized.GetValueOrDefault() ? WindowState.Maximized : WindowState.Normal;
-
-                    // Silly setup code isn't it?
+                    // Silly setup code, isn't it?
                     var pos = Position.WithX(state.LocationX.GetValueOrDefault());
                     pos = pos.WithY(state.LocationY.GetValueOrDefault());
                     var activeScreen = Screens.ScreenFromPoint(pos);
@@ -213,6 +246,11 @@ namespace IronyModManager.Views
                         pos = pos.WithY(locY);
                         Position = pos;
                     }
+
+                    if (initialLoad)
+                    {
+                        WindowState = state.IsMaximized.GetValueOrDefault() ? WindowState.Maximized : WindowState.Normal;
+                    }
                 }
                 catch (Exception ex)
                 {
@@ -222,9 +260,9 @@ namespace IronyModManager.Views
                     SizeToContent = SizeToContent.Manual;
                     WindowStartupLocation = WindowStartupLocation.CenterScreen;
                     WindowState = WindowState.Normal;
-                    Position = oldPos;
-                    Height = oldHeight;
-                    Width = oldWidth;
+                    Position = oldPosition.GetValueOrDefault();
+                    Height = oldHeight.GetValueOrDefault();
+                    Width = oldWidth.GetValueOrDefault();
                 }
             }
         }
@@ -333,6 +371,11 @@ namespace IronyModManager.Views
             base.OnPropertyChanged(change);
             if (change != null && change.Property == WindowStateProperty)
             {
+                if (change.OldValue.HasValue && change.OldValue.GetValueOrDefault(WindowState) == WindowState.Maximized)
+                {
+                    InitWindowSize(false);
+                }
+
                 if (WindowState != WindowState.Minimized)
                 {
                     ActualState = WindowState;
@@ -351,7 +394,7 @@ namespace IronyModManager.Views
             {
                 Opened += async (_, _) =>
                 {
-                    await Dispatcher.UIThread.InvokeAsync(InitWindowSize, DispatcherPriority.Loaded);
+                    await Dispatcher.UIThread.InvokeAsync(InitializeWindowState, DispatcherPriority.Loaded);
                 };
             }
 
