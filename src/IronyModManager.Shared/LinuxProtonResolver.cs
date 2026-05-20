@@ -4,7 +4,7 @@
 // Created          : 12-03-2025
 //
 // Last Modified By : Mario
-// Last Modified On : 05-18-2026
+// Last Modified On : 05-20-2026
 // ***********************************************************************
 // <copyright file="LinuxProtonResolver.cs" company="Mario">
 //     Mario
@@ -130,6 +130,11 @@ namespace IronyModManager.Shared
         /// <returns>System.String.</returns>
         public static string GetSteamLibraryRootFromGamePath(string path)
         {
+            if (string.IsNullOrWhiteSpace(path))
+            {
+                return string.Empty;
+            }
+
             var fullPath = Path.GetFullPath(path);
 
             var index = fullPath.IndexOf(Path.DirectorySeparatorChar + SteamApps + Path.DirectorySeparatorChar, StringComparison.OrdinalIgnoreCase);
