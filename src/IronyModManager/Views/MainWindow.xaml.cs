@@ -225,19 +225,27 @@ namespace IronyModManager.Views
                     {
                         Height = state.Height.GetValueOrDefault();
                     }
+                    else if (!isValid((int)Height))
+                    {
+                        Height = 600;
+                    }
 
                     if (isValid(state.Width.GetValueOrDefault()))
                     {
                         Width = state.Width.GetValueOrDefault();
                     }
+                    else if (!isValid((int)Width))
+                    {
+                        Width = 1000;
+                    }
 
                     // Silly setup code, isn't it?
                     var pos = Position.WithX(state.LocationX.GetValueOrDefault());
                     pos = pos.WithY(state.LocationY.GetValueOrDefault());
-                    var activeScreen = Screens.ScreenFromPoint(pos);
+                    var activeScreen = Screens.ScreenFromPoint(pos) ?? Screens.Primary;
                     var totalScreenX = Screens.All.Sum(p => p.WorkingArea.Width);
                     var locX = state.LocationX.GetValueOrDefault() + state.Width.GetValueOrDefault() > totalScreenX ? totalScreenX - state.Width.GetValueOrDefault() : state.LocationX.GetValueOrDefault();
-                    var locY = state.LocationY.GetValueOrDefault() + state.Height.GetValueOrDefault() > activeScreen!.WorkingArea.Height
+                    var locY = state.LocationY.GetValueOrDefault() + state.Height.GetValueOrDefault() > activeScreen.WorkingArea.Height
                         ? activeScreen.WorkingArea.Height - state.Height.GetValueOrDefault()
                         : state.LocationY.GetValueOrDefault();
                     if (isValid(locX) && isValid(locY))
