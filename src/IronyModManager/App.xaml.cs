@@ -4,7 +4,7 @@
 // Created          : 01-10-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 01-08-2025
+// Last Modified On : 05-23-2026
 // ***********************************************************************
 // <copyright file="App.xaml.cs" company="Mario">
 //     Mario
@@ -183,7 +183,7 @@ namespace IronyModManager
             }
 
             var stateService = DIResolver.Get<IWindowStateService>();
-            desktop.MainWindow.Height = validateSize(desktop.MainWindow.MinHeight, desktop.MainWindow.Height) + desktop.MainWindow.ExtendClientAreaTitleBarHeightHint;
+            desktop.MainWindow.Height = validateSize(desktop.MainWindow.MinHeight, desktop.MainWindow.Height) + desktop.MainWindow.ExtendClientAreaTitleBarHeightHint > 0 ? desktop.MainWindow.ExtendClientAreaTitleBarHeightHint : 0;
             desktop.MainWindow.Width = validateSize(desktop.MainWindow.MinWidth, desktop.MainWindow.Width);
             if (!stateService.IsDefined() && !stateService.IsMaximized())
             {
