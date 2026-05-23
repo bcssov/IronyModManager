@@ -227,7 +227,7 @@ namespace IronyModManager.Views
                     }
                     else if (!isValid((int)Height))
                     {
-                        Height = 600;
+                        Height = MinHeight + ExtendClientAreaTitleBarHeightHint > 0 ? ExtendClientAreaTitleBarHeightHint : 0;
                     }
 
                     if (isValid(state.Width.GetValueOrDefault()))
@@ -236,7 +236,7 @@ namespace IronyModManager.Views
                     }
                     else if (!isValid((int)Width))
                     {
-                        Width = 1000;
+                        Width = MinWidth;
                     }
 
                     // Silly setup code, isn't it?
@@ -449,7 +449,7 @@ namespace IronyModManager.Views
                     locY = 0;
                 }
 
-                state.Height = Convert.ToInt32(ClientSize.Height) - Convert.ToInt32(ExtendClientAreaTitleBarHeightHint);
+                state.Height = Convert.ToInt32(ClientSize.Height) - Convert.ToInt32(ExtendClientAreaTitleBarHeightHint > 0 ? ExtendClientAreaTitleBarHeightHint : 0);
                 state.Width = Convert.ToInt32(ClientSize.Width);
                 state.IsMaximized = false;
                 state.LocationX = Convert.ToInt32(locX);
