@@ -4,19 +4,9 @@
 		<title>Irony Mod Manager</title>
 		<language>en</language>
 		<item>
-			<title>1.27.182</title>
+			<title>1.27.183</title>
 			<description>## Current Release Notes
-* Fixed window state restoration. Small change, Murphy's Law, two bugfix releases followed - you know how it goes.
-
-## Release Notes 1.27.181
-* Fix CTD on windows while querying steam library path
-
-## Release Notes 1.27.180
-* Hopefully resolve #604
-* Added full Proton mod path awareness for Linux installs
-* Irony now correctly resolves and serializes Proton mod paths (C:/, S:/, custom Proton drive mappings)
-* Improved compatibility with Proton-based Paradox launcher configurations and workshop mods
-* Bump Magick.net
+* Fixed instance if someone drags Irony off screen completely and it fails to render
 
 ## Release Notes 1.27
 * Update dependencies
@@ -27,23 +17,13 @@
 * Optional GenerateSteamAppId flag to create steam_appid.txt when missing (used for enabling Steam activity tracking when launching games directly; off by default)
 * Added StoragePath setting to customize where Irony stores and reads its data
 * Irony is now Flatpak-aware (detects and supports Steam Flatpak installations)</description>
-			<pubDate>Wed, 20 May 2026 23:41:46 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.27.182/linux-x64.zip" sparkle:version="1.27.182.46742" sparkle:shortVersionString="1.27.182" length="89246738" sparkle:os="linux" type="application/zip" sparkle:signature="bQVuTcg4wsHRG5bU401KG4mLFo/wKGpJh2SQqWf/CJcaIqWtx490qD3MWZePD6zsXjZs9xn8BDU0awtUlTlnCA=="/>
+			<pubDate>Sat, 23 May 2026 13:27:43 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.27.183/linux-x64.zip" sparkle:version="1.27.183.39219" sparkle:shortVersionString="1.27.183" length="89246805" sparkle:os="linux" type="application/zip" sparkle:signature="KcrPTLzW/LBIZXS1FT06lthA7p5KcYo8vhHbtgcP0bdi6KtkqoYO6PRfRkOwYHKlKnz9e3zCjRqzO7Tn9IXWDQ=="/>
 		</item>
 		<item>
-			<title>1.27.182</title>
+			<title>1.27.183</title>
 			<description>## Current Release Notes
-* Fixed window state restoration. Small change, Murphy's Law, two bugfix releases followed - you know how it goes.
-
-## Release Notes 1.27.181
-* Fix CTD on windows while querying steam library path
-
-## Release Notes 1.27.180
-* Hopefully resolve #604
-* Added full Proton mod path awareness for Linux installs
-* Irony now correctly resolves and serializes Proton mod paths (C:/, S:/, custom Proton drive mappings)
-* Improved compatibility with Proton-based Paradox launcher configurations and workshop mods
-* Bump Magick.net
+* Fixed instance if someone drags Irony off screen completely and it fails to render
 
 ## Release Notes 1.27
 * Update dependencies
@@ -54,23 +34,13 @@
 * Optional GenerateSteamAppId flag to create steam_appid.txt when missing (used for enabling Steam activity tracking when launching games directly; off by default)
 * Added StoragePath setting to customize where Irony stores and reads its data
 * Irony is now Flatpak-aware (detects and supports Steam Flatpak installations)</description>
-			<pubDate>Wed, 20 May 2026 23:41:52 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.27.182/osx-x64.zip" sparkle:version="1.27.182.46742" sparkle:shortVersionString="1.27.182" length="91981233" sparkle:os="osx" type="application/zip" sparkle:signature="gF9n4vrqCrZnuD67pPuOl4ZgKZ73luVtZVxzQGLjNul03Wk97GMVqAgLDtK3dT8TUe6fHoM2TzyhciMvKlF9AQ=="/>
+			<pubDate>Sat, 23 May 2026 13:27:49 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.27.183/osx-x64.zip" sparkle:version="1.27.183.39219" sparkle:shortVersionString="1.27.183" length="91981353" sparkle:os="osx" type="application/zip" sparkle:signature="c/gNAnSW4AREK0gbDtR75J0H483Ru9xgGZ5yJigoyw+XZP1Nj0b4YAc8NdynrlkjJTUYTjdM4/RfRiNLqNhxBg=="/>
 		</item>
 		<item>
-			<title>1.27.182</title>
+			<title>1.27.183</title>
 			<description>## Current Release Notes
-* Fixed window state restoration. Small change, Murphy's Law, two bugfix releases followed - you know how it goes.
-
-## Release Notes 1.27.181
-* Fix CTD on windows while querying steam library path
-
-## Release Notes 1.27.180
-* Hopefully resolve #604
-* Added full Proton mod path awareness for Linux installs
-* Irony now correctly resolves and serializes Proton mod paths (C:/, S:/, custom Proton drive mappings)
-* Improved compatibility with Proton-based Paradox launcher configurations and workshop mods
-* Bump Magick.net
+* Fixed instance if someone drags Irony off screen completely and it fails to render
 
 ## Release Notes 1.27
 * Update dependencies
@@ -81,23 +51,13 @@
 * Optional GenerateSteamAppId flag to create steam_appid.txt when missing (used for enabling Steam activity tracking when launching games directly; off by default)
 * Added StoragePath setting to customize where Irony stores and reads its data
 * Irony is now Flatpak-aware (detects and supports Steam Flatpak installations)</description>
-			<pubDate>Wed, 20 May 2026 23:41:59 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.27.182/win-x64-setup.zip" sparkle:version="1.27.182.46742" sparkle:shortVersionString="1.27.182" length="73812407" sparkle:os="windows" type="application/zip" sparkle:signature="IHxCr4keNqBEl8IiHN0bcXpbwPZT0h9qflWa8dSAL0feXFp4Ua6yXAechswbNkMMyk/6EpRDp6Nf+OT62SuQDg=="/>
+			<pubDate>Sat, 23 May 2026 13:27:55 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.27.183/win-x64-setup.zip" sparkle:version="1.27.183.39219" sparkle:shortVersionString="1.27.183" length="73812089" sparkle:os="windows" type="application/zip" sparkle:signature="xLI+9i0sOTWDn3zYz586QFa3dt1wmok7MR4b5r9frGDUUZyMV6Voay6zDsrS8wtfZzKCFvlt7EfFBKhnLUUSAw=="/>
 		</item>
 		<item>
-			<title>1.27.182</title>
+			<title>1.27.183</title>
 			<description>## Current Release Notes
-* Fixed window state restoration. Small change, Murphy's Law, two bugfix releases followed - you know how it goes.
-
-## Release Notes 1.27.181
-* Fix CTD on windows while querying steam library path
-
-## Release Notes 1.27.180
-* Hopefully resolve #604
-* Added full Proton mod path awareness for Linux installs
-* Irony now correctly resolves and serializes Proton mod paths (C:/, S:/, custom Proton drive mappings)
-* Improved compatibility with Proton-based Paradox launcher configurations and workshop mods
-* Bump Magick.net
+* Fixed instance if someone drags Irony off screen completely and it fails to render
 
 ## Release Notes 1.27
 * Update dependencies
@@ -108,8 +68,8 @@
 * Optional GenerateSteamAppId flag to create steam_appid.txt when missing (used for enabling Steam activity tracking when launching games directly; off by default)
 * Added StoragePath setting to customize where Irony stores and reads its data
 * Irony is now Flatpak-aware (detects and supports Steam Flatpak installations)</description>
-			<pubDate>Wed, 20 May 2026 23:42:10 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.27.182/win-x64.zip" sparkle:version="1.27.182.46742" sparkle:shortVersionString="1.27.182" length="103427798" sparkle:os="windows" type="application/zip" sparkle:signature="h0M4xNWEvPMkZysnn/3qO7wSBJ8gEfYGc4K30GgmFX8wH9RtsFz3epAeBu3oJoNFg9lf+gYkVlx4f/9/yYoQCQ=="/>
+			<pubDate>Sat, 23 May 2026 13:28:07 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.27.183/win-x64.zip" sparkle:version="1.27.183.39219" sparkle:shortVersionString="1.27.183" length="103427880" sparkle:os="windows" type="application/zip" sparkle:signature="2QWsrYw1IgRMbFnQLS+oBWEXsJDZMOyVb74Hbj9g1Nt2TXFyY0qkM9tKaehfVpHAo/oDhmTPOv8t0wvCo+B7AA=="/>
 		</item>
 	</channel>
 </rss>
