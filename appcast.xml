@@ -4,9 +4,9 @@
 		<title>Irony Mod Manager</title>
 		<language>en</language>
 		<item>
-			<title>1.27.183</title>
+			<title>1.27.185</title>
 			<description>## Current Release Notes
-* Fixed instance if someone drags Irony off screen completely and it fails to render
+* Stellaris: Static modifiers now LIOS in CS
 
 ## Release Notes 1.27
 * Update dependencies
@@ -17,13 +17,13 @@
 * Optional GenerateSteamAppId flag to create steam_appid.txt when missing (used for enabling Steam activity tracking when launching games directly; off by default)
 * Added StoragePath setting to customize where Irony stores and reads its data
 * Irony is now Flatpak-aware (detects and supports Steam Flatpak installations)</description>
-			<pubDate>Sat, 23 May 2026 13:27:43 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.27.183/linux-x64.zip" sparkle:version="1.27.183.39219" sparkle:shortVersionString="1.27.183" length="89246805" sparkle:os="linux" type="application/zip" sparkle:signature="KcrPTLzW/LBIZXS1FT06lthA7p5KcYo8vhHbtgcP0bdi6KtkqoYO6PRfRkOwYHKlKnz9e3zCjRqzO7Tn9IXWDQ=="/>
+			<pubDate>Wed, 27 May 2026 22:48:31 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.27.185/linux-x64.zip" sparkle:version="1.27.185.50173" sparkle:shortVersionString="1.27.185" length="89246832" sparkle:os="linux" type="application/zip" sparkle:signature="Eo/exqqiQAvOipaI/kJmyqKbzcaSOITuLRKmdVff91RAqz8i3fn7K6+wRGIyA/dSYO1XYEMv6XRr8c9PfuCSAQ=="/>
 		</item>
 		<item>
-			<title>1.27.183</title>
+			<title>1.27.185</title>
 			<description>## Current Release Notes
-* Fixed instance if someone drags Irony off screen completely and it fails to render
+* Stellaris: Static modifiers now LIOS in CS
 
 ## Release Notes 1.27
 * Update dependencies
@@ -34,13 +34,13 @@
 * Optional GenerateSteamAppId flag to create steam_appid.txt when missing (used for enabling Steam activity tracking when launching games directly; off by default)
 * Added StoragePath setting to customize where Irony stores and reads its data
 * Irony is now Flatpak-aware (detects and supports Steam Flatpak installations)</description>
-			<pubDate>Sat, 23 May 2026 13:27:49 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.27.183/osx-x64.zip" sparkle:version="1.27.183.39219" sparkle:shortVersionString="1.27.183" length="91981353" sparkle:os="osx" type="application/zip" sparkle:signature="c/gNAnSW4AREK0gbDtR75J0H483Ru9xgGZ5yJigoyw+XZP1Nj0b4YAc8NdynrlkjJTUYTjdM4/RfRiNLqNhxBg=="/>
+			<pubDate>Wed, 27 May 2026 22:48:37 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.27.185/osx-x64.zip" sparkle:version="1.27.185.50173" sparkle:shortVersionString="1.27.185" length="91981501" sparkle:os="osx" type="application/zip" sparkle:signature="s9L9lw9NQA1FjHhnkJB9V0CEZvMn4lv6cRUNg3ZSbwPF5Znn8BxdrzwW0EGjKy+TxRCRkfZ1owz3jqA2NumxBg=="/>
 		</item>
 		<item>
-			<title>1.27.183</title>
+			<title>1.27.185</title>
 			<description>## Current Release Notes
-* Fixed instance if someone drags Irony off screen completely and it fails to render
+* Stellaris: Static modifiers now LIOS in CS
 
 ## Release Notes 1.27
 * Update dependencies
@@ -51,13 +51,13 @@
 * Optional GenerateSteamAppId flag to create steam_appid.txt when missing (used for enabling Steam activity tracking when launching games directly; off by default)
 * Added StoragePath setting to customize where Irony stores and reads its data
 * Irony is now Flatpak-aware (detects and supports Steam Flatpak installations)</description>
-			<pubDate>Sat, 23 May 2026 13:27:55 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.27.183/win-x64-setup.zip" sparkle:version="1.27.183.39219" sparkle:shortVersionString="1.27.183" length="73812089" sparkle:os="windows" type="application/zip" sparkle:signature="xLI+9i0sOTWDn3zYz586QFa3dt1wmok7MR4b5r9frGDUUZyMV6Voay6zDsrS8wtfZzKCFvlt7EfFBKhnLUUSAw=="/>
+			<pubDate>Wed, 27 May 2026 22:48:44 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.27.185/win-x64-setup.zip" sparkle:version="1.27.185.50173" sparkle:shortVersionString="1.27.185" length="73810974" sparkle:os="windows" type="application/zip" sparkle:signature="nTBz502vlrarFmf37x8FjtHuvQ6eUWQiOyvBP4uXTwsH8PFFnK35ndrYnENA1CNjP+K2c29hJfm2jJaWHVbACA=="/>
 		</item>
 		<item>
-			<title>1.27.183</title>
+			<title>1.27.185</title>
 			<description>## Current Release Notes
-* Fixed instance if someone drags Irony off screen completely and it fails to render
+* Stellaris: Static modifiers now LIOS in CS
 
 ## Release Notes 1.27
 * Update dependencies
@@ -68,8 +68,8 @@
 * Optional GenerateSteamAppId flag to create steam_appid.txt when missing (used for enabling Steam activity tracking when launching games directly; off by default)
 * Added StoragePath setting to customize where Irony stores and reads its data
 * Irony is now Flatpak-aware (detects and supports Steam Flatpak installations)</description>
-			<pubDate>Sat, 23 May 2026 13:28:07 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.27.183/win-x64.zip" sparkle:version="1.27.183.39219" sparkle:shortVersionString="1.27.183" length="103427880" sparkle:os="windows" type="application/zip" sparkle:signature="2QWsrYw1IgRMbFnQLS+oBWEXsJDZMOyVb74Hbj9g1Nt2TXFyY0qkM9tKaehfVpHAo/oDhmTPOv8t0wvCo+B7AA=="/>
+			<pubDate>Wed, 27 May 2026 22:48:55 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.27.185/win-x64.zip" sparkle:version="1.27.185.50173" sparkle:shortVersionString="1.27.185" length="103427954" sparkle:os="windows" type="application/zip" sparkle:signature="sxSbNYgkNMz3AqvP6CxrX/0I9Nk0EZ1Jn/E9TaBB4/wpNyeg1jV6zpubKrMx9lXdvJkciYpxyBAQXRkfO5hNBA=="/>
 		</item>
 	</channel>
 </rss>
