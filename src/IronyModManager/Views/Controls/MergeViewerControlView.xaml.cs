@@ -4,7 +4,7 @@
 // Created          : 03-20-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 05-07-2025
+// Last Modified On : 05-31-2026
 // ***********************************************************************
 // <copyright file="MergeViewerControlView.xaml.cs" company="Mario">
 //     Mario
@@ -20,6 +20,7 @@ using System.Reactive.Linq;
 using System.Threading.Tasks;
 using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Controls.Primitives;
 using Avalonia.Input;
 using Avalonia.Markup.Xaml;
 using Avalonia.Threading;
@@ -131,10 +132,30 @@ namespace IronyModManager.Views.Controls
         /// </summary>
         public MergeViewerControlView()
         {
+            bool NeedsHorizontalScrollbar(IronyModManager.Controls.TextEditor editor)
+            {
+                return editor.ScrollViewer.Extent.Width > editor.ScrollViewer.Viewport.Width;
+            }
+
             logger = DIResolver.Get<ILogger>();
             hotkeyPressedHandler = DIResolver.Get<ConflictSolverViewHotkeyPressedHandler>();
             resourceLoader = DIResolver.Get<IResourceLoader>();
             InitializeComponent();
+            LayoutUpdated += (_, _) =>
+            {
+                if (diffLeft == null || diffRight == null)
+                {
+                    return;
+                }
+
+                var leftNeeds = NeedsHorizontalScrollbar(diffLeft);
+                var rightNeeds = NeedsHorizontalScrollbar(diffRight);
+
+                var visibility = leftNeeds || rightNeeds ? ScrollBarVisibility.Visible : ScrollBarVisibility.Auto;
+
+                diffLeft.HorizontalScrollBarVisibility = visibility;
+                diffRight.HorizontalScrollBarVisibility = visibility;
+            };
         }
 
         #endregion Constructors
