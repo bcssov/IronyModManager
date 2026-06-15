@@ -4,7 +4,7 @@
 // Created          : 02-16-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-03-2026
+// Last Modified On : 06-16-2026
 // ***********************************************************************
 // <copyright file="Constants.cs" company="Mario">
 //     Mario
@@ -387,6 +387,11 @@ namespace IronyModManager.Parser.Common
             /// The state categories
             /// </summary>
             public static readonly string StateCategories = MergePath(CommonPath, "state_category");
+
+            /// <summary>
+            /// The synchronize dynamic tokens
+            /// </summary>
+            public static readonly string SyncDynamicTokens = MergePath(CommonPath, "synchronized_dynamic_tokens");
 
             /// <summary>
             /// The technologies
