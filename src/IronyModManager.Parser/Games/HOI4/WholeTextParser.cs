@@ -4,7 +4,7 @@
 // Created          : 02-18-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-03-2026
+// Last Modified On : 06-16-2026
 // ***********************************************************************
 // <copyright file="WholeTextParser.cs" company="Mario">
 //     Mario
@@ -51,7 +51,7 @@ namespace IronyModManager.Parser.Games.HOI4
             Common.Constants.HOI4.Units, Common.Constants.HOI4.History, Common.Constants.HOI4.Generation, Common.Constants.HOI4.IdeaTags, Common.Constants.HOI4.Terrain, Common.Constants.HOI4.ProfilePictures,
             Common.Constants.HOI4.PeaceConference, Common.Constants.HOI4.ProfileBackgrounds, Common.Constants.HOI4.MIO, Common.Constants.HOI4.FocusInlayWindows, Common.Constants.HOI4.Raids,
             Common.Constants.HOI4.SpecialProjects, Common.Constants.HOI4.Portraits, Common.Constants.HOI4.AIFactionTheaters, Common.Constants.HOI4.Collections, Common.Constants.HOI4.Doctrines,
-            Common.Constants.HOI4.Faction
+            Common.Constants.HOI4.Faction, Common.Constants.HOI4.SyncDynamicTokens
         ];
 
         #endregion Fields

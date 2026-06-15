@@ -107,6 +107,9 @@
         "DirectoryPath": "common\\doctrines\\subdoctrines\\sea",
         "PreferredParser": "HOI4WholeTextParser"
     }, {
+        "DirectoryPath": "common\\doctrines\\subdoctrines\\special_forces",
+        "PreferredParser": "HOI4WholeTextParser"
+    }, {
         "DirectoryPath": "common\\doctrines\\tracks",
         "PreferredParser": "HOI4WholeTextParser"
     }, {
@@ -277,6 +280,9 @@
     }, {
         "DirectoryPath": "common\\strategic_locations",
         "PreferredParser": "DefaultParser"
+    }, {
+        "DirectoryPath": "common\\synchronized_dynamic_tokens",
+        "PreferredParser": "HOI4WholeTextParser"
     }, {
         "DirectoryPath": "common\\technologies",
         "PreferredParser": "HOI4InnerLayerParser"
