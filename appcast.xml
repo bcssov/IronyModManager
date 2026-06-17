@@ -4,11 +4,9 @@
 		<title>Irony Mod Manager</title>
 		<language>en</language>
 		<item>
-			<title>1.27.187</title>
+			<title>1.27.188</title>
 			<description>## Current Release Notes
-* Fix #609
-* Stellaris CS mapping for latest game version
-* HOI4 CS mapping for latest game version
+* Handle CWTools validation of "?" syntax
 
 ## Release Notes 1.27
 * Update dependencies
@@ -19,15 +17,13 @@
 * Optional GenerateSteamAppId flag to create steam_appid.txt when missing (used for enabling Steam activity tracking when launching games directly; off by default)
 * Added StoragePath setting to customize where Irony stores and reads its data
 * Irony is now Flatpak-aware (detects and supports Steam Flatpak installations)</description>
-			<pubDate>Tue, 16 Jun 2026 00:31:36 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.27.187/linux-x64.zip" sparkle:version="1.27.187.46840" sparkle:shortVersionString="1.27.187" length="89255384" sparkle:os="linux" type="application/zip" sparkle:signature="km6hoD9A/MWc89miOYEGpa4wnsPankR2BLTNKZuOTwpwXGcQnllKtbHT2LDpGllLGW5cxQBYhZ+Eampa+jQtCw=="/>
+			<pubDate>Wed, 17 Jun 2026 17:40:08 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.27.188/linux-x64.zip" sparkle:version="1.27.188.26660" sparkle:shortVersionString="1.27.188" length="89255369" sparkle:os="linux" type="application/zip" sparkle:signature="ZPda7KS6XgC9Kd2A6QtayvbyGigH4ISNPOw13SLOkXHSFYsZpSFHSJ3cdiUx/sFt0k0mN6/ffhsrIhWV9bZuCw=="/>
 		</item>
 		<item>
-			<title>1.27.187</title>
+			<title>1.27.188</title>
 			<description>## Current Release Notes
-* Fix #609
-* Stellaris CS mapping for latest game version
-* HOI4 CS mapping for latest game version
+* Handle CWTools validation of "?" syntax
 
 ## Release Notes 1.27
 * Update dependencies
@@ -38,15 +34,13 @@
 * Optional GenerateSteamAppId flag to create steam_appid.txt when missing (used for enabling Steam activity tracking when launching games directly; off by default)
 * Added StoragePath setting to customize where Irony stores and reads its data
 * Irony is now Flatpak-aware (detects and supports Steam Flatpak installations)</description>
-			<pubDate>Tue, 16 Jun 2026 00:31:42 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.27.187/osx-x64.zip" sparkle:version="1.27.187.46840" sparkle:shortVersionString="1.27.187" length="91984790" sparkle:os="osx" type="application/zip" sparkle:signature="HfKNhZy1R8gba9AgJn7XzVqtBSTOJ8gq8sQdeRcZsEjWipD5idIs2qFdytNhweboY1YZKUuUlVZ5vavzbmu3BA=="/>
+			<pubDate>Wed, 17 Jun 2026 17:40:14 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.27.188/osx-x64.zip" sparkle:version="1.27.188.26660" sparkle:shortVersionString="1.27.188" length="91984832" sparkle:os="osx" type="application/zip" sparkle:signature="XrDRZpJkH4FDtnXqQJ7w3ebs3MKRhbgMD9Mi6btweOENsjRflOc1jMUQoYCg/E03H6rL2lCRmdExnzpf7s88Dw=="/>
 		</item>
 		<item>
-			<title>1.27.187</title>
+			<title>1.27.188</title>
 			<description>## Current Release Notes
-* Fix #609
-* Stellaris CS mapping for latest game version
-* HOI4 CS mapping for latest game version
+* Handle CWTools validation of "?" syntax
 
 ## Release Notes 1.27
 * Update dependencies
@@ -57,15 +51,13 @@
 * Optional GenerateSteamAppId flag to create steam_appid.txt when missing (used for enabling Steam activity tracking when launching games directly; off by default)
 * Added StoragePath setting to customize where Irony stores and reads its data
 * Irony is now Flatpak-aware (detects and supports Steam Flatpak installations)</description>
-			<pubDate>Tue, 16 Jun 2026 00:31:48 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.27.187/win-x64-setup.zip" sparkle:version="1.27.187.46840" sparkle:shortVersionString="1.27.187" length="73816917" sparkle:os="windows" type="application/zip" sparkle:signature="vTmwWu8rQkX5k2Skd0W+wk/LXJstsCXHOuHRn2YJWarr3HN/NCF47sNdRlEsIdW4/ug/9zgWvb2z8sN0T1kmCg=="/>
+			<pubDate>Wed, 17 Jun 2026 17:40:20 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.27.188/win-x64-setup.zip" sparkle:version="1.27.188.26660" sparkle:shortVersionString="1.27.188" length="73817044" sparkle:os="windows" type="application/zip" sparkle:signature="lAAt7WS5oMnBhpezW3gJ/yNGGmuW5gZ+/aaBaqP/X7OVdfqFROc8gG195arTxhnpDy75VNq57B49ABq9euIvDA=="/>
 		</item>
 		<item>
-			<title>1.27.187</title>
+			<title>1.27.188</title>
 			<description>## Current Release Notes
-* Fix #609
-* Stellaris CS mapping for latest game version
-* HOI4 CS mapping for latest game version
+* Handle CWTools validation of "?" syntax
 
 ## Release Notes 1.27
 * Update dependencies
@@ -76,8 +68,8 @@
 * Optional GenerateSteamAppId flag to create steam_appid.txt when missing (used for enabling Steam activity tracking when launching games directly; off by default)
 * Added StoragePath setting to customize where Irony stores and reads its data
 * Irony is now Flatpak-aware (detects and supports Steam Flatpak installations)</description>
-			<pubDate>Tue, 16 Jun 2026 00:32:00 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.27.187/win-x64.zip" sparkle:version="1.27.187.46840" sparkle:shortVersionString="1.27.187" length="103432549" sparkle:os="windows" type="application/zip" sparkle:signature="Xk1OQrgBHopw8/67OIHMIt8lNzO+lCFginGqlEtNPkeiCoJ52LqfZoxAOHAhoQcNw/5Sq8iP8GXTPThgQvseCg=="/>
+			<pubDate>Wed, 17 Jun 2026 17:40:32 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.27.188/win-x64.zip" sparkle:version="1.27.188.26660" sparkle:shortVersionString="1.27.188" length="103432596" sparkle:os="windows" type="application/zip" sparkle:signature="pVsnvz5S2wKqiWg4MWbc4bhG9xsuWfYYaaSMfc8w5r5IyOLDXSEDC+EpKmzQM2NWNozsTuSKx8vVvYuZSjlsBg=="/>
 		</item>
 	</channel>
 </rss>
