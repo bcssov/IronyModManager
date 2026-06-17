@@ -4,7 +4,7 @@
 // Created          : 02-17-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 05-23-2025
+// Last Modified On : 06-17-2026
 // ***********************************************************************
 // <copyright file="BaseParser.cs" company="Mario">
 //     Mario
@@ -555,6 +555,14 @@ namespace IronyModManager.Parser.Common.Parsers
         {
             if (lines != null)
             {
+                var joined = string.Join("", lines).Replace(" ", string.Empty);
+
+                // TODO: Temp until Irony is on Net10 so we can upgrade to newer CWTools build
+                if (!string.IsNullOrWhiteSpace(joined) && joined.Contains("?="))
+                {
+                    return true;
+                }
+
                 return lines.Count() > SimpleErrorCheckLinesThreshold || lines.Any(p => !string.IsNullOrEmpty(p) && p.Contains(Constants.Scripts.FallbackToSimpleParserComment, StringComparison.OrdinalIgnoreCase));
             }
 
