@@ -4,13 +4,14 @@
 // Created          : 07-18-2022
 //
 // Last Modified By : Mario
-// Last Modified On : 11-09-2022
+// Last Modified On : 06-19-2026
 // ***********************************************************************
 // <copyright file="Extensions.cs" company="Mario">
 //     Mario
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
+
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -39,6 +40,7 @@ namespace IronyModManager.IO.Readers
             {
                 return null;
             }
+
             using var memoryStream = new MemoryStream();
             stream.CopyTo(memoryStream);
             memoryStream.Seek(0, SeekOrigin.Begin);
@@ -48,8 +50,11 @@ namespace IronyModManager.IO.Readers
             {
                 return null;
             }
-            var result = new EncodingInfo() { Encoding = encoding.Detected.EncodingName, HasBOM = encoding.Detected.HasBOM };
+
+            var result = new EncodingInfo { Encoding = encoding.Detected.EncodingName, HasBOM = encoding.Detected.HasBOM };
             memoryStream.Close();
+
+            // ReSharper disable once DisposeOnUsingVariable
             memoryStream.Dispose();
             return result;
         }
@@ -65,12 +70,14 @@ namespace IronyModManager.IO.Readers
             {
                 return null;
             }
+
             var encoding = CharsetDetector.DetectFromFile(file);
-            if (encoding == null || encoding.Detected == null)
+            if (encoding?.Detected == null)
             {
                 return null;
             }
-            var result = new EncodingInfo() { Encoding = encoding.Detected.EncodingName, HasBOM = encoding.Detected.HasBOM };
+
+            var result = new EncodingInfo { Encoding = encoding.Detected.EncodingName, HasBOM = encoding.Detected.HasBOM };
             return result;
         }
 
@@ -85,12 +92,14 @@ namespace IronyModManager.IO.Readers
             {
                 return null;
             }
+
             var encoding = CharsetDetector.DetectFromFile(fileInfo);
-            if (encoding == null || encoding.Detected == null)
+            if (encoding?.Detected == null)
             {
                 return null;
             }
-            var result = new EncodingInfo() { Encoding = encoding.Detected.EncodingName, HasBOM = encoding.Detected.HasBOM };
+
+            var result = new EncodingInfo { Encoding = encoding.Detected.EncodingName, HasBOM = encoding.Detected.HasBOM };
             return result;
         }
 

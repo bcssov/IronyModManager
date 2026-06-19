@@ -1,17 +1,17 @@
-﻿
-// ***********************************************************************
+﻿// ***********************************************************************
 // Assembly         : IronyModManager.Shared
 // Author           : Mario
 // Created          : 06-13-2023
 //
 // Last Modified By : Mario
-// Last Modified On : 06-24-2023
+// Last Modified On : 06-19-2026
 // ***********************************************************************
 // <copyright file="Store.cs" company="Mario">
 //     Mario
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,7 +20,6 @@ using Jering.KeyValueStore;
 
 namespace IronyModManager.Shared.KeyValueStore
 {
-
     /// <summary>
     /// Class Store.
     /// </summary>
@@ -32,6 +31,7 @@ namespace IronyModManager.Shared.KeyValueStore
         /// <summary>
         /// The options
         /// </summary>
+        // ReSharper disable once PrivateFieldCanBeConvertedToLocalVariable
         private readonly MixedStorageKVStoreOptions options;
 
         /// <summary>
@@ -55,12 +55,7 @@ namespace IronyModManager.Shared.KeyValueStore
         /// <param name="loadType">Type of the load.</param>
         public Store(string cacheDirectory, Func<string, Type> loadType = null)
         {
-            options = new MixedStorageKVStoreOptions()
-            {
-                DeleteLogOnClose = true,
-                LogDirectory = cacheDirectory,
-                MessagePackSerializerOptions = new StoreOptions(loadType)
-            };
+            options = new MixedStorageKVStoreOptions { DeleteLogOnClose = true, LogDirectory = cacheDirectory, MessagePackSerializerOptions = new StoreOptions(loadType) };
             storage = new MixedStorageKVStore<string, T>(options);
         }
 
@@ -116,6 +111,7 @@ namespace IronyModManager.Shared.KeyValueStore
             {
                 return result.Item2;
             }
+
             return default;
         }
 
