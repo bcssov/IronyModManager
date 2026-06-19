@@ -4,7 +4,7 @@
 // Created          : 07-20-2022
 //
 // Last Modified By : Mario
-// Last Modified On : 12-08-2025
+// Last Modified On : 06-19-2026
 // ***********************************************************************
 // <copyright file="FileSignatureUtility.cs" company="Mario">
 //     Mario
@@ -122,7 +122,7 @@ namespace IronyModManager.Shared
 
             ms.Close();
             ms.Dispose();
-            return extensions.Any(s => s.EndsWith(filename, StringComparison.OrdinalIgnoreCase));
+            return extensions.Any(s => filename.EndsWith(s, StringComparison.OrdinalIgnoreCase));
         }
 
         /// <summary>
@@ -151,7 +151,7 @@ namespace IronyModManager.Shared
                 }
             }
 
-            return extensions.Any(s => s.EndsWith(filename, StringComparison.OrdinalIgnoreCase));
+            return extensions.Any(s => filename.EndsWith(s, StringComparison.OrdinalIgnoreCase));
         }
 
         /// <summary>
@@ -173,19 +173,28 @@ namespace IronyModManager.Shared
                 var buffer = new byte[512];
                 var byteCount = stream.Read(buffer, 0, buffer.Length);
 
-                for (var i = 1; i < byteCount; i++)
+                var suspicious = 0;
+
+                for (var i = 0; i < byteCount; i++)
                 {
-                    if (buffer[i] == 0x00 && buffer[i - 1] == 0x00)
+                    var b = buffer[i];
+
+                    switch (b)
                     {
-                        return false;
+                        case 0x00:
+                            return false;
+                        case < 0x09:
+                        case > 0x0D and < 0x20:
+                            suspicious++;
+                            break;
                     }
                 }
 
-                return true;
+                return suspicious <= byteCount / 20;
             }
             catch
             {
-                return true;
+                return false;
             }
         }
 

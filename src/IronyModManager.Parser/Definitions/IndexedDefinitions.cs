@@ -4,7 +4,7 @@
 // Created          : 02-16-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-21-2025
+// Last Modified On : 06-19-2026
 // ***********************************************************************
 // <copyright file="IndexedDefinitions.cs" company="Mario">
 //     Mario
@@ -1114,15 +1114,23 @@ namespace IronyModManager.Parser.Definitions
         /// <returns>A Task representing the asynchronous operation.</returns>
         private async Task UpdateStoreDefinitionAsync(IDefinition definition)
         {
-            var result = await store.ReadAsync(definition.TypeAndId);
-            if (result != null)
+            try
             {
-                result.Add(definition);
-                await store.InsertAsync(definition.TypeAndId, result);
+                var result = await store.ReadAsync(definition.TypeAndId);
+                if (result != null)
+                {
+                    result.Add(definition);
+                    await store.InsertAsync(definition.TypeAndId, result);
+                }
+                else
+                {
+                    await store.InsertAsync(definition.TypeAndId, [definition]);
+                }
             }
-            else
+            catch (Exception ex)
             {
-                await store.InsertAsync(definition.TypeAndId, [definition]);
+                var log = DIResolver.Get<ILogger>();
+                log.Error(ex);
             }
         }
 
