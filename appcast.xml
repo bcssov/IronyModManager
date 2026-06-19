@@ -4,9 +4,9 @@
 		<title>Irony Mod Manager</title>
 		<language>en</language>
 		<item>
-			<title>1.27.188</title>
+			<title>1.27.189</title>
 			<description>## Current Release Notes
-* Handle CWTools validation of "?" syntax
+* Fixed a rare issue where large mixed-content files could be misidentified as text, causing cache errors and stalled processing
 
 ## Release Notes 1.27
 * Update dependencies
@@ -17,13 +17,13 @@
 * Optional GenerateSteamAppId flag to create steam_appid.txt when missing (used for enabling Steam activity tracking when launching games directly; off by default)
 * Added StoragePath setting to customize where Irony stores and reads its data
 * Irony is now Flatpak-aware (detects and supports Steam Flatpak installations)</description>
-			<pubDate>Wed, 17 Jun 2026 17:40:08 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.27.188/linux-x64.zip" sparkle:version="1.27.188.26660" sparkle:shortVersionString="1.27.188" length="89255369" sparkle:os="linux" type="application/zip" sparkle:signature="ZPda7KS6XgC9Kd2A6QtayvbyGigH4ISNPOw13SLOkXHSFYsZpSFHSJ3cdiUx/sFt0k0mN6/ffhsrIhWV9bZuCw=="/>
+			<pubDate>Fri, 19 Jun 2026 22:58:16 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.27.189/linux-x64.zip" sparkle:version="1.27.189.1109" sparkle:shortVersionString="1.27.189" length="89255317" sparkle:os="linux" type="application/zip" sparkle:signature="YOuvuJZsTOllRvtSPxUlBUbw+PhGBZu8l23j9MfgNFBTFnLPu53buAN3v/LHXTZ+h4uYcZ62bcJwBATnwSIbBg=="/>
 		</item>
 		<item>
-			<title>1.27.188</title>
+			<title>1.27.189</title>
 			<description>## Current Release Notes
-* Handle CWTools validation of "?" syntax
+* Fixed a rare issue where large mixed-content files could be misidentified as text, causing cache errors and stalled processing
 
 ## Release Notes 1.27
 * Update dependencies
@@ -34,13 +34,13 @@
 * Optional GenerateSteamAppId flag to create steam_appid.txt when missing (used for enabling Steam activity tracking when launching games directly; off by default)
 * Added StoragePath setting to customize where Irony stores and reads its data
 * Irony is now Flatpak-aware (detects and supports Steam Flatpak installations)</description>
-			<pubDate>Wed, 17 Jun 2026 17:40:14 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.27.188/osx-x64.zip" sparkle:version="1.27.188.26660" sparkle:shortVersionString="1.27.188" length="91984832" sparkle:os="osx" type="application/zip" sparkle:signature="XrDRZpJkH4FDtnXqQJ7w3ebs3MKRhbgMD9Mi6btweOENsjRflOc1jMUQoYCg/E03H6rL2lCRmdExnzpf7s88Dw=="/>
+			<pubDate>Fri, 19 Jun 2026 22:58:22 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.27.189/osx-x64.zip" sparkle:version="1.27.189.1109" sparkle:shortVersionString="1.27.189" length="91984766" sparkle:os="osx" type="application/zip" sparkle:signature="sIR9S/oSqrE8/ZKfyIgm0k2B1rR7w5lm+o0WjUJIZmhQwnzPTpMr6pkCQjksuiW0aINGQKzRJliw94Dsay6rBg=="/>
 		</item>
 		<item>
-			<title>1.27.188</title>
+			<title>1.27.189</title>
 			<description>## Current Release Notes
-* Handle CWTools validation of "?" syntax
+* Fixed a rare issue where large mixed-content files could be misidentified as text, causing cache errors and stalled processing
 
 ## Release Notes 1.27
 * Update dependencies
@@ -51,13 +51,13 @@
 * Optional GenerateSteamAppId flag to create steam_appid.txt when missing (used for enabling Steam activity tracking when launching games directly; off by default)
 * Added StoragePath setting to customize where Irony stores and reads its data
 * Irony is now Flatpak-aware (detects and supports Steam Flatpak installations)</description>
-			<pubDate>Wed, 17 Jun 2026 17:40:20 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.27.188/win-x64-setup.zip" sparkle:version="1.27.188.26660" sparkle:shortVersionString="1.27.188" length="73817044" sparkle:os="windows" type="application/zip" sparkle:signature="lAAt7WS5oMnBhpezW3gJ/yNGGmuW5gZ+/aaBaqP/X7OVdfqFROc8gG195arTxhnpDy75VNq57B49ABq9euIvDA=="/>
+			<pubDate>Fri, 19 Jun 2026 22:58:29 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.27.189/win-x64-setup.zip" sparkle:version="1.27.189.1109" sparkle:shortVersionString="1.27.189" length="73813887" sparkle:os="windows" type="application/zip" sparkle:signature="H2Y6OQyjD14fD8asjM+syh/0XEWuSlXV9uFFOlH5BntrUyB8280jscMmoi6WySrgQk62o1Li1JmM9hJVLEALCw=="/>
 		</item>
 		<item>
-			<title>1.27.188</title>
+			<title>1.27.189</title>
 			<description>## Current Release Notes
-* Handle CWTools validation of "?" syntax
+* Fixed a rare issue where large mixed-content files could be misidentified as text, causing cache errors and stalled processing
 
 ## Release Notes 1.27
 * Update dependencies
@@ -68,8 +68,8 @@
 * Optional GenerateSteamAppId flag to create steam_appid.txt when missing (used for enabling Steam activity tracking when launching games directly; off by default)
 * Added StoragePath setting to customize where Irony stores and reads its data
 * Irony is now Flatpak-aware (detects and supports Steam Flatpak installations)</description>
-			<pubDate>Wed, 17 Jun 2026 17:40:32 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.27.188/win-x64.zip" sparkle:version="1.27.188.26660" sparkle:shortVersionString="1.27.188" length="103432596" sparkle:os="windows" type="application/zip" sparkle:signature="pVsnvz5S2wKqiWg4MWbc4bhG9xsuWfYYaaSMfc8w5r5IyOLDXSEDC+EpKmzQM2NWNozsTuSKx8vVvYuZSjlsBg=="/>
+			<pubDate>Fri, 19 Jun 2026 22:58:41 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.27.189/win-x64.zip" sparkle:version="1.27.189.1109" sparkle:shortVersionString="1.27.189" length="103432390" sparkle:os="windows" type="application/zip" sparkle:signature="fRAnsg5MmwOprQGmND/4L5SR3N43pI3ad1K1LiHN6YSeHPXBjdccKaYaEGumHCYMWT4D8u2uSMfBmf54/zmPBg=="/>
 		</item>
 	</channel>
 </rss>
