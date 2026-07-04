@@ -4,7 +4,7 @@
 // Created          : 05-26-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 12-08-2025
+// Last Modified On : 07-04-2026
 // ***********************************************************************
 // <copyright file="ModPatchCollectionService.cs" company="Mario">
 //     Mario
@@ -419,7 +419,7 @@ namespace IronyModManager.Services
                     var flatMerge = indexed.Where(p => p.MergeType == merge.Key).GroupBy(p => p.TypeAndId).ToList();
                     foreach (var item in flatMerge)
                     {
-                        var types = await allIndexed.GetByTypeAndIdAsync(item.FirstOrDefault().TypeAndId);
+                        var types = await allIndexed.GetByTypeAndIdAsync(item.FirstOrDefault()?.TypeAndId);
                         var ordered = EvalDefinitionPriority(types.OrderBy(x => modOrder.IndexOf(x.ModName))).DefinitionOrder.ToList();
                         foreach (var definition in types.Where(p => p.MergeType == MergeType.None))
                         {
@@ -470,7 +470,7 @@ namespace IronyModManager.Services
                 var scriptedVars = await tempIndex.GetByParentDirectoryAsync(provider.GlobalVariablesPath);
                 if (scriptedVars != null && scriptedVars.Any())
                 {
-                    scriptedVars = scriptedVars?.GroupBy(p => p.Id).Select(p => EvalDefinitionPriority(p.OrderBy(f => modOrder.IndexOf(f.ModName))).Definition).ToList();
+                    scriptedVars = scriptedVars.GroupBy(p => p.Id).Select(p => EvalDefinitionPriority(p.OrderBy(f => modOrder.IndexOf(f.ModName))).Definition).ToList();
                 }
 
                 prunedInlineDefinitions = [];
@@ -505,17 +505,18 @@ namespace IronyModManager.Services
 
                                 var parametrizedCode = string.Empty;
                                 IEnumerable<IDefinition> ids = null;
+                                var logicProcessed = false;
                                 try
                                 {
                                     var processedInline = ProcessInlineConstants(def.Code, vars, scriptedVars, out ids);
-                                    parametrizedCode = parametrizedParser.Process(priorityDefinition.Definition.Code, processedInline);
+                                    parametrizedCode = parametrizedParser.Process(priorityDefinition.Definition.Code, processedInline, out logicProcessed);
                                 }
                                 catch (Exception e)
                                 {
                                     throw new ArgumentException($"Inline code-block from file: {item.File} could not be parsed from mod: {item.ModName}.", e);
                                 }
 
-                                if (!string.IsNullOrWhiteSpace(parametrizedCode))
+                                if (!string.IsNullOrWhiteSpace(parametrizedCode) || logicProcessed)
                                 {
                                     var validationType = ValidationType.Full;
                                     if (item.UseSimpleValidation.GetValueOrDefault() || item.UseSimpleValidation == null)

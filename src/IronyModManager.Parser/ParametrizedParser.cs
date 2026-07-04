@@ -4,7 +4,7 @@
 // Created          : 10-03-2023
 //
 // Last Modified By : Mario
-// Last Modified On : 05-23-2025
+// Last Modified On : 07-04-2026
 // ***********************************************************************
 // <copyright file="ParametrizedParser.cs" company="Mario">
 //     Mario
@@ -124,10 +124,12 @@ namespace IronyModManager.Parser
         /// </summary>
         /// <param name="code">The code.</param>
         /// <param name="parameters">The parameters.</param>
+        /// <param name="logicProcessed">if set to <c>true</c> [logic processed].</param>
         /// <param name="forceProcessPath">if set to <c>true</c> [force process path].</param>
         /// <returns>System.String.</returns>
-        public string Process(string code, string parameters, bool forceProcessPath = false)
+        public string Process(string code, string parameters, out bool logicProcessed, bool forceProcessPath = false)
         {
+            logicProcessed = false;
             var elParams = codeParser.ParseScriptWithoutValidation(parameters.SplitOnNewLine(), string.Empty);
             if (elParams is { Values: not null, Error: null })
             {
@@ -166,6 +168,7 @@ namespace IronyModManager.Parser
                         processed = EvaluateMathExpression(processed);
                     }
 
+                    logicProcessed = true;
                     return processed;
                 }
                 else if (elParams.Values.Count() == 1 && elParams.Values.FirstOrDefault() != null && elParams.Values.FirstOrDefault()!.Values != null &&
@@ -213,6 +216,7 @@ namespace IronyModManager.Parser
                                 newValues.AddRange(replacementCode.Values);
                                 newCode.Values = newValues;
                                 processed = codeParser.FormatCode(newCode);
+                                logicProcessed = true;
                                 return processed;
                             }
                         }
@@ -227,6 +231,7 @@ namespace IronyModManager.Parser
                             {
                                 newCode.Values = replacementCode.Values;
                                 processed = codeParser.FormatCode(newCode);
+                                logicProcessed = true;
                                 return processed;
                             }
                         }

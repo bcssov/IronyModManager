@@ -205,7 +205,7 @@ namespace IronyModManager.Parser.Tests
             sb2.AppendLine(@"}");
 
             var parser = new ParametrizedParser(new CodeParser(new Logger()));
-            var result = parser.Process(sb.ToString(), sb2.ToString());
+            var result = parser.Process(sb.ToString(), sb2.ToString(), out var test);
             result.Should().NotBeNullOrEmpty();
             var m = DIResolver.Get<IParserManager>();
             var parserResult = m.Parse(new ParserManagerArgs { File = "common\\buildings\\dummy.txt", GameType = "Stellaris", IsBinary = false, Lines = result.SplitOnNewLine() });
@@ -386,7 +386,7 @@ namespace IronyModManager.Parser.Tests
             sb2.AppendLine(@"}");
 
             var parser = new ParametrizedParser(new CodeParser(new Logger()));
-            var result = parser.Process(sb.ToString(), sb2.ToString());
+            var result = parser.Process(sb.ToString(), sb2.ToString(), out var test);
             result.Should().NotBeNullOrEmpty();
             var m = DIResolver.Get<IParserManager>();
             var parserResult = m.Parse(new ParserManagerArgs { File = "common\\buildings\\dummy.txt", GameType = "Stellaris", IsBinary = false, Lines = result.SplitOnNewLine() });
@@ -567,7 +567,7 @@ namespace IronyModManager.Parser.Tests
             sb2.AppendLine(@"}");
 
             var parser = new ParametrizedParser(new CodeParser(new Logger()));
-            var result = parser.Process(sb.ToString(), sb2.ToString());
+            var result = parser.Process(sb.ToString(), sb2.ToString(), out var test);
 
             result.Should().NotBeNullOrEmpty();
             var m = DIResolver.Get<IParserManager>();
@@ -751,7 +751,7 @@ namespace IronyModManager.Parser.Tests
             sb2.AppendLine(@"}");
 
             var parser = new ParametrizedParser(new CodeParser(new Logger()));
-            var result = parser.Process(sb.ToString(), sb2.ToString());
+            var result = parser.Process(sb.ToString(), sb2.ToString(), out var test);
 
             result.Should().NotBeNullOrEmpty();
             var m = DIResolver.Get<IParserManager>();
@@ -935,7 +935,7 @@ namespace IronyModManager.Parser.Tests
             sb2.AppendLine(@"}");
 
             var parser = new ParametrizedParser(new CodeParser(new Logger()));
-            var result = parser.Process(sb.ToString(), sb2.ToString());
+            var result = parser.Process(sb.ToString(), sb2.ToString(), out var test);
 
             result.Should().NotBeNullOrEmpty();
             var m = DIResolver.Get<IParserManager>();
@@ -1006,7 +1006,7 @@ namespace IronyModManager.Parser.Tests
             sb2.AppendLine(@"}");
 
             var parser = new ParametrizedParser(new CodeParser(new Logger()));
-            var result = parser.Process(sb.ToString(), sb2.ToString());
+            var result = parser.Process(sb.ToString(), sb2.ToString(), out var test);
             result.Should().NotBeNullOrEmpty();
             var m = DIResolver.Get<IParserManager>();
             var parserResult = m.Parse(new ParserManagerArgs { File = "common\\component_templates\\dummy.txt", GameType = "Stellaris", IsBinary = false, Lines = result.SplitOnNewLine() });
@@ -1076,7 +1076,7 @@ namespace IronyModManager.Parser.Tests
             sb2.AppendLine(@"}");
 
             var parser = new ParametrizedParser(new CodeParser(new Logger()));
-            var result = parser.Process(sb.ToString(), sb2.ToString());
+            var result = parser.Process(sb.ToString(), sb2.ToString(), out var test);
             result.Should().NotBeNullOrEmpty();
             var m = DIResolver.Get<IParserManager>();
             var parserResult = m.Parse(new ParserManagerArgs { File = "common\\component_templates\\dummy.txt", GameType = "Stellaris", IsBinary = false, Lines = result.SplitOnNewLine() });
@@ -1111,7 +1111,7 @@ namespace IronyModManager.Parser.Tests
             sb2.AppendLine(@"}");
 
             var parser = new ParametrizedParser(new CodeParser(new Logger()));
-            var result = parser.Process(sb.ToString(), sb2.ToString());
+            var result = parser.Process(sb.ToString(), sb2.ToString(), out var test);
             result.Should().NotBeNullOrEmpty();
             var m = DIResolver.Get<IParserManager>();
             var parserResult = m.Parse(new ParserManagerArgs { File = "common\\ship_sizes\\dummy.txt", GameType = "Stellaris", IsBinary = false, Lines = result.SplitOnNewLine() });
@@ -1149,7 +1149,7 @@ namespace IronyModManager.Parser.Tests
             sb2.AppendLine(@"");
 
             var parser = new ParametrizedParser(new CodeParser(new Logger()));
-            var result = parser.Process(sb.ToString(), sb2.ToString());
+            var result = parser.Process(sb.ToString(), sb2.ToString(), out var test);
             result.Should().NotBeNullOrEmpty();
             var m = DIResolver.Get<IParserManager>();
             var parserResult = m.Parse(new ParserManagerArgs { File = "common\\ship_sizes\\dummy.txt", GameType = "Stellaris", IsBinary = false, Lines = result.SplitOnNewLine() });
@@ -1184,7 +1184,7 @@ namespace IronyModManager.Parser.Tests
             sb2.AppendLine(@"	}");
 
             var parser = new ParametrizedParser(new CodeParser(new Logger()));
-            var result = parser.Process(sb.ToString(), sb2.ToString());
+            var result = parser.Process(sb.ToString(), sb2.ToString(), out var test);
             result.Should().NotBeNullOrEmpty();
             var m = DIResolver.Get<IParserManager>();
             var parserResult = m.Parse(new ParserManagerArgs { File = "common\\ship_sizes\\dummy.txt", GameType = "Stellaris", IsBinary = false, Lines = result.SplitOnNewLine() });
@@ -1215,7 +1215,7 @@ namespace IronyModManager.Parser.Tests
 
 
             var parser = new ParametrizedParser(new CodeParser(new Logger()));
-            var result = parser.Process(sb.ToString(), param);
+            var result = parser.Process(sb.ToString(), param, out var test);
             result.Should().NotBeNullOrEmpty();
             var m = DIResolver.Get<IParserManager>();
             var parserResult = m.Parse(new ParserManagerArgs { File = "common\\ship_sizes\\dummy.txt", GameType = "Stellaris", IsBinary = false, Lines = result.SplitOnNewLine() });
@@ -1243,7 +1243,7 @@ namespace IronyModManager.Parser.Tests
 
 
             var parser = new ParametrizedParser(new CodeParser(new Logger()));
-            var result = parser.Process(sb.ToString(), param);
+            var result = parser.Process(sb.ToString(), param, out var test);
             result.Should().NotBeNullOrEmpty();
             var m = DIResolver.Get<IParserManager>();
             var parserResult = m.Parse(new ParserManagerArgs { File = "common\\ship_sizes\\dummy.txt", GameType = "Stellaris", IsBinary = false, Lines = result.SplitOnNewLine() });
@@ -1267,7 +1267,7 @@ namespace IronyModManager.Parser.Tests
 
 
             var parser = new ParametrizedParser(new CodeParser(new Logger()));
-            var result = parser.Process(param1, param);
+            var result = parser.Process(param1, param, out var test);
             result.Should().NotBeNullOrEmpty();
             var m = DIResolver.Get<IParserManager>();
             var parserResult = m.Parse(new ParserManagerArgs { File = "common\\ship_sizes\\dummy.txt", GameType = "Stellaris", IsBinary = false, Lines = result.SplitOnNewLine() });
