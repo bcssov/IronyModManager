@@ -4,7 +4,7 @@
 // Created          : 10-03-2023
 //
 // Last Modified By : Mario
-// Last Modified On : 02-10-2025
+// Last Modified On : 07-04-2026
 // ***********************************************************************
 // <copyright file="IParametrizedParser.cs" company="Mario">
 //     Mario
@@ -37,9 +37,10 @@ namespace IronyModManager.Parser.Common.Parsers
         /// </summary>
         /// <param name="code">The code.</param>
         /// <param name="parameters">The parameters.</param>
+        /// <param name="logicProcessed">if set to <c>true</c> [logic processed].</param>
         /// <param name="forceProcessPath">if set to <c>true</c> [force process path].</param>
         /// <returns>System.String.</returns>
-        string Process(string code, string parameters, bool forceProcessPath = false);
+        string Process(string code, string parameters, out bool logicProcessed, bool forceProcessPath = false);
 
         #endregion Methods
     }

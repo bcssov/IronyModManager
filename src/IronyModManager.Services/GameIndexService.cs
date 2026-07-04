@@ -4,7 +4,7 @@
 // Created          : 05-27-2021
 //
 // Last Modified By : Mario
-// Last Modified On : 03-09-2025
+// Last Modified On : 07-04-2026
 // ***********************************************************************
 // <copyright file="GameIndexService.cs" company="Mario">
 //     Mario
@@ -298,8 +298,6 @@ namespace IronyModManager.Services
 
                     return true;
                 }
-
-                return false;
             }
 
             return false;
@@ -568,17 +566,18 @@ namespace IronyModManager.Services
                                 }
 
                                 var parametrizedCode = string.Empty;
+                                var logicProcessed = false;
                                 try
                                 {
                                     var processedInline = ProcessInlineConstants(def.Code, vars, scriptedVarsBucket, out _);
-                                    parametrizedCode = parametrizedParser.Process(priorityDefinition.Definition.Code, processedInline);
+                                    parametrizedCode = parametrizedParser.Process(priorityDefinition.Definition.Code, processedInline, out logicProcessed);
                                 }
                                 catch (Exception e)
                                 {
                                     throw new ArgumentException($"Inline code-block from file: {item.File} could not be parsed from the game.", e);
                                 }
 
-                                if (!string.IsNullOrWhiteSpace(parametrizedCode))
+                                if (!string.IsNullOrWhiteSpace(parametrizedCode) || logicProcessed)
                                 {
                                     var results = parserManager.Parse(new ParserManagerArgs
                                     {
