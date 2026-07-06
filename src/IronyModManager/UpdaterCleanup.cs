@@ -4,7 +4,7 @@
 // Created          : 09-16-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 12-05-2025
+// Last Modified On : 07-06-2026
 // ***********************************************************************
 // <copyright file="UpdaterCleanup.cs" company="Mario">
 //     Mario
@@ -56,11 +56,22 @@ namespace IronyModManager
                 if (File.Exists(settingsFileName))
                 {
                     var fileInfo = new FileInfo(settingsFileName);
-                    var text = await File.ReadAllTextAsync(settingsFileName);
-                    var settings = JsonConvert.DeserializeObject<UpdateSettings>(text);
+                    UpdateSettings settings = null;
+
+                    try
+                    {
+                        var text = await File.ReadAllTextAsync(settingsFileName);
+                        if (!string.IsNullOrWhiteSpace(text))
+                        {
+                            settings = JsonConvert.DeserializeObject<UpdateSettings>(text);
+                        }
+                    }
+                    catch
+                    {
+                    }
 
                     // At least 72 since last update to clean up
-                    cleanup = (settings.Updated || settings.IsInstaller) && fileInfo.LastWriteTime <= DateTime.Now.AddHours(-72);
+                    cleanup = settings != null && (settings.Updated || settings.IsInstaller) && fileInfo.LastWriteTime <= DateTime.Now.AddHours(-72);
                 }
 
                 if (cleanup)
