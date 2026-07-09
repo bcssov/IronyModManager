@@ -4,8 +4,11 @@
 		<title>Irony Mod Manager</title>
 		<language>en</language>
 		<item>
-			<title>1.27.194</title>
+			<title>1.27.196</title>
 			<description>## Current Release Notes
+* Fix CTDs caused by increased Irony sensitivity to inline scripts' detection and parsing
+
+## 1.27.194 Release Notes
 * Fix #613
 * Expand multi-nested inline script parsing for mods using more complex logic
 
@@ -18,12 +21,15 @@
 * Optional GenerateSteamAppId flag to create steam_appid.txt when missing (used for enabling Steam activity tracking when launching games directly; off by default)
 * Added StoragePath setting to customize where Irony stores and reads its data
 * Irony is now Flatpak-aware (detects and supports Steam Flatpak installations)</description>
-			<pubDate>Thu, 09 Jul 2026 05:06:32 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.27.194/linux-x64.zip" sparkle:version="1.27.194.35058" sparkle:shortVersionString="1.27.194" length="89260248" sparkle:os="linux" type="application/zip" sparkle:signature="l5YvOkO/daIfY0RiMk6OLS8RJsr+KbLv6uecpOlRPEum8wAbCCa97LVOtkdNBPs7PO3wFHNdJFJrznGuEZrXDQ=="/>
+			<pubDate>Fri, 10 Jul 2026 01:19:12 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.27.196/linux-x64.zip" sparkle:version="1.27.196.62697" sparkle:shortVersionString="1.27.196" length="89260751" sparkle:os="linux" type="application/zip" sparkle:signature="p0u0inVafrqJGC6mSRro1Vf7oXjFyhBaRr3btLjB7/qO3APW/pA2NgEnQf9K/OJxz6dB2RaI7QEJ2g0YZuxcDA=="/>
 		</item>
 		<item>
-			<title>1.27.194</title>
+			<title>1.27.196</title>
 			<description>## Current Release Notes
+* Fix CTDs caused by increased Irony sensitivity to inline scripts' detection and parsing
+
+## 1.27.194 Release Notes
 * Fix #613
 * Expand multi-nested inline script parsing for mods using more complex logic
 
@@ -36,12 +42,15 @@
 * Optional GenerateSteamAppId flag to create steam_appid.txt when missing (used for enabling Steam activity tracking when launching games directly; off by default)
 * Added StoragePath setting to customize where Irony stores and reads its data
 * Irony is now Flatpak-aware (detects and supports Steam Flatpak installations)</description>
-			<pubDate>Thu, 09 Jul 2026 05:06:38 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.27.194/osx-x64.zip" sparkle:version="1.27.194.35058" sparkle:shortVersionString="1.27.194" length="91989487" sparkle:os="osx" type="application/zip" sparkle:signature="XA5aXV/c6DAUQw7pa5Ph0+d8VWTDqRvtlbXTuZ8LolPt6MmmrlfzqEjOFQ7s+0nT4d/Lqfh2FbB2XC5VSCrkAw=="/>
+			<pubDate>Fri, 10 Jul 2026 01:19:19 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.27.196/osx-x64.zip" sparkle:version="1.27.196.62697" sparkle:shortVersionString="1.27.196" length="91989992" sparkle:os="osx" type="application/zip" sparkle:signature="vsnnJehHeTYUK2127kwXiFALqFTC6llX0j+ppA71nhwdFcD/ZJWDZ+LzhbkJvGeNKLJTNPeex6dELBhtCUfAAw=="/>
 		</item>
 		<item>
-			<title>1.27.194</title>
+			<title>1.27.196</title>
 			<description>## Current Release Notes
+* Fix CTDs caused by increased Irony sensitivity to inline scripts' detection and parsing
+
+## 1.27.194 Release Notes
 * Fix #613
 * Expand multi-nested inline script parsing for mods using more complex logic
 
@@ -54,12 +63,15 @@
 * Optional GenerateSteamAppId flag to create steam_appid.txt when missing (used for enabling Steam activity tracking when launching games directly; off by default)
 * Added StoragePath setting to customize where Irony stores and reads its data
 * Irony is now Flatpak-aware (detects and supports Steam Flatpak installations)</description>
-			<pubDate>Thu, 09 Jul 2026 05:06:45 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.27.194/win-x64-setup.zip" sparkle:version="1.27.194.35058" sparkle:shortVersionString="1.27.194" length="73901801" sparkle:os="windows" type="application/zip" sparkle:signature="Ibc0Bg7X4SQdvXtK9tqyPV2nRHalPr8KEW3qswDTh+f71tGiEYcjmGYyncE0H7EkyXgszDQ8TBp1pJib/JjrDg=="/>
+			<pubDate>Fri, 10 Jul 2026 01:19:26 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.27.196/win-x64-setup.zip" sparkle:version="1.27.196.62697" sparkle:shortVersionString="1.27.196" length="73910414" sparkle:os="windows" type="application/zip" sparkle:signature="U+LphQw1vP19MtBZEX7Iu2TXqHD8AO/3iiYv3mIqIPMBYswiaIYNzPbYUB3Ysrvp7+mY/lrEHZRh9zJYlPIzCg=="/>
 		</item>
 		<item>
-			<title>1.27.194</title>
+			<title>1.27.196</title>
 			<description>## Current Release Notes
+* Fix CTDs caused by increased Irony sensitivity to inline scripts' detection and parsing
+
+## 1.27.194 Release Notes
 * Fix #613
 * Expand multi-nested inline script parsing for mods using more complex logic
 
@@ -72,8 +84,8 @@
 * Optional GenerateSteamAppId flag to create steam_appid.txt when missing (used for enabling Steam activity tracking when launching games directly; off by default)
 * Added StoragePath setting to customize where Irony stores and reads its data
 * Irony is now Flatpak-aware (detects and supports Steam Flatpak installations)</description>
-			<pubDate>Thu, 09 Jul 2026 05:06:57 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.27.194/win-x64.zip" sparkle:version="1.27.194.35058" sparkle:shortVersionString="1.27.194" length="103631772" sparkle:os="windows" type="application/zip" sparkle:signature="itB9aVZXRFjqlxLHqV/fX/s5Lb63uFb1fecSzZeEtJXm93c7sFNwSulcYA4P93kVDXqqc55hwiZBTc2dwKbzCA=="/>
+			<pubDate>Fri, 10 Jul 2026 01:19:38 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.27.196/win-x64.zip" sparkle:version="1.27.196.62697" sparkle:shortVersionString="1.27.196" length="103632309" sparkle:os="windows" type="application/zip" sparkle:signature="yWfSLqdlKB6qXz/fF+fk7LLduk7Z4xEO8HpSwE13SfR1++e2A+ohMMODoRIYB2l4dvv2qGJP105p2LZ2bl9yDg=="/>
 		</item>
 	</channel>
 </rss>
