@@ -4,9 +4,10 @@
 		<title>Irony Mod Manager</title>
 		<language>en</language>
 		<item>
-			<title>1.27.192</title>
+			<title>1.27.194</title>
 			<description>## Current Release Notes
-* Fix CS analysis for mods that have messed up inline conditionals seen in some obscure mods
+* Fix #613
+* Expand multi-nested inline script parsing for mods using more complex logic
 
 ## Release Notes 1.27
 * Update dependencies
@@ -17,13 +18,14 @@
 * Optional GenerateSteamAppId flag to create steam_appid.txt when missing (used for enabling Steam activity tracking when launching games directly; off by default)
 * Added StoragePath setting to customize where Irony stores and reads its data
 * Irony is now Flatpak-aware (detects and supports Steam Flatpak installations)</description>
-			<pubDate>Sat, 04 Jul 2026 02:33:26 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.27.192/linux-x64.zip" sparkle:version="1.27.192.32361" sparkle:shortVersionString="1.27.192" length="89255993" sparkle:os="linux" type="application/zip" sparkle:signature="8XSKGQBkhKFWIAKqmf2UCM/dS+5cVYoqpfvFkCbHmcQvdU27nKH3zCvCm/I73PZgjDKjRIXRNnRjrEFaiXAhBQ=="/>
+			<pubDate>Thu, 09 Jul 2026 05:06:32 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.27.194/linux-x64.zip" sparkle:version="1.27.194.35058" sparkle:shortVersionString="1.27.194" length="89260248" sparkle:os="linux" type="application/zip" sparkle:signature="l5YvOkO/daIfY0RiMk6OLS8RJsr+KbLv6uecpOlRPEum8wAbCCa97LVOtkdNBPs7PO3wFHNdJFJrznGuEZrXDQ=="/>
 		</item>
 		<item>
-			<title>1.27.192</title>
+			<title>1.27.194</title>
 			<description>## Current Release Notes
-* Fix CS analysis for mods that have messed up inline conditionals seen in some obscure mods
+* Fix #613
+* Expand multi-nested inline script parsing for mods using more complex logic
 
 ## Release Notes 1.27
 * Update dependencies
@@ -34,13 +36,14 @@
 * Optional GenerateSteamAppId flag to create steam_appid.txt when missing (used for enabling Steam activity tracking when launching games directly; off by default)
 * Added StoragePath setting to customize where Irony stores and reads its data
 * Irony is now Flatpak-aware (detects and supports Steam Flatpak installations)</description>
-			<pubDate>Sat, 04 Jul 2026 02:33:33 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.27.192/osx-x64.zip" sparkle:version="1.27.192.32361" sparkle:shortVersionString="1.27.192" length="91985489" sparkle:os="osx" type="application/zip" sparkle:signature="bEXcqd3JDZTnst6m0rrImAf+W5pOw8bEEUIp8ptcfeZa0FpkmHEVNUQZ0Ax2lD1nSkUu54zuq/AsUKennuQiDw=="/>
+			<pubDate>Thu, 09 Jul 2026 05:06:38 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.27.194/osx-x64.zip" sparkle:version="1.27.194.35058" sparkle:shortVersionString="1.27.194" length="91989487" sparkle:os="osx" type="application/zip" sparkle:signature="XA5aXV/c6DAUQw7pa5Ph0+d8VWTDqRvtlbXTuZ8LolPt6MmmrlfzqEjOFQ7s+0nT4d/Lqfh2FbB2XC5VSCrkAw=="/>
 		</item>
 		<item>
-			<title>1.27.192</title>
+			<title>1.27.194</title>
 			<description>## Current Release Notes
-* Fix CS analysis for mods that have messed up inline conditionals seen in some obscure mods
+* Fix #613
+* Expand multi-nested inline script parsing for mods using more complex logic
 
 ## Release Notes 1.27
 * Update dependencies
@@ -51,13 +54,14 @@
 * Optional GenerateSteamAppId flag to create steam_appid.txt when missing (used for enabling Steam activity tracking when launching games directly; off by default)
 * Added StoragePath setting to customize where Irony stores and reads its data
 * Irony is now Flatpak-aware (detects and supports Steam Flatpak installations)</description>
-			<pubDate>Sat, 04 Jul 2026 02:33:40 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.27.192/win-x64-setup.zip" sparkle:version="1.27.192.32361" sparkle:shortVersionString="1.27.192" length="73909953" sparkle:os="windows" type="application/zip" sparkle:signature="/PDQZfp7DTyRdRWjBJfhOdzjT/rk67nzXUC0Z1yx0DHfDITkBn1hEwUl/CDYexEyF5oe1i4AgVCjNwsQVvSKDg=="/>
+			<pubDate>Thu, 09 Jul 2026 05:06:45 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.27.194/win-x64-setup.zip" sparkle:version="1.27.194.35058" sparkle:shortVersionString="1.27.194" length="73901801" sparkle:os="windows" type="application/zip" sparkle:signature="Ibc0Bg7X4SQdvXtK9tqyPV2nRHalPr8KEW3qswDTh+f71tGiEYcjmGYyncE0H7EkyXgszDQ8TBp1pJib/JjrDg=="/>
 		</item>
 		<item>
-			<title>1.27.192</title>
+			<title>1.27.194</title>
 			<description>## Current Release Notes
-* Fix CS analysis for mods that have messed up inline conditionals seen in some obscure mods
+* Fix #613
+* Expand multi-nested inline script parsing for mods using more complex logic
 
 ## Release Notes 1.27
 * Update dependencies
@@ -68,8 +72,8 @@
 * Optional GenerateSteamAppId flag to create steam_appid.txt when missing (used for enabling Steam activity tracking when launching games directly; off by default)
 * Added StoragePath setting to customize where Irony stores and reads its data
 * Irony is now Flatpak-aware (detects and supports Steam Flatpak installations)</description>
-			<pubDate>Sat, 04 Jul 2026 02:33:51 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.27.192/win-x64.zip" sparkle:version="1.27.192.32361" sparkle:shortVersionString="1.27.192" length="103627801" sparkle:os="windows" type="application/zip" sparkle:signature="9vHRHUy0hPFmwwiA+rQFPFf7Byp2Q5vzYlz+dDB+UPwbCEYPxvnay7f7/IgBbBgI5T5bQOE1FrvUjA6tOVfqAg=="/>
+			<pubDate>Thu, 09 Jul 2026 05:06:57 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.27.194/win-x64.zip" sparkle:version="1.27.194.35058" sparkle:shortVersionString="1.27.194" length="103631772" sparkle:os="windows" type="application/zip" sparkle:signature="itB9aVZXRFjqlxLHqV/fX/s5Lb63uFb1fecSzZeEtJXm93c7sFNwSulcYA4P93kVDXqqc55hwiZBTc2dwKbzCA=="/>
 		</item>
 	</channel>
 </rss>
