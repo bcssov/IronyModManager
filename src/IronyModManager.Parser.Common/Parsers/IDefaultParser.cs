@@ -4,7 +4,7 @@
 // Created          : 02-16-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 12-07-2020
+// Last Modified On : 07-08-2026
 // ***********************************************************************
 // <copyright file="IDefaultParser.cs" company="Mario">
 //     Mario
@@ -14,6 +14,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using IronyModManager.Parser.Common.Args;
 using IronyModManager.Shared.Models;
 
@@ -25,6 +26,12 @@ namespace IronyModManager.Parser.Common.Parsers
     public interface IDefaultParser
     {
         #region Properties
+
+        /// <summary>
+        /// Gets a value indicating whether this instance is key type parser.
+        /// </summary>
+        /// <value><c>true</c> if this instance is key type parser; otherwise, <c>false</c>.</value>
+        bool IsKeyTypeParser { get; }
 
         /// <summary>
         /// Gets the name of the parser.

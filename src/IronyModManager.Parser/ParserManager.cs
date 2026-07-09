@@ -4,7 +4,7 @@
 // Created          : 02-19-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 10-18-2024
+// Last Modified On : 07-08-2026
 // ***********************************************************************
 // <copyright file="ParserManager.cs" company="Mario">
 //     Mario
@@ -110,7 +110,7 @@ namespace IronyModManager.Parser
                 definition.UsedParser = string.Empty;
                 definition.ValueType = ValueType.EmptyFile;
                 definition.LastModified = args.FileLastModified;
-                return new List<IDefinition> { definition };
+                return (List<IDefinition>)[definition];
             }
 
             return InvokeParsers(args);
@@ -145,6 +145,7 @@ namespace IronyModManager.Parser
         /// Validates the parser names.
         /// </summary>
         /// <param name="parsers">The parsers.</param>
+        /// <exception cref="ArgumentOutOfRangeException">$"Duplicate parsers detected: {message}</exception>
         /// <exception cref="System.ArgumentOutOfRangeException">Duplicate parsers detected: {message}</exception>
         private static void ValidateParserNames(IEnumerable<IDefaultParser> parsers)
         {
@@ -224,7 +225,7 @@ namespace IronyModManager.Parser
                         foreach (var item in grouped)
                         {
                             var id = item.First().DirectoryPath.ToLowerInvariant();
-                            newMaps.TryAdd(id, item.Select(p => p).ToList());
+                            newMaps.TryAdd(id, [.. item.Select(p => p)]);
                             if (id.Equals(location))
                             {
                                 parser = item.Select(p => p.PreferredParser);
@@ -246,13 +247,13 @@ namespace IronyModManager.Parser
         /// <returns>IEnumerable&lt;IDefinition&gt;.</returns>
         private IEnumerable<IDefinition> InvokeParsers(ParserManagerArgs args)
         {
-            var canParseArgs = new CanParseArgs { File = args.File, GameType = args.GameType, Lines = args.Lines ?? new List<string>(), IsBinary = args.IsBinary };
+            var canParseArgs = new CanParseArgs { File = args.File, GameType = args.GameType, Lines = args.Lines ?? (List<string>)[], IsBinary = args.IsBinary };
             var parseArgs = new ParserArgs
             {
                 ContentSHA = args.ContentSHA,
                 ModDependencies = args.ModDependencies,
                 File = args.File,
-                Lines = args.Lines ?? new List<string>(),
+                Lines = args.Lines ?? (List<string>)[],
                 ModName = args.ModName,
                 ValidationType = args.ValidationType,
                 IsBinary = args.IsBinary,
@@ -262,28 +263,36 @@ namespace IronyModManager.Parser
             IDefaultParser preferredParser = null;
             if (preferredParserNames?.Count() > 0)
             {
+                var preferredParsers = new List<IDefaultParser>();
+
                 var gameParser = gameParsers.Where(p => preferredParserNames.Any(s => s.Equals(p.ParserName)));
                 if (gameParser.Any())
                 {
                     preferredParser = gameParser.FirstOrDefault(p => p.CanParse(canParseArgs));
+                    preferredParsers.AddRange(gameParser);
                 }
 
                 var genericParser = genericParsers.Where(p => preferredParserNames.Any(s => s.Equals(p.ParserName)));
                 if (preferredParser == null && genericParser.Any())
                 {
                     preferredParser = genericParser.FirstOrDefault(p => p.CanParse(canParseArgs));
+                    preferredParsers.AddRange(genericParser);
                 }
 
                 var defaultParser = defaultParsers.Where(p => preferredParserNames.Any(s => s.Equals(p.ParserName)));
                 if (preferredParser == null && defaultParsers.Any())
                 {
                     preferredParser = defaultParser.FirstOrDefault(p => p.CanParse(canParseArgs));
+                    preferredParsers.AddRange(defaultParsers);
                 }
+
+                preferredParsers.Remove(preferredParser);
+                parseArgs.PreferredParsers = preferredParsers;
             }
 
             IEnumerable<IDefinition> result = null;
 
-            // This will be auto generated when a game is scanned for the first time. It was rushed and is now generated via unit test and is no where near as completed.
+            // This will be auto generated when a game is scanned for the first time. It was rushed and is now generated via unit test and is nowhere near as completed.
             if (preferredParser != null)
             {
                 result = preferredParser.Parse(parseArgs);

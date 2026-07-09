@@ -4,7 +4,7 @@
 // Created          : 02-22-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 12-01-2025
+// Last Modified On : 07-08-2026
 // ***********************************************************************
 // <copyright file="CodeParser.cs" company="Mario">
 //     Mario
@@ -31,8 +31,9 @@ namespace IronyModManager.Parser
     /// Implements the <see cref="IronyModManager.Parser.Common.Parsers.ICodeParser" />
     /// </summary>
     /// <seealso cref="IronyModManager.Parser.Common.Parsers.ICodeParser" />
+    /// <remarks>Initializes a new instance of the <see cref="CodeParser" /> class.</remarks>
     [ExcludeFromCoverage("Code parser is tested in parser implementations.")]
-    public class CodeParser : ICodeParser
+    public class CodeParser(ILogger logger) : ICodeParser
     {
         #region Fields
 
@@ -68,22 +69,9 @@ namespace IronyModManager.Parser
         /// <summary>
         /// The logger
         /// </summary>
-        private readonly ILogger logger;
+        private readonly ILogger logger = logger;
 
         #endregion Fields
-
-        #region Constructors
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="CodeParser" /> class.
-        /// </summary>
-        /// <param name="logger">The logger.</param>
-        public CodeParser(ILogger logger)
-        {
-            this.logger = logger;
-        }
-
-        #endregion Constructors
 
         #region Methods
 
@@ -485,7 +473,7 @@ namespace IronyModManager.Parser
                     var childElement = DIResolver.Get<IScriptElement>();
                     childElement.Key = elValue.Value;
                     childElement.Values = values;
-                    parentElement.Values = new List<IScriptElement> { childElement };
+                    parentElement.Values = (List<IScriptElement>)[childElement];
                     return parentElement;
                 }
                 else

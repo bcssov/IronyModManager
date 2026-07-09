@@ -4,7 +4,7 @@
 // Created          : 02-16-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 05-23-2025
+// Last Modified On : 07-08-2026
 // ***********************************************************************
 // <copyright file="KeyParser.cs" company="Mario">
 //     Mario
@@ -31,22 +31,16 @@ namespace IronyModManager.Parser.Generic
     /// </summary>
     /// <seealso cref="IronyModManager.Parser.Generic.BaseLineParser" />
     /// <seealso cref="IronyModManager.Parser.Common.Parsers.IGenericParser" />
-    public class KeyParser : BaseLineParser, IGenericParser
+    /// <remarks>Initializes a new instance of the <see cref="KeyParser" /> class.</remarks>
+    public class KeyParser(ICodeParser codeParser, ILogger logger) : BaseLineParser(codeParser, logger), IGenericParser
     {
-        #region Constructors
+        #region Properties
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="KeyParser" /> class.
+        /// Gets a value indicating whether this instance is key type parser.
         /// </summary>
-        /// <param name="codeParser">The code parser.</param>
-        /// <param name="logger">The logger.</param>
-        public KeyParser(ICodeParser codeParser, ILogger logger) : base(codeParser, logger)
-        {
-        }
-
-        #endregion Constructors
-
-        #region Properties
+        /// <value><c>true</c> if this instance is key type parser; otherwise, <c>false</c>.</value>
+        public override bool IsKeyTypeParser => true;
 
         /// <summary>
         /// Gets the name of the parser.

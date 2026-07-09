@@ -4,7 +4,7 @@
 // Created          : 02-12-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-16-2026
+// Last Modified On : 07-08-2026
 // ***********************************************************************
 // <copyright file="GameRegistration.cs" company="Mario">
 //     Mario
@@ -46,7 +46,7 @@ namespace IronyModManager.Services.Registrations
         /// <summary>
         /// The stellaris cache version
         /// </summary>
-        private const int StellarisCacheVersion = 33;
+        private const int StellarisCacheVersion = 34;
 
         /// <summary>
         /// The path resolver
