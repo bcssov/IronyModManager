@@ -172,6 +172,12 @@ namespace IronyModManager.Parser
             parameters = parameters.Replace("\"\"", "\"dummy_irony_empty\"", StringComparison.OrdinalIgnoreCase);
             logicProcessed = false;
 
+            if (IsCodeEmpty(code))
+            {
+                logicProcessed = true;
+                return string.Empty;
+            }
+
             var elParams = codeParser.ParseScriptWithoutValidation(parameters.SplitOnNewLine(), string.Empty);
             if (elParams is not { Values: not null, Error: null })
             {
@@ -243,6 +249,12 @@ namespace IronyModManager.Parser
         {
             parameters = parameters.Replace("\"\"", "\"dummy_irony_empty\"", StringComparison.OrdinalIgnoreCase);
             logicProcessed = false;
+
+            if (IsCodeEmpty(code))
+            {
+                logicProcessed = true;
+                return string.Empty;
+            }
 
             var elParams = codeParser.ParseScriptWithoutValidation(parameters.SplitOnNewLine(), string.Empty);
             if (elParams is { Values: not null, Error: null })
@@ -468,6 +480,23 @@ namespace IronyModManager.Parser
             }
 
             return i >= 0 && input[i] == '=';
+        }
+
+        /// <summary>
+        /// Determines whether provided code is empty.
+        /// </summary>
+        /// <param name="code">The code.</param>
+        /// <returns>true if empty, otherwise false.</returns>
+        private bool IsCodeEmpty(string code)
+        {
+            if (string.IsNullOrWhiteSpace(code))
+            {
+                return true;
+            }
+
+            bool isEmpty = !(from c in code.SplitOnNewLine() where !string.IsNullOrWhiteSpace(c) select c.Trim()).Any(t => t.StartsWith("#"));
+
+            return isEmpty;
         }
 
         /// <summary>
