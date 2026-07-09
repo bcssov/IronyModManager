@@ -4,7 +4,7 @@
 // Created          : 10-03-2023
 //
 // Last Modified By : Mario
-// Last Modified On : 07-09-2026
+// Last Modified On : 07-10-2026
 // ***********************************************************************
 // <copyright file="ParametrizedParser.cs" company="Mario">
 //     Mario
@@ -169,8 +169,14 @@ namespace IronyModManager.Parser
         /// <returns>System.String.</returns>
         public string ProcessFirstOptimized(string code, string parameters, out bool logicProcessed, bool forceProcessPath = false)
         {
-            parameters = parameters.Replace("\"\"", "\"dummy_irony_empty\"", StringComparison.OrdinalIgnoreCase);
+            parameters = ReplaceEmptyQuotesOutsideStrings(parameters, "dummy_irony_empty");
             logicProcessed = false;
+
+            if (IsCodeEmpty(code))
+            {
+                logicProcessed = true;
+                return string.Empty;
+            }
 
             var elParams = codeParser.ParseScriptWithoutValidation(parameters.SplitOnNewLine(), string.Empty);
             if (elParams is not { Values: not null, Error: null })
@@ -241,8 +247,14 @@ namespace IronyModManager.Parser
         /// <returns>System.String.</returns>
         public string ProcessOptimized(string code, string parameters, out bool logicProcessed, bool forceProcessPath = false)
         {
-            parameters = parameters.Replace("\"\"", "\"dummy_irony_empty\"", StringComparison.OrdinalIgnoreCase);
+            parameters = ReplaceEmptyQuotesOutsideStrings(parameters, "dummy_irony_empty");
             logicProcessed = false;
+
+            if (IsCodeEmpty(code))
+            {
+                logicProcessed = true;
+                return string.Empty;
+            }
 
             var elParams = codeParser.ParseScriptWithoutValidation(parameters.SplitOnNewLine(), string.Empty);
             if (elParams is { Values: not null, Error: null })
@@ -460,7 +472,7 @@ namespace IronyModManager.Parser
         /// <returns>bool.</returns>
         private bool HasEqualsImmediatelyBefore(string input, int index)
         {
-            int i = index - 1;
+            var i = index - 1;
 
             while (i >= 0 && input[i] != '\n' && input[i] != '\r' && char.IsWhiteSpace(input[i]))
             {
@@ -468,6 +480,22 @@ namespace IronyModManager.Parser
             }
 
             return i >= 0 && input[i] == '=';
+        }
+
+        /// <summary>
+        /// Determines whether provided code is empty.
+        /// </summary>
+        /// <param name="code">The code.</param>
+        /// <returns>true if empty, otherwise false.</returns>
+        private bool IsCodeEmpty(string code)
+        {
+            return string.IsNullOrWhiteSpace(code) ||
+                   !code.SplitOnNewLine()
+                       .Any(line =>
+                       {
+                           var t = line.Trim();
+                           return t.Length > 0 && !t.StartsWith("#");
+                       });
         }
 
         /// <summary>
@@ -489,10 +517,7 @@ namespace IronyModManager.Parser
         /// <returns>bool.</returns>
         private bool IsMatchAt(string input, int index, string token)
         {
-            if (index + token.Length > input.Length)
-                return false;
-
-            return input.AsSpan(index, token.Length).Equals(token.AsSpan(), StringComparison.OrdinalIgnoreCase);
+            return index + token.Length <= input.Length && input.AsSpan(index, token.Length).Equals(token.AsSpan(), StringComparison.OrdinalIgnoreCase);
         }
 
         /// <summary>
@@ -506,11 +531,11 @@ namespace IronyModManager.Parser
 
             var sb = new StringBuilder(input.Length);
 
-            for (int i = 0; i < input.Length;)
+            for (var i = 0; i < input.Length;)
             {
                 if (IsMatchAt(input, i, token))
                 {
-                    bool hasEqualsBefore = HasEqualsImmediatelyBefore(input, i);
+                    var hasEqualsBefore = HasEqualsImmediatelyBefore(input, i);
 
                     sb.Append(hasEqualsBefore ? "\"\"" : string.Empty);
                     i += token.Length;
@@ -520,6 +545,48 @@ namespace IronyModManager.Parser
                     sb.Append(input[i]);
                     i++;
                 }
+            }
+
+            return sb.ToString();
+        }
+
+        /// <summary>
+        /// Replaces the empty quotes outside strings.
+        /// </summary>
+        /// <param name="input">The input.</param>
+        /// <param name="replacement">The replacement.</param>
+        /// <returns>string.</returns>
+        private string ReplaceEmptyQuotesOutsideStrings(string input, string replacement)
+        {
+            var sb = new StringBuilder(input.Length);
+            var inString = false;
+
+            for (var i = 0; i < input.Length; i++)
+            {
+                var c = input[i];
+
+                var escaped = c == '"' && i > 0 && input[i - 1] == '\\';
+
+                if (c == '"' && !escaped)
+                {
+                    if (!inString)
+                    {
+                        if (i + 1 < input.Length && input[i + 1] == '"')
+                        {
+                            sb.Append(replacement);
+                            i++;
+                            continue;
+                        }
+
+                        inString = true;
+                    }
+                    else
+                    {
+                        inString = false;
+                    }
+                }
+
+                sb.Append(c);
             }
 
             return sb.ToString();
