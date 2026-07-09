@@ -4,7 +4,7 @@
 // Created          : 10-03-2023
 //
 // Last Modified By : Mario
-// Last Modified On : 02-06-2025
+// Last Modified On : 07-08-2026
 // ***********************************************************************
 // <copyright file="ParametrizedParserTests.cs" company="Mario">
 //     Mario
@@ -205,7 +205,7 @@ namespace IronyModManager.Parser.Tests
             sb2.AppendLine(@"}");
 
             var parser = new ParametrizedParser(new CodeParser(new Logger()));
-            var result = parser.Process(sb.ToString(), sb2.ToString(), out var test);
+            var result = parser.ProcessOptimized(sb.ToString(), sb2.ToString(), out var test);
             result.Should().NotBeNullOrEmpty();
             var m = DIResolver.Get<IParserManager>();
             var parserResult = m.Parse(new ParserManagerArgs { File = "common\\buildings\\dummy.txt", GameType = "Stellaris", IsBinary = false, Lines = result.SplitOnNewLine() });
@@ -386,7 +386,7 @@ namespace IronyModManager.Parser.Tests
             sb2.AppendLine(@"}");
 
             var parser = new ParametrizedParser(new CodeParser(new Logger()));
-            var result = parser.Process(sb.ToString(), sb2.ToString(), out var test);
+            var result = parser.ProcessOptimized(sb.ToString(), sb2.ToString(), out var test);
             result.Should().NotBeNullOrEmpty();
             var m = DIResolver.Get<IParserManager>();
             var parserResult = m.Parse(new ParserManagerArgs { File = "common\\buildings\\dummy.txt", GameType = "Stellaris", IsBinary = false, Lines = result.SplitOnNewLine() });
@@ -567,7 +567,7 @@ namespace IronyModManager.Parser.Tests
             sb2.AppendLine(@"}");
 
             var parser = new ParametrizedParser(new CodeParser(new Logger()));
-            var result = parser.Process(sb.ToString(), sb2.ToString(), out var test);
+            var result = parser.ProcessOptimized(sb.ToString(), sb2.ToString(), out var test);
 
             result.Should().NotBeNullOrEmpty();
             var m = DIResolver.Get<IParserManager>();
@@ -751,7 +751,7 @@ namespace IronyModManager.Parser.Tests
             sb2.AppendLine(@"}");
 
             var parser = new ParametrizedParser(new CodeParser(new Logger()));
-            var result = parser.Process(sb.ToString(), sb2.ToString(), out var test);
+            var result = parser.ProcessOptimized(sb.ToString(), sb2.ToString(), out var test);
 
             result.Should().NotBeNullOrEmpty();
             var m = DIResolver.Get<IParserManager>();
@@ -935,7 +935,7 @@ namespace IronyModManager.Parser.Tests
             sb2.AppendLine(@"}");
 
             var parser = new ParametrizedParser(new CodeParser(new Logger()));
-            var result = parser.Process(sb.ToString(), sb2.ToString(), out var test);
+            var result = parser.ProcessOptimized(sb.ToString(), sb2.ToString(), out var test);
 
             result.Should().NotBeNullOrEmpty();
             var m = DIResolver.Get<IParserManager>();
@@ -1006,7 +1006,7 @@ namespace IronyModManager.Parser.Tests
             sb2.AppendLine(@"}");
 
             var parser = new ParametrizedParser(new CodeParser(new Logger()));
-            var result = parser.Process(sb.ToString(), sb2.ToString(), out var test);
+            var result = parser.ProcessOptimized(sb.ToString(), sb2.ToString(), out var test);
             result.Should().NotBeNullOrEmpty();
             var m = DIResolver.Get<IParserManager>();
             var parserResult = m.Parse(new ParserManagerArgs { File = "common\\component_templates\\dummy.txt", GameType = "Stellaris", IsBinary = false, Lines = result.SplitOnNewLine() });
@@ -1022,7 +1022,8 @@ namespace IronyModManager.Parser.Tests
         {
             DISetup.SetupContainer();
 
-            ; var sb = new StringBuilder(700);
+            ;
+            var sb = new StringBuilder(700);
             sb.AppendLine(@"key = ""BIO_PROPULSION_$LEVEL$_$CORRESPONDING_SIZE$""");
             sb.AppendLine(@"size = small");
             sb.AppendLine(@"icon = ""GFX_ship_part_bio_thruster_$LEVEL$""");
@@ -1059,7 +1060,7 @@ namespace IronyModManager.Parser.Tests
             sb.AppendLine(@"}");
 
 
-            var sb2 = new System.Text.StringBuilder(492);
+            var sb2 = new StringBuilder(492);
             sb2.AppendLine(@"utility_component_template = {");
             sb2.AppendLine(@"    inline_script = {");
             sb2.AppendLine(@"        script = grand_archive/mutations/core_components/component_thrusters_bio");
@@ -1076,7 +1077,7 @@ namespace IronyModManager.Parser.Tests
             sb2.AppendLine(@"}");
 
             var parser = new ParametrizedParser(new CodeParser(new Logger()));
-            var result = parser.Process(sb.ToString(), sb2.ToString(), out var test);
+            var result = parser.ProcessOptimized(sb.ToString(), sb2.ToString(), out var test);
             result.Should().NotBeNullOrEmpty();
             var m = DIResolver.Get<IParserManager>();
             var parserResult = m.Parse(new ParserManagerArgs { File = "common\\component_templates\\dummy.txt", GameType = "Stellaris", IsBinary = false, Lines = result.SplitOnNewLine() });
@@ -1111,7 +1112,7 @@ namespace IronyModManager.Parser.Tests
             sb2.AppendLine(@"}");
 
             var parser = new ParametrizedParser(new CodeParser(new Logger()));
-            var result = parser.Process(sb.ToString(), sb2.ToString(), out var test);
+            var result = parser.ProcessOptimized(sb.ToString(), sb2.ToString(), out var test);
             result.Should().NotBeNullOrEmpty();
             var m = DIResolver.Get<IParserManager>();
             var parserResult = m.Parse(new ParserManagerArgs { File = "common\\ship_sizes\\dummy.txt", GameType = "Stellaris", IsBinary = false, Lines = result.SplitOnNewLine() });
@@ -1149,7 +1150,7 @@ namespace IronyModManager.Parser.Tests
             sb2.AppendLine(@"");
 
             var parser = new ParametrizedParser(new CodeParser(new Logger()));
-            var result = parser.Process(sb.ToString(), sb2.ToString(), out var test);
+            var result = parser.ProcessOptimized(sb.ToString(), sb2.ToString(), out var test);
             result.Should().NotBeNullOrEmpty();
             var m = DIResolver.Get<IParserManager>();
             var parserResult = m.Parse(new ParserManagerArgs { File = "common\\ship_sizes\\dummy.txt", GameType = "Stellaris", IsBinary = false, Lines = result.SplitOnNewLine() });
@@ -1184,12 +1185,13 @@ namespace IronyModManager.Parser.Tests
             sb2.AppendLine(@"	}");
 
             var parser = new ParametrizedParser(new CodeParser(new Logger()));
-            var result = parser.Process(sb.ToString(), sb2.ToString(), out var test);
+            var result = parser.ProcessOptimized(sb.ToString(), sb2.ToString(), out var test);
             result.Should().NotBeNullOrEmpty();
             var m = DIResolver.Get<IParserManager>();
             var parserResult = m.Parse(new ParserManagerArgs { File = "common\\ship_sizes\\dummy.txt", GameType = "Stellaris", IsBinary = false, Lines = result.SplitOnNewLine() });
             parserResult.Count().Should().Be(1);
-            parserResult.FirstOrDefault()!.Code.Should().Be("inline_script = {\r\n    script = merger_of_rules/parts/switch\r\n    file = merger_of_rules/parts/toggled_code_case_\r\n    value = 1\r\n    params = \"code = \\\"$code$\\\"\"\r\n}");
+            parserResult.FirstOrDefault()!.Code.Should()
+                .Be("inline_script = {\r\n    script = merger_of_rules/parts/switch\r\n    file = merger_of_rules/parts/toggled_code_case_\r\n    value = 1\r\n    params = \"code = \\\"$code$\\\"\"\r\n}");
         }
 
         /// <summary>
@@ -1201,7 +1203,7 @@ namespace IronyModManager.Parser.Tests
             DISetup.SetupContainer();
             CurrentLocale.SetCurrent("en");
 
-            var sb = new System.Text.StringBuilder(307);
+            var sb = new StringBuilder(307);
             sb.AppendLine(@"inline_script = {");
             sb.AppendLine(@"    script = merger_of_rules/parts/switch");
             sb.AppendLine(@"    file = merger_of_rules/parts/toggled_code_case_");
@@ -1215,12 +1217,14 @@ namespace IronyModManager.Parser.Tests
 
 
             var parser = new ParametrizedParser(new CodeParser(new Logger()));
-            var result = parser.Process(sb.ToString(), param, out var test);
+            var result = parser.ProcessOptimized(sb.ToString(), param, out var test);
             result.Should().NotBeNullOrEmpty();
             var m = DIResolver.Get<IParserManager>();
             var parserResult = m.Parse(new ParserManagerArgs { File = "common\\ship_sizes\\dummy.txt", GameType = "Stellaris", IsBinary = false, Lines = result.SplitOnNewLine() });
             parserResult.Count().Should().Be(1);
-            parserResult.FirstOrDefault()!.Code.Should().Be("can_destroy_planet_with_ACOT_EMISSARY_BEAM = {\r\n    inline_script = {\r\n        script = merger_of_rules/parts/switch\r\n        file = merger_of_rules/parts/toggled_code_case_\r\n        value = 1\r\n        params = \"code = \\\"\r\ncustom_tooltip = {\r\ntext = acot_emissary_on_cooldown\r\nFROM = { NOT = { has_fleet_flag = acot_emissary_beam_delay } }\r\n}\r\ncustom_tooltip = {\r\nfail_text = is_shielded\r\nNOR = {\r\nis_planet_class = pc_shielded\r\nis_planet_class = pc_ringworld_shielded\r\nis_planet_class = pc_habitat_shielded\r\n}\r\n}\r\nOR = {\r\ncustom_tooltip = {\r\ntext = acot_is_valid_for_emissary_beam\r\nOR = {\r\nNOT = { exists = space_owner }\r\nAND = {\r\nexists = space_owner\r\nspace_owner = { is_same_value = from.owner }\r\n}\r\n}\r\nis_a_planet = yes\r\nis_asteroid = no\r\nis_star = no\r\nis_artificial = no\r\nmerg_is_gas_giant = no\r\nmerg_is_habitat = no\r\nmerg_is_hab_ringworld = no\r\n}\r\n}\r\n\\\"\"\r\n    }\r\n}");
+            parserResult.FirstOrDefault()!.Code.Should()
+                .Be(
+                    "can_destroy_planet_with_ACOT_EMISSARY_BEAM = {\r\n    inline_script = {\r\n        script = merger_of_rules/parts/switch\r\n        file = merger_of_rules/parts/toggled_code_case_\r\n        value = 1\r\n        params = \"code = \\\"\r\ncustom_tooltip = {\r\ntext = acot_emissary_on_cooldown\r\nFROM = { NOT = { has_fleet_flag = acot_emissary_beam_delay } }\r\n}\r\ncustom_tooltip = {\r\nfail_text = is_shielded\r\nNOR = {\r\nis_planet_class = pc_shielded\r\nis_planet_class = pc_ringworld_shielded\r\nis_planet_class = pc_habitat_shielded\r\n}\r\n}\r\nOR = {\r\ncustom_tooltip = {\r\ntext = acot_is_valid_for_emissary_beam\r\nOR = {\r\nNOT = { exists = space_owner }\r\nAND = {\r\nexists = space_owner\r\nspace_owner = { is_same_value = from.owner }\r\n}\r\n}\r\nis_a_planet = yes\r\nis_asteroid = no\r\nis_star = no\r\nis_artificial = no\r\nmerg_is_gas_giant = no\r\nmerg_is_habitat = no\r\nmerg_is_hab_ringworld = no\r\n}\r\n}\r\n\\\"\"\r\n    }\r\n}");
         }
 
         /// <summary>
@@ -1232,7 +1236,7 @@ namespace IronyModManager.Parser.Tests
             DISetup.SetupContainer();
             CurrentLocale.SetCurrent("en");
 
-            var sb = new System.Text.StringBuilder(62);
+            var sb = new StringBuilder(62);
             sb.AppendLine(@"inline_script = {");
             sb.AppendLine(@"    script = $file$$value$");
             sb.AppendLine(@"    $params$");
@@ -1243,12 +1247,62 @@ namespace IronyModManager.Parser.Tests
 
 
             var parser = new ParametrizedParser(new CodeParser(new Logger()));
-            var result = parser.Process(sb.ToString(), param, out var test);
+            var result = parser.ProcessOptimized(sb.ToString(), param, out var test);
             result.Should().NotBeNullOrEmpty();
             var m = DIResolver.Get<IParserManager>();
             var parserResult = m.Parse(new ParserManagerArgs { File = "common\\ship_sizes\\dummy.txt", GameType = "Stellaris", IsBinary = false, Lines = result.SplitOnNewLine() });
             parserResult.Count().Should().Be(1);
-            parserResult.FirstOrDefault()!.Code.Should().Be("can_destroy_planet_with_ACOT_EMISSARY_BEAM = {\r\n    inline_script = {\r\n        script = merger_of_rules/parts/toggled_code_case_1\r\n        code = \"\r\ncustom_tooltip = {\r\ntext = acot_emissary_on_cooldown\r\nFROM = { NOT = { has_fleet_flag = acot_emissary_beam_delay } }\r\n}\r\ncustom_tooltip = {\r\nfail_text = is_shielded\r\nNOR = {\r\nis_planet_class = pc_shielded\r\nis_planet_class = pc_ringworld_shielded\r\nis_planet_class = pc_habitat_shielded\r\n}\r\n}\r\nOR = {\r\ncustom_tooltip = {\r\ntext = acot_is_valid_for_emissary_beam\r\nOR = {\r\nNOT = { exists = space_owner }\r\nAND = {\r\nexists = space_owner\r\nspace_owner = { is_same_value = from.owner }\r\n}\r\n}\r\nis_a_planet = yes\r\nis_asteroid = no\r\nis_star = no\r\nis_artificial = no\r\nmerg_is_gas_giant = no\r\nmerg_is_habitat = no\r\nmerg_is_hab_ringworld = no\r\n}\r\n}\r\n\"\r\n    }\r\n}");
+
+            var sb2 = new System.Text.StringBuilder();
+            sb2.AppendLine(@"can_destroy_planet_with_ACOT_EMISSARY_BEAM = {");
+            sb2.AppendLine(@"    inline_script = {");
+            sb2.AppendLine(@"        script = merger_of_rules/parts/toggled_code_case_1");
+            sb2.AppendLine(@"        code = \""");
+            sb2.AppendLine(@"        custom_tooltip = {");
+            sb2.AppendLine(@"            text = acot_emissary_on_cooldown");
+            sb2.AppendLine(@"            FROM = {");
+            sb2.AppendLine(@"                NOT = {");
+            sb2.AppendLine(@"                    has_fleet_flag = acot_emissary_beam_delay");
+            sb2.AppendLine(@"                }");
+            sb2.AppendLine(@"            }");
+            sb2.AppendLine(@"        }");
+            sb2.AppendLine(@"        custom_tooltip = {");
+            sb2.AppendLine(@"            fail_text = is_shielded");
+            sb2.AppendLine(@"            NOR = {");
+            sb2.AppendLine(@"                is_planet_class = pc_shielded");
+            sb2.AppendLine(@"                is_planet_class = pc_ringworld_shielded");
+            sb2.AppendLine(@"                is_planet_class = pc_habitat_shielded");
+            sb2.AppendLine(@"            }");
+            sb2.AppendLine(@"        }");
+            sb2.AppendLine(@"        OR = {");
+            sb2.AppendLine(@"            custom_tooltip = {");
+            sb2.AppendLine(@"                text = acot_is_valid_for_emissary_beam");
+            sb2.AppendLine(@"                OR = {");
+            sb2.AppendLine(@"                    NOT = {");
+            sb2.AppendLine(@"                        exists = space_owner");
+            sb2.AppendLine(@"                    }");
+            sb2.AppendLine(@"                    AND = {");
+            sb2.AppendLine(@"                        exists = space_owner");
+            sb2.AppendLine(@"                        space_owner = {");
+            sb2.AppendLine(@"                            is_same_value = from.owner");
+            sb2.AppendLine(@"                        }");
+            sb2.AppendLine(@"                    }");
+            sb2.AppendLine(@"                }");
+            sb2.AppendLine(@"                is_a_planet = yes");
+            sb2.AppendLine(@"                is_asteroid = no");
+            sb2.AppendLine(@"                is_star = no");
+            sb2.AppendLine(@"                is_artificial = no");
+            sb2.AppendLine(@"                merg_is_gas_giant = no");
+            sb2.AppendLine(@"                merg_is_habitat = no");
+            sb2.AppendLine(@"                merg_is_hab_ringworld = no");
+            sb2.AppendLine(@"            }");
+            sb2.AppendLine(@"        }");
+            sb2.AppendLine(@"        \""");
+            sb2.AppendLine(@"    }");
+            sb2.AppendLine(@"}");
+
+
+            parserResult.FirstOrDefault()!.Code.Trim().Should().Be(sb2.ToString().Trim());
         }
 
         /// <summary>
@@ -1267,13 +1321,13 @@ namespace IronyModManager.Parser.Tests
 
 
             var parser = new ParametrizedParser(new CodeParser(new Logger()));
-            var result = parser.Process(param1, param, out var test);
+            var result = parser.ProcessOptimized(param1, param, out var test);
             result.Should().NotBeNullOrEmpty();
             var m = DIResolver.Get<IParserManager>();
             var parserResult = m.Parse(new ParserManagerArgs { File = "common\\ship_sizes\\dummy.txt", GameType = "Stellaris", IsBinary = false, Lines = result.SplitOnNewLine() });
             parserResult.Count().Should().Be(1);
 
-            var sb = new System.Text.StringBuilder(1143);
+            var sb = new StringBuilder(1143);
             sb.AppendLine(@"can_destroy_planet_with_ACOT_EMISSARY_BEAM = {");
             sb.AppendLine(@"    custom_tooltip = {");
             sb.AppendLine(@"        text = acot_emissary_on_cooldown");
@@ -1340,7 +1394,7 @@ namespace IronyModManager.Parser.Tests
             sb.AppendLine(@"}");
 
             var parser = new ParametrizedParser(new CodeParser(new Logger()));
-            var result = parser.GetScriptPath(sb.ToString());
+            var result = parser.GetOptimizedScriptPath(sb.ToString());
             result.Should().Be("buildings\\building_giga_megaworkshop_acot");
         }
 
@@ -1364,7 +1418,7 @@ namespace IronyModManager.Parser.Tests
             sb.AppendLine(@"}");
 
             var parser = new ParametrizedParser(new CodeParser(new Logger()));
-            var result = parser.GetScriptPath(sb.ToString());
+            var result = parser.GetOptimizedScriptPath(sb.ToString());
             result.Should().BeNullOrEmpty();
         }
 
@@ -1392,7 +1446,7 @@ namespace IronyModManager.Parser.Tests
             sb.AppendLine(@"}");
 
             var parser = new ParametrizedParser(new CodeParser(new Logger()));
-            var result = parser.GetScriptPath(sb.ToString());
+            var result = parser.GetOptimizedScriptPath(sb.ToString());
             result.Should().Be("grand_archive\\mutations\\core_components\\component_thrusters_bio");
         }
 
@@ -1410,7 +1464,7 @@ namespace IronyModManager.Parser.Tests
             sb.AppendLine(@"}");
 
             var parser = new ParametrizedParser(new CodeParser(new Logger()));
-            var result = parser.GetScriptPath(sb.ToString());
+            var result = parser.GetOptimizedScriptPath(sb.ToString());
             result.Should().Be("giga_placeholders\\ship_sizes");
         }
 
@@ -1428,8 +1482,169 @@ namespace IronyModManager.Parser.Tests
             sb.AppendLine(@"");
 
             var parser = new ParametrizedParser(new CodeParser(new Logger()));
-            var result = parser.GetScriptPath(sb.ToString());
+            var result = parser.GetOptimizedScriptPath(sb.ToString());
             result.Should().Be("giga_placeholders\\ship_sizes");
+        }
+
+        /// <summary>
+        /// Defines the test method GetFirstOptimizedScriptPath_single_inline_script_should_match_original_optimized.
+        /// </summary>
+        [Fact]
+        public void GetFirstOptimizedScriptPath_single_inline_script_should_match_original_optimized()
+        {
+            DISetup.SetupContainer();
+
+            var sb = new StringBuilder(374);
+            sb.AppendLine(@"utility_component_template = {");
+            sb.AppendLine(@"    inline_script = {");
+            sb.AppendLine(@"        script = grand_archive/mutations/core_components/component_thrusters_bio");
+            sb.AppendLine(@"        LEVEL = 5");
+            sb.AppendLine(@"    }");
+            sb.AppendLine(@"}");
+
+            var parser = new ParametrizedParser(new CodeParser(new Logger()));
+
+            var original = parser.GetOptimizedScriptPath(sb.ToString());
+            var first = parser.GetFirstOptimizedScriptPath(sb.ToString());
+
+            first.Should().Be(original);
+            first.Should().Be(@"grand_archive\mutations\core_components\component_thrusters_bio");
+        }
+
+        /// <summary>
+        /// Defines the test method GetFirstOptimizedScriptPath_single_inline_script_should_return_first_match.
+        /// </summary>
+        [Fact]
+        public void GetFirstOptimizedScriptPath_single_inline_script_should_return_first_match()
+        {
+            DISetup.SetupContainer();
+
+            var sb = new StringBuilder();
+            sb.AppendLine(@"weapon_component_template = {");
+            sb.AppendLine(@"    ship_modifier = {");
+            sb.AppendLine(@"        custom_tooltip = ""ag_ancient_singularity_torpedo_1_DESC""");
+            sb.AppendLine(@"        show_only_custom_tooltip = yes");
+            sb.AppendLine(@"    }");
+            sb.AppendLine(@"    inline_script = {");
+            sb.AppendLine(@"        script = components/ag_ancient_gravity_weapon_template_key_overwrite_yes");
+            sb.AppendLine(@"        ag_key_prefix = ""primitive""");
+            sb.AppendLine(@"        ag_size_short = ""torpedo""");
+            sb.AppendLine(@"        ag_key_suffix = """"");
+            sb.AppendLine(@"        ag_status = ""1""");
+            sb.AppendLine(@"        ag_key_extra_suffix = """"");
+            sb.AppendLine(@"        ag_key = ag_ancient_torpedo_1");
+            sb.AppendLine(@"    }");
+            sb.AppendLine(@"    entity = ""invisible_turret_entity""");
+            sb.AppendLine(@"    size = torpedo");
+            sb.AppendLine(@"    type = instant");
+            sb.AppendLine(@"    inline_script = {");
+            sb.AppendLine(@"        script = components/ag_ancient_gravity_weapon_template_icon_overwrite_yes2");
+            sb.AppendLine(@"        ag_size_short = torpedo");
+            sb.AppendLine(@"        ag_color = red");
+            sb.AppendLine(@"        ag_icon = GFX_ship_part_ag_ancient_torpedo_red");
+            sb.AppendLine(@"    }");
+            sb.AppendLine(@"    icon_frame = 1");
+            sb.AppendLine(@"}");
+
+            var parser = new ParametrizedParser(new CodeParser(new Logger()));
+
+            var result = parser.GetFirstOptimizedScriptPath(sb.ToString());
+
+            result.Should().Be(@"components\ag_ancient_gravity_weapon_template_key_overwrite_yes");
+        }
+
+        /// <summary>
+        /// Defines the test method ProcessFirstOptimized_single_inline_script_should_match_original_optimized.
+        /// </summary>
+        [Fact]
+        public void ProcessFirstOptimized_single_inline_script_should_match_original_optimized()
+        {
+            DISetup.SetupContainer();
+
+            var code = "level = $LEVEL$";
+
+            var parameters = """
+                             utility_component_template = {
+                                 inline_script = {
+                                     script = grand_archive/mutations/core_components/component_thrusters_bio
+                                     LEVEL = 5
+                                 }
+                             }
+                             """;
+
+            var parser = new ParametrizedParser(new CodeParser(new Logger()));
+
+            var original = parser.ProcessOptimized(code, parameters, out var originalProcessed);
+            var first = parser.ProcessFirstOptimized(code, parameters, out var firstProcessed);
+
+            firstProcessed.Should().Be(originalProcessed);
+            first.Should().Be(original);
+        }
+
+        /// <summary>
+        /// Defines the test method ProcessFirstOptimized_single_inline_script_should_process_first_match.
+        /// </summary>
+        [Fact]
+        public void ProcessFirstOptimized_single_inline_script_should_process_first_match()
+        {
+            DISetup.SetupContainer();
+
+            var code = "key = $ag_key$";
+
+            var sb = new StringBuilder();
+            sb.AppendLine(@"weapon_component_template = {");
+            sb.AppendLine(@"    ship_modifier = {");
+            sb.AppendLine(@"        custom_tooltip = ""ag_ancient_singularity_torpedo_1_DESC""");
+            sb.AppendLine(@"        show_only_custom_tooltip = yes");
+            sb.AppendLine(@"    }");
+            sb.AppendLine(@"    inline_script = {");
+            sb.AppendLine(@"        script = components/ag_ancient_gravity_weapon_template_key_overwrite_yes");
+            sb.AppendLine(@"        ag_key_prefix = ""primitive""");
+            sb.AppendLine(@"        ag_size_short = ""torpedo""");
+            sb.AppendLine(@"        ag_key_suffix = """"");
+            sb.AppendLine(@"        ag_status = ""1""");
+            sb.AppendLine(@"        ag_key_extra_suffix = """"");
+            sb.AppendLine(@"        ag_key = ag_ancient_torpedo_1");
+            sb.AppendLine(@"    }");
+            sb.AppendLine(@"    entity = ""invisible_turret_entity""");
+            sb.AppendLine(@"    size = torpedo");
+            sb.AppendLine(@"    type = instant");
+            sb.AppendLine(@"    inline_script = {");
+            sb.AppendLine(@"        script = components/ag_ancient_gravity_weapon_template_icon_overwrite_yes2");
+            sb.AppendLine(@"        ag_size_short = torpedo");
+            sb.AppendLine(@"        ag_color = red");
+            sb.AppendLine(@"        ag_icon = GFX_ship_part_ag_ancient_torpedo_red");
+            sb.AppendLine(@"    }");
+            sb.AppendLine(@"    icon_frame = 1");
+            sb.AppendLine(@"}");
+
+            var sb2 = new StringBuilder();
+            sb2.AppendLine(@"weapon_component_template = {");
+            sb2.AppendLine(@"    ship_modifier = {");
+            sb2.AppendLine(@"        custom_tooltip = ""ag_ancient_singularity_torpedo_1_DESC""");
+            sb2.AppendLine(@"        show_only_custom_tooltip = yes");
+            sb2.AppendLine(@"    }");
+            sb2.AppendLine(@"    key = ag_ancient_torpedo_1");
+            sb2.AppendLine(@"    entity = ""invisible_turret_entity""");
+            sb2.AppendLine(@"    size = torpedo");
+            sb2.AppendLine(@"    type = instant");
+            sb2.AppendLine(@"    inline_script = {");
+            sb2.AppendLine(@"        script = components/ag_ancient_gravity_weapon_template_icon_overwrite_yes2");
+            sb2.AppendLine(@"        ag_size_short = torpedo");
+            sb2.AppendLine(@"        ag_color = red");
+            sb2.AppendLine(@"        ag_icon = GFX_ship_part_ag_ancient_torpedo_red");
+            sb2.AppendLine(@"    }");
+            sb2.AppendLine(@"    icon_frame = 1");
+            sb2.AppendLine(@"}");
+
+            var parser = new ParametrizedParser(new CodeParser(new Logger()));
+            var result = parser.ProcessFirstOptimized(code, sb.ToString(), out var test);
+            result.Should().NotBeNullOrEmpty();
+            var m = DIResolver.Get<IParserManager>();
+            var parserResult = m.Parse(new ParserManagerArgs { File = "common\\ship_sizes\\dummy.txt", GameType = "Stellaris", IsBinary = false, Lines = result.SplitOnNewLine() });
+            parserResult.Count().Should().Be(1);
+
+            parserResult.FirstOrDefault()!.Code.Trim().Should().Be(sb2.ToString().Trim());
         }
     }
 }

@@ -4,15 +4,18 @@
 // Created          : 02-16-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 05-11-2023
+// Last Modified On : 07-08-2026
 // ***********************************************************************
 // <copyright file="ParserArgs.cs" company="Mario">
 //     Mario
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
+
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using IronyModManager.Parser.Common.Parsers;
 
 namespace IronyModManager.Parser.Common.Args
 {
@@ -44,6 +47,7 @@ namespace IronyModManager.Parser.Common.Args
             ValidationType = args.ValidationType;
             IsBinary = args.IsBinary;
             GameType = args.GameType;
+            PreferredParsers = args.PreferredParsers;
         }
 
         #endregion Constructors
@@ -91,6 +95,12 @@ namespace IronyModManager.Parser.Common.Args
         /// </summary>
         /// <value>The name of the mod.</value>
         public string ModName { get; set; }
+
+        /// <summary>
+        /// Gets or sets the preferred parser.
+        /// </summary>
+        /// <value>The preferred parser.</value>
+        public IEnumerable<IDefaultParser> PreferredParsers { get; set; }
 
         /// <summary>
         /// Gets or sets the type of the validation.

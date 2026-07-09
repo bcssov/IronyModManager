@@ -4,7 +4,7 @@
 // Created          : 05-27-2021
 //
 // Last Modified By : Mario
-// Last Modified On : 07-04-2026
+// Last Modified On : 07-09-2026
 // ***********************************************************************
 // <copyright file="GameIndexService.cs" company="Mario">
 //     Mario
@@ -543,6 +543,7 @@ namespace IronyModManager.Services
                     var depth = 0;
                     while (def.Id.Equals(Parser.Common.Constants.Stellaris.InlineScriptId, StringComparison.OrdinalIgnoreCase) || def.ContainsInlineIdentifier)
                     {
+                        var multiInline = depth > 0 && def.ContainsInlineIdentifier;
                         depth++;
                         if (depth > MaxDepth)
                         {
@@ -550,7 +551,14 @@ namespace IronyModManager.Services
                         }
 
                         addDefault = false;
-                        var path = Path.Combine(Parser.Common.Constants.Stellaris.InlineScripts, parametrizedParser.GetScriptPath(def.Code));
+                        var inlinePath = multiInline ? parametrizedParser.GetFirstOptimizedScriptPath(def.Code) : parametrizedParser.GetOptimizedScriptPath(def.Code);
+                        if (string.IsNullOrWhiteSpace(inlinePath) && !multiInline)
+                        {
+                            multiInline = true;
+                            inlinePath = parametrizedParser.GetFirstOptimizedScriptPath(def.Code);
+                        }
+
+                        var path = Path.Combine(Parser.Common.Constants.Stellaris.InlineScripts, inlinePath ?? string.Empty);
                         var pathCI = path.ToLowerInvariant();
                         var files = (await inlineDefinitions.GetByParentDirectoryAsync(Path.GetDirectoryName(path))).Where(p => Path.Combine(Path.GetDirectoryName(p.FileCI)!, Path.GetFileNameWithoutExtension(p.FileCI)!).Equals(pathCI))
                             .ToList();
@@ -570,7 +578,9 @@ namespace IronyModManager.Services
                                 try
                                 {
                                     var processedInline = ProcessInlineConstants(def.Code, vars, scriptedVarsBucket, out _);
-                                    parametrizedCode = parametrizedParser.Process(priorityDefinition.Definition.Code, processedInline, out logicProcessed);
+                                    parametrizedCode = multiInline
+                                        ? parametrizedParser.ProcessFirstOptimized(priorityDefinition.Definition.Code, processedInline, out logicProcessed)
+                                        : parametrizedParser.ProcessOptimized(priorityDefinition.Definition.Code, processedInline, out logicProcessed);
                                 }
                                 catch (Exception e)
                                 {

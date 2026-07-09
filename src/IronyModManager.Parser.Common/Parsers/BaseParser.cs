@@ -4,7 +4,7 @@
 // Created          : 02-17-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-17-2026
+// Last Modified On : 07-08-2026
 // ***********************************************************************
 // <copyright file="BaseParser.cs" company="Mario">
 //     Mario
@@ -54,6 +54,13 @@ namespace IronyModManager.Parser.Common.Parsers
         #endregion Fields
 
         #region Properties
+
+        /// <summary>
+        /// Gets a value indicating whether this instance is key type parser.
+        /// </summary>
+        /// <value><c>true</c> if this instance is key type parser; otherwise, <c>false</c>.</value>
+        // ReSharper disable once UnassignedGetOnlyAutoProperty
+        public virtual bool IsKeyTypeParser { get; }
 
         /// <summary>
         /// Gets the name of the parser.
@@ -346,6 +353,12 @@ namespace IronyModManager.Parser.Common.Parsers
                         }
                     }
 
+                    if ((IsKeyTypeParser || (args.PreferredParsers != null && args.PreferredParsers.Any(p => p.IsKeyTypeParser))) && !definition.ContainsInlineIdentifier && definition.ValueType != ValueType.Namespace &&
+                        definition.ValueType != ValueType.Variable)
+                    {
+                        definition.ContainsInlineIdentifier = definition.Code.Trim().StartsWith(definition.Id, StringComparison.OrdinalIgnoreCase);
+                    }
+
                     result.Add(definition);
                 }
             }
@@ -497,6 +510,12 @@ namespace IronyModManager.Parser.Common.Parsers
 
                             definition.ContainsInlineIdentifier = true;
                         }
+                    }
+
+                    if ((IsKeyTypeParser || (args.PreferredParsers != null && args.PreferredParsers.Any(p => p.IsKeyTypeParser))) && !definition.ContainsInlineIdentifier && definition.ValueType != ValueType.Namespace &&
+                        definition.ValueType != ValueType.Variable)
+                    {
+                        definition.ContainsInlineIdentifier = definition.Code.Trim().StartsWith(definition.Id, StringComparison.OrdinalIgnoreCase);
                     }
 
                     if (typeAssigned)
