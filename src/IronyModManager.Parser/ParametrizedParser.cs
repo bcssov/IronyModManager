@@ -181,7 +181,6 @@ namespace IronyModManager.Parser
             var elParams = codeParser.ParseScriptWithoutValidation(parameters.SplitOnNewLine(), string.Empty);
             if (elParams is not { Values: not null, Error: null })
             {
-                logicProcessed = true;
                 return string.Empty;
             }
 
