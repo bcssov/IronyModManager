@@ -181,12 +181,14 @@ namespace IronyModManager.Parser
             var elParams = codeParser.ParseScriptWithoutValidation(parameters.SplitOnNewLine(), string.Empty);
             if (elParams is not { Values: not null, Error: null })
             {
+                logicProcessed = true;
                 return string.Empty;
             }
 
             var root = elParams.Values.FirstOrDefault();
             if (root == null || !TryFindFirstInlineScript(elParams.Values, out var parent, out var inlineScript, out var index))
             {
+                logicProcessed = true;
                 return string.Empty;
             }
 
