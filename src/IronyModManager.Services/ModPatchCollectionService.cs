@@ -4,7 +4,7 @@
 // Created          : 05-26-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 07-09-2026
+// Last Modified On : 07-10-2026
 // ***********************************************************************
 // <copyright file="ModPatchCollectionService.cs" company="Mario">
 //     Mario
@@ -119,7 +119,6 @@ namespace IronyModManager.Services
         /// The maximum mods to process in parallel
         /// </summary>
         private const int MaxModsToProcessInParallel = 6;
-
 
         /// <summary>
         /// The mod name ignore counter identifier
@@ -472,6 +471,7 @@ namespace IronyModManager.Services
             {
                 var inlines = allDefs.Where(def => (def.Id.Equals(Parser.Common.Constants.Stellaris.InlineScriptId, StringComparison.OrdinalIgnoreCase) || def.ContainsInlineIdentifier) && !def.File.StartsWith(provider.InlineScriptsPath))
                     .ToList();
+                var others = allDefs.Where(p => !inlines.Contains(p)).ToList();
                 total += inlines.Count;
 
                 var tempIndex = DIResolver.Get<IIndexedDefinitions>();
@@ -483,7 +483,7 @@ namespace IronyModManager.Services
                 }
 
                 var inlineOpLock = new AsyncLock();
-                prunedInlineDefinitions = [];
+                prunedInlineDefinitions = [.. others];
                 var reportedInlineErrors = new HashSet<string>();
                 await Parallel.ForEachAsync(
                     inlines,
@@ -697,7 +697,6 @@ namespace IronyModManager.Services
 
                         progressMutex.Dispose();
                     });
-
 
                 tempIndex.Dispose();
             }
