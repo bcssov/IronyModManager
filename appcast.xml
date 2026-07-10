@@ -4,8 +4,11 @@
 		<title>Irony Mod Manager</title>
 		<language>en</language>
 		<item>
-			<title>1.27.196</title>
+			<title>1.27.197</title>
 			<description>## Current Release Notes
+* Resolve additional edge cases in inline script detection after increasing detection sensitivity
+
+## 1.27.196 Release Notes
 * Fix CTDs caused by increased Irony sensitivity to inline scripts' detection and parsing
 
 ## 1.27.194 Release Notes
@@ -21,12 +24,15 @@
 * Optional GenerateSteamAppId flag to create steam_appid.txt when missing (used for enabling Steam activity tracking when launching games directly; off by default)
 * Added StoragePath setting to customize where Irony stores and reads its data
 * Irony is now Flatpak-aware (detects and supports Steam Flatpak installations)</description>
-			<pubDate>Fri, 10 Jul 2026 01:19:12 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.27.196/linux-x64.zip" sparkle:version="1.27.196.62697" sparkle:shortVersionString="1.27.196" length="89260751" sparkle:os="linux" type="application/zip" sparkle:signature="p0u0inVafrqJGC6mSRro1Vf7oXjFyhBaRr3btLjB7/qO3APW/pA2NgEnQf9K/OJxz6dB2RaI7QEJ2g0YZuxcDA=="/>
+			<pubDate>Fri, 10 Jul 2026 13:16:11 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.27.197/linux-x64.zip" sparkle:version="1.27.197.17894" sparkle:shortVersionString="1.27.197" length="89260708" sparkle:os="linux" type="application/zip" sparkle:signature="mjao0m1eE1roLQFIKteKvtDtzVzOgTl45i99JVR7wc5tSATWLW6RVdU6j0CjgAu2tzMZG6uU1lPuh4pAPTDCCA=="/>
 		</item>
 		<item>
-			<title>1.27.196</title>
+			<title>1.27.197</title>
 			<description>## Current Release Notes
+* Resolve additional edge cases in inline script detection after increasing detection sensitivity
+
+## 1.27.196 Release Notes
 * Fix CTDs caused by increased Irony sensitivity to inline scripts' detection and parsing
 
 ## 1.27.194 Release Notes
@@ -42,12 +48,15 @@
 * Optional GenerateSteamAppId flag to create steam_appid.txt when missing (used for enabling Steam activity tracking when launching games directly; off by default)
 * Added StoragePath setting to customize where Irony stores and reads its data
 * Irony is now Flatpak-aware (detects and supports Steam Flatpak installations)</description>
-			<pubDate>Fri, 10 Jul 2026 01:19:19 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.27.196/osx-x64.zip" sparkle:version="1.27.196.62697" sparkle:shortVersionString="1.27.196" length="91989992" sparkle:os="osx" type="application/zip" sparkle:signature="vsnnJehHeTYUK2127kwXiFALqFTC6llX0j+ppA71nhwdFcD/ZJWDZ+LzhbkJvGeNKLJTNPeex6dELBhtCUfAAw=="/>
+			<pubDate>Fri, 10 Jul 2026 13:16:17 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.27.197/osx-x64.zip" sparkle:version="1.27.197.17894" sparkle:shortVersionString="1.27.197" length="91989829" sparkle:os="osx" type="application/zip" sparkle:signature="T7bU01yfwiqAKql2N7ArvrY3PiDSNHZPXrV65GWY6Csd6WRciZjtbT3G37GFXTYLLAOtEt187r8F0WJOv3w6Dw=="/>
 		</item>
 		<item>
-			<title>1.27.196</title>
+			<title>1.27.197</title>
 			<description>## Current Release Notes
+* Resolve additional edge cases in inline script detection after increasing detection sensitivity
+
+## 1.27.196 Release Notes
 * Fix CTDs caused by increased Irony sensitivity to inline scripts' detection and parsing
 
 ## 1.27.194 Release Notes
@@ -63,12 +72,15 @@
 * Optional GenerateSteamAppId flag to create steam_appid.txt when missing (used for enabling Steam activity tracking when launching games directly; off by default)
 * Added StoragePath setting to customize where Irony stores and reads its data
 * Irony is now Flatpak-aware (detects and supports Steam Flatpak installations)</description>
-			<pubDate>Fri, 10 Jul 2026 01:19:26 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.27.196/win-x64-setup.zip" sparkle:version="1.27.196.62697" sparkle:shortVersionString="1.27.196" length="73910414" sparkle:os="windows" type="application/zip" sparkle:signature="U+LphQw1vP19MtBZEX7Iu2TXqHD8AO/3iiYv3mIqIPMBYswiaIYNzPbYUB3Ysrvp7+mY/lrEHZRh9zJYlPIzCg=="/>
+			<pubDate>Fri, 10 Jul 2026 13:16:24 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.27.197/win-x64-setup.zip" sparkle:version="1.27.197.17894" sparkle:shortVersionString="1.27.197" length="73911623" sparkle:os="windows" type="application/zip" sparkle:signature="peZOTQsXKS2gB+JixZZaOuto2TOizOFZGMlMfZHWPmKCAJohub9X+Fz+gibnm7FAqBtc1yqwLETKbNpcw1HcBA=="/>
 		</item>
 		<item>
-			<title>1.27.196</title>
+			<title>1.27.197</title>
 			<description>## Current Release Notes
+* Resolve additional edge cases in inline script detection after increasing detection sensitivity
+
+## 1.27.196 Release Notes
 * Fix CTDs caused by increased Irony sensitivity to inline scripts' detection and parsing
 
 ## 1.27.194 Release Notes
@@ -84,8 +96,8 @@
 * Optional GenerateSteamAppId flag to create steam_appid.txt when missing (used for enabling Steam activity tracking when launching games directly; off by default)
 * Added StoragePath setting to customize where Irony stores and reads its data
 * Irony is now Flatpak-aware (detects and supports Steam Flatpak installations)</description>
-			<pubDate>Fri, 10 Jul 2026 01:19:38 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.27.196/win-x64.zip" sparkle:version="1.27.196.62697" sparkle:shortVersionString="1.27.196" length="103632309" sparkle:os="windows" type="application/zip" sparkle:signature="yWfSLqdlKB6qXz/fF+fk7LLduk7Z4xEO8HpSwE13SfR1++e2A+ohMMODoRIYB2l4dvv2qGJP105p2LZ2bl9yDg=="/>
+			<pubDate>Fri, 10 Jul 2026 13:16:36 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.27.197/win-x64.zip" sparkle:version="1.27.197.17894" sparkle:shortVersionString="1.27.197" length="103632127" sparkle:os="windows" type="application/zip" sparkle:signature="qBlb5pBwkJakeKgBFbF38r394AVjyzIYP1KPqYKAOY4AJrCnQBcC1FF4qxKhXAg2t2kgecCU/c+D3kZqo3/zDg=="/>
 		</item>
 	</channel>
 </rss>
