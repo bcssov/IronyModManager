@@ -4,7 +4,7 @@
 // Created          : 03-20-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 05-31-2026
+// Last Modified On : 07-18-2026
 // ***********************************************************************
 // <copyright file="MergeViewerControlView.xaml.cs" company="Mario">
 //     Mario
@@ -132,7 +132,7 @@ namespace IronyModManager.Views.Controls
         /// </summary>
         public MergeViewerControlView()
         {
-            bool NeedsHorizontalScrollbar(IronyModManager.Controls.TextEditor editor)
+            bool needsHorizontalScrollbar(IronyModManager.Controls.TextEditor editor)
             {
                 return editor.ScrollViewer.Extent.Width > editor.ScrollViewer.Viewport.Width;
             }
@@ -148,13 +148,20 @@ namespace IronyModManager.Views.Controls
                     return;
                 }
 
-                var leftNeeds = NeedsHorizontalScrollbar(diffLeft);
-                var rightNeeds = NeedsHorizontalScrollbar(diffRight);
+                var leftNeeds = needsHorizontalScrollbar(diffLeft);
+                var rightNeeds = needsHorizontalScrollbar(diffRight);
 
                 var visibility = leftNeeds || rightNeeds ? ScrollBarVisibility.Visible : ScrollBarVisibility.Auto;
 
-                diffLeft.HorizontalScrollBarVisibility = visibility;
-                diffRight.HorizontalScrollBarVisibility = visibility;
+                if (diffLeft.HorizontalScrollBarVisibility != visibility)
+                {
+                    diffLeft.HorizontalScrollBarVisibility = visibility;
+                }
+
+                if (diffRight.HorizontalScrollBarVisibility != visibility)
+                {
+                    diffRight.HorizontalScrollBarVisibility = visibility;
+                }
             };
         }
 
