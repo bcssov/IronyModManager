@@ -4,7 +4,7 @@
 // Created          : 04-16-2021
 //
 // Last Modified By : Mario
-// Last Modified On : 12-05-2025
+// Last Modified On : 07-26-2026
 // ***********************************************************************
 // <copyright file="PlatformConfigurationOptions.cs" company="Mario">
 //     Mario
@@ -184,6 +184,12 @@ namespace IronyModManager.Platform.Configuration
         /// <value>The updates.</value>
         public Updates Updates { get; } = new();
 
+        /// <summary>
+        /// Gets the windows options.
+        /// </summary>
+        /// <value>The windows options.</value>
+        public WindowsOptions WindowsOptions { get; } = new();
+
         #endregion Properties
     }
 
@@ -237,6 +243,46 @@ namespace IronyModManager.Platform.Configuration
         /// </summary>
         /// <value><c>true</c> if [disable install only]; otherwise, <c>false</c>.</value>
         public bool DisableInstallOnly { get; set; }
+
+        #endregion Properties
+    }
+
+    /// <summary>
+    /// Class WindowsOptions.
+    /// </summary>
+    public class WindowsOptions
+    {
+        #region Properties
+
+        /// <summary>
+        /// Gets or sets a value indicating whether [allow egl initialization].
+        /// </summary>
+        /// <value><c>null</c> if [allow egl initialization] contains no value, <c>true</c> if [allow egl initialization]; otherwise, <c>false</c>.</value>
+        public bool? AllowEglInitialization { get; set; }
+
+        /// <summary>
+        /// Gets or sets the egl renderer blacklist.
+        /// </summary>
+        /// <value>The egl renderer blacklist.</value>
+        public List<string> EglRendererBlacklist { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether [use deferred rendering].
+        /// </summary>
+        /// <value><c>null</c> if [use deferred rendering] contains no value, <c>true</c> if [use deferred rendering]; otherwise, <c>false</c>.</value>
+        public bool? UseDeferredRendering { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether [use WGL].
+        /// </summary>
+        /// <value><c>null</c> if [use WGL] contains no value, <c>true</c> if [use WGL]; otherwise, <c>false</c>.</value>
+        public bool? UseWgl { get; set; }
+
+        /// <summary>
+        /// Gets or sets the WGL profiles.
+        /// </summary>
+        /// <value>The WGL profiles.</value>
+        public List<List<object>> WglProfiles { get; set; }
 
         #endregion Properties
     }

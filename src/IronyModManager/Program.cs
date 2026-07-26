@@ -4,7 +4,7 @@
 // Created          : 01-10-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 12-08-2025
+// Last Modified On : 07-27-2026
 // ***********************************************************************
 // <copyright file="Program.cs" company="IronyModManager">
 //     Copyright (c) Mario. All rights reserved.
@@ -40,11 +40,13 @@
 
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Avalonia;
 using Avalonia.Controls;
+using Avalonia.OpenGL;
 using Avalonia.Threading;
 using CommandLine;
 using IronyModManager.Common;
@@ -210,7 +212,60 @@ namespace IronyModManager
                 app.With(waylandOpts);
             }
 
+            void configureWindows()
+            {
+                var opts = new Win32PlatformOptions();
+                var configuration = DIResolver.Get<IPlatformConfiguration>().GetOptions().WindowsOptions;
+
+                if (configuration.AllowEglInitialization.HasValue)
+                {
+                    opts.AllowEglInitialization = configuration.AllowEglInitialization;
+                }
+
+                if (configuration.EglRendererBlacklist is { Count: > 0 })
+                {
+                    opts.EglRendererBlacklist = configuration.EglRendererBlacklist;
+                }
+
+                if (configuration.UseDeferredRendering.HasValue)
+                {
+                    opts.UseDeferredRendering = configuration.UseDeferredRendering.GetValueOrDefault();
+                }
+
+                if (configuration.UseWgl.HasValue)
+                {
+                    opts.UseWgl = configuration.UseWgl.GetValueOrDefault();
+                }
+
+                if (configuration.WglProfiles is { Count: > 0 })
+                {
+                    var ver = new List<GlVersion>();
+                    foreach (var profile in configuration.WglProfiles)
+                    {
+                        if (profile.Count == 3)
+                        {
+                            var openGL = GlProfileType.OpenGL;
+                            if (profile[0].ToString()!.Equals("OpenGLES", StringComparison.OrdinalIgnoreCase))
+                            {
+                                openGL = GlProfileType.OpenGLES;
+                            }
+
+                            if (int.TryParse(profile[1].ToString(), NumberStyles.Number, CultureInfo.InvariantCulture, out var major))
+                            {
+                                if (int.TryParse(profile[1].ToString(), NumberStyles.Number, CultureInfo.InvariantCulture, out var minor))
+                                {
+                                    ver.Add(new GlVersion(openGL, major, minor));
+                                }
+                            }
+                        }
+                    }
+
+                    opts.WglProfiles = ver;
+                }
+            }
+
             configureLinux();
+            configureWindows();
         }
 
         /// <summary>
