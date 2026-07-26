@@ -4,7 +4,7 @@
 // Created          : 10-29-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 05-16-2026
+// Last Modified On : 07-27-2026
 // ***********************************************************************
 // <copyright file="Extensions.cs" company="Mario">
 //     Mario
@@ -50,37 +50,39 @@ namespace IronyModManager.Platform
             where TAppBuilder : AppBuilderBase<TAppBuilder>, new()
         {
             var os = builder.RuntimePlatform.GetRuntimeInfo().OperatingSystem;
-            var options = DIResolver.Get<IPlatformConfiguration>().GetOptions().LinuxOptions;
-            if (LinuxDisplayServer.IsAuto(options.DisplayServer))
+            var useAutoDetect = true;
+
+            // ReSharper disable once SwitchStatementMissingSomeEnumCasesNoDefault
+            switch (os)
             {
-                // Use the same logic from the fork, if env variable is set then use wayland display otherwise fallback
-                if (Environment.GetEnvironmentVariable("WAYLAND_DISPLAY") is not null)
+                case OperatingSystemType.Linux:
                 {
-                    LoadWayland(builder);
-                    builder.UseSkia();
-                }
-                else
-                {
-                    builder.UsePlatformDetect();
+                    var options = DIResolver.Get<IPlatformConfiguration>().GetOptions().LinuxOptions;
+                    if (LinuxDisplayServer.IsAuto(options.DisplayServer))
+                    {
+                        // Use the same logic from the fork, if env variable is set then use wayland display otherwise fallback
+                        if (Environment.GetEnvironmentVariable("WAYLAND_DISPLAY") is not null)
+                        {
+                            LoadWayland(builder);
+                            builder.UseSkia();
+                            useAutoDetect = false;
+                        }
+                    }
+                    else if (LinuxDisplayServer.IsWayland(options.DisplayServer))
+                    {
+                        // User says I want wayland give them wayland
+                        LoadWayland(builder);
+                        builder.UseSkia();
+                        useAutoDetect = false;
+                    }
+
+                    break;
                 }
             }
-            else if (LinuxDisplayServer.IsX11(options.DisplayServer))
+
+            if (useAutoDetect)
             {
-                // Standard check if x11 it will fall back to x11 itself
                 builder.UsePlatformDetect();
-            }
-            else if (LinuxDisplayServer.IsWayland(options.DisplayServer))
-            {
-                // User says I want wayland give them wayland
-                if (os == OperatingSystemType.Linux)
-                {
-                    LoadWayland(builder);
-                    builder.UseSkia();
-                }
-                else
-                {
-                    builder.UsePlatformDetect();
-                }
             }
 
             builder.AfterSetup(_ =>

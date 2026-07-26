@@ -4,7 +4,7 @@
 // Created          : 04-16-2021
 //
 // Last Modified By : Mario
-// Last Modified On : 12-05-2025
+// Last Modified On : 07-26-2026
 // ***********************************************************************
 // <copyright file="PlatformConfiguration.cs" company="Mario">
 //     Mario
@@ -139,6 +139,13 @@ namespace IronyModManager.Implementation.Config
                 platformConfiguration.ConflictSolver.UseSubMenus = configuration.GetSection("ConflictSolver").GetSection("UseSubMenus").Get<bool>();
                 var appSection = configuration.GetSection("App");
                 platformConfiguration.App.SingleInstance = appSection.GetSection("SingleInstance").Get<bool>();
+
+                var windowsSection = configuration.GetSection("WindowsOptions");
+                platformConfiguration.WindowsOptions.AllowEglInitialization = windowsSection.GetSection("AllowEglInitialization").Get<bool?>();
+                platformConfiguration.WindowsOptions.EglRendererBlacklist = windowsSection.GetSection("EglRendererBlacklist").Get<List<string>>();
+                platformConfiguration.WindowsOptions.UseDeferredRendering = windowsSection.GetSection("UseDeferredRendering").Get<bool?>();
+                platformConfiguration.WindowsOptions.UseWgl = windowsSection.GetSection("UseWgl").Get<bool?>();
+                platformConfiguration.WindowsOptions.WglProfiles = windowsSection.GetSection("WglProfiles").Get<List<List<object>>>();
             }
 
             return platformConfiguration;
