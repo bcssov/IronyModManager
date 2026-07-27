@@ -262,6 +262,8 @@ namespace IronyModManager
 
                     opts.WglProfiles = ver;
                 }
+
+                app.With(opts);
             }
 
             configureLinux();
