@@ -4,19 +4,11 @@
 		<title>Irony Mod Manager</title>
 		<language>en</language>
 		<item>
-			<title>1.27.199</title>
+			<title>1.27.206</title>
 			<description>## Current Release Notes
-* Ease inline sensitivity detection
-
-## 1.27.197 Release Notes
-* Resolve additional edge cases in inline script detection after increasing detection sensitivity
-
-## 1.27.196 Release Notes
-* Fix CTDs caused by increased Irony sensitivity to inline scripts' detection and parsing
-
-## 1.27.194 Release Notes
-* Fix #613
-* Expand multi-nested inline script parsing for mods using more complex logic
+* Potentially fixed a rare freeze in the Conflict Solver diff viewer
+* Update Chinese translation (thanks to KrukaL for the PR)
+* Expose some windows rendering options
 
 ## Release Notes 1.27
 * Update dependencies
@@ -27,23 +19,15 @@
 * Optional GenerateSteamAppId flag to create steam_appid.txt when missing (used for enabling Steam activity tracking when launching games directly; off by default)
 * Added StoragePath setting to customize where Irony stores and reads its data
 * Irony is now Flatpak-aware (detects and supports Steam Flatpak installations)</description>
-			<pubDate>Fri, 10 Jul 2026 23:10:11 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.27.199/linux-x64.zip" sparkle:version="1.27.199.32635" sparkle:shortVersionString="1.27.199" length="89260951" sparkle:os="linux" type="application/zip" sparkle:signature="YxGVKWF07R+ZUMb4ftEtBl+OkeQQmwtdv7Yvy+m0n2rYMIcspp1krxJogh9jjPhq6TVlbxUEenir3iK4U756BA=="/>
+			<pubDate>Sat, 01 Aug 2026 00:44:35 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.27.206/linux-x64.zip" sparkle:version="1.27.206.27272" sparkle:shortVersionString="1.27.206" length="89272895" sparkle:os="linux" type="application/zip" sparkle:signature="T3xS3n5/W6NJfmmiIl8lxVCUoi/VZricCdm4KFQFj+0aXqlbM+J1095i28AlQkFiLaYCQ+luLR7++QjMHuzbAw=="/>
 		</item>
 		<item>
-			<title>1.27.199</title>
+			<title>1.27.206</title>
 			<description>## Current Release Notes
-* Ease inline sensitivity detection
-
-## 1.27.197 Release Notes
-* Resolve additional edge cases in inline script detection after increasing detection sensitivity
-
-## 1.27.196 Release Notes
-* Fix CTDs caused by increased Irony sensitivity to inline scripts' detection and parsing
-
-## 1.27.194 Release Notes
-* Fix #613
-* Expand multi-nested inline script parsing for mods using more complex logic
+* Potentially fixed a rare freeze in the Conflict Solver diff viewer
+* Update Chinese translation (thanks to KrukaL for the PR)
+* Expose some windows rendering options
 
 ## Release Notes 1.27
 * Update dependencies
@@ -54,23 +38,15 @@
 * Optional GenerateSteamAppId flag to create steam_appid.txt when missing (used for enabling Steam activity tracking when launching games directly; off by default)
 * Added StoragePath setting to customize where Irony stores and reads its data
 * Irony is now Flatpak-aware (detects and supports Steam Flatpak installations)</description>
-			<pubDate>Fri, 10 Jul 2026 23:10:18 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.27.199/osx-x64.zip" sparkle:version="1.27.199.32635" sparkle:shortVersionString="1.27.199" length="91990154" sparkle:os="osx" type="application/zip" sparkle:signature="GTch7i2VDdYvC9CEdjsRsJ/bEV4VrNIoIJstPD+IrzzAtG5es6PF9ostrTThAzrSFGcLGakssdR0CxHD3rlKDQ=="/>
+			<pubDate>Sat, 01 Aug 2026 00:44:42 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.27.206/osx-x64.zip" sparkle:version="1.27.206.27272" sparkle:shortVersionString="1.27.206" length="92000797" sparkle:os="osx" type="application/zip" sparkle:signature="8EXMq4w1RAzPYNpFUGD7e699mc0kIcXBAZKjSvXcmH0SXMUQX9ejNPc45Dbr+uw651Ep+y3aCN1agdh8apy4Cw=="/>
 		</item>
 		<item>
-			<title>1.27.199</title>
+			<title>1.27.206</title>
 			<description>## Current Release Notes
-* Ease inline sensitivity detection
-
-## 1.27.197 Release Notes
-* Resolve additional edge cases in inline script detection after increasing detection sensitivity
-
-## 1.27.196 Release Notes
-* Fix CTDs caused by increased Irony sensitivity to inline scripts' detection and parsing
-
-## 1.27.194 Release Notes
-* Fix #613
-* Expand multi-nested inline script parsing for mods using more complex logic
+* Potentially fixed a rare freeze in the Conflict Solver diff viewer
+* Update Chinese translation (thanks to KrukaL for the PR)
+* Expose some windows rendering options
 
 ## Release Notes 1.27
 * Update dependencies
@@ -81,23 +57,15 @@
 * Optional GenerateSteamAppId flag to create steam_appid.txt when missing (used for enabling Steam activity tracking when launching games directly; off by default)
 * Added StoragePath setting to customize where Irony stores and reads its data
 * Irony is now Flatpak-aware (detects and supports Steam Flatpak installations)</description>
-			<pubDate>Fri, 10 Jul 2026 23:10:24 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.27.199/win-x64-setup.zip" sparkle:version="1.27.199.32635" sparkle:shortVersionString="1.27.199" length="73905309" sparkle:os="windows" type="application/zip" sparkle:signature="QedeES8X/qd32l5LH/+vvk+9mvmNditHXvZsT8MiyBVvwWCPrgl/JWM1YvUjexCiB4DCRjPv9CvyYBAWufU2Ag=="/>
+			<pubDate>Sat, 01 Aug 2026 00:44:48 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.27.206/win-x64-setup.zip" sparkle:version="1.27.206.27272" sparkle:shortVersionString="1.27.206" length="73940661" sparkle:os="windows" type="application/zip" sparkle:signature="CwL9FZBejw2G+RBS1oMpLbXv/d1VGixAvvgBXEheIRrdlJoDyVzBlNcjAdN1JGox2UPzMFLvsvTR4nEU9bIDAw=="/>
 		</item>
 		<item>
-			<title>1.27.199</title>
+			<title>1.27.206</title>
 			<description>## Current Release Notes
-* Ease inline sensitivity detection
-
-## 1.27.197 Release Notes
-* Resolve additional edge cases in inline script detection after increasing detection sensitivity
-
-## 1.27.196 Release Notes
-* Fix CTDs caused by increased Irony sensitivity to inline scripts' detection and parsing
-
-## 1.27.194 Release Notes
-* Fix #613
-* Expand multi-nested inline script parsing for mods using more complex logic
+* Potentially fixed a rare freeze in the Conflict Solver diff viewer
+* Update Chinese translation (thanks to KrukaL for the PR)
+* Expose some windows rendering options
 
 ## Release Notes 1.27
 * Update dependencies
@@ -108,8 +76,8 @@
 * Optional GenerateSteamAppId flag to create steam_appid.txt when missing (used for enabling Steam activity tracking when launching games directly; off by default)
 * Added StoragePath setting to customize where Irony stores and reads its data
 * Irony is now Flatpak-aware (detects and supports Steam Flatpak installations)</description>
-			<pubDate>Fri, 10 Jul 2026 23:10:36 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.27.199/win-x64.zip" sparkle:version="1.27.199.32635" sparkle:shortVersionString="1.27.199" length="103632491" sparkle:os="windows" type="application/zip" sparkle:signature="0v7YUihpatoMgwPBAw7ly4/5ybUQhbgyLvJqmgbIImZOvcIhZaJio+e8W959sy8S8f7MlASJvIb/IWXmH5eEAA=="/>
+			<pubDate>Sat, 01 Aug 2026 00:45:00 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.27.206/win-x64.zip" sparkle:version="1.27.206.27272" sparkle:shortVersionString="1.27.206" length="103673491" sparkle:os="windows" type="application/zip" sparkle:signature="hSEhR0dINUIC2pXmHbIYAW74mVpkio57JG95/ES1DCg51uBj62IUUAAQ2nPuQQBeL61XcDxKhQo8v/u7fY9QAA=="/>
 		</item>
 	</channel>
 </rss>
