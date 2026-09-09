@@ -37,10 +37,6 @@
 		<!-- 2.5.0–3.1.x early versions broke tests badly (parallelization/config behavior changed).
 			3.1.5 finally works again. Version pinned on purpose. Do not auto-upgrade blindly. -->
 		<XUnitRunnerVS>[3.1.5]</XUnitRunnerVS>
-		<!-- SixLabors should be removed at some point  -->
-		<SixLaborsImageSharp>[1.0.4]</SixLaborsImageSharp>
-		<SixLaborsImageSharpDrawing>[1.0.0-beta13.15]</SixLaborsImageSharpDrawing>
-		<SixLaborsImageSharpTextures>[0.0.0-alpha.0.132]</SixLaborsImageSharpTextures>
 		<!-- Updater has too many breaking changes and our logic diverged from it, we handle lots of stuff on our own anyway -->
 		<NetSparkleUpdaterSparkleUpdater>[2.3.0]</NetSparkleUpdaterSparkleUpdater>
 		<!-- Minor version updates keep breaking the API; sticking to 2.2.3 -->

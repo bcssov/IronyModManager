@@ -1,10 +1,10 @@
-﻿// ***********************************************************************
+// ***********************************************************************
 // Assembly         : IronyModManager.IO
 // Author           : Mario
 // Created          : 02-17-2021
 //
 // Last Modified By : Mario
-// Last Modified On : 12-03-2025
+// Last Modified On : 09-09-2026
 // ***********************************************************************
 // <copyright file="ImageReader.cs" company="Mario">
 //     Mario
@@ -15,14 +15,10 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Threading.Tasks;
-using BCnEncoder.Shared.ImageFiles;
 using ImageMagick;
+using ImageMagick.Formats;
 using IronyModManager.Shared;
-using Pfim;
-using SixLabors.ImageSharp;
-using SixLabors.ImageSharp.PixelFormats;
 
 namespace IronyModManager.IO.Images
 {
@@ -33,19 +29,8 @@ namespace IronyModManager.IO.Images
     {
         #region Fields
 
-        /// <summary>
-        /// The DDS extension
-        /// </summary>
         private const string DDSExtension = ".dds";
-
-        /// <summary>
-        /// The DDS decoder
-        /// </summary>
-        private readonly DDSDecoder ddsDecoder;
-
-        /// <summary>
-        /// The logger
-        /// </summary>
+        private const string TGAExtension = ".tga";
         private readonly ILogger logger;
 
         #endregion Fields
@@ -59,7 +44,6 @@ namespace IronyModManager.IO.Images
         public ImageReader(ILogger logger)
         {
             this.logger = logger;
-            ddsDecoder = new DDSDecoder();
         }
 
         #endregion Constructors
@@ -77,7 +61,7 @@ namespace IronyModManager.IO.Images
             if (stream != null)
             {
                 var attemptedAsDds = false;
-                var attemptedAsPng = false;
+                var attemptedAsOther = false;
                 MemoryStream ms = null;
                 try
                 {
@@ -88,19 +72,20 @@ namespace IronyModManager.IO.Images
                     }
                     else
                     {
-                        attemptedAsPng = true;
-                        ms = await ParseOther(stream);
+                        attemptedAsOther = true;
+                        ms = await ParseOther(stream, file);
                     }
 
+                    // Real mods contain misleading extensions, so the extension is a hint rather than authority.
                     if (ms == null)
                     {
                         if (!attemptedAsDds)
                         {
                             ms = await ParseDDS(stream);
                         }
-                        else if (!attemptedAsPng)
+                        else if (!attemptedAsOther)
                         {
-                            ms = await ParseOther(stream);
+                            ms = await ParseOther(stream, file);
                         }
                     }
 
@@ -131,253 +116,127 @@ namespace IronyModManager.IO.Images
         }
 
         /// <summary>
-        /// Gets the DDS.
+        /// Gets a DDS image.
         /// </summary>
         /// <param name="stream">The stream.</param>
         /// <returns>MemoryStream.</returns>
-        /// <exception cref="System.AggregateException"></exception>
         private async Task<MemoryStream> GetDDS(Stream stream)
         {
-            if (stream.CanSeek)
-            {
-                stream.Seek(0, SeekOrigin.Begin);
-            }
-
             var exceptions = new List<Exception>();
-            MemoryStream ms = null;
 
-            // At some point I should probably remove some providers (due to unstable nature of cross-platform libraries I'll leave this be)
-            // Default provider magick.net
-            MagickImage magickImage = null;
             try
             {
-                magickImage = new MagickImage(stream) { Format = MagickFormat.Png };
-                ms = new MemoryStream();
-                await magickImage.WriteAsync(ms);
+                Rewind(stream);
+                using var images = new MagickImageCollection(stream);
+                if (images.Count == 6)
+                {
+                    using var cubeMap = CreateCubeMap(images);
+                    return await WritePng(cubeMap, true);
+                }
+
+                if (images.Count > 0)
+                {
+                    return await WritePng(images[0]);
+                }
             }
             catch (Exception ex)
             {
-                if (ms != null)
-                {
-                    ms.Close();
-                    await ms.DisposeAsync();
-                }
-
-                ms = null;
                 exceptions.Add(ex);
             }
-            finally
+
+            try
             {
-                magickImage?.Dispose();
-            }
-
-            // Fallback #1 (SixLabors.Textures)
-            if (ms == null)
-            {
-                Image sixLaborsImage = null;
-                if (stream.CanSeek)
+                Rewind(stream);
+                using var compatibilityImage = DdsCompatibilityReader.TryRead(stream);
+                if (compatibilityImage != null)
                 {
-                    stream.Seek(0, SeekOrigin.Begin);
-                }
-
-                try
-                {
-                    sixLaborsImage = await ddsDecoder.DecodeStreamToImageAsync(stream);
-                    ms = new MemoryStream();
-                    await sixLaborsImage.SaveAsPngAsync(ms);
-                }
-                catch (Exception ex)
-                {
-                    if (ms != null)
-                    {
-                        ms.Close();
-                        await ms.DisposeAsync();
-                    }
-
-                    ms = null;
-                    exceptions.Add(ex);
-                }
-                finally
-                {
-                    sixLaborsImage?.Dispose();
+                    return await WritePng(compatibilityImage);
                 }
             }
-
-            // fallback #2 (BCnEncoder.NET)
-            if (ms == null)
+            catch (Exception ex)
             {
-                Image ddsImage = null;
-                if (stream.CanSeek)
-                {
-                    stream.Seek(0, SeekOrigin.Begin);
-                }
-
-                try
-                {
-                    var file = DdsFile.Load(stream);
-                    ddsImage = await ddsDecoder.DecodeToImageAsync(file);
-                    ms = new MemoryStream();
-                    await ddsImage.SaveAsPngAsync(ms);
-                }
-                catch (Exception ex)
-                {
-                    if (ms != null)
-                    {
-                        ms.Close();
-                        await ms.DisposeAsync();
-                    }
-
-                    ms = null;
-                    exceptions.Add(ex);
-                }
-                finally
-                {
-                    ddsImage?.Dispose();
-                }
+                exceptions.Add(ex);
             }
 
-            // fallback #3 (pfim)
-            if (ms == null)
-            {
-                if (stream.CanSeek)
-                {
-                    stream.Seek(0, SeekOrigin.Begin);
-                }
-
-                try
-                {
-                    using var pfimImage = Dds.Create(stream, new PfimConfig());
-                    if (pfimImage.Compressed)
-                    {
-                        pfimImage.Decompress();
-                    }
-
-                    switch (pfimImage.Format)
-                    {
-                        case ImageFormat.Rgba32:
-                        {
-                            ms = new MemoryStream();
-                            using var image = Image.LoadPixelData<Bgra32>(ddsDecoder.TightData(pfimImage), pfimImage.Width, pfimImage.Height);
-                            await image.SaveAsPngAsync(ms);
-
-                            // ReSharper disable once DisposeOnUsingVariable
-                            image.Dispose();
-                            break;
-                        }
-                        case ImageFormat.Rgb24:
-                        {
-                            ms = new MemoryStream();
-                            using var image = Image.LoadPixelData<Bgr24>(ddsDecoder.TightData(pfimImage), pfimImage.Width, pfimImage.Height);
-                            await image.SaveAsPngAsync(ms);
-
-                            // ReSharper disable once DisposeOnUsingVariable
-                            image.Dispose();
-                            break;
-                        }
-                    }
-                }
-                catch (Exception ex)
-                {
-                    if (ms != null)
-                    {
-                        ms.Close();
-                        await ms.DisposeAsync();
-                    }
-
-                    ms = null;
-                    exceptions.Add(ex);
-                }
-            }
-
-            // Fallback can result in memory stream being empty so throw aggregate exception only if all attempts failed
-            if (ms == null && exceptions.Count == 4)
+            if (exceptions.Count > 0)
             {
                 throw new AggregateException(exceptions);
             }
 
-            return ms;
+            return null;
         }
 
         /// <summary>
-        /// Gets the other.
+        /// Gets a non-DDS image.
         /// </summary>
         /// <param name="stream">The stream.</param>
+        /// <param name="file">The file name.</param>
         /// <returns>MemoryStream.</returns>
-        /// <exception cref="System.AggregateException"></exception>
-        private async Task<MemoryStream> GetOther(Stream stream)
+        private async Task<MemoryStream> GetOther(Stream stream, string file)
         {
-            if (stream.CanSeek)
-            {
-                stream.Seek(0, SeekOrigin.Begin);
-            }
-
             var exceptions = new List<Exception>();
-            MemoryStream ms = null;
 
-            // Default provider magick.net
-            MagickImage magickImage = null;
-            try
+            if (file.EndsWith(TGAExtension, StringComparison.OrdinalIgnoreCase))
             {
-                magickImage = new MagickImage(stream) { Format = MagickFormat.Png };
-                ms = new MemoryStream();
-                await magickImage.WriteAsync(ms);
-            }
-            catch (Exception ex)
-            {
-                if (ms != null)
-                {
-                    ms.Close();
-                    await ms.DisposeAsync();
-                }
-
-                ms = null;
-                exceptions.Add(ex);
-            }
-            finally
-            {
-                magickImage?.Dispose();
-            }
-
-            // Fallback provider (SixLabours)
-            if (ms == null)
-            {
-                Image sixLaborsImage = null;
-                if (stream.CanSeek)
-                {
-                    stream.Seek(0, SeekOrigin.Begin);
-                }
-
                 try
                 {
-                    sixLaborsImage = await Image.LoadAsync(stream);
-                    ms = new MemoryStream();
-                    await sixLaborsImage.SaveAsPngAsync(ms);
-                    return ms;
+                    Rewind(stream);
+                    var settings = new MagickReadSettings { Format = MagickFormat.Tga };
+                    using var tgaImage = new MagickImage(stream, settings);
+                    return await WritePng(tgaImage);
                 }
                 catch (Exception ex)
                 {
-                    if (ms != null)
-                    {
-                        ms.Close();
-                        await ms.DisposeAsync();
-                    }
-
-                    ms = null;
                     exceptions.Add(ex);
                 }
-                finally
+            }
+
+            try
+            {
+                Rewind(stream);
+                using var image = new MagickImage(stream);
+                return await WritePng(image);
+            }
+            catch (Exception ex)
+            {
+                exceptions.Add(ex);
+            }
+
+            throw new AggregateException(exceptions);
+        }
+
+        /// <summary>
+        /// Creates Irony's established transparent cubemap cross.
+        /// </summary>
+        /// <param name="images">The six faces in ImageMagick order.</param>
+        /// <returns>The composed cubemap.</returns>
+        private static MagickImage CreateCubeMap(MagickImageCollection images)
+        {
+            if (images.Count != 6)
+            {
+                throw new InvalidDataException("A DDS cubemap must contain exactly six faces.");
+            }
+
+            var width = images[0].Width;
+            var height = images[0].Height;
+            for (var i = 1; i < images.Count; i++)
+            {
+                if (images[i].Width != width || images[i].Height != height)
                 {
-                    sixLaborsImage?.Dispose();
+                    throw new InvalidDataException("DDS cubemap faces must have matching dimensions.");
                 }
             }
 
-            // Fallback can result in memory stream being empty so throw aggregate exception only if all attempts failed
-            if (ms == null && exceptions.Count == 2)
-            {
-                throw new AggregateException(exceptions);
-            }
+            var canvas = new MagickImage(MagickColors.Transparent, checked(width * 4), checked(height * 3));
 
-            return ms;
+            // ImageMagick face order: +X, -X, +Y, -Y, +Z, -Z.
+            canvas.Composite(images[2], checked((int)width), 0, CompositeOperator.Over);
+            canvas.Composite(images[1], 0, checked((int)height), CompositeOperator.Over);
+            canvas.Composite(images[4], checked((int)width), checked((int)height), CompositeOperator.Over);
+            canvas.Composite(images[0], checked((int)(width * 2)), checked((int)height), CompositeOperator.Over);
+            canvas.Composite(images[5], checked((int)(width * 3)), checked((int)height), CompositeOperator.Over);
+            canvas.Composite(images[3], checked((int)width), checked((int)(height * 2)), CompositeOperator.Over);
+            return canvas;
         }
 
         /// <summary>
@@ -408,16 +267,17 @@ namespace IronyModManager.IO.Images
         }
 
         /// <summary>
-        /// Parses the other.
+        /// Parses a non-DDS image.
         /// </summary>
         /// <param name="stream">The stream.</param>
+        /// <param name="file">The file name.</param>
         /// <returns>MemoryStream.</returns>
-        private async Task<MemoryStream> ParseOther(Stream stream)
+        private async Task<MemoryStream> ParseOther(Stream stream, string file)
         {
             MemoryStream ms = null;
             try
             {
-                ms = await GetOther(stream);
+                ms = await GetOther(stream, file);
             }
             catch (Exception ex)
             {
@@ -432,6 +292,52 @@ namespace IronyModManager.IO.Images
             }
 
             return ms;
+        }
+
+        /// <summary>
+        /// Rewinds a stream for another decoding attempt.
+        /// </summary>
+        /// <param name="stream">The stream.</param>
+        private static void Rewind(Stream stream)
+        {
+            if (stream.CanSeek)
+            {
+                stream.Seek(0, SeekOrigin.Begin);
+            }
+        }
+
+        /// <summary>
+        /// Writes an image to an in-memory PNG stream.
+        /// </summary>
+        /// <param name="image">The image.</param>
+        /// <returns>The PNG stream.</returns>
+        private static async Task<MemoryStream> WritePng(IMagickImage<byte> image, bool optimizeForPreviewLatency = false)
+        {
+            var ms = new MemoryStream();
+            try
+            {
+                image.Format = MagickFormat.Png;
+                if (optimizeForPreviewLatency)
+                {
+                    var defines = new PngWriteDefines
+                    {
+                        CompressionLevel = 1,
+                        CompressionStrategy = PngCompressionStrategy.ZRLENoFilter
+                    };
+                    await image.WriteAsync(ms, defines);
+                }
+                else
+                {
+                    await image.WriteAsync(ms);
+                }
+                return ms;
+            }
+            catch
+            {
+                ms.Close();
+                await ms.DisposeAsync();
+                throw;
+            }
         }
 
         #endregion Methods

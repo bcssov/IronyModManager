@@ -17,6 +17,7 @@ dotnet publish src\IronyModManager.Common\IronyModManager.Common.csproj  /p:Publ
 dotnet publish src\IronyModManager.Updater\IronyModManager.Updater.csproj  /p:PublishProfile=src\IronyModManager.Updater\Properties\PublishProfiles\linux-x64.pubxml --configuration linux-x64
 dotnet publish src\IronyModManager.GameHandler\IronyModManager.GameHandler.csproj  /p:PublishProfile=src\IronyModManager.GameHandler\Properties\PublishProfiles\linux-x64.pubxml --configuration linux-x64
 dotnet publish src\IronyModManager\IronyModManager.csproj  /p:PublishProfile=src\IronyModManager\Properties\PublishProfiles\linux-x64.pubxml --configuration linux-x64
+xcopy "src\IronyModManager.IO\bin\x64\linux-x64\net8.0\publish\linux-x64\Magick.Native-Q8-x64.dll.so" "src\IronyModManager\bin\x64\linux-x64\net8.0\publish\linux-x64\" /Y /D
 xcopy "src\IronyModManager\bin\linux-x64\net8.0\linux-x64\*.dll" "src\IronyModManager\bin\x64\linux-x64\net8.0\publish\linux-x64\" /Y /S /D
 xcopy "src\IronyModManager\bin\linux-x64\net8.0\linux-x64\*.json" "src\IronyModManager\bin\x64\linux-x64\net8.0\publish\linux-x64\" /Y /S /D
 xcopy "src\IronyModManager\bin\linux-x64\net8.0\linux-x64\*.pdb" "src\IronyModManager\bin\x64\linux-x64\net8.0\publish\linux-x64\" /Y /S /D
@@ -29,5 +30,5 @@ del "src\IronyModManager\bin\x64\linux-x64\net8.0\publish\linux-x64\steam_api64.
 xcopy "References\CopyAll\*.*" "src\IronyModManager\bin\x64\linux-x64\net8.0\publish\linux-x64\" /Y /S /D
 REM Why on earth cannot nuget include these? Also the documentation sucks in this regard
 xcopy "References\Conditional\Steamworks\OSX-Linux-x64\libsteam_api.so" "src\IronyModManager\bin\x64\linux-x64\net8.0\publish\linux-x64\" /Y /S /D
-xcopy "References\Conditional\Steamworks\.Net\OSX-Linux\*.*" "src\IronyModManager\bin\x64\win-x64\net8.0\publish\win-x64\" /Y /S /D
+xcopy "References\Conditional\Steamworks\.Net\OSX-Linux\*.*" "src\IronyModManager\bin\x64\linux-x64\net8.0\publish\linux-x64\" /Y /S /D
 cd publish

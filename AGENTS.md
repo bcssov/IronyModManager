@@ -75,6 +75,18 @@ Build the full solution when validating composition. Building only the applicati
 
 The loader also supports dependency resolution through plugins and in-memory paths beyond the ordinary packaged application flow. Code is not dead merely because the common deployment path does not exercise every loader capability.
 
+### Repository-owned build and maintenance scripts
+
+Before writing an ad-hoc command for an operation below, use the repository-owned script or establish why it is unsuitable. These batch files assume they are started with `cmd` as the working directory; several begin by moving to the repository root, and `copy-dependencies.bat` receives its paths from MSBuild.
+
+- `build-tools.bat` builds the localization resource generator in Release and copies its executable, assemblies, and runtime configuration into `Tools\LocalizationResourceGenerator`. Run it before a build that needs a missing or changed generator. `run-tools.bat` runs that prepared generator and therefore follows `build-tools.bat`; generation can update generated localization sources, so review its diff rather than invoking it as general cleanup.
+- `update-versioning.bat` updates the globally installed Nerdbank.GitVersioning CLI. Use it only when the maintainer workflow requires updating `nbgv`; it changes a user-level tool installation and is not a normal solution-build prerequisite.
+- `clean-solution-partial.bat` removes project `bin` directories, localization-generator `bin`, and `TestResults`, while retaining `obj`. Use it for ordinary generated-output cleanup. `clean-solution-full.bat` removes both `bin` and `obj` plus `TestResults`; use it before dependency-removal, package-layout, target-framework, or clean-machine-style validation. The scripts may report missing directories and return a nonzero status when targets are already absent, so verify the generated-directory state when that is the only reported condition.
+- `copy-dependencies.bat` is the post-build composition step invoked by the main executable project. It copies non-test implementation outputs and required reference assets into the main application output. Do not replace it with direct project references or a hand-selected copy command. Because it copies rather than reconciles output, removed dependencies can survive as stale DLLs; clean first when validating dependency removal or packaged contents.
+- `kill-dotnet.bat` force-terminates every `dotnet.exe` process, while `kill-process.bat` force-terminates running `ironymodmanager.exe` processes. Use them only when the corresponding process is blocking an intentional clean/build operation, after considering unrelated .NET work on the machine. Do not substitute broad process-kill commands or use either script as a routine build step.
+
+After clearing the solution, the established first Visual Studio action is a full solution Rebuild, which populates the independently built outputs and runs the composition copy; it is not a Build-then-Rebuild sequence. Command-line solution traversal does not necessarily reproduce Visual Studio's project ordering. For CLI validation, build every solution project before running the repository copy step with the actual configuration/output values, then inspect the composed output. Do not manually invoke `copy-dependencies.bat` with invented paths or use it as a substitute for building the full solution.
+
 ## Dependency injection and refactoring
 
 Irony's architecture deliberately adopted Simple Injector's explicit dependency style after extensive experience with Ninject. Explicit constructor dependencies remain valuable, but the architecture has never prohibited deferred creation or interception. It includes concepts such as:
