@@ -199,15 +199,15 @@
       "Paradox": "Aus Dem Spiel Importieren",
       "ParadoxLauncher": "Aus Paradox Launcher Importieren",
       "ParadoxLauncherBeta": "Import von Paradox Launcher Beta",
-      "ParadoxLauncherJson": "Aus Paradox Launcher Json Importieren",
+      "ParadoxLauncherJson": "Aus Paradox Launcher JSON importieren",
       "Close": "Schließen"
     },
     "ExportOther": {
       "Title": "...",
       "OrderOnly": "Nur Reihenfolge Exportieren",
       "WholeCollection": "Export ganzer Sammlung",
-      "ParadoxLauncherJson": "Export nach Paradox Launcher Json (<2021.10)",
-      "ParadoxLauncherJson202110": "Export To Paradox Launcher Json (>=2021.10)",
+      "ParadoxLauncherJson": "In Paradox Launcher JSON exportieren (<2021.10)",
+      "ParadoxLauncherJson202110": "In Paradox Launcher JSON exportieren (>=2021.10)",
       "Close": "Schließen"
     },
     "MergeCollection": {

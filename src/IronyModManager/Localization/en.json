@@ -3,8 +3,8 @@
     "FontFamily": "Noto Sans",
     "SupportedNameBlock": "",
     "Title": "Irony Mod Manager: v{AppVersion}",
-    "BackgroundOperationMessage": "Please wait a background operation is being performed. App will shut down once it is completed...",
-    "WaitBackgroundOperationMessage": "Please wait a background operation is being performed.",
+    "BackgroundOperationMessage": "Please wait while a background operation is being performed. The app will close when it is complete...",
+    "WaitBackgroundOperationMessage": "Please wait while a background operation is being performed.",
     "Actions": {
       "Name": "Actions",
       "Wiki": "Wiki",
@@ -26,7 +26,7 @@
   },
   "SavingError": {
     "Title": "Save Error",
-    "Message": "Something seems to be locking Irony's ability to write to mod files. Please report this on GitHub issue tracker and post the error log."
+    "Message": "Something appears to be preventing Irony from writing to mod files. Please report this on the GitHub issue tracker and include the error log."
   },
   "UnableToWriteError": {
     "Title": "Application Blocked",
@@ -102,7 +102,7 @@
   },
   "GameLanguages": {
     "l_english": "English",
-    "l_braz_por": "Portugese",
+    "l_braz_por": "Portuguese",
     "l_french": "French",
     "l_german": "German",
     "l_polish": "Polish",
@@ -190,7 +190,7 @@
       "Message": "Collection already exists and will be overwritten, do you want to proceed?"
     },
     "ImportNonExistingMods": {
-      "Title": "Non existant mods",
+      "Title": "Missing Mods",
       "Message": "The following mods could not be imported as they appear to be missing:{NewLine}{Mods}"
     },
     "ImportOther": {
@@ -199,15 +199,15 @@
       "Paradox": "Import From Game",
       "ParadoxLauncher": "Import From Paradox Launcher",
       "ParadoxLauncherBeta": "Import From Paradox Launcher Beta",
-      "ParadoxLauncherJson": "Import From Paradox Launcher Json",
+      "ParadoxLauncherJson": "Import from Paradox Launcher JSON",
       "Close": "Close"
     },
     "ExportOther": {
       "Title": "...",
       "OrderOnly": "Export Order Only",
       "WholeCollection": "Export Whole Collection",
-      "ParadoxLauncherJson": "Export To Paradox Launcher Json (<2021.10)",
-      "ParadoxLauncherJson202110": "Export To Paradox Launcher Json (>=2021.10)",
+      "ParadoxLauncherJson": "Export to Paradox Launcher JSON (<2021.10)",
+      "ParadoxLauncherJson202110": "Export to Paradox Launcher JSON (>=2021.10)",
       "Close": "Close"
     },
     "MergeCollection": {
@@ -279,7 +279,7 @@
       },
       "TooLargePrompt": {
         "Title": "Too Large",
-        "Message": "A mod with large source code has been detected this will potentially cause an out of memory crash in Irony. Game will potentially be also unlikely to be able to handle such large source files."
+        "Message": "A mod with large source files was detected. This may cause Irony to run out of memory, and the game may be unable to handle such large source files."
       }
     },
     "LaunchGame": {

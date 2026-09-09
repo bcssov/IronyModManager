@@ -26,7 +26,7 @@
   },
   "SavingError": {
     "Title": "Guardar Error",
-    "Message": "Algo parece estar bloqueando la capacidad de Irony para escribir en archivos mod. Reporta esto en el rastreador de problemas de GitHub y publique el registro de errores."
+    "Message": "Algo parece impedir que Irony escriba en los archivos de los mods. Informe de ello en el rastreador de incidencias de GitHub e incluya el registro de errores."
   },
   "UnableToWriteError": {
     "Title": "Aplicación bloqueada",
@@ -199,15 +199,15 @@
       "Paradox": "Importar desde Juego",
       "ParadoxLauncher": "Importar desde Paradox Launcher",
       "ParadoxLauncherBeta": "Importación de Paradox Launcher Beta",
-      "ParadoxLauncherJson": "Importar desde Paradox Launcher Json",
+      "ParadoxLauncherJson": "Importar desde JSON de Paradox Launcher",
       "Close": "Cerrar"
     },
     "ExportOther": {
       "Title": "...",
       "OrderOnly": "Exportar Orden Solamente",
       "WholeCollection": "Exportar toda la colección",
-      "ParadoxLauncherJson": "Exportar a Paradox Launcher Json (<2021.10)",
-      "ParadoxLauncherJson202110": "Exportar a Paradox Launcher Json (>=2021.10)",
+      "ParadoxLauncherJson": "Exportar a JSON de Paradox Launcher (<2021.10)",
+      "ParadoxLauncherJson202110": "Exportar a JSON de Paradox Launcher (>=2021.10)",
       "Close": "Cerrar"
     },
     "MergeCollection": {

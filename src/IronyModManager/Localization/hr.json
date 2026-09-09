@@ -46,7 +46,7 @@
   "FileDialog": {
     "FileName": "Naziv datoteke",
     "ShowHiddenFiles": "Pokaži skrivene datoteke",
-    "Volume": "{Size} Volumen",
+    "Volume": "{Size} volumen",
     "OK": "U redu",
     "Cancel": "Otkaži",
     "Name": "Ime",
@@ -75,10 +75,10 @@
     "Name": "Tema",
     "Light": "Svjetlo",
     "Dark": "Tamno",
-    "FluentLight": "Fluidna Svjetla",
-    "FluentDark": "Fluidna Tamna",
-    "MaterialDark": "Material Tamna",
-    "MaterialLight": "Material Svjetla",
+    "FluentLight": "Fluent svijetla",
+    "FluentDark": "Fluent tamna",
+    "MaterialDark": "Material tamna",
+    "MaterialLight": "Material svijetla",
     "Restart_Title": "Potrebno je ponovno pokretanje",
     "Restart_Header": "Aplikaciju je potrebno ponovno pokrenuti",
     "Restart_Message": "Aplikaciju treba ponovo pokrenuti kako bi se nova tema pravilno primijenila. Želite li ponovno pokrenuti aplikaciju?"
@@ -123,7 +123,7 @@
     "LoadingMods": "Pričekajte dok se učitavaju mod podaci...",
     "RefreshingModList": "Pričekajte dok se popis modova osvježava...",
     "InvalidMods": {
-      "Title": "Otkriveni su nevažeći modovi",
+      "Title": "Otkriveni su nevaljani modovi",
       "Message": "Nedostaju sljedeći modovi:{NewLine}{Mods}.{NewLine}{NewLine}Želite li izbrisati deskriptore?"
     }
   },
@@ -135,15 +135,15 @@
     "Cancel": "Otkaži",
     "Watermark": "Unesi ime nove kolekcije",
     "Delete_Title": "Obrisati kolekciju?",
-    "Delete_Header": "Potvrdi birsanje kolekcije",
-    "Delete_Message": "Da li si siguran da želiš obrisati {CollectionName} kolekciju?",
-    "Deleting_Message": "Molim pričekajte dok brišem kolekciju...",
+    "Delete_Header": "Potvrdi brisanje kolekcije",
+    "Delete_Message": "Jeste li sigurni da želite izbrisati kolekciju {CollectionName}?",
+    "Deleting_Message": "Pričekajte dok se kolekcija briše...",
     "Export": "Izvoz",
     "Import": "Uvoz",
     "Export_Dialog_Title": "Izvoz kolekcije",
     "Import_Dialog_Title": "Uvezi kolekciju",
-    "Overlay_Exporting_Message": "Molim pričekajte dok izvozimo kolekciju...",
-    "Overlay_Importing_Message": "Molim pričekajte dok uvozimo kolekciju...",
+    "Overlay_Exporting_Message": "Pričekajte dok se kolekcija izvozi...",
+    "Overlay_Importing_Message": "Pričekajte dok se kolekcija uvozi...",
     "Overlay_Import_Export_Progress": "{PercentDone}",
     "Filter": "Traži modove",
     "Selected": "Odabrano",
@@ -190,8 +190,8 @@
       "Message": "Kolekcija postoji i bit će prebrisana, želite li nastaviti?"
     },
     "ImportNonExistingMods": {
-      "Title": "Nepostojeći modovi",
-      "Message": "Sljedeće modove nije moguće uvesti jer se čini da nedostaju::{NewLine}{Mods}"
+      "Title": "Modovi koji nedostaju",
+      "Message": "Sljedeće modove nije moguće uvesti jer nedostaju:{NewLine}{Mods}"
     },
     "ImportOther": {
       "Title": "...",
@@ -199,15 +199,15 @@
       "Paradox": "Uvezi iz igre",
       "ParadoxLauncher": "Uvezi iz Paradox Launcher",
       "ParadoxLauncherBeta": "Uvezi iz Paradox Launcher Bete",
-      "ParadoxLauncherJson": "Uvezi iz Paradox Launcher Json",
+      "ParadoxLauncherJson": "Uvezi iz JSON-a programa Paradox Launcher",
       "Close": "Zatvori"
     },
     "ExportOther": {
       "Title": "...",
       "OrderOnly": "Izvezi redoslijed",
-      "WholeCollection": "Izvoz cijelu zbirku",
-      "ParadoxLauncherJson": "Izvezi u Paradox Launcher Json (<2021.10)",
-      "ParadoxLauncherJson202110": "Izvezi u Paradox Launcher Json (>=2021.10)",
+      "WholeCollection": "Izvezi cijelu kolekciju",
+      "ParadoxLauncherJson": "Izvezi u JSON programa Paradox Launcher (<2021.10)",
+      "ParadoxLauncherJson202110": "Izvezi u JSON programa Paradox Launcher (>=2021.10)",
       "Close": "Zatvori"
     },
     "MergeCollection": {
@@ -236,7 +236,7 @@
       }
     },
     "PatchMod": {
-      "Title": "Patch Mod: {Status}",
+      "Title": "Mod zakrpe: {Status}",
       "Enabled": "Omogućeno",
       "Disabled": "Onemogućeno",
       "NotAvailable": "Nije dostupno",
@@ -262,16 +262,16 @@
     "Overlay_Apply_Message": "Pričekajte dok se primjenjuje kolekcija...",
     "ConflictSolver": {
       "Conflict": "Rješavanje sukoba",
-      "Overlay_Conflict_Solver_Indexing_Game": "Pričekaj dok se indexiraju definicije igre...",
-      "Overlay_Conflict_Solver_Loading_Game_Definitions": "Pričekaj dok se učitavaju definicije igre...",
-      "Overlay_Conflict_Solver_Loading_Definitions": "Pričekaj dok se učitavaju definicije modova...",
-      "Overlay_Conflict_Solver_Analyzing_Conflicts": "Pričekaj dok se analiziraju definicije za sukobe...",
-      "Overlay_Conflict_Solver_Analyzing_Resolved_Conflicts": "Pričekaj dok se analiziraju riješene definicije...",
-      "Overlay_Conflict_Solver_Replacing_Definitions": "Pričekaj dok se zamjenjuju definicije...",
+      "Overlay_Conflict_Solver_Indexing_Game": "Pričekajte dok se indeksiraju definicije igre...",
+      "Overlay_Conflict_Solver_Loading_Game_Definitions": "Pričekajte dok se učitavaju definicije igre...",
+      "Overlay_Conflict_Solver_Loading_Definitions": "Pričekajte dok se učitavaju definicije modova...",
+      "Overlay_Conflict_Solver_Analyzing_Conflicts": "Pričekajte dok se analiziraju sukobi definicija...",
+      "Overlay_Conflict_Solver_Analyzing_Resolved_Conflicts": "Pričekajte dok se analiziraju riješeni sukobi...",
+      "Overlay_Conflict_Solver_Replacing_Definitions": "Pričekajte dok se zamjenjuju definicije...",
       "Overlay_Conflict_Solver_Progress": "Korak {Count}/{TotalCount}: {PercentDone}",
       "FirstUsePrompt": {
         "Title": "Pažnja",
-        "Message": "Rješavač sukoba nije za osobe slabog srca. Ono zahtijeva znanje i iskustvo s krpanjem koda. Korisnici manjih kolekcija ga slobodno trebaju ugnorirati, korisnici većih kolekcija trebaju ili smanjiti broj modifikacija ili istražiti krpanje koda. Ne može se pružiti podrška ako nastaviš."
+        "Message": "Rješavač sukoba nije za svakoga. Zahtijeva znanje i iskustvo s izradom zakrpa za kod. Korisnici malih kolekcija modova trebali bi ga zanemariti; korisnici većih kolekcija trebali bi razmotriti smanjenje kolekcije ili proučiti izradu zakrpa za kod. Ako nastavite, podrška nije dostupna."
       },
       "GameExecutableNotSetPrompt": {
         "Title": "Izvršna datoteka igre nije postavljena",
@@ -279,7 +279,7 @@
       },
       "TooLargePrompt": {
         "Title": "Prevelik",
-        "Message": "Otkriven je mod s velikim izvornim kodom koji će potencijalno uzrokovati pad memorije u Ironyju. Također je malo vjerojatno da će igra moći rukovati tako velikim izvornim datotekama."
+        "Message": "Otkriven je mod s velikim izvornim datotekama. To može uzrokovati ponestanak memorije u Ironyju, a igra možda neće moći obraditi tako velike izvorne datoteke."
       }
     },
     "LaunchGame": {
@@ -323,7 +323,7 @@
     "InvalidConflicts": {
       "Name": "Nevažeći",
       "Error": "Pogreška u retku: {Line} stupac: {Column} datoteka: {File}.{NewLine}Prijavite ovu pogrešku autoru mod-a: {ModName}.{NewLine}{NewLine}Poruka o pogrešci kaže:{NewLine}{NewLine}{Message}",
-      "ErrorNoLine": "Pogreška u datoteci: {Line} stupac: {Column} datoteka: {File}.{NewLine}Prijavite ovu pogrešku autoru mod-a: {ModName}.{NewLine}{NewLine}Poruka o pogrešci kaže:{NewLine}{NewLine}{Message}",
+      "ErrorNoLine": "Pogreška u datoteci: {File}.{NewLine}Prijavite ovu pogrešku autoru moda: {ModName}.{NewLine}{NewLine}Poruka o pogrešci glasi:{NewLine}{NewLine}{Message}",
       "ContextMenu": {
         "OpenFile": "Otvori datoteku",
         "OpenDirectory": "Otvori direktorij",
