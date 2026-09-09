@@ -19,8 +19,7 @@ using System.Linq;
 using IronyModManager.DI;
 using IronyModManager.IO.Common.Readers;
 using IronyModManager.Shared;
-using SharpCompress.Archives;
-using SharpCompress.Readers;
+using Ionic.Zip;
 
 namespace IronyModManager.IO.Readers
 {
@@ -33,15 +32,6 @@ namespace IronyModManager.IO.Readers
     [ExcludeFromCoverage("Skipping testing IO logic.")]
     public class ArchiveFileReader : IFileReader
     {
-        #region Fields
-
-        /// <summary>
-        /// The logger
-        /// </summary>
-        private readonly ILogger logger;
-
-        #endregion Fields
-
         #region Constructors
 
         /// <summary>
@@ -50,7 +40,6 @@ namespace IronyModManager.IO.Readers
         /// <param name="logger">The logger.</param>
         public ArchiveFileReader(ILogger logger)
         {
-            this.logger = logger;
         }
 
         #endregion Constructors
@@ -116,83 +105,37 @@ namespace IronyModManager.IO.Readers
         /// <returns>Stream.</returns>
         public virtual (Stream, bool, DateTime?, EncodingInfo) GetStream(string rootPath, string file)
         {
-            (MemoryStream, EncodingInfo) readStream(Stream entryStream)
+            using var zip = ZipFile.Read(rootPath);
+            foreach (var entry in zip.Where(entry => !entry.IsDirectory))
             {
-                var memoryStream = new MemoryStream();
-                entryStream.CopyTo(memoryStream);
-                memoryStream.Seek(0, SeekOrigin.Begin);
-                return (memoryStream, memoryStream.GetEncodingInfo(file));
-            }
-            (MemoryStream, EncodingInfo) getUsingReaderFactory()
-            {
-                using var fileStream = File.OpenRead(rootPath);
-                using var reader = ReaderFactory.Open(fileStream);
-                while (reader.MoveToNextEntry())
+                var relativePath = entry.FileName.StandardizeDirectorySeparator().Trim(Path.DirectorySeparatorChar);
+                var filePath = file.StandardizeDirectorySeparator();
+                var isMatch = false;
+
+                // If using wildcard then we are going to match if it ends with and update this logic if ever needed
+                if (file.StartsWith("*"))
                 {
-                    if (!reader.Entry.IsDirectory)
-                    {
-                        var relativePath = reader.Entry.Key.StandardizeDirectorySeparator().Trim(Path.DirectorySeparatorChar);
-                        var filePath = file.StandardizeDirectorySeparator();
-
-                        // If using wildcard then we are going to match if it ends with and update this logic if ever needed
-                        if (file.StartsWith("*"))
-                        {
-                            var endsWith = file.Replace("*", string.Empty);
-                            if (relativePath.EndsWith(endsWith, StringComparison.OrdinalIgnoreCase))
-                            {
-                                using var stream = reader.OpenEntryStream();
-                                return readStream(stream);
-                            }
-                        }
-                        else if (relativePath.Equals(filePath, StringComparison.OrdinalIgnoreCase))
-                        {
-                            using var stream = reader.OpenEntryStream();
-                            return readStream(stream);
-                        }
-                    }
+                    var endsWith = file.Replace("*", string.Empty);
+                    isMatch = relativePath.EndsWith(endsWith, StringComparison.OrdinalIgnoreCase);
                 }
-                return (null, null);
-            }
-            (MemoryStream, EncodingInfo) getUsingArchiveFactory()
-            {
-                using var fileStream = File.OpenRead(rootPath);
-                using var reader = ArchiveFactory.Open(fileStream);
-                foreach (var entry in reader.Entries.Where(entry => !entry.IsDirectory))
+                else if (relativePath.Equals(filePath, StringComparison.OrdinalIgnoreCase))
                 {
-                    var relativePath = entry.Key.StandardizeDirectorySeparator().Trim(Path.DirectorySeparatorChar);
-                    var filePath = file.StandardizeDirectorySeparator();
-
-                    // If using wildcard then we are going to match if it ends with and update this logic if ever needed
-                    if (file.StartsWith("*"))
-                    {
-                        var endsWith = file.Replace("*", string.Empty);
-                        if (relativePath.EndsWith(endsWith, StringComparison.OrdinalIgnoreCase))
-                        {
-                            using var stream = entry.OpenEntryStream();
-                            return readStream(stream);
-                        }
-                    }
-                    else if (relativePath.Equals(filePath, StringComparison.OrdinalIgnoreCase))
-                    {
-                        using var stream = entry.OpenEntryStream();
-                        return readStream(stream);
-                    }
+                    isMatch = true;
                 }
-                return (null, null);
+
+                if (isMatch)
+                {
+                    var memoryStream = new MemoryStream();
+                    using var stream = entry.OpenReader();
+                    stream.CopyTo(memoryStream);
+                    memoryStream.Seek(0, SeekOrigin.Begin);
+
+                    // Return zip file last write time. Zip info can be unreliable if the client which created it actually didn't write the info in the first place (as far as I know)
+                    return (memoryStream, false, new System.IO.FileInfo(rootPath).LastWriteTime, memoryStream.GetEncodingInfo(file));
+                }
             }
 
-            // Return zip file last write time. Zip info can be unreliable if the client which created it actually didn't write the info in the first place (as far as I know)
-            try
-            {
-                var result = getUsingArchiveFactory();
-                return (result.Item1, false, new System.IO.FileInfo(rootPath).LastWriteTime, result.Item2);
-            }
-            catch (Exception ex)
-            {
-                logger.Error(ex);
-                var result = getUsingReaderFactory();
-                return (result.Item1, false, new System.IO.FileInfo(rootPath).LastWriteTime, result.Item2);
-            }
+            return (null, false, new System.IO.FileInfo(rootPath).LastWriteTime, null);
         }
 
         /// <summary>
@@ -203,61 +146,24 @@ namespace IronyModManager.IO.Readers
         /// <returns>System.Int64.</returns>
         public virtual long GetTotalSize(string path, string[] extensions = null)
         {
-            long getUsingReaderFactory()
+            long total = 0;
+            using var zip = ZipFile.Read(path);
+            foreach (var entry in zip.Where(entry => !entry.IsDirectory))
             {
-                long total = 0;
-                using var fileStream = File.OpenRead(path);
-                using var reader = ReaderFactory.Open(fileStream);
-                while (reader.MoveToNextEntry())
+                total += entry.UncompressedSize;
+                if (extensions != null && extensions.Any())
                 {
-                    if (!reader.Entry.IsDirectory)
+                    if (extensions.Any(p => entry.FileName.EndsWith(p, StringComparison.OrdinalIgnoreCase)))
                     {
-                        if (extensions != null && extensions.Any())
-                        {
-                            if (extensions.Any(p => reader.Entry.Key.EndsWith(p, StringComparison.OrdinalIgnoreCase)))
-                            {
-                                total += reader.Entry.Size;
-                            }
-                        }
-                        else
-                        {
-                            total += reader.Entry.Size;
-                        }
+                        total += entry.UncompressedSize;
                     }
                 }
-                return total;
-            }
-            long getUsingArchiveFactory()
-            {
-                long total = 0;
-                using var fileStream = File.OpenRead(path);
-                using var reader = ArchiveFactory.Open(fileStream);
-                foreach (var entry in reader.Entries.Where(entry => !entry.IsDirectory))
+                else
                 {
-                    total += entry.Size;
-                    if (extensions != null && extensions.Any())
-                    {
-                        if (extensions.Any(p => entry.Key.EndsWith(p, StringComparison.OrdinalIgnoreCase)))
-                        {
-                            total += entry.Size;
-                        }
-                    }
-                    else
-                    {
-                        total += entry.Size;
-                    }
+                    total += entry.UncompressedSize;
                 }
-                return total;
             }
-            try
-            {
-                return getUsingArchiveFactory();
-            }
-            catch (Exception ex)
-            {
-                logger.Error(ex);
-                return getUsingReaderFactory();
-            }
+            return total;
         }
 
         /// <summary>
@@ -271,117 +177,50 @@ namespace IronyModManager.IO.Readers
         {
             var result = new List<IFileInfo>();
 
-            void parseUsingReaderFactory()
+            using var zip = ZipFile.Read(path);
+            var modified = new System.IO.FileInfo(path).LastWriteTime;
+            foreach (var entry in zip.Where(entry => !entry.IsDirectory))
             {
-                using var fileStream = File.OpenRead(path);
-                var modified = new System.IO.FileInfo(path).LastWriteTime;
-                using var reader = ReaderFactory.Open(fileStream);
-                while (reader.MoveToNextEntry())
+                var relativePath = entry.FileName.StandardizeDirectorySeparator().Trim(Path.DirectorySeparatorChar);
+                if (searchSubFolders)
                 {
-                    if (!reader.Entry.IsDirectory)
-                    {
-                        var relativePath = reader.Entry.Key.StandardizeDirectorySeparator().Trim(Path.DirectorySeparatorChar);
-                        if (searchSubFolders)
-                        {
-                            if (!relativePath.Contains(Path.DirectorySeparatorChar) ||
-                                relativePath.Split(Path.DirectorySeparatorChar, StringSplitOptions.RemoveEmptyEntries).Any(s => s.StartsWith(".") ||
-                                (allowedPaths?.Count() > 0 && !allowedPaths.Any(p => relativePath.StartsWith(p, StringComparison.OrdinalIgnoreCase)))))
-                            {
-                                continue;
-                            }
-                        }
-                        else if (!searchSubFolders && !Path.GetDirectoryName(relativePath).Equals(path))
-                        {
-                            continue;
-                        }
-                        var info = DIResolver.Get<IFileInfo>();
-                        info.IsReadOnly = false;
-                        info.LastModified = modified;
-                        info.Size = reader.Entry.Size;
-                        using var entryStream = reader.OpenEntryStream();
-                        using var memoryStream = new MemoryStream();
-                        entryStream.CopyTo(memoryStream);
-                        memoryStream.Seek(0, SeekOrigin.Begin);
-                        info.Encoding = memoryStream.GetEncodingInfo(relativePath);
-                        info.FileName = relativePath;
-                        if (FileSignatureUtility.IsTextFile(reader.Entry.Key, memoryStream))
-                        {
-                            using var streamReader = new StreamReader(memoryStream, true);
-                            var text = streamReader.ReadToEnd();
-                            streamReader.Close();
-                            streamReader.Dispose();
-                            info.IsBinary = false;
-                            info.Content = text.SplitOnNewLine(false);
-                            info.ContentSHA = text.CalculateSHA();
-                        }
-                        else
-                        {
-                            info.IsBinary = true;
-                            info.ContentSHA = memoryStream.CalculateSHA();
-                        }
-                        result.Add(info);
-                    }
-                }
-            }
-
-            void parseUsingArchiveFactory()
-            {
-                using var fileStream = File.OpenRead(path);
-                var modified = new System.IO.FileInfo(path).LastWriteTime;
-                using var reader = ArchiveFactory.Open(fileStream);
-                foreach (var entry in reader.Entries.Where(entry => !entry.IsDirectory))
-                {
-                    var relativePath = entry.Key.StandardizeDirectorySeparator().Trim(Path.DirectorySeparatorChar);
-                    if (searchSubFolders)
-                    {
-                        if (!relativePath.Contains(Path.DirectorySeparatorChar) ||
-                            relativePath.Split(Path.DirectorySeparatorChar, StringSplitOptions.RemoveEmptyEntries).Any(s => s.StartsWith(".") ||
-                            (allowedPaths?.Count() > 0 && !allowedPaths.Any(p => relativePath.StartsWith(p, StringComparison.OrdinalIgnoreCase)))))
-                        {
-                            continue;
-                        }
-                    }
-                    else if (!searchSubFolders && !Path.GetDirectoryName(relativePath).Equals(path))
+                    if (!relativePath.Contains(Path.DirectorySeparatorChar) ||
+                        relativePath.Split(Path.DirectorySeparatorChar, StringSplitOptions.RemoveEmptyEntries).Any(s => s.StartsWith(".") ||
+                        (allowedPaths?.Count() > 0 && !allowedPaths.Any(p => relativePath.StartsWith(p, StringComparison.OrdinalIgnoreCase)))))
                     {
                         continue;
                     }
-                    var info = DIResolver.Get<IFileInfo>();
-                    info.IsReadOnly = false;
-                    info.LastModified = modified;
-                    info.Size = entry.Size;
-                    using var entryStream = entry.OpenEntryStream();
-                    using var memoryStream = new MemoryStream();
-                    entryStream.CopyTo(memoryStream);
-                    memoryStream.Seek(0, SeekOrigin.Begin);
-                    info.Encoding = memoryStream.GetEncodingInfo(relativePath);
-                    info.FileName = relativePath;
-                    if (FileSignatureUtility.IsTextFile(entry.Key, memoryStream))
-                    {
-                        using var streamReader = new StreamReader(memoryStream, true);
-                        var text = streamReader.ReadToEnd();
-                        streamReader.Close();
-                        streamReader.Dispose();
-                        info.IsBinary = false;
-                        info.Content = text.SplitOnNewLine(false);
-                        info.ContentSHA = text.CalculateSHA();
-                    }
-                    else
-                    {
-                        info.IsBinary = true;
-                        info.ContentSHA = memoryStream.CalculateSHA();
-                    }
-                    result.Add(info);
                 }
-            }
-            try
-            {
-                parseUsingArchiveFactory();
-            }
-            catch (Exception ex)
-            {
-                logger.Error(ex);
-                result = new List<IFileInfo>();
-                parseUsingReaderFactory();
+                else if (!searchSubFolders && !Path.GetDirectoryName(relativePath).Equals(path))
+                {
+                    continue;
+                }
+                var info = DIResolver.Get<IFileInfo>();
+                info.IsReadOnly = false;
+                info.LastModified = modified;
+                info.Size = entry.UncompressedSize;
+                using var entryStream = entry.OpenReader();
+                using var memoryStream = new MemoryStream();
+                entryStream.CopyTo(memoryStream);
+                memoryStream.Seek(0, SeekOrigin.Begin);
+                info.Encoding = memoryStream.GetEncodingInfo(relativePath);
+                info.FileName = relativePath;
+                if (FileSignatureUtility.IsTextFile(entry.FileName, memoryStream))
+                {
+                    using var streamReader = new StreamReader(memoryStream, true);
+                    var text = streamReader.ReadToEnd();
+                    streamReader.Close();
+                    streamReader.Dispose();
+                    info.IsBinary = false;
+                    info.Content = text.SplitOnNewLine(false);
+                    info.ContentSHA = text.CalculateSHA();
+                }
+                else
+                {
+                    info.IsBinary = true;
+                    info.ContentSHA = memoryStream.CalculateSHA();
+                }
+                result.Add(info);
             }
 
             return result.Count != 0 ? result : null;

@@ -13,11 +13,9 @@
 // ***********************************************************************
 
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using IronyModManager.Shared;
-using SharpCompress.Common;
+using Ionic.Zip;
 
 namespace IronyModManager.IO
 {
@@ -33,23 +31,21 @@ namespace IronyModManager.IO
         /// </summary>
         private static readonly StringComparison safePathComparison = OperatingSystem.IsWindows() ? StringComparison.OrdinalIgnoreCase : StringComparison.Ordinal;
 
-        /// <summary>
-        /// The extraction options
-        /// </summary>
-        private static ExtractionOptions extractionOptions;
-
         #endregion Fields
 
         #region Methods
 
         /// <summary>
-        /// Gets the extraction options.
+        /// Extracts the entry to the specified file.
         /// </summary>
-        /// <returns>ExtractionOptions.</returns>
-        public static ExtractionOptions GetExtractionOptions()
+        /// <param name="entry">The entry.</param>
+        /// <param name="destinationFile">The destination file.</param>
+        public static void ExtractEntryToFile(ZipEntry entry, string destinationFile)
         {
-            extractionOptions ??= new ExtractionOptions { ExtractFullPath = false, Overwrite = true, PreserveFileTime = true };
-            return extractionOptions;
+            using var output = new FileStream(destinationFile, FileMode.Create, FileAccess.Write, FileShare.None);
+            entry.Extract(output);
+            output.Close();
+            File.SetLastWriteTime(destinationFile, entry.LastModified);
         }
 
         /// <summary>
