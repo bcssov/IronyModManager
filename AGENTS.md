@@ -1,261 +1,315 @@
 # AGENTS.md
 
-## Purpose
+## Purpose and authority
 
-Irony Mod Manager is a mature cross-platform desktop application with more than six years of production history. The project is currently maintained primarily in life-support mode: stability, compatibility, dependency maintenance, targeted fixes, and focused improvements take priority over broad rewrites.
+Irony Mod Manager is a mature cross-platform desktop application with more than six years of production history. It is maintained primarily in life-support mode: stability, compatibility, dependency maintenance, targeted fixes, and focused improvements take priority over broad rewrites.
 
-AI-assisted contributions are welcome. The use of AI does not lower or raise the engineering bar for a contribution. Contributors remain responsible for understanding, testing, reviewing, and supporting the changes they submit.
+AI-assisted contributions are welcome. AI use does not lower or raise the engineering bar. Contributors remain responsible for understanding, testing, reviewing, explaining, and supporting the changes they submit.
 
-This file is the canonical repository guidance for coding agents. Tool-specific instruction files such as `CLAUDE.md`, `GEMINI.md`, or similar files must defer to this document rather than duplicate project policy. If guidance conflicts, `AGENTS.md` takes precedence.
+This file is the canonical repository guidance for coding agents and is also useful to human contributors. Tool-specific instruction files such as `CLAUDE.md`, `GEMINI.md`, or similar files must defer to this document rather than duplicate project policy. If guidance conflicts, `AGENTS.md` takes precedence.
 
-## General Engineering Principles
+The current Irony repository and its current behavior are authoritative. Historical repositories, architectural lineage, external forks, old wiki material, upstream/donor framework source, and comments that contradict current tested behavior are context only. They may explain intent, but they do not define current behavior.
 
-- Preserve established behavior, especially in mature domain logic and compatibility-sensitive code.
-- Existing structure is not automatically optimal. Refactoring is welcome when it produces clearer domain boundaries, better maintainability, or better testability without changing behavior unintentionally.
-- Preserve behavior, not necessarily structure.
-- Do not use class size, constructor size, method count, or complexity metrics as proxies for architectural quality.
-- Irony follows SRP primarily along domain boundaries. A large class may still have a single domain responsibility.
-- Conversely, if a large service contains genuinely separable responsibilities, extracting focused services and introducing a coordinator/facade is acceptable.
-- Avoid repository-wide stylistic churn during dependency or framework maintenance.
+## Core engineering principles
+
+```text
+Preserve behavior, not necessarily structure.
+```
+
+- Preserve established behavior, especially in mature domain logic, persistence, security boundaries, and compatibility-sensitive code.
+- Existing structure is not automatically optimal. Refactoring is welcome when it produces clearer domain boundaries, lifecycle ownership, maintainability, or testability without unintended behavior changes.
+- Evaluate single responsibility primarily by domain responsibility, not source-line count, constructor size, method count, or complexity metrics.
+- A large service may legitimately represent a large domain. It may also contain real semantic seams worth extracting.
+- Avoid repository-wide stylistic churn during framework or dependency maintenance.
 - Local syntax modernization in touched code is welcome when it improves clarity and does not obscure the actual change.
-- Do not treat unfamiliar or unusual code as obsolete merely because a newer or more fashionable pattern exists.
-- When code appears unusual, inspect local Git history and related issues before changing it. Commit messages often contain `fixes #N` or `resolves #N` references that explain why compatibility code exists.
-- Historical implementation choices may encode production lessons that are not obvious from the current source alone.
+- Do not classify unfamiliar code as obsolete merely because a newer pattern exists. Inspect current callers, tests, Git history, and related issues first.
+- Commit messages commonly reference issues with forms such as `fixes #N` and `resolves #N`; those issues are part of the design evidence for compatibility code.
 
-## Architecture
+## Architecture and dependency direction
 
-Irony uses a layered, modular architecture.
+Irony uses a layered, modular architecture. The normal application direction is:
 
-### Frontend
+```text
+UI / frontend
+     |
+     v
+Services / application-domain coordination
+     |
+     +--> IO contracts / implementation
+     +--> Parser contracts / implementation
+     +--> Storage contracts / implementation
+     +--> other lower-level capabilities
+```
 
-The frontend/UI layer consumes the service layer. It should not directly orchestrate lower-level infrastructure implementations.
+### Frontend and services
 
-### Services
+The frontend primarily consumes the service layer. It should not directly coordinate lower-level implementations.
 
-The service layer is the application-level coordination layer. Services compose lower-level capabilities such as IO, storage, and game-data parsing into application behavior.
+Services form the application coordination layer. They combine lower-level capabilities into user-facing workflows and may also own substantial application/domain behavior.
 
-Services may contain substantial domain logic. In particular, Paradox-specific patching and conflict-resolution behavior has accumulated many real-world edge cases over the lifetime of the project.
+### Lower-level capabilities
 
-### Lower-Level Components
+IO, storage/preferences, game-file parsing, platform integration, and similar components are lower-level capabilities. Avoid lateral dependencies between them merely for convenience; application-level orchestration belongs in Services.
 
-Lower-level subsystems such as:
+Dependencies on stable lower-level contracts can be legitimate. Storage's dependency on `IO.Common` and `DiskOperations` is an accepted example because `DiskOperations` owns filesystem operations. Do not classify that dependency as a layering defect without a concrete, semantically better boundary.
 
-- IO
-- storage/preferences
-- game-file parsers
-- similar infrastructure/domain components
+Third-party implementation details must remain behind the abstraction that owns them. Archive-library types belong inside IO, persistence-library details inside Storage, parser-engine details inside Parser, and framework-specific behavior inside the relevant UI/Platform boundary.
 
-are peer layers. They should remain independently focused and should not acquire lateral dependencies merely for convenience.
+### Contracts, implementations, and composition
 
-Application-level coordination belongs in the service layer.
+Contract/common projects are intentionally separated from runtime implementations. The executable/composition root intentionally does not statically reference every implementation project.
 
-Third-party implementation details should remain inside the layer that owns them. For example, archive libraries such as SharpCompress belong behind the IO abstraction rather than leaking upward into services or UI code.
+The application composition path is intentional:
 
-### Contracts and Implementations
+1. implementation projects are built independently;
+2. their output assemblies are copied into the executable layout;
+3. runtime discovery finds candidate Irony assemblies by convention;
+4. Irony's identity policy validates dynamically discovered module assemblies;
+5. module dependencies are discovered and ordered;
+6. DI packages and other runtime registrations are discovered;
+7. modules are composed and initialized.
 
-Irony separates contracts/common projects from implementation projects.
+Missing direct project references are therefore not evidence of broken architecture. Do not add references merely to make runtime implementations visible to the executable at compile time.
 
-Implementation projects are intentionally not all directly referenced by the composition root. Do not add static project references merely because an implementation assembly is not visible at compile time.
+Build the full solution when validating composition. Building only the application project can leave implementation outputs missing or stale before the dependency-copy step. When changing target frameworks, output paths, packaging, or build tooling, verify the copied DLL set, runtime discovery, dependency ordering, DI registration, initialization, and both development and packaged layouts.
 
-The build and runtime composition model intentionally includes:
+The loader also supports dependency resolution through plugins and in-memory paths beyond the ordinary packaged application flow. Code is not dead merely because the common deployment path does not exercise every loader capability.
 
-- independently built implementation assemblies
-- build-time copying of implementation DLLs into the composition root/output
-- runtime assembly discovery using naming conventions
-- dependency discovery and resolution
-- topological ordering
-- DI/IoC registration and initialization
+## Dependency injection and refactoring
 
-This is intentional architecture, not a missing-reference problem.
+Irony's architecture deliberately adopted Simple Injector's explicit dependency style after extensive experience with Ninject. Explicit constructor dependencies remain valuable, but the architecture has never prohibited deferred creation or interception. It includes concepts such as:
 
-The loader also contains plugin/dependency resolution capabilities beyond the normal application path. Do not remove apparently unused plugin-resolution behavior as incidental cleanup without understanding its purpose and history.
+- `Func<T>`;
+- `Lazy<T>`;
+- parameterized factories;
+- proxy/interception-based behavior.
 
-## Dependency Injection
+Use these principles when reviewing or refactoring dependency-heavy code:
 
-Irony uses dependency injection extensively.
+- constructor size is evidence, not a verdict;
+- keep important dependencies and ownership visible;
+- factories are appropriate when they own meaningful object creation or parameterized construction;
+- facades and coordinators are appropriate when they express a real domain workflow or orchestration boundary;
+- aggregate state objects and lifecycle owners are appropriate when they own coherent state or lifetime;
+- parameter bags or facades that merely conceal a long constructor are not useful architecture;
+- preserve behavior and keep the blast radius controlled.
 
-Constructor size alone is not a defect. Some views/view-models or services may have many dependencies because of accumulated UI state or domain responsibilities.
+Do not try to reconstruct an unavailable successor architecture. Apply the durable semantic lessons above to the current code and task.
 
-Local cleanup is welcome where a clearer abstraction, facade, state object, or coordinator genuinely improves the design. Do not introduce indirection solely to reduce a parameter count.
+## Paradox domain behavior
 
-## Paradox Domain Logic
+Paradox game behavior is irregular and has changed repeatedly. Conflict solving, patching, parsing, load order, inline scripts, parameterized constructs, game indexing, filesystem behavior, localization conflict rules, and related logic may encode years of empirical production knowledge.
 
-Paradox game behavior is often irregular and has changed repeatedly over time.
+Three AI-assisted attempts to replace Irony have historically stalled around this class of behavior. The product's value is not merely its visible structure; it includes accumulated compatibility knowledge.
 
-Conflict resolution, mod patching, inline-script handling, parsing, filesystem behavior, load ordering, and related code may encode empirical compatibility knowledge collected from years of production use.
+Refactoring these areas is allowed and can be valuable. Behavioral equivalence is the hard requirement.
 
-Refactoring these areas is allowed and may be desirable, but behavioral equivalence is the hard requirement.
+Before changing complex domain behavior:
 
-When changing complex existing behavior:
+1. reconstruct the current end-to-end semantics;
+2. inspect relevant tests, history, and issues;
+3. preserve known edge cases and fallback behavior;
+4. add focused characterization/regression coverage when the changed behavior benefits from explicit protection;
+5. extract only semantically meaningful policies, lifecycle owners, builders, factories, or coordinators.
 
-- understand the current end-to-end semantics first
-- preserve known edge cases
-- use existing tests as regression protection
-- add characterization/regression tests where the touched behavior is insufficiently protected
-- prefer semantically meaningful decomposition over arbitrary splitting by file size
+Do not split a class merely to reduce its size.
 
-## Testing
+## Avalonia and platform compatibility
 
-Irony has a substantial business-logic test suite. Historically coverage was high, but maintenance has been lighter in recent years and current coverage must not be assumed.
+Avalonia 0.10.x (Irony's Avalonia 10 compatibility boundary) is intentionally pinned. Do not propose or perform a routine Avalonia major upgrade as incidental dependency maintenance. A major framework upgrade is a product migration and is outside normal 1.28 maintenance.
 
-The test suite primarily protects business logic. It is not a complete UI end-to-end test suite.
+Irony contains framework-version-specific behavior, including:
 
-Green tests mean known contracts remain protected; they do not prove complete behavioral equivalence across every UI/platform path.
+- custom controls and templates;
+- framework overrides and wrappers;
+- reflection-based compatibility shims;
+- selected fixes and backports from later Avalonia versions;
+- X11 and Wayland integration;
+- platform-specific input, window, dialog, clipboard, rendering, and lifecycle workarounds.
 
-Do not pursue repository-wide coverage numbers as a goal in themselves. Add tests where they materially protect behavior being changed.
+Before removing or modernizing unusual framework code:
 
-## Static Analysis
+1. inspect its current callers;
+2. inspect Git history and the originating issue or behavior where discoverable;
+3. understand the platform/framework failure it prevents;
+4. preserve the behavior unless the task explicitly changes it;
+5. validate on the affected platform path where practical.
 
-Release preparation includes PVS-Studio static analysis.
-
-Existing analyzer configuration and suppressions are part of the established baseline. New warnings introduced by a change should be investigated rather than mechanically suppressed.
-
-Static-analysis metrics are inputs to engineering judgment, not automatic architectural instructions.
-
-## Avalonia
-
-Avalonia major version 10 is an intentional compatibility boundary for Irony.
-
-Do not upgrade Irony to a newer Avalonia major version as incidental dependency maintenance.
-
-Irony contains Avalonia-version-specific behavior, custom controls, framework overrides, platform integration, and compatibility fixes that have accumulated over time.
-
-Some framework workarounds and backports may:
-
-- wrap Avalonia services
-- subclass or override framework behavior
-- use reflection into framework internals
-- replace platform-specific behavior
-- backport fixes from newer Avalonia versions
-
-Such code is not automatically obsolete.
-
-Before modifying Avalonia compatibility code:
-
-1. inspect Git history
-2. identify related issues where possible
-3. understand the bug or compatibility requirement being addressed
-4. preserve the existing behavior unless the current task explicitly changes it
-
-Newer Avalonia source may be used as a reference for targeted fixes or backports. A newer upstream implementation is not automatically a migration target.
-
-Major framework upgrades are product migrations, not routine package maintenance.
+Newer Avalonia source may be used as a donor/reference for a targeted fix or backport. It is not automatically a migration target. Irony's own localization system is separate from Avalonia-specific work needed to localize or correct framework/control behavior.
 
 ## Localization
 
-Irony's localization architecture is stable and intentional.
+Irony's localization architecture is stable and intentional:
 
-- `en.json` is the canonical source of truth and default language.
-- C# localization lookup members are generated from the canonical keys.
-- Generated members provide compile-time protection when keys change.
-- Runtime localization is applied through attributed virtual string properties and Castle proxy/interception behavior.
-- UI elements bind to those properties.
+1. `en.json` is the canonical/default resource and source of localization keys.
+2. The existing localization generator/build-tools flow produces C# lookup members from those keys.
+3. Generated C# members form a compile-time contract for lookup sites.
+4. Attributed virtual properties expose localized values to the UI.
+5. Castle proxy/interception behavior resolves values and performs runtime locale refresh.
 
-Do not replace this architecture with ad-hoc string-key lookup or a generic framework-localization mechanism as incidental modernization.
+Do not hand-edit generated localization files. Key additions, removals, and renames originate in `en.json` and flow through the existing generator. Do not replace this architecture with ad-hoc string-key lookup or generic framework localization during unrelated work.
 
-Community translations may evolve independently, but canonical localization keys originate from `en.json`.
+## Testing strategy
 
-## Storage and Preferences
+Irony has a substantial xUnit business/domain suite. Business and domain behavior are the main unit-test priority. Add focused characterization/regression tests where changed behavior benefits from protection; do not write tests merely to increase a global percentage.
 
-Preferences/storage are version-aware by design.
+UI unit-test coverage is intentionally not a remediation target. UI and platform behavior are primarily validated through functional/manual testing. Low whole-repository line coverage is not, by itself, technical debt to fix.
 
-Versioned persistence files allow schema migration while preserving rollback compatibility with older Irony versions. Do not collapse versioned stores into a single unversioned settings file or alter migration semantics as incidental cleanup.
+Visual Studio's xUnit integration is the historical primary runner. If solution-level CLI `dotnet test` exits successfully without useful discovery or test-result output, do not accept that as evidence that tests ran. Invoke the seven test projects explicitly:
 
-When a preference/storage model changes, preserve the established versioning and migration behavior.
+- `IronyModManager.IO.Tests`;
+- `IronyModManager.Localization.Tests`;
+- `IronyModManager.Model.Tests`;
+- `IronyModManager.Parser.Tests`;
+- `IronyModManager.Services.Tests`;
+- `IronyModManager.Storage.Tests`;
+- `IronyModManager.Tests`.
 
-## Dependency Upgrades
+At the 2026-09-09 reconnaissance snapshot, those project-level runs discovered 876 tests: 862 passed and 14 were intentionally skipped. This is a dated baseline, not a permanent test-count invariant.
 
-Dependency updates are welcome, including upgrades with breaking API changes.
+`FUNCTIONAL_TEST` tests are intentional maintainer investigation probes. They may perform real IO, scan installed games, contain machine-specific paths, and emit evidence about new Paradox content. They are not normal portable unit tests. Do not treat their default skipped state as broken coverage, remove them as dead tests, or force them into ordinary contributor validation.
 
-For breaking dependency migrations:
+Green tests protect known contracts; they do not establish complete behavioral equivalence for every UI, platform, packaging, or game-data path.
 
-- first identify the abstraction boundary that owns the dependency
-- preserve that boundary where possible
-- fix compile errors in the owning implementation rather than leaking new third-party APIs upward
-- preserve old Irony behavior, not merely successful compilation
-- run relevant tests
-- add targeted regression coverage where needed
+## Static analysis
 
-Do not combine unrelated framework migration, package upgrades, and broad refactors unless the changes are genuinely coupled.
+PVS-Studio is a manual, maintainer-local release-time check. There is intentionally no repository-owned PVS configuration or baseline for contributors to reproduce.
 
-## .NET Runtime
+Contributors and coding agents are not required to install PVS-Studio or any commercial/external analyzer, and PVS is not a contribution gate. Do not add repository suppressions or configuration in an attempt to reproduce a private maintainer workflow unless explicitly requested.
 
-Irony may move to newer supported .NET runtime versions as maintenance requires.
+Compiler/analyzer warnings encountered in normal project tooling should still be investigated. Static-analysis metrics are inputs to engineering judgment, not architectural commandments.
 
-A .NET runtime upgrade does not imply a corresponding Avalonia major-version upgrade.
+## Storage and preferences
 
-Keep framework/runtime migration diffs focused and avoid opportunistic architectural rewrites unless they directly improve the touched area with a controlled blast radius.
+Preferences and persisted application state are version-aware by design. Persistence files are versioned by the running application's major/minor version so a newer release can migrate state while retaining the older version's compatible state for rollback.
 
-## Build and Composition
+The migration invariant is:
 
-Build scripts that copy implementation assemblies into the composition root are part of the application composition model.
+```text
+Migration fallback must never select a persistence schema newer than the
+running application's major/minor version.
+```
 
-Do not replace them with direct project references or redesign the composition pipeline as incidental cleanup.
+When changing storage models or migration behavior, preserve:
 
-When changing target frameworks, output paths, packaging, or build tooling, verify that:
+- writes to the current version's store;
+- migration from eligible older stores;
+- source-file retention;
+- crash-recovery behavior;
+- rollback/copy-on-write behavior.
 
-- implementation assemblies are still copied to the expected location
-- assembly discovery still sees the expected DLL set
-- dependency resolution/topological ordering remains intact
-- DI registration and initialization still occur correctly
-- development and packaged layouts remain compatible with the runtime loader
+Do not collapse versioned persistence into a single unversioned settings file as incidental cleanup.
 
-## Versioning and Release Flow
+## Dependency maintenance
 
-Irony uses Nerdbank.GitVersioning.
+Dependency upgrades are ownership-driven. For any upgrade, especially one with breaking APIs:
 
-Normal development occurs on `develop`, which produces alpha builds.
+1. identify the abstraction that owns the dependency;
+2. keep third-party APIs behind that abstraction;
+3. preserve observable Irony behavior rather than merely achieving compilation;
+4. inspect deliberate pins, source comments, history, and related issues before changing them;
+5. run the relevant business/domain tests and add focused regression fixtures where needed;
+6. keep unrelated framework migrations and refactors separate unless genuinely coupled.
 
-Release preparation uses a release branch. The established flow is:
+Archive and image input-processing changes deserve corrupt/adversarial fixtures and path-boundary validation. Archive extraction changes must preserve Irony's canonicalization/root-containment boundary: every filesystem extraction path must sanitize an entry before a third-party write API receives the destination.
 
-1. prepare the release candidate using NBGV
-2. produce one or more RCs as needed
-3. once stable, prepare the final release state so the RC prerelease tag is removed
-4. merge the release into `master`
-5. merge `master` back into `develop`
+Do not assume an old dependency must be upgraded if its historical responsibility can instead be removed. Prefer deleting obsolete compatibility providers/stacks when evidence from real supported files proves they are no longer needed; if a fallback remains necessary, retain the smallest one and document the behavior it owns.
+
+A .NET runtime upgrade does not imply an Avalonia upgrade. Keep runtime migration focused and verify hard-coded target-framework output paths, copied implementation assemblies, runtime composition, native dependencies, and packaged layouts.
+
+## Runtime assembly identity and trust
+
+Irony dynamically discovers runtime module assemblies. The plugin model was deliberately designed to be powerful: plugins can participate in plugin assembly discovery and DI registration, replace or add application components, declare dependency order, provide localization, run post-startup behavior, and consume exposed application integration points. That power is why identity validation was designed alongside dynamic composition rather than added as incidental signing machinery.
+
+Historically, authorization to receive plugin-signing capability followed maintainer vetting and approval. The runtime identity gate then enforces possession of the accepted signing identity; it does not independently reproduce or prove that the maintainer approval process occurred. Do not provision, broaden, or alter that trust without explicit maintainer direction.
+
+Strong-name/public-key metadata participates in Irony's own application-level identity policy for candidate module assemblies. This is not a claim that CLR strong names are a general security sandbox. It is an Irony composition invariant: dynamically discovered candidate module assemblies must match the trusted identity expected for their discovery path. An unexpected identity is a security failure and stops execution before the assembly can proceed through module metadata discovery, dependency ordering, DI/runtime registration, and initialization.
+
+The current finder must load or obtain an `Assembly` object before it can read and validate that identity. Do not inaccurately describe this policy as validation before CLR loading or before an assembly exists in memory. The security boundary is the application composition/execution path after discovery/loading and before the candidate is accepted for composition.
+
+Do not remove, bypass, weaken, or casually refactor:
+
+- public-key/strong-name validation for dynamically discovered module assemblies;
+- the trusted embedded identity material used by that validation;
+- signing configuration for official Irony assemblies;
+- identity checks associated with plugins or dynamic composition.
+
+Generic guidance that strong names are not a modern sandbox is not sufficient reason to remove Irony's application-level identity gate. Validate the complete discovery-to-composition call chain before changing it.
+
+The public plugin ecosystem did not grow enough to justify a more elaborate trust service, so public Irony retained its local identity mechanism. The public repository's current behavior is authoritative. Do not infer, reconstruct, document in detail, or imitate unavailable proprietary validation systems.
+
+## Update authenticity and release secrets
+
+NetSparkle release/update artifacts use Ed25519 signatures for update authenticity. The private update-signing key is maintainer-only release security material, remains outside the public repository, and must stay uncommitted.
+
+Contributors and coding agents must never:
+
+- commit private signing keys or other release secrets;
+- request that private keys be added to the repository;
+- generate replacement official keys without explicit maintainer instruction;
+- relocate private release keys into tracked source;
+- weaken update signing because contributor builds cannot reproduce official signatures.
+
+Contributor builds are not equivalent to official signed Irony release artifacts.
+
+Runtime assembly identity signing and NetSparkle Ed25519 update signing are separate mechanisms with separate purposes. Do not conflate their keys, validation paths, threat models, or maintenance decisions. Both cross maintainer-authorized trust boundaries, and sensitive signing material must remain outside the public repository.
+
+## Public builds and official releases
+
+Reproducible contributor build/test guidance is valuable, but public CI/CD is intentionally not a 1.28 requirement. Do not treat its absence as merely missing workflow YAML.
+
+Official publishing depends on maintainer-only security and infrastructure, including release signing, runtime assembly identity material, private/custom package availability, and local packaging/deployment state. Official publishing and signing remain maintainer responsibilities. Never commit secrets or redesign release infrastructure during ordinary contribution work.
+
+A future public build/test system may be considered separately. It would validate contributor builds; it would not be equivalent to the official signed release pipeline or cross the same trust boundary.
+
+## Versioning and release flow
+
+Irony uses Nerdbank.GitVersioning. Normal development occurs on `develop`, producing alpha builds. Do not invent manual version numbers or replace the established NBGV flow.
+
+The release flow is:
+
+1. create/use the release branch;
+2. prepare the release candidate with NBGV;
+3. produce one or more RCs as needed;
+4. when stable, prepare the final state so the RC prerelease marker is removed;
+5. merge the release into `master`;
+6. merge `master` back into `develop`.
 
 Beta releases are not part of the normal flow.
 
-Do not invent manual version numbers or replace the existing NBGV release process.
+## AI-assisted contributions
 
-## AI-Assisted Contributions
+AI-assisted pull requests are explicitly welcome. AI use is not itself a reason to reject a contribution, and contributors do not have to disclose the model/tool used or provide prompts or chat logs.
 
-AI-assisted pull requests are explicitly welcome.
+The same standards apply to human-only and AI-assisted work. Contributors remain responsible for:
 
-The project does not require contributors to disclose which model or tool they used.
+- understanding the change and its intent;
+- keeping the PR focused;
+- preserving architecture, security, and compatibility boundaries;
+- explaining important decisions;
+- testing relevant behavior;
+- reviewing generated changes rather than submitting them blindly;
+- responding to review and supporting the submitted code.
 
-The same standards apply to all contributions:
+AI assistance neither lowers the engineering bar nor disqualifies a contribution.
 
-- understand the change
-- keep the PR focused
-- explain intent
-- preserve architectural boundaries
-- test relevant behavior
-- respond to review
-- remain responsible for the submitted code
+If a tool requires a repository-specific instruction file that does not yet exist, a contribution may add the minimal adapter required by that tool. Such files must:
 
-If an AI coding tool requires a repository-specific instruction file that does not yet exist, contributors should add the minimal adapter file required by that tool.
+- direct the tool to read and follow `AGENTS.md`;
+- state that `AGENTS.md` is authoritative;
+- contain only tool-specific bootstrap guidance that cannot live here;
+- avoid duplicating general project policy.
 
-Tool-specific files must:
+General project guidance belongs in `AGENTS.md`, not competing copies.
 
-- direct the tool to read and follow `AGENTS.md`
-- state that `AGENTS.md` is authoritative
-- avoid duplicating general project policy
-- contain only tool-specific bootstrap guidance that cannot reasonably live here
+## Maintainer context
 
-General project guidance belongs in `AGENTS.md`, not in tool-specific adapter files.
-
-## Maintainer Context
-
-Irony is a mature OSS application and has been in life-support maintenance for several years. Some cleanup and refactoring opportunities were intentionally deferred because maintainer time and interest shifted elsewhere.
-
-Do not assume deferred cleanup is an architectural invariant.
-
-At the same time, do not assume mature code should be rewritten simply because a cleaner modern implementation can be imagined.
+Irony has been in life-support maintenance for several years. Some cleanup was deferred because maintainer time moved elsewhere; deferred cleanup is not an architectural invariant.
 
 Use engineering judgment:
 
-- preserve learned behavior
-- improve structure where the payoff is real
-- keep blast radius understandable
-- prefer domain clarity over cosmetic purity
+- preserve learned behavior;
+- improve structure where the semantic payoff is real;
+- keep blast radius understandable;
+- prefer domain clarity over cosmetic purity;
+- keep official release/security responsibilities separate from contributor validation.
