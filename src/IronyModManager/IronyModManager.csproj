@@ -176,6 +176,22 @@
     <ProjectReference Include="..\IronyModManager.Shared\IronyModManager.Shared.csproj" />
   </ItemGroup>
   <ItemGroup>
+    <RuntimeImplementationProject Include="..\IronyModManager.GameHandler\IronyModManager.GameHandler.csproj" />
+    <RuntimeImplementationProject Include="..\IronyModManager.IO\IronyModManager.IO.csproj" />
+    <RuntimeImplementationProject Include="..\IronyModManager.Models\IronyModManager.Models.csproj" />
+    <RuntimeImplementationProject Include="..\IronyModManager.Parser\IronyModManager.Parser.csproj" />
+    <RuntimeImplementationProject Include="..\IronyModManager.Services\IronyModManager.Services.csproj" />
+    <RuntimeImplementationProject Include="..\IronyModManager.Storage\IronyModManager.Storage.csproj" />
+    <RuntimeImplementationProject Include="..\IronyModManager.Updater\IronyModManager.Updater.csproj" />
+    <ProjectReference Include="..\IronyModManager.GameHandler\IronyModManager.GameHandler.csproj" ReferenceOutputAssembly="false" />
+    <ProjectReference Include="..\IronyModManager.IO\IronyModManager.IO.csproj" ReferenceOutputAssembly="false" />
+    <ProjectReference Include="..\IronyModManager.Models\IronyModManager.Models.csproj" ReferenceOutputAssembly="false" />
+    <ProjectReference Include="..\IronyModManager.Parser\IronyModManager.Parser.csproj" ReferenceOutputAssembly="false" />
+    <ProjectReference Include="..\IronyModManager.Services\IronyModManager.Services.csproj" ReferenceOutputAssembly="false" />
+    <ProjectReference Include="..\IronyModManager.Storage\IronyModManager.Storage.csproj" ReferenceOutputAssembly="false" />
+    <ProjectReference Include="..\IronyModManager.Updater\IronyModManager.Updater.csproj" ReferenceOutputAssembly="false" />
+  </ItemGroup>
+  <ItemGroup>
     <EmbeddedResource Include="Assets\logo.png">
       <Pack>True</Pack>
       <PackagePath></PackagePath>
@@ -357,8 +373,8 @@
       <DependentUpon>nlog.config</DependentUpon>
     </None>
   </ItemGroup>
-  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
-    <Exec Command="call &quot;$(SolutionDir)\cmd\copy-dependencies.bat&quot; $(ConfigurationName) $(OutDir) $(SolutionDir)" />
+  <Target Name="ComposeApplicationOutput" AfterTargets="PostBuildEvent">
+    <Exec Command="call &quot;$(SolutionDir)\cmd\copy-dependencies.bat&quot; &quot;$(ConfigurationName)&quot; &quot;$(OutDir)&quot; &quot;$(SolutionDir)&quot; @(RuntimeImplementationProject-&gt;'&quot;%(Filename)&quot;', ' ')" />
   </Target>
   <ItemGroup>
     <EmbeddedResource Include="Controls\Themes\Light\ThemeOverride.xaml">
