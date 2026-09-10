@@ -54,7 +54,7 @@
     <PackageReference Include="CodexMicroORM.Core" Version="1.3.2" />
     <PackageReference Include="info.lundin.math.dll" Version="1.2.7" />
     <PackageReference Include="Jering.KeyValueStore" Version="1.1.0" />
-    <PackageReference Include="MagicMapper" Version="14.0.0" />
+    <PackageReference Include="MagicMapper" Version="14.0.1" />
     <PackageReference Include="Microsoft.Extensions.DependencyModel" Version="$(MicrosoftExtensionsDependencyModelVersion)" allowedVersions="$(MicrosoftExtensionsDependencyModelVersion)" />
     <PackageReference Include="MimeTypes" Version="2.5.2">
       <PrivateAssets>all</PrivateAssets>
