@@ -130,6 +130,8 @@ Do not split a class merely to reduce its size.
 
 Avalonia 0.10.x (Irony's Avalonia 10 compatibility boundary) is intentionally pinned. Do not propose or perform a routine Avalonia major upgrade as incidental dependency maintenance. A major framework upgrade is a product migration and is outside normal 1.28 maintenance.
 
+If `CompileAvaloniaXamlTask` reports an `original.pdb` sharing violation, see [Tools/Avalonia.Build.Tasks.Fix/README.md](Tools/Avalonia.Build.Tasks.Fix/README.md) for the optional Avalonia 0.10.22 workaround. It is not a normal build prerequisite.
+
 Irony contains framework-version-specific behavior, including:
 
 - custom controls and templates;
