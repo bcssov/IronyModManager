@@ -163,9 +163,11 @@ Do not hand-edit generated localization files. Key additions, removals, and rena
 
 ## Testing strategy
 
-Irony has a substantial xUnit business/domain suite. Business and domain behavior are the main unit-test priority. Add focused characterization/regression tests where changed behavior benefits from protection; do not write tests merely to increase a global percentage.
+Irony has a substantial xUnit business/domain suite. Coverage refers to the applicable unit-test surface, not every line in the frontend or every first-party assembly. Services, Parser, Storage, IO, Models/Shared, Localization, and limited deterministic frontend code are the normal unit-test surface. UI interaction/state, explicitly functional-tested view/viewmodel behavior, platform work, DI/IoC implementation plumbing, framework/logging plumbing, and XAML/AXAML belong to other testing layers. Do not pull them into the denominator or create artificial tests merely to increase a global percentage.
 
-UI unit-test coverage is intentionally not a remediation target. UI and platform behavior are primarily validated through functional/manual testing. Low whole-repository line coverage is not, by itself, technical debt to fix.
+Honor both `System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverageAttribute` and `IronyModManager.Shared.ExcludeFromCoverageAttribute`. The Irony-specific attribute's `Reason` documents why code belongs outside ordinary unit coverage and is part of the test-strategy guidance. Detailed policy, Visual Studio steps, the canonical CLI coverage workflow, and the dated baseline are in [`docs/TESTING.md`](docs/TESTING.md).
+
+Add focused characterization/regression tests for changed unit-testable behavior, not to chase an aggregate. Do not remove or bypass an exclusion without understanding its Reason and intended testing layer. Report a tooling/policy discrepancy rather than silently redefining the denominator.
 
 Visual Studio's xUnit integration is the historical primary runner. If solution-level CLI `dotnet test` exits successfully without useful discovery or test-result output, do not accept that as evidence that tests ran. Invoke the seven test projects explicitly:
 
@@ -177,7 +179,7 @@ Visual Studio's xUnit integration is the historical primary runner. If solution-
 - `IronyModManager.Storage.Tests`;
 - `IronyModManager.Tests`.
 
-At the 2026-09-09 reconnaissance snapshot, those project-level runs discovered 876 tests: 862 passed and 14 were intentionally skipped. This is a dated baseline, not a permanent test-count invariant.
+At the 2026-09-10 coverage baseline, those project-level runs discovered 908 tests: 894 passed and 14 were intentionally skipped. This is a dated baseline, not a permanent test-count invariant.
 
 `FUNCTIONAL_TEST` tests are intentional maintainer investigation probes. They may perform real IO, scan installed games, contain machine-specific paths, and emit evidence about new Paradox content. They are not normal portable unit tests. Do not treat their default skipped state as broken coverage, remove them as dead tests, or force them into ordinary contributor validation.
 

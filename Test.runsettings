@@ -9,32 +9,42 @@
 
   <DataCollectionRunSettings>
     <DataCollectors>
-      <DataCollector friendlyName="Code Coverage" uri="datacollector://Microsoft/CodeCoverage/2.0" assemblyQualifiedName="Microsoft.VisualStudio.Coverage.DynamicCoverageDataCollector, Microsoft.VisualStudio.TraceCollector, Version=11.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+      <DataCollector friendlyName="Code Coverage">
         <Configuration>
           <CodeCoverage>
             <Attributes>
               <Exclude>
                 <Attribute>System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverageAttribute$</Attribute>
+                <!-- Maintainer-owned coverage boundary since 2020; Reason explains each exclusion. -->
                 <Attribute>IronyModManager.Shared.ExcludeFromCoverageAttribute$</Attribute>
               </Exclude>
             </Attributes>
             <Sources>
+              <Include>
+                <!-- Business/domain/application layers. -->
+                <Source>.*IronyModManager\.(IO|Localization|Models|Parser|Services|Storage|Shared).*</Source>
+                <!-- The deliberately unit-tested portion of the Avalonia frontend. -->
+                <Source>.*IronyModManager[/\\]Converters[/\\].*</Source>
+                <Source>.*IronyModManager[/\\]Implementation[/\\](ViewLocator|ViewResolver|LocalizationResourceProvider)\.cs$</Source>
+                <Source>.*IronyModManager[/\\]Implementation[/\\]Config[/\\]ConfigurationLoader\.cs$</Source>
+                <Source>.*IronyModManager[/\\]Fonts[/\\]NotoSans.*\.cs$</Source>
+              </Include>
               <Exclude>
                 <Source>.*\.xaml$</Source>
+                <Source>.*\.axaml$</Source>
               </Exclude>
             </Sources>
             <ModulePaths>
+              <Include>
+                <ModulePath>.*IronyModManager.*</ModulePath>
+              </Include>
               <Exclude>
-                <!-- DI Module is excluded due to the static nature of the project. Unit tests won't help much here even if architecture was different -->
-                <ModulePath>.*di.*</ModulePath>
-                <ModulePath>.*platform.*</ModulePath>
-                <!-- Barely managed to get it working -->
-                <ModulePath>.*xunit.*</ModulePath>
-                <ModulePath>.*dynamicdata.*</ModulePath>
-                <ModulePath>.*splat.*</ModulePath>
-                <ModulePath>.*reactiveui.*</ModulePath>
-                <ModulePath>.*system.*</ModulePath>
-                <ModulePath>.*\.tests\..*</ModulePath>
+                <!-- Composition plumbing is validated for resolution, not unit coverage. -->
+                <ModulePath>.*IronyModManager\.DI.*</ModulePath>
+                <!-- Platform integration belongs to functional/platform validation. -->
+                <ModulePath>.*IronyModManager\.Platform.*</ModulePath>
+                <!-- Match test assembly filenames, not their parent test-project directories. -->
+                <ModulePath>(^|.*[/\\])IronyModManager(\.[^/\\]*)?\.Tests\.dll$</ModulePath>
               </Exclude>
             </ModulePaths>
           </CodeCoverage>
