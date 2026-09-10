@@ -68,10 +68,8 @@ On 2026-09-10, the owner executed this workflow in Visual Studio with the correc
 There are three distinct command-line cases:
 
 - `dotnet test` executes tests only.
-- `dotnet test --settings Test.runsettings --collect "Code Coverage"` asks VSTest to use dynamic profiler collection. In the current maintainer environment this runs the tests but produces no usable coverage and reports `Profiler was not initialized`.
-- Microsoft `dotnet-coverage` with `--include-files` statically instruments the selected generated assemblies. This is the canonical automated CLI workflow until dynamic VSTest collection is independently shown to emit a real coverage artifact.
-
-The bounded VSTest diagnostic showed the collector was loaded and supplied the profiler environment variables, but the profiler did not initialize. It also reported a collector/SDK extension dependency mismatch involving `Microsoft.Bcl.AsyncInterfaces`. Removing the obsolete VS-era collector binding did not repair collection, so this is treated as a current tooling limitation rather than a test or filtering failure.
+- `dotnet test --settings Test.runsettings --collect "Code Coverage"` asks VSTest to use dynamic profiler collection. With Microsoft.NET.Test.Sdk 18.10.0, it was revalidated successfully: the test run completes and emits a usable `.coverage` artifact without a profiler-initialization failure.
+- Microsoft `dotnet-coverage` with `--include-files` statically instruments the selected generated assemblies. It remains the canonical automated CLI workflow because it is reproducible across all seven test projects.
 
 Install the Microsoft tool; version 18.10.0 established the baseline below:
 
