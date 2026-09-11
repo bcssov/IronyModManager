@@ -51,7 +51,23 @@ namespace IronyModManager.Common
                 window.ExtendClientAreaToDecorationsHint = true;
                 window.ExtendClientAreaTitleBarHeightHint = 30d;
                 window.Padding = new Thickness(0, 30, 0, 0);
+                return;
             }
+
+            var originalTitleBarHeight = window.ExtendClientAreaTitleBarHeightHint;
+            var originalPadding = window.Padding;
+            var managedDecorationsApplied = false;
+            var subscription = window.GetObservable(Window.IsExtendedIntoWindowDecorationsProperty).Subscribe(_ =>
+            {
+                var needsManagedDecorations = window.PlatformImpl?.NeedsManagedDecorations ?? false;
+                if (managedDecorationsApplied == needsManagedDecorations)
+                    return;
+
+                managedDecorationsApplied = needsManagedDecorations;
+                window.ExtendClientAreaTitleBarHeightHint = needsManagedDecorations ? 30d : originalTitleBarHeight;
+                window.Padding = needsManagedDecorations ? new Thickness(0, 30, 0, 0) : originalPadding;
+            });
+            window.Closed += (_, _) => subscription.Dispose();
         }
 
         /// <summary>

@@ -6,5 +6,5 @@ Source: https://github.com/bcssov/LiteDB
 Had to build to remove hardcoded document size limit
 3. NWayland & Avalonia.Wayland
 Source: https://github.com/bcssov/NWayland
-Check Irony branch. The functionality is still a PR and not compatible with 0.10 (only 0.11 preview). Therefore the logic was ripped from there. 
+Use the irony branch, which is authoritative for Irony's maintained fork. Avalonia.Wayland is a custom backend/backport deliberately kept compatible with Avalonia 0.10.22 and deployed with NWayland.dll as direct references. The fork includes maintained compatibility and lifecycle fixes, with generated Wayland protocol bindings intentionally committed.
 Depends on nuget: Wanhjor.ObjectInspector
