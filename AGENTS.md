@@ -124,6 +124,8 @@ Before changing complex domain behavior:
 4. add focused characterization/regression coverage when the changed behavior benefits from explicit protection;
 5. extract only semantically meaningful policies, lifecycle owners, builders, factories, or coordinators.
 
+When parser behavior or any definition-cache schema, serialization, persistence, indexing, or normalization behavior changes, review the affected `GameRegistration` game-index cache version(s). Treat each cache version as a semantic/cache-schema epoch: increment it when existing cached definitions may no longer represent the current behavior or persistence contract, but not for a purely internal refactor that provably cannot affect either. If only some games are affected, bump only those games so their disposable caches are regenerated.
+
 Do not split a class merely to reduce its size.
 
 ## Avalonia and platform compatibility
