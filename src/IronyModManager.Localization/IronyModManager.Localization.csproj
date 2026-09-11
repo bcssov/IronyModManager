@@ -58,7 +58,7 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="Newtonsoft.Json" Version="13.0.4" />
-    <PackageReference Include="SimpleInjector" Version="5.5.0" />
+    <PackageReference Include="SimpleInjector" Version="5.6.0" />
     <PackageReference Include="SimpleInjector.Packaging" Version="5.5.0" />
   </ItemGroup>
 

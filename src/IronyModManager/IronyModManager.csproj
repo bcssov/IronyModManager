@@ -159,7 +159,7 @@
     <PackageReference Include="NLog" Version="6.2.0" />
     <PackageReference Include="NLog.Targets.Trace" Version="6.0.3" />
     <PackageReference Include="ReactiveUI" Version="22.3.1" />
-    <PackageReference Include="SimpleInjector" Version="5.5.0" />
+    <PackageReference Include="SimpleInjector" Version="5.6.0" />
     <PackageReference Include="SimpleInjector.Packaging" Version="5.5.0" />
     <PackageReference Include="SkiaSharp" Version="$(SkiaSharp)" allowedVersions="$(SkiaSharp)" />
     <PackageReference Include="Splat.NLog" Version="$(Splat)" allowedVersions="$(Splat)" />
