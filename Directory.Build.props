@@ -44,7 +44,12 @@
 		<!-- SkiaSharp stays on 2.88.x because Avalonia 0.10.x depends on that API surface.
 			Safe patch bump within same minor version. -->
 		<SkiaSharp>[2.88.9]</SkiaSharp>
-		<!-- Splat dependencies should also be locked -->
+		<!-- Avalonia 0.10.22 frontend compatibility boundary: ReactiveUI 22.3.1 and the Splat 17.1.1 family
+			must remain exact and aligned. Newer or mixed Splat generations change SimpleInjector resolver registration
+			behavior in Irony's InitializeSplat/InitializeReactiveUI composition path and have reproduced DI/startup failures.
+			ReactiveUI 23 requires coordinated Splat + DynamicData changes; ReactiveUI 24 additionally adopts Primitives/new
+			disposables. Revisit only as a coordinated Avalonia/reactive-stack migration. -->
+		<ReactiveUI>[22.3.1]</ReactiveUI>
 		<Splat>[17.1.1]</Splat>
 	</PropertyGroup>
 	<ItemGroup>
