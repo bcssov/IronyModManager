@@ -26,6 +26,7 @@
 		<SystemSecurityPermissions>[8.0.0]</SystemSecurityPermissions>
 		<SystemTextEncodingCodePages>[8.0.0]</SystemTextEncodingCodePages>
 		<Jot>[2.1.17]</Jot>
+		<FSharpCore>[10.1.400]</FSharpCore>
 		<!-- Non-upgradeable stuff below  -->
 		<!-- Avalonia is not easily upgradeable too -->
 		<MaterialAvalonia>[2.5.1]</MaterialAvalonia>
