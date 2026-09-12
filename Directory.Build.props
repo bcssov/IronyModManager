@@ -18,17 +18,16 @@
 		<PathMap>$(MSBuildProjectDirectory)=$(MSBuildProjectName)</PathMap>
 	</PropertyGroup>
 	<PropertyGroup>
-		<!-- Current net8.0 compatibility cohort: keep these aligned with the .NET 8 baseline; do not independently bump to 10.x. Review them together for the planned .NET 10 migration. -->
-		<MicrosoftExtensionsDependencyModelVersion>[8.0.2]</MicrosoftExtensionsDependencyModelVersion>
-		<MicrosoftNETCorePlatformsVersion>[8.0.0-preview.7.23375.6]</MicrosoftNETCorePlatformsVersion>
-		<MicrosoftExtensionsConfigurationBinder>[8.0.2]</MicrosoftExtensionsConfigurationBinder>
-		<MicrosoftExtensionsConfigurationJson>[8.0.1]</MicrosoftExtensionsConfigurationJson>
-		<MicrosoftBclAsyncInterfaces>[8.0.0]</MicrosoftBclAsyncInterfaces>
-		<SystemSecurityPermissions>[8.0.0]</SystemSecurityPermissions>
-		<SystemTextEncodingCodePages>[8.0.0]</SystemTextEncodingCodePages>
+		<!-- Current net10.0 compatibility cohort: keep these aligned with the .NET 10 baseline and review them together. -->
+		<MicrosoftExtensionsDependencyModelVersion>[10.0.12]</MicrosoftExtensionsDependencyModelVersion>
+		<MicrosoftExtensionsConfigurationBinder>[10.0.12]</MicrosoftExtensionsConfigurationBinder>
+		<MicrosoftExtensionsConfigurationJson>[10.0.12]</MicrosoftExtensionsConfigurationJson>
+		<MicrosoftBclAsyncInterfaces>[10.0.12]</MicrosoftBclAsyncInterfaces>
+		<SystemSecurityPermissions>[10.0.12]</SystemSecurityPermissions>
+		<SystemTextEncodingCodePages>[10.0.12]</SystemTextEncodingCodePages>
 		<!-- Jot previously introduced a regression in tracked nested/object properties during an upgrade (upstream issue #58). Exact pinning is intentional; future upgrades require targeted storage/tracking validation. -->
 		<Jot>[2.1.17]</Jot>
-		<!-- Keep on F# 10 while Irony targets .NET 8 and uses the current CWTools build. Revisit together with CWTools after the .NET 10 migration. -->
+		<!-- The .NET 10 migration is complete. Reconsider FSharp.Core only together with the separate follow-up CWTools modernization task. -->
 		<FSharpCore>[10.1.400]</FSharpCore>
 		<!-- Non-upgradeable stuff below  -->
 		<!-- Avalonia is not easily upgradeable too -->
@@ -80,7 +79,8 @@
 		</PackageReference>
 	</ItemGroup>
 	<ItemGroup>
-		<!-- Probably not needed but I've got so many dependencies -->
+		<!-- Preserve legacy RID fallback for AssemblyDependencyResolver and older native dependencies.
+			Restore/publish uses the .NET SDK RID graph; this runtime switch is independent of Microsoft.NETCore.Platforms. -->
 		<RuntimeHostConfigurationOption Include="System.Runtime.Loader.UseRidGraph" Value="true"/>
 	</ItemGroup>
 </Project>

@@ -32,12 +32,12 @@ The Wiki covers:
 
 ## Building Irony Mod Manager (Windows)
 
-All instructions below are for **Windows** and **Visual Studio 2022**.
+All instructions below are for **Windows** and **Visual Studio 2026**.
 
 ### Prerequisites
 
 - Windows  
-- **[Visual Studio 2022](https://visualstudio.microsoft.com/)** with the *.NET 8* workload  
+- **[Visual Studio 2026](https://visualstudio.microsoft.com/)** with the *.NET 10* workload
 - Git  
 - Command line (CMD or PowerShell)  
 
@@ -45,8 +45,8 @@ All instructions below are for **Windows** and **Visual Studio 2022**.
 
 ## Step‑by‑step build guide
 
-### 1. Install Visual Studio 2022  
-Make sure the .NET 8 SDK workload is installed.
+### 1. Install Visual Studio 2026
+Make sure the .NET 10 SDK workload is installed.
 
 ### 2. Clone the repository
 

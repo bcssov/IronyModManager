@@ -576,7 +576,7 @@ namespace IronyModManager.Parser.Common.Parsers
             {
                 var joined = string.Join("", lines).Replace(" ", string.Empty);
 
-                // TODO: Temp until Irony is on Net10 so we can upgrade to newer CWTools build
+                // Keep this fallback until the separate CWTools modernization proves a newer build handles ?= correctly.
                 if (!string.IsNullOrWhiteSpace(joined) && joined.Contains("?="))
                 {
                     return true;

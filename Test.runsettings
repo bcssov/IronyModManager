@@ -4,7 +4,7 @@
     <MaxCpuCount>1</MaxCpuCount>
     <TargetPlatform>x64</TargetPlatform>
     <ResultsDirectory>.\TestResults</ResultsDirectory>
-    <TargetFrameworkVersion>net8.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion>net10.0</TargetFrameworkVersion>
   </RunConfiguration>
 
   <DataCollectionRunSettings>

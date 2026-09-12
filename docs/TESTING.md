@@ -48,7 +48,7 @@ Ordinary `dotnet test` runs tests but does not inherently collect coverage. Run 
 - `IronyModManager.Storage.Tests`;
 - `IronyModManager.Tests`.
 
-Use Release, one MSBuild worker, and the repository's `net8.0` test target while 1.28 still targets .NET 8. `FUNCTIONAL_TEST` cases are maintainer investigation probes that may access installed games and machine-specific paths; their normal skipped state is intentional.
+Use Release, one MSBuild worker, and the repository's `net10.0` test target for the .NET 10-based 1.28 release. `FUNCTIONAL_TEST` cases are maintainer investigation probes that may access installed games and machine-specific paths; their normal skipped state is intentional.
 
 ## Visual Studio coverage
 
@@ -94,7 +94,7 @@ New-Item -ItemType Directory -Path 'TestResults\Coverage' -Force | Out-Null
 
 foreach ($name in $tests) {
     $project = "src\$name\$name.csproj"
-    $bin = "src\$name\bin\Release\net8.0"
+    $bin = "src\$name\bin\Release\net10.0"
 
     dotnet build $project -c Release -m:1
     if ($LASTEXITCODE -ne 0) { throw "Build failed: $name" }

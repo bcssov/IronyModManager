@@ -17,18 +17,18 @@ dotnet publish src\IronyModManager.Common\IronyModManager.Common.csproj  /p:Publ
 dotnet publish src\IronyModManager.Updater\IronyModManager.Updater.csproj  /p:PublishProfile=src\IronyModManager.Updater\Properties\PublishProfiles\osx-x64.pubxml --configuration osx-x64
 dotnet publish src\IronyModManager.GameHandler\IronyModManager.GameHandler.csproj  /p:PublishProfile=src\IronyModManager.GameHandler\Properties\PublishProfiles\osx-x64.pubxml --configuration osx-x64
 dotnet publish src\IronyModManager\IronyModManager.csproj  /p:PublishProfile=src\IronyModManager\Properties\PublishProfiles\osx-x64.pubxml --configuration osx-x64
-xcopy "src\IronyModManager.IO\bin\x64\osx-x64\net8.0\publish\osx-x64\Magick.Native-Q8-x64.dll.dylib" "src\IronyModManager\bin\x64\osx-x64\net8.0\publish\osx-x64\" /Y /D
-xcopy "src\IronyModManager\bin\osx-x64\net8.0\osx-x64\*.dll" "src\IronyModManager\bin\x64\osx-x64\net8.0\publish\osx-x64\" /Y /S /D
-xcopy "src\IronyModManager\bin\osx-x64\net8.0\osx-x64\*.json" "src\IronyModManager\bin\x64\osx-x64\net8.0\publish\osx-x64\" /Y /S /D
-xcopy "src\IronyModManager\bin\osx-x64\net8.0\osx-x64\*.pdb" "src\IronyModManager\bin\x64\osx-x64\net8.0\publish\osx-x64\" /Y /S /D
-xcopy "src\IronyModManager.Updater\bin\x64\osx-x64\net8.0\publish\osx-x64\*.*" "src\IronyModManager\bin\x64\osx-x64\net8.0\publish\osx-x64\" /Y /S /D
-xcopy "src\IronyModManager.GameHandler\bin\x64\osx-x64\net8.0\publish\osx-x64\*.*" "src\IronyModManager\bin\x64\osx-x64\net8.0\publish\osx-x64\" /Y /S /D
-del "src\IronyModManager\bin\x64\osx-x64\net8.0\publish\osx-x64\IronyModManager.runtimeconfig.dev.json" /S /Q
-del "src\IronyModManager\bin\x64\osx-x64\net8.0\publish\osx-x64\IronyModManager.Updater.runtimeconfig.dev.json" /S /Q
-del "src\IronyModManager\bin\x64\osx-x64\net8.0\publish\osx-x64\IronyModManager.GameHandler.runtimeconfig.dev.json" /S /Q
-del "src\IronyModManager\bin\x64\osx-x64\net8.0\publish\osx-x64\steam_api64.dll" /S /Q
-xcopy "References\CopyAll\*.*" "src\IronyModManager\bin\x64\osx-x64\net8.0\publish\osx-x64\" /Y /S /D
+xcopy "src\IronyModManager.IO\bin\x64\osx-x64\net10.0\publish\osx-x64\Magick.Native-Q8-x64.dll.dylib" "src\IronyModManager\bin\x64\osx-x64\net10.0\publish\osx-x64\" /Y /D
+xcopy "src\IronyModManager\bin\osx-x64\net10.0\osx-x64\*.dll" "src\IronyModManager\bin\x64\osx-x64\net10.0\publish\osx-x64\" /Y /S /D
+xcopy "src\IronyModManager\bin\osx-x64\net10.0\osx-x64\*.json" "src\IronyModManager\bin\x64\osx-x64\net10.0\publish\osx-x64\" /Y /S /D
+xcopy "src\IronyModManager\bin\osx-x64\net10.0\osx-x64\*.pdb" "src\IronyModManager\bin\x64\osx-x64\net10.0\publish\osx-x64\" /Y /S /D
+xcopy "src\IronyModManager.Updater\bin\x64\osx-x64\net10.0\publish\osx-x64\*.*" "src\IronyModManager\bin\x64\osx-x64\net10.0\publish\osx-x64\" /Y /S /D
+xcopy "src\IronyModManager.GameHandler\bin\x64\osx-x64\net10.0\publish\osx-x64\*.*" "src\IronyModManager\bin\x64\osx-x64\net10.0\publish\osx-x64\" /Y /S /D
+del "src\IronyModManager\bin\x64\osx-x64\net10.0\publish\osx-x64\IronyModManager.runtimeconfig.dev.json" /S /Q
+del "src\IronyModManager\bin\x64\osx-x64\net10.0\publish\osx-x64\IronyModManager.Updater.runtimeconfig.dev.json" /S /Q
+del "src\IronyModManager\bin\x64\osx-x64\net10.0\publish\osx-x64\IronyModManager.GameHandler.runtimeconfig.dev.json" /S /Q
+del "src\IronyModManager\bin\x64\osx-x64\net10.0\publish\osx-x64\steam_api64.dll" /S /Q
+xcopy "References\CopyAll\*.*" "src\IronyModManager\bin\x64\osx-x64\net10.0\publish\osx-x64\" /Y /S /D
 REM Why on earth cannot nuget include these? Also the documentation sucks in this regard
-xcopy "References\Conditional\Steamworks\OSX-Linux-x64\steam_api.bundle\Contents\MacOS\*.*" "src\IronyModManager\bin\x64\osx-x64\net8.0\publish\osx-x64\" /Y /S /D
-xcopy "References\Conditional\Steamworks\.Net\OSX-Linux\*.*" "src\IronyModManager\bin\x64\osx-x64\net8.0\publish\osx-x64\" /Y /S /D
+xcopy "References\Conditional\Steamworks\OSX-Linux-x64\steam_api.bundle\Contents\MacOS\*.*" "src\IronyModManager\bin\x64\osx-x64\net10.0\publish\osx-x64\" /Y /S /D
+xcopy "References\Conditional\Steamworks\.Net\OSX-Linux\*.*" "src\IronyModManager\bin\x64\osx-x64\net10.0\publish\osx-x64\" /Y /S
 cd publish
