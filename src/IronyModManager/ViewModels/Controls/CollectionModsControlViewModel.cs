@@ -118,6 +118,11 @@ namespace IronyModManager.ViewModels.Controls
         private readonly ModExportProgressHandler modExportProgressHandler;
 
         /// <summary>
+        /// The patch mod rename progress handler
+        /// </summary>
+        private readonly PatchModRenameProgressHandler patchModRenameProgressHandler;
+
+        /// <summary>
         /// The mod patch collection service
         /// </summary>
         private readonly IModPatchCollectionService modPatchCollectionService;
@@ -258,7 +263,8 @@ namespace IronyModManager.ViewModels.Controls
         /// <param name="localizationManager">The localization manager.</param>
         /// <param name="notificationAction">The notification action.</param>
         /// <param name="appAction">The application action.</param>
-        public CollectionModsControlViewModel(ModCollectionChangeRequestHandler modCollectionChangeRequestHandler, IScrollState scrollState, ModExportProgressHandler modExportProgressHandler, IReportExportService reportExportService,
+        public CollectionModsControlViewModel(ModCollectionChangeRequestHandler modCollectionChangeRequestHandler, IScrollState scrollState, ModExportProgressHandler modExportProgressHandler,
+            PatchModRenameProgressHandler patchModRenameProgressHandler, IReportExportService reportExportService,
             MainViewHotkeyPressedHandler hotkeyPressedHandler, PatchModControlViewModel patchMod,
             IIDGenerator idGenerator, HashReportControlViewModel hashReportView, ModReportExportHandler modReportExportHandler,
             IFileDialogAction fileDialogAction, IModCollectionService modCollectionService,
@@ -288,6 +294,7 @@ namespace IronyModManager.ViewModels.Controls
             this.modReportExportHandler = modReportExportHandler;
             this.hotkeyPressedHandler = hotkeyPressedHandler;
             this.modExportProgressHandler = modExportProgressHandler;
+            this.patchModRenameProgressHandler = patchModRenameProgressHandler;
             this.modCollectionChangeRequestHandler = modCollectionChangeRequestHandler;
             HashReportView = hashReportView;
             SearchMods.ShowArrows = true;
@@ -1559,7 +1566,6 @@ namespace IronyModManager.ViewModels.Controls
                         case CommandState.Success:
                             skipModCollectionSave = true;
                             var id = idGenerator.GetNextId();
-                            TriggerOverlay(id, true, localizationManager.GetResource(LocalizationResources.Collection_Mods.Overlay_Rename_Message));
                             if (Mods != null)
                             {
                                 foreach (var mod in Mods)
@@ -1580,13 +1586,29 @@ namespace IronyModManager.ViewModels.Controls
                             {
                                 async Task handleRenamePatchCollection()
                                 {
-                                    await Task.Run(async () =>
+                                    await TriggerOverlayAsync(id, true, localizationManager.GetResource(LocalizationResources.Collection_Mods.Overlay_Rename_Message));
+                                    IDisposable renameProgress = null;
+                                    try
                                     {
-                                        await modPatchCollectionService.RenamePatchCollectionAsync(AddNewCollection.RenamingCollection.Name, result.Result).ConfigureAwait(false);
-                                    }).ConfigureAwait(false);
+                                        renameProgress = patchModRenameProgressHandler.Subscribe(s =>
+                                        {
+                                            var overlayProgress = IronyFormatter.Format(localizationManager.GetResource(LocalizationResources.Collection_Mods.Overlay_Import_Export_Progress),
+                                                new { PercentDone = s.Percentage.ToLocalizedPercentage() });
+                                            TriggerOverlay(id, true, localizationManager.GetResource(LocalizationResources.Collection_Mods.Overlay_Rename_Message), overlayProgress);
+                                        });
+                                        await Task.Run(async () =>
+                                        {
+                                            await modPatchCollectionService.RenamePatchCollectionAsync(AddNewCollection.RenamingCollection.Name, result.Result).ConfigureAwait(false);
+                                        }).ConfigureAwait(false);
+                                    }
+                                    finally
+                                    {
+                                        renameProgress?.Dispose();
+                                        await TriggerOverlayAsync(id, false);
+                                    }
+
                                     successTitle = localizationManager.GetResource(LocalizationResources.Notifications.CollectionRenamed.Title);
                                     successMessage = localizationManager.GetResource(LocalizationResources.Notifications.CollectionRenamed.Message);
-                                    await TriggerOverlayAsync(id, false);
                                     notificationAction.ShowNotification(successTitle, successMessage, NotificationType.Success);
                                     PatchMod.SetParameters(SelectedModCollection);
                                 }

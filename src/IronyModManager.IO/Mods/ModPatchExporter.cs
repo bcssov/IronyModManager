@@ -354,9 +354,20 @@ namespace IronyModManager.IO.Mods
         /// <returns>Task&lt;System.Boolean&gt;.</returns>
         public async Task<bool> RenamePatchModAsync(ModPatchExporterParameters parameters)
         {
+            double lastPercentage = 0;
+
+            void reportProgress(double percentage)
+            {
+                if (percentage > lastPercentage)
+                {
+                    messageBus.Publish(new PatchModRenameProgressEvent(percentage));
+                    lastPercentage = percentage;
+                }
+            }
+
             async Task<bool> rename()
             {
-                var result = await CopyPatchModInternalAsync(parameters);
+                var result = await CopyPatchModInternalAsync(parameters, reportProgress);
                 if (result)
                 {
                     var oldPath = Path.Combine(parameters.RootPath, parameters.ModPath);
@@ -370,7 +381,13 @@ namespace IronyModManager.IO.Mods
             }
 
             var retry = new RetryStrategy();
-            return await retry.RetryActionAsync(rename);
+            var result = await retry.RetryActionAsync(rename);
+            if (result)
+            {
+                messageBus.Publish(new PatchModRenameProgressEvent(100));
+            }
+
+            return result;
         }
 
         /// <summary>
@@ -500,13 +517,14 @@ namespace IronyModManager.IO.Mods
         /// </summary>
         /// <param name="parameters">The parameters.</param>
         /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
-        private static async Task<bool> CopyPatchModInternalAsync(ModPatchExporterParameters parameters)
+        private static async Task<bool> CopyPatchModInternalAsync(ModPatchExporterParameters parameters, Action<double> reportProgress = null)
         {
             var oldPath = Path.Combine(parameters.RootPath, parameters.ModPath);
             var newPath = Path.Combine(parameters.RootPath, parameters.PatchPath);
             if (Directory.Exists(oldPath))
             {
-                var files = Directory.EnumerateFiles(oldPath, "*", SearchOption.AllDirectories);
+                var files = Directory.EnumerateFiles(oldPath, "*", SearchOption.AllDirectories).ToList();
+                var processed = 0;
                 foreach (var item in files)
                 {
                     var info = new System.IO.FileInfo(item);
@@ -517,6 +535,12 @@ namespace IronyModManager.IO.Mods
                     }
 
                     info.CopyTo(destinationPath, true);
+                    processed++;
+                    var percentage = Math.Round((double)processed / files.Count * 100, 2);
+                    if (percentage < 100)
+                    {
+                        reportProgress?.Invoke(percentage);
+                    }
                 }
 
                 var text = await ReadPatchContentAsync(newPath);
