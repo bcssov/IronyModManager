@@ -18,6 +18,7 @@
 		<PathMap>$(MSBuildProjectDirectory)=$(MSBuildProjectName)</PathMap>
 	</PropertyGroup>
 	<PropertyGroup>
+		<!-- Current net8.0 compatibility cohort: keep these aligned with the .NET 8 baseline; do not independently bump to 10.x. Review them together for the planned .NET 10 migration. -->
 		<MicrosoftExtensionsDependencyModelVersion>[8.0.2]</MicrosoftExtensionsDependencyModelVersion>
 		<MicrosoftNETCorePlatformsVersion>[8.0.0-preview.7.23375.6]</MicrosoftNETCorePlatformsVersion>
 		<MicrosoftExtensionsConfigurationBinder>[8.0.2]</MicrosoftExtensionsConfigurationBinder>
@@ -25,7 +26,9 @@
 		<MicrosoftBclAsyncInterfaces>[8.0.0]</MicrosoftBclAsyncInterfaces>
 		<SystemSecurityPermissions>[8.0.0]</SystemSecurityPermissions>
 		<SystemTextEncodingCodePages>[8.0.0]</SystemTextEncodingCodePages>
+		<!-- Jot had a significant upgrade regression previously. This exact pin is intentional; future versions may be upgraded after targeted regression validation. -->
 		<Jot>[2.1.17]</Jot>
+		<!-- Keep on F# 10 while Irony targets .NET 8 and uses the current CWTools build. Revisit together with CWTools after the .NET 10 migration. -->
 		<FSharpCore>[10.1.400]</FSharpCore>
 		<!-- Non-upgradeable stuff below  -->
 		<!-- Avalonia is not easily upgradeable too -->
