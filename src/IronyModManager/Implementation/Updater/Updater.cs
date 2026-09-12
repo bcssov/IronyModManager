@@ -134,11 +134,7 @@ namespace IronyModManager.Implementation.Updater
             };
             updater.DownloadHadError += (_, _, exception) =>
             {
-                if (exception.Message != lastException?.Message)
-                {
-                    error.OnNext(exception);
-                    lastException = exception;
-                }
+                ReportError(exception);
             };
             updater.DownloadMadeProgress += (_, _, progress) =>
             {
@@ -213,27 +209,41 @@ namespace IronyModManager.Implementation.Updater
             }
 
             busy = true;
-            if (updateInfo != null && updateInfo.Updates.Count > 0)
+            try
             {
-                lastException = null;
-                updatePath = string.Empty;
-                await updater.InitAndBeginDownload(updateInfo.Updates.FirstOrDefault());
-                while (updater.UpdateDownloading)
+                if (updateInfo != null && updateInfo.Updates.Count > 0)
                 {
-                    // Sigh
-                    await Task.Delay(25);
+                    lastException = null;
+                    updatePath = string.Empty;
+                    try
+                    {
+                        await updater.InitAndBeginDownload(updateInfo.Updates.FirstOrDefault());
+                    }
+                    catch (InvalidDataException exception)
+                    {
+                        ReportError(exception);
+                        return false;
+                    }
+
+                    while (updater.UpdateDownloading)
+                    {
+                        // Sigh
+                        await Task.Delay(25);
+                    }
+
+                    // Slight safety delay
+                    await Task.Delay(250);
+                    var updateSettings = new UpdateSettings { IsInstaller = isInstallerVersion, Path = AppDomain.CurrentDomain.BaseDirectory };
+                    await File.WriteAllTextAsync(Path.Combine(StaticResources.GetUpdaterPath(), Constants.UpdateSettings), JsonConvert.SerializeObject(updateSettings));
+                    return !string.IsNullOrWhiteSpace(updatePath) || lastException == null; // In case file is already downloaded
                 }
 
-                // Slight safety delay
-                await Task.Delay(250);
-                busy = false;
-                var updateSettings = new UpdateSettings { IsInstaller = isInstallerVersion, Path = AppDomain.CurrentDomain.BaseDirectory };
-                await File.WriteAllTextAsync(Path.Combine(StaticResources.GetUpdaterPath(), Constants.UpdateSettings), JsonConvert.SerializeObject(updateSettings));
-                return !string.IsNullOrWhiteSpace(updatePath) || lastException == null; // In case file is already downloaded
+                return false;
             }
-
-            busy = false;
-            return false;
+            finally
+            {
+                busy = false;
+            }
         }
 
         /// <summary>
@@ -290,15 +300,30 @@ namespace IronyModManager.Implementation.Updater
             }
 
             busy = true;
-            await shutDownState.WaitUntilFreeAsync();
-            updater.InstallUpdate(updateInfo.Updates.FirstOrDefault(), updatePath);
-            while (updater.UpdateInstalling)
+            try
             {
-                await Task.Delay(25);
-            }
+                await shutDownState.WaitUntilFreeAsync();
+                try
+                {
+                    updater.InstallUpdate(updateInfo.Updates.FirstOrDefault(), updatePath);
+                }
+                catch (InvalidDataException exception)
+                {
+                    ReportError(exception);
+                    return false;
+                }
 
-            busy = false;
-            return true;
+                while (updater.UpdateInstalling)
+                {
+                    await Task.Delay(25);
+                }
+
+                return true;
+            }
+            finally
+            {
+                busy = false;
+            }
         }
 
         /// <summary>
@@ -321,6 +346,19 @@ namespace IronyModManager.Implementation.Updater
         {
             var files = Directory.GetFiles(AppDomain.CurrentDomain.BaseDirectory, "*.exe");
             return files.Any(p => Path.GetFileName(p).StartsWith("unins", StringComparison.OrdinalIgnoreCase));
+        }
+
+        /// <summary>
+        /// Reports an updater error without repeating the same message.
+        /// </summary>
+        /// <param name="exception">The updater exception.</param>
+        private void ReportError(Exception exception)
+        {
+            if (exception.Message != lastException?.Message)
+            {
+                error.OnNext(exception);
+                lastException = exception;
+            }
         }
 
         #endregion Methods
