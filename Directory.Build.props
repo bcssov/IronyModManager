@@ -55,7 +55,7 @@
 	</PropertyGroup>
 	<ItemGroup>
 		<PackageReference Update="Nerdbank.GitVersioning" Condition="!Exists('packages.config')">
-			<Version>3.9.50</Version>
+			<Version>3.10.94</Version>
 			<PrivateAssets>all</PrivateAssets>
 		</PackageReference>
 	</ItemGroup>
