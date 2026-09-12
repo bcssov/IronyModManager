@@ -622,6 +622,10 @@
       "Title": "Nicht genügend freier Speicherplatz",
       "Message": "Es ist nicht genügend freier Speicherplatz, um den Zusammenführungsvorgang durchzuführen."
     },
+    "CollectionMergeArchiveUnavailable": {
+      "Title": "Merge-Archiv nicht verfügbar",
+      "Message": "Die Ausgabearchive der komprimierten Zusammenführung können nicht überschrieben werden und sind möglicherweise in einem anderen Programm geöffnet: {Archives}"
+    },
     "ParadoxLauncherRunning": {
       "Title": "Paradox Launcher Active",
       "Message": "Paradox Launcher läuft, bitte schließen Sie ihn, bevor Sie diese Aktion versuchen."

@@ -587,11 +587,25 @@ namespace IronyModManager.ViewModels.Controls
                         return new CommandResult<ModifyAction>(ModifyAction.Merge, CommandState.Failed);
                     }
 
+                    var mergePrefix = IronyFormatter.Format(localizationManager.GetResource(LocalizationResources.Collection_Mods.MergeCollection.MergeCompressModPrefix),
+                        new { Name = name });
+                    var preflight = await Task.Run(() => modMergeService.PreflightMergeCompressCollection(copy.Name, mergePrefix));
+                    if (!preflight.CanProceed)
+                    {
+                        var notiTitle = localizationManager.GetResource(LocalizationResources.Notifications.CollectionMergeArchiveUnavailable.Title);
+                        var notiMessage = IronyFormatter.Format(localizationManager.GetResource(LocalizationResources.Notifications.CollectionMergeArchiveUnavailable.Message),
+                            new { Archives = string.Join(", ", preflight.UnavailableArchiveNames) });
+                        await TriggerOverlayAsync(id, false);
+                        freeSpaceCheckHandler?.Dispose();
+                        fileMergeProgressHandler?.Dispose();
+                        notificationAction.ShowNotification(notiTitle, notiMessage, NotificationType.Error, 10);
+                        return new CommandResult<ModifyAction>(ModifyAction.Merge, CommandState.Failed);
+                    }
+
                     await modPatchCollectionService.CleanPatchCollectionAsync(copy.Name);
 
                     var mergeMods = await Task.Run(async () => await modMergeService.MergeCompressCollectionAsync(copy.Name,
-                        IronyFormatter.Format(localizationManager.GetResource(LocalizationResources.Collection_Mods.MergeCollection.MergeCompressModPrefix),
-                            new { Name = name }))).ConfigureAwait(false);
+                        mergePrefix)).ConfigureAwait(false);
                     copy.Mods = mergeMods.Select(p => p.DescriptorFile).ToList();
                     copy.ModPaths = mergeMods.Select(p => p.FullPath).ToList();
                     copy.PatchModEnabled = ActiveCollection.PatchModEnabled;

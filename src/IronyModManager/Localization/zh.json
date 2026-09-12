@@ -621,6 +621,10 @@
       "Title": "存储空间不足",
       "Message": "没有足够的可用存储空间以执行合并操作。"
     },
+    "CollectionMergeArchiveUnavailable": {
+      "Title": "合并压缩包不可用",
+      "Message": "无法覆盖合并压缩输出文件，可能已在其他程序中打开：{Archives}"
+    },
     "ParadoxLauncherRunning": {
       "Title": "官方启动器运行中",
       "Message": "官方启动器正在运行，请先将其关闭再执行此操作。"

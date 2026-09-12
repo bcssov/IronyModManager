@@ -622,6 +622,10 @@
       "Title": "Not enough free space",
       "Message": "There is not enough free space to perform merge operation."
     },
+    "CollectionMergeArchiveUnavailable": {
+      "Title": "Merge archive unavailable",
+      "Message": "The Merge Compress output archive(s) cannot be overwritten and may be open in another program: {Archives}"
+    },
     "ParadoxLauncherRunning": {
       "Title": "Paradox Launcher Active",
       "Message": "Paradox Launcher is running, please close it before attempting this action."

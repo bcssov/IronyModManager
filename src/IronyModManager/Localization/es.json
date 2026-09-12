@@ -622,6 +622,10 @@
       "Title": "No hay suficiente espacio libre",
       "Message": "No hay suficiente espacio libre para realizar una operación de combinación."
     },
+    "CollectionMergeArchiveUnavailable": {
+      "Title": "Archivo de combinación no disponible",
+      "Message": "Los archivos de salida de la combinación comprimida no se pueden sobrescribir y pueden estar abiertos en otro programa: {Archives}"
+    },
     "ParadoxLauncherRunning": {
       "Title": "Paradox Launcher activo",
       "Message": "Paradox Launcher se está ejecutando, cierre antes de intentar esta acción."

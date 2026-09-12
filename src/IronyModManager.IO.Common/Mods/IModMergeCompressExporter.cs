@@ -13,6 +13,7 @@
 // ***********************************************************************
 
 using System;
+using System.Collections.Generic;
 
 namespace IronyModManager.IO.Common.Mods
 {
@@ -45,6 +46,13 @@ namespace IronyModManager.IO.Common.Mods
         /// <param name="exportPath">The export path.</param>
         /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
         bool Finalize(long id, string exportPath);
+
+        /// <summary>
+        /// Gets existing Merge Compress archives that cannot be opened for replacement.
+        /// </summary>
+        /// <param name="archivePaths">The intended output archive paths.</param>
+        /// <returns>The unavailable archive paths.</returns>
+        IEnumerable<string> GetUnavailableArchivePaths(IEnumerable<string> archivePaths);
 
         /// <summary>
         /// Starts this instance.

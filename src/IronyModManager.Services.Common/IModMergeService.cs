@@ -41,6 +41,14 @@ namespace IronyModManager.Services.Common
         string GetMergeCollectionModNameTemplate();
 
         /// <summary>
+        /// Preflights the Merge Compress output archives.
+        /// </summary>
+        /// <param name="collectionName">Name of the collection.</param>
+        /// <param name="copiedNamePrefix">The copied name prefix.</param>
+        /// <returns>The preflight result.</returns>
+        MergeCompressPreflightResult PreflightMergeCompressCollection(string collectionName, string copiedNamePrefix);
+
+        /// <summary>
         /// Gets a merge collection name template.
         /// </summary>
         /// <returns>A string.</returns>

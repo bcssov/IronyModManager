@@ -622,6 +622,10 @@
       "Title": "Nema dovoljno slobodnog prostora",
       "Message": "Nema dovoljno slobodnog prostora za spajanje kolekcije."
     },
+    "CollectionMergeArchiveUnavailable": {
+      "Title": "Arhiva spajanja nije dostupna",
+      "Message": "Izlazne arhive komprimiranog spajanja ne mogu se prepisati i možda su otvorene u drugom programu: {Archives}"
+    },
     "ParadoxLauncherRunning": {
       "Title": "Paradox Launcher Aktivan",
       "Message": "Paradox Launcher je pokrenut molimo zatvorite ga prije nego pokušate ovu akciju."

@@ -146,6 +146,25 @@ namespace IronyModManager.Services
         }
 
         /// <summary>
+        /// Preflights the Merge Compress output archives.
+        /// </summary>
+        /// <param name="collectionName">Name of the collection.</param>
+        /// <param name="copiedNamePrefix">The copied name prefix.</param>
+        /// <returns>The preflight result.</returns>
+        public virtual MergeCompressPreflightResult PreflightMergeCompressCollection(string collectionName, string copiedNamePrefix)
+        {
+            var game = GameService.GetSelected();
+            if (game == null || string.IsNullOrWhiteSpace(collectionName))
+            {
+                return new MergeCompressPreflightResult();
+            }
+
+            var collectionMods = GetCollectionMods(GetInstalledModsInternal(game, false)).ToList();
+            var paths = GetMergeCompressArchivePaths(game, collectionMods, collectionName, copiedNamePrefix, GetMergeCollectionModNameTemplate());
+            return PreflightMergeCompressArchivePaths(paths);
+        }
+
+        /// <summary>
         /// Gets a merge collection name template.
         /// </summary>
         /// <returns>A string.</returns>
@@ -408,6 +427,11 @@ namespace IronyModManager.Services
             var mergeCollectionPath = collectionName.GenerateValidFileName();
             var modDirPath = GetPatchModDirectory(game, mergeCollectionPath);
             var modDirRootPath = GetModDirectoryRootPath(game);
+            var preflight = PreflightMergeCompressArchivePaths(GetMergeCompressArchivePaths(game, collectionMods, collectionName, copiedNamePrefix, modTemplate));
+            if (!preflight.CanProceed)
+            {
+                throw new MergeCompressArchiveUnavailableException(preflight.UnavailableArchiveNames);
+            }
             await ModWriter.PurgeModDirectoryAsync(new ModWriterParameters { Path = modDirPath }, true);
             await ModWriter.CreateModDirectoryAsync(new ModWriterParameters { RootDirectory = game.UserDirectory, Path = Shared.Constants.ModDirectory });
             await ModWriter.CreateModDirectoryAsync(new ModWriterParameters { Path = modDirPath });
@@ -501,17 +525,7 @@ namespace IronyModManager.Services
                         innerProgressLock.Dispose();
                     }
 
-                    string path;
-                    if (!string.IsNullOrWhiteSpace(modTemplate))
-                    {
-                        path = $"{IronyFormatter.Format(modTemplate, new { Name = collectionMod.Name.GenerateValidFileName(), Merged = copiedNamePrefix })}{Shared.Constants.ZipExtension}".GenerateValidFileName();
-                    }
-                    else
-                    {
-                        path = !string.IsNullOrWhiteSpace(copiedNamePrefix)
-                            ? $"{copiedNamePrefix} {collectionMod.Name.GenerateValidFileName()}{Shared.Constants.ZipExtension}".GenerateValidFileName()
-                            : $"{collectionMod.Name.GenerateValidFileName()}{Shared.Constants.ZipExtension}".GenerateValidFileName();
-                    }
+                    var path = GetMergeCompressArchiveFileName(collectionMod.Name, copiedNamePrefix, modTemplate);
 
                     var newMod = cloneMod(collectionMod,
                         Path.Combine(mergeCollectionPath, path),
@@ -537,8 +551,8 @@ namespace IronyModManager.Services
                     // ReSharper disable once DisposeOnUsingVariable - sod off
                     outerProgressLock.Dispose();
 
-                    modMergeCompressExporter.Finalize(queueId,
-                        Path.Combine(modDirRootPath, mergeCollectionPath, path));
+                    var exportPath = Path.Combine(modDirRootPath, mergeCollectionPath, path);
+                    modMergeCompressExporter.Finalize(queueId, exportPath);
                     renamePairs.Add(new KeyValuePair<string, string>(collectionMod.Name, newMod.Name));
                     renamePairs.Add(new KeyValuePair<string, string>(collectionMod.DescriptorFile, newMod.DescriptorFile));
                     using var exportModLock = await zipLock.LockAsync();
@@ -572,6 +586,44 @@ namespace IronyModManager.Services
             Cache.Invalidate(new CacheInvalidateParameters { Region = ModsCacheRegion, Prefix = game.Type, Keys = [GetModsCacheKey(true), GetModsCacheKey(false)] });
             var ordered = exportedMods.OrderBy(p => p.Order).ToList();
             return ordered;
+        }
+
+        /// <summary>
+        /// Preflights the specified Merge Compress archive paths.
+        /// </summary>
+        /// <param name="archivePaths">The intended archive paths.</param>
+        /// <returns>The preflight result.</returns>
+        private MergeCompressPreflightResult PreflightMergeCompressArchivePaths(IEnumerable<string> archivePaths)
+        {
+            var unavailableNames = modMergeCompressExporter.GetUnavailableArchivePaths(archivePaths)
+                .Select(Path.GetFileName)
+                .ToList();
+            return new MergeCompressPreflightResult
+            {
+                UnavailableArchiveNames = unavailableNames
+            };
+        }
+
+        /// <summary>
+        /// Gets the full paths for Merge Compress output archives.
+        /// </summary>
+        private IEnumerable<string> GetMergeCompressArchivePaths(IGame game, IEnumerable<IMod> collectionMods, string collectionName, string copiedNamePrefix, string modTemplate)
+        {
+            var mergeCollectionPath = collectionName.GenerateValidFileName();
+            var modDirRootPath = GetModDirectoryRootPath(game);
+            return collectionMods.Select(p => Path.Combine(modDirRootPath, mergeCollectionPath, GetMergeCompressArchiveFileName(p.Name, copiedNamePrefix, modTemplate)));
+        }
+
+        /// <summary>
+        /// Gets a Merge Compress archive file name.
+        /// </summary>
+        private string GetMergeCompressArchiveFileName(string modName, string copiedNamePrefix, string modTemplate)
+        {
+            return !string.IsNullOrWhiteSpace(modTemplate)
+                ? $"{IronyFormatter.Format(modTemplate, new { Name = modName.GenerateValidFileName(), Merged = copiedNamePrefix })}{Shared.Constants.ZipExtension}".GenerateValidFileName()
+                : (!string.IsNullOrWhiteSpace(copiedNamePrefix)
+                    ? $"{copiedNamePrefix} {modName.GenerateValidFileName()}{Shared.Constants.ZipExtension}"
+                    : $"{modName.GenerateValidFileName()}{Shared.Constants.ZipExtension}").GenerateValidFileName();
         }
 
         /// <summary>

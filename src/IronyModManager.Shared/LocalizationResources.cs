@@ -832,6 +832,12 @@ namespace IronyModManager.Shared
                 public const string Title = Prefix + "Title";
                 public const string Message = Prefix + "Message";
             }
+            public static class CollectionMergeArchiveUnavailable
+            {
+                public const string Prefix = "Notifications.CollectionMergeArchiveUnavailable.";
+                public const string Title = Prefix + "Title";
+                public const string Message = Prefix + "Message";
+            }
             public static class ParadoxLauncherRunning
             {
                 public const string Prefix = "Notifications.ParadoxLauncherRunning.";
