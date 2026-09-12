@@ -26,7 +26,7 @@
 		<MicrosoftBclAsyncInterfaces>[8.0.0]</MicrosoftBclAsyncInterfaces>
 		<SystemSecurityPermissions>[8.0.0]</SystemSecurityPermissions>
 		<SystemTextEncodingCodePages>[8.0.0]</SystemTextEncodingCodePages>
-		<!-- Jot had a significant upgrade regression previously. This exact pin is intentional; future versions may be upgraded after targeted regression validation. -->
+		<!-- Jot previously introduced a regression in tracked nested/object properties during an upgrade (upstream issue #58). Exact pinning is intentional; future upgrades require targeted storage/tracking validation. -->
 		<Jot>[2.1.17]</Jot>
 		<!-- Keep on F# 10 while Irony targets .NET 8 and uses the current CWTools build. Revisit together with CWTools after the .NET 10 migration. -->
 		<FSharpCore>[10.1.400]</FSharpCore>
