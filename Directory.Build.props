@@ -43,7 +43,24 @@
 		<XUnitRunnerVS>[3.1.5]</XUnitRunnerVS>
 		<!-- Updater has too many breaking changes and our logic diverged from it, we handle lots of stuff on our own anyway -->
 		<NetSparkleUpdaterSparkleUpdater>[2.3.0]</NetSparkleUpdaterSparkleUpdater>
-		<!-- Minor version updates keep breaking the API; sticking to 2.2.3 -->
+		<!--
+			SlimMessageBus 2.2.3 is an intentional architecture lock.
+
+			Irony has a heavily customized integration around the 2.x builder/provider model:
+			custom IServiceProvider, memory provider, validation, message-type resolution,
+			interceptor collections, runtime consumer discovery, and SimpleInjector ownership.
+
+			A maintainer migration attempt in 2025 was abandoned because newer SlimMessageBus
+			versions substantially redesigned the DI/provider/composition model. A 2026 audit
+			against 3.5.0 confirmed that this architectural divergence remains: upgrading would
+			require rebuilding Irony's messaging composition boundary rather than performing a
+			bounded dependency update.
+
+			Do not independently upgrade this package during routine dependency maintenance.
+			Revisit only as part of a major application architecture migration/redesign, such as
+			the future Avalonia 12+/2.x generation, where DI/composition and related infrastructure
+			are being intentionally reconsidered together.
+		-->
 		<SlimMessageBusHost>[2.2.3]</SlimMessageBusHost>
 		<!-- SkiaSharp stays on 2.88.x because Avalonia 0.10.x depends on that API surface.
 			Safe patch bump within same minor version. -->
