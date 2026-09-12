@@ -50,14 +50,24 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="CWTools.Irony-Private" Version="0.4.0-alpha12" />
+    <PackageReference Include="DotNet.Glob" Version="3.1.3" />
+    <PackageReference Include="FParsec" Version="1.1.1" />
+    <PackageReference Include="FSharp.Collections.ParallelSeq" Version="1.2.0" />
     <PackageReference Include="FSharp.Core" Version="$(FSharpCore)" />
+    <PackageReference Include="FSharp.Data" Version="3.1.1" />
+    <PackageReference Include="FSharpx.Collections" Version="2.0.0" />
+    <PackageReference Include="FsPickler" Version="5.3.2" />
+    <PackageReference Include="KTrie" Version="3.0.1" />
     <PackageReference Include="Microsoft.Extensions.DependencyModel" Version="$(MicrosoftExtensionsDependencyModelVersion)" allowedVersions="$(MicrosoftExtensionsDependencyModelVersion)" />
     <PackageReference Include="Nerdbank.GitVersioning" Version="3.10.94">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
+    <PackageReference Include="Sandwych.QuickGraph.Core" Version="1.0.0" />
+    <PackageReference Include="SharpZipLib" Version="1.4.2" />
     <PackageReference Include="SimpleInjector.Packaging" Version="5.5.0" />
+    <PackageReference Include="VDS.Common" Version="3.0.0" />
+    <PackageReference Include="ZString" Version="2.6.0" />
   </ItemGroup>
 
   <ItemGroup>
@@ -67,8 +77,17 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Reference Include="CSharpHelpers">
+      <HintPath>..\..\References\Direct\CSharpHelpers.dll</HintPath>
+    </Reference>
+    <Reference Include="CWTools">
+      <HintPath>..\..\References\Direct\CWTools.dll</HintPath>
+    </Reference>
     <Reference Include="LiteDB">
       <HintPath>..\..\References\Direct\LiteDB.dll</HintPath>
+    </Reference>
+    <Reference Include="Shared">
+      <HintPath>..\..\References\Direct\Shared.dll</HintPath>
     </Reference>
   </ItemGroup>
 

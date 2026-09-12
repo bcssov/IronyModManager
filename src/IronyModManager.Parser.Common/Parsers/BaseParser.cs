@@ -574,14 +574,6 @@ namespace IronyModManager.Parser.Common.Parsers
         {
             if (lines != null)
             {
-                var joined = string.Join("", lines).Replace(" ", string.Empty);
-
-                // Keep this fallback until the separate CWTools modernization proves a newer build handles ?= correctly.
-                if (!string.IsNullOrWhiteSpace(joined) && joined.Contains("?="))
-                {
-                    return true;
-                }
-
                 return lines.Count() > SimpleErrorCheckLinesThreshold || lines.Any(p => !string.IsNullOrEmpty(p) && p.Contains(Constants.Scripts.FallbackToSimpleParserComment, StringComparison.OrdinalIgnoreCase));
             }
 

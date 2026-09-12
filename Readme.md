@@ -61,27 +61,7 @@ cd IronyModManager
 cmd\build-tools.bat
 ```
 
-### 4. Set up the local CWTools NuGet package
-
-Irony uses a newer CWTools build than the public NuGet package.
-
-1. Create a folder for local NuGet packages, for example:
-
-   ```text
-   C:\Users\username\code\LocalNuGet
-   ```
-
-2. Download and unzip the private CWTools build:
-
-   **[CWTools.Irony-Private.0.4.0-alpha8](https://github.com/bcssov/IronyModManager/files/7798143/CWTools.Irony-Private.0.4.0-alpha8.zip)**  
-   into that folder.
-
-3. (Optional) Add the *LocalNuGet* folder as a package source:  
-   Visual Studio → Tools → NuGet Package Manager → Package Manager Settings → Package Sources.
-
----
-
-### 5. Create strong name keys
+### 4. Create strong name keys
 
 Create a folder:
 
@@ -112,25 +92,15 @@ into:
 
 ---
 
-### 6. Fix CWTools FSharp.Core dependency
-
-CWTools depends on `FSharp.Core` v4.7.0.
-
-In Visual Studio:
-
-- Right‑click **IronyModManager.Parser**  
-- Select **Manage NuGet Packages**  
-- Install **FSharp.Core 4.7.0**
-
----
-
-### 7. Restore NuGet packages  
+### 5. Restore NuGet packages
 Build once and let Visual Studio restore dependencies automatically.
 
-### 8. Build the solution  
+CWTools and its companion assemblies are checked into `References/Direct`; no private CWTools package download or local package source is required.
+
+### 6. Build the solution
 Visual Studio → Build → Rebuild Solution.
 
-### 9. Run Irony Mod Manager  
+### 7. Run Irony Mod Manager
 Set **IronyModManager** as the Startup Project → press **F5**.
 
 If everything is configured correctly, Irony Mod Manager will launch.
@@ -139,7 +109,6 @@ If everything is configured correctly, Irony Mod Manager will launch.
 
 ## Special Thanks
 
-Special thanks to **tboby** for extending the CWTools API for Irony:  
-**[CWTools on GitHub](https://github.com/tboby/cwtools)**
+Special thanks to **tboby** for creating CWTools and extending its C# API for Irony. Irony's reviewed build is maintained on the **[Irony CWTools fork](https://github.com/bcssov/cwtools)** and retains the **[original upstream lineage](https://github.com/cwtools/cwtools)**.
 
 Thanks also to all early adopters and testers for their continued feedback and support.

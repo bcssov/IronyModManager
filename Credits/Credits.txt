@@ -134,10 +134,10 @@ license Type:Microsoft Public License (Ms-PL)
 
 #########################
 Package:CWTools
-Version:0.4.0-alpha4
-project URL:
+Version:1.0.0.0 (direct build from bcssov/cwtools:irony)
+project URL:https://github.com/bcssov/cwtools
 Description:A library for parsing editing and validating Paradox Interactive script files.
-licenseUrl:
+licenseUrl:https://github.com/cwtools/cwtools/blob/master/LICENSE
 license Type:MIT
 
 #########################
