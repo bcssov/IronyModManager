@@ -21,6 +21,7 @@ Preserve behavior, not necessarily structure.
 - Evaluate single responsibility primarily by domain responsibility, not source-line count, constructor size, method count, or complexity metrics.
 - A large service may legitimately represent a large domain. It may also contain real semantic seams worth extracting.
 - Avoid repository-wide stylistic churn during framework or dependency maintenance.
+- Preserve repository-defined line endings. Irony's Windows/.NET source tree uses CRLF unless `.gitattributes` explicitly specifies otherwise. Never normalize unrelated files or impose the agent runtime's native line-ending convention.
 - Local syntax modernization in touched code is welcome when it improves clarity and does not obscure the actual change.
 - Do not classify unfamiliar code as obsolete merely because a newer pattern exists. Inspect current callers, tests, Git history, and related issues first.
 - Commit messages commonly reference issues with forms such as `fixes #N` and `resolves #N`; those issues are part of the design evidence for compatibility code.

@@ -1,0 +1,66 @@
+# Keep the Windows/.NET working tree deterministic across Git clients.
+* text=auto
+
+# Repository policy files are maintained with the same Windows line endings.
+/.gitattributes text eol=crlf
+/.editorconfig text eol=crlf
+/.gitignore text eol=crlf
+
+# Windows/.NET/Visual Studio source, project, resource, configuration, and text files.
+*.cs text eol=crlf
+*.csx text eol=crlf
+*.vb text eol=crlf
+*.vbx text eol=crlf
+*.csproj text eol=crlf
+*.sln text eol=crlf
+*.props text eol=crlf
+*.targets text eol=crlf
+*.pubxml text eol=crlf
+*.json text eol=crlf
+*.xml text eol=crlf
+*.config text eol=crlf
+*.resx text eol=crlf
+*.runsettings text eol=crlf
+*.xaml text eol=crlf
+*.axaml text eol=crlf
+*.xshd text eol=crlf
+*.bat text eol=crlf
+*.cmd text eol=crlf
+*.ps1 text eol=crlf
+*.md text eol=crlf
+*.txt text eol=crlf
+*.yml text eol=crlf
+*.yaml text eol=crlf
+*.iss text eol=crlf
+*.isl text eol=crlf
+*.mod text eol=crlf
+*.dlc text eol=crlf
+*.py text eol=crlf
+
+# Unix-native scripts and Unix bundle metadata remain LF.
+*.sh text eol=lf
+*.bash text eol=lf
+*.zsh text eol=lf
+*.meta text eol=lf
+*.plist text eol=lf
+
+# Tracked binary assets and native/runtime payloads must never be text-converted.
+*.dll -text
+*.exe -text
+*.so -text
+*.dylib -text
+*.zip -text
+*.epgz -text
+*.nupkg -text
+*.png -text
+*.jpg -text
+*.jpeg -text
+*.gif -text
+*.ico -text
+*.ttf -text
+*.otf -text
+*.woff -text
+*.woff2 -text
+*.sqlite -text
+*.db -text
+*.pdb -text
