@@ -1,4 +1,4 @@
-﻿// ***********************************************************************
+// ***********************************************************************
 // Assembly         : IronyModManager
 // Author           : Mario
 // Created          : 05-30-2020
@@ -476,6 +476,25 @@ namespace IronyModManager.ViewModels.Controls
         /// </summary>
         /// <value>The install updates command.</value>
         public virtual ReactiveCommand<Unit, Unit> InstallUpdatesCommand { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether manual updates are required.
+        /// </summary>
+        /// <value><c>true</c> if manual updates are required; otherwise, <c>false</c>.</value>
+        public virtual bool ManualUpdatesRequired { get; protected set; } = platformConfiguration.GetOptions().Updates.DisableInstallOnly;
+
+        /// <summary>
+        /// Gets or sets the open release page caption.
+        /// </summary>
+        /// <value>The open release page caption.</value>
+        [StaticLocalization(LocalizationResources.Options.Updates.OpenReleasePage)]
+        public virtual string OpenReleasePage { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets the open release page command.
+        /// </summary>
+        /// <value>The open release page command.</value>
+        public virtual ReactiveCommand<Unit, Unit> OpenReleasePageCommand { get; protected set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether this instance is open.
@@ -1095,6 +1114,11 @@ namespace IronyModManager.ViewModels.Controls
                     downloadingUpdates = false;
                     await TriggerOverlayAsync(messageId, false);
                 }
+            }).DisposeWith(disposables);
+
+            OpenReleasePageCommand = ReactiveCommand.CreateFromTask(async () =>
+            {
+                await updater.OpenReleasePageAsync();
             }).DisposeWith(disposables);
 
             SkipUpdateCommand = ReactiveCommand.Create(() =>

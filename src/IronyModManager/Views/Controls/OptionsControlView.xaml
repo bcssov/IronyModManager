@@ -1,4 +1,4 @@
-﻿<UserControl xmlns="https://github.com/avaloniaui"
+<UserControl xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
@@ -256,6 +256,9 @@
                                     HorizontalAlignment="Stretch" VerticalAlignment="Stretch" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" MaxHeight="30" />
                             <Button Margin="0,5" Content="{Binding InstallUpdates}" IsVisible="{Binding InstallingUpdatesAllowed}"
                                     Command="{Binding InstallUpdatesCommand}" Grid.Row="2" Grid.Column="1"
+                                    HorizontalAlignment="Stretch" VerticalAlignment="Stretch" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" MaxHeight="30" />
+                            <Button Margin="0,5" Content="{Binding OpenReleasePage}" IsVisible="{Binding ManualUpdatesRequired}"
+                                    Command="{Binding OpenReleasePageCommand}" Grid.Row="2" Grid.Column="1"
                                     HorizontalAlignment="Stretch" VerticalAlignment="Stretch" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" MaxHeight="30" />
                         </Grid>
                     </Panel>

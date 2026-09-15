@@ -496,6 +496,7 @@
       "CheckPrerelease": "Скачивать предрелизные версии",
       "CheckForUpdates": "Проверить обновления",
       "Install": "Установить",
+      "OpenReleasePage": "Открыть страницу релизов",
       "Version": "Версия: {Version}",
       "Skip": "Игнорировать обновление",
       "Overlay": {

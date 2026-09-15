@@ -496,6 +496,7 @@
       "CheckPrerelease": "Uključi alpha\\beta\\rc azužiranja",
       "CheckForUpdates": "Provjeri ima li ažuriranja",
       "Install": "Instaliraj ažuriranja",
+      "OpenReleasePage": "Otvori stranicu izdanja",
       "Version": "Verzija: {Version}",
       "Skip": "Zanemari ažuriranje",
       "Overlay": {

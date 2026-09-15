@@ -496,6 +496,7 @@
       "CheckPrerelease": "Update auf unveröffentlichte Vorabversionen",
       "CheckForUpdates": "Nach Updates Suchen",
       "Install": "Updates Installieren",
+      "OpenReleasePage": "Veröffentlichungsseite öffnen",
       "Version": "Version: {Version}",
       "Skip": "Update ignorieren",
       "Overlay": {

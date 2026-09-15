@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net10.0</TargetFramework>
@@ -66,6 +66,10 @@
       <PackagePath></PackagePath>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>	
+    <None Include="..\IronyModManager\appSettings.json" Link="UpdatePolicy\appSettings.json" CopyToOutputDirectory="PreserveNewest" />
+    <None Include="..\IronyModManager\appSettings.linux-x64.json" Link="UpdatePolicy\appSettings.linux-x64.json" CopyToOutputDirectory="PreserveNewest" />
+    <None Include="..\IronyModManager\appSettings.osx-x64.json" Link="UpdatePolicy\appSettings.osx-x64.json" CopyToOutputDirectory="PreserveNewest" />
+    <None Include="..\IronyModManager\appSettings.win-x64.json" Link="UpdatePolicy\appSettings.win-x64.json" CopyToOutputDirectory="PreserveNewest" />
   </ItemGroup>
 
   <ItemGroup>

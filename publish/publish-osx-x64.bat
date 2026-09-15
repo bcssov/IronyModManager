@@ -31,4 +31,6 @@ xcopy "References\CopyAll\*.*" "src\IronyModManager\bin\x64\osx-x64\net10.0\publ
 REM Why on earth cannot nuget include these? Also the documentation sucks in this regard
 xcopy "References\Conditional\Steamworks\OSX-Linux-x64\steam_api.bundle\Contents\MacOS\*.*" "src\IronyModManager\bin\x64\osx-x64\net10.0\publish\osx-x64\" /Y /S /D
 xcopy "References\Conditional\Steamworks\.Net\OSX-Linux\*.*" "src\IronyModManager\bin\x64\osx-x64\net10.0\publish\osx-x64\" /Y /S
+pwsh -NoProfile -File "publish\package-osx-x64-app.ps1"
+if errorlevel 1 exit /b %errorlevel%
 cd publish

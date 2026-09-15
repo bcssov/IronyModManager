@@ -1,4 +1,4 @@
-﻿// ***********************************************************************
+// ***********************************************************************
 // Assembly         : IronyModManager
 // Author           : Mario
 // Created          : 09-16-2020
@@ -74,6 +74,12 @@ namespace IronyModManager.Implementation.Updater
         /// </summary>
         /// <returns>Task&lt;System.Boolean&gt;.</returns>
         Task<bool> InstallUpdateAsync();
+
+        /// <summary>
+        /// Opens the release page for a manual update.
+        /// </summary>
+        /// <returns>Task&lt;System.Boolean&gt;.</returns>
+        Task<bool> OpenReleasePageAsync();
 
         /// <summary>
         /// Sets the skipped version.

@@ -644,6 +644,7 @@ namespace IronyModManager.Shared
                 public const string CheckPrerelease = Prefix + "CheckPrerelease";
                 public const string CheckForUpdates = Prefix + "CheckForUpdates";
                 public const string Install = Prefix + "Install";
+                public const string OpenReleasePage = Prefix + "OpenReleasePage";
                 public const string Version = Prefix + "Version";
                 public const string Skip = Prefix + "Skip";
                 public static class Overlay

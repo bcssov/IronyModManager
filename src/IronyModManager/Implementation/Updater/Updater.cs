@@ -1,4 +1,4 @@
-﻿// ***********************************************************************
+// ***********************************************************************
 // Assembly         : IronyModManager
 // Author           : Mario
 // Created          : 09-16-2020
@@ -41,6 +41,11 @@ namespace IronyModManager.Implementation.Updater
         /// The error
         /// </summary>
         private readonly Subject<Exception> error;
+
+        /// <summary>
+        /// The application action
+        /// </summary>
+        private readonly IAppAction appAction;
 
         /// <summary>
         /// The is installer version
@@ -115,6 +120,7 @@ namespace IronyModManager.Implementation.Updater
         /// <param name="shutDownState">State of the shut down.</param>
         public Updater(UpdateUnpackProgressHandler updateProgressHandler, IUpdaterService updaterService, IAppAction appAction, IShutDownState shutDownState)
         {
+            this.appAction = appAction;
             this.shutDownState = shutDownState;
             isInstallerVersion = IsInstallerVersion();
             this.updaterService = updaterService;
@@ -346,6 +352,15 @@ namespace IronyModManager.Implementation.Updater
         {
             var files = Directory.GetFiles(AppDomain.CurrentDomain.BaseDirectory, "*.exe");
             return files.Any(p => Path.GetFileName(p).StartsWith("unins", StringComparison.OrdinalIgnoreCase));
+        }
+
+        /// <summary>
+        /// Opens the release page for a manual update.
+        /// </summary>
+        /// <returns>Task&lt;System.Boolean&gt;.</returns>
+        public Task<bool> OpenReleasePageAsync()
+        {
+            return appAction.OpenAsync(Constants.ReleasesUrl);
         }
 
         /// <summary>

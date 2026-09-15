@@ -1,4 +1,4 @@
-﻿
+
 // ***********************************************************************
 // Assembly         : IronyModManager
 // Author           : Mario
@@ -54,6 +54,11 @@ namespace IronyModManager
         /// The public update key
         /// </summary>
         public const string PublicUpdateKey = "Oc2c/G6WMYkKL9+owAZYNIwMAMu9YqURiKw+gkY4zEw=";
+
+        /// <summary>
+        /// The releases URL
+        /// </summary>
+        public const string ReleasesUrl = "https://github.com/bcssov/IronyModManager/releases";
 
         /// <summary>
         /// The title suffix filename

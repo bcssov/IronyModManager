@@ -496,6 +496,7 @@
       "CheckPrerelease": "Mettre à jour vers les versions instable",
       "CheckForUpdates": "Vérifier les mises à jour",
       "Install": "Installer les mises à jour",
+      "OpenReleasePage": "Ouvrir la page des versions",
       "Version": "Version: {Version}",
       "Skip": "Ignorer la mise à jour",
       "Overlay": {

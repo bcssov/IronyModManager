@@ -164,6 +164,27 @@ namespace IronyModManager.Tests
             dataDownloader.Verify(p => p.DownloadAndGetAppCastData("https://example.test/appcast.xml"), Times.Once);
         }
 
+        /// <summary>
+        /// The manual update path opens the release page without downloading, unpacking, or executing an updater.
+        /// </summary>
+        [Fact]
+        public async Task Manual_update_should_only_open_release_page()
+        {
+            const string releasePage = "https://github.com/bcssov/IronyModManager/releases";
+            var (sut, updaterService, appAction, shutDownState) = CreateUpdater("present-signature");
+            appAction.Setup(p => p.OpenAsync(releasePage)).ReturnsAsync(true);
+
+            var result = await sut.OpenReleasePageAsync();
+
+            result.Should().BeTrue();
+            appAction.Verify(p => p.OpenAsync(releasePage), Times.Once);
+            updaterService.Verify(p => p.UnpackUpdateAsync(It.IsAny<string>()), Times.Never);
+            appAction.Verify(p => p.RunAsync(It.IsAny<string>(), It.IsAny<string>()), Times.Never);
+            shutDownState.Verify(p => p.WaitUntilFreeAsync(), Times.Never);
+            GetField<IronySparkleUpdater>(sut, "updater").UpdateDownloading.Should().BeFalse();
+            GetField<IronySparkleUpdater>(sut, "updater").UpdateInstalling.Should().BeFalse();
+        }
+
         private static (Updater Updater, Mock<IUpdaterService> UpdaterService, Mock<IAppAction> AppAction, Mock<IShutDownState> ShutDownState) CreateUpdater(string signature)
         {
             DISetup.SetupContainer();
