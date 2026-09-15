@@ -59,9 +59,9 @@ namespace IronyModManager.ViewModels.Controls
         private const string InvalidConflictSolverClass = "InvalidConflictSolver";
 
         /// <summary>
-        /// The application action
+        /// Owns common mod-control user interactions.
         /// </summary>
-        private readonly IAppAction appAction;
+        private readonly ModHolderInteraction interaction;
 
         /// <summary>
         /// The creation steam application identifier file flag
@@ -74,19 +74,9 @@ namespace IronyModManager.ViewModels.Controls
         private readonly IExternalProcessHandlerService externalProcessHandlerService;
 
         /// <summary>
-        /// The game definition load progress handler
+        /// Coordinates activation-scoped holder event subscriptions.
         /// </summary>
-        private readonly GameDefinitionLoadProgressHandler gameDefinitionLoadProgressHandler;
-
-        /// <summary>
-        /// The game directory changed handler
-        /// </summary>
-        private readonly GameUserDirectoryChangedHandler gameDirectoryChangedHandler;
-
-        /// <summary>
-        /// The game index progress handler
-        /// </summary>
-        private readonly GameIndexProgressHandler gameIndexProgressHandler;
+        private readonly ModHolderEventCoordinator eventCoordinator;
 
         /// <summary>
         /// The game index service
@@ -104,44 +94,14 @@ namespace IronyModManager.ViewModels.Controls
         private readonly IGameService gameService;
 
         /// <summary>
-        /// The identifier generator
+        /// Coordinates conflict-analysis progress subscriptions and presentation.
         /// </summary>
-        private readonly IIDGenerator idGenerator;
+        private readonly ConflictAnalysisProgressCoordinator conflictAnalysisProgressCoordinator;
 
         /// <summary>
-        /// The localization manager
+        /// Coordinates authoritative installed-mod publication with collection reconciliation.
         /// </summary>
-        private readonly ILocalizationManager localizationManager;
-
-        /// <summary>
-        /// The logger
-        /// </summary>
-        private readonly ILogger logger;
-
-        /// <summary>
-        /// The mod definition analyze handler
-        /// </summary>
-        private readonly ModDefinitionAnalyzeHandler modDefinitionAnalyzeHandler;
-
-        /// <summary>
-        /// The mod definition invalid replace handler
-        /// </summary>
-        private readonly ModDefinitionInvalidReplaceHandler modDefinitionInvalidReplaceHandler;
-
-        /// <summary>
-        /// The mod definition load handler
-        /// </summary>
-        private readonly ModDefinitionLoadHandler modDefinitionLoadHandler;
-
-        /// <summary>
-        /// The mod definition patch load handler
-        /// </summary>
-        private readonly ModDefinitionPatchLoadHandler modDefinitionPatchLoadHandler;
-
-        /// <summary>
-        /// The mod list refresh request handler
-        /// </summary>
-        private readonly ModListInstallRefreshRequestHandler modListInstallRefreshRequestHandler;
+        private readonly ModStateReconciliationCoordinator modStateReconciliationCoordinator;
 
         /// <summary>
         /// The mod service
@@ -153,10 +113,7 @@ namespace IronyModManager.ViewModels.Controls
         /// </summary>
         private readonly IModService modService;
 
-        /// <summary>
-        /// The notification action
-        /// </summary>
-        private readonly INotificationAction notificationAction;
+        private readonly ModApplyResultPresenter modApplyResultPresenter;
 
         /// <summary>
         /// The prompt notifications service
@@ -169,39 +126,9 @@ namespace IronyModManager.ViewModels.Controls
         private readonly IShutDownState shutDownState;
 
         /// <summary>
-        /// The definition analyze load handler
-        /// </summary>
-        private IDisposable definitionAnalyzeLoadHandler;
-
-        /// <summary>
-        /// The definition load handler
-        /// </summary>
-        private IDisposable definitionLoadHandler;
-
-        /// <summary>
-        /// The definition synchronize handler
-        /// </summary>
-        private IDisposable definitionSyncHandler;
-
-        /// <summary>
         /// The force enable resume button
         /// </summary>
         private bool forceEnableResumeButton;
-
-        /// <summary>
-        /// The game definition load handler
-        /// </summary>
-        private IDisposable gameDefinitionLoadHandler;
-
-        /// <summary>
-        /// The game index handler
-        /// </summary>
-        private IDisposable gameIndexHandler;
-
-        /// <summary>
-        /// The mod invalid replace handler
-        /// </summary>
-        private IDisposable modInvalidReplaceHandler;
 
         /// <summary>
         /// The showing invalid notification
@@ -217,57 +144,35 @@ namespace IronyModManager.ViewModels.Controls
         /// </summary>
         /// <param name="gameLanguageService">The game language service.</param>
         /// <param name="externalProcessHandlerService">The external process handler service.</param>
-        /// <param name="gameDefinitionLoadProgressHandler">The game definition load progress handler.</param>
-        /// <param name="gameIndexProgressHandler">The game index progress handler.</param>
         /// <param name="gameIndexService">The game index service.</param>
         /// <param name="promptNotificationsService">The prompt notifications service.</param>
-        /// <param name="modListInstallRefreshRequestHandler">The mod list install refresh request handler.</param>
-        /// <param name="modDefinitionInvalidReplaceHandler">The mod definition invalid replace handler.</param>
-        /// <param name="idGenerator">The identifier generator.</param>
         /// <param name="shutDownState">State of the shut-down.</param>
         /// <param name="modService">The mod service.</param>
         /// <param name="modPatchCollectionService">The mod patch collection service.</param>
         /// <param name="gameService">The game service.</param>
-        /// <param name="notificationAction">The notification action.</param>
-        /// <param name="appAction">The application action.</param>
-        /// <param name="localizationManager">The localization manager.</param>
+        /// <param name="interaction">The mod-control user interaction facade.</param>
         /// <param name="installedModsControlViewModel">The installed mods control view model.</param>
         /// <param name="collectionModsControlViewModel">The collection mods control view model.</param>
-        /// <param name="modDefinitionAnalyzeHandler">The mod definition analyze handler.</param>
-        /// <param name="modDefinitionLoadHandler">The mod definition load handler.</param>
-        /// <param name="modDefinitionPatchLoadHandler">The mod definition patch load handler.</param>
-        /// <param name="gameDirectoryChangedHandler">The game directory changed handler.</param>
-        /// <param name="logger">The logger.</param>
-        public ModHolderControlViewModel(IGameLanguageService gameLanguageService, IExternalProcessHandlerService externalProcessHandlerService, GameDefinitionLoadProgressHandler gameDefinitionLoadProgressHandler,
-            GameIndexProgressHandler gameIndexProgressHandler,
+        /// <param name="coordinatorFactory">The Mod Holder collaborator factory.</param>
+        public ModHolderControlViewModel(IGameLanguageService gameLanguageService, IExternalProcessHandlerService externalProcessHandlerService,
             IGameIndexService gameIndexService, IPromptNotificationsService promptNotificationsService,
-            ModListInstallRefreshRequestHandler modListInstallRefreshRequestHandler, ModDefinitionInvalidReplaceHandler modDefinitionInvalidReplaceHandler,
-            IIDGenerator idGenerator, IShutDownState shutDownState, IModService modService, IModPatchCollectionService modPatchCollectionService, IGameService gameService,
-            INotificationAction notificationAction, IAppAction appAction, ILocalizationManager localizationManager,
+            IShutDownState shutDownState, IModService modService, IModPatchCollectionService modPatchCollectionService, IGameService gameService,
+            ModHolderInteraction interaction,
             InstalledModsControlViewModel installedModsControlViewModel, CollectionModsControlViewModel collectionModsControlViewModel,
-            ModDefinitionAnalyzeHandler modDefinitionAnalyzeHandler, ModDefinitionLoadHandler modDefinitionLoadHandler, ModDefinitionPatchLoadHandler modDefinitionPatchLoadHandler,
-            GameUserDirectoryChangedHandler gameDirectoryChangedHandler, ILogger logger)
+            IModHolderCoordinatorFactory coordinatorFactory)
         {
-            // Oh boy ctor injection really needs some cleanup huge code smell
+            var coordinators = coordinatorFactory.Create();
             this.promptNotificationsService = promptNotificationsService;
-            this.modDefinitionInvalidReplaceHandler = modDefinitionInvalidReplaceHandler;
-            this.idGenerator = idGenerator;
+            this.interaction = interaction;
             this.shutDownState = shutDownState;
             this.modService = modService;
             this.modPatchCollectionService = modPatchCollectionService;
-            this.notificationAction = notificationAction;
-            this.localizationManager = localizationManager;
             this.gameService = gameService;
-            this.logger = logger;
-            this.appAction = appAction;
-            this.modDefinitionLoadHandler = modDefinitionLoadHandler;
-            this.modDefinitionPatchLoadHandler = modDefinitionPatchLoadHandler;
-            this.modDefinitionAnalyzeHandler = modDefinitionAnalyzeHandler;
-            this.gameDirectoryChangedHandler = gameDirectoryChangedHandler;
-            this.modListInstallRefreshRequestHandler = modListInstallRefreshRequestHandler;
+            modStateReconciliationCoordinator = coordinators.Reconciliation;
+            conflictAnalysisProgressCoordinator = coordinators.ConflictProgress;
+            modApplyResultPresenter = coordinators.ApplyResultPresenter;
+            eventCoordinator = coordinators.Events;
             this.gameIndexService = gameIndexService;
-            this.gameIndexProgressHandler = gameIndexProgressHandler;
-            this.gameDefinitionLoadProgressHandler = gameDefinitionLoadProgressHandler;
             this.externalProcessHandlerService = externalProcessHandlerService;
             this.gameLanguageService = gameLanguageService;
             InstalledMods = installedModsControlViewModel;
@@ -580,13 +485,14 @@ namespace IronyModManager.ViewModels.Controls
         /// <returns>Task.</returns>
         protected virtual async Task AnalyzeModsAsync(long id, PatchStateMode mode, IEnumerable<string> versions)
         {
+            var selectedMods = CollectionMods.SelectedMods.Where(p => !p.IsVirtual).ToList();
             var totalSteps = versions != null && versions.Any() ? 6 : 4;
 
             SubscribeToProgressReport(id, Disposables, totalSteps);
 
-            var overlayProgress = IronyFormatter.Format(localizationManager.GetResource(LocalizationResources.Mod_Actions.ConflictSolver.Overlay_Conflict_Solver_Progress),
+            var overlayProgress = IronyFormatter.Format(interaction.GetText(LocalizationResources.Mod_Actions.ConflictSolver.Overlay_Conflict_Solver_Progress),
                 new { PercentDone = 0.ToLocalizedPercentage(), Count = 1, TotalCount = totalSteps });
-            var message = localizationManager.GetResource(LocalizationResources.Mod_Actions.ConflictSolver.Overlay_Conflict_Solver_Loading_Definitions);
+            var message = interaction.GetText(LocalizationResources.Mod_Actions.ConflictSolver.Overlay_Conflict_Solver_Loading_Definitions);
             await TriggerOverlayAsync(id, true, message, overlayProgress);
             modPatchCollectionService.InvalidatePatchModState(CollectionMods.SelectedModCollection.Name);
             modPatchCollectionService.ResetPatchStateCache();
@@ -612,7 +518,7 @@ namespace IronyModManager.ViewModels.Controls
                 try
                 {
                     result = await modPatchCollectionService
-                        .GetModObjectsAsync(gameService.GetSelected(), CollectionMods.SelectedMods, CollectionMods.SelectedModCollection.Name, mode, allowedLanguages).ConfigureAwait(false);
+                        .GetModObjectsAsync(gameService.GetSelected(), selectedMods, CollectionMods.SelectedModCollection.Name, mode, allowedLanguages).ConfigureAwait(false);
                 }
                 catch (ModTooLargeException)
                 {
@@ -628,16 +534,12 @@ namespace IronyModManager.ViewModels.Controls
             {
                 await TriggerOverlayAsync(id, false);
 
-                definitionAnalyzeLoadHandler?.Dispose();
-                definitionLoadHandler?.Dispose();
-                definitionSyncHandler?.Dispose();
-                gameIndexHandler?.Dispose();
-                gameDefinitionLoadHandler?.Dispose();
+                conflictAnalysisProgressCoordinator.Reset();
 
                 GCRunner.RunGC(GCCollectionMode.Aggressive, true);
-                var largeMessageTitle = localizationManager.GetResource(LocalizationResources.Mod_Actions.ConflictSolver.TooLargePrompt.Title);
-                var largeMessageBody = localizationManager.GetResource(LocalizationResources.Mod_Actions.ConflictSolver.TooLargePrompt.Message);
-                notificationAction.ShowNotification(largeMessageTitle, largeMessageBody, NotificationType.Error, 60);
+                var largeMessageTitle = interaction.GetText(LocalizationResources.Mod_Actions.ConflictSolver.TooLargePrompt.Title);
+                var largeMessageBody = interaction.GetText(LocalizationResources.Mod_Actions.ConflictSolver.TooLargePrompt.Message);
+                interaction.Notify(largeMessageTitle, largeMessageBody, NotificationType.Error, 60);
                 return;
             }
 
@@ -668,7 +570,7 @@ namespace IronyModManager.ViewModels.Controls
             {
                 if (definitions != null)
                 {
-                    var result = await modPatchCollectionService.FindConflictsAsync(definitions, [.. CollectionMods.SelectedMods.Select(p => p.Name)], mode, allowedLanguages);
+                    var result = await modPatchCollectionService.FindConflictsAsync(definitions, [.. selectedMods.Select(p => p.Name)], mode, allowedLanguages);
                     GCRunner.RunGC(GCCollectionMode.Aggressive, true);
                     return result;
                 }
@@ -696,16 +598,12 @@ namespace IronyModManager.ViewModels.Controls
                 SelectedCollection = CollectionMods.SelectedModCollection,
                 Results = conflicts,
                 State = mode is PatchStateMode.ReadOnly or PatchStateMode.ReadOnlyWithoutLocalization ? NavigationState.ReadOnlyConflictSolver : NavigationState.ConflictSolver,
-                SelectedMods = [.. CollectionMods.SelectedMods.Select(p => p.Name)]
+                SelectedMods = [.. selectedMods.Select(p => p.Name)]
             };
             ReactiveUI.MessageBus.Current.SendMessage(args);
             await TriggerOverlayAsync(id, false);
 
-            definitionAnalyzeLoadHandler?.Dispose();
-            definitionLoadHandler?.Dispose();
-            definitionSyncHandler?.Dispose();
-            gameIndexHandler?.Dispose();
-            gameDefinitionLoadHandler?.Dispose();
+            conflictAnalysisProgressCoordinator.Reset();
 
             GCRunner.RunGC(GCCollectionMode.Aggressive, true);
         }
@@ -717,67 +615,58 @@ namespace IronyModManager.ViewModels.Controls
         /// <param name="showOverlay">if set to <c>true</c> [show overlay].</param>
         /// <param name="validateParadoxLauncher">if set to <c>true</c> [validate paradox launcher].</param>
         /// <returns>A Task representing the asynchronous operation.</returns>
-        protected virtual async Task ApplyCollectionAsync(long id, bool showOverlay = true, bool validateParadoxLauncher = false)
+        protected virtual async Task<ModApplyResult> ApplyCollectionAsync(long id, bool showOverlay = true,
+            bool validateParadoxLauncher = false, bool launchingGame = false)
         {
             if (ApplyingCollection)
             {
-                return;
+                return new ModApplyResult();
             }
 
             if (validateParadoxLauncher)
             {
                 if (await externalProcessHandlerService.IsParadoxLauncherRunningAsync())
                 {
-                    var title = localizationManager.GetResource(LocalizationResources.Notifications.ParadoxLauncherRunning.Title);
-                    var message = localizationManager.GetResource(LocalizationResources.Notifications.ParadoxLauncherRunning.Message);
-                    notificationAction.ShowNotification(title, message, NotificationType.Error, 30);
-                    return;
+                    var title = interaction.GetText(LocalizationResources.Notifications.ParadoxLauncherRunning.Title);
+                    var message = interaction.GetText(LocalizationResources.Notifications.ParadoxLauncherRunning.Message);
+                    interaction.Notify(title, message, NotificationType.Error, 30);
+                    return new ModApplyResult();
                 }
             }
 
             ApplyingCollection = true;
-            if (CollectionMods.SelectedModCollection != null)
+            var applyResult = new ModApplyResult();
+            try
             {
-                if (showOverlay)
+                if (CollectionMods.SelectedModCollection != null)
                 {
-                    await TriggerOverlayAsync(id, true, localizationManager.GetResource(LocalizationResources.Mod_Actions.Overlay_Apply_Message));
-                }
-
-                var notificationType = NotificationType.Success;
-                try
-                {
-                    var result = await modService.ExportModsAsync([.. CollectionMods.SelectedMods], [.. InstalledMods.AllMods], CollectionMods.SelectedModCollection);
-                    string title;
-                    string message;
-                    if (result)
+                    if (showOverlay)
                     {
-                        title = localizationManager.GetResource(LocalizationResources.Notifications.CollectionApplied.Title);
-                        message = IronyFormatter.Format(localizationManager.GetResource(LocalizationResources.Notifications.CollectionApplied.Message), new { CollectionName = CollectionMods.SelectedModCollection.Name });
-                    }
-                    else
-                    {
-                        title = localizationManager.GetResource(LocalizationResources.Notifications.CollectionNotApplied.Title);
-                        message = IronyFormatter.Format(localizationManager.GetResource(LocalizationResources.Notifications.CollectionNotApplied.Message), new { CollectionName = CollectionMods.SelectedModCollection.Name });
-                        notificationType = NotificationType.Error;
+                        await TriggerOverlayAsync(id, true, interaction.GetText(LocalizationResources.Mod_Actions.Overlay_Apply_Message));
                     }
 
-                    notificationAction.ShowNotification(title, message, notificationType, 5);
-                }
-                catch (Exception ex)
-                {
-                    var title = localizationManager.GetResource(LocalizationResources.SavingError.Title);
-                    var message = localizationManager.GetResource(LocalizationResources.SavingError.Message);
-                    logger.Error(ex);
-                    notificationAction.ShowNotification(title, message, NotificationType.Error, 30);
+                    try
+                    {
+                        applyResult = await modService.ExportModsAsync([.. CollectionMods.SelectedMods], [.. InstalledMods.AllMods], CollectionMods.SelectedModCollection);
+                        await modApplyResultPresenter.ShowAsync(CollectionMods.SelectedModCollection, applyResult, launchingGame);
+                    }
+                    catch (Exception ex)
+                    {
+                        interaction.ReportSavingFailure(ex);
+                    }
+
+                    if (showOverlay)
+                    {
+                        await TriggerOverlayAsync(id, false);
+                    }
                 }
 
-                if (showOverlay)
-                {
-                    await TriggerOverlayAsync(id, false);
-                }
+                return applyResult;
             }
-
-            ApplyingCollection = false;
+            finally
+            {
+                ApplyingCollection = false;
+            }
         }
 
         /// <summary>
@@ -833,6 +722,7 @@ namespace IronyModManager.ViewModels.Controls
                     await ShowInvalidModsNotificationAsync([.. result.Where(p => p.Invalid)]);
                 }
             }
+
         }
 
         /// <summary>
@@ -841,10 +731,30 @@ namespace IronyModManager.ViewModels.Controls
         /// <param name="disposables">The disposables.</param>
         protected override void OnActivated(CompositeDisposable disposables)
         {
+            void onGameLocked(GameStateLockInfo info)
+            {
+                if (!string.Equals(gameService.GetSelected()?.Type, info.GameType, StringComparison.OrdinalIgnoreCase))
+                {
+                    return;
+                }
+
+                Dispatcher.UIThread.SafeInvoke(() =>
+                {
+                    AllowModSelection = false;
+                    InstalledMods.AllowModSelection = false;
+                    CollectionMods.AllowModSelection = false;
+                    var title = interaction.GetText(LocalizationResources.Notifications.FileSystemSafetyLock.Title);
+                    var message = interaction.GetText(LocalizationResources.Notifications.FileSystemSafetyLock.Message);
+                    interaction.Notify(title, message, NotificationType.Error, 10);
+                });
+            }
+
+            modStateReconciliationCoordinator.SubscribeToGameLocks(onGameLocked).DisposeWith(disposables);
+
             async Task runAnalysis(PatchStateMode mode)
             {
-                var id = idGenerator.GetNextId();
-                await TriggerOverlayAsync(id, true, localizationManager.GetResource(LocalizationResources.App.WaitBackgroundOperationMessage));
+                var id = interaction.BeginOperation();
+                await TriggerOverlayAsync(id, true, interaction.GetText(LocalizationResources.App.WaitBackgroundOperationMessage));
                 var game = gameService.GetSelected();
                 var versions = gameService.GetVersions(game);
                 var hasGameDefinitions = await modPatchCollectionService.PatchHasGameDefinitionsAsync(CollectionMods.SelectedModCollection.Name);
@@ -852,9 +762,9 @@ namespace IronyModManager.ViewModels.Controls
                 var proceed = true;
                 if (hasGameDefinitions && !shouldAnalyzePatchState)
                 {
-                    var title = localizationManager.GetResource(LocalizationResources.Mod_Actions.ConflictSolver.GameExecutableNotSetPrompt.Title);
-                    var message = localizationManager.GetResource(LocalizationResources.Mod_Actions.ConflictSolver.GameExecutableNotSetPrompt.Message);
-                    proceed = await notificationAction.ShowPromptAsync(title, title, message, NotificationType.Info, PromptType.YesNo);
+                    var title = interaction.GetText(LocalizationResources.Mod_Actions.ConflictSolver.GameExecutableNotSetPrompt.Title);
+                    var message = interaction.GetText(LocalizationResources.Mod_Actions.ConflictSolver.GameExecutableNotSetPrompt.Message);
+                    proceed = await interaction.PromptAsync(title, title, message, NotificationType.Info, PromptType.YesNo);
                 }
 
                 if (proceed)
@@ -877,7 +787,7 @@ namespace IronyModManager.ViewModels.Controls
 
             this.WhenAnyValue(v => v.CollectionMods.SelectedModCollection).Subscribe(s =>
             {
-                if (s != null)
+                if (s != null && !modStateReconciliationCoordinator.IsLocked(InstalledMods.ActiveGame))
                 {
                     AllowModSelection = true;
                     InstalledMods.AllowModSelection = true;
@@ -895,12 +805,16 @@ namespace IronyModManager.ViewModels.Controls
 
             this.WhenAnyValue(v => v.InstalledMods.Mods).Subscribe(v =>
             {
-                CollectionMods.SetMods(v, InstalledMods.ActiveGame);
-            });
+                modStateReconciliationCoordinator.ReconcileModsPublication(
+                    InstalledMods.ActiveGame, InstalledMods.RefreshingMods, InstalledMods.LastRefreshAuthoritative,
+                    () => CollectionMods.SetMods(v, InstalledMods.ActiveGame));
+            }).DisposeWith(disposables);
 
             this.WhenAnyValue(v => v.InstalledMods.RefreshingMods).Subscribe(s =>
             {
-                CollectionMods.HandleModRefresh(s, InstalledMods.Mods, InstalledMods.ActiveGame);
+                modStateReconciliationCoordinator.ReconcileRefreshPublication(
+                    InstalledMods.ActiveGame, s, InstalledMods.LastRefreshAuthoritative,
+                    () => CollectionMods.HandleModRefresh(s, InstalledMods.Mods, InstalledMods.ActiveGame));
             }).DisposeWith(disposables);
 
             this.WhenAnyValue(v => v.CollectionMods.NeedsModListRefresh).Where(x => x).Subscribe(async _ =>
@@ -920,26 +834,26 @@ namespace IronyModManager.ViewModels.Controls
 
             ApplyCommand = ReactiveCommand.Create(() =>
             {
-                ApplyCollectionAsync(idGenerator.GetNextId(), validateParadoxLauncher: true).ConfigureAwait(true);
+                ApplyCollectionAsync(interaction.BeginOperation(), validateParadoxLauncher: true).ConfigureAwait(true);
             }, applyEnabled).DisposeWith(disposables);
 
             AnalyzeCommand = ReactiveCommand.CreateFromTask(async () =>
             {
                 var game = gameService.GetSelected();
-                if (game != null && CollectionMods.SelectedMods?.Count > 0 && CollectionMods.SelectedModCollection != null)
+                if (game != null && CollectionMods.SelectedMods?.Any(p => !p.IsVirtual) == true && CollectionMods.SelectedModCollection != null)
                 {
                     var messageState = promptNotificationsService.Get();
                     if (!messageState.ConflictSolverPromptShown)
                     {
-                        var title = localizationManager.GetResource(LocalizationResources.Mod_Actions.ConflictSolver.FirstUsePrompt.Title);
-                        var message = localizationManager.GetResource(LocalizationResources.Mod_Actions.ConflictSolver.FirstUsePrompt.Message);
-                        await notificationAction.ShowPromptAsync(title, title, message, NotificationType.Info, PromptType.OK);
+                        var title = interaction.GetText(LocalizationResources.Mod_Actions.ConflictSolver.FirstUsePrompt.Title);
+                        var message = interaction.GetText(LocalizationResources.Mod_Actions.ConflictSolver.FirstUsePrompt.Message);
+                        await interaction.PromptAsync(title, title, message, NotificationType.Info, PromptType.OK);
                         messageState.ConflictSolverPromptShown = true;
                         promptNotificationsService.Save(messageState);
                     }
 
-                    var id = idGenerator.GetNextId();
-                    await TriggerOverlayAsync(id, true, localizationManager.GetResource(LocalizationResources.App.WaitBackgroundOperationMessage));
+                    var id = interaction.BeginOperation();
+                    await TriggerOverlayAsync(id, true, interaction.GetText(LocalizationResources.App.WaitBackgroundOperationMessage));
                     await shutDownState.WaitUntilFreeAsync();
                     modPatchCollectionService.ResetPatchStateCache();
                     if (game.AdvancedFeatures == GameAdvancedFeatures.Full)
@@ -1026,24 +940,24 @@ namespace IronyModManager.ViewModels.Controls
                 {
                     if (await externalProcessHandlerService.IsParadoxLauncherRunningAsync())
                     {
-                        var title = localizationManager.GetResource(LocalizationResources.Notifications.ParadoxLauncherRunning.Title);
-                        var message = localizationManager.GetResource(LocalizationResources.Notifications.ParadoxLauncherRunning.Message);
-                        notificationAction.ShowNotification(title, message, NotificationType.Error, 30);
+                        var title = interaction.GetText(LocalizationResources.Notifications.ParadoxLauncherRunning.Title);
+                        var message = interaction.GetText(LocalizationResources.Notifications.ParadoxLauncherRunning.Message);
+                        interaction.Notify(title, message, NotificationType.Error, 30);
                         return;
                     }
 
                     var args = gameService.GetLaunchSettings(game, continueGame);
                     if (!string.IsNullOrWhiteSpace(args.ExecutableLocation))
                     {
-                        var id = idGenerator.GetNextId();
-                        await TriggerOverlayAsync(id, true, localizationManager.GetResource(LocalizationResources.Mod_Actions.LaunchGame.Overlay));
+                        var id = interaction.BeginOperation();
+                        await TriggerOverlayAsync(id, true, interaction.GetText(LocalizationResources.Mod_Actions.LaunchGame.Overlay));
                         if (game.RefreshDescriptors)
                         {
                             await modService.DeleteDescriptorsAsync(InstalledMods.Mods);
                             await modService.InstallModsAsync(InstalledMods.Mods);
                         }
 
-                        await ApplyCollectionAsync(id, false);
+                        await ApplyCollectionAsync(id, false, launchingGame: true);
                         await MessageBus.PublishAsync(new LaunchingGameEvent(game.Type));
                         if (gameService.IsSteamLaunchPath(args))
                         {
@@ -1051,31 +965,31 @@ namespace IronyModManager.ViewModels.Controls
                             if (gameService.IsFlatpakSteamGame(args))
                             {
                                 // ReSharper disable once StringLiteralTypo
-                                if (await appAction.OpenFlatpakAsync("com.valvesoftware.Steam", args.ExecutableLocation))
+                                if (await interaction.OpenFlatpakAsync("com.valvesoftware.Steam", args.ExecutableLocation))
                                 {
                                     launched = true;
                                     if (game.CloseAppAfterGameLaunch)
                                     {
-                                        await appAction.ExitAppAsync();
+                                        await interaction.ExitApplicationAsync();
                                     }
                                 }
                             }
                             else
                             {
-                                if (await appAction.OpenAsync(args.ExecutableLocation))
+                                if (await interaction.OpenAsync(args.ExecutableLocation))
                                 {
                                     launched = true;
                                     if (game.CloseAppAfterGameLaunch)
                                     {
-                                        await appAction.ExitAppAsync();
+                                        await interaction.ExitApplicationAsync();
                                     }
                                 }
                             }
 
                             if (!launched)
                             {
-                                notificationAction.ShowNotification(localizationManager.GetResource(LocalizationResources.Mod_Actions.LaunchGame.LaunchError.Title),
-                                    localizationManager.GetResource(LocalizationResources.Mod_Actions.LaunchGame.LaunchError.Message), NotificationType.Error, 10);
+                                interaction.Notify(interaction.GetText(LocalizationResources.Mod_Actions.LaunchGame.LaunchError.Title),
+                                    interaction.GetText(LocalizationResources.Mod_Actions.LaunchGame.LaunchError.Message), NotificationType.Error, 10);
                                 await TriggerOverlayAsync(id, false);
                             }
                         }
@@ -1083,11 +997,11 @@ namespace IronyModManager.ViewModels.Controls
                         {
                             await ensureSteamIsRunning(args);
                             var generateAppIdFile = gameService.IsSteamGame(args) && createSteamAppIdFile;
-                            if (await appAction.RunGameAsync(generateAppIdFile, args.ExecutableLocation, game.SteamRoot, game.LinuxProtonVersion, game.SteamAppId, args.LaunchArguments))
+                            if (await interaction.RunGameAsync(generateAppIdFile, args.ExecutableLocation, game.SteamRoot, game.LinuxProtonVersion, game.SteamAppId, args.LaunchArguments))
                             {
                                 if (game.CloseAppAfterGameLaunch)
                                 {
-                                    await appAction.ExitAppAsync();
+                                    await interaction.ExitApplicationAsync();
                                 }
                                 else
                                 {
@@ -1096,16 +1010,16 @@ namespace IronyModManager.ViewModels.Controls
                             }
                             else
                             {
-                                notificationAction.ShowNotification(localizationManager.GetResource(LocalizationResources.Mod_Actions.LaunchGame.LaunchError.Title),
-                                    localizationManager.GetResource(LocalizationResources.Mod_Actions.LaunchGame.LaunchError.Message), NotificationType.Error, 10);
+                                interaction.Notify(interaction.GetText(LocalizationResources.Mod_Actions.LaunchGame.LaunchError.Title),
+                                    interaction.GetText(LocalizationResources.Mod_Actions.LaunchGame.LaunchError.Message), NotificationType.Error, 10);
                                 await TriggerOverlayAsync(id, false);
                             }
                         }
                     }
                     else
                     {
-                        notificationAction.ShowNotification(localizationManager.GetResource(LocalizationResources.Mod_Actions.LaunchGame.NotSet.Title),
-                            localizationManager.GetResource(LocalizationResources.Mod_Actions.LaunchGame.NotSet.Message), NotificationType.Warning, 10);
+                        interaction.Notify(interaction.GetText(LocalizationResources.Mod_Actions.LaunchGame.NotSet.Title),
+                            interaction.GetText(LocalizationResources.Mod_Actions.LaunchGame.NotSet.Message), NotificationType.Warning, 10);
                     }
                 }
             }
@@ -1140,24 +1054,34 @@ namespace IronyModManager.ViewModels.Controls
                 AnalyzeClass = !state ? InvalidConflictSolverClass : string.Empty;
                 if (!state && previousCollectionNotification != collectionName)
                 {
-                    notificationAction.ShowNotification(localizationManager.GetResource(LocalizationResources.Notifications.ConflictSolverUpdate.Title),
-                        localizationManager.GetResource(LocalizationResources.Notifications.ConflictSolverUpdate.Message), NotificationType.Warning, 30);
+                    interaction.Notify(interaction.GetText(LocalizationResources.Notifications.ConflictSolverUpdate.Title),
+                        interaction.GetText(LocalizationResources.Notifications.ConflictSolverUpdate.Message), NotificationType.Warning, 30);
                     previousCollectionNotification = collectionName;
                 }
             };
 
-            gameDirectoryChangedHandler.Subscribe(async s =>
+            eventCoordinator.SubscribeDirectoryChanges(async s =>
             {
-                if (s.CustomDirectoryChanged)
+                AllowModSelection = false;
+                InstalledMods.AllowModSelection = false;
+                CollectionMods.AllowModSelection = false;
+                var recovered = await modStateReconciliationCoordinator.RevalidateConfigurationAsync(
+                    s.Game,
+                    (revalidationLock, isCurrent) => InstalledMods.RevalidateModsAsync(revalidationLock, isCurrent),
+                    s.CustomDirectoryChanged ? () => CollectionMods.Reset(true) : null,
+                    () => CollectionMods.SetMods(InstalledMods.Mods, InstalledMods.ActiveGame));
+                if (recovered)
                 {
-                    CollectionMods.Reset(true);
+                    var allowSelection = CollectionMods.SelectedModCollection != null;
+                    AllowModSelection = allowSelection;
+                    InstalledMods.AllowModSelection = allowSelection;
+                    CollectionMods.AllowModSelection = allowSelection;
                 }
 
-                await InstalledMods.RefreshModsAsync();
                 EvalResumeAvailability(s.Game);
             }).DisposeWith(disposables);
 
-            modListInstallRefreshRequestHandler.Subscribe(async m =>
+            eventCoordinator.SubscribeInstallRefresh(async m =>
             {
                 await InstallModsAsync(m.SkipOverlay);
             }).DisposeWith(disposables);
@@ -1184,13 +1108,13 @@ namespace IronyModManager.ViewModels.Controls
         /// <returns>Task.</returns>
         protected virtual async Task ShowInvalidModsNotificationAsync(IReadOnlyCollection<IModInstallationResult> mods)
         {
-            var title = localizationManager.GetResource(LocalizationResources.InvalidModsDetected.Title);
-            var message = localizationManager.GetResource(LocalizationResources.InvalidModsDetected.Message).FormatIronySmart(new { Environment.NewLine, Mods = string.Join(Environment.NewLine, mods.Select(p => p.Path)) });
+            var title = interaction.GetText(LocalizationResources.InvalidModsDetected.Title);
+            var message = interaction.GetText(LocalizationResources.InvalidModsDetected.Message).FormatIronySmart(new { Environment.NewLine, Mods = string.Join(Environment.NewLine, mods.Select(p => p.Path)) });
 
             if (!showingInvalidNotification)
             {
                 showingInvalidNotification = true;
-                await notificationAction.ShowPromptAsync(title, title, message, NotificationType.Error, PromptType.OK);
+                await interaction.PromptAsync(title, title, message, NotificationType.Error, PromptType.OK);
                 showingInvalidNotification = false;
             }
         }
@@ -1203,59 +1127,7 @@ namespace IronyModManager.ViewModels.Controls
         /// <param name="totalSteps">The total steps.</param>
         private void SubscribeToProgressReport(long id, CompositeDisposable disposables, int totalSteps)
         {
-            definitionLoadHandler?.Dispose();
-            definitionLoadHandler = modDefinitionLoadHandler.Subscribe(s =>
-            {
-                var message = localizationManager.GetResource(LocalizationResources.Mod_Actions.ConflictSolver.Overlay_Conflict_Solver_Loading_Definitions);
-                var overlayProgress = IronyFormatter.Format(localizationManager.GetResource(LocalizationResources.Mod_Actions.ConflictSolver.Overlay_Conflict_Solver_Progress),
-                    new { PercentDone = s.Percentage.ToLocalizedPercentage(), Count = 1, TotalCount = totalSteps });
-                TriggerOverlay(id, true, message, overlayProgress);
-            }).DisposeWith(disposables);
-
-            modInvalidReplaceHandler?.Dispose();
-            modInvalidReplaceHandler = modDefinitionInvalidReplaceHandler.Subscribe(s =>
-            {
-                var message = localizationManager.GetResource(LocalizationResources.Mod_Actions.ConflictSolver.Overlay_Conflict_Solver_Replacing_Definitions);
-                var overlayProgress = IronyFormatter.Format(localizationManager.GetResource(LocalizationResources.Mod_Actions.ConflictSolver.Overlay_Conflict_Solver_Progress),
-                    new { PercentDone = s.Percentage.ToLocalizedPercentage(), Count = 2, TotalCount = totalSteps });
-                TriggerOverlay(id, true, message, overlayProgress);
-            }).DisposeWith(disposables);
-
-            gameIndexHandler?.Dispose();
-            gameIndexHandler = gameIndexProgressHandler.Subscribe(s =>
-            {
-                var message = localizationManager.GetResource(LocalizationResources.Mod_Actions.ConflictSolver.Overlay_Conflict_Solver_Indexing_Game);
-                var overlayProgress = IronyFormatter.Format(localizationManager.GetResource(LocalizationResources.Mod_Actions.ConflictSolver.Overlay_Conflict_Solver_Progress),
-                    new { PercentDone = s.Percentage.ToLocalizedPercentage(), Count = 3, TotalCount = totalSteps });
-                TriggerOverlay(id, true, message, overlayProgress);
-            }).DisposeWith(disposables);
-
-            gameDefinitionLoadHandler?.Dispose();
-            gameDefinitionLoadHandler = gameDefinitionLoadProgressHandler.Subscribe(s =>
-            {
-                var message = localizationManager.GetResource(LocalizationResources.Mod_Actions.ConflictSolver.Overlay_Conflict_Solver_Loading_Game_Definitions);
-                var overlayProgress = IronyFormatter.Format(localizationManager.GetResource(LocalizationResources.Mod_Actions.ConflictSolver.Overlay_Conflict_Solver_Progress),
-                    new { PercentDone = s.Percentage.ToLocalizedPercentage(), Count = 4, TotalCount = totalSteps });
-                TriggerOverlay(id, true, message, overlayProgress);
-            }).DisposeWith(disposables);
-
-            definitionAnalyzeLoadHandler?.Dispose();
-            definitionAnalyzeLoadHandler = modDefinitionAnalyzeHandler.Subscribe(s =>
-            {
-                var message = localizationManager.GetResource(LocalizationResources.Mod_Actions.ConflictSolver.Overlay_Conflict_Solver_Analyzing_Conflicts);
-                var overlayProgress = IronyFormatter.Format(localizationManager.GetResource(LocalizationResources.Mod_Actions.ConflictSolver.Overlay_Conflict_Solver_Progress),
-                    new { PercentDone = s.Percentage.ToLocalizedPercentage(), Count = totalSteps == 6 ? 5 : 3, TotalCount = totalSteps });
-                TriggerOverlay(id, true, message, overlayProgress);
-            }).DisposeWith(disposables);
-
-            definitionSyncHandler?.Dispose();
-            definitionSyncHandler = modDefinitionPatchLoadHandler.Subscribe(s =>
-            {
-                var message = localizationManager.GetResource(LocalizationResources.Mod_Actions.ConflictSolver.Overlay_Conflict_Solver_Analyzing_Resolved_Conflicts);
-                var overlayProgress = IronyFormatter.Format(localizationManager.GetResource(LocalizationResources.Mod_Actions.ConflictSolver.Overlay_Conflict_Solver_Progress),
-                    new { PercentDone = s.Percentage.ToLocalizedPercentage(), Count = totalSteps == 6 ? 6 : 4, TotalCount = totalSteps });
-                TriggerOverlay(id, true, message, overlayProgress);
-            }).DisposeWith(disposables);
+            conflictAnalysisProgressCoordinator.Subscribe(id, disposables, totalSteps, TriggerOverlay);
         }
 
         #endregion Methods

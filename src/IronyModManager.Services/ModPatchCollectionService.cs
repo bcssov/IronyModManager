@@ -66,7 +66,8 @@ namespace IronyModManager.Services
         IMapper mapper,
         IValidateParser validateParser,
         IParametrizedParser parametrizedParser,
-        IParserMerger parserMerger) : ModBaseService(cache, definitionInfoProviders, reader, modWriter, modParser, gameService, storageProvider, mapper), IModPatchCollectionService
+        IParserMerger parserMerger,
+        IGameStateSafetyService gameStateSafetyService) : ModBaseService(cache, definitionInfoProviders, reader, modWriter, modParser, gameService, storageProvider, mapper), IModPatchCollectionService
     {
         #region Fields
 
@@ -186,6 +187,11 @@ namespace IronyModManager.Services
         private readonly AsyncLock searchInitLock = new();
 
         /// <summary>
+        /// Owns per-game filesystem safety state for mixed patch phases.
+        /// </summary>
+        private readonly IGameStateSafetyService gameStateSafetyService = gameStateSafetyService;
+
+        /// <summary>
         /// The validate parser
         /// </summary>
         private readonly IValidateParser validateParser = validateParser;
@@ -287,7 +293,12 @@ namespace IronyModManager.Services
         /// </summary>
         /// <param name="collectionName">Name of the collection.</param>
         /// <returns>Task&lt;System.Boolean&gt;.</returns>
-        public virtual async Task<bool> CleanPatchCollectionAsync(string collectionName)
+        public virtual Task<bool> CleanPatchCollectionAsync(string collectionName)
+        {
+            return CleanPatchCollectionInternalAsync(collectionName);
+        }
+
+        private async Task<bool> CleanPatchCollectionInternalAsync(string collectionName)
         {
             var game = GameService.GetSelected();
             if (game == null)
@@ -314,22 +325,38 @@ namespace IronyModManager.Services
         /// <returns>Task&lt;System.Boolean&gt;.</returns>
         public Task<bool> CopyPatchCollectionAsync(string collectionName, string newCollectionName)
         {
+            return CopyPatchCollectionInternalAsync(collectionName, newCollectionName);
+        }
+
+        private async Task<bool> CopyPatchCollectionInternalAsync(string collectionName, string newCollectionName)
+        {
             var game = GameService.GetSelected();
             if (game == null)
             {
-                return Task.FromResult(false);
+                return false;
             }
 
             var modDirRootPath = GetModDirectoryRootPath(game);
             var oldPatchName = GenerateCollectionPatchName(collectionName);
             var newPatchName = GenerateCollectionPatchName(newCollectionName);
-            return modPatchExporter.CopyPatchModAsync(new ModPatchExporterParameters
+            var parameters = new ModPatchExporterParameters
             {
                 RootPath = modDirRootPath,
                 ModPath = EvaluatePatchNamePath(game, oldPatchName, modDirRootPath),
                 PatchPath = EvaluatePatchNamePath(game, newPatchName, modDirRootPath),
                 RenamePairs = [new KeyValuePair<string, string>(oldPatchName, newPatchName)]
-            });
+            };
+            var sourceAvailable = await gameStateSafetyService.ExecuteReadAsync(game, async () =>
+            {
+                _ = await modPatchExporter.GetPatchStateAsync(new ModPatchExporterParameters
+                {
+                    RootPath = parameters.RootPath,
+                    PatchPath = parameters.ModPath
+                });
+                return true;
+            }, false, "Read patch collection for copy");
+            return sourceAvailable && await gameStateSafetyService.ExecuteMutationAsync(game,
+                () => modPatchExporter.CopyPatchModAsync(parameters), false, "Copy patch collection");
         }
 
         /// <summary>
@@ -338,7 +365,12 @@ namespace IronyModManager.Services
         /// <param name="copy">The copy.</param>
         /// <param name="collectionName">Name of the collection.</param>
         /// <returns>Task&lt;IDefinition&gt;.</returns>
-        public virtual async Task<IDefinition> CreatePatchDefinitionAsync(IDefinition copy, string collectionName)
+        public virtual Task<IDefinition> CreatePatchDefinitionAsync(IDefinition copy, string collectionName)
+        {
+            return CreatePatchDefinitionInternalAsync(copy, collectionName);
+        }
+
+        private async Task<IDefinition> CreatePatchDefinitionInternalAsync(IDefinition copy, string collectionName)
         {
             var game = GameService.GetSelected();
             if (game != null && copy != null && !string.IsNullOrWhiteSpace(collectionName))
@@ -1212,8 +1244,14 @@ namespace IronyModManager.Services
         /// <returns>A Task&lt;IIndexedDefinitions&gt; representing the asynchronous operation.</returns>
         /// <exception cref="ModTooLargeException">Detected a mod which is potentially too large to parse.</exception>
         /// <exception cref="IronyModManager.Services.Common.Exceptions.ModTooLargeException">Detected a mod which is potentially too large to parse.</exception>
-        public virtual async Task<IIndexedDefinitions> GetModObjectsAsync(IGame game, IEnumerable<IMod> mods, string collectionName, PatchStateMode mode, IReadOnlyCollection<IGameLanguage> allowedGameLanguages)
+        public virtual Task<IIndexedDefinitions> GetModObjectsAsync(IGame game, IEnumerable<IMod> mods, string collectionName, PatchStateMode mode, IReadOnlyCollection<IGameLanguage> allowedGameLanguages)
         {
+            return GetModObjectsInternalAsync(game, mods, collectionName, mode, allowedGameLanguages);
+        }
+
+        private async Task<IIndexedDefinitions> GetModObjectsInternalAsync(IGame game, IEnumerable<IMod> mods, string collectionName, PatchStateMode mode, IReadOnlyCollection<IGameLanguage> allowedGameLanguages)
+        {
+            mods = mods?.Where(p => !p.IsVirtual);
             if (game == null || mods == null || !mods.Any())
             {
                 return null;
@@ -2081,21 +2119,37 @@ namespace IronyModManager.Services
         /// <returns>Task&lt;System.Boolean&gt;.</returns>
         public Task<bool> RenamePatchCollectionAsync(string collectionName, string newCollectionName)
         {
+            return RenamePatchCollectionInternalAsync(collectionName, newCollectionName);
+        }
+
+        private async Task<bool> RenamePatchCollectionInternalAsync(string collectionName, string newCollectionName)
+        {
             var game = GameService.GetSelected();
             if (game == null)
             {
-                return Task.FromResult(false);
+                return false;
             }
 
             var oldPatchName = GenerateCollectionPatchName(collectionName);
             var newPatchName = GenerateCollectionPatchName(newCollectionName);
-            return modPatchExporter.RenamePatchModAsync(new ModPatchExporterParameters
+            var parameters = new ModPatchExporterParameters
             {
                 RootPath = GetModDirectoryRootPath(game),
                 ModPath = EvaluatePatchNamePath(game, oldPatchName),
                 PatchPath = EvaluatePatchNamePath(game, newPatchName),
                 RenamePairs = [new KeyValuePair<string, string>(oldPatchName, newPatchName)]
-            });
+            };
+            var sourceAvailable = await gameStateSafetyService.ExecuteReadAsync(game, async () =>
+            {
+                _ = await modPatchExporter.GetPatchStateAsync(new ModPatchExporterParameters
+                {
+                    RootPath = parameters.RootPath,
+                    PatchPath = parameters.ModPath
+                });
+                return true;
+            }, false, "Read patch collection for rename");
+            return sourceAvailable && await gameStateSafetyService.ExecuteMutationAsync(game,
+                () => modPatchExporter.RenamePatchModAsync(parameters), false, "Rename patch collection");
         }
 
         /// <summary>
@@ -2189,7 +2243,12 @@ namespace IronyModManager.Services
         /// <param name="conflictResult">The conflict result.</param>
         /// <param name="collectionName">Name of the collection.</param>
         /// <returns>Task&lt;System.Boolean&gt;.</returns>
-        public virtual async Task<bool> SaveIgnoredPathsAsync(IConflictResult conflictResult, string collectionName)
+        public virtual Task<bool> SaveIgnoredPathsAsync(IConflictResult conflictResult, string collectionName)
+        {
+            return SaveIgnoredPathsInternalAsync(conflictResult, collectionName);
+        }
+
+        private async Task<bool> SaveIgnoredPathsInternalAsync(IConflictResult conflictResult, string collectionName)
         {
             var game = GameService.GetSelected();
             if (game == null)
@@ -2201,7 +2260,7 @@ namespace IronyModManager.Services
             if (conflictResult.Mode != PatchStateMode.ReadOnly && conflictResult.Mode != PatchStateMode.ReadOnlyWithoutLocalization)
             {
                 var patchName = GenerateCollectionPatchName(collectionName);
-                return await modPatchExporter.SaveStateAsync(new ModPatchExporterParameters
+                var parameters = new ModPatchExporterParameters
                 {
                     LoadOrder = GetCollectionMods(collectionName: collectionName).Select(p => p.DescriptorFile),
                     Mode = MapPatchStateMode(conflictResult.Mode),
@@ -2215,7 +2274,18 @@ namespace IronyModManager.Services
                     PatchPath = EvaluatePatchNamePath(game, patchName),
                     HasGameDefinitions = await conflictResult.AllConflicts.HasGameDefinitionsAsync(),
                     AllowedLanguages = conflictResult.AllowedLanguages
-                });
+                };
+                var sourceAvailable = await gameStateSafetyService.ExecuteReadAsync(game, async () =>
+                {
+                    _ = await modPatchExporter.GetPatchStateAsync(new ModPatchExporterParameters
+                    {
+                        RootPath = parameters.RootPath,
+                        PatchPath = parameters.PatchPath
+                    });
+                    return true;
+                }, false, "Read patch state before save");
+                return sourceAvailable && await gameStateSafetyService.ExecuteMutationAsync(game,
+                    () => modPatchExporter.SaveStateAsync(parameters), false, "Save patch state");
             }
 
             return true;
@@ -2796,9 +2866,42 @@ namespace IronyModManager.Services
         /// <param name="collectionName">Name of the collection.</param>
         /// <param name="exportType">Type of the export.</param>
         /// <returns><c>true</c> if exported, <c>false</c> otherwise.</returns>
-        protected virtual async Task<bool> ExportModPatchDefinitionAsync(IConflictResult conflictResult, IDefinition definition, string collectionName, ExportType exportType)
+        protected virtual Task<bool> ExportModPatchDefinitionAsync(IConflictResult conflictResult, IDefinition definition, string collectionName, ExportType exportType)
+        {
+            return ExportModPatchDefinitionInternalAsync(conflictResult, definition, collectionName, exportType);
+        }
+
+        private async Task<bool> ExportModPatchDefinitionInternalAsync(IConflictResult conflictResult, IDefinition definition,
+            string collectionName, ExportType exportType)
         {
             var game = GameService.GetSelected();
+            if (definition == null || game == null || conflictResult == null || string.IsNullOrWhiteSpace(collectionName))
+            {
+                return false;
+            }
+
+            var patchName = GenerateCollectionPatchName(collectionName);
+            var sourceAvailable = await gameStateSafetyService.ExecuteReadAsync(game, async () =>
+            {
+                _ = await modPatchExporter.GetPatchStateAsync(new ModPatchExporterParameters
+                {
+                    RootPath = GetModDirectoryRootPath(game),
+                    PatchPath = EvaluatePatchNamePath(game, patchName)
+                });
+                if (definition.ValueType == ValueType.Binary && !string.IsNullOrWhiteSpace(definition.ModPath))
+                {
+                    using var stream = Reader.GetStream(definition.ModPath, definition.File);
+                }
+                return true;
+            }, false, "Read patch source state");
+            return sourceAvailable && await gameStateSafetyService.ExecuteMutationAsync(game,
+                () => ExportModPatchDefinitionCoreAsync(game, conflictResult, definition, collectionName, exportType),
+                false, "Write patch collection");
+        }
+
+        private async Task<bool> ExportModPatchDefinitionCoreAsync(IGame game, IConflictResult conflictResult,
+            IDefinition definition, string collectionName, ExportType exportType)
+        {
             if (definition != null && game != null && conflictResult != null && !string.IsNullOrWhiteSpace(collectionName))
             {
                 var patchName = GenerateCollectionPatchName(collectionName);

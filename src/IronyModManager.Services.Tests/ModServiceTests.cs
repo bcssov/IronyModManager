@@ -20,7 +20,9 @@ using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using AwesomeAssertions;
+using Castle.DynamicProxy;
 using IronyModManager.IO.Common.Mods;
+using IronyModManager.IO.Common.FileSystem;
 using IronyModManager.IO.Common.Readers;
 using IronyModManager.Localization;
 using IronyModManager.Models;
@@ -53,6 +55,8 @@ namespace IronyModManager.Services.Tests
     [SuppressMessage("CodeQuality", "IDE0079:Remove unnecessary suppression", Justification = "Resharper")]
     public class ModServiceTests
     {
+        private const int CloudFileProviderNotRunningHResult = unchecked((int)0x8007016A);
+
         /// <summary>
         /// Gets the service.
         /// </summary>
@@ -67,9 +71,18 @@ namespace IronyModManager.Services.Tests
         /// <returns>ModService.</returns>
         private static ModService GetService(Mock<IStorageProvider> storageProvider, Mock<IModParser> modParser,
             Mock<IReader> reader, Mock<IMapper> mapper, Mock<IModWriter> modWriter,
-            Mock<IGameService> gameService, Mock<IParser> parser = null, Mock<ILanguagesService> languageService = null)
+            Mock<IGameService> gameService, Mock<IParser> parser = null, Mock<ILanguagesService> languageService = null,
+            Mock<IFileSystemStateProbe> fileSystemStateProbe = null, IGameStateSafetyService gameStateSafetyService = null, ICache cache = null)
         {
-            return new ModService(languageService?.Object, parser?.Object, null, new Cache(), null, reader.Object, modParser.Object, modWriter.Object, gameService.Object, storageProvider.Object, mapper.Object);
+            if (fileSystemStateProbe == null)
+            {
+                fileSystemStateProbe = new Mock<IFileSystemStateProbe>();
+                fileSystemStateProbe.Setup(p => p.CheckDirectory(It.IsAny<string>())).Returns((string path) => new FileSystemPathCheckResult { Path = path, State = FileSystemPathState.Available });
+            }
+
+            gameStateSafetyService ??= new GameStateSafetyService(fileSystemStateProbe.Object, Mock.Of<ILogger>());
+            return new ModService(languageService?.Object, parser?.Object, null, cache ?? new Cache(), null, reader.Object, modParser.Object, modWriter.Object, gameService.Object, storageProvider.Object, mapper.Object,
+                fileSystemStateProbe.Object, gameStateSafetyService, () => new Mod());
         }
 
         /// <summary>
@@ -329,7 +342,59 @@ namespace IronyModManager.Services.Tests
 
             var service = GetService(storageProvider, modParser, reader, mapper, modWriter, gameService);
             var result = await service.ExportModsAsync(new List<IMod> { new Mod { DescriptorFile = "mod/fake.mod" } }, new List<IMod> { new Mod { DescriptorFile = "mod/fake.mod" } }, new ModCollection { Name = "fake" });
-            result.Should().BeTrue();
+            result.Succeeded.Should().BeTrue();
+            result.SkippedVirtualMods.Should().Be(0);
+        }
+
+        [Fact]
+        public async Task Should_skip_virtual_mods_when_applying_without_mutating_collection_membership()
+        {
+            DISetup.SetupContainer();
+
+            var modWriter = new Mock<IModWriter>();
+            var gameService = new Mock<IGameService>();
+            var game = new Game { Type = "test", UserDirectory = "C:\\users\\fake" };
+            gameService.Setup(p => p.GetSelected()).Returns(game);
+            modWriter.Setup(p => p.ModDirectoryExistsAsync(It.IsAny<ModWriterParameters>())).ReturnsAsync(false);
+            ModWriterParameters applied = null;
+            modWriter.Setup(p => p.ApplyModsAsync(It.IsAny<ModWriterParameters>()))
+                .Callback<ModWriterParameters>(p => applied = p)
+                .ReturnsAsync(true);
+            var service = GetService(new Mock<IStorageProvider>(), new Mock<IModParser>(), new Mock<IReader>(),
+                new Mock<IMapper>(), modWriter, gameService);
+            var first = new Mod { DescriptorFile = "mod/a.mod", Name = "A", IsSelected = true };
+            var missingOne = new Mod { DescriptorFile = "mod/b.mod", Name = "B", IsSelected = true, IsVirtual = true };
+            var third = new Mod { DescriptorFile = "mod/c.mod", Name = "C", IsSelected = true };
+            var missingTwo = new Mod { DescriptorFile = "mod/d.mod", Name = "D", IsSelected = true, IsVirtual = true };
+            var fifth = new Mod { DescriptorFile = "mod/e.mod", Name = "E", IsSelected = true };
+            var selected = new List<IMod> { first, missingOne, third, missingTwo, fifth };
+            var persisted = new ModCollection
+            {
+                Name = "collection",
+                Mods = ["mod/a.mod", "mod/b.mod", "mod/c.mod", "mod/d.mod", "mod/e.mod"]
+            };
+
+            var result = await service.ExportModsAsync(selected, selected, persisted);
+
+            result.Succeeded.Should().BeTrue();
+            result.SkippedVirtualMods.Should().Be(2);
+            applied.EnabledMods.Should().Equal(first, third, fifth);
+            applied.OtherMods.Should().BeEmpty();
+            selected.Should().Equal(first, missingOne, third, missingTwo, fifth);
+            persisted.Mods.Should().Equal("mod/a.mod", "mod/b.mod", "mod/c.mod", "mod/d.mod", "mod/e.mod");
+
+            missingOne.IsVirtual = false;
+            result = await service.ExportModsAsync(selected, selected, persisted);
+            result.Succeeded.Should().BeTrue();
+            result.SkippedVirtualMods.Should().Be(1);
+            applied.EnabledMods.Should().Equal(first, missingOne, third, fifth);
+
+            missingTwo.IsVirtual = false;
+            result = await service.ExportModsAsync(selected, selected, persisted);
+            result.Succeeded.Should().BeTrue();
+            result.SkippedVirtualMods.Should().Be(0);
+            applied.EnabledMods.Should().Equal(first, missingOne, third, missingTwo, fifth);
+            persisted.Mods.Should().Equal("mod/a.mod", "mod/b.mod", "mod/c.mod", "mod/d.mod", "mod/e.mod");
         }
 
         /// <summary>
@@ -373,7 +438,7 @@ namespace IronyModManager.Services.Tests
             var service = GetService(storageProvider, modParser, reader, mapper, modWriter, gameService);
             var result = await service.ExportModsAsync(new List<IMod> { new Mod { DescriptorFile = "mod/fake.mod" } }, new List<IMod> { new Mod { DescriptorFile = "mod/fake.mod" } },
                 new ModCollection { PatchModEnabled = false, Name = "fake" });
-            result.Should().BeTrue();
+            result.Succeeded.Should().BeTrue();
             noPatchModExported.Should().BeTrue();
         }
 
@@ -416,7 +481,7 @@ namespace IronyModManager.Services.Tests
 
             var service = GetService(storageProvider, modParser, reader, mapper, modWriter, gameService);
             var result = await service.ExportModsAsync(new List<IMod> { new Mod() }, new List<IMod> { new Mod() }, new ModCollection { Name = "fake" });
-            result.Should().BeFalse();
+            result.Succeeded.Should().BeFalse();
         }
 
         /// <summary>
@@ -455,7 +520,7 @@ namespace IronyModManager.Services.Tests
 
             var service = GetService(storageProvider, modParser, reader, mapper, modWriter, gameService);
             var result = await service.ExportModsAsync(null, null, new ModCollection { Name = "fake" });
-            result.Should().BeFalse();
+            result.Succeeded.Should().BeFalse();
         }
 
 
@@ -754,6 +819,35 @@ namespace IronyModManager.Services.Tests
 
             var result = await service.LockDescriptorsAsync(new List<IMod> { new Mod() }, true);
             result.Should().BeTrue();
+        }
+
+        [Fact]
+        public async Task Descriptor_lock_failure_should_not_mutate_model_or_report_success()
+        {
+            var storageProvider = new Mock<IStorageProvider>();
+            var modParser = new Mock<IModParser>();
+            var reader = new Mock<IReader>();
+            var modWriter = new Mock<IModWriter>();
+            modWriter.Setup(p => p.SetDescriptorLockAsync(It.IsAny<ModWriterParameters>(), true))
+                .ThrowsAsync(new UnauthorizedAccessException());
+            var gameService = new Mock<IGameService>();
+            var game = new Game { Type = "descriptor-failure", UserDirectory = "user", WorkshopDirectory = [] };
+            gameService.Setup(p => p.GetSelected()).Returns(game);
+            var mapper = new Mock<IMapper>();
+            var probe = new Mock<IFileSystemStateProbe>();
+            probe.Setup(p => p.IsFileSystemAccessFailure(It.IsAny<Exception>())).Returns(true);
+            var safety = new GameStateSafetyService(probe.Object, Mock.Of<ILogger>());
+            var target = GetService(storageProvider, modParser, reader, mapper, modWriter, gameService,
+                fileSystemStateProbe: probe, gameStateSafetyService: safety);
+            var service = new ProxyGenerator().CreateInterfaceProxyWithTarget<IModService>(target,
+                new GameStateSafetyInterceptor(gameService.Object, safety, probe.Object));
+            var mod = new Mod { IsLocked = false };
+
+            var result = await service.LockDescriptorsAsync([mod], true);
+
+            result.Should().BeFalse();
+            mod.IsLocked.Should().BeFalse();
+            safety.GetLock(game).Reason.Should().Be(GameStateLockReason.WriteAccessFailure);
         }
 
         /// <summary>
@@ -1433,6 +1527,465 @@ namespace IronyModManager.Services.Tests
             lngService.Setup(p => p.GetSelected()).Returns(new Language { Abrv = "en" });
             var result = service.QueryContainsAchievements("test");
             result.Should().BeFalse();
+        }
+
+        [Fact]
+        public async Task Authoritative_empty_scan_should_return_empty_without_locking_game()
+        {
+            var storageProvider = new Mock<IStorageProvider>();
+            var modParser = new Mock<IModParser>();
+            var reader = new Mock<IReader>();
+            reader.Setup(p => p.Read(It.IsAny<string>(), It.IsAny<IEnumerable<string>>(), It.IsAny<bool>())).Returns([]);
+            var modWriter = new Mock<IModWriter>();
+            var gameService = new Mock<IGameService>();
+            var mapper = new Mock<IMapper>();
+            var probe = new Mock<IFileSystemStateProbe>();
+            probe.Setup(p => p.CheckDirectory(It.IsAny<string>())).Returns((string path) => new FileSystemPathCheckResult { Path = path, State = FileSystemPathState.Available });
+            var safety = new GameStateSafetyService(probe.Object, Mock.Of<ILogger>());
+            var game = new Game { Type = "empty", UserDirectory = "user", WorkshopDirectory = [], CustomModDirectory = string.Empty };
+            var service = GetService(storageProvider, modParser, reader, mapper, modWriter, gameService, fileSystemStateProbe: probe, gameStateSafetyService: safety);
+
+            var result = await service.RefreshInstalledModsAsync(game);
+
+            result.IsAuthoritative.Should().BeTrue();
+            result.Mods.Should().BeEmpty();
+            safety.IsLocked(game).Should().BeFalse();
+        }
+
+        [Fact]
+        public async Task Missing_configured_custom_source_should_lock_without_scanning()
+        {
+            var storageProvider = new Mock<IStorageProvider>();
+            var modParser = new Mock<IModParser>();
+            var reader = new Mock<IReader>();
+            var modWriter = new Mock<IModWriter>();
+            var gameService = new Mock<IGameService>();
+            var mapper = new Mock<IMapper>();
+            var probe = new Mock<IFileSystemStateProbe>();
+            probe.Setup(p => p.CheckDirectory(It.IsAny<string>())).Returns((string path) => new FileSystemPathCheckResult
+            {
+                Path = path,
+                State = path == "custom" ? FileSystemPathState.Missing : FileSystemPathState.Available
+            });
+            var safety = new GameStateSafetyService(probe.Object, Mock.Of<ILogger>());
+            var game = new Game { Type = "missing-custom", UserDirectory = "user", WorkshopDirectory = ["workshop"], CustomModDirectory = "custom" };
+            var service = GetService(storageProvider, modParser, reader, mapper, modWriter, gameService, fileSystemStateProbe: probe, gameStateSafetyService: safety);
+
+            var result = await service.RefreshInstalledModsAsync(game);
+
+            result.IsAuthoritative.Should().BeFalse();
+            safety.GetLock(game).Reason.Should().Be(GameStateLockReason.ExpectedSourceMissing);
+            safety.GetLock(game).Context.Should().Be("custom");
+            reader.Verify(p => p.Read(It.IsAny<string>(), It.IsAny<IEnumerable<string>>(), It.IsAny<bool>()), Times.Never);
+        }
+
+        [Theory]
+        [InlineData(true)]
+        [InlineData(false)]
+        public async Task Missing_descriptor_or_workshop_source_should_lock_without_scanning(bool descriptorSource)
+        {
+            var storageProvider = new Mock<IStorageProvider>();
+            var modParser = new Mock<IModParser>();
+            var reader = new Mock<IReader>();
+            var modWriter = new Mock<IModWriter>();
+            var gameService = new Mock<IGameService>();
+            var mapper = new Mock<IMapper>();
+            var missingPath = descriptorSource ? Path.Combine("user", Shared.Constants.ModDirectory) : "workshop";
+            var probe = new Mock<IFileSystemStateProbe>();
+            probe.Setup(p => p.CheckDirectory(It.IsAny<string>())).Returns((string path) => new FileSystemPathCheckResult
+            {
+                Path = path,
+                State = path == missingPath ? FileSystemPathState.Missing : FileSystemPathState.Available
+            });
+            var safety = new GameStateSafetyService(probe.Object, Mock.Of<ILogger>());
+            var game = new Game { Type = "missing-source", UserDirectory = "user", WorkshopDirectory = ["workshop"] };
+            var service = GetService(storageProvider, modParser, reader, mapper, modWriter, gameService, fileSystemStateProbe: probe, gameStateSafetyService: safety);
+
+            var result = await service.RefreshInstalledModsAsync(game);
+
+            result.IsAuthoritative.Should().BeFalse();
+            safety.GetLock(game).Context.Should().Be(missingPath);
+            reader.Verify(p => p.Read(It.IsAny<string>(), It.IsAny<IEnumerable<string>>(), It.IsAny<bool>()), Times.Never);
+        }
+
+        [Fact]
+        public async Task Blank_optional_sources_should_not_be_probed_or_lock_game()
+        {
+            var storageProvider = new Mock<IStorageProvider>();
+            var modParser = new Mock<IModParser>();
+            var reader = new Mock<IReader>();
+            reader.Setup(p => p.Read(It.IsAny<string>(), It.IsAny<IEnumerable<string>>(), It.IsAny<bool>())).Returns([]);
+            var modWriter = new Mock<IModWriter>();
+            var gameService = new Mock<IGameService>();
+            var mapper = new Mock<IMapper>();
+            var probedPaths = new List<string>();
+            var probe = new Mock<IFileSystemStateProbe>();
+            probe.Setup(p => p.CheckDirectory(It.IsAny<string>())).Returns((string path) =>
+            {
+                probedPaths.Add(path);
+                return new FileSystemPathCheckResult { Path = path, State = FileSystemPathState.Available };
+            });
+            var safety = new GameStateSafetyService(probe.Object, Mock.Of<ILogger>());
+            var game = new Game { Type = "optional", UserDirectory = "user", WorkshopDirectory = [string.Empty, " "], CustomModDirectory = null };
+            var service = GetService(storageProvider, modParser, reader, mapper, modWriter, gameService, fileSystemStateProbe: probe, gameStateSafetyService: safety);
+
+            var result = await service.RefreshInstalledModsAsync(game);
+
+            result.IsAuthoritative.Should().BeTrue();
+            probedPaths.Should().Equal(Path.Combine("user", Shared.Constants.ModDirectory));
+            safety.IsLocked(game).Should().BeFalse();
+        }
+
+        [Fact]
+        public async Task Locked_game_should_only_scan_through_explicit_revalidation_and_remain_locked_until_completion()
+        {
+            var storageProvider = new Mock<IStorageProvider>();
+            var modParser = new Mock<IModParser>();
+            var reader = new Mock<IReader>();
+            reader.Setup(p => p.Read(It.IsAny<string>(), It.IsAny<IEnumerable<string>>(), It.IsAny<bool>())).Returns([]);
+            var modWriter = new Mock<IModWriter>();
+            var gameService = new Mock<IGameService>();
+            var mapper = new Mock<IMapper>();
+            var probe = new Mock<IFileSystemStateProbe>();
+            probe.Setup(p => p.CheckDirectory(It.IsAny<string>())).Returns((string path) => new FileSystemPathCheckResult { Path = path, State = FileSystemPathState.Available });
+            var safety = new GameStateSafetyService(probe.Object, Mock.Of<ILogger>());
+            var game = new Game { Type = "locked", UserDirectory = "user", WorkshopDirectory = [] };
+            safety.Lock(game, GameStateLockReason.DiscoveryUnavailable, "provider");
+            var revalidationLock = safety.BeginRevalidation(game, "new user directory");
+            var service = GetService(storageProvider, modParser, reader, mapper, modWriter, gameService, fileSystemStateProbe: probe, gameStateSafetyService: safety);
+
+            (await service.RefreshInstalledModsAsync(game)).IsAuthoritative.Should().BeFalse();
+            reader.Verify(p => p.Read(It.IsAny<string>(), It.IsAny<IEnumerable<string>>(), It.IsAny<bool>()), Times.Never);
+
+            (await service.RevalidateInstalledModsAsync(game, revalidationLock)).IsAuthoritative.Should().BeTrue();
+            safety.IsLocked(game).Should().BeTrue();
+            safety.CompleteRevalidation(game, revalidationLock).Should().BeTrue();
+            safety.IsLocked(game).Should().BeFalse();
+            reader.Verify(p => p.Read(It.IsAny<string>(), It.IsAny<IEnumerable<string>>(), It.IsAny<bool>()), Times.Once);
+        }
+
+        [Fact]
+        public async Task Superseded_revalidation_should_not_scan_or_replace_known_good_cache()
+        {
+            var storageProvider = new Mock<IStorageProvider>();
+            var modParser = new Mock<IModParser>();
+            var reader = new Mock<IReader>();
+            reader.Setup(p => p.Read(It.IsAny<string>(), It.IsAny<IEnumerable<string>>(), It.IsAny<bool>())).Returns([]);
+            var modWriter = new Mock<IModWriter>();
+            var gameService = new Mock<IGameService>();
+            var mapper = new Mock<IMapper>();
+            var probe = new Mock<IFileSystemStateProbe>();
+            probe.Setup(p => p.CheckDirectory(It.IsAny<string>())).Returns((string path) =>
+                new FileSystemPathCheckResult { Path = path, State = FileSystemPathState.Available });
+            var safety = new GameStateSafetyService(probe.Object, Mock.Of<ILogger>());
+            var cache = new Cache();
+            var game = new Game { Type = "generation", UserDirectory = "user", WorkshopDirectory = [] };
+            var knownGood = new List<IMod> { new Mod { DescriptorFile = "mod/known.mod", Game = game.Type } };
+            cache.Set(new CacheAddParameters<IEnumerable<IMod>>
+                { Region = "Mods", Prefix = game.Type, Key = "RegularMods", Value = knownGood });
+            var first = safety.BeginRevalidation(game, "first path");
+            var second = safety.BeginRevalidation(game, "second path");
+            var service = GetService(storageProvider, modParser, reader, mapper, modWriter, gameService,
+                fileSystemStateProbe: probe, gameStateSafetyService: safety, cache: cache);
+
+            var staleResult = await service.RevalidateInstalledModsAsync(game, first);
+
+            staleResult.IsAuthoritative.Should().BeFalse();
+            staleResult.Mods.Should().Equal(knownGood);
+            cache.Get<IEnumerable<IMod>>(new CacheGetParameters
+                { Region = "Mods", Prefix = game.Type, Key = "RegularMods" }).Should().Equal(knownGood);
+            safety.GetLock(game).Should().BeSameAs(second);
+            reader.Verify(p => p.Read(It.IsAny<string>(), It.IsAny<IEnumerable<string>>(), It.IsAny<bool>()), Times.Never);
+        }
+
+        [Fact]
+        public async Task Failed_refresh_should_restore_known_good_cache_and_never_cache_empty_result()
+        {
+            var storageProvider = new Mock<IStorageProvider>();
+            var modParser = new Mock<IModParser>();
+            var reader = new Mock<IReader>();
+            reader.Setup(p => p.Read(It.IsAny<string>(), It.IsAny<IEnumerable<string>>(), It.IsAny<bool>()))
+                .Throws(new IOException("Locale-independent test fixture", CloudFileProviderNotRunningHResult));
+            var modWriter = new Mock<IModWriter>();
+            var gameService = new Mock<IGameService>();
+            var mapper = new Mock<IMapper>();
+            var probe = new Mock<IFileSystemStateProbe>();
+            probe.Setup(p => p.CheckDirectory(It.IsAny<string>())).Returns((string path) => new FileSystemPathCheckResult { Path = path, State = FileSystemPathState.Available });
+            probe.Setup(p => p.IsFileSystemAccessFailure(It.IsAny<Exception>())).Returns(true);
+            var safety = new GameStateSafetyService(probe.Object, Mock.Of<ILogger>());
+            var cache = new Cache();
+            var game = new Game { Type = "cloud", UserDirectory = "user", WorkshopDirectory = ["workshop"], CustomModDirectory = string.Empty };
+            var knownGood = new List<IMod> { new Mod { DescriptorFile = "mod/known.mod", Game = game.Type } };
+            cache.Set(new CacheAddParameters<IEnumerable<IMod>> { Region = "Mods", Prefix = game.Type, Key = "RegularMods", Value = knownGood });
+            var service = GetService(storageProvider, modParser, reader, mapper, modWriter, gameService, fileSystemStateProbe: probe, gameStateSafetyService: safety, cache: cache);
+
+            var result = await service.RefreshInstalledModsAsync(game);
+
+            result.IsAuthoritative.Should().BeFalse();
+            result.Mods.Should().Equal(knownGood);
+            cache.Get<IEnumerable<IMod>>(new CacheGetParameters { Region = "Mods", Prefix = game.Type, Key = "RegularMods" }).Should().Equal(knownGood);
+            safety.GetLock(game).Reason.Should().Be(GameStateLockReason.DiscoveryUnavailable);
+        }
+
+        [Fact]
+        public async Task Cold_start_failed_refresh_should_be_non_authoritative_without_populating_cache()
+        {
+            var storageProvider = new Mock<IStorageProvider>();
+            var modParser = new Mock<IModParser>();
+            var reader = new Mock<IReader>();
+            reader.Setup(p => p.Read(It.IsAny<string>(), It.IsAny<IEnumerable<string>>(), It.IsAny<bool>()))
+                .Throws(new IOException("Locale-independent test fixture", CloudFileProviderNotRunningHResult));
+            var modWriter = new Mock<IModWriter>();
+            var gameService = new Mock<IGameService>();
+            var mapper = new Mock<IMapper>();
+            var probe = new Mock<IFileSystemStateProbe>();
+            probe.Setup(p => p.CheckDirectory(It.IsAny<string>())).Returns((string path) => new FileSystemPathCheckResult { Path = path, State = FileSystemPathState.Available });
+            probe.Setup(p => p.IsFileSystemAccessFailure(It.IsAny<Exception>())).Returns(true);
+            var safety = new GameStateSafetyService(probe.Object, Mock.Of<ILogger>());
+            var cache = new Cache();
+            var game = new Game { Type = "cold", UserDirectory = "user", WorkshopDirectory = [] };
+            var service = GetService(storageProvider, modParser, reader, mapper, modWriter, gameService, fileSystemStateProbe: probe, gameStateSafetyService: safety, cache: cache);
+
+            var result = await service.RefreshInstalledModsAsync(game);
+
+            result.IsAuthoritative.Should().BeFalse();
+            result.Mods.Should().BeEmpty();
+            cache.Get<IEnumerable<IMod>>(new CacheGetParameters { Region = "Mods", Prefix = game.Type, Key = "RegularMods" }).Should().BeNull();
+            safety.GetLock(game).Reason.Should().Be(GameStateLockReason.DiscoveryUnavailable);
+        }
+
+        [Fact]
+        public async Task Available_mod_lookup_should_not_scan_or_populate_cache_while_locked()
+        {
+            var storageProvider = new Mock<IStorageProvider>();
+            var modParser = new Mock<IModParser>();
+            var reader = new Mock<IReader>();
+            var modWriter = new Mock<IModWriter>();
+            var gameService = new Mock<IGameService>();
+            var mapper = new Mock<IMapper>();
+            var probe = new Mock<IFileSystemStateProbe>();
+            var safety = new GameStateSafetyService(probe.Object, Mock.Of<ILogger>());
+            var cache = new Cache();
+            var game = new Game { Type = "locked", UserDirectory = "user", WorkshopDirectory = [] };
+            safety.Lock(game, GameStateLockReason.DiscoveryUnavailable, "provider");
+            var service = GetService(storageProvider, modParser, reader, mapper, modWriter, gameService, fileSystemStateProbe: probe, gameStateSafetyService: safety, cache: cache);
+
+            var result = await service.GetAvailableModsAsync(game);
+
+            result.Should().BeEmpty();
+            reader.Verify(p => p.Read(It.IsAny<string>(), It.IsAny<IEnumerable<string>>(), It.IsAny<bool>()), Times.Never);
+            cache.Get<IEnumerable<IMod>>(new CacheGetParameters { Region = "Mods", Prefix = game.Type, Key = "RegularMods" }).Should().BeNull();
+        }
+
+        [Fact]
+        public void Collection_resolution_should_create_ordered_virtual_with_persisted_metadata_and_restore_real_mod()
+        {
+            var storageProvider = new Mock<IStorageProvider>();
+            var modParser = new Mock<IModParser>();
+            var reader = new Mock<IReader>();
+            var modWriter = new Mock<IModWriter>();
+            var gameService = new Mock<IGameService>();
+            var mapper = new Mock<IMapper>();
+            var first = new Mod { DescriptorFile = "mod/first.mod", FullPath = "first", Name = "First", Game = "game", IsValid = true };
+            var restored = new Mod { DescriptorFile = "mod/missing.mod", FullPath = "missing", Name = "Restored", Game = "game", IsValid = true };
+            var collection = new ModCollection
+            {
+                Game = "game",
+                Mods = ["mod/first.mod", "mod/missing.mod"],
+                ModPaths = ["first", "missing"],
+                ModNames = ["First", "Missing title"],
+                ModIds = [new ModCollectionSourceInfo(), new ModCollectionSourceInfo { SteamId = 42 }]
+            };
+            var service = GetService(storageProvider, modParser, reader, mapper, modWriter, gameService);
+
+            var missingResult = service.ResolveCollectionMods([first], collection);
+
+            missingResult.Should().HaveCount(2);
+            missingResult.First().Should().BeSameAs(first);
+            var virtualMod = missingResult.Last();
+            virtualMod.IsVirtual.Should().BeTrue();
+            virtualMod.IsValid.Should().BeFalse();
+            virtualMod.IsSelected.Should().BeTrue();
+            virtualMod.DescriptorFile.Should().Be("mod/missing.mod");
+            virtualMod.FullPath.Should().Be("missing");
+            virtualMod.Name.Should().Be("Missing title");
+            virtualMod.RemoteId.Should().Be(42);
+            virtualMod.Source.Should().Be(ModSource.Steam);
+
+            var restoredResult = service.ResolveCollectionMods([first, restored], collection, missingResult);
+            restoredResult.Should().Equal(first, restored);
+            restoredResult.Should().OnlyContain(p => !p.IsVirtual);
+        }
+
+        [Fact]
+        public void Imported_collection_should_preserve_missing_members_and_use_persisted_path_fallback()
+        {
+            var installed = new Mod { DescriptorFile = "new/descriptor.mod", FullPath = "same/path", Name = "Installed", Game = "game" };
+            var collection = new ModCollection
+            {
+                Game = "game",
+                Mods = ["missing.mod", "old/descriptor.mod"],
+                ModPaths = ["missing/path", "same/path"],
+                ModNames = ["Missing imported mod", "Imported installed mod"],
+                ModIds = [new ModCollectionSourceInfo { ParadoxId = 84 }, new ModCollectionSourceInfo()]
+            };
+            var service = GetService(new Mock<IStorageProvider>(), new Mock<IModParser>(), new Mock<IReader>(),
+                new Mock<IMapper>(), new Mock<IModWriter>(), new Mock<IGameService>());
+
+            var result = service.ResolveCollectionMods([installed], collection);
+
+            result.Should().HaveCount(2);
+            result.First().IsVirtual.Should().BeTrue();
+            result.First().Name.Should().Be("Missing imported mod");
+            result.First().RemoteId.Should().Be(84);
+            result.Last().Should().BeSameAs(installed);
+        }
+
+        [Fact]
+        public void Mod_state_identity_should_compare_equivalent_distinct_instances()
+        {
+            var service = GetService(new Mock<IStorageProvider>(), new Mock<IModParser>(), new Mock<IReader>(),
+                new Mock<IMapper>(), new Mock<IModWriter>(), new Mock<IGameService>());
+            var mod = new Mod
+            {
+                DescriptorFile = "mod/example.mod", Version = "1", Name = "Example", Dependencies = ["dependency"],
+                RemoteId = 42, ReplacePath = ["common"], UserDir = ["user"], JsonId = "example"
+            };
+            var equivalent = new Mod
+            {
+                DescriptorFile = "MOD/EXAMPLE.MOD", Version = "1", Name = "Example", Dependencies = ["dependency"],
+                RemoteId = 42, ReplacePath = ["common"], UserDir = ["user"], JsonId = "EXAMPLE"
+            };
+
+            service.AreModDefinitionsEquivalent(mod, equivalent).Should().BeTrue();
+            equivalent.Version = "2";
+            service.AreModDefinitionsEquivalent(mod, equivalent).Should().BeFalse();
+        }
+
+        [Fact]
+        public async Task Locked_game_should_reject_apply_without_calling_writer()
+        {
+            var storageProvider = new Mock<IStorageProvider>();
+            var modParser = new Mock<IModParser>();
+            var reader = new Mock<IReader>();
+            var modWriter = new Mock<IModWriter>();
+            var gameService = new Mock<IGameService>();
+            var mapper = new Mock<IMapper>();
+            var game = new Game { Type = "locked-apply" };
+            gameService.Setup(p => p.GetSelected()).Returns(game);
+            var probe = new Mock<IFileSystemStateProbe>();
+            var safety = new GameStateSafetyService(probe.Object, Mock.Of<ILogger>());
+            safety.Lock(game, GameStateLockReason.DiscoveryUnavailable, "source");
+            var service = GetService(storageProvider, modParser, reader, mapper, modWriter, gameService, fileSystemStateProbe: probe, gameStateSafetyService: safety);
+
+            var result = await service.ExportModsAsync([], [], new ModCollection { Name = "collection" });
+
+            result.Succeeded.Should().BeFalse();
+            modWriter.Verify(p => p.ApplyModsAsync(It.IsAny<ModWriterParameters>()), Times.Never);
+        }
+
+        [Fact]
+        public async Task Unwritable_mod_directory_should_abort_and_lock_game()
+        {
+            var storageProvider = new Mock<IStorageProvider>();
+            var modParser = new Mock<IModParser>();
+            var reader = new Mock<IReader>();
+            var modWriter = new Mock<IModWriter>();
+            modWriter.Setup(p => p.CanWriteToModDirectoryAsync(It.IsAny<ModWriterParameters>())).ReturnsAsync(false);
+            var gameService = new Mock<IGameService>();
+            var mapper = new Mock<IMapper>();
+            var game = new Game { Type = "unwritable", UserDirectory = "user", CustomModDirectory = "custom", WorkshopDirectory = [] };
+            gameService.Setup(p => p.GetSelected()).Returns(game);
+            var probe = new Mock<IFileSystemStateProbe>();
+            var safety = new GameStateSafetyService(probe.Object, Mock.Of<ILogger>());
+            var service = GetService(storageProvider, modParser, reader, mapper, modWriter, gameService, fileSystemStateProbe: probe, gameStateSafetyService: safety);
+
+            var result = await service.InstallModsAsync([]);
+
+            result.Should().BeNull();
+            safety.GetLock(game).Reason.Should().Be(GameStateLockReason.WriteAccessFailure);
+            safety.GetLock(game).Context.Should().Be("custom");
+            modWriter.Verify(p => p.CreateModDirectoryAsync(It.IsAny<ModWriterParameters>()), Times.Never);
+        }
+
+        [Fact]
+        public async Task Historical_cloud_provider_descriptor_read_failure_should_abort_install_and_lock_as_discovery_unavailable()
+        {
+            var storageProvider = new Mock<IStorageProvider>();
+            var modParser = new Mock<IModParser>();
+            var reader = new Mock<IReader>();
+            var descriptorDirectory = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, Shared.Constants.ModDirectory);
+            var cloudProviderException = new IOException("Locale-independent test fixture", CloudFileProviderNotRunningHResult);
+            reader.Setup(p => p.Read(descriptorDirectory, It.IsAny<IEnumerable<string>>(), It.IsAny<bool>()))
+                .Throws(cloudProviderException);
+            var modWriter = new Mock<IModWriter>();
+            modWriter.Setup(p => p.CanWriteToModDirectoryAsync(It.IsAny<ModWriterParameters>())).ReturnsAsync(true);
+            var gameService = new Mock<IGameService>();
+            var game = new Game
+            {
+                Type = "install-read-failure", UserDirectory = AppDomain.CurrentDomain.BaseDirectory,
+                WorkshopDirectory = ["workshop"], CustomModDirectory = string.Empty
+            };
+            gameService.Setup(p => p.GetSelected()).Returns(game);
+            var probe = new Mock<IFileSystemStateProbe>();
+            probe.Setup(p => p.IsFileSystemAccessFailure(It.IsAny<Exception>()))
+                .Returns((Exception exception) => exception is IOException or UnauthorizedAccessException);
+            var safety = new GameStateSafetyService(probe.Object, Mock.Of<ILogger>());
+            var unaffectedGame = new Game { Type = "unaffected" };
+            var service = GetService(storageProvider, modParser, reader, new Mock<IMapper>(), modWriter, gameService,
+                fileSystemStateProbe: probe, gameStateSafetyService: safety);
+
+            var result = await service.InstallModsAsync([]);
+
+            result.Should().BeNull();
+            safety.GetLock(game).Reason.Should().Be(GameStateLockReason.DiscoveryUnavailable);
+            safety.GetLock(game).Context.Should().Be("Read mod descriptor sources");
+            safety.IsLocked(unaffectedGame).Should().BeFalse();
+            cloudProviderException.HResult.Should().Be(CloudFileProviderNotRunningHResult);
+            reader.Verify(p => p.Read(descriptorDirectory, It.IsAny<IEnumerable<string>>(), It.IsAny<bool>()), Times.Once);
+            modWriter.Verify(p => p.CreateModDirectoryAsync(It.IsAny<ModWriterParameters>()), Times.Never);
+            modWriter.Verify(p => p.WriteDescriptorAsync(It.IsAny<ModWriterParameters>(), It.IsAny<bool>()), Times.Never);
+        }
+
+        [Fact]
+        public async Task Install_destination_failure_should_lock_as_write_access_failure()
+        {
+            DISetup.SetupContainer();
+
+            var storageProvider = new Mock<IStorageProvider>();
+            var modParser = new Mock<IModParser>();
+            var reader = new Mock<IReader>();
+            SetupMockCase(reader, modParser);
+            var mapper = new Mock<IMapper>();
+            mapper.Setup(p => p.Map<IMod>(It.IsAny<IModObject>())).Returns((IModObject value) =>
+                new Mod { FileName = value.FileName, DescriptorFile = $"mod/{value.FileName}.mod" });
+            reader.Setup(p => p.GetFileInfo(It.IsAny<string>(), It.IsAny<string>())).Returns(new FileInfo
+            {
+                Content = ["name=\"Fake\"", "path=\"c:/fake\""], ContentSHA = "test", FileName = "fake.mod", IsBinary = false
+            });
+            var modWriter = new Mock<IModWriter>();
+            modWriter.Setup(p => p.ModDirectoryExists(It.IsAny<ModWriterParameters>())).Returns(false);
+            modWriter.Setup(p => p.CanWriteToModDirectoryAsync(It.IsAny<ModWriterParameters>())).ReturnsAsync(true);
+            modWriter.Setup(p => p.CreateModDirectoryAsync(It.IsAny<ModWriterParameters>()))
+                .ThrowsAsync(new UnauthorizedAccessException());
+            var gameService = new Mock<IGameService>();
+            var game = new Game
+            {
+                Type = "install-write-failure", UserDirectory = AppDomain.CurrentDomain.BaseDirectory,
+                WorkshopDirectory = ["workshop"], CustomModDirectory = string.Empty
+            };
+            gameService.Setup(p => p.GetSelected()).Returns(game);
+            var probe = new Mock<IFileSystemStateProbe>();
+            probe.Setup(p => p.IsFileSystemAccessFailure(It.IsAny<Exception>()))
+                .Returns((Exception exception) => exception is IOException or UnauthorizedAccessException);
+            var safety = new GameStateSafetyService(probe.Object, Mock.Of<ILogger>());
+            var service = GetService(storageProvider, modParser, reader, mapper, modWriter, gameService,
+                fileSystemStateProbe: probe, gameStateSafetyService: safety);
+
+            var result = await service.InstallModsAsync([]);
+
+            result.Should().BeNull();
+            safety.GetLock(game).Reason.Should().Be(GameStateLockReason.WriteAccessFailure);
         }
     }
 }

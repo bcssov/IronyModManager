@@ -16,6 +16,7 @@
         <converter:ParadoxModConverter x:Key="ParadoxModConverter" />
         <converter:SteamModConverter x:Key="SteamModConverter" />
         <converter:TextTypeFontFamilyConverter x:Key="TextTypeFontFamilyConverter" />
+        <converter:VirtualModClassConverter x:Key="VirtualModClassConverter" />
     </UserControl.Resources>
     <Panel Height="{Binding $parent[Window].ActualHeight, 
          Converter={StaticResource MathConverter} 
@@ -113,6 +114,7 @@
                                  IsTextSearchEnabled="True">
                             <controls:DragDropListBox.ItemTemplate>
                                 <DataTemplate>
+                                    <controls:BoundClassBorder BoundClasses="{Binding IsVirtual, Converter={StaticResource VirtualModClassConverter}}">
                                     <Grid Background="Transparent">
                                         <Grid.ColumnDefinitions>
                                             <ColumnDefinition MaxWidth="50" Width="1.5*" />
@@ -122,7 +124,7 @@
                                             <ColumnDefinition Width="30" />
                                         </Grid.ColumnDefinitions>
                                         <Grid Grid.Column="0" Grid.ColumnSpan="2" ColumnDefinitions="*,38">
-                                            <CheckBox IsChecked="{Binding IsSelected}" Grid.Column="0"></CheckBox>
+                                            <CheckBox IsChecked="{Binding IsSelected}" IsEnabled="{Binding !IsVirtual}" Grid.Column="0"></CheckBox>
                                             <Panel Grid.Column="1" HorizontalAlignment="Left">
                                                 <controls:IronyToolTip Background="Transparent" BorderThickness="0,0,0,0"  IsVisible="{Binding Source, Converter={StaticResource LocalModConverter}}">
                                                     <Image Width="14" Height="14"
@@ -181,6 +183,7 @@
                                             </Panel>
                                         </Grid>
                                     </Grid>
+                                    </controls:BoundClassBorder>
                                 </DataTemplate>
                             </controls:DragDropListBox.ItemTemplate>
                         </controls:DragDropListBox>

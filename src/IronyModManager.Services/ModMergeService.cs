@@ -57,7 +57,8 @@ namespace IronyModManager.Services
         IModParser modParser,
         IGameService gameService,
         IStorageProvider storageProvider,
-        IMapper mapper) : ModBaseService(cache, definitionInfoProviders, reader, modWriter, modParser, gameService, storageProvider, mapper), IModMergeService
+        IMapper mapper,
+        IGameStateSafetyService gameStateSafetyService) : ModBaseService(cache, definitionInfoProviders, reader, modWriter, modParser, gameService, storageProvider, mapper), IModMergeService
     {
         #region Fields
 
@@ -100,6 +101,11 @@ namespace IronyModManager.Services
         /// A private readonly IPreferencesService named preferencesService.
         /// </summary>
         private readonly IPreferencesService preferencesService = preferencesService;
+
+        /// <summary>
+        /// Owns per-game filesystem safety state.
+        /// </summary>
+        private readonly IGameStateSafetyService gameStateSafetyService = gameStateSafetyService;
 
         #endregion Fields
 
@@ -232,8 +238,18 @@ namespace IronyModManager.Services
                 return null;
             }
 
-            var allMods = GetInstalledModsInternal(game, false).ToList();
-            var collectionMods = GetCollectionMods(allMods).ToList();
+            List<IMod> allMods;
+            List<IMod> collectionMods;
+            try
+            {
+                allMods = GetInstalledModsInternal(game, false).ToList();
+                collectionMods = GetCollectionMods(allMods).ToList();
+            }
+            catch (Exception exception) when (gameStateSafetyService.LockIfFileSystemAccessFailure(game,
+                       GameStateLockReason.DiscoveryUnavailable, "Read merge collection sources", exception))
+            {
+                return null;
+            }
             if (collectionMods.Count == 0)
             {
                 return null;
@@ -244,12 +260,20 @@ namespace IronyModManager.Services
 
             var mergeCollectionPath = collectionName.GenerateValidFileName();
             var modDirPath = GetPatchModDirectory(game, mergeCollectionPath);
-            await ModWriter.PurgeModDirectoryAsync(new ModWriterParameters { Path = modDirPath }, true);
-            await ModWriter.CreateModDirectoryAsync(new ModWriterParameters { RootDirectory = game.UserDirectory, Path = Shared.Constants.ModDirectory });
-            await ModWriter.CreateModDirectoryAsync(new ModWriterParameters { RootDirectory = modDirPath });
-            if (game.ModDescriptorType is ModDescriptorType.JsonMetadata or ModDescriptorType.JsonMetadataV2)
+            try
             {
-                await ModWriter.CreateModDirectoryAsync(new ModWriterParameters { RootDirectory = game.UserDirectory, Path = Shared.Constants.JsonModDirectory });
+                await ModWriter.PurgeModDirectoryAsync(new ModWriterParameters { Path = modDirPath }, true);
+                await ModWriter.CreateModDirectoryAsync(new ModWriterParameters { RootDirectory = game.UserDirectory, Path = Shared.Constants.ModDirectory });
+                await ModWriter.CreateModDirectoryAsync(new ModWriterParameters { RootDirectory = modDirPath });
+                if (game.ModDescriptorType is ModDescriptorType.JsonMetadata or ModDescriptorType.JsonMetadataV2)
+                {
+                    await ModWriter.CreateModDirectoryAsync(new ModWriterParameters { RootDirectory = game.UserDirectory, Path = Shared.Constants.JsonModDirectory });
+                }
+            }
+            catch (Exception exception) when (gameStateSafetyService.LockIfFileSystemAccessFailure(game,
+                       GameStateLockReason.WriteAccessFailure, "Prepare merge output", exception))
+            {
+                return null;
             }
 
             var mod = DIResolver.Get<IMod>();
@@ -285,14 +309,22 @@ namespace IronyModManager.Services
 
             mod.Game = game.Type;
 
-            await ModWriter.WriteDescriptorAsync(new ModWriterParameters
+            try
             {
-                Mod = mod,
-                RootDirectory = game.UserDirectory,
-                Path = mod.DescriptorFile,
-                LockDescriptor = CheckIfModShouldBeLocked(game, mod),
-                DescriptorType = MapDescriptorType(game.ModDescriptorType)
-            }, true);
+                await ModWriter.WriteDescriptorAsync(new ModWriterParameters
+                {
+                    Mod = mod,
+                    RootDirectory = game.UserDirectory,
+                    Path = mod.DescriptorFile,
+                    LockDescriptor = CheckIfModShouldBeLocked(game, mod),
+                    DescriptorType = MapDescriptorType(game.ModDescriptorType)
+                }, true);
+            }
+            catch (Exception exception) when (gameStateSafetyService.LockIfFileSystemAccessFailure(game,
+                       GameStateLockReason.WriteAccessFailure, "Write merged mod descriptor", exception))
+            {
+                return null;
+            }
             Cache.Invalidate(new CacheInvalidateParameters { Region = ModsCacheRegion, Prefix = game.Type, Keys = [GetModsCacheKey(true), GetModsCacheKey(false)] });
 
             var collection = GetAllModCollectionsInternal().FirstOrDefault(p => p.IsSelected);
@@ -312,7 +344,15 @@ namespace IronyModManager.Services
             }
 
             await messageBus.PublishAsync(new ModFileMergeProgressEvent(1, 0));
-            await PopulateModFilesInternalAsync(collectionMods);
+            try
+            {
+                await PopulateModFilesInternalAsync(collectionMods);
+            }
+            catch (Exception exception) when (gameStateSafetyService.LockIfFileSystemAccessFailure(game,
+                       GameStateLockReason.DiscoveryUnavailable, "Read merge source files", exception))
+            {
+                return null;
+            }
             await messageBus.PublishAsync(new ModFileMergeProgressEvent(1, 100));
 
             var totalFiles = collectionMods.Where(p => p.Files != null).SelectMany(p => p.Files.Where(f => game.GameFolders.Any(s => f.StartsWith(s, StringComparison.OrdinalIgnoreCase)))).Count();
@@ -340,7 +380,15 @@ namespace IronyModManager.Services
                     processed++;
                     if (allowCopy)
                     {
-                        await modMergeExporter.ExportFilesAsync(new ModMergeFileExporterParameters { RootModPath = collectionMod.FullPath, ExportFile = file, ExportPath = mod.FullPath });
+                        try
+                        {
+                            await modMergeExporter.ExportFilesAsync(new ModMergeFileExporterParameters { RootModPath = collectionMod.FullPath, ExportFile = file, ExportPath = mod.FullPath });
+                        }
+                        catch (Exception exception) when (gameStateSafetyService.LockIfFileSystemAccessFailure(game,
+                                   GameStateLockReason.WriteAccessFailure, "Write merged mod files", exception))
+                        {
+                            return null;
+                        }
                     }
 
                     var percentage = GetProgressPercentage(totalFiles, processed, 100);
@@ -370,6 +418,18 @@ namespace IronyModManager.Services
                 return null;
             }
 
+            List<IMod> allMods;
+            List<IMod> collectionMods;
+            try
+            {
+                allMods = GetInstalledModsInternal(game, false).ToList();
+                collectionMods = GetCollectionMods(allMods).ToList();
+            }
+            catch (Exception exception) when (gameStateSafetyService.LockIfFileSystemAccessFailure(game,
+                       GameStateLockReason.DiscoveryUnavailable, "Read compressed merge sources", exception))
+            {
+                return null;
+            }
             var modTemplate = GetMergeCollectionModNameTemplate();
 
             IMod cloneMod(IMod mod, string fileName, int order)
@@ -417,8 +477,6 @@ namespace IronyModManager.Services
                 return newMod;
             }
 
-            var allMods = GetInstalledModsInternal(game, false).ToList();
-            var collectionMods = GetCollectionMods(allMods).ToList();
             if (collectionMods.Count == 0)
             {
                 return null;
@@ -427,24 +485,50 @@ namespace IronyModManager.Services
             var mergeCollectionPath = collectionName.GenerateValidFileName();
             var modDirPath = GetPatchModDirectory(game, mergeCollectionPath);
             var modDirRootPath = GetModDirectoryRootPath(game);
-            var preflight = PreflightMergeCompressArchivePaths(GetMergeCompressArchivePaths(game, collectionMods, collectionName, copiedNamePrefix, modTemplate));
+            MergeCompressPreflightResult preflight;
+            try
+            {
+                preflight = PreflightMergeCompressArchivePaths(GetMergeCompressArchivePaths(game,
+                    collectionMods, collectionName, copiedNamePrefix, modTemplate));
+            }
+            catch (Exception exception) when (gameStateSafetyService.LockIfFileSystemAccessFailure(game,
+                       GameStateLockReason.WriteAccessFailure, "Validate compressed merge output", exception))
+            {
+                return null;
+            }
             if (!preflight.CanProceed)
             {
                 throw new MergeCompressArchiveUnavailableException(preflight.UnavailableArchiveNames);
             }
-            await ModWriter.PurgeModDirectoryAsync(new ModWriterParameters { Path = modDirPath }, true);
-            await ModWriter.CreateModDirectoryAsync(new ModWriterParameters { RootDirectory = game.UserDirectory, Path = Shared.Constants.ModDirectory });
-            await ModWriter.CreateModDirectoryAsync(new ModWriterParameters { Path = modDirPath });
-            if (game.ModDescriptorType is ModDescriptorType.JsonMetadata or ModDescriptorType.JsonMetadataV2)
+            try
             {
-                await ModWriter.CreateModDirectoryAsync(new ModWriterParameters { RootDirectory = game.UserDirectory, Path = Shared.Constants.JsonModDirectory });
+                await ModWriter.PurgeModDirectoryAsync(new ModWriterParameters { Path = modDirPath }, true);
+                await ModWriter.CreateModDirectoryAsync(new ModWriterParameters { RootDirectory = game.UserDirectory, Path = Shared.Constants.ModDirectory });
+                await ModWriter.CreateModDirectoryAsync(new ModWriterParameters { Path = modDirPath });
+                if (game.ModDescriptorType is ModDescriptorType.JsonMetadata or ModDescriptorType.JsonMetadataV2)
+                {
+                    await ModWriter.CreateModDirectoryAsync(new ModWriterParameters { RootDirectory = game.UserDirectory, Path = Shared.Constants.JsonModDirectory });
+                }
+            }
+            catch (Exception exception) when (gameStateSafetyService.LockIfFileSystemAccessFailure(game,
+                       GameStateLockReason.WriteAccessFailure, "Prepare compressed merge output", exception))
+            {
+                return null;
             }
 
             var collection = GetAllModCollectionsInternal().FirstOrDefault(p => p.IsSelected);
             var patchName = GenerateCollectionPatchName(collection!.Name);
 
             await messageBus.PublishAsync(new ModCompressMergeProgressEvent(1, 0));
-            await PopulateModFilesInternalAsync(collectionMods);
+            try
+            {
+                await PopulateModFilesInternalAsync(collectionMods);
+            }
+            catch (Exception exception) when (gameStateSafetyService.LockIfFileSystemAccessFailure(game,
+                       GameStateLockReason.DiscoveryUnavailable, "Read compressed merge sources", exception))
+            {
+                return null;
+            }
             await messageBus.PublishAsync(new ModCompressMergeProgressEvent(1, 100));
 
             var newPatchName = GenerateCollectionPatchName(collectionName);
@@ -487,7 +571,16 @@ namespace IronyModManager.Services
                     foreach (var file in collectionMod.Files.Where(p => game.GameFolders.Any(s => p.StartsWith(s, StringComparison.OrdinalIgnoreCase))))
                     {
                         // OSX seems to have a very low ulimit (according to #183) -- so don't punish other OS users by placing stuff in memory
-                        var stream = Reader.GetStream(collectionMod.FullPath, file);
+                        Stream stream;
+                        try
+                        {
+                            stream = Reader.GetStream(collectionMod.FullPath, file);
+                        }
+                        catch (Exception exception) when (gameStateSafetyService.LockIfFileSystemAccessFailure(game,
+                                   GameStateLockReason.DiscoveryUnavailable, "Read compressed merge source file", exception))
+                        {
+                            return;
+                        }
                         if (stream != null)
                         {
                             if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX) && !ulimitBypass)
@@ -552,7 +645,15 @@ namespace IronyModManager.Services
                     outerProgressLock.Dispose();
 
                     var exportPath = Path.Combine(modDirRootPath, mergeCollectionPath, path);
-                    modMergeCompressExporter.Finalize(queueId, exportPath);
+                    try
+                    {
+                        modMergeCompressExporter.Finalize(queueId, exportPath);
+                    }
+                    catch (Exception exception) when (gameStateSafetyService.LockIfFileSystemAccessFailure(game,
+                               GameStateLockReason.WriteAccessFailure, "Write compressed merge archive", exception))
+                    {
+                        return;
+                    }
                     renamePairs.Add(new KeyValuePair<string, string>(collectionMod.Name, newMod.Name));
                     renamePairs.Add(new KeyValuePair<string, string>(collectionMod.DescriptorFile, newMod.DescriptorFile));
                     using var exportModLock = await zipLock.LockAsync();
@@ -574,13 +675,27 @@ namespace IronyModManager.Services
             });
             await Task.WhenAll(zipTasks);
 
+            if (gameStateSafetyService.IsLocked(game))
+            {
+                modMergeCompressExporter.ProcessedFile -= ModMergeCompressExporterProcessedFile;
+                return null;
+            }
+
             modMergeCompressExporter.ProcessedFile -= ModMergeCompressExporterProcessedFile;
 
             await messageBus.PublishAsync(new ModCompressMergeProgressEvent(2, 99.99));
-            await modPatchExporter.CopyPatchModAsync(new ModPatchExporterParameters
+            try
             {
-                RootPath = modDirRootPath, ModPath = EvaluatePatchNamePath(game, patchName, modDirRootPath), PatchPath = EvaluatePatchNamePath(game, newPatchName, modDirRootPath), RenamePairs = renamePairs
-            });
+                await modPatchExporter.CopyPatchModAsync(new ModPatchExporterParameters
+                {
+                    RootPath = modDirRootPath, ModPath = EvaluatePatchNamePath(game, patchName, modDirRootPath), PatchPath = EvaluatePatchNamePath(game, newPatchName, modDirRootPath), RenamePairs = renamePairs
+                });
+            }
+            catch (Exception exception) when (gameStateSafetyService.LockIfFileSystemAccessFailure(game,
+                       GameStateLockReason.WriteAccessFailure, "Write compressed merge patch state", exception))
+            {
+                return null;
+            }
             await messageBus.PublishAsync(new ModCompressMergeProgressEvent(2, 100));
 
             Cache.Invalidate(new CacheInvalidateParameters { Region = ModsCacheRegion, Prefix = game.Type, Keys = [GetModsCacheKey(true), GetModsCacheKey(false)] });

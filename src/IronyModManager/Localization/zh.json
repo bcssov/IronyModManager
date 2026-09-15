@@ -130,6 +130,7 @@
   "Collection_Mods": {
     "Name": "模组合集",
     "Remove": "-",
+    "RemoveFromCollection": "从合集中移除",
     "Create": "+",
     "OK": "确定",
     "Cancel": "取消",
@@ -191,7 +192,7 @@
     },
     "ImportNonExistingMods": {
       "Title": "缺失的模组",
-      "Message": "无法导入下列模组，因其似乎已丢失：{NewLine}{Mods}"
+      "Message": "下列模组当前未安装。其合集条目已导入，并以禁用的占位项保留：{NewLine}{Mods}"
     },
     "ImportOther": {
       "Title": "…",
@@ -252,8 +253,8 @@
       }
     },
     "Prompts": {
-      "ModsMissingTitle": "模组已移除",
-      "ModsMissingMessage": "一些模组缺失，已自动从合集中移除：{NewLine}{NewLine}{Mods}"
+      "ModsMissingTitle": "模组缺失",
+      "ModsMissingMessage": "一些模组缺失。它们会以禁用的占位项保留在合集中：{NewLine}{NewLine}{Mods}"
     }
   },
   "Mod_Actions": {
@@ -565,6 +566,10 @@
       "Title": "合集已应用",
       "Message": "{CollectionName} 已加载。"
     },
+    "CollectionAppliedMissingMods": {
+      "Title": "已跳过缺失模组",
+      "Message": "合集包含缺失的模组。应用合集时已跳过这些条目，但它们仍保留在合集中。"
+    },
     "CollectionNotApplied": {
       "Title": "合集未应用",
       "Message": "{CollectionName} 未加载。"
@@ -632,6 +637,10 @@
     "ConflictSolverRerunGlobalVars": {
       "Title": "刷新冲突处理器",
       "Message": "需要刷新冲突解决程序，以考虑新添加的全局变量补丁。请重新运行冲突解决程序。"
+    },
+    "FileSystemSafetyLock": {
+      "Title": "为安全起见已锁定游戏状态",
+      "Message": "Irony 无法信任此游戏当前的文件系统或模组状态。为安全起见，修改操作已禁用。请修复提供程序或权限并重新启动 Irony，或者选择其他用户模组目录或自定义模组目录。恢复操作前会先验证新目录。"
     }
   },
   "Mod_App_Actions": {

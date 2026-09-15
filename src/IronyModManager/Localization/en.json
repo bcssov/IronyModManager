@@ -130,6 +130,7 @@
   "Collection_Mods": {
     "Name": "Collection Mods",
     "Remove": "-",
+    "RemoveFromCollection": "Remove from collection",
     "Create": "+",
     "OK": "OK",
     "Cancel": "Cancel",
@@ -191,7 +192,7 @@
     },
     "ImportNonExistingMods": {
       "Title": "Missing Mods",
-      "Message": "The following mods could not be imported as they appear to be missing:{NewLine}{Mods}"
+      "Message": "The following mods are not currently installed. Their collection entries were imported and preserved as disabled placeholders:{NewLine}{Mods}"
     },
     "ImportOther": {
       "Title": "...",
@@ -252,8 +253,8 @@
       }
     },
     "Prompts": {
-      "ModsMissingTitle": "Mods removed",
-      "ModsMissingMessage": "Some mods are missing and have been removed from the collection automatically:{NewLine}{NewLine}{Mods}"
+      "ModsMissingTitle": "Mods missing",
+      "ModsMissingMessage": "Some mods are missing. They remain in the collection as disabled placeholders:{NewLine}{NewLine}{Mods}"
     }
 
   },
@@ -566,6 +567,10 @@
       "Title": "Collection Applied",
       "Message": "{CollectionName} has been applied."
     },
+    "CollectionAppliedMissingMods": {
+      "Title": "Missing Mods Skipped",
+      "Message": "The collection contains missing mods. Missing entries were skipped when applying it and remain in the collection."
+    },
     "CollectionNotApplied": {
       "Title": "Collection Not Applied",
       "Message": "{CollectionName} has not been applied."
@@ -633,6 +638,10 @@
     "ConflictSolverRerunGlobalVars": {
       "Title": "Conflict Solver Refresh",
       "Message": "Conflict Solver needs to be refreshed to take into account new global variable patches added. Please rerun conflict solver."
+    },
+    "FileSystemSafetyLock": {
+      "Title": "Game state locked for safety",
+      "Message": "Irony cannot trust the current filesystem or mod state for this game. Modifying operations are disabled for safety. Fix the unavailable provider or permissions and restart Irony, or choose a different user/custom mod directory. A changed directory is validated before operations resume."
     }
   },
   "Mod_App_Actions": {

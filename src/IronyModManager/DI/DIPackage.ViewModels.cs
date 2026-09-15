@@ -37,6 +37,12 @@ namespace IronyModManager.DI
 
         private void RegisterViewModels(Container container)
         {
+            container.Register<ICollectionModsCoordinatorFactory, CollectionModsCoordinatorFactory>();
+            container.Register<IInstalledModsCoordinatorFactory, InstalledModsCoordinatorFactory>();
+            container.Register<IModHolderCoordinatorFactory, ModHolderCoordinatorFactory>();
+            container.Register<ModControlInteraction>();
+            container.Register<CollectionModsInteraction>();
+            container.Register<ModHolderInteraction>();
             container.RegisterLocalization<MainWindowViewModel>();
             container.RegisterLocalization<ThemeControlViewModel>();
             container.RegisterLocalization<LanguageControlViewModel>();

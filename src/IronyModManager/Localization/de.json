@@ -130,6 +130,7 @@
   "Collection_Mods": {
     "Name": "Mod Kollektion",
     "Remove": "-",
+    "RemoveFromCollection": "Aus Sammlung entfernen",
     "Create": "+",
     "OK": "OK",
     "Cancel": "Abbrechen",
@@ -191,7 +192,7 @@
     },
     "ImportNonExistingMods": {
       "Title": "Nicht existierende Mods",
-      "Message": "Die folgenden Mods konnten nicht importiert werden, da sie zu fehlen scheinen:{NewLine}{Mods}"
+      "Message": "Die folgenden Mods sind derzeit nicht installiert. Ihre Sammlungseinträge wurden importiert und als deaktivierte Platzhalter beibehalten:{NewLine}{Mods}"
     },
     "ImportOther": {
       "Title": "...",
@@ -252,8 +253,8 @@
       }
     },
     "Prompts": {
-      "ModsMissingTitle": "Mods entfernt",
-      "ModsMissingMessage": "Einige Mods fehlen und wurden automatisch aus der Sammlung entfernt:{NewLine}{NewLine}{Mods}"
+      "ModsMissingTitle": "Mods fehlen",
+      "ModsMissingMessage": "Einige Mods fehlen. Sie bleiben als deaktivierte Platzhalter in der Sammlung erhalten:{NewLine}{NewLine}{Mods}"
     }
 
   },
@@ -566,6 +567,10 @@
       "Title": "Kollektion angewendet",
       "Message": "{CollectionName} wurde angewendet."
     },
+    "CollectionAppliedMissingMods": {
+      "Title": "Fehlende Mods übersprungen",
+      "Message": "Die Kollektion enthält fehlende Mods. Fehlende Einträge wurden beim Anwenden übersprungen und bleiben in der Kollektion erhalten."
+    },
     "CollectionNotApplied": {
       "Title": "Kollektion nicht angewendet",
       "Message": "{CollectionName} wurde nicht angewendet."
@@ -633,6 +638,10 @@
     "ConflictSolverRerunGlobalVars": {
       "Title": "Konfliktlöser aktualisieren",
       "Message": "Der Conflict Solver muss aktualisiert werden, um die neu hinzugefügten globalen Variablenpatches zu berücksichtigen. Bitte führen Sie den Konfliktlöser erneut aus."
+    },
+    "FileSystemSafetyLock": {
+      "Title": "Spielstatus aus Sicherheitsgründen gesperrt",
+      "Message": "Irony kann dem aktuellen Dateisystem- oder Mod-Status dieses Spiels nicht vertrauen. Änderungsoperationen sind aus Sicherheitsgründen deaktiviert. Beheben Sie den nicht verfügbaren Anbieter oder die Berechtigungen und starten Sie Irony neu, oder wählen Sie ein anderes Benutzer- bzw. benutzerdefiniertes Mod-Verzeichnis. Ein geändertes Verzeichnis wird geprüft, bevor Vorgänge fortgesetzt werden."
     }
   },
   "Mod_App_Actions": {

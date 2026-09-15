@@ -313,6 +313,13 @@ namespace IronyModManager.Views.Controls
                 new() { Header = "-" }
             };
             var counterOffset = 5;
+            if (ViewModel.ContextMenuMod?.IsVirtual == true)
+            {
+                menuItems.Add(new MenuItem { Header = ViewModel.RemoveFromCollection, Command = ViewModel.RemoveFromCollectionCommand });
+                menuItems.Add(new MenuItem { Header = "-" });
+                counterOffset += 2;
+            }
+
             var redoAvailable = ViewModel.IsRedoAvailable();
             var undoAvailable = ViewModel.IsUndoAvailable();
             if (redoAvailable || undoAvailable)
@@ -377,18 +384,20 @@ namespace IronyModManager.Views.Controls
 
             if (!string.IsNullOrWhiteSpace(ViewModel.ContextMenuMod?.FullPath))
             {
-                var menuItem = new MenuItem { Header = ViewModel.OpenInAssociatedApp, Command = ViewModel.OpenInAssociatedAppCommand };
-                if (menuItems.Count == counterOffset)
+                if (ViewModel.ContextMenuMod?.IsVirtual != true)
                 {
-                    menuItems.Add(menuItem);
-                }
-                else
-                {
-                    menuItems.Insert(counterOffset, menuItem);
+                    var openMenuItem = new MenuItem { Header = ViewModel.OpenInAssociatedApp, Command = ViewModel.OpenInAssociatedAppCommand };
+                    if (menuItems.Count == counterOffset)
+                    {
+                        menuItems.Add(openMenuItem);
+                    }
+                    else
+                    {
+                        menuItems.Insert(counterOffset, openMenuItem);
+                    }
                 }
 
-                menuItem = new MenuItem { Header = ViewModel.CopyModPath, Command = ViewModel.CopyModPathCommand };
-                menuItems.Add(menuItem);
+                menuItems.Add(new MenuItem { Header = ViewModel.CopyModPath, Command = ViewModel.CopyModPathCommand });
             }
 
             return menuItems;

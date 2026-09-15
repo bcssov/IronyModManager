@@ -44,6 +44,7 @@ namespace IronyModManager.Services
             container.Register<ILanguagesService, LanguagesService>();
             container.Register<IWindowStateService, WindowStateService>();
             container.Register<IGameService, GameService>();
+            container.Register<IGameStateSafetyService, GameStateSafetyService>(Lifestyle.Singleton);
             container.Register<IModService, ModService>();
             container.Register<IAppStateService, AppStateService>();
             container.Register<IModCollectionService, ModCollectionService>();
@@ -62,6 +63,7 @@ namespace IronyModManager.Services
             container.Register<IObjectClone, ObjectClone>();
             container.Register<IGameLanguageService, GameLanguageService>();
             container.Register<IConflictSolverColorsService, ConflictSolverColorsService>();
+            container.InterceptGameStateSafetyContracts();
         }
 
         #endregion Methods

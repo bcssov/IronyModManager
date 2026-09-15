@@ -130,6 +130,7 @@
   "Collection_Mods": {
     "Name": "Kolekcija modova",
     "Remove": "-",
+    "RemoveFromCollection": "Ukloni iz kolekcije",
     "Create": "+",
     "OK": "U redu",
     "Cancel": "Otkaži",
@@ -191,7 +192,7 @@
     },
     "ImportNonExistingMods": {
       "Title": "Modovi koji nedostaju",
-      "Message": "Sljedeće modove nije moguće uvesti jer nedostaju:{NewLine}{Mods}"
+      "Message": "Sljedeći modovi trenutačno nisu instalirani. Njihove stavke uvezene su i sačuvane u kolekciji kao onemogućene zamjenske stavke:{NewLine}{Mods}"
     },
     "ImportOther": {
       "Title": "...",
@@ -252,8 +253,8 @@
       }
     },
     "Prompts": {
-      "ModsMissingTitle": "Modovi uklonjeni",
-      "ModsMissingMessage": "Neki modovi nedostaju i automatski su uklonjeni iz kolekcije:{NewLine}{NewLine}{Mods}"
+      "ModsMissingTitle": "Modovi nedostaju",
+      "ModsMissingMessage": "Neki modovi nedostaju. Ostaju u kolekciji kao onemogućene zamjenske stavke:{NewLine}{NewLine}{Mods}"
     }
 
   },
@@ -566,6 +567,10 @@
       "Title": "Kolekcija primjenjena",
       "Message": "{CollectionName} je primjenjena."
     },
+    "CollectionAppliedMissingMods": {
+      "Title": "Modovi koji nedostaju su preskočeni",
+      "Message": "Kolekcija sadrži modove koji nedostaju. Nedostajući unosi preskočeni su pri primjeni i ostaju u kolekciji."
+    },
     "CollectionNotApplied": {
       "Title": "Kolekcija nije primjenjena",
       "Message": "{CollectionName} nije primjenjena."
@@ -633,6 +638,10 @@
     "ConflictSolverRerunGlobalVars": {
       "Title": "Osvježi rješenje za rješavanje sukoba",
       "Message": "Rješavač sukoba treba osvježiti kako bi se uzele u obzir nove prilagođene globalne zakrpe. Ponovite postupak rješavanja sukoba."
+    },
+    "FileSystemSafetyLock": {
+      "Title": "Stanje igre zaključano radi sigurnosti",
+      "Message": "Irony ne može vjerovati trenutačnom stanju datotečnog sustava ili modova za ovu igru. Izmjene su onemogućene radi sigurnosti. Ispravite pružatelja ili dozvole i ponovno pokrenite Irony ili odaberite drugu korisničku ili prilagođenu mapu modova. Nova mapa provjerit će se prije nastavka rada."
     }
   },
   "Mod_App_Actions": {

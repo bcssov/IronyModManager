@@ -130,6 +130,7 @@
   "Collection_Mods": {
     "Name": "Colección de Mods",
     "Remove": "-",
+    "RemoveFromCollection": "Eliminar de la colección",
     "Create": "+",
     "OK": "OK",
     "Cancel": "Cancelar",
@@ -191,7 +192,7 @@
     },
     "ImportNonExistingMods": {
       "Title": "Mods inexistentes",
-      "Message": "Los siguientes mods no se pudieron importar porque parecen faltar:{NewLine}{Mods}"
+      "Message": "Los siguientes mods no están instalados actualmente. Sus entradas se importaron y conservaron en la colección como marcadores deshabilitados:{NewLine}{Mods}"
     },
     "ImportOther": {
       "Title": "...",
@@ -252,8 +253,8 @@
       }
     },
     "Prompts": {
-      "ModsMissingTitle": "Mods eliminados",
-      "ModsMissingMessage": "Faltan algunos mods y se han eliminado de la colección automáticamente:{NewLine}{NewLine}{Mods}"
+      "ModsMissingTitle": "Faltan mods",
+      "ModsMissingMessage": "Faltan algunos mods. Permanecen en la colección como marcadores deshabilitados:{NewLine}{NewLine}{Mods}"
     }
 
   },
@@ -566,6 +567,10 @@
       "Title": "Colección Aplicada",
       "Message": "{CollectionName} ha sido aplicada."
     },
+    "CollectionAppliedMissingMods": {
+      "Title": "Mods faltantes omitidos",
+      "Message": "La colección contiene mods que faltan. Las entradas faltantes se omitieron al aplicarla y permanecen en la colección."
+    },
     "CollectionNotApplied": {
       "Title": "Colección no aplicada",
       "Message": "{CollectionName} no se ha aplicado."
@@ -633,6 +638,10 @@
     "ConflictSolverRerunGlobalVars": {
       "Title": "Actualización del Solucionador de conflictos",
       "Message": "Es necesario actualizar el solucionador de conflictos para tener en cuenta los nuevos parches de variables globales añadidos. Vuelva a ejecutar el solucionador de conflictos."
+    },
+    "FileSystemSafetyLock": {
+      "Title": "Estado del juego bloqueado por seguridad",
+      "Message": "Irony no puede confiar en el estado actual del sistema de archivos o de los mods de este juego. Las operaciones de modificación están deshabilitadas por seguridad. Corrija el proveedor o los permisos y reinicie Irony, o elija otro directorio de usuario o de mods personalizado. El nuevo directorio se validará antes de reanudar las operaciones."
     }
   },
   "Mod_App_Actions": {

@@ -23,6 +23,7 @@ namespace IronyModManager.Services.Common
     /// <summary>
     /// Interface IModMergeService
     /// </summary>
+    [GameStateSafetyContract]
     public interface IModMergeService
     {
         #region Methods
@@ -32,12 +33,14 @@ namespace IronyModManager.Services.Common
         /// </summary>
         /// <param name="collectionName">Name of the collection.</param>
         /// <returns>Task&lt;System.Boolean&gt;.</returns>
+        [GameStateSafetyExempt("Read-only eligibility check.")]
         ValueTask<bool> AllowModMergeAsync(string collectionName);
 
         /// <summary>
         /// Gets a merge collection mod name template.
         /// </summary>
         /// <returns>A string.</returns>
+        [GameStateSafetyExempt("Reads persisted naming metadata only.")]
         string GetMergeCollectionModNameTemplate();
 
         /// <summary>
@@ -46,12 +49,14 @@ namespace IronyModManager.Services.Common
         /// <param name="collectionName">Name of the collection.</param>
         /// <param name="copiedNamePrefix">The copied name prefix.</param>
         /// <returns>The preflight result.</returns>
+        [GameStateSafetyExempt("Operation-specific preflight remains available before mutation.")]
         MergeCompressPreflightResult PreflightMergeCompressCollection(string collectionName, string copiedNamePrefix);
 
         /// <summary>
         /// Gets a merge collection name template.
         /// </summary>
         /// <returns>A string.</returns>
+        [GameStateSafetyExempt("Reads persisted naming metadata only.")]
         string GetMergeCollectionNameTemplate();
 
         /// <summary>
@@ -59,6 +64,7 @@ namespace IronyModManager.Services.Common
         /// </summary>
         /// <param name="collectionName">Name of the collection.</param>
         /// <returns>Task&lt;System.Boolean&gt;.</returns>
+        [GameStateSafetyExempt("Operation-specific preflight remains available before mutation.")]
         Task<bool> HasEnoughFreeSpaceAsync(string collectionName);
 
         /// <summary>
@@ -66,6 +72,7 @@ namespace IronyModManager.Services.Common
         /// </summary>
         /// <param name="collectionName">Name of the collection.</param>
         /// <returns>Task&lt;IMod&gt;.</returns>
+        [GameStateSafety(GameStateSafetyOperation.Mutation, GameStateSafetyRejection.Null, "Merge collection by files", GameStateSafetyEnforcement.EntryOnly)]
         Task<IMod> MergeCollectionByFilesAsync(string collectionName);
 
         /// <summary>
@@ -74,6 +81,7 @@ namespace IronyModManager.Services.Common
         /// <param name="collectionName">Name of the collection.</param>
         /// <param name="copiedNamePrefix">The copied name prefix.</param>
         /// <returns>Task&lt;IEnumerable&lt;IMod&gt;&gt;.</returns>
+        [GameStateSafety(GameStateSafetyOperation.Mutation, GameStateSafetyRejection.Null, "Merge and compress collection", GameStateSafetyEnforcement.EntryOnly)]
         Task<IEnumerable<IMod>> MergeCompressCollectionAsync(string collectionName, string copiedNamePrefix);
 
         /// <summary>
@@ -81,6 +89,7 @@ namespace IronyModManager.Services.Common
         /// </summary>
         /// <param name="template">The template.</param>
         /// <returns>A string.</returns>
+        [GameStateSafetyExempt("Writes application preferences, not game filesystem state.")]
         bool SaveMergeCollectionModNameTeplate(string template);
 
         /// <summary>
@@ -88,6 +97,7 @@ namespace IronyModManager.Services.Common
         /// </summary>
         /// <param name="template">The template.</param>
         /// <returns>A string.</returns>
+        [GameStateSafetyExempt("Writes application preferences, not game filesystem state.")]
         bool SaveMergedCollectionNameTemplate(string template);
 
         #endregion Methods

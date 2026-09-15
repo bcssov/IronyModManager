@@ -63,49 +63,39 @@ namespace IronyModManager.ViewModels.Controls
         private const string ClipboardSeparator = " || ";
 
         /// <summary>
-        /// The mod name key
-        /// </summary>
-        private const string ModNameKey = "modName";
-
-        /// <summary>
-        /// The application action
-        /// </summary>
-        private readonly IAppAction appAction;
-
-        /// <summary>
-        /// The application state service
-        /// </summary>
-        private readonly IAppStateService appStateService;
-
-        /// <summary>
-        /// The file dialog action
-        /// </summary>
-        private readonly IFileDialogAction fileDialogAction;
-
-        /// <summary>
         /// The game service
         /// </summary>
         private readonly IGameService gameService;
 
         /// <summary>
-        /// The hotkey pressed handler
+        /// Owns persisted collection membership policy independently from effective mod enablement.
         /// </summary>
-        private readonly MainViewHotkeyPressedHandler hotkeyPressedHandler;
+        private readonly CollectionModMembership collectionModMembership;
 
         /// <summary>
-        /// The identifier generator
+        /// Coordinates authoritative collection resolution and virtual-mod warning policy.
         /// </summary>
-        private readonly IIDGenerator idGenerator;
+        private readonly CollectionModReconciliationCoordinator modReconciliationCoordinator;
 
         /// <summary>
-        /// The localization manager
+        /// Coordinates collection operation progress subscriptions and presentation.
         /// </summary>
-        private readonly ILocalizationManager localizationManager;
+        private readonly CollectionOperationProgressCoordinator operationProgressCoordinator;
 
         /// <summary>
-        /// The mod collection change request handler
+        /// Coordinates collection-list presentation controls and persisted UI state.
         /// </summary>
-        private readonly ModCollectionChangeRequestHandler modCollectionChangeRequestHandler;
+        private readonly CollectionModsPresentationCoordinator presentationCoordinator;
+
+        /// <summary>
+        /// Coordinates activation-scoped event subscriptions.
+        /// </summary>
+        private readonly CollectionModsEventCoordinator eventCoordinator;
+
+        /// <summary>
+        /// Owns common mod-control user interactions.
+        /// </summary>
+        private readonly CollectionModsInteraction interaction;
 
         /// <summary>
         /// The mod collection service
@@ -113,39 +103,14 @@ namespace IronyModManager.ViewModels.Controls
         private readonly IModCollectionService modCollectionService;
 
         /// <summary>
-        /// The mod export progress handler
-        /// </summary>
-        private readonly ModExportProgressHandler modExportProgressHandler;
-
-        /// <summary>
-        /// The patch mod rename progress handler
-        /// </summary>
-        private readonly PatchModRenameProgressHandler patchModRenameProgressHandler;
-
-        /// <summary>
         /// The mod patch collection service
         /// </summary>
         private readonly IModPatchCollectionService modPatchCollectionService;
 
         /// <summary>
-        /// The mod report export handler
-        /// </summary>
-        private readonly ModReportExportHandler modReportExportHandler;
-
-        /// <summary>
         /// The mod service
         /// </summary>
         private readonly IModService modService;
-
-        /// <summary>
-        /// The notification action
-        /// </summary>
-        private readonly INotificationAction notificationAction;
-
-        /// <summary>
-        /// The previous validated mods
-        /// </summary>
-        private readonly ConcurrentDictionary<string, IEnumerable<IMod>> previousValidatedMods = new();
 
         /// <summary>
         /// The redo stack
@@ -168,11 +133,6 @@ namespace IronyModManager.ViewModels.Controls
         private readonly IReportExportService reportExportService;
 
         /// <summary>
-        /// The scroll state
-        /// </summary>
-        private readonly IScrollState scrollState;
-
-        /// <summary>
         /// The undo stack
         /// </summary>
         private readonly Stack<IEnumerable<string>> undoStack = new();
@@ -187,11 +147,6 @@ namespace IronyModManager.ViewModels.Controls
         /// The enable all toggled state flag
         /// </summary>
         private bool enableAllToggledState;
-
-        /// <summary>
-        /// The mod export progress
-        /// </summary>
-        private IDisposable modExportProgress;
 
         /// <summary>
         /// The mod order changed
@@ -240,62 +195,42 @@ namespace IronyModManager.ViewModels.Controls
         /// <summary>
         /// Initializes a new instance of the <see cref="CollectionModsControlViewModel" /> class.
         /// </summary>
-        /// <param name="modCollectionChangeRequestHandler">The mod collection change request handler.</param>
-        /// <param name="scrollState">State of the scroll.</param>
-        /// <param name="modExportProgressHandler">The mod export progress handler.</param>
         /// <param name="reportExportService">The report export service.</param>
-        /// <param name="hotkeyPressedHandler">The hotkey pressed handler.</param>
         /// <param name="patchMod">The patch mod.</param>
-        /// <param name="idGenerator">The identifier generator.</param>
         /// <param name="hashReportView">The hash report view.</param>
-        /// <param name="modReportExportHandler">The mod report export handler.</param>
-        /// <param name="fileDialogAction">The file dialog action.</param>
         /// <param name="modCollectionService">The mod collection service.</param>
-        /// <param name="appStateService">The application state service.</param>
         /// <param name="modPatchCollectionService">The mod patch collection service.</param>
         /// <param name="modService">The mod service.</param>
         /// <param name="gameService">The game service.</param>
         /// <param name="addNewCollection">The add new collection.</param>
         /// <param name="exportCollection">The export collection.</param>
         /// <param name="modifyCollection">The modify collection.</param>
-        /// <param name="searchMods">The search mods.</param>
-        /// <param name="modNameSort">The mod name sort.</param>
-        /// <param name="localizationManager">The localization manager.</param>
-        /// <param name="notificationAction">The notification action.</param>
-        /// <param name="appAction">The application action.</param>
-        public CollectionModsControlViewModel(ModCollectionChangeRequestHandler modCollectionChangeRequestHandler, IScrollState scrollState, ModExportProgressHandler modExportProgressHandler,
-            PatchModRenameProgressHandler patchModRenameProgressHandler, IReportExportService reportExportService,
-            MainViewHotkeyPressedHandler hotkeyPressedHandler, PatchModControlViewModel patchMod,
-            IIDGenerator idGenerator, HashReportControlViewModel hashReportView, ModReportExportHandler modReportExportHandler,
-            IFileDialogAction fileDialogAction, IModCollectionService modCollectionService,
-            IAppStateService appStateService, IModPatchCollectionService modPatchCollectionService, IModService modService, IGameService gameService,
+        /// <param name="interaction">The mod-control user interaction facade.</param>
+        /// <param name="coordinatorFactory">The Collection Mods collaborator factory.</param>
+        public CollectionModsControlViewModel(IReportExportService reportExportService, PatchModControlViewModel patchMod,
+            HashReportControlViewModel hashReportView, IModCollectionService modCollectionService,
+            IModPatchCollectionService modPatchCollectionService, IModService modService, IGameService gameService,
             AddNewCollectionControlViewModel addNewCollection, ExportModCollectionControlViewModel exportCollection, ModifyCollectionControlViewModel modifyCollection,
-            SearchModsControlViewModel searchMods, SortOrderControlViewModel modNameSort, ILocalizationManager localizationManager,
-            INotificationAction notificationAction, IAppAction appAction)
+            CollectionModsInteraction interaction, ICollectionModsCoordinatorFactory coordinatorFactory)
         {
-            this.scrollState = scrollState;
+            var coordinators = coordinatorFactory.Create();
             this.reportExportService = reportExportService;
             PatchMod = patchMod;
-            this.idGenerator = idGenerator;
+            this.interaction = interaction;
             this.modCollectionService = modCollectionService;
-            this.appStateService = appStateService;
             AddNewCollection = addNewCollection;
             ExportCollection = exportCollection;
-            SearchMods = searchMods;
-            ModNameSortOrder = modNameSort;
+            SearchMods = coordinators.Presentation.SearchMods;
+            ModNameSortOrder = coordinators.Presentation.ModNameSortOrder;
             ModifyCollection = modifyCollection;
-            this.localizationManager = localizationManager;
-            this.notificationAction = notificationAction;
-            this.appAction = appAction;
             this.modService = modService;
             this.gameService = gameService;
+            modReconciliationCoordinator = coordinators.Reconciliation;
+            collectionModMembership = coordinators.Membership;
+            operationProgressCoordinator = coordinators.Operations;
+            presentationCoordinator = coordinators.Presentation;
+            eventCoordinator = coordinators.Events;
             this.modPatchCollectionService = modPatchCollectionService;
-            this.fileDialogAction = fileDialogAction;
-            this.modReportExportHandler = modReportExportHandler;
-            this.hotkeyPressedHandler = hotkeyPressedHandler;
-            this.modExportProgressHandler = modExportProgressHandler;
-            this.patchModRenameProgressHandler = patchModRenameProgressHandler;
-            this.modCollectionChangeRequestHandler = modCollectionChangeRequestHandler;
             HashReportView = hashReportView;
             SearchMods.ShowArrows = true;
             reorderQueue = [];
@@ -517,6 +452,17 @@ namespace IronyModManager.ViewModels.Controls
         /// </summary>
         /// <value>The enable all command.</value>
         public virtual ReactiveCommand<Unit, Unit> EnableAllCommand { get; protected set; }
+
+        /// <summary>
+        /// Gets the explicit action for removing a virtual placeholder from the collection.
+        /// </summary>
+        [StaticLocalization(LocalizationResources.Collection_Mods.RemoveFromCollection)]
+        public virtual string RemoveFromCollection { get; protected set; }
+
+        /// <summary>
+        /// Gets the explicit action for removing a virtual placeholder from the collection.
+        /// </summary>
+        public virtual ReactiveCommand<Unit, Unit> RemoveFromCollectionCommand { get; protected set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether [entering new collection].
@@ -858,7 +804,7 @@ namespace IronyModManager.ViewModels.Controls
         /// <returns><c>true</c> if this instance [can export mods]; otherwise, <c>false</c>.</returns>
         public virtual bool CanExportMods()
         {
-            return activeGame != null && SelectedMods != null && SelectedMods.Any();
+            return activeGame != null && SelectedMods?.Any(p => !p.IsVirtual) == true;
         }
 
         /// <summary>
@@ -929,9 +875,8 @@ namespace IronyModManager.ViewModels.Controls
 
                     SetSelectedModsState(mods.ToObservableCollection());
 
-                    AllModsEnabled = SelectedMods?.Count > 0 && SelectedMods.All(p => p.IsSelected);
-                    var state = appStateService.Get();
-                    InitSortersAndFilters(state);
+                    AllModsEnabled = AreAllRealModsEnabled();
+                    InitSortersAndFilters();
                     SaveSelectedCollection();
                     RecognizeSortOrder(SelectedModCollection);
                     break;
@@ -949,13 +894,18 @@ namespace IronyModManager.ViewModels.Controls
         /// <param name="activeGame">The active game.</param>
         public virtual void HandleModRefresh(bool isRefreshing, IEnumerable<IMod> mods, IGame activeGame)
         {
+            if (!modReconciliationCoordinator.CanReconcile(activeGame))
+            {
+                return;
+            }
+
             switch (isRefreshing)
             {
                 case true:
                     refreshInProgress = true;
                     break;
-                case false when mods?.Count() > 0:
-                    SetMods(mods, activeGame);
+                case false:
+                    SetMods(mods ?? [], activeGame);
                     refreshInProgress = false;
                     break;
             }
@@ -1014,8 +964,7 @@ namespace IronyModManager.ViewModels.Controls
         public override void OnLocaleChanged(string newLocale, string oldLocale)
         {
             SetAutoFocusLabel();
-            SearchMods.WatermarkText = SearchModsWatermark;
-            ModNameSortOrder.Text = ModName;
+            presentationCoordinator.UpdateLocalization(SearchModsWatermark, ModName);
             base.OnLocaleChanged(newLocale, oldLocale);
         }
 
@@ -1035,7 +984,7 @@ namespace IronyModManager.ViewModels.Controls
         {
             if (fullReset)
             {
-                previousValidatedMods.Clear();
+                modReconciliationCoordinator.Reset();
             }
 
             PatchMod.SetParameters(SelectedModCollection);
@@ -1049,6 +998,11 @@ namespace IronyModManager.ViewModels.Controls
         /// <param name="activeGame">The active game.</param>
         public virtual void SetMods(IEnumerable<IMod> mods, IGame activeGame)
         {
+            if (!modReconciliationCoordinator.CanReconcile(activeGame))
+            {
+                return;
+            }
+
             var oldActiveGameType = this.activeGame?.Type ?? string.Empty;
             var currentActiveGameType = activeGame?.Type ?? string.Empty;
             this.activeGame = activeGame;
@@ -1079,14 +1033,21 @@ namespace IronyModManager.ViewModels.Controls
             }
         }
 
+        private bool AreAllRealModsEnabled()
+        {
+            var realMods = SelectedMods?.Where(p => !p.IsVirtual).ToList() ?? [];
+            return realMods.Count != 0 && realMods.All(p => p.IsSelected);
+        }
+
         /// <summary>
         /// Assigns the optional collection metadata.
         /// </summary>
         /// <param name="collection">The collection.</param>
         protected virtual void AssignOptionalCollectionMetadata(IModCollection collection)
         {
-            collection.ModNames = SelectedMods?.Where(p => p.IsSelected).Select(p => p.Name).ToList();
-            collection.ModIds = SelectedMods?.Where(p => p.IsSelected).Select(p =>
+            var persistedMods = collectionModMembership.GetPersistedMembers(SelectedMods);
+            collection.ModNames = persistedMods.Select(p => p.Name).ToList();
+            collection.ModIds = persistedMods.Select(p =>
             {
                 var result = DIResolver.Get<IModCollectionSourceInfo>();
                 switch (p.Source)
@@ -1131,9 +1092,9 @@ namespace IronyModManager.ViewModels.Controls
         /// <returns>System.Threading.Tasks.Task.</returns>
         protected virtual async Task ExportCollectionAsync(string path, ImportProviderType providerType)
         {
-            var id = idGenerator.GetNextId();
-            var overlayProgress = IronyFormatter.Format(localizationManager.GetResource(LocalizationResources.Collection_Mods.Overlay_Import_Export_Progress), new { PercentDone = 0.ToLocalizedPercentage() });
-            await TriggerOverlayAsync(id, true, localizationManager.GetResource(LocalizationResources.Collection_Mods.Overlay_Exporting_Message), overlayProgress);
+            var id = interaction.BeginOperation();
+            var overlayProgress = IronyFormatter.Format(interaction.GetText(LocalizationResources.Collection_Mods.Overlay_Import_Export_Progress), new { PercentDone = 0.ToLocalizedPercentage() });
+            await TriggerOverlayAsync(id, true, interaction.GetText(LocalizationResources.Collection_Mods.Overlay_Exporting_Message), overlayProgress);
             var collection = modCollectionService.Get(SelectedModCollection.Name);
             if (providerType == ImportProviderType.ParadoxLauncherJson)
             {
@@ -1145,20 +1106,21 @@ namespace IronyModManager.ViewModels.Controls
             }
             else
             {
-                modExportProgress?.Dispose();
-                modExportProgress = modExportProgressHandler.Subscribe(s =>
+                operationProgressCoordinator.SubscribeCollectionTransfer(id, false, Disposables, TriggerOverlay);
+                try
                 {
-                    var overlayProgress = IronyFormatter.Format(localizationManager.GetResource(LocalizationResources.Collection_Mods.Overlay_Import_Export_Progress), new { PercentDone = s.Progress.ToLocalizedPercentage() });
-                    TriggerOverlay(id, true, localizationManager.GetResource(LocalizationResources.Collection_Mods.Overlay_Exporting_Message), overlayProgress);
-                }).DisposeWith(Disposables);
-                await Task.Run(async () => await modCollectionService.ExportAsync(path, collection, providerType == ImportProviderType.DefaultOrderOnly, providerType == ImportProviderType.DefaultWithAllMods).ConfigureAwait(false))
-                    .ConfigureAwait(false);
-                modExportProgress?.Dispose();
+                    await Task.Run(async () => await modCollectionService.ExportAsync(path, collection, providerType == ImportProviderType.DefaultOrderOnly, providerType == ImportProviderType.DefaultWithAllMods).ConfigureAwait(false))
+                        .ConfigureAwait(false);
+                }
+                finally
+                {
+                    operationProgressCoordinator.CompleteCollectionTransfer();
+                }
             }
 
-            var title = localizationManager.GetResource(LocalizationResources.Notifications.CollectionExported.Title);
-            var message = IronyFormatter.Format(localizationManager.GetResource(LocalizationResources.Notifications.CollectionExported.Message), new { CollectionName = collection.Name });
-            notificationAction.ShowNotification(title, message, NotificationType.Success);
+            var title = interaction.GetText(LocalizationResources.Notifications.CollectionExported.Title);
+            var message = IronyFormatter.Format(interaction.GetText(LocalizationResources.Notifications.CollectionExported.Message), new { CollectionName = collection.Name });
+            interaction.Notify(title, message, NotificationType.Success);
             await TriggerOverlayAsync(id, false);
         }
 
@@ -1191,6 +1153,11 @@ namespace IronyModManager.ViewModels.Controls
         /// <param name="resetStack">if set to <c>true</c> [reset stack].</param>
         protected virtual void HandleModCollectionChange(bool resetStack)
         {
+            if (!modReconciliationCoordinator.CanReconcile(activeGame ?? gameService.GetSelected()))
+            {
+                return;
+            }
+
             var localMods = Mods;
             EvaluateHighlight();
             if (!string.IsNullOrWhiteSpace(restoreCollectionSelection))
@@ -1207,54 +1174,37 @@ namespace IronyModManager.ViewModels.Controls
                 restoreCollectionSelection = string.Empty;
             }
 
+            var existingCollection = modCollectionService.Get(SelectedModCollection?.Name ?? string.Empty);
+            IReadOnlyCollection<IMod> resolvedMods = [];
+            if (existingCollection?.Mods?.Count() > 0 && localMods != null &&
+                !modReconciliationCoordinator.TryResolve(activeGame, localMods, existingCollection, out resolvedMods))
+            {
+                return;
+            }
+
             skipModCollectionSave = true;
             skipModSelectionSave = true;
             ExportCollection.CollectionName = SelectedModCollection?.Name;
             SaveState(true);
-            if (localMods != null)
-            {
-                foreach (var item in localMods)
-                {
-                    item.IsSelected = false;
-                }
-            }
+            collectionModMembership.RestoreSelection(localMods, resolvedMods);
 
-            var existingCollection = modCollectionService.Get(SelectedModCollection?.Name ?? string.Empty);
             var selectedMods = new ObservableCollection<IMod>();
             if (existingCollection?.Mods?.Count() > 0 && localMods != null)
             {
-                var missingMods = new List<string>();
-                var hasModNames = existingCollection.ModNames != null && existingCollection.ModNames.Count() == existingCollection.Mods.Count();
-                var mods = existingCollection.Mods.ToList();
-                var modPaths = existingCollection.ModPaths != null ? existingCollection.ModPaths.ToList() : [];
-                var modNames = hasModNames ? existingCollection.ModNames.ToList() : [];
-                for (var i = 0; i < mods.Count; i++)
+                foreach (var mod in resolvedMods)
                 {
-                    var item = mods[i];
-                    var mod = localMods.FirstOrDefault(p => p.DescriptorFile.Equals(item, StringComparison.InvariantCultureIgnoreCase));
-                    if (mod == null && mods.Count == modPaths.Count)
-                    {
-                        item = modPaths[i];
-                        mod = localMods.FirstOrDefault(p => p.FullPath.Equals(item, StringComparison.OrdinalIgnoreCase));
-                    }
-
-                    if (mod != null)
-                    {
-                        mod.IsSelected = true;
-                        selectedMods.Add(mod);
-                    }
-                    else
-                    {
-                        missingMods.Add(hasModNames ? $"{modNames[i]} ({item})" : item);
-                    }
+                    selectedMods.Add(mod);
                 }
 
-                if (missingMods.Count != 0 && activeGame != null && existingCollection.Game.Equals(activeGame.Type))
+                var missingMods = resolvedMods.Where(p => p.IsVirtual).Select(p => $"{p.Name} ({p.DescriptorFile})").ToList();
+                if (modReconciliationCoordinator.ShouldShowOrdinaryWarning(activeGame?.Type, existingCollection.Game,
+                        existingCollection.Name, resolvedMods.Where(p => p.IsVirtual).Select(p => p.DescriptorFile)))
                 {
-                    var title = localizationManager.GetResource(LocalizationResources.Collection_Mods.Prompts.ModsMissingTitle);
-                    var message = IronyFormatter.Format(localizationManager.GetResource(LocalizationResources.Collection_Mods.Prompts.ModsMissingMessage), new { Environment.NewLine, Mods = string.Join(Environment.NewLine, missingMods) });
-                    Dispatcher.UIThread.SafeInvoke(() => notificationAction.ShowPromptAsync(title, title, message, NotificationType.Warning, PromptType.OK));
+                    var title = interaction.GetText(LocalizationResources.Collection_Mods.Prompts.ModsMissingTitle);
+                    var message = IronyFormatter.Format(interaction.GetText(LocalizationResources.Collection_Mods.Prompts.ModsMissingMessage), new { Environment.NewLine, Mods = string.Join(Environment.NewLine, missingMods) });
+                    Dispatcher.UIThread.SafeInvoke(() => interaction.PromptAsync(title, title, message, NotificationType.Warning, PromptType.OK));
                 }
+
             }
 
             if (resetStack)
@@ -1264,9 +1214,8 @@ namespace IronyModManager.ViewModels.Controls
             }
 
             SetSelectedModsState(selectedMods, ignoreStack: true);
-            AllModsEnabled = SelectedMods?.Count > 0 && SelectedMods.All(p => p.IsSelected);
-            var state = appStateService.Get();
-            InitSortersAndFilters(state, false);
+            AllModsEnabled = AreAllRealModsEnabled();
+            InitSortersAndFilters(false);
             ApplySort();
             SaveSelectedCollection();
             skipModCollectionSave = false;
@@ -1285,14 +1234,16 @@ namespace IronyModManager.ViewModels.Controls
 
             async Task<IModCollection> importDefault(long messageId)
             {
-                modExportProgress?.Dispose();
-                modExportProgress = modExportProgressHandler.Subscribe(s =>
+                operationProgressCoordinator.SubscribeCollectionTransfer(messageId, true, Disposables, TriggerOverlay);
+                IModCollection collection;
+                try
                 {
-                    var overlayProgress = IronyFormatter.Format(localizationManager.GetResource(LocalizationResources.Collection_Mods.Overlay_Import_Export_Progress), new { PercentDone = s.Progress.ToLocalizedPercentage() });
-                    TriggerOverlay(messageId, true, localizationManager.GetResource(LocalizationResources.Collection_Mods.Overlay_Importing_Message), overlayProgress);
-                }).DisposeWith(Disposables);
-                var collection = await Task.Run(async () => await modCollectionService.ImportAsync(path));
-                modExportProgress?.Dispose();
+                    collection = await Task.Run(async () => await modCollectionService.ImportAsync(path));
+                }
+                finally
+                {
+                    operationProgressCoordinator.CompleteCollectionTransfer();
+                }
                 if (collection != null)
                 {
                     collection.IsSelected = true;
@@ -1321,9 +1272,9 @@ namespace IronyModManager.ViewModels.Controls
                 return Task.FromResult((IModCollection)null);
             }
 
-            var id = idGenerator.GetNextId();
-            var overlayProgress = IronyFormatter.Format(localizationManager.GetResource(LocalizationResources.Collection_Mods.Overlay_Import_Export_Progress), new { PercentDone = 0.ToLocalizedPercentage() });
-            await TriggerOverlayAsync(id, true, localizationManager.GetResource(LocalizationResources.Collection_Mods.Overlay_Importing_Message), overlayProgress);
+            var id = interaction.BeginOperation();
+            var overlayProgress = IronyFormatter.Format(interaction.GetText(LocalizationResources.Collection_Mods.Overlay_Import_Export_Progress), new { PercentDone = 0.ToLocalizedPercentage() });
+            await TriggerOverlayAsync(id, true, interaction.GetText(LocalizationResources.Collection_Mods.Overlay_Importing_Message), overlayProgress);
             var importData = type switch
             {
                 ImportProviderType.Paradoxos => await modCollectionService.ImportParadoxosAsync(path),
@@ -1342,9 +1293,9 @@ namespace IronyModManager.ViewModels.Controls
             bool proceed;
             if (modCollectionService.Exists(importData.Name))
             {
-                var title = localizationManager.GetResource(LocalizationResources.Collection_Mods.ImportPrompt.Title);
-                var message = localizationManager.GetResource(LocalizationResources.Collection_Mods.ImportPrompt.Message);
-                proceed = await notificationAction.ShowPromptAsync(title, title, message, NotificationType.Warning);
+                var title = interaction.GetText(LocalizationResources.Collection_Mods.ImportPrompt.Title);
+                var message = interaction.GetText(LocalizationResources.Collection_Mods.ImportPrompt.Message);
+                proceed = await interaction.PromptAsync(title, title, message, NotificationType.Warning);
             }
             else
             {
@@ -1364,9 +1315,10 @@ namespace IronyModManager.ViewModels.Controls
                     var game = gameService.Get().FirstOrDefault(p => p.Type.Equals(result.Game, StringComparison.OrdinalIgnoreCase));
                     await MessageBus.PublishAsync(new ActiveGameRequestEvent(game));
                     await MessageBus.PublishAsync(new ModListInstallRefreshRequestEvent(true));
-                    var hasMods = modNames != null && modNames.Count != 0;
+                    var hasMods = result.Mods?.Any() == true;
+                    var hasMergedModNames = hasMods && modNames?.Count == result.Mods.Count();
                     var mods = game != null ? await modService.GetAvailableModsAsync(game) ?? [] : [];
-                    if (hasMods && !string.IsNullOrWhiteSpace(result.MergedFolderName))
+                    if (hasMergedModNames && !string.IsNullOrWhiteSpace(result.MergedFolderName))
                     {
                         var importedMods = new List<string>();
                         var descriptors = result.Mods.ToList();
@@ -1402,11 +1354,13 @@ namespace IronyModManager.ViewModels.Controls
                     var modDescriptorPaths = result.Mods != null ? result.Mods.ToList() : [];
                     var modPaths = result.ModPaths != null ? result.ModPaths.ToList() : [];
                     restoreCollectionSelection = result.Name;
+                    modReconciliationCoordinator.BeginImport(game, result.Name);
+
                     LoadModCollections();
                     var showImportNotification = true;
 
                     // Check if any mods do not exist
-                    if (hasMods && mods.Any())
+                    if (hasMods && modReconciliationCoordinator.CanReconcile(game))
                     {
                         var nonExistingModPaths = modDescriptorPaths.Where(p => !mods.Any(m => m.DescriptorFile.Equals(p, StringComparison.OrdinalIgnoreCase)));
                         if (nonExistingModPaths.Any())
@@ -1434,25 +1388,25 @@ namespace IronyModManager.ViewModels.Controls
 
                             if (nonExistingModNames.Count != 0)
                             {
-                                var notExistingModTitle = localizationManager.GetResource(LocalizationResources.Collection_Mods.ImportNonExistingMods.Title);
-                                var nonExistingModMessage = IronyFormatter.Format(localizationManager.GetResource(LocalizationResources.Collection_Mods.ImportNonExistingMods.Message),
+                                var notExistingModTitle = interaction.GetText(LocalizationResources.Collection_Mods.ImportNonExistingMods.Title);
+                                var nonExistingModMessage = IronyFormatter.Format(interaction.GetText(LocalizationResources.Collection_Mods.ImportNonExistingMods.Message),
                                     new { Environment.NewLine, Mods = string.Join(Environment.NewLine, nonExistingModNames) });
                                 endOverlay = false;
                                 showImportNotification = false;
-                                var title = localizationManager.GetResource(LocalizationResources.Notifications.CollectionImported.Title);
-                                var message = IronyFormatter.Format(localizationManager.GetResource(LocalizationResources.Notifications.CollectionImported.Message), new { CollectionName = result.Name });
-                                notificationAction.ShowNotification(title, message, NotificationType.Warning);
+                                var title = interaction.GetText(LocalizationResources.Notifications.CollectionImported.Title);
+                                var message = IronyFormatter.Format(interaction.GetText(LocalizationResources.Notifications.CollectionImported.Message), new { CollectionName = result.Name });
+                                interaction.Notify(title, message, NotificationType.Warning);
                                 await TriggerOverlayAsync(id, false);
-                                await notificationAction.ShowPromptAsync(notExistingModTitle, notExistingModTitle, nonExistingModMessage, NotificationType.Warning, PromptType.OK);
+                                await interaction.PromptAsync(notExistingModTitle, notExistingModTitle, nonExistingModMessage, NotificationType.Warning, PromptType.OK);
                             }
                         }
                     }
 
                     if (showImportNotification)
                     {
-                        var title = localizationManager.GetResource(LocalizationResources.Notifications.CollectionImported.Title);
-                        var message = IronyFormatter.Format(localizationManager.GetResource(LocalizationResources.Notifications.CollectionImported.Message), new { CollectionName = result.Name });
-                        notificationAction.ShowNotification(title, message, NotificationType.Success);
+                        var title = interaction.GetText(LocalizationResources.Notifications.CollectionImported.Title);
+                        var message = IronyFormatter.Format(interaction.GetText(LocalizationResources.Notifications.CollectionImported.Message), new { CollectionName = result.Name });
+                        interaction.Notify(title, message, NotificationType.Success);
                     }
                 }
             }
@@ -1466,22 +1420,19 @@ namespace IronyModManager.ViewModels.Controls
         /// <summary>
         /// Initializes the sorters and filters.
         /// </summary>
-        /// <param name="state">The state.</param>
         /// <param name="setFlag">if set to <c>true</c> [set flag].</param>
-        protected virtual void InitSortersAndFilters(IAppState state, bool setFlag = true)
+        protected virtual void InitSortersAndFilters(bool setFlag = true)
         {
             if (setFlag)
             {
                 skipModSelectionSave = true;
             }
 
-            CollectionJumpOnPositionChange = state.CollectionJumpOnPositionChange;
-            SearchMods.WatermarkText = SearchModsWatermark;
-            SearchMods.Text = state.CollectionModsSearchTerm;
-            ModNameSortOrder.Text = ModName;
-            if (!string.IsNullOrWhiteSpace(state.CollectionModsSelectedMod) && SelectedMods != null)
+            var state = presentationCoordinator.Restore(SearchModsWatermark, ModName);
+            CollectionJumpOnPositionChange = state.JumpOnPositionChange;
+            if (!string.IsNullOrWhiteSpace(state.SelectedDescriptor) && SelectedMods != null)
             {
-                SelectedMod = SelectedMods.FirstOrDefault(p => p.DescriptorFile.Equals(state.CollectionModsSelectedMod, StringComparison.OrdinalIgnoreCase));
+                SelectedMod = SelectedMods.FirstOrDefault(p => p.DescriptorFile.Equals(state.SelectedDescriptor, StringComparison.OrdinalIgnoreCase));
             }
 
             RecognizeSortOrder(SelectedModCollection);
@@ -1521,8 +1472,7 @@ namespace IronyModManager.ViewModels.Controls
             SubscribeToMods();
 
             skipModSelectionSave = true;
-            var state = appStateService.Get();
-            InitSortersAndFilters(state, false);
+            InitSortersAndFilters(false);
             LoadModCollections(false);
             ApplySort();
             skipModSelectionSave = false;
@@ -1565,7 +1515,7 @@ namespace IronyModManager.ViewModels.Controls
                     {
                         case CommandState.Success:
                             skipModCollectionSave = true;
-                            var id = idGenerator.GetNextId();
+                            var id = interaction.BeginOperation();
                             if (Mods != null)
                             {
                                 foreach (var mod in Mods)
@@ -1575,7 +1525,7 @@ namespace IronyModManager.ViewModels.Controls
                             }
 
                             SetSelectedModsState(Mods != null ? Mods.Where(p => p.IsSelected).ToObservableCollection() : []);
-                            AllModsEnabled = SelectedMods?.Count > 0 && SelectedMods.All(p => p.IsSelected);
+                            AllModsEnabled = AreAllRealModsEnabled();
                             LoadModCollections();
                             SaveState();
                             skipModCollectionSave = EnteringNewCollection = false;
@@ -1586,16 +1536,11 @@ namespace IronyModManager.ViewModels.Controls
                             {
                                 async Task handleRenamePatchCollection()
                                 {
-                                    await TriggerOverlayAsync(id, true, localizationManager.GetResource(LocalizationResources.Collection_Mods.Overlay_Rename_Message));
+                                    await TriggerOverlayAsync(id, true, interaction.GetText(LocalizationResources.Collection_Mods.Overlay_Rename_Message));
                                     IDisposable renameProgress = null;
                                     try
                                     {
-                                        renameProgress = patchModRenameProgressHandler.Subscribe(s =>
-                                        {
-                                            var overlayProgress = IronyFormatter.Format(localizationManager.GetResource(LocalizationResources.Collection_Mods.Overlay_Import_Export_Progress),
-                                                new { PercentDone = s.Percentage.ToLocalizedPercentage() });
-                                            TriggerOverlay(id, true, localizationManager.GetResource(LocalizationResources.Collection_Mods.Overlay_Rename_Message), overlayProgress);
-                                        });
+                                        renameProgress = operationProgressCoordinator.SubscribePatchRename(id, TriggerOverlay);
                                         await Task.Run(async () =>
                                         {
                                             await modPatchCollectionService.RenamePatchCollectionAsync(AddNewCollection.RenamingCollection.Name, result.Result).ConfigureAwait(false);
@@ -1607,9 +1552,9 @@ namespace IronyModManager.ViewModels.Controls
                                         await TriggerOverlayAsync(id, false);
                                     }
 
-                                    successTitle = localizationManager.GetResource(LocalizationResources.Notifications.CollectionRenamed.Title);
-                                    successMessage = localizationManager.GetResource(LocalizationResources.Notifications.CollectionRenamed.Message);
-                                    notificationAction.ShowNotification(successTitle, successMessage, NotificationType.Success);
+                                    successTitle = interaction.GetText(LocalizationResources.Notifications.CollectionRenamed.Title);
+                                    successMessage = interaction.GetText(LocalizationResources.Notifications.CollectionRenamed.Message);
+                                    interaction.Notify(successTitle, successMessage, NotificationType.Success);
                                     PatchMod.SetParameters(SelectedModCollection);
                                 }
 
@@ -1618,17 +1563,17 @@ namespace IronyModManager.ViewModels.Controls
                             else
                             {
                                 TriggerOverlay(id, false);
-                                successTitle = localizationManager.GetResource(LocalizationResources.Notifications.CollectionCreated.Title);
-                                successMessage = IronyFormatter.Format(localizationManager.GetResource(LocalizationResources.Notifications.CollectionCreated.Message), notification);
-                                notificationAction.ShowNotification(successTitle, successMessage, NotificationType.Success);
+                                successTitle = interaction.GetText(LocalizationResources.Notifications.CollectionCreated.Title);
+                                successMessage = IronyFormatter.Format(interaction.GetText(LocalizationResources.Notifications.CollectionCreated.Message), notification);
+                                interaction.Notify(successTitle, successMessage, NotificationType.Success);
                             }
 
                             break;
 
                         case CommandState.Exists:
-                            var existsTitle = localizationManager.GetResource(LocalizationResources.Notifications.CollectionExists.Title);
-                            var existsMessage = IronyFormatter.Format(localizationManager.GetResource(LocalizationResources.Notifications.CollectionExists.Message), notification);
-                            notificationAction.ShowNotification(existsTitle, existsMessage, NotificationType.Warning);
+                            var existsTitle = interaction.GetText(LocalizationResources.Notifications.CollectionExists.Title);
+                            var existsMessage = IronyFormatter.Format(interaction.GetText(LocalizationResources.Notifications.CollectionExists.Message), notification);
+                            interaction.Notify(existsTitle, existsMessage, NotificationType.Warning);
                             break;
 
                         case CommandState.NotExecuted:
@@ -1692,9 +1637,9 @@ namespace IronyModManager.ViewModels.Controls
                             var selected = ModCollections?.FirstOrDefault(p => p.IsSelected);
                             restoreCollectionSelection = selected!.Name;
                             NeedsModListRefresh = true;
-                            var existsTitle = localizationManager.GetResource(LocalizationResources.Notifications.CollectionMerged.Title);
-                            var existsMessage = localizationManager.GetResource(LocalizationResources.Notifications.CollectionMerged.Message);
-                            notificationAction.ShowNotification(existsTitle, existsMessage, NotificationType.Success);
+                            var existsTitle = interaction.GetText(LocalizationResources.Notifications.CollectionMerged.Title);
+                            var existsMessage = interaction.GetText(LocalizationResources.Notifications.CollectionMerged.Message);
+                            interaction.Notify(existsTitle, existsMessage, NotificationType.Success);
                             NeedsModListRefresh = false;
                         }
                     }
@@ -1712,14 +1657,14 @@ namespace IronyModManager.ViewModels.Controls
                             }
 
                             SetSelectedModsState(Mods != null ? Mods.Where(p => p.IsSelected).ToObservableCollection() : []);
-                            AllModsEnabled = SelectedMods?.Count > 0 && SelectedMods.All(p => p.IsSelected);
+                            AllModsEnabled = AreAllRealModsEnabled();
                             LoadModCollections();
                             SaveState();
                             skipModCollectionSave = EnteringNewCollection = false;
                             MessageBus.Publish(new AllowEnterHotKeysEvent(false));
-                            var existsTitle = localizationManager.GetResource(LocalizationResources.Notifications.CollectionDuplicated.Title);
-                            var existsMessage = localizationManager.GetResource(LocalizationResources.Notifications.CollectionDuplicated.Message);
-                            notificationAction.ShowNotification(existsTitle, existsMessage, NotificationType.Success);
+                            var existsTitle = interaction.GetText(LocalizationResources.Notifications.CollectionDuplicated.Title);
+                            var existsMessage = interaction.GetText(LocalizationResources.Notifications.CollectionDuplicated.Message);
+                            interaction.Notify(existsTitle, existsMessage, NotificationType.Success);
                         }
                     }
                 }).DisposeWith(disposables);
@@ -1821,16 +1766,24 @@ namespace IronyModManager.ViewModels.Controls
                 skipModCollectionSave = true;
                 if (SelectedMods?.Count > 0)
                 {
-                    foreach (var item in SelectedMods)
-                    {
-                        item.IsSelected = false;
-                    }
-
-                    SetSelectedModsState([]);
+                    SetSelectedModsState(collectionModMembership.DisableAllRealMods(SelectedMods));
                     SaveSelectedCollection();
                 }
 
                 skipModCollectionSave = false;
+            }).DisposeWith(disposables);
+
+            RemoveFromCollectionCommand = ReactiveCommand.Create(() =>
+            {
+                var virtualMod = ContextMenuMod;
+                if (virtualMod?.IsVirtual != true || SelectedMods?.Contains(virtualMod) != true)
+                {
+                    return;
+                }
+
+                SetSelectedModsState(collectionModMembership.RemoveVirtual(SelectedMods, virtualMod));
+                SaveSelectedCollection();
+                AllModsEnabled = AreAllRealModsEnabled();
             }).DisposeWith(disposables);
 
             OpenUrlCommand = ReactiveCommand.Create(() =>
@@ -1838,7 +1791,7 @@ namespace IronyModManager.ViewModels.Controls
                 var url = GetContextMenuModUrl();
                 if (!string.IsNullOrWhiteSpace(url))
                 {
-                    appAction.OpenAsync(url).ConfigureAwait(true);
+                    interaction.OpenAsync(url).ConfigureAwait(true);
                 }
             }).DisposeWith(disposables);
 
@@ -1847,7 +1800,7 @@ namespace IronyModManager.ViewModels.Controls
                 var url = GetContextMenuModUrl();
                 if (!string.IsNullOrWhiteSpace(url))
                 {
-                    appAction.CopyAsync(url).ConfigureAwait(true);
+                    interaction.CopyAsync(url).ConfigureAwait(true);
                 }
             }).DisposeWith(disposables);
 
@@ -1861,7 +1814,7 @@ namespace IronyModManager.ViewModels.Controls
                     if (gameService.IsFlatpakSteamGame(args))
                     {
                         // ReSharper disable once StringLiteralTypo
-                        if (await appAction.OpenFlatpakAsync("com.valvesoftware.Steam", args.ExecutableLocation))
+                        if (await interaction.OpenFlatpakAsync("com.valvesoftware.Steam", args.ExecutableLocation))
                         {
                             launchDefault = false;
                         }
@@ -1869,7 +1822,7 @@ namespace IronyModManager.ViewModels.Controls
 
                     if (launchDefault)
                     {
-                        await appAction.OpenAsync(url).ConfigureAwait(true);
+                        await interaction.OpenAsync(url).ConfigureAwait(true);
                     }
                 }
             }).DisposeWith(disposables);
@@ -1878,7 +1831,7 @@ namespace IronyModManager.ViewModels.Controls
             {
                 if (!string.IsNullOrWhiteSpace(ContextMenuMod?.FullPath))
                 {
-                    appAction.OpenAsync(ContextMenuMod.FullPath).ConfigureAwait(true);
+                    interaction.OpenAsync(ContextMenuMod.FullPath).ConfigureAwait(true);
                 }
             }).DisposeWith(disposables);
 
@@ -1886,7 +1839,7 @@ namespace IronyModManager.ViewModels.Controls
             {
                 if (!string.IsNullOrWhiteSpace(ContextMenuMod?.FullPath))
                 {
-                    appAction.CopyAsync(ContextMenuMod.FullPath).ConfigureAwait(true);
+                    interaction.CopyAsync(ContextMenuMod.FullPath).ConfigureAwait(true);
                 }
             }).DisposeWith(disposables);
 
@@ -1919,15 +1872,15 @@ namespace IronyModManager.ViewModels.Controls
 
             ImportCollectionFromClipboardCommand = ReactiveCommand.CreateFromTask(async () =>
             {
-                var text = await appAction.GetAsync();
+                var text = await interaction.GetClipboardTextAsync();
                 if (!string.IsNullOrWhiteSpace(text))
                 {
                     var modNames = text.SplitOnNewLine().Select(p => p.Trim().Split(ClipboardSeparator, StringSplitOptions.RemoveEmptyEntries)[0]);
                     if (modNames.Any(p => Mods.Any(m => m.Name.Equals(p, StringComparison.OrdinalIgnoreCase))))
                     {
-                        var title = localizationManager.GetResource(LocalizationResources.Collection_Mods.ImportFromClipboard.PromptTitle);
-                        var message = localizationManager.GetResource(LocalizationResources.Collection_Mods.ImportFromClipboard.PromptMessage);
-                        if (await notificationAction.ShowPromptAsync(title, title, message, NotificationType.Warning))
+                        var title = interaction.GetText(LocalizationResources.Collection_Mods.ImportFromClipboard.PromptTitle);
+                        var message = interaction.GetText(LocalizationResources.Collection_Mods.ImportFromClipboard.PromptMessage);
+                        if (await interaction.PromptAsync(title, title, message, NotificationType.Warning))
                         {
                             await MessageBus.PublishAsync(new ModListInstallRefreshRequestEvent(true));
                             skipModSelectionSave = true;
@@ -1943,9 +1896,8 @@ namespace IronyModManager.ViewModels.Controls
                             }
 
                             SetSelectedModsState(mods.OrderBy(p => modNames.IndexOf(p.Name)).ToObservableCollection());
-                            AllModsEnabled = SelectedMods?.Count > 0 && SelectedMods.All(p => p.IsSelected);
-                            var state = appStateService.Get();
-                            InitSortersAndFilters(state, false);
+                            AllModsEnabled = AreAllRealModsEnabled();
+                            InitSortersAndFilters(false);
                             SaveSelectedCollection();
                             RecognizeSortOrder(SelectedModCollection);
                             skipModCollectionSave = false;
@@ -1953,10 +1905,10 @@ namespace IronyModManager.ViewModels.Controls
                             var nonExistingMods = modNames.Where(p => !mods.Any(m => m.Name.Equals(p)));
                             if (nonExistingMods.Any())
                             {
-                                var notExistingModTitle = localizationManager.GetResource(LocalizationResources.Collection_Mods.ImportNonExistingMods.Title);
-                                var nonExistingModMessage = IronyFormatter.Format(localizationManager.GetResource(LocalizationResources.Collection_Mods.ImportNonExistingMods.Message),
+                                var notExistingModTitle = interaction.GetText(LocalizationResources.Collection_Mods.ImportNonExistingMods.Title);
+                                var nonExistingModMessage = IronyFormatter.Format(interaction.GetText(LocalizationResources.Collection_Mods.ImportNonExistingMods.Message),
                                     new { Environment.NewLine, Mods = string.Join(Environment.NewLine, nonExistingMods) });
-                                await notificationAction.ShowPromptAsync(notExistingModTitle, notExistingModTitle, nonExistingModMessage, NotificationType.Warning, PromptType.OK);
+                                await interaction.PromptAsync(notExistingModTitle, notExistingModTitle, nonExistingModMessage, NotificationType.Warning, PromptType.OK);
                             }
                         }
                     }
@@ -1967,29 +1919,17 @@ namespace IronyModManager.ViewModels.Controls
 
             void registerReportHandlers(long id, bool useImportOverlay = false)
             {
-                reportDisposable = modReportExportHandler.Subscribe(s =>
-                {
-                    if (useImportOverlay)
-                    {
-                        TriggerOverlay(id, true, localizationManager.GetResource(LocalizationResources.Collection_Mods.FileHash.ImportOverlay),
-                            IronyFormatter.Format(localizationManager.GetResource(LocalizationResources.Collection_Mods.FileHash.ProgressImport), new { Progress = s.Percentage.ToLocalizedPercentage(), Count = s.Step, TotalCount = 2 }));
-                    }
-                    else
-                    {
-                        TriggerOverlay(id, true, localizationManager.GetResource(LocalizationResources.Collection_Mods.FileHash.ExportOverlay),
-                            IronyFormatter.Format(localizationManager.GetResource(LocalizationResources.Collection_Mods.FileHash.ProgressExport), new { Progress = s.Percentage.ToLocalizedPercentage() }));
-                    }
-                }).DisposeWith(disposables);
+                reportDisposable = operationProgressCoordinator.SubscribeReport(id, useImportOverlay, disposables, TriggerOverlay);
             }
 
             ImportReportCommand = ReactiveCommand.CreateFromTask(async () =>
             {
-                var title = localizationManager.GetResource(LocalizationResources.Collection_Mods.FileHash.DialogTitleImport);
-                var path = await fileDialogAction.OpenDialogAsync(title, SelectedModCollection?.Name, Shared.Constants.JsonExtensionWithoutDot);
+                var title = interaction.GetText(LocalizationResources.Collection_Mods.FileHash.DialogTitleImport);
+                var path = await interaction.SelectFileAsync(title, SelectedModCollection?.Name, Shared.Constants.JsonExtensionWithoutDot);
                 if (!string.IsNullOrWhiteSpace(path))
                 {
-                    var id = idGenerator.GetNextId();
-                    await TriggerOverlayAsync(id, true, localizationManager.GetResource(LocalizationResources.Collection_Mods.FileHash.ImportOverlay));
+                    var id = interaction.BeginOperation();
+                    await TriggerOverlayAsync(id, true, interaction.GetText(LocalizationResources.Collection_Mods.FileHash.ImportOverlay));
                     registerReportHandlers(id, true);
                     var rawReports = await reportExportService.ImportAsync(path);
                     var reports = new List<IHashReport>();
@@ -2013,8 +1953,8 @@ namespace IronyModManager.ViewModels.Controls
                     else
                     {
                         await TriggerOverlayAsync(id, false);
-                        notificationAction.ShowNotification(localizationManager.GetResource(LocalizationResources.Notifications.ReportValid.Title),
-                            localizationManager.GetResource(LocalizationResources.Notifications.ReportValid.Message), NotificationType.Success);
+                        interaction.Notify(interaction.GetText(LocalizationResources.Notifications.ReportValid.Title),
+                            interaction.GetText(LocalizationResources.Notifications.ReportValid.Message), NotificationType.Success);
                     }
 
                     reportDisposable?.Dispose();
@@ -2023,17 +1963,17 @@ namespace IronyModManager.ViewModels.Controls
 
             ExportCollectionReportCommand = ReactiveCommand.CreateFromTask(async () =>
             {
-                var title = localizationManager.GetResource(LocalizationResources.Collection_Mods.FileHash.DialogTitleExport);
-                var path = await fileDialogAction.SaveDialogAsync(title, SelectedModCollection?.Name, Shared.Constants.JsonExtensionWithoutDot);
+                var title = interaction.GetText(LocalizationResources.Collection_Mods.FileHash.DialogTitleExport);
+                var path = await interaction.SelectSavePathAsync(title, SelectedModCollection?.Name, Shared.Constants.JsonExtensionWithoutDot);
                 if (!string.IsNullOrWhiteSpace(path))
                 {
-                    var id = idGenerator.GetNextId();
-                    await TriggerOverlayAsync(id, true, localizationManager.GetResource(LocalizationResources.Collection_Mods.FileHash.ExportOverlay));
+                    var id = interaction.BeginOperation();
+                    await TriggerOverlayAsync(id, true, interaction.GetText(LocalizationResources.Collection_Mods.FileHash.ExportOverlay));
                     registerReportHandlers(id);
-                    if (await Task.Run(() => modCollectionService.ExportHashReportAsync(SelectedMods, path)))
+                    if (await Task.Run(() => modCollectionService.ExportHashReportAsync(SelectedMods.Where(p => !p.IsVirtual), path)))
                     {
-                        notificationAction.ShowNotification(localizationManager.GetResource(LocalizationResources.Notifications.ReportExported.Title),
-                            localizationManager.GetResource(LocalizationResources.Notifications.ReportExported.Message), NotificationType.Success);
+                        interaction.Notify(interaction.GetText(LocalizationResources.Notifications.ReportExported.Title),
+                            interaction.GetText(LocalizationResources.Notifications.ReportExported.Message), NotificationType.Success);
                     }
 
                     await TriggerOverlayAsync(id, false);
@@ -2043,17 +1983,17 @@ namespace IronyModManager.ViewModels.Controls
 
             ExportGameReportCommand = ReactiveCommand.CreateFromTask(async () =>
             {
-                var title = localizationManager.GetResource(LocalizationResources.Collection_Mods.FileHash.DialogTitleExport);
-                var path = await fileDialogAction.SaveDialogAsync(title, activeGame?.Name, Shared.Constants.JsonExtensionWithoutDot);
+                var title = interaction.GetText(LocalizationResources.Collection_Mods.FileHash.DialogTitleExport);
+                var path = await interaction.SelectSavePathAsync(title, activeGame?.Name, Shared.Constants.JsonExtensionWithoutDot);
                 if (!string.IsNullOrWhiteSpace(path))
                 {
-                    var id = idGenerator.GetNextId();
-                    await TriggerOverlayAsync(id, true, localizationManager.GetResource(LocalizationResources.Collection_Mods.FileHash.ExportOverlay));
+                    var id = interaction.BeginOperation();
+                    await TriggerOverlayAsync(id, true, interaction.GetText(LocalizationResources.Collection_Mods.FileHash.ExportOverlay));
                     registerReportHandlers(id);
                     if (await Task.Run(() => gameService.ExportHashReportAsync(activeGame, path)))
                     {
-                        notificationAction.ShowNotification(localizationManager.GetResource(LocalizationResources.Notifications.ReportExported.Title),
-                            localizationManager.GetResource(LocalizationResources.Notifications.ReportExported.Message), NotificationType.Success);
+                        interaction.Notify(interaction.GetText(LocalizationResources.Notifications.ReportExported.Title),
+                            interaction.GetText(LocalizationResources.Notifications.ReportExported.Message), NotificationType.Success);
                     }
 
                     await TriggerOverlayAsync(id, false);
@@ -2077,7 +2017,7 @@ namespace IronyModManager.ViewModels.Controls
                 }
             }).DisposeWith(disposables);
 
-            hotkeyPressedHandler.Subscribe(async hotkey =>
+            eventCoordinator.SubscribeHotkeys(async hotkey =>
             {
                 var mod = HoveredMod;
                 if (mod != null)
@@ -2135,7 +2075,7 @@ namespace IronyModManager.ViewModels.Controls
                 }).DisposeWith(disposables);
             }).DisposeWith(disposables);
 
-            modCollectionChangeRequestHandler.Subscribe(s =>
+            eventCoordinator.SubscribeCollectionChanges(s =>
             {
                 if (s is { ModCollection: not null } && ModCollections != null && ModCollections.Any())
                 {
@@ -2183,7 +2123,7 @@ namespace IronyModManager.ViewModels.Controls
                     using var mutex = await reorderLock.LockAsync(cancellationToken);
                     if (!reorderQueue.IsEmpty)
                     {
-                        scrollState.SetState(false);
+                        presentationCoordinator.SetScrollState(false);
                         skipModSelectionSave = true;
                         var mods = SelectedMods.Select(m => new OrderedMod { Order = m.Order, Mod = m }).ToList();
                         foreach (var mod in reorderQueue)
@@ -2222,7 +2162,7 @@ namespace IronyModManager.ViewModels.Controls
                         ModReordered?.Invoke(reorderQueue.Last(), instant);
                         skipModSelectionSave = false;
                         reorderQueue.Clear();
-                        scrollState.SetState(true);
+                        presentationCoordinator.SetScrollState(true);
                     }
                 }
             }
@@ -2250,6 +2190,7 @@ namespace IronyModManager.ViewModels.Controls
         {
             if (Mods != null)
             {
+                var virtualMods = SelectedMods?.Where(p => p.IsVirtual).ToList() ?? [];
                 BeforeUndoRedo?.Invoke(this, EventArgs.Empty);
                 skipModSelectionSave = true;
                 skipModCollectionSave = true;
@@ -2264,6 +2205,7 @@ namespace IronyModManager.ViewModels.Controls
                 foreach (var item in descriptors)
                 {
                     var mod = Mods.FirstOrDefault(p => p.DescriptorFile.Equals(item, StringComparison.InvariantCultureIgnoreCase));
+                    mod ??= virtualMods.FirstOrDefault(p => p.DescriptorFile.Equals(item, StringComparison.InvariantCultureIgnoreCase));
                     if (mod != null)
                     {
                         mod.IsSelected = true;
@@ -2279,7 +2221,7 @@ namespace IronyModManager.ViewModels.Controls
 
                 SaveState();
                 RecognizeSortOrder(SelectedModCollection);
-                AllModsEnabled = SelectedMods?.Count > 0 && SelectedMods.All(p => p.IsSelected);
+                AllModsEnabled = AreAllRealModsEnabled();
                 skipModSelectionSave = false;
                 skipModCollectionSave = false;
                 AfterUndoRedo?.Invoke(this, EventArgs.Empty);
@@ -2356,20 +2298,20 @@ namespace IronyModManager.ViewModels.Controls
         protected async Task RemoveCollectionAsync(string collectionName)
         {
             var noti = new { CollectionName = collectionName };
-            var title = localizationManager.GetResource(LocalizationResources.Collection_Mods.Delete_Title);
-            var header = localizationManager.GetResource(LocalizationResources.Collection_Mods.Delete_Header);
-            var message = IronyFormatter.Format(localizationManager.GetResource(LocalizationResources.Collection_Mods.Delete_Message), noti);
-            if (await notificationAction.ShowPromptAsync(title, header, message, NotificationType.Info))
+            var title = interaction.GetText(LocalizationResources.Collection_Mods.Delete_Title);
+            var header = interaction.GetText(LocalizationResources.Collection_Mods.Delete_Header);
+            var message = IronyFormatter.Format(interaction.GetText(LocalizationResources.Collection_Mods.Delete_Message), noti);
+            if (await interaction.PromptAsync(title, header, message, NotificationType.Info))
             {
-                var id = idGenerator.GetNextId();
-                await TriggerOverlayAsync(id, true, localizationManager.GetResource(LocalizationResources.Collection_Mods.Deleting_Message));
+                var id = interaction.BeginOperation();
+                await TriggerOverlayAsync(id, true, interaction.GetText(LocalizationResources.Collection_Mods.Deleting_Message));
                 var collection = modCollectionService.Get(collectionName);
                 var deleteMergedMod = false;
                 if (!string.IsNullOrWhiteSpace(collection?.MergedFolderName) && await modService.ModDirectoryExistsAsync(collection.MergedFolderName))
                 {
-                    deleteMergedMod = await notificationAction.ShowPromptAsync(localizationManager.GetResource(LocalizationResources.Collection_Mods.DeleteMerge.DeleteTitle),
-                        localizationManager.GetResource(LocalizationResources.Collection_Mods.DeleteMerge.DeleteHeader),
-                        localizationManager.GetResource(LocalizationResources.Collection_Mods.DeleteMerge.DeleteMessage), NotificationType.Info);
+                    deleteMergedMod = await interaction.PromptAsync(interaction.GetText(LocalizationResources.Collection_Mods.DeleteMerge.DeleteTitle),
+                        interaction.GetText(LocalizationResources.Collection_Mods.DeleteMerge.DeleteHeader),
+                        interaction.GetText(LocalizationResources.Collection_Mods.DeleteMerge.DeleteMessage), NotificationType.Info);
                 }
 
                 if (modCollectionService.Delete(collectionName))
@@ -2387,16 +2329,16 @@ namespace IronyModManager.ViewModels.Controls
                     if (deleteMergedMod)
                     {
                         NeedsModListRefresh = true;
-                        var notificationTitle = localizationManager.GetResource(LocalizationResources.Notifications.CollectionAndModDeleted.Title);
-                        var notificationMessage = IronyFormatter.Format(localizationManager.GetResource(LocalizationResources.Notifications.CollectionAndModDeleted.Message), noti);
-                        notificationAction.ShowNotification(notificationTitle, notificationMessage, NotificationType.Success);
+                        var notificationTitle = interaction.GetText(LocalizationResources.Notifications.CollectionAndModDeleted.Title);
+                        var notificationMessage = IronyFormatter.Format(interaction.GetText(LocalizationResources.Notifications.CollectionAndModDeleted.Message), noti);
+                        interaction.Notify(notificationTitle, notificationMessage, NotificationType.Success);
                         NeedsModListRefresh = false;
                     }
                     else
                     {
-                        var notificationTitle = localizationManager.GetResource(LocalizationResources.Notifications.CollectionDeleted.Title);
-                        var notificationMessage = IronyFormatter.Format(localizationManager.GetResource(LocalizationResources.Notifications.CollectionDeleted.Message), noti);
-                        notificationAction.ShowNotification(notificationTitle, notificationMessage, NotificationType.Success);
+                        var notificationTitle = interaction.GetText(LocalizationResources.Notifications.CollectionDeleted.Title);
+                        var notificationMessage = IronyFormatter.Format(interaction.GetText(LocalizationResources.Notifications.CollectionDeleted.Message), noti);
+                        interaction.Notify(notificationTitle, notificationMessage, NotificationType.Success);
                     }
                 }
 
@@ -2422,7 +2364,7 @@ namespace IronyModManager.ViewModels.Controls
 
                 collection.Game = game;
                 collection.Name = SelectedModCollection.Name;
-                var selectedMods = SelectedMods != null ? SelectedMods.Where(p => p.IsSelected) : [];
+                var selectedMods = collectionModMembership.GetPersistedMembers(SelectedMods);
                 collection.Mods = selectedMods.Select(p => p.DescriptorFile).ToList();
                 collection.ModPaths = selectedMods.Select(p => p.FullPath).ToList();
                 collection.IsSelected = true;
@@ -2445,12 +2387,7 @@ namespace IronyModManager.ViewModels.Controls
         /// <param name="useOldModSelection">if set to <c>true</c> [use old mod selection].</param>
         protected virtual void SaveState(bool useOldModSelection = false)
         {
-            var state = appStateService.Get();
-            state.CollectionModsSelectedMod = !useOldModSelection ? SelectedMod?.DescriptorFile : state.CollectionModsSelectedMod;
-            state.CollectionModsSearchTerm = !useOldModSelection ? SearchMods.Text : state.CollectionModsSearchTerm;
-            state.CollectionModsSortColumn = ModNameKey;
-            state.CollectionJumpOnPositionChange = CollectionJumpOnPositionChange;
-            appStateService.Save(state);
+            presentationCoordinator.Save(SelectedMod?.DescriptorFile, CollectionJumpOnPositionChange, useOldModSelection);
         }
 
         /// <summary>
@@ -2479,8 +2416,8 @@ namespace IronyModManager.ViewModels.Controls
         /// </summary>
         protected virtual void SetAutoFocusLabel()
         {
-            var focusLabel = localizationManager.GetResource(LocalizationResources.Collection_Mods.JumpOnDragAndDrop.Title);
-            var focusState = localizationManager.GetResource(CollectionJumpOnPositionChange ? LocalizationResources.Collection_Mods.JumpOnDragAndDrop.On : LocalizationResources.Collection_Mods.JumpOnDragAndDrop.Off);
+            var focusLabel = interaction.GetText(LocalizationResources.Collection_Mods.JumpOnDragAndDrop.Title);
+            var focusState = interaction.GetText(CollectionJumpOnPositionChange ? LocalizationResources.Collection_Mods.JumpOnDragAndDrop.On : LocalizationResources.Collection_Mods.JumpOnDragAndDrop.Off);
             var label = IronyFormatter.Format(focusLabel, new { State = focusState });
             CollectionJumpOnPositionChangeLabel = label;
         }
@@ -2517,7 +2454,7 @@ namespace IronyModManager.ViewModels.Controls
                     oldMods.AddRange(SelectedMods);
                 }
 
-                previousValidatedMods.TryGetValue(SelectedModCollection.Name, out var prevMods);
+                var prevMods = modReconciliationCoordinator.GetPreviousCollectionMods(SelectedModCollection.Name);
                 if (SelectedMods?.Count > 0 && (prevMods == null ||
                                                 !(prevMods.Count() == SelectedMods.Count && !prevMods.Select(p => p.DescriptorFile).Except(SelectedMods.Select(p => p.DescriptorFile)).Any())
                                                 || !prevMods.Select(p => p.DescriptorFile).SequenceEqual(SelectedMods.Select(p => p.DescriptorFile))))
@@ -2525,7 +2462,7 @@ namespace IronyModManager.ViewModels.Controls
                     modPatchCollectionService.InvalidatePatchModState(SelectedModCollection.Name);
                 }
 
-                previousValidatedMods.AddOrUpdate(SelectedModCollection.Name, oldMods, (_, _) => oldMods);
+                modReconciliationCoordinator.RecordCollectionMods(SelectedModCollection.Name, oldMods);
                 if (!ignoreStack && !prevMods.ListsSame(selectedMods))
                 {
                     undoStack.Push((prevMods ?? []).Select(p => p.DescriptorFile).ToList());
@@ -2559,7 +2496,7 @@ namespace IronyModManager.ViewModels.Controls
             modOrderChanged = null;
             if (Mods != null && Disposables != null)
             {
-                AllModsEnabled = SelectedMods?.Count > 0 && SelectedMods.All(p => p.IsSelected);
+                AllModsEnabled = AreAllRealModsEnabled();
 
                 var sourceList = Mods.ToSourceList();
 
@@ -2592,14 +2529,14 @@ namespace IronyModManager.ViewModels.Controls
                             }
                         }
 
-                        if (!string.IsNullOrWhiteSpace(SelectedModCollection?.Name) && needsSave)
-                        {
-                            SaveSelectedCollection();
-                        }
-
                         Dispatcher.UIThread.SafeInvoke(() =>
                         {
                             SetSelectedModsState(selectedMods, false);
+                            if (!string.IsNullOrWhiteSpace(SelectedModCollection?.Name) && needsSave)
+                            {
+                                SaveSelectedCollection();
+                            }
+
                             if (s.Sender != null)
                             {
                                 InstantReorderSelectedItems(s.Sender, s.Sender.Order);
@@ -2609,7 +2546,7 @@ namespace IronyModManager.ViewModels.Controls
                         });
                     }
 
-                    AllModsEnabled = SelectedMods?.Count > 0 && SelectedMods.All(p => p.IsSelected);
+                    AllModsEnabled = AreAllRealModsEnabled();
                     skipReorder = false;
                 }).DisposeWith(Disposables);
 
@@ -2654,7 +2591,7 @@ namespace IronyModManager.ViewModels.Controls
                     sb.AppendLine(string.Join(ClipboardSeparator, entries));
                 }
 
-                await appAction.CopyAsync(sb.ToString());
+                await interaction.CopyAsync(sb.ToString());
             }
         }
 

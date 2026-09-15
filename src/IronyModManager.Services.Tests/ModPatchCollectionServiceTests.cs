@@ -20,6 +20,7 @@ using System.Reflection;
 using System.Threading.Tasks;
 using AutoMapper;
 using AwesomeAssertions;
+using IronyModManager.IO.Common.FileSystem;
 using IronyModManager.IO.Common.Mods;
 using IronyModManager.IO.Common.Readers;
 using IronyModManager.IO.Mods.Models;
@@ -74,13 +75,16 @@ namespace IronyModManager.Services.Tests
         private static ModPatchCollectionService GetService(Mock<IStorageProvider> storageProvider, Mock<IModParser> modParser,
             Mock<IParserManager> parserManager, Mock<IReader> reader, Mock<IMapper> mapper, Mock<IModWriter> modWriter,
             Mock<IGameService> gameService, Mock<IModPatchExporter> modPatchExporter, IEnumerable<IDefinitionInfoProvider> definitionInfoProviders = null, Mock<IValidateParser> validateParser = null,
-            Mock<IParametrizedParser> parametrizedParser = null, Mock<IParserMerger> parserMerger = null)
+            Mock<IParametrizedParser> parametrizedParser = null, Mock<IParserMerger> parserMerger = null,
+            IGameStateSafetyService gameStateSafetyService = null)
         {
             var messageBus = new Mock<IMessageBus>();
             messageBus.Setup(p => p.PublishAsync(It.IsAny<IMessageBusEvent>()));
             messageBus.Setup(p => p.Publish(It.IsAny<IMessageBusEvent>()));
+            gameStateSafetyService ??= new GameStateSafetyService(Mock.Of<IFileSystemStateProbe>(), Mock.Of<ILogger>());
             return new ModPatchCollectionService(new Cache(), messageBus.Object, parserManager.Object, definitionInfoProviders, modPatchExporter.Object, reader.Object, modWriter.Object, modParser.Object, gameService.Object,
-                storageProvider.Object, mapper.Object, validateParser?.Object, parametrizedParser?.Object, parserMerger?.Object);
+                storageProvider.Object, mapper.Object, validateParser?.Object, parametrizedParser?.Object, parserMerger?.Object,
+                gameStateSafetyService);
         }
 
         /// <summary>
@@ -2788,6 +2792,65 @@ namespace IronyModManager.Services.Tests
 
             var result = await service.CopyPatchCollectionAsync("t1", "t2");
             result.Should().BeTrue();
+        }
+
+        [Fact]
+        public async Task Copy_patch_source_failure_should_lock_as_discovery_unavailable()
+        {
+            var storageProvider = new Mock<IStorageProvider>();
+            var modParser = new Mock<IModParser>();
+            var parserManager = new Mock<IParserManager>();
+            var reader = new Mock<IReader>();
+            var modWriter = new Mock<IModWriter>();
+            var gameService = new Mock<IGameService>();
+            var mapper = new Mock<IMapper>();
+            var exporter = new Mock<IModPatchExporter>();
+            var game = new Game { Type = "copy-patch-read", UserDirectory = "user" };
+            gameService.Setup(p => p.GetSelected()).Returns(game);
+            exporter.Setup(p => p.GetPatchStateAsync(It.IsAny<ModPatchExporterParameters>(), It.IsAny<bool>()))
+                .ThrowsAsync(new IOException("source unavailable"));
+            var probe = new Mock<IFileSystemStateProbe>();
+            probe.Setup(p => p.IsFileSystemAccessFailure(It.IsAny<Exception>()))
+                .Returns((Exception exception) => exception is IOException or UnauthorizedAccessException);
+            var safety = new GameStateSafetyService(probe.Object, Mock.Of<ILogger>());
+            var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService,
+                exporter, gameStateSafetyService: safety);
+
+            var result = await service.CopyPatchCollectionAsync("source", "target");
+
+            result.Should().BeFalse();
+            safety.GetLock(game).Reason.Should().Be(GameStateLockReason.DiscoveryUnavailable);
+            exporter.Verify(p => p.CopyPatchModAsync(It.IsAny<ModPatchExporterParameters>()), Times.Never);
+        }
+
+        [Fact]
+        public async Task Copy_patch_destination_failure_should_lock_as_write_access_failure()
+        {
+            var storageProvider = new Mock<IStorageProvider>();
+            var modParser = new Mock<IModParser>();
+            var parserManager = new Mock<IParserManager>();
+            var reader = new Mock<IReader>();
+            var modWriter = new Mock<IModWriter>();
+            var gameService = new Mock<IGameService>();
+            var mapper = new Mock<IMapper>();
+            var exporter = new Mock<IModPatchExporter>();
+            var game = new Game { Type = "copy-patch-write", UserDirectory = "user" };
+            gameService.Setup(p => p.GetSelected()).Returns(game);
+            exporter.Setup(p => p.GetPatchStateAsync(It.IsAny<ModPatchExporterParameters>(), It.IsAny<bool>()))
+                .ReturnsAsync(new PatchState());
+            exporter.Setup(p => p.CopyPatchModAsync(It.IsAny<ModPatchExporterParameters>()))
+                .ThrowsAsync(new UnauthorizedAccessException());
+            var probe = new Mock<IFileSystemStateProbe>();
+            probe.Setup(p => p.IsFileSystemAccessFailure(It.IsAny<Exception>()))
+                .Returns((Exception exception) => exception is IOException or UnauthorizedAccessException);
+            var safety = new GameStateSafetyService(probe.Object, Mock.Of<ILogger>());
+            var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService,
+                exporter, gameStateSafetyService: safety);
+
+            var result = await service.CopyPatchCollectionAsync("source", "target");
+
+            result.Should().BeFalse();
+            safety.GetLock(game).Reason.Should().Be(GameStateLockReason.WriteAccessFailure);
         }
 
         /// <summary>

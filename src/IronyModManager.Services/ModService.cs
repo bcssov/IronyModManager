@@ -20,6 +20,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using IronyModManager.IO.Common.Mods;
+using IronyModManager.IO.Common.FileSystem;
 using IronyModManager.IO.Common.Readers;
 using IronyModManager.Models.Common;
 using IronyModManager.Parser.Common.Mod;
@@ -51,7 +52,10 @@ namespace IronyModManager.Services
         IModWriter modWriter,
         IGameService gameService,
         IStorageProvider storageProvider,
-        IMapper mapper) : ModBaseService(cache, definitionInfoProviders, reader, modWriter, modParser, gameService, storageProvider, mapper), IModService
+        IMapper mapper,
+        IFileSystemStateProbe fileSystemStateProbe,
+        IGameStateSafetyService gameStateSafetyService,
+        Func<IMod> modFactory) : ModBaseService(cache, definitionInfoProviders, reader, modWriter, modParser, gameService, storageProvider, mapper), IModService
     {
         #region Fields
 
@@ -69,6 +73,21 @@ namespace IronyModManager.Services
         /// The logger
         /// </summary>
         private readonly ILogger logger = logger;
+
+        /// <summary>
+        /// The filesystem state probe.
+        /// </summary>
+        private readonly IFileSystemStateProbe fileSystemStateProbe = fileSystemStateProbe;
+
+        /// <summary>
+        /// The per-game filesystem safety state.
+        /// </summary>
+        private readonly IGameStateSafetyService gameStateSafetyService = gameStateSafetyService;
+
+        /// <summary>
+        /// Creates runtime mod representations.
+        /// </summary>
+        private readonly Func<IMod> modFactory = modFactory;
 
         /// <summary>
         /// The search parser
@@ -115,7 +134,7 @@ namespace IronyModManager.Services
         /// Customs the mod directory empty asynchronous.
         /// </summary>
         /// <param name="gameType">Type of the game.</param>
-        /// <returns>Task&lt;System.Boolean&gt;.</returns>
+        /// <returns>The collection apply result.</returns>
         public virtual async Task<bool> CustomModDirectoryEmptyAsync(string gameType)
         {
             var game = GameService.Get().FirstOrDefault(p => p.Type.Equals(gameType));
@@ -141,6 +160,11 @@ namespace IronyModManager.Services
         /// <returns>Task&lt;System.Boolean&gt;.</returns>
         public virtual Task<bool> DeleteDescriptorsAsync(IEnumerable<IMod> mods)
         {
+            if (mods?.Any(p => p.IsVirtual) == true)
+            {
+                return Task.FromResult(false);
+            }
+
             return DeleteDescriptorsInternalAsync(mods);
         }
 
@@ -153,7 +177,7 @@ namespace IronyModManager.Services
         {
             if (mods?.Count() > 0)
             {
-                var filtered = mods.Where(p => p.IsValid && p.AchievementStatus == AchievementStatus.NotEvaluated);
+                var filtered = mods.Where(p => !p.IsVirtual && p.IsValid && p.AchievementStatus == AchievementStatus.NotEvaluated);
                 if (filtered.Any())
                 {
                     var game = GameService.GetSelected();
@@ -189,13 +213,27 @@ namespace IronyModManager.Services
         /// <param name="regularMods">The regular mods.</param>
         /// <param name="modCollection">The mod collection.</param>
         /// <returns>Task&lt;System.Boolean&gt;.</returns>
-        public virtual async Task<bool> ExportModsAsync(IReadOnlyCollection<IMod> enabledMods, IReadOnlyCollection<IMod> regularMods, IModCollection modCollection)
+        public virtual async Task<ModApplyResult> ExportModsAsync(IReadOnlyCollection<IMod> enabledMods, IReadOnlyCollection<IMod> regularMods, IModCollection modCollection)
         {
             var game = GameService.GetSelected();
+            var skippedVirtualMods = enabledMods?.Count(p => p.IsVirtual) ?? 0;
+            return await gameStateSafetyService.ExecuteMutationAsync(game,
+                async () => new ModApplyResult
+                {
+                    Succeeded = await ExportModsInternalAsync(game, enabledMods, regularMods, modCollection),
+                    SkippedVirtualMods = skippedVirtualMods
+                }, new ModApplyResult(), "Apply collection load order");
+        }
+
+        private async Task<bool> ExportModsInternalAsync(IGame game, IReadOnlyCollection<IMod> enabledMods, IReadOnlyCollection<IMod> regularMods, IModCollection modCollection)
+        {
             if (game == null || enabledMods == null || regularMods == null || modCollection == null)
             {
                 return false;
             }
+
+            enabledMods = [.. enabledMods.Where(p => !p.IsVirtual)];
+            regularMods = [.. regularMods.Where(p => !p.IsVirtual)];
 
             var allMods = GetInstalledModsInternal(game, false);
             var mod = GeneratePatchModDescriptor(allMods, game, GenerateCollectionPatchName(modCollection.Name));
@@ -370,7 +408,23 @@ namespace IronyModManager.Services
         public virtual async Task<IEnumerable<IMod>> GetAvailableModsAsync(IGame game)
         {
             using var mutex = await modReadLock.LockAsync();
-            var result = GetInstalledModsInternal(game, true);
+            var cacheParameters = new CacheGetParameters { Region = ModsCacheRegion, Prefix = game.Type, Key = GetModsCacheKey(true) };
+            var previousMods = Cache.Get<IEnumerable<IMod>>(cacheParameters);
+            if (gameStateSafetyService.IsLocked(game))
+            {
+                return previousMods ?? [];
+            }
+
+            IEnumerable<IMod> result;
+            try
+            {
+                result = GetInstalledModsInternal(game, true);
+            }
+            catch (Exception exception) when (fileSystemStateProbe.IsFileSystemAccessFailure(exception))
+            {
+                gameStateSafetyService.Lock(game, GameStateLockReason.DiscoveryUnavailable, "Read available mods", exception);
+                result = previousMods ?? [];
+            }
 
             // ReSharper disable once DisposeOnUsingVariable
             mutex.Dispose();
@@ -403,21 +457,27 @@ namespace IronyModManager.Services
         /// <param name="path">The path.</param>
         /// <param name="isFromGame">if set to <c>true</c> [is from game].</param>
         /// <returns>Task&lt;MemoryStream&gt;.</returns>
-        public virtual Task<MemoryStream> GetImageStreamAsync(IMod mod, string path, bool isFromGame = false)
+        public virtual async Task<MemoryStream> GetImageStreamAsync(IMod mod, string path, bool isFromGame = false)
         {
+            if (mod?.IsVirtual == true)
+            {
+                return null;
+            }
+
+            var game = GameService.GetSelected();
             if (!isFromGame)
             {
                 if (mod != null && !string.IsNullOrWhiteSpace(path))
                 {
-                    return Reader.GetImageStreamAsync(mod.FullPath, path);
+                    return await Reader.GetImageStreamAsync(mod.FullPath, path);
                 }
             }
             else
             {
-                return Reader.GetImageStreamAsync(Path.GetDirectoryName(GameService.GetSelected().ExecutableLocation), path);
+                return await Reader.GetImageStreamAsync(Path.GetDirectoryName(game.ExecutableLocation), path);
             }
 
-            return Task.FromResult((MemoryStream)null);
+            return null;
         }
 
         /// <summary>
@@ -427,17 +487,186 @@ namespace IronyModManager.Services
         /// <returns>Task&lt;IEnumerable&lt;IMod&gt;&gt;.</returns>
         public virtual async Task<IEnumerable<IMod>> GetInstalledModsAsync(IGame game)
         {
+            return (await RefreshInstalledModsAsync(game)).Mods;
+        }
+
+        /// <inheritdoc />
+        public virtual async Task<InstalledModsResult> RefreshInstalledModsAsync(IGame game)
+        {
+            return await RefreshInstalledModsInternalAsync(game);
+        }
+
+        /// <inheritdoc />
+        public virtual async Task<InstalledModsResult> RevalidateInstalledModsAsync(IGame game, GameStateLockInfo revalidationLock)
+        {
+            return await RefreshInstalledModsInternalAsync(game, revalidationLock);
+        }
+
+        private async Task<InstalledModsResult> RefreshInstalledModsInternalAsync(IGame game, GameStateLockInfo revalidationLock = null)
+        {
             using var mutex = await modReadLock.LockAsync();
-            if (game != null)
+            ArgumentNullException.ThrowIfNull(game);
+
+            var regularCacheKey = GetModsCacheKey(true);
+            var allCacheKey = GetModsCacheKey(false);
+            var previousRegularMods = Cache.Get<IEnumerable<IMod>>(new CacheGetParameters { Region = ModsCacheRegion, Prefix = game.Type, Key = regularCacheKey });
+            var previousAllMods = Cache.Get<IEnumerable<IMod>>(new CacheGetParameters { Region = ModsCacheRegion, Prefix = game.Type, Key = allCacheKey });
+
+            var isRevalidation = revalidationLock != null;
+            if (isRevalidation
+                    ? !gameStateSafetyService.IsCurrentRevalidation(game, revalidationLock)
+                    : gameStateSafetyService.IsLocked(game))
             {
-                Cache.Invalidate(new CacheInvalidateParameters { Region = ModsCacheRegion, Prefix = game.Type, Keys = [GetModsCacheKey(true), GetModsCacheKey(false)] });
+                return new InstalledModsResult { IsAuthoritative = false, Mods = previousRegularMods ?? [] };
             }
 
-            var result = GetInstalledModsInternal(game, true);
+            var sourceFailure = GetDiscoverySourceFailure(game);
+            if (sourceFailure != null)
+            {
+                var reason = sourceFailure.State == FileSystemPathState.Missing
+                    ? GameStateLockReason.ExpectedSourceMissing
+                    : GameStateLockReason.DiscoveryUnavailable;
+                if (isRevalidation)
+                {
+                    gameStateSafetyService.LockRevalidationFailure(game, revalidationLock, reason, sourceFailure.Path);
+                }
+                else
+                {
+                    gameStateSafetyService.Lock(game, reason, sourceFailure.Path);
+                }
 
-            // ReSharper disable once DisposeOnUsingVariable
-            mutex.Dispose();
+                return new InstalledModsResult { IsAuthoritative = false, Mods = previousRegularMods ?? [] };
+            }
+
+            try
+            {
+                Cache.Invalidate(new CacheInvalidateParameters { Region = ModsCacheRegion, Prefix = game.Type, Keys = [regularCacheKey, allCacheKey] });
+                var result = GetInstalledModsInternal(game, true).ToList();
+                var stillAuthoritative = isRevalidation
+                    ? gameStateSafetyService.IsCurrentRevalidation(game, revalidationLock)
+                    : !gameStateSafetyService.IsLocked(game);
+                if (!stillAuthoritative)
+                {
+                    RestoreInstalledModsCache(game, regularCacheKey, allCacheKey, previousRegularMods, previousAllMods);
+                    return new InstalledModsResult { IsAuthoritative = false, Mods = previousRegularMods ?? [] };
+                }
+
+                return new InstalledModsResult { IsAuthoritative = true, Mods = result };
+            }
+            catch (Exception exception) when (fileSystemStateProbe.IsFileSystemAccessFailure(exception))
+            {
+                RestoreInstalledModsCache(game, regularCacheKey, allCacheKey, previousRegularMods, previousAllMods);
+                if (isRevalidation)
+                {
+                    gameStateSafetyService.LockRevalidationFailure(game, revalidationLock,
+                        GameStateLockReason.DiscoveryUnavailable, "Installed mod discovery", exception);
+                }
+                else
+                {
+                    gameStateSafetyService.Lock(game, GameStateLockReason.DiscoveryUnavailable,
+                        "Installed mod discovery", exception);
+                }
+
+                return new InstalledModsResult { IsAuthoritative = false, Mods = previousRegularMods ?? [] };
+            }
+        }
+
+        private void RestoreInstalledModsCache(IGame game, string regularCacheKey, string allCacheKey,
+            IEnumerable<IMod> previousRegularMods, IEnumerable<IMod> previousAllMods)
+        {
+            Cache.Invalidate(new CacheInvalidateParameters
+                { Region = ModsCacheRegion, Prefix = game.Type, Keys = [regularCacheKey, allCacheKey] });
+            if (previousRegularMods != null)
+            {
+                Cache.Set(new CacheAddParameters<IEnumerable<IMod>>
+                    { Region = ModsCacheRegion, Prefix = game.Type, Key = regularCacheKey, Value = previousRegularMods });
+            }
+
+            if (previousAllMods != null)
+            {
+                Cache.Set(new CacheAddParameters<IEnumerable<IMod>>
+                    { Region = ModsCacheRegion, Prefix = game.Type, Key = allCacheKey, Value = previousAllMods });
+            }
+        }
+
+        /// <inheritdoc />
+        public virtual IReadOnlyCollection<IMod> ResolveCollectionMods(IEnumerable<IMod> installedMods, IModCollection collection, IEnumerable<IMod> previousMods = null)
+        {
+            var installed = installedMods?.Where(p => !p.IsVirtual).ToList() ?? [];
+            var previous = previousMods?.ToList() ?? [];
+            var result = new List<IMod>();
+            var descriptors = collection?.Mods?.ToList() ?? [];
+            var paths = collection?.ModPaths?.ToList() ?? [];
+            var names = collection?.ModNames?.ToList() ?? [];
+            var ids = collection?.ModIds?.ToList() ?? [];
+
+            for (var index = 0; index < descriptors.Count; index++)
+            {
+                var descriptor = descriptors[index] ?? string.Empty;
+                var path = paths.Count == descriptors.Count ? paths[index] ?? string.Empty : string.Empty;
+                var mod = installed.FirstOrDefault(p => string.Equals(p.DescriptorFile, descriptor, StringComparison.OrdinalIgnoreCase));
+                mod ??= !string.IsNullOrWhiteSpace(path)
+                    ? installed.FirstOrDefault(p => string.Equals(p.FullPath, path, StringComparison.OrdinalIgnoreCase))
+                    : null;
+
+                if (mod != null)
+                {
+                    mod.IsSelected = true;
+                    result.Add(mod);
+                    continue;
+                }
+
+                var oldMod = previous.FirstOrDefault(p => string.Equals(p.DescriptorFile, descriptor, StringComparison.OrdinalIgnoreCase));
+                oldMod ??= !string.IsNullOrWhiteSpace(path)
+                    ? previous.FirstOrDefault(p => string.Equals(p.FullPath, path, StringComparison.OrdinalIgnoreCase))
+                    : null;
+
+                var sourceInfo = ids.Count == descriptors.Count ? ids[index] : null;
+                var virtualMod = modFactory();
+                virtualMod.AchievementStatus = AchievementStatus.AttemptedEvaluation;
+                virtualMod.Dependencies = oldMod?.Dependencies ?? [];
+                virtualMod.DescriptorFile = descriptor;
+                virtualMod.FileName = oldMod?.FileName ?? string.Empty;
+                virtualMod.Files = [];
+                virtualMod.FullPath = !string.IsNullOrWhiteSpace(path) ? path : oldMod?.FullPath ?? string.Empty;
+                virtualMod.Game = collection.Game;
+                virtualMod.IsLocked = true;
+                virtualMod.IsSelected = true;
+                virtualMod.IsValid = false;
+                virtualMod.IsVirtual = true;
+                virtualMod.JsonId = oldMod?.JsonId ?? string.Empty;
+                virtualMod.Name = names.Count == descriptors.Count ? names[index] ?? string.Empty : oldMod?.Name ?? descriptor;
+                virtualMod.Order = index + 1;
+                virtualMod.RemoteId = sourceInfo?.SteamId ?? sourceInfo?.ParadoxId ?? oldMod?.RemoteId;
+                virtualMod.Source = sourceInfo?.SteamId != null ? ModSource.Steam : sourceInfo?.ParadoxId != null ? ModSource.Paradox : oldMod?.Source ?? ModSource.Local;
+                virtualMod.Version = oldMod?.Version ?? string.Empty;
+                result.Add(virtualMod);
+            }
+
             return result;
+        }
+
+        private FileSystemPathCheckResult GetDiscoverySourceFailure(IGame game)
+        {
+            var descriptorDirectory = Path.Combine(game.UserDirectory,
+                game.ModDescriptorType == ModDescriptorType.DescriptorMod ? Shared.Constants.ModDirectory : Shared.Constants.JsonModDirectory);
+            var sources = new List<string> { descriptorDirectory };
+            sources.AddRange(game.WorkshopDirectory?.Where(p => !string.IsNullOrWhiteSpace(p)) ?? []);
+            if (!string.IsNullOrWhiteSpace(game.CustomModDirectory))
+            {
+                sources.Add(game.CustomModDirectory);
+            }
+
+            foreach (var source in sources.Distinct(StringComparer.OrdinalIgnoreCase))
+            {
+                var result = fileSystemStateProbe.CheckDirectory(source);
+                if (result.State != FileSystemPathState.Available)
+                {
+                    return result;
+                }
+            }
+
+            return null;
         }
 
         /// <summary>
@@ -445,108 +674,145 @@ namespace IronyModManager.Services
         /// </summary>
         /// <param name="statusToRetain">The status to retain.</param>
         /// <returns>Task&lt;System.Boolean&gt;.</returns>
-        public virtual async Task<IReadOnlyCollection<IModInstallationResult>> InstallModsAsync(IEnumerable<IMod> statusToRetain)
+        public virtual Task<IReadOnlyCollection<IModInstallationResult>> InstallModsAsync(IEnumerable<IMod> statusToRetain)
+        {
+            var game = GameService.GetSelected();
+            return InstallModsInternalAsync(game, statusToRetain);
+        }
+
+        private async Task<IReadOnlyCollection<IModInstallationResult>> InstallModsInternalAsync(IGame game, IEnumerable<IMod> statusToRetain)
         {
             using var mutex = await modReadLock.LockAsync();
-            var game = GameService.GetSelected();
-            if (game == null || !await ModWriter.CanWriteToModDirectoryAsync(new ModWriterParameters { RootDirectory = game.UserDirectory, Path = Shared.Constants.ModDirectory }) ||
-                (game.ModDescriptorType is ModDescriptorType.JsonMetadata or ModDescriptorType.JsonMetadataV2 &&
-                 !await ModWriter.CanWriteToModDirectoryAsync(new ModWriterParameters { RootDirectory = game.UserDirectory, Path = Shared.Constants.JsonModDirectory })))
+            if (game == null)
             {
+                return null;
+            }
+
+            var canWrite = await gameStateSafetyService.ExecuteMutationAsync(game, async () =>
+            {
+                return await ModWriter.CanWriteToModDirectoryAsync(new ModWriterParameters { RootDirectory = game.UserDirectory, Path = Shared.Constants.ModDirectory }) &&
+                       (game.ModDescriptorType is not (ModDescriptorType.JsonMetadata or ModDescriptorType.JsonMetadataV2) ||
+                        await ModWriter.CanWriteToModDirectoryAsync(new ModWriterParameters { RootDirectory = game.UserDirectory, Path = Shared.Constants.JsonModDirectory }));
+            }, false, "Validate mod descriptor output");
+            if (!canWrite)
+            {
+                if (!gameStateSafetyService.IsLocked(game))
+                {
+                    gameStateSafetyService.Lock(game, GameStateLockReason.WriteAccessFailure, GetModDirectoryRootPath(game));
+                }
+
                 // ReSharper disable once DisposeOnUsingVariable
                 mutex.Dispose();
                 return null;
             }
 
-            var args = new ModParserArgs { BaseSteamDirectory = game.BaseSteamGameDirectory, IsProton = !string.IsNullOrWhiteSpace(game.LinuxProtonVersion), SteamAppId = game.SteamAppId };
-            var mods = GetInstalledModsInternal(game, false);
-            var descriptors = new List<IModInstallationResult>();
-            var userDirectoryMods = GetAllModDescriptors(Path.Combine(game.UserDirectory, Shared.Constants.ModDirectory), ModSource.Local, game.ModDescriptorType, game.Type, args);
-            if (userDirectoryMods?.Count() > 0)
+            List<IModInstallationResult> filteredDescriptors;
+            IEnumerable<IMod> mods;
+            try
             {
-                descriptors.AddRange(userDirectoryMods);
-            }
-
-            if (!string.IsNullOrWhiteSpace(game.CustomModDirectory))
-            {
-                var customMods = GetAllModDescriptors(GetModDirectoryRootPath(game), ModSource.Local, game.ModDescriptorType, game.Type, args);
-                if (customMods != null && customMods.Any())
+                var args = new ModParserArgs { BaseSteamDirectory = game.BaseSteamGameDirectory, IsProton = !string.IsNullOrWhiteSpace(game.LinuxProtonVersion), SteamAppId = game.SteamAppId };
+                mods = GetInstalledModsInternal(game, false);
+                var descriptors = new List<IModInstallationResult>();
+                var userDirectoryMods = GetAllModDescriptors(Path.Combine(game.UserDirectory, Shared.Constants.ModDirectory), ModSource.Local, game.ModDescriptorType, game.Type, args);
+                if (userDirectoryMods?.Count() > 0)
                 {
-                    descriptors.AddRange(customMods);
+                    descriptors.AddRange(userDirectoryMods);
+                }
+
+                if (!string.IsNullOrWhiteSpace(game.CustomModDirectory))
+                {
+                    var customMods = GetAllModDescriptors(GetModDirectoryRootPath(game), ModSource.Local, game.ModDescriptorType, game.Type, args);
+                    if (customMods != null && customMods.Any())
+                    {
+                        descriptors.AddRange(customMods);
+                    }
+                }
+
+                var workshopDirectoryMods = game.WorkshopDirectory.SelectMany(p => GetAllModDescriptors(p, ModSource.Steam, game.ModDescriptorType, game.Type, args));
+                if (workshopDirectoryMods.Any())
+                {
+                    descriptors.AddRange(workshopDirectoryMods);
+                }
+
+                filteredDescriptors = [];
+                var grouped = descriptors.GroupBy(p => p.ParentDirectory);
+                foreach (var item in grouped)
+                {
+                    if (item.Any())
+                    {
+                        filteredDescriptors.AddRange(item.All(p => p.IsFile) ? item : item.Where(p => !p.IsFile));
+                    }
                 }
             }
-
-            var workshopDirectoryMods = game.WorkshopDirectory.SelectMany(p => GetAllModDescriptors(p, ModSource.Steam, game.ModDescriptorType, game.Type, args));
-            if (workshopDirectoryMods.Any())
+            catch (Exception exception) when (fileSystemStateProbe.IsFileSystemAccessFailure(exception))
             {
-                descriptors.AddRange(workshopDirectoryMods);
+                gameStateSafetyService.Lock(game, GameStateLockReason.DiscoveryUnavailable, "Read mod descriptor sources", exception);
+                return null;
             }
 
-            var filteredDescriptors = new List<IModInstallationResult>();
-            var grouped = descriptors.GroupBy(p => p.ParentDirectory);
-            foreach (var item in grouped)
-            {
-                if (item.Any())
-                {
-                    filteredDescriptors.AddRange(item.All(p => p.IsFile) ? item : item.Where(p => !p.IsFile));
-                }
-            }
-
-            var diffs = filteredDescriptors.Where(p => p.Mod != null && !mods.Any(m => AreModsSame(m, p.Mod))).ToList();
+            var diffs = filteredDescriptors.Where(p => p.Mod != null && !mods.Any(m => AreModDefinitionsEquivalent(m, p.Mod))).ToList();
             if (diffs.Count > 0)
             {
                 var result = new List<IModInstallationResult>();
-                await ModWriter.CreateModDirectoryAsync(new ModWriterParameters { RootDirectory = game.UserDirectory, Path = Shared.Constants.ModDirectory });
-                if (game.ModDescriptorType is ModDescriptorType.JsonMetadata or ModDescriptorType.JsonMetadataV2)
+                try
                 {
-                    await ModWriter.CreateModDirectoryAsync(new ModWriterParameters { RootDirectory = game.UserDirectory, Path = Shared.Constants.JsonModDirectory });
-                }
-
-                var tasks = new List<Task>();
-                foreach (var diff in diffs.GroupBy(p => p.Mod.DescriptorFile))
-                {
-                    var installResult = diff.FirstOrDefault();
-                    if (game.WorkshopDirectory.Any() && diff.Any(p => p.Path.StartsWith(game.WorkshopDirectory.FirstOrDefault() ?? string.Empty)))
+                    await ModWriter.CreateModDirectoryAsync(new ModWriterParameters { RootDirectory = game.UserDirectory, Path = Shared.Constants.ModDirectory });
+                    if (game.ModDescriptorType is ModDescriptorType.JsonMetadata or ModDescriptorType.JsonMetadataV2)
                     {
-                        installResult = diff.FirstOrDefault(p => p.Path.StartsWith(game.WorkshopDirectory.FirstOrDefault() ?? string.Empty));
+                        await ModWriter.CreateModDirectoryAsync(new ModWriterParameters { RootDirectory = game.UserDirectory, Path = Shared.Constants.JsonModDirectory });
                     }
 
-                    // ReSharper disable once PossibleNullReferenceException
-                    var localDiff = installResult.Mod;
-                    if (IsPatchModInternal(localDiff))
+                    var tasks = new List<Task>();
+                    foreach (var diff in diffs.GroupBy(p => p.Mod.DescriptorFile))
                     {
-                        continue;
-                    }
-
-                    tasks.Add(Task.Run(async () =>
-                    {
-                        var shouldLock = CheckIfModShouldBeLocked(game, localDiff);
-                        if (statusToRetain != null && !shouldLock)
+                        var installResult = diff.FirstOrDefault();
+                        if (game.WorkshopDirectory.Any() && diff.Any(p => p.Path.StartsWith(game.WorkshopDirectory.FirstOrDefault() ?? string.Empty)))
                         {
-                            var mod = statusToRetain.FirstOrDefault(p => p.DescriptorFile.Equals(localDiff.DescriptorFile, StringComparison.OrdinalIgnoreCase));
-                            if (mod != null)
-                            {
-                                shouldLock = mod.IsLocked;
-                            }
+                            installResult = diff.FirstOrDefault(p => p.Path.StartsWith(game.WorkshopDirectory.FirstOrDefault() ?? string.Empty));
                         }
 
-                        await ModWriter.WriteDescriptorAsync(new ModWriterParameters
+                        // ReSharper disable once PossibleNullReferenceException
+                        var localDiff = installResult.Mod;
+                        if (IsPatchModInternal(localDiff))
                         {
-                            Mod = localDiff,
-                            RootDirectory = game.UserDirectory,
-                            Path = localDiff.DescriptorFile,
-                            LockDescriptor = shouldLock,
-                            DescriptorType = MapDescriptorType(game.ModDescriptorType)
-                        }, IsPatchModInternal(localDiff));
-                    }));
-                    installResult.Installed = true;
-                    result.Add(installResult);
-                }
+                            continue;
+                        }
 
-                if (tasks.Count > 0)
+                        tasks.Add(Task.Run(async () =>
+                        {
+                            var shouldLock = CheckIfModShouldBeLocked(game, localDiff);
+                            if (statusToRetain != null && !shouldLock)
+                            {
+                                var mod = statusToRetain.FirstOrDefault(p => p.DescriptorFile.Equals(localDiff.DescriptorFile, StringComparison.OrdinalIgnoreCase));
+                                if (mod != null)
+                                {
+                                    shouldLock = mod.IsLocked;
+                                }
+                            }
+
+                            await ModWriter.WriteDescriptorAsync(new ModWriterParameters
+                            {
+                                Mod = localDiff,
+                                RootDirectory = game.UserDirectory,
+                                Path = localDiff.DescriptorFile,
+                                LockDescriptor = shouldLock,
+                                DescriptorType = MapDescriptorType(game.ModDescriptorType)
+                            }, IsPatchModInternal(localDiff));
+                        }));
+                        installResult.Installed = true;
+                        result.Add(installResult);
+                    }
+
+                    if (tasks.Count > 0)
+                    {
+                        await Task.WhenAll(tasks);
+                        Cache.Invalidate(new CacheInvalidateParameters { Region = ModsCacheRegion, Prefix = game.Type, Keys = [GetModsCacheKey(true), GetModsCacheKey(false)] });
+                    }
+                }
+                catch (Exception exception) when (fileSystemStateProbe.IsFileSystemAccessFailure(exception))
                 {
-                    await Task.WhenAll(tasks);
-                    Cache.Invalidate(new CacheInvalidateParameters { Region = ModsCacheRegion, Prefix = game.Type, Keys = [GetModsCacheKey(true), GetModsCacheKey(false)] });
+                    gameStateSafetyService.Lock(game, GameStateLockReason.WriteAccessFailure, "Write mod descriptors", exception);
+                    return null;
                 }
 
                 if (filteredDescriptors.Any(p => p.Invalid))
@@ -580,21 +846,17 @@ namespace IronyModManager.Services
         public virtual async Task<bool> LockDescriptorsAsync(IEnumerable<IMod> mods, bool isLocked)
         {
             var game = GameService.GetSelected();
-            if (game != null && mods?.Count() > 0)
+            if (game != null && mods?.Count() > 0 && !mods.Any(p => p.IsVirtual))
             {
-                var tasks = new List<Task>();
-                foreach (var item in mods)
+                var writableMods = mods.Where(item => !CheckIfModShouldBeLocked(game, item)).ToList();
+                var tasks = writableMods.Select(item => ModWriter.SetDescriptorLockAsync(
+                    new ModWriterParameters { Mod = item, RootDirectory = game.UserDirectory }, isLocked));
+                await Task.WhenAll(tasks);
+                foreach (var item in writableMods)
                 {
-                    // Cannot lock\unlock mandatory local zipped mods
-                    if (!CheckIfModShouldBeLocked(game, item))
-                    {
-                        var task = ModWriter.SetDescriptorLockAsync(new ModWriterParameters { Mod = item, RootDirectory = game.UserDirectory }, isLocked);
-                        item.IsLocked = isLocked;
-                        tasks.Add(task);
-                    }
+                    item.IsLocked = isLocked;
                 }
 
-                await Task.WhenAll(tasks);
                 return true;
             }
 
@@ -640,7 +902,8 @@ namespace IronyModManager.Services
         /// <returns>Task&lt;System.Boolean&gt;.</returns>
         public virtual Task<bool> PopulateModFilesAsync(IEnumerable<IMod> mods)
         {
-            return PopulateModFilesInternalAsync(mods);
+            var realMods = mods?.Where(p => !p.IsVirtual).ToList() ?? [];
+            return realMods.Count == 0 ? Task.FromResult(false) : PopulateModFilesInternalAsync(realMods);
         }
 
         /// <summary>
@@ -664,6 +927,10 @@ namespace IronyModManager.Services
             }
 
             var result = await ModWriter.PurgeModDirectoryAsync(new ModWriterParameters { RootDirectory = fullPath }, true);
+            if (!result)
+            {
+                return false;
+            }
             var mods = GetInstalledModsInternal(game, false);
             if (mods.Any(p => !string.IsNullOrWhiteSpace(p.FullPath) && p.FullPath.Contains(fullPath)))
             {
@@ -699,12 +966,12 @@ namespace IronyModManager.Services
         }
 
         /// <summary>
-        /// Ares the mods same.
+        /// Determines whether two mod definitions have equivalent state.
         /// </summary>
         /// <param name="mod">The mod.</param>
         /// <param name="otherMod">The other mod.</param>
-        /// <returns><c>true</c> if mods are the same, <c>false</c> otherwise.</returns>
-        protected virtual bool AreModsSame(IMod mod, IMod otherMod)
+        /// <returns><c>true</c> when the represented mod definitions are equivalent; otherwise, <c>false</c>.</returns>
+        public virtual bool AreModDefinitionsEquivalent(IMod mod, IMod otherMod)
         {
             if (mod == null || otherMod == null)
             {

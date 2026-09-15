@@ -130,6 +130,7 @@
   "Collection_Mods": {
     "Name": "Liste de mods",
     "Remove": "-",
+    "RemoveFromCollection": "Retirer de la collection",
     "Create": "+",
     "OK": "OK",
     "Cancel": "Annuler",
@@ -191,7 +192,7 @@
     },
     "ImportNonExistingMods": {
       "Title": "Mods inexistants",
-      "Message": "Les mods suivants n'ont pas pu être importés car ils semblent manquer:{NewLine}{Mods}"
+      "Message": "Les mods suivants ne sont pas installés actuellement. Leurs entrées ont été importées et conservées dans la collection sous forme d'éléments désactivés :{NewLine}{Mods}"
     },
     "ImportOther": {
       "Title": "...",
@@ -252,8 +253,8 @@
       }
     },
     "Prompts": {
-      "ModsMissingTitle": "Mods supprimés",
-      "ModsMissingMessage": "Certains mods sont manquants et ont été retirés automatiquement de la collection.:{NewLine}{NewLine}{Mods}"
+      "ModsMissingTitle": "Mods manquants",
+      "ModsMissingMessage": "Certains mods sont manquants. Ils restent dans la collection sous forme d'éléments désactivés :{NewLine}{NewLine}{Mods}"
     }
 
   },
@@ -566,6 +567,10 @@
       "Title": "Liste appliquée",
       "Message": "{CollectionName} a été appliqué."
     },
+    "CollectionAppliedMissingMods": {
+      "Title": "Mods manquants ignorés",
+      "Message": "La liste contient des mods manquants. Les entrées manquantes ont été ignorées lors de l’application et restent dans la liste."
+    },
     "CollectionNotApplied": {
       "Title": "Liste non appliquée",
       "Message": "{CollectionName} n'a pas été appliqué."
@@ -633,6 +638,10 @@
     "ConflictSolverRerunGlobalVars": {
       "Title": "Actualisation du correcteur de conflits",
       "Message": "L'outil de résolution des conflits doit être actualisé pour prendre en compte les nouveaux correctifs de variables globales ajoutés. Veuillez réexécuter l'outil de résolution des conflits."
+    },
+    "FileSystemSafetyLock": {
+      "Title": "État du jeu verrouillé par sécurité",
+      "Message": "Irony ne peut pas considérer comme fiable l'état actuel du système de fichiers ou des mods de ce jeu. Les opérations de modification sont désactivées par sécurité. Corrigez le fournisseur ou les autorisations puis redémarrez Irony, ou choisissez un autre dossier utilisateur ou de mods personnalisé. Le nouveau dossier sera validé avant la reprise des opérations."
     }
   },
   "Mod_App_Actions": {

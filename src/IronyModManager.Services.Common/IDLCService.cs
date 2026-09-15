@@ -24,6 +24,7 @@ namespace IronyModManager.Services.Common
     /// Implements the <see cref="IronyModManager.Services.Common.IBaseService" />
     /// </summary>
     /// <seealso cref="IronyModManager.Services.Common.IBaseService" />
+    [GameStateSafetyContract]
     public interface IDLCService : IBaseService
     {
         #region Methods
@@ -34,6 +35,7 @@ namespace IronyModManager.Services.Common
         /// <param name="game">The game.</param>
         /// <param name="dlc">The DLC.</param>
         /// <returns>Task&lt;System.Boolean&gt;.</returns>
+        [GameStateSafety(GameStateSafetyOperation.Mutation, GameStateSafetyRejection.False, "Export DLC state", GameStateSafetyEnforcement.EntryOnly)]
         Task<bool> ExportAsync(IGame game, IReadOnlyCollection<IDLC> dlc);
 
         /// <summary>
@@ -41,6 +43,7 @@ namespace IronyModManager.Services.Common
         /// </summary>
         /// <param name="game">The game.</param>
         /// <returns>Task&lt;IReadOnlyCollection&lt;IDLC&gt;&gt;.</returns>
+        [GameStateSafetyExempt("Uses a method-specific known-good DLC cache fallback.")]
         Task<IReadOnlyCollection<IDLC>> GetAsync(IGame game);
 
         /// <summary>
@@ -49,6 +52,7 @@ namespace IronyModManager.Services.Common
         /// <param name="game">The game.</param>
         /// <param name="dlc">The DLC.</param>
         /// <returns>Task&lt;System.Boolean&gt;.</returns>
+        [GameStateSafety(GameStateSafetyOperation.TrustedRead, GameStateSafetyRejection.False, "Read DLC state", GameStateLockReason.DiscoveryUnavailable)]
         Task<bool> SyncStateAsync(IGame game, IReadOnlyCollection<IDLC> dlc);
 
         #endregion Methods

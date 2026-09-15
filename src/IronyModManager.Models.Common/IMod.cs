@@ -81,6 +81,12 @@ namespace IronyModManager.Models.Common
         bool IsValid { get; set; }
 
         /// <summary>
+        /// Gets or sets a value indicating whether this is a runtime placeholder for a missing collection mod.
+        /// </summary>
+        /// <value><c>true</c> for a virtual missing-mod placeholder; otherwise, <c>false</c>.</value>
+        bool IsVirtual { get; set; }
+
+        /// <summary>
         /// Gets or sets the order.
         /// </summary>
         /// <value>The order.</value>

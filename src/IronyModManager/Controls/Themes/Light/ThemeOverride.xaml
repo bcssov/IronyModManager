@@ -108,6 +108,10 @@
         <Setter Property="BorderThickness" Value="2,2,2,2"/>
         <Setter Property="BorderBrush" Value="Red" />
     </Style>
+    <Style Selector="Border.VirtualMod">
+        <Setter Property="BorderThickness" Value="2,2,2,2"/>
+        <Setter Property="BorderBrush" Value="{DynamicResource VirtualModBorderBrush}" />
+    </Style>
     <Style Selector="Border.IgnoredResetMod">
         <Setter Property="BorderThickness" Value="2,2,2,2"/>
         <Setter Property="BorderBrush" Value="#ffc58b" />
@@ -123,6 +127,8 @@
         <Color x:Key="IronyForegroundColor">#FF000000</Color>
         <SolidColorBrush x:Key="IronyForegroundBrush" Color="{DynamicResource IronyForegroundColor}" />
         <SolidColorBrush x:Key="IronyForegroundTooltipBrush" Color="{DynamicResource IronyForegroundColor}" />
+        <Color x:Key="VirtualModBorderColor">#B85C00</Color>
+        <SolidColorBrush x:Key="VirtualModBorderBrush" Color="{DynamicResource VirtualModBorderColor}" />
         <Color x:Key="IronyAccentColor">#FF0000</Color>
         <SolidColorBrush x:Key="IronyAccentBrush" Color="{DynamicResource IronyAccentColor}" />
         <Color x:Key="IronyEditorBackgroundColor">#FFFFFF</Color>

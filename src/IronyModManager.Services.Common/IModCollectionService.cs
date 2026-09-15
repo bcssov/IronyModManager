@@ -23,6 +23,7 @@ namespace IronyModManager.Services.Common
     /// Implements the <see cref="IronyModManager.Services.Common.IBaseService" />
     /// </summary>
     /// <seealso cref="IronyModManager.Services.Common.IBaseService" />
+    [GameStateSafetyContract]
     public interface IModCollectionService : IBaseService
     {
         #region Methods
@@ -31,6 +32,7 @@ namespace IronyModManager.Services.Common
         /// Creates this instance.
         /// </summary>
         /// <returns>IModCollection.</returns>
+        [GameStateSafetyExempt("Creates an in-memory collection model.")]
         IModCollection Create();
 
         /// <summary>
@@ -38,6 +40,7 @@ namespace IronyModManager.Services.Common
         /// </summary>
         /// <param name="name">The name.</param>
         /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
+        [GameStateSafetyExempt("Explicit collection metadata deletion remains available while locked.")]
         bool Delete(string name);
 
         /// <summary>
@@ -45,6 +48,7 @@ namespace IronyModManager.Services.Common
         /// </summary>
         /// <param name="name">The name.</param>
         /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
+        [GameStateSafetyExempt("Reads persisted collection metadata.")]
         bool Exists(string name);
 
         /// <summary>
@@ -55,6 +59,7 @@ namespace IronyModManager.Services.Common
         /// <param name="exportOrderOnly">if set to <c>true</c> [export order only].</param>
         /// <param name="exportMods">if set to <c>true</c> [export mods].</param>
         /// <returns>Task&lt;System.Boolean&gt;.</returns>
+        [GameStateSafetyExempt("Safety is conditional on file-backed export arguments.")]
         Task<bool> ExportAsync(string file, IModCollection modCollection, bool exportOrderOnly = false, bool exportMods = false);
 
         /// <summary>
@@ -63,6 +68,7 @@ namespace IronyModManager.Services.Common
         /// <param name="mods">The mods.</param>
         /// <param name="path">The path.</param>
         /// <returns>Task&lt;System.Boolean&gt;.</returns>
+        [GameStateSafetyExempt("Uses established report-export semantics.")]
         Task<bool> ExportHashReportAsync(IEnumerable<IMod> mods, string path);
 
         /// <summary>
@@ -71,6 +77,7 @@ namespace IronyModManager.Services.Common
         /// <param name="file">The file.</param>
         /// <param name="modCollection">The mod collection.</param>
         /// <returns>Task&lt;System.Boolean&gt;.</returns>
+        [GameStateSafetyExempt("Exports collection metadata only.")]
         Task<bool> ExportParadoxLauncher202110JsonAsync(string file, IModCollection modCollection);
 
         /// <summary>
@@ -79,6 +86,7 @@ namespace IronyModManager.Services.Common
         /// <param name="file">The file.</param>
         /// <param name="modCollection">The mod collection.</param>
         /// <returns>Task&lt;System.Boolean&gt;.</returns>
+        [GameStateSafetyExempt("Exports collection metadata only.")]
         Task<bool> ExportParadoxLauncherJsonAsync(string file, IModCollection modCollection);
 
         /// <summary>
@@ -86,12 +94,14 @@ namespace IronyModManager.Services.Common
         /// </summary>
         /// <param name="name">The name.</param>
         /// <returns>IModCollection.</returns>
+        [GameStateSafetyExempt("Reads persisted collection metadata.")]
         IModCollection Get(string name);
 
         /// <summary>
         /// Gets the names.
         /// </summary>
         /// <returns>IDictionary&lt;System.String, System.Boolean&gt;.</returns>
+        [GameStateSafetyExempt("Reads persisted collection metadata.")]
         IEnumerable<IModCollection> GetAll();
 
         /// <summary>
@@ -99,6 +109,7 @@ namespace IronyModManager.Services.Common
         /// </summary>
         /// <param name="file">The file.</param>
         /// <returns>Task&lt;IModCollection&gt;.</returns>
+        [GameStateSafetyExempt("Uses import-specific validation and result semantics.")]
         Task<IModCollection> GetImportedCollectionDetailsAsync(string file);
 
         /// <summary>
@@ -106,6 +117,7 @@ namespace IronyModManager.Services.Common
         /// </summary>
         /// <param name="file">The file.</param>
         /// <returns>Task&lt;IModCollection&gt;.</returns>
+        [GameStateSafetyExempt("Uses import-specific validation and result semantics.")]
         Task<IModCollection> ImportAsync(string file);
 
         /// <summary>
@@ -114,24 +126,28 @@ namespace IronyModManager.Services.Common
         /// <param name="mods">The mods.</param>
         /// <param name="hashReports">The hash reports.</param>
         /// <returns>Task&lt;IEnumerable&lt;IHashReport&gt;&gt;.</returns>
+        [GameStateSafetyExempt("Uses report-import matching semantics.")]
         Task<IEnumerable<IHashReport>> ImportHashReportAsync(IEnumerable<IMod> mods, IReadOnlyCollection<IHashReport> hashReports);
 
         /// <summary>
         /// Imports the paradox asynchronous.
         /// </summary>
         /// <returns>Task&lt;IModCollection&gt;.</returns>
+        [GameStateSafetyExempt("Uses import-specific validation and result semantics.")]
         Task<IModCollection> ImportParadoxAsync();
 
         /// <summary>
         /// Imports the paradox launcher asynchronous.
         /// </summary>
         /// <returns>Task&lt;IModCollection&gt;.</returns>
+        [GameStateSafetyExempt("Uses import-specific validation and result semantics.")]
         Task<IModCollection> ImportParadoxLauncherAsync();
 
         /// <summary>
         /// Imports the paradox launcher beta asynchronous.
         /// </summary>
         /// <returns>Task&lt;IModCollection&gt;.</returns>
+        [GameStateSafetyExempt("Uses import-specific validation and result semantics.")]
         Task<IModCollection> ImportParadoxLauncherBetaAsync();
 
         /// <summary>
@@ -139,6 +155,7 @@ namespace IronyModManager.Services.Common
         /// </summary>
         /// <param name="file">The file.</param>
         /// <returns>Task&lt;IModCollection&gt;.</returns>
+        [GameStateSafetyExempt("Uses import-specific validation and result semantics.")]
         Task<IModCollection> ImportParadoxLauncherJsonAsync(string file);
 
         /// <summary>
@@ -146,6 +163,7 @@ namespace IronyModManager.Services.Common
         /// </summary>
         /// <param name="file">The file.</param>
         /// <returns>Task&lt;IModCollection&gt;.</returns>
+        [GameStateSafetyExempt("Uses import-specific validation and result semantics.")]
         Task<IModCollection> ImportParadoxosAsync(string file);
 
         /// <summary>
@@ -153,6 +171,7 @@ namespace IronyModManager.Services.Common
         /// </summary>
         /// <param name="collection">The collection.</param>
         /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
+        [GameStateSafetyExempt("Uses a local persistence guard and method-specific validation.")]
         bool Save(IModCollection collection);
 
         #endregion Methods

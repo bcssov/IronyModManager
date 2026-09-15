@@ -24,6 +24,7 @@ namespace IronyModManager.Services.Common
     /// Implements the <see cref="IronyModManager.Services.Common.IBaseService" />
     /// </summary>
     /// <seealso cref="IronyModManager.Services.Common.IBaseService" />
+    [GameStateSafetyContract]
     public interface IModService : IBaseService
     {
         #region Methods
@@ -33,6 +34,7 @@ namespace IronyModManager.Services.Common
         /// </summary>
         /// <param name="mod">The mod.</param>
         /// <returns>System.String.</returns>
+        [GameStateSafetyExempt("Pure metadata operation.")]
         string BuildModUrl(IMod mod);
 
         /// <summary>
@@ -40,6 +42,7 @@ namespace IronyModManager.Services.Common
         /// </summary>
         /// <param name="mod">The mod.</param>
         /// <returns>System.String.</returns>
+        [GameStateSafetyExempt("Pure metadata operation.")]
         string BuildSteamUrl(IMod mod);
 
         /// <summary>
@@ -47,6 +50,7 @@ namespace IronyModManager.Services.Common
         /// </summary>
         /// <param name="gameType">Type of the game.</param>
         /// <returns>Task&lt;System.Boolean&gt;.</returns>
+        [GameStateSafetyExempt("Configuration validation must remain available during controlled recovery.")]
         Task<bool> CustomModDirectoryEmptyAsync(string gameType);
 
         /// <summary>
@@ -54,6 +58,7 @@ namespace IronyModManager.Services.Common
         /// </summary>
         /// <param name="mods">The mods.</param>
         /// <returns>Task&lt;System.Boolean&gt;.</returns>
+        [GameStateSafety(GameStateSafetyOperation.Mutation, GameStateSafetyRejection.False, "Delete mod descriptors", GameStateLockReason.WriteAccessFailure)]
         Task<bool> DeleteDescriptorsAsync(IEnumerable<IMod> mods);
 
         /// <summary>
@@ -61,6 +66,7 @@ namespace IronyModManager.Services.Common
         /// </summary>
         /// <param name="mods">The mods.</param>
         /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
+        [GameStateSafetyExempt("In-memory domain evaluation.")]
         bool EvalAchievementCompatibility(IEnumerable<IMod> mods);
 
         /// <summary>
@@ -70,7 +76,8 @@ namespace IronyModManager.Services.Common
         /// <param name="regularMods">The regular mods.</param>
         /// <param name="modCollection">The mod collection.</param>
         /// <returns>Task&lt;System.Boolean&gt;.</returns>
-        Task<bool> ExportModsAsync(IReadOnlyCollection<IMod> enabledMods, IReadOnlyCollection<IMod> regularMods, IModCollection modCollection);
+        [GameStateSafetyExempt("Uses virtual filtering and a method-specific apply result.")]
+        Task<ModApplyResult> ExportModsAsync(IReadOnlyCollection<IMod> enabledMods, IReadOnlyCollection<IMod> regularMods, IModCollection modCollection);
 
         /// <summary>
         /// Filters the mods.
@@ -78,6 +85,7 @@ namespace IronyModManager.Services.Common
         /// <param name="collection">The collection.</param>
         /// <param name="text">The text.</param>
         /// <returns>IEnumerable&lt;IMod&gt;.</returns>
+        [GameStateSafetyExempt("In-memory collection operation.")]
         IEnumerable<IMod> FilterMods(IEnumerable<IMod> collection, string text);
 
         /// <summary>
@@ -88,6 +96,7 @@ namespace IronyModManager.Services.Common
         /// <param name="reverse">if set to <c>true</c> [reverse].</param>
         /// <param name="skipIndex">Index of the skip.</param>
         /// <returns>IMod.</returns>
+        [GameStateSafetyExempt("In-memory collection operation.")]
         IMod FindMod(IEnumerable<IMod> collection, string text, bool reverse, int? skipIndex = null);
 
         /// <summary>
@@ -95,6 +104,7 @@ namespace IronyModManager.Services.Common
         /// </summary>
         /// <param name="game">The game.</param>
         /// <returns>Task&lt;IEnumerable&lt;IMod&gt;&gt;.</returns>
+        [GameStateSafetyExempt("Uses a method-specific known-good installed-mod fallback.")]
         Task<IEnumerable<IMod>> GetAvailableModsAsync(IGame game);
 
         /// <summary>
@@ -104,6 +114,7 @@ namespace IronyModManager.Services.Common
         /// <param name="path">The path.</param>
         /// <param name="isFromGame">if set to <c>true</c> [is from game].</param>
         /// <returns>Task&lt;MemoryStream&gt;.</returns>
+        [GameStateSafety(GameStateSafetyOperation.TrustedRead, GameStateSafetyRejection.Null, "Read mod image", GameStateLockReason.DiscoveryUnavailable)]
         Task<MemoryStream> GetImageStreamAsync(string modName, string path, bool isFromGame = false);
 
         /// <summary>
@@ -113,6 +124,7 @@ namespace IronyModManager.Services.Common
         /// <param name="path">The path.</param>
         /// <param name="isFromGame">if set to <c>true</c> [is from game].</param>
         /// <returns>Task&lt;MemoryStream&gt;.</returns>
+        [GameStateSafety(GameStateSafetyOperation.TrustedRead, GameStateSafetyRejection.Null, "Read mod image", GameStateLockReason.DiscoveryUnavailable)]
         Task<MemoryStream> GetImageStreamAsync(IMod mod, string path, bool isFromGame = false);
 
         /// <summary>
@@ -120,13 +132,40 @@ namespace IronyModManager.Services.Common
         /// </summary>
         /// <param name="game">The game.</param>
         /// <returns>IEnumerable&lt;IMod&gt;.</returns>
+        [GameStateSafetyExempt("Delegates to the authoritative installed-mod refresh state machine.")]
         Task<IEnumerable<IMod>> GetInstalledModsAsync(IGame game);
+
+        /// <summary>
+        /// Refreshes installed mods and reports whether the result is authoritative.
+        /// </summary>
+        [GameStateSafetyExempt("Owns authoritative discovery and known-good cache state.")]
+        Task<InstalledModsResult> RefreshInstalledModsAsync(IGame game);
+
+        /// <summary>
+        /// Performs an authoritative installed-mod refresh for an explicit filesystem configuration change.
+        /// The game remains locked until the coordinating caller installs the result and completes revalidation.
+        /// </summary>
+        [GameStateSafetyExempt("Owns controlled revalidation generation and unlock ordering.")]
+        Task<InstalledModsResult> RevalidateInstalledModsAsync(IGame game, GameStateLockInfo revalidationLock);
+
+        /// <summary>
+        /// Resolves a stored collection against an authoritative installed-mod set, creating virtual placeholders for missing entries.
+        /// </summary>
+        [GameStateSafetyExempt("In-memory collection resolution.")]
+        IReadOnlyCollection<IMod> ResolveCollectionMods(IEnumerable<IMod> installedMods, IModCollection collection, IEnumerable<IMod> previousMods = null);
+
+        /// <summary>
+        /// Determines whether two mod definitions have equivalent state.
+        /// </summary>
+        [GameStateSafetyExempt("Pure domain comparison.")]
+        bool AreModDefinitionsEquivalent(IMod mod, IMod otherMod);
 
         /// <summary>
         /// Installs the mods asynchronous.
         /// </summary>
         /// <param name="statusToRetain">The status to retain.</param>
         /// <returns>Task&lt;IReadOnlyCollection&lt;IModInstallationResult&gt;&gt;.</returns>
+        [GameStateSafety(GameStateSafetyOperation.Mutation, GameStateSafetyRejection.Null, "Install mod descriptors", GameStateSafetyEnforcement.EntryOnly)]
         Task<IReadOnlyCollection<IModInstallationResult>> InstallModsAsync(IEnumerable<IMod> statusToRetain);
 
         /// <summary>
@@ -135,6 +174,7 @@ namespace IronyModManager.Services.Common
         /// <param name="mods">The mods.</param>
         /// <param name="isLocked">if set to <c>true</c> [is locked].</param>
         /// <returns>Task&lt;System.Boolean&gt;.</returns>
+        [GameStateSafety(GameStateSafetyOperation.Mutation, GameStateSafetyRejection.False, "Change descriptor lock state", GameStateLockReason.WriteAccessFailure)]
         Task<bool> LockDescriptorsAsync(IEnumerable<IMod> mods, bool isLocked);
 
         /// <summary>
@@ -142,6 +182,7 @@ namespace IronyModManager.Services.Common
         /// </summary>
         /// <param name="folder">The folder.</param>
         /// <returns>Task&lt;System.Boolean&gt;.</returns>
+        [GameStateSafetyExempt("Filesystem preflight remains available during controlled recovery.")]
         Task<bool> ModDirectoryExistsAsync(string folder);
 
         /// <summary>
@@ -149,6 +190,7 @@ namespace IronyModManager.Services.Common
         /// </summary>
         /// <param name="collectionName">Name of the collection.</param>
         /// <returns>Task&lt;System.Boolean&gt;.</returns>
+        [GameStateSafetyExempt("Filesystem preflight remains available during controlled recovery.")]
         Task<bool> PatchModExistsAsync(string collectionName);
 
         /// <summary>
@@ -156,6 +198,7 @@ namespace IronyModManager.Services.Common
         /// </summary>
         /// <param name="mods">The mods.</param>
         /// <returns>Task&lt;System.Boolean&gt;.</returns>
+        [GameStateSafetyExempt("Uses existing per-mod file availability semantics.")]
         Task<bool> PopulateModFilesAsync(IEnumerable<IMod> mods);
 
         /// <summary>
@@ -163,6 +206,7 @@ namespace IronyModManager.Services.Common
         /// </summary>
         /// <param name="folder">The folder.</param>
         /// <returns>Task&lt;System.Boolean&gt;.</returns>
+        [GameStateSafety(GameStateSafetyOperation.Mutation, GameStateSafetyRejection.False, "Purge mod directory", GameStateLockReason.WriteAccessFailure)]
         Task<bool> PurgeModDirectoryAsync(string folder);
 
         /// <summary>
@@ -170,6 +214,7 @@ namespace IronyModManager.Services.Common
         /// </summary>
         /// <param name="collectionName">Name of the collection.</param>
         /// <returns>Task&lt;System.Boolean&gt;.</returns>
+        [GameStateSafety(GameStateSafetyOperation.Mutation, GameStateSafetyRejection.False, "Purge mod directory", GameStateLockReason.WriteAccessFailure)]
         Task<bool> PurgeModPatchAsync(string collectionName);
 
         /// <summary>
@@ -177,6 +222,7 @@ namespace IronyModManager.Services.Common
         /// </summary>
         /// <param name="query">The query.</param>
         /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
+        [GameStateSafetyExempt("Pure query evaluation.")]
         bool QueryContainsAchievements(string query);
 
         #endregion Methods

@@ -177,6 +177,7 @@ namespace IronyModManager.Shared
             public const string Prefix = "Collection_Mods.";
             public const string Name = Prefix + "Name";
             public const string Remove = Prefix + "Remove";
+            public const string RemoveFromCollection = Prefix + "RemoveFromCollection";
             public const string Create = Prefix + "Create";
             public const string OK = Prefix + "OK";
             public const string Cancel = Prefix + "Cancel";
@@ -748,6 +749,12 @@ namespace IronyModManager.Shared
                 public const string Title = Prefix + "Title";
                 public const string Message = Prefix + "Message";
             }
+            public static class CollectionAppliedMissingMods
+            {
+                public const string Prefix = "Notifications.CollectionAppliedMissingMods.";
+                public const string Title = Prefix + "Title";
+                public const string Message = Prefix + "Message";
+            }
             public static class CollectionNotApplied
             {
                 public const string Prefix = "Notifications.CollectionNotApplied.";
@@ -847,6 +854,12 @@ namespace IronyModManager.Shared
             public static class ConflictSolverRerunGlobalVars
             {
                 public const string Prefix = "Notifications.ConflictSolverRerunGlobalVars.";
+                public const string Title = Prefix + "Title";
+                public const string Message = Prefix + "Message";
+            }
+            public static class FileSystemSafetyLock
+            {
+                public const string Prefix = "Notifications.FileSystemSafetyLock.";
                 public const string Title = Prefix + "Title";
                 public const string Message = Prefix + "Message";
             }

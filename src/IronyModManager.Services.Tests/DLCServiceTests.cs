@@ -14,14 +14,17 @@
 
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using AutoMapper;
 using AwesomeAssertions;
+using Castle.DynamicProxy;
 using IronyModManager.DI.Extensions;
 using IronyModManager.IO;
 using IronyModManager.IO.Common.DLC;
+using IronyModManager.IO.Common.FileSystem;
 using IronyModManager.IO.Common.Readers;
 using IronyModManager.Models;
 using IronyModManager.Models.Common;
@@ -37,6 +40,7 @@ using IronyModManager.Tests.Common;
 using Moq;
 using Xunit;
 using static IronyModManager.Services.DLCService;
+using FileInfo = IronyModManager.IO.FileInfo;
 
 namespace IronyModManager.Services.Tests
 {
@@ -45,6 +49,14 @@ namespace IronyModManager.Services.Tests
     /// </summary>
     public class DLCServiceTests
     {
+        private static DLCService GetService(IDLCExporter dlcExporter, ICache cache, IReader reader, IDLCParser parser, IStorageProvider storage, IMapper mapper,
+            Mock<IFileSystemStateProbe> fileSystemStateProbe = null, IGameStateSafetyService gameStateSafetyService = null)
+        {
+            fileSystemStateProbe ??= new Mock<IFileSystemStateProbe>();
+            gameStateSafetyService ??= new GameStateSafetyService(fileSystemStateProbe.Object, Mock.Of<ILogger>());
+            return new DLCService(dlcExporter, cache, reader, parser, storage, mapper, gameStateSafetyService);
+        }
+
         /// <summary>
         /// Defines the test method Should_validate_due_to_non_existing_directory.
         /// </summary>
@@ -85,7 +97,7 @@ namespace IronyModManager.Services.Tests
                     Name = values.First()
                 };
             });
-            var service = new DLCService(null, new Cache(), reader.Object, parser.Object, null, mapper.Object);
+            var service = GetService(null, new Cache(), reader.Object, parser.Object, null, mapper.Object);
             var result = await service.GetAsync(new Game()
             {
                 ExecutableLocation = AppDomain.CurrentDomain.BaseDirectory + "\\test.exe",
@@ -108,7 +120,7 @@ namespace IronyModManager.Services.Tests
             var cache = new Cache();
             cache.Set(new CacheAddParameters<DLCCacheHolder>() { Region = "DLC", Key = "Should_return_dlc_object_from_cache", Value = new DLCCacheHolder(dlcs, AppDomain.CurrentDomain.BaseDirectory + "\\test.exe") });
 
-            var service = new DLCService(null, cache, null, null, null, null);
+            var service = GetService(null, cache, null, null, null, null);
             var result = await service.GetAsync(new Game()
             {
                 ExecutableLocation = AppDomain.CurrentDomain.BaseDirectory + "\\test.exe",
@@ -132,7 +144,7 @@ namespace IronyModManager.Services.Tests
             var cache = new Cache();
             cache.Set(new CacheAddParameters<DLCCacheHolder>() { Region = "DLC", Key = "Should_return_dlc_object_from_cache_when_exe_path_in_subfolder", Value = new DLCCacheHolder(dlcs, AppDomain.CurrentDomain.BaseDirectory + "\\subfolder\\test.exe") });
 
-            var service = new DLCService(null, cache, null, null, null, null);
+            var service = GetService(null, cache, null, null, null, null);
             var result = await service.GetAsync(new Game()
             {
                 ExecutableLocation = AppDomain.CurrentDomain.BaseDirectory + "\\subfolder\\test.exe",
@@ -148,7 +160,7 @@ namespace IronyModManager.Services.Tests
         [Fact]
         public async Task Should_not_return_dlc_objects_when_game_null()
         {
-            var service = new DLCService(null, null, null, null, null, null);
+            var service = GetService(null, null, null, null, null, null);
             var result = await service.GetAsync(null);
             result.Count.Should().Be(0);
         }
@@ -159,7 +171,7 @@ namespace IronyModManager.Services.Tests
         [Fact]
         public async Task Should_not_return_dlc_objects_when_game_path_not_set()
         {
-            var service = new DLCService(null, new Cache(), null, null, null, null);
+            var service = GetService(null, new Cache(), null, null, null, null);
             var result = await service.GetAsync(new Game()
             {
                 ExecutableLocation = string.Empty,
@@ -174,7 +186,7 @@ namespace IronyModManager.Services.Tests
         [Fact]
         public async Task Should_not_export_dlc_when_no_game()
         {
-            var service = new DLCService(null, null, null, null, null, null);
+            var service = GetService(null, null, null, null, null, null);
             var result = await service.ExportAsync(null, new List<IDLC>()
             {
                 new DLC()
@@ -192,7 +204,7 @@ namespace IronyModManager.Services.Tests
         [Fact]
         public async Task Should_not_export_dlc_when_no_dlc()
         {
-            var service = new DLCService(null, null, null, null, null, null);
+            var service = GetService(null, null, null, null, null, null);
             var result = await service.ExportAsync(new Game()
             {
                 ExecutableLocation = string.Empty,
@@ -208,8 +220,9 @@ namespace IronyModManager.Services.Tests
         public async Task Should_export_dlc()
         {
             var dlcExport = new Mock<IDLCExporter>();
+            dlcExport.Setup(p => p.GetDisabledDLCAsync(It.IsAny<DLCParameters>())).ReturnsAsync([]);
             dlcExport.Setup(p => p.ExportDLCAsync(It.IsAny<DLCParameters>())).ReturnsAsync((DLCParameters p) => { return p.DLC.Any(); });
-            var service = new DLCService(dlcExport.Object, null, null, null, null, null);
+            var service = GetService(dlcExport.Object, null, null, null, null, null);
             var result = await service.ExportAsync(new Game()
             {
                 ExecutableLocation = string.Empty,
@@ -226,13 +239,69 @@ namespace IronyModManager.Services.Tests
             result.Should().BeTrue();
         }
 
+        [Fact]
+        public async Task Export_read_failure_should_lock_as_discovery_unavailable_without_writing()
+        {
+            var exporter = new Mock<IDLCExporter>();
+            exporter.Setup(p => p.GetDisabledDLCAsync(It.IsAny<DLCParameters>())).ThrowsAsync(new IOException("provider unavailable"));
+            var probe = new Mock<IFileSystemStateProbe>();
+            probe.Setup(p => p.IsFileSystemAccessFailure(It.IsAny<Exception>())).Returns(true);
+            var safety = new GameStateSafetyService(probe.Object, Mock.Of<ILogger>());
+            var game = new Game { Type = "dlc-export-read" };
+            var notifications = 0;
+            safety.GameLocked += _ => notifications++;
+            var service = GetService(exporter.Object, null, null, null, null, null, probe, safety);
+
+            var result = await service.ExportAsync(game, [new DLC { IsEnabled = false }]);
+
+            result.Should().BeFalse();
+            safety.GetLock(game).Reason.Should().Be(GameStateLockReason.DiscoveryUnavailable);
+            notifications.Should().Be(1);
+            exporter.Verify(p => p.ExportDLCAsync(It.IsAny<DLCParameters>()), Times.Never);
+        }
+
+        [Fact]
+        public async Task Export_write_failure_should_lock_as_write_access_failure()
+        {
+            var exporter = new Mock<IDLCExporter>();
+            exporter.Setup(p => p.GetDisabledDLCAsync(It.IsAny<DLCParameters>())).ReturnsAsync([]);
+            exporter.Setup(p => p.ExportDLCAsync(It.IsAny<DLCParameters>())).ThrowsAsync(new UnauthorizedAccessException());
+            var probe = new Mock<IFileSystemStateProbe>();
+            probe.Setup(p => p.IsFileSystemAccessFailure(It.IsAny<Exception>())).Returns(true);
+            var safety = new GameStateSafetyService(probe.Object, Mock.Of<ILogger>());
+            var game = new Game { Type = "dlc-export-write" };
+            var service = GetService(exporter.Object, null, null, null, null, null, probe, safety);
+
+            var result = await service.ExportAsync(game, [new DLC { IsEnabled = false }]);
+
+            result.Should().BeFalse();
+            safety.GetLock(game).Reason.Should().Be(GameStateLockReason.WriteAccessFailure);
+        }
+
+        [Fact]
+        public async Task Export_unexpected_failure_should_propagate_without_locking()
+        {
+            var exporter = new Mock<IDLCExporter>();
+            exporter.Setup(p => p.GetDisabledDLCAsync(It.IsAny<DLCParameters>())).ThrowsAsync(new InvalidOperationException("programming defect"));
+            var probe = new Mock<IFileSystemStateProbe>();
+            probe.Setup(p => p.IsFileSystemAccessFailure(It.IsAny<Exception>())).Returns(false);
+            var safety = new GameStateSafetyService(probe.Object, Mock.Of<ILogger>());
+            var game = new Game { Type = "dlc-export-unexpected" };
+            var service = GetService(exporter.Object, null, null, null, null, null, probe, safety);
+
+            var action = async () => await service.ExportAsync(game, [new DLC { IsEnabled = false }]);
+
+            await action.Should().ThrowAsync<InvalidOperationException>();
+            safety.IsLocked(game).Should().BeFalse();
+        }
+
         /// <summary>
         /// Defines the test method Should_not_sync_dlc_when_no_game.
         /// </summary>
         [Fact]
         public async Task Should_not_sync_dlc_when_no_game()
         {
-            var service = new DLCService(null, null, null, null, null, null);
+            var service = GetService(null, null, null, null, null, null);
             var result = await service.SyncStateAsync(null, new List<IDLC>()
             {
                 new DLC()
@@ -250,7 +319,7 @@ namespace IronyModManager.Services.Tests
         [Fact]
         public async Task Should_not_sync_dlc_when_no_dlc()
         {
-            var service = new DLCService(null, null, null, null, null, null);
+            var service = GetService(null, null, null, null, null, null);
             var result = await service.SyncStateAsync(new Game()
             {
                 ExecutableLocation = string.Empty,
@@ -279,7 +348,7 @@ namespace IronyModManager.Services.Tests
             };
             var dlcExport = new Mock<IDLCExporter>();
             dlcExport.Setup(p => p.GetDisabledDLCAsync(It.IsAny<DLCParameters>())).ReturnsAsync(() => new List<IDLCObject>() { new DLCObject() { Path = "dlc/dlc01.dlc" } });
-            var service = new DLCService(dlcExport.Object, null, null, null, null, null);
+            var service = GetService(dlcExport.Object, null, null, null, null, null);
             var result = await service.SyncStateAsync(new Game()
             {
                 ExecutableLocation = string.Empty,
@@ -291,6 +360,27 @@ namespace IronyModManager.Services.Tests
             result.Should().BeTrue();
             dlc.IsEnabled.Should().BeFalse();
             dlc2.IsEnabled.Should().BeTrue();
+        }
+
+        [Fact]
+        public async Task Read_failure_should_lock_game_without_changing_existing_dlc_state()
+        {
+            var dlc = new DLC { Path = "dlc/one.dlc", IsEnabled = false };
+            var exporter = new Mock<IDLCExporter>();
+            exporter.Setup(p => p.GetDisabledDLCAsync(It.IsAny<DLCParameters>())).ThrowsAsync(new IOException("cloud provider unavailable"));
+            var probe = new Mock<IFileSystemStateProbe>();
+            probe.Setup(p => p.IsFileSystemAccessFailure(It.IsAny<Exception>())).Returns(true);
+            var safety = new GameStateSafetyService(probe.Object, Mock.Of<ILogger>());
+            var game = new Game { Type = "dlc-cloud" };
+            var target = new DLCService(exporter.Object, null, null, null, null, null, safety);
+            var service = new ProxyGenerator().CreateInterfaceProxyWithTarget<IDLCService>(target,
+                new GameStateSafetyInterceptor(Mock.Of<IGameService>(), safety, probe.Object));
+
+            var result = await service.SyncStateAsync(game, [dlc]);
+
+            result.Should().BeFalse();
+            dlc.IsEnabled.Should().BeFalse();
+            safety.GetLock(game).Reason.Should().Be(GameStateLockReason.DiscoveryUnavailable);
         }
     }
 }
