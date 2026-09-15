@@ -7,7 +7,7 @@
 
 ---
 
-Irony Mod Manager is distributed as portable builds for all platforms and as an installer for Windows.
+Irony Mod Manager is distributed as portable builds for all platforms, as an installer for Windows, and as an unsigned Finder convenience bundle for macOS.
 
 If you're unsure which file to download, follow the guide below.
 
@@ -20,7 +20,8 @@ If you're unsure which file to download, follow the guide below.
 - Installer version: win-x64-setup.zip
 
 ## MacOS
-- Portable version: osx-x64.zip
+- Finder convenience bundle (recommended): `IronyModManager-osx-x64-app.tar.gz`
+- Portable fallback: `osx-x64.zip`
 
 ## Linux
 - Portable version: linux-x64.zip
@@ -45,13 +46,23 @@ If you're unsure which file to download, follow the guide below.
 ---
 
 ## MacOS
-1. Download and extract osx-x64.zip
-2. Open Terminal
-3. Navigate to the folder: `cd /path/to/Irony`
-4. Make the file executable: `chmod +x IronyModManager`
-5. Run Irony: `./IronyModManager`
 
-(Important: `./` must be included.)
+### Finder convenience bundle (recommended)
+1. Download `IronyModManager-osx-x64-app.tar.gz`.
+2. Extract it using a method that preserves Unix executable permissions.
+3. Open `IronyModManager.app` from Finder.
+4. Complete the normal macOS approval flow if prompted for downloaded unsigned software.
+
+The bundle is unsigned and unnotarized. It is a Finder convenience bundle, not a native installer. The 1.28 bundle has been verified to launch from Finder on macOS 11.
+
+### Portable fallback
+1. Download and extract `osx-x64.zip`.
+2. Open Terminal in the extracted directory.
+3. Make the file executable: `chmod +x IronyModManager`.
+4. Run Irony: `./IronyModManager`.
+
+### Updates
+Irony continues to check for updates on macOS, but it does not install them automatically or execute the downloaded updater helper. When an update is available, **Open Release Page** opens the official GitHub Releases page. Download the preferred macOS build and replace the existing copy manually.
 
 ---
 

@@ -159,7 +159,7 @@ Ensure `xwayland` is installed if using X11 fallback.
 See:  
 [https://github.com/bcssov/IronyModManager/issues/19](https://github.com/bcssov/IronyModManager/issues/19)
 
-This is caused by Apple’s notarization and quarantine system.
+The macOS bundle is unsigned and unnotarized, so macOS may require its normal approval flow for downloaded unsigned software. Use the recommended `.app` bundle instructions on the [Install](install.md) page; `osx-x64.zip` remains available as the Terminal-based portable fallback.
 
 </details>
 
@@ -183,7 +183,7 @@ Repeat step 3 for each Terminal session unless made permanent.
 ---
 
 <details>
-<summary><strong>Irony crashes unexpectedly or auto-update fails.</strong></summary>
+<summary><strong>Irony crashes unexpectedly or an update fails.</strong></summary>
 
 Common causes:
 
@@ -192,6 +192,8 @@ Common causes:
 - System restrictions  
 
 Digitally signed binaries would prevent false positives but are expensive.
+
+On macOS, automatic installation is intentionally unavailable. Irony still checks for updates; use **Open Release Page** and replace the macOS build manually.
 
 </details>
 

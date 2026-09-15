@@ -58,14 +58,14 @@ Possible causes:
 
 - Corrupt or incomplete download  
 - Antivirus or security software blocking the executable  
-- Missing executable permissions on Mac/Linux  
+- Missing executable permissions in a portable Mac/Linux extraction
 - Files extracted to a location where your user account cannot execute them (non-Windows)
 
 Try the following:
 
 - Re-download and re-extract the archive  
 - Temporarily whitelist Irony in your antivirus to test  
-- On Unix-based systems (Mac/Linux), ensure Irony is executable using: chmod +x IronyModManager  
+- For the macOS `.app` bundle, extract it using a method that preserves Unix executable permissions; see [Install](install.md). For the portable Mac/Linux build, ensure Irony is executable using: `chmod +x IronyModManager`
 - Make sure you are running Irony from a location your user can read and execute (for example, your home directory)
 
 ---
