@@ -67,28 +67,37 @@ namespace IronyModManager.ViewModels.Controls
         }
 
         /// <summary>
-        /// Keeps the game locked while changed roots are scanned and while any pre-reconciliation reset runs.
-        /// Unlocking occurs only after an authoritative result has been installed by <paramref name="refresh"/>.
+        /// Keeps the game locked while changed roots are scanned, an authoritative result is installed,
+        /// and collection state is reconciled from that result.
         /// </summary>
         public virtual async Task<bool> RevalidateConfigurationAsync(IGame game,
-            Func<GameStateLockInfo, Func<bool>, Task<bool>> refresh, Action reset, Action reconcile)
+            Func<GameStateLockInfo, Func<bool>, Task<bool>> refresh, Action reset, Action reconcile,
+            Func<GameStateLockInfo, Func<bool>, Task<bool>> synchronize = null)
         {
             var revalidationLock = gameStateSafetyService.BeginRevalidation(game, "Filesystem configuration changed");
             IsRevalidating = true;
             try
             {
                 bool isCurrent() => gameStateSafetyService.IsCurrentRevalidation(game, revalidationLock);
+                if (synchronize != null && (!await synchronize(revalidationLock, isCurrent) || !isCurrent()))
+                {
+                    return false;
+                }
+
                 if (!await refresh(revalidationLock, isCurrent) || !isCurrent())
                 {
                     return false;
                 }
 
-                if (!gameStateSafetyService.CompleteRevalidation(game, revalidationLock, reset))
+                if (!gameStateSafetyService.CompleteRevalidation(game, revalidationLock, () =>
+                    {
+                        reset?.Invoke();
+                        reconcile();
+                    }))
                 {
                     return false;
                 }
 
-                reconcile();
                 return true;
             }
             finally

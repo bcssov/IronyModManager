@@ -169,6 +169,18 @@ namespace IronyModManager.Services.Common
         Task<IReadOnlyCollection<IModInstallationResult>> InstallModsAsync(IEnumerable<IMod> statusToRetain);
 
         /// <summary>
+        /// Synchronizes mod descriptors while an explicit filesystem configuration revalidation owns the game.
+        /// </summary>
+        /// <param name="game">The game.</param>
+        /// <param name="statusToRetain">The status to retain.</param>
+        /// <param name="revalidationLock">The current configuration revalidation lock.</param>
+        /// <returns><c>true</c> when synchronization completed under the supplied generation; otherwise, <c>false</c>.</returns>
+        [GameStateSafety(GameStateSafetyOperation.Mutation, GameStateSafetyRejection.False,
+            "Synchronize mod descriptors during configuration revalidation",
+            GameStateSafetyEnforcement.EntryOnly | GameStateSafetyEnforcement.AllowCurrentRevalidation)]
+        Task<bool> InstallModsAsync(IGame game, IEnumerable<IMod> statusToRetain, GameStateLockInfo revalidationLock);
+
+        /// <summary>
         /// Locks the descriptors asynchronous.
         /// </summary>
         /// <param name="mods">The mods.</param>

@@ -32,6 +32,11 @@ namespace IronyModManager.Services.Common
         LockOnFileSystemFailure = 4,
 
         /// <summary>
+        /// Allows a locked invocation only when it supplies the current controlled-revalidation generation.
+        /// </summary>
+        AllowCurrentRevalidation = 8,
+
+        /// <summary>
         /// Rejects invocations that have no game or whose game is already locked, but leaves
         /// filesystem-failure classification to the operation.
         /// </summary>

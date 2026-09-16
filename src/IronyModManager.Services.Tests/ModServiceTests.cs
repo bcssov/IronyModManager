@@ -1987,5 +1987,152 @@ namespace IronyModManager.Services.Tests
             result.Should().BeNull();
             safety.GetLock(game).Reason.Should().Be(GameStateLockReason.WriteAccessFailure);
         }
+
+        [Fact]
+        public async Task Controlled_custom_directory_synchronization_should_write_then_refresh_new_descriptors()
+        {
+            var (service, game, reader, writer, safety, _) = GetControlledInstallService("controlled-install");
+            var notifications = 0;
+            safety.GameLocked += _ => notifications++;
+            var revalidationLock = safety.BeginRevalidation(game, "custom directory changed");
+
+            var synchronized = await service.InstallModsAsync(game, [], revalidationLock);
+            var refreshed = await service.RevalidateInstalledModsAsync(game, revalidationLock);
+
+            synchronized.Should().BeTrue();
+            refreshed.IsAuthoritative.Should().BeTrue();
+            refreshed.Mods.Should().NotBeEmpty();
+            safety.IsLocked(game).Should().BeTrue();
+            notifications.Should().Be(0);
+            writer.Verify(p => p.WriteDescriptorAsync(It.IsAny<ModWriterParameters>(), It.IsAny<bool>()), Times.AtLeastOnce);
+            reader.Verify(p => p.Read(It.IsAny<string>(), It.IsAny<IEnumerable<string>>(), It.IsAny<bool>()), Times.AtLeastOnce);
+        }
+
+        [Fact]
+        public async Task Invalid_custom_root_should_not_start_controlled_descriptor_synchronization()
+        {
+            var (service, game, _, writer, safety, probe) = GetControlledInstallService("missing-custom");
+            probe.Setup(p => p.CheckDirectory(game.CustomModDirectory)).Returns(new FileSystemPathCheckResult
+                { Path = game.CustomModDirectory, State = FileSystemPathState.Missing });
+            var notifications = 0;
+            safety.GameLocked += _ => notifications++;
+            var revalidationLock = safety.BeginRevalidation(game, "custom directory changed");
+
+            var synchronized = await service.InstallModsAsync(game, [], revalidationLock);
+
+            synchronized.Should().BeFalse();
+            safety.GetLock(game).Reason.Should().Be(GameStateLockReason.ExpectedSourceMissing);
+            notifications.Should().Be(1);
+            writer.Verify(p => p.CanWriteToModDirectoryAsync(It.IsAny<ModWriterParameters>()), Times.Never);
+            writer.Verify(p => p.WriteDescriptorAsync(It.IsAny<ModWriterParameters>(), It.IsAny<bool>()), Times.Never);
+        }
+
+        [Fact]
+        public async Task Controlled_descriptor_write_failure_should_leave_write_failure_lock()
+        {
+            var (service, game, _, writer, safety, _) = GetControlledInstallService("controlled-write-failure");
+            writer.Setup(p => p.WriteDescriptorAsync(It.IsAny<ModWriterParameters>(), It.IsAny<bool>())).ReturnsAsync(false);
+            var notifications = 0;
+            safety.GameLocked += _ => notifications++;
+            var revalidationLock = safety.BeginRevalidation(game, "custom directory changed");
+
+            var synchronized = await service.InstallModsAsync(game, [], revalidationLock);
+
+            synchronized.Should().BeFalse();
+            safety.GetLock(game).Reason.Should().Be(GameStateLockReason.WriteAccessFailure);
+            safety.IsLocked(game).Should().BeTrue();
+            notifications.Should().Be(1);
+        }
+
+        [Fact]
+        public async Task Controlled_descriptor_read_failure_should_leave_discovery_failure_lock()
+        {
+            var (service, game, reader, writer, safety, _) = GetControlledInstallService("controlled-read-failure");
+            reader.Setup(p => p.Read(It.IsAny<string>(), It.IsAny<IEnumerable<string>>(), It.IsAny<bool>()))
+                .Throws(new IOException("Locale-independent test fixture"));
+            var revalidationLock = safety.BeginRevalidation(game, "custom directory changed");
+
+            var synchronized = await service.InstallModsAsync(game, [], revalidationLock);
+
+            synchronized.Should().BeFalse();
+            safety.GetLock(game).Reason.Should().Be(GameStateLockReason.DiscoveryUnavailable);
+            safety.IsLocked(game).Should().BeTrue();
+            writer.Verify(p => p.CreateModDirectoryAsync(It.IsAny<ModWriterParameters>()), Times.Never);
+            writer.Verify(p => p.WriteDescriptorAsync(It.IsAny<ModWriterParameters>(), It.IsAny<bool>()), Times.Never);
+        }
+
+        [Fact]
+        public async Task Superseded_custom_directory_generation_should_not_synchronize_descriptors()
+        {
+            var (service, game, _, writer, safety, _) = GetControlledInstallService("superseded-install");
+            var notifications = 0;
+            safety.GameLocked += _ => notifications++;
+            var staleLock = safety.BeginRevalidation(game, "first custom directory");
+            writer.Setup(p => p.CanWriteToModDirectoryAsync(It.IsAny<ModWriterParameters>())).Returns(() =>
+            {
+                safety.BeginRevalidation(game, "second custom directory");
+                return Task.FromResult(true);
+            });
+
+            var synchronized = await service.InstallModsAsync(game, [], staleLock);
+
+            synchronized.Should().BeFalse();
+            notifications.Should().Be(0);
+            writer.Verify(p => p.CanWriteToModDirectoryAsync(It.IsAny<ModWriterParameters>()), Times.Once);
+            writer.Verify(p => p.CreateModDirectoryAsync(It.IsAny<ModWriterParameters>()), Times.Never);
+            writer.Verify(p => p.WriteDescriptorAsync(It.IsAny<ModWriterParameters>(), It.IsAny<bool>()), Times.Never);
+        }
+
+        [Fact]
+        public async Task Ordinary_installed_mod_refresh_should_not_synchronize_descriptors()
+        {
+            var (service, game, _, writer, _, _) = GetControlledInstallService("ordinary-refresh");
+
+            var refreshed = await service.RefreshInstalledModsAsync(game);
+
+            refreshed.IsAuthoritative.Should().BeTrue();
+            writer.Verify(p => p.CanWriteToModDirectoryAsync(It.IsAny<ModWriterParameters>()), Times.Never);
+            writer.Verify(p => p.WriteDescriptorAsync(It.IsAny<ModWriterParameters>(), It.IsAny<bool>()), Times.Never);
+        }
+
+        private static (ModService Service, IGame Game, Mock<IReader> Reader, Mock<IModWriter> Writer,
+            GameStateSafetyService Safety, Mock<IFileSystemStateProbe> Probe) GetControlledInstallService(string gameType)
+        {
+            DISetup.SetupContainer();
+            var storageProvider = new Mock<IStorageProvider>();
+            var modParser = new Mock<IModParser>();
+            var reader = new Mock<IReader>();
+            SetupMockCase(reader, modParser);
+            reader.Setup(p => p.GetFileInfo(It.IsAny<string>(), It.IsAny<string>())).Returns(new FileInfo
+            {
+                Content = ["name=\"Fake\"", "path=\"c:/fake\""], ContentSHA = "test", FileName = "fake.mod", IsBinary = false
+            });
+            var mapper = new Mock<IMapper>();
+            mapper.Setup(p => p.Map<IMod>(It.IsAny<IModObject>())).Returns((IModObject value) =>
+                new Mod { FileName = value.FileName, DescriptorFile = $"mod/{value.FileName}.mod" });
+            var writer = new Mock<IModWriter>();
+            writer.Setup(p => p.ModDirectoryExists(It.IsAny<ModWriterParameters>())).Returns(false);
+            writer.Setup(p => p.CanWriteToModDirectoryAsync(It.IsAny<ModWriterParameters>())).ReturnsAsync(true);
+            writer.Setup(p => p.CreateModDirectoryAsync(It.IsAny<ModWriterParameters>())).ReturnsAsync(false);
+            writer.Setup(p => p.WriteDescriptorAsync(It.IsAny<ModWriterParameters>(), It.IsAny<bool>())).ReturnsAsync(true);
+            var game = new Game
+            {
+                Type = gameType,
+                UserDirectory = AppDomain.CurrentDomain.BaseDirectory,
+                WorkshopDirectory = [],
+                CustomModDirectory = AppDomain.CurrentDomain.BaseDirectory
+            };
+            var gameService = new Mock<IGameService>();
+            gameService.Setup(p => p.GetSelected()).Returns(game);
+            var probe = new Mock<IFileSystemStateProbe>();
+            probe.Setup(p => p.CheckDirectory(It.IsAny<string>())).Returns((string path) =>
+                new FileSystemPathCheckResult { Path = path, State = FileSystemPathState.Available });
+            probe.Setup(p => p.IsFileSystemAccessFailure(It.IsAny<Exception>())).Returns(
+                (Exception exception) => exception is IOException or UnauthorizedAccessException);
+            var safety = new GameStateSafetyService(probe.Object, Mock.Of<ILogger>());
+            var service = GetService(storageProvider, modParser, reader, mapper, writer, gameService,
+                fileSystemStateProbe: probe, gameStateSafetyService: safety);
+            return (service, game, reader, writer, safety, probe);
+        }
     }
 }

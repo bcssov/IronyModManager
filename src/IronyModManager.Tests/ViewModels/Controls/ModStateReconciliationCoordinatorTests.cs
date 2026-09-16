@@ -66,7 +66,7 @@ namespace IronyModManager.Tests.ViewModels.Controls
         }
 
         [Fact]
-        public async Task Successful_configuration_revalidation_should_reset_then_unlock_then_reconcile()
+        public async Task Successful_configuration_revalidation_should_sync_refresh_publish_reconcile_then_unlock()
         {
             var locked = false;
             var safety = GetSafety();
@@ -78,22 +78,24 @@ namespace IronyModManager.Tests.ViewModels.Controls
             });
             Mock.Get(safety).Setup(p => p.IsLocked(It.IsAny<IGame>())).Returns(() => locked);
             Mock.Get(safety).Setup(p => p.IsCurrentRevalidation(It.IsAny<IGame>(), revalidationLock)).Returns(() => locked);
-            Mock.Get(safety).Setup(p => p.CompleteRevalidation(It.IsAny<IGame>(), revalidationLock, It.IsAny<System.Action>())).Returns(
-                (IGame _, GameStateLockInfo _, System.Action beforeUnlock) =>
-            {
-                beforeUnlock?.Invoke();
-                locked = false;
-                return true;
-            });
             var coordinator = new ModStateReconciliationCoordinator(safety);
             var game = new Game { Type = "game" };
             var order = new List<string>();
+            Mock.Get(safety).Setup(p => p.CompleteRevalidation(It.IsAny<IGame>(), revalidationLock, It.IsAny<System.Action>())).Returns(
+                (IGame _, GameStateLockInfo _, System.Action beforeUnlock) =>
+                {
+                    beforeUnlock?.Invoke();
+                    locked = false;
+                    order.Add("unlock");
+                    return true;
+                });
 
             var result = await coordinator.RevalidateConfigurationAsync(game,
                 (_, _) =>
                 {
                     safety.IsLocked(game).Should().BeTrue();
                     order.Add("refresh");
+                    order.Add("publish");
                     return Task.FromResult(true);
                 },
                 () =>
@@ -103,13 +105,59 @@ namespace IronyModManager.Tests.ViewModels.Controls
                 },
                 () =>
                 {
-                    safety.IsLocked(game).Should().BeFalse();
+                    safety.IsLocked(game).Should().BeTrue();
                     order.Add("reconcile");
+                },
+                (_, _) =>
+                {
+                    safety.IsLocked(game).Should().BeTrue();
+                    order.Add("synchronize");
+                    return Task.FromResult(true);
                 });
 
             result.Should().BeTrue();
             coordinator.IsRevalidating.Should().BeFalse();
-            order.Should().Equal("refresh", "reset", "reconcile");
+            order.Should().Equal("synchronize", "refresh", "publish", "reset", "reconcile", "unlock");
+        }
+
+        [Fact]
+        public async Task User_directory_revalidation_should_not_require_descriptor_synchronization()
+        {
+            var safety = GetSafety();
+            var revalidationLock = new GameStateLockInfo { GameType = "game", Reason = GameStateLockReason.ConfigurationChanged };
+            Mock.Get(safety).Setup(p => p.BeginRevalidation(It.IsAny<IGame>(), It.IsAny<string>())).Returns(revalidationLock);
+            Mock.Get(safety).Setup(p => p.IsCurrentRevalidation(It.IsAny<IGame>(), revalidationLock)).Returns(true);
+            Mock.Get(safety).Setup(p => p.CompleteRevalidation(It.IsAny<IGame>(), revalidationLock, It.IsAny<System.Action>())).Returns(true);
+            var coordinator = new ModStateReconciliationCoordinator(safety);
+            var refreshed = false;
+
+            var result = await coordinator.RevalidateConfigurationAsync(new Game { Type = "game" },
+                (_, _) => Task.FromResult(refreshed = true), null, () => { });
+
+            result.Should().BeTrue();
+            refreshed.Should().BeTrue();
+        }
+
+        [Fact]
+        public async Task Failed_descriptor_synchronization_should_not_refresh_unlock_or_reconcile()
+        {
+            var safety = GetSafety();
+            var revalidationLock = new GameStateLockInfo { GameType = "game", Reason = GameStateLockReason.ConfigurationChanged };
+            Mock.Get(safety).Setup(p => p.BeginRevalidation(It.IsAny<IGame>(), It.IsAny<string>())).Returns(revalidationLock);
+            Mock.Get(safety).Setup(p => p.IsCurrentRevalidation(It.IsAny<IGame>(), revalidationLock)).Returns(true);
+            var coordinator = new ModStateReconciliationCoordinator(safety);
+            var refreshed = false;
+            var reconciled = false;
+
+            var result = await coordinator.RevalidateConfigurationAsync(new Game { Type = "game" },
+                (_, _) => Task.FromResult(refreshed = true), null, () => reconciled = true,
+                (_, _) => Task.FromResult(false));
+
+            result.Should().BeFalse();
+            refreshed.Should().BeFalse();
+            reconciled.Should().BeFalse();
+            Mock.Get(safety).Verify(p => p.CompleteRevalidation(
+                It.IsAny<IGame>(), It.IsAny<GameStateLockInfo>(), It.IsAny<System.Action>()), Times.Never);
         }
 
         [Fact]

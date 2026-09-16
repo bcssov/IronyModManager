@@ -42,7 +42,8 @@ namespace IronyModManager.Services
 
             var game = ResolveGame(invocation);
             if ((game == null && safety.RejectWhenGameUnavailable) ||
-                (game != null && safety.RejectWhenLocked && gameStateSafetyService.IsLocked(game)))
+                (game != null && safety.RejectWhenLocked && gameStateSafetyService.IsLocked(game) &&
+                 !OwnsCurrentRevalidation(invocation, game, safety)))
             {
                 SetRejectedResult(invocation, safety.Rejection);
                 return;
@@ -129,6 +130,17 @@ namespace IronyModManager.Services
             var hasExplicitGame = invocation.Method.GetParameters()
                 .Any(parameter => typeof(IGame).IsAssignableFrom(parameter.ParameterType));
             return hasExplicitGame ? ResolveExplicitGame(invocation) : gameService.GetSelected();
+        }
+
+        private bool OwnsCurrentRevalidation(IInvocation invocation, IGame game, GameStateSafetyAttribute safety)
+        {
+            if (!safety.AllowCurrentRevalidation)
+            {
+                return false;
+            }
+
+            var revalidationLock = invocation.Arguments.OfType<GameStateLockInfo>().SingleOrDefault();
+            return gameStateSafetyService.IsCurrentRevalidation(game, revalidationLock);
         }
 
         private bool ShouldLock(IGame game, GameStateSafetyAttribute safety, Exception exception)

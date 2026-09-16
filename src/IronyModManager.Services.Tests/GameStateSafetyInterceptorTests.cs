@@ -98,6 +98,7 @@ namespace IronyModManager.Services.Tests
                 [
                     "IDLCService.ExportAsync",
                     "IModService.InstallModsAsync",
+                    "IModService.InstallModsAsync",
                     "IModMergeService.MergeCollectionByFilesAsync",
                     "IModMergeService.MergeCompressCollectionAsync",
                     "IModPatchCollectionService.AddCustomModPatchAsync",
@@ -265,6 +266,30 @@ namespace IronyModManager.Services.Tests
             modService.Verify(service => service.DeleteDescriptorsAsync(It.IsAny<IEnumerable<IMod>>()), Times.Never);
             mergeService.Verify(service => service.MergeCollectionByFilesAsync(It.IsAny<string>()), Times.Never);
             patchService.Verify(service => service.CopyPatchCollectionAsync(It.IsAny<string>(), It.IsAny<string>()), Times.Never);
+        }
+
+        [Fact]
+        public async Task Owned_install_is_allowed_only_for_the_current_revalidation_generation()
+        {
+            var game = new Game { Type = "owned-install-proxy" };
+            var fixture = CreateContainerFixture(game);
+            var modService = new Mock<IModService>();
+            var current = fixture.Safety.BeginRevalidation(game, "custom directory changed");
+            modService.Setup(service => service.InstallModsAsync(game, It.IsAny<IEnumerable<IMod>>(), current))
+                .ReturnsAsync(true);
+            fixture.Container.RegisterInstance(modService.Object);
+            fixture.Container.InterceptGameStateSafetyContracts();
+            fixture.Container.Verify();
+            var proxied = fixture.Container.GetInstance<IModService>();
+
+            (await proxied.InstallModsAsync(game, [], current)).Should().BeTrue();
+            (await proxied.InstallModsAsync([])).Should().BeNull();
+
+            var stale = current;
+            fixture.Safety.BeginRevalidation(game, "newer custom directory");
+            (await proxied.InstallModsAsync(game, [], stale)).Should().BeFalse();
+            modService.Verify(service => service.InstallModsAsync(game, It.IsAny<IEnumerable<IMod>>(), current), Times.Once);
+            modService.Verify(service => service.InstallModsAsync(It.IsAny<IEnumerable<IMod>>()), Times.Never);
         }
 
         [Fact]

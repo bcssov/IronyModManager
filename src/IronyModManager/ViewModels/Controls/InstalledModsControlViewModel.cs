@@ -529,20 +529,28 @@ namespace IronyModManager.ViewModels.Controls
         }
 
         /// <summary>
+        /// Synchronizes new mod descriptors while an explicit custom-directory revalidation owns the game.
+        /// </summary>
+        public virtual async Task<bool> SynchronizeNewModsAsync(IGame game, GameStateLockInfo revalidationLock)
+        {
+            return await modService.InstallModsAsync(game, Mods, revalidationLock);
+        }
+
+        /// <summary>
         /// Revalidates installed mods after an explicit filesystem configuration change.
         /// </summary>
-        public virtual async Task<bool> RevalidateModsAsync(GameStateLockInfo revalidationLock,
+        public virtual async Task<bool> RevalidateModsAsync(IGame game, GameStateLockInfo revalidationLock,
             Func<bool> isCurrentRevalidation, bool skipOverlay = false)
         {
-            return await RefreshModsInternalAsync(skipOverlay, revalidationLock, isCurrentRevalidation);
+            return await RefreshModsInternalAsync(skipOverlay, revalidationLock, isCurrentRevalidation, game);
         }
 
         private async Task<bool> RefreshModsInternalAsync(bool skipOverlay,
-            GameStateLockInfo revalidationLock = null, Func<bool> isCurrentRevalidation = null)
+            GameStateLockInfo revalidationLock = null, Func<bool> isCurrentRevalidation = null, IGame game = null)
         {
             RefreshingMods = true;
             var previousMods = Mods;
-            var authoritative = await BindAsync(skipOverlay: skipOverlay, revalidationLock: revalidationLock,
+            var authoritative = await BindAsync(game, skipOverlay: skipOverlay, revalidationLock: revalidationLock,
                 isCurrentRevalidation: isCurrentRevalidation);
             if (isCurrentRevalidation != null && !isCurrentRevalidation())
             {

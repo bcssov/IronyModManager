@@ -75,5 +75,10 @@ namespace IronyModManager.Services.Common
         /// Gets a value indicating whether classified filesystem failures lock the captured game.
         /// </summary>
         public bool LockOnFileSystemFailure => (Enforcement & GameStateSafetyEnforcement.LockOnFileSystemFailure) != 0;
+
+        /// <summary>
+        /// Gets a value indicating whether the current controlled-revalidation generation may enter while locked.
+        /// </summary>
+        public bool AllowCurrentRevalidation => (Enforcement & GameStateSafetyEnforcement.AllowCurrentRevalidation) != 0;
     }
 }

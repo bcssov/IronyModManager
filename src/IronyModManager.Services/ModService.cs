@@ -680,7 +680,21 @@ namespace IronyModManager.Services
             return InstallModsInternalAsync(game, statusToRetain);
         }
 
-        private async Task<IReadOnlyCollection<IModInstallationResult>> InstallModsInternalAsync(IGame game, IEnumerable<IMod> statusToRetain)
+        /// <inheritdoc />
+        public virtual async Task<bool> InstallModsAsync(IGame game, IEnumerable<IMod> statusToRetain,
+            GameStateLockInfo revalidationLock)
+        {
+            if (!gameStateSafetyService.IsCurrentRevalidation(game, revalidationLock))
+            {
+                return false;
+            }
+
+            await InstallModsInternalAsync(game, statusToRetain, revalidationLock);
+            return gameStateSafetyService.IsCurrentRevalidation(game, revalidationLock);
+        }
+
+        private async Task<IReadOnlyCollection<IModInstallationResult>> InstallModsInternalAsync(IGame game,
+            IEnumerable<IMod> statusToRetain, GameStateLockInfo revalidationLock = null)
         {
             using var mutex = await modReadLock.LockAsync();
             if (game == null)
@@ -688,17 +702,54 @@ namespace IronyModManager.Services
                 return null;
             }
 
-            var canWrite = await gameStateSafetyService.ExecuteMutationAsync(game, async () =>
+            bool ownsRevalidation() => revalidationLock == null ||
+                                        gameStateSafetyService.IsCurrentRevalidation(game, revalidationLock);
+            if (!ownsRevalidation())
             {
-                return await ModWriter.CanWriteToModDirectoryAsync(new ModWriterParameters { RootDirectory = game.UserDirectory, Path = Shared.Constants.ModDirectory }) &&
-                       (game.ModDescriptorType is not (ModDescriptorType.JsonMetadata or ModDescriptorType.JsonMetadataV2) ||
-                        await ModWriter.CanWriteToModDirectoryAsync(new ModWriterParameters { RootDirectory = game.UserDirectory, Path = Shared.Constants.JsonModDirectory }));
-            }, false, "Validate mod descriptor output");
+                return null;
+            }
+
+            if (revalidationLock != null)
+            {
+                var sourceFailure = GetDiscoverySourceFailure(game);
+                if (sourceFailure != null)
+                {
+                    var reason = sourceFailure.State == FileSystemPathState.Missing
+                        ? GameStateLockReason.ExpectedSourceMissing
+                        : GameStateLockReason.DiscoveryUnavailable;
+                    gameStateSafetyService.LockRevalidationFailure(game, revalidationLock, reason, sourceFailure.Path);
+                    return null;
+                }
+            }
+
+            bool canWrite;
+            try
+            {
+                async Task<bool> validateOutput()
+                {
+                    return ownsRevalidation() &&
+                           await ModWriter.CanWriteToModDirectoryAsync(new ModWriterParameters { RootDirectory = game.UserDirectory, Path = Shared.Constants.ModDirectory }) &&
+                           (game.ModDescriptorType is not (ModDescriptorType.JsonMetadata or ModDescriptorType.JsonMetadataV2) ||
+                            await ModWriter.CanWriteToModDirectoryAsync(new ModWriterParameters { RootDirectory = game.UserDirectory, Path = Shared.Constants.JsonModDirectory }));
+                }
+
+                canWrite = revalidationLock != null
+                    ? await validateOutput()
+                    : await gameStateSafetyService.ExecuteMutationAsync(game, validateOutput, false, "Validate mod descriptor output");
+            }
+            catch (Exception exception) when (fileSystemStateProbe.IsFileSystemAccessFailure(exception))
+            {
+                LockInstallFailure(game, revalidationLock, GameStateLockReason.WriteAccessFailure,
+                    "Validate mod descriptor output", exception);
+                return null;
+            }
+
             if (!canWrite)
             {
-                if (!gameStateSafetyService.IsLocked(game))
+                if (ownsRevalidation())
                 {
-                    gameStateSafetyService.Lock(game, GameStateLockReason.WriteAccessFailure, GetModDirectoryRootPath(game));
+                    LockInstallFailure(game, revalidationLock, GameStateLockReason.WriteAccessFailure,
+                        revalidationLock != null ? "Validate mod descriptor output" : GetModDirectoryRootPath(game));
                 }
 
                 // ReSharper disable once DisposeOnUsingVariable
@@ -710,6 +761,11 @@ namespace IronyModManager.Services
             IEnumerable<IMod> mods;
             try
             {
+                if (!ownsRevalidation())
+                {
+                    return null;
+                }
+
                 var args = new ModParserArgs { BaseSteamDirectory = game.BaseSteamGameDirectory, IsProton = !string.IsNullOrWhiteSpace(game.LinuxProtonVersion), SteamAppId = game.SteamAppId };
                 mods = GetInstalledModsInternal(game, false);
                 var descriptors = new List<IModInstallationResult>();
@@ -746,7 +802,13 @@ namespace IronyModManager.Services
             }
             catch (Exception exception) when (fileSystemStateProbe.IsFileSystemAccessFailure(exception))
             {
-                gameStateSafetyService.Lock(game, GameStateLockReason.DiscoveryUnavailable, "Read mod descriptor sources", exception);
+                LockInstallFailure(game, revalidationLock, GameStateLockReason.DiscoveryUnavailable,
+                    "Read mod descriptor sources", exception);
+                return null;
+            }
+
+            if (!ownsRevalidation())
+            {
                 return null;
             }
 
@@ -756,13 +818,29 @@ namespace IronyModManager.Services
                 var result = new List<IModInstallationResult>();
                 try
                 {
-                    await ModWriter.CreateModDirectoryAsync(new ModWriterParameters { RootDirectory = game.UserDirectory, Path = Shared.Constants.ModDirectory });
-                    if (game.ModDescriptorType is ModDescriptorType.JsonMetadata or ModDescriptorType.JsonMetadataV2)
+                    if (!ownsRevalidation())
                     {
-                        await ModWriter.CreateModDirectoryAsync(new ModWriterParameters { RootDirectory = game.UserDirectory, Path = Shared.Constants.JsonModDirectory });
+                        return null;
                     }
 
-                    var tasks = new List<Task>();
+                    await ModWriter.CreateModDirectoryAsync(
+                        new ModWriterParameters { RootDirectory = game.UserDirectory, Path = Shared.Constants.ModDirectory });
+                    if (!ownsRevalidation())
+                    {
+                        return null;
+                    }
+
+                    if (game.ModDescriptorType is ModDescriptorType.JsonMetadata or ModDescriptorType.JsonMetadataV2)
+                    {
+                        await ModWriter.CreateModDirectoryAsync(
+                            new ModWriterParameters { RootDirectory = game.UserDirectory, Path = Shared.Constants.JsonModDirectory });
+                        if (!ownsRevalidation())
+                        {
+                            return null;
+                        }
+                    }
+
+                    var tasks = new List<Task<bool>>();
                     foreach (var diff in diffs.GroupBy(p => p.Mod.DescriptorFile))
                     {
                         var installResult = diff.FirstOrDefault();
@@ -780,6 +858,11 @@ namespace IronyModManager.Services
 
                         tasks.Add(Task.Run(async () =>
                         {
+                            if (!ownsRevalidation())
+                            {
+                                return false;
+                            }
+
                             var shouldLock = CheckIfModShouldBeLocked(game, localDiff);
                             if (statusToRetain != null && !shouldLock)
                             {
@@ -790,7 +873,7 @@ namespace IronyModManager.Services
                                 }
                             }
 
-                            await ModWriter.WriteDescriptorAsync(new ModWriterParameters
+                            return await ModWriter.WriteDescriptorAsync(new ModWriterParameters
                             {
                                 Mod = localDiff,
                                 RootDirectory = game.UserDirectory,
@@ -805,13 +888,26 @@ namespace IronyModManager.Services
 
                     if (tasks.Count > 0)
                     {
-                        await Task.WhenAll(tasks);
+                        var writes = await Task.WhenAll(tasks);
+                        if (!ownsRevalidation())
+                        {
+                            return null;
+                        }
+
+                        if (revalidationLock != null && writes.Any(p => !p))
+                        {
+                            LockInstallFailure(game, revalidationLock, GameStateLockReason.WriteAccessFailure,
+                                "Write mod descriptors");
+                            return null;
+                        }
+
                         Cache.Invalidate(new CacheInvalidateParameters { Region = ModsCacheRegion, Prefix = game.Type, Keys = [GetModsCacheKey(true), GetModsCacheKey(false)] });
                     }
                 }
                 catch (Exception exception) when (fileSystemStateProbe.IsFileSystemAccessFailure(exception))
                 {
-                    gameStateSafetyService.Lock(game, GameStateLockReason.WriteAccessFailure, "Write mod descriptors", exception);
+                    LockInstallFailure(game, revalidationLock, GameStateLockReason.WriteAccessFailure,
+                        "Write mod descriptors", exception);
                     return null;
                 }
 
@@ -835,6 +931,19 @@ namespace IronyModManager.Services
             // ReSharper disable once DisposeOnUsingVariable
             mutex.Dispose();
             return null;
+        }
+
+        private void LockInstallFailure(IGame game, GameStateLockInfo revalidationLock,
+            GameStateLockReason reason, string context, Exception exception = null)
+        {
+            if (revalidationLock != null)
+            {
+                gameStateSafetyService.LockRevalidationFailure(game, revalidationLock, reason, context, exception);
+            }
+            else if (!gameStateSafetyService.IsLocked(game))
+            {
+                gameStateSafetyService.Lock(game, reason, context, exception);
+            }
         }
 
         /// <summary>

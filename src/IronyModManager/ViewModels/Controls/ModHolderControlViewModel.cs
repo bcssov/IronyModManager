@@ -1067,9 +1067,13 @@ namespace IronyModManager.ViewModels.Controls
                 CollectionMods.AllowModSelection = false;
                 var recovered = await modStateReconciliationCoordinator.RevalidateConfigurationAsync(
                     s.Game,
-                    (revalidationLock, isCurrent) => InstalledMods.RevalidateModsAsync(revalidationLock, isCurrent),
+                    (revalidationLock, isCurrent) => InstalledMods.RevalidateModsAsync(
+                        s.Game, revalidationLock, isCurrent),
                     s.CustomDirectoryChanged ? () => CollectionMods.Reset(true) : null,
-                    () => CollectionMods.SetMods(InstalledMods.Mods, InstalledMods.ActiveGame));
+                    () => CollectionMods.SetMods(InstalledMods.Mods, InstalledMods.ActiveGame),
+                    s.CustomDirectoryChanged
+                        ? (revalidationLock, _) => InstalledMods.SynchronizeNewModsAsync(s.Game, revalidationLock)
+                        : null);
                 if (recovered)
                 {
                     var allowSelection = CollectionMods.SelectedModCollection != null;
