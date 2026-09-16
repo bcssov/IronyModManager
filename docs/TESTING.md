@@ -87,6 +87,22 @@ Use Release, one MSBuild worker, and the repository's `net10.0` test target for 
 
 Run heavy build, test, coverage, and publish operations sequentially. Avoid rebuilding the same graph unnecessarily. When a required build has already produced usable test assemblies, subsequent runs may reuse those outputs where the tooling supports it. Do not repeatedly attempt `--no-build` runs for assemblies that have not been produced. Preserve validation confidence while avoiding pointless resource consumption.
 
+### Agent .NET process hygiene
+
+Every agent-run .NET build or test sequence owns cleanup of processes it starts. This includes successful runs and failure, timeout, cancellation, interruption, and retry paths; arrange cleanup as a `finally` operation rather than success-only housekeeping. Process names alone do not establish ownership. Before starting a runner, record its root PID and start time and, while it is active, record descendant PIDs needed to identify its build/test tree. After completion, wait briefly for those recorded children to exit, then terminate only recorded, still-running descendants that are confirmed to belong to that invocation. Do not terminate a process merely because it is named `dotnet`, `MSBuild`, `VBCSCompiler`, `testhost`, or `vstest.console`.
+
+The owner workstation has 64 GB RAM. Treat substantial memory growth, workstation responsiveness degradation, or any retained worker/test process from an agent invocation as a validation failure even if the build and tests report success. Report that failure; do not begin another heavy build/test pass merely to obtain totals while the machine is already under substantial memory pressure.
+
+Never use `taskkill /F /IM dotnet.exe`, `kill-dotnet.bat`, or any equivalent process-name-wide termination from an agent. Such commands can stop the owner's Visual Studio session, another terminal build, another agent, or a legitimate .NET application. A process that predates the agent command is external unless its ownership is positively established.
+
+Use the current runner's supported non-persistent mode where practical:
+
+- The installed .NET 10 SDK supports `--disable-build-servers` for `dotnet build` and `dotnet test`; include it when an agent-run command performs a build. Keep `--no-build` when valid so focused tests can reuse a verified prior build rather than rebuilding solely for hygiene.
+- The installed Visual Studio MSBuild 18.10 supports `-nr:false`; use it on every direct agent-run `MSBuild.exe` build/test preparation command unless a concrete toolchain reason prevents it and is reported. VSTest has no equivalent reusable-node switch in this workflow; its `vstest.console` and `testhost` processes must instead be tracked as children of the recorded invocation and allowed to exit normally.
+- The installed SDK supports `dotnet build-server shutdown`, which gracefully stops build servers started from `dotnet`. It is appropriate only when the agent has an exclusive, positively identified CLI build-server context. Do not run it as routine desktop cleanup, because its documented default stops all dotnet-started build servers and may affect other work.
+
+Keep heavy validation sequential as required above. This makes PID-tree attribution reliable as well as reducing resource contention. Hygiene does not justify redundant builds: select focused/affected validation first and reuse valid outputs where supported.
+
 ### Reporting
 
 For narrow tasks, report the focused tests executed, affected maintained-suite totals, and the relevant build result. A repository-wide test total is required only when a repository-wide canonical pass was justified and actually executed. Do not present the absence of a global total as incomplete validation for a narrow task.
@@ -137,7 +153,7 @@ foreach ($name in $tests) {
     $project = "src\$name\$name.csproj"
     $bin = "src\$name\bin\Release\net10.0"
 
-    dotnet build $project -c Release -m:1
+    dotnet build $project -c Release -m:1 --disable-build-servers
     if ($LASTEXITCODE -ne 0) { throw "Build failed: $name" }
 
     dotnet-coverage collect `

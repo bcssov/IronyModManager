@@ -115,7 +115,7 @@ namespace IronyModManager.ViewModels.Controls
         /// <summary>
         /// The redo stack
         /// </summary>
-        private readonly Stack<IEnumerable<string>> redoStack = new();
+        private readonly Stack<CollectionMembershipHistorySnapshot> redoStack = new();
 
         /// <summary>
         /// The reorder lock
@@ -135,7 +135,7 @@ namespace IronyModManager.ViewModels.Controls
         /// <summary>
         /// The undo stack
         /// </summary>
-        private readonly Stack<IEnumerable<string>> undoStack = new();
+        private readonly Stack<CollectionMembershipHistorySnapshot> undoStack = new();
 
         /// <summary>
         /// The active game
@@ -2170,40 +2170,26 @@ namespace IronyModManager.ViewModels.Controls
                 return;
             }
 
-            undoStack.Push(SelectedMods.Select(p => p.DescriptorFile).ToList());
+            undoStack.Push(CaptureCollectionMembership(SelectedMods));
             PerformRedoUndoOrdering(redoStack.Pop());
         }
 
         /// <summary>
         /// Performs the redo undo ordering.
         /// </summary>
-        /// <param name="descriptors">The descriptors.</param>
-        protected virtual void PerformRedoUndoOrdering(IEnumerable<string> descriptors)
+        /// <param name="membership">The ordered collection membership.</param>
+        private void PerformRedoUndoOrdering(CollectionMembershipHistorySnapshot membership)
         {
-            if (Mods != null)
+            if (Mods != null && membership != null)
             {
-                var virtualMods = SelectedMods?.Where(p => p.IsVirtual).ToList() ?? [];
                 BeforeUndoRedo?.Invoke(this, EventArgs.Empty);
                 skipModSelectionSave = true;
                 skipModCollectionSave = true;
                 reorderQueue.Clear();
                 reorderToken?.Cancel();
-                foreach (var item in Mods)
-                {
-                    item.IsSelected = false;
-                }
-
-                var mods = new List<IMod>();
-                foreach (var item in descriptors)
-                {
-                    var mod = Mods.FirstOrDefault(p => p.DescriptorFile.Equals(item, StringComparison.InvariantCultureIgnoreCase));
-                    mod ??= virtualMods.FirstOrDefault(p => p.DescriptorFile.Equals(item, StringComparison.InvariantCultureIgnoreCase));
-                    if (mod != null)
-                    {
-                        mod.IsSelected = true;
-                        mods.Add(mod);
-                    }
-                }
+                var collection = membership.CreateCollection(modCollectionService, SelectedModCollection);
+                var mods = modService.ResolveCollectionMods(Mods, collection, SelectedMods).ToList();
+                collectionModMembership.RestoreSelection(Mods, mods);
 
                 SetSelectedModsState(mods, ignoreStack: true);
                 if (!string.IsNullOrWhiteSpace(SelectedModCollection?.Name))
@@ -2230,7 +2216,7 @@ namespace IronyModManager.ViewModels.Controls
                 return;
             }
 
-            redoStack.Push(SelectedMods.Select(p => p.DescriptorFile).ToList());
+            redoStack.Push(CaptureCollectionMembership(SelectedMods));
             PerformRedoUndoOrdering(undoStack.Pop());
         }
 
@@ -2484,7 +2470,7 @@ namespace IronyModManager.ViewModels.Controls
                 modReconciliationCoordinator.RecordCollectionMods(SelectedModCollection.Name, oldMods);
                 if (!ignoreStack && !collectionModMembership.AreEquivalentInOrder(prevMods, selectedMods))
                 {
-                    undoStack.Push((prevMods ?? []).Select(p => p.DescriptorFile).ToList());
+                    undoStack.Push(CaptureCollectionMembership(prevMods));
                     redoStack.Clear();
                 }
             }
@@ -2504,6 +2490,109 @@ namespace IronyModManager.ViewModels.Controls
             if (canShutdownReorder)
             {
                 skipReorder = false;
+            }
+        }
+
+        /// <summary>
+        /// Captures persisted collection membership without retaining mutable runtime mod proxies.
+        /// </summary>
+        /// <param name="mods">The collection members.</param>
+        /// <returns>A scalar history snapshot.</returns>
+        private CollectionMembershipHistorySnapshot CaptureCollectionMembership(IEnumerable<IMod> mods)
+        {
+            return new CollectionMembershipHistorySnapshot(mods);
+        }
+
+        /// <summary>
+        /// Represents one runtime-only, ordered collection membership state.
+        /// </summary>
+        private sealed class CollectionMembershipHistorySnapshot
+        {
+            private readonly IReadOnlyList<Member> members;
+
+            /// <summary>
+            /// Initializes a new instance of the <see cref="CollectionMembershipHistorySnapshot"/> class.
+            /// </summary>
+            /// <param name="mods">The collection members to capture.</param>
+            public CollectionMembershipHistorySnapshot(IEnumerable<IMod> mods)
+            {
+                members = (mods ?? []).Select(p => new Member(p)).ToList();
+            }
+
+            /// <summary>
+            /// Creates a transient collection projection suitable for the canonical collection resolver.
+            /// </summary>
+            /// <param name="collectionService">The collection factory.</param>
+            /// <param name="selectedCollection">The currently selected collection.</param>
+            /// <returns>The persisted-membership projection.</returns>
+            public IModCollection CreateCollection(IModCollectionService collectionService, IModCollection selectedCollection)
+            {
+                var collection = collectionService.Create();
+                collection.Game = selectedCollection?.Game;
+                collection.Name = selectedCollection?.Name;
+                collection.Mods = members.Select(p => p.DescriptorFile).ToList();
+                collection.ModPaths = members.Select(p => p.FullPath).ToList();
+                collection.ModNames = members.Select(p => p.Name).ToList();
+                collection.ModIds = members.Select(p => p.CreateSourceInfo()).ToList();
+                return collection;
+            }
+
+            /// <summary>
+            /// Holds the persisted scalar identity and metadata for one collection member.
+            /// </summary>
+            private sealed class Member
+            {
+                private readonly long? remoteId;
+                private readonly ModSource source;
+
+                /// <summary>
+                /// Initializes a new instance of the <see cref="Member"/> class.
+                /// </summary>
+                /// <param name="mod">The mod to capture.</param>
+                public Member(IMod mod)
+                {
+                    DescriptorFile = mod?.DescriptorFile ?? string.Empty;
+                    FullPath = mod?.FullPath ?? string.Empty;
+                    Name = mod?.Name ?? string.Empty;
+                    remoteId = mod?.RemoteId;
+                    source = mod?.Source ?? ModSource.Local;
+                }
+
+                /// <summary>
+                /// Gets the descriptor identity.
+                /// </summary>
+                public string DescriptorFile { get; }
+
+                /// <summary>
+                /// Gets the persisted path.
+                /// </summary>
+                public string FullPath { get; }
+
+                /// <summary>
+                /// Gets the persisted display name.
+                /// </summary>
+                public string Name { get; }
+
+                /// <summary>
+                /// Creates the persisted source metadata for this member.
+                /// </summary>
+                /// <returns>The source metadata.</returns>
+                public IModCollectionSourceInfo CreateSourceInfo()
+                {
+                    var sourceInfo = DIResolver.Get<IModCollectionSourceInfo>();
+                    switch (source)
+                    {
+                        case ModSource.Steam:
+                            sourceInfo.SteamId = remoteId;
+                            break;
+
+                        case ModSource.Paradox:
+                            sourceInfo.ParadoxId = remoteId;
+                            break;
+                    }
+
+                    return sourceInfo;
+                }
             }
         }
 
