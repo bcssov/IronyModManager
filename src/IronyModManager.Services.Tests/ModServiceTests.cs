@@ -85,6 +85,19 @@ namespace IronyModManager.Services.Tests
                 fileSystemStateProbe.Object, gameStateSafetyService, () => new Mod());
         }
 
+        private static IMod CreateProxyMod(string descriptor = null, string path = null, string name = null,
+            ModSource source = ModSource.Local, long? remoteId = null, bool isVirtual = false)
+        {
+            var mod = new ProxyGenerator().CreateClassProxy<Mod>();
+            mod.DescriptorFile = descriptor;
+            mod.FullPath = path;
+            mod.Name = name;
+            mod.Source = source;
+            mod.RemoteId = remoteId;
+            mod.IsVirtual = isVirtual;
+            return mod;
+        }
+
         /// <summary>
         /// Setups the mock case.
         /// </summary>
@@ -1818,6 +1831,29 @@ namespace IronyModManager.Services.Tests
         }
 
         [Fact]
+        public void Removed_virtual_membership_should_not_return_after_refresh_or_installation()
+        {
+            var service = GetService(new Mock<IStorageProvider>(), new Mock<IModParser>(), new Mock<IReader>(),
+                new Mock<IMapper>(), new Mock<IModWriter>(), new Mock<IGameService>());
+            var first = new Mod { DescriptorFile = "mod/first.mod", FullPath = "first", Name = "First", Game = "game", IsValid = true };
+            var removed = new Mod { DescriptorFile = "mod/removed.mod", FullPath = "removed", Name = "Removed", Game = "game", IsValid = true };
+            var last = new Mod { DescriptorFile = "mod/last.mod", FullPath = "last", Name = "Last", Game = "game", IsValid = true };
+            var persistedAfterRemoval = new ModCollection
+            {
+                Game = "game",
+                Mods = [first.DescriptorFile, last.DescriptorFile],
+                ModPaths = [first.FullPath, last.FullPath],
+                ModNames = [first.Name, last.Name],
+                ModIds = [new ModCollectionSourceInfo(), new ModCollectionSourceInfo()]
+            };
+
+            service.ResolveCollectionMods([first, last], persistedAfterRemoval)
+                .Should().Equal(first, last);
+            service.ResolveCollectionMods([first, removed, last], persistedAfterRemoval)
+                .Should().Equal(first, last);
+        }
+
+        [Fact]
         public void Imported_collection_should_preserve_missing_members_and_use_persisted_path_fallback()
         {
             var installed = new Mod { DescriptorFile = "new/descriptor.mod", FullPath = "same/path", Name = "Installed", Game = "game" };
@@ -1860,6 +1896,65 @@ namespace IronyModManager.Services.Tests
             service.AreModDefinitionsEquivalent(mod, equivalent).Should().BeTrue();
             equivalent.Version = "2";
             service.AreModDefinitionsEquivalent(mod, equivalent).Should().BeFalse();
+        }
+
+        [Fact]
+        public void Mod_identity_should_match_distinct_castle_proxies_by_case_insensitive_descriptor()
+        {
+            var service = GetService(new Mock<IStorageProvider>(), new Mock<IModParser>(), new Mock<IReader>(),
+                new Mock<IMapper>(), new Mock<IModWriter>(), new Mock<IGameService>());
+            var virtualMod = CreateProxyMod("mod/example.mod", "old/path", "Virtual", isVirtual: true);
+            var realMod = CreateProxyMod("MOD/EXAMPLE.MOD", "new/path", "Real");
+
+            service.AreModIdentitiesEquivalent(virtualMod, realMod).Should().BeTrue();
+            virtualMod.Should().NotBeSameAs(realMod);
+            virtualMod.GetType().Should().NotBe(typeof(Mod));
+            realMod.GetType().Should().NotBe(typeof(Mod));
+        }
+
+        [Fact]
+        public void Mod_identity_should_use_case_insensitive_persisted_path_fallback()
+        {
+            var service = GetService(new Mock<IStorageProvider>(), new Mock<IModParser>(), new Mock<IReader>(),
+                new Mock<IMapper>(), new Mock<IModWriter>(), new Mock<IGameService>());
+            var missingDescriptor = CreateProxyMod(string.Empty, "mods/example", "First");
+            var reconstructed = CreateProxyMod(null, "MODS/EXAMPLE", "Second");
+            var staleDescriptor = CreateProxyMod("old/example.mod", "mods/example");
+            var currentDescriptor = CreateProxyMod("new/example.mod", "MODS/EXAMPLE");
+
+            service.AreModIdentitiesEquivalent(missingDescriptor, reconstructed).Should().BeTrue();
+            service.AreModIdentitiesEquivalent(staleDescriptor, currentDescriptor).Should().BeTrue();
+        }
+
+        [Fact]
+        public void Mod_identity_should_reject_name_and_remote_metadata_without_descriptor_or_path_match()
+        {
+            var service = GetService(new Mock<IStorageProvider>(), new Mock<IModParser>(), new Mock<IReader>(),
+                new Mock<IMapper>(), new Mock<IModWriter>(), new Mock<IGameService>());
+            var first = CreateProxyMod("first.mod", "first/path", "Same", ModSource.Steam, 42);
+            var second = CreateProxyMod("second.mod", "second/path", "Same", ModSource.Steam, 42);
+
+            service.AreModIdentitiesEquivalent(first, second).Should().BeFalse();
+        }
+
+        [Fact]
+        public void Mod_identity_should_ignore_nullable_parser_definition_fields_without_weakening_definition_comparison()
+        {
+            var service = GetService(new Mock<IStorageProvider>(), new Mock<IModParser>(), new Mock<IReader>(),
+                new Mock<IMapper>(), new Mock<IModWriter>(), new Mock<IGameService>());
+            var first = CreateProxyMod("same.mod", "first/path", "Same");
+            var second = CreateProxyMod("same.mod", "second/path", "Same");
+            first.Version = "1";
+            second.Version = "1";
+            first.Dependencies = null;
+            second.Dependencies = null;
+            first.ReplacePath = null;
+            second.ReplacePath = null;
+            first.UserDir = null;
+            second.UserDir = null;
+
+            service.AreModIdentitiesEquivalent(first, second).Should().BeTrue();
+            service.AreModDefinitionsEquivalent(first, second).Should().BeFalse();
         }
 
         [Fact]

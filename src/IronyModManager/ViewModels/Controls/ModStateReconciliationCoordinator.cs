@@ -71,7 +71,8 @@ namespace IronyModManager.ViewModels.Controls
         /// and collection state is reconciled from that result.
         /// </summary>
         public virtual async Task<bool> RevalidateConfigurationAsync(IGame game,
-            Func<GameStateLockInfo, Func<bool>, Task<bool>> refresh, Action reset, Action reconcile,
+            Func<GameStateLockInfo, Func<bool>, Task<bool>> refresh, Action reset,
+            Action<GameStateLockInfo> reconcile,
             Func<GameStateLockInfo, Func<bool>, Task<bool>> synchronize = null)
         {
             var revalidationLock = gameStateSafetyService.BeginRevalidation(game, "Filesystem configuration changed");
@@ -92,7 +93,7 @@ namespace IronyModManager.ViewModels.Controls
                 if (!gameStateSafetyService.CompleteRevalidation(game, revalidationLock, () =>
                     {
                         reset?.Invoke();
-                        reconcile();
+                        reconcile(revalidationLock);
                     }))
                 {
                     return false;

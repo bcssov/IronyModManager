@@ -20,18 +20,21 @@ namespace IronyModManager.ViewModels.Controls
         /// <summary>
         /// Gets whether collection reconciliation may use the current installed-mod projection.
         /// </summary>
-        public virtual bool CanReconcile(IGame game)
+        public virtual bool CanReconcile(IGame game, GameStateLockInfo revalidationLock = null)
         {
-            return !gameStateSafetyService.IsLocked(game);
+            return revalidationLock != null
+                ? gameStateSafetyService.IsCurrentRevalidation(game, revalidationLock)
+                : !gameStateSafetyService.IsLocked(game);
         }
 
         /// <summary>
         /// Resolves persisted collection members only when the filesystem state is authoritative.
         /// </summary>
-        public virtual bool TryResolve(IGame game, IEnumerable<IMod> installedMods, IModCollection collection, out IReadOnlyCollection<IMod> resolvedMods)
+        public virtual bool TryResolve(IGame game, IEnumerable<IMod> installedMods, IModCollection collection,
+            out IReadOnlyCollection<IMod> resolvedMods, GameStateLockInfo revalidationLock = null)
         {
             resolvedMods = [];
-            if (!CanReconcile(game))
+            if (!CanReconcile(game, revalidationLock))
             {
                 return false;
             }

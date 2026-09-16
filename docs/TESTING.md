@@ -36,9 +36,42 @@ The Irony-specific attribute has existed since 2020. Its `Reason` records the in
 
 Coverage is descriptive, not a contribution KPI. AI-assisted contributors are encouraged to add focused characterization or regression tests when they change unit-testable behavior. Do not remove or bypass an exclusion without understanding its Reason and intended testing layer. If actual tooling contradicts this documented policy, report the discrepancy rather than silently redefining the denominator.
 
-## Normal test execution
+## Validation scope
 
-Ordinary `dotnet test` runs tests but does not inherently collect coverage. Run the seven normal test projects individually because solution-level CLI traversal can produce incomplete or misleading discovery/output:
+Validation scope must match change scope. Relevant regression confidence matters more than maximizing the number of unrelated tests executed. A full regression gate required by an earlier high-blast-radius task does not automatically carry forward into a later narrow follow-up.
+
+### Focused development loop
+
+During implementation, run the directly affected tests first and iterate only on the affected test project or projects. Do not repeatedly rebuild or execute unrelated projects.
+
+### Narrow and local changes
+
+For a change confined to one feature, service, ViewModel, command, or semantic path:
+
+- run focused regression tests that exercise the changed behavior;
+- run the directly affected maintained test suite or suites;
+- run the smallest meaningful build needed to prove the affected production code compiles and, where relevant, composes.
+
+Do not run unrelated IO, Parser, Storage, UI, Services, or other suites merely to produce a repository-wide test count. Examples include a context-menu command correction, one membership or equality bug, localized ViewModel behavior, and a narrow service-method correction.
+
+### Cross-layer and shared-contract changes
+
+Broaden validation when a change affects shared interfaces or models, persistence contracts, DI/container composition, interception or proxy contracts, ReactiveUI coordination across layers, or code used materially by several maintained projects. Run every materially affected suite and use a full solution build when composition or the affected architecture requires it.
+
+### Full canonical validation
+
+Run all canonical maintained suites when scope justifies a repository-wide regression gate, including:
+
+- explicitly high-blast-radius tasks;
+- cross-cutting architecture changes;
+- filesystem trust or safety architecture;
+- broad persistence or domain changes;
+- an explicit owner or master-chat request for a full regression gate;
+- substantial work immediately before owner functional QA when broad qualification is warranted;
+- RC or release qualification;
+- evidence suggesting broader regression risk.
+
+When a full canonical pass is justified, run the seven maintained test projects individually because solution-level CLI traversal can produce incomplete or misleading discovery/output:
 
 - `IronyModManager.IO.Tests`;
 - `IronyModManager.Localization.Tests`;
@@ -49,6 +82,14 @@ Ordinary `dotnet test` runs tests but does not inherently collect coverage. Run 
 - `IronyModManager.Tests`.
 
 Use Release, one MSBuild worker, and the repository's `net10.0` test target for the .NET 10-based 1.28 release. `FUNCTIONAL_TEST` cases are maintainer investigation probes that may access installed games and machine-specific paths; their normal skipped state is intentional.
+
+### Build efficiency
+
+Run heavy build, test, coverage, and publish operations sequentially. Avoid rebuilding the same graph unnecessarily. When a required build has already produced usable test assemblies, subsequent runs may reuse those outputs where the tooling supports it. Do not repeatedly attempt `--no-build` runs for assemblies that have not been produced. Preserve validation confidence while avoiding pointless resource consumption.
+
+### Reporting
+
+For narrow tasks, report the focused tests executed, affected maintained-suite totals, and the relevant build result. A repository-wide test total is required only when a repository-wide canonical pass was justified and actually executed. Do not present the absence of a global total as incomplete validation for a narrow task.
 
 ## Visual Studio coverage
 

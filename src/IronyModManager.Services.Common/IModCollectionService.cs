@@ -174,6 +174,14 @@ namespace IronyModManager.Services.Common
         [GameStateSafetyExempt("Uses a local persistence guard and method-specific validation.")]
         bool Save(IModCollection collection);
 
+        /// <summary>
+        /// Saves an explicit user-authored collection membership change.
+        /// </summary>
+        /// <param name="collection">The collection.</param>
+        /// <returns><c>true</c> if the collection was saved; otherwise, <c>false</c>.</returns>
+        [GameStateSafetyExempt("Explicit collection membership changes remain available while locked.")]
+        bool SaveExplicitMembershipChange(IModCollection collection);
+
         #endregion Methods
     }
 }

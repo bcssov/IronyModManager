@@ -4,9 +4,11 @@
 
 using System.Linq;
 using AwesomeAssertions;
+using IronyModManager.DI;
 using IronyModManager.Models;
 using IronyModManager.Models.Common;
 using IronyModManager.Services.Common;
+using IronyModManager.Tests.Common;
 using IronyModManager.ViewModels.Controls;
 using Moq;
 using Xunit;
@@ -41,18 +43,60 @@ namespace IronyModManager.Tests.ViewModels.Controls
         [Fact]
         public void Authoritative_resolution_should_restore_only_persisted_collection_selection()
         {
-            var collectionMember = new Mod { DescriptorFile = "member", IsSelected = false };
-            var installedNonMember = new Mod { DescriptorFile = "non-member", IsSelected = true };
-            var virtualMember = new Mod { DescriptorFile = "missing", IsSelected = false, IsVirtual = true };
-            var membership = new CollectionModMembership(Mock.Of<IModService>());
+            DISetup.SetupContainer();
+            var collectionMember = CreateMod("member", "Same name");
+            var installedCollectionMember = CreateMod("member", "Same name");
+            var installedNonMember = CreateMod("non-member", isSelected: true);
+            var superficiallySimilarNonMember = CreateMod("different", "Same name", true);
+            var virtualMember = CreateMod("missing", isVirtual: true);
+            var modService = new Mock<IModService>();
+            modService.Setup(p => p.AreModIdentitiesEquivalent(It.IsAny<IMod>(), It.IsAny<IMod>()))
+                .Returns((IMod candidate, IMod requested) => candidate.DescriptorFile == requested.DescriptorFile);
+            var membership = new CollectionModMembership(modService.Object);
 
-            membership.RestoreSelection([collectionMember, installedNonMember], [collectionMember, virtualMember]);
+            membership.RestoreSelection([installedCollectionMember, installedNonMember, superficiallySimilarNonMember],
+                [collectionMember, virtualMember]);
 
             collectionMember.IsSelected.Should().BeTrue();
+            installedCollectionMember.IsSelected.Should().BeTrue();
             installedNonMember.IsSelected.Should().BeFalse();
+            superficiallySimilarNonMember.IsSelected.Should().BeFalse();
             virtualMember.IsSelected.Should().BeTrue();
+            collectionMember.GetType().Should().NotBe(typeof(Mod));
+            installedCollectionMember.GetType().Should().NotBe(typeof(Mod));
+            collectionMember.Should().NotBeSameAs(installedCollectionMember);
             membership.GetPersistedMembers([collectionMember, virtualMember])
                 .Should().Equal(collectionMember, virtualMember);
+            modService.Verify(p => p.AreModIdentitiesEquivalent(installedCollectionMember, collectionMember), Times.Once);
+        }
+
+        [Fact]
+        public void Ordered_projection_comparison_should_use_domain_equivalence()
+        {
+            DISetup.SetupContainer();
+            var first = CreateMod("first", "Same");
+            var second = CreateMod("second", "Second");
+            var equivalentFirst = CreateMod("first", "Same");
+            var equivalentSecond = CreateMod("second", "Second");
+            var similarButDifferent = CreateMod("different", "Same");
+            var modService = new Mock<IModService>();
+            modService.Setup(p => p.AreModIdentitiesEquivalent(It.IsAny<IMod>(), It.IsAny<IMod>()))
+                .Returns((IMod candidate, IMod requested) => candidate.DescriptorFile == requested.DescriptorFile);
+            var membership = new CollectionModMembership(modService.Object);
+
+            membership.AreEquivalentInOrder([first, second], [equivalentFirst, equivalentSecond]).Should().BeTrue();
+            membership.AreEquivalentInOrder([first, second], [similarButDifferent, equivalentSecond]).Should().BeFalse();
+            membership.AreEquivalentInOrder([first, second], [equivalentSecond, equivalentFirst]).Should().BeFalse();
+        }
+
+        private static IMod CreateMod(string descriptor, string name = null, bool isSelected = false, bool isVirtual = false)
+        {
+            var mod = DIResolver.Get<IMod>();
+            mod.DescriptorFile = descriptor;
+            mod.Name = name ?? descriptor;
+            mod.IsSelected = isSelected;
+            mod.IsVirtual = isVirtual;
+            return mod;
         }
 
         [Fact]
@@ -92,7 +136,7 @@ namespace IronyModManager.Tests.ViewModels.Controls
             var virtualMod = new Mod { DescriptorFile = "missing", IsVirtual = true };
             var reconstructedVirtualMod = new Mod { DescriptorFile = "missing", IsVirtual = true };
             var modService = new Mock<IModService>();
-            modService.Setup(p => p.AreModDefinitionsEquivalent(It.IsAny<IMod>(), It.IsAny<IMod>()))
+            modService.Setup(p => p.AreModIdentitiesEquivalent(It.IsAny<IMod>(), It.IsAny<IMod>()))
                 .Returns((IMod candidate, IMod requested) => candidate.DescriptorFile == requested.DescriptorFile);
 
             var membership = new CollectionModMembership(modService.Object);
@@ -100,6 +144,31 @@ namespace IronyModManager.Tests.ViewModels.Controls
             membership.RemoveVirtual([real, virtualMod], virtualMod).Should().Equal(real);
             membership.RemoveVirtual([real, virtualMod], real).Should().Equal(real, virtualMod);
             membership.RemoveVirtual([real, virtualMod], reconstructedVirtualMod).Should().Equal(real);
+            modService.Verify(p => p.AreModIdentitiesEquivalent(It.IsAny<IMod>(), reconstructedVirtualMod), Times.Exactly(2));
+            real.IsSelected.Should().BeTrue();
+        }
+
+        [Theory]
+        [InlineData(0)]
+        [InlineData(1)]
+        [InlineData(2)]
+        public void Explicit_remove_should_preserve_remaining_order_for_every_position(int removedIndex)
+        {
+            var mods = new[]
+            {
+                new Mod { DescriptorFile = "first", IsVirtual = true },
+                new Mod { DescriptorFile = "middle", IsVirtual = true },
+                new Mod { DescriptorFile = "last", IsVirtual = true }
+            };
+            var contextMod = new Mod { DescriptorFile = mods[removedIndex].DescriptorFile, IsVirtual = true };
+            var modService = new Mock<IModService>();
+            modService.Setup(p => p.AreModIdentitiesEquivalent(It.IsAny<IMod>(), It.IsAny<IMod>()))
+                .Returns((IMod candidate, IMod requested) => candidate.DescriptorFile == requested.DescriptorFile);
+
+            var result = new CollectionModMembership(modService.Object).RemoveVirtual(mods, contextMod);
+
+            result.Select(p => p.DescriptorFile).Should().Equal(
+                mods.Where((_, index) => index != removedIndex).Select(p => p.DescriptorFile));
         }
 
         [Fact]

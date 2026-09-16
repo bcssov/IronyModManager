@@ -31,6 +31,7 @@ namespace IronyModManager.IO.Images
 
         private const string DDSExtension = ".dds";
         private const string TGAExtension = ".tga";
+        private readonly IDdsCompatibilityReader ddsCompatibilityReader = new DdsCompatibilityReader();
         private readonly ILogger logger;
 
         #endregion Fields
@@ -147,7 +148,7 @@ namespace IronyModManager.IO.Images
             try
             {
                 Rewind(stream);
-                using var compatibilityImage = DdsCompatibilityReader.TryRead(stream);
+                using var compatibilityImage = ddsCompatibilityReader.TryRead(stream);
                 if (compatibilityImage != null)
                 {
                     return await WritePng(compatibilityImage);

@@ -161,6 +161,12 @@ namespace IronyModManager.Services.Common
         bool AreModDefinitionsEquivalent(IMod mod, IMod otherMod);
 
         /// <summary>
+        /// Determines whether two runtime mod models identify the same logical collection member.
+        /// </summary>
+        [GameStateSafetyExempt("Pure domain identity comparison.")]
+        bool AreModIdentitiesEquivalent(IMod mod, IMod otherMod);
+
+        /// <summary>
         /// Installs the mods asynchronous.
         /// </summary>
         /// <param name="statusToRetain">The status to retain.</param>

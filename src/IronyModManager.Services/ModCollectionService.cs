@@ -513,6 +513,18 @@ namespace IronyModManager.Services
                 return false;
             }
 
+            return SaveCollection(collection);
+        }
+
+        /// <inheritdoc />
+        public virtual bool SaveExplicitMembershipChange(IModCollection collection)
+        {
+            return SaveCollection(collection);
+        }
+
+        private bool SaveCollection(IModCollection collection)
+        {
+
             if (collection == null || string.IsNullOrWhiteSpace(collection.Game))
             {
                 throw new ArgumentNullException(nameof(collection));

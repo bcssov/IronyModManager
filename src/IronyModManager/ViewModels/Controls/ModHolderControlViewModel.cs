@@ -1070,7 +1070,8 @@ namespace IronyModManager.ViewModels.Controls
                     (revalidationLock, isCurrent) => InstalledMods.RevalidateModsAsync(
                         s.Game, revalidationLock, isCurrent),
                     s.CustomDirectoryChanged ? () => CollectionMods.Reset(true) : null,
-                    () => CollectionMods.SetMods(InstalledMods.Mods, InstalledMods.ActiveGame),
+                    revalidationLock => CollectionMods.SetMods(
+                        InstalledMods.Mods, InstalledMods.ActiveGame, revalidationLock),
                     s.CustomDirectoryChanged
                         ? (revalidationLock, _) => InstalledMods.SynchronizeNewModsAsync(s.Game, revalidationLock)
                         : null);

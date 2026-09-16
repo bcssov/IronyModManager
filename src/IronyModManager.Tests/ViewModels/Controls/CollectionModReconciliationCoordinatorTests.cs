@@ -58,5 +58,34 @@ namespace IronyModManager.Tests.ViewModels.Controls
             coordinator.ShouldShowOrdinaryWarning(game.Type, game.Type, collection.Name, ["missing.mod"]).Should().BeFalse();
             modService.Verify(p => p.ResolveCollectionMods(installed, collection, previous), Times.Once);
         }
+
+        [Fact]
+        public void Current_revalidation_should_allow_only_its_authoritative_locked_resolution()
+        {
+            var game = new Game { Type = "game" };
+            var current = new GameStateLockInfo
+                { GameType = game.Type, Reason = GameStateLockReason.ConfigurationChanged };
+            var stale = new GameStateLockInfo
+                { GameType = game.Type, Reason = GameStateLockReason.ConfigurationChanged };
+            var safety = new Mock<IGameStateSafetyService>();
+            safety.Setup(p => p.IsLocked(game)).Returns(true);
+            safety.Setup(p => p.IsCurrentRevalidation(game, It.IsAny<GameStateLockInfo>()))
+                .Returns((IGame _, GameStateLockInfo token) => ReferenceEquals(token, current));
+            var modService = new Mock<IModService>();
+            var coordinator = new CollectionModReconciliationCoordinator(modService.Object, safety.Object);
+            var collection = new ModCollection { Name = "Collection", Game = game.Type };
+            var installed = new List<IMod> { new Mod { Name = "Installed" } };
+            IReadOnlyCollection<IMod> expected = [installed[0]];
+            modService.Setup(p => p.ResolveCollectionMods(installed, collection, It.IsAny<IEnumerable<IMod>>()))
+                .Returns(expected);
+
+            coordinator.TryResolve(game, installed, collection, out var staleResult, stale).Should().BeFalse();
+            coordinator.TryResolve(game, installed, collection, out var currentResult, current).Should().BeTrue();
+
+            staleResult.Should().BeEmpty();
+            currentResult.Should().BeSameAs(expected);
+            modService.Verify(p => p.ResolveCollectionMods(installed, collection, It.IsAny<IEnumerable<IMod>>()),
+                Times.Once);
+        }
     }
 }

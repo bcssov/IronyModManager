@@ -592,22 +592,25 @@ namespace IronyModManager.Services
         /// <inheritdoc />
         public virtual IReadOnlyCollection<IMod> ResolveCollectionMods(IEnumerable<IMod> installedMods, IModCollection collection, IEnumerable<IMod> previousMods = null)
         {
+            if (collection == null)
+            {
+                return [];
+            }
+
             var installed = installedMods?.Where(p => !p.IsVirtual).ToList() ?? [];
             var previous = previousMods?.ToList() ?? [];
             var result = new List<IMod>();
-            var descriptors = collection?.Mods?.ToList() ?? [];
-            var paths = collection?.ModPaths?.ToList() ?? [];
-            var names = collection?.ModNames?.ToList() ?? [];
-            var ids = collection?.ModIds?.ToList() ?? [];
+            var descriptors = collection.Mods?.ToList() ?? [];
+            var paths = collection.ModPaths?.ToList() ?? [];
+            var names = collection.ModNames?.ToList() ?? [];
+            var ids = collection.ModIds?.ToList() ?? [];
 
             for (var index = 0; index < descriptors.Count; index++)
             {
                 var descriptor = descriptors[index] ?? string.Empty;
                 var path = paths.Count == descriptors.Count ? paths[index] ?? string.Empty : string.Empty;
-                var mod = installed.FirstOrDefault(p => string.Equals(p.DescriptorFile, descriptor, StringComparison.OrdinalIgnoreCase));
-                mod ??= !string.IsNullOrWhiteSpace(path)
-                    ? installed.FirstOrDefault(p => string.Equals(p.FullPath, path, StringComparison.OrdinalIgnoreCase))
-                    : null;
+                var mod = installed.FirstOrDefault(p => HasDescriptorIdentity(p, descriptor));
+                mod ??= installed.FirstOrDefault(p => HasPathIdentity(p, path));
 
                 if (mod != null)
                 {
@@ -616,10 +619,8 @@ namespace IronyModManager.Services
                     continue;
                 }
 
-                var oldMod = previous.FirstOrDefault(p => string.Equals(p.DescriptorFile, descriptor, StringComparison.OrdinalIgnoreCase));
-                oldMod ??= !string.IsNullOrWhiteSpace(path)
-                    ? previous.FirstOrDefault(p => string.Equals(p.FullPath, path, StringComparison.OrdinalIgnoreCase))
-                    : null;
+                var oldMod = previous.FirstOrDefault(p => HasDescriptorIdentity(p, descriptor));
+                oldMod ??= previous.FirstOrDefault(p => HasPathIdentity(p, path));
 
                 var sourceInfo = ids.Count == descriptors.Count ? ids[index] : null;
                 var virtualMod = modFactory();
@@ -1090,6 +1091,35 @@ namespace IronyModManager.Services
             return mod.DescriptorFile.Equals(otherMod.DescriptorFile, StringComparison.OrdinalIgnoreCase) && mod.Version.Equals(otherMod.Version) &&
                    mod.Name.Equals(otherMod.Name) && mod.Dependencies.ListsSame(otherMod.Dependencies) && mod.RemoteId.GetValueOrDefault().Equals(otherMod.RemoteId.GetValueOrDefault()) &&
                    mod.ReplacePath.ListsSame(otherMod.ReplacePath) && mod.UserDir.ListsSame(otherMod.UserDir) && (mod.JsonId ?? string.Empty).Equals(otherMod.JsonId ?? string.Empty, StringComparison.OrdinalIgnoreCase);
+        }
+
+        /// <inheritdoc />
+        public virtual bool AreModIdentitiesEquivalent(IMod mod, IMod otherMod)
+        {
+            if (mod == null || otherMod == null)
+            {
+                return false;
+            }
+
+            return HasDescriptorIdentity(mod, otherMod.DescriptorFile) || HasPathIdentity(mod, otherMod.FullPath);
+        }
+
+        /// <summary>
+        /// Determines whether a runtime mod matches a persisted descriptor identity.
+        /// </summary>
+        private bool HasDescriptorIdentity(IMod mod, string descriptor)
+        {
+            return mod != null && !string.IsNullOrWhiteSpace(descriptor) &&
+                   string.Equals(mod.DescriptorFile, descriptor, StringComparison.OrdinalIgnoreCase);
+        }
+
+        /// <summary>
+        /// Determines whether a runtime mod matches a persisted full-path identity.
+        /// </summary>
+        private bool HasPathIdentity(IMod mod, string path)
+        {
+            return mod != null && !string.IsNullOrWhiteSpace(path) &&
+                   string.Equals(mod.FullPath, path, StringComparison.OrdinalIgnoreCase);
         }
 
         /// <summary>

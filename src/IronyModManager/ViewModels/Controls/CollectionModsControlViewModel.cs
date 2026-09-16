@@ -861,14 +861,14 @@ namespace IronyModManager.ViewModels.Controls
                         {
                             if (enabled)
                             {
-                                if (!mods.Contains(item))
+                                if (!mods.Any(mod => modService.AreModIdentitiesEquivalent(mod, item)))
                                 {
                                     mods.Add(item);
                                 }
                             }
                             else
                             {
-                                mods.Remove(item);
+                                mods.RemoveAll(mod => modService.AreModIdentitiesEquivalent(mod, item));
                             }
                         }
                     }
@@ -996,9 +996,10 @@ namespace IronyModManager.ViewModels.Controls
         /// </summary>
         /// <param name="mods">The mods.</param>
         /// <param name="activeGame">The active game.</param>
-        public virtual void SetMods(IEnumerable<IMod> mods, IGame activeGame)
+        public virtual void SetMods(IEnumerable<IMod> mods, IGame activeGame,
+            GameStateLockInfo revalidationLock = null)
         {
-            if (!modReconciliationCoordinator.CanReconcile(activeGame))
+            if (!modReconciliationCoordinator.CanReconcile(activeGame, revalidationLock))
             {
                 return;
             }
@@ -1010,7 +1011,7 @@ namespace IronyModManager.ViewModels.Controls
 
             skipModCollectionSave = true;
             SubscribeToMods();
-            HandleModCollectionChange(!oldActiveGameType.Equals(currentActiveGameType));
+            HandleModCollectionChange(!oldActiveGameType.Equals(currentActiveGameType), revalidationLock);
             skipModCollectionSave = false;
         }
 
@@ -1046,7 +1047,7 @@ namespace IronyModManager.ViewModels.Controls
         protected virtual void AssignOptionalCollectionMetadata(IModCollection collection)
         {
             var persistedMods = collectionModMembership.GetPersistedMembers(SelectedMods);
-            collection.ModNames = persistedMods.Select(p => p.Name).ToList();
+            collection.ModNames = [.. persistedMods.Select(p => p.Name)];
             collection.ModIds = persistedMods.Select(p =>
             {
                 var result = DIResolver.Get<IModCollectionSourceInfo>();
@@ -1151,9 +1152,10 @@ namespace IronyModManager.ViewModels.Controls
         /// Handles the mod collection change.
         /// </summary>
         /// <param name="resetStack">if set to <c>true</c> [reset stack].</param>
-        protected virtual void HandleModCollectionChange(bool resetStack)
+        protected virtual void HandleModCollectionChange(bool resetStack,
+            GameStateLockInfo revalidationLock = null)
         {
-            if (!modReconciliationCoordinator.CanReconcile(activeGame ?? gameService.GetSelected()))
+            if (!modReconciliationCoordinator.CanReconcile(activeGame ?? gameService.GetSelected(), revalidationLock))
             {
                 return;
             }
@@ -1177,7 +1179,8 @@ namespace IronyModManager.ViewModels.Controls
             var existingCollection = modCollectionService.Get(SelectedModCollection?.Name ?? string.Empty);
             IReadOnlyCollection<IMod> resolvedMods = [];
             if (existingCollection?.Mods?.Count() > 0 && localMods != null &&
-                !modReconciliationCoordinator.TryResolve(activeGame, localMods, existingCollection, out resolvedMods))
+                !modReconciliationCoordinator.TryResolve(activeGame, localMods, existingCollection, out resolvedMods,
+                    revalidationLock))
             {
                 return;
             }
@@ -1773,18 +1776,7 @@ namespace IronyModManager.ViewModels.Controls
                 skipModCollectionSave = false;
             }).DisposeWith(disposables);
 
-            RemoveFromCollectionCommand = ReactiveCommand.Create(() =>
-            {
-                var virtualMod = ContextMenuMod;
-                if (virtualMod?.IsVirtual != true || SelectedMods?.Contains(virtualMod) != true)
-                {
-                    return;
-                }
-
-                SetSelectedModsState(collectionModMembership.RemoveVirtual(SelectedMods, virtualMod));
-                SaveSelectedCollection();
-                AllModsEnabled = AreAllRealModsEnabled();
-            }).DisposeWith(disposables);
+            InitializeRemoveFromCollectionCommand(disposables);
 
             OpenUrlCommand = ReactiveCommand.Create(() =>
             {
@@ -2349,7 +2341,7 @@ namespace IronyModManager.ViewModels.Controls
         /// <summary>
         /// Saves the selected collection.
         /// </summary>
-        protected virtual void SaveSelectedCollection()
+        protected virtual void SaveSelectedCollection(bool explicitMembershipChange = false)
         {
             var game = gameService.GetSelected()?.Type ?? string.Empty;
             var collection = modCollectionService.Create();
@@ -2371,7 +2363,10 @@ namespace IronyModManager.ViewModels.Controls
                 collection.MergedFolderName = SelectedModCollection.MergedFolderName;
                 collection.PatchModEnabled = SelectedModCollection.PatchModEnabled;
                 AssignOptionalCollectionMetadata(collection);
-                if (modCollectionService.Save(collection))
+                var saved = explicitMembershipChange
+                    ? modCollectionService.SaveExplicitMembershipChange(collection)
+                    : modCollectionService.Save(collection);
+                if (saved)
                 {
                     SelectedModCollection.Mods = collection.Mods.ToList();
                     SelectedModCollection.ModIds = collection.ModIds;
@@ -2379,6 +2374,28 @@ namespace IronyModManager.ViewModels.Controls
                     SelectedModCollection.ModPaths = collection.ModPaths;
                 }
             }
+        }
+
+        /// <summary>
+        /// Initializes the explicit virtual collection-member removal command.
+        /// </summary>
+        /// <param name="disposables">The activation disposables.</param>
+        protected virtual void InitializeRemoveFromCollectionCommand(CompositeDisposable disposables)
+        {
+            RemoveFromCollectionCommand = ReactiveCommand.Create(() =>
+            {
+                var virtualMod = ContextMenuMod;
+                var isCollectionMember = virtualMod != null && SelectedMods?.Any(p =>
+                    modService.AreModIdentitiesEquivalent(p, virtualMod)) == true;
+                if (virtualMod?.IsVirtual != true || !isCollectionMember)
+                {
+                    return;
+                }
+
+                SetSelectedModsState(collectionModMembership.RemoveVirtual(SelectedMods, virtualMod), evaluatePatchState: false);
+                SaveSelectedCollection(true);
+                AllModsEnabled = AreAllRealModsEnabled();
+            }).DisposeWith(disposables);
         }
 
         /// <summary>
@@ -2428,7 +2445,9 @@ namespace IronyModManager.ViewModels.Controls
         /// <param name="selectedMods">The selected mods.</param>
         /// <param name="canShutdownReorder">if set to <c>true</c> [can shutdown reorder].</param>
         /// <param name="ignoreStack">if set to <c>true</c> [ignore stack].</param>
-        protected virtual void SetSelectedModsState(IList<IMod> selectedMods, bool canShutdownReorder = true, bool ignoreStack = false)
+        /// <param name="evaluatePatchState">if set to <c>true</c>, evaluates the filesystem-backed patch state.</param>
+        protected virtual void SetSelectedModsState(IList<IMod> selectedMods, bool canShutdownReorder = true, bool ignoreStack = false,
+            bool evaluatePatchState = true)
         {
             if (canShutdownReorder)
             {
@@ -2463,7 +2482,7 @@ namespace IronyModManager.ViewModels.Controls
                 }
 
                 modReconciliationCoordinator.RecordCollectionMods(SelectedModCollection.Name, oldMods);
-                if (!ignoreStack && !prevMods.ListsSame(selectedMods))
+                if (!ignoreStack && !collectionModMembership.AreEquivalentInOrder(prevMods, selectedMods))
                 {
                     undoStack.Push((prevMods ?? []).Select(p => p.DescriptorFile).ToList());
                     redoStack.Clear();
@@ -2471,7 +2490,10 @@ namespace IronyModManager.ViewModels.Controls
             }
 
             ModifyCollection.SelectedMods = selectedMods;
-            HandleCollectionPatchStateAsync(SelectedModCollection?.Name).ConfigureAwait(false);
+            if (evaluatePatchState)
+            {
+                HandleCollectionPatchStateAsync(SelectedModCollection?.Name).ConfigureAwait(false);
+            }
             var order = 1;
             if (SelectedMods?.Count > 0)
             {

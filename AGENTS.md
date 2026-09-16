@@ -90,6 +90,8 @@ A normal full solution Build populates the independently built outputs and then 
 
 ## Dependency injection and refactoring
 
+Irony favors instance-based, replaceable behavioral code. Do not introduce static classes or static methods for domain, application, service, coordination, policy, reader, or reusable behavioral logic merely because an implementation is stateless. Use a DI/IoC-managed service when the dependency belongs to application composition, shared lifetime, interception, decoration, or graph-wide substitution; model a process-wide lifetime with the appropriate DI lifestyle, including singleton, rather than static state. A simple local collaborator may instead be held as an instance behind an abstraction when container registration adds no real value. Static usage is normally limited to extension methods, constants/resources, and narrowly justified true utilities. Existing static exceptions are evaluated individually and are not precedent for new service-like code. Do not turn this rule into opportunistic repository-wide static or composition rewrites.
+
 Irony's architecture deliberately adopted Simple Injector's explicit dependency style after extensive experience with Ninject. Explicit constructor dependencies remain valuable, but the architecture has never prohibited deferred creation or interception. It includes concepts such as:
 
 - `Func<T>`;
@@ -174,7 +176,9 @@ Honor both `System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverageAttribute` an
 
 Add focused characterization/regression tests for changed unit-testable behavior, not to chase an aggregate. Do not remove or bypass an exclusion without understanding its Reason and intended testing layer. Report a tooling/policy discrepancy rather than silently redefining the denominator.
 
-Visual Studio's xUnit integration is the historical primary runner. If solution-level CLI `dotnet test` exits successfully without useful discovery or test-result output, do not accept that as evidence that tests ran. Invoke the seven test projects explicitly:
+Validation must be proportional to the change scope. Do not mechanically run all canonical suites for narrow or local changes. Use focused tests and affected maintained suites; reserve full canonical validation for high-blast-radius, cross-cutting, explicitly owner-requested, or release-qualification work. The detailed and canonical validation-level policy is in [`docs/TESTING.md`](docs/TESTING.md).
+
+Visual Studio's xUnit integration is the historical primary runner. When a full canonical pass is justified, do not accept a solution-level CLI `dotnet test` result without useful discovery or test-result output as evidence that tests ran. Invoke the seven test projects explicitly:
 
 - `IronyModManager.IO.Tests`;
 - `IronyModManager.Localization.Tests`;

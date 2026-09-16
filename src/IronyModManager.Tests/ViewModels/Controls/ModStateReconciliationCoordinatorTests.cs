@@ -103,7 +103,7 @@ namespace IronyModManager.Tests.ViewModels.Controls
                     safety.IsLocked(game).Should().BeTrue();
                     order.Add("reset");
                 },
-                () =>
+                _ =>
                 {
                     safety.IsLocked(game).Should().BeTrue();
                     order.Add("reconcile");
@@ -132,7 +132,7 @@ namespace IronyModManager.Tests.ViewModels.Controls
             var refreshed = false;
 
             var result = await coordinator.RevalidateConfigurationAsync(new Game { Type = "game" },
-                (_, _) => Task.FromResult(refreshed = true), null, () => { });
+                (_, _) => Task.FromResult(refreshed = true), null, _ => { });
 
             result.Should().BeTrue();
             refreshed.Should().BeTrue();
@@ -150,7 +150,7 @@ namespace IronyModManager.Tests.ViewModels.Controls
             var reconciled = false;
 
             var result = await coordinator.RevalidateConfigurationAsync(new Game { Type = "game" },
-                (_, _) => Task.FromResult(refreshed = true), null, () => reconciled = true,
+                (_, _) => Task.FromResult(refreshed = true), null, _ => reconciled = true,
                 (_, _) => Task.FromResult(false));
 
             result.Should().BeFalse();
@@ -178,7 +178,7 @@ namespace IronyModManager.Tests.ViewModels.Controls
             var reconciled = false;
 
             var result = await coordinator.RevalidateConfigurationAsync(game, (_, _) => Task.FromResult(false),
-                () => reset = true, () => reconciled = true);
+                () => reset = true, _ => reconciled = true);
 
             result.Should().BeFalse();
             safety.IsLocked(game).Should().BeTrue();
@@ -239,10 +239,10 @@ namespace IronyModManager.Tests.ViewModels.Controls
 
             var first = coordinator.RevalidateConfigurationAsync(game,
                 (token, _) => refresh(token, firstCompletion),
-                () => effects.Add("first-reset"), () => effects.Add("first-reconcile"));
+                () => effects.Add("first-reset"), _ => effects.Add("first-reconcile"));
             var second = coordinator.RevalidateConfigurationAsync(game,
                 (token, _) => refresh(token, secondCompletion),
-                () => effects.Add("second-reset"), () => effects.Add("second-reconcile"));
+                () => effects.Add("second-reset"), _ => effects.Add("second-reconcile"));
 
             secondCompletion.SetResult(secondSucceeds);
             (await second).Should().Be(secondSucceeds);

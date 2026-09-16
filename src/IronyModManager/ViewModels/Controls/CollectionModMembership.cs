@@ -30,15 +30,27 @@ namespace IronyModManager.ViewModels.Controls
         /// </summary>
         public virtual void RestoreSelection(IEnumerable<IMod> installedMods, IEnumerable<IMod> collectionMembers)
         {
+            var members = collectionMembers?.ToList() ?? [];
             foreach (var mod in installedMods ?? [])
             {
-                mod.IsSelected = false;
+                mod.IsSelected = members.Any(member => modService.AreModIdentitiesEquivalent(mod, member));
             }
 
-            foreach (var mod in collectionMembers ?? [])
+            foreach (var mod in members)
             {
                 mod.IsSelected = true;
             }
+        }
+
+        /// <summary>
+        /// Determines whether two ordered collection projections represent the same logical mods.
+        /// </summary>
+        public virtual bool AreEquivalentInOrder(IEnumerable<IMod> mods, IEnumerable<IMod> otherMods)
+        {
+            var first = mods?.ToList() ?? [];
+            var second = otherMods?.ToList() ?? [];
+            return first.Count == second.Count && first.Zip(second).All(pair =>
+                modService.AreModIdentitiesEquivalent(pair.First, pair.Second));
         }
 
         /// <summary>
@@ -51,7 +63,7 @@ namespace IronyModManager.ViewModels.Controls
                 return mods?.ToList() ?? [];
             }
 
-            return mods?.Where(p => !modService.AreModDefinitionsEquivalent(p, mod)).ToList() ?? [];
+            return mods?.Where(p => !modService.AreModIdentitiesEquivalent(p, mod)).ToList() ?? [];
         }
 
         /// <summary>

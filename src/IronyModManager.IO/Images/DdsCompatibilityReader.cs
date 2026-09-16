@@ -22,7 +22,7 @@ namespace IronyModManager.IO.Images
     /// <summary>
     /// Handles the narrowly characterized valid DDS layouts which ImageMagick cannot dispatch.
     /// </summary>
-    internal static class DdsCompatibilityReader
+    internal class DdsCompatibilityReader : IDdsCompatibilityReader
     {
         #region Fields
 
@@ -53,7 +53,7 @@ namespace IronyModManager.IO.Images
         /// </summary>
         /// <param name="stream">The DDS stream.</param>
         /// <returns>An image when the exact compatibility layout matches; otherwise, <c>null</c>.</returns>
-        public static MagickImage TryRead(Stream stream)
+        public virtual MagickImage TryRead(Stream stream)
         {
             if (!stream.CanSeek)
             {
@@ -81,7 +81,7 @@ namespace IronyModManager.IO.Images
             return null;
         }
 
-        private static bool HasValidBaseHeader(byte[] header)
+        private bool HasValidBaseHeader(byte[] header)
         {
             return ReadUInt32(header, 0) == DdsMagic &&
                    ReadUInt32(header, 4) == DdsHeaderSize &&
@@ -90,7 +90,7 @@ namespace IronyModManager.IO.Images
                    ReadUInt32(header, 16) > 0;
         }
 
-        private static MagickImage ReadRgb555(Stream stream, byte[] header)
+        private MagickImage ReadRgb555(Stream stream, byte[] header)
         {
             if (ReadUInt32(header, 8) != Rgb555HeaderFlags ||
                 ReadUInt32(header, 24) != 0 ||
@@ -138,7 +138,7 @@ namespace IronyModManager.IO.Images
             return new MagickImage(rgba, settings);
         }
 
-        private static MagickImage ReadNormalizedDx10(Stream stream, byte[] header)
+        private MagickImage ReadNormalizedDx10(Stream stream, byte[] header)
         {
             var dx10Header = new byte[Dx10HeaderLength - LegacyHeaderLength];
             if (!TryReadExactly(stream, dx10Header))
@@ -191,12 +191,12 @@ namespace IronyModManager.IO.Images
             return new MagickImage(normalized);
         }
 
-        private static byte ExpandFiveBits(int value)
+        private byte ExpandFiveBits(int value)
         {
             return checked((byte)((value * 255 + 15) / 31));
         }
 
-        private static void EnsureRemainingLength(Stream stream, int length)
+        private void EnsureRemainingLength(Stream stream, int length)
         {
             if (stream.Length - stream.Position < length)
             {
@@ -204,7 +204,7 @@ namespace IronyModManager.IO.Images
             }
         }
 
-        private static int ToSupportedDimension(uint dimension)
+        private int ToSupportedDimension(uint dimension)
         {
             if (dimension == 0 || dimension > int.MaxValue)
             {
@@ -214,12 +214,12 @@ namespace IronyModManager.IO.Images
             return checked((int)dimension);
         }
 
-        private static uint ReadUInt32(byte[] data, int offset)
+        private uint ReadUInt32(byte[] data, int offset)
         {
             return BinaryPrimitives.ReadUInt32LittleEndian(data.AsSpan(offset, 4));
         }
 
-        private static void ReadExactly(Stream stream, Span<byte> buffer)
+        private void ReadExactly(Stream stream, Span<byte> buffer)
         {
             if (!TryReadExactly(stream, buffer))
             {
@@ -227,7 +227,7 @@ namespace IronyModManager.IO.Images
             }
         }
 
-        private static bool TryReadExactly(Stream stream, Span<byte> buffer)
+        private bool TryReadExactly(Stream stream, Span<byte> buffer)
         {
             var read = 0;
             while (read < buffer.Length)
