@@ -615,6 +615,7 @@ namespace IronyModManager.Services
             else
             {
                 var result = new ConcurrentBag<IMod>();
+                var aliases = StorageProvider.GetModAliases()?.Where(p => p.Game.Equals(game.Type, StringComparison.OrdinalIgnoreCase)).ToList() ?? [];
                 var installedMods = Reader.Read(Path.Combine(game.UserDirectory, game.ModDescriptorType == ModDescriptorType.DescriptorMod ? Shared.Constants.ModDirectory : Shared.Constants.JsonModDirectory));
                 if (installedMods?.Count() > 0)
                 {
@@ -667,6 +668,7 @@ namespace IronyModManager.Services
                         // Validate if path exists
                         mod.IsValid = File.Exists(mod.FullPath) || Directory.Exists(mod.FullPath);
                         mod.Game = game.Type;
+                        mod.NameOverride = aliases.FirstOrDefault(p => p.DescriptorFile.Equals(mod.DescriptorFile, StringComparison.OrdinalIgnoreCase))?.NameOverride;
                         result.Add(mod);
                     });
                 }
@@ -674,6 +676,21 @@ namespace IronyModManager.Services
                 Cache.Set(new CacheAddParameters<IEnumerable<IMod>> { Region = ModsCacheRegion, Prefix = game.Type, Key = GetModsCacheKey(ignorePatchMods), Value = [.. result] });
                 return result;
             }
+        }
+
+        /// <summary>
+        /// Applies the stored presentation override without changing canonical mod metadata.
+        /// </summary>
+        protected virtual void ApplyDisplayNameOverride(IMod mod)
+        {
+            if (mod == null || string.IsNullOrWhiteSpace(mod.Game) || string.IsNullOrWhiteSpace(mod.DescriptorFile))
+            {
+                return;
+            }
+
+            mod.NameOverride = StorageProvider.GetModAliases()?.FirstOrDefault(p =>
+                p.Game.Equals(mod.Game, StringComparison.OrdinalIgnoreCase) &&
+                p.DescriptorFile.Equals(mod.DescriptorFile, StringComparison.OrdinalIgnoreCase))?.NameOverride;
         }
 
         /// <summary>

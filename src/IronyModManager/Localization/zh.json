@@ -644,6 +644,16 @@
       "Message": "Irony 无法信任此游戏当前的文件系统或模组状态。为安全起见，修改操作已禁用。请修复提供程序或权限并重新启动 Irony，或者选择其他用户模组目录或自定义模组目录。恢复操作前会先验证新目录。"
     }
   },
+  "Mod_Alias": {
+    "Title": "模组别名",
+    "Alias": "别名",
+    "OriginalName": "原始名称",
+    "Set": "设置别名",
+    "Edit": "编辑别名",
+    "Clear": "清除别名",
+    "Save": "保存",
+    "Cancel": "取消"
+  },
   "Mod_App_Actions": {
     "OpenInSteam": "在 Steam 中打开",
     "Open": "打开模组链接",

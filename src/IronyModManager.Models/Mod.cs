@@ -42,6 +42,11 @@ namespace IronyModManager.Models
         /// </summary>
         private Shared.Version versionData;
 
+        /// <summary>
+        /// The user-defined presentation override.
+        /// </summary>
+        private string nameOverride;
+
         #endregion Fields
 
         #region Properties
@@ -70,6 +75,9 @@ namespace IronyModManager.Models
         /// </summary>
         /// <value>The descriptor file.</value>
         public virtual string DescriptorFile { get; set; }
+
+        /// <inheritdoc />
+        public virtual string DisplayName => string.IsNullOrWhiteSpace(NameOverride) ? Name : NameOverride;
 
         /// <summary>
         /// Gets or sets the name of the file.
@@ -132,6 +140,22 @@ namespace IronyModManager.Models
         /// <value>The name.</value>
         [DescriptorProperty("name")]
         public virtual string Name { get; set; }
+
+        /// <inheritdoc />
+        public virtual string NameOverride
+        {
+            get => nameOverride;
+            set
+            {
+                if (nameOverride == value)
+                {
+                    return;
+                }
+
+                nameOverride = value;
+                OnPropertyChanged(nameof(DisplayName));
+            }
+        }
 
         /// <summary>
         /// Gets or sets the order.

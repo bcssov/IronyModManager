@@ -645,6 +645,16 @@
       "Message": "Irony ne može vjerovati trenutačnom stanju datotečnog sustava ili modova za ovu igru. Izmjene su onemogućene radi sigurnosti. Ispravite pružatelja ili dozvole i ponovno pokrenite Irony ili odaberite drugu korisničku ili prilagođenu mapu modova. Nova mapa provjerit će se prije nastavka rada."
     }
   },
+  "Mod_Alias": {
+    "Title": "Nadimak moda",
+    "Alias": "Nadimak",
+    "OriginalName": "Izvorni naziv",
+    "Set": "Postavi nadimak",
+    "Edit": "Uredi nadimak",
+    "Clear": "Ukloni nadimak",
+    "Save": "Spremi",
+    "Cancel": "Odustani"
+  },
   "Mod_App_Actions": {
     "OpenInSteam": "Otvori u steamu",
     "Open": "Otvori adresu moda",

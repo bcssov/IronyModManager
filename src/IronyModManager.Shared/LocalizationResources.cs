@@ -865,6 +865,18 @@ namespace IronyModManager.Shared
                 public const string Message = Prefix + "Message";
             }
         }
+        public static class Mod_Alias
+        {
+            public const string Prefix = "Mod_Alias.";
+            public const string Title = Prefix + "Title";
+            public const string Alias = Prefix + "Alias";
+            public const string OriginalName = Prefix + "OriginalName";
+            public const string Set = Prefix + "Set";
+            public const string Edit = Prefix + "Edit";
+            public const string Clear = Prefix + "Clear";
+            public const string Save = Prefix + "Save";
+            public const string Cancel = Prefix + "Cancel";
+        }
         public static class Mod_App_Actions
         {
             public const string Prefix = "Mod_App_Actions.";

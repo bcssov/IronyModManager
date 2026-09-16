@@ -142,6 +142,21 @@ namespace IronyModManager.Storage.Tests
             result.FirstOrDefault().Name.Should().Be("fake");
         }
 
+        [Fact]
+        public void Should_store_and_return_mod_aliases_independently()
+        {
+            DISetup.SetupContainer();
+            var aliases = new List<IModAlias> { new ModAlias { Game = "game", DescriptorFile = "mod/example.mod", NameOverride = "Personal name" } };
+            var storage = new Storage(GetDbMock(), DIResolver.Get<IMapper>());
+
+            storage.SetModAliases(aliases).Should().BeTrue();
+            var result = storage.GetModAliases().Single();
+
+            result.Game.Should().Be("game");
+            result.DescriptorFile.Should().Be("mod/example.mod");
+            result.NameOverride.Should().Be("Personal name");
+        }
+
         /// <summary>
         /// Defines the test method Should_return_same_game_settings_object.
         /// </summary>

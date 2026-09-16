@@ -116,6 +116,15 @@ namespace IronyModManager.Storage
             }
         }
 
+        /// <inheritdoc />
+        public virtual IEnumerable<IModAlias> GetModAliases()
+        {
+            lock (dbLock)
+            {
+                return Mapper.Map<List<IModAlias>>(Database.ModAliases);
+            }
+        }
+
         /// <summary>
         /// Gets the notification positions.
         /// </summary>
@@ -337,6 +346,21 @@ namespace IronyModManager.Storage
                 if (IsDifferent(data, Database.ModCollection))
                 {
                     Database.ModCollection = data;
+                }
+
+                return true;
+            }
+        }
+
+        /// <inheritdoc />
+        public virtual bool SetModAliases(IEnumerable<IModAlias> modAliases)
+        {
+            lock (dbLock)
+            {
+                var data = Mapper.Map<List<IModAlias>>(modAliases);
+                if (IsDifferent(data, Database.ModAliases))
+                {
+                    Database.ModAliases = data;
                 }
 
                 return true;

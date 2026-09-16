@@ -1,0 +1,17 @@
+﻿<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        x:Class="IronyModManager.Views.ModAliasDialog"
+        CanResize="False"
+        SizeToContent="WidthAndHeight"
+        WindowStartupLocation="CenterOwner">
+    <Grid Margin="18" RowDefinitions="Auto,Auto,Auto,Auto" ColumnDefinitions="Auto,*">
+        <TextBlock Grid.Row="0" Grid.ColumnSpan="2" Text="{Binding OriginalNameLabel}" FontWeight="Bold" />
+        <TextBlock Grid.Row="1" Grid.ColumnSpan="2" Text="{Binding CanonicalName}" TextWrapping="Wrap" Margin="0,4,0,14" />
+        <TextBlock Grid.Row="2" Text="{Binding AliasLabel}" VerticalAlignment="Center" Margin="0,0,12,0" />
+        <TextBox x:Name="alias" Grid.Row="2" Grid.Column="1" Width="360" Text="{Binding Alias, Mode=TwoWay}" />
+        <StackPanel Grid.Row="3" Grid.ColumnSpan="2" Orientation="Horizontal" HorizontalAlignment="Right" Spacing="8" Margin="0,16,0,0">
+            <Button Content="{Binding SaveLabel}" Click="Save" IsDefault="True" />
+            <Button Content="{Binding CancelLabel}" Click="Cancel" />
+        </StackPanel>
+    </Grid>
+</Window>

@@ -100,6 +100,12 @@ namespace IronyModManager.Services.Common
         IMod FindMod(IEnumerable<IMod> collection, string text, bool reverse, int? skipIndex = null);
 
         /// <summary>
+        /// Sets or clears an Irony-local display-name override for a mod.
+        /// </summary>
+        [GameStateSafetyExempt("User preference operation.")]
+        bool SetModAlias(IMod mod, string nameOverride);
+
+        /// <summary>
         /// Gets the available mods.
         /// </summary>
         /// <param name="game">The game.</param>

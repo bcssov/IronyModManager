@@ -645,6 +645,16 @@
       "Message": "Irony kann dem aktuellen Dateisystem- oder Mod-Status dieses Spiels nicht vertrauen. Änderungsoperationen sind aus Sicherheitsgründen deaktiviert. Beheben Sie den nicht verfügbaren Anbieter oder die Berechtigungen und starten Sie Irony neu, oder wählen Sie ein anderes Benutzer- bzw. benutzerdefiniertes Mod-Verzeichnis. Ein geändertes Verzeichnis wird geprüft, bevor Vorgänge fortgesetzt werden."
     }
   },
+  "Mod_Alias": {
+    "Title": "Mod-Alias",
+    "Alias": "Alias",
+    "OriginalName": "Originalname",
+    "Set": "Alias festlegen",
+    "Edit": "Alias bearbeiten",
+    "Clear": "Alias löschen",
+    "Save": "Speichern",
+    "Cancel": "Abbrechen"
+  },
   "Mod_App_Actions": {
     "OpenInSteam": "In Steam Öffnen",
     "Open": "Mod-URL Öffnen",

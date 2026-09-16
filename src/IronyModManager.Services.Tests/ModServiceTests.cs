@@ -82,7 +82,7 @@ namespace IronyModManager.Services.Tests
 
             gameStateSafetyService ??= new GameStateSafetyService(fileSystemStateProbe.Object, Mock.Of<ILogger>());
             return new ModService(languageService?.Object, parser?.Object, null, cache ?? new Cache(), null, reader.Object, modParser.Object, modWriter.Object, gameService.Object, storageProvider.Object, mapper.Object,
-                fileSystemStateProbe.Object, gameStateSafetyService, () => new Mod());
+                fileSystemStateProbe.Object, gameStateSafetyService, () => new Mod(), () => Mock.Of<IModAlias>());
         }
 
         private static IMod CreateProxyMod(string descriptor = null, string path = null, string name = null,
@@ -1406,6 +1406,61 @@ namespace IronyModManager.Services.Tests
             result.FirstOrDefault().Name.Should().Be("test 3");
         }
 
+        [Fact]
+        public void Alias_name_filters_preserve_positive_negative_and_find_parity()
+        {
+            var storageProvider = new Mock<IStorageProvider>();
+            var modParser = new Mock<IModParser>();
+            var reader = new Mock<IReader>();
+            var modWriter = new Mock<IModWriter>();
+            var gameService = new Mock<IGameService>();
+            var mapper = new Mock<IMapper>();
+            var parser = new Mock<IParser>();
+            var languageService = new Mock<ILanguagesService>();
+            var service = GetService(storageProvider, modParser, reader, mapper, modWriter, gameService, parser, languageService);
+            var canonical = new Mod { Name = "Canonical frontier", NameOverride = "Favorite", RemoteId = 7 };
+            var aliasOnly = new Mod { Name = "Unrelated", NameOverride = "Frontier reserve", RemoteId = 8 };
+            var rejectedByAlias = new Mod { Name = "Canonical frontier", NameOverride = "Deprecated frontier", RemoteId = 9 };
+            var mods = new List<IMod> { canonical, aliasOnly, rejectedByAlias };
+            languageService.Setup(p => p.GetSelected()).Returns(new Language { Abrv = "en" });
+            parser.Setup(p => p.Parse(It.IsAny<string>(), It.IsAny<string>())).Returns(new SearchParserResult
+            {
+                Name = [new NameFilterResult("frontier"), new NameFilterResult("deprecated") { Negate = true }]
+            });
+
+            var filtered = service.FilterMods(mods, "frontier -deprecated").ToList();
+
+            filtered.Should().Equal(canonical, aliasOnly);
+            service.FindMod(mods, "frontier -deprecated", false).Should().BeSameAs(canonical);
+            service.FindMod(mods, "frontier -deprecated", false, 1).Should().BeSameAs(aliasOnly);
+        }
+
+        [Fact]
+        public void Set_alias_uses_game_and_descriptor_identity_without_modifying_metadata()
+        {
+            var storageProvider = new Mock<IStorageProvider>();
+            var aliases = new List<IModAlias>();
+            storageProvider.Setup(p => p.GetModAliases()).Returns(() => aliases.ToList());
+            storageProvider.Setup(p => p.SetModAliases(It.IsAny<IEnumerable<IModAlias>>())).Callback((IEnumerable<IModAlias> value) => aliases = value.ToList()).Returns(true);
+            var service = GetService(storageProvider, new Mock<IModParser>(), new Mock<IReader>(), new Mock<IMapper>(), new Mock<IModWriter>(), new Mock<IGameService>());
+            var mod = new Mod { Game = "game-a", DescriptorFile = "mod/example.mod", Name = "Canonical", RemoteId = 42, Source = ModSource.Steam };
+            var sameNameDifferentIdentity = new Mod { Game = "game-b", DescriptorFile = "mod/example.mod", Name = "Canonical", RemoteId = 42, Source = ModSource.Steam };
+
+            service.SetModAlias(mod, "  Personal name  ").Should().BeTrue();
+            service.SetModAlias(sameNameDifferentIdentity, "Other game").Should().BeTrue();
+            service.SetModAlias(mod, "Edited name").Should().BeTrue();
+
+            mod.Name.Should().Be("Canonical");
+            mod.RemoteId.Should().Be(42);
+            mod.Source.Should().Be(ModSource.Steam);
+            mod.DisplayName.Should().Be("Edited name");
+            aliases.Should().HaveCount(2);
+            aliases.Single(p => p.Game == "game-a").NameOverride.Should().Be("Edited name");
+            service.SetModAlias(mod, null).Should().BeTrue();
+            aliases.Should().ContainSingle(p => p.Game == "game-b");
+            mod.DisplayName.Should().Be(mod.Name);
+        }
+
         /// <summary>
         /// Defines the test method Should_find_mods.
         /// </summary>
@@ -1810,6 +1865,7 @@ namespace IronyModManager.Services.Tests
                 ModIds = [new ModCollectionSourceInfo(), new ModCollectionSourceInfo { SteamId = 42 }]
             };
             var service = GetService(storageProvider, modParser, reader, mapper, modWriter, gameService);
+            storageProvider.Setup(p => p.GetModAliases()).Returns([Mock.Of<IModAlias>(p => p.Game == "game" && p.DescriptorFile == "mod/missing.mod" && p.NameOverride == "Missing alias")]);
 
             var missingResult = service.ResolveCollectionMods([first], collection);
 
@@ -1824,6 +1880,7 @@ namespace IronyModManager.Services.Tests
             virtualMod.Name.Should().Be("Missing title");
             virtualMod.RemoteId.Should().Be(42);
             virtualMod.Source.Should().Be(ModSource.Steam);
+            virtualMod.DisplayName.Should().Be("Missing alias");
 
             var restoredResult = service.ResolveCollectionMods([first, restored], collection, missingResult);
             restoredResult.Should().Equal(first, restored);

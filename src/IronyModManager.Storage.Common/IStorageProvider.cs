@@ -49,6 +49,11 @@ namespace IronyModManager.Storage.Common
         IEnumerable<IModCollection> GetModCollections();
 
         /// <summary>
+        /// Gets Irony-local mod display-name preferences.
+        /// </summary>
+        IEnumerable<IModAlias> GetModAliases();
+
+        /// <summary>
         /// Gets the notification positions.
         /// </summary>
         /// <returns>IEnumerable&lt;INotificationPositionType&gt;.</returns>
@@ -120,6 +125,11 @@ namespace IronyModManager.Storage.Common
         /// <param name="modCollections">The mod collections.</param>
         /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
         bool SetModCollections(IEnumerable<IModCollection> modCollections);
+
+        /// <summary>
+        /// Sets Irony-local mod display-name preferences.
+        /// </summary>
+        bool SetModAliases(IEnumerable<IModAlias> modAliases);
 
         /// <summary>
         /// Sets the preferences.

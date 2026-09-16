@@ -55,7 +55,8 @@ namespace IronyModManager.Services
         IMapper mapper,
         IFileSystemStateProbe fileSystemStateProbe,
         IGameStateSafetyService gameStateSafetyService,
-        Func<IMod> modFactory) : ModBaseService(cache, definitionInfoProviders, reader, modWriter, modParser, gameService, storageProvider, mapper), IModService
+        Func<IMod> modFactory,
+        Func<IModAlias> modAliasFactory) : ModBaseService(cache, definitionInfoProviders, reader, modWriter, modParser, gameService, storageProvider, mapper), IModService
     {
         #region Fields
 
@@ -88,6 +89,11 @@ namespace IronyModManager.Services
         /// Creates runtime mod representations.
         /// </summary>
         private readonly Func<IMod> modFactory = modFactory;
+
+        /// <summary>
+        /// Creates persisted alias preferences.
+        /// </summary>
+        private readonly Func<IModAlias> modAliasFactory = modAliasFactory;
 
         /// <summary>
         /// The search parser
@@ -128,6 +134,43 @@ namespace IronyModManager.Services
             }
 
             return string.Empty;
+        }
+
+        /// <inheritdoc />
+        public virtual bool SetModAlias(IMod mod, string nameOverride)
+        {
+            if (mod == null || string.IsNullOrWhiteSpace(mod.Game) || string.IsNullOrWhiteSpace(mod.DescriptorFile))
+            {
+                return false;
+            }
+
+            var aliases = StorageProvider.GetModAliases()?.ToList() ?? [];
+            var existing = aliases.FirstOrDefault(p => p.Game.Equals(mod.Game, StringComparison.OrdinalIgnoreCase) &&
+                                                       p.DescriptorFile.Equals(mod.DescriptorFile, StringComparison.OrdinalIgnoreCase));
+            var value = string.IsNullOrWhiteSpace(nameOverride) ? null : nameOverride.Trim();
+            if (existing != null)
+            {
+                if (value == null)
+                {
+                    aliases.Remove(existing);
+                }
+                else
+                {
+                    existing.NameOverride = value;
+                }
+            }
+            else if (value != null)
+            {
+                var alias = modAliasFactory();
+                alias.Game = mod.Game;
+                alias.DescriptorFile = mod.DescriptorFile;
+                alias.NameOverride = value;
+                aliases.Add(alias);
+            }
+
+            StorageProvider.SetModAliases(aliases);
+            mod.NameOverride = value;
+            return true;
         }
 
         /// <summary>
@@ -313,7 +356,7 @@ namespace IronyModManager.Services
             var result = (hasAnyFilter
                     ? collection.Where(p =>
                     {
-                        var nameMatch = hasName && matches(p.Name, namePos, nameNeg);
+                        var nameMatch = hasName && MatchesName(p, namePos, nameNeg);
                         var idStr = p.RemoteId?.ToString();
                         var idMatch = hasId && matches(idStr, idPos, idNeg);
                         return nameMatch || idMatch;
@@ -378,7 +421,7 @@ namespace IronyModManager.Services
             result = (hasAnyFilter
                     ? result.Where(p =>
                     {
-                        var nameMatch = hasName && matches(p.Name, namePos, nameNeg);
+                        var nameMatch = hasName && MatchesName(p, namePos, nameNeg);
                         var idStr = p.RemoteId?.ToString();
                         var idMatch = hasId && matches(idStr, idPos, idNeg);
                         return nameMatch || idMatch;
@@ -641,6 +684,7 @@ namespace IronyModManager.Services
                 virtualMod.RemoteId = sourceInfo?.SteamId ?? sourceInfo?.ParadoxId ?? oldMod?.RemoteId;
                 virtualMod.Source = sourceInfo?.SteamId != null ? ModSource.Steam : sourceInfo?.ParadoxId != null ? ModSource.Paradox : oldMod?.Source ?? ModSource.Local;
                 virtualMod.Version = oldMod?.Version ?? string.Empty;
+                ApplyDisplayNameOverride(virtualMod);
                 result.Add(virtualMod);
             }
 
@@ -1433,6 +1477,18 @@ namespace IronyModManager.Services
                 SourceType.Steam => ModSource.Steam,
                 _ => ModSource.Local
             };
+        }
+
+        /// <summary>
+        /// Evaluates the two representations of Irony's logical name-search field.
+        /// A negative term rejects a mod when it appears in either canonical or display name.
+        /// </summary>
+        protected static bool MatchesName(IMod mod, IReadOnlyList<string> positive, IReadOnlyList<string> negative)
+        {
+            var values = new[] { mod?.Name, mod?.NameOverride }.Where(p => !string.IsNullOrWhiteSpace(p)).ToList();
+            var positiveMatches = positive.Count == 0 || positive.Any(term => values.Any(value => value.Contains(term, StringComparison.OrdinalIgnoreCase)));
+            var negativeMatches = negative.All(term => values.All(value => !value.Contains(term, StringComparison.OrdinalIgnoreCase)));
+            return positiveMatches && negativeMatches;
         }
 
         #endregion Methods

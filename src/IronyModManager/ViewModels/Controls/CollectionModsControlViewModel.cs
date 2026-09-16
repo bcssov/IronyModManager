@@ -838,6 +838,28 @@ namespace IronyModManager.ViewModels.Controls
         }
 
         /// <summary>
+        /// Sets or clears the local display-name override for the context-menu mod.
+        /// This deliberately does not alter collection membership or undo/redo state.
+        /// </summary>
+        /// <param name="nameOverride">The requested alias, or null/whitespace to clear it.</param>
+        /// <returns><c>true</c> when the mod has a stable alias identity.</returns>
+        public virtual bool SetContextMenuModAlias(string nameOverride)
+        {
+            if (ContextMenuMod == null || !modService.SetModAlias(ContextMenuMod, nameOverride))
+            {
+                return false;
+            }
+
+            foreach (var mod in Mods?.Where(p => p.Game.Equals(ContextMenuMod.Game, StringComparison.OrdinalIgnoreCase) &&
+                                                 p.DescriptorFile.Equals(ContextMenuMod.DescriptorFile, StringComparison.OrdinalIgnoreCase)) ?? [])
+            {
+                mod.NameOverride = ContextMenuMod.NameOverride;
+            }
+
+            return true;
+        }
+
+        /// <summary>
         /// Handles enable all toggled.
         /// </summary>
         /// <param name="toggledState">if set to <c>true</c> [toggled state].</param>

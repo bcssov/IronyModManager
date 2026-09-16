@@ -645,6 +645,16 @@
       "Message": "Irony ne peut pas considérer comme fiable l'état actuel du système de fichiers ou des mods de ce jeu. Les opérations de modification sont désactivées par sécurité. Corrigez le fournisseur ou les autorisations puis redémarrez Irony, ou choisissez un autre dossier utilisateur ou de mods personnalisé. Le nouveau dossier sera validé avant la reprise des opérations."
     }
   },
+  "Mod_Alias": {
+    "Title": "Alias du mod",
+    "Alias": "Alias",
+    "OriginalName": "Nom d’origine",
+    "Set": "Définir l’alias",
+    "Edit": "Modifier l’alias",
+    "Clear": "Effacer l’alias",
+    "Save": "Enregistrer",
+    "Cancel": "Annuler"
+  },
   "Mod_App_Actions": {
     "OpenInSteam": "Ouvrir dans Steam",
     "Open": "Ouvrir l'URL du mod",

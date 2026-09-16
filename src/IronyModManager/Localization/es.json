@@ -645,6 +645,16 @@
       "Message": "Irony no puede confiar en el estado actual del sistema de archivos o de los mods de este juego. Las operaciones de modificación están deshabilitadas por seguridad. Corrija el proveedor o los permisos y reinicie Irony, o elija otro directorio de usuario o de mods personalizado. El nuevo directorio se validará antes de reanudar las operaciones."
     }
   },
+  "Mod_Alias": {
+    "Title": "Alias del mod",
+    "Alias": "Alias",
+    "OriginalName": "Nombre original",
+    "Set": "Establecer alias",
+    "Edit": "Editar alias",
+    "Clear": "Borrar alias",
+    "Save": "Guardar",
+    "Cancel": "Cancelar"
+  },
   "Mod_App_Actions": {
     "OpenInSteam": "Abrir en Steam",
     "Open": "Abrir Mod Url",

@@ -507,6 +507,27 @@ namespace IronyModManager.ViewModels.Controls
         }
 
         /// <summary>
+        /// Sets or clears the local display-name override for the context-menu mod.
+        /// </summary>
+        /// <param name="nameOverride">The requested alias, or null/whitespace to clear it.</param>
+        /// <returns><c>true</c> when the mod has a stable alias identity.</returns>
+        public virtual bool SetContextMenuModAlias(string nameOverride)
+        {
+            if (ContextMenuMod == null || !modService.SetModAlias(ContextMenuMod, nameOverride))
+            {
+                return false;
+            }
+
+            foreach (var mod in Mods?.Where(p => p.Game.Equals(ContextMenuMod.Game, StringComparison.OrdinalIgnoreCase) &&
+                                                 p.DescriptorFile.Equals(ContextMenuMod.DescriptorFile, StringComparison.OrdinalIgnoreCase)) ?? [])
+            {
+                mod.NameOverride = ContextMenuMod.NameOverride;
+            }
+
+            return true;
+        }
+
+        /// <summary>
         /// Called when [locale changed].
         /// </summary>
         /// <param name="newLocale">The new locale.</param>

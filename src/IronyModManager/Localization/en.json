@@ -645,6 +645,16 @@
       "Message": "Irony cannot trust the current filesystem or mod state for this game. Modifying operations are disabled for safety. Fix the unavailable provider or permissions and restart Irony, or choose a different user/custom mod directory. A changed directory is validated before operations resume."
     }
   },
+  "Mod_Alias": {
+    "Title": "Mod alias",
+    "Alias": "Alias",
+    "OriginalName": "Original name",
+    "Set": "Set alias",
+    "Edit": "Edit alias",
+    "Clear": "Clear alias",
+    "Save": "Save",
+    "Cancel": "Cancel"
+  },
   "Mod_App_Actions": {
     "OpenInSteam": "Open In Steam",
     "Open": "Open Mod Url",

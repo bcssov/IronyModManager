@@ -45,6 +45,16 @@ namespace IronyModManager.Models.Common
         string DescriptorFile { get; set; }
 
         /// <summary>
+        /// Gets the user-facing display name. This is a presentation value and does not replace <see cref="IModObject.Name"/>.
+        /// </summary>
+        string DisplayName { get; }
+
+        /// <summary>
+        /// Gets or sets the user-defined display-name override.
+        /// </summary>
+        string NameOverride { get; set; }
+
+        /// <summary>
         /// Gets or sets the files.
         /// </summary>
         /// <value>The files.</value>
