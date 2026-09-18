@@ -4,7 +4,7 @@
 // Created          : 05-30-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-25-2024
+// Last Modified On : 09-18-2026
 // ***********************************************************************
 // <copyright file="OptionsControlView.xaml.cs" company="Mario">
 //     Mario
@@ -23,11 +23,11 @@ using Avalonia.Controls.Html;
 using Avalonia.Controls.Primitives;
 using Avalonia.Markup.Xaml;
 using Avalonia.Threading;
+using Avalonia.VisualTree;
 using IronyModManager.Common;
 using IronyModManager.Common.Events;
 using IronyModManager.Common.Views;
 using IronyModManager.DI;
-using IronyModManager.Models.Common;
 using IronyModManager.Platform.Fonts;
 using IronyModManager.Platform.Themes;
 using IronyModManager.Services.Common;
@@ -45,6 +45,25 @@ namespace IronyModManager.Views.Controls
     [ExcludeFromCoverage("This should be tested via functional testing.")]
     public class OptionsControlView : BaseControl<OptionsControlViewModel>
     {
+        #region Fields
+
+        /// <summary>
+        /// The popup viewport margin
+        /// </summary>
+        private const double PopupViewportMargin = 16;
+
+        /// <summary>
+        /// The preferred popup height
+        /// </summary>
+        private const double PreferredPopupHeight = 470;
+
+        /// <summary>
+        /// The preferred popup width
+        /// </summary>
+        private const double PreferredPopupWidth = 760;
+
+        #endregion Fields
+
         #region Constructors
 
         /// <summary>
@@ -66,8 +85,43 @@ namespace IronyModManager.Views.Controls
         protected override void OnActivated(CompositeDisposable disposables)
         {
             var popup = this.FindControl<Popup>("popup");
+            var optionsSurface = this.FindControl<Border>("optionsSurface");
             var changelog = this.FindControl<HtmlLabel>("changelog");
             var md = new MarkdownSharp.Markdown();
+
+            void updatePopupSize()
+            {
+                if (this.GetVisualRoot() is not Window window)
+                {
+                    return;
+                }
+
+                var screen = window.Screens.ScreenFromVisual(window);
+                var scaling = window.PlatformImpl?.RenderScaling ?? screen.PixelDensity;
+                var clientSize = window.ClientSize;
+                var availableWidth = clientSize.Width;
+                var availableHeight = clientSize.Height;
+                if (screen != null && scaling > 0)
+                {
+                    var workingArea = screen.WorkingArea;
+                    var logicalScreenWidth = workingArea.Width / scaling;
+                    var logicalScreenHeight = workingArea.Height / scaling;
+                    availableWidth = availableWidth > 0 ? Math.Min(availableWidth, logicalScreenWidth) : logicalScreenWidth;
+                    availableHeight = availableHeight > 0 ? Math.Min(availableHeight, logicalScreenHeight) : logicalScreenHeight;
+                }
+
+                var width = Math.Max(0, Math.Min(PreferredPopupWidth, availableWidth - (PopupViewportMargin * 2)));
+                var height = Math.Max(0, Math.Min(PreferredPopupHeight, availableHeight - (PopupViewportMargin * 2)));
+                if (double.IsNaN(optionsSurface.Width) || Math.Abs(optionsSurface.Width - width) > 0.5)
+                {
+                    optionsSurface.Width = width;
+                }
+
+                if (double.IsNaN(optionsSurface.Height) || Math.Abs(optionsSurface.Height - height) > 0.5)
+                {
+                    optionsSurface.Height = height;
+                }
+            }
 
             string getVersionHtml()
             {
@@ -88,7 +142,7 @@ namespace IronyModManager.Views.Controls
                 var themeManager = DIResolver.Get<IThemeManager>();
                 var fontResolver = DIResolver.Get<IFontFamilyManager>();
                 var font = fontResolver.ResolveFontFamily(language!.Font);
-                changelog.BaseStylesheet = themeManager.GetHtmlBaseCSS($"width:660px; font-family:\"{font.Name}\";");
+                changelog.BaseStylesheet = themeManager.GetHtmlBaseCSS($"width:100%; font-family:\"{font.Name}\";");
                 changelog.Text = getVersionHtml();
             }
 
@@ -103,6 +157,19 @@ namespace IronyModManager.Views.Controls
             {
                 ViewModel!.ForceClose();
             };
+            EventHandler popupOpened = (_, _) => updatePopupSize();
+            EventHandler layoutUpdated = (_, _) =>
+            {
+                updatePopupSize();
+            };
+            popup.Opened += popupOpened;
+            LayoutUpdated += layoutUpdated;
+            Disposable.Create(() =>
+            {
+                popup.Opened -= popupOpened;
+                LayoutUpdated -= layoutUpdated;
+            }).DisposeWith(disposables);
+            updatePopupSize();
             MessageBus.Current.Listen<ForceClosePopulsEventArgs>()
                 .SubscribeObservable(_ =>
                 {
