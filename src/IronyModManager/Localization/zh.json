@@ -686,7 +686,29 @@
   "Filter": {
     "Clear": "×",
     "UpArrow": "▲",
-    "DownArrow": "▼"
+    "DownArrow": "▼",
+    "Advanced": {
+      "Title": "高级筛选",
+      "Name": "名称 / 别名 / 远程 ID",
+      "Source": "来源",
+      "Steam": "Steam",
+      "Paradox": "Paradox",
+      "Local": "本地",
+      "Selected": "已选择",
+      "Achievements": "成就",
+      "Version": "版本",
+      "Include": "包含",
+      "Exclude": "排除",
+      "Any": "不限",
+      "Yes": "是",
+      "No": "否",
+      "Compatible": "兼容",
+      "NotCompatible": "不兼容",
+      "Apply": "应用",
+      "Reset": "重置",
+      "Cancel": "取消",
+      "CustomQuery": "此自定义查询无法完整显示。除非应用或重置此筛选，否则查询将保持不变。"
+    }
   },
   "FilterCommands": {
     "Achievements": "成就",

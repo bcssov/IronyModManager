@@ -687,7 +687,29 @@
   "Filter": {
     "Clear": "X",
     "UpArrow": "▲",
-    "DownArrow": "▼"
+    "DownArrow": "▼",
+    "Advanced": {
+      "Title": "Erweiterter Filter",
+      "Name": "Name / Alias / Remote-ID",
+      "Source": "Quelle",
+      "Steam": "Steam",
+      "Paradox": "Paradox",
+      "Local": "Lokal",
+      "Selected": "Ausgewählt",
+      "Achievements": "Errungenschaften",
+      "Version": "Version",
+      "Include": "Einschließen",
+      "Exclude": "Ausschließen",
+      "Any": "Beliebig",
+      "Yes": "Ja",
+      "No": "Nein",
+      "Compatible": "Kompatibel",
+      "NotCompatible": "Nicht kompatibel",
+      "Apply": "Anwenden",
+      "Reset": "Zurücksetzen",
+      "Cancel": "Abbrechen",
+      "CustomQuery": "Diese benutzerdefinierte Abfrage kann nicht vollständig dargestellt werden. Sie bleibt unverändert, sofern Sie diesen Filter nicht anwenden oder zurücksetzen."
+    }
   },
   "FilterCommands": {
     "Achievements": "erfolge",

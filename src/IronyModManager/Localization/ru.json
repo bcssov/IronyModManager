@@ -687,7 +687,29 @@
   "Filter": {
     "Clear": "X",
     "UpArrow": "▲",
-    "DownArrow": "▼"
+    "DownArrow": "▼",
+    "Advanced": {
+      "Title": "Расширенный фильтр",
+      "Name": "Название / Псевдоним / Удалённый ID",
+      "Source": "Источник",
+      "Steam": "Steam",
+      "Paradox": "Paradox",
+      "Local": "Локальный",
+      "Selected": "Выбран",
+      "Achievements": "Достижения",
+      "Version": "Версия",
+      "Include": "Включить",
+      "Exclude": "Исключить",
+      "Any": "Любой",
+      "Yes": "Да",
+      "No": "Нет",
+      "Compatible": "Совместим",
+      "NotCompatible": "Несовместим",
+      "Apply": "Применить",
+      "Reset": "Сбросить",
+      "Cancel": "Отмена",
+      "CustomQuery": "Этот пользовательский запрос невозможно представить полностью. Он останется без изменений, пока вы не примените или не сбросите этот фильтр."
+    }
   },
   "FilterCommands": {
     "Achievements": "достижения",

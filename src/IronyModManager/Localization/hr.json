@@ -687,7 +687,29 @@
   "Filter": {
     "Clear": "X",
     "UpArrow": "▲",
-    "DownArrow": "▼"
+    "DownArrow": "▼",
+    "Advanced": {
+      "Title": "Napredni filtar",
+      "Name": "Naziv / Alias / Udaljeni ID",
+      "Source": "Izvor",
+      "Steam": "Steam",
+      "Paradox": "Paradox",
+      "Local": "Lokalno",
+      "Selected": "Odabrano",
+      "Achievements": "Postignuća",
+      "Version": "Verzija",
+      "Include": "Uključi",
+      "Exclude": "Isključi",
+      "Any": "Bilo koje",
+      "Yes": "Da",
+      "No": "Ne",
+      "Compatible": "Kompatibilno",
+      "NotCompatible": "Nije kompatibilno",
+      "Apply": "Primijeni",
+      "Reset": "Poništi",
+      "Cancel": "Odustani",
+      "CustomQuery": "Ovaj prilagođeni upit nije moguće potpuno prikazati. Ostat će nepromijenjen osim ako primijenite ili poništite ovaj filtar."
+    }
   },
   "FilterCommands": {
     "Achievements": "postignuća",

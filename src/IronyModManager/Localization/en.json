@@ -687,7 +687,29 @@
   "Filter": {
     "Clear": "X",
     "UpArrow": "▲",
-    "DownArrow": "▼"
+    "DownArrow": "▼",
+    "Advanced": {
+      "Title": "Advanced Filter",
+      "Name": "Name / Alias / Remote ID",
+      "Source": "Source",
+      "Steam": "Steam",
+      "Paradox": "Paradox",
+      "Local": "Local",
+      "Selected": "Selected",
+      "Achievements": "Achievements",
+      "Version": "Version",
+      "Include": "Include",
+      "Exclude": "Exclude",
+      "Any": "Any",
+      "Yes": "Yes",
+      "No": "No",
+      "Compatible": "Compatible",
+      "NotCompatible": "Not compatible",
+      "Apply": "Apply",
+      "Reset": "Reset",
+      "Cancel": "Cancel",
+      "CustomQuery": "This custom query cannot be represented completely. It will remain unchanged unless you apply or reset this filter."
+    }
   },
   "FilterCommands": {
     "Achievements": "achievements",

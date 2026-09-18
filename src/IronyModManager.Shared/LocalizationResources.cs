@@ -922,6 +922,30 @@ namespace IronyModManager.Shared
             public const string Clear = Prefix + "Clear";
             public const string UpArrow = Prefix + "UpArrow";
             public const string DownArrow = Prefix + "DownArrow";
+            public static class Advanced
+            {
+                public const string Prefix = "Filter.Advanced.";
+                public const string Title = Prefix + "Title";
+                public const string Name = Prefix + "Name";
+                public const string Source = Prefix + "Source";
+                public const string Steam = Prefix + "Steam";
+                public const string Paradox = Prefix + "Paradox";
+                public const string Local = Prefix + "Local";
+                public const string Selected = Prefix + "Selected";
+                public const string Achievements = Prefix + "Achievements";
+                public const string Version = Prefix + "Version";
+                public const string Include = Prefix + "Include";
+                public const string Exclude = Prefix + "Exclude";
+                public const string Any = Prefix + "Any";
+                public const string Yes = Prefix + "Yes";
+                public const string No = Prefix + "No";
+                public const string Compatible = Prefix + "Compatible";
+                public const string NotCompatible = Prefix + "NotCompatible";
+                public const string Apply = Prefix + "Apply";
+                public const string Reset = Prefix + "Reset";
+                public const string Cancel = Prefix + "Cancel";
+                public const string CustomQuery = Prefix + "CustomQuery";
+            }
         }
         public static class FilterCommands
         {
