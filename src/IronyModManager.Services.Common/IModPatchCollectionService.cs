@@ -51,6 +51,40 @@ namespace IronyModManager.Services.Common
         void AddModsToIgnoreList(IConflictResult conflictResult, IEnumerable<IModIgnoreConfiguration> mods);
 
         /// <summary>
+        /// Adds an exact participating-mod set to the ignore rules.
+        /// </summary>
+        /// <param name="conflictResult">The conflict result.</param>
+        /// <param name="modNames">The canonical mod names.</param>
+        [GameStateSafetyExempt("Mutates in-memory conflict configuration only.")]
+        void AddExactModSetToIgnoreList(IConflictResult conflictResult, IEnumerable<string> modNames);
+
+        /// <summary>
+        /// Gets the valid exact participating-mod sets from the ignore rules.
+        /// </summary>
+        /// <param name="conflictResult">The conflict result.</param>
+        /// <returns>The decoded canonical mod-name sets in persisted order.</returns>
+        [GameStateSafetyExempt("Reads in-memory conflict configuration only.")]
+        IReadOnlyList<IReadOnlyList<string>> GetExactModSetIgnoreRules(IConflictResult conflictResult);
+
+        /// <summary>
+        /// Removes a logical exact participating-mod set from the ignore rules.
+        /// </summary>
+        /// <param name="conflictResult">The conflict result.</param>
+        /// <param name="modNames">The canonical mod names.</param>
+        /// <returns><c>true</c> when at least one equivalent rule was removed; otherwise, <c>false</c>.</returns>
+        [GameStateSafetyExempt("Mutates in-memory conflict configuration only.")]
+        bool RemoveExactModSetIgnoreRule(IConflictResult conflictResult, IEnumerable<string> modNames);
+
+        /// <summary>
+        /// Determines whether an exact participating-mod set is already present in the ignore rules.
+        /// </summary>
+        /// <param name="conflictResult">The conflict result.</param>
+        /// <param name="modNames">The canonical mod names.</param>
+        /// <returns><c>true</c> when a logically equivalent exact-set rule exists; otherwise, <c>false</c>.</returns>
+        [GameStateSafetyExempt("Reads in-memory conflict configuration only.")]
+        bool HasExactModSetIgnoreRule(IConflictResult conflictResult, IEnumerable<string> modNames);
+
+        /// <summary>
         /// Applies the mod patch asynchronous.
         /// </summary>
         /// <param name="conflictResult">The conflict result.</param>

@@ -394,6 +394,17 @@
       "ShowResetConflicts": "Show nur Zurücksetzen von Konflikten",
       "Close": "Schließen"
     },
+    "ExactModSet": {
+      "Title": "Exakte Mod-Gruppe ignorieren",
+      "ExistingRules": "Vorhandene Regeln für exakte Mod-Gruppen",
+      "AvailableMods": "Mods für die exakte Gruppe auswählen",
+      "PreviewOnly": "Nur Vorschau",
+      "Add": "Hinzufügen",
+      "Delete": "Löschen",
+      "Save": "Speichern",
+      "Cancel": "Abbrechen",
+      "Close": "Schließen"
+    },
     "ResetConflicts": {
       "Title": "Konflikte Zurücksetzen",
       "Resolved": "Aufgelöst",

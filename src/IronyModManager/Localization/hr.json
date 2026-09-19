@@ -394,6 +394,17 @@
       "ShowResetConflicts": "Pokaži samo resetirane sukobe",
       "Close": "Zatvori"
     },
+    "ExactModSet": {
+      "Title": "Zanemari točan skup modova",
+      "ExistingRules": "Postojeća pravila za točne skupove modova",
+      "AvailableMods": "Odaberite modove u točnom skupu",
+      "PreviewOnly": "Samo pregled",
+      "Add": "Dodaj",
+      "Delete": "Izbriši",
+      "Save": "Spremi",
+      "Cancel": "Odustani",
+      "Close": "Zatvori"
+    },
     "ResetConflicts": {
       "Title": "Poništi sukobe",
       "Resolved": "Riješeni",

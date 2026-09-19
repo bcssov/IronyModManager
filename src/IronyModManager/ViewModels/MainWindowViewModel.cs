@@ -4,7 +4,7 @@
 // Created          : 01-10-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-21-2024
+// Last Modified On : 09-19-2026
 // ***********************************************************************
 // <copyright file="MainWindowViewModel.cs" company="Mario">
 //     Mario
@@ -14,7 +14,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Reactive;
 using System.Reactive.Disposables;
@@ -332,7 +331,7 @@ namespace IronyModManager.ViewModels
                             OverlayQueue overlay;
                             if (overlays.Any(p => p.Event.IsVisible != OverlayVisible))
                             {
-                                if (overlays.Any(p => p.Event.IsVisible == false))
+                                if (overlays.Any(p => !p.Event.IsVisible))
                                 {
                                     OverlayStack.RemoveAll(p => p.Event.Id <= currentMessageId.GetValueOrDefault());
                                     if (OverlayStack.Count > 0)
@@ -353,7 +352,7 @@ namespace IronyModManager.ViewModels
                                         lastMessageId++;
                                     }
 
-                                    overlay = overlays.FirstOrDefault(p => p.Event.IsVisible == false);
+                                    overlay = overlays.FirstOrDefault(p => !p.Event.IsVisible);
                                 }
                                 else
                                 {

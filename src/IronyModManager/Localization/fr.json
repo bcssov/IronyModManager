@@ -394,6 +394,17 @@
       "ShowResetConflicts": "Afficher uniquement les conflits de réinitialisation",
       "Close": "Fermer"
     },
+    "ExactModSet": {
+      "Title": "Ignorer l’ensemble exact de mods",
+      "ExistingRules": "Règles existantes d’ensembles exacts de mods",
+      "AvailableMods": "Sélectionnez les mods de l’ensemble exact",
+      "PreviewOnly": "Aperçu uniquement",
+      "Add": "Ajouter",
+      "Delete": "Supprimer",
+      "Save": "Enregistrer",
+      "Cancel": "Annuler",
+      "Close": "Fermer"
+    },
     "ResetConflicts": {
       "Title": "Réinitialiser les conflits",
       "Resolved": "Résolu",

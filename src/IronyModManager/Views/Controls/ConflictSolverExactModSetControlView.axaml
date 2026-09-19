@@ -1,0 +1,60 @@
+﻿<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" d:DesignWidth="440" d:DesignHeight="340"
+             x:Class="IronyModManager.Views.Controls.ConflictSolverExactModSetControlView">
+    <Panel>
+        <Button Content="{Binding Title}" Command="{Binding OpenCommand}" IsEnabled="{Binding CanOpen}"
+                BorderThickness="0,0,0,0" Background="Transparent"
+                Foreground="{DynamicResource IronyAccentBrush}" x:Name="openPopupButton"></Button>
+        <Popup PlacementMode="AnchorAndGravity" PlacementGravity="Bottom" VerticalOffset="15"
+               IsOpen="{Binding IsOpen}" Topmost="True" ObeyScreenEdges="True" StaysOpen="False"
+               x:Name="popup" PlacementTarget="{Binding #openPopupButton}">
+            <Border BorderThickness="1,1,1,1" BorderBrush="{DynamicResource IronyButtonBorderBrush}">
+                <Grid RowDefinitions="Auto,Auto,260,Auto" Width="440" Background="{DynamicResource IronyBackgroundPopupBrush}">
+                    <TextBlock Grid.Row="0" Text="{Binding Title}" HorizontalAlignment="Center" Margin="10"></TextBlock>
+                    <StackPanel Grid.Row="1" Margin="10,0,10,5">
+                        <TextBlock Text="{Binding ExistingRulesTitle}" IsVisible="{Binding !IsAdding}"
+                                   HorizontalAlignment="Center"></TextBlock>
+                        <TextBlock Text="{Binding AvailableModsTitle}" IsVisible="{Binding IsAdding}"
+                                   HorizontalAlignment="Center"></TextBlock>
+                        <TextBlock Text="{Binding PreviewOnly}" IsVisible="{Binding ReadOnly}"
+                                   Foreground="{DynamicResource IronyAccentBrush}" HorizontalAlignment="Center" Margin="0,20,0,0"></TextBlock>
+                    </StackPanel>
+                    <ListBox Grid.Row="2" Items="{Binding ExactRules}" SelectedItem="{Binding SelectedRule}"
+                             IsVisible="{Binding !IsAdding}"
+                             Margin="10,5" SelectionMode="Single">
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding DisplayName}" TextWrapping="Wrap" Margin="5,3"></TextBlock>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+                    <ListBox Grid.Row="2" Items="{Binding AvailableMods}" SelectedItems="{Binding SelectedMods}"
+                             IsVisible="{Binding IsAdding}" SelectionMode="Multiple" Margin="10,5">
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding}" TextWrapping="Wrap" Margin="5,3"></TextBlock>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+                    <Grid Grid.Row="3" Margin="10,5,10,10" IsVisible="{Binding !IsAdding}"
+                          ColumnDefinitions="Auto,*,Auto,*,Auto">
+                        <Button Grid.Column="0" Content="{Binding Add}" Command="{Binding AddCommand}" IsVisible="{Binding !ReadOnly}"
+                                IsEnabled="{Binding CanAdd}"></Button>
+                        <Button Grid.Column="2" Content="{Binding Delete}" Command="{Binding DeleteCommand}" IsVisible="{Binding !ReadOnly}"
+                                IsEnabled="{Binding CanDelete}"></Button>
+                        <Button Grid.Column="4" Content="{Binding Close}" Command="{Binding CloseCommand}"></Button>
+                    </Grid>
+                    <Panel Grid.Row="3" Margin="10,5,10,10" IsVisible="{Binding IsAdding}">
+                        <Button Content="{Binding Save}" Command="{Binding SaveCommand}" IsEnabled="{Binding CanSave}"
+                                HorizontalAlignment="Left"></Button>
+                        <Button Content="{Binding Cancel}" Command="{Binding CancelCommand}"
+                                HorizontalAlignment="Right"></Button>
+                    </Panel>
+                </Grid>
+            </Border>
+        </Popup>
+    </Panel>
+</UserControl>

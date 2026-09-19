@@ -510,6 +510,19 @@ namespace IronyModManager.Shared
                 public const string ShowResetConflicts = Prefix + "ShowResetConflicts";
                 public const string Close = Prefix + "Close";
             }
+            public static class ExactModSet
+            {
+                public const string Prefix = "Conflict_Solver.ExactModSet.";
+                public const string Title = Prefix + "Title";
+                public const string ExistingRules = Prefix + "ExistingRules";
+                public const string AvailableMods = Prefix + "AvailableMods";
+                public const string PreviewOnly = Prefix + "PreviewOnly";
+                public const string Add = Prefix + "Add";
+                public const string Delete = Prefix + "Delete";
+                public const string Save = Prefix + "Save";
+                public const string Cancel = Prefix + "Cancel";
+                public const string Close = Prefix + "Close";
+            }
             public static class ResetConflicts
             {
                 public const string Prefix = "Conflict_Solver.ResetConflicts.";

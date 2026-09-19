@@ -132,6 +132,11 @@ namespace IronyModManager.Services
         private const string ModNameIgnoreId = "modName:";
 
         /// <summary>
+        /// The exact mod-set ignore identifier.
+        /// </summary>
+        private const string ModSetIgnoreId = "modSet:";
+
+        /// <summary>
         /// The ignore game mods identifier
         /// </summary>
         private const string ShowGameModsId = "--showGameMods";
@@ -274,6 +279,126 @@ namespace IronyModManager.Services
 
                 conflictResult.IgnoredPaths = sb.ToString().Trim(Environment.NewLine.ToCharArray());
             }
+        }
+
+        /// <summary>
+        /// Adds an exact participating-mod set to the ignore list.
+        /// </summary>
+        /// <param name="conflictResult">The conflict result.</param>
+        /// <param name="modNames">The canonical mod names.</param>
+        public virtual void AddExactModSetToIgnoreList(IConflictResult conflictResult, IEnumerable<string> modNames)
+        {
+            if (conflictResult == null || !TryCreateExactModSetIgnoreRule(modNames, out var rule, out var modSet))
+            {
+                return;
+            }
+
+            var lines = (conflictResult.IgnoredPaths ?? string.Empty).SplitOnNewLine();
+            if (lines.Any(line => TryParseExactModSetIgnoreRule(line, out var existing) && existing.SetEquals(modSet)))
+            {
+                return;
+            }
+
+            conflictResult.IgnoredPaths = string.Join(Environment.NewLine, lines.Append(rule)).Trim(Environment.NewLine.ToCharArray());
+        }
+
+        /// <summary>
+        /// Gets the valid exact participating-mod sets from the ignore rules.
+        /// </summary>
+        /// <param name="conflictResult">The conflict result.</param>
+        /// <returns>The decoded canonical mod-name sets in persisted order.</returns>
+        public virtual IReadOnlyList<IReadOnlyList<string>> GetExactModSetIgnoreRules(IConflictResult conflictResult)
+        {
+            var rules = new List<IReadOnlyList<string>>();
+            var logicalRules = new List<HashSet<string>>();
+            foreach (var line in (conflictResult?.IgnoredPaths ?? string.Empty).SplitOnNewLine())
+            {
+                if (!TryDecodeExactModSetIgnoreRule(line, out var modSet, out var modNames) || logicalRules.Any(rule => rule.SetEquals(modSet)))
+                {
+                    continue;
+                }
+
+                logicalRules.Add(modSet);
+                rules.Add(modNames);
+            }
+
+            return rules;
+        }
+
+        /// <summary>
+        /// Removes a logical exact participating-mod set from the ignore rules.
+        /// </summary>
+        /// <param name="conflictResult">The conflict result.</param>
+        /// <param name="modNames">The canonical mod names.</param>
+        /// <returns><c>true</c> when at least one equivalent rule was removed; otherwise, <c>false</c>.</returns>
+        public virtual bool RemoveExactModSetIgnoreRule(IConflictResult conflictResult, IEnumerable<string> modNames)
+        {
+            if (conflictResult == null || !TryCreateExactModSetIgnoreRule(modNames, out _, out var modSet))
+            {
+                return false;
+            }
+
+            var ignoredPaths = conflictResult.IgnoredPaths ?? string.Empty;
+            var result = new StringBuilder(ignoredPaths.Length);
+            var removed = false;
+            var index = 0;
+            while (index < ignoredPaths.Length)
+            {
+                var lineStart = index;
+                while (index < ignoredPaths.Length && ignoredPaths[index] != '\r' && ignoredPaths[index] != '\n')
+                {
+                    index++;
+                }
+
+                var line = ignoredPaths.Substring(lineStart, index - lineStart);
+                var separatorStart = index;
+                if (index < ignoredPaths.Length && ignoredPaths[index++] == '\r' && index < ignoredPaths.Length && ignoredPaths[index] == '\n')
+                {
+                    index++;
+                }
+
+                if (TryParseExactModSetIgnoreRule(line, out var existing) && existing.SetEquals(modSet))
+                {
+                    removed = true;
+                    continue;
+                }
+
+                result.Append(line);
+                result.Append(ignoredPaths, separatorStart, index - separatorStart);
+            }
+
+            if (!removed)
+            {
+                return false;
+            }
+
+            if (!ignoredPaths.EndsWith('\r') && !ignoredPaths.EndsWith('\n'))
+            {
+                while (result.Length > 0 && (result[^1] == '\r' || result[^1] == '\n'))
+                {
+                    result.Length--;
+                }
+            }
+
+            conflictResult.IgnoredPaths = result.ToString();
+            return true;
+        }
+
+        /// <summary>
+        /// Determines whether an exact participating-mod set is already present in the ignore rules.
+        /// </summary>
+        /// <param name="conflictResult">The conflict result.</param>
+        /// <param name="modNames">The canonical mod names.</param>
+        /// <returns><c>true</c> when a logically equivalent exact-set rule exists; otherwise, <c>false</c>.</returns>
+        public virtual bool HasExactModSetIgnoreRule(IConflictResult conflictResult, IEnumerable<string> modNames)
+        {
+            if (conflictResult == null || !TryCreateExactModSetIgnoreRule(modNames, out _, out var modSet))
+            {
+                return false;
+            }
+
+            return (conflictResult.IgnoredPaths ?? string.Empty).SplitOnNewLine()
+                .Any(line => TryParseExactModSetIgnoreRule(line, out var existing) && existing.SetEquals(modSet));
         }
 
         /// <summary>
@@ -2703,6 +2828,7 @@ namespace IronyModManager.Services
             {
                 var allowedMods = GetCollectionMods().Select(p => p.Name).ToList();
                 var forbiddenMods = new List<IModIgnoreConfiguration>();
+                var exactModSetRules = new List<HashSet<string>>();
                 var ignoreRules = new List<string>();
                 var includeRules = new List<string>();
                 var lines = conflictResult.IgnoredPaths.SplitOnNewLine().Where(p => !p.Trim().StartsWith('#'));
@@ -2714,6 +2840,14 @@ namespace IronyModManager.Services
                     {
                         allowedMods.Remove(ignoreMod.ModName);
                         forbiddenMods.Add(ignoreMod);
+                    }
+                    else if (TryParseExactModSetIgnoreRule(line, out var modSet))
+                    {
+                        exactModSetRules.Add(modSet);
+                    }
+                    else if (IsExactModSetIgnoreRule(line))
+                    {
+                        // A malformed reserved structured rule must never become a path rule.
                     }
                     else if (parsed.Equals(ShowGameModsId))
                     {
@@ -2752,7 +2886,8 @@ namespace IronyModManager.Services
                         {
                             foreach (var item in topConflict.Children)
                             {
-                                if (!item.Mods.Any(allowedMods.Contains) || !canAllowForbiddenMod(item, forbiddenMods))
+                                if (!item.Mods.Any(allowedMods.Contains) || !canAllowForbiddenMod(item, forbiddenMods) ||
+                                    exactModSetRules.Any(rule => IsExactModSetMatch(item.Mods, rule)))
                                 {
                                     if (alreadyIgnored.Add(item.Key))
                                     {
@@ -3324,6 +3459,129 @@ namespace IronyModManager.Services
             }
 
             return null;
+        }
+
+        /// <summary>
+        /// Determines whether the line reserves the exact mod-set structured syntax.
+        /// </summary>
+        private static bool IsExactModSetIgnoreRule(string line)
+        {
+            return line?.Trim().TrimStart(Path.DirectorySeparatorChar).StartsWith(ModSetIgnoreId, StringComparison.Ordinal) == true;
+        }
+
+        /// <summary>
+        /// Parses an exact mod-set ignore rule using backslash-escaped quoted fields.
+        /// </summary>
+        private static bool TryParseExactModSetIgnoreRule(string line, out HashSet<string> modSet)
+        {
+            return TryDecodeExactModSetIgnoreRule(line, out modSet, out _);
+        }
+
+        /// <summary>
+        /// Parses an exact mod-set ignore rule and preserves its persisted participant order.
+        /// </summary>
+        private static bool TryDecodeExactModSetIgnoreRule(string line, out HashSet<string> modSet, out IReadOnlyList<string> modNames)
+        {
+            modSet = null;
+            modNames = null;
+            if (!IsExactModSetIgnoreRule(line))
+            {
+                return false;
+            }
+
+            var value = line.Trim().TrimStart(Path.DirectorySeparatorChar).Substring(ModSetIgnoreId.Length);
+            var result = new HashSet<string>(StringComparer.Ordinal);
+            var names = new List<string>();
+            var index = 0;
+            while (true)
+            {
+                while (index < value.Length && char.IsWhiteSpace(value[index]))
+                {
+                    index++;
+                }
+
+                if (index >= value.Length || value[index] != '"')
+                {
+                    return false;
+                }
+
+                index++;
+                var name = new StringBuilder();
+                var closed = false;
+                while (index < value.Length)
+                {
+                    if (value[index] == '\\')
+                    {
+                        if (index + 1 >= value.Length || (value[index + 1] != '"' && value[index + 1] != '\\'))
+                        {
+                            return false;
+                        }
+
+                        name.Append(value[index + 1]);
+                        index += 2;
+                        continue;
+                    }
+
+                    if (value[index] == '"')
+                    {
+                        index++;
+                        closed = true;
+                        break;
+                    }
+
+                    name.Append(value[index++]);
+                }
+
+                var decodedName = name.ToString();
+                if (!closed || decodedName.Length == 0 || !result.Add(decodedName))
+                {
+                    return false;
+                }
+                names.Add(decodedName);
+
+                while (index < value.Length && char.IsWhiteSpace(value[index]))
+                {
+                    index++;
+                }
+
+                if (index == value.Length)
+                {
+                    modSet = result;
+                    modNames = names;
+                    return true;
+                }
+
+                if (value[index] != ',')
+                {
+                    return false;
+                }
+
+                index++;
+            }
+        }
+
+        /// <summary>
+        /// Creates a serialized exact mod-set ignore rule.
+        /// </summary>
+        private static bool TryCreateExactModSetIgnoreRule(IEnumerable<string> modNames, out string rule, out HashSet<string> modSet)
+        {
+            rule = null;
+            modSet = new HashSet<string>(modNames?.Where(p => !string.IsNullOrEmpty(p)) ?? [], StringComparer.Ordinal);
+            if (modSet.Count == 0)
+            {
+                return false;
+            }
+
+            rule = ModSetIgnoreId + string.Join(",", modSet.Select(p => $"\"{p.Replace("\\", "\\\\").Replace("\"", "\\\"")}\""));
+            return true;
+        }
+
+        /// <summary>
+        /// Determines whether a child conflict has exactly the specified participating mod set.
+        /// </summary>
+        private static bool IsExactModSetMatch(IEnumerable<string> participants, HashSet<string> rule)
+        {
+            return rule != null && new HashSet<string>(participants ?? [], StringComparer.Ordinal).SetEquals(rule);
         }
 
         /// <summary>

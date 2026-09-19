@@ -394,6 +394,17 @@
       "ShowResetConflicts": "Show Only Reset Conflicts",
       "Close": "Close"
     },
+    "ExactModSet": {
+      "Title": "Ignore Exact Mod Set",
+      "ExistingRules": "Existing exact mod set rules",
+      "AvailableMods": "Select the mods in the exact set",
+      "PreviewOnly": "Preview only",
+      "Add": "Add",
+      "Delete": "Delete",
+      "Save": "Save",
+      "Cancel": "Cancel",
+      "Close": "Close"
+    },
     "ResetConflicts": {
       "Title": "Reset Conflicts",
       "Resolved": "Resolved",

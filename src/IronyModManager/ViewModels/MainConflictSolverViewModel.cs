@@ -57,6 +57,7 @@ namespace IronyModManager.ViewModels
     /// <param name="modCompareSelector">The mod compare selector.</param>
     /// <param name="ignoreConflictsRules">The ignore conflicts rules.</param>
     /// <param name="modFilter">The mod filter.</param>
+    /// <param name="exactModSet">The exact mod set rule manager.</param>
     /// <param name="resetConflicts">The reset conflicts.</param>
     /// <param name="dbSearch">The database search.</param>
     /// <param name="customConflicts">The custom conflicts.</param>
@@ -76,6 +77,7 @@ namespace IronyModManager.ViewModels
         ModCompareSelectorControlViewModel modCompareSelector,
         ModConflictIgnoreControlViewModel ignoreConflictsRules,
         ConflictSolverModFilterControlViewModel modFilter,
+        ConflictSolverExactModSetControlViewModel exactModSet,
         ConflictSolverResetConflictsControlViewModel resetConflicts,
         ConflictSolverDBSearchControlViewModel dbSearch,
         ConflictSolverCustomConflictsControlViewModel customConflicts,
@@ -372,6 +374,11 @@ namespace IronyModManager.ViewModels
         public virtual ConflictSolverModFilterControlViewModel ModFilter { get; protected set; } = modFilter;
 
         /// <summary>
+        /// Gets the exact mod set rule manager.
+        /// </summary>
+        public virtual ConflictSolverExactModSetControlViewModel ExactModSet { get; protected set; } = exactModSet;
+
+        /// <summary>
         /// Gets or sets the number of conflicts caption.
         /// </summary>
         /// <value>The number of conflicts caption.</value>
@@ -394,12 +401,6 @@ namespace IronyModManager.ViewModels
         /// </summary>
         /// <value>The reset conflicts.</value>
         public virtual ConflictSolverResetConflictsControlViewModel ResetConflicts { get; protected set; } = resetConflicts;
-
-        /// <summary>
-        /// Gets or sets the reset conflicts column.
-        /// </summary>
-        /// <value>The reset conflicts column.</value>
-        public virtual int ResetConflictsColumn { get; protected set; }
 
         /// <summary>
         /// Gets or sets the resolve.
@@ -475,7 +476,12 @@ namespace IronyModManager.ViewModels
         public async Task InitializeAsync(bool readOnly)
         {
             ReadOnly = readOnly;
-            ResetConflictsColumn = readOnly ? 0 : 1;
+            await Dispatcher.UIThread.SafeInvokeAsync(() =>
+            {
+                ExactModSet.Initialize(readOnly);
+                ExactModSet.SetContext(Conflicts, SelectedModsOrder, SelectedModCollection?.Name,
+                    Conflicts != null && !ResolvingConflict);
+            });
             ResetConflicts.SetParameters(readOnly);
             BinaryMergeViewer.SetParameters(readOnly);
             MergeViewer.SetParameters(readOnly);
@@ -767,6 +773,22 @@ namespace IronyModManager.ViewModels
         }
 
         /// <summary>
+        /// Refreshes the exact-set rule manager's source context on the UI thread.
+        /// </summary>
+        private void UpdateExactModSetContext(bool closeSurface = false)
+        {
+            Dispatcher.UIThread.SafeInvoke(() =>
+            {
+                if (closeSurface)
+                {
+                    ExactModSet.ClearSurface();
+                }
+                ExactModSet.SetContext(Conflicts, SelectedModsOrder, SelectedModCollection?.Name,
+                    Conflicts != null && !ResolvingConflict);
+            });
+        }
+
+        /// <summary>
         /// Called when [activated].
         /// </summary>
         /// <param name="disposables">The disposables.</param>
@@ -777,6 +799,7 @@ namespace IronyModManager.ViewModels
 
             BackCommand = ReactiveCommand.CreateFromTask(async () =>
             {
+                ExactModSet.ClearSurface();
                 var id = idGenerator.GetNextId();
                 await TriggerOverlayAsync(id, true);
                 await Task.Delay(100);
@@ -834,6 +857,7 @@ namespace IronyModManager.ViewModels
                 {
                     ModFilter.SetConflictResult(Conflicts, [.. SelectedModsOrder], SelectedModCollection.Name);
                 }
+                UpdateExactModSetContext(closeSurface: true);
             }).DisposeWith(disposables);
 
             this.WhenAnyValue(v => v.SelectedParentConflict).Subscribe(s =>
@@ -872,6 +896,19 @@ namespace IronyModManager.ViewModels
                     PreviousConflictIndex = null;
                     IgnoreEnabled = false;
                 }
+            }).DisposeWith(disposables);
+
+            void exactModSetRuleSaved()
+            {
+                FilterHierarchicalConflictsAsync(Conflicts).ConfigureAwait(false);
+            }
+
+            ExactModSet.RuleSaved += exactModSetRuleSaved;
+            Disposable.Create(() => ExactModSet.RuleSaved -= exactModSetRuleSaved).DisposeWith(disposables);
+
+            this.WhenAnyValue(v => v.ResolvingConflict).Subscribe(isResolving =>
+            {
+                UpdateExactModSetContext(closeSurface: isResolving);
             }).DisposeWith(disposables);
 
             this.WhenAnyValue(v => v.ModCompareSelector.IsActivated).Where(p => p).Subscribe(_ =>

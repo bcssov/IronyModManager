@@ -24,11 +24,12 @@
             <Panel Grid.Column="0" Grid.Row="0" Grid.RowSpan="3">
                 <StackPanel Orientation="Vertical" Grid.Column="0" Grid.Row="0" Margin="5,0,0,0">
                     <TextBlock Text="{Binding ConflictedObjects}" HorizontalAlignment="Center" Margin="10"></TextBlock>
-                    <Grid ColumnDefinitions="*,*" RowDefinitions="*,*">
+                    <Grid ColumnDefinitions="*,*" RowDefinitions="Auto,Auto,Auto">
                         <ContentControl Content="{Binding ModFilter}" Grid.Column="0" Grid.Row="0"></ContentControl>
                         <ContentControl Content="{Binding DatabaseSearch}" Grid.Column="1" Grid.Row="0"></ContentControl>
-                        <ContentControl Content="{Binding CustomConflicts}" Grid.Column="0" Grid.Row="1" IsVisible="{Binding !ReadOnly}"></ContentControl>
-                        <ContentControl Content="{Binding ResetConflicts}" Grid.Column="{Binding ResetConflictsColumn}" Grid.Row="1"></ContentControl>
+                        <ContentControl Content="{Binding ExactModSet}" Grid.Column="0" Grid.Row="1"></ContentControl>
+                        <ContentControl Content="{Binding ResetConflicts}" Grid.Column="1" Grid.Row="1"></ContentControl>
+                        <ContentControl Content="{Binding CustomConflicts}" Grid.Column="0" Grid.Row="2" IsVisible="{Binding !ReadOnly}"></ContentControl>
                     </Grid>
                     <controls:ComboBox Items="{Binding HierarchicalConflicts}" SelectedItem="{Binding SelectedParentConflict}"
                              HorizontalAlignment="Stretch" MinHeight="30">
@@ -42,7 +43,7 @@
                              ScrollViewer.HorizontalScrollBarVisibility="Disabled" SelectionMode="Single" x:Name="conflictList"
                              Height="{Binding $parent[Window].ActualHeight,
                                      Converter={StaticResource MathConverter}
-                                     ConverterParameter=x-160}" IsTextSearchEnabled="True">
+                                     ConverterParameter=x-190}" IsTextSearchEnabled="True">
                         <controls:ListBox.ItemTemplate>
                             <DataTemplate>
                                 <Grid ColumnDefinitions="*" Background="Transparent">

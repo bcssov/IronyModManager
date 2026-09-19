@@ -63,6 +63,7 @@ namespace IronyModManager.DI
             container.RegisterLocalization<ModifyCollectionControlViewModel>();
             container.RegisterLocalization<OptionsControlViewModel>();
             container.RegisterLocalization<ConflictSolverModFilterControlViewModel>();
+            container.RegisterLocalization<ConflictSolverExactModSetControlViewModel>();
             container.RegisterLocalization<ConflictSolverResetConflictsControlViewModel>();
             container.RegisterLocalization<ConflictSolverDBSearchControlViewModel>();
             container.RegisterLocalization<ConflictSolverCustomConflictsControlViewModel>();

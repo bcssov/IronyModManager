@@ -393,6 +393,17 @@
       "ShowResetConflicts": "仅显示被重置的冲突",
       "Close": "关闭"
     },
+    "ExactModSet": {
+      "Title": "忽略精确模组集合",
+      "ExistingRules": "现有精确模组集合规则",
+      "AvailableMods": "选择精确集合中的模组",
+      "PreviewOnly": "仅预览",
+      "Add": "添加",
+      "Delete": "删除",
+      "Save": "保存",
+      "Cancel": "取消",
+      "Close": "关闭"
+    },
     "ResetConflicts": {
       "Title": "重置冲突标记",
       "Resolved": "已处理",

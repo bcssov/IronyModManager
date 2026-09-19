@@ -88,6 +88,35 @@ namespace IronyModManager.Services.Tests
         }
 
         /// <summary>
+        /// Gets a service for in-memory ignore-rule tests.
+        /// </summary>
+        private static ModPatchCollectionService GetIgnoreRuleService()
+        {
+            return GetService(new Mock<IStorageProvider>(), new Mock<IModParser>(), new Mock<IParserManager>(), new Mock<IReader>(), new Mock<IMapper>(), new Mock<IModWriter>(),
+                new Mock<IGameService>(), new Mock<IModPatchExporter>());
+        }
+
+        private static HashSet<string> ParseExactModSetRule(ModPatchCollectionService service, string line, out bool parsed)
+        {
+            var method = typeof(ModPatchCollectionService).GetMethod("TryParseExactModSetIgnoreRule", BindingFlags.Static | BindingFlags.NonPublic);
+            var args = new object[] { line, null };
+            parsed = (bool)method!.Invoke(null, args);
+            return args[1] as HashSet<string>;
+        }
+
+        private static bool IsExactModSetMatch(ModPatchCollectionService service, IEnumerable<string> participants, HashSet<string> rule)
+        {
+            var method = typeof(ModPatchCollectionService).GetMethod("IsExactModSetMatch", BindingFlags.Static | BindingFlags.NonPublic);
+            return (bool)method!.Invoke(null, [participants, rule]);
+        }
+
+        private static bool IsReservedExactModSetRule(string line)
+        {
+            var method = typeof(ModPatchCollectionService).GetMethod("IsExactModSetIgnoreRule", BindingFlags.Static | BindingFlags.NonPublic);
+            return (bool)method!.Invoke(null, [line]);
+        }
+
+        /// <summary>
         /// Setups the mock case.
         /// </summary>
         /// <param name="reader">The reader.</param>
@@ -2655,7 +2684,8 @@ namespace IronyModManager.Services.Tests
             {
                 Type = "SaveIgnoredPathsAsync_should_be_true", UserDirectory = "C:\\Users\\Fake", WorkshopDirectory = new List<string> { "C:\\Fake" }, CustomModDirectory = string.Empty
             });
-            modPatchExporter.Setup(p => p.SaveStateAsync(It.IsAny<ModPatchExporterParameters>())).Returns(Task.FromResult(true));
+            ModPatchExporterParameters savedParameters = null;
+            modPatchExporter.Setup(p => p.SaveStateAsync(It.IsAny<ModPatchExporterParameters>())).Callback<ModPatchExporterParameters>(p => savedParameters = p).Returns(Task.FromResult(true));
             mapper.Setup(s => s.Map<IMod>(It.IsAny<IModObject>())).Returns((IModObject o) =>
             {
                 return new Mod { FileName = o.FileName, Name = o.Name };
@@ -2672,8 +2702,9 @@ namespace IronyModManager.Services.Tests
             var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter, null);
 
             var indexed = new IndexedDefinitions();
-            var result = await service.SaveIgnoredPathsAsync(new ConflictResult { AllConflicts = indexed, Conflicts = indexed }, "test");
+            var result = await service.SaveIgnoredPathsAsync(new ConflictResult { AllConflicts = indexed, Conflicts = indexed, IgnoredPaths = "modSet:\"A\",\"B\"" }, "test");
             result.Should().BeTrue();
+            savedParameters.IgnoreConflictPaths.Should().Be("modSet:\"A\",\"B\"");
         }
 
         /// <summary>
@@ -3246,6 +3277,202 @@ namespace IronyModManager.Services.Tests
             var c = new ConflictResult { IgnoredPaths = "modName:a" };
             service.AddModsToIgnoreList(c, new List<IModIgnoreConfiguration> { new ModIgnoreConfiguration { ModName = "a", Count = 3 }, new ModIgnoreConfiguration { ModName = "b" } });
             c.IgnoredPaths.Should().Be("modName:a--count:3" + Environment.NewLine + "modName:b--count:2");
+        }
+
+        [Fact]
+        public void Should_add_exact_mod_set_ignore_rule_with_quoted_fields()
+        {
+            var service = GetIgnoreRuleService();
+            var conflictResult = new ConflictResult();
+
+            service.AddExactModSetToIgnoreList(conflictResult, ["AI, Economy Tweaks", "Some \"Quoted\" Mod", "A \"Very\" Strange \\ Mod", "Planetary--Diversity", "Život"]);
+
+            conflictResult.IgnoredPaths.Should().Be("modSet:\"AI, Economy Tweaks\",\"Some \\\"Quoted\\\" Mod\",\"A \\\"Very\\\" Strange \\\\ Mod\",\"Planetary--Diversity\",\"Život\"");
+            conflictResult.IgnoredPaths.Should().NotContain("\"\"");
+        }
+
+        [Fact]
+        public void Should_not_add_duplicate_exact_mod_set_ignore_rule_when_order_differs()
+        {
+            var service = GetIgnoreRuleService();
+            var conflictResult = new ConflictResult { IgnoredPaths = "modSet:\"B\",\"A\"" };
+
+            service.AddExactModSetToIgnoreList(conflictResult, ["A", "B"]);
+
+            conflictResult.IgnoredPaths.Should().Be("modSet:\"B\",\"A\"");
+        }
+
+        [Fact]
+        public void Should_not_add_duplicate_exact_mod_set_ignore_rule_with_escaped_name()
+        {
+            var service = GetIgnoreRuleService();
+            var conflictResult = new ConflictResult { IgnoredPaths = "modSet:\"Some \\\"Quoted\\\" Mod\",\"A\"" };
+
+            service.AddExactModSetToIgnoreList(conflictResult, ["A", "Some \"Quoted\" Mod"]);
+
+            conflictResult.IgnoredPaths.Should().Be("modSet:\"Some \\\"Quoted\\\" Mod\",\"A\"");
+        }
+
+        [Theory]
+        [InlineData("modSet:\"A\",\"B\"", new[] { "A", "B" }, true)]
+        [InlineData("modSet:\"A\",\"B\"", new[] { "B", "A" }, true)]
+        [InlineData("modSet:\"A\",\"B\"", new[] { "A" }, false)]
+        [InlineData("modSet:\"A\",\"B\"", new[] { "A", "B", "C" }, false)]
+        [InlineData("modSet:\"A\",\"Some \\\"Quoted\\\" Mod\"", new[] { "Some \"Quoted\" Mod", "A" }, true)]
+        [InlineData("modSet:\"A\",B", new[] { "A", "B" }, false)]
+        public void Should_query_persisted_exact_mod_set_rules(string ignoredPaths, string[] participants, bool expected)
+        {
+            var conflictResult = new ConflictResult { IgnoredPaths = ignoredPaths };
+
+            GetIgnoreRuleService().HasExactModSetIgnoreRule(conflictResult, participants).Should().Be(expected);
+        }
+
+        [Fact]
+        public void Should_get_decoded_unique_valid_exact_mod_set_rules_for_presentation()
+        {
+            var conflictResult = new ConflictResult
+            {
+                IgnoredPaths = "modSet:\"B\",\"A\"" + Environment.NewLine +
+                               "modSet:\"A\",\"B\"" + Environment.NewLine +
+                               "modSet:\"A\",B" + Environment.NewLine +
+                               "modSet:\"Some \\\"Quoted\\\" Mod\",\"A \\\\ Mod\""
+            };
+
+            var rules = GetIgnoreRuleService().GetExactModSetIgnoreRules(conflictResult);
+
+            rules.Should().HaveCount(2);
+            rules[0].Should().Equal("B", "A");
+            rules[1].Should().Equal("Some \"Quoted\" Mod", "A \\ Mod");
+        }
+
+        [Fact]
+        public void Should_remove_only_the_selected_logical_exact_mod_set_rule_and_preserve_other_text()
+        {
+            var newLine = Environment.NewLine;
+            var conflictResult = new ConflictResult
+            {
+                IgnoredPaths = "# comment" + newLine +
+                               "path/*.txt" + newLine +
+                               "modName:Legacy--count:2" + newLine +
+                               "modSet:\"B\",\"A\"" + newLine +
+                               "modSet:\"A\",\"B\"" + newLine +
+                               "modSet:\"A\",B" + newLine +
+                               "modSet:\"C\",\"D\""
+            };
+            var service = GetIgnoreRuleService();
+
+            service.RemoveExactModSetIgnoreRule(conflictResult, ["A", "B"]).Should().BeTrue();
+
+            conflictResult.IgnoredPaths.Should().Be("# comment" + newLine +
+                                                    "path/*.txt" + newLine +
+                                                    "modName:Legacy--count:2" + newLine +
+                                                    "modSet:\"A\",B" + newLine +
+                                                    "modSet:\"C\",\"D\"");
+            service.HasExactModSetIgnoreRule(conflictResult, ["A", "B"]).Should().BeFalse();
+            service.HasExactModSetIgnoreRule(conflictResult, ["C", "D"]).Should().BeTrue();
+        }
+
+        [Fact]
+        public void Should_preserve_exact_mod_set_rules_when_rewriting_legacy_mod_rules()
+        {
+            var service = GetIgnoreRuleService();
+            var conflictResult = new ConflictResult { IgnoredPaths = "# comment" + Environment.NewLine + "path/*.txt" + Environment.NewLine + "modSet:\"A\",\"B\"" + Environment.NewLine + "modName:A" };
+
+            service.AddModsToIgnoreList(conflictResult, [new ModIgnoreConfiguration { ModName = "C" }]);
+
+            conflictResult.IgnoredPaths.Should().Be("# comment" + Environment.NewLine + "path/*.txt" + Environment.NewLine + "modSet:\"A\",\"B\"" + Environment.NewLine + "modName:C--count:2");
+        }
+
+        [Fact]
+        public void Should_reject_empty_exact_mod_set_ignore_rule()
+        {
+            var service = GetIgnoreRuleService();
+            var conflictResult = new ConflictResult { IgnoredPaths = "# comment" };
+
+            service.AddExactModSetToIgnoreList(conflictResult, []);
+
+            conflictResult.IgnoredPaths.Should().Be("# comment");
+        }
+
+        [Fact]
+        public void Should_parse_quoted_exact_mod_set_fields()
+        {
+            var service = GetIgnoreRuleService();
+            var result = ParseExactModSetRule(service, "modSet:\"AI, Economy Tweaks\", \"Some \\\"Quoted\\\" Mod\",\"A \\\"Very\\\" Strange \\\\ Mod\",\"Planetary--Diversity\",\"50% Život \"", out var parsed);
+
+            parsed.Should().BeTrue();
+            result.Should().BeEquivalentTo(["AI, Economy Tweaks", "Some \"Quoted\" Mod", "A \"Very\" Strange \\ Mod", "Planetary--Diversity", "50% Život "]);
+        }
+
+        [Theory]
+        [InlineData("modSet:")]
+        [InlineData("modSet:\"\"")]
+        [InlineData("modSet:\"A")]
+        [InlineData("modSet:\"A\",B")]
+        [InlineData("modSet:\"A\",\"A\"")]
+        [InlineData("modSet:\"A\",\"B\"junk")]
+        [InlineData("modSet:\"A\",\"B\\q\"")]
+        public void Should_reject_malformed_exact_mod_set_rules(string line)
+        {
+            var result = ParseExactModSetRule(GetIgnoreRuleService(), line, out var parsed);
+
+            parsed.Should().BeFalse();
+            result.Should().BeNull();
+        }
+
+        [Fact]
+        public void Should_match_only_exact_participating_mod_set()
+        {
+            var service = GetIgnoreRuleService();
+            var rule = ParseExactModSetRule(service, "modSet:\"A\",\"B\",\"C\"", out var parsed);
+
+            parsed.Should().BeTrue();
+            IsExactModSetMatch(service, ["C", "A", "B"], rule).Should().BeTrue();
+            IsExactModSetMatch(service, ["A", "B", "C", "C"], rule).Should().BeTrue();
+            IsExactModSetMatch(service, ["A", "B"], rule).Should().BeFalse();
+            IsExactModSetMatch(service, ["A", "B", "C", "D"], rule).Should().BeFalse();
+            IsExactModSetMatch(service, ["A", "C"], rule).Should().BeFalse();
+        }
+
+        [Fact]
+        public void Should_match_exact_two_and_one_member_mod_sets()
+        {
+            var service = GetIgnoreRuleService();
+            var twoMemberRule = ParseExactModSetRule(service, "modSet:\"A\",\"B\"", out var parsed);
+
+            parsed.Should().BeTrue();
+            IsExactModSetMatch(service, ["A", "B"], twoMemberRule).Should().BeTrue();
+            IsExactModSetMatch(service, ["B", "A"], twoMemberRule).Should().BeTrue();
+            IsExactModSetMatch(service, ["A"], twoMemberRule).Should().BeFalse();
+            IsExactModSetMatch(service, ["B"], twoMemberRule).Should().BeFalse();
+            IsExactModSetMatch(service, ["A", "B", "C"], twoMemberRule).Should().BeFalse();
+
+            var oneMemberRule = ParseExactModSetRule(service, "modSet:\"A\"", out parsed);
+            parsed.Should().BeTrue();
+            IsExactModSetMatch(service, ["A"], oneMemberRule).Should().BeTrue();
+            IsExactModSetMatch(service, ["A", "B"], oneMemberRule).Should().BeFalse();
+        }
+
+        [Fact]
+        public void Should_match_exact_mod_set_with_escaped_quote_participant()
+        {
+            var service = GetIgnoreRuleService();
+            var rule = ParseExactModSetRule(service, "modSet:\"A\",\"Some \\\"Quoted\\\" Mod\"", out var parsed);
+
+            parsed.Should().BeTrue();
+            IsExactModSetMatch(service, ["Some \"Quoted\" Mod", "A"], rule).Should().BeTrue();
+            IsExactModSetMatch(service, ["Some \"Quoted\" Mod"], rule).Should().BeFalse();
+        }
+
+        [Theory]
+        [InlineData("modSet:")]
+        [InlineData(" modSet:\"A")]
+        [InlineData("\\modSet:\"A\",B")]
+        public void Should_reserve_malformed_exact_mod_set_rules_from_path_rule_processing(string line)
+        {
+            IsReservedExactModSetRule(line).Should().BeTrue();
+            ParseExactModSetRule(GetIgnoreRuleService(), line, out var parsed).Should().BeNull();
+            parsed.Should().BeFalse();
         }
 
         /// <summary>
