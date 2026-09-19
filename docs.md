@@ -30,6 +30,18 @@ The Wiki includes:
 
 ---
 
+# Exact Mod Set Ignore Rules
+
+Irony 1.28 can ignore a conflict only when its participating mods are exactly equal to a configured set. For example, `modSet:"A","B"` matches A + B or B + A, but not A alone or A + B + C. All names are quoted; inside a name, `\"` escapes a double quote and `\\` escapes a backslash.
+
+The Conflict Solver manager lists existing rules and supports **Add**, **Delete**, and **Close**. Analysis mode provides a read-only **Preview only** view with Add and Delete unavailable. Matching uses canonical mod names rather than local aliases.
+
+These rules are new in 1.28. Older Irony versions do not understand `modSet:` correctly; normal round-trips preserve the text, but older releases should not be relied on to evaluate or manage these rules.
+
+See the authoritative [Ignore Rules guide](https://github.com/bcssov/IronyModManager/wiki/Ignore-Rules) for complete syntax, examples, and compatibility details.
+
+---
+
 # 🧭 New User Checklist
 
 If you're using Irony for the first time, start here:
