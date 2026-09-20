@@ -216,7 +216,7 @@ namespace IronyModManager.Services
             };
             if (exportMods)
             {
-                parameters.ExportMods = GetCollectionMods(collectionName: modCollection.Name);
+                parameters.ExportMods = GetFileBackedCollectionMods(collectionName: modCollection.Name);
                 var prefixModNames = new List<string>();
                 collection.ModNames.ToList().ForEach(p => prefixModNames.Add(ModWriter.FormatPrefixModName(modNameOverride, p)));
                 collection.ModNames = prefixModNames;
@@ -284,7 +284,7 @@ namespace IronyModManager.Services
             {
                 File = file,
                 Mod = collection,
-                ExportMods = GetCollectionMods(collectionName: modCollection.Name),
+                ExportMods = GetFileBackedCollectionMods(collectionName: modCollection.Name),
                 Game = game,
                 DescriptorType = MapDescriptorType(game.ModDescriptorType)
             };
@@ -310,7 +310,7 @@ namespace IronyModManager.Services
             {
                 File = file,
                 Mod = collection,
-                ExportMods = GetCollectionMods(collectionName: modCollection.Name),
+                ExportMods = GetFileBackedCollectionMods(collectionName: modCollection.Name),
                 Game = game,
                 DescriptorType = MapDescriptorType(game.ModDescriptorType)
             };

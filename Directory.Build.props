@@ -37,6 +37,8 @@
 		<AvaloniaEdit>[0.10.12.2]</AvaloniaEdit>
 		<AvaloniaMaterialIcons>[1.1.10]</AvaloniaMaterialIcons>
 		<AvaloniaColorPicker>[0.10.17]</AvaloniaColorPicker>
+		<!-- Runtime-only compatibility patch for Avalonia 0.10.22 WinUI Composition commit starvation. -->
+		<LibHarmony>[2.4.2]</LibHarmony>
 		<!-- 2.5.0–3.1.x early versions broke tests badly (parallelization/config behavior changed).
 			3.1.5 finally works again. Version pinned on purpose. Do not auto-upgrade blindly. -->
 		<XUnitRunnerVS>[3.1.5]</XUnitRunnerVS>

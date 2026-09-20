@@ -116,6 +116,109 @@ namespace IronyModManager.Services.Tests
             return (bool)method!.Invoke(null, [line]);
         }
 
+        private static IReadOnlyList<IMod> GetFileBackedCollectionMods(ModPatchCollectionService service,
+            IEnumerable<IMod> mods, string collectionName)
+        {
+            var method = typeof(ModBaseService).GetMethod("GetFileBackedCollectionMods",
+                BindingFlags.Instance | BindingFlags.NonPublic);
+            return ((IEnumerable<IMod>)method!.Invoke(service, [mods, collectionName])!).ToList();
+        }
+
+        private static IReadOnlyList<string> GetPersistedCollectionModDescriptors(
+            ModPatchCollectionService service, string collectionName)
+        {
+            var method = typeof(ModBaseService).GetMethod("GetPersistedCollectionModDescriptors",
+                BindingFlags.Instance | BindingFlags.NonPublic);
+            return (IReadOnlyList<string>)method!.Invoke(service, [collectionName])!;
+        }
+
+        private static IReadOnlyList<IDefinition> PopulateModPath(ModPatchCollectionService service,
+            IEnumerable<IDefinition> definitions, IEnumerable<IMod> mods)
+        {
+            var method = typeof(ModBaseService).GetMethod("PopulateModPath",
+                BindingFlags.Instance | BindingFlags.NonPublic, null,
+                [typeof(IEnumerable<IDefinition>), typeof(IEnumerable<IMod>)], null);
+            return ((IEnumerable<IDefinition>)method!.Invoke(service, [definitions, mods])!).ToList();
+        }
+
+        /// <summary>
+        /// Defines the test method GetFileBackedCollectionMods_should_resolve_named_collection_without_virtuals.
+        /// </summary>
+        [Fact]
+        public void GetFileBackedCollectionMods_should_resolve_named_collection_without_virtuals()
+        {
+            var storageProvider = new Mock<IStorageProvider>();
+            storageProvider.Setup(p => p.GetModCollections()).Returns([
+                new ModCollection { Name = "selected", Game = "game", IsSelected = true, Mods = ["mod/selected.mod"], ModPaths = ["selected"] },
+                new ModCollection
+                {
+                    Name = "target", Game = "game",
+                    Mods = ["MOD/REAL.MOD", "mod/path.mod", "mod/name-only.mod", "mod/virtual.mod"],
+                    ModPaths = ["real", "C:\\MODS\\PATH", "missing", "virtual"]
+                }
+            ]);
+            var gameService = new Mock<IGameService>();
+            gameService.Setup(p => p.GetSelected()).Returns(new Game { Type = "game" });
+            var service = GetService(storageProvider, new Mock<IModParser>(), new Mock<IParserManager>(),
+                new Mock<IReader>(), new Mock<IMapper>(), new Mock<IModWriter>(), gameService,
+                new Mock<IModPatchExporter>());
+            var real = new Mod { Name = "real", DescriptorFile = "mod/real.mod", FullPath = "real" };
+            var path = new Mod { Name = "path", DescriptorFile = "other.mod", FullPath = "c:\\mods\\path" };
+            var nameOnly = new Mod { Name = "mod/name-only.mod", DescriptorFile = "other-name.mod", FullPath = "other" };
+            var virtualMod = new Mod
+            {
+                Name = "virtual", DescriptorFile = "mod/virtual.mod", FullPath = "virtual", IsVirtual = true
+            };
+
+            var result = GetFileBackedCollectionMods(service, [nameOnly, virtualMod, path, real], "target");
+
+            result.Should().Equal(real, path);
+            storageProvider.Verify(p => p.GetModCollections(), Times.Once);
+        }
+
+        /// <summary>
+        /// Defines the test method GetPersistedCollectionModDescriptors_should_preserve_missing_members_and_order.
+        /// </summary>
+        [Fact]
+        public void GetPersistedCollectionModDescriptors_should_preserve_missing_members_and_order()
+        {
+            var storageProvider = new Mock<IStorageProvider>();
+            storageProvider.Setup(p => p.GetModCollections()).Returns([
+                new ModCollection { Name = "selected", Game = "game", IsSelected = true, Mods = ["selected.mod"] },
+                new ModCollection { Name = "target", Game = "game", Mods = ["real.mod", "missing.mod", "later.mod"] }
+            ]);
+            var gameService = new Mock<IGameService>();
+            gameService.Setup(p => p.GetSelected()).Returns(new Game { Type = "game" });
+            var service = GetService(storageProvider, new Mock<IModParser>(), new Mock<IParserManager>(),
+                new Mock<IReader>(), new Mock<IMapper>(), new Mock<IModWriter>(), gameService,
+                new Mock<IModPatchExporter>());
+
+            GetPersistedCollectionModDescriptors(service, "TARGET")
+                .Should().Equal("real.mod", "missing.mod", "later.mod");
+        }
+
+        /// <summary>
+        /// Defines the test method PopulateModPath_should_leave_unavailable_mod_path_unresolved.
+        /// </summary>
+        [Fact]
+        public void PopulateModPath_should_leave_unavailable_mod_path_unresolved()
+        {
+            var gameService = new Mock<IGameService>();
+            gameService.Setup(p => p.GetSelected()).Returns(new Game { Type = "game", UserDirectory = "root" });
+            var service = GetService(new Mock<IStorageProvider>(), new Mock<IModParser>(),
+                new Mock<IParserManager>(), new Mock<IReader>(), new Mock<IMapper>(), new Mock<IModWriter>(),
+                gameService, new Mock<IModPatchExporter>());
+            var real = new Definition { ModName = "real" };
+            var unavailable = new Definition { ModName = "unavailable" };
+
+            var result = PopulateModPath(service, [real, unavailable],
+                [new Mod { Name = "real", FullPath = "real-path" }]);
+
+            result.Should().Equal(real, unavailable);
+            real.ModPath.Should().Be("real-path");
+            unavailable.ModPath.Should().BeNullOrEmpty();
+        }
+
         /// <summary>
         /// Setups the mock case.
         /// </summary>
@@ -175,6 +278,34 @@ namespace IronyModManager.Services.Tests
 
             result = await service.GetModObjectsAsync(new Game(), null, string.Empty, PatchStateMode.Advanced, null);
             result.Should().BeNull();
+        }
+
+        [Fact]
+        public async Task Should_not_read_virtual_mods_when_getting_mod_objects()
+        {
+            var storageProvider = new Mock<IStorageProvider>();
+            var modParser = new Mock<IModParser>();
+            var parserManager = new Mock<IParserManager>();
+            var reader = new Mock<IReader>();
+            var modWriter = new Mock<IModWriter>();
+            var gameService = new Mock<IGameService>();
+            var mapper = new Mock<IMapper>();
+            var modPatchExporter = new Mock<IModPatchExporter>();
+            var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter,
+                gameService, modPatchExporter);
+            var virtualMod = new Mod
+            {
+                FullPath = "missing",
+                IsVirtual = true
+            };
+
+            var result = await service.GetModObjectsAsync(new Game(), [virtualMod], string.Empty,
+                PatchStateMode.Advanced, null);
+
+            result.Should().BeNull();
+            reader.Verify(p => p.GetTotalSize(It.IsAny<string>(), It.IsAny<string[]>()), Times.Never);
+            reader.Verify(p => p.Read(It.IsAny<string>(), It.IsAny<IEnumerable<string>>(), It.IsAny<bool>()),
+                Times.Never);
         }
 
         /// <summary>
@@ -1019,7 +1150,7 @@ namespace IronyModManager.Services.Tests
             {
                 return new Mod { FileName = o.FileName, Name = o.Name };
             });
-            var collections = new List<IModCollection> { new ModCollection { IsSelected = true, Mods = new List<string> { "mod/fake1.txt", "mod/fake2.txt" }, Name = "test", Game = "Should_return_true_when_applying_patches" } };
+            var collections = new List<IModCollection> { new ModCollection { IsSelected = true, Mods = new List<string> { "mod/fake1.txt", "mod/fake2.txt" }, Name = "colname", Game = "Should_return_true_when_applying_patches" } };
             storageProvider.Setup(s => s.GetModCollections()).Returns(() =>
             {
                 return collections;
@@ -2690,7 +2821,16 @@ namespace IronyModManager.Services.Tests
             {
                 return new Mod { FileName = o.FileName, Name = o.Name };
             });
-            var collections = new List<IModCollection> { new ModCollection { IsSelected = true, Mods = new List<string> { "mod/fake1.txt", "mod/fake2.txt" }, Name = "test", Game = "SaveIgnoredPathsAsync_should_be_false" } };
+            var collections = new List<IModCollection>
+            {
+                new ModCollection
+                {
+                    IsSelected = true,
+                    Mods = new List<string> { "mod/fake1.txt", "mod/missing.txt", "mod/fake2.txt" },
+                    Name = "test",
+                    Game = "SaveIgnoredPathsAsync_should_be_true"
+                }
+            };
             storageProvider.Setup(s => s.GetModCollections()).Returns(() =>
             {
                 return collections;
@@ -2705,6 +2845,7 @@ namespace IronyModManager.Services.Tests
             var result = await service.SaveIgnoredPathsAsync(new ConflictResult { AllConflicts = indexed, Conflicts = indexed, IgnoredPaths = "modSet:\"A\",\"B\"" }, "test");
             result.Should().BeTrue();
             savedParameters.IgnoreConflictPaths.Should().Be("modSet:\"A\",\"B\"");
+            savedParameters.LoadOrder.Should().Equal("mod/fake1.txt", "mod/missing.txt", "mod/fake2.txt");
         }
 
         /// <summary>

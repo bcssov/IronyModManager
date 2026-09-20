@@ -125,7 +125,7 @@ namespace IronyModManager.Services
             }
 
             var allMods = GetInstalledModsInternal(game, false).ToList();
-            var collectionMods = GetCollectionMods(allMods).ToList();
+            var collectionMods = GetFileBackedCollectionMods(allMods, collectionName).ToList();
             if (collectionMods.Count == 0)
             {
                 return ValueTask.FromResult(false);
@@ -165,7 +165,7 @@ namespace IronyModManager.Services
                 return new MergeCompressPreflightResult();
             }
 
-            var collectionMods = GetCollectionMods(GetInstalledModsInternal(game, false)).ToList();
+            var collectionMods = GetFileBackedCollectionMods(GetInstalledModsInternal(game, false), collectionName).ToList();
             var paths = GetMergeCompressArchivePaths(game, collectionMods, collectionName, copiedNamePrefix, GetMergeCollectionModNameTemplate());
             return PreflightMergeCompressArchivePaths(paths);
         }
@@ -199,7 +199,7 @@ namespace IronyModManager.Services
             }
 
             var allMods = GetInstalledModsInternal(game, false).ToList();
-            var collectionMods = GetCollectionMods(allMods).ToList();
+            var collectionMods = GetFileBackedCollectionMods(allMods, collectionName).ToList();
             if (collectionMods.Count == 0)
             {
                 return false;
@@ -243,7 +243,7 @@ namespace IronyModManager.Services
             try
             {
                 allMods = GetInstalledModsInternal(game, false).ToList();
-                collectionMods = GetCollectionMods(allMods).ToList();
+                collectionMods = GetFileBackedCollectionMods(allMods, collectionName).ToList();
             }
             catch (Exception exception) when (gameStateSafetyService.LockIfFileSystemAccessFailure(game,
                        GameStateLockReason.DiscoveryUnavailable, "Read merge collection sources", exception))
@@ -423,7 +423,7 @@ namespace IronyModManager.Services
             try
             {
                 allMods = GetInstalledModsInternal(game, false).ToList();
-                collectionMods = GetCollectionMods(allMods).ToList();
+                collectionMods = GetFileBackedCollectionMods(allMods, collectionName).ToList();
             }
             catch (Exception exception) when (gameStateSafetyService.LockIfFileSystemAccessFailure(game,
                        GameStateLockReason.DiscoveryUnavailable, "Read compressed merge sources", exception))

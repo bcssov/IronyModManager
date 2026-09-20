@@ -458,6 +458,7 @@ namespace IronyModManager.Services
         /// <summary>
         /// Gets the progress percentage.
         /// </summary>
+        /// 
         /// <param name="total">The total.</param>
         /// <param name="processed">The processed.</param>
         /// <param name="maxPerc">The maximum perc.</param>

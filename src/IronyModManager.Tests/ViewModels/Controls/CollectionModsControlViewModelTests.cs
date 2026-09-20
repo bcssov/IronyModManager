@@ -34,6 +34,59 @@ namespace IronyModManager.Tests.ViewModels.Controls
     /// </summary>
     public class CollectionModsControlViewModelTests
     {
+        [Fact]
+        public void Conflict_solver_input_should_preserve_all_real_members()
+        {
+            var first = CreateMod("first.mod");
+            var second = CreateMod("second.mod");
+            var viewModel = CreateSolverInputViewModel([first, second]);
+
+            viewModel.GetConflictSolverMods().Should().Equal(first, second);
+            viewModel.SelectedMods.Should().Equal(first, second);
+        }
+
+        [Fact]
+        public void Conflict_solver_input_should_filter_virtual_members_without_mutating_collection_order()
+        {
+            var first = CreateMod("first.mod");
+            var missingFirst = CreateMod("missing-first.mod", isVirtual: true);
+            var middle = CreateMod("middle.mod");
+            var missingLast = CreateMod("missing-last.mod", isVirtual: true);
+            var last = CreateMod("last.mod");
+            IMod[] membership = [first, missingFirst, middle, missingLast, last];
+            var viewModel = CreateSolverInputViewModel(membership);
+
+            viewModel.GetConflictSolverMods().Should().Equal(first, middle, last);
+            viewModel.SelectedMods.Should().Equal(membership);
+        }
+
+        [Fact]
+        public void Conflict_solver_input_should_include_reappeared_real_shared_instance()
+        {
+            var missing = CreateMod("missing.mod", isVirtual: true);
+            var reappeared = CreateMod(missing.DescriptorFile);
+            var viewModel = CreateSolverInputViewModel([missing]);
+            viewModel.GetConflictSolverMods().Should().BeEmpty();
+
+            viewModel.ApplySelectedMods([reappeared], true);
+
+            viewModel.GetConflictSolverMods().Should().ContainSingle().Which.Should().BeSameAs(reappeared);
+        }
+
+        [Fact]
+        public void Conflict_solver_input_should_be_empty_for_all_virtual_members()
+        {
+            var members = new[]
+            {
+                CreateMod("missing-first.mod", isVirtual: true),
+                CreateMod("missing-second.mod", isVirtual: true)
+            };
+            var viewModel = CreateSolverInputViewModel(members);
+
+            viewModel.GetConflictSolverMods().Should().BeEmpty();
+            viewModel.SelectedMods.Should().Equal(members);
+        }
+
         [Theory]
         [InlineData(0)]
         [InlineData(1)]
@@ -433,6 +486,15 @@ namespace IronyModManager.Tests.ViewModels.Controls
             mod.Source = source;
             mod.RemoteId = remoteId;
             return mod;
+        }
+
+        private static TestCollectionModsControlViewModel CreateSolverInputViewModel(IList<IMod> members)
+        {
+            DISetup.SetupContainer();
+            var viewModel = CreateViewModel(Mock.Of<IModService>(), new Mock<IModCollectionService>(),
+                new Mock<IModPatchCollectionService>(), new Mock<IGameService>());
+            viewModel.ApplySelectedMods(members, true);
+            return viewModel;
         }
 
         private static IModService CreateIdentityContractModService()

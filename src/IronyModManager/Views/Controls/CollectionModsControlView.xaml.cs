@@ -242,7 +242,7 @@ namespace IronyModManager.Views.Controls
                     var mods = visibleItems.Select(p => p.Item).OfType<IMod>().ToList();
                     if (mods.Count != 0)
                     {
-                        mods = mods.Where(p => p.Files == null || !p.Files.Any() || p.AchievementStatus == AchievementStatus.NotEvaluated).ToList();
+                        mods = mods.Where(p => !p.IsVirtual && (p.Files == null || !p.Files.Any() || p.AchievementStatus == AchievementStatus.NotEvaluated)).ToList();
                         if (mods.Count != 0)
                         {
                             Task.Run(() => mbus.Publish(new EvalModAchievementsCompatibilityEvent(mods)));

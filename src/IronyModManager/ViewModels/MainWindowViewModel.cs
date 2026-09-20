@@ -17,7 +17,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reactive;
 using System.Reactive.Disposables;
+using System.Reactive.Linq;
 using System.Threading.Tasks;
+using Avalonia.Threading;
 using IronyModManager.Common.Events;
 using IronyModManager.Common.ViewModels;
 using IronyModManager.DI;
@@ -252,6 +254,7 @@ namespace IronyModManager.ViewModels
             BindOverlay();
 
             ReactiveUI.MessageBus.Current.Listen<NavigationEventArgs>()
+                .ObserveOn(AvaloniaScheduler.Instance)
                 .Subscribe(async s =>
                 {
                     ReactiveUI.MessageBus.Current.SendMessage(new ForceClosePopulsEventArgs());

@@ -814,6 +814,12 @@ namespace IronyModManager.ViewModels.Controls
         /// <returns>A Task representing the asynchronous operation.</returns>
         protected virtual async Task EvalModAchievementAsync(IEnumerable<IMod> mods, bool hasPriority = false)
         {
+            var effectiveMods = mods?.Where(p => !p.IsVirtual).ToList() ?? [];
+            if (effectiveMods.Count == 0)
+            {
+                return;
+            }
+
             async Task performEval(CancellationToken token)
             {
                 if (!hasPriority)
@@ -835,25 +841,22 @@ namespace IronyModManager.ViewModels.Controls
 
             evalModToken?.Cancel();
             evalModToken = new CancellationTokenSource();
-            if (mods.Any())
+            IDisposable mutex = null;
+            if (hasPriority)
             {
-                IDisposable mutex = null;
-                if (hasPriority)
-                {
-                    mutex = await evalLock.LockAsync();
-                }
-
-                mods.ToList().ForEach(m => evalModsQueue.Add(m));
-                try
-                {
-                    await performEval(evalModToken.Token);
-                }
-                catch (OperationCanceledException)
-                {
-                }
-
-                mutex?.Dispose();
+                mutex = await evalLock.LockAsync();
             }
+
+            effectiveMods.ForEach(m => evalModsQueue.Add(m));
+            try
+            {
+                await performEval(evalModToken.Token);
+            }
+            catch (OperationCanceledException)
+            {
+            }
+
+            mutex?.Dispose();
         }
 
         /// <summary>

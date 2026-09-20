@@ -4,7 +4,7 @@
 // Created          : 02-29-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 12-07-2025
+// Last Modified On : 09-20-2026
 // ***********************************************************************
 // <copyright file="ModHolderControlViewModel.cs" company="Mario">
 //     Mario
@@ -27,9 +27,6 @@ using IronyModManager.Common.ViewModels;
 using IronyModManager.DI;
 using IronyModManager.Implementation.Actions;
 using IronyModManager.Implementation.AppState;
-using IronyModManager.Implementation.MessageBus;
-using IronyModManager.Implementation.Overlay;
-using IronyModManager.Localization;
 using IronyModManager.Localization.Attributes;
 using IronyModManager.Models.Common;
 using IronyModManager.Platform.Configuration;
@@ -59,9 +56,9 @@ namespace IronyModManager.ViewModels.Controls
         private const string InvalidConflictSolverClass = "InvalidConflictSolver";
 
         /// <summary>
-        /// Owns common mod-control user interactions.
+        /// Coordinates conflict-analysis progress subscriptions and presentation.
         /// </summary>
-        private readonly ModHolderInteraction interaction;
+        private readonly ConflictAnalysisProgressCoordinator conflictAnalysisProgressCoordinator;
 
         /// <summary>
         /// The creation steam application identifier file flag
@@ -69,14 +66,14 @@ namespace IronyModManager.ViewModels.Controls
         private readonly bool createSteamAppIdFile;
 
         /// <summary>
-        /// The external process handler service
-        /// </summary>
-        private readonly IExternalProcessHandlerService externalProcessHandlerService;
-
-        /// <summary>
         /// Coordinates activation-scoped holder event subscriptions.
         /// </summary>
         private readonly ModHolderEventCoordinator eventCoordinator;
+
+        /// <summary>
+        /// The external process handler service
+        /// </summary>
+        private readonly IExternalProcessHandlerService externalProcessHandlerService;
 
         /// <summary>
         /// The game index service
@@ -94,14 +91,14 @@ namespace IronyModManager.ViewModels.Controls
         private readonly IGameService gameService;
 
         /// <summary>
-        /// Coordinates conflict-analysis progress subscriptions and presentation.
+        /// Owns common mod-control user interactions.
         /// </summary>
-        private readonly ConflictAnalysisProgressCoordinator conflictAnalysisProgressCoordinator;
+        private readonly ModHolderInteraction interaction;
 
         /// <summary>
-        /// Coordinates authoritative installed-mod publication with collection reconciliation.
+        /// The mod apply result presenter
         /// </summary>
-        private readonly ModStateReconciliationCoordinator modStateReconciliationCoordinator;
+        private readonly ModApplyResultPresenter modApplyResultPresenter;
 
         /// <summary>
         /// The mod service
@@ -113,7 +110,10 @@ namespace IronyModManager.ViewModels.Controls
         /// </summary>
         private readonly IModService modService;
 
-        private readonly ModApplyResultPresenter modApplyResultPresenter;
+        /// <summary>
+        /// Coordinates authoritative installed-mod publication with collection reconciliation.
+        /// </summary>
+        private readonly ModStateReconciliationCoordinator modStateReconciliationCoordinator;
 
         /// <summary>
         /// The prompt notifications service
@@ -485,7 +485,7 @@ namespace IronyModManager.ViewModels.Controls
         /// <returns>Task.</returns>
         protected virtual async Task AnalyzeModsAsync(long id, PatchStateMode mode, IEnumerable<string> versions)
         {
-            var selectedMods = CollectionMods.SelectedMods.Where(p => !p.IsVirtual).ToList();
+            var selectedMods = CollectionMods.GetConflictSolverMods();
             var totalSteps = versions != null && versions.Any() ? 6 : 4;
 
             SubscribeToProgressReport(id, Disposables, totalSteps);
@@ -614,6 +614,7 @@ namespace IronyModManager.ViewModels.Controls
         /// <param name="id">The identifier.</param>
         /// <param name="showOverlay">if set to <c>true</c> [show overlay].</param>
         /// <param name="validateParadoxLauncher">if set to <c>true</c> [validate paradox launcher].</param>
+        /// <param name="launchingGame">if set to <c>true</c> [launching game].</param>
         /// <returns>A Task representing the asynchronous operation.</returns>
         protected virtual async Task<ModApplyResult> ApplyCollectionAsync(long id, bool showOverlay = true,
             bool validateParadoxLauncher = false, bool launchingGame = false)
@@ -722,7 +723,6 @@ namespace IronyModManager.ViewModels.Controls
                     await ShowInvalidModsNotificationAsync([.. result.Where(p => p.Invalid)]);
                 }
             }
-
         }
 
         /// <summary>

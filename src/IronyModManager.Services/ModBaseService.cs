@@ -546,43 +546,66 @@ namespace IronyModManager.Services
         }
 
         /// <summary>
-        /// Gets the collection mods.
+        /// Gets the installed, file-backed members of a persisted collection.
         /// </summary>
         /// <param name="mods">The mods.</param>
         /// <param name="collectionName">Name of the collection.</param>
         /// <returns>IEnumerable&lt;IMod&gt;.</returns>
-        protected virtual IEnumerable<IMod> GetCollectionMods(IEnumerable<IMod> mods = null, string collectionName = Shared.Constants.EmptyParam)
+        protected virtual IEnumerable<IMod> GetFileBackedCollectionMods(IEnumerable<IMod> mods = null,
+            string collectionName = Shared.Constants.EmptyParam)
         {
-            mods ??= GetInstalledModsInternal(GameService.GetSelected(), false);
+            var installedMods = (mods ?? GetInstalledModsInternal(GameService.GetSelected(), false))
+                .Where(p => !p.IsVirtual).ToList();
             var collectionMods = new List<IMod>();
-            var collections = GetAllModCollectionsInternal();
-            if (collections?.Count() > 0)
+            var collection = GetModCollectionInternal(collectionName);
+            if (collection != null)
             {
-                var collection = !string.IsNullOrWhiteSpace(collectionName) ? collections.FirstOrDefault(p => p.Name.Equals(collectionName, StringComparison.OrdinalIgnoreCase)) : collections.FirstOrDefault(p => p.IsSelected);
-
-                if (collection != null)
+                var descriptors = collection.Mods?.ToList() ?? [];
+                var paths = collection.ModPaths?.ToList() ?? [];
+                var modsByDescriptor = installedMods
+                    .Where(p => !string.IsNullOrWhiteSpace(p.DescriptorFile))
+                    .GroupBy(p => p.DescriptorFile, StringComparer.OrdinalIgnoreCase)
+                    .ToDictionary(p => p.Key, p => p.First(), StringComparer.OrdinalIgnoreCase);
+                var modsByPath = installedMods
+                    .Where(p => !string.IsNullOrWhiteSpace(p.FullPath))
+                    .GroupBy(p => p.FullPath, StringComparer.OrdinalIgnoreCase)
+                    .ToDictionary(p => p.Key, p => p.First(), StringComparer.OrdinalIgnoreCase);
+                for (var index = 0; index < descriptors.Count; index++)
                 {
-                    var colMods = collection.Mods.ToList();
-                    var colModPaths = collection.ModPaths.ToList();
-                    for (var i = 0; i < colMods.Count; i++)
+                    var descriptor = descriptors[index];
+                    modsByDescriptor.TryGetValue(descriptor ?? string.Empty, out var mod);
+                    if (mod == null && paths.Count == descriptors.Count)
                     {
-                        var item = colMods[i];
-                        var mod = mods.FirstOrDefault(p => p.DescriptorFile.Equals(item, StringComparison.OrdinalIgnoreCase));
-                        if (mod == null && colModPaths.Count == colMods.Count)
-                        {
-                            item = colModPaths[i];
-                            mod = mods.FirstOrDefault(p => p.FullPath.Equals(item, StringComparison.OrdinalIgnoreCase));
-                        }
+                        modsByPath.TryGetValue(paths[index] ?? string.Empty, out mod);
+                    }
 
-                        if (mod != null)
-                        {
-                            collectionMods.Add(mod);
-                        }
+                    if (mod != null)
+                    {
+                        collectionMods.Add(mod);
                     }
                 }
             }
 
             return collectionMods;
+        }
+
+        /// <summary>
+        /// Gets the persisted descriptor order for a collection, including unavailable members.
+        /// </summary>
+        /// <param name="collectionName">Name of the collection.</param>
+        /// <returns>The persisted descriptor order.</returns>
+        protected virtual IReadOnlyList<string> GetPersistedCollectionModDescriptors(
+            string collectionName = Shared.Constants.EmptyParam)
+        {
+            return GetModCollectionInternal(collectionName)?.Mods?.ToList() ?? [];
+        }
+
+        private IModCollection GetModCollectionInternal(string collectionName)
+        {
+            var collections = GetAllModCollectionsInternal()?.ToList() ?? [];
+            return !string.IsNullOrWhiteSpace(collectionName)
+                ? collections.FirstOrDefault(p => p.Name.Equals(collectionName, StringComparison.OrdinalIgnoreCase))
+                : collections.FirstOrDefault(p => p.IsSelected);
         }
 
         /// <summary>
@@ -1008,26 +1031,41 @@ namespace IronyModManager.Services
         /// <returns>IEnumerable&lt;IDefinition&gt;.</returns>
         protected virtual IEnumerable<IDefinition> PopulateModPath(IEnumerable<IDefinition> definitions, IEnumerable<IMod> collectionMods)
         {
-            if (definitions != null && definitions.Any())
+            if (definitions == null)
             {
-                foreach (var item in definitions)
-                {
-                    if (IsPatchModInternal(item.ModName))
-                    {
-                        item.ModPath = GetPatchModDirectory(GameService.GetSelected(), item.ModName);
-                    }
-                    else if (item.IsFromGame)
-                    {
-                        item.ModPath = PathResolver.GetPath(GameService.GetSelected());
-                    }
-                    else
-                    {
-                        item.ModPath = collectionMods.FirstOrDefault(p => p.Name.Equals(item.ModName))!.FullPath;
-                    }
-                }
+                return [];
             }
 
-            return definitions;
+            var populated = new List<IDefinition>();
+            var fileBackedMods = collectionMods?.Where(p => !p.IsVirtual)
+                .GroupBy(p => p.Name, StringComparer.Ordinal)
+                .ToDictionary(p => p.Key, p => p.First(), StringComparer.Ordinal) ??
+                new Dictionary<string, IMod>(StringComparer.Ordinal);
+            foreach (var item in definitions)
+            {
+                if (item == null)
+                {
+                    continue;
+                }
+
+                if (IsPatchModInternal(item.ModName))
+                {
+                    item.ModPath = GetPatchModDirectory(GameService.GetSelected(), item.ModName);
+                }
+                else if (item.IsFromGame)
+                {
+                    item.ModPath = PathResolver.GetPath(GameService.GetSelected());
+                }
+                else if (fileBackedMods.TryGetValue(item.ModName ?? string.Empty, out var mod) &&
+                         !string.IsNullOrWhiteSpace(mod.FullPath))
+                {
+                    item.ModPath = mod.FullPath;
+                }
+
+                populated.Add(item);
+            }
+
+            return populated;
         }
 
         /// <summary>

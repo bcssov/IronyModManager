@@ -17,6 +17,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Controls.Platform;
 using Avalonia.Input;
 using Avalonia.Input.Platform;
@@ -28,6 +29,7 @@ using IronyModManager.Platform.Configuration;
 using IronyModManager.Platform.Dbus;
 using IronyModManager.Platform.Drives;
 using IronyModManager.Platform.Fonts;
+using IronyModManager.Platform.Windows;
 using IronyModManager.Shared;
 
 namespace IronyModManager.Platform
@@ -85,7 +87,18 @@ namespace IronyModManager.Platform
                 builder.UsePlatformDetect();
             }
 
-            builder.AfterSetup(_ =>
+            if (os == OperatingSystemType.WinNT)
+            {
+                var renderingInitializer = builder.RenderingSubsystemInitializer;
+                var renderingSubsystemName = builder.RenderingSubsystemName;
+                builder.UseRenderingSubsystem(() =>
+                {
+                    WinUiCompositionWatchdogCompatibility.TryInstall();
+                    renderingInitializer();
+                }, renderingSubsystemName);
+            }
+
+            builder.AfterSetup(appBuilder =>
             {
                 // Use already registered manager as a proxy -- doing it like this because the implementation is hidden away as internal
                 var fontManager = AvaloniaLocator.Current.GetService<IFontManagerImpl>();
@@ -107,6 +120,11 @@ namespace IronyModManager.Platform
                 if (os == OperatingSystemType.WinNT)
                 {
                     AvaloniaLocator.CurrentMutable.Bind<IMountedVolumeInfoProvider>().ToConstant(new WindowsMountedVolumeInfoProvider());
+
+                    if (appBuilder.Instance.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktopLifetime)
+                    {
+                        desktopLifetime.Exit += (_, _) => WinUiCompositionWatchdogCompatibility.Stop();
+                    }
                 }
 
                 SafeX11InputMethod.TryInstall();

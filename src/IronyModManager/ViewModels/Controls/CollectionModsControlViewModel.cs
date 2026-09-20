@@ -4,7 +4,7 @@
 // Created          : 03-03-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 12-07-2025
+// Last Modified On : 09-20-2026
 // ***********************************************************************
 // <copyright file="CollectionModsControlViewModel.cs" company="Mario">
 //     Mario
@@ -31,12 +31,8 @@ using IronyModManager.Common.ViewModels;
 using IronyModManager.DI;
 using IronyModManager.Implementation;
 using IronyModManager.Implementation.Actions;
-using IronyModManager.Implementation.AppState;
 using IronyModManager.Implementation.Hotkey;
-using IronyModManager.Implementation.MessageBus;
 using IronyModManager.Implementation.MessageBus.Events;
-using IronyModManager.Implementation.Overlay;
-using IronyModManager.Localization;
 using IronyModManager.Localization.Attributes;
 using IronyModManager.Models.Common;
 using IronyModManager.Services.Common;
@@ -63,34 +59,19 @@ namespace IronyModManager.ViewModels.Controls
         private const string ClipboardSeparator = " || ";
 
         /// <summary>
-        /// The game service
-        /// </summary>
-        private readonly IGameService gameService;
-
-        /// <summary>
         /// Owns persisted collection membership policy independently from effective mod enablement.
         /// </summary>
         private readonly CollectionModMembership collectionModMembership;
 
         /// <summary>
-        /// Coordinates authoritative collection resolution and virtual-mod warning policy.
-        /// </summary>
-        private readonly CollectionModReconciliationCoordinator modReconciliationCoordinator;
-
-        /// <summary>
-        /// Coordinates collection operation progress subscriptions and presentation.
-        /// </summary>
-        private readonly CollectionOperationProgressCoordinator operationProgressCoordinator;
-
-        /// <summary>
-        /// Coordinates collection-list presentation controls and persisted UI state.
-        /// </summary>
-        private readonly CollectionModsPresentationCoordinator presentationCoordinator;
-
-        /// <summary>
         /// Coordinates activation-scoped event subscriptions.
         /// </summary>
         private readonly CollectionModsEventCoordinator eventCoordinator;
+
+        /// <summary>
+        /// The game service
+        /// </summary>
+        private readonly IGameService gameService;
 
         /// <summary>
         /// Owns common mod-control user interactions.
@@ -108,9 +89,24 @@ namespace IronyModManager.ViewModels.Controls
         private readonly IModPatchCollectionService modPatchCollectionService;
 
         /// <summary>
+        /// Coordinates authoritative collection resolution and virtual-mod warning policy.
+        /// </summary>
+        private readonly CollectionModReconciliationCoordinator modReconciliationCoordinator;
+
+        /// <summary>
         /// The mod service
         /// </summary>
         private readonly IModService modService;
+
+        /// <summary>
+        /// Coordinates collection operation progress subscriptions and presentation.
+        /// </summary>
+        private readonly CollectionOperationProgressCoordinator operationProgressCoordinator;
+
+        /// <summary>
+        /// Coordinates collection-list presentation controls and persisted UI state.
+        /// </summary>
+        private readonly CollectionModsPresentationCoordinator presentationCoordinator;
 
         /// <summary>
         /// The redo stack
@@ -454,17 +450,6 @@ namespace IronyModManager.ViewModels.Controls
         public virtual ReactiveCommand<Unit, Unit> EnableAllCommand { get; protected set; }
 
         /// <summary>
-        /// Gets the explicit action for removing a virtual placeholder from the collection.
-        /// </summary>
-        [StaticLocalization(LocalizationResources.Collection_Mods.RemoveFromCollection)]
-        public virtual string RemoveFromCollection { get; protected set; }
-
-        /// <summary>
-        /// Gets the explicit action for removing a virtual placeholder from the collection.
-        /// </summary>
-        public virtual ReactiveCommand<Unit, Unit> RemoveFromCollectionCommand { get; protected set; }
-
-        /// <summary>
         /// Gets or sets a value indicating whether [entering new collection].
         /// </summary>
         /// <value><c>true</c> if [entering new collection]; otherwise, <c>false</c>.</value>
@@ -716,6 +701,19 @@ namespace IronyModManager.ViewModels.Controls
         public virtual ReactiveCommand<Unit, Unit> RemoveCommand { get; protected set; }
 
         /// <summary>
+        /// Gets the explicit action for removing a virtual placeholder from the collection.
+        /// </summary>
+        /// <value>The remove from collection.</value>
+        [StaticLocalization(LocalizationResources.Collection_Mods.RemoveFromCollection)]
+        public virtual string RemoveFromCollection { get; protected set; }
+
+        /// <summary>
+        /// Gets the explicit action for removing a virtual placeholder from the collection.
+        /// </summary>
+        /// <value>The remove from collection command.</value>
+        public virtual ReactiveCommand<Unit, Unit> RemoveFromCollectionCommand { get; protected set; }
+
+        /// <summary>
         /// Gets or sets the search mods.
         /// </summary>
         /// <value>The search mods.</value>
@@ -808,6 +806,15 @@ namespace IronyModManager.ViewModels.Controls
         }
 
         /// <summary>
+        /// Gets the effective collection members that can participate in a Conflict Solver session.
+        /// </summary>
+        /// <returns>The ordered, file-backed mod instances available for analysis.</returns>
+        public virtual IReadOnlyList<IMod> GetConflictSolverMods()
+        {
+            return SelectedMods?.Where(p => !p.IsVirtual).ToList() ?? [];
+        }
+
+        /// <summary>
         /// Gets the context menu mod steam URL.
         /// </summary>
         /// <returns>System.String.</returns>
@@ -835,28 +842,6 @@ namespace IronyModManager.ViewModels.Controls
             }
 
             return string.Empty;
-        }
-
-        /// <summary>
-        /// Sets or clears the local display-name override for the context-menu mod.
-        /// This deliberately does not alter collection membership or undo/redo state.
-        /// </summary>
-        /// <param name="nameOverride">The requested alias, or null/whitespace to clear it.</param>
-        /// <returns><c>true</c> when the mod has a stable alias identity.</returns>
-        public virtual bool SetContextMenuModAlias(string nameOverride)
-        {
-            if (ContextMenuMod == null || !modService.SetModAlias(ContextMenuMod, nameOverride))
-            {
-                return false;
-            }
-
-            foreach (var mod in Mods?.Where(p => p.Game.Equals(ContextMenuMod.Game, StringComparison.OrdinalIgnoreCase) &&
-                                                 p.DescriptorFile.Equals(ContextMenuMod.DescriptorFile, StringComparison.OrdinalIgnoreCase)) ?? [])
-            {
-                mod.NameOverride = ContextMenuMod.NameOverride;
-            }
-
-            return true;
         }
 
         /// <summary>
@@ -1014,10 +999,33 @@ namespace IronyModManager.ViewModels.Controls
         }
 
         /// <summary>
+        /// Sets or clears the local display-name override for the context-menu mod.
+        /// This deliberately does not alter collection membership or undo/redo state.
+        /// </summary>
+        /// <param name="nameOverride">The requested alias, or null/whitespace to clear it.</param>
+        /// <returns><c>true</c> when the mod has a stable alias identity.</returns>
+        public virtual bool SetContextMenuModAlias(string nameOverride)
+        {
+            if (ContextMenuMod == null || !modService.SetModAlias(ContextMenuMod, nameOverride))
+            {
+                return false;
+            }
+
+            foreach (var mod in Mods?.Where(p => p.Game.Equals(ContextMenuMod.Game, StringComparison.OrdinalIgnoreCase) &&
+                                                 p.DescriptorFile.Equals(ContextMenuMod.DescriptorFile, StringComparison.OrdinalIgnoreCase)) ?? [])
+            {
+                mod.NameOverride = ContextMenuMod.NameOverride;
+            }
+
+            return true;
+        }
+
+        /// <summary>
         /// Sets the mods.
         /// </summary>
         /// <param name="mods">The mods.</param>
         /// <param name="activeGame">The active game.</param>
+        /// <param name="revalidationLock">The revalidation lock.</param>
         public virtual void SetMods(IEnumerable<IMod> mods, IGame activeGame,
             GameStateLockInfo revalidationLock = null)
         {
@@ -1054,12 +1062,6 @@ namespace IronyModManager.ViewModels.Controls
                     SetSelectedModsState(SelectedMods.OrderByDescending(x => x.Name, StringComparer.OrdinalIgnoreCase).ToObservableCollection());
                     break;
             }
-        }
-
-        private bool AreAllRealModsEnabled()
-        {
-            var realMods = SelectedMods?.Where(p => !p.IsVirtual).ToList() ?? [];
-            return realMods.Count != 0 && realMods.All(p => p.IsSelected);
         }
 
         /// <summary>
@@ -1174,6 +1176,7 @@ namespace IronyModManager.ViewModels.Controls
         /// Handles the mod collection change.
         /// </summary>
         /// <param name="resetStack">if set to <c>true</c> [reset stack].</param>
+        /// <param name="revalidationLock">The revalidation lock.</param>
         protected virtual void HandleModCollectionChange(bool resetStack,
             GameStateLockInfo revalidationLock = null)
         {
@@ -1229,7 +1232,6 @@ namespace IronyModManager.ViewModels.Controls
                     var message = IronyFormatter.Format(interaction.GetText(LocalizationResources.Collection_Mods.Prompts.ModsMissingMessage), new { Environment.NewLine, Mods = string.Join(Environment.NewLine, missingMods) });
                     Dispatcher.UIThread.SafeInvoke(() => interaction.PromptAsync(title, title, message, NotificationType.Warning, PromptType.OK));
                 }
-
             }
 
             if (resetStack)
@@ -1269,6 +1271,7 @@ namespace IronyModManager.ViewModels.Controls
                 {
                     operationProgressCoordinator.CompleteCollectionTransfer();
                 }
+
                 if (collection != null)
                 {
                     collection.IsSelected = true;
@@ -1440,6 +1443,28 @@ namespace IronyModManager.ViewModels.Controls
             {
                 await TriggerOverlayAsync(id, false);
             }
+        }
+
+        /// <summary>
+        /// Initializes the explicit virtual collection-member removal command.
+        /// </summary>
+        /// <param name="disposables">The activation disposables.</param>
+        protected virtual void InitializeRemoveFromCollectionCommand(CompositeDisposable disposables)
+        {
+            RemoveFromCollectionCommand = ReactiveCommand.Create(() =>
+            {
+                var virtualMod = ContextMenuMod;
+                var isCollectionMember = virtualMod != null && SelectedMods?.Any(p =>
+                    modService.AreModIdentitiesEquivalent(p, virtualMod)) == true;
+                if (virtualMod?.IsVirtual != true || !isCollectionMember)
+                {
+                    return;
+                }
+
+                SetSelectedModsState(collectionModMembership.RemoveVirtual(SelectedMods, virtualMod), evaluatePatchState: false);
+                SaveSelectedCollection(true);
+                AllModsEnabled = AreAllRealModsEnabled();
+            }).DisposeWith(disposables);
         }
 
         /// <summary>
@@ -2197,38 +2222,6 @@ namespace IronyModManager.ViewModels.Controls
         }
 
         /// <summary>
-        /// Performs the redo undo ordering.
-        /// </summary>
-        /// <param name="membership">The ordered collection membership.</param>
-        private void PerformRedoUndoOrdering(CollectionMembershipHistorySnapshot membership)
-        {
-            if (Mods != null && membership != null)
-            {
-                BeforeUndoRedo?.Invoke(this, EventArgs.Empty);
-                skipModSelectionSave = true;
-                skipModCollectionSave = true;
-                reorderQueue.Clear();
-                reorderToken?.Cancel();
-                var collection = membership.CreateCollection(modCollectionService, SelectedModCollection);
-                var mods = modService.ResolveCollectionMods(Mods, collection, SelectedMods).ToList();
-                collectionModMembership.RestoreSelection(Mods, mods);
-
-                SetSelectedModsState(mods, ignoreStack: true);
-                if (!string.IsNullOrWhiteSpace(SelectedModCollection?.Name))
-                {
-                    SaveSelectedCollection();
-                }
-
-                SaveState();
-                RecognizeSortOrder(SelectedModCollection);
-                AllModsEnabled = AreAllRealModsEnabled();
-                skipModSelectionSave = false;
-                skipModCollectionSave = false;
-                AfterUndoRedo?.Invoke(this, EventArgs.Empty);
-            }
-        }
-
-        /// <summary>
         /// Performs the undo.
         /// </summary>
         protected virtual void PerformUndo()
@@ -2349,6 +2342,7 @@ namespace IronyModManager.ViewModels.Controls
         /// <summary>
         /// Saves the selected collection.
         /// </summary>
+        /// <param name="explicitMembershipChange">The explicit membership change.</param>
         protected virtual void SaveSelectedCollection(bool explicitMembershipChange = false)
         {
             var game = gameService.GetSelected()?.Type ?? string.Empty;
@@ -2382,28 +2376,6 @@ namespace IronyModManager.ViewModels.Controls
                     SelectedModCollection.ModPaths = collection.ModPaths;
                 }
             }
-        }
-
-        /// <summary>
-        /// Initializes the explicit virtual collection-member removal command.
-        /// </summary>
-        /// <param name="disposables">The activation disposables.</param>
-        protected virtual void InitializeRemoveFromCollectionCommand(CompositeDisposable disposables)
-        {
-            RemoveFromCollectionCommand = ReactiveCommand.Create(() =>
-            {
-                var virtualMod = ContextMenuMod;
-                var isCollectionMember = virtualMod != null && SelectedMods?.Any(p =>
-                    modService.AreModIdentitiesEquivalent(p, virtualMod)) == true;
-                if (virtualMod?.IsVirtual != true || !isCollectionMember)
-                {
-                    return;
-                }
-
-                SetSelectedModsState(collectionModMembership.RemoveVirtual(SelectedMods, virtualMod), evaluatePatchState: false);
-                SaveSelectedCollection(true);
-                AllModsEnabled = AreAllRealModsEnabled();
-            }).DisposeWith(disposables);
         }
 
         /// <summary>
@@ -2502,6 +2474,7 @@ namespace IronyModManager.ViewModels.Controls
             {
                 HandleCollectionPatchStateAsync(SelectedModCollection?.Name).ConfigureAwait(false);
             }
+
             var order = 1;
             if (SelectedMods?.Count > 0)
             {
@@ -2512,109 +2485,6 @@ namespace IronyModManager.ViewModels.Controls
             if (canShutdownReorder)
             {
                 skipReorder = false;
-            }
-        }
-
-        /// <summary>
-        /// Captures persisted collection membership without retaining mutable runtime mod proxies.
-        /// </summary>
-        /// <param name="mods">The collection members.</param>
-        /// <returns>A scalar history snapshot.</returns>
-        private CollectionMembershipHistorySnapshot CaptureCollectionMembership(IEnumerable<IMod> mods)
-        {
-            return new CollectionMembershipHistorySnapshot(mods);
-        }
-
-        /// <summary>
-        /// Represents one runtime-only, ordered collection membership state.
-        /// </summary>
-        private sealed class CollectionMembershipHistorySnapshot
-        {
-            private readonly IReadOnlyList<Member> members;
-
-            /// <summary>
-            /// Initializes a new instance of the <see cref="CollectionMembershipHistorySnapshot"/> class.
-            /// </summary>
-            /// <param name="mods">The collection members to capture.</param>
-            public CollectionMembershipHistorySnapshot(IEnumerable<IMod> mods)
-            {
-                members = (mods ?? []).Select(p => new Member(p)).ToList();
-            }
-
-            /// <summary>
-            /// Creates a transient collection projection suitable for the canonical collection resolver.
-            /// </summary>
-            /// <param name="collectionService">The collection factory.</param>
-            /// <param name="selectedCollection">The currently selected collection.</param>
-            /// <returns>The persisted-membership projection.</returns>
-            public IModCollection CreateCollection(IModCollectionService collectionService, IModCollection selectedCollection)
-            {
-                var collection = collectionService.Create();
-                collection.Game = selectedCollection?.Game;
-                collection.Name = selectedCollection?.Name;
-                collection.Mods = members.Select(p => p.DescriptorFile).ToList();
-                collection.ModPaths = members.Select(p => p.FullPath).ToList();
-                collection.ModNames = members.Select(p => p.Name).ToList();
-                collection.ModIds = members.Select(p => p.CreateSourceInfo()).ToList();
-                return collection;
-            }
-
-            /// <summary>
-            /// Holds the persisted scalar identity and metadata for one collection member.
-            /// </summary>
-            private sealed class Member
-            {
-                private readonly long? remoteId;
-                private readonly ModSource source;
-
-                /// <summary>
-                /// Initializes a new instance of the <see cref="Member"/> class.
-                /// </summary>
-                /// <param name="mod">The mod to capture.</param>
-                public Member(IMod mod)
-                {
-                    DescriptorFile = mod?.DescriptorFile ?? string.Empty;
-                    FullPath = mod?.FullPath ?? string.Empty;
-                    Name = mod?.Name ?? string.Empty;
-                    remoteId = mod?.RemoteId;
-                    source = mod?.Source ?? ModSource.Local;
-                }
-
-                /// <summary>
-                /// Gets the descriptor identity.
-                /// </summary>
-                public string DescriptorFile { get; }
-
-                /// <summary>
-                /// Gets the persisted path.
-                /// </summary>
-                public string FullPath { get; }
-
-                /// <summary>
-                /// Gets the persisted display name.
-                /// </summary>
-                public string Name { get; }
-
-                /// <summary>
-                /// Creates the persisted source metadata for this member.
-                /// </summary>
-                /// <returns>The source metadata.</returns>
-                public IModCollectionSourceInfo CreateSourceInfo()
-                {
-                    var sourceInfo = DIResolver.Get<IModCollectionSourceInfo>();
-                    switch (source)
-                    {
-                        case ModSource.Steam:
-                            sourceInfo.SteamId = remoteId;
-                            break;
-
-                        case ModSource.Paradox:
-                            sourceInfo.ParadoxId = remoteId;
-                            break;
-                    }
-
-                    return sourceInfo;
-                }
             }
         }
 
@@ -2694,6 +2564,26 @@ namespace IronyModManager.ViewModels.Controls
         }
 
         /// <summary>
+        /// Ares all real mods enabled.
+        /// </summary>
+        /// <returns>bool.</returns>
+        private bool AreAllRealModsEnabled()
+        {
+            var realMods = SelectedMods?.Where(p => !p.IsVirtual).ToList() ?? [];
+            return realMods.Count != 0 && realMods.All(p => p.IsSelected);
+        }
+
+        /// <summary>
+        /// Captures persisted collection membership without retaining mutable runtime mod proxies.
+        /// </summary>
+        /// <param name="mods">The collection members.</param>
+        /// <returns>A scalar history snapshot.</returns>
+        private CollectionMembershipHistorySnapshot CaptureCollectionMembership(IEnumerable<IMod> mods)
+        {
+            return new CollectionMembershipHistorySnapshot(mods);
+        }
+
+        /// <summary>
         /// Export mods as an asynchronous operation.
         /// </summary>
         /// <param name="fullMetadata">if set to <c>true</c> [full metadata].</param>
@@ -2728,9 +2618,179 @@ namespace IronyModManager.ViewModels.Controls
             }
         }
 
+        /// <summary>
+        /// Performs the redo undo ordering.
+        /// </summary>
+        /// <param name="membership">The ordered collection membership.</param>
+        private void PerformRedoUndoOrdering(CollectionMembershipHistorySnapshot membership)
+        {
+            if (Mods != null && membership != null)
+            {
+                BeforeUndoRedo?.Invoke(this, EventArgs.Empty);
+                skipModSelectionSave = true;
+                skipModCollectionSave = true;
+                reorderQueue.Clear();
+                reorderToken?.Cancel();
+                var collection = membership.CreateCollection(modCollectionService, SelectedModCollection);
+                var mods = modService.ResolveCollectionMods(Mods, collection, SelectedMods).ToList();
+                collectionModMembership.RestoreSelection(Mods, mods);
+
+                SetSelectedModsState(mods, ignoreStack: true);
+                if (!string.IsNullOrWhiteSpace(SelectedModCollection?.Name))
+                {
+                    SaveSelectedCollection();
+                }
+
+                SaveState();
+                RecognizeSortOrder(SelectedModCollection);
+                AllModsEnabled = AreAllRealModsEnabled();
+                skipModSelectionSave = false;
+                skipModCollectionSave = false;
+                AfterUndoRedo?.Invoke(this, EventArgs.Empty);
+            }
+        }
+
         #endregion Methods
 
         #region Classes
+
+        /// <summary>
+        /// Represents one runtime-only, ordered collection membership state.
+        /// </summary>
+        private sealed class CollectionMembershipHistorySnapshot
+        {
+            #region Fields
+
+            /// <summary>
+            /// The members
+            /// </summary>
+            private readonly IReadOnlyList<Member> members;
+
+            #endregion Fields
+
+            #region Constructors
+
+            /// <summary>
+            /// Initializes a new instance of the <see cref="CollectionMembershipHistorySnapshot" /> class.
+            /// </summary>
+            /// <param name="mods">The collection members to capture.</param>
+            public CollectionMembershipHistorySnapshot(IEnumerable<IMod> mods)
+            {
+                members = (mods ?? []).Select(p => new Member(p)).ToList();
+            }
+
+            #endregion Constructors
+
+            #region Methods
+
+            /// <summary>
+            /// Creates a transient collection projection suitable for the canonical collection resolver.
+            /// </summary>
+            /// <param name="collectionService">The collection factory.</param>
+            /// <param name="selectedCollection">The currently selected collection.</param>
+            /// <returns>The persisted-membership projection.</returns>
+            public IModCollection CreateCollection(IModCollectionService collectionService, IModCollection selectedCollection)
+            {
+                var collection = collectionService.Create();
+                collection.Game = selectedCollection?.Game;
+                collection.Name = selectedCollection?.Name;
+                collection.Mods = members.Select(p => p.DescriptorFile).ToList();
+                collection.ModPaths = members.Select(p => p.FullPath).ToList();
+                collection.ModNames = members.Select(p => p.Name).ToList();
+                collection.ModIds = members.Select(p => p.CreateSourceInfo()).ToList();
+                return collection;
+            }
+
+            #endregion Methods
+
+            #region Classes
+
+            /// <summary>
+            /// Holds the persisted scalar identity and metadata for one collection member.
+            /// </summary>
+            private sealed class Member
+            {
+                #region Fields
+
+                /// <summary>
+                /// The remote identifier
+                /// </summary>
+                private readonly long? remoteId;
+
+                /// <summary>
+                /// The source
+                /// </summary>
+                private readonly ModSource source;
+
+                #endregion Fields
+
+                #region Constructors
+
+                /// <summary>
+                /// Initializes a new instance of the <see cref="Member" /> class.
+                /// </summary>
+                /// <param name="mod">The mod to capture.</param>
+                public Member(IMod mod)
+                {
+                    DescriptorFile = mod?.DescriptorFile ?? string.Empty;
+                    FullPath = mod?.FullPath ?? string.Empty;
+                    Name = mod?.Name ?? string.Empty;
+                    remoteId = mod?.RemoteId;
+                    source = mod?.Source ?? ModSource.Local;
+                }
+
+                #endregion Constructors
+
+                #region Properties
+
+                /// <summary>
+                /// Gets the descriptor identity.
+                /// </summary>
+                /// <value>The descriptor file.</value>
+                public string DescriptorFile { get; }
+
+                /// <summary>
+                /// Gets the persisted path.
+                /// </summary>
+                /// <value>The full path.</value>
+                public string FullPath { get; }
+
+                /// <summary>
+                /// Gets the persisted display name.
+                /// </summary>
+                /// <value>The name.</value>
+                public string Name { get; }
+
+                #endregion Properties
+
+                #region Methods
+
+                /// <summary>
+                /// Creates the persisted source metadata for this member.
+                /// </summary>
+                /// <returns>The source metadata.</returns>
+                public IModCollectionSourceInfo CreateSourceInfo()
+                {
+                    var sourceInfo = DIResolver.Get<IModCollectionSourceInfo>();
+                    switch (source)
+                    {
+                        case ModSource.Steam:
+                            sourceInfo.SteamId = remoteId;
+                            break;
+
+                        case ModSource.Paradox:
+                            sourceInfo.ParadoxId = remoteId;
+                            break;
+                    }
+
+                    return sourceInfo;
+                }
+
+                #endregion Methods
+            }
+
+            #endregion Classes
+        }
 
         /// <summary>
         /// Class OrderedMod.
