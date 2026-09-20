@@ -200,6 +200,25 @@ On macOS, automatic installation is intentionally unavailable. Irony still check
 ---
 
 <details>
+<summary><strong>Irony shows blank, transparent, or unresponsive windows on Windows.</strong></summary>
+
+Rare Windows rendering failures can leave Irony windows blank, transparent, or unresponsive. Irony 1.28 improves automatic rendering recovery for this failure class, but validation on the originally affected systems is still pending.
+
+If the problem persists, WGL remains available as a compatibility and diagnostic fallback. Copy `appSettings.json` to `appSettings.override.json`, then set:
+
+```json
+"WindowsOptions": {
+  "UseWgl": true
+}
+```
+
+Restart Irony after changing the setting. Leave WGL at its default unless this fallback is needed.
+
+</details>
+
+---
+
+<details>
 <summary><strong>Irony crashes on startup on Windows.</strong></summary>
 
 Install Microsoft Visual C++ 2017 Redistributable:
