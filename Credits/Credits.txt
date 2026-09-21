@@ -76,29 +76,11 @@ license Type:MIT
 
 #########################
 Package:AwesomeAssertions
-Version:9.3.0
+Version:9.6.0
 project URL:https://github.com/AwesomeAssertions/AwesomeAssertions
 Description:A fork of FluentAssertions.
 licenseUrl:https://licenses.nuget.org/Apache-2.0
 license Type:Apache-2.0
-
-#########################
-Package:BCnEncoder.Net
-Version:2.2.1
-project URL:https://github.com/Nominom/BCnEncoder.NET
-Description:BCnEncoder.NET is a library for compressing rgba images to different block-compressed formats. Both ktx and dds output file-formats are supported. It has no native dependencies and is .NET Standard 2.1 compatible.
-
-Supported formats are:
-    Raw unsigned byte R, RG, RGB and RGBA formats
-    BC1 (S3TC DXT1)
-    BC2 (S3TC DXT3)
-    BC3 (S3TC DXT5)
-    BC4 (RGTC1)
-    BC5 (RGTC2)
-    BC6 (BPTC-FLOAT)
-    BC7 (BPTC)
-licenseUrl:https://licenses.nuget.org/MIT%20OR%20Unlicense
-license Type:MIT OR Unlicense
 
 #########################
 Package:Castle.Core
@@ -110,7 +92,7 @@ license Type:Apache-2.0
 
 #########################
 Package:CodexMicroORM.Core
-Version:1.3.2
+Version:1.4.1
 project URL:https://github.com/codexguy/CodexMicroORM
 Description:A high performance, low code alternative to ORM's such as Entity Framework, offers intelligent database mapping to your existing CLR objects with minimal effort. Visit "Design Goals" on GitHub to see more rationale and guidance.
 licenseUrl:https://licenses.nuget.org/Apache-2.0
@@ -147,6 +129,62 @@ project URL:https://github.com/mmanela/diffplex/
 Description:DiffPlex is a diffing library that allows you to programmatically create text diffs. DiffPlex is a fast and tested library.
 licenseUrl:https://licenses.nuget.org/Apache-2.0
 license Type:Apache-2.0
+
+#########################
+Package:DotNet.Glob
+Version:3.1.3
+project URL:https://github.com/dazinator/DotNet.Glob
+Description:A fast globbing library for .NET applications, including .net core. Doesn't use Regex.
+licenseUrl:https://github.com/dazinator/DotNet.Glob/blob/master/LICENSE
+license Type:MIT
+
+#########################
+Package:FParsec
+Version:1.1.1
+project URL:http://www.quanttec.com/fparsec/
+Description:FParsec is a parser combinator library for F#.
+
+You can find comprehensive documentation for FParsec at http://www.quanttec.com/fparsec. The documentation includes a feature list, a tutorial, a user’s guide and an API reference.
+
+This package uses the basic “low-trust” configuration of FParsec, which does not use any unverifiable code and is optimized for maximum portability. If you need to parse very large files or if you employ FParsec for performance-critical jobs, consider using the alternate “Big Data Edition” NuGet package (see https://nuget.org/packages/fparsec-big-data-edition).
+licenseUrl:http://www.quanttec.com/fparsec/license.html
+license Type:Simplified BSD License.
+
+#########################
+Package:FSharp.Collections.ParallelSeq
+Version:1.2.0
+project URL:http://fsprojects.github.io/FSharp.Collections.ParallelSeq/
+Description:Provides an F#-style API for parallel operations on sequences that are part in .NET 4.0 as System.Linq.ParallelEnumerable class. The API is akin to F# operations on sequences.
+licenseUrl:https://licenses.nuget.org/Apache-2.0
+license Type:Apache-2.0
+
+#########################
+Package:FSharp.Data
+Version:3.1.1
+project URL:http://fsharp.github.io/FSharp.Data
+Description:The F# Data library (FSharp.Data.dll) implements everything you need to access data in your F# applications and scripts. It implements F# type providers for working with structured file formats (CSV, HTML, JSON and XML) and for accessing the WorldBank data. It also includes helpers for parsing CSV, HTML and JSON files and for sending HTTP requests.
+licenseUrl:http://github.com/fsharp/FSharp.Data/blob/master/LICENSE.md
+license Type:Apache-2.0
+
+#########################
+Package:FSharpx.Collections
+Version:2.0.0
+project URL:https://github.com/fsprojects/FSharpx.Collections
+Description:FSharpx.Collections is a collection of datastructures for use with F# and C#.
+licenseUrl:http://github.com/fsprojects/FSharpx.Collections/blob/master/LICENSE.txt
+license Type:Apache-2.0
+
+#########################
+Package:FsPickler
+Version:5.3.2
+project URL:http://mbraceproject.github.io/FsPickler/
+Description:FsPickler is a serialization library that facilitates the distribution of .NET objects.
+The implementation focuses on performance and completeness in supported types, including F# types.
+It supports multiple, pluggable serialization formats including Binary, Xml, JSON and BSON.
+The library is based on the functional programming concept of pickler combinators which
+has been adapted to accommodate the object oriented nature of the .NET framework.
+licenseUrl:https://licenses.nuget.org/MIT
+license Type:MIT
 
 #########################
 Package:FSharp.Core
@@ -189,8 +227,16 @@ licenseUrl:https://github.com/JeringTech/KeyValueStore/blob/master/License.md
 license Type:Apache-2.0
 
 #########################
+Package:KTrie
+Version:3.0.1
+project URL:https://github.com/kpol/trie
+Description:Trie (a.k.a. prefix tree) is an ordered tree data structure that is used to store an associative array where the keys are usually strings. All the descendants of a node have a common prefix of the string associated with that node, and the root is associated with the empty string.
+licenseUrl:https://github.com/kpol/trie/blob/main/LICENSE
+license Type:MIT
+
+#########################
 Package:Magick.NET-Q8-x64
-Version:14.9.1
+Version:14.17.1
 project URL:https://github.com/dlemstra/Magick.NET
 Description:ImageMagick is a powerful image manipulation library that supports over 100 major file formats (not including sub-formats). With Magick.NET you can use ImageMagick without having to install ImageMagick on your server or desktop. Visit https://github.com/dlemstra/Magick.NET/tree/main/docs before installing to help you decide the best version.
 licenseUrl:https://licenses.nuget.org/Apache-2.0
@@ -243,7 +289,7 @@ license Type:MIT
 
 #########################
 Package:MagicMapper
-Version:14.0.0
+Version:14.0.1
 project URL:https://automapper.org/
 Description:A convention-based object-object mapper.
 licenseUrl:https://licenses.nuget.org/MIT
@@ -251,7 +297,7 @@ license Type:MIT
 
 #########################
 Package:Microsoft.NET.Test.Sdk
-Version:18.0.1
+Version:18.10.0
 project URL:https://github.com/microsoft/vstest
 Description:The MSbuild targets and properties for building .NET test projects.
 licenseUrl:https://licenses.nuget.org/MIT
@@ -291,6 +337,14 @@ licenseUrl:https://licenses.nuget.org/Apache-2.0
 license Type:Apache-2.0
 
 #########################
+Package:Mono.Cecil
+Version:0.11.6
+project URL:http://github.com/jbevain/cecil/
+Description:Cecil is a library written by Jb Evain to generate and inspect programs and libraries in the ECMA CIL format. It has full support for generics, and support some debugging symbol format. In simple English, with Cecil, you can load existing managed assemblies, browse all the contained types, modify them on the fly and save back to the disk the modified assembly.
+licenseUrl:https://licenses.nuget.org/MIT
+license Type:MIT
+
+#########################
 Package:Moq
 Version:4.20.72
 project URL:https://github.com/moq/moq
@@ -308,7 +362,7 @@ license Type:MIT
 
 #########################
 Package:Nerdbank.GitVersioning
-Version:3.9.50
+Version:3.10.94
 project URL:https://github.com/dotnet/Nerdbank.GitVersioning
 Description:Stamps your assemblies with semver 2.0 compliant git commit specific version information and provides NuGet versioning information as well.
 licenseUrl:https://licenses.nuget.org/MIT
@@ -340,7 +394,7 @@ license Type:MIT
 
 #########################
 Package:NLog
-Version:6.0.6
+Version:6.2.0
 project URL:https://nlog-project.org/
 Description:NLog is a logging platform for .NET with rich log routing and management capabilities.
 NLog supports traditional logging, structured logging and the combination of both.
@@ -360,16 +414,16 @@ licenseUrl:https://licenses.nuget.org/BSD-3-Clause
 license Type:BSD-3-Clause
 
 #########################
-Package:Pfim
-Version:0.11.4
-project URL:https://nickbabcock.github.io/Pfim/
-Description:A simple and fast .NET Standard image decoder for targa (.tga) and direct draw surface (.dds) images
-licenseUrl:https://raw.githubusercontent.com/nickbabcock/Pfim/master/LICENSE.txt
-license Type:
+Package:NLog.Targets.Trace
+Version:6.0.3
+project URL:https://nlog-project.org/
+Description:Trace Target for System.Diagnostics.Trace
+licenseUrl:https://licenses.nuget.org/BSD-3-Clause
+license Type:BSD-3-Clause
 
 #########################
 Package:PommaLabs.MimeTypes
-Version:3.1.0+97cf707b
+Version:3.2.0+0fdf861a
 project URL:https://gitlab.com/pommalabs/mime-types
 Description:MIME content type definitions mapped with file extensions and file signatures.
 licenseUrl:https://licenses.nuget.org/MIT
@@ -401,31 +455,39 @@ license Type:MIT
 
 #########################
 Package:RepoDb
-Version:1.13.1
+Version:1.16.0
 project URL:https://repodb.net/
 Description:A hybrid ORM library for .NET.
-licenseUrl:https://www.nuget.org/packages/RepoDb/1.13.1/License
-license Type:Apache License 2.0
+licenseUrl:https://licenses.nuget.org/Apache-2.0
+license Type:Apache-2.0
 
 #########################
 Package:RepoDb.Sqlite.Microsoft
-Version:1.13.1
+Version:1.16.0
 project URL:https://repodb.net/tutorial/get-started-sqlite
 Description:A hybrid .NET ORM library for SQLite (using Microsoft.Data.Sqlite).
-licenseUrl:https://www.nuget.org/packages/RepoDb.Sqlite.Microsoft/1.13.1/License
-license Type:Apache License 2.0
+licenseUrl:https://licenses.nuget.org/Apache-2.0
+license Type:Apache-2.0
 
 #########################
-Package:SharpCompress
-Version:0.42.0
-project URL:https://github.com/adamhathcock/sharpcompress
-Description:SharpCompress is a compression library for NET Standard 2.0/NET 4.8/NET 4.8.1/NET 6.0/NET 8.0 that can unrar, decompress 7zip, decompress xz, zip/unzip, tar/untar lzip/unlzip, bzip2/unbzip2 and gzip/ungzip with forward-only reading and file random access APIs. Write support for zip/tar/bzip2/gzip is implemented.
+Package:Sandwych.QuickGraph.Core
+Version:1.0.0
+project URL:https://github.com/oldrev/Sandwych.QuickGraph
+Description:Sandwych.QuickGraph is a port of the awesome QuickGraph to .NET Standard, it provides generic directed/undirected graph datastructures and algorithms for .NET.
+licenseUrl:https://github.com/oldrev/Sandwych.QuickGraph/blob/master/LICENSE.md
+license Type:MS-PL
+
+#########################
+Package:SharpZipLib
+Version:1.4.2
+project URL:https://github.com/icsharpcode/SharpZipLib
+Description:SharpZipLib (#ziplib, formerly NZipLib) is a compression library for Zip, GZip, BZip2, and Tar written entirely in C# for .NET. It is implemented as an assembly (installable in the GAC), and thus can easily be incorporated into other projects (in any .NET language)
 licenseUrl:https://licenses.nuget.org/MIT
 license Type:MIT
 
 #########################
 Package:SimpleInjector
-Version:5.5.0
+Version:5.6.0
 project URL:https://simpleinjector.org/
 Description:Simple Injector is an easy, flexible and fast dependency injection library that uses best practice to guide your solutions toward the pit of success.
 licenseUrl:https://licenses.nuget.org/MIT
@@ -439,23 +501,6 @@ project URL:https://simpleinjector.org/
 Description:Adds support for packaging sets of related services to allow registering them together. Consumers can implement the IPackage interface and use the RegisterPackages extension method to dynamically add registrations in the supplied list of assemblies.
 licenseUrl:https://licenses.nuget.org/MIT
 license Type:MIT
-
-#########################
-Package:SixLabors.ImageSharp
-Version:1.0.4
-project URL:https://github.com/SixLabors/ImageSharp
-Description:A new, fully featured, fully managed, cross-platform, 2D graphics API for .NET
-licenseUrl:https://licenses.nuget.org/Apache-2.0
-license Type:Apache-2.0
-
-#########################
-Package:SixLabors.ImageSharp.Drawing
-Version:1.0.0-beta11
-project URL:https://github.com/SixLabors/ImageSharp.Drawing
-Description:An extension to ImageSharp that allows the drawing of images, paths, and text.
-licenseUrl:https://licenses.nuget.org/Apache-2.0
-license Type:Apache-2.0
-
 #########################
 Package:SkiaSharp
 Version:2.88.7
@@ -527,7 +572,7 @@ license Type:
 
 #########################
 Package:System.Linq.Async
-Version:7.0.0
+Version:7.0.1
 project URL:https://github.com/dotnet/reactive
 Description:Provides support for Language-Integrated Query (LINQ) over IAsyncEnumerable<T> sequences.
 licenseUrl:https://licenses.nuget.org/MIT
@@ -535,7 +580,7 @@ license Type:MIT
 
 #########################
 Package:System.Reactive
-Version:6.1.0
+Version:7.0.0
 project URL:https://github.com/dotnet/reactive
 Description:Reactive Extensions (Rx) for .NET
 licenseUrl:https://licenses.nuget.org/MIT
@@ -551,29 +596,36 @@ license Type:MIT
 
 #########################
 Package:UTF.Unknown
-Version:2.6.0
+Version:2.7.0
 project URL:https://github.com/CharsetDetector/UTF-unknown
 Description:Detect character set for files, streams and other bytes.
 
-      This package is based on Ude and since version 2 also on uchardet, which are ports of the Mozilla Universal Charset Detector.
+This package is based on Ude and since version 2 also on uchardet, which are ports of the Mozilla Universal Charset Detector.
 
 Features:
 - Easy to use API
 - Supports frameworks:
- - .NET 6 (Will be dropped in the future)
- - .NET 8
+ - .NET 8, 9 and 10
  - .NET Standard 2.0
 - Strong named
 - XML documentation included
 
- Compared to Ude:
+Compared to Ude:
 
- - Refactor of API, namespaces and deadcode removal
+ - Refactored API, namespaces and removed dead code
  - Added some docs
- - Improve error handling
+ - Improved error handling
  - Improved unit tests
-licenseUrl:https://github.com/CharsetDetector/UTF-unknown/blob/master/license/MPL-1.1.txt
-license Type:Mozilla Public License
+licenseUrl:https://licenses.nuget.org/MPL-1.1
+license Type:MPL-1.1
+
+#########################
+Package:VDS.Common
+Version:3.0.0
+project URL:https://www.dotnetrdf.org/
+Description:A library containing useful data structures like Trees, Tries, Sparse Arrays, Bloom Filters and indexing tailored dictionaries.
+licenseUrl:https://licenses.nuget.org/MIT
+license Type:MIT
 
 #########################
 Package:Wanhjor.ObjectInspector
@@ -585,7 +637,7 @@ license Type:MIT
 
 #########################
 Package:xunit
-Version:2.7.0
+Version:2.9.3
 project URL:https://github.com/xunit/xunit
 Description:xUnit.net is a developer testing framework, built to support Test Driven Development, with a design goal of extreme simplicity and alignment with framework features.
 
@@ -601,3 +653,10 @@ Description:Visual Studio 2019 16.8+ Test Explorer runner for the xUnit.net fram
 licenseUrl:https://licenses.nuget.org/MIT
 license Type:MIT
 
+#########################
+Package:ZString
+Version:2.6.0
+project URL:https://github.com/Cysharp/ZString
+Description:Zero allocation StringBuilder for .NET Core and Unity.
+licenseUrl:https://licenses.nuget.org/MIT
+license Type:MIT
