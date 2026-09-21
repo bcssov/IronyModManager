@@ -18,6 +18,17 @@ Changes you make in Irony are applied directly to the game’s mod registry in a
 ---
 
 <details>
+<summary><strong>What happens if a mod or configured mod source is temporarily unavailable?</strong></summary>
+
+Irony preserves known collection membership instead of treating the unavailable source as an empty mod list. Missing members remain in **Collection Mods** as disabled placeholders; Apply skips them with a warning and continues with available mods.
+
+For a filesystem, permission, or provider failure, Irony blocks unsafe changes only for the affected game. Fix the source and restart Irony, or select a valid Data / User Directory or Custom Mod Directory so Irony can revalidate it. See the Wiki's [Collection Mods guide](https://github.com/bcssov/IronyModManager/wiki/Collection-Mods) for details.
+
+</details>
+
+---
+
+<details>
 <summary><strong>Does drag-and-drop support multiple items?</strong></summary>
 
 Not yet. Multi-select drag-and-drop is planned.  

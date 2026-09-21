@@ -30,6 +30,14 @@ The Wiki includes:
 
 ---
 
+# Resilient Collections
+
+Irony 1.28 preserves unavailable collection members as disabled placeholders instead of silently removing them. Applying a collection skips unavailable entries, warns the user, and writes only available mods to the effective game load order. Restoring or reinstalling a mod resolves its placeholder normally.
+
+If a configured mod source cannot be trusted because of a filesystem, permission, or provider failure, Irony protects only the affected game and blocks unsafe changes while preserving its last known-good state. See the detailed [Collection Mods guide](https://github.com/bcssov/IronyModManager/wiki/Collection-Mods) and [Options guide](https://github.com/bcssov/IronyModManager/wiki/Options).
+
+---
+
 # Exact Mod Set Ignore Rules
 
 Irony 1.28 can ignore a conflict only when its participating mods are exactly equal to a configured set. For example, `modSet:"A","B"` matches A + B or B + A, but not A alone or A + B + C. All names are quoted; inside a name, `\"` escapes a double quote and `\\` escapes a backslash.
