@@ -79,5 +79,197 @@
 			<pubDate>Sat, 01 Aug 2026 00:45:00 +02:00</pubDate>
 			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.27.206/win-x64.zip" sparkle:version="1.27.206.27272" sparkle:shortVersionString="1.27.206" length="103673491" sparkle:os="windows" type="application/zip" sparkle:signature="hSEhR0dINUIC2pXmHbIYAW74mVpkio57JG95/ES1DCg51uBj62IUUAAQ2nPuQQBeL61XcDxKhQo8v/u7fY9QAA=="/>
 		</item>
+		<item>
+			<title>1.28.94-alpha</title>
+			<description>## Release Notes 1.28
+
+* Upgrade to .NET 10
+* Update dependencies
+* Update Steamworks.NET
+* Update LiteDB
+* Modernize CWTools integration
+* Improve Wayland support
+* Fix deployment bugs on OSX\Linux
+* Improve Windows rendering recovery for rare blank or unresponsive windows
+* Improve deterministic build composition
+* Generalize Avalonia build workaround
+* Harden update artifact signature validation
+* Remove obsolete image parsing references
+* Remove SharpCompress
+* Update localization
+* Improve parser compatibility
+* Improve Compress Merge writable preflight
+* Improve collection rename progress feedback
+* Add per-game filesystem safety and recovery
+* Preserve missing collection mods as virtual entries
+* Preserve missing mods when importing collections
+* Improve collection persistence across unavailable mod sources
+* Add controlled recovery after changing mod directories
+* Skip unavailable mods when applying or launching collections
+* Preserve missing-mod metadata when exporting collections
+* Add visual indicators for unavailable collection mods
+* Improve virtual mod removal and collection membership handling
+* Add virtual-mod-aware collection undo and redo
+* Add local mod aliases
+* Search mods by local alias
+* Add Advanced Filter UI for mod search
+* Add exact mod-set Ignore Rules to Conflict Solver
+* Add GUI management for exact mod-set Ignore Rules with Add/Delete and read-only preview
+* Preserve exact mod-set Ignore Rules through Conflict Solver persistence and legacy rule editing
+* Note: Exact mod-set Ignore Rules are new in 1.28 and are not understood correctly by older Irony versions
+* Improve Options scaling and accessibility
+* Add responsive Options layout for high-DPI and small viewports
+* Add macOS application bundle packaging
+* Improve macOS Finder launch compatibility
+* Improve macOS update experience with manual release-page updates
+* Improve conflict analysis equivalence filtering
+</description>
+			<pubDate>Mon, 21 Sep 2026 07:00:13 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.28.94-alpha/linux-x64.zip" sparkle:version="1.28.94.65180" sparkle:shortVersionString="1.28.94" length="106576421" sparkle:os="linux" type="application/zip" sparkle:signature="VNgrScAAdP1OPnV0DESdo9fFkL1mS674EHxKtO2atnPzwpyw/w06IOrnuY4+pIjHv3wZ7R/KUAXDykm0DpvnDw=="/>
+		</item>
+		<item>
+			<title>1.28.94-alpha</title>
+			<description>## Release Notes 1.28
+
+* Upgrade to .NET 10
+* Update dependencies
+* Update Steamworks.NET
+* Update LiteDB
+* Modernize CWTools integration
+* Improve Wayland support
+* Fix deployment bugs on OSX\Linux
+* Improve Windows rendering recovery for rare blank or unresponsive windows
+* Improve deterministic build composition
+* Generalize Avalonia build workaround
+* Harden update artifact signature validation
+* Remove obsolete image parsing references
+* Remove SharpCompress
+* Update localization
+* Improve parser compatibility
+* Improve Compress Merge writable preflight
+* Improve collection rename progress feedback
+* Add per-game filesystem safety and recovery
+* Preserve missing collection mods as virtual entries
+* Preserve missing mods when importing collections
+* Improve collection persistence across unavailable mod sources
+* Add controlled recovery after changing mod directories
+* Skip unavailable mods when applying or launching collections
+* Preserve missing-mod metadata when exporting collections
+* Add visual indicators for unavailable collection mods
+* Improve virtual mod removal and collection membership handling
+* Add virtual-mod-aware collection undo and redo
+* Add local mod aliases
+* Search mods by local alias
+* Add Advanced Filter UI for mod search
+* Add exact mod-set Ignore Rules to Conflict Solver
+* Add GUI management for exact mod-set Ignore Rules with Add/Delete and read-only preview
+* Preserve exact mod-set Ignore Rules through Conflict Solver persistence and legacy rule editing
+* Note: Exact mod-set Ignore Rules are new in 1.28 and are not understood correctly by older Irony versions
+* Improve Options scaling and accessibility
+* Add responsive Options layout for high-DPI and small viewports
+* Add macOS application bundle packaging
+* Improve macOS Finder launch compatibility
+* Improve macOS update experience with manual release-page updates
+* Improve conflict analysis equivalence filtering
+</description>
+			<pubDate>Mon, 21 Sep 2026 07:00:26 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.28.94-alpha/osx-x64.zip" sparkle:version="1.28.94.65180" sparkle:shortVersionString="1.28.94" length="107626197" sparkle:os="osx" type="application/zip" sparkle:signature="fVbEHfaJIzsJI2xB/P5IteJoMCRCXVNxVfhL0BN9HnA2gEE6hSN6CPND+dIoptBLmisw1PBcQ+eWdUbgxRFiAg=="/>
+		</item>
+		<item>
+			<title>1.28.94-alpha</title>
+			<description>## Release Notes 1.28
+
+* Upgrade to .NET 10
+* Update dependencies
+* Update Steamworks.NET
+* Update LiteDB
+* Modernize CWTools integration
+* Improve Wayland support
+* Fix deployment bugs on OSX\Linux
+* Improve Windows rendering recovery for rare blank or unresponsive windows
+* Improve deterministic build composition
+* Generalize Avalonia build workaround
+* Harden update artifact signature validation
+* Remove obsolete image parsing references
+* Remove SharpCompress
+* Update localization
+* Improve parser compatibility
+* Improve Compress Merge writable preflight
+* Improve collection rename progress feedback
+* Add per-game filesystem safety and recovery
+* Preserve missing collection mods as virtual entries
+* Preserve missing mods when importing collections
+* Improve collection persistence across unavailable mod sources
+* Add controlled recovery after changing mod directories
+* Skip unavailable mods when applying or launching collections
+* Preserve missing-mod metadata when exporting collections
+* Add visual indicators for unavailable collection mods
+* Improve virtual mod removal and collection membership handling
+* Add virtual-mod-aware collection undo and redo
+* Add local mod aliases
+* Search mods by local alias
+* Add Advanced Filter UI for mod search
+* Add exact mod-set Ignore Rules to Conflict Solver
+* Add GUI management for exact mod-set Ignore Rules with Add/Delete and read-only preview
+* Preserve exact mod-set Ignore Rules through Conflict Solver persistence and legacy rule editing
+* Note: Exact mod-set Ignore Rules are new in 1.28 and are not understood correctly by older Irony versions
+* Improve Options scaling and accessibility
+* Add responsive Options layout for high-DPI and small viewports
+* Add macOS application bundle packaging
+* Improve macOS Finder launch compatibility
+* Improve macOS update experience with manual release-page updates
+* Improve conflict analysis equivalence filtering
+</description>
+			<pubDate>Mon, 21 Sep 2026 07:00:40 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.28.94-alpha/win-x64-setup.zip" sparkle:version="1.28.94.65180" sparkle:shortVersionString="1.28.94" length="76569687" sparkle:os="windows" type="application/zip" sparkle:signature="4R64oiILHINHH0WvKzm++sGbh1B8idZ2FJF9VvKheOavke6PvpttUbTUPdOjAjuhCPYqmBbkE2daQt+MYCQnCA=="/>
+		</item>
+		<item>
+			<title>1.28.94-alpha</title>
+			<description>## Release Notes 1.28
+
+* Upgrade to .NET 10
+* Update dependencies
+* Update Steamworks.NET
+* Update LiteDB
+* Modernize CWTools integration
+* Improve Wayland support
+* Fix deployment bugs on OSX\Linux
+* Improve Windows rendering recovery for rare blank or unresponsive windows
+* Improve deterministic build composition
+* Generalize Avalonia build workaround
+* Harden update artifact signature validation
+* Remove obsolete image parsing references
+* Remove SharpCompress
+* Update localization
+* Improve parser compatibility
+* Improve Compress Merge writable preflight
+* Improve collection rename progress feedback
+* Add per-game filesystem safety and recovery
+* Preserve missing collection mods as virtual entries
+* Preserve missing mods when importing collections
+* Improve collection persistence across unavailable mod sources
+* Add controlled recovery after changing mod directories
+* Skip unavailable mods when applying or launching collections
+* Preserve missing-mod metadata when exporting collections
+* Add visual indicators for unavailable collection mods
+* Improve virtual mod removal and collection membership handling
+* Add virtual-mod-aware collection undo and redo
+* Add local mod aliases
+* Search mods by local alias
+* Add Advanced Filter UI for mod search
+* Add exact mod-set Ignore Rules to Conflict Solver
+* Add GUI management for exact mod-set Ignore Rules with Add/Delete and read-only preview
+* Preserve exact mod-set Ignore Rules through Conflict Solver persistence and legacy rule editing
+* Note: Exact mod-set Ignore Rules are new in 1.28 and are not understood correctly by older Irony versions
+* Improve Options scaling and accessibility
+* Add responsive Options layout for high-DPI and small viewports
+* Add macOS application bundle packaging
+* Improve macOS Finder launch compatibility
+* Improve macOS update experience with manual release-page updates
+* Improve conflict analysis equivalence filtering
+</description>
+			<pubDate>Mon, 21 Sep 2026 07:00:52 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.28.94-alpha/win-x64.zip" sparkle:version="1.28.94.65180" sparkle:shortVersionString="1.28.94" length="107397923" sparkle:os="windows" type="application/zip" sparkle:signature="6zCLt2MhPIBCBv2dn46PBdjFVskOek7IR4MINXcX4jxp9sOJ2JwCXJnD3DITILgHPnzgH9a3J0/drn5rrxirDg=="/>
+		</item>
 	</channel>
 </rss>
