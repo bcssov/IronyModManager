@@ -267,6 +267,7 @@
       "Overlay_Conflict_Solver_Loading_Game_Definitions": "Загрузка игровых определений...",
       "Overlay_Conflict_Solver_Loading_Definitions": "Загрузка определений модов...",
       "Overlay_Conflict_Solver_Analyzing_Conflicts": "Анализ определений на предмет конфликтов...",
+      "Overlay_Conflict_Solver_Filtering_Equivalent_Conflicts": "Фильтрация эквивалентных конфликтов...",
       "Overlay_Conflict_Solver_Analyzing_Resolved_Conflicts": "Анализ разрешенных определений...",
       "Overlay_Conflict_Solver_Replacing_Definitions": "Замена определений...",
       "Overlay_Conflict_Solver_Progress": "Шаг {Count}/{TotalCount}: {PercentDone}",

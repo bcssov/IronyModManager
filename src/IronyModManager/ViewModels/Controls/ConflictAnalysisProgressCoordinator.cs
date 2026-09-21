@@ -18,9 +18,11 @@ namespace IronyModManager.ViewModels.Controls
     public class ConflictAnalysisProgressCoordinator(ModDefinitionLoadHandler modDefinitionLoadHandler,
         ModDefinitionInvalidReplaceHandler modDefinitionInvalidReplaceHandler, GameIndexProgressHandler gameIndexProgressHandler,
         GameDefinitionLoadProgressHandler gameDefinitionLoadProgressHandler, ModDefinitionAnalyzeHandler modDefinitionAnalyzeHandler,
+        ModDefinitionEquivalentFilterHandler modDefinitionEquivalentFilterHandler,
         ModDefinitionPatchLoadHandler modDefinitionPatchLoadHandler, ILocalizationManager localizationManager)
     {
         private IDisposable definitionAnalyzeLoadHandler;
+        private IDisposable definitionEquivalentFilterHandler;
         private IDisposable definitionLoadHandler;
         private IDisposable definitionSyncHandler;
         private IDisposable gameDefinitionLoadHandler;
@@ -59,13 +61,19 @@ namespace IronyModManager.ViewModels.Controls
             definitionAnalyzeLoadHandler?.Dispose();
             definitionAnalyzeLoadHandler = modDefinitionAnalyzeHandler.Subscribe(s =>
             {
-                ShowProgress(id, totalSteps, totalSteps == 6 ? 5 : 3, s.Percentage, LocalizationResources.Mod_Actions.ConflictSolver.Overlay_Conflict_Solver_Analyzing_Conflicts, showOverlay);
+                ShowProgress(id, totalSteps, totalSteps == 7 ? 5 : 3, s.Percentage, LocalizationResources.Mod_Actions.ConflictSolver.Overlay_Conflict_Solver_Analyzing_Conflicts, showOverlay);
+            }).DisposeWith(disposables);
+
+            definitionEquivalentFilterHandler?.Dispose();
+            definitionEquivalentFilterHandler = modDefinitionEquivalentFilterHandler.Subscribe(s =>
+            {
+                ShowProgress(id, totalSteps, totalSteps == 7 ? 6 : 4, s.Percentage, LocalizationResources.Mod_Actions.ConflictSolver.Overlay_Conflict_Solver_Filtering_Equivalent_Conflicts, showOverlay);
             }).DisposeWith(disposables);
 
             definitionSyncHandler?.Dispose();
             definitionSyncHandler = modDefinitionPatchLoadHandler.Subscribe(s =>
             {
-                ShowProgress(id, totalSteps, totalSteps == 6 ? 6 : 4, s.Percentage, LocalizationResources.Mod_Actions.ConflictSolver.Overlay_Conflict_Solver_Analyzing_Resolved_Conflicts, showOverlay);
+                ShowProgress(id, totalSteps, totalSteps == 7 ? 7 : 5, s.Percentage, LocalizationResources.Mod_Actions.ConflictSolver.Overlay_Conflict_Solver_Analyzing_Resolved_Conflicts, showOverlay);
             }).DisposeWith(disposables);
         }
 
@@ -75,6 +83,7 @@ namespace IronyModManager.ViewModels.Controls
         public virtual void Reset()
         {
             definitionAnalyzeLoadHandler?.Dispose();
+            definitionEquivalentFilterHandler?.Dispose();
             definitionLoadHandler?.Dispose();
             definitionSyncHandler?.Dispose();
             gameDefinitionLoadHandler?.Dispose();

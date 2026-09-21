@@ -115,6 +115,9 @@ namespace IronyModManager.IO.Mods.InfoProviders
         /// <returns>CanProcess.</returns>
         public abstract bool CanProcess(string game);
 
+        /// <inheritdoc />
+        public abstract bool CanUseShallowComparison(IDefinition definition);
+
         /// <summary>
         /// Definitions the uses fios rules.
         /// </summary>

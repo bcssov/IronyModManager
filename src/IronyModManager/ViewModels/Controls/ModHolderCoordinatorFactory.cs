@@ -16,7 +16,8 @@ namespace IronyModManager.ViewModels.Controls
         ModDefinitionLoadHandler modDefinitionLoadHandler,
         ModDefinitionInvalidReplaceHandler modDefinitionInvalidReplaceHandler,
         GameIndexProgressHandler gameIndexProgressHandler, GameDefinitionLoadProgressHandler gameDefinitionLoadProgressHandler,
-        ModDefinitionAnalyzeHandler modDefinitionAnalyzeHandler, ModDefinitionPatchLoadHandler modDefinitionPatchLoadHandler,
+        ModDefinitionAnalyzeHandler modDefinitionAnalyzeHandler, ModDefinitionEquivalentFilterHandler modDefinitionEquivalentFilterHandler,
+        ModDefinitionPatchLoadHandler modDefinitionPatchLoadHandler,
         ILocalizationManager localizationManager, INotificationAction notificationAction,
         GameUserDirectoryChangedHandler directoryChangedHandler,
         ModListInstallRefreshRequestHandler installRefreshHandler) : IModHolderCoordinatorFactory
@@ -26,7 +27,7 @@ namespace IronyModManager.ViewModels.Controls
             new ModStateReconciliationCoordinator(gameStateSafetyService),
             new ConflictAnalysisProgressCoordinator(modDefinitionLoadHandler, modDefinitionInvalidReplaceHandler,
                 gameIndexProgressHandler, gameDefinitionLoadProgressHandler, modDefinitionAnalyzeHandler,
-                modDefinitionPatchLoadHandler, localizationManager),
+                modDefinitionEquivalentFilterHandler, modDefinitionPatchLoadHandler, localizationManager),
             new ModApplyResultPresenter(localizationManager, notificationAction),
             new ModHolderEventCoordinator(directoryChangedHandler, installRefreshHandler));
     }

@@ -19,6 +19,7 @@ using System.Linq;
 using System.Text;
 using IronyModManager.Shared;
 using IronyModManager.Shared.Models;
+using ValueType = IronyModManager.Shared.Models.ValueType;
 
 namespace IronyModManager.IO.Mods.InfoProviders
 {
@@ -30,6 +31,15 @@ namespace IronyModManager.IO.Mods.InfoProviders
     public class StellarisDefinitionInfoProvider : BaseDefinitionInfoProvider
     {
         #region Fields
+
+        private static readonly string[] ShallowComparisonExcludedDirectories =
+        [
+            "common\\inline_scripts".StandardizeDirectorySeparator(),
+            "common\\on_actions".StandardizeDirectorySeparator(),
+            "common\\solar_system_initializers".StandardizeDirectorySeparator()
+        ];
+
+        private static readonly string ShallowComparisonExcludedScriptedPrefix = "common\\scripted_".StandardizeDirectorySeparator();
 
         /// <summary>
         /// The localization synced
@@ -104,6 +114,37 @@ namespace IronyModManager.IO.Mods.InfoProviders
         public override bool CanProcess(string game)
         {
             return game.Equals(Shared.Constants.GamesTypes.Stellaris.Id);
+        }
+
+        /// <inheritdoc />
+        public override bool CanUseShallowComparison(IDefinition definition)
+        {
+            if (!IsCommonObjectDefinition(definition))
+            {
+                return false;
+            }
+
+            var directory = definition.ParentDirectoryCI.StandardizeDirectorySeparator().TrimEnd(Path.DirectorySeparatorChar);
+            return !directory.StartsWith(ShallowComparisonExcludedScriptedPrefix, StringComparison.OrdinalIgnoreCase) &&
+                   ShallowComparisonExcludedDirectories.All(excluded => !IsDirectoryOrChild(directory, excluded));
+        }
+
+        private static bool IsCommonObjectDefinition(IDefinition definition)
+        {
+            if (definition == null || definition.ValueType != ValueType.Object)
+            {
+                return false;
+            }
+
+            var directory = (definition.ParentDirectoryCI ?? string.Empty).StandardizeDirectorySeparator().TrimEnd(Path.DirectorySeparatorChar);
+            return directory.Equals("common", StringComparison.OrdinalIgnoreCase) ||
+                   directory.StartsWith("common" + Path.DirectorySeparatorChar, StringComparison.OrdinalIgnoreCase);
+        }
+
+        private static bool IsDirectoryOrChild(string directory, string expected)
+        {
+            return directory.Equals(expected, StringComparison.OrdinalIgnoreCase) ||
+                   directory.StartsWith(expected + Path.DirectorySeparatorChar, StringComparison.OrdinalIgnoreCase);
         }
 
         /// <summary>

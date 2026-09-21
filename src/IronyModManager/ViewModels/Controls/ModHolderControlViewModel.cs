@@ -486,7 +486,7 @@ namespace IronyModManager.ViewModels.Controls
         protected virtual async Task AnalyzeModsAsync(long id, PatchStateMode mode, IEnumerable<string> versions)
         {
             var selectedMods = CollectionMods.GetConflictSolverMods();
-            var totalSteps = versions != null && versions.Any() ? 6 : 4;
+            var totalSteps = versions != null && versions.Any() ? 7 : 5;
 
             SubscribeToProgressReport(id, Disposables, totalSteps);
 
@@ -532,10 +532,6 @@ namespace IronyModManager.ViewModels.Controls
             Debug.WriteLine("Conflict Solver Stage 1: " + stopWatch.Elapsed.FormatElapsed());
             if (tooLargeMod)
             {
-                await TriggerOverlayAsync(id, false);
-
-                conflictAnalysisProgressCoordinator.Reset();
-
                 GCRunner.RunGC(GCCollectionMode.Aggressive, true);
                 var largeMessageTitle = interaction.GetText(LocalizationResources.Mod_Actions.ConflictSolver.TooLargePrompt.Title);
                 var largeMessageBody = interaction.GetText(LocalizationResources.Mod_Actions.ConflictSolver.TooLargePrompt.Message);
@@ -601,10 +597,6 @@ namespace IronyModManager.ViewModels.Controls
                 SelectedMods = [.. selectedMods.Select(p => p.Name)]
             };
             ReactiveUI.MessageBus.Current.SendMessage(args);
-            await TriggerOverlayAsync(id, false);
-
-            conflictAnalysisProgressCoordinator.Reset();
-
             GCRunner.RunGC(GCCollectionMode.Aggressive, true);
         }
 
@@ -769,7 +761,15 @@ namespace IronyModManager.ViewModels.Controls
 
                 if (proceed)
                 {
-                    await AnalyzeModsAsync(id, mode, versions);
+                    try
+                    {
+                        await AnalyzeModsAsync(id, mode, versions);
+                    }
+                    finally
+                    {
+                        await TriggerOverlayAsync(id, false);
+                        conflictAnalysisProgressCoordinator.Reset();
+                    }
                 }
                 else
                 {

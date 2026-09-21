@@ -64,6 +64,7 @@ namespace IronyModManager.Services
         IGameService gameService,
         IStorageProvider storageProvider,
         IMapper mapper,
+        IDefinitionShallowComparer definitionShallowComparer,
         IValidateParser validateParser,
         IParametrizedParser parametrizedParser,
         IParserMerger parserMerger,
@@ -175,6 +176,11 @@ namespace IronyModManager.Services
         /// The parametrized parser
         /// </summary>
         private readonly IParametrizedParser parametrizedParser = parametrizedParser;
+
+        /// <summary>
+        /// The definition shallow comparer
+        /// </summary>
+        private readonly IDefinitionShallowComparer definitionShallowComparer = definitionShallowComparer;
 
         /// <summary>
         /// The parser manager
@@ -1258,6 +1264,9 @@ namespace IronyModManager.Services
             Debug.WriteLine("FindConflictsAsync Placeholder Valid Parse: " + stopWatch.Elapsed.FormatElapsed());
             stopWatch.Restart();
 
+            await messageBus.PublishAsync(new ModDefinitionAnalyzeEvent(100));
+            await FilterEquivalentDefinitionConflictsAsync(filteredConflicts, modOrder, provider);
+
             var result = GetModelInstance<IConflictResult>();
             result.AllowedLanguages = allowedLanguages != null ? allowedLanguages.Select(l => l.Type).ToList() : [];
             result.Mode = patchStateMode;
@@ -1280,12 +1289,107 @@ namespace IronyModManager.Services
             var customConflicts = DIResolver.Get<IIndexedDefinitions>();
             await customConflicts.InitMapAsync(null, true);
             result.CustomConflicts = customConflicts;
-            await messageBus.PublishAsync(new ModDefinitionAnalyzeEvent(100));
-
             stopWatch.Stop();
             Debug.WriteLine("FindConflictsAsync Init Result: " + stopWatch.Elapsed.FormatElapsed());
 
             return result;
+        }
+
+        /// <summary>
+        /// Filters definition conflicts that differ only by supported shallow representation details.
+        /// </summary>
+        private async Task FilterEquivalentDefinitionConflictsAsync(List<IDefinition> conflicts, IList<string> modOrder, IDefinitionInfoProvider definitionInfoProvider)
+        {
+            if (definitionInfoProvider == null)
+            {
+                return;
+            }
+
+            var candidateGroups = conflicts.GroupBy(definition => definition.TypeAndId)
+                .Where(group => group.Count() > 1 && group.Select(definition => definition.DefinitionSHA).Distinct(StringComparer.Ordinal).Count() > 1)
+                .Where(group => group.All(definitionInfoProvider.CanUseShallowComparison))
+                .Select(group => group.ToList()).ToList();
+            if (candidateGroups.Count == 0)
+            {
+                return;
+            }
+
+            var removedDefinitions = new HashSet<IDefinition>();
+            var eligibleGroups = 0;
+            var collapsedGroups = 0;
+            var collapsedRepresentations = 0;
+            var processedGroups = 0;
+            double previousProgress = 0;
+
+            await messageBus.PublishAsync(new ModDefinitionEquivalentFilterEvent(0));
+            foreach (var candidateGroup in candidateGroups)
+            {
+                var comparison = definitionShallowComparer.Compare(candidateGroup);
+                if (comparison.Status != DefinitionShallowComparisonStatus.Unsupported)
+                {
+                    var equivalentGroups = comparison.EquivalentGroups;
+                    eligibleGroups++;
+                    if (comparison.Status == DefinitionShallowComparisonStatus.Equivalent)
+                    {
+                        foreach (var definition in candidateGroup)
+                        {
+                            removedDefinitions.Add(definition);
+                        }
+
+                        collapsedGroups++;
+                        collapsedRepresentations += candidateGroup.Count;
+                    }
+                    else
+                    {
+                        foreach (var equivalentGroup in equivalentGroups.Where(group => group.Count > 1))
+                        {
+                            var representative = EvalDefinitionPriority(equivalentGroup.OrderBy(definition => modOrder.IndexOf(definition.ModName))).Definition;
+                            MergeEquivalentDefinitionMetadata(representative, equivalentGroup);
+                            foreach (var definition in equivalentGroup.Where(definition => definition != representative))
+                            {
+                                removedDefinitions.Add(definition);
+                                collapsedRepresentations++;
+                            }
+                        }
+                    }
+                }
+
+                processedGroups++;
+                var progress = GetProgressPercentage(candidateGroups.Count, processedGroups);
+                if (progress.IsNotNearlyEqual(previousProgress, 2))
+                {
+                    await messageBus.PublishAsync(new ModDefinitionEquivalentFilterEvent(progress));
+                    previousProgress = progress;
+                }
+            }
+
+            conflicts.RemoveAll(removedDefinitions.Contains);
+            if (previousProgress.IsNotNearlyEqual(100))
+            {
+                await messageBus.PublishAsync(new ModDefinitionEquivalentFilterEvent(100));
+            }
+
+            Debug.WriteLine($"Equivalent conflict filter: candidates={candidateGroups.Count}, eligible={eligibleGroups}, " +
+                            $"groupsCollapsed={collapsedGroups}, representationsRemoved={collapsedRepresentations}");
+        }
+
+        private static void MergeEquivalentDefinitionMetadata(IDefinition representative, IEnumerable<IDefinition> equivalentDefinitions)
+        {
+            var definitions = equivalentDefinitions.ToList();
+            var fileNames = representative.AdditionalFileNames;
+            foreach (var definition in definitions.Where(definition => definition != representative))
+            {
+                foreach (var fileName in definition.AdditionalFileNames)
+                {
+                    fileNames.Add(fileName);
+                }
+            }
+
+            representative.AdditionalFileNames = fileNames;
+            if (representative.IsPlaceholder && definitions.Any(definition => !definition.IsPlaceholder))
+            {
+                representative.IsPlaceholder = false;
+            }
         }
 
         /// <summary>

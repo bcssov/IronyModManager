@@ -3,6 +3,7 @@
 // ***********************************************************************
 
 using System.Collections.Generic;
+using System.Linq;
 using System.Reactive.Disposables;
 using System.Threading.Tasks;
 using AwesomeAssertions;
@@ -230,7 +231,8 @@ namespace IronyModManager.Tests.ViewModels.Controls
             var factory = new ModHolderCoordinatorFactory(Mock.Of<IGameStateSafetyService>(),
                 new ModDefinitionLoadHandler(), new ModDefinitionInvalidReplaceHandler(),
                 new GameIndexProgressHandler(), new GameDefinitionLoadProgressHandler(),
-                new ModDefinitionAnalyzeHandler(), new ModDefinitionPatchLoadHandler(), localization.Object,
+                new ModDefinitionAnalyzeHandler(), new ModDefinitionEquivalentFilterHandler(),
+                new ModDefinitionPatchLoadHandler(), localization.Object,
                 Mock.Of<INotificationAction>(), new GameUserDirectoryChangedHandler(),
                 new ModListInstallRefreshRequestHandler());
 
@@ -299,23 +301,38 @@ namespace IronyModManager.Tests.ViewModels.Controls
             var gameIndex = new GameIndexProgressHandler();
             var gameDefinitions = new GameDefinitionLoadProgressHandler();
             var analyze = new ModDefinitionAnalyzeHandler();
+            var equivalentFilter = new ModDefinitionEquivalentFilterHandler();
             var patchLoad = new ModDefinitionPatchLoadHandler();
             var localization = CreateLocalization();
-            var coordinator = new ConflictAnalysisProgressCoordinator(definitionLoad, invalidReplace, gameIndex, gameDefinitions, analyze, patchLoad, localization.Object);
-            var messages = new List<string>();
+            localization.Setup(p => p.GetResource(Shared.LocalizationResources.Mod_Actions.ConflictSolver.Overlay_Conflict_Solver_Progress))
+                .Returns("Step {Count}/{TotalCount}: {PercentDone}");
+            var coordinator = new ConflictAnalysisProgressCoordinator(definitionLoad, invalidReplace, gameIndex, gameDefinitions, analyze, equivalentFilter, patchLoad, localization.Object);
+            var overlays = new List<(string Message, string Progress)>();
             using var disposables = new CompositeDisposable();
 
-            coordinator.Subscribe(7, disposables, 6, (_, _, message, _) => messages.Add(message));
-            await definitionLoad.OnHandle(new ModDefinitionLoadEvent(0.25));
-            await patchLoad.OnHandle(new ModDefinitionPatchLoadEvent(0.75));
+            coordinator.Subscribe(7, disposables, 7, (_, _, message, progress) => overlays.Add((message, progress)));
+            await definitionLoad.OnHandle(new ModDefinitionLoadEvent(25));
+            await equivalentFilter.OnHandle(new ModDefinitionEquivalentFilterEvent(50));
+            await patchLoad.OnHandle(new ModDefinitionPatchLoadEvent(75));
 
-            messages.Should().ContainInOrder(
+            overlays.Select(item => item.Message).Should().ContainInOrder(
                 Shared.LocalizationResources.Mod_Actions.ConflictSolver.Overlay_Conflict_Solver_Loading_Definitions,
+                Shared.LocalizationResources.Mod_Actions.ConflictSolver.Overlay_Conflict_Solver_Filtering_Equivalent_Conflicts,
                 Shared.LocalizationResources.Mod_Actions.ConflictSolver.Overlay_Conflict_Solver_Analyzing_Resolved_Conflicts);
+            overlays[0].Progress.Should().StartWith("Step 1/7:");
+            overlays[1].Progress.Should().StartWith("Step 6/7:");
+            overlays[2].Progress.Should().StartWith("Step 7/7:");
+
+            coordinator.Subscribe(8, disposables, 5, (_, _, message, progress) => overlays.Add((message, progress)));
+            await equivalentFilter.OnHandle(new ModDefinitionEquivalentFilterEvent(50));
+            overlays.Last().Message.Should().Be(Shared.LocalizationResources.Mod_Actions.ConflictSolver.Overlay_Conflict_Solver_Filtering_Equivalent_Conflicts);
+            overlays.Last().Progress.Should().StartWith("Step 4/5:");
+            overlays.Should().HaveCount(4);
 
             coordinator.Reset();
-            await definitionLoad.OnHandle(new ModDefinitionLoadEvent(0.5));
-            messages.Should().HaveCount(2);
+            await definitionLoad.OnHandle(new ModDefinitionLoadEvent(50));
+            await equivalentFilter.OnHandle(new ModDefinitionEquivalentFilterEvent(75));
+            overlays.Should().HaveCount(4);
         }
 
         [Theory]

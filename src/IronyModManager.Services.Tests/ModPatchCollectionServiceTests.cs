@@ -34,6 +34,7 @@ using IronyModManager.Parser.Definitions;
 using IronyModManager.Parser.Mod;
 using IronyModManager.Parser.Models;
 using IronyModManager.Services.Common;
+using IronyModManager.Services.Common.MessageBus;
 using IronyModManager.Shared;
 using IronyModManager.Shared.Cache;
 using IronyModManager.Shared.Configuration;
@@ -68,22 +69,23 @@ namespace IronyModManager.Services.Tests
         /// <param name="gameService">The game service.</param>
         /// <param name="modPatchExporter">The mod patch exporter.</param>
         /// <param name="definitionInfoProviders">The definition information providers.</param>
+        /// <param name="definitionShallowComparer">The definition shallow comparer.</param>
         /// <param name="validateParser">The validate parser.</param>
         /// <param name="parametrizedParser">The parametrized parser.</param>
         /// <param name="parserMerger">The parser merger.</param>
         /// <returns>ModService.</returns>
         private static ModPatchCollectionService GetService(Mock<IStorageProvider> storageProvider, Mock<IModParser> modParser,
             Mock<IParserManager> parserManager, Mock<IReader> reader, Mock<IMapper> mapper, Mock<IModWriter> modWriter,
-            Mock<IGameService> gameService, Mock<IModPatchExporter> modPatchExporter, IEnumerable<IDefinitionInfoProvider> definitionInfoProviders = null, Mock<IValidateParser> validateParser = null,
+            Mock<IGameService> gameService, Mock<IModPatchExporter> modPatchExporter, IEnumerable<IDefinitionInfoProvider> definitionInfoProviders = null, IDefinitionShallowComparer definitionShallowComparer = null, Mock<IValidateParser> validateParser = null,
             Mock<IParametrizedParser> parametrizedParser = null, Mock<IParserMerger> parserMerger = null,
-            IGameStateSafetyService gameStateSafetyService = null)
+            IGameStateSafetyService gameStateSafetyService = null, Mock<IMessageBus> messageBus = null)
         {
-            var messageBus = new Mock<IMessageBus>();
+            messageBus ??= new Mock<IMessageBus>();
             messageBus.Setup(p => p.PublishAsync(It.IsAny<IMessageBusEvent>()));
             messageBus.Setup(p => p.Publish(It.IsAny<IMessageBusEvent>()));
             gameStateSafetyService ??= new GameStateSafetyService(Mock.Of<IFileSystemStateProbe>(), Mock.Of<ILogger>());
             return new ModPatchCollectionService(new Cache(), messageBus.Object, parserManager.Object, definitionInfoProviders, modPatchExporter.Object, reader.Object, modWriter.Object, modParser.Object, gameService.Object,
-                storageProvider.Object, mapper.Object, validateParser?.Object, parametrizedParser?.Object, parserMerger?.Object,
+                storageProvider.Object, mapper.Object, definitionShallowComparer ?? Mock.Of<IDefinitionShallowComparer>(), validateParser?.Object, parametrizedParser?.Object, parserMerger?.Object,
                 gameStateSafetyService);
         }
 
@@ -5124,7 +5126,7 @@ namespace IronyModManager.Services.Tests
             var modPatchExporter = new Mock<IModPatchExporter>();
             var validateParser = new Mock<IValidateParser>();
             validateParser.Setup(p => p.GetBracketCount(It.IsAny<string>(), It.IsAny<string>())).Returns(new BracketValidateResult { CloseBracketCount = 1, OpenBracketCount = 1 });
-            var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter, null, validateParser);
+            var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter, null, null, validateParser);
             var result = service.GetBracketCount("test.txt", "test");
             result.Should().NotBeNull();
             result.OpenBracketCount.Should().Be(1);
@@ -5147,7 +5149,7 @@ namespace IronyModManager.Services.Tests
             var modPatchExporter = new Mock<IModPatchExporter>();
             var validateParser = new Mock<IValidateParser>();
             validateParser.Setup(p => p.Validate(It.IsAny<ParserArgs>())).Returns(new List<IDefinition> { new Definition { ErrorMessage = "test" } });
-            var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter, null, validateParser);
+            var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter, null, null, validateParser);
             var result = service.Validate(new Definition { ValueType = ValueType.Object });
             result.Should().NotBeNull();
             result.IsValid.Should().BeFalse();
@@ -5171,7 +5173,7 @@ namespace IronyModManager.Services.Tests
             var modPatchExporter = new Mock<IModPatchExporter>();
             var validateParser = new Mock<IValidateParser>();
             validateParser.Setup(p => p.Validate(It.IsAny<ParserArgs>())).Returns((IEnumerable<IDefinition>)null);
-            var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter, null, validateParser);
+            var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter, null, null, validateParser);
             var result = service.Validate(new Definition { ValueType = ValueType.Object });
             result.Should().NotBeNull();
             result.IsValid.Should().BeTrue();
@@ -5193,7 +5195,7 @@ namespace IronyModManager.Services.Tests
             var modPatchExporter = new Mock<IModPatchExporter>();
             var validateParser = new Mock<IValidateParser>();
             validateParser.Setup(p => p.Validate(It.IsAny<ParserArgs>())).Returns(new List<IDefinition> { new Definition { ErrorMessage = "test" } });
-            var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter, null, validateParser);
+            var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter, null, null, validateParser);
             var result = service.Validate(new Definition { ValueType = ValueType.Binary });
             result.Should().NotBeNull();
             result.IsValid.Should().BeTrue();
@@ -5413,6 +5415,127 @@ namespace IronyModManager.Services.Tests
             var game = DISetup.Container.GetInstance<IGameService>().Get().First(s => s.Type == "Stellaris");
             var mods = await DISetup.Container.GetInstance<IModService>().GetInstalledModsAsync(game);
             var defs = await DISetup.Container.GetInstance<IModPatchCollectionService>().GetModObjectsAsync(game, mods, string.Empty, PatchStateMode.Advanced, null);
+        }
+
+        [Fact]
+        public async Task Shallow_filter_should_not_invoke_comparer_when_provider_refuses_definition()
+        {
+            var comparer = new Mock<IDefinitionShallowComparer>();
+            var provider = new Mock<IDefinitionInfoProvider>();
+            provider.Setup(candidate => candidate.CanUseShallowComparison(It.IsAny<IDefinition>())).Returns(false);
+            var conflicts = GetShallowFilterDefinitions();
+            var messageBus = new Mock<IMessageBus>();
+            var service = GetShallowFilterService(comparer.Object, messageBus);
+
+            await InvokeShallowFilterAsync(service, conflicts, provider.Object);
+
+            conflicts.Should().HaveCount(2);
+            comparer.Verify(candidate => candidate.Compare(It.IsAny<IReadOnlyCollection<IDefinition>>()), Times.Never);
+            messageBus.Verify(candidate => candidate.PublishAsync(It.IsAny<ModDefinitionEquivalentFilterEvent>()), Times.Never);
+        }
+
+        [Fact]
+        public async Task Shallow_filter_should_invoke_comparer_when_provider_accepts_definition()
+        {
+            var comparer = new Mock<IDefinitionShallowComparer>();
+            var provider = new Mock<IDefinitionInfoProvider>();
+            provider.Setup(candidate => candidate.CanUseShallowComparison(It.IsAny<IDefinition>())).Returns(true);
+            var conflicts = GetShallowFilterDefinitions();
+            comparer.Setup(candidate => candidate.Compare(It.IsAny<IReadOnlyCollection<IDefinition>>()))
+                .Returns(new DefinitionShallowComparisonResult(DefinitionShallowComparisonStatus.Equivalent, [conflicts]));
+            var service = GetShallowFilterService(comparer.Object);
+
+            await InvokeShallowFilterAsync(service, conflicts, provider.Object);
+
+            conflicts.Should().BeEmpty();
+            comparer.Verify(candidate => candidate.Compare(It.IsAny<IReadOnlyCollection<IDefinition>>()), Times.Once);
+        }
+
+        [Fact]
+        public async Task Shallow_filter_should_preserve_conflict_when_no_provider_exists()
+        {
+            var comparer = new Mock<IDefinitionShallowComparer>();
+            var conflicts = GetShallowFilterDefinitions();
+            var messageBus = new Mock<IMessageBus>();
+            var service = GetShallowFilterService(comparer.Object, messageBus);
+
+            await InvokeShallowFilterAsync(service, conflicts, null);
+
+            conflicts.Should().HaveCount(2);
+            comparer.Verify(candidate => candidate.Compare(It.IsAny<IReadOnlyCollection<IDefinition>>()), Times.Never);
+            messageBus.Verify(candidate => candidate.PublishAsync(It.IsAny<ModDefinitionEquivalentFilterEvent>()), Times.Never);
+        }
+
+        [Theory]
+        [InlineData(100, 51)]
+        [InlineData(1000, 51)]
+        [InlineData(10000, 51)]
+        public async Task Shallow_filter_progress_should_be_bounded_by_meaningful_percentage_changes(int candidateCount, int expectedPublications)
+        {
+            var comparer = new Mock<IDefinitionShallowComparer>();
+            comparer.Setup(candidate => candidate.Compare(It.IsAny<IReadOnlyCollection<IDefinition>>()))
+                .Returns((IReadOnlyCollection<IDefinition> definitions) => new DefinitionShallowComparisonResult(
+                    DefinitionShallowComparisonStatus.Different, definitions.Select(definition => (IReadOnlyList<IDefinition>)[definition]).ToList()));
+            var provider = new Mock<IDefinitionInfoProvider>();
+            provider.Setup(candidate => candidate.CanUseShallowComparison(It.IsAny<IDefinition>())).Returns(true);
+            var messageBus = new Mock<IMessageBus>();
+            var percentages = new List<double>();
+            var conflicts = GetShallowFilterDefinitions(candidateCount);
+            var service = GetShallowFilterService(comparer.Object, messageBus);
+            messageBus.Setup(candidate => candidate.PublishAsync(It.IsAny<IMessageBusEvent>()))
+                .Callback<IMessageBusEvent>(message =>
+                {
+                    if (message is ModDefinitionEquivalentFilterEvent progress)
+                    {
+                        percentages.Add(progress.Percentage);
+                    }
+                });
+
+            await InvokeShallowFilterAsync(service, conflicts, provider.Object);
+
+            percentages.Should().HaveCount(expectedPublications);
+            percentages.First().Should().Be(0);
+            percentages.Last().Should().Be(100);
+            percentages.Should().OnlyHaveUniqueItems();
+            percentages.Count.Should().BeLessThan(candidateCount);
+        }
+
+        [Fact]
+        public async Task Shallow_filter_should_not_publish_a_phase_when_there_are_no_candidates()
+        {
+            var comparer = new Mock<IDefinitionShallowComparer>();
+            var provider = new Mock<IDefinitionInfoProvider>();
+            var messageBus = new Mock<IMessageBus>();
+            var service = GetShallowFilterService(comparer.Object, messageBus);
+
+            await InvokeShallowFilterAsync(service, [], provider.Object);
+
+            messageBus.Verify(candidate => candidate.PublishAsync(It.IsAny<ModDefinitionEquivalentFilterEvent>()), Times.Never);
+            comparer.Verify(candidate => candidate.Compare(It.IsAny<IReadOnlyCollection<IDefinition>>()), Times.Never);
+        }
+
+        private static List<IDefinition> GetShallowFilterDefinitions(int groupCount = 1)
+        {
+            return Enumerable.Range(0, groupCount).SelectMany(index => new IDefinition[]
+            {
+                new Definition { DefinitionSHA = "first", File = $"common\\test\\first-{index}.txt", Id = $"test-{index}", Type = "test", ModName = "first", ValueType = ValueType.Object },
+                new Definition { DefinitionSHA = "second", File = $"common\\test\\second-{index}.txt", Id = $"test-{index}", Type = "test", ModName = "second", ValueType = ValueType.Object }
+            }).ToList();
+        }
+
+        private static ModPatchCollectionService GetShallowFilterService(IDefinitionShallowComparer comparer, Mock<IMessageBus> messageBus = null)
+        {
+            return GetService(new Mock<IStorageProvider>(), new Mock<IModParser>(), new Mock<IParserManager>(), new Mock<IReader>(),
+                new Mock<IMapper>(), new Mock<IModWriter>(), new Mock<IGameService>(), new Mock<IModPatchExporter>(), null, comparer,
+                gameStateSafetyService: null, messageBus: messageBus);
+        }
+
+        private static async Task InvokeShallowFilterAsync(ModPatchCollectionService service, List<IDefinition> conflicts, IDefinitionInfoProvider provider)
+        {
+            var method = typeof(ModPatchCollectionService).GetMethod("FilterEquivalentDefinitionConflictsAsync", BindingFlags.Instance | BindingFlags.NonPublic);
+            var task = method?.Invoke(service, [conflicts, new List<string>(), provider]) as Task;
+            task.Should().NotBeNull();
+            await task!;
         }
 
         /// <summary>

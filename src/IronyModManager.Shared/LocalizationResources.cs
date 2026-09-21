@@ -351,6 +351,7 @@ namespace IronyModManager.Shared
                 public const string Overlay_Conflict_Solver_Loading_Game_Definitions = Prefix + "Overlay_Conflict_Solver_Loading_Game_Definitions";
                 public const string Overlay_Conflict_Solver_Loading_Definitions = Prefix + "Overlay_Conflict_Solver_Loading_Definitions";
                 public const string Overlay_Conflict_Solver_Analyzing_Conflicts = Prefix + "Overlay_Conflict_Solver_Analyzing_Conflicts";
+                public const string Overlay_Conflict_Solver_Filtering_Equivalent_Conflicts = Prefix + "Overlay_Conflict_Solver_Filtering_Equivalent_Conflicts";
                 public const string Overlay_Conflict_Solver_Analyzing_Resolved_Conflicts = Prefix + "Overlay_Conflict_Solver_Analyzing_Resolved_Conflicts";
                 public const string Overlay_Conflict_Solver_Replacing_Definitions = Prefix + "Overlay_Conflict_Solver_Replacing_Definitions";
                 public const string Overlay_Conflict_Solver_Progress = Prefix + "Overlay_Conflict_Solver_Progress";

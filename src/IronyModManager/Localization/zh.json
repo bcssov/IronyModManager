@@ -266,6 +266,7 @@
       "Overlay_Conflict_Solver_Loading_Game_Definitions": "正在加载游戏定义……",
       "Overlay_Conflict_Solver_Loading_Definitions": "正在加载模组数据……",
       "Overlay_Conflict_Solver_Analyzing_Conflicts": "正在分析模组冲突……",
+      "Overlay_Conflict_Solver_Filtering_Equivalent_Conflicts": "正在筛选等效冲突……",
       "Overlay_Conflict_Solver_Analyzing_Resolved_Conflicts": "正在分析已处理的冲突……",
       "Overlay_Conflict_Solver_Replacing_Definitions": "正在应用模组补丁……",
       "Overlay_Conflict_Solver_Progress": "步骤 {Count}/{TotalCount}: {PercentDone}",

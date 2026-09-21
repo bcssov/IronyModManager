@@ -267,6 +267,7 @@
       "Overlay_Conflict_Solver_Loading_Game_Definitions": "Veuillez patienter pendant le chargement des définitions de jeu...",
       "Overlay_Conflict_Solver_Loading_Definitions": "Veuillez patienter pendant le chargement des définitions du mod...",
       "Overlay_Conflict_Solver_Analyzing_Conflicts": "Veuillez patienter pendant l'analyse des définitions pour les conflits...",
+      "Overlay_Conflict_Solver_Filtering_Equivalent_Conflicts": "Filtrage des conflits équivalents...",
       "Overlay_Conflict_Solver_Analyzing_Resolved_Conflicts": "Veuillez patienter pendant l'analyse des définitions résolues...",
       "Overlay_Conflict_Solver_Replacing_Definitions": "Veuillez patienter pendant le remplacement des définitions...",
       "Overlay_Conflict_Solver_Progress": "Étape {Count}/{TotalCount}: {PercentDone}",

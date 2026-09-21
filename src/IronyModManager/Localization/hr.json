@@ -267,6 +267,7 @@
       "Overlay_Conflict_Solver_Loading_Game_Definitions": "Pričekajte dok se učitavaju definicije igre...",
       "Overlay_Conflict_Solver_Loading_Definitions": "Pričekajte dok se učitavaju definicije modova...",
       "Overlay_Conflict_Solver_Analyzing_Conflicts": "Pričekajte dok se analiziraju sukobi definicija...",
+      "Overlay_Conflict_Solver_Filtering_Equivalent_Conflicts": "Filtriranje ekvivalentnih sukoba...",
       "Overlay_Conflict_Solver_Analyzing_Resolved_Conflicts": "Pričekajte dok se analiziraju riješeni sukobi...",
       "Overlay_Conflict_Solver_Replacing_Definitions": "Pričekajte dok se zamjenjuju definicije...",
       "Overlay_Conflict_Solver_Progress": "Korak {Count}/{TotalCount}: {PercentDone}",
