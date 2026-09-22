@@ -64,3 +64,7 @@
 *.sqlite -text
 *.db -text
 *.pdb -text
+
+# These fake archive fixtures contain plain text, not ZIP data.
+/src/IronyModManager.Services.Tests/mod/fakemod.zip text eol=crlf
+/src/IronyModManager.Services.Tests/mod/fakemod2.zip text eol=crlf
