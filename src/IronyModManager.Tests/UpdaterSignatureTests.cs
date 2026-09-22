@@ -165,19 +165,24 @@ namespace IronyModManager.Tests
         }
 
         /// <summary>
-        /// The manual update path opens the release page without downloading, unpacking, or executing an updater.
+        /// The manual update path opens the exact offered release without downloading, unpacking, or executing an updater.
         /// </summary>
-        [Fact]
-        public async Task Manual_update_should_only_open_release_page()
+        /// <param name="title">The offered update title and canonical release tag.</param>
+        [Theory]
+        [InlineData("v1.28.95-alpha")]
+        [InlineData("v1.28.100-rc")]
+        [InlineData("v1.28.120")]
+        public async Task Manual_update_should_only_open_exact_offered_release_page(string title)
         {
-            const string releasePage = "https://github.com/bcssov/IronyModManager/releases";
-            var (sut, updaterService, appAction, shutDownState) = CreateUpdater("present-signature");
+            var releasePage = $"https://github.com/bcssov/IronyModManager/releases/tag/{title}";
+            var (sut, updaterService, appAction, shutDownState) = CreateUpdater("present-signature", title);
             appAction.Setup(p => p.OpenAsync(releasePage)).ReturnsAsync(true);
 
             var result = await sut.OpenReleasePageAsync();
 
             result.Should().BeTrue();
             appAction.Verify(p => p.OpenAsync(releasePage), Times.Once);
+            appAction.Verify(p => p.OpenAsync(It.Is<string>(url => url.Contains("/releases/latest", StringComparison.OrdinalIgnoreCase))), Times.Never);
             updaterService.Verify(p => p.UnpackUpdateAsync(It.IsAny<string>()), Times.Never);
             appAction.Verify(p => p.RunAsync(It.IsAny<string>(), It.IsAny<string>()), Times.Never);
             shutDownState.Verify(p => p.WaitUntilFreeAsync(), Times.Never);
@@ -185,24 +190,59 @@ namespace IronyModManager.Tests
             GetField<IronySparkleUpdater>(sut, "updater").UpdateInstalling.Should().BeFalse();
         }
 
-        private static (Updater Updater, Mock<IUpdaterService> UpdaterService, Mock<IAppAction> AppAction, Mock<IShutDownState> ShutDownState) CreateUpdater(string signature)
+        /// <summary>
+        /// The offered title is encoded as release-tag path data.
+        /// </summary>
+        [Fact]
+        public async Task Manual_update_should_encode_offered_release_tag()
+        {
+            const string title = "v1.28.95-alpha+build";
+            const string releasePage = "https://github.com/bcssov/IronyModManager/releases/tag/v1.28.95-alpha%2Bbuild";
+            var (sut, _, appAction, _) = CreateUpdater("present-signature", title);
+            appAction.Setup(p => p.OpenAsync(releasePage)).ReturnsAsync(true);
+
+            var result = await sut.OpenReleasePageAsync();
+
+            result.Should().BeTrue();
+            appAction.Verify(p => p.OpenAsync(releasePage), Times.Once);
+        }
+
+        /// <summary>
+        /// Incomplete offered-update metadata does not open an unrelated release page.
+        /// </summary>
+        /// <param name="title">The unusable offered update title.</param>
+        [Theory]
+        [InlineData(null)]
+        [InlineData("")]
+        [InlineData(" ")]
+        public async Task Manual_update_without_title_should_not_open_release_page(string title)
+        {
+            var (sut, _, appAction, _) = CreateUpdater("present-signature", title);
+
+            var result = await sut.OpenReleasePageAsync();
+
+            result.Should().BeFalse();
+            appAction.Verify(p => p.OpenAsync(It.IsAny<string>()), Times.Never);
+        }
+
+        private static (Updater Updater, Mock<IUpdaterService> UpdaterService, Mock<IAppAction> AppAction, Mock<IShutDownState> ShutDownState) CreateUpdater(string signature, string title = "999.0.0")
         {
             DISetup.SetupContainer();
             var updaterService = new Mock<IUpdaterService>();
             var appAction = new Mock<IAppAction>();
             var shutDownState = new Mock<IShutDownState>();
             var updater = new Updater(new UpdateUnpackProgressHandler(), updaterService.Object, appAction.Object, shutDownState.Object);
-            SetField(updater, "updateInfo", new UpdateInfo(UpdateStatus.UpdateAvailable, [CreateItem(signature)]));
+            SetField(updater, "updateInfo", new UpdateInfo(UpdateStatus.UpdateAvailable, [CreateItem(signature, title)]));
             return (updater, updaterService, appAction, shutDownState);
         }
 
-        private static AppCastItem CreateItem(string signature)
+        private static AppCastItem CreateItem(string signature, string title = "999.0.0")
         {
             return new AppCastItem
             {
                 DownloadLink = "https://example.test/IronyModManager.zip",
                 DownloadSignature = signature,
-                Title = "999.0.0",
+                Title = title,
                 Version = "999.0.0"
             };
         }

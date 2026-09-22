@@ -360,7 +360,18 @@ namespace IronyModManager.Implementation.Updater
         /// <returns>Task&lt;System.Boolean&gt;.</returns>
         public Task<bool> OpenReleasePageAsync()
         {
-            return appAction.OpenAsync(Constants.ReleasesUrl);
+            var title = GetTitle();
+            if (string.IsNullOrWhiteSpace(title))
+            {
+                return Task.FromResult(false);
+            }
+
+            var releasesUri = new Uri(Constants.ReleasesUrl, UriKind.Absolute);
+            var releaseUri = new UriBuilder(releasesUri)
+            {
+                Path = $"{releasesUri.AbsolutePath.TrimEnd('/')}/tag/{Uri.EscapeDataString(title)}"
+            }.Uri;
+            return appAction.OpenAsync(releaseUri.AbsoluteUri);
         }
 
         /// <summary>
