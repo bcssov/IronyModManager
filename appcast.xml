@@ -80,8 +80,13 @@
 			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.27.206/win-x64.zip" sparkle:version="1.27.206.27272" sparkle:shortVersionString="1.27.206" length="103673491" sparkle:os="windows" type="application/zip" sparkle:signature="hSEhR0dINUIC2pXmHbIYAW74mVpkio57JG95/ES1DCg51uBj62IUUAAQ2nPuQQBeL61XcDxKhQo8v/u7fY9QAA=="/>
 		</item>
 		<item>
-			<title>1.28.94-alpha</title>
-			<description>## Release Notes 1.28
+			<title>1.28.97-alpha</title>
+			<description>## Current Release Notes
+
+* Latest Stellaris CS support
+* Fix Open Release Page to open the exact offered update release, including prerelease versions.
+
+## Release Notes 1.28
 
 * Upgrade to .NET 10
 * Update dependencies
@@ -124,12 +129,17 @@
 * Improve macOS update experience with manual release-page updates
 * Improve conflict analysis equivalence filtering
 </description>
-			<pubDate>Mon, 21 Sep 2026 07:00:13 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.28.94-alpha/linux-x64.zip" sparkle:version="1.28.94.65180" sparkle:shortVersionString="1.28.94" length="106576421" sparkle:os="linux" type="application/zip" sparkle:signature="VNgrScAAdP1OPnV0DESdo9fFkL1mS674EHxKtO2atnPzwpyw/w06IOrnuY4+pIjHv3wZ7R/KUAXDykm0DpvnDw=="/>
+			<pubDate>Tue, 22 Sep 2026 20:49:51 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.28.97-alpha/linux-x64.zip" sparkle:version="1.28.97.39337" sparkle:shortVersionString="1.28.97" length="106576808" sparkle:os="linux" type="application/zip" sparkle:signature="tRHHPDHNgQzPDq4AXxiclVWj4BUV3INjofFQ6tTRKjN3+cQeKh4tRbcACMG5ofTh7EJAyt2dacg0bRDOzNAMDg=="/>
 		</item>
 		<item>
-			<title>1.28.94-alpha</title>
-			<description>## Release Notes 1.28
+			<title>1.28.97-alpha</title>
+			<description>## Current Release Notes
+
+* Latest Stellaris CS support
+* Fix Open Release Page to open the exact offered update release, including prerelease versions.
+
+## Release Notes 1.28
 
 * Upgrade to .NET 10
 * Update dependencies
@@ -172,12 +182,17 @@
 * Improve macOS update experience with manual release-page updates
 * Improve conflict analysis equivalence filtering
 </description>
-			<pubDate>Mon, 21 Sep 2026 07:00:26 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.28.94-alpha/osx-x64.zip" sparkle:version="1.28.94.65180" sparkle:shortVersionString="1.28.94" length="107626197" sparkle:os="osx" type="application/zip" sparkle:signature="fVbEHfaJIzsJI2xB/P5IteJoMCRCXVNxVfhL0BN9HnA2gEE6hSN6CPND+dIoptBLmisw1PBcQ+eWdUbgxRFiAg=="/>
+			<pubDate>Tue, 22 Sep 2026 20:50:05 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.28.97-alpha/osx-x64.zip" sparkle:version="1.28.97.39337" sparkle:shortVersionString="1.28.97" length="107626431" sparkle:os="osx" type="application/zip" sparkle:signature="fqPZQJtLtI2b3lTS9oyn7aDaiuDoWpzNQ2ZhqGYEx1wn9QZrHiT850w4utHx/iwOxSg7gZoEpva9bzVLgYN8AA=="/>
 		</item>
 		<item>
-			<title>1.28.94-alpha</title>
-			<description>## Release Notes 1.28
+			<title>1.28.97-alpha</title>
+			<description>## Current Release Notes
+
+* Latest Stellaris CS support
+* Fix Open Release Page to open the exact offered update release, including prerelease versions.
+
+## Release Notes 1.28
 
 * Upgrade to .NET 10
 * Update dependencies
@@ -220,12 +235,17 @@
 * Improve macOS update experience with manual release-page updates
 * Improve conflict analysis equivalence filtering
 </description>
-			<pubDate>Mon, 21 Sep 2026 07:00:40 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.28.94-alpha/win-x64-setup.zip" sparkle:version="1.28.94.65180" sparkle:shortVersionString="1.28.94" length="76569687" sparkle:os="windows" type="application/zip" sparkle:signature="4R64oiILHINHH0WvKzm++sGbh1B8idZ2FJF9VvKheOavke6PvpttUbTUPdOjAjuhCPYqmBbkE2daQt+MYCQnCA=="/>
+			<pubDate>Tue, 22 Sep 2026 20:50:18 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.28.97-alpha/win-x64-setup.zip" sparkle:version="1.28.97.39337" sparkle:shortVersionString="1.28.97" length="76570880" sparkle:os="windows" type="application/zip" sparkle:signature="NNiqrAwDWiGvyvnQUGuTt8n+PCSYH6htsht4dWYqEcK4VxsEQFcPndLWQ0ltBVD+wlsWTObr3ZH3Zs5Ci6FPDA=="/>
 		</item>
 		<item>
-			<title>1.28.94-alpha</title>
-			<description>## Release Notes 1.28
+			<title>1.28.97-alpha</title>
+			<description>## Current Release Notes
+
+* Latest Stellaris CS support
+* Fix Open Release Page to open the exact offered update release, including prerelease versions.
+
+## Release Notes 1.28
 
 * Upgrade to .NET 10
 * Update dependencies
@@ -268,8 +288,8 @@
 * Improve macOS update experience with manual release-page updates
 * Improve conflict analysis equivalence filtering
 </description>
-			<pubDate>Mon, 21 Sep 2026 07:00:52 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.28.94-alpha/win-x64.zip" sparkle:version="1.28.94.65180" sparkle:shortVersionString="1.28.94" length="107397923" sparkle:os="windows" type="application/zip" sparkle:signature="6zCLt2MhPIBCBv2dn46PBdjFVskOek7IR4MINXcX4jxp9sOJ2JwCXJnD3DITILgHPnzgH9a3J0/drn5rrxirDg=="/>
+			<pubDate>Tue, 22 Sep 2026 20:50:31 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.28.97-alpha/win-x64.zip" sparkle:version="1.28.97.39337" sparkle:shortVersionString="1.28.97" length="107398157" sparkle:os="windows" type="application/zip" sparkle:signature="Z+5o/4fkwtsHOzanmi3f+J5ELIEFYwvel1v/0K8tRZ8d4r7YZ60Y8Dfj9PgfbIMIMtNH9/kapHk5Rj24+4AUBg=="/>
 		</item>
 	</channel>
 </rss>
