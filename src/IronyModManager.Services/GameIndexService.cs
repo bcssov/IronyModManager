@@ -518,7 +518,14 @@ namespace IronyModManager.Services
                     Lines = fileInfo.Content,
                     ModName = game.Name,
                     ValidationType = ValidationType.SkipAll
-                }).Where(p => p.ValueType != ValueType.Invalid);
+                }).ToList();
+                if (provider!.SupportsInlineScripts && fileDefs.Any(p => p.ValueType == ValueType.Invalid))
+                {
+                    // An original source rejected by the parser must not publish sibling definitions.
+                    continue;
+                }
+
+                fileDefs = fileDefs.Where(p => p.ValueType != ValueType.Invalid).ToList();
                 MergeDefinitions(fileDefs);
                 definitions.AddRange(fileDefs);
             }
@@ -536,9 +543,15 @@ namespace IronyModManager.Services
 
                 inlineDefinitions ??= DIResolver.Get<IIndexedDefinitions>();
                 prunedInlineDefinitions = [];
+                var rejectedInlineFiles = new Dictionary<(string Mod, string File), IDefinition>();
 
                 foreach (var item in definitions)
                 {
+                    if (rejectedInlineFiles.ContainsKey((item.ModName, item.FileCI)))
+                    {
+                        continue;
+                    }
+
                     var def = item;
                     var addDefault = true;
                     var depth = 0;
@@ -552,11 +565,20 @@ namespace IronyModManager.Services
                         }
 
                         addDefault = false;
-                        var inlinePath = multiInline ? parametrizedParser.GetFirstOptimizedScriptPath(def.Code) : parametrizedParser.GetOptimizedScriptPath(def.Code);
-                        if (string.IsNullOrWhiteSpace(inlinePath) && !multiInline)
+                        string inlinePath;
+                        try
                         {
-                            multiInline = true;
-                            inlinePath = parametrizedParser.GetFirstOptimizedScriptPath(def.Code);
+                            inlinePath = multiInline ? parametrizedParser.GetFirstOptimizedScriptPath(def.Code) : parametrizedParser.GetOptimizedScriptPath(def.Code);
+                            if (string.IsNullOrWhiteSpace(inlinePath) && !multiInline)
+                            {
+                                multiInline = true;
+                                inlinePath = parametrizedParser.GetFirstOptimizedScriptPath(def.Code);
+                            }
+                        }
+                        catch (ScriptParseException e)
+                        {
+                            rejectedInlineFiles.TryAdd((item.ModName, item.FileCI), CreateInlineFailure(item, def.File, e));
+                            break;
                         }
 
                         var path = Path.Combine(Parser.Common.Constants.Stellaris.InlineScripts, inlinePath ?? string.Empty);
@@ -583,6 +605,11 @@ namespace IronyModManager.Services
                                         ? parametrizedParser.ProcessFirstOptimized(priorityDefinition.Definition.Code, processedInline, out logicProcessed)
                                         : parametrizedParser.ProcessOptimized(priorityDefinition.Definition.Code, processedInline, out logicProcessed);
                                 }
+                                catch (ScriptParseException e)
+                                {
+                                    rejectedInlineFiles.TryAdd((item.ModName, item.FileCI), CreateInlineFailure(item, priorityDefinition.Definition.File, e));
+                                    break;
+                                }
                                 catch (Exception e)
                                 {
                                     throw new ArgumentException($"Inline code-block from file: {item.File} could not be parsed from the game.", e);
@@ -601,7 +628,13 @@ namespace IronyModManager.Services
                                         IsBinary = item.ValueType == ValueType.Binary,
                                         ModName = item.ModName,
                                         ValidationType = ValidationType.SkipAll
-                                    });
+                                    })?.ToList();
+                                    var parseFailure = GetInlineParseFailure(results);
+                                    if (parseFailure != null)
+                                    {
+                                        rejectedInlineFiles.TryAdd((item.ModName, item.FileCI), CreateInlineFailure(item, priorityDefinition.Definition.File, parseFailure));
+                                        break;
+                                    }
                                     if (item.Variables != null && item.Variables.Any() && results != null)
                                     {
                                         MergeDefinitions(results.Concat(item.Variables));
@@ -635,6 +668,8 @@ namespace IronyModManager.Services
                     }
                 }
 
+                prunedInlineDefinitions.RemoveAll(p => rejectedInlineFiles.ContainsKey((p.ModName, p.FileCI)));
+                prunedInlineDefinitions.AddRange(rejectedInlineFiles.Values);
                 GCRunner.RunGC(GCCollectionMode.Optimized);
             }
             else

@@ -44,9 +44,9 @@ namespace IronyModManager.Services.Registrations
         private const int HOI4CacheVersion = 24;
 
         /// <summary>
-        /// The stellaris cache version
+        /// The stellaris cache version. Epoch 36 excludes partial files rejected during inline expansion.
         /// </summary>
-        private const int StellarisCacheVersion = 35;
+        private const int StellarisCacheVersion = 36;
 
         /// <summary>
         /// The path resolver

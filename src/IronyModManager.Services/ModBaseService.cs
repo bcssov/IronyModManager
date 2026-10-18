@@ -27,6 +27,8 @@ using IronyModManager.IO.Common.Mods;
 using IronyModManager.IO.Common.Readers;
 using IronyModManager.Models.Common;
 using IronyModManager.Parser.Common.Mod;
+using IronyModManager.Parser.Common.Parsers;
+using IronyModManager.Parser.Common.Parsers.Models;
 using IronyModManager.Services.Common;
 using IronyModManager.Services.Resolver;
 using IronyModManager.Shared;
@@ -182,6 +184,45 @@ namespace IronyModManager.Services
         {
             var clone = DIResolver.Get<IObjectClone>();
             return clone.CloneDefinition(definition, true);
+        }
+
+        /// <summary>
+        /// Keeps an expected inline rejection in the ordinary invalid-file diagnostics.
+        /// </summary>
+        protected virtual IDefinition CreateInlineFailure(IDefinition source, string target, ScriptParseException failure)
+        {
+            var invalid = CopyDefinition(source);
+            invalid.ValueType = ValueType.Invalid;
+            invalid.ContainsInlineIdentifier = false;
+            invalid.Code = invalid.OriginalCode = source.OriginalCode ?? source.Code;
+            invalid.ErrorLine = failure.Error.Line;
+            invalid.ErrorColumn = failure.Error.Column;
+            var reason = failure.Message;
+            if (reason.Length > 1024)
+            {
+                reason = reason[..1024] + "...";
+            }
+
+            invalid.ErrorMessage = $"Inline script {target} could not be processed from mod {source.ModName}. {reason} Processing of {source.File} was skipped.";
+            return invalid;
+        }
+
+        /// <summary>
+        /// Preserves a rejection detected by the subsequent ParserManager stage.
+        /// </summary>
+        protected virtual ScriptParseException GetInlineParseFailure(IEnumerable<IDefinition> definitions)
+        {
+            var invalid = definitions?.FirstOrDefault(p => p.ValueType == ValueType.Invalid);
+            if (invalid == null)
+            {
+                return null;
+            }
+
+            var error = DIResolver.Get<IScriptError>();
+            error.Message = invalid.ErrorMessage;
+            error.Line = invalid.ErrorLine;
+            error.Column = invalid.ErrorColumn;
+            return new ScriptParseException(error);
         }
 
         /// <summary>

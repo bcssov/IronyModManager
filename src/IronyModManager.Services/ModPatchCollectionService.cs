@@ -643,17 +643,38 @@ namespace IronyModManager.Services
 
                 var inlineOpLock = new AsyncLock();
                 prunedInlineDefinitions = [.. others];
-                var reportedInlineErrors = new HashSet<string>();
+                // ModName is the mod-order identity; FileCI is the normalized original file identity.
+                var rejectedInlineFiles = new Dictionary<(string Mod, string File), IDefinition>();
+                var inlineSourceLocks = inlines.GroupBy(p => (p.ModName, p.FileCI)).ToDictionary(p => p.Key, _ => new AsyncLock());
+                async Task rejectFileAsync(IDefinition source, IDefinition invalid)
+                {
+                    using (await inlineOpLock.LockAsync())
+                    {
+                        rejectedInlineFiles.TryAdd((source.ModName, source.FileCI), invalid);
+                    }
+                }
+
                 await Parallel.ForEachAsync(
                     inlines,
                     new ParallelOptions { MaxDegreeOfParallelism = Math.Min(Environment.ProcessorCount, MaxInlinesToProcess) },
                     async (item, _) =>
                     {
+                        // Serialize only siblings of one source file, so a rejection stops subsequent expansions.
+                        using var sourceMutex = await inlineSourceLocks[(item.ModName, item.FileCI)].LockAsync();
                         var def = item;
                         var addDefault = true;
                         var depth = 0;
                         while ((def.Id.Equals(Parser.Common.Constants.Stellaris.InlineScriptId, StringComparison.OrdinalIgnoreCase) || def.ContainsInlineIdentifier) && !def.File.StartsWith(provider.InlineScriptsPath))
                         {
+                            using (await inlineOpLock.LockAsync())
+                            {
+                                if (rejectedInlineFiles.ContainsKey((item.ModName, item.FileCI)))
+                                {
+                                    addDefault = false;
+                                    break;
+                                }
+                            }
+
                             var multiInline = depth > 0 && def.ContainsInlineIdentifier;
                             depth++;
                             if (depth > MaxDepth)
@@ -662,11 +683,20 @@ namespace IronyModManager.Services
                             }
 
                             addDefault = false;
-                            var inlinePath = multiInline ? parametrizedParser.GetFirstOptimizedScriptPath(def.Code) : parametrizedParser.GetOptimizedScriptPath(def.Code);
-                            if (string.IsNullOrWhiteSpace(inlinePath) && !multiInline)
+                            string inlinePath;
+                            try
                             {
-                                multiInline = true;
-                                inlinePath = parametrizedParser.GetFirstOptimizedScriptPath(def.Code);
+                                inlinePath = multiInline ? parametrizedParser.GetFirstOptimizedScriptPath(def.Code) : parametrizedParser.GetOptimizedScriptPath(def.Code);
+                                if (string.IsNullOrWhiteSpace(inlinePath) && !multiInline)
+                                {
+                                    multiInline = true;
+                                    inlinePath = parametrizedParser.GetFirstOptimizedScriptPath(def.Code);
+                                }
+                            }
+                            catch (ScriptParseException e)
+                            {
+                                await rejectFileAsync(item, CreateInlineFailure(item, def.File, e));
+                                break;
                             }
 
                             var path = Path.Combine(Parser.Common.Constants.Stellaris.InlineScripts, inlinePath ?? string.Empty);
@@ -689,10 +719,23 @@ namespace IronyModManager.Services
                                     var logicProcessed = false;
                                     try
                                     {
+                                        using (await inlineOpLock.LockAsync())
+                                        {
+                                            if (rejectedInlineFiles.ContainsKey((item.ModName, item.FileCI)))
+                                            {
+                                                break;
+                                            }
+                                        }
+
                                         var processedInline = ProcessInlineConstants(def.Code, vars, scriptedVars, out ids);
                                         parametrizedCode = multiInline
                                             ? parametrizedParser.ProcessFirstOptimized(priorityDefinition.Definition.Code, processedInline, out logicProcessed)
                                             : parametrizedParser.ProcessOptimized(priorityDefinition.Definition.Code, processedInline, out logicProcessed);
+                                    }
+                                    catch (ScriptParseException e)
+                                    {
+                                        await rejectFileAsync(item, CreateInlineFailure(item, priorityDefinition.Definition.File, e));
+                                        break;
                                     }
                                     catch (Exception e)
                                     {
@@ -722,7 +765,13 @@ namespace IronyModManager.Services
                                             IsBinary = item.ValueType == ValueType.Binary,
                                             ModName = item.ModName,
                                             ValidationType = ValidationType.SkipAll // First skip all validation types due to nth level
-                                        });
+                                        })?.ToList();
+                                        var parseFailure = GetInlineParseFailure(results);
+                                        if (parseFailure != null)
+                                        {
+                                            await rejectFileAsync(item, CreateInlineFailure(item, priorityDefinition.Definition.File, parseFailure));
+                                            break;
+                                        }
                                         if (item.Variables != null && item.Variables.Any() && results != null)
                                         {
                                             MergeDefinitions(results.Concat(item.Variables));
@@ -759,7 +808,13 @@ namespace IronyModManager.Services
                                                     ModName = item.ModName,
                                                     ValidationType =
                                                         validationType // This is kinda difficult but try to guess which validation type we want to inherit. This was previously done outside, but now we need to re-run and re-validate.
-                                                });
+                                                })?.ToList();
+                                                parseFailure = GetInlineParseFailure(results);
+                                                if (parseFailure != null)
+                                                {
+                                                    await rejectFileAsync(item, CreateInlineFailure(item, priorityDefinition.Definition.File, parseFailure));
+                                                    break;
+                                                }
                                                 if (item.Variables != null && item.Variables.Any() && results != null)
                                                 {
                                                     MergeDefinitions(results.Concat(item.Variables));
@@ -789,13 +844,14 @@ namespace IronyModManager.Services
                                         {
                                             var copy = CopyDefinition(item);
                                             copy.ValueType = ValueType.Invalid;
-                                            copy.ErrorMessage = "Inline script failed to be processed." + Environment.NewLine + def.Code;
+                                            copy.ErrorMessage = $"Inline script {path} failed to be processed from {item.File}.";
                                             var syncMutex = await inlineOpLock.LockAsync();
                                             prunedInlineDefinitions.Add(copy);
+                                            rejectedInlineFiles.TryAdd((item.ModName, item.FileCI), copy);
                                             syncMutex.Dispose();
                                             break;
                                         }
-                                        else if (!reportedInlineErrors.Contains($"{item.ModName} - {pathCI}"))
+                                        else
                                         {
                                             // Could happen, will need manually investigation though
                                             var copy = CopyDefinition(item);
@@ -803,7 +859,7 @@ namespace IronyModManager.Services
                                             copy.ErrorMessage = $"Inline script {path} failed to be processed. Please report to the author of Irony.";
                                             var syncMutex = await inlineOpLock.LockAsync();
                                             prunedInlineDefinitions.Add(copy);
-                                            reportedInlineErrors.Add($"{item.ModName} - {pathCI}");
+                                            rejectedInlineFiles.TryAdd((item.ModName, item.FileCI), copy);
                                             syncMutex.Dispose();
                                             break;
                                         }
@@ -814,13 +870,14 @@ namespace IronyModManager.Services
                             {
                                 var copy = CopyDefinition(item);
                                 copy.ValueType = ValueType.Invalid;
-                                copy.ErrorMessage = "Inline script failed to be processed." + Environment.NewLine + def.Code;
+                                copy.ErrorMessage = $"Inline script failed to be processed from {item.File}.";
                                 var syncMutex = await inlineOpLock.LockAsync();
                                 prunedInlineDefinitions.Add(copy);
+                                rejectedInlineFiles.TryAdd((item.ModName, item.FileCI), copy);
                                 syncMutex.Dispose();
                                 break;
                             }
-                            else if (!reportedInlineErrors.Contains($"{item.ModName} - {pathCI}"))
+                            else
                             {
                                 // Need to report missing inline script
                                 var copy = CopyDefinition(item);
@@ -828,12 +885,8 @@ namespace IronyModManager.Services
                                 copy.ErrorMessage = $"Inline script {path} is not found in any mods.{Environment.NewLine}{Environment.NewLine}It is possible that the file is missing or due to a syntax error Irony cannot find it.";
                                 var syncMutex = await inlineOpLock.LockAsync();
                                 prunedInlineDefinitions.Add(copy);
-                                reportedInlineErrors.Add($"{item.ModName} - {pathCI}");
+                                rejectedInlineFiles.TryAdd((item.ModName, item.FileCI), copy);
                                 syncMutex.Dispose();
-                                break;
-                            }
-                            else
-                            {
                                 break;
                             }
                         }
@@ -857,6 +910,9 @@ namespace IronyModManager.Services
                         progressMutex.Dispose();
                     });
 
+                // A late failure wins over every earlier/in-flight success from the same source file.
+                prunedInlineDefinitions.RemoveAll(p => rejectedInlineFiles.ContainsKey((p.ModName, p.FileCI)));
+                prunedInlineDefinitions.AddRange(rejectedInlineFiles.Values);
                 tempIndex.Dispose();
             }
             else

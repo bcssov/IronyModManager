@@ -80,7 +80,7 @@ namespace IronyModManager.Parser
         /// <returns>System.String.</returns>
         public string GetFirstOptimizedScriptPath(string parameters)
         {
-            var elParams = codeParser.ParseScriptWithoutValidation(parameters.SplitOnNewLine(), string.Empty);
+            var elParams = ParseCode(parameters);
             if (elParams is not { Values: not null, Error: null })
             {
                 return string.Empty;
@@ -119,7 +119,7 @@ namespace IronyModManager.Parser
         /// <returns>System.String.</returns>
         public string GetOptimizedScriptPath(string parameters)
         {
-            var elParams = codeParser.ParseScriptWithoutValidation(parameters.SplitOnNewLine(), string.Empty);
+            var elParams = ParseCode(parameters);
             if (elParams is { Values: not null, Error: null })
             {
                 if (elParams.Values.Count(p => p.Key.Equals(Common.Constants.Stellaris.InlineScriptId, StringComparison.OrdinalIgnoreCase)) == 1)
@@ -178,7 +178,8 @@ namespace IronyModManager.Parser
                 return string.Empty;
             }
 
-            var elParams = codeParser.ParseScriptWithoutValidation(parameters.SplitOnNewLine(), string.Empty);
+            VerifyCodeLength(code);
+            var elParams = ParseCode(parameters);
             if (elParams is not { Values: not null, Error: null })
             {
                 return string.Empty;
@@ -223,7 +224,7 @@ namespace IronyModManager.Parser
                 processed = EvaluateMathExpression(processed);
             }
 
-            var replacementCode = codeParser.ParseScriptWithoutValidation(processed.SplitOnNewLine(), string.Empty);
+            var replacementCode = ParseCode(processed);
             if (replacementCode is not { Values: not null, Error: null })
             {
                 return string.Empty;
@@ -257,7 +258,8 @@ namespace IronyModManager.Parser
                 return string.Empty;
             }
 
-            var elParams = codeParser.ParseScriptWithoutValidation(parameters.SplitOnNewLine(), string.Empty);
+            VerifyCodeLength(code);
+            var elParams = ParseCode(parameters);
             if (elParams is { Values: not null, Error: null })
             {
                 if (elParams.Values.Count(p => p.Key.Equals(Common.Constants.Stellaris.InlineScriptId, StringComparison.OrdinalIgnoreCase)) == 1)
@@ -333,7 +335,7 @@ namespace IronyModManager.Parser
 
                         processed = EvaluateMathExpression(processed);
 
-                        var replacementCode = codeParser.ParseScriptWithoutValidation(processed.SplitOnNewLine(), string.Empty);
+                        var replacementCode = ParseCode(processed);
                         if (replacementCode is { Values: not null, Error: null })
                         {
                             var newCode = elParams.Values.FirstOrDefault(p => p.Values != null);
@@ -350,7 +352,7 @@ namespace IronyModManager.Parser
                     }
                     else if (!string.IsNullOrWhiteSpace(elObj?.Value))
                     {
-                        var replacementCode = codeParser.ParseScriptWithoutValidation(processed.SplitOnNewLine(), string.Empty);
+                        var replacementCode = ParseCode(processed);
                         if (replacementCode is { Values: not null, Error: null })
                         {
                             var newCode = elParams.Values.FirstOrDefault(p => p.Values != null);
@@ -386,7 +388,7 @@ namespace IronyModManager.Parser
         /// <returns>string.</returns>
         private string EvaluateMathExpression(string code)
         {
-            var elCode = codeParser.ParseScriptWithoutValidation(code.SplitOnNewLine(), string.Empty);
+            var elCode = ParseCode(code);
             if (elCode is { Values: not null, Error: null })
             {
                 if (elCode.Values.Count(p => p.Key.Equals(Common.Constants.Stellaris.InlineScriptId, StringComparison.OrdinalIgnoreCase)) == 1)
@@ -455,14 +457,46 @@ namespace IronyModManager.Parser
         private string FormatCode(string code)
         {
             var sb = new StringBuilder();
-            var root = codeParser.ParseScriptWithoutValidation(ReplaceEmpty(code).SplitOnNewLine(),
-                string.Empty);
+            var root = ParseCode(ReplaceEmpty(code));
             foreach (var v in root.Values)
             {
                 sb.AppendLine(codeParser.FormatCode(v));
             }
 
-            return sb.ToString();
+            var formatted = sb.ToString();
+            VerifyCodeLength(formatted);
+            return formatted;
+        }
+
+        /// <summary>
+        /// Parses intermediate code without hiding an expected rejection or a broken parser contract.
+        /// </summary>
+        private IParseResponse ParseCode(string code)
+        {
+            var result = codeParser.ParseScriptWithoutValidation(code.SplitOnNewLine(), string.Empty);
+            if (result?.Error != null)
+            {
+                throw new ScriptParseException(result.Error);
+            }
+
+            if (result?.Values == null)
+            {
+                throw new InvalidOperationException("Script parser returned no values without an error.");
+            }
+
+            return result;
+        }
+
+        /// <summary>
+        /// Rejects oversized inline input before parameter substitution allocates more intermediate text.
+        /// </summary>
+        private void VerifyCodeLength(string code)
+        {
+            var error = codeParser.VerifyAllowedLength(code.SplitOnNewLine());
+            if (error != null)
+            {
+                throw new ScriptParseException(error);
+            }
         }
 
         /// <summary>
