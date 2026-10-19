@@ -236,10 +236,18 @@ license Type:MIT
 
 #########################
 Package:Magick.NET-Q8-x64
-Version:14.17.1
+Version:15.0.0
 project URL:https://github.com/dlemstra/Magick.NET
 Description:ImageMagick is a powerful image manipulation library that supports over 100 major file formats (not including sub-formats). With Magick.NET you can use ImageMagick without having to install ImageMagick on your server or desktop. Visit https://github.com/dlemstra/Magick.NET/tree/main/docs before installing to help you decide the best version.
 licenseUrl:https://licenses.nuget.org/Apache-2.0
+license Type:Apache-2.0
+
+#########################
+Package:Echostorm.SharpImage
+Version:1.0.13
+project URL:https://github.com/Echostorm44/SharpImage
+Description:Managed macOS image previews. Irony's limited DDS adapter preserves supported transparency and six-face cubemap layout.
+licenseUrl:https://github.com/Echostorm44/SharpImage/blob/v1.0.13/LICENSE
 license Type:Apache-2.0
 
 #########################

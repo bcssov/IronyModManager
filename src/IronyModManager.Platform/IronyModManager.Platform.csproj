@@ -69,6 +69,9 @@
    <ItemGroup>
     <PackageReference Include="Avalonia" Version="$(Avalonia)" allowedVersions="$(Avalonia)" />
     <PackageReference Include="Avalonia.Desktop" Version="$(Avalonia)" allowedVersions="$(Avalonia)" />
+    <!-- Override vulnerable transitive versions without changing Avalonia's desktop API contracts. -->
+    <PackageReference Include="Tmds.DBus" Version="[0.92.0]" />
+    <PackageReference Include="System.Drawing.Common" Version="[8.0.0]" />
      <PackageReference Include="Lib.Harmony" Version="$(LibHarmony)" allowedVersions="$(LibHarmony)" />
     <PackageReference Include="Microsoft.Extensions.DependencyModel" Version="$(MicrosoftExtensionsDependencyModelVersion)" allowedVersions="$(MicrosoftExtensionsDependencyModelVersion)" />
     <PackageReference Include="Nerdbank.GitVersioning" Version="3.10.94">

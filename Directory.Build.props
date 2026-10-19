@@ -19,12 +19,12 @@
 	</PropertyGroup>
 	<PropertyGroup>
 		<!-- Current net10.0 compatibility cohort: keep these aligned with the .NET 10 baseline and review them together. -->
-		<MicrosoftExtensionsDependencyModelVersion>[10.0.12]</MicrosoftExtensionsDependencyModelVersion>
-		<MicrosoftExtensionsConfigurationBinder>[10.0.12]</MicrosoftExtensionsConfigurationBinder>
-		<MicrosoftExtensionsConfigurationJson>[10.0.12]</MicrosoftExtensionsConfigurationJson>
-		<MicrosoftBclAsyncInterfaces>[10.0.12]</MicrosoftBclAsyncInterfaces>
-		<SystemSecurityPermissions>[10.0.12]</SystemSecurityPermissions>
-		<SystemTextEncodingCodePages>[10.0.12]</SystemTextEncodingCodePages>
+		<MicrosoftExtensionsDependencyModelVersion>[10.0.13]</MicrosoftExtensionsDependencyModelVersion>
+		<MicrosoftExtensionsConfigurationBinder>[10.0.13]</MicrosoftExtensionsConfigurationBinder>
+		<MicrosoftExtensionsConfigurationJson>[10.0.13]</MicrosoftExtensionsConfigurationJson>
+		<MicrosoftBclAsyncInterfaces>[10.0.13]</MicrosoftBclAsyncInterfaces>
+		<SystemSecurityPermissions>[10.0.13]</SystemSecurityPermissions>
+		<SystemTextEncodingCodePages>[10.0.13]</SystemTextEncodingCodePages>
 		<!-- Jot previously introduced a regression in tracked nested/object properties during an upgrade (upstream issue #58). Exact pinning is intentional; future upgrades require targeted storage/tracking validation. -->
 		<Jot>[2.1.17]</Jot>
 		<!-- The .NET 10 migration is complete. Reconsider FSharp.Core only together with the separate follow-up CWTools modernization task. -->

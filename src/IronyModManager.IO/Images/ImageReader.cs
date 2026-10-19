@@ -13,8 +13,10 @@
 // ***********************************************************************
 
 using System;
+using System.Buffers.Binary;
 using System.Collections.Generic;
 using System.IO;
+using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using ImageMagick;
 using ImageMagick.Formats;
@@ -33,6 +35,7 @@ namespace IronyModManager.IO.Images
         private const string TGAExtension = ".tga";
         private readonly IDdsCompatibilityReader ddsCompatibilityReader = new DdsCompatibilityReader();
         private readonly ILogger logger;
+        private readonly SharpImagePreviewReader sharpImageReader;
 
         #endregion Fields
 
@@ -43,8 +46,15 @@ namespace IronyModManager.IO.Images
         /// </summary>
         /// <param name="logger">The logger.</param>
         public ImageReader(ILogger logger)
+            : this(logger, RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
+        {
+        }
+
+        // The explicit choice also permits exercising the macOS path on other test hosts.
+        internal ImageReader(ILogger logger, bool useSharpImage)
         {
             this.logger = logger;
+            sharpImageReader = useSharpImage ? new SharpImagePreviewReader() : null;
         }
 
         #endregion Constructors
@@ -66,7 +76,14 @@ namespace IronyModManager.IO.Images
                 MemoryStream ms = null;
                 try
                 {
-                    if (file.EndsWith(DDSExtension, StringComparison.OrdinalIgnoreCase))
+                    if (sharpImageReader != null)
+                    {
+                        ms = await sharpImageReader.Parse(stream, file);
+                        return ms;
+                    }
+
+                    var isCubemap = IsDdsCubemap(stream);
+                    if (isCubemap || file.EndsWith(DDSExtension, StringComparison.OrdinalIgnoreCase))
                     {
                         attemptedAsDds = true;
                         ms = await ParseDDS(stream);
@@ -78,7 +95,7 @@ namespace IronyModManager.IO.Images
                     }
 
                     // Real mods contain misleading extensions, so the extension is a hint rather than authority.
-                    if (ms == null)
+                    if (ms == null && !isCubemap)
                     {
                         if (!attemptedAsDds)
                         {
@@ -124,6 +141,7 @@ namespace IronyModManager.IO.Images
         private async Task<MemoryStream> GetDDS(Stream stream)
         {
             var exceptions = new List<Exception>();
+            var isCubemap = IsDdsCubemap(stream);
 
             try
             {
@@ -135,6 +153,11 @@ namespace IronyModManager.IO.Images
                     return await WritePng(cubeMap, true);
                 }
 
+                if (isCubemap)
+                {
+                    throw new InvalidDataException("A DDS cubemap must decode all six faces.");
+                }
+
                 if (images.Count > 0)
                 {
                     return await WritePng(images[0]);
@@ -143,6 +166,12 @@ namespace IronyModManager.IO.Images
             catch (Exception ex)
             {
                 exceptions.Add(ex);
+            }
+
+            if (isCubemap)
+            {
+                // Neither the flat compatibility reader nor ordinary fallback may publish one face.
+                throw new AggregateException(exceptions);
             }
 
             try
@@ -304,6 +333,36 @@ namespace IronyModManager.IO.Images
             if (stream.CanSeek)
             {
                 stream.Seek(0, SeekOrigin.Begin);
+            }
+        }
+
+        private bool IsDdsCubemap(Stream stream)
+        {
+            if (!stream.CanSeek || stream.Length < 128) return false;
+            var position = stream.Position;
+            try
+            {
+                stream.Position = 0;
+                Span<byte> header = stackalloc byte[148];
+                stream.ReadExactly(header[..128]);
+                if (BinaryPrimitives.ReadUInt32LittleEndian(header) != 0x20534444) return false;
+                var caps = BinaryPrimitives.ReadUInt32LittleEndian(header[112..]);
+                if ((caps & 0xfe00) != 0)
+                {
+                    if ((caps & 0xfe00) != 0xfe00)
+                        throw new InvalidDataException("DDS cubemap previews require all six faces.");
+                    return true;
+                }
+                if (BinaryPrimitives.ReadUInt32LittleEndian(header[84..]) == 0x30315844 && stream.Length >= 148)
+                {
+                    stream.ReadExactly(header[128..]);
+                    return (BinaryPrimitives.ReadUInt32LittleEndian(header[136..]) & 4) != 0;
+                }
+                return false;
+            }
+            finally
+            {
+                stream.Position = position;
             }
         }
 

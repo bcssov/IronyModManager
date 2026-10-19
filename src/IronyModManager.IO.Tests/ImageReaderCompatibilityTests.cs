@@ -247,13 +247,13 @@ namespace IronyModManager.IO.Tests
             return await reader.GetImageStreamAsync("root", file);
         }
 
-        private static byte[] CreateOrdinaryImage(MagickFormat format, MagickColor color)
+        internal static byte[] CreateOrdinaryImage(MagickFormat format, MagickColor color)
         {
             using var image = new MagickImage(color, 3, 2) { Format = format };
             return image.ToByteArray();
         }
 
-        private static byte[] CreateDxtDds(string fourCc, ushort color)
+        internal static byte[] CreateDxtDds(string fourCc, ushort color)
         {
             byte[] block;
             if (fourCc == "DXT1")
@@ -277,7 +277,7 @@ namespace IronyModManager.IO.Tests
             return Combine(header, block);
         }
 
-        private static byte[] CreateDx10Dds(uint format, byte[] payload)
+        internal static byte[] CreateDx10Dds(uint format, byte[] payload)
         {
             var dimension = format == 98 ? 4u : 1u;
             var header = CreateDdsHeader(dimension, dimension, (uint)payload.Length, FourCc("DX10"), 0x4, 0x1000, 0, 1);
@@ -296,7 +296,7 @@ namespace IronyModManager.IO.Tests
             return Combine(header, dx10, payload);
         }
 
-        private static byte[] CreateRgb555Dds(int width, int height, ushort[] firstMip, ushort[] secondMip)
+        internal static byte[] CreateRgb555Dds(int width, int height, ushort[] firstMip, ushort[] secondMip)
         {
             var header = CreateDdsHeader((uint)width, (uint)height, checked((uint)(width * height * 2)), 0, 0x40, 0x401008, 0, secondMip == null ? 1u : 2u);
             Write(header, 88, 16);
@@ -323,7 +323,7 @@ namespace IronyModManager.IO.Tests
             return Combine(header, new byte[8]);
         }
 
-        private static byte[] CreateCubemapDds()
+        internal static byte[] CreateCubemapDds()
         {
             var header = CreateDdsHeader(4, 4, 8, FourCc("DXT1"), 0x4, 0x401008, 0xFE00, 2);
             var payloads = new List<byte[]>();

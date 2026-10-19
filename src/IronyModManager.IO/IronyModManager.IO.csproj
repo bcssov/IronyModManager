@@ -51,7 +51,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Magick.NET-Q8-x64" Version="14.17.1" />
+    <PackageReference Include="Magick.NET-Q8-x64" Version="15.0.0" />
+    <PackageReference Include="Echostorm.SharpImage" Version="[1.0.13]" />
     <PackageReference Include="Microsoft.Extensions.DependencyModel" Version="$(MicrosoftExtensionsDependencyModelVersion)" allowedVersions="$(MicrosoftExtensionsDependencyModelVersion)" />
     <PackageReference Include="Nerdbank.GitVersioning" Version="3.10.94">
       <PrivateAssets>all</PrivateAssets>
@@ -62,7 +63,7 @@
     <PackageReference Include="SimpleInjector.Packaging" Version="5.5.0" />
     <PackageReference Include="System.Security.Permissions" Version="$(SystemSecurityPermissions)" allowedVersions="$(SystemSecurityPermissions)" />
     <PackageReference Include="System.Text.Encoding.CodePages" Version="$(SystemTextEncodingCodePages)" allowedVersions="$(SystemTextEncodingCodePages)" />
-    <PackageReference Include="UTF.Unknown" Version="2.7.0" />
+    <PackageReference Include="UTF.Unknown" Version="2.8.0" />
   </ItemGroup>
 
   <ItemGroup>

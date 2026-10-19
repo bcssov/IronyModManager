@@ -54,6 +54,8 @@
     <PackageReference Include="CodexMicroORM.Core" Version="1.4.1" />
     <PackageReference Include="info.lundin.math.dll" Version="1.2.7" />
     <PackageReference Include="Jering.KeyValueStore" Version="1.1.0" />
+    <!-- Keep Jering's MessagePack dependency on the security-fixed 2.x serialization contract. -->
+    <PackageReference Include="MessagePack" Version="[2.5.303]" />
     <PackageReference Include="MagicMapper" Version="14.0.1" />
     <PackageReference Include="Microsoft.Extensions.DependencyModel" Version="$(MicrosoftExtensionsDependencyModelVersion)" allowedVersions="$(MicrosoftExtensionsDependencyModelVersion)" />
     <PackageReference Include="MimeTypes" Version="2.5.2">
