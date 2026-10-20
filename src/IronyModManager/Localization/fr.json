@@ -292,6 +292,10 @@
         "Title": "Impossible de lancer le jeu",
         "Message": "Impossible de lancer le jeu."
       },
+      "ExecutableNotFound": {
+        "Title": "Exécutable du jeu introuvable",
+        "Message": "Exécutable du jeu introuvable. Vérifiez le chemin configuré vers l’exécutable du jeu."
+      },
       "NotSet": {
         "Title": "Jeu introuvable",
         "Message": "Le jeu n'a pas été détecté automatiquement, veuillez utiliser la fenêtre des options pour définir manuellement le chemin de l'exécutable."

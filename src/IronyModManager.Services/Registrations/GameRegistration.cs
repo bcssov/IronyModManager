@@ -463,6 +463,7 @@ namespace IronyModManager.Services.Registrations
         {
             baseUserDir = defaultUserDir;
             gameType.LinuxProtonVersion = SteamDirectory.GetProtonVersion(gameType.SteamAppId);
+            gameType.SteamLibraryRoots = SteamDirectory.GetSteamLibraryRoots(SteamDirectory.GetSteamRootPath()).ToList();
             if (!string.IsNullOrWhiteSpace(gameType.LinuxProtonVersion))
             {
                 var protonUserDir = pathResolver.GetProtonParadoxUserDir(gameType.BaseSteamGameDirectory, gameType.SteamAppId);

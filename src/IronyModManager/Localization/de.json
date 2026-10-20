@@ -292,6 +292,10 @@
         "Title": "Spiel kann nicht gestartet werden",
         "Message": "Das Spiel konnte nicht gestartet werden."
       },
+      "ExecutableNotFound": {
+        "Title": "Spielprogramm nicht gefunden",
+        "Message": "Die ausführbare Spieldatei wurde nicht gefunden. Überprüfe den eingestellten Pfad zur ausführbaren Spieldatei."
+      },
       "NotSet": {
         "Title": "Spiel Nicht Eingestellt",
         "Message": "Das Spiel wurde nicht automatisch erkannt. Verwenden Sie das Optionsfenster, um den Dateipfad manuell festzulegen."

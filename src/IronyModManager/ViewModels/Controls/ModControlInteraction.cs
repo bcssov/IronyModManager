@@ -3,6 +3,7 @@
 // ***********************************************************************
 
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using IronyModManager.Implementation.Actions;
 using IronyModManager.Implementation.Overlay;
@@ -66,6 +67,20 @@ namespace IronyModManager.ViewModels.Controls
         public virtual Task<bool> RunGameAsync(bool createSteamFile, string path, string steamRoot,
             string steamProtonVersion, int appId, string args = IronyModManager.Shared.Constants.EmptyParam) =>
             appAction.RunGameAsync(createSteamFile, path, steamRoot, steamProtonVersion, appId, args);
+
+        /// <summary>
+        /// Presents an execution-reported missing-game warning without another filesystem check.
+        /// </summary>
+        public virtual Task<bool> RunGameAsync(bool createSteamFile, string path, string steamRoot,
+            string steamProtonVersion, int appId, IEnumerable<string> steamLibraryRoots, string args, Action executableNotFound)
+        {
+            return appAction.RunGameAsync(createSteamFile, path, steamRoot, steamProtonVersion, appId, steamLibraryRoots, args, () =>
+            {
+                executableNotFound?.Invoke();
+                Notify(GetText(LocalizationResources.Mod_Actions.LaunchGame.ExecutableNotFound.Title),
+                    GetText(LocalizationResources.Mod_Actions.LaunchGame.ExecutableNotFound.Message), NotificationType.Warning, 10);
+            });
+        }
 
         /// <summary>
         /// Exits the application after a successful launch hand-off.
