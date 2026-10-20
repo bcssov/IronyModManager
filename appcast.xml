@@ -80,11 +80,11 @@
 			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.27.206/win-x64.zip" sparkle:version="1.27.206.27272" sparkle:shortVersionString="1.27.206" length="103673491" sparkle:os="windows" type="application/zip" sparkle:signature="hSEhR0dINUIC2pXmHbIYAW74mVpkio57JG95/ES1DCg51uBj62IUUAAQ2nPuQQBeL61XcDxKhQo8v/u7fY9QAA=="/>
 		</item>
 		<item>
-			<title>1.28.100-rc</title>
+			<title>1.28.102-rc</title>
 			<description>## Current Release Notes
 
-* Fix #622
-* Add alternative to Magick.net for OSX builds
+* Fixed Linux Proton discovery when Proton is installed in additional Steam library folders
+* Improved game launch error handling for missing executables
 
 ## Release Notes 1.28
 
@@ -129,15 +129,15 @@
 * Improve macOS update experience with manual release-page updates
 * Improve conflict analysis equivalence filtering
 </description>
-			<pubDate>Mon, 19 Oct 2026 08:46:12 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.28.100-rc/linux-x64.zip" sparkle:version="1.28.100.46311" sparkle:shortVersionString="1.28.100" length="109337916" sparkle:os="linux" type="application/zip" sparkle:signature="5Qchxn99mTLIJJhps/nq2zbWFi8EHNq4hLwt9rNJoxHLINC3OofyKhxMWs297C/DLzXABgoy4KEzGcvNTGZBCg=="/>
+			<pubDate>Tue, 20 Oct 2026 07:36:44 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.28.102-rc/linux-x64.zip" sparkle:version="1.28.102.42258" sparkle:shortVersionString="1.28.102" length="109341786" sparkle:os="linux" type="application/zip" sparkle:signature="HTjyM+Yji/TxaKHMSwCyBwbey34NFyuXcoG4ZQgBfLRAOyvrjtmyt5vtYM0oHdiDLBVAxcNmqyZ6Dzx53zZwDQ=="/>
 		</item>
 		<item>
-			<title>1.28.100-rc</title>
+			<title>1.28.102-rc</title>
 			<description>## Current Release Notes
 
-* Fix #622
-* Add alternative to Magick.net for OSX builds
+* Fixed Linux Proton discovery when Proton is installed in additional Steam library folders
+* Improved game launch error handling for missing executables
 
 ## Release Notes 1.28
 
@@ -182,15 +182,15 @@
 * Improve macOS update experience with manual release-page updates
 * Improve conflict analysis equivalence filtering
 </description>
-			<pubDate>Mon, 19 Oct 2026 08:46:27 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.28.100-rc/osx-x64.zip" sparkle:version="1.28.100.46311" sparkle:shortVersionString="1.28.100" length="96868625" sparkle:os="osx" type="application/zip" sparkle:signature="HCgzYpkfKzO1PyCTIVDEsXDQN0KbIIiNOzsxFnpsiCCPhsQIFbCCGY6u8+Ul0OcRrfk3uBPFNz76RptZ3f6sDw=="/>
+			<pubDate>Tue, 20 Oct 2026 07:36:59 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.28.102-rc/osx-x64.zip" sparkle:version="1.28.102.42258" sparkle:shortVersionString="1.28.102" length="96872444" sparkle:os="osx" type="application/zip" sparkle:signature="vkCyW87tkqv/VAhZb/UYOFeJBUotbgh0NSw+qVOhAJrosrZhzOGYces7I+AoqdSWMP4geXx6DUreJTWODMO/Ag=="/>
 		</item>
 		<item>
-			<title>1.28.100-rc</title>
+			<title>1.28.102-rc</title>
 			<description>## Current Release Notes
 
-* Fix #622
-* Add alternative to Magick.net for OSX builds
+* Fixed Linux Proton discovery when Proton is installed in additional Steam library folders
+* Improved game launch error handling for missing executables
 
 ## Release Notes 1.28
 
@@ -235,15 +235,15 @@
 * Improve macOS update experience with manual release-page updates
 * Improve conflict analysis equivalence filtering
 </description>
-			<pubDate>Mon, 19 Oct 2026 08:46:36 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.28.100-rc/win-x64-setup.zip" sparkle:version="1.28.100.46311" sparkle:shortVersionString="1.28.100" length="77543783" sparkle:os="windows" type="application/zip" sparkle:signature="zopvzrIOvEyOoHLy7Xw8nwuBudbZGQYBe59wL1S5BlxP6lHXgMtO4FFoLNnbX9EcceggG+NV8e7VMfqaM/9pCw=="/>
+			<pubDate>Tue, 20 Oct 2026 07:37:07 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.28.102-rc/win-x64-setup.zip" sparkle:version="1.28.102.42258" sparkle:shortVersionString="1.28.102" length="77548123" sparkle:os="windows" type="application/zip" sparkle:signature="JmF/urWcuANBOrWsQQAOtaVY0ISbvGdDI0PemTqeEzI4ZC7FuVXsNMAIYwyx1tQg02XsOeB606P2oO/ckG1MAA=="/>
 		</item>
 		<item>
-			<title>1.28.100-rc</title>
+			<title>1.28.102-rc</title>
 			<description>## Current Release Notes
 
-* Fix #622
-* Add alternative to Magick.net for OSX builds
+* Fixed Linux Proton discovery when Proton is installed in additional Steam library folders
+* Improved game launch error handling for missing executables
 
 ## Release Notes 1.28
 
@@ -288,8 +288,8 @@
 * Improve macOS update experience with manual release-page updates
 * Improve conflict analysis equivalence filtering
 </description>
-			<pubDate>Mon, 19 Oct 2026 08:46:50 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.28.100-rc/win-x64.zip" sparkle:version="1.28.100.46311" sparkle:shortVersionString="1.28.100" length="108381790" sparkle:os="windows" type="application/zip" sparkle:signature="jBaoBeMPVpE+Zh9e1roe80UsJrVypdEHg3qj+lgPL9tAjVzfo1mrFMeP4T6n3plkCVesmcyDoAx/QtioZZXxBw=="/>
+			<pubDate>Tue, 20 Oct 2026 07:37:20 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.28.102-rc/win-x64.zip" sparkle:version="1.28.102.42258" sparkle:shortVersionString="1.28.102" length="108385621" sparkle:os="windows" type="application/zip" sparkle:signature="bIvncllJLgP8HI6cTvzUzxSqLjDfGFyUJmSsMLiXDKwv4mupyJnmI6hMVSCnSoKudpF3wJ9eykAbWsn4Pfc+BA=="/>
 		</item>
 	</channel>
 </rss>
