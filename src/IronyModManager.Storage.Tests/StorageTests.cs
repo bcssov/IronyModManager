@@ -302,6 +302,7 @@ namespace IronyModManager.Storage.Tests
                 SignatureFiles = ["test1.txt"],
                 SupportedOperatingSystems = SupportedOperatingSystems.Windows,
                 SteamRoot = "root",
+                SteamLibraryRoots = ["root", "library2", "library3"],
                 LinuxProtonVersion = "proton_10"
             };
             storage.RegisterGame(game);
@@ -332,6 +333,7 @@ namespace IronyModManager.Storage.Tests
             dbMock.Games.FirstOrDefault(p => p.Name == key).SignatureFiles.FirstOrDefault().Should().Be("test1.txt");
             dbMock.Games.FirstOrDefault(p => p.Name == key).SupportedOperatingSystems.HasFlag(SupportedOperatingSystems.Windows).Should().BeTrue();
             dbMock.Games.FirstOrDefault(p => p.Name == key).SteamRoot.Should().Be("root");
+            dbMock.Games.FirstOrDefault(p => p.Name == key).SteamLibraryRoots.Should().Equal("root", "library2", "library3");
             dbMock.Games.FirstOrDefault(p => p.Name == key).LinuxProtonVersion.Should().Be("proton_10");
         }
 
@@ -516,6 +518,7 @@ namespace IronyModManager.Storage.Tests
                 SignatureFiles = ["test1.txt"],
                 SupportedOperatingSystems = SupportedOperatingSystems.Windows,
                 SteamRoot = "root",
+                SteamLibraryRoots = ["root", "library2", "library3"],
                 LinuxProtonVersion = "proton_10"
             };
             storage.RegisterGame(game);
@@ -547,6 +550,7 @@ namespace IronyModManager.Storage.Tests
             result.FirstOrDefault(p => p.Name == key).SignatureFiles.FirstOrDefault().Should().Be("test1.txt");
             result.FirstOrDefault(p => p.Name == key).SupportedOperatingSystems.HasFlag(SupportedOperatingSystems.Windows).Should().BeTrue();
             result.FirstOrDefault(p => p.Name == key).SteamRoot.Should().Be("root");
+            result.FirstOrDefault(p => p.Name == key).SteamLibraryRoots.Should().Equal("root", "library2", "library3");
             result.FirstOrDefault(p => p.Name == key).LinuxProtonVersion.Should().Be("proton_10");
         }
 

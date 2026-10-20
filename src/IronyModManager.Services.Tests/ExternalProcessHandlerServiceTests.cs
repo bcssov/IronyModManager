@@ -14,6 +14,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -151,10 +152,10 @@ namespace IronyModManager.Services.Tests
         }
 
         /// <summary>
-        /// Defines the test method Should_launch_external_steam.
+        /// A missing external helper must fail without falling back to the Steam API.
         /// </summary>
         [Fact]
-        public async Task Should_launch_external_steam()
+        public async Task Should_fail_when_external_steam_handler_is_missing()
         {
             var isValid = true;
             var steam = new Mock<ISteam>();
@@ -178,7 +179,8 @@ namespace IronyModManager.Services.Tests
             DISetup.Container.Register<IDomainConfiguration>(() => new DomainConfigDummyExternal());
 
             var service = GetService(steam: steam);
-            await service.LaunchSteamAsync(new Game());
+            Func<Task> launch = async () => await service.LaunchSteamAsync(new Game());
+            await launch.Should().ThrowAsync<FileNotFoundException>();
             isValid.Should().BeTrue();
         }
 

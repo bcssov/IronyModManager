@@ -236,6 +236,7 @@ namespace IronyModManager.Storage
                 game.SignatureFiles = gameType.SignatureFiles;
                 game.SupportedOperatingSystems = gameType.SupportedOperatingSystems;
                 game.SteamRoot = gameType.SteamRoot;
+                game.SteamLibraryRoots = gameType.SteamLibraryRoots?.ToList() ?? [];
                 game.LinuxProtonVersion = gameType.LinuxProtonVersion;
                 Database.Games.Add(game);
                 return true;

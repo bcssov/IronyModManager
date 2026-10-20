@@ -386,6 +386,12 @@ namespace IronyModManager.Shared
                     public const string Title = Prefix + "Title";
                     public const string Message = Prefix + "Message";
                 }
+                public static class ExecutableNotFound
+                {
+                    public const string Prefix = "Mod_Actions.LaunchGame.ExecutableNotFound.";
+                    public const string Title = Prefix + "Title";
+                    public const string Message = Prefix + "Message";
+                }
                 public static class NotSet
                 {
                     public const string Prefix = "Mod_Actions.LaunchGame.NotSet.";
