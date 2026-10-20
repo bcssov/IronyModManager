@@ -292,6 +292,10 @@
         "Title": "Nije moguće pokrenuti igru",
         "Message": "Pokretanje igre nije uspjelo."
       },
+      "ExecutableNotFound": {
+        "Title": "Izvršna datoteka igre nije pronađena",
+        "Message": "Izvršna datoteka igre nije pronađena. Provjerite postavljenu putanju do izvršne datoteke igre."
+      },
       "NotSet": {
         "Title": "Igra nije postavljena",
         "Message": "Igra nije automatski otkrivena, koristite prozor opcija da bi ručno postavili izvršnu datoteku igre."

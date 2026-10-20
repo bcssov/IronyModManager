@@ -997,7 +997,8 @@ namespace IronyModManager.ViewModels.Controls
                         {
                             await ensureSteamIsRunning(args);
                             var generateAppIdFile = gameService.IsSteamGame(args) && createSteamAppIdFile;
-                            if (await interaction.RunGameAsync(generateAppIdFile, args.ExecutableLocation, game.SteamRoot, game.LinuxProtonVersion, game.SteamAppId, args.LaunchArguments))
+                            var executableNotFound = false;
+                            if (await interaction.RunGameAsync(generateAppIdFile, args.ExecutableLocation, game.SteamRoot, game.LinuxProtonVersion, game.SteamAppId, game.SteamLibraryRoots, args.LaunchArguments, () => executableNotFound = true))
                             {
                                 if (game.CloseAppAfterGameLaunch)
                                 {
@@ -1010,8 +1011,11 @@ namespace IronyModManager.ViewModels.Controls
                             }
                             else
                             {
-                                interaction.Notify(interaction.GetText(LocalizationResources.Mod_Actions.LaunchGame.LaunchError.Title),
-                                    interaction.GetText(LocalizationResources.Mod_Actions.LaunchGame.LaunchError.Message), NotificationType.Error, 10);
+                                if (!executableNotFound)
+                                {
+                                    interaction.Notify(interaction.GetText(LocalizationResources.Mod_Actions.LaunchGame.LaunchError.Title),
+                                        interaction.GetText(LocalizationResources.Mod_Actions.LaunchGame.LaunchError.Message), NotificationType.Error, 10);
+                                }
                                 await TriggerOverlayAsync(id, false);
                             }
                         }

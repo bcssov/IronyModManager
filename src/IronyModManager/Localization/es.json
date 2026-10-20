@@ -292,6 +292,10 @@
         "Title": "No se pudo iniciar el juego.",
         "Message": "No se pudo iniciar el juego."
       },
+      "ExecutableNotFound": {
+        "Title": "Ejecutable del juego no encontrado",
+        "Message": "No se ha encontrado el ejecutable del juego. Comprueba la ruta configurada al ejecutable del juego."
+      },
       "NotSet": {
         "Title": "Juego no configurado",
         "Message": "El juego no se detectó automáticamente, utilice la ventana de opciones para configurar manualmente la ruta del ejecutable."

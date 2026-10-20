@@ -115,6 +115,7 @@ namespace IronyModManager.Services.Registrations
         /// <summary>
         /// The VDF serializer settings
         /// </summary>
+        // Deliberate headroom for growing Steam values such as DownloadsStoreRecentlyCompleted (Gameloop.Vdf#32).
         private static readonly VdfSerializerSettings vdfSerializerSettings = new() { MaximumTokenSize = 8192 * 8, UsesEscapeSequences = true, UsesConditionals = true };
 
         /// <summary>
@@ -203,6 +204,42 @@ namespace IronyModManager.Services.Registrations
             }
 
             return string.Empty;
+        }
+
+        /// <summary>
+        /// Enumerates Steam library roots for the cold-start game registration snapshot.
+        /// </summary>
+        public static IEnumerable<string> GetSteamLibraryRoots(string steamRoot)
+        {
+            if (string.IsNullOrWhiteSpace(steamRoot))
+            {
+                yield break;
+            }
+
+            var paths = GetVdfData(Path.Combine(steamRoot, steamConfigVDF), Path.Combine(steamRoot, libraryFolderVDF), Path.Combine(steamRoot, steamAppsLibraryFolderVDF)).Item1;
+            var seen = new HashSet<string>(OperatingSystem.IsWindows() ? StringComparer.OrdinalIgnoreCase : StringComparer.Ordinal);
+            foreach (var path in new[] { steamRoot }.Concat(paths))
+            {
+                if (string.IsNullOrWhiteSpace(path))
+                {
+                    continue;
+                }
+
+                string normalized;
+                try
+                {
+                    normalized = Path.TrimEndingDirectorySeparator(Path.GetFullPath(path.StandardizeDirectorySeparator()));
+                }
+                catch (Exception ex) when (ex is ArgumentException or NotSupportedException or IOException)
+                {
+                    continue;
+                }
+
+                if (Directory.Exists(normalized) && seen.Add(normalized))
+                {
+                    yield return normalized;
+                }
+            }
         }
 
         /// <summary>

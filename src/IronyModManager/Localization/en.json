@@ -292,6 +292,10 @@
         "Title": "Cannot Launch Game",
         "Message": "Failed to launch the game."
       },
+      "ExecutableNotFound": {
+        "Title": "Game Executable Not Found",
+        "Message": "Game executable not found. Check the configured game executable path."
+      },
       "NotSet": {
         "Title": "Game Not Set",
         "Message": "Game was not automatically detected, please use the options window to manually set the executable path."
