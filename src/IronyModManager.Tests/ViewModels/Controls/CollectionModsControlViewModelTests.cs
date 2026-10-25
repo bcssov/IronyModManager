@@ -473,6 +473,142 @@ namespace IronyModManager.Tests.ViewModels.Controls
             viewModel.SelectedMods.Should().BeEmpty();
         }
 
+        [Theory]
+        [InlineData(false)]
+        [InlineData(true)]
+        public async Task Locked_game_switch_should_clear_source_graph_without_reconciling_or_persisting_unknown_absence(bool targetHasSnapshot)
+        {
+            DISetup.SetupContainer();
+            var a = new Game { Type = "A" };
+            var b = new Game { Type = "B" };
+            IGame selected = a;
+            var modA = CreateMod("mod/shared.mod", "A-path", game: a.Type, isSelected: true);
+            var modB = CreateMod("mod/shared.mod", "B-path", game: b.Type, isSelected: true);
+            modA.IsValid = modB.IsValid = true;
+            var collectionA = new ModCollection { Name = "Same name", Game = a.Type, IsSelected = true, Mods = [modA.DescriptorFile], ModPaths = [modA.FullPath] };
+            var collectionB = new ModCollection { Name = "Same name", Game = b.Type, IsSelected = true, Mods = [modB.DescriptorFile], ModPaths = [modB.FullPath] };
+            var gameService = new Mock<IGameService>();
+            gameService.Setup(p => p.GetSelected()).Returns(() => selected);
+            var collections = new Mock<IModCollectionService>();
+            collections.Setup(p => p.GetAll()).Returns(() => selected == a ? [collectionA] : [collectionB]);
+            collections.Setup(p => p.Get(It.IsAny<string>())).Returns(() => selected == a ? collectionA : collectionB);
+            var patch = new Mock<IModPatchCollectionService>();
+            var safety = new Mock<IGameStateSafetyService>();
+            safety.Setup(p => p.IsLocked(b)).Returns(true);
+            var mods = new Mock<IModService>();
+            mods.Setup(p => p.RefreshInstalledModsAsync(a)).ReturnsAsync(new InstalledModsResult { IsAuthoritative = true, Mods = [modA] });
+            mods.Setup(p => p.RefreshInstalledModsAsync(b)).ReturnsAsync(new InstalledModsResult { IsAuthoritative = false, Mods = targetHasSnapshot ? [modB] : [] });
+            mods.Setup(p => p.FilterMods(It.IsAny<IEnumerable<IMod>>(), It.IsAny<string>())).Returns((IEnumerable<IMod> values, string _) => values);
+            mods.Setup(p => p.ResolveCollectionMods(It.IsAny<IEnumerable<IMod>>(), It.IsAny<IModCollection>(), It.IsAny<IEnumerable<IMod>>()))
+                .Returns((IEnumerable<IMod> values, IModCollection collection, IEnumerable<IMod> _) => values.Where(p => p.Game == collection.Game).ToList());
+            mods.Setup(p => p.AreModIdentitiesEquivalent(It.IsAny<IMod>(), It.IsAny<IMod>()))
+                .Returns((IMod left, IMod right) => left.Game == right.Game && left.DescriptorFile == right.DescriptorFile);
+            var reconciliation = new CollectionModReconciliationCoordinator(mods.Object, safety.Object);
+            var collectionView = CreateViewModel(mods.Object, collections, patch, gameService, reconciliation: reconciliation);
+            if (targetHasSnapshot)
+            {
+                selected = b;
+                collectionView.InitializeState(b, collectionB, [modB]);
+                collectionView.ApplySelectedMods([modB], true);
+                selected = a;
+                collectionView.PresentGameContext(a, [modA]);
+            }
+            collectionView.InitializeState(a, collectionA, [modA]);
+            collectionView.ApplySelectedMods([modA], true);
+            Mock.Get(collectionView.ModifyCollection).SetupAllProperties();
+            using var subscriptions = collectionView.StartModSubscriptions();
+            var filter = new SearchModsControlViewModel();
+            var presentation = new Mock<InstalledModsPresentationCoordinator>(MockBehavior.Loose, new object[] { null, null, null, null, null });
+            presentation.SetupGet(p => p.FilterMods).Returns(filter);
+            var events = new Mock<InstalledModsEventCoordinator>(MockBehavior.Loose, new object[] { null });
+            var factory = new Mock<IInstalledModsCoordinatorFactory>();
+            factory.Setup(p => p.Create()).Returns(new InstalledModsCoordinators(presentation.Object, events.Object));
+            var interaction = new Mock<ModControlInteraction>(MockBehavior.Loose, new object[] { null, null, null, null });
+            var installedView = new ProxyGenerator().CreateClassProxy<InstalledModsControlViewModel>(
+                [gameService.Object, mods.Object, safety.Object, interaction.Object, factory.Object],
+                new LocalizationInterceptor<InstalledModsControlViewModel>([], []));
+            installedView.GameContextPresented += collectionView.PresentGameContext;
+            var stateReconciliation = new ModStateReconciliationCoordinator(safety.Object);
+            using var publications = installedView.WhenAnyValue(p => p.Mods).Subscribe(values =>
+                stateReconciliation.ReconcileModsPublication(installedView.ActiveGame, installedView.RefreshingMods, installedView.LastRefreshAuthoritative,
+                    () => collectionView.SetMods(values, installedView.ActiveGame)));
+            Task<bool> bind(IGame game) => (Task<bool>)typeof(InstalledModsControlViewModel)
+                .GetMethod("BindAsync", BindingFlags.Instance | BindingFlags.NonPublic)!.Invoke(installedView, [game, true, null, null]);
+            await bind(a);
+            collections.Invocations.Clear();
+            mods.Invocations.Clear();
+
+            selected = b;
+            await bind(b);
+
+            installedView.Mods.Should().OnlyContain(p => p.Game == b.Type);
+            installedView.FilteredMods.Should().OnlyContain(p => p.Game == b.Type);
+            collectionView.Mods.Should().OnlyContain(p => p.Game == b.Type);
+            collectionView.SelectedMods.Should().OnlyContain(p => p.Game == b.Type);
+            collectionView.SelectedMods.Should().HaveCount(targetHasSnapshot ? 1 : 0);
+            collectionView.ModifyCollection.SelectedMods.Should().Equal(collectionView.SelectedMods);
+            collectionView.SelectedModCollection.Should().BeSameAs(collectionB);
+            modA.IsSelected = false;
+            modA.IsSelected = true;
+            await Task.Delay(25);
+            collectionView.SelectedMods.Should().NotContain(modA);
+            await bind(b);
+            collectionView.SelectedMods.Should().HaveCount(targetHasSnapshot ? 1 : 0);
+            collections.Verify(p => p.Save(It.IsAny<IModCollection>()), Times.Never);
+            mods.Verify(p => p.ResolveCollectionMods(It.IsAny<IEnumerable<IMod>>(), It.IsAny<IModCollection>(), It.IsAny<IEnumerable<IMod>>()), Times.Never);
+            collectionB.Mods.Should().Equal(modB.DescriptorFile);
+            collectionB.ModPaths.Should().Equal(modB.FullPath);
+
+            selected = a;
+            await bind(a);
+            installedView.Mods.Single().Should().BeSameAs(modA);
+            collectionView.SelectedMods.Single().Should().BeSameAs(modA);
+            collectionView.Mods.Single().Should().BeSameAs(modA);
+            safety.Object.IsLocked(a).Should().BeFalse();
+        }
+
+        [Fact]
+        public void Startup_activation_must_not_resolve_temporary_empty_presentation_as_missing_mods()
+        {
+            DISetup.SetupContainer();
+            var game = new Game { Type = "Stellaris" };
+            var real = CreateMod("mod/ugc_2257109065.mod", "workshop/2257109065", "! Camera & Galaxy Map Tweaks", game.Type, true);
+            real.IsValid = true;
+            var missing = CreateMod(real.DescriptorFile, real.FullPath, real.Name, game.Type, true, true);
+            var collection = new ModCollection { Name = "Startup", Game = game.Type, IsSelected = true,
+                Mods = [real.DescriptorFile], ModPaths = [real.FullPath], ModNames = [real.Name] };
+            var gameService = new Mock<IGameService>();
+            gameService.Setup(p => p.GetSelected()).Returns(game);
+            var collections = new Mock<IModCollectionService>();
+            collections.Setup(p => p.GetAll()).Returns([collection]);
+            collections.Setup(p => p.Get(It.IsAny<string>())).Returns(collection);
+            collections.Setup(p => p.Create()).Returns(() => new ModCollection());
+            collections.Setup(p => p.Save(It.IsAny<IModCollection>())).Returns(true);
+            var mods = new Mock<IModService>();
+            mods.Setup(p => p.ResolveCollectionMods(It.IsAny<IEnumerable<IMod>>(), collection, It.IsAny<IEnumerable<IMod>>()))
+                .Returns((IEnumerable<IMod> installed, IModCollection _, IEnumerable<IMod> _) => installed.Any() ? [real] : [missing]);
+            mods.Setup(p => p.AreModIdentitiesEquivalent(It.IsAny<IMod>(), It.IsAny<IMod>()))
+                .Returns((IMod left, IMod right) => left.DescriptorFile == right.DescriptorFile);
+            var coordinator = new CollectionModReconciliationCoordinator(mods.Object, Mock.Of<IGameStateSafetyService>());
+            var view = CreateCastleProxiedViewModel(mods.Object, collections, new Mock<IModPatchCollectionService>(), gameService, coordinator);
+            var interactions = Mock.Get((CollectionModsInteraction)typeof(CollectionModsControlViewModel)
+                .GetField("interaction", BindingFlags.Instance | BindingFlags.NonPublic)!.GetValue(view));
+            interactions.Setup(p => p.GetText(It.IsAny<string>())).Returns("Text");
+            view.PresentGameContext(game, []);
+            using var activation = new CompositeDisposable();
+
+            typeof(CollectionModsControlViewModel).GetMethod("OnActivated", BindingFlags.Instance | BindingFlags.NonPublic)!
+                .Invoke(view, [activation]);
+
+            mods.Verify(p => p.ResolveCollectionMods(It.IsAny<IEnumerable<IMod>>(), It.IsAny<IModCollection>(), It.IsAny<IEnumerable<IMod>>()), Times.Never);
+            collections.Verify(p => p.Save(It.IsAny<IModCollection>()), Times.Never);
+            view.SelectedMods.Should().BeEmpty();
+            view.SetMods([real], game);
+            view.SelectedMods.Should().ContainSingle().Which.Should().BeSameAs(real);
+            view.SelectedMods.Should().OnlyContain(p => !p.IsVirtual);
+            real.IsSelected.Should().BeTrue();
+        }
+
         private static IMod CreateMod(string descriptor, string fullPath = null, string name = null, string game = null,
             bool isSelected = false, bool isVirtual = false, ModSource source = ModSource.Local, long? remoteId = null)
         {
@@ -632,6 +768,8 @@ namespace IronyModManager.Tests.ViewModels.Controls
         private static void InitializeCastleProxy(CollectionModsControlViewModel viewModel, CompositeDisposable disposables,
             IGame game, IModCollection collection, IEnumerable<IMod> installedMods, IList<IMod> collectionMembers)
         {
+            typeof(CollectionModsControlViewModel).GetField("awaitingAuthoritativeMods", BindingFlags.Instance | BindingFlags.NonPublic)!
+                .SetValue(viewModel, false);
             typeof(CollectionModsControlViewModel).GetField("activeGame", BindingFlags.Instance | BindingFlags.NonPublic)!
                 .SetValue(viewModel, game);
             SetProtectedProperty(viewModel, nameof(CollectionModsControlViewModel.Mods), installedMods);
@@ -679,6 +817,8 @@ namespace IronyModManager.Tests.ViewModels.Controls
 
             public void InitializeState(IGame game, IModCollection selectedCollection, IEnumerable<IMod> installedMods)
             {
+                typeof(CollectionModsControlViewModel).GetField("awaitingAuthoritativeMods", BindingFlags.Instance | BindingFlags.NonPublic)!
+                    .SetValue(this, false);
                 typeof(CollectionModsControlViewModel).GetField("activeGame", BindingFlags.Instance | BindingFlags.NonPublic)!
                     .SetValue(this, game);
                 Mods = installedMods;

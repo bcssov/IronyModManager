@@ -231,6 +231,10 @@
         "Overlay_Gathering_Mod_Info": "Bitte warten Sie, während Sie Mod-Informationen gesammelt werden...",
         "Overlay_Compressing_Files": "Bitte warten Sie, während die Mod-Kollektionen zusammengeführt werden..."
       },
+      "MissingModsPrompt": {
+        "Title": "Ohne nicht verfügbare Mods zusammenführen?",
+        "Message": "Einige Mods dieser Sammlung sind nicht verfügbar und werden nicht zusammengeführt:{NewLine}{NewLine}{Mods}{NewLine}{NewLine}Mit den verfügbaren Mods fortfahren?"
+      },
       "OverwritePrompt": {
         "Title": "Bestehende Kollektion überschreiben?",
         "Message": "Eine zusammengeführte Kollektion mit dem angegebenen Namen ist bereits vorhanden. Möchten Sie diese überschreiben?"
@@ -643,6 +647,10 @@
     "CollectionMergeNotEnoughSpace": {
       "Title": "Nicht genügend freier Speicherplatz",
       "Message": "Es ist nicht genügend freier Speicherplatz, um den Zusammenführungsvorgang durchzuführen."
+    },
+    "CollectionMergeFailed": {
+      "Title": "Sammlung kann nicht zusammengeführt werden",
+      "Message": "Die Sammlung kann nicht zusammengeführt werden. Prüfe, ob sie verfügbare Mods enthält und nicht die Ausgabe der Zusammenführung."
     },
     "CollectionMergeArchiveUnavailable": {
       "Title": "Merge-Archiv nicht verfügbar",
