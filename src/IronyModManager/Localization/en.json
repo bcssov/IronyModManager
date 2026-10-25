@@ -231,6 +231,10 @@
         "Overlay_Gathering_Mod_Info": "Please wait while gathering mod info...",
         "Overlay_Compressing_Files": "Please wait while merging the mod collection..."
       },
+      "MissingModsPrompt": {
+        "Title": "Merge without unavailable mods?",
+        "Message": "Some mods in this collection are unavailable and will not be included in the merge:{NewLine}{NewLine}{Mods}{NewLine}{NewLine}Continue merging the available mods?"
+      },
       "OverwritePrompt": {
         "Title": "Overwrite existing collection?",
         "Message": "A merged collection with the specified name already exists. Would you like to overwrite it?"
@@ -643,6 +647,10 @@
     "CollectionMergeNotEnoughSpace": {
       "Title": "Not enough free space",
       "Message": "There is not enough free space to perform merge operation."
+    },
+    "CollectionMergeFailed": {
+      "Title": "Unable to merge collection",
+      "Message": "The collection cannot be merged. Check that it contains available mods and does not include the merge output."
     },
     "CollectionMergeArchiveUnavailable": {
       "Title": "Merge archive unavailable",

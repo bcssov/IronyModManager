@@ -803,6 +803,9 @@ namespace IronyModManager.ViewModels.Controls
                 InstallModsAsync().ConfigureAwait(true);
             }).DisposeWith(disposables);
 
+            InstalledMods.GameContextPresented += CollectionMods.PresentGameContext;
+            Disposable.Create(() => InstalledMods.GameContextPresented -= CollectionMods.PresentGameContext).DisposeWith(disposables);
+
             this.WhenAnyValue(v => v.InstalledMods.Mods).Subscribe(v =>
             {
                 modStateReconciliationCoordinator.ReconcileModsPublication(

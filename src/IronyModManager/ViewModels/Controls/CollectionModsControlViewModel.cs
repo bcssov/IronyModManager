@@ -138,6 +138,10 @@ namespace IronyModManager.ViewModels.Controls
         /// </summary>
         private IGame activeGame;
 
+        private readonly Dictionary<string, (IModCollection Collection, IList<IMod> Mods)> gamePresentations = new();
+        private bool presentingGameContext;
+        private bool awaitingAuthoritativeMods = true;
+
         /// <summary>
         // ReSharper disable once GrammarMistakeInComment
         /// The enable all toggled state flag
@@ -984,6 +988,59 @@ namespace IronyModManager.ViewModels.Controls
         }
 
         /// <summary>
+        /// Changes presentation ownership without resolving unknown absence or writing collection state.
+        /// </summary>
+        public virtual void PresentGameContext(IGame game, IEnumerable<IMod> mods)
+        {
+            awaitingAuthoritativeMods = true;
+            if (activeGame?.Type == game?.Type && activeGame != null && SelectedModCollection != null)
+            {
+                gamePresentations[activeGame.Type] = (SelectedModCollection, SelectedMods?.ToList() ?? []);
+            }
+
+            if (activeGame?.Type != game?.Type)
+            {
+                if (activeGame != null && SelectedModCollection != null)
+                {
+                    gamePresentations[activeGame.Type] = (SelectedModCollection, SelectedMods?.ToList() ?? []);
+                }
+
+                modReconciliationCoordinator.Reset();
+                undoStack.Clear();
+                redoStack.Clear();
+                reorderToken?.Cancel();
+                reorderQueue.Clear();
+                restoreCollectionSelection = string.Empty;
+            }
+
+            presentingGameContext = skipModCollectionSave = skipModSelectionSave = true;
+            try
+            {
+                modSelectedChanged?.Dispose();
+                modSelectedChanged = null;
+                modOrderChanged?.Dispose();
+                modOrderChanged = null;
+                activeGame = game;
+                Mods = mods ?? [];
+                SelectedMod = ContextMenuMod = null;
+                gamePresentations.TryGetValue(game?.Type ?? string.Empty, out var snapshot);
+                ModCollections = modCollectionService.GetAll();
+                SelectedModCollection = ModCollections?.FirstOrDefault(p => p.IsSelected);
+                SelectedMods = snapshot.Collection?.Name == SelectedModCollection?.Name
+                    ? snapshot.Mods ?? [] : [];
+                ModifyCollection.ActiveCollection = SelectedModCollection;
+                ModifyCollection.SelectedMods = SelectedMods;
+                ExportCollection.CollectionName = SelectedModCollection?.Name;
+                AllModsEnabled = false;
+                MaxOrder = Math.Max(1, SelectedMods.Count);
+            }
+            finally
+            {
+                presentingGameContext = skipModCollectionSave = skipModSelectionSave = false;
+            }
+        }
+
+        /// <summary>
         /// Resets this instance.
         /// </summary>
         /// <param name="fullReset">The full reset.</param>
@@ -1034,6 +1091,7 @@ namespace IronyModManager.ViewModels.Controls
                 return;
             }
 
+            awaitingAuthoritativeMods = false;
             var oldActiveGameType = this.activeGame?.Type ?? string.Empty;
             var currentActiveGameType = activeGame?.Type ?? string.Empty;
             this.activeGame = activeGame;
@@ -1180,6 +1238,11 @@ namespace IronyModManager.ViewModels.Controls
         protected virtual void HandleModCollectionChange(bool resetStack,
             GameStateLockInfo revalidationLock = null)
         {
+            if (presentingGameContext || awaitingAuthoritativeMods)
+            {
+                return;
+            }
+
             if (!modReconciliationCoordinator.CanReconcile(activeGame ?? gameService.GetSelected(), revalidationLock))
             {
                 return;
@@ -1518,8 +1581,16 @@ namespace IronyModManager.ViewModels.Controls
         {
             EvaluateHighlight();
             EvalGameSpecificVisibility();
-            SetSelectedModsState(Mods != null ? Mods.Where(p => p.IsSelected).ToObservableCollection() : []);
-            SubscribeToMods();
+            if (!awaitingAuthoritativeMods)
+            {
+                SetSelectedModsState(Mods != null ? Mods.Where(p => p.IsSelected).ToObservableCollection() : []);
+                SubscribeToMods();
+            }
+            else if (SelectedMods == null)
+            {
+                SelectedMods = [];
+                ModifyCollection.SelectedMods = SelectedMods;
+            }
 
             skipModSelectionSave = true;
             InitSortersAndFilters(false);
@@ -2502,6 +2573,8 @@ namespace IronyModManager.ViewModels.Controls
                 AllModsEnabled = AreAllRealModsEnabled();
 
                 var sourceList = Mods.ToSourceList();
+                var subscribedGame = activeGame;
+                var subscribedMods = Mods;
 
                 modSelectedChanged = sourceList.Connect().WhenPropertyChanged(s => s.IsSelected).Subscribe(s =>
                 {
@@ -2534,6 +2607,11 @@ namespace IronyModManager.ViewModels.Controls
 
                         Dispatcher.UIThread.SafeInvoke(() =>
                         {
+                            if (!ReferenceEquals(activeGame, subscribedGame) || !ReferenceEquals(Mods, subscribedMods))
+                            {
+                                return;
+                            }
+
                             SetSelectedModsState(selectedMods, false);
                             if (!string.IsNullOrWhiteSpace(SelectedModCollection?.Name) && needsSave)
                             {

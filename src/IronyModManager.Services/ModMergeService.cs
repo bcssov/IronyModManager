@@ -119,13 +119,14 @@ namespace IronyModManager.Services
         public virtual ValueTask<bool> AllowModMergeAsync(string collectionName)
         {
             var game = GameService.GetSelected();
-            if (game == null || string.IsNullOrWhiteSpace(collectionName))
+            if (game == null || string.IsNullOrWhiteSpace(collectionName) || gameStateSafetyService.IsLocked(game))
             {
                 return ValueTask.FromResult(false);
             }
 
             var allMods = GetInstalledModsInternal(game, false).ToList();
-            var collectionMods = GetFileBackedCollectionMods(allMods, collectionName).ToList();
+            // collectionName names the output, which may not exist yet. Inputs belong to the active persisted collection.
+            var collectionMods = GetFileBackedCollectionMods(allMods).ToList();
             if (collectionMods.Count == 0)
             {
                 return ValueTask.FromResult(false);
@@ -160,12 +161,12 @@ namespace IronyModManager.Services
         public virtual MergeCompressPreflightResult PreflightMergeCompressCollection(string collectionName, string copiedNamePrefix)
         {
             var game = GameService.GetSelected();
-            if (game == null || string.IsNullOrWhiteSpace(collectionName))
+            if (game == null || string.IsNullOrWhiteSpace(collectionName) || gameStateSafetyService.IsLocked(game))
             {
                 return new MergeCompressPreflightResult();
             }
 
-            var collectionMods = GetFileBackedCollectionMods(GetInstalledModsInternal(game, false), collectionName).ToList();
+            var collectionMods = GetFileBackedCollectionMods(GetInstalledModsInternal(game, false)).ToList();
             var paths = GetMergeCompressArchivePaths(game, collectionMods, collectionName, copiedNamePrefix, GetMergeCollectionModNameTemplate());
             return PreflightMergeCompressArchivePaths(paths);
         }
@@ -193,13 +194,13 @@ namespace IronyModManager.Services
         public virtual async Task<bool> HasEnoughFreeSpaceAsync(string collectionName)
         {
             var game = GameService.GetSelected();
-            if (game == null || string.IsNullOrWhiteSpace(collectionName))
+            if (game == null || string.IsNullOrWhiteSpace(collectionName) || gameStateSafetyService.IsLocked(game))
             {
                 return false;
             }
 
             var allMods = GetInstalledModsInternal(game, false).ToList();
-            var collectionMods = GetFileBackedCollectionMods(allMods, collectionName).ToList();
+            var collectionMods = GetFileBackedCollectionMods(allMods).ToList();
             if (collectionMods.Count == 0)
             {
                 return false;
@@ -233,7 +234,7 @@ namespace IronyModManager.Services
         public virtual async Task<IMod> MergeCollectionByFilesAsync(string collectionName)
         {
             var game = GameService.GetSelected();
-            if (game == null || string.IsNullOrWhiteSpace(collectionName))
+            if (game == null || string.IsNullOrWhiteSpace(collectionName) || gameStateSafetyService.IsLocked(game))
             {
                 return null;
             }
@@ -243,7 +244,7 @@ namespace IronyModManager.Services
             try
             {
                 allMods = GetInstalledModsInternal(game, false).ToList();
-                collectionMods = GetFileBackedCollectionMods(allMods, collectionName).ToList();
+                collectionMods = GetFileBackedCollectionMods(allMods).ToList();
             }
             catch (Exception exception) when (gameStateSafetyService.LockIfFileSystemAccessFailure(game,
                        GameStateLockReason.DiscoveryUnavailable, "Read merge collection sources", exception))
@@ -413,7 +414,7 @@ namespace IronyModManager.Services
         public virtual async Task<IEnumerable<IMod>> MergeCompressCollectionAsync(string collectionName, string copiedNamePrefix)
         {
             var game = GameService.GetSelected();
-            if (game == null || string.IsNullOrWhiteSpace(collectionName))
+            if (game == null || string.IsNullOrWhiteSpace(collectionName) || gameStateSafetyService.IsLocked(game))
             {
                 return null;
             }
@@ -423,7 +424,7 @@ namespace IronyModManager.Services
             try
             {
                 allMods = GetInstalledModsInternal(game, false).ToList();
-                collectionMods = GetFileBackedCollectionMods(allMods, collectionName).ToList();
+                collectionMods = GetFileBackedCollectionMods(allMods).ToList();
             }
             catch (Exception exception) when (gameStateSafetyService.LockIfFileSystemAccessFailure(game,
                        GameStateLockReason.DiscoveryUnavailable, "Read compressed merge sources", exception))

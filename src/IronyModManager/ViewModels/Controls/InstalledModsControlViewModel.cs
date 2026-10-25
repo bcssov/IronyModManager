@@ -101,6 +101,8 @@ namespace IronyModManager.ViewModels.Controls
         /// </summary>
         private IDisposable modChanged;
 
+        private long bindVersion;
+
         /// <summary>
         /// The showing invalid notification
         /// </summary>
@@ -157,6 +159,11 @@ namespace IronyModManager.ViewModels.Controls
         /// </summary>
         /// <value>The active game.</value>
         public IGame ActiveGame { get; protected set; }
+
+        /// <summary>
+        /// Presents a game context without treating unavailable discovery as authoritative reconciliation.
+        /// </summary>
+        public event Action<IGame, IEnumerable<IMod>> GameContextPresented;
 
         /// <summary>
         /// Gets or sets all mods.
@@ -570,9 +577,16 @@ namespace IronyModManager.ViewModels.Controls
             GameStateLockInfo revalidationLock = null, Func<bool> isCurrentRevalidation = null, IGame game = null)
         {
             RefreshingMods = true;
-            var previousMods = Mods;
-            var authoritative = await BindAsync(game, skipOverlay: skipOverlay, revalidationLock: revalidationLock,
+            var previousMods = ActiveGame?.Type == (game ?? gameService.GetSelected())?.Type ? Mods : null;
+            var refresh = BindAsync(game, skipOverlay: skipOverlay, revalidationLock: revalidationLock,
                 isCurrentRevalidation: isCurrentRevalidation);
+            var version = bindVersion;
+            var authoritative = await refresh;
+            if (version != bindVersion)
+            {
+                return false;
+            }
+
             if (isCurrentRevalidation != null && !isCurrentRevalidation())
             {
                 RefreshingMods = false;
@@ -644,7 +658,26 @@ namespace IronyModManager.ViewModels.Controls
         protected virtual async Task<bool> BindAsync(IGame game = null, bool skipOverlay = false,
             GameStateLockInfo revalidationLock = null, Func<bool> isCurrentRevalidation = null)
         {
-            var raiseGameChanged = game != null;
+            var version = Interlocked.Increment(ref bindVersion);
+            game ??= gameService.GetSelected();
+            var changedGame = ActiveGame?.Type != game?.Type;
+            ActiveGame = game;
+            LastRefreshAuthoritative = false;
+            if (changedGame)
+            {
+                RefreshingMods = false;
+                modChanged?.Dispose();
+                modChanged = null;
+                evalModToken?.Cancel();
+                evalModsQueue.Clear();
+                Mods = FilteredMods = new System.Collections.ObjectModel.ObservableCollection<IMod>();
+                AllMods = [];
+                AllModsEnabled = false;
+                SelectedMod = ContextMenuMod = null;
+                GameContextPresented?.Invoke(game, Mods);
+            }
+
+            var raiseGameChanged = changedGame;
             GameChangedRefresh = false;
             var id = interaction.BeginOperation();
             if (!skipOverlay)
@@ -652,21 +685,21 @@ namespace IronyModManager.ViewModels.Controls
                 await TriggerOverlayAsync(id, true, interaction.GetText(LocalizationResources.Installed_Mods.LoadingMods));
             }
 
-            game ??= gameService.GetSelected();
-            ActiveGame = game;
+            if (version != bindVersion)
+            {
+                await TriggerOverlayAsync(id, false);
+                return false;
+            }
+
             if (game != null)
             {
-                if (raiseGameChanged)
-                {
-                    GameChangedRefresh = true;
-                }
-
                 var refreshResult = await Task.Run(async () => revalidationLock != null
                     ? await modService.RevalidateInstalledModsAsync(game, revalidationLock)
                     : await modService.RefreshInstalledModsAsync(game));
                 await Task.Delay(100);
-                bool ownsAuthority() => isCurrentRevalidation?.Invoke() ?? !gameStateSafetyService.IsLocked(game);
-                if (!ownsAuthority())
+                bool ownsContext() => version == bindVersion && (isCurrentRevalidation?.Invoke() ?? true);
+                bool ownsAuthority() => ownsContext() && (isCurrentRevalidation != null || !gameStateSafetyService.IsLocked(game));
+                if (!ownsContext())
                 {
                     if (!skipOverlay)
                     {
@@ -676,9 +709,16 @@ namespace IronyModManager.ViewModels.Controls
                     return false;
                 }
 
-                LastRefreshAuthoritative = refreshResult.IsAuthoritative;
-                if (!IsRefreshAuthoritative(refreshResult))
+                LastRefreshAuthoritative = IsRefreshAuthoritative(refreshResult) && ownsAuthority();
+                if (!LastRefreshAuthoritative)
                 {
+                    modChanged?.Dispose();
+                    modChanged = null;
+                    Mods = (refreshResult?.Mods ?? []).ToObservableCollection();
+                    AllMods = Mods.ToHashSet();
+                    FilteredMods = modService.FilterMods(Mods, FilterMods.Text ?? string.Empty).ToObservableCollection();
+                    AllModsEnabled = false;
+                    GameContextPresented?.Invoke(game, Mods);
                     if (!skipOverlay)
                     {
                         await TriggerOverlayAsync(id, false);
@@ -709,6 +749,11 @@ namespace IronyModManager.ViewModels.Controls
                 presentationCoordinator.Initialize(ModName, ModVersion, ModSelected, FilterModsWatermark);
 
                 ApplyDefaultSort();
+
+                if (raiseGameChanged && ownsAuthority())
+                {
+                    GameChangedRefresh = true;
+                }
 
                 var invalidMods = AllMods.Where(p => !p.IsValid).ToList();
                 if (invalidMods.Count != 0 && ownsAuthority())
@@ -753,9 +798,13 @@ namespace IronyModManager.ViewModels.Controls
         /// <returns>A Task representing the asynchronous operation.</returns>
         protected virtual async Task CheckModEnabledStateAsync()
         {
+            var version = bindVersion;
             checkingState = true;
             await Task.Delay(50);
-            AllModsEnabled = FilteredMods.Where(p => p.IsValid).Any() && FilteredMods.Where(p => p.IsValid).All(p => p.IsSelected);
+            if (version == bindVersion && !gameStateSafetyService.IsLocked(ActiveGame))
+            {
+                AllModsEnabled = FilteredMods.Where(p => p.IsValid).Any() && FilteredMods.Where(p => p.IsValid).All(p => p.IsSelected);
+            }
             checkingState = false;
         }
 
@@ -814,7 +863,8 @@ namespace IronyModManager.ViewModels.Controls
         /// <returns>A Task representing the asynchronous operation.</returns>
         protected virtual async Task EvalModAchievementAsync(IEnumerable<IMod> mods, bool hasPriority = false)
         {
-            var effectiveMods = mods?.Where(p => !p.IsVirtual).ToList() ?? [];
+            var effectiveMods = mods?.Where(p => !p.IsVirtual &&
+                (ActiveGame == null || string.Equals(p.Game, ActiveGame.Type, StringComparison.OrdinalIgnoreCase))).ToList() ?? [];
             if (effectiveMods.Count == 0)
             {
                 return;

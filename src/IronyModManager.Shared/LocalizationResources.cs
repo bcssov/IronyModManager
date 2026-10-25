@@ -302,6 +302,12 @@ namespace IronyModManager.Shared
                     public const string Overlay_Gathering_Mod_Info = Prefix + "Overlay_Gathering_Mod_Info";
                     public const string Overlay_Compressing_Files = Prefix + "Overlay_Compressing_Files";
                 }
+                public static class MissingModsPrompt
+                {
+                    public const string Prefix = "Collection_Mods.MergeCollection.MissingModsPrompt.";
+                    public const string Title = Prefix + "Title";
+                    public const string Message = Prefix + "Message";
+                }
                 public static class OverwritePrompt
                 {
                     public const string Prefix = "Collection_Mods.MergeCollection.OverwritePrompt.";
@@ -857,6 +863,12 @@ namespace IronyModManager.Shared
             public static class CollectionMergeNotEnoughSpace
             {
                 public const string Prefix = "Notifications.CollectionMergeNotEnoughSpace.";
+                public const string Title = Prefix + "Title";
+                public const string Message = Prefix + "Message";
+            }
+            public static class CollectionMergeFailed
+            {
+                public const string Prefix = "Notifications.CollectionMergeFailed.";
                 public const string Title = Prefix + "Title";
                 public const string Message = Prefix + "Message";
             }
