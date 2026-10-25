@@ -231,6 +231,10 @@
         "Overlay_Gathering_Mod_Info": "正在收集模组信息……",
         "Overlay_Compressing_Files": "正在合并合集……"
       },
+      "MissingModsPrompt": {
+        "Title": "跳过不可用的模组并合并？",
+        "Message": "此合集中的部分模组不可用，将不会包含在合并结果中：{NewLine}{NewLine}{Mods}{NewLine}{NewLine}是否继续合并可用的模组？"
+      },
       "OverwritePrompt": {
         "Title": "覆盖现有合集？",
         "Message": "同名的合并模组已存在，是否覆盖？"
@@ -642,6 +646,10 @@
     "CollectionMergeNotEnoughSpace": {
       "Title": "存储空间不足",
       "Message": "没有足够的可用存储空间以执行合并操作。"
+    },
+    "CollectionMergeFailed": {
+      "Title": "无法合并合集",
+      "Message": "无法合并此合集。请确认合集中包含可用的模组，且未包含合并输出。"
     },
     "CollectionMergeArchiveUnavailable": {
       "Title": "合并压缩包不可用",

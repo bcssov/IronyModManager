@@ -231,6 +231,10 @@
         "Overlay_Gathering_Mod_Info": "Pričekaj dok se skupljaju mod informacije...",
         "Overlay_Compressing_Files": "Pričekaj dok se spaja kolekcija..."
       },
+      "MissingModsPrompt": {
+        "Title": "Spojiti bez nedostupnih modova?",
+        "Message": "Neki modovi u ovoj kolekciji nisu dostupni i neće biti uključeni u spajanje:{NewLine}{NewLine}{Mods}{NewLine}{NewLine}Nastaviti spajanje dostupnih modova?"
+      },
       "OverwritePrompt": {
         "Title": "Prebriši postojeću kolekciju?",
         "Message": "Spojena kolekcija već postoji. Želite li je prebrisati?"
@@ -643,6 +647,10 @@
     "CollectionMergeNotEnoughSpace": {
       "Title": "Nema dovoljno slobodnog prostora",
       "Message": "Nema dovoljno slobodnog prostora za spajanje kolekcije."
+    },
+    "CollectionMergeFailed": {
+      "Title": "Nije moguće spojiti kolekciju",
+      "Message": "Kolekciju nije moguće spojiti. Provjerite sadrži li dostupne modove i da ne uključuje rezultat spajanja."
     },
     "CollectionMergeArchiveUnavailable": {
       "Title": "Arhiva spajanja nije dostupna",

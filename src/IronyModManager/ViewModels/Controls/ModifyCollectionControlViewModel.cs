@@ -399,9 +399,32 @@ namespace IronyModManager.ViewModels.Controls
         }
 
         /// <summary>
-        /// get merged collection as an asynchronous operation.
+        /// Confirms omission of unavailable persisted collection members before any merge mutation.
         /// </summary>
-        /// <returns>IModCollection.</returns>
+        /// <returns>Whether the user wants to merge the available members.</returns>
+        protected virtual async Task<bool> ConfirmMergeInputsAsync()
+        {
+            var missing = SelectedMods?.Where(p => p.IsVirtual).Select(p => $"{p.Name} ({p.DescriptorFile})").ToList();
+            if (missing?.Count > 0)
+            {
+                var title = localizationManager.GetResource(LocalizationResources.Collection_Mods.MergeCollection.MissingModsPrompt.Title);
+                var message = IronyFormatter.Format(localizationManager.GetResource(LocalizationResources.Collection_Mods.MergeCollection.MissingModsPrompt.Message),
+                    new { Mods = string.Join(Environment.NewLine, missing), Environment.NewLine });
+                return await notificationAction.ShowPromptAsync(title, title, message, NotificationType.Warning);
+            }
+
+            return true;
+        }
+
+        private void NotifyMergeFailed()
+        {
+            notificationAction.ShowNotification(localizationManager.GetResource(LocalizationResources.Notifications.CollectionMergeFailed.Title),
+                localizationManager.GetResource(LocalizationResources.Notifications.CollectionMergeFailed.Message), NotificationType.Error, 10);
+        }
+
+        /// <summary>
+        /// Creates the output collection metadata without changing the source collection.
+        /// </summary>
         protected virtual async Task<Tuple<string, IModCollection>> GetMergedCollectionAsync()
         {
             var prefix = localizationManager.GetResource(LocalizationResources.Collection_Mods.MergeCollection.MergedCollectionPrefix);
@@ -476,66 +499,87 @@ namespace IronyModManager.ViewModels.Controls
             {
                 if (ActiveCollection != null && ActiveCollection.Mods?.Count() > 0)
                 {
+                    if (!await ConfirmMergeInputsAsync())
+                    {
+                        return new CommandResult<ModifyAction>(ModifyAction.Merge, CommandState.NotExecuted);
+                    }
+
                     var (_, copy) = await GetMergedCollectionAsync();
                     var id = idGenerator.GetNextId();
-
-                    await TriggerOverlayAsync(id, true, localizationManager.GetResource(LocalizationResources.App.WaitBackgroundOperationMessage));
-                    await shutDownState.WaitUntilFreeAsync();
-
-                    var savedCollection = modCollectionService.GetAll().FirstOrDefault(p => p.IsSelected);
-                    while (savedCollection == null)
+                    try
                     {
-                        await Task.Delay(25);
-                        savedCollection = modCollectionService.GetAll().FirstOrDefault(p => p.IsSelected);
+                        await TriggerOverlayAsync(id, true, localizationManager.GetResource(LocalizationResources.App.WaitBackgroundOperationMessage));
+                        await shutDownState.WaitUntilFreeAsync();
+
+                        var savedCollection = modCollectionService.GetAll().FirstOrDefault(p => p.IsSelected);
+                        while (savedCollection == null)
+                        {
+                            await Task.Delay(25);
+                            savedCollection = modCollectionService.GetAll().FirstOrDefault(p => p.IsSelected);
+                        }
+
+                        SubscribeToProgressReports(id, disposables, MergeType.Basic);
+
+                        var overlayProgress = IronyFormatter.Format(localizationManager.GetResource(LocalizationResources.Collection_Mods.MergeCollection.Overlay_Progress),
+                            new { PercentDone = 0.ToLocalizedPercentage(), Count = 1, TotalCount = 3 });
+                        var message = localizationManager.GetResource(LocalizationResources.Collection_Mods.MergeCollection.DiskInfoOverlay);
+                        await TriggerOverlayAsync(id, true, message, overlayProgress);
+
+                        var canMerge = await modMergeService.AllowModMergeAsync(copy.Name);
+                        if (!canMerge)
+                        {
+                            await TriggerOverlayAsync(id, false);
+                            freeSpaceCheckHandler?.Dispose();
+                            fileMergeProgressHandler?.Dispose();
+                            NotifyMergeFailed();
+                            return new CommandResult<ModifyAction>(ModifyAction.Merge, CommandState.Failed);
+                        }
+
+                        var result = await Task.Run(async () => await modMergeService.HasEnoughFreeSpaceAsync(copy.Name));
+                        if (!result)
+                        {
+                            var notiTitle = localizationManager.GetResource(LocalizationResources.Notifications.CollectionMergeNotEnoughSpace.Title);
+                            var notiMessage = localizationManager.GetResource(LocalizationResources.Notifications.CollectionMergeNotEnoughSpace.Message);
+                            await TriggerOverlayAsync(id, false);
+                            freeSpaceCheckHandler?.Dispose();
+                            fileMergeProgressHandler?.Dispose();
+                            notificationAction.ShowNotification(notiTitle, notiMessage, NotificationType.Error, 10);
+                            return new CommandResult<ModifyAction>(ModifyAction.Merge, CommandState.Failed);
+                        }
+
+                        await modPatchCollectionService.CleanPatchCollectionAsync(copy.Name);
+
+                        var mergeMod = await Task.Run(async () => await modMergeService.MergeCollectionByFilesAsync(copy.Name)).ConfigureAwait(false);
+                        if (mergeMod == null)
+                        {
+                            NotifyMergeFailed();
+                            return new CommandResult<ModifyAction>(ModifyAction.Merge, CommandState.Failed);
+                        }
+                        copy.Mods = new List<string> { mergeMod.DescriptorFile };
+                        copy.ModPaths = new List<string> { mergeMod.FullPath };
+
+                        await TriggerOverlayAsync(id, false);
+                        freeSpaceCheckHandler?.Dispose();
+                        fileMergeProgressHandler?.Dispose();
+
+                        modCollectionService.Delete(copy.Name);
+                        modPatchCollectionService.InvalidatePatchModState(copy.Name);
+                        if (modCollectionService.Save(copy))
+                        {
+                            return new CommandResult<ModifyAction>(ModifyAction.Merge, CommandState.Success);
+                        }
+                        else
+                        {
+                            NotifyMergeFailed();
+                            return new CommandResult<ModifyAction>(ModifyAction.Merge, CommandState.Failed);
+                        }
                     }
-
-                    SubscribeToProgressReports(id, disposables, MergeType.Basic);
-
-                    var overlayProgress = IronyFormatter.Format(localizationManager.GetResource(LocalizationResources.Collection_Mods.MergeCollection.Overlay_Progress),
-                        new { PercentDone = 0.ToLocalizedPercentage(), Count = 1, TotalCount = 3 });
-                    var message = localizationManager.GetResource(LocalizationResources.Collection_Mods.MergeCollection.DiskInfoOverlay);
-                    await TriggerOverlayAsync(id, true, message, overlayProgress);
-
-                    var canMerge = await modMergeService.AllowModMergeAsync(copy.Name);
-                    if (!canMerge)
+                    finally
                     {
                         await TriggerOverlayAsync(id, false);
                         freeSpaceCheckHandler?.Dispose();
                         fileMergeProgressHandler?.Dispose();
-                        return new CommandResult<ModifyAction>(ModifyAction.Merge, CommandState.Failed);
-                    }
-
-                    var result = await Task.Run(async () => await modMergeService.HasEnoughFreeSpaceAsync(copy.Name));
-                    if (!result)
-                    {
-                        var notiTitle = localizationManager.GetResource(LocalizationResources.Notifications.CollectionMergeNotEnoughSpace.Title);
-                        var notiMessage = localizationManager.GetResource(LocalizationResources.Notifications.CollectionMergeNotEnoughSpace.Message);
-                        await TriggerOverlayAsync(id, false);
-                        freeSpaceCheckHandler?.Dispose();
-                        fileMergeProgressHandler?.Dispose();
-                        notificationAction.ShowNotification(notiTitle, notiMessage, NotificationType.Error, 10);
-                        return new CommandResult<ModifyAction>(ModifyAction.Merge, CommandState.Failed);
-                    }
-
-                    await modPatchCollectionService.CleanPatchCollectionAsync(copy.Name);
-
-                    var mergeMod = await Task.Run(async () => await modMergeService.MergeCollectionByFilesAsync(copy.Name)).ConfigureAwait(false);
-                    copy.Mods = new List<string> { mergeMod.DescriptorFile };
-                    copy.ModPaths = new List<string> { mergeMod.FullPath };
-
-                    await TriggerOverlayAsync(id, false);
-                    freeSpaceCheckHandler?.Dispose();
-                    fileMergeProgressHandler?.Dispose();
-
-                    modCollectionService.Delete(copy.Name);
-                    modPatchCollectionService.InvalidatePatchModState(copy.Name);
-                    if (modCollectionService.Save(copy))
-                    {
-                        return new CommandResult<ModifyAction>(ModifyAction.Merge, CommandState.Success);
-                    }
-                    else
-                    {
-                        return new CommandResult<ModifyAction>(ModifyAction.Merge, CommandState.Failed);
+                        modCompressProgressHandler?.Dispose();
                     }
                 }
 
@@ -546,86 +590,115 @@ namespace IronyModManager.ViewModels.Controls
             {
                 if (ActiveCollection != null && ActiveCollection.Mods?.Count() > 0)
                 {
+                    if (!await ConfirmMergeInputsAsync())
+                    {
+                        return new CommandResult<ModifyAction>(ModifyAction.Merge, CommandState.NotExecuted);
+                    }
+
                     var (name, copy) = await GetMergedCollectionAsync();
                     var id = idGenerator.GetNextId();
-
-                    await TriggerOverlayAsync(id, true, localizationManager.GetResource(LocalizationResources.App.WaitBackgroundOperationMessage));
-                    await shutDownState.WaitUntilFreeAsync();
-
-                    var savedCollection = modCollectionService.GetAll().FirstOrDefault(p => p.IsSelected);
-                    while (savedCollection == null)
+                    try
                     {
-                        await Task.Delay(25);
-                        savedCollection = modCollectionService.GetAll().FirstOrDefault(p => p.IsSelected);
+                        await TriggerOverlayAsync(id, true, localizationManager.GetResource(LocalizationResources.App.WaitBackgroundOperationMessage));
+                        await shutDownState.WaitUntilFreeAsync();
+
+                        var savedCollection = modCollectionService.GetAll().FirstOrDefault(p => p.IsSelected);
+                        while (savedCollection == null)
+                        {
+                            await Task.Delay(25);
+                            savedCollection = modCollectionService.GetAll().FirstOrDefault(p => p.IsSelected);
+                        }
+
+                        SubscribeToProgressReports(id, disposables, MergeType.Compress);
+
+                        var overlayProgress = IronyFormatter.Format(localizationManager.GetResource(LocalizationResources.Collection_Mods.MergeCollection.Overlay_Progress),
+                            new { PercentDone = 0.ToLocalizedPercentage(), Count = 1, TotalCount = 3 });
+                        var message = localizationManager.GetResource(LocalizationResources.Collection_Mods.MergeCollection.DiskInfoOverlay);
+                        await TriggerOverlayAsync(id, true, message, overlayProgress);
+
+                        var canMerge = await modMergeService.AllowModMergeAsync(copy.Name);
+                        if (!canMerge)
+                        {
+                            await TriggerOverlayAsync(id, false);
+                            freeSpaceCheckHandler?.Dispose();
+                            fileMergeProgressHandler?.Dispose();
+                            NotifyMergeFailed();
+                            return new CommandResult<ModifyAction>(ModifyAction.Merge, CommandState.Failed);
+                        }
+
+                        var result = await Task.Run(async () => await modMergeService.HasEnoughFreeSpaceAsync(copy.Name));
+                        if (!result)
+                        {
+                            var notiTitle = localizationManager.GetResource(LocalizationResources.Notifications.CollectionMergeNotEnoughSpace.Title);
+                            var notiMessage = localizationManager.GetResource(LocalizationResources.Notifications.CollectionMergeNotEnoughSpace.Message);
+                            await TriggerOverlayAsync(id, false);
+                            freeSpaceCheckHandler?.Dispose();
+                            fileMergeProgressHandler?.Dispose();
+                            notificationAction.ShowNotification(notiTitle, notiMessage, NotificationType.Error, 10);
+                            return new CommandResult<ModifyAction>(ModifyAction.Merge, CommandState.Failed);
+                        }
+
+                        var mergePrefix = IronyFormatter.Format(localizationManager.GetResource(LocalizationResources.Collection_Mods.MergeCollection.MergeCompressModPrefix),
+                            new { Name = name });
+                        var preflight = await Task.Run(() => modMergeService.PreflightMergeCompressCollection(copy.Name, mergePrefix));
+                        if (!preflight.CanProceed)
+                        {
+                            var notiTitle = localizationManager.GetResource(LocalizationResources.Notifications.CollectionMergeArchiveUnavailable.Title);
+                            var notiMessage = IronyFormatter.Format(localizationManager.GetResource(LocalizationResources.Notifications.CollectionMergeArchiveUnavailable.Message),
+                                new { Archives = string.Join(", ", preflight.UnavailableArchiveNames) });
+                            await TriggerOverlayAsync(id, false);
+                            freeSpaceCheckHandler?.Dispose();
+                            fileMergeProgressHandler?.Dispose();
+                            notificationAction.ShowNotification(notiTitle, notiMessage, NotificationType.Error, 10);
+                            return new CommandResult<ModifyAction>(ModifyAction.Merge, CommandState.Failed);
+                        }
+
+                        await modPatchCollectionService.CleanPatchCollectionAsync(copy.Name);
+
+                        var mergeMods = await Task.Run(async () => await modMergeService.MergeCompressCollectionAsync(copy.Name,
+                            mergePrefix)).ConfigureAwait(false);
+                        if (mergeMods == null || !mergeMods.Any())
+                        {
+                            NotifyMergeFailed();
+                            return new CommandResult<ModifyAction>(ModifyAction.Merge, CommandState.Failed);
+                        }
+                        copy.Mods = mergeMods.Select(p => p.DescriptorFile).ToList();
+                        copy.ModPaths = mergeMods.Select(p => p.FullPath).ToList();
+                        copy.PatchModEnabled = ActiveCollection.PatchModEnabled;
+
+                        // I know bad
+                        GCRunner.RunGC(GCCollectionMode.Default);
+                        await TriggerOverlayAsync(id, false);
+                        freeSpaceCheckHandler?.Dispose();
+                        fileMergeProgressHandler?.Dispose();
+
+                        modCollectionService.Delete(copy.Name);
+                        modPatchCollectionService.InvalidatePatchModState(copy.Name);
+                        await modService.InstallModsAsync(null);
+                        if (modCollectionService.Save(copy))
+                        {
+                            return new CommandResult<ModifyAction>(ModifyAction.Merge, CommandState.Success);
+                        }
+                        else
+                        {
+                            NotifyMergeFailed();
+                            return new CommandResult<ModifyAction>(ModifyAction.Merge, CommandState.Failed);
+                        }
                     }
-
-                    SubscribeToProgressReports(id, disposables, MergeType.Compress);
-
-                    var overlayProgress = IronyFormatter.Format(localizationManager.GetResource(LocalizationResources.Collection_Mods.MergeCollection.Overlay_Progress),
-                        new { PercentDone = 0.ToLocalizedPercentage(), Count = 1, TotalCount = 3 });
-                    var message = localizationManager.GetResource(LocalizationResources.Collection_Mods.MergeCollection.DiskInfoOverlay);
-                    await TriggerOverlayAsync(id, true, message, overlayProgress);
-
-                    var canMerge = await modMergeService.AllowModMergeAsync(copy.Name);
-                    if (!canMerge)
+                    catch (MergeCompressArchiveUnavailableException exception)
+                    {
+                        var title = localizationManager.GetResource(LocalizationResources.Notifications.CollectionMergeArchiveUnavailable.Title);
+                        var message = IronyFormatter.Format(localizationManager.GetResource(LocalizationResources.Notifications.CollectionMergeArchiveUnavailable.Message),
+                            new { Archives = string.Join(", ", exception.ArchiveNames) });
+                        notificationAction.ShowNotification(title, message, NotificationType.Error, 10);
+                        return new CommandResult<ModifyAction>(ModifyAction.Merge, CommandState.Failed);
+                    }
+                    finally
                     {
                         await TriggerOverlayAsync(id, false);
                         freeSpaceCheckHandler?.Dispose();
                         fileMergeProgressHandler?.Dispose();
-                        return new CommandResult<ModifyAction>(ModifyAction.Merge, CommandState.Failed);
-                    }
-
-                    var result = await Task.Run(async () => await modMergeService.HasEnoughFreeSpaceAsync(copy.Name));
-                    if (!result)
-                    {
-                        var notiTitle = localizationManager.GetResource(LocalizationResources.Notifications.CollectionMergeNotEnoughSpace.Title);
-                        var notiMessage = localizationManager.GetResource(LocalizationResources.Notifications.CollectionMergeNotEnoughSpace.Message);
-                        await TriggerOverlayAsync(id, false);
-                        freeSpaceCheckHandler?.Dispose();
-                        fileMergeProgressHandler?.Dispose();
-                        notificationAction.ShowNotification(notiTitle, notiMessage, NotificationType.Error, 10);
-                        return new CommandResult<ModifyAction>(ModifyAction.Merge, CommandState.Failed);
-                    }
-
-                    var mergePrefix = IronyFormatter.Format(localizationManager.GetResource(LocalizationResources.Collection_Mods.MergeCollection.MergeCompressModPrefix),
-                        new { Name = name });
-                    var preflight = await Task.Run(() => modMergeService.PreflightMergeCompressCollection(copy.Name, mergePrefix));
-                    if (!preflight.CanProceed)
-                    {
-                        var notiTitle = localizationManager.GetResource(LocalizationResources.Notifications.CollectionMergeArchiveUnavailable.Title);
-                        var notiMessage = IronyFormatter.Format(localizationManager.GetResource(LocalizationResources.Notifications.CollectionMergeArchiveUnavailable.Message),
-                            new { Archives = string.Join(", ", preflight.UnavailableArchiveNames) });
-                        await TriggerOverlayAsync(id, false);
-                        freeSpaceCheckHandler?.Dispose();
-                        fileMergeProgressHandler?.Dispose();
-                        notificationAction.ShowNotification(notiTitle, notiMessage, NotificationType.Error, 10);
-                        return new CommandResult<ModifyAction>(ModifyAction.Merge, CommandState.Failed);
-                    }
-
-                    await modPatchCollectionService.CleanPatchCollectionAsync(copy.Name);
-
-                    var mergeMods = await Task.Run(async () => await modMergeService.MergeCompressCollectionAsync(copy.Name,
-                        mergePrefix)).ConfigureAwait(false);
-                    copy.Mods = mergeMods.Select(p => p.DescriptorFile).ToList();
-                    copy.ModPaths = mergeMods.Select(p => p.FullPath).ToList();
-                    copy.PatchModEnabled = ActiveCollection.PatchModEnabled;
-
-                    // I know bad
-                    GCRunner.RunGC(GCCollectionMode.Default);
-                    await TriggerOverlayAsync(id, false);
-                    freeSpaceCheckHandler?.Dispose();
-                    fileMergeProgressHandler?.Dispose();
-
-                    modCollectionService.Delete(copy.Name);
-                    modPatchCollectionService.InvalidatePatchModState(copy.Name);
-                    await modService.InstallModsAsync(null);
-                    if (modCollectionService.Save(copy))
-                    {
-                        return new CommandResult<ModifyAction>(ModifyAction.Merge, CommandState.Success);
-                    }
-                    else
-                    {
-                        return new CommandResult<ModifyAction>(ModifyAction.Merge, CommandState.Failed);
+                        modCompressProgressHandler?.Dispose();
                     }
                 }
 

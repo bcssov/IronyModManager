@@ -231,6 +231,10 @@
         "Overlay_Gathering_Mod_Info": "Veuillez patienter pendant la collecte des informations sur le mod...",
         "Overlay_Compressing_Files": "Veuillez patienter pendant la fusion de la liste des mods..."
       },
+      "MissingModsPrompt": {
+        "Title": "Fusionner sans les mods indisponibles ?",
+        "Message": "Certains mods de cette collection sont indisponibles et ne seront pas inclus dans la fusion :{NewLine}{NewLine}{Mods}{NewLine}{NewLine}Continuer avec les mods disponibles ?"
+      },
       "OverwritePrompt": {
         "Title": "Remplacer la liste existante ?",
         "Message": "Une liste fusionnée avec le nom spécifié existe déjà. Souhaitez-vous l'écraser?"
@@ -643,6 +647,10 @@
     "CollectionMergeNotEnoughSpace": {
       "Title": "Pas assez d'espace libre",
       "Message": "Il n'y a pas assez d'espace libre pour effectuer l'opération de fusion."
+    },
+    "CollectionMergeFailed": {
+      "Title": "Impossible de fusionner la collection",
+      "Message": "La collection ne peut pas être fusionnée. Vérifiez qu’elle contient des mods disponibles et n’inclut pas le résultat de la fusion."
     },
     "CollectionMergeArchiveUnavailable": {
       "Title": "Archive de fusion indisponible",

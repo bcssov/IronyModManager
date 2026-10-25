@@ -231,6 +231,10 @@
         "Overlay_Gathering_Mod_Info": "Espere mientras se recopila la información del mod...",
         "Overlay_Compressing_Files": "Espere mientras se fusiona la colección de mods..."
       },
+      "MissingModsPrompt": {
+        "Title": "¿Combinar sin los mods no disponibles?",
+        "Message": "Algunos mods de esta colección no están disponibles y no se incluirán en la combinación:{NewLine}{NewLine}{Mods}{NewLine}{NewLine}¿Continuar con los mods disponibles?"
+      },
       "OverwritePrompt": {
         "Title": "¿Sobrescribir la colección existente?",
         "Message": "Ya existe una colección combinada con el nombre especificado. ¿Le gustaría sobrescribirlo?"
@@ -643,6 +647,10 @@
     "CollectionMergeNotEnoughSpace": {
       "Title": "No hay suficiente espacio libre",
       "Message": "No hay suficiente espacio libre para realizar una operación de combinación."
+    },
+    "CollectionMergeFailed": {
+      "Title": "No se puede combinar la colección",
+      "Message": "No se puede combinar la colección. Comprueba que contenga mods disponibles y que no incluya el resultado de la combinación."
     },
     "CollectionMergeArchiveUnavailable": {
       "Title": "Archivo de combinación no disponible",
