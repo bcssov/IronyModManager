@@ -80,11 +80,12 @@
 			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.27.206/win-x64.zip" sparkle:version="1.27.206.27272" sparkle:shortVersionString="1.27.206" length="103673491" sparkle:os="windows" type="application/zip" sparkle:signature="hSEhR0dINUIC2pXmHbIYAW74mVpkio57JG95/ES1DCg51uBj62IUUAAQ2nPuQQBeL61XcDxKhQo8v/u7fY9QAA=="/>
 		</item>
 		<item>
-			<title>1.28.102-rc</title>
+			<title>1.28.106-rc</title>
 			<description>## Current Release Notes
 
-* Fixed Linux Proton discovery when Proton is installed in additional Steam library folders
-* Improved game launch error handling for missing executables
+* Fix broken merge regression
+* Fix locked game state showing stale mods in the UI
+* Fix selected mod scroll regression
 
 ## Release Notes 1.28
 
@@ -129,15 +130,16 @@
 * Improve macOS update experience with manual release-page updates
 * Improve conflict analysis equivalence filtering
 </description>
-			<pubDate>Tue, 20 Oct 2026 07:36:44 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.28.102-rc/linux-x64.zip" sparkle:version="1.28.102.42258" sparkle:shortVersionString="1.28.102" length="109341786" sparkle:os="linux" type="application/zip" sparkle:signature="HTjyM+Yji/TxaKHMSwCyBwbey34NFyuXcoG4ZQgBfLRAOyvrjtmyt5vtYM0oHdiDLBVAxcNmqyZ6Dzx53zZwDQ=="/>
+			<pubDate>Mon, 26 Oct 2026 02:59:19 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.28.106-rc/linux-x64.zip" sparkle:version="1.28.106.35410" sparkle:shortVersionString="1.28.106" length="109346851" sparkle:os="linux" type="application/zip" sparkle:signature="sIWIuljYdBj2YT/e4RiQ0Zf7sbhocIrPqgFmS9X7F2T9euVr149VKcs+LfYxvORSJXmA6TUZ/UmYe0KuhM/LAw=="/>
 		</item>
 		<item>
-			<title>1.28.102-rc</title>
+			<title>1.28.106-rc</title>
 			<description>## Current Release Notes
 
-* Fixed Linux Proton discovery when Proton is installed in additional Steam library folders
-* Improved game launch error handling for missing executables
+* Fix broken merge regression
+* Fix locked game state showing stale mods in the UI
+* Fix selected mod scroll regression
 
 ## Release Notes 1.28
 
@@ -182,15 +184,16 @@
 * Improve macOS update experience with manual release-page updates
 * Improve conflict analysis equivalence filtering
 </description>
-			<pubDate>Tue, 20 Oct 2026 07:36:59 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.28.102-rc/osx-x64.zip" sparkle:version="1.28.102.42258" sparkle:shortVersionString="1.28.102" length="96872444" sparkle:os="osx" type="application/zip" sparkle:signature="vkCyW87tkqv/VAhZb/UYOFeJBUotbgh0NSw+qVOhAJrosrZhzOGYces7I+AoqdSWMP4geXx6DUreJTWODMO/Ag=="/>
+			<pubDate>Mon, 26 Oct 2026 02:59:32 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.28.106-rc/osx-x64.zip" sparkle:version="1.28.106.35410" sparkle:shortVersionString="1.28.106" length="96877491" sparkle:os="osx" type="application/zip" sparkle:signature="eHLcCPc2Ilt4TZ1zC3RhqOGjj6kPGzr8vSE1XBhh0UTUfZNnHNHegpMu4mnL9BTED0w2Ht8Fvoa5RrNV1Vs2Aw=="/>
 		</item>
 		<item>
-			<title>1.28.102-rc</title>
+			<title>1.28.106-rc</title>
 			<description>## Current Release Notes
 
-* Fixed Linux Proton discovery when Proton is installed in additional Steam library folders
-* Improved game launch error handling for missing executables
+* Fix broken merge regression
+* Fix locked game state showing stale mods in the UI
+* Fix selected mod scroll regression
 
 ## Release Notes 1.28
 
@@ -235,15 +238,16 @@
 * Improve macOS update experience with manual release-page updates
 * Improve conflict analysis equivalence filtering
 </description>
-			<pubDate>Tue, 20 Oct 2026 07:37:07 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.28.102-rc/win-x64-setup.zip" sparkle:version="1.28.102.42258" sparkle:shortVersionString="1.28.102" length="77548123" sparkle:os="windows" type="application/zip" sparkle:signature="JmF/urWcuANBOrWsQQAOtaVY0ISbvGdDI0PemTqeEzI4ZC7FuVXsNMAIYwyx1tQg02XsOeB606P2oO/ckG1MAA=="/>
+			<pubDate>Mon, 26 Oct 2026 02:59:40 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.28.106-rc/win-x64-setup.zip" sparkle:version="1.28.106.35410" sparkle:shortVersionString="1.28.106" length="78621333" sparkle:os="windows" type="application/zip" sparkle:signature="XwLt9BVnG+xpQLOW3wqr2HrUxgqfgoW/ixQblgb8YiLQckYB0YzkoZ/Vs+Z0Z2wgYwtySziIkEN8wKJiof/XCQ=="/>
 		</item>
 		<item>
-			<title>1.28.102-rc</title>
+			<title>1.28.106-rc</title>
 			<description>## Current Release Notes
 
-* Fixed Linux Proton discovery when Proton is installed in additional Steam library folders
-* Improved game launch error handling for missing executables
+* Fix broken merge regression
+* Fix locked game state showing stale mods in the UI
+* Fix selected mod scroll regression
 
 ## Release Notes 1.28
 
@@ -288,8 +292,8 @@
 * Improve macOS update experience with manual release-page updates
 * Improve conflict analysis equivalence filtering
 </description>
-			<pubDate>Tue, 20 Oct 2026 07:37:20 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.28.102-rc/win-x64.zip" sparkle:version="1.28.102.42258" sparkle:shortVersionString="1.28.102" length="108385621" sparkle:os="windows" type="application/zip" sparkle:signature="bIvncllJLgP8HI6cTvzUzxSqLjDfGFyUJmSsMLiXDKwv4mupyJnmI6hMVSCnSoKudpF3wJ9eykAbWsn4Pfc+BA=="/>
+			<pubDate>Mon, 26 Oct 2026 02:59:53 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.28.106-rc/win-x64.zip" sparkle:version="1.28.106.35410" sparkle:shortVersionString="1.28.106" length="109916546" sparkle:os="windows" type="application/zip" sparkle:signature="EaDPG0gNpzn2BnXQXK3DGelA0enT0c2GHOO9/PT1ixiuutgRmNd8a/HE50uDJLMnrG/X9EhotI1Cf99EulC4CA=="/>
 		</item>
 	</channel>
 </rss>
