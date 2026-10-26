@@ -70,6 +70,38 @@ namespace IronyModManager.Tests.ViewModels.Controls
             modService.Verify(p => p.AreModIdentitiesEquivalent(installedCollectionMember, collectionMember), Times.Once);
         }
 
+        [Theory]
+        [InlineData(false)]
+        [InlineData(true)]
+        public void Restoring_large_membership_should_compare_only_matching_identity_candidates(bool replaceDescriptor)
+        {
+            var members = Enumerable.Range(0, 256).Select(i => new Mod
+            {
+                DescriptorFile = $"mod/{i}.mod", FullPath = $"mods/{i}"
+            }).ToList();
+            var installed = members.Select(p => new Mod
+            {
+                DescriptorFile = replaceDescriptor ? $"replacement/{p.DescriptorFile}" : p.DescriptorFile.ToUpperInvariant(),
+                FullPath = p.FullPath.ToUpperInvariant()
+            }).ToList();
+            var nonMembers = Enumerable.Range(0, 256).Select(i => new Mod { DescriptorFile = $"other/{i}.mod", IsSelected = true }).ToList();
+            var virtualMember = new Mod { DescriptorFile = "mod/missing.mod", IsVirtual = true };
+            var service = new Mock<IModService>();
+            service.Setup(p => p.AreModIdentitiesEquivalent(It.IsAny<IMod>(), It.IsAny<IMod>()))
+                .Returns((IMod candidate, IMod member) =>
+                    string.Equals(candidate.DescriptorFile, member.DescriptorFile, System.StringComparison.OrdinalIgnoreCase) ||
+                    (!string.IsNullOrWhiteSpace(member.FullPath) &&
+                     string.Equals(candidate.FullPath, member.FullPath, System.StringComparison.OrdinalIgnoreCase)));
+
+            new CollectionModMembership(service.Object).RestoreSelection(installed.Concat(nonMembers), members.Append(virtualMember));
+
+            installed.Should().OnlyContain(p => p.IsSelected);
+            nonMembers.Should().OnlyContain(p => !p.IsSelected);
+            members.Should().OnlyContain(p => p.IsSelected);
+            virtualMember.IsSelected.Should().BeTrue();
+            service.Verify(p => p.AreModIdentitiesEquivalent(It.IsAny<IMod>(), It.IsAny<IMod>()), Times.Exactly(256));
+        }
+
         [Fact]
         public void Ordered_projection_comparison_should_use_domain_equivalence()
         {

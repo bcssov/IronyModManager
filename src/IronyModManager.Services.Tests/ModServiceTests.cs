@@ -1888,6 +1888,33 @@ namespace IronyModManager.Services.Tests
         }
 
         [Fact]
+        public void Large_collection_resolution_should_read_identity_linearly_and_preserve_live_order()
+        {
+            var identityReads = 0;
+            var installed = Enumerable.Range(0, 256).Select(i =>
+            {
+                var mod = new Mock<IMod>();
+                mod.SetupGet(p => p.DescriptorFile).Returns(() => { identityReads++; return $"mod/{i}.mod"; });
+                mod.SetupGet(p => p.FullPath).Returns(() => { identityReads++; return $"mods/{i}"; });
+                return mod.Object;
+            }).ToList();
+            var collection = new ModCollection
+            {
+                Game = "game",
+                Mods = Enumerable.Range(0, installed.Count).Reverse().Select(i => $"MOD/{i}.MOD").ToList(),
+                ModPaths = Enumerable.Range(0, installed.Count).Reverse().Select(i => $"MODS/{i}").ToList()
+            };
+            var service = GetService(new Mock<IStorageProvider>(), new Mock<IModParser>(), new Mock<IReader>(),
+                new Mock<IMapper>(), new Mock<IModWriter>(), new Mock<IGameService>());
+
+            var result = service.ResolveCollectionMods(installed, collection);
+
+            result.Should().Equal(installed.AsEnumerable().Reverse());
+            identityReads.Should().BeLessThanOrEqualTo(installed.Count * 8,
+                "collection binding must not scan every installed mod for each persisted member");
+        }
+
+        [Fact]
         public void Removed_virtual_membership_should_not_return_after_refresh_or_installation()
         {
             var service = GetService(new Mock<IStorageProvider>(), new Mock<IModParser>(), new Mock<IReader>(),
