@@ -27,7 +27,7 @@ Irony understands game structures, FIOS/LIOS rules, and provides deterministic l
 Always download the latest version here:
 
 👉 **[Stable Release (recommended)](https://github.com/bcssov/IronyModManager/releases/latest)**
-👉 **[Latest RC Release](https://github.com/bcssov/IronyModManager/releases/tag/v1.28.102-rc)**
+👉 **[Latest RC Release](https://github.com/bcssov/IronyModManager/releases/tag/v1.28.106-rc)**
 
 Official Irony Mod Manager binaries are published on GitHub Releases.  
 Package managers such as winget and AUR source their downloads from there.
