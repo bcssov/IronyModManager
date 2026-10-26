@@ -642,6 +642,14 @@ namespace IronyModManager.Services
 
             var installed = installedMods?.Where(p => !p.IsVirtual).ToList() ?? [];
             var previous = previousMods?.ToList() ?? [];
+            var installedDescriptors = installed.Where(p => !string.IsNullOrWhiteSpace(p.DescriptorFile))
+                .ToLookup(p => p.DescriptorFile, StringComparer.OrdinalIgnoreCase);
+            var installedPaths = installed.Where(p => !string.IsNullOrWhiteSpace(p.FullPath))
+                .ToLookup(p => p.FullPath, StringComparer.OrdinalIgnoreCase);
+            var previousDescriptors = previous.Where(p => !string.IsNullOrWhiteSpace(p.DescriptorFile))
+                .ToLookup(p => p.DescriptorFile, StringComparer.OrdinalIgnoreCase);
+            var previousPaths = previous.Where(p => !string.IsNullOrWhiteSpace(p.FullPath))
+                .ToLookup(p => p.FullPath, StringComparer.OrdinalIgnoreCase);
             var result = new List<IMod>();
             var descriptors = collection.Mods?.ToList() ?? [];
             var paths = collection.ModPaths?.ToList() ?? [];
@@ -652,8 +660,8 @@ namespace IronyModManager.Services
             {
                 var descriptor = descriptors[index] ?? string.Empty;
                 var path = paths.Count == descriptors.Count ? paths[index] ?? string.Empty : string.Empty;
-                var mod = installed.FirstOrDefault(p => HasDescriptorIdentity(p, descriptor));
-                mod ??= installed.FirstOrDefault(p => HasPathIdentity(p, path));
+                var mod = installedDescriptors[descriptor].FirstOrDefault();
+                mod ??= installedPaths[path].FirstOrDefault();
 
                 if (mod != null)
                 {
@@ -662,8 +670,8 @@ namespace IronyModManager.Services
                     continue;
                 }
 
-                var oldMod = previous.FirstOrDefault(p => HasDescriptorIdentity(p, descriptor));
-                oldMod ??= previous.FirstOrDefault(p => HasPathIdentity(p, path));
+                var oldMod = previousDescriptors[descriptor].FirstOrDefault();
+                oldMod ??= previousPaths[path].FirstOrDefault();
 
                 var sourceInfo = ids.Count == descriptors.Count ? ids[index] : null;
                 var virtualMod = modFactory();

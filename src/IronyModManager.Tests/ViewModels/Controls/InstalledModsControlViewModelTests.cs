@@ -190,6 +190,33 @@ namespace IronyModManager.Tests.ViewModels.Controls
         }
 
         [Fact]
+        public async Task Game_collection_context_should_be_loaded_before_discovery_publishes_live_mods()
+        {
+            DISetup.SetupContainer();
+            var game = new Game { Type = "early-collection-context" };
+            var mod = new Mod { Game = game.Type, DescriptorFile = "mod/live.mod", IsValid = true };
+            var service = new Mock<IModService>();
+            var viewModel = CreateViewModel(service);
+            var contextPresented = false;
+            viewModel.GameContextPresented += (target, _) => contextPresented = target == game;
+            service.Setup(p => p.RefreshInstalledModsAsync(game)).Returns(() =>
+            {
+                contextPresented.Should().BeTrue();
+                viewModel.GameChangedRefresh.Should().BeTrue("collection rebinding precedes the live mod publication, as in the known-good RC");
+                viewModel.Mods.Should().BeEmpty();
+                viewModel.LastRefreshAuthoritative.Should().BeFalse();
+                return Task.FromResult(new InstalledModsResult { IsAuthoritative = true, Mods = [mod] });
+            });
+            service.Setup(p => p.FilterMods(It.IsAny<IEnumerable<IMod>>(), It.IsAny<string>()))
+                .Returns((IEnumerable<IMod> mods, string _) => mods);
+
+            await viewModel.BindForTestAsync(game);
+
+            viewModel.Mods.Should().Equal(mod);
+            viewModel.LastRefreshAuthoritative.Should().BeTrue();
+        }
+
+        [Fact]
         public async Task Game_switch_should_release_superseded_refresh_ownership()
         {
             DISetup.SetupContainer();

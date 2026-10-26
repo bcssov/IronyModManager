@@ -609,6 +609,223 @@ namespace IronyModManager.Tests.ViewModels.Controls
             real.IsSelected.Should().BeTrue();
         }
 
+        [Fact]
+        public void Collection_resolution_should_not_dispatch_user_reorders_or_per_member_saves()
+        {
+            using var fixture = new ScrollFixture();
+            var current = fixture.ReplacementMembers();
+            foreach (var mod in current) mod.IsSelected = false;
+            fixture.View.InitializeState(fixture.Game, fixture.Collection, current);
+            using var subscriptions = fixture.View.StartModSubscriptions();
+            fixture.Mods.Setup(p => p.ResolveCollectionMods(It.IsAny<IEnumerable<IMod>>(), It.IsAny<IModCollection>(), It.IsAny<IEnumerable<IMod>>()))
+                .Returns((IEnumerable<IMod> installed, IModCollection _, IEnumerable<IMod> _) =>
+                {
+                    var members = installed.ToList();
+                    foreach (var mod in members) mod.IsSelected = true;
+                    return members;
+                });
+            fixture.Collections.Invocations.Clear();
+            fixture.ScrollRequests.Clear();
+
+            fixture.View.ReconcileCollectionForTest();
+
+            fixture.View.SelectedMods.Should().Equal(current);
+            current.Should().OnlyContain(p => p.IsSelected);
+            fixture.ScrollRequests.Should().BeEmpty("resolver side effects are internal loading, not user reorders");
+            fixture.Collections.Verify(p => p.Save(It.IsAny<IModCollection>()), Times.Once);
+        }
+
+        [Fact]
+        public void Authoritative_rebind_should_not_rescan_the_previous_projection_for_each_restored_member()
+        {
+            using var fixture = new ScrollFixture();
+            var previousMember = new Mock<IMod>();
+            previousMember.SetupGet(p => p.IsSelected).Returns(true);
+            fixture.View.ApplySelectedMods([previousMember.Object], ignoreStack: true);
+            var current = fixture.ReplacementMembers();
+            foreach (var mod in current) mod.IsSelected = false;
+            previousMember.Invocations.Clear();
+
+            fixture.View.SetMods(current, fixture.Game);
+
+            previousMember.VerifyGet(p => p.IsVirtual, Times.Once,
+                "internal membership restoration must not rescan the old list for every IsSelected notification");
+            fixture.View.SelectedMods.Should().Equal(current);
+            current.Should().OnlyContain(p => p.IsSelected);
+            fixture.ScrollRequests.Should().BeEmpty();
+        }
+
+        [Fact]
+        public async Task Rebinding_ordered_presentation_should_not_request_reorder_scrolling()
+        {
+            using var fixture = new ScrollFixture();
+            fixture.View.PresentGameContext(fixture.Game, fixture.Members);
+            fixture.View.SetMods(fixture.Members, fixture.Game);
+            await Task.Delay(650);
+
+            fixture.ScrollRequests.Should().BeEmpty("initial values are not user reorders or focus requests");
+            fixture.View.SelectedMod.Should().BeSameAs(fixture.Members[0]);
+        }
+
+        [Theory]
+        [InlineData(false)]
+        [InlineData(true)]
+        public async Task Scroll_selection_should_restore_the_current_live_member_after_reconciliation(bool wasVirtual)
+        {
+            using var fixture = new ScrollFixture();
+            var previous = fixture.Members[0];
+            previous.IsVirtual = wasVirtual;
+            var current = fixture.ReplacementMembers();
+            if (wasVirtual) current[0].DescriptorFile = "mod/reappeared.mod";
+
+            fixture.View.SetMods(current, fixture.Game);
+            await Task.Delay(650);
+
+            fixture.View.SelectedMod.Should().BeSameAs(current[0]).And.NotBeSameAs(previous);
+            fixture.View.SelectedMod.IsVirtual.Should().BeFalse();
+            fixture.ScrollRequests.Should().BeEmpty();
+        }
+
+        [Theory]
+        [InlineData(false)]
+        [InlineData(true)]
+        public async Task Scroll_without_a_valid_selection_should_not_target_the_final_member(bool selectedMemberRemoved)
+        {
+            using var fixture = new ScrollFixture(selectedMemberRemoved ? 0 : null);
+            var current = fixture.ReplacementMembers();
+            if (selectedMemberRemoved) current.RemoveAt(0);
+
+            fixture.View.SetMods(current, fixture.Game);
+            await Task.Delay(650);
+
+            fixture.View.SelectedMod.Should().BeNull();
+            fixture.ScrollRequests.Should().BeEmpty();
+        }
+
+        [Theory]
+        [InlineData(false)]
+        [InlineData(true)]
+        public async Task Locked_presentation_scroll_state_should_preserve_only_a_valid_own_selection(bool hasSelection)
+        {
+            using var fixture = new ScrollFixture(hasSelection ? 0 : null);
+            fixture.Safety.Setup(p => p.IsLocked(fixture.Game)).Returns(true);
+            fixture.Collections.Invocations.Clear();
+            fixture.Mods.Invocations.Clear();
+
+            fixture.View.PresentGameContext(fixture.Game, fixture.Members);
+            await Task.Delay(650);
+
+            fixture.View.SelectedMod.Should().BeSameAs(hasSelection ? fixture.Members[0] : null);
+            fixture.ScrollRequests.Should().BeEmpty();
+            fixture.Collections.Verify(p => p.Save(It.IsAny<IModCollection>()), Times.Never);
+            fixture.Mods.Verify(p => p.ResolveCollectionMods(It.IsAny<IEnumerable<IMod>>(), It.IsAny<IModCollection>(), It.IsAny<IEnumerable<IMod>>()), Times.Never);
+        }
+
+        [Theory]
+        [InlineData(false)]
+        [InlineData(true)]
+        public async Task Scroll_selection_must_not_leak_between_collection_or_game_contexts(bool switchGame)
+        {
+            using var fixture = new ScrollFixture();
+            var otherGame = switchGame ? new Game { Type = "other-scroll-game" } : fixture.Game;
+            var otherMembers = fixture.ReplacementMembers(otherGame);
+            var otherCollection = new ModCollection { Name = switchGame ? fixture.Collection.Name : "Other collection", Game = otherGame.Type,
+                IsSelected = true, Mods = otherMembers.Select(p => p.DescriptorFile).ToList(), ModPaths = otherMembers.Select(p => p.FullPath).ToList() };
+            fixture.CurrentGame = otherGame;
+            fixture.CurrentCollection = otherCollection;
+            if (switchGame) fixture.View.PresentGameContext(otherGame, otherMembers);
+            else SetProtectedProperty(fixture.View, nameof(CollectionModsControlViewModel.SelectedModCollection), otherCollection);
+            fixture.View.SetMods(otherMembers, otherGame);
+            fixture.View.SelectedMod.Should().BeNull("the same descriptor in another context is not the old selection");
+
+            fixture.CurrentGame = fixture.Game;
+            fixture.CurrentCollection = fixture.Collection;
+            var restoredMembers = fixture.ReplacementMembers();
+            if (switchGame) fixture.View.PresentGameContext(fixture.Game, restoredMembers);
+            else SetProtectedProperty(fixture.View, nameof(CollectionModsControlViewModel.SelectedModCollection), fixture.Collection);
+            fixture.View.SetMods(restoredMembers, fixture.Game);
+            await Task.Delay(650);
+
+            fixture.View.SelectedMod.Should().BeSameAs(restoredMembers[0]);
+            fixture.ScrollRequests.Should().BeEmpty();
+        }
+
+        [Theory]
+        [InlineData(false)]
+        [InlineData(true)]
+        public async Task Deliberate_reorder_should_still_request_focus_on_the_moved_member(bool instant)
+        {
+            using var fixture = new ScrollFixture();
+            var moved = fixture.Members[1];
+
+            if (instant) fixture.View.InstantReorderSelectedItems(moved, 3);
+            else moved.Order = 3;
+            await Task.Delay(650);
+
+            fixture.ScrollRequests.Should().ContainSingle().Which.Should().Be((moved, instant));
+            fixture.View.SelectedMod.Should().BeSameAs(moved);
+        }
+
+        private sealed class ScrollFixture : IDisposable
+        {
+            private readonly CompositeDisposable subscriptions;
+            private string savedDescriptor;
+            public Game Game { get; } = new() { Type = "scroll-game" };
+            public IGame CurrentGame { get; set; }
+            public IModCollection CurrentCollection { get; set; }
+            public ModCollection Collection { get; }
+            public List<IMod> Members { get; }
+            public Mock<IModCollectionService> Collections { get; } = new();
+            public Mock<IModService> Mods { get; } = new();
+            public Mock<IGameStateSafetyService> Safety { get; } = new();
+            public TestCollectionModsControlViewModel View { get; }
+            public List<(IMod Mod, bool Instant)> ScrollRequests { get; } = [];
+
+            public ScrollFixture(int? selectedIndex = 0)
+            {
+                DISetup.SetupContainer();
+                Members = ReplacementMembers();
+                Collection = new ModCollection { Name = "Scroll", Game = Game.Type, IsSelected = true,
+                    Mods = Members.Select(p => p.DescriptorFile).ToList(), ModPaths = Members.Select(p => p.FullPath).ToList() };
+                CurrentGame = Game;
+                CurrentCollection = Collection;
+                var games = new Mock<IGameService>();
+                games.Setup(p => p.GetSelected()).Returns(() => CurrentGame);
+                Collections.Setup(p => p.GetAll()).Returns(() => [CurrentCollection]);
+                Collections.Setup(p => p.Get(It.IsAny<string>())).Returns(() => CurrentCollection);
+                Collections.Setup(p => p.Create()).Returns(() => new ModCollection());
+                Mods.Setup(p => p.ResolveCollectionMods(It.IsAny<IEnumerable<IMod>>(), It.IsAny<IModCollection>(), It.IsAny<IEnumerable<IMod>>()))
+                    .Returns((IEnumerable<IMod> installed, IModCollection _, IEnumerable<IMod> _) => installed.ToList());
+                Mods.Setup(p => p.AreModIdentitiesEquivalent(It.IsAny<IMod>(), It.IsAny<IMod>()))
+                    .Returns((IMod left, IMod right) => left != null && right != null &&
+                        (left.DescriptorFile == right.DescriptorFile || left.FullPath == right.FullPath));
+                View = CreateViewModel(Mods.Object, Collections, new Mock<IModPatchCollectionService>(), games,
+                    reconciliation: new CollectionModReconciliationCoordinator(Mods.Object, Safety.Object));
+                var presentation = Mock.Get((CollectionModsPresentationCoordinator)typeof(CollectionModsControlViewModel)
+                    .GetField("presentationCoordinator", BindingFlags.Instance | BindingFlags.NonPublic)!.GetValue(View));
+                savedDescriptor = selectedIndex.HasValue ? Members[selectedIndex.Value].DescriptorFile : null;
+                presentation.Setup(p => p.Restore(It.IsAny<string>(), It.IsAny<string>())).Returns(() => (true, savedDescriptor));
+                presentation.Setup(p => p.Save(It.IsAny<string>(), It.IsAny<bool>(), It.IsAny<bool>()))
+                    .Callback((string descriptor, bool _, bool preserve) => { if (!preserve) savedDescriptor = descriptor; });
+                View.InitializeState(Game, Collection, Members);
+                View.SetMods(Members, Game);
+                View.ModReordered += (mod, instant) => ScrollRequests.Add((mod, instant));
+                subscriptions = View.StartModSubscriptions();
+            }
+
+            public List<IMod> ReplacementMembers(IGame game = null)
+            {
+                return new[] { "first", "middle", "last" }.Select(name =>
+                {
+                    var mod = CreateMod($"mod/{name}.mod", name, name, (game ?? Game).Type, true);
+                    mod.IsValid = true;
+                    return mod;
+                }).ToList();
+            }
+
+            public void Dispose() => subscriptions.Dispose();
+        }
+
         private static IMod CreateMod(string descriptor, string fullPath = null, string name = null, string game = null,
             bool isSelected = false, bool isVirtual = false, ModSource source = ModSource.Local, long? remoteId = null)
         {
@@ -839,6 +1056,8 @@ namespace IronyModManager.Tests.ViewModels.Controls
             {
                 SetSelectedModsState(collectionMembers, ignoreStack: ignoreStack, evaluatePatchState: false);
             }
+
+            public void ReconcileCollectionForTest() => HandleModCollectionChange(true);
 
             public void PublishMods(IEnumerable<IMod> mods, IGame game, GameStateLockInfo revalidationLock)
             {
