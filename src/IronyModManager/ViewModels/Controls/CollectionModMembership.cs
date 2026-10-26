@@ -2,6 +2,7 @@
 // Assembly         : IronyModManager
 // ***********************************************************************
 
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using IronyModManager.Models.Common;
@@ -31,9 +32,14 @@ namespace IronyModManager.ViewModels.Controls
         public virtual void RestoreSelection(IEnumerable<IMod> installedMods, IEnumerable<IMod> collectionMembers)
         {
             var members = collectionMembers?.ToList() ?? [];
+            var descriptors = members.Where(p => !string.IsNullOrWhiteSpace(p.DescriptorFile))
+                .ToLookup(p => p.DescriptorFile, StringComparer.OrdinalIgnoreCase);
+            var paths = members.Where(p => !string.IsNullOrWhiteSpace(p.FullPath))
+                .ToLookup(p => p.FullPath, StringComparer.OrdinalIgnoreCase);
             foreach (var mod in installedMods ?? [])
             {
-                mod.IsSelected = members.Any(member => modService.AreModIdentitiesEquivalent(mod, member));
+                mod.IsSelected = descriptors[mod.DescriptorFile ?? string.Empty].Any(member => modService.AreModIdentitiesEquivalent(mod, member)) ||
+                                 paths[mod.FullPath ?? string.Empty].Any(member => modService.AreModIdentitiesEquivalent(mod, member));
             }
 
             foreach (var mod in members)

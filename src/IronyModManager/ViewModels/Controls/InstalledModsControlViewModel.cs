@@ -693,6 +693,12 @@ namespace IronyModManager.ViewModels.Controls
 
             if (game != null)
             {
+                // Rebind the target collection before publishing its live mod graph, as in the RC lifecycle.
+                if (raiseGameChanged)
+                {
+                    GameChangedRefresh = true;
+                }
+
                 var refreshResult = await Task.Run(async () => revalidationLock != null
                     ? await modService.RevalidateInstalledModsAsync(game, revalidationLock)
                     : await modService.RefreshInstalledModsAsync(game));
@@ -749,11 +755,6 @@ namespace IronyModManager.ViewModels.Controls
                 presentationCoordinator.Initialize(ModName, ModVersion, ModSelected, FilterModsWatermark);
 
                 ApplyDefaultSort();
-
-                if (raiseGameChanged && ownsAuthority())
-                {
-                    GameChangedRefresh = true;
-                }
 
                 var invalidMods = AllMods.Where(p => !p.IsValid).ToList();
                 if (invalidMods.Count != 0 && ownsAuthority())

@@ -85,7 +85,12 @@ namespace IronyModManager.Views.Controls
         /// <returns>A Task representing the asynchronous operation.</returns>
         protected virtual async Task FocusListBoxItemAsync(IMod mod, bool scrollToSelected)
         {
+            var members = ViewModel?.SelectedMods;
             await Task.Delay(100);
+            if (!ReferenceEquals(members, ViewModel?.SelectedMods) || members?.Contains(mod) != true)
+            {
+                return;
+            }
             var listboxItems = modList.GetLogicalChildren().Cast<ListBoxItem>();
             if (mod != null)
             {

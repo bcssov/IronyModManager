@@ -138,7 +138,8 @@ namespace IronyModManager.ViewModels.Controls
         /// </summary>
         private IGame activeGame;
 
-        private readonly Dictionary<string, (IModCollection Collection, IList<IMod> Mods)> gamePresentations = new();
+        private readonly Dictionary<string, (IModCollection Collection, IList<IMod> Mods, IMod SelectedMod)> gamePresentations = new();
+        private (string Game, string Collection) savedSelectionContext;
         private bool presentingGameContext;
         private bool awaitingAuthoritativeMods = true;
 
@@ -995,14 +996,14 @@ namespace IronyModManager.ViewModels.Controls
             awaitingAuthoritativeMods = true;
             if (activeGame?.Type == game?.Type && activeGame != null && SelectedModCollection != null)
             {
-                gamePresentations[activeGame.Type] = (SelectedModCollection, SelectedMods?.ToList() ?? []);
+                gamePresentations[activeGame.Type] = (SelectedModCollection, SelectedMods?.ToList() ?? [], SelectedMod);
             }
 
             if (activeGame?.Type != game?.Type)
             {
                 if (activeGame != null && SelectedModCollection != null)
                 {
-                    gamePresentations[activeGame.Type] = (SelectedModCollection, SelectedMods?.ToList() ?? []);
+                    gamePresentations[activeGame.Type] = (SelectedModCollection, SelectedMods?.ToList() ?? [], SelectedMod);
                 }
 
                 modReconciliationCoordinator.Reset();
@@ -1028,6 +1029,8 @@ namespace IronyModManager.ViewModels.Controls
                 SelectedModCollection = ModCollections?.FirstOrDefault(p => p.IsSelected);
                 SelectedMods = snapshot.Collection?.Name == SelectedModCollection?.Name
                     ? snapshot.Mods ?? [] : [];
+                SelectedMod = snapshot.SelectedMod == null ? null : SelectedMods.FirstOrDefault(p =>
+                    modService.AreModIdentitiesEquivalent(p, snapshot.SelectedMod));
                 ModifyCollection.ActiveCollection = SelectedModCollection;
                 ModifyCollection.SelectedMods = SelectedMods;
                 ExportCollection.CollectionName = SelectedModCollection?.Name;
@@ -1264,52 +1267,66 @@ namespace IronyModManager.ViewModels.Controls
                 restoreCollectionSelection = string.Empty;
             }
 
+            var selectedMod = ExportCollection.CollectionName == SelectedModCollection?.Name && SelectedMod?.Game == activeGame?.Type
+                ? SelectedMod : null;
             var existingCollection = modCollectionService.Get(SelectedModCollection?.Name ?? string.Empty);
-            IReadOnlyCollection<IMod> resolvedMods = [];
-            if (existingCollection?.Mods?.Count() > 0 && localMods != null &&
-                !modReconciliationCoordinator.TryResolve(activeGame, localMods, existingCollection, out resolvedMods,
-                    revalidationLock))
-            {
-                return;
-            }
-
+            var previousSkipCollectionSave = skipModCollectionSave;
+            var previousSkipSelectionSave = skipModSelectionSave;
             skipModCollectionSave = true;
             skipModSelectionSave = true;
-            ExportCollection.CollectionName = SelectedModCollection?.Name;
-            SaveState(true);
-            collectionModMembership.RestoreSelection(localMods, resolvedMods);
-
-            var selectedMods = new ObservableCollection<IMod>();
-            if (existingCollection?.Mods?.Count() > 0 && localMods != null)
+            try
             {
-                foreach (var mod in resolvedMods)
+                // Resolution selects live installed objects; suppress user-edit reactions before it starts.
+                IReadOnlyCollection<IMod> resolvedMods = [];
+                if (existingCollection?.Mods?.Count() > 0 && localMods != null &&
+                    !modReconciliationCoordinator.TryResolve(activeGame, localMods, existingCollection, out resolvedMods,
+                        revalidationLock))
                 {
-                    selectedMods.Add(mod);
+                    return;
                 }
 
-                var missingMods = resolvedMods.Where(p => p.IsVirtual).Select(p => $"{p.Name} ({p.DescriptorFile})").ToList();
-                if (modReconciliationCoordinator.ShouldShowOrdinaryWarning(activeGame?.Type, existingCollection.Game,
-                        existingCollection.Name, resolvedMods.Where(p => p.IsVirtual).Select(p => p.DescriptorFile)))
+                ExportCollection.CollectionName = SelectedModCollection?.Name;
+                SaveState(true);
+                collectionModMembership.RestoreSelection(localMods, resolvedMods);
+
+                var selectedMods = new ObservableCollection<IMod>();
+                if (existingCollection?.Mods?.Count() > 0 && localMods != null)
                 {
-                    var title = interaction.GetText(LocalizationResources.Collection_Mods.Prompts.ModsMissingTitle);
-                    var message = IronyFormatter.Format(interaction.GetText(LocalizationResources.Collection_Mods.Prompts.ModsMissingMessage), new { Environment.NewLine, Mods = string.Join(Environment.NewLine, missingMods) });
-                    Dispatcher.UIThread.SafeInvoke(() => interaction.PromptAsync(title, title, message, NotificationType.Warning, PromptType.OK));
+                    foreach (var mod in resolvedMods)
+                    {
+                        selectedMods.Add(mod);
+                    }
+
+                    var missingMods = resolvedMods.Where(p => p.IsVirtual).Select(p => $"{p.Name} ({p.DescriptorFile})").ToList();
+                    if (modReconciliationCoordinator.ShouldShowOrdinaryWarning(activeGame?.Type, existingCollection.Game,
+                            existingCollection.Name, resolvedMods.Where(p => p.IsVirtual).Select(p => p.DescriptorFile)))
+                    {
+                        var title = interaction.GetText(LocalizationResources.Collection_Mods.Prompts.ModsMissingTitle);
+                        var message = IronyFormatter.Format(interaction.GetText(LocalizationResources.Collection_Mods.Prompts.ModsMissingMessage), new { Environment.NewLine, Mods = string.Join(Environment.NewLine, missingMods) });
+                        Dispatcher.UIThread.SafeInvoke(() => interaction.PromptAsync(title, title, message, NotificationType.Warning, PromptType.OK));
+                    }
                 }
-            }
 
-            if (resetStack)
+                if (resetStack)
+                {
+                    undoStack.Clear();
+                    redoStack.Clear();
+                }
+
+                SetSelectedModsState(selectedMods, ignoreStack: true);
+                AllModsEnabled = AreAllRealModsEnabled();
+                InitSortersAndFilters(false);
+                var restoredSelection = selectedMod ?? SelectedMod;
+                ApplySort();
+                SelectedMod = restoredSelection == null ? null : SelectedMods.FirstOrDefault(p =>
+                    modService.AreModIdentitiesEquivalent(p, restoredSelection));
+                SaveSelectedCollection();
+            }
+            finally
             {
-                undoStack.Clear();
-                redoStack.Clear();
+                skipModCollectionSave = previousSkipCollectionSave;
+                skipModSelectionSave = previousSkipSelectionSave;
             }
-
-            SetSelectedModsState(selectedMods, ignoreStack: true);
-            AllModsEnabled = AreAllRealModsEnabled();
-            InitSortersAndFilters(false);
-            ApplySort();
-            SaveSelectedCollection();
-            skipModCollectionSave = false;
-            skipModSelectionSave = false;
         }
 
         /// <summary>
@@ -1543,9 +1560,17 @@ namespace IronyModManager.ViewModels.Controls
 
             var state = presentationCoordinator.Restore(SearchModsWatermark, ModName);
             CollectionJumpOnPositionChange = state.JumpOnPositionChange;
-            if (!string.IsNullOrWhiteSpace(state.SelectedDescriptor) && SelectedMods != null)
+            var context = (Game: activeGame?.Type, Collection: SelectedModCollection?.Name);
+            if (!awaitingAuthoritativeMods && context.Game != null && context.Collection != null)
             {
-                SelectedMod = SelectedMods.FirstOrDefault(p => p.DescriptorFile.Equals(state.SelectedDescriptor, StringComparison.OrdinalIgnoreCase));
+                if (savedSelectionContext == default)
+                {
+                    savedSelectionContext = context;
+                }
+
+                SelectedMod = savedSelectionContext == context && !string.IsNullOrWhiteSpace(state.SelectedDescriptor)
+                    ? SelectedMods?.FirstOrDefault(p => p.DescriptorFile.Equals(state.SelectedDescriptor, StringComparison.OrdinalIgnoreCase))
+                    : null;
             }
 
             RecognizeSortOrder(SelectedModCollection);
@@ -2455,6 +2480,10 @@ namespace IronyModManager.ViewModels.Controls
         /// <param name="useOldModSelection">if set to <c>true</c> [use old mod selection].</param>
         protected virtual void SaveState(bool useOldModSelection = false)
         {
+            if (!useOldModSelection)
+            {
+                savedSelectionContext = (activeGame?.Type, SelectedModCollection?.Name);
+            }
             presentationCoordinator.Save(SelectedMod?.DescriptorFile, CollectionJumpOnPositionChange, useOldModSelection);
         }
 
@@ -2576,8 +2605,14 @@ namespace IronyModManager.ViewModels.Controls
                 var subscribedGame = activeGame;
                 var subscribedMods = Mods;
 
-                modSelectedChanged = sourceList.Connect().WhenPropertyChanged(s => s.IsSelected).Subscribe(s =>
+                // SetMods reconciles existing state; only subsequent edits may request reorder/focus.
+                modSelectedChanged = sourceList.Connect().WhenPropertyChanged(s => s.IsSelected, notifyOnInitialValue: false).Subscribe(s =>
                 {
+                    if (skipModCollectionSave || refreshInProgress)
+                    {
+                        return;
+                    }
+
                     skipReorder = true;
                     if (!skipModCollectionSave && !refreshInProgress)
                     {
@@ -2631,7 +2666,7 @@ namespace IronyModManager.ViewModels.Controls
                     skipReorder = false;
                 }).DisposeWith(Disposables);
 
-                modOrderChanged = sourceList.Connect().WhenPropertyChanged(s => s.Order).Where(s => s.Value > 0).Subscribe(s =>
+                modOrderChanged = sourceList.Connect().WhenPropertyChanged(s => s.Order, notifyOnInitialValue: false).Where(s => s.Value > 0).Subscribe(s =>
                 {
                     if (!refreshInProgress && !skipReorder)
                     {
