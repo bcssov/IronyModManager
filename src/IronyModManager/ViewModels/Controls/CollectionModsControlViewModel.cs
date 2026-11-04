@@ -1435,7 +1435,7 @@ namespace IronyModManager.ViewModels.Controls
                         {
                             var descriptor = descriptors[i];
                             var name = modNames[i];
-                            var mod = mods.FirstOrDefault(p => p.Name.Equals(name) && System.IO.Path.GetDirectoryName(p.FullPath)!.EndsWith(System.IO.Path.DirectorySeparatorChar + result.MergedFolderName));
+                            var mod = mods.FirstOrDefault(p => p.Name.Equals(name) && System.IO.Path.GetDirectoryName(p.FullPath)?.EndsWith(System.IO.Path.DirectorySeparatorChar + result.MergedFolderName) == true);
                             if (mod != null)
                             {
                                 importedMods.Add(mod.DescriptorFile);
@@ -1445,7 +1445,7 @@ namespace IronyModManager.ViewModels.Controls
                                 if (descriptors.Count == paths.Count)
                                 {
                                     var existingMod = mods.FirstOrDefault(p => p.DescriptorFile.Equals(descriptor, StringComparison.OrdinalIgnoreCase));
-                                    existingMod ??= mods.FirstOrDefault(p => p.FullPath.Equals(paths[i], StringComparison.OrdinalIgnoreCase));
+                                    existingMod ??= mods.FirstOrDefault(p => p.FullPath?.Equals(paths[i], StringComparison.OrdinalIgnoreCase) == true);
                                     importedMods.Add(existingMod != null ? existingMod.DescriptorFile : descriptor);
                                 }
                                 else
@@ -1482,7 +1482,7 @@ namespace IronyModManager.ViewModels.Controls
                                 if (modPaths.Count == modDescriptorPaths.Count)
                                 {
                                     var modPath = modPaths[index];
-                                    if (mods.Any(p => p.FullPath.Equals(modPath, StringComparison.OrdinalIgnoreCase)))
+                                    if (mods.Any(p => p.FullPath?.Equals(modPath, StringComparison.OrdinalIgnoreCase) == true))
                                     {
                                         isInvalid = false;
                                     }
@@ -2350,7 +2350,7 @@ namespace IronyModManager.ViewModels.Controls
                     if (mod == null && colMods.Count == colPaths.Count)
                     {
                         item = colPaths[i];
-                        mod = Mods.FirstOrDefault(p => p.FullPath.Equals(item, StringComparison.OrdinalIgnoreCase));
+                        mod = Mods.FirstOrDefault(p => p.FullPath?.Equals(item, StringComparison.OrdinalIgnoreCase) == true);
                     }
 
                     if (mod != null)

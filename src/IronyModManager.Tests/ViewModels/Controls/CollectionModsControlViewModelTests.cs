@@ -13,6 +13,7 @@ using Castle.DynamicProxy;
 using IronyModManager.DI;
 using IronyModManager.Common.Events;
 using IronyModManager.Implementation.AppState;
+using IronyModManager.Implementation;
 using IronyModManager.Implementation.Hotkey;
 using IronyModManager.Implementation.MessageBus.Events;
 using IronyModManager.IO.Common.Mods;
@@ -34,6 +35,106 @@ namespace IronyModManager.Tests.ViewModels.Controls
     /// </summary>
     public class CollectionModsControlViewModelTests
     {
+        [Theory]
+        [InlineData(SortOrder.Asc, false)]
+        [InlineData(SortOrder.Desc, false)]
+        [InlineData(SortOrder.None, false)]
+        [InlineData(SortOrder.Asc, true)]
+        [InlineData(SortOrder.Desc, true)]
+        [InlineData(SortOrder.None, true)]
+        public void Sort_recognition_should_preserve_valid_order_with_an_invalid_non_member(SortOrder expected, bool includeInvalid)
+        {
+            DISetup.SetupContainer();
+            var first = CreateMod("mod/a.mod", name: "A");
+            var second = CreateMod("mod/b.mod", name: "B");
+            var third = CreateMod("mod/c.mod", name: "C");
+            first.IsValid = second.IsValid = third.IsValid = true;
+            var invalid = CreateMod("mod/invalid.mod");
+            invalid.FullPath = null;
+            invalid.IsValid = false;
+            IMod[] ordered = expected == SortOrder.Asc ? [first, second, third] :
+                expected == SortOrder.Desc ? [third, second, first] : [second, first, third];
+            var collection = new ModCollection { Mods = ordered.Select(p => p.DescriptorFile).ToList() };
+            var view = CreateViewModel(Mock.Of<IModService>(), new Mock<IModCollectionService>(),
+                new Mock<IModPatchCollectionService>(), new Mock<IGameService>());
+            view.InitializeState(null, collection, includeInvalid ? [invalid, first, second, third] : [first, second, third]);
+
+            view.RecognizeSortOrderForTest(collection);
+
+            view.ModNameSortOrder.SortOrder.Should().Be(expected);
+            collection.Mods.Should().Equal(ordered.Select(p => p.DescriptorFile));
+        }
+
+        [Theory]
+        [InlineData(false, false)]
+        [InlineData(true, false)]
+        [InlineData(false, true)]
+        public void Sort_path_fallback_should_skip_null_paths_without_changing_invalid_members(bool invalidIsMember, bool nullSavedPath)
+        {
+            DISetup.SetupContainer();
+            var invalid = CreateMod("mod/invalid.mod");
+            invalid.FullPath = null;
+            invalid.IsValid = false;
+            var valid = CreateMod("mod/valid.mod", "valid-path", "Valid");
+            valid.IsValid = true;
+            var collection = new ModCollection
+            {
+                Mods = invalidIsMember ? [invalid.DescriptorFile, "mod/old.mod"] : ["mod/old.mod"],
+                ModPaths = invalidIsMember ? [null, "VALID-PATH"] : [nullSavedPath ? null : "VALID-PATH"]
+            };
+            var view = CreateViewModel(Mock.Of<IModService>(), new Mock<IModCollectionService>(),
+                new Mock<IModPatchCollectionService>(), new Mock<IGameService>());
+            view.InitializeState(null, collection, [invalid, valid]);
+            view.ModNameSortOrder.SetSortOrder(SortOrder.Desc);
+
+            view.RecognizeSortOrderForTest(collection);
+
+            // A resolved fallback changes the recognition to None; no match retains the previous order.
+            view.ModNameSortOrder.SortOrder.Should().Be(nullSavedPath ? SortOrder.Desc : SortOrder.None);
+            view.Mods.Should().Equal(invalid, valid);
+            invalid.FullPath.Should().BeNull();
+            invalid.IsValid.Should().BeFalse();
+            invalid.IsVirtual.Should().BeFalse();
+            collection.Mods.Should().Equal(invalidIsMember ? [invalid.DescriptorFile, "mod/old.mod"] : ["mod/old.mod"]);
+        }
+
+        [Theory]
+        [InlineData(false, false)]
+        [InlineData(true, false)]
+        [InlineData(true, true)]
+        public async Task Import_path_fallback_should_tolerate_invalid_non_members(bool merged, bool nullSavedPath)
+        {
+            DISetup.SetupContainer();
+            var game = new Game { Type = "game" };
+            var invalid = CreateMod("mod/invalid.mod", name: "Valid");
+            invalid.FullPath = null;
+            invalid.IsValid = false;
+            var valid = CreateMod("mod/valid.mod", "valid-path", "Valid");
+            valid.IsValid = true;
+            var collection = new ModCollection
+            {
+                Name = "Imported", Game = game.Type, Mods = ["mod/old.mod"],
+                ModPaths = [nullSavedPath ? null : "VALID-PATH"], ModNames = ["Valid"],
+                MergedFolderName = merged ? "merged" : null
+            };
+            var service = new Mock<IModService>();
+            service.Setup(p => p.GetAvailableModsAsync(game)).ReturnsAsync([invalid, valid]);
+            var collections = new Mock<IModCollectionService>();
+            collections.Setup(p => p.ImportParadoxAsync()).ReturnsAsync(collection);
+            collections.Setup(p => p.Save(collection)).Returns(true);
+            var games = new Mock<IGameService>();
+            games.Setup(p => p.Get()).Returns([game]);
+            var view = CreateViewModel(service.Object, collections, new Mock<IModPatchCollectionService>(), games,
+                reconciliation: new CollectionModReconciliationCoordinator(service.Object, Mock.Of<IGameStateSafetyService>()),
+                localizationText: string.Empty);
+
+            await view.ImportCollectionForTestAsync();
+
+            collection.Mods.Should().Equal(merged && !nullSavedPath ? valid.DescriptorFile : "mod/old.mod");
+            invalid.IsValid.Should().BeFalse();
+            invalid.IsVirtual.Should().BeFalse();
+        }
+
         [Fact]
         public void Conflict_solver_input_should_preserve_all_real_members()
         {
@@ -902,7 +1003,7 @@ namespace IronyModManager.Tests.ViewModels.Controls
         private static TestCollectionModsControlViewModel CreateViewModel(IModService modService,
             Mock<IModCollectionService> collectionService, Mock<IModPatchCollectionService> patchService,
             Mock<IGameService> gameService, IEnumerable<IMod> previousMods = null,
-            CollectionModReconciliationCoordinator reconciliation = null)
+            CollectionModReconciliationCoordinator reconciliation = null, string localizationText = "{State}")
         {
             var search = new SearchModsControlViewModel();
             var sort = new SortOrderControlViewModel(Mock.Of<ILocalizationManager>());
@@ -937,7 +1038,7 @@ namespace IronyModManager.Tests.ViewModels.Controls
                 new object[] { null, null, null, null, null, null, null, null, null, null, null, null });
             var interaction = new Mock<CollectionModsInteraction>(MockBehavior.Loose,
                 new object[] { null, null, null, null, null });
-            interaction.Setup(p => p.GetText(It.IsAny<string>())).Returns("{State}");
+            interaction.Setup(p => p.GetText(It.IsAny<string>())).Returns(localizationText);
 
             return new TestCollectionModsControlViewModel(null, patch.Object, new HashReportControlViewModel(null),
                 collectionService.Object, patchService.Object, modService, gameService.Object,
@@ -1013,6 +1114,10 @@ namespace IronyModManager.Tests.ViewModels.Controls
 
         private sealed class TestCollectionModsControlViewModel : CollectionModsControlViewModel
         {
+            public void RecognizeSortOrderForTest(IModCollection collection) => RecognizeSortOrder(collection);
+
+            public Task ImportCollectionForTestAsync() => ImportCollectionAsync(null, ImportProviderType.Paradox);
+
             public TestCollectionModsControlViewModel(IReportExportService reportExportService, PatchModControlViewModel patchMod,
                 HashReportControlViewModel hashReportView, IModCollectionService modCollectionService,
                 IModPatchCollectionService modPatchCollectionService, IModService modService, IGameService gameService,
