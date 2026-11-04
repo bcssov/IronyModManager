@@ -7,6 +7,8 @@ using System;
 using System.Threading.Tasks;
 using AwesomeAssertions;
 using IronyModManager.Models;
+using IronyModManager.Implementation.Actions;
+using IronyModManager.Shared;
 using IronyModManager.Models.Common;
 using IronyModManager.Services.Common;
 using IronyModManager.Tests.Common;
@@ -18,6 +20,37 @@ namespace IronyModManager.Tests.ViewModels.Controls
 {
     public class InstalledModsControlViewModelTests
     {
+        [Fact]
+        public async Task Invalid_null_path_mod_should_reach_existing_warning_and_remain_when_deletion_is_declined()
+        {
+            DISetup.SetupContainer();
+            var game = new Game { Type = "invalid-descriptor" };
+            var invalid = new Mod { Name = "Invalid", DescriptorFile = "mod/invalid.mod", FullPath = null, IsValid = false };
+            var valid = new Mod { Name = "Valid", DescriptorFile = "mod/valid.mod", FullPath = "valid-path", IsValid = true };
+            var service = new Mock<IModService>();
+            service.Setup(p => p.RefreshInstalledModsAsync(game)).ReturnsAsync(
+                new InstalledModsResult { IsAuthoritative = true, Mods = [invalid, valid] });
+            service.Setup(p => p.FilterMods(It.IsAny<IEnumerable<IMod>>(), It.IsAny<string>()))
+                .Returns((IEnumerable<IMod> mods, string _) => mods);
+            var interaction = new Mock<ModControlInteraction>(MockBehavior.Loose, new object[] { null, null, null, null });
+            interaction.Setup(p => p.GetText(LocalizationResources.Installed_Mods.InvalidMods.Title)).Returns("Invalid Mods Detected");
+            interaction.Setup(p => p.GetText(LocalizationResources.Installed_Mods.InvalidMods.Message)).Returns("{Mods}");
+            interaction.Setup(p => p.PromptAsync("Invalid Mods Detected", "Invalid Mods Detected", "Invalid (mod/invalid.mod)",
+                NotificationType.Warning, PromptType.YesNo)).ReturnsAsync(false);
+            var view = CreateViewModel(service, interaction: interaction);
+
+            (await view.BindForTestAsync(game)).Should().BeTrue();
+
+            interaction.Verify(p => p.PromptAsync("Invalid Mods Detected", "Invalid Mods Detected", "Invalid (mod/invalid.mod)",
+                NotificationType.Warning, PromptType.YesNo), Times.Once);
+            service.Verify(p => p.DeleteDescriptorsAsync(It.IsAny<IEnumerable<IMod>>()), Times.Never);
+            view.Mods.Should().Equal(invalid, valid);
+            view.AllMods.Should().Contain(invalid).And.Contain(valid);
+            invalid.IsValid.Should().BeFalse();
+            invalid.IsVirtual.Should().BeFalse();
+            invalid.FullPath.Should().BeNull();
+        }
+
         [Fact]
         public async Task Achievement_evaluation_should_ignore_virtual_mods()
         {
@@ -245,7 +278,8 @@ namespace IronyModManager.Tests.ViewModels.Controls
         }
 
         private static TestInstalledModsControlViewModel CreateViewModel(Mock<IModService> modService,
-            Mock<IGameService> game = null, Mock<IGameStateSafetyService> safety = null)
+            Mock<IGameService> game = null, Mock<IGameStateSafetyService> safety = null,
+            Mock<ModControlInteraction> interaction = null)
         {
             var filter = new SearchModsControlViewModel();
             var presentation = new Mock<InstalledModsPresentationCoordinator>(MockBehavior.Loose,
@@ -254,7 +288,7 @@ namespace IronyModManager.Tests.ViewModels.Controls
             var events = new Mock<InstalledModsEventCoordinator>(MockBehavior.Loose, new object[] { null });
             var factory = new Mock<IInstalledModsCoordinatorFactory>();
             factory.Setup(value => value.Create()).Returns(new InstalledModsCoordinators(presentation.Object, events.Object));
-            var interaction = new Mock<ModControlInteraction>(MockBehavior.Loose,
+            interaction ??= new Mock<ModControlInteraction>(MockBehavior.Loose,
                 new object[] { null, null, null, null });
 
             return new TestInstalledModsControlViewModel(game?.Object ?? Mock.Of<IGameService>(), modService.Object,

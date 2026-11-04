@@ -57,6 +57,35 @@ namespace IronyModManager.Services.Tests
     {
         private const int CloudFileProviderNotRunningHResult = unchecked((int)0x8007016A);
 
+        [Fact]
+        public async Task Unresolved_relative_descriptor_should_remain_an_invalid_real_collection_member()
+        {
+            var missingPath = Path.Combine("missing-" + Guid.NewGuid().ToString("N"), "content");
+            var mod = new Mod { FileName = missingPath, Name = "Invalid" };
+            var reader = new Mock<IReader>();
+            reader.Setup(p => p.Read(It.IsAny<string>(), It.IsAny<IEnumerable<string>>(), It.IsAny<bool>()))
+                .Returns([new FileInfo { FileName = "invalid.mod", Content = ["path=\"" + missingPath + "\""] }]);
+            var parser = new Mock<IModParser>();
+            parser.Setup(p => p.Parse(It.IsAny<IEnumerable<string>>(), It.IsAny<DescriptorModType>(), It.IsAny<ModParserArgs>()))
+                .Returns(new ModObject { FileName = missingPath });
+            var mapper = new Mock<IMapper>();
+            mapper.Setup(p => p.Map<IMod>(It.IsAny<IModObject>())).Returns(mod);
+            var service = GetService(new Mock<IStorageProvider>(), parser, reader, mapper, new Mock<IModWriter>(), new Mock<IGameService>());
+            var game = new Game { Type = "invalid-relative", UserDirectory = "user", CustomModDirectory = "custom", WorkshopDirectory = ["workshop"] };
+
+            var discovered = (await service.GetInstalledModsAsync(game)).ToList();
+
+            discovered.Should().ContainSingle().Which.Should().BeSameAs(mod);
+            mod.FullPath.Should().BeNull();
+            mod.IsValid.Should().BeFalse();
+            mod.IsVirtual.Should().BeFalse();
+            var collection = new ModCollection { Mods = [mod.DescriptorFile], ModPaths = [null] };
+            service.ResolveCollectionMods(discovered, collection).Should().ContainSingle().Which.Should().BeSameAs(mod);
+            mod.IsValid.Should().BeFalse();
+            mod.IsVirtual.Should().BeFalse();
+            collection.Mods.Should().Equal(mod.DescriptorFile);
+        }
+
         /// <summary>
         /// Gets the service.
         /// </summary>
