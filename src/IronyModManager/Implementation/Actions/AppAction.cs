@@ -149,6 +149,14 @@ namespace IronyModManager.Implementation.Actions
         /// <returns>Task&lt;System.Boolean&gt;.</returns>
         public Task<bool> RunGameAsync(bool createSteamFile, string path, string steamRoot, string steamProtonVersion, int appId, string args = Shared.Constants.EmptyParam)
         {
+            return RunGameAsync(createSteamFile, path, steamRoot, steamProtonVersion, appId, null, args, null);
+        }
+
+        /// <summary>
+        /// Preserves the execution boundary's missing-game classification for the notification boundary.
+        /// </summary>
+        public Task<bool> RunGameAsync(bool createSteamFile, string path, string steamRoot, string steamProtonVersion, int appId, IEnumerable<string> steamLibraryRoots, string args, Action executableNotFound)
+        {
             try
             {
                 TryCreateSteamAppIdFile(path, appId);
@@ -156,13 +164,20 @@ namespace IronyModManager.Implementation.Actions
                 // Proton test
                 if (path.EndsWith(".exe", StringComparison.OrdinalIgnoreCase) && RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
                 {
-                    ProcessRunner.RunProtonProcess(path, steamRoot, steamProtonVersion, appId, args);
+                    ProcessRunner.RunProtonProcess(path, steamRoot, steamProtonVersion, appId, steamLibraryRoots, args);
                     return Task.FromResult(true);
                 }
                 else
                 {
-                    return RunAsync(path, args);
+                    ProcessRunner.RunExternalProcess(path, args);
+                    return Task.FromResult(true);
                 }
+            }
+            catch (FileNotFoundException ex) when (string.Equals(ex.FileName, path, StringComparison.Ordinal))
+            {
+                logger.Error(ex);
+                executableNotFound?.Invoke();
+                return Task.FromResult(false);
             }
             catch (Exception ex)
             {

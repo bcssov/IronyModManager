@@ -41,12 +41,12 @@ namespace IronyModManager.Services.Registrations
         /// <summary>
         /// The hoi4 cache version
         /// </summary>
-        private const int HOI4CacheVersion = 23;
+        private const int HOI4CacheVersion = 24;
 
         /// <summary>
-        /// The stellaris cache version
+        /// The stellaris cache version. Epoch 36 excludes partial files rejected during inline expansion.
         /// </summary>
-        private const int StellarisCacheVersion = 34;
+        private const int StellarisCacheVersion = 36;
 
         /// <summary>
         /// The path resolver
@@ -463,6 +463,7 @@ namespace IronyModManager.Services.Registrations
         {
             baseUserDir = defaultUserDir;
             gameType.LinuxProtonVersion = SteamDirectory.GetProtonVersion(gameType.SteamAppId);
+            gameType.SteamLibraryRoots = SteamDirectory.GetSteamLibraryRoots(SteamDirectory.GetSteamRootPath()).ToList();
             if (!string.IsNullOrWhiteSpace(gameType.LinuxProtonVersion))
             {
                 var protonUserDir = pathResolver.GetProtonParadoxUserDir(gameType.BaseSteamGameDirectory, gameType.SteamAppId);

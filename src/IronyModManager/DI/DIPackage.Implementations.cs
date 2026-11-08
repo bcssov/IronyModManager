@@ -50,7 +50,7 @@ namespace IronyModManager.DI
         private void RegisterImplementations(Container container)
         {
             container.Register<IViewResolver, ViewResolver>();
-            container.Register<ILogger, Logger>();
+            container.Register<ILogger, Logger>(SimpleInjector.Lifestyle.Singleton);
             container.Register<IAppAction, AppAction>();
             container.Register<INotificationAction, NotificationAction>();
             container.Register<IFileDialogAction, FileDialogAction>();

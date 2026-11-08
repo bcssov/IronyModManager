@@ -1,0 +1,44 @@
+
+action_exodus_jump_insight_2 = {
+	sound = event_administrative_work
+	unlock_threshold = 2
+	usages = 1
+
+	activation_cost = {
+		cost = {
+			astral_threads = 1500
+		}
+	}
+
+	picture = GFX_astral_action_quantum_catapult_insight
+
+	potential = {
+		is_nomadic = yes
+		OR = {
+			has_technology = tech_arkship_exodus_jump
+			has_tech_option = tech_arkship_exodus_jump
+		}
+	}
+
+	allow = {
+		custom_tooltip = {
+			fail_text = "action_exodus_jump_insight_2_requirement_tooltip"
+			any_owned_fleet = {
+				is_arkship_fleet = yes
+				starbase? = {
+					has_starbase_module = arkship_exodus_jump
+				}
+			}
+		}
+	}
+
+	effect = {
+		add_modifier = {
+			modifier = quantum_catapult_insight_2_modifier
+		}
+	}
+
+	ai_weight = {
+		weight = 1000
+	}
+}

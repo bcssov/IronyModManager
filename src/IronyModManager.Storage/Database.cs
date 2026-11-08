@@ -42,6 +42,7 @@ namespace IronyModManager.Storage
             Themes = [];
             Games = [];
             ModCollection = [];
+            ModAliases = [];
             GameSettings = [];
             NotificationPosition = [];
         }
@@ -76,6 +77,10 @@ namespace IronyModManager.Storage
         /// <value>The mod collection.</value>
         [Trackable]
         public IEnumerable<IModCollection> ModCollection { get; set; }
+
+        /// <inheritdoc />
+        [Trackable]
+        public IEnumerable<IModAlias> ModAliases { get; set; }
 
         /// <summary>
         /// Gets or sets the notification position.

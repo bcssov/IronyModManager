@@ -79,6 +79,11 @@ namespace IronyModManager.Implementation.Actions
         /// <returns>Task&lt;System.Boolean&gt;.</returns>
         Task<bool> RunGameAsync(bool createSteamFile, string path, string steamRoot, string steamProtonVersion, int appId, string args = Shared.Constants.EmptyParam);
 
+        /// <summary>
+        /// Reports a missing configured game executable separately from other launch failures.
+        /// </summary>
+        Task<bool> RunGameAsync(bool createSteamFile, string path, string steamRoot, string steamProtonVersion, int appId, IEnumerable<string> steamLibraryRoots, string args, Action executableNotFound);
+
         #endregion Methods
     }
 }

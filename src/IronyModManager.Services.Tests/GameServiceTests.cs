@@ -57,7 +57,7 @@ namespace IronyModManager.Services.Tests
             preferencesService.Setup(p => p.Save(It.IsAny<IPreferences>())).Returns(true);
             var games = new List<IGameType>
             {
-                new GameType { Name = "game 1", UserDirectory = "user1", SteamAppId = 1, WorkshopDirectory = new List<string> { "workshop1" } },
+                new GameType { Name = "game 1", UserDirectory = "user1", SteamAppId = 1, WorkshopDirectory = new List<string> { "workshop1" }, SteamRoot = "client", SteamLibraryRoots = ["client", "library2", "library3"] },
                 new GameType
                 {
                     Name = "game 2",
@@ -68,7 +68,7 @@ namespace IronyModManager.Services.Tests
                     ExecutablePath = "exePath.exe",
                     BaseSteamGameDirectory = "exePath"
                 },
-                new GameType { Name = "game 3", UserDirectory = "user2", SteamAppId = 3 }
+                new GameType { Name = "game 3", UserDirectory = "user2", SteamAppId = 3, SteamLibraryRoots = null }
             };
             storageProvider.Setup(p => p.GetGames()).Returns(games);
             var gameSettings = new List<IGameSettings> { new GameSettings { Type = "game 1", LaunchArguments = "test", ExecutableLocation = "test.exe" } };
@@ -89,6 +89,8 @@ namespace IronyModManager.Services.Tests
             var result = service.Get();
             result.Count().Should().Be(3);
             result.GroupBy(p => p.Type).Select(p => p.First()).Count().Should().Be(3);
+            result.Single(p => p.Type == "game 2").SteamLibraryRoots.Should().BeEmpty();
+            result.Single(p => p.Type == "game 3").SteamLibraryRoots.Should().BeEmpty();
         }
 
         /// <summary>
@@ -148,6 +150,8 @@ namespace IronyModManager.Services.Tests
             result.UserDirectory.Should().Be("user1");
             result.SteamAppId.Should().Be(1);
             result.WorkshopDirectory.FirstOrDefault().Should().Be("workshop1");
+            result.SteamRoot.Should().Be("client");
+            result.SteamLibraryRoots.Should().Equal("client", "library2", "library3");
         }
 
         /// <summary>

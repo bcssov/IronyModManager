@@ -178,6 +178,11 @@ namespace IronyModManager.Models.Common
         string SteamRoot { get; set; }
 
         /// <summary>
+        /// Gets or sets the registered Steam library roots.
+        /// </summary>
+        IEnumerable<string> SteamLibraryRoots { get; set; }
+
+        /// <summary>
         /// Gets or sets the supported merge types.
         /// </summary>
         /// <value>The supported merge types.</value>

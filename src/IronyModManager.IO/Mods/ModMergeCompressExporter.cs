@@ -14,6 +14,7 @@
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using Ionic.Zip;
 using IronyModManager.IO.Common.Mods;
@@ -128,6 +129,41 @@ namespace IronyModManager.IO.Mods
                 return true;
             }
             return false;
+        }
+
+        /// <summary>
+        /// Gets existing Merge Compress archives that cannot be opened for replacement.
+        /// </summary>
+        /// <param name="archivePaths">The intended output archive paths.</param>
+        /// <returns>The unavailable archive paths.</returns>
+        public IEnumerable<string> GetUnavailableArchivePaths(IEnumerable<string> archivePaths)
+        {
+            ArgumentNullException.ThrowIfNull(archivePaths);
+            var unavailablePaths = new List<string>();
+            foreach (var path in archivePaths)
+            {
+                if (!File.Exists(path))
+                {
+                    continue;
+                }
+
+                try
+                {
+                    using var stream = new FileStream(path, FileMode.Open, FileAccess.ReadWrite, FileShare.None);
+                }
+                catch (IOException)
+                {
+                    // FileStream uses IOException as the portable boundary for sharing violations
+                    // and other filesystem failures encountered by this non-mutating replacement probe.
+                    unavailablePaths.Add(path);
+                }
+                catch (UnauthorizedAccessException)
+                {
+                    unavailablePaths.Add(path);
+                }
+            }
+
+            return unavailablePaths;
         }
 
         /// <summary>

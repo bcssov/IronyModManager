@@ -4,7 +4,7 @@
 // Created          : 02-16-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-09-2025
+// Last Modified On : 09-20-2026
 // ***********************************************************************
 // <copyright file="IIndexedDefinitions.cs" company="Mario">
 //     Mario
@@ -88,6 +88,7 @@ namespace IronyModManager.Shared.Models
         /// Gets all type keys.
         /// </summary>
         /// <returns>IEnumerable&lt;System.String&gt;.</returns>
+        // ReSharper disable once UnusedMemberInSuper.Global
         Task<IEnumerable<string>> GetAllTypeKeysAsync();
 
         /// <summary>
@@ -138,6 +139,7 @@ namespace IronyModManager.Shared.Models
         /// </summary>
         /// <param name="type">The type.</param>
         /// <returns>IEnumerable&lt;IDefinition&gt;.</returns>
+        // ReSharper disable once UnusedMemberInSuper.Global
         Task<IEnumerable<IDefinition>> GetByTypeAsync(string type);
 
         /// <summary>
@@ -213,6 +215,7 @@ namespace IronyModManager.Shared.Models
         /// </summary>
         /// <param name="definitions">The definitions.</param>
         /// <returns>Task&lt;System.Boolean&gt;.</returns>
+        // ReSharper disable once UnusedMemberInSuper.Global
         Task<bool> UpdateDefinitionsAsync(IReadOnlyCollection<IDefinition> definitions);
 
         /// <summary>

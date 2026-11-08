@@ -11,7 +11,6 @@
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
-using System.Collections.Generic;
 using System;
 using System.Reactive;
 using System.Reactive.Disposables;
@@ -31,7 +30,43 @@ namespace IronyModManager.ViewModels.Controls
     [ExcludeFromCoverage("This should be tested via functional testing.")]
     public class SearchModsControlViewModel : BaseViewModel
     {
+        private readonly AdvancedModFilterQueryComposer queryComposer = new AdvancedModFilterQueryComposer();
+
         #region Properties
+
+        [StaticLocalization(LocalizationResources.Filter.Advanced.Achievements)]
+        public virtual string AchievementsText { get; protected set; }
+
+        public virtual int AdvancedAchievements { get; set; }
+
+        [StaticLocalization(LocalizationResources.Filter.Advanced.Apply)]
+        public virtual string AdvancedApplyText { get; protected set; }
+
+        public virtual ReactiveCommand<Unit, Unit> AdvancedApplyCommand { get; protected set; }
+
+        [StaticLocalization(LocalizationResources.Filter.Advanced.Cancel)]
+        public virtual string AdvancedCancelText { get; protected set; }
+
+        public virtual ReactiveCommand<Unit, Unit> AdvancedCancelCommand { get; protected set; }
+
+        public virtual ReactiveCommand<Unit, Unit> AdvancedClearCommand { get; protected set; }
+
+        [StaticLocalization(LocalizationResources.Filter.Advanced.CustomQuery)]
+        public virtual string AdvancedCustomQueryText { get; protected set; }
+
+        [StaticLocalization(LocalizationResources.Filter.Advanced.Title)]
+        public virtual string AdvancedFilterText { get; protected set; }
+
+        public virtual string AdvancedPlainText { get; set; }
+
+        public virtual int AdvancedSelected { get; set; }
+
+        public virtual string AdvancedVersion { get; set; }
+
+        public virtual int AdvancedVersionMode { get; set; }
+
+        [StaticLocalization(LocalizationResources.Filter.Advanced.Any)]
+        public virtual string AnyText { get; protected set; }
 
         /// <summary>
         /// Gets or sets the clear text.
@@ -45,6 +80,99 @@ namespace IronyModManager.ViewModels.Controls
         /// </summary>
         /// <value>The clear text command.</value>
         public virtual ReactiveCommand<Unit, Unit> ClearTextCommand { get; protected set; }
+
+        [StaticLocalization(LocalizationResources.Filter.Advanced.Compatible)]
+        public virtual string CompatibleText { get; protected set; }
+
+        [StaticLocalization(LocalizationResources.Filter.Advanced.Exclude)]
+        public virtual string ExcludeText { get; protected set; }
+
+        [StaticLocalization(LocalizationResources.Filter.Advanced.Include)]
+        public virtual string IncludeText { get; protected set; }
+
+        public virtual bool IsAdvancedFilterOpen { get; set; }
+
+        public virtual bool IsCustomAdvancedQuery { get; set; }
+
+        public virtual bool LocalSource { get; set; }
+
+        [StaticLocalization(LocalizationResources.Filter.Advanced.Local)]
+        public virtual string LocalText { get; protected set; }
+
+        [StaticLocalization(LocalizationResources.Filter.Advanced.Name)]
+        public virtual string NameText { get; protected set; }
+
+        [StaticLocalization(LocalizationResources.Filter.Advanced.No)]
+        public virtual string NoText { get; protected set; }
+
+        [StaticLocalization(LocalizationResources.Filter.Advanced.NotCompatible)]
+        public virtual string NotCompatibleText { get; protected set; }
+
+        public virtual ReactiveCommand<Unit, Unit> OpenAdvancedFilterCommand { get; protected set; }
+
+        public virtual bool ParadoxSource { get; set; }
+
+        [StaticLocalization(LocalizationResources.Filter.Advanced.Paradox)]
+        public virtual string ParadoxText { get; protected set; }
+
+        [StaticLocalization(LocalizationResources.Filter.Advanced.Reset)]
+        public virtual string ResetText { get; protected set; }
+
+        [StaticLocalization(LocalizationResources.Filter.Advanced.Selected)]
+        public virtual string SelectedText { get; protected set; }
+
+        [StaticLocalization(LocalizationResources.Filter.Advanced.Source)]
+        public virtual string SourceText { get; protected set; }
+
+        public virtual bool SteamSource { get; set; }
+
+        [StaticLocalization(LocalizationResources.Filter.Advanced.Steam)]
+        public virtual string SteamText { get; protected set; }
+
+        [StaticLocalization(LocalizationResources.Filter.Advanced.Version)]
+        public virtual string VersionText { get; protected set; }
+
+        [StaticLocalization(LocalizationResources.Filter.Advanced.Yes)]
+        public virtual string YesText { get; protected set; }
+
+        [StaticLocalization(LocalizationResources.FilterCommands.Achievements)]
+        public virtual string AchievementsCommand { get; protected set; }
+
+        [StaticLocalization(LocalizationResources.FilterCommands.Local)]
+        public virtual string LocalCommand { get; protected set; }
+
+        [StaticLocalization(LocalizationResources.FilterCommands.No)]
+        public virtual string NoCommand { get; protected set; }
+
+        [StaticLocalization(LocalizationResources.FilterOperators.Negate)]
+        public virtual string NegateOperator { get; protected set; }
+
+        [StaticLocalization(LocalizationResources.FilterOperators.OrStatementSeparator)]
+        public virtual string OrSeparator { get; protected set; }
+
+        [StaticLocalization(LocalizationResources.FilterCommands.Paradox)]
+        public virtual string ParadoxCommand { get; protected set; }
+
+        [StaticLocalization(LocalizationResources.FilterCommands.Selected)]
+        public virtual string SelectedCommand { get; protected set; }
+
+        [StaticLocalization(LocalizationResources.FilterCommands.Source)]
+        public virtual string SourceCommand { get; protected set; }
+
+        [StaticLocalization(LocalizationResources.FilterOperators.StatementSeparator)]
+        public virtual string StatementSeparator { get; protected set; }
+
+        [StaticLocalization(LocalizationResources.FilterCommands.Steam)]
+        public virtual string SteamCommand { get; protected set; }
+
+        [StaticLocalization(LocalizationResources.FilterOperators.ValueSeparator)]
+        public virtual string ValueSeparator { get; protected set; }
+
+        [StaticLocalization(LocalizationResources.FilterCommands.Version)]
+        public virtual string VersionCommand { get; protected set; }
+
+        [StaticLocalization(LocalizationResources.FilterCommands.Yes)]
+        public virtual string YesCommand { get; protected set; }
 
         /// <summary>
         /// Gets or sets down arrow command.
@@ -107,6 +235,31 @@ namespace IronyModManager.ViewModels.Controls
                 Text = string.Empty;
             }).DisposeWith(disposables);
 
+            OpenAdvancedFilterCommand = ReactiveCommand.Create(() =>
+            {
+                IsCustomAdvancedQuery = !queryComposer.TryParse(Text, GetSyntax(), out var state);
+                SetAdvancedState(state);
+                IsAdvancedFilterOpen = true;
+            }).DisposeWith(disposables);
+
+            AdvancedApplyCommand = ReactiveCommand.Create(() =>
+            {
+                Text = queryComposer.Compose(GetAdvancedState(), GetSyntax());
+                IsAdvancedFilterOpen = false;
+            }).DisposeWith(disposables);
+
+            AdvancedClearCommand = ReactiveCommand.Create(() =>
+            {
+                SetAdvancedState(new AdvancedModFilterState());
+                Text = string.Empty;
+                IsAdvancedFilterOpen = false;
+            }).DisposeWith(disposables);
+
+            AdvancedCancelCommand = ReactiveCommand.Create(() =>
+            {
+                IsAdvancedFilterOpen = false;
+            }).DisposeWith(disposables);
+
             UpArrowCommand = ReactiveCommand.Create(() =>
             {
                 return new CommandResult<bool>(true, CommandState.Success);
@@ -118,6 +271,53 @@ namespace IronyModManager.ViewModels.Controls
             }, arrowEnabled).DisposeWith(disposables);
 
             base.OnActivated(disposables);
+        }
+
+        private AdvancedModFilterState GetAdvancedState()
+        {
+            return new AdvancedModFilterState
+            {
+                Achievements = (AdvancedFilterBooleanState)AdvancedAchievements,
+                Local = LocalSource,
+                Paradox = ParadoxSource,
+                PlainText = AdvancedPlainText,
+                Selected = (AdvancedFilterBooleanState)AdvancedSelected,
+                Steam = SteamSource,
+                Version = AdvancedVersion,
+                VersionExcluded = AdvancedVersionMode == 1
+            };
+        }
+
+        private AdvancedModFilterQuerySyntax GetSyntax()
+        {
+            return new AdvancedModFilterQuerySyntax
+            {
+                Achievements = AchievementsCommand,
+                Local = LocalCommand,
+                Negate = NegateOperator,
+                No = NoCommand,
+                OrSeparator = OrSeparator,
+                Paradox = ParadoxCommand,
+                Selected = SelectedCommand,
+                Source = SourceCommand,
+                StatementSeparator = StatementSeparator,
+                Steam = SteamCommand,
+                ValueSeparator = ValueSeparator,
+                Version = VersionCommand,
+                Yes = YesCommand
+            };
+        }
+
+        private void SetAdvancedState(AdvancedModFilterState state)
+        {
+            AdvancedAchievements = (int)state.Achievements;
+            AdvancedPlainText = state.PlainText;
+            AdvancedSelected = (int)state.Selected;
+            AdvancedVersion = state.Version;
+            AdvancedVersionMode = state.VersionExcluded ? 1 : 0;
+            LocalSource = state.Local;
+            ParadoxSource = state.Paradox;
+            SteamSource = state.Steam;
         }
 
         #endregion Methods

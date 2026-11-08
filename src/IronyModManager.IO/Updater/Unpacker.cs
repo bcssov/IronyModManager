@@ -17,12 +17,12 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using Ionic.Zip;
 using IronyModManager.IO.Common;
 using IronyModManager.IO.Common.MessageBus;
 using IronyModManager.IO.Common.Updater;
 using IronyModManager.Shared;
 using IronyModManager.Shared.MessageBus;
-using SharpCompress.Archives;
 
 namespace IronyModManager.IO.Updater
 {
@@ -80,15 +80,14 @@ namespace IronyModManager.IO.Updater
 
             // Throwing exception because of this? While previously it would automatically be created
             Directory.CreateDirectory(extractPath);
-            await using var fileStream = File.OpenRead(path);
-            using var reader = ArchiveFactory.Open(fileStream);
-            var all = reader.Entries.Where(entry => !entry.IsDirectory);
-            double total = all.Count();
+            using var zip = ZipFile.Read(path);
+            var all = zip.Where(entry => !entry.IsDirectory).ToList();
+            double total = all.Count;
             double processed = 0;
             var lastPercentage = 0;
             foreach (var entry in all)
             {
-                var relativePath = ZipExtractionOpts.SanitizeArchivePath(entry.Key);
+                var relativePath = ZipExtractionOpts.SanitizeArchivePath(entry.FileName);
                 var destinationFile = Path.Combine(extractPath, relativePath);
 
                 var parentDirectory = Path.GetDirectoryName(destinationFile);
@@ -97,7 +96,7 @@ namespace IronyModManager.IO.Updater
                     Directory.CreateDirectory(parentDirectory);
                 }
 
-                await entry.WriteToFileAsync(destinationFile, ZipExtractionOpts.GetExtractionOptions());
+                ZipExtractionOpts.ExtractEntryToFile(entry, destinationFile);
 
                 processed++;
 

@@ -21,14 +21,17 @@ using Avalonia.Controls;
 using Avalonia.LogicalTree;
 using Avalonia.Markup.Xaml;
 using Avalonia.Threading;
+using Avalonia.VisualTree;
 using IronyModManager.Common;
 using IronyModManager.Common.Views;
 using IronyModManager.Controls;
 using IronyModManager.DI;
 using IronyModManager.Implementation.MessageBus.Events;
+using IronyModManager.Localization;
 using IronyModManager.Models.Common;
 using IronyModManager.Shared;
 using IronyModManager.ViewModels.Controls;
+using IronyModManager.Views;
 using ReactiveUI;
 
 namespace IronyModManager.Views.Controls
@@ -82,7 +85,12 @@ namespace IronyModManager.Views.Controls
         /// <returns>A Task representing the asynchronous operation.</returns>
         protected virtual async Task FocusListBoxItemAsync(IMod mod, bool scrollToSelected)
         {
+            var members = ViewModel?.SelectedMods;
             await Task.Delay(100);
+            if (!ReferenceEquals(members, ViewModel?.SelectedMods) || members?.Contains(mod) != true)
+            {
+                return;
+            }
             var listboxItems = modList.GetLogicalChildren().Cast<ListBoxItem>();
             if (mod != null)
             {
@@ -239,7 +247,7 @@ namespace IronyModManager.Views.Controls
                     var mods = visibleItems.Select(p => p.Item).OfType<IMod>().ToList();
                     if (mods.Count != 0)
                     {
-                        mods = mods.Where(p => p.Files == null || !p.Files.Any() || p.AchievementStatus == AchievementStatus.NotEvaluated).ToList();
+                        mods = mods.Where(p => !p.IsVirtual && (p.Files == null || !p.Files.Any() || p.AchievementStatus == AchievementStatus.NotEvaluated)).ToList();
                         if (mods.Count != 0)
                         {
                             Task.Run(() => mbus.Publish(new EvalModAchievementsCompatibilityEvent(mods)));
@@ -313,6 +321,13 @@ namespace IronyModManager.Views.Controls
                 new() { Header = "-" }
             };
             var counterOffset = 5;
+            if (ViewModel.ContextMenuMod?.IsVirtual == true)
+            {
+                menuItems.Add(new MenuItem { Header = ViewModel.RemoveFromCollection, Command = ViewModel.RemoveFromCollectionCommand });
+                menuItems.Add(new MenuItem { Header = "-" });
+                counterOffset += 2;
+            }
+
             var redoAvailable = ViewModel.IsRedoAvailable();
             var undoAvailable = ViewModel.IsUndoAvailable();
             if (redoAvailable || undoAvailable)
@@ -377,21 +392,76 @@ namespace IronyModManager.Views.Controls
 
             if (!string.IsNullOrWhiteSpace(ViewModel.ContextMenuMod?.FullPath))
             {
-                var menuItem = new MenuItem { Header = ViewModel.OpenInAssociatedApp, Command = ViewModel.OpenInAssociatedAppCommand };
-                if (menuItems.Count == counterOffset)
+                if (ViewModel.ContextMenuMod?.IsVirtual != true)
                 {
-                    menuItems.Add(menuItem);
-                }
-                else
-                {
-                    menuItems.Insert(counterOffset, menuItem);
+                    var openMenuItem = new MenuItem { Header = ViewModel.OpenInAssociatedApp, Command = ViewModel.OpenInAssociatedAppCommand };
+                    if (menuItems.Count == counterOffset)
+                    {
+                        menuItems.Add(openMenuItem);
+                    }
+                    else
+                    {
+                        menuItems.Insert(counterOffset, openMenuItem);
+                    }
                 }
 
-                menuItem = new MenuItem { Header = ViewModel.CopyModPath, Command = ViewModel.CopyModPathCommand };
-                menuItems.Add(menuItem);
+                menuItems.Add(new MenuItem { Header = ViewModel.CopyModPath, Command = ViewModel.CopyModPathCommand });
             }
 
+            AddAliasMenuItems(menuItems);
+
             return menuItems;
+        }
+
+        /// <summary>
+        /// Adds local alias actions for the selected mod without changing collection membership.
+        /// </summary>
+        /// <param name="menuItems">The menu items.</param>
+        private void AddAliasMenuItems(List<MenuItem> menuItems)
+        {
+            if (ViewModel?.ContextMenuMod == null)
+            {
+                return;
+            }
+
+            var localization = DIResolver.Get<ILocalizationManager>();
+            menuItems.Add(new MenuItem { Header = "-" });
+            menuItems.Add(new MenuItem
+            {
+                Header = localization.GetResource(string.IsNullOrWhiteSpace(ViewModel.ContextMenuMod.NameOverride)
+                    ? LocalizationResources.Mod_Alias.Set : LocalizationResources.Mod_Alias.Edit),
+                Command = ReactiveUI.ReactiveCommand.CreateFromTask(ShowAliasDialogAsync)
+            });
+            if (!string.IsNullOrWhiteSpace(ViewModel.ContextMenuMod.NameOverride))
+            {
+                menuItems.Add(new MenuItem
+                {
+                    Header = localization.GetResource(LocalizationResources.Mod_Alias.Clear),
+                    Command = ReactiveUI.ReactiveCommand.Create(() => ViewModel.SetContextMenuModAlias(null))
+                });
+            }
+        }
+
+        /// <summary>
+        /// Shows the normal single-mod alias editor.
+        /// </summary>
+        /// <returns>A task representing the dialog interaction.</returns>
+        private async Task ShowAliasDialogAsync()
+        {
+            if (ViewModel?.ContextMenuMod == null)
+            {
+                return;
+            }
+
+            var localization = DIResolver.Get<ILocalizationManager>();
+            var mod = ViewModel.ContextMenuMod;
+            var dialog = new ModAliasDialog(localization.GetResource(LocalizationResources.Mod_Alias.Title),
+                localization.GetResource(LocalizationResources.Mod_Alias.OriginalName), localization.GetResource(LocalizationResources.Mod_Alias.Alias),
+                localization.GetResource(LocalizationResources.Mod_Alias.Save), localization.GetResource(LocalizationResources.Mod_Alias.Cancel), mod.Name, mod.NameOverride);
+            if (await dialog.ShowDialog<bool>(this.GetVisualRoot() as Window))
+            {
+                ViewModel.SetContextMenuModAlias(dialog.Alias);
+            }
         }
 
         /// <summary>

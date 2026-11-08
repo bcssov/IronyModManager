@@ -34,8 +34,6 @@ using IronyModManager.Shared;
 using IronyModManager.Shared.Configuration;
 using IronyModManager.Shared.MessageBus;
 using Newtonsoft.Json;
-using SharpCompress.Archives;
-using SharpCompress.Readers;
 
 namespace IronyModManager.IO.Mods
 {
@@ -487,149 +485,54 @@ namespace IronyModManager.IO.Mods
             }
 
             var result = false;
-
-            int getTotalFileCount()
+            using var zip = ZipFile.Read(parameters.File);
+            var entries = zip.Where(entry => !entry.IsDirectory).ToList();
+            double total = !importInstance ? entries.Count : 1;
+            double processed = 0;
+            double previousProgress = 0;
+            foreach (var entry in entries)
             {
-                var count = 0;
-                using var fileStream = File.OpenRead(parameters.File);
-                using var reader = ReaderFactory.Open(fileStream);
-                while (reader.MoveToNextEntry())
+                var entryKey = ZipExtractionOpts.SanitizeArchivePath(entry.FileName);
+                var relativePath = entryKey.StandardizeDirectorySeparator().Trim(Path.DirectorySeparatorChar);
+                if (entryKey.Equals(Common.Constants.ExportedModContentId, StringComparison.OrdinalIgnoreCase))
                 {
-                    if (!reader.Entry.IsDirectory)
+                    if (importInstance)
                     {
-                        count++;
+                        using var entryStream = entry.OpenReader();
+                        using var memoryStream = new MemoryStream();
+                        entryStream.CopyTo(memoryStream);
+                        memoryStream.Seek(0, SeekOrigin.Begin);
+                        using var streamReader = new StreamReader(memoryStream, true);
+                        var text = streamReader.ReadToEnd();
+                        streamReader.Close();
+                        var model = JsonDISerializer.Deserialize<IModCollection>(text);
+                        mapper.Map(model, importResult);
+                        importResult!.ModNames = model.ModNames;
+                        importResult.Descriptors = model.Mods;
+                        importResult.ModIds = model.ModIds;
+                        result = true;
+                        break;
                     }
                 }
-
-                fileStream.Close();
-                return count;
-            }
-
-            void parseUsingReaderFactory()
-            {
-                double total = getTotalFileCount();
-                using var fileStream = File.OpenRead(parameters.File);
-                using var reader = ReaderFactory.Open(fileStream);
-                double processed = 0;
-                double previousProgress = 0;
-                while (reader.MoveToNextEntry())
+                else if (!importInstance)
                 {
-                    if (!reader.Entry.IsDirectory)
+                    var exportFileName = Path.Combine(relativePath.StartsWith(Common.Constants.ModExportPath + Path.DirectorySeparatorChar) ? parameters.ExportModDirectory : parameters.ModDirectory,
+                        relativePath.Replace(Common.Constants.ModExportPath + Path.DirectorySeparatorChar, string.Empty));
+                    if (!Directory.Exists(Path.GetDirectoryName(exportFileName)))
                     {
-                        var entryKey = ZipExtractionOpts.SanitizeArchivePath(reader.Entry.Key);
-                        var relativePath = entryKey.StandardizeDirectorySeparator().Trim(Path.DirectorySeparatorChar);
-                        if (entryKey.Equals(Common.Constants.ExportedModContentId, StringComparison.OrdinalIgnoreCase))
-                        {
-                            if (importInstance)
-                            {
-                                using var entryStream = reader.OpenEntryStream();
-                                using var memoryStream = new MemoryStream();
-                                entryStream.CopyTo(memoryStream);
-                                memoryStream.Seek(0, SeekOrigin.Begin);
-                                using var streamReader = new StreamReader(memoryStream, true);
-                                var text = streamReader.ReadToEnd();
-                                streamReader.Close();
-                                var model = JsonDISerializer.Deserialize<IModCollection>(text);
-                                mapper.Map(model, importResult);
-                                importResult!.ModNames = model.ModNames;
-                                importResult.Descriptors = model.Mods;
-                                importResult.ModIds = model.ModIds;
-                                result = true;
-                                break;
-                            }
-                        }
-                        else
-                        {
-                            if (!importInstance)
-                            {
-                                var exportFileName = Path.Combine(relativePath.StartsWith(Common.Constants.ModExportPath + Path.DirectorySeparatorChar) ? parameters.ExportModDirectory : parameters.ModDirectory,
-                                    relativePath.Replace(Common.Constants.ModExportPath + Path.DirectorySeparatorChar, string.Empty));
-                                if (!Directory.Exists(Path.GetDirectoryName(exportFileName)))
-                                {
-                                    Directory.CreateDirectory(Path.GetDirectoryName(exportFileName)!);
-                                }
-
-                                reader.WriteEntryToFile(exportFileName, ZipExtractionOpts.GetExtractionOptions());
-                            }
-                        }
-
-                        processed++;
-                        var perc = GetProgressPercentage(total, processed, 100);
-                        if (perc.IsNotNearlyEqual(previousProgress))
-                        {
-                            messageBus.Publish(new ModExportProgressEvent(perc));
-                            previousProgress = perc;
-                        }
+                        Directory.CreateDirectory(Path.GetDirectoryName(exportFileName)!);
                     }
-                }
-            }
 
-            void parseUsingArchiveFactory()
-            {
-                using var fileStream = File.OpenRead(parameters.File);
-                using var reader = ArchiveFactory.Open(fileStream);
-                var entries = reader.Entries.Where(entry => !entry.IsDirectory);
-                double total = !importInstance ? entries.Count() : 1;
-                double processed = 0;
-                double previousProgress = 0;
-                foreach (var entry in entries)
+                    ZipExtractionOpts.ExtractEntryToFile(entry, exportFileName);
+                }
+
+                processed++;
+                var perc = GetProgressPercentage(total, processed, 100);
+                if (perc.IsNotNearlyEqual(previousProgress))
                 {
-                    var entryKey = ZipExtractionOpts.SanitizeArchivePath(entry.Key);
-                    var relativePath = entryKey.StandardizeDirectorySeparator().Trim(Path.DirectorySeparatorChar);
-                    if (entryKey.Equals(Common.Constants.ExportedModContentId, StringComparison.OrdinalIgnoreCase))
-                    {
-                        if (importInstance)
-                        {
-                            using var entryStream = entry.OpenEntryStream();
-                            using var memoryStream = new MemoryStream();
-                            entryStream.CopyTo(memoryStream);
-                            memoryStream.Seek(0, SeekOrigin.Begin);
-                            using var streamReader = new StreamReader(memoryStream, true);
-                            var text = streamReader.ReadToEnd();
-                            streamReader.Close();
-                            var model = JsonDISerializer.Deserialize<IModCollection>(text);
-                            mapper.Map(model, importResult);
-                            importResult!.ModNames = model.ModNames;
-                            importResult.Descriptors = model.Mods;
-                            importResult.ModIds = model.ModIds;
-                            result = true;
-                            break;
-                        }
-                    }
-                    else
-                    {
-                        if (!importInstance)
-                        {
-                            var exportFileName = Path.Combine(relativePath.StartsWith(Common.Constants.ModExportPath + Path.DirectorySeparatorChar) ? parameters.ExportModDirectory : parameters.ModDirectory,
-                                relativePath.Replace(Common.Constants.ModExportPath + Path.DirectorySeparatorChar, string.Empty));
-                            if (!Directory.Exists(Path.GetDirectoryName(exportFileName)))
-                            {
-                                Directory.CreateDirectory(Path.GetDirectoryName(exportFileName)!);
-                            }
-
-                            entry.WriteToFile(exportFileName, ZipExtractionOpts.GetExtractionOptions());
-                        }
-                    }
-
-                    processed++;
-                    var perc = GetProgressPercentage(total, processed, 100);
-                    if (perc.IsNotNearlyEqual(previousProgress))
-                    {
-                        messageBus.Publish(new ModExportProgressEvent(perc));
-                        previousProgress = perc;
-                    }
+                    messageBus.Publish(new ModExportProgressEvent(perc));
+                    previousProgress = perc;
                 }
-            }
-
-            try
-            {
-                parseUsingArchiveFactory();
-            }
-            catch (Exception ex)
-            {
-                logger.Error(ex);
-                result = false;
-                parseUsingReaderFactory();
             }
 
             collectionImportResult = importResult;

@@ -576,6 +576,7 @@ namespace IronyModManager.Services
             game.CustomModDirectory = string.Empty;
             game.GogAppId = gameType.GogAppId;
             game.SteamRoot = gameType.SteamRoot;
+            game.SteamLibraryRoots = gameType.SteamLibraryRoots?.ToList() ?? [];
             game.LinuxProtonVersion = gameType.LinuxProtonVersion;
             var setExeLocation = true;
             var setUserDirLocation = true;

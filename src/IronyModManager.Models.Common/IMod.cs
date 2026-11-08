@@ -45,6 +45,16 @@ namespace IronyModManager.Models.Common
         string DescriptorFile { get; set; }
 
         /// <summary>
+        /// Gets the user-facing display name. This is a presentation value and does not replace <see cref="IModObject.Name"/>.
+        /// </summary>
+        string DisplayName { get; }
+
+        /// <summary>
+        /// Gets or sets the user-defined display-name override.
+        /// </summary>
+        string NameOverride { get; set; }
+
+        /// <summary>
         /// Gets or sets the files.
         /// </summary>
         /// <value>The files.</value>
@@ -79,6 +89,12 @@ namespace IronyModManager.Models.Common
         /// </summary>
         /// <value><c>true</c> if this instance is valid; otherwise, <c>false</c>.</value>
         bool IsValid { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether this is a runtime placeholder for a missing collection mod.
+        /// </summary>
+        /// <value><c>true</c> for a virtual missing-mod placeholder; otherwise, <c>false</c>.</value>
+        bool IsVirtual { get; set; }
 
         /// <summary>
         /// Gets or sets the order.

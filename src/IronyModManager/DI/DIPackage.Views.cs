@@ -56,6 +56,7 @@ namespace IronyModManager.DI
             container.Register<ModifyCollectionControlView>();
             container.Register<OptionsControlView>();
             container.Register<ConflictSolverModFilterControlView>();
+            container.Register<ConflictSolverExactModSetControlView>();
             container.Register<ConflictSolverResetConflictsControlView>();
             container.Register<ConflictSolverDBSearchControlView>();
             container.Register<ConflictSolverCustomConflictsControlView>();

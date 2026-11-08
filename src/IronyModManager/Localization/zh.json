@@ -130,6 +130,7 @@
   "Collection_Mods": {
     "Name": "模组合集",
     "Remove": "-",
+    "RemoveFromCollection": "从合集中移除",
     "Create": "+",
     "OK": "确定",
     "Cancel": "取消",
@@ -190,8 +191,8 @@
       "Message": "合集已存在并将被覆盖, 是否继续？"
     },
     "ImportNonExistingMods": {
-      "Title": "不存在的模组",
-      "Message": "无法导入下列模组，因其似乎已丢失：{NewLine}{Mods}"
+      "Title": "缺失的模组",
+      "Message": "下列模组当前未安装。其合集条目已导入，并以禁用的占位项保留：{NewLine}{Mods}"
     },
     "ImportOther": {
       "Title": "…",
@@ -230,6 +231,10 @@
         "Overlay_Gathering_Mod_Info": "正在收集模组信息……",
         "Overlay_Compressing_Files": "正在合并合集……"
       },
+      "MissingModsPrompt": {
+        "Title": "跳过不可用的模组并合并？",
+        "Message": "此合集中的部分模组不可用，将不会包含在合并结果中：{NewLine}{NewLine}{Mods}{NewLine}{NewLine}是否继续合并可用的模组？"
+      },
       "OverwritePrompt": {
         "Title": "覆盖现有合集？",
         "Message": "同名的合并模组已存在，是否覆盖？"
@@ -252,8 +257,8 @@
       }
     },
     "Prompts": {
-      "ModsMissingTitle": "模组已移除",
-      "ModsMissingMessage": "一些模组缺失，已自动从合集中移除：{NewLine}{NewLine}{Mods}"
+      "ModsMissingTitle": "模组缺失",
+      "ModsMissingMessage": "一些模组缺失。它们会以禁用的占位项保留在合集中：{NewLine}{NewLine}{Mods}"
     }
   },
   "Mod_Actions": {
@@ -265,6 +270,7 @@
       "Overlay_Conflict_Solver_Loading_Game_Definitions": "正在加载游戏定义……",
       "Overlay_Conflict_Solver_Loading_Definitions": "正在加载模组数据……",
       "Overlay_Conflict_Solver_Analyzing_Conflicts": "正在分析模组冲突……",
+      "Overlay_Conflict_Solver_Filtering_Equivalent_Conflicts": "正在筛选等效冲突……",
       "Overlay_Conflict_Solver_Analyzing_Resolved_Conflicts": "正在分析已处理的冲突……",
       "Overlay_Conflict_Solver_Replacing_Definitions": "正在应用模组补丁……",
       "Overlay_Conflict_Solver_Progress": "步骤 {Count}/{TotalCount}: {PercentDone}",
@@ -288,6 +294,10 @@
       "LaunchError": {
         "Title": "无法启动游戏",
         "Message": "启动失败。"
+      },
+      "ExecutableNotFound": {
+        "Title": "未找到游戏可执行文件",
+        "Message": "未找到游戏可执行文件。请检查配置的游戏可执行文件路径。"
       },
       "NotSet": {
         "Title": "找不到游戏",
@@ -392,6 +402,17 @@
       "ShowResetConflicts": "仅显示被重置的冲突",
       "Close": "关闭"
     },
+    "ExactModSet": {
+      "Title": "忽略精确模组集合",
+      "ExistingRules": "现有精确模组集合规则",
+      "AvailableMods": "选择精确集合中的模组",
+      "PreviewOnly": "仅预览",
+      "Add": "添加",
+      "Delete": "删除",
+      "Save": "保存",
+      "Cancel": "取消",
+      "Close": "关闭"
+    },
     "ResetConflicts": {
       "Title": "重置冲突标记",
       "Resolved": "已处理",
@@ -494,6 +515,7 @@
       "CheckPrerelease": "检查预发布版更新",
       "CheckForUpdates": "检查更新",
       "Install": "安装更新",
+      "OpenReleasePage": "打开版本发布页面",
       "Version": "版本：{Version}",
       "Skip": "忽略更新",
       "Overlay": {
@@ -565,6 +587,10 @@
       "Title": "合集已应用",
       "Message": "{CollectionName} 已加载。"
     },
+    "CollectionAppliedMissingMods": {
+      "Title": "已跳过缺失模组",
+      "Message": "合集包含缺失的模组。应用合集时已跳过这些条目，但它们仍保留在合集中。"
+    },
     "CollectionNotApplied": {
       "Title": "合集未应用",
       "Message": "{CollectionName} 未加载。"
@@ -621,6 +647,14 @@
       "Title": "存储空间不足",
       "Message": "没有足够的可用存储空间以执行合并操作。"
     },
+    "CollectionMergeFailed": {
+      "Title": "无法合并合集",
+      "Message": "无法合并此合集。请确认合集中包含可用的模组，且未包含合并输出。"
+    },
+    "CollectionMergeArchiveUnavailable": {
+      "Title": "合并压缩包不可用",
+      "Message": "无法覆盖合并压缩输出文件，可能已在其他程序中打开：{Archives}"
+    },
     "ParadoxLauncherRunning": {
       "Title": "官方启动器运行中",
       "Message": "官方启动器正在运行，请先将其关闭再执行此操作。"
@@ -628,7 +662,21 @@
     "ConflictSolverRerunGlobalVars": {
       "Title": "刷新冲突处理器",
       "Message": "需要刷新冲突解决程序，以考虑新添加的全局变量补丁。请重新运行冲突解决程序。"
+    },
+    "FileSystemSafetyLock": {
+      "Title": "为安全起见已锁定游戏状态",
+      "Message": "Irony 无法信任此游戏当前的文件系统或模组状态。为安全起见，修改操作已禁用。请修复提供程序或权限并重新启动 Irony，或者选择其他用户模组目录或自定义模组目录。恢复操作前会先验证新目录。"
     }
+  },
+  "Mod_Alias": {
+    "Title": "模组别名",
+    "Alias": "别名",
+    "OriginalName": "原始名称",
+    "Set": "设置别名",
+    "Edit": "编辑别名",
+    "Clear": "清除别名",
+    "Save": "保存",
+    "Cancel": "取消"
   },
   "Mod_App_Actions": {
     "OpenInSteam": "在 Steam 中打开",
@@ -662,7 +710,29 @@
   "Filter": {
     "Clear": "×",
     "UpArrow": "▲",
-    "DownArrow": "▼"
+    "DownArrow": "▼",
+    "Advanced": {
+      "Title": "高级筛选",
+      "Name": "名称 / 别名 / 远程 ID",
+      "Source": "来源",
+      "Steam": "Steam",
+      "Paradox": "Paradox",
+      "Local": "本地",
+      "Selected": "已选择",
+      "Achievements": "成就",
+      "Version": "版本",
+      "Include": "包含",
+      "Exclude": "排除",
+      "Any": "不限",
+      "Yes": "是",
+      "No": "否",
+      "Compatible": "兼容",
+      "NotCompatible": "不兼容",
+      "Apply": "应用",
+      "Reset": "重置",
+      "Cancel": "取消",
+      "CustomQuery": "此自定义查询无法完整显示。除非应用或重置此筛选，否则查询将保持不变。"
+    }
   },
   "FilterCommands": {
     "Achievements": "成就",

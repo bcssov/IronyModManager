@@ -1,0 +1,1184 @@
+﻿// ***********************************************************************
+// Assembly         : IronyModManager.Tests
+// ***********************************************************************
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
+using System.Reactive.Disposables;
+using System.Threading.Tasks;
+using AwesomeAssertions;
+using Castle.DynamicProxy;
+using IronyModManager.DI;
+using IronyModManager.Common.Events;
+using IronyModManager.Implementation.AppState;
+using IronyModManager.Implementation;
+using IronyModManager.Implementation.Hotkey;
+using IronyModManager.Implementation.MessageBus.Events;
+using IronyModManager.IO.Common.Mods;
+using IronyModManager.Localization;
+using IronyModManager.Models;
+using IronyModManager.Models.Common;
+using IronyModManager.Parser.Common.Mod.Search;
+using IronyModManager.Services.Common;
+using IronyModManager.Tests.Common;
+using IronyModManager.ViewModels.Controls;
+using Moq;
+using ReactiveUI;
+using Xunit;
+
+namespace IronyModManager.Tests.ViewModels.Controls
+{
+    /// <summary>
+    /// Tests collection commands at the ViewModel boundary.
+    /// </summary>
+    public class CollectionModsControlViewModelTests
+    {
+        [Theory]
+        [InlineData(SortOrder.Asc, false)]
+        [InlineData(SortOrder.Desc, false)]
+        [InlineData(SortOrder.None, false)]
+        [InlineData(SortOrder.Asc, true)]
+        [InlineData(SortOrder.Desc, true)]
+        [InlineData(SortOrder.None, true)]
+        public void Sort_recognition_should_preserve_valid_order_with_an_invalid_non_member(SortOrder expected, bool includeInvalid)
+        {
+            DISetup.SetupContainer();
+            var first = CreateMod("mod/a.mod", name: "A");
+            var second = CreateMod("mod/b.mod", name: "B");
+            var third = CreateMod("mod/c.mod", name: "C");
+            first.IsValid = second.IsValid = third.IsValid = true;
+            var invalid = CreateMod("mod/invalid.mod");
+            invalid.FullPath = null;
+            invalid.IsValid = false;
+            IMod[] ordered = expected == SortOrder.Asc ? [first, second, third] :
+                expected == SortOrder.Desc ? [third, second, first] : [second, first, third];
+            var collection = new ModCollection { Mods = ordered.Select(p => p.DescriptorFile).ToList() };
+            var view = CreateViewModel(Mock.Of<IModService>(), new Mock<IModCollectionService>(),
+                new Mock<IModPatchCollectionService>(), new Mock<IGameService>());
+            view.InitializeState(null, collection, includeInvalid ? [invalid, first, second, third] : [first, second, third]);
+
+            view.RecognizeSortOrderForTest(collection);
+
+            view.ModNameSortOrder.SortOrder.Should().Be(expected);
+            collection.Mods.Should().Equal(ordered.Select(p => p.DescriptorFile));
+        }
+
+        [Theory]
+        [InlineData(false, false)]
+        [InlineData(true, false)]
+        [InlineData(false, true)]
+        public void Sort_path_fallback_should_skip_null_paths_without_changing_invalid_members(bool invalidIsMember, bool nullSavedPath)
+        {
+            DISetup.SetupContainer();
+            var invalid = CreateMod("mod/invalid.mod");
+            invalid.FullPath = null;
+            invalid.IsValid = false;
+            var valid = CreateMod("mod/valid.mod", "valid-path", "Valid");
+            valid.IsValid = true;
+            var collection = new ModCollection
+            {
+                Mods = invalidIsMember ? [invalid.DescriptorFile, "mod/old.mod"] : ["mod/old.mod"],
+                ModPaths = invalidIsMember ? [null, "VALID-PATH"] : [nullSavedPath ? null : "VALID-PATH"]
+            };
+            var view = CreateViewModel(Mock.Of<IModService>(), new Mock<IModCollectionService>(),
+                new Mock<IModPatchCollectionService>(), new Mock<IGameService>());
+            view.InitializeState(null, collection, [invalid, valid]);
+            view.ModNameSortOrder.SetSortOrder(SortOrder.Desc);
+
+            view.RecognizeSortOrderForTest(collection);
+
+            // A resolved fallback changes the recognition to None; no match retains the previous order.
+            view.ModNameSortOrder.SortOrder.Should().Be(nullSavedPath ? SortOrder.Desc : SortOrder.None);
+            view.Mods.Should().Equal(invalid, valid);
+            invalid.FullPath.Should().BeNull();
+            invalid.IsValid.Should().BeFalse();
+            invalid.IsVirtual.Should().BeFalse();
+            collection.Mods.Should().Equal(invalidIsMember ? [invalid.DescriptorFile, "mod/old.mod"] : ["mod/old.mod"]);
+        }
+
+        [Theory]
+        [InlineData(false, false)]
+        [InlineData(true, false)]
+        [InlineData(true, true)]
+        public async Task Import_path_fallback_should_tolerate_invalid_non_members(bool merged, bool nullSavedPath)
+        {
+            DISetup.SetupContainer();
+            var game = new Game { Type = "game" };
+            var invalid = CreateMod("mod/invalid.mod", name: "Valid");
+            invalid.FullPath = null;
+            invalid.IsValid = false;
+            var valid = CreateMod("mod/valid.mod", "valid-path", "Valid");
+            valid.IsValid = true;
+            var collection = new ModCollection
+            {
+                Name = "Imported", Game = game.Type, Mods = ["mod/old.mod"],
+                ModPaths = [nullSavedPath ? null : "VALID-PATH"], ModNames = ["Valid"],
+                MergedFolderName = merged ? "merged" : null
+            };
+            var service = new Mock<IModService>();
+            service.Setup(p => p.GetAvailableModsAsync(game)).ReturnsAsync([invalid, valid]);
+            var collections = new Mock<IModCollectionService>();
+            collections.Setup(p => p.ImportParadoxAsync()).ReturnsAsync(collection);
+            collections.Setup(p => p.Save(collection)).Returns(true);
+            var games = new Mock<IGameService>();
+            games.Setup(p => p.Get()).Returns([game]);
+            var view = CreateViewModel(service.Object, collections, new Mock<IModPatchCollectionService>(), games,
+                reconciliation: new CollectionModReconciliationCoordinator(service.Object, Mock.Of<IGameStateSafetyService>()),
+                localizationText: string.Empty);
+
+            await view.ImportCollectionForTestAsync();
+
+            collection.Mods.Should().Equal(merged && !nullSavedPath ? valid.DescriptorFile : "mod/old.mod");
+            invalid.IsValid.Should().BeFalse();
+            invalid.IsVirtual.Should().BeFalse();
+        }
+
+        [Fact]
+        public void Conflict_solver_input_should_preserve_all_real_members()
+        {
+            var first = CreateMod("first.mod");
+            var second = CreateMod("second.mod");
+            var viewModel = CreateSolverInputViewModel([first, second]);
+
+            viewModel.GetConflictSolverMods().Should().Equal(first, second);
+            viewModel.SelectedMods.Should().Equal(first, second);
+        }
+
+        [Fact]
+        public void Conflict_solver_input_should_filter_virtual_members_without_mutating_collection_order()
+        {
+            var first = CreateMod("first.mod");
+            var missingFirst = CreateMod("missing-first.mod", isVirtual: true);
+            var middle = CreateMod("middle.mod");
+            var missingLast = CreateMod("missing-last.mod", isVirtual: true);
+            var last = CreateMod("last.mod");
+            IMod[] membership = [first, missingFirst, middle, missingLast, last];
+            var viewModel = CreateSolverInputViewModel(membership);
+
+            viewModel.GetConflictSolverMods().Should().Equal(first, middle, last);
+            viewModel.SelectedMods.Should().Equal(membership);
+        }
+
+        [Fact]
+        public void Conflict_solver_input_should_include_reappeared_real_shared_instance()
+        {
+            var missing = CreateMod("missing.mod", isVirtual: true);
+            var reappeared = CreateMod(missing.DescriptorFile);
+            var viewModel = CreateSolverInputViewModel([missing]);
+            viewModel.GetConflictSolverMods().Should().BeEmpty();
+
+            viewModel.ApplySelectedMods([reappeared], true);
+
+            viewModel.GetConflictSolverMods().Should().ContainSingle().Which.Should().BeSameAs(reappeared);
+        }
+
+        [Fact]
+        public void Conflict_solver_input_should_be_empty_for_all_virtual_members()
+        {
+            var members = new[]
+            {
+                CreateMod("missing-first.mod", isVirtual: true),
+                CreateMod("missing-second.mod", isVirtual: true)
+            };
+            var viewModel = CreateSolverInputViewModel(members);
+
+            viewModel.GetConflictSolverMods().Should().BeEmpty();
+            viewModel.SelectedMods.Should().Equal(members);
+        }
+
+        [Theory]
+        [InlineData(0)]
+        [InlineData(1)]
+        [InlineData(2)]
+        public void Remove_from_collection_command_should_remove_equivalent_virtual_and_persist_aligned_metadata(int removedIndex)
+        {
+            DISetup.SetupContainer();
+            var game = new Game { Type = "game" };
+            var first = CreateMod("mod/first.mod", "first-path", "First", game.Type, true,
+                source: ModSource.Steam, remoteId: 11);
+            var virtualMember = CreateMod("mod/missing.mod", "missing-path", "Missing", game.Type, true, true,
+                ModSource.Steam, 22);
+            var last = CreateMod("mod/last.mod", "last-path", "Last", game.Type,
+                source: ModSource.Paradox, remoteId: 33);
+            var equivalentContextMember = CreateMod(virtualMember.DescriptorFile, isVirtual: true);
+            var collectionMembers = new List<IMod> { first, last };
+            collectionMembers.Insert(removedIndex, virtualMember);
+            var selectedCollection = new ModCollection
+            {
+                Name = "Collection", Game = game.Type,
+                Mods = collectionMembers.Select(p => p.DescriptorFile).ToList(),
+                ModPaths = null,
+                ModNames = [first.Name],
+                ModIds = null
+            };
+            var modService = CreateIdentityContractModService();
+            var collectionService = new Mock<IModCollectionService>();
+            collectionService.Setup(p => p.Create()).Returns(() => new ModCollection());
+            IModCollection persisted = null;
+            collectionService.Setup(p => p.SaveExplicitMembershipChange(It.IsAny<IModCollection>()))
+                .Callback((IModCollection collection) => persisted = collection)
+                .Returns(true);
+            var patchService = new Mock<IModPatchCollectionService>();
+            patchService.Setup(p => p.PatchModNeedsUpdateAsync(It.IsAny<string>(), It.IsAny<IReadOnlyCollection<string>>()))
+                .ReturnsAsync(false);
+            var gameService = new Mock<IGameService>();
+            gameService.Setup(p => p.GetSelected()).Returns(game);
+            var viewModel = CreateViewModel(modService, collectionService, patchService, gameService);
+            using var disposables = new CompositeDisposable();
+            viewModel.InitializeRemoval(disposables, game, selectedCollection, [first, last], collectionMembers);
+            viewModel.ContextMenuMod = equivalentContextMember;
+
+            using var execution = viewModel.RemoveFromCollectionCommand.Execute().Subscribe();
+
+            viewModel.SelectedMods.Should().Equal(first, last);
+            viewModel.Mods.Should().Equal(first, last);
+            virtualMember.GetType().Should().NotBe(typeof(Mod));
+            equivalentContextMember.GetType().Should().NotBe(typeof(Mod));
+            virtualMember.Should().NotBeSameAs(equivalentContextMember);
+            first.IsSelected.Should().BeTrue();
+            last.IsSelected.Should().BeFalse();
+            persisted.Should().NotBeNull();
+            persisted.Mods.Should().Equal(first.DescriptorFile, last.DescriptorFile);
+            persisted.ModPaths.Should().Equal(first.FullPath, last.FullPath);
+            persisted.ModNames.Should().Equal(first.Name, last.Name);
+            persisted.ModIds.Should().HaveCount(2);
+            persisted.ModIds.First().SteamId.Should().Be(11);
+            persisted.ModIds.Last().ParadoxId.Should().Be(33);
+            selectedCollection.Mods.Should().Equal(first.DescriptorFile, last.DescriptorFile);
+            selectedCollection.ModPaths.Should().Equal(first.FullPath, last.FullPath);
+            selectedCollection.ModNames.Should().Equal(first.Name, last.Name);
+            selectedCollection.ModIds.Should().HaveCount(2);
+            collectionService.Verify(p => p.SaveExplicitMembershipChange(It.IsAny<IModCollection>()), Times.Once);
+            collectionService.Verify(p => p.Save(It.IsAny<IModCollection>()), Times.Never);
+            patchService.Verify(p => p.PatchModNeedsUpdateAsync(It.IsAny<string>(), It.IsAny<IReadOnlyCollection<string>>()), Times.Never);
+        }
+
+        [Theory]
+        [InlineData(0)]
+        [InlineData(1)]
+        [InlineData(2)]
+        public void Remove_virtual_from_collection_undo_redo_should_restore_ordered_persisted_membership(int removedIndex)
+        {
+            DISetup.SetupContainer();
+            var game = new Game { Type = "game" };
+            var first = CreateMod("first.mod", "first-path", "First", game.Type, true, source: ModSource.Steam, remoteId: 11);
+            var missing = CreateMod("missing.mod", "missing-path", "Missing", game.Type, true, true, ModSource.Steam, 22);
+            var last = CreateMod("last.mod", "last-path", "Last", game.Type, true, source: ModSource.Paradox, remoteId: 33);
+            var members = new List<IMod> { first, last };
+            members.Insert(removedIndex, missing);
+            var selectedCollection = new ModCollection { Name = "Collection", Game = game.Type };
+            var modService = CreateResolvingModService();
+            var collectionService = new Mock<IModCollectionService>();
+            collectionService.Setup(p => p.Create()).Returns(() => new ModCollection());
+            var persisted = new List<IModCollection>();
+            collectionService.Setup(p => p.Save(It.IsAny<IModCollection>()))
+                .Callback((IModCollection collection) => persisted.Add(collection)).Returns(true);
+            collectionService.Setup(p => p.SaveExplicitMembershipChange(It.IsAny<IModCollection>())).Returns(true);
+            var patchService = new Mock<IModPatchCollectionService>();
+            var gameService = new Mock<IGameService>();
+            gameService.Setup(p => p.GetSelected()).Returns(game);
+            var reconciliation = new CollectionModReconciliationCoordinator(modService.Object, Mock.Of<IGameStateSafetyService>());
+            var viewModel = CreateViewModel(modService.Object, collectionService, patchService, gameService, reconciliation: reconciliation);
+            using var disposables = new CompositeDisposable();
+            viewModel.InitializeRemoval(disposables, game, selectedCollection, [first, last], members);
+            viewModel.InitializeHistoryCommands(disposables);
+            viewModel.ContextMenuMod = CreateMod(missing.DescriptorFile, missing.FullPath, isVirtual: true);
+
+            using var remove = viewModel.RemoveFromCollectionCommand.Execute().Subscribe();
+            using var undo = viewModel.UndoCommand.Execute().Subscribe();
+
+            viewModel.SelectedMods.Should().HaveCount(3);
+            viewModel.SelectedMods[removedIndex].Should().NotBeSameAs(missing);
+            viewModel.SelectedMods[removedIndex].IsVirtual.Should().BeTrue();
+            viewModel.SelectedMods[removedIndex].DescriptorFile.Should().Be(missing.DescriptorFile);
+            viewModel.SelectedMods[removedIndex].FullPath.Should().Be(missing.FullPath);
+            viewModel.SelectedMods[removedIndex].Name.Should().Be(missing.Name);
+            viewModel.SelectedMods[removedIndex].Source.Should().Be(ModSource.Steam);
+            viewModel.SelectedMods[removedIndex].RemoteId.Should().Be(22);
+            viewModel.SelectedMods.Select(p => p.DescriptorFile).Should().Equal(members.Select(p => p.DescriptorFile));
+            persisted.Last().Mods.Should().Equal(members.Select(p => p.DescriptorFile));
+            persisted.Last().ModPaths.Should().Equal(members.Select(p => p.FullPath));
+            persisted.Last().ModNames.Should().Equal(members.Select(p => p.Name));
+            persisted.Last().ModIds.Should().HaveCount(3);
+            persisted.Last().ModIds.ElementAt(removedIndex).SteamId.Should().Be(22);
+
+            using var redo = viewModel.RedoCommand.Execute().Subscribe();
+            viewModel.SelectedMods.Should().Equal(first, last);
+            persisted.Last().Mods.Should().Equal(first.DescriptorFile, last.DescriptorFile);
+
+            using var repeatUndo = viewModel.UndoCommand.Execute().Subscribe();
+            viewModel.SelectedMods.Select(p => p.DescriptorFile).Should().Equal(members.Select(p => p.DescriptorFile));
+            modService.Verify(p => p.ResolveCollectionMods(It.IsAny<IEnumerable<IMod>>(), It.IsAny<IModCollection>(),
+                It.IsAny<IEnumerable<IMod>>()), Times.Exactly(3));
+        }
+
+        [Fact]
+        public void Undo_should_resolve_historical_virtual_membership_to_the_current_shared_real_mod()
+        {
+            DISetup.SetupContainer();
+            var game = new Game { Type = "game" };
+            var first = CreateMod("first.mod", game: game.Type, isSelected: true);
+            var missing = CreateMod("missing.mod", "missing-path", "Missing", game.Type, true, true, ModSource.Steam, 22);
+            var currentReal = CreateMod(missing.DescriptorFile, missing.FullPath, "Installed", game.Type);
+            var collection = new ModCollection { Name = "Collection", Game = game.Type };
+            var modService = CreateResolvingModService();
+            var collectionService = new Mock<IModCollectionService>();
+            collectionService.Setup(p => p.Create()).Returns(() => new ModCollection());
+            collectionService.Setup(p => p.Save(It.IsAny<IModCollection>())).Returns(true);
+            collectionService.Setup(p => p.SaveExplicitMembershipChange(It.IsAny<IModCollection>())).Returns(true);
+            var gameService = new Mock<IGameService>();
+            gameService.Setup(p => p.GetSelected()).Returns(game);
+            var reconciliation = new CollectionModReconciliationCoordinator(modService.Object, Mock.Of<IGameStateSafetyService>());
+            var viewModel = CreateViewModel(modService.Object, collectionService, new Mock<IModPatchCollectionService>(), gameService,
+                reconciliation: reconciliation);
+            using var disposables = new CompositeDisposable();
+            viewModel.InitializeRemoval(disposables, game, collection, [first], [first, missing]);
+            viewModel.InitializeHistoryCommands(disposables);
+            viewModel.ContextMenuMod = missing;
+            using var remove = viewModel.RemoveFromCollectionCommand.Execute().Subscribe();
+            viewModel.ReplaceInstalledMods([first, currentReal]);
+
+            using var undo = viewModel.UndoCommand.Execute().Subscribe();
+
+            viewModel.SelectedMods.Should().Contain(currentReal);
+            viewModel.SelectedMods.Single(p => p.DescriptorFile == missing.DescriptorFile).Should().BeSameAs(currentReal);
+            currentReal.IsVirtual.Should().BeFalse();
+        }
+
+        [Fact]
+        public void Castle_proxied_view_model_should_remove_undo_and_redo_virtual_collection_members()
+        {
+            DISetup.SetupContainer();
+            var game = new Game { Type = "game" };
+            var first = CreateMod("first.mod", game: game.Type, isSelected: true);
+            var missing = CreateMod("missing.mod", "missing-path", "Missing", game.Type, true, true, ModSource.Steam, 22);
+            var last = CreateMod("last.mod", game: game.Type, isSelected: true);
+            var collection = new ModCollection { Name = "Collection", Game = game.Type };
+            var modService = CreateResolvingModService();
+            var collectionService = new Mock<IModCollectionService>();
+            collectionService.Setup(p => p.Create()).Returns(() => new ModCollection());
+            collectionService.Setup(p => p.GetAll()).Returns([]);
+            collectionService.Setup(p => p.Save(It.IsAny<IModCollection>())).Returns(true);
+            collectionService.Setup(p => p.SaveExplicitMembershipChange(It.IsAny<IModCollection>())).Returns(true);
+            var gameService = new Mock<IGameService>();
+            gameService.Setup(p => p.GetSelected()).Returns(game);
+            var reconciliation = new CollectionModReconciliationCoordinator(modService.Object, Mock.Of<IGameStateSafetyService>());
+            var viewModel = CreateCastleProxiedViewModel(modService.Object, collectionService,
+                new Mock<IModPatchCollectionService>(), gameService, reconciliation);
+            using var disposables = new CompositeDisposable();
+            InitializeCastleProxy(viewModel, disposables, game, collection, [first, last], [first, missing, last]);
+            viewModel.ContextMenuMod = missing;
+
+            Exception commandError = null;
+            using var remove = viewModel.RemoveFromCollectionCommand.Execute().Subscribe(_ => { }, exception => commandError = exception);
+            using var undo = viewModel.UndoCommand.Execute().Subscribe(_ => { }, exception => commandError = exception);
+            using var redo = viewModel.RedoCommand.Execute().Subscribe(_ => { }, exception => commandError = exception);
+
+            commandError.Should().BeNull();
+            viewModel.SelectedMods.Should().Equal(first, last);
+            viewModel.IsUndoAvailable().Should().BeTrue();
+            modService.Verify(p => p.ResolveCollectionMods(It.IsAny<IEnumerable<IMod>>(), It.IsAny<IModCollection>(),
+                It.IsAny<IEnumerable<IMod>>()), Times.Exactly(2));
+        }
+
+        [Fact]
+        public void Enable_all_propagation_should_match_collection_members_by_domain_equivalence()
+        {
+            DISetup.SetupContainer();
+            var game = new Game { Type = "game" };
+            var member = CreateMod("member", "member-path", "Same", game.Type, true);
+            var equivalentFilteredMod = CreateMod("member", "member-path", "Same", game.Type, true);
+            var similarNonMember = CreateMod("different", "different-path", "Same", game.Type, true);
+            var virtualMember = CreateMod("missing", "missing-path", game: game.Type, isSelected: true, isVirtual: true);
+            var collection = new ModCollection
+            {
+                Name = "Collection", Game = game.Type,
+                Mods = [member.DescriptorFile, similarNonMember.DescriptorFile, virtualMember.DescriptorFile]
+            };
+            var modService = new Mock<IModService>();
+            modService.Setup(p => p.AreModIdentitiesEquivalent(It.IsAny<IMod>(), It.IsAny<IMod>()))
+                .Returns((IMod candidate, IMod requested) => candidate.DescriptorFile == requested.DescriptorFile);
+            var collectionService = new Mock<IModCollectionService>();
+            collectionService.Setup(p => p.Create()).Returns(() => new ModCollection());
+            collectionService.Setup(p => p.Save(It.IsAny<IModCollection>())).Returns(true);
+            var patchService = new Mock<IModPatchCollectionService>();
+            patchService.Setup(p => p.PatchModNeedsUpdateAsync(It.IsAny<string>(), It.IsAny<IReadOnlyCollection<string>>()))
+                .ReturnsAsync(false);
+            var gameService = new Mock<IGameService>();
+            gameService.Setup(p => p.GetSelected()).Returns(game);
+            var viewModel = CreateViewModel(modService.Object, collectionService, patchService, gameService);
+            viewModel.InitializeState(game, collection, [member, similarNonMember]);
+            viewModel.ApplySelectedMods([member, similarNonMember, virtualMember]);
+
+            viewModel.HandleEnableAllToggled(true, true, [equivalentFilteredMod]);
+            viewModel.HandleEnableAllToggled(false, true, [equivalentFilteredMod]);
+
+            viewModel.SelectedMods.Should().Equal(member, similarNonMember, virtualMember);
+
+            viewModel.HandleEnableAllToggled(true, false, [equivalentFilteredMod]);
+            viewModel.HandleEnableAllToggled(false, false, [equivalentFilteredMod]);
+
+            viewModel.SelectedMods.Should().Equal(similarNonMember, virtualMember);
+            similarNonMember.IsSelected.Should().BeTrue();
+            virtualMember.IsSelected.Should().BeTrue();
+        }
+
+        [Fact]
+        public void Equivalent_reconstructed_projection_should_not_create_undo_history()
+        {
+            DISetup.SetupContainer();
+            var game = new Game { Type = "game" };
+            var previousFirst = CreateMod("first", name: "Same");
+            var previousSecond = CreateMod("second", name: "Second");
+            var reconstructedFirst = CreateMod("first", name: "Same");
+            var reconstructedSecond = CreateMod("second", name: "Second");
+            var similarButDifferent = CreateMod("different", name: "Same");
+            var collection = new ModCollection { Name = "Collection", Game = game.Type, Mods = ["first", "second"] };
+            var modService = new Mock<IModService>();
+            modService.Setup(p => p.AreModIdentitiesEquivalent(It.IsAny<IMod>(), It.IsAny<IMod>()))
+                .Returns((IMod candidate, IMod requested) => candidate.DescriptorFile == requested.DescriptorFile);
+            var collectionService = new Mock<IModCollectionService>();
+            var patchService = new Mock<IModPatchCollectionService>();
+            var gameService = new Mock<IGameService>();
+            var viewModel = CreateViewModel(modService.Object, collectionService, patchService, gameService,
+                [previousFirst, previousSecond]);
+            viewModel.InitializeState(game, collection, [reconstructedFirst, reconstructedSecond, similarButDifferent]);
+
+            viewModel.ApplySelectedMods([reconstructedFirst, reconstructedSecond]);
+
+            viewModel.IsUndoAvailable().Should().BeFalse();
+
+            viewModel.ApplySelectedMods([similarButDifferent, reconstructedSecond]);
+
+            viewModel.IsUndoAvailable().Should().BeTrue();
+        }
+
+        [Fact]
+        public void Reordered_equivalent_projection_should_create_undo_history()
+        {
+            DISetup.SetupContainer();
+            var game = new Game { Type = "game" };
+            var previousFirst = CreateMod("first");
+            var previousSecond = CreateMod("second");
+            var reconstructedFirst = CreateMod("first");
+            var reconstructedSecond = CreateMod("second");
+            var collection = new ModCollection { Name = "Collection", Game = game.Type, Mods = ["first", "second"] };
+            var modService = new Mock<IModService>();
+            modService.Setup(p => p.AreModIdentitiesEquivalent(It.IsAny<IMod>(), It.IsAny<IMod>()))
+                .Returns((IMod candidate, IMod requested) => candidate.DescriptorFile == requested.DescriptorFile);
+            var viewModel = CreateViewModel(modService.Object, new Mock<IModCollectionService>(),
+                new Mock<IModPatchCollectionService>(), new Mock<IGameService>(), [previousFirst, previousSecond]);
+            viewModel.InitializeState(game, collection, [reconstructedFirst, reconstructedSecond]);
+
+            viewModel.ApplySelectedMods([reconstructedSecond, reconstructedFirst]);
+
+            viewModel.IsUndoAvailable().Should().BeTrue();
+        }
+
+        [Fact]
+        public async Task Directory_revalidation_should_publish_one_live_proxy_graph_before_unlock()
+        {
+            DISetup.SetupContainer();
+            var game = new Game { Type = "game" };
+            var previousMod = CreateMod("mod/member.mod", "member-path", game: game.Type, isSelected: true);
+            var refreshedMod = CreateMod("mod/member.mod", "member-path", game: game.Type);
+            var collection = new ModCollection
+            {
+                Name = "Collection", Game = game.Type, IsSelected = true,
+                Mods = [previousMod.DescriptorFile], ModPaths = [previousMod.FullPath]
+            };
+            GameStateLockInfo currentLock = null;
+            var safety = new Mock<IGameStateSafetyService>();
+            safety.Setup(p => p.BeginRevalidation(game, It.IsAny<string>())).Returns(() =>
+            {
+                currentLock = new GameStateLockInfo
+                    { GameType = game.Type, Reason = GameStateLockReason.ConfigurationChanged };
+                return currentLock;
+            });
+            safety.Setup(p => p.IsLocked(game)).Returns(() => currentLock != null);
+            safety.Setup(p => p.IsCurrentRevalidation(game, It.IsAny<GameStateLockInfo>()))
+                .Returns((IGame _, GameStateLockInfo token) => ReferenceEquals(currentLock, token));
+            safety.Setup(p => p.CompleteRevalidation(game, It.IsAny<GameStateLockInfo>(), It.IsAny<Action>()))
+                .Returns((IGame _, GameStateLockInfo token, Action beforeUnlock) =>
+                {
+                    if (!ReferenceEquals(currentLock, token))
+                    {
+                        return false;
+                    }
+
+                    beforeUnlock();
+                    currentLock = null;
+                    return true;
+                });
+            var modService = new Mock<IModService>();
+            modService.Setup(p => p.AreModIdentitiesEquivalent(It.IsAny<IMod>(), It.IsAny<IMod>()))
+                .Returns((IMod candidate, IMod requested) =>
+                    string.Equals(candidate.DescriptorFile, requested.DescriptorFile,
+                        StringComparison.OrdinalIgnoreCase));
+            modService.Setup(p => p.ResolveCollectionMods(It.IsAny<IEnumerable<IMod>>(), collection,
+                    It.IsAny<IEnumerable<IMod>>()))
+                .Returns((IEnumerable<IMod> installed, IModCollection _, IEnumerable<IMod> _) =>
+                    installed.Where(p => string.Equals(p.DescriptorFile, previousMod.DescriptorFile,
+                        StringComparison.OrdinalIgnoreCase)).ToList());
+            var collectionService = new Mock<IModCollectionService>();
+            collectionService.Setup(p => p.Create()).Returns(() => new ModCollection());
+            collectionService.Setup(p => p.Get(collection.Name)).Returns(collection);
+            collectionService.Setup(p => p.GetAll()).Returns([collection]);
+            collectionService.Setup(p => p.Save(It.IsAny<IModCollection>())).Returns(true);
+            var patchService = new Mock<IModPatchCollectionService>();
+            patchService.Setup(p => p.PatchModNeedsUpdateAsync(It.IsAny<string>(),
+                It.IsAny<IReadOnlyCollection<string>>())).ReturnsAsync(false);
+            var gameService = new Mock<IGameService>();
+            gameService.Setup(p => p.GetSelected()).Returns(game);
+            var collectionReconciliation = new CollectionModReconciliationCoordinator(
+                modService.Object, safety.Object);
+            collectionReconciliation.RecordCollectionMods(collection.Name, [previousMod]);
+            var viewModel = CreateViewModel(modService.Object, collectionService, patchService, gameService,
+                [previousMod], collectionReconciliation);
+            viewModel.InitializeState(game, collection, [previousMod]);
+            viewModel.ApplySelectedMods([previousMod], ignoreStack: true);
+            using var subscriptions = viewModel.StartModSubscriptions();
+            var installedMods = new List<IMod> { previousMod };
+            var filteredMods = installedMods.ToList();
+            var stateReconciliation = new ModStateReconciliationCoordinator(safety.Object);
+
+            var recovered = await stateReconciliation.RevalidateConfigurationAsync(game,
+                (_, _) =>
+                {
+                    installedMods = [refreshedMod];
+                    filteredMods = installedMods.ToList();
+                    return Task.FromResult(true);
+                },
+                collectionReconciliation.Reset,
+                token => viewModel.PublishMods(installedMods, game, token));
+
+            recovered.Should().BeTrue();
+            safety.Object.IsLocked(game).Should().BeFalse();
+            previousMod.Should().NotBeSameAs(refreshedMod);
+            installedMods.Single().Should().BeSameAs(refreshedMod);
+            filteredMods.Single().Should().BeSameAs(refreshedMod);
+            viewModel.Mods.Single().Should().BeSameAs(refreshedMod);
+            viewModel.SelectedMods.Single().Should().BeSameAs(refreshedMod);
+            refreshedMod.IsSelected.Should().BeTrue();
+
+            refreshedMod.IsSelected = false;
+            await Task.Delay(25);
+            viewModel.SelectedMods.Should().BeEmpty();
+            refreshedMod.IsSelected = true;
+            await Task.Delay(25);
+            viewModel.SelectedMods.Single().Should().BeSameAs(refreshedMod);
+            refreshedMod.IsSelected = false;
+            await Task.Delay(25);
+            viewModel.SelectedMods.Should().BeEmpty();
+        }
+
+        [Theory]
+        [InlineData(false)]
+        [InlineData(true)]
+        public async Task Locked_game_switch_should_clear_source_graph_without_reconciling_or_persisting_unknown_absence(bool targetHasSnapshot)
+        {
+            DISetup.SetupContainer();
+            var a = new Game { Type = "A" };
+            var b = new Game { Type = "B" };
+            IGame selected = a;
+            var modA = CreateMod("mod/shared.mod", "A-path", game: a.Type, isSelected: true);
+            var modB = CreateMod("mod/shared.mod", "B-path", game: b.Type, isSelected: true);
+            modA.IsValid = modB.IsValid = true;
+            var collectionA = new ModCollection { Name = "Same name", Game = a.Type, IsSelected = true, Mods = [modA.DescriptorFile], ModPaths = [modA.FullPath] };
+            var collectionB = new ModCollection { Name = "Same name", Game = b.Type, IsSelected = true, Mods = [modB.DescriptorFile], ModPaths = [modB.FullPath] };
+            var gameService = new Mock<IGameService>();
+            gameService.Setup(p => p.GetSelected()).Returns(() => selected);
+            var collections = new Mock<IModCollectionService>();
+            collections.Setup(p => p.GetAll()).Returns(() => selected == a ? [collectionA] : [collectionB]);
+            collections.Setup(p => p.Get(It.IsAny<string>())).Returns(() => selected == a ? collectionA : collectionB);
+            var patch = new Mock<IModPatchCollectionService>();
+            var safety = new Mock<IGameStateSafetyService>();
+            safety.Setup(p => p.IsLocked(b)).Returns(true);
+            var mods = new Mock<IModService>();
+            mods.Setup(p => p.RefreshInstalledModsAsync(a)).ReturnsAsync(new InstalledModsResult { IsAuthoritative = true, Mods = [modA] });
+            mods.Setup(p => p.RefreshInstalledModsAsync(b)).ReturnsAsync(new InstalledModsResult { IsAuthoritative = false, Mods = targetHasSnapshot ? [modB] : [] });
+            mods.Setup(p => p.FilterMods(It.IsAny<IEnumerable<IMod>>(), It.IsAny<string>())).Returns((IEnumerable<IMod> values, string _) => values);
+            mods.Setup(p => p.ResolveCollectionMods(It.IsAny<IEnumerable<IMod>>(), It.IsAny<IModCollection>(), It.IsAny<IEnumerable<IMod>>()))
+                .Returns((IEnumerable<IMod> values, IModCollection collection, IEnumerable<IMod> _) => values.Where(p => p.Game == collection.Game).ToList());
+            mods.Setup(p => p.AreModIdentitiesEquivalent(It.IsAny<IMod>(), It.IsAny<IMod>()))
+                .Returns((IMod left, IMod right) => left.Game == right.Game && left.DescriptorFile == right.DescriptorFile);
+            var reconciliation = new CollectionModReconciliationCoordinator(mods.Object, safety.Object);
+            var collectionView = CreateViewModel(mods.Object, collections, patch, gameService, reconciliation: reconciliation);
+            if (targetHasSnapshot)
+            {
+                selected = b;
+                collectionView.InitializeState(b, collectionB, [modB]);
+                collectionView.ApplySelectedMods([modB], true);
+                selected = a;
+                collectionView.PresentGameContext(a, [modA]);
+            }
+            collectionView.InitializeState(a, collectionA, [modA]);
+            collectionView.ApplySelectedMods([modA], true);
+            Mock.Get(collectionView.ModifyCollection).SetupAllProperties();
+            using var subscriptions = collectionView.StartModSubscriptions();
+            var filter = new SearchModsControlViewModel();
+            var presentation = new Mock<InstalledModsPresentationCoordinator>(MockBehavior.Loose, new object[] { null, null, null, null, null });
+            presentation.SetupGet(p => p.FilterMods).Returns(filter);
+            var events = new Mock<InstalledModsEventCoordinator>(MockBehavior.Loose, new object[] { null });
+            var factory = new Mock<IInstalledModsCoordinatorFactory>();
+            factory.Setup(p => p.Create()).Returns(new InstalledModsCoordinators(presentation.Object, events.Object));
+            var interaction = new Mock<ModControlInteraction>(MockBehavior.Loose, new object[] { null, null, null, null });
+            var installedView = new ProxyGenerator().CreateClassProxy<InstalledModsControlViewModel>(
+                [gameService.Object, mods.Object, safety.Object, interaction.Object, factory.Object],
+                new LocalizationInterceptor<InstalledModsControlViewModel>([], []));
+            installedView.GameContextPresented += collectionView.PresentGameContext;
+            var stateReconciliation = new ModStateReconciliationCoordinator(safety.Object);
+            using var publications = installedView.WhenAnyValue(p => p.Mods).Subscribe(values =>
+                stateReconciliation.ReconcileModsPublication(installedView.ActiveGame, installedView.RefreshingMods, installedView.LastRefreshAuthoritative,
+                    () => collectionView.SetMods(values, installedView.ActiveGame)));
+            Task<bool> bind(IGame game) => (Task<bool>)typeof(InstalledModsControlViewModel)
+                .GetMethod("BindAsync", BindingFlags.Instance | BindingFlags.NonPublic)!.Invoke(installedView, [game, true, null, null]);
+            await bind(a);
+            collections.Invocations.Clear();
+            mods.Invocations.Clear();
+
+            selected = b;
+            await bind(b);
+
+            installedView.Mods.Should().OnlyContain(p => p.Game == b.Type);
+            installedView.FilteredMods.Should().OnlyContain(p => p.Game == b.Type);
+            collectionView.Mods.Should().OnlyContain(p => p.Game == b.Type);
+            collectionView.SelectedMods.Should().OnlyContain(p => p.Game == b.Type);
+            collectionView.SelectedMods.Should().HaveCount(targetHasSnapshot ? 1 : 0);
+            collectionView.ModifyCollection.SelectedMods.Should().Equal(collectionView.SelectedMods);
+            collectionView.SelectedModCollection.Should().BeSameAs(collectionB);
+            modA.IsSelected = false;
+            modA.IsSelected = true;
+            await Task.Delay(25);
+            collectionView.SelectedMods.Should().NotContain(modA);
+            await bind(b);
+            collectionView.SelectedMods.Should().HaveCount(targetHasSnapshot ? 1 : 0);
+            collections.Verify(p => p.Save(It.IsAny<IModCollection>()), Times.Never);
+            mods.Verify(p => p.ResolveCollectionMods(It.IsAny<IEnumerable<IMod>>(), It.IsAny<IModCollection>(), It.IsAny<IEnumerable<IMod>>()), Times.Never);
+            collectionB.Mods.Should().Equal(modB.DescriptorFile);
+            collectionB.ModPaths.Should().Equal(modB.FullPath);
+
+            selected = a;
+            await bind(a);
+            installedView.Mods.Single().Should().BeSameAs(modA);
+            collectionView.SelectedMods.Single().Should().BeSameAs(modA);
+            collectionView.Mods.Single().Should().BeSameAs(modA);
+            safety.Object.IsLocked(a).Should().BeFalse();
+        }
+
+        [Fact]
+        public void Startup_activation_must_not_resolve_temporary_empty_presentation_as_missing_mods()
+        {
+            DISetup.SetupContainer();
+            var game = new Game { Type = "Stellaris" };
+            var real = CreateMod("mod/ugc_2257109065.mod", "workshop/2257109065", "! Camera & Galaxy Map Tweaks", game.Type, true);
+            real.IsValid = true;
+            var missing = CreateMod(real.DescriptorFile, real.FullPath, real.Name, game.Type, true, true);
+            var collection = new ModCollection { Name = "Startup", Game = game.Type, IsSelected = true,
+                Mods = [real.DescriptorFile], ModPaths = [real.FullPath], ModNames = [real.Name] };
+            var gameService = new Mock<IGameService>();
+            gameService.Setup(p => p.GetSelected()).Returns(game);
+            var collections = new Mock<IModCollectionService>();
+            collections.Setup(p => p.GetAll()).Returns([collection]);
+            collections.Setup(p => p.Get(It.IsAny<string>())).Returns(collection);
+            collections.Setup(p => p.Create()).Returns(() => new ModCollection());
+            collections.Setup(p => p.Save(It.IsAny<IModCollection>())).Returns(true);
+            var mods = new Mock<IModService>();
+            mods.Setup(p => p.ResolveCollectionMods(It.IsAny<IEnumerable<IMod>>(), collection, It.IsAny<IEnumerable<IMod>>()))
+                .Returns((IEnumerable<IMod> installed, IModCollection _, IEnumerable<IMod> _) => installed.Any() ? [real] : [missing]);
+            mods.Setup(p => p.AreModIdentitiesEquivalent(It.IsAny<IMod>(), It.IsAny<IMod>()))
+                .Returns((IMod left, IMod right) => left.DescriptorFile == right.DescriptorFile);
+            var coordinator = new CollectionModReconciliationCoordinator(mods.Object, Mock.Of<IGameStateSafetyService>());
+            var view = CreateCastleProxiedViewModel(mods.Object, collections, new Mock<IModPatchCollectionService>(), gameService, coordinator);
+            var interactions = Mock.Get((CollectionModsInteraction)typeof(CollectionModsControlViewModel)
+                .GetField("interaction", BindingFlags.Instance | BindingFlags.NonPublic)!.GetValue(view));
+            interactions.Setup(p => p.GetText(It.IsAny<string>())).Returns("Text");
+            view.PresentGameContext(game, []);
+            using var activation = new CompositeDisposable();
+
+            typeof(CollectionModsControlViewModel).GetMethod("OnActivated", BindingFlags.Instance | BindingFlags.NonPublic)!
+                .Invoke(view, [activation]);
+
+            mods.Verify(p => p.ResolveCollectionMods(It.IsAny<IEnumerable<IMod>>(), It.IsAny<IModCollection>(), It.IsAny<IEnumerable<IMod>>()), Times.Never);
+            collections.Verify(p => p.Save(It.IsAny<IModCollection>()), Times.Never);
+            view.SelectedMods.Should().BeEmpty();
+            view.SetMods([real], game);
+            view.SelectedMods.Should().ContainSingle().Which.Should().BeSameAs(real);
+            view.SelectedMods.Should().OnlyContain(p => !p.IsVirtual);
+            real.IsSelected.Should().BeTrue();
+        }
+
+        [Fact]
+        public void Collection_resolution_should_not_dispatch_user_reorders_or_per_member_saves()
+        {
+            using var fixture = new ScrollFixture();
+            var current = fixture.ReplacementMembers();
+            foreach (var mod in current) mod.IsSelected = false;
+            fixture.View.InitializeState(fixture.Game, fixture.Collection, current);
+            using var subscriptions = fixture.View.StartModSubscriptions();
+            fixture.Mods.Setup(p => p.ResolveCollectionMods(It.IsAny<IEnumerable<IMod>>(), It.IsAny<IModCollection>(), It.IsAny<IEnumerable<IMod>>()))
+                .Returns((IEnumerable<IMod> installed, IModCollection _, IEnumerable<IMod> _) =>
+                {
+                    var members = installed.ToList();
+                    foreach (var mod in members) mod.IsSelected = true;
+                    return members;
+                });
+            fixture.Collections.Invocations.Clear();
+            fixture.ScrollRequests.Clear();
+
+            fixture.View.ReconcileCollectionForTest();
+
+            fixture.View.SelectedMods.Should().Equal(current);
+            current.Should().OnlyContain(p => p.IsSelected);
+            fixture.ScrollRequests.Should().BeEmpty("resolver side effects are internal loading, not user reorders");
+            fixture.Collections.Verify(p => p.Save(It.IsAny<IModCollection>()), Times.Once);
+        }
+
+        [Fact]
+        public void Authoritative_rebind_should_not_rescan_the_previous_projection_for_each_restored_member()
+        {
+            using var fixture = new ScrollFixture();
+            var previousMember = new Mock<IMod>();
+            previousMember.SetupGet(p => p.IsSelected).Returns(true);
+            fixture.View.ApplySelectedMods([previousMember.Object], ignoreStack: true);
+            var current = fixture.ReplacementMembers();
+            foreach (var mod in current) mod.IsSelected = false;
+            previousMember.Invocations.Clear();
+
+            fixture.View.SetMods(current, fixture.Game);
+
+            previousMember.VerifyGet(p => p.IsVirtual, Times.Once,
+                "internal membership restoration must not rescan the old list for every IsSelected notification");
+            fixture.View.SelectedMods.Should().Equal(current);
+            current.Should().OnlyContain(p => p.IsSelected);
+            fixture.ScrollRequests.Should().BeEmpty();
+        }
+
+        [Fact]
+        public async Task Rebinding_ordered_presentation_should_not_request_reorder_scrolling()
+        {
+            using var fixture = new ScrollFixture();
+            fixture.View.PresentGameContext(fixture.Game, fixture.Members);
+            fixture.View.SetMods(fixture.Members, fixture.Game);
+            await Task.Delay(650);
+
+            fixture.ScrollRequests.Should().BeEmpty("initial values are not user reorders or focus requests");
+            fixture.View.SelectedMod.Should().BeSameAs(fixture.Members[0]);
+        }
+
+        [Theory]
+        [InlineData(false)]
+        [InlineData(true)]
+        public async Task Scroll_selection_should_restore_the_current_live_member_after_reconciliation(bool wasVirtual)
+        {
+            using var fixture = new ScrollFixture();
+            var previous = fixture.Members[0];
+            previous.IsVirtual = wasVirtual;
+            var current = fixture.ReplacementMembers();
+            if (wasVirtual) current[0].DescriptorFile = "mod/reappeared.mod";
+
+            fixture.View.SetMods(current, fixture.Game);
+            await Task.Delay(650);
+
+            fixture.View.SelectedMod.Should().BeSameAs(current[0]).And.NotBeSameAs(previous);
+            fixture.View.SelectedMod.IsVirtual.Should().BeFalse();
+            fixture.ScrollRequests.Should().BeEmpty();
+        }
+
+        [Theory]
+        [InlineData(false)]
+        [InlineData(true)]
+        public async Task Scroll_without_a_valid_selection_should_not_target_the_final_member(bool selectedMemberRemoved)
+        {
+            using var fixture = new ScrollFixture(selectedMemberRemoved ? 0 : null);
+            var current = fixture.ReplacementMembers();
+            if (selectedMemberRemoved) current.RemoveAt(0);
+
+            fixture.View.SetMods(current, fixture.Game);
+            await Task.Delay(650);
+
+            fixture.View.SelectedMod.Should().BeNull();
+            fixture.ScrollRequests.Should().BeEmpty();
+        }
+
+        [Theory]
+        [InlineData(false)]
+        [InlineData(true)]
+        public async Task Locked_presentation_scroll_state_should_preserve_only_a_valid_own_selection(bool hasSelection)
+        {
+            using var fixture = new ScrollFixture(hasSelection ? 0 : null);
+            fixture.Safety.Setup(p => p.IsLocked(fixture.Game)).Returns(true);
+            fixture.Collections.Invocations.Clear();
+            fixture.Mods.Invocations.Clear();
+
+            fixture.View.PresentGameContext(fixture.Game, fixture.Members);
+            await Task.Delay(650);
+
+            fixture.View.SelectedMod.Should().BeSameAs(hasSelection ? fixture.Members[0] : null);
+            fixture.ScrollRequests.Should().BeEmpty();
+            fixture.Collections.Verify(p => p.Save(It.IsAny<IModCollection>()), Times.Never);
+            fixture.Mods.Verify(p => p.ResolveCollectionMods(It.IsAny<IEnumerable<IMod>>(), It.IsAny<IModCollection>(), It.IsAny<IEnumerable<IMod>>()), Times.Never);
+        }
+
+        [Theory]
+        [InlineData(false)]
+        [InlineData(true)]
+        public async Task Scroll_selection_must_not_leak_between_collection_or_game_contexts(bool switchGame)
+        {
+            using var fixture = new ScrollFixture();
+            var otherGame = switchGame ? new Game { Type = "other-scroll-game" } : fixture.Game;
+            var otherMembers = fixture.ReplacementMembers(otherGame);
+            var otherCollection = new ModCollection { Name = switchGame ? fixture.Collection.Name : "Other collection", Game = otherGame.Type,
+                IsSelected = true, Mods = otherMembers.Select(p => p.DescriptorFile).ToList(), ModPaths = otherMembers.Select(p => p.FullPath).ToList() };
+            fixture.CurrentGame = otherGame;
+            fixture.CurrentCollection = otherCollection;
+            if (switchGame) fixture.View.PresentGameContext(otherGame, otherMembers);
+            else SetProtectedProperty(fixture.View, nameof(CollectionModsControlViewModel.SelectedModCollection), otherCollection);
+            fixture.View.SetMods(otherMembers, otherGame);
+            fixture.View.SelectedMod.Should().BeNull("the same descriptor in another context is not the old selection");
+
+            fixture.CurrentGame = fixture.Game;
+            fixture.CurrentCollection = fixture.Collection;
+            var restoredMembers = fixture.ReplacementMembers();
+            if (switchGame) fixture.View.PresentGameContext(fixture.Game, restoredMembers);
+            else SetProtectedProperty(fixture.View, nameof(CollectionModsControlViewModel.SelectedModCollection), fixture.Collection);
+            fixture.View.SetMods(restoredMembers, fixture.Game);
+            await Task.Delay(650);
+
+            fixture.View.SelectedMod.Should().BeSameAs(restoredMembers[0]);
+            fixture.ScrollRequests.Should().BeEmpty();
+        }
+
+        [Theory]
+        [InlineData(false)]
+        [InlineData(true)]
+        public async Task Deliberate_reorder_should_still_request_focus_on_the_moved_member(bool instant)
+        {
+            using var fixture = new ScrollFixture();
+            var moved = fixture.Members[1];
+
+            if (instant) fixture.View.InstantReorderSelectedItems(moved, 3);
+            else moved.Order = 3;
+            await Task.Delay(650);
+
+            fixture.ScrollRequests.Should().ContainSingle().Which.Should().Be((moved, instant));
+            fixture.View.SelectedMod.Should().BeSameAs(moved);
+        }
+
+        private sealed class ScrollFixture : IDisposable
+        {
+            private readonly CompositeDisposable subscriptions;
+            private string savedDescriptor;
+            public Game Game { get; } = new() { Type = "scroll-game" };
+            public IGame CurrentGame { get; set; }
+            public IModCollection CurrentCollection { get; set; }
+            public ModCollection Collection { get; }
+            public List<IMod> Members { get; }
+            public Mock<IModCollectionService> Collections { get; } = new();
+            public Mock<IModService> Mods { get; } = new();
+            public Mock<IGameStateSafetyService> Safety { get; } = new();
+            public TestCollectionModsControlViewModel View { get; }
+            public List<(IMod Mod, bool Instant)> ScrollRequests { get; } = [];
+
+            public ScrollFixture(int? selectedIndex = 0)
+            {
+                DISetup.SetupContainer();
+                Members = ReplacementMembers();
+                Collection = new ModCollection { Name = "Scroll", Game = Game.Type, IsSelected = true,
+                    Mods = Members.Select(p => p.DescriptorFile).ToList(), ModPaths = Members.Select(p => p.FullPath).ToList() };
+                CurrentGame = Game;
+                CurrentCollection = Collection;
+                var games = new Mock<IGameService>();
+                games.Setup(p => p.GetSelected()).Returns(() => CurrentGame);
+                Collections.Setup(p => p.GetAll()).Returns(() => [CurrentCollection]);
+                Collections.Setup(p => p.Get(It.IsAny<string>())).Returns(() => CurrentCollection);
+                Collections.Setup(p => p.Create()).Returns(() => new ModCollection());
+                Mods.Setup(p => p.ResolveCollectionMods(It.IsAny<IEnumerable<IMod>>(), It.IsAny<IModCollection>(), It.IsAny<IEnumerable<IMod>>()))
+                    .Returns((IEnumerable<IMod> installed, IModCollection _, IEnumerable<IMod> _) => installed.ToList());
+                Mods.Setup(p => p.AreModIdentitiesEquivalent(It.IsAny<IMod>(), It.IsAny<IMod>()))
+                    .Returns((IMod left, IMod right) => left != null && right != null &&
+                        (left.DescriptorFile == right.DescriptorFile || left.FullPath == right.FullPath));
+                View = CreateViewModel(Mods.Object, Collections, new Mock<IModPatchCollectionService>(), games,
+                    reconciliation: new CollectionModReconciliationCoordinator(Mods.Object, Safety.Object));
+                var presentation = Mock.Get((CollectionModsPresentationCoordinator)typeof(CollectionModsControlViewModel)
+                    .GetField("presentationCoordinator", BindingFlags.Instance | BindingFlags.NonPublic)!.GetValue(View));
+                savedDescriptor = selectedIndex.HasValue ? Members[selectedIndex.Value].DescriptorFile : null;
+                presentation.Setup(p => p.Restore(It.IsAny<string>(), It.IsAny<string>())).Returns(() => (true, savedDescriptor));
+                presentation.Setup(p => p.Save(It.IsAny<string>(), It.IsAny<bool>(), It.IsAny<bool>()))
+                    .Callback((string descriptor, bool _, bool preserve) => { if (!preserve) savedDescriptor = descriptor; });
+                View.InitializeState(Game, Collection, Members);
+                View.SetMods(Members, Game);
+                View.ModReordered += (mod, instant) => ScrollRequests.Add((mod, instant));
+                subscriptions = View.StartModSubscriptions();
+            }
+
+            public List<IMod> ReplacementMembers(IGame game = null)
+            {
+                return new[] { "first", "middle", "last" }.Select(name =>
+                {
+                    var mod = CreateMod($"mod/{name}.mod", name, name, (game ?? Game).Type, true);
+                    mod.IsValid = true;
+                    return mod;
+                }).ToList();
+            }
+
+            public void Dispose() => subscriptions.Dispose();
+        }
+
+        private static IMod CreateMod(string descriptor, string fullPath = null, string name = null, string game = null,
+            bool isSelected = false, bool isVirtual = false, ModSource source = ModSource.Local, long? remoteId = null)
+        {
+            var mod = DIResolver.Get<IMod>();
+            mod.DescriptorFile = descriptor;
+            mod.FullPath = fullPath ?? descriptor;
+            mod.Name = name ?? descriptor;
+            mod.Game = game;
+            mod.IsSelected = isSelected;
+            mod.IsVirtual = isVirtual;
+            mod.Source = source;
+            mod.RemoteId = remoteId;
+            return mod;
+        }
+
+        private static TestCollectionModsControlViewModel CreateSolverInputViewModel(IList<IMod> members)
+        {
+            DISetup.SetupContainer();
+            var viewModel = CreateViewModel(Mock.Of<IModService>(), new Mock<IModCollectionService>(),
+                new Mock<IModPatchCollectionService>(), new Mock<IGameService>());
+            viewModel.ApplySelectedMods(members, true);
+            return viewModel;
+        }
+
+        private static IModService CreateIdentityContractModService()
+        {
+            var modService = new Mock<IModService>();
+            modService.Setup(p => p.AreModIdentitiesEquivalent(It.IsAny<IMod>(), It.IsAny<IMod>()))
+                .Returns((IMod mod, IMod otherMod) => mod != null && otherMod != null &&
+                    ((!string.IsNullOrWhiteSpace(otherMod.DescriptorFile) &&
+                      string.Equals(mod.DescriptorFile, otherMod.DescriptorFile, StringComparison.OrdinalIgnoreCase)) ||
+                     (!string.IsNullOrWhiteSpace(otherMod.FullPath) &&
+                      string.Equals(mod.FullPath, otherMod.FullPath, StringComparison.OrdinalIgnoreCase))));
+            return modService.Object;
+        }
+
+        private static Mock<IModService> CreateResolvingModService()
+        {
+            var modService = new Mock<IModService>();
+            modService.Setup(p => p.AreModIdentitiesEquivalent(It.IsAny<IMod>(), It.IsAny<IMod>()))
+                .Returns((IMod mod, IMod otherMod) => mod != null && otherMod != null &&
+                    (string.Equals(mod.DescriptorFile, otherMod.DescriptorFile, StringComparison.OrdinalIgnoreCase) ||
+                     (!string.IsNullOrWhiteSpace(otherMod.FullPath) &&
+                      string.Equals(mod.FullPath, otherMod.FullPath, StringComparison.OrdinalIgnoreCase))));
+            modService.Setup(p => p.ResolveCollectionMods(It.IsAny<IEnumerable<IMod>>(), It.IsAny<IModCollection>(),
+                    It.IsAny<IEnumerable<IMod>>()))
+                .Returns((IEnumerable<IMod> installed, IModCollection collection, IEnumerable<IMod> _) =>
+                {
+                    var installedMods = installed.ToList();
+                    var descriptors = collection.Mods.ToList();
+                    var paths = collection.ModPaths.ToList();
+                    var names = collection.ModNames.ToList();
+                    var sourceInfos = collection.ModIds.ToList();
+                    return descriptors.Select((descriptor, index) =>
+                    {
+                        var current = installedMods.FirstOrDefault(mod =>
+                            string.Equals(mod.DescriptorFile, descriptor, StringComparison.OrdinalIgnoreCase) ||
+                            string.Equals(mod.FullPath, paths[index], StringComparison.OrdinalIgnoreCase));
+                        if (current != null)
+                        {
+                            return current;
+                        }
+
+                        var virtualMod = CreateMod(descriptor, paths[index], names[index], collection.Game, true, true);
+                        virtualMod.Source = sourceInfos[index].SteamId != null ? ModSource.Steam :
+                            sourceInfos[index].ParadoxId != null ? ModSource.Paradox : ModSource.Local;
+                        virtualMod.RemoteId = sourceInfos[index].SteamId ?? sourceInfos[index].ParadoxId;
+                        return virtualMod;
+                    }).ToList();
+                });
+            return modService;
+        }
+
+        private static TestCollectionModsControlViewModel CreateViewModel(IModService modService,
+            Mock<IModCollectionService> collectionService, Mock<IModPatchCollectionService> patchService,
+            Mock<IGameService> gameService, IEnumerable<IMod> previousMods = null,
+            CollectionModReconciliationCoordinator reconciliation = null, string localizationText = "{State}")
+        {
+            var search = new SearchModsControlViewModel();
+            var sort = new SortOrderControlViewModel(Mock.Of<ILocalizationManager>());
+            var presentation = new Mock<CollectionModsPresentationCoordinator>(MockBehavior.Loose,
+                new object[] { null, null, search, sort });
+            presentation.SetupGet(p => p.SearchMods).Returns(search);
+            presentation.SetupGet(p => p.ModNameSortOrder).Returns(sort);
+            presentation.Setup(p => p.Restore(It.IsAny<string>(), It.IsAny<string>())).Returns((false, null));
+            if (reconciliation == null)
+            {
+                var mockReconciliation = new Mock<CollectionModReconciliationCoordinator>(MockBehavior.Loose,
+                    new object[] { modService, Mock.Of<IGameStateSafetyService>() });
+                mockReconciliation.Setup(p => p.GetPreviousCollectionMods(It.IsAny<string>()))
+                    .Returns(previousMods ?? []);
+                reconciliation = mockReconciliation.Object;
+            }
+
+            var factory = new Mock<ICollectionModsCoordinatorFactory>();
+            var events = new Mock<CollectionModsEventCoordinator>(MockBehavior.Loose,
+                new object[] { null, null });
+            events.Setup(p => p.SubscribeHotkeys(It.IsAny<Action<MainViewHotkeyPressedEvent>>())).Returns(Disposable.Empty);
+            events.Setup(p => p.SubscribeCollectionChanges(It.IsAny<Action<ModCollectionChangeRequestEvent>>())).Returns(Disposable.Empty);
+            factory.Setup(p => p.Create()).Returns(new CollectionModsCoordinators(
+                new CollectionModMembership(modService), reconciliation,
+                new Mock<CollectionOperationProgressCoordinator>(MockBehavior.Loose,
+                    new object[] { null, null, null, null }).Object,
+                presentation.Object,
+                events.Object));
+            var patch = new Mock<PatchModControlViewModel>(MockBehavior.Loose,
+                new object[] { null, collectionService.Object, modService, null });
+            var modify = new Mock<ModifyCollectionControlViewModel>(MockBehavior.Loose,
+                new object[] { null, null, null, null, null, null, null, null, null, null, null, null });
+            var interaction = new Mock<CollectionModsInteraction>(MockBehavior.Loose,
+                new object[] { null, null, null, null, null });
+            interaction.Setup(p => p.GetText(It.IsAny<string>())).Returns(localizationText);
+
+            return new TestCollectionModsControlViewModel(null, patch.Object, new HashReportControlViewModel(null),
+                collectionService.Object, patchService.Object, modService, gameService.Object,
+                new AddNewCollectionControlViewModel(null, collectionService.Object, patchService.Object),
+                new ExportModCollectionControlViewModel(gameService.Object, null), modify.Object,
+                interaction.Object, factory.Object);
+        }
+
+        private static CollectionModsControlViewModel CreateCastleProxiedViewModel(IModService modService,
+            Mock<IModCollectionService> collectionService, Mock<IModPatchCollectionService> patchService,
+            Mock<IGameService> gameService, CollectionModReconciliationCoordinator reconciliation)
+        {
+            var search = new SearchModsControlViewModel();
+            var sort = new SortOrderControlViewModel(Mock.Of<ILocalizationManager>());
+            var presentation = new Mock<CollectionModsPresentationCoordinator>(MockBehavior.Loose,
+                new object[] { null, null, search, sort });
+            presentation.SetupGet(p => p.SearchMods).Returns(search);
+            presentation.SetupGet(p => p.ModNameSortOrder).Returns(sort);
+            presentation.Setup(p => p.Restore(It.IsAny<string>(), It.IsAny<string>())).Returns((false, null));
+            var factory = new Mock<ICollectionModsCoordinatorFactory>();
+            var events = new Mock<CollectionModsEventCoordinator>(MockBehavior.Loose,
+                new object[] { null, null });
+            events.Setup(p => p.SubscribeHotkeys(It.IsAny<Action<MainViewHotkeyPressedEvent>>())).Returns(Disposable.Empty);
+            events.Setup(p => p.SubscribeCollectionChanges(It.IsAny<Action<ModCollectionChangeRequestEvent>>())).Returns(Disposable.Empty);
+            factory.Setup(p => p.Create()).Returns(new CollectionModsCoordinators(
+                new CollectionModMembership(modService), reconciliation,
+                new Mock<CollectionOperationProgressCoordinator>(MockBehavior.Loose,
+                    new object[] { null, null, null, null }).Object,
+                presentation.Object,
+                events.Object));
+            var patch = new Mock<PatchModControlViewModel>(MockBehavior.Loose,
+                new object[] { null, collectionService.Object, modService, null });
+            var modify = new Mock<ModifyCollectionControlViewModel>(MockBehavior.Loose,
+                new object[] { null, null, null, null, null, null, null, null, null, null, null, null });
+            var interaction = new Mock<CollectionModsInteraction>(MockBehavior.Loose,
+                new object[] { null, null, null, null, null });
+            interaction.Setup(p => p.GetText(It.IsAny<string>())).Returns("{State}");
+            return new ProxyGenerator().CreateClassProxy<CollectionModsControlViewModel>(
+                [null, patch.Object, new HashReportControlViewModel(null), collectionService.Object, patchService.Object,
+                    modService, gameService.Object, new AddNewCollectionControlViewModel(null, collectionService.Object, patchService.Object),
+                    new ExportModCollectionControlViewModel(gameService.Object, null), modify.Object, interaction.Object, factory.Object],
+                new ProceedingInterceptor());
+        }
+
+        private static void InitializeCastleProxy(CollectionModsControlViewModel viewModel, CompositeDisposable disposables,
+            IGame game, IModCollection collection, IEnumerable<IMod> installedMods, IList<IMod> collectionMembers)
+        {
+            typeof(CollectionModsControlViewModel).GetField("awaitingAuthoritativeMods", BindingFlags.Instance | BindingFlags.NonPublic)!
+                .SetValue(viewModel, false);
+            typeof(CollectionModsControlViewModel).GetField("activeGame", BindingFlags.Instance | BindingFlags.NonPublic)!
+                .SetValue(viewModel, game);
+            SetProtectedProperty(viewModel, nameof(CollectionModsControlViewModel.Mods), installedMods);
+            SetProtectedProperty(viewModel, nameof(CollectionModsControlViewModel.SelectedModCollection), collection);
+            typeof(CollectionModsControlViewModel).GetMethod("OnActivated", BindingFlags.Instance | BindingFlags.NonPublic)!
+                .Invoke(viewModel, [disposables]);
+            typeof(CollectionModsControlViewModel).GetMethod("SetSelectedModsState", BindingFlags.Instance | BindingFlags.NonPublic)!
+                .Invoke(viewModel, [collectionMembers, true, true, false]);
+        }
+
+        private static void SetProtectedProperty(CollectionModsControlViewModel viewModel, string name, object value)
+        {
+            typeof(CollectionModsControlViewModel).GetProperty(name, BindingFlags.Instance | BindingFlags.Public)!
+                .SetValue(viewModel, value);
+        }
+
+        private sealed class ProceedingInterceptor : IInterceptor
+        {
+            public void Intercept(Castle.DynamicProxy.IInvocation invocation)
+            {
+                invocation.Proceed();
+            }
+        }
+
+        private sealed class TestCollectionModsControlViewModel : CollectionModsControlViewModel
+        {
+            public void RecognizeSortOrderForTest(IModCollection collection) => RecognizeSortOrder(collection);
+
+            public Task ImportCollectionForTestAsync() => ImportCollectionAsync(null, ImportProviderType.Paradox);
+
+            public TestCollectionModsControlViewModel(IReportExportService reportExportService, PatchModControlViewModel patchMod,
+                HashReportControlViewModel hashReportView, IModCollectionService modCollectionService,
+                IModPatchCollectionService modPatchCollectionService, IModService modService, IGameService gameService,
+                AddNewCollectionControlViewModel addNewCollection, ExportModCollectionControlViewModel exportCollection,
+                ModifyCollectionControlViewModel modifyCollection, CollectionModsInteraction interaction,
+                ICollectionModsCoordinatorFactory coordinatorFactory)
+                : base(reportExportService, patchMod, hashReportView, modCollectionService, modPatchCollectionService,
+                    modService, gameService, addNewCollection, exportCollection, modifyCollection, interaction, coordinatorFactory)
+            {
+            }
+
+            public void InitializeRemoval(CompositeDisposable disposables, IGame game, IModCollection selectedCollection,
+                IEnumerable<IMod> installedMods, IList<IMod> collectionMembers)
+            {
+                InitializeState(game, selectedCollection, installedMods);
+                ApplySelectedMods(collectionMembers, ignoreStack: true);
+                InitializeRemoveFromCollectionCommand(disposables);
+            }
+
+            public void InitializeState(IGame game, IModCollection selectedCollection, IEnumerable<IMod> installedMods)
+            {
+                typeof(CollectionModsControlViewModel).GetField("awaitingAuthoritativeMods", BindingFlags.Instance | BindingFlags.NonPublic)!
+                    .SetValue(this, false);
+                typeof(CollectionModsControlViewModel).GetField("activeGame", BindingFlags.Instance | BindingFlags.NonPublic)!
+                    .SetValue(this, game);
+                Mods = installedMods;
+                SelectedModCollection = selectedCollection;
+            }
+
+            public CompositeDisposable StartModSubscriptions()
+            {
+                var disposables = new CompositeDisposable();
+                typeof(IronyModManager.Common.ViewModels.BaseViewModel)
+                    .GetProperty("Disposables", BindingFlags.Instance | BindingFlags.NonPublic)!
+                    .SetValue(this, disposables);
+                SubscribeToMods();
+                return disposables;
+            }
+
+            public void ApplySelectedMods(IList<IMod> collectionMembers, bool ignoreStack = false)
+            {
+                SetSelectedModsState(collectionMembers, ignoreStack: ignoreStack, evaluatePatchState: false);
+            }
+
+            public void ReconcileCollectionForTest() => HandleModCollectionChange(true);
+
+            public void PublishMods(IEnumerable<IMod> mods, IGame game, GameStateLockInfo revalidationLock)
+            {
+                SetMods(mods, game, revalidationLock);
+            }
+
+            public void InitializeHistoryCommands(CompositeDisposable disposables)
+            {
+                UndoCommand = ReactiveCommand.Create(PerformUndo).DisposeWith(disposables);
+                RedoCommand = ReactiveCommand.Create(PerformRedo).DisposeWith(disposables);
+            }
+
+            public void ReplaceInstalledMods(IEnumerable<IMod> mods)
+            {
+                Mods = mods;
+            }
+        }
+    }
+}

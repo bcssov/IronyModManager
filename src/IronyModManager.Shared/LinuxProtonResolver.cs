@@ -160,12 +160,48 @@ namespace IronyModManager.Shared
         /// <exception cref="System.ArgumentNullException">steamRoot</exception>
         public static string ResolveProtonPath(string steamRoot, string compatValue)
         {
+            return ResolveProtonPath(steamRoot, compatValue, null);
+        }
+
+        /// <summary>
+        /// Resolves Proton using registered libraries only when the client root has no candidates.
+        /// </summary>
+        public static string ResolveProtonPath(string steamRoot, string compatValue, IEnumerable<string> steamLibraryRoots)
+        {
             if (string.IsNullOrWhiteSpace(steamRoot))
             {
                 throw new ArgumentNullException(nameof(steamRoot));
             }
 
             var protons = FindInstalledProtons(steamRoot);
+            if (protons.Count == 0)
+            {
+                var searched = new HashSet<string>(OperatingSystem.IsWindows() ? StringComparer.OrdinalIgnoreCase : StringComparer.Ordinal)
+                {
+                    Path.TrimEndingDirectorySeparator(Path.GetFullPath(steamRoot))
+                };
+                foreach (var root in steamLibraryRoots ?? [])
+                {
+                    if (string.IsNullOrWhiteSpace(root))
+                    {
+                        continue;
+                    }
+
+                    try
+                    {
+                        var normalized = Path.TrimEndingDirectorySeparator(Path.GetFullPath(root));
+                        if (searched.Add(normalized))
+                        {
+                            protons.AddRange(FindInstalledProtons(normalized));
+                        }
+                    }
+                    catch (Exception ex) when (ex is IOException or UnauthorizedAccessException or ArgumentException or NotSupportedException)
+                    {
+                        // A stale or inaccessible additional library must not hide candidates in later libraries.
+                    }
+                }
+            }
+
             if (protons.Count == 0)
             {
                 return null;

@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net8.0</TargetFramework>
+    <TargetFramework>net10.0</TargetFramework>
     <Description>Irony Mod Manager Shared Component</Description>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
     <PackageIcon>logo.png</PackageIcon>
@@ -51,27 +51,29 @@
 
   <ItemGroup>
     <PackageReference Include="Castle.Core" Version="5.2.1" />
-    <PackageReference Include="CodexMicroORM.Core" Version="1.3.2" />
+    <PackageReference Include="CodexMicroORM.Core" Version="1.4.1" />
     <PackageReference Include="info.lundin.math.dll" Version="1.2.7" />
     <PackageReference Include="Jering.KeyValueStore" Version="1.1.0" />
-    <PackageReference Include="MagicMapper" Version="14.0.0" />
+    <!-- Keep Jering's MessagePack dependency on the security-fixed 2.x serialization contract. -->
+    <PackageReference Include="MessagePack" Version="[2.5.303]" />
+    <PackageReference Include="MagicMapper" Version="14.0.1" />
     <PackageReference Include="Microsoft.Extensions.DependencyModel" Version="$(MicrosoftExtensionsDependencyModelVersion)" allowedVersions="$(MicrosoftExtensionsDependencyModelVersion)" />
     <PackageReference Include="MimeTypes" Version="2.5.2">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="NaturalSort.Extension" Version="4.4.1" />
-    <PackageReference Include="Nerdbank.GitVersioning" Version="3.9.50">
+    <PackageReference Include="Nerdbank.GitVersioning" Version="3.10.94">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="Newtonsoft.Json" Version="13.0.4" />
     <PackageReference Include="Nito.AsyncEx" Version="5.1.2" />
-    <PackageReference Include="PommaLabs.MimeTypes" Version="3.1.0" />
+    <PackageReference Include="PommaLabs.MimeTypes" Version="3.2.0" />
     <PackageReference Include="SlimMessageBus.Host.Memory" Version="$(SlimMessageBusHost)" allowedVersions="$(SlimMessageBusHost)" />
     <PackageReference Include="SmartFormat" Version="3.6.1" />
     <PackageReference Include="System.Data.HashFunction.MetroHash" Version="2.0.0" />
-    <PackageReference Include="System.Reactive" Version="6.1.0" />
+    <PackageReference Include="System.Reactive" Version="7.0.0" />
     <PackageReference Include="TrieNet2" Version="2.0.2" />
   </ItemGroup>
 

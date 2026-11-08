@@ -101,6 +101,7 @@ namespace IronyModManager.Implementation.Updater
         /// <param name="item">The item.</param>
         public new async Task InitAndBeginDownload(AppCastItem item)
         {
+            EnsureUpdateSignature(item);
             UpdateDownloading = true;
             await base.InitAndBeginDownload(item);
         }
@@ -112,6 +113,7 @@ namespace IronyModManager.Implementation.Updater
         /// <param name="installPath">The install path.</param>
         public new void InstallUpdate(AppCastItem item, string installPath = null)
         {
+            EnsureUpdateSignature(item);
             // So what to say to this "async void"? I don't know where to even begin.
             UpdateInstalling = true;
             base.InstallUpdate(item, installPath);
@@ -178,6 +180,19 @@ namespace IronyModManager.Implementation.Updater
                 return Path.Combine(path, "IronyModManager.Updater.exe");
             }
             return Path.Combine(path, "IronyModManager.Updater");
+        }
+
+        /// <summary>
+        /// Ensures that the software artifact has a signature for NetSparkle to verify.
+        /// </summary>
+        /// <param name="item">The application cast item.</param>
+        /// <exception cref="InvalidDataException">The software artifact signature is missing.</exception>
+        private static void EnsureUpdateSignature(AppCastItem item)
+        {
+            if (string.IsNullOrWhiteSpace(item?.DownloadSignature))
+            {
+                throw new InvalidDataException("Update signature is missing.");
+            }
         }
 
         /// <summary>

@@ -350,6 +350,18 @@
         "DirectoryPath": "common\\inline_scripts\\pop_faction_types",
         "PreferredParser": "StellarisWholeTextParser"
     }, {
+        "DirectoryPath": "common\\inline_scripts\\pop_faction_types\\actions",
+        "PreferredParser": "StellarisWholeTextParser"
+    }, {
+        "DirectoryPath": "common\\inline_scripts\\pop_faction_types\\attraction",
+        "PreferredParser": "StellarisWholeTextParser"
+    }, {
+        "DirectoryPath": "common\\inline_scripts\\pop_faction_types\\can_join_faction",
+        "PreferredParser": "StellarisWholeTextParser"
+    }, {
+        "DirectoryPath": "common\\inline_scripts\\pop_faction_types\\effect",
+        "PreferredParser": "StellarisWholeTextParser"
+    }, {
         "DirectoryPath": "common\\inline_scripts\\pop_resources",
         "PreferredParser": "StellarisWholeTextParser"
     }, {
@@ -387,6 +399,9 @@
         "PreferredParser": "StellarisWholeTextParser"
     }, {
         "DirectoryPath": "common\\inline_scripts\\special_projects",
+        "PreferredParser": "StellarisWholeTextParser"
+    }, {
+        "DirectoryPath": "common\\inline_scripts\\starbase",
         "PreferredParser": "StellarisWholeTextParser"
     }, {
         "DirectoryPath": "common\\inline_scripts\\starbase_modules",
@@ -512,6 +527,9 @@
         "DirectoryPath": "common\\policies",
         "PreferredParser": "DefaultParser"
     }, {
+        "DirectoryPath": "common\\policy_categories",
+        "PreferredParser": "DefaultParser"
+    }, {
         "DirectoryPath": "common\\pop_categories",
         "PreferredParser": "DefaultParser"
     }, {
@@ -552,6 +570,9 @@
         "PreferredParser": "DefaultParser"
     }, {
         "DirectoryPath": "common\\resource_converters",
+        "PreferredParser": "DefaultParser"
+    }, {
+        "DirectoryPath": "common\\resource_regions",
         "PreferredParser": "DefaultParser"
     }, {
         "DirectoryPath": "common\\scripted_actions",

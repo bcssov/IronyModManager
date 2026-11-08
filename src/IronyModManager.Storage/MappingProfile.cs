@@ -41,6 +41,7 @@ namespace IronyModManager.Storage
             CreateMap<IGameType, IGameType>().ReverseMap();
             CreateMap<IThemeType, IThemeType>().ReverseMap();
             CreateMap<IModCollection, IModCollection>();
+            CreateMap<IModAlias, IModAlias>().ReverseMap();
             CreateMap<IPreferences, IPreferences>().ReverseMap();
             CreateMap<IWindowState, IWindowState>().ReverseMap();
             CreateMap<IAppState, IAppState>().ReverseMap();

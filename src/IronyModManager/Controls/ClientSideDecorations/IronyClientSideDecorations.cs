@@ -14,6 +14,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reactive.Disposables;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
@@ -77,8 +78,12 @@ namespace IronyModManager.Controls.ClientSideDecorations
             base.OnAttachedToVisualTree(e);
 
             if (VisualRoot is Window window)
-                _toggleVisibilityDisposable = window.GetObservable(Window.ExtendClientAreaChromeHintsProperty)
-                    .Subscribe(_ => IsVisible = window.PlatformImpl?.NeedsManagedDecorations ?? false);
+            {
+                void UpdateVisibility() => IsVisible = window.PlatformImpl?.NeedsManagedDecorations ?? false;
+                _toggleVisibilityDisposable = new CompositeDisposable(
+                    window.GetObservable(Window.ExtendClientAreaChromeHintsProperty).Subscribe(_ => UpdateVisibility()),
+                    window.GetObservable(Window.IsExtendedIntoWindowDecorationsProperty).Subscribe(_ => UpdateVisibility()));
+            }
         }
 
         /// <summary>

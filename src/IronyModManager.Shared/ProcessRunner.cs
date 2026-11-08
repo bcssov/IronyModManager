@@ -110,12 +110,16 @@ namespace IronyModManager.Shared
         {
             if (!File.Exists(path))
             {
-                return;
+                throw new FileNotFoundException("The configured executable does not exist.", path);
             }
 
             if (string.IsNullOrWhiteSpace(args))
             {
                 var process = Process.Start(new ProcessStartInfo { FileName = path, WorkingDirectory = Path.GetDirectoryName(path)!, UseShellExecute = RuntimeInformation.IsOSPlatform(OSPlatform.Windows) });
+                if (process == null)
+                {
+                    throw new InvalidOperationException("No process was started for the configured executable.");
+                }
                 if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
                 {
                     if (waitForExit)
@@ -142,6 +146,10 @@ namespace IronyModManager.Shared
             else
             {
                 var process = Process.Start(new ProcessStartInfo { FileName = path, Arguments = args, WorkingDirectory = Path.GetDirectoryName(path)!, UseShellExecute = RuntimeInformation.IsOSPlatform(OSPlatform.Windows) });
+                if (process == null)
+                {
+                    throw new InvalidOperationException("No process was started for the configured executable.");
+                }
                 if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
                 {
                     if (waitForExit)
@@ -177,14 +185,38 @@ namespace IronyModManager.Shared
         /// <param name="args">The arguments.</param>
         public static void RunProtonProcess(string path, string baseSteamPath, string protonVersion, long appId, string args = Constants.EmptyParam)
         {
+            RunProtonProcess(path, baseSteamPath, protonVersion, appId, null, args);
+        }
+
+        /// <summary>
+        /// Runs Proton using Steam library roots supplied by the registered game model.
+        /// </summary>
+        public static void RunProtonProcess(string path, string baseSteamPath, string protonVersion, long appId, IEnumerable<string> steamLibraryRoots, string args)
+        {
+            var psi = CreateProtonStartInfo(path, baseSteamPath, protonVersion, appId, steamLibraryRoots, args);
+            if (Process.Start(psi) == null)
+            {
+                throw new InvalidOperationException("No process was started for the resolved Proton executable.");
+            }
+        }
+
+        /// <summary>
+        /// Builds the direct Proton launch configuration without starting a process.
+        /// </summary>
+        private static ProcessStartInfo CreateProtonStartInfo(string path, string baseSteamPath, string protonVersion, long appId, IEnumerable<string> steamLibraryRoots, string args)
+        {
             if (!File.Exists(path))
             {
-                return;
+                throw new FileNotFoundException("The configured game executable does not exist.", path);
             }
 
             var libraryPath = LinuxProtonResolver.GetSteamLibraryRootFromGamePath(path) ?? baseSteamPath;
 
-            var protonPath = LinuxProtonResolver.ResolveProtonPath(baseSteamPath, protonVersion);
+            var protonPath = LinuxProtonResolver.ResolveProtonPath(baseSteamPath, protonVersion, steamLibraryRoots);
+            if (string.IsNullOrWhiteSpace(protonPath))
+            {
+                throw new InvalidOperationException("No Proton executable was found in the Steam client or registered Steam libraries.");
+            }
 
             // ReSharper disable StringLiteralTypo -- shut the hell up
             var compatDataPath = Path.Combine(libraryPath, "steamapps", "compatdata", appId.ToString());
@@ -206,7 +238,7 @@ namespace IronyModManager.Shared
             psi.Environment["STEAM_COMPAT_DATA_PATH"] = compatDataPath;
             psi.Environment["STEAM_COMPAT_CLIENT_INSTALL_PATH"] = baseSteamPath;
 
-            Process.Start(psi);
+            return psi;
         }
 
         /// <summary>

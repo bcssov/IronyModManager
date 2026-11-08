@@ -11,17 +11,74 @@
     <converter:TextTypeFontFamilyConverter x:Key="TextTypeFontFamilyConverter" />
   </UserControl.Resources>
   <Panel>
-    <Grid ColumnDefinitions="7*,*,*,*" IsVisible="{Binding ShowArrows}">
+    <Grid ColumnDefinitions="*,Auto,Auto,Auto,Auto">
       <controls:TextBox Text="{Binding Text}" Watermark="{Binding WatermarkText}" HorizontalAlignment="Stretch"
-               Grid.Column="0" FontFamily="{Binding Text,Converter={StaticResource TextTypeFontFamilyConverter}}"></controls:TextBox>
-      <Button Content="{Binding DownArrowText}" Command="{Binding DownArrowCommand}" Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"></Button>
-      <Button Content="{Binding UpArrowText}" Command="{Binding UpArrowCommand}" Grid.Column="2" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"></Button>
-      <Button Content="{Binding ClearText}" Command="{Binding ClearTextCommand}" Grid.Column="3" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"></Button>
+               Grid.Column="0" FontFamily="{Binding Text,Converter={StaticResource TextTypeFontFamilyConverter}}" />
+      <Button Command="{Binding OpenAdvancedFilterCommand}" Grid.Column="1" x:Name="openAdvancedFilterButton"
+              ToolTip.Tip="{Binding AdvancedFilterText}"
+              HorizontalContentAlignment="Center" VerticalContentAlignment="Center">
+        <Path Width="16" Height="16" Stretch="Uniform" Fill="{Binding $parent[Button].Foreground}"
+              Data="M 1,2 L 15,2 L 10,8 L 10,14 L 6,12 L 6,8 Z" />
+      </Button>
+      <Button Content="{Binding DownArrowText}" Command="{Binding DownArrowCommand}" Grid.Column="2"
+              IsVisible="{Binding ShowArrows}" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" />
+      <Button Content="{Binding UpArrowText}" Command="{Binding UpArrowCommand}" Grid.Column="3"
+              IsVisible="{Binding ShowArrows}" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" />
+      <Button Content="{Binding ClearText}" Command="{Binding ClearTextCommand}" Grid.Column="4"
+              HorizontalContentAlignment="Center" VerticalContentAlignment="Center" />
     </Grid>
-    <Grid ColumnDefinitions="8*,*" IsVisible="{Binding !ShowArrows}">
-      <controls:TextBox Text="{Binding Text}" Watermark="{Binding WatermarkText}" HorizontalAlignment="Stretch"
-               Grid.Column="0" FontFamily="{Binding Text,Converter={StaticResource TextTypeFontFamilyConverter}}"></controls:TextBox>
-      <Button Content="{Binding ClearText}" Command="{Binding ClearTextCommand}" Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"></Button>
-    </Grid>
+    <Popup PlacementMode="AnchorAndGravity" PlacementGravity="Bottom" VerticalOffset="8"
+           IsOpen="{Binding IsAdvancedFilterOpen, Mode=TwoWay}" Topmost="True" ObeyScreenEdges="True"
+           StaysOpen="False" PlacementTarget="{Binding #openAdvancedFilterButton}">
+      <Border BorderThickness="1" BorderBrush="{DynamicResource IronyButtonBorderBrush}"
+              Background="{DynamicResource IronyBackgroundPopupBrush}" Padding="12" MinWidth="320" MaxWidth="480">
+        <ScrollViewer MaxHeight="520" HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
+          <StackPanel Spacing="8">
+            <TextBlock Text="{Binding AdvancedFilterText}" FontWeight="Bold" />
+            <TextBlock Text="{Binding AdvancedCustomQueryText}" IsVisible="{Binding IsCustomAdvancedQuery}"
+                       TextWrapping="Wrap" Foreground="{DynamicResource IronyAccentBrush}" />
+            <TextBlock Text="{Binding NameText}" />
+            <controls:TextBox Text="{Binding AdvancedPlainText}" HorizontalAlignment="Stretch" />
+            <TextBlock Text="{Binding SourceText}" />
+            <WrapPanel>
+              <CheckBox Content="{Binding SteamText}" IsChecked="{Binding SteamSource}" Margin="0,0,12,0" />
+              <CheckBox Content="{Binding ParadoxText}" IsChecked="{Binding ParadoxSource}" Margin="0,0,12,0" />
+              <CheckBox Content="{Binding LocalText}" IsChecked="{Binding LocalSource}" />
+            </WrapPanel>
+            <Grid ColumnDefinitions="*,*">
+              <StackPanel Grid.Column="0" Spacing="4" Margin="0,0,6,0">
+                <TextBlock Text="{Binding SelectedText}" />
+                <ComboBox SelectedIndex="{Binding AdvancedSelected}" HorizontalAlignment="Stretch">
+                  <ComboBoxItem Content="{Binding AnyText}" />
+                  <ComboBoxItem Content="{Binding YesText}" />
+                  <ComboBoxItem Content="{Binding NoText}" />
+                </ComboBox>
+              </StackPanel>
+              <StackPanel Grid.Column="1" Spacing="4" Margin="6,0,0,0">
+                <TextBlock Text="{Binding AchievementsText}" />
+                <ComboBox SelectedIndex="{Binding AdvancedAchievements}" HorizontalAlignment="Stretch">
+                  <ComboBoxItem Content="{Binding AnyText}" />
+                  <ComboBoxItem Content="{Binding CompatibleText}" />
+                  <ComboBoxItem Content="{Binding NotCompatibleText}" />
+                </ComboBox>
+              </StackPanel>
+            </Grid>
+            <TextBlock Text="{Binding VersionText}" />
+            <Grid ColumnDefinitions="Auto,*">
+              <ComboBox SelectedIndex="{Binding AdvancedVersionMode}" Margin="0,0,8,0" VerticalAlignment="Center">
+                <ComboBoxItem Content="{Binding IncludeText}" />
+                <ComboBoxItem Content="{Binding ExcludeText}" />
+              </ComboBox>
+              <controls:TextBox Text="{Binding AdvancedVersion}" HorizontalAlignment="Stretch" Grid.Column="1" />
+            </Grid>
+            <Grid ColumnDefinitions="Auto,*,Auto,Auto" Margin="0,4,0,0">
+              <Button Content="{Binding ResetText}" Command="{Binding AdvancedClearCommand}" Grid.Column="0" />
+              <Button Content="{Binding AdvancedCancelText}" Command="{Binding AdvancedCancelCommand}" Grid.Column="2" Margin="0,0,4,0" />
+              <Button Content="{Binding AdvancedApplyText}" Command="{Binding AdvancedApplyCommand}" Grid.Column="3" Margin="4,0,0,0" />
+            </Grid>
+          </StackPanel>
+        </ScrollViewer>
+      </Border>
+    </Popup>
   </Panel>
 </UserControl>

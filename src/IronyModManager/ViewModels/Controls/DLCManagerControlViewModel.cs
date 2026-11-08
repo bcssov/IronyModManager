@@ -48,6 +48,11 @@ namespace IronyModManager.ViewModels.Controls
         private readonly IGameService gameService;
 
         /// <summary>
+        /// The per-game filesystem safety state.
+        /// </summary>
+        private readonly IGameStateSafetyService gameStateSafetyService;
+
+        /// <summary>
         /// The selected game
         /// </summary>
         private IGame selectedGame;
@@ -61,10 +66,11 @@ namespace IronyModManager.ViewModels.Controls
         /// </summary>
         /// <param name="dlcService">The DLC service.</param>
         /// <param name="gameService">The game service.</param>
-        public DLCManagerControlViewModel(IDLCService dlcService, IGameService gameService)
+        public DLCManagerControlViewModel(IDLCService dlcService, IGameService gameService, IGameStateSafetyService gameStateSafetyService)
         {
             this.dlcService = dlcService;
             this.gameService = gameService;
+            this.gameStateSafetyService = gameStateSafetyService;
         }
 
         #endregion Constructors
@@ -145,6 +151,11 @@ namespace IronyModManager.ViewModels.Controls
             selectedGame = game;
             var dlc = await dlcService.GetAsync(selectedGame);
             await dlcService.SyncStateAsync(selectedGame, dlc);
+            if (gameStateSafetyService.IsLocked(selectedGame))
+            {
+                return;
+            }
+
             AllDLC = dlc?.OrderBy(p => p.Name).ToList();
             DLC = AllDLC?.Where(p => p.IsVisible).ToList();
         }

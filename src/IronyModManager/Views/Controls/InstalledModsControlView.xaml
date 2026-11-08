@@ -104,7 +104,7 @@
                                     </Panel>
                                 </Grid>
                                 <Grid Grid.Column="3" ColumnDefinitions="*,16">
-                                    <TextBlock Text="{Binding Name}" TextWrapping="Wrap" Grid.Column="0" FontFamily="{Binding Name,Converter={StaticResource TextTypeFontFamilyConverter}}" VerticalAlignment="Center"></TextBlock>
+                                    <TextBlock Text="{Binding DisplayName}" ToolTip.Tip="{Binding Name}" TextWrapping="Wrap" Grid.Column="0" FontFamily="{Binding DisplayName,Converter={StaticResource TextTypeFontFamilyConverter}}" VerticalAlignment="Center"></TextBlock>
                                     <Panel Grid.Column="1">
                                         <!-- Because Avalonia sucks in this regard, that's why -->
                                         <controls:IronyToolTip Background="Transparent" BorderThickness="0,0,0,0"  IsVisible="{Binding AchievementStatus, Converter={StaticResource AchievementStatusCompatibleConverter}}">

@@ -3,8 +3,8 @@
     "FontFamily": "Noto Sans",
     "SupportedNameBlock": "",
     "Title": "Irony Mod Manager: v{AppVersion}",
-    "BackgroundOperationMessage": "Please wait a background operation is being performed. App will shut down once it is completed...",
-    "WaitBackgroundOperationMessage": "Please wait a background operation is being performed.",
+    "BackgroundOperationMessage": "Please wait while a background operation is being performed. The app will close when it is complete...",
+    "WaitBackgroundOperationMessage": "Please wait while a background operation is being performed.",
     "Actions": {
       "Name": "Actions",
       "Wiki": "Wiki",
@@ -26,7 +26,7 @@
   },
   "SavingError": {
     "Title": "Save Error",
-    "Message": "Something seems to be locking Irony's ability to write to mod files. Please report this on GitHub issue tracker and post the error log."
+    "Message": "Something appears to be preventing Irony from writing to mod files. Please report this on the GitHub issue tracker and include the error log."
   },
   "UnableToWriteError": {
     "Title": "Application Blocked",
@@ -102,7 +102,7 @@
   },
   "GameLanguages": {
     "l_english": "English",
-    "l_braz_por": "Portugese",
+    "l_braz_por": "Portuguese",
     "l_french": "French",
     "l_german": "German",
     "l_polish": "Polish",
@@ -130,6 +130,7 @@
   "Collection_Mods": {
     "Name": "Collection Mods",
     "Remove": "-",
+    "RemoveFromCollection": "Remove from collection",
     "Create": "+",
     "OK": "OK",
     "Cancel": "Cancel",
@@ -190,8 +191,8 @@
       "Message": "Collection already exists and will be overwritten, do you want to proceed?"
     },
     "ImportNonExistingMods": {
-      "Title": "Non existant mods",
-      "Message": "The following mods could not be imported as they appear to be missing:{NewLine}{Mods}"
+      "Title": "Missing Mods",
+      "Message": "The following mods are not currently installed. Their collection entries were imported and preserved as disabled placeholders:{NewLine}{Mods}"
     },
     "ImportOther": {
       "Title": "...",
@@ -199,15 +200,15 @@
       "Paradox": "Import From Game",
       "ParadoxLauncher": "Import From Paradox Launcher",
       "ParadoxLauncherBeta": "Import From Paradox Launcher Beta",
-      "ParadoxLauncherJson": "Import From Paradox Launcher Json",
+      "ParadoxLauncherJson": "Import from Paradox Launcher JSON",
       "Close": "Close"
     },
     "ExportOther": {
       "Title": "...",
       "OrderOnly": "Export Order Only",
       "WholeCollection": "Export Whole Collection",
-      "ParadoxLauncherJson": "Export To Paradox Launcher Json (<2021.10)",
-      "ParadoxLauncherJson202110": "Export To Paradox Launcher Json (>=2021.10)",
+      "ParadoxLauncherJson": "Export to Paradox Launcher JSON (<2021.10)",
+      "ParadoxLauncherJson202110": "Export to Paradox Launcher JSON (>=2021.10)",
       "Close": "Close"
     },
     "MergeCollection": {
@@ -229,6 +230,10 @@
       "Compress": {
         "Overlay_Gathering_Mod_Info": "Please wait while gathering mod info...",
         "Overlay_Compressing_Files": "Please wait while merging the mod collection..."
+      },
+      "MissingModsPrompt": {
+        "Title": "Merge without unavailable mods?",
+        "Message": "Some mods in this collection are unavailable and will not be included in the merge:{NewLine}{NewLine}{Mods}{NewLine}{NewLine}Continue merging the available mods?"
       },
       "OverwritePrompt": {
         "Title": "Overwrite existing collection?",
@@ -252,8 +257,8 @@
       }
     },
     "Prompts": {
-      "ModsMissingTitle": "Mods removed",
-      "ModsMissingMessage": "Some mods are missing and have been removed from the collection automatically:{NewLine}{NewLine}{Mods}"
+      "ModsMissingTitle": "Mods missing",
+      "ModsMissingMessage": "Some mods are missing. They remain in the collection as disabled placeholders:{NewLine}{NewLine}{Mods}"
     }
 
   },
@@ -266,6 +271,7 @@
       "Overlay_Conflict_Solver_Loading_Game_Definitions": "Please wait while loading game definitions...",
       "Overlay_Conflict_Solver_Loading_Definitions": "Please wait while loading mod definitions...",
       "Overlay_Conflict_Solver_Analyzing_Conflicts": "Please wait while analyzing definitions for conflicts...",
+      "Overlay_Conflict_Solver_Filtering_Equivalent_Conflicts": "Filtering equivalent conflicts...",
       "Overlay_Conflict_Solver_Analyzing_Resolved_Conflicts": "Please wait while analyzing resolved definitions...",
       "Overlay_Conflict_Solver_Replacing_Definitions": "Please wait while replacing definitions...",
       "Overlay_Conflict_Solver_Progress": "Step {Count}/{TotalCount}: {PercentDone}",
@@ -279,7 +285,7 @@
       },
       "TooLargePrompt": {
         "Title": "Too Large",
-        "Message": "A mod with large source code has been detected this will potentially cause an out of memory crash in Irony. Game will potentially be also unlikely to be able to handle such large source files."
+        "Message": "A mod with large source files was detected. This may cause Irony to run out of memory, and the game may be unable to handle such large source files."
       }
     },
     "LaunchGame": {
@@ -289,6 +295,10 @@
       "LaunchError": {
         "Title": "Cannot Launch Game",
         "Message": "Failed to launch the game."
+      },
+      "ExecutableNotFound": {
+        "Title": "Game Executable Not Found",
+        "Message": "Game executable not found. Check the configured game executable path."
       },
       "NotSet": {
         "Title": "Game Not Set",
@@ -393,6 +403,17 @@
       "ShowResetConflicts": "Show Only Reset Conflicts",
       "Close": "Close"
     },
+    "ExactModSet": {
+      "Title": "Ignore Exact Mod Set",
+      "ExistingRules": "Existing exact mod set rules",
+      "AvailableMods": "Select the mods in the exact set",
+      "PreviewOnly": "Preview only",
+      "Add": "Add",
+      "Delete": "Delete",
+      "Save": "Save",
+      "Cancel": "Cancel",
+      "Close": "Close"
+    },
     "ResetConflicts": {
       "Title": "Reset Conflicts",
       "Resolved": "Resolved",
@@ -495,6 +516,7 @@
       "CheckPrerelease": "Update To Prerelease Versions",
       "CheckForUpdates": "Check For Updates",
       "Install": "Install Updates",
+      "OpenReleasePage": "Open Release Page",
       "Version": "Version: {Version}",
       "Skip": "Ignore Update",
       "Overlay": {
@@ -566,6 +588,10 @@
       "Title": "Collection Applied",
       "Message": "{CollectionName} has been applied."
     },
+    "CollectionAppliedMissingMods": {
+      "Title": "Missing Mods Skipped",
+      "Message": "The collection contains missing mods. Missing entries were skipped when applying it and remain in the collection."
+    },
     "CollectionNotApplied": {
       "Title": "Collection Not Applied",
       "Message": "{CollectionName} has not been applied."
@@ -622,6 +648,14 @@
       "Title": "Not enough free space",
       "Message": "There is not enough free space to perform merge operation."
     },
+    "CollectionMergeFailed": {
+      "Title": "Unable to merge collection",
+      "Message": "The collection cannot be merged. Check that it contains available mods and does not include the merge output."
+    },
+    "CollectionMergeArchiveUnavailable": {
+      "Title": "Merge archive unavailable",
+      "Message": "The Merge Compress output archive(s) cannot be overwritten and may be open in another program: {Archives}"
+    },
     "ParadoxLauncherRunning": {
       "Title": "Paradox Launcher Active",
       "Message": "Paradox Launcher is running, please close it before attempting this action."
@@ -629,7 +663,21 @@
     "ConflictSolverRerunGlobalVars": {
       "Title": "Conflict Solver Refresh",
       "Message": "Conflict Solver needs to be refreshed to take into account new global variable patches added. Please rerun conflict solver."
+    },
+    "FileSystemSafetyLock": {
+      "Title": "Game state locked for safety",
+      "Message": "Irony cannot trust the current filesystem or mod state for this game. Modifying operations are disabled for safety. Fix the unavailable provider or permissions and restart Irony, or choose a different user/custom mod directory. A changed directory is validated before operations resume."
     }
+  },
+  "Mod_Alias": {
+    "Title": "Mod alias",
+    "Alias": "Alias",
+    "OriginalName": "Original name",
+    "Set": "Set alias",
+    "Edit": "Edit alias",
+    "Clear": "Clear alias",
+    "Save": "Save",
+    "Cancel": "Cancel"
   },
   "Mod_App_Actions": {
     "OpenInSteam": "Open In Steam",
@@ -663,7 +711,29 @@
   "Filter": {
     "Clear": "X",
     "UpArrow": "▲",
-    "DownArrow": "▼"
+    "DownArrow": "▼",
+    "Advanced": {
+      "Title": "Advanced Filter",
+      "Name": "Name / Alias / Remote ID",
+      "Source": "Source",
+      "Steam": "Steam",
+      "Paradox": "Paradox",
+      "Local": "Local",
+      "Selected": "Selected",
+      "Achievements": "Achievements",
+      "Version": "Version",
+      "Include": "Include",
+      "Exclude": "Exclude",
+      "Any": "Any",
+      "Yes": "Yes",
+      "No": "No",
+      "Compatible": "Compatible",
+      "NotCompatible": "Not compatible",
+      "Apply": "Apply",
+      "Reset": "Reset",
+      "Cancel": "Cancel",
+      "CustomQuery": "This custom query cannot be represented completely. It will remain unchanged unless you apply or reset this filter."
+    }
   },
   "FilterCommands": {
     "Achievements": "achievements",

@@ -81,6 +81,13 @@ namespace IronyModManager.IO.Common.Mods
         bool CanProcess(string game);
 
         /// <summary>
+        /// Determines whether a definition is eligible for the game's shallow-comparison policy.
+        /// </summary>
+        /// <param name="definition">The definition.</param>
+        /// <returns><c>true</c> when shallow comparison is allowed; otherwise, <c>false</c>.</returns>
+        bool CanUseShallowComparison(IDefinition definition);
+
+        /// <summary>
         /// Definitions the uses fios rules.
         /// </summary>
         /// <param name="definition">The definition.</param>

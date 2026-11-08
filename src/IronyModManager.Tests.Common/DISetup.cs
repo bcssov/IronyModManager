@@ -48,7 +48,8 @@ namespace IronyModManager.Tests.Common
                     Container = Container,
                     PluginPathAndName = Constants.PluginsPathAndName
                 });
-            Container.Register<ILogger, Logger>();
+            // Production safety services retain their logger for the process lifetime.
+            Container.Register<ILogger, Logger>(Lifestyle.Singleton);
         }
 
         #endregion Methods

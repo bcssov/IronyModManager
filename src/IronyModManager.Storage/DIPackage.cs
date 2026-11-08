@@ -60,6 +60,7 @@ namespace IronyModManager.Storage
             }, ctx => ctx.Registration.ImplementationType == typeof(Database));
 
             container.Register<IStorageProvider, Storage>();
+            container.Register<IModAlias, ModAlias>();
             container.Register<INotificationPositionType, NotificationPositionType>();
         }
 

@@ -14,8 +14,11 @@
 
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using IronyModManager.Shared;
 using IronyModManager.Shared.Models;
+using ValueType = IronyModManager.Shared.Models.ValueType;
 
 namespace IronyModManager.IO.Mods.InfoProviders
 {
@@ -26,6 +29,14 @@ namespace IronyModManager.IO.Mods.InfoProviders
     /// <seealso cref="IronyModManager.IO.Mods.InfoProviders.BaseDefinitionInfoProvider" />
     public class HOI4DefinitionInfoProvider : BaseDefinitionInfoProvider
     {
+        private static readonly string[] ShallowComparisonExcludedDirectories =
+        [
+            "common\\on_actions".StandardizeDirectorySeparator(),
+            "common\\scripted_effects".StandardizeDirectorySeparator(),
+            "common\\scripted_localisation".StandardizeDirectorySeparator(),
+            "common\\scripted_triggers".StandardizeDirectorySeparator()
+        ];
+
         #region Properties
 
         /// <summary>
@@ -83,6 +94,26 @@ namespace IronyModManager.IO.Mods.InfoProviders
         public override bool CanProcess(string game)
         {
             return game.Equals(Shared.Constants.GamesTypes.HeartsOfIron4.Id);
+        }
+
+        /// <inheritdoc />
+        public override bool CanUseShallowComparison(IDefinition definition)
+        {
+            if (definition == null || definition.ValueType != ValueType.Object)
+            {
+                return false;
+            }
+
+            var directory = (definition.ParentDirectoryCI ?? string.Empty).StandardizeDirectorySeparator().TrimEnd(Path.DirectorySeparatorChar);
+            if (!directory.Equals("common", StringComparison.OrdinalIgnoreCase) &&
+                !directory.StartsWith("common" + Path.DirectorySeparatorChar, StringComparison.OrdinalIgnoreCase))
+            {
+                return false;
+            }
+
+            return ShallowComparisonExcludedDirectories.All(excluded =>
+                !directory.Equals(excluded, StringComparison.OrdinalIgnoreCase) &&
+                !directory.StartsWith(excluded + Path.DirectorySeparatorChar, StringComparison.OrdinalIgnoreCase));
         }
 
         #endregion Methods

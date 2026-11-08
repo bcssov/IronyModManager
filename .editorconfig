@@ -8,6 +8,17 @@ root = true
 [*]
 indent_style = space
 
+# Keep the Windows/.NET/Visual Studio tree aligned with .gitattributes.
+[*.{cs,csx,vb,vbx,csproj,sln,props,targets,pubxml,json,xml,config,resx,runsettings,xaml,axaml,xshd,bat,cmd,ps1,md,txt,yml,yaml,iss,isl,mod,dlc,py}]
+end_of_line = crlf
+
+# Unix-native scripts and Unix bundle metadata intentionally use LF.
+[*.{sh,bash,zsh,meta,plist}]
+end_of_line = lf
+
+[.{editorconfig,gitattributes,gitignore}]
+end_of_line = crlf
+
 # Code files
 [*.{cs,csx,vb,vbx}]
 indent_size = 4

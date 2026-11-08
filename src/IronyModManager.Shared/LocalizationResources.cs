@@ -177,6 +177,7 @@ namespace IronyModManager.Shared
             public const string Prefix = "Collection_Mods.";
             public const string Name = Prefix + "Name";
             public const string Remove = Prefix + "Remove";
+            public const string RemoveFromCollection = Prefix + "RemoveFromCollection";
             public const string Create = Prefix + "Create";
             public const string OK = Prefix + "OK";
             public const string Cancel = Prefix + "Cancel";
@@ -301,6 +302,12 @@ namespace IronyModManager.Shared
                     public const string Overlay_Gathering_Mod_Info = Prefix + "Overlay_Gathering_Mod_Info";
                     public const string Overlay_Compressing_Files = Prefix + "Overlay_Compressing_Files";
                 }
+                public static class MissingModsPrompt
+                {
+                    public const string Prefix = "Collection_Mods.MergeCollection.MissingModsPrompt.";
+                    public const string Title = Prefix + "Title";
+                    public const string Message = Prefix + "Message";
+                }
                 public static class OverwritePrompt
                 {
                     public const string Prefix = "Collection_Mods.MergeCollection.OverwritePrompt.";
@@ -350,6 +357,7 @@ namespace IronyModManager.Shared
                 public const string Overlay_Conflict_Solver_Loading_Game_Definitions = Prefix + "Overlay_Conflict_Solver_Loading_Game_Definitions";
                 public const string Overlay_Conflict_Solver_Loading_Definitions = Prefix + "Overlay_Conflict_Solver_Loading_Definitions";
                 public const string Overlay_Conflict_Solver_Analyzing_Conflicts = Prefix + "Overlay_Conflict_Solver_Analyzing_Conflicts";
+                public const string Overlay_Conflict_Solver_Filtering_Equivalent_Conflicts = Prefix + "Overlay_Conflict_Solver_Filtering_Equivalent_Conflicts";
                 public const string Overlay_Conflict_Solver_Analyzing_Resolved_Conflicts = Prefix + "Overlay_Conflict_Solver_Analyzing_Resolved_Conflicts";
                 public const string Overlay_Conflict_Solver_Replacing_Definitions = Prefix + "Overlay_Conflict_Solver_Replacing_Definitions";
                 public const string Overlay_Conflict_Solver_Progress = Prefix + "Overlay_Conflict_Solver_Progress";
@@ -381,6 +389,12 @@ namespace IronyModManager.Shared
                 public static class LaunchError
                 {
                     public const string Prefix = "Mod_Actions.LaunchGame.LaunchError.";
+                    public const string Title = Prefix + "Title";
+                    public const string Message = Prefix + "Message";
+                }
+                public static class ExecutableNotFound
+                {
+                    public const string Prefix = "Mod_Actions.LaunchGame.ExecutableNotFound.";
                     public const string Title = Prefix + "Title";
                     public const string Message = Prefix + "Message";
                 }
@@ -507,6 +521,19 @@ namespace IronyModManager.Shared
                 public const string IgnoreGameConflicts = Prefix + "IgnoreGameConflicts";
                 public const string ShowSelfConflicts = Prefix + "ShowSelfConflicts";
                 public const string ShowResetConflicts = Prefix + "ShowResetConflicts";
+                public const string Close = Prefix + "Close";
+            }
+            public static class ExactModSet
+            {
+                public const string Prefix = "Conflict_Solver.ExactModSet.";
+                public const string Title = Prefix + "Title";
+                public const string ExistingRules = Prefix + "ExistingRules";
+                public const string AvailableMods = Prefix + "AvailableMods";
+                public const string PreviewOnly = Prefix + "PreviewOnly";
+                public const string Add = Prefix + "Add";
+                public const string Delete = Prefix + "Delete";
+                public const string Save = Prefix + "Save";
+                public const string Cancel = Prefix + "Cancel";
                 public const string Close = Prefix + "Close";
             }
             public static class ResetConflicts
@@ -643,6 +670,7 @@ namespace IronyModManager.Shared
                 public const string CheckPrerelease = Prefix + "CheckPrerelease";
                 public const string CheckForUpdates = Prefix + "CheckForUpdates";
                 public const string Install = Prefix + "Install";
+                public const string OpenReleasePage = Prefix + "OpenReleasePage";
                 public const string Version = Prefix + "Version";
                 public const string Skip = Prefix + "Skip";
                 public static class Overlay
@@ -748,6 +776,12 @@ namespace IronyModManager.Shared
                 public const string Title = Prefix + "Title";
                 public const string Message = Prefix + "Message";
             }
+            public static class CollectionAppliedMissingMods
+            {
+                public const string Prefix = "Notifications.CollectionAppliedMissingMods.";
+                public const string Title = Prefix + "Title";
+                public const string Message = Prefix + "Message";
+            }
             public static class CollectionNotApplied
             {
                 public const string Prefix = "Notifications.CollectionNotApplied.";
@@ -832,6 +866,18 @@ namespace IronyModManager.Shared
                 public const string Title = Prefix + "Title";
                 public const string Message = Prefix + "Message";
             }
+            public static class CollectionMergeFailed
+            {
+                public const string Prefix = "Notifications.CollectionMergeFailed.";
+                public const string Title = Prefix + "Title";
+                public const string Message = Prefix + "Message";
+            }
+            public static class CollectionMergeArchiveUnavailable
+            {
+                public const string Prefix = "Notifications.CollectionMergeArchiveUnavailable.";
+                public const string Title = Prefix + "Title";
+                public const string Message = Prefix + "Message";
+            }
             public static class ParadoxLauncherRunning
             {
                 public const string Prefix = "Notifications.ParadoxLauncherRunning.";
@@ -844,6 +890,24 @@ namespace IronyModManager.Shared
                 public const string Title = Prefix + "Title";
                 public const string Message = Prefix + "Message";
             }
+            public static class FileSystemSafetyLock
+            {
+                public const string Prefix = "Notifications.FileSystemSafetyLock.";
+                public const string Title = Prefix + "Title";
+                public const string Message = Prefix + "Message";
+            }
+        }
+        public static class Mod_Alias
+        {
+            public const string Prefix = "Mod_Alias.";
+            public const string Title = Prefix + "Title";
+            public const string Alias = Prefix + "Alias";
+            public const string OriginalName = Prefix + "OriginalName";
+            public const string Set = Prefix + "Set";
+            public const string Edit = Prefix + "Edit";
+            public const string Clear = Prefix + "Clear";
+            public const string Save = Prefix + "Save";
+            public const string Cancel = Prefix + "Cancel";
         }
         public static class Mod_App_Actions
         {
@@ -890,6 +954,30 @@ namespace IronyModManager.Shared
             public const string Clear = Prefix + "Clear";
             public const string UpArrow = Prefix + "UpArrow";
             public const string DownArrow = Prefix + "DownArrow";
+            public static class Advanced
+            {
+                public const string Prefix = "Filter.Advanced.";
+                public const string Title = Prefix + "Title";
+                public const string Name = Prefix + "Name";
+                public const string Source = Prefix + "Source";
+                public const string Steam = Prefix + "Steam";
+                public const string Paradox = Prefix + "Paradox";
+                public const string Local = Prefix + "Local";
+                public const string Selected = Prefix + "Selected";
+                public const string Achievements = Prefix + "Achievements";
+                public const string Version = Prefix + "Version";
+                public const string Include = Prefix + "Include";
+                public const string Exclude = Prefix + "Exclude";
+                public const string Any = Prefix + "Any";
+                public const string Yes = Prefix + "Yes";
+                public const string No = Prefix + "No";
+                public const string Compatible = Prefix + "Compatible";
+                public const string NotCompatible = Prefix + "NotCompatible";
+                public const string Apply = Prefix + "Apply";
+                public const string Reset = Prefix + "Reset";
+                public const string Cancel = Prefix + "Cancel";
+                public const string CustomQuery = Prefix + "CustomQuery";
+            }
         }
         public static class FilterCommands
         {

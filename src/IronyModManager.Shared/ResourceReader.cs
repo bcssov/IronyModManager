@@ -100,7 +100,7 @@ namespace IronyModManager.Shared
                 throw new ArgumentNullException("resource not found");
             }
             var bytes = new byte[stream.Length];
-            stream.Read(bytes, 0, bytes.Length);
+            stream.ReadExactly(bytes);
             return bytes;
         }
 

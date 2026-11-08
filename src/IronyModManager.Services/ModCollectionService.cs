@@ -49,7 +49,8 @@ namespace IronyModManager.Services
         IGameService gameService,
         IModCollectionExporter modCollectionExporter,
         IStorageProvider storageProvider,
-        IMapper mapper) : ModBaseService(cache, definitionInfoProviders, reader, modWriter, modParser, gameService, storageProvider, mapper), IModCollectionService
+        IMapper mapper,
+        IGameStateSafetyService gameStateSafetyService = null) : ModBaseService(cache, definitionInfoProviders, reader, modWriter, modParser, gameService, storageProvider, mapper), IModCollectionService
     {
         #region Fields
 
@@ -72,6 +73,11 @@ namespace IronyModManager.Services
         /// The mod collection exporter
         /// </summary>
         private readonly IModCollectionExporter modCollectionExporter = modCollectionExporter;
+
+        /// <summary>
+        /// The per-game filesystem safety state.
+        /// </summary>
+        private readonly IGameStateSafetyService gameStateSafetyService = gameStateSafetyService;
 
         #endregion Fields
 
@@ -180,6 +186,11 @@ namespace IronyModManager.Services
         /// <returns>Task&lt;System.Boolean&gt;.</returns>
         public virtual Task<bool> ExportAsync(string file, IModCollection modCollection, bool exportOrderOnly = false, bool exportMods = false)
         {
+            if (exportMods && gameStateSafetyService?.IsLocked(GameService.GetSelected()) == true)
+            {
+                return Task.FromResult(false);
+            }
+
             var game = GameService.GetSelected();
             if (game == null || modCollection == null)
             {
@@ -205,7 +216,7 @@ namespace IronyModManager.Services
             };
             if (exportMods)
             {
-                parameters.ExportMods = GetCollectionMods(collectionName: modCollection.Name);
+                parameters.ExportMods = GetFileBackedCollectionMods(collectionName: modCollection.Name);
                 var prefixModNames = new List<string>();
                 collection.ModNames.ToList().ForEach(p => prefixModNames.Add(ModWriter.FormatPrefixModName(modNameOverride, p)));
                 collection.ModNames = prefixModNames;
@@ -224,9 +235,10 @@ namespace IronyModManager.Services
         /// <returns>Task&lt;System.Boolean&gt;.</returns>
         public virtual async Task<bool> ExportHashReportAsync(IEnumerable<IMod> mods, string path)
         {
-            if (!string.IsNullOrWhiteSpace(path) && mods?.Count() > 0)
+            var realMods = mods?.Where(p => !p.IsVirtual).ToList() ?? [];
+            if (!string.IsNullOrWhiteSpace(path) && realMods.Count != 0)
             {
-                var modExport = mods.ToList();
+                var modExport = realMods;
                 var collection = GetAllModCollectionsInternal().FirstOrDefault(p => p.IsSelected);
                 var patchModName = GenerateCollectionPatchName(collection!.Name);
                 var allMods = GetInstalledModsInternal(GameService.GetSelected(), false);
@@ -272,7 +284,7 @@ namespace IronyModManager.Services
             {
                 File = file,
                 Mod = collection,
-                ExportMods = GetCollectionMods(collectionName: modCollection.Name),
+                ExportMods = GetFileBackedCollectionMods(collectionName: modCollection.Name),
                 Game = game,
                 DescriptorType = MapDescriptorType(game.ModDescriptorType)
             };
@@ -298,7 +310,7 @@ namespace IronyModManager.Services
             {
                 File = file,
                 Mod = collection,
-                ExportMods = GetCollectionMods(collectionName: modCollection.Name),
+                ExportMods = GetFileBackedCollectionMods(collectionName: modCollection.Name),
                 Game = game,
                 DescriptorType = MapDescriptorType(game.ModDescriptorType)
             };
@@ -496,6 +508,23 @@ namespace IronyModManager.Services
         /// <exception cref="System.ArgumentNullException">collection</exception>
         public virtual bool Save(IModCollection collection)
         {
+            if (gameStateSafetyService?.IsLocked(GameService.GetSelected()) == true)
+            {
+                return false;
+            }
+
+            return SaveCollection(collection);
+        }
+
+        /// <inheritdoc />
+        public virtual bool SaveExplicitMembershipChange(IModCollection collection)
+        {
+            return SaveCollection(collection);
+        }
+
+        private bool SaveCollection(IModCollection collection)
+        {
+
             if (collection == null || string.IsNullOrWhiteSpace(collection.Game))
             {
                 throw new ArgumentNullException(nameof(collection));

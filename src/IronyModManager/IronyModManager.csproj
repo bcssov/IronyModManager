@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
-    <TargetFramework>net8.0</TargetFramework>
+    <TargetFramework>net10.0</TargetFramework>
     <ApplicationIcon>Assets\logo.ico</ApplicationIcon>
     <StartupObject>IronyModManager.Program</StartupObject>
     <Authors>Mario</Authors>
@@ -146,19 +146,19 @@
     <PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="$(MicrosoftExtensionsConfigurationBinder)" allowedVersions="$(MicrosoftExtensionsConfigurationBinder)" />
     <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="$(MicrosoftExtensionsConfigurationJson)" allowedVersions="$(MicrosoftExtensionsConfigurationJson)" />
     <PackageReference Include="Microsoft.Extensions.DependencyModel" Version="$(MicrosoftExtensionsDependencyModelVersion)" allowedVersions="$(MicrosoftExtensionsDependencyModelVersion)" />
-    <PackageReference Include="Microsoft.NETCore.Platforms" Version="$(MicrosoftNETCorePlatformsVersion)" allowedVersions="$(MicrosoftNETCorePlatformsVersion)" />
     <PackageReference Include="Microsoft.VisualStudio.SlowCheetah" Version="4.0.50">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="Nerdbank.GitVersioning" Version="3.9.50">
+    <PackageReference Include="Nerdbank.GitVersioning" Version="3.10.94">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="NetSparkleUpdater.SparkleUpdater" Version="$(NetSparkleUpdaterSparkleUpdater)" allowedVersions="$(NetSparkleUpdaterSparkleUpdater)" />
-    <PackageReference Include="NLog" Version="6.1.0" />
-    <PackageReference Include="ReactiveUI" Version="22.3.1" />
-    <PackageReference Include="SimpleInjector" Version="5.5.0" />
+    <PackageReference Include="NLog" Version="6.2.2" />
+    <PackageReference Include="NLog.Targets.Trace" Version="6.0.3" />
+    <PackageReference Include="ReactiveUI" Version="$(ReactiveUI)" allowedVersions="$(ReactiveUI)" />
+    <PackageReference Include="SimpleInjector" Version="5.6.0" />
     <PackageReference Include="SimpleInjector.Packaging" Version="5.5.0" />
     <PackageReference Include="SkiaSharp" Version="$(SkiaSharp)" allowedVersions="$(SkiaSharp)" />
     <PackageReference Include="Splat.NLog" Version="$(Splat)" allowedVersions="$(Splat)" />
@@ -174,6 +174,22 @@
     <ProjectReference Include="..\IronyModManager.Platform\IronyModManager.Platform.csproj" />
     <ProjectReference Include="..\IronyModManager.Services.Common\IronyModManager.Services.Common.csproj" />
     <ProjectReference Include="..\IronyModManager.Shared\IronyModManager.Shared.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <RuntimeImplementationProject Include="..\IronyModManager.GameHandler\IronyModManager.GameHandler.csproj" />
+    <RuntimeImplementationProject Include="..\IronyModManager.IO\IronyModManager.IO.csproj" />
+    <RuntimeImplementationProject Include="..\IronyModManager.Models\IronyModManager.Models.csproj" />
+    <RuntimeImplementationProject Include="..\IronyModManager.Parser\IronyModManager.Parser.csproj" />
+    <RuntimeImplementationProject Include="..\IronyModManager.Services\IronyModManager.Services.csproj" />
+    <RuntimeImplementationProject Include="..\IronyModManager.Storage\IronyModManager.Storage.csproj" />
+    <RuntimeImplementationProject Include="..\IronyModManager.Updater\IronyModManager.Updater.csproj" />
+    <ProjectReference Include="..\IronyModManager.GameHandler\IronyModManager.GameHandler.csproj" ReferenceOutputAssembly="false" />
+    <ProjectReference Include="..\IronyModManager.IO\IronyModManager.IO.csproj" ReferenceOutputAssembly="false" />
+    <ProjectReference Include="..\IronyModManager.Models\IronyModManager.Models.csproj" ReferenceOutputAssembly="false" />
+    <ProjectReference Include="..\IronyModManager.Parser\IronyModManager.Parser.csproj" ReferenceOutputAssembly="false" />
+    <ProjectReference Include="..\IronyModManager.Services\IronyModManager.Services.csproj" ReferenceOutputAssembly="false" />
+    <ProjectReference Include="..\IronyModManager.Storage\IronyModManager.Storage.csproj" ReferenceOutputAssembly="false" />
+    <ProjectReference Include="..\IronyModManager.Updater\IronyModManager.Updater.csproj" ReferenceOutputAssembly="false" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Assets\logo.png">
@@ -357,8 +373,8 @@
       <DependentUpon>nlog.config</DependentUpon>
     </None>
   </ItemGroup>
-  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
-    <Exec Command="call &quot;$(SolutionDir)\cmd\copy-dependencies.bat&quot; $(ConfigurationName) $(OutDir) $(SolutionDir)" />
+  <Target Name="ComposeApplicationOutput" AfterTargets="PostBuildEvent">
+    <Exec Command="call &quot;$(SolutionDir)\cmd\copy-dependencies.bat&quot; &quot;$(ConfigurationName)&quot; &quot;$(OutDir)&quot; &quot;$(SolutionDir)&quot; @(RuntimeImplementationProject-&gt;'&quot;%(Filename)&quot;', ' ')" />
   </Target>
   <ItemGroup>
     <EmbeddedResource Include="Controls\Themes\Light\ThemeOverride.xaml">

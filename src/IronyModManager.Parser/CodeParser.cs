@@ -283,10 +283,11 @@ namespace IronyModManager.Parser
         /// <returns>IScriptError.</returns>
         public IScriptError VerifyAllowedLength(IEnumerable<string> lines)
         {
-            if (lines.Count() > MaxLines)
+            var count = lines.Count();
+            if (count > MaxLines)
             {
                 var error = DIResolver.Get<IScriptError>();
-                error.Message = "File exceeded allowed number of lines.";
+                error.Message = $"File exceeded allowed number of lines. Lines: {count}; limit: {MaxLines}.";
                 return error;
             }
 
@@ -515,7 +516,7 @@ namespace IronyModManager.Parser
         /// <param name="code">The code.</param>
         /// <param name="index">The index.</param>
         /// <returns>IEnumerable&lt;IScriptElement&gt;.</returns>
-        /// <exception cref="System.ArgumentException">Unknown script syntax error near code:{sb}</exception>
+        /// <exception cref="ScriptParseException">Unknown script syntax error near code:{sb}</exception>
         protected IEnumerable<IScriptElement> GetElements(List<char> code, ref int index)
         {
             var counter = 0;
@@ -567,7 +568,9 @@ namespace IronyModManager.Parser
                             sb.Append(code[dump]);
                         }
 
-                        throw new ArgumentException($"Unknown script syntax error near code:{sb}");
+                        var error = DIResolver.Get<IScriptError>();
+                        error.Message = $"Unknown script syntax error near code:{sb}";
+                        throw new ScriptParseException(error);
                     }
                 }
                 else
@@ -747,13 +750,13 @@ namespace IronyModManager.Parser
         /// <param name="file">The file.</param>
         /// <param name="lines">The lines.</param>
         /// <returns>IEnumerable&lt;IScriptElement&gt;.</returns>
-        /// <exception cref="System.ArgumentException"></exception>
+        /// <exception cref="ScriptParseException">The input exceeds the allowed number of lines.</exception>
         protected IEnumerable<IScriptElement> ParseElements(string file, IEnumerable<string> lines)
         {
             var error = VerifyAllowedLength(lines);
             if (error != null)
             {
-                throw new ArgumentException(error.Message);
+                throw new ScriptParseException(error);
             }
 
             var result = new List<IScriptElement>();
@@ -791,12 +794,10 @@ namespace IronyModManager.Parser
                 {
                     result.Values = ParseElements(file, lines);
                 }
-                catch (Exception ex)
+                catch (ScriptParseException ex)
                 {
                     logger.Error(ex);
-                    var parseError = DIResolver.Get<IScriptError>();
-                    parseError.Message = ex.Message;
-                    result.Error = parseError;
+                    result.Error = ex.Error;
                 }
             }
             else
@@ -813,12 +814,10 @@ namespace IronyModManager.Parser
                     {
                         result.Values = ParseElements(file, lines);
                     }
-                    catch (Exception ex)
+                    catch (ScriptParseException ex)
                     {
                         logger.Error(ex);
-                        var parseError = DIResolver.Get<IScriptError>();
-                        parseError.Message = ex.Message;
-                        result.Error = parseError;
+                        result.Error = ex.Error;
                     }
                 }
             }

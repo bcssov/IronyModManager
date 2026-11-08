@@ -162,6 +162,11 @@ namespace IronyModManager.Storage
         public virtual string SteamRoot { get; set; }
 
         /// <summary>
+        /// Gets or sets the Steam library roots discovered during registration.
+        /// </summary>
+        public virtual IEnumerable<string> SteamLibraryRoots { get; set; } = [];
+
+        /// <summary>
         /// Gets or sets the supported merge types.
         /// </summary>
         /// <value>The supported merge types.</value>

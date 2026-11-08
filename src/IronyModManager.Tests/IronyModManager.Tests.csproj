@@ -1,7 +1,7 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net8.0</TargetFramework>
+    <TargetFramework>net10.0</TargetFramework>
     <Description>IronyModManager.Tests</Description>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
     <PackageIcon>logo.png</PackageIcon>
@@ -37,11 +37,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="AwesomeAssertions" Version="9.3.0" />
+    <PackageReference Include="AwesomeAssertions" Version="9.6.0" />
     <PackageReference Include="DiffPlex" Version="1.9.0" />
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="18.0.1" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="18.10.0" />
     <PackageReference Include="Moq" Version="4.20.72" />
-    <PackageReference Include="Nerdbank.GitVersioning" Version="3.9.50">
+    <PackageReference Include="Nerdbank.GitVersioning" Version="3.10.94">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
@@ -66,12 +66,19 @@
       <PackagePath></PackagePath>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>	
+    <None Include="..\IronyModManager\appSettings.json" Link="UpdatePolicy\appSettings.json" CopyToOutputDirectory="PreserveNewest" />
+    <None Include="..\IronyModManager\appSettings.linux-x64.json" Link="UpdatePolicy\appSettings.linux-x64.json" CopyToOutputDirectory="PreserveNewest" />
+    <None Include="..\IronyModManager\appSettings.osx-x64.json" Link="UpdatePolicy\appSettings.osx-x64.json" CopyToOutputDirectory="PreserveNewest" />
+    <None Include="..\IronyModManager\appSettings.win-x64.json" Link="UpdatePolicy\appSettings.win-x64.json" CopyToOutputDirectory="PreserveNewest" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\IronyModManager.Common\IronyModManager.Common.csproj" />
     <ProjectReference Include="..\IronyModManager.Models\IronyModManager.Models.csproj" />
     <ProjectReference Include="..\IronyModManager.Parser\IronyModManager.Parser.csproj" />
+    <ProjectReference Include="..\IronyModManager.Services\IronyModManager.Services.csproj" />
+    <ProjectReference Include="..\IronyModManager.IO\IronyModManager.IO.csproj" />
+    <ProjectReference Include="..\IronyModManager.Storage\IronyModManager.Storage.csproj" />
     <ProjectReference Include="..\IronyModManager.Tests.Common\IronyModManager.Tests.Common.csproj" />
     <ProjectReference Include="..\IronyModManager\IronyModManager.csproj" />
   </ItemGroup>

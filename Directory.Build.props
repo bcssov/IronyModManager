@@ -18,14 +18,17 @@
 		<PathMap>$(MSBuildProjectDirectory)=$(MSBuildProjectName)</PathMap>
 	</PropertyGroup>
 	<PropertyGroup>
-		<MicrosoftExtensionsDependencyModelVersion>[8.0.2]</MicrosoftExtensionsDependencyModelVersion>
-		<MicrosoftNETCorePlatformsVersion>[8.0.0-preview.7.23375.6]</MicrosoftNETCorePlatformsVersion>
-		<MicrosoftExtensionsConfigurationBinder>[8.0.2]</MicrosoftExtensionsConfigurationBinder>
-		<MicrosoftExtensionsConfigurationJson>[8.0.1]</MicrosoftExtensionsConfigurationJson>
-		<MicrosoftBclAsyncInterfaces>[8.0.0]</MicrosoftBclAsyncInterfaces>
-		<SystemSecurityPermissions>[8.0.0]</SystemSecurityPermissions>
-		<SystemTextEncodingCodePages>[8.0.0]</SystemTextEncodingCodePages>
+		<!-- Current net10.0 compatibility cohort: keep these aligned with the .NET 10 baseline and review them together. -->
+		<MicrosoftExtensionsDependencyModelVersion>[10.0.13]</MicrosoftExtensionsDependencyModelVersion>
+		<MicrosoftExtensionsConfigurationBinder>[10.0.13]</MicrosoftExtensionsConfigurationBinder>
+		<MicrosoftExtensionsConfigurationJson>[10.0.13]</MicrosoftExtensionsConfigurationJson>
+		<MicrosoftBclAsyncInterfaces>[10.0.13]</MicrosoftBclAsyncInterfaces>
+		<SystemSecurityPermissions>[10.0.13]</SystemSecurityPermissions>
+		<SystemTextEncodingCodePages>[10.0.13]</SystemTextEncodingCodePages>
+		<!-- Jot previously introduced a regression in tracked nested/object properties during an upgrade (upstream issue #58). Exact pinning is intentional; future upgrades require targeted storage/tracking validation. -->
 		<Jot>[2.1.17]</Jot>
+		<!-- The .NET 10 migration is complete. Reconsider FSharp.Core only together with the separate follow-up CWTools modernization task. -->
+		<FSharpCore>[10.1.400]</FSharpCore>
 		<!-- Non-upgradeable stuff below  -->
 		<!-- Avalonia is not easily upgradeable too -->
 		<MaterialAvalonia>[2.5.1]</MaterialAvalonia>
@@ -34,31 +37,52 @@
 		<AvaloniaEdit>[0.10.12.2]</AvaloniaEdit>
 		<AvaloniaMaterialIcons>[1.1.10]</AvaloniaMaterialIcons>
 		<AvaloniaColorPicker>[0.10.17]</AvaloniaColorPicker>
+		<!-- Runtime-only compatibility patch for Avalonia 0.10.22 WinUI Composition commit starvation. -->
+		<LibHarmony>[2.4.2]</LibHarmony>
 		<!-- 2.5.0–3.1.x early versions broke tests badly (parallelization/config behavior changed).
 			3.1.5 finally works again. Version pinned on purpose. Do not auto-upgrade blindly. -->
 		<XUnitRunnerVS>[3.1.5]</XUnitRunnerVS>
-		<!-- SixLabors should be removed at some point  -->
-		<SixLaborsImageSharp>[1.0.4]</SixLaborsImageSharp>
-		<SixLaborsImageSharpDrawing>[1.0.0-beta13.15]</SixLaborsImageSharpDrawing>
-		<SixLaborsImageSharpTextures>[0.0.0-alpha.0.132]</SixLaborsImageSharpTextures>
 		<!-- Updater has too many breaking changes and our logic diverged from it, we handle lots of stuff on our own anyway -->
 		<NetSparkleUpdaterSparkleUpdater>[2.3.0]</NetSparkleUpdaterSparkleUpdater>
-		<!-- Minor version updates keep breaking the API; sticking to 2.2.3 -->
+		<!--
+			SlimMessageBus 2.2.3 is an intentional architecture lock.
+
+			Irony has a heavily customized integration around the 2.x builder/provider model:
+			custom IServiceProvider, memory provider, validation, message-type resolution,
+			interceptor collections, runtime consumer discovery, and SimpleInjector ownership.
+
+			A maintainer migration attempt in 2025 was abandoned because newer SlimMessageBus
+			versions substantially redesigned the DI/provider/composition model. A 2026 audit
+			against 3.5.0 confirmed that this architectural divergence remains: upgrading would
+			require rebuilding Irony's messaging composition boundary rather than performing a
+			bounded dependency update.
+
+			Do not independently upgrade this package during routine dependency maintenance.
+			Revisit only as part of a major application architecture migration/redesign, such as
+			the future Avalonia 12+/2.x generation, where DI/composition and related infrastructure
+			are being intentionally reconsidered together.
+		-->
 		<SlimMessageBusHost>[2.2.3]</SlimMessageBusHost>
 		<!-- SkiaSharp stays on 2.88.x because Avalonia 0.10.x depends on that API surface.
 			Safe patch bump within same minor version. -->
 		<SkiaSharp>[2.88.9]</SkiaSharp>
-		<!-- Splat dependencies should also be locked -->
+		<!-- Avalonia 0.10.22 frontend compatibility boundary: ReactiveUI 22.3.1 and the Splat 17.1.1 family
+			must remain exact and aligned. Newer or mixed Splat generations change SimpleInjector resolver registration
+			behavior in Irony's InitializeSplat/InitializeReactiveUI composition path and have reproduced DI/startup failures.
+			ReactiveUI 23 requires coordinated Splat + DynamicData changes; ReactiveUI 24 additionally adopts Primitives/new
+			disposables. Revisit only as a coordinated Avalonia/reactive-stack migration. -->
+		<ReactiveUI>[22.3.1]</ReactiveUI>
 		<Splat>[17.1.1]</Splat>
 	</PropertyGroup>
 	<ItemGroup>
 		<PackageReference Update="Nerdbank.GitVersioning" Condition="!Exists('packages.config')">
-			<Version>3.9.50</Version>
+			<Version>3.10.94</Version>
 			<PrivateAssets>all</PrivateAssets>
 		</PackageReference>
 	</ItemGroup>
 	<ItemGroup>
-		<!-- Probably not needed but I've got so many dependencies -->
+		<!-- Preserve legacy RID fallback for AssemblyDependencyResolver and older native dependencies.
+			Restore/publish uses the .NET SDK RID graph; this runtime switch is independent of Microsoft.NETCore.Platforms. -->
 		<RuntimeHostConfigurationOption Include="System.Runtime.Loader.UseRidGraph" Value="true"/>
 	</ItemGroup>
 </Project>

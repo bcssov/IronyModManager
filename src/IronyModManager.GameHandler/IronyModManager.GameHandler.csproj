@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <TargetFramework>net8.0</TargetFramework>
+    <TargetFramework>net10.0</TargetFramework>
 	<ApplicationIcon>../IronyModManager/Assets/logo.ico</ApplicationIcon>
     <Description>IronyModManager Game Launcher Component</Description>	
 	<PackageLicenseFile>LICENSE</PackageLicenseFile>
@@ -59,8 +59,8 @@
   <ItemGroup>
 	<PackageReference Include="CommandLineParser" Version="2.9.1" />
 	<PackageReference Include="Nerdbank.GitVersioning" />
-	<PackageReference Include="NLog" Version="6.1.0" />
-	<PackageReference Update="Nerdbank.GitVersioning" Version="3.9.50">
+	<PackageReference Include="NLog" Version="6.2.2" />
+	<PackageReference Update="Nerdbank.GitVersioning" Version="3.10.94">
 	  <PrivateAssets>all</PrivateAssets>
 	  <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 	</PackageReference>

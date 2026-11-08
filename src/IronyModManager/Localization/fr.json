@@ -3,8 +3,8 @@
     "FontFamily": "Noto Sans",
     "SupportedNameBlock": "",
     "Title": "Irony Mod Manager: v{AppVersion}",
-    "BackgroundOperationMessage": "Veuillez patienter une opération en arrière-plan est en cours d'exécution. L'application se fermera une fois qu'elle sera terminée...",
-    "WaitBackgroundOperationMessage": "Veuillez patienter une opération en arrière-plan est en cours d'exécution.",
+    "BackgroundOperationMessage": "Veuillez patienter pendant l'exécution d'une opération en arrière-plan. L'application se fermera une fois l'opération terminée...",
+    "WaitBackgroundOperationMessage": "Veuillez patienter pendant l'exécution d'une opération en arrière-plan.",
     "Actions": {
       "Name": "Actions",
       "Wiki": "Wiki",
@@ -130,6 +130,7 @@
   "Collection_Mods": {
     "Name": "Liste de mods",
     "Remove": "-",
+    "RemoveFromCollection": "Retirer de la collection",
     "Create": "+",
     "OK": "OK",
     "Cancel": "Annuler",
@@ -191,7 +192,7 @@
     },
     "ImportNonExistingMods": {
       "Title": "Mods inexistants",
-      "Message": "Les mods suivants n'ont pas pu être importés car ils semblent manquer:{NewLine}{Mods}"
+      "Message": "Les mods suivants ne sont pas installés actuellement. Leurs entrées ont été importées et conservées dans la collection sous forme d'éléments désactivés :{NewLine}{Mods}"
     },
     "ImportOther": {
       "Title": "...",
@@ -230,6 +231,10 @@
         "Overlay_Gathering_Mod_Info": "Veuillez patienter pendant la collecte des informations sur le mod...",
         "Overlay_Compressing_Files": "Veuillez patienter pendant la fusion de la liste des mods..."
       },
+      "MissingModsPrompt": {
+        "Title": "Fusionner sans les mods indisponibles ?",
+        "Message": "Certains mods de cette collection sont indisponibles et ne seront pas inclus dans la fusion :{NewLine}{NewLine}{Mods}{NewLine}{NewLine}Continuer avec les mods disponibles ?"
+      },
       "OverwritePrompt": {
         "Title": "Remplacer la liste existante ?",
         "Message": "Une liste fusionnée avec le nom spécifié existe déjà. Souhaitez-vous l'écraser?"
@@ -252,8 +257,8 @@
       }
     },
     "Prompts": {
-      "ModsMissingTitle": "Mods supprimés",
-      "ModsMissingMessage": "Certains mods sont manquants et ont été retirés automatiquement de la collection.:{NewLine}{NewLine}{Mods}"
+      "ModsMissingTitle": "Mods manquants",
+      "ModsMissingMessage": "Certains mods sont manquants. Ils restent dans la collection sous forme d'éléments désactivés :{NewLine}{NewLine}{Mods}"
     }
 
   },
@@ -266,6 +271,7 @@
       "Overlay_Conflict_Solver_Loading_Game_Definitions": "Veuillez patienter pendant le chargement des définitions de jeu...",
       "Overlay_Conflict_Solver_Loading_Definitions": "Veuillez patienter pendant le chargement des définitions du mod...",
       "Overlay_Conflict_Solver_Analyzing_Conflicts": "Veuillez patienter pendant l'analyse des définitions pour les conflits...",
+      "Overlay_Conflict_Solver_Filtering_Equivalent_Conflicts": "Filtrage des conflits équivalents...",
       "Overlay_Conflict_Solver_Analyzing_Resolved_Conflicts": "Veuillez patienter pendant l'analyse des définitions résolues...",
       "Overlay_Conflict_Solver_Replacing_Definitions": "Veuillez patienter pendant le remplacement des définitions...",
       "Overlay_Conflict_Solver_Progress": "Étape {Count}/{TotalCount}: {PercentDone}",
@@ -289,6 +295,10 @@
       "LaunchError": {
         "Title": "Impossible de lancer le jeu",
         "Message": "Impossible de lancer le jeu."
+      },
+      "ExecutableNotFound": {
+        "Title": "Exécutable du jeu introuvable",
+        "Message": "Exécutable du jeu introuvable. Vérifiez le chemin configuré vers l’exécutable du jeu."
       },
       "NotSet": {
         "Title": "Jeu introuvable",
@@ -393,6 +403,17 @@
       "ShowResetConflicts": "Afficher uniquement les conflits de réinitialisation",
       "Close": "Fermer"
     },
+    "ExactModSet": {
+      "Title": "Ignorer l’ensemble exact de mods",
+      "ExistingRules": "Règles existantes d’ensembles exacts de mods",
+      "AvailableMods": "Sélectionnez les mods de l’ensemble exact",
+      "PreviewOnly": "Aperçu uniquement",
+      "Add": "Ajouter",
+      "Delete": "Supprimer",
+      "Save": "Enregistrer",
+      "Cancel": "Annuler",
+      "Close": "Fermer"
+    },
     "ResetConflicts": {
       "Title": "Réinitialiser les conflits",
       "Resolved": "Résolu",
@@ -434,7 +455,7 @@
     },
     "ResetWarning": {
       "Title": "Réinitialisation des conflits",
-      "AnalyzeModeAll": "Certains conflits seront réinitialisés si le correcteur de conflit est exécuté en raison de modifications récente. Voilà les conflits résolus qui seront réinitialisés:{NewLine}{NewLine}{NewLine}{ListOfConflictsResolved}{NewLine}Voilà les conflits ignorés qui seront réinitialisés:{NewLine}{NewLine}{ListOfConflictsIgnored}",
+      "AnalyzeModeAll": "Certains conflits seront réinitialisés si le correcteur de conflits est exécuté à la suite de modifications de mods. Voici les conflits résolus qui seront réinitialisés :{NewLine}{NewLine}{ListOfConflictsResolved}{NewLine}Voici les conflits ignorés qui seront réinitialisés :{NewLine}{NewLine}{ListOfConflictsIgnored}",
       "AnalyzeModeResolvedOnly": "Certains conflits seront réinitialisés si le correcteur de conflit est exécuté en raison de modifications récente. Voilà les conflits résolus qui seront réinitialisés:{NewLine}{NewLine}{ListOfConflictsResolved}",
       "AnalyzeModeIgnoredOnly": "Certains conflits seront réinitialisés si le correcteur de conflit est exécuté en raison de modifications récente. Voilà les conflits ignorés qui seront réinitialisés:{NewLine}{NewLine}{ListOfConflictsIgnored}",
       "RegularModeAll": "Certains conflits ont été réinitialisés en raison de modifications récente. Voilà les conflits qui ont été réinitialisées en conflits résolus:{NewLine}{NewLine}{ListOfConflictsResolved}{NewLine}Voilà les conflits qui ont été réinitialisées en conflits ignorés:{NewLine}{NewLine}{ListOfConflictsIgnored}",
@@ -495,6 +516,7 @@
       "CheckPrerelease": "Mettre à jour vers les versions instable",
       "CheckForUpdates": "Vérifier les mises à jour",
       "Install": "Installer les mises à jour",
+      "OpenReleasePage": "Ouvrir la page des versions",
       "Version": "Version: {Version}",
       "Skip": "Ignorer la mise à jour",
       "Overlay": {
@@ -566,6 +588,10 @@
       "Title": "Liste appliquée",
       "Message": "{CollectionName} a été appliqué."
     },
+    "CollectionAppliedMissingMods": {
+      "Title": "Mods manquants ignorés",
+      "Message": "La liste contient des mods manquants. Les entrées manquantes ont été ignorées lors de l’application et restent dans la liste."
+    },
     "CollectionNotApplied": {
       "Title": "Liste non appliquée",
       "Message": "{CollectionName} n'a pas été appliqué."
@@ -622,6 +648,14 @@
       "Title": "Pas assez d'espace libre",
       "Message": "Il n'y a pas assez d'espace libre pour effectuer l'opération de fusion."
     },
+    "CollectionMergeFailed": {
+      "Title": "Impossible de fusionner la collection",
+      "Message": "La collection ne peut pas être fusionnée. Vérifiez qu’elle contient des mods disponibles et n’inclut pas le résultat de la fusion."
+    },
+    "CollectionMergeArchiveUnavailable": {
+      "Title": "Archive de fusion indisponible",
+      "Message": "Les archives de sortie de la fusion compressée ne peuvent pas être écrasées et sont peut-être ouvertes dans un autre programme : {Archives}"
+    },
     "ParadoxLauncherRunning": {
       "Title": "Lanceur de paradoxe actif",
       "Message": "Paradox Launcher est en cours d'exécution, veuillez le fermer avant de tenter cette action."
@@ -629,7 +663,21 @@
     "ConflictSolverRerunGlobalVars": {
       "Title": "Actualisation du correcteur de conflits",
       "Message": "L'outil de résolution des conflits doit être actualisé pour prendre en compte les nouveaux correctifs de variables globales ajoutés. Veuillez réexécuter l'outil de résolution des conflits."
+    },
+    "FileSystemSafetyLock": {
+      "Title": "État du jeu verrouillé par sécurité",
+      "Message": "Irony ne peut pas considérer comme fiable l'état actuel du système de fichiers ou des mods de ce jeu. Les opérations de modification sont désactivées par sécurité. Corrigez le fournisseur ou les autorisations puis redémarrez Irony, ou choisissez un autre dossier utilisateur ou de mods personnalisé. Le nouveau dossier sera validé avant la reprise des opérations."
     }
+  },
+  "Mod_Alias": {
+    "Title": "Alias du mod",
+    "Alias": "Alias",
+    "OriginalName": "Nom d’origine",
+    "Set": "Définir l’alias",
+    "Edit": "Modifier l’alias",
+    "Clear": "Effacer l’alias",
+    "Save": "Enregistrer",
+    "Cancel": "Annuler"
   },
   "Mod_App_Actions": {
     "OpenInSteam": "Ouvrir dans Steam",
@@ -663,7 +711,29 @@
   "Filter": {
     "Clear": "X",
     "UpArrow": "▲",
-    "DownArrow": "▼"
+    "DownArrow": "▼",
+    "Advanced": {
+      "Title": "Filtre avancé",
+      "Name": "Nom / Alias / ID distant",
+      "Source": "Source",
+      "Steam": "Steam",
+      "Paradox": "Paradox",
+      "Local": "Local",
+      "Selected": "Sélectionné",
+      "Achievements": "Succès",
+      "Version": "Version",
+      "Include": "Inclure",
+      "Exclude": "Exclure",
+      "Any": "Tous",
+      "Yes": "Oui",
+      "No": "Non",
+      "Compatible": "Compatible",
+      "NotCompatible": "Non compatible",
+      "Apply": "Appliquer",
+      "Reset": "Réinitialiser",
+      "Cancel": "Annuler",
+      "CustomQuery": "Cette requête personnalisée ne peut pas être représentée entièrement. Elle restera inchangée sauf si vous appliquez ou réinitialisez ce filtre."
+    }
   },
   "FilterCommands": {
     "Achievements": "succès",

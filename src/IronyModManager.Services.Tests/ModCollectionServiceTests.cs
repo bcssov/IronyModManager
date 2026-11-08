@@ -366,6 +366,27 @@ namespace IronyModManager.Services.Tests
             service.GetAll().Count().Should().Be(2);
         }
 
+        [Fact]
+        public void Explicit_membership_change_should_save_while_game_is_locked()
+        {
+            var storageProvider = new Mock<IStorageProvider>();
+            var mapper = new Mock<IMapper>();
+            var gameService = new Mock<IGameService>();
+            var modExport = new Mock<IModCollectionExporter>();
+            var safety = new Mock<IGameStateSafetyService>();
+            SetupMockCase(storageProvider, gameService);
+            safety.Setup(p => p.IsLocked(It.IsAny<IGame>())).Returns(true);
+            var service = new ModCollectionService(null, null, new Cache(), null, null, null, null,
+                gameService.Object, modExport.Object, storageProvider.Object, mapper.Object, safety.Object);
+            var collection = new ModCollection { Name = "test", Game = "test", Mods = ["first", "last"] };
+
+            service.Save(collection).Should().BeFalse();
+            service.SaveExplicitMembershipChange(collection).Should().BeTrue();
+
+            service.Get("test").Mods.Should().Equal("first", "last");
+            storageProvider.Verify(p => p.SetModCollections(It.IsAny<IEnumerable<IModCollection>>()), Times.Once);
+        }
+
         /// <summary>
         /// Defines the test method Should_return_mod_names.
         /// </summary>

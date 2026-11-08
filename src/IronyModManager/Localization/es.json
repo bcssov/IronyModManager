@@ -26,7 +26,7 @@
   },
   "SavingError": {
     "Title": "Guardar Error",
-    "Message": "Algo parece estar bloqueando la capacidad de Irony para escribir en archivos mod. Reporta esto en el rastreador de problemas de GitHub y publique el registro de errores."
+    "Message": "Algo parece impedir que Irony escriba en los archivos de los mods. Informe de ello en el rastreador de incidencias de GitHub e incluya el registro de errores."
   },
   "UnableToWriteError": {
     "Title": "Aplicación bloqueada",
@@ -130,6 +130,7 @@
   "Collection_Mods": {
     "Name": "Colección de Mods",
     "Remove": "-",
+    "RemoveFromCollection": "Eliminar de la colección",
     "Create": "+",
     "OK": "OK",
     "Cancel": "Cancelar",
@@ -191,7 +192,7 @@
     },
     "ImportNonExistingMods": {
       "Title": "Mods inexistentes",
-      "Message": "Los siguientes mods no se pudieron importar porque parecen faltar:{NewLine}{Mods}"
+      "Message": "Los siguientes mods no están instalados actualmente. Sus entradas se importaron y conservaron en la colección como marcadores deshabilitados:{NewLine}{Mods}"
     },
     "ImportOther": {
       "Title": "...",
@@ -199,15 +200,15 @@
       "Paradox": "Importar desde Juego",
       "ParadoxLauncher": "Importar desde Paradox Launcher",
       "ParadoxLauncherBeta": "Importación de Paradox Launcher Beta",
-      "ParadoxLauncherJson": "Importar desde Paradox Launcher Json",
+      "ParadoxLauncherJson": "Importar desde JSON de Paradox Launcher",
       "Close": "Cerrar"
     },
     "ExportOther": {
       "Title": "...",
       "OrderOnly": "Exportar Orden Solamente",
       "WholeCollection": "Exportar toda la colección",
-      "ParadoxLauncherJson": "Exportar a Paradox Launcher Json (<2021.10)",
-      "ParadoxLauncherJson202110": "Exportar a Paradox Launcher Json (>=2021.10)",
+      "ParadoxLauncherJson": "Exportar a JSON de Paradox Launcher (<2021.10)",
+      "ParadoxLauncherJson202110": "Exportar a JSON de Paradox Launcher (>=2021.10)",
       "Close": "Cerrar"
     },
     "MergeCollection": {
@@ -229,6 +230,10 @@
       "Compress": {
         "Overlay_Gathering_Mod_Info": "Espere mientras se recopila la información del mod...",
         "Overlay_Compressing_Files": "Espere mientras se fusiona la colección de mods..."
+      },
+      "MissingModsPrompt": {
+        "Title": "¿Combinar sin los mods no disponibles?",
+        "Message": "Algunos mods de esta colección no están disponibles y no se incluirán en la combinación:{NewLine}{NewLine}{Mods}{NewLine}{NewLine}¿Continuar con los mods disponibles?"
       },
       "OverwritePrompt": {
         "Title": "¿Sobrescribir la colección existente?",
@@ -252,8 +257,8 @@
       }
     },
     "Prompts": {
-      "ModsMissingTitle": "Mods eliminados",
-      "ModsMissingMessage": "Faltan algunos mods y se han eliminado de la colección automáticamente:{NewLine}{NewLine}{Mods}"
+      "ModsMissingTitle": "Faltan mods",
+      "ModsMissingMessage": "Faltan algunos mods. Permanecen en la colección como marcadores deshabilitados:{NewLine}{NewLine}{Mods}"
     }
 
   },
@@ -266,6 +271,7 @@
       "Overlay_Conflict_Solver_Loading_Game_Definitions": "Por favor, espere mientras cargando definiciones de juego...",
       "Overlay_Conflict_Solver_Loading_Definitions": "Espere mientras se cargan las definiciones de mod...",
       "Overlay_Conflict_Solver_Analyzing_Conflicts": "Espere mientras se analizan las definiciones en busca de conflictos...",
+      "Overlay_Conflict_Solver_Filtering_Equivalent_Conflicts": "Filtrando conflictos equivalentes...",
       "Overlay_Conflict_Solver_Analyzing_Resolved_Conflicts": "Espere mientras se analizan las definiciones resueltas...",
       "Overlay_Conflict_Solver_Replacing_Definitions": "Espere mientras se reemplazan las definiciones...",
       "Overlay_Conflict_Solver_Progress": "Step {Count}/{TotalCount}: {PercentDone}",
@@ -289,6 +295,10 @@
       "LaunchError": {
         "Title": "No se pudo iniciar el juego.",
         "Message": "No se pudo iniciar el juego."
+      },
+      "ExecutableNotFound": {
+        "Title": "Ejecutable del juego no encontrado",
+        "Message": "No se ha encontrado el ejecutable del juego. Comprueba la ruta configurada al ejecutable del juego."
       },
       "NotSet": {
         "Title": "Juego no configurado",
@@ -393,6 +403,17 @@
       "ShowResetConflicts": "Mostrar solo restablecer conflictos",
       "Close": "Cerrar"
     },
+    "ExactModSet": {
+      "Title": "Ignorar conjunto exacto de mods",
+      "ExistingRules": "Reglas existentes de conjuntos exactos de mods",
+      "AvailableMods": "Selecciona los mods del conjunto exacto",
+      "PreviewOnly": "Solo vista previa",
+      "Add": "Añadir",
+      "Delete": "Eliminar",
+      "Save": "Guardar",
+      "Cancel": "Cancelar",
+      "Close": "Cerrar"
+    },
     "ResetConflicts": {
       "Title": "Reiniciar Conflictos",
       "Resolved": "Resuelto",
@@ -495,6 +516,7 @@
       "CheckPrerelease": "Actualizar a versiones preliminares",
       "CheckForUpdates": "Buscar Actualizaciones",
       "Install": "Instalar Actualizaciones",
+      "OpenReleasePage": "Abrir página de versiones",
       "Version": "Version: {Version}",
       "Skip": "Ignorar la actualización",
       "Overlay": {
@@ -566,6 +588,10 @@
       "Title": "Colección Aplicada",
       "Message": "{CollectionName} ha sido aplicada."
     },
+    "CollectionAppliedMissingMods": {
+      "Title": "Mods faltantes omitidos",
+      "Message": "La colección contiene mods que faltan. Las entradas faltantes se omitieron al aplicarla y permanecen en la colección."
+    },
     "CollectionNotApplied": {
       "Title": "Colección no aplicada",
       "Message": "{CollectionName} no se ha aplicado."
@@ -622,6 +648,14 @@
       "Title": "No hay suficiente espacio libre",
       "Message": "No hay suficiente espacio libre para realizar una operación de combinación."
     },
+    "CollectionMergeFailed": {
+      "Title": "No se puede combinar la colección",
+      "Message": "No se puede combinar la colección. Comprueba que contenga mods disponibles y que no incluya el resultado de la combinación."
+    },
+    "CollectionMergeArchiveUnavailable": {
+      "Title": "Archivo de combinación no disponible",
+      "Message": "Los archivos de salida de la combinación comprimida no se pueden sobrescribir y pueden estar abiertos en otro programa: {Archives}"
+    },
     "ParadoxLauncherRunning": {
       "Title": "Paradox Launcher activo",
       "Message": "Paradox Launcher se está ejecutando, cierre antes de intentar esta acción."
@@ -629,7 +663,21 @@
     "ConflictSolverRerunGlobalVars": {
       "Title": "Actualización del Solucionador de conflictos",
       "Message": "Es necesario actualizar el solucionador de conflictos para tener en cuenta los nuevos parches de variables globales añadidos. Vuelva a ejecutar el solucionador de conflictos."
+    },
+    "FileSystemSafetyLock": {
+      "Title": "Estado del juego bloqueado por seguridad",
+      "Message": "Irony no puede confiar en el estado actual del sistema de archivos o de los mods de este juego. Las operaciones de modificación están deshabilitadas por seguridad. Corrija el proveedor o los permisos y reinicie Irony, o elija otro directorio de usuario o de mods personalizado. El nuevo directorio se validará antes de reanudar las operaciones."
     }
+  },
+  "Mod_Alias": {
+    "Title": "Alias del mod",
+    "Alias": "Alias",
+    "OriginalName": "Nombre original",
+    "Set": "Establecer alias",
+    "Edit": "Editar alias",
+    "Clear": "Borrar alias",
+    "Save": "Guardar",
+    "Cancel": "Cancelar"
   },
   "Mod_App_Actions": {
     "OpenInSteam": "Abrir en Steam",
@@ -663,7 +711,29 @@
   "Filter": {
     "Clear": "X",
     "UpArrow": "▲",
-    "DownArrow": "▼"
+    "DownArrow": "▼",
+    "Advanced": {
+      "Title": "Filtro avanzado",
+      "Name": "Nombre / Alias / ID remoto",
+      "Source": "Fuente",
+      "Steam": "Steam",
+      "Paradox": "Paradox",
+      "Local": "Local",
+      "Selected": "Seleccionado",
+      "Achievements": "Logros",
+      "Version": "Versión",
+      "Include": "Incluir",
+      "Exclude": "Excluir",
+      "Any": "Cualquiera",
+      "Yes": "Sí",
+      "No": "No",
+      "Compatible": "Compatible",
+      "NotCompatible": "No compatible",
+      "Apply": "Aplicar",
+      "Reset": "Restablecer",
+      "Cancel": "Cancelar",
+      "CustomQuery": "Esta consulta personalizada no se puede representar por completo. Permanecerá sin cambios a menos que aplique o restablezca este filtro."
+    }
   },
   "FilterCommands": {
     "Achievements": "logros",

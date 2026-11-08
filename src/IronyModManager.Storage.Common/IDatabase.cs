@@ -52,6 +52,11 @@ namespace IronyModManager.Storage.Common
         IEnumerable<IModCollection> ModCollection { get; set; }
 
         /// <summary>
+        /// Gets or sets Irony-local mod display-name preferences.
+        /// </summary>
+        IEnumerable<IModAlias> ModAliases { get; set; }
+
+        /// <summary>
         /// Gets or sets the notification position.
         /// </summary>
         /// <value>The notification position.</value>
