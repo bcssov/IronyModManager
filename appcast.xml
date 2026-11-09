@@ -4,8 +4,12 @@
 		<title>Irony Mod Manager</title>
 		<language>en</language>
 		<item>
-			<title>1.28.109</title>
-			<description>## Release Notes 1.28
+			<title>1.28.110</title>
+			<description>## Current Release Notes
+
+* Fix #624 ORM regression affecting legacy launcher database updates
+
+## Release Notes 1.28
 
 * Upgrade to .NET 10
 * Update dependencies
@@ -48,12 +52,16 @@
 * Improve macOS update experience with manual release-page updates
 * Improve conflict analysis equivalence filtering
 </description>
-			<pubDate>Sun, 08 Nov 2026 23:02:48 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.28.109/linux-x64.zip" sparkle:version="1.28.109.16286" sparkle:shortVersionString="1.28.109" length="109346460" sparkle:os="linux" type="application/zip" sparkle:signature="9AReqj5GE4yP5NYHEEli0uYPYKk8DKKLUhwvEbJNiI3BwVPrlU/V2lag1rcLQdRFH58y/Cakt6tF3OFpdtjTAQ=="/>
+			<pubDate>Mon, 09 Nov 2026 15:10:02 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.28.110/linux-x64.zip" sparkle:version="1.28.110.60731" sparkle:shortVersionString="1.28.110" length="109346498" sparkle:os="linux" type="application/zip" sparkle:signature="3aoBIY1y5SHIxBpesqr2rkn3TfoxxhcsFA4fUlFlZZzLQuRJtzSiIviqmlxbDfYGP82jKyJLtZiIamCw+5rhDA=="/>
 		</item>
 		<item>
-			<title>1.28.109</title>
-			<description>## Release Notes 1.28
+			<title>1.28.110</title>
+			<description>## Current Release Notes
+
+* Fix #624 ORM regression affecting legacy launcher database updates
+
+## Release Notes 1.28
 
 * Upgrade to .NET 10
 * Update dependencies
@@ -96,12 +104,16 @@
 * Improve macOS update experience with manual release-page updates
 * Improve conflict analysis equivalence filtering
 </description>
-			<pubDate>Sun, 08 Nov 2026 23:03:02 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.28.109/osx-x64.zip" sparkle:version="1.28.109.16286" sparkle:shortVersionString="1.28.109" length="96876920" sparkle:os="osx" type="application/zip" sparkle:signature="xWWRgwv8lnLF/5P+TkaV4ONAabKTAnHjpjnF9WMRd+sfCle7XsSjPtahPN2CANpGzNzip5jAQ1y2oTc5bviICQ=="/>
+			<pubDate>Mon, 09 Nov 2026 15:10:16 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.28.110/osx-x64.zip" sparkle:version="1.28.110.60731" sparkle:shortVersionString="1.28.110" length="96876863" sparkle:os="osx" type="application/zip" sparkle:signature="sThdzdjBj4l2nFBddfHYzSLuZENbVaTT1xzFIzLtRd4ahLpzbzQcZuWGlwnuEnTPjS9HVVAcWZd2a3mG8PW4Dw=="/>
 		</item>
 		<item>
-			<title>1.28.109</title>
-			<description>## Release Notes 1.28
+			<title>1.28.110</title>
+			<description>## Current Release Notes
+
+* Fix #624 ORM regression affecting legacy launcher database updates
+
+## Release Notes 1.28
 
 * Upgrade to .NET 10
 * Update dependencies
@@ -144,12 +156,16 @@
 * Improve macOS update experience with manual release-page updates
 * Improve conflict analysis equivalence filtering
 </description>
-			<pubDate>Sun, 08 Nov 2026 23:03:09 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.28.109/win-x64-setup.zip" sparkle:version="1.28.109.16286" sparkle:shortVersionString="1.28.109" length="77545277" sparkle:os="windows" type="application/zip" sparkle:signature="esczfkaaCXdkCOhraW8WY31luAjM1vF6mTOTvoapDwkzpXqs/vQKYb2MfsV/k0hOstDYa5JbQ6aoPgVG6BTwBw=="/>
+			<pubDate>Mon, 09 Nov 2026 15:10:23 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.28.110/win-x64-setup.zip" sparkle:version="1.28.110.60731" sparkle:shortVersionString="1.28.110" length="77538682" sparkle:os="windows" type="application/zip" sparkle:signature="R3VkyWVslwO40u6OFsj1GhC1DkT7+sqbLzotjk+j787eWKfoRLXWN3BPErAixF08NkUImZ38Omv8OSZaZm19CA=="/>
 		</item>
 		<item>
-			<title>1.28.109</title>
-			<description>## Release Notes 1.28
+			<title>1.28.110</title>
+			<description>## Current Release Notes
+
+* Fix #624 ORM regression affecting legacy launcher database updates
+
+## Release Notes 1.28
 
 * Upgrade to .NET 10
 * Update dependencies
@@ -192,8 +208,8 @@
 * Improve macOS update experience with manual release-page updates
 * Improve conflict analysis equivalence filtering
 </description>
-			<pubDate>Sun, 08 Nov 2026 23:03:22 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.28.109/win-x64.zip" sparkle:version="1.28.109.16286" sparkle:shortVersionString="1.28.109" length="108391362" sparkle:os="windows" type="application/zip" sparkle:signature="qbZX4XTJjR7Zb2muNgIWKw2CKoTfBtRZydDqV+BYtJuap40a3gDlPb705+y60/CF7I2Y4j9KU+8xhV3FqZYLBw=="/>
+			<pubDate>Mon, 09 Nov 2026 15:10:36 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.28.110/win-x64.zip" sparkle:version="1.28.110.60731" sparkle:shortVersionString="1.28.110" length="108391320" sparkle:os="windows" type="application/zip" sparkle:signature="R9rE1xbqtQtKOqk62y1FRXAyruUvIhI63U7CtVMpHViSOObgAvi9YIxBFoXwuh/yHUFr8MHreu2vRt7HjheoAA=="/>
 		</item>
 	</channel>
 </rss>
