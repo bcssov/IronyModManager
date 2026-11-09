@@ -711,10 +711,11 @@ namespace IronyModManager.IO.Mods.Exporter
 
                     if (toUpdate.Count > 0)
                     {
-                        // Composite key, need to handle differently due to limitation in the ORM.
+                        // Only position changes. RepoDb cannot bind composite key columns in SET.
                         foreach (var item in toUpdate)
                         {
-                            await con.UpdateAsync(item, e => e.ModId == item.ModId && e.PlaysetId == item.PlaysetId, transaction: transaction, trace: trace);
+                            await con.UpdateAsync(item, e => e.ModId == item.ModId && e.PlaysetId == item.PlaysetId,
+                                fields: [new Field("position")], transaction: transaction, trace: trace);
                         }
                     }
 
@@ -798,10 +799,11 @@ namespace IronyModManager.IO.Mods.Exporter
 
                     if (toUpdate.Count > 0)
                     {
-                        // Composite key, need to handle differently due to limitation in the ORM.
+                        // Only position changes. RepoDb cannot bind composite key columns in SET.
                         foreach (var item in toUpdate)
                         {
-                            await con.UpdateAsync(item, e => e.ModId == item.ModId && e.PlaysetId == item.PlaysetId, transaction: transaction, trace: trace);
+                            await con.UpdateAsync(item, e => e.ModId == item.ModId && e.PlaysetId == item.PlaysetId,
+                                fields: [new Field("position")], transaction: transaction, trace: trace);
                         }
                     }
 
@@ -885,10 +887,11 @@ namespace IronyModManager.IO.Mods.Exporter
 
                     if (toUpdate.Count > 0)
                     {
-                        // Composite key, need to handle differently due to limitation in the ORM.
+                        // Only position changes. RepoDb cannot bind composite key columns in SET.
                         foreach (var item in toUpdate)
                         {
-                            await con.UpdateAsync(item, e => e.ModId == item.ModId && e.PlaysetId == item.PlaysetId, transaction: transaction, trace: trace);
+                            await con.UpdateAsync(item, e => e.ModId == item.ModId && e.PlaysetId == item.PlaysetId,
+                                fields: [new Field("position")], transaction: transaction, trace: trace);
                         }
                     }
 
