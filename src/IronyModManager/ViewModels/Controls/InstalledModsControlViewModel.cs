@@ -557,7 +557,7 @@ namespace IronyModManager.ViewModels.Controls
         }
 
         /// <summary>
-        /// Synchronizes new mod descriptors while an explicit custom-directory revalidation owns the game.
+        /// Synchronizes new mod descriptors while filesystem configuration revalidation owns the game.
         /// </summary>
         public virtual async Task<bool> SynchronizeNewModsAsync(IGame game, GameStateLockInfo revalidationLock)
         {

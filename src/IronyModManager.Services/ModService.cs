@@ -563,21 +563,8 @@ namespace IronyModManager.Services
                 return new InstalledModsResult { IsAuthoritative = false, Mods = previousRegularMods ?? [] };
             }
 
-            var sourceFailure = GetDiscoverySourceFailure(game);
-            if (sourceFailure != null)
+            if (!await ValidateDiscoverySourcesAsync(game, revalidationLock))
             {
-                var reason = sourceFailure.State == FileSystemPathState.Missing
-                    ? GameStateLockReason.ExpectedSourceMissing
-                    : GameStateLockReason.DiscoveryUnavailable;
-                if (isRevalidation)
-                {
-                    gameStateSafetyService.LockRevalidationFailure(game, revalidationLock, reason, sourceFailure.Path);
-                }
-                else
-                {
-                    gameStateSafetyService.Lock(game, reason, sourceFailure.Path);
-                }
-
                 return new InstalledModsResult { IsAuthoritative = false, Mods = previousRegularMods ?? [] };
             }
 
@@ -699,10 +686,12 @@ namespace IronyModManager.Services
             return result;
         }
 
-        private FileSystemPathCheckResult GetDiscoverySourceFailure(IGame game)
+        private async Task<bool> ValidateDiscoverySourcesAsync(IGame game, GameStateLockInfo revalidationLock)
         {
-            var descriptorDirectory = Path.Combine(game.UserDirectory,
+            var dataDirectory = game.UserDirectory;
+            var descriptorDirectory = Path.Combine(dataDirectory,
                 game.ModDescriptorType == ModDescriptorType.DescriptorMod ? Shared.Constants.ModDirectory : Shared.Constants.JsonModDirectory);
+            var hasGeneratedDescriptorDirectory = game.ModDescriptorType is ModDescriptorType.JsonMetadata or ModDescriptorType.JsonMetadataV2;
             var sources = new List<string> { descriptorDirectory };
             sources.AddRange(game.WorkshopDirectory?.Where(p => !string.IsNullOrWhiteSpace(p)) ?? []);
             if (!string.IsNullOrWhiteSpace(game.CustomModDirectory))
@@ -710,16 +699,106 @@ namespace IronyModManager.Services
                 sources.Add(game.CustomModDirectory);
             }
 
+            var initializeDescriptorDirectory = false;
             foreach (var source in sources.Distinct(StringComparer.OrdinalIgnoreCase))
             {
                 var result = fileSystemStateProbe.CheckDirectory(source);
-                if (result.State != FileSystemPathState.Available)
+                if (result.State == FileSystemPathState.Available)
                 {
-                    return result;
+                    continue;
                 }
+
+                if (hasGeneratedDescriptorDirectory && source == descriptorDirectory && result.State == FileSystemPathState.Missing &&
+                    !sources.Skip(1).Contains(descriptorDirectory, StringComparer.OrdinalIgnoreCase))
+                {
+                    initializeDescriptorDirectory = true;
+                    continue;
+                }
+
+                LockFileSystemFailure(game, revalidationLock,
+                    result.State == FileSystemPathState.Missing ? GameStateLockReason.ExpectedSourceMissing : GameStateLockReason.DiscoveryUnavailable,
+                    result.Path);
+                return false;
             }
 
-            return null;
+            // Only write after the other authoritative sources have passed discovery.
+            return !initializeDescriptorDirectory ||
+                   await InitializeDescriptorDirectoryAsync(game, revalidationLock, dataDirectory, descriptorDirectory);
+        }
+
+        private async Task<bool> InitializeDescriptorDirectoryAsync(IGame game, GameStateLockInfo revalidationLock,
+            string dataDirectory, string descriptorDirectory)
+        {
+            bool ownsBootstrap() => revalidationLock != null
+                ? gameStateSafetyService.IsCurrentRevalidation(game, revalidationLock)
+                : !gameStateSafetyService.IsLocked(game);
+
+            var parent = fileSystemStateProbe.CheckDirectory(dataDirectory);
+            if (parent.State != FileSystemPathState.Available)
+            {
+                LockFileSystemFailure(game, revalidationLock,
+                    parent.State == FileSystemPathState.Missing ? GameStateLockReason.ExpectedSourceMissing : GameStateLockReason.DiscoveryUnavailable,
+                    dataDirectory);
+                return false;
+            }
+
+            try
+            {
+                // Directory.Exists can hide access errors and reports false for occupied non-directory paths.
+                _ = File.GetAttributes(descriptorDirectory);
+                if (fileSystemStateProbe.CheckDirectory(descriptorDirectory).State == FileSystemPathState.Available)
+                {
+                    return ownsBootstrap();
+                }
+
+                LockFileSystemFailure(game, revalidationLock, GameStateLockReason.DiscoveryUnavailable, descriptorDirectory);
+                return false;
+            }
+            catch (FileNotFoundException)
+            {
+                // The leaf is absent under the verified parent.
+            }
+            catch (Exception exception) when (fileSystemStateProbe.IsFileSystemAccessFailure(exception))
+            {
+                LockFileSystemFailure(game, revalidationLock, GameStateLockReason.DiscoveryUnavailable, descriptorDirectory, exception);
+                return false;
+            }
+
+            if (!ownsBootstrap())
+            {
+                return false;
+            }
+
+            try
+            {
+                // Creation can also return false if the directory appeared since the earlier probe.
+                await ModWriter.CreateModDirectoryAsync(new ModWriterParameters
+                {
+                    RootDirectory = dataDirectory,
+                    Path = Shared.Constants.JsonModDirectory
+                });
+            }
+            catch (Exception exception) when (fileSystemStateProbe.IsFileSystemAccessFailure(exception))
+            {
+                LockFileSystemFailure(game, revalidationLock, GameStateLockReason.WriteAccessFailure, descriptorDirectory, exception);
+                return false;
+            }
+
+            if (!ownsBootstrap())
+            {
+                return false;
+            }
+
+            var result = fileSystemStateProbe.CheckDirectory(descriptorDirectory);
+            if (result.State == FileSystemPathState.Available)
+            {
+                return true;
+            }
+
+            LockFileSystemFailure(game, revalidationLock,
+                result.State == FileSystemPathState.Missing ? GameStateLockReason.WriteAccessFailure : GameStateLockReason.DiscoveryUnavailable,
+                descriptorDirectory);
+            return false;
         }
 
         /// <summary>
@@ -762,17 +841,9 @@ namespace IronyModManager.Services
                 return null;
             }
 
-            if (revalidationLock != null)
+            if (revalidationLock != null && !await ValidateDiscoverySourcesAsync(game, revalidationLock))
             {
-                var sourceFailure = GetDiscoverySourceFailure(game);
-                if (sourceFailure != null)
-                {
-                    var reason = sourceFailure.State == FileSystemPathState.Missing
-                        ? GameStateLockReason.ExpectedSourceMissing
-                        : GameStateLockReason.DiscoveryUnavailable;
-                    gameStateSafetyService.LockRevalidationFailure(game, revalidationLock, reason, sourceFailure.Path);
-                    return null;
-                }
+                return null;
             }
 
             bool canWrite;
@@ -792,7 +863,7 @@ namespace IronyModManager.Services
             }
             catch (Exception exception) when (fileSystemStateProbe.IsFileSystemAccessFailure(exception))
             {
-                LockInstallFailure(game, revalidationLock, GameStateLockReason.WriteAccessFailure,
+                LockFileSystemFailure(game, revalidationLock, GameStateLockReason.WriteAccessFailure,
                     "Validate mod descriptor output", exception);
                 return null;
             }
@@ -801,7 +872,7 @@ namespace IronyModManager.Services
             {
                 if (ownsRevalidation())
                 {
-                    LockInstallFailure(game, revalidationLock, GameStateLockReason.WriteAccessFailure,
+                    LockFileSystemFailure(game, revalidationLock, GameStateLockReason.WriteAccessFailure,
                         revalidationLock != null ? "Validate mod descriptor output" : GetModDirectoryRootPath(game));
                 }
 
@@ -855,7 +926,7 @@ namespace IronyModManager.Services
             }
             catch (Exception exception) when (fileSystemStateProbe.IsFileSystemAccessFailure(exception))
             {
-                LockInstallFailure(game, revalidationLock, GameStateLockReason.DiscoveryUnavailable,
+                LockFileSystemFailure(game, revalidationLock, GameStateLockReason.DiscoveryUnavailable,
                     "Read mod descriptor sources", exception);
                 return null;
             }
@@ -949,7 +1020,7 @@ namespace IronyModManager.Services
 
                         if (revalidationLock != null && writes.Any(p => !p))
                         {
-                            LockInstallFailure(game, revalidationLock, GameStateLockReason.WriteAccessFailure,
+                            LockFileSystemFailure(game, revalidationLock, GameStateLockReason.WriteAccessFailure,
                                 "Write mod descriptors");
                             return null;
                         }
@@ -959,7 +1030,7 @@ namespace IronyModManager.Services
                 }
                 catch (Exception exception) when (fileSystemStateProbe.IsFileSystemAccessFailure(exception))
                 {
-                    LockInstallFailure(game, revalidationLock, GameStateLockReason.WriteAccessFailure,
+                    LockFileSystemFailure(game, revalidationLock, GameStateLockReason.WriteAccessFailure,
                         "Write mod descriptors", exception);
                     return null;
                 }
@@ -986,7 +1057,7 @@ namespace IronyModManager.Services
             return null;
         }
 
-        private void LockInstallFailure(IGame game, GameStateLockInfo revalidationLock,
+        private void LockFileSystemFailure(IGame game, GameStateLockInfo revalidationLock,
             GameStateLockReason reason, string context, Exception exception = null)
         {
             if (revalidationLock != null)

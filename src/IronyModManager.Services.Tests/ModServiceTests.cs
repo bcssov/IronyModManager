@@ -24,6 +24,9 @@ using Castle.DynamicProxy;
 using IronyModManager.IO.Common.Mods;
 using IronyModManager.IO.Common.FileSystem;
 using IronyModManager.IO.Common.Readers;
+using IronyModManager.IO.FileSystem;
+using IronyModManager.IO.Mods;
+using IronyModManager.IO.Readers;
 using IronyModManager.Localization;
 using IronyModManager.Models;
 using IronyModManager.Models.Common;
@@ -35,6 +38,7 @@ using IronyModManager.Parser.Mod.Search;
 using IronyModManager.Services.Common;
 using IronyModManager.Shared;
 using IronyModManager.Shared.Cache;
+using IronyModManager.Shared.MessageBus;
 using IronyModManager.Shared.Models;
 using IronyModManager.Storage.Common;
 using IronyModManager.Tests.Common;
@@ -2301,6 +2305,307 @@ namespace IronyModManager.Services.Tests
             refreshed.IsAuthoritative.Should().BeTrue();
             writer.Verify(p => p.CanWriteToModDirectoryAsync(It.IsAny<ModWriterParameters>()), Times.Never);
             writer.Verify(p => p.WriteDescriptorAsync(It.IsAny<ModWriterParameters>(), It.IsAny<bool>()), Times.Never);
+        }
+
+        [Theory]
+        [InlineData(false, true, ModDescriptorType.JsonMetadata)] // A: the generated descriptor root is missing.
+        [InlineData(true, true, ModDescriptorType.JsonMetadata)]  // B: the generated descriptor root exists and is empty.
+        [InlineData(true, false, ModDescriptorType.JsonMetadata)] // C: only the normal mod root is missing.
+        [InlineData(false, true, ModDescriptorType.JsonMetadataV2)]
+        public async Task Json_descriptor_discovery_should_bootstrap_the_generated_directory(
+            bool descriptorDirectoryExists, bool modDirectoryExists, ModDescriptorType descriptorType)
+        {
+            DISetup.SetupContainer();
+            var temp = Directory.CreateTempSubdirectory("IronyVictoria3Revalidation-");
+            try
+            {
+                var data = Directory.CreateDirectory(Path.Combine(temp.FullName, "data")).FullName;
+                if (OperatingSystem.IsWindows())
+                {
+                    // Exercise the established-directory preflight without leaving its marker creation handle open.
+                    File.WriteAllText(Path.Combine(data, "IronyModManager_IntegrityCheck.txt"), string.Empty);
+                }
+
+                var descriptorDirectory = Path.Combine(data, Shared.Constants.JsonModDirectory);
+                var modDirectory = Path.Combine(data, Shared.Constants.ModDirectory);
+                if (descriptorDirectoryExists)
+                {
+                    Directory.CreateDirectory(descriptorDirectory);
+                    Directory.EnumerateFileSystemEntries(descriptorDirectory).Should().BeEmpty();
+                }
+                if (modDirectoryExists)
+                {
+                    Directory.CreateDirectory(modDirectory);
+                }
+
+                var workshop = Directory.CreateDirectory(Path.Combine(temp.FullName, "workshop")).FullName;
+                var workshopMod = Path.Combine(workshop, "123456");
+                var metadata = Path.Combine(workshopMod, Shared.Constants.DescriptorJsonMetadata);
+                Directory.CreateDirectory(Path.GetDirectoryName(metadata)!);
+                File.WriteAllText(metadata, """{"name":"Workshop fixture"}""");
+
+                var game = new Game
+                {
+                    Type = Shared.Constants.GamesTypes.Victoria3.Id,
+                    SteamAppId = Shared.Constants.GamesTypes.Victoria3.SteamAppId,
+                    ModDescriptorType = descriptorType,
+                    UserDirectory = data,
+                    CustomModDirectory = string.Empty,
+                    WorkshopDirectory = [workshop]
+                };
+
+                var probe = new FileSystemStateProbe();
+                var checkedSources = new List<FileSystemPathCheckResult>();
+                var observedProbe = new Mock<IFileSystemStateProbe>();
+                observedProbe.Setup(p => p.CheckDirectory(It.IsAny<string>())).Returns((string source) =>
+                {
+                    var result = probe.CheckDirectory(source);
+                    checkedSources.Add(result);
+                    return result;
+                });
+                observedProbe.Setup(p => p.IsFileSystemAccessFailure(It.IsAny<Exception>()))
+                    .Returns((Exception exception) => probe.IsFileSystemAccessFailure(exception));
+                var logger = Mock.Of<ILogger>();
+                var safety = new GameStateSafetyService(observedProbe.Object, logger);
+                var mapper = new Mock<IMapper>();
+                mapper.Setup(p => p.Map<IMod>(It.IsAny<IModObject>())).Returns(() =>
+                    new Mod { Name = "Workshop fixture", FileName = workshopMod });
+                var parser = new Mock<IModParser>();
+                parser.Setup(p => p.Parse(It.IsAny<IEnumerable<string>>(), It.IsAny<DescriptorModType>(), It.IsAny<ModParserArgs>()))
+                    .Returns(new ModObject());
+                var reader = new Mock<IReader>();
+                var jsonReader = new JsonModFileReader();
+                reader.Setup(p => p.Read(descriptorDirectory, It.IsAny<IEnumerable<string>>(), It.IsAny<bool>()))
+                    .Returns(() => jsonReader.Read(descriptorDirectory));
+                reader.Setup(p => p.GetFileInfo(workshopMod, Shared.Constants.DescriptorJsonMetadata))
+                    .Returns(() => new FileInfo { Content = File.ReadAllLines(metadata) });
+
+                var diskWriter = new ModWriter(logger, mapper.Object, new IO.DriveInfoProvider(logger), Mock.Of<IMessageBus>());
+                var writer = new Mock<IModWriter>();
+                writer.Setup(p => p.CanWriteToModDirectoryAsync(It.IsAny<ModWriterParameters>()))
+                    .Returns((ModWriterParameters parameters) => diskWriter.CanWriteToModDirectoryAsync(parameters));
+                writer.Setup(p => p.CreateModDirectoryAsync(It.IsAny<ModWriterParameters>()))
+                    .Returns((ModWriterParameters parameters) => diskWriter.CreateModDirectoryAsync(parameters));
+                writer.Setup(p => p.WriteDescriptorAsync(It.IsAny<ModWriterParameters>(), false))
+                    .Returns((ModWriterParameters parameters, bool writeInModDirectory) =>
+                        diskWriter.WriteDescriptorAsync(parameters, writeInModDirectory));
+
+                var service = GetService(new Mock<IStorageProvider>(), parser, reader, mapper, writer,
+                    new Mock<IGameService>(), fileSystemStateProbe: observedProbe, gameStateSafetyService: safety);
+
+                // Revalidate with no generated descriptors to read or differences to write.
+                var refreshLock = safety.BeginRevalidation(game, "Data Directory changed");
+                var refresh = await service.RevalidateInstalledModsAsync(game, refreshLock);
+                refresh.IsAuthoritative.Should().BeTrue();
+                refresh.Mods.Should().BeEmpty();
+                checkedSources[0].Path.Should().Be(descriptorDirectory);
+                checkedSources[0].State.Should().Be(descriptorDirectoryExists
+                    ? FileSystemPathState.Available : FileSystemPathState.Missing);
+                Directory.Exists(descriptorDirectory).Should().BeTrue();
+                Directory.EnumerateFileSystemEntries(descriptorDirectory).Should().BeEmpty();
+                Directory.Exists(modDirectory).Should().Be(modDirectoryExists);
+                writer.Verify(p => p.CreateModDirectoryAsync(It.IsAny<ModWriterParameters>()),
+                    descriptorDirectoryExists ? Times.Never() : Times.Once());
+                writer.Verify(p => p.WriteDescriptorAsync(It.IsAny<ModWriterParameters>(), It.IsAny<bool>()), Times.Never);
+                safety.CompleteRevalidation(game, refreshLock).Should().BeTrue();
+
+                if (!descriptorDirectoryExists)
+                {
+                    // Verify startup refresh and synchronization-first each bootstrap independently.
+                    Directory.Delete(descriptorDirectory);
+                    var startup = await service.RefreshInstalledModsAsync(game);
+                    startup.IsAuthoritative.Should().BeTrue();
+                    startup.Mods.Should().BeEmpty();
+                    safety.IsLocked(game).Should().BeFalse();
+                    Directory.Delete(descriptorDirectory);
+                }
+
+                writer.Invocations.Clear();
+                var syncLock = safety.BeginRevalidation(game, "Synchronize before refresh");
+                (await service.InstallModsAsync(game, [], syncLock)).Should().BeTrue();
+
+                writer.Verify(p => p.CreateModDirectoryAsync(It.Is<ModWriterParameters>(
+                    value => value.RootDirectory == data && value.Path == Shared.Constants.ModDirectory)), Times.Once);
+                writer.Verify(p => p.CreateModDirectoryAsync(It.Is<ModWriterParameters>(
+                    value => value.RootDirectory == data && value.Path == Shared.Constants.JsonModDirectory)),
+                    Times.Exactly(descriptorDirectoryExists ? 1 : 2));
+                Directory.Exists(modDirectory).Should().BeTrue();
+                Directory.EnumerateFiles(descriptorDirectory, "*.json").Should().ContainSingle();
+                var refreshed = await service.RevalidateInstalledModsAsync(game, syncLock);
+                refreshed.IsAuthoritative.Should().BeTrue();
+                refreshed.Mods.Should().ContainSingle();
+                safety.CompleteRevalidation(game, syncLock).Should().BeTrue();
+                safety.IsLocked(game).Should().BeFalse();
+            }
+            finally
+            {
+                temp.Delete(recursive: true);
+            }
+        }
+
+        [Theory]
+        [InlineData(false)]
+        [InlineData(true)]
+        public async Task Generated_descriptor_directory_creation_failure_should_keep_the_game_locked(bool throws)
+        {
+            var temp = Directory.CreateTempSubdirectory("IronyDescriptorCreationFailure-");
+            try
+            {
+                var (service, game, _, writer, safety, probe) = GetControlledInstallService("failed-bootstrap");
+                game.UserDirectory = temp.FullName;
+                game.CustomModDirectory = string.Empty;
+                game.ModDescriptorType = ModDescriptorType.JsonMetadata;
+                var output = Path.Combine(game.UserDirectory, Shared.Constants.JsonModDirectory);
+                probe.Setup(p => p.CheckDirectory(output)).Returns(new FileSystemPathCheckResult
+                    { Path = output, State = FileSystemPathState.Missing });
+                var create = writer.Setup(p => p.CreateModDirectoryAsync(It.IsAny<ModWriterParameters>()));
+                if (throws)
+                {
+                    create.ThrowsAsync(new UnauthorizedAccessException());
+                }
+                else
+                {
+                    create.ReturnsAsync(false);
+                }
+
+                var revalidation = safety.BeginRevalidation(game, "Data Directory changed");
+                var result = await service.RevalidateInstalledModsAsync(game, revalidation);
+
+                result.IsAuthoritative.Should().BeFalse();
+                safety.GetLock(game).Reason.Should().Be(GameStateLockReason.WriteAccessFailure);
+                safety.GetLock(game).Context.Should().Be(output);
+                if (throws)
+                {
+                    safety.GetLock(game).ExceptionType.Should().Be(typeof(UnauthorizedAccessException).FullName);
+                }
+                writer.Verify(p => p.CreateModDirectoryAsync(It.Is<ModWriterParameters>(
+                    parameters => parameters.RootDirectory == game.UserDirectory && parameters.Path == Shared.Constants.JsonModDirectory)), Times.Once);
+                Directory.Exists(output).Should().BeFalse();
+            }
+            finally
+            {
+                temp.Delete(recursive: true);
+            }
+        }
+
+        [Theory]
+        [InlineData("generated", FileSystemPathState.Unavailable)]
+        [InlineData("data", FileSystemPathState.Missing)]
+        [InlineData("data", FileSystemPathState.Unavailable)]
+        [InlineData("custom", FileSystemPathState.Missing)]
+        [InlineData("custom", FileSystemPathState.Unavailable)]
+        [InlineData("custom-at-output", FileSystemPathState.Missing)]
+        [InlineData("workshop", FileSystemPathState.Missing)]
+        [InlineData("workshop", FileSystemPathState.Unavailable)]
+        public async Task Descriptor_bootstrap_should_keep_invalid_sources_locked(string source, FileSystemPathState state)
+        {
+            var temp = Directory.CreateTempSubdirectory("IronyInvalidDescriptorSource-");
+            try
+            {
+                var (service, game, _, writer, safety, probe) = GetControlledInstallService("invalid-bootstrap-source");
+                game.UserDirectory = Path.Combine(temp.FullName, "data");
+                if (source != "data" || state != FileSystemPathState.Missing)
+                {
+                    Directory.CreateDirectory(game.UserDirectory);
+                }
+
+                var output = Path.Combine(game.UserDirectory, Shared.Constants.JsonModDirectory);
+                var rejectedPath = source switch
+                {
+                    "data" => game.UserDirectory,
+                    "generated" or "custom-at-output" => output,
+                    _ => Path.Combine(temp.FullName, source)
+                };
+                if (state == FileSystemPathState.Unavailable)
+                {
+                    Directory.CreateDirectory(rejectedPath);
+                }
+
+                game.ModDescriptorType = ModDescriptorType.JsonMetadataV2;
+                game.CustomModDirectory = source.StartsWith("custom", StringComparison.Ordinal) ? rejectedPath : string.Empty;
+                game.WorkshopDirectory = source == "workshop" ? [rejectedPath] : [];
+                probe.Setup(p => p.CheckDirectory(output)).Returns(new FileSystemPathCheckResult
+                    { Path = output, State = FileSystemPathState.Missing });
+                probe.Setup(p => p.CheckDirectory(rejectedPath)).Returns(new FileSystemPathCheckResult
+                    { Path = rejectedPath, State = state });
+
+                var revalidation = safety.BeginRevalidation(game, "Filesystem configuration changed");
+                (await service.InstallModsAsync(game, [], revalidation)).Should().BeFalse();
+
+                safety.GetLock(game).Reason.Should().Be(state == FileSystemPathState.Missing
+                    ? GameStateLockReason.ExpectedSourceMissing : GameStateLockReason.DiscoveryUnavailable);
+                safety.GetLock(game).Context.Should().Be(rejectedPath);
+                writer.Verify(p => p.CanWriteToModDirectoryAsync(It.IsAny<ModWriterParameters>()), Times.Never);
+                writer.Verify(p => p.CreateModDirectoryAsync(It.IsAny<ModWriterParameters>()), Times.Never);
+            }
+            finally
+            {
+                temp.Delete(recursive: true);
+            }
+        }
+
+        [Fact]
+        public async Task Descriptor_bootstrap_should_not_modify_an_occupied_output_path()
+        {
+            var temp = Directory.CreateTempSubdirectory("IronyOccupiedDescriptorPath-");
+            try
+            {
+                var (service, game, _, writer, safety, probe) = GetControlledInstallService("occupied-bootstrap-path");
+                game.UserDirectory = temp.FullName;
+                game.CustomModDirectory = string.Empty;
+                game.ModDescriptorType = ModDescriptorType.JsonMetadata;
+                var output = Path.Combine(game.UserDirectory, Shared.Constants.JsonModDirectory);
+                File.WriteAllText(output, "existing file");
+                var diskProbe = new FileSystemStateProbe();
+                probe.Setup(p => p.CheckDirectory(It.IsAny<string>())).Returns((string path) => diskProbe.CheckDirectory(path));
+
+                var result = await service.RefreshInstalledModsAsync(game);
+
+                result.IsAuthoritative.Should().BeFalse();
+                safety.GetLock(game).Reason.Should().Be(GameStateLockReason.DiscoveryUnavailable);
+                safety.GetLock(game).Context.Should().Be(output);
+                writer.Verify(p => p.CreateModDirectoryAsync(It.IsAny<ModWriterParameters>()), Times.Never);
+                File.ReadAllText(output).Should().Be("existing file");
+            }
+            finally
+            {
+                temp.Delete(recursive: true);
+            }
+        }
+
+        [Fact]
+        public async Task Superseded_revalidation_should_not_create_the_generated_descriptor_directory()
+        {
+            var temp = Directory.CreateTempSubdirectory("IronySupersededDescriptorBootstrap-");
+            try
+            {
+                var (service, game, _, writer, safety, probe) = GetControlledInstallService("superseded-bootstrap");
+                game.UserDirectory = temp.FullName;
+                game.CustomModDirectory = string.Empty;
+                game.ModDescriptorType = ModDescriptorType.JsonMetadata;
+                var output = Path.Combine(game.UserDirectory, Shared.Constants.JsonModDirectory);
+                probe.Setup(p => p.CheckDirectory(output)).Returns(new FileSystemPathCheckResult
+                    { Path = output, State = FileSystemPathState.Missing });
+                GameStateLockInfo latest = null;
+                probe.Setup(p => p.CheckDirectory(game.UserDirectory)).Returns(() =>
+                {
+                    latest = safety.BeginRevalidation(game, "Newer Data Directory change");
+                    return new FileSystemPathCheckResult { Path = game.UserDirectory, State = FileSystemPathState.Available };
+                });
+                var stale = safety.BeginRevalidation(game, "Older Data Directory change");
+
+                var result = await service.RevalidateInstalledModsAsync(game, stale);
+
+                result.IsAuthoritative.Should().BeFalse();
+                latest.Should().NotBeNull();
+                safety.IsCurrentRevalidation(game, latest).Should().BeTrue();
+                writer.Verify(p => p.CreateModDirectoryAsync(It.IsAny<ModWriterParameters>()), Times.Never);
+                Directory.Exists(output).Should().BeFalse();
+            }
+            finally
+            {
+                temp.Delete(recursive: true);
+            }
         }
 
         private static (ModService Service, IGame Game, Mock<IReader> Reader, Mock<IModWriter> Writer,

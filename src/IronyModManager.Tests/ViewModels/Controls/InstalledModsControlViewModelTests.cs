@@ -2,15 +2,30 @@
 // Assembly         : IronyModManager.Tests
 // ***********************************************************************
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
-using System;
 using System.Threading.Tasks;
+using System;
+using AutoMapper;
 using AwesomeAssertions;
-using IronyModManager.Models;
+using IronyModManager.IO.Common.Mods;
+using IronyModManager.IO.FileSystem;
+using IronyModManager.IO.Mods;
+using IronyModManager.IO.Readers;
 using IronyModManager.Implementation.Actions;
-using IronyModManager.Shared;
 using IronyModManager.Models.Common;
+using IronyModManager.Models;
+using IronyModManager.Parser.Common.Mod.Search;
+using IronyModManager.Parser.Mod.Search;
+using IronyModManager.Parser.Mod;
+using IronyModManager.Parser;
 using IronyModManager.Services.Common;
+using IronyModManager.Services;
+using IronyModManager.Shared.Cache;
+using IronyModManager.Shared.MessageBus;
+using IronyModManager.Shared.Models;
+using IronyModManager.Shared;
+using IronyModManager.Storage.Common;
 using IronyModManager.Tests.Common;
 using IronyModManager.ViewModels.Controls;
 using Moq;
@@ -277,9 +292,215 @@ namespace IronyModManager.Tests.ViewModels.Controls
             viewModel.LastRefreshAuthoritative.Should().BeTrue();
         }
 
+        public enum DirectoryRecoveryCase
+        {
+            NewDescriptor,
+            ExistingDescriptor,
+            NoWorkshopMods,
+            PartialWriteFailure
+        }
+
+        [Theory]
+        [InlineData(ModDescriptorType.JsonMetadata, DirectoryRecoveryCase.NewDescriptor)]
+        [InlineData(ModDescriptorType.DescriptorMod, DirectoryRecoveryCase.NewDescriptor)]
+        [InlineData(ModDescriptorType.JsonMetadata, DirectoryRecoveryCase.ExistingDescriptor)]
+        [InlineData(ModDescriptorType.DescriptorMod, DirectoryRecoveryCase.ExistingDescriptor)]
+        [InlineData(ModDescriptorType.JsonMetadata, DirectoryRecoveryCase.NoWorkshopMods)]
+        [InlineData(ModDescriptorType.DescriptorMod, DirectoryRecoveryCase.NoWorkshopMods)]
+        [InlineData(ModDescriptorType.JsonMetadata, DirectoryRecoveryCase.PartialWriteFailure)]
+        public async Task Data_directory_recovery_should_publish_synchronized_workshop_mods_before_unlocking(
+            ModDescriptorType descriptorType, DirectoryRecoveryCase recovery)
+        {
+            DISetup.SetupContainer();
+            var temp = Directory.CreateTempSubdirectory("IronyWorkshopRecovery-");
+            try
+            {
+                const string workshopName = "Workshop fixture";
+                const string workshopId = "123456";
+                var json = descriptorType == ModDescriptorType.JsonMetadata;
+                var data = Directory.CreateDirectory(Path.Combine(temp.FullName, "data")).FullName;
+                var workshop = Directory.CreateDirectory(Path.Combine(temp.FullName, "workshop")).FullName;
+                var descriptorDirectory = json ? Shared.Constants.JsonModDirectory : Shared.Constants.ModDirectory;
+                var extension = json ? ".json" : ".mod";
+                var output = Path.Combine(data, descriptorDirectory);
+                var workshopMod = Path.Combine(workshop, workshopId);
+                var expectedMods = recovery == DirectoryRecoveryCase.NoWorkshopMods ? 0 : 1;
+                if (expectedMods != 0)
+                {
+                    writeWorkshopFixture(workshopMod, workshopName, workshopId);
+                }
+                var failWrite = recovery == DirectoryRecoveryCase.PartialWriteFailure;
+                if (failWrite)
+                {
+                    writeWorkshopFixture(Path.Combine(workshop, "654321"), "Refused workshop fixture", "654321");
+                }
+                if (OperatingSystem.IsWindows())
+                {
+                    File.WriteAllText(Path.Combine(data, "IronyModManager_IntegrityCheck.txt"), string.Empty);
+                }
+
+                var game = new Game
+                {
+                    Type = json ? Shared.Constants.GamesTypes.Victoria3.Id : Shared.Constants.GamesTypes.Stellaris.Id,
+                    SteamAppId = json ? Shared.Constants.GamesTypes.Victoria3.SteamAppId : Shared.Constants.GamesTypes.Stellaris.SteamAppId,
+                    ModDescriptorType = descriptorType,
+                    UserDirectory = data,
+                    CustomModDirectory = string.Empty,
+                    WorkshopDirectory = [workshop]
+                };
+                var logger = Mock.Of<ILogger>();
+                var probe = new FileSystemStateProbe();
+                var cache = new Cache();
+                var safety = new GameStateSafetyService(probe, logger);
+                var games = new Mock<IGameService>();
+                games.Setup(p => p.GetSelected()).Returns(game);
+                var reader = new Reader([new JsonModFileReader(), new ModFileReader(), new DiskFileReader()], logger);
+                var parser = new ModParser(logger, new CodeParser(logger));
+                var mapper = new Mock<IMapper>();
+                mapper.Setup(p => p.Map<IMod>(It.IsAny<IModObject>())).Returns((IModObject mod) => new Mod
+                {
+                    Name = mod.Name,
+                    FileName = mod.FileName,
+                    JsonId = mod.JsonId,
+                    RemoteId = mod.RemoteId,
+                    Version = mod.Version,
+                    Dependencies = mod.Dependencies ?? [],
+                    ReplacePath = mod.ReplacePath ?? [],
+                    UserDir = mod.UserDir ?? []
+                });
+                var diskWriter = new ModWriter(logger, mapper.Object, new IronyModManager.IO.DriveInfoProvider(logger), Mock.Of<IMessageBus>());
+                var blockBootstrap = true;
+                var writer = new Mock<IModWriter>();
+                writer.Setup(p => p.FormatPrefixModName(It.IsAny<string>(), It.IsAny<string>()))
+                    .Returns((string prefix, string name) => diskWriter.FormatPrefixModName(prefix, name));
+                writer.Setup(p => p.CanWriteToModDirectoryAsync(It.IsAny<ModWriterParameters>()))
+                    .Returns((ModWriterParameters p) => diskWriter.CanWriteToModDirectoryAsync(p));
+                writer.Setup(p => p.CreateModDirectoryAsync(It.IsAny<ModWriterParameters>()))
+                    .Returns((ModWriterParameters p) => blockBootstrap && p.Path == descriptorDirectory
+                        ? Task.FromResult(false)
+                        : diskWriter.CreateModDirectoryAsync(p));
+                writer.Setup(p => p.WriteDescriptorAsync(It.IsAny<ModWriterParameters>(), It.IsAny<bool>()))
+                    .Returns((ModWriterParameters p, bool writeInMod) => failWrite && p.Mod.RemoteId == 654321
+                        ? Task.FromResult(false)
+                        : diskWriter.WriteDescriptorAsync(p, writeInMod));
+
+                var languages = new Mock<ILanguagesService>();
+                languages.Setup(p => p.GetSelected()).Returns(new Language { Abrv = "en" });
+                var search = new Mock<IParser>();
+                search.Setup(p => p.Parse("en", It.IsAny<string>())).Returns(() => new SearchParserResult());
+                ModService createService(ICache modCache, IGameStateSafetyService safetyService) =>
+                    new(languages.Object, search.Object, logger, modCache, null, reader, parser, writer.Object,
+                        games.Object, Mock.Of<IStorageProvider>(), mapper.Object, probe, safetyService, () => new Mod(), () => Mock.Of<IModAlias>());
+
+                var service = createService(cache, safety);
+                var view = CreateViewModel(service, games.Object, safety);
+                (await view.BindForTestAsync(game)).Should().BeFalse();
+                safety.IsLocked(game).Should().BeTrue();
+                Directory.Exists(output).Should().BeFalse();
+                readRegularCache().Should().BeNull();
+                view.LastRefreshAuthoritative.Should().BeFalse();
+                view.Mods.Should().BeEmpty();
+
+                blockBootstrap = false;
+                if (!json || recovery != DirectoryRecoveryCase.NewDescriptor)
+                {
+                    Directory.CreateDirectory(output);
+                }
+                if (recovery == DirectoryRecoveryCase.ExistingDescriptor)
+                {
+                    var seedService = createService(new Cache(), new GameStateSafetyService(probe, logger));
+                    var seeded = await seedService.InstallModsAsync([]);
+                    seeded.Should().ContainSingle(result => result.Installed && !result.Invalid);
+                    writer.Invocations.Clear();
+                }
+
+                var coordinator = new ModStateReconciliationCoordinator(safety);
+                var steps = new List<string>();
+                var recovered = await coordinator.RevalidateConfigurationAsync(game,
+                    (revalidationLock, isCurrent) =>
+                    {
+                        steps.Add("refresh");
+                        isCurrent().Should().BeTrue();
+                        view.LastRefreshAuthoritative.Should().BeFalse();
+                        readRegularCache().Should().BeNull();
+                        Directory.EnumerateFiles(output, "*" + extension).Should().HaveCount(expectedMods);
+                        return view.RevalidateModsAsync(game, revalidationLock, isCurrent, skipOverlay: true);
+                    },
+                    reset: null,
+                    reconcile: revalidationLock =>
+                    {
+                        steps.Add("reconcile");
+                        safety.IsCurrentRevalidation(game, revalidationLock).Should().BeTrue();
+                        view.LastRefreshAuthoritative.Should().BeTrue();
+                        view.Mods.Should().HaveCount(expectedMods);
+                        readRegularCache().Should().Equal(view.Mods);
+                    },
+                    synchronize: (revalidationLock, isCurrent) =>
+                    {
+                        steps.Add("synchronize");
+                        isCurrent().Should().BeTrue();
+                        return view.SynchronizeNewModsAsync(game, revalidationLock);
+                    });
+
+                recovered.Should().Be(!failWrite);
+                if (failWrite)
+                {
+                    steps.Should().Equal("synchronize");
+                    safety.GetLock(game).Reason.Should().Be(GameStateLockReason.WriteAccessFailure);
+                    readRegularCache().Should().BeNull();
+                    view.LastRefreshAuthoritative.Should().BeFalse();
+                    view.Mods.Should().BeEmpty();
+                    Directory.EnumerateFiles(output, "*" + extension).Should().ContainSingle();
+                    writer.Verify(p => p.WriteDescriptorAsync(It.IsAny<ModWriterParameters>(), It.IsAny<bool>()), Times.Exactly(2));
+                    return;
+                }
+
+                steps.Should().Equal("synchronize", "refresh", "reconcile");
+                safety.IsLocked(game).Should().BeFalse();
+                view.LastRefreshAuthoritative.Should().BeTrue();
+                view.FilteredMods.Should().Equal(view.Mods);
+                readRegularCache().Should().Equal(view.Mods);
+                if (expectedMods != 0)
+                {
+                    var installed = view.Mods.Should().ContainSingle().Which;
+                    installed.Name.Should().Be(workshopName);
+                    installed.FullPath.Should().Be(workshopMod);
+                    installed.IsValid.Should().BeTrue();
+                }
+                writer.Verify(p => p.WriteDescriptorAsync(It.IsAny<ModWriterParameters>(), It.IsAny<bool>()),
+                    recovery == DirectoryRecoveryCase.NewDescriptor ? Times.Once() : Times.Never());
+
+                IEnumerable<IMod> readRegularCache() => cache.Get<IEnumerable<IMod>>(
+                    new CacheGetParameters { Region = "Mods", Prefix = game.Type, Key = "RegularMods" });
+
+                void writeWorkshopFixture(string modPath, string name, string id)
+                {
+                    var manifest = Path.Combine(modPath, json ? Shared.Constants.DescriptorJsonMetadata : Shared.Constants.DescriptorFile);
+                    Directory.CreateDirectory(Path.GetDirectoryName(manifest)!);
+                    var contents = json
+                        ? $$"""{"id":"{{id}}","name":"{{name}}","supported_game_version":"1.0","relationships":[]}"""
+                        : $"""
+                           name="{name}"
+                           supported_version="1.0"
+                           remote_file_id="{id}"
+                           """;
+                    File.WriteAllText(manifest, contents);
+                }
+            }
+            finally
+            {
+                temp.Delete(recursive: true);
+            }
+        }
+
         private static TestInstalledModsControlViewModel CreateViewModel(Mock<IModService> modService,
             Mock<IGameService> game = null, Mock<IGameStateSafetyService> safety = null,
-            Mock<ModControlInteraction> interaction = null)
+            Mock<ModControlInteraction> interaction = null) =>
+            CreateViewModel(modService.Object, game?.Object ?? Mock.Of<IGameService>(),
+                safety?.Object ?? Mock.Of<IGameStateSafetyService>(), interaction);
+
+        private static TestInstalledModsControlViewModel CreateViewModel(IModService modService, IGameService game,
+            IGameStateSafetyService safety, Mock<ModControlInteraction> interaction = null)
         {
             var filter = new SearchModsControlViewModel();
             var presentation = new Mock<InstalledModsPresentationCoordinator>(MockBehavior.Loose,
@@ -291,8 +512,7 @@ namespace IronyModManager.Tests.ViewModels.Controls
             interaction ??= new Mock<ModControlInteraction>(MockBehavior.Loose,
                 new object[] { null, null, null, null });
 
-            return new TestInstalledModsControlViewModel(game?.Object ?? Mock.Of<IGameService>(), modService.Object,
-                safety?.Object ?? Mock.Of<IGameStateSafetyService>(), interaction.Object, factory.Object);
+            return new TestInstalledModsControlViewModel(game, modService, safety, interaction.Object, factory.Object);
         }
 
         private sealed class TestInstalledModsControlViewModel(IGameService gameService, IModService modService,
@@ -305,6 +525,8 @@ namespace IronyModManager.Tests.ViewModels.Controls
                 if (!discover) { ActiveGame = game; return Task.FromResult(true); }
                 return BindAsync(game, skipOverlay: true);
             }
+            protected override Task TriggerOverlayAsync(long id, bool isVisible, string message, string progress) => Task.CompletedTask;
+
             public Task EvalModAchievementForTestAsync(IEnumerable<IMod> mods) => EvalModAchievementAsync(mods, true);
         }
     }
