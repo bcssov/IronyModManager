@@ -552,7 +552,8 @@ namespace IronyModManager.Tests.ViewModels.Controls
                     return Task.FromResult(true);
                 },
                 collectionReconciliation.Reset,
-                token => viewModel.PublishMods(installedMods, game, token));
+                token => viewModel.PublishMods(installedMods, game, token),
+                (_, _) => Task.FromResult(true));
 
             recovered.Should().BeTrue();
             safety.Object.IsLocked(game).Should().BeFalse();

@@ -121,7 +121,7 @@ namespace IronyModManager.Tests.ViewModels.Controls
         }
 
         [Fact]
-        public async Task User_directory_revalidation_should_not_require_descriptor_synchronization()
+        public async Task Successful_synchronization_with_no_changes_should_still_refresh_the_user_directory()
         {
             var safety = GetSafety();
             var revalidationLock = new GameStateLockInfo { GameType = "game", Reason = GameStateLockReason.ConfigurationChanged };
@@ -132,7 +132,8 @@ namespace IronyModManager.Tests.ViewModels.Controls
             var refreshed = false;
 
             var result = await coordinator.RevalidateConfigurationAsync(new Game { Type = "game" },
-                (_, _) => Task.FromResult(refreshed = true), null, _ => { });
+                (_, _) => Task.FromResult(refreshed = true), null, _ => { },
+                (_, _) => Task.FromResult(true));
 
             result.Should().BeTrue();
             refreshed.Should().BeTrue();
@@ -178,7 +179,7 @@ namespace IronyModManager.Tests.ViewModels.Controls
             var reconciled = false;
 
             var result = await coordinator.RevalidateConfigurationAsync(game, (_, _) => Task.FromResult(false),
-                () => reset = true, _ => reconciled = true);
+                () => reset = true, _ => reconciled = true, (_, _) => Task.FromResult(true));
 
             result.Should().BeFalse();
             safety.IsLocked(game).Should().BeTrue();
@@ -239,10 +240,10 @@ namespace IronyModManager.Tests.ViewModels.Controls
 
             var first = coordinator.RevalidateConfigurationAsync(game,
                 (token, _) => refresh(token, firstCompletion),
-                () => effects.Add("first-reset"), _ => effects.Add("first-reconcile"));
+                () => effects.Add("first-reset"), _ => effects.Add("first-reconcile"), (_, _) => Task.FromResult(true));
             var second = coordinator.RevalidateConfigurationAsync(game,
                 (token, _) => refresh(token, secondCompletion),
-                () => effects.Add("second-reset"), _ => effects.Add("second-reconcile"));
+                () => effects.Add("second-reset"), _ => effects.Add("second-reconcile"), (_, _) => Task.FromResult(true));
 
             secondCompletion.SetResult(secondSucceeds);
             (await second).Should().Be(secondSucceeds);
@@ -253,6 +254,33 @@ namespace IronyModManager.Tests.ViewModels.Controls
                 ? ["second-reset", "second-reconcile"]
                 : []);
             (current != null).Should().Be(!secondSucceeds);
+        }
+
+        [Fact]
+        public async Task Superseded_synchronization_should_not_refresh_or_complete_revalidation()
+        {
+            var safety = GetSafety();
+            var game = new Game { Type = "game" };
+            var token = new GameStateLockInfo { GameType = "game", Reason = GameStateLockReason.ConfigurationChanged };
+            var ownsRevalidation = true;
+            Mock.Get(safety).Setup(p => p.BeginRevalidation(game, It.IsAny<string>())).Returns(token);
+            Mock.Get(safety).Setup(p => p.IsCurrentRevalidation(game, token)).Returns(() => ownsRevalidation);
+            var synchronization = new TaskCompletionSource<bool>(TaskCreationOptions.RunContinuationsAsynchronously);
+            var coordinator = new ModStateReconciliationCoordinator(safety);
+            var refreshed = false;
+            var reconciled = false;
+
+            var recovery = coordinator.RevalidateConfigurationAsync(game,
+                (_, _) => Task.FromResult(refreshed = true), null, _ => reconciled = true,
+                (_, _) => synchronization.Task);
+            ownsRevalidation = false;
+            synchronization.SetResult(true);
+
+            (await recovery).Should().BeFalse();
+            refreshed.Should().BeFalse();
+            reconciled.Should().BeFalse();
+            Mock.Get(safety).Verify(p => p.CompleteRevalidation(
+                It.IsAny<IGame>(), It.IsAny<GameStateLockInfo>(), It.IsAny<System.Action>()), Times.Never);
         }
 
         private static IGameStateSafetyService GetSafety()

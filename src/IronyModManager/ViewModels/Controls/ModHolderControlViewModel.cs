@@ -1079,9 +1079,7 @@ namespace IronyModManager.ViewModels.Controls
                     s.CustomDirectoryChanged ? () => CollectionMods.Reset(true) : null,
                     revalidationLock => CollectionMods.SetMods(
                         InstalledMods.Mods, InstalledMods.ActiveGame, revalidationLock),
-                    s.CustomDirectoryChanged
-                        ? (revalidationLock, _) => InstalledMods.SynchronizeNewModsAsync(s.Game, revalidationLock)
-                        : null);
+                    (revalidationLock, _) => InstalledMods.SynchronizeNewModsAsync(s.Game, revalidationLock));
                 if (recovered)
                 {
                     var allowSelection = CollectionMods.SelectedModCollection != null;
