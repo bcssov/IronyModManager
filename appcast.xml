@@ -4,10 +4,12 @@
 		<title>Irony Mod Manager</title>
 		<language>en</language>
 		<item>
-			<title>1.28.110</title>
+			<title>1.28.111</title>
 			<description>## Current Release Notes
 
-* Fix #624 ORM regression affecting legacy launcher database updates
+* Fixed Victoria 3 safety lock when the generated `irony-mod` directory did not exist yet
+* Fixed Data Directory recovery so Workshop mods are synchronized before Installed Mods refreshes
+* Fixed post-recovery cases where Irony could unlock successfully but still show an empty Installed Mods list
 
 ## Release Notes 1.28
 
@@ -52,14 +54,16 @@
 * Improve macOS update experience with manual release-page updates
 * Improve conflict analysis equivalence filtering
 </description>
-			<pubDate>Mon, 09 Nov 2026 15:10:02 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.28.110/linux-x64.zip" sparkle:version="1.28.110.60731" sparkle:shortVersionString="1.28.110" length="109346498" sparkle:os="linux" type="application/zip" sparkle:signature="3aoBIY1y5SHIxBpesqr2rkn3TfoxxhcsFA4fUlFlZZzLQuRJtzSiIviqmlxbDfYGP82jKyJLtZiIamCw+5rhDA=="/>
+			<pubDate>Sun, 22 Nov 2026 00:34:46 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.28.111/linux-x64.zip" sparkle:version="1.28.111.13933" sparkle:shortVersionString="1.28.111" length="109353117" sparkle:os="linux" type="application/zip" sparkle:signature="lS22M16d96C7nefCdATp0ZyfGtoykr6ANMQlCRJiGMk2oAQLRnKmDsJ2PYdhyGARTAccBgYIfII1oZ7xW6/xDg=="/>
 		</item>
 		<item>
-			<title>1.28.110</title>
+			<title>1.28.111</title>
 			<description>## Current Release Notes
 
-* Fix #624 ORM regression affecting legacy launcher database updates
+* Fixed Victoria 3 safety lock when the generated `irony-mod` directory did not exist yet
+* Fixed Data Directory recovery so Workshop mods are synchronized before Installed Mods refreshes
+* Fixed post-recovery cases where Irony could unlock successfully but still show an empty Installed Mods list
 
 ## Release Notes 1.28
 
@@ -104,14 +108,16 @@
 * Improve macOS update experience with manual release-page updates
 * Improve conflict analysis equivalence filtering
 </description>
-			<pubDate>Mon, 09 Nov 2026 15:10:16 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.28.110/osx-x64.zip" sparkle:version="1.28.110.60731" sparkle:shortVersionString="1.28.110" length="96876863" sparkle:os="osx" type="application/zip" sparkle:signature="sThdzdjBj4l2nFBddfHYzSLuZENbVaTT1xzFIzLtRd4ahLpzbzQcZuWGlwnuEnTPjS9HVVAcWZd2a3mG8PW4Dw=="/>
+			<pubDate>Sun, 22 Nov 2026 00:35:00 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.28.111/osx-x64.zip" sparkle:version="1.28.111.13933" sparkle:shortVersionString="1.28.111" length="96884813" sparkle:os="osx" type="application/zip" sparkle:signature="XKSU3aMjZ9mZefAoIh9CFXPEaPXVqez+R0OCPUDVvy0RrCOGk/bu5QpjLqEA7iLw0yqhP9in3MTwhxdpFu5PBg=="/>
 		</item>
 		<item>
-			<title>1.28.110</title>
+			<title>1.28.111</title>
 			<description>## Current Release Notes
 
-* Fix #624 ORM regression affecting legacy launcher database updates
+* Fixed Victoria 3 safety lock when the generated `irony-mod` directory did not exist yet
+* Fixed Data Directory recovery so Workshop mods are synchronized before Installed Mods refreshes
+* Fixed post-recovery cases where Irony could unlock successfully but still show an empty Installed Mods list
 
 ## Release Notes 1.28
 
@@ -156,14 +162,16 @@
 * Improve macOS update experience with manual release-page updates
 * Improve conflict analysis equivalence filtering
 </description>
-			<pubDate>Mon, 09 Nov 2026 15:10:23 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.28.110/win-x64-setup.zip" sparkle:version="1.28.110.60731" sparkle:shortVersionString="1.28.110" length="77538682" sparkle:os="windows" type="application/zip" sparkle:signature="R3VkyWVslwO40u6OFsj1GhC1DkT7+sqbLzotjk+j787eWKfoRLXWN3BPErAixF08NkUImZ38Omv8OSZaZm19CA=="/>
+			<pubDate>Sun, 22 Nov 2026 00:35:08 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.28.111/win-x64-setup.zip" sparkle:version="1.28.111.13933" sparkle:shortVersionString="1.28.111" length="78645978" sparkle:os="windows" type="application/zip" sparkle:signature="EQDPRTcXwP/A8sh4bvrTBMz1ShVNIpnzyX8Zv/DqthZWyIn2pble7RkBRydJX1o1n2D3kiuaDH2or0pZH81XBw=="/>
 		</item>
 		<item>
-			<title>1.28.110</title>
+			<title>1.28.111</title>
 			<description>## Current Release Notes
 
-* Fix #624 ORM regression affecting legacy launcher database updates
+* Fixed Victoria 3 safety lock when the generated `irony-mod` directory did not exist yet
+* Fixed Data Directory recovery so Workshop mods are synchronized before Installed Mods refreshes
+* Fixed post-recovery cases where Irony could unlock successfully but still show an empty Installed Mods list
 
 ## Release Notes 1.28
 
@@ -208,8 +216,8 @@
 * Improve macOS update experience with manual release-page updates
 * Improve conflict analysis equivalence filtering
 </description>
-			<pubDate>Mon, 09 Nov 2026 15:10:36 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.28.110/win-x64.zip" sparkle:version="1.28.110.60731" sparkle:shortVersionString="1.28.110" length="108391320" sparkle:os="windows" type="application/zip" sparkle:signature="R9rE1xbqtQtKOqk62y1FRXAyruUvIhI63U7CtVMpHViSOObgAvi9YIxBFoXwuh/yHUFr8MHreu2vRt7HjheoAA=="/>
+			<pubDate>Sun, 22 Nov 2026 00:35:21 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.28.111/win-x64.zip" sparkle:version="1.28.111.13933" sparkle:shortVersionString="1.28.111" length="109928303" sparkle:os="windows" type="application/zip" sparkle:signature="R74OTmwoXtjpdgPd1HgL7Ky5OLMgfztfPzOg3siiLji9/6r80LGL45sCw2wiMJQZQrsg5xtsYAJV6biwOI7qAA=="/>
 		</item>
 	</channel>
 </rss>
