@@ -482,8 +482,17 @@
         "DirectoryPath": "interface",
         "PreferredParser": "DefaultParser"
     }, {
+        "DirectoryPath": "keybinds",
+        "PreferredParser": "DefaultParser"
+    }, {
+        "DirectoryPath": "keybind_profiles",
+        "PreferredParser": "DefaultParser"
+    }, {
         "DirectoryPath": "localisation",
         "PreferredParser": "GenericLocalizationParser"
+    }, {
+        "DirectoryPath": "localisation",
+        "PreferredParser": "HOI4WholeTextParser"
     }, {
         "DirectoryPath": "localisation\\braz_por",
         "PreferredParser": "GenericLocalizationParser"
