@@ -4,7 +4,7 @@
 // Created          : 02-16-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-16-2026
+// Last Modified On : 11-24-2026
 // ***********************************************************************
 // <copyright file="Constants.cs" company="Mario">
 //     Mario
@@ -691,6 +691,16 @@ namespace IronyModManager.Parser.Common
             /// The government authorities
             /// </summary>
             public static readonly string GovernmentAuthorities = MergePath(CommonPath, "governments", "authorities");
+
+            /// <summary>
+            /// The ideologies actions
+            /// </summary>
+            public static readonly string IdeologiesActions = MergePath(CommonPath, "ideologies", "actions");
+
+            /// <summary>
+            /// The ideologies reach types
+            /// </summary>
+            public static readonly string IdeologiesReachTypes = MergePath(CommonPath, "ideologies", "reach_types");
 
             /// <summary>
             /// The inline scripts

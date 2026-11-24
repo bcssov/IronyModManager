@@ -266,6 +266,18 @@
         "DirectoryPath": "common\\greeting_overlay_sounds",
         "PreferredParser": "DefaultParser"
     }, {
+        "DirectoryPath": "common\\ideologies",
+        "PreferredParser": "DefaultParser"
+    }, {
+        "DirectoryPath": "common\\ideologies\\actions",
+        "PreferredParser": "StellarisWholeTextParser"
+    }, {
+        "DirectoryPath": "common\\ideologies\\reach_types",
+        "PreferredParser": "StellarisWholeTextParser"
+    }, {
+        "DirectoryPath": "common\\ideologies\\tenets",
+        "PreferredParser": "DefaultParser"
+    }, {
         "DirectoryPath": "common\\inline_scripts",
         "PreferredParser": "StellarisWholeTextParser"
     }, {
@@ -273,6 +285,9 @@
         "PreferredParser": "StellarisWholeTextParser"
     }, {
         "DirectoryPath": "common\\inline_scripts\\arkship",
+        "PreferredParser": "StellarisWholeTextParser"
+    }, {
+        "DirectoryPath": "common\\inline_scripts\\assimilation",
         "PreferredParser": "StellarisWholeTextParser"
     }, {
         "DirectoryPath": "common\\inline_scripts\\astral_rift",
@@ -311,6 +326,15 @@
         "DirectoryPath": "common\\inline_scripts\\extreme_frontiers",
         "PreferredParser": "StellarisWholeTextParser"
     }, {
+        "DirectoryPath": "common\\inline_scripts\\forceofwill",
+        "PreferredParser": "StellarisWholeTextParser"
+    }, {
+        "DirectoryPath": "common\\inline_scripts\\forceofwill\\duplicated_traits",
+        "PreferredParser": "StellarisWholeTextParser"
+    }, {
+        "DirectoryPath": "common\\inline_scripts\\fotd",
+        "PreferredParser": "StellarisWholeTextParser"
+    }, {
         "DirectoryPath": "common\\inline_scripts\\game_start",
         "PreferredParser": "StellarisWholeTextParser"
     }, {
@@ -330,6 +354,9 @@
         "PreferredParser": "StellarisWholeTextParser"
     }, {
         "DirectoryPath": "common\\inline_scripts\\grand_archive\\specimen_upkeeps",
+        "PreferredParser": "StellarisWholeTextParser"
+    }, {
+        "DirectoryPath": "common\\inline_scripts\\ideologies",
         "PreferredParser": "StellarisWholeTextParser"
     }, {
         "DirectoryPath": "common\\inline_scripts\\jobs",
@@ -359,7 +386,13 @@
         "DirectoryPath": "common\\inline_scripts\\pop_faction_types\\can_join_faction",
         "PreferredParser": "StellarisWholeTextParser"
     }, {
+        "DirectoryPath": "common\\inline_scripts\\pop_faction_types\\demands",
+        "PreferredParser": "StellarisWholeTextParser"
+    }, {
         "DirectoryPath": "common\\inline_scripts\\pop_faction_types\\effect",
+        "PreferredParser": "StellarisWholeTextParser"
+    }, {
+        "DirectoryPath": "common\\inline_scripts\\pop_faction_types\\resources",
         "PreferredParser": "StellarisWholeTextParser"
     }, {
         "DirectoryPath": "common\\inline_scripts\\pop_resources",
@@ -449,7 +482,7 @@
         "DirectoryPath": "common\\leader_classes",
         "PreferredParser": "DefaultParser"
     }, {
-        "DirectoryPath": "common\\leader_classes",
+        "DirectoryPath": "common\\leader_tiers",
         "PreferredParser": "DefaultParser"
     }, {
         "DirectoryPath": "common\\mandates",
@@ -458,13 +491,13 @@
         "DirectoryPath": "common\\map_modes",
         "PreferredParser": "DefaultParser"
     }, {
-        "DirectoryPath": "common\\leader_tiers",
+        "DirectoryPath": "common\\megastructures",
         "PreferredParser": "DefaultParser"
     }, {
         "DirectoryPath": "common\\map_modes",
         "PreferredParser": "DefaultParser"
     }, {
-        "DirectoryPath": "common\\megastructures",
+        "DirectoryPath": "common\\megastructure_modules",
         "PreferredParser": "DefaultParser"
     }, {
         "DirectoryPath": "common\\megastructure_overclock_types",
@@ -782,6 +815,30 @@
         "DirectoryPath": "flags\\human",
         "PreferredParser": "StellarisFlagsParser"
     }, {
+        "DirectoryPath": "flags\\ideologies\\ethic_authoritarian",
+        "PreferredParser": "StellarisFlagsParser"
+    }, {
+        "DirectoryPath": "flags\\ideologies\\ethic_egalitarian",
+        "PreferredParser": "StellarisFlagsParser"
+    }, {
+        "DirectoryPath": "flags\\ideologies\\ethic_materialist",
+        "PreferredParser": "StellarisFlagsParser"
+    }, {
+        "DirectoryPath": "flags\\ideologies\\ethic_militarist",
+        "PreferredParser": "StellarisFlagsParser"
+    }, {
+        "DirectoryPath": "flags\\ideologies\\ethic_pacifist",
+        "PreferredParser": "StellarisFlagsParser"
+    }, {
+        "DirectoryPath": "flags\\ideologies\\ethic_spiritualist",
+        "PreferredParser": "StellarisFlagsParser"
+    }, {
+        "DirectoryPath": "flags\\ideologies\\ethic_xenophile",
+        "PreferredParser": "StellarisFlagsParser"
+    }, {
+        "DirectoryPath": "flags\\ideologies\\ethic_xenophobe",
+        "PreferredParser": "StellarisFlagsParser"
+    }, {
         "DirectoryPath": "flags\\imperial",
         "PreferredParser": "StellarisFlagsParser"
     }, {
@@ -1035,6 +1092,15 @@
         "PreferredParser": "GenericWholeTextParser"
     }, {
         "DirectoryPath": "sound\\firstcontact\\ui",
+        "PreferredParser": "GenericWholeTextParser"
+    }, {
+        "DirectoryPath": "sound\\forceofwill",
+        "PreferredParser": "GenericWholeTextParser"
+    }, {
+        "DirectoryPath": "sound\\forceofwill\\portraits",
+        "PreferredParser": "GenericWholeTextParser"
+    }, {
+        "DirectoryPath": "sound\\forceofwill\\ships",
         "PreferredParser": "GenericWholeTextParser"
     }, {
         "DirectoryPath": "sound\\grand_archive\\events",
